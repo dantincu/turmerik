@@ -85,6 +85,8 @@
             // textBoxMessageContent
             // 
             this.textBoxMessageContent.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxMessageContent.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxMessageContent.ForeColor = System.Drawing.Color.Black;
             this.textBoxMessageContent.Location = new System.Drawing.Point(2, 25);
             this.textBoxMessageContent.Multiline = true;
             this.textBoxMessageContent.Name = "textBoxMessageContent";
