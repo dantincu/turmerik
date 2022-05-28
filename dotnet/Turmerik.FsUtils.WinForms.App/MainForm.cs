@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +15,9 @@ namespace Turmerik.FsUtils.WinForms.App
     public partial class MainForm : Form
     {
         private readonly MainFormViewModel viewModel;
+        private readonly MainFormEventsViewModel eventsViewModel;
+
+        private readonly string initialDirPath;
 
         public MainForm() : this(new string[0])
         {
@@ -21,22 +25,41 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public MainForm(string[] args)
         {
-            this.viewModel = new MainFormViewModel(args);
             InitializeComponent();
+            initialDirPath = args.FirstOrDefault();
 
-            viewModel.UILogMessageAdded += ViewModel_UILogMessageAdded;
-            viewModel.StatusStripTextChanged += ViewModel_StatusStripTextChanged;
+            viewModel = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<MainFormViewModel>();
 
-            this.toolStripStatusLabel.Text = string.Empty;
-            fsDirectoryEntriesGridUserControl.SetIsFoldersGrid(true);
+            viewModel.OnFsExplorerTabAdded += ViewModel_OnFsExplorerTabAdded;
+            viewModel.OnFsExplorerTabRemoved += ViewModel_OnFsExplorerTabRemoved;
 
-            textBoxPath.Text = viewModel.CurrentDirPath;
-            textBoxVPath.Text = viewModel.CurrentDirVPath;
+            eventsViewModel = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<MainFormEventsViewModel>();
+            eventsViewModel.UILogMessageAdded += ViewModel_UILogMessageAdded;
+
+            eventsViewModel.StatusStripTextChanged += ViewModel_StatusStripTextChanged;
+            eventsViewModel.UpdateStatusStripText(string.Empty);
+        }
+
+        private void ViewModel_OnFsExplorerTabRemoved(KeyValuePair<int, FsExplorerViewModel> kvp)
+        {
+            this.tabControlFsExplorer.TabPages.RemoveAt(kvp.Key);
+        }
+
+        private void ViewModel_OnFsExplorerTabAdded(KeyValuePair<int, FsExplorerViewModel> kvp)
+        {
+            var control = new FsExplorerPageUserControl();
+            control.Dock = DockStyle.Fill;
+
+            control.SetViewModel(kvp.Value);
+            var tabPage = new TabPage(kvp.Value.CurrentDirName);
+
+            tabPage.Controls.Add(control);
+            this.tabControlFsExplorer.TabPages.Insert(kvp.Key, tabPage);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            viewModel.TryExecute("Init", viewModel.Init);
+            viewModel.AddFsExplorerTabPage(initialDirPath);
         }
 
         private void ViewModel_StatusStripTextChanged(string statusTripText)
@@ -46,30 +69,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void ViewModel_UILogMessageAdded(IUILogMessage uILogMessage)
         {
-            var userControl = new UILogMessageUserControl(uILogMessage);
-            var size = uiMessagesFlowLayoutPanel.ClientSize;
-
-            size = new Size(size.Width - 20, userControl.Height);
-            userControl.Size = size;
-
-            uiMessagesFlowLayoutPanel.Controls.Add(userControl);
+            uiMessagesUserControl.AddUILogMessage(uILogMessage);
         }
-
-        #region ONLY_FOR_TEST
-
-        private void TestUIMessages()
-        {
-            string testLongMsg = string.Join(" ", Enumerable.Range(1, 5).Select(
-                i => "Action 1 success WAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWA"));
-
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(true, testLongMsg));
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(true, null));
-            viewModel.TryExecute("Action 1", () => null);
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(false, "Action 1 error"));
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(false, null));
-            viewModel.TryExecute("Action 1", () => throw new InvalidOperationException("Invalid operation exception"));
-        }
-
-        #endregion ONLY_FOR_TEST
     }
 }

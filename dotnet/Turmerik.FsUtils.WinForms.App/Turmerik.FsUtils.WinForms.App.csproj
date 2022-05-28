@@ -61,50 +61,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControlColorsTuple.cs" />
-    <Compile Include="ExceptionHierarchyUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ExceptionHierarchyUserControl.Designer.cs">
-      <DependentUpon>ExceptionHierarchyUserControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ExceptionUserControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ExceptionUserControl.Designer.cs">
-      <DependentUpon>ExceptionUserControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="FsEntriesGridUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="FsEntriesGridUserControl.Designer.cs">
       <DependentUpon>FsEntriesGridUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="FsExplorerPageUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FsExplorerPageUserControl.Designer.cs">
+      <DependentUpon>FsExplorerPageUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FsItem.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FsExplorerViewModel.cs" />
+    <Compile Include="MainFormEventsViewModel.cs" />
     <Compile Include="MainFormViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceProviderContainer.cs" />
     <Compile Include="UILogMessage.cs" />
-    <Compile Include="UILogMessageUserControl.cs">
+    <Compile Include="UIMessageItemSummaryUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UILogMessageUserControl.Designer.cs">
-      <DependentUpon>UILogMessageUserControl.cs</DependentUpon>
+    <Compile Include="UIMessageItemSummaryUserControl.Designer.cs">
+      <DependentUpon>UIMessageItemSummaryUserControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ExceptionHierarchyUserControl.resx">
-      <DependentUpon>ExceptionHierarchyUserControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExceptionUserControl.resx">
-      <DependentUpon>ExceptionUserControl.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="UIMessageItemUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UIMessageItemUserControl.Designer.cs">
+      <DependentUpon>UIMessageItemUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UIMessagesUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UIMessagesUserControl.Designer.cs">
+      <DependentUpon>UIMessagesUserControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FsEntriesGridUserControl.resx">
       <DependentUpon>FsEntriesGridUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FsExplorerPageUserControl.resx">
+      <DependentUpon>FsExplorerPageUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -119,8 +124,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="UILogMessageUserControl.resx">
-      <DependentUpon>UILogMessageUserControl.cs</DependentUpon>
+    <EmbeddedResource Include="UIMessageItemSummaryUserControl.resx">
+      <DependentUpon>UIMessageItemSummaryUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIMessageItemUserControl.resx">
+      <DependentUpon>UIMessageItemUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIMessagesUserControl.resx">
+      <DependentUpon>UIMessagesUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

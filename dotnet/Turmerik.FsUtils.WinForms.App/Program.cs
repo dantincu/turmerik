@@ -19,6 +19,10 @@ namespace Turmerik.FsUtils.WinForms.App
             var services = new ServiceCollection();
             TrmrkCoreServiceCollectionBuilder.RegisterAll(services);
 
+            services.AddSingleton<MainFormViewModel>();
+            services.AddSingleton<MainFormEventsViewModel>();
+            services.AddTransient<FsExplorerViewModel>();
+
             ServiceProviderContainer.Instance.Value.RegisterServices(services);
             Application.EnableVisualStyles();
 

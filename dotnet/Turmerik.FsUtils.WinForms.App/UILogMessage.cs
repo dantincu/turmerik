@@ -8,9 +8,11 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public interface IUILogMessage
     {
+        Guid Uuid { get; }
         UILogMessageLevel Level { get; }
         string Message { get; }
-        DateTime DateTime { get; }
+        DateTime TimeStamp { get; }
+        string TimeStampStr { get; }
         Exception Exception { get; }
     }
 
@@ -18,15 +20,19 @@ namespace Turmerik.FsUtils.WinForms.App
     {
         public UILogMessageImmtbl(IUILogMessage src)
         {
+            Uuid = src.Uuid;
             Level = src.Level;
             Message = src.Message;
-            DateTime = src.DateTime;
+            TimeStamp = src.TimeStamp;
+            TimeStampStr = src.TimeStampStr;
             Exception = src.Exception;
         }
 
+        public Guid Uuid { get; }
         public UILogMessageLevel Level { get; }
         public string Message { get; }
-        public DateTime DateTime { get; }
+        public DateTime TimeStamp { get; }
+        public string TimeStampStr { get; }
         public Exception Exception { get; }
     }
 
@@ -38,15 +44,19 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public UILogMessageMtbl(IUILogMessage src)
         {
+            Uuid = src.Uuid;
             Level = src.Level;
             Message = src.Message;
-            DateTime = src.DateTime;
+            TimeStamp = src.TimeStamp;
+            TimeStampStr = src.TimeStampStr;
             Exception = src.Exception;
         }
 
+        public Guid Uuid { get; set; }
         public UILogMessageLevel Level { get; set; }
         public string Message { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime TimeStamp { get; set; }
+        public string TimeStampStr { get; set; }
         public Exception Exception { get; set; }
     }
 

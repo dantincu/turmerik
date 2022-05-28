@@ -69,5 +69,22 @@ namespace Turmerik.Core.Helpers
 
             return invalidPathChars;
         }
+
+        public static string GetDirName(this string path)
+        {
+            path = path?.TrimEnd('/', '\\') ?? string.Empty;
+            string dirName = null;
+
+            if (path.LastOrDefault() == ':')
+            {
+                dirName = path;
+            }
+            else
+            {
+                dirName = Path.GetFileName(path);
+            }
+
+            return dirName;
+        }
     }
 }

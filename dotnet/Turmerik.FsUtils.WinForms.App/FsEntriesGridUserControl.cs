@@ -20,9 +20,9 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public bool IsFoldersGrid { get; private set; }
 
-        public List<FileSystemInfo> FsEntries { get; private set; }
+        public List<IFsItem> FsEntries { get; private set; }
 
-        public void SetFsEntries(List<FileSystemInfo> fsEntries)
+        public void SetFsEntries(List<IFsItem> fsEntries)
         {
             FsEntries = fsEntries;
         }

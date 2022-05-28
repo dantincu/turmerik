@@ -1,183 +1,86 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Core.Components;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.FsUtils.WinForms.App
 {
     public class MainFormViewModel
     {
-        private readonly string[] args;
+        private readonly MainFormEventsViewModel eventsViewModel;
 
-        private Action<IUILogMessage> uILogMessageAdded;
-        private Action<string> statusStripTextChanged;
+        private Action<KeyValuePair<int, FsExplorerViewModel>> onFsExplorerTabAdded;
+        private Action<KeyValuePair<int, FsExplorerViewModel>> onFsExplorerTabRemoved;
 
-        public MainFormViewModel(string[] args)
+        public MainFormViewModel(MainFormEventsViewModel eventsViewModel)
         {
-            this.args = args ?? throw new ArgumentNullException(nameof(args));
-            UILogMessages = new List<IUILogMessage>();
+            this.eventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
 
-            CurrentDirPath = args.FirstOrDefault() ?? Environment.GetFolderPath(
-                Environment.SpecialFolder.UserProfile);
-
-            CurrentDirVPath = GetCurrentDirVPath(CurrentDirPath);
+            FsExplorerViewModelsList = new List<FsExplorerViewModel>();
+            FsExplorerViewModelsRdnlColcnt = FsExplorerViewModelsList.RdnlC();
         }
 
-        public List<IUILogMessage> UILogMessages { get; }
+        public ReadOnlyCollection<FsExplorerViewModel> FsExplorerViewModelsRdnlColcnt { get; }
 
-        public string CurrentDirPath { get; }
-        public string CurrentDirVPath { get; }
+        private List<FsExplorerViewModel> FsExplorerViewModelsList { get; }
 
-        public event Action<IUILogMessage> UILogMessageAdded
+        public event Action<KeyValuePair<int, FsExplorerViewModel>> OnFsExplorerTabAdded
         {
             add
             {
-                uILogMessageAdded += value;
+                onFsExplorerTabAdded += value;
             }
 
             remove
             {
-                uILogMessageAdded -= value;
+                onFsExplorerTabAdded -= value;
             }
         }
 
-        public event Action<string> StatusStripTextChanged
+        public event Action<KeyValuePair<int, FsExplorerViewModel>> OnFsExplorerTabRemoved
         {
             add
             {
-                statusStripTextChanged += value;
+                onFsExplorerTabRemoved += value;
             }
 
             remove
             {
-                statusStripTextChanged -= value;
+                onFsExplorerTabRemoved -= value;
             }
         }
 
-        public Tuple<bool, string> Init()
+        public KeyValuePair<int, FsExplorerViewModel> AddFsExplorerTabPage(string dirPath)
         {
-            return null;
+            var viewModel = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<FsExplorerViewModel>();
+            viewModel.TryExecute("Init", () => viewModel.Init(dirPath));
+
+            int idx = FsExplorerViewModelsList.Count;
+            FsExplorerViewModelsList.Add(viewModel);
+
+            var kvp = new KeyValuePair<int, FsExplorerViewModel>(idx, viewModel);
+            onFsExplorerTabAdded?.Invoke(kvp);
+
+            return kvp;
         }
 
-        public void TryExecute(
-            string actionName,
-            Func<Tuple<bool, string>> action)
+        public KeyValuePair<int, FsExplorerViewModel> RemoveFsExplorerTabPage(Guid uuid)
         {
-            statusStripTextChanged?.Invoke($"Executing action {actionName}");
-            Exception exception = null;
+            var kvp = FsExplorerViewModelsList.FindVal(x => x.Uuid == uuid);
 
-            string resultMessage;
-            bool resultIsSuccess;
-
-            try
+            if (kvp.Key < 0)
             {
-                var result = action();
-
-                if (result != null)
-                {
-                    resultIsSuccess = result.Item1;
-
-                    if (resultIsSuccess)
-                    {
-                        resultMessage = result.Item2 ?? $"Action {actionName} executed successfully";
-                    }
-                    else
-                    {
-                        resultMessage = result.Item2 ?? $"An error ocurred while executing action {actionName}";
-                    }
-                }
-                else
-                {
-                    resultIsSuccess = false;
-                    resultMessage = $"Something went wrong while executing action {actionName}";
-                }
-            }
-            catch (Exception exc)
-            {
-                resultIsSuccess = false;
-                resultMessage = $"An Unhandled error ocurred while executing action {actionName}";
-
-                exception = exc;
+                throw new InvalidOperationException($"Could not find a tab page with id {uuid}");
             }
 
-            var uILogMessageLevel = resultIsSuccess ? UILogMessageLevel.Information : UILogMessageLevel.Error;
+            FsExplorerViewModelsList.RemoveAt(kvp.Key);
+            onFsExplorerTabRemoved?.Invoke(kvp);
 
-            if (resultIsSuccess)
-            {
-                statusStripTextChanged?.Invoke($"Action {actionName} executed successfully");
-            }
-            else
-            {
-                statusStripTextChanged?.Invoke($"Action {actionName} executed with errors");
-            }
-
-            AddUILogMessage(
-                uILogMessageLevel,
-                resultMessage,
-                exception);
-        }
-
-        public void AddUILogMessage(IUILogMessage uILogMessage)
-        {
-            uILogMessageAdded?.Invoke(uILogMessage);
-        }
-
-        public void AddUILogMessage(UILogMessageMtbl uILogMessage)
-        {
-            var logMessage = new UILogMessageImmtbl(uILogMessage);
-            AddUILogMessage(logMessage);
-        }
-
-        public void AddUILogMessage(
-            UILogMessageLevel level,
-            string message,
-            Exception exc = null,
-            DateTime? dateTime = null)
-        {
-            var uiLogMessage = new UILogMessageMtbl
-            {
-                Level = level,
-                Message = message,
-                Exception = exc,
-                DateTime = dateTime ?? DateTime.Now
-            };
-
-            AddUILogMessage(uiLogMessage);
-        }
-
-        public void AddUIInfoMsg(
-            string message,
-            Exception exc = null)
-        {
-            AddUILogMessage(
-                UILogMessageLevel.Information,
-                message, exc);
-        }
-
-        public void AddUIWarnMsg(
-            string message,
-            Exception exc = null)
-        {
-            AddUILogMessage(
-                UILogMessageLevel.Warning,
-                message, exc);
-        }
-
-        public void AddUIErrMsg(
-            string message,
-            Exception exc = null)
-        {
-            AddUILogMessage(
-                UILogMessageLevel.Error,
-                message, exc);
-        }
-
-        private string GetCurrentDirVPath(string currentDirPath)
-        {
-            return currentDirPath;
+            return kvp;
         }
     }
 }
