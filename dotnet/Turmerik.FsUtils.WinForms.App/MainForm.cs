@@ -27,18 +27,21 @@ namespace Turmerik.FsUtils.WinForms.App
             viewModel.UILogMessageAdded += ViewModel_UILogMessageAdded;
             viewModel.StatusStripTextChanged += ViewModel_StatusStripTextChanged;
 
+            this.toolStripStatusLabel.Text = string.Empty;
+            fsDirectoryEntriesGridUserControl.SetIsFoldersGrid(true);
+
             textBoxPath.Text = viewModel.CurrentDirPath;
             textBoxVPath.Text = viewModel.CurrentDirVPath;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            TestUIMessages();
+            viewModel.TryExecute("Init", viewModel.Init);
         }
 
         private void ViewModel_StatusStripTextChanged(string statusTripText)
         {
-            this.statusStrip.Text = statusTripText;
+            this.toolStripStatusLabel.Text = statusTripText;
         }
 
         private void ViewModel_UILogMessageAdded(IUILogMessage uILogMessage)
@@ -52,6 +55,8 @@ namespace Turmerik.FsUtils.WinForms.App
             uiMessagesFlowLayoutPanel.Controls.Add(userControl);
         }
 
+        #region ONLY_FOR_TEST
+
         private void TestUIMessages()
         {
             string testLongMsg = string.Join(" ", Enumerable.Range(1, 5).Select(
@@ -64,5 +69,7 @@ namespace Turmerik.FsUtils.WinForms.App
             viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(false, null));
             viewModel.TryExecute("Action 1", () => throw new InvalidOperationException("Invalid operation exception"));
         }
+
+        #endregion ONLY_FOR_TEST
     }
 }

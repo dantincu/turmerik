@@ -57,6 +57,11 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
+        public Tuple<bool, string> Init()
+        {
+            return null;
+        }
+
         public void TryExecute(
             string actionName,
             Func<Tuple<bool, string>> action)
@@ -99,6 +104,15 @@ namespace Turmerik.FsUtils.WinForms.App
             }
 
             var uILogMessageLevel = resultIsSuccess ? UILogMessageLevel.Information : UILogMessageLevel.Error;
+
+            if (resultIsSuccess)
+            {
+                statusStripTextChanged?.Invoke($"Action {actionName} executed successfully");
+            }
+            else
+            {
+                statusStripTextChanged?.Invoke($"Action {actionName} executed with errors");
+            }
 
             AddUILogMessage(
                 uILogMessageLevel,
