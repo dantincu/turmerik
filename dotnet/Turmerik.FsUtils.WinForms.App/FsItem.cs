@@ -18,6 +18,9 @@ namespace Turmerik.FsUtils.WinForms.App
         DateTime? CreationTime { get; }
         DateTime? LastAccessTime { get; }
         DateTime? LastWriteTime { get; }
+        string CreationTimeStr { get; }
+        string LastAccessTimeStr { get; }
+        string LastWriteTimeStr { get; }
         bool IsDriveRoot { get; }
         SpecialFolder? SpecialFolder { get; }
     }
@@ -35,6 +38,9 @@ namespace Turmerik.FsUtils.WinForms.App
             CreationTime = src.CreationTime;
             LastAccessTime = src.LastAccessTime;
             LastWriteTime = src.LastWriteTime;
+            CreationTimeStr = src.CreationTimeStr;
+            LastAccessTimeStr = src.LastAccessTimeStr;
+            LastWriteTimeStr = src.LastWriteTimeStr;
             IsDriveRoot = src.IsDriveRoot;
             SpecialFolder = src.SpecialFolder;
         }
@@ -48,6 +54,9 @@ namespace Turmerik.FsUtils.WinForms.App
         public DateTime? CreationTime { get; }
         public DateTime? LastAccessTime { get; }
         public DateTime? LastWriteTime { get; }
+        public string CreationTimeStr { get; }
+        public string LastAccessTimeStr { get; }
+        public string LastWriteTimeStr { get; }
         public bool IsDriveRoot { get; }
         public SpecialFolder? SpecialFolder { get; }
     }
@@ -69,6 +78,9 @@ namespace Turmerik.FsUtils.WinForms.App
             CreationTime = src.CreationTime;
             LastAccessTime = src.LastAccessTime;
             LastWriteTime = src.LastWriteTime;
+            CreationTimeStr = src.CreationTimeStr;
+            LastAccessTimeStr = src.LastAccessTimeStr;
+            LastWriteTimeStr = src.LastWriteTimeStr;
             IsDriveRoot = src.IsDriveRoot;
             SpecialFolder = src.SpecialFolder;
         }
@@ -82,6 +94,9 @@ namespace Turmerik.FsUtils.WinForms.App
         public DateTime? CreationTime { get; set; }
         public DateTime? LastAccessTime { get; set; }
         public DateTime? LastWriteTime { get; set; }
+        public string CreationTimeStr { get; set; }
+        public string LastAccessTimeStr { get; set; }
+        public string LastWriteTimeStr { get; set; }
         public bool IsDriveRoot { get; set; }
         public SpecialFolder? SpecialFolder { get; set; }
     }

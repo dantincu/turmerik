@@ -32,12 +32,20 @@ namespace Turmerik.FsUtils.WinForms.App
 
             viewModel.OnFsExplorerTabAdded += ViewModel_OnFsExplorerTabAdded;
             viewModel.OnFsExplorerTabRemoved += ViewModel_OnFsExplorerTabRemoved;
+            viewModel.OnFsExplorerTabPageChanged += ViewModel_OnFsExplorerTabPageChanged;
 
             eventsViewModel = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<MainFormEventsViewModel>();
             eventsViewModel.UILogMessageAdded += ViewModel_UILogMessageAdded;
 
             eventsViewModel.StatusStripTextChanged += ViewModel_StatusStripTextChanged;
             eventsViewModel.UpdateStatusStripText(string.Empty);
+        }
+
+        private KeyValuePair<int, FsExplorerViewModel> SelectedTabPage { get; set; }
+
+        private void ViewModel_OnFsExplorerTabPageChanged(KeyValuePair<int, FsExplorerViewModel> kvp)
+        {
+            SelectedTabPage = kvp;
         }
 
         private void ViewModel_OnFsExplorerTabRemoved(KeyValuePair<int, FsExplorerViewModel> kvp)
@@ -70,6 +78,24 @@ namespace Turmerik.FsUtils.WinForms.App
         private void ViewModel_UILogMessageAdded(IUILogMessage uILogMessage)
         {
             uiMessagesUserControl.AddUILogMessage(uILogMessage);
+        }
+
+        private void ToolStripMenuItemAddNewTab_Click(object sender, EventArgs e)
+        {
+            viewModel.AddFsExplorerTabPage(null);
+        }
+
+        private void ToolStripMenuItemCloseCurrentTab_Click(object sender, EventArgs e)
+        {
+            if (SelectedTabPage.Value != null)
+            {
+                viewModel.RemoveFsExplorerTabPage(SelectedTabPage.Value.Uuid);
+            }
+        }
+
+        private void TabControlFsExplorer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            viewModel.UpdateFsExplorerTabPageIndex(tabControlFsExplorer.SelectedIndex);
         }
     }
 }

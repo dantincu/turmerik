@@ -15,6 +15,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private Action<KeyValuePair<int, FsExplorerViewModel>> onFsExplorerTabAdded;
         private Action<KeyValuePair<int, FsExplorerViewModel>> onFsExplorerTabRemoved;
+        private Action<KeyValuePair<int, FsExplorerViewModel>> onFsExplorerTabPageChanged;
 
         public MainFormViewModel(MainFormEventsViewModel eventsViewModel)
         {
@@ -25,6 +26,7 @@ namespace Turmerik.FsUtils.WinForms.App
         }
 
         public ReadOnlyCollection<FsExplorerViewModel> FsExplorerViewModelsRdnlColcnt { get; }
+        public KeyValuePair<int, FsExplorerViewModel> SelectedTabPage { get; private set; }
 
         private List<FsExplorerViewModel> FsExplorerViewModelsList { get; }
 
@@ -54,16 +56,35 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
+        public event Action<KeyValuePair<int, FsExplorerViewModel>> OnFsExplorerTabPageChanged
+        {
+            add
+            {
+                onFsExplorerTabPageChanged += value;
+            }
+
+            remove
+            {
+                onFsExplorerTabPageChanged -= value;
+            }
+        }
+
         public KeyValuePair<int, FsExplorerViewModel> AddFsExplorerTabPage(string dirPath)
         {
             var viewModel = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<FsExplorerViewModel>();
-            viewModel.TryExecute("Init", () => viewModel.Init(dirPath));
 
             int idx = FsExplorerViewModelsList.Count;
             FsExplorerViewModelsList.Add(viewModel);
 
             var kvp = new KeyValuePair<int, FsExplorerViewModel>(idx, viewModel);
+            viewModel.TryExecute("[FS Explorer -> add new tab page]", () => viewModel.Init(dirPath));
+
             onFsExplorerTabAdded?.Invoke(kvp);
+
+            if (idx == 0)
+            {
+                onFsExplorerTabPageChanged?.Invoke(kvp);
+            }
 
             return kvp;
         }
@@ -81,6 +102,26 @@ namespace Turmerik.FsUtils.WinForms.App
             onFsExplorerTabRemoved?.Invoke(kvp);
 
             return kvp;
+        }
+
+        public KeyValuePair<int, FsExplorerViewModel> UpdateFsExplorerTabPageIndex(int selectedIndex)
+        {
+            FsExplorerViewModel viewModel;
+
+            if (selectedIndex == -1)
+            {
+                viewModel = null;
+            }
+            else
+            {
+                viewModel = FsExplorerViewModelsList[selectedIndex];
+            }
+
+            SelectedTabPage = new KeyValuePair<int, FsExplorerViewModel>(
+                selectedIndex, viewModel);
+
+            onFsExplorerTabPageChanged?.Invoke(SelectedTabPage);
+            return SelectedTabPage;
         }
     }
 }

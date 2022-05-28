@@ -105,6 +105,7 @@
     <Compile Include="UIMessagesUserControl.Designer.cs">
       <DependentUpon>UIMessagesUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="WinFormsH.cs" />
     <EmbeddedResource Include="FsEntriesGridUserControl.resx">
       <DependentUpon>FsEntriesGridUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,13 +149,32 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\error-icon-48x48.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Turmerik.Core\Turmerik.Core.csproj">
       <Project>{1A6B78DE-309B-4B96-BAA4-F9E4724BD3B4}</Project>
       <Name>Turmerik.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\file-icon-16x16.png" />
+    <Content Include="Images\file-icon-24x24.png" />
+    <Content Include="Images\file-icon-32x32.png" />
+    <Content Include="Images\file-icon-64x64.png" />
+    <Content Include="Images\folder-icon-16x16.png" />
+    <Content Include="Images\folder-icon-24x24.png" />
+    <Content Include="Images\folder-icon-32x32.png" />
+    <Content Include="Images\folder-icon-64x64.png" />
+    <Content Include="Images\options-icon-16x16.png" />
+    <Content Include="Images\options-icon-24x24.png" />
+    <Content Include="Images\options-icon-32x32.png" />
+    <Content Include="Images\options-icon-64x64.png" />
+    <None Include="Images\plus-icon-32x32.png" />
+    <None Include="Images\plus-icon-16x16.png" />
+    <None Include="Images\plus-icon-24x24.png" />
+    <Content Include="Images\plus-icon-64x64.png" />
+    <Content Include="Images\times-16x16.png" />
+    <Content Include="Images\times-24x24.png" />
+    <Content Include="Images\times-32x32.png" />
+    <Content Include="Images\times-64x64.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

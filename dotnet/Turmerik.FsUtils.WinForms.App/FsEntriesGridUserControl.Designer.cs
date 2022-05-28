@@ -31,6 +31,13 @@
             this.topPanel = new System.Windows.Forms.Panel();
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.fsEntriesDataGridIconColumn = new System.Windows.Forms.DataGridViewImageColumn();
+            this.fsEntriesDataGridNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fsEntriesDataGridLabelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fsEntriesGridOptsColumn = new System.Windows.Forms.DataGridViewImageColumn();
+            this.fsEntriesGridCreationTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fsEntriesDataGridLastAccessColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fsEntriesDataGridLastWriteColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
@@ -56,13 +63,68 @@
             // 
             // dataGridView
             // 
-            this.dataGridView.AllowUserToOrderColumns = true;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.fsEntriesDataGridIconColumn,
+            this.fsEntriesDataGridNameColumn,
+            this.fsEntriesDataGridLabelColumn,
+            this.fsEntriesGridOptsColumn,
+            this.fsEntriesGridCreationTimeColumn,
+            this.fsEntriesDataGridLastAccessColumn,
+            this.fsEntriesDataGridLastWriteColumn});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 27);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
+            this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.Size = new System.Drawing.Size(982, 584);
             this.dataGridView.TabIndex = 1;
+            // 
+            // fsEntriesDataGridIconColumn
+            // 
+            this.fsEntriesDataGridIconColumn.HeaderText = "";
+            this.fsEntriesDataGridIconColumn.Name = "fsEntriesDataGridIconColumn";
+            this.fsEntriesDataGridIconColumn.ReadOnly = true;
+            this.fsEntriesDataGridIconColumn.Width = 30;
+            // 
+            // fsEntriesDataGridNameColumn
+            // 
+            this.fsEntriesDataGridNameColumn.HeaderText = "Name";
+            this.fsEntriesDataGridNameColumn.Name = "fsEntriesDataGridNameColumn";
+            this.fsEntriesDataGridNameColumn.ReadOnly = true;
+            this.fsEntriesDataGridNameColumn.Width = 600;
+            // 
+            // fsEntriesDataGridLabelColumn
+            // 
+            this.fsEntriesDataGridLabelColumn.HeaderText = "Label";
+            this.fsEntriesDataGridLabelColumn.Name = "fsEntriesDataGridLabelColumn";
+            this.fsEntriesDataGridLabelColumn.ReadOnly = true;
+            // 
+            // fsEntriesGridOptsColumn
+            // 
+            this.fsEntriesGridOptsColumn.HeaderText = "";
+            this.fsEntriesGridOptsColumn.Name = "fsEntriesGridOptsColumn";
+            this.fsEntriesGridOptsColumn.ReadOnly = true;
+            this.fsEntriesGridOptsColumn.Width = 30;
+            // 
+            // fsEntriesGridCreationTimeColumn
+            // 
+            this.fsEntriesGridCreationTimeColumn.HeaderText = "Creation";
+            this.fsEntriesGridCreationTimeColumn.Name = "fsEntriesGridCreationTimeColumn";
+            this.fsEntriesGridCreationTimeColumn.ReadOnly = true;
+            // 
+            // fsEntriesDataGridLastAccessColumn
+            // 
+            this.fsEntriesDataGridLastAccessColumn.HeaderText = "Last access";
+            this.fsEntriesDataGridLastAccessColumn.Name = "fsEntriesDataGridLastAccessColumn";
+            this.fsEntriesDataGridLastAccessColumn.ReadOnly = true;
+            // 
+            // fsEntriesDataGridLastWriteColumn
+            // 
+            this.fsEntriesDataGridLastWriteColumn.HeaderText = "Last write";
+            this.fsEntriesDataGridLastWriteColumn.Name = "fsEntriesDataGridLastWriteColumn";
+            this.fsEntriesDataGridLastWriteColumn.ReadOnly = true;
             // 
             // FsEntriesGridUserControl
             // 
@@ -85,5 +147,12 @@
         private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.Label labelControlTitle;
         private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.DataGridViewImageColumn fsEntriesDataGridIconColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridNameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridLabelColumn;
+        private System.Windows.Forms.DataGridViewImageColumn fsEntriesGridOptsColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesGridCreationTimeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridLastAccessColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridLastWriteColumn;
     }
 }

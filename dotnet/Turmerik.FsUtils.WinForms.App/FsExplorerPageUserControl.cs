@@ -27,25 +27,23 @@ namespace Turmerik.FsUtils.WinForms.App
             textBoxCurrentDirPath.Text = viewModel.CurrentDirPath;
             textBoxVPath.Text = viewModel.CurrentDirVPath;
 
-            TestUIMessages();
+            viewModel.FsEntriesRefreshed += ViewModel_FsEntriesRefreshed;
+            UpdateFsEntryGrids();
         }
 
-        #region ONLY_FOR_TEST
-
-        private void TestUIMessages()
+        private void UpdateFsEntryGrids()
         {
-            string testLongMsg = string.Join(" ", Enumerable.Range(1, 5).Select(
-                i => "Action 1 success WAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWAWA"));
+            fsDirectoryEntriesGridUserControl.ClearFsEntries();
+            fsFileEntriesGridUserControl.ClearFsEntries();
 
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(true, testLongMsg));
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(true, null));
-            viewModel.TryExecute("Action 1", () => null);
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(false, "Action 1 error"));
-            viewModel.TryExecute("Action 1", () => new Tuple<bool, string>(false, null));
-            viewModel.TryExecute("Action 1", () => throw new InvalidOperationException("Invalid operation exception"));
+            fsDirectoryEntriesGridUserControl.SetFsEntries(viewModel.FsDirectoryEntries);
+            fsFileEntriesGridUserControl.SetFsEntries(viewModel.FsFileEntries);
         }
 
-        #endregion ONLY_FOR_TEST
+        private void ViewModel_FsEntriesRefreshed()
+        {
+            UpdateFsEntryGrids();
+        }
 
         private void textBoxEditableDirPath_TextChanged(object sender, EventArgs e)
         {

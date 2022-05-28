@@ -63,9 +63,49 @@ namespace Turmerik.FsUtils.WinForms.App.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Error_icon_48x48 {
+        internal static System.Drawing.Bitmap file_icon_16x16 {
             get {
-                object obj = ResourceManager.GetObject("Error_icon_48x48", resourceCulture);
+                object obj = ResourceManager.GetObject("file_icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder_icon_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("folder_icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap options_icon_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("options_icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap plus_icon_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("plus_icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap times_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("times_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

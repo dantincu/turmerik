@@ -33,11 +33,15 @@
             this.tabControlFsExplorer = new System.Windows.Forms.TabControl();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.topMenuStrip = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItemAddNewTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemCloseCurrentTab = new System.Windows.Forms.ToolStripMenuItem();
             this.uiMessagesTabPage = new System.Windows.Forms.TabPage();
             this.uiMessagesUserControl = new Turmerik.FsUtils.WinForms.App.UIMessagesUserControl();
             this.mainTabControl.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.topMenuStrip.SuspendLayout();
             this.uiMessagesTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,6 +60,7 @@
             // 
             this.mainTabPage.Controls.Add(this.tabControlFsExplorer);
             this.mainTabPage.Controls.Add(this.statusStrip);
+            this.mainTabPage.Controls.Add(this.topMenuStrip);
             this.mainTabPage.Location = new System.Drawing.Point(4, 22);
             this.mainTabPage.Name = "mainTabPage";
             this.mainTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -67,11 +72,12 @@
             // tabControlFsExplorer
             // 
             this.tabControlFsExplorer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlFsExplorer.Location = new System.Drawing.Point(3, 3);
+            this.tabControlFsExplorer.Location = new System.Drawing.Point(3, 27);
             this.tabControlFsExplorer.Name = "tabControlFsExplorer";
             this.tabControlFsExplorer.SelectedIndex = 0;
-            this.tabControlFsExplorer.Size = new System.Drawing.Size(1326, 632);
+            this.tabControlFsExplorer.Size = new System.Drawing.Size(1326, 608);
             this.tabControlFsExplorer.TabIndex = 6;
+            this.tabControlFsExplorer.SelectedIndexChanged += new System.EventHandler(this.TabControlFsExplorer_SelectedIndexChanged);
             // 
             // statusStrip
             // 
@@ -87,6 +93,32 @@
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
+            // 
+            // topMenuStrip
+            // 
+            this.topMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemAddNewTab,
+            this.ToolStripMenuItemCloseCurrentTab});
+            this.topMenuStrip.Location = new System.Drawing.Point(3, 3);
+            this.topMenuStrip.Name = "topMenuStrip";
+            this.topMenuStrip.Size = new System.Drawing.Size(1326, 24);
+            this.topMenuStrip.TabIndex = 7;
+            this.topMenuStrip.Text = "menuStrip1";
+            // 
+            // toolStripMenuItemAddNewTab
+            // 
+            this.toolStripMenuItemAddNewTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.toolStripMenuItemAddNewTab.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.plus_icon_16x16;
+            this.toolStripMenuItemAddNewTab.Name = "toolStripMenuItemAddNewTab";
+            this.toolStripMenuItemAddNewTab.Size = new System.Drawing.Size(28, 20);
+            this.toolStripMenuItemAddNewTab.Click += new System.EventHandler(this.ToolStripMenuItemAddNewTab_Click);
+            // 
+            // ToolStripMenuItemCloseCurrentTab
+            // 
+            this.ToolStripMenuItemCloseCurrentTab.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.times_16x16;
+            this.ToolStripMenuItemCloseCurrentTab.Name = "ToolStripMenuItemCloseCurrentTab";
+            this.ToolStripMenuItemCloseCurrentTab.Size = new System.Drawing.Size(28, 20);
+            this.ToolStripMenuItemCloseCurrentTab.Click += new System.EventHandler(this.ToolStripMenuItemCloseCurrentTab_Click);
             // 
             // uiMessagesTabPage
             // 
@@ -113,6 +145,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1340, 686);
             this.Controls.Add(this.mainTabControl);
+            this.MainMenuStrip = this.topMenuStrip;
             this.Name = "MainForm";
             this.Text = "Turmerik FS Utils";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -122,6 +155,8 @@
             this.mainTabPage.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.topMenuStrip.ResumeLayout(false);
+            this.topMenuStrip.PerformLayout();
             this.uiMessagesTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -135,6 +170,9 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.TabControl tabControlFsExplorer;
         private UIMessagesUserControl uiMessagesUserControl;
+        private System.Windows.Forms.MenuStrip topMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddNewTab;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCloseCurrentTab;
     }
 }
 

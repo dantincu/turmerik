@@ -18,6 +18,8 @@ namespace Turmerik.FsUtils.WinForms.App
         private readonly ITimeStampHelper timeStampHelper;
         private readonly MainFormEventsViewModel eventsViewModel;
 
+        private Action fsEntriesRefreshed;
+
         public FsExplorerViewModel(
             MainFormEventsViewModel eventsViewModel,
             ITimeStampHelper timeStampHelper)
@@ -42,16 +44,23 @@ namespace Turmerik.FsUtils.WinForms.App
         public List<IFsItem> FsDirectoryEntries { get; }
         public List<IFsItem> FsFileEntries { get; }
 
+        public event Action FsEntriesRefreshed
+        {
+            add
+            {
+                fsEntriesRefreshed += value;
+            }
+
+            remove
+            {
+                fsEntriesRefreshed -= value;
+            }
+        }
+
         public Tuple<bool, string> Init(string currentDirPath)
         {
-            CurrentDirPath = currentDirPath;
-            CurrentDirName = currentDirPath.GetDirName() ?? "This PC";
-
-            CurrentDirPath = currentDirPath;
-            CurrentDirVPath = GetCurrentDirVPath(CurrentDirPath);
-
-            // return new Tuple<bool, string>(true, null);
-            return null;
+            NavigateToFolderCore(currentDirPath);
+            return new Tuple<bool, string>(true, null);
         }
 
         public Tuple<bool, string> NavigateToRoot()
@@ -69,7 +78,7 @@ namespace Turmerik.FsUtils.WinForms.App
             return null;
         }
 
-        public Tuple<bool, string> NavigateToFile(string fileName)
+        public Tuple<bool, string> OpenFileInOSDefaultApp(string fileName)
         {
             string filePath = Path.Combine(CurrentDirPath, fileName);
             Process.Start(filePath);
@@ -143,6 +152,8 @@ namespace Turmerik.FsUtils.WinForms.App
                 exception);
         }
 
+        #region AddUILogMessage
+
         public void AddUILogMessage(IUILogMessage uILogMessage)
         {
             eventsViewModel.AddUILogMessage(uILogMessage);
@@ -204,15 +215,41 @@ namespace Turmerik.FsUtils.WinForms.App
                 message, exc);
         }
 
+        #endregion AddUILogMessage
+
         private void NavigateToFolderCore(string folderPath)
         {
+            CurrentDirPath = folderPath;
 
+            if (!string.IsNullOrEmpty(folderPath))
+            {
+                CurrentDirName = folderPath.GetDirName();
+            }
+            else
+            {
+                CurrentDirName = "This PC";
+            }
+
+            CurrentDirPath = folderPath;
+            CurrentDirVPath = GetCurrentDirVPath(CurrentDirPath);
+
+            var fsEntries = GetFsEntries(folderPath);
+
+            FsDirectoryEntries.Clear();
+            FsFileEntries.Clear();
+
+            FsDirectoryEntries.AddRange(fsEntries.Where(item => item.IsDirectory));
+            FsFileEntries.AddRange(fsEntries.Where(item => !item.IsDirectory));
+
+            fsEntriesRefreshed?.Invoke();
         }
 
         private string GetCurrentDirVPath(string currentDirPath)
         {
             return currentDirPath;
         }
+
+        #region GetFsEntries
 
         private IFsItem[] GetFsEntries(string currentDirPath)
         {
@@ -247,29 +284,13 @@ namespace Turmerik.FsUtils.WinForms.App
 
             var drives = DriveInfo.GetDrives(
                 ).Where(d => d.IsReady).Select(
-                d =>
+                d => new FsItemMtbl
                 {
-                    string label = d.VolumeLabel;
-
-                    if (!string.IsNullOrWhiteSpace(label))
-                    {
-                        label = $"({label})";
-                    }
-                    else
-                    {
-                        label = null;
-                    }
-
-                    var item = new FsItemMtbl
-                    {
-                        Name = d.Name,
-                        Path = d.Name,
-                        Label = label,
-                        IsDirectory = true,
-                        IsDriveRoot = true
-                    };
-
-                    return item;
+                    Name = d.Name,
+                    Path = d.Name,
+                    Label = d.VolumeLabel,
+                    IsDirectory = true,
+                    IsDriveRoot = true
                 }).Select(d => new FsItemImmtbl(d) as IFsItem);
 
             string userHomePath = GetFolderPath(SpecialFolder.UserProfile);
@@ -295,10 +316,10 @@ namespace Turmerik.FsUtils.WinForms.App
                         name = $"~{Path.DirectorySeparatorChar}{name}";
                     }
 
-                    name = $"({name})";
                     DirectoryInfo dirInfo = new DirectoryInfo(path);
-
                     var item = GetFsItemMtbl(dirInfo);
+
+                    item.Name = name;
                     item.Label = kvp.Value;
 
                     item.SpecialFolder = kvp.Key;
@@ -325,5 +346,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
             return fsItemMtbl;
         }
+
+        #endregion GetFsEntries
     }
 }
