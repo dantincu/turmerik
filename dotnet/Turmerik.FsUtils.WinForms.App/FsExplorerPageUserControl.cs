@@ -26,6 +26,8 @@ namespace Turmerik.FsUtils.WinForms.App
 
             textBoxCurrentDirPath.Text = viewModel.CurrentDirPath;
             textBoxVPath.Text = viewModel.CurrentDirVPath;
+
+            TestUIMessages();
         }
 
         #region ONLY_FOR_TEST

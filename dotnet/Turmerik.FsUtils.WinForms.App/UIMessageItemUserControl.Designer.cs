@@ -35,13 +35,13 @@
             this.groupBoxMessageContent = new System.Windows.Forms.GroupBox();
             this.textBoxMessageContent = new System.Windows.Forms.TextBox();
             this.groupBoxExceptionsHierarchy = new System.Windows.Forms.GroupBox();
-            this.groupBoxExceptionType = new System.Windows.Forms.GroupBox();
-            this.groupBoxExceptionMessage = new System.Windows.Forms.GroupBox();
-            this.groupBoxExceptionStackTrace = new System.Windows.Forms.GroupBox();
-            this.textBoxExceptionType = new System.Windows.Forms.TextBox();
-            this.textBoxExceptionMessage = new System.Windows.Forms.TextBox();
-            this.textBoxExceptionStackTrace = new System.Windows.Forms.TextBox();
             this.treeViewExceptionHierarchy = new System.Windows.Forms.TreeView();
+            this.groupBoxExceptionType = new System.Windows.Forms.GroupBox();
+            this.textBoxExceptionType = new System.Windows.Forms.TextBox();
+            this.groupBoxExceptionMessage = new System.Windows.Forms.GroupBox();
+            this.textBoxExceptionMessage = new System.Windows.Forms.TextBox();
+            this.groupBoxExceptionStackTrace = new System.Windows.Forms.GroupBox();
+            this.textBoxExceptionStackTrace = new System.Windows.Forms.TextBox();
             this.mainTableLayoutPanel.SuspendLayout();
             this.topTableLayoutPanel.SuspendLayout();
             this.groupBoxMessageContent.SuspendLayout();
@@ -92,7 +92,7 @@
             // labelMessageTimeStamp
             // 
             this.labelMessageTimeStamp.AutoSize = true;
-            this.labelMessageTimeStamp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelMessageTimeStamp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.0F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.labelMessageTimeStamp.Location = new System.Drawing.Point(326, 6);
             this.labelMessageTimeStamp.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelMessageTimeStamp.Name = "labelMessageTimeStamp";
@@ -103,7 +103,7 @@
             // labelMessageLevel
             // 
             this.labelMessageLevel.AutoSize = true;
-            this.labelMessageLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelMessageLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.0F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.labelMessageLevel.Location = new System.Drawing.Point(3, 6);
             this.labelMessageLevel.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelMessageLevel.Name = "labelMessageLevel";
@@ -143,6 +143,15 @@
             this.groupBoxExceptionsHierarchy.TabStop = false;
             this.groupBoxExceptionsHierarchy.Text = "Exception";
             // 
+            // treeViewExceptionHierarchy
+            // 
+            this.treeViewExceptionHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewExceptionHierarchy.Location = new System.Drawing.Point(3, 16);
+            this.treeViewExceptionHierarchy.Name = "treeViewExceptionHierarchy";
+            this.treeViewExceptionHierarchy.Size = new System.Drawing.Size(693, 95);
+            this.treeViewExceptionHierarchy.TabIndex = 0;
+            this.treeViewExceptionHierarchy.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeViewExceptionHierarchy_NodeMouseClick);
+            // 
             // groupBoxExceptionType
             // 
             this.groupBoxExceptionType.Controls.Add(this.textBoxExceptionType);
@@ -153,6 +162,17 @@
             this.groupBoxExceptionType.TabIndex = 3;
             this.groupBoxExceptionType.TabStop = false;
             this.groupBoxExceptionType.Text = "Exception type";
+            // 
+            // textBoxExceptionType
+            // 
+            this.textBoxExceptionType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxExceptionType.Font = new System.Drawing.Font("Consolas", 9.0F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxExceptionType.Location = new System.Drawing.Point(3, 16);
+            this.textBoxExceptionType.Multiline = true;
+            this.textBoxExceptionType.Name = "textBoxExceptionType";
+            this.textBoxExceptionType.ReadOnly = true;
+            this.textBoxExceptionType.Size = new System.Drawing.Size(693, 35);
+            this.textBoxExceptionType.TabIndex = 1;
             // 
             // groupBoxExceptionMessage
             // 
@@ -165,6 +185,16 @@
             this.groupBoxExceptionMessage.TabStop = false;
             this.groupBoxExceptionMessage.Text = "Exception message";
             // 
+            // textBoxExceptionMessage
+            // 
+            this.textBoxExceptionMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxExceptionMessage.Location = new System.Drawing.Point(3, 16);
+            this.textBoxExceptionMessage.Multiline = true;
+            this.textBoxExceptionMessage.Name = "textBoxExceptionMessage";
+            this.textBoxExceptionMessage.ReadOnly = true;
+            this.textBoxExceptionMessage.Size = new System.Drawing.Size(693, 35);
+            this.textBoxExceptionMessage.TabIndex = 1;
+            // 
             // groupBoxExceptionStackTrace
             // 
             this.groupBoxExceptionStackTrace.Controls.Add(this.textBoxExceptionStackTrace);
@@ -176,44 +206,16 @@
             this.groupBoxExceptionStackTrace.TabStop = false;
             this.groupBoxExceptionStackTrace.Text = "Exception stack trace";
             // 
-            // textBoxExceptionType
-            // 
-            this.textBoxExceptionType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxExceptionType.Location = new System.Drawing.Point(3, 16);
-            this.textBoxExceptionType.Multiline = true;
-            this.textBoxExceptionType.Name = "textBoxExceptionType";
-            this.textBoxExceptionType.ReadOnly = true;
-            this.textBoxExceptionType.Size = new System.Drawing.Size(693, 35);
-            this.textBoxExceptionType.TabIndex = 1;
-            // 
-            // textBoxExceptionMessage
-            // 
-            this.textBoxExceptionMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxExceptionMessage.Location = new System.Drawing.Point(3, 16);
-            this.textBoxExceptionMessage.Multiline = true;
-            this.textBoxExceptionMessage.Name = "textBoxExceptionMessage";
-            this.textBoxExceptionMessage.ReadOnly = true;
-            this.textBoxExceptionMessage.Size = new System.Drawing.Size(693, 35);
-            this.textBoxExceptionMessage.TabIndex = 1;
-            // 
             // textBoxExceptionStackTrace
             // 
             this.textBoxExceptionStackTrace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxExceptionStackTrace.Font = new System.Drawing.Font("Consolas", 9.0F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxExceptionStackTrace.Location = new System.Drawing.Point(3, 16);
             this.textBoxExceptionStackTrace.Multiline = true;
             this.textBoxExceptionStackTrace.Name = "textBoxExceptionStackTrace";
             this.textBoxExceptionStackTrace.ReadOnly = true;
             this.textBoxExceptionStackTrace.Size = new System.Drawing.Size(693, 435);
             this.textBoxExceptionStackTrace.TabIndex = 1;
-            // 
-            // treeViewExceptionHierarchy
-            // 
-            this.treeViewExceptionHierarchy.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeViewExceptionHierarchy.Location = new System.Drawing.Point(3, 16);
-            this.treeViewExceptionHierarchy.Name = "treeViewExceptionHierarchy";
-            this.treeViewExceptionHierarchy.Size = new System.Drawing.Size(693, 95);
-            this.treeViewExceptionHierarchy.TabIndex = 0;
-            this.treeViewExceptionHierarchy.Click += new System.EventHandler(this.treeViewExceptionHierarchy_Click);
             // 
             // UIMessageItemUserControl
             // 

@@ -39,8 +39,8 @@
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.ColumnCount = 4;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.Controls.Add(this.labelMessageTimeStamp, 1, 0);
@@ -58,29 +58,29 @@
             // labelMessageTimeStamp
             // 
             this.labelMessageTimeStamp.AutoSize = true;
-            this.labelMessageTimeStamp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelMessageTimeStamp.Location = new System.Drawing.Point(103, 6);
+            this.labelMessageTimeStamp.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelMessageTimeStamp.Location = new System.Drawing.Point(123, 6);
             this.labelMessageTimeStamp.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelMessageTimeStamp.Name = "labelMessageTimeStamp";
-            this.labelMessageTimeStamp.Size = new System.Drawing.Size(79, 13);
+            this.labelMessageTimeStamp.Size = new System.Drawing.Size(86, 15);
             this.labelMessageTimeStamp.TabIndex = 1;
             this.labelMessageTimeStamp.Text = "TIMESTAMP";
             // 
             // labelMessageLevel
             // 
             this.labelMessageLevel.AutoSize = true;
-            this.labelMessageLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelMessageLevel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.labelMessageLevel.Location = new System.Drawing.Point(3, 6);
             this.labelMessageLevel.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelMessageLevel.Name = "labelMessageLevel";
-            this.labelMessageLevel.Size = new System.Drawing.Size(45, 13);
+            this.labelMessageLevel.Size = new System.Drawing.Size(49, 15);
             this.labelMessageLevel.TabIndex = 0;
             this.labelMessageLevel.Text = "LEVEL";
             // 
             // textBoxMessageContent
             // 
             this.textBoxMessageContent.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxMessageContent.Location = new System.Drawing.Point(283, 3);
+            this.textBoxMessageContent.Location = new System.Drawing.Point(333, 3);
             this.textBoxMessageContent.Name = "textBoxMessageContent";
             this.textBoxMessageContent.ReadOnly = true;
             this.textBoxMessageContent.Size = new System.Drawing.Size(814, 20);
@@ -95,7 +95,7 @@
             this.buttonMessageException.FlatAppearance.BorderSize = 0;
             this.buttonMessageException.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.buttonMessageException.ForeColor = System.Drawing.SystemColors.Control;
-            this.buttonMessageException.Location = new System.Drawing.Point(253, 3);
+            this.buttonMessageException.Location = new System.Drawing.Point(303, 3);
             this.buttonMessageException.Name = "buttonMessageException";
             this.buttonMessageException.Size = new System.Drawing.Size(24, 19);
             this.buttonMessageException.TabIndex = 3;

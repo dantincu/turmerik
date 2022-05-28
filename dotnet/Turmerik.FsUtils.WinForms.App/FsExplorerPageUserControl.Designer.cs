@@ -142,7 +142,7 @@
             // textBoxEditableDirPath
             // 
             this.textBoxEditableDirPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxEditableDirPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxEditableDirPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.0F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxEditableDirPath.Location = new System.Drawing.Point(0, 0);
             this.textBoxEditableDirPath.Name = "textBoxEditableDirPath";
             this.textBoxEditableDirPath.Size = new System.Drawing.Size(1257, 20);

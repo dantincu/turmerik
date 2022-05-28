@@ -26,6 +26,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public void SetUIMessage(IUILogMessage uIMessage)
         {
+            ClearUIMessage();
             this.UIMessage = uIMessage;
 
             labelMessageLevel.Text = uIMessage.Level.ToString().ToUpper();
@@ -38,12 +39,8 @@ namespace Turmerik.FsUtils.WinForms.App
                 ExceptionsFlatList = new List<DataTreeNode<Tuple<Exception, TreeNode>>>();
                 var rootNode = GetExceptionTreeViewNode(uIMessage.Exception);
 
+                ExceptionsFlatList.Add(rootNode);
                 treeViewExceptionHierarchy.Nodes.Add(rootNode.Data.Item2);
-                ShowException(rootNode);
-            }
-            else
-            {
-                ClearException();
             }
         }
 
@@ -55,6 +52,10 @@ namespace Turmerik.FsUtils.WinForms.App
             labelMessageTimeStamp.Text = string.Empty;
 
             textBoxMessageContent.Text = string.Empty;
+
+            ExceptionsFlatList = null;
+            treeViewExceptionHierarchy.Nodes.Clear();
+
             ClearException();
         }
 
@@ -93,23 +94,6 @@ namespace Turmerik.FsUtils.WinForms.App
             return rootNode;
         }
 
-        private void treeViewExceptionHierarchy_Click(object sender, EventArgs e)
-        {
-            var selectedNode = treeViewExceptionHierarchy.SelectedNode;
-
-            var kvp = ExceptionsFlatList.FindVal(
-                node => node.Data.Item2 == selectedNode);
-
-            if (kvp.Key >= 0)
-            {
-                ShowException(kvp.Value);
-            }
-            else
-            {
-                ClearException();
-            }
-        }
-
         private void ShowException(DataTreeNode<Tuple<Exception, TreeNode>> dataNode)
         {
             var exc = dataNode.Data.Item1;
@@ -124,6 +108,23 @@ namespace Turmerik.FsUtils.WinForms.App
             textBoxExceptionMessage.Text = string.Empty;
             textBoxExceptionType.Text = string.Empty;
             textBoxExceptionStackTrace.Text = string.Empty;
+        }
+
+        private void treeViewExceptionHierarchy_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            var selectedNode = e.Node;
+
+            var kvp = ExceptionsFlatList.FindVal(
+                node => node.Data.Item2 == selectedNode);
+
+            if (kvp.Key >= 0)
+            {
+                ShowException(kvp.Value);
+            }
+            else
+            {
+                ClearException();
+            }
         }
     }
 }
