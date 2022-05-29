@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Turmerik.Core.Components;
+using Turmerik.Core.Data;
 using Turmerik.Core.Helpers;
 using Turmerik.FsUtils.WinForms.App.Properties;
 
@@ -16,9 +19,9 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public partial class FsEntriesGridUserControl : UserControl
     {
-        private const int ICON_COLUMN_INDEX = 0;
-        private const int NAME_COLUMN_INDEX = 1;
-        private const int OPTS_COLUMN_INDEX = 2;
+        private readonly ILambdaExprHelperFactory lambdaExprHelperFactory;
+        private readonly ILambdaExprHelper<IFsEntriesDataGridRow> fsEntriesDataGridRowLambdaExprHelper;
+        private readonly ILambdaExprHelper<FsItemMtbl> fsItemMtblLambdaExprHelper;
 
         private readonly Action dataGridViewEndEditAction;
 
@@ -30,23 +33,26 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public FsEntriesGridUserControl()
         {
+            lambdaExprHelperFactory = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<ILambdaExprHelperFactory>();
+            fsEntriesDataGridRowLambdaExprHelper = lambdaExprHelperFactory.GetHelper<IFsEntriesDataGridRow>();
+            fsItemMtblLambdaExprHelper = lambdaExprHelperFactory.GetHelper<FsItemMtbl>();
+
             InitializeComponent();
             dataGridViewEndEditAction = () => dataGridView.EndEdit();
         }
 
         public bool IsFoldersGrid { get; private set; }
 
-        public ReadOnlyCollection<IFsEntriesDataGridRow> DataGridValueRows { get; private set; }
-        public List<FsEntriesDataGridRowMtbl> EditableDataGridValueRows { get; private set; }
+        public ReadOnlyList<IFsEntriesDataGridRow> DataGridValueRows { get; private set; }
+        public List<IFsEntriesDataGridRow> EditableDataGridValueRows { get; private set; }
 
         public int CurrentRowIndex { get; private set; }
         public int CurrentCellIndex { get; private set; }
-        public bool IsEditMode { get; private set; }
-        public bool IsAddingNewRow { get; private set; }
-        public bool CurrentRowIndexOutOfBounds => CurrentRowIndex >= DataGridValueRows.Count;
+        public FsEntriesGridColumn CurrentCell { get; private set; }
+
         public IFsEntriesDataGridRow CurrentRow { get; private set; }
-        private FsEntriesDataGridRowMtbl CurrentlyEditedRow { get; set; }
-        private FsEntriesDataGridRowMtbl CurrentlyAddedRow { get; set; }
+
+        private Bitmap FsItemIcon => IsFoldersGrid ? Resources.folder_icon_16x16 : Resources.file_icon_16x16;
 
         public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryIconClick
         {
@@ -119,15 +125,15 @@ namespace Turmerik.FsUtils.WinForms.App
             dataGridView.Rows.Clear();
 
             EditableDataGridValueRows = fsEntries.Select(
-                GetFsEntriesDataGridRowMtbl).ToList();
+                GetFsEntriesDataGridRow).ToList();
 
-            this.DataGridValueRows = EditableDataGridValueRows.Select(
-                row => (IFsEntriesDataGridRow) new FsEntriesDataGridRowImmtbl(row)).RdnlC();
+            this.DataGridValueRows = new ReadOnlyList<IFsEntriesDataGridRow>(
+                EditableDataGridValueRows);
 
-            var dataGridRows = EditableDataGridValueRows.Select(
-                GetDataGridRow).ToArray();
+            var dataGridViewRows = EditableDataGridValueRows.Select(
+                GetDataGridViewRow).ToArray();
 
-            dataGridView.Rows.AddRange(dataGridRows);
+            dataGridView.Rows.AddRange(dataGridViewRows);
         }
 
         public void ClearFsEntries()
@@ -152,262 +158,118 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
-        private DataGridViewRow GetDataGridRow(FsEntriesDataGridRowMtbl dataRow)
+        private IFsEntriesDataGridRow GetFsEntriesDataGridRow(IFsItem fsItem, int idx)
         {
-            var row = new DataGridViewRow();
-
-            foreach (var dataCell in dataRow.Cells)
-            {
-                switch (dataCell.CellType)
-                {
-                    case FsEntriesDataGridCellType.Text:
-                        row.AddDataGridTextCell(dataCell.CellText);
-                        break;
-                    case FsEntriesDataGridCellType.Image:
-                        row.AddDataGridImageCell(dataCell.GetCellValue<Bitmap>());
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                }
-            }
-
-            return row;
-        }
-
-        private IFsEntriesDataGridCell GetFsEntriesDataGridCell(
-            ref int cellIndex,
-            object cellValue,
-            string cellText,
-            bool isTextCellType = true,
-            bool isEditable = false)
-        {
-            FsEntriesDataGridCellType cellType = FsEntriesDataGridCellType.Text;
-
-            if (!isTextCellType)
-            {
-                cellType = FsEntriesDataGridCellType.Image;
-            }
-
-            var cell = new FsEntriesDataGridCellImmtbl(
-                new FsEntriesDataGridCellMtbl
-                {
-                    CellIndex = cellIndex++,
-                    CellText = cellText,
-                    CellValue = cellValue,
-                    IsEditable = isEditable,
-                    EditedCellText = cellText,
-                    CellType = cellType
-                });
-
-            return cell;
-        }
-
-        private FsEntriesDataGridRowMtbl GetFsEntriesDataGridRowMtbl(IFsItem fsItem, int idx)
-        {
-            string label;
-            Bitmap entryIcon;
-
-            if (IsFoldersGrid)
-            {
-                label = fsItem.Label;
-                entryIcon = Resources.folder_icon_16x16;
-            }
-            else
-            {
-                label = fsItem.FileNameExtension;
-                entryIcon = Resources.file_icon_16x16;
-            }
-
-            var optsIcon = Resources.options_icon_16x16;
-            int cellIndex = 0;
-
             var row = new FsEntriesDataGridRowMtbl
             {
-                RowIndex = idx,
                 Data = fsItem,
-                Cells = new IFsEntriesDataGridCell[]
-                    {
-                        GetFsEntriesDataGridCell(ref cellIndex, entryIcon, null, false),
-                        GetFsEntriesDataGridCell(ref cellIndex, fsItem.Name, fsItem.Name, true, true),
-                        GetFsEntriesDataGridCell(ref cellIndex, label, label),
-                        GetFsEntriesDataGridCell(ref cellIndex, optsIcon, null, false),
-                        GetFsEntriesDataGridCell(ref cellIndex, fsItem.CreationTime, fsItem.CreationTimeStr),
-                        GetFsEntriesDataGridCell(ref cellIndex, fsItem.LastAccessTime, fsItem.LastAccessTimeStr),
-                        GetFsEntriesDataGridCell(ref cellIndex, fsItem.LastWriteTime, fsItem.LastAccessTimeStr),
-                    }.RdnlC()
+                DataMtbl = new FsItemMtbl(fsItem),
+                RowIndex = idx
             };
 
             return row;
         }
 
-        private void BeginAddNewRow()
+        private DataGridViewRow GetDataGridViewRow(IFsEntriesDataGridRow dataRow, int idx)
         {
-            IsAddingNewRow = true;
+            var rowCellsDictnr = GetFsEntriesGridCellsDictnr(dataRow);
+            var row = GetDataGridViewRow(rowCellsDictnr);
 
-            CurrentlyAddedRow = new FsEntriesDataGridRowMtbl
-            {
-                IsEdited = true,
-                IsNewRow = true
-            };
-
-            BeginEdit();
+            return row;
         }
 
-        private void BeginEdit()
+        private Dictionary<FsEntriesGridColumn, DataGridViewCell> GetFsEntriesGridCellsDictnr(IFsEntriesDataGridRow dataRow)
         {
-            IsEditMode = true;
+            var fsItem = dataRow.Data;
+            var optsIcon = Resources.options_icon_16x16;
 
-            if (IsAddingNewRow)
+            var rowCellsDictnr = new Dictionary<FsEntriesGridColumn, DataGridViewCell>();
+            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Icon, FsItemIcon, null);
+
+            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Name, null, fsItem.Name);
+            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Label, null, fsItem.Label);
+
+            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Opts, optsIcon, null);
+            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.CreationTime, null, fsItem.CreationTimeStr);
+
+            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastAccessTime, null, fsItem.LastAccessTimeStr);
+            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastWriteTime, null, fsItem.LastWriteTimeStr);
+
+            return rowCellsDictnr;
+        }
+
+        private void AddFsEntriesGridCellToDictnr(
+            Dictionary<FsEntriesGridColumn, DataGridViewCell>
+            rowCellsDictnr,
+            FsEntriesGridColumn fsEntriesGridColumn,
+            Bitmap cellImage,
+            string cellText)
+        {
+            DataGridViewCell cell;
+
+            if (cellImage != null)
             {
-                CurrentlyEditedRow = CurrentlyAddedRow;
+                cell = new DataGridViewImageCell();
+                cell.Value = cellImage;
             }
             else
             {
-                CurrentlyEditedRow = new FsEntriesDataGridRowMtbl(
-                    DataGridValueRows[CurrentRowIndex]);
+                cell = new DataGridViewTextBoxCell();
+                cell.Value = cellText;
             }
 
-            var cellToEdit = dataGridView.Rows[CurrentRowIndex].Cells[1];
-            dataGridView.CurrentCell = cellToEdit;
-
-            dataGridView.BeginEdit(true);
+            rowCellsDictnr.Add(fsEntriesGridColumn, cell);
         }
 
-        private void EndEditIfReq(bool checkIfInvokeRequired = false)
+        private DataGridViewRow GetDataGridViewRow(Dictionary<FsEntriesGridColumn, DataGridViewCell> rowCellsDictnr)
         {
-            if (IsEditMode)
-            {
-                EndEdit(checkIfInvokeRequired);
-            }
-        }
+            var rowCellsArr = rowCellsDictnr.OrderBy(
+                x => x.Key).Select(kvp => kvp.Value).ToArray();
 
-        private void EndEdit(bool checkIfInvokeRequired = false)
-        {
-            IsEditMode = false;
-            IsAddingNewRow = false;
+            var row = new DataGridViewRow();
+            row.Cells.AddRange(rowCellsArr);
 
-            CurrentlyEditedRow = null;
-            CurrentlyAddedRow = null;
-
-            if (checkIfInvokeRequired && dataGridView.InvokeRequired)
-            {
-                dataGridView.Invoke(dataGridViewEndEditAction);
-            }
-            else
-            {
-                dataGridViewEndEditAction();
-            }
+            return row;
         }
 
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            bool currentRowIndexHasChanged = e.RowIndex != CurrentRowIndex;
-
             CurrentRowIndex = e.RowIndex;
             CurrentCellIndex = e.ColumnIndex;
 
-            if (currentRowIndexHasChanged)
-            {
-                EndEditIfReq();
-            }
+            CurrentCell = (FsEntriesGridColumn)e.ColumnIndex;
+            CurrentRow = DataGridValueRows[CurrentRowIndex];
 
-            IFsEntriesDataGridRow row;
-
-            if (CurrentRowIndexOutOfBounds)
+            switch (CurrentCell)
             {
-                BeginAddNewRow();
-                row = CurrentlyAddedRow;
-            }
-            else
-            {
-                row = DataGridValueRows[e.RowIndex];
-            }
-
-            CurrentRow = row;
-
-            switch (e.ColumnIndex)
-            {
-                case ICON_COLUMN_INDEX:
+                case FsEntriesGridColumn.Icon:
                     onFsEntryIconClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, row));
+                        e.RowIndex, CurrentRow));
                     break;
-                case NAME_COLUMN_INDEX:
+                case FsEntriesGridColumn.Name:
                     onFsEntryNameClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, row));
+                        e.RowIndex, CurrentRow));
                     break;
-                case OPTS_COLUMN_INDEX:
+                case FsEntriesGridColumn.Opts:
                     onFsEntryOptsClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, row));
+                        e.RowIndex, CurrentRow));
                     break;
             }
         }
 
         private void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            var row = CurrentRow;
-
-            switch (e.ColumnIndex)
+            switch (CurrentCell)
             {
-                case ICON_COLUMN_INDEX:
+                case FsEntriesGridColumn.Icon:
                     onFsEntryIconDblClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, row));
+                        e.RowIndex, CurrentRow));
                     break;
-                case NAME_COLUMN_INDEX:
-                    BeginEdit();
+                case FsEntriesGridColumn.Name:
                     onFsEntryNameDblClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, row));
+                        e.RowIndex, CurrentRow));
                     break;
             }
-        }
-
-        private void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void dataGridView_CurrentCellChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView_UserAddedRow(object sender, DataGridViewRowEventArgs e)
-        {
-
-        }
-
-        private void dataGridView_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
-        {
-
-        }
-
-        private void dataGridView_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
-        {
-
-        }
-
-        private void dataGridView_CellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
-        {
-
-        }
-
-        private void dataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void dataGridView_CellLeave(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void dataGridView_EditModeChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
-        {
-
         }
     }
 }

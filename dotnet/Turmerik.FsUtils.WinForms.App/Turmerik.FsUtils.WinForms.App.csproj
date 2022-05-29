@@ -61,7 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IFsEntriesDataGridCell.cs" />
+    <Compile Include="FsEntriesGridColumn.cs" />
     <Compile Include="IFsEntriesDataGridRow.cs" />
     <Compile Include="FsEntriesGridUserControl.cs">
       <SubType>UserControl</SubType>

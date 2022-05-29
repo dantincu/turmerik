@@ -9,6 +9,7 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public interface IFsItem
     {
+        Guid Uuid { get; }
         string Path { get; }
         string Name { get; }
         string Label { get; }
@@ -29,6 +30,7 @@ namespace Turmerik.FsUtils.WinForms.App
     {
         public FsItemImmtbl(IFsItem src)
         {
+            Uuid = src.Uuid;
             Path = src.Path;
             Name = src.Name;
             Label = src.Label;
@@ -45,6 +47,7 @@ namespace Turmerik.FsUtils.WinForms.App
             SpecialFolder = src.SpecialFolder;
         }
 
+        public Guid Uuid { get; }
         public string Path { get; }
         public string Name { get; }
         public string Label { get; }
@@ -69,6 +72,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public FsItemMtbl(IFsItem src)
         {
+            Uuid = src.Uuid;
             Path = src.Path;
             Name = src.Name;
             Label = src.Label;
@@ -85,6 +89,7 @@ namespace Turmerik.FsUtils.WinForms.App
             SpecialFolder = src.SpecialFolder;
         }
 
+        public Guid Uuid { get; set; }
         public string Path { get; set; }
         public string Name { get; set; }
         public string Label { get; set; }
