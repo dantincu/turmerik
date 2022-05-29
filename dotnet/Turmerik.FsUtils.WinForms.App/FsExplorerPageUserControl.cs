@@ -45,14 +45,6 @@ namespace Turmerik.FsUtils.WinForms.App
 
             fsDirectoryEntriesGridUserControl.SetIsFoldersGrid(true);
             fsFileEntriesGridUserControl.SetIsFoldersGrid(false);
-
-            textBoxCurrentDirPath.Text = viewModel.CurrentDirPath;
-            textBoxVPath.Text = viewModel.CurrentDirVPath;
-
-            if (!viewModel.IsRootFolder)
-            {
-                textBoxCurrentFolderName.Text = viewModel.CurrentDirName;
-            }
             
             viewModel.FsEntriesRefreshed += ViewModel_FsEntriesRefreshed;
             UpdateFsEntryGrids();
@@ -60,6 +52,18 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void UpdateFsEntryGrids()
         {
+            textBoxCurrentDirPath.Text = viewModel.CurrentDirPath;
+            textBoxVPath.Text = viewModel.CurrentDirVPath;
+
+            if (!viewModel.IsRootFolder)
+            {
+                textBoxCurrentFolderName.Text = viewModel.CurrentDirName;
+            }
+            else
+            {
+                textBoxCurrentFolderName.Text = string.Empty;
+            }
+
             fsDirectoryEntriesGridUserControl.ClearFsEntries();
             fsFileEntriesGridUserControl.ClearFsEntries();
 

@@ -381,6 +381,13 @@ namespace Turmerik.FsUtils.WinForms.App
                 LastWriteTime = fsInfo.LastWriteTime
             };
 
+            if (!fsItemMtbl.IsDirectory)
+            {
+                fsItemMtbl.FileNameWithoutExtension = Path.GetFileNameWithoutExtension(fsItemMtbl.Name);
+                fsItemMtbl.FileNameExtension = Path.GetExtension(fsItemMtbl.Name);
+                fsItemMtbl.Label = fsItemMtbl.FileNameExtension;
+            }
+
             return fsItemMtbl;
         }
 

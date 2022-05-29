@@ -98,7 +98,8 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void ToolStripMenuItemAddNewTab_Click(object sender, EventArgs e)
         {
-            viewModel.AddFsExplorerTabPage(null);
+            var kvp = viewModel.AddFsExplorerTabPage(string.Empty);
+            tabControlFsExplorer.SelectedIndex = kvp.Key;
         }
 
         private void ToolStripMenuItemCloseCurrentTab_Click(object sender, EventArgs e)

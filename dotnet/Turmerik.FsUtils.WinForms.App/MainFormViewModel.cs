@@ -81,7 +81,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
             onFsExplorerTabAdded?.Invoke(kvp);
 
-            if (idx == 0)
+            if (kvp.Key == 0)
             {
                 onFsExplorerTabPageChanged?.Invoke(kvp);
             }
