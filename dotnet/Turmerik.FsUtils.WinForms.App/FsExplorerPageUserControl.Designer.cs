@@ -38,6 +38,9 @@
             this.panelEditableDirPathControls = new System.Windows.Forms.Panel();
             this.panelEditableDirPath = new System.Windows.Forms.Panel();
             this.textBoxEditableDirPath = new System.Windows.Forms.TextBox();
+            this.groupBoxCurrentFolderName = new System.Windows.Forms.GroupBox();
+            this.panelCurrentFolderNameControls = new System.Windows.Forms.Panel();
+            this.textBoxCurrentFolderName = new System.Windows.Forms.TextBox();
             this.fsEntriesSplitContainer = new System.Windows.Forms.SplitContainer();
             this.fsDirectoryEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
             this.fsFileEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
@@ -46,6 +49,7 @@
             this.currentDirPathPanel.SuspendLayout();
             this.groupBoxNavigation.SuspendLayout();
             this.panelEditableDirPath.SuspendLayout();
+            this.groupBoxCurrentFolderName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fsEntriesSplitContainer)).BeginInit();
             this.fsEntriesSplitContainer.Panel1.SuspendLayout();
             this.fsEntriesSplitContainer.Panel2.SuspendLayout();
@@ -58,7 +62,7 @@
             this.groupBoxVPath.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxVPath.Location = new System.Drawing.Point(0, 0);
             this.groupBoxVPath.Name = "groupBoxVPath";
-            this.groupBoxVPath.Size = new System.Drawing.Size(1263, 39);
+            this.groupBoxVPath.Size = new System.Drawing.Size(1244, 39);
             this.groupBoxVPath.TabIndex = 5;
             this.groupBoxVPath.TabStop = false;
             this.groupBoxVPath.Text = "VPath";
@@ -69,7 +73,7 @@
             this.textBoxVPath.Location = new System.Drawing.Point(3, 16);
             this.textBoxVPath.Name = "textBoxVPath";
             this.textBoxVPath.ReadOnly = true;
-            this.textBoxVPath.Size = new System.Drawing.Size(1257, 20);
+            this.textBoxVPath.Size = new System.Drawing.Size(1238, 20);
             this.textBoxVPath.TabIndex = 2;
             // 
             // groupBoxPath
@@ -79,7 +83,7 @@
             this.groupBoxPath.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxPath.Location = new System.Drawing.Point(0, 39);
             this.groupBoxPath.Name = "groupBoxPath";
-            this.groupBoxPath.Size = new System.Drawing.Size(1263, 72);
+            this.groupBoxPath.Size = new System.Drawing.Size(1244, 72);
             this.groupBoxPath.TabIndex = 6;
             this.groupBoxPath.TabStop = false;
             this.groupBoxPath.Text = "Path";
@@ -90,7 +94,7 @@
             this.currentDirPathPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.currentDirPathPanel.Location = new System.Drawing.Point(3, 37);
             this.currentDirPathPanel.Name = "currentDirPathPanel";
-            this.currentDirPathPanel.Size = new System.Drawing.Size(1257, 25);
+            this.currentDirPathPanel.Size = new System.Drawing.Size(1238, 25);
             this.currentDirPathPanel.TabIndex = 4;
             // 
             // textBoxCurrentDirPath
@@ -99,7 +103,7 @@
             this.textBoxCurrentDirPath.Location = new System.Drawing.Point(0, 0);
             this.textBoxCurrentDirPath.Name = "textBoxCurrentDirPath";
             this.textBoxCurrentDirPath.ReadOnly = true;
-            this.textBoxCurrentDirPath.Size = new System.Drawing.Size(1257, 20);
+            this.textBoxCurrentDirPath.Size = new System.Drawing.Size(1238, 20);
             this.textBoxCurrentDirPath.TabIndex = 2;
             // 
             // navigationPanel
@@ -107,7 +111,7 @@
             this.navigationPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.navigationPanel.Location = new System.Drawing.Point(3, 16);
             this.navigationPanel.Name = "navigationPanel";
-            this.navigationPanel.Size = new System.Drawing.Size(1257, 21);
+            this.navigationPanel.Size = new System.Drawing.Size(1238, 21);
             this.navigationPanel.TabIndex = 3;
             // 
             // groupBoxNavigation
@@ -117,7 +121,7 @@
             this.groupBoxNavigation.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxNavigation.Location = new System.Drawing.Point(0, 111);
             this.groupBoxNavigation.Name = "groupBoxNavigation";
-            this.groupBoxNavigation.Size = new System.Drawing.Size(1263, 73);
+            this.groupBoxNavigation.Size = new System.Drawing.Size(1244, 73);
             this.groupBoxNavigation.TabIndex = 8;
             this.groupBoxNavigation.TabStop = false;
             this.groupBoxNavigation.Text = "Go to";
@@ -127,7 +131,7 @@
             this.panelEditableDirPathControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelEditableDirPathControls.Location = new System.Drawing.Point(3, 41);
             this.panelEditableDirPathControls.Name = "panelEditableDirPathControls";
-            this.panelEditableDirPathControls.Size = new System.Drawing.Size(1257, 26);
+            this.panelEditableDirPathControls.Size = new System.Drawing.Size(1238, 26);
             this.panelEditableDirPathControls.TabIndex = 5;
             // 
             // panelEditableDirPath
@@ -136,39 +140,68 @@
             this.panelEditableDirPath.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelEditableDirPath.Location = new System.Drawing.Point(3, 16);
             this.panelEditableDirPath.Name = "panelEditableDirPath";
-            this.panelEditableDirPath.Size = new System.Drawing.Size(1257, 25);
+            this.panelEditableDirPath.Size = new System.Drawing.Size(1238, 25);
             this.panelEditableDirPath.TabIndex = 6;
             // 
             // textBoxEditableDirPath
             // 
             this.textBoxEditableDirPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxEditableDirPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.0F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.textBoxEditableDirPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxEditableDirPath.Location = new System.Drawing.Point(0, 0);
             this.textBoxEditableDirPath.Name = "textBoxEditableDirPath";
-            this.textBoxEditableDirPath.Size = new System.Drawing.Size(1257, 20);
+            this.textBoxEditableDirPath.Size = new System.Drawing.Size(1238, 21);
             this.textBoxEditableDirPath.TabIndex = 2;
+            this.textBoxEditableDirPath.TextChanged += new System.EventHandler(this.textBoxEditableDirPath_TextChanged);
+            // 
+            // groupBoxCurrentFolderName
+            // 
+            this.groupBoxCurrentFolderName.Controls.Add(this.panelCurrentFolderNameControls);
+            this.groupBoxCurrentFolderName.Controls.Add(this.textBoxCurrentFolderName);
+            this.groupBoxCurrentFolderName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCurrentFolderName.Location = new System.Drawing.Point(0, 184);
+            this.groupBoxCurrentFolderName.Name = "groupBoxCurrentFolderName";
+            this.groupBoxCurrentFolderName.Size = new System.Drawing.Size(1244, 66);
+            this.groupBoxCurrentFolderName.TabIndex = 9;
+            this.groupBoxCurrentFolderName.TabStop = false;
+            this.groupBoxCurrentFolderName.Text = "Current folder name";
+            // 
+            // panelCurrentFolderNameControls
+            // 
+            this.panelCurrentFolderNameControls.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCurrentFolderNameControls.Location = new System.Drawing.Point(3, 36);
+            this.panelCurrentFolderNameControls.Name = "panelCurrentFolderNameControls";
+            this.panelCurrentFolderNameControls.Size = new System.Drawing.Size(1238, 26);
+            this.panelCurrentFolderNameControls.TabIndex = 6;
+            // 
+            // textBoxCurrentFolderName
+            // 
+            this.textBoxCurrentFolderName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxCurrentFolderName.Location = new System.Drawing.Point(3, 16);
+            this.textBoxCurrentFolderName.Name = "textBoxCurrentFolderName";
+            this.textBoxCurrentFolderName.ReadOnly = true;
+            this.textBoxCurrentFolderName.Size = new System.Drawing.Size(1238, 20);
+            this.textBoxCurrentFolderName.TabIndex = 3;
             // 
             // fsEntriesSplitContainer
             // 
-            this.fsEntriesSplitContainer.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.fsEntriesSplitContainer.IsSplitterFixed = true;
-            this.fsEntriesSplitContainer.Location = new System.Drawing.Point(0, 184);
+            this.fsEntriesSplitContainer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.fsEntriesSplitContainer.Location = new System.Drawing.Point(0, 250);
+            this.fsEntriesSplitContainer.MinimumSize = new System.Drawing.Size(0, 1610);
             this.fsEntriesSplitContainer.Name = "fsEntriesSplitContainer";
             this.fsEntriesSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // fsEntriesSplitContainer.Panel1
             // 
-            this.fsEntriesSplitContainer.Panel1.AutoScroll = true;
             this.fsEntriesSplitContainer.Panel1.Controls.Add(this.fsDirectoryEntriesGridUserControl);
             this.fsEntriesSplitContainer.Panel1MinSize = 800;
             // 
             // fsEntriesSplitContainer.Panel2
             // 
-            this.fsEntriesSplitContainer.Panel2.AutoScroll = true;
             this.fsEntriesSplitContainer.Panel2.Controls.Add(this.fsFileEntriesGridUserControl);
-            this.fsEntriesSplitContainer.Size = new System.Drawing.Size(1263, 1600);
+            this.fsEntriesSplitContainer.Panel2MinSize = 800;
+            this.fsEntriesSplitContainer.Size = new System.Drawing.Size(1244, 1610);
             this.fsEntriesSplitContainer.SplitterDistance = 800;
-            this.fsEntriesSplitContainer.TabIndex = 9;
+            this.fsEntriesSplitContainer.TabIndex = 10;
             // 
             // fsDirectoryEntriesGridUserControl
             // 
@@ -176,7 +209,7 @@
             this.fsDirectoryEntriesGridUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fsDirectoryEntriesGridUserControl.Location = new System.Drawing.Point(0, 0);
             this.fsDirectoryEntriesGridUserControl.Name = "fsDirectoryEntriesGridUserControl";
-            this.fsDirectoryEntriesGridUserControl.Size = new System.Drawing.Size(1263, 800);
+            this.fsDirectoryEntriesGridUserControl.Size = new System.Drawing.Size(1244, 800);
             this.fsDirectoryEntriesGridUserControl.TabIndex = 0;
             // 
             // fsFileEntriesGridUserControl
@@ -185,20 +218,22 @@
             this.fsFileEntriesGridUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fsFileEntriesGridUserControl.Location = new System.Drawing.Point(0, 0);
             this.fsFileEntriesGridUserControl.Name = "fsFileEntriesGridUserControl";
-            this.fsFileEntriesGridUserControl.Size = new System.Drawing.Size(1263, 796);
-            this.fsFileEntriesGridUserControl.TabIndex = 0;
+            this.fsFileEntriesGridUserControl.Size = new System.Drawing.Size(1244, 806);
+            this.fsFileEntriesGridUserControl.TabIndex = 1;
             // 
-            // FsExplorerUserControl
+            // FsExplorerPageUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.Controls.Add(this.fsEntriesSplitContainer);
+            this.Controls.Add(this.groupBoxCurrentFolderName);
             this.Controls.Add(this.groupBoxNavigation);
             this.Controls.Add(this.groupBoxPath);
             this.Controls.Add(this.groupBoxVPath);
-            this.Name = "FsExplorerUserControl";
-            this.Size = new System.Drawing.Size(1263, 810);
+            this.MinimumSize = new System.Drawing.Size(0, 2000);
+            this.Name = "FsExplorerPageUserControl";
+            this.Size = new System.Drawing.Size(1244, 2000);
             this.groupBoxVPath.ResumeLayout(false);
             this.groupBoxVPath.PerformLayout();
             this.groupBoxPath.ResumeLayout(false);
@@ -207,6 +242,8 @@
             this.groupBoxNavigation.ResumeLayout(false);
             this.panelEditableDirPath.ResumeLayout(false);
             this.panelEditableDirPath.PerformLayout();
+            this.groupBoxCurrentFolderName.ResumeLayout(false);
+            this.groupBoxCurrentFolderName.PerformLayout();
             this.fsEntriesSplitContainer.Panel1.ResumeLayout(false);
             this.fsEntriesSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fsEntriesSplitContainer)).EndInit();
@@ -227,6 +264,9 @@
         private System.Windows.Forms.Panel panelEditableDirPathControls;
         private System.Windows.Forms.Panel panelEditableDirPath;
         private System.Windows.Forms.TextBox textBoxEditableDirPath;
+        private System.Windows.Forms.GroupBox groupBoxCurrentFolderName;
+        private System.Windows.Forms.TextBox textBoxCurrentFolderName;
+        private System.Windows.Forms.Panel panelCurrentFolderNameControls;
         private System.Windows.Forms.SplitContainer fsEntriesSplitContainer;
         private FsEntriesGridUserControl fsDirectoryEntriesGridUserControl;
         private FsEntriesGridUserControl fsFileEntriesGridUserControl;

@@ -63,6 +63,46 @@ namespace Turmerik.FsUtils.WinForms.App.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap arrow_down_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_down_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_left_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_left_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_right_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_right_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_up_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_up_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap file_icon_16x16 {
             get {
                 object obj = ResourceManager.GetObject("file_icon_16x16", resourceCulture);
@@ -96,6 +136,16 @@ namespace Turmerik.FsUtils.WinForms.App.Properties {
         internal static System.Drawing.Bitmap plus_icon_16x16 {
             get {
                 object obj = ResourceManager.GetObject("plus_icon_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap reload_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("reload_16x16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

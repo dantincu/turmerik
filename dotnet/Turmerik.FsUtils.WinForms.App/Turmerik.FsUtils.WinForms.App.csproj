@@ -155,6 +155,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\arrow-down-16x16.png" />
+    <Content Include="Images\arrow-down-24x24.png" />
+    <Content Include="Images\arrow-left-16x16.png" />
+    <Content Include="Images\arrow-left-24x24.png" />
+    <Content Include="Images\arrow-right-16x16.png" />
+    <Content Include="Images\arrow-right-24x24.png" />
+    <Content Include="Images\arrow-up-16x16.png" />
+    <Content Include="Images\arrow-up-24x24.png" />
+    <Content Include="Images\circle-16x16.png" />
+    <Content Include="Images\circle-24x24.png" />
+    <Content Include="Images\circle-32x32.png" />
     <Content Include="Images\file-icon-16x16.png" />
     <Content Include="Images\file-icon-24x24.png" />
     <Content Include="Images\file-icon-32x32.png" />
@@ -171,6 +182,9 @@
     <None Include="Images\plus-icon-16x16.png" />
     <None Include="Images\plus-icon-24x24.png" />
     <Content Include="Images\plus-icon-64x64.png" />
+    <Content Include="Images\reload-16x16.png" />
+    <Content Include="Images\reload-24x24.png" />
+    <Content Include="Images\reload-32x32.png" />
     <Content Include="Images\times-16x16.png" />
     <Content Include="Images\times-24x24.png" />
     <Content Include="Images\times-32x32.png" />

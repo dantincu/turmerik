@@ -56,12 +56,23 @@ namespace Turmerik.FsUtils.WinForms.App
         private void ViewModel_OnFsExplorerTabAdded(KeyValuePair<int, FsExplorerViewModel> kvp)
         {
             var control = new FsExplorerPageUserControl();
-            control.Dock = DockStyle.Fill;
+            control.Dock = DockStyle.Top;
 
+            control.AutoScroll = true;
             control.SetViewModel(kvp.Value);
-            var tabPage = new TabPage(kvp.Value.CurrentDirName);
 
-            tabPage.Controls.Add(control);
+            control.Height = 2000;
+
+            var tabPage = new TabPage(kvp.Value.CurrentDirName);
+            tabPage.AutoScroll = true;
+
+            Panel panel = new Panel();
+            panel.AutoScroll = true;
+
+            panel.Dock = DockStyle.Fill;
+            panel.Controls.Add(control);
+
+            tabPage.Controls.Add(panel);
             this.tabControlFsExplorer.TabPages.Insert(kvp.Key, tabPage);
         }
 

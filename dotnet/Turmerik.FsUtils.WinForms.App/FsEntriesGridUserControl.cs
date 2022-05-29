@@ -44,7 +44,17 @@ namespace Turmerik.FsUtils.WinForms.App
         public void SetIsFoldersGrid(bool isFoldersGrid)
         {
             IsFoldersGrid = isFoldersGrid;
-            labelControlTitle.Text = isFoldersGrid ? "Folders" : "Files";
+
+            if (isFoldersGrid)
+            {
+                labelControlTitle.Text = "Folders";
+                fsEntriesDataGridLabelColumn.HeaderText = "Description";
+            }
+            else
+            {
+                labelControlTitle.Text = "Files";
+                fsEntriesDataGridLabelColumn.HeaderText = "Extension";
+            }
         }
 
         private DataGridViewRow GetDataGridRow(IFsItem fsEntry)

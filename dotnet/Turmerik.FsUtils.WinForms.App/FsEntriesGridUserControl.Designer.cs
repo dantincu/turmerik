@@ -48,16 +48,16 @@
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(982, 27);
+            this.topPanel.Size = new System.Drawing.Size(1064, 27);
             this.topPanel.TabIndex = 0;
             // 
             // labelControlTitle
             // 
             this.labelControlTitle.AutoSize = true;
-            this.labelControlTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.labelControlTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.labelControlTitle.Location = new System.Drawing.Point(4, 4);
             this.labelControlTitle.Name = "labelControlTitle";
-            this.labelControlTitle.Size = new System.Drawing.Size(59, 17);
+            this.labelControlTitle.Size = new System.Drawing.Size(52, 15);
             this.labelControlTitle.TabIndex = 0;
             this.labelControlTitle.Text = "Entries";
             // 
@@ -78,7 +78,7 @@
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
             this.dataGridView.RowHeadersVisible = false;
-            this.dataGridView.Size = new System.Drawing.Size(982, 584);
+            this.dataGridView.Size = new System.Drawing.Size(1064, 584);
             this.dataGridView.TabIndex = 1;
             // 
             // fsEntriesDataGridIconColumn
@@ -97,7 +97,7 @@
             // 
             // fsEntriesDataGridLabelColumn
             // 
-            this.fsEntriesDataGridLabelColumn.HeaderText = "Label";
+            this.fsEntriesDataGridLabelColumn.HeaderText = "Label or file ext";
             this.fsEntriesDataGridLabelColumn.Name = "fsEntriesDataGridLabelColumn";
             this.fsEntriesDataGridLabelColumn.ReadOnly = true;
             // 
@@ -134,7 +134,7 @@
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.topPanel);
             this.Name = "FsEntriesGridUserControl";
-            this.Size = new System.Drawing.Size(982, 611);
+            this.Size = new System.Drawing.Size(1064, 611);
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
