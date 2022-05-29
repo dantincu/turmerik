@@ -176,6 +176,7 @@
     <Content Include="Images\folder-icon-24x24.png" />
     <Content Include="Images\folder-icon-32x32.png" />
     <Content Include="Images\folder-icon-64x64.png" />
+    <Content Include="Images\fw-slash-16x16.png" />
     <Content Include="Images\options-icon-16x16.png" />
     <Content Include="Images\options-icon-24x24.png" />
     <Content Include="Images\options-icon-32x32.png" />

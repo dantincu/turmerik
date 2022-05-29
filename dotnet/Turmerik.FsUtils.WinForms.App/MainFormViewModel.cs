@@ -77,12 +77,15 @@ namespace Turmerik.FsUtils.WinForms.App
             FsExplorerViewModelsList.Add(viewModel);
 
             var kvp = new KeyValuePair<int, FsExplorerViewModel>(idx, viewModel);
-            viewModel.TryExecute("[FS Explorer -> add new tab page]", () => viewModel.Init(dirPath));
+
+            viewModel.TryExecute("[FS Explorer -> add new tab page]",
+                () => viewModel.Init(dirPath), true);
 
             onFsExplorerTabAdded?.Invoke(kvp);
 
             if (kvp.Key == 0)
             {
+                SelectedTabPage = kvp;
                 onFsExplorerTabPageChanged?.Invoke(kvp);
             }
 
@@ -95,7 +98,9 @@ namespace Turmerik.FsUtils.WinForms.App
 
             if (kvp.Key < 0)
             {
-                throw new InvalidOperationException($"Could not find a tab page with id {uuid}");
+                eventsViewModel.AddUILogMessage(UILogMessageLevel.Error,
+                    $"Could not find a tab page with id {uuid}",
+                    null, false);
             }
 
             FsExplorerViewModelsList.RemoveAt(kvp.Key);
@@ -121,6 +126,16 @@ namespace Turmerik.FsUtils.WinForms.App
                 selectedIndex, viewModel);
 
             onFsExplorerTabPageChanged?.Invoke(SelectedTabPage);
+            return SelectedTabPage;
+        }
+
+        public KeyValuePair<int, FsExplorerViewModel> NavigateCurrentToRoot()
+        {
+            var viewModel = SelectedTabPage.Value;
+
+            SelectedTabPage.Value.TryExecute("[FS Explorer -> navigate to root]",
+                () => viewModel.NavigateToRoot(), true);
+
             return SelectedTabPage;
         }
     }

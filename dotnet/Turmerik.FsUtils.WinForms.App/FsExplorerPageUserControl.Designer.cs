@@ -44,9 +44,13 @@
             this.fsEntriesSplitContainer = new System.Windows.Forms.SplitContainer();
             this.fsDirectoryEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
             this.fsFileEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
+            this.buttonCurrentDirGoBack = new System.Windows.Forms.Button();
+            this.buttonCurrentDirGoUp = new System.Windows.Forms.Button();
+            this.buttonCurrentDirGoForward = new System.Windows.Forms.Button();
             this.groupBoxVPath.SuspendLayout();
             this.groupBoxPath.SuspendLayout();
             this.currentDirPathPanel.SuspendLayout();
+            this.navigationPanel.SuspendLayout();
             this.groupBoxNavigation.SuspendLayout();
             this.panelEditableDirPath.SuspendLayout();
             this.groupBoxCurrentFolderName.SuspendLayout();
@@ -108,6 +112,9 @@
             // 
             // navigationPanel
             // 
+            this.navigationPanel.Controls.Add(this.buttonCurrentDirGoForward);
+            this.navigationPanel.Controls.Add(this.buttonCurrentDirGoUp);
+            this.navigationPanel.Controls.Add(this.buttonCurrentDirGoBack);
             this.navigationPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.navigationPanel.Location = new System.Drawing.Point(3, 16);
             this.navigationPanel.Name = "navigationPanel";
@@ -221,6 +228,36 @@
             this.fsFileEntriesGridUserControl.Size = new System.Drawing.Size(1244, 806);
             this.fsFileEntriesGridUserControl.TabIndex = 1;
             // 
+            // buttonCurrentDirGoBack
+            // 
+            this.buttonCurrentDirGoBack.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_left_16x16;
+            this.buttonCurrentDirGoBack.Location = new System.Drawing.Point(0, -1);
+            this.buttonCurrentDirGoBack.Name = "buttonCurrentDirGoBack";
+            this.buttonCurrentDirGoBack.Size = new System.Drawing.Size(32, 23);
+            this.buttonCurrentDirGoBack.TabIndex = 0;
+            this.buttonCurrentDirGoBack.UseVisualStyleBackColor = true;
+            this.buttonCurrentDirGoBack.Click += new System.EventHandler(this.buttonCurrentDirGoBack_Click);
+            // 
+            // buttonCurrentDirGoUp
+            // 
+            this.buttonCurrentDirGoUp.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_up_16x16;
+            this.buttonCurrentDirGoUp.Location = new System.Drawing.Point(29, -1);
+            this.buttonCurrentDirGoUp.Name = "buttonCurrentDirGoUp";
+            this.buttonCurrentDirGoUp.Size = new System.Drawing.Size(32, 23);
+            this.buttonCurrentDirGoUp.TabIndex = 1;
+            this.buttonCurrentDirGoUp.UseVisualStyleBackColor = true;
+            this.buttonCurrentDirGoUp.Click += new System.EventHandler(this.buttonCurrentDirGoUp_Click);
+            // 
+            // buttonCurrentDirGoForward
+            // 
+            this.buttonCurrentDirGoForward.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_right_16x16;
+            this.buttonCurrentDirGoForward.Location = new System.Drawing.Point(58, -1);
+            this.buttonCurrentDirGoForward.Name = "buttonCurrentDirGoForward";
+            this.buttonCurrentDirGoForward.Size = new System.Drawing.Size(32, 23);
+            this.buttonCurrentDirGoForward.TabIndex = 2;
+            this.buttonCurrentDirGoForward.UseVisualStyleBackColor = true;
+            this.buttonCurrentDirGoForward.Click += new System.EventHandler(this.buttonCurrentDirGoForward_Click);
+            // 
             // FsExplorerPageUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -239,6 +276,7 @@
             this.groupBoxPath.ResumeLayout(false);
             this.currentDirPathPanel.ResumeLayout(false);
             this.currentDirPathPanel.PerformLayout();
+            this.navigationPanel.ResumeLayout(false);
             this.groupBoxNavigation.ResumeLayout(false);
             this.panelEditableDirPath.ResumeLayout(false);
             this.panelEditableDirPath.PerformLayout();
@@ -270,5 +308,8 @@
         private System.Windows.Forms.SplitContainer fsEntriesSplitContainer;
         private FsEntriesGridUserControl fsDirectoryEntriesGridUserControl;
         private FsEntriesGridUserControl fsFileEntriesGridUserControl;
+        private System.Windows.Forms.Button buttonCurrentDirGoBack;
+        private System.Windows.Forms.Button buttonCurrentDirGoUp;
+        private System.Windows.Forms.Button buttonCurrentDirGoForward;
     }
 }

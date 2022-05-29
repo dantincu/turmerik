@@ -34,10 +34,11 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.topMenuStrip = new System.Windows.Forms.MenuStrip();
-            this.toolStripMenuItemAddNewTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItemCloseCurrentTab = new System.Windows.Forms.ToolStripMenuItem();
             this.uiMessagesTabPage = new System.Windows.Forms.TabPage();
             this.uiMessagesUserControl = new Turmerik.FsUtils.WinForms.App.UIMessagesUserControl();
+            this.toolStripMenuItemGoToRoot = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemAddNewTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItemCloseCurrentTab = new System.Windows.Forms.ToolStripMenuItem();
             this.mainTabControl.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -97,6 +98,7 @@
             // topMenuStrip
             // 
             this.topMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemGoToRoot,
             this.toolStripMenuItemAddNewTab,
             this.ToolStripMenuItemCloseCurrentTab});
             this.topMenuStrip.Location = new System.Drawing.Point(3, 3);
@@ -104,21 +106,6 @@
             this.topMenuStrip.Size = new System.Drawing.Size(1326, 24);
             this.topMenuStrip.TabIndex = 7;
             this.topMenuStrip.Text = "menuStrip1";
-            // 
-            // toolStripMenuItemAddNewTab
-            // 
-            this.toolStripMenuItemAddNewTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.toolStripMenuItemAddNewTab.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.plus_icon_16x16;
-            this.toolStripMenuItemAddNewTab.Name = "toolStripMenuItemAddNewTab";
-            this.toolStripMenuItemAddNewTab.Size = new System.Drawing.Size(28, 20);
-            this.toolStripMenuItemAddNewTab.Click += new System.EventHandler(this.ToolStripMenuItemAddNewTab_Click);
-            // 
-            // ToolStripMenuItemCloseCurrentTab
-            // 
-            this.ToolStripMenuItemCloseCurrentTab.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.times_16x16;
-            this.ToolStripMenuItemCloseCurrentTab.Name = "ToolStripMenuItemCloseCurrentTab";
-            this.ToolStripMenuItemCloseCurrentTab.Size = new System.Drawing.Size(28, 20);
-            this.ToolStripMenuItemCloseCurrentTab.Click += new System.EventHandler(this.ToolStripMenuItemCloseCurrentTab_Click);
             // 
             // uiMessagesTabPage
             // 
@@ -138,6 +125,28 @@
             this.uiMessagesUserControl.Name = "uiMessagesUserControl";
             this.uiMessagesUserControl.Size = new System.Drawing.Size(1326, 654);
             this.uiMessagesUserControl.TabIndex = 0;
+            // 
+            // toolStripMenuItemGoToRoot
+            // 
+            this.toolStripMenuItemGoToRoot.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.fw_slash_16x16;
+            this.toolStripMenuItemGoToRoot.Name = "toolStripMenuItemGoToRoot";
+            this.toolStripMenuItemGoToRoot.Size = new System.Drawing.Size(28, 20);
+            this.toolStripMenuItemGoToRoot.Click += new System.EventHandler(this.toolStripMenuItemGoToRoot_Click);
+            // 
+            // toolStripMenuItemAddNewTab
+            // 
+            this.toolStripMenuItemAddNewTab.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.toolStripMenuItemAddNewTab.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.plus_icon_16x16;
+            this.toolStripMenuItemAddNewTab.Name = "toolStripMenuItemAddNewTab";
+            this.toolStripMenuItemAddNewTab.Size = new System.Drawing.Size(28, 20);
+            this.toolStripMenuItemAddNewTab.Click += new System.EventHandler(this.ToolStripMenuItemAddNewTab_Click);
+            // 
+            // ToolStripMenuItemCloseCurrentTab
+            // 
+            this.ToolStripMenuItemCloseCurrentTab.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.times_16x16;
+            this.ToolStripMenuItemCloseCurrentTab.Name = "ToolStripMenuItemCloseCurrentTab";
+            this.ToolStripMenuItemCloseCurrentTab.Size = new System.Drawing.Size(28, 20);
+            this.ToolStripMenuItemCloseCurrentTab.Click += new System.EventHandler(this.ToolStripMenuItemCloseCurrentTab_Click);
             // 
             // MainForm
             // 
@@ -173,6 +182,7 @@
         private System.Windows.Forms.MenuStrip topMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddNewTab;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCloseCurrentTab;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGoToRoot;
     }
 }
 

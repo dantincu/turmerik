@@ -91,9 +91,27 @@ namespace Turmerik.FsUtils.WinForms.App
             this.toolStripStatusLabel.Text = statusTripText;
         }
 
-        private void ViewModel_UILogMessageAdded(IUILogMessage uILogMessage)
+        private void ViewModel_UILogMessageAdded(IUILogMessage uILogMessage, bool showMessageBox)
         {
             uiMessagesUserControl.AddUILogMessage(uILogMessage);
+
+            if (showMessageBox)
+            {
+                switch (uILogMessage.Level)
+                {
+                    case UILogMessageLevel.Information:
+                        ShowMessageBox(uILogMessage, MessageBoxIcon.Information);
+                        break;
+                    case UILogMessageLevel.Warning:
+                        ShowMessageBox(uILogMessage, MessageBoxIcon.Warning);
+                        break;
+                    case UILogMessageLevel.Error:
+                        ShowMessageBox(uILogMessage, MessageBoxIcon.Error);
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
         }
 
         private void ToolStripMenuItemAddNewTab_Click(object sender, EventArgs e)
@@ -113,6 +131,22 @@ namespace Turmerik.FsUtils.WinForms.App
         private void TabControlFsExplorer_SelectedIndexChanged(object sender, EventArgs e)
         {
             viewModel.UpdateFsExplorerTabPageIndex(tabControlFsExplorer.SelectedIndex);
+        }
+
+        private void toolStripMenuItemGoToRoot_Click(object sender, EventArgs e)
+        {
+            viewModel.NavigateCurrentToRoot();
+        }
+
+        private void ShowMessageBox(
+            IUILogMessage uILogMessage,
+            MessageBoxIcon messageBoxIcon)
+        {
+            MessageBox.Show(
+                uILogMessage.Message,
+                uILogMessage.Level.ToString(),
+                MessageBoxButtons.OK,
+                messageBoxIcon);
         }
     }
 }

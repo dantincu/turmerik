@@ -18,17 +18,14 @@ namespace Turmerik.FsUtils.WinForms.App
     {
         public const string ROOT_FOLDER_NAME = "This PC";
 
-        private readonly ITimeStampHelper timeStampHelper;
         private readonly MainFormEventsViewModel eventsViewModel;
 
         private Action fsEntriesRefreshed;
         private Action currentFsDirNameChanged;
 
         public FsExplorerViewModel(
-            MainFormEventsViewModel eventsViewModel,
-            ITimeStampHelper timeStampHelper)
+            MainFormEventsViewModel eventsViewModel)
         {
-            this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
             this.eventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
 
             UILogMessages = new List<IUILogMessage>();
@@ -128,7 +125,9 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public void TryExecute(
             string actionName,
-            Func<Tuple<bool, string>> action)
+            Func<Tuple<bool, string>> action,
+            bool showMessageBoxOnError = false,
+            bool showMessageBoxOnSuccess = false)
         {
             eventsViewModel.UpdateStatusStripText($"Executing action {actionName}");
             Exception exception = null;
@@ -168,84 +167,44 @@ namespace Turmerik.FsUtils.WinForms.App
             }
 
             var uILogMessageLevel = resultIsSuccess ? UILogMessageLevel.Information : UILogMessageLevel.Error;
+            bool showMessageBox;
 
             if (resultIsSuccess)
             {
+                showMessageBox = showMessageBoxOnSuccess;
                 eventsViewModel.UpdateStatusStripText($"Action {actionName} executed successfully");
             }
             else
             {
+                showMessageBox = showMessageBoxOnError;
                 eventsViewModel.UpdateStatusStripText($"Action {actionName} executed with errors");
             }
 
-            AddUILogMessage(
+            eventsViewModel.AddUILogMessage(
                 uILogMessageLevel,
                 resultMessage,
-                exception);
+                exception,
+                showMessageBox);
         }
 
         #region AddUILogMessage
 
-        public void AddUILogMessage(IUILogMessage uILogMessage)
+        public void AddUILogMessage(
+            IUILogMessage uILogMessage,
+            bool showMessageBox = false)
         {
-            eventsViewModel.AddUILogMessage(uILogMessage);
-        }
-
-        public void AddUILogMessage(UILogMessageMtbl uILogMessage)
-        {
-            var logMessage = new UILogMessageImmtbl(uILogMessage);
-            AddUILogMessage(logMessage);
+            eventsViewModel.AddUILogMessage(uILogMessage, showMessageBox);
         }
 
         public void AddUILogMessage(
-            UILogMessageLevel level,
-            string message,
-            Exception exc = null,
-            DateTime? dateTime = null)
+            UILogMessageMtbl uILogMessage,
+            bool showMessageBox = false)
         {
-            var timeStamp = dateTime ?? DateTime.Now;
-
-            var uiLogMessage = new UILogMessageMtbl
-            {
-                Uuid = Guid.NewGuid(),
-                Level = level,
-                Message = message,
-                Exception = exc,
-                TimeStamp = timeStamp,
-                TimeStampStr = timeStampHelper.TmStmp(
-                    timeStamp, true,
-                    TimeStamp.Seconds)
-            };
-
-            AddUILogMessage(uiLogMessage);
+            var logMessage = new UILogMessageImmtbl(uILogMessage);
+            AddUILogMessage(logMessage, showMessageBox);
         }
 
-        public void AddUIInfoMsg(
-            string message,
-            Exception exc = null)
-        {
-            AddUILogMessage(
-                UILogMessageLevel.Information,
-                message, exc);
-        }
-
-        public void AddUIWarnMsg(
-            string message,
-            Exception exc = null)
-        {
-            AddUILogMessage(
-                UILogMessageLevel.Warning,
-                message, exc);
-        }
-
-        public void AddUIErrMsg(
-            string message,
-            Exception exc = null)
-        {
-            AddUILogMessage(
-                UILogMessageLevel.Error,
-                message, exc);
-        }
+        
 
         #endregion AddUILogMessage
 

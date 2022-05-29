@@ -26,11 +26,13 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             if (viewModel.IsRootFolder)
             {
-                viewModel.NavigateToFolder(kvp.Value.Data.Path);
+                viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                    () => viewModel.NavigateToFolder(kvp.Value.Data.Path), true);
             }
             else
             {
-                viewModel.NavigateToSubFolder(kvp.Value.Data.Name);
+                viewModel.TryExecute("[FS Explorer] -> navigate to sub folder",
+                    () => viewModel.NavigateToSubFolder(kvp.Value.Data.Name), true);
             }
         }
 
@@ -90,6 +92,21 @@ namespace Turmerik.FsUtils.WinForms.App
                     textBoxEditableDirPath.Font,
                     FontStyle.Regular);
             }
+        }
+
+        private void buttonCurrentDirGoBack_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonCurrentDirGoUp_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonCurrentDirGoForward_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -13,6 +13,8 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public partial class UIMessagesUserControl : UserControl
     {
+        private const int MESSAGES_MAX_COUNT = 100;
+
         public UIMessagesUserControl()
         {
             InitializeComponent();
@@ -26,14 +28,44 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public void AddUILogMessage(IUILogMessage uILogMessage)
         {
-            UILogMessages.Add(uILogMessage);
-            var control = GetMessageItemSummaryUserControl(uILogMessage);
+            Action action = GetAddUILogMessageAction(uILogMessage);
 
-            flowLayoutPanelMessagesList.SuspendLayout();
-            flowLayoutPanelMessagesList.Controls.Add(control);
+            if (this.InvokeRequired)
+            {
+                this.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
 
-            flowLayoutPanelMessagesList.ResumeLayout(true);
-            flowLayoutPanelMessagesList.Refresh();
+        private Action GetAddUILogMessageAction(IUILogMessage uILogMessage)
+        {
+            Action action = () =>
+            {
+                UILogMessages.Add(uILogMessage);
+                var control = GetMessageItemSummaryUserControl(uILogMessage);
+
+                flowLayoutPanelMessagesList.SuspendLayout();
+
+                if (flowLayoutPanelMessagesList.Controls.Count >= MESSAGES_MAX_COUNT)
+                {
+                    int toRemoveCount = flowLayoutPanelMessagesList.Controls.Count + 1 - MESSAGES_MAX_COUNT;
+
+                    for (int i = 0; i < toRemoveCount; i++)
+                    {
+                        flowLayoutPanelMessagesList.Controls.RemoveAt(0);
+                    }
+                }
+
+                flowLayoutPanelMessagesList.Controls.Add(control);
+
+                flowLayoutPanelMessagesList.ResumeLayout(true);
+                flowLayoutPanelMessagesList.Refresh();
+            };
+
+            return action;
         }
 
         private UIMessageItemSummaryUserControl GetMessageItemSummaryUserControl(IUILogMessage uILogMessage)
