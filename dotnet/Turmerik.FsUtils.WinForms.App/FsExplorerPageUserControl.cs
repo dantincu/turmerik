@@ -17,6 +17,26 @@ namespace Turmerik.FsUtils.WinForms.App
         public FsExplorerPageUserControl()
         {
             InitializeComponent();
+
+            fsDirectoryEntriesGridUserControl.OnFsEntryNameDblClick += FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick;
+            fsFileEntriesGridUserControl.OnFsEntryNameDblClick += FsFileEntriesGridUserControl_OnFsEntryNameDblClick;
+        }
+
+        private void FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick(KeyValuePair<int, IFsEntriesDataGridRow> kvp)
+        {
+            if (viewModel.IsRootFolder)
+            {
+                viewModel.NavigateToFolder(kvp.Value.Data.Path);
+            }
+            else
+            {
+                viewModel.NavigateToSubFolder(kvp.Value.Data.Name);
+            }
+        }
+
+        private void FsFileEntriesGridUserControl_OnFsEntryNameDblClick(KeyValuePair<int, IFsEntriesDataGridRow> kvp)
+        {
+            viewModel.OpenFileInOSDefaultApp(kvp.Value.Data.Name);
         }
 
         public void SetViewModel(FsExplorerViewModel viewModel)

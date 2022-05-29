@@ -16,10 +16,13 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public class FsExplorerViewModel
     {
+        public const string ROOT_FOLDER_NAME = "This PC";
+
         private readonly ITimeStampHelper timeStampHelper;
         private readonly MainFormEventsViewModel eventsViewModel;
 
         private Action fsEntriesRefreshed;
+        private Action currentFsDirNameChanged;
 
         public FsExplorerViewModel(
             MainFormEventsViewModel eventsViewModel,
@@ -60,6 +63,19 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
+        public event Action CurrentFsDirNameChanged
+        {
+            add
+            {
+                currentFsDirNameChanged += value;
+            }
+
+            remove
+            {
+                currentFsDirNameChanged -= value;
+            }
+        }
+
         public Tuple<bool, string> Init(string currentDirPath)
         {
             NavigateToFolderCore(currentDirPath);
@@ -68,17 +84,30 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public Tuple<bool, string> NavigateToRoot()
         {
-            return null;
+            NavigateToFolderCore(null);
+            return new Tuple<bool, string>(true, null);
         }
 
         public Tuple<bool, string> NavigateToParentFolder()
         {
-            return null;
+            string folderPath = CurrentDirPath.GetDirPath();
+            NavigateToFolderCore(folderPath);
+
+            return new Tuple<bool, string>(true, null);
         }
 
-        public Tuple<bool, string> NavigateToFolder(string folderName)
+        public Tuple<bool, string> NavigateToSubFolder(string folderName)
         {
-            return null;
+            string folderPath = Path.Combine(CurrentDirPath, folderName);
+            NavigateToFolderCore(folderPath);
+
+            return new Tuple<bool, string>(true, null);
+        }
+
+        public Tuple<bool, string> NavigateToFolder(string folderPath)
+        {
+            NavigateToFolderCore(folderPath);
+            return new Tuple<bool, string>(true, null);
         }
 
         public Tuple<bool, string> OpenFileInOSDefaultApp(string fileName)
@@ -230,7 +259,7 @@ namespace Turmerik.FsUtils.WinForms.App
             }
             else
             {
-                CurrentDirName = "This PC";
+                CurrentDirName = ROOT_FOLDER_NAME;
                 IsRootFolder = true;
             }
 
@@ -249,6 +278,7 @@ namespace Turmerik.FsUtils.WinForms.App
                 entry => new FsItemImmtbl(entry) as IFsItem).RdnlC();
 
             fsEntriesRefreshed?.Invoke();
+            currentFsDirNameChanged?.Invoke();
         }
 
         private string GetCurrentDirVPath(string currentDirPath)

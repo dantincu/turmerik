@@ -33,9 +33,12 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public FsEntriesGridUserControl()
         {
-            lambdaExprHelperFactory = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<ILambdaExprHelperFactory>();
-            fsEntriesDataGridRowLambdaExprHelper = lambdaExprHelperFactory.GetHelper<IFsEntriesDataGridRow>();
-            fsItemMtblLambdaExprHelper = lambdaExprHelperFactory.GetHelper<FsItemMtbl>();
+            if (!ServiceProviderContainer.Instance.Value.IsDesignMode)
+            {
+                lambdaExprHelperFactory = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<ILambdaExprHelperFactory>();
+                fsEntriesDataGridRowLambdaExprHelper = lambdaExprHelperFactory.GetHelper<IFsEntriesDataGridRow>();
+                fsItemMtblLambdaExprHelper = lambdaExprHelperFactory.GetHelper<FsItemMtbl>();
+            }
 
             InitializeComponent();
             dataGridViewEndEditAction = () => dataGridView.EndEdit();

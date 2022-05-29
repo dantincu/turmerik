@@ -24,6 +24,8 @@ namespace Turmerik.FsUtils.WinForms.App
             services.AddTransient<FsExplorerViewModel>();
 
             ServiceProviderContainer.Instance.Value.RegisterServices(services);
+            ServiceProviderContainer.Instance.Value.IsDesignMode = false;
+
             Application.EnableVisualStyles();
 
             Application.SetCompatibleTextRenderingDefault(false);

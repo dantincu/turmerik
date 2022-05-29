@@ -14,6 +14,9 @@ namespace Turmerik.FsUtils.WinForms.App
 
         protected ServiceProviderContainer()
         {
+            IsDesignMode = true;
         }
+
+        public bool IsDesignMode { get; set; }
     }
 }

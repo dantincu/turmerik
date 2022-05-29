@@ -26,7 +26,7 @@ namespace Turmerik.FsUtils.WinForms.App
         public MainForm(string[] args)
         {
             InitializeComponent();
-            initialDirPath = args.FirstOrDefault();
+            initialDirPath = args.FirstOrDefault() ?? string.Empty;
 
             viewModel = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<MainFormViewModel>();
 
@@ -65,6 +65,11 @@ namespace Turmerik.FsUtils.WinForms.App
 
             var tabPage = new TabPage(kvp.Value.CurrentDirName);
             tabPage.AutoScroll = true;
+
+            kvp.Value.CurrentFsDirNameChanged += () =>
+            {
+                tabPage.Text = kvp.Value.CurrentDirName;
+            };
 
             Panel panel = new Panel();
             panel.AutoScroll = true;

@@ -77,7 +77,7 @@ namespace Turmerik.Core.Helpers
 
             if (path.LastOrDefault() == ':')
             {
-                dirName = path;
+                dirName = path ?? string.Empty;
             }
             else
             {
@@ -85,6 +85,19 @@ namespace Turmerik.Core.Helpers
             }
 
             return dirName;
+        }
+
+        public static string GetDirPath(this string path)
+        {
+            path = path?.TrimEnd('/', '\\') ?? string.Empty;
+            string dirPath = string.Empty;
+
+            if (path.LastOrDefault() != ':')
+            {
+                dirPath = Path.GetFileName(path);
+            }
+
+            return dirPath;
         }
     }
 }
