@@ -19,29 +19,13 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public partial class FsEntriesGridUserControl : UserControl
     {
-        private readonly ILambdaExprHelperFactory lambdaExprHelperFactory;
-        private readonly ILambdaExprHelper<IFsEntriesDataGridRow> fsEntriesDataGridRowLambdaExprHelper;
-        private readonly ILambdaExprHelper<FsItemMtbl> fsItemMtblLambdaExprHelper;
-
-        private readonly Action dataGridViewEndEditAction;
-
-        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryIconClick;
-        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryIconDblClick;
-        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryNameClick;
-        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryNameDblClick;
-        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOptsClick;
+        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToParent;
+        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOpen;
+        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOptsOpen;
 
         public FsEntriesGridUserControl()
         {
-            if (!ServiceProviderContainer.Instance.Value.IsDesignMode)
-            {
-                lambdaExprHelperFactory = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<ILambdaExprHelperFactory>();
-                fsEntriesDataGridRowLambdaExprHelper = lambdaExprHelperFactory.GetHelper<IFsEntriesDataGridRow>();
-                fsItemMtblLambdaExprHelper = lambdaExprHelperFactory.GetHelper<FsItemMtbl>();
-            }
-
             InitializeComponent();
-            dataGridViewEndEditAction = () => dataGridView.EndEdit();
         }
 
         public bool IsFoldersGrid { get; private set; }
@@ -55,73 +39,49 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public IFsEntriesDataGridRow CurrentRow { get; private set; }
 
+        public int NavigationRowIndex { get; private set; }
+        public IFsEntriesDataGridRow NavigationRow { get; private set; }
+
         private Bitmap FsItemIcon => IsFoldersGrid ? Resources.folder_icon_16x16 : Resources.file_icon_16x16;
 
-        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryIconClick
+        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoToParent
         {
             add
             {
-                onFsEntryIconClick += value;
+                onGoToParent += value;
             }
 
             remove
             {
-                onFsEntryIconClick -= value;
+                onGoToParent -= value;
             }
         }
 
-        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryIconDblClick
+        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryOpen
         {
             add
             {
-                onFsEntryIconDblClick += value;
+                onFsEntryOpen += value;
             }
 
             remove
             {
-                onFsEntryIconDblClick -= value;
+                onFsEntryOpen -= value;
             }
         }
 
-        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryNameClick
+        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryOptsOpen
         {
             add
             {
-                onFsEntryNameClick += value;
+                onFsEntryOptsOpen += value;
             }
 
             remove
             {
-                onFsEntryNameClick -= value;
+                onFsEntryOptsOpen -= value;
             }
         }
-
-        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryNameDblClick
-        {
-            add
-            {
-                onFsEntryNameDblClick += value;
-            }
-
-            remove
-            {
-                onFsEntryNameDblClick -= value;
-            }
-        }
-
-        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnFsEntryOptsClick
-        {
-            add
-            {
-                onFsEntryOptsClick += value;
-            }
-
-            remove
-            {
-                onFsEntryOptsClick -= value;
-            }
-        }
-
 
         public void SetFsEntries(ICollection<IFsItem> fsEntries)
         {
@@ -237,25 +197,11 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            CurrentRowIndex = e.RowIndex;
-            CurrentCellIndex = e.ColumnIndex;
-
-            CurrentCell = (FsEntriesGridColumn)e.ColumnIndex;
-            CurrentRow = DataGridValueRows[CurrentRowIndex];
-
             switch (CurrentCell)
             {
-                case FsEntriesGridColumn.Icon:
-                    onFsEntryIconClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, CurrentRow));
-                    break;
-                case FsEntriesGridColumn.Name:
-                    onFsEntryNameClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, CurrentRow));
-                    break;
                 case FsEntriesGridColumn.Opts:
-                    onFsEntryOptsClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, CurrentRow));
+                    onFsEntryOptsOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                        CurrentRowIndex, CurrentRow));
                     break;
             }
         }
@@ -264,13 +210,45 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             switch (CurrentCell)
             {
-                case FsEntriesGridColumn.Icon:
-                    onFsEntryIconDblClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, CurrentRow));
-                    break;
                 case FsEntriesGridColumn.Name:
-                    onFsEntryNameDblClick?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        e.RowIndex, CurrentRow));
+                    onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                        CurrentRowIndex, CurrentRow));
+                    break;
+            }
+        }
+
+        private void dataGridView_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                    onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                        NavigationRowIndex, NavigationRow));
+                    break;
+                case Keys.Back:
+                    onGoToParent?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                        NavigationRowIndex, NavigationRow));
+                    break;
+            }
+        }
+
+        private void dataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            CurrentRowIndex = e.RowIndex;
+            CurrentCellIndex = e.ColumnIndex;
+
+            CurrentCell = (FsEntriesGridColumn)e.ColumnIndex;
+            CurrentRow = DataGridValueRows[CurrentRowIndex];
+        }
+
+        private void dataGridView_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Enter:
+                case Keys.Back:
+                    NavigationRowIndex = CurrentRowIndex;
+                    NavigationRow = DataGridValueRows[NavigationRowIndex];
                     break;
             }
         }

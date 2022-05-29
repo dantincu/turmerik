@@ -426,5 +426,32 @@ namespace Turmerik.FsUtils.WinForms.App
         }
 
         #endregion GetFsEntries
+
+        public static class ActionNames
+        {
+            private const string ACTION_NAME_TPL = "[{0}] -> {1}";
+            private const string ACTION_NAME_PREFIX = "FS Explorer";
+
+            public static readonly string NavigateToParentFolder = GetActionName("navigate to parent folder");
+            public static readonly string NavigateToFolder = GetActionName("navigate to folder");
+            public static readonly string NavigateToSubFolder = GetActionName("navigate to sub folder");
+            public static readonly string NavigateToHistoryBack = GetActionName("navigate to history back");
+            public static readonly string NavigateToHistoryForward = GetActionName("navigate to history forward");
+            public static readonly string OpenFileInOSDefaultApp = GetActionName("open app in OS default app");
+            public static readonly string CopyCurrentDirPathToClipboard = GetActionName("copy current dir path to clipboard");
+            public static readonly string CopyEditableDirPathToClipboard = GetActionName("copy current dir path to clipboard");
+            public static readonly string AddNewTabPage = GetActionName("add new tab page");
+            public static readonly string NavigateToRoot = GetActionName("navigate to root");
+
+            private static string GetActionName(string actionNameCore)
+            {
+                string actionName = string.Format(
+                    ACTION_NAME_TPL,
+                    ACTION_NAME_PREFIX,
+                    actionNameCore);
+
+                return actionName;
+            }
+        }
     }
 }

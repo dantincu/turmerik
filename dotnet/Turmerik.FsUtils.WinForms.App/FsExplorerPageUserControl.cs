@@ -19,27 +19,60 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             InitializeComponent();
 
-            fsDirectoryEntriesGridUserControl.OnFsEntryNameDblClick += FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick;
-            fsFileEntriesGridUserControl.OnFsEntryNameDblClick += FsFileEntriesGridUserControl_OnFsEntryNameDblClick;
+            fsDirectoryEntriesGridUserControl.OnGoToParent += FsDirectoryEntriesGridUserControl_OnGoToParent;
+            fsDirectoryEntriesGridUserControl.OnFsEntryOpen += FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick;
+            fsDirectoryEntriesGridUserControl.OnFsEntryOptsOpen += FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen;
+
+            fsFileEntriesGridUserControl.OnGoToParent += FsFileEntriesGridUserControl_OnGoToParent;
+            fsFileEntriesGridUserControl.OnFsEntryOpen += FsFileEntriesGridUserControl_OnFsEntryNameDblClick;
+            fsFileEntriesGridUserControl.OnFsEntryOptsOpen += FsFileEntriesGridUserControl_OnFsEntryOptsOpen;
+        }
+
+        private void FsFileEntriesGridUserControl_OnFsEntryOptsOpen(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void FsFileEntriesGridUserControl_OnGoToParent(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            if (!viewModel.IsRootFolder)
+            {
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToParentFolder,
+                    () => viewModel.NavigateToParentFolder(), true);
+            }
+        }
+
+        private void FsDirectoryEntriesGridUserControl_OnGoToParent(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            if (!viewModel.IsRootFolder)
+            {
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToParentFolder,
+                    () => viewModel.NavigateToParentFolder(), true);
+            }
         }
 
         private void FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick(KeyValuePair<int, IFsEntriesDataGridRow> kvp)
         {
             if (viewModel.IsRootFolder)
             {
-                viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToFolder,
                     () => viewModel.NavigateToFolder(kvp.Value.Data.Path), true);
             }
             else
             {
-                viewModel.TryExecute("[FS Explorer] -> navigate to sub folder",
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToSubFolder,
                     () => viewModel.NavigateToSubFolder(kvp.Value.Data.Name), true);
             }
         }
 
         private void FsFileEntriesGridUserControl_OnFsEntryNameDblClick(KeyValuePair<int, IFsEntriesDataGridRow> kvp)
         {
-            viewModel.TryExecute("[FS Explorer] -> open file in OS default app",
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.OpenFileInOSDefaultApp,
                 () => viewModel.OpenFileInOSDefaultApp(kvp.Value.Data.Name), false);
         }
 
@@ -99,7 +132,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void ButtonCurrentDirGoBack_Click(object sender, EventArgs e)
         {
-            viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToHistoryBack,
                 () => viewModel.NavigateToHistoryBack(), true);
         }
 
@@ -107,14 +140,14 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             if (!viewModel.IsRootFolder)
             {
-                viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToParentFolder,
                     () => viewModel.NavigateToParentFolder(), true);
             }
         }
 
         private void ButtonCurrentDirGoForward_Click(object sender, EventArgs e)
         {
-            viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToHistoryForward,
                 () => viewModel.NavigateToHistoryForward(), true);
         }
 
@@ -122,7 +155,7 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             if (!string.IsNullOrEmpty(textBoxCurrentDirPath.Text))
             {
-                viewModel.TryExecute("[FS Explorer] -> copy current dir path to clipboard",
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.CopyCurrentDirPathToClipboard,
                 () =>
                 {
                     Clipboard.SetText(textBoxCurrentDirPath.Text);
@@ -136,7 +169,7 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             if (!string.IsNullOrEmpty(textBoxEditableDirPath.Text))
             {
-                viewModel.TryExecute("[FS Explorer] -> copy editable dir path to clipboard",
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.CopyEditableDirPathToClipboard,
                     () =>
                     {
                         Clipboard.SetText(textBoxEditableDirPath.Text);
@@ -183,7 +216,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
             if (errorMessage == null)
             {
-                viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToFolder,
                     () => viewModel.NavigateToFolder(folderPath), true);
             }
             else

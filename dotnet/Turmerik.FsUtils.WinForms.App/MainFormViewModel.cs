@@ -78,7 +78,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
             var kvp = new KeyValuePair<int, FsExplorerViewModel>(idx, viewModel);
 
-            viewModel.TryExecute("[FS Explorer -> add new tab page]",
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.AddNewTabPage,
                 () => viewModel.Init(dirPath), true);
 
             onFsExplorerTabAdded?.Invoke(kvp);
@@ -133,7 +133,7 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             var viewModel = SelectedTabPage.Value;
 
-            SelectedTabPage.Value.TryExecute("[FS Explorer -> navigate to root]",
+            SelectedTabPage.Value.TryExecute(FsExplorerViewModel.ActionNames.NavigateToRoot,
                 () => viewModel.NavigateToRoot(), true);
 
             return SelectedTabPage;
