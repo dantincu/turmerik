@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -96,41 +97,99 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
-        private void buttonCurrentDirGoBack_Click(object sender, EventArgs e)
+        private void ButtonCurrentDirGoBack_Click(object sender, EventArgs e)
         {
-
+            viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                () => viewModel.NavigateToHistoryBack(), true);
         }
 
-        private void buttonCurrentDirGoUp_Click(object sender, EventArgs e)
+        private void ButtonCurrentDirGoUp_Click(object sender, EventArgs e)
         {
-
+            if (!viewModel.IsRootFolder)
+            {
+                viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                    () => viewModel.NavigateToParentFolder(), true);
+            }
         }
 
-        private void buttonCurrentDirGoForward_Click(object sender, EventArgs e)
+        private void ButtonCurrentDirGoForward_Click(object sender, EventArgs e)
         {
-
+            viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                () => viewModel.NavigateToHistoryForward(), true);
         }
 
-        private void buttonCopyCurrentDirPathToClipboard_Click(object sender, EventArgs e)
+        private void ButtonCopyCurrentDirPathToClipboard_Click(object sender, EventArgs e)
         {
-            viewModel.TryExecute("[FS Explorer] -> copy current dir path to clipboard",
+            if (!string.IsNullOrEmpty(textBoxCurrentDirPath.Text))
+            {
+                viewModel.TryExecute("[FS Explorer] -> copy current dir path to clipboard",
                 () =>
                 {
                     Clipboard.SetText(textBoxCurrentDirPath.Text);
                     return new Tuple<bool, string>(true, null);
                 },
                 false);
+            }
         }
 
-        private void buttonClearEditableDirPath_Click(object sender, EventArgs e)
+        private void ButtonCopyEditableDirPathToClipboard_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxEditableDirPath.Text))
+            {
+                viewModel.TryExecute("[FS Explorer] -> copy editable dir path to clipboard",
+                    () =>
+                    {
+                        Clipboard.SetText(textBoxEditableDirPath.Text);
+                        return new Tuple<bool, string>(true, null);
+                    },
+                    false);
+            }
+        }
+
+        private void ButtonClearEditableDirPath_Click(object sender, EventArgs e)
         {
             textBoxEditableDirPath.Text = string.Empty;
         }
 
-        private void buttonEditableDirPathGo_Click(object sender, EventArgs e)
+        private void ButtonEditableDirPathGo_Click(object sender, EventArgs e)
         {
-            viewModel.TryExecute("[FS Explorer] -> navigate to folder",
-                () => viewModel.NavigateToFolder(textBoxEditableDirPath.Text, true), true);
+            string folderPath = textBoxEditableDirPath.Text;
+            string errorMessage = null;
+
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                var result = viewModel.FsPathNormalizer.TryNormalizePath(folderPath);
+
+                if (result.IsValid)
+                {
+                    if (result.IsAbsUri == true)
+                    {
+                        errorMessage = "Path must not be an URI";
+                    }
+                    else if (result.IsRooted)
+                    {
+                        folderPath = result.NormalizedPath;
+                    }
+                    else
+                    {
+                        errorMessage = "Path must be rooted";
+                    }
+                }
+                else
+                {
+                    errorMessage = "Path is invalid";
+                }
+            }
+
+            if (errorMessage == null)
+            {
+                viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                    () => viewModel.NavigateToFolder(folderPath), true);
+            }
+            else
+            {
+                viewModel.EventsViewModel.AddUIErrMsg(errorMessage, null, true);
+            }
         }
     }
 }

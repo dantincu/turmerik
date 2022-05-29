@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -19,8 +20,8 @@ namespace Turmerik.FsUtils.WinForms.App
     {
         public const string ROOT_FOLDER_NAME = "This PC";
 
-        private readonly MainFormEventsViewModel eventsViewModel;
-        private readonly IFsPathNormalizer fsPathNormalizer;
+        private readonly ConcurrentStack<string> backHistoryStack;
+        private readonly ConcurrentStack<string> forwardHistoryStack;
 
         private Action fsEntriesRefreshed;
         private Action currentFsDirNameChanged;
@@ -29,20 +30,27 @@ namespace Turmerik.FsUtils.WinForms.App
             MainFormEventsViewModel eventsViewModel,
             IFsPathNormalizer fsPathNormalizer)
         {
-            this.eventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
-            this.fsPathNormalizer = fsPathNormalizer ?? throw new ArgumentNullException(nameof(fsPathNormalizer));
+            this.EventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
+            this.FsPathNormalizer = fsPathNormalizer ?? throw new ArgumentNullException(nameof(fsPathNormalizer));
 
-            UILogMessages = new List<IUILogMessage>();
+            backHistoryStack = new ConcurrentStack<string>();
+            forwardHistoryStack = new ConcurrentStack<string>();
+
             Uuid = Guid.NewGuid();
         }
 
         public Guid Uuid { get; }
-        public List<IUILogMessage> UILogMessages { get; }
+        public IFsPathNormalizer FsPathNormalizer { get; }
+        public MainFormEventsViewModel EventsViewModel { get; }
 
         public bool IsRootFolder { get; private set; }
         public string CurrentDirName { get; private set; }
         public string CurrentDirPath { get; private set; }
         public string CurrentDirVPath { get; private set; }
+
+        public bool HistoryBackButtonEnabled { get; private set; }
+        public bool HistoryForwardButtonEnabled { get; private set; }
+        public bool GoToParentDirButtonEnabled { get; private set; }
 
         public ReadOnlyCollection<IFsItem> FsDirectoryEntries { get; private set; }
         public ReadOnlyCollection<IFsItem> FsFileEntries { get; private set; }
@@ -79,71 +87,98 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public Tuple<bool, string> Init(string currentDirPath)
         {
+            HistoryBackButtonEnabled = false;
+            HistoryForwardButtonEnabled = false;
+
             NavigateToFolderCore(currentDirPath);
+            return new Tuple<bool, string>(true, null);
+        }
+
+        public Tuple<bool, string> NavigateToHistoryBack()
+        {
+            string folderPath;
+            bool isValid = backHistoryStack.TryPop(out folderPath);
+
+            if (isValid)
+            {
+                HistoryBackButtonEnabled = backHistoryStack.Any();
+                HistoryForwardButtonEnabled = true;
+
+                forwardHistoryStack.Push(CurrentDirPath);
+                NavigateToFolderCore(folderPath);
+            }
+
+            return new Tuple<bool, string>(true, null);
+        }
+
+        public Tuple<bool, string> NavigateToHistoryForward()
+        {
+            string folderPath;
+            bool isValid = forwardHistoryStack.TryPop(out folderPath);
+
+            if (isValid)
+            {
+                HistoryForwardButtonEnabled = forwardHistoryStack.Any();
+                HistoryBackButtonEnabled = true;
+
+                backHistoryStack.Push(CurrentDirPath);
+                NavigateToFolderCore(folderPath);
+            }
+
             return new Tuple<bool, string>(true, null);
         }
 
         public Tuple<bool, string> NavigateToRoot()
         {
-            NavigateToFolderCore(null);
+            forwardHistoryStack.Clear();
+            HistoryForwardButtonEnabled = false;
+
+            HistoryBackButtonEnabled = true;
+
+            backHistoryStack.Push(CurrentDirPath);
+            NavigateToFolderCore(string.Empty);
+
             return new Tuple<bool, string>(true, null);
         }
 
         public Tuple<bool, string> NavigateToParentFolder()
         {
-            string folderPath = CurrentDirPath.GetDirPath();
-            NavigateToFolderCore(folderPath);
+            forwardHistoryStack.Clear();
+            HistoryForwardButtonEnabled = false;
 
+            HistoryBackButtonEnabled = true;
+
+            backHistoryStack.Push(CurrentDirPath);
+            string folderPath = CurrentDirPath.GetDirPath();
+
+            NavigateToFolderCore(folderPath);
             return new Tuple<bool, string>(true, null);
         }
 
         public Tuple<bool, string> NavigateToSubFolder(string folderName)
         {
+            forwardHistoryStack.Clear();
+            HistoryForwardButtonEnabled = false;
+
+            HistoryBackButtonEnabled = true;
+            backHistoryStack.Push(CurrentDirPath);
+
             string folderPath = Path.Combine(CurrentDirPath, folderName);
             NavigateToFolderCore(folderPath);
 
             return new Tuple<bool, string>(true, null);
         }
 
-        public Tuple<bool, string> NavigateToFolder(string folderPath, bool normalizePath = false)
+        public Tuple<bool, string> NavigateToFolder(string folderPath)
         {
-            string errorMessage = null;
+            forwardHistoryStack.Clear();
+            HistoryForwardButtonEnabled = false;
 
-            if (normalizePath && !string.IsNullOrEmpty(folderPath))
-            {
-                var result = fsPathNormalizer.TryNormalizePath(folderPath);
+            HistoryBackButtonEnabled = true;
+            backHistoryStack.Push(CurrentDirPath);
 
-                if (result.IsValid)
-                {
-                    if (result.IsAbsUri == true)
-                    {
-                        errorMessage = "Path must not be an URI";
-                    }
-                    else if (result.IsRooted)
-                    {
-                        folderPath = result.NormalizedPath;
-                    }
-                    else
-                    {
-                        errorMessage = "Path must be rooted";
-                    }
-                }
-                else
-                {
-                    errorMessage = "Path is invalid";
-                }
-            }
-
-            var retVal = new Tuple<bool, string>(
-                errorMessage == null,
-                errorMessage);
-
-            if (retVal.Item1)
-            {
-                NavigateToFolderCore(folderPath);
-            }
-
-            return retVal;
+            NavigateToFolderCore(folderPath);
+            return new Tuple<bool, string>(true, null);
         }
 
         public Tuple<bool, string> OpenFileInOSDefaultApp(string fileName)
@@ -168,7 +203,7 @@ namespace Turmerik.FsUtils.WinForms.App
             bool showMessageBoxOnError = false,
             bool showMessageBoxOnSuccess = false)
         {
-            eventsViewModel.UpdateStatusStripText($"Executing action {actionName}");
+            EventsViewModel.UpdateStatusStripText($"Executing action {actionName}");
             Exception exception = null;
 
             string resultMessage;
@@ -211,15 +246,15 @@ namespace Turmerik.FsUtils.WinForms.App
             if (resultIsSuccess)
             {
                 showMessageBox = showMessageBoxOnSuccess;
-                eventsViewModel.UpdateStatusStripText($"Action {actionName} executed successfully");
+                EventsViewModel.UpdateStatusStripText($"Action {actionName} executed successfully");
             }
             else
             {
                 showMessageBox = showMessageBoxOnError;
-                eventsViewModel.UpdateStatusStripText($"Action {actionName} executed with errors");
+                EventsViewModel.UpdateStatusStripText($"Action {actionName} executed with errors");
             }
 
-            eventsViewModel.AddUILogMessage(
+            EventsViewModel.AddUILogMessage(
                 uILogMessageLevel,
                 resultMessage,
                 exception,
@@ -232,7 +267,7 @@ namespace Turmerik.FsUtils.WinForms.App
             IUILogMessage uILogMessage,
             bool showMessageBox = false)
         {
-            eventsViewModel.AddUILogMessage(uILogMessage, showMessageBox);
+            EventsViewModel.AddUILogMessage(uILogMessage, showMessageBox);
         }
 
         public void AddUILogMessage(
@@ -248,19 +283,22 @@ namespace Turmerik.FsUtils.WinForms.App
         private void NavigateToFolderCore(string folderPath)
         {
             CurrentDirPath = folderPath;
+            CurrentDirVPath = GetCurrentDirVPath(CurrentDirPath);
 
             if (!string.IsNullOrEmpty(folderPath))
             {
+                IsRootFolder = false;
+                GoToParentDirButtonEnabled = true;
+
                 CurrentDirName = folderPath.GetDirName();
             }
             else
             {
-                CurrentDirName = ROOT_FOLDER_NAME;
                 IsRootFolder = true;
-            }
+                GoToParentDirButtonEnabled = false;
 
-            CurrentDirPath = folderPath;
-            CurrentDirVPath = GetCurrentDirVPath(CurrentDirPath);
+                CurrentDirName = ROOT_FOLDER_NAME;
+            }
 
             var fsEntries = GetFsEntriesMtbl(folderPath);
 

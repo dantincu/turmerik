@@ -94,7 +94,7 @@ namespace Turmerik.Core.Helpers
 
             if (path.LastOrDefault() != ':')
             {
-                dirPath = Path.GetFileName(path);
+                dirPath = Path.GetDirectoryName(path);
             }
 
             return dirPath;

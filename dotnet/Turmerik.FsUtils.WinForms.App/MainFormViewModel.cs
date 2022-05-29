@@ -98,7 +98,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
             if (kvp.Key < 0)
             {
-                eventsViewModel.AddUILogMessage(UILogMessageLevel.Error,
+                eventsViewModel.AddUIErrMsg(
                     $"Could not find a tab page with id {uuid}",
                     null, false);
             }
