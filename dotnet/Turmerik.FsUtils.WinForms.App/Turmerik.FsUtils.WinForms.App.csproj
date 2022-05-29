@@ -61,6 +61,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFsEntriesDataGridCell.cs" />
+    <Compile Include="IFsEntriesDataGridRow.cs" />
     <Compile Include="FsEntriesGridUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -73,7 +75,7 @@
     <Compile Include="FsExplorerPageUserControl.Designer.cs">
       <DependentUpon>FsExplorerPageUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="FsItem.cs" />
+    <Compile Include="IFsItem.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

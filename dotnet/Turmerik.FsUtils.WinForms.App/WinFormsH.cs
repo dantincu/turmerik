@@ -10,7 +10,9 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public static class WinFormsH
     {
-        public static DataGridViewRow AddDataGridTextCell(this DataGridViewRow row, string cellText)
+        public static DataGridViewRow AddDataGridTextCell(
+            this DataGridViewRow row,
+            string cellText)
         {
             var cell = new DataGridViewTextBoxCell();
             cell.Value = cellText;

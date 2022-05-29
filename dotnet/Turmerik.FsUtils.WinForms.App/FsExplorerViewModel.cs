@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,20 +30,22 @@ namespace Turmerik.FsUtils.WinForms.App
 
             UILogMessages = new List<IUILogMessage>();
             Uuid = Guid.NewGuid();
-
-            FsDirectoryEntries = new List<IFsItem>();
-            FsFileEntries = new List<IFsItem>();
         }
 
         public Guid Uuid { get; }
         public List<IUILogMessage> UILogMessages { get; }
 
+        public bool IsRootFolder { get; private set; }
         public string CurrentDirName { get; private set; }
         public string CurrentDirPath { get; private set; }
         public string CurrentDirVPath { get; private set; }
 
-        public List<IFsItem> FsDirectoryEntries { get; }
-        public List<IFsItem> FsFileEntries { get; }
+        public ReadOnlyCollection<IFsItem> FsDirectoryEntries { get; private set; }
+        public ReadOnlyCollection<IFsItem> FsFileEntries { get; private set; }
+
+        private List<FsItemMtbl> EditableFsDirectoryEntries { get; set; }
+        private List<FsItemMtbl> EditableFsFileEntries { get; set; }
+
 
         public event Action FsEntriesRefreshed
         {
@@ -228,18 +231,22 @@ namespace Turmerik.FsUtils.WinForms.App
             else
             {
                 CurrentDirName = "This PC";
+                IsRootFolder = true;
             }
 
             CurrentDirPath = folderPath;
             CurrentDirVPath = GetCurrentDirVPath(CurrentDirPath);
 
-            var fsEntries = GetFsEntries(folderPath);
+            var fsEntries = GetFsEntriesMtbl(folderPath);
 
-            FsDirectoryEntries.Clear();
-            FsFileEntries.Clear();
+            EditableFsDirectoryEntries = fsEntries.Where(item => item.IsDirectory).ToList();
+            EditableFsFileEntries = fsEntries.Where(item => !item.IsDirectory).ToList();
 
-            FsDirectoryEntries.AddRange(fsEntries.Where(item => item.IsDirectory));
-            FsFileEntries.AddRange(fsEntries.Where(item => !item.IsDirectory));
+            FsDirectoryEntries = EditableFsDirectoryEntries.Select(
+                entry => new FsItemImmtbl(entry) as IFsItem).RdnlC();
+
+            FsFileEntries = EditableFsFileEntries.Select(
+                entry => new FsItemImmtbl(entry) as IFsItem).RdnlC();
 
             fsEntriesRefreshed?.Invoke();
         }
@@ -251,36 +258,36 @@ namespace Turmerik.FsUtils.WinForms.App
 
         #region GetFsEntries
 
-        private IFsItem[] GetFsEntries(string currentDirPath)
+        private List<FsItemMtbl> GetFsEntriesMtbl(string currentDirPath)
         {
-            IFsItem[] fsEntriesArr;
+            List<FsItemMtbl> fsEntriesArr;
 
             if (!string.IsNullOrWhiteSpace(currentDirPath))
             {
-                fsEntriesArr = GetFsEntriesCore(currentDirPath);
+                fsEntriesArr = GetFsEntriesMtblCore(currentDirPath);
             }
             else
             {
-                fsEntriesArr = GetRootFsDirectoryEntries();
+                fsEntriesArr = GetRootFsDirectoryEntriesMtbl();
             }
 
             return fsEntriesArr;
         }
 
-        private IFsItem[] GetFsEntriesCore(
+        private List<FsItemMtbl> GetFsEntriesMtblCore(
             string currentDirPath)
         {
             var dirInfo = new DirectoryInfo(currentDirPath);
 
             var fsEntries = dirInfo.EnumerateFileSystemInfos().Select(
-                GetFsItemMtbl).Select(d => new FsItemImmtbl(d) as IFsItem).ToArray();
+                GetFsItemMtbl).ToList();
 
             return fsEntries;
         }
 
-        private IFsItem[] GetRootFsDirectoryEntries()
+        private List<FsItemMtbl> GetRootFsDirectoryEntriesMtbl()
         {
-            var fsEntriesList = new List<IFsItem>();
+            var fsEntriesList = new List<FsItemMtbl>();
 
             var drives = DriveInfo.GetDrives(
                 ).Where(d => d.IsReady).Select(
@@ -291,7 +298,7 @@ namespace Turmerik.FsUtils.WinForms.App
                     Label = d.VolumeLabel,
                     IsDirectory = true,
                     IsDriveRoot = true
-                }).Select(d => new FsItemImmtbl(d) as IFsItem);
+                });
 
             string userHomePath = GetFolderPath(SpecialFolder.UserProfile);
 
@@ -324,12 +331,12 @@ namespace Turmerik.FsUtils.WinForms.App
 
                     item.SpecialFolder = kvp.Key;
                     return item;
-                }).Select(d => new FsItemImmtbl(d) as IFsItem);
+                });
 
             fsEntriesList.AddRange(drives);
             fsEntriesList.AddRange(folders);
 
-            return fsEntriesList.ToArray();
+            return fsEntriesList;
         }
 
         private FsItemMtbl GetFsItemMtbl(FileSystemInfo fsInfo)

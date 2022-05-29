@@ -22,11 +22,18 @@ namespace Turmerik.FsUtils.WinForms.App
         public void SetViewModel(FsExplorerViewModel viewModel)
         {
             this.viewModel = viewModel;
+
             fsDirectoryEntriesGridUserControl.SetIsFoldersGrid(true);
+            fsFileEntriesGridUserControl.SetIsFoldersGrid(false);
 
             textBoxCurrentDirPath.Text = viewModel.CurrentDirPath;
             textBoxVPath.Text = viewModel.CurrentDirVPath;
 
+            if (!viewModel.IsRootFolder)
+            {
+                textBoxCurrentFolderName.Text = viewModel.CurrentDirName;
+            }
+            
             viewModel.FsEntriesRefreshed += ViewModel_FsEntriesRefreshed;
             UpdateFsEntryGrids();
         }
