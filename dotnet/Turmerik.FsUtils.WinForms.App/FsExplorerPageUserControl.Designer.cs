@@ -44,14 +44,18 @@
             this.fsEntriesSplitContainer = new System.Windows.Forms.SplitContainer();
             this.fsDirectoryEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
             this.fsFileEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
-            this.buttonCurrentDirGoBack = new System.Windows.Forms.Button();
-            this.buttonCurrentDirGoUp = new System.Windows.Forms.Button();
+            this.buttonClearEditableDirPath = new System.Windows.Forms.Button();
+            this.buttonCopyCurrentDirPathToClipboard = new System.Windows.Forms.Button();
             this.buttonCurrentDirGoForward = new System.Windows.Forms.Button();
+            this.buttonCurrentDirGoUp = new System.Windows.Forms.Button();
+            this.buttonCurrentDirGoBack = new System.Windows.Forms.Button();
+            this.buttonEditableDirPathGo = new System.Windows.Forms.Button();
             this.groupBoxVPath.SuspendLayout();
             this.groupBoxPath.SuspendLayout();
             this.currentDirPathPanel.SuspendLayout();
             this.navigationPanel.SuspendLayout();
             this.groupBoxNavigation.SuspendLayout();
+            this.panelEditableDirPathControls.SuspendLayout();
             this.panelEditableDirPath.SuspendLayout();
             this.groupBoxCurrentFolderName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fsEntriesSplitContainer)).BeginInit();
@@ -112,6 +116,7 @@
             // 
             // navigationPanel
             // 
+            this.navigationPanel.Controls.Add(this.buttonCopyCurrentDirPathToClipboard);
             this.navigationPanel.Controls.Add(this.buttonCurrentDirGoForward);
             this.navigationPanel.Controls.Add(this.buttonCurrentDirGoUp);
             this.navigationPanel.Controls.Add(this.buttonCurrentDirGoBack);
@@ -135,6 +140,8 @@
             // 
             // panelEditableDirPathControls
             // 
+            this.panelEditableDirPathControls.Controls.Add(this.buttonEditableDirPathGo);
+            this.panelEditableDirPathControls.Controls.Add(this.buttonClearEditableDirPath);
             this.panelEditableDirPathControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelEditableDirPathControls.Location = new System.Drawing.Point(3, 41);
             this.panelEditableDirPathControls.Name = "panelEditableDirPathControls";
@@ -228,18 +235,42 @@
             this.fsFileEntriesGridUserControl.Size = new System.Drawing.Size(1244, 806);
             this.fsFileEntriesGridUserControl.TabIndex = 1;
             // 
-            // buttonCurrentDirGoBack
+            // buttonClearEditableDirPath
             // 
-            this.buttonCurrentDirGoBack.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_left_16x16;
-            this.buttonCurrentDirGoBack.Location = new System.Drawing.Point(0, -1);
-            this.buttonCurrentDirGoBack.Name = "buttonCurrentDirGoBack";
-            this.buttonCurrentDirGoBack.Size = new System.Drawing.Size(32, 23);
-            this.buttonCurrentDirGoBack.TabIndex = 0;
-            this.buttonCurrentDirGoBack.UseVisualStyleBackColor = true;
-            this.buttonCurrentDirGoBack.Click += new System.EventHandler(this.buttonCurrentDirGoBack_Click);
+            this.buttonClearEditableDirPath.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonClearEditableDirPath.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.times_16x16;
+            this.buttonClearEditableDirPath.Location = new System.Drawing.Point(1, 1);
+            this.buttonClearEditableDirPath.Name = "buttonClearEditableDirPath";
+            this.buttonClearEditableDirPath.Size = new System.Drawing.Size(32, 23);
+            this.buttonClearEditableDirPath.TabIndex = 1;
+            this.buttonClearEditableDirPath.UseVisualStyleBackColor = true;
+            this.buttonClearEditableDirPath.Click += new System.EventHandler(this.buttonClearEditableDirPath_Click);
+            // 
+            // buttonCopyCurrentDirPathToClipboard
+            // 
+            this.buttonCopyCurrentDirPathToClipboard.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonCopyCurrentDirPathToClipboard.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.clipboard_16x16;
+            this.buttonCopyCurrentDirPathToClipboard.Location = new System.Drawing.Point(90, 0);
+            this.buttonCopyCurrentDirPathToClipboard.Name = "buttonCopyCurrentDirPathToClipboard";
+            this.buttonCopyCurrentDirPathToClipboard.Size = new System.Drawing.Size(32, 23);
+            this.buttonCopyCurrentDirPathToClipboard.TabIndex = 3;
+            this.buttonCopyCurrentDirPathToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyCurrentDirPathToClipboard.Click += new System.EventHandler(this.buttonCopyCurrentDirPathToClipboard_Click);
+            // 
+            // buttonCurrentDirGoForward
+            // 
+            this.buttonCurrentDirGoForward.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonCurrentDirGoForward.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_right_16x16;
+            this.buttonCurrentDirGoForward.Location = new System.Drawing.Point(58, -1);
+            this.buttonCurrentDirGoForward.Name = "buttonCurrentDirGoForward";
+            this.buttonCurrentDirGoForward.Size = new System.Drawing.Size(32, 23);
+            this.buttonCurrentDirGoForward.TabIndex = 2;
+            this.buttonCurrentDirGoForward.UseVisualStyleBackColor = true;
+            this.buttonCurrentDirGoForward.Click += new System.EventHandler(this.buttonCurrentDirGoForward_Click);
             // 
             // buttonCurrentDirGoUp
             // 
+            this.buttonCurrentDirGoUp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonCurrentDirGoUp.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_up_16x16;
             this.buttonCurrentDirGoUp.Location = new System.Drawing.Point(29, -1);
             this.buttonCurrentDirGoUp.Name = "buttonCurrentDirGoUp";
@@ -248,15 +279,27 @@
             this.buttonCurrentDirGoUp.UseVisualStyleBackColor = true;
             this.buttonCurrentDirGoUp.Click += new System.EventHandler(this.buttonCurrentDirGoUp_Click);
             // 
-            // buttonCurrentDirGoForward
+            // buttonCurrentDirGoBack
             // 
-            this.buttonCurrentDirGoForward.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_right_16x16;
-            this.buttonCurrentDirGoForward.Location = new System.Drawing.Point(58, -1);
-            this.buttonCurrentDirGoForward.Name = "buttonCurrentDirGoForward";
-            this.buttonCurrentDirGoForward.Size = new System.Drawing.Size(32, 23);
-            this.buttonCurrentDirGoForward.TabIndex = 2;
-            this.buttonCurrentDirGoForward.UseVisualStyleBackColor = true;
-            this.buttonCurrentDirGoForward.Click += new System.EventHandler(this.buttonCurrentDirGoForward_Click);
+            this.buttonCurrentDirGoBack.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonCurrentDirGoBack.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_left_16x16;
+            this.buttonCurrentDirGoBack.Location = new System.Drawing.Point(0, -1);
+            this.buttonCurrentDirGoBack.Name = "buttonCurrentDirGoBack";
+            this.buttonCurrentDirGoBack.Size = new System.Drawing.Size(32, 23);
+            this.buttonCurrentDirGoBack.TabIndex = 0;
+            this.buttonCurrentDirGoBack.UseVisualStyleBackColor = true;
+            this.buttonCurrentDirGoBack.Click += new System.EventHandler(this.buttonCurrentDirGoBack_Click);
+            // 
+            // buttonEditableDirPathGo
+            // 
+            this.buttonEditableDirPathGo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonEditableDirPathGo.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_right_16x16;
+            this.buttonEditableDirPathGo.Location = new System.Drawing.Point(30, 1);
+            this.buttonEditableDirPathGo.Name = "buttonEditableDirPathGo";
+            this.buttonEditableDirPathGo.Size = new System.Drawing.Size(32, 23);
+            this.buttonEditableDirPathGo.TabIndex = 3;
+            this.buttonEditableDirPathGo.UseVisualStyleBackColor = true;
+            this.buttonEditableDirPathGo.Click += new System.EventHandler(this.buttonEditableDirPathGo_Click);
             // 
             // FsExplorerPageUserControl
             // 
@@ -278,6 +321,7 @@
             this.currentDirPathPanel.PerformLayout();
             this.navigationPanel.ResumeLayout(false);
             this.groupBoxNavigation.ResumeLayout(false);
+            this.panelEditableDirPathControls.ResumeLayout(false);
             this.panelEditableDirPath.ResumeLayout(false);
             this.panelEditableDirPath.PerformLayout();
             this.groupBoxCurrentFolderName.ResumeLayout(false);
@@ -311,5 +355,8 @@
         private System.Windows.Forms.Button buttonCurrentDirGoBack;
         private System.Windows.Forms.Button buttonCurrentDirGoUp;
         private System.Windows.Forms.Button buttonCurrentDirGoForward;
+        private System.Windows.Forms.Button buttonCopyCurrentDirPathToClipboard;
+        private System.Windows.Forms.Button buttonClearEditableDirPath;
+        private System.Windows.Forms.Button buttonEditableDirPathGo;
     }
 }

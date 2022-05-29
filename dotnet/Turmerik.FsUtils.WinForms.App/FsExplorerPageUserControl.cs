@@ -38,7 +38,8 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void FsFileEntriesGridUserControl_OnFsEntryNameDblClick(KeyValuePair<int, IFsEntriesDataGridRow> kvp)
         {
-            viewModel.OpenFileInOSDefaultApp(kvp.Value.Data.Name);
+            viewModel.TryExecute("[FS Explorer] -> open file in OS default app",
+                () => viewModel.OpenFileInOSDefaultApp(kvp.Value.Data.Name), false);
         }
 
         public void SetViewModel(FsExplorerViewModel viewModel)
@@ -56,6 +57,7 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             textBoxCurrentDirPath.Text = viewModel.CurrentDirPath;
             textBoxVPath.Text = viewModel.CurrentDirVPath;
+            textBoxEditableDirPath.Text = viewModel.CurrentDirPath;
 
             if (!viewModel.IsRootFolder)
             {
@@ -107,6 +109,28 @@ namespace Turmerik.FsUtils.WinForms.App
         private void buttonCurrentDirGoForward_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonCopyCurrentDirPathToClipboard_Click(object sender, EventArgs e)
+        {
+            viewModel.TryExecute("[FS Explorer] -> copy current dir path to clipboard",
+                () =>
+                {
+                    Clipboard.SetText(textBoxCurrentDirPath.Text);
+                    return new Tuple<bool, string>(true, null);
+                },
+                false);
+        }
+
+        private void buttonClearEditableDirPath_Click(object sender, EventArgs e)
+        {
+            textBoxEditableDirPath.Text = string.Empty;
+        }
+
+        private void buttonEditableDirPathGo_Click(object sender, EventArgs e)
+        {
+            viewModel.TryExecute("[FS Explorer] -> navigate to folder",
+                () => viewModel.NavigateToFolder(textBoxEditableDirPath.Text, true), true);
         }
     }
 }

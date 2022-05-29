@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Components;
+using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.FsUtils.WinForms.App.Properties;
 using static System.Environment;
@@ -19,14 +20,17 @@ namespace Turmerik.FsUtils.WinForms.App
         public const string ROOT_FOLDER_NAME = "This PC";
 
         private readonly MainFormEventsViewModel eventsViewModel;
+        private readonly IFsPathNormalizer fsPathNormalizer;
 
         private Action fsEntriesRefreshed;
         private Action currentFsDirNameChanged;
 
         public FsExplorerViewModel(
-            MainFormEventsViewModel eventsViewModel)
+            MainFormEventsViewModel eventsViewModel,
+            IFsPathNormalizer fsPathNormalizer)
         {
             this.eventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
+            this.fsPathNormalizer = fsPathNormalizer ?? throw new ArgumentNullException(nameof(fsPathNormalizer));
 
             UILogMessages = new List<IUILogMessage>();
             Uuid = Guid.NewGuid();
@@ -101,10 +105,45 @@ namespace Turmerik.FsUtils.WinForms.App
             return new Tuple<bool, string>(true, null);
         }
 
-        public Tuple<bool, string> NavigateToFolder(string folderPath)
+        public Tuple<bool, string> NavigateToFolder(string folderPath, bool normalizePath = false)
         {
-            NavigateToFolderCore(folderPath);
-            return new Tuple<bool, string>(true, null);
+            string errorMessage = null;
+
+            if (normalizePath && !string.IsNullOrEmpty(folderPath))
+            {
+                var result = fsPathNormalizer.TryNormalizePath(folderPath);
+
+                if (result.IsValid)
+                {
+                    if (result.IsAbsUri == true)
+                    {
+                        errorMessage = "Path must not be an URI";
+                    }
+                    else if (result.IsRooted)
+                    {
+                        folderPath = result.NormalizedPath;
+                    }
+                    else
+                    {
+                        errorMessage = "Path must be rooted";
+                    }
+                }
+                else
+                {
+                    errorMessage = "Path is invalid";
+                }
+            }
+
+            var retVal = new Tuple<bool, string>(
+                errorMessage == null,
+                errorMessage);
+
+            if (retVal.Item1)
+            {
+                NavigateToFolderCore(folderPath);
+            }
+
+            return retVal;
         }
 
         public Tuple<bool, string> OpenFileInOSDefaultApp(string fileName)
@@ -203,8 +242,6 @@ namespace Turmerik.FsUtils.WinForms.App
             var logMessage = new UILogMessageImmtbl(uILogMessage);
             AddUILogMessage(logMessage, showMessageBox);
         }
-
-        
 
         #endregion AddUILogMessage
 

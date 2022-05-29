@@ -71,13 +71,7 @@ namespace Turmerik.FsUtils.WinForms.App
                 tabPage.Text = kvp.Value.CurrentDirName;
             };
 
-            Panel panel = new Panel();
-            panel.AutoScroll = true;
-
-            panel.Dock = DockStyle.Fill;
-            panel.Controls.Add(control);
-
-            tabPage.Controls.Add(panel);
+            tabPage.Controls.Add(control);
             this.tabControlFsExplorer.TabPages.Insert(kvp.Key, tabPage);
         }
 

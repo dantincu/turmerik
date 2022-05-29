@@ -168,6 +168,7 @@
     <Content Include="Images\circle-16x16.png" />
     <Content Include="Images\circle-24x24.png" />
     <Content Include="Images\circle-32x32.png" />
+    <Content Include="Images\clipboard-16x16.png" />
     <Content Include="Images\file-icon-16x16.png" />
     <Content Include="Images\file-icon-24x24.png" />
     <Content Include="Images\file-icon-32x32.png" />
