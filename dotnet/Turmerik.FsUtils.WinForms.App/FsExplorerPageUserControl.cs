@@ -19,10 +19,12 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             InitializeComponent();
 
+            fsDirectoryEntriesGridUserControl.OnGoToRoot += FsDirectoryEntriesGridUserControl_OnGoToRoot;
             fsDirectoryEntriesGridUserControl.OnGoToParent += FsDirectoryEntriesGridUserControl_OnGoToParent;
             fsDirectoryEntriesGridUserControl.OnFsEntryOpen += FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick;
             fsDirectoryEntriesGridUserControl.OnFsEntryOptsOpen += FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen;
 
+            fsFileEntriesGridUserControl.OnGoToRoot += FsFileEntriesGridUserControl_OnGoToRoot;
             fsFileEntriesGridUserControl.OnGoToParent += FsFileEntriesGridUserControl_OnGoToParent;
             fsFileEntriesGridUserControl.OnFsEntryOpen += FsFileEntriesGridUserControl_OnFsEntryNameDblClick;
             fsFileEntriesGridUserControl.OnFsEntryOptsOpen += FsFileEntriesGridUserControl_OnFsEntryOptsOpen;
@@ -38,6 +40,24 @@ namespace Turmerik.FsUtils.WinForms.App
         private void FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen(KeyValuePair<int, IFsEntriesDataGridRow> obj)
         {
             throw new NotImplementedException();
+        }
+
+        private void FsFileEntriesGridUserControl_OnGoToRoot(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            if (!viewModel.IsRootFolder)
+            {
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToParentFolder,
+                    () => viewModel.NavigateToRoot(), true);
+            }
+        }
+
+        private void FsDirectoryEntriesGridUserControl_OnGoToRoot(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            if (!viewModel.IsRootFolder)
+            {
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToParentFolder,
+                    () => viewModel.NavigateToRoot(), true);
+            }
         }
 
         private void FsFileEntriesGridUserControl_OnGoToParent(KeyValuePair<int, IFsEntriesDataGridRow> obj)

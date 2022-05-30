@@ -136,11 +136,14 @@ namespace Turmerik.FsUtils.WinForms.App
             IUILogMessage uILogMessage,
             MessageBoxIcon messageBoxIcon)
         {
-            MessageBox.Show(
+            if (MessageBox.Show(
                 uILogMessage.Message,
                 uILogMessage.Level.ToString(),
                 MessageBoxButtons.OKCancel,
-                messageBoxIcon);
+                messageBoxIcon) == DialogResult.Cancel)
+            {
+                Application.Exit();
+            }
         }
     }
 }

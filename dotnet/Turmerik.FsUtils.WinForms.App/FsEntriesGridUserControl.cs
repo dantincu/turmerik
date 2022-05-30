@@ -19,6 +19,9 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public partial class FsEntriesGridUserControl : UserControl
     {
+        private const int FS_ENTRIES_DATA_GRID_PAGE_SIZE = 10;
+
+        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToRoot;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToParent;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOpen;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOptsOpen;
@@ -37,10 +40,20 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private int CurrentRowIndex { get; set; }
         private FsEntriesDataGridRowMtbl CurrentRow { get; set; }
-        
-        private int NavigationRowIndex { get; set; }
-        private FsEntriesDataGridRowMtbl NavigationRow { get; set; }
-        
+
+        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoToRoot
+        {
+            add
+            {
+                onGoToRoot += value;
+            }
+
+            remove
+            {
+                onGoToRoot -= value;
+            }
+        }
+
         public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoToParent
         {
             add
@@ -91,6 +104,15 @@ namespace Turmerik.FsUtils.WinForms.App
                 GetDataGridViewRow).ToArray();
 
             dataGridView.Rows.AddRange(dataGridViewRows);
+
+            if (EditableDataGridValueRows.Any())
+            {
+                SetCurrentRow(0, 0, false);
+            }
+            else
+            {
+                ClearCurrentRow(false);
+            }
         }
 
         public void ClearFsEntries()
@@ -200,32 +222,75 @@ namespace Turmerik.FsUtils.WinForms.App
             return row;
         }
 
-        private void SetNavigationRow(int navigationRowIndex)
-        {
-            dataGridView.Rows[NavigationRowIndex].Cells[(int)FsEntriesGridColumn.EntryName].Style.BackColor = Color.White;
-
-            NavigationRowIndex = navigationRowIndex;
-            NavigationRow = EditableDataGridValueRows[navigationRowIndex];
-
-            dataGridView.Rows[navigationRowIndex].Cells[(int)FsEntriesGridColumn.EntryName].Style.BackColor = Color.AntiqueWhite;
-        }
-
         private void SetCurrentRow(
             int currentRowIndex,
-            int currentCellIndex)
+            int currentCellIndex,
+            bool unselectPrevCurrent = true)
         {
             FsEntriesGridColumn fsEntriesGridColumn = (FsEntriesGridColumn)currentCellIndex;
+
+            var isDifferentRow = SetDataGridRowBackColor(
+                CurrentRowIndex, Color.White, () => unselectPrevCurrent && currentRowIndex != CurrentRowIndex);
 
             CurrentRowIndex = currentRowIndex;
             CurrentRow = EditableDataGridValueRows[currentRowIndex];
 
             CurrentCellIndex = currentCellIndex;
             CurrentCell = fsEntriesGridColumn;
+
+            SetDataGridRowBackColor(
+                currentRowIndex, Color.Beige, () => true);
         }
 
-        private void DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        private void ClearCurrentRow(bool unselectPrevCurrent = true)
         {
-            SetNavigationRow(e.RowIndex);
+            SetDataGridRowBackColor(
+                CurrentRowIndex, Color.White, () => unselectPrevCurrent);
+
+            CurrentRowIndex = 0;
+            CurrentRow = null;
+
+            CurrentCellIndex = 0;
+            CurrentCell = FsEntriesGridColumn.SelectEntry;
+        }
+
+        private bool SetDataGridRowBackColor(
+            int rowIndex,
+            Color backColor,
+            Func<bool> condition)
+        {
+            bool retVal = ForEveryDataGridCellInRow(
+                rowIndex,
+                (cell, idx) => cell.Style.BackColor = backColor,
+                condition);
+
+            return retVal;
+        }
+
+        private bool ForEveryDataGridCellInRow(
+            int rowIndex,
+            Action<DataGridViewCell, int> callback,
+            Func<bool> condition)
+        {
+            bool retVal = condition();
+
+            if (retVal)
+            {
+                var row = dataGridView.Rows[rowIndex];
+
+                for (int i = 0; i < row.Cells.Count; i++)
+                {
+                    var cell = row.Cells[i];
+                    callback(cell, i);
+                }
+            }
+
+            return retVal;
+        }
+
+        private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            SetCurrentRow(e.RowIndex, e.ColumnIndex);
 
             switch (CurrentCell)
             {
@@ -238,16 +303,10 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
-        private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (NavigationRowIndex == CurrentCellIndex)
-            {
-                dataGridView.Rows[NavigationRowIndex].Cells[(int)FsEntriesGridColumn.EntryName].Style.BackColor = Color.AntiqueWhite;
-            }
-        }
-
         private void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            SetCurrentRow(e.RowIndex, e.ColumnIndex);
+
             switch (CurrentCell)
             {
                 case FsEntriesGridColumn.EntryName:
@@ -259,31 +318,52 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void DataGridView_KeyUp(object sender, KeyEventArgs e)
         {
+            int newRowIndex;
+
             switch (e.KeyCode)
             {
                 case Keys.Enter:
                     onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        NavigationRowIndex, NavigationRow));
+                        CurrentCellIndex, CurrentRow));
                     break;
                 case Keys.Back:
                     onGoToParent?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        NavigationRowIndex, NavigationRow));
+                        CurrentCellIndex, CurrentRow));
                     break;
-            }
-        }
+                case Keys.Up:
+                    if (CurrentRowIndex > 0)
+                    {
+                        SetCurrentRow(CurrentRowIndex - 1, CurrentCellIndex);
+                    }
+                    break;
+                case Keys.Down:
+                    if (CurrentRowIndex < EditableDataGridValueRows.Count - 1)
+                    {
+                        SetCurrentRow(CurrentRowIndex + 1, CurrentCellIndex);
+                    }
+                    break;
+                case Keys.Home:
+                    if (e.Control)
+                    {
+                        onGoToRoot?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                            CurrentRowIndex, CurrentRow));
+                    }
+                    else
+                    {
+                        SetCurrentRow(0, CurrentCellIndex);
+                    }
 
-        private void DataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
-        {
-            SetCurrentRow(e.RowIndex, e.ColumnIndex);
-        }
-
-        private void DataGridView_KeyDown(object sender, KeyEventArgs e)
-        {
-            switch (e.KeyCode)
-            {
-                case Keys.Enter:
-                case Keys.Back:
-                    SetNavigationRow(CurrentRowIndex);
+                    break;
+                case Keys.End:
+                    SetCurrentRow(EditableDataGridValueRows.Count - 1, CurrentCellIndex);
+                    break;
+                case Keys.PageDown:
+                    newRowIndex = Math.Max(0, CurrentRowIndex - FS_ENTRIES_DATA_GRID_PAGE_SIZE);
+                    SetCurrentRow(newRowIndex, CurrentCellIndex);
+                    break;
+                case Keys.PageUp:
+                    newRowIndex = Math.Min(EditableDataGridValueRows.Count - 1, CurrentRowIndex + FS_ENTRIES_DATA_GRID_PAGE_SIZE);
+                    SetCurrentRow(newRowIndex, CurrentCellIndex);
                     break;
             }
         }
