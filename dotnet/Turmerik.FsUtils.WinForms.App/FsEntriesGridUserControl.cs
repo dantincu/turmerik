@@ -21,6 +21,11 @@ namespace Turmerik.FsUtils.WinForms.App
     {
         private const int FS_ENTRIES_DATA_GRID_PAGE_SIZE = 10;
 
+        private static readonly Color dataGridCellBackColor = Color.White;
+        private static readonly Color dataGridCellCurrentBackColor = Color.FromArgb(255, 248, 192);
+        private static readonly Color dataGridCellCheckedBackColor = Color.Aqua;
+        private static readonly Color dataGridCellCheckedCurrentBackColor = Color.LightGreen;
+
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToRoot;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToParent;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOpen;
@@ -225,12 +230,14 @@ namespace Turmerik.FsUtils.WinForms.App
         private void SetCurrentRow(
             int currentRowIndex,
             int currentCellIndex,
-            bool unselectPrevCurrent = true)
+            bool unMarkPrevCurrent = true)
         {
             FsEntriesGridColumn fsEntriesGridColumn = (FsEntriesGridColumn)currentCellIndex;
 
             var isDifferentRow = SetDataGridRowBackColor(
-                CurrentRowIndex, Color.White, () => unselectPrevCurrent && currentRowIndex != CurrentRowIndex);
+                CurrentRowIndex,
+                () => CurrentRow.IsChecked ? dataGridCellCheckedBackColor : dataGridCellBackColor,
+                () => unMarkPrevCurrent && currentRowIndex != CurrentRowIndex);
 
             CurrentRowIndex = currentRowIndex;
             CurrentRow = EditableDataGridValueRows[currentRowIndex];
@@ -239,13 +246,17 @@ namespace Turmerik.FsUtils.WinForms.App
             CurrentCell = fsEntriesGridColumn;
 
             SetDataGridRowBackColor(
-                currentRowIndex, Color.Beige, () => true);
+                currentRowIndex,
+                () => CurrentRow.IsChecked ? dataGridCellCheckedCurrentBackColor : dataGridCellCurrentBackColor,
+                () => true);
         }
 
-        private void ClearCurrentRow(bool unselectPrevCurrent = true)
+        private void ClearCurrentRow(bool unMarkPrevCurrent = true)
         {
             SetDataGridRowBackColor(
-                CurrentRowIndex, Color.White, () => unselectPrevCurrent);
+                CurrentRowIndex,
+                () => CurrentRow.IsChecked ? dataGridCellCheckedBackColor : dataGridCellBackColor,
+                () => unMarkPrevCurrent);
 
             CurrentRowIndex = 0;
             CurrentRow = null;
@@ -256,12 +267,12 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private bool SetDataGridRowBackColor(
             int rowIndex,
-            Color backColor,
+            Func<Color> backColorFunc,
             Func<bool> condition)
         {
             bool retVal = ForEveryDataGridCellInRow(
                 rowIndex,
-                (cell, idx) => cell.Style.BackColor = backColor,
+                (cell, idx) => cell.Style.BackColor = backColorFunc(),
                 condition);
 
             return retVal;
@@ -288,18 +299,64 @@ namespace Turmerik.FsUtils.WinForms.App
             return retVal;
         }
 
+        private void SelectDataGridRows(int[] rowIndexesArr, bool? check = null)
+        {
+            foreach (int rowIndex in rowIndexesArr)
+            {
+                SelectDataGridRow(rowIndex, check);
+            }
+        }
+
+        private void SelectDataGridRow(int rowIndex, bool? check = null)
+        {
+            bool isCurrentRow = rowIndex == CurrentRowIndex;
+            var dataRow = EditableDataGridValueRows[rowIndex];
+
+            var row = dataGridView.Rows[rowIndex];
+            var cell = row.Cells[(int)FsEntriesGridColumn.SelectEntry];
+
+            if (check.HasValue)
+            {
+                cell.Value = check.Value;
+            }
+            else // toggle check
+            {
+                dataRow.IsChecked = !dataRow.IsChecked;
+                cell.Value = dataRow.IsChecked;
+            }
+
+            if (isCurrentRow)
+            {
+                SetDataGridRowBackColor(
+                    rowIndex,
+                    () => CurrentRow.IsChecked ? dataGridCellCheckedCurrentBackColor : dataGridCellCurrentBackColor,
+                    () => true);
+            }
+            else
+            {
+                SetDataGridRowBackColor(
+                    rowIndex,
+                    () => CurrentRow.IsChecked ? dataGridCellCheckedBackColor : dataGridCellBackColor,
+                    () => true);
+            }
+        }
+
         private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
             SetCurrentRow(e.RowIndex, e.ColumnIndex);
 
-            switch (CurrentCell)
+            if (e.Button == MouseButtons.Left)
             {
-                case FsEntriesGridColumn.SelectEntry:
-                    break;
-                case FsEntriesGridColumn.EntryOpts:
-                    onFsEntryOptsOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        CurrentRowIndex, CurrentRow));
-                    break;
+                switch (CurrentCell)
+                {
+                    case FsEntriesGridColumn.SelectEntry:
+                        SelectDataGridRow(CurrentRowIndex);
+                        break;
+                    case FsEntriesGridColumn.EntryOpts:
+                        onFsEntryOptsOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                            CurrentRowIndex, CurrentRow));
+                        break;
+                }
             }
         }
 
@@ -329,6 +386,9 @@ namespace Turmerik.FsUtils.WinForms.App
                 case Keys.Back:
                     onGoToParent?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentCellIndex, CurrentRow));
+                    break;
+                case Keys.Space:
+                    SelectDataGridRow(CurrentRowIndex);
                     break;
                 case Keys.Up:
                     if (CurrentRowIndex > 0)

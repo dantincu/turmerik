@@ -11,7 +11,7 @@ namespace Turmerik.FsUtils.WinForms.App
     {
         IFsItem Data { get; }
         int RowIndex { get; }
-        bool IsSelected { get; }
+        bool IsChecked { get; }
     }
 
     public class FsEntriesDataGridRowImmtbl : IFsEntriesDataGridRow
@@ -20,12 +20,12 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             Data = src.Data;
             RowIndex = src.RowIndex;
-            IsSelected = src.IsSelected;
+            IsChecked = src.IsChecked;
         }
 
         public IFsItem Data { get; }
         public int RowIndex { get; }
-        public bool IsSelected { get; }
+        public bool IsChecked { get; }
     }
 
     public class FsEntriesDataGridRowMtbl : IFsEntriesDataGridRow
@@ -38,11 +38,11 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             Data = src.Data;
             RowIndex = src.RowIndex;
-            IsSelected = src.IsSelected;
+            IsChecked = src.IsChecked;
         }
 
         public IFsItem Data { get; set; }
         public int RowIndex { get; set; }
-        public bool IsSelected { get; }
+        public bool IsChecked { get; set; }
     }
 }
