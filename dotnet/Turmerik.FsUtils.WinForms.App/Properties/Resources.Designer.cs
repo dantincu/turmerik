@@ -73,6 +73,46 @@ namespace Turmerik.FsUtils.WinForms.App.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap arrow_head_down_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_head_down_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_head_left_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_head_left_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_head_right_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_head_right_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap arrow_head_up_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("arrow_head_up_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap arrow_left_16x16 {
             get {
                 object obj = ResourceManager.GetObject("arrow_left_16x16", resourceCulture);

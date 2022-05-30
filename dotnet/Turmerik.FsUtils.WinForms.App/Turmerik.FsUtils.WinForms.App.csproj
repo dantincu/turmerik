@@ -61,6 +61,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpandCollapseUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExpandCollapseUserControl.Designer.cs">
+      <DependentUpon>ExpandCollapseUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="FsEntriesGridColumn.cs" />
     <Compile Include="IFsEntriesDataGridRow.cs" />
     <Compile Include="FsEntriesGridUserControl.cs">
@@ -108,6 +114,9 @@
       <DependentUpon>UIMessagesUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="WinFormsH.cs" />
+    <EmbeddedResource Include="ExpandCollapseUserControl.resx">
+      <DependentUpon>ExpandCollapseUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FsEntriesGridUserControl.resx">
       <DependentUpon>FsEntriesGridUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,6 +168,10 @@
   <ItemGroup>
     <Content Include="Images\arrow-down-16x16.png" />
     <Content Include="Images\arrow-down-24x24.png" />
+    <Content Include="Images\arrow-head-down-16x16.png" />
+    <Content Include="Images\arrow-head-left-16x16.png" />
+    <Content Include="Images\arrow-head-right-16x16.png" />
+    <Content Include="Images\arrow-head-up-16x16.png" />
     <Content Include="Images\arrow-left-16x16.png" />
     <Content Include="Images\arrow-left-24x24.png" />
     <Content Include="Images\arrow-right-16x16.png" />

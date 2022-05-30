@@ -27,7 +27,7 @@ namespace Turmerik.FsUtils.WinForms.App
             fsFileEntriesGridUserControl.OnFsEntryOpen += FsFileEntriesGridUserControl_OnFsEntryNameDblClick;
             fsFileEntriesGridUserControl.OnFsEntryOptsOpen += FsFileEntriesGridUserControl_OnFsEntryOptsOpen;
 
-            groupBoxEditableDirPath.Visible = false;
+            SetNavigationPanelsVisibility(false);
         }
 
         private void FsFileEntriesGridUserControl_OnFsEntryOptsOpen(KeyValuePair<int, IFsEntriesDataGridRow> obj)
@@ -271,6 +271,28 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             viewModel.TryExecute(FsExplorerViewModel.ActionNames.ReloadToFolder,
                 () => viewModel.ReloadCurrentFolder(), true);
+        }
+
+        private void textBoxCurrentDirName_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                bool show = !expandCollapseNavigationPanelsUserControl.IsExpanded;
+                SetNavigationPanelsVisibility(show);
+            }
+        }
+
+        private void ExpandCollapseNavigationPanelsUserControl_StateChanged(bool isExpanded)
+        {
+            SetNavigationPanelsVisibility(isExpanded);
+        }
+
+        private void SetNavigationPanelsVisibility(bool show)
+        {
+            groupBoxPath.Visible = show;
+
+            groupBoxVPath.Visible = show;
+            groupBoxEditableDirPath.Visible = show;
         }
     }
 }

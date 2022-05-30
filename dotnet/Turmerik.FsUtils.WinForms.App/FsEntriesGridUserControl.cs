@@ -202,8 +202,12 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void SetNavigationRow(int navigationRowIndex)
         {
+            dataGridView.Rows[NavigationRowIndex].Cells[(int)FsEntriesGridColumn.EntryName].Style.BackColor = Color.White;
+
             NavigationRowIndex = navigationRowIndex;
             NavigationRow = EditableDataGridValueRows[navigationRowIndex];
+
+            dataGridView.Rows[navigationRowIndex].Cells[(int)FsEntriesGridColumn.EntryName].Style.BackColor = Color.AntiqueWhite;
         }
 
         private void SetCurrentRow(
@@ -231,6 +235,14 @@ namespace Turmerik.FsUtils.WinForms.App
                     onFsEntryOptsOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentRowIndex, CurrentRow));
                     break;
+            }
+        }
+
+        private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (NavigationRowIndex == CurrentCellIndex)
+            {
+                dataGridView.Rows[NavigationRowIndex].Cells[(int)FsEntriesGridColumn.EntryName].Style.BackColor = Color.AntiqueWhite;
             }
         }
 
