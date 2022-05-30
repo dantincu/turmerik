@@ -8,10 +8,11 @@ namespace Turmerik.FsUtils.WinForms.App
 {
     public enum FsEntriesGridColumn
     {
-        Icon = 0,
-        Name,
-        Label,
-        Opts,
+        SelectEntry = 0,
+        EntryIcon,
+        EntryName,
+        EntryLabel,
+        EntryOpts,
         CreationTime,
         LastAccessTime,
         LastWriteTime,

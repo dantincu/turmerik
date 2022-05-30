@@ -28,22 +28,19 @@ namespace Turmerik.FsUtils.WinForms.App
             InitializeComponent();
         }
 
-        public bool IsFoldersGrid { get; private set; }
-
-        public ReadOnlyList<IFsEntriesDataGridRow> DataGridValueRows { get; private set; }
-        public List<IFsEntriesDataGridRow> EditableDataGridValueRows { get; private set; }
-
-        public int CurrentRowIndex { get; private set; }
-        public int CurrentCellIndex { get; private set; }
-        public FsEntriesGridColumn CurrentCell { get; private set; }
-
-        public IFsEntriesDataGridRow CurrentRow { get; private set; }
-
-        public int NavigationRowIndex { get; private set; }
-        public IFsEntriesDataGridRow NavigationRow { get; private set; }
-
+        private bool IsFoldersGrid { get; set; }
         private Bitmap FsItemIcon => IsFoldersGrid ? Resources.folder_icon_16x16 : Resources.file_icon_16x16;
+        private List<FsEntriesDataGridRowMtbl> EditableDataGridValueRows { get; set; }
 
+        private int CurrentCellIndex { get; set; }
+        private FsEntriesGridColumn CurrentCell { get; set; }
+
+        private int CurrentRowIndex { get; set; }
+        private FsEntriesDataGridRowMtbl CurrentRow { get; set; }
+        
+        private int NavigationRowIndex { get; set; }
+        private FsEntriesDataGridRowMtbl NavigationRow { get; set; }
+        
         public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoToParent
         {
             add
@@ -88,10 +85,7 @@ namespace Turmerik.FsUtils.WinForms.App
             dataGridView.Rows.Clear();
 
             EditableDataGridValueRows = fsEntries.Select(
-                GetFsEntriesDataGridRow).ToList();
-
-            this.DataGridValueRows = new ReadOnlyList<IFsEntriesDataGridRow>(
-                EditableDataGridValueRows);
+                GetFsEntriesDataGridRowMtbl).ToList();
 
             var dataGridViewRows = EditableDataGridValueRows.Select(
                 GetDataGridViewRow).ToArray();
@@ -102,7 +96,7 @@ namespace Turmerik.FsUtils.WinForms.App
         public void ClearFsEntries()
         {
             dataGridView.Rows.Clear();
-            DataGridValueRows = null;
+            EditableDataGridValueRows = null;
         }
 
         public void SetIsFoldersGrid(bool isFoldersGrid)
@@ -121,7 +115,7 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
-        private IFsEntriesDataGridRow GetFsEntriesDataGridRow(IFsItem fsItem, int idx)
+        private FsEntriesDataGridRowMtbl GetFsEntriesDataGridRowMtbl(IFsItem fsItem, int idx)
         {
             var rowMtbl = new FsEntriesDataGridRowMtbl
             {
@@ -129,8 +123,7 @@ namespace Turmerik.FsUtils.WinForms.App
                 RowIndex = idx
             };
 
-            var rowImmtbl = new FsEntriesDataGridRowImmtbl(rowMtbl);
-            return rowImmtbl;
+            return rowMtbl;
         }
 
         private DataGridViewRow GetDataGridViewRow(IFsEntriesDataGridRow dataRow, int idx)
@@ -147,39 +140,51 @@ namespace Turmerik.FsUtils.WinForms.App
             var optsIcon = Resources.options_icon_16x16;
 
             var rowCellsDictnr = new Dictionary<FsEntriesGridColumn, DataGridViewCell>();
-            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Icon, FsItemIcon, null);
 
-            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Name, null, fsItem.Name);
-            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Label, null, fsItem.Label);
+            AddFsEntriesGridCheckBoxCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.SelectEntry, false);
+            AddFsEntriesGridImageCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.EntryIcon, FsItemIcon);
 
-            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Opts, optsIcon, null);
-            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.CreationTime, null, fsItem.CreationTimeStr);
+            AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.EntryName, fsItem.Name);
+            AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.EntryLabel, fsItem.Label);
 
-            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastAccessTime, null, fsItem.LastAccessTimeStr);
-            AddFsEntriesGridCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastWriteTime, null, fsItem.LastWriteTimeStr);
+            AddFsEntriesGridImageCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.EntryOpts, optsIcon);
+            AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.CreationTime, fsItem.CreationTimeStr);
+
+            AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastAccessTime, fsItem.LastAccessTimeStr);
+            AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastWriteTime, fsItem.LastWriteTimeStr);
 
             return rowCellsDictnr;
         }
 
-        private void AddFsEntriesGridCellToDictnr(
-            Dictionary<FsEntriesGridColumn, DataGridViewCell>
-            rowCellsDictnr,
+        private void AddFsEntriesGridTextCellToDictnr(
+            Dictionary<FsEntriesGridColumn, DataGridViewCell> rowCellsDictnr,
             FsEntriesGridColumn fsEntriesGridColumn,
-            Bitmap cellImage,
             string cellText)
         {
-            DataGridViewCell cell;
+            var cell = new DataGridViewTextBoxCell();
+            cell.Value = cellText;
 
-            if (cellImage != null)
-            {
-                cell = new DataGridViewImageCell();
-                cell.Value = cellImage;
-            }
-            else
-            {
-                cell = new DataGridViewTextBoxCell();
-                cell.Value = cellText;
-            }
+            rowCellsDictnr.Add(fsEntriesGridColumn, cell);
+        }
+
+        private void AddFsEntriesGridImageCellToDictnr(
+            Dictionary<FsEntriesGridColumn, DataGridViewCell> rowCellsDictnr,
+            FsEntriesGridColumn fsEntriesGridColumn,
+            Bitmap cellImage)
+        {
+            var cell = new DataGridViewImageCell();
+            cell.Value = cellImage;
+
+            rowCellsDictnr.Add(fsEntriesGridColumn, cell);
+        }
+
+        private void AddFsEntriesGridCheckBoxCellToDictnr(
+            Dictionary<FsEntriesGridColumn, DataGridViewCell> rowCellsDictnr,
+            FsEntriesGridColumn fsEntriesGridColumn,
+            bool isChecked)
+        {
+            var cell = new DataGridViewCheckBoxCell();
+            cell.Value = isChecked;
 
             rowCellsDictnr.Add(fsEntriesGridColumn, cell);
         }
@@ -195,11 +200,34 @@ namespace Turmerik.FsUtils.WinForms.App
             return row;
         }
 
-        private void DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void SetNavigationRow(int navigationRowIndex)
         {
+            NavigationRowIndex = navigationRowIndex;
+            NavigationRow = EditableDataGridValueRows[navigationRowIndex];
+        }
+
+        private void SetCurrentRow(
+            int currentRowIndex,
+            int currentCellIndex)
+        {
+            FsEntriesGridColumn fsEntriesGridColumn = (FsEntriesGridColumn)currentCellIndex;
+
+            CurrentRowIndex = currentRowIndex;
+            CurrentRow = EditableDataGridValueRows[currentRowIndex];
+
+            CurrentCellIndex = currentCellIndex;
+            CurrentCell = fsEntriesGridColumn;
+        }
+
+        private void DataGridView_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            SetNavigationRow(e.RowIndex);
+
             switch (CurrentCell)
             {
-                case FsEntriesGridColumn.Opts:
+                case FsEntriesGridColumn.SelectEntry:
+                    break;
+                case FsEntriesGridColumn.EntryOpts:
                     onFsEntryOptsOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentRowIndex, CurrentRow));
                     break;
@@ -210,14 +238,14 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             switch (CurrentCell)
             {
-                case FsEntriesGridColumn.Name:
+                case FsEntriesGridColumn.EntryName:
                     onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentRowIndex, CurrentRow));
                     break;
             }
         }
 
-        private void dataGridView_KeyUp(object sender, KeyEventArgs e)
+        private void DataGridView_KeyUp(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -232,28 +260,23 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
-        private void dataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            CurrentRowIndex = e.RowIndex;
-            CurrentCellIndex = e.ColumnIndex;
-
-            CurrentCell = (FsEntriesGridColumn)e.ColumnIndex;
-            CurrentRow = DataGridValueRows[CurrentRowIndex];
+            SetCurrentRow(e.RowIndex, e.ColumnIndex);
         }
 
-        private void dataGridView_KeyDown(object sender, KeyEventArgs e)
+        private void DataGridView_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
                 case Keys.Enter:
                 case Keys.Back:
-                    NavigationRowIndex = CurrentRowIndex;
-                    NavigationRow = DataGridValueRows[NavigationRowIndex];
+                    SetNavigationRow(CurrentRowIndex);
                     break;
             }
         }
 
-        private void dataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        private void DataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             var exc = e.Exception;
 
