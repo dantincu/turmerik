@@ -20,11 +20,25 @@ namespace Turmerik.FsUtils.WinForms.App
     public partial class FsEntriesGridUserControl : UserControl
     {
         private const int FS_ENTRIES_DATA_GRID_PAGE_SIZE = 10;
+        private const int MAIN_COLOR_COMPONENT = 240;
+        private const int SECONDARY_COLOR_COMPONENT = 184;
 
         private static readonly Color dataGridCellBackColor = Color.White;
-        private static readonly Color dataGridCellCurrentBackColor = Color.FromArgb(255, 248, 192);
-        private static readonly Color dataGridCellCheckedBackColor = Color.FromArgb(216, 216, 255);
-        private static readonly Color dataGridCellCheckedCurrentBackColor = Color.LightGreen;
+
+        private static readonly Color dataGridCellCurrentBackColor = Color.FromArgb(
+            MAIN_COLOR_COMPONENT,
+            MAIN_COLOR_COMPONENT,
+            SECONDARY_COLOR_COMPONENT);
+
+        private static readonly Color dataGridCellCheckedBackColor = Color.FromArgb(
+            SECONDARY_COLOR_COMPONENT,
+            SECONDARY_COLOR_COMPONENT,
+            MAIN_COLOR_COMPONENT);
+
+        private static readonly Color dataGridCellCheckedCurrentBackColor = Color.FromArgb(
+            SECONDARY_COLOR_COMPONENT,
+            MAIN_COLOR_COMPONENT,
+            SECONDARY_COLOR_COMPONENT);
 
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToRoot;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToParent;

@@ -43,6 +43,7 @@
             this.fsEntriesGridCreationTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fsEntriesDataGridLastAccessColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fsEntriesDataGridLastWriteColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fsEntriesGridUuidColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
@@ -88,7 +89,8 @@
             this.fsEntriesGridOptsColumn,
             this.fsEntriesGridCreationTimeColumn,
             this.fsEntriesDataGridLastAccessColumn,
-            this.fsEntriesDataGridLastWriteColumn});
+            this.fsEntriesDataGridLastWriteColumn,
+            this.fsEntriesGridUuidColumn});
             this.dataGridView.Cursor = System.Windows.Forms.Cursors.Hand;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -192,6 +194,13 @@
             this.fsEntriesDataGridLastWriteColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesDataGridLastWriteColumn.Width = 120;
             // 
+            // fsEntriesGridUuidColumn
+            // 
+            this.fsEntriesGridUuidColumn.HeaderText = "Uuid";
+            this.fsEntriesGridUuidColumn.Name = "fsEntriesGridUuidColumn";
+            this.fsEntriesGridUuidColumn.ReadOnly = true;
+            this.fsEntriesGridUuidColumn.Visible = false;
+            // 
             // FsEntriesGridUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -221,5 +230,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesGridCreationTimeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridLastAccessColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridLastWriteColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesGridUuidColumn;
     }
 }
