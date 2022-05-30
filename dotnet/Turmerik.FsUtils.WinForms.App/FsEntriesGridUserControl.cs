@@ -40,6 +40,8 @@ namespace Turmerik.FsUtils.WinForms.App
             MAIN_COLOR_COMPONENT,
             SECONDARY_COLOR_COMPONENT);
 
+        private bool isFoldersGrid;
+
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToRoot;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToParent;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoBack;
@@ -50,10 +52,13 @@ namespace Turmerik.FsUtils.WinForms.App
         public FsEntriesGridUserControl()
         {
             InitializeComponent();
+            labelCheckedEntriesCount.Text = string.Empty;
         }
 
         private bool IsFoldersGrid { get; set; }
-        private Bitmap FsItemIcon => IsFoldersGrid ? Resources.folder_icon_16x16 : Resources.file_icon_16x16;
+        private Bitmap FsItemIcon { get; set; }
+        private string EntryTypeName { get; set; }
+        private string labelCheckedEntriesCountTextTpl { get; set; }
         private List<FsEntriesDataGridRowMtbl> EditableDataGridValueRows { get; set; }
 
         private int CurrentCellIndex { get; set; }
@@ -61,6 +66,8 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private int CurrentRowIndex { get; set; }
         private FsEntriesDataGridRowMtbl CurrentRow { get; set; }
+
+        private int checkedEntriesCount;
 
         public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoToRoot
         {
@@ -174,14 +181,23 @@ namespace Turmerik.FsUtils.WinForms.App
 
             if (isFoldersGrid)
             {
-                labelControlTitle.Text = "Folders";
+                FsItemIcon = Resources.folder_icon_16x16;
+                EntryTypeName = "folder";
+                
                 fsEntriesDataGridLabelColumn.HeaderText = "Description";
             }
             else
             {
-                labelControlTitle.Text = "Files";
+                FsItemIcon = Resources.file_icon_16x16;
+                EntryTypeName = "file";
                 fsEntriesDataGridLabelColumn.HeaderText = "Extension";
             }
+
+            string controlTitle = EntryTypeName.CapitalizeFirstLetter();
+            controlTitle = $"{controlTitle}s";
+
+            labelControlTitle.Text = controlTitle;
+            labelCheckedEntriesCountTextTpl = $"({{0}} {controlTitle} selected)";
         }
 
         private FsEntriesDataGridRowMtbl GetFsEntriesDataGridRowMtbl(IFsItem fsItem, int idx)
@@ -381,6 +397,26 @@ namespace Turmerik.FsUtils.WinForms.App
                     rowIndex,
                     () => CurrentRow.IsChecked ? dataGridCellCheckedBackColor : dataGridCellBackColor,
                     () => true);
+            }
+
+            if (dataRow.IsChecked)
+            {
+                checkedEntriesCount++;
+            }
+            else
+            {
+                checkedEntriesCount--;
+            }
+
+            if (checkedEntriesCount == 0)
+            {
+                labelCheckedEntriesCount.Text = string.Empty;
+            }
+            else
+            {
+                labelCheckedEntriesCount.Text = string.Format(
+                    labelCheckedEntriesCountTextTpl,
+                    checkedEntriesCount);
             }
         }
 
