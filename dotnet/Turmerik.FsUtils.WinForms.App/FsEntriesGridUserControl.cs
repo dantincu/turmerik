@@ -42,6 +42,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private bool isFoldersGrid;
 
+        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onReload;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToRoot;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToParent;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoBack;
@@ -68,6 +69,19 @@ namespace Turmerik.FsUtils.WinForms.App
         private FsEntriesDataGridRowMtbl CurrentRow { get; set; }
 
         private int checkedEntriesCount;
+
+        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnReload
+        {
+            add
+            {
+                onReload += value;
+            }
+
+            remove
+            {
+                onReload -= value;
+            }
+        }
 
         public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoToRoot
         {
@@ -464,6 +478,14 @@ namespace Turmerik.FsUtils.WinForms.App
 
             switch (e.KeyCode)
             {
+                case Keys.R:
+                    if (e.Control)
+                    {
+                        onReload?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                            CurrentCellIndex, CurrentRow));
+                    }
+                    break;
+
                 case Keys.Enter:
                     onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentCellIndex, CurrentRow));

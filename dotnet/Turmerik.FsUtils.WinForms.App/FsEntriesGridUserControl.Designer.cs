@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.topPanel = new System.Windows.Forms.Panel();
+            this.labelCheckedEntriesCount = new System.Windows.Forms.Label();
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.dataGridSelectRowColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -44,9 +46,13 @@
             this.fsEntriesDataGridLastAccessColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fsEntriesDataGridLastWriteColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fsEntriesGridUuidColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labelCheckedEntriesCount = new System.Windows.Forms.Label();
+            this.fsEntriesContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemCheckSelectedItems = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemUncheckSelectedItems = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemReverseSelectedItemsCheckedState = new System.Windows.Forms.ToolStripMenuItem();
             this.topPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            this.fsEntriesContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // topPanel
@@ -58,6 +64,15 @@
             this.topPanel.Name = "topPanel";
             this.topPanel.Size = new System.Drawing.Size(1200, 27);
             this.topPanel.TabIndex = 0;
+            // 
+            // labelCheckedEntriesCount
+            // 
+            this.labelCheckedEntriesCount.AutoSize = true;
+            this.labelCheckedEntriesCount.Location = new System.Drawing.Point(63, 6);
+            this.labelCheckedEntriesCount.Name = "labelCheckedEntriesCount";
+            this.labelCheckedEntriesCount.Size = new System.Drawing.Size(96, 13);
+            this.labelCheckedEntriesCount.TabIndex = 1;
+            this.labelCheckedEntriesCount.Text = "(0 entries selected)";
             // 
             // labelControlTitle
             // 
@@ -75,14 +90,14 @@
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.Disable;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridSelectRowColumn,
             this.fsEntriesDataGridIconColumn,
@@ -93,35 +108,36 @@
             this.fsEntriesDataGridLastAccessColumn,
             this.fsEntriesDataGridLastWriteColumn,
             this.fsEntriesGridUuidColumn});
+            this.dataGridView.ContextMenuStrip = this.fsEntriesContextMenuStrip;
             this.dataGridView.Cursor = System.Windows.Forms.Cursors.Hand;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView.Location = new System.Drawing.Point(0, 27);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ReadOnly = true;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView.RowHeadersVisible = false;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.LightGray;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.dataGridView.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.LightGray;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.dataGridView.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.White;
             this.dataGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.dataGridView.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -200,14 +216,32 @@
             this.fsEntriesGridUuidColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesGridUuidColumn.Visible = false;
             // 
-            // labelSelectedEntriesCount
+            // fsEntriesContextMenuStrip
             // 
-            this.labelCheckedEntriesCount.AutoSize = true;
-            this.labelCheckedEntriesCount.Location = new System.Drawing.Point(63, 6);
-            this.labelCheckedEntriesCount.Name = "labelSelectedEntriesCount";
-            this.labelCheckedEntriesCount.Size = new System.Drawing.Size(96, 13);
-            this.labelCheckedEntriesCount.TabIndex = 1;
-            this.labelCheckedEntriesCount.Text = "(0 entries selected)";
+            this.fsEntriesContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemCheckSelectedItems,
+            this.toolStripMenuItemUncheckSelectedItems,
+            this.toolStripMenuItemReverseSelectedItemsCheckedState});
+            this.fsEntriesContextMenuStrip.Name = "contextMenuStrip1";
+            this.fsEntriesContextMenuStrip.Size = new System.Drawing.Size(268, 70);
+            // 
+            // toolStripMenuItemCheckSelectedItems
+            // 
+            this.toolStripMenuItemCheckSelectedItems.Name = "toolStripMenuItemCheckSelectedItems";
+            this.toolStripMenuItemCheckSelectedItems.Size = new System.Drawing.Size(267, 22);
+            this.toolStripMenuItemCheckSelectedItems.Text = "Check selected items";
+            // 
+            // toolStripMenuItemUncheckSelectedItems
+            // 
+            this.toolStripMenuItemUncheckSelectedItems.Name = "toolStripMenuItemUncheckSelectedItems";
+            this.toolStripMenuItemUncheckSelectedItems.Size = new System.Drawing.Size(267, 22);
+            this.toolStripMenuItemUncheckSelectedItems.Text = "Uncheck selected items";
+            // 
+            // toolStripMenuItemReverseSelectedItemsCheckedState
+            // 
+            this.toolStripMenuItemReverseSelectedItemsCheckedState.Name = "toolStripMenuItemReverseSelectedItemsCheckedState";
+            this.toolStripMenuItemReverseSelectedItemsCheckedState.Size = new System.Drawing.Size(267, 22);
+            this.toolStripMenuItemReverseSelectedItemsCheckedState.Text = "Reverse selected items checked state";
             // 
             // FsEntriesGridUserControl
             // 
@@ -221,6 +255,7 @@
             this.topPanel.ResumeLayout(false);
             this.topPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+            this.fsEntriesContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -240,5 +275,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridLastWriteColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesGridUuidColumn;
         private System.Windows.Forms.Label labelCheckedEntriesCount;
+        private System.Windows.Forms.ContextMenuStrip fsEntriesContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCheckSelectedItems;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUncheckSelectedItems;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemReverseSelectedItemsCheckedState;
     }
 }

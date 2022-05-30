@@ -19,6 +19,7 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             InitializeComponent();
 
+            fsDirectoryEntriesGridUserControl.OnReload += FsDirectoryEntriesGridUserControl_OnReload;
             fsDirectoryEntriesGridUserControl.OnGoBack += FsDirectoryEntriesGridUserControl_OnGoBack;
             fsDirectoryEntriesGridUserControl.OnGoForward += FsDirectoryEntriesGridUserControl_OnGoForward;
             fsDirectoryEntriesGridUserControl.OnGoToRoot += FsDirectoryEntriesGridUserControl_OnGoToRoot;
@@ -26,6 +27,7 @@ namespace Turmerik.FsUtils.WinForms.App
             fsDirectoryEntriesGridUserControl.OnFsEntryOpen += FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick;
             fsDirectoryEntriesGridUserControl.OnFsEntryOptsOpen += FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen;
 
+            fsFileEntriesGridUserControl.OnReload += FsFileEntriesGridUserControl_OnReload;
             fsFileEntriesGridUserControl.OnGoBack += FsFileEntriesGridUserControl_OnGoBack;
             fsFileEntriesGridUserControl.OnGoForward += FsFileEntriesGridUserControl_OnGoForward;
             fsFileEntriesGridUserControl.OnGoToRoot += FsFileEntriesGridUserControl_OnGoToRoot;
@@ -44,6 +46,18 @@ namespace Turmerik.FsUtils.WinForms.App
         private void FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen(KeyValuePair<int, IFsEntriesDataGridRow> obj)
         {
             throw new NotImplementedException();
+        }
+
+        private void FsFileEntriesGridUserControl_OnReload(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.ReloadToFolder,
+                () => viewModel.ReloadCurrentFolder(), true);
+        }
+
+        private void FsDirectoryEntriesGridUserControl_OnReload(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.ReloadToFolder,
+                () => viewModel.ReloadCurrentFolder(), true);
         }
 
         private void FsFileEntriesGridUserControl_OnGoForward(KeyValuePair<int, IFsEntriesDataGridRow> obj)
