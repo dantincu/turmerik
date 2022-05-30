@@ -131,6 +131,7 @@
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
             this.dataGridView.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseUp);
             this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridView_DataError);
+            this.dataGridView.Sorted += new System.EventHandler(this.dataGridView_Sorted);
             this.dataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_KeyUp);
             // 
             // dataGridSelectRowColumn
@@ -152,7 +153,6 @@
             this.fsEntriesDataGridNameColumn.HeaderText = "Name";
             this.fsEntriesDataGridNameColumn.Name = "fsEntriesDataGridNameColumn";
             this.fsEntriesDataGridNameColumn.ReadOnly = true;
-            this.fsEntriesDataGridNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesDataGridNameColumn.Width = 600;
             // 
             // fsEntriesDataGridLabelColumn
@@ -160,7 +160,6 @@
             this.fsEntriesDataGridLabelColumn.HeaderText = "Label or file ext";
             this.fsEntriesDataGridLabelColumn.Name = "fsEntriesDataGridLabelColumn";
             this.fsEntriesDataGridLabelColumn.ReadOnly = true;
-            this.fsEntriesDataGridLabelColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesDataGridLabelColumn.Width = 120;
             // 
             // fsEntriesGridOptsColumn
@@ -175,7 +174,6 @@
             this.fsEntriesGridCreationTimeColumn.HeaderText = "Creation";
             this.fsEntriesGridCreationTimeColumn.Name = "fsEntriesGridCreationTimeColumn";
             this.fsEntriesGridCreationTimeColumn.ReadOnly = true;
-            this.fsEntriesGridCreationTimeColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesGridCreationTimeColumn.Width = 120;
             // 
             // fsEntriesDataGridLastAccessColumn
@@ -183,7 +181,6 @@
             this.fsEntriesDataGridLastAccessColumn.HeaderText = "Last access";
             this.fsEntriesDataGridLastAccessColumn.Name = "fsEntriesDataGridLastAccessColumn";
             this.fsEntriesDataGridLastAccessColumn.ReadOnly = true;
-            this.fsEntriesDataGridLastAccessColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesDataGridLastAccessColumn.Width = 120;
             // 
             // fsEntriesDataGridLastWriteColumn
@@ -191,7 +188,6 @@
             this.fsEntriesDataGridLastWriteColumn.HeaderText = "Last write";
             this.fsEntriesDataGridLastWriteColumn.Name = "fsEntriesDataGridLastWriteColumn";
             this.fsEntriesDataGridLastWriteColumn.ReadOnly = true;
-            this.fsEntriesDataGridLastWriteColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesDataGridLastWriteColumn.Width = 120;
             // 
             // fsEntriesGridUuidColumn
@@ -199,6 +195,7 @@
             this.fsEntriesGridUuidColumn.HeaderText = "Uuid";
             this.fsEntriesGridUuidColumn.Name = "fsEntriesGridUuidColumn";
             this.fsEntriesGridUuidColumn.ReadOnly = true;
+            this.fsEntriesGridUuidColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.fsEntriesGridUuidColumn.Visible = false;
             // 
             // FsEntriesGridUserControl

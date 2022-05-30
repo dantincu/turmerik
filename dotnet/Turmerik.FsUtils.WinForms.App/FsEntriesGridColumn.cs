@@ -16,5 +16,6 @@ namespace Turmerik.FsUtils.WinForms.App
         CreationTime,
         LastAccessTime,
         LastWriteTime,
+        Uuid
     }
 }

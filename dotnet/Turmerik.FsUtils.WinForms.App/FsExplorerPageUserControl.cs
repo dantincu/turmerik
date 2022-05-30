@@ -19,11 +19,15 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             InitializeComponent();
 
+            fsDirectoryEntriesGridUserControl.OnGoBack += FsDirectoryEntriesGridUserControl_OnGoBack;
+            fsDirectoryEntriesGridUserControl.OnGoForward += FsDirectoryEntriesGridUserControl_OnGoForward;
             fsDirectoryEntriesGridUserControl.OnGoToRoot += FsDirectoryEntriesGridUserControl_OnGoToRoot;
             fsDirectoryEntriesGridUserControl.OnGoToParent += FsDirectoryEntriesGridUserControl_OnGoToParent;
             fsDirectoryEntriesGridUserControl.OnFsEntryOpen += FsDirectoryEntriesGridUserControl_OnFsEntryNameDblClick;
             fsDirectoryEntriesGridUserControl.OnFsEntryOptsOpen += FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen;
 
+            fsFileEntriesGridUserControl.OnGoBack += FsFileEntriesGridUserControl_OnGoBack;
+            fsFileEntriesGridUserControl.OnGoForward += FsFileEntriesGridUserControl_OnGoForward;
             fsFileEntriesGridUserControl.OnGoToRoot += FsFileEntriesGridUserControl_OnGoToRoot;
             fsFileEntriesGridUserControl.OnGoToParent += FsFileEntriesGridUserControl_OnGoToParent;
             fsFileEntriesGridUserControl.OnFsEntryOpen += FsFileEntriesGridUserControl_OnFsEntryNameDblClick;
@@ -40,6 +44,30 @@ namespace Turmerik.FsUtils.WinForms.App
         private void FsDirectoryEntriesGridUserControl_OnFsEntryOptsOpen(KeyValuePair<int, IFsEntriesDataGridRow> obj)
         {
             throw new NotImplementedException();
+        }
+
+        private void FsFileEntriesGridUserControl_OnGoForward(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToHistoryForward,
+                () => viewModel.NavigateToHistoryForward(), true);
+        }
+
+        private void FsFileEntriesGridUserControl_OnGoBack(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToHistoryBack,
+                () => viewModel.NavigateToHistoryBack(), true);
+        }
+
+        private void FsDirectoryEntriesGridUserControl_OnGoForward(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToHistoryForward,
+                () => viewModel.NavigateToHistoryForward(), true);
+        }
+
+        private void FsDirectoryEntriesGridUserControl_OnGoBack(KeyValuePair<int, IFsEntriesDataGridRow> obj)
+        {
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToHistoryBack,
+                () => viewModel.NavigateToHistoryBack(), true);
         }
 
         private void FsFileEntriesGridUserControl_OnGoToRoot(KeyValuePair<int, IFsEntriesDataGridRow> obj)

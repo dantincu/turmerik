@@ -42,6 +42,8 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToRoot;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToParent;
+        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoBack;
+        private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoForward;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOpen;
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onFsEntryOptsOpen;
 
@@ -83,6 +85,32 @@ namespace Turmerik.FsUtils.WinForms.App
             remove
             {
                 onGoToParent -= value;
+            }
+        }
+
+        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoBack
+        {
+            add
+            {
+                onGoBack += value;
+            }
+
+            remove
+            {
+                onGoBack -= value;
+            }
+        }
+
+        public event Action<KeyValuePair<int, IFsEntriesDataGridRow>> OnGoForward
+        {
+            add
+            {
+                onGoForward += value;
+            }
+
+            remove
+            {
+                onGoForward -= value;
             }
         }
 
@@ -194,6 +222,7 @@ namespace Turmerik.FsUtils.WinForms.App
             AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastAccessTime, fsItem.LastAccessTimeStr);
             AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.LastWriteTime, fsItem.LastWriteTimeStr);
 
+            AddFsEntriesGridTextCellToDictnr(rowCellsDictnr, FsEntriesGridColumn.Uuid, fsItem.Uuid.ToString());
             return rowCellsDictnr;
         }
 
@@ -403,25 +432,30 @@ namespace Turmerik.FsUtils.WinForms.App
                     onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentCellIndex, CurrentRow));
                     break;
+
                 case Keys.Back:
                     onGoToParent?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentCellIndex, CurrentRow));
                     break;
+
                 case Keys.Space:
                     SelectDataGridRow(CurrentRowIndex);
                     break;
+
                 case Keys.Up:
                     if (CurrentRowIndex > 0)
                     {
                         SetCurrentRow(CurrentRowIndex - 1, CurrentCellIndex);
                     }
                     break;
+
                 case Keys.Down:
                     if (CurrentRowIndex < EditableDataGridValueRows.Count - 1)
                     {
                         SetCurrentRow(CurrentRowIndex + 1, CurrentCellIndex);
                     }
                     break;
+
                 case Keys.Home:
                     if (e.Control)
                     {
@@ -432,20 +466,56 @@ namespace Turmerik.FsUtils.WinForms.App
                     {
                         SetCurrentRow(0, CurrentCellIndex);
                     }
-
                     break;
+
                 case Keys.End:
                     SetCurrentRow(EditableDataGridValueRows.Count - 1, CurrentCellIndex);
                     break;
+
                 case Keys.PageDown:
                     newRowIndex = Math.Max(0, CurrentRowIndex - FS_ENTRIES_DATA_GRID_PAGE_SIZE);
                     SetCurrentRow(newRowIndex, CurrentCellIndex);
                     break;
+
                 case Keys.PageUp:
                     newRowIndex = Math.Min(EditableDataGridValueRows.Count - 1, CurrentRowIndex + FS_ENTRIES_DATA_GRID_PAGE_SIZE);
                     SetCurrentRow(newRowIndex, CurrentCellIndex);
                     break;
+
+                case Keys.OemMinus:
+                    if (e.Control)
+                    {
+                        onGoBack?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                            CurrentCellIndex, CurrentRow));
+                    }
+                    break;
+
+                case Keys.Oemplus:
+                    if (e.Control)
+                    {
+                        onGoForward?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                            CurrentCellIndex, CurrentRow));
+                    }
+                    break;
             }
+        }
+
+        private void dataGridView_Sorted(object sender, EventArgs e)
+        {
+            var dataGridValueRows = new List<FsEntriesDataGridRowMtbl>();
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                var uuidCell = row.Cells[(int)FsEntriesGridColumn.Uuid];
+                Guid uuid = Guid.Parse((string)uuidCell.Value);
+
+                var dataRow = EditableDataGridValueRows.Single(
+                    entry => entry.Data.Uuid == uuid);
+
+                dataGridValueRows.Add(dataRow);
+            }
+
+            EditableDataGridValueRows = dataGridValueRows;
         }
 
         private void DataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)

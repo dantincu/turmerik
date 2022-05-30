@@ -367,6 +367,7 @@ namespace Turmerik.FsUtils.WinForms.App
                 ).Where(d => d.IsReady).Select(
                 d => new FsItemMtbl
                 {
+                    Uuid = Guid.NewGuid(),
                     Name = d.Name,
                     Path = d.Name,
                     Label = d.VolumeLabel,
@@ -417,6 +418,7 @@ namespace Turmerik.FsUtils.WinForms.App
         {
             var fsItemMtbl = new FsItemMtbl
             {
+                Uuid = Guid.NewGuid(),
                 Name = fsInfo.Name,
                 Path = fsInfo.FullName,
                 IsDirectory = fsInfo is DirectoryInfo,
