@@ -28,10 +28,12 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public FsExplorerViewModel(
             MainFormEventsViewModel eventsViewModel,
-            IFsPathNormalizer fsPathNormalizer)
+            IFsPathNormalizer fsPathNormalizer,
+            ITimeStampHelper timeStampHelper)
         {
             this.EventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
             this.FsPathNormalizer = fsPathNormalizer ?? throw new ArgumentNullException(nameof(fsPathNormalizer));
+            this.TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
 
             backHistoryStack = new ConcurrentStack<string>();
             forwardHistoryStack = new ConcurrentStack<string>();
@@ -41,6 +43,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         public Guid Uuid { get; }
         public IFsPathNormalizer FsPathNormalizer { get; }
+        public ITimeStampHelper TimeStampHelper { get; }
         public MainFormEventsViewModel EventsViewModel { get; }
 
         public bool IsRootFolder { get; private set; }
@@ -350,7 +353,8 @@ namespace Turmerik.FsUtils.WinForms.App
             var dirInfo = new DirectoryInfo(currentDirPath);
 
             var fsEntries = dirInfo.EnumerateFileSystemInfos().Select(
-                GetFsItemMtbl).ToList();
+                GetFsItemMtbl).ToList().OrderBy(
+                entry => entry.Name).ToList();
 
             return fsEntries;
         }
@@ -417,8 +421,11 @@ namespace Turmerik.FsUtils.WinForms.App
                 Path = fsInfo.FullName,
                 IsDirectory = fsInfo is DirectoryInfo,
                 CreationTime = fsInfo.CreationTime,
+                CreationTimeStr = TimeStampHelper.TmStmp(fsInfo.CreationTime, true, TimeStamp.Seconds),
                 LastAccessTime = fsInfo.LastAccessTime,
-                LastWriteTime = fsInfo.LastWriteTime
+                LastAccessTimeStr = TimeStampHelper.TmStmp(fsInfo.LastAccessTime, true, TimeStamp.Seconds),
+                LastWriteTime = fsInfo.LastWriteTime,
+                LastWriteTimeStr = TimeStampHelper.TmStmp(fsInfo.LastWriteTime, true, TimeStamp.Seconds)
             };
 
             if (!fsItemMtbl.IsDirectory)

@@ -343,33 +343,39 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private void DataGridView_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
         {
-            SetCurrentRow(e.RowIndex, e.ColumnIndex);
-
-            if (e.Button == MouseButtons.Left)
+            if (e.RowIndex >= 0)
             {
-                switch (CurrentCell)
+                SetCurrentRow(e.RowIndex, e.ColumnIndex);
+
+                if (e.Button == MouseButtons.Left)
                 {
-                    case FsEntriesGridColumn.SelectEntry:
-                        SelectDataGridRow(CurrentRowIndex);
-                        break;
-                    case FsEntriesGridColumn.EntryOpts:
-                        onFsEntryOptsOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                            CurrentRowIndex, CurrentRow));
-                        break;
+                    switch (CurrentCell)
+                    {
+                        case FsEntriesGridColumn.SelectEntry:
+                            SelectDataGridRow(CurrentRowIndex);
+                            break;
+                        case FsEntriesGridColumn.EntryOpts:
+                            onFsEntryOptsOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                                CurrentRowIndex, CurrentRow));
+                            break;
+                    }
                 }
             }
         }
 
         private void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            SetCurrentRow(e.RowIndex, e.ColumnIndex);
-
-            switch (CurrentCell)
+            if (e.RowIndex >= 0)
             {
-                case FsEntriesGridColumn.EntryName:
-                    onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
-                        CurrentRowIndex, CurrentRow));
-                    break;
+                SetCurrentRow(e.RowIndex, e.ColumnIndex);
+
+                switch (CurrentCell)
+                {
+                    case FsEntriesGridColumn.EntryName:
+                        onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                            CurrentRowIndex, CurrentRow));
+                        break;
+                }
             }
         }
 
