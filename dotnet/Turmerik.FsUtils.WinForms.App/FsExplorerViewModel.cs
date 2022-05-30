@@ -181,6 +181,12 @@ namespace Turmerik.FsUtils.WinForms.App
             return new Tuple<bool, string>(true, null);
         }
 
+        public Tuple<bool, string> ReloadCurrentFolder()
+        {
+            NavigateToFolderCore(CurrentDirPath);
+            return new Tuple<bool, string>(true, null);
+        }
+
         public Tuple<bool, string> OpenFileInOSDefaultApp(string fileName)
         {
             string filePath = Path.Combine(CurrentDirPath, fileName);
@@ -434,12 +440,14 @@ namespace Turmerik.FsUtils.WinForms.App
 
             public static readonly string NavigateToParentFolder = GetActionName("navigate to parent folder");
             public static readonly string NavigateToFolder = GetActionName("navigate to folder");
+            public static readonly string ReloadToFolder = GetActionName("reload current folder");
             public static readonly string NavigateToSubFolder = GetActionName("navigate to sub folder");
             public static readonly string NavigateToHistoryBack = GetActionName("navigate to history back");
             public static readonly string NavigateToHistoryForward = GetActionName("navigate to history forward");
             public static readonly string OpenFileInOSDefaultApp = GetActionName("open app in OS default app");
             public static readonly string CopyCurrentDirPathToClipboard = GetActionName("copy current dir path to clipboard");
-            public static readonly string CopyEditableDirPathToClipboard = GetActionName("copy current dir path to clipboard");
+            public static readonly string CopyEditableDirPathToClipboard = GetActionName("copy editable dir path to clipboard");
+            public static readonly string CopyCurrentDirNameToClipboard = GetActionName("copy current dir name to clipboard");
             public static readonly string AddNewTabPage = GetActionName("add new tab page");
             public static readonly string NavigateToRoot = GetActionName("navigate to root");
 

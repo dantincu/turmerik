@@ -34,31 +34,35 @@
             this.currentDirPathPanel = new System.Windows.Forms.Panel();
             this.textBoxCurrentDirPath = new System.Windows.Forms.TextBox();
             this.navigationPanel = new System.Windows.Forms.Panel();
+            this.buttonReloadCurrentDirPath = new System.Windows.Forms.Button();
             this.buttonCopyCurrentDirPathToClipboard = new System.Windows.Forms.Button();
             this.buttonCurrentDirGoForward = new System.Windows.Forms.Button();
             this.buttonCurrentDirGoUp = new System.Windows.Forms.Button();
             this.buttonCurrentDirGoBack = new System.Windows.Forms.Button();
-            this.groupBoxNavigation = new System.Windows.Forms.GroupBox();
+            this.groupBoxEditableDirPath = new System.Windows.Forms.GroupBox();
             this.panelEditableDirPathControls = new System.Windows.Forms.Panel();
+            this.buttonEditableDirPathUndoChanges = new System.Windows.Forms.Button();
+            this.buttonCopyEditableDirPathToClipboard = new System.Windows.Forms.Button();
             this.buttonEditableDirPathGo = new System.Windows.Forms.Button();
             this.buttonClearEditableDirPath = new System.Windows.Forms.Button();
             this.panelEditableDirPath = new System.Windows.Forms.Panel();
             this.textBoxEditableDirPath = new System.Windows.Forms.TextBox();
             this.groupBoxCurrentFolderName = new System.Windows.Forms.GroupBox();
             this.panelCurrentFolderNameControls = new System.Windows.Forms.Panel();
-            this.textBoxCurrentFolderName = new System.Windows.Forms.TextBox();
+            this.textBoxCurrentDirName = new System.Windows.Forms.TextBox();
             this.fsEntriesSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.buttonCopyCurrentFolderNameToClipboard = new System.Windows.Forms.Button();
             this.fsDirectoryEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
             this.fsFileEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
-            this.buttonCopyEditableDirPathToClipboard = new System.Windows.Forms.Button();
             this.groupBoxVPath.SuspendLayout();
             this.groupBoxPath.SuspendLayout();
             this.currentDirPathPanel.SuspendLayout();
             this.navigationPanel.SuspendLayout();
-            this.groupBoxNavigation.SuspendLayout();
+            this.groupBoxEditableDirPath.SuspendLayout();
             this.panelEditableDirPathControls.SuspendLayout();
             this.panelEditableDirPath.SuspendLayout();
             this.groupBoxCurrentFolderName.SuspendLayout();
+            this.panelCurrentFolderNameControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fsEntriesSplitContainer)).BeginInit();
             this.fsEntriesSplitContainer.Panel1.SuspendLayout();
             this.fsEntriesSplitContainer.Panel2.SuspendLayout();
@@ -114,9 +118,11 @@
             this.textBoxCurrentDirPath.ReadOnly = true;
             this.textBoxCurrentDirPath.Size = new System.Drawing.Size(1238, 20);
             this.textBoxCurrentDirPath.TabIndex = 2;
+            this.textBoxCurrentDirPath.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TextBoxCurrentDirPath_MouseUp);
             // 
             // navigationPanel
             // 
+            this.navigationPanel.Controls.Add(this.buttonReloadCurrentDirPath);
             this.navigationPanel.Controls.Add(this.buttonCopyCurrentDirPathToClipboard);
             this.navigationPanel.Controls.Add(this.buttonCurrentDirGoForward);
             this.navigationPanel.Controls.Add(this.buttonCurrentDirGoUp);
@@ -127,11 +133,22 @@
             this.navigationPanel.Size = new System.Drawing.Size(1238, 21);
             this.navigationPanel.TabIndex = 3;
             // 
+            // buttonReloadCurrentDirPath
+            // 
+            this.buttonReloadCurrentDirPath.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonReloadCurrentDirPath.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.reload_16x16;
+            this.buttonReloadCurrentDirPath.Location = new System.Drawing.Point(88, -1);
+            this.buttonReloadCurrentDirPath.Name = "buttonReloadCurrentDirPath";
+            this.buttonReloadCurrentDirPath.Size = new System.Drawing.Size(32, 23);
+            this.buttonReloadCurrentDirPath.TabIndex = 4;
+            this.buttonReloadCurrentDirPath.UseVisualStyleBackColor = true;
+            this.buttonReloadCurrentDirPath.Click += new System.EventHandler(this.ButtonReloadCurrentDirPath_Click);
+            // 
             // buttonCopyCurrentDirPathToClipboard
             // 
             this.buttonCopyCurrentDirPathToClipboard.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonCopyCurrentDirPathToClipboard.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.clipboard_16x16;
-            this.buttonCopyCurrentDirPathToClipboard.Location = new System.Drawing.Point(90, 0);
+            this.buttonCopyCurrentDirPathToClipboard.Location = new System.Drawing.Point(120, -1);
             this.buttonCopyCurrentDirPathToClipboard.Name = "buttonCopyCurrentDirPathToClipboard";
             this.buttonCopyCurrentDirPathToClipboard.Size = new System.Drawing.Size(32, 23);
             this.buttonCopyCurrentDirPathToClipboard.TabIndex = 3;
@@ -171,20 +188,21 @@
             this.buttonCurrentDirGoBack.UseVisualStyleBackColor = true;
             this.buttonCurrentDirGoBack.Click += new System.EventHandler(this.ButtonCurrentDirGoBack_Click);
             // 
-            // groupBoxNavigation
+            // groupBoxEditableDirPath
             // 
-            this.groupBoxNavigation.Controls.Add(this.panelEditableDirPathControls);
-            this.groupBoxNavigation.Controls.Add(this.panelEditableDirPath);
-            this.groupBoxNavigation.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxNavigation.Location = new System.Drawing.Point(0, 111);
-            this.groupBoxNavigation.Name = "groupBoxNavigation";
-            this.groupBoxNavigation.Size = new System.Drawing.Size(1244, 73);
-            this.groupBoxNavigation.TabIndex = 8;
-            this.groupBoxNavigation.TabStop = false;
-            this.groupBoxNavigation.Text = "Go to";
+            this.groupBoxEditableDirPath.Controls.Add(this.panelEditableDirPathControls);
+            this.groupBoxEditableDirPath.Controls.Add(this.panelEditableDirPath);
+            this.groupBoxEditableDirPath.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxEditableDirPath.Location = new System.Drawing.Point(0, 111);
+            this.groupBoxEditableDirPath.Name = "groupBoxEditableDirPath";
+            this.groupBoxEditableDirPath.Size = new System.Drawing.Size(1244, 73);
+            this.groupBoxEditableDirPath.TabIndex = 8;
+            this.groupBoxEditableDirPath.TabStop = false;
+            this.groupBoxEditableDirPath.Text = "Go to";
             // 
             // panelEditableDirPathControls
             // 
+            this.panelEditableDirPathControls.Controls.Add(this.buttonEditableDirPathUndoChanges);
             this.panelEditableDirPathControls.Controls.Add(this.buttonCopyEditableDirPathToClipboard);
             this.panelEditableDirPathControls.Controls.Add(this.buttonEditableDirPathGo);
             this.panelEditableDirPathControls.Controls.Add(this.buttonClearEditableDirPath);
@@ -194,11 +212,33 @@
             this.panelEditableDirPathControls.Size = new System.Drawing.Size(1238, 26);
             this.panelEditableDirPathControls.TabIndex = 5;
             // 
+            // buttonEditableDirPathUndoChanges
+            // 
+            this.buttonEditableDirPathUndoChanges.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonEditableDirPathUndoChanges.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_left_16x16;
+            this.buttonEditableDirPathUndoChanges.Location = new System.Drawing.Point(3, 1);
+            this.buttonEditableDirPathUndoChanges.Name = "buttonEditableDirPathUndoChanges";
+            this.buttonEditableDirPathUndoChanges.Size = new System.Drawing.Size(32, 23);
+            this.buttonEditableDirPathUndoChanges.TabIndex = 5;
+            this.buttonEditableDirPathUndoChanges.UseVisualStyleBackColor = true;
+            this.buttonEditableDirPathUndoChanges.Click += new System.EventHandler(this.buttonEditableDirPathUndoChanges_Click);
+            // 
+            // buttonCopyEditableDirPathToClipboard
+            // 
+            this.buttonCopyEditableDirPathToClipboard.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonCopyEditableDirPathToClipboard.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.clipboard_16x16;
+            this.buttonCopyEditableDirPathToClipboard.Location = new System.Drawing.Point(94, 1);
+            this.buttonCopyEditableDirPathToClipboard.Name = "buttonCopyEditableDirPathToClipboard";
+            this.buttonCopyEditableDirPathToClipboard.Size = new System.Drawing.Size(32, 23);
+            this.buttonCopyEditableDirPathToClipboard.TabIndex = 4;
+            this.buttonCopyEditableDirPathToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyEditableDirPathToClipboard.Click += new System.EventHandler(this.ButtonCopyEditableDirPathToClipboard_Click);
+            // 
             // buttonEditableDirPathGo
             // 
             this.buttonEditableDirPathGo.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonEditableDirPathGo.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.arrow_right_16x16;
-            this.buttonEditableDirPathGo.Location = new System.Drawing.Point(30, 1);
+            this.buttonEditableDirPathGo.Location = new System.Drawing.Point(62, 1);
             this.buttonEditableDirPathGo.Name = "buttonEditableDirPathGo";
             this.buttonEditableDirPathGo.Size = new System.Drawing.Size(32, 23);
             this.buttonEditableDirPathGo.TabIndex = 3;
@@ -209,7 +249,7 @@
             // 
             this.buttonClearEditableDirPath.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonClearEditableDirPath.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.times_16x16;
-            this.buttonClearEditableDirPath.Location = new System.Drawing.Point(1, 1);
+            this.buttonClearEditableDirPath.Location = new System.Drawing.Point(33, 1);
             this.buttonClearEditableDirPath.Name = "buttonClearEditableDirPath";
             this.buttonClearEditableDirPath.Size = new System.Drawing.Size(32, 23);
             this.buttonClearEditableDirPath.TabIndex = 1;
@@ -234,11 +274,12 @@
             this.textBoxEditableDirPath.Size = new System.Drawing.Size(1238, 21);
             this.textBoxEditableDirPath.TabIndex = 2;
             this.textBoxEditableDirPath.TextChanged += new System.EventHandler(this.textBoxEditableDirPath_TextChanged);
+            this.textBoxEditableDirPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxEditableDirPath_KeyUp);
             // 
             // groupBoxCurrentFolderName
             // 
             this.groupBoxCurrentFolderName.Controls.Add(this.panelCurrentFolderNameControls);
-            this.groupBoxCurrentFolderName.Controls.Add(this.textBoxCurrentFolderName);
+            this.groupBoxCurrentFolderName.Controls.Add(this.textBoxCurrentDirName);
             this.groupBoxCurrentFolderName.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCurrentFolderName.Location = new System.Drawing.Point(0, 184);
             this.groupBoxCurrentFolderName.Name = "groupBoxCurrentFolderName";
@@ -249,20 +290,21 @@
             // 
             // panelCurrentFolderNameControls
             // 
+            this.panelCurrentFolderNameControls.Controls.Add(this.buttonCopyCurrentFolderNameToClipboard);
             this.panelCurrentFolderNameControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelCurrentFolderNameControls.Location = new System.Drawing.Point(3, 36);
             this.panelCurrentFolderNameControls.Name = "panelCurrentFolderNameControls";
             this.panelCurrentFolderNameControls.Size = new System.Drawing.Size(1238, 26);
             this.panelCurrentFolderNameControls.TabIndex = 6;
             // 
-            // textBoxCurrentFolderName
+            // textBoxCurrentDirName
             // 
-            this.textBoxCurrentFolderName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBoxCurrentFolderName.Location = new System.Drawing.Point(3, 16);
-            this.textBoxCurrentFolderName.Name = "textBoxCurrentFolderName";
-            this.textBoxCurrentFolderName.ReadOnly = true;
-            this.textBoxCurrentFolderName.Size = new System.Drawing.Size(1238, 20);
-            this.textBoxCurrentFolderName.TabIndex = 3;
+            this.textBoxCurrentDirName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBoxCurrentDirName.Location = new System.Drawing.Point(3, 16);
+            this.textBoxCurrentDirName.Name = "textBoxCurrentDirName";
+            this.textBoxCurrentDirName.ReadOnly = true;
+            this.textBoxCurrentDirName.Size = new System.Drawing.Size(1238, 20);
+            this.textBoxCurrentDirName.TabIndex = 3;
             // 
             // fsEntriesSplitContainer
             // 
@@ -285,6 +327,17 @@
             this.fsEntriesSplitContainer.SplitterDistance = 800;
             this.fsEntriesSplitContainer.TabIndex = 10;
             // 
+            // buttonCopyCurrentFolderNameToClipboard
+            // 
+            this.buttonCopyCurrentFolderNameToClipboard.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonCopyCurrentFolderNameToClipboard.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.clipboard_16x16;
+            this.buttonCopyCurrentFolderNameToClipboard.Location = new System.Drawing.Point(3, 1);
+            this.buttonCopyCurrentFolderNameToClipboard.Name = "buttonCopyCurrentFolderNameToClipboard";
+            this.buttonCopyCurrentFolderNameToClipboard.Size = new System.Drawing.Size(32, 23);
+            this.buttonCopyCurrentFolderNameToClipboard.TabIndex = 5;
+            this.buttonCopyCurrentFolderNameToClipboard.UseVisualStyleBackColor = true;
+            this.buttonCopyCurrentFolderNameToClipboard.Click += new System.EventHandler(this.buttonCopyCurrentFolderNameToClipboard_Click);
+            // 
             // fsDirectoryEntriesGridUserControl
             // 
             this.fsDirectoryEntriesGridUserControl.AutoScroll = true;
@@ -303,17 +356,6 @@
             this.fsFileEntriesGridUserControl.Size = new System.Drawing.Size(1244, 806);
             this.fsFileEntriesGridUserControl.TabIndex = 1;
             // 
-            // buttonCopyEditableDirPathToClipboard
-            // 
-            this.buttonCopyEditableDirPathToClipboard.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonCopyEditableDirPathToClipboard.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.clipboard_16x16;
-            this.buttonCopyEditableDirPathToClipboard.Location = new System.Drawing.Point(62, 1);
-            this.buttonCopyEditableDirPathToClipboard.Name = "buttonCopyEditableDirPathToClipboard";
-            this.buttonCopyEditableDirPathToClipboard.Size = new System.Drawing.Size(32, 23);
-            this.buttonCopyEditableDirPathToClipboard.TabIndex = 4;
-            this.buttonCopyEditableDirPathToClipboard.UseVisualStyleBackColor = true;
-            this.buttonCopyEditableDirPathToClipboard.Click += new System.EventHandler(this.ButtonCopyEditableDirPathToClipboard_Click);
-            // 
             // FsExplorerPageUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -321,7 +363,7 @@
             this.AutoScroll = true;
             this.Controls.Add(this.fsEntriesSplitContainer);
             this.Controls.Add(this.groupBoxCurrentFolderName);
-            this.Controls.Add(this.groupBoxNavigation);
+            this.Controls.Add(this.groupBoxEditableDirPath);
             this.Controls.Add(this.groupBoxPath);
             this.Controls.Add(this.groupBoxVPath);
             this.MinimumSize = new System.Drawing.Size(0, 2000);
@@ -333,12 +375,13 @@
             this.currentDirPathPanel.ResumeLayout(false);
             this.currentDirPathPanel.PerformLayout();
             this.navigationPanel.ResumeLayout(false);
-            this.groupBoxNavigation.ResumeLayout(false);
+            this.groupBoxEditableDirPath.ResumeLayout(false);
             this.panelEditableDirPathControls.ResumeLayout(false);
             this.panelEditableDirPath.ResumeLayout(false);
             this.panelEditableDirPath.PerformLayout();
             this.groupBoxCurrentFolderName.ResumeLayout(false);
             this.groupBoxCurrentFolderName.PerformLayout();
+            this.panelCurrentFolderNameControls.ResumeLayout(false);
             this.fsEntriesSplitContainer.Panel1.ResumeLayout(false);
             this.fsEntriesSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fsEntriesSplitContainer)).EndInit();
@@ -355,12 +398,12 @@
         private System.Windows.Forms.Panel currentDirPathPanel;
         private System.Windows.Forms.TextBox textBoxCurrentDirPath;
         private System.Windows.Forms.Panel navigationPanel;
-        private System.Windows.Forms.GroupBox groupBoxNavigation;
+        private System.Windows.Forms.GroupBox groupBoxEditableDirPath;
         private System.Windows.Forms.Panel panelEditableDirPathControls;
         private System.Windows.Forms.Panel panelEditableDirPath;
         private System.Windows.Forms.TextBox textBoxEditableDirPath;
         private System.Windows.Forms.GroupBox groupBoxCurrentFolderName;
-        private System.Windows.Forms.TextBox textBoxCurrentFolderName;
+        private System.Windows.Forms.TextBox textBoxCurrentDirName;
         private System.Windows.Forms.Panel panelCurrentFolderNameControls;
         private System.Windows.Forms.SplitContainer fsEntriesSplitContainer;
         private FsEntriesGridUserControl fsDirectoryEntriesGridUserControl;
@@ -372,5 +415,8 @@
         private System.Windows.Forms.Button buttonClearEditableDirPath;
         private System.Windows.Forms.Button buttonEditableDirPathGo;
         private System.Windows.Forms.Button buttonCopyEditableDirPathToClipboard;
+        private System.Windows.Forms.Button buttonEditableDirPathUndoChanges;
+        private System.Windows.Forms.Button buttonReloadCurrentDirPath;
+        private System.Windows.Forms.Button buttonCopyCurrentFolderNameToClipboard;
     }
 }

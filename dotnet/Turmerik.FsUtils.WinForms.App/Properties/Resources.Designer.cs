@@ -153,6 +153,16 @@ namespace Turmerik.FsUtils.WinForms.App.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap pen_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("pen_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap plus_icon_16x16 {
             get {
                 object obj = ResourceManager.GetObject("plus_icon_16x16", resourceCulture);

@@ -185,6 +185,7 @@
     <None Include="Images\plus-icon-32x32.png" />
     <None Include="Images\plus-icon-16x16.png" />
     <None Include="Images\plus-icon-24x24.png" />
+    <Content Include="Images\pen-16x16.png" />
     <Content Include="Images\plus-icon-64x64.png" />
     <Content Include="Images\reload-16x16.png" />
     <Content Include="Images\reload-24x24.png" />

@@ -26,6 +26,8 @@ namespace Turmerik.FsUtils.WinForms.App
             fsFileEntriesGridUserControl.OnGoToParent += FsFileEntriesGridUserControl_OnGoToParent;
             fsFileEntriesGridUserControl.OnFsEntryOpen += FsFileEntriesGridUserControl_OnFsEntryNameDblClick;
             fsFileEntriesGridUserControl.OnFsEntryOptsOpen += FsFileEntriesGridUserControl_OnFsEntryOptsOpen;
+
+            groupBoxEditableDirPath.Visible = false;
         }
 
         private void FsFileEntriesGridUserControl_OnFsEntryOptsOpen(KeyValuePair<int, IFsEntriesDataGridRow> obj)
@@ -95,11 +97,11 @@ namespace Turmerik.FsUtils.WinForms.App
 
             if (!viewModel.IsRootFolder)
             {
-                textBoxCurrentFolderName.Text = viewModel.CurrentDirName;
+                textBoxCurrentDirName.Text = viewModel.CurrentDirName;
             }
             else
             {
-                textBoxCurrentFolderName.Text = string.Empty;
+                textBoxCurrentDirName.Text = string.Empty;
             }
 
             fsDirectoryEntriesGridUserControl.ClearFsEntries();
@@ -107,6 +109,46 @@ namespace Turmerik.FsUtils.WinForms.App
 
             fsDirectoryEntriesGridUserControl.SetFsEntries(viewModel.FsDirectoryEntries);
             fsFileEntriesGridUserControl.SetFsEntries(viewModel.FsFileEntries);
+        }
+
+        private void NavigateToPath(string folderPath, bool normalizePath = true)
+        {
+            string errorMessage = null;
+
+            if (normalizePath && string.IsNullOrEmpty(folderPath))
+            {
+                var result = viewModel.FsPathNormalizer.TryNormalizePath(folderPath);
+
+                if (result.IsValid)
+                {
+                    if (result.IsAbsUri == true)
+                    {
+                        errorMessage = "Path must not be an URI";
+                    }
+                    else if (result.IsRooted)
+                    {
+                        folderPath = result.NormalizedPath;
+                    }
+                    else
+                    {
+                        errorMessage = "Path must be rooted";
+                    }
+                }
+                else
+                {
+                    errorMessage = "Path is invalid";
+                }
+            }
+
+            if (errorMessage == null)
+            {
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToFolder,
+                    () => viewModel.NavigateToFolder(folderPath), true);
+            }
+            else
+            {
+                viewModel.EventsViewModel.AddUIErrMsg(errorMessage, null, true);
+            }
         }
 
         private void ViewModel_FsEntriesRefreshed()
@@ -179,50 +221,56 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
+        private void buttonCopyCurrentFolderNameToClipboard_Click(object sender, EventArgs e)
+        {
+            if (!viewModel.IsRootFolder && !string.IsNullOrEmpty(textBoxCurrentDirName.Text))
+            {
+                viewModel.TryExecute(FsExplorerViewModel.ActionNames.CopyCurrentDirNameToClipboard,
+                    () =>
+                    {
+                        Clipboard.SetText(textBoxCurrentDirName.Text);
+                        return new Tuple<bool, string>(true, null);
+                    },
+                    false);
+            }
+        }
+
         private void ButtonClearEditableDirPath_Click(object sender, EventArgs e)
         {
             textBoxEditableDirPath.Text = string.Empty;
         }
 
+        private void buttonEditableDirPathUndoChanges_Click(object sender, EventArgs e)
+        {
+            textBoxEditableDirPath.Text = textBoxCurrentDirPath.Text;
+        }
+
+        private void textBoxEditableDirPath_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                textBoxEditableDirPath.Text = textBoxCurrentDirPath.Text;
+            }
+        }
+
         private void ButtonEditableDirPathGo_Click(object sender, EventArgs e)
         {
             string folderPath = textBoxEditableDirPath.Text;
-            string errorMessage = null;
+            NavigateToPath(folderPath);
+        }
 
-            if (string.IsNullOrEmpty(folderPath))
+        private void TextBoxCurrentDirPath_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
             {
-                var result = viewModel.FsPathNormalizer.TryNormalizePath(folderPath);
+                groupBoxEditableDirPath.Visible = !groupBoxEditableDirPath.Visible;
+            }
+        }
 
-                if (result.IsValid)
-                {
-                    if (result.IsAbsUri == true)
-                    {
-                        errorMessage = "Path must not be an URI";
-                    }
-                    else if (result.IsRooted)
-                    {
-                        folderPath = result.NormalizedPath;
-                    }
-                    else
-                    {
-                        errorMessage = "Path must be rooted";
-                    }
-                }
-                else
-                {
-                    errorMessage = "Path is invalid";
-                }
-            }
-
-            if (errorMessage == null)
-            {
-                viewModel.TryExecute(FsExplorerViewModel.ActionNames.NavigateToFolder,
-                    () => viewModel.NavigateToFolder(folderPath), true);
-            }
-            else
-            {
-                viewModel.EventsViewModel.AddUIErrMsg(errorMessage, null, true);
-            }
+        private void ButtonReloadCurrentDirPath_Click(object sender, EventArgs e)
+        {
+            viewModel.TryExecute(FsExplorerViewModel.ActionNames.ReloadToFolder,
+                () => viewModel.ReloadCurrentFolder(), true);
         }
     }
 }
