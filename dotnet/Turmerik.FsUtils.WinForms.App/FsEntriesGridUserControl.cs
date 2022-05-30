@@ -23,7 +23,7 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private static readonly Color dataGridCellBackColor = Color.White;
         private static readonly Color dataGridCellCurrentBackColor = Color.FromArgb(255, 248, 192);
-        private static readonly Color dataGridCellCheckedBackColor = Color.Aqua;
+        private static readonly Color dataGridCellCheckedBackColor = Color.FromArgb(216, 216, 255);
         private static readonly Color dataGridCellCheckedCurrentBackColor = Color.LightGreen;
 
         private Action<KeyValuePair<int, IFsEntriesDataGridRow>> onGoToRoot;
