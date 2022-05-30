@@ -123,14 +123,14 @@ namespace Turmerik.FsUtils.WinForms.App
 
         private IFsEntriesDataGridRow GetFsEntriesDataGridRow(IFsItem fsItem, int idx)
         {
-            var row = new FsEntriesDataGridRowMtbl
+            var rowMtbl = new FsEntriesDataGridRowMtbl
             {
                 Data = fsItem,
-                DataMtbl = new FsItemMtbl(fsItem),
                 RowIndex = idx
             };
 
-            return row;
+            var rowImmtbl = new FsEntriesDataGridRowImmtbl(rowMtbl);
+            return rowImmtbl;
         }
 
         private DataGridViewRow GetDataGridViewRow(IFsEntriesDataGridRow dataRow, int idx)
@@ -251,6 +251,30 @@ namespace Turmerik.FsUtils.WinForms.App
                     NavigationRow = DataGridValueRows[NavigationRowIndex];
                     break;
             }
+        }
+
+        private void dataGridView_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            var exc = e.Exception;
+
+            string exceptionStr = string.Join(
+                Environment.NewLine,
+                $"EXCEPTION TYPE: {exc.GetType().FullName}",
+                $"EXCEPTION MESSAGE: {exc.Message}");
+
+            string message = string.Join(
+                Environment.NewLine,
+                "A critical error related to the FS entries data grids has ocurred and the application needs to exit:",
+                string.Empty,
+                exceptionStr);
+
+            MessageBox.Show(
+                message,
+                "Critical error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+
+            Application.Exit();
         }
     }
 }

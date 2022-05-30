@@ -139,7 +139,7 @@ namespace Turmerik.FsUtils.WinForms.App
             MessageBox.Show(
                 uILogMessage.Message,
                 uILogMessage.Level.ToString(),
-                MessageBoxButtons.OK,
+                MessageBoxButtons.OKCancel,
                 messageBoxIcon);
         }
     }

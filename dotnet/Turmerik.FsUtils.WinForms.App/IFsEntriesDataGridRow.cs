@@ -10,10 +10,8 @@ namespace Turmerik.FsUtils.WinForms.App
     public interface IFsEntriesDataGridRow
     {
         IFsItem Data { get; }
-        FsItemMtbl DataMtbl { get; }
         int RowIndex { get; }
-        bool IsEdited { get; }
-        bool IsNewRow { get; }
+        bool IsSelected { get; }
     }
 
     public class FsEntriesDataGridRowImmtbl : IFsEntriesDataGridRow
@@ -21,17 +19,13 @@ namespace Turmerik.FsUtils.WinForms.App
         public FsEntriesDataGridRowImmtbl(IFsEntriesDataGridRow src)
         {
             Data = src.Data;
-            DataMtbl = src.DataMtbl;
             RowIndex = src.RowIndex;
-            IsEdited = src.IsEdited;
-            IsNewRow = src.IsNewRow;
+            IsSelected = src.IsSelected;
         }
 
         public IFsItem Data { get; }
-        public FsItemMtbl DataMtbl { get; }
         public int RowIndex { get; }
-        public bool IsEdited { get; }
-        public bool IsNewRow { get; }
+        public bool IsSelected { get; }
     }
 
     public class FsEntriesDataGridRowMtbl : IFsEntriesDataGridRow
@@ -43,16 +37,12 @@ namespace Turmerik.FsUtils.WinForms.App
         public FsEntriesDataGridRowMtbl(IFsEntriesDataGridRow src)
         {
             Data = src.Data;
-            DataMtbl = src.DataMtbl;
             RowIndex = src.RowIndex;
-            IsEdited = src.IsEdited;
-            IsNewRow = src.IsNewRow;
+            IsSelected = src.IsSelected;
         }
 
         public IFsItem Data { get; set; }
-        public FsItemMtbl DataMtbl { get; set; }
         public int RowIndex { get; set; }
-        public bool IsEdited { get; set; }
-        public bool IsNewRow { get; set; }
+        public bool IsSelected { get; }
     }
 }

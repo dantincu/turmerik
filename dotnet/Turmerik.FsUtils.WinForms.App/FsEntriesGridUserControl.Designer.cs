@@ -35,6 +35,7 @@
             this.topPanel = new System.Windows.Forms.Panel();
             this.labelControlTitle = new System.Windows.Forms.Label();
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.dataGridSelectRowColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.fsEntriesDataGridIconColumn = new System.Windows.Forms.DataGridViewImageColumn();
             this.fsEntriesDataGridNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fsEntriesDataGridLabelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -79,6 +80,7 @@
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridSelectRowColumn,
             this.fsEntriesDataGridIconColumn,
             this.fsEntriesDataGridNameColumn,
             this.fsEntriesDataGridLabelColumn,
@@ -122,9 +124,17 @@
             this.dataGridView.TabIndex = 1;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellClick);
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
+            this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
             this.dataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_RowEnter);
             this.dataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView_KeyDown);
             this.dataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridView_KeyUp);
+            // 
+            // dataGridSelectRowColumn
+            // 
+            this.dataGridSelectRowColumn.HeaderText = "";
+            this.dataGridSelectRowColumn.Name = "dataGridSelectRowColumn";
+            this.dataGridSelectRowColumn.ReadOnly = true;
+            this.dataGridSelectRowColumn.Width = 30;
             // 
             // fsEntriesDataGridIconColumn
             // 
@@ -192,6 +202,7 @@
         private System.Windows.Forms.Panel topPanel;
         private System.Windows.Forms.Label labelControlTitle;
         private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridSelectRowColumn;
         private System.Windows.Forms.DataGridViewImageColumn fsEntriesDataGridIconColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridNameColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn fsEntriesDataGridLabelColumn;
