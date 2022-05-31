@@ -302,12 +302,12 @@ namespace Turmerik.FsUtils.WinForms.App
             textBoxEditableDirPath.Text = string.Empty;
         }
 
-        private void buttonEditableDirPathUndoChanges_Click(object sender, EventArgs e)
+        private void ButtonEditableDirPathUndoChanges_Click(object sender, EventArgs e)
         {
             textBoxEditableDirPath.Text = textBoxCurrentDirPath.Text;
         }
 
-        private void textBoxEditableDirPath_KeyUp(object sender, KeyEventArgs e)
+        private void TextBoxEditableDirPath_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
@@ -321,27 +321,10 @@ namespace Turmerik.FsUtils.WinForms.App
             NavigateToPath(folderPath);
         }
 
-        private void TextBoxCurrentDirPath_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                groupBoxEditableDirPath.Visible = !groupBoxEditableDirPath.Visible;
-            }
-        }
-
         private void ButtonReloadCurrentDirPath_Click(object sender, EventArgs e)
         {
             viewModel.TryExecute(FsExplorerViewModel.ActionNames.ReloadToFolder,
                 () => viewModel.ReloadCurrentFolder(), true);
-        }
-
-        private void textBoxCurrentDirName_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                bool show = !expandCollapseNavigationPanelsUserControl.IsExpanded;
-                SetNavigationPanelsVisibility(show);
-            }
         }
 
         private void ExpandCollapseNavigationPanelsUserControl_StateChanged(bool isExpanded)

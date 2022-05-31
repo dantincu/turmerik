@@ -331,7 +331,7 @@ namespace Turmerik.FsUtils.WinForms.App
                 () => CurrentRow.IsChecked ? dataGridCellCheckedBackColor : dataGridCellBackColor,
                 () => unMarkPrevCurrent);
 
-            CurrentRowIndex = 0;
+            CurrentRowIndex = -1;
             CurrentRow = null;
 
             CurrentCellIndex = 0;
@@ -487,8 +487,11 @@ namespace Turmerik.FsUtils.WinForms.App
                     break;
 
                 case Keys.Enter:
-                    onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
+                    if (EditableDataGridValueRows.Any())
+                    {
+                        onFsEntryOpen?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                         CurrentCellIndex, CurrentRow));
+                    }
                     break;
 
                 case Keys.Back:
@@ -497,7 +500,10 @@ namespace Turmerik.FsUtils.WinForms.App
                     break;
 
                 case Keys.Space:
-                    SelectDataGridRow(CurrentRowIndex);
+                    if (CurrentRowIndex >= 0)
+                    {
+                        SelectDataGridRow(CurrentRowIndex);
+                    }
                     break;
 
                 case Keys.Up:
@@ -515,29 +521,38 @@ namespace Turmerik.FsUtils.WinForms.App
                     break;
 
                 case Keys.Home:
-                    if (e.Control)
+                    if (e.Alt)
                     {
                         onGoToRoot?.Invoke(new KeyValuePair<int, IFsEntriesDataGridRow>(
                             CurrentRowIndex, CurrentRow));
                     }
-                    else
+                    else if (e.Control && EditableDataGridValueRows.Any())
                     {
                         SetCurrentRow(0, CurrentCellIndex);
                     }
                     break;
 
                 case Keys.End:
-                    SetCurrentRow(EditableDataGridValueRows.Count - 1, CurrentCellIndex);
+                    if (e.Control && EditableDataGridValueRows.Any())
+                    {
+                        SetCurrentRow(EditableDataGridValueRows.Count - 1, CurrentCellIndex);
+                    }
                     break;
 
                 case Keys.PageDown:
-                    newRowIndex = Math.Max(0, CurrentRowIndex - FS_ENTRIES_DATA_GRID_PAGE_SIZE);
-                    SetCurrentRow(newRowIndex, CurrentCellIndex);
+                    if (EditableDataGridValueRows.Any())
+                    {
+                        newRowIndex = Math.Max(0, CurrentRowIndex - FS_ENTRIES_DATA_GRID_PAGE_SIZE);
+                        SetCurrentRow(newRowIndex, CurrentCellIndex);
+                    }
                     break;
 
                 case Keys.PageUp:
-                    newRowIndex = Math.Min(EditableDataGridValueRows.Count - 1, CurrentRowIndex + FS_ENTRIES_DATA_GRID_PAGE_SIZE);
-                    SetCurrentRow(newRowIndex, CurrentCellIndex);
+                    if (EditableDataGridValueRows.Any())
+                    {
+                        newRowIndex = Math.Min(EditableDataGridValueRows.Count - 1, CurrentRowIndex + FS_ENTRIES_DATA_GRID_PAGE_SIZE);
+                        SetCurrentRow(newRowIndex, CurrentCellIndex);
+                    }
                     break;
 
                 case Keys.OemMinus:
@@ -558,7 +573,7 @@ namespace Turmerik.FsUtils.WinForms.App
             }
         }
 
-        private void dataGridView_Sorted(object sender, EventArgs e)
+        private void DataGridView_Sorted(object sender, EventArgs e)
         {
             var dataGridValueRows = new List<FsEntriesDataGridRowMtbl>();
 

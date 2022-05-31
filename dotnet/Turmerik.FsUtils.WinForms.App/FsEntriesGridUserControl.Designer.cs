@@ -149,7 +149,7 @@
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellDoubleClick);
             this.dataGridView.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView_CellMouseUp);
             this.dataGridView.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.DataGridView_DataError);
-            this.dataGridView.Sorted += new System.EventHandler(this.dataGridView_Sorted);
+            this.dataGridView.Sorted += new System.EventHandler(this.DataGridView_Sorted);
             this.dataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DataGridView_KeyUp);
             // 
             // dataGridSelectRowColumn

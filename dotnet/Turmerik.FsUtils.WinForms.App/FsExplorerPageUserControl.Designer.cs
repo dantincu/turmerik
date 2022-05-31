@@ -119,7 +119,6 @@
             this.textBoxCurrentDirPath.ReadOnly = true;
             this.textBoxCurrentDirPath.Size = new System.Drawing.Size(1238, 20);
             this.textBoxCurrentDirPath.TabIndex = 2;
-            this.textBoxCurrentDirPath.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TextBoxCurrentDirPath_MouseUp);
             // 
             // navigationPanel
             // 
@@ -176,7 +175,7 @@
             this.textBoxEditableDirPath.Size = new System.Drawing.Size(1238, 21);
             this.textBoxEditableDirPath.TabIndex = 2;
             this.textBoxEditableDirPath.TextChanged += new System.EventHandler(this.textBoxEditableDirPath_TextChanged);
-            this.textBoxEditableDirPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxEditableDirPath_KeyUp);
+            this.textBoxEditableDirPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxEditableDirPath_KeyUp);
             // 
             // groupBoxCurrentFolderName
             // 
@@ -208,7 +207,6 @@
             this.textBoxCurrentDirName.ReadOnly = true;
             this.textBoxCurrentDirName.Size = new System.Drawing.Size(1238, 20);
             this.textBoxCurrentDirName.TabIndex = 3;
-            this.textBoxCurrentDirName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textBoxCurrentDirName_MouseDown);
             // 
             // fsEntriesSplitContainer
             // 
@@ -251,7 +249,7 @@
             this.buttonEditableDirPathUndoChanges.Size = new System.Drawing.Size(32, 23);
             this.buttonEditableDirPathUndoChanges.TabIndex = 5;
             this.buttonEditableDirPathUndoChanges.UseVisualStyleBackColor = true;
-            this.buttonEditableDirPathUndoChanges.Click += new System.EventHandler(this.buttonEditableDirPathUndoChanges_Click);
+            this.buttonEditableDirPathUndoChanges.Click += new System.EventHandler(this.ButtonEditableDirPathUndoChanges_Click);
             // 
             // buttonCopyEditableDirPathToClipboard
             // 
