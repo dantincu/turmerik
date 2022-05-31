@@ -3,7 +3,7 @@ using Turmerik.Core.FsExplorer.Background.AspNetCore;
 
 namespace Turmerik.FsExplorer.Background.AspNetCore.App.Hubs
 {
-    public class MainHub : Hub
+    public class MainHub : Hub, IMainHub
     {
         private readonly ISingleHubClientInstance singleHubClientInstance;
 
@@ -41,7 +41,7 @@ namespace Turmerik.FsExplorer.Background.AspNetCore.App.Hubs
         }
 
         public Tuple<bool, IHubClientIdentifier> TryUnregisterSingleInstance(
-            IHubClientIdentifier hubClientIdentifier)
+            HubClientIdentifierMtbl hubClientIdentifier)
         {
             bool retVal = singleHubClientInstance.TryUnregisterSingleInstance(
                 hubClientIdentifier);
@@ -52,7 +52,7 @@ namespace Turmerik.FsExplorer.Background.AspNetCore.App.Hubs
             return retTuple;
         }
 
-        public Tuple<bool, IHubClientIdentifier> TryReceiveClientPingResponse(IHubClientIdentifier hubClientIdentifier)
+        public Tuple<bool, IHubClientIdentifier> TryReceiveClientPingResponse(HubClientIdentifierMtbl hubClientIdentifier)
         {
             bool retVal = singleHubClientInstance.ClientIsRegistered(hubClientIdentifier);
 
