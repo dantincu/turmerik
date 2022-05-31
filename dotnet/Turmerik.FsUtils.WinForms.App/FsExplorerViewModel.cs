@@ -457,6 +457,7 @@ namespace Turmerik.FsUtils.WinForms.App
             public static readonly string CopyCurrentDirPathToClipboard = GetActionName("copy current dir path to clipboard");
             public static readonly string CopyEditableDirPathToClipboard = GetActionName("copy editable dir path to clipboard");
             public static readonly string CopyCurrentDirNameToClipboard = GetActionName("copy current dir name to clipboard");
+            public static readonly string CopySelectedFsEntryNameToClipboard = GetActionName("copy current entry name to clipboard");
             public static readonly string AddNewTabPage = GetActionName("add new tab page");
             public static readonly string NavigateToRoot = GetActionName("navigate to root");
 

@@ -34,5 +34,17 @@ namespace Turmerik.FsUtils.WinForms.App.Properties {
                 this["NotepadPlusPlusPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://localhost:7080")]
+        public string BackgroundAspNetCoreAppBaseUri {
+            get {
+                return ((string)(this["BackgroundAspNetCoreAppBaseUri"]));
+            }
+            set {
+                this["BackgroundAspNetCoreAppBaseUri"] = value;
+            }
+        }
     }
 }

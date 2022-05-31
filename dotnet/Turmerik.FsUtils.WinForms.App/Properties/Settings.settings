@@ -5,5 +5,8 @@
     <Setting Name="NotepadPlusPlusPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\Notepad++\notepad++.exe</Value>
     </Setting>
+    <Setting Name="BackgroundAspNetCoreAppBaseUri" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://localhost:7080</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

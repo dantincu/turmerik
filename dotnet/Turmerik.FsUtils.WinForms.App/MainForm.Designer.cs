@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainTabControl = new System.Windows.Forms.TabControl();
             this.mainTabPage = new System.Windows.Forms.TabPage();
             this.tabControlFsExplorer = new System.Windows.Forms.TabControl();
@@ -35,10 +36,10 @@
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.topMenuStrip = new System.Windows.Forms.MenuStrip();
             this.uiMessagesTabPage = new System.Windows.Forms.TabPage();
-            this.uiMessagesUserControl = new Turmerik.FsUtils.WinForms.App.UIMessagesUserControl();
             this.toolStripMenuItemGoToRoot = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAddNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCloseCurrentTab = new System.Windows.Forms.ToolStripMenuItem();
+            this.uiMessagesUserControl = new Turmerik.FsUtils.WinForms.App.UIMessagesUserControl();
             this.mainTabControl.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -67,7 +68,7 @@
             this.mainTabPage.Padding = new System.Windows.Forms.Padding(3);
             this.mainTabPage.Size = new System.Drawing.Size(1332, 660);
             this.mainTabPage.TabIndex = 0;
-            this.mainTabPage.Text = "FS Explorer";
+            this.mainTabPage.Text = "Explorer";
             this.mainTabPage.UseVisualStyleBackColor = true;
             // 
             // tabControlFsExplorer
@@ -118,14 +119,6 @@
             this.uiMessagesTabPage.Text = "Notifications";
             this.uiMessagesTabPage.UseVisualStyleBackColor = true;
             // 
-            // uiMessagesUserControl
-            // 
-            this.uiMessagesUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uiMessagesUserControl.Location = new System.Drawing.Point(3, 3);
-            this.uiMessagesUserControl.Name = "uiMessagesUserControl";
-            this.uiMessagesUserControl.Size = new System.Drawing.Size(1326, 654);
-            this.uiMessagesUserControl.TabIndex = 0;
-            // 
             // toolStripMenuItemGoToRoot
             // 
             this.toolStripMenuItemGoToRoot.Image = global::Turmerik.FsUtils.WinForms.App.Properties.Resources.fw_slash_16x16;
@@ -148,15 +141,24 @@
             this.ToolStripMenuItemCloseCurrentTab.Size = new System.Drawing.Size(28, 20);
             this.ToolStripMenuItemCloseCurrentTab.Click += new System.EventHandler(this.ToolStripMenuItemCloseCurrentTab_Click);
             // 
+            // uiMessagesUserControl
+            // 
+            this.uiMessagesUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uiMessagesUserControl.Location = new System.Drawing.Point(3, 3);
+            this.uiMessagesUserControl.Name = "uiMessagesUserControl";
+            this.uiMessagesUserControl.Size = new System.Drawing.Size(1326, 654);
+            this.uiMessagesUserControl.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1340, 686);
             this.Controls.Add(this.mainTabControl);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.topMenuStrip;
             this.Name = "MainForm";
-            this.Text = "Turmerik FS Utils";
+            this.Text = "Turmerik File System Explorer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.mainTabControl.ResumeLayout(false);
