@@ -58,12 +58,13 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
 
         private void ViewModel_OnFsExplorerTabAdded(KeyValuePair<int, FsExplorerViewModel> kvp)
         {
+            this.tabControlFsExplorer.Focus();
             var control = new FsExplorerPageUserControl();
+
             control.Dock = DockStyle.Top;
-
             control.AutoScroll = true;
-            control.SetViewModel(kvp.Value);
 
+            control.SetViewModel(kvp.Value);
             control.Height = 2000;
 
             var tabPage = new TabPage(kvp.Value.CurrentDirName);
@@ -76,6 +77,9 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
 
             tabPage.Controls.Add(control);
             this.tabControlFsExplorer.TabPages.Insert(kvp.Key, tabPage);
+
+            tabPage.Focus();
+            control.FocusControl();
         }
 
         private void MainForm_Load(object sender, EventArgs e)

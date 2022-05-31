@@ -36,6 +36,14 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
             UpdateFsEntryGrids();
         }
 
+        public void FocusControl()
+        {
+            this.Focus();
+            fsDirectoryEntriesGridUserControl.Focus();
+
+            this.ScrollToControl(fsDirectoryEntriesGridUserControl);
+        }
+
         private void InitFsDirectoryEntriesGridUserControlEvents()
         {
             fsDirectoryEntriesGridUserControl.OnReload += FsDirectoryEntriesGridUserControl_OnReload;
@@ -74,6 +82,10 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
         private void InitSelectedFileOptsFormCommands(FsEntryOptionsForm form)
         {
 
+        }
+
+        private void FsExplorerPageUserControl_Load(object sender, EventArgs e)
+        {
         }
 
         private void ButtonCurrentFolderOpts_Click(object sender, EventArgs e)
@@ -227,7 +239,7 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
         {
             string errorMessage = null;
 
-            if (normalizePath && string.IsNullOrEmpty(folderPath))
+            if (normalizePath && !string.IsNullOrEmpty(folderPath))
             {
                 var result = viewModel.FsPathNormalizer.TryNormalizePath(folderPath);
 
@@ -362,6 +374,13 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
             if (e.KeyCode == Keys.Escape)
             {
                 textBoxEditableDirPath.Text = textBoxCurrentDirPath.Text;
+            }
+            else if (e.KeyCode == Keys.Enter)
+            {
+                FocusControl();
+
+                string folderPath = textBoxEditableDirPath.Text;
+                NavigateToPath(folderPath);
             }
         }
 

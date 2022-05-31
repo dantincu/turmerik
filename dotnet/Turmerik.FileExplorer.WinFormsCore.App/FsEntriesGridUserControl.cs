@@ -543,7 +543,7 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
                 case Keys.PageDown:
                     if (EditableDataGridValueRows.Any())
                     {
-                        newRowIndex = Math.Max(0, CurrentRowIndex - FS_ENTRIES_DATA_GRID_PAGE_SIZE);
+                        newRowIndex = Math.Min(EditableDataGridValueRows.Count - 1, CurrentRowIndex + FS_ENTRIES_DATA_GRID_PAGE_SIZE);
                         SetCurrentRow(newRowIndex, CurrentCellIndex);
                     }
                     break;
@@ -551,7 +551,7 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
                 case Keys.PageUp:
                     if (EditableDataGridValueRows.Any())
                     {
-                        newRowIndex = Math.Min(EditableDataGridValueRows.Count - 1, CurrentRowIndex + FS_ENTRIES_DATA_GRID_PAGE_SIZE);
+                        newRowIndex = Math.Max(0, CurrentRowIndex - FS_ENTRIES_DATA_GRID_PAGE_SIZE);
                         SetCurrentRow(newRowIndex, CurrentCellIndex);
                     }
                     break;
