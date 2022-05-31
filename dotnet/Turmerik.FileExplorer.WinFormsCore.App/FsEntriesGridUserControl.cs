@@ -13,9 +13,10 @@ using System.Windows.Forms;
 using Turmerik.Core.Components;
 using Turmerik.Core.Data;
 using Turmerik.Core.Helpers;
+using Turmerik.FileExplorer.WinFormsCore.App;
 using Turmerik.FileExplorer.WinFormsCore.App.Properties;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public partial class FsEntriesGridUserControl : UserControl
     {

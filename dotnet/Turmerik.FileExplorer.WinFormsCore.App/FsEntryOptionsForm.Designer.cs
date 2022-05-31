@@ -1,4 +1,4 @@
-﻿namespace Turmerik.FsUtils.WinForms.App
+﻿namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     partial class FsEntryOptionsForm
     {

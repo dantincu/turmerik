@@ -14,7 +14,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.FileExplorer.WinFormsCore.App.Properties;
 using static System.Environment;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public class FsExplorerViewModel
     {
@@ -31,9 +31,9 @@ namespace Turmerik.FsUtils.WinForms.App
             IFsPathNormalizer fsPathNormalizer,
             ITimeStampHelper timeStampHelper)
         {
-            this.EventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
-            this.FsPathNormalizer = fsPathNormalizer ?? throw new ArgumentNullException(nameof(fsPathNormalizer));
-            this.TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
+            EventsViewModel = eventsViewModel ?? throw new ArgumentNullException(nameof(eventsViewModel));
+            FsPathNormalizer = fsPathNormalizer ?? throw new ArgumentNullException(nameof(fsPathNormalizer));
+            TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
 
             backHistoryStack = new ConcurrentStack<string>();
             forwardHistoryStack = new ConcurrentStack<string>();

@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Turmerik.FileExplorer.WinFormsCore.App;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public partial class UIMessageItemSummaryUserControl : UserControl
     {

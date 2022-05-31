@@ -1,4 +1,4 @@
-﻿namespace Turmerik.FsUtils.WinForms.App
+﻿namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     partial class FsExplorerPageUserControl
     {
@@ -49,12 +49,12 @@
             this.textBoxEditableDirPath = new System.Windows.Forms.TextBox();
             this.groupBoxCurrentFolderName = new System.Windows.Forms.GroupBox();
             this.panelCurrentFolderNameControls = new System.Windows.Forms.Panel();
-            this.expandCollapseNavigationPanelsUserControl = new Turmerik.FsUtils.WinForms.App.ExpandCollapseUserControl();
+            this.expandCollapseNavigationPanelsUserControl = new Turmerik.FileExplorer.WinFormsCore.App.ExpandCollapseUserControl();
             this.buttonCopyCurrentFolderNameToClipboard = new System.Windows.Forms.Button();
             this.textBoxCurrentDirName = new System.Windows.Forms.TextBox();
             this.fsEntriesSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.fsDirectoryEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
-            this.fsFileEntriesGridUserControl = new Turmerik.FsUtils.WinForms.App.FsEntriesGridUserControl();
+            this.fsDirectoryEntriesGridUserControl = new Turmerik.FileExplorer.WinFormsCore.App.FsEntriesGridUserControl();
+            this.fsFileEntriesGridUserControl = new Turmerik.FileExplorer.WinFormsCore.App.FsEntriesGridUserControl();
             this.buttonCurrentFolderOpts = new System.Windows.Forms.Button();
             this.groupBoxVPath.SuspendLayout();
             this.groupBoxPath.SuspendLayout();

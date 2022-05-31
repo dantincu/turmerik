@@ -1,4 +1,4 @@
-﻿namespace Turmerik.FsUtils.WinForms.App
+﻿namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     partial class MainForm
     {
@@ -39,7 +39,7 @@
             this.toolStripMenuItemGoToRoot = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAddNewTab = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemCloseCurrentTab = new System.Windows.Forms.ToolStripMenuItem();
-            this.uiMessagesUserControl = new Turmerik.FsUtils.WinForms.App.UIMessagesUserControl();
+            this.uiMessagesUserControl = new Turmerik.FileExplorer.WinFormsCore.App.UIMessagesUserControl();
             this.mainTabControl.SuspendLayout();
             this.mainTabPage.SuspendLayout();
             this.statusStrip.SuspendLayout();

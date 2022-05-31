@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public interface IProgramArgs
     {

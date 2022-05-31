@@ -1,4 +1,4 @@
-﻿namespace Turmerik.FsUtils.WinForms.App
+﻿namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     partial class UIMessagesUserControl
     {
@@ -30,7 +30,7 @@
         {
             this.flowLayoutPanelMessagesList = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainerCurrentMessage = new System.Windows.Forms.SplitContainer();
-            this.uiMessageItemUserControl = new Turmerik.FsUtils.WinForms.App.UIMessageItemUserControl();
+            this.uiMessageItemUserControl = new Turmerik.FileExplorer.WinFormsCore.App.UIMessageItemUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerCurrentMessage)).BeginInit();
             this.splitContainerCurrentMessage.Panel1.SuspendLayout();
             this.splitContainerCurrentMessage.Panel2.SuspendLayout();

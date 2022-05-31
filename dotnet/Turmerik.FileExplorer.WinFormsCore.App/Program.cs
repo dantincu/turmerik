@@ -7,8 +7,9 @@ using System.Windows.Forms;
 using Turmerik.Core.FsExplorer.Background.AspNetCore;
 using Turmerik.Core.Infrastucture;
 using Turmerik.FileExplorer.WinFormsCore.App.Properties;
+using Turmerik.FileExplorer.WinFormsCore.App;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     internal static class Program
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Environment;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public interface IFsItem
     {

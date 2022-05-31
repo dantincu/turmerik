@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public class MainFormViewModel
     {

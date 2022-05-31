@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Components;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public class MainFormEventsViewModel
     {

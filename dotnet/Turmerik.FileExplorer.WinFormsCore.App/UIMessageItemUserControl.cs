@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Turmerik.Core.Data;
 using Turmerik.Core.Helpers;
+using Turmerik.FileExplorer.WinFormsCore.App;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public partial class UIMessageItemUserControl : UserControl
     {

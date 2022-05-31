@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using Turmerik.Core.Infrastucture;
 
-namespace Turmerik.FsUtils.WinForms.App
+namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public class ServiceProviderContainer : SimpleServiceProviderContainer
     {
