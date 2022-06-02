@@ -2,3 +2,10 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+import { Trmrk as trmrk } from './core.js';
+import './domUtils.js';
+
+trmrk.isLoggingEnabled = true;
+
+export const Trmrk = trmrk;

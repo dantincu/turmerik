@@ -1,0 +1,19 @@
+﻿@page
+
+@using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Pages
+
+@model ExplorerModel
+
+@{
+    ViewData["Title"] = "Explorer";
+}
+
+@using System.Security.Principal
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <h1>@ViewData["Title"]</h1>
+}
+else
+{
+}
