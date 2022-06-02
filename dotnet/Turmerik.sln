@@ -25,13 +25,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.FsExplorer.Backgro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.FileExplorer.WinFormsCore.App", "Turmerik.FileExplorer.WinFormsCore.App\Turmerik.FileExplorer.WinFormsCore.App.csproj", "{3839FE03-556D-4ED5-8559-9E5C552B5AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.AspNetCore", "Turmerik.AspNetCore\Turmerik.AspNetCore.csproj", "{5CE26D2E-0402-4A9B-B712-0A62B4C149BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.AspNetCore", "Turmerik.AspNetCore\Turmerik.AspNetCore.csproj", "{5CE26D2E-0402-4A9B-B712-0A62B4C149BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.AspNetCore.OpenId", "Turmerik.AspNetCore.OpenId\Turmerik.AspNetCore.OpenId.csproj", "{73205C7C-66CD-4AE0-BC06-713315A65A47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.AspNetCore.OpenId", "Turmerik.AspNetCore.OpenId\Turmerik.AspNetCore.OpenId.csproj", "{73205C7C-66CD-4AE0-BC06-713315A65A47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.AspNetCore.MsIdentity", "Turmerik.AspNetCore.MsIdentity\Turmerik.AspNetCore.MsIdentity.csproj", "{583D30EE-7AED-4984-ADDB-0832EBAE6519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.AspNetCore.MsIdentity", "Turmerik.AspNetCore.MsIdentity\Turmerik.AspNetCore.MsIdentity.csproj", "{583D30EE-7AED-4984-ADDB-0832EBAE6519}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.OneDriveExplorer.AspNetCore.WebApp", "Turmerik.OneDriveExplorer.AspNetCore.WebApp\Turmerik.OneDriveExplorer.AspNetCore.WebApp.csproj", "{92D8D6D4-34E0-4077-A607-63961880371C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.OneDriveExplorer.AspNetCore.WebApp", "Turmerik.OneDriveExplorer.AspNetCore.WebApp\Turmerik.OneDriveExplorer.AspNetCore.WebApp.csproj", "{92D8D6D4-34E0-4077-A607-63961880371C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.JavascriptClassFileGenerator.ConsoleApp", "Turmerik.JavascriptClassFileGenerator.ConsoleApp\Turmerik.JavascriptClassFileGenerator.ConsoleApp.csproj", "{028308BA-BC88-4895-BE24-95449E7D1478}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.CsTypeToJson.WinFormsCore.App", "Turmerik.CsTypeToJson.WinFormsCore.App\Turmerik.CsTypeToJson.WinFormsCore.App.csproj", "{99AD378F-EC43-452C-AAD4-160C921F6930}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.CsTypeToJson.WinForms.App", "Turmerik.CsTypeToJson.WinForms.App\Turmerik.CsTypeToJson.WinForms.App.csproj", "{BF031F7D-6154-4F19-8276-E2F1D2E4D996}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.WinForms.Core", "Turmerik.WinForms.Core\Turmerik.WinForms.Core.csproj", "{059A7CBC-3344-4456-8203-27B243739AE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +87,22 @@ Global
 		{92D8D6D4-34E0-4077-A607-63961880371C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92D8D6D4-34E0-4077-A607-63961880371C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92D8D6D4-34E0-4077-A607-63961880371C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{028308BA-BC88-4895-BE24-95449E7D1478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{028308BA-BC88-4895-BE24-95449E7D1478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{028308BA-BC88-4895-BE24-95449E7D1478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{028308BA-BC88-4895-BE24-95449E7D1478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99AD378F-EC43-452C-AAD4-160C921F6930}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99AD378F-EC43-452C-AAD4-160C921F6930}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99AD378F-EC43-452C-AAD4-160C921F6930}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99AD378F-EC43-452C-AAD4-160C921F6930}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF031F7D-6154-4F19-8276-E2F1D2E4D996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF031F7D-6154-4F19-8276-E2F1D2E4D996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF031F7D-6154-4F19-8276-E2F1D2E4D996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF031F7D-6154-4F19-8276-E2F1D2E4D996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{059A7CBC-3344-4456-8203-27B243739AE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{059A7CBC-3344-4456-8203-27B243739AE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{059A7CBC-3344-4456-8203-27B243739AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{059A7CBC-3344-4456-8203-27B243739AE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +118,10 @@ Global
 		{73205C7C-66CD-4AE0-BC06-713315A65A47} = {DE7957C7-C42B-40BF-B03E-382EFAB67DFA}
 		{583D30EE-7AED-4984-ADDB-0832EBAE6519} = {DE7957C7-C42B-40BF-B03E-382EFAB67DFA}
 		{92D8D6D4-34E0-4077-A607-63961880371C} = {565D4698-C837-43B0-BCAC-FF51196A01CE}
+		{028308BA-BC88-4895-BE24-95449E7D1478} = {DE7957C7-C42B-40BF-B03E-382EFAB67DFA}
+		{99AD378F-EC43-452C-AAD4-160C921F6930} = {DE7957C7-C42B-40BF-B03E-382EFAB67DFA}
+		{BF031F7D-6154-4F19-8276-E2F1D2E4D996} = {DE7957C7-C42B-40BF-B03E-382EFAB67DFA}
+		{059A7CBC-3344-4456-8203-27B243739AE2} = {DE7957C7-C42B-40BF-B03E-382EFAB67DFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C6094B8-95CB-4666-8422-1C5DB55894FE}

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="JavascriptClassGenerator$not-compiled$.cs" />
+    <Compile Remove="Program$not-compiled$.cs" />
+    <Compile Remove="ProgramArgs$not-compiled$.cs" />
+    <Compile Remove="ProgramArgsParser$not-compiled$.cs" />
+    <Compile Remove="ServiceProviderContainer$not-compiled$.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="JavascriptClassGenerator%24not-compiled%24.cs" />
+    <None Include="Program%24not-compiled%24.cs" />
+    <None Include="ProgramArgs%24not-compiled%24.cs" />
+    <None Include="ProgramArgsParser%24not-compiled%24.cs" />
+    <None Include="ServiceProviderContainer%24not-compiled%24.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turmerik.Core\Turmerik.Core.csproj" />
+  </ItemGroup>
+
+</Project>

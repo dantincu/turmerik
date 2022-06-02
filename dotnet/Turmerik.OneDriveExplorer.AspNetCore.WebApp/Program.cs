@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.FsExplorer;
 using Turmerik.Core.Infrastucture;
+using Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,13 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
-TrmrkCoreServiceCollectionBuilder.RegisterAll(builder.Services);
+var svcs = TrmrkCoreServiceCollectionBuilder.RegisterAll(builder.Services);
+
+builder.Services.RegisterAppSettings(
+    svcs.TypesStaticDataCache,
+    svcs.LambdaExprHelperFactory);
+
+builder.Services.AddScoped<IDriveExplorerService, FsExplorerService>();
 
 var app = builder.Build();
 

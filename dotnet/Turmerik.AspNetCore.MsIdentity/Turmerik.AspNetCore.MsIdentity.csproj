@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Turmerik.AspNetCore.OpenId\Turmerik.AspNetCore.OpenId.csproj" />
+  </ItemGroup>
+
 </Project>

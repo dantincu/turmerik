@@ -6,14 +6,11 @@ using Turmerik.Core.Collections.TypeMapped;
 
 namespace Turmerik.Core.Reflection.Wrappers
 {
-    public abstract class WrapperBase<TData>
+    public abstract class WrapperBase<TData> : WrapperCoreBase<TData>
         where TData : MemberInfo
     {
-        public readonly TData Data;
-
-        protected WrapperBase(TData data)
+        protected WrapperBase(TData data) : base(data)
         {
-            Data = data ?? throw new ArgumentNullException(nameof(data));
             Name = data.Name;
             DeclaringType = new Lazy<TypeWrapper>(() => new TypeWrapper(data.DeclaringType));
 

@@ -59,6 +59,10 @@ namespace Turmerik.Core.Reflection.Wrappers
 
             InstFamMethods = InstMethods.LzRdnlC(miw => miw.Is(mi => miw.Data.Is(
                 d => d.IsPublic || d.IsFamily)));
+
+            AllConstructors = new Lazy<IReadOnlyCollection<ConstructorInfoWrapper>>(
+                () => data.GetConstructors().RdnlC(
+                    ci => new ConstructorInfoWrapper(ci)));
         }
 
         public readonly string FullName;
@@ -89,5 +93,7 @@ namespace Turmerik.Core.Reflection.Wrappers
         public readonly Lazy<IReadOnlyCollection<MethodInfoWrapper>> InstPubMethods;
         public readonly Lazy<IReadOnlyCollection<MethodInfoWrapper>> InstFamMethods;
         public readonly Lazy<IReadOnlyCollection<MethodInfoWrapper>> InstPubOrFamMethods;
+
+        public readonly Lazy<IReadOnlyCollection<ConstructorInfoWrapper>> AllConstructors;
     }
 }
