@@ -5,7 +5,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExplorerController : ControllerBase
+    public class ExplorerController : TrmrkControllerBase
     {
     }
 }

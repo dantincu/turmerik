@@ -5,7 +5,7 @@
 
 import { Trmrk as trmrk } from './core.js';
 import './domUtils.js';
-
-trmrk.isLoggingEnabled = true;
+import { WebStorage as webStorage } from './webStorage.js';
 
 export const Trmrk = trmrk;
+export const WebStorage = webStorage;

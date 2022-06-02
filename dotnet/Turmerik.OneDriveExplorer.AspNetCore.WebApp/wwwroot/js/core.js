@@ -32,6 +32,15 @@
         }
 
         return str;
+    },
+    cacheKeyBasePrefix: "trmrk",
+    getCacheKey: (keyName, id, username) => {
+        if (typeof (username) === "string" && username.length > 0) {
+            username = username + "|";
+        }
+
+        let cacheKey = trmrk.cacheKeyBasePrefix + "|" + username + keyName + "|" + id;
+        return cacheKey;
     }
 }
 

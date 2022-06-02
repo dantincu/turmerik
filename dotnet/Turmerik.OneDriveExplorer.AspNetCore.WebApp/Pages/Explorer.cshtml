@@ -8,6 +8,10 @@
     ViewData["Title"] = "Explorer";
 }
 
+@section Scripts {
+    <script src="~/js/pages/explorer.js" asp-append-version="true" type="module"></script>
+}
+
 @using System.Security.Principal
 
 @if (User.Identity?.IsAuthenticated == true)
