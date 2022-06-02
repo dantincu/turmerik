@@ -2,13 +2,27 @@
 
 const driveExplorer = {
     username: "",
-    setUsername: (username) => {
+    urlQuery: null,
+    init: (username) => {
         driveExplorer.username = username;
+
+        driveExplorer.urlQuery = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
     },
-    driveItemCacheKeyName: "driveItem",
+    getCacheKey: (keyName, id, username) => {
+        if (typeof (username) === "string" && username.length > 0) {
+            username = username + "|";
+        }
+
+        let cacheKey = trmrk.cacheKeyBasePrefix + "|" + username + keyName + "|" + id;
+        return cacheKey;
+    },
+    driveFolderCacheKeyName: "driveFolder",
+    rootDriveFolderCacheKeyName: "rootDriveFolder",
     getDriveItemCacheKey(id) {
-        let cacheKey = trmrk.getCacheKey(
-            driveExplorer.driveItemCacheKeyName,
+        let cacheKey = driveExplorer.getCacheKey(
+            driveExplorer.driveFolderCacheKeyName,
             id,
             driveExplorer.username);
 

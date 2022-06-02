@@ -10,6 +10,13 @@
 
 @section Scripts {
     <script src="~/js/pages/explorer.js" asp-append-version="true" type="module"></script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    let username = "@User.Identity?.Name";
+    window.Trmrk.driveExplorer.init(username);
+}, false);
+    </script>
 }
 
 @using System.Security.Principal
