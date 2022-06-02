@@ -7,14 +7,22 @@ namespace Turmerik.Core.FsExplorer.Background.AspNetCore
 {
     public interface IMainHub
     {
-        Tuple<bool, IHubClientIdentifier> TryRegisterSingleInstance();
+        Task<Tuple<bool, HubClientIdentifierMtbl>> TryRegisterSingleInstanceAsync();
 
-        Tuple<bool, IHubClientIdentifier> TryUnregisterSingleInstance(
+        Task<Tuple<bool, HubClientIdentifierMtbl>> TryUnregisterSingleInstanceAsync(
             HubClientIdentifierMtbl hubClientIdentifier);
 
-        Tuple<bool, IHubClientIdentifier> TryReceiveClientPingResponse(
+        Task<Tuple<bool, HubClientIdentifierMtbl>> TryReceiveClientPingResponseAsync(
+            HubClientIdentifierMtbl hubClientIdentifier);
+    }
+
+    public interface IMainHubClient
+    {
+        Task<Tuple<bool, HubClientIdentifierMtbl>> TrySendClientPingResponseAsync(
+            bool alreadyRegistered,
             HubClientIdentifierMtbl hubClientIdentifier);
 
-        Task<Tuple<bool, IHubClientIdentifier>> TryPingClientAsync();
+        Task<Tuple<bool, HubClientIdentifierMtbl>> TryPingClientAsync(
+            HubClientIdentifierMtbl hubClientIdentifier);
     }
 }

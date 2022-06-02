@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
+using Turmerik.AspNetCore.FsExplorer.Background;
 using Turmerik.Core.FsExplorer.Background.AspNetCore;
 using Turmerik.Core.Infrastucture;
-using Turmerik.FsExplorer.Background.AspNetCore.App.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 TrmrkCoreServiceCollectionBuilder.RegisterAll(builder.Services);

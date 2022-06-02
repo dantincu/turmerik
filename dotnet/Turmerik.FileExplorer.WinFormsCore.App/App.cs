@@ -13,36 +13,48 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
 {
     public class App : IAsyncDisposable
     {
+        private readonly object syncRoot;
+
         private readonly ILambdaExprHelperFactory lambdaExprHelperFactory;
         private readonly ILambdaExprHelper<IMainHub> mainHubLambdaExprHelper;
+        private readonly ILambdaExprHelper<IMainHubClient> mainHubClientLambdaExprHelper;
 
         private readonly string tryRegisterSingleInstanceMethodName;
         private readonly string tryUnregisterSingleInstanceMethodName;
         private readonly string tryPingClientMethodName;
         private readonly string tryReceiveClientPingResponseMethodName;
+        private readonly string trySendClientPingResponseAsyncMethodName;
 
         private volatile int singleInstanceUnregistered;
-        private bool singleInstanceRegistered;
+        private volatile int singleInstanceAlreadyRegistered;
 
         private HubConnection hubConnection;
-        private IHubClientIdentifier hubClientIdentifier;
+        private HubClientIdentifierMtbl hubClientIdentifier;
 
         public App()
         {
+            syncRoot = new object();
+            singleInstanceAlreadyRegistered = -1;
+
             lambdaExprHelperFactory = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<ILambdaExprHelperFactory>();
+
             mainHubLambdaExprHelper = lambdaExprHelperFactory.GetHelper<IMainHub>();
+            mainHubClientLambdaExprHelper = lambdaExprHelperFactory.GetHelper<IMainHubClient>();
 
             tryRegisterSingleInstanceMethodName = mainHubLambdaExprHelper.MethodName(
-                hub => hub.TryRegisterSingleInstance());
+                hub => hub.TryRegisterSingleInstanceAsync());
 
             tryUnregisterSingleInstanceMethodName = mainHubLambdaExprHelper.MethodName(
-                hub => hub.TryUnregisterSingleInstance(null));
+                hub => hub.TryUnregisterSingleInstanceAsync(null));
 
-            tryPingClientMethodName = mainHubLambdaExprHelper.MethodName(
-                hub => hub.TryPingClientAsync());
+            tryPingClientMethodName = mainHubClientLambdaExprHelper.MethodName(
+                hub => hub.TryPingClientAsync(null));
 
             tryReceiveClientPingResponseMethodName = mainHubLambdaExprHelper.MethodName(
-                hub => hub.TryReceiveClientPingResponse(null));
+                hub => hub.TryReceiveClientPingResponseAsync(null));
+
+            trySendClientPingResponseAsyncMethodName = mainHubClientLambdaExprHelper.MethodName(
+                hub => hub.TrySendClientPingResponseAsync(false, null));
         }
 
         public void Run(IProgramArgs args)
@@ -78,16 +90,24 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
             var tuple = await hubConnection.InvokeAsync<Tuple<bool, HubClientIdentifierMtbl>>(
                 tryRegisterSingleInstanceMethodName);
 
+            hubClientIdentifier = tuple.Item2;
+
             if (tuple.Item1)
             {
-                hubClientIdentifier = tuple.Item2;
-                singleInstanceRegistered = true;
-
                 RunCore(args);
             }
             else
             {
+                bool singleInstanceAlreadyRegistered = await WaitForClientPingResponse();
 
+                if (!singleInstanceAlreadyRegistered)
+                {
+                    RunCore(args);
+                }
+                else
+                {
+                    await UnregisterSingleInstanceAsync();
+                }
             }
         }
 
@@ -113,11 +133,34 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
                 await connection.StartAsync();
             };
 
-            connection.On<IHubClientIdentifier>(
+            connection.On<HubClientIdentifierMtbl>(
                 tryPingClientMethodName,
-                async identifier => await connection.InvokeAsync(
-                    tryReceiveClientPingResponseMethodName,
-                    hubClientIdentifier));
+                async identifier =>
+                {
+                    if (identifier.Uuid == hubClientIdentifier.Uuid)
+                    {
+                        await connection.InvokeAsync(
+                            tryReceiveClientPingResponseMethodName,
+                            hubClientIdentifier);
+                    }
+                });
+
+            connection.On<bool, HubClientIdentifierMtbl>(
+                trySendClientPingResponseAsyncMethodName,
+                (alreadyRegistered, identifier) =>
+                {
+                    lock (syncRoot)
+                    {
+                        if (alreadyRegistered)
+                        {
+                            singleInstanceAlreadyRegistered = 1;
+                        }
+                        else
+                        {
+                            singleInstanceAlreadyRegistered = 0;
+                        }
+                    }
+                });
 
             connection.StartAsync().Wait();
         }
@@ -162,6 +205,34 @@ namespace Turmerik.FileExplorer.WinFormsCore.App
             }
             
             return valueTask;
+        }
+
+        private async Task<bool> WaitForClientPingResponse()
+        {
+            bool singleInstanceAlreadyRegistered = this.singleInstanceAlreadyRegistered == 0;
+            bool waitForResponse = this.singleInstanceAlreadyRegistered == -1;
+
+            int waitMillis = HubsH.PING_RESPONSE_WAIT_MILLIS;
+            int totalWaitMillis = 0;
+
+            int totalWaitMillisAggMax = HubsH.PING_RESPONSE_WAIT_MILLIS_AGG_MAX;
+
+            while (waitForResponse)
+            {
+                lock (syncRoot)
+                {
+                    singleInstanceAlreadyRegistered = this.singleInstanceAlreadyRegistered == 0;
+                    waitForResponse = this.singleInstanceAlreadyRegistered == -1;
+                }
+
+                if (waitForResponse)
+                {
+                    await Task.Delay(waitMillis);
+                    totalWaitMillis += waitMillis;
+                }
+            }
+
+            return singleInstanceAlreadyRegistered;
         }
     }
 }
