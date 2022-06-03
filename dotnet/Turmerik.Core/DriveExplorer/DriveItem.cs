@@ -40,8 +40,10 @@ namespace Turmerik.Core.DriveExplorer
         public string ConstName { get; set; }
         public char? SrcNameFirstLetterWrappingChar { get; set; }
         public int? NumberSeed { get; set; }
+        public int? MinNumber { get; set; }
+        public int? MaxNumber { get; set; }
         public bool? IncrementNumber { get; set; }
-        public int? MinDigitsLength { get; set; }
+        public int? DigitsCount { get; set; }
         public string PreceedingDelimiter { get; set; }
         public Guid? PreceedingMacroUuid { get; set; }
         public string SucceedingDelimiter { get; set; }

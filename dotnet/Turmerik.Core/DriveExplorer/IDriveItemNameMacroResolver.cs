@@ -18,6 +18,9 @@ namespace Turmerik.Core.DriveExplorer
 
     public class DriveItemNameMacroFactoryResolver : IDriveItemNameMacroFactoryResolver
     {
+        private static readonly int maxDigitsCount = MathH.Int32MaxValueDigitsCount - 1;
+        private static readonly int maxAllowedNumber = Convert.ToInt32(Math.Pow(10, maxDigitsCount)) - 1;
+
         private readonly Dictionary<Guid, DriveItemNameMacro> registeredMacrosList;
         private readonly Dictionary<Guid, Func<string[], int, string, string>> registeredFactoriesList;
 
@@ -173,29 +176,52 @@ namespace Turmerik.Core.DriveExplorer
             }
             else if (macro.NumberSeed.HasValue)
             {
+                int digitsCount = macro.DigitsCount ?? 1;
                 int numberSeed = macro.NumberSeed.Value;
+
                 bool incrementNumber = macro.IncrementNumber ?? false;
-                int minDigitsLength = macro.MinDigitsLength ?? 1;
+                int minNumber = macro.MinNumber ?? 0;
+
+                int maxNumber = macro.MaxNumber ?? maxAllowedNumber;
+
+                ValidateMacroNumberOptions(
+                    digitsCount,
+                    numberSeed,
+                    minNumber,
+                    maxNumber);
 
                 coreFactory = (arr, idx, srcName) =>
                 {
                     int number = numberSeed;
 
-                    if (incrementNumber)
+                    if (idx > 0)
                     {
-                        number += idx;
-                    }
-                    else
-                    {
-                        number -= idx;
+                        if (incrementNumber)
+                        {
+                            number += idx;
+
+                            if (number > maxNumber)
+                            {
+                                throw new InternalAppError(HttpStatusCode.BadRequest);
+                            }
+                        }
+                        else
+                        {
+                            number -= idx;
+
+                            if (number < minNumber)
+                            {
+                                throw new InternalAppError(HttpStatusCode.BadRequest);
+                            }
+                        }
                     }
 
                     string newName = number.ToString();
 
-                    if (newName.Length < minDigitsLength)
+                    if (newName.Length < digitsCount)
                     {
                         string padding = new string(Enumerable.Range(
-                            0, minDigitsLength - newName.Length).Select(
+                            0, digitsCount - newName.Length).Select(
                             i => ' ').ToArray());
 
                         newName = string.Concat(padding, newName);
@@ -222,6 +248,51 @@ namespace Turmerik.Core.DriveExplorer
             };
 
             return factory;
+        }
+
+        private void ValidateMacroNumberOptions(
+            int digitsCount,
+            int numberSeed,
+            int minNumber,
+            int maxNumber)
+        {
+            ValidateMacroNumber(
+                nameof(digitsCount),
+                1,
+                digitsCount,
+                maxDigitsCount);
+
+            ValidateMacroNumber(
+                nameof(minNumber),
+                0,
+                minNumber,
+                maxAllowedNumber);
+
+            ValidateMacroNumber(
+                nameof(maxNumber),
+                minNumber,
+                maxNumber,
+                maxAllowedNumber);
+
+            ValidateMacroNumber(
+                nameof(numberSeed),
+                minNumber,
+                numberSeed,
+                maxNumber);
+        }
+
+        private void ValidateMacroNumber(
+            string propName,
+            int allowedMin,
+            int value,
+            int allowedMax)
+        {
+            if (value < allowedMin || value > allowedMax)
+            {
+                throw new InternalAppError(
+                    $"Value {propName} outside of valid range [{allowedMin}-{allowedMax}]",
+                    HttpStatusCode.BadRequest);
+            }
         }
     }
 }
