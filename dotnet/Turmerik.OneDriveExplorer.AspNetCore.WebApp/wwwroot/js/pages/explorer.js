@@ -35,10 +35,6 @@ const driveExplorer = {
         let cacheKey = driveExplorer.getDriveItemCacheKey(id);
         let driveItemJson = sessionStorage.getItem(cacheKey);
 
-        if (typeof (driveItemJson) !== "string") {
-            driveItemJson = localStorage.getItem(cacheKey);
-        }
-
         return driveItemJson;
     },
     getDriveItem: (id) => {
@@ -56,7 +52,6 @@ const driveExplorer = {
         }
 
         sessionStorage.setItem(cacheKey, driveItemJson);
-        localStorage.setItem(cacheKey, driveItemJson);
     }
 };
 

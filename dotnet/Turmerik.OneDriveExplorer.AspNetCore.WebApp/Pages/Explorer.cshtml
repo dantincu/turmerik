@@ -18,7 +18,10 @@
     <script>
 document.addEventListener('DOMContentLoaded', () => {
     let username = "@User.Identity?.Name";
-    window.Trmrk.driveExplorer.init(username, @Html.Raw(appSettingsJson));
+
+    window.Trmrk.driveExplorer.init(
+        username,
+        @Html.Raw(appSettingsJson));
 }, false);
     </script>
 }

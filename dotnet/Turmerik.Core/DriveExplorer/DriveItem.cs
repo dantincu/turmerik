@@ -22,4 +22,29 @@ namespace Turmerik.Core.DriveExplorer
         public List<DriveItem> SubFolders { get; set; }
         public List<DriveItem> FolderFiles { get; set; }
     }
+
+    public class DriveItemPutOp : DriveItem
+    {
+        public DriveItemOp? DriveItemOp { get; set; }
+        public List<DriveItemPutOp> MultipleItems { get; set; }
+        public DriveItemNameMacro NameMacro { get; set; }
+    }
+
+    public class DriveItemNameMacro
+    {
+        public Guid? MacroUuid { get; set; }
+        public string MacroName { get; set; }
+        public string MacroDescription { get; set; }
+        public string EntryName { get; set; }
+        public string SrcName { get; set; }
+        public string ConstName { get; set; }
+        public char? SrcNameFirstLetterWrappingChar { get; set; }
+        public int? NumberSeed { get; set; }
+        public bool? IncrementNumber { get; set; }
+        public int? MinDigitsLength { get; set; }
+        public string PreceedingDelimiter { get; set; }
+        public Guid? PreceedingMacroUuid { get; set; }
+        public string SucceedingDelimiter { get; set; }
+        public Guid? SucceedingMacroUuid { get; set; }
+    }
 }

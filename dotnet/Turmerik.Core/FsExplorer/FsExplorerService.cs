@@ -106,7 +106,7 @@ namespace Turmerik.Core.FsExplorer
                     };
 
                     var result = new TrmrkActionResult<DriveItem>(
-                        true, rootFolder, null, null);
+                        true, rootFolder);
 
                     return result;
                 });
@@ -125,7 +125,7 @@ namespace Turmerik.Core.FsExplorer
                 var item = GetDriveItem(newEntry);
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, item, null, null);
+                    true, item);
 
                 return result;
             });
@@ -144,7 +144,7 @@ namespace Turmerik.Core.FsExplorer
                 var item = GetDriveItem(newEntry);
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, item, null, null);
+                    true, item);
 
                 return result;
             });
@@ -163,7 +163,7 @@ namespace Turmerik.Core.FsExplorer
                 var item = GetDriveItem(newEntry);
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, item, null, null);
+                    true, item);
 
                 return result;
             });
@@ -176,7 +176,7 @@ namespace Turmerik.Core.FsExplorer
             string newFileName,
             OfficeLikeFileType officeLikeFileType)
         {
-            var actionResult = ExecuteCoreAsync(async () =>
+            var actionResult = await ExecuteCoreAsync(async () =>
             {
                 var result = await CreateTextFileAsync(parentFolderId, newFileName, string.Empty);
                 return result;
@@ -196,7 +196,7 @@ namespace Turmerik.Core.FsExplorer
                 var item = GetDriveItem(newEntry);
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, item, null, null);
+                    true, item);
 
                 return result;
             });
@@ -214,7 +214,7 @@ namespace Turmerik.Core.FsExplorer
                 fileInfo.Delete();
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, driveItem, null, null);
+                    true, driveItem);
 
                 return result;
             });
@@ -232,7 +232,7 @@ namespace Turmerik.Core.FsExplorer
                 dirInfo.Delete(true);
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, driveItem, null, null);
+                    true, driveItem);
 
                 return result;
             });
@@ -251,7 +251,7 @@ namespace Turmerik.Core.FsExplorer
                 var item = GetDriveItem(newEntry);
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, item, null, null);
+                    true, item);
 
                 return result;
             });
@@ -270,12 +270,52 @@ namespace Turmerik.Core.FsExplorer
                 var item = GetDriveItem(newEntry);
 
                 var result = new TrmrkActionResult<DriveItem>(
-                    true, item, null, null);
+                    true, item);
 
                 return result;
             });
 
             return actionResult;
+        }
+
+        public async Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleFoldersAsync(
+            string parentFolderId,
+            List<Tuple<Func<string[], int, string, string>, string>> folderNameFactoriesList)
+        {
+            var factoriesList = folderNameFactoriesList.Select(
+                tuple => new Tuple<Func<string[], int, string, string>, string, Action<string>>(
+                    tuple.Item1, tuple.Item2, path => Directory.CreateDirectory(path))).ToList();
+
+            var actionResult = await CreateMultipleEntriesAsync(
+                parentFolderId, factoriesList);
+
+            return actionResult;
+        }
+
+        public async Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleFilesAsync(
+            string parentFolderId,
+            List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>> fileNameFactoriesList)
+        {
+            var factoriesList = fileNameFactoriesList.Select(
+                tuple => new Tuple<Func<string[], int, string, string>, string, Action<string>>(
+                    tuple.Item1, tuple.Item2, path => File.WriteAllText(path, string.Empty))).ToList();
+
+            var actionResult = await CreateMultipleEntriesAsync(
+                parentFolderId, factoriesList);
+
+            return actionResult;
+        }
+
+        protected override HttpStatusCode? GetHttpStatusCode(Exception exc)
+        {
+            var httpStatusCode = base.GetHttpStatusCode(exc);
+
+            if (exc is SecurityException)
+            {
+                httpStatusCode = HttpStatusCode.NotFound;
+            }
+
+            return httpStatusCode;
         }
 
         private DriveItem GetDriveItem(FileSystemInfo fsInfo)
@@ -299,55 +339,47 @@ namespace Turmerik.Core.FsExplorer
             return fsItemMtbl;
         }
 
-        private TrmrkActionResult<DriveItem> ExecuteCore(
-            Func<TrmrkActionResult<DriveItem>> action,
-            Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
+        private async Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleEntriesAsync(
+            string parentFolderId,
+            List<Tuple<Func<string[], int, string, string>, string, Action<string>>> fileNameFactoriesList)
         {
-            excHandler = excHandler.FirstNotNull(
-                exc =>
-                {
-                    HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
-
-                    if (exc is SecurityException)
-                    {
-                        httpStatusCode = HttpStatusCode.NotFound;
-                    }
-
-                    var result = new TrmrkActionResult<DriveItem>(
-                        false, null, new ErrorViewModel(
-                            null, exc), httpStatusCode);
-
-                    return result;
-                });
-
-            TrmrkActionResult<DriveItem> actionResult;
-
-            try
+            var actionResult = await ExecuteCoreAsync(async () =>
             {
-                actionResult = action();
-            }
-            catch (Exception exc)
-            {
-                actionResult = excHandler(exc);
-            }
+                var factoriesList = fileNameFactoriesList.Select(
+                    tuple => new Tuple<Func<string[], int, string, string>, string, Func<string, int, Task<DriveItemPutOp>>>(
+                        tuple.Item1, tuple.Item2, async (name, idx) =>
+                        {
+                            string path = Path.Combine(parentFolderId, name);
+                            tuple.Item3(path);
 
-            return actionResult;
-        }
+                            DateTime now = DateTime.Now;
+                            string nowStr = TimeStampHelper.TmStmp(now, true, TimeStamp.Seconds);
 
-        private TrmrkActionResult<DriveItem> ExecuteCoreAsync(
-            Func<Task<TrmrkActionResult<DriveItem>>> action,
-            Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
-        {
-            var actionResult = ExecuteCore(
-                () =>
-                {
-                    var task = action();
-                    task.Wait();
+                            return new DriveItemPutOp
+                            {
+                                Id = path,
+                                Name = name,
+                                FileNameExtension = Path.GetExtension(name),
+                                CreationTimeStr = nowStr,
+                                LastAccessTimeStr = nowStr,
+                                LastWriteTimeStr = nowStr
+                            };
+                        })).ToList();
 
-                    var result = task.Result;
-                    return result;
-                },
-                excHandler);
+                var parentDirInfo = new DirectoryInfo(parentFolderId);
+
+                var existingEntriesArr = parentDirInfo.EnumerateFileSystemInfos()
+                    .Select(ent => ent.Name).ToArray();
+
+                var result = await base.CreateMultipleEntriesAsync(
+                    existingEntriesArr,
+                    factoriesList);
+
+                return new TrmrkActionResult<DriveItemPutOp>(true, result);
+            },
+            exc => DefaultExceptionHandler(exc).WithHelper(
+                result => new TrmrkActionResult<DriveItemPutOp>(
+                    false, null, result.ErrorViewModel, result.HttpStatusCode)));
 
             return actionResult;
         }

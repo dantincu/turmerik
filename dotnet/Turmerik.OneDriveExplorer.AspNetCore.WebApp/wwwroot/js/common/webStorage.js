@@ -4,7 +4,6 @@ const webStorage = {
     bigItems: {},
     clear: (isPersistent) => {
         let storage = trmrk.webStorage.getStorage(isPersistent);
-
         storage.clear();
     },
     containsKey: (key, isPersistent) => {

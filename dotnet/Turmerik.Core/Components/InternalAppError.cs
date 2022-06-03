@@ -8,21 +8,35 @@ namespace Turmerik.Core.Components
 {
     public class InternalAppError : Exception
     {
-        public InternalAppError()
+        public InternalAppError(HttpStatusCode? httpStatusCode = null)
         {
+            HttpStatusCode = httpStatusCode;
         }
 
-        public InternalAppError(string message) : base(message)
+        public InternalAppError(
+            string message,
+            HttpStatusCode? httpStatusCode = null) : base(message)
         {
+            HttpStatusCode = httpStatusCode;
         }
 
-        public InternalAppError(string message, Exception innerException) : base(message, innerException)
+        public InternalAppError(
+            string message,
+            Exception innerException,
+            HttpStatusCode? httpStatusCode = null) : base(message, innerException)
         {
+            HttpStatusCode = httpStatusCode;
         }
 
-        protected InternalAppError(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected InternalAppError(
+            SerializationInfo info,
+            StreamingContext context,
+            HttpStatusCode? httpStatusCode = null) : base(info, context)
         {
+            HttpStatusCode = httpStatusCode;
         }
+
+        public HttpStatusCode? HttpStatusCode { get; }
     }
 
     public class ErrorViewModel
@@ -44,10 +58,17 @@ namespace Turmerik.Core.Components
 
     public class TrmrkActionResult
     {
+        public TrmrkActionResult(TrmrkActionResult src)
+        {
+            IsSuccess = src.IsSuccess;
+            ErrorViewModel = src.ErrorViewModel;
+            HttpStatusCode = src.HttpStatusCode;
+        }
+
         public TrmrkActionResult(
             bool isSuccess,
-            ErrorViewModel errorViewModel,
-            HttpStatusCode? httpStatusCode)
+            ErrorViewModel errorViewModel = null,
+            HttpStatusCode? httpStatusCode = null)
         {
             IsSuccess = isSuccess;
             ErrorViewModel = errorViewModel;
@@ -61,11 +82,21 @@ namespace Turmerik.Core.Components
 
     public class TrmrkActionResult<TData> : TrmrkActionResult
     {
+        public TrmrkActionResult(TrmrkActionResult<TData> src) : base(src)
+        {
+            Data = src.Data;
+        }
+
+        public TrmrkActionResult(TrmrkActionResult src, TData data) : base(src)
+        {
+            Data = data;
+        }
+
         public TrmrkActionResult(
             bool isSuccess,
             TData data,
-            ErrorViewModel errorViewModel,
-            HttpStatusCode? httpStatusCode) : base(
+            ErrorViewModel errorViewModel = null,
+            HttpStatusCode? httpStatusCode = null) : base(
                 isSuccess,
                 errorViewModel,
                 httpStatusCode)

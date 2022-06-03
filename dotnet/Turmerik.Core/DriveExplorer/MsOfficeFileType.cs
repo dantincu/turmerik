@@ -10,4 +10,17 @@ namespace Turmerik.Core.DriveExplorer
         Sheets,
         Slides
     }
+
+    public enum DriveItemOp
+    {
+        MoveFolder = 1,
+        CopyFolder,
+        MoveFile,
+        CopyFile,
+        DeleteFile,
+        CreateMultipleFolders,
+        CreateMultipleFiles,
+        CreateFolderFromMacro,
+        CreateFileFromMacro
+    }
 }
