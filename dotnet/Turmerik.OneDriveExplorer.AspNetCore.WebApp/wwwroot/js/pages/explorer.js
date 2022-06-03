@@ -1,10 +1,13 @@
-﻿import { Trmrk as trmrk, WebStorage as webStorage } from '../main.js';
+﻿import { Trmrk as trmrk, WebStorage as webStorage } from '../common/main.js';
+import { DriveItem } from './DriveItem.js';
 
 const driveExplorer = {
     username: "",
     urlQuery: null,
-    init: (username) => {
+    appSettings: null,
+    init: (username, appSettings) => {
         driveExplorer.username = username;
+        driveExplorer.appSettings = appSettings;
 
         driveExplorer.urlQuery = new Proxy(new URLSearchParams(window.location.search), {
             get: (searchParams, prop) => searchParams.get(prop),

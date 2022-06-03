@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Components;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.Helpers;
 using static System.Environment;
 
 namespace Turmerik.Core.FsExplorer
@@ -18,107 +21,261 @@ namespace Turmerik.Core.FsExplorer
         {
         }
 
-        public async Task<DriveItem> GetFolderAsync(string folderId)
+        public async Task<TrmrkActionResult<DriveItem>> GetFolderAsync(string folderId)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<DriveItem> GetRootFolderAsync()
-        {
-            var fsEntriesList = new List<DriveItem>();
-
-            var drives = DriveInfo.GetDrives(
-                ).Where(d => d.IsReady).Select(
-                d => new DriveItem
+            var actionResult = ExecuteCore(
+                () =>
                 {
-                    Id = d.Name,
-                    Name = d.Name,
-                    IsFolder = true,
+                    var entry = new DirectoryInfo(folderId);
+                    var folder = GetDriveItem(entry);
+
+                    var driveItemsArr = entry.EnumerateFileSystemInfos(
+                        ).Select(GetDriveItem).ToArray();
+
+                    folder.SubFolders = driveItemsArr.Where(
+                        item => item.IsFolder == true).ToList();
+
+                    folder.FolderFiles = driveItemsArr.Where(
+                        item => item.IsFolder != true).ToList();
+
+                    var result = new TrmrkActionResult<DriveItem>(
+                        true, folder, null, null);
+
+                    return result;
                 });
 
-            string userHomePath = GetFolderPath(SpecialFolder.UserProfile);
+            return actionResult;
+        }
 
-            var folders = new Dictionary<SpecialFolder, string>
-            {
-                { SpecialFolder.UserProfile, "User Home" },
-                { SpecialFolder.ApplicationData, "Application Data" },
-                { SpecialFolder.MyDocuments, "Documents" },
-                { SpecialFolder.MyPictures, "Pictures" },
-                { SpecialFolder.MyVideos, "Videos" },
-                { SpecialFolder.MyMusic, "Music" },
-                { SpecialFolder.Desktop, "Desktop" }
-            }.Select(
-                kvp =>
+        public async Task<TrmrkActionResult<DriveItem>> GetRootFolderAsync()
+        {
+            var actionResult = ExecuteCore(
+                () =>
                 {
-                    string path = GetFolderPath(kvp.Key);
-                    string name = path;
+                    var fsEntriesList = new List<DriveItem>();
 
-                    if (name.StartsWith(userHomePath))
+                    var drives = DriveInfo.GetDrives(
+                        ).Where(d => d.IsReady).Select(
+                        d => new DriveItem
+                        {
+                            Id = d.Name,
+                            Name = d.Name,
+                            IsFolder = true,
+                        });
+
+                    string userHomePath = GetFolderPath(SpecialFolder.UserProfile);
+
+                    var folders = new Dictionary<SpecialFolder, string>
                     {
-                        name = name.Substring(userHomePath.Length).TrimStart('/', '\\');
-                        name = $"~{Path.DirectorySeparatorChar}{name}";
-                    }
+                        { SpecialFolder.UserProfile, "User Home" },
+                        { SpecialFolder.ApplicationData, "Application Data" },
+                        { SpecialFolder.MyDocuments, "Documents" },
+                        { SpecialFolder.MyPictures, "Pictures" },
+                        { SpecialFolder.MyVideos, "Videos" },
+                        { SpecialFolder.MyMusic, "Music" },
+                        { SpecialFolder.Desktop, "Desktop" }
+                    }.Select(
+                        kvp =>
+                        {
+                            string path = GetFolderPath(kvp.Key);
+                            string name = path;
 
-                    DirectoryInfo dirInfo = new DirectoryInfo(path);
-                    var item = GetDriveItem(dirInfo);
+                            if (name.StartsWith(userHomePath))
+                            {
+                                name = name.Substring(userHomePath.Length).TrimStart('/', '\\');
+                                name = $"~{Path.DirectorySeparatorChar}{name}";
+                            }
 
-                    item.Name = name;
-                    return item;
+                            DirectoryInfo dirInfo = new DirectoryInfo(path);
+                            var item = GetDriveItem(dirInfo);
+
+                            item.Name = name;
+                            return item;
+                        });
+
+                    fsEntriesList.AddRange(drives);
+                    fsEntriesList.AddRange(folders);
+
+                    var rootFolder = new DriveItem
+                    {
+                        Id = string.Empty,
+                        Name = "This PC",
+                        IsFolder = true,
+                        IsRootFolder = true,
+                        SubFolders = fsEntriesList
+                    };
+
+                    var result = new TrmrkActionResult<DriveItem>(
+                        true, rootFolder, null, null);
+
+                    return result;
                 });
 
-            fsEntriesList.AddRange(drives);
-            fsEntriesList.AddRange(folders);
+            return actionResult;
+        }
 
-            var rootFolder = new DriveItem
+        public async Task<TrmrkActionResult<DriveItem>> CopyFileAsync(string fileId, string newParentFolderId, string newFileName)
+        {
+            var actionResult = ExecuteCore(() =>
             {
-                Id = string.Empty,
-                Name = "This PC",
-                IsFolder = true,
-                IsRootFolder = true,
-                SubFolders = fsEntriesList
-            };
+                string newPath = Path.Combine(newParentFolderId, newFileName);
+                File.Copy(fileId, newPath);
 
-            return rootFolder;
+                var newEntry = new FileInfo(newPath);
+                var item = GetDriveItem(newEntry);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, item, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> CopyFileAsync(string fileId, string newParentFolderId, string newFileName)
+        public async Task<TrmrkActionResult<DriveItem>> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCore(() =>
+            {
+                string newPath = Path.Combine(newParentFolderId, newFolderName);
+                FsH.CopyDirectory(folderId, newPath, true);
+
+                var newEntry = new DirectoryInfo(newPath);
+                var item = GetDriveItem(newEntry);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, item, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName)
+        public async Task<TrmrkActionResult<DriveItem>> CreateTextFileAsync(string parentFolderId, string newFileName, string text)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCore(() =>
+            {
+                string newPath = Path.Combine(parentFolderId, newFileName);
+                File.WriteAllText(newPath, text);
+
+                var newEntry = new FileInfo(newPath);
+                var item = GetDriveItem(newEntry);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, item, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> CreateFileAsync(string parentFolderId, string newFileName)
+        public async Task<TrmrkActionResult<DriveItem>> CreateOfficeLikeFileAsync(
+            string parentFolderId,
+            string newFileName,
+            OfficeLikeFileType officeLikeFileType)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCoreAsync(async () =>
+            {
+                var result = await CreateTextFileAsync(parentFolderId, newFileName, string.Empty);
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> CreateFolderAsync(string parentFolderId, string newFolderName)
+        public async Task<TrmrkActionResult<DriveItem>> CreateFolderAsync(string parentFolderId, string newFolderName)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCore(() =>
+            {
+                string newPath = Path.Combine(parentFolderId, newFolderName);
+                Directory.CreateDirectory(newPath);
+
+                var newEntry = new DirectoryInfo(newPath);
+                var item = GetDriveItem(newEntry);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, item, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> DeleteFileAsync(string fileId)
+        public async Task<TrmrkActionResult<DriveItem>> DeleteFileAsync(string fileId)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCore(() =>
+            {
+                var fileInfo = new FileInfo(fileId);
+                var driveItem = GetDriveItem(fileInfo);
+
+                fileInfo.Delete();
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, driveItem, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> DeleteFolderAsync(string folderId)
+        public async Task<TrmrkActionResult<DriveItem>> DeleteFolderAsync(string folderId)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCore(() =>
+            {
+                var dirInfo = new DirectoryInfo(folderId);
+                var driveItem = GetDriveItem(dirInfo);
+
+                dirInfo.Delete(true);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, driveItem, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> MoveFileAsync(string fileId, string newParentFolderId, string newFileName)
+        public async Task<TrmrkActionResult<DriveItem>> MoveFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCore(() =>
+            {
+                string newPath = Path.Combine(newParentFolderId, newFileName);
+                File.Move(fileId, newPath);
+
+                var newEntry = new FileInfo(newPath);
+                var item = GetDriveItem(newEntry);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, item, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
-        public async Task<DriveItem> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName)
+        public async Task<TrmrkActionResult<DriveItem>> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName)
         {
-            throw new NotImplementedException();
+            var actionResult = ExecuteCore(() =>
+            {
+                string newPath = Path.Combine(newParentFolderId, newFolderName);
+                FsH.MoveDirectory(folderId, newPath, true);
+
+                var newEntry = new DirectoryInfo(newPath);
+                var item = GetDriveItem(newEntry);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, item, null, null);
+
+                return result;
+            });
+
+            return actionResult;
         }
 
         private DriveItem GetDriveItem(FileSystemInfo fsInfo)
@@ -127,11 +284,8 @@ namespace Turmerik.Core.FsExplorer
             {
                 Id = fsInfo.FullName,
                 Name = fsInfo.Name,
-                // CreationTime = fsInfo.CreationTime,
                 CreationTimeStr = TimeStampHelper.TmStmp(fsInfo.CreationTime, true, TimeStamp.Seconds),
-                // LastAccessTime = fsInfo.LastAccessTime,
                 LastAccessTimeStr = TimeStampHelper.TmStmp(fsInfo.LastAccessTime, true, TimeStamp.Seconds),
-                // LastWriteTime = fsInfo.LastWriteTime,
                 LastWriteTimeStr = TimeStampHelper.TmStmp(fsInfo.LastWriteTime, true, TimeStamp.Seconds)
             };
 
@@ -141,12 +295,61 @@ namespace Turmerik.Core.FsExplorer
             {
                 fsItemMtbl.IsFolder = true;
             }
-            else
-            {
-                // fsItemMtbl.FileNameExtension = Path.GetExtension(fsItemMtbl.Name);
-            }
 
             return fsItemMtbl;
+        }
+
+        private TrmrkActionResult<DriveItem> ExecuteCore(
+            Func<TrmrkActionResult<DriveItem>> action,
+            Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
+        {
+            excHandler = excHandler.FirstNotNull(
+                exc =>
+                {
+                    HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError;
+
+                    if (exc is SecurityException)
+                    {
+                        httpStatusCode = HttpStatusCode.NotFound;
+                    }
+
+                    var result = new TrmrkActionResult<DriveItem>(
+                        false, null, new ErrorViewModel(
+                            null, exc), httpStatusCode);
+
+                    return result;
+                });
+
+            TrmrkActionResult<DriveItem> actionResult;
+
+            try
+            {
+                actionResult = action();
+            }
+            catch (Exception exc)
+            {
+                actionResult = excHandler(exc);
+            }
+
+            return actionResult;
+        }
+
+        private TrmrkActionResult<DriveItem> ExecuteCoreAsync(
+            Func<Task<TrmrkActionResult<DriveItem>>> action,
+            Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
+        {
+            var actionResult = ExecuteCore(
+                () =>
+                {
+                    var task = action();
+                    task.Wait();
+
+                    var result = task.Result;
+                    return result;
+                },
+                excHandler);
+
+            return actionResult;
         }
     }
 }

@@ -172,6 +172,7 @@
             this.Controls.Add(this.groupBoxAssembly);
             this.Name = "MainForm";
             this.Text = "C# type to json";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.groupBoxAssembly.ResumeLayout(false);
             this.groupBoxAssembly.PerformLayout();
             this.statusStrip.ResumeLayout(false);

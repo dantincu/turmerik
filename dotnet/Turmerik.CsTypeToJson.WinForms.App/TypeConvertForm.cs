@@ -50,8 +50,40 @@ namespace Turmerik.CsTypeToJson.WinForms.App
             object obj = Activator.CreateInstance(type);
             string json = JsonSrlzH.ToJson(obj);
 
-            textBoxTypeJson.Text = json;
+            textBoxJson.Text = json;
+            textBoxPropDefs.Text = GetPropDefsStr(json);
+
             return new Tuple<bool, string>(true, null);
+        }
+
+        private string GetPropDefsStr(string json)
+        {
+            var linesList = json.Split('\n').Skip(1).ToList();
+            linesList.RemoveAt(linesList.Count - 1);
+
+            linesList = linesList.Select(GetPropDefLine).ToList();
+
+            string propDefsStr = string.Join(
+                Environment.NewLine,
+                linesList);
+
+            return propDefsStr;
+        }
+
+        private string GetPropDefLine(string jsonLine)
+        {
+            jsonLine = jsonLine.Trim();
+
+            jsonLine = jsonLine.TrimStart('"');
+            int dblQuoteIdx = jsonLine.IndexOf('"');
+
+            string propName = jsonLine.Substring(0, dblQuoteIdx);
+            string propValue = jsonLine.Substring(dblQuoteIdx + 2);
+
+            propValue = propValue.TrimEnd(',');
+
+            string propDefStr = string.Concat(propName, " = ", propValue, ";");
+            return propDefStr;
         }
     }
 }

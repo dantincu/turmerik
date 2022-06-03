@@ -29,10 +29,7 @@ builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
 var svcs = TrmrkCoreServiceCollectionBuilder.RegisterAll(builder.Services);
-
-builder.Services.RegisterAppSettings(
-    svcs.TypesStaticDataCache,
-    svcs.LambdaExprHelperFactory);
+builder.Services.RegisterAppSettings();
 
 builder.Services.AddScoped<IDriveExplorerService, FsExplorerService>();
 

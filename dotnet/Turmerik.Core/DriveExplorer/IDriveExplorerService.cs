@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.Components;
 
 namespace Turmerik.Core.DriveExplorer
 {
     public interface IDriveExplorerService
     {
-        Task<DriveItem> GetRootFolderAsync();
-        Task<DriveItem> GetFolderAsync(string folderId);
-        Task<DriveItem> CreateFolderAsync(string parentFolderId, string newFolderName);
-        Task<DriveItem> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName);
-        Task<DriveItem> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName);
-        Task<DriveItem> DeleteFolderAsync(string folderId);
-        Task<DriveItem> CreateFileAsync(string parentFolderId, string newFileName);
-        Task<DriveItem> CopyFileAsync(string fileId, string newParentFolderId, string newFileName);
-        Task<DriveItem> MoveFileAsync(string fileId, string newParentFolderId, string newFileName);
-        Task<DriveItem> DeleteFileAsync(string fileId);
+        Task<TrmrkActionResult<DriveItem>> GetRootFolderAsync();
+        Task<TrmrkActionResult<DriveItem>> GetFolderAsync(string folderId);
+        Task<TrmrkActionResult<DriveItem>> CreateFolderAsync(string parentFolderId, string newFolderName);
+        Task<TrmrkActionResult<DriveItem>> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName);
+        Task<TrmrkActionResult<DriveItem>> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName);
+        Task<TrmrkActionResult<DriveItem>> DeleteFolderAsync(string folderId);
+        Task<TrmrkActionResult<DriveItem>> CreateTextFileAsync(string parentFolderId, string newFileName, string text);
+        Task<TrmrkActionResult<DriveItem>> CreateOfficeLikeFileAsync(string parentFolderId, string newFileName, OfficeLikeFileType officeLikeFileType);
+        Task<TrmrkActionResult<DriveItem>> CopyFileAsync(string fileId, string newParentFolderId, string newFileName);
+        Task<TrmrkActionResult<DriveItem>> MoveFileAsync(string fileId, string newParentFolderId, string newFileName);
+        Task<TrmrkActionResult<DriveItem>> DeleteFileAsync(string fileId);
     }
 }

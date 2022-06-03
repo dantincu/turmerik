@@ -34,11 +34,17 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.panelJsonTextBox = new System.Windows.Forms.Panel();
-            this.textBoxTypeJson = new System.Windows.Forms.TextBox();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.textBoxJson = new System.Windows.Forms.TextBox();
+            this.textBoxPropDefs = new System.Windows.Forms.TextBox();
             this.groupBoxControls.SuspendLayout();
             this.panelStatusStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.panelJsonTextBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxControls
@@ -89,22 +95,47 @@
             // 
             // panelJsonTextBox
             // 
-            this.panelJsonTextBox.Controls.Add(this.textBoxTypeJson);
+            this.panelJsonTextBox.Controls.Add(this.splitContainer1);
             this.panelJsonTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelJsonTextBox.Location = new System.Drawing.Point(0, 47);
             this.panelJsonTextBox.Name = "panelJsonTextBox";
             this.panelJsonTextBox.Size = new System.Drawing.Size(800, 379);
             this.panelJsonTextBox.TabIndex = 4;
             // 
-            // textBoxTypeJson
+            // splitContainer1
             // 
-            this.textBoxTypeJson.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTypeJson.Location = new System.Drawing.Point(0, 0);
-            this.textBoxTypeJson.Multiline = true;
-            this.textBoxTypeJson.Name = "textBoxTypeJson";
-            this.textBoxTypeJson.Size = new System.Drawing.Size(800, 379);
-            this.textBoxTypeJson.TabIndex = 0;
-            this.textBoxTypeJson.WordWrap = false;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.textBoxJson);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.textBoxPropDefs);
+            this.splitContainer1.Size = new System.Drawing.Size(800, 379);
+            this.splitContainer1.SplitterDistance = 408;
+            this.splitContainer1.TabIndex = 0;
+            // 
+            // textBoxJson
+            // 
+            this.textBoxJson.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxJson.Location = new System.Drawing.Point(0, 0);
+            this.textBoxJson.Multiline = true;
+            this.textBoxJson.Name = "textBoxJson";
+            this.textBoxJson.Size = new System.Drawing.Size(408, 379);
+            this.textBoxJson.TabIndex = 0;
+            // 
+            // textBoxPropDefs
+            // 
+            this.textBoxPropDefs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxPropDefs.Location = new System.Drawing.Point(0, 0);
+            this.textBoxPropDefs.Multiline = true;
+            this.textBoxPropDefs.Name = "textBoxPropDefs";
+            this.textBoxPropDefs.Size = new System.Drawing.Size(388, 379);
+            this.textBoxPropDefs.TabIndex = 1;
             // 
             // TypeConvertForm
             // 
@@ -116,13 +147,19 @@
             this.Controls.Add(this.groupBoxControls);
             this.Name = "TypeConvertForm";
             this.Text = "Data type json";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.groupBoxControls.ResumeLayout(false);
             this.panelStatusStrip.ResumeLayout(false);
             this.panelStatusStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.panelJsonTextBox.ResumeLayout(false);
-            this.panelJsonTextBox.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -132,8 +169,10 @@
         private System.Windows.Forms.Button buttonGenerate;
         private System.Windows.Forms.Panel panelStatusStrip;
         private System.Windows.Forms.Panel panelJsonTextBox;
-        private System.Windows.Forms.TextBox textBoxTypeJson;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.TextBox textBoxJson;
+        private System.Windows.Forms.TextBox textBoxPropDefs;
     }
 }

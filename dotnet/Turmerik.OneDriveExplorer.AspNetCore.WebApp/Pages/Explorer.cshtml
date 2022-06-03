@@ -1,11 +1,15 @@
 ﻿@page
 
+@using Turmerik.Core.Helpers
+@using Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig
 @using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Pages
 
 @model ExplorerModel
+@inject IAppSettings appSettings;
 
 @{
     ViewData["Title"] = "Explorer";
+    string appSettingsJson = JsonSrlzH.ToJson(appSettings);
 }
 
 @section Scripts {
@@ -14,7 +18,7 @@
     <script>
 document.addEventListener('DOMContentLoaded', () => {
     let username = "@User.Identity?.Name";
-    window.Trmrk.driveExplorer.init(username);
+    window.Trmrk.driveExplorer.init(username, @Html.Raw(appSettingsJson));
 }, false);
     </script>
 }
