@@ -3,9 +3,16 @@
 
 // Write your JavaScript code.
 
-import { Trmrk as trmrk } from './core.js';
-import './domUtils.js';
-import { WebStorage as webStorage } from './webStorage.js';
+import { trmrk as trmrkInstnt } from './core.js';
 
-export const Trmrk = trmrk;
-export const WebStorage = webStorage;
+import { domUtils as domUtilsInstn,
+    bsDomUtils as bsDomUtilsInstn,
+    vdom as vdomInstance } from './vdom.js';
+
+import { webStorage as webStorageInstnt } from './webStorage.js';
+
+export const trmrk = trmrkInstnt;
+export const domUtils = domUtilsInstn;
+export const bsDomUtils = bsDomUtilsInstn;
+export const vdom = vdomInstance;
+export const webStorage = webStorageInstnt;

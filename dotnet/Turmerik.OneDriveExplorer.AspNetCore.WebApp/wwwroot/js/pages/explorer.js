@@ -8,10 +8,6 @@ const driveExplorer = {
     init: (username, appSettings) => {
         driveExplorer.username = username;
         driveExplorer.appSettings = appSettings;
-
-        driveExplorer.urlQuery = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-        });
     },
     getCacheKey: (keyName, id, username) => {
         if (typeof (username) === "string" && username.length > 0) {

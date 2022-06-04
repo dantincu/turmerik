@@ -1,4 +1,6 @@
-﻿export class DomElWrapperBase {
+﻿import { trmrk } from './core.js';
+
+export class DomElWrapperBase {
 
     DomElId;
 
@@ -23,3 +25,5 @@
         return domEl;
     }
 }
+
+trmrk.types["DomElWrapperBase"] = DomElWrapperBase;

@@ -1,4 +1,6 @@
-﻿export class EntityBase {
+﻿import { trmrk } from './core.js';
+
+export class EntityBase {
     __copyProps(src, throwOnUnknownProp = false) {
         if (src !== null && typeof src === "object") {
             const srcProps = Object.keys(src);
@@ -17,3 +19,5 @@
         }
     }
 }
+
+trmrk.types["EntityBase"] = EntityBase;

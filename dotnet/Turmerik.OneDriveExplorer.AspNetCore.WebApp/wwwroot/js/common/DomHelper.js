@@ -1,4 +1,5 @@
-﻿import { DomElWrapperBase } from './DomElWrapperBase.js';
+﻿import { trmrk } from './core.js';
+import { DomElWrapperBase } from './DomElWrapperBase.js';
 
 export class DomHelper extends DomElWrapperBase {
     Selector;
@@ -40,3 +41,5 @@ export class DomHelper extends DomElWrapperBase {
         return domElms;
     }
 }
+
+trmrk.types["DomHelper"] = DomHelper;
