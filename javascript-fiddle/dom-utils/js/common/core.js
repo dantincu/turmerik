@@ -66,7 +66,7 @@
         return retVal;
     }
 
-    get isNonEmptyStr() {
+    get isNonEmptyString() {
         let retVal = this.isString && this.value.length > 0;
         return retVal;
     }
@@ -77,6 +77,43 @@ export class TrmrkCore {
     cacheKeyBasePrefix = "trmrk";
 
     urlQuery = new URLSearchParams(window.location.search);
+
+    openUrl(urlSearchParams, inNewTab, pathname, host, https) {
+        let search = "";
+        let scheme = window.location.protocol;
+
+        if (https === false) {
+            scheme = "http:";
+        }
+        
+        if (trmrk.core.isNotNullObj(urlSearchParams)) {
+            search = urlSearchParams.toString();
+
+            if (trmrk.core.isNonEmptyString(search)) {
+                search = "?" + search;
+            }
+        }
+
+        if (!trmrk.core.isNonEmptyString(pathname)) {
+            pathname = window.location.pathname;
+        }
+
+        if (!trmrk.core.isNonEmptyString(host)) {
+            host = window.location.host;
+
+            if (https !== false) {
+                scheme = window.location.protocol;
+            }
+        }
+
+        let url = scheme + "//" + host + pathname + search;
+        
+        if (inNewTab) {
+            window.open(url);
+        } else {
+            window.location.assign(url);
+        }
+    }
     
     throw (err) {
         if (typeof (err) !== "object") {

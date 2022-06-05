@@ -169,14 +169,14 @@ export class App {
         let urlQuery = trmrk.core.urlQuery;
         urlQuery.set("edit", "true");
 
-        window.location.search = urlQuery.toString();
+        trmrk.core.openUrl(urlQuery, true);
     }
 
     gotoMainPage() {
         let urlQuery = trmrk.core.urlQuery;
         urlQuery.delete("edit");
 
-        window.location.search = urlQuery.toString();
+        trmrk.core.openUrl(urlQuery, true);
     }
 }
 
