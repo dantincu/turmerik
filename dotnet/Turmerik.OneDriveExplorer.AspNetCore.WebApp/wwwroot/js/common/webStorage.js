@@ -79,6 +79,25 @@ export class WebStorage {
         return storage;
     }
 
+    textToLines (text, maxLineLen) {
+        let lines = [];
+        let textLen = text.length;
+
+        let linesCount = Math.ceil(textLen / maxLineLen);
+
+        let stIdx = 0;
+        let endIdx = maxLineLen - 1;
+
+        for (let i = 0; i < linesCount; i++) {
+            lines[i] = text.substring(stIdx, endIdx);
+
+            stIdx = endIdx;
+            endIdx += maxLineLen;
+        }
+
+        return lines;
+    }
+
     getBigItemChunksCount(key, guidStr, maxChunkLength, isPersistent) {
         let text = this.getItem(key, isPersistent);
 
@@ -86,7 +105,7 @@ export class WebStorage {
             text = "";
         }
 
-        let lines = trmrk.core.textToLines(text, maxChunkLength);
+        let lines = this.textToLines(text, maxChunkLength);
         this.bigItems[guidStr] = lines;
 
         let chunksCount = lines.length;

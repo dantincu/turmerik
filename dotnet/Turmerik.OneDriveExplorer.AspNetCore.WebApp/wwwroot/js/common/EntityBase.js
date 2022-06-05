@@ -6,9 +6,7 @@ export class EntityBase {
             const srcProps = Object.keys(src);
             const ownProps = Object.keys(this);
 
-            for (let idx in srcProps) {
-                let prop = srcProps[idx];
-
+            for (let prop of srcProps) {
                 if (throwOnUnknownProp && ownProps.indexOf(prop) < 0) {
                     var err = "Unknown prop: " + prop;
                     throw err;

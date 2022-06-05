@@ -60,6 +60,23 @@ export class DomUtils {
         let helper = new DomHelper(domElId, selector);
         return helper.DomEl.outerHTML;
     };
+
+    createAndAppendEl(parentEl, nodeName, textContent) {
+        let el = document.createElement(nodeName);
+        el.textContent = textContent;
+
+        parentEl.appendChild(el);
+    }
+
+    onDomContentLoaded(callback) {
+        if (document.readyState !== 'loading') {
+            callback();
+        } else {
+            document.addEventListener('DOMContentLoaded', function () {
+                callback();
+            });
+        }
+    }
 }
 
 export class BsDomUtils {
