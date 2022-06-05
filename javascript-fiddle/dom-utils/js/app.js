@@ -50,9 +50,10 @@ export class App {
                 "navbar-expand-md",
                 "navbar-dark",
                 "bg-dark",
-                "fixed-top"
+                "fixed-top",
+                "trmrk-nav-bar"
         ], {}, [
-            vdom.utils.getVDomEl("a", ["navbar-brand"], {}, [viewEditToggleEl])
+            vdom.utils.getVDomEl("a", ["navbar-brand", "trmrk-navbar-brand"], {}, [viewEditToggleEl])
         ]);
 
         return rootEl;
@@ -105,15 +106,15 @@ export class App {
         let childNodes = [
             this.getEditPageRootNode(
                 this.sessionStorageKeys.vdom,
-                vdomJson, "Edit Virtual DOM"
+                "Edit Virtual DOM", vdomJson
             ),
             this.getEditPageRootNode(
                 this.sessionStorageKeys.js,
-                jsStr, "Edit Javascript"
+                "Edit Javascript", jsStr
             ),
             this.getEditPageRootNode(
                 this.sessionStorageKeys.css,
-                cssStr, "Edit CSS"
+                "Edit CSS", cssStr
             ),
         ];
 
@@ -126,13 +127,16 @@ export class App {
             "textarea", [], {}, [], {}, text);
 
         let textAreaWrapperVEl = vdom.utils.getVDomEl(
-            "div", ["trmrk-content"], {}, [textareaVEl]);
+            "div", ["trmrk-content"], {
+                "style": "display: none"
+            }, [textareaVEl]);
 
         let saveButtonVEl = vdom.utils.getVDomEl("button", [], {
-            "disabled": "disabled" }, [], {
+            "disabled": "disabled"
+        }, [new VDomTextNode("save")], {
             "click": [{
                     listener: e => {
-                        let newText = textareaVEl.textContent;
+                        let newText = textareaVEl.refreshTextValue();
                         sessionStorage.setItem(key, newText);
                     }
                 }]
@@ -142,20 +146,20 @@ export class App {
             "type": "checkbox" }, [], {
             "click": [{
                     listener: e => {
-                        if (chkVEl.checked) {
+                        if (chkVEl.domNode.checked) {
                             saveButtonVEl.removeAttr("disabled");
-                            textAreaWrapperVEl.style.display = "block";
+                            textAreaWrapperVEl.domNode.style.display = "block";
                         } else {
                             saveButtonVEl.addAttr("disabled", "disabled");
-                            textAreaWrapperVEl.style.display = "none";
+                            textAreaWrapperVEl.domNode.style.display = "none";
                         }
                     }
                 }]
             }
         );
 
-        let labelVEl = vdom.utils.getVDomEl("label", [], {}, [new VDomTextNode(name), chkVEl, saveButtonVEl]);
-        let titleVEl = vdom.utils.getVDomEl("div", ["trmrk-summary"], {}, [labelVEl]);
+        let labelVEl = vdom.utils.getVDomEl("label", ["trmrk-label"], {}, [new VDomTextNode(name), chkVEl]);
+        let titleVEl = vdom.utils.getVDomEl("div", ["trmrk-summary"], {}, [labelVEl, saveButtonVEl]);
         
         let wrapperVEl = vdom.utils.getVDomEl("div", ["trmrk-item"], {}, [titleVEl, textAreaWrapperVEl]);
         return wrapperVEl;

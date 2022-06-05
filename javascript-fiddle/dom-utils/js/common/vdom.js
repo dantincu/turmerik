@@ -77,7 +77,7 @@ export class VDomEl extends VDomNodeBase {
                 this.data = data;
             }
 
-            if (trmrk.core.isOfTypeString(textValue)) {
+            if (trmrk.core.isNonEmptyString(textValue)) {
                 this.textValue = textValue;
             }
 
@@ -139,15 +139,33 @@ export class VDomEl extends VDomNodeBase {
 
     setTextValue(textValue) {
         if (this.domNode) {
-            this.domNode.textContent = textValue;
-            this.refreshChildNodes();
+            if (trmrk.vdom.utils.textInputElNodeNames.indexOf(this.nodeName) >= 0) {
+                this.domNode.value = textValue;
+            } else {
+                this.domNode.textContent = textValue;
+                this.refreshChildNodes();
+            }
         }
 
         super.setTextValue(textValue);
     }
 
     refreshNodeName() {
-        this.nodeName = this.domNode.nodeName;
+        if (this.domNode) {
+            this.nodeName = this.domNode.nodeName;
+        } else {
+            this.nodeName = null;
+        }
+    }
+
+    refreshTextValue() {
+        if (this.domNode && trmrk.vdom.utils.textInputElNodeNames.indexOf(this.nodeName) >= 0) {
+            this.textValue = this.domNode.value;
+        } else {
+            super.refreshTextValue();
+        }
+
+        return this.textValue;
     }
 
     refreshAttrs() {
@@ -221,6 +239,14 @@ export class VDomEl extends VDomNodeBase {
                 ({listener, options} = event);
 
                 trmrk.vdom.utils.addEventListener(domEl, eventType, listener, options);
+            }
+        }
+
+        if (trmrk.core.isNonEmptyString(this.textValue)) {
+            if (trmrk.vdom.utils.textInputElNodeNames.indexOf(this.nodeName) >= 0) {
+                domEl.value = this.textValue;
+            } else {
+                domEl.textContent = this.textValue;
             }
         }
 
@@ -386,6 +412,7 @@ export class VDomEl extends VDomNodeBase {
 
 export class VirtualDomUtils {
     nonVDomElNodeNames = ["script", "style"];
+    textInputElNodeNames = ["input", "textarea"];
 
     getOrCreateDomNode(node) {
         let vNode = node;
