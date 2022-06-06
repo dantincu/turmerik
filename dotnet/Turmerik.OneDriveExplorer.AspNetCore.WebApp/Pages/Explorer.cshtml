@@ -16,13 +16,28 @@
     <script src="~/js/pages/explorer.js" asp-append-version="true" type="module"></script>
 
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-    let username = "@User.Identity?.Name";
+        let domReadyExecuted = false;
 
-    window.Trmrk.driveExplorer.init(
-        username,
-        @Html.Raw(appSettingsJson));
-}, false);
+        let domReadyCallback = () => {
+            if (!domReadyExecuted) {
+                domReadyExecuted = true;
+                let username = "@User.Identity?.Name";
+
+                console.log("Initializing app for user " + username);
+
+                window.trmrk.driveExplorer.init(
+                    username,
+                    @Html.Raw(appSettingsJson));
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            domReadyCallback();
+        });
+
+        if (document.readyState !== 'loading') {
+            domReadyCallback();
+        }
     </script>
 }
 

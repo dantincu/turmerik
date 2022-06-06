@@ -73,8 +73,9 @@
 }
 
 export class TrmrkCore {
+    javascriptVoid = "javascript:void(0);"
     isLoggingEnabled = false;
-    cacheKeyBasePrefix = "trmrk";
+    trmrkPrefix = "trmrk";
 
     urlQuery = new URLSearchParams(window.location.search);
 
@@ -138,6 +139,14 @@ export class TrmrkCore {
         }
     };
 
+    trimStrIfNotNull(value) {
+        if (this.isNonEmptyString(value)) {
+            value = value.trim();
+        } else {
+            value = null;
+        }
+    }
+
     strTrimStart(str, strToTrim) {
         while (str.startsWith(strToTrim)) {
             str = str.substring(strToTrim.length);
@@ -153,6 +162,30 @@ export class TrmrkCore {
 
         return str;
     };
+
+    tryParseJson(value) {
+        if (this.isNonEmptyString(value)) {
+            value = value.trim();
+
+            try {
+                let json = JSON.parse(value);
+                value = json;
+            } catch (err) {
+            }
+        } else {
+            value = null;
+        }
+
+        return value;
+    }
+
+    toJsonIfObj(value) {
+        if (this.isNotNullObj(value)) {
+            value = JSON.stringify(value);
+        }
+
+        return value;
+    }
 
     isOfTypeString(value) {
         let retVal = typeof(value) === "string";
@@ -441,6 +474,138 @@ export class TrmrkCore {
         
         return retVal;
     };
+
+    bindFuncOrNoop(func, target) {
+        if (this.isOfTypeFunction(func)) {
+            func = func.bind(target);
+        } else {
+            func = (function() {}).bind(target);
+        }
+
+        return func;
+    }
+
+    bindFuncOrDefault(func, target, defaultFunc) {
+        if (this.isOfTypeFunction(func)) {
+            func = func.bind(target);
+        } else {
+            func = defaultFunc.bind(target);
+        }
+
+        return func;
+    }
+
+    valOrNull(value) {
+        if (this.isUndef(value)) {
+            value = null;
+        }
+
+        return value;
+    }
+
+    valOrDefault(value, defaultValue) {
+        if (this.isNullOrUndef(value)) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    getValOrNull(value, isNotNullPred) {
+        if (!isNotNullPred(value)) {
+            value = null;
+        }
+
+        return value;
+    }
+
+    getValOrDefault(value, isNotNullPred, defaultValue) {
+        if (!isNotNullPred(value)) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    getValueOrDefault(value, isNotNullPred, defaultValueFactory) {
+        if (!isNotNullPred(value)) {
+            value = defaultValueFactory();
+        }
+
+        return value;
+    }
+
+    objValOrNull(value) {
+        if (!this.isNotNullObj(value)) {
+            value = null;
+        }
+
+        return value;
+    }
+
+    objValOrDefault(value, defaultValue) {
+        if (!this.isNotNullObj(value)) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    objValueOrDefault(value, defaultValueFactory) {
+        if (!this.isNotNullObj(value)) {
+            value = defaultValueFactory();
+        }
+
+        return value;
+    }
+
+    strValOrNull(value) {
+        if (!this.isOfTypeString(value)) {
+            value = null;
+        }
+
+        return value;
+    }
+
+    strValOrDefault(value, defaultValue) {
+        if (!this.isOfTypeString(value)) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    strValueOrDefault(value, defaultValueFactory) {
+        if (!this.isOfTypeString(value)) {
+            value = defaultValueFactory();
+        }
+
+        return value;
+    }
+
+    nonEmptyStrValOrNull(value) {
+        if (!this.isNonEmptyString(value)) {
+            value = null;
+        }
+
+        return value;
+    }
+
+    nonEmptyStrValOrDefault(value, defaultValue) {
+        if (!this.isNonEmptyString(value)) {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    nonEmptyStrValueOrDefault(value, defaultValueFactory) {
+        if (!this.isNonEmptyString(value)) {
+            value = defaultValueFactory();
+        }
+
+        return value;
+    }
 };
 
 export class Trmrk {
@@ -452,6 +617,7 @@ export class Trmrk {
     domUtils = null;
     bsDomUtils = null;
     webStorage = null;
+    vdom = null;
 }
 
 export class EntityBase {
@@ -476,6 +642,7 @@ export class EntityBase {
 
 const trmrkInstn = new Trmrk();
 
+trmrkInstn.types["ValueWrapper"] = ValueWrapper;
 trmrkInstn.types["Trmrk"] = Trmrk;
 trmrkInstn.types["TrmrkCore"] = TrmrkCore;
 trmrkInstn.types["EntityBase"] = EntityBase;

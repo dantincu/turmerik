@@ -94,6 +94,13 @@ export class BsDomUtils {
         modal.hide();
     }
 
+    createPopover(domElId, selector) {
+        let helper = new DomHelper(domElId, selector);
+        var popover = bootstrap.Popover.getOrCreateInstance(helper.DomEl);
+
+        return popover;
+    }
+
     showPopover(domElId, selector, autohideMillis) {
         let helper = new DomHelper(domElId, selector);
         var popover = bootstrap.Popover.getOrCreateInstance(helper.DomEl);
@@ -101,7 +108,7 @@ export class BsDomUtils {
         popover.show();
         let retVal = -1;
 
-        if (typeof (autohideMillis) == "number") {
+        if (typeof (autohideMillis) === "number") {
             retVal = setTimeout(() => {
                 popover.hide();
             }, autohideMillis);

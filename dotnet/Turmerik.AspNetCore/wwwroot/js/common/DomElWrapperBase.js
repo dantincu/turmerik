@@ -17,9 +17,12 @@ export class DomElWrapperBase {
 
     GetDomEl() {
         let domEl;
+        let domElIdType = typeof(this.DomElId);
 
-        if (this.DomElId) {
+        if (domElIdType === "string") {
             domEl = document.getElementById(this.DomElId);
+        } else if (domElIdType === "object") {
+            domEl = this.DomElId;
         }
 
         return domEl;

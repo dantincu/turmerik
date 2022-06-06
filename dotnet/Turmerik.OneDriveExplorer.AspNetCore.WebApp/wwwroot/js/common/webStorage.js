@@ -120,6 +120,15 @@ export class WebStorage {
     clearBigItemChunks(guidStr) {
         delete this.bigItems[guidStr];
     }
+
+    getCacheKey(keyName, id, username) {
+        if (typeof (username) === "string" && username.length > 0) {
+            username = username + "|";
+        }
+
+        let cacheKey = trmrk.core.trmrkPrefix + "|" + username + keyName + "|" + id;
+        return cacheKey;
+    }
 }
 
 trmrk.types["WebStorage"] = WebStorage;

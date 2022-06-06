@@ -1,55 +1,49 @@
-﻿import { Trmrk as trmrk, WebStorage as webStorage } from '../common/main.js';
+﻿import { trmrk, webStorage } from '../common/main.js';
 import { DriveItem } from './DriveItem.js';
 
-const driveExplorer = {
-    username: "",
-    urlQuery: null,
-    appSettings: null,
-    init: (username, appSettings) => {
-        driveExplorer.username = username;
-        driveExplorer.appSettings = appSettings;
-    },
-    getCacheKey: (keyName, id, username) => {
-        if (typeof (username) === "string" && username.length > 0) {
-            username = username + "|";
-        }
+export class DriveExplorer {
+    username = null;
+    urlQuery = null;
+    appSettings = null;
+    driveFolderCacheKeyName = "driveFolder";
+    rootDriveFolderCacheKeyName = "rootDriveFolder";
 
-        let cacheKey = trmrk.cacheKeyBasePrefix + "|" + username + keyName + "|" + id;
-        return cacheKey;
-    },
-    driveFolderCacheKeyName: "driveFolder",
-    rootDriveFolderCacheKeyName: "rootDriveFolder",
+    init(username, appSettings) {
+        this.username = username;
+        this.appSettings = appSettings;
+    }
+
     getDriveItemCacheKey(id) {
-        let cacheKey = driveExplorer.getCacheKey(
-            driveExplorer.driveFolderCacheKeyName,
-            id,
-            driveExplorer.username);
+        let cacheKey = this.getCacheKey(
+            this.driveFolderCacheKeyName,
+            id, this.username);
 
         return cacheKey;
-    },
-    getDriveItemJson: (id) => {
-        let cacheKey = driveExplorer.getDriveItemCacheKey(id);
+    }
+
+    getDriveItemJson(id) {
+        let cacheKey = this.getDriveItemCacheKey(id);
         let driveItemJson = sessionStorage.getItem(cacheKey);
 
         return driveItemJson;
-    },
-    getDriveItem: (id) => {
-        let driveItemJson = driveExplorer.getDriveItemJson(id);
+    }
+
+    getDriveItem(id) {
+        let driveItemJson = this.getDriveItemJson(id);
         let driveItem = JSON.parse(driveItemJson);
 
         return driveItem;
-    },
-    setDriveItem: (driveItem, id) => {
-        let cacheKey = driveExplorer.getDriveItemCacheKey(id);
-        let driveItemJson = driveItem;
+    }
 
-        if (typeof (driveItemJson) !== "string") {
-            driveItemJson = JSON.stringify(driveItem);
-        }
+    setDriveItem(driveItem, id) {
+        let cacheKey = this.getDriveItemCacheKey(id);
+        let driveItemJson = trmrk.core.toJsonIfObj(driveItem);
 
         sessionStorage.setItem(cacheKey, driveItemJson);
     }
-};
+}
 
-trmrk.driveExplorer = driveExplorer;
-export const DriveExplorer = driveExplorer;
+const driveExplorerInstn = new DriveExplorer();
+
+trmrk.driveExplorer = driveExplorerInstn;
+export const driveExplorer = driveExplorerInstn;
