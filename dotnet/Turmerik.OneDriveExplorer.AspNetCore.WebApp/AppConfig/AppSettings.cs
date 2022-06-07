@@ -8,6 +8,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig
         string RootDriveFolderCacheKeyName { get; }
         string ClientAppRootObjPropName { get; }
         string CacheKeyBasePrefix { get; }
+        string DriveFolderIdUrlQueryKey { get; }
     }
 
     public class AppSettingsImmtbl : IAppSettings
@@ -18,12 +19,14 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig
             RootDriveFolderCacheKeyName = src.RootDriveFolderCacheKeyName;
             ClientAppRootObjPropName = src.ClientAppRootObjPropName;
             CacheKeyBasePrefix = src.CacheKeyBasePrefix;
+            DriveFolderIdUrlQueryKey = src.DriveFolderIdUrlQueryKey;
         }
 
         public string DriveFolderCacheKeyName { get; }
         public string RootDriveFolderCacheKeyName { get; }
         public string ClientAppRootObjPropName { get; }
         public string CacheKeyBasePrefix { get; }
+        public string DriveFolderIdUrlQueryKey { get; }
     }
 
     public class AppSettingsMtbl : IAppSettings
@@ -38,11 +41,13 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig
             RootDriveFolderCacheKeyName = src.RootDriveFolderCacheKeyName;
             ClientAppRootObjPropName = src.ClientAppRootObjPropName;
             CacheKeyBasePrefix = src.CacheKeyBasePrefix;
+            DriveFolderIdUrlQueryKey = src.DriveFolderIdUrlQueryKey;
         }
 
         public string DriveFolderCacheKeyName { get; set; }
         public string RootDriveFolderCacheKeyName { get; set; }
         public string ClientAppRootObjPropName { get; set; }
         public string CacheKeyBasePrefix { get; set; }
+        public string DriveFolderIdUrlQueryKey { get; set; }
     }
 }

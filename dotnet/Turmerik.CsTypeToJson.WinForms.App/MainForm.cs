@@ -41,6 +41,9 @@ namespace Turmerik.CsTypeToJson.WinForms.App
             actionComponent = actionComponentFactory.GetActionComponent(toolStripStatusLabel);
 
             typesStaticDataCache = ServiceProviderContainer.Instance.Value.Services.GetRequiredService<ITypesStaticDataCache>();
+            this.assembly = this.GetType().Assembly;
+
+            textBoxAssemblyPath.Text = this.assembly.Location;
         }
 
         private void textBoxAssemblyPath_KeyUp(object sender, KeyEventArgs e)

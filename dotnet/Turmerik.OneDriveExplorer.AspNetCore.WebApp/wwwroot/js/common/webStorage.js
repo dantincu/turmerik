@@ -1,6 +1,7 @@
-import { trmrk as trmrk } from './core.js';
+import { trmrk } from './core.js';
 
 export class WebStorage {
+    cacheKeyBasePrefix = trmrk.core.trmrkPrefix;
     bigItems = {};
 
     clear(isPersistent) {
@@ -122,11 +123,10 @@ export class WebStorage {
     }
 
     getCacheKey(keyName, id, username) {
-        if (typeof (username) === "string" && username.length > 0) {
-            username = username + "|";
-        }
+        let idStr = trmrk.core.getNonEmptyStrValOrEmpty(id, val => "|" + val);
+        let usernameStr = trmrk.core.getNonEmptyStrValOrEmpty(username, val => "|" + val + "|");
 
-        let cacheKey = trmrk.core.trmrkPrefix + "|" + username + keyName + "|" + id;
+        let cacheKey = this.cacheKeyBasePrefix + usernameStr + keyName + idStr;
         return cacheKey;
     }
 }

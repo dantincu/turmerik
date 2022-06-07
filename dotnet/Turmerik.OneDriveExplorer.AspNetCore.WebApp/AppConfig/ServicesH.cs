@@ -14,7 +14,8 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig
                 DriveFolderCacheKeyName = "driveFolder",
                 RootDriveFolderCacheKeyName = "rootDriveFolder",
                 ClientAppRootObjPropName = "Trmrk",
-                CacheKeyBasePrefix = "trmrk"
+                CacheKeyBasePrefix = "trmrk",
+                DriveFolderIdUrlQueryKey = "drive-folder-id"
             };
 
             var immtbl = new AppSettingsImmtbl(mtbl);

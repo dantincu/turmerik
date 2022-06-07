@@ -13,32 +13,18 @@
 }
 
 @section Scripts {
-    <script src="~/js/pages/explorer.js" asp-append-version="true" type="module"></script>
-
     <script>
-        let domReadyExecuted = false;
+        window["trmrkDOMContentLoaded"] = () => {
+            let username = "@User.Identity?.Name";
+            console.log("Initializing app for user " + username);
 
-        let domReadyCallback = () => {
-            if (!domReadyExecuted) {
-                domReadyExecuted = true;
-                let username = "@User.Identity?.Name";
-
-                console.log("Initializing app for user " + username);
-
-                window.trmrk.driveExplorer.init(
-                    username,
-                    @Html.Raw(appSettingsJson));
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', function () {
-            domReadyCallback();
-        });
-
-        if (document.readyState !== 'loading') {
-            domReadyCallback();
+            window.trmrk.driveExplorer.init(
+                username,
+                @Html.Raw(appSettingsJson));
         }
     </script>
+
+    <script src="~/js/pages/explorerPage.js" asp-append-version="true" type="module"></script>
 }
 
 @using System.Security.Principal

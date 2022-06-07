@@ -163,20 +163,27 @@ export class TrmrkCore {
         return str;
     };
 
-    tryParseJson(value) {
-        if (this.isNonEmptyString(value)) {
-            value = value.trim();
+    tryParseJson(jsonStr, retSrcStrOnFail) {
+        let retVal;
+
+        if (this.isNonEmptyString(jsonStr)) {
+            jsonStr = jsonStr.trim();
 
             try {
-                let json = JSON.parse(value);
-                value = json;
+                let obj = JSON.parse(jsonStr);
+                retVal = obj;
             } catch (err) {
+                if (retSrcStrOnFail) {
+                    retVal = jsonStr;
+                } else {
+                    retVal = null;
+                }
             }
         } else {
-            value = null;
+            retVal = null;
         }
 
-        return value;
+        return retVal;
     }
 
     toJsonIfObj(value) {
@@ -601,6 +608,46 @@ export class TrmrkCore {
 
     nonEmptyStrValueOrDefault(value, defaultValueFactory) {
         if (!this.isNonEmptyString(value)) {
+            value = defaultValueFactory();
+        }
+
+        return value;
+    }
+
+    getNonEmptyStrValOrNull(value, nonEmptyTransformer) {
+        if (this.isNonEmptyString(value)) {
+            value = nonEmptyTransformer(value);
+        } else {
+            value = null;
+        }
+
+        return value;
+    }
+
+    getNonEmptyStrValOrEmpty(value, nonEmptyTransformer) {
+        if (this.isNonEmptyString(value)) {
+            value = nonEmptyTransformer(value);
+        } else {
+            value = "";
+        }
+
+        return value;
+    }
+
+    getNonEmptyStrValOrDefault(value, nonEmptyTransformer, defaultValue) {
+        if (this.isNonEmptyString(value)) {
+            value = nonEmptyTransformer(value);
+        } else {
+            value = defaultValue;
+        }
+
+        return value;
+    }
+
+    getNonEmptyStrValueOrDefault(value, nonEmptyTransformer, defaultValueFactory) {
+        if (this.isNonEmptyString(value)) {
+            value = nonEmptyTransformer(value);
+        } else {
             value = defaultValueFactory();
         }
 

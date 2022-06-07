@@ -265,9 +265,7 @@ export class VDomEl extends VDomNodeBase {
             } else {
                 domEl.textContent = this.textValue;
             }
-        }
-
-        if (trmrk.core.isNonEmptyString(this.innerHTML)) {
+        } else if (trmrk.core.isNonEmptyString(this.innerHTML)) {
             domEl.innerHTML = this.innerHTML;
             this.childNodes = [];
         } else {

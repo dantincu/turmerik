@@ -2,6 +2,8 @@ import { trmrk } from './core.js';
 import { DomHelper } from './DomHelper.js';
 
 export class DomUtils {
+    trmrkDOMContentLoadedGlobalPropName = "trmrkDOMContentLoaded";
+
     async selectDomEl(domElId, selector, copyToClipboard) {
         let helper = new DomHelper(domElId, selector);
 
@@ -68,7 +70,21 @@ export class DomUtils {
         parentEl.appendChild(el);
     }
 
-    onDomContentLoaded(callback) {
+    onDomContentLoaded(callbackArg) {
+        let callback = () => {
+            let callbackPropName = this.trmrkDOMContentLoadedGlobalPropName;
+            let globalCallback = window[callbackPropName];
+
+            if (globalCallback) {
+                delete window[callbackPropName];
+                globalCallback();
+            }
+
+            if (callbackArg) {
+                callbackArg();
+            }
+        }
+
         if (document.readyState !== 'loading') {
             callback();
         } else {

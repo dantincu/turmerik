@@ -1,6 +1,19 @@
-﻿import { EntityBase } from '../common/EntityBase.js';
+﻿import { ViewModelBase } from '../common/ViewModelBase.js';
 
-export class DriveItem extends EntityBase {
+export class AppSettings extends ViewModelBase {
+    constructor(src, throwOnUnknownProp = false) {
+        super();
+        this.__copyProps(src, throwOnUnknownProp);
+    }
+
+    DriveFolderCacheKeyName =  null;
+    RootDriveFolderCacheKeyName =  null;
+    ClientAppRootObjPropName =  null;
+    CacheKeyBasePrefix =  null;
+    DriveFolderIdUrlQueryKey = null;
+}
+
+export class DriveItem extends ViewModelBase {
     constructor(src, throwOnUnknownProp = false) {
         super();
         this.__copyProps(src, throwOnUnknownProp);
