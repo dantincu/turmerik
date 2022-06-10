@@ -1,12 +1,12 @@
 html {
-  font-size: 14px;
+  font-size: 20px;
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
-}
+} */
 
 html {
   position: relative;
@@ -15,4 +15,75 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.trmrk-rotate-90deg {
+    transform: rotate(90deg);
+}
+
+.trmrk-rotate-45deg {
+    transform: rotate(45deg);
+}
+
+.trmrk-drive-items-grid {
+    height: 100vh;
+    overflow-y: scroll;
+}
+
+.trmrk-grid-icon-cell,
+.trmrk-grid-checkbox-cell {
+    width: 1rem;
+    cursor: grabbing;
+}
+
+.trmrk-drive-folder-view .trmrk-drive-items-grid .trmrk-grid-checkbox-cell {
+    padding-top: 0.6rem;
+}
+
+    .trmrk-grid-checkbox-cell > input[type=checkbox] {
+        width: 1em;
+        height: 1em;
+    }
+
+.trmrk-times-icon {
+    display: inline-flex;
+    font-size: 2em;
+    font-weight: bold;
+    width: 1rem;
+    padding: 0.1rem;
+    cursor: grabbing;
+}
+
+.trmrk-icon {
+    display: inline-flex;
+    padding: 0.5rem;
+    cursor: grabbing;
+}
+
+.trmrk-grid-main-edit-cell {
+    cursor: grabbing;
+}
+
+    .trmrk-grid-main-edit-cell input[type=text] {
+        font-family: Consolas, monaco, monospace;
+        font-weight: bold;
+    }
+
+    .trmrk-grid-main-cell > .trmrk-name {
+        width: 100%;
+        display: inline-flex;
+        font-weight: bold;
+        cursor: grabbing;
+    }
+
+.trmrk-checked {
+    background-color: #FFF0E0;
+}
+
+.trmrk-pressed {
+    background-color: #E0F0FF;
+}
+
+.trmrk-checked.trmrk-pressed {
+    background-color: #F0F0F0;
 }

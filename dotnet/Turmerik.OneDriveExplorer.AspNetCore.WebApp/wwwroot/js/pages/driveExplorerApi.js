@@ -1,6 +1,8 @@
 import { trmrk, webStorage } from '../common/main.js';
-import { TrmrkActionResult } from '../common/ViewModelBase.js';
+import { ViewModelBase } from '../common/ViewModelBase.js';
 import { DriveItem, AppSettings } from './Entities.js';
+import { trmrkAxios, TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
+import { webStorageAxios } from '../common/webStorageAxios.js';
 
 export class DriveExplorerApi {
     appSettings = new AppSettings();
@@ -21,29 +23,18 @@ export class DriveExplorerApi {
         return cacheKey;
     }
 
-    getDriveItemJsonFromCache(driveItemId) {
-        let cacheKey = this.getDriveItemCacheKey(driveItemId);
-        let driveItemJson = sessionStorage.getItem(cacheKey);
-
-        return driveItemJson;
-    }
-
     async getDriveItemAsync(driveItemId) {
-        let apiResult = new TrmrkActionResult();
+        let cacheKey = this.getDriveItemCacheKey(driveItemId);
 
-        let driveItemJson = this.getDriveItemJsonFromCache(driveItemId);
-        let driveItem = trmrk.core.tryParseJson(driveItemJson);
+        let apiResult = await webStorageAxios.get(
+            'api/driveFolder', {
+                params: {
+                    driveItemId: driveItemId
+                }
+            }, cacheKey
+        );
 
-        if (trmrk.core.isNotNullObj(driveItem)) {
-            apiResult = new TrmrkActionResult({
-                IsSuccess: true,
-                Data: driveItem
-            });
-        } else {
-            apiResult = await this.getDriveItemCoreAsync(driveItemId);
-        }
-
-        return driveItem;
+        return apiResult;
     }
 
     setDriveItemToCache(driveItem, driveItemId) {
@@ -54,7 +45,15 @@ export class DriveExplorerApi {
     }
 
     async getDriveItemCoreAsync(driveItemId) {
+        let apiResult = await trmrkAxios.get(
+            'api/driveFolder', {
+                params: {
+                    driveItemId: driveItemId
+                }
+            }
+        );
 
+        return apiResult;
     }
 }
 

@@ -93,6 +93,11 @@ export class DomUtils {
             });
         }
     }
+
+    replaceElWith(srcEl, trgEl) {
+        const parentEl = trgEl.parentNode;
+        parentEl.replaceChild(srcEl, trgEl);
+    }
 }
 
 export class BsDomUtils {
@@ -119,7 +124,7 @@ export class BsDomUtils {
 
     showPopover(domElId, selector, autohideMillis) {
         let helper = new DomHelper(domElId, selector);
-        var popover = bootstrap.Popover.getOrCreateInstance(helper.DomEl);
+        var popover = bootstrap.Popover.getOrCreateInstance(helper.DomEl);        
 
         popover.show();
         let retVal = -1;

@@ -40,12 +40,12 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(string id)
+        public async Task<ActionResult> Get(string driveItemId)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
                 {
-                    var result = await this.DriveExplorerService.GetFolderAsync(id);
+                    var result = await this.DriveExplorerService.GetFolderAsync(driveItemId);
                     return result;
                 });
 
@@ -69,7 +69,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(string id, DriveItemPutOp driveItemPutOp)
+        public async Task<ActionResult> Put(string driveItemId, DriveItemPutOp driveItemPutOp)
         {
             Func<Task<TrmrkActionResult<DriveItem>>> action = null;
 
@@ -80,26 +80,26 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
             {
                 case DriveItemOp.MoveFolder:
                     action = () => this.DriveExplorerService.MoveFolderAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
+                        driveItemId, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
                     break;
 
                 case DriveItemOp.CopyFolder:
                     action = () => this.DriveExplorerService.CopyFolderAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
+                        driveItemId, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
                     break;
 
                 case DriveItemOp.MoveFile:
                     action = () => this.DriveExplorerService.MoveFileAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
+                        driveItemId, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
                     break;
 
                 case DriveItemOp.CopyFile:
                     action = () => this.DriveExplorerService.CopyFileAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
+                        driveItemId, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
                     break;
 
                 case DriveItemOp.DeleteFile:
-                    action = () => this.DriveExplorerService.DeleteFileAsync(id);
+                    action = () => this.DriveExplorerService.DeleteFileAsync(driveItemId);
                     break;
 
                 case DriveItemOp.CreateMultipleFolders:
@@ -190,12 +190,12 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(string driveItemId)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
                 {
-                    var result = await this.DriveExplorerService.DeleteFolderAsync(id);
+                    var result = await this.DriveExplorerService.DeleteFolderAsync(driveItemId);
                     return result;
                 });
 

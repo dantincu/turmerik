@@ -19,19 +19,19 @@ export class DriveItem extends ViewModelBase {
         this.__copyProps(src, throwOnUnknownProp);
     }
 
-    Id = null;
-    Name = null;
-    ParentFolderId = null;
-    IsFolder = null;
-    FileNameExtension = null;
-    IsRootFolder = null;
-    CreationTime = null;
-    LastAccessTime = null;
-    LastWriteTime = null;
-    CreationTimeStr = null;
-    LastAccessTimeStr = null;
-    LastWriteTimeStr = null;
-    OfficeLikeFileType = null;
-    SubFolders = null;
-    FolderFiles = null;
+    id = null;
+    name = null;
+    parentFolderId = null;
+    isFolder = null;
+    fileNameExtension = null;
+    isRootFolder = null;
+    creationTime = null;
+    lastAccessTime = null;
+    lastWriteTime = null;
+    creationTimeStr = null;
+    lastAccessTimeStr = null;
+    lastWriteTimeStr = null;
+    officeLikeFileType = null;
+    subFolders = null;
+    folderFiles = null;
 }

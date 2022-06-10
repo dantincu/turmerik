@@ -4,13 +4,13 @@ export class WebStorage {
     cacheKeyBasePrefix = trmrk.core.trmrkPrefix;
     bigItems = {};
 
-    clear(isPersistent) {
-        let storage = this.getStorage(isPersistent);
+    clear(storage) {
+        storage = this.getStorage(storage);
         storage.clear();
     }
 
-    containsKey(key, isPersistent) {
-        let storage = this.getStorage(isPersistent);
+    containsKey(key, storage) {
+        storage = this.getStorage(storage);
 
         let len = storage.length;
         let retVal = false;
@@ -27,8 +27,8 @@ export class WebStorage {
         return retVal;
     }
 
-    keys(isPersistent) {
-        let storage = this.getStorage(isPersistent);
+    keys(storage) {
+        storage = this.getStorage(storage);
 
         let len = storage.length;
         let keysArr = [];
@@ -41,25 +41,25 @@ export class WebStorage {
         return keysArr;
     }
 
-    getItem(key, isPersistent) {
-        let storage = this.getStorage(isPersistent);
+    getItem(key, storage) {
+        storage = this.getStorage(storage);
         let retVal = storage.getItem(key);
 
         return retVal;
     }
 
-    setItem(key, value, isPersistent) {
-        let storage = this.getStorage(isPersistent);
+    setItem(key, value, storage) {
+        storage = this.getStorage(storage);
         storage.setItem(key, value);
     }
 
-    removeItem(key, isPersistent) {
-        let storage = this.getStorage(isPersistent);
+    removeItem(key, storage) {
+        storage = this.getStorage(storage);
         storage.removeItem(key);
     }
 
-    removeItems(keysArr, isPersistent) {
-        let storage = this.getStorage(isPersistent);
+    removeItems(keysArr, storage) {
+        storage = this.getStorage(storage);
         let len = keysArr.length;
 
         for (let i = 0; i < len; i++) {
@@ -68,13 +68,13 @@ export class WebStorage {
         }
     }
 
-    getStorage(isPersistent) {
-        let storage;
-
-        if (isPersistent) {
-            storage = localStorage;
-        } else {
-            storage = sessionStorage;
+    getStorage(storage) {
+        if (!trmrk.core.isNotNullObj(storage)) {
+            if (storage) { // storage becomes parameter "isPersistent"
+                storage = localStorage;
+            } else {
+                storage = sessionStorage;
+            }
         }
 
         return storage;
