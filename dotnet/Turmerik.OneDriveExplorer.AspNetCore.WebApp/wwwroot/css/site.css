@@ -29,15 +29,19 @@ body {
     position: relative;
 }
 
-.trmrk-drive-folder-view-header {
-
+.trmrk-drive-folder-view-header,
+.trmrk-drive-folder-view-sticky-header,
+.trmrk-drive-folder-view-sticky-footer {
+    background-color: bisque;
+    line-height: 1rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 0.2rem;
 }
 
 .trmrk-drive-folder-view-sticky-header,
 .trmrk-drive-folder-view-sticky-footer {
-    background-color: white;
     z-index: 10;
-    width: 100%;
+    width: 95%;
     position: fixed;
 }
 
