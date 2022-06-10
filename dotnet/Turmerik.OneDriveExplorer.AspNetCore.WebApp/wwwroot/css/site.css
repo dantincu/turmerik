@@ -29,6 +29,10 @@ body {
     position: relative;
 }
 
+    .trmrk-drive-folder-view.trmrk-edit-mode {
+        background-color: #F8F8F8;
+    }
+
 .trmrk-drive-folder-view-header,
 .trmrk-drive-folder-view-sticky-header,
 .trmrk-drive-folder-view-sticky-footer {

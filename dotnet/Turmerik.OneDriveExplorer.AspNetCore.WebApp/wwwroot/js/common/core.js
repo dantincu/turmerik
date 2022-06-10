@@ -94,9 +94,13 @@ export class TrmrkCore {
         }
         
         if (this.isNotNullObj(urlSearchParams)) {
-            search = urlSearchParams.toString();
+            search = urlSearchParams.toString().trim();
+        } else if (trmrk.core.isNonEmptyString(urlSearchParams)) {
+            search = urlSearchParams.trim();
+        }
 
-            if (trmrk.core.isNonEmptyString(search)) {
+        if (trmrk.core.isNonEmptyString(search)) {
+            if (!search.startsWith("?")) {
                 search = "?" + search;
             }
         }
@@ -114,7 +118,7 @@ export class TrmrkCore {
         }
 
         let relUrl = pathname + search;
-        let url = scheme + "//" + host + relUrl;
+        let url = scheme + "//" + host + '/' + relUrl;
         
         if (inNewTab === true) {
             window.open(url);

@@ -15,6 +15,7 @@ export class TrmrkCssClasses {
 }
 
 export class DriveFolderViewCssClasses {
+    view = "trmrk-drive-folder-view";
     name = "trmrk-drive-item-name";
     header = "trmrk-drive-folder-view-header";
     stickyHeader = "trmrk-drive-folder-view-sticky-header";
@@ -179,6 +180,7 @@ export class DriveItemsGridHeaderRow extends VDomEl {
 export class DriveItemsGridRow extends VDomEl {
     driveItem;
     isChecked = false;
+    isDisabled = false;
 
     constructor(
         driveItem,
@@ -195,21 +197,28 @@ export class DriveItemsGridRow extends VDomEl {
         mainCellShortPressListener = mainCellShortPressListener.bind(this);
         mainCellLongPressListener = mainCellLongPressListener.bind(this);
 
+        this.runMouseEvent = this.runMouseEvent.bind(this);
+
         this.childNodes = [
             new TableRowCell([
                 new DriveItemCheckBox({
-                    mousedown: [{
+                    click: [{
                         listener: function(e) {
-                            if (e.button === 0) {
-                                that.addClass(trmrkCssClasses.pressed);
+                            const retVal = that.addPressedClass(e);
+
+                            if (!retVal) {
+                                e.preventDefault();
+                                e.stopPropagation();
                             }
+
+                            return retVal;
                         }
                     }],
                     mouseup: [{
                         listener: function(e) {
-                            if (e.button === 0) {
-                                that.removeClass(trmrkCssClasses.pressed);
+                            const retVal = that.removePressedClass(e);
 
+                            if (retVal) {
                                 let checked = !this.domNode.checked; // at this point the checked property has not yet been updated
                                 that.isChecked = checked;
 
@@ -218,63 +227,96 @@ export class DriveItemsGridRow extends VDomEl {
                                 } else {
                                     that.removeClass(trmrkCssClasses.checked);
                                 }
+                            } else {
+                                e.preventDefault();
+                                e.stopPropagation();
                             }
+
+                            return retVal;
                         }
                     }]
                 })
             ], [ driveFolderViewCssClasses.gridCheckBoxCell ]),
             new TableRowCell([
                 new IconVDomEl([ "oi", isFoldersGrid ? "oi-folder" : "oi-file" ],
-                {
-                    mousedown: [{
-                        listener: e => {
-                            if (e.button === 0) {
-                                this.addClass(trmrkCssClasses.pressed);
-                            }
-                        }
-                    }],
-                    mouseup: [{
-                        listener: e => {
-                            if (e.button === 0) {
-                                this.removeClass(trmrkCssClasses.pressed);
-                            }
-                        }
-                    }]
-                })
+                this.getDefaultMouseEvents())
             ], [ driveFolderViewCssClasses.gridIconCell ]),
             new DriveItemsGridMainCell(
                 mainCellShortPressListener,
                 mainCellLongPressListener,
                 driveItem.name,
-                e => {
-                    if (e.button === 0) {
-                        this.addClass(trmrkCssClasses.pressed);
-                    }
-                },
-                e => {
-                    if (e.button === 0) {
-                        this.removeClass(trmrkCssClasses.pressed);
-                    }
-                }),
+                this.getDefaultMouseDownListener(),
+                this.getDefaultMouseUpListener()),
             new TableRowCell([
-                new IconVDomEl([ "oi", "oi-ellipses", trmrkCssClasses.rotate90Deg ], {
-                    mouseup: [{
-                        listener: function(e) {
-                            if (e.button === 0) {
-                                that.removeClass(trmrkCssClasses.checked);
-                            }
-                        }
-                    }],
-                    mousedown: [{
-                        listener: function(e) {
-                            if (e.button === 0) {
-                                that.addClass(trmrkCssClasses.checked);
-                            }
-                        }
-                    }]
-                })
+                new IconVDomEl(
+                    [ "oi", "oi-ellipses", trmrkCssClasses.rotate90Deg ],
+                    this.getDefaultMouseEvents())
             ], [ driveFolderViewCssClasses.gridIconCell ])
         ];
+    }
+
+    canRunMouseEvent(e) {
+        const canRun = !this.isDisabled && e.button === 0;
+        return canRun;
+    }
+
+    runMouseEvent(e, callback) {
+        const retVal = this.canRunMouseEvent(e);
+
+        if (retVal) {
+            callback.call(this, e);
+        }
+
+        return retVal;
+    }
+
+    addPressedClass(e) {
+        const retVal = this.runMouseEvent(e,
+            () => this.addClass(trmrkCssClasses.pressed));
+
+        return retVal;
+    }
+
+    removePressedClass(e) {
+        const retVal = this.runMouseEvent(e,
+            () => this.removeClass(trmrkCssClasses.pressed));
+
+        return retVal;
+    }
+
+    getDefaultMouseUpListener() {
+        const listener = e => this.removePressedClass(e);
+        return listener;
+    }
+
+    getDefaultMouseDownListener() {
+        const listener = e => this.addPressedClass(e);
+        return listener;
+    }
+
+    getDefaultMouseUpEvent() {
+        const event = {
+            listener: this.getDefaultMouseUpListener()
+        };
+
+        return event;
+    }
+
+    getDefaultMouseDownEvent() {
+        const event = {
+            listener: this.getDefaultMouseDownListener()
+        };
+
+        return event;
+    }
+
+    getDefaultMouseEvents() {
+        const events = {
+            mouseup: [ this.getDefaultMouseUpEvent() ],
+            mousedown: [ this.getDefaultMouseDownEvent() ]
+        };
+
+        return events;
     }
 }
 
@@ -307,7 +349,7 @@ export class DriveItemsGridViewTrmrkEvents extends EntityBase {
     onNavigateToDriveItem = null;
     onUpdateDriveItemName = null;
     onEnterEditMode = null;
-    onEnterExitMode = null;
+    onExitEditMode = null;
 
     constructor(src) {
         super();
@@ -417,11 +459,11 @@ export class DriveItemsGridView extends VDomEl {
         const tableRowVDomEl = new DriveItemsGridRow(
             driveItem,
             function(e) {
-                if (e.button === 0) {
+                if (!that.isEditMode && e.button === 0) {
                     that.onNavigateToDriveItem(driveItem);
                 }
             }, function(e) {
-                if (e.button === 0) {
+                if (!that.isEditMode && e.button === 0) {
                     that.startEditTableRow(this, driveItem);
                 }
             },
@@ -466,14 +508,26 @@ export class DriveItemsGridView extends VDomEl {
         return textValue;
     }
 
-    enterEditMode() {
-        this.isEditMode = true;
-        this.onEnterEditMode();
+    enterEditMode(triggered) {
+        if (!triggered) {
+            this.isEditMode = true;
+            this.onEnterEditMode();
+        } else {
+            for (let row of this.tableBodyVDomEl.childNodes) {
+                row.isDisabled = true;
+            }
+        }
     }
 
-    exitEditMode() {
-        this.onExitEditMode();
-        this.isEditMode = false;
+    exitEditMode(triggered) {
+        if (!triggered) {
+            this.isEditMode = false;
+            this.onExitEditMode();
+        } else {
+            for (let row of this.tableBodyVDomEl.childNodes) {
+                row.isDisabled = false;
+            }
+        }
     }
 
     onEnterEditMode() {

@@ -81,7 +81,7 @@ export class DriveExplorer {
     generateAppRootChildVDomElms() {
         this.currentDriveFolderVDomEl = new VDomEl({
             nodeName: "div",
-            classList: [ "trmrk-drive-folder-view" ]
+            classList: [ driveFolderViewCssClasses.view ]
         });
 
         this.appRootChildVDomElms = [ this.currentDriveFolderVDomEl ];
@@ -111,14 +111,14 @@ export class DriveExplorer {
             onNavigateToDriveItem: driveItem => this.navigateToFolderAsync(driveItem),
             onUpdateDriveItemName: (driveItem, newName) => this.updateDriveItemNameAsync(driveItem, newName, true),
             onEnterEditMode: () => this.onEnterEditMode(),
-            onEnterExitMode: () => this.onExitEditMode()
+            onExitEditMode: () => this.onExitEditMode()
         });
 
         const fileItemsGridVDomElEvents = new DriveItemsGridViewTrmrkEvents({
             onNavigateToDriveItem: driveItem => {},
             onUpdateDriveItemName: (driveItem, newName) => this.updateDriveItemNameAsync(driveItem, newName, false),
             onEnterEditMode: () => this.onEnterEditMode(),
-            onEnterExitMode: () => this.onExitEditMode()
+            onExitEditMode: () => this.onExitEditMode()
         });
 
         this.currentDriveFolderTitleVDomEl = currentDriveFolderTitleVDomEl;
@@ -238,7 +238,7 @@ export class DriveExplorer {
             driveItemId);
 
         let newQuery = trmrk.core.urlQuery.toString();
-        trmrk.core.navigate(item.id, item.name, newQuery);
+        trmrk.core.navigate(newQuery, false, null, null, null, item.name, null);
 
         await this.getCurrentDriveFolderAsync(item.id);
     }
@@ -255,11 +255,17 @@ export class DriveExplorer {
     onEnterEditMode() {
         this.isEditMode = true;
         this.currentDriveFolderVDomEl.addClass(trmrkCssClasses.editMode);
+
+        this.subFolderItemsGridVDomEl.enterEditMode(true);
+        this.fileItemsGridVDomEl.enterEditMode(true);
     }
 
     onExitEditMode() {
         this.isEditMode = false;
         this.currentDriveFolderVDomEl.removeClass(trmrkCssClasses.editMode);
+
+        this.subFolderItemsGridVDomEl.exitEditMode(true);
+        this.fileItemsGridVDomEl.exitEditMode(true);
     }
 }
 
