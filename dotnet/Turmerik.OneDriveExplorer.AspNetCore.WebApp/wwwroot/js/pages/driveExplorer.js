@@ -46,32 +46,13 @@ export class DriveExplorer {
     }
 
     onDocumentScroll(e) {
-        var body = document.body,
-        html = document.documentElement;
-
-        const height = Math.max(
-            body.scrollHeight,
-            body.offsetHeight, 
-            html.clientHeight,
-            html.scrollHeight,
-            html.offsetHeight );
-        
-        const halfHeight = height / 2;
         const initialOffset = this.currentDriveFolderTitleVDomElInitialOffset;
 
         if (this.currentDriveFolderTitleVDomEl) {
             if (document.body.scrollTop > initialOffset || document.documentElement.scrollTop > initialOffset) {
-                if (document.body.scrollTop > halfHeight || document.documentElement.scrollTop > halfHeight) {
-                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
-                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyFooter);
-                    this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.stickyHeader);
-                } else {
-                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
-                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyHeader);
-                    this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.stickyFooter);
-                }
+                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
+                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.stickyHeader);
             } else {
-                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyFooter);
                 this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyHeader);
                 this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.header);
             }

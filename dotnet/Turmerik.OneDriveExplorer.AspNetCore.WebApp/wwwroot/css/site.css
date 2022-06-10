@@ -34,27 +34,48 @@ body {
     }
 
 .trmrk-drive-folder-view-header,
-.trmrk-drive-folder-view-sticky-header,
-.trmrk-drive-folder-view-sticky-footer {
+.trmrk-drive-folder-view-sticky-header {
     background-color: bisque;
     line-height: 1rem;
     padding: 0.1rem 0.5rem;
     border-radius: 0.2rem;
 }
 
-.trmrk-drive-folder-view-sticky-header,
-.trmrk-drive-folder-view-sticky-footer {
-    z-index: 10;
-    width: 95%;
-    position: fixed;
-}
-
 .trmrk-drive-folder-view-sticky-header {
+    z-index: 10;
+    position: fixed;
     top: 0px;
+    width: 100%;
 }
 
-.trmrk-drive-folder-view-sticky-footer {
-    bottom: 0px;
+@media (min-width: 576px) {
+    .trmrk-drive-folder-view-sticky-header {
+        width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .trmrk-drive-folder-view-sticky-header {
+        width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .trmrk-drive-folder-view-sticky-header {
+        width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .trmrk-drive-folder-view-sticky-header {
+        width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .trmrk-drive-folder-view-sticky-header {
+        width: 1320px;
+    }
 }
 
 .trmrk-drive-items-grid {
