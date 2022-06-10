@@ -25,6 +25,26 @@ body {
     transform: rotate(45deg);
 }
 
+.trmrk-drive-folder-view {
+    position: relative;
+}
+
+.trmrk-drive-folder-view-footer,
+.trmrk-drive-folder-view-header {
+    background-color: white;
+    z-index: 10;
+    width: 100%;
+    position: fixed;
+}
+
+.trmrk-drive-folder-view-footer {
+    bottom: 0px;
+}
+
+.trmrk-drive-folder-view-header {
+    top: 0px;
+}
+
 .trmrk-drive-items-grid {
     height: 100vh;
     overflow-y: scroll;
@@ -45,7 +65,8 @@ body {
         height: 1em;
     }
 
-.trmrk-times-icon {
+.trmrk-times-icon,
+.trmrk-plus-icon {
     display: inline-flex;
     font-size: 2em;
     font-weight: bold;
@@ -69,7 +90,7 @@ body {
         font-weight: bold;
     }
 
-    .trmrk-grid-main-cell > .trmrk-name {
+    .trmrk-grid-main-cell > .trmrk-drive-item-name {
         width: 100%;
         display: inline-flex;
         font-weight: bold;

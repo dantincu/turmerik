@@ -4,7 +4,7 @@ import { ViewModelBase } from '../common/ViewModelBase.js';
 import { driveExplorerApi } from './driveExplorerApi.js';
 import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
-import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, trmrkCssClasses } from './driveItemsGridView.js';
+import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, trmrkCssClasses, driveFolderViewCssClasses } from './driveItemsGridView.js';
 
 export class DriveFolderApiResultWrapper {
     id = null;
@@ -26,6 +26,7 @@ export class DriveExplorer {
 
     currentDriveFolder = new DriveFolderApiResultWrapper();
     currentDriveFolderVDomEl = null;
+    currentDriveFolderTitleVDomEl = null;
 
     async init(username, appSettings) {
         this.username = username;
@@ -37,8 +38,34 @@ export class DriveExplorer {
         this.generateAppRootChildVDomElms();
         this.appRootVDomEl = vdom.init("main", this.appRootChildVDomElms);
 
+        document.addEventListener("scroll", e => this.onDocumentScroll(e));
         window.addEventListener("popstate", e => this.loadCurrentDriveFolderAsync());
+
         await this.loadCurrentDriveFolderAsync();
+    }
+
+    onDocumentScroll(e) {
+        var body = document.body,
+        html = document.documentElement;
+
+        const height = Math.max(
+            body.scrollHeight,
+            body.offsetHeight, 
+            html.clientHeight,
+            html.scrollHeight,
+            html.offsetHeight );
+        
+        const halfHeight = height / 2;
+
+        if (this.currentDriveFolderTitleVDomEl) {
+            if (document.body.scrollTop > halfHeight || document.documentElement.scrollTop > halfHeight) {
+                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.footer);
+                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.header);
+            } else {
+                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
+                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.footer);
+            }
+        }
     }
 
     generateAppRootChildVDomElms() {
@@ -56,9 +83,6 @@ export class DriveExplorer {
 
         this.renderCurrendDriveFolderLoadingView();
         folder.apiResult = await driveExplorerApi.getDriveItemAsync(folderId);
-        /* folder.apiResult.status = 404;
-        folder.apiResult.statusText = "Page not Found";
-        folder.apiResult.data = "The page you are looking for doesn't exist"; */
 
         if (folder.apiResult.isSuccess) {
             folder.data = folder.apiResult.data;
@@ -69,8 +93,9 @@ export class DriveExplorer {
     }
 
     renderCurrentDriveFolderView(driveFolder) {
-        let folderItemsGridHeaderVDomEl = this.getDriveItemsGridHeaderVDomEl(true);
-        let fileItemsGridHeaderVDomEl = this.getDriveItemsGridHeaderVDomEl(false);
+        const currentDriveFolderTitleVDomEl = this.getCurrentDriveFolderTitleVDomEl(driveFolder);
+        const folderItemsGridHeaderVDomEl = this.getDriveItemsGridHeaderVDomEl(true);
+        const fileItemsGridHeaderVDomEl = this.getDriveItemsGridHeaderVDomEl(false);
 
         const subFolderItemsGridVDomElEvents = new DriveItemsGridViewTrmrkEvents({
             onNavigateToDriveItem: driveItem => this.navigateToFolderAsync(driveItem),
@@ -86,6 +111,8 @@ export class DriveExplorer {
             onEnterExitMode: () => this.onExitEditMode()
         });
 
+        this.currentDriveFolderTitleVDomEl = currentDriveFolderTitleVDomEl;
+
         this.subFolderItemsGridVDomEl = new DriveItemsGridView(
             driveFolder.subFolders, true, subFolderItemsGridVDomElEvents);
 
@@ -93,6 +120,7 @@ export class DriveExplorer {
             driveFolder.folderFiles, false, fileItemsGridVDomElEvents);
 
         let driveFolderVDomElChildNodes = [
+            currentDriveFolderTitleVDomEl,
             folderItemsGridHeaderVDomEl,
             this.subFolderItemsGridVDomEl,
             fileItemsGridHeaderVDomEl,
@@ -101,19 +129,25 @@ export class DriveExplorer {
         this.renderCurrentDriveFolderViewCore(driveFolderVDomElChildNodes);
     }
 
-    getDriveItemsGridHeaderVDomEl(isFoldersGrid) {
+    getCurrentDriveFolderTitleVDomEl(driveFolder) {
         let that = this;
 
-        let driveItemsGridHeaderVDomEl = vdom.utils.getVDomEl("h5", [], {}, [
-            new VDomTextNode(isFoldersGrid ? "Folders " : "Files "),
+        let currentDriveFolderTitleVDomEl = vdom.utils.getVDomEl(
+            "h6", [driveFolderViewCssClasses.footer], {}, [
+            new VDomTextNode(driveFolder.name),
             vdom.utils.getVDomEl("span",
-                [ "oi", "oi-ellipses", "trmrk-rotate-90deg" ], {}, [], {
+                [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], {
                     click: [{
-                        listener: isFoldersGrid ? function(e) {
+                        listener: function(e) {
                             if (!that.isEditMode) {
-
+                                
                             }
-                        } : function(e) {
+                        }
+                    }]
+                }), vdom.utils.getVDomEl("span",
+                [ trmrkCssClasses.plusIcon ], {}, "+", {
+                    click: [{
+                        listener: function(e) {
                             if (!that.isEditMode) {
                                 
                             }
@@ -121,6 +155,13 @@ export class DriveExplorer {
                     }]
                 })
         ]);
+
+        return currentDriveFolderTitleVDomEl;
+    }
+
+    getDriveItemsGridHeaderVDomEl(isFoldersGrid) {
+        let driveItemsGridHeaderVDomEl = vdom.utils.getVDomEl(
+            "h5", [], {}, [], {}, isFoldersGrid ? "Folders " : "Files ");
 
         return driveItemsGridHeaderVDomEl;
     }

@@ -7,14 +7,17 @@ export class TrmrkCssClasses {
     rotate45Deg = "trmrk-rotate-45deg";
     rotate90Deg = "trmrk-rotate-90deg";
     timesIcon = "trmrk-times-icon";
+    plusIcon = "trmrk-plus-icon";
     icon = "trmrk-icon";
     editMode = "trmrk-edit-mode";
     checked = "trmrk-checked"
     pressed = "trmrk-pressed"
 }
 
-export class DriveItemsGridViewCssClasses {
-    name = "trmrk-name";
+export class DriveFolderViewCssClasses {
+    name = "trmrk-drive-item-name";
+    footer = "trmrk-drive-folder-view-footer";
+    header = "trmrk-drive-folder-view-header";
     gridMainCell = "trmrk-grid-main-cell";
     gridMainEditCell = "trmrk-grid-main-edit-cell";
     gridIconCell = "trmrk-grid-icon-cell"
@@ -25,7 +28,7 @@ export class DriveItemsGridViewCssClasses {
 }
 
 export const trmrkCssClasses = new TrmrkCssClasses();
-export const gridCssClasses = new DriveItemsGridViewCssClasses();
+export const driveFolderViewCssClasses = new DriveFolderViewCssClasses();
 
 export class IconVDomEl extends VDomEl {
     constructor(classList, events, innerHTML) {
@@ -42,7 +45,7 @@ export class DriveItemNameVDomEl extends VDomEl {
     constructor(driveItemName, events) {
         super({
             nodeName: "span",
-            classList: [ gridCssClasses.name ],
+            classList: [ driveFolderViewCssClasses.name ],
             textValue: driveItemName,
             events: events
         });
@@ -106,7 +109,7 @@ export class DriveItemsGridMainCell extends TableRowCell {
         driveItemName,
         mainCellMouseDown,
         mainCellMouseUp) {
-        super([], [ gridCssClasses.gridMainCell ]);
+        super([], [ driveFolderViewCssClasses.gridMainCell ]);
 
         let mainCellEvents = {};
 
@@ -130,7 +133,7 @@ export class DriveItemsGridMainEditCell extends TableRowCell {
     constructor(
         editCancelListener,
         editConfirmListener) {
-        super([], [ gridCssClasses.gridMainEditCell ]);
+        super([], [ driveFolderViewCssClasses.gridMainEditCell ]);
 
         this.textBoxVDomEl = new DriveItemTextBox();
 
@@ -164,10 +167,10 @@ export class DriveItemsGridHeaderRow extends VDomEl {
         });
 
         this.childNodes = [
-            new TableHeaderCell(null, [ gridCssClasses.gridCheckBoxCell ] ),
-            new TableHeaderCell(null, [ gridCssClasses.gridIconCell ]),
-            new TableHeaderCell("Name", [ gridCssClasses.gridMainCell ]),
-            new TableHeaderCell(null, [ gridCssClasses.gridIconCell ])
+            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridCheckBoxCell ] ),
+            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
+            new TableHeaderCell("Name", [ driveFolderViewCssClasses.gridMainCell ]),
+            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ])
         ];
     }
 }
@@ -218,10 +221,26 @@ export class DriveItemsGridRow extends VDomEl {
                         }
                     }]
                 })
-            ], [ gridCssClasses.gridCheckBoxCell ]),
+            ], [ driveFolderViewCssClasses.gridCheckBoxCell ]),
             new TableRowCell([
-                new IconVDomEl([ "oi", isFoldersGrid ? "oi-folder" : "oi-file" ] )
-            ], [ gridCssClasses.gridIconCell ]),
+                new IconVDomEl([ "oi", isFoldersGrid ? "oi-folder" : "oi-file" ],
+                {
+                    mousedown: [{
+                        listener: e => {
+                            if (e.button === 0) {
+                                this.addClass(trmrkCssClasses.pressed);
+                            }
+                        }
+                    }],
+                    mouseup: [{
+                        listener: e => {
+                            if (e.button === 0) {
+                                this.removeClass(trmrkCssClasses.pressed);
+                            }
+                        }
+                    }]
+                })
+            ], [ driveFolderViewCssClasses.gridIconCell ]),
             new DriveItemsGridMainCell(
                 mainCellShortPressListener,
                 mainCellLongPressListener,
@@ -253,7 +272,7 @@ export class DriveItemsGridRow extends VDomEl {
                         }
                     }]
                 })
-            ], [ gridCssClasses.gridIconCell ])
+            ], [ driveFolderViewCssClasses.gridIconCell ])
         ];
     }
 }
@@ -275,10 +294,10 @@ export class DriveItemsGridEditRow extends VDomEl {
         this.mainEditCell.parentVDomEl = this;
 
         this.childNodes = [
-            new TableRowCell(null, [ gridCssClasses.gridCheckBoxCell ]),
-            new TableRowCell(null, [ gridCssClasses.gridIconCell ]),
+            new TableRowCell(null, [ driveFolderViewCssClasses.gridCheckBoxCell ]),
+            new TableRowCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
             this.mainEditCell,
-            new TableRowCell(null, [ gridCssClasses.gridIconCell ])
+            new TableRowCell(null, [ driveFolderViewCssClasses.gridIconCell ])
         ];
     }
 }
@@ -318,7 +337,7 @@ export class DriveItemsGridView extends VDomEl {
         const driveItemsGridCssClass = this.getDriveItemsGridCssClass(isFoldersGrid);
 
         this.classList = [
-            gridCssClasses.itemsGrid,
+            driveFolderViewCssClasses.itemsGrid,
             driveItemsGridCssClass
         ];
 
@@ -333,9 +352,9 @@ export class DriveItemsGridView extends VDomEl {
         let driveItemsGridCssClass = "";
 
         if (isFoldersGrid) {
-            driveItemsGridCssClass = gridCssClasses.foldersGrid;
+            driveItemsGridCssClass = driveFolderViewCssClasses.foldersGrid;
         } else {
-            driveItemsGridCssClass = gridCssClasses.filesGrid;
+            driveItemsGridCssClass = driveFolderViewCssClasses.filesGrid;
         }
 
         return driveItemsGridCssClass;
