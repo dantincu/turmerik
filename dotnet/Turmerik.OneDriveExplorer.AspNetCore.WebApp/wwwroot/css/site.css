@@ -29,20 +29,24 @@ body {
     position: relative;
 }
 
-.trmrk-drive-folder-view-footer,
 .trmrk-drive-folder-view-header {
+
+}
+
+.trmrk-drive-folder-view-sticky-header,
+.trmrk-drive-folder-view-sticky-footer {
     background-color: white;
     z-index: 10;
     width: 100%;
     position: fixed;
 }
 
-.trmrk-drive-folder-view-footer {
-    bottom: 0px;
+.trmrk-drive-folder-view-sticky-header {
+    top: 0px;
 }
 
-.trmrk-drive-folder-view-header {
-    top: 0px;
+.trmrk-drive-folder-view-sticky-footer {
+    bottom: 0px;
 }
 
 .trmrk-drive-items-grid {

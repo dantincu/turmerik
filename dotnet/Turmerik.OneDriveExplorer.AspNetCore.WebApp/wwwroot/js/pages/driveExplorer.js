@@ -27,6 +27,7 @@ export class DriveExplorer {
     currentDriveFolder = new DriveFolderApiResultWrapper();
     currentDriveFolderVDomEl = null;
     currentDriveFolderTitleVDomEl = null;
+    currentDriveFolderTitleVDomElInitialOffset = null;
 
     async init(username, appSettings) {
         this.username = username;
@@ -56,14 +57,23 @@ export class DriveExplorer {
             html.offsetHeight );
         
         const halfHeight = height / 2;
+        const initialOffset = this.currentDriveFolderTitleVDomElInitialOffset;
 
         if (this.currentDriveFolderTitleVDomEl) {
-            if (document.body.scrollTop > halfHeight || document.documentElement.scrollTop > halfHeight) {
-                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.footer);
-                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.header);
+            if (document.body.scrollTop > initialOffset || document.documentElement.scrollTop > initialOffset) {
+                if (document.body.scrollTop > halfHeight || document.documentElement.scrollTop > halfHeight) {
+                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
+                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyFooter);
+                    this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.stickyHeader);
+                } else {
+                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
+                    this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyHeader);
+                    this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.stickyFooter);
+                }
             } else {
-                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
-                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.footer);
+                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyFooter);
+                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyHeader);
+                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.header);
             }
         }
     }
@@ -127,13 +137,32 @@ export class DriveExplorer {
             this.fileItemsGridVDomEl];
 
         this.renderCurrentDriveFolderViewCore(driveFolderVDomElChildNodes);
+        this.currentDriveFolderTitleVDomElInitialOffset = this.getCoords(currentDriveFolderTitleVDomEl.domNode).top;
+    }
+
+    getCoords(elem) { // crossbrowser version
+        var box = elem.getBoundingClientRect();
+
+        var body = document.body;
+        var docEl = document.documentElement;
+
+        var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+        var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+        var clientTop = docEl.clientTop || body.clientTop || 0;
+        var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+        var top  = box.top +  scrollTop - clientTop;
+        var left = box.left + scrollLeft - clientLeft;
+
+        return { top: Math.round(top), left: Math.round(left) };
     }
 
     getCurrentDriveFolderTitleVDomEl(driveFolder) {
         let that = this;
 
         let currentDriveFolderTitleVDomEl = vdom.utils.getVDomEl(
-            "h6", [driveFolderViewCssClasses.footer], {}, [
+            "h6", [driveFolderViewCssClasses.header], {}, [
             new VDomTextNode(driveFolder.name),
             vdom.utils.getVDomEl("span",
                 [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], {

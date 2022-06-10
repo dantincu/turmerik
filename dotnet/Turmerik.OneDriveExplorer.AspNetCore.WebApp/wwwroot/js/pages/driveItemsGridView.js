@@ -16,8 +16,9 @@ export class TrmrkCssClasses {
 
 export class DriveFolderViewCssClasses {
     name = "trmrk-drive-item-name";
-    footer = "trmrk-drive-folder-view-footer";
     header = "trmrk-drive-folder-view-header";
+    stickyHeader = "trmrk-drive-folder-view-sticky-header";
+    stickyFooter = "trmrk-drive-folder-view-sticky-footer";
     gridMainCell = "trmrk-grid-main-cell";
     gridMainEditCell = "trmrk-grid-main-edit-cell";
     gridIconCell = "trmrk-grid-icon-cell"
