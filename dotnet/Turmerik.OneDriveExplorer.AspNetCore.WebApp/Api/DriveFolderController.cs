@@ -40,12 +40,12 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(string driveItemId)
+        public async Task<ActionResult> Get(string id)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
                 {
-                    var result = await this.DriveExplorerService.GetFolderAsync(driveItemId);
+                    var result = await this.DriveExplorerService.GetFolderAsync(id);
                     return result;
                 });
 

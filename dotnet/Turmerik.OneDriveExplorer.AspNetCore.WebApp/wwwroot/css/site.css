@@ -33,6 +33,13 @@ body {
         background-color: #F8F8F8;
     }
 
+
+.trmrk-drive-folder-view-header > label,
+.trmrk-drive-folder-view-sticky-header > label {
+    display: block;
+    line-height: 2rem;
+}
+
 .trmrk-drive-folder-view-header,
 .trmrk-drive-folder-view-sticky-header {
     background-color: bisque;

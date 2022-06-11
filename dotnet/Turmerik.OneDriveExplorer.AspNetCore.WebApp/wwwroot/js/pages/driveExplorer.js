@@ -26,8 +26,11 @@ export class DriveExplorer {
 
     currentDriveFolder = new DriveFolderApiResultWrapper();
     currentDriveFolderVDomEl = null;
-    currentDriveFolderTitleVDomEl = null;
-    currentDriveFolderTitleVDomElInitialOffset = null;
+    currentDriveFolderHeaderVDomEl = null;
+    currentDriveFolderHeaderVDomElInitialOffset = null;
+
+    currentDriveFolderStickyHeaderVDomEl = null;
+    currentDriveFolderStickyHeaderVDomElAdded = false;
 
     async init(username, appSettings) {
         this.username = username;
@@ -46,15 +49,19 @@ export class DriveExplorer {
     }
 
     onDocumentScroll(e) {
-        const initialOffset = this.currentDriveFolderTitleVDomElInitialOffset;
+        const initialOffset = this.currentDriveFolderHeaderVDomElInitialOffset;
 
-        if (this.currentDriveFolderTitleVDomEl) {
+        if (this.currentDriveFolderHeaderVDomEl) {
             if (document.body.scrollTop > initialOffset || document.documentElement.scrollTop > initialOffset) {
-                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.header);
-                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.stickyHeader);
+                if (!this.currentDriveFolderStickyHeaderVDomElAdded) {
+                    this.currentDriveFolderStickyHeaderVDomElAdded = true;
+                    this.currentDriveFolderVDomEl.appendChildVNode(this.currentDriveFolderStickyHeaderVDomEl);
+                }
             } else {
-                this.currentDriveFolderTitleVDomEl.removeClass(driveFolderViewCssClasses.stickyHeader);
-                this.currentDriveFolderTitleVDomEl.addClass(driveFolderViewCssClasses.header);
+                if (this.currentDriveFolderStickyHeaderVDomElAdded) {
+                    this.currentDriveFolderStickyHeaderVDomElAdded = false;
+                    this.currentDriveFolderVDomEl.removeChildVNode(this.currentDriveFolderStickyHeaderVDomEl);
+                }
             }
         }
     }
@@ -84,7 +91,8 @@ export class DriveExplorer {
     }
 
     renderCurrentDriveFolderView(driveFolder) {
-        const currentDriveFolderTitleVDomEl = this.getCurrentDriveFolderTitleVDomEl(driveFolder);
+        const currentDriveFolderHeaderVDomEl = this.getCurrentDriveFolderHeaderVDomEl(driveFolder, false);
+        const currentDriveFolderStickyHeaderVDomEl = this.getCurrentDriveFolderHeaderVDomEl(driveFolder, true);
         const folderItemsGridHeaderVDomEl = this.getDriveItemsGridHeaderVDomEl(true);
         const fileItemsGridHeaderVDomEl = this.getDriveItemsGridHeaderVDomEl(false);
 
@@ -102,7 +110,10 @@ export class DriveExplorer {
             onExitEditMode: () => this.onExitEditMode()
         });
 
-        this.currentDriveFolderTitleVDomEl = currentDriveFolderTitleVDomEl;
+        this.currentDriveFolderHeaderVDomEl = currentDriveFolderHeaderVDomEl;
+        this.currentDriveFolderStickyHeaderVDomEl = currentDriveFolderStickyHeaderVDomEl;
+
+        this.currentDriveFolderStickyHeaderVDomEl.createDomNode();
 
         this.subFolderItemsGridVDomEl = new DriveItemsGridView(
             driveFolder.subFolders, true, subFolderItemsGridVDomElEvents);
@@ -111,14 +122,14 @@ export class DriveExplorer {
             driveFolder.folderFiles, false, fileItemsGridVDomElEvents);
 
         let driveFolderVDomElChildNodes = [
-            currentDriveFolderTitleVDomEl,
+            currentDriveFolderHeaderVDomEl,
             folderItemsGridHeaderVDomEl,
             this.subFolderItemsGridVDomEl,
             fileItemsGridHeaderVDomEl,
             this.fileItemsGridVDomEl];
 
         this.renderCurrentDriveFolderViewCore(driveFolderVDomElChildNodes);
-        this.currentDriveFolderTitleVDomElInitialOffset = this.getCoords(currentDriveFolderTitleVDomEl.domNode).top;
+        this.currentDriveFolderHeaderVDomElInitialOffset = this.getCoords(currentDriveFolderHeaderVDomEl.domNode).top;
     }
 
     getCoords(elem) { // crossbrowser version
@@ -139,12 +150,13 @@ export class DriveExplorer {
         return { top: Math.round(top), left: Math.round(left) };
     }
 
-    getCurrentDriveFolderTitleVDomEl(driveFolder) {
+    getCurrentDriveFolderHeaderVDomEl(driveFolder, isSticky) {
         let that = this;
+        let headerCssClass = isSticky ? driveFolderViewCssClasses.stickyHeader : driveFolderViewCssClasses.header;
 
         let currentDriveFolderTitleVDomEl = vdom.utils.getVDomEl(
-            "h6", [driveFolderViewCssClasses.header], {}, [
-            new VDomTextNode(driveFolder.name),
+            "div", [ headerCssClass ], {}, [
+            vdom.utils.getVDomEl("label", [], {}, [], {}, driveFolder.name),
             vdom.utils.getVDomEl("span",
                 [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], {
                     click: [{

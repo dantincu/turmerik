@@ -29,7 +29,7 @@ export class WebStorageAxios {
         return apiResult;
     }
 
-    async get(url, params, cacheKey, storage) {
+    async get(url, cacheKey, storage, params) {
         let apiResult = this.request(
             () => trmrkAxios.get(url, params),
             cacheKey, storage);
