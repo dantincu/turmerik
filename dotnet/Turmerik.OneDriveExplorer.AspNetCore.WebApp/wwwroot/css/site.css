@@ -17,6 +17,10 @@ body {
   margin-bottom: 60px;
 }
 
+.trmrk-is-invalid {
+    border-block-color: red;
+}
+
 .trmrk-rotate-90deg {
     transform: rotate(90deg);
 }

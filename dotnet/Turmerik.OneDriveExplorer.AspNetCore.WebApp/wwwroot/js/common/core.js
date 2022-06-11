@@ -310,8 +310,14 @@ export class TrmrkCore {
         return retVal;
     }
 
-    isNonEmptyString(value) {
+    isNonEmptyString(value, mustNotBeAllWhiteSpace) {
         let retVal = typeof(value) === "string" && value.length > 0;
+
+        if (retVal && mustNotBeAllWhiteSpace) {
+            value = value.trim();
+            retVal = value.length > 0;
+        }
+
         return retVal;
     }
 

@@ -20,6 +20,7 @@ export class DriveExplorer {
     appRootChildVDomElms = [];
 
     isEditMode = false;
+    isAddNew = false;
     
     subFolderItemsGridVDomEl = null;
     fileItemsGridVDomEl = null;
@@ -212,11 +213,13 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderCreateNewFolderClick(e) {
-
+        this.isAddNew = true;
+        this.subFolderItemsGridVDomEl.start();
     }
 
     onCurrentDriveFolderCreateNewTextFileClick(e) {
-
+        this.isAddNew = true;
+        this.fileItemsGridVDomEl.enterEditMode();
     }
 
     onCurrentDriveFolderCreateNewOfficeFileClick(e) {

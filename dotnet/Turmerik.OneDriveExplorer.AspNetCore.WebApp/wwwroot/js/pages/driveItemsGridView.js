@@ -2,6 +2,7 @@ import { EntityBase } from '../common/core.js';
 import { domUtils } from '../common/domUtils.js';
 import { trmrk } from '../common/main.js';
 import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
+import { DriveItem } from './Entities.js';
 
 export class TrmrkCssClasses {
     rotate45Deg = "trmrk-rotate-45deg";
@@ -13,6 +14,7 @@ export class TrmrkCssClasses {
     checked = "trmrk-checked";
     pressed = "trmrk-pressed";
     iconsRow = "trmrk-icons-row";
+    isInvalid = "trmrk-is-invalid";
 }
 
 export class DriveFolderViewCssClasses {
@@ -413,16 +415,18 @@ export class DriveItemsGridView extends VDomEl {
         const editRow = new DriveItemsGridEditRow(
             function(e) {
                 if (e.button === 0) {
-                    that.endEditTableRow(that.currentRow);
+                    that.endEditTableRow(that.currentRow, true);
                 }
             }, function(e) {
                 if (e.button === 0) {
                     const currentDriveItem = that.currentDriveItem;
                     const textValue = that.endEditTableRow(that.currentRow);
 
-                    trmrk.core.applyIfOfTypeFunc(
-                        that.trmrkEvents.onUpdateDriveItemName, that,
-                        [currentDriveItem, textValue]);
+                    if (trmrk.core.isNonEmptyString(textValue, true)) {
+                        trmrk.core.applyIfOfTypeFunc(
+                            that.trmrkEvents.onUpdateDriveItemName, that,
+                            [currentDriveItem, textValue]);
+                    }
                 }
             }
         );
@@ -484,31 +488,46 @@ export class DriveItemsGridView extends VDomEl {
             const tableBodyVDomEl = this.tableBodyVDomEl;
             const editRow = this.editRow;
 
-            this.currentRow = tableRow;
-            this.currentDriveItem = driveItem;
+            if (trmrk.core.isNotNullObj(tableRow)) {
+                this.currentRow = tableRow;
+                this.currentDriveItem = driveItem;
 
-            tableBodyVDomEl.domNode.replaceChild(editRow.domNode, tableRow.domNode);
+                tableBodyVDomEl.domNode.replaceChild(editRow.domNode, tableRow.domNode);
+
+                const textValue = driveItem.name;
+                this.editRowTextBoxVDomEl.domNode.value = textValue;
+            } else {
+                tableBodyVDomEl.domNode.appendChild(editRow.domNode);
+            }
             
-            const textValue = driveItem.name;
-            this.editRowTextBoxVDomEl.domNode.value = textValue;
-
             this.editRowTextBoxVDomEl.domNode.select();
         }
     }
 
-    endEditTableRow(tableRow) {
+    endEditTableRow(tableRow, isCancel) {
         const tableBodyVDomEl = this.tableBodyVDomEl;
         const editRow = this.editRow;
         
         const textValue = this.editRowTextBoxVDomEl.domNode.value;
-        this.editRowTextBoxVDomEl.domNode.value = "";
 
-        tableBodyVDomEl.domNode.replaceChild(tableRow.domNode, editRow.domNode);
+        if (isCancel || trmrk.core.isNonEmptyString(textValue, true)) {
+            this.editRowTextBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
+            this.editRowTextBoxVDomEl.domNode.value = "";
 
-        this.currentDriveItem = null;
-        this.currentRow = null;
+            if (trmrk.core.isNotNullObj(tableRow)) {
+                tableBodyVDomEl.domNode.replaceChild(tableRow.domNode, editRow.domNode);
+            } else {
+                tableBodyVDomEl.domNode.removeChild(editRow.domNode);
+            }
 
-        this.exitEditMode();
+            this.currentDriveItem = null;
+            this.currentRow = null;
+
+            this.exitEditMode();
+        } else {
+            this.editRowTextBoxVDomEl.addClass(trmrkCssClasses.isInvalid);
+        }
+
         return textValue;
     }
 
