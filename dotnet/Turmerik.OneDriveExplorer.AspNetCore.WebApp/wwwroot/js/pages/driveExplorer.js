@@ -147,8 +147,10 @@ export class DriveExplorer {
                 this.getMouseClickEvent(this.onCurrentDriveFolderReloadClick)),
             vdom.utils.getVDomEl("span", [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], 
                 this.getMouseClickEvent(this.onCurrentDriveFolderOptionsClick)),
-            vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon ], {}, "+",
-                this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewClick))
+            vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon, trmrkCssClasses.icon ], {}, "+",
+                this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewClick)),
+            vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-thick-top", "trmrk-rotate-45deg", trmrkCssClasses.icon ], {}, [], 
+                this.getMouseClickEvent(this.onCurrentDriveFolderOpenInNewTabClick)),
         ]);
 
         return currentDriveFolderTitleVDomEl;
@@ -171,7 +173,7 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderReloadClick(e) {
-        this.getCurrentDriveFolderAsync(this.currentDriveFolder.data.id);
+        this.getCurrentDriveFolderAsync(this.currentDriveFolder.data.id, true);
     }
 
     onCurrentDriveFolderOptionsClick(e) {
@@ -180,6 +182,10 @@ export class DriveExplorer {
 
     onCurrentDriveFolderCreateNewClick(e) {
 
+    }
+
+    onCurrentDriveFolderOpenInNewTabClick(e) {
+        window.open(window.location.href);
     }
 
     getDriveItemsGridHeaderVDomEl(isFoldersGrid) {

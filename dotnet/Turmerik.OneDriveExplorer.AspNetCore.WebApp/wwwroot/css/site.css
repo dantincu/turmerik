@@ -40,6 +40,7 @@ body {
     line-height: 2rem;
     word-wrap: anywhere;
     word-break: break-all;
+    font-weight: bold;
 }
 
 .trmrk-drive-folder-view-header,
@@ -125,12 +126,26 @@ body {
     vertical-align: middle;
 }
 
+.trmrk-drive-folder-view-header > .trmrk-icon,
+.trmrk-drive-folder-view-sticky-header > .trmrk-icon {
+    font-size: 2rem;
+    vertical-align: bottom;
+    margin-left: 1rem;
+}
+
+    .trmrk-drive-folder-view-header > .trmrk-icon:nth-child(2),
+    .trmrk-drive-folder-view-sticky-header > .trmrk-icon:nth-child(2) {
+        margin-left: 0.3rem;
+    }
+
 .trmrk-drive-folder-view-header > .trmrk-plus-icon,
 .trmrk-drive-folder-view-sticky-header > .trmrk-plus-icon {
     position: relative;
     top: 0.1rem;
+    font-size: 4rem;
+    vertical-align: top;
 }
-
+    
 .trmrk-icon {
     display: inline-flex;
     cursor: grabbing;
