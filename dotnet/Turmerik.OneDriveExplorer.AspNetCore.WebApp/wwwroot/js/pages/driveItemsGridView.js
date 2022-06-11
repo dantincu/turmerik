@@ -458,11 +458,11 @@ export class DriveItemsGridView extends VDomEl {
         const editRow = new DriveItemsGridEditRow(
             function(e) {
                 if (!this.isWaiting && e.button === 0) {
-                    that.endEditTableRow(that.currentRow, true);
+                    that.stopEditTableRow(that.currentRow, true);
                 }
             }, function(e) {
                 if (!this.isWaiting && e.button === 0) {
-                    const textValue = that.endEditTableRow(that.currentRow);
+                    const textValue = that.stopEditTableRow(that.currentRow);
 
                     if (trmrk.core.isNonEmptyString(textValue, true)) {
                         trmrk.core.applyIfOfTypeFunc(
@@ -472,7 +472,7 @@ export class DriveItemsGridView extends VDomEl {
                 }
             }, function(e) {
                 if (!this.isWaiting && e.button === 0) {
-                    that.endEditTableRow(that.currentRow);
+                    that.stopEditTableRow(that.currentRow);
 
                     trmrk.core.applyIfOfTypeFunc(
                         that.trmrkEvents.onDeleteItem, that,
@@ -557,34 +557,38 @@ export class DriveItemsGridView extends VDomEl {
         }
     }
 
-    endEditTableRow(tableRow, isCancel) {
-        const tableBodyVDomEl = this.tableBodyVDomEl;
-        const editRow = this.editRow;
-        
+    stopEditTableRow(tableRow, isCancel) {
         const textValue = this.editRowTextBoxVDomEl.domNode.value;
 
         if (isCancel) {
-            this.editRowTextBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
-            this.editRowTextBoxVDomEl.domNode.value = "";
-            this.currentDriveItem = null;
-            this.currentRow = null;
-
-            if (trmrk.core.isNotNullObj(tableRow)) {
-                tableBodyVDomEl.domNode.replaceChild(tableRow.domNode, editRow.domNode);
-            } else {
-                tableBodyVDomEl.domNode.removeChild(editRow.domNode);
-            }
-
-            this.exitEditMode();
+            this.endEditTableRow();
         } else if (trmrk.core.isNonEmptyString(textValue, true)) {
-            editRow.isWaiting = true;
-            editRow.addClass(trmrkCssClasses.waiting);
+            this.editRow.isWaiting = true;
+            this.editRow.addClass(trmrkCssClasses.waiting);
             this.editRowTextBoxVDomEl.addAttr("readonly");
         } else {
             this.editRowTextBoxVDomEl.addClass(trmrkCssClasses.isInvalid);
         }
 
         return textValue;
+    }
+
+    endEditTableRow() {
+        const tableRow = this.currentRow;
+
+        this.editRowTextBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
+        this.editRowTextBoxVDomEl.domNode.value = "";
+        this.currentDriveItem = null;
+        this.currentRow = null;
+
+        if (trmrk.core.isNotNullObj(tableRow)) {
+            this.tableBodyVDomEl.domNode.replaceChild(tableRow.domNode, this.editRow.domNode);
+        } else {
+            this.tableBodyVDomEl.domNode.removeChild(this.editRow.domNode);
+        }
+
+        this.exitEditMode();
+        this.editRow.isWaiting = false;
     }
 
     enterEditMode(triggered) {

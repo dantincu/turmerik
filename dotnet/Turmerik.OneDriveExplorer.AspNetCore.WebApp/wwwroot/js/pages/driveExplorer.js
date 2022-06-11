@@ -297,11 +297,13 @@ export class DriveExplorer {
     }
 
     async updateDriveItemNameAsync(driveItem, newName, isDriveFolder) {
-        return;
         let apiResult, isUpdate = trmrk.core.isNotNullObj(driveItem);
         const parentFolder = this.currentDriveFolder.data;
 
-        if (isUpdate) {
+        apiResult = new TrmrkAxiosApiResult();
+        apiResult.isSuccess = true;
+
+        /* if (isUpdate) {
             if (isDriveFolder) {
                 apiResult = await driveExplorerApi.updateDriveFolderNameAsync(driveItem.id, newName);
             } else {
@@ -313,20 +315,20 @@ export class DriveExplorer {
             } else {
                 apiResult = await driveExplorerApi.addDriveFileAsync(parentFolder.id, newName);
             }
-        }
+        } */
 
         if (apiResult.isSuccess) {
             if (isUpdate) {
                 if (isDriveFolder) {
-
+                    this.subFolderItemsGridVDomEl.endEditTableRow();
                 } else {
-
+                    this.fileItemsGridVDomEl.endEditTableRow();
                 }
             } else {
                 if (isDriveFolder) {
-
+                    this.subFolderItemsGridVDomEl.endEditTableRow();
                 } else {
-                    
+                    this.fileItemsGridVDomEl.endEditTableRow();
                 }
             }
         }
@@ -335,20 +337,22 @@ export class DriveExplorer {
     }
 
     async deleteDriveItemAsync(driveItem, isDriveFolder) {
-        return;
         let apiResult;
 
-        if (isDriveFolder) {
+        apiResult = new TrmrkAxiosApiResult();
+        apiResult.isSuccess = true;
+
+        /* if (isDriveFolder) {
             apiResult = await driveExplorerApi.removeDriveFolderAsync(driveItem.id);
         } else {
             apiResult = await driveExplorerApi.removeDriveFileAsync(driveItem.id);
-        }
+        } */
 
         if (apiResult.isSuccess) {
             if (isDriveFolder) {
-
+                this.subFolderItemsGridVDomEl.endEditTableRow();
             } else {
-
+                this.fileItemsGridVDomEl.endEditTableRow();
             }
         }
         // this.enterEditMode();
