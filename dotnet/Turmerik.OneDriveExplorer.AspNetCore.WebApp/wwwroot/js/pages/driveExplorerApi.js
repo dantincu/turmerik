@@ -28,7 +28,7 @@ export class DriveExplorerApi {
         let relUrl = 'api/driveFolder';
 
         if (trmrk.core.isNonEmptyString(driveItemId)) {
-            relUrl += "/" + driveItemId;
+            relUrl += "/" + encodeURIComponent(driveItemId);
         }
 
         let apiResult = await webStorageAxios.get(

@@ -43,7 +43,7 @@ export class DriveExplorer {
         this.appRootVDomEl = vdom.init("main", this.appRootChildVDomElms);
 
         document.addEventListener("scroll", e => this.onDocumentScroll(e));
-        window.addEventListener("popstate", e => this.loadCurrentDriveFolderAsync());
+        window.addEventListener("popstate", e => this.onWindowPopState());
 
         await this.loadCurrentDriveFolderAsync();
     }
@@ -64,6 +64,11 @@ export class DriveExplorer {
                 }
             }
         }
+    }
+
+    onWindowPopState(e) {
+        trmrk.core.urlQuery = new URLSearchParams(window.location.search);
+        this.loadCurrentDriveFolderAsync()
     }
 
     generateAppRootChildVDomElms() {
@@ -129,25 +134,7 @@ export class DriveExplorer {
             this.fileItemsGridVDomEl];
 
         this.renderCurrentDriveFolderViewCore(driveFolderVDomElChildNodes);
-        this.currentDriveFolderHeaderVDomElInitialOffset = this.getCoords(currentDriveFolderHeaderVDomEl.domNode).top;
-    }
-
-    getCoords(elem) { // crossbrowser version
-        var box = elem.getBoundingClientRect();
-
-        var body = document.body;
-        var docEl = document.documentElement;
-
-        var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-        var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-        var clientTop = docEl.clientTop || body.clientTop || 0;
-        var clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-        var top  = box.top +  scrollTop - clientTop;
-        var left = box.left + scrollLeft - clientLeft;
-
-        return { top: Math.round(top), left: Math.round(left) };
+        this.currentDriveFolderHeaderVDomElInitialOffset = domUtils.getCoords(currentDriveFolderHeaderVDomEl.domNode).top;
     }
 
     getCurrentDriveFolderHeaderVDomEl(driveFolder, isSticky) {
@@ -224,11 +211,9 @@ export class DriveExplorer {
     }
 
     async navigateToFolderAsync(item) {
-        let driveItemId = encodeURIComponent(item.id);
-
         trmrk.core.urlQuery.set(
             this.appSettings.DriveFolderIdUrlQueryKey,
-            driveItemId);
+            item.id);
 
         let newQuery = trmrk.core.urlQuery.toString();
         trmrk.core.navigate(newQuery, false, null, null, null, item.name, null);

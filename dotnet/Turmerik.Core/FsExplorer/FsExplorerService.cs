@@ -310,7 +310,7 @@ namespace Turmerik.Core.FsExplorer
         {
             var httpStatusCode = base.GetHttpStatusCode(exc);
 
-            if (exc is SecurityException)
+            if (exc is SecurityException || exc is DirectoryNotFoundException)
             {
                 httpStatusCode = HttpStatusCode.NotFound;
             }

@@ -38,6 +38,8 @@ body {
 .trmrk-drive-folder-view-sticky-header > label {
     display: block;
     line-height: 2rem;
+    word-wrap: anywhere;
+    word-break: break-all;
 }
 
 .trmrk-drive-folder-view-header,
@@ -144,12 +146,14 @@ body {
         width: 100%;
     }
 
-    .trmrk-grid-main-cell > .trmrk-drive-item-name {
-        width: 100%;
-        display: inline-flex;
-        font-weight: bold;
-        cursor: grabbing;
-    }
+.trmrk-grid-main-cell > .trmrk-drive-item-name {
+    width: 100%;
+    display: inline-flex;
+    font-weight: bold;
+    cursor: grabbing;
+    word-wrap: anywhere;
+    word-break: break-all;
+}
 
 .trmrk-checked {
     background-color: #FFF0E0;
