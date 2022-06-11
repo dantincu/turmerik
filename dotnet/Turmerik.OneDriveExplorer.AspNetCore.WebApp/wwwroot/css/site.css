@@ -37,7 +37,7 @@ body {
 .trmrk-drive-folder-view-sticky-header {
     background-color: bisque;
     line-height: 1rem;
-    padding: 0.1rem 0.5rem;
+    padding: 0.2rem 0.5rem 0.5rem 0.5rem;
     border-radius: 0.2rem;
 }
 
@@ -103,14 +103,27 @@ body {
     display: inline-flex;
     font-size: 2em;
     font-weight: bold;
-    width: 1rem;
-    padding: 0.1rem;
     cursor: grabbing;
+}
+
+.trmrk-times-icon {
+    vertical-align: top;
+    line-height: 1rem;
+    padding-top: 0.1rem;
+}
+
+.trmrk-icon.oi.oi-arrow-circle-right {
+    vertical-align: middle;
+}
+
+.trmrk-drive-folder-view-header > .trmrk-plus-icon,
+.trmrk-drive-folder-view-sticky-header > .trmrk-plus-icon {
+    position: relative;
+    top: 0.1rem;
 }
 
 .trmrk-icon {
     display: inline-flex;
-    padding: 0.5rem;
     cursor: grabbing;
 }
 
@@ -121,6 +134,7 @@ body {
     .trmrk-grid-main-edit-cell input[type=text] {
         font-family: Consolas, monaco, monospace;
         font-weight: bold;
+        width: 100%;
     }
 
     .trmrk-grid-main-cell > .trmrk-drive-item-name {

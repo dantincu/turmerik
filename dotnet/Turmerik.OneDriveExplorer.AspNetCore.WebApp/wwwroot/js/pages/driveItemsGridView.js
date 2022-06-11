@@ -131,33 +131,11 @@ export class DriveItemsGridMainCell extends TableRowCell {
 export class DriveItemsGridMainEditCell extends TableRowCell {
     textBoxVDomEl = null;
 
-    constructor(
-        editCancelListener,
-        editConfirmListener) {
+    constructor() {
         super([], [ driveFolderViewCssClasses.gridMainEditCell ]);
 
         this.textBoxVDomEl = new DriveItemTextBox();
-
-        this.childNodes = [new IconVDomEl(
-            [ "oi", "oi-arrow-thick-left", trmrkCssClasses.rotate45Deg, trmrkCssClasses.icon ], {
-                click: [{
-                        listener: editCancelListener
-                    }]
-                }), this.textBoxVDomEl,
-                new IconVDomEl([ trmrkCssClasses.timesIcon ], {
-                    click: [{
-                        listener: e => {
-                            if (e.button === 0) {
-                                this.textBoxVDomEl.domNode.value = "";
-                            }
-                        }
-                    }]
-                }, "&times;"), new IconVDomEl([ "oi", "oi-arrow-circle-right", trmrkCssClasses.icon ], {
-                    click: [{
-                        listener: editConfirmListener
-                    }]
-                })
-            ];
+        this.childNodes = [this.textBoxVDomEl];
     }
 }
 
@@ -329,17 +307,43 @@ export class DriveItemsGridEditRow extends VDomEl {
             nodeName: "tr"
         });
 
-        this.mainEditCell = new DriveItemsGridMainEditCell(
-            editCancelListener,
-            editConfirmListener);
-
+        this.mainEditCell = new DriveItemsGridMainEditCell();
         this.mainEditCell.parentVDomEl = this;
 
         this.childNodes = [
-            new TableRowCell(null, [ driveFolderViewCssClasses.gridCheckBoxCell ]),
-            new TableRowCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
+            new TableRowCell(
+                [ new IconVDomEl(
+                    [ "oi", "oi-arrow-thick-left", trmrkCssClasses.rotate45Deg, trmrkCssClasses.icon ],
+                    {
+                        click: [{
+                                listener: editCancelListener
+                            }]
+                    }) ],
+                [ driveFolderViewCssClasses.gridCheckBoxCell ]),
+            new TableRowCell(
+                [ new IconVDomEl(
+                    [ trmrkCssClasses.timesIcon ],
+                    {
+                        click: [{
+                            listener: e => {
+                                if (e.button === 0) {
+                                    this.mainEditCell.textBoxVDomEl.domNode.value = "";
+                                }
+                            }
+                        }]
+                    },
+                    "&times;") ],
+                [ driveFolderViewCssClasses.gridIconCell ]),
             this.mainEditCell,
-            new TableRowCell(null, [ driveFolderViewCssClasses.gridIconCell ])
+            new TableRowCell(
+                [ new IconVDomEl(
+                    [ "oi", "oi-arrow-circle-right", trmrkCssClasses.icon ],
+                    {
+                        click: [{
+                            listener: editConfirmListener
+                        }]
+                    }) ],
+                [ driveFolderViewCssClasses.gridIconCell ])
         ];
     }
 }
