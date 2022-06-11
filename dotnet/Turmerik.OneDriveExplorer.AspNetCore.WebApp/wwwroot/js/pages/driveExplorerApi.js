@@ -23,7 +23,7 @@ export class DriveExplorerApi {
         return cacheKey;
     }
 
-    async getDriveItemAsync(driveItemId) {
+    async getDriveItemAsync(driveItemId, refreshCache) {
         let cacheKey = this.getDriveItemCacheKey(driveItemId);
         let relUrl = 'api/driveFolder';
 
@@ -32,7 +32,7 @@ export class DriveExplorerApi {
         }
 
         let apiResult = await webStorageAxios.get(
-            relUrl, cacheKey
+            relUrl, cacheKey, null, null, refreshCache
         );
 
         return apiResult;

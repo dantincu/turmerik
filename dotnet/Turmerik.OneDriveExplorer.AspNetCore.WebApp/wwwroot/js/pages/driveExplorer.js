@@ -80,12 +80,12 @@ export class DriveExplorer {
         this.appRootChildVDomElms = [ this.currentDriveFolderVDomEl ];
     }
 
-    async getCurrentDriveFolderAsync(folderId) {
+    async getCurrentDriveFolderAsync(folderId, refreshCache) {
         let folder = this.currentDriveFolder;
         folder.id = folderId;
 
         this.renderCurrendDriveFolderLoadingView();
-        folder.apiResult = await driveExplorerApi.getDriveItemAsync(folderId);
+        folder.apiResult = await driveExplorerApi.getDriveItemAsync(folderId, refreshCache);
 
         if (folder.apiResult.isSuccess) {
             folder.data = folder.apiResult.data;
@@ -138,34 +138,48 @@ export class DriveExplorer {
     }
 
     getCurrentDriveFolderHeaderVDomEl(driveFolder, isSticky) {
-        let that = this;
         let headerCssClass = isSticky ? driveFolderViewCssClasses.stickyHeader : driveFolderViewCssClasses.header;
 
         let currentDriveFolderTitleVDomEl = vdom.utils.getVDomEl(
             "div", [ headerCssClass ], {}, [
             vdom.utils.getVDomEl("label", [], {}, [], {}, driveFolder.name),
-            vdom.utils.getVDomEl("span",
-                [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], {
-                    click: [{
-                        listener: function(e) {
-                            if (!that.isEditMode) {
-                                
-                            }
-                        }
-                    }]
-                }), vdom.utils.getVDomEl("span",
-                [ trmrkCssClasses.plusIcon ], {}, "+", {
-                    click: [{
-                        listener: function(e) {
-                            if (!that.isEditMode) {
-                                
-                            }
-                        }
-                    }]
-                })
+            vdom.utils.getVDomEl("span", [ "oi", "oi-reload", trmrkCssClasses.icon ], {}, [], 
+                this.getMouseClickEvent(this.onCurrentDriveFolderReloadClick)),
+            vdom.utils.getVDomEl("span", [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], 
+                this.getMouseClickEvent(this.onCurrentDriveFolderOptionsClick)),
+            vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon ], {}, "+",
+                this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewClick))
         ]);
 
         return currentDriveFolderTitleVDomEl;
+    }
+
+    getMouseClickEvent(callback) {
+        const that = this;
+
+        const event = {
+            click: [{
+                listener: function(e) {
+                    if (e.button === 0 && !that.isEditMode) {
+                        callback.call(that, e);
+                    }
+                }
+            }]
+        };
+
+        return event;
+    }
+
+    onCurrentDriveFolderReloadClick(e) {
+        this.getCurrentDriveFolderAsync(this.currentDriveFolder.data.id);
+    }
+
+    onCurrentDriveFolderOptionsClick(e) {
+
+    }
+
+    onCurrentDriveFolderCreateNewClick(e) {
+
     }
 
     getDriveItemsGridHeaderVDomEl(isFoldersGrid) {

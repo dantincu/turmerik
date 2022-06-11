@@ -4,13 +4,21 @@ import { trmrkAxios, TrmrkAxiosApiResult } from './trmrkAxios.js';
 import { webStorage } from './webStorage.js';
 
 export class WebStorageAxios {
-    async request(axiosReqFunc, cacheKey, storage) {
-        let json = webStorage.getItem(cacheKey, storage);
-        let data = trmrk.core.tryParseJson(json);
+    async request(axiosReqFunc, cacheKey, storage, refreshCache) {
+        let json = "";
+        let data;
+
+        if (!refreshCache) {
+            json = webStorage.getItem(cacheKey, storage);
+            data = trmrk.core.tryParseJson(json);
+        }
 
         let apiResult = new TrmrkAxiosApiResult();
+        let cachedDataFound = false;
 
         if (!trmrk.core.isNullOrUndef(data)) {
+            cachedDataFound = true;
+
             apiResult = {
                 isSuccess: true,
                 data: data
@@ -19,9 +27,9 @@ export class WebStorageAxios {
             apiResult = await axiosReqFunc();
 
             if (apiResult.isSuccess) {
-                if (!trmrk.core.isNullOrUndefOrOrNaN(apiResult.data)) {
+                if (!cachedDataFound && !trmrk.core.isNullOrUndefOrOrNaN(apiResult.data)) {
                     json = JSON.stringify(apiResult.data);
-                    webStorage.setItem(cacheKey, storage);
+                    webStorage.setItem(cacheKey, json, storage);
                 }
             }
         }
@@ -29,10 +37,10 @@ export class WebStorageAxios {
         return apiResult;
     }
 
-    async get(url, cacheKey, storage, params) {
+    async get(url, cacheKey, storage, params, refreshCache) {
         let apiResult = this.request(
             () => trmrkAxios.get(url, params),
-            cacheKey, storage);
+            cacheKey, storage, refreshCache);
 
         return apiResult;
     }
