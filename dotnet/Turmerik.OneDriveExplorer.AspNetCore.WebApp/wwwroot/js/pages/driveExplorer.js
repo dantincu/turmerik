@@ -43,6 +43,7 @@ export class DriveExplorer {
         this.appRootVDomEl = vdom.init("main", this.appRootChildVDomElms);
 
         document.addEventListener("scroll", e => this.onDocumentScroll(e));
+        window.addEventListener("resize", e => this.onWindowResize(e));
         window.addEventListener("popstate", e => this.onWindowPopState());
 
         await this.loadCurrentDriveFolderAsync();
@@ -55,15 +56,21 @@ export class DriveExplorer {
             if (document.body.scrollTop > initialOffset || document.documentElement.scrollTop > initialOffset) {
                 if (!this.currentDriveFolderStickyHeaderVDomElAdded) {
                     this.currentDriveFolderStickyHeaderVDomElAdded = true;
+                    this.currentDriveFolderHeaderVDomEl.addAttr("visibility", "hidden");
                     this.currentDriveFolderVDomEl.appendChildVNode(this.currentDriveFolderStickyHeaderVDomEl);
                 }
             } else {
                 if (this.currentDriveFolderStickyHeaderVDomElAdded) {
                     this.currentDriveFolderStickyHeaderVDomElAdded = false;
                     this.currentDriveFolderVDomEl.removeChildVNode(this.currentDriveFolderStickyHeaderVDomEl);
+                    this.currentDriveFolderHeaderVDomEl.removeAttr("visibility");
                 }
             }
         }
+    }
+
+    onWindowResize(e) {
+        this.currentDriveFolderHeaderVDomElInitialOffset = domUtils.getCoords(this.currentDriveFolderHeaderVDomEl.domNode).top;
     }
 
     onWindowPopState(e) {
