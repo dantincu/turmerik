@@ -246,6 +246,8 @@ namespace Turmerik.Core.FsExplorer
         {
             var actionResult = ExecuteCore(() =>
             {
+                newParentFolderId = newParentFolderId ?? Path.GetDirectoryName(fileId);
+
                 string newPath = Path.Combine(newParentFolderId, newFileName);
                 File.Move(fileId, newPath);
 
@@ -265,6 +267,8 @@ namespace Turmerik.Core.FsExplorer
         {
             var actionResult = ExecuteCore(() =>
             {
+                newParentFolderId = newParentFolderId ?? Path.GetDirectoryName(folderId);
+
                 string newPath = Path.Combine(newParentFolderId, newFolderName);
                 FsH.MoveDirectory(folderId, newPath, true);
 

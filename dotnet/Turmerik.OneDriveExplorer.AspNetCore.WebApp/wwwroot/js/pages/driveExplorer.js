@@ -1,7 +1,7 @@
 import { trmrk, webStorage, domUtils, bsDomUtils } from '../common/main.js';
 import { DriveItem, AppSettings } from './Entities.js';
 import { ViewModelBase } from '../common/ViewModelBase.js';
-import { driveExplorerApi } from './driveExplorerApi.js';
+import { driveExplorerApi, driveItemOpEnum } from './driveExplorerApi.js';
 import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
 import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, trmrkCssClasses, driveFolderViewCssClasses } from './driveItemsGridView.js';
@@ -93,7 +93,7 @@ export class DriveExplorer {
         folder.id = folderId;
 
         this.renderCurrendDriveFolderLoadingView();
-        folder.apiResult = await driveExplorerApi.getDriveItemAsync(folderId, refreshCache);
+        folder.apiResult = await driveExplorerApi.getDriveFolderAsync(folderId, refreshCache);
 
         if (folder.apiResult.isSuccess) {
             folder.data = folder.apiResult.data;
@@ -112,6 +112,7 @@ export class DriveExplorer {
         const subFolderItemsGridVDomElEvents = new DriveItemsGridViewTrmrkEvents({
             onNavigateToDriveItem: driveItem => this.navigateToFolderIdAsync(driveItem.id),
             onUpdateDriveItemName: (driveItem, newName) => this.updateDriveItemNameAsync(driveItem, newName, true),
+            onDeleteItem: (driveItem) => this.deleteDriveItemAsync(driveItem, true),
             onEnterEditMode: () => this.onEnterEditMode(),
             onExitEditMode: () => this.onExitEditMode()
         });
@@ -119,6 +120,7 @@ export class DriveExplorer {
         const fileItemsGridVDomElEvents = new DriveItemsGridViewTrmrkEvents({
             onNavigateToDriveItem: driveItem => {},
             onUpdateDriveItemName: (driveItem, newName) => this.updateDriveItemNameAsync(driveItem, newName, false),
+            onDeleteItem: (driveItem) => this.deleteDriveItemAsync(driveItem, false),
             onEnterEditMode: () => this.onEnterEditMode(),
             onExitEditMode: () => this.onExitEditMode()
         });
@@ -295,6 +297,67 @@ export class DriveExplorer {
     }
 
     async updateDriveItemNameAsync(driveItem, newName, isDriveFolder) {
+        return;
+        let apiResult, isUpdate = trmrk.core.isNotNullObj(driveItem);
+        const parentFolder = this.currentDriveFolder.data;
+
+        if (isUpdate) {
+            if (isDriveFolder) {
+                apiResult = await driveExplorerApi.updateDriveFolderNameAsync(driveItem.id, newName);
+            } else {
+                apiResult = await driveExplorerApi.updateDriveFileNameAsync(driveItem.id, newName);
+            }
+        } else {
+            if (isDriveFolder) {
+                apiResult = await driveExplorerApi.addDriveFolderAsync(parentFolder.id, newName);
+            } else {
+                apiResult = await driveExplorerApi.addDriveFileAsync(parentFolder.id, newName);
+            }
+        }
+
+        if (apiResult.isSuccess) {
+            if (isUpdate) {
+                if (isDriveFolder) {
+
+                } else {
+
+                }
+            } else {
+                if (isDriveFolder) {
+
+                } else {
+                    
+                }
+            }
+        }
+        
+        // this.enterEditMode();
+    }
+
+    async deleteDriveItemAsync(driveItem, isDriveFolder) {
+        return;
+        let apiResult;
+
+        if (isDriveFolder) {
+            apiResult = await driveExplorerApi.removeDriveFolderAsync(driveItem.id);
+        } else {
+            apiResult = await driveExplorerApi.removeDriveFileAsync(driveItem.id);
+        }
+
+        if (apiResult.isSuccess) {
+            if (isDriveFolder) {
+
+            } else {
+
+            }
+        }
+        // this.enterEditMode();
+    }
+
+    enterEditMode() {
+        this.subFolderItemsGridVDomEl.isEditMode = true;
+        this.fileItemsGridVDomEl.isEditMode = true;
+
         this.onEnterEditMode();
     }
 

@@ -15,6 +15,7 @@ export class TrmrkCssClasses {
     pressed = "trmrk-pressed";
     iconsRow = "trmrk-icons-row";
     isInvalid = "trmrk-is-invalid";
+    waiting = "trmrk-waiting"
 }
 
 export class DriveFolderViewCssClasses {
@@ -128,6 +129,13 @@ export class DriveItemsGridMainCell extends TableRowCell {
             new DriveItemNameVDomEl(
                 driveItemName,
                 mainCellEvents));
+        
+        this.childNodes.push(
+            new VDomEl({
+                nodeName: "span",
+                // classList
+            })
+        );
     }
 }
 
@@ -152,6 +160,7 @@ export class DriveItemsGridHeaderRow extends VDomEl {
             new TableHeaderCell(null, [ driveFolderViewCssClasses.gridCheckBoxCell ] ),
             new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
             new TableHeaderCell("Name", [ driveFolderViewCssClasses.gridMainCell ]),
+            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
             new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ])
         ];
     }
@@ -234,6 +243,19 @@ export class DriveItemsGridRow extends VDomEl {
                 this.getDefaultMouseUpListener()),
             new TableRowCell([
                 new IconVDomEl(
+                    [ "oi", "oi-pencil" ],
+                    {
+                        mouseup: [{
+                            listener: function(e) {
+                                that.removePressedClass(e);
+                                mainCellLongPressListener.call(that, e);
+                            }
+                        }],
+                        mousedown: [ this.getDefaultMouseDownEvent() ]
+                    })
+            ], [ driveFolderViewCssClasses.gridIconCell ]),
+            new TableRowCell([
+                new IconVDomEl(
                     [ "oi", "oi-ellipses", trmrkCssClasses.rotate90Deg ],
                     this.getDefaultMouseEvents())
             ], [ driveFolderViewCssClasses.gridIconCell ])
@@ -307,16 +329,22 @@ export class DriveItemsGridRow extends VDomEl {
 
 export class DriveItemsGridEditRow extends VDomEl {
     mainEditCell = null;
+    isWaiting = false;
 
     constructor(
         editCancelListener,
-        editConfirmListener) {
+        editConfirmListener,
+        deleteListener) {
         super({
             nodeName: "tr"
         });
 
         this.mainEditCell = new DriveItemsGridMainEditCell();
         this.mainEditCell.parentVDomEl = this;
+
+        editCancelListener = editCancelListener.bind(this);
+        editConfirmListener = editConfirmListener.bind(this);
+        deleteListener = deleteListener.bind(this);
 
         this.childNodes = [
             new TableRowCell(
@@ -334,7 +362,7 @@ export class DriveItemsGridEditRow extends VDomEl {
                     {
                         click: [{
                             listener: e => {
-                                if (e.button === 0) {
+                                if (!this.isWaiting && e.button === 0) {
                                     this.mainEditCell.textBoxVDomEl.domNode.value = "";
                                 }
                             }
@@ -351,6 +379,15 @@ export class DriveItemsGridEditRow extends VDomEl {
                             listener: editConfirmListener
                         }]
                     }) ],
+                [ driveFolderViewCssClasses.gridIconCell ]),
+            new TableRowCell(
+                [ new IconVDomEl(
+                    [ "oi", "oi-trash", trmrkCssClasses.icon ],
+                    {
+                        click: [{
+                            listener: deleteListener
+                        }]
+                    }) ],
                 [ driveFolderViewCssClasses.gridIconCell ])
         ];
     }
@@ -359,6 +396,7 @@ export class DriveItemsGridEditRow extends VDomEl {
 export class DriveItemsGridViewTrmrkEvents extends EntityBase {
     onNavigateToDriveItem = null;
     onUpdateDriveItemName = null;
+    onDeleteItem = null;
     onEnterEditMode = null;
     onExitEditMode = null;
 
@@ -419,19 +457,26 @@ export class DriveItemsGridView extends VDomEl {
 
         const editRow = new DriveItemsGridEditRow(
             function(e) {
-                if (e.button === 0) {
+                if (!this.isWaiting && e.button === 0) {
                     that.endEditTableRow(that.currentRow, true);
                 }
             }, function(e) {
-                if (e.button === 0) {
-                    const currentDriveItem = that.currentDriveItem;
+                if (!this.isWaiting && e.button === 0) {
                     const textValue = that.endEditTableRow(that.currentRow);
 
                     if (trmrk.core.isNonEmptyString(textValue, true)) {
                         trmrk.core.applyIfOfTypeFunc(
                             that.trmrkEvents.onUpdateDriveItemName, that,
-                            [currentDriveItem, textValue]);
+                            [that.currentDriveItem, textValue]);
                     }
+                }
+            }, function(e) {
+                if (!this.isWaiting && e.button === 0) {
+                    that.endEditTableRow(that.currentRow);
+
+                    trmrk.core.applyIfOfTypeFunc(
+                        that.trmrkEvents.onDeleteItem, that,
+                        [that.currentDriveItem]);
                 }
             }
         );
@@ -502,7 +547,9 @@ export class DriveItemsGridView extends VDomEl {
                 const textValue = driveItem.name;
                 this.editRowTextBoxVDomEl.domNode.value = textValue;
             } else {
-                tableBodyVDomEl.domNode.appendChild(editRow.domNode);
+                tableBodyVDomEl.domNode.appendChild(editRow.domNode);    
+                this.currentDriveItem = null;
+                this.currentRow = null;
             }
             
             this.editRowTextBoxVDomEl.domNode.focus();
@@ -516,9 +563,11 @@ export class DriveItemsGridView extends VDomEl {
         
         const textValue = this.editRowTextBoxVDomEl.domNode.value;
 
-        if (isCancel || trmrk.core.isNonEmptyString(textValue, true)) {
+        if (isCancel) {
             this.editRowTextBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
             this.editRowTextBoxVDomEl.domNode.value = "";
+            this.currentDriveItem = null;
+            this.currentRow = null;
 
             if (trmrk.core.isNotNullObj(tableRow)) {
                 tableBodyVDomEl.domNode.replaceChild(tableRow.domNode, editRow.domNode);
@@ -526,10 +575,11 @@ export class DriveItemsGridView extends VDomEl {
                 tableBodyVDomEl.domNode.removeChild(editRow.domNode);
             }
 
-            this.currentDriveItem = null;
-            this.currentRow = null;
-
             this.exitEditMode();
+        } else if (trmrk.core.isNonEmptyString(textValue, true)) {
+            editRow.isWaiting = true;
+            editRow.addClass(trmrkCssClasses.waiting);
+            this.editRowTextBoxVDomEl.addAttr("readonly");
         } else {
             this.editRowTextBoxVDomEl.addClass(trmrkCssClasses.isInvalid);
         }

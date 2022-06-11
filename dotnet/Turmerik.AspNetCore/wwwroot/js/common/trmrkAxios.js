@@ -58,9 +58,30 @@ export class TrmrkAxios {
         return apiResult;
     }
 
-    async get(url, params) {
+    async get(url, opts) {
         let apiResult = await this.request(
-            async () => axios.get(url, params));
+            async () => await axios.get(url, opts));
+
+        return apiResult;
+    }
+
+    async put(url, opts) {
+        let apiResult = await this.request(
+            async () => await axios.put(url, opts));
+
+        return apiResult;
+    }
+
+    async post(url, opts) {
+        let apiResult = await this.request(
+            async () => await axios.post(url, opts));
+
+        return apiResult;
+    }
+
+    async delete(url, opts) {
+        let apiResult = await this.request(
+            async () => await axios.delete(url, opts));
 
         return apiResult;
     }
