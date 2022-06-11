@@ -29,6 +29,8 @@ namespace Turmerik.Core.FsExplorer
                     var entry = new DirectoryInfo(folderId);
                     var folder = GetDriveItem(entry);
 
+                    folder.ParentFolderId = Path.GetDirectoryName(entry.FullName);
+
                     var driveItemsArr = entry.EnumerateFileSystemInfos(
                         ).Select(GetDriveItem).ToArray();
 

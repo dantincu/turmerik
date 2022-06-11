@@ -109,6 +109,10 @@ export class TrmrkCore {
             pathname = window.location.pathname;
         }
 
+        if (pathname.startsWith('/')) {
+            pathname = pathname.substring(1);
+        }
+
         if (!this.isNonEmptyString(host)) {
             host = window.location.host;
 

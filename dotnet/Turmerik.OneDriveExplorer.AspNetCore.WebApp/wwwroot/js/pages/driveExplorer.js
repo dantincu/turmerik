@@ -102,7 +102,7 @@ export class DriveExplorer {
         const fileItemsGridHeaderVDomEl = this.getDriveItemsGridHeaderVDomEl(false);
 
         const subFolderItemsGridVDomElEvents = new DriveItemsGridViewTrmrkEvents({
-            onNavigateToDriveItem: driveItem => this.navigateToFolderAsync(driveItem),
+            onNavigateToDriveItem: driveItem => this.navigateToFolderIdAsync(driveItem.id),
             onUpdateDriveItemName: (driveItem, newName) => this.updateDriveItemNameAsync(driveItem, newName, true),
             onEnterEditMode: () => this.onEnterEditMode(),
             onExitEditMode: () => this.onExitEditMode()
@@ -145,6 +145,8 @@ export class DriveExplorer {
             vdom.utils.getVDomEl("label", [], {}, [], {}, driveFolder.name),
             vdom.utils.getVDomEl("span", [ "oi", "oi-reload", trmrkCssClasses.icon ], {}, [], 
                 this.getMouseClickEvent(this.onCurrentDriveFolderReloadClick)),
+            vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-circle-top", trmrkCssClasses.icon ], {}, [],
+                this.getMouseClickEvent(this.onCurrentDriveFolderGoUpClick)),
             vdom.utils.getVDomEl("span", [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], 
                 this.getMouseClickEvent(this.onCurrentDriveFolderOptionsClick)),
             vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon, trmrkCssClasses.icon ], {}, "+",
@@ -174,6 +176,10 @@ export class DriveExplorer {
 
     onCurrentDriveFolderReloadClick(e) {
         this.getCurrentDriveFolderAsync(this.currentDriveFolder.data.id, true);
+    }
+
+    onCurrentDriveFolderGoUpClick(e) {
+        this.navigateToFolderIdAsync(this.currentDriveFolder.data.parentFolderId)
     }
 
     onCurrentDriveFolderOptionsClick(e) {
@@ -230,15 +236,21 @@ export class DriveExplorer {
         }
     }
 
-    async navigateToFolderAsync(item) {
-        trmrk.core.urlQuery.set(
-            this.appSettings.DriveFolderIdUrlQueryKey,
-            item.id);
+    async navigateToFolderIdAsync(folderId) {
+        if (trmrk.core.isNonEmptyString(folderId)) {
+            trmrk.core.urlQuery.set(
+                this.appSettings.DriveFolderIdUrlQueryKey,
+                folderId);
+        } else {
+            trmrk.core.urlQuery.delete(
+                this.appSettings.DriveFolderIdUrlQueryKey
+            );
+        }
 
         let newQuery = trmrk.core.urlQuery.toString();
-        trmrk.core.navigate(newQuery, false, null, null, null, item.name, null);
+        trmrk.core.navigate(newQuery);
 
-        await this.getCurrentDriveFolderAsync(item.id);
+        await this.getCurrentDriveFolderAsync(folderId);
     }
 
     async loadCurrentDriveFolderAsync() {
