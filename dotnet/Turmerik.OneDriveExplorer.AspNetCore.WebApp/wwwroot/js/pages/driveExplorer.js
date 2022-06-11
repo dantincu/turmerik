@@ -214,12 +214,12 @@ export class DriveExplorer {
 
     onCurrentDriveFolderCreateNewFolderClick(e) {
         this.isAddNew = true;
-        this.subFolderItemsGridVDomEl.start();
+        this.subFolderItemsGridVDomEl.startEditTableRow();
     }
 
     onCurrentDriveFolderCreateNewTextFileClick(e) {
         this.isAddNew = true;
-        this.fileItemsGridVDomEl.enterEditMode();
+        this.fileItemsGridVDomEl.startEditTableRow();
     }
 
     onCurrentDriveFolderCreateNewOfficeFileClick(e) {
@@ -308,6 +308,7 @@ export class DriveExplorer {
 
     onExitEditMode() {
         this.isEditMode = false;
+        this.isAddNew = false;
         this.currentDriveFolderVDomEl.removeClass(trmrkCssClasses.editMode);
 
         this.subFolderItemsGridVDomEl.exitEditMode(true);

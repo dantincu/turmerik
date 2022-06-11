@@ -184,7 +184,7 @@ export class DriveItemsGridRow extends VDomEl {
                 new DriveItemCheckBox({
                     click: [{
                         listener: function(e) {
-                            const retVal = that.addPressedClass(e);
+                            const retVal = that.canRunMouseEvent(e);
 
                             if (!retVal) {
                                 e.preventDefault();
@@ -192,6 +192,11 @@ export class DriveItemsGridRow extends VDomEl {
                             }
 
                             return retVal;
+                        }
+                    }],
+                    mousedown: [{
+                        listener: function(e) {
+                            that.addPressedClass(e);
                         }
                     }],
                     mouseup: [{
@@ -483,16 +488,16 @@ export class DriveItemsGridView extends VDomEl {
     startEditTableRow(tableRow, driveItem) {
         if (!this.isEditMode) {
             this.enterEditMode();
-            tableRow.removeClass(trmrkCssClasses.pressed);
-
-            const tableBodyVDomEl = this.tableBodyVDomEl;
             const editRow = this.editRow;
 
+            const tableBodyVDomEl = this.tableBodyVDomEl;
+
             if (trmrk.core.isNotNullObj(tableRow)) {
+                tableRow.removeClass(trmrkCssClasses.pressed);
                 this.currentRow = tableRow;
-                this.currentDriveItem = driveItem;
 
                 tableBodyVDomEl.domNode.replaceChild(editRow.domNode, tableRow.domNode);
+                this.currentDriveItem = driveItem;
 
                 const textValue = driveItem.name;
                 this.editRowTextBoxVDomEl.domNode.value = textValue;
@@ -500,6 +505,7 @@ export class DriveItemsGridView extends VDomEl {
                 tableBodyVDomEl.domNode.appendChild(editRow.domNode);
             }
             
+            this.editRowTextBoxVDomEl.domNode.focus();
             this.editRowTextBoxVDomEl.domNode.select();
         }
     }
