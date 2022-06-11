@@ -34,8 +34,8 @@ body {
     }
 
 
-.trmrk-drive-folder-view-header > label,
-.trmrk-drive-folder-view-sticky-header > label {
+.trmrk-drive-folder-view-header > h6,
+.trmrk-drive-folder-view-sticky-header > h6 {
     display: block;
     line-height: 2rem;
     word-wrap: anywhere;
@@ -43,8 +43,12 @@ body {
     font-weight: bold;
 }
 
-.trmrk-drive-folder-view-header,
-.trmrk-drive-folder-view-sticky-header {
+.trmrk-drive-folder-view-header > .trmrk-icons-row,
+.trmrk-drive-folder-view-sticky-header > .trmrk-icons-row {
+    height: 2.4rem;
+}
+
+.trmrk-drive-folder-view-header, .trmrk-drive-folder-view-sticky-header {
     background-color: bisque;
     line-height: 1rem;
     padding: 0.2rem 0.5rem 0.5rem 0.5rem;
@@ -59,10 +63,35 @@ body {
     width: 100%;
 }
 
+.trmrk-drive-folder-view-header > .trmrk-icons-row > .trmrk-icon,
+.trmrk-drive-folder-view-sticky-header > .trmrk-icons-row > .trmrk-icon {
+    font-size: 1.8rem;
+    vertical-align: bottom;
+    margin-left: 0.8rem;
+}
+
+    .trmrk-drive-folder-view-header > .trmrk-icons-row > .trmrk-icon:first-child,
+    .trmrk-drive-folder-view-sticky-header > .trmrk-icons-row > .trmrk-icon:first-child {
+        margin-left: 0;
+    }
+
+    .trmrk-drive-folder-view-header > .trmrk-icons-row > .trmrk-plus-icon,
+    .trmrk-drive-folder-view-sticky-header > .trmrk-icons-row > .trmrk-plus-icon {
+        position: relative;
+        top: 0.1rem;
+        font-size: 4rem;
+        vertical-align: top;
+        margin-left: 0;
+    }
+
 @media (min-width: 576px) {
     .trmrk-drive-folder-view-sticky-header {
         width: 540px;
     }
+
+        .trmrk-drive-folder-view-header > .trmrk-icons-row,
+        .trmrk-drive-folder-view-sticky-header > .trmrk-icons-row {
+        }
 }
 
 @media (min-width: 768px) {
@@ -125,26 +154,6 @@ body {
 
 .trmrk-icon.oi.oi-arrow-circle-right {
     vertical-align: middle;
-}
-
-.trmrk-drive-folder-view-header > .trmrk-icon,
-.trmrk-drive-folder-view-sticky-header > .trmrk-icon {
-    font-size: 2rem;
-    vertical-align: bottom;
-    margin-left: 1rem;
-}
-
-    .trmrk-drive-folder-view-header > .trmrk-icon:nth-child(2),
-    .trmrk-drive-folder-view-sticky-header > .trmrk-icon:nth-child(2) {
-        margin-left: 0.3rem;
-    }
-
-.trmrk-drive-folder-view-header > .trmrk-plus-icon,
-.trmrk-drive-folder-view-sticky-header > .trmrk-plus-icon {
-    position: relative;
-    top: 0.1rem;
-    font-size: 4rem;
-    vertical-align: top;
 }
     
 .trmrk-icon {

@@ -10,8 +10,9 @@ export class TrmrkCssClasses {
     plusIcon = "trmrk-plus-icon";
     icon = "trmrk-icon";
     editMode = "trmrk-edit-mode";
-    checked = "trmrk-checked"
-    pressed = "trmrk-pressed"
+    checked = "trmrk-checked";
+    pressed = "trmrk-pressed";
+    iconsRow = "trmrk-icons-row";
 }
 
 export class DriveFolderViewCssClasses {

@@ -142,17 +142,27 @@ export class DriveExplorer {
 
         let currentDriveFolderTitleVDomEl = vdom.utils.getVDomEl(
             "div", [ headerCssClass ], {}, [
-            vdom.utils.getVDomEl("label", [], {}, [], {}, driveFolder.name),
-            vdom.utils.getVDomEl("span", [ "oi", "oi-reload", trmrkCssClasses.icon ], {}, [], 
-                this.getMouseClickEvent(this.onCurrentDriveFolderReloadClick)),
-            vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-circle-top", trmrkCssClasses.icon ], {}, [],
-                this.getMouseClickEvent(this.onCurrentDriveFolderGoUpClick)),
-            vdom.utils.getVDomEl("span", [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], 
-                this.getMouseClickEvent(this.onCurrentDriveFolderOptionsClick)),
-            vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon, trmrkCssClasses.icon ], {}, "+",
-                this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewClick)),
-            vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-thick-top", "trmrk-rotate-45deg", trmrkCssClasses.icon ], {}, [], 
-                this.getMouseClickEvent(this.onCurrentDriveFolderOpenInNewTabClick)),
+            vdom.utils.getVDomEl("h6", [], {}, [], {}, driveFolder.name),
+            vdom.utils.getVDomEl("div", [ trmrkCssClasses.iconsRow ], {}, [
+                vdom.utils.getVDomEl("span", [ "oi", "oi-home", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(this.onCurrentDriveFolderHomeClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-reload", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(this.onCurrentDriveFolderReloadClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-circle-top", trmrkCssClasses.icon ], {}, [],
+                    this.getMouseClickEvent(this.onCurrentDriveFolderGoUpClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(this.onCurrentDriveFolderOptionsClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-command", trmrkCssClasses.icon ], {}, [],
+                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewWithMacroClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-thick-top", "trmrk-rotate-45deg", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(this.onCurrentDriveFolderOpenInNewTabClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-folder", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewFolderClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-file", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewTextFileClick)),
+                vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon, trmrkCssClasses.icon ], {}, "+", 
+                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewOfficeFileClick)),
+            ]),
         ]);
 
         return currentDriveFolderTitleVDomEl;
@@ -174,6 +184,10 @@ export class DriveExplorer {
         return event;
     }
 
+    onCurrentDriveFolderHomeClick(e) {
+        this.navigateToFolderIdAsync(null);
+    }
+
     onCurrentDriveFolderReloadClick(e) {
         this.getCurrentDriveFolderAsync(this.currentDriveFolder.data.id, true);
     }
@@ -186,7 +200,19 @@ export class DriveExplorer {
 
     }
 
-    onCurrentDriveFolderCreateNewClick(e) {
+    onCurrentDriveFolderCreateNewWithMacroClick(e) {
+
+    }
+
+    onCurrentDriveFolderCreateNewFolderClick(e) {
+
+    }
+
+    onCurrentDriveFolderCreateNewTextFileClick(e) {
+
+    }
+
+    onCurrentDriveFolderCreateNewOfficeFileClick(e) {
 
     }
 
