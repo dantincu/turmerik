@@ -666,7 +666,7 @@ export class DriveItemsGridView extends VDomEl {
 
     onEnterEditMode() {
         if (trmrk.core.isOfTypeFunction(this.trmrkEvents.onEnterEditMode)) {
-            this.trmrkEvents.onEnterEditMode();
+            this.trmrkEvents.onEnterEditMode(this.currentDriveItem);
         }
     }
 

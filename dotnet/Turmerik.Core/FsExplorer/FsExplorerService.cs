@@ -141,7 +141,7 @@ namespace Turmerik.Core.FsExplorer
             var actionResult = ExecuteCore(() =>
             {
                 string newPath = Path.Combine(newParentFolderId, newFolderName);
-                FsH.CopyDirectory(folderId, newPath, true);
+                FsH.CopyDirectory(folderId, newPath);
 
                 var newEntry = new DirectoryInfo(newPath);
                 var item = GetDriveItem(newEntry);
@@ -271,7 +271,7 @@ namespace Turmerik.Core.FsExplorer
                 newParentFolderId = newParentFolderId ?? Path.GetDirectoryName(folderId);
 
                 string newPath = Path.Combine(newParentFolderId, newFolderName);
-                FsH.MoveDirectory(folderId, newPath, true);
+                FsH.MoveDirectory(folderId, newPath);
 
                 var newEntry = new DirectoryInfo(newPath);
                 var item = GetDriveItem(newEntry);

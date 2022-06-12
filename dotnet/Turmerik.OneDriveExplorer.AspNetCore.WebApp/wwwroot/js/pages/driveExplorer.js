@@ -22,7 +22,12 @@ export class DriveExplorer {
     appRootChildVDomElms = [];
 
     isEditMode = false;
-    isAddNew = false;
+    isAddNewFolder = false;
+    isAddNewFile = false;
+    isEditingCurrentFolder = false;
+    isDeletingCurrentFolder = false;
+    isMovingCurrentFolder = false;
+    isCopyingCurrentFolder = false;
     
     subFolderItemsGridVDomEl = null;
     fileItemsGridVDomEl = null;
@@ -34,6 +39,9 @@ export class DriveExplorer {
 
     currentDriveFolderStickyHeaderVDomEl = null;
     currentDriveFolderStickyHeaderVDomElAdded = false;
+
+    currentlyEditedDriveItem = null;
+    currentlyEditedOfficeFileType = null;
 
     async init(username, appSettings) {
         this.username = username;
@@ -115,7 +123,7 @@ export class DriveExplorer {
             onNavigateToDriveItem: driveItem => this.navigateToFolderIdAsync(driveItem.id),
             onUpdateDriveItemName: (driveItem, newName) => this.updateDriveItemNameAsync(driveItem, newName, true),
             onDeleteItem: (driveItem) => this.deleteDriveItemAsync(driveItem, true),
-            onEnterEditMode: () => this.onEnterEditMode(),
+            onEnterEditMode: (driveItem) => this.onEnterEditMode(driveItem),
             onExitEditMode: () => this.onExitEditMode()
         });
 
@@ -123,7 +131,7 @@ export class DriveExplorer {
             onNavigateToDriveItem: driveItem => {},
             onUpdateDriveItemName: (driveItem, newName) => this.updateDriveItemNameAsync(driveItem, newName, false),
             onDeleteItem: (driveItem) => this.deleteDriveItemAsync(driveItem, false),
-            onEnterEditMode: () => this.onEnterEditMode(),
+            onEnterEditMode: (driveItem) => this.onEnterEditMode(driveItem),
             onExitEditMode: () => this.onExitEditMode()
         });
 
@@ -210,12 +218,12 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderCreateNewFolderClick(e) {
-        this.isAddNew = true;
+        this.isAddNewFolder = true;
         this.subFolderItemsGridVDomEl.startEditTableRow();
     }
 
     onCurrentDriveFolderCreateNewTextFileClick(e) {
-        this.isAddNew = true;
+        this.isAddNewFile = true;
         this.fileItemsGridVDomEl.startEditTableRow();
     }
 
@@ -391,8 +399,14 @@ export class DriveExplorer {
         this.onEnterEditMode();
     }
 
-    onEnterEditMode() {
+    onEnterEditMode(driveItem) {
         this.isEditMode = true;
+        this.currentlyEditedDriveItem = driveItem;
+
+        if (trmrk.core.isNotNullObj(driveItem)) {
+            this.currentlyEditedOfficeFileType = driveItem.officeLikeFileType;
+        }
+        
         this.currentDriveFolderVDomEl.addClass(trmrkCssClasses.editMode);
 
         this.subFolderItemsGridVDomEl.enterEditMode(true);
@@ -401,7 +415,10 @@ export class DriveExplorer {
 
     onExitEditMode() {
         this.isEditMode = false;
-        this.isAddNew = false;
+        this.isAddNewFolder = false;
+        this.isAddNewFile = false;
+        this.currentlyEditedDriveItem = null;
+        this.currentlyEditedOfficeFileType = null;
         this.currentDriveFolderVDomEl.removeClass(trmrkCssClasses.editMode);
 
         this.subFolderItemsGridVDomEl.exitEditMode(true);
@@ -421,13 +438,32 @@ export class DriveExplorer {
 
     validateEditRowText(textValue) {
         textValue = trmrk.core.strValOrDefault(textValue, "").trim();
-        let validation;
+        let validation = new Validation(true);
 
         if (trmrk.core.isNonEmptyString(textValue)) {
-            validation = this.validateDriveItemNameUnique(
-                this.currentDriveFolder.data.subFolders,
-                textValue, "A folder with the same name already exists"
-            );
+            let driveItemId = this.currentDriveFolder.data.id;
+            let officeLikeFileType = null;
+
+            if (trmrk.core.isNotNullObj(this.currentlyEditedDriveItem)) {
+                driveItemId = this.currentlyEditedDriveItem.id;
+                officeLikeFileType = this.currentlyEditedDriveItem.officeLikeFileType;
+            }
+
+            try {
+                driveExplorerApi.validateDriveItemIdAndNewName(
+                    driveItemId,
+                    textValue,
+                    officeLikeFileType);
+            } catch (err) {
+                validation = new Validation(false, err);
+            }
+
+            if (validation.isValid) {
+                validation = this.validateDriveItemNameUnique(
+                    this.currentDriveFolder.data.subFolders,
+                    textValue, "A folder with the same name already exists"
+                );
+            }
 
             if (validation.isValid) {
                 validation = this.validateDriveItemNameUnique(

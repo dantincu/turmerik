@@ -16,22 +16,43 @@ namespace Turmerik.Core.Helpers
             return isWinDrive;
         }
 
-        public static void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
+        public static void CopyDirectory(string sourceDir, string destinationDir)
         {
-            CopyDirectoryCore(
-                sourceDir,
-                destinationDir,
-                recursive,
-                (fileInfo, newPath) => fileInfo.CopyTo(newPath));
+            // Get information about the source directory
+            var dir = new DirectoryInfo(sourceDir);
+
+            // Check if the source directory exists
+            if (!dir.Exists)
+                throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+            // Cache directories before we start copying
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            // Create the destination directory
+            Directory.CreateDirectory(destinationDir);
+
+            // Get the files in the source directory and copy to the destination directory
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                string targetFilePath = Path.Combine(destinationDir, file.Name);
+                file.CopyTo(targetFilePath);
+            }
+
+            // If recursive and copying subdirectories, recursively call this method
+            foreach (DirectoryInfo subDir in dirs)
+            {
+                string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+
+                CopyDirectory(
+                    subDir.FullName,
+                    newDestinationDir);
+            }
         }
 
-        public static void MoveDirectory(string sourceDir, string destinationDir, bool recursive)
+        public static void MoveDirectory(string sourceDir, string destinationDir)
         {
-            CopyDirectoryCore(
-                sourceDir,
-                destinationDir,
-                recursive,
-                (fileInfo, newPath) => fileInfo.MoveTo(newPath));
+            var dir = new DirectoryInfo(sourceDir);
+            dir.MoveTo(destinationDir);
         }
 
         /// <summary>
@@ -45,8 +66,19 @@ namespace Turmerik.Core.Helpers
             string sourceDir,
             string destinationDir,
             bool recursive,
-            Action<FileInfo, string> copyFileFunc)
+            bool isMoveDir)
         {
+            Action<FileInfo, string> copyFileFunc;
+
+            if (isMoveDir)
+            {
+                copyFileFunc = (fileInfo, newPath) => fileInfo.MoveTo(newPath);
+            }
+            else
+            {
+                copyFileFunc = (fileInfo, newPath) => fileInfo.CopyTo(newPath);
+            }
+
             // Get information about the source directory
             var dir = new DirectoryInfo(sourceDir);
 
@@ -73,7 +105,17 @@ namespace Turmerik.Core.Helpers
                 foreach (DirectoryInfo subDir in dirs)
                 {
                     string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
-                    CopyDirectory(subDir.FullName, newDestinationDir, true);
+
+                    CopyDirectoryCore(
+                        subDir.FullName,
+                        newDestinationDir,
+                        true,
+                        isMoveDir);
+
+                    if (isMoveDir)
+                    {
+                        subDir.Delete();
+                    }
                 }
             }
         }

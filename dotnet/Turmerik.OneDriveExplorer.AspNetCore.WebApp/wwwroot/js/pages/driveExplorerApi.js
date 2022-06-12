@@ -4,6 +4,12 @@ import { DriveItem, AppSettings } from './Entities.js';
 import { trmrkAxios, TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { webStorageAxios } from '../common/webStorageAxios.js';
 
+export class OfficeLikeFileType {
+    Docs = 1;
+    Sheets = 2;
+    Slides = 3;
+}
+
 export class DriveItemOpEnum {
     CreateFile = 1;
     MoveFolder = 2;
@@ -18,6 +24,15 @@ export class DriveItemOpEnum {
 }
 
 const driveItemOpEnumInstn = new DriveItemOpEnum();
+const officeLikeFileTypeInstn = new OfficeLikeFileType();
+
+export const officeFileLikeTypeExtensions = {};
+officeFileLikeTypeExtensions[officeLikeFileTypeInstn.Docs] = ".docx";
+
+officeFileLikeTypeExtensions[officeLikeFileTypeInstn.Sheets] = ".xlsx";
+officeFileLikeTypeExtensions[officeLikeFileTypeInstn.Slides] = ".pptx";
+
+export const driveItemNameInvalidChars = "\\/:*?\"<>|";
 
 export class DriveExplorerApi {
     appSettings = new AppSettings();
@@ -88,8 +103,8 @@ export class DriveExplorerApi {
         return apiResult;
     }
 
-    async updateDriveFileNameAsync(driveFileId, newFileName) {
-        this.validateDriveItemIdAndNewName(driveFileId, newFileName);
+    async updateDriveFileNameAsync(driveFileId, newFileName, officeLikeFileType) {
+        this.validateDriveItemIdAndNewName(driveFileId, newFileName, officeLikeFileType);
         let relUrl = this.relUri + "/" + encodeURIComponent(driveFileId);
 
         let params = {
@@ -100,8 +115,8 @@ export class DriveExplorerApi {
         return apiResult;
     }
 
-    async addDriveFileAsync(parentFolderId, newFileName) {
-        this.validateDriveItemIdAndNewName(parentFolderId, newFileName);
+    async addDriveFileAsync(parentFolderId, newFileName, officeLikeFileType) {
+        this.validateDriveItemIdAndNewName(parentFolderId, newFileName, officeLikeFileType);
         let relUrl = this.relUri;
 
         let params = {
@@ -135,7 +150,7 @@ export class DriveExplorerApi {
         }]);
     }
 
-    validateDriveItemIdAndNewName(driveItemId, newItemName) {
+    validateDriveItemIdAndNewName(driveItemId, newItemName, officeLikeFileType) {
         this.validateRequiredStringItems([{
             key: "driveItemId",
             value: driveItemId
@@ -143,6 +158,12 @@ export class DriveExplorerApi {
             key: "newItemName",
             value: newItemName
         }]);
+
+        this.validateDriveItemName(newItemName);
+
+        if (trmrk.core.isNotNaNNumber(officeLikeFileType)) {
+            this.validateOfficeLikeFileName(newItemName, officeLikeFileType);
+        }
     }
 
     validateRequiredStringItems(argsArr) {
@@ -152,12 +173,44 @@ export class DriveExplorerApi {
             }
         }
     }
+
+    validateDriveItemName(newItemName) {
+        let charsArr = newItemName.split('').filter(
+            c => driveItemNameInvalidChars.indexOf(c) >= 0
+        );
+
+        if (charsArr.length > 0) {
+            const errorMessage = "Drive name \"" + newItemName + "\" contains the following illegal chars: " + charsArr.join();
+            throw errorMessage;
+        }
+    }
+
+    validateOfficeLikeFileName(newItemName, officeLikeFileType) {
+        switch (officeLikeFileType) {
+            case officeLikeFileTypeInstn.Docs:
+            case officeLikeFileTypeInstn.Sheets:
+            case officeLikeFileTypeInstn.Slides:
+                let requiredExtension = officeFileLikeTypeExtensions[officeLikeFileType];
+                this.validateOfficeLikeFileNameExtension(newItemName, requiredExtension);
+                break;
+            default:
+                throw "Unknown office like file type id: " + officeLikeFileType;
+        }
+    }
+
+    validateOfficeLikeFileNameExtension(newItemName, requiredExtension) {
+        if (!newItemName.endsWith(requiredExtension)) {
+            throw "Office file name \"" + newItemName + "\" should end with extension " + requiredExtension;
+        }
+    }
 }
 
 const driveExplorerApiInstn = new DriveExplorerApi();
 
-trmrk.types["DriveExplorerApi"] = DriveExplorerApi;
+trmrk.types["OfficeLikeFileType"] = OfficeLikeFileType;
 trmrk.types["DriveItemOpEnum"] = DriveItemOpEnum;
+trmrk.types["DriveExplorerApi"] = DriveExplorerApi;
 
-export const driveExplorerApi = driveExplorerApiInstn;
+export const officeLikeFileType = officeLikeFileTypeInstn;
 export const driveItemOpEnum = driveItemOpEnumInstn;
+export const driveExplorerApi = driveExplorerApiInstn;
