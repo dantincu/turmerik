@@ -144,9 +144,6 @@ export class DriveItemsGridMainCell extends TableRowCell {
 }
 
 export class ErrorPopoverVDomEl extends VDomEl {
-    bsPopover = null;
-    popoverContent = null;
-
     constructor() {
         super({
             nodeName: "a",
@@ -156,23 +153,13 @@ export class ErrorPopoverVDomEl extends VDomEl {
                 "data-bs-trigger": "focus"
             }
         });
-
-        const that = this;
-
-        this.onCreated = () => {
-            this.bsPopover = new bootstrap.Popover(this.domNode, {
-                content: () => {
-                    return that.popoverContent;
-                },
-                customClass: driveFolderViewCssClasses.errorPopover
-            });
-        }
     }
 }
 
 export class DriveItemsGridMainEditCell extends TableRowCell {
     textBoxVDomEl = null;
     errorPopoverVDomEl = null;
+    bsPopover = null;
 
     constructor() {
         super([], [ driveFolderViewCssClasses.gridMainEditCell ]);
@@ -184,7 +171,6 @@ export class DriveItemsGridMainEditCell extends TableRowCell {
         });
 
         this.errorPopoverVDomEl = new ErrorPopoverVDomEl();
-
         this.childNodes = [ this.textBoxVDomEl, this.errorPopoverVDomEl ];
     }
 
@@ -196,14 +182,23 @@ export class DriveItemsGridMainEditCell extends TableRowCell {
         }
 
         this.textBoxVDomEl.addClass(trmrkCssClasses.isInvalid);
-        this.errorPopoverVDomEl.popoverContent = error;
-        this.errorPopoverVDomEl.bsPopover.show();
+        
+        this.bsPopover = new bootstrap.Popover(
+            this.errorPopoverVDomEl.domNode, {
+                content: error,
+                customClass: driveFolderViewCssClasses.errorPopover
+            });
+
+        this.bsPopover.show();
     }
 
     hideError() {
         this.textBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
-        this.errorPopoverVDomEl.popoverContent = "";
-        this.errorPopoverVDomEl.bsPopover.hide();
+        
+        if (trmrk.core.isNotNullObj(this.bsPopover)) {
+            this.bsPopover.dispose();
+            this.bsPopover = null;
+        }
     }
 }
 
