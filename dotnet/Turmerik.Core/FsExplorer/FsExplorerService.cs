@@ -104,7 +104,8 @@ namespace Turmerik.Core.FsExplorer
                         Name = "This PC",
                         IsFolder = true,
                         IsRootFolder = true,
-                        SubFolders = fsEntriesList
+                        SubFolders = fsEntriesList,
+                        FolderFiles = new List<DriveItem>()
                     };
 
                     var result = new TrmrkActionResult<DriveItem>(

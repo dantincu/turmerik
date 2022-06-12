@@ -715,6 +715,19 @@ export class TrmrkCore {
         return strVal;
     }
 
+    stringsEqualIgnoreCase(trgStr, refStr) {
+        let retVal = trgStr === refStr;
+
+        if (!retVal) {
+            trgStr = trgStr.toLowerCase();
+            refStr = refStr.toLowerCase();
+
+            retVal = trgStr === refStr;
+        }
+
+        return retVal;
+    }
+
     numOrNull(value) {
         if (!this.isNotNaNNumber(value)) {
             value = null;

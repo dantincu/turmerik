@@ -4,7 +4,7 @@ import { ViewModelBase } from '../common/ViewModelBase.js';
 import { driveExplorerApi, driveItemOpEnum } from './driveExplorerApi.js';
 import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
-import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, trmrkCssClasses, driveFolderViewCssClasses } from './driveItemsGridView.js';
+import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, trmrkCssClasses, driveFolderViewCssClasses, Validation } from './driveItemsGridView.js';
 
 export class DriveFolderApiResultWrapper {
     id = null;
@@ -131,10 +131,12 @@ export class DriveExplorer {
         this.currentDriveFolderStickyHeaderVDomEl.createDomNode();
 
         this.subFolderItemsGridVDomEl = new DriveItemsGridView(
-            driveFolder.subFolders, true, subFolderItemsGridVDomElEvents);
+            driveFolder.subFolders, true, subFolderItemsGridVDomElEvents,
+            textValue => this.validateEditRowText(textValue));
 
         this.fileItemsGridVDomEl = new DriveItemsGridView(
-            driveFolder.folderFiles, false, fileItemsGridVDomElEvents);
+            driveFolder.folderFiles, false, fileItemsGridVDomElEvents,
+            textValue => this.validateEditRowText(textValue));
 
         let driveFolderVDomElChildNodes = [
             currentDriveFolderHeaderVDomEl,
@@ -331,16 +333,20 @@ export class DriveExplorer {
                     this.fileItemsGridVDomEl.endEditTableRow();
                 }
             }
+        } else {
+            if (isDriveFolder) {
+                this.showApiErrorPopover(apiResult, this.subFolderItemsGridVDomEl.editRow);
+            } else {
+                this.showApiErrorPopover(apiResult, this.fileItemsGridVDomEl.editRow);
+            }
         }
-        
-        // this.enterEditMode();
     }
 
     async deleteDriveItemAsync(driveItem, isDriveFolder) {
         let apiResult;
 
         apiResult = new TrmrkAxiosApiResult();
-        apiResult.isSuccess = true;
+        apiResult.isSuccess = false;
 
         /* if (isDriveFolder) {
             apiResult = await driveExplorerApi.removeDriveFolderAsync(driveItem.id);
@@ -350,12 +356,27 @@ export class DriveExplorer {
 
         if (apiResult.isSuccess) {
             if (isDriveFolder) {
+                this.removeDriveItem(this.currentDriveFolder.data.subFolders, driveItem);
+
+                this.subFolderItemsGridVDomEl.currentRow.removeDomNode();
+                this.subFolderItemsGridVDomEl.currentRow = null;
+
                 this.subFolderItemsGridVDomEl.endEditTableRow();
             } else {
+                this.removeDriveItem(this.currentDriveFolder.data.folderFiles, driveItem);
+
+                this.fileItemsGridVDomEl.currentRow.removeDomNode();
+                this.fileItemsGridVDomEl.currentRow = null;
+
                 this.fileItemsGridVDomEl.endEditTableRow();
             }
+        } else {
+            if (isDriveFolder) {
+                this.showApiErrorPopover(apiResult, this.subFolderItemsGridVDomEl.editRow);
+            } else {
+                this.showApiErrorPopover(apiResult, this.fileItemsGridVDomEl.editRow);
+            }
         }
-        // this.enterEditMode();
     }
 
     enterEditMode() {
@@ -380,6 +401,65 @@ export class DriveExplorer {
 
         this.subFolderItemsGridVDomEl.exitEditMode(true);
         this.fileItemsGridVDomEl.exitEditMode(true);
+    }
+
+    showApiErrorPopover(apiResult, editRow) {
+        editRow.showError(apiResult.statusText);
+        editRow.unsetReadonly();
+    }
+
+    validateEditRowText(textValue) {
+        textValue = trmrk.core.strValOrDefault(textValue, "").trim();
+        let validation;
+
+        if (trmrk.core.isNonEmptyString(textValue)) {
+            validation = this.validateDriveItemNameUnique(
+                this.currentDriveFolder.data.subFolders,
+                textValue, "A folder with the same name already exists"
+            );
+
+            if (validation.isValid) {
+                validation = this.validateDriveItemNameUnique(
+                    this.currentDriveFolder.data.folderFiles,
+                    textValue, "A file with the same name already exists"
+                );
+            }
+        } else {
+            validation = new Validation(false, "Entry name cannot be empty");
+        }
+
+        return validation;
+    }
+
+    validateDriveItemNameUnique(driveItemsArr, trgName, errorMessage) {
+        let validation = null;
+            
+        for (let existing of driveItemsArr) {
+            if (trmrk.core.stringsEqualIgnoreCase(existing.name, trgName)) {
+                validation = new Validation(false, errorMessage);
+                break;
+            }
+        }
+
+        if (!trmrk.core.isNotNullObj(validation)) {
+            validation = new Validation(true, null);
+        }
+
+        return validation;
+    }
+
+    removeDriveItem(driveItemsArr, driveItem) {
+        const kvp = trmrk.core.firstOrDefault(
+            driveItemsArr,
+            item => item.id === driveItem.id
+        );
+
+        if (kvp.Key >= 0) {
+            driveItemsArr.splice(kvp, 1);
+            console.log("Removed drive item with id " + driveItem.id);
+        } else {
+            console.log("Could not find drive item with id " + driveItem.id);
+        }
     }
 }
 

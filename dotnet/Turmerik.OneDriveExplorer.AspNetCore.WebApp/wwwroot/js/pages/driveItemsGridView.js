@@ -30,10 +30,21 @@ export class DriveFolderViewCssClasses {
     itemsGrid = "trmrk-drive-items-grid";
     foldersGrid = "trmrk-drive-folders-grid";
     filesGrid = "trmrk-drive-files-grid";
+    errorPopover = "trmrk-error-popover";
 }
 
 export const trmrkCssClasses = new TrmrkCssClasses();
 export const driveFolderViewCssClasses = new DriveFolderViewCssClasses();
+
+export class Validation {
+    isValid = false;
+    error = null;
+
+    constructor(isValid, error) {
+        this.isValid = isValid;
+        this.error = error;
+    }
+}
 
 export class IconVDomEl extends VDomEl {
     constructor(classList, events, innerHTML) {
@@ -129,24 +140,70 @@ export class DriveItemsGridMainCell extends TableRowCell {
             new DriveItemNameVDomEl(
                 driveItemName,
                 mainCellEvents));
-        
-        this.childNodes.push(
-            new VDomEl({
-                nodeName: "span",
-                // classList
-            })
-        );
+    }
+}
+
+export class ErrorPopoverVDomEl extends VDomEl {
+    bsPopover = null;
+    popoverContent = null;
+
+    constructor() {
+        super({
+            nodeName: "a",
+            attrs: {
+                href: trmrk.core.javascriptVoid,
+                "data-bs-toggle": "popover",
+                "data-bs-trigger": "focus"
+            }
+        });
+
+        const that = this;
+
+        this.onCreated = () => {
+            this.bsPopover = new bootstrap.Popover(this.domNode, {
+                content: () => {
+                    return that.popoverContent;
+                },
+                customClass: driveFolderViewCssClasses.errorPopover
+            });
+        }
     }
 }
 
 export class DriveItemsGridMainEditCell extends TableRowCell {
     textBoxVDomEl = null;
+    errorPopoverVDomEl = null;
 
     constructor() {
         super([], [ driveFolderViewCssClasses.gridMainEditCell ]);
 
-        this.textBoxVDomEl = new DriveItemTextBox();
-        this.childNodes = [this.textBoxVDomEl];
+        this.textBoxVDomEl = new DriveItemTextBox({
+            click: [{
+                listener: e => this.hideError()
+            }]
+        });
+
+        this.errorPopoverVDomEl = new ErrorPopoverVDomEl();
+
+        this.childNodes = [ this.textBoxVDomEl, this.errorPopoverVDomEl ];
+    }
+
+    showError(error) {
+        if (trmrk.core.isNonEmptyString(error, true)) {
+            error = error.trim();
+        } else {
+            error = "An error occurred";
+        }
+
+        this.textBoxVDomEl.addClass(trmrkCssClasses.isInvalid);
+        this.errorPopoverVDomEl.popoverContent = error;
+        this.errorPopoverVDomEl.bsPopover.show();
+    }
+
+    hideError() {
+        this.textBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
+        this.errorPopoverVDomEl.popoverContent = "";
+        this.errorPopoverVDomEl.bsPopover.hide();
     }
 }
 
@@ -329,7 +386,8 @@ export class DriveItemsGridRow extends VDomEl {
 
 export class DriveItemsGridEditRow extends VDomEl {
     mainEditCell = null;
-    isWaiting = false;
+    textBoxVDomEl = null;
+    isReadonly = false;
 
     constructor(
         editCancelListener,
@@ -341,6 +399,7 @@ export class DriveItemsGridEditRow extends VDomEl {
 
         this.mainEditCell = new DriveItemsGridMainEditCell();
         this.mainEditCell.parentVDomEl = this;
+        this.textBoxVDomEl = this.mainEditCell.textBoxVDomEl;
 
         editCancelListener = editCancelListener.bind(this);
         editConfirmListener = editConfirmListener.bind(this);
@@ -362,8 +421,8 @@ export class DriveItemsGridEditRow extends VDomEl {
                     {
                         click: [{
                             listener: e => {
-                                if (!this.isWaiting && e.button === 0) {
-                                    this.mainEditCell.textBoxVDomEl.domNode.value = "";
+                                if (!this.isReadonly && e.button === 0) {
+                                    this.textBoxVDomEl.domNode.value = "";
                                 }
                             }
                         }]
@@ -391,6 +450,26 @@ export class DriveItemsGridEditRow extends VDomEl {
                 [ driveFolderViewCssClasses.gridIconCell ])
         ];
     }
+
+    showError(error) {
+        this.mainEditCell.showError(error);
+    }
+
+    clearError() {
+        this.mainEditCell.hideError();
+    }
+
+    setReadonly() {
+        this.isReadonly = true;
+        this.addClass(trmrkCssClasses.waiting);
+        this.textBoxVDomEl.addAttr("readonly", "readonly");
+    }
+
+    unsetReadonly() {
+        this.isReadonly = false;
+        this.removeClass(trmrkCssClasses.waiting);
+        this.textBoxVDomEl.removeAttr("readonly");
+    }
 }
 
 export class DriveItemsGridViewTrmrkEvents extends EntityBase {
@@ -416,8 +495,9 @@ export class DriveItemsGridView extends VDomEl {
     currentDriveItem = null;
     isEditMode = false;
     trmrkEvents = null;
+    editRowValidator = null;
 
-    constructor(driveItemsArr, isFoldersGrid, trmrkEvents) {
+    constructor(driveItemsArr, isFoldersGrid, trmrkEvents, editRowValidator) {
         super({
             nodeName: "div"
         });
@@ -438,6 +518,8 @@ export class DriveItemsGridView extends VDomEl {
 
         const tableVDomEl = this.getTableVDomEl();
         this.childNodes = [ tableVDomEl ];
+
+        this.editRowValidator = editRowValidator;
     }
 
     getDriveItemsGridCssClass(isFoldersGrid) {
@@ -457,26 +539,31 @@ export class DriveItemsGridView extends VDomEl {
 
         const editRow = new DriveItemsGridEditRow(
             function(e) {
-                if (!this.isWaiting && e.button === 0) {
-                    that.stopEditTableRow(that.currentRow, true);
+                if (!this.isReadonly && e.button === 0) {
+                    that.endEditTableRow();
                 }
             }, function(e) {
-                if (!this.isWaiting && e.button === 0) {
-                    const textValue = that.stopEditTableRow(that.currentRow);
+                if (!this.isReadonly && e.button === 0) {
+                    const textValue = that.editRowTextBoxVDomEl.domNode.value;
+                    const validation = that.editRowValidator(textValue);
 
-                    if (trmrk.core.isNonEmptyString(textValue, true)) {
+                    if (validation.isSuccess) {
+                        editRow.setReadonly();
+
                         trmrk.core.applyIfOfTypeFunc(
                             that.trmrkEvents.onUpdateDriveItemName, that,
-                            [that.currentDriveItem, textValue]);
+                            [ that.currentDriveItem, textValue ]);
+                    } else {
+                        editRow.showError(validation.error);
                     }
                 }
             }, function(e) {
-                if (!this.isWaiting && e.button === 0) {
-                    that.stopEditTableRow(that.currentRow);
+                if (!this.isReadonly && e.button === 0) {
+                    editRow.setReadonly();
 
                     trmrk.core.applyIfOfTypeFunc(
                         that.trmrkEvents.onDeleteItem, that,
-                        [that.currentDriveItem]);
+                        [ that.currentDriveItem ]);
                 }
             }
         );
@@ -557,38 +644,20 @@ export class DriveItemsGridView extends VDomEl {
         }
     }
 
-    stopEditTableRow(tableRow, isCancel) {
-        const textValue = this.editRowTextBoxVDomEl.domNode.value;
-
-        if (isCancel) {
-            this.endEditTableRow();
-        } else if (trmrk.core.isNonEmptyString(textValue, true)) {
-            this.editRow.isWaiting = true;
-            this.editRow.addClass(trmrkCssClasses.waiting);
-            this.editRowTextBoxVDomEl.addAttr("readonly");
-        } else {
-            this.editRowTextBoxVDomEl.addClass(trmrkCssClasses.isInvalid);
-        }
-
-        return textValue;
-    }
-
     endEditTableRow() {
-        const tableRow = this.currentRow;
-
-        this.editRowTextBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
+        this.editRow.clearError();
         this.editRowTextBoxVDomEl.domNode.value = "";
         this.currentDriveItem = null;
-        this.currentRow = null;
 
-        if (trmrk.core.isNotNullObj(tableRow)) {
-            this.tableBodyVDomEl.domNode.replaceChild(tableRow.domNode, this.editRow.domNode);
+        if (trmrk.core.isNotNullObj(this.currentRow)) {
+            this.tableBodyVDomEl.domNode.replaceChild(this.currentRow.domNode, this.editRow.domNode);
+            this.currentRow = null;
         } else {
             this.tableBodyVDomEl.domNode.removeChild(this.editRow.domNode);
         }
 
         this.exitEditMode();
-        this.editRow.isWaiting = false;
+        this.editRow.isReadonly = false;
     }
 
     enterEditMode(triggered) {
