@@ -473,7 +473,7 @@ export class DriveExplorer {
         );
 
         if (kvp.Key >= 0) {
-            driveItemsArr.splice(kvp, 1);
+            driveItemsArr.splice(kvp.Key, 1);
             console.log("Removed drive item with id " + driveItem.id);
         } else {
             console.log("Could not find drive item with id " + driveItem.id);
