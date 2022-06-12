@@ -540,7 +540,7 @@ export class DriveItemsGridView extends VDomEl {
                     }
                 }
             }, function(e) {
-                if (!this.isReadonly && e.button === 0) {
+                if (!this.isReadonly && e.button === 0 && trmrk.core.isNotNullObj(that.currentDriveItem)) {
                     editRow.setReadonly();
 
                     trmrk.core.applyIfOfTypeFunc(
@@ -684,6 +684,6 @@ export class DriveItemsGridView extends VDomEl {
 
     addTableRow(newDriveItem) {
         const tableRow = this.getTableRow(newDriveItem);
-        this.tableBodyVDomEl.appendChild(tableRow);
+        this.tableBodyVDomEl.appendChildVNode(tableRow);
     }
 }

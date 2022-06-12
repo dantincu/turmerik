@@ -5,16 +5,19 @@ import { trmrkAxios, TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { webStorageAxios } from '../common/webStorageAxios.js';
 
 export class DriveItemOpEnum {
-    MoveFolder = 1;
-    CopyFolder = 2;
-    MoveFile = 3;
-    CopyFile = 4;
-    DeleteFile = 5;
-    CreateMultipleFolders = 6;
-    CreateMultipleFiles = 7;
-    CreateFolderFromMacro = 8;
-    CreateFileFromMacro = 9;
+    CreateFile = 1;
+    MoveFolder = 2;
+    CopyFolder = 3;
+    MoveFile = 4;
+    CopyFile = 5;
+    DeleteFile = 6;
+    CreateMultipleFolders = 7;
+    CreateMultipleFiles = 8;
+    CreateFolderFromMacro = 9;
+    CreateFileFromMacro = 10;
 }
+
+const driveItemOpEnumInstn = new DriveItemOpEnum();
 
 export class DriveExplorerApi {
     appSettings = new AppSettings();
@@ -55,13 +58,12 @@ export class DriveExplorerApi {
         this.validateDriveItemIdAndNewName(driveFolderId, newFolderName);
         let relUrl = this.relUri + "/" + encodeURIComponent(driveFolderId);
 
-        let opts = {
-            params: {
-                name: newFolderName
-            }
+        let params = {
+            name: newFolderName,
+            driveItemOp: driveItemOpEnumInstn.MoveFolder
         };
 
-        let apiResult = await trmrkAxios.put(relUrl, opts);
+        let apiResult = await trmrkAxios.put(relUrl, params);
         return apiResult;
     }
 
@@ -69,14 +71,12 @@ export class DriveExplorerApi {
         this.validateDriveItemIdAndNewName(parentFolderId, newFolderName);
         let relUrl = this.relUri;
 
-        let opts = {
-            params: {
-                parentFolderId: parentFolderId,
-                name: newFolderName
-            }
+        let params = {
+            parentFolderId: parentFolderId,
+            name: newFolderName
         };
 
-        let apiResult = await trmrkAxios.post(relUrl, opts);
+        let apiResult = await trmrkAxios.post(relUrl, params);
         return apiResult;
     }
 
@@ -92,13 +92,11 @@ export class DriveExplorerApi {
         this.validateDriveItemIdAndNewName(driveFileId, newFileName);
         let relUrl = this.relUri + "/" + encodeURIComponent(driveFileId);
 
-        let opts = {
-            params: {
-                name: newFolderName
-            }
+        let params = {
+            name: newFolderName
         };
 
-        let apiResult = await trmrkAxios.put(relUrl, opts);
+        let apiResult = await trmrkAxios.put(relUrl, params);
         return apiResult;
     }
 
@@ -106,14 +104,12 @@ export class DriveExplorerApi {
         this.validateDriveItemIdAndNewName(parentFolderId, newFileName);
         let relUrl = this.relUri;
 
-        let opts = {
-            params: {
-                parentFolderId: parentFolderId,
-                name: newFolderName
-            }
-        };
+        let params = {
+            parentFolderId: parentFolderId,
+            name: newFileName
+        }
 
-        let apiResult = await trmrkAxios.post(relUrl, opts);
+        let apiResult = await trmrkAxios.post(relUrl, params);
         return apiResult;
     }
 
@@ -133,20 +129,20 @@ export class DriveExplorerApi {
     }
 
     validateDriveItemId(driveItemId) {
-        this.validateRequiredStringItems({
+        this.validateRequiredStringItems([{
             key: "driveItemId",
             value: driveItemId
-        });
+        }]);
     }
 
     validateDriveItemIdAndNewName(driveItemId, newItemName) {
-        this.validateRequiredStringItems({
+        this.validateRequiredStringItems([{
             key: "driveItemId",
             value: driveItemId
         }, {
             key: "newItemName",
             value: newItemName
-        });
+        }]);
     }
 
     validateRequiredStringItems(argsArr) {
@@ -159,7 +155,6 @@ export class DriveExplorerApi {
 }
 
 const driveExplorerApiInstn = new DriveExplorerApi();
-const driveItemOpEnumInstn = new DriveItemOpEnum();
 
 trmrk.types["DriveExplorerApi"] = DriveExplorerApi;
 trmrk.types["DriveItemOpEnum"] = DriveItemOpEnum;

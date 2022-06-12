@@ -65,16 +65,16 @@ export class TrmrkAxios {
         return apiResult;
     }
 
-    async put(url, opts) {
+    async put(url, params, opts) {
         let apiResult = await this.request(
-            async () => await axios.put(url, opts));
+            async () => await axios.put(url, params, opts));
 
         return apiResult;
     }
 
-    async post(url, opts) {
+    async post(url, params, opts) {
         let apiResult = await this.request(
-            async () => await axios.post(url, opts));
+            async () => await axios.post(url, params, opts));
 
         return apiResult;
     }

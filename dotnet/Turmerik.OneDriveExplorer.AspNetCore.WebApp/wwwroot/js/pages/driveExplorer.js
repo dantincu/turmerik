@@ -163,6 +163,7 @@ export class DriveExplorer {
         events.onCurrentDriveFolderEditClick = this.onCurrentDriveFolderEditClick.bind(this);
         events.onCurrentDriveFolderCreateNewWithMacroClick = this.onCurrentDriveFolderCreateNewWithMacroClick.bind(this);
         events.onCurrentDriveFolderCreateNewFolderClick = this.onCurrentDriveFolderCreateNewFolderClick.bind(this);
+        events.onCurrentDriveFolderCreateNewTextFileClick = this.onCurrentDriveFolderCreateNewTextFileClick.bind(this);
         events.onCurrentDriveFolderCreateNewOfficeFileClick = this.onCurrentDriveFolderCreateNewOfficeFileClick.bind(this);
         events.onCurrentDriveFolderOpenInNewTabClick = this.onCurrentDriveFolderOpenInNewTabClick.bind(this);
 
@@ -181,7 +182,9 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderHomeClick(e) {
-        this.navigateToFolderIdAsync(null);
+        if (!this.currentDriveFolder.data.isRootFolder) {
+            this.navigateToFolderIdAsync(null);
+        }
     }
 
     onCurrentDriveFolderReloadClick(e) {
@@ -189,7 +192,9 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderGoUpClick(e) {
-        this.navigateToFolderIdAsync(this.currentDriveFolder.data.parentFolderId)
+        if (!this.currentDriveFolder.data.isRootFolder) {
+            this.navigateToFolderIdAsync(this.currentDriveFolder.data.parentFolderId)
+        }
     }
 
     onCurrentDriveFolderOptionsClick(e) {
@@ -290,10 +295,7 @@ export class DriveExplorer {
         let apiResult, isUpdate = trmrk.core.isNotNullObj(driveItem);
         const parentFolder = this.currentDriveFolder.data;
 
-        apiResult = new TrmrkAxiosApiResult();
-        apiResult.isSuccess = true;
-
-        /* if (isUpdate) {
+        if (isUpdate) {
             if (isDriveFolder) {
                 apiResult = await driveExplorerApi.updateDriveFolderNameAsync(driveItem.id, newName);
             } else {
@@ -305,7 +307,7 @@ export class DriveExplorer {
             } else {
                 apiResult = await driveExplorerApi.addDriveFileAsync(parentFolder.id, newName);
             }
-        } */
+        }
 
         if (apiResult.isSuccess) {
             if (isUpdate) {
@@ -351,14 +353,11 @@ export class DriveExplorer {
     async deleteDriveItemAsync(driveItem, isDriveFolder) {
         let apiResult;
 
-        apiResult = new TrmrkAxiosApiResult();
-        apiResult.isSuccess = true;
-
-        /* if (isDriveFolder) {
+        if (isDriveFolder) {
             apiResult = await driveExplorerApi.removeDriveFolderAsync(driveItem.id);
         } else {
             apiResult = await driveExplorerApi.removeDriveFileAsync(driveItem.id);
-        } */
+        }
 
         if (apiResult.isSuccess) {
             if (isDriveFolder) {
@@ -410,7 +409,13 @@ export class DriveExplorer {
     }
 
     showApiErrorPopover(apiResult, editRow) {
-        editRow.showError(apiResult.statusText);
+        let errorMessage = apiResult.statusText;
+
+        if (trmrk.core.isNotNullObj(apiResult.exc)) {
+            errorMessage = apiResult.exc.message;
+        }
+        
+        editRow.showError(errorMessage);
         editRow.unsetReadonly();
     }
 
