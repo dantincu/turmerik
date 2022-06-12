@@ -108,11 +108,12 @@ body {
     .trmrk-drive-folder-view-sticky-header > h6 > .trmrk-icon {
         font-size: 1.7rem;
         vertical-align: bottom;
+        margin-right: 0.5rem;
+        margin-left: 0.5rem;
     }
 
         .trmrk-drive-folder-view-header > .trmrk-icons-row > .trmrk-icon,
         .trmrk-drive-folder-view-sticky-header > .trmrk-icons-row > .trmrk-icon {
-            margin-left: 0.4rem;
         }
 
     .trmrk-drive-folder-view-header > .trmrk-icons-row:first-child,
@@ -122,7 +123,6 @@ body {
 
     .trmrk-drive-folder-view-header > .trmrk-icons-row > .trmrk-icon:first-child,
     .trmrk-drive-folder-view-sticky-header > .trmrk-icons-row > .trmrk-icon:first-child {
-        margin-left: 0;
     }
 
     .trmrk-drive-folder-view-header > .trmrk-icons-row > .trmrk-plus-icon,
