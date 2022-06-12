@@ -321,16 +321,22 @@ export class DriveExplorer {
 
         if (apiResult.isSuccess) {
             if (isUpdate) {
+                driveItem.name = newName;
+
                 if (isDriveFolder) {
-                    this.subFolderItemsGridVDomEl.endEditTableRow();
+                    this.updateDriveItemNameCore(this.subFolderItemsGridVDomEl, newName);
                 } else {
-                    this.fileItemsGridVDomEl.endEditTableRow();
+                    this.updateDriveItemNameCore(this.fileItemsGridVDomEl, newName);
                 }
             } else {
+                driveItem = apiResult.data;
+
                 if (isDriveFolder) {
-                    this.subFolderItemsGridVDomEl.endEditTableRow();
+                    this.currentDriveFolder.data.subFolders.push(driveItem);
+                    this.addDriveItemCore(this.subFolderItemsGridVDomEl, driveItem);
                 } else {
-                    this.fileItemsGridVDomEl.endEditTableRow();
+                    this.currentDriveFolder.data.folderFiles.push(driveItem);
+                    this.addDriveItemCore(this.fileItemsGridVDomEl, driveItem);
                 }
             }
         } else {
@@ -342,11 +348,23 @@ export class DriveExplorer {
         }
     }
 
+    updateDriveItemNameCore(itemsGridVDomEl, newName) {
+        itemsGridVDomEl.currentRow.updateDriveItemName(newName);
+        itemsGridVDomEl.editRow.unsetReadonly();
+        itemsGridVDomEl.endEditTableRow();
+    }
+
+    addDriveItemCore(itemsGridVDomEl, driveItem) {
+        itemsGridVDomEl.addTableRow(driveItem);
+        itemsGridVDomEl.editRow.unsetReadonly();
+        itemsGridVDomEl.endEditTableRow();
+    }
+
     async deleteDriveItemAsync(driveItem, isDriveFolder) {
         let apiResult;
 
         apiResult = new TrmrkAxiosApiResult();
-        apiResult.isSuccess = false;
+        apiResult.isSuccess = true;
 
         /* if (isDriveFolder) {
             apiResult = await driveExplorerApi.removeDriveFolderAsync(driveItem.id);
@@ -357,18 +375,10 @@ export class DriveExplorer {
         if (apiResult.isSuccess) {
             if (isDriveFolder) {
                 this.removeDriveItem(this.currentDriveFolder.data.subFolders, driveItem);
-
-                this.subFolderItemsGridVDomEl.currentRow.removeDomNode();
-                this.subFolderItemsGridVDomEl.currentRow = null;
-
-                this.subFolderItemsGridVDomEl.endEditTableRow();
+                this.deleteDriveItemCore(this.subFolderItemsGridVDomEl);
             } else {
                 this.removeDriveItem(this.currentDriveFolder.data.folderFiles, driveItem);
-
-                this.fileItemsGridVDomEl.currentRow.removeDomNode();
-                this.fileItemsGridVDomEl.currentRow = null;
-
-                this.fileItemsGridVDomEl.endEditTableRow();
+                this.deleteDriveItemCore(this.fileItemsGridVDomEl);
             }
         } else {
             if (isDriveFolder) {
@@ -377,6 +387,14 @@ export class DriveExplorer {
                 this.showApiErrorPopover(apiResult, this.fileItemsGridVDomEl.editRow);
             }
         }
+    }
+
+    deleteDriveItemCore(itemsGridVDomEl) {
+        itemsGridVDomEl.currentRow.removeDomNode();
+        itemsGridVDomEl.currentRow = null;
+
+        itemsGridVDomEl.editRow.unsetReadonly();
+        itemsGridVDomEl.endEditTableRow();
     }
 
     enterEditMode() {

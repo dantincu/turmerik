@@ -13,7 +13,8 @@ namespace Turmerik.Core.DriveExplorer
 
     public enum DriveItemOp
     {
-        MoveFolder = 1,
+        CreateFile = 1,
+        MoveFolder,
         CopyFolder,
         MoveFile,
         CopyFile,

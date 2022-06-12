@@ -66,6 +66,10 @@ export class DriveItemNameVDomEl extends VDomEl {
             events: events
         });
     }
+
+    updateDriveItemName(driveItemName) {
+        this.domNode.textContent = driveItemName;
+    }
 }
 
 export class DriveItemCheckBox extends VDomEl {
@@ -119,6 +123,8 @@ export class TableRowCell extends VDomEl {
 }
 
 export class DriveItemsGridMainCell extends TableRowCell {
+    driveItemNameVDomEl = null;
+
     constructor(
         mainCellShortPressListener,
         mainCellLongPressListener,
@@ -136,10 +142,15 @@ export class DriveItemsGridMainCell extends TableRowCell {
             onMouseUp: mainCellMouseUp
         })];
 
-        this.childNodes.push(
-            new DriveItemNameVDomEl(
-                driveItemName,
-                mainCellEvents));
+        this.driveItemNameVDomEl = new DriveItemNameVDomEl(
+            driveItemName,
+            mainCellEvents);
+
+        this.childNodes.push(this.driveItemNameVDomEl);
+    }
+
+    updateDriveItemName(driveItemName) {
+        this.driveItemNameVDomEl.updateDriveItemName(driveItemName);
     }
 }
 
@@ -220,6 +231,7 @@ export class DriveItemsGridHeaderRow extends VDomEl {
 
 export class DriveItemsGridRow extends VDomEl {
     driveItem;
+    mainCell = null;
     isChecked = false;
     isDisabled = false;
 
@@ -239,6 +251,13 @@ export class DriveItemsGridRow extends VDomEl {
         mainCellLongPressListener = mainCellLongPressListener.bind(this);
 
         this.runMouseEvent = this.runMouseEvent.bind(this);
+
+        this.mainCell = new DriveItemsGridMainCell(
+            mainCellShortPressListener,
+            mainCellLongPressListener,
+            driveItem.name,
+            this.getDefaultMouseDownListener(),
+            this.getDefaultMouseUpListener());
 
         this.childNodes = [
             new TableRowCell([
@@ -287,12 +306,7 @@ export class DriveItemsGridRow extends VDomEl {
                 new IconVDomEl([ "oi", isFoldersGrid ? "oi-folder" : "oi-file" ],
                 this.getDefaultMouseEvents())
             ], [ driveFolderViewCssClasses.gridIconCell ]),
-            new DriveItemsGridMainCell(
-                mainCellShortPressListener,
-                mainCellLongPressListener,
-                driveItem.name,
-                this.getDefaultMouseDownListener(),
-                this.getDefaultMouseUpListener()),
+            this.mainCell,
             new TableRowCell([
                 new IconVDomEl(
                     [ "oi", "oi-pencil" ],
@@ -376,6 +390,10 @@ export class DriveItemsGridRow extends VDomEl {
         };
 
         return events;
+    }
+
+    updateDriveItemName(driveItemName) {
+        this.mainCell.updateDriveItemName(driveItemName);
     }
 }
 
@@ -542,7 +560,7 @@ export class DriveItemsGridView extends VDomEl {
                     const textValue = that.editRowTextBoxVDomEl.domNode.value;
                     const validation = that.editRowValidator(textValue);
 
-                    if (validation.isSuccess) {
+                    if (validation.isValid) {
                         editRow.setReadonly();
 
                         trmrk.core.applyIfOfTypeFunc(
@@ -693,5 +711,10 @@ export class DriveItemsGridView extends VDomEl {
         if (trmrk.core.isOfTypeFunction(this.trmrkEvents.onNavigateToDriveItem)) {
             this.trmrkEvents.onNavigateToDriveItem(driveItem);
         }
+    }
+
+    addTableRow(newDriveItem) {
+        const tableRow = this.getTableRow(newDriveItem);
+        this.tableBodyVDomEl.appendChild(tableRow);
     }
 }

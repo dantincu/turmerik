@@ -79,6 +79,20 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
             switch (driveItemPutOp.DriveItemOp.Value)
             {
+                case DriveItemOp.CreateFile:
+                    if (driveItemPutOp.OfficeLikeFileType.HasValue)
+                    {
+                        action = () => this.DriveExplorerService.CreateOfficeLikeFileAsync(
+                            driveItemPutOp.ParentFolderId, driveItemPutOp.Name, driveItemPutOp.OfficeLikeFileType.Value);
+                    }
+                    else
+                    {
+                        action = () => this.DriveExplorerService.CreateTextFileAsync(
+                            driveItemPutOp.ParentFolderId, driveItemPutOp.Name, string.Empty);
+                    }
+
+                    break;
+
                 case DriveItemOp.MoveFolder:
                     action = () => this.DriveExplorerService.MoveFolderAsync(
                         id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
