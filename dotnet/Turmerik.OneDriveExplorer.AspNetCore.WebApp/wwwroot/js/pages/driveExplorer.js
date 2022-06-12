@@ -4,7 +4,9 @@ import { ViewModelBase } from '../common/ViewModelBase.js';
 import { driveExplorerApi, driveItemOpEnum } from './driveExplorerApi.js';
 import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
-import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, trmrkCssClasses, driveFolderViewCssClasses, Validation } from './driveItemsGridView.js';
+import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, Validation } from './driveItemsGridView.js';
+import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
+import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
 
 export class DriveFolderApiResultWrapper {
     id = null;
@@ -150,50 +152,32 @@ export class DriveExplorer {
     }
 
     getCurrentDriveFolderHeaderVDomEl(driveFolder, isSticky) {
-        let headerCssClass = isSticky ? driveFolderViewCssClasses.stickyHeader : driveFolderViewCssClasses.header;
+        const events = new DriveExplorerHeaderEvents();
 
-        let currentDriveFolderTitleVDomEl = vdom.utils.getVDomEl(
-            "div", [ headerCssClass ], {}, [
-            vdom.utils.getVDomEl("h6", [], {}, [], {}, driveFolder.name),
-            vdom.utils.getVDomEl("div", [ trmrkCssClasses.iconsRow ], {}, [
-                vdom.utils.getVDomEl("span", [ "oi", "oi-home", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(this.onCurrentDriveFolderHomeClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-reload", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(this.onCurrentDriveFolderReloadClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-circle-top", trmrkCssClasses.icon ], {}, [],
-                    this.getMouseClickEvent(this.onCurrentDriveFolderGoUpClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(this.onCurrentDriveFolderOptionsClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-command", trmrkCssClasses.icon ], {}, [],
-                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewWithMacroClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-thick-top", "trmrk-rotate-45deg", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(this.onCurrentDriveFolderOpenInNewTabClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-folder", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewFolderClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-file", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewTextFileClick)),
-                vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon, trmrkCssClasses.icon ], {}, "+", 
-                    this.getMouseClickEvent(this.onCurrentDriveFolderCreateNewOfficeFileClick)),
-            ]),
-        ]);
+        events.onExpandCurrentDriveFolderTitle = this.onExpandCurrentDriveFolderTitle.bind(this);
+        events.onCollapseCurrentDriveFolderTitle = this.onCollapseCurrentDriveFolderTitle.bind(this);
+        events.onCurrentDriveFolderHomeClick = this.onCurrentDriveFolderHomeClick.bind(this);
+        events.onCurrentDriveFolderReloadClick = this.onCurrentDriveFolderReloadClick.bind(this);
+        events.onCurrentDriveFolderGoUpClick = this.onCurrentDriveFolderGoUpClick.bind(this);
+        events.onCurrentDriveFolderOptionsClick = this.onCurrentDriveFolderOptionsClick.bind(this);
+        events.onCurrentDriveFolderEditClick = this.onCurrentDriveFolderEditClick.bind(this);
+        events.onCurrentDriveFolderCreateNewWithMacroClick = this.onCurrentDriveFolderCreateNewWithMacroClick.bind(this);
+        events.onCurrentDriveFolderCreateNewFolderClick = this.onCurrentDriveFolderCreateNewFolderClick.bind(this);
+        events.onCurrentDriveFolderCreateNewOfficeFileClick = this.onCurrentDriveFolderCreateNewOfficeFileClick.bind(this);
+        events.onCurrentDriveFolderOpenInNewTabClick = this.onCurrentDriveFolderOpenInNewTabClick.bind(this);
 
+        let currentDriveFolderTitleVDomEl = new DriveExplorerHeader(driveFolder, isSticky, events);
         return currentDriveFolderTitleVDomEl;
     }
 
-    getMouseClickEvent(callback) {
-        const that = this;
+    onExpandCurrentDriveFolderTitle(e) {
+        this.currentDriveFolderHeaderVDomEl.expandTitle();
+        this.currentDriveFolderStickyHeaderVDomEl.expandTitle();
+    }
 
-        const event = {
-            click: [{
-                listener: function(e) {
-                    if (e.button === 0 && !that.isEditMode) {
-                        callback.call(that, e);
-                    }
-                }
-            }]
-        };
-
-        return event;
+    onCollapseCurrentDriveFolderTitle(e) {
+        this.currentDriveFolderHeaderVDomEl.collapseTitle();
+        this.currentDriveFolderStickyHeaderVDomEl.collapseTitle();
     }
 
     onCurrentDriveFolderHomeClick(e) {
@@ -209,6 +193,10 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderOptionsClick(e) {
+
+    }
+
+    onCurrentDriveFolderEditClick(e) {
 
     }
 

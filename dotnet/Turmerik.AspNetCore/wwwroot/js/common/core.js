@@ -788,33 +788,12 @@ export class Trmrk {
     vdom = null;
 }
 
-export class EntityBase {
-    __copyProps(src, throwOnUnknownProp = false) {
-        if (src !== null && typeof src === "object") {
-            const srcProps = Object.keys(src);
-            const ownProps = Object.keys(this);
-
-            for (let idx in srcProps) {
-                let prop = srcProps[idx];
-
-                if (throwOnUnknownProp && ownProps.indexOf(prop) < 0) {
-                    var err = "Unknown prop: " + prop;
-                    throw err;
-                } else {
-                    this[prop] = src[prop];
-                }
-            }
-        }
-    }
-}
-
 const trmrkInstn = new Trmrk();
 
 trmrkInstn.types["ValueWrapper"] = ValueWrapper;
 trmrkInstn.types["KeyValuePair"] = KeyValuePair;
 trmrkInstn.types["Trmrk"] = Trmrk;
 trmrkInstn.types["TrmrkCore"] = TrmrkCore;
-trmrkInstn.types["EntityBase"] = EntityBase;
 
 window.trmrk = trmrkInstn;
 export const trmrk = trmrkInstn;

@@ -22,4 +22,4 @@ export class ViewModelBase {
     }
 }
 
-trmrk.types["EntityBase"] = ViewModelBase;
+trmrk.types["ViewModelBase"] = ViewModelBase;
