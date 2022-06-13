@@ -28,7 +28,7 @@ export class WebStorageAxios {
 
             if (apiResult.isSuccess) {
                 if (!cachedDataFound && !trmrk.core.isNullOrUndefOrOrNaN(apiResult.data)) {
-                    json = JSON.stringify(apiResult.data);
+                    json = trmrk.core.toJsonIfObj(apiResult.data);
                     webStorage.setItem(cacheKey, json, storage);
                 }
             }

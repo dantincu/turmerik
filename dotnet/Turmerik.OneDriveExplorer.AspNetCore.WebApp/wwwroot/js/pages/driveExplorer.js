@@ -323,6 +323,7 @@ export class DriveExplorer {
 
                 if (isDriveFolder) {
                     this.updateDriveItemNameCore(this.subFolderItemsGridVDomEl, newName);
+                    driveExplorerApi.setDriveFolderToCache(driveItem);
                 } else {
                     this.updateDriveItemNameCore(this.fileItemsGridVDomEl, newName);
                 }
@@ -332,10 +333,14 @@ export class DriveExplorer {
                 if (isDriveFolder) {
                     this.currentDriveFolder.data.subFolders.push(driveItem);
                     this.addDriveItemCore(this.subFolderItemsGridVDomEl, driveItem);
+                    
+                    driveExplorerApi.setDriveFolderToCache(driveItem, this.currentDriveFolder.data.id);
                 } else {
                     this.currentDriveFolder.data.folderFiles.push(driveItem);
                     this.addDriveItemCore(this.fileItemsGridVDomEl, driveItem);
                 }
+                
+                driveExplorerApi.setDriveFolderToCache(this.currentDriveFolder.data);
             }
         } else {
             if (isDriveFolder) {
@@ -371,10 +376,14 @@ export class DriveExplorer {
             if (isDriveFolder) {
                 this.removeDriveItem(this.currentDriveFolder.data.subFolders, driveItem);
                 this.deleteDriveItemCore(this.subFolderItemsGridVDomEl);
+
+                driveExplorerApi.removeDriveFolderFromCache(driveItem);
             } else {
                 this.removeDriveItem(this.currentDriveFolder.data.folderFiles, driveItem);
                 this.deleteDriveItemCore(this.fileItemsGridVDomEl);
             }
+                
+            driveExplorerApi.setDriveFolderToCache(this.currentDriveFolder.data);
         } else {
             if (isDriveFolder) {
                 this.showApiErrorPopover(apiResult, this.subFolderItemsGridVDomEl.editRow);

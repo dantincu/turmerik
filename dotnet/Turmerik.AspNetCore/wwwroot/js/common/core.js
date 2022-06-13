@@ -141,6 +141,11 @@ export class TrmrkCore {
         throw err;
     };
 
+    isIterable(obj) {
+        const retVal = typeof obj[Symbol.iterator] === 'function';
+        return retVal;
+    }
+
     async readFromClipboardAsync() {
         let text = await navigator.clipboard.readText();
         return text;
@@ -205,6 +210,7 @@ export class TrmrkCore {
 
     toJsonIfObj(value) {
         if (this.isNotNullObj(value)) {
+            value = this.clone(value, true);
             value = JSON.stringify(value);
         }
 
@@ -351,6 +357,10 @@ export class TrmrkCore {
     filterMap(src, callbacksArr) {
         let trg = {};
 
+        if (this.isIterable(src)) {
+            trg = [];
+        }
+
         if (callbacksArr.length % 2 == 1) {
             callbacksArr.push(null);
         }
@@ -363,31 +373,34 @@ export class TrmrkCore {
         return trg;
     }
 
-    cloneShallow(src) {
-        let trg = this.filterMap(
-            src, [
-            value => !this.isNullOrUndefOrOrNaN(value)
-        ]);
+    clone(src, deep) {
+        let convertor;
 
-        return trg;
-    }
+        if (deep) {
+            convertor = value => typeof(value) === "object" ? this.clone(value, deep) : value;
+        } else {
+            convertor = value => value;
+        }
 
-    cloneDeep(src) {
         let trg = this.filterMap(
             src, [
             value => !this.isNullOrUndefOrOrNaN(value),
-            value => typeof(value) === "object" ? this.cloneDeep(value) : value
+            convertor
         ]);
 
         return trg;
     }
 
-    assureIsObject(obj, throwIfObjIsNull) {
+    assureIsObject(obj, throwIfObjIsNull, defaultValueIsArray) {
         if (this.isNullOrUndef(obj)) {
             if (throwIfObjIsNull) {
                 throw "Provided value must not be null or undefined"
             } else {
-                obj = {};
+                if (defaultValueIsArray) {
+                    obj = [];
+                } else {
+                    obj = {};
+                }
             }
         } else if (typeof(obj) !== "object") {
             throw "Provided value must be an object";
@@ -396,34 +409,36 @@ export class TrmrkCore {
         return obj;
     }
 
-    merge(trg, src, converter) {
-        trg = this.assureIsObject(trg);
-
-        if (typeof(converter) !== "function") {
-            let deep = !(!converter);
-            
-            if (deep) {
-                converter = (value, key) => {
-                    let retValue = value;
-
-                    if (typeof(value) === "object") {
-                        retValue = this.merge({}, value, true);
-                    }
-
-                    return retValue;
-                }
-            } else {
-                converter = (value, key) => value;
-            }
-        }
+    merge(trg, src, deep) {
+        trg = this.assureIsObject(trg, false, this.isIterable(src));
 
         this.foreach(src, [
-            value => this.isNullOrUndefOrOrNaN(trg[key]) && !this.isNullOrUndefOrOrNaN(value),
-            (value, key) => {
-                let trgValue = converter(value, key);
-                trg[key] = trgValue;
+            value => !this.isNullOrUndefOrOrNaN(value),
+            (srcVal, key) => {
+                let trgVal = trg[key];
+                
+                if (this.isNullOrUndefOrOrNaN(trgVal)) {
+                    if (this.isOfTypeObject(srcVal)) {
+                        trgVal = this.clone(srcVal, deep);
+                    } else {
+                        trgVal = srcVal;
+                    }
+
+                    trg[key] = srcVal;
+                } else if (this.isOfTypeObject(
+                    trgVal) && this.isOfTypeObject(srcVal)) {
+                    this.merge(trgVal, srcVal, deep);
+                }
             }
         ]);
+
+        return trg;
+    }
+
+    mergeAll(trg, srcArr, deep) {
+        for (let src of srcArr) {
+            trg = this.merge(trg, src, deep);
+        }
 
         return trg;
     }

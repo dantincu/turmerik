@@ -38,13 +38,13 @@ export class DriveExplorerApi {
     appSettings = new AppSettings();
     relUri = 'api/driveFolder';
 
-    getDriveItemCacheKey(driveItemId) {
+    getDriveFolderCacheKey(driveFolderId) {
         let cacheKey;
         
-        if (trmrk.core.isNonEmptyString(driveItemId)) {
+        if (trmrk.core.isNonEmptyString(driveFolderId)) {
             cacheKey = webStorage.getCacheKey(
                 this.appSettings.DriveFolderCacheKeyName,
-                driveItemId, this.username);
+                driveFolderId, this.username);
         } else {
             cacheKey = webStorage.getCacheKey(
                 this.appSettings.RootDriveFolderCacheKeyName,
@@ -55,7 +55,7 @@ export class DriveExplorerApi {
     }
 
     async getDriveFolderAsync(driveFolderId, refreshCache) {
-        let cacheKey = this.getDriveItemCacheKey(driveFolderId);
+        let cacheKey = this.getDriveFolderCacheKey(driveFolderId);
         let relUrl = this.relUri;
 
         if (trmrk.core.isNonEmptyString(driveFolderId)) {
@@ -136,11 +136,23 @@ export class DriveExplorerApi {
         return apiResult;
     }
 
-    setDriveItemToCache(driveItem, driveItemId) {
-        let cacheKey = this.getDriveItemCacheKey(driveItemId);
-        let driveItemJson = trmrk.core.toJsonIfObj(driveItem);
+    setDriveFolderToCache(driveFolder, parentFolderId) {
+        let cacheKey = this.getDriveFolderCacheKey(driveFolder.id);
+        
+        if (trmrk.core.isNonEmptyString(parentFolderId)) {
+            driveFolder = trmrk.core.mergeAll(
+                {}, [ {
+                    parentFolderId: parentFolderId
+                }, driveFolder ], true);
+        }
 
-        sessionStorage.setItem(cacheKey, driveItemJson);
+        let driveFolderJson = trmrk.core.toJsonIfObj(driveFolder);
+        sessionStorage.setItem(cacheKey, driveFolderJson);
+    }
+
+    removeDriveFolderFromCache(driveFolder) {
+        let cacheKey = this.getDriveFolderCacheKey(driveFolder.id);
+        sessionStorage.removeItem(cacheKey);
     }
 
     validateDriveItemId(driveItemId) {
