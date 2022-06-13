@@ -361,8 +361,9 @@ export class DriveItemsGridRow extends VDomEl {
         return events;
     }
 
-    updateDriveItemName(driveItemName) {
-        this.mainCell.updateDriveItemName(driveItemName);
+    updateDriveItem(driveItem) {
+        this.mainCell.updateDriveItemName(driveItem.name);
+        this.driveItem = driveItem;
     }
 }
 

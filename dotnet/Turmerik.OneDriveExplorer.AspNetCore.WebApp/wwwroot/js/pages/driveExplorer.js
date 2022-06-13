@@ -319,29 +319,31 @@ export class DriveExplorer {
 
         if (apiResult.isSuccess) {
             if (isUpdate) {
-                driveItem.name = newName;
+                sessionStorage.removeItem(driveItem.id);
 
                 if (isDriveFolder) {
-                    this.updateDriveItemNameCore(this.subFolderItemsGridVDomEl, newName);
-                    driveExplorerApi.setDriveFolderToCache(driveItem);
+                    this.updateDriveItemNameCore(this.subFolderItemsGridVDomEl, apiResult.data);
+                    this.replaceDriveItem(parentFolder.subFolders, driveItem, apiResult.data)
                 } else {
-                    this.updateDriveItemNameCore(this.fileItemsGridVDomEl, newName);
+                    this.updateDriveItemNameCore(this.fileItemsGridVDomEl, apiResult.data);
+                    this.replaceDriveItem(parentFolder.folderFiles, driveItem, apiResult.data)
                 }
+
+                driveItem = apiResult.data;
             } else {
                 driveItem = apiResult.data;
 
                 if (isDriveFolder) {
-                    this.currentDriveFolder.data.subFolders.push(driveItem);
+                    parentFolder.subFolders.push(driveItem);
                     this.addDriveItemCore(this.subFolderItemsGridVDomEl, driveItem);
-                    
-                    driveExplorerApi.setDriveFolderToCache(driveItem, this.currentDriveFolder.data.id);
                 } else {
-                    this.currentDriveFolder.data.folderFiles.push(driveItem);
+                    parentFolder.folderFiles.push(driveItem);
                     this.addDriveItemCore(this.fileItemsGridVDomEl, driveItem);
                 }
-                
-                driveExplorerApi.setDriveFolderToCache(this.currentDriveFolder.data);
             }
+            
+            driveExplorerApi.setDriveFolderToCache(driveItem, parentFolder.id);
+            driveExplorerApi.setDriveFolderToCache(this.currentDriveFolder.data);
         } else {
             if (isDriveFolder) {
                 this.showApiErrorPopover(apiResult, this.subFolderItemsGridVDomEl.editRow);
@@ -351,8 +353,8 @@ export class DriveExplorer {
         }
     }
 
-    updateDriveItemNameCore(itemsGridVDomEl, newName) {
-        itemsGridVDomEl.currentRow.updateDriveItemName(newName);
+    updateDriveItemNameCore(itemsGridVDomEl, driveItem) {
+        itemsGridVDomEl.currentRow.updateDriveItem(driveItem);
         itemsGridVDomEl.editRow.unsetReadonly();
         itemsGridVDomEl.endEditTableRow();
     }
@@ -365,6 +367,7 @@ export class DriveExplorer {
 
     async deleteDriveItemAsync(driveItem, isDriveFolder) {
         let apiResult;
+        const parentFolder = this.currentDriveFolder.data;
 
         if (isDriveFolder) {
             apiResult = await driveExplorerApi.removeDriveFolderAsync(driveItem.id);
@@ -374,16 +377,15 @@ export class DriveExplorer {
 
         if (apiResult.isSuccess) {
             if (isDriveFolder) {
-                this.removeDriveItem(this.currentDriveFolder.data.subFolders, driveItem);
+                this.removeDriveItem(parentFolder.subFolders, driveItem);
                 this.deleteDriveItemCore(this.subFolderItemsGridVDomEl);
-
-                driveExplorerApi.removeDriveFolderFromCache(driveItem);
             } else {
-                this.removeDriveItem(this.currentDriveFolder.data.folderFiles, driveItem);
+                this.removeDriveItem(parentFolder.folderFiles, driveItem);
                 this.deleteDriveItemCore(this.fileItemsGridVDomEl);
             }
                 
-            driveExplorerApi.setDriveFolderToCache(this.currentDriveFolder.data);
+            driveExplorerApi.setDriveFolderToCache(parentFolder);
+            driveExplorerApi.removeDriveFolderFromCache(driveItem);
         } else {
             if (isDriveFolder) {
                 this.showApiErrorPopover(apiResult, this.subFolderItemsGridVDomEl.editRow);
@@ -502,6 +504,20 @@ export class DriveExplorer {
         }
 
         return validation;
+    }
+
+    replaceDriveItem(driveItemsArr, prevDriveItem, newDriveItem) {
+        const kvp = trmrk.core.firstOrDefault(
+            driveItemsArr,
+            item => item.id === prevDriveItem.id
+        );
+
+        if (kvp.Key >= 0) {
+            driveItemsArr.splice(kvp.Key, 1, newDriveItem);
+            console.log("Replaced drive item with id " + prevDriveItem.id);
+        } else {
+            console.log("Could not find drive item with id " + prevDriveItem.id);
+        }
     }
 
     removeDriveItem(driveItemsArr, driveItem) {
