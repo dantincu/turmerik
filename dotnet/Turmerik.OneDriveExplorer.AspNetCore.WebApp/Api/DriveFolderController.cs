@@ -79,20 +79,6 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
             switch (driveItemPutOp.DriveItemOp.Value)
             {
-                case DriveItemOp.CreateFile:
-                    if (driveItemPutOp.OfficeLikeFileType.HasValue)
-                    {
-                        action = () => this.DriveExplorerService.CreateOfficeLikeFileAsync(
-                            driveItemPutOp.ParentFolderId, driveItemPutOp.Name, driveItemPutOp.OfficeLikeFileType.Value);
-                    }
-                    else
-                    {
-                        action = () => this.DriveExplorerService.CreateTextFileAsync(
-                            driveItemPutOp.ParentFolderId, driveItemPutOp.Name, string.Empty);
-                    }
-
-                    break;
-
                 case DriveItemOp.MoveFolder:
                     action = () => this.DriveExplorerService.MoveFolderAsync(
                         id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
@@ -103,18 +89,9 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
                         id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
                     break;
 
-                case DriveItemOp.MoveFile:
-                    action = () => this.DriveExplorerService.MoveFileAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
-                    break;
-
                 case DriveItemOp.CopyFile:
                     action = () => this.DriveExplorerService.CopyFileAsync(
                         id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
-                    break;
-
-                case DriveItemOp.DeleteFile:
-                    action = () => this.DriveExplorerService.DeleteFileAsync(id);
                     break;
 
                 case DriveItemOp.CreateMultipleFolders:
@@ -165,7 +142,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
                     }
                     break;
                 default:
-                    action = async () => throw new InternalAppError(HttpStatusCode.InternalServerError);
+                    action = async () => throw new InternalAppError(HttpStatusCode.BadRequest);
                     break;
             }
 
@@ -213,25 +190,6 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
                     var result = await this.DriveExplorerService.DeleteFolderAsync(id);
                     return result;
                 });
-
-            return actionResult;
-        }
-
-        private async Task<ActionResult> ExecuteAsync(
-            Func<Task<TrmrkActionResult<DriveItem>>> action)
-        {
-            var result = await action();
-            ActionResult actionResult;
-
-            if (result.IsSuccess)
-            {
-                actionResult = new JsonResult(result.Data);
-            }
-            else
-            {
-                var httpStatusCode = result.HttpStatusCode ?? HttpStatusCode.InternalServerError;
-                actionResult = this.StatusCode((int)httpStatusCode);
-            }
 
             return actionResult;
         }

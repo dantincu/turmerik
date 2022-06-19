@@ -23,7 +23,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> GetFolderAsync(string folderId)
         {
-            var actionResult = ExecuteCore(
+            var actionResult = ExecuteDriveItemCore(
                 () =>
                 {
                     var entry = new DirectoryInfo(folderId);
@@ -51,7 +51,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> GetRootFolderAsync()
         {
-            var actionResult = ExecuteCore(
+            var actionResult = ExecuteDriveItemCore(
                 () =>
                 {
                     var fsEntriesList = new List<DriveItem>();
@@ -117,9 +117,52 @@ namespace Turmerik.Core.FsExplorer
             return actionResult;
         }
 
+        public async Task<TrmrkActionResult<DriveItem>> GetTextFileAsync(string fileId)
+        {
+            var actionResult = await ExecuteDriveItemCoreAsync(async () =>
+            {
+                var entry = new FileInfo(fileId);
+                var fileItem = GetDriveItem(entry);
+
+                fileItem.ParentFolderId = Path.GetDirectoryName(entry.FullName);
+                fileItem.TextFileContent = File.ReadAllText(fileId);
+
+                var result = new TrmrkActionResult<DriveItem>(
+                    true, fileItem, null, null);
+
+                return result;
+            });
+
+            return actionResult;
+        }
+
+        public TrmrkActionResult<string> GetRootDriveFolderUrl()
+        {
+            var actionResult = new TrmrkActionResult<string>(
+                true, string.Empty);
+
+            return actionResult;
+        }
+
+        public TrmrkActionResult<string> GetDriveFolderUrl(string folderId)
+        {
+            var actionResult = new TrmrkActionResult<string>(
+                true, this.GetDriveItemUrl(folderId));
+
+            return actionResult;
+        }
+
+        public TrmrkActionResult<string> GetDriveFileUrl(string fileId)
+        {
+            var actionResult = new TrmrkActionResult<string>(
+                true, this.GetDriveItemUrl(fileId));
+
+            return actionResult;
+        }
+
         public async Task<TrmrkActionResult<DriveItem>> CopyFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 string newPath = Path.Combine(newParentFolderId, newFileName);
                 File.Copy(fileId, newPath);
@@ -138,7 +181,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 string newPath = Path.Combine(newParentFolderId, newFolderName);
                 FsH.CopyDirectory(folderId, newPath);
@@ -157,7 +200,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> CreateTextFileAsync(string parentFolderId, string newFileName, string text)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 string newPath = Path.Combine(parentFolderId, newFileName);
                 File.WriteAllText(newPath, text);
@@ -179,7 +222,7 @@ namespace Turmerik.Core.FsExplorer
             string newFileName,
             OfficeLikeFileType officeLikeFileType)
         {
-            var actionResult = await ExecuteCoreAsync(async () =>
+            var actionResult = await ExecuteDriveItemCoreAsync(async () =>
             {
                 var result = await CreateTextFileAsync(parentFolderId, newFileName, string.Empty);
                 return result;
@@ -190,7 +233,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> CreateFolderAsync(string parentFolderId, string newFolderName)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 string newPath = Path.Combine(parentFolderId, newFolderName);
                 Directory.CreateDirectory(newPath);
@@ -209,7 +252,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> DeleteFileAsync(string fileId)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 var fileInfo = new FileInfo(fileId);
                 var driveItem = GetDriveItem(fileInfo);
@@ -227,7 +270,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> DeleteFolderAsync(string folderId)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 var dirInfo = new DirectoryInfo(folderId);
                 var driveItem = GetDriveItem(dirInfo);
@@ -245,7 +288,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> MoveFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 newParentFolderId = newParentFolderId ?? Path.GetDirectoryName(fileId);
 
@@ -266,7 +309,7 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName)
         {
-            var actionResult = ExecuteCore(() =>
+            var actionResult = ExecuteDriveItemCore(() =>
             {
                 newParentFolderId = newParentFolderId ?? Path.GetDirectoryName(folderId);
 
@@ -331,9 +374,9 @@ namespace Turmerik.Core.FsExplorer
             {
                 Id = fsInfo.FullName,
                 Name = fsInfo.Name,
-                CreationTimeStr = TimeStampHelper.TmStmp(fsInfo.CreationTime, true, TimeStamp.Seconds),
+                /* CreationTimeStr = TimeStampHelper.TmStmp(fsInfo.CreationTime, true, TimeStamp.Seconds),
                 LastAccessTimeStr = TimeStampHelper.TmStmp(fsInfo.LastAccessTime, true, TimeStamp.Seconds),
-                LastWriteTimeStr = TimeStampHelper.TmStmp(fsInfo.LastWriteTime, true, TimeStamp.Seconds)
+                LastWriteTimeStr = TimeStampHelper.TmStmp(fsInfo.LastWriteTime, true, TimeStamp.Seconds) */
             };
 
             var dirInfo = fsInfo as DirectoryInfo;
@@ -384,11 +427,17 @@ namespace Turmerik.Core.FsExplorer
 
                 return new TrmrkActionResult<DriveItemPutOp>(true, result);
             },
-            exc => DefaultExceptionHandler(exc).WithHelper(
+            exc => DriveItemDefaultExceptionHandler(exc).WithHelper(
                 result => new TrmrkActionResult<DriveItemPutOp>(
                     false, null, result.ErrorViewModel, result.HttpStatusCode)));
 
             return actionResult;
+        }
+
+        private string GetDriveItemUrl(string driveItemId)
+        {
+            string driveItemUrl = $"file://{driveItemId}";
+            return driveItemUrl;
         }
     }
 }

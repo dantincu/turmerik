@@ -32,6 +32,7 @@ export class DriveItem extends ViewModelBase {
     lastAccessTimeStr = null;
     lastWriteTimeStr = null;
     officeLikeFileType = null;
+    textFileContent = null;
     subFolders = null;
     folderFiles = null;
 }

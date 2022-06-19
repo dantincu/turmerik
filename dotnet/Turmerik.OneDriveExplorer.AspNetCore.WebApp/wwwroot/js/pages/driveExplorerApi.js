@@ -36,7 +36,8 @@ export const driveItemNameInvalidChars = "\\/:*?\"<>|";
 
 export class DriveExplorerApi {
     appSettings = new AppSettings();
-    relUri = 'api/driveFolder';
+    folderRelUri = 'api/driveFolder';
+    fileRelUri = 'api/driveFile';
 
     getDriveFolderCacheKey(driveFolderId) {
         let cacheKey;
@@ -56,7 +57,7 @@ export class DriveExplorerApi {
 
     async getDriveFolderAsync(driveFolderId, refreshCache) {
         let cacheKey = this.getDriveFolderCacheKey(driveFolderId);
-        let relUrl = this.relUri;
+        let relUrl = this.folderRelUri;
 
         if (trmrk.core.isNonEmptyString(driveFolderId)) {
             relUrl += "/" + encodeURIComponent(driveFolderId);
@@ -71,7 +72,7 @@ export class DriveExplorerApi {
 
     async updateDriveFolderNameAsync(driveFolderId, newFolderName) {
         this.validateDriveItemIdAndNewName(driveFolderId, newFolderName);
-        let relUrl = this.relUri + "/" + encodeURIComponent(driveFolderId);
+        let relUrl = this.folderRelUri + "/" + encodeURIComponent(driveFolderId);
 
         let params = {
             name: newFolderName,
@@ -84,7 +85,7 @@ export class DriveExplorerApi {
 
     async addDriveFolderAsync(parentFolderId, newFolderName) {
         this.validateDriveItemIdAndNewName(parentFolderId, newFolderName);
-        let relUrl = this.relUri;
+        let relUrl = this.folderRelUri;
 
         let params = {
             parentFolderId: parentFolderId,
@@ -97,7 +98,7 @@ export class DriveExplorerApi {
 
     async removeDriveFolderAsync(driveFolderId) {
         this.validateDriveItemId(driveFolderId);
-        let relUrl = this.relUri + "/" + encodeURIComponent(driveFolderId);
+        let relUrl = this.folderRelUri + "/" + encodeURIComponent(driveFolderId);
 
         let apiResult = await trmrkAxios.delete(relUrl);
         return apiResult;
@@ -105,7 +106,7 @@ export class DriveExplorerApi {
 
     async updateDriveFileNameAsync(driveFileId, newFileName, officeLikeFileType) {
         this.validateDriveItemIdAndNewName(driveFileId, newFileName, officeLikeFileType);
-        let relUrl = this.relUri + "/" + encodeURIComponent(driveFileId);
+        let relUrl = this.fileRelUri + "/" + encodeURIComponent(driveFileId);
 
         let params = {
             name: newFolderName
@@ -117,7 +118,7 @@ export class DriveExplorerApi {
 
     async addDriveFileAsync(parentFolderId, newFileName, officeLikeFileType) {
         this.validateDriveItemIdAndNewName(parentFolderId, newFileName, officeLikeFileType);
-        let relUrl = this.relUri;
+        let relUrl = this.fileRelUri;
 
         let params = {
             parentFolderId: parentFolderId,
@@ -130,7 +131,7 @@ export class DriveExplorerApi {
 
     async removeDriveFileAsync(driveFileId) {
         this.validateDriveItemId(driveFileId);
-        let relUrl = this.relUri + "/" + encodeURIComponent(driveFileId);
+        let relUrl = this.fileRelUri + "/" + encodeURIComponent(driveFileId);
 
         let apiResult = await trmrkAxios.delete(relUrl);
         return apiResult;

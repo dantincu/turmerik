@@ -14,16 +14,18 @@ namespace Turmerik.Core.DriveExplorer
         protected DriveExplorerServiceBase(ITimeStampHelper timeStampHelper)
         {
             this.TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
-            DefaultExceptionHandler = GetDefaultExceptionHandler();
+            DriveItemDefaultExceptionHandler = GetDefaultExceptionHandler<DriveItem>();
+            StringDefaultExceptionHandler = GetDefaultExceptionHandler<string>();
         }
 
         protected ITimeStampHelper TimeStampHelper { get; }
 
-        protected Func<Exception, TrmrkActionResult<DriveItem>> DefaultExceptionHandler { get; }
+        protected Func<Exception, TrmrkActionResult<DriveItem>> DriveItemDefaultExceptionHandler { get; }
+        protected Func<Exception, TrmrkActionResult<string>> StringDefaultExceptionHandler { get; }
 
-        protected virtual Func<Exception, TrmrkActionResult<DriveItem>> GetDefaultExceptionHandler()
+        protected virtual Func<Exception, TrmrkActionResult<TData>> GetDefaultExceptionHandler<TData>()
         {
-            Func<Exception, TrmrkActionResult<DriveItem>> handler = exc => HandleException(exc);
+            Func<Exception, TrmrkActionResult<TData>> handler = exc => HandleException<TData>(exc);
             return handler;
         }
 
@@ -39,13 +41,13 @@ namespace Turmerik.Core.DriveExplorer
             return httpStatusCode;
         }
 
-        protected virtual TrmrkActionResult<DriveItem> HandleException(Exception exc)
+        protected virtual TrmrkActionResult<TData> HandleException<TData>(Exception exc)
         {
             var httpStatusCode = GetHttpStatusCode(exc);
             var errViewModel = new ErrorViewModel(null, exc);
 
-            var result = new TrmrkActionResult<DriveItem>(
-                false, null, errViewModel, httpStatusCode);
+            var result = new TrmrkActionResult<TData>(
+                false, default, errViewModel, httpStatusCode);
 
             return result;
         }
@@ -86,25 +88,49 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected TrmrkActionResult<DriveItem> ExecuteCore(
+        protected TrmrkActionResult<DriveItem> ExecuteDriveItemCore(
             Func<TrmrkActionResult<DriveItem>> action,
             Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
         {
-            excHandler = excHandler.FirstNotNull(DefaultExceptionHandler);
+            excHandler = excHandler.FirstNotNull(DriveItemDefaultExceptionHandler);
 
-            var actionResult = ExecuteCore<TrmrkActionResult<DriveItem>>(
+            var actionResult = ExecuteCore(
                 action, excHandler);
 
             return actionResult;
         }
 
-        protected async Task<TrmrkActionResult<DriveItem>> ExecuteCoreAsync(
+        protected async Task<TrmrkActionResult<DriveItem>> ExecuteDriveItemCoreAsync(
             Func<Task<TrmrkActionResult<DriveItem>>> action,
             Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
         {
-            excHandler = excHandler.FirstNotNull(DefaultExceptionHandler);
+            excHandler = excHandler.FirstNotNull(DriveItemDefaultExceptionHandler);
 
-            var actionResult = await ExecuteCoreAsync<TrmrkActionResult<DriveItem>>(
+            var actionResult = await ExecuteCoreAsync(
+                action, excHandler);
+
+            return actionResult;
+        }
+
+        protected TrmrkActionResult<string> ExecuteStringCore(
+            Func<TrmrkActionResult<string>> action,
+            Func<Exception, TrmrkActionResult<string>> excHandler = null)
+        {
+            excHandler = excHandler.FirstNotNull(StringDefaultExceptionHandler);
+
+            var actionResult = ExecuteCore(
+                action, excHandler);
+
+            return actionResult;
+        }
+
+        protected async Task<TrmrkActionResult<string>> ExecuteStringCoreAsync(
+            Func<Task<TrmrkActionResult<string>>> action,
+            Func<Exception, TrmrkActionResult<string>> excHandler = null)
+        {
+            excHandler = excHandler.FirstNotNull(StringDefaultExceptionHandler);
+
+            var actionResult = await ExecuteCoreAsync(
                 action, excHandler);
 
             return actionResult;

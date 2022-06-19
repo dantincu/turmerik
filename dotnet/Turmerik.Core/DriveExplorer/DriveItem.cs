@@ -19,6 +19,8 @@ namespace Turmerik.Core.DriveExplorer
         public string LastAccessTimeStr { get; set; }
         public string LastWriteTimeStr { get; set; }
         public OfficeLikeFileType? OfficeLikeFileType { get; set; }
+        public string TextFileContent { get; set; }
+        public byte[] RawFileContent { get; set; }
         public List<DriveItem> SubFolders { get; set; }
         public List<DriveItem> FolderFiles { get; set; }
     }

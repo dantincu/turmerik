@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Turmerik.Core.Components;
 using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
@@ -12,5 +14,24 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
         }
 
         protected IDriveExplorerService DriveExplorerService { get; }
+
+        protected async Task<ActionResult> ExecuteAsync(
+            Func<Task<TrmrkActionResult<DriveItem>>> action)
+        {
+            var result = await action();
+            ActionResult actionResult;
+
+            if (result.IsSuccess)
+            {
+                actionResult = new JsonResult(result.Data);
+            }
+            else
+            {
+                var httpStatusCode = result.HttpStatusCode ?? HttpStatusCode.InternalServerError;
+                actionResult = this.StatusCode((int)httpStatusCode);
+            }
+
+            return actionResult;
+        }
     }
 }

@@ -10,6 +10,10 @@ namespace Turmerik.Core.DriveExplorer
     {
         Task<TrmrkActionResult<DriveItem>> GetRootFolderAsync();
         Task<TrmrkActionResult<DriveItem>> GetFolderAsync(string folderId);
+        TrmrkActionResult<string> GetRootDriveFolderUrl();
+        TrmrkActionResult<string> GetDriveFolderUrl(string folderId);
+        TrmrkActionResult<string> GetDriveFileUrl(string fileId);
+        Task<TrmrkActionResult<DriveItem>> GetTextFileAsync(string fileId);
         Task<TrmrkActionResult<DriveItem>> CreateFolderAsync(string parentFolderId, string newFolderName);
         Task<TrmrkActionResult<DriveItem>> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName);
         Task<TrmrkActionResult<DriveItem>> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName);
