@@ -25,10 +25,10 @@ namespace Turmerik.Core.DriveExplorer
         public List<DriveItem> FolderFiles { get; set; }
     }
 
-    public class DriveItemPutOp : DriveItem
+    public class DriveItemOp : DriveItem
     {
-        public DriveItemOp? DriveItemOp { get; set; }
-        public List<DriveItemPutOp> MultipleItems { get; set; }
+        // public DriveItemOp? DriveItemOp { get; set; }
+        public List<DriveItemOp> MultipleItems { get; set; }
         public DriveItemNameMacro NameMacro { get; set; }
     }
 

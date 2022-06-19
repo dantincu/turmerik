@@ -70,113 +70,15 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(string id, [FromBody] DriveItemPutOp driveItemPutOp)
+        public async Task<ActionResult> Put(string id, [FromBody] DriveItemOp driveItem)
         {
-            Func<Task<TrmrkActionResult<DriveItem>>> action = null;
-
-            List<Tuple<Func<string[], int, string, string>, string>> folderNameFactoriesList = null;
-            List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>> fileNameFactoriesList = null;
-
-            switch (driveItemPutOp.DriveItemOp.Value)
-            {
-                case DriveItemOp.MoveFolder:
-                    action = () => this.DriveExplorerService.MoveFolderAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
-                    break;
-
-                case DriveItemOp.CopyFolder:
-                    action = () => this.DriveExplorerService.CopyFolderAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
-                    break;
-
-                case DriveItemOp.CopyFile:
-                    action = () => this.DriveExplorerService.CopyFileAsync(
-                        id, driveItemPutOp.ParentFolderId, driveItemPutOp.Name);
-                    break;
-
-                case DriveItemOp.CreateMultipleFolders:
-                    if (TryRegisterDriveItemNameMacros(ref action))
-                    {
-                        folderNameFactoriesList = driveItemPutOp.MultipleItems.Select(
-                            item => new Tuple<Func<string[], int, string, string>, string>(
-                                nameMacroResolver.Resolve(
-                                    item.NameMacro),
-                                item.NameMacro.SrcName)).ToList();
-                    }
-
-                    break;
-                case DriveItemOp.CreateMultipleFiles:
-                    if (TryRegisterDriveItemNameMacros(ref action))
-                    {
-                        fileNameFactoriesList = driveItemPutOp.MultipleItems.Select(
-                        item => new Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>(
-                            nameMacroResolver.Resolve(
-                                item.NameMacro),
-                            item.NameMacro.SrcName,
-                            item.OfficeLikeFileType)).ToList();
-                    }
-
-                    break;
-                case DriveItemOp.CreateFolderFromMacro:
-                    if (TryRegisterDriveItemNameMacros(ref action))
-                    {
-                        folderNameFactoriesList = new List<Tuple<Func<string[], int, string, string>, string>>()
-                        {
-                            new Tuple<Func<string[], int, string, string>, string>(
-                                nameMacroResolver.Resolve(driveItemPutOp.NameMacro),
-                                driveItemPutOp.NameMacro.SrcName)
-                        };
-                    }
-
-                    break;
-                case DriveItemOp.CreateFileFromMacro:
-                    if (TryRegisterDriveItemNameMacros(ref action))
-                    {
-                        fileNameFactoriesList = new List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>>()
-                        {
-                            new Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>(
-                                nameMacroResolver.Resolve(driveItemPutOp.NameMacro),
-                                driveItemPutOp.NameMacro.SrcName,
-                                driveItemPutOp.OfficeLikeFileType)
-                        };
-                    }
-                    break;
-                default:
-                    action = async () => throw new InternalAppError(HttpStatusCode.BadRequest);
-                    break;
-            }
-
-            if (action == null)
-            {
-                if (folderNameFactoriesList != null && fileNameFactoriesList == null)
+            var actionResult = await ExecuteAsync(
+                async () =>
                 {
-                    action = async () => (await DriveExplorerService.CreateMultipleFoldersAsync(
-                        id,
-                        folderNameFactoriesList)).WithHelper(
-                        result => new TrmrkActionResult<DriveItem>(
-                            result.IsSuccess,
-                            result.Data,
-                            result.ErrorViewModel,
-                            result.HttpStatusCode));
-                }
-                else if (folderNameFactoriesList == null && fileNameFactoriesList != null)
-                {
-                    action = async () => (await DriveExplorerService.CreateMultipleFilesAsync(
-                        id,
-                        fileNameFactoriesList)).WithHelper(
-                        result => new TrmrkActionResult<DriveItem>(
-                            result.IsSuccess,
-                            result.Data,
-                            result.ErrorViewModel,
-                            result.HttpStatusCode));
-                }
-                else
-                {
-                    action = async () => throw new InternalAppError(HttpStatusCode.InternalServerError);
-                }
-            }
+                    var result = await this.DriveExplorerService.RenameFolderAsync(id, driveItem.Name);
+                    return result;
+                });
 
-            var actionResult = await ExecuteAsync(action);
             return actionResult;
         }
 
@@ -188,6 +90,104 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
                 async () =>
                 {
                     var result = await this.DriveExplorerService.DeleteFolderAsync(id);
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Copy([FromBody] DriveItem driveItem)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var result = await this.DriveExplorerService.CopyFolderAsync(
+                        driveItem.Id, driveItem.ParentFolderId, driveItem.Name);
+
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Move([FromBody] DriveItem driveItem)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var result = await this.DriveExplorerService.MoveFolderAsync(
+                        driveItem.Id, driveItem.ParentFolderId, driveItem.Name);
+
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> CreateMultipleFoldersFromMacros([FromBody] DriveItemOp driveItemOp)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var factoriesList = this.ToDriveFolderNameFactoriesList(driveItemOp.MultipleItems);
+
+                    var result = await this.DriveExplorerService.CreateMultipleFoldersAsync(
+                        driveItemOp.ParentFolderId, factoriesList);
+
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> CreateFolderFromMacro([FromBody] DriveItemOp driveItemOp)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var factoriesList = this.ItemToDriveFolderNameFactoriesList(driveItemOp);
+
+                    var result = await this.DriveExplorerService.CreateMultipleFoldersAsync(
+                        driveItemOp.ParentFolderId, factoriesList);
+
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> CreateMultipleFilesFromMacros([FromBody] DriveItemOp driveItemOp)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var factoriesList = this.ToDriveFileNameFactoriesList(driveItemOp.MultipleItems);
+
+                    var result = await this.DriveExplorerService.CreateMultipleFilesAsync(
+                        driveItemOp.ParentFolderId, factoriesList);
+
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> CreateFileFromMacro([FromBody] DriveItemOp driveItemOp)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var factoriesList = this.ItemToDriveFileNameFactoriesList(driveItemOp);
+
+                    var result = await this.DriveExplorerService.CreateMultipleFilesAsync(
+                        driveItemOp.ParentFolderId, factoriesList);
+
                     return result;
                 });
 
@@ -210,6 +210,67 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
             }
 
             return retVal;
+        }
+
+        private Tuple<Func<string[], int, string, string>, string> ToDriveFolderNameFactory(
+            DriveItemOp driveItemOp)
+        {
+            var macro = driveItemOp.NameMacro;
+
+            var tuple = new Tuple<Func<string[], int, string, string>, string>(
+                nameMacroResolver.Resolve(macro),
+                macro.SrcName);
+
+            return tuple;
+        }
+
+        private Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?> ToDriveFileNameFactory(
+            DriveItemOp driveItemOp)
+        {
+            var macro = driveItemOp.NameMacro;
+
+            var tuple = new Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>(
+                nameMacroResolver.Resolve(macro),
+                macro.SrcName,
+                driveItemOp.OfficeLikeFileType);
+
+            return tuple;
+        }
+
+        private List<Tuple<Func<string[], int, string, string>, string>> ItemToDriveFolderNameFactoriesList(
+            DriveItemOp driveItemOp)
+        {
+            var retList = new List<Tuple<Func<string[], int, string, string>, string>>()
+            {
+                this.ToDriveFolderNameFactory(driveItemOp)
+            };
+
+            return retList;
+        }
+
+        private List<Tuple<Func<string[], int, string, string>, string>> ToDriveFolderNameFactoriesList(
+            List<DriveItemOp> driveItemOpsList)
+        {
+            var retList = driveItemOpsList.Select(this.ToDriveFolderNameFactory).ToList();
+            return retList;
+        }
+
+        private List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>> ItemToDriveFileNameFactoriesList(
+            DriveItemOp driveItemOp)
+        {
+            var retList = new List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>>()
+            {
+                this.ToDriveFileNameFactory(driveItemOp)
+            };
+
+            return retList;
+        }
+
+        private List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>> ToDriveFileNameFactoriesList(
+            List<DriveItemOp> driveItemOpsList)
+        {
+            var retList = driveItemOpsList.Select(this.ToDriveFileNameFactory).ToList();
+            return retList;
         }
     }
 }

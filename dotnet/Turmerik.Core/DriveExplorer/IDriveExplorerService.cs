@@ -15,6 +15,7 @@ namespace Turmerik.Core.DriveExplorer
         TrmrkActionResult<string> GetDriveFileUrl(string fileId);
         Task<TrmrkActionResult<DriveItem>> GetTextFileAsync(string fileId);
         Task<TrmrkActionResult<DriveItem>> CreateFolderAsync(string parentFolderId, string newFolderName);
+        Task<TrmrkActionResult<DriveItem>> RenameFolderAsync(string folderId, string newFolderName);
         Task<TrmrkActionResult<DriveItem>> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName);
         Task<TrmrkActionResult<DriveItem>> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName);
         Task<TrmrkActionResult<DriveItem>> DeleteFolderAsync(string folderId);
@@ -25,14 +26,15 @@ namespace Turmerik.Core.DriveExplorer
             string newFileName,
             OfficeLikeFileType officeLikeFileType);
 
+        Task<TrmrkActionResult<DriveItem>> RenameFileAsync(string fileId, string newFileName);
         Task<TrmrkActionResult<DriveItem>> CopyFileAsync(string fileId, string newParentFolderId, string newFileName);
         Task<TrmrkActionResult<DriveItem>> MoveFileAsync(string fileId, string newParentFolderId, string newFileName);
         Task<TrmrkActionResult<DriveItem>> DeleteFileAsync(string fileId);
 
-        Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleFoldersAsync(string parentFolderId,
+        Task<TrmrkActionResult<DriveItemOp>> CreateMultipleFoldersAsync(string parentFolderId,
             List<Tuple<Func<string[], int, string, string>, string>> folderNameFactoriesList);
 
-        Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleFilesAsync(string parentFolderId,
+        Task<TrmrkActionResult<DriveItemOp>> CreateMultipleFilesAsync(string parentFolderId,
             List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>> fileNameFactoriesList);
     }
 }

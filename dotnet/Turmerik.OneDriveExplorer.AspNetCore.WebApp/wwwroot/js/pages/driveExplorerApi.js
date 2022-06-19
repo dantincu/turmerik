@@ -10,20 +10,6 @@ export class OfficeLikeFileType {
     Slides = 3;
 }
 
-export class DriveItemOpEnum {
-    CreateFile = 1;
-    MoveFolder = 2;
-    CopyFolder = 3;
-    MoveFile = 4;
-    CopyFile = 5;
-    DeleteFile = 6;
-    CreateMultipleFolders = 7;
-    CreateMultipleFiles = 8;
-    CreateFolderFromMacro = 9;
-    CreateFileFromMacro = 10;
-}
-
-const driveItemOpEnumInstn = new DriveItemOpEnum();
 const officeLikeFileTypeInstn = new OfficeLikeFileType();
 
 export const officeFileLikeTypeExtensions = {};
@@ -75,8 +61,7 @@ export class DriveExplorerApi {
         let relUrl = this.folderRelUri + "/" + encodeURIComponent(driveFolderId);
 
         let params = {
-            name: newFolderName,
-            driveItemOp: driveItemOpEnumInstn.MoveFolder
+            name: newFolderName
         };
 
         let apiResult = await trmrkAxios.put(relUrl, params);
@@ -109,7 +94,8 @@ export class DriveExplorerApi {
         let relUrl = this.fileRelUri + "/" + encodeURIComponent(driveFileId);
 
         let params = {
-            name: newFolderName
+            name: newFileName,
+            officeLikeFileType: officeLikeFileType
         };
 
         let apiResult = await trmrkAxios.put(relUrl, params);
@@ -221,9 +207,7 @@ export class DriveExplorerApi {
 const driveExplorerApiInstn = new DriveExplorerApi();
 
 trmrk.types["OfficeLikeFileType"] = OfficeLikeFileType;
-trmrk.types["DriveItemOpEnum"] = DriveItemOpEnum;
 trmrk.types["DriveExplorerApi"] = DriveExplorerApi;
 
 export const officeLikeFileType = officeLikeFileTypeInstn;
-export const driveItemOpEnum = driveItemOpEnumInstn;
 export const driveExplorerApi = driveExplorerApiInstn;

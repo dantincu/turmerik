@@ -54,9 +54,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
             var actionResult = await ExecuteAsync(
                 async () =>
                 {
-                    var result = await this.DriveExplorerService.MoveFileAsync(
-                        id, driveItem.ParentFolderId, driveItem.Name);
-
+                    var result = await this.DriveExplorerService.RenameFileAsync(id, driveItem.Name);
                     return result;
                 });
 
@@ -71,6 +69,36 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
                 async () =>
                 {
                     var result = await this.DriveExplorerService.DeleteFileAsync(id);
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Copy([FromBody] DriveItem driveItem)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var result = await this.DriveExplorerService.CopyFileAsync(
+                        driveItem.Id, driveItem.ParentFolderId, driveItem.Name);
+
+                    return result;
+                });
+
+            return actionResult;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Move([FromBody] DriveItem driveItem)
+        {
+            var actionResult = await ExecuteAsync(
+                async () =>
+                {
+                    var result = await this.DriveExplorerService.MoveFileAsync(
+                        driveItem.Id, driveItem.ParentFolderId, driveItem.Name);
+
                     return result;
                 });
 

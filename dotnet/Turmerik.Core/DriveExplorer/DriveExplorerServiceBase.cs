@@ -136,15 +136,15 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected async Task<DriveItemPutOp> CreateMultipleEntriesAsync(
+        protected async Task<DriveItemOp> CreateMultipleEntriesAsync(
             string[] existingEntriesArr,
-            List<Tuple<Func<string[], int, string, string>, string, Func<string, int, Task<DriveItemPutOp>>>> fileNameFactoriesList)
+            List<Tuple<Func<string[], int, string, string>, string, Func<string, int, Task<DriveItemOp>>>> fileNameFactoriesList)
         {
             int idx = -1;
             bool conflict = true;
 
             string[] candidateEntriesArr = null;
-            List<DriveItemPutOp> newDriveItemsList = new List<DriveItemPutOp>();
+            List<DriveItemOp> newDriveItemsList = new List<DriveItemOp>();
 
             while (conflict)
             {
@@ -166,7 +166,7 @@ namespace Turmerik.Core.DriveExplorer
                 newDriveItemsList.Add(newDriveItem);
             }
 
-            return new DriveItemPutOp
+            return new DriveItemOp
             {
                 MultipleItems = newDriveItemsList
             };

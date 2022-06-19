@@ -15,8 +15,8 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         protected IDriveExplorerService DriveExplorerService { get; }
 
-        protected async Task<ActionResult> ExecuteAsync(
-            Func<Task<TrmrkActionResult<DriveItem>>> action)
+        protected async Task<ActionResult> ExecuteAsync<TData>(
+            Func<Task<TrmrkActionResult<TData>>> action)
         {
             var result = await action();
             ActionResult actionResult;

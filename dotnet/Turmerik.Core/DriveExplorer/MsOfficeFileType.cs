@@ -11,7 +11,7 @@ namespace Turmerik.Core.DriveExplorer
         Slides
     }
 
-    public enum DriveItemOp
+    /* public enum DriveItemOp
     {
         CreateFile = 1,
         MoveFolder,
@@ -23,5 +23,5 @@ namespace Turmerik.Core.DriveExplorer
         CreateMultipleFiles,
         CreateFolderFromMacro,
         CreateFileFromMacro
-    }
+    } */
 }

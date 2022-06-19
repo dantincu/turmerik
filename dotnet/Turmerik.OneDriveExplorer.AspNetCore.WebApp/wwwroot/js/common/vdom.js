@@ -480,8 +480,17 @@ export class VDomEl extends VDomNodeBase {
         return vNode;
     }
 
-    removeChildVNode(vNode) {
-        this.domNode.removeChild(vNode.domNode);
+    removeChildVNode(vNode, checkFirst) {
+        let remove = true;
+
+        if (checkFirst) {
+            remove = this.domNode.contains(vNode.domNode);
+        }
+
+        if (remove) {
+            this.domNode.removeChild(vNode.domNode);
+        }
+
         vNode.parentVDomEl = null;
 
         let idx = this.childNodes.indexOf(vNode);

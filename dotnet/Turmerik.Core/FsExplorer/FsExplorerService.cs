@@ -160,6 +160,14 @@ namespace Turmerik.Core.FsExplorer
             return actionResult;
         }
 
+        public Task<TrmrkActionResult<DriveItem>> RenameFolderAsync(
+            string folderId, string newFolderName) => this.MoveFolderAsync(
+            folderId, Path.GetDirectoryName(folderId), newFolderName);
+
+        public Task<TrmrkActionResult<DriveItem>> RenameFileAsync(
+            string fileId, string newFileName) => this.MoveFileAsync(
+            fileId, Path.GetDirectoryName(fileId), newFileName);
+
         public async Task<TrmrkActionResult<DriveItem>> CopyFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
             var actionResult = ExecuteDriveItemCore(() =>
@@ -288,18 +296,15 @@ namespace Turmerik.Core.FsExplorer
 
         public async Task<TrmrkActionResult<DriveItem>> MoveFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
-            var actionResult = ExecuteDriveItemCore(() =>
+            var actionResult = await ExecuteDriveItemCoreAsync(async () =>
             {
-                newParentFolderId = newParentFolderId ?? Path.GetDirectoryName(fileId);
-
                 string newPath = Path.Combine(newParentFolderId, newFileName);
+
                 File.Move(fileId, newPath);
-
                 var newEntry = new FileInfo(newPath);
-                var item = GetDriveItem(newEntry);
 
-                var result = new TrmrkActionResult<DriveItem>(
-                    true, item);
+                var item = GetDriveItem(newEntry);
+                var result = new TrmrkActionResult<DriveItem>(true, item);
 
                 return result;
             });
@@ -311,8 +316,6 @@ namespace Turmerik.Core.FsExplorer
         {
             var actionResult = ExecuteDriveItemCore(() =>
             {
-                newParentFolderId = newParentFolderId ?? Path.GetDirectoryName(folderId);
-
                 string newPath = Path.Combine(newParentFolderId, newFolderName);
                 FsH.MoveDirectory(folderId, newPath);
 
@@ -328,7 +331,7 @@ namespace Turmerik.Core.FsExplorer
             return actionResult;
         }
 
-        public async Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleFoldersAsync(
+        public async Task<TrmrkActionResult<DriveItemOp>> CreateMultipleFoldersAsync(
             string parentFolderId,
             List<Tuple<Func<string[], int, string, string>, string>> folderNameFactoriesList)
         {
@@ -342,7 +345,7 @@ namespace Turmerik.Core.FsExplorer
             return actionResult;
         }
 
-        public async Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleFilesAsync(
+        public async Task<TrmrkActionResult<DriveItemOp>> CreateMultipleFilesAsync(
             string parentFolderId,
             List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>> fileNameFactoriesList)
         {
@@ -389,14 +392,14 @@ namespace Turmerik.Core.FsExplorer
             return fsItemMtbl;
         }
 
-        private async Task<TrmrkActionResult<DriveItemPutOp>> CreateMultipleEntriesAsync(
+        private async Task<TrmrkActionResult<DriveItemOp>> CreateMultipleEntriesAsync(
             string parentFolderId,
             List<Tuple<Func<string[], int, string, string>, string, Action<string>>> fileNameFactoriesList)
         {
             var actionResult = await ExecuteCoreAsync(async () =>
             {
                 var factoriesList = fileNameFactoriesList.Select(
-                    tuple => new Tuple<Func<string[], int, string, string>, string, Func<string, int, Task<DriveItemPutOp>>>(
+                    tuple => new Tuple<Func<string[], int, string, string>, string, Func<string, int, Task<DriveItemOp>>>(
                         tuple.Item1, tuple.Item2, async (name, idx) =>
                         {
                             string path = Path.Combine(parentFolderId, name);
@@ -405,7 +408,7 @@ namespace Turmerik.Core.FsExplorer
                             DateTime now = DateTime.Now;
                             string nowStr = TimeStampHelper.TmStmp(now, true, TimeStamp.Seconds);
 
-                            return new DriveItemPutOp
+                            return new DriveItemOp
                             {
                                 Id = path,
                                 Name = name,
@@ -425,10 +428,10 @@ namespace Turmerik.Core.FsExplorer
                     existingEntriesArr,
                     factoriesList);
 
-                return new TrmrkActionResult<DriveItemPutOp>(true, result);
+                return new TrmrkActionResult<DriveItemOp>(true, result);
             },
             exc => DriveItemDefaultExceptionHandler(exc).WithHelper(
-                result => new TrmrkActionResult<DriveItemPutOp>(
+                result => new TrmrkActionResult<DriveItemOp>(
                     false, null, result.ErrorViewModel, result.HttpStatusCode)));
 
             return actionResult;
