@@ -13,10 +13,10 @@ namespace FsUtilsConsoleApp
 
         static ProgramComponentArgsParser()
         {
-            var d = new ProgramComponentArgs();
-            var list = new List<Tuple<string, Action<ProgramComponentArgs, string>>>();
+            var propsList = new List<Tuple<string, Action<ProgramComponentArgs, string>>>();
+            var optsList = new List<Tuple<string, Action<ProgramComponentArgs, string>>>();
 
-            AddPropParser(list, nameof(d.ParentDirPath), (args, str) =>
+            AddPropParser(propsList, nameof(ProgramComponentArgs.ParentDirPath), (args, str) =>
             {
                 if (string.IsNullOrWhiteSpace(str))
                 {
@@ -28,9 +28,9 @@ namespace FsUtilsConsoleApp
                 }
             });
 
-            AddPropParser(list, nameof(d.DirName), (args, str) => args.DirName = str);
+            AddPropParser(propsList, nameof(ProgramComponentArgs.DirName), (args, str) => args.DirName = str);
 
-            propParsers = new ReadOnlyCollection<Tuple<string, Action<ProgramComponentArgs, string>>>(list.ToArray());
+            propParsers = new ReadOnlyCollection<Tuple<string, Action<ProgramComponentArgs, string>>>(propsList.ToArray());
         }
 
         public ProgramComponentArgs Parse(string[] args)
