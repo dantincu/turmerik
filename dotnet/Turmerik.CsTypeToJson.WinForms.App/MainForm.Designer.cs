@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBoxAssembly = new System.Windows.Forms.GroupBox();
+            this.checkBoxUseCamelCase = new System.Windows.Forms.CheckBox();
             this.buttonBrowseAssemblyPath = new System.Windows.Forms.Button();
             this.buttonLoadAssembly = new System.Windows.Forms.Button();
             this.textBoxAssemblyPath = new System.Windows.Forms.TextBox();
@@ -49,6 +50,7 @@
             // 
             // groupBoxAssembly
             // 
+            this.groupBoxAssembly.Controls.Add(this.checkBoxUseCamelCase);
             this.groupBoxAssembly.Controls.Add(this.buttonBrowseAssemblyPath);
             this.groupBoxAssembly.Controls.Add(this.buttonLoadAssembly);
             this.groupBoxAssembly.Controls.Add(this.textBoxAssemblyPath);
@@ -59,6 +61,19 @@
             this.groupBoxAssembly.TabIndex = 0;
             this.groupBoxAssembly.TabStop = false;
             this.groupBoxAssembly.Text = "Load from assembly";
+            // 
+            // checkBoxUseCamelCase
+            // 
+            this.checkBoxUseCamelCase.AutoSize = true;
+            this.checkBoxUseCamelCase.Checked = true;
+            this.checkBoxUseCamelCase.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseCamelCase.Dock = System.Windows.Forms.DockStyle.Right;
+            this.checkBoxUseCamelCase.Location = new System.Drawing.Point(601, 36);
+            this.checkBoxUseCamelCase.Name = "checkBoxUseCamelCase";
+            this.checkBoxUseCamelCase.Size = new System.Drawing.Size(102, 23);
+            this.checkBoxUseCamelCase.TabIndex = 3;
+            this.checkBoxUseCamelCase.Text = "Use camel case";
+            this.checkBoxUseCamelCase.UseVisualStyleBackColor = true;
             // 
             // buttonBrowseAssemblyPath
             // 
@@ -200,6 +215,7 @@
         private System.Windows.Forms.Panel panelAssemblyTypesGrid;
         private System.Windows.Forms.DataGridView dataGridViewAssemblyTypes;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewAssemblyTypesFullTypeNameColumn;
+        private System.Windows.Forms.CheckBox checkBoxUseCamelCase;
     }
 }
 

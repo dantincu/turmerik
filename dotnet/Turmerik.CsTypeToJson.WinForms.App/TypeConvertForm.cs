@@ -18,6 +18,7 @@ namespace Turmerik.CsTypeToJson.WinForms.App
         private readonly ActionComponent actionComponent;
 
         private Type type;
+        private bool useCamelCase;
 
         public TypeConvertForm()
         {
@@ -27,9 +28,13 @@ namespace Turmerik.CsTypeToJson.WinForms.App
             actionComponent = actionComponentFactory.GetActionComponent(toolStripStatusLabel);
         }
 
-        public void SetType(Type type)
+        public void SetArgs(
+            Type type,
+            bool useCamelCase)
         {
             this.type = type;
+            this.useCamelCase = useCamelCase;
+
             GenerateJson();
         }
 
@@ -48,7 +53,7 @@ namespace Turmerik.CsTypeToJson.WinForms.App
         private Tuple<bool, string> GenerateJsonCore()
         {
             object obj = Activator.CreateInstance(type);
-            string json = JsonSrlzH.ToJson(obj);
+            string json = JsonSrlzH.ToJson(obj, this.useCamelCase, false);
 
             textBoxJson.Text = json;
             textBoxPropDefs.Text = GetPropDefsStr(json);

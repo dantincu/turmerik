@@ -218,7 +218,7 @@ namespace Turmerik.CsTypeToJson.WinForms.App
         private Tuple<bool, string> OpenTypeConvertFormCore(Type type)
         {
             var form = new TypeConvertForm();
-            form.SetType(type);
+            form.SetArgs(type, this.checkBoxUseCamelCase.Checked);
 
             form.ShowDialog();
             return new Tuple<bool, string>(true, null);

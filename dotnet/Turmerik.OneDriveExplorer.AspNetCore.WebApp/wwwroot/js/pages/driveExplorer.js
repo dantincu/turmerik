@@ -1,5 +1,5 @@
 import { trmrk, webStorage, domUtils, bsDomUtils } from '../common/main.js';
-import { DriveItem, AppSettings } from './Entities.js';
+import { DriveItem, AppSettings, DriveItemOp, DriveItemNameMacro } from './Entities.js';
 import { ViewModelBase } from '../common/ViewModelBase.js';
 import { driveExplorerApi } from './driveExplorerApi.js';
 import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
@@ -43,9 +43,19 @@ export class DriveExplorer {
     currentlyEditedDriveItem = null;
     currentlyEditedOfficeFileType = null;
 
-    async init(username, appSettings) {
+    driveItemNameMacros = null;
+    driveItemMacros = null;
+
+    async init(
+        username,
+        appSettings,
+        driveItemNameMacros,
+        driveItemMacros) {
         this.username = username;
         this.appSettings = new AppSettings(appSettings);
+
+        this.driveItemNameMacros = driveItemNameMacros;
+        this.driveItemMacros = driveItemMacros;
 
         driveExplorerApi.appSettings = this.appSettings;
         webStorage.cacheKeyBasePrefix = this.appSettings.CacheKeyBasePrefix;

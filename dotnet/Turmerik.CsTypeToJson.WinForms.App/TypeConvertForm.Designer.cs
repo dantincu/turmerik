@@ -122,6 +122,7 @@
             // textBoxJson
             // 
             this.textBoxJson.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxJson.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxJson.Location = new System.Drawing.Point(0, 0);
             this.textBoxJson.Multiline = true;
             this.textBoxJson.Name = "textBoxJson";
@@ -131,6 +132,7 @@
             // textBoxPropDefs
             // 
             this.textBoxPropDefs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxPropDefs.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxPropDefs.Location = new System.Drawing.Point(0, 0);
             this.textBoxPropDefs.Multiline = true;
             this.textBoxPropDefs.Name = "textBoxPropDefs";

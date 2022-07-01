@@ -12,9 +12,9 @@ namespace FsUtilsConsoleApp
     {
         private const string NPP_PATH = @"C:\Program Files\Notepad++\notepad++.exe";
         private const string IDX_FMT = "D4";
-        private const int DF_IDX = 8999;
-        private const int DF_NOMD_IDX = 0199;
-        private const int DF_INC_IDX = 1001;
+        private const int DF_IDX = 7999;
+        private const int DF_NOMD_IDX = 0001;
+        private const int DF_INC_IDX = 6001;
 
         public void Run(ProgramComponentArgs args)
         {
@@ -46,7 +46,7 @@ namespace FsUtilsConsoleApp
                 else if (noMd)
                 {
                     idx = DF_NOMD_IDX;
-                    incIdx = false;
+                    incIdx = true;
                 }
                 else if (incIdx)
                 {

@@ -27,13 +27,51 @@ namespace Turmerik.Core.DriveExplorer
 
     public class DriveItemOp : DriveItem
     {
-        // public DriveItemOp? DriveItemOp { get; set; }
+        public DriveItemOp()
+        {
+        }
+
+        public DriveItemOp(DriveItemOp src)
+        {
+            this.Name = src.Name;
+            this.IsFolder = src.IsFolder;
+            this.FileNameExtension = src.FileNameExtension;
+            this.OfficeLikeFileType = src.OfficeLikeFileType;
+            this.TextFileContent = src.TextFileContent;
+            this.MultipleItems = src.MultipleItems;
+            this.NameMacro = src.NameMacro;
+        }
+
+        public Guid? OpUuid { get; set; }
         public List<DriveItemOp> MultipleItems { get; set; }
         public DriveItemNameMacro NameMacro { get; set; }
     }
 
     public class DriveItemNameMacro
     {
+        public DriveItemNameMacro()
+        {
+        }
+
+        public DriveItemNameMacro(DriveItemNameMacro src)
+        {
+            this.MacroName = src.MacroName;
+            this.MacroDescription = src.MacroDescription;
+            this.EntryName = src.EntryName;
+            this.SrcName = src.SrcName;
+            this.ConstName = src.ConstName;
+            this.SrcNameFirstLetterWrappingChar = src.SrcNameFirstLetterWrappingChar;
+            this.NumberSeed = src.NumberSeed;
+            this.MinNumber = src.MinNumber;
+            this.MaxNumber = src.MaxNumber;
+            this.IncrementNumber = src.IncrementNumber;
+            this.DigitsCount = src.DigitsCount;
+            this.PreceedingDelimiter = src.PreceedingDelimiter;
+            // this.PreceedingMacroUuid = src.PreceedingMacroUuid;
+            this.SucceedingDelimiter = src.SucceedingDelimiter;
+            // this.SucceedingMacroUuid = src.SucceedingMacroUuid;
+        }
+
         public Guid? MacroUuid { get; set; }
         public string MacroName { get; set; }
         public string MacroDescription { get; set; }
@@ -47,8 +85,10 @@ namespace Turmerik.Core.DriveExplorer
         public bool? IncrementNumber { get; set; }
         public int? DigitsCount { get; set; }
         public string PreceedingDelimiter { get; set; }
-        public Guid? PreceedingMacroUuid { get; set; }
+        // public Guid? PreceedingMacroUuid { get; set; }
+        public DriveItemNameMacro PreceedingMacro { get; set; }
         public string SucceedingDelimiter { get; set; }
-        public Guid? SucceedingMacroUuid { get; set; }
+        // public Guid? SucceedingMacroUuid { get; set; }
+        public DriveItemNameMacro SucceedingMacro { get; set; }
     }
 }

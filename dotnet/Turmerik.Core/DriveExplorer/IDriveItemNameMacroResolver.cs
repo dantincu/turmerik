@@ -69,8 +69,8 @@ namespace Turmerik.Core.DriveExplorer
             Func<string[], int, string, string> factory = null;
             var coreFactory = GetFactoryCore(macro);
 
-            bool hasPreceeding = macro.PreceedingMacroUuid.HasValue;
-            bool hasSucceeding = macro.PreceedingMacroUuid.HasValue;
+            bool hasPreceeding = macro.PreceedingMacro != null;
+            bool hasSucceeding = macro.PreceedingMacro != null;
 
             if (!hasPreceeding && !hasSucceeding)
             {
@@ -80,8 +80,8 @@ namespace Turmerik.Core.DriveExplorer
             {
                 factory = (arr, idx, srcName) =>
                 {
-                    var preceedingFactory = Resolve(macro.PreceedingMacroUuid.Value);
-                    var succeedingFactory = Resolve(macro.SucceedingMacroUuid.Value);
+                    var preceedingFactory = Resolve(macro.PreceedingMacro);
+                    var succeedingFactory = Resolve(macro.SucceedingMacro);
 
                     string preceedingStr = preceedingFactory(arr, idx, srcName);
                     string succeedingStr = succeedingFactory(arr, idx, srcName);
@@ -100,7 +100,7 @@ namespace Turmerik.Core.DriveExplorer
             {
                 factory = (arr, idx, srcName) =>
                 {
-                    var preceedingFactory = Resolve(macro.PreceedingMacroUuid.Value);
+                    var preceedingFactory = Resolve(macro.PreceedingMacro);
                     string preceedingStr = preceedingFactory(arr, idx, srcName);
 
                     string coreStr = coreFactory(arr, idx, srcName);
@@ -116,7 +116,7 @@ namespace Turmerik.Core.DriveExplorer
             {
                 factory = (arr, idx, srcName) =>
                 {
-                    var succeedingFactory = Resolve(macro.SucceedingMacroUuid.Value);
+                    var succeedingFactory = Resolve(macro.SucceedingMacro);
                     string succeedingStr = succeedingFactory(arr, idx, srcName);
 
                     string coreStr = coreFactory(arr, idx, srcName);

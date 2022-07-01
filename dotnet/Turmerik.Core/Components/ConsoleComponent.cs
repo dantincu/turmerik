@@ -185,10 +185,10 @@ namespace Turmerik.Core.Components
             WriteObjCore(
                 colors =>
                 {
-                    string xml = obj.ToJson();
+                    string json = obj.ToJson();
 
                     Write(
-                        xml,
+                        json,
                         true,
                         colors.MainForeColor,
                         true,

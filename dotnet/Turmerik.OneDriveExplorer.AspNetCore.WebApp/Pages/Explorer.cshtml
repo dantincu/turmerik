@@ -6,10 +6,18 @@
 
 @model ExplorerModel
 @inject IAppSettings appSettings;
+@inject IDriveItemMacrosService driveItemMacrosService;
+@inject IDriveItemNameMacrosService driveItemNameMacrosService;
 
 @{
     ViewData["Title"] = "Explorer";
     string appSettingsJson = JsonSrlzH.ToJson(appSettings);
+
+    var driveItemNameMacros = driveItemNameMacrosService.GetDriveItemNameMacros();
+    string driveItemNameMacrosJson = JsonSrlzH.ToJson(driveItemNameMacros);
+
+    var driveItemMacros = driveItemMacrosService.GetDriveItemMacros();
+    string driveItemMacrosJson = JsonSrlzH.ToJson(driveItemMacros);
 }
 
 @section Scripts {
@@ -20,7 +28,9 @@
 
             window.trmrk.driveExplorer.init(
                 username,
-                @Html.Raw(appSettingsJson));
+                @Html.Raw(appSettingsJson),
+                @Html.Raw(driveItemNameMacrosJson),
+                @Html.Raw(driveItemMacrosJson));
         }
     </script>
 
@@ -28,6 +38,7 @@
 }
 
 @using System.Security.Principal
+@using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
 
 @if (User.Identity?.IsAuthenticated == true)
 {

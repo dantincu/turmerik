@@ -8,6 +8,7 @@ using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.FsExplorer;
 using Turmerik.Core.Infrastucture;
 using Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig;
+using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,9 @@ builder.Services.AddSession(options =>
 
 var svcs = TrmrkCoreServiceCollectionBuilder.RegisterAll(builder.Services);
 builder.Services.RegisterAppSettings();
+
+builder.Services.AddSingleton<IDriveItemNameMacrosService, DriveItemNameMacrosService>();
+builder.Services.AddSingleton<IDriveItemMacrosService, DriveItemMacrosService>();
 
 builder.Services.AddScoped<IDriveExplorerService, FsExplorerService>();
 builder.Services.AddScoped<IDriveItemNameMacroFactoryResolver, DriveItemNameMacroFactoryResolver>();

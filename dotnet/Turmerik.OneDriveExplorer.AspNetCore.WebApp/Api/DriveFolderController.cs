@@ -5,6 +5,7 @@ using Turmerik.AspNetCore.Helpers;
 using Turmerik.Core.Components;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
+using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,12 +16,17 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
     public class DriveFolderController : DriveItemControllerBase
     {
         private readonly IDriveItemNameMacroFactoryResolver nameMacroResolver;
+        private readonly IDriveItemMacrosService driveItemMacrosService;
 
         public DriveFolderController(
-            IDriveExplorerService driveExplorerService,
-            IDriveItemNameMacroFactoryResolver driveItemNameMacroFactoryResolver) : base(
+            IDriveItemMacrosService driveItemMacrosService,
+            IDriveItemNameMacroFactoryResolver driveItemNameMacroFactoryResolver,
+            IDriveExplorerService driveExplorerService) : base(
                 driveExplorerService)
         {
+            this.driveItemMacrosService = driveItemMacrosService ?? throw new ArgumentNullException(
+                nameof(driveItemMacrosService));
+
             this.nameMacroResolver = driveItemNameMacroFactoryResolver ?? throw new ArgumentNullException(
                 nameof(driveItemNameMacroFactoryResolver));
         }
@@ -196,9 +202,12 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         private bool TryRegisterDriveItemNameMacros(ref Func<Task<TrmrkActionResult<DriveItem>>> action)
         {
-            bool retVal = this.HttpContext.Session.TryGetValue<DriveItemNameMacro[]>(
+            bool retVal = true; /* this.HttpContext.Session.TryGetValue<DriveItemNameMacro[]>(
                 SessionKeysH.DRIVE_ITEM_NAME_MACROS,
-                out var macrosArr);
+                out var macrosArr); */
+
+            var macrosArr = this.driveItemMacrosService.DriveItemNameMacrosService.GetDriveItemNameMacros().SelectMany(
+                kvp => kvp.Value.Item2).ToArray();
 
             if (retVal)
             {
