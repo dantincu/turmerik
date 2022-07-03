@@ -6,6 +6,7 @@ export class TrmrkCssClasses {
     plusIcon = "trmrk-plus-icon";
     icon = "trmrk-icon";
     editMode = "trmrk-edit-mode";
+    checked = "trmrk-checked";
     pressed = "trmrk-pressed";
     iconsRow = "trmrk-icons-row";
     isInvalid = "trmrk-is-invalid";
