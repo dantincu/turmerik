@@ -12,6 +12,7 @@ export class DriveItemsGridRow extends VDomEl {
     isChecked = false;
     isDisabled = false;
     rowCheckedHandler = null;
+    checkBox = null;
 
     constructor(
         driveItem,
@@ -39,49 +40,49 @@ export class DriveItemsGridRow extends VDomEl {
             this.getDefaultMouseDownListener(),
             this.getDefaultMouseUpListener());
 
+        this.checkBox = new DriveItemCheckBox({
+            click: [{
+                listener: function(e) {
+                    const retVal = that.canRunMouseEvent(e);
+
+                    if (!retVal) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+
+                    return retVal;
+                }
+            }],
+            mousedown: [{
+                listener: function(e) {
+                    that.addPressedClass(e);
+                }
+            }],
+            mouseup: [{
+                listener: function(e) {
+                    const retVal = that.removePressedClass(e);
+
+                    setTimeout(() => {
+                        if (retVal) {
+                            if (that.isChecked) {
+                                that.uncheckRow();
+                            } else {
+                                that.checkRow();
+                            }
+
+                            that.rowCheckedHandler(that, that.isChecked);
+                        }
+                    }, 0);
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }]
+        }, false);
+
         this.childNodes = [
             new TableRowCell([
-                new DriveItemCheckBox({
-                    click: [{
-                        listener: function(e) {
-                            const retVal = that.canRunMouseEvent(e);
-
-                            if (!retVal) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
-
-                            return retVal;
-                        }
-                    }],
-                    mousedown: [{
-                        listener: function(e) {
-                            that.addPressedClass(e);
-                        }
-                    }],
-                    mouseup: [{
-                        listener: function(e) {
-                            const retVal = that.removePressedClass(e);
-
-                            if (retVal) {
-                                let checked = !this.domNode.checked; // at this point the checked property has not yet been updated
-
-                                if (checked) {
-                                    that.checkRow();
-                                } else {
-                                    that.uncheckRow();
-                                }
-
-                                that.rowCheckedHandler(that, checked);
-                            } else {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
-
-                            return retVal;
-                        }
-                    }]
-                })
+                this.checkBox
             ], [ driveFolderViewCssClasses.gridCheckBoxCell ]),
             new TableRowCell([
                 new IconVDomEl([ "oi", isFoldersGrid ? "oi-folder" : "oi-file" ],
@@ -107,16 +108,6 @@ export class DriveItemsGridRow extends VDomEl {
                     this.getDefaultMouseEvents())
             ], [ driveFolderViewCssClasses.gridIconCell ])
         ];
-    }
-
-    checkRow() {
-        that.isChecked = true;
-        that.addClass(trmrkCssClasses.checked);
-    }
-
-    uncheckRow() {
-        that.isChecked = false;
-        that.removeClass(trmrkCssClasses.checked);
     }
 
     canRunMouseEvent(e) {
@@ -186,5 +177,21 @@ export class DriveItemsGridRow extends VDomEl {
     updateDriveItem(driveItem) {
         this.mainCell.updateDriveItemName(driveItem.name);
         this.driveItem = driveItem;
+    }
+
+    checkRow() {
+        this.isChecked = true;
+        this.checkBox.domNode.checked = true;
+
+        this.checkBox.addAttr("checked", true);
+        this.addClass(trmrkCssClasses.checked);
+    }
+
+    uncheckRow() {
+        this.isChecked = false;
+        this.checkBox.domNode.checked = false;
+
+        this.checkBox.removeAttr("checked");
+        this.removeClass(trmrkCssClasses.checked);
     }
 }

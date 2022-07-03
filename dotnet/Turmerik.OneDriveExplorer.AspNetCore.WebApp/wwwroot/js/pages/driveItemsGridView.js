@@ -20,8 +20,8 @@ export class DriveItemsGridView extends VDomEl {
     trmrkEvents = null;
     editRowValidator = null;
     tableHeaderVDomEl = null;
+    tableHeaderRowVDomEl = null;
     tableBodyVDomEl = null;
-    manuallyCheckedRows = [];
 
     constructor(driveItemsArr, isFoldersGrid, trmrkEvents, editRowValidator) {
         super({
@@ -114,30 +114,36 @@ export class DriveItemsGridView extends VDomEl {
 
         const headerCheckBoxElEvents = {
             click: [{
-                    listener: e => {
-                        if (that.tableHeaderVDomEl.isChecked === true) {
-                            for (let row of that.tableBodyVDomEl.childNodes) {
-                                row.uncheckRow();
-                            }
+                listener: e => {
+                    const isChecked = that.tableHeaderRowVDomEl.isChecked;
 
-                            that.tableHeaderVDomEl.uncheck();
-                        } else if (that.tableHeaderVDomEl.isChecked === false && that.manuallyCheckedRows.length > 0) {
-                            for (let row of that.manuallyCheckedRows) {
-                                row.checkRow();
+                    setTimeout(() => {
+                        for (let row of that.tableBodyVDomEl.childNodes) {
+                            if (isChecked) {
+                                if (row.isChecked) {
+                                    row.uncheckRow();
+                                }
+                            } else {
+                                if (!row.isChecked) {
+                                    row.checkRow();
+                                }
                             }
-                        } else {
-                            for (let row of that.tableBodyVDomEl.childNodes) {
-                                row.checkRow();
-                            }
-
-                            that.tableHeaderVDomEl.check();
                         }
-                    }
-                }]
+
+                        if (isChecked) {
+                            that.tableHeaderRowVDomEl.uncheck();
+                        } else {
+                            that.tableHeaderRowVDomEl.check();
+                        }
+                    }, 0);
+                }
+            }]
         }
 
-        const tableHeaderVDomEl = vdom.utils.getVDomEl("thead", [], {}, [
-            new DriveItemsGridHeaderRow(headerCheckBoxElEvents)]);
+        this.tableHeaderRowVDomEl = new DriveItemsGridHeaderRow(headerCheckBoxElEvents);
+
+        const tableHeaderVDomEl = vdom.utils.getVDomEl(
+            "thead", [], {}, [ this.tableHeaderRowVDomEl ]);
 
         return tableHeaderVDomEl;
     }
@@ -167,20 +173,14 @@ export class DriveItemsGridView extends VDomEl {
             this.isFoldersGrid,
             (row, checked) => {
                 if (checked) {
-                    if (that.tableHeaderVDomEl.isChecked === false) {
-                        that.manuallyCheckedRows = [];
+                    if (!that.tableBodyVDomEl.childNodes.find(
+                        node => !node.isChecked
+                    )) {
+                        that.tableHeaderRowVDomEl.check();
                     }
-
-                    that.manuallyCheckedRows.push(row);
                 } else {
-                    const idx = this.manuallyCheckedRows.indexOf(row);
-
-                    if (idx >= 0) {
-                        that.manuallyCheckedRows.splice(idx, 1);
-
-                        if (that.manuallyCheckedRows.length === 0) {
-                            that.tableHeaderVDomEl.uncheck();
-                        }
+                    if (that.tableHeaderRowVDomEl.isChecked === true) {
+                        that.tableHeaderRowVDomEl.uncheck();
                     }
                 }
             });

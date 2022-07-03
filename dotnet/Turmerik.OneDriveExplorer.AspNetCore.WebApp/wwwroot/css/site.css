@@ -254,14 +254,14 @@ pre {
     word-break: break-all;
 }
 
-.trmrk-checked {
+tr.trmrk-checked {
     background-color: #FFF0E0;
 }
 
-.trmrk-pressed {
+tr.trmrk-pressed {
     background-color: #E0F0FF;
 }
 
-.trmrk-checked.trmrk-pressed {
+tr.trmrk-checked.trmrk-pressed {
     background-color: #F0F0F0;
 }

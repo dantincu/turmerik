@@ -4,14 +4,8 @@ export class TrmrkCssClasses {
     rotate90Deg = "trmrk-rotate-90deg";
     timesIcon = "trmrk-times-icon";
     plusIcon = "trmrk-plus-icon";
-    square = "trmrk-square";
     icon = "trmrk-icon";
     editMode = "trmrk-edit-mode";
-    checkBox = "trmrk-check-box";
-    checked = "trmrk-checked";
-    unChecked = "trmrk-unchecked";
-    partiallyChecked = "trmrk-partially-checked";
-    partialCheckBox = "trmrk-partial-check-box";
     pressed = "trmrk-pressed";
     iconsRow = "trmrk-icons-row";
     isInvalid = "trmrk-is-invalid";

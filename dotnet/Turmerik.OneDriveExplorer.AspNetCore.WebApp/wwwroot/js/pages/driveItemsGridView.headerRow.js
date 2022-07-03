@@ -4,10 +4,10 @@ import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
 import { DriveItem } from './Entities.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 import { ViewModelBase } from '../common/ViewModelBase.js';
-import { TableHeaderCell } from './driveItemsGridView.core.js';
+import { TableHeaderCell, DriveItemCheckBox } from './driveItemsGridView.core.js';
 
 export class DriveItemsGridHeaderRow extends VDomEl {
-    headerCheckBoxEl;
+    checkBox;
     isChecked = false;
 
     constructor(headerCheckBoxElEvents) {
@@ -15,15 +15,10 @@ export class DriveItemsGridHeaderRow extends VDomEl {
             nodeName: "tr"
         });
 
-        this.headerCheckBoxEl = vdom.utils.getVDomEl("div",
-            [ trmrkCssClasses.partialCheckBox/* , trmrkCssClasses.unchecked */ ], {}, [
-                vdom.utils.getVDomEl("div", [ trmrkCssClasses.square ], {}, [
-                    vdom.utils.getVDomEl("span", [ "oi", "oi-check" ])
-                ])
-            ], headerCheckBoxElEvents);
+        this.checkBox = new DriveItemCheckBox(headerCheckBoxElEvents);
 
         this.childNodes = [
-            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridCheckBoxCell ], [ this.headerCheckBoxEl ] ),
+            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridCheckBoxCell ], [ this.checkBox ] ),
             new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
             new TableHeaderCell("Name", [ driveFolderViewCssClasses.gridMainCell ]),
             new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
@@ -32,22 +27,18 @@ export class DriveItemsGridHeaderRow extends VDomEl {
     }
 
     check() {
-        this.setCheckValue(true, trmrkCssClasses.checked);
+        this.isChecked = true;
+        this.checkBox.domNode.checked = true;
+
+        this.checkBox.addAttr("checked", true);
+        this.addClass(trmrkCssClasses.checked);
     }
 
     uncheck() {
-        this.setCheckValue(false, trmrkCssClasses.unChecked);
-    }
+        this.isChecked = false;
+        this.checkBox.domNode.checked = false;
 
-    partiallyCheck() {
-        this.setCheckValue(null, trmrkCssClasses.partiallyChecked);
-    }
-
-    setCheckValue(checked, cssClass) {
-        this.checked = checked;
-        this.headerCheckBoxEl.removeAllClasses();
-
-        this.headerCheckBoxEl.push(trmrkCssClasses.partialCheckBox);
-        this.headerCheckBoxEl.push(cssClass);
+        this.checkBox.removeAttr("checked");
+        this.removeClass(trmrkCssClasses.checked);
     }
 }
