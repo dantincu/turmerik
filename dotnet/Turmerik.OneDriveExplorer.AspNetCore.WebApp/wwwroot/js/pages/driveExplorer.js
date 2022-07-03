@@ -290,11 +290,11 @@ export class DriveExplorer {
     async navigateToFolderIdAsync(folderId) {
         if (trmrk.core.isNonEmptyString(folderId)) {
             trmrk.core.urlQuery.set(
-                this.appSettings.DriveFolderIdUrlQueryKey,
+                this.appSettings.driveFolderIdUrlQueryKey,
                 folderId);
         } else {
             trmrk.core.urlQuery.delete(
-                this.appSettings.DriveFolderIdUrlQueryKey
+                this.appSettings.driveFolderIdUrlQueryKey
             );
         }
 
@@ -305,7 +305,7 @@ export class DriveExplorer {
     }
 
     async loadCurrentDriveFolderAsync() {
-        let folderId = trmrk.core.urlQuery.get(this.appSettings.DriveFolderIdUrlQueryKey);
+        let folderId = trmrk.core.urlQuery.get(this.appSettings.driveFolderIdUrlQueryKey);
         await this.getCurrentDriveFolderAsync(folderId);
     }
 

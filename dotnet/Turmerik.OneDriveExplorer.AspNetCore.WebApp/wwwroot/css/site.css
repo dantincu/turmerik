@@ -17,6 +17,10 @@ body {
   margin-bottom: 60px;
 }
 
+pre {
+    font-family: Consolas;
+}
+
 .trmrk-hidden,
 .trmrk-hidden.trmrk-icon {
     display: none;

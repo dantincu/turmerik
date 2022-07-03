@@ -31,8 +31,9 @@ namespace Turmerik.Core.DriveExplorer
         {
         }
 
-        public DriveItemOp(DriveItemOp src)
+        public DriveItemOp(DriveItemOp src, Guid? opUuid = null)
         {
+            this.OpUuid = opUuid;
             this.Name = src.Name;
             this.IsFolder = src.IsFolder;
             this.FileNameExtension = src.FileNameExtension;
@@ -53,8 +54,9 @@ namespace Turmerik.Core.DriveExplorer
         {
         }
 
-        public DriveItemNameMacro(DriveItemNameMacro src)
+        public DriveItemNameMacro(DriveItemNameMacro src, Guid? macroUuid = null)
         {
+            this.MacroUuid = macroUuid;
             this.MacroName = src.MacroName;
             this.MacroDescription = src.MacroDescription;
             this.EntryName = src.EntryName;

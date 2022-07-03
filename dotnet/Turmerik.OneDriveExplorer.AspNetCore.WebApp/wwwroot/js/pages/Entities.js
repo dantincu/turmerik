@@ -6,11 +6,11 @@ export class AppSettings extends ViewModelBase {
         this.__copyProps(src, throwOnUnknownProp);
     }
 
-    DriveFolderCacheKeyName =  null;
-    RootDriveFolderCacheKeyName =  null;
-    ClientAppRootObjPropName =  null;
-    CacheKeyBasePrefix =  null;
-    DriveFolderIdUrlQueryKey = null;
+    driveFolderCacheKeyName =  null;
+    rootDriveFolderCacheKeyName =  null;
+    clientAppRootObjPropName =  null;
+    cacheKeyBasePrefix =  null;
+    driveFolderIdUrlQueryKey = null;
 }
 
 export class DriveItem extends ViewModelBase {
@@ -37,44 +37,31 @@ export class DriveItem extends ViewModelBase {
     folderFiles = null;
 }
 
-export class DriveItemOp {
-    Id =  null;
-    Name =  null;
-    ParentFolderId =  null;
-    IsFolder =  null;
-    FileNameExtension =  null;
-    IsRootFolder =  null;
-    CreationTime =  null;
-    LastAccessTime =  null;
-    LastWriteTime =  null;
-    CreationTimeStr =  null;
-    LastAccessTimeStr =  null;
-    LastWriteTimeStr =  null;
-    OfficeLikeFileType =  null;
-    TextFileContent =  null;
-    RawFileContent =  null;
-    SubFolders =  null;
-    FolderFiles =  null;
-    OpUuid =  null;
-    MultipleItems =  null;
-    NameMacro =  null;
+export class DriveItemOp extends DriveItem {
+    constructor(src, throwOnUnknownProp = false) {
+        super(src, throwOnUnknownProp);
+    }
+    
+    opUuid =  null;
+    multipleItems =  null;
+    nameMacro =  null;
 }
 
 export class DriveItemNameMacro {
-    MacroUuid =  null;
-    MacroName =  null;
-    MacroDescription =  null;
-    EntryName =  null;
-    SrcName =  null;
-    ConstName =  null;
-    SrcNameFirstLetterWrappingChar =  null;
-    NumberSeed =  null;
-    MinNumber =  null;
-    MaxNumber =  null;
-    IncrementNumber =  null;
-    DigitsCount =  null;
-    PreceedingDelimiter =  null;
-    PreceedingMacro =  null;
-    SucceedingDelimiter =  null;
-    SucceedingMacro =  null;
+    macroUuid =  null;
+    macroName =  null;
+    macroDescription =  null;
+    entryName =  null;
+    srcName =  null;
+    constName =  null;
+    srcNameFirstLetterWrappingChar =  null;
+    numberSeed =  null;
+    minNumber =  null;
+    maxNumber =  null;
+    incrementNumber =  null;
+    digitsCount =  null;
+    preceedingDelimiter =  null;
+    preceedingMacro =  null;
+    succeedingDelimiter =  null;
+    succeedingMacro =  null;
 }

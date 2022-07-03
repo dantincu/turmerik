@@ -33,7 +33,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
                     kvp.Value.Item1,
                     kvp.Value.Item2.Select(
                     item => new DriveItemOp(
-                        item)).ToArray().RdnlC())).RdnlD();
+                        item, item.OpUuid)).ToArray().RdnlC())).RdnlD();
 
             return driveItemNameMacros;
         }
@@ -41,43 +41,45 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         private Dictionary<string, Tuple<string, List<DriveItemOp>>> GetDriveItemMacrosList(
             ReadOnlyDictionary<string, Tuple<string, ReadOnlyCollection<DriveItemNameMacro>>> driveItemNameMacrosMx)
         {
-            var driveItemNameMacrosMxList = driveItemNameMacrosMx.ToList();
-            var commonConstDirNameMacros = driveItemNameMacrosMxList[driveItemNameMacrosMxList.Count - 2];
+            var commonConstDirNameMacros = driveItemNameMacrosMx[MacrosH.COMMON_CONST];
+            var miscMacros = driveItemNameMacrosMx[MacrosH.MISC];
 
-            var descMacros = driveItemNameMacrosMxList[0];
-            var ascMacros = driveItemNameMacrosMxList[1];
+            var descMacros = driveItemNameMacrosMx[MacrosH.DESC_IDX];
+            var ascMacros = driveItemNameMacrosMx[MacrosH.ASC_IDX];
 
-            var headingDescMacros = driveItemNameMacrosMxList[2];
-            var headingAscMacros = driveItemNameMacrosMxList[3];
+            var headingDescMacros = driveItemNameMacrosMx[MacrosH.H_DESC_IDX];
+            var headingAscMacros = driveItemNameMacrosMx[MacrosH.H_ASC_IDX];
 
-            var descDriveItemOps = descMacros.Value.Item2.Select(
+            var miscDriveItemOps = miscMacros.Item2.Select(
                 nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
 
-            var ascDriveItemOps = ascMacros.Value.Item2.Select(
+            var descDriveItemOps = descMacros.Item2.Select(
                 nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
 
-            var headingDescDriveItemOps = headingDescMacros.Value.Item2.Select(
+            var ascDriveItemOps = ascMacros.Item2.Select(
                 nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
 
-            var headingAscDriveItemOps = headingAscMacros.Value.Item2.Select(
+            var headingDescDriveItemOps = headingDescMacros.Item2.Select(
                 nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
 
-            var defaultDescMacro = descMacros.Value.Item2.Skip(1).First();
-            var defaultHeadingDescMacro = headingDescMacros.Value.Item2.Last();
+            var headingAscDriveItemOps = headingAscMacros.Item2.Select(
+                nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
 
-            var firstMacrosList = commonConstDirNameMacros.Value.Item2.Select(
+            var defaultDescMacro = descMacros.Item2.Skip(1).First();
+            var defaultHeadingDescMacro = headingDescMacros.Item2.Last();
+
+            var secondMacrosList = commonConstDirNameMacros.Item2.Select(
                 nameMacro => this.GetDirsPairDriveItemOp(
-                    defaultDescMacro, null, shortDirItemOp =>
+                    this.GetDefaultHeadingDescMacro(
+                        defaultHeadingDescMacro,
+                        nameMacro.ConstName.First()),
+                    nameMacro)).ToList();
+
+            var firstMacrosList = secondMacrosList.Select(
+                driveItemOp => this.GetDirsPairDriveItemOp(
+                    defaultDescMacro, new DriveItemNameMacro(), shortDirItemOp =>
                     {
-                        shortDirItemOp.MultipleItems = new List<DriveItemOp>
-                        {
-                            this.GetDriveItemOp(defaultHeadingDescMacro),
-                            this.GetDriveItemOp(new DriveItemNameMacro(defaultHeadingDescMacro)
-                                {
-                                    SucceedingDelimiter = " ",
-                                    SucceedingMacro = nameMacro
-                                })
-                        };
+                        shortDirItemOp.MultipleItems = driveItemOp.MultipleItems;
                     })).ToList();
 
             var driveItemOpsDictnr = new Dictionary<string, Tuple<string, List<DriveItemOp>>>
@@ -87,6 +89,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
                 { MacrosH.ASC_IDX, new Tuple<string, List<DriveItemOp>>("Asc Indexing", ascDriveItemOps) },
                 { MacrosH.H_DESC_IDX, new Tuple<string, List<DriveItemOp>>("Heading Desc Indexing", headingDescDriveItemOps) },
                 { MacrosH.H_ASC_IDX, new Tuple<string, List<DriveItemOp>>("Heading Asc Indexing", headingAscDriveItemOps) },
+                { MacrosH.MISC, new Tuple<string, List<DriveItemOp>>("Miscellaneous", miscDriveItemOps) }
             };
 
             return driveItemOpsDictnr;
@@ -122,12 +125,23 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         {
             var driveItemOp = new DriveItemOp
             {
-                OpUuid = Guid.NewGuid(),
+                // OpUuid = Guid.NewGuid(),
                 NameMacro = nameMacro
             };
 
             driveItemOpCallback?.Invoke(driveItemOp);
             return driveItemOp;
+        }
+
+        private DriveItemNameMacro GetDefaultHeadingDescMacro(
+            DriveItemNameMacro defaultHeadingDescMacro, char trailingChar)
+        {
+            defaultHeadingDescMacro = new DriveItemNameMacro(defaultHeadingDescMacro)
+            {
+                SucceedingDelimiter = new string(new char[] { ' ', trailingChar })
+            };
+
+            return defaultHeadingDescMacro;
         }
     }
 }

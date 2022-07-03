@@ -40,6 +40,11 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
                 "@A@", "Alphabetical ordering",
                 macro => macro.SrcNameFirstLetterWrappingChar = '@');
 
+            var miscMacros = new List<DriveItemNameMacro>()
+            {
+                alphabeticalOrderingMacro
+            };
+
             var headingAscMacros = this.GetIndexHeadingAscMacros(digitsCount, numFmt);
             var headingDescMacros = this.GetIndexHeadingDescMacros(digitsCount, numFmt);
 
@@ -52,12 +57,13 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
 
             var dictnr = new Dictionary<string, Tuple<string, List<DriveItemNameMacro>>>
             {
+                { MacrosH.COMMON_CONST, new Tuple<string, List<DriveItemNameMacro>>("Common const dir name macros", commonConstDirNameMacros) },
                 { MacrosH.DESC_IDX, new Tuple<string, List<DriveItemNameMacro>>("Desc Indexing", descMacros) },
                 { MacrosH.ASC_IDX, new Tuple<string, List<DriveItemNameMacro>>("Asc Indexing", ascMacros) },
                 { MacrosH.H_DESC_IDX, new Tuple<string, List<DriveItemNameMacro>>("Heading Desc Indexing", headingDescMacros) },
                 { MacrosH.H_ASC_IDX, new Tuple<string, List<DriveItemNameMacro>>("Heading Asc Indexing", headingAscMacros) },
-                { MacrosH.COMMON_CONST, new Tuple<string, List<DriveItemNameMacro>>("Common const dir name macros", commonConstDirNameMacros) },
-                { MacrosH.ATOCMI_CONST, new Tuple<string, List<DriveItemNameMacro>>("Atomic const dir name macros", atomicConstDirNameMacros) },
+                { MacrosH.MISC, new Tuple<string, List<DriveItemNameMacro>>("Miscellaneous", miscMacros) },
+                { MacrosH.ATOMIC_CONST, new Tuple<string, List<DriveItemNameMacro>>("Atomic const dir name macros", atomicConstDirNameMacros) },
                 { MacrosH.EXT, new Tuple<string, List<DriveItemNameMacro>>("File name extensions", fileNameExtensionMacros) }
             };
 
@@ -71,7 +77,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         {
             var macro = new DriveItemNameMacro
             {
-                MacroUuid = Guid.NewGuid(),
+                // MacroUuid = Guid.NewGuid(),
                 MacroName = name,
                 MacroDescription = description
             };
@@ -81,12 +87,18 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         }
 
         private DriveItemNameMacro GetDriveItemConstNameMacro(
-            string description, params string[] nameParts)
+            string name, string description, params string[] nameParts)
         {
+            if (nameParts.Length == 0)
+            {
+                nameParts = new string[] { name };
+            }
+
+            description = description ?? name;
             string constDirName = string.Join("-", nameParts);
 
             var retMacro = this.GetDriveItemNameMacro(
-                constDirName, description, macro =>
+                name, description, macro =>
                 {
                     macro.ConstName = constDirName;
                 });
@@ -197,6 +209,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         {
             var macrosList = new List<DriveItemNameMacro>
             {
+                this.GetDriveItemConstNameMacro("@#a-z#", "Alphabetical ordering dir name"),
                 this.GetDriveItemConstNameMacro("#photo-imgs.jpg#", ".jpg photo image files"),
                 this.GetDriveItemConstNameMacro("#info-photo-imgs.jpg#", ".jpg info photo image files"),
                 this.GetDriveItemConstNameMacro("#dwnldd-imgs.jpg#", "Downloaded .jpg files"),
@@ -222,11 +235,13 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         {
             var macrosList = new List<DriveItemNameMacro>
             {
-                this.GetDriveItemConstNameMacro(string.Empty, "Empty macro"),
-                this.GetDriveItemConstNameMacro(" ", "Single space char"),
+                this.GetDriveItemConstNameMacro("Empty macro", null, string.Empty),
+                this.GetDriveItemConstNameMacro("Single space char", null, " "),
                 this.GetDriveItemConstNameMacro("#", "Const dir name delimiter char"),
                 this.GetDriveItemConstNameMacro("-", "Const dir name part delimiter char"),
                 this.GetDriveItemConstNameMacro(".", "Const dir name file name extension delimiter char"),
+                this.GetDriveItemConstNameMacro("@", "Alphabetical ordering delimiter char"),
+                this.GetDriveItemConstNameMacro("a-z", "Alphabetical ordering dir name"),
                 this.GetDriveItemConstNameMacro("imgs", "Image files"),
                 this.GetDriveItemConstNameMacro("photo", "Photos"),
                 this.GetDriveItemConstNameMacro("doc", "Document"),

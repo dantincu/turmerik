@@ -44,7 +44,8 @@ builder.Services.RegisterAppSettings();
 builder.Services.AddSingleton<IDriveItemNameMacrosService, DriveItemNameMacrosService>();
 builder.Services.AddSingleton<IDriveItemMacrosService, DriveItemMacrosService>();
 
-builder.Services.AddScoped<IDriveExplorerService, FsExplorerService>();
+builder.Services.AddScoped<IDriveExplorerServiceEngine, FsExplorerServiceEngine>();
+builder.Services.AddScoped<IDriveExplorerService, DriveExplorerService>();
 builder.Services.AddScoped<IDriveItemNameMacroFactoryResolver, DriveItemNameMacroFactoryResolver>();
 
 var app = builder.Build();

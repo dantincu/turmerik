@@ -1,13 +1,71 @@
 @page
+@using Turmerik.Core.Helpers
+@using Turmerik.OneDriveExplorer.AspNetCore.WebApp.AppConfig
+@using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
 @model IndexModel
+
+@inject IAppSettings appSettings;
+@inject IDriveItemMacrosService driveItemMacrosService;
+@inject IDriveItemNameMacrosService driveItemNameMacrosService;
+
 @{
     ViewData["Title"] = "Home page";
+    string appSettingsJson = JsonSrlzH.ToJson(appSettings);
+
+    var driveItemNameMacros = driveItemNameMacrosService.GetDriveItemNameMacros();
+    string driveItemNameMacrosJson = JsonSrlzH.ToJson(driveItemNameMacros);
+
+    var driveItemMacros = driveItemMacrosService.GetDriveItemMacros();
+    string driveItemMacrosJson = JsonSrlzH.ToJson(driveItemMacros);
 }
 
+@section Scripts {
+    <script>
+        window["trmrkDOMContentLoaded"] = () => {
+            let username = "@User.Identity?.Name";
+            console.log("Initializing app for user " + username);
+
+            window.trmrk.homePage.init(
+                username,
+                @Html.Raw(appSettingsJson),
+                @Html.Raw(driveItemNameMacrosJson),
+                @Html.Raw(driveItemMacrosJson));
+        }
+    </script>
+}
+
+<script src="~/js/pages/homePage.js" asp-append-version="true" type="module"></script>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <!--p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p-->
+    <h1 class="display-4">Home</h1>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#driveItemMacrosModal">
+        Drive Item Macros
+    </button>
 </div>
 
-<div>Graph API result</div>
-<div>@ViewData["GraphApiResult"]</div>
+<div class="modal" tabindex="-1" id="driveItemMacrosModal">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Drive Item Name Macros</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h6>Drive Item Name Macros</h6>
+        <pre id="driveItemNameMacros">
+            @Html.Raw(driveItemNameMacrosJson)
+        </pre>
+        <h6>Drive Item Macros</h6>
+        <pre id="driveItemMacros">
+            @Html.Raw(driveItemMacrosJson)
+        </pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@*<--div>Graph API result</div>
+<div>@ViewData["GraphApiResult"]</div-->*@

@@ -11,14 +11,18 @@ namespace Turmerik.Core.DriveExplorer
 {
     public abstract class DriveExplorerServiceBase
     {
-        protected DriveExplorerServiceBase(ITimeStampHelper timeStampHelper)
+        protected DriveExplorerServiceBase(
+            ITimeStampHelper timeStampHelper,
+            IDriveItemNameMacroFactoryResolver nameMacroResolver)
         {
             this.TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
+            this.NameMacroResolver = nameMacroResolver ?? throw new ArgumentNullException(nameof(nameMacroResolver));
             DriveItemDefaultExceptionHandler = GetDefaultExceptionHandler<DriveItem>();
             StringDefaultExceptionHandler = GetDefaultExceptionHandler<string>();
         }
 
         protected ITimeStampHelper TimeStampHelper { get; }
+        protected IDriveItemNameMacroFactoryResolver NameMacroResolver { get; }
 
         protected Func<Exception, TrmrkActionResult<DriveItem>> DriveItemDefaultExceptionHandler { get; }
         protected Func<Exception, TrmrkActionResult<string>> StringDefaultExceptionHandler { get; }
@@ -136,9 +140,9 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected async Task<DriveItemOp> CreateMultipleEntriesAsync(
+        protected async Task<DriveItemOp[]> CreateMultipleEntriesAsync(
             string[] existingEntriesArr,
-            List<Tuple<Func<string[], int, string, string>, string, Func<string, int, Task<DriveItemOp>>>> fileNameFactoriesList)
+            Tuple<Func<string[], int, string, string>, string, Func<string, int, Task<DriveItemOp>>>[] fileNameFactoriesArr)
         {
             int idx = -1;
             bool conflict = true;
@@ -150,7 +154,7 @@ namespace Turmerik.Core.DriveExplorer
             {
                 idx++;
 
-                candidateEntriesArr = fileNameFactoriesList.Select(
+                candidateEntriesArr = fileNameFactoriesArr.Select(
                     tuple => tuple.Item1(existingEntriesArr, idx, tuple.Item2)).ToArray();
 
                 conflict = candidateEntriesArr.Any(
@@ -161,15 +165,73 @@ namespace Turmerik.Core.DriveExplorer
             for (int i = 0; i < candidateEntriesArr.Length; i++)
             {
                 var newEntry = candidateEntriesArr[i];
-                var newDriveItem = await fileNameFactoriesList[i].Item3(newEntry, i);
+                var newDriveItem = await fileNameFactoriesArr[i].Item3(newEntry, i);
 
                 newDriveItemsList.Add(newDriveItem);
             }
 
-            return new DriveItemOp
+            return newDriveItemsList.ToArray();
+        }
+
+        protected Tuple<Func<string[], int, string, string>, string> ToDriveFolderNameFactory(
+            DriveItemOp driveItemOp)
+        {
+            var macro = driveItemOp.NameMacro;
+
+            var tuple = new Tuple<Func<string[], int, string, string>, string>(
+                this.NameMacroResolver.Resolve(macro),
+                macro.SrcName);
+
+            return tuple;
+        }
+
+        protected Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?> ToDriveFileNameFactory(
+            DriveItemOp driveItemOp)
+        {
+            var macro = driveItemOp.NameMacro;
+
+            var tuple = new Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>(
+                this.NameMacroResolver.Resolve(macro),
+                macro.SrcName,
+                driveItemOp.OfficeLikeFileType);
+
+            return tuple;
+        }
+
+        protected List<Tuple<Func<string[], int, string, string>, string>> ItemToDriveFolderNameFactoriesList(
+            DriveItemOp driveItemOp)
+        {
+            var retList = new List<Tuple<Func<string[], int, string, string>, string>>()
             {
-                MultipleItems = newDriveItemsList
+                this.ToDriveFolderNameFactory(driveItemOp)
             };
+
+            return retList;
+        }
+
+        protected Tuple<Func<string[], int, string, string>, string>[] ToDriveFolderNameFactoriesArr(
+            DriveItemOp[] driveItemOpsArr)
+        {
+            var retArr = driveItemOpsArr.Select(this.ToDriveFolderNameFactory).ToArray();
+            return retArr;
+        }
+
+        protected Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>[] ItemToDriveFileNameFactoriesArr(
+            DriveItemOp driveItemOp)
+        {
+            var retList = new Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>[]
+            {
+                this.ToDriveFileNameFactory(driveItemOp)
+            };
+
+            return retList;
+        }
+
+        protected Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>[] ToDriveFileNameFactoriesArr(
+            List<DriveItemOp> driveItemOpsList)
+        {
+            var retArr = driveItemOpsList.Select(this.ToDriveFileNameFactory).ToArray();
+            return retArr;
         }
     }
 }
