@@ -4,7 +4,8 @@ import { ViewModelBase } from '../common/ViewModelBase.js';
 import { driveExplorerApi } from './driveExplorerApi.js';
 import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
-import { DriveItemsGridView, DriveItemsGridViewTrmrkEvents, Validation } from './driveItemsGridView.js';
+import { DriveItemsGridViewTrmrkEvents, Validation } from './driveItemsGridView.core.js';
+import { DriveItemsGridView } from './driveItemsGridView.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
 
@@ -65,8 +66,8 @@ export class DriveExplorer {
 
         document.addEventListener("scroll", e => this.onDocumentScroll(e));
         window.addEventListener("resize", e => this.onWindowResize(e));
+        
         window.addEventListener("popstate", e => this.onWindowPopState());
-
         await this.loadCurrentDriveFolderAsync();
     }
 

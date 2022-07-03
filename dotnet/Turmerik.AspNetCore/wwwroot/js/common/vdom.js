@@ -630,6 +630,20 @@ export class VirtualDomUtils {
             domNode.addEventListener(type, listener, options);
         }
     }
+
+    classListUnion(minClassList, addClassList) {
+        const retClassList = [...minClassList];
+
+        if (trmrk.core.isNotNullObj(addClassList)) {
+            for (let className of addClassList) {
+                if (retClassList.indexOf(className) < 0) {
+                    retClassList.push(className);
+                }
+            }
+        }
+
+        return retClassList;
+    }
 }
 
 export class VirtualDom {

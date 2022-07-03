@@ -4,9 +4,14 @@ export class TrmrkCssClasses {
     rotate90Deg = "trmrk-rotate-90deg";
     timesIcon = "trmrk-times-icon";
     plusIcon = "trmrk-plus-icon";
+    square = "trmrk-square";
     icon = "trmrk-icon";
     editMode = "trmrk-edit-mode";
+    checkBox = "trmrk-check-box";
     checked = "trmrk-checked";
+    unChecked = "trmrk-unchecked";
+    partiallyChecked = "trmrk-partially-checked";
+    partialCheckBox = "trmrk-partial-check-box";
     pressed = "trmrk-pressed";
     iconsRow = "trmrk-icons-row";
     isInvalid = "trmrk-is-invalid";
@@ -22,8 +27,9 @@ export class DriveFolderViewCssClasses {
     stickyHeader = "trmrk-drive-folder-view-sticky-header";
     gridMainCell = "trmrk-grid-main-cell";
     gridMainEditCell = "trmrk-grid-main-edit-cell";
-    gridIconCell = "trmrk-grid-icon-cell"
-    gridCheckBoxCell = "trmrk-grid-checkbox-cell"
+    gridIconCell = "trmrk-grid-icon-cell";
+    gridCheckBoxCell = "trmrk-grid-checkbox-cell";
+    gridHeaderCheckBox = "trmrk-grid-header-checkbox";
     itemsGrid = "trmrk-drive-items-grid";
     foldersGrid = "trmrk-drive-folders-grid";
     filesGrid = "trmrk-drive-files-grid";

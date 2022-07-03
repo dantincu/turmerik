@@ -4,469 +4,9 @@ import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
 import { DriveItem } from './Entities.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 import { ViewModelBase } from '../common/ViewModelBase.js';
-
-export class Validation {
-    isValid = false;
-    error = null;
-
-    constructor(isValid, error) {
-        this.isValid = isValid;
-        this.error = error;
-    }
-}
-
-export class IconVDomEl extends VDomEl {
-    constructor(classList, events, innerHTML) {
-        super({
-            nodeName: "span",
-            classList: classList,
-            events: events,
-            childNodes: innerHTML
-        });
-    }
-}
-
-export class DriveItemNameVDomEl extends VDomEl {
-    constructor(driveItemName, events) {
-        super({
-            nodeName: "span",
-            classList: [ driveFolderViewCssClasses.name ],
-            textValue: driveItemName,
-            events: events
-        });
-    }
-
-    updateDriveItemName(driveItemName) {
-        this.domNode.textContent = driveItemName;
-    }
-}
-
-export class DriveItemCheckBox extends VDomEl {
-    constructor(events) {
-        super({
-            nodeName: "input",
-            attrs: {
-                type: "checkbox"
-            },
-            events: events
-        });
-    }
-}
-
-export class DriveItemTextBox extends VDomEl {
-    constructor(events) {
-        super({
-            nodeName: "input",
-            attrs: {
-                type: "text"
-            },
-            events: events
-        });
-    }
-}
-
-export class TableHeaderCell extends VDomEl {
-    constructor(text, classList) {
-        super({
-            nodeName: "th",
-            classList: classList
-        });
-
-        this.attrs["scope"] = "col";
-
-        if (trmrk.core.isNonEmptyString(text)) {
-            this.childNodes.push(new VDomTextNode(text));
-        }
-    }
-}
-
-export class TableRowCell extends VDomEl {
-    constructor(childNodes, classList) {
-        super({
-            nodeName: "td",
-            classList: classList
-        });
-
-        this.childNodes = trmrk.core.objValOrDefault(childNodes, []);
-    }
-}
-
-export class DriveItemsGridMainCell extends TableRowCell {
-    driveItemNameVDomEl = null;
-
-    constructor(
-        mainCellShortPressListener,
-        mainCellLongPressListener,
-        driveItemName,
-        mainCellMouseDown,
-        mainCellMouseUp) {
-        super([], [ driveFolderViewCssClasses.gridMainCell ]);
-
-        let mainCellEvents = {};
-
-        mainCellEvents[vdom.utils.shortLongMouseUpEventName] = [new EventOpts({
-            listener: mainCellShortPressListener,
-            altListener: mainCellLongPressListener,
-            onMouseDown: mainCellMouseDown,
-            onMouseUp: mainCellMouseUp
-        })];
-
-        this.driveItemNameVDomEl = new DriveItemNameVDomEl(
-            driveItemName,
-            mainCellEvents);
-
-        this.childNodes.push(this.driveItemNameVDomEl);
-    }
-
-    updateDriveItemName(driveItemName) {
-        this.driveItemNameVDomEl.updateDriveItemName(driveItemName);
-    }
-}
-
-export class ErrorPopoverVDomEl extends VDomEl {
-    constructor() {
-        super({
-            nodeName: "a",
-            attrs: {
-                href: trmrk.core.javascriptVoid,
-                "data-bs-toggle": "popover",
-                "data-bs-trigger": "focus"
-            }
-        });
-    }
-}
-
-export class DriveItemsGridMainEditCell extends TableRowCell {
-    textBoxVDomEl = null;
-    errorPopoverVDomEl = null;
-    bsPopover = null;
-
-    constructor() {
-        super([], [ driveFolderViewCssClasses.gridMainEditCell ]);
-
-        this.textBoxVDomEl = new DriveItemTextBox({
-            click: [{
-                listener: e => this.hideError()
-            }]
-        });
-
-        this.errorPopoverVDomEl = new ErrorPopoverVDomEl();
-        this.childNodes = [ this.textBoxVDomEl, this.errorPopoverVDomEl ];
-    }
-
-    showError(error) {
-        if (trmrk.core.isNonEmptyString(error, true)) {
-            error = error.trim();
-        } else {
-            error = "An error occurred";
-        }
-
-        this.textBoxVDomEl.addClass(trmrkCssClasses.isInvalid);
-        
-        this.bsPopover = new bootstrap.Popover(
-            this.errorPopoverVDomEl.domNode, {
-                content: error,
-                customClass: driveFolderViewCssClasses.errorPopover
-            });
-
-        this.bsPopover.show();
-    }
-
-    hideError() {
-        this.textBoxVDomEl.removeClass(trmrkCssClasses.isInvalid);
-        
-        if (trmrk.core.isNotNullObj(this.bsPopover)) {
-            this.bsPopover.dispose();
-            this.bsPopover = null;
-        }
-    }
-}
-
-export class DriveItemsGridHeaderRow extends VDomEl {
-    constructor() {
-        super({
-            nodeName: "tr"
-        });
-
-        this.childNodes = [
-            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridCheckBoxCell ] ),
-            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
-            new TableHeaderCell("Name", [ driveFolderViewCssClasses.gridMainCell ]),
-            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ]),
-            new TableHeaderCell(null, [ driveFolderViewCssClasses.gridIconCell ])
-        ];
-    }
-}
-
-export class DriveItemsGridRow extends VDomEl {
-    driveItem;
-    mainCell = null;
-    isChecked = false;
-    isDisabled = false;
-
-    constructor(
-        driveItem,
-        mainCellShortPressListener,
-        mainCellLongPressListener,
-        isFoldersGrid) {
-        super({
-            nodeName: "tr"
-        });
-
-        this.driveItem = driveItem;
-        const that = this;
-
-        mainCellShortPressListener = mainCellShortPressListener.bind(this);
-        mainCellLongPressListener = mainCellLongPressListener.bind(this);
-
-        this.runMouseEvent = this.runMouseEvent.bind(this);
-
-        this.mainCell = new DriveItemsGridMainCell(
-            mainCellShortPressListener,
-            mainCellLongPressListener,
-            driveItem.name,
-            this.getDefaultMouseDownListener(),
-            this.getDefaultMouseUpListener());
-
-        this.childNodes = [
-            new TableRowCell([
-                new DriveItemCheckBox({
-                    click: [{
-                        listener: function(e) {
-                            const retVal = that.canRunMouseEvent(e);
-
-                            if (!retVal) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
-
-                            return retVal;
-                        }
-                    }],
-                    mousedown: [{
-                        listener: function(e) {
-                            that.addPressedClass(e);
-                        }
-                    }],
-                    mouseup: [{
-                        listener: function(e) {
-                            const retVal = that.removePressedClass(e);
-
-                            if (retVal) {
-                                let checked = !this.domNode.checked; // at this point the checked property has not yet been updated
-                                that.isChecked = checked;
-
-                                if (checked) {
-                                    that.addClass(trmrkCssClasses.checked);
-                                } else {
-                                    that.removeClass(trmrkCssClasses.checked);
-                                }
-                            } else {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
-
-                            return retVal;
-                        }
-                    }]
-                })
-            ], [ driveFolderViewCssClasses.gridCheckBoxCell ]),
-            new TableRowCell([
-                new IconVDomEl([ "oi", isFoldersGrid ? "oi-folder" : "oi-file" ],
-                this.getDefaultMouseEvents())
-            ], [ driveFolderViewCssClasses.gridIconCell ]),
-            this.mainCell,
-            new TableRowCell([
-                new IconVDomEl(
-                    [ "oi", "oi-pencil" ],
-                    {
-                        mouseup: [{
-                            listener: function(e) {
-                                that.removePressedClass(e);
-                                mainCellLongPressListener.call(that, e);
-                            }
-                        }],
-                        mousedown: [ this.getDefaultMouseDownEvent() ]
-                    })
-            ], [ driveFolderViewCssClasses.gridIconCell ]),
-            new TableRowCell([
-                new IconVDomEl(
-                    [ "oi", "oi-ellipses", trmrkCssClasses.rotate90Deg ],
-                    this.getDefaultMouseEvents())
-            ], [ driveFolderViewCssClasses.gridIconCell ])
-        ];
-    }
-
-    canRunMouseEvent(e) {
-        const canRun = !this.isDisabled && e.button === 0;
-        return canRun;
-    }
-
-    runMouseEvent(e, callback) {
-        const retVal = this.canRunMouseEvent(e);
-
-        if (retVal) {
-            callback.call(this, e);
-        }
-
-        return retVal;
-    }
-
-    addPressedClass(e) {
-        const retVal = this.runMouseEvent(e,
-            () => this.addClass(trmrkCssClasses.pressed));
-
-        return retVal;
-    }
-
-    removePressedClass(e) {
-        const retVal = this.runMouseEvent(e,
-            () => this.removeClass(trmrkCssClasses.pressed));
-
-        return retVal;
-    }
-
-    getDefaultMouseUpListener() {
-        const listener = e => this.removePressedClass(e);
-        return listener;
-    }
-
-    getDefaultMouseDownListener() {
-        const listener = e => this.addPressedClass(e);
-        return listener;
-    }
-
-    getDefaultMouseUpEvent() {
-        const event = {
-            listener: this.getDefaultMouseUpListener()
-        };
-
-        return event;
-    }
-
-    getDefaultMouseDownEvent() {
-        const event = {
-            listener: this.getDefaultMouseDownListener()
-        };
-
-        return event;
-    }
-
-    getDefaultMouseEvents() {
-        const events = {
-            mouseup: [ this.getDefaultMouseUpEvent() ],
-            mousedown: [ this.getDefaultMouseDownEvent() ]
-        };
-
-        return events;
-    }
-
-    updateDriveItem(driveItem) {
-        this.mainCell.updateDriveItemName(driveItem.name);
-        this.driveItem = driveItem;
-    }
-}
-
-export class DriveItemsGridEditRow extends VDomEl {
-    mainEditCell = null;
-    textBoxVDomEl = null;
-    isReadonly = false;
-
-    constructor(
-        editCancelListener,
-        editConfirmListener,
-        deleteListener) {
-        super({
-            nodeName: "tr"
-        });
-
-        this.mainEditCell = new DriveItemsGridMainEditCell();
-        this.mainEditCell.parentVDomEl = this;
-        this.textBoxVDomEl = this.mainEditCell.textBoxVDomEl;
-
-        editCancelListener = editCancelListener.bind(this);
-        editConfirmListener = editConfirmListener.bind(this);
-        deleteListener = deleteListener.bind(this);
-
-        this.childNodes = [
-            new TableRowCell(
-                [ new IconVDomEl(
-                    [ "oi", "oi-arrow-thick-left", trmrkCssClasses.rotate45Deg, trmrkCssClasses.icon ],
-                    {
-                        click: [{
-                                listener: editCancelListener
-                            }]
-                    }) ],
-                [ driveFolderViewCssClasses.gridCheckBoxCell ]),
-            new TableRowCell(
-                [ new IconVDomEl(
-                    [ trmrkCssClasses.timesIcon ],
-                    {
-                        click: [{
-                            listener: e => {
-                                if (!this.isReadonly && e.button === 0) {
-                                    this.textBoxVDomEl.domNode.value = "";
-                                }
-                            }
-                        }]
-                    },
-                    "&times;") ],
-                [ driveFolderViewCssClasses.gridIconCell ]),
-            this.mainEditCell,
-            new TableRowCell(
-                [ new IconVDomEl(
-                    [ "oi", "oi-arrow-circle-right", trmrkCssClasses.icon ],
-                    {
-                        click: [{
-                            listener: editConfirmListener
-                        }]
-                    }) ],
-                [ driveFolderViewCssClasses.gridIconCell ]),
-            new TableRowCell(
-                [ new IconVDomEl(
-                    [ "oi", "oi-trash", trmrkCssClasses.icon ],
-                    {
-                        click: [{
-                            listener: deleteListener
-                        }]
-                    }) ],
-                [ driveFolderViewCssClasses.gridIconCell ])
-        ];
-    }
-
-    showError(error) {
-        this.mainEditCell.showError(error);
-    }
-
-    clearError() {
-        this.mainEditCell.hideError();
-    }
-
-    setReadonly() {
-        this.isReadonly = true;
-        this.addClass(trmrkCssClasses.waiting);
-        this.textBoxVDomEl.addAttr("readonly", "readonly");
-    }
-
-    unsetReadonly() {
-        this.isReadonly = false;
-        this.removeClass(trmrkCssClasses.waiting);
-        this.textBoxVDomEl.removeAttr("readonly");
-    }
-}
-
-export class DriveItemsGridViewTrmrkEvents extends ViewModelBase {
-    onNavigateToDriveItem = null;
-    onUpdateDriveItemName = null;
-    onDeleteItem = null;
-    onEnterEditMode = null;
-    onExitEditMode = null;
-
-    constructor(src) {
-        super();
-        this.__copyProps(src);
-    }
-}
+import { DriveItemsGridHeaderRow } from './driveItemsGridView.headerRow.js';
+import { DriveItemsGridRow } from './driveItemsGridView.row.js';
+import { DriveItemsGridEditRow } from './driveItemsGridView.editRow.js';
 
 export class DriveItemsGridView extends VDomEl {
     driveItemsArr = [];
@@ -479,6 +19,9 @@ export class DriveItemsGridView extends VDomEl {
     isEditMode = false;
     trmrkEvents = null;
     editRowValidator = null;
+    tableHeaderVDomEl = null;
+    tableBodyVDomEl = null;
+    manuallyCheckedRows = [];
 
     constructor(driveItemsArr, isFoldersGrid, trmrkEvents, editRowValidator) {
         super({
@@ -556,19 +99,45 @@ export class DriveItemsGridView extends VDomEl {
     }
 
     getTableVDomEl() {
-        const tableHeaderVDomEl = this.getTableHeaderVDomEl();
-        const tableBodyVDomEl = this.getTableBodyVDomEl();
+        this.tableHeaderVDomEl = this.getTableHeaderVDomEl();
+        this.tableBodyVDomEl = this.getTableBodyVDomEl();
 
         const tableVDomEl = vdom.utils.getVDomEl("table", [ "table" ], {}, [
-            tableHeaderVDomEl, tableBodyVDomEl
+            this.tableHeaderVDomEl, this.tableBodyVDomEl
         ]);
 
         return tableVDomEl;
     }
 
     getTableHeaderVDomEl() {
+        const that = this;
+
+        const headerCheckBoxElEvents = {
+            click: [{
+                    listener: e => {
+                        if (that.tableHeaderVDomEl.isChecked === true) {
+                            for (let row of that.tableBodyVDomEl.childNodes) {
+                                row.uncheckRow();
+                            }
+
+                            that.tableHeaderVDomEl.uncheck();
+                        } else if (that.tableHeaderVDomEl.isChecked === false && that.manuallyCheckedRows.length > 0) {
+                            for (let row of that.manuallyCheckedRows) {
+                                row.checkRow();
+                            }
+                        } else {
+                            for (let row of that.tableBodyVDomEl.childNodes) {
+                                row.checkRow();
+                            }
+
+                            that.tableHeaderVDomEl.check();
+                        }
+                    }
+                }]
+        }
+
         const tableHeaderVDomEl = vdom.utils.getVDomEl("thead", [], {}, [
-            new DriveItemsGridHeaderRow()]);
+            new DriveItemsGridHeaderRow(headerCheckBoxElEvents)]);
 
         return tableHeaderVDomEl;
     }
@@ -595,7 +164,26 @@ export class DriveItemsGridView extends VDomEl {
                     that.startEditTableRow(this, driveItem);
                 }
             },
-            this.isFoldersGrid);
+            this.isFoldersGrid,
+            (row, checked) => {
+                if (checked) {
+                    if (that.tableHeaderVDomEl.isChecked === false) {
+                        that.manuallyCheckedRows = [];
+                    }
+
+                    that.manuallyCheckedRows.push(row);
+                } else {
+                    const idx = this.manuallyCheckedRows.indexOf(row);
+
+                    if (idx >= 0) {
+                        that.manuallyCheckedRows.splice(idx, 1);
+
+                        if (that.manuallyCheckedRows.length === 0) {
+                            that.tableHeaderVDomEl.uncheck();
+                        }
+                    }
+                }
+            });
 
         return tableRowVDomEl;
     }
