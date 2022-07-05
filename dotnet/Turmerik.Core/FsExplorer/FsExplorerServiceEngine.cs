@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,18 @@ namespace Turmerik.Core.FsExplorer
 {
     public class FsExplorerServiceEngine : IDriveExplorerServiceEngine
     {
+        private static readonly ReadOnlyDictionary<OfficeLikeFileType, ReadOnlyCollection<string>> officeLikeFileTypesFileNameExtensions;
+
+        static FsExplorerServiceEngine()
+        {
+            officeLikeFileTypesFileNameExtensions = new Dictionary<OfficeLikeFileType, ReadOnlyCollection<string>>
+            {
+                { OfficeLikeFileType.Docs, new string[] { ".docx", ".doc" }.RdnlC() },
+                { OfficeLikeFileType.Sheets, new string[] { ".xlsx", ".xls" }.RdnlC() },
+                { OfficeLikeFileType.Slides, new string[] { ".pptx" , ".ppt" }.RdnlC() },
+            }.RdnlD();
+        }
+
         public FsExplorerServiceEngine(
             ITimeStampHelper timeStampHelper)
         {
@@ -229,25 +242,42 @@ namespace Turmerik.Core.FsExplorer
             return result;
         }
 
-        private DriveItem GetDriveItem(FileSystemInfo fsInfo)
+        private DriveItem GetDriveItem(FileSystemInfo fSysInfo)
         {
             var fsItemMtbl = new DriveItem
             {
-                Id = fsInfo.FullName,
-                Name = fsInfo.Name,
+                Id = fSysInfo.FullName,
+                Name = fSysInfo.Name,
                 /* CreationTimeStr = TimeStampHelper.TmStmp(fsInfo.CreationTime, true, TimeStamp.Seconds),
                 LastAccessTimeStr = TimeStampHelper.TmStmp(fsInfo.LastAccessTime, true, TimeStamp.Seconds),
                 LastWriteTimeStr = TimeStampHelper.TmStmp(fsInfo.LastWriteTime, true, TimeStamp.Seconds) */
             };
 
-            var dirInfo = fsInfo as DirectoryInfo;
-
-            if (dirInfo != null)
+            if (fSysInfo is DirectoryInfo dirInfo)
             {
                 fsItemMtbl.IsFolder = true;
             }
+            else if (fSysInfo is FileInfo fInfo)
+            {
+                fsItemMtbl.OfficeLikeFileType = this.GetOfficeLikeFileType(fInfo);
+            }
 
             return fsItemMtbl;
+        }
+
+        private OfficeLikeFileType? GetOfficeLikeFileType(FileInfo fInfo)
+        {
+            var matchKvp = officeLikeFileTypesFileNameExtensions.SingleOrDefault(
+                kvp => kvp.Value.Contains(fInfo.Extension));
+
+            OfficeLikeFileType? retVal = null;
+
+            if (matchKvp.Value != null)
+            {
+                retVal = matchKvp.Key;
+            }
+
+            return retVal;
         }
 
         private string GetDriveItemUrl(string driveItemId)
