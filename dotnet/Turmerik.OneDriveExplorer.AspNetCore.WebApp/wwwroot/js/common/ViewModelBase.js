@@ -1,6 +1,6 @@
 ﻿import { trmrk } from './core.js';
 
-export const copyProps = (trg, src, throwOnUnknownProp = false) => {
+export const copyProps = (trg, src, throwOnUnknownProp = false, skipNullOrUndefOrNaNValues = false) => {
     let retVal = src !== null && typeof src === "object";
 
     if (retVal) {
@@ -8,11 +8,13 @@ export const copyProps = (trg, src, throwOnUnknownProp = false) => {
         const ownProps = Object.keys(trg);
 
         for (let prop of srcProps) {
+            let propVal = src[prop];
+
             if (throwOnUnknownProp && ownProps.indexOf(prop) < 0) {
                 var err = "Unknown prop: " + prop;
                 throw err;
-            } else {
-                trg[prop] = src[prop];
+            } else if (!skipNullOrUndefOrNaNValues || !trmrk.core.isNullOrUndefOrOrNaN(propVal)) {
+                trg[prop] = propVal;
             }
         }
     }

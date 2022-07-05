@@ -176,7 +176,7 @@ export class DriveItemsGridRow extends VDomEl {
 
     updateDriveItem(driveItem) {
         this.mainCell.updateDriveItemName(driveItem.name);
-        copyProps(this.driveItem, driveItem);
+        copyProps(this.driveItem, driveItem, false, true);
     }
 
     checkRow() {
