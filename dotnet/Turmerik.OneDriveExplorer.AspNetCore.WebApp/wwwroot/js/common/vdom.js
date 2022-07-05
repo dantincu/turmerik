@@ -427,7 +427,7 @@ export class VDomEl extends VDomNodeBase {
                 let eventId = idx;
 
                 idx = trmrk.core.firstOrDefault(eventsArr,
-                    item => item.eventId === eventId).Key;
+                    item => item.eventId === eventId).key;
 
                 if (typeof(idx) !== "number") {
                     throw "There are no events with id " + eventId + " registered for type " + type;

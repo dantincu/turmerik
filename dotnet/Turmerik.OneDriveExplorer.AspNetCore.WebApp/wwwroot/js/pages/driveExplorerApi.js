@@ -5,18 +5,18 @@ import { trmrkAxios, TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
 import { webStorageAxios } from '../common/webStorageAxios.js';
 
 export class OfficeLikeFileType {
-    Docs = 1;
-    Sheets = 2;
-    Slides = 3;
+    docs = 1;
+    sheets = 2;
+    slides = 3;
 }
 
 const officeLikeFileTypeInstn = new OfficeLikeFileType();
 
 export const officeFileLikeTypeExtensions = {};
-officeFileLikeTypeExtensions[officeLikeFileTypeInstn.Docs] = ".docx";
+officeFileLikeTypeExtensions[officeLikeFileTypeInstn.docs] = ".docx";
 
-officeFileLikeTypeExtensions[officeLikeFileTypeInstn.Sheets] = ".xlsx";
-officeFileLikeTypeExtensions[officeLikeFileTypeInstn.Slides] = ".pptx";
+officeFileLikeTypeExtensions[officeLikeFileTypeInstn.sheets] = ".xlsx";
+officeFileLikeTypeExtensions[officeLikeFileTypeInstn.slides] = ".pptx";
 
 export const driveItemNameInvalidChars = "\\/:*?\"<>|";
 
@@ -25,16 +25,18 @@ export class DriveExplorerApi {
     folderRelUri = 'api/driveFolder';
     fileRelUri = 'api/driveFile';
 
+    username = null;
+
     getDriveFolderCacheKey(driveFolderId) {
         let cacheKey;
         
         if (trmrk.core.isNonEmptyString(driveFolderId)) {
             cacheKey = webStorage.getCacheKey(
-                this.appSettings.DriveFolderCacheKeyName,
+                this.appSettings.driveFolderCacheKeyName,
                 driveFolderId, this.username);
         } else {
             cacheKey = webStorage.getCacheKey(
-                this.appSettings.RootDriveFolderCacheKeyName,
+                this.appSettings.rootDriveFolderCacheKeyName,
                 this.username);
         }
 
@@ -186,9 +188,9 @@ export class DriveExplorerApi {
 
     validateOfficeLikeFileName(newItemName, officeLikeFileType) {
         switch (officeLikeFileType) {
-            case officeLikeFileTypeInstn.Docs:
-            case officeLikeFileTypeInstn.Sheets:
-            case officeLikeFileTypeInstn.Slides:
+            case officeLikeFileTypeInstn.docs:
+            case officeLikeFileTypeInstn.sheets:
+            case officeLikeFileTypeInstn.slides:
                 let requiredExtension = officeFileLikeTypeExtensions[officeLikeFileType];
                 this.validateOfficeLikeFileNameExtension(newItemName, requiredExtension);
                 break;

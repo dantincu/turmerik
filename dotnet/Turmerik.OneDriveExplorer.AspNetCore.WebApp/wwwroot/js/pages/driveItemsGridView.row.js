@@ -176,7 +176,9 @@ export class DriveItemsGridRow extends VDomEl {
 
     updateDriveItem(driveItem) {
         this.mainCell.updateDriveItemName(driveItem.name);
-        this.driveItem = driveItem;
+        
+        this.driveItem.id = driveItem.id;
+        this.driveItem.name = driveItem.name;
     }
 
     checkRow() {

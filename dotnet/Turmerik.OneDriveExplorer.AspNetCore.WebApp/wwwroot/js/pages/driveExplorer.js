@@ -8,6 +8,7 @@ import { DriveItemsGridViewTrmrkEvents, Validation } from './driveItemsGridView.
 import { DriveItemsGridView } from './driveItemsGridView.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
+import { DriveExplorerMacros } from './driveExplorer.marcos.js';
 
 export class DriveFolderApiResultWrapper {
     id = null;
@@ -47,6 +48,8 @@ export class DriveExplorer {
     driveItemNameMacros = null;
     driveItemMacros = null;
 
+    driveExplorerMacros;
+
     async init(
         username,
         appSettings,
@@ -58,10 +61,14 @@ export class DriveExplorer {
         this.driveItemNameMacros = driveItemNameMacros;
         this.driveItemMacros = driveItemMacros;
 
+        driveExplorerApi.username = username;
         driveExplorerApi.appSettings = this.appSettings;
-        webStorage.cacheKeyBasePrefix = this.appSettings.CacheKeyBasePrefix;
+        webStorage.cacheKeyBasePrefix = this.appSettings.cacheKeyBasePrefix;
 
-        this.generateAppRootChildVDomElms();
+        this.driveExplorerMacros = new DriveExplorerMacros();
+        const macroModalElms = this.driveExplorerMacros.init();
+
+        this.generateAppRootChildVDomElms(macroModalElms);
         this.appRootVDomEl = vdom.init("main", this.appRootChildVDomElms);
 
         document.addEventListener("scroll", e => this.onDocumentScroll(e));
@@ -100,13 +107,14 @@ export class DriveExplorer {
         this.loadCurrentDriveFolderAsync()
     }
 
-    generateAppRootChildVDomElms() {
+    generateAppRootChildVDomElms(rootElms) {
         this.currentDriveFolderVDomEl = new VDomEl({
             nodeName: "div",
             classList: [ driveFolderViewCssClasses.view ]
         });
 
-        this.appRootChildVDomElms = [ this.currentDriveFolderVDomEl ];
+        rootElms.splice(0, 0, this.currentDriveFolderVDomEl);
+        this.appRootChildVDomElms = rootElms;
     }
 
     async getCurrentDriveFolderAsync(folderId, refreshCache) {
@@ -354,7 +362,7 @@ export class DriveExplorer {
             }
             
             driveExplorerApi.setDriveFolderToCache(driveItem, parentFolder.id);
-            driveExplorerApi.setDriveFolderToCache(this.currentDriveFolder.data);
+            driveExplorerApi.setDriveFolderToCache(parentFolder);
         } else {
             if (isDriveFolder) {
                 this.showApiErrorPopover(apiResult, this.subFolderItemsGridVDomEl.editRow);
@@ -523,8 +531,8 @@ export class DriveExplorer {
             item => item.id === prevDriveItem.id
         );
 
-        if (kvp.Key >= 0) {
-            driveItemsArr.splice(kvp.Key, 1, newDriveItem);
+        if (kvp.key >= 0) {
+            driveItemsArr.splice(kvp.key, 1, newDriveItem);
             console.log("Replaced drive item with id " + prevDriveItem.id);
         } else {
             console.log("Could not find drive item with id " + prevDriveItem.id);
@@ -537,8 +545,8 @@ export class DriveExplorer {
             item => item.id === driveItem.id
         );
 
-        if (kvp.Key >= 0) {
-            driveItemsArr.splice(kvp.Key, 1);
+        if (kvp.key >= 0) {
+            driveItemsArr.splice(kvp.key, 1);
             console.log("Removed drive item with id " + driveItem.id);
         } else {
             console.log("Could not find drive item with id " + driveItem.id);

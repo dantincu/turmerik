@@ -16,16 +16,16 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
     public class DriveFolderController : DriveItemControllerBase
     {
         // private readonly IDriveItemNameMacroFactoryResolver nameMacroResolver;
-        private readonly IDriveItemMacrosService driveItemMacrosService;
+        // private readonly IDriveItemMacrosService driveItemMacrosService;
 
         public DriveFolderController(
-            IDriveItemMacrosService driveItemMacrosService,
+            // IDriveItemMacrosService driveItemMacrosService,
             /* IDriveItemNameMacroFactoryResolver driveItemNameMacroFactoryResolver, */
             IDriveExplorerService driveExplorerService) : base(
                 driveExplorerService)
         {
-            this.driveItemMacrosService = driveItemMacrosService ?? throw new ArgumentNullException(
-                nameof(driveItemMacrosService));
+            /* this.driveItemMacrosService = driveItemMacrosService ?? throw new ArgumentNullException(
+                nameof(driveItemMacrosService)); */
 
             /* this.nameMacroResolver = driveItemNameMacroFactoryResolver ?? throw new ArgumentNullException(
                 nameof(driveItemNameMacroFactoryResolver)); */
@@ -206,8 +206,8 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
                 SessionKeysH.DRIVE_ITEM_NAME_MACROS,
                 out var macrosArr); */
 
-            var macrosArr = this.driveItemMacrosService.DriveItemNameMacrosService.GetDriveItemNameMacros().SelectMany(
-                kvp => kvp.Value.Item2).ToArray();
+            /* var macrosArr = this.driveItemMacrosService.DriveItemNameMacrosService.GetDriveItemNameMacros().SelectMany(
+                kvp => kvp.Value.Item2).ToArray(); */
 
             if (retVal)
             {

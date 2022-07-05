@@ -73,8 +73,8 @@
 }
 
 export class KeyValuePair {
-    Key = null;
-    Value = null;
+    key = null;
+    value = null;
 }
 
 export class TrmrkCore {
@@ -774,8 +774,8 @@ export class TrmrkCore {
             let val = arr[i];
 
             if (predicate(val, i)) {
-                retVal.Key = i;
-                retVal.Value = val;
+                retVal.key = i;
+                retVal.value = val;
 
                 break;
             }

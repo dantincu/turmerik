@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Components;
 using Turmerik.Core.Helpers;
+using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services;
 
 namespace Turmerik.Core.DriveExplorer
 {
@@ -32,28 +34,26 @@ namespace Turmerik.Core.DriveExplorer
 
         Task<TrmrkActionResult<DriveItemOp[]>> CreateMultipleAsync(
             string parentFolderId, DriveItemOp[] driveItemOpsArr);
-
-        /* Task<TrmrkActionResult<DriveItemOp>> CreateMultipleFoldersAsync(string parentFolderId,
-            List<Tuple<Func<string[], int, string, string>, string>> folderNameFactoriesList);
-
-        Task<TrmrkActionResult<DriveItemOp>> CreateMultipleFilesAsync(string parentFolderId,
-            List<Tuple<Func<string[], int, string, string>, string, OfficeLikeFileType?>> fileNameFactoriesList); */
     }
 
     public class DriveExplorerService : IDriveExplorerService
     {
         private readonly IDriveExplorerServiceEngine driveExplorerServiceEngine;
+        private readonly IDriveItemMacrosService driveItemMacrosService;
 
         public DriveExplorerService(
-            IDriveExplorerServiceEngine driveExplorerServiceEngine)
+            IDriveExplorerServiceEngine driveExplorerServiceEngine,
+            IDriveItemMacrosService driveItemMacrosService)
         {
             this.driveExplorerServiceEngine = driveExplorerServiceEngine ?? throw new ArgumentNullException(nameof(driveExplorerServiceEngine));
+            this.driveItemMacrosService = driveItemMacrosService ?? throw new ArgumentNullException(nameof(driveItemMacrosService));
+
             this.DriveItemDefaultExceptionHandler = this.GetDefaultExceptionHandler<DriveItem>();
-            this.StringDefaultExceptionHandler = this.GetDefaultExceptionHandler<string>();
+            this.DriveItemsDefaultExceptionHandler = this.GetDefaultExceptionHandler<DriveItem[]>();
         }
 
         protected Func<Exception, TrmrkActionResult<DriveItem>> DriveItemDefaultExceptionHandler { get; }
-        protected Func<Exception, TrmrkActionResult<string>> StringDefaultExceptionHandler { get; }
+        protected Func<Exception, TrmrkActionResult<DriveItem[]>> DriveItemsDefaultExceptionHandler { get; }
 
         public async Task<TrmrkActionResult<DriveItem>> CopyFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
@@ -84,6 +84,9 @@ namespace Turmerik.Core.DriveExplorer
 
         public async Task<TrmrkActionResult<DriveItemOp[]>> CreateMultipleAsync(string parentFolderId, DriveItemOp[] driveItemOpsArr)
         {
+            var driveItemOpTuplesArr = driveItemOpsArr.Select(
+                item => new Tuple<DriveItemOp>(item)).ToArray();
+
             throw new NotImplementedException();
         }
 
@@ -250,30 +253,6 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         protected TrmrkActionResult<DriveItem> ExecuteDriveItemCore(
-            Func<TrmrkActionResult<DriveItem>> action,
-            Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
-        {
-            excHandler = excHandler.FirstNotNull(DriveItemDefaultExceptionHandler);
-
-            var actionResult = ExecuteCore(
-                action, excHandler);
-
-            return actionResult;
-        }
-
-        protected async Task<TrmrkActionResult<DriveItem>> ExecuteDriveItemCoreAsync(
-            Func<Task<TrmrkActionResult<DriveItem>>> action,
-            Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
-        {
-            excHandler = excHandler.FirstNotNull(DriveItemDefaultExceptionHandler);
-
-            var actionResult = await ExecuteCoreAsync(
-                action, excHandler);
-
-            return actionResult;
-        }
-
-        protected TrmrkActionResult<DriveItem> ExecuteDriveItemCore(
             Func<DriveItem> action,
             Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
         {
@@ -294,6 +273,32 @@ namespace Turmerik.Core.DriveExplorer
 
             var actionResult = await ExecuteCoreAsync(
                 async () => new TrmrkActionResult<DriveItem>(
+                    true, await action()), excHandler);
+
+            return actionResult;
+        }
+
+        protected TrmrkActionResult<DriveItem[]> ExecuteDriveItemsCore(
+            Func<DriveItem[]> action,
+            Func<Exception, TrmrkActionResult<DriveItem[]>> excHandler = null)
+        {
+            excHandler = excHandler.FirstNotNull(DriveItemsDefaultExceptionHandler);
+
+            var actionResult = ExecuteCore(
+                () => new TrmrkActionResult<DriveItem[]>(
+                    true, action()), excHandler);
+
+            return actionResult;
+        }
+
+        protected async Task<TrmrkActionResult<DriveItem[]>> ExecuteDriveItemsCoreAsync(
+            Func<Task<DriveItem[]>> action,
+            Func<Exception, TrmrkActionResult<DriveItem[]>> excHandler = null)
+        {
+            excHandler = excHandler.FirstNotNull(DriveItemsDefaultExceptionHandler);
+
+            var actionResult = await ExecuteCoreAsync(
+                async () => new TrmrkActionResult<DriveItem[]>(
                     true, await action()), excHandler);
 
             return actionResult;
