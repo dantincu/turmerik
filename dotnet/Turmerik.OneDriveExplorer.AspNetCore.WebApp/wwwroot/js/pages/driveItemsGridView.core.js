@@ -30,7 +30,7 @@ export class DriveItemNameVDomEl extends VDomEl {
     constructor(driveItemName, events) {
         super({
             nodeName: "span",
-            classList: [ driveFolderViewCssClasses.name ],
+            classList: [ driveFolderViewCssClasses.driveItemName ],
             textValue: driveItemName,
             events: events
         });

@@ -1,5 +1,13 @@
 ﻿export class ValueWrapper {
     value;
+
+    constructor(value) {
+        this.value = value;
+        this.type = typeof(value);
+    }
+}
+
+export class ExtendedValueWrapper extends ValueWrapper {
     type = "";
 
     __isNull = null;
@@ -12,8 +20,8 @@
     __isNaN = null;
 
     constructor(value) {
-        this.value = value;
-        this.type = tyepof(value);
+        super(value);
+        this.type = typeof(value);
     }
 
     get isNull() {
@@ -73,8 +81,13 @@
 }
 
 export class KeyValuePair {
-    key = null;
-    value = null;
+    key;
+    value;
+
+    constructor(key, value) {
+        this.key = key;
+        this.value = value;
+    }
 }
 
 export class TrmrkCore {
@@ -327,6 +340,11 @@ export class TrmrkCore {
         return retVal;
     }
 
+    isLetter(char) {
+        const retVal = char.toLowerCase() != char.toUpperCase();
+        return retVal;
+    }
+
     foreach(src, callbacksArr) {
         let keysArr = Object.keys(src);
 
@@ -449,8 +467,8 @@ export class TrmrkCore {
             let retVal = refValue === value;
 
             if (!retVal) {
-                let trgWrppr = new ValueWrapper(value);
-                let refWrppr = new ValueWrapper(ref[key]);
+                let trgWrppr = new ExtendedValueWrapper(value);
+                let refWrppr = new ExtendedValueWrapper(ref[key]);
 
                 if (trgWrppr.isNullOrUndef && refWrppr.isNullOrUndef) {
                     retVal = ignoreEmpyValues;
@@ -768,7 +786,7 @@ export class TrmrkCore {
     }
 
     firstOrDefault(arr, predicate) {
-        let retVal = new KeyValuePair();
+        let retVal = new KeyValuePair(-1);
 
         for (let i in Object.keys(arr)) {
             let val = arr[i];
@@ -789,6 +807,54 @@ export class TrmrkCore {
             callback.apply(target, argsArr);
         }
     }
+
+    paddStr(str, minLen, paddChar) {
+        const startsWithPadd = minLen < 0;
+        minLen = Math.abs(minLen);
+        
+        while (str.length < minLen) {
+            if (startsWithPadd) {
+                str = paddChar + str;
+            } else {
+                str += paddChar;
+            }
+        }
+
+        return str;
+    }
+
+    strJoin(strArr, joinStr = "", testForNullOrUndef = false) {
+        const predicate = this.getStrJoinReducePredicate(
+            joinStr, testForNullOrUndef);
+
+        const retStr = strArr.reduce(predicate);
+        return retStr;
+    }
+
+    getStrJoinReducePredicate(joinStr, testForNullOrUndef) {
+        let predicate;
+
+        if (testForNullOrUndef) {
+            if (joinStr === "") {
+                predicate = (prev, next) => (prev ?? "") + (next ?? "");
+            } else {
+                predicate = (prev, next) => (prev ?? "") + joinStr + (next ?? "");
+            }
+        } else {
+            if (joinStr === "") {
+                predicate = (prev, next) => prev + next;
+            } else {
+                predicate = (prev, next) => prev + joinStr + next;
+            }
+        }
+
+        return predicate;
+    }
+
+    withResult(factory, callback) {
+        const result = factory();
+        callback(result);
+    }
 };
 
 export class Trmrk {
@@ -806,6 +872,7 @@ export class Trmrk {
 const trmrkInstn = new Trmrk();
 
 trmrkInstn.types["ValueWrapper"] = ValueWrapper;
+trmrkInstn.types["ExtendedValueWrapper"] = ExtendedValueWrapper;
 trmrkInstn.types["KeyValuePair"] = KeyValuePair;
 trmrkInstn.types["Trmrk"] = Trmrk;
 trmrkInstn.types["TrmrkCore"] = TrmrkCore;

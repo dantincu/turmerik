@@ -15,22 +15,10 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
     [ApiController]
     public class DriveFolderController : DriveItemControllerBase
     {
-        // private readonly IDriveItemNameMacroFactoryResolver nameMacroResolver;
-        // private readonly IDriveItemMacrosService driveItemMacrosService;
-
         public DriveFolderController(
-            // IDriveItemMacrosService driveItemMacrosService,
-            /* IDriveItemNameMacroFactoryResolver driveItemNameMacroFactoryResolver, */
             IDriveExplorerService driveExplorerService) : base(
                 driveExplorerService)
         {
-            /* this.driveItemMacrosService = driveItemMacrosService ?? throw new ArgumentNullException(
-                nameof(driveItemMacrosService)); */
-
-            /* this.nameMacroResolver = driveItemNameMacroFactoryResolver ?? throw new ArgumentNullException(
-                nameof(driveItemNameMacroFactoryResolver)); */
-
-            // this.TryRegisterDriveItemNameMacros();
         }
 
         // GET: api/<ValuesController>
@@ -147,78 +135,6 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
                 });
 
             return actionResult;
-        }
-
-        /* [HttpPost("[action]")]
-        public async Task<ActionResult> CreateFolderFromMacro([FromBody] DriveItemOp driveItemOp)
-        {
-            var actionResult = await ExecuteAsync(
-                async () =>
-                {
-                    var factoriesList = this.ItemToDriveFolderNameFactoriesList(driveItemOp);
-
-                    var result = await this.DriveExplorerService.CreateMultipleFoldersAsync(
-                        driveItemOp.ParentFolderId, factoriesList);
-
-                    return result;
-                });
-
-            return actionResult;
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> CreateMultipleFilesFromMacros([FromBody] DriveItemOp driveItemOp)
-        {
-            var actionResult = await ExecuteAsync(
-                async () =>
-                {
-                    var factoriesList = this.ToDriveFileNameFactoriesList(driveItemOp.MultipleItems);
-
-                    var result = await this.DriveExplorerService.CreateMultipleFilesAsync(
-                        driveItemOp.ParentFolderId, factoriesList);
-
-                    return result;
-                });
-
-            return actionResult;
-        }
-
-        [HttpPost("[action]")]
-        public async Task<ActionResult> CreateFileFromMacro([FromBody] DriveItemOp driveItemOp)
-        {
-            var actionResult = await ExecuteAsync(
-                async () =>
-                {
-                    var factoriesList = this.ItemToDriveFileNameFactoriesList(driveItemOp);
-
-                    var result = await this.DriveExplorerService.CreateMultipleFilesAsync(
-                        driveItemOp.ParentFolderId, factoriesList);
-
-                    return result;
-                });
-
-            return actionResult;
-        } */
-
-        private bool TryRegisterDriveItemNameMacros(/* ref Func<Task<TrmrkActionResult<DriveItem>>> action*/)
-        {
-            bool retVal = true; /* this.HttpContext.Session.TryGetValue<DriveItemNameMacro[]>(
-                SessionKeysH.DRIVE_ITEM_NAME_MACROS,
-                out var macrosArr); */
-
-            /* var macrosArr = this.driveItemMacrosService.DriveItemNameMacrosService.GetDriveItemNameMacros().SelectMany(
-                kvp => kvp.Value.Item2).ToArray(); */
-
-            if (retVal)
-            {
-                // this.nameMacroResolver.RegisterMacros(macrosArr);
-            }
-            else
-            {
-                // action = async () => throw new InternalAppError(HttpStatusCode.BadRequest);
-            }
-
-            return retVal;
         }
     }
 }

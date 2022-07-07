@@ -5,14 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="DriveExplorer\DriveExplorerServiceBase%24not-compiled%24.cs" />
-    <Compile Remove="FsExplorer\FsExplorerService%24not-compiled%24.cs" />
     <Compile Remove="Infrastucture\ProgramArgsParserBase%24not-compiled%24.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="DriveExplorer\DriveExplorerServiceBase$not-compiled$.cs" />
-    <None Include="FsExplorer\FsExplorerService$not-compiled$.cs" />
     <None Include="Infrastucture\ProgramArgsParserBase$not-compiled$.cs" />
   </ItemGroup>
 

@@ -12,22 +12,21 @@ namespace Turmerik.Core.DriveExplorer
     public interface IDriveItemNameMacroFactoryResolver
     {
         void RegisterMacros(DriveItemNameMacro[] driveItemNameMacrosArr);
-        Func<string[], int, string, string> Resolve(Guid macroUuid);
-        Func<string[], int, string, string> Resolve(DriveItemNameMacro macro);
+        Func<string[], int, string> Resolve(Guid macroUuid);
+        Func<string[], int, string> Resolve(DriveItemNameMacro macro);
     }
 
     public class DriveItemNameMacroFactoryResolver : IDriveItemNameMacroFactoryResolver
     {
         private static readonly int maxDigitsCount = MathH.Int32MaxValueDigitsCount - 1;
-        private static readonly int maxAllowedNumber = Convert.ToInt32(Math.Pow(10, maxDigitsCount)) - 1;
 
         private readonly Dictionary<Guid, DriveItemNameMacro> registeredMacrosList;
-        private readonly Dictionary<Guid, Func<string[], int, string, string>> registeredFactoriesList;
+        private readonly Dictionary<Guid, Func<string[], int, string>> registeredFactoriesList;
 
         public DriveItemNameMacroFactoryResolver()
         {
             registeredMacrosList = new Dictionary<Guid, DriveItemNameMacro>();
-            registeredFactoriesList = new Dictionary<Guid, Func<string[], int, string, string>>();
+            registeredFactoriesList = new Dictionary<Guid, Func<string[], int, string>>();
         }
 
         public void RegisterMacros(DriveItemNameMacro[] driveItemNameMacrosArr)
@@ -42,15 +41,15 @@ namespace Turmerik.Core.DriveExplorer
             }
         }
 
-        public Func<string[], int, string, string> Resolve(Guid macroUuid)
+        public Func<string[], int, string> Resolve(Guid macroUuid)
         {
             var retFactory = registeredFactoriesList[macroUuid];
             return retFactory;
         }
 
-        public Func<string[], int, string, string> Resolve(DriveItemNameMacro macro)
+        public Func<string[], int, string> Resolve(DriveItemNameMacro macro)
         {
-            Func<string[], int, string, string> retFactory;
+            Func<string[], int, string> retFactory;
 
             if (macro.MacroUuid.HasValue)
             {
@@ -64,180 +63,43 @@ namespace Turmerik.Core.DriveExplorer
             return retFactory;
         }
 
-        private Func<string[], int, string, string> GetFactory(DriveItemNameMacro macro)
+        private Func<string[], int, string> GetFactory(DriveItemNameMacro macro)
         {
-            Func<string[], int, string, string> factory = null;
+            Func<string[], int, string> factory = null;
             var coreFactory = GetFactoryCore(macro);
 
-            bool hasPreceeding = macro.PreceedingMacro != null;
-            bool hasSucceeding = macro.PreceedingMacro != null;
-
-            if (!hasPreceeding && !hasSucceeding)
+            factory = (arr, idx) =>
             {
-                factory = coreFactory;
-            }
-            else if (hasPreceeding && hasSucceeding)
-            {
-                factory = (arr, idx, srcName) =>
-                {
-                    var preceedingFactory = Resolve(macro.PreceedingMacro);
-                    var succeedingFactory = Resolve(macro.SucceedingMacro);
+                string succeedingStr = null;
 
-                    string preceedingStr = preceedingFactory(arr, idx, srcName);
-                    string succeedingStr = succeedingFactory(arr, idx, srcName);
-
-                    string coreStr = coreFactory(arr, idx, srcName);
-
-                    string retStr = string.Concat(
-                        preceedingStr,
-                        coreStr,
-                        succeedingStr);
-
-                    return retStr;
-                };
-            }
-            else if (hasPreceeding)
-            {
-                factory = (arr, idx, srcName) =>
-                {
-                    var preceedingFactory = Resolve(macro.PreceedingMacro);
-                    string preceedingStr = preceedingFactory(arr, idx, srcName);
-
-                    string coreStr = coreFactory(arr, idx, srcName);
-
-                    string retStr = string.Concat(
-                        preceedingStr,
-                        coreStr);
-
-                    return retStr;
-                };
-            }
-            else if (hasSucceeding)
-            {
-                factory = (arr, idx, srcName) =>
+                if (macro.SucceedingMacro != null)
                 {
                     var succeedingFactory = Resolve(macro.SucceedingMacro);
-                    string succeedingStr = succeedingFactory(arr, idx, srcName);
+                    succeedingStr = succeedingFactory(arr, idx);
+                }
+                
+                string coreStr = coreFactory(arr, idx);
 
-                    string coreStr = coreFactory(arr, idx, srcName);
+                string retStr = string.Concat(
+                    macro.PreceedingDelimiter,
+                    coreStr,
+                    macro.SucceedingDelimiter,
+                    succeedingStr);
 
-                    string retStr = string.Concat(
-                        coreStr,
-                        succeedingStr);
-
-                    return retStr;
-                };
-            }
-            else
-            {
-                throw new InternalAppError(HttpStatusCode.InternalServerError);
-            }
+                return retStr;
+            };
 
             return factory;
         }
 
-        private Func<string[], int, string, string> GetFactoryCore(DriveItemNameMacro macro)
+        private Func<string[], int, string> GetFactoryCore(DriveItemNameMacro macro)
         {
-            Func<string[], int, string, string> coreFactory, factory;
-            string name = macro.EntryName ?? macro.ConstName;
+            Func<string[], int, string> coreFactory, factory;
+            coreFactory = this.GetCoreFactory(macro);
 
-            if (name != null)
+            factory = (arr, idx) =>
             {
-                coreFactory = (arr, idx, srcName) => name;
-            }
-            else if (macro.SrcNameFirstLetterWrappingChar.HasValue)
-            {
-                var wrappingChar = macro.SrcNameFirstLetterWrappingChar.Value;
-
-                coreFactory = (arr, idx, srcName) =>
-                {
-                    string newName;
-                    char firstChar = srcName.First();
-                    
-                    if (char.IsLetter(firstChar))
-                    {
-                        newName = firstChar.ToString();
-                    }
-                    else
-                    {
-                        newName = string.Empty;
-                    }
-
-                    if (idx > 0)
-                    {
-                        newName = string.Concat(
-                            newName,
-                            idx.ToString());
-                    }
-
-                    newName = $"{wrappingChar}{newName}{wrappingChar}";
-                    return newName;
-                };
-            }
-            else if (macro.NumberSeed.HasValue)
-            {
-                int digitsCount = macro.DigitsCount ?? 1;
-                int numberSeed = macro.NumberSeed.Value;
-
-                bool incrementNumber = macro.IncrementNumber ?? false;
-                int minNumber = macro.MinNumber ?? 0;
-
-                int maxNumber = macro.MaxNumber ?? maxAllowedNumber;
-
-                ValidateMacroNumberOptions(
-                    digitsCount,
-                    numberSeed,
-                    minNumber,
-                    maxNumber);
-
-                coreFactory = (arr, idx, srcName) =>
-                {
-                    int number = numberSeed;
-
-                    if (idx > 0)
-                    {
-                        if (incrementNumber)
-                        {
-                            number += idx;
-
-                            if (number > maxNumber)
-                            {
-                                throw new InternalAppError(HttpStatusCode.BadRequest);
-                            }
-                        }
-                        else
-                        {
-                            number -= idx;
-
-                            if (number < minNumber)
-                            {
-                                throw new InternalAppError(HttpStatusCode.BadRequest);
-                            }
-                        }
-                    }
-
-                    string newName = number.ToString();
-
-                    if (newName.Length < digitsCount)
-                    {
-                        string padding = new string(Enumerable.Range(
-                            0, digitsCount - newName.Length).Select(
-                            i => ' ').ToArray());
-
-                        newName = string.Concat(padding, newName);
-                    }
-
-                    return newName;
-                };
-            }
-            else
-            {
-                throw new InternalAppError(HttpStatusCode.BadRequest);
-            }
-
-            factory = (arr, idx, srcName) =>
-            {
-                string coreStr = coreFactory(arr, idx, srcName);
+                string coreStr = coreFactory(arr, idx);
 
                 string retStr = string.Concat(
                     macro.PreceedingDelimiter,
@@ -250,11 +112,152 @@ namespace Turmerik.Core.DriveExplorer
             return factory;
         }
 
-        private void ValidateMacroNumberOptions(
+        private Func<string[], int, string> GetCoreFactory(DriveItemNameMacro macro)
+        {
+            Func<string[], int, string> coreFactory;
+            string name = macro.EntryName ?? macro.ConstName;
+
+            var wrappingChar = macro.SrcNameFirstLetterWrappingChar ?? default;
+
+            if (wrappingChar != default)
+            {
+                coreFactory = this.GetSrcNameFirstLetterWrappingCharFactory(
+                    macro, wrappingChar);
+            }
+            else if (macro.NumberSeed.HasValue)
+            {
+                coreFactory = GetPaddedIndexFactory(macro);
+            }
+            else
+            {
+                coreFactory = (arr, idx) => name;
+            }
+
+            return coreFactory;
+        }
+
+        private Func<string[], int, string> GetSrcNameFirstLetterWrappingCharFactory(
+            DriveItemNameMacro macro, char wrappingChar)
+        {
+            Func<string[], int, string> coreFactory = (arr, idx) =>
+            {
+                string newName;
+                char firstChar = macro.SrcName.First();
+
+                if (char.IsLetter(firstChar))
+                {
+                    newName = firstChar.ToString();
+                }
+                else
+                {
+                    newName = string.Empty;
+                }
+
+                int number = (macro.NumberSeed ?? 0) + idx;
+
+                if (number > 0)
+                {
+                    newName = string.Concat(
+                        newName,
+                        number.ToString());
+                }
+
+                newName = $"{wrappingChar}{newName}{wrappingChar}";
+                return newName;
+            };
+
+            return coreFactory;
+        }
+
+        private Func<string[], int, string> GetPaddedIndexFactory(
+            DriveItemNameMacro macro)
+        {
+            int digitsCount = macro.DigitsCount ?? 1;
+            int numberSeed = macro.NumberSeed ?? -1;
+
+            bool incrementNumber = macro.IncrementNumber ?? false;
+            int minNumber = macro.MinNumber ?? 1;
+
+            int maxAllowedNumber = Convert.ToInt32(Math.Pow(10, digitsCount)) - 1;
+            int maxNumber = macro.MaxNumber ?? maxAllowedNumber;
+
+            if (numberSeed < 0)
+            {
+                if (incrementNumber)
+                {
+                    numberSeed = minNumber;
+                }
+                else
+                {
+                    numberSeed = maxNumber;
+                }
+            }
+
+            ValidateMacroNumberOptions(
+                digitsCount,
+                numberSeed,
+                minNumber,
+                maxNumber,
+                maxAllowedNumber);
+
+            Func<string[], int, string> coreFactory = this.GetPaddedIndexFactoryCore(
+                macro,
+                incrementNumber,
+                digitsCount,
+                numberSeed,
+                minNumber,
+                maxNumber);
+
+            return coreFactory;
+        }
+
+        private Func<string[], int, string> GetPaddedIndexFactoryCore(
+            DriveItemNameMacro macro,
+            bool incrementNumber,
             int digitsCount,
             int numberSeed,
             int minNumber,
             int maxNumber)
+        {
+            Func<string[], int, string> coreFactory = (arr, idx) =>
+            {
+                int number = numberSeed;
+
+                if (idx > 0)
+                {
+                    if (incrementNumber)
+                    {
+                        number += idx;
+
+                        if (number > maxNumber)
+                        {
+                            throw new InternalAppError(HttpStatusCode.BadRequest);
+                        }
+                    }
+                    else
+                    {
+                        number -= idx;
+
+                        if (number < minNumber)
+                        {
+                            throw new InternalAppError(HttpStatusCode.BadRequest);
+                        }
+                    }
+                }
+
+                string newName = number.ToString($"D{digitsCount}");
+                return newName;
+            };
+
+            return coreFactory;
+        }
+
+        private void ValidateMacroNumberOptions(
+            int digitsCount,
+            int numberSeed,
+            int minNumber,
+            int maxNumber,
+            int maxAllowedNumber)
         {
             ValidateMacroNumber(
                 nameof(digitsCount),
@@ -264,7 +267,7 @@ namespace Turmerik.Core.DriveExplorer
 
             ValidateMacroNumber(
                 nameof(minNumber),
-                0,
+                1,
                 minNumber,
                 maxAllowedNumber);
 
@@ -290,7 +293,7 @@ namespace Turmerik.Core.DriveExplorer
             if (value < allowedMin || value > allowedMax)
             {
                 throw new InternalAppError(
-                    $"Value {propName} outside of valid range [{allowedMin}-{allowedMax}]",
+                    $"Value {value} for {propName} is outside of valid range [{allowedMin}-{allowedMax}]",
                     HttpStatusCode.BadRequest);
             }
         }

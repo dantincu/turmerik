@@ -8,7 +8,7 @@ import { DriveItemsGridViewTrmrkEvents, Validation } from './driveItemsGridView.
 import { DriveItemsGridView } from './driveItemsGridView.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
-import { DriveExplorerMacros } from './driveExplorer.marcos.js';
+import { DriveExplorerMacros } from './driveExplorer.macros.js';
 
 export class DriveFolderApiResultWrapper {
     id = null;
@@ -48,7 +48,8 @@ export class DriveExplorer {
     driveItemNameMacros = null;
     driveItemMacros = null;
 
-    driveExplorerMacros;
+    driveExplorerMacros = null;
+    driveExplorerMacrosBsModal = null;
 
     async init(
         username,
@@ -65,10 +66,7 @@ export class DriveExplorer {
         driveExplorerApi.appSettings = this.appSettings;
         webStorage.cacheKeyBasePrefix = this.appSettings.cacheKeyBasePrefix;
 
-        this.driveExplorerMacros = new DriveExplorerMacros();
-        const macroModalElms = this.driveExplorerMacros.init();
-
-        this.generateAppRootChildVDomElms(macroModalElms);
+        this.generateAppRootChildVDomElms([]);
         this.appRootVDomEl = vdom.init("main", this.appRootChildVDomElms);
 
         document.addEventListener("scroll", e => this.onDocumentScroll(e));
@@ -115,6 +113,19 @@ export class DriveExplorer {
 
         rootElms.splice(0, 0, this.currentDriveFolderVDomEl);
         this.appRootChildVDomElms = rootElms;
+    }
+
+    assureCurrentDriveFolderMacrosModalVDomCreated() {
+        if (!this.driveExplorerMacros) {
+            this.driveExplorerMacros = new DriveExplorerMacros();
+
+            const modalVDomEl = this.driveExplorerMacros.init(
+                this.driveItemNameMacros,
+                this.driveItemMacros,
+                this.currentDriveFolder.data);
+
+            this.currentDriveFolderVDomEl.appendChildVNode(modalVDomEl);
+        }
     }
 
     async getCurrentDriveFolderAsync(folderId, refreshCache) {
@@ -183,15 +194,17 @@ export class DriveExplorer {
 
         events.onExpandCurrentDriveFolderTitle = this.onExpandCurrentDriveFolderTitle.bind(this);
         events.onCollapseCurrentDriveFolderTitle = this.onCollapseCurrentDriveFolderTitle.bind(this);
+
         events.onCurrentDriveFolderHomeClick = this.onCurrentDriveFolderHomeClick.bind(this);
         events.onCurrentDriveFolderReloadClick = this.onCurrentDriveFolderReloadClick.bind(this);
         events.onCurrentDriveFolderGoUpClick = this.onCurrentDriveFolderGoUpClick.bind(this);
+        events.onCurrentDriveFolderMainCommandsClick = this.onCurrentDriveFolderMainCommandsClick.bind(this);
         events.onCurrentDriveFolderOptionsClick = this.onCurrentDriveFolderOptionsClick.bind(this);
-        events.onCurrentDriveFolderEditClick = this.onCurrentDriveFolderEditClick.bind(this);
-        events.onCurrentDriveFolderCreateNewWithMacroClick = this.onCurrentDriveFolderCreateNewWithMacroClick.bind(this);
+        
         events.onCurrentDriveFolderCreateNewFolderClick = this.onCurrentDriveFolderCreateNewFolderClick.bind(this);
         events.onCurrentDriveFolderCreateNewTextFileClick = this.onCurrentDriveFolderCreateNewTextFileClick.bind(this);
-        events.onCurrentDriveFolderCreateNewOfficeFileClick = this.onCurrentDriveFolderCreateNewOfficeFileClick.bind(this);
+        events.onCurrentDriveFolderCreateWithMacrosClick = this.onCurrentDriveFolderCreateWithMacrosClick.bind(this);
+        events.onCurrentDriveFolderCommandsClick = this.onCurrentDriveFolderCommandsClick.bind(this);
         events.onCurrentDriveFolderOpenInNewTabClick = this.onCurrentDriveFolderOpenInNewTabClick.bind(this);
 
         let currentDriveFolderTitleVDomEl = new DriveExplorerHeader(driveFolder, isSticky, events);
@@ -224,15 +237,11 @@ export class DriveExplorer {
         }
     }
 
+    onCurrentDriveFolderMainCommandsClick(e) {
+
+    }
+
     onCurrentDriveFolderOptionsClick(e) {
-
-    }
-
-    onCurrentDriveFolderEditClick(e) {
-
-    }
-
-    onCurrentDriveFolderCreateNewWithMacroClick(e) {
 
     }
 
@@ -246,7 +255,12 @@ export class DriveExplorer {
         this.fileItemsGridVDomEl.startEditTableRow();
     }
 
-    onCurrentDriveFolderCreateNewOfficeFileClick(e) {
+    onCurrentDriveFolderCreateWithMacrosClick(e) {
+        this.assureCurrentDriveFolderMacrosModalVDomCreated();
+        this.driveExplorerMacros.bsModal.show();
+    }
+
+    onCurrentDriveFolderCommandsClick(e) {
 
     }
 
@@ -290,6 +304,7 @@ export class DriveExplorer {
 
     renderCurrentDriveFolderViewCore(driveFolderVDomElChildNodes) {
         this.currentDriveFolderVDomEl.removeAllChildVNodes();
+        this.driveExplorerMacros = null;
 
         for (let vNode of driveFolderVDomElChildNodes) {
             this.currentDriveFolderVDomEl.appendChildVNode(vNode);

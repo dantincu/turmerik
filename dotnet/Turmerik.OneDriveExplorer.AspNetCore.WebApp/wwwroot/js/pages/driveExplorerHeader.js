@@ -15,14 +15,16 @@ export class DriveExplorerHeaderEvents extends ViewModelBase {
     onCurrentDriveFolderHomeClick = null;
     onCurrentDriveFolderReloadClick = null;
     onCurrentDriveFolderGoUpClick = null;
+    onCurrentDriveFolderMainCommandsClick = null;
     onCurrentDriveFolderOptionsClick = null;
-    onCurrentDriveFolderEditClick = null;
+    
     onExpandCurrentDriveFolderTitle = null;
     onCollapseCurrentDriveFolderTitle = null;
-    onCurrentDriveFolderCreateNewWithMacroClick = null;
+    
     onCurrentDriveFolderCreateNewFolderClick = null;
     onCurrentDriveFolderCreateNewTextFileClick = null;
-    onCurrentDriveFolderCreateNewOfficeFileClick = null;
+    onCurrentDriveFolderCreateWithMacrosClick = null;
+    onCurrentDriveFolderCommandsClick = null;
     onCurrentDriveFolderOpenInNewTabClick = null;
 }
 
@@ -34,7 +36,7 @@ export class DriveExplorerHeader extends VDomEl {
     constructor(driveFolder, isSticky, eventListeners) {
         super({
             nodeName: "div",
-            classList: [ isSticky ? driveFolderViewCssClasses.stickyHeader : driveFolderViewCssClasses.header ]
+            classList: [ isSticky ? driveFolderViewCssClasses.driveFolderViewStickyHeader : driveFolderViewCssClasses.driveFolderViewHeader ]
         });
 
         const events = new DriveExplorerHeaderEvents(eventListeners);
@@ -59,21 +61,21 @@ export class DriveExplorerHeader extends VDomEl {
                     this.getMouseClickEvent(events.onCurrentDriveFolderReloadClick)),
                 vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-circle-top", trmrkCssClasses.icon ], {}, [],
                     this.getMouseClickEvent(events.onCurrentDriveFolderGoUpClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-command", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(events.onCurrentDriveFolderMainCommandsClick)),
                 vdom.utils.getVDomEl("span", [ "oi", "oi-ellipses", "trmrk-rotate-90deg", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(events.onCurrentDriveFolderOptionsClick)),
-                vdom.utils.getVDomEl("span", [ "oi", "oi-pencil", trmrkCssClasses.icon ], {}, [], 
-                    this.getMouseClickEvent(events.onCurrentDriveFolderEditClick))
+                    this.getMouseClickEvent(events.onCurrentDriveFolderOptionsClick))
             ]),
             this.titleVDomEl,
             vdom.utils.getVDomEl("div", [ trmrkCssClasses.iconsRow ], {}, [
-                vdom.utils.getVDomEl("span", [ "oi", "oi-command", trmrkCssClasses.icon ], {}, [],
-                    this.getMouseClickEvent(events.onCurrentDriveFolderCreateNewWithMacroClick)),
                 vdom.utils.getVDomEl("span", [ "oi", "oi-folder", trmrkCssClasses.icon ], {}, [], 
                     this.getMouseClickEvent(events.onCurrentDriveFolderCreateNewFolderClick)),
                 vdom.utils.getVDomEl("span", [ "oi", "oi-file", trmrkCssClasses.icon ], {}, [], 
                     this.getMouseClickEvent(events.onCurrentDriveFolderCreateNewTextFileClick)),
                 vdom.utils.getVDomEl("span", [ trmrkCssClasses.plusIcon, trmrkCssClasses.icon ], {}, "+", 
-                    this.getMouseClickEvent(events.onCurrentDriveFolderCreateNewOfficeFileClick)),
+                    this.getMouseClickEvent(events.onCurrentDriveFolderCreateWithMacrosClick)),
+                vdom.utils.getVDomEl("span", [ "oi", "oi-command", trmrkCssClasses.icon ], {}, [], 
+                    this.getMouseClickEvent(events.onCurrentDriveFolderCommandsClick)),
                 vdom.utils.getVDomEl("span", [ "oi", "oi-arrow-thick-top", "trmrk-rotate-45deg", trmrkCssClasses.icon ], {}, [], 
                     this.getMouseClickEvent(events.onCurrentDriveFolderOpenInNewTabClick)),
             ])

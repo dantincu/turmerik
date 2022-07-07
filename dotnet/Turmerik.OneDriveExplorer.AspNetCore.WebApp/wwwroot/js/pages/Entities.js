@@ -40,6 +40,7 @@ export class DriveItem extends ViewModelBase {
 export class DriveItemOp extends DriveItem {
     constructor(src, throwOnUnknownProp = false) {
         super(src, throwOnUnknownProp);
+        this.opUuid = null;
     }
     
     opUuid =  null;
@@ -47,7 +48,12 @@ export class DriveItemOp extends DriveItem {
     nameMacro =  null;
 }
 
-export class DriveItemNameMacro {
+export class DriveItemNameMacro extends ViewModelBase {
+    constructor(src, throwOnUnknownProp = false) {
+        super(src, throwOnUnknownProp);
+        this.macroUuid = null;
+    }
+
     macroUuid =  null;
     macroName =  null;
     macroDescription =  null;
@@ -61,7 +67,6 @@ export class DriveItemNameMacro {
     incrementNumber =  null;
     digitsCount =  null;
     preceedingDelimiter =  null;
-    preceedingMacro =  null;
     succeedingDelimiter =  null;
     succeedingMacro =  null;
 }

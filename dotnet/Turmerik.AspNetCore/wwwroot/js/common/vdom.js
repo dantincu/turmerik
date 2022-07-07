@@ -1,4 +1,4 @@
-import { trmrk } from './core.js';
+import { trmrk, KeyValuePair } from './core.js';
 import { ViewModelBase } from './ViewModelBase.js';
 import { domUtils, bsDomUtils } from './domUtils.js';
 
@@ -60,7 +60,6 @@ export class VDomNodeBase {
 }
 
 export class VDomTextNode extends VDomNodeBase {
-
     constructor(value) {
         super();
         this.isTextNode = true;
@@ -102,8 +101,8 @@ export class VDomEl extends VDomNodeBase {
         super();
 
         if (trmrk.core.isNotNullObj(props)) {
-            let domNode, data, textValue, nodeName, classList, attrs, events, childNodes, onCreated, onAppended, onRemoved, parentVDomEl;
-            ({domNode, data, textValue, nodeName, classList, attrs, events, childNodes, onCreated, onAppended, onRemoved, parentVDomEl} = props);
+            let domNode, data, textValue, nodeName, classList, attrs, events, childNodes, onCreated, onAppended, onRemoved, onInsertedBefore, parentVDomEl;
+            ({domNode, data, textValue, nodeName, classList, attrs, events, childNodes, onCreated, onAppended, onRemoved, onInsertedBefore, parentVDomEl} = props);
 
             super.setDomNode(domNode);
             super.setData(data);
@@ -126,6 +125,7 @@ export class VDomEl extends VDomNodeBase {
             this.onCreated = trmrk.core.bindFuncOrNoop(onCreated, this);
             this.onAppended = trmrk.core.bindFuncOrNoop(onAppended, this);
             this.onRemoved = trmrk.core.bindFuncOrNoop(onRemoved, this);
+            this.onInsertedBefore = trmrk.core.bindFuncOrNoop(onInsertedBefore, this);
         } else if (trmrk.core.isOfTypeString(props)) {
             this.nodeName = props;
         }
@@ -288,14 +288,14 @@ export class VDomEl extends VDomNodeBase {
             domEl.innerHTML = this.innerHTML;
             this.childNodes = [];
         } else {
+            if (this.childNodes.find(node => !node) || this.classList.indexOf("modal-body") >= 0) {
+                debugger;
+            }
+
             this.childNodes = this.childNodes.map(
                 node => trmrk.vdom.utils.getOrCreateVDomNode(node, true));
 
             for (let childVNode of this.childNodes) {
-                if (!childVNode.domNode) {
-                    childVNode.createDomNode();
-                }
-
                 childVNode.parentVDomEl = this;
                 domEl.appendChild(childVNode.domNode);
             }
@@ -471,7 +471,10 @@ export class VDomEl extends VDomNodeBase {
 
     appendChildVNode(vNode) {
         vNode = trmrk.vdom.utils.getOrCreateVDomNode(vNode, true);
-        this.domNode.appendChild(vNode.domNode);
+
+        if (this.domNode != null) {
+            this.domNode.appendChild(vNode.domNode);
+        }
 
         this.childNodes.push(vNode);
         vNode.parentVDomEl = this;
@@ -480,11 +483,61 @@ export class VDomEl extends VDomNodeBase {
         return vNode;
     }
 
+    appendManyChildVNodes(vNodesList) {
+        for (let vNode of vNodesList) {
+            this.appendChildVNode(vNode);
+        }
+    }
+
+    insertChildVNodeBefore(vNode, sibbling = null) {
+        vNode = trmrk.vdom.utils.getOrCreateVDomNode(vNode, true);
+        sibbling = sibbling || this.domNode.firstChild;
+
+        let sibblingDomNode = sibbling;
+        let sibblingVDomNodeKvp = new KeyValuePair(-1);
+
+        if (sibblingDomNode.isVNode) {
+            sibblingDomNode = sibblingDomNode.domNode;
+        }
+
+        if (this.domNode != null) {
+            this.domNode.insertBefore(vNode.domNode, sibblingDomNode);
+        }
+
+        if (sibbling.isVNode) {
+            sibblingVDomNodeKvp = trmrk.core.firstOrDefault(this.childNodes,
+                childVDomNode => childVDomNode === sibbling
+            );
+        } else if (sibblingDomNode) {
+            sibblingVDomNodeKvp = trmrk.core.firstOrDefault(this.childNodes,
+                childVDomNode => childVDomNode.domNode === sibblingDomNode
+            );
+        }
+
+        const idx = Math.max(sibblingVDomNodeKvp.key, 0);
+        this.childNodes.splice(idx, 0, vNode);
+  
+        vNode.parentVDomEl = this;
+        vNode.onInsertedBefore(vNode, sibblingVDomNodeKvp.value);
+
+        return vNode;
+    }
+
+    insertManyChildVNodesBefore(vNodesList, sibbling = null) {
+        let lastVNode = vNodesList[vNodesList.length - 1];
+        lastVNode = this.insertChildVNodeBefore(lastVNode, sibbling);
+
+        for (let i = vNodesList.length - 2; i >= 0; i--) {
+            vNode = vNodesList[i];
+            lastVNode = this.insertChildVNodeBefore(vNode, lastVNode);
+        }
+    }
+
     removeChildVNode(vNode, checkFirst) {
         let remove = true;
 
         if (checkFirst) {
-            remove = this.domNode.contains(vNode.domNode);
+            remove = this.domNode != null && this.domNode.contains(vNode.domNode);
         }
 
         if (remove) {
@@ -492,7 +545,6 @@ export class VDomEl extends VDomNodeBase {
         }
 
         vNode.parentVDomEl = null;
-
         let idx = this.childNodes.indexOf(vNode);
 
         if (idx >= 0) {

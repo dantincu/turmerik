@@ -220,6 +220,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
                 this.GetDriveItemConstNameMacro("#dwnldd-e-docs.pdf#", "Downloaded .pdf files"),
                 this.GetDriveItemConstNameMacro("#e-docs.docx#", ".docx files"),
                 this.GetDriveItemConstNameMacro("#dwnldd-e-docs.docx#", "Downloaded .docx files"),
+                this.GetDriveItemConstNameMacro("#work-item-attachments#", "Work item attachments"),
                 this.GetDriveItemConstNameMacro("#upldd-doc-scan-docs.pdf#signed-by-me#", "Uploaded .pdf files containing document scan images signed by me"),
                 this.GetDriveItemConstNameMacro("#upldd-doc-scan-docs.pdf#", "Uploaded .pdf files containing document scan images"),
                 this.GetDriveItemConstNameMacro("#upldd-doc-scan-docs.jpg#signed-by-me#", "Uploaded .jpg files containing document scan images signed by me"),
@@ -238,12 +239,8 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         {
             var macrosList = new List<DriveItemNameMacro>
             {
-                this.GetDriveItemConstNameMacro("Empty macro", null, string.Empty),
-                this.GetDriveItemConstNameMacro("Single space char", null, " "),
-                this.GetDriveItemConstNameMacro("#", "Const dir name delimiter char"),
-                this.GetDriveItemConstNameMacro("-", "Const dir name part delimiter char"),
-                this.GetDriveItemConstNameMacro(".", "Const dir name file name extension delimiter char"),
-                this.GetDriveItemConstNameMacro("@", "Alphabetical ordering delimiter char"),
+                this.GetDriveItemConstNameMacro("EntryName", "The drive item name", string.Empty),
+                this.GetDriveItemConstNameMacro("SrcName", "The source name", string.Empty),
                 this.GetDriveItemConstNameMacro("a-z", "Alphabetical ordering dir name"),
                 this.GetDriveItemConstNameMacro("imgs", "Image files"),
                 this.GetDriveItemConstNameMacro("photo", "Photos"),
@@ -261,6 +258,12 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
                 this.GetDriveItemConstNameMacro("written", "Written"),
                 this.GetDriveItemConstNameMacro("by", "By"),
                 this.GetDriveItemConstNameMacro("me", "Me"),
+                this.GetDriveItemConstNameMacro("#", "Const dir name delimiter char"),
+                this.GetDriveItemConstNameMacro("-", "Const dir name part delimiter char"),
+                this.GetDriveItemConstNameMacro(".", "Const dir name file name extension delimiter char"),
+                this.GetDriveItemConstNameMacro("@", "Alphabetical ordering delimiter char"),
+                this.GetDriveItemConstNameMacro("Single space char", null, " "),
+                this.GetDriveItemConstNameMacro("Empty macro", null, string.Empty),
             };
 
             return macrosList;

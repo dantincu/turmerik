@@ -32,21 +32,24 @@ namespace Turmerik.Core.DriveExplorer
         Task<TrmrkActionResult<DriveItem>> MoveFileAsync(string fileId, string newParentFolderId, string newFileName);
         Task<TrmrkActionResult<DriveItem>> DeleteFileAsync(string fileId);
 
-        Task<TrmrkActionResult<DriveItemOp[]>> CreateMultipleAsync(
+        Task<TrmrkActionResult<DriveItem[]>> CreateMultipleAsync(
             string parentFolderId, DriveItemOp[] driveItemOpsArr);
     }
 
     public class DriveExplorerService : IDriveExplorerService
     {
         private readonly IDriveExplorerServiceEngine driveExplorerServiceEngine;
-        private readonly IDriveItemMacrosService driveItemMacrosService;
+        private readonly IDriveItemNameMacroFactoryResolver driveItemNameMacroFactoryResolver;
 
         public DriveExplorerService(
             IDriveExplorerServiceEngine driveExplorerServiceEngine,
-            IDriveItemMacrosService driveItemMacrosService)
+            IDriveItemNameMacroFactoryResolver driveItemNameMacroFactoryResolver)
         {
-            this.driveExplorerServiceEngine = driveExplorerServiceEngine ?? throw new ArgumentNullException(nameof(driveExplorerServiceEngine));
-            this.driveItemMacrosService = driveItemMacrosService ?? throw new ArgumentNullException(nameof(driveItemMacrosService));
+            this.driveExplorerServiceEngine = driveExplorerServiceEngine ?? throw new ArgumentNullException(
+                nameof(driveExplorerServiceEngine));
+
+            this.driveItemNameMacroFactoryResolver = driveItemNameMacroFactoryResolver ?? throw new ArgumentNullException(
+                nameof(driveItemNameMacroFactoryResolver));
 
             this.DriveItemDefaultExceptionHandler = this.GetDefaultExceptionHandler<DriveItem>();
             this.DriveItemsDefaultExceptionHandler = this.GetDefaultExceptionHandler<DriveItem[]>();
@@ -82,12 +85,13 @@ namespace Turmerik.Core.DriveExplorer
             return result;
         }
 
-        public async Task<TrmrkActionResult<DriveItemOp[]>> CreateMultipleAsync(string parentFolderId, DriveItemOp[] driveItemOpsArr)
+        public async Task<TrmrkActionResult<DriveItem[]>> CreateMultipleAsync(string parentFolderId, DriveItemOp[] driveItemOpsArr)
         {
-            var driveItemOpTuplesArr = driveItemOpsArr.Select(
-                item => new Tuple<DriveItemOp>(item)).ToArray();
+            var result = await ExecuteDriveItemsCoreAsync(
+                async () => await this.CreateMultipleCoreAsync(
+                    parentFolderId, driveItemOpsArr));
 
-            throw new NotImplementedException();
+            return result;
         }
 
         public async Task<TrmrkActionResult<DriveItem>> CreateOfficeLikeFileAsync(
@@ -187,13 +191,13 @@ namespace Turmerik.Core.DriveExplorer
             return result;
         }
 
-        protected virtual Func<Exception, TrmrkActionResult<TData>> GetDefaultExceptionHandler<TData>()
+        private Func<Exception, TrmrkActionResult<TData>> GetDefaultExceptionHandler<TData>()
         {
             Func<Exception, TrmrkActionResult<TData>> handler = exc => HandleException<TData>(exc);
             return handler;
         }
 
-        protected virtual HttpStatusCode? GetHttpStatusCode(Exception exc)
+        private HttpStatusCode? GetHttpStatusCode(Exception exc)
         {
             HttpStatusCode? httpStatusCode = null;
 
@@ -205,7 +209,7 @@ namespace Turmerik.Core.DriveExplorer
             return httpStatusCode;
         }
 
-        protected virtual TrmrkActionResult<TData> HandleException<TData>(Exception exc)
+        private TrmrkActionResult<TData> HandleException<TData>(Exception exc)
         {
             var httpStatusCode = GetHttpStatusCode(exc);
             var errViewModel = new ErrorViewModel(null, exc);
@@ -216,7 +220,7 @@ namespace Turmerik.Core.DriveExplorer
             return result;
         }
 
-        protected TResult ExecuteCore<TResult>(
+        private TResult ExecuteCore<TResult>(
             Func<TResult> action,
             Func<Exception, TResult> excHandler)
         {
@@ -234,7 +238,7 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected async Task<TResult> ExecuteCoreAsync<TResult>(
+        private async Task<TResult> ExecuteCoreAsync<TResult>(
             Func<Task<TResult>> action,
             Func<Exception, TResult> excHandler)
         {
@@ -252,7 +256,7 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected TrmrkActionResult<DriveItem> ExecuteDriveItemCore(
+        private TrmrkActionResult<DriveItem> ExecuteDriveItemCore(
             Func<DriveItem> action,
             Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
         {
@@ -265,7 +269,7 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected async Task<TrmrkActionResult<DriveItem>> ExecuteDriveItemCoreAsync(
+        private async Task<TrmrkActionResult<DriveItem>> ExecuteDriveItemCoreAsync(
             Func<Task<DriveItem>> action,
             Func<Exception, TrmrkActionResult<DriveItem>> excHandler = null)
         {
@@ -278,7 +282,7 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected TrmrkActionResult<DriveItem[]> ExecuteDriveItemsCore(
+        private TrmrkActionResult<DriveItem[]> ExecuteDriveItemsCore(
             Func<DriveItem[]> action,
             Func<Exception, TrmrkActionResult<DriveItem[]>> excHandler = null)
         {
@@ -291,7 +295,7 @@ namespace Turmerik.Core.DriveExplorer
             return actionResult;
         }
 
-        protected async Task<TrmrkActionResult<DriveItem[]>> ExecuteDriveItemsCoreAsync(
+        private async Task<TrmrkActionResult<DriveItem[]>> ExecuteDriveItemsCoreAsync(
             Func<Task<DriveItem[]>> action,
             Func<Exception, TrmrkActionResult<DriveItem[]>> excHandler = null)
         {
@@ -302,6 +306,170 @@ namespace Turmerik.Core.DriveExplorer
                     true, await action()), excHandler);
 
             return actionResult;
+        }
+
+        private Tuple<DriveItemOp, Func<string[], int, string>> GetDriveItemOpFactoryTuple(
+            DriveItemOp driveItemOp)
+        {
+            var nameFactory = this.driveItemNameMacroFactoryResolver.Resolve(
+                driveItemOp.NameMacro);
+
+            var retTuple = new Tuple<DriveItemOp, Func<string[], int, string>>(
+                    driveItemOp, nameFactory);
+
+            return retTuple;
+        }
+
+        private async Task<DriveItem[]> CreateMultipleCoreAsync(
+            string parentFolderId,
+            DriveItemOp[] driveItemOpsArr,
+            bool isSurelyEmpty = false)
+        {
+            var driveItemOpTuplesArr = driveItemOpsArr.Select(
+                this.GetDriveItemOpFactoryTuple).ToArray();
+
+            var driveItemsArr = new DriveItem[driveItemOpTuplesArr.Length];
+
+            for (int i = 0; i < driveItemOpTuplesArr.Length; i++)
+            {
+                var tuple = driveItemOpTuplesArr[i];
+
+                var childDriveItem = await this.CreateEntryAsync(
+                    parentFolderId, tuple, isSurelyEmpty);
+
+                driveItemsArr[i] = childDriveItem;
+            }
+
+            for (int i = 0; i < driveItemsArr.Length; i++)
+            {
+                var driveItem = driveItemsArr[i];
+                var driveItemOp = driveItemOpsArr[i];
+
+                if (driveItemOp.MultipleItems != null)
+                {
+                    var childItems = await this.CreateMultipleCoreAsync(
+                        driveItem.Id, driveItemOp.MultipleItems.ToArray(), true);
+
+                    driveItem.SubFolders = childItems.Where(
+                        item => item.IsFolder == true).ToList();
+
+                    driveItem.FolderFiles = childItems.Where(
+                        item => item.IsFolder != true).ToList();
+                }
+            }
+
+            return driveItemsArr;
+        }
+
+        private async Task<DriveItem> CreateEntryAsync(
+            string parentFolderId,
+            Tuple<DriveItemOp, Func<string[], int, string>> tuple,
+            bool isSurelyEmpty)
+        {
+            var existingEntriesArr = await this.GetExistingEntriesAsync(
+                parentFolderId, isSurelyEmpty);
+
+            string newEntryName = this.GetNewEntryName(
+                existingEntriesArr, tuple.Item2);
+
+            var driveItem = await CreateEntryAsync(
+                parentFolderId,
+                newEntryName,
+                tuple.Item1);
+
+            return driveItem;
+        }
+
+        private async Task<DriveItem> CreateEntryAsync(
+            string parentFolderId,
+            string newEntryName,
+            DriveItemOp driveItemOp)
+        {
+            DriveItem driveItem;
+
+            if (driveItemOp.IsFolder == true)
+            {
+                driveItem = await this.driveExplorerServiceEngine.CreateFolderAsync(
+                    parentFolderId, newEntryName);
+            }
+            else
+            {
+                if (driveItemOp.OfficeLikeFileType.HasValue)
+                {
+                    driveItem = await this.driveExplorerServiceEngine.CreateOfficeLikeFileAsync(
+                        parentFolderId, newEntryName, driveItemOp.OfficeLikeFileType.Value);
+                }
+                else
+                {
+                    driveItem = await this.driveExplorerServiceEngine.CreateTextFileAsync(
+                        parentFolderId, newEntryName, driveItemOp.TextFileContent ?? string.Empty);
+                }
+            }
+
+            return driveItem;
+        }
+
+        private string GetNewEntryName(
+            string[] existingEntriesArr,
+            Func<string[], int, string> nameFactory)
+        {
+            int idx = 0;
+
+            string entryName = nameFactory(existingEntriesArr, idx);
+            string entryNameToLower = entryName.ToLower();
+
+            if (existingEntriesArr.Any())
+            {
+                existingEntriesArr = existingEntriesArr.Select(
+                    str => str.ToLower()).ToArray();
+            }
+
+            while (existingEntriesArr.Contains(entryNameToLower))
+            {
+                idx++;
+                entryName = nameFactory(existingEntriesArr, idx);
+
+                string newEntryNameToLower = entryName.ToLower();
+
+                if (newEntryNameToLower == entryNameToLower)
+                {
+                    throw new InternalAppError(
+                        $"Same entry name returned for 2 different uniquifier indexes: {entryName}",
+                        HttpStatusCode.BadRequest);
+                }
+                else
+                {
+                    entryNameToLower = newEntryNameToLower;
+                }
+            }
+
+            return entryName;
+        }
+
+        private async Task<string[]> GetExistingEntriesAsync(
+            string folderId,
+            bool isSurelyEmpty)
+        {
+            string[] existingEntries;
+
+            if (isSurelyEmpty)
+            {
+                existingEntries = new string[0];
+            }
+            else
+            {
+                var folder = await this.driveExplorerServiceEngine.GetFolderAsync(folderId);
+
+                var existingFolderNames = folder.SubFolders.Select(
+                    item => item.Name);
+
+                var existingFileNames = folder.FolderFiles.Select(
+                    item => item.Name);
+
+                existingEntries = existingFolderNames.Concat(existingFileNames).ToArray();
+            }
+
+            return existingEntries;
         }
     }
 }

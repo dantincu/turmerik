@@ -87,8 +87,6 @@ namespace Turmerik.Core.DriveExplorer
         public bool? IncrementNumber { get; set; }
         public int? DigitsCount { get; set; }
         public string PreceedingDelimiter { get; set; }
-        // public Guid? PreceedingMacroUuid { get; set; }
-        public DriveItemNameMacro PreceedingMacro { get; set; }
         public string SucceedingDelimiter { get; set; }
         // public Guid? SucceedingMacroUuid { get; set; }
         public DriveItemNameMacro SucceedingMacro { get; set; }
