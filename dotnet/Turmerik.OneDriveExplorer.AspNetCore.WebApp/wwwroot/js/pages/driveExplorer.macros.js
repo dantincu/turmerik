@@ -119,16 +119,22 @@ export class DriveExplorerMacros {
                 "#" + sectionId,
                 "Toggle", "btn-primary");
 
-            headerChildNodes.push(section.toggleBtnVDomEl);
+            headerChildNodes.splice(0, 0, section.toggleBtnVDomEl);
         }
 
         section.headerVDomEl = vdom.utils.getVDomEl("h6",
             [ trmrkCssClasses.section, trmrkCssClasses.header ],
                 {}, headerChildNodes);
+
+        const bodyVDomElClassList = [ trmrkCssClasses.section, trmrkCssClasses.body ];
+
+        if (hasToggleButton) {
+            bodyVDomElClassList.splice(Infinity, 0, "collapse", "show" );
+        }
         
-        section.bodyVDomEl = vdom.utils.getVDomEl("div",
-            [ trmrkCssClasses.section, trmrkCssClasses.body ],
-            {}, sectionNodesArr);
+        section.bodyVDomEl = vdom.utils.getVDomEl("ul",
+            bodyVDomElClassList,
+            { id: sectionId }, sectionNodesArr);
 
         return section;
     }
@@ -153,7 +159,7 @@ export class DriveExplorerMacros {
             ]);
 
         sectionsGroup.bodyVDomEl = vdom.utils.getVDomEl("div",
-            [ trmrkCssClasses.sectionsGroup ],
+            [ trmrkCssClasses.sectionsGroup, "collapse", "show" ],
             { id: driveFolderMacrosModalIds.macrosSectionsGroup }, [
                 sectionsGroup.folders.headerVDomEl,
                 sectionsGroup.folders.bodyVDomEl,
@@ -203,7 +209,8 @@ export class DriveExplorerMacros {
 
         const section = this.generateModalBodySection(
             sectionTitle, sectionId,
-            new DriveItemMacroDefsModalSection(), sectionNodes);
+            new DriveItemMacroDefsModalSection(),
+            sectionNodes, true);
 
         return section;
     }

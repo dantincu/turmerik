@@ -288,10 +288,6 @@ export class VDomEl extends VDomNodeBase {
             domEl.innerHTML = this.innerHTML;
             this.childNodes = [];
         } else {
-            if (this.childNodes.find(node => !node) || this.classList.indexOf("modal-body") >= 0) {
-                debugger;
-            }
-
             this.childNodes = this.childNodes.map(
                 node => trmrk.vdom.utils.getOrCreateVDomNode(node, true));
 

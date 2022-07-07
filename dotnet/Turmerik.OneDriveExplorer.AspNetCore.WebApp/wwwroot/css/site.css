@@ -1,5 +1,6 @@
 html {
-  font-size: 20px;
+    /* font-size: 20px; */
+    font-size: 16px;
 }
 
 /* @media (min-width: 768px) {
@@ -14,7 +15,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  /* margin-bottom: 60px; */
 }
 
 pre {
@@ -265,3 +266,19 @@ tr.trmrk-pressed {
 tr.trmrk-checked.trmrk-pressed {
     background-color: #F0F0F0;
 }
+
+.trmrk-section.trmrk-header > .btn.btn-primary,
+.trmrk-header > .btn.btn-primary {
+    margin-right: 0.5rem;
+}
+
+h6.trmrk-header {
+}
+
+ul.trmrk-section {
+    list-style-type: none;
+}
+
+    ul.trmrk-section > li.trmrk-item {
+        margin-top: 0.5rem;
+    }

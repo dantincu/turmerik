@@ -32,6 +32,7 @@ export class EntryMacroDefVDomEl extends VDomEl {
         idxValueWrapper,
         onApplyItemEventHandler,
         macroName = null,
+        isCollapsed = true,
         nodeName = "li") {
         if (!trmrk.core.isNotNaNNumber(idxValueWrapper.value)) {
             throw "idxValueWrapper.value must be a number: " + idxValueWrapper.value;
@@ -85,7 +86,7 @@ export class EntryMacroDefVDomEl extends VDomEl {
                 const childVNodesArr = driveItemOp.multipleDriveItemOps.map(
                     item => new EntryMacroDefVDomEl(
                         trmrk.core.isNotNullObj(item.nameMacro) ? existingEntriesArr : null,
-                        item, idxValueWrapper, onApplyItemEventHandler));
+                        item, idxValueWrapper, onApplyItemEventHandler, null, true));
 
                 const childNodesVDomEl = vdom.utils.getVDomEl("ul",
                     [ trmrkCssClasses.childNodes ], {}, childVNodesArr);
@@ -94,8 +95,14 @@ export class EntryMacroDefVDomEl extends VDomEl {
             }
         }
 
+        const bodyVDomElClasses = [ trmrkCssClasses.body, "collapse" ];
+
+        if (!isCollapsed) {
+            bodyVDomElClasses.push("show");
+        }
+
         const bodyVDomEl = vdom.utils.getVDomEl("div",
-            [ trmrkCssClasses.body, "collapse" ],
+            bodyVDomElClasses,
             { "data-trmrk-idx": idxStr }, bodyNodes);
 
         super({
