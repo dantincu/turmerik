@@ -38,11 +38,11 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         private List<DriveItemMacroMtbl> GetDriveItemMacrosList(
             ReadOnlyCollection<DriveItemMacroImmtbl> driveItemNameMacros)
         {
-            var commonConstDirNameMacros = driveItemNameMacros.Single(
-                macro => macro.Key == MacrosH.COMMON_CONST);
-
-            var miscMacros = driveItemNameMacros.Single(
+            var pinnedMacros = driveItemNameMacros.Single(
                 macro => macro.Key == MacrosH.PINNED);
+
+            var constDirNameMacros = driveItemNameMacros.Single(
+                macro => macro.Key == MacrosH.CONST);
 
             var descMacros = driveItemNameMacros.Single(
                 macro => macro.Key == MacrosH.DESC_IDX);
@@ -56,17 +56,11 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
             var headingAscMacros = driveItemNameMacros.Single(
                 macro => macro.Key == MacrosH.H_ASC_IDX);
 
-            var entryNameMacro = commonConstDirNameMacros.Children.Single(
+            var entryNameMacro = pinnedMacros.Children.Single(
                 macro => macro.Name == MacrosH.ENTRY_NAME);
 
-            var srcNameMacro = commonConstDirNameMacros.Children.Single(
+            var srcNameMacro = pinnedMacros.Children.Single(
                 macro => macro.Name == MacrosH.SRC_NAME);
-
-            var miscDriveItemOps = miscMacros.Children.Select(
-                macro => this.GetDirsPairDriveItemOp(
-                    macro.GetNameMacro(),
-                    entryNameMacro.GetNameMacro(),
-                    macro.NameMacro.MacroName)).ToList();
 
             var descDriveItemOps = descMacros.Children.Select(
                 macro => this.GetDirsPairDriveItemOp(
@@ -75,25 +69,27 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
                     macro.NameMacro.MacroName)).ToList();
 
             var ascDriveItemOps = ascMacros.Children.Select(
-                macro => this.GetDirsPairDriveItemOp(macro.GetNameMacro(),
+                macro => this.GetDirsPairDriveItemOp(
+                    macro.GetNameMacro(),
                     entryNameMacro.GetNameMacro(),
                     macro.NameMacro.MacroName)).ToList();
 
             var headingDescDriveItemOps = headingDescMacros.Children.Select(
-                macro => this.GetDirsPairDriveItemOp(macro.GetNameMacro(),
+                macro => this.GetDirsPairDriveItemOp(
+                    macro.GetNameMacro(),
                     entryNameMacro.GetNameMacro(),
                     macro.NameMacro.MacroName)).ToList();
 
             var headingAscDriveItemOps = headingAscMacros.Children.Select(
-                macro => this.GetDirsPairDriveItemOp(macro.GetNameMacro(),
+                macro => this.GetDirsPairDriveItemOp(
+                    macro.GetNameMacro(),
                     entryNameMacro.GetNameMacro(),
                     macro.NameMacro.MacroName)).ToList();
 
-            var defaultDescMacro = descMacros.Children.Skip(1).First();
+            var defaultDescMacro = pinnedMacros.Children.First();
             var defaultHeadingDescMacro = headingDescMacros.Children.Last();
 
-            var secondMacrosList = commonConstDirNameMacros.Children.Where(
-                macro => macro.NameMacro.ConstName.Any()).Select(
+            var firstMacrosList = constDirNameMacros.Children.Select(
                 macro => this.GetDirsPairDriveItemOp(
                     this.GetDefaultHeadingDescMacro(
                         defaultHeadingDescMacro.NameMacro,
@@ -101,22 +97,13 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
                     macro.NameMacro,
                     macro.NameMacro.MacroName)).ToList();
 
-            var firstMacrosList = secondMacrosList.Select(
-                macro => this.GetDirsPairDriveItemOp(
-                    defaultDescMacro.NameMacro, new DriveItemNameMacroMtbl(),
-                    macro.NameMacro.MacroName, shortDirItemOp =>
-                    {
-                        shortDirItemOp.MultipleItems = macro.MultipleDriveItemOps;
-                    })).ToList();
-
             var retList = new List<DriveItemMacroMtbl>()
             {
-                this.GetDriveItemMacroMtbl(MacrosH.COMMON_CONST, "Common const dir name macros", firstMacrosList),
+                this.GetDriveItemMacroMtbl(MacrosH.CONST, "Common const dir name macros", firstMacrosList),
                 this.GetDriveItemMacroMtbl(MacrosH.DESC_IDX, "Desc Indexing", descDriveItemOps),
                 this.GetDriveItemMacroMtbl(MacrosH.ASC_IDX, "Asc Indexing", ascDriveItemOps),
                 this.GetDriveItemMacroMtbl(MacrosH.H_DESC_IDX, "Heading Desc Indexing", headingDescDriveItemOps),
                 this.GetDriveItemMacroMtbl(MacrosH.H_ASC_IDX, "Heading Asc Indexing", headingAscDriveItemOps),
-                this.GetDriveItemMacroMtbl(MacrosH.PINNED, "Miscellaneous", miscDriveItemOps)
             };
 
             return retList;
