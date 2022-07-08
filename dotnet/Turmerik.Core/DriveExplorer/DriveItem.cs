@@ -1,11 +1,115 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.Core.DriveExplorer
 {
-    public class DriveItem
+    public interface IDriveItem
     {
+        string Id { get; }
+        string Name { get; }
+        string ParentFolderId { get; }
+        bool? IsFolder { get; }
+        string FileNameExtension { get; }
+        bool? IsRootFolder { get; }
+        DateTime? CreationTime { get; }
+        DateTime? LastAccessTime { get; }
+        DateTime? LastWriteTime { get; }
+        string CreationTimeStr { get; }
+        string LastAccessTimeStr { get; }
+        string LastWriteTimeStr { get; }
+        OfficeLikeFileType? OfficeLikeFileType { get; }
+        string TextFileContent { get; }
+        byte[] RawFileContent { get; }
+
+        IDriveItem[] GetSubFolders();
+        IDriveItem[] GetFolderFiles();
+    }
+
+    public class DriveItemImmtbl : IDriveItem
+    {
+        public DriveItemImmtbl(IDriveItem src)
+        {
+            this.Id = src.Id;
+            this.Name = src.Name;
+            this.ParentFolderId = src.ParentFolderId;
+            this.IsFolder = src.IsFolder;
+            this.FileNameExtension = src.FileNameExtension;
+            this.IsRootFolder = src.IsRootFolder;
+            this.CreationTime = src.CreationTime;
+            this.LastAccessTime = src.LastAccessTime;
+            this.LastWriteTime = src.LastWriteTime;
+            this.CreationTimeStr = src.CreationTimeStr;
+            this.LastAccessTimeStr = src.LastAccessTimeStr;
+            this.LastWriteTimeStr = src.LastWriteTimeStr;
+            this.OfficeLikeFileType = src.OfficeLikeFileType;
+            this.TextFileContent = src.TextFileContent;
+            this.RawFileContent = src.RawFileContent;
+
+            this.SubFolders = src.GetSubFolders()?.Select(
+                item => new DriveItemImmtbl(item)).RdnlC();
+
+            this.FolderFiles = src.GetFolderFiles()?.Select(
+                item => new DriveItemImmtbl(item)).RdnlC();
+        }
+
+        public string Id { get; }
+        public string Name { get; }
+        public string ParentFolderId { get; }
+        public bool? IsFolder { get; }
+        public string FileNameExtension { get; }
+        public bool? IsRootFolder { get; }
+        public DateTime? CreationTime { get; }
+        public DateTime? LastAccessTime { get; }
+        public DateTime? LastWriteTime { get; }
+        public string CreationTimeStr { get; }
+        public string LastAccessTimeStr { get; }
+        public string LastWriteTimeStr { get; }
+        public OfficeLikeFileType? OfficeLikeFileType { get; }
+        public string TextFileContent { get; }
+        public byte[] RawFileContent { get; }
+
+        public ReadOnlyCollection<DriveItemImmtbl> SubFolders { get; }
+        public ReadOnlyCollection<DriveItemImmtbl> FolderFiles { get; }
+
+        public IDriveItem[] GetFolderFiles() => this.FolderFiles?.Cast<IDriveItem>().ToArray();
+        public IDriveItem[] GetSubFolders() => this.SubFolders?.Cast<IDriveItem>().ToArray();
+    }
+
+    public class DriveItemMtbl : IDriveItem
+    {
+        public DriveItemMtbl()
+        {
+        }
+
+        public DriveItemMtbl(IDriveItem src)
+        {
+            this.Id = src.Id;
+            this.Name = src.Name;
+            this.ParentFolderId = src.ParentFolderId;
+            this.IsFolder = src.IsFolder;
+            this.FileNameExtension = src.FileNameExtension;
+            this.IsRootFolder = src.IsRootFolder;
+            this.CreationTime = src.CreationTime;
+            this.LastAccessTime = src.LastAccessTime;
+            this.LastWriteTime = src.LastWriteTime;
+            this.CreationTimeStr = src.CreationTimeStr;
+            this.LastAccessTimeStr = src.LastAccessTimeStr;
+            this.LastWriteTimeStr = src.LastWriteTimeStr;
+            this.OfficeLikeFileType = src.OfficeLikeFileType;
+            this.TextFileContent = src.TextFileContent;
+            this.RawFileContent = src.RawFileContent;
+
+            this.SubFolders = src.GetSubFolders()?.Select(
+                item => new DriveItemMtbl(item)).ToList();
+
+            this.FolderFiles = src.GetFolderFiles()?.Select(
+                item => new DriveItemMtbl(item)).ToList();
+        }
+
         public string Id { get; set; }
         public string Name { get; set; }
         public string ParentFolderId { get; set; }
@@ -21,74 +125,11 @@ namespace Turmerik.Core.DriveExplorer
         public OfficeLikeFileType? OfficeLikeFileType { get; set; }
         public string TextFileContent { get; set; }
         public byte[] RawFileContent { get; set; }
-        public List<DriveItem> SubFolders { get; set; }
-        public List<DriveItem> FolderFiles { get; set; }
-    }
 
-    public class DriveItemOp : DriveItem
-    {
-        public DriveItemOp()
-        {
-        }
+        public List<DriveItemMtbl> SubFolders { get; set; }
+        public List<DriveItemMtbl> FolderFiles { get; set; }
 
-        public DriveItemOp(DriveItemOp src, Guid? opUuid = null)
-        {
-            this.OpUuid = opUuid;
-            this.Name = src.Name;
-            this.IsFolder = src.IsFolder;
-            this.FileNameExtension = src.FileNameExtension;
-            this.OfficeLikeFileType = src.OfficeLikeFileType;
-            this.TextFileContent = src.TextFileContent;
-            this.MultipleItems = src.MultipleItems;
-            this.NameMacro = src.NameMacro;
-        }
-
-        public Guid? OpUuid { get; set; }
-        public List<DriveItemOp> MultipleItems { get; set; }
-        public DriveItemNameMacro NameMacro { get; set; }
-    }
-
-    public class DriveItemNameMacro
-    {
-        public DriveItemNameMacro()
-        {
-        }
-
-        public DriveItemNameMacro(DriveItemNameMacro src, Guid? macroUuid = null)
-        {
-            this.MacroUuid = macroUuid;
-            this.MacroName = src.MacroName;
-            this.MacroDescription = src.MacroDescription;
-            this.EntryName = src.EntryName;
-            this.SrcName = src.SrcName;
-            this.ConstName = src.ConstName;
-            this.SrcNameFirstLetterWrappingChar = src.SrcNameFirstLetterWrappingChar;
-            this.NumberSeed = src.NumberSeed;
-            this.MinNumber = src.MinNumber;
-            this.MaxNumber = src.MaxNumber;
-            this.IncrementNumber = src.IncrementNumber;
-            this.DigitsCount = src.DigitsCount;
-            this.PreceedingDelimiter = src.PreceedingDelimiter;
-            // this.PreceedingMacroUuid = src.PreceedingMacroUuid;
-            this.SucceedingDelimiter = src.SucceedingDelimiter;
-            // this.SucceedingMacroUuid = src.SucceedingMacroUuid;
-        }
-
-        public Guid? MacroUuid { get; set; }
-        public string MacroName { get; set; }
-        public string MacroDescription { get; set; }
-        public string EntryName { get; set; }
-        public string SrcName { get; set; }
-        public string ConstName { get; set; }
-        public char? SrcNameFirstLetterWrappingChar { get; set; }
-        public int? NumberSeed { get; set; }
-        public int? MinNumber { get; set; }
-        public int? MaxNumber { get; set; }
-        public bool? IncrementNumber { get; set; }
-        public int? DigitsCount { get; set; }
-        public string PreceedingDelimiter { get; set; }
-        public string SucceedingDelimiter { get; set; }
-        // public Guid? SucceedingMacroUuid { get; set; }
-        public DriveItemNameMacro SucceedingMacro { get; set; }
+        public IDriveItem[] GetFolderFiles() => this.FolderFiles?.Cast<IDriveItem>().ToArray();
+        public IDriveItem[] GetSubFolders() => this.SubFolders?.Cast<IDriveItem>().ToArray();
     }
 }

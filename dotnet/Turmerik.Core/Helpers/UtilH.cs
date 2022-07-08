@@ -154,5 +154,22 @@ namespace Turmerik.Core.Helpers
 
             return retVal;
         }
+
+        public static TOut IfNotNull<TIn, TOut>(
+            this TIn inVal, Func<TIn, TOut> outValFactory)
+        {
+            TOut outVal;
+
+            if (inVal != null)
+            {
+                outVal = outValFactory(inVal);
+            }
+            else
+            {
+                outVal = default;
+            }
+
+            return outVal;
+        }
     }
 }

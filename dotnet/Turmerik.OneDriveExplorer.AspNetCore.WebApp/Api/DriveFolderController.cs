@@ -51,7 +51,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] DriveItem driveItem)
+        public async Task<ActionResult> Post([FromBody] DriveItemMtbl driveItem)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
@@ -66,7 +66,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(string id, [FromBody] DriveItemOp driveItem)
+        public async Task<ActionResult> Put(string id, [FromBody] DriveItemOpMtbl driveItem)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
@@ -93,7 +93,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> Copy([FromBody] DriveItem driveItem)
+        public async Task<ActionResult> Copy([FromBody] DriveItemMtbl driveItem)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
@@ -108,7 +108,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
         }
 
         [HttpPut("[action]")]
-        public async Task<ActionResult> Move([FromBody] DriveItem driveItem)
+        public async Task<ActionResult> Move([FromBody] DriveItemMtbl driveItem)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
@@ -123,7 +123,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
         }
 
         [HttpPost("[action]/{parentFolderId}")]
-        public async Task<ActionResult> CreateMultipleMacros(string parentFolderId, [FromBody] DriveItemOp[] driveItemOpsArr)
+        public async Task<ActionResult> CreateMultipleMacros(string parentFolderId, [FromBody] DriveItemOpMtbl[] driveItemOpsArr)
         {
             var actionResult = await ExecuteAsync(
                 async () =>

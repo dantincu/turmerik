@@ -7,27 +7,27 @@ namespace Turmerik.Core.DriveExplorer
 {
     public interface IDriveExplorerServiceEngine
     {
-        Task<DriveItem> GetRootFolderAsync();
-        Task<DriveItem> GetFolderAsync(string folderId);
+        Task<DriveItemMtbl> GetRootFolderAsync();
+        Task<DriveItemMtbl> GetFolderAsync(string folderId);
         string GetRootDriveFolderUrl();
         string GetDriveFolderUrl(string folderId);
         string GetDriveFileUrl(string fileId);
-        Task<DriveItem> GetTextFileAsync(string fileId);
-        Task<DriveItem> CreateFolderAsync(string parentFolderId, string newFolderName);
-        Task<DriveItem> RenameFolderAsync(string folderId, string newFolderName);
-        Task<DriveItem> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName);
-        Task<DriveItem> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName);
-        Task<DriveItem> DeleteFolderAsync(string folderId);
-        Task<DriveItem> CreateTextFileAsync(string parentFolderId, string newFileName, string text);
+        Task<DriveItemMtbl> GetTextFileAsync(string fileId);
+        Task<DriveItemMtbl> CreateFolderAsync(string parentFolderId, string newFolderName);
+        Task<DriveItemMtbl> RenameFolderAsync(string folderId, string newFolderName);
+        Task<DriveItemMtbl> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName);
+        Task<DriveItemMtbl> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName);
+        Task<DriveItemMtbl> DeleteFolderAsync(string folderId);
+        Task<DriveItemMtbl> CreateTextFileAsync(string parentFolderId, string newFileName, string text);
 
-        Task<DriveItem> CreateOfficeLikeFileAsync(
+        Task<DriveItemMtbl> CreateOfficeLikeFileAsync(
             string parentFolderId,
             string newFileName,
             OfficeLikeFileType officeLikeFileType);
 
-        Task<DriveItem> RenameFileAsync(string fileId, string newFileName);
-        Task<DriveItem> CopyFileAsync(string fileId, string newParentFolderId, string newFileName);
-        Task<DriveItem> MoveFileAsync(string fileId, string newParentFolderId, string newFileName);
-        Task<DriveItem> DeleteFileAsync(string fileId);
+        Task<DriveItemMtbl> RenameFileAsync(string fileId, string newFileName);
+        Task<DriveItemMtbl> CopyFileAsync(string fileId, string newParentFolderId, string newFileName);
+        Task<DriveItemMtbl> MoveFileAsync(string fileId, string newParentFolderId, string newFileName);
+        Task<DriveItemMtbl> DeleteFileAsync(string fileId);
     }
 }

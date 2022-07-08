@@ -11,25 +11,25 @@ namespace Turmerik.Core.DriveExplorer
 {
     public interface IDriveItemNameMacroFactoryResolver
     {
-        void RegisterMacros(DriveItemNameMacro[] driveItemNameMacrosArr);
+        void RegisterMacros(DriveItemNameMacroMtbl[] driveItemNameMacrosArr);
         Func<string[], int, string> Resolve(Guid macroUuid);
-        Func<string[], int, string> Resolve(DriveItemNameMacro macro);
+        Func<string[], int, string> Resolve(DriveItemNameMacroMtbl macro);
     }
 
     public class DriveItemNameMacroFactoryResolver : IDriveItemNameMacroFactoryResolver
     {
         private static readonly int maxDigitsCount = MathH.Int32MaxValueDigitsCount - 1;
 
-        private readonly Dictionary<Guid, DriveItemNameMacro> registeredMacrosList;
+        private readonly Dictionary<Guid, DriveItemNameMacroMtbl> registeredMacrosList;
         private readonly Dictionary<Guid, Func<string[], int, string>> registeredFactoriesList;
 
         public DriveItemNameMacroFactoryResolver()
         {
-            registeredMacrosList = new Dictionary<Guid, DriveItemNameMacro>();
+            registeredMacrosList = new Dictionary<Guid, DriveItemNameMacroMtbl>();
             registeredFactoriesList = new Dictionary<Guid, Func<string[], int, string>>();
         }
 
-        public void RegisterMacros(DriveItemNameMacro[] driveItemNameMacrosArr)
+        public void RegisterMacros(DriveItemNameMacroMtbl[] driveItemNameMacrosArr)
         {
             foreach (var macro in driveItemNameMacrosArr)
             {
@@ -47,7 +47,7 @@ namespace Turmerik.Core.DriveExplorer
             return retFactory;
         }
 
-        public Func<string[], int, string> Resolve(DriveItemNameMacro macro)
+        public Func<string[], int, string> Resolve(DriveItemNameMacroMtbl macro)
         {
             Func<string[], int, string> retFactory;
 
@@ -63,7 +63,7 @@ namespace Turmerik.Core.DriveExplorer
             return retFactory;
         }
 
-        private Func<string[], int, string> GetFactory(DriveItemNameMacro macro)
+        private Func<string[], int, string> GetFactory(DriveItemNameMacroMtbl macro)
         {
             Func<string[], int, string> factory = null;
             var coreFactory = GetFactoryCore(macro);
@@ -92,7 +92,7 @@ namespace Turmerik.Core.DriveExplorer
             return factory;
         }
 
-        private Func<string[], int, string> GetFactoryCore(DriveItemNameMacro macro)
+        private Func<string[], int, string> GetFactoryCore(DriveItemNameMacroMtbl macro)
         {
             Func<string[], int, string> coreFactory, factory;
             coreFactory = this.GetCoreFactory(macro);
@@ -112,7 +112,7 @@ namespace Turmerik.Core.DriveExplorer
             return factory;
         }
 
-        private Func<string[], int, string> GetCoreFactory(DriveItemNameMacro macro)
+        private Func<string[], int, string> GetCoreFactory(DriveItemNameMacroMtbl macro)
         {
             Func<string[], int, string> coreFactory;
             string name = macro.EntryName ?? macro.ConstName;
@@ -137,7 +137,7 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         private Func<string[], int, string> GetSrcNameFirstLetterWrappingCharFactory(
-            DriveItemNameMacro macro, char wrappingChar)
+            DriveItemNameMacroMtbl macro, char wrappingChar)
         {
             Func<string[], int, string> coreFactory = (arr, idx) =>
             {
@@ -170,7 +170,7 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         private Func<string[], int, string> GetPaddedIndexFactory(
-            DriveItemNameMacro macro)
+            DriveItemNameMacroMtbl macro)
         {
             int digitsCount = macro.DigitsCount ?? 1;
             int numberSeed = macro.NumberSeed ?? -1;
@@ -212,7 +212,7 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         private Func<string[], int, string> GetPaddedIndexFactoryCore(
-            DriveItemNameMacro macro,
+            DriveItemNameMacroMtbl macro,
             bool incrementNumber,
             int digitsCount,
             int numberSeed,

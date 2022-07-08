@@ -10,141 +10,184 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
     public interface IDriveItemMacrosService
     {
         IDriveItemNameMacrosService DriveItemNameMacrosService { get; }
-        ReadOnlyDictionary<string, Tuple<string, ReadOnlyCollection<DriveItemOp>>> GetDriveItemMacros();
+        ReadOnlyCollection<DriveItemMacroImmtbl> GetDriveItemMacros();
     }
 
     public class DriveItemMacrosService : IDriveItemMacrosService
     {
-        private readonly ReadOnlyDictionary<string, Tuple<string, ReadOnlyCollection<DriveItemNameMacro>>> driveItemNameMacrosMx;
-        private readonly Dictionary<string, Tuple<string, List<DriveItemOp>>> driveItemMacrosMx;
+        private readonly ReadOnlyCollection<DriveItemMacroImmtbl> driveItemNameMacros;
+        private readonly ReadOnlyCollection<DriveItemMacroImmtbl> driveItemMacros;
 
         public DriveItemMacrosService(
             IDriveItemNameMacrosService driveItemNameMacrosService)
         {
-            this.DriveItemNameMacrosService = driveItemNameMacrosService ?? throw new ArgumentNullException(nameof(driveItemNameMacrosService));
-            this.driveItemNameMacrosMx = this.DriveItemNameMacrosService.GetDriveItemNameMacros();
-            this.driveItemMacrosMx = this.GetDriveItemMacrosList(this.driveItemNameMacrosMx);
+            this.DriveItemNameMacrosService = driveItemNameMacrosService ?? throw new ArgumentNullException(
+                nameof(driveItemNameMacrosService));
+
+            this.driveItemNameMacros = this.DriveItemNameMacrosService.GetDriveItemNameMacros();
+
+            this.driveItemMacros = this.GetDriveItemMacrosList(
+                this.driveItemNameMacros).Select(
+                item => new DriveItemMacroImmtbl(item)).RdnlC();
         }
 
         public IDriveItemNameMacrosService DriveItemNameMacrosService { get; }
 
-        public ReadOnlyDictionary<string, Tuple<string, ReadOnlyCollection<DriveItemOp>>> GetDriveItemMacros()
+        public ReadOnlyCollection<DriveItemMacroImmtbl> GetDriveItemMacros() => this.driveItemMacros;
+
+        private List<DriveItemMacroMtbl> GetDriveItemMacrosList(
+            ReadOnlyCollection<DriveItemMacroImmtbl> driveItemNameMacros)
         {
-            var driveItemNameMacros = this.driveItemMacrosMx.ToDictionary(
-                kvp => kvp.Key,
-                kvp => new Tuple<string, ReadOnlyCollection<DriveItemOp>>(
-                    kvp.Value.Item1,
-                    kvp.Value.Item2.Select(
-                    item => new DriveItemOp(
-                        item, item.OpUuid)).ToArray().RdnlC())).RdnlD();
+            var commonConstDirNameMacros = driveItemNameMacros.Single(
+                macro => macro.Key == MacrosH.COMMON_CONST);
 
-            return driveItemNameMacros;
-        }
+            var miscMacros = driveItemNameMacros.Single(
+                macro => macro.Key == MacrosH.PINNED);
 
-        private Dictionary<string, Tuple<string, List<DriveItemOp>>> GetDriveItemMacrosList(
-            ReadOnlyDictionary<string, Tuple<string, ReadOnlyCollection<DriveItemNameMacro>>> driveItemNameMacrosMx)
-        {
-            var commonConstDirNameMacros = driveItemNameMacrosMx[MacrosH.COMMON_CONST];
-            var miscMacros = driveItemNameMacrosMx[MacrosH.MISC];
+            var descMacros = driveItemNameMacros.Single(
+                macro => macro.Key == MacrosH.DESC_IDX);
 
-            var descMacros = driveItemNameMacrosMx[MacrosH.DESC_IDX];
-            var ascMacros = driveItemNameMacrosMx[MacrosH.ASC_IDX];
+            var ascMacros = driveItemNameMacros.Single(
+                macro => macro.Key == MacrosH.ASC_IDX);
 
-            var headingDescMacros = driveItemNameMacrosMx[MacrosH.H_DESC_IDX];
-            var headingAscMacros = driveItemNameMacrosMx[MacrosH.H_ASC_IDX];
+            var headingDescMacros = driveItemNameMacros.Single(
+                macro => macro.Key == MacrosH.H_DESC_IDX);
 
-            var miscDriveItemOps = miscMacros.Item2.Select(
-                nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
+            var headingAscMacros = driveItemNameMacros.Single(
+                macro => macro.Key == MacrosH.H_ASC_IDX);
 
-            var descDriveItemOps = descMacros.Item2.Select(
-                nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
+            var entryNameMacro = commonConstDirNameMacros.Children.Single(
+                macro => macro.Name == MacrosH.ENTRY_NAME);
 
-            var ascDriveItemOps = ascMacros.Item2.Select(
-                nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
+            var srcNameMacro = commonConstDirNameMacros.Children.Single(
+                macro => macro.Name == MacrosH.SRC_NAME);
 
-            var headingDescDriveItemOps = headingDescMacros.Item2.Select(
-                nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
+            var miscDriveItemOps = miscMacros.Children.Select(
+                macro => this.GetDirsPairDriveItemOp(
+                    macro.GetNameMacro(),
+                    entryNameMacro.GetNameMacro(),
+                    macro.NameMacro.MacroName)).ToList();
 
-            var headingAscDriveItemOps = headingAscMacros.Item2.Select(
-                nameMacro => this.GetDirsPairDriveItemOp(nameMacro)).ToList();
+            var descDriveItemOps = descMacros.Children.Select(
+                macro => this.GetDirsPairDriveItemOp(
+                    macro.GetNameMacro(),
+                    entryNameMacro.GetNameMacro(),
+                    macro.NameMacro.MacroName)).ToList();
 
-            var defaultDescMacro = descMacros.Item2.Skip(1).First();
-            var defaultHeadingDescMacro = headingDescMacros.Item2.Last();
+            var ascDriveItemOps = ascMacros.Children.Select(
+                macro => this.GetDirsPairDriveItemOp(macro.GetNameMacro(),
+                    entryNameMacro.GetNameMacro(),
+                    macro.NameMacro.MacroName)).ToList();
 
-            var secondMacrosList = commonConstDirNameMacros.Item2.Select(
-                nameMacro => this.GetDirsPairDriveItemOp(
+            var headingDescDriveItemOps = headingDescMacros.Children.Select(
+                macro => this.GetDirsPairDriveItemOp(macro.GetNameMacro(),
+                    entryNameMacro.GetNameMacro(),
+                    macro.NameMacro.MacroName)).ToList();
+
+            var headingAscDriveItemOps = headingAscMacros.Children.Select(
+                macro => this.GetDirsPairDriveItemOp(macro.GetNameMacro(),
+                    entryNameMacro.GetNameMacro(),
+                    macro.NameMacro.MacroName)).ToList();
+
+            var defaultDescMacro = descMacros.Children.Skip(1).First();
+            var defaultHeadingDescMacro = headingDescMacros.Children.Last();
+
+            var secondMacrosList = commonConstDirNameMacros.Children.Where(
+                macro => macro.NameMacro.ConstName.Any()).Select(
+                macro => this.GetDirsPairDriveItemOp(
                     this.GetDefaultHeadingDescMacro(
-                        defaultHeadingDescMacro,
-                        nameMacro.ConstName.First()),
-                    nameMacro)).ToList();
+                        defaultHeadingDescMacro.NameMacro,
+                        macro.NameMacro.ConstName.First()),
+                    macro.NameMacro,
+                    macro.NameMacro.MacroName)).ToList();
 
             var firstMacrosList = secondMacrosList.Select(
-                driveItemOp => this.GetDirsPairDriveItemOp(
-                    defaultDescMacro, new DriveItemNameMacro(), shortDirItemOp =>
+                macro => this.GetDirsPairDriveItemOp(
+                    defaultDescMacro.NameMacro, new DriveItemNameMacroMtbl(),
+                    macro.NameMacro.MacroName, shortDirItemOp =>
                     {
-                        shortDirItemOp.MultipleItems = driveItemOp.MultipleItems;
+                        shortDirItemOp.MultipleItems = macro.MultipleDriveItemOps;
                     })).ToList();
 
-            var driveItemOpsDictnr = new Dictionary<string, Tuple<string, List<DriveItemOp>>>
+            var retList = new List<DriveItemMacroMtbl>()
             {
-                { MacrosH.COMMON_CONST, new Tuple<string, List<DriveItemOp>>("Common const dir name macros", firstMacrosList) },
-                { MacrosH.DESC_IDX, new Tuple<string, List<DriveItemOp>>("Desc Indexing", descDriveItemOps) },
-                { MacrosH.ASC_IDX, new Tuple<string, List<DriveItemOp>>("Asc Indexing", ascDriveItemOps) },
-                { MacrosH.H_DESC_IDX, new Tuple<string, List<DriveItemOp>>("Heading Desc Indexing", headingDescDriveItemOps) },
-                { MacrosH.H_ASC_IDX, new Tuple<string, List<DriveItemOp>>("Heading Asc Indexing", headingAscDriveItemOps) },
-                { MacrosH.MISC, new Tuple<string, List<DriveItemOp>>("Miscellaneous", miscDriveItemOps) }
+                this.GetDriveItemMacroMtbl(MacrosH.COMMON_CONST, "Common const dir name macros", firstMacrosList),
+                this.GetDriveItemMacroMtbl(MacrosH.DESC_IDX, "Desc Indexing", descDriveItemOps),
+                this.GetDriveItemMacroMtbl(MacrosH.ASC_IDX, "Asc Indexing", ascDriveItemOps),
+                this.GetDriveItemMacroMtbl(MacrosH.H_DESC_IDX, "Heading Desc Indexing", headingDescDriveItemOps),
+                this.GetDriveItemMacroMtbl(MacrosH.H_ASC_IDX, "Heading Asc Indexing", headingAscDriveItemOps),
+                this.GetDriveItemMacroMtbl(MacrosH.PINNED, "Miscellaneous", miscDriveItemOps)
             };
 
-            return driveItemOpsDictnr;
+            return retList;
         }
 
-        private DriveItemOp GetDirsPairDriveItemOp(
-            DriveItemNameMacro shortNameMacro,
-            DriveItemNameMacro fullNamePartMacro = null,
-            Action<DriveItemOp> shortDirItemOpCallback = null)
+        private DriveItemMacroMtbl GetDriveItemMacroMtbl(
+            string key, string name,
+            List<DriveItemMacroMtbl> macros)
+        {
+            var retMacro = new DriveItemMacroMtbl
+            {
+                Key = key,
+                Name = name,
+                Children = macros
+            };
+
+            return retMacro;
+        }
+
+        private DriveItemMacroMtbl GetDirsPairDriveItemOp(
+            IDriveItemNameMacro shortNameMacro,
+            IDriveItemNameMacro fullNamePartMacro,
+            string name,
+            Action<DriveItemOpMtbl> shortDirItemOpCallback = null)
         {
             var shortDirItemOp = this.GetDriveItemOp(shortNameMacro);
             shortDirItemOpCallback?.Invoke(shortDirItemOp);
 
-            var driveItemOp = this.GetDriveItemOp(null, dvItemOp =>
+            var fullNameMacro = this.GetDriveItemOp(
+                new DriveItemNameMacroMtbl(shortNameMacro)
             {
-                dvItemOp.MultipleItems = new List<DriveItemOp>
-                {
-                    shortDirItemOp,
-                    this.GetDriveItemOp(new DriveItemNameMacro(shortNameMacro)
-                        {
-                            SucceedingDelimiter = " ",
-                            SucceedingMacro = fullNamePartMacro ?? new DriveItemNameMacro()
-                        })
-                };
+                SucceedingDelimiter = " ",
+                SucceedingMacro = new DriveItemNameMacroMtbl(
+                    fullNamePartMacro)
             });
 
-            return driveItemOp;
+            var retMacro = new DriveItemMacroMtbl
+            {
+                Name = name,
+                MultipleDriveItemOps = new List<DriveItemOpMtbl>
+                {
+                    shortDirItemOp,
+                    fullNameMacro
+                }
+            };
+
+            return retMacro;
         }
 
-        private DriveItemOp GetDriveItemOp(
-            DriveItemNameMacro nameMacro = null,
-            Action<DriveItemOp> driveItemOpCallback = null)
+        private DriveItemOpMtbl GetDriveItemOp(
+            IDriveItemNameMacro nameMacro = null,
+            Action<DriveItemOpMtbl> driveItemOpCallback = null)
         {
-            var driveItemOp = new DriveItemOp
+            var driveItemOp = new DriveItemOpMtbl
             {
-                // OpUuid = Guid.NewGuid(),
-                NameMacro = nameMacro
+                NameMacro = new DriveItemNameMacroMtbl(nameMacro)
             };
 
             driveItemOpCallback?.Invoke(driveItemOp);
             return driveItemOp;
         }
 
-        private DriveItemNameMacro GetDefaultHeadingDescMacro(
-            DriveItemNameMacro defaultHeadingDescMacro, char trailingChar)
+        private DriveItemNameMacroMtbl GetDefaultHeadingDescMacro(
+            IDriveItemNameMacro defaultHeadingDescMacro, char trailingChar)
         {
-            defaultHeadingDescMacro = new DriveItemNameMacro(defaultHeadingDescMacro)
+            var headingDescMacro = new DriveItemNameMacroMtbl(defaultHeadingDescMacro)
             {
                 SucceedingDelimiter = new string(new char[] { ' ', trailingChar })
             };
 
-            return defaultHeadingDescMacro;
+            return headingDescMacro;
         }
     }
 }

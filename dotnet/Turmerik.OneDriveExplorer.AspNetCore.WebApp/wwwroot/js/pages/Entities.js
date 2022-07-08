@@ -2,8 +2,7 @@
 
 export class AppSettings extends ViewModelBase {
     constructor(src, throwOnUnknownProp = false) {
-        super();
-        this.__copyProps(src, throwOnUnknownProp);
+        super(src, throwOnUnknownProp);
     }
 
     driveFolderCacheKeyName =  null;
@@ -15,8 +14,7 @@ export class AppSettings extends ViewModelBase {
 
 export class DriveItem extends ViewModelBase {
     constructor(src, throwOnUnknownProp = false) {
-        super();
-        this.__copyProps(src, throwOnUnknownProp);
+        super(src, throwOnUnknownProp);
     }
 
     id = null;

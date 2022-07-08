@@ -34,7 +34,7 @@ namespace Turmerik.Core.FsExplorer
 
         private ITimeStampHelper TimeStampHelper { get; }
 
-        public async Task<DriveItem> CopyFileAsync(string fileId, string newParentFolderId, string newFileName)
+        public async Task<DriveItemMtbl> CopyFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
             string newPath = Path.Combine(newParentFolderId, newFileName);
             File.Copy(fileId, newPath);
@@ -45,7 +45,7 @@ namespace Turmerik.Core.FsExplorer
             return item;
         }
 
-        public async Task<DriveItem> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName)
+        public async Task<DriveItemMtbl> CopyFolderAsync(string folderId, string newParentFolderId, string newFolderName)
         {
             string newPath = Path.Combine(newParentFolderId, newFolderName);
             FsH.CopyDirectory(folderId, newPath);
@@ -56,7 +56,7 @@ namespace Turmerik.Core.FsExplorer
             return item;
         }
 
-        public async Task<DriveItem> CreateFolderAsync(string parentFolderId, string newFolderName)
+        public async Task<DriveItemMtbl> CreateFolderAsync(string parentFolderId, string newFolderName)
         {
             string newPath = Path.Combine(parentFolderId, newFolderName);
             Directory.CreateDirectory(newPath);
@@ -67,13 +67,13 @@ namespace Turmerik.Core.FsExplorer
             return item;
         }
 
-        public async Task<DriveItem> CreateOfficeLikeFileAsync(string parentFolderId, string newFileName, OfficeLikeFileType officeLikeFileType)
+        public async Task<DriveItemMtbl> CreateOfficeLikeFileAsync(string parentFolderId, string newFileName, OfficeLikeFileType officeLikeFileType)
         {
             var result = await CreateTextFileAsync(parentFolderId, newFileName, string.Empty);
             return result;
         }
 
-        public async Task<DriveItem> CreateTextFileAsync(string parentFolderId, string newFileName, string text)
+        public async Task<DriveItemMtbl> CreateTextFileAsync(string parentFolderId, string newFileName, string text)
         {
             string newPath = Path.Combine(parentFolderId, newFileName);
             File.WriteAllText(newPath, text);
@@ -84,7 +84,7 @@ namespace Turmerik.Core.FsExplorer
             return item;
         }
 
-        public async Task<DriveItem> DeleteFileAsync(string fileId)
+        public async Task<DriveItemMtbl> DeleteFileAsync(string fileId)
         {
             var fileInfo = new FileInfo(fileId);
             var driveItem = GetDriveItem(fileInfo);
@@ -93,7 +93,7 @@ namespace Turmerik.Core.FsExplorer
             return driveItem;
         }
 
-        public async Task<DriveItem> DeleteFolderAsync(string folderId)
+        public async Task<DriveItemMtbl> DeleteFolderAsync(string folderId)
         {
             var dirInfo = new DirectoryInfo(folderId);
             var driveItem = GetDriveItem(dirInfo);
@@ -119,7 +119,7 @@ namespace Turmerik.Core.FsExplorer
             return string.Empty;
         }
 
-        public async Task<DriveItem> GetFolderAsync(string folderId)
+        public async Task<DriveItemMtbl> GetFolderAsync(string folderId)
         {
             var entry = new DirectoryInfo(folderId);
             var folder = GetDriveItem(entry);
@@ -138,13 +138,13 @@ namespace Turmerik.Core.FsExplorer
             return folder;
         }
 
-        public async Task<DriveItem> GetRootFolderAsync()
+        public async Task<DriveItemMtbl> GetRootFolderAsync()
         {
-            var fsEntriesList = new List<DriveItem>();
+            var fsEntriesList = new List<DriveItemMtbl>();
 
             var drives = DriveInfo.GetDrives(
                 ).Where(d => d.IsReady).Select(
-                d => new DriveItem
+                d => new DriveItemMtbl
                 {
                     Id = d.Name,
                     Name = d.Name,
@@ -184,20 +184,20 @@ namespace Turmerik.Core.FsExplorer
             fsEntriesList.AddRange(drives);
             fsEntriesList.AddRange(folders);
 
-            var rootFolder = new DriveItem
+            var rootFolder = new DriveItemMtbl
             {
                 Id = string.Empty,
                 Name = "This PC",
                 IsFolder = true,
                 IsRootFolder = true,
                 SubFolders = fsEntriesList,
-                FolderFiles = new List<DriveItem>()
+                FolderFiles = new List<DriveItemMtbl>()
             };
 
             return rootFolder;
         }
 
-        public async Task<DriveItem> GetTextFileAsync(string fileId)
+        public async Task<DriveItemMtbl> GetTextFileAsync(string fileId)
         {
             var entry = new FileInfo(fileId);
             var fileItem = GetDriveItem(entry);
@@ -208,7 +208,7 @@ namespace Turmerik.Core.FsExplorer
             return fileItem;
         }
 
-        public async Task<DriveItem> MoveFileAsync(string fileId, string newParentFolderId, string newFileName)
+        public async Task<DriveItemMtbl> MoveFileAsync(string fileId, string newParentFolderId, string newFileName)
         {
             string newPath = Path.Combine(newParentFolderId, newFileName);
 
@@ -219,7 +219,7 @@ namespace Turmerik.Core.FsExplorer
             return item;
         }
 
-        public async Task<DriveItem> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName)
+        public async Task<DriveItemMtbl> MoveFolderAsync(string folderId, string newParentFolderId, string newFolderName)
         {
             string newPath = Path.Combine(newParentFolderId, newFolderName);
             FsH.MoveDirectory(folderId, newPath);
@@ -230,21 +230,21 @@ namespace Turmerik.Core.FsExplorer
             return item;
         }
 
-        public async Task<DriveItem> RenameFileAsync(string fileId, string newFileName)
+        public async Task<DriveItemMtbl> RenameFileAsync(string fileId, string newFileName)
         {
             var result = await this.MoveFileAsync(fileId, Path.GetDirectoryName(fileId), newFileName);
             return result;
         }
 
-        public async Task<DriveItem> RenameFolderAsync(string folderId, string newFolderName)
+        public async Task<DriveItemMtbl> RenameFolderAsync(string folderId, string newFolderName)
         {
             var result = await this.MoveFolderAsync(folderId, Path.GetDirectoryName(folderId), newFolderName);
             return result;
         }
 
-        private DriveItem GetDriveItem(FileSystemInfo fSysInfo)
+        private DriveItemMtbl GetDriveItem(FileSystemInfo fSysInfo)
         {
-            var fsItemMtbl = new DriveItem
+            var fsItemMtbl = new DriveItemMtbl
             {
                 Id = fSysInfo.FullName,
                 Name = fSysInfo.Name,

@@ -11,7 +11,7 @@ import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
 import { driveItemNameMacroFactoryResolver } from './driveExplorer.entryNameMacro.factories.js';
 
-export const getBsToggleBtn = (targetSelector, btnText, btnClass) => {
+export const getBsToggleBtn = (targetSelector, btnText = "Toggle", btnClass = "btn-primary") => {
     const bsToggleBtn = vdom.utils.getVDomEl("button",
         [ "btn", btnClass ], {
             type: "button",
@@ -22,77 +22,104 @@ export const getBsToggleBtn = (targetSelector, btnText, btnClass) => {
     return bsToggleBtn;
 }
 
-export class EntryMacroDefVDomEl extends VDomEl {
+export class EntryMacroDefVDomElArgs extends ViewModelBase {
+    name;
     isFolder;
-    driveItemOp;
+    itemsArr;
+    nameMacro;
+    idxValueWrapper;
+    existingEntriesArr;
+    onApplyItemEventHandler;
 
-    constructor(
-        existingEntriesArr,
-        driveItemOp,
-        idxValueWrapper,
-        onApplyItemEventHandler,
-        macroName = null,
-        isCollapsed = true,
-        nodeName = "li") {
-        if (!trmrk.core.isNotNaNNumber(idxValueWrapper.value)) {
-            throw "idxValueWrapper.value must be a number: " + idxValueWrapper.value;
+    constructor(src) {
+        super(src, true);
+    }
+}
+
+export class EntryMacroDefVDomElBase extends VDomEl {
+    opts = new EntryMacroDefVDomElArgs();
+    idxStr;
+
+    headerVDomEl;
+    mainContentVDomEl;
+    bodyNodes;
+    bodyVDomEl;
+
+    constructor(opts) {
+        super({
+            nodeName: "div"
+        });
+
+        this.opts = opts;
+
+        if (!trmrk.core.isNotNaNNumber(this.opts.idxValueWrapper.value)) {
+            throw "idxValueWrapper.value must be a number: " + this.opts.idxValueWrapper.value;
         }
 
-        idxValueWrapper.value++;
-        const idxStr = idxValueWrapper.value.toString();
+        this.opts.idxValueWrapper.value++;
+        this.idxStr = idxValueWrapper.value.toString();
         
-        const headerVDomEl = vdom.utils.getVDomEl("div",
+        this.headerVDomEl = vdom.utils.getVDomEl("div",
             [ trmrkCssClasses.header ], {}, [
-                getBsToggleBtn("[data-trmrk-idx='" + idxStr + "']",
-                    macroName ?? driveItemOp.nameMacro.macroName, "btn-outline-primary")
+                getBsToggleBtn("[data-trmrk-idx='" + this.idxStr + "']",
+                    this.opts.name, "btn-outline-primary")
         ]);
-        
-        let applyMacroBtn = null;
 
-        if (!trmrk.core.isOfTypeString(macroName)) {
-            applyMacroBtn = vdom.utils.getVDomEl("button",
-                [ "btn", "btn-primary" ], {
-                    type: "button"
-                }, [], {
-                    click: [{
-                        listener: onApplyItemEventHandler
-                    }]
-                }, "+");
-            
-            headerVDomEl.insertChildVNodeBefore(applyMacroBtn);
-        }
-
-        const mainContentVDomEl = vdom.utils.getVDomEl("div",
+        this.mainContentVDomEl = vdom.utils.getVDomEl("div",
             [ trmrkCssClasses.mainContent ], {}, []);
 
-        const bodyNodes = [ mainContentVDomEl ];
+        this.bodyNodes = [ this.mainContentVDomEl ];
+    }
+}
 
-        if (trmrk.core.isNotNullObj(driveItemOp.nameMacro)) {
-            const mainContentVDomEl = vdom.utils.getVDomEl("p",
-                [ trmrkCssClasses.description ],
-                {}, [], {}, driveItemOp.nameMacro.macroDescription);
+export class EntryMacroDefsGroupVDomEl extends EntryMacroDefVDomElBase {
+    constructor(opts) {
+        super(opts);
+    }
+}
 
-            const sampleText = driveItemNameMacroFactoryResolver.getName(
-                existingEntriesArr, driveItemOp.nameMacro, true);
+export class EntryMacroDefVDomEl extends EntryMacroDefVDomElBase {
+    applyMacroBtn;
+    descriptionVDomEl;
+    sampleTextVDomNode;
 
-            const sampleTextVDomNode = vdom.utils.getVDomEl("pre",
-                [ trmrkCssClasses.mainText ],
-                {}, [], {}, sampleText);
+    constructor(opts) {
+        super(opts);
+        
+        this.applyMacroBtn = vdom.utils.getVDomEl("button",
+            [ "btn", "btn-primary" ], {
+                type: "button"
+            }, [], {
+                click: [{
+                    listener: onApplyItemEventHandler
+                }]
+            }, "+");
+        
+        this.headerVDomEl.insertChildVNodeBefore(this.applyMacroBtn);
 
-            mainContentVDomEl.appendManyChildVNodes([
-                mainContentVDomEl, sampleTextVDomNode ]);
+        this.descriptionVDomEl = vdom.utils.getVDomEl("p",
+            [ trmrkCssClasses.description ],
+            {}, [], {}, this.opts.nameMacro.macroDescription);
 
-            if (trmrk.core.isNotNullObj(driveItemOp.multipleDriveItemOps)) {
-                const childVNodesArr = driveItemOp.multipleDriveItemOps.map(
-                    item => new EntryMacroDefVDomEl(
-                        trmrk.core.isNotNullObj(item.nameMacro) ? existingEntriesArr : null,
-                        item, idxValueWrapper, onApplyItemEventHandler, null, true));
+        const sampleText = driveItemNameMacroFactoryResolver.getName(
+            this.opts.existingEntriesArr, this.opts.nameMacro, true);
 
-                const childNodesVDomEl = vdom.utils.getVDomEl("ul",
-                    [ trmrkCssClasses.childNodes ], {}, childVNodesArr);
+        this.sampleTextVDomNode = vdom.utils.getVDomEl("pre",
+            [ trmrkCssClasses.mainText ],
+            {}, [], {}, sampleText);
 
-                bodyNodes.push(childNodesVDomEl);
-            }
+        this.mainContentVDomEl.appendManyChildVNodes([
+            this.descriptionVDomEl, this.sampleTextVDomNode ]);
+
+        if (trmrk.core.isNotNullObj(this.opts.itemsArr)) {
+            const childVNodesArr = this.opts.itemsArr.map(
+                item => new EntryMacroDefVDomEl(existingEntriesArr, item,
+                    idxValueWrapper, onApplyItemEventHandler, item.nameMacro ? null : , true));
+
+            const childNodesVDomEl = vdom.utils.getVDomEl("ul",
+                [ trmrkCssClasses.childNodes ], {}, childVNodesArr);
+
+            bodyNodes.push(childNodesVDomEl);
         }
 
         const bodyVDomElClasses = [ trmrkCssClasses.body, "collapse" ];
@@ -123,5 +150,18 @@ export class EntryMacroDefVDomEl extends VDomEl {
         }
 
         this.createDomNode();
+    }
+
+    getChildVNode(childItem) {
+        childVNode;
+
+        if (trmrk.core.isNonEmptyString(
+            childItem.item1) || trmrk.core.isNotNullObj(childItem.item2)) {
+
+        } else {
+            childVNode = new EntryMacroDefVDomEl({
+
+            });
+        }
     }
 }

@@ -126,15 +126,19 @@ export class DriveExplorerMacros {
             [ trmrkCssClasses.section, trmrkCssClasses.header ],
                 {}, headerChildNodes);
 
-        const bodyVDomElClassList = [ trmrkCssClasses.section, trmrkCssClasses.body ];
+        const bodyVDomElClassList = [
+            trmrkCssClasses.section,
+            trmrkCssClasses.body
+        ];
 
         if (hasToggleButton) {
-            bodyVDomElClassList.splice(Infinity, 0, "collapse", "show" );
+            bodyVDomElClassList.splice(
+                Infinity, 0, "collapse", "show" );
         }
         
         section.bodyVDomEl = vdom.utils.getVDomEl("ul",
-            bodyVDomElClassList,
-            { id: sectionId }, sectionNodesArr);
+            bodyVDomElClassList, { id: sectionId },
+            sectionNodesArr);
 
         return section;
     }

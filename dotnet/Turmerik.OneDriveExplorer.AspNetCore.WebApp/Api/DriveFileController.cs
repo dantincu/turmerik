@@ -28,9 +28,9 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] DriveItem driveItem)
+        public async Task<ActionResult> Post([FromBody] DriveItemMtbl driveItem)
         {
-            Func<Task<TrmrkActionResult<DriveItem>>> action = null;
+            Func<Task<TrmrkActionResult<DriveItemMtbl>>> action = null;
 
             if (driveItem.OfficeLikeFileType.HasValue)
             {
@@ -49,7 +49,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(string id, [FromBody] DriveItem driveItem)
+        public async Task<ActionResult> Put(string id, [FromBody] DriveItemMtbl driveItem)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
@@ -76,7 +76,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> Copy([FromBody] DriveItem driveItem)
+        public async Task<ActionResult> Copy([FromBody] DriveItemMtbl driveItem)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
@@ -91,7 +91,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Api
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> Move([FromBody] DriveItem driveItem)
+        public async Task<ActionResult> Move([FromBody] DriveItemMtbl driveItem)
         {
             var actionResult = await ExecuteAsync(
                 async () =>
