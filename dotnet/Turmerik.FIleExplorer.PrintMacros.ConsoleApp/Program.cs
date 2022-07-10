@@ -6,8 +6,6 @@ using Turmerik.Core.Infrastucture;
 using Turmerik.FIleExplorer.PrintMacros.ConsoleApp;
 using Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services;
 
-Console.WriteLine("Hello, World!");
-
 var services = new ServiceCollection();
 TrmrkCoreServiceCollectionBuilder.RegisterAll(services);
 
@@ -18,15 +16,12 @@ ServiceProviderContainer.Instance.Value.RegisterServices(services);
 var svcsProv = ServiceProviderContainer.Instance.Value.Services;
 
 var nameMacrosService = svcsProv.GetRequiredService<IDriveItemNameMacrosService>();
-var macrosHcy = nameMacrosService.GetDriveItemNameMacros();
+var macrosService = svcsProv.GetRequiredService<IDriveItemMacrosService>();
+
+var nameMacrosHcy = nameMacrosService.GetDriveItemNameMacros();
+var macrosHcy = macrosService.GetDriveItemMacros();
 
 var flatNameMacrosRetriever = new FlatNameMacrosRetriever();
-var flatList = flatNameMacrosRetriever.GetFlatMacros(macrosHcy);
 
-string[] lines = flatList.Select(macro => JsonConvert.SerializeObject(macro, new JsonSerializerSettings
-{
-    Formatting = Formatting.None,
-    NullValueHandling = NullValueHandling.Ignore,
-})).ToArray();
-
-File.WriteAllLines("nameMacro.json", lines);
+flatNameMacrosRetriever.WriteFlatNameMacrosToFile(nameMacrosHcy, "nameMacros.json");
+flatNameMacrosRetriever.WriteFlatMacrosToFile(macrosHcy, "macros.json");

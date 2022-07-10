@@ -114,7 +114,7 @@ export class EntryMacroDefVDomEl extends EntryMacroDefVDomElBase {
         if (trmrk.core.isNotNullObj(this.opts.itemsArr)) {
             const childVNodesArr = this.opts.itemsArr.map(
                 item => new EntryMacroDefVDomEl(existingEntriesArr, item,
-                    idxValueWrapper, onApplyItemEventHandler, item.nameMacro ? null : , true));
+                    idxValueWrapper, onApplyItemEventHandler, item.nameMacro ? null : true));
 
             const childNodesVDomEl = vdom.utils.getVDomEl("ul",
                 [ trmrkCssClasses.childNodes ], {}, childVNodesArr);
