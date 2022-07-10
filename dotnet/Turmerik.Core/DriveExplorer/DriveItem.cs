@@ -24,6 +24,7 @@ namespace Turmerik.Core.DriveExplorer
         OfficeLikeFileType? OfficeLikeFileType { get; }
         string TextFileContent { get; }
         byte[] RawFileContent { get; }
+        long? SizeBytesCount { get; }
 
         IDriveItem[] GetSubFolders();
         IDriveItem[] GetFolderFiles();
@@ -48,6 +49,7 @@ namespace Turmerik.Core.DriveExplorer
             this.OfficeLikeFileType = src.OfficeLikeFileType;
             this.TextFileContent = src.TextFileContent;
             this.RawFileContent = src.RawFileContent;
+            this.SizeBytesCount = src.SizeBytesCount;
 
             this.SubFolders = src.GetSubFolders()?.Select(
                 item => new DriveItemImmtbl(item)).RdnlC();
@@ -71,6 +73,7 @@ namespace Turmerik.Core.DriveExplorer
         public OfficeLikeFileType? OfficeLikeFileType { get; }
         public string TextFileContent { get; }
         public byte[] RawFileContent { get; }
+        public long? SizeBytesCount { get; }
 
         public ReadOnlyCollection<DriveItemImmtbl> SubFolders { get; }
         public ReadOnlyCollection<DriveItemImmtbl> FolderFiles { get; }
@@ -102,6 +105,7 @@ namespace Turmerik.Core.DriveExplorer
             this.OfficeLikeFileType = src.OfficeLikeFileType;
             this.TextFileContent = src.TextFileContent;
             this.RawFileContent = src.RawFileContent;
+            this.SizeBytesCount = src.SizeBytesCount;
 
             this.SubFolders = src.GetSubFolders()?.Select(
                 item => new DriveItemMtbl(item)).ToList();
@@ -125,6 +129,7 @@ namespace Turmerik.Core.DriveExplorer
         public OfficeLikeFileType? OfficeLikeFileType { get; set; }
         public string TextFileContent { get; set; }
         public byte[] RawFileContent { get; set; }
+        public long? SizeBytesCount { get; set; }
 
         public List<DriveItemMtbl> SubFolders { get; set; }
         public List<DriveItemMtbl> FolderFiles { get; set; }

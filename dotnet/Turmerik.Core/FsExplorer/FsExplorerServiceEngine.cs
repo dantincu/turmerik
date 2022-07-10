@@ -260,6 +260,7 @@ namespace Turmerik.Core.FsExplorer
             else if (fSysInfo is FileInfo fInfo)
             {
                 fsItemMtbl.OfficeLikeFileType = this.GetOfficeLikeFileType(fInfo);
+                fsItemMtbl.SizeBytesCount = fInfo.Length;
             }
 
             return fsItemMtbl;

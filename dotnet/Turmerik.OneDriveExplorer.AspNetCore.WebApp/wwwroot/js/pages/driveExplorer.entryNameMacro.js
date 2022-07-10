@@ -32,7 +32,8 @@ export class EntryMacroDefVDomElArgs extends ViewModelBase {
     onApplyItemEventHandler;
 
     constructor(src) {
-        super(src, true);
+        super();
+        this.__copyProps(src);
     }
 }
 

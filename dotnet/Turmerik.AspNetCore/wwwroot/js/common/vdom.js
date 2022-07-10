@@ -3,11 +3,6 @@ import { ViewModelBase } from './ViewModelBase.js';
 import { domUtils, bsDomUtils } from './domUtils.js';
 
 export class EventOpts extends ViewModelBase {
-    constructor(src, throwOnUnknownProp = false) {
-        super();
-        this.__copyProps(src, throwOnUnknownProp);
-    }
-
     eventId = null;
     srcListener = null;
     listener = null;
@@ -18,6 +13,11 @@ export class EventOpts extends ViewModelBase {
     onMouseUp = null;
     timeout = null;
     isLongPress = null;
+    
+    constructor(src, throwOnUnknownProp = false) {
+        super();
+        this.__copyProps(src, throwOnUnknownProp);
+    }
 }
 
 export class VDomNodeBase {
@@ -96,6 +96,7 @@ export class VDomEl extends VDomNodeBase {
     onCreated = null;
     onAppended = null;
     onRemoved = null;
+    onInsertedBefore = null;
 
     constructor(props, callback) {
         super();
@@ -475,7 +476,10 @@ export class VDomEl extends VDomNodeBase {
         this.childNodes.push(vNode);
         vNode.parentVDomEl = this;
 
-        vNode.onAppended(vNode);
+        if (vNode.onAppended) {
+            vNode.onAppended(vNode);
+        }
+        
         return vNode;
     }
 
@@ -514,7 +518,10 @@ export class VDomEl extends VDomNodeBase {
         this.childNodes.splice(idx, 0, vNode);
   
         vNode.parentVDomEl = this;
-        vNode.onInsertedBefore(vNode, sibblingVDomNodeKvp.value);
+
+        if (vNode.onInsertedBefore) {
+            vNode.onInsertedBefore(vNode, sibblingVDomNodeKvp.value);
+        }
 
         return vNode;
     }
@@ -548,7 +555,10 @@ export class VDomEl extends VDomNodeBase {
         }
 
         vNode.removeAllEventListeners();
-        vNode.onRemoved(vNode);
+
+        if (vNode.onRemoved) {
+            vNode.onRemoved(vNode);
+        }
     }
 
     removeAllChildVNodes() {

@@ -9,3 +9,7 @@ export const domUtils = domUtilsInstn;
 export const bsDomUtils = bsDomUtilsInstn;
 export const vdom = vdomInstance;
 export const webStorage = webStorageInstnt;
+
+export const imageFileNameExtensions = [
+    "jpg", "png", "giff", "ico"
+];

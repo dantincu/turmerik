@@ -1,22 +1,19 @@
 ﻿import { ViewModelBase } from '../common/ViewModelBase.js';
 
 export class AppSettings extends ViewModelBase {
-    constructor(src, throwOnUnknownProp = false) {
-        super(src, throwOnUnknownProp);
-    }
-
     driveFolderCacheKeyName =  null;
     rootDriveFolderCacheKeyName =  null;
     clientAppRootObjPropName =  null;
     cacheKeyBasePrefix =  null;
     driveFolderIdUrlQueryKey = null;
+
+    constructor(src, throwOnUnknownProp) {
+        super();
+        this.__copyProps(src, throwOnUnknownProp);
+    }
 }
 
 export class DriveItem extends ViewModelBase {
-    constructor(src, throwOnUnknownProp = false) {
-        super(src, throwOnUnknownProp);
-    }
-
     id = null;
     name = null;
     parentFolderId = null;
@@ -31,27 +28,29 @@ export class DriveItem extends ViewModelBase {
     lastWriteTimeStr = null;
     officeLikeFileType = null;
     textFileContent = null;
+    sizeBytesCount = null;
     subFolders = null;
     folderFiles = null;
+
+    constructor(src, throwOnUnknownProp) {
+        super();
+        this.__copyProps(src, throwOnUnknownProp);
+    }
 }
 
 export class DriveItemOp extends DriveItem {
-    constructor(src, throwOnUnknownProp = false) {
-        super(src, throwOnUnknownProp);
-        this.opUuid = null;
-    }
-    
     opUuid =  null;
     multipleItems =  null;
     nameMacro =  null;
+
+    constructor(src, throwOnUnknownProp = false) {
+        super(null);
+        this.__copyProps(src, throwOnUnknownProp);
+        this.opUuid = null;
+    }
 }
 
 export class DriveItemNameMacro extends ViewModelBase {
-    constructor(src, throwOnUnknownProp = false) {
-        super(src, throwOnUnknownProp);
-        this.macroUuid = null;
-    }
-
     macroUuid =  null;
     macroName =  null;
     macroDescription =  null;
@@ -67,4 +66,10 @@ export class DriveItemNameMacro extends ViewModelBase {
     preceedingDelimiter =  null;
     succeedingDelimiter =  null;
     succeedingMacro =  null;
+    
+    constructor(src, throwOnUnknownProp = false) {
+        super(null);
+        this.__copyProps(src, throwOnUnknownProp);
+        this.macroUuid = null;
+    }
 }

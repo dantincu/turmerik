@@ -19,12 +19,13 @@ export class WebStorageAxios {
         if (!trmrk.core.isNullOrUndef(data)) {
             cachedDataFound = true;
 
-            apiResult = {
+            apiResult = new TrmrkAxiosApiResult({
                 isSuccess: true,
                 data: data
-            }
+            });
         } else {
             apiResult = await axiosReqFunc();
+            apiResult = new TrmrkAxiosApiResult(apiResult);
 
             if (apiResult.isSuccess) {
                 if (!cachedDataFound && !trmrk.core.isNullOrUndefOrOrNaN(apiResult.data)) {

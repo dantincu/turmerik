@@ -7,11 +7,6 @@ import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 
 export class DriveExplorerHeaderEvents extends ViewModelBase {
-    constructor(src) {
-        super();
-        this.__copyProps(src);
-    }
-
     onCurrentDriveFolderHomeClick = null;
     onCurrentDriveFolderReloadClick = null;
     onCurrentDriveFolderGoUpClick = null;
@@ -26,6 +21,11 @@ export class DriveExplorerHeaderEvents extends ViewModelBase {
     onCurrentDriveFolderCreateWithMacrosClick = null;
     onCurrentDriveFolderCommandsClick = null;
     onCurrentDriveFolderOpenInNewTabClick = null;
+    
+    constructor(src) {
+        super();
+        this.__copyProps(src, true);
+    }
 }
 
 export class DriveExplorerHeader extends VDomEl {
@@ -49,9 +49,12 @@ export class DriveExplorerHeader extends VDomEl {
 
         this.titleVDomEl = vdom.utils.getVDomEl("h6", [ trmrkCssClasses.collapsed ], {}, [
             this.titleExpandButton,
-            this.titleCollapseButton,
-            new VDomTextNode(driveFolder.name)
+            this.titleCollapseButton
         ]);
+
+        if (driveFolder) {
+            this.setDriveFolderName(driveFolder);
+        }
 
         this.childNodes = [
             vdom.utils.getVDomEl("div", [ trmrkCssClasses.iconsRow ], {}, [
@@ -110,5 +113,15 @@ export class DriveExplorerHeader extends VDomEl {
         this.titleVDomEl.addClass(trmrkCssClasses.collapsed);
         this.titleCollapseButton.addClass(trmrkCssClasses.hidden);
         this.titleExpandButton.removeClass(trmrkCssClasses.hidden);
+    }
+
+    setDriveFolderName(driveFolder) {
+        const textVNode = this.titleVDomEl.childNodes[this.titleVDomEl.childNodes.length - 1];
+
+        if (textVNode.isTextNode) {
+            this.titleVDomEl.removeChildVNode(textVNode);
+        }
+        
+        this.titleVDomEl.appendChildVNode(new VDomTextNode(driveFolder.name));
     }
 }

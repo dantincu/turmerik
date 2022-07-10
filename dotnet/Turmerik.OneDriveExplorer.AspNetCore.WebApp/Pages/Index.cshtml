@@ -19,6 +19,15 @@
     string driveItemMacrosJson = JsonSrlzH.ToJson(driveItemMacros);
 }
 
+@section Styles {
+    <style>
+        .nav-link.text-dark.trmrk-page-link-home {
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>
+}
+
 @section Scripts {
     <script>
         window["trmrkDOMContentLoaded"] = () => {
@@ -37,7 +46,7 @@
 <script src="~/js/pages/homePage.js" asp-append-version="true" type="module"></script>
 
 <div class="text-center">
-    <h1 class="display-4">Home</h1>
+    @*<h1 class="display-4">Home</h1>*@
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#driveItemMacrosModal">
         Drive Item Macros
     </button>

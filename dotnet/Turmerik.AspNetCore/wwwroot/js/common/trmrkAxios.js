@@ -15,6 +15,11 @@ export class TrmrkAxiosApiResult extends ViewModelBase {
     config = null;
     request = null;
 
+    getStatusText() {
+        const statusText = this.statusText ?? this.status;
+        return statusText;
+    }
+
     /* {
         // `data` is the response that was provided by the server
         data: {},

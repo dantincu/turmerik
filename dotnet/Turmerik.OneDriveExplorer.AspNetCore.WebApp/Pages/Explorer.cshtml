@@ -20,6 +20,17 @@
     string driveItemMacrosJson = JsonSrlzH.ToJson(driveItemMacros);
 }
 
+@section Styles {
+    @*<link rel="stylesheet" type="text/css" href="~/lib/js-fileexplorer/file-explorer/file-explorer.css" asp-append-version="false">*@
+
+    <style>
+        .trmrk-page-link-explorer {
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>
+}
+
 @section Scripts {
     <script>
         window["trmrkDOMContentLoaded"] = () => {
@@ -34,6 +45,8 @@
         }
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    @*<script src="~/lib/js-fileexplorer/file-explorer/file-explorer.js" asp-append-version="false"></script>*@
     <script src="~/js/pages/explorerPage.js" asp-append-version="true" type="module"></script>
 }
 
@@ -42,7 +55,7 @@
 
 @if (User.Identity?.IsAuthenticated == true)
 {
-    <h1>@ViewData["Title"]</h1>
+    @*<h1>@ViewData["Title"]</--h1>*@
 }
 else
 {
