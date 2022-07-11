@@ -22,10 +22,21 @@ export const driveItemNameInvalidChars = "\\/:*?\"<>|";
 
 export class DriveExplorerApi {
     appSettings = new AppSettings();
+
     folderRelUri = 'api/driveFolder';
     fileRelUri = 'api/driveFile';
+    explorerRelUri = 'api/explorer';
+    getDriveItemMacrosActionName = 'getDriveItemMacros';
+
+    getDriveItemMacrosRelUri;
+    getDriveItemMacrosCacheKey;
 
     username = null;
+
+    constructor() {
+        this.getDriveItemMacrosRelUri = this.explorerRelUri + "/" + this.getDriveItemMacrosActionName;
+        this.getDriveItemMacrosCacheKey = webStorage.getCacheKey("driveItemMacros");
+    }
 
     getDriveFolderCacheKey(driveFolderId) {
         let cacheKey;
@@ -122,6 +133,17 @@ export class DriveExplorerApi {
         let relUrl = this.fileRelUri + "/" + encodeURIComponent(driveFileId);
 
         let apiResult = await trmrkAxios.delete(relUrl);
+        return apiResult;
+    }
+
+    async getDriveItemMacrosAsync() {
+        const relUri = this.getDriveItemMacrosRelUri;
+        const cacheKey = this.getDriveItemMacrosCacheKey;
+        
+        let apiResult = await webStorageAxios.get(
+            relUri, cacheKey
+        );
+
         return apiResult;
     }
 

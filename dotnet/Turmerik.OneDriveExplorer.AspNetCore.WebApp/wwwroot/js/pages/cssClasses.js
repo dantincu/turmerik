@@ -27,6 +27,7 @@ export class TrmrkCssClasses {
     description = "trmrk-main-text";
     mainContent = "trmrk-main-content";
     mainChildNodes = "trmrk-child-nodes";
+    loadingContainer = "trmrk-loading-container";
 }
 
 export class DriveFolderViewCssClasses {

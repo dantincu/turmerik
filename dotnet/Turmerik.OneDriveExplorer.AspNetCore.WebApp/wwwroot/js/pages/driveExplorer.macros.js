@@ -32,6 +32,10 @@ export class DriveItemMacrosModalSectionsGroup extends DriveItemMacrosModalSecti
 }
 
 export class DriveItemMacrosModal {
+    loadingVDomEl;
+    loadingResponseStatusVDomEl;
+    loadingResponseStatusTitleVDomEl;
+    loadingResponseStatusTextVDomEl;
     modalVDomEl;
     macros;
     macroDefs;
@@ -48,22 +52,7 @@ export class DriveExplorerMacros {
     modal;
     onApplyMacroEventHandler;
 
-    init(driveItemNameMacros,
-        driveItemMacros,
-        currentDriveFolder) {
-        this.driveItemNameMacros = driveItemNameMacros;
-        this.driveItemMacros = driveItemMacros;
-
-        this.currentDriveFolder = currentDriveFolder;
-
-        const existingEntriesArr = currentDriveFolder.subFolders.concat(
-            currentDriveFolder.folderFiles
-        );
-
-        this.existingEntriesArr = existingEntriesArr.map(
-            item => item.name
-        );
-
+    init() {
         this.modal = this.generateModal();
         this.bsModal = new bootstrap.Modal(this.modal.modalVDomEl.domNode)
 
@@ -71,15 +60,10 @@ export class DriveExplorerMacros {
     }
 
     generateModal() {
-        const modal = this.generateModalSections();
+        const modal = this.generateModalLoadingSections();
 
         const modalBodyChildNodes = [
-            modal.macros.headerVDomEl,
-            modal.macros.bodyVDomEl,
-            modal.macroDefs.headerVDomEl,
-            modal.macroDefs.bodyVDomEl,
-            modal.nameMacroDefs.headerVDomEl,
-            modal.nameMacroDefs.bodyVDomEl,
+            modal.loadingVDomEl
         ];
 
         modal.modalVDomEl = this.generateModalVDomEl(
@@ -92,8 +76,62 @@ export class DriveExplorerMacros {
         return modal;
     }
 
-    generateModalSections() {
+    generateModalLoadingSections() {
         const modalSections = new DriveItemMacrosModal();
+
+        modalSections.loadingResponseStatusVDomEl = vdom.utils.getVDomEl("h5", ["display-2", "fw-bold"]);
+        modalSections.loadingResponseStatusTitleVDomEl = vdom.utils.getVDomEl("span", ["text-danger"]);
+
+        modalSections.loadingResponseStatusTextVDomEl = vdom.utils.getVDomEl("p", ["fs-3"], {}, [
+            modalSections.loadingResponseStatusTitleVDomEl
+        ]);
+
+        modalSections.loadingVDomEl = vdom.utils.getVDomEl("div",
+            [ "text-center", trmrkCssClasses.loadingContainer ], {}, [
+                modalSections.loadingResponseStatusVDomEl,
+                modalSections.loadingResponseStatusTextVDomEl
+        ]);
+
+        return modalSections;
+    }
+
+    updateModal(apiResponse, currentDriveFolder) {
+        if (apiResponse.isSuccess) {
+            this.driveItemMacros = apiResponse.data.macros;
+            this.driveItemNameMacros = apiResponse.data.nameMacros;
+            this.currentDriveFolder = currentDriveFolder;
+
+            const existingEntriesArr = currentDriveFolder.subFolders.concat(
+                currentDriveFolder.folderFiles
+            );
+
+            this.existingEntriesArr = existingEntriesArr.map(
+                item => item.name
+            );
+
+            this.modal.loadingContainer.addClass(trmrkCssClasses.hidden);
+            this.generateModalSections();
+
+            this.modal.appendChildVNode(modal.macros.headerVDomEl);
+            this.modal.appendChildVNode(modal.macros.bodyVDomEl);
+
+            this.modal.appendChildVNode(modal.macroDefs.headerVDomEl);
+            this.modal.appendChildVNode(modal.macroDefs.bodyVDomEl);
+
+            this.modal.appendChildVNode(modal.nameMacroDefs.headerVDomEl);
+            this.modal.appendChildVNode(modal.nameMacroDefs.bodyVDomEl);
+        } else {
+            let status = trmrk.core.toNonEmptyStringOrDefault(apiResult.status, "Error");
+            let statusText = trmrk.core.toNonEmptyStringOrDefault(apiResult.statusText, "An error has ocurred");
+
+            this.modal.loadingResponseStatusVDomEl.appendChildVNode(new VDomTextNode(status));
+            this.modal.loadingResponseStatusTitleVDomEl.setTextValue("Oops! ");
+            this.modal.loadingResponseStatusTextVDomEl.appendChildVNode(new VDomTextNode(statusText));
+        }
+    }
+
+    generateModalSections() {
+        const modalSections = this.modal;
         const idxValueWrapper = new ValueWrapper();
 
         idxValueWrapper.value = 0;

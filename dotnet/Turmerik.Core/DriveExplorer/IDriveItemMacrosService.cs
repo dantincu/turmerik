@@ -11,6 +11,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
     {
         IDriveItemNameMacrosService DriveItemNameMacrosService { get; }
         ReadOnlyCollection<DriveItemMacroImmtbl> GetDriveItemMacros();
+        DriveItemMacrosAggregate GetDriveItemMacrosAggregate();
     }
 
     public class DriveItemMacrosService : IDriveItemMacrosService
@@ -34,6 +35,9 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApp.Services
         public IDriveItemNameMacrosService DriveItemNameMacrosService { get; }
 
         public ReadOnlyCollection<DriveItemMacroImmtbl> GetDriveItemMacros() => this.driveItemMacros;
+
+        public DriveItemMacrosAggregate GetDriveItemMacrosAggregate() => new DriveItemMacrosAggregate(
+            this.driveItemMacros, this.driveItemNameMacros);
 
         private List<DriveItemMacroMtbl> GetDriveItemMacrosList(
             ReadOnlyCollection<DriveItemMacroImmtbl> driveItemNameMacros)

@@ -53,14 +53,9 @@ export class DriveExplorer {
 
     async init(
         username,
-        appSettings,
-        driveItemNameMacros,
-        driveItemMacros) {
+        appSettings) {
         this.username = username;
         this.appSettings = new AppSettings(appSettings);
-
-        this.driveItemNameMacros = driveItemNameMacros;
-        this.driveItemMacros = driveItemMacros;
 
         driveExplorerApi.username = username;
         driveExplorerApi.appSettings = this.appSettings;
@@ -115,16 +110,24 @@ export class DriveExplorer {
         this.appRootChildVDomElms = rootElms;
     }
 
-    assureCurrentDriveFolderMacrosModalVDomCreated() {
+    async assureCurrentDriveFolderMacrosModalVDomCreatedAsync() {
         if (!this.driveExplorerMacros) {
-            this.driveExplorerMacros = new DriveExplorerMacros();
+            let apiResult = await driveExplorerApi.getDriveItemMacrosAsync();
+            apiResult = new TrmrkAxiosApiResult(apiResult);
 
-            const modalVDomEl = this.driveExplorerMacros.init(
-                this.driveItemNameMacros,
-                this.driveItemMacros,
-                this.currentDriveFolder.data);
+            if (apiResult.isSuccess) {
+                this.driveItemMacros = apiResult.data.macros;
+                this.driveItemNameMacros = apiResult.data.nameMacros;
 
-            this.currentDriveFolderVDomEl.appendChildVNode(modalVDomEl);
+                this.driveExplorerMacros = new DriveExplorerMacros();
+
+                const modalVDomEl = this.driveExplorerMacros.init(
+                    this.driveItemNameMacros,
+                    this.driveItemMacros,
+                    this.currentDriveFolder.data);
+                
+                this.currentDriveFolderVDomEl.appendChildVNode(modalVDomEl);
+            }
         }
     }
 
@@ -256,8 +259,9 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderCreateWithMacrosClick(e) {
-        this.assureCurrentDriveFolderMacrosModalVDomCreated();
-        this.driveExplorerMacros.bsModal.show();
+        this.assureCurrentDriveFolderMacrosModalVDomCreatedAsync().then(() => {
+            this.driveExplorerMacros.bsModal.show();
+        });
     }
 
     onCurrentDriveFolderCommandsClick(e) {

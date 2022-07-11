@@ -738,6 +738,13 @@ export class TrmrkCore {
         return strVal;
     }
 
+    toNonEmptyStringOrDefault(value, defaultValue) {
+        let retVal = this.toStringOrDefault(value).trim();
+        retVal = this.nonEmptyStrValOrDefault(retVal, defaultValue);
+
+        return retVal;
+    }
+
     toString(value) {
         let strVal = this.toStringOrDefault(value, "");
         return strVal;

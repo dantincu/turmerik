@@ -13,11 +13,11 @@
     ViewData["Title"] = "Explorer";
     string appSettingsJson = JsonSrlzH.ToJson(appSettings);
 
-    var driveItemNameMacros = driveItemNameMacrosService.GetDriveItemNameMacros();
+    /* var driveItemNameMacros = driveItemNameMacrosService.GetDriveItemNameMacros();
     string driveItemNameMacrosJson = JsonSrlzH.ToJson(driveItemNameMacros);
 
     var driveItemMacros = driveItemMacrosService.GetDriveItemMacros();
-    string driveItemMacrosJson = JsonSrlzH.ToJson(driveItemMacros);
+    string driveItemMacrosJson = JsonSrlzH.ToJson(driveItemMacros); */
 }
 
 @section Styles {
@@ -39,9 +39,7 @@
 
             window.trmrk.driveExplorer.init(
                 username,
-                @Html.Raw(appSettingsJson),
-                @Html.Raw(driveItemNameMacrosJson),
-                @Html.Raw(driveItemMacrosJson));
+                @Html.Raw(appSettingsJson));
         }
     </script>
 
