@@ -1,11 +1,16 @@
 ﻿import { ViewModelBase } from '../common/ViewModelBase.js';
 
 export class AppSettings extends ViewModelBase {
+    apiFolderRelUri = null;
+    apiFileRelUri = null;
+    apiExplorerRelUri = null;
     driveFolderCacheKeyName =  null;
     rootDriveFolderCacheKeyName =  null;
+    driveItemMacrosCacheKeyName = null;
     clientAppRootObjPropName =  null;
     cacheKeyBasePrefix =  null;
     driveFolderIdUrlQueryKey = null;
+    getDriveItemMacrosActionName = null;
 
     constructor(src, throwOnUnknownProp) {
         super();

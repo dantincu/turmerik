@@ -39,12 +39,27 @@ builder.Services.AddSession(options =>
 });
 
 var svcs = TrmrkCoreServiceCollectionBuilder.RegisterAll(builder.Services);
-builder.Services.RegisterAppSettings();
+
+var appSettings = builder.Services.RegisterAppSettings(
+    builder.Configuration,
+    svcs.TypesStaticDataCache);
 
 builder.Services.AddSingleton<IDriveItemNameMacrosService, DriveItemNameMacrosService>();
 builder.Services.AddSingleton<IDriveItemMacrosService, DriveItemMacrosService>();
 
-builder.Services.AddScoped<IDriveExplorerServiceEngine, FsExplorerServiceEngine>();
+if (appSettings.UseFsExplorerServiceEngine)
+{
+    builder.Services.AddScoped<IDriveExplorerServiceEngine, FsExplorerServiceEngine>();
+}
+else if (appSettings.UseOneDriveExplorerServiceEngine)
+{
+    throw new NotImplementedException("One Drive Explorer service engine is not yet implemented");
+}
+else
+{
+    throw new InvalidOperationException("No drive explorer service engine could be registered");
+}
+
 builder.Services.AddScoped<IDriveExplorerService, DriveExplorerService>();
 builder.Services.AddScoped<IDriveItemNameMacroFactoryResolver, DriveItemNameMacroFactoryResolver>();
 

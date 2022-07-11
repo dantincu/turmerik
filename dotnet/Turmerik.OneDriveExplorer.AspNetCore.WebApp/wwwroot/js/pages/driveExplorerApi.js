@@ -23,19 +23,15 @@ export const driveItemNameInvalidChars = "\\/:*?\"<>|";
 export class DriveExplorerApi {
     appSettings = new AppSettings();
 
-    folderRelUri = 'api/driveFolder';
-    fileRelUri = 'api/driveFile';
-    explorerRelUri = 'api/explorer';
-    getDriveItemMacrosActionName = 'getDriveItemMacros';
-
     getDriveItemMacrosRelUri;
-    getDriveItemMacrosCacheKey;
-
     username = null;
 
     constructor() {
-        this.getDriveItemMacrosRelUri = this.explorerRelUri + "/" + this.getDriveItemMacrosActionName;
-        this.getDriveItemMacrosCacheKey = webStorage.getCacheKey("driveItemMacros");
+    }
+
+    setAppSettings(appSettings) {
+        this.appSettings = new AppSettings(appSettings);
+        this.getDriveItemMacrosRelUri = appSettings.apiExplorerRelUri + "/" + appSettings.getDriveItemMacrosActionName;
     }
 
     getDriveFolderCacheKey(driveFolderId) {
@@ -56,7 +52,7 @@ export class DriveExplorerApi {
 
     async getDriveFolderAsync(driveFolderId, refreshCache) {
         let cacheKey = this.getDriveFolderCacheKey(driveFolderId);
-        let relUrl = this.folderRelUri;
+        let relUrl = this.appSettings.apiFolderRelUri;
 
         if (trmrk.core.isNonEmptyString(driveFolderId)) {
             relUrl += "/" + encodeURIComponent(driveFolderId);
@@ -71,7 +67,7 @@ export class DriveExplorerApi {
 
     async updateDriveFolderNameAsync(driveFolderId, newFolderName) {
         this.validateDriveItemIdAndNewName(driveFolderId, newFolderName);
-        let relUrl = this.folderRelUri + "/" + encodeURIComponent(driveFolderId);
+        let relUrl = this.appSettings.apiFolderRelUri + "/" + encodeURIComponent(driveFolderId);
 
         let params = {
             name: newFolderName
@@ -83,7 +79,7 @@ export class DriveExplorerApi {
 
     async addDriveFolderAsync(parentFolderId, newFolderName) {
         this.validateDriveItemIdAndNewName(parentFolderId, newFolderName);
-        let relUrl = this.folderRelUri;
+        let relUrl = this.appSettings.apiFolderRelUri;
 
         let params = {
             parentFolderId: parentFolderId,
@@ -96,7 +92,7 @@ export class DriveExplorerApi {
 
     async removeDriveFolderAsync(driveFolderId) {
         this.validateDriveItemId(driveFolderId);
-        let relUrl = this.folderRelUri + "/" + encodeURIComponent(driveFolderId);
+        let relUrl = this.appSettings.apiFolderRelUri + "/" + encodeURIComponent(driveFolderId);
 
         let apiResult = await trmrkAxios.delete(relUrl);
         return apiResult;
@@ -104,7 +100,7 @@ export class DriveExplorerApi {
 
     async updateDriveFileNameAsync(driveFileId, newFileName, officeLikeFileType) {
         this.validateDriveItemIdAndNewName(driveFileId, newFileName, officeLikeFileType);
-        let relUrl = this.fileRelUri + "/" + encodeURIComponent(driveFileId);
+        let relUrl = this.appSettings.apiFileRelUri + "/" + encodeURIComponent(driveFileId);
 
         let params = {
             name: newFileName,
@@ -117,7 +113,7 @@ export class DriveExplorerApi {
 
     async addDriveFileAsync(parentFolderId, newFileName, officeLikeFileType) {
         this.validateDriveItemIdAndNewName(parentFolderId, newFileName, officeLikeFileType);
-        let relUrl = this.fileRelUri;
+        let relUrl = this.appSettings.apiFileRelUri;
 
         let params = {
             parentFolderId: parentFolderId,
@@ -130,7 +126,7 @@ export class DriveExplorerApi {
 
     async removeDriveFileAsync(driveFileId) {
         this.validateDriveItemId(driveFileId);
-        let relUrl = this.fileRelUri + "/" + encodeURIComponent(driveFileId);
+        let relUrl = this.appSettings.apiFileRelUri + "/" + encodeURIComponent(driveFileId);
 
         let apiResult = await trmrkAxios.delete(relUrl);
         return apiResult;
@@ -138,7 +134,7 @@ export class DriveExplorerApi {
 
     async getDriveItemMacrosAsync() {
         const relUri = this.getDriveItemMacrosRelUri;
-        const cacheKey = this.getDriveItemMacrosCacheKey;
+        const cacheKey = this.appSettings.driveItemMacrosCacheKeyName;
         
         let apiResult = await webStorageAxios.get(
             relUri, cacheKey
