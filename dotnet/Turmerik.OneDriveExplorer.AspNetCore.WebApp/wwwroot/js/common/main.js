@@ -3,6 +3,7 @@ import { domUtils as domUtilsInstn } from './domUtils.js';
 import { bsDomUtils as bsDomUtilsInstn } from './domUtils.js';
 import { vdom as vdomInstance } from './vdom.js';
 import { webStorage as webStorageInstnt } from './webStorage.js';
+import { ViewModelBase } from './ViewModelBase.js';
 
 export const trmrk = trmrkInstnt;
 export const domUtils = domUtilsInstn;

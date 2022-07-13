@@ -50,6 +50,7 @@ export class DriveExplorerMacros {
     existingEntriesArr;
 
     modal;
+    bsModal;
     onApplyMacroEventHandler;
 
     init() {
@@ -95,10 +96,10 @@ export class DriveExplorerMacros {
         return modalSections;
     }
 
-    updateModal(apiResponse, currentDriveFolder) {
-        if (apiResponse.isSuccess) {
-            this.driveItemMacros = apiResponse.data.macros;
-            this.driveItemNameMacros = apiResponse.data.nameMacros;
+    updateModal(apiResult, currentDriveFolder) {
+        if (apiResult.isSuccess) {
+            this.driveItemMacros = apiResult.data.macros;
+            this.driveItemNameMacros = apiResult.data.nameMacros;
             this.currentDriveFolder = currentDriveFolder;
 
             const existingEntriesArr = currentDriveFolder.subFolders.concat(

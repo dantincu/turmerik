@@ -78,3 +78,17 @@ export class DriveItemNameMacro extends ViewModelBase {
         this.macroUuid = null;
     }
 }
+
+export class DriveItemMacro extends ViewModelBase {
+    key =  null;
+    name =  null;
+    nameMacro =  null;
+    driveItemOp =  null;
+    multipleDriveItemOps =  null;
+    children =  null;
+
+    constructor(src, throwOnUnknownProp = false) {
+        super(null);
+        this.__copyProps(src, throwOnUnknownProp);
+    }
+}

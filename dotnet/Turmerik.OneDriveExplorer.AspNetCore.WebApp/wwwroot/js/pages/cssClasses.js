@@ -1,34 +1,4 @@
-export class TrmrkCssClasses {
-    hidden = "trmrk-hidden";
-    rotate45Deg = "trmrk-rotate-45deg";
-    rotate90Deg = "trmrk-rotate-90deg";
-    timesIcon = "trmrk-times-icon";
-    plusIcon = "trmrk-plus-icon";
-    minusIcon = "trmrk-minus-icon";
-    icon = "trmrk-icon";
-    editMode = "trmrk-edit-mode";
-    checked = "trmrk-checked";
-    pressed = "trmrk-pressed";
-    iconsRow = "trmrk-icons-row";
-    isInvalid = "trmrk-is-invalid";
-    waiting = "trmrk-waiting";
-    collapsed = "trmrk-collapsed";
-    expanded = "trmrk-expanded";
-    header = "trmrk-header";
-    body = "trmrk-body";
-    part = "trmrk-part";
-    item = "trmrk-item";
-    group = "trmrk-group";
-    section = "trmrk-section";
-    sectionsGroup = "trmrk-sections-group";
-    readonly = "trmrk-readonly";
-    editable = "trmrk-editable";
-    mainText = "trmrk-main-text";
-    description = "trmrk-main-text";
-    mainContent = "trmrk-main-content";
-    mainChildNodes = "trmrk-child-nodes";
-    loadingContainer = "trmrk-loading-container";
-}
+import { trmrkCssClasses as trmrkCssClassesInstn } from '../common/domUtils.js';
 
 export class DriveFolderViewCssClasses {
     driveFolder = "trmrk-drive-folder";
@@ -60,6 +30,14 @@ export class DriveFolderMacrosModalIds {
     nameMacroDefsSection = "driveItemNameMacroDefsSection";
 }
 
-export const trmrkCssClasses = new TrmrkCssClasses();
+export class DriveFolderMacrosCssClasses {
+    macroContainer = "trmrk-drive-item-macro-container";
+    nameMacroContainer = "trmrk-drive-item-name-macro-container";
+    nameMacroPartContainer = "trmrk-drive-item-name-macro-part-container";
+    nameMacroPartPopoverContainer = "trmrk-drive-item-name-macro-part-popover-container";
+}
+
+export const trmrkCssClasses = trmrkCssClassesInstn;
 export const driveFolderViewCssClasses = new DriveFolderViewCssClasses();
 export const driveFolderMacrosModalIds = new DriveFolderMacrosModalIds();
+export const driveFolderMacrosCssClasses = new DriveFolderMacrosCssClasses();

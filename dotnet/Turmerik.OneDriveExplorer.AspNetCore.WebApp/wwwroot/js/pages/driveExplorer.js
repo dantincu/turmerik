@@ -48,8 +48,7 @@ export class DriveExplorer {
     driveItemNameMacros = null;
     driveItemMacros = null;
 
-    driveExplorerMacros = null;
-    driveExplorerMacrosBsModal = null;
+    driveExplorerMacros = new DriveExplorerMacros();
 
     async init(
         username,
@@ -106,28 +105,24 @@ export class DriveExplorer {
             classList: [ driveFolderViewCssClasses.view ]
         });
 
+        const modalVDomEl = this.driveExplorerMacros.init();        
+        this.currentDriveFolderVDomEl.appendChildVNode(modalVDomEl);
+
         rootElms.splice(0, 0, this.currentDriveFolderVDomEl);
         this.appRootChildVDomElms = rootElms;
     }
 
     async assureCurrentDriveFolderMacrosModalVDomCreatedAsync() {
-        if (!this.driveExplorerMacros) {
+        if (!this.driveItemMacros) {
             let apiResult = await driveExplorerApi.getDriveItemMacrosAsync();
             apiResult = new TrmrkAxiosApiResult(apiResult);
 
             if (apiResult.isSuccess) {
                 this.driveItemMacros = apiResult.data.macros;
-                this.driveItemNameMacros = apiResult.data.nameMacros;
-
-                this.driveExplorerMacros = new DriveExplorerMacros();
-
-                const modalVDomEl = this.driveExplorerMacros.init(
-                    this.driveItemNameMacros,
-                    this.driveItemMacros,
-                    this.currentDriveFolder.data);
-                
-                this.currentDriveFolderVDomEl.appendChildVNode(modalVDomEl);
+                this.driveItemNameMacros = apiResult.data.nameMacros;                
             }
+
+            this.driveExplorerMacros.updateModal(apiResult, this.currentDriveFolder);
         }
     }
 
@@ -259,9 +254,8 @@ export class DriveExplorer {
     }
 
     onCurrentDriveFolderCreateWithMacrosClick(e) {
-        this.assureCurrentDriveFolderMacrosModalVDomCreatedAsync().then(() => {
-            this.driveExplorerMacros.bsModal.show();
-        });
+        this.driveExplorerMacros.bsModal.show();
+        this.assureCurrentDriveFolderMacrosModalVDomCreatedAsync();
     }
 
     onCurrentDriveFolderCommandsClick(e) {
@@ -308,7 +302,6 @@ export class DriveExplorer {
 
     renderCurrentDriveFolderViewCore(driveFolderVDomElChildNodes) {
         this.currentDriveFolderVDomEl.removeAllChildVNodes();
-        this.driveExplorerMacros = null;
 
         for (let vNode of driveFolderVDomElChildNodes) {
             this.currentDriveFolderVDomEl.appendChildVNode(vNode);

@@ -1,4 +1,54 @@
-﻿export class ValueWrapper {
+﻿export const copyProps = (trg, src,
+    throwOnUnknownProp = false,
+    skipNullOrUndefOrNaNValues = false,
+    throwIfSrcIsNullOrUndef = false) => {
+    let retVal = src !== null && typeof src === "object";
+
+    if (retVal) {
+        const srcProps = Object.keys(src);
+        const ownProps = Object.keys(trg);
+
+        for (let prop of srcProps) {
+            let propVal = src[prop];
+
+            if (throwOnUnknownProp && ownProps.indexOf(prop) < 0) {
+                var err = "Unknown prop: " + prop;
+                throw err;
+            } else if (!skipNullOrUndefOrNaNValues || !trmrk.core.isNullOrUndefOrOrNaN(propVal)) {
+                trg[prop] = propVal;
+            }
+        }
+    } else if (throwIfSrcIsNullOrUndef) {
+        var err = "Source must be a not null object";
+        throw err;
+    }
+
+    return retVal;
+}
+
+export class ViewModelBase {
+    __copyProps(src, throwOnUnknownProp = false, throwIfSrcIsNullOrUndef = false) {
+        let retVal = copyProps(this, src, throwOnUnknownProp, throwIfSrcIsNullOrUndef);
+        return retVal;
+    }
+}
+
+export class StrIndentOpts extends ViewModelBase {
+    indent;
+    indentStr;
+
+    constructor(src) {
+        super();
+        this.__copyProps(src, true, true);
+        this.indentStr = trmrk.core.strValOrDefault(trmrk.core.dblSpace);
+
+        if (!trmrk.core.isNotNaNNumber(this.indent)) {
+            this.indent = !(this.indent);
+        }
+    }
+}
+
+export class ValueWrapper {
     value;
 
     constructor(value) {
@@ -91,6 +141,14 @@ export class KeyValuePair {
 }
 
 export class TrmrkCore {
+    bckSlash = '\\';
+    dblBckSlash = '\\';
+    dblSpace = "  ";
+    escapedQuotes = {
+        '"': '\\"',
+        "'": "\\'"
+    }
+
     javascriptVoid = "javascript:void(0);"
     isLoggingEnabled = false;
     trmrkPrefix = "trmrk";
@@ -861,6 +919,29 @@ export class TrmrkCore {
     withResult(factory, callback) {
         const result = factory();
         callback(result);
+    }
+
+    escapeStr(str, rmQ = '"', wrapRetStr = false) {
+        const esqRmQ = this.escapedQuotes[rmQ];
+        str = str.replaceAll(this.bckSlash, this.dblBckSlash);
+
+        str = str.replaceAll(rmQ, esqRmQ);
+
+        if (wrapRetStr) {
+            str = [rmQ, str, rmQ].join("");
+        }
+
+        return str;
+    }
+
+    range(length, transformer) {
+        let retArr = [...Array(length).keys()];
+
+        if (this.isOfTypeFunction(transformer)) {
+            retArr = retArr.map(transformer);
+        }
+
+        return retArr;
     }
 };
 

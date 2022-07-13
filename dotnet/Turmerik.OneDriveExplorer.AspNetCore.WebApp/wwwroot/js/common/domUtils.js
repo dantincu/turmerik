@@ -1,5 +1,33 @@
-import { trmrk } from './core.js';
+import { trmrk, StrIndentOpts } from './core.js';
 import { DomHelper } from './DomHelper.js';
+import { ViewModelBase } from './ViewModelBase.js';
+
+export class DomElTagHtmlStrOpts extends ViewModelBase {
+    nodeName;
+    attrs;
+    classList;
+    isSelfClosingTag;
+    childNodes;
+    indentOpts;
+    textValue;
+    sanitizeText;
+
+    constructor(src) {
+        super();
+        this.__copyProps(src, true, true);
+
+        if (!trmrk.core.isNotNaNNumber(indent)) {
+            this.indent = !(!indent);
+        }
+
+        this.indentOpts = new StrIndentOpts(this.indentOpts);
+        this.sanitizeText = !(!sanitizeText);
+
+        if (this.isSelfClosingTag && (this.childNodes || trmrk.core.isNonEmptyString(this.textValue))) {
+            throw "A self closing tag cannot have child nodes or text value";
+        }
+    }
+}
 
 export class DomUtils {
     trmrkDOMContentLoadedGlobalPropName = "trmrkDOMContentLoaded";
@@ -116,6 +144,122 @@ export class DomUtils {
 
         return { top: Math.round(top), left: Math.round(left) };
     }
+
+    getDomElmsArrHtmlStr(optsArr) {
+        const strArr = optsArr.map(
+            opts => this.getDomElHtmlStr(opts)
+        );
+
+        const retStr = strArr.join("\n");
+        return retStr;
+    }
+
+    getDomElHtmlStr(opts) {
+        const tOpts = new DomElTagHtmlStrOpts(opts);
+        let strArr = [];
+
+        const domElStartTagStr = this.getHtmlTagStr(
+            tOpts.tagName, tOpts.attrs, tOpts.classList, tOpts.isSelfClosingTag
+        );
+
+        strArr.push(domElStartTagStr);
+
+        if (!isSelfClosingTag) {
+            let indentVal = -1;
+            let indentStr = "";
+
+            if (trmrk.core.isNotNaNNumber(tOpts.indent)) {
+                indentVal = tOpts.indent;
+
+                if (indentVal > 0) {
+                    indentStr = trmrk.core.range(indentVal, k => tOpts.indentStr).reduce(
+                        (a, b) => a + b
+                    );
+                }
+            } else if (tOpts.indent === true) {
+                indentVal = 0;
+            }
+            
+            if (tOpts.childNodes) {
+                let childNodeOpts = tOpts.childNodes;
+                
+                if (indentVal >= 0) {
+                    childNodeOpts = tOpts.childNodes.map(
+                        childOpts => {
+                            childOpts.indent = {
+                                indent: indentVal + 1,
+                                indentStr: tOpts.indentStr
+                            };
+
+                            return childOpts;
+                        });
+                }
+
+                const childNodeStrsArr = this.getDomElmsArrHtmlStr(childNodeOpts);
+                strArr.splice(1, 0, childNodeStrsArr);
+            } else if (trmrk.core.isNonEmptyString(tOpts.textValue)) {
+                strArr.push(tOpts.textValue);
+            }
+
+            const domElEndTagStr = this.getHtmlTagStr(
+                tOpts.tagName, null, null, false, true);
+
+            strArr.push(domElEndTagStr);
+
+            if (indentVal > 0) {
+                strArr = strArr.map(part => indentStr + part);
+            }
+        }
+
+        const retStr = strArr.join("\n");
+        return retStr;
+    }
+
+    getHtmlTagStr(tagName, attrs = {}, classList = [], isSelfClosingTag = true, isEndTag = false) {
+        isEndTag = isEndTag && !isSelfClosingTag && !attrs && !classList;
+        const strParts = ['<'];
+
+        if (isEndTag) {
+            strParts.push('/');
+            strParts.push(tagName);
+            strParts.push('>');
+        } else {
+            strParts.push(tagName);
+
+            attrs = attrs ?? {};
+            classList = classList ?? [];
+
+            if (classList.length > 0) {
+                const classStrVal = classList.join(" ");
+                attrs["class"] = classStrVal;
+            }
+
+            const attrsStrVal = this.getHtmlAttrs(attrs);
+
+            if (!trmrk.core.isNonEmptyString(attrsStrVal)) {
+                attrsStrVal = [" ", attrsStrVal, " "].join("");
+                strParts.push(attrsStrVal);
+            }
+
+            if (isSelfClosingTag) {
+                strParts.push("/");
+            }
+
+            strParts.push(">");
+        }
+
+        const retStr = strParts.join("");
+        return retStr;
+    }
+
+    getHtmlAttrs(attrs) {
+        const strArr = Object.keys(attrs).map(
+            key => [key, '=', trmrk.core.escapeStr(attrs[key], '"', true)].join("")
+        );
+
+        const retStr = strArr.join(" ");
+        return retStr;
+    }
 }
 
 export class BsDomUtils {
@@ -164,6 +308,84 @@ export class BsDomUtils {
     }
 }
 
+export class TrmrkCssClasses {
+    hidden = "trmrk-hidden";
+    rotate45Deg = "trmrk-rotate-45deg";
+    rotate90Deg = "trmrk-rotate-90deg";
+    timesIcon = "trmrk-times-icon";
+    plusIcon = "trmrk-plus-icon";
+    minusIcon = "trmrk-minus-icon";
+    icon = "trmrk-icon";
+    editMode = "trmrk-edit-mode";
+    checked = "trmrk-checked";
+    pressed = "trmrk-pressed";
+    iconsRow = "trmrk-icons-row";
+    isInvalid = "trmrk-is-invalid";
+    waiting = "trmrk-waiting";
+    collapsed = "trmrk-collapsed";
+    expanded = "trmrk-expanded";
+    header = "trmrk-header";
+    body = "trmrk-body";
+    part = "trmrk-part";
+    item = "trmrk-item";
+    group = "trmrk-group";
+    section = "trmrk-section";
+    sectionsGroup = "trmrk-sections-group";
+    readonly = "trmrk-readonly";
+    editable = "trmrk-editable";
+    mainText = "trmrk-main-text";
+    description = "trmrk-main-text";
+    mainContent = "trmrk-main-content";
+    mainChildNodes = "trmrk-child-nodes";
+    loadingContainer = "trmrk-loading-container";
+}
+
+export class BasicVDomElProps extends ViewModelBase {
+    textValue;
+    classList;
+
+    constructor(src, defaults) {
+        super();
+        this.__copyProps(src);
+
+        if (trmrk.core.isNotNullObj(defaults)) {
+            trmrk.core.merge(this, defaults);
+        }
+
+        this.classList = this.classList ?? [];
+
+        if (trmrk.core.isNotNullObj(classList)) {
+            classList.sort();
+        }
+    }
+
+    equals(src) {
+        let retVal = this.textValue === src.textValue;
+
+        if (!retVal) {
+            retVal = !trmrk.core.isNonEmptyString(
+                this.textValue) && !trmrk.core.isNonEmptyString(src.textValue);
+        }
+
+        if (retVal) {
+            retVal = this.classList === src.classList;
+
+            if (!retVal) {
+                const srcClassList = src.classList ?? [];
+                retVal = srcClassList.length === this.classList.length;
+
+                if (retVal && this.classList.length > 0) {
+                    retVal = src.classList.map(
+                        cssClass => this.classList.indexOf(cssClass) >= 0
+                    ).reduce((a, b) => a && b);
+                }
+            }
+        }
+
+        return retVal;
+    }
+}
+
 trmrk.types["DomUtils"] = DomUtils;
 trmrk.types["BsDomUtils"] = BsDomUtils;
 
@@ -175,3 +397,4 @@ trmrk.bsDomUtils = bsDomUtilsInstn;
 
 export const domUtils = domUtilsInstn;
 export const bsDomUtils = bsDomUtilsInstn;
+export const trmrkCssClasses = new TrmrkCssClasses();

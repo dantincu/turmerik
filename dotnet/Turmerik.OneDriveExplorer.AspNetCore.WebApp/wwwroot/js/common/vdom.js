@@ -342,7 +342,16 @@ export class VDomEl extends VDomNodeBase {
 
     addClass(className) {
         this.domNode.classList.add(className);
-        this.classList.push(className);
+
+        if (this.classList.indexOf(className) < 0) {
+            this.classList.push(className);
+        }
+    }
+
+    addManyClasses(classList) {
+        for (let cssClass of classList) {
+            this.addClass(cssClass);
+        }
     }
 
     removeClass(className) {
@@ -351,6 +360,12 @@ export class VDomEl extends VDomNodeBase {
 
         if (idx >= 0) {
             this.classList.splice(idx, 1);
+        }
+    }
+
+    removeManyClasses(classList) {
+        for (let cssClass of classList) {
+            this.removeClass(cssClass);
         }
     }
 
