@@ -1,4 +1,4 @@
-import { trmrk, ViewModelBase } from './core.js';
+import { ViewModelBase } from './core.js';
 import { VDomEl } from './vdom.js';
 
 export class BasicVDomElOpts extends ViewModelBase {

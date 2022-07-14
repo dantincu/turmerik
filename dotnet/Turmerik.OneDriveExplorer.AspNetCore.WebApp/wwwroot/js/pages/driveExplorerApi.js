@@ -1,7 +1,6 @@
 import { trmrk, webStorage } from '../common/main.js';
-import { ViewModelBase } from '../common/ViewModelBase.js';
-import { DriveItem, AppSettings } from './Entities.js';
-import { trmrkAxios, TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
+import { AppSettings } from './Entities.js';
+import { trmrkAxios } from '../common/trmrkAxios.js';
 import { webStorageAxios } from '../common/webStorageAxios.js';
 
 export class OfficeLikeFileType {

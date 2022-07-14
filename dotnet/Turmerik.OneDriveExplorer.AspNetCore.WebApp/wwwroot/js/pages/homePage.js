@@ -1,6 +1,6 @@
-import { trmrk, webStorage } from '../common/main.js';
+import { trmrk } from '../common/main.js';
 import { domUtils } from '../common/domUtils.js';
-import { DriveItem, AppSettings } from './Entities.js';
+import { AppSettings } from './Entities.js';
 
 export class HomePage {
     username = null;

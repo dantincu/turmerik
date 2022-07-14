@@ -1,14 +1,8 @@
 import { ValueWrapper } from '../common/core.js';
-import { trmrk, webStorage, domUtils, bsDomUtils } from '../common/main.js';
-import { DriveItem, AppSettings, DriveItemOp, DriveItemNameMacro } from './Entities.js';
-import { ViewModelBase } from '../common/ViewModelBase.js';
-import { driveExplorerApi } from './driveExplorerApi.js';
-import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
-import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
-import { DriveItemsGridViewTrmrkEvents, Validation } from './driveItemsGridView.core.js';
-import { DriveItemsGridView } from './driveItemsGridView.js';
-import { trmrkCssClasses, driveFolderViewCssClasses, driveFolderMacrosModalIds } from './cssClasses.js';
-import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
+import { trmrk } from '../common/main.js';
+import { DriveItemOp } from './Entities.js';
+import { vdom, VDomTextNode } from '../common/vdom.js';
+import { trmrkCssClasses, driveFolderMacrosModalIds } from './cssClasses.js';
 import { getBsToggleBtn, EntryMacroDefVDomEl } from './driveExplorer.entryNameMacro.js';
 
 export class DriveItemMacrosModalSectionCoreBase {

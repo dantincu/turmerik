@@ -1,8 +1,5 @@
-import { trmrk, copyProps } from './core.js';
-import { ViewModelBase } from './ViewModelBase.js';
+import { trmrk } from './core.js';
 import { BasicVDomElProps } from './domUtils.js';
-import { bsDomUtils, domUtils } from './main.js';
-import { vdom, VDomEl, VDomTextNode, BasicVDomElOpts, BasicVDomEl } from './vdom.js';
 import { BsButtonVDomEl, BsButtonVDomElOpts } from './BsButtonVDomEl.js';
 
 export class BsToggleButtonVDomElOpts extends BsButtonVDomElOpts {

@@ -1,6 +1,5 @@
 import { trmrk, KeyValuePair } from './core.js';
 import { ViewModelBase } from './ViewModelBase.js';
-import { domUtils, bsDomUtils } from './domUtils.js';
 
 export class EventOpts extends ViewModelBase {
     eventId = null;

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Client\**" />
+    <EmbeddedResource Remove="Client\**" />
+    <None Remove="Client\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="wwwroot\js\common\core.js" />
     <None Remove="wwwroot\js\common\DomElWrapperBase.js" />
     <None Remove="wwwroot\js\common\DomHelper.js" />

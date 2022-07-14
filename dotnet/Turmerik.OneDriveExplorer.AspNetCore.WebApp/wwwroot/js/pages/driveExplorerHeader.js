@@ -1,9 +1,5 @@
-import { trmrk, webStorage, domUtils, bsDomUtils } from '../common/main.js';
-import { DriveItem, AppSettings } from './Entities.js';
 import { ViewModelBase } from '../common/ViewModelBase.js';
-import { driveExplorerApi } from './driveExplorerApi.js';
-import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
-import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
+import { vdom, VDomEl, VDomTextNode } from '../common/vdom.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 
 export class DriveExplorerHeaderEvents extends ViewModelBase {

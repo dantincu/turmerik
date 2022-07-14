@@ -1,9 +1,8 @@
-import { trmrk, webStorage, domUtils, bsDomUtils } from '../common/main.js';
-import { DriveItem, AppSettings, DriveItemOp, DriveItemNameMacro } from './Entities.js';
-import { ViewModelBase } from '../common/ViewModelBase.js';
+import { trmrk, webStorage, domUtils } from '../common/main.js';
+import { DriveItem, AppSettings } from './Entities.js';
 import { driveExplorerApi } from './driveExplorerApi.js';
 import { TrmrkAxiosApiResult } from '../common/trmrkAxios.js';
-import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
+import { vdom, VDomEl, VDomTextNode } from '../common/vdom.js';
 import { DriveItemsGridViewTrmrkEvents, Validation } from './driveItemsGridView.core.js';
 import { DriveItemsGridView } from './driveItemsGridView.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';

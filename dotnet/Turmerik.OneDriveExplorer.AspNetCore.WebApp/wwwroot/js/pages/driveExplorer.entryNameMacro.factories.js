@@ -1,7 +1,4 @@
 import { trmrk } from '../common/main.js';
-import { DriveItem, AppSettings, DriveItemOp, DriveItemNameMacro } from './Entities.js';
-import { ViewModelBase } from '../common/ViewModelBase.js';
-
 export class DriveItemNameMacroFactoryResolver {
     getName(existingEntriesArr, macro, recursive = false) {
         const factory = this.resolve(macro, recursive);

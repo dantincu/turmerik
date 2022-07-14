@@ -1,9 +1,5 @@
-import { trmrk } from './core.js';
-import { ViewModelBase } from './ViewModelBase.js';
-import { BasicVDomElProps, trmrkCssClasses } from './domUtils.js';
-import { bsDomUtils, domUtils } from './main.js';
-import { vdom, VDomEl, VDomTextNode } from './vdom.js';
-import { BasicVDomElOpts, BasicVDomEl } from './BasicVDomEl.js';
+import { trmrkCssClasses } from './domUtils.js';
+import { vdom, VDomTextNode } from './vdom.js';
 import { TrmrkAxiosApiResult } from './trmrkAxios.js';
 import { BsStaticContentModalVDomEl, BsStaticContentModalVDomElOpts } from './BsStaticContentModalVDomEl.js';
 

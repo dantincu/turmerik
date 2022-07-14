@@ -1,9 +1,4 @@
 import { trmrk, withVal } from './core.js';
-import { ViewModelBase } from './ViewModelBase.js';
-import { BasicVDomElProps } from './domUtils.js';
-import { bsDomUtils, domUtils } from './main.js';
-import { vdom, VDomEl, VDomTextNode } from './vdom.js';
-import { TrmrkAxiosApiResult } from './trmrkAxios.js';
 import { BasicVDomEl, BasicVDomElOpts } from './BasicVDomEl.js';
 import { BsButtonVDomEl, BsButtonVDomElOpts } from './BsButtonVDomEl.js';
 

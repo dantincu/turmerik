@@ -1,9 +1,5 @@
-import { domUtils } from '../common/domUtils.js';
-import { trmrk } from '../common/main.js';
-import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
-import { DriveItem } from './Entities.js';
+import { VDomEl } from '../common/vdom.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
-import { ViewModelBase, copyProps } from '../common/ViewModelBase.js';
 import { IconVDomEl, DriveItemCheckBox, TableRowCell, DriveItemsGridMainCell } from './driveItemsGridView.core.js';
 
 export class DriveItemsGridRow extends VDomEl {

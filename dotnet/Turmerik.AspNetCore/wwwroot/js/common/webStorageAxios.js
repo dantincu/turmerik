@@ -1,5 +1,4 @@
 import { trmrk } from './core.js';
-import { ViewModelBase } from './ViewModelBase.js';
 import { trmrkAxios, TrmrkAxiosApiResult } from './trmrkAxios.js';
 import { webStorage } from './webStorage.js';
 

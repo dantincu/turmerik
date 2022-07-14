@@ -1,7 +1,5 @@
-import { domUtils } from '../common/domUtils.js';
 import { trmrk } from '../common/main.js';
 import { vdom, VDomEl, EventOpts, VDomTextNode } from '../common/vdom.js';
-import { DriveItem } from './Entities.js';
 import { trmrkCssClasses, driveFolderViewCssClasses } from './cssClasses.js';
 import { ViewModelBase } from '../common/ViewModelBase.js';
 
