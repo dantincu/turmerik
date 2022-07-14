@@ -10,89 +10,130 @@ import { DriveItemsGridView } from './driveItemsGridView.js';
 import { trmrkCssClasses, driveFolderViewCssClasses, driveFolderMacrosCssClasses } from './cssClasses.js';
 import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
 import { driveItemNameMacroFactoryResolver } from './driveExplorer.entryNameMacro.factories.js';
-import { BsToggleButtonVDomEl, getBsToggleButton, BsToggleButtonOpts } from '../common/bsToggleButton.js';
+import { BasicVDomEl, BasicVDomElOpts } from '../common/BasicVDomEl.js';
+import { BsToggleButtonVDomEl, getBsToggleButton, BsToggleButtonVDomElOpts } from '../common/BsToggleButtonVDomEl.js';
 import { driveItemNameMacroFactoryResolver } from './driveExplorer.entryNameMacro.factories.js';
 
-export class DriveItemNameMacroDefPartVDomElOpts extends ViewModelBase {
+export class DriveItemNameMacroDefPartVDomElOpts extends BasicVDomElOpts {
     macro;
     existingEntryNamesArr;
 
-    constructor(src) {
-        super();
-        this.__copyProps(src, true);
+    assignProps(src) {
+        this.__copyProps(src);
+        this.existingEntryNamesArr = this.existingEntryNamesArr ?? [];
     }
 };
 
-export class DriveItemNameMacroDefPartVDomElBase extends VDomEl {
+export class DriveItemNameMacroDefPartVDomElBase extends BasicVDomEl {
     macro;
     existingEntryNamesArr;
 
-    constructor(opts, cssClass) {
-        super({
-            nodeName: "span",
-            classList: [ cssClass ],
-            textValue: driveItemNameMacroFactoryResolver.getName(
-                this.existingEntryNamesArr, macro) + (macro.succeedingDelimiter ?? "")
-        });
-
+    assignOpts(opts) {
         this.opts = new DriveItemNameMacroDefPartVDomElOpts(opts);
         this.macro = new DriveItemNameMacro(this.opts.macro);
-
         this.existingEntryNamesArr = this.opts.existingEntryNamesArr;
-
-        const textValue = driveItemNameMacroFactoryResolver.getName(
-            this.existingEntryNamesArr, macro) + (macro.succeedingDelimiter ?? "");
-
-        this.setTextValue(textValue);
-
     }
 }
 
 export class DriveItemNameMacroDefPartVDomEl extends DriveItemNameMacroDefPartVDomElBase {
-    popoverBodyHtml;
+    popoverBodyHtmlOptsArr;
+    bsPopoverInstn;
 
     constructor(opts) {
-        super(opts, driveFolderMacrosCssClasses.nameMacroPartContainer);
+        opts.nodeName = "span";
+        opts.classList = [ trmrkCssClasses.part ];
+        super(opts);
+    }
 
+    init() {
         const textValue = driveItemNameMacroFactoryResolver.getName(
             this.existingEntryNamesArr, macro) + (macro.succeedingDelimiter ?? "");
 
         this.setTextValue(textValue);
-        this.popoverBodyHtml = this.popoverBodyHtml();
+        this.popoverBodyHtmlOptsArr = this.getPopoverBodyHtmlOptsArr();
 
         this.onCreated = vEl => {
-            new bootstrap.Popover(vEl.domNode, {
+            const popoverHtml = bsDomUtils.getPopoverHtmlStr(
+                this.popoverBodyHtmlOptsArr,
+                this.opts.macro.macroName,
+                driveFolderMacrosCssClasses.nameMacroPartPopoverContainer);
+
+            this.bsPopoverInstn = new bootstrap.Popover(vEl.domNode, {
                 container: vEl.domNode,
-                html: [ '<div class="popover ',
-                    driveFolderMacrosCssClasses.nameMacroPartPopoverContainer,
-                    '" role="tooltip">',
-                    '<div class="popover-arrow"></div>',
-                    '<h3 class="popover-header"></h3>',
-                    '<div class="popover-body">',
-                    vEl.popoverBodyHtml,
-                    '</div></div>' ].join("")
-            })
+                html: popoverHtml
+            });
         };
     }
 
-    getPopoverBodyHtml() {
-        const htmlPartsArr = ["<ul>"];
+    getPopoverBodyHtmlOptsArr() {
+        const listItemsArr = [
+            this.getPopoverHtmlListItem(
+                "Src name first letter wrapping char",
+                this.macro.srcNameFirstLetterWrappingChar
+            ),
+            this.getPopoverHtmlListItem(
+                "Src name", this.macro.srcName
+            ),
+            this.getPopoverHtmlListItem(
+                "Digits count", this.macro.digitsCount
+            ),
+            this.getPopoverHtmlListItem(
+                "Min number", this.macro.minNumber
+            ),
+            this.getPopoverHtmlListItem(
+                "Max number", this.macro.maxNumber
+            ),
+            this.getPopoverHtmlListItem(
+                "Number seed", this.macro.numberSeed
+            ),
+            this.getPopoverHtmlListItem(
+                "Const name", this.macro.constName
+            ),
+            this.getPopoverHtmlListItem(
+                "Entry name", this.macro.entryName,
+                val => !trmrk.core.isNullOrUndef(val)
+            ),
+            this.getPopoverHtmlListItem(
+                "Preceeding delimiter", this.macro.preceedingDelimiter
+            ),
+            this.getPopoverHtmlListItem(
+                "Succeeding delimiter", this.macro.succeedingDelimiter
+            )
+        ];
 
-        if (trmrk.core.isNonEmptyString(this.macro.constName)) {
+        const retArr = [{
+            nodeName: "p",
+            textValue: this.macroName.macroDescription
+        }, {
+            nodeName: "ul",
+            childNodes: listItemsArr.filter(
+                item => !(!item)
+            )
+        }];
 
-        }
+        return retArr;
     }
 
-    addPopoverHtmlListItem(htmlPartsArr, html, cssClassList = []) {
-        const cssClassesAttrValStr = [ '"', cssClassList.join(" ") , '"' ].join("");
+    getPopoverHtmlListItem(name, value, condition, classList = []) {
+        let retNode;
+        condition = condition ?? (val => trmrk.core.isNonEmptyString(val, true));
 
-        const cssClassAttrStr = ['class="', cssClassesAttrValStr, '">'].join("");
-        const startTagStr = ['<li ', cssClassAttrStr, '>'].join("");
+        if (condition(value)) {
+            retNode = {
+                nodeName: "li",
+                classList: classList,
+                childNodes: [
+                    domUtils.getTextDomElHtmlOpts(name + ": ",
+                        [ trmrkCssClasses.name ], "span"),
+                    domUtils.getTextDomElHtmlOpts(value,
+                        [ trmrkCssClasses.value ], "span")
+                ]
+            };
+        } else {
+            retNode = null;
+        }
 
-        const itemHtml = ['<li class="', cssClassesStr,
-            '">', html, "</li>"].join("");
-        
-        itemHtml
+        return retNode;
     }
 }
 
@@ -101,8 +142,12 @@ export class DriveItemNameMacroDefVDomEl extends DriveItemNameMacroDefPartVDomEl
     bodyVDomEl;
 
     constructor(opts) {
-        super(opts, driveFolderMacrosCssClasses.nameMacroContainer);
+        opts.nodeName = "div";
+        opts.classList = [ driveFolderMacrosCssClasses.nameMacroContainer ];
+        super(opts);
+    }
 
+    init() {
         this.bodyVDomEl = this.getBodyVDomEl();
         this.headerVDomEl = this.getHeaderVDomEl();
 

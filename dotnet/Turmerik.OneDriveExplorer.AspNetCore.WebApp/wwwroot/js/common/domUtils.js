@@ -1,4 +1,4 @@
-import { trmrk, StrIndentOpts } from './core.js';
+import { trmrk } from './core.js';
 import { DomHelper } from './DomHelper.js';
 import { ViewModelBase } from './ViewModelBase.js';
 
@@ -8,20 +8,17 @@ export class DomElTagHtmlStrOpts extends ViewModelBase {
     classList;
     isSelfClosingTag;
     childNodes;
-    indentOpts;
+    indentStr;
     textValue;
-    sanitizeText;
+    innerHTML;
 
     constructor(src) {
         super();
         this.__copyProps(src, true, true);
 
-        if (!trmrk.core.isNotNaNNumber(indent)) {
-            this.indent = !(!indent);
-        }
-
-        this.indentOpts = new StrIndentOpts(this.indentOpts);
-        this.sanitizeText = !(!sanitizeText);
+        this.indentStr = this.indentStr ?? trmrk.core.dblSpace;
+        this.textValue = this.textValue ?? "";
+        this.innerHTML = this.innerHTML ?? "";
 
         if (this.isSelfClosingTag && (this.childNodes || trmrk.core.isNonEmptyString(this.textValue))) {
             throw "A self closing tag cannot have child nodes or text value";
@@ -145,64 +142,42 @@ export class DomUtils {
         return { top: Math.round(top), left: Math.round(left) };
     }
 
-    getDomElmsArrHtmlStr(optsArr) {
+    getDomElmsArrHtmlStr(optsArr, indentStr = null) {
         const strArr = optsArr.map(
-            opts => this.getDomElHtmlStr(opts)
+            opts => this.getDomElHtmlStr(opts, indentStr)
         );
 
         const retStr = strArr.join("\n");
         return retStr;
     }
 
-    getDomElHtmlStr(opts) {
+    getDomElHtmlStr(opts, indentStr = null) {
         const tOpts = new DomElTagHtmlStrOpts(opts);
         let strArr = [];
 
+        indentStr = indentStr ?? "";
+        const childIndentStr = indentStr + tOpts.indentStr;
+
         const domElStartTagStr = this.getHtmlTagStr(
-            tOpts.tagName, tOpts.attrs, tOpts.classList, tOpts.isSelfClosingTag
+            tOpts.tagName, tOpts.attrs, tOpts.classList, tOpts.isSelfClosingTag, false, indentStr
         );
 
         strArr.push(domElStartTagStr);
 
         if (!isSelfClosingTag) {
-            let indentVal = -1;
-            let indentStr = "";
-
-            if (trmrk.core.isNotNaNNumber(tOpts.indent)) {
-                indentVal = tOpts.indent;
-
-                if (indentVal > 0) {
-                    indentStr = trmrk.core.range(indentVal, k => tOpts.indentStr).reduce(
-                        (a, b) => a + b
-                    );
-                }
-            } else if (tOpts.indent === true) {
-                indentVal = 0;
-            }
-            
             if (tOpts.childNodes) {
-                let childNodeOpts = tOpts.childNodes;
-                
-                if (indentVal >= 0) {
-                    childNodeOpts = tOpts.childNodes.map(
-                        childOpts => {
-                            childOpts.indent = {
-                                indent: indentVal + 1,
-                                indentStr: tOpts.indentStr
-                            };
+                const childNodeStrsArr = this.getDomElmsArrHtmlStr(
+                    tOpts.childNodes, childIndentStr);
 
-                            return childOpts;
-                        });
-                }
-
-                const childNodeStrsArr = this.getDomElmsArrHtmlStr(childNodeOpts);
                 strArr.splice(1, 0, childNodeStrsArr);
+            } else if (trmrk.core.isNonEmptyString(tOpts.innerHTML)) {
+                strArr.push(childIndentStr + tOpts.innerHTML);
             } else if (trmrk.core.isNonEmptyString(tOpts.textValue)) {
-                strArr.push(tOpts.textValue);
+
             }
 
             const domElEndTagStr = this.getHtmlTagStr(
-                tOpts.tagName, null, null, false, true);
+                tOpts.tagName, null, null, false, true, indentStr);
 
             strArr.push(domElEndTagStr);
 
@@ -215,7 +190,7 @@ export class DomUtils {
         return retStr;
     }
 
-    getHtmlTagStr(tagName, attrs = {}, classList = [], isSelfClosingTag = true, isEndTag = false) {
+    getHtmlTagStr(tagName, attrs = {}, classList = [], isSelfClosingTag = true, isEndTag = false, indentStr = null) {
         isEndTag = isEndTag && !isSelfClosingTag && !attrs && !classList;
         const strParts = ['<'];
 
@@ -229,12 +204,15 @@ export class DomUtils {
             attrs = attrs ?? {};
             classList = classList ?? [];
 
+            classList = classList.filter(
+                cssClass => trmrk.core.isNonEmptyString(cssClass));
+
             if (classList.length > 0) {
                 const classStrVal = classList.join(" ");
                 attrs["class"] = classStrVal;
             }
 
-            const attrsStrVal = this.getHtmlAttrs(attrs);
+            const attrsStrVal = this.getHtmlAttrsAgg(attrs);
 
             if (!trmrk.core.isNonEmptyString(attrsStrVal)) {
                 attrsStrVal = [" ", attrsStrVal, " "].join("");
@@ -248,17 +226,50 @@ export class DomUtils {
             strParts.push(">");
         }
 
+        strParts.splice(0, 0, indentStr ?? "");
         const retStr = strParts.join("");
+
         return retStr;
     }
 
-    getHtmlAttrs(attrs) {
+    getHtmlAttrsAgg(attrs) {
         const strArr = Object.keys(attrs).map(
-            key => [key, '=', trmrk.core.escapeStr(attrs[key], '"', true)].join("")
+            key => this.getHtmlAttrsPair(key, attrs[key])
         );
 
         const retStr = strArr.join(" ");
         return retStr;
+    }
+
+    getHtmlAttrsPair(attrName, attrValue) {
+        let retStr;
+
+        if (trmrk.core.isNonEmptyString(attrName)) {
+            const strParts = [ attrName ];
+
+            if (!trmrk.core.isNullOrUndefOrEmptyStrOrNaN(attrValue)) {
+                attrValue = attrValue.toString();
+                const attrValStr = trmrk.core.escapeHtmlText(attrValue);
+
+                strParts.splice(1, 0, "=", '"', attrValStr, '"');
+            }
+
+            retStr = strParts.join("");
+        } else {
+            retStr = "";
+        }
+
+        return retStr;
+    }
+
+    getTextDomElHtmlOpts(textValue, classList, nodeName) {
+        const opts = {
+            nodeName: nodeName,
+            classList: classList,
+            textValue: textValue
+        }
+
+        return opts;
     }
 }
 
@@ -306,6 +317,28 @@ export class BsDomUtils {
 
         popover.hide();
     }
+
+    getPopoverHtmlStr(bodyHtmlChildNodeOptsArr, popoverTitle, popoverCssClass) {
+        const htmlStr = domUtils.getDomElHtmlStr({
+            nodeName: "div",
+            attrs: { role: "tooltip" },
+            classList: [ "popover", popoverCssClass ],
+            childNodes: [{
+                nodeName: "div",
+                classList: [ "popover-arrow" ]
+            }, {
+                nodeName: "h3",
+                classList: [ "popover-header" ],
+                textValue: popoverTitle
+            }, {
+                nodeName: "div",
+                classList: [ "popover-body" ],
+                childNodes: bodyHtmlChildNodeOptsArr
+            }]
+        });
+
+        return htmlStr;
+    }
 }
 
 export class TrmrkCssClasses {
@@ -338,6 +371,10 @@ export class TrmrkCssClasses {
     mainContent = "trmrk-main-content";
     mainChildNodes = "trmrk-child-nodes";
     loadingContainer = "trmrk-loading-container";
+    dataContainer = "trmrk-data-container";
+    errorContainer = "trmrk-error-container";
+    name = "trmrk-name";
+    value = "trmrk-value"
 }
 
 export class BasicVDomElProps extends ViewModelBase {

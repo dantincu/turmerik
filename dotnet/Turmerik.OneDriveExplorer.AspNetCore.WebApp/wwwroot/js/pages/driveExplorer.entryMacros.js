@@ -10,7 +10,8 @@ import { DriveItemsGridView } from './driveItemsGridView.js';
 import { trmrkCssClasses, driveFolderViewCssClasses, driveFolderMacrosCssClasses } from './cssClasses.js';
 import { DriveExplorerHeader, DriveExplorerHeaderEvents } from './driveExplorerHeader.js';
 import { driveItemNameMacroFactoryResolver } from './driveExplorer.entryNameMacro.factories.js';
-import { BsToggleButtonVDomEl, getBsToggleButton, BsToggleButtonOpts } from '../common/bsToggleButton.js';
+import { BasicVDomEl, BasicVDomElOpts } from '../common/BasicVDomEl.js';
+import { getBsToggleButton, BsToggleButtonVDomElOpts, BsToggleButtonVDomEl } from '../common/BsToggleButtonVDomEl.js';
 
 export class DriveItemMacroVDomElOpts extends ViewModelBase {
     macro;
@@ -80,7 +81,7 @@ export class DriveItemMacroVDomEl extends VDomEl {
         const headerVDomEl = vdom.utils.getVDomEl("div",
             [ trmrkCssClasses.header ], {}, [
                 getBsToggleButton("[data-trmrk-idx='" + this.idxStr + "']",
-                    this.bodyVDomEl, this.isCollapsed, {
+                    this.isCollapsed, this.bodyVDomEl, {
                         textValue: this.macro.name,
                         classList: [ "btn-dark" ] }, {
                         classList: [ "btn-outline-dark" ] })

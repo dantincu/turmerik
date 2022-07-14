@@ -1,7 +1,8 @@
 ﻿export const copyProps = (trg, src,
     throwOnUnknownProp = false,
     skipNullOrUndefOrNaNValues = false,
-    throwIfSrcIsNullOrUndef = false) => {
+    throwIfSrcIsNullOrUndef = false,
+    onlyCopyKnownProps = false) => {
     let retVal = src !== null && typeof src === "object";
 
     if (retVal) {
@@ -10,11 +11,18 @@
 
         for (let prop of srcProps) {
             let propVal = src[prop];
+            let copyProp = !skipNullOrUndefOrNaNValues || !trmrk.core.isNullOrUndefOrOrNaN(propVal)
 
-            if (throwOnUnknownProp && ownProps.indexOf(prop) < 0) {
-                var err = "Unknown prop: " + prop;
-                throw err;
-            } else if (!skipNullOrUndefOrNaNValues || !trmrk.core.isNullOrUndefOrOrNaN(propVal)) {
+            if (ownProps.indexOf(prop) < 0) {
+                if (throwOnUnknownProp) {
+                    var err = "Unknown prop: " + prop;
+                    throw err;
+                } else if (onlyCopyKnownProps) {
+                    copyProp = false;
+                }
+            }
+
+            if (copyProp) {
                 trg[prop] = propVal;
             }
         }
@@ -27,8 +35,8 @@
 }
 
 export class ViewModelBase {
-    __copyProps(src, throwOnUnknownProp = false, throwIfSrcIsNullOrUndef = false) {
-        let retVal = copyProps(this, src, throwOnUnknownProp, throwIfSrcIsNullOrUndef);
+    __copyProps(src, throwOnUnknownProp = false, throwIfSrcIsNullOrUndef = false, onlyCopyKnownProps = false) {
+        let retVal = copyProps(this, src, throwOnUnknownProp, true, throwIfSrcIsNullOrUndef, onlyCopyKnownProps);
         return retVal;
     }
 }
@@ -387,7 +395,7 @@ export class TrmrkCore {
         return retVal;
     }
 
-    isNonEmptyString(value, mustNotBeAllWhiteSpace) {
+    isNonEmptyString(value, mustNotBeAllWhiteSpace = false) {
         let retVal = typeof(value) === "string" && value.length > 0;
 
         if (retVal && mustNotBeAllWhiteSpace) {
@@ -850,10 +858,17 @@ export class TrmrkCore {
         return value;
     }
 
-    firstOrDefault(arr, predicate) {
+    firstOrDefault(arr, predicate = null, reverseKeys = false) {
         let retVal = new KeyValuePair(-1);
+        predicate = predicate ?? ((val, idx) => true);
 
-        for (let i in Object.keys(arr)) {
+        let keys = Object.keys(arr);
+
+        if (reverseKeys) {
+            keys = keys.reverse();
+        }
+
+        for (let i in keys) {
             let val = arr[i];
 
             if (predicate(val, i)) {
@@ -942,6 +957,39 @@ export class TrmrkCore {
         }
 
         return retArr;
+    }
+
+    removeAllNullOrUndefOrEmptyStrOrNaNItems(arr) {
+        let i = 0;
+
+        while (i < arr.length) {
+            if (this.isNullOrUndefOrEmptyStrOrNaN(arr[i])) {
+                arr.splice(i, 1);
+            } else {
+                i++;
+            }
+        }
+
+        return arr;
+    }
+
+    withVal(value, callback, condition) {
+        condition = condition ?? this.isNullOrUndefOrEmptyStrOrNaN;
+
+        if (condition(value)) {
+            callback(value);
+        }
+    }
+
+    escapeHtmlText(text) {
+        text = text.replaceAll(
+            '&', '&amp;').replaceAll(
+            '<', '&lt;').replaceAll(
+            '>', '&gt;').replaceAll(
+            '"', '&quot;').replaceAll(
+                "'", '&#039;');
+        
+        return text;
     }
 };
 

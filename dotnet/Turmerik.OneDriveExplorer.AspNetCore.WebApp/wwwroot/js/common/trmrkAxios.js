@@ -15,8 +15,22 @@ export class TrmrkAxiosApiResult extends ViewModelBase {
     config = null;
     request = null;
 
-    getStatusText() {
-        const statusText = this.statusText ?? this.status;
+    getStatusStr(defaultValue = "Error") {
+        let statusStr;
+
+        if (trmrk.core.isNotNaNNumber(this.status)) {
+            statusStr = this.status.toString();
+        } else if (trmrk.core.isNonEmptyString(this.status)) {
+            statusStr = this.status;
+        } else {
+            statusStr = defaultValue;
+        }
+
+        return statusStr;
+    }
+
+    getStatusText(defaultValue = "Error") {
+        const statusText = this.statusText ?? this.getStatusStr(defaultValue);
         return statusText;
     }
 

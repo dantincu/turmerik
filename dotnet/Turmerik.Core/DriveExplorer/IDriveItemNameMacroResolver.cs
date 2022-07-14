@@ -139,10 +139,12 @@ namespace Turmerik.Core.DriveExplorer
         private Func<string[], int, string> GetSrcNameFirstLetterWrappingCharFactory(
             DriveItemNameMacroMtbl macro, char wrappingChar)
         {
+            string srcName = macro.SrcName?.Trim() ?? string.Empty;
+
             Func<string[], int, string> coreFactory = (arr, idx) =>
             {
                 string newName;
-                char firstChar = macro.SrcName.First();
+                char firstChar = macro.SrcName.FirstOrDefault();
 
                 if (char.IsLetter(firstChar))
                 {

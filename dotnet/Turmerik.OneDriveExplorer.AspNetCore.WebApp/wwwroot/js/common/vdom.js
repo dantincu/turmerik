@@ -118,8 +118,12 @@ export class VDomEl extends VDomNodeBase {
             );
 
             this.classList = trmrk.core.objValOrDefault(classList, []);
+            trmrk.core.removeAllNullOrUndefOrEmptyStrOrNaNItems(this.classList);
+
             this.attrs = trmrk.core.objValOrDefault(attrs, {});
             this.childNodes = trmrk.core.objValOrDefault(childNodes, []);
+            trmrk.core.removeAllNullOrUndefOrEmptyStrOrNaNItems(this.childNodes);
+
             this.innerHTML = trmrk.core.nonEmptyStrValOrNull(childNodes);
             this.events = trmrk.core.objValOrDefault(events, {});
 
@@ -152,8 +156,8 @@ export class VDomEl extends VDomNodeBase {
 
     setDomEl(domNode) {
         this.setDomNode(domNode);
-
         this.refreshAttrs();
+        
         this.refreshClassList();
         this.refreshChildNodes();
     }
@@ -176,11 +180,12 @@ export class VDomEl extends VDomNodeBase {
     setinnerHTML(innerHTML) {
         if (this.domNode) {
             this.removeAllEventListeners(true, true);
-            this.domNode.innerHTML = innerHTML;
 
-            this.innerHTML = innerHTML;
+            this.domNode.innerHTML = innerHTML;
             this.refreshChildNodes();
         }
+
+        this.innerHTML = innerHTML;
     }
 
     refreshNodeName() {
@@ -238,14 +243,14 @@ export class VDomEl extends VDomNodeBase {
 
                 switch (nodeType) {
                     case Node.TEXT_NODE:
-                        if (trmrk.vdom.utils.nonVDomElNodeNames.indexOf(nodeName) < 0) {
-                            childVNode = new VDomTextNode();
-                            childVNode.setDomNode(child);
-                        }
+                        childVNode = new VDomTextNode();
+                        childVNode.setDomNode(child);
                         break;
                     case Node.ELEMENT_NODE:
-                        childVNode = new VDomEl();
-                        childVNode.setDomEl(child);
+                        if (trmrk.vdom.utils.nonVDomElNodeNames.indexOf(nodeName) < 0) {
+                            childVNode = new VDomEl();
+                            childVNode.setDomEl(child);
+                        }
                         break;
                 }
             }
@@ -307,7 +312,7 @@ export class VDomEl extends VDomNodeBase {
     removeDomNode() {
         this.removeAllEventListeners();
         this.domNode.remove();
-
+        
         this.onRemoved();
     }
 
@@ -316,7 +321,12 @@ export class VDomEl extends VDomNodeBase {
             throw "Class attribute cannot be set directly";
         }
 
-        this.domNode.setAttribute(key, value);
+        const hasDomNode = !(!this.domNode);
+
+        if (hasDomNode) {
+            this.domNode.setAttribute(key, value);
+        }
+        
         this.attrs[key] = value;
     }
 
@@ -325,23 +335,36 @@ export class VDomEl extends VDomNodeBase {
             throw "Class attribute cannot be removed directly";
         }
 
-        this.domNode.removeAttribute(key);
+        const hasDomNode = !(!this.domNode);
+
+        if (hasDomNode) {
+            this.domNode.removeAttribute(key);
+        }
+        
         delete this.attrs[key];
     }
 
     removeAllAttrs() {
-        while (this.domNode.attributes.length > 0) {
-            let attr = this.domNode.attributes.length[0];
-            let attrName = attr.name;
+        const hasDomNode = !(!this.domNode);
 
-            this.domNode.removeAttribute(attrName);
+        if (hasDomNode) {
+            while (this.domNode.attributes.length > 0) {
+                let attr = this.domNode.attributes.length[0];
+                let attrName = attr.name;
+
+                this.domNode.removeAttribute(attrName);
+            }
         }
 
         this.attrs = {};
     }
 
     addClass(className) {
-        this.domNode.classList.add(className);
+        const hasDomNode = !(!this.domNode);
+
+        if (hasDomNode) {
+            this.domNode.classList.add(className);
+        }
 
         if (this.classList.indexOf(className) < 0) {
             this.classList.push(className);
@@ -355,7 +378,12 @@ export class VDomEl extends VDomNodeBase {
     }
 
     removeClass(className) {
-        this.domNode.classList.remove(className);
+        const hasDomNode = !(!this.domNode);
+
+        if (hasDomNode) {
+            this.domNode.classList.remove(className);
+        }
+        
         let idx = this.classList.indexOf(className);
 
         if (idx >= 0) {
@@ -371,13 +399,22 @@ export class VDomEl extends VDomNodeBase {
 
     toggleClass(className) {
         let idx = this.classList.indexOf(className);
+        const hasDomNode = !(!this.domNode);
 
-        if (this.domNode.classList.toggle(className)) {
-            if (idx < 0) {
-                this.classList.push(className);
+        if (hasDomNode) {    
+            if (this.domNode.classList.toggle(className)) {
+                if (idx < 0) {
+                    this.classList.push(className);
+                }
+            } else {
+                if (idx >= 0) {
+                    this.classList.splice(idx, 1);
+                }
             }
         } else {
-            if (idx >= 0) {
+            if (idx < 0) {
+                this.classList.push(className);
+            } else {
                 this.classList.splice(idx, 1);
             }
         }
@@ -385,13 +422,16 @@ export class VDomEl extends VDomNodeBase {
 
     removeAllClasses() {
         const list = [];
+        const hasDomNode = !(!this.domNode);
 
-        for (let value of this.domNode.classList.keys()) {
-            list.push(value);
-        }
+        if (hasDomNode) {
+            for (let value of this.domNode.classList.keys()) {
+                list.push(value);
+            }
 
-        for (let i = 0; i < list.length; i++) {
-            this.domNode.classList.remove(list[i]);
+            for (let i = 0; i < list.length; i++) {
+                this.domNode.classList.remove(list[i]);
+            }
         }
 
         this.classList = [];
@@ -399,6 +439,7 @@ export class VDomEl extends VDomNodeBase {
 
     addEventListener(type, listener, options, altListener, eventId, longPressMillis) {
         let eventsArr = this.events[type];
+        const hasDomNode = !(!this.domNode);
 
         if (typeof(eventsArr) !== "object") {
             eventsArr = [];
@@ -423,12 +464,16 @@ export class VDomEl extends VDomNodeBase {
             longPressMillis: longPressMillis
         }, true);
 
-        trmrk.vdom.utils.addEventListener(this.domNode, type, eventInstnt);
+        if (hasDomNode) {
+            trmrk.vdom.utils.addEventListener(this.domNode, type, eventInstnt);
+        }
+        
         eventsArr.push(eventInstnt)
     }
 
     removeEventListener(type, idx) {
         let eventsArr = this.events[type];
+        const hasDomNode = !(!this.domNode);
 
         if (typeof(eventsArr) !== "object") {
             throw "There are no events registered for type " + type;
@@ -454,10 +499,15 @@ export class VDomEl extends VDomNodeBase {
         }
 
         let eventInstn = eventsArr.splice(idx, 1);
-        trmrk.vdom.utils.removeEventListener(this.domNode, type, eventInstn);
+
+        if (hasDomNode) {
+            trmrk.vdom.utils.removeEventListener(this.domNode, type, eventInstn);
+        }
     }
 
     removeAllEventListeners(recursive, childrenOnly) {
+        const hasDomNode = !(!this.domNode);
+
         if (!childrenOnly) {
             for (let type of Object.keys(this.events)) {
                 let eventsArr = this.events[type];
@@ -466,8 +516,10 @@ export class VDomEl extends VDomNodeBase {
                     let event = eventsArr.pop();
                     let listener, options;
 
-                    ({listener, options} = event);
-                    trmrk.vdom.utils.removeEventListener(this.domNode, type, listener, options);
+                    if (hasDomNode) {
+                        ({listener, options} = event);
+                        trmrk.vdom.utils.removeEventListener(this.domNode, type, listener, options);
+                    }
                 }
             }
         }
@@ -484,7 +536,7 @@ export class VDomEl extends VDomNodeBase {
     appendChildVNode(vNode) {
         vNode = trmrk.vdom.utils.getOrCreateVDomNode(vNode, true);
 
-        if (this.domNode != null) {
+        if (this.domNode) {
             this.domNode.appendChild(vNode.domNode);
         }
 
@@ -515,7 +567,7 @@ export class VDomEl extends VDomNodeBase {
             sibblingDomNode = sibblingDomNode.domNode;
         }
 
-        if (this.domNode != null) {
+        if (this.domNode) {
             this.domNode.insertBefore(vNode.domNode, sibblingDomNode);
         }
 
@@ -555,7 +607,7 @@ export class VDomEl extends VDomNodeBase {
         let remove = true;
 
         if (checkFirst) {
-            remove = this.domNode != null && this.domNode.contains(vNode.domNode);
+            remove = this.domNode && this.domNode.contains(vNode.domNode);
         }
 
         if (remove) {
@@ -577,13 +629,95 @@ export class VDomEl extends VDomNodeBase {
     }
 
     removeAllChildVNodes() {
+        const hasDomNode = !(!this.domNode);
+
         while (this.childNodes.length > 0) {
             let vNode = this.childNodes.pop();
             vNode.removeAllEventListeners();
 
-            this.domNode.removeChild(vNode.domNode);
+            if (hasDomNode) {
+                this.domNode.removeChild(vNode.domNode);
+            }
+            
             vNode.onRemoved(vNode);
         }
+    }
+
+    removeChildVDomNodesWhere(predicate, reverse = false) {
+        let hasDomNode = !(!this.domNode);
+        let i, condition, increment;
+        let rmCount = 0;
+
+        if (reverse) {
+            i = this.childNodes.length;
+            condition = () => i >= 0;
+            increment = () => i--;
+        } else {
+            i = 0;
+            condition = () => i < this.childNodes.length;
+            increment = () => i++;
+        }
+
+        while (condition()) {
+            let vNode = this.childNodes[i];
+
+            if (predicate(vNode, i, rmCount)) {
+                this.childNodes.splice(i, 1);
+
+                if (hasDomNode && vNode.domNode) {
+                    this.domNode.removeChild(vNode.domNode);
+                }
+
+                rmCount++;
+            } else {
+                increment();
+            }
+        }
+
+        return rmCount;
+    }
+
+    removeChildNodesWhere(predicate, reverse = false) {
+        let i, condition, increment;
+        let rmCount = 0;
+
+        if (reverse) {
+            i = this.domNode.childNodes.length;
+            condition = () => i >= 0;
+            increment = () => i--;
+        } else {
+            i = 0;
+            condition = () => i < this.domNode.childNodes.length;
+            increment = () => i++;
+        }
+
+        while (condition()) {
+            let node = this.domNode.childNodes[i];
+            let vNode = this.childNodes[i];
+
+            let vNodeKvp;
+
+            if (vNode && vNode.domNode === node) {
+                vNodeKvp = new KeyValuePair(i, vNode);
+            } else {
+                vNodeKvp = trmrk.core.firstOrDefault(this.childNodes,
+                    vNd => vNd.domNode === node);
+            }
+            
+            if (predicate(node, i, rmCount, vNodeKvp)) {
+                this.domNode.removeChild(vNode.domNode);
+
+                if (vNodeKvp.key >= 0) {
+                    this.childNodes.splice(vNodeKvp.key, 1);
+                }
+                
+                rmCount++;
+            } else {
+                increment();
+            }
+        }
+
+        return rmCount;
     }
 }
 

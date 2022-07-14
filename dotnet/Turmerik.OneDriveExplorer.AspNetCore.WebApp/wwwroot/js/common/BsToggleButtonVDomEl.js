@@ -1,13 +1,11 @@
-import { trmrk } from './core.js';
+import { trmrk, copyProps } from './core.js';
 import { ViewModelBase } from './ViewModelBase.js';
 import { BasicVDomElProps } from './domUtils.js';
 import { bsDomUtils, domUtils } from './main.js';
-import { vdom, VDomEl, VDomTextNode } from './vdom.js';
+import { vdom, VDomEl, VDomTextNode, BasicVDomElOpts, BasicVDomEl } from './vdom.js';
+import { BsButtonVDomEl, BsButtonVDomElOpts } from './BsButtonVDomEl.js';
 
-export class BsToggleButtonOpts extends ViewModelBase {
-    nodeName;
-    classList;
-    attrs;
+export class BsToggleButtonVDomElOpts extends BsButtonVDomElOpts {
     targetSelector;
     targetVDomEl;
 
@@ -16,19 +14,15 @@ export class BsToggleButtonOpts extends ViewModelBase {
 
     isCollapsed;
     changePropsOnToggle;
+    
+    assignProps(src) {
+        this.__copyProps(src);
+        super.assignProps();
 
-    constructor(src) {
-        super();
-        this.__copyProps(src, true);
-
-        this.nodeName = this.nodeName ?? "button";
-        this.classList = this.classList ?? [ "btn" ];
-
-        this.attrs = this.attrs ?? {
-            type: "button",
+        trmrk.core.merge(this.attrs, {
             "data-bs-toggle": "collapse",
             "data-bs-target": this.targetSelector
-        };
+        });
 
         this.collapsedProps = new BasicVDomElProps(this.collapsedProps, {
             textValue: "+",
@@ -42,20 +36,14 @@ export class BsToggleButtonOpts extends ViewModelBase {
     }
 }
 
-export class BsToggleButtonVDomEl extends VDomEl {
-    opts;
+export class BsToggleButtonVDomEl extends BsButtonVDomEl {
     isCollapsed;
 
-    constructor(opts) {
-        const tOpts = new BsToggleButtonOpts(opts);
+    assignOpts(opts) {
+        this.opts = new BsToggleButtonVDomElOpts(opts);
+    }
 
-        super({
-            nodeName: tOpts.nodeName,
-            attrs: tOpts.attrs,
-            classList: tOpts.classList
-        });
-
-        this.opts = tOpts;
+    init() {
         this.isCollapsed = tOpts.isCollapsed;
 
         if (this.opts.targetVDomEl) {
