@@ -1,2 +1,2 @@
-import { Trmrk } from './main-core';
+import { Trmrk } from './main';
 export const trmrk = new Trmrk();
