@@ -8,7 +8,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApi.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+    // [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class WeatherForecastController : ControllerBase
     {
         private readonly GraphServiceClient _graphServiceClient;
