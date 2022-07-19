@@ -4,9 +4,9 @@ using Microsoft.Graph;
 
 namespace Turmerik.OneDriveExplorer.AspNetCore.WebApi.Controllers
 {
-    /* [Authorize]
-    [ApiController]
-    [Route("api/[controller]")]
+    [Authorize]
+    // [ApiController]
+    [Route("api/mvc/[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly GraphServiceClient _graphServiceClient;
@@ -16,21 +16,22 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApi.Controllers
             _graphServiceClient = graphServiceClient;
         }
 
+        [HttpGet]
         public async Task<IActionResult> LoggedIn()
         {
             var user = await _graphServiceClient.Me.Request().GetAsync();
-            string username = user.UserPrincipalName;
+            string username = user.Mail;
 
             return View((object)username);
         }
 
         [HttpGet]
-        public async Task<string> GetUserName()
+        public async Task<string> GetEmail()
         {
             var user = await _graphServiceClient.Me.Request().GetAsync();
-            string username = user.UserPrincipalName;
+            string username = user.Mail;
 
             return username;
         }
-    } */
+    }
 }
