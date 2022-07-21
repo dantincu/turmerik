@@ -1,16 +1,14 @@
-import * as bootstrap from 'bootstrap';
-
-import { TrmrkCore } from '../../core/core';
-import { TrmrkClientBrowser, TrmrkClientBrowserApp } from '../browser';
+import { TrmrkCore } from "../../core/core";
+import { TrmrkClientBrowser, TrmrkClientBrowserApp } from "../browser";
 
 export class TrmrkBootStrap {
-    core: TrmrkClientBrowser;
+  browser: TrmrkClientBrowser;
 
-    constructor(core: TrmrkClientBrowser) {
-        this.core = core;
-    }
+  constructor(browser: TrmrkClientBrowser) {
+    this.browser = browser;
+  }
 }
 
 export class TrmrkBootstrapApp extends TrmrkClientBrowserApp {
-    bsCore = new TrmrkBootStrap(this.core);
+  bsBrowser = new TrmrkBootStrap(this.browser);
 }
