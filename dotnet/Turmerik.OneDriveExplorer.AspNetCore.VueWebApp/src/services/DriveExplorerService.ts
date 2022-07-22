@@ -1,4 +1,4 @@
-import { DriveItem } from "./Entities";
+import { DriveItem } from "./Entities/Entities";
 
 export class DriveExplorerService {
   loading: boolean;
