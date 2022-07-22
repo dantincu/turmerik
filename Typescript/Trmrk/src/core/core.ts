@@ -131,37 +131,37 @@ export class NumValueFactoryNormalizer extends ValueFactoryNormalizerBase<
 }
 
 export class StrValueNormalizer extends ValueNormalizerBase<
-  String | null | undefined
+  string | null | undefined
 > {
   constructor(
-    val: String | null | undefined,
-    dfVal: String | null | undefined,
+    val: string | null | undefined,
+    dfVal: string | null | undefined,
     public allowEmpty = true,
     public trimFirst = false
   ) {
     super(val, dfVal);
   }
 
-  useDefaultValue(val: String | null | undefined): boolean {
-    const retVal = !Trmrk.valIStr(val, this.allowEmpty, this.trimFirst);
+  useDefaultValue(val: string | null | undefined): boolean {
+    const retVal = !Trmrk.valIsStr(val, this.allowEmpty, this.trimFirst);
     return retVal;
   }
 }
 
 export class StrValueFactoryNormalizer extends ValueFactoryNormalizerBase<
-  String | null | undefined
+  string | null | undefined
 > {
   constructor(
-    val: String | null | undefined,
-    dfValFactory: () => String | null | undefined,
+    val: string | null | undefined,
+    dfValFactory: () => string | null | undefined,
     public allowEmpty = true,
     public trimFirst = false
   ) {
     super(val, dfValFactory);
   }
 
-  useDefaultValue(val: String | null | undefined): boolean {
-    const retVal = !Trmrk.valIStr(val, this.allowEmpty, this.trimFirst);
+  useDefaultValue(val: string | null | undefined): boolean {
+    const retVal = !Trmrk.valIsStr(val, this.allowEmpty, this.trimFirst);
     return retVal;
   }
 }
@@ -231,7 +231,7 @@ export namespace Trmrk {
   export const valIsNotNaNNumber = (val: any | null | undefined) =>
     typeof val === "number" && !isNaN(val);
 
-  export const valIStr = (
+  export const valIsStr = (
     val: any | null | undefined,
     allowEmpty = true,
     trimFirst = false
@@ -240,7 +240,7 @@ export namespace Trmrk {
 
     if (retVal && !allowEmpty) {
       if (trimFirst) {
-        val = (val as String).trim();
+        val = (val as string).trim();
       }
 
       retVal = val !== "";

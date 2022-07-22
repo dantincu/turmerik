@@ -1,8 +1,6 @@
 import { App } from "vue";
 import { Axios } from "axios";
 
-import { Trmrk } from "../common/core/core";
-
 import {
   servicesMap,
   trmrkClientBrowser,
@@ -19,8 +17,9 @@ import { mapAudioFileComponent } from "./MapComponents/MapAudioFileComponent";
 import { mapTextFileComponent } from "./MapComponents/MapTextFileComponent";
 
 import DriveItemsGridComponent from "../components/NestedComponents/DriveItemsGridComponent.vue";
-
+import { WebStorage } from "../common/core/webStorage";
 import { TrmrkAxios } from "../common/axios/trmrkAxios";
+import { WebStorageAxios } from "../common/axios/webStorageAxios";
 
 export interface IComponentWrapper {
   componentName: string;
@@ -28,8 +27,12 @@ export interface IComponentWrapper {
 }
 
 const axiosFactory = () => new Axios();
-
 const trmrkAxiosFactory = () => new TrmrkAxios(axiosFactory());
+
+const webStorage = new WebStorage();
+
+const webStorageAxiosFactory = () =>
+  new WebStorageAxios(webStorage, trmrkAxiosFactory());
 
 const fillComponentsMap = () => {
   mapDriveExplorerComponent();
@@ -62,6 +65,8 @@ export const registerServices = (app: App) => {
   app.provide("trmrkBootStrapApp", trmrkBootStrapApp);
   app.provide("axios", axiosFactory);
   app.provide("trmrkAxios", trmrkAxiosFactory);
+  app.provide("webStorage", webStorage);
+  app.provide("webStorageAxios", webStorageAxiosFactory);
 };
 
 export const registerComponentServices = (app: App) => {

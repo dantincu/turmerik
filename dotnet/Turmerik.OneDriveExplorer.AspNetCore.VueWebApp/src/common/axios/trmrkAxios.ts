@@ -49,8 +49,8 @@ export class TrmrkAxiosApiResult<T = any, D = any> {
 export class TrmrkAxios {
   constructor(public axios: Axios) {}
 
-  async request<T = any, D = any>(
-    requestFunc: () => Promise<AxiosResponse<T, D>>
+  async request<T = any, R = AxiosResponse<T>, D = any>(
+    requestFunc: () => Promise<R>
   ) {
     let apiResult: TrmrkAxiosApiResult<T, D>;
 
@@ -58,7 +58,7 @@ export class TrmrkAxios {
       const axiosApiResult = await requestFunc();
       apiResult = new TrmrkAxiosApiResult<T, D>(axiosApiResult);
     } catch (exc) {
-      apiResult = new TrmrkAxiosApiResult({
+      apiResult = new TrmrkAxiosApiResult<T, D>({
         isSuccess: false,
         exc: exc,
         status: 500,
@@ -69,47 +69,47 @@ export class TrmrkAxios {
     return apiResult;
   }
 
-  async get(
+  async get<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    opts: AxiosRequestConfig<any> | undefined = undefined
+    opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
-    const apiResult = await this.request(
-      async () => await this.axios.get(url, opts)
+    const apiResult = await this.request<T, R, D>(
+      async () => await this.axios.get<T, R, D>(url, opts)
     );
 
     return apiResult;
   }
 
-  async put(
+  async put<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     params: any,
-    opts: AxiosRequestConfig<any> | undefined = undefined
+    opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
-    const apiResult = await this.request(
-      async () => await this.axios.put(url, params, opts)
+    const apiResult = await this.request<T, R, D>(
+      async () => await this.axios.put<T, R, D>(url, params, opts)
     );
 
     return apiResult;
   }
 
-  async post(
+  async post<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
     params: any,
-    opts: AxiosRequestConfig<any> | undefined = undefined
+    opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
-    const apiResult = await this.request(
-      async () => await this.axios.post(url, params, opts)
+    const apiResult = await this.request<T, R, D>(
+      async () => await this.axios.post<T, R, D>(url, params, opts)
     );
 
     return apiResult;
   }
 
-  async delete(
+  async delete<T = any, R = AxiosResponse<T>, D = any>(
     url: string,
-    opts: AxiosRequestConfig<any> | undefined = undefined
+    opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
-    const apiResult = await this.request(
-      async () => await this.axios.delete(url, opts)
+    const apiResult = await this.request<T, R, D>(
+      async () => await this.axios.delete<T, R, D>(url, opts)
     );
 
     return apiResult;

@@ -1,12 +1,7 @@
-import { Trmrk, StrValueFactoryNormalizer } from "./core.js";
+import { Trmrk, StrValueFactoryNormalizer } from "./core";
 
 export class WebStorage {
-  cacheKeyBasePrefix: string;
-
-  constructor() {
-    this.cacheKeyBasePrefix = Trmrk.trmrkPrefix.value as string;
-    window.sessionStorage;
-  }
+  cacheKeyBasePrefix = Trmrk.trmrkPrefix.value as string;
 
   clear(storage: Storage | boolean) {
     const storageObj = this.getStorage(storage);
@@ -94,7 +89,7 @@ export class WebStorage {
     username: string | null = null
   ) {
     const cacheKey = [this.cacheKeyBasePrefix, username, keyName, id]
-      .filter((str) => Trmrk.valIStr(str, false, true))
+      .filter((str) => Trmrk.valIsStr(str, false, true))
       .join("|");
 
     return cacheKey;
