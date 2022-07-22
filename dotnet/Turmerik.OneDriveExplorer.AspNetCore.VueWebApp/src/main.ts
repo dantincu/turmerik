@@ -5,14 +5,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap";
 
-import AppContentComponent from "./components/AppContentComponent.vue";
-import { registerRoutes, allComponents } from "./routes";
-import {
-  registerComponents,
-  registerServices,
-  trmrkBootstrapApp,
-} from "./components";
+import { registerRoutes, allComponents } from "./appSetup/RegisterRoutes";
+import { registerComponents, registerServices } from "./appSetup/MapComponents";
+import { trmrkBootstrapApp } from "./appSetup/MapComponentsCore";
 
+import AppContentComponent from "./components/AppContentComponent.vue";
 const app = createApp(App);
 
 app.provide("trmrkBootstrapApp", trmrkBootstrapApp);

@@ -1,9 +1,11 @@
 <template>
     <div class="trmrk-app-nav">
         <nav class="nav">
-            <router-link to="/" :class="homePageRouterLinkCssClass"><i class="bi bi-house-door-fill"></i></router-link>
-            <router-link to="/options" :class="userOptionsRouterLinkCssClass"><i class="bi bi-gear-fill"></i></router-link>
+            <router-link to="/" class="nav-link trmrk-nav-link"><i class="bi bi-house-door-fill"></i></router-link>
+            <router-link to="/options" class="nav-link trmrk-nav-link"><i class="bi bi-gear-fill"></i></router-link>
             
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isDriveExplorerPage"><i class="bi bi-house-door-fill"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isUserOptionsPage"><i class="bi bi-gear-fill"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isImagesExplorerPage"><i class="bi bi-images"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isTextFilePage"><i class="bi bi-cursor-text"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isVideoFilePage"><i class="bi bi-camera-video-fill"></i></a>
@@ -23,21 +25,12 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, watch } from 'vue';
-    import { useRoute } from 'vue-router'
+    import { defineComponent } from 'vue';
 
     import { TrmrkBootstrapApp } from '../common/browser/bootstrap/bootstrap';
-    import { routePaths } from '../routes';
+    import { routePaths } from '../appSetup/RegisterRoutes';
     import DriveExplorerAppMenuComponent from "./DriveExplorerAppMenuComponent.vue";
     import UserOptionsAppMenuComponent from "./UserOptionsAppMenuComponent.vue";
-
-    const routerLinkCssClassesArr = ["nav-link", "trmrk-nav-link"];
-    const currentRouterLinkCssClassesArr = [...routerLinkCssClassesArr, "active"];
-
-    const routerLinkCssClass = routerLinkCssClassesArr.join(" ");
-    const currentRouterLinkCssClass = currentRouterLinkCssClassesArr.join(" ");
-
-    const getRouterLinkCssClass = (isCurrent: boolean) => isCurrent ? currentRouterLinkCssClass : routerLinkCssClass;
 
     export default defineComponent({
         inject: [
@@ -46,73 +39,76 @@
             "userOptionsService"],
         data() {
             const loginUrl = process.env.VUE_APP_API_BASE_URL + "/api/mvc/account/loggedIn";
-            const route = useRoute();
-            // fetch the user information when params change
-            
-            let isDriveExplorerPage = false;
-            let isUserOptionsPage = false;
-            let isImagesExplorerPage = false;
-            let isTextFilePage = false;
-            let isImageFilePage = false;
-            let isVideoFilePage = false;
-            let isAudioFilePage = false;
-
-            watch(
-                () => route.path,
-                async newPath => {
-                    switch (newPath) {
-                        case routePaths.driveExplorer:
-                            isDriveExplorerPage = true;
-                            break;
-                        case routePaths.userOptions:
-                            isUserOptionsPage = true;
-                            break;
-                        case routePaths.imagesExplorer:
-                            isImagesExplorerPage = true;
-                            break;
-                        case routePaths.textFile:
-                            isTextFilePage = true;
-                            break;
-                        case routePaths.imageFile:
-                            isImageFilePage = true;
-                            break;
-                        case routePaths.videoFile:
-                            isVideoFilePage = true;
-                            break;
-                        case routePaths.audioFile:
-                            isAudioFilePage = true;
-                            break;
-                        default:
-                            console.error("Unknown route path: " + newPath);
-                            break;
-                    }
-                }
-            )
 
             const trmrkBootstrapApp = this.trmrkBootstrapApp as any as TrmrkBootstrapApp;
             const javascriptVoid: string = trmrkBootstrapApp.browser.core.javascriptVoid;
 
-            const homePageRouterLinkCssClass = getRouterLinkCssClass(isDriveExplorerPage);
-            const userOptionsRouterLinkCssClass = getRouterLinkCssClass(isUserOptionsPage);
-
             return {
-                isDriveExplorerPage: isDriveExplorerPage,
-                isUserOptionsPage: isUserOptionsPage,
-                isImagesExplorerPage: isImagesExplorerPage,
-                isImageFilePage: isImageFilePage,
-                isTextFilePage: isTextFilePage,
-                isVideoFilePage: isVideoFilePage,
-                isAudioFilePage: isAudioFilePage,
+                isDriveExplorerPage: false,
+                isUserOptionsPage: false,
+                isImagesExplorerPage: false,
+                isImageFilePage: false,
+                isTextFilePage: false,
+                isVideoFilePage: false,
+                isAudioFilePage: false,
                 javascriptVoid: javascriptVoid,
-                loginUrl: loginUrl,
-                homePageRouterLinkCssClass: homePageRouterLinkCssClass,
-                userOptionsRouterLinkCssClass: userOptionsRouterLinkCssClass
+                loginUrl: loginUrl
             };
         },
         methods: {
             onLoginClick() {
                 window.open(this.loginUrl, "_blank");
+            },
+            resetNavLinkFlags() {
+                this.isDriveExplorerPage = false;
+                this.isUserOptionsPage = false;
+                this.isImagesExplorerPage = false;
+                this.isTextFilePage = false;
+                this.isImageFilePage = false;
+                this.isVideoFilePage = false;
+                this.isAudioFilePage = false;
+            },
+            updateNavLinkFlag(routePath: string) {
+                switch (routePath) {
+                    case routePaths.driveExplorer:
+                        this.isDriveExplorerPage = true;
+                        break;
+                    case routePaths.userOptions:
+                        this.isUserOptionsPage = true;
+                        break;
+                    case routePaths.imagesExplorer:
+                        this.isImagesExplorerPage = true;
+                        break;
+                    case routePaths.textFile:
+                        this.isTextFilePage = true;
+                        break;
+                    case routePaths.imageFile:
+                        this.isImageFilePage = true;
+                        break;
+                    case routePaths.videoFile:
+                        this.isVideoFilePage = true;
+                        break;
+                    case routePaths.audioFile:
+                        this.isAudioFilePage = true;
+                        break;
+                    default:
+                        console.error("Unknown route path: " + routePath);
+                        break;
+                }
             }
+        },
+        created() {
+            // watch the params of the route to fetch the data again
+            this.$watch(
+                () => this.$route.path,
+                (newPath: string) => {
+                    this.resetNavLinkFlags();
+                    this.updateNavLinkFlag(newPath);
+                },
+                // fetch the data when the view is created and the data is
+                // already being observed
+                { immediate: true }
+            )
         },
         components: {
             DriveExplorerAppMenuComponent,
@@ -155,5 +151,13 @@
 
     /* Handle on hover */::-webkit-scrollbar-thumb:hover {
         background: #555;
+    }
+
+    .trmrk-nav-link.router-link-active {
+        color: #FFF;
+    }
+
+    .trmrk-nav-no-link {
+        color: #88F;
     }
 </style>

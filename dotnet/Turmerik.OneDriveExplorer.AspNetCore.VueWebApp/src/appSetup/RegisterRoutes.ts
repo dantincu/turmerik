@@ -2,8 +2,9 @@ import { App } from "vue";
 import * as VueRouter from "vue-router";
 import { DefineComponent } from "vue";
 
-import { IHash } from "./common/core/core";
-import { componentsMap, IComponentWrapper } from "./components";
+import { IHash } from "../common/core/core";
+import { IComponentWrapper } from "./MapComponents";
+import { componentsMap } from "./MapComponentsCore";
 
 const getComponentWrapper = (
   componentName: string,
