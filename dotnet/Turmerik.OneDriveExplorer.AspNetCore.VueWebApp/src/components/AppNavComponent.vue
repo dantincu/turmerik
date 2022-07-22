@@ -20,6 +20,21 @@
 
             <UserOptionsAppMenuComponent v-if="isUserOptionsPage">
             </UserOptionsAppMenuComponent>
+
+            <ImagesExplorerAppMenuComponent v-if="isImagesExplorerPage">
+            </ImagesExplorerAppMenuComponent>
+
+            <ImageFileAppMenuComponent v-if="isImageFilePage">
+            </ImageFileAppMenuComponent>
+
+            <VideoFileAppMenuComponent v-if="isVideoFilePage">
+            </VideoFileAppMenuComponent>
+
+            <AudioFileAppMenuComponent v-if="isAudioFilePage">
+            </AudioFileAppMenuComponent>
+
+            <TextFileAppMenuComponent v-if="isTextFilePage">
+            </TextFileAppMenuComponent>
         </div>
     </div>
 </template>
@@ -29,28 +44,34 @@
 
     import { TrmrkBootstrapApp } from '../common/browser/bootstrap/bootstrap';
     import { routePaths } from '../appSetup/RegisterRoutes';
-    import DriveExplorerAppMenuComponent from "./DriveExplorerAppMenuComponent.vue";
-    import UserOptionsAppMenuComponent from "./UserOptionsAppMenuComponent.vue";
+
+    import DriveExplorerAppMenuComponent from "./AppMenuComponents/DriveExplorerAppMenuComponent.vue";
+    import UserOptionsAppMenuComponent from "./AppMenuComponents/UserOptionsAppMenuComponent.vue";
+    import ImagesExplorerAppMenuComponent from "./AppMenuComponents/ImagesExplorerAppMenuComponent.vue";
+    import ImageFileAppMenuComponent from "./AppMenuComponents/ImageFileAppMenuComponent.vue";
+    import VideoFileAppMenuComponent from "./AppMenuComponents/VideoFileAppMenuComponent.vue";
+    import AudioFileAppMenuComponent from "./AppMenuComponents/AudioFileAppMenuComponent.vue";
+    import TextFileAppMenuComponent from "./AppMenuComponents/TextFileAppMenuComponent.vue";
+    
+    const loginUrl = process.env.VUE_APP_API_BASE_URL + "/api/mvc/account/loggedIn";
 
     export default defineComponent({
         inject: [
-            'trmrkBootstrapApp',
+            'trmrkBootStrapApp',
             "driveExplorerService",
             "userOptionsService"],
         data() {
-            const loginUrl = process.env.VUE_APP_API_BASE_URL + "/api/mvc/account/loggedIn";
-
-            const trmrkBootstrapApp = this.trmrkBootstrapApp as any as TrmrkBootstrapApp;
-            const javascriptVoid: string = trmrkBootstrapApp.browser.core.javascriptVoid;
+            const trmrkBootStrapApp = this.trmrkBootStrapApp as any as TrmrkBootstrapApp;
+            const javascriptVoid: string = trmrkBootStrapApp.browser.core.javascriptVoid;
 
             return {
                 isDriveExplorerPage: false,
                 isUserOptionsPage: false,
                 isImagesExplorerPage: false,
                 isImageFilePage: false,
-                isTextFilePage: false,
                 isVideoFilePage: false,
                 isAudioFilePage: false,
+                isTextFilePage: false,
                 javascriptVoid: javascriptVoid,
                 loginUrl: loginUrl
             };
@@ -79,9 +100,6 @@
                     case routePaths.imagesExplorer:
                         this.isImagesExplorerPage = true;
                         break;
-                    case routePaths.textFile:
-                        this.isTextFilePage = true;
-                        break;
                     case routePaths.imageFile:
                         this.isImageFilePage = true;
                         break;
@@ -90,6 +108,9 @@
                         break;
                     case routePaths.audioFile:
                         this.isAudioFilePage = true;
+                        break;
+                    case routePaths.textFile:
+                        this.isTextFilePage = true;
                         break;
                     default:
                         console.error("Unknown route path: " + routePath);
@@ -112,7 +133,12 @@
         },
         components: {
             DriveExplorerAppMenuComponent,
-            UserOptionsAppMenuComponent
+            UserOptionsAppMenuComponent,
+            ImagesExplorerAppMenuComponent,
+            ImageFileAppMenuComponent,
+            VideoFileAppMenuComponent,
+            AudioFileAppMenuComponent,
+            TextFileAppMenuComponent,
         }
     });
 </script>

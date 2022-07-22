@@ -1,9 +1,22 @@
 import { App } from "vue";
 
-import { IHash } from "../common/core/core";
-import { TrmrkBootstrapApp } from "../common/browser/bootstrap/bootstrap";
+import { TrmrkCore, IHash } from "../common/core/core";
+import { TrmrkClientBrowser } from "../common/browser/browser";
 
-export const trmrkBootstrapApp = new TrmrkBootstrapApp();
+import {
+  TrmrkBootStrap,
+  TrmrkBootstrapApp,
+} from "../common/browser/bootstrap/bootstrap";
+
+export const trmrkCore = new TrmrkCore();
+export const trmrkClientBrowser = new TrmrkClientBrowser(trmrkCore);
+
+export const trmrkBootStrap = new TrmrkBootStrap(trmrkClientBrowser);
+export const trmrkBootStrapApp = new TrmrkBootstrapApp(
+  trmrkBootStrap,
+  trmrkClientBrowser
+);
+
 export const componentsMap: IHash<object> = {};
 export const servicesMap: IHash<object> = {};
 
@@ -19,7 +32,7 @@ export const mapComponent = (
   appMenuComponent: object
 ) => {
   const serviceName =
-    trmrkBootstrapApp.browser.core.firstLetterToLowerCase(componentName);
+    trmrkBootStrapApp.browser.core.firstLetterToLowerCase(componentName);
 
   servicesMap[serviceName + "Service"] = componentService;
 

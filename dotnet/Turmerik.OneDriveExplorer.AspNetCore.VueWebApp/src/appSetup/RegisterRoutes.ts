@@ -60,7 +60,7 @@ export const appMenuComponents = routePathsMap.map(
   (route) => route.appMenuComponent
 );
 
-export const allComponents = [...routeComponents, ...appMenuComponents];
+export const mainComponents = [...routeComponents, ...appMenuComponents];
 
 export const routes = routePathsMap.map((route) => ({
   path: route.path,

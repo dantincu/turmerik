@@ -1,7 +1,7 @@
 import { mapComponent } from "../MapComponentsCore";
 import { DriveExplorerService } from "../../services/DriveExplorerService";
-import DriveExplorerComponent from "../../components/DriveExplorerComponent.vue";
-import DriveExplorerAppMenuComponent from "../../components/DriveExplorerAppMenuComponent.vue";
+import DriveExplorerComponent from "../../components/RouteComponents/DriveExplorerComponent.vue";
+import DriveExplorerAppMenuComponent from "../../components/AppMenuComponents/DriveExplorerAppMenuComponent.vue";
 
 export const mapDriveExplorerComponent = () => {
   mapComponent(

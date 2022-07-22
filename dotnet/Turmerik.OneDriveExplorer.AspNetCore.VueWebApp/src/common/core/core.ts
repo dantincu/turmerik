@@ -199,4 +199,83 @@ export class TrmrkCore {
     strVal = strVal[0].toUpperCase() + strVal.substring(1);
     return strVal;
   }
+
+  numberIs(
+    value: number | any | null | undefined,
+    callback: (val: number) => boolean,
+    defaultValue = false
+  ) {
+    let retVal = defaultValue;
+
+    if (new ValueWrapper(value).isNotNaNNumber) {
+      retVal = callback(value);
+    }
+
+    return retVal;
+  }
+
+  numbersAre(
+    trgValue: number | any | null | undefined,
+    srcValue: number | any | null | undefined,
+    callback: (trgVal: number, srcVal: number) => boolean
+  ) {
+    const retValue = this.numberIs(trgValue, (trgVal) =>
+      this.numberIs(srcValue, (srcVal) => callback(trgVal, srcVal), true)
+    );
+
+    return retValue;
+  }
+
+  numberIsGreaterThan(
+    trgValue: number | any | null | undefined,
+    srcValue: number | any | null | undefined,
+    strictlyGreatherThan = false
+  ) {
+    const retValue = this.numbersAre(trgValue, srcValue, (trgVal, srcVal) => {
+      let retVal: boolean;
+
+      if (strictlyGreatherThan) {
+        retVal = trgVal > srcVal;
+      } else {
+        retVal = trgVal >= srcVal;
+      }
+
+      return retVal;
+    });
+
+    return retValue;
+  }
+
+  numberIsLessThan(
+    trgValue: number | any | null | undefined,
+    srcValue: number | any | null | undefined,
+    strictlyLessThan = false
+  ) {
+    const retValue = this.numbersAre(trgValue, srcValue, (trgVal, srcVal) => {
+      let retVal: boolean;
+
+      if (strictlyLessThan) {
+        retVal = trgVal < srcVal;
+      } else {
+        retVal = trgVal <= srcVal;
+      }
+
+      return retVal;
+    });
+
+    return retValue;
+  }
+
+  numberIsInRange(
+    value: number | any | null | undefined,
+    min: number | null = null,
+    max: number | null = null,
+    strictlyGreatherThan = false,
+    strictlyLessThan = false
+  ) {
+    let retVal = this.numberIsGreaterThan(value, min, strictlyGreatherThan);
+    retVal = retVal && this.numberIsLessThan(value, min, strictlyLessThan);
+
+    return retVal;
+  }
 }

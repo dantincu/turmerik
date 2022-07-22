@@ -1,7 +1,7 @@
 import { mapComponent } from "../MapComponentsCore";
 import { ImageFileService } from "../../services/ImageFileService";
-import ImageFileComponent from "../../components/ImageFileComponent.vue";
-import ImageFileAppMenuComponent from "../../components/ImageFileAppMenuComponent.vue";
+import ImageFileComponent from "../../components/RouteComponents/ImageFileComponent.vue";
+import ImageFileAppMenuComponent from "../../components/AppMenuComponents/ImageFileAppMenuComponent.vue";
 
 export const mapImageFileComponent = () => {
   mapComponent(

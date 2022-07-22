@@ -1,7 +1,7 @@
 import { mapComponent } from "../MapComponentsCore";
 import { ImagesExplorerService } from "../../services/ImagesExplorerService";
-import ImagesExplorerComponent from "../../components/ImagesExplorerComponent.vue";
-import ImagesExplorerAppMenuComponent from "../../components/ImagesExplorerAppMenuComponent.vue";
+import ImagesExplorerComponent from "../../components/RouteComponents/ImagesExplorerComponent.vue";
+import ImagesExplorerAppMenuComponent from "../../components/AppMenuComponents/ImagesExplorerAppMenuComponent.vue";
 
 export const mapImagesExplorerComponent = () => {
   mapComponent(

@@ -1,9 +1,9 @@
 import { TrmrkCore } from "../core/core";
 
 export class TrmrkClientBrowser {
-  core = new TrmrkCore();
+  constructor(public core: TrmrkCore) {}
 }
 
 export class TrmrkClientBrowserApp {
-  browser = new TrmrkClientBrowser();
+  constructor(public browser: TrmrkClientBrowser) {}
 }
