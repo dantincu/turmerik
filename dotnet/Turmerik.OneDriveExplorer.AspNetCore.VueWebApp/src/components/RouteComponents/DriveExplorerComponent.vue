@@ -6,15 +6,13 @@
 <script lang="ts">
     import { defineComponent } from 'vue';
 
-    import { TrmrkBootstrapApp } from '../../common/browser/bootstrap/bootstrap';
+    import { Trmrk } from '../../common/core/core';
 
     export default defineComponent({
         inject: [
-            'trmrkBootStrapApp',
             "driveExplorerService"],
         data() {
-            const trmrkBootStrapApp = this.trmrkBootStrapApp as any as TrmrkBootstrapApp;
-            const javascriptVoid: string = trmrkBootStrapApp.browser.core.javascriptVoid;
+            const javascriptVoid: string = Trmrk.javascriptVoid;
 
             return {
                 javascriptVoid: javascriptVoid,

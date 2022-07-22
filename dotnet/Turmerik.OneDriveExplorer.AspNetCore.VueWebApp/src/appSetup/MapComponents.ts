@@ -1,9 +1,10 @@
 import { App } from "vue";
 import { Axios } from "axios";
 
+import { Trmrk } from "../common/core/core";
+
 import {
   servicesMap,
-  trmrkCore,
   trmrkClientBrowser,
   trmrkBootStrap,
   trmrkBootStrapApp,
@@ -28,8 +29,7 @@ export interface IComponentWrapper {
 
 const axiosFactory = () => new Axios();
 
-const trmrkAxiosFactory = () =>
-  new TrmrkAxios(axiosFactory(), trmrkBootStrapApp.browser.core);
+const trmrkAxiosFactory = () => new TrmrkAxios(axiosFactory());
 
 const fillComponentsMap = () => {
   mapDriveExplorerComponent();
@@ -57,7 +57,6 @@ export const registerNestedComponents = (app: App) => {
 };
 
 export const registerServices = (app: App) => {
-  app.provide("trmrkCore", trmrkCore);
   app.provide("trmrkClientBrowser", trmrkClientBrowser);
   app.provide("trmrkBootStrap", trmrkBootStrap);
   app.provide("trmrkBootStrapApp", trmrkBootStrapApp);

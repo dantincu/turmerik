@@ -1,6 +1,6 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from "axios";
 
-import { TrmrkCore, ValueWrapper } from "../core/core";
+import { Trmrk } from "../core/core";
 
 export class TrmrkAxiosApiResult<T = any, D = any> {
   constructor(src: any | null | undefined = null) {
@@ -26,10 +26,12 @@ export class TrmrkAxiosApiResult<T = any, D = any> {
   request: object | null = null;
 
   getStatusStr(defaultValue = "Error") {
-    const statusWrapper = new ValueWrapper(this.status);
     let statusStr;
 
-    if (statusWrapper.isNotNaNNumber || statusWrapper.isNonEmptyString) {
+    if (
+      Trmrk.valIsOfTypeString(this.status) ||
+      Trmrk.valIsNotNaNNumber(this.status)
+    ) {
       statusStr = this.status?.toString();
     } else {
       statusStr = defaultValue;
@@ -45,7 +47,7 @@ export class TrmrkAxiosApiResult<T = any, D = any> {
 }
 
 export class TrmrkAxios {
-  constructor(public axios: Axios, public trmrkCore: TrmrkCore) {}
+  constructor(public axios: Axios) {}
 
   async request<T = any, D = any>(
     requestFunc: () => Promise<AxiosResponse<T, D>>

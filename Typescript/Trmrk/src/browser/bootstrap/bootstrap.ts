@@ -1,4 +1,3 @@
-import { TrmrkCore } from "../../core/core";
 import { TrmrkClientBrowser, TrmrkClientBrowserApp } from "../browser";
 
 export class TrmrkBootStrap {

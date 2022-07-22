@@ -42,7 +42,8 @@
 <script lang="ts">
     import { defineComponent } from 'vue';
 
-    import { TrmrkBootstrapApp } from '../common/browser/bootstrap/bootstrap';
+    import { Trmrk } from '../common/core/core';
+    
     import { routePaths } from '../appSetup/RegisterRoutes';
 
     import DriveExplorerAppMenuComponent from "./AppMenuComponents/DriveExplorerAppMenuComponent.vue";
@@ -61,8 +62,7 @@
             "driveExplorerService",
             "userOptionsService"],
         data() {
-            const trmrkBootStrapApp = this.trmrkBootStrapApp as any as TrmrkBootstrapApp;
-            const javascriptVoid: string = trmrkBootStrapApp.browser.core.javascriptVoid;
+            const javascriptVoid: string = Trmrk.javascriptVoid;
 
             return {
                 isDriveExplorerPage: false,
