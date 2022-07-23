@@ -12,6 +12,7 @@ import {
   registerComponentServices,
   registerNestedComponents,
   registerServices,
+  registerDirectives,
 } from "./appSetup/MapComponents";
 
 import AppContentComponent from "./components/AppContentComponent.vue";
@@ -24,5 +25,7 @@ registerMainComponents(app, mainComponents);
 registerNestedComponents(app);
 app.component("AppContentComponent", AppContentComponent);
 
+registerDirectives(app);
 registerRoutes(app);
+
 app.mount("#app");

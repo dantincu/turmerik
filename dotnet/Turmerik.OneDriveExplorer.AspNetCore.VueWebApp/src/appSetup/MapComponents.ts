@@ -21,6 +21,8 @@ import { WebStorage } from "../common/core/webStorage";
 import { TrmrkAxios } from "../common/axios/trmrkAxios";
 import { WebStorageAxios } from "../common/axios/webStorageAxios";
 
+// import { createLongClickDirective } from "../common/browser/vue-js/directives/long-click-directive";
+
 export interface IComponentWrapper {
   componentName: string;
   component: object;
@@ -73,4 +75,8 @@ export const registerComponentServices = (app: App) => {
   for (const key of Object.keys(servicesMap)) {
     app.provide(key, servicesMap[key]);
   }
+};
+
+export const registerDirectives = (app: App) => {
+  // createLongClickDirective(app);
 };

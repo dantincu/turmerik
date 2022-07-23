@@ -8,8 +8,8 @@
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isUserOptionsPage"><i class="bi bi-gear-fill"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isImagesExplorerPage"><i class="bi bi-images"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isTextFilePage"><i class="bi bi-cursor-text"></i></a>
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isVideoFilePage"><i class="bi bi-camera-video-fill"></i></a>
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isAudioFilePage"><i class="bi bi-headphones"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isVideoFilePage"><i class="bi bi-film"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isAudioFilePage"><i class="bi bi-file-music-fill"></i></a>
 
             <a class="nav-link trmrk-nav-link" :href="javascriptVoid" v-on:click="onLoginClick"><i class="bi bi-person-fill"></i></a>
             <button type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
@@ -57,10 +57,6 @@
     const loginUrl = process.env.VUE_APP_API_BASE_URL + "/api/mvc/account/loggedIn";
 
     export default defineComponent({
-        inject: [
-            'trmrkBootStrapApp',
-            "driveExplorerService",
-            "userOptionsService"],
         data() {
             const javascriptVoid: string = Trmrk.javascriptVoid;
 
