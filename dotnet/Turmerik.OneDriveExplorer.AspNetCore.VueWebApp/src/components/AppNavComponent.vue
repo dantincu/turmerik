@@ -4,36 +4,36 @@
             <router-link to="/" class="nav-link trmrk-nav-link"><i class="bi bi-house-door-fill"></i></router-link>
             <router-link to="/options" class="nav-link trmrk-nav-link"><i class="bi bi-gear-fill"></i></router-link>
             
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isDriveExplorerPage"><i class="bi bi-house-door-fill"></i></a>
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isUserOptionsPage"><i class="bi bi-gear-fill"></i></a>
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isImagesExplorerPage"><i class="bi bi-images"></i></a>
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isTextFilePage"><i class="bi bi-cursor-text"></i></a>
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isVideoFilePage"><i class="bi bi-film"></i></a>
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="isAudioFilePage"><i class="bi bi-file-music-fill"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isDriveExplorerPage"><i class="bi bi-house-door-fill"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isUserOptionsPage"><i class="bi bi-gear-fill"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isImagesExplorerPage"><i class="bi bi-images"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isTextFilePage"><i class="bi bi-cursor-text"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isVideoFilePage"><i class="bi bi-film"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isAudioFilePage"><i class="bi bi-file-music-fill"></i></a>
 
             <a class="nav-link trmrk-nav-link" :href="javascriptVoid" v-on:click="onLoginClick"><i class="bi bi-person-fill"></i></a>
             <button type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
         </nav>
         <div class="collapse" id="appMenu">
-            <DriveExplorerAppMenuComponent v-if="isDriveExplorerPage">
+            <DriveExplorerAppMenuComponent v-if="routes.isDriveExplorerPage">
             </DriveExplorerAppMenuComponent>
 
-            <UserOptionsAppMenuComponent v-if="isUserOptionsPage">
+            <UserOptionsAppMenuComponent v-if="routes.isUserOptionsPage">
             </UserOptionsAppMenuComponent>
 
-            <ImagesExplorerAppMenuComponent v-if="isImagesExplorerPage">
+            <ImagesExplorerAppMenuComponent v-if="routes.isImagesExplorerPage">
             </ImagesExplorerAppMenuComponent>
 
-            <ImageFileAppMenuComponent v-if="isImageFilePage">
+            <ImageFileAppMenuComponent v-if="routes.isImageFilePage">
             </ImageFileAppMenuComponent>
 
-            <VideoFileAppMenuComponent v-if="isVideoFilePage">
+            <VideoFileAppMenuComponent v-if="routes.isVideoFilePage">
             </VideoFileAppMenuComponent>
 
-            <AudioFileAppMenuComponent v-if="isAudioFilePage">
+            <AudioFileAppMenuComponent v-if="routes.isAudioFilePage">
             </AudioFileAppMenuComponent>
 
-            <TextFileAppMenuComponent v-if="isTextFilePage">
+            <TextFileAppMenuComponent v-if="routes.isTextFilePage">
             </TextFileAppMenuComponent>
         </div>
     </div>
@@ -43,8 +43,7 @@
     import { defineComponent } from 'vue';
 
     import { Trmrk } from '../common/core/core';
-    
-    import { routePaths } from '../appSetup/RegisterRoutes';
+    import { IPageRoutes } from '../services/Entities/PageRoutes';
 
     import DriveExplorerAppMenuComponent from "./AppMenuComponents/DriveExplorerAppMenuComponent.vue";
     import UserOptionsAppMenuComponent from "./AppMenuComponents/UserOptionsAppMenuComponent.vue";
@@ -57,75 +56,23 @@
     const loginUrl = process.env.VUE_APP_API_BASE_URL + "/api/mvc/account/loggedIn";
 
     export default defineComponent({
+        props: [
+            "pageRoutes"
+        ],
         data() {
             const javascriptVoid: string = Trmrk.javascriptVoid;
+            const pageRoutes = this.$props.pageRoutes as IPageRoutes;
 
             return {
-                isDriveExplorerPage: false,
-                isUserOptionsPage: false,
-                isImagesExplorerPage: false,
-                isImageFilePage: false,
-                isVideoFilePage: false,
-                isAudioFilePage: false,
-                isTextFilePage: false,
                 javascriptVoid: javascriptVoid,
-                loginUrl: loginUrl
+                loginUrl: loginUrl,
+                routes: pageRoutes
             };
         },
         methods: {
             onLoginClick() {
                 window.open(this.loginUrl, "_blank");
             },
-            resetNavLinkFlags() {
-                this.isDriveExplorerPage = false;
-                this.isUserOptionsPage = false;
-                this.isImagesExplorerPage = false;
-                this.isTextFilePage = false;
-                this.isImageFilePage = false;
-                this.isVideoFilePage = false;
-                this.isAudioFilePage = false;
-            },
-            updateNavLinkFlag(routePath: string) {
-                switch (routePath) {
-                    case routePaths.driveExplorer:
-                        this.isDriveExplorerPage = true;
-                        break;
-                    case routePaths.userOptions:
-                        this.isUserOptionsPage = true;
-                        break;
-                    case routePaths.imagesExplorer:
-                        this.isImagesExplorerPage = true;
-                        break;
-                    case routePaths.imageFile:
-                        this.isImageFilePage = true;
-                        break;
-                    case routePaths.videoFile:
-                        this.isVideoFilePage = true;
-                        break;
-                    case routePaths.audioFile:
-                        this.isAudioFilePage = true;
-                        break;
-                    case routePaths.textFile:
-                        this.isTextFilePage = true;
-                        break;
-                    default:
-                        console.error("Unknown route path: " + routePath);
-                        break;
-                }
-            }
-        },
-        created() {
-            // watch the params of the route to fetch the data again
-            this.$watch(
-                () => this.$route.path,
-                (newPath: string) => {
-                    this.resetNavLinkFlags();
-                    this.updateNavLinkFlag(newPath);
-                },
-                // fetch the data when the view is created and the data is
-                // already being observed
-                { immediate: true }
-            )
         },
         components: {
             DriveExplorerAppMenuComponent,
