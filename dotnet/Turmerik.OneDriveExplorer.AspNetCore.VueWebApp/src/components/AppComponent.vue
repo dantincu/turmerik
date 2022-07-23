@@ -6,7 +6,7 @@
             <h3>Loading...</h3>
         </div>
 
-        <AppContentComponent v-else-if="email" />
+        <AppContentComponent v-else-if="email" :pageRoutes="pageRoutes" />
 
         <div v-else class="trmrk-app-error container-xxl">
             <h3>{{ status ?? "Error" }}</h3>

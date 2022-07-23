@@ -1,35 +1,62 @@
 <template>
     <div class="container-xxl trmrk-app-content">
-        <router-view></router-view>
+        <DriveExplorerComponent v-if="routes.isDriveExplorerPage">
+        </DriveExplorerComponent>
+
+        <UserOptionsComponent v-if="routes.isUserOptionsPage">
+        </UserOptionsComponent>
+
+        <ImagesExplorerComponent v-if="routes.isImagesExplorerPage">
+        </ImagesExplorerComponent>
+
+        <ImageFileComponent v-if="routes.isImageFilePage">
+        </ImageFileComponent>
+
+        <VideoFileComponent v-if="routes.isVideoFilePage">
+        </VideoFileComponent>
+
+        <AudioFileComponent v-if="routes.isAudioFilePage">
+        </AudioFileComponent>
+
+        <TextFileComponent v-if="routes.isTextFilePage">
+        </TextFileComponent>
     </div>
 </template>
 
 <script lang="ts">
     import { defineComponent } from 'vue';
 
-    /* import DriveExplorerComponent from "./RouteComponents/DriveExplorerComponent.vue";
+    import { IPageRoutes } from '../services/Entities/PageRoutes';
+
+    import DriveExplorerComponent from "./RouteComponents/DriveExplorerComponent.vue";
     import UserOptionsComponent from "./RouteComponents/UserOptionsComponent.vue";
     import ImagesExplorerComponent from "./RouteComponents/ImagesExplorerComponent.vue";
     import ImageFileComponent from "./RouteComponents/ImageFileComponent.vue";
     import VideoFileComponent from "./RouteComponents/VideoFileComponent.vue";
     import AudioFileComponent from "./RouteComponents/AudioFileComponent.vue";
-    import TextFileComponent from "./RouteComponents/TextFileComponent.vue"; */
+    import TextFileComponent from "./RouteComponents/TextFileComponent.vue";
 
     export default defineComponent({
+        props: [
+            "pageRoutes"
+        ],
         data() {
+            const pageRoutes = this.$props.pageRoutes as IPageRoutes;
+
             return ({
+                routes: pageRoutes
             });
         },
         created() {
         },
         components: {
-            /* DriveExplorerComponent,
+            DriveExplorerComponent,
             UserOptionsComponent,
             ImagesExplorerComponent,
             ImageFileComponent,
             VideoFileComponent,
             AudioFileComponent,
-            TextFileComponent, */
+            TextFileComponent,
         }
     });
 </script>
