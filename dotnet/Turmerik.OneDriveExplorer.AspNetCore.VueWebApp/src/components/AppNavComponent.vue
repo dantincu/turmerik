@@ -134,7 +134,7 @@
         color: #FFF;
     }
 
-    .trmrk-nav-no-link {
-        color: #88F;
+    .nav-link.trmrk-nav-no-link, .nav-link.trmrk-nav-no-link:active, .nav-link.trmrk-nav-no-link:hover {
+        color: #FB8;
     }
 </style>
