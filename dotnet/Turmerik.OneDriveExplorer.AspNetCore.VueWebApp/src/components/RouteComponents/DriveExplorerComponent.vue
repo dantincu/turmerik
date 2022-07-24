@@ -24,7 +24,7 @@
     import { TrmrkAxiosApiResult } from '../../common/axios/trmrkAxios';
     // import { DriveExplorerService } from '../../services/DriveExplorerService';
     import { DriveItem } from '../../services/Entities/Entities';
-    // import DriveItemsGridComponent from '../NestedComponents/DriveItemsGridComponent.vue';
+    import DriveItemsGridComponent from '../NestedComponents/DriveItemsGridComponent.vue';
 
     export default defineComponent({
         inject: [
@@ -64,9 +64,10 @@
             };
         },
         created() {
+            // const driveExplorerService = this.driveExplorerService as DriveExplorerService;
         },
         components: {
-            // DriveItemsGridComponent
+            DriveItemsGridComponent
         }
     });
 </script>

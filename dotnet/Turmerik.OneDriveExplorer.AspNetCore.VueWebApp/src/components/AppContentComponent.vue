@@ -1,10 +1,13 @@
 <template>
     <div class="container-xxl trmrk-app-content">
-        <DriveExplorerComponent v-if="routes.isDriveExplorerPage">
-        </DriveExplorerComponent>
+        <HomeComponent v-if="routes.isHomePage">
+        </HomeComponent>
 
         <UserOptionsComponent v-if="routes.isUserOptionsPage">
         </UserOptionsComponent>
+
+        <DriveExplorerComponent v-if="routes.isDriveExplorerPage">
+        </DriveExplorerComponent>
 
         <ImagesExplorerComponent v-if="routes.isImagesExplorerPage">
         </ImagesExplorerComponent>
@@ -28,8 +31,9 @@
 
     import { IPageRoutes } from '../services/Entities/PageRoutes';
 
-    import DriveExplorerComponent from "./RouteComponents/DriveExplorerComponent.vue";
+    import HomeComponent from "./RouteComponents/HomeComponent.vue";
     import UserOptionsComponent from "./RouteComponents/UserOptionsComponent.vue";
+    import DriveExplorerComponent from "./RouteComponents/DriveExplorerComponent.vue";
     import ImagesExplorerComponent from "./RouteComponents/ImagesExplorerComponent.vue";
     import ImageFileComponent from "./RouteComponents/ImageFileComponent.vue";
     import VideoFileComponent from "./RouteComponents/VideoFileComponent.vue";
@@ -50,8 +54,9 @@
         created() {
         },
         components: {
-            DriveExplorerComponent,
+            HomeComponent,
             UserOptionsComponent,
+            DriveExplorerComponent,
             ImagesExplorerComponent,
             ImageFileComponent,
             VideoFileComponent,

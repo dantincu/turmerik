@@ -52,8 +52,9 @@
                 statusText: null,
                 error: null,
                 pageRoutes: {
-                    isDriveExplorerPage: false,
+                    isHomePage: false,
                     isUserOptionsPage: false,
+                    isDriveExplorerPage: false,
                     isImagesExplorerPage: false,
                     isTextFilePage: false,
                     isImageFilePage: false,
@@ -84,6 +85,7 @@
                 }
             },
             resetNavLinkFlags() {
+                this.pageRoutes.isHomePage = false;
                 this.pageRoutes.isDriveExplorerPage = false;
                 this.pageRoutes.isUserOptionsPage = false;
                 this.pageRoutes.isImagesExplorerPage = false;
@@ -93,31 +95,24 @@
                 this.pageRoutes.isAudioFilePage = false;
             },
             updateNavLinkFlag(routePath: string) {
-                switch (routePath) {
-                    case routePaths.driveExplorer:
-                        this.pageRoutes.isDriveExplorerPage = true;
-                        break;
-                    case routePaths.userOptions:
-                        this.pageRoutes.isUserOptionsPage = true;
-                        break;
-                    case routePaths.imagesExplorer:
-                        this.pageRoutes.isImagesExplorerPage = true;
-                        break;
-                    case routePaths.imageFile:
-                        this.pageRoutes.isImageFilePage = true;
-                        break;
-                    case routePaths.videoFile:
-                        this.pageRoutes.isVideoFilePage = true;
-                        break;
-                    case routePaths.audioFile:
-                        this.pageRoutes.isAudioFilePage = true;
-                        break;
-                    case routePaths.textFile:
-                        this.pageRoutes.isTextFilePage = true;
-                        break;
-                    default:
-                        console.error("Unknown route path: " + routePath);
-                        break;
+                if (routePath.startsWith(routePaths.userOptions)) {
+                    this.pageRoutes.isUserOptionsPage = true;
+                } else if (routePath.startsWith(routePaths.driveExplorer)) {
+                    this.pageRoutes.isDriveExplorerPage = true;
+                } else if (routePath.startsWith(routePaths.imagesExplorer)) {
+                    this.pageRoutes.isImagesExplorerPage = true;
+                } else if (routePath.startsWith(routePaths.imageFile)) {
+                    this.pageRoutes.isImageFilePage = true;
+                } else if (routePath.startsWith(routePaths.videoFile)) {
+                    this.pageRoutes.isVideoFilePage = true;
+                } else if (routePath.startsWith(routePaths.audioFile)) {
+                    this.pageRoutes.isAudioFilePage = true;
+                } else if (routePath.startsWith(routePaths.textFile)) {
+                    this.pageRoutes.isTextFilePage = true;
+                } else if (routePath.startsWith(routePaths.home)) {
+                    this.pageRoutes.isHomePage = true;
+                } else {
+                    console.error("Unknown route path: " + routePath);
                 }
             },
         },

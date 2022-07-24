@@ -1,4 +1,4 @@
-import { Trmrk, StrValueFactoryNormalizer } from "./core";
+import { Trmrk } from "./core";
 
 export class WebStorage {
   cacheKeyBasePrefix = Trmrk.trmrkPrefix.value as string;

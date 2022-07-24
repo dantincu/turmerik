@@ -2,12 +2,15 @@
     <div class="trmrk-app-nav">
         <nav class="nav">
             <router-link to="/" class="nav-link trmrk-nav-link"><i class="bi bi-house-door-fill"></i></router-link>
+            <router-link to="/files" class="nav-link trmrk-nav-link"><i class="bi bi-files"></i></router-link>
             <router-link to="/options" class="nav-link trmrk-nav-link"><i class="bi bi-gear-fill"></i></router-link>
             
-            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isDriveExplorerPage"><i class="bi bi-house-door-fill"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isHomePage"><i class="bi bi-house-door-fill"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isUserOptionsPage"><i class="bi bi-gear-fill"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isDriveExplorerPage"><i class="bi bi-files"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isImagesExplorerPage"><i class="bi bi-images"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isTextFilePage"><i class="bi bi-cursor-text"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isImageFilePage"><i class="bi bi-image"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isVideoFilePage"><i class="bi bi-film"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isAudioFilePage"><i class="bi bi-file-music-fill"></i></a>
 
@@ -15,11 +18,14 @@
             <button type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
         </nav>
         <div class="collapse" id="appMenu">
-            <DriveExplorerAppMenuComponent v-if="routes.isDriveExplorerPage">
-            </DriveExplorerAppMenuComponent>
+            <HomeAppMenuComponent v-if="routes.isUserOptionsPage">
+            </HomeAppMenuComponent>
 
             <UserOptionsAppMenuComponent v-if="routes.isUserOptionsPage">
             </UserOptionsAppMenuComponent>
+
+            <DriveExplorerAppMenuComponent v-if="routes.isDriveExplorerPage">
+            </DriveExplorerAppMenuComponent>
 
             <ImagesExplorerAppMenuComponent v-if="routes.isImagesExplorerPage">
             </ImagesExplorerAppMenuComponent>
@@ -45,8 +51,9 @@
     import { Trmrk } from '../common/core/core';
     import { IPageRoutes } from '../services/Entities/PageRoutes';
 
-    import DriveExplorerAppMenuComponent from "./AppMenuComponents/DriveExplorerAppMenuComponent.vue";
+    import HomeAppMenuComponent from "./AppMenuComponents/HomeAppMenuComponent.vue";
     import UserOptionsAppMenuComponent from "./AppMenuComponents/UserOptionsAppMenuComponent.vue";
+    import DriveExplorerAppMenuComponent from "./AppMenuComponents/DriveExplorerAppMenuComponent.vue";
     import ImagesExplorerAppMenuComponent from "./AppMenuComponents/ImagesExplorerAppMenuComponent.vue";
     import ImageFileAppMenuComponent from "./AppMenuComponents/ImageFileAppMenuComponent.vue";
     import VideoFileAppMenuComponent from "./AppMenuComponents/VideoFileAppMenuComponent.vue";
@@ -75,8 +82,9 @@
             },
         },
         components: {
-            DriveExplorerAppMenuComponent,
+            HomeAppMenuComponent,
             UserOptionsAppMenuComponent,
+            DriveExplorerAppMenuComponent,
             ImagesExplorerAppMenuComponent,
             ImageFileAppMenuComponent,
             VideoFileAppMenuComponent,

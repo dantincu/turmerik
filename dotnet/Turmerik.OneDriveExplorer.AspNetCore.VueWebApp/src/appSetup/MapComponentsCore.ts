@@ -17,7 +17,7 @@ export const trmrkBootStrapApp = new TrmrkBootstrapApp(
 );
 
 export const componentsMap: IHash<object> = {};
-export const servicesMap: IHash<object> = {};
+export const servicesMap: IHash<object | Function> = {};
 
 export interface IComponentWrapper {
   componentName: string;
@@ -26,7 +26,7 @@ export interface IComponentWrapper {
 
 export const mapComponent = (
   componentName: string,
-  componentService: object,
+  componentService: object | Function,
   routeComponent: object,
   appMenuComponent: object
 ) => {

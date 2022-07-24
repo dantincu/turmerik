@@ -22,10 +22,6 @@ export interface IHash<TValue> {
   [key: string]: TValue;
 }
 
-export type HashType<TKey extends HashKeyType<TValue>, TValue> = {
-  [key in keyof TKey]: TValue;
-};
-
 export interface IStrHash extends IHash<string> {}
 
 export abstract class ValueNormalizerCoreBase<

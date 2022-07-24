@@ -8,6 +8,7 @@ import {
   trmrkBootStrapApp,
 } from "./MapComponentsCore";
 
+import { mapHomeComponent } from "./MapComponents/MapHomeComponent";
 import { mapDriveExplorerComponent } from "./MapComponents/MapDriveExplorerComponent";
 import { mapUserOptionsComponent } from "./MapComponents/MapUserOptionsComponent";
 import { mapImagesExplorerComponent } from "./MapComponents/MapImagesExplorerComponent";
@@ -20,8 +21,10 @@ import DriveItemsGridComponent from "../components/NestedComponents/DriveItemsGr
 import { WebStorage } from "../common/core/webStorage";
 import { TrmrkAxios } from "../common/axios/trmrkAxios";
 import { WebStorageAxios } from "../common/axios/webStorageAxios";
-
-// import { createLongClickDirective } from "../common/browser/vue-js/directives/long-click-directive";
+import {
+  DriveExplorerApi,
+  DriveExplorerService,
+} from "../services/DriveExplorerService";
 
 export interface IComponentWrapper {
   componentName: string;
@@ -29,15 +32,24 @@ export interface IComponentWrapper {
 }
 
 const axiosFactory = () => new Axios();
-const trmrkAxiosFactory = () => new TrmrkAxios(axiosFactory());
+const trmrkAxiosFactory = (axios: Axios) => new TrmrkAxios(axios);
 
 const webStorage = new WebStorage();
 
-const webStorageAxiosFactory = () =>
-  new WebStorageAxios(webStorage, trmrkAxiosFactory());
+const webStorageAxiosFactory = (
+  webStorage: WebStorage,
+  trmrkAxios: TrmrkAxios
+) => new WebStorageAxios(webStorage, trmrkAxios);
+
+const driveExplorerApiFactory = (webStorageAxios: WebStorageAxios) =>
+  new DriveExplorerApi(webStorageAxios);
+
+const driveExplorerServiceFactory = (driveExplorerApi: DriveExplorerApi) =>
+  new DriveExplorerService(driveExplorerApi);
 
 const fillComponentsMap = () => {
-  mapDriveExplorerComponent();
+  mapHomeComponent();
+  mapDriveExplorerComponent(driveExplorerServiceFactory);
   mapUserOptionsComponent();
   mapImagesExplorerComponent();
   mapImageFileComponent();
@@ -47,6 +59,23 @@ const fillComponentsMap = () => {
 };
 
 fillComponentsMap();
+
+export const registerServices = (app: App) => {
+  app.provide("trmrkClientBrowser", trmrkClientBrowser);
+  app.provide("trmrkBootStrap", trmrkBootStrap);
+  app.provide("trmrkBootStrapApp", trmrkBootStrapApp);
+  app.provide("axios", axiosFactory);
+  app.provide("trmrkAxios", trmrkAxiosFactory);
+  app.provide("webStorage", webStorage);
+  app.provide("webStorageAxios", webStorageAxiosFactory);
+  app.provide("driveExplorerApi", driveExplorerApiFactory);
+};
+
+export const registerComponentServices = (app: App) => {
+  for (const key of Object.keys(servicesMap)) {
+    app.provide(key, servicesMap[key]);
+  }
+};
 
 export const registerMainComponents = (
   app: App,
@@ -59,22 +88,6 @@ export const registerMainComponents = (
 
 export const registerNestedComponents = (app: App) => {
   app.component("DriveItemsGridComponent", DriveItemsGridComponent);
-};
-
-export const registerServices = (app: App) => {
-  app.provide("trmrkClientBrowser", trmrkClientBrowser);
-  app.provide("trmrkBootStrap", trmrkBootStrap);
-  app.provide("trmrkBootStrapApp", trmrkBootStrapApp);
-  app.provide("axios", axiosFactory);
-  app.provide("trmrkAxios", trmrkAxiosFactory);
-  app.provide("webStorage", webStorage);
-  app.provide("webStorageAxios", webStorageAxiosFactory);
-};
-
-export const registerComponentServices = (app: App) => {
-  for (const key of Object.keys(servicesMap)) {
-    app.provide(key, servicesMap[key]);
-  }
 };
 
 export const registerDirectives = (app: App) => {

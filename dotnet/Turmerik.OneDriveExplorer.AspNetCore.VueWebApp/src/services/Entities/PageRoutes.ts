@@ -1,4 +1,5 @@
 export interface IPageRoutes {
+  isHomePage: boolean;
   isDriveExplorerPage: boolean;
   isUserOptionsPage: boolean;
   isImagesExplorerPage: boolean;

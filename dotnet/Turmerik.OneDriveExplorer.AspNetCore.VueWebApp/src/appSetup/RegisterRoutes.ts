@@ -20,36 +20,85 @@ const getComponentWrapper = (
   return retObj;
 };
 
-const getRoute = (path: string, componentName: string): ITrmrkRoute => ({
-  path: path,
+const getRoute = (
+  template: string,
+  basePath: string,
+  componentName: string
+): ITrmrkRoute => ({
+  template: template,
+  basePath: basePath,
   routeComponent: getComponentWrapper(componentName, "Component"),
   appMenuComponent: getComponentWrapper(componentName, "AppMenuComponent"),
 });
 
 export interface ITrmrkRoute {
-  path: string;
+  template: string;
+  basePath: string;
   routeComponent: IComponentWrapper;
   appMenuComponent: IComponentWrapper;
 }
 
 export const routePaths = {
-  userOptions: "/options",
+  driveExplorer: "/files",
   imagesExplorer: "/images",
   textFile: "/text-file",
   imageFile: "/image-file",
   videoFile: "/video-file",
   audioFile: "/audio-file",
-  driveExplorer: "/",
+  userOptions: "/options",
+  home: "/",
+};
+
+const driveFileIdSeg = "/:driveFileId";
+const driveFolderIdSegOpt = "/:driveFolderId?";
+
+const getRouteTemplateStr = (
+  routePath: string,
+  secondSeg: string | null = null
+) => {
+  let templateStr = routePath;
+
+  if (secondSeg !== null) {
+    templateStr = [templateStr, secondSeg].join("/");
+  }
+
+  return templateStr;
+};
+
+export const routeTemplates = {
+  driveExplorer: getRouteTemplateStr(
+    routePaths.driveExplorer,
+    driveFolderIdSegOpt
+  ),
+  imagesExplorer: getRouteTemplateStr(
+    routePaths.driveExplorer,
+    driveFolderIdSegOpt
+  ),
+  textFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
+  videoFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
+  imageFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
+  audioFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
+  userOptions: getRouteTemplateStr(routePaths.driveExplorer),
+  home: getRouteTemplateStr(routePaths.driveExplorer),
 };
 
 export const routePathsMap: ITrmrkRoute[] = [
-  getRoute(routePaths.userOptions, "UserOptions"),
-  getRoute(routePaths.imagesExplorer, "ImagesExplorer"),
-  getRoute(routePaths.textFile, "TextFile"),
-  getRoute(routePaths.imageFile, "ImageFile"),
-  getRoute(routePaths.videoFile, "VideoFile"),
-  getRoute(routePaths.audioFile, "AudioFile"),
-  getRoute(routePaths.driveExplorer, "DriveExplorer"),
+  getRoute(routeTemplates.userOptions, routePaths.userOptions, "UserOptions"),
+  getRoute(
+    routeTemplates.imagesExplorer,
+    routePaths.imagesExplorer,
+    "ImagesExplorer"
+  ),
+  getRoute(routeTemplates.textFile, routePaths.textFile, "TextFile"),
+  getRoute(routeTemplates.imageFile, routePaths.imageFile, "ImageFile"),
+  getRoute(routeTemplates.videoFile, routePaths.videoFile, "VideoFile"),
+  getRoute(routeTemplates.audioFile, routePaths.audioFile, "AudioFile"),
+  getRoute(
+    routeTemplates.driveExplorer,
+    routePaths.driveExplorer,
+    "DriveExplorer"
+  ),
+  getRoute(routeTemplates.home, routePaths.home, "Home"),
 ];
 
 export const routeComponents = routePathsMap.map(
@@ -63,7 +112,7 @@ export const appMenuComponents = routePathsMap.map(
 export const mainComponents = [...routeComponents, ...appMenuComponents];
 
 export const routes = routePathsMap.map((route) => ({
-  path: route.path,
+  path: route.basePath,
   component: route.routeComponent,
 }));
 
