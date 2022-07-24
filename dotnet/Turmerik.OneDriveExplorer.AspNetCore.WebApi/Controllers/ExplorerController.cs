@@ -12,7 +12,7 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApi.Controllers
     // [Authorize]
     [AllowAnonymous]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class ExplorerController : ExplorerControllerBase
     {
         public ExplorerController(
@@ -23,10 +23,10 @@ namespace Turmerik.OneDriveExplorer.AspNetCore.WebApi.Controllers
         {
         }
 
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<ActionResult> GetDriveItemMacros() => await this.GetDriveItemMacrosCoreAsync();
 
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<ActionResult> GetAppSettings() => await this.GetAppSettingsCoreAsync();
     }
 }

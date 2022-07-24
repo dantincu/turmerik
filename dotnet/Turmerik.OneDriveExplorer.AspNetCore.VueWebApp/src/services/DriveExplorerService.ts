@@ -50,6 +50,8 @@ export class DriveExplorerService {
       this.currentDriveFolder = apiResponse.data;
       this.hasData = true;
     }
+
+    return apiResponse;
   }
 }
 

@@ -382,4 +382,17 @@ export namespace Trmrk {
   export const writeToClipboardAsync = async (text: string) => {
     await navigator.clipboard.writeText(text);
   };
+
+  export const getObjOrParseJsonIfStr = <T>(value: T) => {
+    let retVal = value;
+
+    if (valIsStr(value, false, true)) {
+      try {
+        retVal = JSON.parse(value as any as string);
+        // eslint-disable-next-line no-empty
+      } catch (err) {}
+    }
+
+    return retVal as any as T;
+  };
 }

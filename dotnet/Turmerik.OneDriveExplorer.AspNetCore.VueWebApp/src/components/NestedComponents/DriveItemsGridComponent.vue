@@ -9,7 +9,7 @@
                 <th scope="col" class="trmrk-icon-grid-head-cell"></th>
             </thead>
             <tbody>
-                <tr v-for="driveItemEl in driveItemElsArr" :key="driveItemEl.id">
+                <tr v-for="driveItemEl in driveItemElemsArr" :key="driveItemEl.id">
                     <td class="trmrk-icon-grid-row-cell">
                         <i :class="driveItemEl.checkIconCssClass" @click="itemCheckBoxClick(driveItemEl)"></i>
                     </td>
@@ -46,8 +46,7 @@
 
             return ({
                 rootDomElCssClass: [ "trmrk-drive-items-grid", rootDomElCssClass ].join(" "),
-                isDriveFoldersGrid: this.$props.isDriveFoldersGrid,
-                driveItemElsArr: this.$props.driveItemElsArr ?? this.$props.driveItemsArr.map(
+                driveItemElemsArr: this.$props.driveItemElsArr ?? this.$props.driveItemsArr?.map(
                     (item: DriveItem) => {
                         const [ fileNameWithoutExtension, fileNameExtension ] = getFileNameAndExtension(item.name as string);
                         const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder" : getFileNameBsIconCssClass(fileNameExtension);
@@ -62,7 +61,7 @@
                             fileNameExtension: fileNameExtension,
                         } as DriveItemEl);
                     }
-                )
+                ) ?? []
             });
         },
         methods: {

@@ -43,7 +43,9 @@ const webStorageAxiosFactory = (
   trmrkAxios: TrmrkAxios
 ) => new WebStorageAxios(webStorage, trmrkAxios);
 
-const appSettingsService = new AppSettingsService();
+const appSettingsService = new AppSettingsService(
+  webStorageAxiosFactory(webStorage, trmrkAxiosFactory(axiosFactory()))
+);
 
 const driveExplorerApiFactory = (webStorageAxios: WebStorageAxios) =>
   new DriveExplorerApi(webStorageAxios);

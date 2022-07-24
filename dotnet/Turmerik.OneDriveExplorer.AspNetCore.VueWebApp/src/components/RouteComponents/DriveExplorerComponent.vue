@@ -21,6 +21,7 @@
 <script lang="ts">
     import { defineComponent, inject } from 'vue';
 
+    import { TrmrkAxiosApiResult } from '../../common/axios/trmrkAxios';
     import { AppSettings } from '../../services/Entities/Entities';
     import { AppSettingsService } from '../../services/AppSettingsService';
     import { DriveExplorerService } from '../../services/DriveExplorerService';
@@ -60,27 +61,55 @@
 
             return data;
         },
+        methods: {
+            applyError(apiResponse: TrmrkAxiosApiResult | null, reason: any | null = null) {
+                apiResponse = apiResponse ?? new TrmrkAxiosApiResult({
+                    isSuccess: false,
+                    exc: reason ?? "Error"
+                });
+
+                this.hasData = false;
+                this.isLoading = false;
+
+                this.errorStatusStr = apiResponse.getStatusStr() as string;
+                this.errorStatusText = apiResponse.getStatusText() as string;
+                this.errorText = JSON.stringify(apiResponse.exc ?? "Error");
+                
+                this.driveFoldersArr = [];
+                this.driveFilesArr = [];
+            }
+        },
         created() {
-            this.driveExplorerService.driveExplorerApi.setAppSettings(
-            this.appSettingsService.appSettings as AppSettings);
-
-            const driveFolderId = (this.$route.params["driveFolderId"] as string | null | undefined) ?? "";
-
             this.isLoading = true;
             this.hasData = false;
 
-            this.driveExplorerService.loadDriveFolderAsync(driveFolderId).then(() => {
-                this.hasData = this.driveExplorerService.hasData;
-                this.isLoading = false;
-                
-                if (this.driveExplorerService.hasData) {
-                    this.driveFoldersArr = this.driveExplorerService.currentDriveFolder?.subFolders as DriveItem[];
-                    this.driveFilesArr = this.driveExplorerService.currentDriveFolder?.folderFiles as DriveItem[];
-                } else {
-                    this.driveFoldersArr = [];
-                    this.driveFilesArr = [];
+            this.appSettingsService.getAppSettingsAsync().then(
+                (appSettings: TrmrkAxiosApiResult<AppSettings>) => {
+                    if (appSettings.isSuccess) {
+                        this.driveExplorerService.driveExplorerApi.setAppSettings(appSettings.data as AppSettings);
+                        const driveFolderId = (this.$route.params["driveFolderId"] as string | null | undefined) ?? "";
+
+                        this.driveExplorerService.loadDriveFolderAsync(driveFolderId).then((apiResponse: TrmrkAxiosApiResult) => {
+                            this.isLoading = false;
+                     
+                            if (this.driveExplorerService.hasData) {
+                                this.driveFoldersArr = this.driveExplorerService.currentDriveFolder?.subFolders as DriveItem[];
+                                this.driveFilesArr = this.driveExplorerService.currentDriveFolder?.folderFiles as DriveItem[];
+                                this.hasData = true;
+                            } else {
+                                this.applyError(apiResponse);
+                            }
+                        });
+                    } else {
+                        this.applyError(appSettings);
+                    }
+                },
+                (reason: any) => {
+                    this.applyError(null, reason);
                 }
-            });
+            );
+            
+            
         },
         components: {
             DriveItemsGridComponent

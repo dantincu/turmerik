@@ -30,15 +30,18 @@
     
     import { routePaths } from '../appSetup/RegisterRoutes';
     import { IPageRoutes } from '../services/Entities/PageRoutes';
+    import { TrmrkAxiosApiResult } from '../common/axios/trmrkAxios';
+    import { AppSettings } from '../services/Entities/Entities';
     import { AppSettingsService } from '../services/AppSettingsService';
+    import { DriveExplorerService } from '../services/DriveExplorerService';
 
     import AppContentComponent from './AppContentComponent.vue';
     import AppNavComponent from './AppNavComponent.vue';
 
     interface Data {
         loading: boolean,
-        appSettings: null | string
-        status: null | number;
+        appSettings: null | AppSettings
+        status: null | number | string;
         statusText: null | string;
         error: null | any;
         pageRoutes: IPageRoutes
@@ -47,9 +50,11 @@
     export default defineComponent({
         setup() {
             const appSettingsService = inject<AppSettingsService>("appSettingsService") as AppSettingsService;
+            const driveExplorerService = inject<DriveExplorerService>("driveExplorerService") as DriveExplorerService;
 
             return {
-                appSettingsService
+                appSettingsService,
+                driveExplorerService
             }
         },
         data(): Data {
@@ -75,24 +80,20 @@
             async fetchData() {
                 this.appSettings = null;
                 this.loading = true;
-                try {
-                    const response = await fetch("api/explorer/getAppSettings");
-                    if (response.ok) {
-                        const appSettings = await response.json();
-                        this.appSettings = appSettings;
 
-                        this.appSettingsService.appSettings = appSettings;
+                this.appSettingsService.getAppSettingsAsync().then((apiReponse: TrmrkAxiosApiResult<AppSettings>) => {
+                    if (apiReponse.isSuccess) {
+                        this.driveExplorerService.driveExplorerApi.setAppSettings(apiReponse.data as AppSettings);
+                        this.appSettings = apiReponse.data;
                         this.loading = false;
+                    } else {
+                        this.status = apiReponse.getStatusStr() as string;
+                        this.statusText = apiReponse.getStatusText() as string;
                     }
-                    else {
-                        this.status = response.status;
-                        this.statusText = response.statusText;
-                    }
-                }
-                catch (reason) {
+                }, (reason: any) => {
                     this.error = reason;
                     this.loading = false;
-                }
+                });
             },
             resetNavLinkFlags() {
                 this.pageRoutes.isHomePage = false;

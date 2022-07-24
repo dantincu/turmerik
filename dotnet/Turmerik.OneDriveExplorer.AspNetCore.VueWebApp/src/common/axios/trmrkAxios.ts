@@ -1,13 +1,18 @@
-import { Axios, AxiosRequestConfig, AxiosResponse } from "axios";
-
 import { Trmrk } from "../core/core";
+import {
+  Axios,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosDefaults,
+  AxiosRequestHeaders,
+} from "axios";
 
 export class TrmrkAxiosApiResult<T = any, D = any> {
   constructor(src: any | null | undefined = null) {
     if (src) {
       this.isSuccess = src.isSuccess ?? src.status == 200; // Did NOT use strict comparison as I DO want it to be valid when the status is "200" as a string
       this.exc = src.exc ?? null;
-      this.data = src.data ?? null;
+      this.data = Trmrk.getObjOrParseJsonIfStr<T>(src.data);
       this.status = src.status ?? null;
       this.statusText = src.statusText ?? null;
       this.headers = src.headers ?? null;
@@ -47,26 +52,50 @@ export class TrmrkAxiosApiResult<T = any, D = any> {
 }
 
 export class TrmrkAxios {
-  constructor(public axios: Axios) {}
+  constructor(public axios: Axios) {
+    axios.defaults = {
+      headers: {
+        get: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        } as AxiosRequestHeaders,
+        post: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        } as AxiosRequestHeaders,
+        put: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        } as AxiosRequestHeaders,
+        delete: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        } as AxiosRequestHeaders,
+      },
+    } as AxiosDefaults;
+  }
 
   async request<T = any, R = AxiosResponse<T>, D = any>(
     requestFunc: () => Promise<R>
   ) {
-    let apiResult: TrmrkAxiosApiResult<T, D>;
+    let apiResult: TrmrkAxiosApiResult<T, D> | null = null;
 
-    try {
-      const axiosApiResult = await requestFunc();
-      apiResult = new TrmrkAxiosApiResult<T, D>(axiosApiResult);
-    } catch (exc) {
+    const axiosApiResult = await requestFunc().catch((exc: any) => {
       apiResult = new TrmrkAxiosApiResult<T, D>({
         isSuccess: false,
         exc: exc,
         status: 500,
         statusText: "Unknown error",
       });
+
+      return null;
+    });
+
+    if (!apiResult && axiosApiResult) {
+      apiResult = new TrmrkAxiosApiResult<T, D>(axiosApiResult);
     }
 
-    return apiResult;
+    return apiResult as TrmrkAxiosApiResult<T, D>;
   }
 
   async get<T = any, R = AxiosResponse<T>, D = any>(
@@ -74,8 +103,26 @@ export class TrmrkAxios {
     opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
     const apiResult = await this.request<T, R, D>(async () => {
-      return await this.axios.get<T, R, D>(url, opts);
+      return await this.axios.get<T, R, D>(
+        url,
+        opts ?? {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        }
+      );
     });
+
+    /* if (Trmrk.valIsNullOfUndef(opts)) {
+      apiResult = await this.request<T, R, D>(async () => {
+        return await this.axios.get<T, R, D>(url);
+      });
+    } else {
+      apiResult = await this.request<T, R, D>(async () => {
+        return await this.axios.get<T, R, D>(url, opts ?? {});
+      });
+    } */
 
     return apiResult;
   }
@@ -86,8 +133,34 @@ export class TrmrkAxios {
     opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
     const apiResult = await this.request<T, R, D>(
-      async () => await this.axios.put<T, R, D>(url, params, opts)
+      async () =>
+        await this.axios.put<T, R, D>(
+          url,
+          params,
+          opts ?? {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json;charset=UTF-8",
+            },
+          }
+        )
     );
+
+    /* if (Trmrk.valIsNullOfUndef(opts)) {
+      if (Trmrk.valIsNullOfUndef(params)) {
+        apiResult = await this.request<T, R, D>(
+          async () => await this.axios.put<T, R, D>(url)
+        );
+      } else {
+        apiResult = await this.request<T, R, D>(
+          async () => await this.axios.put<T, R, D>(url, params)
+        );
+      }
+    } else {
+      apiResult = await this.request<T, R, D>(
+        async () => await this.axios.put<T, R, D>(url, params ?? {}, opts)
+      );
+    }*/
 
     return apiResult;
   }
@@ -98,8 +171,34 @@ export class TrmrkAxios {
     opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
     const apiResult = await this.request<T, R, D>(
-      async () => await this.axios.post<T, R, D>(url, params, opts)
+      async () =>
+        await this.axios.post<T, R, D>(
+          url,
+          params,
+          opts ?? {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json;charset=UTF-8",
+            },
+          }
+        )
     );
+
+    /* if (Trmrk.valIsNullOfUndef(opts)) {
+      if (Trmrk.valIsNullOfUndef(params)) {
+        apiResult = await this.request<T, R, D>(
+          async () => await this.axios.post<T, R, D>(url)
+        );
+      } else {
+        apiResult = await this.request<T, R, D>(
+          async () => await this.axios.post<T, R, D>(url, params)
+        );
+      }
+    } else {
+      apiResult = await this.request<T, R, D>(
+        async () => await this.axios.post<T, R, D>(url, params ?? {}, opts)
+      );
+    } */
 
     return apiResult;
   }
@@ -108,9 +207,27 @@ export class TrmrkAxios {
     url: string,
     opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
-    const apiResult = await this.request<T, R, D>(
-      async () => await this.axios.delete<T, R, D>(url, opts)
-    );
+    const apiResult = await this.request<T, R, D>(async () => {
+      return await this.axios.delete<T, R, D>(
+        url,
+        opts ?? {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        }
+      );
+    });
+
+    /* if (Trmrk.valIsNullOfUndef(opts)) {
+      apiResult = await this.request<T, R, D>(async () => {
+        return await this.axios.delete<T, R, D>(url);
+      });
+    } else {
+      apiResult = await this.request<T, R, D>(async () => {
+        return await this.axios.delete<T, R, D>(url, opts);
+      });
+    } */
 
     return apiResult;
   }

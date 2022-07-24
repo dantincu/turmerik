@@ -55,10 +55,12 @@ export class WebStorageAxios {
     opts: AxiosRequestConfig<D> | null | undefined = null,
     refreshCache: boolean = false
   ) {
-    const axOpts = opts ?? undefined;
-
     const apiResult = await this.request<T, D>(
-      async () => await this.trmrkAxios.get<T, R, D>(url, axOpts),
+      async () =>
+        await this.trmrkAxios.get<T, R, D>(
+          url,
+          opts as AxiosRequestConfig<D> | undefined
+        ),
       cacheKey,
       storage,
       refreshCache
