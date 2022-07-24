@@ -26,6 +26,8 @@ import {
   DriveExplorerService,
 } from "../services/DriveExplorerService";
 
+import { AppSettingsService } from "../services/AppSettingsService";
+
 export interface IComponentWrapper {
   componentName: string;
   component: object;
@@ -41,15 +43,20 @@ const webStorageAxiosFactory = (
   trmrkAxios: TrmrkAxios
 ) => new WebStorageAxios(webStorage, trmrkAxios);
 
+const appSettingsService = new AppSettingsService();
+
 const driveExplorerApiFactory = (webStorageAxios: WebStorageAxios) =>
   new DriveExplorerApi(webStorageAxios);
 
-const driveExplorerServiceFactory = (driveExplorerApi: DriveExplorerApi) =>
-  new DriveExplorerService(driveExplorerApi);
+const driveExplorerService = new DriveExplorerService(
+  driveExplorerApiFactory(
+    webStorageAxiosFactory(webStorage, trmrkAxiosFactory(axiosFactory()))
+  )
+);
 
 const fillComponentsMap = () => {
   mapHomeComponent();
-  mapDriveExplorerComponent(driveExplorerServiceFactory);
+  mapDriveExplorerComponent(driveExplorerService);
   mapUserOptionsComponent();
   mapImagesExplorerComponent();
   mapImageFileComponent();
@@ -67,6 +74,7 @@ export const registerServices = (app: App) => {
   app.provide("axios", axiosFactory);
   app.provide("trmrkAxios", trmrkAxiosFactory);
   app.provide("webStorage", webStorage);
+  app.provide("appSettingsService", appSettingsService);
   app.provide("webStorageAxios", webStorageAxiosFactory);
   app.provide("driveExplorerApi", driveExplorerApiFactory);
 };

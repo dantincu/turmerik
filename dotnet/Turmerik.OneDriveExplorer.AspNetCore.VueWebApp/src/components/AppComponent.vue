@@ -6,7 +6,7 @@
             <h3>Loading...</h3>
         </div>
 
-        <AppContentComponent v-else-if="email" :pageRoutes="pageRoutes" />
+        <AppContentComponent v-else-if="appSettings" :pageRoutes="pageRoutes" />
 
         <div v-else class="trmrk-app-error container-xxl">
             <h3>{{ status ?? "Error" }}</h3>
@@ -26,17 +26,18 @@
 </style>
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
+    import { defineComponent, inject } from 'vue';
     
     import { routePaths } from '../appSetup/RegisterRoutes';
-    import { IPageRoutes } from '@/services/Entities/PageRoutes';
+    import { IPageRoutes } from '../services/Entities/PageRoutes';
+    import { AppSettingsService } from '../services/AppSettingsService';
 
     import AppContentComponent from './AppContentComponent.vue';
     import AppNavComponent from './AppNavComponent.vue';
 
     interface Data {
         loading: boolean,
-        email: null | string
+        appSettings: null | string
         status: null | number;
         statusText: null | string;
         error: null | any;
@@ -44,10 +45,17 @@
     }
 
     export default defineComponent({
+        setup() {
+            const appSettingsService = inject<AppSettingsService>("appSettingsService") as AppSettingsService;
+
+            return {
+                appSettingsService
+            }
+        },
         data(): Data {
             return {
                 loading: false,
-                email: null,
+                appSettings: null,
                 status: null,
                 statusText: null,
                 error: null,
@@ -65,13 +73,15 @@
         },
         methods: {
             async fetchData() {
-                this.email = null;
+                this.appSettings = null;
                 this.loading = true;
                 try {
-                    const response = await fetch("api/mvc/account/getEmail");
+                    const response = await fetch("api/explorer/getAppSettings");
                     if (response.ok) {
-                        const text = await response.text();
-                        this.email = text;
+                        const appSettings = await response.json();
+                        this.appSettings = appSettings;
+
+                        this.appSettingsService.appSettings = appSettings;
                         this.loading = false;
                     }
                     else {

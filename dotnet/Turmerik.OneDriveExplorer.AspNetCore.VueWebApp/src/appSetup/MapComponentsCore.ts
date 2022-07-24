@@ -31,7 +31,6 @@ export const mapComponent = (
   appMenuComponent: object
 ) => {
   const serviceName = Trmrk.firstLetterToLowerCase(componentName);
-
   servicesMap[serviceName + "Service"] = componentService;
 
   componentsMap[componentName + "Component"] = routeComponent;

@@ -1,11 +1,12 @@
 import { Trmrk, NumHashKeyType } from "../common/core/core";
-import { TrmrkAxios } from "../common/axios/trmrkAxios";
+import { TrmrkAxios, TrmrkAxiosApiResult } from "../common/axios/trmrkAxios";
 import { WebStorageAxios } from "../common/axios/webStorageAxios";
 import { DriveItem, AppSettings } from "./Entities/Entities";
 import { WebStorage } from "@/common/core/webStorage";
 
 export class DriveExplorerService {
   loading: boolean;
+  hasData: boolean;
   currentDriveFolderId: string | null;
   currentDriveFolder: DriveItem | null;
   status: string | null;
@@ -14,6 +15,7 @@ export class DriveExplorerService {
 
   constructor(public driveExplorerApi: DriveExplorerApi) {
     this.loading = false;
+    this.hasData = false;
     this.currentDriveFolderId = null;
     this.currentDriveFolder = null;
     this.status = null;
@@ -21,7 +23,34 @@ export class DriveExplorerService {
     this.error = null;
   }
 
-  async loadDriveFolderAsync(driveFolderId: string | null) {}
+  async loadDriveFolderAsync(driveFolderId: string | null) {
+    this.currentDriveFolderId = driveFolderId;
+    this.hasData = false;
+    this.loading = true;
+
+    const apiResponse = await this.driveExplorerApi
+      .getDriveFolderAsync(driveFolderId ?? "")
+      .catch(
+        (reason) =>
+          new TrmrkAxiosApiResult<DriveItem>({
+            exc: reason,
+          })
+      );
+
+    this.loading = false;
+
+    if (!apiResponse.isSuccess) {
+      this.status = apiResponse.getStatusStr() ?? null;
+      this.statusText = apiResponse.getStatusText() ?? null;
+
+      if (apiResponse.exc) {
+        this.error = JSON.stringify(apiResponse.exc);
+      }
+    } else {
+      this.currentDriveFolder = apiResponse.data;
+      this.hasData = true;
+    }
+  }
 }
 
 export enum OfficeLikeFileType {
@@ -86,7 +115,7 @@ export class DriveExplorerApi {
       relUrl += "/" + encodeURIComponent(driveFolderId);
     }
 
-    const apiResult = await this.webStorageAxios.get(
+    const apiResult = await this.webStorageAxios.get<DriveItem>(
       relUrl,
       cacheKey,
       false,

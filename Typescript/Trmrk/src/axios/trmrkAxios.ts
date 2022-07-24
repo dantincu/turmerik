@@ -73,9 +73,9 @@ export class TrmrkAxios {
     url: string,
     opts: AxiosRequestConfig<D> | undefined = undefined
   ) {
-    const apiResult = await this.request<T, R, D>(
-      async () => await this.axios.get<T, R, D>(url, opts)
-    );
+    const apiResult = await this.request<T, R, D>(async () => {
+      return await this.axios.get<T, R, D>(url, opts);
+    });
 
     return apiResult;
   }

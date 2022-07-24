@@ -6,11 +6,11 @@ import DriveExplorerComponent from "../../components/RouteComponents/DriveExplor
 import DriveExplorerAppMenuComponent from "../../components/AppMenuComponents/DriveExplorerAppMenuComponent.vue";
 
 export const mapDriveExplorerComponent = (
-  driveExplorerServiceFactory: Function
+  driveExplorerService: DriveExplorerService
 ) => {
   mapComponent(
     "DriveExplorer",
-    driveExplorerServiceFactory,
+    driveExplorerService,
     DriveExplorerComponent,
     DriveExplorerAppMenuComponent
   );
