@@ -2,9 +2,9 @@
     <div class="trmrk-app-component trmrk-drive-explorer-component">
         <div class="trmrk-drive-explorer" v-if="hasData">
             <h3>Folders</h3>
-            <DriveItemsGridComponent @isDriveFoldersGrid="true" @driveItemsArr="(driveFoldersArr as any)"></DriveItemsGridComponent>
+            <DriveItemsGridComponent :isDriveFoldersGrid="true" :driveItems="driveFolders"></DriveItemsGridComponent>
             <h3>Files</h3>
-            <DriveItemsGridComponent @isDriveFoldersGrid="false" @driveItemsArr="(driveFilesArr as any)"></DriveItemsGridComponent>
+            <DriveItemsGridComponent :isDriveFoldersGrid="false" :driveItems="driveFiles"></DriveItemsGridComponent>
         </div>
 
         <div v-if="isLoading" class="trmrk-component-loading">
@@ -21,6 +21,7 @@
 <script lang="ts">
     import { defineComponent, inject } from 'vue';
 
+    import { IRefValue } from '../../common/core/core';
     import { TrmrkAxiosApiResult } from '../../common/axios/trmrkAxios';
     import { AppSettings } from '../../services/Entities/Entities';
     import { AppSettingsService } from '../../services/AppSettingsService';
@@ -34,8 +35,8 @@
         errorStatusStr: string | null;
         errorStatusText: string | null;
         errorText: string | null;
-        driveFoldersArr: DriveItem[];
-        driveFilesArr: DriveItem[];
+        driveFolders: IRefValue<DriveItem[]>;
+        driveFiles: IRefValue<DriveItem[]>;
     }
 
     export default defineComponent({
@@ -55,8 +56,12 @@
                 errorStatusStr: null,
                 errorStatusText: null,
                 errorText: null,
-                driveFoldersArr: [],
-                driveFilesArr: []
+                driveFolders: {
+                    value: []
+                },
+                driveFiles: {
+                    value: []
+                },
             }
 
             return data;
@@ -75,8 +80,8 @@
                 this.errorStatusText = apiResponse.getStatusText() as string;
                 this.errorText = JSON.stringify(apiResponse.exc ?? "Error");
                 
-                this.driveFoldersArr = [];
-                this.driveFilesArr = [];
+                this.driveFolders.value = [];
+                this.driveFiles.value = [];
             }
         },
         created() {
@@ -91,10 +96,11 @@
 
                         this.driveExplorerService.loadDriveFolderAsync(driveFolderId).then((apiResponse: TrmrkAxiosApiResult) => {
                             this.isLoading = false;
-                     
+                            
                             if (this.driveExplorerService.hasData) {
-                                this.driveFoldersArr = this.driveExplorerService.currentDriveFolder?.subFolders as DriveItem[];
-                                this.driveFilesArr = this.driveExplorerService.currentDriveFolder?.folderFiles as DriveItem[];
+                                this.driveFolders.value = this.driveExplorerService.currentDriveFolder?.subFolders ?? [];
+                                this.driveFiles.value = this.driveExplorerService.currentDriveFolder?.folderFiles ?? [];
+
                                 this.hasData = true;
                             } else {
                                 this.applyError(apiResponse);
@@ -108,8 +114,6 @@
                     this.applyError(null, reason);
                 }
             );
-            
-            
         },
         components: {
             DriveItemsGridComponent

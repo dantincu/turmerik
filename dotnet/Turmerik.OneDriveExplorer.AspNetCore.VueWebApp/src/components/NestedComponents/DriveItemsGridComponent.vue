@@ -9,7 +9,7 @@
                 <th scope="col" class="trmrk-icon-grid-head-cell"></th>
             </thead>
             <tbody>
-                <tr v-for="driveItemEl in driveItemElemsArr" :key="driveItemEl.id">
+                <tr v-for="driveItemEl in driveItemElems" :key="(driveItemEl.data.id as string)">
                     <td class="trmrk-icon-grid-row-cell">
                         <i :class="driveItemEl.checkIconCssClass" @click="itemCheckBoxClick(driveItemEl)"></i>
                     </td>
@@ -40,31 +40,50 @@
 
     export default defineComponent({
         name: 'Counter',
-        props: [ "isDriveFoldersGrid", "driveItemElsArr", "driveItemsArr" ],
+        props: [ "isDriveFoldersGrid", "driveItemEls", "driveItems" ],
         data() {
             const rootDomElCssClass = this.$props.isDriveFoldersGrid ? "trmrk-drive-folders-grid" : "trmrk-drive-files-grid";
 
+            let driveItemElems: DriveItemEl[] = this.getDriveItemEls(
+                this.$props.driveItems?.value, this.$props.driveItemEls?.value
+            );
+
             return ({
                 rootDomElCssClass: [ "trmrk-drive-items-grid", rootDomElCssClass ].join(" "),
-                driveItemElemsArr: this.$props.driveItemElsArr ?? this.$props.driveItemsArr?.map(
-                    (item: DriveItem) => {
-                        const [ fileNameWithoutExtension, fileNameExtension ] = getFileNameAndExtension(item.name as string);
-                        const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder" : getFileNameBsIconCssClass(fileNameExtension);
-
-                        return ({
-                            data: item,
-                            isSelected: false,
-                            isChecked: false,
-                            iconCssClass: iconCssClass,
-                            checkIconCssClass: "bi bi-square",
-                            fileNameWithoutExtension: fileNameWithoutExtension,
-                            fileNameExtension: fileNameExtension,
-                        } as DriveItemEl);
-                    }
-                ) ?? []
+                driveItemElems: driveItemElems
             });
         },
         methods: {
+            getDriveItemEls(driveItems: DriveItem[] | null, driveItemEls: DriveItemEl[] | null) {
+                let driveItemElems = driveItemEls as DriveItemEl[];
+
+                if (!driveItemElems) {
+                    if (driveItems) {
+                        driveItemElems = driveItems.map(
+                            (item: DriveItem) => {
+                                const [ fileNameWithoutExtension, fileNameExtension ] = getFileNameAndExtension(item.name as string);
+                                const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder" : getFileNameBsIconCssClass(fileNameExtension);
+
+                                const retItem = ({
+                                    data: item,
+                                    isSelected: false,
+                                    isChecked: false,
+                                    iconCssClass: iconCssClass,
+                                    checkIconCssClass: "bi bi-square",
+                                    fileNameWithoutExtension: fileNameWithoutExtension,
+                                    fileNameExtension: fileNameExtension,
+                                } as DriveItemEl);
+
+                                return retItem;
+                            }
+                        );
+                    } else {
+                        driveItemElems = []
+                    }
+                }
+
+                return driveItemElems;
+            },
             itemCheckBoxClick(driveItem: DriveItemEl) {
                 driveItem.isChecked = !driveItem.isChecked;
 
