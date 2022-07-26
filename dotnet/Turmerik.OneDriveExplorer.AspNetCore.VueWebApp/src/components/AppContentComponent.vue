@@ -87,9 +87,3 @@
         }
     });
 </script>
-
-<style>
-    .trmrk-app-content {
-        margin-top: 60px;
-    }
-</style>

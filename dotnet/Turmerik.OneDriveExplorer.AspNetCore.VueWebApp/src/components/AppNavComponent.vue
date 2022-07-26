@@ -16,7 +16,7 @@
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isDownloadFilePage"><i class="bi bi-download"></i></a>
 
             <a class="nav-link trmrk-nav-link" :href="javascriptVoid" v-on:click="onLoginClick"><i class="bi bi-person-fill"></i></a>
-            <button id="btnToggleAppMenu" type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
+            <button type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
         </nav>
         <div class="collapse" id="appMenu">
             <HomeAppMenuComponent v-if="routes.isUserOptionsPage">
@@ -73,6 +73,7 @@
             "pageRoutes",
             "currentDriveFolder"
         ],
+        emits: [ "appMenuExpanded", "appMenuCollapsed" ],
         data() {
             const javascriptVoid: string = Trmrk.javascriptVoid;
             const pageRoutes = this.$props.pageRoutes as IPageRoutes;
@@ -87,6 +88,17 @@
             onLoginClick() {
                 window.open(this.loginUrl, "_blank");
             },
+        },
+        mounted() {
+            const appMenuDomEl = document.getElementById("appMenu") as HTMLElement;
+            
+            appMenuDomEl.addEventListener("shown.bs.collapse", () => {
+                this.$emit("appMenuExpanded");
+            });
+
+            appMenuDomEl.addEventListener("hidden.bs.collapse", () => {
+                this.$emit("appMenuCollapsed");
+            });
         },
         components: {
             HomeAppMenuComponent,
@@ -120,17 +132,12 @@
     }
 
     #appMenu {
-        display: hidden;
         width: 100%;
+    }
+
+    #appMenu {
         align-items: center;
         text-align: center;
-    }
-
-    #appMenu.show {
-        display: block;
-    }
-
-    #btnToggleAppMenu {
     }
 
     /* width */

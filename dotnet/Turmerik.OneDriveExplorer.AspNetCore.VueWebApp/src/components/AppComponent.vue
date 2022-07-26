@@ -1,9 +1,13 @@
 <template>
     <AppNavComponent
         :pageRoutes="nestedProps.pageRoutes"
-        :currentDriveFolder="currentDriveFolder" />
+        :currentDriveFolder="currentDriveFolder"
+        @appMenuExpanded="appMenuExpanded"
+        @appMenuCollapsed="appMenuCollapsed" />
 
     <main class="trmrk-app-container">
+        <div class="trmrk-app-menu-spacer" ref="appMenuSpacer"></div>
+
         <ApiGetCallComponent
             :childComponent="AppContentComponent"
             :apiCallFunc="getAppSettingsAsync"
@@ -130,6 +134,14 @@
             },
             currentDriveFolderLoaded(currentDriveFolder: DriveItem) {
                 this.currentDriveFolder = currentDriveFolder;
+            },
+            appMenuExpanded() {
+                const appMenuSpacer: any = this.$refs.appMenuSpacer;
+                appMenuSpacer.classList.add("trmrk-app-menu-spacer-expanded");
+            },
+            appMenuCollapsed() {
+                const appMenuSpacer: any = this.$refs.appMenuSpacer;
+                appMenuSpacer.classList.remove("trmrk-app-menu-spacer-expanded");
             }
         },
         created() {
@@ -155,7 +167,12 @@
 </script>
 
 <style>
-    .trmrk-app-error, .trmrk-app-loading {
-        margin-top: 60px;
+    .trmrk-app-menu-spacer {
+        width: 100%;
+        height: 55px;
+    }
+
+    .trmrk-app-menu-spacer.trmrk-app-menu-spacer-expanded {
+        height: 100px;
     }
 </style>

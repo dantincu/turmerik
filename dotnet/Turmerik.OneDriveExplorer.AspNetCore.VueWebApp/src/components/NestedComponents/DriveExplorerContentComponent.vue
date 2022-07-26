@@ -1,8 +1,8 @@
 <template>
     <div class="trmrk-drive-explorer">
-        <h3>Folders</h3>
+        <h4>Folders</h4>
         <DriveItemsGridComponent :isDriveFoldersGrid="true" :driveItems="driveFolders" :currentDriveFolder="currentDriveFolder"></DriveItemsGridComponent>
-        <h3>Files</h3>
+        <h4>Files</h4>
         <DriveItemsGridComponent :isDriveFoldersGrid="false" :driveItems="driveFiles" :currentDriveFolder="currentDriveFolder"></DriveItemsGridComponent>
     </div>
 </template>
