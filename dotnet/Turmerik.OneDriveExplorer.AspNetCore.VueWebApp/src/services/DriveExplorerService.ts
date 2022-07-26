@@ -93,7 +93,7 @@ export class DriveExplorerApi {
   getDriveFolderCacheKey(driveFolderId: string) {
     let cacheKey: string;
 
-    if (Trmrk.valIsStr(false, true)) {
+    if (Trmrk.valIsStr(driveFolderId, false, true)) {
       cacheKey = this.webStorage.getCacheKey(
         this.appSettings?.driveFolderCacheKeyName as string,
         driveFolderId,
@@ -111,7 +111,7 @@ export class DriveExplorerApi {
 
   async getDriveFolderAsync(driveFolderId: string, refreshCache = false) {
     const cacheKey = this.getDriveFolderCacheKey(driveFolderId);
-    let relUrl = this.appSettings?.apiFolderRelUri as string;
+    let relUrl = ("/" + this.appSettings?.apiFolderRelUri) as string;
 
     if (Trmrk.valIsStr(driveFolderId)) {
       relUrl += "/" + encodeURIComponent(driveFolderId);

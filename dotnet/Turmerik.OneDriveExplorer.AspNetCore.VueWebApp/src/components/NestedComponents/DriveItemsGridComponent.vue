@@ -17,10 +17,9 @@
                         <i :class="driveItemEl.iconCssClass"></i>
                     </td>
                     <td class="trmrk-name-grid-row-cell">
-                        <span class="trmrk-item-name"
-                            @mouseup="itemNameMouseUp(driveItemEl)">
+                        <a class="trmrk-item-name" :href="driveItemEl.url" :click="(e: any) => itemNameClick(e, driveItemEl)">
                             {{ driveItemEl.data.name }}
-                        </span>
+                        </a>
                     </td>
                     <td class="trmrk-extn-grid-row-cell" v-if="!isDriveFoldersGrid"></td>
                     <td class="trmrk-icon-grid-row-cell"></td>
@@ -40,12 +39,12 @@
 
     export default defineComponent({
         name: 'Counter',
-        props: [ "isDriveFoldersGrid", "driveItemEls", "driveItems" ],
+        props: [ "isDriveFoldersGrid", "driveItemEls", "driveItems", "currentDriveFolder" ],
         data() {
             const rootDomElCssClass = this.$props.isDriveFoldersGrid ? "trmrk-drive-folders-grid" : "trmrk-drive-files-grid";
 
-            let driveItemElems: DriveItemEl[] = this.getDriveItemEls(
-                this.$props.driveItems?.value, this.$props.driveItemEls?.value
+            let driveItemElems: DriveItemEl[] = this.getDriveItemElsArr(
+                this.$props.driveItems, this.$props.driveItemEls
             );
 
             return ({
@@ -54,35 +53,35 @@
             });
         },
         methods: {
-            getDriveItemEls(driveItems: DriveItem[] | null, driveItemEls: DriveItemEl[] | null) {
+            getDriveItemElsArr(driveItems: DriveItem[] | null, driveItemEls: DriveItemEl[] | null) {
                 let driveItemElems = driveItemEls as DriveItemEl[];
 
                 if (!driveItemElems) {
                     if (driveItems) {
-                        driveItemElems = driveItems.map(
-                            (item: DriveItem) => {
-                                const [ fileNameWithoutExtension, fileNameExtension ] = getFileNameAndExtension(item.name as string);
-                                const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder" : getFileNameBsIconCssClass(fileNameExtension);
-
-                                const retItem = ({
-                                    data: item,
-                                    isSelected: false,
-                                    isChecked: false,
-                                    iconCssClass: iconCssClass,
-                                    checkIconCssClass: "bi bi-square",
-                                    fileNameWithoutExtension: fileNameWithoutExtension,
-                                    fileNameExtension: fileNameExtension,
-                                } as DriveItemEl);
-
-                                return retItem;
-                            }
-                        );
+                        driveItemElems = driveItems.map(this.getDriveItemEl);
                     } else {
                         driveItemElems = []
                     }
                 }
 
                 return driveItemElems;
+            },
+            getDriveItemEl(item: DriveItem) {
+                const [ fileNameWithoutExtension, fileNameExtension ] = getFileNameAndExtension(item.name as string);
+                const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder" : getFileNameBsIconCssClass(fileNameExtension);
+
+                const retItem = ({
+                    data: item,
+                    url: "/files/" + encodeURIComponent(item.id ?? (this.$props.currentDriveFolder.id + "/" + item.name)),
+                    isSelected: false,
+                    isChecked: false,
+                    iconCssClass: iconCssClass,
+                    checkIconCssClass: "bi bi-square",
+                    fileNameWithoutExtension: fileNameWithoutExtension,
+                    fileNameExtension: fileNameExtension,
+                } as DriveItemEl);
+
+                return retItem;
             },
             itemCheckBoxClick(driveItem: DriveItemEl) {
                 driveItem.isChecked = !driveItem.isChecked;
@@ -93,9 +92,9 @@
                     driveItem.checkIconCssClass = "bi bi-square";
                 }
             },
-            itemNameLongClick(driveItem: DriveItemEl) {
-            },
-            itemNameMouseUp(driveItem: DriveItemEl) {
+            itemNameClick(e: any, driveItem: DriveItemEl) {
+                e.preventDefault();
+                return false;
             }
         }
     });

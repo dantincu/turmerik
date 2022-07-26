@@ -1,12 +1,12 @@
 <template>
-    <div class="container-xxl trmrk-app-content">
+    <div class="trmrk-app-content container-xxl">
         <HomeComponent v-if="routes.isHomePage">
         </HomeComponent>
 
         <UserOptionsComponent v-if="routes.isUserOptionsPage">
         </UserOptionsComponent>
 
-        <DriveExplorerComponent v-if="routes.isDriveExplorerPage">
+        <DriveExplorerComponent v-if="routes.isDriveExplorerPage" :key="driveFolderId" :driveFolderId="driveFolderId">
         </DriveExplorerComponent>
 
         <ImagesExplorerComponent v-if="routes.isImagesExplorerPage">
@@ -39,19 +39,25 @@
     import VideoFileComponent from "./RouteComponents/VideoFileComponent.vue";
     import AudioFileComponent from "./RouteComponents/AudioFileComponent.vue";
     import TextFileComponent from "./RouteComponents/TextFileComponent.vue";
+import { RouteParams } from 'vue-router';
 
     export default defineComponent({
         props: [
-            "pageRoutes"
+            "props"
         ],
         data() {
-            const pageRoutes = this.$props.pageRoutes as IPageRoutes;
+            const pageRoutes = this.$props.props.pageRoutes as IPageRoutes;
 
             return ({
-                routes: pageRoutes
+                routes: pageRoutes,
+                driveFolderId: (this.$route.params["driveFolderId"] as string | null | undefined) ?? ""
             });
         },
         created() {
+            this.$watch(() => this.$route.params,
+                (params: RouteParams) => {
+                     this.driveFolderId = (params["driveFolderId"] as string | null | undefined) ?? "";
+                });
         },
         components: {
             HomeComponent,
@@ -66,5 +72,8 @@
     });
 </script>
 
-<style scoped>
+<style>
+    .trmrk-app-content {
+        margin-top: 60px;
+    }
 </style>

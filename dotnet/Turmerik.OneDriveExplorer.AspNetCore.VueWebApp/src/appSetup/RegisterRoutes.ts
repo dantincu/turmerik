@@ -2,7 +2,7 @@ import { App } from "vue";
 import * as VueRouter from "vue-router";
 import { DefineComponent } from "vue";
 
-import { IHash } from "../common/core/core";
+import { IHash, Trmrk } from "../common/core/core";
 import { IComponentWrapper } from "./MapComponents";
 import { componentsMap } from "./MapComponentsCore";
 
@@ -49,8 +49,8 @@ export const routePaths = {
   home: "/",
 };
 
-const driveFileIdSeg = "/:driveFileId";
-const driveFolderIdSegOpt = "/:driveFolderId?";
+const driveFileIdSeg = ":driveFileId";
+const driveFolderIdSegOpt = ":driveFolderId?";
 
 const getRouteTemplateStr = (
   routePath: string,
@@ -58,7 +58,7 @@ const getRouteTemplateStr = (
 ) => {
   let templateStr = routePath;
 
-  if (secondSeg !== null) {
+  if (Trmrk.valIsStr(secondSeg, false, true)) {
     templateStr = [templateStr, secondSeg].join("/");
   }
 
@@ -71,15 +71,15 @@ export const routeTemplates = {
     driveFolderIdSegOpt
   ),
   imagesExplorer: getRouteTemplateStr(
-    routePaths.driveExplorer,
+    routePaths.imagesExplorer,
     driveFolderIdSegOpt
   ),
-  textFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
-  videoFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
-  imageFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
-  audioFile: getRouteTemplateStr(routePaths.driveExplorer, driveFileIdSeg),
-  userOptions: getRouteTemplateStr(routePaths.driveExplorer),
-  home: getRouteTemplateStr(routePaths.driveExplorer),
+  textFile: getRouteTemplateStr(routePaths.textFile, driveFileIdSeg),
+  videoFile: getRouteTemplateStr(routePaths.videoFile, driveFileIdSeg),
+  imageFile: getRouteTemplateStr(routePaths.imageFile, driveFileIdSeg),
+  audioFile: getRouteTemplateStr(routePaths.audioFile, driveFileIdSeg),
+  userOptions: getRouteTemplateStr(routePaths.userOptions),
+  home: getRouteTemplateStr(routePaths.home),
 };
 
 export const routePathsMap: ITrmrkRoute[] = [
@@ -112,9 +112,11 @@ export const appMenuComponents = routePathsMap.map(
 export const mainComponents = [...routeComponents, ...appMenuComponents];
 
 export const routes = routePathsMap.map((route) => ({
-  path: route.basePath,
+  path: route.template,
   component: route.routeComponent,
 }));
+
+// console.log("routes", routes);
 
 export const registerRoutes = (app: App) => {
   const router = VueRouter.createRouter({

@@ -8,6 +8,11 @@ import {
   trmrkBootStrapApp,
 } from "./MapComponentsCore";
 
+import ApiErrorComponent from "../components/ApiErrorComponent.vue";
+import ApiGetCallComponent from "../components/ApiGetCallComponent.vue";
+import DriveItemsGridComponent from "../components/NestedComponents/DriveItemsGridComponent.vue";
+import DriveExplorerContentComponent from "../components/NestedComponents/DriveExplorerContentComponent.vue";
+
 import { mapHomeComponent } from "./MapComponents/MapHomeComponent";
 import { mapDriveExplorerComponent } from "./MapComponents/MapDriveExplorerComponent";
 import { mapUserOptionsComponent } from "./MapComponents/MapUserOptionsComponent";
@@ -17,7 +22,6 @@ import { mapVideoFileComponent } from "./MapComponents/MapVideoFileComponent";
 import { mapAudioFileComponent } from "./MapComponents/MapAudioFileComponent";
 import { mapTextFileComponent } from "./MapComponents/MapTextFileComponent";
 
-import DriveItemsGridComponent from "../components/NestedComponents/DriveItemsGridComponent.vue";
 import { WebStorage } from "../common/core/webStorage";
 import { TrmrkAxios } from "../common/axios/trmrkAxios";
 import { WebStorageAxios } from "../common/axios/webStorageAxios";
@@ -97,7 +101,10 @@ export const registerMainComponents = (
 };
 
 export const registerNestedComponents = (app: App) => {
+  app.component("ApiErrorComponent", ApiErrorComponent);
+  app.component("ApiGetCallComponent", ApiGetCallComponent);
   app.component("DriveItemsGridComponent", DriveItemsGridComponent);
+  app.component("DriveExplorerContentComponent", DriveExplorerContentComponent);
 };
 
 export const registerDirectives = (app: App) => {

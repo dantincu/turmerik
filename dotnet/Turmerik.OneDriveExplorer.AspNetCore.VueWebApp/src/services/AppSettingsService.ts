@@ -24,9 +24,19 @@ export class AppSettingsService {
     return appSettings;
   }
 
+  public getAppSettings() {
+    const appSettings = this.appSettings;
+
+    if (!Trmrk.valIsNotNullObj(appSettings)) {
+      throw "App settings should have been fetched by now";
+    }
+
+    return appSettings;
+  }
+
   private async getAppSettingsCoreAsync() {
     const url = [
-      /* this.apiBaseUrl, */ "api",
+      /* this.apiBaseUrl, */ "/api",
       "explorer",
       "getAppSettings",
     ].join("/");

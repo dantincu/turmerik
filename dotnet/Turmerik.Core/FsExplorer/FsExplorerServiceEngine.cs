@@ -141,6 +141,7 @@ namespace Turmerik.Core.FsExplorer
         public async Task<DriveItemMtbl> GetRootFolderAsync()
         {
             var fsEntriesList = new List<DriveItemMtbl>();
+            string userHomePath = GetFolderPath(SpecialFolder.UserProfile);
 
             var drives = DriveInfo.GetDrives(
                 ).Where(d => d.IsReady).Select(
@@ -150,8 +151,6 @@ namespace Turmerik.Core.FsExplorer
                     Name = d.Name,
                     IsFolder = true,
                 });
-
-            string userHomePath = GetFolderPath(SpecialFolder.UserProfile);
 
             var folders = new Dictionary<SpecialFolder, string>
                     {

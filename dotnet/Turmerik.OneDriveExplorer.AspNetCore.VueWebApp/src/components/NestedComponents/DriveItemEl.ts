@@ -4,6 +4,7 @@ import { DriveItem } from "../../services/Entities/Entities";
 
 export interface DriveItemEl {
   data: DriveItem;
+  url: string;
   isChecked: boolean;
   isSelected: boolean;
   iconCssClass: string;
