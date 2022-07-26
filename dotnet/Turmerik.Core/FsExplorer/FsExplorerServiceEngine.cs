@@ -258,17 +258,36 @@ namespace Turmerik.Core.FsExplorer
             }
             else if (fSysInfo is FileInfo fInfo)
             {
-                fsItemMtbl.OfficeLikeFileType = this.GetOfficeLikeFileType(fInfo);
+                string extn = fInfo.Extension.ToLower();
+                fsItemMtbl.OfficeLikeFileType = this.GetOfficeLikeFileType(extn);
+
                 fsItemMtbl.SizeBytesCount = fInfo.Length;
+
+                if (FsH.CommonTextFileExtensions.Contains(extn))
+                {
+                    fsItemMtbl.IsTextFile = true;
+                }
+                else if (FsH.CommonImageFileExtensions.Contains(extn))
+                {
+                    fsItemMtbl.IsImageFile = true;
+                }
+                else if (FsH.CommonVideoFileExtensions.Contains(extn))
+                {
+                    fsItemMtbl.IsVideoFile = true;
+                }
+                else if (FsH.CommonAudioFileExtensions.Contains(extn))
+                {
+                    fsItemMtbl.IsAudioFile = true;
+                }
             }
 
             return fsItemMtbl;
         }
 
-        private OfficeLikeFileType? GetOfficeLikeFileType(FileInfo fInfo)
+        private OfficeLikeFileType? GetOfficeLikeFileType(string extn)
         {
             var matchKvp = officeLikeFileTypesFileNameExtensions.SingleOrDefault(
-                kvp => kvp.Value.Contains(fInfo.Extension));
+                kvp => kvp.Value.Contains(extn));
 
             OfficeLikeFileType? retVal = null;
 

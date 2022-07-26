@@ -17,9 +17,9 @@
                         <i :class="driveItemEl.iconCssClass"></i>
                     </td>
                     <td class="trmrk-name-grid-row-cell">
-                        <a class="trmrk-item-name" :href="driveItemEl.url" :click="(e: any) => itemNameClick(e, driveItemEl)">
+                        <RouterLink class="trmrk-item-name" :to="driveItemEl.url">
                             {{ driveItemEl.data.name }}
-                        </a>
+                        </RouterLink>
                     </td>
                     <td class="trmrk-extn-grid-row-cell" v-if="!isDriveFoldersGrid"></td>
                     <td class="trmrk-icon-grid-row-cell"></td>
@@ -72,7 +72,7 @@
 
                 const retItem = ({
                     data: item,
-                    url: "/files/" + encodeURIComponent(item.id ?? (this.$props.currentDriveFolder.id + "/" + item.name)),
+                    url: this.getDriveItemUrl(item, this.$props.isDriveFoldersGrid),
                     isSelected: false,
                     isChecked: false,
                     iconCssClass: iconCssClass,
@@ -82,6 +82,32 @@
                 } as DriveItemEl);
 
                 return retItem;
+            },
+            getDriveItemUrl(item: DriveItem, isDriveFoldersGrid: boolean): string {
+                const id = this.getDriveItemId(item);
+                const encodedId = encodeURIComponent(id);
+
+                let url: string;
+
+                if (isDriveFoldersGrid) {
+                    url = "/explore-files/" + encodedId;
+                } else if (item.isTextFile) {
+                    url = "/text-file/" + encodedId;
+                } else if (item.isTextFile) {
+                    url = "/image-file/" + encodedId;
+                } else if (item.isTextFile) {
+                    url = "/video-file/" + encodedId;
+                } else if (item.isTextFile) {
+                    url = "/audio-file/" + encodedId;
+                } else {
+                    url = "/download-file/" + encodedId;
+                }
+
+                return url;
+            },
+            getDriveItemId(item: DriveItem) {
+                const id = item.id ?? (this.$props.currentDriveFolder.id + "/" + item.name);
+                return id;
             },
             itemCheckBoxClick(driveItem: DriveItemEl) {
                 driveItem.isChecked = !driveItem.isChecked;
@@ -126,7 +152,10 @@
     }
 
     .trmrk-name-grid-row-cell > .trmrk-item-name {
-
+        text-transform: none;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
     }
 
     .trmrk-extn-grid-row-cell > .trmrk-item-name-extn {

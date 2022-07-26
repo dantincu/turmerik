@@ -65,6 +65,7 @@
                         isImageFilePage: false,
                         isVideoFilePage: false,
                         isAudioFilePage: false,
+                        isDownloadFilePage: false,
                     }
                 },
             };
@@ -86,6 +87,7 @@
                 this.nestedProps.pageRoutes.isImageFilePage = false;
                 this.nestedProps.pageRoutes.isVideoFilePage = false;
                 this.nestedProps.pageRoutes.isAudioFilePage = false;
+                this.nestedProps.pageRoutes.isDownloadFilePage = false;
             },
             updateNavLinkFlag(routePath: string) {
                 if (routePath.startsWith(routePaths.userOptions)) {
@@ -102,6 +104,8 @@
                     this.nestedProps.pageRoutes.isAudioFilePage = true;
                 } else if (routePath.startsWith(routePaths.textFile)) {
                     this.nestedProps.pageRoutes.isTextFilePage = true;
+                } else if (routePath.startsWith(routePaths.downloadFile)) {
+                    this.nestedProps.pageRoutes.isDownloadFilePage = true;
                 } else if (routePath.startsWith(routePaths.home)) {
                     this.nestedProps.pageRoutes.isHomePage = true;
                 } else {

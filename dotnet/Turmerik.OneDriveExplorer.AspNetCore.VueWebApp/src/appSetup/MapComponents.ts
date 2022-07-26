@@ -20,6 +20,7 @@ import { mapImagesExplorerComponent } from "./MapComponents/MapImagesExplorerCom
 import { mapImageFileComponent } from "./MapComponents/MapImageFileComponent";
 import { mapVideoFileComponent } from "./MapComponents/MapVideoFileComponent";
 import { mapAudioFileComponent } from "./MapComponents/MapAudioFileComponent";
+import { mapDownloadFileComponent } from "./MapComponents/MapDownloadFileComponent";
 import { mapTextFileComponent } from "./MapComponents/MapTextFileComponent";
 
 import { WebStorage } from "../common/core/webStorage";
@@ -69,6 +70,7 @@ const fillComponentsMap = () => {
   mapVideoFileComponent();
   mapAudioFileComponent();
   mapTextFileComponent();
+  mapDownloadFileComponent();
 };
 
 fillComponentsMap();

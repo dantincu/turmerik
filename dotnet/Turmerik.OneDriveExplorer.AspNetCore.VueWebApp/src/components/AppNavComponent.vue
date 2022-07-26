@@ -2,7 +2,7 @@
     <div class="trmrk-app-nav">
         <nav class="nav">
             <router-link to="/" class="nav-link trmrk-nav-link"><i class="bi bi-house-door-fill"></i></router-link>
-            <router-link to="/files" class="nav-link trmrk-nav-link"><i class="bi bi-files"></i></router-link>
+            <router-link to="/explore-files" class="nav-link trmrk-nav-link"><i class="bi bi-files"></i></router-link>
             <router-link to="/options" class="nav-link trmrk-nav-link"><i class="bi bi-gear-fill"></i></router-link>
             
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isHomePage"><i class="bi bi-house-door-fill"></i></a>
@@ -13,6 +13,7 @@
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isImageFilePage"><i class="bi bi-image"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isVideoFilePage"><i class="bi bi-film"></i></a>
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isAudioFilePage"><i class="bi bi-file-music-fill"></i></a>
+            <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isDownloadFilePage"><i class="bi bi-download"></i></a>
 
             <a class="nav-link trmrk-nav-link" :href="javascriptVoid" v-on:click="onLoginClick"><i class="bi bi-person-fill"></i></a>
             <button type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
@@ -41,6 +42,9 @@
 
             <TextFileAppMenuComponent v-if="routes.isTextFilePage">
             </TextFileAppMenuComponent>
+
+            <DownloadFileAppMenuComponent v-if="routes.isDownloadFilePage">
+            </DownloadFileAppMenuComponent>
         </div>
     </div>
 </template>
@@ -59,6 +63,7 @@
     import VideoFileAppMenuComponent from "./AppMenuComponents/VideoFileAppMenuComponent.vue";
     import AudioFileAppMenuComponent from "./AppMenuComponents/AudioFileAppMenuComponent.vue";
     import TextFileAppMenuComponent from "./AppMenuComponents/TextFileAppMenuComponent.vue";
+    import DownloadFileAppMenuComponent from "./AppMenuComponents/DownloadFileAppMenuComponent.vue";
     
     const loginUrl = process.env.VUE_APP_API_BASE_URL + "/api/mvc/account/loggedIn";
 
@@ -90,6 +95,7 @@
             VideoFileAppMenuComponent,
             AudioFileAppMenuComponent,
             TextFileAppMenuComponent,
+            DownloadFileAppMenuComponent
         }
     });
 </script>

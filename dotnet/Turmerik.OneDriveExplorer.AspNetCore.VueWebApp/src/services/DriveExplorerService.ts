@@ -3,6 +3,7 @@ import { TrmrkAxios, TrmrkAxiosApiResult } from "../common/axios/trmrkAxios";
 import { WebStorageAxios } from "../common/axios/webStorageAxios";
 import { DriveItem, AppSettings } from "./Entities/Entities";
 import { WebStorage } from "@/common/core/webStorage";
+import { OfficeLikeFileType } from "./Entities/Entities";
 
 export class DriveExplorerService {
   loading: boolean;
@@ -53,12 +54,6 @@ export class DriveExplorerService {
 
     return apiResponse;
   }
-}
-
-export enum OfficeLikeFileType {
-  docs = 1,
-  sheets = 2,
-  slides = 3,
 }
 
 export const officeFileLikeTypeExtensions: NumHashKeyType<string> = {};

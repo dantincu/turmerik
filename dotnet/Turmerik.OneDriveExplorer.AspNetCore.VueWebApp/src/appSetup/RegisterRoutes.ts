@@ -39,12 +39,13 @@ export interface ITrmrkRoute {
 }
 
 export const routePaths = {
-  driveExplorer: "/files",
-  imagesExplorer: "/images",
+  driveExplorer: "/explore-files",
+  imagesExplorer: "/explore-images",
   textFile: "/text-file",
   imageFile: "/image-file",
   videoFile: "/video-file",
   audioFile: "/audio-file",
+  downloadFile: "/download-file",
   userOptions: "/options",
   home: "/",
 };
@@ -78,6 +79,7 @@ export const routeTemplates = {
   videoFile: getRouteTemplateStr(routePaths.videoFile, driveFileIdSeg),
   imageFile: getRouteTemplateStr(routePaths.imageFile, driveFileIdSeg),
   audioFile: getRouteTemplateStr(routePaths.audioFile, driveFileIdSeg),
+  downloadFile: getRouteTemplateStr(routePaths.downloadFile, driveFileIdSeg),
   userOptions: getRouteTemplateStr(routePaths.userOptions),
   home: getRouteTemplateStr(routePaths.home),
 };
@@ -93,6 +95,11 @@ export const routePathsMap: ITrmrkRoute[] = [
   getRoute(routeTemplates.imageFile, routePaths.imageFile, "ImageFile"),
   getRoute(routeTemplates.videoFile, routePaths.videoFile, "VideoFile"),
   getRoute(routeTemplates.audioFile, routePaths.audioFile, "AudioFile"),
+  getRoute(
+    routeTemplates.downloadFile,
+    routePaths.downloadFile,
+    "DownloadFile"
+  ),
   getRoute(
     routeTemplates.driveExplorer,
     routePaths.driveExplorer,
@@ -116,13 +123,10 @@ export const routes = routePathsMap.map((route) => ({
   component: route.routeComponent,
 }));
 
-// console.log("routes", routes);
-
 export const registerRoutes = (app: App) => {
   const router = VueRouter.createRouter({
-    // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: VueRouter.createWebHistory(),
-    routes, // short for `routes: routes`
+    routes,
   });
 
   app.use(router);

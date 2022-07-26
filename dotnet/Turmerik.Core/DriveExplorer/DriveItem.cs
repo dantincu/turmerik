@@ -22,6 +22,10 @@ namespace Turmerik.Core.DriveExplorer
         string LastAccessTimeStr { get; }
         string LastWriteTimeStr { get; }
         OfficeLikeFileType? OfficeLikeFileType { get; }
+        bool? IsTextFile { get; }
+        bool? IsImageFile { get; }
+        bool? IsVideoFile { get; }
+        bool? IsAudioFile { get; }
         string TextFileContent { get; }
         byte[] RawFileContent { get; }
         long? SizeBytesCount { get; }
@@ -47,6 +51,10 @@ namespace Turmerik.Core.DriveExplorer
             this.LastAccessTimeStr = src.LastAccessTimeStr;
             this.LastWriteTimeStr = src.LastWriteTimeStr;
             this.OfficeLikeFileType = src.OfficeLikeFileType;
+            this.IsTextFile = src.IsTextFile;
+            this.IsImageFile = src.IsImageFile;
+            this.IsVideoFile = src.IsVideoFile;
+            this.IsAudioFile = src.IsAudioFile;
             this.TextFileContent = src.TextFileContent;
             this.RawFileContent = src.RawFileContent;
             this.SizeBytesCount = src.SizeBytesCount;
@@ -71,6 +79,10 @@ namespace Turmerik.Core.DriveExplorer
         public string LastAccessTimeStr { get; }
         public string LastWriteTimeStr { get; }
         public OfficeLikeFileType? OfficeLikeFileType { get; }
+        public bool? IsTextFile { get; }
+        public bool? IsImageFile { get; }
+        public bool? IsVideoFile { get; }
+        public bool? IsAudioFile { get; }
         public string TextFileContent { get; }
         public byte[] RawFileContent { get; }
         public long? SizeBytesCount { get; }
@@ -103,6 +115,10 @@ namespace Turmerik.Core.DriveExplorer
             this.LastAccessTimeStr = src.LastAccessTimeStr;
             this.LastWriteTimeStr = src.LastWriteTimeStr;
             this.OfficeLikeFileType = src.OfficeLikeFileType;
+            this.IsTextFile = src.IsTextFile;
+            this.IsImageFile = src.IsImageFile;
+            this.IsVideoFile = src.IsVideoFile;
+            this.IsAudioFile = src.IsAudioFile;
             this.TextFileContent = src.TextFileContent;
             this.RawFileContent = src.RawFileContent;
             this.SizeBytesCount = src.SizeBytesCount;
@@ -127,6 +143,10 @@ namespace Turmerik.Core.DriveExplorer
         public string LastAccessTimeStr { get; set; }
         public string LastWriteTimeStr { get; set; }
         public OfficeLikeFileType? OfficeLikeFileType { get; set; }
+        public bool? IsTextFile { get; set; }
+        public bool? IsImageFile { get; set; }
+        public bool? IsVideoFile { get; set; }
+        public bool? IsAudioFile { get; set; }
         public string TextFileContent { get; set; }
         public byte[] RawFileContent { get; set; }
         public long? SizeBytesCount { get; set; }

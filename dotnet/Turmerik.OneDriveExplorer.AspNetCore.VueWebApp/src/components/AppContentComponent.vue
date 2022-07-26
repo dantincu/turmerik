@@ -6,7 +6,8 @@
         <UserOptionsComponent v-if="routes.isUserOptionsPage">
         </UserOptionsComponent>
 
-        <DriveExplorerComponent v-if="routes.isDriveExplorerPage" :key="driveFolderId" :driveFolderId="driveFolderId">
+        <DriveExplorerComponent v-if="routes.isDriveExplorerPage"
+            :key="driveFolderId" :driveFolderId="driveFolderId">
         </DriveExplorerComponent>
 
         <ImagesExplorerComponent v-if="routes.isImagesExplorerPage">
@@ -23,6 +24,9 @@
 
         <TextFileComponent v-if="routes.isTextFilePage">
         </TextFileComponent>
+
+        <DownloadFileComponent v-if="routes.isDownloadFilePage">
+        </DownloadFileComponent>
     </div>
 </template>
 
@@ -39,7 +43,9 @@
     import VideoFileComponent from "./RouteComponents/VideoFileComponent.vue";
     import AudioFileComponent from "./RouteComponents/AudioFileComponent.vue";
     import TextFileComponent from "./RouteComponents/TextFileComponent.vue";
-import { RouteParams } from 'vue-router';
+    import DownloadFileComponent from "./RouteComponents/DownloadFileComponent.vue";
+
+    import { RouteParams } from 'vue-router';
 
     export default defineComponent({
         props: [
@@ -68,6 +74,7 @@ import { RouteParams } from 'vue-router';
             VideoFileComponent,
             AudioFileComponent,
             TextFileComponent,
+            DownloadFileComponent
         }
     });
 </script>

@@ -7,4 +7,5 @@ export interface IPageRoutes {
   isImageFilePage: boolean;
   isVideoFilePage: boolean;
   isAudioFilePage: boolean;
+  isDownloadFilePage: boolean;
 }

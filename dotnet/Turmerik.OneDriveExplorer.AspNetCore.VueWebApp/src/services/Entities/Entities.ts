@@ -11,6 +11,12 @@ export class AppSettings {
   getDriveItemMacrosActionName: string | null | undefined;
 }
 
+export enum OfficeLikeFileType {
+  docs = 1,
+  sheets = 2,
+  slides = 3,
+}
+
 export class DriveItem {
   id: string | null | undefined;
   name: string | null | undefined;
@@ -24,7 +30,11 @@ export class DriveItem {
   creationTimeStr: string | null | undefined;
   lastAccessTimeStr: string | null | undefined;
   lastWriteTimeStr: string | null | undefined;
-  officeLikeFileType: number | null | undefined;
+  officeLikeFileType: OfficeLikeFileType | null | undefined;
+  isTextFile: boolean | null | undefined;
+  isImageFile: boolean | null | undefined;
+  isVideoFile: boolean | null | undefined;
+  isAudioFile: boolean | null | undefined;
   textFileContent: string | null | undefined;
   sizeBytesCount: number | null | undefined;
   subFolders: DriveItem[] | null | undefined;
