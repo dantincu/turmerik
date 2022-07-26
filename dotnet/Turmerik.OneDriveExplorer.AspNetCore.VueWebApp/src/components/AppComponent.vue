@@ -173,6 +173,6 @@
     }
 
     .trmrk-app-menu-spacer.trmrk-app-menu-spacer-expanded {
-        height: 100px;
+        height: 170px;
     }
 </style>

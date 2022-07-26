@@ -16,7 +16,7 @@
             <a class="nav-link trmrk-nav-no-link" :href="javascriptVoid" v-if="routes.isDownloadFilePage"><i class="bi bi-download"></i></a>
 
             <a class="nav-link trmrk-nav-link" :href="javascriptVoid" v-on:click="onLoginClick"><i class="bi bi-person-fill"></i></a>
-            <button type="button" class="btn btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
+            <button type="button" class="btn btn-dark trmrk-btn-dark" data-bs-toggle="collapse" data-bs-target="#appMenu"><i class="bi bi-arrow-down-up"></i></button>
         </nav>
         <div class="collapse" id="appMenu">
             <HomeAppMenuComponent v-if="routes.isUserOptionsPage">
@@ -165,5 +165,9 @@
 
     .nav-link.trmrk-nav-no-link, .nav-link.trmrk-nav-no-link:active, .nav-link.trmrk-nav-no-link:hover {
         color: #FB8;
+    }
+
+    .trmrk-btn-dark {
+        color: #CCC;
     }
 </style>

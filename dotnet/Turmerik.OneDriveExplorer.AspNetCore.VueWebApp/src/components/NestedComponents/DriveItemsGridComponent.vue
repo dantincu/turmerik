@@ -211,7 +211,9 @@
     }
 
     .trmrk-name-grid-row-cell {
-
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
     }
 
     .trmrk-extn-grid-head-cell {
