@@ -10,7 +10,7 @@
         :error-label="errorLabel"
         :error-text="errorText"></ApiErrorComponent>
 
-    <component v-if="hasData" :is="childComponent" :data="data" :props="childProps"></component>
+    <component v-if="hasData" :is="childComponent" :data="data" :props="childProps" @upstreamEvent="upstreamEventHandler"></component>
 </template>
 
 <script lang="ts">
@@ -35,6 +35,7 @@ import { defineComponent } from 'vue';
             "errorCssClass", "loadingCssClass",
             "errorTitle", "errorLabel", "errorText",
             "childComponent", "childProps" ],
+        emits: [ "upstreamEvent" ],
         data() {
             const apiResponse: TrmrkAxiosApiResult | null = null;
 
@@ -48,6 +49,11 @@ import { defineComponent } from 'vue';
         },
         components: {
             ApiErrorComponent
+        },
+        methods: {
+            upstreamEventHandler(source: string, type: string, payload: any) {
+                this.$emit("upstreamEvent", source, type, payload);
+            }
         },
         mounted() {
             const apiCallFunc = this.$props.apiCallFunc as () => Promise<TrmrkAxiosApiResult>;

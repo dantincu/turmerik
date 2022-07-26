@@ -2,7 +2,7 @@ import { Trmrk, NumHashKeyType } from "../common/core/core";
 import { TrmrkAxios, TrmrkAxiosApiResult } from "../common/axios/trmrkAxios";
 import { WebStorageAxios } from "../common/axios/webStorageAxios";
 import { DriveItem, AppSettings } from "./Entities/Entities";
-import { WebStorage } from "@/common/core/webStorage";
+import { WebStorage } from "../common/core/webStorage";
 import { OfficeLikeFileType } from "./Entities/Entities";
 
 export class DriveExplorerService {

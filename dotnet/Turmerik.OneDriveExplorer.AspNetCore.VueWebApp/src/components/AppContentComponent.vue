@@ -7,7 +7,9 @@
         </UserOptionsComponent>
 
         <DriveExplorerComponent v-if="routes.isDriveExplorerPage"
-            :key="driveFolderId" :driveFolderId="driveFolderId">
+            :key="driveFolderId"
+            :driveFolderId="driveFolderId"
+            @loaded="currentDriveFolderLoaded">
         </DriveExplorerComponent>
 
         <ImagesExplorerComponent v-if="routes.isImagesExplorerPage">
@@ -32,6 +34,7 @@
 
 <script lang="ts">
     import { defineComponent } from 'vue';
+    import { RouteParams } from 'vue-router';
 
     import { IPageRoutes } from '../services/Entities/PageRoutes';
 
@@ -44,13 +47,14 @@
     import AudioFileComponent from "./RouteComponents/AudioFileComponent.vue";
     import TextFileComponent from "./RouteComponents/TextFileComponent.vue";
     import DownloadFileComponent from "./RouteComponents/DownloadFileComponent.vue";
-
-    import { RouteParams } from 'vue-router';
+    
+    import { DriveItem } from '../services/Entities/Entities';
 
     export default defineComponent({
         props: [
             "props"
         ],
+        emits: [ "upstreamEvent" ],
         data() {
             const pageRoutes = this.$props.props.pageRoutes as IPageRoutes;
 
@@ -58,6 +62,11 @@
                 routes: pageRoutes,
                 driveFolderId: (this.$route.params["driveFolderId"] as string | null | undefined) ?? ""
             });
+        },
+        methods: {
+            currentDriveFolderLoaded(currentDriveFolder: DriveItem) {
+                this.$emit("upstreamEvent", "DriveExplorer", "currentDriveFolderLoaded", currentDriveFolder);
+            }
         },
         created() {
             this.$watch(() => this.$route.params,

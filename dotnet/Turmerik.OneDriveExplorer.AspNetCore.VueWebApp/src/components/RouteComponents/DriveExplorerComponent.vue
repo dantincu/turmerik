@@ -3,6 +3,7 @@
         <ApiGetCallComponent
             :childComponent="DriveExplorerContentComponent"
             :apiCallFunc="loadDriveFolderAsync"
+            :apiSuccessCallback="driveFolderLoaded"
             ></ApiGetCallComponent>
     </div>
 </template>
@@ -10,6 +11,7 @@
 <script lang="ts">
     import { inject, defineComponent } from 'vue';
 
+    import { DriveItem } from '@/services/Entities/Entities';
     import { DriveExplorerService } from '../../services/DriveExplorerService';
     import ApiGetCallComponent from '../ApiGetCallComponent.vue';
     import DriveExplorerContentComponent from '../NestedComponents/DriveExplorerContentComponent.vue';
@@ -31,6 +33,9 @@
 
                 return apiResponse;
             },
+            driveFolderLoaded(currentDriveFolder: DriveItem) {
+                this.$emit("loaded", currentDriveFolder);
+            }
         },
         components: {
             ApiGetCallComponent,

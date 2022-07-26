@@ -1,8 +1,11 @@
 <template>
     <div :class="rootDomElCssClass">
-        <table class="table">
+        <p class="trmrk-checked-count" v-if="hasCheckedRows">{{ checkedRowsCount }} checked</p>
+        <table :class="tableCssClass">
             <thead>
-                <th scope="col" class="trmrk-icon-grid-head-cell"></th>
+                <th scope="col" class="trmrk-icon-grid-head-cell">
+                    <i :class="headerCheckIconCssClass" @click="headerCheckBoxClick()"></i>
+                </th>
                 <th scope="col" class="trmrk-icon-grid-head-cell"></th>
                 <th scope="col" class="trmrk-name-grid-head-cell">Name</th>
                 <th scope="col" class="trmrk-extn-grid-head-cell" v-if="!isDriveFoldersGrid"></th>
@@ -18,11 +21,14 @@
                     </td>
                     <td class="trmrk-name-grid-row-cell">
                         <RouterLink class="trmrk-item-name" :to="driveItemEl.url">
-                            {{ driveItemEl.data.name }}
+                            {{ driveItemEl.fileNameWithoutExtension }}
                         </RouterLink>
                     </td>
-                    <td class="trmrk-extn-grid-row-cell" v-if="!isDriveFoldersGrid"></td>
-                    <td class="trmrk-icon-grid-row-cell"></td>
+                    <td class="trmrk-extn-grid-row-cell" v-if="!isDriveFoldersGrid">
+                        <span class="trmrk-item-name-extn">{{ driveItemEl.fileNameExtension }}</span></td>
+                    <td class="trmrk-icon-grid-row-cell">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -49,7 +55,12 @@
 
             return ({
                 rootDomElCssClass: [ "trmrk-drive-items-grid", rootDomElCssClass ].join(" "),
-                driveItemElems: driveItemElems
+                driveItemElems: driveItemElems,
+                headerCheckIconIsChecked: false,
+                headerCheckIconCssClass: "bi bi-square",
+                hasCheckedRows: false,
+                checkedRowsCount: 0,
+                tableCssClass: "table",
             });
         },
         methods: {
@@ -114,9 +125,59 @@
 
                 if (driveItem.isChecked) {
                     driveItem.checkIconCssClass = "bi bi-check-square";
+                    this.checkedRowsCount++;
+
+                    if (!this.hasCheckedRows) {
+                        this.hasCheckedRows = true;
+                        this.updateTableCssClass();
+                    }
                 } else {
                     driveItem.checkIconCssClass = "bi bi-square";
+                    this.checkedRowsCount--;
+
+                    if (this.hasCheckedRows) {
+                        if (!this.driveItemElems.find(
+                            itemEl => itemEl.isChecked
+                        )) {
+                            this.hasCheckedRows = false;
+                            this.updateTableCssClass();
+                        }
+                    }
                 }
+            },
+            headerCheckBoxClick() {
+                this.headerCheckIconIsChecked = !this.headerCheckIconIsChecked;
+
+                if (this.headerCheckIconIsChecked) {
+                    this.headerCheckIconCssClass = "bi bi-check-square";
+                    this.hasCheckedRows = true;
+                    this.checkedRowsCount = this.driveItemElems.length;
+                } else {
+                    this.headerCheckIconCssClass = "bi bi-square";
+                    this.hasCheckedRows = false;
+                    this.checkedRowsCount = 0;
+                }
+
+                for (let itemEl of this.driveItemElems) {
+                    itemEl.isChecked = this.headerCheckIconIsChecked;
+
+                    if (this.headerCheckIconIsChecked) {
+                        itemEl.checkIconCssClass = "bi bi-check-square";
+                    } else {
+                        itemEl.checkIconCssClass = "bi bi-square";
+                    }
+                }
+
+                this.updateTableCssClass();
+            },
+            updateTableCssClass() {
+                let tableCssClass = "table";
+
+                if (this.hasCheckedRows) {
+                    tableCssClass += " trmrk-table-has-checked-rows";
+                }
+
+                this.tableCssClass = tableCssClass;
             },
             itemNameClick(e: any, driveItem: DriveItemEl) {
                 e.preventDefault();
@@ -133,6 +194,16 @@
 
     .trmrk-icon-grid-row-cell {
         width: 1em;
+    }
+
+    .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #DDD;
+    }
+
+    .trmrk-table-has-checked-rows .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-table-has-checked-rows .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #BDF;
     }
 
     .trmrk-name-grid-head-cell {
@@ -159,6 +230,11 @@
     }
 
     .trmrk-extn-grid-row-cell > .trmrk-item-name-extn {
-        
+        color: black;
+        font-weight: bold;
+    }
+
+    .trmrk-checked-count {
+        color: #88F;
     }
 </style>

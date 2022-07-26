@@ -1,5 +1,7 @@
 <template>
-    <AppNavComponent :pageRoutes="nestedProps.pageRoutes" />
+    <AppNavComponent
+        :pageRoutes="nestedProps.pageRoutes"
+        :currentDriveFolder="currentDriveFolder" />
 
     <main class="trmrk-app-container">
         <ApiGetCallComponent
@@ -8,7 +10,8 @@
             :apiSuccessCallback="onAppSettingsSuccess"
             :childProps="nestedProps"
             :errorCssClass="'trmrk-app-error container-xxl'"
-            :loadingCssClass="'trmrk-app-loading container-xxl'"></ApiGetCallComponent>
+            :loadingCssClass="'trmrk-app-loading container-xxl'"
+            @upstreamEvent="upstreamEventHandler"></ApiGetCallComponent>
     </main>
 </template>
 
@@ -25,6 +28,7 @@
 
     import AppContentComponent from './AppContentComponent.vue';
     import AppNavComponent from './AppNavComponent.vue';
+    import { DriveItem } from '../services/Entities/Entities';
 
     interface Data {
         loading: boolean,
@@ -34,7 +38,8 @@
         error: null | any;
         nestedProps: {
             pageRoutes: IPageRoutes
-        }
+        },
+        currentDriveFolder: DriveItem | null
     }
 
     export default defineComponent({
@@ -68,6 +73,7 @@
                         isDownloadFilePage: false,
                     }
                 },
+                currentDriveFolder: null
             };
         },
         methods: {
@@ -112,6 +118,19 @@
                     console.error("Unknown route path: " + routePath);
                 }
             },
+            upstreamEventHandler(source: string, type: string, payload: any) {
+                if (source === "DriveExplorer") {
+                    this.driveExplorerEventHandler(type, payload);
+                }
+            },
+            driveExplorerEventHandler(type: string, payload: any) {
+                if (type === "currentDriveFolderLoaded") {
+                    this.currentDriveFolderLoaded(payload.data);
+                }
+            },
+            currentDriveFolderLoaded(currentDriveFolder: DriveItem) {
+                this.currentDriveFolder = currentDriveFolder;
+            }
         },
         created() {
             // watch the params of the route to fetch the data again
