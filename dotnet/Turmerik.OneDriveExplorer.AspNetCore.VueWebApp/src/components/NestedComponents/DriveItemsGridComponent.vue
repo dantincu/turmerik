@@ -7,9 +7,11 @@
                 </th>
                 <th scope="col" class="trmrk-icon-grid-head-cell"></th>
                 <th scope="col" class="trmrk-name-grid-head-cell">
-                    Name <span class="trmrk-checked-count" v-if="hasCheckedRows">{{ checkedRowsCount }} <i class="bi bi-check"></i></span>
+                    Name <span class="trmrk-checked-count" v-if="hasCheckedRows">{{ checkedRowsCount }} <i class="bi bi-check2"></i></span>
                 </th>
-                <th scope="col" class="trmrk-icon-grid-head-cell"></th>
+                <th scope="col" class="trmrk-icon-grid-head-cell">
+                    <i class="bi bi-three-dots-vertical"></i>
+                </th>
             </thead>
             <tbody>
                 <tr v-for="driveItemEl in driveItemElems" :key="(driveItemEl.data.id as string)">

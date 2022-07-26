@@ -8,24 +8,36 @@
                 <i class="bi bi-house-fill" @click="btnGoToHomeDirClicked()"></i>
             </button>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
-                <i class="bi bi-three-dots" @click="btnGoToParentDirClicked()"></i>
+                <i class="bi bi-arrow-left-circle-fill" @click="btnGoBackClicked()"></i>
+            </button>
+            <button type="button" class="btn btn-dark trmrk-btn-dark">
+                <i class="bi bi-arrow-up-circle-fill" @click="btnGoToParentDirClicked()"></i>
+            </button>
+            <button type="button" class="btn btn-dark trmrk-btn-dark">
+                <i class="bi bi-arrow-right-circle-fill" @click="btnGoForwardClicked()"></i>
             </button>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-arrow-clockwise" @click="btnReloadCurrentDirClicked()"></i>
             </button>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
-                <i class="bi bi-three-dots-vertical" @click="btnOpenOptionsModalClicked()"></i>
+                <i class="bi bi-pencil-fill" @click="btnGoToDirClicked()"></i>
             </button>
         </div>
         <div class="trmrk-row">
+            <a class="nav-link trmrk-nav-link" href="#folders"><i class="bi bi-folder"></i></a>
+            <a class="nav-link trmrk-nav-link" href="#files"><i class="bi bi-file"></i></a>
+            <button type="button" class="btn btn-dark trmrk-btn-dark">
+                <i class="bi bi-check-circle" @click="btnOpenCheckedItemsModalClicked()"></i>
+            </button>
+            <button type="button" class="btn btn-dark trmrk-btn-dark">
+                <i class="bi bi-three-dots-vertical" @click="btnOpenOptionsModalClicked()"></i>
+            </button>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-command" @click="btnOpenCommandModalClicked()"></i>
             </button>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
-                <i class="bi bi-three-dots-vertical" @click="btnOpenCheckedItemsModalClicked()"></i>
+                <i class="bi bi-asterisk" @click="btnOpenExtraCommandModalClicked()"></i>
             </button>
-            <a class="nav-link trmrk-nav-link" href="#folders"><i class="bi bi-folder"></i></a>
-            <a class="nav-link trmrk-nav-link" href="#files"><i class="bi bi-file"></i></a>
         </div>
     </div>
 </template>
@@ -54,10 +66,22 @@
             btnGoToHomeDirClicked() {
 
             },
+            btnGoBackClicked() {
+
+            },
             btnGoToParentDirClicked() {
 
             },
+            btnGoForwardClicked() {
+
+            },
             btnReloadCurrentDirClicked() {
+
+            },
+            btnGoToDirClicked() {
+
+            },
+            btnOpenCheckedItemsModalClicked() {
 
             },
             btnOpenOptionsModalClicked() {
@@ -66,9 +90,9 @@
             btnOpenCommandModalClicked() {
 
             },
-            btnOpenCheckedItemsModalClicked() {
+            btnOpenExtraCommandModalClicked() {
 
-            }
+            },
         }
     });
 </script>
