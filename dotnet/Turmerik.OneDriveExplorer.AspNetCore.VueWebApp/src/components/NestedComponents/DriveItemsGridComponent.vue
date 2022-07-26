@@ -1,14 +1,14 @@
 <template>
     <div :class="rootDomElCssClass">
-        <p class="trmrk-checked-count" v-if="hasCheckedRows">{{ checkedRowsCount }} checked</p>
         <table :class="tableCssClass">
             <thead>
                 <th scope="col" class="trmrk-icon-grid-head-cell">
                     <i :class="headerCheckIconCssClass" @click="headerCheckBoxClick()"></i>
                 </th>
                 <th scope="col" class="trmrk-icon-grid-head-cell"></th>
-                <th scope="col" class="trmrk-name-grid-head-cell">Name</th>
-                <th scope="col" class="trmrk-extn-grid-head-cell" v-if="!isDriveFoldersGrid"></th>
+                <th scope="col" class="trmrk-name-grid-head-cell">
+                    Name <span class="trmrk-checked-count" v-if="hasCheckedRows">{{ checkedRowsCount }} <i class="bi bi-check"></i></span>
+                </th>
                 <th scope="col" class="trmrk-icon-grid-head-cell"></th>
             </thead>
             <tbody>
@@ -20,12 +20,11 @@
                         <i :class="driveItemEl.iconCssClass"></i>
                     </td>
                     <td class="trmrk-name-grid-row-cell">
-                        <RouterLink class="trmrk-item-name" :to="driveItemEl.url">
-                            {{ driveItemEl.fileNameWithoutExtension }}
+                        <RouterLink :to="driveItemEl.url">
+                            <span class="trmrk-item-name">{{ driveItemEl.fileNameWithoutExtension }}</span>
+                            <span class="trmrk-item-name-extn">{{ driveItemEl.fileNameExtension }}</span>
                         </RouterLink>
                     </td>
-                    <td class="trmrk-extn-grid-row-cell" v-if="!isDriveFoldersGrid">
-                        <span class="trmrk-item-name-extn">{{ driveItemEl.fileNameExtension }}</span></td>
                     <td class="trmrk-icon-grid-row-cell">
                         <i class="bi bi-three-dots-vertical"></i>
                     </td>
@@ -79,7 +78,7 @@
             },
             getDriveItemEl(item: DriveItem) {
                 const [ fileNameWithoutExtension, fileNameExtension ] = getFileNameAndExtension(item.name as string);
-                const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder" : getFileNameBsIconCssClass(fileNameExtension);
+                const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder-fill" : getFileNameBsIconCssClass(fileNameExtension);
 
                 const retItem = ({
                     data: item,
@@ -88,8 +87,8 @@
                     isChecked: false,
                     iconCssClass: iconCssClass,
                     checkIconCssClass: "bi bi-square",
-                    fileNameWithoutExtension: fileNameWithoutExtension,
-                    fileNameExtension: fileNameExtension,
+                    fileNameWithoutExtension,
+                    fileNameExtension
                 } as DriveItemEl);
 
                 return retItem;
@@ -216,27 +215,22 @@
         word-break: break-all;
     }
 
-    .trmrk-extn-grid-head-cell {
-        width: 2em;
-    }
-
-    .trmrk-extn-grid-row-cell {
-        width: 2em;
-    }
-
-    .trmrk-name-grid-row-cell > .trmrk-item-name {
+    .trmrk-name-grid-row-cell a {
         text-transform: none;
         text-decoration: none;
-        color: black;
         font-weight: bold;
     }
 
-    .trmrk-extn-grid-row-cell > .trmrk-item-name-extn {
+    .trmrk-name-grid-row-cell .trmrk-item-name {
         color: black;
-        font-weight: bold;
+    }
+
+    .trmrk-name-grid-row-cell .trmrk-item-name-extn {
+        color: #00C;
     }
 
     .trmrk-checked-count {
         color: #88F;
+        font-weight: normal;
     }
 </style>

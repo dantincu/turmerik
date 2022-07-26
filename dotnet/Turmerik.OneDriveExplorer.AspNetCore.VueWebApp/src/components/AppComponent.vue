@@ -175,4 +175,14 @@
     .trmrk-app-menu-spacer.trmrk-app-menu-spacer-expanded {
         height: 170px;
     }
+
+    @media screen and (max-width: 350px) {
+        .trmrk-app-menu-spacer {
+            height: 90px;
+        }
+
+        .trmrk-app-menu-spacer.trmrk-app-menu-spacer-expanded {
+            height: 200px;
+        }
+    }
 </style>

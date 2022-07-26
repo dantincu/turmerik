@@ -24,6 +24,8 @@
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-three-dots-vertical" @click="btnOpenCheckedItemsModalClicked()"></i>
             </button>
+            <a class="nav-link trmrk-nav-link" href="#folders"><i class="bi bi-folder"></i></a>
+            <a class="nav-link trmrk-nav-link" href="#files"><i class="bi bi-file"></i></a>
         </div>
     </div>
 </template>
@@ -88,5 +90,9 @@
 
     .trmrk-btn-dark {
         color: #DDF;
+    }
+
+    .trmrk-nav-link {
+        display: inline-flex;
     }
 </style>

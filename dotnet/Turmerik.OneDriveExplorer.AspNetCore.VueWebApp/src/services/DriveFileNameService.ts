@@ -103,7 +103,7 @@ export const getFileNameBsIconCssClass = (fileNameExtension: string) => {
         iconCssClass = "bi bi-file-music-fill";
         break;
       default:
-        iconCssClass = "bi bi-file";
+        iconCssClass = "bi bi-file-earmark";
         break;
     }
   }

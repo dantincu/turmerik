@@ -1,8 +1,12 @@
 <template>
     <div class="trmrk-drive-explorer">
-        <h4>Folders</h4>
+        <h6 id="folders">
+            <button type="button" class="btn btn-light"><i class="bi bi-folder-fill"></i></button>
+        </h6>
         <DriveItemsGridComponent :isDriveFoldersGrid="true" :driveItems="driveFolders" :currentDriveFolder="currentDriveFolder"></DriveItemsGridComponent>
-        <h4>Files</h4>
+        <h6 id="files">
+            <button type="button" class="btn btn-light"><i class="bi bi-file"></i></button>
+        </h6>
         <DriveItemsGridComponent :isDriveFoldersGrid="false" :driveItems="driveFiles" :currentDriveFolder="currentDriveFolder"></DriveItemsGridComponent>
     </div>
 </template>
@@ -34,5 +38,10 @@
 </script>
 
 <style scoped>
+</style>
 
+<style>
+    .trmrk-row {
+        display: block;
+    }
 </style>
