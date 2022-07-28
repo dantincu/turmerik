@@ -1,7 +1,7 @@
 <template>
     <div class="trmrk-go-to-folder-component">
         <p>Type or paste folder id <button type="button" class="btn btn-primary trmrk-btn-decode" @click="btnFolderIdDecodeClick()">Decode</button></p>
-        <p><input ref="folderIdTextBox" v-model="folderIdVal" @change="updateEncodedFolderIdVal()" /></p>
+        <p><input type="text" ref="folderIdTextBox" v-model="folderIdVal" @change="updateEncodedFolderIdVal()" /></p>
         <p><label class="folderIdEncodeCheckBoxLabel">Encode</label>
             <input type="checkbox" ref="folderIdEncodeCheckBox" v-model="encodeFolderId" @change="updateEncodedFolderIdVal()" />
             <button
@@ -95,6 +95,10 @@
     input, code {
         font-family: 'Courier New', Courier, monospace;
         font-size: 16px;
+    }
+
+    input[type="text"] {
+        width: 100%;
     }
 
     input[type="checkbox"] {

@@ -36,21 +36,18 @@
             </button>
         </div>
         <div class="modal" id="goToFolderModal" ref="goToFolderModalEl" tabindex="-1">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title">Go to folder</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <GoToFolderComponent
-                        :key="currentDriveFolder?.id"
-                        :currentDriveFolderId="currentDriveFolder?.id"
-                        @onNavigateTo="(url: string) => onNavigateToFolderIdFromModal(url)"></GoToFolderComponent>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+                    <div class="modal-header">
+                        <p class="modal-title"><i class="bi bi-files"></i>Go to folder</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <GoToFolderComponent
+                            :key="currentDriveFolder?.id"
+                            :currentDriveFolderId="currentDriveFolder?.id"
+                            @onNavigateTo="(url: string) => onNavigateToFolderIdFromModal(url)"></GoToFolderComponent>
+                    </div>
                 </div>
             </div>
         </div>
@@ -119,9 +116,6 @@
             btnOpenExtraCommandModalClicked() {
 
             },
-            btnGoToFolderIdDecodeClick() {
-
-            },
             onNavigateToFolderIdFromModal(url: string) {
                 this.goToFolderModal?.hide();
                 this.$router.push(url);
@@ -163,7 +157,13 @@
         display: inline-flex;
     }
 
-    .modal h6 {
+    .modal-title {
         font-weight: bold;
+        width: 100%;
+        margin: auto;
+    }
+
+    .modal-title > .bi.bi-files {
+        margin-right: 0.5rem;
     }
 </style>
