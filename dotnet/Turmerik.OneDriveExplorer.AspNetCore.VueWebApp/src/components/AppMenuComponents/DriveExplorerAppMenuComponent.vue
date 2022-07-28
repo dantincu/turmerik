@@ -8,7 +8,7 @@
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-arrow-left-circle-fill" @click="btnGoBackClicked()"></i>
             </button>
-            <router-link class="nav-link trmrk-nav-link" :to="'/explore-files/' + (currentDriveFolder?.parentFolderId ?? '')"><i class="bi bi-arrow-up-circle-fill"></i></router-link>
+            <router-link class="nav-link trmrk-nav-link" :to="getParentFolderId()"><i class="bi bi-arrow-up-circle-fill"></i></router-link>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-arrow-right-circle-fill" @click="btnGoForwardClicked()"></i>
             </button>
@@ -35,8 +35,8 @@
                 <i class="bi bi-asterisk" @click="btnOpenExtraCommandModalClicked()"></i>
             </button>
         </div>
-        <div class="modal" id="goToFolderModal" ref="goToFolderModalEl" tabindex="-1">
-            <div class="modal-dialog modal-fullscreen">
+        <div class="modal fade" id="goToFolderModal" ref="goToFolderModalEl" tabindex="-1">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <p class="modal-title"><i class="bi bi-files"></i>Go to folder</p>
@@ -63,7 +63,7 @@
 
     interface DriveExplorerAppMenuComponentData {
         driveFolderNameCollapsed: boolean;
-        goToFolderModal: Modal | null
+        goToFolderModal: Modal | null,
     }
 
     export default defineComponent({
@@ -79,7 +79,7 @@
         data() {
             const data: DriveExplorerAppMenuComponentData = {
                 driveFolderNameCollapsed: true,
-                goToFolderModal: null
+                goToFolderModal: null,
             }
 
             return data;
@@ -119,6 +119,10 @@
             onNavigateToFolderIdFromModal(url: string) {
                 this.goToFolderModal?.hide();
                 this.$router.push(url);
+            },
+            getParentFolderId() {
+                const parentFolderId = "/explore-files/" + encodeURIComponent(this.currentDriveFolder?.parentFolderId ?? '');
+                return parentFolderId;
             }
         },
         mounted() {
