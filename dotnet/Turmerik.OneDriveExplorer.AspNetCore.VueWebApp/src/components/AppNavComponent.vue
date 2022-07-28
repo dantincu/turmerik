@@ -26,7 +26,8 @@
             </UserOptionsAppMenuComponent>
 
             <DriveExplorerAppMenuComponent v-if="routes.isDriveExplorerPage"
-                :currentDriveFolder="currentDriveFolder">
+                :currentDriveFolder="currentDriveFolder"
+                @reloadCurrentDriveFolder="onReloadCurrentDriveFolder()">
             </DriveExplorerAppMenuComponent>
 
             <ImagesExplorerAppMenuComponent v-if="routes.isImagesExplorerPage">
@@ -73,7 +74,7 @@
             "pageRoutes",
             "currentDriveFolder"
         ],
-        emits: [ "appMenuExpanded", "appMenuCollapsed" ],
+        emits: [ "appMenuExpanded", "appMenuCollapsed", "reloadCurrentDriveFolder" ],
         data() {
             const javascriptVoid: string = Trmrk.javascriptVoid;
             const pageRoutes = this.$props.pageRoutes as IPageRoutes;
@@ -87,6 +88,9 @@
         methods: {
             onLoginClick() {
                 window.open(this.loginUrl, "_blank");
+            },
+            onReloadCurrentDriveFolder() {
+                this.$emit("reloadCurrentDriveFolder");
             },
         },
         mounted() {

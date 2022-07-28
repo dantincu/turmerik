@@ -4,15 +4,11 @@
             <span class="trmrk-drive-folder-name" ref="driveFolderNameEl" @click="driveFolderNameClicked()">{{ currentDriveFolder?.name ?? "" }}</span>
         </div>
         <div class="trmrk-row">
-            <button type="button" class="btn btn-dark trmrk-btn-dark">
-                <i class="bi bi-house-fill" @click="btnGoToHomeDirClicked()"></i>
-            </button>
+            <RouterLink class="nav-link trmrk-nav-link" to="."><i class="bi bi-house-fill"></i></RouterLink>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-arrow-left-circle-fill" @click="btnGoBackClicked()"></i>
             </button>
-            <button type="button" class="btn btn-dark trmrk-btn-dark">
-                <i class="bi bi-arrow-up-circle-fill" @click="btnGoToParentDirClicked()"></i>
-            </button>
+            <router-link class="nav-link trmrk-nav-link" :to="'/explore-files/' + (currentDriveFolder?.parentFolderId ?? '')"><i class="bi bi-arrow-up-circle-fill"></i></router-link>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-arrow-right-circle-fill" @click="btnGoForwardClicked()"></i>
             </button>
@@ -47,6 +43,7 @@
 
     export default defineComponent({
         props: [ "currentDriveFolder" ],
+        emits: [ "reloadCurrentDriveFolder" ],
         data() {
             return {
                 driveFolderNameCollapsed: true
@@ -63,20 +60,14 @@
                     driveFolderNameEl.classList.add("trmrk-expanded");
                 }
             },
-            btnGoToHomeDirClicked() {
-
-            },
             btnGoBackClicked() {
-
-            },
-            btnGoToParentDirClicked() {
-
+                this.$router.go(-1);
             },
             btnGoForwardClicked() {
-
+                this.$router.go(1);
             },
             btnReloadCurrentDirClicked() {
-
+                this.$emit("reloadCurrentDriveFolder");
             },
             btnGoToDirClicked() {
 

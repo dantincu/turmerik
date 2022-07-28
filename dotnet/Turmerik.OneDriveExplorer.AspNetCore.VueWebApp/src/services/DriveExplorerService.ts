@@ -54,6 +54,13 @@ export class DriveExplorerService {
 
     return apiResponse;
   }
+
+  removeDriveFolderCacheKey(driveFolderId: string) {
+    const cacheKey =
+      this.driveExplorerApi.getDriveFolderCacheKey(driveFolderId);
+
+    sessionStorage.removeItem(cacheKey);
+  }
 }
 
 export const officeFileLikeTypeExtensions: NumHashKeyType<string> = {};

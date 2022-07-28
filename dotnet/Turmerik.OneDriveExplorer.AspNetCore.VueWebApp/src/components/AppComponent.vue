@@ -3,12 +3,14 @@
         :pageRoutes="nestedProps.pageRoutes"
         :currentDriveFolder="currentDriveFolder"
         @appMenuExpanded="appMenuExpanded"
-        @appMenuCollapsed="appMenuCollapsed" />
+        @appMenuCollapsed="appMenuCollapsed"
+        @reloadCurrentDriveFolder="onReloadCurrentDriveFolder()" />
 
     <main class="trmrk-app-container">
         <div class="trmrk-app-menu-spacer" ref="appMenuSpacer"></div>
 
         <ApiGetCallComponent
+            :key="apiCallKey"
             :childComponent="AppContentComponent"
             :apiCallFunc="getAppSettingsAsync"
             :apiSuccessCallback="onAppSettingsSuccess"
@@ -43,7 +45,8 @@
         nestedProps: {
             pageRoutes: IPageRoutes
         },
-        currentDriveFolder: DriveItem | null
+        currentDriveFolder: DriveItem | null,
+        apiCallKey: number
     }
 
     export default defineComponent({
@@ -77,7 +80,8 @@
                         isDownloadFilePage: false,
                     }
                 },
-                currentDriveFolder: null
+                currentDriveFolder: null,
+                apiCallKey: 0
             };
         },
         methods: {
@@ -142,6 +146,10 @@
             appMenuCollapsed() {
                 const appMenuSpacer: any = this.$refs.appMenuSpacer;
                 appMenuSpacer.classList.remove("trmrk-app-menu-spacer-expanded");
+            },
+            onReloadCurrentDriveFolder() {
+                this.driveExplorerService.removeDriveFolderCacheKey(this.currentDriveFolder?.id ?? "");
+                this.apiCallKey++;
             }
         },
         created() {
