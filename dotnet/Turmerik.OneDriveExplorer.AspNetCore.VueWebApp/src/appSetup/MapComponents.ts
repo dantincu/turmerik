@@ -12,6 +12,7 @@ import ApiErrorComponent from "../components/ApiErrorComponent.vue";
 import ApiGetCallComponent from "../components/ApiGetCallComponent.vue";
 import DriveItemsGridComponent from "../components/NestedComponents/DriveItemsGridComponent.vue";
 import DriveExplorerContentComponent from "../components/NestedComponents/DriveExplorerContentComponent.vue";
+import GoToFolderComponent from "../components/NestedComponents/GoToFolderComponent.vue";
 
 import { mapHomeComponent } from "./MapComponents/MapHomeComponent";
 import { mapDriveExplorerComponent } from "./MapComponents/MapDriveExplorerComponent";
@@ -107,6 +108,7 @@ export const registerNestedComponents = (app: App) => {
   app.component("ApiGetCallComponent", ApiGetCallComponent);
   app.component("DriveItemsGridComponent", DriveItemsGridComponent);
   app.component("DriveExplorerContentComponent", DriveExplorerContentComponent);
+  app.component("GoToFolderComponent", GoToFolderComponent);
 };
 
 export const registerDirectives = (app: App) => {

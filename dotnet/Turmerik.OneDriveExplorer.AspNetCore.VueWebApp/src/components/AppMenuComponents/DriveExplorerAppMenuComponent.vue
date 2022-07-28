@@ -15,8 +15,8 @@
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-arrow-clockwise" @click="btnReloadCurrentDirClicked()"></i>
             </button>
-            <button type="button" class="btn btn-dark trmrk-btn-dark">
-                <i class="bi bi-pencil-fill" @click="btnGoToDirClicked()"></i>
+            <button type="button" class="btn btn-dark trmrk-btn-dark" data-bs-toggle="modal" data-bs-target="#goToFolderModal">
+                <i class="bi bi-pencil-fill"></i>
             </button>
         </div>
         <div class="trmrk-row">
@@ -35,19 +35,57 @@
                 <i class="bi bi-asterisk" @click="btnOpenExtraCommandModalClicked()"></i>
             </button>
         </div>
+        <div class="modal" id="goToFolderModal" ref="goToFolderModalEl" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title">Go to folder</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <GoToFolderComponent
+                        :key="currentDriveFolder?.id"
+                        :currentDriveFolderId="currentDriveFolder?.id"
+                        @onNavigateTo="(url: string) => onNavigateToFolderIdFromModal(url)"></GoToFolderComponent>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-    import { defineComponent } from 'vue';
+    import { defineComponent, inject } from 'vue';
+    import { Modal } from 'bootstrap';
+
+    import { DriveExplorerService } from '../../services/DriveExplorerService';
+    import GoToFolderComponent from '../NestedComponents/GoToFolderComponent.vue';
+
+    interface DriveExplorerAppMenuComponentData {
+        driveFolderNameCollapsed: boolean;
+        goToFolderModal: Modal | null
+    }
 
     export default defineComponent({
         props: [ "currentDriveFolder" ],
         emits: [ "reloadCurrentDriveFolder" ],
-        data() {
+        setup() {
+            const driveExplorerService = inject<DriveExplorerService>("driveExplorerService") as DriveExplorerService;
+            
             return {
-                driveFolderNameCollapsed: true
-            };
+                driveExplorerService
+            }
+        },
+        data() {
+            const data: DriveExplorerAppMenuComponentData = {
+                driveFolderNameCollapsed: true,
+                goToFolderModal: null
+            }
+
+            return data;
         },
         methods: {
             driveFolderNameClicked() {
@@ -69,9 +107,6 @@
             btnReloadCurrentDirClicked() {
                 this.$emit("reloadCurrentDriveFolder");
             },
-            btnGoToDirClicked() {
-
-            },
             btnOpenCheckedItemsModalClicked() {
 
             },
@@ -84,11 +119,28 @@
             btnOpenExtraCommandModalClicked() {
 
             },
+            btnGoToFolderIdDecodeClick() {
+
+            },
+            onNavigateToFolderIdFromModal(url: string) {
+                this.goToFolderModal?.hide();
+                this.$router.push(url);
+            }
+        },
+        mounted() {
+            const goToFolderModalEl = this.$refs.goToFolderModalEl as HTMLElement;
+            this.goToFolderModal = Modal.getOrCreateInstance(goToFolderModalEl);
+        },
+        components: {
+            GoToFolderComponent
         }
     });
 </script>
 
 <style scoped>
+    .trmrk-app-menu {
+        z-index: 1055;
+    }
     .trmrk-row {
         display: block;
     }
@@ -109,5 +161,9 @@
 
     .trmrk-nav-link {
         display: inline-flex;
+    }
+
+    .modal h6 {
+        font-weight: bold;
     }
 </style>

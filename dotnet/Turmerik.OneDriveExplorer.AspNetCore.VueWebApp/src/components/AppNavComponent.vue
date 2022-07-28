@@ -133,15 +133,14 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
+        z-index: 1055;
     }
 
     #appMenu {
         width: 100%;
-    }
-
-    #appMenu {
         align-items: center;
         text-align: center;
+        z-index: 1055;
     }
 
     /* width */
@@ -173,5 +172,11 @@
 
     .trmrk-btn-dark {
         color: #CCC;
+    }
+</style>
+
+<style>
+    .trmrk-app-nav .modal {
+        color: #000;
     }
 </style>
