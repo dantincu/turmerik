@@ -139,6 +139,7 @@
     .trmrk-app-menu {
         z-index: 1055;
     }
+    
     .trmrk-row {
         display: block;
     }

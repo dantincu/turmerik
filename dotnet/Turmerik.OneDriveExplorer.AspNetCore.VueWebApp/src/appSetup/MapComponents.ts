@@ -13,6 +13,9 @@ import ApiGetCallComponent from "../components/ApiGetCallComponent.vue";
 import DriveItemsGridComponent from "../components/NestedComponents/DriveItemsGridComponent.vue";
 import DriveExplorerContentComponent from "../components/NestedComponents/DriveExplorerContentComponent.vue";
 import GoToFolderComponent from "../components/NestedComponents/GoToFolderComponent.vue";
+import DriveItemsGridHeadComponent from "../components/NestedComponents/DriveItemsGridHeadComponent.vue";
+import DriveItemsGridRowComponent from "../components/NestedComponents/DriveItemsGridRowComponent.vue";
+import DriveItemsGridEditComponent from "../components/NestedComponents/DriveItemsGridEditComponent.vue";
 
 import { mapHomeComponent } from "./MapComponents/MapHomeComponent";
 import { mapDriveExplorerComponent } from "./MapComponents/MapDriveExplorerComponent";
@@ -109,6 +112,9 @@ export const registerNestedComponents = (app: App) => {
   app.component("DriveItemsGridComponent", DriveItemsGridComponent);
   app.component("DriveExplorerContentComponent", DriveExplorerContentComponent);
   app.component("GoToFolderComponent", GoToFolderComponent);
+  app.component("DriveItemsGridHeadComponent", DriveItemsGridHeadComponent);
+  app.component("DriveItemsGridRowComponent", DriveItemsGridRowComponent);
+  app.component("DriveItemsGridEditComponent", DriveItemsGridEditComponent);
 };
 
 export const registerDirectives = (app: App) => {

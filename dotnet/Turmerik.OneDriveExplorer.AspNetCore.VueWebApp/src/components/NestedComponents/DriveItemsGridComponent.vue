@@ -1,70 +1,98 @@
 <template>
-    <div :class="rootDomElCssClass">
+    <div :class="getRootDomElCssClass()">
         <table :class="tableCssClass">
-            <thead>
-                <th scope="col" class="trmrk-icon-grid-head-cell">
-                    <i :class="headerCheckIconCssClass" @click="headerCheckBoxClick()"></i>
-                </th>
-                <th scope="col" class="trmrk-icon-grid-head-cell"></th>
-                <th scope="col" class="trmrk-name-grid-head-cell">
-                    Name <span class="trmrk-checked-count" v-if="hasCheckedRows">{{ checkedRowsCount }} <i class="bi bi-check2"></i></span>
-                </th>
-                <th scope="col" class="trmrk-icon-grid-head-cell">
-                    <i class="bi bi-three-dots-vertical"></i>
-                </th>
-            </thead>
+            <DriveItemsGridHeadComponent
+                :isDriveFoldersGrid="isDriveFoldersGrid"
+                :isEditMode="editModeValWrapper.value"
+                :driveItemsCount="driveItemElems.length"
+                @headerCheckBoxClicked="(checked: boolean) => headerCheckBoxClicked(checked)">
+            </DriveItemsGridHeadComponent>
             <tbody>
-                <tr v-for="driveItemEl in driveItemElems" :key="(driveItemEl.data.id as string)">
-                    <td class="trmrk-icon-grid-row-cell">
-                        <i :class="driveItemEl.checkIconCssClass" @click="itemCheckBoxClick(driveItemEl)"></i>
-                    </td>
-                    <td class="trmrk-icon-grid-row-cell">
-                        <i :class="driveItemEl.iconCssClass"></i>
-                    </td>
-                    <td class="trmrk-name-grid-row-cell">
-                        <RouterLink :to="driveItemEl.url">
-                            <span class="trmrk-item-name">{{ driveItemEl.fileNameWithoutExtension }}</span>
-                            <span class="trmrk-item-name-extn">{{ driveItemEl.fileNameExtension }}</span>
-                        </RouterLink>
-                    </td>
-                    <td class="trmrk-icon-grid-row-cell">
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </td>
-                </tr>
+                <DriveItemsGridRowComponent v-if="isAddMode()"
+                    :isDriveFoldersGrid="isDriveFoldersGrid"
+                    :isNewItem="true"
+                    :driveItemEl="newItemEl"
+                    @itemEditingCancelled="(newItem: any) => itemAddingCancelled(newItem)"
+                    @editedItemSaved="(newItem: any, newValue: string) => addedItemSaved(newItem, newValue)">
+                </DriveItemsGridRowComponent>
+
+                <DriveItemsGridRowComponent
+                    v-for="driveItemEl in driveItemElems"
+                    :key="(driveItemEl.data.id as string)"
+                    :isDriveFoldersGrid="isDriveFoldersGrid"
+                    :isNewItem="false"
+                    :driveItemEl="driveItemEl"
+                    @itemCheckBoxClicked="(isChecked: boolean) => itemCheckBoxClicked(driveItemEl, isChecked)"
+                    @itemEditingStarted="(item: any) => itemEditingStarted(item)"
+                    @itemEditingCancelled="(item: any) => itemEditingCancelled(item)"
+                    @editedItemSaved="(item: any, newValue: string) => editedItemSaved(item, newValue)"
+                    @editedItemRemoved="(item: any) => editedItemRemoved(item)">
+                </DriveItemsGridRowComponent>
             </tbody>
         </table>
     </div>
 </template>
 
 <script lang="ts">
-/* eslint-disable */
     import { defineComponent } from 'vue';
 
+    import { IRefValue } from '../../common/core/core';
     import { DriveItem } from '../../services/Entities/Entities';
     import { getFileNameAndExtension, getFileNameBsIconCssClass } from '../../services/DriveFileNameService';
     import { DriveItemEl } from './DriveItemEl';
+    import DriveItemsGridHeadComponent from './DriveItemsGridHeadComponent.vue';
+    import DriveItemsGridRowComponent from './DriveItemsGridRowComponent.vue';
 
     export default defineComponent({
-        name: 'Counter',
-        props: [ "isDriveFoldersGrid", "driveItemEls", "driveItems", "currentDriveFolder" ],
+        props: [ "isDriveFoldersGrid", "driveItemEls", "driveItems", "currentDriveFolder", "editModeValueWrapper", "addModeValueWrapper" ],
+        emits: [ "enteredEditMode", "exitedEditMode" ],
         data() {
-            const rootDomElCssClass = this.$props.isDriveFoldersGrid ? "trmrk-drive-folders-grid" : "trmrk-drive-files-grid";
-
             let driveItemElems: DriveItemEl[] = this.getDriveItemElsArr(
                 this.$props.driveItems, this.$props.driveItemEls
             );
 
+            const defaultIconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder-fill" : "bi bi-file-text-fill";
+
             return ({
-                rootDomElCssClass: [ "trmrk-drive-items-grid", rootDomElCssClass ].join(" "),
+                defaultIconCssClass,
                 driveItemElems: driveItemElems,
                 headerCheckIconIsChecked: false,
                 headerCheckIconCssClass: "bi bi-square",
                 hasCheckedRows: false,
                 checkedRowsCount: 0,
                 tableCssClass: "table",
+                editModeValWrapper: this.$props.editModeValueWrapper as IRefValue<boolean>,
+                addModeValWrapper: this.$props.addModeValueWrapper as IRefValue<boolean>,
+                newEntryValWrapper: {
+                    value: ""
+                } as IRefValue<string>,
+                newItemEl: {
+                    iconCssClass: defaultIconCssClass,
+                    checkIconCssClass: "bi bi-square",
+                    isEditing: true
+                } as DriveItemEl
             });
         },
         methods: {
+            isEditMode() {
+                const isEditMode = this.editModeValWrapper.value as boolean;
+                return isEditMode;
+            },
+            isAddMode() {
+                const isAddMode = this.addModeValWrapper.value as boolean;
+                return isAddMode;
+            },
+            getRootDomElCssClass() {
+                const cssClassArr = [ "trmrk-drive-items-grid",
+                    this.$props.isDriveFoldersGrid ? "trmrk-drive-folders-grid" : "trmrk-drive-files-grid" ];
+                
+                if (this.isEditMode() || this.isAddMode()) {
+                    cssClassArr.push("trmrk-edit-mode");
+                }
+
+                const cssClassStr = cssClassArr.join(" ");
+                return cssClassStr;
+            },
             getDriveItemElsArr(driveItems: DriveItem[] | null, driveItemEls: DriveItemEl[] | null) {
                 let driveItemElems = driveItemEls as DriveItemEl[];
 
@@ -90,7 +118,9 @@
                     iconCssClass: iconCssClass,
                     checkIconCssClass: "bi bi-square",
                     fileNameWithoutExtension,
-                    fileNameExtension
+                    fileNameExtension,
+                    isEditing: false,
+                    rowCssClass: "trmrk-grid-row"
                 } as DriveItemEl);
 
                 return retItem;
@@ -105,11 +135,11 @@
                     url = "/explore-files/" + encodedId;
                 } else if (item.isTextFile) {
                     url = "/text-file/" + encodedId;
-                } else if (item.isTextFile) {
+                } else if (item.isImageFile) {
                     url = "/image-file/" + encodedId;
-                } else if (item.isTextFile) {
+                } else if (item.isVideoFile) {
                     url = "/video-file/" + encodedId;
-                } else if (item.isTextFile) {
+                } else if (item.isAudioFile) {
                     url = "/audio-file/" + encodedId;
                 } else {
                     url = "/download-file/" + encodedId;
@@ -121,11 +151,8 @@
                 const id = item.id ?? (this.$props.currentDriveFolder.id + "/" + item.name);
                 return id;
             },
-            itemCheckBoxClick(driveItem: DriveItemEl) {
-                driveItem.isChecked = !driveItem.isChecked;
-
-                if (driveItem.isChecked) {
-                    driveItem.checkIconCssClass = "bi bi-check-square";
+            itemCheckBoxClicked(driveItem: DriveItemEl, isChecked: boolean) {
+                if (isChecked) {
                     this.checkedRowsCount++;
 
                     if (!this.hasCheckedRows) {
@@ -133,36 +160,21 @@
                         this.updateTableCssClass();
                     }
                 } else {
-                    driveItem.checkIconCssClass = "bi bi-square";
                     this.checkedRowsCount--;
 
                     if (this.hasCheckedRows) {
-                        if (!this.driveItemElems.find(
-                            itemEl => itemEl.isChecked
-                        )) {
+                        if (this.checkedRowsCount === 0) {
                             this.hasCheckedRows = false;
                             this.updateTableCssClass();
                         }
                     }
                 }
             },
-            headerCheckBoxClick() {
-                this.headerCheckIconIsChecked = !this.headerCheckIconIsChecked;
-
-                if (this.headerCheckIconIsChecked) {
-                    this.headerCheckIconCssClass = "bi bi-check-square";
-                    this.hasCheckedRows = true;
-                    this.checkedRowsCount = this.driveItemElems.length;
-                } else {
-                    this.headerCheckIconCssClass = "bi bi-square";
-                    this.hasCheckedRows = false;
-                    this.checkedRowsCount = 0;
-                }
-
+            headerCheckBoxClicked(checked: boolean) {
                 for (let itemEl of this.driveItemElems) {
-                    itemEl.isChecked = this.headerCheckIconIsChecked;
+                    itemEl.isChecked = checked;
 
-                    if (this.headerCheckIconIsChecked) {
+                    if (checked) {
                         itemEl.checkIconCssClass = "bi bi-check-square";
                     } else {
                         itemEl.checkIconCssClass = "bi bi-square";
@@ -180,15 +192,115 @@
 
                 this.tableCssClass = tableCssClass;
             },
-            itemNameClick(e: any, driveItem: DriveItemEl) {
-                e.preventDefault();
-                return false;
-            }
+            itemEditingStarted(driveItemEl: DriveItemEl) {
+                this.editModeValWrapper.value = true;
+                driveItemEl.isEditing = true;
+
+                this.$emit("enteredEditMode");
+            },
+            itemEditingCancelled(driveItemEl: DriveItemEl) {
+                this.editModeValWrapper.value = false;
+                driveItemEl.isEditing = false;
+
+                this.$emit("exitedEditMode");
+            },
+            // eslint-disable-next-line no-unused-vars
+            itemAddingCancelled(newItem: DriveItemEl) {
+                this.addModeValWrapper.value = false;
+                this.$emit("exitedEditMode");
+            },
+            // eslint-disable-next-line no-unused-vars
+            editedItemSaved(driveItemEl: DriveItemEl, newValue: string) {
+                this.editModeValWrapper.value = false;
+                driveItemEl.isEditing = false;
+                
+                this.$emit("exitedEditMode");
+            },
+            // eslint-disable-next-line no-unused-vars
+            addedItemSaved(newItem: DriveItemEl, newValue: string) {
+                this.addModeValWrapper.value = false;
+                this.$emit("exitedEditMode");
+            },
+            editedItemRemoved(driveItemEl: DriveItemEl) {
+                this.editModeValWrapper.value = false;
+                driveItemEl.isEditing = false;
+                
+                this.$emit("exitedEditMode");
+            },
+        },
+        components: {
+            DriveItemsGridHeadComponent,
+            DriveItemsGridRowComponent,
         }
     });
 </script>
 
-<style scoped>
+<style>
+    .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #DDD;
+    }
+
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #CCC;
+    }
+
+    .trmrk-table-has-checked-rows .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-table-has-checked-rows .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #BDF;
+    }
+
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-table-has-checked-rows .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-table-has-checked-rows .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #ACE;
+    }
+
+    .trmrk-name-grid-row-cell {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
+    .trmrk-name-grid-row-cell a {
+        text-transform: none;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .trmrk-name-grid-row-cell .trmrk-item-name {
+        color: black;
+    }
+
+    .trmrk-name-grid-row-cell .trmrk-item-name-extn {
+        color: #00C;
+    }
+
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #CCC;
+    }
+
+    .trmrk-table-has-checked-rows .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-table-has-checked-rows .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #BDF;
+    }
+
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-table-has-checked-rows .trmrk-icon-grid-head-cell > .bi.bi-square,
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-table-has-checked-rows .trmrk-icon-grid-row-cell > .bi.bi-square {
+        color: #ACE;
+    }
+
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-grid-row,
+    .trmrk-drive-items-grid.trmrk-edit-mode thead {
+        background-color: #EEE;
+    }
+
+    .trmrk-checked-count {
+        color: #88F;
+        font-weight: normal;
+    }
+    
     .trmrk-icon-grid-head-cell {
         width: 1em;
     }
@@ -200,15 +312,6 @@
     .trmrk-icon-grid-head-cell > .bi.bi-square,
     .trmrk-icon-grid-row-cell > .bi.bi-square {
         color: #DDD;
-    }
-
-    .trmrk-table-has-checked-rows .trmrk-icon-grid-head-cell > .bi.bi-square,
-    .trmrk-table-has-checked-rows .trmrk-icon-grid-row-cell > .bi.bi-square {
-        color: #BDF;
-    }
-
-    .trmrk-name-grid-head-cell {
-
     }
 
     .trmrk-name-grid-row-cell {

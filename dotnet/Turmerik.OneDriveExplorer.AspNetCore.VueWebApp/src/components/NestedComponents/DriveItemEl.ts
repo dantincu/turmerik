@@ -1,5 +1,4 @@
-import { ComponentPropsOptions, ComponentObjectPropsOptions } from "vue";
-
+import { IRefValue } from "../../common/core/core";
 import { DriveItem } from "../../services/Entities/Entities";
 
 export interface DriveItemEl {
@@ -11,4 +10,6 @@ export interface DriveItemEl {
   checkIconCssClass: string;
   fileNameWithoutExtension: string;
   fileNameExtension: string;
+  isEditing: boolean;
+  rowCssClass: string;
 }
