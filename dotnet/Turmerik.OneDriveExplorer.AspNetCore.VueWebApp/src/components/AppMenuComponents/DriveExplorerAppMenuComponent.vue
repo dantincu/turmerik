@@ -4,7 +4,7 @@
             <span class="trmrk-drive-folder-name" ref="driveFolderNameEl" @click="driveFolderNameClicked()">{{ currentDriveFolder?.name ?? "" }}</span>
         </div>
         <div class="trmrk-row">
-            <RouterLink class="nav-link trmrk-nav-link" to="."><i class="bi bi-house-fill"></i></RouterLink>
+            <RouterLink class="nav-link trmrk-nav-link" to="/explore-files"><i class="bi bi-house-fill"></i></RouterLink>
             <button type="button" class="btn btn-dark trmrk-btn-dark">
                 <i class="bi bi-arrow-left-circle-fill" @click="btnGoBackClicked()"></i>
             </button>

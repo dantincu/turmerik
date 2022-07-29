@@ -1,6 +1,14 @@
-import { Trmrk, NumHashKeyType } from "../common/core/core";
+import {
+  Trmrk,
+  NumHashKeyType,
+  IHash,
+  IKeyValuePair,
+} from "../common/core/core";
 import { TrmrkAxios, TrmrkAxiosApiResult } from "../common/axios/trmrkAxios";
-import { WebStorageAxios } from "../common/axios/webStorageAxios";
+import {
+  WebStorageAxios,
+  ICacheKeyProp,
+} from "../common/axios/webStorageAxios";
 import { DriveItem, AppSettings } from "./Entities/Entities";
 import { WebStorage } from "../common/core/webStorage";
 import { OfficeLikeFileType } from "./Entities/Entities";
@@ -56,10 +64,14 @@ export class DriveExplorerService {
   }
 
   removeDriveFolderCacheKey(driveFolderId: string) {
-    const cacheKey =
-      this.driveExplorerApi.getDriveFolderCacheKey(driveFolderId);
+    for (const keyType of ["summary", "subFolders", "files"]) {
+      const cacheKey = this.driveExplorerApi.getDriveFolderCacheKey(
+        driveFolderId,
+        keyType as "summary" | "subFolders" | "files"
+      );
 
-    sessionStorage.removeItem(cacheKey);
+      sessionStorage.removeItem(cacheKey);
+    }
   }
 }
 
@@ -92,18 +104,21 @@ export class DriveExplorerApi {
       appSettings.getDriveItemMacrosActionName;
   }
 
-  getDriveFolderCacheKey(driveFolderId: string) {
+  getDriveFolderCacheKey(
+    driveFolderId: string,
+    keyType: "summary" | "subFolders" | "files"
+  ) {
     let cacheKey: string;
 
     if (Trmrk.valIsStr(driveFolderId, false, true)) {
       cacheKey = this.webStorage.getCacheKey(
-        this.appSettings?.driveFolderCacheKeyName as string,
+        this.appSettings?.driveFolderCacheKeyName + keyType,
         driveFolderId,
         this.username
       );
     } else {
       cacheKey = this.webStorage.getCacheKey(
-        this.appSettings?.rootDriveFolderCacheKeyName as string,
+        this.appSettings?.rootDriveFolderCacheKeyName + keyType,
         this.username
       );
     }
@@ -112,16 +127,58 @@ export class DriveExplorerApi {
   }
 
   async getDriveFolderAsync(driveFolderId: string, refreshCache = false) {
-    const cacheKey = this.getDriveFolderCacheKey(driveFolderId);
+    const cacheKeysMap = {} as IHash<ICacheKeyProp<DriveItem>>;
+
+    cacheKeysMap[this.getDriveFolderCacheKey(driveFolderId, "summary")] = {
+      get: (data, obj) => {
+        data.value = data.value ?? ({} as DriveItem);
+        data.value = { ...data.value, ...obj };
+      },
+      set: (data, key) => {
+        // debugger;
+        const jsonData = { ...data.value };
+
+        delete jsonData.subFolders;
+        delete jsonData.folderFiles;
+
+        const jsonStr = JSON.stringify(jsonData);
+        sessionStorage.setItem(key, jsonStr);
+      },
+    };
+
+    cacheKeysMap[this.getDriveFolderCacheKey(driveFolderId, "subFolders")] = {
+      get: (data, obj) => {
+        data.value = data.value ?? ({} as DriveItem);
+        (data.value as DriveItem).subFolders = obj as DriveItem[];
+      },
+      set: (data, key) => {
+        // debugger;
+        const jsonStr = JSON.stringify(data.value?.subFolders);
+        sessionStorage.setItem(key, jsonStr);
+      },
+    };
+
+    cacheKeysMap[this.getDriveFolderCacheKey(driveFolderId, "files")] = {
+      get: (data, obj) => {
+        data.value = data.value ?? ({} as DriveItem);
+        (data.value as DriveItem).folderFiles = obj as DriveItem[];
+      },
+      set: (data, key) => {
+        // debugger;
+        const jsonStr = JSON.stringify(data.value?.folderFiles);
+        sessionStorage.setItem(key, jsonStr);
+      },
+    };
+
     let relUrl = ("/" + this.appSettings?.apiFolderRelUri) as string;
 
     if (Trmrk.valIsStr(driveFolderId)) {
       relUrl += "/" + encodeURIComponent(driveFolderId);
     }
 
-    const apiResult = await this.webStorageAxios.get<DriveItem>(
+    const apiResult = await this.webStorageAxios.getMultiple<DriveItem>(
       relUrl,
-      cacheKey,
+      cacheKeysMap,
       false,
       null,
       refreshCache
@@ -233,25 +290,6 @@ export class DriveExplorerApi {
     const apiResult = await this.webStorageAxios.get(relUri, cacheKey);
 
     return apiResult;
-  }
-
-  setDriveFolderToCache(driveFolder: DriveItem, parentFolderId: string) {
-    const cacheKey = this.getDriveFolderCacheKey(driveFolder.id as string);
-
-    if (Trmrk.valIsStr(parentFolderId, false, true)) {
-      driveFolder = {
-        ...driveFolder,
-        parentFolderId: parentFolderId,
-      };
-    }
-
-    const driveFolderJson = JSON.stringify(driveFolder);
-    sessionStorage.setItem(cacheKey, driveFolderJson);
-  }
-
-  removeDriveFolderFromCache(driveFolder: DriveItem) {
-    const cacheKey = this.getDriveFolderCacheKey(driveFolder.id as string);
-    sessionStorage.removeItem(cacheKey);
   }
 
   validateDriveItemId(driveItemId: string) {
