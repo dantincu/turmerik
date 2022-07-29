@@ -102,15 +102,15 @@
     }
 
     input[type="checkbox"] {
-        width: 24px;
-        height: 24px;
+        width: 1.5em;
+        height: 1.5em;
         cursor: pointer;
         padding-left: 0.5rem;
     }
 
     .folderIdEncodeCheckBoxLabel {
-        height: 24px;
-        line-height: 24px;
+        height: 1.5em;
+        line-height: 1.5em;
         vertical-align: top;
         margin-right: 0.5rem;
     }

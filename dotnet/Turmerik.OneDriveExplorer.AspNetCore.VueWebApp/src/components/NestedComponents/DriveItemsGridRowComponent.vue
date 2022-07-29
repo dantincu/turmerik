@@ -13,9 +13,10 @@
             </RouterLink>
         </td>
         <DriveItemsGridEditComponent v-if="driveItemEl.isEditing"
-            :isNewItem="false"
+            :isNewItem="isNewItem"
             :rowCssClass="'trmrk-edit-name-grid-row-cell'"
             :valueWrapper="editedNameValWrapper"
+            :isReadonly="isReadonly"
             @editItemCancelled="(item: any) => cancelEditItem(item)"
             @editedItemSaved="(item: any, newValue: string) => saveEditedItem(item, newValue)"
             @editedItemRemoved="(item: any) => removeEditedItem(item)">
@@ -35,31 +36,41 @@
     import DriveItemsGridEditComponent from './DriveItemsGridEditComponent.vue';
 
     interface DriveItemsGridRowComponentData {
-        editedNameValWrapper: IRefValue<string> | null | undefined;
         rowCssClass: string
+        editedNameValWrapper: IRefValue<string> | null | undefined;
+        isReadonly: boolean
     }
+    
+    const getRowCssClass = (isReadonly: boolean, isEditing: boolean, isNewItem: boolean) => {
+        let rowCssClass: string;
+
+        if (isEditing) {
+            if (isNewItem) {
+                rowCssClass = "trmrk-grid-row-new";
+            } else {
+                rowCssClass = "trmrk-grid-row-edit";
+            }
+
+            if (isReadonly) {
+                rowCssClass += " trmrk-readonly";
+            }
+        } else {
+            rowCssClass = "trmrk-grid-row";
+        }
+
+        return rowCssClass;
+    };
 
     export default defineComponent({
         props: [ "isDriveFoldersGrid", "isEditMode", "isNewItem", "driveItemEl" ],
         emits: [ "itemCheckBoxClicked", "itemEditingStarted", "itemEditingCancelled", "editedItemSaved", "editedItemRemoved" ],
         data() {
-            let rowCssClass: string;
-
-            if (this.driveItemEl.isEditing) {
-                if (this.isNewItem) {
-                    rowCssClass = "trmrk-grid-row-new";
-                } else {
-                    rowCssClass = "trmrk-grid-row-edit";
-                }
-            } else {
-                rowCssClass = "trmrk-grid-row";
-            }
-
             return ({
-                rowCssClass,
+                rowCssClass: getRowCssClass(false, this.driveItemEl.isEditing, this.isNewItem),
                 editedNameValWrapper: {
                     value: this.driveItemEl.data?.name ?? ""
-                }
+                },
+                isReadonly: false
             } as DriveItemsGridRowComponentData);
         },
         methods: {
@@ -93,9 +104,13 @@
                 this.$emit("itemEditingCancelled", this.driveItemEl);
             },
             saveEditedItem(item: DriveItemEl, newValue: string) {
-                this.$emit("editedItemSaved", this.driveItemEl, newValue);
+                this.isReadonly = true;
+                this.rowCssClass = getRowCssClass(true, this.driveItemEl.isEditing, this.isNewItem);
+                // this.$emit("editedItemSaved", this.driveItemEl, newValue);
             },
             removeEditedItem(item: DriveItemEl) {
+                this.isReadonly = true;
+                this.rowCssClass = getRowCssClass(true, this.driveItemEl.isEditing, this.isNewItem);
                 this.$emit("editedItemRemoved", this.driveItemEl);
             }
         },

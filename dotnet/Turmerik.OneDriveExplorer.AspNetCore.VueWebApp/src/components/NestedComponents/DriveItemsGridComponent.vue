@@ -282,6 +282,33 @@
         background-color: #EEE;
     }
 
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-grid-row-new.trmrk-readonly,
+    .trmrk-drive-items-grid.trmrk-edit-mode .trmrk-grid-row-edit.trmrk-readonly {
+        background-color: #E0E0E0;
+    }
+
+    .trmrk-edit-name-grid-row-cell {
+        display: flex;
+    }
+
+    .trmrk-edit-name-grid-row-cell .bi {
+        font-size: 1.5rem;
+        line-height: 1rem;
+        margin-left: 0.5rem;
+        padding-top: 0.3rem;
+    }
+
+    .trmrk-edit-name-grid-row-cell .bi.trmrk-utf-icon {
+        font-size: 2.5rem;
+        padding-top: 0.5rem;
+    }
+
+    .trmrk-edit-name-grid-row-cell input[type="text"] {
+        flex-grow: 100;
+        height: 2rem;
+        margin-left: 0.5rem;
+    }
+
     .trmrk-checked-count {
         color: #88F;
         font-weight: normal;

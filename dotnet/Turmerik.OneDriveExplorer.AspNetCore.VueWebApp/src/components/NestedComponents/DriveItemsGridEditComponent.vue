@@ -2,7 +2,7 @@
     <td class="trmrk-edit-name-grid-row-cell">
         <i class="bi bi-escape" @click="cancelEditItem(driveItemEl)"></i>
         <span class="bi trmrk-utf-icon" @click="clearEditedItemName()">&times;</span>
-        <input type="text" ref="editedItemNameTextBox" v-model="valWrapper.value" />
+        <input type="text" ref="editedItemNameTextBox" v-model="valWrapper.value" :readonly="isReadonly" />
         <i class="bi bi-save-fill" @click="saveEditedItem(driveItemEl)"></i>
         <i class="bi bi-file-x-fill" @click="removeEditedItem(driveItemEl)" v-if="!isNewItem"></i>
     </td>
@@ -16,7 +16,7 @@
     import { DriveItemEl } from './DriveItemEl';
 
     export default defineComponent({
-        props: [ "isDriveFoldersGrid", "isNewItem", "rowCssClass", "driveItemEl", "valueWrapper" ],
+        props: [ "isDriveFoldersGrid", "isNewItem", "rowCssClass", "driveItemEl", "valueWrapper", "isReadonly" ],
         emits: [ "editItemCancelled", "editedItemSaved", "editedItemRemoved" ],
         data() {
             const valWrapper = this.$props.valueWrapper as IRefValue<string>;
@@ -27,16 +27,24 @@
         },
         methods: {
             cancelEditItem(driveItemEl: DriveItemEl) {
-                this.$emit("editItemCancelled", driveItemEl);
+                if (!this.isReadonly) {
+                    this.$emit("editItemCancelled", driveItemEl);
+                }
             },
             saveEditedItem(driveItemEl: DriveItemEl) {
-                this.$emit("editedItemSaved", driveItemEl, this.valWrapper.value);
+                if (!this.isReadonly) {
+                    this.$emit("editedItemSaved", driveItemEl, this.valWrapper.value);
+                }
             },
             removeEditedItem(driveItemEl: DriveItemEl) {
-                this.$emit("editedItemRemoved", driveItemEl);
+                if (!this.isReadonly) {
+                    this.$emit("editedItemRemoved", driveItemEl);
+                }
             },
             clearEditedItemName() {
-                this.valWrapper.value = "";
+                if (!this.isReadonly) {
+                    this.valWrapper.value = "";
+                }
             },
         }
     });
