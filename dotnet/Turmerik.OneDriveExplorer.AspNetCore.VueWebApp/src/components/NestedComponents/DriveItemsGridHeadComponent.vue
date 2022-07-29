@@ -30,7 +30,7 @@
     }
 
     export default defineComponent({
-        props: [ "isDriveFoldersGrid", "isEditMode", "driveItemsCount" ],
+        props: [ "isDriveFoldersGrid", "isEditMode", "isAddMode", "driveItemsCount" ],
         emits: [ "headerCheckBoxClicked" ],
         data() {
             return ({
@@ -43,7 +43,7 @@
         },
         methods: {
             headerCheckBoxClick() {
-                if (!this.isEditMode) {
+                if (!this.isEditMode && !this.isAddMode) {
                     this.headerCheckIconIsChecked = !this.headerCheckIconIsChecked;
 
                     if (this.headerCheckIconIsChecked) {

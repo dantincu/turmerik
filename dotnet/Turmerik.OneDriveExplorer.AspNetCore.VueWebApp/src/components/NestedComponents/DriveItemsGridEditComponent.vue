@@ -1,5 +1,5 @@
 <template>
-    <td class="trmrk-edit-name-grid-row-cell" v-if="driveItemEl.isEditing">
+    <td class="trmrk-edit-name-grid-row-cell">
         <i class="bi bi-escape" @click="cancelEditItem(driveItemEl)"></i>
         <span class="bi trmrk-utf-icon" @click="clearEditedItemName()">&times;</span>
         <input type="text" ref="editedItemNameTextBox" v-model="valWrapper.value" />

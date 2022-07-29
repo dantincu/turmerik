@@ -40,7 +40,7 @@
     }
 
     export default defineComponent({
-        props: [ "isDriveFoldersGrid", "isNewItem", "driveItemEl" ],
+        props: [ "isDriveFoldersGrid", "isEditMode", "isNewItem", "driveItemEl" ],
         emits: [ "itemCheckBoxClicked", "itemEditingStarted", "itemEditingCancelled", "editedItemSaved", "editedItemRemoved" ],
         data() {
             let rowCssClass: string;
@@ -56,12 +56,15 @@
             }
 
             return ({
-                rowCssClass
+                rowCssClass,
+                editedNameValWrapper: {
+                    value: this.driveItemEl.data?.name ?? ""
+                }
             } as DriveItemsGridRowComponentData);
         },
         methods: {
             itemCheckBoxClick() {
-                if (!this.driveItemEl.isEditing) {
+                if (!this.isEditMode) {
                     const driveItemEl = this.driveItemEl as DriveItemEl;
                     driveItemEl.isChecked = !driveItemEl.isChecked;
 

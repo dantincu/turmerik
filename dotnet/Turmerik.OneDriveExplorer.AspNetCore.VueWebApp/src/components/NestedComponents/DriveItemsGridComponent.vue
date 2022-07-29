@@ -3,15 +3,17 @@
         <table :class="tableCssClass">
             <DriveItemsGridHeadComponent
                 :isDriveFoldersGrid="isDriveFoldersGrid"
-                :isEditMode="editModeValWrapper.value"
+                :isEditMode="isEditMode"
+                :isAddMode="isAddMode"
                 :driveItemsCount="driveItemElems.length"
                 @headerCheckBoxClicked="(checked: boolean) => headerCheckBoxClicked(checked)">
             </DriveItemsGridHeadComponent>
             <tbody>
-                <DriveItemsGridRowComponent v-if="isAddMode()"
+                <DriveItemsGridRowComponent v-if="isAddMode"
                     :isDriveFoldersGrid="isDriveFoldersGrid"
                     :isNewItem="true"
                     :driveItemEl="newItemEl"
+                    :isEditMode="isEditMode || isAddMode"
                     @itemEditingCancelled="(newItem: any) => itemAddingCancelled(newItem)"
                     @editedItemSaved="(newItem: any, newValue: string) => addedItemSaved(newItem, newValue)">
                 </DriveItemsGridRowComponent>
@@ -22,6 +24,7 @@
                     :isDriveFoldersGrid="isDriveFoldersGrid"
                     :isNewItem="false"
                     :driveItemEl="driveItemEl"
+                    :isEditMode="isEditMode || isAddMode"
                     @itemCheckBoxClicked="(isChecked: boolean) => itemCheckBoxClicked(driveItemEl, isChecked)"
                     @itemEditingStarted="(item: any) => itemEditingStarted(item)"
                     @itemEditingCancelled="(item: any) => itemEditingCancelled(item)"
@@ -44,8 +47,8 @@
     import DriveItemsGridRowComponent from './DriveItemsGridRowComponent.vue';
 
     export default defineComponent({
-        props: [ "isDriveFoldersGrid", "driveItemEls", "driveItems", "currentDriveFolder", "editModeValueWrapper", "addModeValueWrapper" ],
-        emits: [ "enteredEditMode", "exitedEditMode" ],
+        props: [ "isDriveFoldersGrid", "driveItemEls", "driveItems", "currentDriveFolder", "isEditMode", "isAddMode" ],
+        emits: [ "itemEditingStarted", "itemEditingCancelled", "itemAddingCancelled", "editedItemSaved", "addedItemSaved", "editedItemRemoved" ],
         data() {
             let driveItemElems: DriveItemEl[] = this.getDriveItemElsArr(
                 this.$props.driveItems, this.$props.driveItemEls
@@ -61,32 +64,24 @@
                 hasCheckedRows: false,
                 checkedRowsCount: 0,
                 tableCssClass: "table",
-                editModeValWrapper: this.$props.editModeValueWrapper as IRefValue<boolean>,
-                addModeValWrapper: this.$props.addModeValueWrapper as IRefValue<boolean>,
                 newEntryValWrapper: {
                     value: ""
                 } as IRefValue<string>,
                 newItemEl: {
                     iconCssClass: defaultIconCssClass,
                     checkIconCssClass: "bi bi-square",
-                    isEditing: true
-                } as DriveItemEl
+                    isEditing: true,
+                    parentFolderId: this.$props.currentDriveFolder.id
+                } as DriveItemEl,
+                isReadonly: false
             });
         },
         methods: {
-            isEditMode() {
-                const isEditMode = this.editModeValWrapper.value as boolean;
-                return isEditMode;
-            },
-            isAddMode() {
-                const isAddMode = this.addModeValWrapper.value as boolean;
-                return isAddMode;
-            },
             getRootDomElCssClass() {
                 const cssClassArr = [ "trmrk-drive-items-grid",
                     this.$props.isDriveFoldersGrid ? "trmrk-drive-folders-grid" : "trmrk-drive-files-grid" ];
                 
-                if (this.isEditMode() || this.isAddMode()) {
+                if (this.isEditMode || this.isAddMode) {
                     cssClassArr.push("trmrk-edit-mode");
                 }
 
@@ -110,9 +105,12 @@
                 const [ fileNameWithoutExtension, fileNameExtension ] = getFileNameAndExtension(item.name as string);
                 const iconCssClass = this.$props.isDriveFoldersGrid ? "bi bi-folder-fill" : getFileNameBsIconCssClass(fileNameExtension);
 
+                const driveItemId = this.getDriveItemId(item);
+
                 const retItem = ({
                     data: item,
-                    url: this.getDriveItemUrl(item, this.$props.isDriveFoldersGrid),
+                    id: driveItemId,
+                    url: this.getDriveItemUrl(item, driveItemId, this.$props.isDriveFoldersGrid),
                     isSelected: false,
                     isChecked: false,
                     iconCssClass: iconCssClass,
@@ -125,10 +123,8 @@
 
                 return retItem;
             },
-            getDriveItemUrl(item: DriveItem, isDriveFoldersGrid: boolean): string {
-                const id = this.getDriveItemId(item);
+            getDriveItemUrl(item: DriveItem, id: string, isDriveFoldersGrid: boolean): string {
                 const encodedId = encodeURIComponent(id);
-
                 let url: string;
 
                 if (isDriveFoldersGrid) {
@@ -193,39 +189,29 @@
                 this.tableCssClass = tableCssClass;
             },
             itemEditingStarted(driveItemEl: DriveItemEl) {
-                this.editModeValWrapper.value = true;
                 driveItemEl.isEditing = true;
-
-                this.$emit("enteredEditMode");
+                this.$emit("itemEditingStarted", driveItemEl);
             },
             itemEditingCancelled(driveItemEl: DriveItemEl) {
-                this.editModeValWrapper.value = false;
                 driveItemEl.isEditing = false;
-
-                this.$emit("exitedEditMode");
+                this.$emit("itemEditingCancelled", driveItemEl);
             },
             // eslint-disable-next-line no-unused-vars
             itemAddingCancelled(newItem: DriveItemEl) {
-                this.addModeValWrapper.value = false;
-                this.$emit("exitedEditMode");
+                this.$emit("itemAddingCancelled", newItem);
             },
             // eslint-disable-next-line no-unused-vars
             editedItemSaved(driveItemEl: DriveItemEl, newValue: string) {
-                this.editModeValWrapper.value = false;
                 driveItemEl.isEditing = false;
-                
-                this.$emit("exitedEditMode");
+                this.$emit("editedItemSaved", driveItemEl, newValue);
             },
             // eslint-disable-next-line no-unused-vars
             addedItemSaved(newItem: DriveItemEl, newValue: string) {
-                this.addModeValWrapper.value = false;
-                this.$emit("exitedEditMode");
+                this.$emit("addedItemSaved", newItem, newValue);
             },
             editedItemRemoved(driveItemEl: DriveItemEl) {
-                this.editModeValWrapper.value = false;
                 driveItemEl.isEditing = false;
-                
-                this.$emit("exitedEditMode");
+                this.$emit("editedItemRemoved", driveItemEl);
             },
         },
         components: {

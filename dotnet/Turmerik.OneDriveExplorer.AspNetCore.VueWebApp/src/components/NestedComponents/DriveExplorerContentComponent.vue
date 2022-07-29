@@ -8,10 +8,14 @@
             :isDriveFoldersGrid="true"
             :driveItems="driveFolders"
             :currentDriveFolder="currentDriveFolder"
-            :editModeValueWrapper="foldersEditModeValWrppr"
-            :addModeValueWrapper="foldersAddModeValWrppr"
-            :enteredEditMode="enteredEditMode()"
-            :exitedEditMode="exitedEditMode()">
+            :isEditMode="foldersEditMode"
+            :isAddMode="foldersAddMode"
+            @itemAddingCancelled="(newItem: any) => itemAddingCancelled(newItem)"
+            @itemEditingStarted="(driveFolderEl: any) => itemEditingStarted(driveFolderEl)"
+            @itemEditingCancelled="(driveFolderEl: any) => itemEditingCancelled(driveFolderEl)"
+            @editedItemSaved="(driveFolderEl: any, newFolderName: string) => editedFolderSaved(driveFolderEl, newFolderName)"
+            @addedItemSaved="(newFolderEl: any, newFolderName: string) => addedFolderSaved(newFolderEl, newFolderName)"
+            @editedItemRemoved="(driveFolderEl: any) => editedFolderRemoved(driveFolderEl)">
         </DriveItemsGridComponent>
 
         <h6 id="files">
@@ -22,8 +26,14 @@
             :isDriveFoldersGrid="false"
             :driveItems="driveFiles"
             :currentDriveFolder="currentDriveFolder"
-            :editModeValueWrapper="filesEditModeValWrppr"
-            :addModeValueWrapper="filesAddModeValWrppr">
+            :isEditMode="filesEditMode"
+            :isAddMode="filesAddMode"
+            @itemAddingCancelled="(newItem: any) => itemAddingCancelled(newItem)"
+            @itemEditingStarted="(driveFileEl: any) => itemEditingStarted(driveFileEl)"
+            @itemEditingCancelled="(driveFileEl: any) => itemEditingCancelled(driveFileEl)"
+            @editedItemSaved="(driveFileEl: any, newFileName: string) => editedFileSaved(driveFileEl, newFileName)"
+            @addedItemSaved="(newFileEl: any, newFileName: string) => addedFileSaved(newFileEl, newFileName)"
+            @editedItemRemoved="(driveFileEl: any) => editedFileRemoved(driveFileEl)">
         </DriveItemsGridComponent>
     </div>
 </template>
@@ -31,8 +41,8 @@
 <script lang="ts">
     import { defineComponent } from 'vue';
 
-    import { IRefValue } from '../../common/core/core';
     import { DriveItem } from '../../services/Entities/Entities';
+    import { DriveItemEl } from './DriveItemEl';
     import DriveItemsGridComponent from './DriveItemsGridComponent.vue';
 
     export default defineComponent({
@@ -47,37 +57,68 @@
                 currentDriveFolder,
                 driveFolders,
                 driveFiles,
-                foldersEditModeValWrppr: {
-                    value: false
-                } as IRefValue<boolean>,
-                foldersAddModeValWrppr: {
-                    value: false
-                } as IRefValue<boolean>,
-                filesEditModeValWrppr: {
-                    value: false
-                } as IRefValue<boolean>,
-                filesAddModeValWrppr: {
-                    value: false
-                } as IRefValue<boolean>
+                foldersEditMode: false,
+                foldersAddMode: false,
+                filesEditMode: false,
+                filesAddMode: false
             };
         },
         methods: {
             addNewFolderClick() {
-                this.foldersAddModeValWrppr.value = true;
+                this.foldersAddMode = true;
+                this.filesEditMode = true;
             },
             addNewFileClick() {
-                this.filesAddModeValWrppr.value = true;
+                this.filesAddMode = true;
+                this.foldersEditMode = true;
             },
-            enteredEditMode() {
-                this.foldersEditModeValWrppr.value = true;
-                this.filesEditModeValWrppr.value = true;
+            // eslint-disable-next-line no-unused-vars
+            itemEditingStarted(driveitemEl: DriveItemEl) {
+                this.foldersEditMode = true;
+                this.filesEditMode = true;
             },
-            exitedEditMode() {
-                this.foldersAddModeValWrppr.value = false;
-                this.filesAddModeValWrppr.value = false;
-                this.foldersEditModeValWrppr.value = false;
-                this.filesEditModeValWrppr.value = false;
-            }
+            // eslint-disable-next-line no-unused-vars
+            itemEditingCancelled(driveItemEl: DriveItemEl) {
+                this.foldersEditMode = false;
+                this.filesEditMode = false;
+            },
+            // eslint-disable-next-line no-unused-vars
+            itemAddingCancelled(newItem: DriveItemEl) {
+                this.foldersAddMode = false;
+                this.filesAddMode = false;
+                this.foldersEditMode = false;
+                this.filesEditMode = false;
+            },
+            // eslint-disable-next-line no-unused-vars
+            editedFolderSaved(driveFolderEl: DriveItemEl, newFolderName: string) {
+                this.foldersEditMode = false;
+                this.filesEditMode = false;
+            },
+            // eslint-disable-next-line no-unused-vars
+            editedFileSaved(driveFileEl: DriveItemEl, newFileName: string) {
+                this.foldersEditMode = false;
+                this.filesEditMode = false;
+            },
+            // eslint-disable-next-line no-unused-vars
+            addedFolderSaved(newItem: DriveItemEl, newValue: string) {
+                this.foldersAddMode = false;
+                this.filesEditMode = false;
+            },
+            // eslint-disable-next-line no-unused-vars
+            addedFileSaved(newItem: DriveItemEl, newValue: string) {
+                this.filesAddMode = false;
+                this.foldersEditMode = false;
+            },
+            // eslint-disable-next-line no-unused-vars
+            editedFolderRemoved(driveFolderEl: DriveItemEl) {
+                this.foldersEditMode = false;
+                this.filesEditMode = false;
+            },
+            // eslint-disable-next-line no-unused-vars
+            editedFileRemoved(driveFileEl: DriveItemEl) {
+                this.foldersEditMode = false;
+                this.filesEditMode = false;
+            },
         },
         components: {
             DriveItemsGridComponent
