@@ -15,22 +15,22 @@
 
   <Grid ColumnDefinitions="100, 45, *" RowDefinitions="35, 35, 35, 35, auto, auto, *">
     <Button Command="{Binding Fetch}" Content="Fetch" Grid.Row="0" Grid.Column="0" Margin="3 3 0 3"></Button>
-    <Button Command="{Binding RawUrlFromClipboard}" Content="{materialIcons:MaterialIconExt Kind=ContentPaste}" Grid.Row="0" Grid.Column="1"></Button>
+    <TextBlock Text="Get from clipboard and fetch" Margin="5 10 0 10" Grid.Row="0" Grid.Column="2" />
+    <Button Command="{Binding RawUrlFromClipboard}" Content="{materialIcons:MaterialIconExt Kind=ContentPaste}" Grid.Row="0" Grid.Column="2" Margin="200 0 0 0"></Button>
 
     <TextBlock Text="Raw Url" Margin="5 10 0 10" Grid.Row="1" Grid.Column="0" />
     <Button Command="{Binding RawUrlToClipboard}" Content="{materialIcons:MaterialIconExt Kind=ContentPaste}" Grid.Row="1" Grid.Column="1" Margin="0 0 0 0"></Button>
-    <TextBox Text="{Binding RawUrl}" x:Name="textBoxRawUrl" Grid.Row="1" Grid.Column="2" Margin="0 3 0 3" />
+    <TextBox Text="{Binding RawUrl}" x:Name="textBoxRawUrl" Grid.Row="1" Grid.Column="2" Margin="0 3 9 3" />
 
     <TextBlock Text="Title" Margin="5 10 0 10" Grid.Row="2" Grid.Column="0" />
     <Button Command="{Binding ResourceTitleToClipboard}" Content="{materialIcons:MaterialIconExt Kind=ContentPaste}" Grid.Row="2" Grid.Column="1" Margin="0 0 0 0"></Button>
-    <TextBox Text="{Binding ResourceTitle}" x:Name="textBoxResourceTitle" Grid.Row="2" Grid.Column="2" Margin="0 3 0 3" />
+    <TextBox Text="{Binding ResourceTitle}" x:Name="textBoxResourceTitle" Grid.Row="2" Grid.Column="2" Margin="0 3 9 3" />
 
     <TextBlock Text="Title and Url" Margin="5 10 0 10" Grid.Row="3" Grid.Column="0" />
     <Button Command="{Binding TitleAndUrlToClipboard}" Content="{materialIcons:MaterialIconExt Kind=ContentPaste}" Grid.Row="3" Grid.Column="1" Margin="0 0 0 0"></Button>
-    <TextBox Text="{Binding TitleAndUrl}" x:Name="textBoxTitleAndUrl" Grid.Row="3" Grid.Column="2" Margin="0 3 0 3" />
+    <TextBox Text="{Binding TitleAndUrl}" x:Name="textBoxTitleAndUrl" Grid.Row="3" Grid.Column="2" Margin="0 3 9 3" />
 
-    <TextBlock Text="{Binding OutputText}" Foreground="{Binding OutputTextForeground}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="10 10 10 10" />
-    <!--TextBox Text="{Binding OutputText}" Foreground="{Binding OutputTextForeground}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True" x:Name="textBoxOutput" Margin="10 10 10 10" /-->
-    <TextBox Text="{Binding Description}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True" x:Name="textBoxDescription" Height="100" Margin="10 10 10 10" />
+    <TextBlock Text="{Binding OutputText}" Foreground="{Binding OutputTextForeground}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="9 6 9 0" FontSize="14" TextWrapping="Wrap" />
+    <TextBox Text="{Binding Description}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True" x:Name="textBoxDescription" Height="100" Margin="9 9 9 9" />
   </Grid>
 </UserControl>
