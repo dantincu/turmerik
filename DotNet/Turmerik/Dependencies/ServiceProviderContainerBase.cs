@@ -9,6 +9,8 @@ namespace Turmerik.Dependencies
 {
     public abstract class ServiceProviderContainerBase : SingletonRegistrarBase<IServiceProvider, IServiceCollection>
     {
+        protected readonly Guid Guid = Guid.NewGuid();
+
         protected abstract void RegisterServices(
             IServiceCollection services);
 
