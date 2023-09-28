@@ -51,7 +51,7 @@ public partial class MainView : ReactiveUserControl<MainWindowViewModel>
                 new AppGlobalsMutableData
                 {
                     TopLevel = TopLevel.GetTopLevel(this),
-                    DefaultOutputTextForeground = new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)),
+                    DefaultOutputTextForeground = new SolidColorBrush(Color.FromArgb(255, 64, 64, 255)),
                     SuccessOutputTextForeground = new SolidColorBrush(Color.FromArgb(255, 0, 255, 0)),
                     ErrorOutputTextForeground = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)),
                     DefaultMaterialIconsForeground = buttonControlSyncItems.Foreground

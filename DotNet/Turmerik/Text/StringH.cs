@@ -125,8 +125,8 @@ namespace Turmerik.Text
         }
 
         public static string JoinNotNullStr(
-            this string joinStr,
-            string[] strArr,
+            this string[] strArr,
+            string joinStr,
             bool? excludeAllWhitespaces = true)
         {
             if (excludeAllWhitespaces != false)

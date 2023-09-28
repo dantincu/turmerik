@@ -179,10 +179,10 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             string text,
             bool? isSuccess)
         {
-            ShowUserMsg.Execute(
+            using (_ = ShowUserMsg.Execute(
                 new UserMsgTuple(
                     text,
-                    isSuccess)).Subscribe().Dispose();
+                    isSuccess)).Subscribe()) ;
         }
 
         private Task RawUrlToClipboardAsync() => CopyToClipboardAsync("provided url", RawUrl);
@@ -227,7 +227,7 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                 ShowUserMessage(retrieveUrlErrMsgFactory(exc), false);
             }
 
-            // await Task.Delay(1000);
+            await Task.Delay(1000);
             return rawUrl;
         }
 

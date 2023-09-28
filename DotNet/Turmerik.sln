@@ -15,11 +15,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{FC13E95F-6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuickNotes", "QuickNotes", "{315D1028-9240-4808-B0AA-70ED523CC47E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Avalonia", "Turmerik.Avalonia\Turmerik.Avalonia.csproj", "{B75C800D-1B4A-497C-AA11-6181E3AE94A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Avalonia", "Turmerik.Avalonia\Turmerik.Avalonia.csproj", "{B75C800D-1B4A-497C-AA11-6181E3AE94A3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.QuickMarks.AvaloniaApp", "Turmerik.QuickMarks.AvaloniaApp\Turmerik.QuickMarks.AvaloniaApp.csproj", "{B6239AB7-2B28-45F4-8363-5F8C30216FDF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.QuickMarks.AvaloniaApp.Desktop", "Turmerik.QuickMarks.AvaloniaApp.Desktop\Turmerik.QuickMarks.AvaloniaApp.Desktop.csproj", "{ACE996AF-E001-4E43-99EB-2F5FF84A7F46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{52B63410-2581-4146-9484-89D300FAE7B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsPair.ConsoleApp", "Turmerik.MkFsDirsPair.ConsoleApp\Turmerik.MkFsDirsPair.ConsoleApp.csproj", "{ED144131-C48B-49AC-BAFC-D261B6C5405C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.MkNoteDirsPair.ConsoleApp", "Turmerik.MkNoteDirsPair.ConsoleApp\Turmerik.MkNoteDirsPair.ConsoleApp.csproj", "{F76681FF-BB05-4064-A277-EF4B7CD89F9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.MkFsDirsPair.Lib", "Turmerik.MkFsDirsPair.Lib\Turmerik.MkFsDirsPair.Lib.csproj", "{B612401F-A2D2-4EC8-8B12-C63EC63EC588}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +59,18 @@ Global
 		{ACE996AF-E001-4E43-99EB-2F5FF84A7F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACE996AF-E001-4E43-99EB-2F5FF84A7F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACE996AF-E001-4E43-99EB-2F5FF84A7F46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED144131-C48B-49AC-BAFC-D261B6C5405C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED144131-C48B-49AC-BAFC-D261B6C5405C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED144131-C48B-49AC-BAFC-D261B6C5405C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED144131-C48B-49AC-BAFC-D261B6C5405C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F76681FF-BB05-4064-A277-EF4B7CD89F9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F76681FF-BB05-4064-A277-EF4B7CD89F9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F76681FF-BB05-4064-A277-EF4B7CD89F9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F76681FF-BB05-4064-A277-EF4B7CD89F9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B612401F-A2D2-4EC8-8B12-C63EC63EC588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B612401F-A2D2-4EC8-8B12-C63EC63EC588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B612401F-A2D2-4EC8-8B12-C63EC63EC588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B612401F-A2D2-4EC8-8B12-C63EC63EC588}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +83,10 @@ Global
 		{B75C800D-1B4A-497C-AA11-6181E3AE94A3} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 		{B6239AB7-2B28-45F4-8363-5F8C30216FDF} = {315D1028-9240-4808-B0AA-70ED523CC47E}
 		{ACE996AF-E001-4E43-99EB-2F5FF84A7F46} = {315D1028-9240-4808-B0AA-70ED523CC47E}
+		{52B63410-2581-4146-9484-89D300FAE7B5} = {FC13E95F-6405-4DF0-B40C-4D4D077A59AE}
+		{ED144131-C48B-49AC-BAFC-D261B6C5405C} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{F76681FF-BB05-4064-A277-EF4B7CD89F9D} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{B612401F-A2D2-4EC8-8B12-C63EC63EC588} = {52B63410-2581-4146-9484-89D300FAE7B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
