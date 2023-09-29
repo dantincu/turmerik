@@ -65,7 +65,7 @@ namespace Turmerik.MkFsDirsPair.Lib
                 wr =>
                 {
                     msgFactory = msgFactory.FirstNotNull(
-                        ex => string.Join(":",
+                        ex => string.Join(": ",
                             ex.GetType().FullName,
                             ex.Message));
 

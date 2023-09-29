@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Turmerik.MkNoteDirsPair.ConsoleApp": {
+      "commandName": "Project",
+      // "commandLineArgs": "/b asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf"
+      "commandLineArgs": ""
+    }
+  }
+}

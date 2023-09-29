@@ -13,6 +13,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         public bool CreateNoteBook { get; set; }
         public bool CreateNoteFiles { get; set; }
         public bool CreateNoteInternals { get; set; }
-        public int GroudIdx { get; set; }
+        // public int GroudIdx { get; set; }
     }
 }

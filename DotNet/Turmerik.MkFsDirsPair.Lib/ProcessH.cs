@@ -9,13 +9,16 @@ namespace Turmerik.MkFsDirsPair.Lib
 {
     public static class ProcessH
     {
-        public static void OpenWithDefaultProgram(string path)
+        public static void OpenWithDefaultProgramIfNotNull(string path)
         {
-            using Process fileopener = new Process();
+            if (path != null)
+            {
+                using Process fileopener = new Process();
 
-            fileopener.StartInfo.FileName = "explorer";
-            fileopener.StartInfo.Arguments = "\"" + path + "\"";
-            fileopener.Start();
+                fileopener.StartInfo.FileName = "explorer";
+                fileopener.StartInfo.Arguments = "\"" + path + "\"";
+                fileopener.Start();
+            }
         }
     }
 }

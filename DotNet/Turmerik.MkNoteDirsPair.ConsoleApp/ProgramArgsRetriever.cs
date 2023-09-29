@@ -68,7 +68,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             string arg)
         {
             var argOptsKvp = argOptsArr.FirstKvp(
-                        (kvp, i) => kvp.Key.StartsWith(arg));
+                (kvp, i) => kvp.Key.StartsWith(arg));
 
             var argOptsSetter = argOptsKvp.Value.Value;
 
@@ -108,7 +108,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
             argOptsArr = new Dictionary<string, Action<ProgramArgs, string>>
             {
-                { argOpts.GroudIdx, (pAgs, arg) => pAgs.GroudIdx = int.Parse(arg) }
+                //{ argOpts.GroudIdx, (pAgs, arg) => pAgs.GroudIdx = int.Parse(arg) }
             };
 
             return pa;
@@ -136,10 +136,13 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         private void ThrowIfCreateNoteAndBookBothSet(
             ProgramArgs pa)
         {
-            throw new ArgumentException(
-                string.Format("{0} and {1} cannot be both set to true",
-                    nameof(pa.CreateNote),
-                    nameof(pa.CreateNoteBook)));
+            if (pa.CreateNote && pa.CreateNoteBook)
+            {
+                throw new ArgumentException(
+                    string.Format("{0} and {1} cannot be both specified",
+                        nameof(pa.CreateNote),
+                        nameof(pa.CreateNoteBook)));
+            }
         }
     }
 }

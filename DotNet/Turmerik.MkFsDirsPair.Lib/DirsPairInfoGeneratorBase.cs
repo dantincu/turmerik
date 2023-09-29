@@ -65,23 +65,26 @@ namespace Turmerik.MkFsDirsPair.Lib
 
             foreach (char chr in docTitle)
             {
+                char newPrevChar = chr;
+
                 if (chr == ':')
                 {
                     if (prevC == ':')
                     {
                         charsList.Add(chr);
-                        prevC = default;
+                        newPrevChar = default;
                     }
-                    else
-                    {
-                        prevC = chr;
-                    }
+                }
+                else if (prevC == ':')
+                {
+                    charsList.Add(' ');
                 }
                 else
                 {
                     charsList.Add(chr);
-                    prevC = chr;
                 }
+
+                prevC = newPrevChar;
             }
 
             docTitle = new string(
@@ -103,37 +106,6 @@ namespace Turmerik.MkFsDirsPair.Lib
             }
 
             return docFileContents;
-        }
-
-        protected DirsPairInfo GetDirsPairInfo(
-            string workDir,
-            string[] existingEntriesArr,
-            string docTitle,
-            string shortDirName,
-            string docFileName,
-            string fullDirName)
-        {
-            string docFilePath = Path.Combine(
-                workDir,
-                shortDirName,
-                docFileName);
-
-            string docFileContents = GetFileContents(
-                docFileName, docTitle);
-
-            var dirsPairInfo = new DirsPairInfo(
-                workDir,
-                existingEntriesArr,
-                new List<DataTreeNode<FsEntry>>
-                {
-                    new FsEntry(shortDirName).Folder(
-                        new FsEntry(docFileName, docFileContents).File()),
-                    new FsEntry(fullDirName).Folder(
-                        new FsEntry(".keep", "").File())
-                },
-                docFilePath);
-
-            return dirsPairInfo;
         }
     }
 }

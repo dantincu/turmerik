@@ -37,14 +37,15 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 public string NoteBook { get; set; }
                 public string NoteFiles { get; set; }
                 public string NoteInternals { get; set; }
+                public string NoteInternalsPfx { get; set; }
+                public string NoteItemsPfx { get; set; }
                 public string JoinStr { get; set; }
             }
 
             public class FileNamesT
             {
                 public string KeepFileName { get; set; }
-                public string NoteMdFileName { get; set; }
-                public string NoteJsonFileName { get; set; }
+                public string NoteFileName { get; set; }
             }
 
             public class FileContentsT

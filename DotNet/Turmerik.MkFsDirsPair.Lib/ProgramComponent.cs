@@ -28,7 +28,7 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
                 data.DirsList,
                 true);
 
-            ProcessH.OpenWithDefaultProgram(
+            ProcessH.OpenWithDefaultProgramIfNotNull(
                 data.PathToOpen);
         }
 

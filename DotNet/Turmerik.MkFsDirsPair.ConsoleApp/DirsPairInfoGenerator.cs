@@ -36,6 +36,37 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             return dirsPairInfo;
         }
 
+        private DirsPairInfo GetDirsPairInfo(
+            string workDir,
+            string[] existingEntriesArr,
+            string docTitle,
+            string shortDirName,
+            string docFileName,
+            string fullDirName)
+        {
+            string docFilePath = Path.Combine(
+                workDir,
+                shortDirName,
+                docFileName);
+
+            string docFileContents = GetFileContents(
+                docFileName, docTitle);
+
+            var dirsPairInfo = new DirsPairInfo(
+                workDir,
+                existingEntriesArr,
+                new List<DataTreeNode<FsEntry>>
+                {
+                    new FsEntry(shortDirName).Folder(
+                        new FsEntry(docFileName, docFileContents).File()),
+                    new FsEntry(fullDirName).Folder(
+                        new FsEntry(".keep", "").File())
+                },
+                docFilePath);
+
+            return dirsPairInfo;
+        }
+
         private string GetArgs(
             string[] args,
             out string shortDirName,
