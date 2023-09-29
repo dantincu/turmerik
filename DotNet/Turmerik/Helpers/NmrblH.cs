@@ -179,7 +179,7 @@ namespace Turmerik.Helpers
                 nmrbl.ToArray());
 
         public static ReadOnlyDictionary<TKey, TValue> RdnlD<TKey, TValue>(
-            IDictionary<TKey, TValue> dictnr) => new ReadOnlyDictionary<TKey, TValue>(dictnr);
+            this IDictionary<TKey, TValue> dictnr) => new ReadOnlyDictionary<TKey, TValue>(dictnr);
 
         public static Dictionary<TKey, TValue> Dictnr<TKey, TValue>(
             this IEnumerable<KeyValuePair<TKey, TValue>> kvpNmrbl) => kvpNmrbl.ToDictionary(

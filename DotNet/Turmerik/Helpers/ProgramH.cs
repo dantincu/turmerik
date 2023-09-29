@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.MkFsDirsPair.ConsoleApp;
 
-namespace Turmerik.MkFsDirsPair.Lib
+namespace Turmerik.Helpers
 {
     public static class ProgramH
     {
         public static void Run(
-            string[] args,
-            IDirsPairInfoGenerator generator)
+            Action program)
         {
             try
             {
-                new ProgramComponent(generator).Run(args);
+                program();
             }
             catch (Exception ex)
             {

@@ -7,7 +7,10 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Turmerik.Helpers;
 using Turmerik.MkFsDirsPair.Lib;
+using Turmerik.Text;
+using Turmerik.Utility;
 
 namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {

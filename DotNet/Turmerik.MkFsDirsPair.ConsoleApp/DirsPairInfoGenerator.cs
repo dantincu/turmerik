@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.MkFsDirsPair.Lib;
+using Turmerik.Utility;
 
 namespace Turmerik.MkFsDirsPair.ConsoleApp
 {

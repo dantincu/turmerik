@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Turmerik.MkFsDirsPair.Lib
+namespace Turmerik.Helpers
 {
     public static class ConsoleH
     {

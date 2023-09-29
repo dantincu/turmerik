@@ -7,8 +7,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Utility;
 using Turmerik;
+using Turmerik.Utility;
 
 namespace Turmerik.EqualityComparer
 {

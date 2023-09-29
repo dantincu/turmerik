@@ -358,7 +358,7 @@ namespace Turmerik.Utility
             int millis,
             long ticks)
         {
-            DateTime retDateTime = new (
+            DateTime retDateTime = new(
                 year,
                 month,
                 day,
@@ -563,7 +563,7 @@ namespace Turmerik.Utility
                     }
                 }
             }
-            
+
             return retVal;
         }
 

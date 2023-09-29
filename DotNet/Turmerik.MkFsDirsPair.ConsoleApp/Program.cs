@@ -11,8 +11,7 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
     {
         static void Main(string[] args)
         {
-            ProgramH.Run(args,
-                new DirsPairInfoGenerator());
+            ProgH.Run(args, new DirsPairInfoGenerator());
         }
     }
 }

@@ -5,9 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using Turmerik.MkFsDirsPair.Lib;
+using Turmerik.Helpers;
+using Turmerik.Utility;
 
-namespace Turmerik.MkFsDirsPair.ConsoleApp
+namespace Turmerik.MkFsDirsPair.Lib
 {
     public class ProgramComponent
     {

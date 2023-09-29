@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.MkFsDirsPair.Lib
+namespace Turmerik.Utility
 {
     public class DataTreeNode<T>
     {

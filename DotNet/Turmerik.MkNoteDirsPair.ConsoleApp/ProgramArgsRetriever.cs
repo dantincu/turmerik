@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.MkFsDirsPair.Lib;
+using Turmerik.Helpers;
 
 namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {

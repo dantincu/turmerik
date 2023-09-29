@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace Turmerik.MkFsDirsPair.Lib
+namespace Turmerik.Helpers
 {
     public static class EnvH
     {

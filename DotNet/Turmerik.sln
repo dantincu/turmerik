@@ -25,9 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{52B6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsPair.ConsoleApp", "Turmerik.MkFsDirsPair.ConsoleApp\Turmerik.MkFsDirsPair.ConsoleApp.csproj", "{ED144131-C48B-49AC-BAFC-D261B6C5405C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.MkNoteDirsPair.ConsoleApp", "Turmerik.MkNoteDirsPair.ConsoleApp\Turmerik.MkNoteDirsPair.ConsoleApp.csproj", "{F76681FF-BB05-4064-A277-EF4B7CD89F9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkNoteDirsPair.ConsoleApp", "Turmerik.MkNoteDirsPair.ConsoleApp\Turmerik.MkNoteDirsPair.ConsoleApp.csproj", "{F76681FF-BB05-4064-A277-EF4B7CD89F9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.MkFsDirsPair.Lib", "Turmerik.MkFsDirsPair.Lib\Turmerik.MkFsDirsPair.Lib.csproj", "{B612401F-A2D2-4EC8-8B12-C63EC63EC588}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsPair.Lib", "Turmerik.MkFsDirsPair.Lib\Turmerik.MkFsDirsPair.Lib.csproj", "{B612401F-A2D2-4EC8-8B12-C63EC63EC588}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.LsDirPairs.ConsoleApp", "Turmerik.LsDirPairs.ConsoleApp\Turmerik.LsDirPairs.ConsoleApp.csproj", "{84E5C057-56ED-4E07-B68C-842640191F27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{B612401F-A2D2-4EC8-8B12-C63EC63EC588}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B612401F-A2D2-4EC8-8B12-C63EC63EC588}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B612401F-A2D2-4EC8-8B12-C63EC63EC588}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84E5C057-56ED-4E07-B68C-842640191F27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84E5C057-56ED-4E07-B68C-842640191F27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84E5C057-56ED-4E07-B68C-842640191F27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84E5C057-56ED-4E07-B68C-842640191F27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{ED144131-C48B-49AC-BAFC-D261B6C5405C} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{F76681FF-BB05-4064-A277-EF4B7CD89F9D} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{B612401F-A2D2-4EC8-8B12-C63EC63EC588} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{84E5C057-56ED-4E07-B68C-842640191F27} = {52B63410-2581-4146-9484-89D300FAE7B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

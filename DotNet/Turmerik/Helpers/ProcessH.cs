@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Turmerik.MkFsDirsPair.Lib
+namespace Turmerik.Helpers
 {
     public static class ProcessH
     {

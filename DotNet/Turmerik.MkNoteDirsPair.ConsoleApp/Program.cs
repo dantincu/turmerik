@@ -2,5 +2,4 @@
 using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.MkNoteDirsPair.ConsoleApp;
 
-ProgramH.Run(args,
-    new DirNamesPairGenerator());
+ProgH.Run(args, new DirNamesPairGenerator());
