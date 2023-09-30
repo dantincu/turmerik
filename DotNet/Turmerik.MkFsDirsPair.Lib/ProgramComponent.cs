@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Turmerik.FileSystem;
 using Turmerik.Helpers;
 using Turmerik.Utility;
 
@@ -35,7 +36,7 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateEntries(
             string parentDirPath,
-            List<DataTreeNode<FsEntry>> nodesList,
+            List<DataTreeNode<FsEntryOpts>> nodesList,
             bool isRootLevel = false)
         {
             foreach (var node in nodesList)
@@ -47,7 +48,7 @@ namespace Turmerik.MkFsDirsPair.Lib
                     parentDirPath,
                     entryName);
 
-                if (isRootLevel && (File.Exists(entryPath) || Directory.Exists(entryPath)))
+                if (isRootLevel && !data.OverwriteExisting && FsH.EntryExists(entryPath))
                 {
                     throw new InvalidOperationException(
                         $"An entry with name {entryName} already exists at this location");
@@ -62,8 +63,8 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateEntry(
             string entryPath,
-            FsEntry data,
-            DataTreeNode<FsEntry> node)
+            FsEntryOpts data,
+            DataTreeNode<FsEntryOpts> node)
         {
             if (data.IsFolder)
             {
@@ -81,7 +82,7 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateFolder(
             string entryPath,
-            DataTreeNode<FsEntry> node)
+            DataTreeNode<FsEntryOpts> node)
         {
             Directory.CreateDirectory(entryPath);
 
@@ -95,7 +96,7 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateFile(
             string entryPath,
-            FsEntry data)
+            FsEntryOpts data)
         {
             File.WriteAllText(
                 entryPath,

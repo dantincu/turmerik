@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Turmerik.Text;
 
 namespace Turmerik.Helpers
 {
@@ -32,6 +33,7 @@ namespace Turmerik.Helpers
         }
 
         public static TConfig LoadConfig<TConfig>(
+            this IJsonConversion jsonConversion,
             string configFileName = APP_SETTINGS_FILE_NAME)
         {
             string configFilePath = Path.Combine(
@@ -41,7 +43,7 @@ namespace Turmerik.Helpers
             string configJson = File.ReadAllText(
                 configFilePath);
 
-            TConfig config = JsonConvert.DeserializeObject<TConfig>(configJson);
+            TConfig config = jsonConversion.Adapter.Deserialize<TConfig>(configJson);
             return config;
         }
     }

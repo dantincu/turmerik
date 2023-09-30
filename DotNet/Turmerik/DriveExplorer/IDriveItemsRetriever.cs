@@ -1,0 +1,157 @@
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Turmerik.Helpers;
+using Turmerik.Text;
+using Turmerik.Utility;
+
+namespace Turmerik.DriveExplorer
+{
+    public interface IDriveItemsRetriever
+    {
+        Task<DriveItem> GetFolderAsync(string idnf);
+        Task<DriveItem> GetFolderAsync(string idnf, int depth);
+
+        Task<bool> FolderExistsAsync(string idnf);
+        Task<bool> FileExistsAsync(string idnf);
+
+        string DirSeparator { get; }
+    }
+
+    public interface IDriveItemsObjMirrorRetriever : IDriveItemsRetriever
+    {
+        DriveItem RoodDriveFolder { get; }
+    }
+
+    public abstract class DriveItemsRetrieverCoreBase : IDriveItemsRetriever
+    {
+        protected DriveItemsRetrieverCoreBase()
+        {
+            DirSeparator = GetDirSeparator();
+        }
+
+        public string DirSeparator { get; }
+
+        public abstract Task<bool> FileExistsAsync(string idnf);
+        public abstract Task<bool> FolderExistsAsync(string idnf);
+        public abstract Task<DriveItem> GetFolderAsync(string idnf);
+
+        public async Task<DriveItem> GetFolderAsync(
+            string idnf, int depth)
+        {
+            var folder = await GetFolderAsync(idnf);
+            string folderPath = folder.GetPath();
+            var subFolders = folder.SubFolders;
+
+            if (subFolders != null && depth > 0)
+            {
+                int count = subFolders.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    string childIdnf = Path.Combine(
+                        folderPath,
+                        subFolders[i].Name);
+
+                    subFolders[i] = await GetFolderAsync(
+                        childIdnf, depth - 1);
+                }
+            }
+
+            return folder;
+        }
+
+        protected abstract string GetDirSeparator();
+    }
+
+    public abstract class DriveItemsRetrieverBase : DriveItemsRetrieverCoreBase, IDriveItemsRetriever
+    {
+        protected static readonly ReadOnlyDictionary<OfficeLikeFileType, ReadOnlyCollection<string>> OfficeLikeFileTypesFileNameExtensions;
+        protected static readonly ReadOnlyDictionary<FileType, ReadOnlyCollection<string>> FileTypesFileNameExtensions;
+
+        static DriveItemsRetrieverBase()
+        {
+            OfficeLikeFileTypesFileNameExtensions = new Dictionary<OfficeLikeFileType, ReadOnlyCollection<string>>
+            {
+                { OfficeLikeFileType.Docs, new string[] { ".docx", ".doc" }.RdnlC() },
+                { OfficeLikeFileType.Sheets, new string[] { ".xlsx", ".xls" }.RdnlC() },
+                { OfficeLikeFileType.Slides, new string[] { ".pptx" , ".ppt" }.RdnlC() },
+            }.RdnlD();
+
+            FileTypesFileNameExtensions = new Dictionary<FileType, ReadOnlyCollection<string>>
+            {
+                { FileType.PlainText, new string [] { ".txt", ".md", ".log", ".logs" }.RdnlC() },
+                { FileType.Document, OfficeLikeFileTypesFileNameExtensions.Values.SelectMany(
+                    arr => arr).Concat(new string[] { ".pdf", ".rtf" }).RdnlC() },
+                { FileType.Image, new string[] { ".jpg", ".jpeg", ".png", ".giff", ".tiff", ".img", ".ico", ".bmp", ".heic" }.RdnlC() },
+                { FileType.Audio, new string[] { ".mp3", ".flac", ".wav", ".aac" }.RdnlC() },
+                { FileType.Video, new string[] { ".mpg", ".mpeg", ".avi", ".mp4", ".m4a" }.RdnlC() },
+                { FileType.Code, new string[] { ".cs", "vb", ".js", ".ts", ".json", ".jsx", ".tsx", ".csx", ".vbx",
+                    ".csproj", ".vbproj", ".sln", ".xml", ".yml", ".xaml", ".yaml", ".toml", ".html", ".cshtml", ".vbhtml",
+                    ".c", ".h", ".cpp", ".java", ".config", ".cfg", ".ini" }.RdnlC() },
+                { FileType.Binary, new string[] { ".bin", ".exe", ".lib", ".jar" }.RdnlC() },
+                { FileType.ZippedFolder, new string[] { ".zip", ".rar", ".tar", ".7z" }.RdnlC() },
+            }.RdnlD();
+        }
+
+        public DriveItemsRetrieverBase(
+            ITimeStampHelper timeStampHelper)
+        {
+            TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
+        }
+
+        protected ITimeStampHelper TimeStampHelper { get; }
+
+        protected string GetTimeStampStr(DateTime? dateTime)
+        {
+            string timeStampStr = null;
+
+            if (dateTime.HasValue)
+            {
+                DateTime dateTimeValue = dateTime.Value;
+
+                timeStampStr = TimeStampHelper.TmStmp(
+                    dateTimeValue,
+                    true,
+                    TimeStamp.Seconds);
+            }
+
+            return timeStampStr;
+        }
+
+        protected FileType? GetFileType(string extn)
+        {
+            var matchKvp = FileTypesFileNameExtensions.SingleOrDefault(
+                kvp => kvp.Value.Contains(extn));
+
+            FileType? retVal = null;
+
+            if (matchKvp.Value != null)
+            {
+                retVal = matchKvp.Key;
+            }
+
+            return retVal;
+        }
+
+        protected OfficeLikeFileType? GetOfficeLikeFileType(string extn)
+        {
+            var matchKvp = OfficeLikeFileTypesFileNameExtensions.SingleOrDefault(
+                kvp => kvp.Value.Contains(extn));
+
+            OfficeLikeFileType? retVal = null;
+
+            if (matchKvp.Value != null)
+            {
+                retVal = matchKvp.Key;
+            }
+
+            return retVal;
+        }
+    }
+}

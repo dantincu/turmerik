@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.MkFsDirsPair.Lib;
 
 namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {
@@ -13,6 +14,8 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         public class TrmrkT
         {
             public int? FileNameMaxLength { get; set; }
+            public bool? SerializeToJson { get; set; }
+            public DataIntegrityCheckType? DataIntegrityCheck { get; set; }
             public PrefixesT Prefixes { get; set; }
             public ArgOptionsT ArgOpts { get; set; }
             public DirNamesT DirNames { get; set; }
@@ -29,7 +32,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
             public class ArgOptionsT
             {
-                public string GroudIdx { get; set; }
             }
 
             public class DirNamesT

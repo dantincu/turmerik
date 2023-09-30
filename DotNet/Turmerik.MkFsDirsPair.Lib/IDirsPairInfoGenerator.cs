@@ -15,7 +15,7 @@ namespace Turmerik.MkFsDirsPair.Lib
         public DirsPairInfo(
             string workDir,
             string[] existingEntriesArr,
-            List<DataTreeNode<FsEntry>> dirsList,
+            List<DataTreeNode<FsEntryOpts>> dirsList,
             string pathToOpen)
         {
             WorkDir = workDir ?? throw new ArgumentNullException(nameof(workDir));
@@ -26,7 +26,7 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         public string WorkDir { get; }
         public string[] ExistingEntriesArr { get; }
-        public List<DataTreeNode<FsEntry>> DirsList { get; }
+        public List<DataTreeNode<FsEntryOpts>> DirsList { get; }
         public string PathToOpen { get; }
     }
 }

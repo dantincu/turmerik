@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Turmerik.QuickMarks.AvaloniaApp
+namespace Turmerik.MkFsDirsPair.Lib
 {
     public class ServiceProviderContainer : ServiceProviderContainerBase
     {
@@ -19,7 +19,6 @@ namespace Turmerik.QuickMarks.AvaloniaApp
         protected override void RegisterServices(IServiceCollection services)
         {
             TrmrkServices.RegisterAll(services);
-            services.AddSingleton<AppGlobals>();
         }
     }
 }

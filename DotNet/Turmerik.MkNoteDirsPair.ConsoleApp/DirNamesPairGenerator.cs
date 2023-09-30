@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
 using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.Text;
@@ -18,6 +20,8 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
     {
         private const string DIR_NAME_REGEX = @"[1-9]+[0-9]*";
 
+        private readonly IServiceProvider svcProv;
+        private readonly IJsonConversion jsonConversion;
         private readonly AppSettings appSettings;
         private readonly AppSettings.TrmrkT trmrk;
         private readonly AppSettings.TrmrkT.DirNamesT dirNames;
@@ -33,7 +37,10 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
         public DirNamesPairGenerator()
         {
-            appSettings = EnvH.LoadConfig<AppSettings>();
+            svcProv = ServiceProviderContainer.Instance.Value.Data;
+            jsonConversion = svcProv.GetRequiredService<IJsonConversion>();
+
+            appSettings = jsonConversion.LoadConfig<AppSettings>();
             trmrk = appSettings.Trmrk;
             dirNames = trmrk.DirNames;
             fileNames = trmrk.FileNames;
@@ -106,7 +113,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             var dirsPairInfo = new DirsPairInfo(
                 wka.WorkDir,
                 wka.ExistingEntriesArr,
-                new List<DataTreeNode<FsEntry>>
+                new List<DataTreeNode<FsEntryOpts>>
                 {
                     Folder(wka.ShortDirName,
                         noteDirChildren),
@@ -121,14 +128,14 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             WorkArgs wka) => new DirsPairInfo(
                 wka.WorkDir,
                 wka.ExistingEntriesArr,
-                new List<DataTreeNode<FsEntry>>
+                new List<DataTreeNode<FsEntryOpts>>
                 {
                     Folder(wka.ShortDirName),
                     FullNameDir(wka.FullDirName)
                 },
                 null);
 
-        private DataTreeNode<FsEntry>[] GetNoteDirChildren(
+        private DataTreeNode<FsEntryOpts>[] GetNoteDirChildren(
             WorkArgs wka)
         {
             wka.DocFileName += ".md";
@@ -137,7 +144,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 fileContents.NoteFileContentsTemplate,
                 wka.DocTitle);
 
-            List<DataTreeNode<FsEntry>> list = new()
+            List<DataTreeNode<FsEntryOpts>> list = new()
             {
                 TextFile(
                     wka.DocFileName,
@@ -290,7 +297,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 existingEntriesArr,
                 dirCat);
 
-            int nextIdx = GetNextIdx(idxesSet);
+            int nextIdx = DirPairsH.GetNextIdx(idxesSet);
             string dirNamePfx = GetDirNamePfx(dirCat);
 
             string shortDirName = string.Concat(
@@ -306,97 +313,31 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 DirCategory.TrmrkInternals => noteInternalsPfx
             };
 
-        private int GetNextIdx(
-            HashSet<int> idxesSet)
-        {
-            int nextIdx = 1;
-            int idxesCount = idxesSet.Count;
-
-            if (idxesCount >= 2)
-            {
-                var idxesList = idxesSet.ToList();
-                idxesList.Sort();
-
-                int prevIdx = 0;
-                int maxI = idxesCount - 1;
-
-                for (int i = 0; i <= maxI; i++)
-                {
-                    var idx = idxesList[i] - 1;
-
-                    if (idx > prevIdx || i == maxI)
-                    {
-                        nextIdx = prevIdx + 2;
-                        break;
-                    }
-                    else
-                    {
-                        prevIdx = idx + 1;
-                    }
-                }
-            }
-            else if (idxesCount == 1 && idxesSet.Single() == 1)
-            {
-                nextIdx = 2;
-            }
-
-            return nextIdx;
-        }
-
         private HashSet<int> GetExistingIdxes(
             string[] existingEntriesArr,
-            DirCategory dirCat)
-        {
-            var joinChar = dirNames.JoinStr;
-            var idxes = new HashSet<int>();
-            var regexMap = dirNameRegexMap[dirCat];
+            DirCategory dirCat) => DirPairsH.GetExistingIdxes(
+                existingEntriesArr,
+                dirNameRegexMap[dirCat],
+                dirNames.JoinStr);
 
-            foreach (var entry in existingEntriesArr)
-            {
-                foreach (var kvp in regexMap)
-                {
-                    if (kvp.Value.IsMatch(entry))
-                    {
-                        string idxStr = entry;
-
-                        if (kvp.Key == DirType.FullName)
-                        {
-                            idxStr = idxStr.Split(joinChar)[0];
-                        }
-
-                        int idx = int.Parse(idxStr);
-
-                        if (idx > 0)
-                        {
-                            idxes.Add(idx);
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            return idxes;
-        }
-
-        private DataTreeNode<FsEntry> TextFile(
+        private DataTreeNode<FsEntryOpts> TextFile(
             string fileName,
-            string contents) => new FsEntry(
+            string contents) => new FsEntryOpts(
                 fileName,
                 contents).File();
 
-        private DataTreeNode<FsEntry> KeepFile(
+        private DataTreeNode<FsEntryOpts> KeepFile(
             ) => TextFile(
                 fileNames.KeepFileName,
                 keepFileContentsTemplate);
 
-        private DataTreeNode<FsEntry> FullNameDir(
-            string dirName) => new FsEntry(
+        private DataTreeNode<FsEntryOpts> FullNameDir(
+            string dirName) => new FsEntryOpts(
                 dirName).Folder(KeepFile());
 
-        private DataTreeNode<FsEntry> Folder(
+        private DataTreeNode<FsEntryOpts> Folder(
             string folderName,
-            params DataTreeNode<FsEntry>[] childItems) => new FsEntry(
+            params DataTreeNode<FsEntryOpts>[] childItems) => new FsEntryOpts(
                 folderName).Folder(childItems);
 
         private void PrintDataWithColors(
@@ -434,18 +375,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                     }.RdnlD()
                 },
             }.RdnlD();
-
-        private enum DirType
-        {
-            ShortName,
-            FullName
-        }
-
-        private enum DirCategory
-        {
-            TrmrkNote,
-            TrmrkInternals
-        }
 
         private class WorkArgs
         {

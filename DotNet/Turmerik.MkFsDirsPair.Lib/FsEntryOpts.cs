@@ -4,19 +4,19 @@ using System.Text;
 
 namespace Turmerik.MkFsDirsPair.Lib
 {
-    public class FsEntry
+    public class FsEntryOpts
     {
-        public FsEntry()
+        public FsEntryOpts()
         {
         }
 
-        public FsEntry(string name)
+        public FsEntryOpts(string name)
         {
             Name = name;
             IsFolder = true;
         }
 
-        public FsEntry(
+        public FsEntryOpts(
             string name,
             string contents)
         {
@@ -24,15 +24,21 @@ namespace Turmerik.MkFsDirsPair.Lib
             Contents = contents;
         }
 
-        public FsEntry(string name, bool isFolder, string contents)
+        public FsEntryOpts(
+            string name,
+            bool isFolder,
+            string contents,
+            bool overwriteExisting = false)
         {
             Name = name;
             IsFolder = isFolder;
             Contents = contents;
+            OverwriteExisting = overwriteExisting;
         }
 
         public string Name { get; set; }
         public bool IsFolder { get; set; }
         public string Contents { get; set; }
+        public bool OverwriteExisting { get; set; }
     }
 }

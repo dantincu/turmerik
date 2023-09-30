@@ -9,31 +9,28 @@ using Newtonsoft.Json.Linq;
 using Turmerik.Text;
 using Newtonsoft.Json.Converters;
 using Turmerik.Helpers;
+using System.Xml.Linq;
 
 namespace Turmerik.Text
 {
     public static class JsonH
     {
-        public static string ToJson(
-            this object obj,
-            bool useCamelCase = true,
-            bool ignoreNullValues = true,
-            Formatting formatting = Formatting.Indented,
-            bool useStringEnumConverter = true)
+        public static JsonSerializerSettings CreateJsonSerializerSettings(
+            JsonSerializerOpts opts)
         {
             var settings = new JsonSerializerSettings();
 
-            if (ignoreNullValues)
+            if (opts.IgnoreNullValues)
             {
                 settings.NullValueHandling = NullValueHandling.Ignore;
             }
 
-            if (useCamelCase)
+            if (opts.UseCamelCase)
             {
                 settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             }
 
-            if (useStringEnumConverter)
+            if (opts.UseStringEnumConverter)
             {
                 settings.Converters = settings.Converters ?? new List<JsonConverter>();
 
@@ -41,39 +38,7 @@ namespace Turmerik.Text
                     new StringEnumConverter());
             }
 
-            string json = JsonConvert.SerializeObject(
-                obj,
-                formatting,
-                settings);
-
-            return json;
-        }
-
-        public static TData FromJson<TData>(
-            this string json,
-            bool useCamelCase = true,
-            bool useStringEnumConverter = true)
-        {
-            var settings = new JsonSerializerSettings();
-
-            if (useCamelCase)
-            {
-                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            }
-
-            if (useStringEnumConverter)
-            {
-                settings.Converters = settings.Converters ?? new List<JsonConverter>();
-
-                settings.Converters.Add(
-                    new StringEnumConverter());
-            }
-
-            TData data = JsonConvert.DeserializeObject<TData>(
-                json,
-                settings);
-
-            return data;
+            return settings;
         }
 
         public static JToken TryGetToken(

@@ -56,12 +56,12 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             var dirsPairInfo = new DirsPairInfo(
                 workDir,
                 existingEntriesArr,
-                new List<DataTreeNode<FsEntry>>
+                new List<DataTreeNode<FsEntryOpts>>
                 {
-                    new FsEntry(shortDirName).Folder(
-                        new FsEntry(docFileName, docFileContents).File()),
-                    new FsEntry(fullDirName).Folder(
-                        new FsEntry(".keep", "").File())
+                    new FsEntryOpts(shortDirName).Folder(
+                        new FsEntryOpts(docFileName, docFileContents).File()),
+                    new FsEntryOpts(fullDirName).Folder(
+                        new FsEntryOpts(".keep", "").File())
                 },
                 docFilePath);
 

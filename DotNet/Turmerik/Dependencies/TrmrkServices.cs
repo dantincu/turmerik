@@ -13,13 +13,14 @@ namespace Turmerik.Dependencies
     public static class TrmrkServices
     {
         public static IServiceCollection RegisterAll(
-            this IServiceCollection services)
+            IServiceCollection services)
         {
             services.AddSingleton<ITimeStampHelper, TimeStampHelper>();
             services.AddSingleton<ILambdaExprHelper, LambdaExprHelper>();
             services.AddSingleton<ILambdaExprHelperFactory, LambdaExprHelperFactory>();
             services.AddSingleton<IBasicEqualityComparerFactory, BasicEqualityComparerFactory>();
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
+            services.AddSingleton<IJsonConversion, JsonConversion>();
 
             return services;
         }

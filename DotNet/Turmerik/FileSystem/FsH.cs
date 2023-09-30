@@ -12,6 +12,16 @@ namespace Turmerik.FileSystem
 {
     public static class FsH
     {
+        public static bool EntryExists(
+            string entryPath) => EntryExists(
+                entryPath, out _);
+
+        public static bool EntryExists(
+            string entryPath,
+            out bool existingIsFolder) => (
+                existingIsFolder = Directory.Exists(
+                    entryPath)) || File.Exists(entryPath);
+
         public static void CopyDirectory(string sourceDir, string destinationDir)
         {
             // Get information about the source directory
@@ -45,10 +55,11 @@ namespace Turmerik.FileSystem
             }
         }
 
-        public static void MoveDirectory(string sourceDir, string destinationDir)
+        public static void MoveDirectory(
+            string sourceDir,
+            string destinationDir)
         {
-            var dir = new DirectoryInfo(sourceDir);
-            dir.MoveTo(destinationDir);
+            Directory.Move(sourceDir, destinationDir);
         }
 
         /// <summary>

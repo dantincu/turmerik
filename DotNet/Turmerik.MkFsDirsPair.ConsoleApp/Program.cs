@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
     {
         static void Main(string[] args)
         {
+            ServiceProviderContainer.Instance.Value.RegisterData(new ServiceCollection());
             ProgH.Run(args, new DirsPairInfoGenerator());
         }
     }
