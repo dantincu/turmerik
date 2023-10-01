@@ -136,6 +136,7 @@ namespace Turmerik.DriveExplorer
         {
             bool hasNoteJson = false;
             noteBook = null;
+            bool createInternalDirs = opts.DirCategory == NoteDirCategory.TrmrkInternals;
 
             if (TryLoadData(
                 opts.NoteItemJson,
@@ -144,7 +145,7 @@ namespace Turmerik.DriveExplorer
             {
                 AddIdxesIfAny(
                     existingIdxes,
-                    opts.CreateInternalDirs,
+                    createInternalDirs,
                     noteItem.Data,
                     data => data.ChildNotes,
                     data => data.NoteDirs?.Values.ToArray());
@@ -156,7 +157,7 @@ namespace Turmerik.DriveExplorer
             {
                 AddIdxesIfAny(
                     existingIdxes,
-                    opts.CreateInternalDirs,
+                    createInternalDirs,
                     noteBook.Data,
                     data => data.Notes,
                     data => data.InternalDirIdx?.Arr());

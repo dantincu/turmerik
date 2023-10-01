@@ -18,14 +18,10 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {
     public class DirNamesPairGenerator : DirsPairInfoGeneratorBase, IDirsPairInfoGenerator
     {
-        private const string DIR_NAME_REGEX = @"[1-9]+[0-9]*";
-
-        private readonly IJsonConversion jsonConversion;
-        private readonly INoteDirsPairIdxRetriever noteDirsPairIdxRetriever;
+        private readonly INoteDirsPairGenerator noteDirsPairGenerator;
 
         private readonly AppSettings appSettings;
         private readonly NoteDirsPairSettings trmrk;
-        private readonly NoteDirsPairSettings.DirNamesT dirNames;
         private readonly NoteDirsPairSettings.FileNamesT fileNames;
         private readonly NoteDirsPairSettings.FileContentsT fileContents;
 
@@ -33,28 +29,19 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         private readonly string noteBookJsonFileName;
         private readonly string keepFileContentsTemplate;
 
-        private readonly RegexEncodedText joinStr;
-        private readonly RegexEncodedText noteInternalsPfx;
-        private readonly RegexEncodedText noteItemsPfx;
-        private readonly ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> dirNameRegexMap;
-
         public DirNamesPairGenerator(
             IJsonConversion jsonConversion,
-            INoteDirsPairIdxRetrieverFactory noteDirsPairIdxRetrieverFactory,
+            INoteDirsPairGeneratorFactory noteDirsPairGeneratorFactory,
             INoteDirsPairFullNamePartRetriever noteDirsPairFullNamePartRetriever) : base(
                 noteDirsPairFullNamePartRetriever)
         {
-            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
-                nameof(jsonConversion));
-
             appSettings = jsonConversion.LoadConfig<AppSettings>();
 
             trmrk = appSettings.Trmrk;
-            dirNames = trmrk.DirNames;
             fileNames = trmrk.FileNames;
             fileContents = trmrk.FileContents;
 
-            this.noteDirsPairIdxRetriever = noteDirsPairIdxRetrieverFactory.Create(dirNames);
+            this.noteDirsPairGenerator = noteDirsPairGeneratorFactory.Generator(trmrk);
 
             noteJsonFileName = string.Join(
                 ".", fileNames.NoteFileName, "json");
@@ -65,158 +52,112 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             keepFileContentsTemplate = string.Format(
                 fileContents.KeepFileContentsTemplate,
                 Trmrk.TrmrkGuidStrNoDash);
-
-            joinStr = RegexH.EncodeForRegex(
-                dirNames.JoinStr);
-
-            noteInternalsPfx = RegexH.EncodeForRegex(
-                dirNames.NoteInternalsPfx);
-
-            noteItemsPfx = RegexH.EncodeForRegex(
-                dirNames.NoteItemsPfx);
-
-            dirNameRegexMap = GetDirNameRegexMap();
         }
 
         public DirsPairInfo Generate(string[] args)
         {
             var wka = GetWorkArgs(args);
-            var dirsPairInfo = GetDirsPairInfo(wka);
+
+            var dirsPairInfo = GetDirsPairInfo(
+                wka, out string shortDirName);
+
+            PrintDataWithColors(
+                "Short dir name: ",
+                shortDirName);
 
             return dirsPairInfo;
         }
 
-        private WorkArgs GetWorkArgs(
-            string[] args)
-        {
-            var wka = GetWorkArgsCore(args);
-            GetEntryNamesCore(wka);
-
-            PrintDataWithColors(
-                "Short dir name: ",
-                wka.ShortDirName);
-
-            return wka;
-        }
-
         private DirsPairInfo GetDirsPairInfo(
-            WorkArgs wka)
+            WorkArgs wka, out string shortDirName)
         {
             DirsPairInfo info;
 
             if (wka.ProgArgs.CreateNote)
             {
-                info = GetNoteDirsPairInfo(wka);
+                info = GetNoteDirsPairInfo(
+                    wka, out shortDirName);
             }
             else
             {
-                info = GetInternalDirsPairInfoCore(wka);
+                info = GetInternalDirsPairInfoCore(
+                    wka, out shortDirName);
             }
 
             return info;
         }
 
         private DirsPairInfo GetNoteDirsPairInfo(
-            WorkArgs wka)
+            WorkArgs wka, out string shortDirName)
         {
-            var noteDirChildren = GetNoteDirChildren(wka);
+            var dirsList = noteDirsPairGenerator.Generate(
+                new NoteDirsPairOpts
+                {
+                    Title = wka.ProgArgs.NoteName,
+                    AltSpaceChar = ':',
+                    DirCategory = wka.DirCat,
+                    ExistingEntriesArr = wka.ExistingEntriesArr,
+                    NoteBookJson = wka.NoteBookJson,
+                    NoteItemJson = wka.NoteItemJson,
+                    NoteInternalDirs = GetInternalDirNamesList(
+                        wka.ProgArgs)
+                },
+                out shortDirName,
+                out string docFileName);
 
             string docFilePath = Path.Combine(
                 wka.WorkDir,
-                wka.ShortDirName,
-                wka.DocFileName);
+                shortDirName,
+                docFileName);
 
-            var dirsPairInfo = new DirsPairInfo(
+            var retInfo = new DirsPairInfo(
                 wka.WorkDir,
                 wka.ExistingEntriesArr,
-                new List<DataTreeNode<DriveItemOpts>>
-                {
-                    Folder(wka.ShortDirName,
-                        noteDirChildren),
-                    FullNameDir(wka.FullDirName)
-                },
+                dirsList,
                 docFilePath);
 
-            return dirsPairInfo;
+            return retInfo;
         }
 
         private DirsPairInfo GetInternalDirsPairInfoCore(
-            WorkArgs wka) => new DirsPairInfo(
+            WorkArgs wka, out string shortDirName) => new DirsPairInfo(
                 wka.WorkDir,
                 wka.ExistingEntriesArr,
-                new List<DataTreeNode<DriveItemOpts>>
-                {
-                    Folder(wka.ShortDirName),
-                    FullNameDir(wka.FullDirName)
-                },
+                noteDirsPairGenerator.Generate(
+                    new NoteDirsPairOpts
+                    {
+                        AltSpaceChar = ':',
+                        DirCategory = wka.DirCat,
+                        ExistingEntriesArr = wka.ExistingEntriesArr,
+                        NoteBookJson = wka.NoteBookJson,
+                        NoteItemJson = wka.NoteItemJson,
+                        NoteInternalDirs = GetInternalDirNamesList(
+                            wka.ProgArgs),
+                        CreateNoteBook = wka.ProgArgs.CreateNoteBook
+                    }, out shortDirName, out _),
                 null);
 
-        private DataTreeNode<DriveItemOpts>[] GetNoteDirChildren(
-            WorkArgs wka)
-        {
-            wka.DocFileName += ".md";
-
-            wka.DocFileContents = string.Format(
-                fileContents.NoteFileContentsTemplate,
-                wka.DocTitle);
-
-            List<DataTreeNode<DriveItemOpts>> list = new()
-            {
-                TextFile(
-                    wka.DocFileName,
-                    wka.DocFileContents)
-            };
-
-            var fullDirNamePartsList = GetInternalDirNamesList(
-                wka.ProgArgs);
-
-            int dirsCount = fullDirNamePartsList.Count;
-            var dirNames = appSettings.Trmrk.DirNames;
-
-            for (int i = 0; i < dirsCount; i++)
-            {
-                string fullDirNamePart = fullDirNamePartsList[i];
-                string shortDirName = $"{noteInternalsPfx.RawStr}{i + 1}";
-
-                string fullDirName = string.Join(
-                    dirNames.JoinStr,
-                    shortDirName,
-                    fullDirNamePart);
-
-                list.Add(Folder(shortDirName));
-                list.Add(FullNameDir(fullDirName));
-            }
-
-            return list.ToArray();
-        }
-
-        private List<string> GetInternalDirNamesList(
+        private NoteInternalDir[] GetInternalDirNamesList(
             ProgramArgs pga)
         {
-            List<string> fullDirNamesList = new();
-
-            if (pga.CreateNoteBook)
-            {
-                fullDirNamesList.Add(
-                    dirNames.NoteBook);
-            }
+            List<NoteInternalDir> fullDirNamesList = new();
 
             if (pga.CreateNoteFiles)
             {
                 fullDirNamesList.Add(
-                    dirNames.NoteFiles);
+                    NoteInternalDir.NoteFiles);
             }
 
             if (pga.CreateNoteInternals)
             {
                 fullDirNamesList.Add(
-                    dirNames.NoteInternals);
+                    NoteInternalDir.NoteInternals);
             }
 
-            return fullDirNamesList;
+            return fullDirNamesList.ToArray();
         }
 
-        private WorkArgs GetWorkArgsCore(
+        private WorkArgs GetWorkArgs(
             string[] args)
         {
             var pga = new ProgramArgsRetriever(
@@ -224,63 +165,21 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
             string workDir = Environment.CurrentDirectory;
 
-            string fullDirNamePart = GetFullDirNamePartCore(
-                pga, out string docTitle);
-
             var wka = new WorkArgs
             {
                 ProgArgs = pga,
                 WorkDir = workDir,
                 ExistingEntriesArr = Directory.EnumerateFileSystemEntries(
                     workDir).Select(entry => Path.GetFileName(entry)).ToArray(),
-                DocTitle = docTitle,
-                FullDirNamePart = fullDirNamePart,
+                DirCat = pga.CreateNote switch
+                {
+                    false => NoteDirCategory.TrmrkInternals,
+                    true => NoteDirCategory.TrmrkNote
+                },
             };
 
             LoadJsonIfReq(wka);
             return wka;
-        }
-
-        private string GetFullDirNamePartCore(
-            ProgramArgs pga,
-            out string docTitle)
-        {
-            docTitle = null;
-            
-            string? fullDirNamePart = pga.CreateNote switch
-            {
-                false => GetInternalDirName(pga),
-                true => NormalizeFileName(
-                    pga.NoteName, out docTitle,
-                    ':', trmrk.FileNameMaxLength)
-            };
-
-            return fullDirNamePart;
-        }
-
-        private string GetInternalDirName(ProgramArgs pga)
-        {
-            string internalDirName;
-
-            var internalDirNamesList = GetInternalDirNamesList(pga);
-            int internalDirNamesCount = internalDirNamesList.Count;
-
-            if (internalDirNamesCount == 1)
-            {
-                internalDirName = internalDirNamesList.Single();
-            }
-            else if (internalDirNamesCount == 0)
-            {
-                throw new ArgumentException(
-                    "Either the note name or an internal note dir flag must be specified");
-            }
-            else
-            {
-                throw new ArgumentException(
-                    "You can only specify multiple note internal dir flags along with the note name");
-            }
-
-            return internalDirName;
         }
 
         private void LoadJsonIfReq(WorkArgs wka)
@@ -322,75 +221,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             return shouldLoad;
         }
 
-        private void GetEntryNamesCore(WorkArgs wka)
-        {
-            wka.DirCat = wka.ProgArgs.CreateNote switch
-            {
-                false => NoteDirCategory.TrmrkInternals,
-                true => NoteDirCategory.TrmrkNote,
-            };
-
-            wka.ShortDirName = GetShortDirName(wka);
-
-            wka.FullDirName = string.Join(
-                dirNames.JoinStr,
-                wka.ShortDirName,
-                wka.FullDirNamePart);
-
-            wka.DocFileName = wka.DirCat switch
-            {
-                NoteDirCategory.TrmrkNote => appSettings.Trmrk.FileNames.NoteFileName,
-                NoteDirCategory.TrmrkInternals => null
-            };
-        }
-
-        private string GetShortDirName(WorkArgs wka)
-        {
-            wka.NextIdx = noteDirsPairIdxRetriever.GetNextDirIdx(
-                new NoteDirsPairIdxOpts
-                {
-                    CreateInternalDirs = !wka.ProgArgs.CreateNote,
-                    DirCategory = wka.DirCat,
-                    ExistingEntriesArr = wka.ExistingEntriesArr,
-                    NoteItemJson = wka.NoteItemJson,
-                    NoteBookJson = wka.NoteBookJson,
-                }); 
-            
-            wka.DirNamePfx = GetDirNamePfx(wka.DirCat);
-
-            string shortDirName = string.Concat(
-                wka.DirNamePfx, wka.NextIdx);
-
-            return shortDirName;
-        }
-
-        private string GetDirNamePfx(
-            NoteDirCategory dirCat) => dirCat switch
-            {
-                NoteDirCategory.TrmrkNote => noteItemsPfx.RawStr,
-                NoteDirCategory.TrmrkInternals => noteInternalsPfx.RawStr
-            };
-
-        private DataTreeNode<DriveItemOpts> TextFile(
-            string fileName,
-            string contents) => new DriveItemOpts(
-                fileName,
-                contents).File();
-
-        private DataTreeNode<DriveItemOpts> KeepFile(
-            ) => TextFile(
-                fileNames.KeepFileName,
-                keepFileContentsTemplate);
-
-        private DataTreeNode<DriveItemOpts> FullNameDir(
-            string dirName) => new DriveItemOpts(
-                dirName).Folder(KeepFile());
-
-        private DataTreeNode<DriveItemOpts> Folder(
-            string folderName,
-            params DataTreeNode<DriveItemOpts>[] childItems) => new DriveItemOpts(
-                folderName).Folder(childItems);
-
         private void PrintDataWithColors(
             string title,
             string content)
@@ -406,47 +236,14 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 ConsoleColor.Cyan);
         }
 
-        private ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> GetDirNameRegexMap(
-            ) => new Dictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>>
-            {
-                {
-                    NoteDirCategory.TrmrkNote,
-                    new Dictionary<NoteDirType, Regex>
-                    {
-                        { NoteDirType.ShortName, new Regex($"^{noteItemsPfx.EncodedStr}{DIR_NAME_REGEX}$") },
-                        { NoteDirType.FullName, new Regex($"^{noteItemsPfx.EncodedStr}{DIR_NAME_REGEX}{joinStr.EncodedStr}") }
-                    }.RdnlD()
-                },
-                {
-                    NoteDirCategory.TrmrkInternals,
-                    new Dictionary<NoteDirType, Regex>
-                    {
-                        { NoteDirType.ShortName, new Regex($"^{noteInternalsPfx.EncodedStr}{DIR_NAME_REGEX}$") },
-                        { NoteDirType.FullName, new Regex($"^{noteInternalsPfx.EncodedStr}{DIR_NAME_REGEX}{joinStr.EncodedStr}") }
-                    }.RdnlD()
-                },
-            }.RdnlD();
-
         private class WorkArgs
         {
             public ProgramArgs ProgArgs { get; set; }
             public string WorkDir { get; set; }
             public string[] ExistingEntriesArr { get; set; }
             public NoteDirCategory DirCat { get; set; }
-            public HashSet<int> ExistingIdxes { get; set; }
             public string NoteItemJson { get; set; }
             public string NoteBookJson { get; set; }
-            public IJsonObjectDecorator<NoteItem> NoteItem { get; set; }
-            public IJsonObjectDecorator<NoteBook> NoteBook { get; set; }
-            public int NextIdx { get; set; }
-            public string DirNamePfx { get; set; }
-            public string DocTitle { get; set; }
-            public string ShortDirName { get; set; }
-            public string FullDirNamePart { get; set; }
-            public string FullDirName { get; set; }
-            public string? DocFileName { get; set; }
-            public string? DocFileContents { get; set; }
-            public string KeepFileContents { get; set; }
         }
     }
 }

@@ -7,14 +7,14 @@ using Turmerik.Utility;
 
 namespace Turmerik.MkFsDirsPair.Lib
 {
-    public static class FsEntryH
+    public static class DriveItemOptsH
     {
         public static DataTreeNode<DriveItemOpts> File(
-            this DriveItemOpts entry) => new DataTreeNode<DriveItemOpts>(entry, null);
+            this DriveItemOpts entry) => new DataTreeNode<DriveItemOpts>(entry, null, null);
 
         public static DataTreeNode<DriveItemOpts> Folder(
             this DriveItemOpts entry,
             params DataTreeNode<DriveItemOpts>[] childNodes) => new DataTreeNode<DriveItemOpts>(
-                entry, childNodes.ToList());
+                entry, null, childNodes.ToList());
     }
 }

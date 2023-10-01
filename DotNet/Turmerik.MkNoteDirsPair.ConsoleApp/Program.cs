@@ -11,5 +11,5 @@ var svcProv = ServiceProviderContainer.Instance.Value.RegisterData(
 ProgH.Run(args,
     new DirNamesPairGenerator(
         svcProv.GetRequiredService<IJsonConversion>(),
-        svcProv.GetRequiredService<INoteDirsPairIdxRetrieverFactory>(),
+        svcProv.GetRequiredService<INoteDirsPairGeneratorFactory>(),
         svcProv.GetRequiredService<INoteDirsPairFullNamePartRetriever>()));

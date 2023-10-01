@@ -22,8 +22,8 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IBasicEqualityComparerFactory, BasicEqualityComparerFactory>();
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IJsonConversion, JsonConversion>();
-            services.AddSingleton<INoteDirsPairIdxRetrieverFactory, NoteDirsPairIdxRetrieverFactory>();
             services.AddSingleton<INoteDirsPairFullNamePartRetriever, NoteDirsPairFullNamePartRetriever>();
+            services.AddSingleton<INoteDirsPairGeneratorFactory, NoteDirsPairGeneratorFactory>();
 
             return services;
         }

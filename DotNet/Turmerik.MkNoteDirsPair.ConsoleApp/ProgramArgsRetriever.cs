@@ -23,7 +23,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 optsArr, argOptsArr);
 
             ValidateProgramArgs(pa);
-
             return pa;
         }
 

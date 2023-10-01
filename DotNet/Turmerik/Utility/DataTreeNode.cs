@@ -18,13 +18,25 @@ namespace Turmerik.Utility
 
         public DataTreeNode(
             T data,
+            DataTreeNode<T> parentNode)
+        {
+            Data = data;
+            ParentNode = parentNode;
+            ChildNodes = new List<DataTreeNode<T>>();
+        }
+
+        public DataTreeNode(
+            T data,
+            DataTreeNode<T> parentNode,
             List<DataTreeNode<T>> childNodes)
         {
             Data = data;
+            ParentNode = parentNode;
             ChildNodes = childNodes;
         }
 
         public T Data { get; set; }
+        public DataTreeNode<T> ParentNode { get; set; }
         public List<DataTreeNode<T>> ChildNodes { get; set; }
     }
 }
