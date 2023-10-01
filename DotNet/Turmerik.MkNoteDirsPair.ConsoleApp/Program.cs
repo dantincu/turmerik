@@ -4,12 +4,9 @@ using Turmerik.DriveExplorer;
 using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.MkNoteDirsPair.ConsoleApp;
 using Turmerik.Text;
+using Turmerik.Dependencies;
 
 var svcProv = ServiceProviderContainer.Instance.Value.RegisterData(
-    new ServiceCollection());
+    new ServiceCollection().AsOpts(svc => svc.AddScoped<DirNamesPairGenerator>()));
 
-ProgH.Run(args,
-    new DirNamesPairGenerator(
-        svcProv.GetRequiredService<IJsonConversion>(),
-        svcProv.GetRequiredService<INoteDirsPairGeneratorFactory>(),
-        svcProv.GetRequiredService<INoteDirsPairFullNamePartRetriever>()));
+ProgH.Run(args, svcProv.GetRequiredService<DirNamesPairGenerator>());

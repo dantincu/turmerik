@@ -23,11 +23,9 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         private readonly AppSettings appSettings;
         private readonly NoteDirsPairSettings trmrk;
         private readonly NoteDirsPairSettings.FileNamesT fileNames;
-        private readonly NoteDirsPairSettings.FileContentsT fileContents;
 
         private readonly string noteJsonFileName;
         private readonly string noteBookJsonFileName;
-        private readonly string keepFileContentsTemplate;
 
         public DirNamesPairGenerator(
             IJsonConversion jsonConversion,
@@ -39,7 +37,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
             trmrk = appSettings.Trmrk;
             fileNames = trmrk.FileNames;
-            fileContents = trmrk.FileContents;
 
             this.noteDirsPairGenerator = noteDirsPairGeneratorFactory.Generator(trmrk);
 
@@ -48,10 +45,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
             noteBookJsonFileName = string.Join(
                 ".", fileNames.NoteBookFileName, "json");
-
-            keepFileContentsTemplate = string.Format(
-                fileContents.KeepFileContentsTemplate,
-                Trmrk.TrmrkGuidStrNoDash);
         }
 
         public DirsPairInfo Generate(string[] args)

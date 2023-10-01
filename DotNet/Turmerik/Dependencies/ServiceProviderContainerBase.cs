@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace Turmerik.Dependencies
 {
-    public abstract class ServiceProviderContainerBase : SingletonRegistrarBase<IServiceProvider, IServiceCollection>
+    public abstract class ServiceProviderContainerBase : SingletonRegistrarBase<IServiceProvider, ServiceProviderOpts>
     {
-        protected readonly Guid Guid = Guid.NewGuid();
-
         protected abstract void RegisterServices(
             IServiceCollection services);
 
         protected override IServiceProvider Convert(
-            IServiceCollection services)
+            ServiceProviderOpts opts)
         {
-            RegisterServices(services);
-            var svcProv = services.BuildServiceProvider();
+            RegisterServices(opts.Services);
 
+            opts.ServicesCallback?.Invoke(
+                opts.Services);
+
+            var svcProv = opts.Services.BuildServiceProvider();
             return svcProv;
         }
     }

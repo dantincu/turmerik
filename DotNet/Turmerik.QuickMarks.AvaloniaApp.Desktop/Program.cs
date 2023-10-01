@@ -1,8 +1,8 @@
 ﻿using System;
-
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
+using Turmerik.Dependencies;
 
 namespace Turmerik.QuickMarks.AvaloniaApp.Desktop;
 
@@ -14,7 +14,9 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        ServiceProviderContainer.Instance.Value.RegisterData(new ServiceCollection());
+        ServiceProviderContainer.Instance.Value.RegisterData(
+            new ServiceCollection().AsOpts());
+
         BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 

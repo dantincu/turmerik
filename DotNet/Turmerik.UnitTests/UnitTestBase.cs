@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Testing;
+using Turmerik.Dependencies;
 
 namespace Turmerik.LocalDevice.UnitTests
 {
@@ -13,7 +14,7 @@ namespace Turmerik.LocalDevice.UnitTests
         static UnitTestBase()
         {
             ServiceProviderContainer.Instance.Value.RegisterData(
-                new ServiceCollection());
+                new ServiceCollection().AsOpts());
         }
 
         protected IServiceProvider SvcProv { get; } = ServiceProviderContainer.Instance.Value.Data;

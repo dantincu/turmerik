@@ -13,6 +13,9 @@ namespace Turmerik.DriveExplorer
         INoteDirsPairShortNameRetriever ShortNameRetriever(
             NoteDirsPairSettings.DirNamesT opts);
 
+        INoteDirPairsRetriever PairsRetriever(
+            NoteDirsPairSettings.DirNamesT opts);
+
         INoteDirsPairGenerator Generator(
             NoteDirsPairSettings settings);
     }
@@ -39,6 +42,10 @@ namespace Turmerik.DriveExplorer
 
         public INoteDirsPairShortNameRetriever ShortNameRetriever(
             NoteDirsPairSettings.DirNamesT opts) => new NoteDirsPairShortNameRetriever(
+                IdxRetriever(opts));
+
+        public INoteDirPairsRetriever PairsRetriever(
+            NoteDirsPairSettings.DirNamesT opts) => new NoteDirPairsRetriever(
                 IdxRetriever(opts));
 
         public INoteDirsPairGenerator Generator(

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -18,6 +19,17 @@ namespace Turmerik.DriveExplorer
         RegexEncodedText JoinStr { get; }
         RegexEncodedText NoteInternalsPfx { get; }
         RegexEncodedText NoteItemsPfx { get; }
+
+        public NoteDirName TryGetAsNoteDirName(
+            IEnumerable<KeyValuePair<NoteDirType, Regex>> regexMap,
+            string dirName);
+
+        public NoteDirName TryGetAsNoteDirName(
+            NoteDirCategory noteDirCategory,
+            string dirName);
+
+        public NoteDirName TryGetAsNoteDirName(
+            string dirName);
 
         HashSet<int> GetExistingDirIdxes(
             NoteDirsPairIdxOpts opts);
@@ -47,7 +59,7 @@ namespace Turmerik.DriveExplorer
 
     public class NoteDirsPairIdxRetriever : INoteDirsPairIdxRetriever
     {
-        private const string DIR_NAME_REGEX = @"[1-9]+[0-9]*";
+        public const string DIR_NAME_REGEX = @"[1-9]+[0-9]*";
 
         private readonly IJsonConversion jsonConversion;
 
@@ -76,6 +88,100 @@ namespace Turmerik.DriveExplorer
         public RegexEncodedText NoteInternalsPfx { get; }
         public RegexEncodedText NoteItemsPfx { get; }
 
+        public NoteDirName TryGetAsNoteDirName(
+            IEnumerable<KeyValuePair<NoteDirType, Regex>> regexMap,
+            string dirName)
+        {
+            NoteDirName dirsPair = null;
+            int idx = -1;
+
+            foreach (var kvp in regexMap)
+            {
+                if (kvp.Value.IsMatch(dirName))
+                {
+                    string dirNameStr = dirName;
+                    string shortDirName = null;
+                    string idxStrPart = null;
+                    string fullDirNamePart = null;
+                    string fullDirName = null;
+
+                    if (!string.IsNullOrEmpty(NoteItemsPfx.RawStr))
+                    {
+                        dirNameStr = dirNameStr.Substring(
+                            NoteItemsPfx.RawStr.Length);
+                    }
+
+                    if (kvp.Key == NoteDirType.FullName)
+                    {
+                        (idxStrPart, fullDirNamePart) = dirNameStr.SplitStr(
+                            (nmrbl, count) => nmrbl.IndexOfStr(
+                                JoinStr.RawStr));
+
+                        fullDirNamePart = fullDirNamePart.Substring(
+                            JoinStr.RawStr.Length);
+
+                        fullDirName = dirName;
+                    }
+                    else
+                    {
+                        idxStrPart = dirNameStr;
+                    }
+
+                    shortDirName = NoteItemsPfx.RawStr + idxStrPart;
+                    idx = int.Parse(idxStrPart);
+
+                    if (idx > 0)
+                    {
+                        dirsPair = new NoteDirName
+                        {
+                            ShortDirName = shortDirName,
+                            FullDirName = fullDirName,
+                            JoinStr = JoinStr.RawStr,
+                            FullDirNamePart = fullDirNamePart,
+                            Prefix = NoteItemsPfx.RawStr,
+                            Idx = idx,
+                        };
+                    }
+
+                    break;
+                }
+            }
+
+            return dirsPair;
+        }
+
+        public NoteDirName TryGetAsNoteDirName(
+            NoteDirCategory noteDirCategory,
+            string dirName)
+        {
+            var regexMap = DirNameRegexMap[noteDirCategory];
+
+            var dirsPair = TryGetAsNoteDirName(
+                regexMap, dirName);
+
+            return dirsPair;
+        }
+
+        public NoteDirName TryGetAsNoteDirName(
+            string dirName)
+        {
+            NoteDirName dirsPair = null;
+
+            foreach (var kvp in DirNameRegexMap)
+            {
+                dirsPair = TryGetAsNoteDirName(
+                    kvp.Value, dirName);
+
+                if (dirsPair != null)
+                {
+                    dirsPair.NoteDirCategory = kvp.Key;
+                    break;
+                }
+            }
+
+            return dirsPair;
+        }
+
         public HashSet<int> GetExistingDirIdxes(
             NoteDirsPairIdxOpts opts)
         {
@@ -84,28 +190,12 @@ namespace Turmerik.DriveExplorer
 
             foreach (var entry in opts.ExistingEntriesArr)
             {
-                foreach (var kvp in regexMap)
+                var dirsPair = TryGetAsNoteDirName(
+                    regexMap, entry);
+
+                if (dirsPair != null)
                 {
-                    if (kvp.Value.IsMatch(entry))
-                    {
-                        string idxStr = entry;
-
-                        if (kvp.Key == NoteDirType.FullName)
-                        {
-                            idxStr = idxStr.SplitStr(
-                                (nmrbl, count) => nmrbl.IndexOfStr(
-                                    JoinStr.RawStr)).Item1;
-                        }
-
-                        int idx = int.Parse(idxStr);
-
-                        if (idx > 0)
-                        {
-                            idxes.Add(idx);
-                        }
-
-                        break;
-                    }
+                    idxes.Add(dirsPair.Idx);
                 }
             }
 

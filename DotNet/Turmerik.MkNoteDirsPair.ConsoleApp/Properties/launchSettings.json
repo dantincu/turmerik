@@ -2,8 +2,8 @@
   "profiles": {
     "Turmerik.MkNoteDirsPair.ConsoleApp": {
       "commandName": "Project",
-      // "commandLineArgs": "/f /i asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf"
-      "commandLineArgs": "/b"
+      "commandLineArgs": "asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf"
+      // "commandLineArgs": "/b"
     }
   }
 }
