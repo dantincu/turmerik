@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Turmerik.DriveExplorer;
 using Turmerik.FileSystem;
 using Turmerik.Helpers;
 using Turmerik.Utility;
@@ -36,7 +37,7 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateEntries(
             string parentDirPath,
-            List<DataTreeNode<FsEntryOpts>> nodesList,
+            List<DataTreeNode<DriveItemOpts>> nodesList,
             bool isRootLevel = false)
         {
             foreach (var node in nodesList)
@@ -63,8 +64,8 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateEntry(
             string entryPath,
-            FsEntryOpts data,
-            DataTreeNode<FsEntryOpts> node)
+            DriveItemOpts data,
+            DataTreeNode<DriveItemOpts> node)
         {
             if (data.IsFolder)
             {
@@ -82,7 +83,7 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateFolder(
             string entryPath,
-            DataTreeNode<FsEntryOpts> node)
+            DataTreeNode<DriveItemOpts> node)
         {
             Directory.CreateDirectory(entryPath);
 
@@ -96,7 +97,7 @@ namespace Turmerik.MkFsDirsPair.Lib
 
         private void CreateFile(
             string entryPath,
-            FsEntryOpts data)
+            DriveItemOpts data)
         {
             File.WriteAllText(
                 entryPath,

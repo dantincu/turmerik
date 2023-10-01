@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Turmerik.DriveExplorer;
 using Turmerik.Utility;
 
 namespace Turmerik.MkFsDirsPair.Lib
 {
     public static class FsEntryH
     {
-        public static DataTreeNode<FsEntryOpts> File(
-            this FsEntryOpts entry) => new DataTreeNode<FsEntryOpts>(entry, null);
+        public static DataTreeNode<DriveItemOpts> File(
+            this DriveItemOpts entry) => new DataTreeNode<DriveItemOpts>(entry, null);
 
-        public static DataTreeNode<FsEntryOpts> Folder(
-            this FsEntryOpts entry,
-            params DataTreeNode<FsEntryOpts>[] childNodes) => new DataTreeNode<FsEntryOpts>(
+        public static DataTreeNode<DriveItemOpts> Folder(
+            this DriveItemOpts entry,
+            params DataTreeNode<DriveItemOpts>[] childNodes) => new DataTreeNode<DriveItemOpts>(
                 entry, childNodes.ToList());
     }
 }

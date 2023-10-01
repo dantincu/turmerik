@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Turmerik.MkFsDirsPair.Lib
 {
-    public enum DataIntegrityCheckType
+    public enum NoteDirPairsIntegrityCheckType
     {
         None,
         Basic,

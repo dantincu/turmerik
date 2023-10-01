@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.DriveExplorer;
 using Turmerik.MkFsDirsPair.Lib;
 
 namespace Turmerik.MkFsDirsPair.ConsoleApp
@@ -12,8 +13,10 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
     {
         static void Main(string[] args)
         {
-            ServiceProviderContainer.Instance.Value.RegisterData(new ServiceCollection());
-            ProgH.Run(args, new DirsPairInfoGenerator());
+            var svcProv = ServiceProviderContainer.Instance.Value.RegisterData(new ServiceCollection());
+
+            ProgH.Run(args, new DirsPairInfoGenerator(
+                svcProv.GetRequiredService<INoteDirsPairFullNamePartRetriever>()));
         }
     }
 }

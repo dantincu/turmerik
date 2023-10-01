@@ -2,21 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.MkFsDirsPair.Lib
+namespace Turmerik.DriveExplorer
 {
-    public class FsEntryOpts
+    public class DriveItemOpts
     {
-        public FsEntryOpts()
+        public DriveItemOpts()
         {
         }
 
-        public FsEntryOpts(string name)
+        public DriveItemOpts(string name)
         {
             Name = name;
             IsFolder = true;
         }
 
-        public FsEntryOpts(
+        public DriveItemOpts(
             string name,
             string contents)
         {
@@ -24,7 +24,7 @@ namespace Turmerik.MkFsDirsPair.Lib
             Contents = contents;
         }
 
-        public FsEntryOpts(
+        public DriveItemOpts(
             string name,
             bool isFolder,
             string contents,

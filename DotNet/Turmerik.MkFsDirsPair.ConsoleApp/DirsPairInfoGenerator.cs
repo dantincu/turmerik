@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.DriveExplorer;
 using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.Utility;
 
@@ -11,6 +12,12 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
 {
     public class DirsPairInfoGenerator : DirsPairInfoGeneratorBase, IDirsPairInfoGenerator
     {
+        public DirsPairInfoGenerator(
+            INoteDirsPairFullNamePartRetriever noteDirsPairFullNamePartRetriever) : base(
+                noteDirsPairFullNamePartRetriever)
+        {
+        }
+
         public DirsPairInfo Generate(
             string[] args)
         {
@@ -56,12 +63,12 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             var dirsPairInfo = new DirsPairInfo(
                 workDir,
                 existingEntriesArr,
-                new List<DataTreeNode<FsEntryOpts>>
+                new List<DataTreeNode<DriveItemOpts>>
                 {
-                    new FsEntryOpts(shortDirName).Folder(
-                        new FsEntryOpts(docFileName, docFileContents).File()),
-                    new FsEntryOpts(fullDirName).Folder(
-                        new FsEntryOpts(".keep", "").File())
+                    new DriveItemOpts(shortDirName).Folder(
+                        new DriveItemOpts(docFileName, docFileContents).File()),
+                    new DriveItemOpts(fullDirName).Folder(
+                        new DriveItemOpts(".keep", "").File())
                 },
                 docFilePath);
 
@@ -120,7 +127,6 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
                 args,
                 idx++,
                 "Type the full dir name part",
-                true,
                 (rawArg, i, titleStr, arg) =>
                 {
                     int rawArgLen = rawArg.Length;
@@ -168,7 +174,6 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             string[] argsArr,
             int idx,
             string message,
-            bool normalizeDocTitle = false,
             Func<string, int, string, string, string> callback = null)
         {
             string rawArg;
@@ -192,8 +197,7 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             else
             {
                 arg = NormalizeFileName(
-                    arg, out docTitle,
-                    normalizeDocTitle);
+                    arg, out docTitle, ':');
             }
 
             if (callback != null)

@@ -24,7 +24,7 @@ namespace Turmerik.Text
         /// </summary>
         public const string REGEX_SPECIAL_CHARS = "\\.[]{}()*+-=!?^$|";
 
-        public static string EncodeForRegex(
+        public static RegexEncodedText EncodeForRegex(
             this string str,
             bool shouldMatchTheStartOfStr = false,
             bool shouldMatchTheEndOfStr = false)
@@ -53,7 +53,7 @@ namespace Turmerik.Text
                 sb.Append('$');
             }
 
-            return sb.ToString();
+            return new RegexEncodedText(str, sb.ToString());
         }
     }
 }
