@@ -84,7 +84,7 @@ namespace Turmerik.DriveExplorer
             string title,
             char altSpaceChar)
         {
-            if (title.Any())
+            if (title.Length > 1)
             {
                 List<char> charsList = new();
                 char prevC = default;
@@ -101,25 +101,25 @@ namespace Turmerik.DriveExplorer
                             newPrevChar = default;
                         }
                     }
-                    else if (prevC == altSpaceChar)
-                    {
-                        charsList.Add(' ');
-                    }
                     else
                     {
+                        if (prevC == altSpaceChar)
+                        {
+                            charsList.Add(' ');
+                        }
+
                         charsList.Add(chr);
                     }
 
                     prevC = newPrevChar;
                 }
 
-                if (prevC == altSpaceChar)
-                {
-                    charsList.Add(prevC);
-                }
-
                 title = new string(
                     charsList.ToArray());
+            }
+            else if (title.Length == 1 && title.Single() == altSpaceChar)
+            {
+                title = " ";
             }
 
             return title;

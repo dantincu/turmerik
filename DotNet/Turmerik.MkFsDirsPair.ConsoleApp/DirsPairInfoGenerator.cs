@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
+using Turmerik.Helpers;
 using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.Utility;
 
@@ -52,21 +53,26 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             string docFileName,
             string fullDirName)
         {
-            string docFilePath = Path.Combine(
-                workDir,
-                shortDirName,
-                docFileName);
+            string? docFilePath = docFileName?.With(
+                fileName => Path.Combine(
+                    workDir,
+                    shortDirName,
+                    fileName));
 
             string docFileContents = GetFileContents(
                 docFileName, docTitle);
+
+            var docFile = docFileContents?.With(
+                contents => new DriveItemOpts(
+                    docFileName,
+                    docFileContents).File().Arr()) ?? new DataTreeNode<DriveItemOpts>[0];
 
             var dirsPairInfo = new DirsPairInfo(
                 workDir,
                 existingEntriesArr,
                 new List<DataTreeNode<DriveItemOpts>>
                 {
-                    new DriveItemOpts(shortDirName).Folder(
-                        new DriveItemOpts(docFileName, docFileContents).File()),
+                    new DriveItemOpts(shortDirName).Folder(docFile),
                     new DriveItemOpts(fullDirName).Folder(
                         new DriveItemOpts(".keep", "").File())
                 },

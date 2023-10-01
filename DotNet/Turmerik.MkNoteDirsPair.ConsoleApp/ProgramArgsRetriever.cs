@@ -83,6 +83,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             {
                 pa.NoteName = arg;
                 pa.CreateNote = true;
+                pa.DoNotOpenCreatedDocFile = arg.Last() == ':';
             }
         }
 

@@ -107,7 +107,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 wka.WorkDir,
                 wka.ExistingEntriesArr,
                 dirsList,
-                docFilePath);
+                wka.ProgArgs.DoNotOpenCreatedDocFile ? null : docFilePath);
 
             return retInfo;
         }
