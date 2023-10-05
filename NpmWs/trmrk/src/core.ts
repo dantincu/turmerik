@@ -19,3 +19,10 @@ export const forEach = <T>(
     }
   }
 };
+
+export const contains = <T>(arr: T[], item: T) => arr.indexOf(item) >= 0;
+
+export const any = <T>(
+  arr: T[],
+  predicate: (item: T, idx: number, array: T[]) => boolean
+) => arr.filter(predicate).length >= 0;

@@ -11,25 +11,43 @@ export class FsEntriesRetriever {
       dirPath: string,
       dirSep: string
     ) => Promise<IFsEntry[]>,
-    readonly fsEntriesRetrieverFunc: (rootFolder: FsEntry) => void
+    readonly forEachChildCallback: (
+      item: FsEntry,
+      idx: number,
+      arr: FsEntry[]
+    ) => Promise<void>
   ) {
     this.rootPath = [rootParentPath, rootDirName].join(dirSepStr);
   }
 
-  public run() {
+  public async run() {
     return new Promise<FsEntry>((resolve, reject) => {
       const rootFolder = new FsEntry(
+        null,
         this.rootParentPath,
         this.rootDirName,
         this.dirSepStr,
         this.folderFsEntriesRetriever
       );
 
+      let resolved = false;
+
       rootFolder.resolved.push((rootFolder) => {
-        resolve(rootFolder);
+        if (!resolved) {
+          resolved = true;
+          resolve(rootFolder);
+        }
       });
 
-      this.fsEntriesRetrieverFunc(rootFolder);
+      rootFolder.forEachChild(this.forEachChildCallback).then(
+        () => {
+          if (!resolved) {
+            resolved = true;
+            resolve(rootFolder);
+          }
+        },
+        (reason) => reject(reason)
+      );
     });
   }
 }

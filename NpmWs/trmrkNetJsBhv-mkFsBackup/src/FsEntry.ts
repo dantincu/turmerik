@@ -6,6 +6,7 @@ export interface IFsEntry {
 }
 
 export const retrieveFsEntries = async (
+  parent: FsEntry | null,
   parentDirPath: string,
   dirSepStr: string,
   folderFsEntriesRetriever: (
@@ -21,6 +22,7 @@ export const retrieveFsEntries = async (
   const childNodes = childEntriesArr.map(
     (entry) =>
       new FsEntry(
+        parent,
         parentDirPath,
         entry.name,
         dirSepStr,
@@ -41,18 +43,21 @@ export class FsEntry implements IFsEntry {
 
   public resolved: ((fsEntry: FsEntry) => void)[] = [];
 
+  public fsPath: string | null;
+
   private readonly folderFsEntriesRetriever: (
     dirPath: string,
     dirSep: string
   ) => Promise<IFsEntry[]>;
 
-  private childrenCount = 0;
-  private resolvedChildrenCount = 0;
+  private childrenCount = -1;
+  private resolvedChildrenCount = -1;
 
   constructor(
-    public parentDirPath: string,
+    public readonly parent: FsEntry | null,
+    public readonly parentDirPath: string,
     public readonly name: string,
-    readonly dirSepStr = "/",
+    public readonly dirSepStr = "/",
     folderFsEntriesRetriever:
       | ((dirPath: string, dirSep: string) => Promise<IFsEntry[]>)
       | null
@@ -67,74 +72,99 @@ export class FsEntry implements IFsEntry {
       });
   }
 
-  public async forEachChild(
-    callback: (item: FsEntry, idx: number, arr: FsEntry[]) => void
-  ) {
-    await this.assureChildrenRetrieved();
-    forEach(this.childNodes, callback);
+  public isRootFolder() {
+    const isRootFolder = !this.parent;
+    return isRootFolder;
   }
 
-  public exclude() {
-    const wasResolved = this.isResolved;
+  public isRootLevel() {
+    const isRootLevel = this.parent.isRootFolder;
+    return isRootLevel;
+  }
 
-    this.isExcluded = true;
-    this.isIncluded = false;
-    this.isResolved = true;
+  public async forEachChild(
+    callback: (item: FsEntry, idx: number, arr: FsEntry[]) => Promise<void>
+  ) {
+    await this.assureChildrenRetrieved();
 
-    if (!wasResolved) {
-      this.onResolved();
+    for (let i = 0; i < this.childNodes.length; i++) {
+      await callback(this.childNodes[i], i, this.childNodes);
     }
   }
 
   public async include(depth = 0) {
-    const wasResolved = this.isResolved;
-
     this.isIncluded = true;
     this.isExcluded = false;
 
-    if (this.isFolder) {
+    let resolve = !this.isFolder;
+
+    if (!resolve) {
       if (depth > 0) {
         const nextDepth = depth - 1;
 
-        await this.forEachChild((item) => {
-          item.include(nextDepth);
+        await this.forEachChild(async (item) => {
+          await item.include(nextDepth);
         });
       } else {
         await this.assureChildrenRetrieved();
       }
 
-      if (this.childrenCount === 0) {
-        this.isResolved = true;
-        this.onResolved();
-      }
-    } else {
-      if (!wasResolved) {
-        this.isResolved = true;
-        this.onResolved();
+      resolve = depth >= 0 && this.childrenCount === 0;
+    }
+
+    if (this.parent && !this.parent.isIncluded) {
+      this.parent.include(depth);
+    }
+
+    if (resolve) {
+      this.resolveIfReq();
+    }
+  }
+
+  public exclude() {
+    this.isExcluded = true;
+    this.isIncluded = false;
+
+    this.resolveIfReq();
+  }
+
+  public excludeUnresolved() {
+    if (!this.isResolved) {
+      if (!this.isFolder) {
+        this.exclude();
+      } else {
+        if (this.resolvedChildrenCount > 0) {
+          forEach(this.childNodes, (childItem) => {
+            if (!childItem.isResolved) {
+              childItem.exclude();
+            }
+          });
+        } else if (!this.isIncluded) {
+          this.exclude();
+        } else {
+          this.resolveIfReq();
+        }
       }
     }
   }
 
   private async retrieveChildren(): Promise<[FsEntry[], number]> {
-    const dirPath = [this.parentDirPath, this.name].join(this.dirSepStr);
+    this.fsPath ??= [this.parentDirPath, this.name].join(this.dirSepStr);
 
     const childNodes = await retrieveFsEntries(
-      dirPath,
+      this,
+      this.fsPath,
       this.dirSepStr,
       this.folderFsEntriesRetriever
     );
 
     forEach(childNodes, (item) => {
       item.resolved.push(() => {
-        let keepIterating = true;
         this.resolvedChildrenCount++;
 
         if (this.resolvedChildrenCount >= this.childrenCount) {
-          this.onResolved();
-          keepIterating = false;
+          this.resolveIfReq();
         }
-
-        return keepIterating;
       });
     });
 
@@ -147,7 +177,23 @@ export class FsEntry implements IFsEntry {
 
       this.childNodes = childNodes;
       this.childrenCount = childrenCount;
+      this.resolvedChildrenCount = 0;
     }
+  }
+
+  private resolveIfReq() {
+    const resolve = !this.isResolved;
+
+    if (resolve) {
+      this.resolve();
+    }
+
+    return resolve;
+  }
+
+  private resolve() {
+    this.isResolved = true;
+    this.onResolved();
   }
 
   private onResolved() {
