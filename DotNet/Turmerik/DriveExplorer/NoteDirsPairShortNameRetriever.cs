@@ -1,44 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.Text;
 
 namespace Turmerik.DriveExplorer
 {
     public interface INoteDirsPairShortNameRetriever
     {
+        INoteDirsPairIdxRetriever NextIdxRetriever { get; }
+
+        string GetShortDirName(
+            NoteDirsPairIdxOpts opts,
+            out NoteDirsPairIdx notesDirPairIdx);
+
         string GetShortDirName(
             NoteDirsPairIdxOpts opts);
     }
 
     public class NoteDirsPairShortNameRetriever : INoteDirsPairShortNameRetriever
     {
-        private readonly INoteDirsPairIdxRetriever nextIdxRetriever;
-
         public NoteDirsPairShortNameRetriever(
             INoteDirsPairIdxRetriever noteDirsPairIdxRetriever)
         {
-            this.nextIdxRetriever = noteDirsPairIdxRetriever ?? throw new ArgumentNullException(nameof(noteDirsPairIdxRetriever));
+            this.NextIdxRetriever = noteDirsPairIdxRetriever ?? throw new ArgumentNullException(nameof(noteDirsPairIdxRetriever));
         }
 
+        public INoteDirsPairIdxRetriever NextIdxRetriever { get; }
+
         public string GetShortDirName(
-            NoteDirsPairIdxOpts opts)
+            NoteDirsPairIdxOpts opts,
+            out NoteDirsPairIdx notesDirPairIdx)
         {
-            int nextIdx = nextIdxRetriever.GetNextDirIdx(opts);
+            notesDirPairIdx = NextIdxRetriever.GetNextDirIdx(opts);
 
             string dirNamePfx = GetDirNamePfx(
                 opts.DirCategory);
 
             string shortDirName = string.Concat(
-                dirNamePfx, nextIdx);
+                dirNamePfx, notesDirPairIdx.Idx);
 
             return shortDirName;
         }
 
+        public string GetShortDirName(
+            NoteDirsPairIdxOpts opts) => GetShortDirName(
+                opts, out _);
+
         private string GetDirNamePfx(
-            NoteDirCategory dirCat) => dirCat switch
+            DirCategory dirCat) => dirCat switch
             {
-                NoteDirCategory.TrmrkNote => nextIdxRetriever.NoteItemsPfx.RawStr,
-                NoteDirCategory.TrmrkInternals => nextIdxRetriever.NoteInternalsPfx.RawStr
+                DirCategory.Item => NextIdxRetriever.NoteItemsPfx.RawStr,
+                DirCategory.Internals => NextIdxRetriever.NoteInternalsPfx.RawStr
             };
     }
 }

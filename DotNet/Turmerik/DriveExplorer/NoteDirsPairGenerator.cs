@@ -6,15 +6,18 @@ using System.Text;
 using Turmerik.Utility;
 using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.Text;
+using Turmerik.Helpers;
 
 namespace Turmerik.DriveExplorer
 {
     public interface INoteDirsPairGenerator
     {
+        string NoteJsonFileName { get; }
+        string NoteBookJsonFileName { get; }
+
         List<DataTreeNode<DriveItemOpts>> Generate(
             NoteDirsPairOpts opts,
-            out string shortDirName,
-            out string? docFileName);
+            out NoteDirsPair pair);
     }
 
     public class NoteDirsPairGenerator : INoteDirsPairGenerator
@@ -24,18 +27,23 @@ namespace Turmerik.DriveExplorer
         private readonly NoteDirsPairSettings.FileNamesT fileNames;
         private readonly NoteDirsPairSettings.FileContentsT fileContents;
 
-        private readonly INoteDirsPairShortNameRetriever noteDirsPairShortNameRetriever;
+        private readonly IJsonConversion jsonConversion;
+        private readonly INoteDirsPairShortNameRetriever shortNameRetriever;
         private readonly INoteDirsPairFullNamePartRetriever noteDirsPairFullNamePartRetriever;
 
         private readonly string keepFileContentsTemplate;
         private readonly RegexEncodedText noteInternalsPfx;
 
         public NoteDirsPairGenerator(
+            IJsonConversion jsonConversion,
             INoteDirsPairShortNameRetriever noteDirsPairShortNameRetriever,
             INoteDirsPairFullNamePartRetriever noteDirsPairFullNamePartRetriever,
             NoteDirsPairSettings settings)
         {
-            this.noteDirsPairShortNameRetriever = noteDirsPairShortNameRetriever ?? throw new ArgumentNullException(
+            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
+                nameof(jsonConversion));
+
+            this.shortNameRetriever = noteDirsPairShortNameRetriever ?? throw new ArgumentNullException(
                 nameof(noteDirsPairShortNameRetriever));
 
             this.noteDirsPairFullNamePartRetriever = noteDirsPairFullNamePartRetriever ?? throw new ArgumentNullException(
@@ -52,31 +60,38 @@ namespace Turmerik.DriveExplorer
 
             noteInternalsPfx = RegexH.EncodeForRegex(
                 dirNames.NoteInternalsPfx);
+
+            NoteJsonFileName = string.Join(
+                ".", fileNames.NoteFileName, "json");
+
+            NoteBookJsonFileName = string.Join(
+                ".", fileNames.NoteBookFileName, "json");
         }
+
+        public string NoteJsonFileName { get; }
+        public string NoteBookJsonFileName { get; }
 
         public List<DataTreeNode<DriveItemOpts>> Generate(
             NoteDirsPairOpts opts,
-            out string shortDirName,
-            out string? docFileName)
+            out NoteDirsPair pair)
         {
             List<DataTreeNode<DriveItemOpts>> dirsPair;
+            pair = GetEntryNamesCore(opts);
 
-            shortDirName = GetEntryNamesCore(
-                opts, out _,
-                out string fullDirName,
-                out string docTitle,
-                out docFileName);
-
-            if (opts.DirCategory == NoteDirCategory.TrmrkNote)
+            if (opts.DirCategory == DirCategory.Item)
             {
-                dirsPair = GetNoteDirsPair(opts,
-                    shortDirName, fullDirName,
-                    docTitle, docFileName);
+                dirsPair = GetNoteDirsPair(opts, pair);
             }
             else
             {
-                dirsPair = GetInternalDirsPair(
-                    shortDirName, fullDirName);
+                dirsPair = GetInternalDirsPair(opts, pair);
+            }
+
+            if (settings.SerializeToJson == true)
+            {
+                SerializeToJson(
+                    new SerializationArgs(
+                        opts, pair, dirsPair));
             }
 
             return dirsPair;
@@ -84,56 +99,60 @@ namespace Turmerik.DriveExplorer
 
         private List<DataTreeNode<DriveItemOpts>> GetNoteDirsPair(
             NoteDirsPairOpts opts,
-            string shortDirName,
-            string fullDirName,
-            string docTitle,
-            string docFileName)
+            NoteDirsPair pair)
         {
-            var noteDirChildren = GetNoteDirChildren(
-                opts, docTitle, docFileName);
+            var noteDirChildren = GetNoteDirChildren(opts, pair);
 
             var retList = new List<DataTreeNode<DriveItemOpts>>
                 {
-                    Folder(shortDirName,
+                    Folder(pair.ShortDirName,
                         noteDirChildren),
-                    FullNameDir(fullDirName)
+                    FullNameDir(pair.FullDirName)
                 };
 
             return retList;
         }
 
         private List<DataTreeNode<DriveItemOpts>> GetInternalDirsPair(
-            string shortDirName,
-            string fullDirName) => new List<DataTreeNode<DriveItemOpts>>
+            NoteDirsPairOpts opts,
+            NoteDirsPair pair)
+        {
+            var list = new List<DataTreeNode<DriveItemOpts>>
                 {
-                    Folder(shortDirName),
-                    FullNameDir(fullDirName)
+                    Folder(pair.ShortDirName),
+                    FullNameDir(pair.FullDirName)
                 };
+
+            return list;
+        }
 
         private DataTreeNode<DriveItemOpts>[] GetNoteDirChildren(
             NoteDirsPairOpts opts,
-            string docTitle,
-            string docFileName)
+            NoteDirsPair pair)
         {
             string docFileContents = string.Format(
-                    fileContents.NoteFileContentsTemplate,
-                    docTitle);
+                fileContents.NoteFileContentsTemplate,
+                pair.DocTitle);
 
             List<DataTreeNode<DriveItemOpts>> list = new()
             {
                 TextFile(
-                    docFileName,
+                    pair.DocFileName,
                     docFileContents)
             };
 
-            var fullDirNamePartsList = GetInternalDirNamesList(opts);
+            var fullDirNamePartsMap = GetInternalDirNamesList(opts).Select(
+                (kvp, idx) => new KeyValuePair<InternalDir, Tuple<int, string>>(
+                    kvp.Key, Tuple.Create(idx, kvp.Value))).Dictnr();
 
-            int dirsCount = fullDirNamePartsList.Count;
             var dirNames = settings.DirNames;
 
-            for (int i = 0; i < dirsCount; i++)
+            foreach (var kvp in fullDirNamePartsMap)
             {
-                string fullDirNamePart = fullDirNamePartsList[i];
+                var tuple = kvp.Value;
+                int i = tuple.Item1;
+
+                string fullDirNamePart = tuple.Item2;
                 string shortDirName = $"{noteInternalsPfx.RawStr}{i + 1}";
 
                 string fullDirName = string.Join(
@@ -145,41 +164,54 @@ namespace Turmerik.DriveExplorer
                 list.Add(FullNameDir(fullDirName));
             }
 
+            if (settings.SerializeToJson == true)
+            {
+                string json = jsonConversion.Adapter.Serialize(
+                    new NoteItemCore
+                    {
+                        Title = pair.DocTitle,
+                        ItemIdx = pair.Idx,
+                        InternalDirs = fullDirNamePartsMap.ToDictionary(
+                            kvp => kvp.Key, kvp => kvp.Value.Item1 + 1),
+                        ChildItems = new Dictionary<int, string>()
+                    });
+
+                list.Add(TextFile(
+                    NoteJsonFileName, json));
+            }
+
             return list.ToArray();
         }
 
-        private string GetEntryNamesCore(
-            NoteDirsPairOpts opts,
-            out string fullDirNamePart,
-            out string fullDirName,
-            out string docTitle,
-            out string? docFileName)
+        private NoteDirsPair GetEntryNamesCore(
+            NoteDirsPairOpts opts)
         {
-            string shortDirName = noteDirsPairShortNameRetriever.GetShortDirName(opts);
+            string shortDirName = shortNameRetriever.GetShortDirName(
+                opts, out var pairIdx);
 
-            fullDirNamePart = GetFullDirNamePart(opts,
-                out docTitle, out docFileName);
+            var pair = new NoteDirsPair(pairIdx);
+            pair.ShortDirName = shortDirName;
 
-            fullDirName = string.Join(
+            SetFullDirNamePart(opts, pair);
+
+            pair.FullDirName = string.Join(
                 dirNames.JoinStr,
                 shortDirName,
-                fullDirNamePart);
+                pair.FullDirNamePart);
 
-            return shortDirName;
+            return pair;
         }
 
-        private string GetFullDirNamePart(
+        private void SetFullDirNamePart(
             NoteDirsPairOpts opts,
-            out string docTitle,
-            out string? docFileName)
+            NoteDirsPair pair)
         {
-            docTitle = null;
-            docFileName = null;
+            string docTitle = null;
 
-            string fullDirNamePart = opts.DirCategory switch
+            pair.FullDirNamePart = opts.DirCategory switch
             {
-                NoteDirCategory.TrmrkInternals => GetInternalDirName(opts),
-                NoteDirCategory.TrmrkNote => noteDirsPairFullNamePartRetriever.GetNoteDirFullNamePart(
+                DirCategory.Internals => GetInternalDirName(opts),
+                DirCategory.Item => noteDirsPairFullNamePartRetriever.GetNoteDirFullNamePart(
                     opts.Title, out docTitle,
                     opts.AltSpaceChar,
                     settings.FileNameMaxLength)
@@ -187,37 +219,22 @@ namespace Turmerik.DriveExplorer
 
             if (docTitle != null)
             {
-                docFileName = settings.FileNames.NoteFileName ?? fullDirNamePart;
-                docFileName = $"{docFileName}.md";
-            }
+                pair.DocTitle = docTitle;
 
-            return fullDirNamePart;
+                string docFileName = settings.FileNames.NoteFileName ?? pair.FullDirNamePart;
+                pair.DocFileName = $"{docFileName}.md";
+            }
         }
 
-        private List<string> GetInternalDirNamesList(
-            NoteDirsPairOpts opts)
-        {
-            var fullDirNamesList = opts.NoteInternalDirs?.Select(
+        private Dictionary<InternalDir, string> GetInternalDirNamesList(
+            NoteDirsPairOpts opts) => opts.NoteInternalDirs?.ToDictionary(
+                internalDir => internalDir,
                 internalDir => internalDir switch
                 {
-                    NoteInternalDir.NoteInternals => dirNames.NoteInternals,
-                    NoteInternalDir.NoteFiles => dirNames.NoteFiles
-                }).ToList() ?? new List<string>();
-
-            if (opts.CreateNoteBook)
-            {
-                if (fullDirNamesList.Any())
-                {
-                    throw new ArgumentException(
-                        "The note book dir pairs flag cannot be provided along with other dir pairs flags");
-                }
-
-                fullDirNamesList.Add(
-                    dirNames.NoteBook);
-            }
-
-            return fullDirNamesList;
-        }
+                    InternalDir.Root => dirNames.NoteBook,
+                    InternalDir.Internals => dirNames.NoteInternals,
+                    InternalDir.Files => dirNames.NoteFiles
+                }) ?? new Dictionary<InternalDir, string>();
 
         private string GetInternalDirName(
             NoteDirsPairOpts opts)
@@ -229,7 +246,7 @@ namespace Turmerik.DriveExplorer
 
             if (internalDirNamesCount == 1)
             {
-                internalDirName = internalDirNamesList.Single();
+                internalDirName = internalDirNamesList.Single().Value;
             }
             else if (internalDirNamesCount == 0)
             {
@@ -245,11 +262,80 @@ namespace Turmerik.DriveExplorer
             return internalDirName;
         }
 
+        private void SerializeToJson(
+            SerializationArgs args)
+        {
+            args.Decorator = args.Pair.NoteItem ?? args.Pair.NoteBook ?? jsonConversion.Decorator(
+                new NoteItemCore { ChildItems = new Dictionary<int, string>() });
+
+            if (args.Decorator != null)
+            {
+                if (args.Opts.Title != null)
+                {
+                    SerializeNoteToJson(args);
+                }
+                else
+                {
+                    SerializeInternalDirToJson(args);
+                }
+            }
+        }
+
+        private void SerializeNoteToJson(
+            SerializationArgs args)
+        {
+            var data = args.Decorator.Data;
+            data.ChildItems = data.ChildItems ?? new Dictionary<int, string>();
+
+            data.ChildItems.Add(
+                args.Pair.Idx, args.Pair.DocTitle);
+
+            string json = args.Decorator.Serialize(true);
+            string fileName = GetJsonFileName(args.Opts);
+
+            args.DirsPair.Add(TextFile(
+                fileName, json));
+        }
+
+        private void SerializeInternalDirToJson(
+            SerializationArgs args)
+        {
+            var data = args.Decorator.Data;
+            data.InternalDirs = data.InternalDirs ?? new Dictionary<InternalDir, int>();
+
+            data.InternalDirs.Add(
+                args.Opts.NoteInternalDirs.Single(),
+                args.Pair.Idx);
+
+            string json = args.Decorator.Serialize(true);
+            string fileName = GetJsonFileName(args.Opts);
+
+            args.DirsPair.Add(TextFile(
+                fileName, json));
+        }
+
+        private string GetJsonFileName(
+            NoteDirsPairOpts opts)
+        {
+            string jsonFileName;
+
+            if (opts.CreateNoteBook || opts.NoteBookJson != null)
+            {
+                jsonFileName = NoteBookJsonFileName;
+            }
+            else
+            {
+                jsonFileName = NoteJsonFileName;
+            }
+
+            return jsonFileName;
+        }
+
         private DataTreeNode<DriveItemOpts> TextFile(
             string fileName,
             string contents) => new DriveItemOpts(
-                fileName,
-                contents).File();
+                fileName, false,
+                contents, true).File();
 
         private DataTreeNode<DriveItemOpts> KeepFile(
             ) => TextFile(
@@ -264,5 +350,27 @@ namespace Turmerik.DriveExplorer
             string folderName,
             params DataTreeNode<DriveItemOpts>[] childItems) => new DriveItemOpts(
                 folderName).Folder(childItems);
+
+        private class SerializationArgs
+        {
+            public SerializationArgs()
+            {
+            }
+
+            public SerializationArgs(
+                NoteDirsPairOpts opts,
+                NoteDirsPair pair,
+                List<DataTreeNode<DriveItemOpts>> dirsPair)
+            {
+                Opts = opts;
+                Pair = pair;
+                DirsPair = dirsPair;
+            }
+
+            public NoteDirsPairOpts Opts { get; set; }
+            public NoteDirsPair Pair { get; set; }
+            public List<DataTreeNode<DriveItemOpts>> DirsPair { get; set; }
+            public IJsonObjectDecorator<NoteItemCore> Decorator { get; set; }
+        }
     }
 }

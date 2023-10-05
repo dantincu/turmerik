@@ -1,0 +1,21 @@
+export const allWsRegex = /^\s+$/g;
+
+export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
+  let retVal = "string" === typeof arg;
+  retVal = retVal && arg !== "";
+
+  if (retVal && allWsSameAsEmpty) {
+    retVal = allWsRegex.test(arg);
+  }
+};
+
+export const forEach = <T>(
+  arr: T[],
+  callback: (item: T, idx: number, arr: T[]) => boolean | void
+) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (callback(arr[i], i, arr) === false) {
+      break;
+    }
+  }
+};

@@ -4,21 +4,22 @@ using System.Text;
 
 namespace Turmerik.DriveExplorer
 {
-    public enum NoteDirType
+    public enum DirType
     {
         ShortName,
         FullName
     }
 
-    public enum NoteDirCategory
+    public enum DirCategory
     {
-        TrmrkNote,
-        TrmrkInternals
+        Item,
+        Internals
     }
 
-    public enum NoteInternalDir
+    public enum InternalDir
     {
-        NoteInternals = 0,
-        NoteFiles
+        Root = 1,
+        Internals,
+        Files
     }
 }

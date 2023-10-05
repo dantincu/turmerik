@@ -12,7 +12,7 @@ namespace Turmerik.DriveExplorer
         public string FullDirNamePart { get; set; }
         public string Prefix { get; set; }
         public int Idx { get; set; }
-        public NoteDirCategory? NoteDirCategory { get; set; }
-        public NoteInternalDir? NoteInternalDir { get; set; }
+        public DirCategory? NoteDirCategory { get; set; }
+        public InternalDir? NoteInternalDir { get; set; }
     }
 }

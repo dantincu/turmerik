@@ -1,0 +1,22 @@
+{
+  "name": "trmrknetjsbhv-mkfsbackup",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Js behavior configuration code for Turmerik.MkFsBackup.ConsoleApp .NET Core App",
+  "main": "index.js",
+  "scripts": {
+    "build-dev": "webpack --config webpack.config.dev.cjs",
+    "build-prod": "webpack --config webpack.config.prod.cjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.2.2",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "trmrk": "file:../trmrk"
+  }
+}

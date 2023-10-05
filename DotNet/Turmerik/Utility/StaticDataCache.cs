@@ -20,5 +20,16 @@ namespace Turmerik.Utility
         public TValue Get(
             TKey key) => map.GetOrAdd(
                 key, factory);
+
+        public void Clear() => map.Clear();
+
+        public bool TryRemove(
+            TKey key,
+            out TValue value) => map.TryRemove(
+                key,
+                out value);
+
+        public KeyValuePair<TKey, TValue>[] ToArray(
+            ) => map.ToArray();
     }
 }

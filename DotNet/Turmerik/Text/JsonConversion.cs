@@ -21,7 +21,23 @@ namespace Turmerik.Text
             bool useCamelCase = false,
             bool useStringEnumConverter = false);
 
-        IJsonObjectDecorator<T> Decorator<T>(JObject rawObj);
+        IJsonObjectDecorator<T> Decorator<T>(
+            JObject rawObj,
+            JsonSerializerOpts opts);
+
+        IJsonObjectDecorator<T> Decorator<T>(
+            JObject rawObj,
+            bool useCamelCase = false,
+            bool useStringEnumConverter = false);
+
+        IJsonObjectDecorator<T> Decorator<T>(
+            T data,
+            JsonSerializerOpts opts);
+
+        IJsonObjectDecorator<T> Decorator<T>(
+            T data,
+            bool useCamelCase = false,
+            bool useStringEnumConverter = false);
     }
 
     public class JsonConversion : IJsonConversion
@@ -52,7 +68,27 @@ namespace Turmerik.Text
                     useCamelCase, true, useStringEnumConverter));
 
         public IJsonObjectDecorator<T> Decorator<T>(
-            JObject rawObj) => new JsonObjectDecorator<T>(
-                Adapter, rawObj);
+            JObject rawObj,
+            JsonSerializerOpts opts) => new JsonObjectDecorator<T>(
+                Adapter, rawObj, opts);
+
+        public IJsonObjectDecorator<T> Decorator<T>(
+            JObject rawObj,
+            bool useCamelCase = false,
+            bool useStringEnumConverter = false) => Decorator<T>(
+                rawObj, new JsonSerializerOpts(
+                    useCamelCase, true, useStringEnumConverter));
+
+        public IJsonObjectDecorator<T> Decorator<T>(
+            T data,
+            JsonSerializerOpts opts) => new JsonObjectDecorator<T>(
+                Adapter, data, opts);
+
+        public IJsonObjectDecorator<T> Decorator<T>(
+            T data,
+            bool useCamelCase = false,
+            bool useStringEnumConverter = false) => Decorator<T>(
+                data, new JsonSerializerOpts(
+                    useCamelCase, true, useStringEnumConverter));
     }
 }

@@ -33,7 +33,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
                 nameof(jsonConversion));
 
             appSettings = jsonConversion.LoadConfig<AppSettings>();
-            trmrk = appSettings.Trmrk;
+            trmrk = appSettings.TrmrkDirPairs;
 
             this.noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
                 trmrk.DirNames);
@@ -146,8 +146,8 @@ namespace Turmerik.LsDirPairs.ConsoleApp
         {
             public string WorkDir { get; set; }
             public string[] ExistingDirsArr { get; set; }
-            public Dictionary<int, NoteItem> DirPairs { get; set; }
-            public Dictionary<int, List<NoteItem>> AmbgDirPairs { get; set; }
+            public Dictionary<int, NoteItemCore> DirPairs { get; set; }
+            public Dictionary<int, List<NoteItemCore>> AmbgDirPairs { get; set; }
         }
     }
 }

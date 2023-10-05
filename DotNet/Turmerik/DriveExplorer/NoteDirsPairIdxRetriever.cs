@@ -14,18 +14,18 @@ namespace Turmerik.DriveExplorer
 {
     public interface INoteDirsPairIdxRetriever
     {
-        ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> DirNameRegexMap { get; }
+        ReadOnlyDictionary<DirCategory, ReadOnlyDictionary<DirType, Regex>> DirNameRegexMap { get; }
 
         RegexEncodedText JoinStr { get; }
         RegexEncodedText NoteInternalsPfx { get; }
         RegexEncodedText NoteItemsPfx { get; }
 
         public NoteDirName TryGetAsNoteDirName(
-            IEnumerable<KeyValuePair<NoteDirType, Regex>> regexMap,
+            IEnumerable<KeyValuePair<DirType, Regex>> regexMap,
             string dirName);
 
         public NoteDirName TryGetAsNoteDirName(
-            NoteDirCategory noteDirCategory,
+            DirCategory noteDirCategory,
             string dirName);
 
         public NoteDirName TryGetAsNoteDirName(
@@ -34,27 +34,11 @@ namespace Turmerik.DriveExplorer
         HashSet<int> GetExistingDirIdxes(
             NoteDirsPairIdxOpts opts);
 
-        HashSet<int> GetExistingIdxes(
-            NoteDirsPairIdxOpts opts,
-            out IJsonObjectDecorator<NoteItem> noteItem,
-            out IJsonObjectDecorator<NoteBook> noteBook);
-
-        void AddExistingIdxesIfReq(
-            NoteDirsPairIdxOpts opts,
-            HashSet<int> existingIdxes,
-            out IJsonObjectDecorator<NoteItem> noteItem,
-            out IJsonObjectDecorator<NoteBook> noteBook);
-
-        int GetNextDirIdx(
-            NoteDirsPairIdxOpts opts,
-            out HashSet<int> existingIdxes,
-            out IJsonObjectDecorator<NoteItem> noteItem,
-            out IJsonObjectDecorator<NoteBook> noteBook);
-
         int GetNextDirIdx(
             HashSet<int> existingIdxes);
 
-        int GetNextDirIdx(NoteDirsPairIdxOpts opts);
+        NoteDirsPairIdx GetNextDirIdx(
+            NoteDirsPairIdxOpts opts);
     }
 
     public class NoteDirsPairIdxRetriever : INoteDirsPairIdxRetriever
@@ -82,14 +66,14 @@ namespace Turmerik.DriveExplorer
             DirNameRegexMap = GetDirNameRegexMap();
         }
 
-        public ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> DirNameRegexMap { get; }
+        public ReadOnlyDictionary<DirCategory, ReadOnlyDictionary<DirType, Regex>> DirNameRegexMap { get; }
 
         public RegexEncodedText JoinStr { get; }
         public RegexEncodedText NoteInternalsPfx { get; }
         public RegexEncodedText NoteItemsPfx { get; }
 
         public NoteDirName TryGetAsNoteDirName(
-            IEnumerable<KeyValuePair<NoteDirType, Regex>> regexMap,
+            IEnumerable<KeyValuePair<DirType, Regex>> regexMap,
             string dirName)
         {
             NoteDirName dirsPair = null;
@@ -111,7 +95,7 @@ namespace Turmerik.DriveExplorer
                             NoteItemsPfx.RawStr.Length);
                     }
 
-                    if (kvp.Key == NoteDirType.FullName)
+                    if (kvp.Key == DirType.FullName)
                     {
                         (idxStrPart, fullDirNamePart) = dirNameStr.SplitStr(
                             (nmrbl, count) => nmrbl.IndexOfStr(
@@ -151,7 +135,7 @@ namespace Turmerik.DriveExplorer
         }
 
         public NoteDirName TryGetAsNoteDirName(
-            NoteDirCategory noteDirCategory,
+            DirCategory noteDirCategory,
             string dirName)
         {
             var regexMap = DirNameRegexMap[noteDirCategory];
@@ -202,78 +186,47 @@ namespace Turmerik.DriveExplorer
             return idxes;
         }
 
-        public HashSet<int> GetExistingIdxes(
-            NoteDirsPairIdxOpts opts,
-            out IJsonObjectDecorator<NoteItem> noteItem,
-            out IJsonObjectDecorator<NoteBook> noteBook)
+        public NoteDirsPairIdx GetNextDirIdx(
+            NoteDirsPairIdxOpts opts)
         {
-            var existingIdxes = GetExistingDirIdxes(opts);
-
-            AddExistingIdxesIfReq(
-                opts,
-                existingIdxes,
-                out noteItem,
-                out noteBook);
-
-            return existingIdxes;
-        }
-
-        public void AddExistingIdxesIfReq(
-            NoteDirsPairIdxOpts opts,
-            HashSet<int> existingIdxes,
-            out IJsonObjectDecorator<NoteItem> noteItem,
-            out IJsonObjectDecorator<NoteBook> noteBook)
-        {
+            var idxes = GetExistingDirIdxes(opts);
             bool hasNoteJson = false;
-            noteBook = null;
-            bool createInternalDirs = opts.DirCategory == NoteDirCategory.TrmrkInternals;
+            IJsonObjectDecorator<NoteItemCore> noteBook = null, noteItem = null;
+            bool createInternalDirs = opts.DirCategory == DirCategory.Internals;
 
             if (TryLoadData(
                 opts.NoteItemJson,
                 out hasNoteJson,
                 out noteItem))
             {
-                AddIdxesIfAny(
-                    existingIdxes,
+                AddIdxesIfAny(idxes,
                     createInternalDirs,
                     noteItem.Data,
-                    data => data.ChildNotes,
-                    data => data.NoteDirs?.Values.ToArray());
+                    data => data.ChildItems,
+                    data => data.InternalDirs?.Values.ToArray());
             }
             else if (!hasNoteJson && TryLoadData(
                 opts.NoteBookJson,
                 out _,
                 out noteBook))
             {
-                AddIdxesIfAny(
-                    existingIdxes,
+                AddIdxesIfAny(idxes,
                     createInternalDirs,
                     noteBook.Data,
-                    data => data.Notes,
-                    data => data.InternalDirIdx?.Arr());
+                    data => data.ChildItems,
+                    data => data.InternalDirs?.Values.ToArray());
             }
+
+            int nextIdx = GetNextDirIdx(idxes);
+
+            return new NoteDirsPairIdx
+            {
+                Idx = nextIdx,
+                ExistingIdxes = idxes,
+                NoteItem = noteItem,
+                NoteBook = noteBook
+            };
         }
-
-        public int GetNextDirIdx(
-            NoteDirsPairIdxOpts opts,
-            out HashSet<int> existingIdxes,
-            out IJsonObjectDecorator<NoteItem> noteItem,
-            out IJsonObjectDecorator<NoteBook> noteBook)
-        {
-            existingIdxes = GetExistingIdxes(
-                opts,
-                out noteItem,
-                out noteBook);
-
-            int nextIdx = GetNextDirIdx(
-                existingIdxes);
-
-            return nextIdx;
-        }
-
-        public int GetNextDirIdx(
-            NoteDirsPairIdxOpts opts) => GetNextDirIdx(
-                opts, out _, out _, out _);
 
         public int GetNextDirIdx(
             HashSet<int> existingIdxes)
@@ -295,7 +248,7 @@ namespace Turmerik.DriveExplorer
 
                     if (idx > prevIdx || i == maxI)
                     {
-                        nextIdx = prevIdx + 2;
+                        nextIdx = prevIdx + 1;
                         break;
                     }
                     else
@@ -316,7 +269,7 @@ namespace Turmerik.DriveExplorer
             HashSet<int> existingIdxes,
             bool createInternalDirs,
             TData data,
-            Func<TData, Dictionary<int, NoteItem>> childNotesFactory,
+            Func<TData, Dictionary<int, string>> childNotesFactory,
             Func<TData, int[]> internalDirIdxesFactory)
         {
             int[]? idxesArr;
@@ -366,23 +319,23 @@ namespace Turmerik.DriveExplorer
             return loaded;
         }
 
-        private ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> GetDirNameRegexMap(
-            ) => new Dictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>>
+        private ReadOnlyDictionary<DirCategory, ReadOnlyDictionary<DirType, Regex>> GetDirNameRegexMap(
+            ) => new Dictionary<DirCategory, ReadOnlyDictionary<DirType, Regex>>
             {
                 {
-                    NoteDirCategory.TrmrkNote,
-                    new Dictionary<NoteDirType, Regex>
+                    DirCategory.Item,
+                    new Dictionary<DirType, Regex>
                     {
-                        { NoteDirType.ShortName, new Regex($"^{NoteItemsPfx.EncodedStr}{DIR_NAME_REGEX}$") },
-                        { NoteDirType.FullName, new Regex($"^{NoteItemsPfx.EncodedStr}{DIR_NAME_REGEX}{JoinStr.EncodedStr}") }
+                        { DirType.ShortName, new Regex($"^{NoteItemsPfx.EncodedStr}{DIR_NAME_REGEX}$") },
+                        { DirType.FullName, new Regex($"^{NoteItemsPfx.EncodedStr}{DIR_NAME_REGEX}{JoinStr.EncodedStr}") }
                     }.RdnlD()
                 },
                 {
-                    NoteDirCategory.TrmrkInternals,
-                    new Dictionary<NoteDirType, Regex>
+                    DirCategory.Internals,
+                    new Dictionary<DirType, Regex>
                     {
-                        { NoteDirType.ShortName, new Regex($"^{NoteInternalsPfx.EncodedStr}{DIR_NAME_REGEX}$") },
-                        { NoteDirType.FullName, new Regex($"^{NoteInternalsPfx.EncodedStr}{DIR_NAME_REGEX}{JoinStr.EncodedStr}") }
+                        { DirType.ShortName, new Regex($"^{NoteInternalsPfx.EncodedStr}{DIR_NAME_REGEX}$") },
+                        { DirType.FullName, new Regex($"^{NoteInternalsPfx.EncodedStr}{DIR_NAME_REGEX}{JoinStr.EncodedStr}") }
                     }.RdnlD()
                 },
             }.RdnlD();

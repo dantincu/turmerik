@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Turmerik.MkFsDirsPair.Lib
 {
-    public enum NoteDirPairsIntegrityCheckType
+    public enum DirPairsIntegrityCheckType
     {
         None,
         Basic,
-        ChildNoteNames
+        ChildItemNames
     }
 }

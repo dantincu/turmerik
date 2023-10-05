@@ -171,5 +171,56 @@ namespace Turmerik.Text
 
             return dirPath;
         }
+
+        public static TResult WithPath<TResult>(
+            string path,
+            Func<string, TResult> ifNotRooted,
+            Func<string, TResult> ifRooted)
+        {
+            TResult result;
+
+            if (Path.IsPathRooted(path))
+            {
+                result = ifRooted(path);
+            }
+            else
+            {
+                result = ifNotRooted(path);
+            }
+
+            return result;
+        }
+
+        public static string AssurePathRooted(
+            string path,
+            Func<string> defaultBasePathFactory,
+            Func<string, string> normalizer = null) => WithPath(
+                path,
+                ph =>
+                {
+                    string defaultBasePath = defaultBasePathFactory();
+
+                    string retPath = Path.Combine(
+                        defaultBasePath, ph);
+
+                    if (normalizer != null)
+                    {
+                        retPath = normalizer(retPath);
+                    }
+
+                    return retPath;
+                },
+                ph => ph);
+
+        public static string AssurePathRooted(
+            string path,
+            string defaultBasePath,
+            Func<string, string> normalizer) => AssurePathRooted(
+                path, () => defaultBasePath, normalizer);
+
+        public static string AssurePathRooted(
+            string path,
+            string defaultBasePath) => AssurePathRooted(
+                path, defaultBasePath, Path.GetFullPath);
     }
 }

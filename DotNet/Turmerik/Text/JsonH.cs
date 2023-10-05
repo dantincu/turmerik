@@ -139,6 +139,19 @@ namespace Turmerik.Text
             JsonPropRetrieverOpts opts) => jObject.TryGetValue<TVal>(
                 opts.PropName,
                 opts.TryCamelCaseIfNotFound ?? false);
+
+        public static string EscapeQuotes(
+            string idnf, char quote = '"')
+        {
+            string quoteStr = quote.ToString();
+            string escapedStr = $"\\{quoteStr}";
+
+            idnf = idnf.Replace(
+                "\"", "\"\"").Replace(
+                quoteStr, escapedStr);
+
+            return idnf;
+        }
     }
 
     public class JsonPropRetrieverOpts

@@ -50,6 +50,7 @@ namespace Turmerik.DriveExplorer
 
         public INoteDirsPairGenerator Generator(
             NoteDirsPairSettings settings) => new NoteDirsPairGenerator(
+                jsonConversion,
                 ShortNameRetriever(settings.DirNames),
                 noteDirsPairFullNamePartRetriever,
                 settings);

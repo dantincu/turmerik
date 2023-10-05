@@ -29,7 +29,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkNoteDirsPair.Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsPair.Lib", "Turmerik.MkFsDirsPair.Lib\Turmerik.MkFsDirsPair.Lib.csproj", "{B612401F-A2D2-4EC8-8B12-C63EC63EC588}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.LsDirPairs.ConsoleApp", "Turmerik.LsDirPairs.ConsoleApp\Turmerik.LsDirPairs.ConsoleApp.csproj", "{84E5C057-56ED-4E07-B68C-842640191F27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LsDirPairs.ConsoleApp", "Turmerik.LsDirPairs.ConsoleApp\Turmerik.LsDirPairs.ConsoleApp.csproj", "{84E5C057-56ED-4E07-B68C-842640191F27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ConvertFsDirPairsToNotes.ConsoleApp", "Turmerik.ConvertFsDirPairsToNotes.ConsoleApp\Turmerik.ConvertFsDirPairsToNotes.ConsoleApp.csproj", "{49054AB8-E238-44B2-A0A2-7BC395D62C45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.PureFuncJs", "Turmerik.PureFuncJs\Turmerik.PureFuncJs.csproj", "{D8000230-7FC4-480C-A7A8-BA5225F30453}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.PureFuncJs.UnitTests", "Turmerik.PureFuncJs.UnitTests\Turmerik.PureFuncJs.UnitTests.csproj", "{B4864D3B-8AD4-4953-AE87-B9FA07FF47B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +83,18 @@ Global
 		{84E5C057-56ED-4E07-B68C-842640191F27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84E5C057-56ED-4E07-B68C-842640191F27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84E5C057-56ED-4E07-B68C-842640191F27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49054AB8-E238-44B2-A0A2-7BC395D62C45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49054AB8-E238-44B2-A0A2-7BC395D62C45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49054AB8-E238-44B2-A0A2-7BC395D62C45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49054AB8-E238-44B2-A0A2-7BC395D62C45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8000230-7FC4-480C-A7A8-BA5225F30453}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8000230-7FC4-480C-A7A8-BA5225F30453}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8000230-7FC4-480C-A7A8-BA5225F30453}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8000230-7FC4-480C-A7A8-BA5225F30453}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4864D3B-8AD4-4953-AE87-B9FA07FF47B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4864D3B-8AD4-4953-AE87-B9FA07FF47B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4864D3B-8AD4-4953-AE87-B9FA07FF47B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4864D3B-8AD4-4953-AE87-B9FA07FF47B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +112,9 @@ Global
 		{F76681FF-BB05-4064-A277-EF4B7CD89F9D} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{B612401F-A2D2-4EC8-8B12-C63EC63EC588} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{84E5C057-56ED-4E07-B68C-842640191F27} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{49054AB8-E238-44B2-A0A2-7BC395D62C45} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{D8000230-7FC4-480C-A7A8-BA5225F30453} = {A5B8430F-B64C-4AE7-B315-72686C296100}
+		{B4864D3B-8AD4-4953-AE87-B9FA07FF47B6} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

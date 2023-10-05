@@ -144,5 +144,9 @@ namespace Turmerik.Text
 
             return retStr;
         }
+
+        public static string[] GetTextLines(
+            string text) => text.Split('\n').Select(
+                line => line.TrimEnd('\r')).ToArray();
     }
 }

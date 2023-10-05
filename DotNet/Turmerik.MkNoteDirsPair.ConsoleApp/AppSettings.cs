@@ -10,6 +10,6 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {
     public class AppSettings
     {
-        public NoteDirsPairSettings Trmrk { get; set; }
+        public NoteDirsPairSettings TrmrkDirPairs { get; set; }
     }
 }

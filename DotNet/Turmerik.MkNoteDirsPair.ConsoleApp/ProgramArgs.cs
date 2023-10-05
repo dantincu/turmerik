@@ -8,6 +8,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {
     public class ProgramArgs
     {
+        public string WorkDir { get; set; }
         public string NoteName { get; set; }
         public bool CreateNote { get; set; }
         public bool CreateNoteBook { get; set; }

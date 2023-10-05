@@ -35,16 +35,13 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         {
             appSettings = jsonConversion.LoadConfig<AppSettings>();
 
-            trmrk = appSettings.Trmrk;
+            trmrk = appSettings.TrmrkDirPairs;
             fileNames = trmrk.FileNames;
 
             this.noteDirsPairGenerator = noteDirsPairGeneratorFactory.Generator(trmrk);
 
-            noteJsonFileName = string.Join(
-                ".", fileNames.NoteFileName, "json");
-
-            noteBookJsonFileName = string.Join(
-                ".", fileNames.NoteBookFileName, "json");
+            noteJsonFileName = noteDirsPairGenerator.NoteJsonFileName;
+            noteBookJsonFileName = noteDirsPairGenerator.NoteBookJsonFileName;
         }
 
         public DirsPairInfo Generate(string[] args)
@@ -52,36 +49,34 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             var wka = GetWorkArgs(args);
 
             var dirsPairInfo = GetDirsPairInfo(
-                wka, out string shortDirName);
+                wka, out var pair);
 
             PrintDataWithColors(
                 "Short dir name: ",
-                shortDirName);
+                pair.ShortDirName);
 
             return dirsPairInfo;
         }
 
         private DirsPairInfo GetDirsPairInfo(
-            WorkArgs wka, out string shortDirName)
+            WorkArgs wka, out NoteDirsPair pair)
         {
             DirsPairInfo info;
 
             if (wka.ProgArgs.CreateNote)
             {
-                info = GetNoteDirsPairInfo(
-                    wka, out shortDirName);
+                info = GetNoteDirsPairInfo(wka, out pair);
             }
             else
             {
-                info = GetInternalDirsPairInfoCore(
-                    wka, out shortDirName);
+                info = GetInternalDirsPairInfoCore(wka, out pair);
             }
 
             return info;
         }
 
         private DirsPairInfo GetNoteDirsPairInfo(
-            WorkArgs wka, out string shortDirName)
+            WorkArgs wka, out NoteDirsPair pair)
         {
             var dirsList = noteDirsPairGenerator.Generate(
                 new NoteDirsPairOpts
@@ -95,13 +90,12 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                     NoteInternalDirs = GetInternalDirNamesList(
                         wka.ProgArgs)
                 },
-                out shortDirName,
-                out string docFileName);
+                out pair);
 
             string docFilePath = Path.Combine(
                 wka.WorkDir,
-                shortDirName,
-                docFileName);
+                pair.ShortDirName,
+                pair.DocFileName);
 
             var retInfo = new DirsPairInfo(
                 wka.WorkDir,
@@ -113,7 +107,8 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         }
 
         private DirsPairInfo GetInternalDirsPairInfoCore(
-            WorkArgs wka, out string shortDirName) => new DirsPairInfo(
+            WorkArgs wka,
+            out NoteDirsPair pair) => new DirsPairInfo(
                 wka.WorkDir,
                 wka.ExistingEntriesArr,
                 noteDirsPairGenerator.Generate(
@@ -127,24 +122,36 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                         NoteInternalDirs = GetInternalDirNamesList(
                             wka.ProgArgs),
                         CreateNoteBook = wka.ProgArgs.CreateNoteBook
-                    }, out shortDirName, out _),
+                    }, out pair),
                 null);
 
-        private NoteInternalDir[] GetInternalDirNamesList(
+        private InternalDir[] GetInternalDirNamesList(
             ProgramArgs pga)
         {
-            List<NoteInternalDir> fullDirNamesList = new();
+            List<InternalDir> fullDirNamesList = new();
+
+            if (pga.CreateNoteBook)
+            {
+                fullDirNamesList.Add(
+                    InternalDir.Root);
+            }
 
             if (pga.CreateNoteFiles)
             {
                 fullDirNamesList.Add(
-                    NoteInternalDir.NoteFiles);
+                    InternalDir.Files);
             }
 
             if (pga.CreateNoteInternals)
             {
                 fullDirNamesList.Add(
-                    NoteInternalDir.NoteInternals);
+                    InternalDir.Internals);
+            }
+
+            if (pga.CreateNoteBook && fullDirNamesList.Count > 1)
+            {
+                throw new ArgumentException(
+                    "The create note book flag cannot be provided along with other note flags");
             }
 
             return fullDirNamesList.ToArray();
@@ -158,6 +165,11 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
             string workDir = Environment.CurrentDirectory;
 
+            if (pga.WorkDir != null)
+            {
+                workDir = PathH.AssurePathRooted(pga.WorkDir, workDir);
+            }
+
             var wka = new WorkArgs
             {
                 ProgArgs = pga,
@@ -166,8 +178,8 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                     workDir).Select(entry => Path.GetFileName(entry)).ToArray(),
                 DirCat = pga.CreateNote switch
                 {
-                    false => NoteDirCategory.TrmrkInternals,
-                    true => NoteDirCategory.TrmrkNote
+                    false => DirCategory.Internals,
+                    true => DirCategory.Item
                 },
             };
 
@@ -234,7 +246,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             public ProgramArgs ProgArgs { get; set; }
             public string WorkDir { get; set; }
             public string[] ExistingEntriesArr { get; set; }
-            public NoteDirCategory DirCat { get; set; }
+            public DirCategory DirCat { get; set; }
             public string NoteItemJson { get; set; }
             public string NoteBookJson { get; set; }
         }

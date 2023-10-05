@@ -20,7 +20,7 @@ namespace Turmerik.Text
 
         string Serialize(
             object obj,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool ignoreNullValues = true,
             Formatting formatting = Formatting.Indented,
             bool useStringEnumConverter = true);
@@ -31,7 +31,7 @@ namespace Turmerik.Text
 
         object Deserialize(
             string json,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool useStringEnumConverter = true);
 
         TData Deserialize<TData>(
@@ -40,7 +40,7 @@ namespace Turmerik.Text
 
         TData Deserialize<TData>(
             string json,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool useStringEnumConverter = true);
 
         JObject ToJObject(
@@ -49,7 +49,7 @@ namespace Turmerik.Text
 
         JObject ToJObject(
             object obj,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool useStringEnumConverter = true);
     }
 
@@ -78,7 +78,7 @@ namespace Turmerik.Text
 
         public string Serialize(
             object obj,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool ignoreNullValues = true,
             Formatting formatting = Formatting.Indented,
             bool useStringEnumConverter = true)
@@ -107,7 +107,7 @@ namespace Turmerik.Text
 
         public object Deserialize(
             string json,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool useStringEnumConverter = true)
         {
             var settings = SettingsMap.Get(
@@ -134,7 +134,7 @@ namespace Turmerik.Text
 
         public TData Deserialize<TData>(
             string json,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool useStringEnumConverter = true)
         {
             var settings = SettingsMap.Get(
@@ -161,7 +161,7 @@ namespace Turmerik.Text
 
         public JObject ToJObject(
             object obj,
-            bool useCamelCase = true,
+            bool useCamelCase = false,
             bool useStringEnumConverter = true) => ToJObject(
                 obj, new JsonSerializerOpts(
                     useCamelCase, true,

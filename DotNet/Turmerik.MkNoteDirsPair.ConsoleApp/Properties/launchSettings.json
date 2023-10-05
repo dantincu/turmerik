@@ -2,8 +2,9 @@
   "profiles": {
     "Turmerik.MkNoteDirsPair.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:"
-      // "commandLineArgs": "/f"
+      // "commandLineArgs": "/i /f asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:",
+      "commandLineArgs": "/wd:F:\\B\\MyOneDrive\\src\\ asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:"
+      // "commandLineArgs": "/i"
     }
   }
 }

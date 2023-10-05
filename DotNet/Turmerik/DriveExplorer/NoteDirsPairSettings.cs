@@ -9,7 +9,7 @@ namespace Turmerik.DriveExplorer
     {
         public int? FileNameMaxLength { get; set; }
         public bool? SerializeToJson { get; set; }
-        public NoteDirPairsIntegrityCheckType? NoteDirPairsIntegrityCheck { get; set; }
+        public DirPairsIntegrityCheckType? NoteDirPairsIntegrityCheck { get; set; }
         public PrefixesT Prefixes { get; set; }
         public ArgOptionsT ArgOpts { get; set; }
         public DirNamesT DirNames { get; set; }
@@ -26,6 +26,7 @@ namespace Turmerik.DriveExplorer
 
         public class ArgOptionsT
         {
+            public string WorkDir { get; set; }
         }
 
         public class DirNamesT

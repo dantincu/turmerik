@@ -58,32 +58,24 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             }
             else
             {
-                BuildArgsCore(pa, argOptsArr, arg);
-            }
-        }
+                var argOptsKvp = argOptsArr.FirstKvp(
+                    (kvp, i) => arg.StartsWith(kvp.Key));
 
-        private void BuildArgsCore(
-            ProgramArgs pa,
-            Dictionary<string, Action<ProgramArgs, string>> argOptsArr,
-            string arg)
-        {
-            var argOptsKvp = argOptsArr.FirstKvp(
-                (kvp, i) => kvp.Key.StartsWith(arg));
+                var argOptsSetter = argOptsKvp.Value.Value;
 
-            var argOptsSetter = argOptsKvp.Value.Value;
+                if (argOptsSetter != null)
+                {
+                    var argValStr = arg.Substring(
+                        argOptsKvp.Value.Key.Length);
 
-            if (argOptsSetter != null)
-            {
-                var argValStr = arg.Substring(0,
-                    argOptsKvp.Value.Key.Length);
-
-                argOptsSetter(pa, argValStr);
-            }
-            else
-            {
-                pa.NoteName = arg;
-                pa.CreateNote = true;
-                pa.DoNotOpenCreatedDocFile = arg.Last() == ':';
+                    argOptsSetter(pa, argValStr);
+                }
+                else
+                {
+                    pa.NoteName = arg;
+                    pa.CreateNote = true;
+                    pa.DoNotOpenCreatedDocFile = arg.Last() == ':';
+                }
             }
         }
 
@@ -92,7 +84,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             out Dictionary<string, Action<ProgramArgs>> optsArr,
             out Dictionary<string, Action<ProgramArgs, string>> argOptsArr)
         {
-            var trmrk = appSettings.Trmrk;
+            var trmrk = appSettings.TrmrkDirPairs;
             var pfxes = trmrk.Prefixes;
             var argOpts = trmrk.ArgOpts;
             ProgramArgs pa = new();
@@ -109,7 +101,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
             argOptsArr = new Dictionary<string, Action<ProgramArgs, string>>
             {
-                //{ argOpts.GroudIdx, (pAgs, arg) => pAgs.GroudIdx = int.Parse(arg) }
+                { argOpts.WorkDir, (pAgs, arg) => pAgs.WorkDir = arg }
             };
 
             return pa;

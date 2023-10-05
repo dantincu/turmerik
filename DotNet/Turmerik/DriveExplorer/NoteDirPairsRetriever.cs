@@ -10,11 +10,11 @@ namespace Turmerik.DriveExplorer
     {
         INoteDirsPairIdxRetriever IdxRetriever { get; }
 
-        Dictionary<int, NoteItem> GetNotes(
+        Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr,
-            out Dictionary<int, List<NoteItem>> ambiguosMap);
+            out Dictionary<int, List<NoteItemCore>> ambiguosMap);
 
-        Dictionary<int, NoteItem> GetNotes(
+        Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr);
     }
 
@@ -28,15 +28,15 @@ namespace Turmerik.DriveExplorer
 
         public INoteDirsPairIdxRetriever IdxRetriever { get; }
 
-        public Dictionary<int, NoteItem> GetNotes(
+        public Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr,
-            out Dictionary<int, List<NoteItem>> ambgMap)
+            out Dictionary<int, List<NoteItemCore>> ambgMap)
         {
             var dirPairs = existingEntriesArr.Select(
                 IdxRetriever.TryGetAsNoteDirName).NotNull().ToArray();
 
-            var retMap = new Dictionary<int, NoteItem>();
-            ambgMap = new Dictionary<int, List<NoteItem>>();
+            var retMap = new Dictionary<int, NoteItemCore>();
+            ambgMap = new Dictionary<int, List<NoteItemCore>>();
 
             foreach (var item in dirPairs)
             {
@@ -49,13 +49,13 @@ namespace Turmerik.DriveExplorer
             return retMap;
         }
 
-        public Dictionary<int, NoteItem> GetNotes(
+        public Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr) => GetNotes(
                 existingEntriesArr, out _);
 
         private void GetNotesCore(
-            Dictionary<int, NoteItem> retMap,
-            Dictionary<int, List<NoteItem>> ambgMap,
+            Dictionary<int, NoteItemCore> retMap,
+            Dictionary<int, List<NoteItemCore>> ambgMap,
             NoteDirName item)
         {
             if (ambgMap.TryGetValue(item.Idx, out var ambgMatching))
@@ -88,17 +88,17 @@ namespace Turmerik.DriveExplorer
             }
         }
 
-        private NoteItem ToNoteItem(
-            NoteDirName item) => new NoteItem
+        private NoteItemCore ToNoteItem(
+            NoteDirName item) => new NoteItemCore
             {
                 Title = item.FullDirNamePart,
-                NoteIdx = item.Idx
+                ItemIdx = item.Idx
             };
 
-        private List<NoteItem> CreateNotesList(
-            params NoteItem[] notesArr)
+        private List<NoteItemCore> CreateNotesList(
+            params NoteItemCore[] notesArr)
         {
-            var list = new List<NoteItem>();
+            var list = new List<NoteItemCore>();
             list.AddRange(notesArr);
 
             return list;
