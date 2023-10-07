@@ -7,4 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if '$(ConfigurationName)' == 'Debug' ( copy /y $(SolutionDir)app-env-locator.dev.json $(ProjectDir)$(OutDir)app-env-locator.json ) ELSE (copy /y $(SolutionDir)app-env-locator.json $(ProjectDir)$(OutDir)app-env-locator.json )" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
+  </ItemGroup>
+
 </Project>

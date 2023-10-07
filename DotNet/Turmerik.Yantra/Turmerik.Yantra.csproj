@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\base64-js.js" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\buffer.js" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\clr.d.ts" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\events.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\FileUtil.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\FileUtil.d.ts" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\fs.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\ieee754.js" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\net.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\omnisharp.json" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\path.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\process.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\settings.json" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\temp.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\tsconfig.json" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\url.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\util.csx" />
+    <Content Remove="C:\Users\Dan\.nuget\packages\yantrajs\1.2.188\contentFiles\any\net6.0\vm.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="YantraJS" Version="1.2.188" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
+  </ItemGroup>
+
+</Project>

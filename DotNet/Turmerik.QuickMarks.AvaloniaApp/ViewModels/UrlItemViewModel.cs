@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
 using HtmlAgilityPack;
+using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,16 @@ using System.Linq;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Async;
+using Turmerik.Text;
+using Turmerik.Helpers;
+using System.Collections.Concurrent;
 
 namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 {
     public class UrlItemViewModel : ViewModelBase, IRoutableViewModel
     {
-        // private UserMsgObservable userMsgObservable;
+        private readonly IAsyncMessageQueuer<UserMsgTuple> asyncMessageQueuer;
 
         private string rawUrl;
         private string resourceTitle;
@@ -25,15 +30,18 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
         public UrlItemViewModel(IScreen hostScreen)
         {
             HostScreen = hostScreen;
+            this.asyncMessageQueuer = SvcProv.GetRequiredService<IAsyncMessageQueuerFactory>(
+                ).Queuer<UserMsgTuple>(
+                userMsgTuple => ShowUserMessage(
+                    userMsgTuple));
+
             TitleAndUrlTemplate = "[{0}]({1})";
-            // userMsgObservable = new UserMsgObservable();
 
             Fetch = CreateFetchCommand();
             RawUrlToClipboard = CreateRawUrlToClipboardCommand();
             ResourceTitleToClipboard = CreateResourceTitleToClipboardCommand();
             TitleAndUrlToClipboard = CreateTitleAndUrlToClipboardCommand();
             RawUrlFromClipboard = CreateRawUrlFromClipboardCommand();
-            ShowUserMsg = CreateShowUserMsgCommand();
 
             DefaultOutputTextForeground = AppGlobals.DefaultOutputTextForeground;
             SuccessOutputTextForeground = AppGlobals.SuccessOutputTextForeground;
@@ -110,8 +118,6 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
         public ReactiveCommand<Unit, Unit> TitleAndUrlToClipboard { get; }
         public ReactiveCommand<Unit, Unit> RawUrlFromClipboard { get; }
 
-        public ReactiveCommand<UserMsgTuple, Unit> ShowUserMsg { get; }
-
         private IBrush DefaultOutputTextForeground { get; set; }
         private IBrush SuccessOutputTextForeground { get; set; }
         private IBrush ErrorOutputTextForeground { get; set; }
@@ -120,41 +126,48 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
         private ReactiveCommand<Unit, Unit> CreateFetchCommand() => ReactiveCommand.Create(
             () =>
             {
-                FetchResourceAsync(
-                    async () => RawUrl,
-                    string.Empty,
-                    exc => $"Something went wrong: {exc.Message}",
-                    false);
+                asyncMessageQueuer.ExecuteAsync(
+                    () => FetchResourceAsync(
+                        async () => RawUrl,
+                        string.Empty,
+                        exc => $"Something went wrong: {exc.Message}",
+                        false));
             });
 
         private ReactiveCommand<Unit, Unit> CreateRawUrlToClipboardCommand() => ReactiveCommand.Create(
-            () => { RawUrlToClipboardAsync(); });
+            () =>
+            {
+                asyncMessageQueuer.ExecuteAsync(
+                    () => RawUrlToClipboardAsync());
+            });
 
         private ReactiveCommand<Unit, Unit> CreateResourceTitleToClipboardCommand() => ReactiveCommand.Create(
-            () => { ResourceTitleToClipboardAsync(); });
+            () =>
+            {
+                asyncMessageQueuer.ExecuteAsync(
+                    () => ResourceTitleToClipboardAsync());
+            });
 
         private ReactiveCommand<Unit, Unit> CreateTitleAndUrlToClipboardCommand() => ReactiveCommand.Create(
-            () => { TitleAndUrlToClipboardAsync(); });
+            () =>
+            {
+                asyncMessageQueuer.ExecuteAsync(
+                    () => TitleAndUrlToClipboardAsync());
+            });
 
         private ReactiveCommand<Unit, Unit> CreateRawUrlFromClipboardCommand() => ReactiveCommand.Create(
             () =>
             {
-                FetchResourceAsync(
-                    TopLevel.Clipboard.GetTextAsync,
-                    "Retrieving the url from clipboard...",
-                    exc => $"Could not the url from clipboard: {exc.Message}",
-                    true);
+                asyncMessageQueuer.ExecuteAsync(
+                    () => FetchResourceAsync(
+                        TopLevel.Clipboard.GetTextAsync,
+                        "Retrieving the url from clipboard...",
+                        exc => $"Could not the url from clipboard: {exc.Message}",
+                        true));
             });
 
-        private ReactiveCommand<UserMsgTuple, Unit> CreateShowUserMsgCommand(
-            ) => ReactiveCommand.Create<UserMsgTuple>(
-                msgTuple =>
-                {
-                    ShowUserMessage(msgTuple);
-                }/* ,
-                userMsgObservable*/);
-
-        private void ShowUserMessage(UserMsgTuple msgTuple)
+        private void ShowUserMessage(
+            UserMsgTuple msgTuple)
         {
             OutputText = msgTuple.Message;
 
@@ -179,15 +192,22 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             string text,
             bool? isSuccess)
         {
-            using (_ = ShowUserMsg.Execute(
-                new UserMsgTuple(
-                    text,
-                    isSuccess)).Subscribe()) ;
+            var tuple = new UserMsgTuple(
+                text,
+                isSuccess);
+
+            this.asyncMessageQueuer.Enqueue(tuple);
+            ShowUserMessage(tuple);
         }
 
-        private Task RawUrlToClipboardAsync() => CopyToClipboardAsync("provided url", RawUrl);
-        private Task ResourceTitleToClipboardAsync() => CopyToClipboardAsync("title", ResourceTitle);
-        private Task TitleAndUrlToClipboardAsync() => CopyToClipboardAsync("title and url", TitleAndUrl);
+        private Task RawUrlToClipboardAsync() => CopyToClipboardAsync(
+            "provided url", RawUrl);
+
+        private Task ResourceTitleToClipboardAsync() => CopyToClipboardAsync(
+            "title", ResourceTitle);
+
+        private Task TitleAndUrlToClipboardAsync() => CopyToClipboardAsync(
+            "title and url", TitleAndUrl);
 
         private async Task CopyToClipboardAsync(
             string objectName,
@@ -201,7 +221,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             }
             catch (Exception exc)
             {
-                ShowUserMessage($"Could not copy the {objectName} to clipboard: {exc.Message}", false);
+                ShowUserMessage(
+                    $"Could not copy the {objectName} to clipboard: {exc.Message}", false);
             }
         }
 
@@ -215,6 +236,7 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             try
             {
                 ShowUserMessage(initMsg, null);
+
                 rawUrl = await rawUrlRetriever();
 
                 if (string.IsNullOrWhiteSpace(rawUrl))
@@ -224,7 +246,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             }
             catch (Exception exc)
             {
-                ShowUserMessage(retrieveUrlErrMsgFactory(exc), false);
+                ShowUserMessage(
+                    retrieveUrlErrMsgFactory(exc), false);
             }
 
             await Task.Delay(1000);
@@ -280,13 +303,15 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             var titleNode = GetChildNode(
                 doc.DocumentNode.ChildNodes,
                 new HtmlNodeOpts[]
-                {
-                new HtmlNodeOpts("html"),
-                new HtmlNodeOpts("head"),
-                new HtmlNodeOpts("title")
+                    {
+                    new HtmlNodeOpts("html"),
+                    new HtmlNodeOpts("head"),
+                    new HtmlNodeOpts("title")
                 });
 
-            string title = titleNode?.InnerText;
+            string title = titleNode?.InnerText ?? string.Empty;
+            title = title.Split('\n', '\r', '\t').JoinNotNullStr(" ");
+
             return title;
         }
 
@@ -355,8 +380,7 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             string title = await FetchResourceIfReqCoreAsync(uri);
 
             await SetResourceTitleIfReqAsync(
-                title,
-                copyResultToClipboard);
+                title, copyResultToClipboard);
         }
 
         private async Task SetResourceTitleIfReqAsync(
@@ -373,7 +397,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                 }
                 else
                 {
-                    ShowUserMessage("Retrieved the resource from url", true);
+                    ShowUserMessage(
+                        "Retrieved the resource from url", true);
                 }
             }
         }
