@@ -9,45 +9,33 @@ namespace Turmerik.Async
 {
     public interface IAsyncMessageQueuer<T>
     {
-        void Enqueue(T item);
-
         Task ExecuteAsync(
-            Func<Task> action,
+            Func<ConcurrentQueue<T>, Task> action,
+            ConcurrentQueue<T> queue = null,
             int? waitMillis = null);
     }
 
     public class AsyncMessageQueuer<T> : IAsyncMessageQueuer<T>
     {
-        private readonly ConcurrentQueue<T> queue;
         private readonly Action<T> valueCallback;
         private readonly int defaultWaitMillis;
 
         public AsyncMessageQueuer(
-            ConcurrentQueue<T> queue,
             Action<T> valueCallback,
             int defaultWaitMillis)
         {
-            this.queue = queue ?? throw new ArgumentNullException(
-                nameof(queue));
-
             this.valueCallback = valueCallback ?? throw new ArgumentNullException(
                 nameof(valueCallback));
 
             this.defaultWaitMillis = defaultWaitMillis;
         }
 
-        public void Enqueue(T item)
-        {
-            queue.Enqueue(item);
-        }
-
         public Task ExecuteAsync(
-            Func<Task> action,
+            Func<ConcurrentQueue<T>, Task> action,
+            ConcurrentQueue<T> queue = null,
             int? waitMillis = null)
         {
-            while (queue.TryDequeue(out var _))
-            {
-            }
+            queue ??= new ConcurrentQueue<T>();
 
             int waitMillisVal = waitMillis ?? defaultWaitMillis;
             bool taskFinished = false;
@@ -84,7 +72,7 @@ namespace Turmerik.Async
 
             thread.Start();
 
-            var retTask = action().ContinueWith(
+            var retTask = action(queue).ContinueWith(
                 task =>
                 {
                     taskFinished = true;

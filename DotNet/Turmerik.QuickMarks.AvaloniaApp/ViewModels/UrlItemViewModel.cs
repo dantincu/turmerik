@@ -13,6 +13,7 @@ using Turmerik.Async;
 using Turmerik.Text;
 using Turmerik.Helpers;
 using System.Collections.Concurrent;
+using System.Collections;
 
 namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 {
@@ -127,7 +128,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             () =>
             {
                 asyncMessageQueuer.ExecuteAsync(
-                    () => FetchResourceAsync(
+                    queue => FetchResourceAsync(
+                        queue,
                         async () => RawUrl,
                         string.Empty,
                         exc => $"Something went wrong: {exc.Message}",
@@ -138,28 +140,29 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             () =>
             {
                 asyncMessageQueuer.ExecuteAsync(
-                    () => RawUrlToClipboardAsync());
+                    queue => RawUrlToClipboardAsync(queue));
             });
 
         private ReactiveCommand<Unit, Unit> CreateResourceTitleToClipboardCommand() => ReactiveCommand.Create(
             () =>
             {
                 asyncMessageQueuer.ExecuteAsync(
-                    () => ResourceTitleToClipboardAsync());
+                    queue => ResourceTitleToClipboardAsync(queue));
             });
 
         private ReactiveCommand<Unit, Unit> CreateTitleAndUrlToClipboardCommand() => ReactiveCommand.Create(
             () =>
             {
                 asyncMessageQueuer.ExecuteAsync(
-                    () => TitleAndUrlToClipboardAsync());
+                    queue => TitleAndUrlToClipboardAsync(queue));
             });
 
         private ReactiveCommand<Unit, Unit> CreateRawUrlFromClipboardCommand() => ReactiveCommand.Create(
             () =>
             {
                 asyncMessageQueuer.ExecuteAsync(
-                    () => FetchResourceAsync(
+                    queue => FetchResourceAsync(
+                        queue,
                         TopLevel.Clipboard.GetTextAsync,
                         "Retrieving the url from clipboard...",
                         exc => $"Could not the url from clipboard: {exc.Message}",
@@ -189,6 +192,7 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
         }
 
         private void ShowUserMessage(
+            ConcurrentQueue<UserMsgTuple> queue,
             string text,
             bool? isSuccess)
         {
@@ -196,37 +200,42 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                 text,
                 isSuccess);
 
-            this.asyncMessageQueuer.Enqueue(tuple);
+            queue.Enqueue(tuple);
             ShowUserMessage(tuple);
         }
 
-        private Task RawUrlToClipboardAsync() => CopyToClipboardAsync(
-            "provided url", RawUrl);
+        private Task RawUrlToClipboardAsync(
+            ConcurrentQueue<UserMsgTuple> queue) => CopyToClipboardAsync(
+            queue, "provided url", RawUrl);
 
-        private Task ResourceTitleToClipboardAsync() => CopyToClipboardAsync(
-            "title", ResourceTitle);
+        private Task ResourceTitleToClipboardAsync(
+            ConcurrentQueue<UserMsgTuple> queue) => CopyToClipboardAsync(
+            queue, "title", ResourceTitle);
 
-        private Task TitleAndUrlToClipboardAsync() => CopyToClipboardAsync(
-            "title and url", TitleAndUrl);
+        private Task TitleAndUrlToClipboardAsync(
+            ConcurrentQueue<UserMsgTuple> queue) => CopyToClipboardAsync(
+            queue, "title and url", TitleAndUrl);
 
         private async Task CopyToClipboardAsync(
+            ConcurrentQueue<UserMsgTuple> queue,
             string objectName,
             string objectText)
         {
             try
             {
-                ShowUserMessage($"Copying the {objectName} to clipboard...", null);
+                ShowUserMessage(queue, $"Copying the {objectName} to clipboard...", null);
                 await TopLevel.Clipboard.SetTextAsync(objectText);
-                ShowUserMessage($"Copied the {objectName} to clipboard", true);
+                ShowUserMessage(queue, $"Copied the {objectName} to clipboard", true);
             }
             catch (Exception exc)
             {
-                ShowUserMessage(
+                ShowUserMessage(queue,
                     $"Could not copy the {objectName} to clipboard: {exc.Message}", false);
             }
         }
 
         private async Task<string> TryGetRawUrl(
+            ConcurrentQueue<UserMsgTuple> queue,
             Func<Task<string>> rawUrlRetriever,
             string initMsg,
             Func<Exception, string> retrieveUrlErrMsgFactory)
@@ -235,18 +244,18 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 
             try
             {
-                ShowUserMessage(initMsg, null);
+                ShowUserMessage(queue, initMsg, null);
 
                 rawUrl = await rawUrlRetriever();
 
                 if (string.IsNullOrWhiteSpace(rawUrl))
                 {
-                    ShowUserMessage("The provided url is empty", false);
+                    ShowUserMessage(queue, "The provided url is empty", false);
                 }
             }
             catch (Exception exc)
             {
-                ShowUserMessage(
+                ShowUserMessage(queue,
                     retrieveUrlErrMsgFactory(exc), false);
             }
 
@@ -254,7 +263,9 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             return rawUrl;
         }
 
-        private Uri TryGetUriIfReq(string rawUrl)
+        private Uri TryGetUriIfReq(
+            ConcurrentQueue<UserMsgTuple> queue,
+            string rawUrl)
         {
             Uri uri = null;
 
@@ -262,19 +273,21 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             {
                 try
                 {
-                    ShowUserMessage("Validating the provided url...", null);
+                    ShowUserMessage(queue, "Validating the provided url...", null);
                     uri = new Uri(rawUrl);
                 }
                 catch (Exception exc)
                 {
-                    ShowUserMessage($"The provided url is invalid: {exc.Message}", false);
+                    ShowUserMessage(queue, $"The provided url is invalid: {exc.Message}", false);
                 }
             }
 
             return uri;
         }
 
-        private async Task<string> FetchResourceIfReqCoreAsync(Uri uri)
+        private async Task<string> FetchResourceIfReqCoreAsync(
+            ConcurrentQueue<UserMsgTuple> queue,
+            Uri uri)
         {
             string title = null;
 
@@ -282,7 +295,7 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             {
                 try
                 {
-                    ShowUserMessage("Retrieving the resource from url...", null);
+                    ShowUserMessage(queue, "Retrieving the resource from url...", null);
 
                     var web = new HtmlWeb();
                     var doc = web.Load(uri);
@@ -291,7 +304,7 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                 }
                 catch (Exception exc)
                 {
-                    ShowUserMessage($"Could not retrieve the resource from url: {exc.Message}", false);
+                    ShowUserMessage(queue, $"Could not retrieve the resource from url: {exc.Message}", false);
                 }
             }
 
@@ -361,12 +374,14 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
         }
 
         private async Task FetchResourceAsync(
+            ConcurrentQueue<UserMsgTuple> queue,
             Func<Task<string>> rawUrlRetriever,
             string initMsg,
             Func<Exception, string> retrieveUrlErrMsgFactory,
             bool copyResultToClipboard)
         {
             string rawUrl = await TryGetRawUrl(
+                queue,
                 rawUrlRetriever,
                 initMsg,
                 retrieveUrlErrMsgFactory);
@@ -376,14 +391,15 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                 RawUrl = rawUrl;
             }
 
-            Uri uri = TryGetUriIfReq(rawUrl);
-            string title = await FetchResourceIfReqCoreAsync(uri);
+            Uri uri = TryGetUriIfReq(queue, rawUrl);
+            string title = await FetchResourceIfReqCoreAsync(queue, uri);
 
             await SetResourceTitleIfReqAsync(
-                title, copyResultToClipboard);
+                queue, title, copyResultToClipboard);
         }
 
         private async Task SetResourceTitleIfReqAsync(
+            ConcurrentQueue<UserMsgTuple> queue,
             string title,
             bool copyResultToClipboard)
         {
@@ -393,11 +409,11 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 
                 if (copyResultToClipboard)
                 {
-                    await TitleAndUrlToClipboardAsync();
+                    await TitleAndUrlToClipboardAsync(queue);
                 }
                 else
                 {
-                    ShowUserMessage(
+                    ShowUserMessage(queue,
                         "Retrieved the resource from url", true);
                 }
             }

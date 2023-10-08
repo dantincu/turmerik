@@ -18,7 +18,6 @@ namespace Turmerik.Async
         public IAsyncMessageQueuer<T> Queuer<T>(
             Action<T> valueCallback,
             int? defaultWaitMillis = null) => new AsyncMessageQueuer<T>(
-                new ConcurrentQueue<T>(),
                 valueCallback,
                 defaultWaitMillis ?? AsyncH.DEFAULT_WAIT_MILLIS);
     }
