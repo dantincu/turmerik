@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
+    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
   </ItemGroup>
 
 </Project>

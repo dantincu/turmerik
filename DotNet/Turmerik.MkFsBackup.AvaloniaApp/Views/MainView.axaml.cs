@@ -6,18 +6,19 @@ using Avalonia.VisualTree;
 using ReactiveUI;
 using System.Threading;
 using System;
-using Turmerik.QuickMarks.AvaloniaApp.ViewModels;
+using Turmerik.MkFsBackup.AvaloniaApp.ViewModels;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Avalonia.Controls.Primitives;
 
-namespace Turmerik.QuickMarks.AvaloniaApp.Views;
+namespace Turmerik.MkFsBackup.AvaloniaApp.Views;
 
-public partial class MainView : ReactiveUserControl<MainWindowViewModel>
+public partial class MainView : ReactiveUserControl<MainViewModel>
 {
     private readonly IServiceProvider svcProv;
 
     private IAppGlobalsData appGlobals;
-    private MainWindowViewModel viewModel;
+    private MainViewModel viewModel;
 
     public MainView()
     {

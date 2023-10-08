@@ -24,6 +24,7 @@
     <Button Content="{materialIcons:MaterialIconExt Kind=Plus}" Command="{Binding NewItem}" Foreground="{Binding ButtonNewUrlItemForeground}" Grid.Row="0" Margin="40 0 0 0"></Button>
     <Button Content="{materialIcons:MaterialIconExt Kind=ContentSave}" Command="{Binding SaveItem}" Foreground="{Binding ButtonSaveUrlItemForeground}" Grid.Row="0" Margin="77 0 0 0"></Button>
     <Button Content="{materialIcons:MaterialIconExt Kind=ListBox}" Command="{Binding GoToItemList}" Foreground="{Binding ButtonUrlItemsListForeground}" Grid.Row="0" Margin="0 0 77 0" HorizontalAlignment="Right"></Button>
+    <TextBlock Text="" x:Name="dummyTextBlock"></TextBlock>
     <Button Content="{materialIcons:MaterialIconExt Kind=Sync}" Command="{Binding SyncItems}" x:Name="buttonSyncItems" Grid.Row="0" Margin="0 0 40 0" HorizontalAlignment="Right"></Button>
     <Button Content="{materialIcons:MaterialIconExt Kind=Settings}" Command="{Binding GoToSettings}" Foreground="{Binding ButtonSettingsForeground}" Grid.Row="0" Margin="0 0 3 0" HorizontalAlignment="Right"></Button>
     <rxui:RoutedViewHost Grid.Row="1" Router="{Binding Router}">

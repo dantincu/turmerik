@@ -14,14 +14,6 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
     public class MainWindowViewModel : ReactiveObject, IScreen
     {
         private readonly IServiceProvider svcProv;
-
-        private readonly IObservable<bool> buttonBackEnabledObservable;
-        private readonly IObservable<bool> buttonNewUrlItemEnabledObservable;
-        private readonly IObservable<bool> buttonSaveUrlItemEnabledObservable;
-        private readonly IObservable<bool> buttonUrlItemsListEnabledObservable;
-        private readonly IObservable<bool> buttonSyncUrlItemsEnabledObservable;
-        private readonly IObservable<bool> buttonSettingsEnabledObservable;
-
         private IAppGlobalsData appGlobals;
 
         private IBrush buttonBackForeground;

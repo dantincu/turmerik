@@ -35,9 +35,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.ConvertFsDirPairsT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsBackup.ConsoleApp", "Turmerik.MkFsBackup.ConsoleApp\Turmerik.MkFsBackup.ConsoleApp.csproj", "{E709C7A9-AC58-4492-A982-E0F9C46EFFBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Yantra", "Turmerik.Yantra\Turmerik.Yantra.csproj", "{B5F5E10D-1FD3-4D47-B7ED-648DB1B8D292}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Yantra", "Turmerik.Yantra\Turmerik.Yantra.csproj", "{B5F5E10D-1FD3-4D47-B7ED-648DB1B8D292}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.NetCore", "Turmerik.NetCore\Turmerik.NetCore.csproj", "{B461E799-8714-4D9B-B989-2EFF061B5D24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.NetCore", "Turmerik.NetCore\Turmerik.NetCore.csproj", "{B461E799-8714-4D9B-B989-2EFF061B5D24}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsBackup.AvaloniaApp", "Turmerik.MkFsBackup.AvaloniaApp\Turmerik.MkFsBackup.AvaloniaApp.csproj", "{6B76A51C-647B-49F0-A3F5-4C6EAF023D62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsBackup.AvaloniaApp.Desktop", "Turmerik.MkFsBackup.AvaloniaApp.Desktop\Turmerik.MkFsBackup.AvaloniaApp.Desktop.csproj", "{7A4FC6C7-A391-4EBC-A1B4-39915C5384FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +105,14 @@ Global
 		{B461E799-8714-4D9B-B989-2EFF061B5D24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B461E799-8714-4D9B-B989-2EFF061B5D24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B461E799-8714-4D9B-B989-2EFF061B5D24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B76A51C-647B-49F0-A3F5-4C6EAF023D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B76A51C-647B-49F0-A3F5-4C6EAF023D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B76A51C-647B-49F0-A3F5-4C6EAF023D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B76A51C-647B-49F0-A3F5-4C6EAF023D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A4FC6C7-A391-4EBC-A1B4-39915C5384FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A4FC6C7-A391-4EBC-A1B4-39915C5384FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A4FC6C7-A391-4EBC-A1B4-39915C5384FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A4FC6C7-A391-4EBC-A1B4-39915C5384FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,6 +134,8 @@ Global
 		{E709C7A9-AC58-4492-A982-E0F9C46EFFBB} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{B5F5E10D-1FD3-4D47-B7ED-648DB1B8D292} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 		{B461E799-8714-4D9B-B989-2EFF061B5D24} = {A5B8430F-B64C-4AE7-B315-72686C296100}
+		{6B76A51C-647B-49F0-A3F5-4C6EAF023D62} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{7A4FC6C7-A391-4EBC-A1B4-39915C5384FC} = {52B63410-2581-4146-9484-89D300FAE7B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
