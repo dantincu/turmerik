@@ -7,7 +7,7 @@ namespace Turmerik.Helpers
 {
     public static class AsyncH
     {
-        public const int DEFAULT_SPIN_WAIT_ITERATIONS = 5;
+        public const int DEFAULT_SPIN_WAIT_COUNT = 5;
         public const int DEFAULT_WAIT_MILLIS = 100;
 
         public static async Task ActUsingAsync<TDisposable>(

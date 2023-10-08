@@ -131,8 +131,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                     queue => FetchResourceAsync(
                         queue,
                         async () => RawUrl,
-                        string.Empty,
-                        exc => $"Something went wrong: {exc.Message}",
+                        "Fetching the resource from the provided url...",
+                        exc => $"Could not retrieve the resource from the provided url: {exc.Message}",
                         false));
             });
 
@@ -164,8 +164,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                     queue => FetchResourceAsync(
                         queue,
                         TopLevel.Clipboard.GetTextAsync,
-                        "Retrieving the url from clipboard...",
-                        exc => $"Could not the url from clipboard: {exc.Message}",
+                        "Fetching the resource using the url from clipboard...",
+                        exc => $"Could not retrieve the resource using the url from clipboard: {exc.Message}",
                         true));
             });
 
