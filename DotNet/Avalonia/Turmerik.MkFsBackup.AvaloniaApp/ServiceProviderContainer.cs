@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.NetCore.Dependencies;
 
 namespace Turmerik.MkFsBackup.AvaloniaApp
 {
@@ -19,6 +20,7 @@ namespace Turmerik.MkFsBackup.AvaloniaApp
         protected override void RegisterServices(IServiceCollection services)
         {
             TrmrkServices.RegisterAll(services);
+            TrmrkNetCoreServices.RegisterAll(services);
             services.AddSingleton<AppGlobals>();
         }
     }

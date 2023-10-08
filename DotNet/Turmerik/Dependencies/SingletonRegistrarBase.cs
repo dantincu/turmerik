@@ -12,17 +12,18 @@ namespace Turmerik.Dependencies
         private readonly object syncLock = new object();
 
         private TData data;
-        private volatile int registered;
+        private Action<TData> registered;
+        private volatile int isRegistered;
 
         public TData Data
         {
             get
             {
-                if (registered == 0)
+                if (isRegistered == 0)
                 {
                     lock (syncLock)
                     {
-                        if (registered == 0)
+                        if (isRegistered == 0)
                         {
                             throw new InvalidOperationException(
                                 "The singleton has not yet been registered");
@@ -40,9 +41,17 @@ namespace Turmerik.Dependencies
             }
         }
 
+        public event Action<TData> Registered
+        {
+            add => registered += value;
+            remove => registered -= value;
+        }
+
         public TData RegisterData(TInputData inputData)
         {
-            if (registered != 0)
+            bool registeredNow = false;
+
+            if (isRegistered != 0)
             {
                 OnAlreadyRegistered();
             }
@@ -50,16 +59,22 @@ namespace Turmerik.Dependencies
             {
                 lock (syncLock)
                 {
-                    if (registered != 0)
+                    if (isRegistered != 0)
                     {
                         OnAlreadyRegistered();
                     }
                     else
                     {
+                        registeredNow = true;
                         data = Convert(inputData);
-                        registered = 1;
+                        isRegistered = 1;
                     }
                 }
+            }
+
+            if (registeredNow)
+            {
+                registered?.Invoke(data);
             }
 
             return data;

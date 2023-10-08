@@ -11,4 +11,21 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:FsBackupFolderViewModel />
   </Design.DataContext>
+
+  <Panel VerticalAlignment="Stretch">
+    <ScrollViewer VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+      <TreeView ItemsSource="{Binding Items}" x:Name="treeView">
+        <TreeView.Styles>
+          <Style Selector="TreeViewItem">
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+          </Style>
+        </TreeView.Styles>
+        <TreeView.ItemTemplate>
+          <TreeDataTemplate ItemsSource="{Binding Subfolders}">
+            <TextBlock Text="{Binding StrNodeText}"/>
+          </TreeDataTemplate>
+        </TreeView.ItemTemplate>
+      </TreeView>
+    </ScrollViewer>
+  </Panel>
 </UserControl>

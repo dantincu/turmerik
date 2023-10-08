@@ -14,6 +14,7 @@ public class MainViewModel : ReactiveObject
     private readonly IServiceProvider svcProv;
     private readonly IAsyncMessageQueuer<UserMsgTuple> asyncMessageQueuer;
 
+    private readonly AppGlobals appGlobalsWrapper;
     private IAppGlobalsData appGlobals;
 
     private string outputText;
@@ -23,11 +24,20 @@ public class MainViewModel : ReactiveObject
     {
         svcProv = ServiceProviderContainer.Instance.Value.Data;
 
+        appGlobalsWrapper = svcProv.GetRequiredService<AppGlobals>();
+        appGlobalsWrapper.Registered += AppGlobalsWrapper_Registered;
+
         asyncMessageQueuer = svcProv.GetRequiredService<IAsyncMessageQueuerFactory>(
             ).Queuer<UserMsgTuple>(
             userMsgTuple => ShowUserMessage(
                 userMsgTuple));
+
+        FsBackupFolderViewModel = new FsBackupFolderViewModel();
+        SectionsBrowserViewModel = new SectionsBrowserViewModel();
     }
+
+    public FsBackupFolderViewModel FsBackupFolderViewModel { get; }
+    public SectionsBrowserViewModel SectionsBrowserViewModel { get; }
 
     public string OutputText
     {
@@ -54,11 +64,6 @@ public class MainViewModel : ReactiveObject
     private IBrush SuccessOutputTextForeground { get; set; }
     private IBrush ErrorOutputTextForeground { get; set; }
     private IBrush DefaultMaterialIconsForeground { get; set; }
-
-    public void Initialize()
-    {
-        appGlobals = svcProv.GetRequiredService<AppGlobals>().Data;
-    }
 
     private void ShowUserMessage(
             UserMsgTuple msgTuple)
@@ -93,5 +98,11 @@ public class MainViewModel : ReactiveObject
 
         queue.Enqueue(tuple);
         ShowUserMessage(tuple);
+    }
+
+    private void AppGlobalsWrapper_Registered(IAppGlobalsData data)
+    {
+        appGlobals = data;
+        appGlobalsWrapper.Registered -= AppGlobalsWrapper_Registered;
     }
 }

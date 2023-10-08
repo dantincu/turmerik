@@ -46,7 +46,5 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
                     button => button.Name == nameof(
                         dummyTextBlock)).Foreground!
             });
-
-        viewModel.Initialize();
     }
 }

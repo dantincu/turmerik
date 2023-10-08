@@ -14,6 +14,7 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
     public class MainWindowViewModel : ReactiveObject, IScreen
     {
         private readonly IServiceProvider svcProv;
+        private readonly AppGlobals appGlobalsWrapper;
         private IAppGlobalsData appGlobals;
 
         private IBrush buttonBackForeground;
@@ -26,6 +27,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
         public MainWindowViewModel()
         {
             svcProv = ServiceProviderContainer.Instance.Value.Data;
+            appGlobalsWrapper = svcProv.GetRequiredService<AppGlobals>();
+            appGlobalsWrapper.Registered += MainWindowViewModel_Registered;
             // buttonBackEnabledObservable = Observable.Create<bool>()
             // Manage the routing state. Use the Router.Navigate.Execute
             // command to navigate to different view models. 
@@ -107,9 +110,11 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
                 value);
         }
 
-        public void Initialize()
+        private void MainWindowViewModel_Registered(
+            IAppGlobalsData data)
         {
-            appGlobals = svcProv.GetRequiredService<AppGlobals>().Data;
+            appGlobals = data;
+            appGlobalsWrapper.Registered -= MainWindowViewModel_Registered;
 
             ButtonNewUrlItemForeground = appGlobals.DefaultMaterialIconsForeground;
             ButtonSaveUrlItemForeground = appGlobals.DefaultMaterialIconsForeground;

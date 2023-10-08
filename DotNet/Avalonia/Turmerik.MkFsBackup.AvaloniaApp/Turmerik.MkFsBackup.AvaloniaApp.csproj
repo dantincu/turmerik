@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Turmerik.Yantra\Turmerik.Yantra.csproj" />
     <ProjectReference Include="..\Turmerik.Avalonia\Turmerik.Avalonia.csproj" />
-    <ProjectReference Include="..\Turmerik.Yantra\Turmerik.Yantra.csproj" />
   </ItemGroup>
 </Project>

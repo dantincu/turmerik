@@ -61,7 +61,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 
             set => this.RaiseAndSetIfChanged(
                 ref rawUrl,
-                value);
+                value,
+                nameof(RawUrl));
         }
 
         public string ResourceTitle
@@ -70,7 +71,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 
             set => this.RaiseAndSetIfChanged(
                 ref resourceTitle,
-                value);
+                value,
+                nameof(ResourceTitle));
         }
 
         public string TitleAndUrl
@@ -79,7 +81,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 
             set => this.RaiseAndSetIfChanged(
                 ref titleAndUrl,
-                value);
+                value,
+                nameof(TitleAndUrl));
         }
 
         public string TitleAndUrlTemplate { get; set; }
@@ -90,7 +93,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 
             set => this.RaiseAndSetIfChanged(
                 ref outputText,
-                value);
+                value,
+                nameof(OutputText));
         }
 
         public string Description
@@ -99,7 +103,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
 
             set => this.RaiseAndSetIfChanged(
                 ref description,
-                value);
+                value,
+                nameof(Description));
         }
 
         public IBrush OutputTextForeground
@@ -110,7 +115,8 @@ namespace Turmerik.QuickMarks.AvaloniaApp.ViewModels
             {
                 this.RaiseAndSetIfChanged(
                     ref outputTextForeground,
-                    value);
+                    value,
+                nameof(OutputTextForeground));
             }
         }
 

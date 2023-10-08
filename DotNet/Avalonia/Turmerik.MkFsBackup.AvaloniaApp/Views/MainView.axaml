@@ -18,12 +18,8 @@
       <ColumnDefinition Width="1*"></ColumnDefinition>
       <ColumnDefinition Width="1*"></ColumnDefinition>
     </Grid.ColumnDefinitions>
-    <Panel VerticalAlignment="Stretch" Grid.Column="0">
-      <vw:FsBackupFolderView></vw:FsBackupFolderView>
-    </Panel>
-    <Panel VerticalAlignment="Stretch" Grid.Column="1">
-      <vw:SectionsBrowserView></vw:SectionsBrowserView>
-    </Panel>
+    <vw:FsBackupFolderView DataContext="{Binding Path=FsBackupFolderViewModel}" Grid.Column="0"></vw:FsBackupFolderView>
+    <vw:SectionsBrowserView DataContext="{Binding Path=SectionsBrowserViewModel}" Grid.Column="1"></vw:SectionsBrowserView>
     <TextBlock Text="" x:Name="dummyTextBlock"></TextBlock>
   </Grid>
 </UserControl>
