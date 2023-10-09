@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 using Turmerik.Text;
 using Turmerik.Helpers;
+using Turmerik.LsDirPairs.ConsoleApp;
 
 namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 {
@@ -15,6 +16,7 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 
         private readonly IJsonConversion jsonConversion;
         private readonly INoteDirPairsRetriever noteDirPairsRetriever;
+        private readonly DirPairsRetriever dirPairsRetriever;
 
         private readonly AppSettings appSettings;
         private readonly ProgramSettings programSettings;
@@ -39,25 +41,29 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             this.noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
                 trmrk.DirNames);
 
+            dirPairsRetriever = new DirPairsRetriever(noteDirsPairGeneratorFactory, trmrk);
+
             noteItemsPfx = trmrk.DirNames.NoteItemsPfx;
             joinStr = trmrk.DirNames.JoinStr;
         }
 
         public void Run(string[] args)
         {
-            string[] existingEntriesArr = Directory.GetFileSystemEntries(
-                programSettings.SrcDirPath).Select(
-                    entry => Path.GetFileName(entry)).ToArray();
-
             GetChildNodes(new Args(null,
                 programSettings.SrcDirPath,
                 true, programSettings.DestnDirPath),
                 out var src, out var destn);
+
+            RunCore(programSettings.SrcDirPath);
         }
 
         private void RunCore(string parentDirPath)
         {
+            string[] existingEntriesArr = Directory.GetFileSystemEntries(
+                parentDirPath).Select(
+                    entry => Path.GetFileName(entry)).ToArray();
 
+            var wka = dirPairsRetriever.GetResult(parentDirPath);
         }
 
         private void GetChildNodes(
