@@ -84,6 +84,10 @@ namespace Turmerik.DriveExplorer
 
                     mapList.RemoveAt(idx);
                 }
+                else
+                {
+                    idx++;
+                }
             }
 
             mapList.Sort((a, b) => a.Key.CompareTo(b.Key));
@@ -140,8 +144,9 @@ namespace Turmerik.DriveExplorer
             }
             else
             {
-                ambgMatching = new List<NoteDirName> { item };
-                ambgMap.Add(idxStr, ambgMatching);
+                /* ambgMatching = new List<NoteDirName> { item };
+                ambgMap.Add(idxStr, ambgMatching); */
+                noteDirsMap.Add(item.Idx, new List<NoteDirName> { item });
             }
 
             if (ambgMatching != null)

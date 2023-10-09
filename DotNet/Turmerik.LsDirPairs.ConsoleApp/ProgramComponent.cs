@@ -146,13 +146,21 @@ namespace Turmerik.LsDirPairs.ConsoleApp
                     foreach (var note in notesList)
                     {
                         string shortDirName = noteItemsPfx + kvp.Key;
+                        string fullDirNamePart = note.FullDirNamePart;
+                        string joinStr = note.JoinStr;
 
-                        string fullDirNamePart = note.FullDirNamePart ?? note.FullDirName?.With(
-                            fullDirName => fullDirName.Substring((shortDirName + note.JoinStr).Length))!;
+                        if (fullDirNamePart == null && !string.IsNullOrEmpty(note.FullDirName))
+                        {
+                            fullDirNamePart = note.FullDirName.Substring(
+                                (shortDirName + note.JoinStr).Length);
+
+                            joinStr = fullDirNamePart.First().ToString();
+                            fullDirNamePart = fullDirNamePart.Substring(1);
+                        }
 
                         PrintDataWithColors(
-                            noteItemsPfx + kvp.Key,
-                            note.JoinStr,
+                            shortDirName,
+                            joinStr,
                             fullDirNamePart,
                             ConsoleColor.Red,
                             ConsoleColor.DarkRed,
