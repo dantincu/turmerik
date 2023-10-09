@@ -12,7 +12,9 @@ namespace Turmerik.DriveExplorer
 
         Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr,
-            out Dictionary<int, List<NoteDirName>> ambiguosMap);
+            out Dictionary<int, List<NoteDirName>> noteDirsMap,
+            out Dictionary<string, List<NoteDirName>> ambiguosMap,
+            out List<string> ambgEntryNamesList);
 
         Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr);
@@ -30,24 +32,40 @@ namespace Turmerik.DriveExplorer
 
         public Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr,
-            out Dictionary<int, List<NoteDirName>> ambgMap)
+            out Dictionary<int, List<NoteDirName>> noteDirsMap,
+            out Dictionary<string, List<NoteDirName>> ambgMap,
+            out List<string> ambgEntryNamesList)
         {
-            var dirPairs = existingEntriesArr.Select(
-                IdxRetriever.TryGetAsNoteDirName).NotNull().ToArray();
+            var ambgEntryNames = new List<string>();
+            ambgEntryNamesList = ambgEntryNames;
 
-            var map = new Dictionary<int, List<NoteDirName>>();
-            ambgMap = new Dictionary<int, List<NoteDirName>>();
+            var dirPairs = existingEntriesArr.Select(
+                dirName =>
+                {
+                    var retObj = IdxRetriever.TryGetAsNoteDirName(dirName);
+
+                    if (retObj == null)
+                    {
+                        ambgEntryNames.Add(dirName);
+                    }
+
+                    return retObj;
+                }).NotNull().ToArray();
+
+            noteDirsMap = new Dictionary<int, List<NoteDirName>>();
+            ambgMap = new Dictionary<string, List<NoteDirName>>();
 
             foreach (var item in dirPairs)
             {
                 GetNotesCore(
-                    map,
+                    noteDirsMap,
                     ambgMap,
+                    ambgEntryNames,
                     item);
             }
 
             int idx = 0;
-            var mapList = map.ToList();
+            var mapList = noteDirsMap.ToList();
 
             while (idx < mapList.Count)
             {
@@ -56,7 +74,7 @@ namespace Turmerik.DriveExplorer
                 if (kvp.Value.Count != 2)
                 {
                     ambgMap.AddOrUpdate(
-                        kvp.Key,
+                        kvp.Value.First().ShortDirName,
                         key => kvp.Value,
                         (key, value) =>
                         {
@@ -68,6 +86,8 @@ namespace Turmerik.DriveExplorer
                 }
             }
 
+            mapList.Sort((a, b) => a.Key.CompareTo(b.Key));
+
             var retMap = mapList.ToDictionary(
                 kvp => kvp.Key,
                 kvp => new NoteItemCore
@@ -77,32 +97,40 @@ namespace Turmerik.DriveExplorer
                         item => item.FullDirNamePart != null).FullDirNamePart,
                 });
 
+            ambgMap = ambgMap.OrderBy(
+                kvp => kvp.Key).ToDictnr();
+
             return retMap;
         }
 
         public Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr) => GetNotes(
-                existingEntriesArr, out _);
+                existingEntriesArr, out _, out _, out _);
 
         private void GetNotesCore(
-            Dictionary<int, List<NoteDirName>> retMap,
-            Dictionary<int, List<NoteDirName>> ambgMap,
+            Dictionary<int, List<NoteDirName>> noteDirsMap,
+            Dictionary<string, List<NoteDirName>> ambgMap,
+            List<string> ambgEntryNamesList,
             NoteDirName item)
         {
-            if (ambgMap.TryGetValue(item.Idx, out var ambgMatching))
+            string idxStr = item.Idx.ToString();
+            List<NoteDirName> ambgMatching;
+
+            if (ambgMap.TryGetValue(idxStr, out ambgMatching))
             {
                 ambgMatching.Add(item);
             }
-            else if (retMap.TryGetValue(item.Idx, out var matching))
+            else if (noteDirsMap.TryGetValue(item.Idx, out var matching))
             {
                 if (item.FullDirNamePart != null)
                 {
                     if (matching.Count > 1 || matching.Single().FullDirNamePart != null)
                     {
-                        retMap.Remove(item.Idx);
+                        noteDirsMap.Remove(item.Idx);
                         matching.Add(item);
 
-                        ambgMap.Add(item.Idx, matching);
+                        ambgMatching = matching;
+                        ambgMap.Add(idxStr, ambgMatching);
                     }
                     else
                     {
@@ -112,8 +140,32 @@ namespace Turmerik.DriveExplorer
             }
             else
             {
-                retMap.Add(item.Idx,
-                    new List<NoteDirName> { item });
+                ambgMatching = new List<NoteDirName> { item };
+                ambgMap.Add(idxStr, ambgMatching);
+            }
+
+            if (ambgMatching != null)
+            {
+                int idx = 0;
+
+                while (idx < ambgEntryNamesList.Count)
+                {
+                    string ambgEntryName = ambgEntryNamesList[idx];
+
+                    if (ambgEntryName.StartsWith(item.ShortDirName))
+                    {
+                        ambgEntryNamesList.RemoveAt(idx);
+
+                        ambgMatching.Add(new NoteDirName
+                        {
+                            FullDirName = ambgEntryName,
+                        });
+                    }
+                    else
+                    {
+                        idx++;
+                    }
+                }
             }
         }
     }

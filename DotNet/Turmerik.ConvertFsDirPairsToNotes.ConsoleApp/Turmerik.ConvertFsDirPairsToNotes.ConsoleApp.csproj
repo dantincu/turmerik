@@ -11,4 +11,10 @@
     <ProjectReference Include="..\Turmerik.MkFsDirsPair.Lib\Turmerik.MkFsDirsPair.Lib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="programSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

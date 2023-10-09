@@ -91,9 +91,9 @@ namespace Turmerik.Text
                 partsList.InsertRange(0, stPrPnArr);
             }
 
-            string retPath = partsList.ToArray().JoinNotNullStr(
-                PathH.DirSepChar,
-                false);
+            string retPath = partsList.ToArray(
+                ).JoinNotNullStr(
+                PathH.DirSepChar, false);
 
             retPath = retPath.TrimEnd('/', '\\');
             return retPath;

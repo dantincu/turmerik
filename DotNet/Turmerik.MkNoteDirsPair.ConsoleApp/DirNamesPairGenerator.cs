@@ -174,7 +174,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             {
                 ProgArgs = pga,
                 WorkDir = workDir,
-                ExistingEntriesArr = Directory.EnumerateFileSystemEntries(
+                ExistingEntriesArr = Directory.GetFileSystemEntries(
                     workDir).Select(entry => Path.GetFileName(entry)).ToArray(),
                 DirCat = pga.CreateNote switch
                 {

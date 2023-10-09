@@ -24,9 +24,8 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
         {
             string workDir = Environment.CurrentDirectory;
 
-            string[] existingEntriesArr = Directory.EnumerateFileSystemEntries(
-                workDir).Select(
-                entry => Path.GetFileName(entry)).ToArray();
+            string[] existingEntriesArr = Directory.GetFileSystemEntries(
+                workDir).Select(entry => Path.GetFileName(entry)).ToArray();
 
             string docFileName = GetArgs(
                 args,

@@ -15,6 +15,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
     public class ProgramComponent
     {
         private static readonly string NL = Environment.NewLine;
+        // private static readonly string NL = "\n";
 
         private readonly IJsonConversion jsonConversion;
         private readonly INoteDirPairsRetriever noteDirPairsRetriever;
@@ -45,6 +46,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
         public void Run(string[] args)
         {
             var wka = GetWorkArgs(args);
+            PrintAmbgDirNamesIfReq(wka);
             PrintDirPairs(wka);
             PrintAmbgDirPairsIfReq(wka);
         }
@@ -61,22 +63,55 @@ namespace Turmerik.LsDirPairs.ConsoleApp
             {
                 WorkDir = workDir,
                 ExistingDirsArr = dirsArr,
-                DirPairs = noteDirPairsRetriever.GetNotes(
-                    dirsArr, out var amgMap),
-                AmbgDirPairs = amgMap
+                Notes = noteDirPairsRetriever.GetNotes(
+                    dirsArr, out var notesMap,
+                    out var ambgMap, out var ambgEntryNames),
+                NoteDirPairs = notesMap,
+                AmbgDirPairs = ambgMap,
+                AmbgEntryNames = ambgEntryNames
             };
 
             return wka;
         }
 
+        private void PrintAmbgDirNamesIfReq(WorkArgs wka)
+        {
+            if (wka.AmbgEntryNames.Any())
+            {
+                Console.WriteLine();
+
+                Console.Out.WithColors(
+                    wr => wr.Write($"Ambigous entry names:"),
+                    ConsoleColor.Black,
+                    ConsoleColor.DarkYellow);
+
+                Console.WriteLine();
+                Console.WriteLine();
+
+                Console.Out.WithColors(wr =>
+                {
+                    foreach (var name in wka.AmbgEntryNames)
+                    {
+                        wr.WriteLine(name);
+                    }
+                },
+                    ConsoleColor.Yellow);
+            }
+        }
+
         private void PrintDirPairs(WorkArgs wka)
         {
+            Console.WriteLine();
+
             Console.Out.WithColors(
-                wr => wr.WriteLine($"{NL}Dir pairs: {NL}"),
+                wr => wr.Write($"Dir pairs:"),
                 ConsoleColor.Black,
                 ConsoleColor.Cyan);
 
-            foreach (var kvp in wka.DirPairs)
+            Console.WriteLine();
+            Console.WriteLine();
+
+            foreach (var kvp in wka.Notes)
             {
                 var note = kvp.Value;
 
@@ -94,21 +129,31 @@ namespace Turmerik.LsDirPairs.ConsoleApp
         {
             if (wka.AmbgDirPairs.Any())
             {
+                Console.WriteLine();
+
                 Console.Out.WithColors(
-                    wr => wr.WriteLine($"{NL}Ambigous dir pairs: {NL}"),
+                    wr => wr.Write($"Ambigous dir pairs:"),
                     ConsoleColor.Black,
                     ConsoleColor.Red);
+
+                Console.WriteLine();
+                Console.WriteLine();
 
                 foreach (var kvp in wka.AmbgDirPairs)
                 {
                     var notesList = kvp.Value;
-
+                    
                     foreach (var note in notesList)
                     {
+                        string shortDirName = noteItemsPfx + kvp.Key;
+
+                        string fullDirNamePart = note.FullDirNamePart ?? note.FullDirName?.With(
+                            fullDirName => fullDirName.Substring((shortDirName + note.JoinStr).Length))!;
+
                         PrintDataWithColors(
                             noteItemsPfx + kvp.Key,
                             note.JoinStr,
-                            note.FullDirNamePart,
+                            fullDirNamePart,
                             ConsoleColor.Red,
                             ConsoleColor.DarkRed,
                             ConsoleColor.DarkRed);
@@ -146,8 +191,10 @@ namespace Turmerik.LsDirPairs.ConsoleApp
         {
             public string WorkDir { get; set; }
             public string[] ExistingDirsArr { get; set; }
-            public Dictionary<int, NoteItemCore> DirPairs { get; set; }
-            public Dictionary<int, List<NoteDirName>> AmbgDirPairs { get; set; }
+            public Dictionary<int, NoteItemCore> Notes { get; set; }
+            public Dictionary<int, List<NoteDirName>> NoteDirPairs { get; set; }
+            public Dictionary<string, List<NoteDirName>> AmbgDirPairs { get; set; }
+            public List<string> AmbgEntryNames { get; set; }
         }
     }
 }
