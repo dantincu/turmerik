@@ -14,16 +14,14 @@ namespace Turmerik.LsDirPairs.ConsoleApp
 {
     public class ProgramComponent
     {
-        private static readonly string NL = Environment.NewLine;
-        // private static readonly string NL = "\n";
-
         private readonly IJsonConversion jsonConversion;
         private readonly INoteDirPairsRetriever noteDirPairsRetriever;
 
         private readonly AppSettings appSettings;
         private readonly NoteDirsPairSettings trmrk;
 
-        private readonly string noteItemsPfx;
+        private readonly string noteItemDirNamePfx;
+        private readonly string noteInternalDirNamePfx;
         private readonly string joinStr;
 
         public ProgramComponent(
@@ -39,7 +37,8 @@ namespace Turmerik.LsDirPairs.ConsoleApp
             this.noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
                 trmrk.DirNames);
 
-            noteItemsPfx = trmrk.DirNames.NoteItemsPfx;
+            noteItemDirNamePfx = trmrk.DirNames.NoteItemsPfx;
+            noteInternalDirNamePfx = trmrk.DirNames.NoteInternalsPfx;
             joinStr = trmrk.DirNames.JoinStr;
         }
 
@@ -47,8 +46,9 @@ namespace Turmerik.LsDirPairs.ConsoleApp
         {
             var wka = GetWorkArgs(args);
             PrintAmbgDirNamesIfReq(wka);
-            PrintDirPairs(wka);
             PrintAmbgDirPairsIfReq(wka);
+            PrintInternalNoteDirPairs(wka);
+            PrintNoteDirPairs(wka);
         }
 
         private WorkArgs GetWorkArgs(
@@ -64,9 +64,13 @@ namespace Turmerik.LsDirPairs.ConsoleApp
                 WorkDir = workDir,
                 ExistingDirsArr = dirsArr,
                 Notes = noteDirPairsRetriever.GetNotes(
-                    dirsArr, out var notesMap,
-                    out var ambgMap, out var ambgEntryNames),
-                NoteDirPairs = notesMap,
+                    dirsArr,
+                    out var noteDirsMap,
+                    out var internalDirsMap,
+                    out var ambgMap,
+                    out var ambgEntryNames),
+                NoteDirPairs = noteDirsMap,
+                InternalDirPairs = internalDirsMap,
                 AmbgDirPairs = ambgMap,
                 AmbgEntryNames = ambgEntryNames
             };
@@ -99,32 +103,6 @@ namespace Turmerik.LsDirPairs.ConsoleApp
             }
         }
 
-        private void PrintDirPairs(WorkArgs wka)
-        {
-            Console.WriteLine();
-
-            Console.Out.WithColors(
-                wr => wr.Write($"Dir pairs:"),
-                ConsoleColor.Black,
-                ConsoleColor.Cyan);
-
-            Console.WriteLine();
-            Console.WriteLine();
-
-            foreach (var kvp in wka.Notes)
-            {
-                var note = kvp.Value;
-
-                PrintDataWithColors(
-                    noteItemsPfx + kvp.Key,
-                    joinStr,
-                    note.Title,
-                    ConsoleColor.Cyan,
-                    ConsoleColor.DarkCyan,
-                    ConsoleColor.DarkCyan);
-            }
-        }
-
         private void PrintAmbgDirPairsIfReq(WorkArgs wka)
         {
             if (wka.AmbgDirPairs.Any())
@@ -145,7 +123,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
                     
                     foreach (var note in notesList)
                     {
-                        string shortDirName = noteItemsPfx + kvp.Key;
+                        string shortDirName = note.ShortDirName ?? note.Prefix + kvp.Key;
                         string fullDirNamePart = note.FullDirNamePart;
                         string joinStr = note.JoinStr;
 
@@ -167,6 +145,58 @@ namespace Turmerik.LsDirPairs.ConsoleApp
                             ConsoleColor.DarkRed);
                     }
                 }
+            }
+        }
+
+        private void PrintInternalNoteDirPairs(WorkArgs wka)
+        {
+            Console.WriteLine();
+
+            Console.Out.WithColors(
+                wr => wr.Write("Note Internal Dir pairs:"),
+                ConsoleColor.Black,
+                ConsoleColor.Cyan);
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            foreach (var kvp in wka.InternalDirPairs)
+            {
+                var dirName = kvp.Value;
+
+                PrintDataWithColors(
+                    kvp.Key,
+                    joinStr,
+                    dirName.Select(item => item.FullDirNamePart).NotNull().Single(),
+                    ConsoleColor.Cyan,
+                    ConsoleColor.DarkCyan,
+                    ConsoleColor.DarkCyan);
+            }
+        }
+
+        private void PrintNoteDirPairs(WorkArgs wka)
+        {
+            Console.WriteLine();
+
+            Console.Out.WithColors(
+                wr => wr.Write("Note Dir pairs:"),
+                ConsoleColor.Black,
+                ConsoleColor.Green);
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            foreach (var kvp in wka.Notes)
+            {
+                var note = kvp.Value;
+
+                PrintDataWithColors(
+                    noteItemDirNamePfx + kvp.Key,
+                    joinStr,
+                    note.Title,
+                    ConsoleColor.Green,
+                    ConsoleColor.DarkGreen,
+                    ConsoleColor.DarkGreen);
             }
         }
 
@@ -200,7 +230,8 @@ namespace Turmerik.LsDirPairs.ConsoleApp
             public string WorkDir { get; set; }
             public string[] ExistingDirsArr { get; set; }
             public Dictionary<int, NoteItemCore> Notes { get; set; }
-            public Dictionary<int, List<NoteDirName>> NoteDirPairs { get; set; }
+            public Dictionary<string, List<NoteDirName>> NoteDirPairs { get; set; }
+            public Dictionary<string, List<NoteDirName>> InternalDirPairs { get; set; }
             public Dictionary<string, List<NoteDirName>> AmbgDirPairs { get; set; }
             public List<string> AmbgEntryNames { get; set; }
         }

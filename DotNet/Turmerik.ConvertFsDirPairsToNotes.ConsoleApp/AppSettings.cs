@@ -14,6 +14,7 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 
     public class ProgramSettings
     {
+        public string RefDirPath { get; set; }
         public string SrcDirPath { get; set; }
         public string DestnDirPath { get; set; }
         public string NotesDirPath { get; set; }
