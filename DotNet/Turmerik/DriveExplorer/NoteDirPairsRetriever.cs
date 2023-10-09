@@ -12,7 +12,7 @@ namespace Turmerik.DriveExplorer
 
         Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr,
-            out Dictionary<int, List<NoteItemCore>> ambiguosMap);
+            out Dictionary<int, List<NoteDirName>> ambiguosMap);
 
         Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr);
@@ -30,21 +30,52 @@ namespace Turmerik.DriveExplorer
 
         public Dictionary<int, NoteItemCore> GetNotes(
             string[] existingEntriesArr,
-            out Dictionary<int, List<NoteItemCore>> ambgMap)
+            out Dictionary<int, List<NoteDirName>> ambgMap)
         {
             var dirPairs = existingEntriesArr.Select(
                 IdxRetriever.TryGetAsNoteDirName).NotNull().ToArray();
 
-            var retMap = new Dictionary<int, NoteItemCore>();
-            ambgMap = new Dictionary<int, List<NoteItemCore>>();
+            var map = new Dictionary<int, List<NoteDirName>>();
+            ambgMap = new Dictionary<int, List<NoteDirName>>();
 
             foreach (var item in dirPairs)
             {
                 GetNotesCore(
-                    retMap,
+                    map,
                     ambgMap,
                     item);
             }
+
+            int idx = 0;
+            var mapList = map.ToList();
+
+            while (idx < mapList.Count)
+            {
+                var kvp = mapList[idx];
+
+                if (kvp.Value.Count != 2)
+                {
+                    ambgMap.AddOrUpdate(
+                        kvp.Key,
+                        key => kvp.Value,
+                        (key, value) =>
+                        {
+                            value.AddRange(kvp.Value);
+                            return value;
+                        });
+
+                    mapList.RemoveAt(idx);
+                }
+            }
+
+            var retMap = mapList.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new NoteItemCore
+                {
+                    ItemIdx = kvp.Key,
+                    Title = kvp.Value.Single(
+                        item => item.FullDirNamePart != null).FullDirNamePart,
+                });
 
             return retMap;
         }
@@ -54,54 +85,36 @@ namespace Turmerik.DriveExplorer
                 existingEntriesArr, out _);
 
         private void GetNotesCore(
-            Dictionary<int, NoteItemCore> retMap,
-            Dictionary<int, List<NoteItemCore>> ambgMap,
+            Dictionary<int, List<NoteDirName>> retMap,
+            Dictionary<int, List<NoteDirName>> ambgMap,
             NoteDirName item)
         {
             if (ambgMap.TryGetValue(item.Idx, out var ambgMatching))
             {
-                ambgMatching.Add(
-                    ToNoteItem(item));
+                ambgMatching.Add(item);
             }
             else if (retMap.TryGetValue(item.Idx, out var matching))
             {
                 if (item.FullDirNamePart != null)
                 {
-                    if (matching.Title != null)
+                    if (matching.Count > 1 || matching.Single().FullDirNamePart != null)
                     {
                         retMap.Remove(item.Idx);
+                        matching.Add(item);
 
-                        ambgMap.Add(item.Idx,
-                            CreateNotesList(matching,
-                                ToNoteItem(item)));
+                        ambgMap.Add(item.Idx, matching);
                     }
                     else
                     {
-                        matching.Title = item.FullDirNamePart;
+                        matching.Add(item);
                     }
                 }
             }
             else
             {
                 retMap.Add(item.Idx,
-                    ToNoteItem(item));
+                    new List<NoteDirName> { item });
             }
-        }
-
-        private NoteItemCore ToNoteItem(
-            NoteDirName item) => new NoteItemCore
-            {
-                Title = item.FullDirNamePart,
-                ItemIdx = item.Idx
-            };
-
-        private List<NoteItemCore> CreateNotesList(
-            params NoteItemCore[] notesArr)
-        {
-            var list = new List<NoteItemCore>();
-            list.AddRange(notesArr);
-
-            return list;
         }
     }
 }

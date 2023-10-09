@@ -85,9 +85,10 @@ namespace Turmerik.DriveExplorer
                 {
                     string dirNameStr = dirName;
                     string shortDirName = null;
-                    string idxStrPart = null;
+                    string idxStrPart = dirNameStr;
                     string fullDirNamePart = null;
                     string fullDirName = null;
+                    string joinStr = null;
 
                     if (!string.IsNullOrEmpty(NoteItemsPfx.RawStr))
                     {
@@ -104,11 +105,8 @@ namespace Turmerik.DriveExplorer
                         fullDirNamePart = fullDirNamePart.Substring(
                             JoinStr.RawStr.Length);
 
+                        joinStr = JoinStr.RawStr;
                         fullDirName = dirName;
-                    }
-                    else
-                    {
-                        idxStrPart = dirNameStr;
                     }
 
                     shortDirName = NoteItemsPfx.RawStr + idxStrPart;
@@ -120,7 +118,7 @@ namespace Turmerik.DriveExplorer
                         {
                             ShortDirName = shortDirName,
                             FullDirName = fullDirName,
-                            JoinStr = JoinStr.RawStr,
+                            JoinStr = joinStr,
                             FullDirNamePart = fullDirNamePart,
                             Prefix = NoteItemsPfx.RawStr,
                             Idx = idx,

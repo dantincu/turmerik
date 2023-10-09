@@ -52,7 +52,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
         private WorkArgs GetWorkArgs(
             string[] args)
         {
-            var workDir = Environment.CurrentDirectory;
+            var workDir = args.FirstOrDefault() ?? Environment.CurrentDirectory;
 
             var dirsArr = Directory.GetDirectories(workDir).Select(
                 dir => Path.GetFileName(dir)).ToArray();
@@ -107,8 +107,8 @@ namespace Turmerik.LsDirPairs.ConsoleApp
                     {
                         PrintDataWithColors(
                             noteItemsPfx + kvp.Key,
-                            joinStr,
-                            note.Title,
+                            note.JoinStr,
+                            note.FullDirNamePart,
                             ConsoleColor.Red,
                             ConsoleColor.DarkRed,
                             ConsoleColor.DarkRed);
@@ -147,7 +147,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
             public string WorkDir { get; set; }
             public string[] ExistingDirsArr { get; set; }
             public Dictionary<int, NoteItemCore> DirPairs { get; set; }
-            public Dictionary<int, List<NoteItemCore>> AmbgDirPairs { get; set; }
+            public Dictionary<int, List<NoteDirName>> AmbgDirPairs { get; set; }
         }
     }
 }
