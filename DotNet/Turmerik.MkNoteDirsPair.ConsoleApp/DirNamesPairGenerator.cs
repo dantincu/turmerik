@@ -132,12 +132,12 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             string content)
         {
             Console.Out.WithColors(
-                wr => wr.Write(
+                () => Console.Write(
                     title),
                 ConsoleColor.DarkGreen);
 
             Console.Out.WithColors(
-                wr => wr.WriteLine(
+                () => Console.WriteLine(
                     content),
                 ConsoleColor.Cyan);
         }

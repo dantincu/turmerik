@@ -7,7 +7,8 @@ namespace Turmerik.Helpers
     public static class ProgramH
     {
         public static void Run(
-            Action program)
+            Action program,
+            bool rethrow = false)
         {
             try
             {
@@ -16,6 +17,11 @@ namespace Turmerik.Helpers
             catch (Exception ex)
             {
                 Console.Error.WithExcp(ex);
+
+                if (rethrow)
+                {
+                    throw;
+                }
             }
         }
     }

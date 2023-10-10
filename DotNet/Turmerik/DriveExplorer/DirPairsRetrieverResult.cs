@@ -6,7 +6,7 @@ namespace Turmerik.DriveExplorer
 {
     public class DirPairsRetrieverResult
     {
-        public string WorkDir { get; set; }
+        public string WorkDirPath { get; set; }
         public string[] ExistingDirsArr { get; set; }
         public Dictionary<int, NoteItemCore> Notes { get; set; }
         public Dictionary<string, List<NoteDirName>> NoteDirPairs { get; set; }

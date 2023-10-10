@@ -9,48 +9,44 @@ namespace Turmerik.Helpers
     {
         public static void WithColors(
             this TextWriter writer,
-            Action<TextWriter> callback,
+            Action callback,
             ConsoleColor? forecolor = null,
             ConsoleColor? backcolor = null)
         {
-            ConsoleColor prevForecolor = Console.ForegroundColor;
-            ConsoleColor prevBackcolor = Console.BackgroundColor;
-
             SetColors(forecolor, backcolor);
 
             try
             {
-                callback(writer);
+                callback();
             }
             finally
             {
-                SetColors(prevForecolor, prevBackcolor,
-                    forecolor.HasValue, backcolor.HasValue);
+                Console.ResetColor();
             }
         }
 
         public static void SetColors(
-            ConsoleColor forecolor,
-            ConsoleColor backcolor,
+            Func<ConsoleColor> forecolor,
+            Func<ConsoleColor> backcolor,
             bool setForecolor,
             bool setBackcolor)
         {
             if (setForecolor)
             {
-                Console.ForegroundColor = forecolor;
+                Console.ForegroundColor = forecolor();
             }
 
             if (setBackcolor)
             {
-                Console.BackgroundColor = backcolor;
+                Console.BackgroundColor = backcolor();
             }
         }
 
         public static void SetColors(
             ConsoleColor? forecolor,
             ConsoleColor? backcolor) => SetColors(
-                forecolor ?? default,
-                backcolor ?? default,
+                () => forecolor.Value,
+                () => backcolor.Value,
                 forecolor.HasValue,
                 backcolor.HasValue);
 
@@ -62,7 +58,7 @@ namespace Turmerik.Helpers
             ConsoleColor? backcolor = null)
         {
             writer.WithColors(
-                wr =>
+                () =>
                 {
                     msgFactory = msgFactory.FirstNotNull(
                         ex => string.Join(": ",
@@ -70,7 +66,7 @@ namespace Turmerik.Helpers
                             ex.Message));
 
                     var msg = msgFactory(exc);
-                    wr.WriteLine(msg);
+                    Console.Error.WriteLine(msg);
                 },
                 forecolor ?? ConsoleColor.Red,
                 backcolor);

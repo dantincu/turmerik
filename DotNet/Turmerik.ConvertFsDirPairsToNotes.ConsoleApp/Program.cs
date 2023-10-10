@@ -8,4 +8,4 @@ using Core = Turmerik.ConvertFsDirPairsToNotes.ConsoleApp;
 var svcProv = ServiceProviderContainer.Instance.Value.RegisterData(
     new ServiceCollection().AsOpts(svc => svc.AddScoped<Core.ProgramComponent>()));
 
-ProgramH.Run(() => svcProv.GetRequiredService<Core.ProgramComponent>().Run(args));
+ProgramH.Run(() => svcProv.GetRequiredService<Core.ProgramComponent>().Run(args), true);

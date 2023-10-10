@@ -15,10 +15,19 @@ namespace Turmerik.DriveExplorer
     {
         DirPairsRetrieverResult GetResult(
             string workDir,
-            bool printResult = true);
+            bool printResult = false);
+
+        DirPairsRetrieverResult GetResult(
+            string[] existingDirsArr,
+            bool printResult = false);
 
         void PrintResult(
             DirPairsRetrieverResult result);
+
+        void PrintAmbgDirNamesIfReq(DirPairsRetrieverResult wka);
+        void PrintAmbgDirPairsIfReq(DirPairsRetrieverResult wka);
+        void PrintInternalNoteDirPairs(DirPairsRetrieverResult wka);
+        void PrintNoteDirPairs(DirPairsRetrieverResult wka);
     }
 
     public class DirPairsRetriever : IDirPairsRetriever
@@ -26,6 +35,7 @@ namespace Turmerik.DriveExplorer
         public static readonly string NL = Environment.NewLine;
 
         private readonly INoteDirPairsRetriever noteDirPairsRetriever;
+        private readonly IConsolePrinter consolePrinter;
         private readonly NoteDirsPairSettings trmrk;
 
         private readonly string noteItemDirNamePfx;
@@ -34,6 +44,7 @@ namespace Turmerik.DriveExplorer
 
         public DirPairsRetriever(
             INoteDirsPairGeneratorFactory noteDirsPairGeneratorFactory,
+            IConsolePrinter consolePrinter,
             NoteDirsPairSettings noteDirsPairSettings)
         {
             trmrk = noteDirsPairSettings ?? throw new ArgumentNullException(nameof(
@@ -41,6 +52,9 @@ namespace Turmerik.DriveExplorer
 
             noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
                 trmrk.DirNames);
+
+            this.consolePrinter = consolePrinter ?? throw new ArgumentNullException(
+                nameof(consolePrinter));
 
             noteItemDirNamePfx = trmrk.DirNames.NoteItemsPfx;
             noteInternalDirNamePfx = trmrk.DirNames.NoteInternalsPfx;
@@ -61,100 +75,64 @@ namespace Turmerik.DriveExplorer
             return result;
         }
 
+        public DirPairsRetrieverResult GetResult(
+            string[] existingDirsArr,
+            bool printResult = false)
+        {
+            var result = GetResultCore(existingDirsArr);
+
+            if (printResult)
+            {
+                PrintResult(result);
+            }
+
+            return result;
+        }
+
         public void PrintResult(DirPairsRetrieverResult result)
         {
-            Console.Out.WithColors(
-                wr => wr.Write($"{NL} <<<< <<<< <<<< <<<< {NL}START DIR ENTRIES FOR PATH <<<< {result.WorkDir}{NL} <<<< <<<< <<<< <<<< {NL}"),
-                ConsoleColor.Black,
-                ConsoleColor.White);
+            consolePrinter.PrintWithHeaderAndFooter(wr =>
+                {
+                    PrintAmbgDirNamesIfReq(result);
+                    PrintAmbgDirPairsIfReq(result);
 
-            PrintAmbgDirNamesIfReq(result);
-            PrintAmbgDirPairsIfReq(result);
-
-            PrintInternalNoteDirPairs(result);
-            PrintNoteDirPairs(result);
-
-            Console.Out.WithColors(
-                wr => wr.Write($"{NL} >>>> >>>> >>>> >>>> {NL}END DIR ENTRIES FOR PATH >>>> {result.WorkDir}{NL} >>>> >>>> >>>> >>>> "),
-                ConsoleColor.Black,
-                ConsoleColor.White);
+                    PrintInternalNoteDirPairs(result);
+                    PrintNoteDirPairs(result);
+                },
+                "START DIR ENTRIES FOR PATH",
+                "END DIR ENTRIES FOR PATH",
+                result.WorkDirPath);
 
             Console.WriteLine();
             Console.WriteLine();
         }
 
-        private DirPairsRetrieverResult GetResultCore(
-            string workDir)
-        {
-            workDir ??= Environment.CurrentDirectory;
-
-            var dirsArr = Directory.GetDirectories(workDir).Select(
-                dir => Path.GetFileName(dir)).ToArray();
-
-            var wka = new DirPairsRetrieverResult
-            {
-                WorkDir = workDir,
-                ExistingDirsArr = dirsArr,
-                Notes = noteDirPairsRetriever.GetNotes(
-                    dirsArr,
-                    out var noteDirsMap,
-                    out var internalDirsMap,
-                    out var ambgMap,
-                    out var ambgEntryNames),
-                NoteDirPairs = noteDirsMap,
-                InternalDirPairs = internalDirsMap,
-                AmbgDirPairs = ambgMap,
-                AmbgEntryNames = ambgEntryNames
-            };
-
-            return wka;
-        }
-
-        private void PrintAmbgDirNamesIfReq(DirPairsRetrieverResult wka)
+        public void PrintAmbgDirNamesIfReq(DirPairsRetrieverResult wka)
         {
             if (wka.AmbgEntryNames.Any())
             {
-                Console.WriteLine();
-
-                Console.Out.WithColors(
-                    wr => wr.Write($"Ambigous entry names:"),
-                    ConsoleColor.Black,
-                    ConsoleColor.DarkYellow);
-
-                Console.WriteLine();
-                Console.WriteLine();
-
-                Console.Out.WithColors(wr =>
-                {
-                    foreach (var name in wka.AmbgEntryNames)
-                    {
-                        wr.WriteLine(name);
-                    }
-                },
+                consolePrinter.PrintDataWithColors(
+                    wka.AmbgEntryNames,
+                    text => text,
+                    "Ambigous entry names: ",
+                    ConsoleColor.DarkYellow,
                     ConsoleColor.Yellow);
             }
         }
 
-        private void PrintAmbgDirPairsIfReq(DirPairsRetrieverResult wka)
+        public void PrintAmbgDirPairsIfReq(DirPairsRetrieverResult wka)
         {
             if (wka.AmbgDirPairs.Any())
             {
-                Console.WriteLine();
-
-                Console.Out.WithColors(
-                    wr => wr.Write($"Ambigous dir pairs:"),
-                    ConsoleColor.Black,
-                    ConsoleColor.Red);
-
-                Console.WriteLine();
-                Console.WriteLine();
-
-                foreach (var kvp in wka.AmbgDirPairs)
-                {
-                    var notesList = kvp.Value;
-
-                    foreach (var note in notesList)
+                consolePrinter.PrintDataWithColors(
+                    wka.AmbgDirPairs.Select(
+                        kvp => kvp.Value.Select(
+                            value => new KeyValuePair<string, NoteDirName>(
+                                kvp.Key, value))).SelectMany(kvp => kvp),
+                    kvp =>
                     {
+                        var note = kvp.Value;
+
                         string shortDirName = note.ShortDirName ?? note.Prefix + kvp.Key;
                         string fullDirNamePart = note.FullDirNamePart;
                         string joinStr = note.JoinStr;
@@ -168,93 +146,74 @@ namespace Turmerik.DriveExplorer
                             fullDirNamePart = fullDirNamePart.Substring(1);
                         }
 
-                        PrintDataWithColors(
+                        return Tuple.Create(
                             shortDirName,
                             joinStr,
-                            fullDirNamePart,
-                            ConsoleColor.Red,
-                            ConsoleColor.DarkRed,
-                            ConsoleColor.DarkRed);
-                    }
-                }
+                            fullDirNamePart!);
+                    },
+                    "Ambigous dir pair names: ",
+                    ConsoleColor.Red,
+                    ConsoleColor.DarkRed);
             }
         }
 
-        private void PrintInternalNoteDirPairs(DirPairsRetrieverResult wka)
+        public void PrintInternalNoteDirPairs(DirPairsRetrieverResult wka)
         {
-            Console.WriteLine();
-
-            Console.Out.WithColors(
-                wr => wr.Write("Note Internal Dir pairs:"),
-                ConsoleColor.Black,
-                ConsoleColor.Cyan);
-
-            Console.WriteLine();
-            Console.WriteLine();
-
-            foreach (var kvp in wka.InternalDirPairs)
-            {
-                var dirName = kvp.Value;
-
-                PrintDataWithColors(
+            consolePrinter.PrintDataWithColors(
+                wka.InternalDirPairs,
+                kvp => Tuple.Create(
                     kvp.Key,
                     joinStr,
-                    dirName.Select(item => item.FullDirNamePart).NotNull().Single(),
-                    ConsoleColor.Cyan,
-                    ConsoleColor.DarkCyan,
-                    ConsoleColor.DarkCyan);
-            }
+                    kvp.Value.Select(
+                        item => item.FullDirNamePart).NotNull(
+                            ).Single()),
+                "Note Internal Dir pairs:",
+                ConsoleColor.Cyan,
+                ConsoleColor.DarkCyan);
         }
 
-        private void PrintNoteDirPairs(DirPairsRetrieverResult wka)
+        public void PrintNoteDirPairs(DirPairsRetrieverResult wka)
         {
-            Console.WriteLine();
-
-            Console.Out.WithColors(
-                wr => wr.Write("Note Dir pairs:"),
-                ConsoleColor.Black,
-                ConsoleColor.Green);
-
-            Console.WriteLine();
-            Console.WriteLine();
-
-            foreach (var kvp in wka.Notes)
-            {
-                var note = kvp.Value;
-
-                PrintDataWithColors(
+            consolePrinter.PrintDataWithColors(
+                wka.Notes,
+                kvp => Tuple.Create(
                     noteItemDirNamePfx + kvp.Key,
                     joinStr,
-                    note.Title,
-                    ConsoleColor.Green,
-                    ConsoleColor.DarkGreen,
-                    ConsoleColor.DarkGreen);
-            }
+                    kvp.Value.Title),
+                "Note Dir pairs:",
+                ConsoleColor.Green,
+                ConsoleColor.DarkGreen);
         }
 
-        private void PrintDataWithColors(
-            string title,
-            string joinStr,
-            string content,
-            ConsoleColor titleColor,
-            ConsoleColor joinStrBackColor,
-            ConsoleColor contentColor)
+        private DirPairsRetrieverResult GetResultCore(
+            string workDirPath)
         {
-            Console.Out.WithColors(
-                wr => wr.Write(
-                    title),
-                titleColor);
+            workDirPath ??= Environment.CurrentDirectory;
 
-            Console.Out.WithColors(
-                wr => wr.Write(
-                    joinStr),
-                ConsoleColor.Black,
-                joinStrBackColor);
+            var existingDirsArr = Directory.GetDirectories(
+                workDirPath).Select(dir => Path.GetFileName(dir)).ToArray();
 
-            Console.Out.WithColors(
-                wr => wr.WriteLine(
-                    content),
-                contentColor);
+            var wka = GetResultCore(
+                existingDirsArr);
+
+            wka.WorkDirPath = workDirPath;
+            return wka;
         }
+
+        private DirPairsRetrieverResult GetResultCore(
+            string[] existingDirsArr) => new DirPairsRetrieverResult
+            {
+                ExistingDirsArr = existingDirsArr,
+                Notes = noteDirPairsRetriever.GetNotes(
+                    existingDirsArr,
+                    out var noteDirsMap,
+                    out var internalDirsMap,
+                    out var ambgMap,
+                    out var ambgEntryNames),
+                NoteDirPairs = noteDirsMap,
+                InternalDirPairs = internalDirsMap,
+                AmbgDirPairs = ambgMap,
+                AmbgEntryNames = ambgEntryNames
+            };
     }
 }

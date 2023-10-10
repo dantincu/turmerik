@@ -7,6 +7,7 @@ using Turmerik.DriveExplorer;
 using Turmerik.Text;
 using Turmerik.Helpers;
 using Turmerik.MkFsDirsPair.Lib;
+using System.Collections.ObjectModel;
 
 namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 {
@@ -14,9 +15,13 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
     {
         private static readonly string NL = Environment.NewLine;
 
+        private static readonly ReadOnlyDictionary<int, string> commandNames;
+
         private readonly IJsonConversion jsonConversion;
         private readonly INoteDirPairsRetriever noteDirPairsRetriever;
         private readonly INoteDirsPairIdxRetriever noteDirsPairIdxRetriever;
+        private readonly IDirPairsRetriever dirPairsRetriever;
+        private readonly IConsolePrinter consolePrinter;
 
         private readonly AppSettings appSettings;
         private readonly ProgramSettings programSettings;
@@ -25,9 +30,16 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
         private readonly string noteItemsPfx;
         private readonly string joinStr;
 
+        static ProgramComponent()
+        {
+            commandNames = GetCommandNames();
+        }
+
         public ProgramComponent(
             IJsonConversion jsonConversion,
-            INoteDirsPairGeneratorFactory noteDirsPairGeneratorFactory)
+            INoteDirsPairGeneratorFactory noteDirsPairGeneratorFactory,
+            IDirPairsRetrieverFactory dirPairsRetrieverFactory,
+            IConsolePrinter consolePrinter)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -38,11 +50,12 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             programSettings = jsonConversion.LoadConfig<ProgramSettings>(
                 "programSettings.json");
 
-            this.noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
-                trmrk.DirNames);
+            noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(trmrk.DirNames);
+            noteDirsPairIdxRetriever = noteDirsPairGeneratorFactory.IdxRetriever(trmrk.DirNames);
+            dirPairsRetriever = dirPairsRetrieverFactory.Create(trmrk);
 
-            this.noteDirsPairIdxRetriever = noteDirsPairGeneratorFactory.IdxRetriever(
-                trmrk.DirNames);
+            this.consolePrinter = consolePrinter ?? throw new ArgumentNullException(
+                nameof(consolePrinter));
 
             noteItemsPfx = trmrk.DirNames.NoteItemsPfx;
             joinStr = trmrk.DirNames.JoinStr;
@@ -60,53 +73,258 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             WorkArgs wka)
         {
             var current = wka.CurrentFsNodesWrapper;
-            var src = current.Src;
-            var destn = current.Destn;
+            AddFsNodeChildrenIfReq(current);
+            SetSrcDirPairsIfReq(current);
+            SetNotesIfReq(current);
 
-            var destnExistingEntriesArr = Directory.GetFileSystemEntries(
-                destn.FsPath);
-
-            var currentNotes = noteDirPairsRetriever.GetNotes(
-                    destnExistingEntriesArr,
-                    out var noteDirsMap,
-                    out var internalDirsMap,
-                    out var ambgMap,
-                    out var ambgEntryNames);
-
-            AddSrcFsNodeChildren(src);
+            PrintFsEntryNames(current);
+            ListCommandNames();
         }
 
-        private FsNode AddSrcFsNodeChildren(FsNode srcFsNode)
+        private void WaitForCommand()
         {
-            var currentFileNodesArr = GetSrcFolderFilesArr(srcFsNode);
-            srcFsNode.FolderFiles.AddRange(currentFileNodesArr);
 
-            var currentFolderNodesArr = GetSrcSubFoldersArr(srcFsNode);
-            srcFsNode.FolderFiles.AddRange(currentFolderNodesArr);
-
-            return srcFsNode;
         }
 
-        private FsNode[] GetSrcFolderFilesArr(FsNode srcFsNode)
+        private void PrintFsEntryNames(
+            FsNodesWrapper wrapper)
         {
-            var currentFilesArr = Directory.GetFiles(
-                srcFsNode.FsPath);
+            PrintPaths(wrapper, "<<<<");
 
-            var currentFileNodesArr = currentFilesArr.Select(
-                filePath => GetFsNode(srcFsNode, filePath, false)).ToArray();
+            PrintEntryNames(
+                wrapper.SrcChildrenNamesList,
+                ConsoleColor.Cyan);
 
-            return currentFileNodesArr;
+            PrintEntryNames(
+                wrapper.DestnChildrenNamesList,
+                ConsoleColor.Blue);
+
+            PrintEntryNames(
+                wrapper.NotesChildrenNamesList,
+                ConsoleColor.Magenta);
+
+            PrintPaths(wrapper, ">>>>");
         }
 
-        private FsNode[] GetSrcSubFoldersArr(FsNode srcFsNode)
+        private void PrintEntryNames(
+            List<string> entryNamesList,
+            ConsoleColor consoleColor)
         {
-            var currentFoldersArr = Directory.GetDirectories(
-                srcFsNode.FsPath);
+            Console.ForegroundColor = consoleColor;
 
-            var currentFolderNodesArr = currentFoldersArr.Select(
-                filePath => GetFsNode(srcFsNode, filePath, true)).ToArray();
+            foreach (string entryName in entryNamesList)
+            {
+                Console.WriteLine(entryName);
+            }
 
-            return currentFolderNodesArr;
+            Console.ResetColor();
+            Console.WriteLine();
+        }
+
+        private void PrintPaths(
+            FsNodesWrapper wrapper,
+            string prefix)
+        {
+            Console.WriteLine();
+
+            PrintPath(
+                $" {prefix}   SRC PATH",
+                wrapper.Src.FsPath,
+                ConsoleColor.DarkCyan,
+                ConsoleColor.Cyan);
+
+            PrintPath(
+                $" {prefix} DESTN PATH",
+                wrapper.Destn.FsPath,
+                ConsoleColor.DarkBlue,
+                ConsoleColor.Blue);
+
+            PrintPath(
+                $" {prefix} NOTES PATH",
+                wrapper.Notes.FsPath,
+                ConsoleColor.DarkMagenta,
+                ConsoleColor.Magenta);
+
+            Console.WriteLine();
+        }
+
+        private void PrintPath(
+            string caption,
+            string fsPath,
+            ConsoleColor headBackColor,
+            ConsoleColor contentForeColor)
+        {
+            Console.Out.WithColors(
+                () => Console.Write($"{caption}:"),
+                ConsoleColor.Black,
+                headBackColor);
+
+            Console.Out.WithColors(
+                () => Console.Write($" {fsPath}"),
+                contentForeColor);
+
+            Console.WriteLine();
+        }
+
+        private void SetNotesIfReq(
+            FsNodesWrapper wrapper,
+            bool forceRefresh = false)
+        {
+            if (forceRefresh || wrapper.NoteItemsList == null)
+            {
+                wrapper.NoteItemsList = noteDirPairsRetriever.GetNotes(
+                    wrapper.DestnChildrenNamesList.ToArray());
+
+                wrapper.NoteIdxes = wrapper.NoteItemsList.Keys.ToHashSet();
+            }
+        }
+
+        private void SetSrcDirPairsIfReq(
+            FsNodesWrapper wrapper,
+            bool forceRefresh = false)
+        {
+            if (forceRefresh || wrapper.SrcDirPairs == null)
+            {
+                wrapper.SrcDirPairs = new Dictionary<string, string>();
+                wrapper.SrcAmbgDirGroups = new Dictionary<string, List<string>>();
+
+                wrapper.SrcUngrouppedDirNames = wrapper.Src.SubFolders.Select(
+                    folder => folder.Name).ToList();
+
+                int idx = 0;
+
+                while (idx < wrapper.SrcUngrouppedDirNames.Count)
+                {
+                    string srcDirName = wrapper.SrcUngrouppedDirNames[idx];
+
+                    int candIdx = 0;
+                    var matchingDirNamesList = new List<string>();
+
+                    while (candIdx < wrapper.SrcUngrouppedDirNames.Count)
+                    {
+                        if (candIdx != idx)
+                        {
+                            var candDirName = wrapper.SrcUngrouppedDirNames[candIdx];
+
+                            if (candDirName.StartsWith(srcDirName))
+                            {
+                                matchingDirNamesList.Add(candDirName);
+                                wrapper.SrcUngrouppedDirNames.RemoveAt(candIdx);
+
+                                if (candIdx < idx)
+                                {
+                                    idx--;
+                                }
+                            }
+                            else
+                            {
+                                candIdx++;
+                            }
+                        }
+                        else
+                        {
+                            candIdx++;
+                        }
+                    }
+
+                    int matchingDirNamesCount = matchingDirNamesList.Count;
+
+                    if (matchingDirNamesCount > 0)
+                    {
+                        if (matchingDirNamesCount == 1)
+                        {
+                            wrapper.SrcDirPairs.Add(
+                                srcDirName,
+                                matchingDirNamesList.Single());
+                        }
+                        else
+                        {
+                            wrapper.SrcAmbgDirGroups.Add(
+                                srcDirName,
+                                matchingDirNamesList);
+                        }
+
+                        wrapper.SrcUngrouppedDirNames.RemoveAt(idx);
+                    }
+                    else
+                    {
+                        idx++;
+                    }
+                }
+            }
+        }
+
+        private void AddFsNodeChildrenIfReq(
+            FsNodesWrapper wrapper,
+            bool forceRefresh = false)
+        {
+            var srcChildrenNamesList = AddFsNodeChildrenIfReq(
+                wrapper.Src, forceRefresh);
+
+            var destnChildrenNamesList = AddFsNodeChildrenIfReq(
+                wrapper.Destn, forceRefresh);
+
+            var notesChildrenNamesList = AddFsNodeChildrenIfReq(
+                wrapper.Notes, forceRefresh);
+
+            if (forceRefresh)
+            {
+                wrapper.SrcChildrenNamesList = srcChildrenNamesList;
+                wrapper.DestnChildrenNamesList = destnChildrenNamesList;
+                wrapper.NotesChildrenNamesList = notesChildrenNamesList;
+            }
+            else
+            {
+                wrapper.SrcChildrenNamesList ??= srcChildrenNamesList;
+                wrapper.DestnChildrenNamesList ??= destnChildrenNamesList;
+                wrapper.NotesChildrenNamesList ??= notesChildrenNamesList;
+            }
+        }
+
+        private List<string> AddFsNodeChildrenIfReq(
+            FsNode fsNode,
+            bool forceRefresh = false) => fsNode.ShouldRefreshChildren(
+                forceRefresh).With(refresh => refresh.If(() =>
+                    {
+                        var childrenNamesList = new List<string>();
+
+                        fsNode.FolderFiles = GetFolderFilesArr(
+                            fsNode, childrenNamesList);
+
+                        fsNode.SubFolders = GetSubFoldersArr(
+                            fsNode, childrenNamesList);
+
+                        return childrenNamesList;
+                    }));
+
+        private List<FsNode> GetFolderFilesArr(
+            FsNode fsNode,
+            List<string> childrenNamesList) => GetChildNodes(
+                fsNode, Directory.GetFiles,
+                false, childrenNamesList);
+
+        private List<FsNode> GetSubFoldersArr(
+            FsNode fsNode,
+            List<string> childrenNamesList) => GetChildNodes(
+                fsNode, Directory.GetDirectories,
+                true, childrenNamesList);
+
+        private List<FsNode> GetChildNodes(
+            FsNode fsNode,
+            Func<string, string[]> childPathsRetriever,
+            bool isFoldersList,
+            List<string> childrenNamesList)
+        {
+            var fsNodesList = childPathsRetriever(fsNode.FsPath).Select(
+                fsPath => GetFsNode(fsNode, fsPath, isFoldersList)).ToList();
+
+            var childrenNamesArr = fsNodesList.Select(
+                node => node.Name).ToArray();
+
+            childrenNamesList.AddRange(
+                childrenNamesArr);
+
+            return fsNodesList;
         }
 
         private FsNode GetFsNode(
@@ -130,6 +348,62 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
         private FsNode GetRootFsNode(
             string rootPath) => new FsNode(null, string.Empty, true, rootPath);
 
+        private static ReadOnlyDictionary<int, string> GetCommandNames() => Enum.GetValues<Command>().ToDictionary(
+            command => (int)command, command => command.ToString()).RdnlD();
+
+        private void ListCommandNames()
+        {
+            Console.WriteLine();
+
+            Console.Out.WithColors(
+                () => Console.Write(" COMMANDS: <<<< "),
+                ConsoleColor.Black, ConsoleColor.DarkBlue);
+
+            int idx = 0;
+
+            foreach (var kvp in commandNames)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write("    [");
+
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(kvp.Key);
+
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write("]:");
+
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(kvp.Value);
+
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write(";    ");
+
+                if (++idx >= 4)
+                {
+                    idx = 0;
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
+            }
+
+            Console.Out.WithColors(
+                () => Console.Write(" >>>> :COMMANDS "),
+                ConsoleColor.Black, ConsoleColor.DarkBlue);
+
+            Console.WriteLine();
+        }
+
+        private enum Command
+        {
+            Default,
+            ListEntries,
+            ListSrcDirPairs,
+            ListNotes,
+            Refresh,
+            HighlightNextPair,
+            CreateNextNote
+        }
+
         private class FsNodesWrapper
         {
             public FsNodesWrapper(FsNode src, FsNode destn, FsNode notes)
@@ -142,6 +416,17 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             public FsNode Src { get; }
             public FsNode Destn { get; }
             public FsNode Notes { get; }
+
+            public List<string> SrcChildrenNamesList { get; set; }
+            public List<string> DestnChildrenNamesList { get; set; }
+            public List<string> NotesChildrenNamesList { get; set; }
+
+            public Dictionary<int, NoteItemCore> NoteItemsList { get; set; }
+            public HashSet<int> NoteIdxes { get; set; }
+
+            public Dictionary<string, string> SrcDirPairs { get; set; }
+            public Dictionary<string, List<string>> SrcAmbgDirGroups { get; set; }
+            public List<string> SrcUngrouppedDirNames { get; set; }
         }
 
         private class FsNode
@@ -161,12 +446,6 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
                     ParentPath, Name);
 
                 IsFolder = isFolder;
-
-                if (isFolder)
-                {
-                    SubFolders = new List<FsNode>();
-                    FolderFiles = new List<FsNode>();
-                }
             }
 
             public FsNode ParentFolder { get; }
@@ -174,8 +453,16 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             public string Name { get; }
             public string FsPath { get; }
             public bool IsFolder { get; }
-            public List<FsNode> SubFolders { get; }
-            public List<FsNode> FolderFiles { get; }
+            public List<FsNode> SubFolders { get; set; }
+            public List<FsNode> FolderFiles { get; set; }
+
+            public bool ShouldRefreshChildren(
+                bool forceRefresh = false) => IsFolder && (
+                forceRefresh || !AreChildNodesAssigned());
+
+            public bool AreChildNodesAssigned(
+                ) => SubFolders != null && 
+                    FolderFiles != null;
         }
 
         private class WorkArgs

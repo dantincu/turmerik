@@ -30,6 +30,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<INoteDirsPairGeneratorFactory, NoteDirsPairGeneratorFactory>();
             services.AddSingleton<INoteDirNamesPairGeneratorFactory, NoteDirNamesPairGeneratorFactory>();
             services.AddSingleton<IDirPairsRetrieverFactory, DirPairsRetrieverFactory>();
+            services.AddSingleton<IConsolePrinter, ConsolePrinter>();
 
             return services;
         }
