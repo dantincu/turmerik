@@ -6,14 +6,22 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
-using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.Text;
 
-namespace Turmerik.LsDirPairs.ConsoleApp
+namespace Turmerik.DriveExplorer
 {
-    public class DirPairsRetriever
+    public interface IDirPairsRetriever
+    {
+        DirPairsRetrieverResult GetResult(
+            string workDir,
+            bool printResult = true);
+
+        void PrintResult(
+            DirPairsRetrieverResult result);
+    }
+
+    public class DirPairsRetriever : IDirPairsRetriever
     {
         public static readonly string NL = Environment.NewLine;
 
@@ -31,7 +39,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
             trmrk = noteDirsPairSettings ?? throw new ArgumentNullException(nameof(
                 noteDirsPairSettings));
 
-            this.noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
+            noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
                 trmrk.DirNames);
 
             noteItemDirNamePfx = trmrk.DirNames.NoteItemsPfx;
@@ -144,7 +152,7 @@ namespace Turmerik.LsDirPairs.ConsoleApp
                 foreach (var kvp in wka.AmbgDirPairs)
                 {
                     var notesList = kvp.Value;
-                    
+
                     foreach (var note in notesList)
                     {
                         string shortDirName = note.ShortDirName ?? note.Prefix + kvp.Key;

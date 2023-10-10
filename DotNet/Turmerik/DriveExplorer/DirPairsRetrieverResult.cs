@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.DriveExplorer;
 
-namespace Turmerik.MkFsDirsPair.Lib
+namespace Turmerik.DriveExplorer
 {
     public class DirPairsRetrieverResult
     {

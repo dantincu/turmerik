@@ -27,6 +27,7 @@ namespace Turmerik.DriveExplorer
         public class ArgOptionsT
         {
             public string WorkDir { get; set; }
+            public string SortIdx { get; set; }
         }
 
         public class DirNamesT

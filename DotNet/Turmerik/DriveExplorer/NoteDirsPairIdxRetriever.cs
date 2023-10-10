@@ -35,10 +35,16 @@ namespace Turmerik.DriveExplorer
             NoteDirsPairIdxOpts opts);
 
         int GetNextDirIdx(
-            HashSet<int> existingIdxes);
+            HashSet<int> existingIdxes,
+            bool updateExistingIdxes = false);
 
         NoteDirsPairIdx GetNextDirIdx(
             NoteDirsPairIdxOpts opts);
+
+        int[] GetNextDirIdxes(
+            HashSet<int> existingIdxes,
+            int count,
+            bool updateExistingIdxes = false);
     }
 
     public class NoteDirsPairIdxRetriever : INoteDirsPairIdxRetriever
@@ -227,7 +233,8 @@ namespace Turmerik.DriveExplorer
         }
 
         public int GetNextDirIdx(
-            HashSet<int> existingIdxes)
+            HashSet<int> existingIdxes,
+            bool updateExistingIdxes = false)
         {
             int nextIdx = 1;
             int idxesCount = existingIdxes.Count;
@@ -260,7 +267,53 @@ namespace Turmerik.DriveExplorer
                 nextIdx = 2;
             }
 
+            if (updateExistingIdxes)
+            {
+                existingIdxes.Add(nextIdx);
+            }
+
             return nextIdx;
+        }
+
+        public int[] GetNextDirIdxes(
+            HashSet<int> existingIdxes,
+            int count,
+            bool updateExistingIdxes = false)
+        {
+            HashSet<int> workIdexes = existingIdxes;
+
+            if (!updateExistingIdxes)
+            {
+                workIdexes = new HashSet<int>();
+                
+                foreach (int existingIdx in existingIdxes)
+                {
+                    workIdexes.Add(existingIdx);
+                }
+            }
+
+            var retArr = GetNextDirIdxesCore(
+                workIdexes,
+                new int[count],
+                count);
+
+            return retArr;
+        }
+
+        private int[] GetNextDirIdxesCore(
+            HashSet<int> existingIdxes,
+            int[] nextIdxesArr,
+            int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                int nextIdx = GetNextDirIdx(
+                    existingIdxes, true);
+
+                nextIdxesArr[i] = nextIdx;
+            }
+
+            return nextIdxesArr;
         }
 
         private void AddIdxesIfAny<TData>(

@@ -28,6 +28,8 @@ namespace Turmerik.Dependencies
             
             services.AddSingleton<INoteDirsPairFullNamePartRetriever, NoteDirsPairFullNamePartRetriever>();
             services.AddSingleton<INoteDirsPairGeneratorFactory, NoteDirsPairGeneratorFactory>();
+            services.AddSingleton<INoteDirNamesPairGeneratorFactory, NoteDirNamesPairGeneratorFactory>();
+            services.AddSingleton<IDirPairsRetrieverFactory, DirPairsRetrieverFactory>();
 
             return services;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 using Turmerik.Text;
 using Turmerik.Helpers;
-using Turmerik.LsDirPairs.ConsoleApp;
+using Turmerik.MkFsDirsPair.Lib;
 
 namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 {
@@ -16,7 +16,7 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 
         private readonly IJsonConversion jsonConversion;
         private readonly INoteDirPairsRetriever noteDirPairsRetriever;
-        private readonly DirPairsRetriever dirPairsRetriever;
+        private readonly INoteDirsPairIdxRetriever noteDirsPairIdxRetriever;
 
         private readonly AppSettings appSettings;
         private readonly ProgramSettings programSettings;
@@ -41,7 +41,8 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             this.noteDirPairsRetriever = noteDirsPairGeneratorFactory.PairsRetriever(
                 trmrk.DirNames);
 
-            dirPairsRetriever = new DirPairsRetriever(noteDirsPairGeneratorFactory, trmrk);
+            this.noteDirsPairIdxRetriever = noteDirsPairGeneratorFactory.IdxRetriever(
+                trmrk.DirNames);
 
             noteItemsPfx = trmrk.DirNames.NoteItemsPfx;
             joinStr = trmrk.DirNames.JoinStr;
@@ -49,76 +50,89 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 
         public void Run(string[] args)
         {
-            GetChildNodes(new Args(null,
-                programSettings.SrcDirPath,
-                true, programSettings.DestnDirPath),
-                out var src, out var destn);
+            var wka = GetWorkArgs(args);
+            wka.CurrentFsNodesWrapper = wka.RootFsNodesWrapper;
 
-            RunCore(programSettings.SrcDirPath);
+            RunCore(wka);
         }
 
-        private void RunCore(string parentDirPath)
+        private void RunCore(
+            WorkArgs wka)
         {
-            string[] existingEntriesArr = Directory.GetFileSystemEntries(
-                parentDirPath).Select(
-                    entry => Path.GetFileName(entry)).ToArray();
+            var current = wka.CurrentFsNodesWrapper;
+            var src = current.Src;
+            var destn = current.Destn;
 
-            var wka = dirPairsRetriever.GetResult(parentDirPath);
+            var destnExistingEntriesArr = Directory.GetFileSystemEntries(
+                destn.FsPath);
+
+            var currentNotes = noteDirPairsRetriever.GetNotes(
+                    destnExistingEntriesArr,
+                    out var noteDirsMap,
+                    out var internalDirsMap,
+                    out var ambgMap,
+                    out var ambgEntryNames);
+
+            AddSrcFsNodeChildren(src);
         }
 
-        private void GetChildNodes(
-            Args args,
-            out FsNode src,
-            out FsNode destn)
+        private FsNode AddSrcFsNodeChildren(FsNode srcFsNode)
         {
-            src = new FsNode(
-                args.SrcItemName,
-                args.ParentWrppr?.Src,
-                args.IsFolder);
+            var currentFileNodesArr = GetSrcFolderFilesArr(srcFsNode);
+            srcFsNode.FolderFiles.AddRange(currentFileNodesArr);
 
-            if (args.DestnItemPath != null)
-            {
-                destn = new FsNode(
-                    Path.Combine(
-                        args.DestnItemPath,
-                        Path.GetFileName(args.SrcItemName)),
-                    null, args.IsFolder);
-            }
-            else
-            {
-                destn = new FsNode(
-                    args.SrcItemName,
-                    args.ParentWrppr.Destn,
-                    args.IsFolder);
-            }
+            var currentFolderNodesArr = GetSrcSubFoldersArr(srcFsNode);
+            srcFsNode.FolderFiles.AddRange(currentFolderNodesArr);
+
+            return srcFsNode;
         }
 
-        private class Args
+        private FsNode[] GetSrcFolderFilesArr(FsNode srcFsNode)
         {
-            public Args(
-                FsNodesWrapper parentWrppr,
-                string srcItemName,
-                bool isFolder = false,
-                string destnItemPath = null)
-            {
-                ParentWrppr = parentWrppr;
-                SrcItemName = srcItemName;
-                IsFolder = isFolder;
-                DestnItemPath = destnItemPath;
-            }
+            var currentFilesArr = Directory.GetFiles(
+                srcFsNode.FsPath);
 
-            public FsNodesWrapper ParentWrppr { get; }
-            public string SrcItemName { get; }
-            public bool IsFolder { get; }
-            public string DestnItemPath { get; }
+            var currentFileNodesArr = currentFilesArr.Select(
+                filePath => GetFsNode(srcFsNode, filePath, false)).ToArray();
+
+            return currentFileNodesArr;
         }
+
+        private FsNode[] GetSrcSubFoldersArr(FsNode srcFsNode)
+        {
+            var currentFoldersArr = Directory.GetDirectories(
+                srcFsNode.FsPath);
+
+            var currentFolderNodesArr = currentFoldersArr.Select(
+                filePath => GetFsNode(srcFsNode, filePath, true)).ToArray();
+
+            return currentFolderNodesArr;
+        }
+
+        private FsNode GetFsNode(
+            FsNode parentNode,
+            string fsPath,
+            bool isFolder) => new FsNode(
+                parentNode,
+                Path.GetFileName(fsPath),
+                isFolder);
+
+        private WorkArgs GetWorkArgs(string[] args) => new WorkArgs
+        {
+            RootFsNodesWrapper = GetRootFsNodesWrppr()
+        };
+
+        private FsNodesWrapper GetRootFsNodesWrppr() => new FsNodesWrapper(
+            GetRootFsNode(programSettings.SrcDirPath),
+            GetRootFsNode(programSettings.DestnDirPath),
+            GetRootFsNode(programSettings.NotesDirPath));
+
+        private FsNode GetRootFsNode(
+            string rootPath) => new FsNode(null, string.Empty, true, rootPath);
 
         private class FsNodesWrapper
         {
-            public FsNodesWrapper(
-                FsNode src,
-                FsNode destn,
-                FsNode notes)
+            public FsNodesWrapper(FsNode src, FsNode destn, FsNode notes)
             {
                 Src = src ?? throw new ArgumentNullException(nameof(src));
                 Destn = destn ?? throw new ArgumentNullException(nameof(destn));
@@ -133,24 +147,41 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
         private class FsNode
         {
             public FsNode(
+                FsNode parentFolder,
                 string name,
-                FsNode parent = null,
-                bool isFolder = false)
+                bool isFolder,
+                string parentPath = null,
+                string fsPath = null)
             {
-                Name = name ?? throw new ArgumentNullException(
-                    nameof(name));
+                ParentFolder = parentFolder;
+                ParentPath = parentPath ?? parentFolder.FsPath;
+                Name = name;
 
-                Parent = parent;
+                FsPath = fsPath ?? Path.Combine(
+                    ParentPath, Name);
+
                 IsFolder = isFolder;
+
+                if (isFolder)
+                {
+                    SubFolders = new List<FsNode>();
+                    FolderFiles = new List<FsNode>();
+                }
             }
 
+            public FsNode ParentFolder { get; }
+            public string ParentPath { get; }
             public string Name { get; }
-            public FsNode Parent { get; }
+            public string FsPath { get; }
             public bool IsFolder { get; }
-            public List<FsNode> Children { get; set; }
-            public Dictionary<int, NoteItem> ChildNotes { get; set; }
-            public Dictionary<int, List<NoteDirName>> NotesMap { get; set; }
-            public Dictionary<int, List<NoteDirName>> AmbgNotesMap { get; set; }
+            public List<FsNode> SubFolders { get; }
+            public List<FsNode> FolderFiles { get; }
+        }
+
+        private class WorkArgs
+        {
+            public FsNodesWrapper RootFsNodesWrapper { get; init; }
+            public FsNodesWrapper CurrentFsNodesWrapper { get; set; }
         }
     }
 }

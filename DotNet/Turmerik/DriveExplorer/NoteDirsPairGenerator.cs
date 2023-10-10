@@ -285,10 +285,25 @@ namespace Turmerik.DriveExplorer
             SerializationArgs args)
         {
             var data = args.Decorator.Data;
+
             data.ChildItems = data.ChildItems ?? new Dictionary<int, string>();
+            data.ChildItemsSortOrder = data.ChildItemsSortOrder ?? new List<int>();
 
             data.ChildItems.Add(
                 args.Pair.Idx, args.Pair.DocTitle);
+
+            int sortIdx = args.Opts.SortIdx ?? 0;
+
+            if (sortIdx >= 0)
+            {
+                data.ChildItemsSortOrder.Insert(
+                    sortIdx, args.Pair.Idx);
+            }
+            else
+            {
+                data.ChildItemsSortOrder.Add(
+                    args.Pair.Idx);
+            }
 
             string json = args.Decorator.Serialize(true);
             string fileName = GetJsonFileName(args.Opts);

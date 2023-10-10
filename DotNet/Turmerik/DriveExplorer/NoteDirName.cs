@@ -6,6 +6,22 @@ namespace Turmerik.DriveExplorer
 {
     public class NoteDirName
     {
+        public NoteDirName()
+        {
+        }
+
+        public NoteDirName(NoteDirName src)
+        {
+            ShortDirName = src.ShortDirName;
+            FullDirName = src.FullDirName;
+            JoinStr = src.JoinStr;
+            FullDirNamePart = src.FullDirNamePart;
+            Prefix = src.Prefix;
+            Idx = src.Idx;
+            NoteDirCategory = src.NoteDirCategory;
+            NoteInternalDir = src.NoteInternalDir;
+        }
+
         public string ShortDirName { get; set; }
         public string FullDirName { get; set; }
         public string JoinStr { get; set; }

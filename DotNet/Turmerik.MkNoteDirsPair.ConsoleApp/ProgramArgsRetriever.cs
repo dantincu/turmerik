@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.MkFsDirsPair.Lib;
 using Turmerik.Helpers;
+using Turmerik.DriveExplorer;
 
 namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {
     public class ProgramArgsRetriever
     {
-        public ProgramArgs Retrieve(
+        public MkNoteDirsPairArgs Retrieve(
             string[] args,
             AppSettings appSettings)
         {
@@ -28,9 +29,9 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
 
         private void BuildArgs(
             string[] args,
-            ProgramArgs pa,
-            Dictionary<string, Action<ProgramArgs>> optsArr,
-            Dictionary<string, Action<ProgramArgs, string>> argOptsArr)
+            MkNoteDirsPairArgs pa,
+            Dictionary<string, Action<MkNoteDirsPairArgs>> optsArr,
+            Dictionary<string, Action<MkNoteDirsPairArgs, string>> argOptsArr)
         {
             foreach (var arg in args)
             {
@@ -42,9 +43,9 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         }
 
         private void BuildArgsCore(
-            ProgramArgs pa,
-            Dictionary<string, Action<ProgramArgs>> optsArr,
-            Dictionary<string, Action<ProgramArgs, string>> argOptsArr,
+            MkNoteDirsPairArgs pa,
+            Dictionary<string, Action<MkNoteDirsPairArgs>> optsArr,
+            Dictionary<string, Action<MkNoteDirsPairArgs, string>> argOptsArr,
             string arg)
         {
             var optsKvp = optsArr.FirstKvp(
@@ -79,17 +80,17 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             }
         }
 
-        private ProgramArgs PrepArgs(
+        private MkNoteDirsPairArgs PrepArgs(
             AppSettings appSettings,
-            out Dictionary<string, Action<ProgramArgs>> optsArr,
-            out Dictionary<string, Action<ProgramArgs, string>> argOptsArr)
+            out Dictionary<string, Action<MkNoteDirsPairArgs>> optsArr,
+            out Dictionary<string, Action<MkNoteDirsPairArgs, string>> argOptsArr)
         {
             var trmrk = appSettings.TrmrkDirPairs;
             var pfxes = trmrk.Prefixes;
             var argOpts = trmrk.ArgOpts;
-            ProgramArgs pa = new();
+            MkNoteDirsPairArgs pa = new();
 
-            optsArr = new Dictionary<string, Action<ProgramArgs>>
+            optsArr = new Dictionary<string, Action<MkNoteDirsPairArgs>>
             {
                 { pfxes.Note, pAgs => pAgs.CreateNote = true },
                 { pfxes.NoteBook, pAgs => pAgs.CreateNoteBook = true },
@@ -99,23 +100,24 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
                 kvp => $"/{kvp.Key}",
                 kvp => kvp.Value);
 
-            argOptsArr = new Dictionary<string, Action<ProgramArgs, string>>
+            argOptsArr = new Dictionary<string, Action<MkNoteDirsPairArgs, string>>
             {
-                { argOpts.WorkDir, (pAgs, arg) => pAgs.WorkDir = arg }
+                { argOpts.WorkDir, (pAgs, arg) => pAgs.WorkDir = arg },
+                { argOpts.SortIdx, (pAgs, arg) => pAgs.SortIdx = int.Parse(arg) }
             };
 
             return pa;
         }
 
         private void ValidateProgramArgs(
-            ProgramArgs pa)
+            MkNoteDirsPairArgs pa)
         {
             ThrowIfCreateNoteAndNameNull(pa);
             ThrowIfCreateNoteAndBookBothSet(pa);
         }
 
         private void ThrowIfCreateNoteAndNameNull(
-            ProgramArgs pa)
+            MkNoteDirsPairArgs pa)
         {
             if (pa.CreateNote && pa.NoteName == null)
             {
@@ -127,7 +129,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         }
 
         private void ThrowIfCreateNoteAndBookBothSet(
-            ProgramArgs pa)
+            MkNoteDirsPairArgs pa)
         {
             if (pa.CreateNote && pa.CreateNoteBook)
             {

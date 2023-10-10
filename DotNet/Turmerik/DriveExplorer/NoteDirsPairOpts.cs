@@ -10,5 +10,6 @@ namespace Turmerik.DriveExplorer
         public InternalDir[] NoteInternalDirs { get; set; }
         public bool CreateNoteBook { get; set; }
         public char AltSpaceChar { get; set; }
+        public int? SortIdx { get; set; }
     }
 }

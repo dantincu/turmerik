@@ -7,6 +7,7 @@ using Turmerik.Text;
 using Turmerik.Dependencies;
 
 var svcProv = ServiceProviderContainer.Instance.Value.RegisterData(
-    new ServiceCollection().AsOpts(svc => svc.AddScoped<DirNamesPairGenerator>()));
+    new ServiceCollection().AsOpts(
+        svc => svc.AddTransient<IDirsPairInfoGenerator, DirNamesPairGenerator>()));
 
-ProgH.Run(args, svcProv.GetRequiredService<DirNamesPairGenerator>());
+ProgH.Run(args, svcProv.GetRequiredService<IDirsPairInfoGenerator>());
