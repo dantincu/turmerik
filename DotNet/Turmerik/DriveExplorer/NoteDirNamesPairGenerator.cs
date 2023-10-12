@@ -82,7 +82,7 @@ namespace Turmerik.DriveExplorer
                 wka.WorkDir,
                 wka.ExistingEntriesArr,
                 dirsList,
-                wka.ProgArgs.DoNotOpenCreatedDocFile ? null : docFilePath);
+                wka.ProgArgs.OpenCreatedDocFile ? docFilePath: null);
 
             return retInfo;
         }

@@ -66,24 +66,176 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             var wka = GetWorkArgs(args);
             wka.CurrentFsNodesWrapper = wka.RootFsNodesWrapper;
 
+            Run(wka);
+        }
+
+        private void Run(
+            WorkArgs wka)
+        {
+            var current = wka.CurrentFsNodesWrapper;
+            UpdateEntries(current);
             RunCore(wka);
         }
 
         private void RunCore(
             WorkArgs wka)
         {
-            var current = wka.CurrentFsNodesWrapper;
-            AddFsNodeChildrenIfReq(current);
-            SetSrcDirPairsIfReq(current);
-            SetNotesIfReq(current);
+            var command = GetNextCommand(wka);
 
-            PrintFsEntryNames(current);
-            ListCommandNames();
+            switch (command)
+            {
+                case Command.BuildNextNote:
+                    break;
+                case Command.AddRemngToNoteFiles:
+                    break;
+                case Command.GoUpAndRemThis:
+                    break;
+            }
         }
 
-        private void WaitForCommand()
+        private Command GetNextCommand(
+            WorkArgs wka)
         {
+            var current = wka.CurrentFsNodesWrapper;
+            var command = Command.Default;
+            var dfCmd = Command.Default;
 
+            bool hasRemainingEntries = current.SrcChildrenNamesList.Any();
+            bool hasDirPairs = hasRemainingEntries && current.SrcDirPairs.Any();
+
+            if (hasRemainingEntries)
+            {
+                if (hasDirPairs)
+                {
+                    dfCmd = Command.BuildNextNote;
+                }
+                else
+                {
+                    dfCmd = Command.AddRemngToNoteFiles;
+                }
+            }
+            else
+            {
+                command = Command.GoUpAndRemThis;
+            }
+
+            while (command < Command.BuildNextNote)
+            {
+                command = RequestCommand(
+                    Command.BuildNextNote);
+
+                switch (command)
+                {
+                    case Command.ListEntries:
+                        break;
+                    case Command.ListSrcDirPairs:
+                        break;
+                    case Command.ListNotes:
+                        break;
+                    case Command.Refresh:
+                        break;
+                    case Command.BuildNextNote:
+                        break;
+                    case Command.AddRemngToNoteFiles:
+                        break;
+                }
+            }
+
+            PrintExecutingCommand(command);
+            throw new NotImplementedException();
+        }
+
+        private void UpdateEntries(
+            FsNodesWrapper wrapper,
+            bool forceRefresh = false)
+        {
+            AddFsNodeChildrenIfReq(
+                wrapper,
+                forceRefresh);
+
+            SetSrcDirPairsIfReq(
+                wrapper,
+                forceRefresh);
+
+            SetNotesIfReq(
+                wrapper,
+                forceRefresh);
+
+            PrintFsEntryNames(wrapper);
+        }
+
+        private Command RequestCommand(
+            Command? defaultCommand = null,
+            Func<Command, string> errMsgFactory = null,
+            Func<Command, Command> normalizer = null)
+        {
+            errMsgFactory = errMsgFactory.FirstNotNull(
+                value => (value >= 0 && (int)value < commandNames.Count) switch
+                {
+                    false => $"",
+                    true => null!
+                });
+
+            if (normalizer == null)
+            {
+                if (defaultCommand.HasValue)
+                {
+                    normalizer = value => value == Command.Default ? defaultCommand.Value : value;
+                }
+                else
+                {
+                    normalizer = value => value;
+                }
+            }
+            
+            ListCommandNames();
+
+            var command = Command.Default;
+            bool isValid = false;
+
+            while (!isValid)
+            {
+                string input = Console.ReadLine();
+
+                try
+                {
+                    command = Enum.Parse<Command>(input);
+                    string errMsg = errMsgFactory(command);
+
+                    if (errMsg == null)
+                    {
+                        isValid = true;
+                        command = normalizer(command);
+                    }
+                    else
+                    {
+                        errMsg = errMsg.Nullify(true) ?? $"Invalid command: {command}";
+                        command = Command.Default;
+
+                        throw new ArgumentException(errMsg);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    Console.Error.WithExcp(exc);
+                }
+            }
+
+            return command;
+        }
+
+        private void PrintExecutingCommand(
+            Command command)
+        {
+            Console.Out.WithColors(
+                () => Console.Write(" WILL EXECUTE: "),
+                ConsoleColor.Black, ConsoleColor.DarkBlue);
+
+            PrintCommand(
+                (int)command,
+                command.ToString());
+
+            Console.ResetColor();
         }
 
         private void PrintFsEntryNames(
@@ -353,32 +505,22 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 
         private void ListCommandNames()
         {
+            string spacer = "    ";
             Console.WriteLine();
 
             Console.Out.WithColors(
-                () => Console.Write(" COMMANDS: <<<< "),
+                () => Console.Write($" COMMANDS: <<<< "),
                 ConsoleColor.Black, ConsoleColor.DarkBlue);
 
+            Console.Write(spacer);
             int idx = 0;
 
             foreach (var kvp in commandNames)
             {
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
-                Console.Write("    [");
+                PrintCommand(kvp.Key, kvp.Value);
+                Console.Write(spacer);
 
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(kvp.Key);
-
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
-                Console.Write("]:");
-
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(kvp.Value);
-
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
-                Console.Write(";    ");
-
-                if (++idx >= 4)
+                if (++idx >= 5)
                 {
                     idx = 0;
                     Console.ResetColor();
@@ -387,10 +529,30 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             }
 
             Console.Out.WithColors(
-                () => Console.Write(" >>>> :COMMANDS "),
+                () => Console.Write($" >>>> :COMMANDS "),
                 ConsoleColor.Black, ConsoleColor.DarkBlue);
 
             Console.WriteLine();
+        }
+
+        private void PrintCommand(
+            int commandId,
+            string commandName)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write($"[");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write(commandId);
+
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write("]:");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write(commandName);
+
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write($";");
         }
 
         private enum Command
@@ -400,8 +562,9 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
             ListSrcDirPairs,
             ListNotes,
             Refresh,
-            HighlightNextPair,
-            CreateNextNote
+            BuildNextNote,
+            AddRemngToNoteFiles,
+            GoUpAndRemThis
         }
 
         private class FsNodesWrapper

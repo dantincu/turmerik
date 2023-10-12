@@ -14,7 +14,7 @@ namespace Turmerik.DriveExplorer
         public bool CreateNoteBook { get; set; }
         public bool CreateNoteFiles { get; set; }
         public bool CreateNoteInternals { get; set; }
-        public bool DoNotOpenCreatedDocFile { get; set; }
+        public bool OpenCreatedDocFile { get; set; }
         public int? SortIdx { get; set; }
     }
 }

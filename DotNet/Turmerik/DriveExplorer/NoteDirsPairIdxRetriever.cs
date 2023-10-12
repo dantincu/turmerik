@@ -247,19 +247,27 @@ namespace Turmerik.DriveExplorer
                 int prevIdx = 0;
                 int maxI = idxesCount - 1;
 
+                bool nextIdxIsSet = false;
+
                 for (int i = 0; i <= maxI; i++)
                 {
-                    var idx = idxesList[i] - 1;
+                    var idx = idxesList[i];
 
-                    if (idx > prevIdx || i == maxI)
+                    if (idx - prevIdx > 1)
                     {
                         nextIdx = prevIdx + 1;
+                        nextIdxIsSet = true;
                         break;
                     }
                     else
                     {
-                        prevIdx = idx + 1;
+                        prevIdx = idx;
                     }
+                }
+
+                if (!nextIdxIsSet)
+                {
+                    nextIdx = prevIdx + 1;
                 }
             }
             else if (idxesCount == 1 && existingIdxes.Single() == 1)
