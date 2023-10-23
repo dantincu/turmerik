@@ -43,7 +43,7 @@ export class FsEntry implements IFsEntry {
 
   public resolved: ((fsEntry: FsEntry) => void)[] = [];
 
-  public fsPath: string | null;
+  public fsPath!: string | null;
 
   private readonly folderFsEntriesRetriever: (
     dirPath: string,
@@ -78,7 +78,7 @@ export class FsEntry implements IFsEntry {
   }
 
   public isRootLevel() {
-    const isRootLevel = this.parent.isRootFolder;
+    const isRootLevel = this.parent!.isRootFolder;
     return isRootLevel;
   }
 
@@ -87,8 +87,8 @@ export class FsEntry implements IFsEntry {
   ) {
     await this.assureChildrenRetrieved();
 
-    for (let i = 0; i < this.childNodes.length; i++) {
-      await callback(this.childNodes[i], i, this.childNodes);
+    for (let i = 0; i < this.childNodes!.length; i++) {
+      await callback(this.childNodes![i], i, this.childNodes!);
     }
   }
 
@@ -134,7 +134,7 @@ export class FsEntry implements IFsEntry {
         this.exclude();
       } else {
         if (this.resolvedChildrenCount > 0) {
-          forEach(this.childNodes, (childItem) => {
+          forEach(this.childNodes!, (childItem) => {
             if (!childItem.isResolved) {
               childItem.exclude();
             }

@@ -7,6 +7,8 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   if (retVal && allWsSameAsEmpty) {
     retVal = allWsRegex.test(arg);
   }
+
+  return retVal;
 };
 
 export const forEach = <T>(

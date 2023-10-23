@@ -10,7 +10,7 @@ export interface IRuntimeData {
 }
 
 export class FsBackupsManager {
-  public runtimeData: IRuntimeData | null;
+  public runtimeData!: IRuntimeData | null;
 
   constructor() {}
 
@@ -27,8 +27,8 @@ export class FsBackupsManager {
     const fsEntriesRetriever = new FsEntriesRetriever(
       rootDirPath,
       "",
-      this.runtimeData.dirSepStr,
-      this.runtimeData.folderFsEntriesRetriever,
+      this.runtimeData!.dirSepStr,
+      this.runtimeData!.folderFsEntriesRetriever,
       forEachChildCallback
     );
 

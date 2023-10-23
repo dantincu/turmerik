@@ -60,6 +60,10 @@ namespace Turmerik.DriveExplorer
                 LastWriteTimeStr = GetTimeStampStr(fSysInfo.LastWriteTime)
             };
 
+            fsItem.SetCreationTime(fSysInfo.CreationTime);
+            fsItem.SetLastAccessTime(fSysInfo.LastAccessTime);
+            fsItem.SetLastWriteTime(fSysInfo.LastWriteTime);
+
             fsItem.SetPath(fSysInfo.FullName);
 
             if (fSysInfo is DirectoryInfo dirInfo)
