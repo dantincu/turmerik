@@ -7,7 +7,7 @@ namespace Turmerik.DriveExplorer
     public interface IDirPairsRetrieverFactory
     {
         IDirPairsRetriever Create(
-            NoteDirsPairSettings noteDirsPairSettings);
+            NoteDirsPairSettingsMtbl noteDirsPairSettings);
     }
 
     public class DirPairsRetrieverFactory : IDirPairsRetrieverFactory
@@ -26,7 +26,7 @@ namespace Turmerik.DriveExplorer
         }
 
         public IDirPairsRetriever Create(
-            NoteDirsPairSettings noteDirsPairSettings) => new DirPairsRetriever(
+            NoteDirsPairSettingsMtbl noteDirsPairSettings) => new DirPairsRetriever(
                 noteDirsPairGeneratorFactory,
                 consolePrinter,
                 noteDirsPairSettings);

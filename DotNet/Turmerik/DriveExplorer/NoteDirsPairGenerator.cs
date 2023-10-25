@@ -22,10 +22,10 @@ namespace Turmerik.DriveExplorer
 
     public class NoteDirsPairGenerator : INoteDirsPairGenerator
     {
-        private readonly NoteDirsPairSettings settings;
-        private readonly NoteDirsPairSettings.DirNamesT dirNames;
-        private readonly NoteDirsPairSettings.FileNamesT fileNames;
-        private readonly NoteDirsPairSettings.FileContentsT fileContents;
+        private readonly NoteDirsPairSettingsMtbl settings;
+        private readonly NoteDirsPairSettingsMtbl.DirNamesT dirNames;
+        private readonly NoteDirsPairSettingsMtbl.FileNamesT fileNames;
+        private readonly NoteDirsPairSettingsMtbl.FileContentsT fileContents;
 
         private readonly IJsonConversion jsonConversion;
         private readonly INoteDirsPairShortNameRetriever shortNameRetriever;
@@ -38,7 +38,7 @@ namespace Turmerik.DriveExplorer
             IJsonConversion jsonConversion,
             INoteDirsPairShortNameRetriever noteDirsPairShortNameRetriever,
             INoteDirsPairFullNamePartRetriever noteDirsPairFullNamePartRetriever,
-            NoteDirsPairSettings settings)
+            NoteDirsPairSettingsMtbl settings)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));

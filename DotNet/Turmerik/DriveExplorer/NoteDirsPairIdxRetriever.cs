@@ -55,7 +55,7 @@ namespace Turmerik.DriveExplorer
 
         public NoteDirsPairIdxRetriever(
             IJsonConversion jsonConversion,
-            NoteDirsPairSettings.DirNamesT opts)
+            NoteDirsPairSettingsMtbl.DirNamesT opts)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));

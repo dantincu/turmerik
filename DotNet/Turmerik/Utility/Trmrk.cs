@@ -7,6 +7,7 @@ namespace Turmerik.Utility
 {
     public static class Trmrk
     {
+        public static readonly string TrmrkPfx = nameof(Trmrk);
         public static readonly string TrmrkGuidStr;
         public static readonly string TrmrkGuidStrNoDash;
         public static readonly Guid TrmrkGuid;

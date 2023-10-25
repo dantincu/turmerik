@@ -8,16 +8,16 @@ namespace Turmerik.DriveExplorer
     public interface INoteDirsPairGeneratorFactory
     {
         INoteDirsPairIdxRetriever IdxRetriever(
-            NoteDirsPairSettings.DirNamesT opts);
+            NoteDirsPairSettingsMtbl.DirNamesT opts);
 
         INoteDirsPairShortNameRetriever ShortNameRetriever(
-            NoteDirsPairSettings.DirNamesT opts);
+            NoteDirsPairSettingsMtbl.DirNamesT opts);
 
         INoteDirPairsRetriever PairsRetriever(
-            NoteDirsPairSettings.DirNamesT opts);
+            NoteDirsPairSettingsMtbl.DirNamesT opts);
 
         INoteDirsPairGenerator Generator(
-            NoteDirsPairSettings settings);
+            NoteDirsPairSettingsMtbl settings);
     }
 
     public class NoteDirsPairGeneratorFactory : INoteDirsPairGeneratorFactory
@@ -37,19 +37,19 @@ namespace Turmerik.DriveExplorer
         }
 
         public INoteDirsPairIdxRetriever IdxRetriever(
-            NoteDirsPairSettings.DirNamesT opts) => new NoteDirsPairIdxRetriever(
+            NoteDirsPairSettingsMtbl.DirNamesT opts) => new NoteDirsPairIdxRetriever(
                 jsonConversion, opts);
 
         public INoteDirsPairShortNameRetriever ShortNameRetriever(
-            NoteDirsPairSettings.DirNamesT opts) => new NoteDirsPairShortNameRetriever(
+            NoteDirsPairSettingsMtbl.DirNamesT opts) => new NoteDirsPairShortNameRetriever(
                 IdxRetriever(opts));
 
         public INoteDirPairsRetriever PairsRetriever(
-            NoteDirsPairSettings.DirNamesT opts) => new NoteDirPairsRetriever(
+            NoteDirsPairSettingsMtbl.DirNamesT opts) => new NoteDirPairsRetriever(
                 IdxRetriever(opts));
 
         public INoteDirsPairGenerator Generator(
-            NoteDirsPairSettings settings) => new NoteDirsPairGenerator(
+            NoteDirsPairSettingsMtbl settings) => new NoteDirsPairGenerator(
                 jsonConversion,
                 ShortNameRetriever(settings.DirNames),
                 noteDirsPairFullNamePartRetriever,

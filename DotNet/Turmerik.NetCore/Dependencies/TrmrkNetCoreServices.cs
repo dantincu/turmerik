@@ -15,7 +15,6 @@ namespace Turmerik.NetCore.Dependencies
             IServiceCollection services)
         {
             services.AddSingleton<INetCoreAppEnvFactoryCore, NetCoreAppEnvFactoryCore>();
-
             return services;
         }
     }

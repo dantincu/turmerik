@@ -18,12 +18,12 @@ namespace Turmerik.DriveExplorer
     public class NoteDirNamesPairGenerator : INoteDirNamesPairGenerator
     {
         private readonly INoteDirsPairGenerator noteDirsPairGenerator;
-        private readonly NoteDirsPairSettings trmrk;
-        private readonly NoteDirsPairSettings.FileNamesT fileNames;
+        private readonly NoteDirsPairSettingsMtbl trmrk;
+        private readonly NoteDirsPairSettingsMtbl.FileNamesT fileNames;
 
         public NoteDirNamesPairGenerator(
             INoteDirsPairGeneratorFactory noteDirsPairGeneratorFactory,
-            NoteDirsPairSettings trmrk)
+            NoteDirsPairSettingsMtbl trmrk)
         {
             this.trmrk = trmrk;
             this.fileNames = trmrk.FileNames;

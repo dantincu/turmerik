@@ -5,7 +5,7 @@ using Turmerik.MkFsDirsPair.Lib;
 
 namespace Turmerik.DriveExplorer
 {
-    public class NoteDirsPairSettings
+    public class NoteDirsPairSettingsMtbl
     {
         public int? FileNameMaxLength { get; set; }
         public bool? SerializeToJson { get; set; }

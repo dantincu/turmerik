@@ -7,7 +7,7 @@ namespace Turmerik.DriveExplorer
     public interface INoteDirNamesPairGeneratorFactory
     {
         INoteDirNamesPairGenerator Create(
-            NoteDirsPairSettings trmrk);
+            NoteDirsPairSettingsMtbl trmrk);
     }
 
     public class NoteDirNamesPairGeneratorFactory : INoteDirNamesPairGeneratorFactory
@@ -21,7 +21,7 @@ namespace Turmerik.DriveExplorer
         }
 
         public INoteDirNamesPairGenerator Create(
-            NoteDirsPairSettings trmrk) => new NoteDirNamesPairGenerator(
+            NoteDirsPairSettingsMtbl trmrk) => new NoteDirNamesPairGenerator(
                 noteDirsPairGeneratorFactory, trmrk);
     }
 }

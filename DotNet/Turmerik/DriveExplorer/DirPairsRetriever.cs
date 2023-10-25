@@ -36,7 +36,7 @@ namespace Turmerik.DriveExplorer
 
         private readonly INoteDirPairsRetriever noteDirPairsRetriever;
         private readonly IConsolePrinter consolePrinter;
-        private readonly NoteDirsPairSettings trmrk;
+        private readonly NoteDirsPairSettingsMtbl trmrk;
 
         private readonly string noteItemDirNamePfx;
         private readonly string noteInternalDirNamePfx;
@@ -45,7 +45,7 @@ namespace Turmerik.DriveExplorer
         public DirPairsRetriever(
             INoteDirsPairGeneratorFactory noteDirsPairGeneratorFactory,
             IConsolePrinter consolePrinter,
-            NoteDirsPairSettings noteDirsPairSettings)
+            NoteDirsPairSettingsMtbl noteDirsPairSettings)
         {
             trmrk = noteDirsPairSettings ?? throw new ArgumentNullException(nameof(
                 noteDirsPairSettings));

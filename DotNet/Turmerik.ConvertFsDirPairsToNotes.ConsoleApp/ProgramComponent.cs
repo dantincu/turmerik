@@ -25,7 +25,7 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
 
         private readonly AppSettings appSettings;
         private readonly ProgramSettings programSettings;
-        private readonly NoteDirsPairSettings trmrk;
+        private readonly NoteDirsPairSettingsMtbl trmrk;
 
         private readonly string noteItemsPfx;
         private readonly string joinStr;

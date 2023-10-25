@@ -21,8 +21,8 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         private readonly INoteDirNamesPairGenerator noteDirNamesPairGenerator;
 
         private readonly AppSettings appSettings;
-        private readonly NoteDirsPairSettings trmrk;
-        private readonly NoteDirsPairSettings.FileNamesT fileNames;
+        private readonly NoteDirsPairSettingsMtbl trmrk;
+        private readonly NoteDirsPairSettingsMtbl.FileNamesT fileNames;
 
         private readonly string noteJsonFileName;
         private readonly string noteBookJsonFileName;
