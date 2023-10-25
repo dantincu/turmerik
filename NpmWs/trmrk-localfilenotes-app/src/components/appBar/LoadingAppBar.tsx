@@ -32,9 +32,9 @@ export default function LoadingAppBar ({
   return (<AppBar sx={{ position: "relative" }}>
     <Grid>
       <Grid gridRow={0}>
-        <IconButton sx={{ color: args.appTheme.dfBgColor, width: "2em" }}><HomeIcon /></IconButton>
+        <IconButton sx={{ color: "#FFF", width: "2em" }}><HomeIcon /></IconButton>
         <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>Turmerik Local File Notes</Typography>
-        <IconButton sx={{ color: args.appTheme.dfBgColor, width: "2em", float: "right" }}
+        <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
             onClick={handleClick}><MenuIcon /></IconButton>
       </Grid>
     </Grid>

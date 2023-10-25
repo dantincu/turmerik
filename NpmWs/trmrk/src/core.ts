@@ -5,7 +5,7 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   retVal = retVal && arg !== "";
 
   if (retVal && allWsSameAsEmpty) {
-    retVal = allWsRegex.test(arg);
+    retVal = !allWsRegex.test(arg);
   }
 
   return retVal;

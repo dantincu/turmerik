@@ -21,7 +21,7 @@ export default function ToggleDarkModeBtn({
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
     const switchToDarkMode = !args.appTheme.isDark;
-    args.darModeToggled(switchToDarkMode);
+    args.darkModeToggled(switchToDarkMode);
   };
 
   return (

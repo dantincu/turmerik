@@ -7,6 +7,9 @@ import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 
 import { ApiConfigData, ApiResponse } from "trmrk-axios";
+import { browser as trmrkBrwsr } from "trmrk-browser";
+
+import { queryKeys } from "./utils";
 import { AppSettingsData } from "../services/settings/app-settings";
 import { apiSvc } from "../services/settings/api/api-service"; 
 import { setAppSettings } from '../store/app-settings';
@@ -61,6 +64,7 @@ export default function App({
 }) {
   apiSvc.init(appConfig);
 
+  const [ redirectToAppTheme, setRedirectToAppTheme ] = useState(false);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ appSettingsResp, setAppSettingsResp ] = useState({} as ApiResponse<AppSettingsData>);
   const [ isDarkMode, setIsDarkMode ] = useState(false);
@@ -69,10 +73,15 @@ export default function App({
     isDarkMode
   });
 
+  console.log("isDarkMode", isDarkMode);
+
   const appArgs = {
     appTheme: appTheme,
     resp: appSettingsResp,
-    darModeToggled: switchToDarkMode => {
+    darkModeToggled: switchToDarkMode => {
+      const appThemeMode = switchToDarkMode ? "dark" : "light";
+      localStorage.setItem(queryKeys.appTheme, appThemeMode);
+      console.log("switchToDarkMode", switchToDarkMode);
       dispatch(setDarkMode(switchToDarkMode));
       setIsDarkMode(switchToDarkMode);
     }
@@ -81,15 +90,43 @@ export default function App({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    apiSvc.get<AppSettingsData>("AppSettings").then(resp => {
-      setAppSettingsResp(resp);
-      setIsLoading(false);
+    if (redirectToAppTheme) {
+      setRedirectToAppTheme(false);
+    } else {
+      const searchParams = new URLSearchParams(window.location.search);
+      const appThemeQ = searchParams.get(queryKeys.appTheme);
 
-      if (resp.isSuccessStatus) {
-        dispatch(setAppSettings(resp.data));
+      if (appThemeQ) {
+        const appThemeMode = appThemeQ === "light" ? "light" : "dark";
+        localStorage.setItem(queryKeys.appTheme, appThemeMode);
+
+        appArgs.darkModeToggled(appThemeQ === "dark");
+
+        const newUrl = trmrkBrwsr.getRelUri(
+          searchParams, q => q.delete(queryKeys.appTheme), null, null, true
+        );
+
+        window.history.replaceState(null, "", newUrl);
+        setRedirectToAppTheme(true);
+      } else {
+        const appThemeMode = localStorage.getItem(queryKeys.appTheme);
+        const isDarkModeVal = appThemeMode === "dark";
+
+        if (isDarkMode !== isDarkModeVal) {
+          setIsDarkMode(isDarkModeVal);
+        }
+        
+        apiSvc.get<AppSettingsData>("AppSettings").then(resp => {
+          setAppSettingsResp(resp);
+          setIsLoading(false);
+
+          if (resp.isSuccessStatus) {
+            dispatch(setAppSettings(resp.data));
+          }
+        });
       }
-    });
-  }, []);
+    }
+  }, [redirectToAppTheme, isDarkMode]);
 
   return (
     <ThemeProvider theme={appTheme.theme}>

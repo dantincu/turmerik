@@ -6,5 +6,5 @@ import { AppTheme } from "../../services/app-theme/app-theme";
 export interface AppBarArgs {
   appTheme: AppTheme;
   resp: ApiResponse<AppSettingsData>;
-  darModeToggled: (switchToDarkMode: boolean) => void;
+  darkModeToggled: (switchToDarkMode: boolean) => void;
 }
