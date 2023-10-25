@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { ThemeProvider, Theme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import AppBar from "@mui/material/AppBar";
-import Grid from "@mui/material/Grid";
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
 
 import { ApiConfigData, ApiResponse } from "trmrk-axios";
-import { AppSettings, AppSettingsData } from "../services/settings/app-settings";
+import { AppSettingsData } from "../services/settings/app-settings";
 import { apiSvc } from "../services/settings/api/api-service"; 
-import { getAppSettings, setAppSettings } from '../store/app-settings';
-import { getDarkMode, setDarkMode } from '../store/app-theme';
+import { setAppSettings } from '../store/app-settings';
+import { setDarkMode } from '../store/app-theme';
 
-import { getAppTheme, AppTheme } from "../services/app-theme/app-theme";
+import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppBarArgs } from "../components/appBar/AppBarArgs";
 import LoadingAppBar from "../components/appBar/LoadingAppBar";
 import MainAppBar from "../components/appBar/LoadingAppBar";

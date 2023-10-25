@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 
+import styled from '@emotion/styled';
 import MenuItem from '@mui/material/MenuItem';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { AppBarArgs } from "./AppBarArgs";
+
+const ColorThemeLabel = styled.span`
+  padding-right: 1em
+`;
 
 export default function ToggleDarkModeBtn({
   args,
@@ -21,6 +26,7 @@ export default function ToggleDarkModeBtn({
 
   return (
     <MenuItem onClick={handleClick}>
+      <ColorThemeLabel>Color Theme</ColorThemeLabel>
       { args.appTheme.isDark ? <LightModeIcon /> : <DarkModeIcon /> }
     </MenuItem>);
 }
