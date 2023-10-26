@@ -15,10 +15,21 @@ import { apiSvc } from "../services/settings/api/api-service";
 import { setAppSettings } from '../store/app-settings';
 import { setDarkMode } from '../store/app-theme';
 
-import { getAppTheme } from "../services/app-theme/app-theme";
+import { getAppTheme, AppTheme } from "../services/app-theme/app-theme";
 import { AppBarArgs } from "../components/appBar/AppBarArgs";
 import LoadingAppBar from "../components/appBar/LoadingAppBar";
 import MainAppBar from "../components/appBar/LoadingAppBar";
+
+interface AppEffectsArgs {
+  appArgs: AppBarArgs,
+  reduceSearchParams: boolean,
+  setReduceSearchParams: (value: boolean) => void,
+  isDarkMode: boolean,
+  setIsDarkMode: (value: boolean) => void,
+  setAppSettingsResp: (value: ApiResponse<AppSettingsData>) => void,
+  setIsLoading: (value: boolean) => void,
+  disaptchSetAppSettings: (data: AppSettingsData) => void
+}
 
 const LoadingEl = ({
   args
@@ -53,6 +64,61 @@ const AppEl = ({
     <MainAppBar args={args} />
     <Container sx={{ position: "relative" }} maxWidth="xl">{JSON.stringify(args.resp.data)}</Container>
   </Paper>);
+}
+
+const getAppArgs = (
+  appTheme: AppTheme,
+  appSettingsResp: ApiResponse<AppSettingsData>,
+  setDarkMode: (swToDarkMode: boolean) => void,
+  setIsDarkMode: (swToDarkMode: boolean) => void) => ({
+  appTheme: appTheme,
+  resp: appSettingsResp,
+  darkModeToggled: switchToDarkMode => {
+    const appThemeMode = switchToDarkMode ? "dark" : "light";
+    localStorage.setItem(queryKeys.appTheme, appThemeMode);
+    
+    setDarkMode(switchToDarkMode);
+    setIsDarkMode(switchToDarkMode);
+  }
+} as AppBarArgs);
+
+const runAppEffects = (
+  args: AppEffectsArgs) => {
+  if (args.reduceSearchParams) {
+    args.setReduceSearchParams(false);
+
+  } else {
+    const [willSetReduceSearchParams, searchParams] = shouldReduceSearchParams(args.appArgs);
+    const dfAppThemeQ = searchParams.get(queryKeys.dfAppTheme);
+
+    if (willSetReduceSearchParams) {
+      args.setReduceSearchParams(true);
+
+      const newUrl = trmrkBrwsr.getRelUri(
+        searchParams, q => {}, null, null, true
+      );
+
+      window.history.replaceState(null, "", newUrl);
+    } else {
+      const appThemeMode = localStorage.getItem(
+        queryKeys.appTheme) ?? dfAppThemeQ;
+
+      const isDarkModeVal = appThemeMode === "dark";
+
+      if (args.isDarkMode !== isDarkModeVal) {
+        args.setIsDarkMode(isDarkModeVal);
+      }
+      
+      apiSvc.get<AppSettingsData>("AppSettings").then(resp => {
+        args.setAppSettingsResp(resp);
+        args.setIsLoading(false);
+
+        if (resp.isSuccessStatus) {
+          args.disaptchSetAppSettings(resp.data);
+        }
+      });
+    }
+  }
 }
 
 const shouldReduceSearchParams = (appArgs: AppBarArgs): [boolean, URLSearchParams] => {
@@ -101,56 +167,26 @@ export default function App({
     isDarkMode
   });
 
-  const appArgs = {
-    appTheme: appTheme,
-    resp: appSettingsResp,
-    darkModeToggled: switchToDarkMode => {
-      const appThemeMode = switchToDarkMode ? "dark" : "light";
-      localStorage.setItem(queryKeys.appTheme, appThemeMode);
-      
-      dispatch(setDarkMode(switchToDarkMode));
-      setIsDarkMode(switchToDarkMode);
-    }
-  } as AppBarArgs;
+  const appArgs = getAppArgs(
+    appTheme,
+    appSettingsResp,
+    swToDarkMode => dispatch(setDarkMode(swToDarkMode)),
+    swToDarkMode => setIsDarkMode(swToDarkMode)
+  );
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (reduceSearchParams) {
-      setReduceSearchParams(false);
-      
-    } else {
-      const [willSetReduceSearchParams, searchParams] = shouldReduceSearchParams(appArgs);
-      const dfAppThemeQ = searchParams.get(queryKeys.dfAppTheme);
-
-      if (willSetReduceSearchParams) {
-        setReduceSearchParams(true);
-
-        const newUrl = trmrkBrwsr.getRelUri(
-          searchParams, q => {}, null, null, true
-        );
-
-        window.history.replaceState(null, "", newUrl);
-      } else {
-        const appThemeMode = localStorage.getItem(
-          queryKeys.appTheme) ?? dfAppThemeQ;
-
-        const isDarkModeVal = appThemeMode === "dark";
-
-        if (isDarkMode !== isDarkModeVal) {
-          setIsDarkMode(isDarkModeVal);
-        }
-        
-        apiSvc.get<AppSettingsData>("AppSettings").then(resp => {
-          setAppSettingsResp(resp);
-          setIsLoading(false);
-
-          if (resp.isSuccessStatus) {
-            dispatch(setAppSettings(resp.data));
-          }
-        });
-      }
-    }
+    runAppEffects({
+      appArgs,
+      reduceSearchParams,
+      setReduceSearchParams: value => setReduceSearchParams(value),
+      isDarkMode,
+      setIsDarkMode: value => setIsDarkMode(value),
+      setAppSettingsResp: value => setAppSettingsResp(value),
+      setIsLoading,
+      disaptchSetAppSettings: value => dispatch(setAppSettings(value))
+    });
   }, [reduceSearchParams, isDarkMode]);
 
   return (
