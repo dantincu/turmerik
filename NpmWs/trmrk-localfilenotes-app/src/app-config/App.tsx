@@ -55,6 +55,34 @@ const AppEl = ({
   </Paper>);
 }
 
+const shouldReduceSearchParams = (appArgs: AppBarArgs): [boolean, URLSearchParams] => {
+  const searchParams = new URLSearchParams(window.location.search);
+
+  const appThemeQ = searchParams.get(queryKeys.appTheme);
+  const clearAppThemeQ = searchParams.get(queryKeys.clearAppTheme);
+
+  let willSetReduceSearchParams = false;
+
+  if (typeof clearAppThemeQ === "string") {
+    searchParams.delete(queryKeys.clearAppTheme);
+
+    localStorage.removeItem(queryKeys.appTheme);
+    willSetReduceSearchParams = true;
+  }
+
+  if (appThemeQ) {
+    searchParams.delete(queryKeys.appTheme);
+
+    const appThemeMode = appThemeQ === "light" ? "light" : "dark";
+    localStorage.setItem(queryKeys.appTheme, appThemeMode);
+    appArgs.darkModeToggled(appThemeQ === "dark");
+
+    willSetReduceSearchParams = true;
+  }
+
+  return [willSetReduceSearchParams, searchParams];
+}
+
 export default function App({
   envName,
   appConfig
@@ -64,7 +92,7 @@ export default function App({
 }) {
   apiSvc.init(appConfig);
 
-  const [ redirectToAppTheme, setRedirectToAppTheme ] = useState(false);
+  const [ reduceSearchParams, setReduceSearchParams ] = useState(false);
   const [ isLoading, setIsLoading ] = useState(true);
   const [ appSettingsResp, setAppSettingsResp ] = useState({} as ApiResponse<AppSettingsData>);
   const [ isDarkMode, setIsDarkMode ] = useState(false);
@@ -88,31 +116,22 @@ export default function App({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (redirectToAppTheme) {
-      setRedirectToAppTheme(false);
+    if (reduceSearchParams) {
+      setReduceSearchParams(false);
+      
     } else {
-      const searchParams = new URLSearchParams(window.location.search);
+      const [willSetReduceSearchParams, searchParams] = shouldReduceSearchParams(appArgs);
       const dfAppThemeQ = searchParams.get(queryKeys.dfAppTheme);
-      const appThemeQ = searchParams.get(queryKeys.appTheme);
-      const clearAppThemeQ = searchParams.get(queryKeys.clearAppTheme);
 
-      if (appThemeQ) {
-        const appThemeMode = appThemeQ === "light" ? "light" : "dark";
-        localStorage.setItem(queryKeys.appTheme, appThemeMode);
-
-        appArgs.darkModeToggled(appThemeQ === "dark");
+      if (willSetReduceSearchParams) {
+        setReduceSearchParams(true);
 
         const newUrl = trmrkBrwsr.getRelUri(
-          searchParams, q => q.delete(queryKeys.appTheme), null, null, true
+          searchParams, q => {}, null, null, true
         );
 
         window.history.replaceState(null, "", newUrl);
-        setRedirectToAppTheme(true);
       } else {
-        if (typeof clearAppThemeQ === "string") {
-          localStorage.removeItem(queryKeys.appTheme);
-        }
-
         const appThemeMode = localStorage.getItem(
           queryKeys.appTheme) ?? dfAppThemeQ;
 
@@ -132,7 +151,7 @@ export default function App({
         });
       }
     }
-  }, [redirectToAppTheme, isDarkMode]);
+  }, [reduceSearchParams, isDarkMode]);
 
   return (
     <ThemeProvider theme={appTheme.theme}>
