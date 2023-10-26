@@ -4,7 +4,7 @@
   "description": "Turmerik Local File Notes App",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --port 443",
+    "start": "webpack serve --port 9001",
     "build": "SET NODE_ENV=production & webpack"
   },
   "author": "Daniel Tincu",

@@ -1,4 +1,6 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+
+import { core as trmrk } from "trmrk";
 
 export namespace core {
   export interface ApiConfigData {
@@ -40,6 +42,10 @@ export class ApiService {
   public apiRelUriBase!: string;
   public apiUriBase!: string;
 
+  public defaultConfigFactory: (
+    data: any
+  ) => AxiosRequestConfig<any> | undefined = (data) => undefined;
+
   public init(data: core.ApiConfigData) {
     this.apiHost = data.apiHost;
     this.apiRelUriBase = data.apiRelUriBase;
@@ -73,7 +79,15 @@ export class ApiService {
         resolve(resp);
       })
       .catch((reason) => {
-        const resp = this.getError<T>(reason);
+        let resp: ApiResponse<T>;
+        const response = reason.response;
+
+        if (response) {
+          resp = this.setResponseFields(response as core.ApiResponse<T>);
+        } else {
+          resp = this.getError<T>(reason);
+        }
+
         resolve(resp);
       });
   }
@@ -81,14 +95,12 @@ export class ApiService {
   public setResponseFields<T>(resp: core.ApiResponse<T>) {
     const status = resp.status;
 
-    if (status && status >= 100) {
+    if (status >= 100) {
       if (status < 200) {
         resp.isInfoStatus = true;
-        resp.errMessage = "Unexpected status code";
       } else if (status < 300) {
         resp.isSuccessStatus = true;
       } else if (status < 400) {
-        resp.errMessage = "Unexpected status code";
         resp.isRedirectStatus = false;
       } else {
         resp.isErrorStatus = false;
@@ -98,7 +110,7 @@ export class ApiService {
 
           switch (status) {
             case 400:
-              resp.errMessage = "A validation error occurred";
+              resp.errMessage = "A validation error has occurred";
               resp.isBadRequestStatus = true;
               break;
             case 401:
@@ -106,12 +118,12 @@ export class ApiService {
               resp.isNotAuthenticatedStatus = true;
               break;
             case 403:
-              resp.errMessage =
-                "You are not authorized to access the requested resource";
+              resp.errMessage = "You are not authorized to access this page";
               resp.isForbiddenStatus = true;
               break;
             case 404:
-              resp.errMessage = "The requested resource could not be found";
+              resp.errMessage =
+                "The page you are looking for doesn't exist or has been moved";
               resp.isNotFoundStatus = true;
               break;
             case 408:
@@ -123,8 +135,6 @@ export class ApiService {
           resp.isServerErrorStatus = true;
         }
       }
-    } else {
-      resp.errMessage = "Unexpected status code";
     }
 
     if (!resp.isSuccessStatus) {
@@ -134,58 +144,128 @@ export class ApiService {
         resp.errTitle = "Error";
       }
 
-      resp.errMessage ??= "The server responded with an error";
+      resp.errMessage ??= `The server responded with status ${status}`;
     }
 
     return resp;
   }
 
-  public get<T, D = any>(relUri: string, data?: D | undefined) {
+  public get<T, D = any>(
+    relUri: string,
+    data?: D | undefined,
+    configFactory?: (
+      d: D,
+      cfg: AxiosRequestConfig<D> | undefined
+    ) => AxiosRequestConfig<D> | undefined
+  ) {
     return new Promise<core.ApiResponse<T>>((resolve) => {
       this.resolvePromise(
-        axios.get<T, core.AxiosResponse<T>, D>(this.getUri(relUri), {
-          data: data,
-        }),
+        axios.get<T, core.AxiosResponse<T>, D>(
+          this.getUri(relUri),
+          this.getConfig(configFactory, data)
+        ),
         resolve
       );
     });
   }
 
-  public post<T, D = any>(relUri: string, data: D) {
+  public post<T, D = any>(
+    relUri: string,
+    data: D,
+    configFactory?: (
+      d: D,
+      cfg: AxiosRequestConfig<D> | undefined
+    ) => AxiosRequestConfig<D> | undefined
+  ) {
     return new Promise<core.ApiResponse<T>>((resolve) => {
       this.resolvePromise(
-        axios.post<T, core.AxiosResponse<T>, D>(this.getUri(relUri), data),
+        axios.post<T, core.AxiosResponse<T>, D>(
+          this.getUri(relUri),
+          data,
+          this.getConfig(configFactory, data)
+        ),
         resolve
       );
     });
   }
 
-  public put<T, D = any>(relUri: string, data: D) {
+  public put<T, D = any>(
+    relUri: string,
+    data: D,
+    configFactory?: (
+      d: D,
+      cfg: AxiosRequestConfig<D> | undefined
+    ) => AxiosRequestConfig<D> | undefined
+  ) {
     return new Promise<core.ApiResponse<T>>((resolve) => {
       this.resolvePromise(
-        axios.put<T, core.AxiosResponse<T>, D>(this.getUri(relUri), data),
+        axios.put<T, core.AxiosResponse<T>, D>(
+          this.getUri(relUri),
+          data,
+          this.getConfig(configFactory, data)
+        ),
         resolve
       );
     });
   }
 
-  public patch<T, D = any>(relUri: string, data: D) {
+  public patch<T, D = any>(
+    relUri: string,
+    data: D,
+    configFactory?: (
+      d: D,
+      cfg: AxiosRequestConfig<D> | undefined
+    ) => AxiosRequestConfig<D> | undefined
+  ) {
     return new Promise<core.ApiResponse<T>>((resolve) => {
       this.resolvePromise(
-        axios.patch<T, core.AxiosResponse<T>, D>(this.getUri(relUri), data),
+        axios.patch<T, core.AxiosResponse<T>, D>(
+          this.getUri(relUri),
+          data,
+          this.getConfig(configFactory, data)
+        ),
         resolve
       );
     });
   }
 
-  public delete<T, D = any>(relUri: string, data?: D | undefined) {
+  public delete<T, D = any>(
+    relUri: string,
+    configFactory?: (
+      d: D,
+      cfg: AxiosRequestConfig<D> | undefined
+    ) => AxiosRequestConfig<D> | undefined
+  ) {
     return new Promise<core.ApiResponse<T>>((resolve) => {
       this.resolvePromise(
-        axios.delete<T, core.AxiosResponse<T>, D>(this.getUri(relUri), {
-          data: data,
-        }),
+        axios.delete<T, core.AxiosResponse<T>, D>(
+          this.getUri(relUri),
+          this.getConfig(configFactory)
+        ),
         resolve
       );
     });
+  }
+
+  private getConfig<D>(
+    configFactory?: (
+      d: D,
+      cfg: AxiosRequestConfig<D> | undefined
+    ) => AxiosRequestConfig<D> | undefined,
+    data?: D
+  ) {
+    let config: AxiosRequestConfig<D> | undefined =
+      this.defaultConfigFactory(data);
+
+    configFactory ??= (dt, cfg) => {
+      if (cfg && (dt ?? false)) {
+        cfg.data ??= dt;
+      }
+
+      return cfg;
+    };
+
+    config = configFactory(data!, config);
+    return config;
   }
 }

@@ -85,7 +85,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             out Dictionary<string, Action<MkNoteDirsPairArgs>> optsArr,
             out Dictionary<string, Action<MkNoteDirsPairArgs, string>> argOptsArr)
         {
-            var trmrk = appSettings.TrmrkDirPairs;
+            var trmrk = appSettings.NoteDirPairs;
             var pfxes = trmrk.Prefixes;
             var argOpts = trmrk.ArgOpts;
             MkNoteDirsPairArgs pa = new();

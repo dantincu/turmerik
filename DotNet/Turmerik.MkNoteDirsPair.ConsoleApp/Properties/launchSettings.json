@@ -2,8 +2,8 @@
   "profiles": {
     "Turmerik.MkNoteDirsPair.ConsoleApp": {
       "commandName": "Project",
-      // "commandLineArgs": "/i /f asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:",
-      "commandLineArgs": "/wd:F:\\B\\MyOneDrive\\notes asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:"
+      "commandLineArgs": "/i /f asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:",
+      // "commandLineArgs": "/wd:F:\\B\\MyOneDrive\\notes asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:"
       // "commandLineArgs": "/i"
     }
   }

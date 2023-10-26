@@ -13,5 +13,5 @@ var svcProv = ServiceProviderContainer.Instance.Value.RegisterData(
 
 ProgramH.Run(() => svcProv.GetRequiredService<IDirPairsRetrieverFactory>(
     ).Create(svcProv.GetRequiredService<IJsonConversion>(
-        ).LoadConfig<AppSettings>().TrmrkDirPairs).GetResult(
+        ).LoadConfig<AppSettings>().NoteDirPairs).GetResult(
         args.FirstOrDefault(), true));

@@ -35,7 +35,7 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         {
             appSettings = jsonConversion.LoadConfig<AppSettings>();
 
-            trmrk = appSettings.TrmrkDirPairs;
+            trmrk = appSettings.NoteDirPairs;
             fileNames = trmrk.FileNames;
 
             this.noteDirNamesPairGenerator = noteDirNamesPairGeneratorFactory.Create(trmrk);

@@ -45,7 +45,7 @@ namespace Turmerik.ConvertFsDirPairsToNotes.ConsoleApp
                 nameof(jsonConversion));
 
             appSettings = jsonConversion.LoadConfig<AppSettings>();
-            trmrk = appSettings.TrmrkDirPairs;
+            trmrk = appSettings.NoteDirPairs;
 
             programSettings = jsonConversion.LoadConfig<ProgramSettings>(
                 "programSettings.json");

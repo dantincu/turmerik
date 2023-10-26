@@ -1,5 +1,6 @@
 {
-  "TrmrkDirPairs": {
+  "ClientRedirectUrl": null,
+  "NoteDirPairs": {
     "FileNameMaxLength": 100,
     // "SerializeToJson": true,
     "NoteDirPairsIntegrityCheck": "None",

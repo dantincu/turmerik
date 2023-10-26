@@ -16,7 +16,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins(clientHost);
+            builder.WithOrigins(
+                clientHost).AllowAnyHeader(
+                ).AllowAnyMethod(
+                ).AllowCredentials();
         });
 });
 
@@ -36,7 +39,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 var app = builder.Build();
-
+https://www.wipo.int/pct-eservices/en/support/cert_import_backup_chrome.html
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -51,5 +54,9 @@ app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

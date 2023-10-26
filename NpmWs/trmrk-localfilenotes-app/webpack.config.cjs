@@ -41,11 +41,11 @@ module.exports = {
   ],
   devServer: {
       // ...
-      https: {
+      /* https: {
           key: fs.readFileSync("devsslcert/cert.key"),
           cert: fs.readFileSync("devsslcert/cert.crt"),
           ca: fs.readFileSync("devsslcert/ca.crt"),
-      },
+      },*/
       // ....
   },
 };

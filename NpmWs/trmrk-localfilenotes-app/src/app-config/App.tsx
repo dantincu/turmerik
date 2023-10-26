@@ -20,14 +20,16 @@ import { AppBarArgs } from "../components/appBar/AppBarArgs";
 import LoadingAppBar from "../components/appBar/LoadingAppBar";
 import MainAppBar from "../components/appBar/LoadingAppBar";
 
+import ApiError from "../components/apiError/ApiError";
+
 interface AppEffectsArgs {
   appArgs: AppBarArgs,
   reduceSearchParams: boolean,
-  setReduceSearchParams: (value: boolean) => void,
+  setReduceSearchParams: React.Dispatch<React.SetStateAction<boolean>>,
   isDarkMode: boolean,
-  setIsDarkMode: (value: boolean) => void,
-  setAppSettingsResp: (value: ApiResponse<AppSettingsData>) => void,
-  setIsLoading: (value: boolean) => void,
+  setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>
+  setAppSettingsResp: React.Dispatch<React.SetStateAction<ApiResponse<AppSettingsData>>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   disaptchSetAppSettings: (data: AppSettingsData) => void
 }
 
@@ -49,7 +51,7 @@ const LoadErrorEl = ({
 }) => {
   return (<Paper className="trmrk-app-error">
     <LoadingAppBar args={args} />
-    <Container sx={{ position: "relative" }} maxWidth="xl">{JSON.stringify(args.resp)}</Container>
+    <Container sx={{ position: "relative" }} maxWidth="xl"><ApiError apiResp={args.resp} /></Container>
   </Paper>);
 }
 
@@ -180,10 +182,10 @@ export default function App({
     runAppEffects({
       appArgs,
       reduceSearchParams,
-      setReduceSearchParams: value => setReduceSearchParams(value),
+      setReduceSearchParams,
       isDarkMode,
-      setIsDarkMode: value => setIsDarkMode(value),
-      setAppSettingsResp: value => setAppSettingsResp(value),
+      setIsDarkMode,
+      setAppSettingsResp,
       setIsLoading,
       disaptchSetAppSettings: value => dispatch(setAppSettings(value))
     });

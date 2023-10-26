@@ -9,6 +9,6 @@ namespace Turmerik.LsDirPairs.ConsoleApp
 {
     public class AppSettings
     {
-        public NoteDirsPairSettingsMtbl TrmrkDirPairs { get; set; }
+        public NoteDirsPairSettingsMtbl NoteDirPairs { get; set; }
     }
 }

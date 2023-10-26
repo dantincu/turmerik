@@ -12,9 +12,11 @@ namespace Turmerik.Notes.AspNetCore.Settings
         public AppSettingsCoreImmtbl(
             AppSettingsCoreMtbl src)
         {
+            ClientRedirectUrl = src.ClientRedirectUrl;
             NoteDirPairs = src.NoteDirPairs?.ToImmtbl();
         }
 
+        public string ClientRedirectUrl { get; }
         public NoteDirsPairSettingsImmtbl NoteDirPairs { get; }
     }
 }
