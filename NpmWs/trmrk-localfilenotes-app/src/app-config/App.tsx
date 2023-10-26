@@ -73,15 +73,13 @@ export default function App({
     isDarkMode
   });
 
-  console.log("isDarkMode", isDarkMode);
-
   const appArgs = {
     appTheme: appTheme,
     resp: appSettingsResp,
     darkModeToggled: switchToDarkMode => {
       const appThemeMode = switchToDarkMode ? "dark" : "light";
       localStorage.setItem(queryKeys.appTheme, appThemeMode);
-      console.log("switchToDarkMode", switchToDarkMode);
+      
       dispatch(setDarkMode(switchToDarkMode));
       setIsDarkMode(switchToDarkMode);
     }
@@ -94,7 +92,9 @@ export default function App({
       setRedirectToAppTheme(false);
     } else {
       const searchParams = new URLSearchParams(window.location.search);
+      const dfAppThemeQ = searchParams.get(queryKeys.dfAppTheme);
       const appThemeQ = searchParams.get(queryKeys.appTheme);
+      const clearAppThemeQ = searchParams.get(queryKeys.clearAppTheme);
 
       if (appThemeQ) {
         const appThemeMode = appThemeQ === "light" ? "light" : "dark";
@@ -109,7 +109,13 @@ export default function App({
         window.history.replaceState(null, "", newUrl);
         setRedirectToAppTheme(true);
       } else {
-        const appThemeMode = localStorage.getItem(queryKeys.appTheme);
+        if (typeof clearAppThemeQ === "string") {
+          localStorage.removeItem(queryKeys.appTheme);
+        }
+
+        const appThemeMode = localStorage.getItem(
+          queryKeys.appTheme) ?? dfAppThemeQ;
+
         const isDarkModeVal = appThemeMode === "dark";
 
         if (isDarkMode !== isDarkModeVal) {
