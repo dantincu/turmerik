@@ -13,8 +13,6 @@ namespace Turmerik.Notes.AspNetCore.Filters
 {
     public class RequiredClientVersionFilter : IActionFilter
     {
-        public const string CLIENT_VERSION_HEADER_NAME = "trmrk-client-version";
-
         private readonly IAppSettingsService<AppSettingsCoreImmtbl> appSettingsRetriever;
 
         public RequiredClientVersionFilter(
@@ -31,11 +29,13 @@ namespace Turmerik.Notes.AspNetCore.Filters
         {
             if (!appSettingsRetriever.Data.IsDevEnv)
             {
-                var clientVersionStr = context.HttpContext.Request.Headers[CLIENT_VERSION_HEADER_NAME].ToString();
+                var clientVersionStr = context.HttpContext.Request.Headers[TrmrkHeaderNamesH.CLIENT_VERSION_HEADER_NAME].ToString();
 
                 if (int.TryParse(clientVersionStr, out var clientVersionNum) || clientVersionNum < appSettingsRetriever.Data.RequiredClientVersion)
                 {
                     context.HttpContext.Response.StatusCode = StatusCodesH.STATUS_428_PRECONDITION_REQUIRED;
+                    context.HttpContext.Response.Headers[TrmrkHeaderNamesH.REQUIRED_CLIENT_VERSION_HEADER_NAME] = appSettingsRetriever.Data.RequiredClientVersion.ToString();
+                    context.HttpContext.Response.Headers[HeaderNamesH.ACCESS_CONTROL_EXPOSE_HEADERS] = TrmrkHeaderNamesH.REQUIRED_CLIENT_VERSION_HEADER_NAME;
                 }
             }
         }

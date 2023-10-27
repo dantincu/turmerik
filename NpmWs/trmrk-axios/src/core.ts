@@ -12,6 +12,7 @@ export namespace core {
     status: number;
     statusText: string;
     request?: any;
+    headers: { [key: string]: string };
   }
 
   export interface ApiResponse<T> extends AxiosResponse<T> {
@@ -29,7 +30,13 @@ export namespace core {
     isNotAuthenticatedStatus?: boolean | null | undefined;
     isNotFoundStatus?: boolean | null | undefined;
     isTimeoutStatus?: boolean | null | undefined;
+    isPreconditionRequiredStatus?: boolean | null | undefined;
   }
+
+  export const trmrkHeaderNames = {
+    clientVersion: "trmrk-client-version",
+    requiredClientVersion: "trmrk-required-client-version",
+  };
 }
 
 export type ApiConfigData = core.ApiConfigData;
@@ -61,12 +68,17 @@ export class ApiService {
     if (defaultConfigFactory !== null) {
       this.defaultConfigFactory =
         defaultConfigFactory ??
-        ((data) => ({
-          withCredentials: true,
-          headers: {
-            "trmrk-client-version": this.clientVersion,
-          },
-        }));
+        ((data) => {
+          const headers: { [key: string]: string } = {};
+
+          headers[core.trmrkHeaderNames.clientVersion] =
+            this.clientVersion.toString();
+
+          return {
+            withCredentials: true,
+            headers,
+          };
+        });
     }
   }
 
@@ -148,6 +160,13 @@ export class ApiService {
               resp.errMessage = "The request took too long to respond";
               resp.isTimeoutStatus = true;
               break;
+            case 428:
+              resp.isPreconditionRequiredStatus = true;
+
+              if (core.trmrkHeaderNames.requiredClientVersion in resp.headers) {
+                resp.errMessage = `The client app in the browser needs to be updated. \
+                  Please back up any unsubmitted data (if any) and then refresh the browser page in order to update the client app.`;
+              }
           }
         } else {
           resp.isServerErrorStatus = true;
