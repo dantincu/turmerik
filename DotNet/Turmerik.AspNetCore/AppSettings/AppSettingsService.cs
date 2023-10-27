@@ -9,17 +9,17 @@ using Turmerik.Text;
 
 namespace Turmerik.AspNetCore.AppSettings
 {
-    public interface IAppSettingsRetriever<TImmtblData>
+    public interface IAppSettingsService<TImmtblData>
     {
         TImmtblData Data { get; }
     }
 
-    public class AppSettingsRetriever<TImmtblData, TMtblData> : IAppSettingsRetriever<TImmtblData>
+    public class AppSettingsService<TImmtblData, TMtblData> : IAppSettingsService<TImmtblData>
     {
         private readonly IJsonConversion jsonConversion;
         private readonly Func<TMtblData, TImmtblData> normalizerFunc;
 
-        public AppSettingsRetriever(
+        public AppSettingsService(
             IJsonConversion jsonConversion,
             Func<TMtblData, TImmtblData> normalizerFunc)
         {

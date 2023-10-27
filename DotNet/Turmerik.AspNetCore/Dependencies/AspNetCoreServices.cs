@@ -17,7 +17,7 @@ namespace Turmerik.AspNetCore.Dependencies
             IServiceCollection services)
         {
             TrmrkServices.RegisterAll(services);
-            services.AddSingleton<IAppSettingsRetrieverFactory, AppSettingsRetrieverFactory>();
+            services.AddSingleton<IAppSettingsServiceFactory, AppSettingsServiceFactory>();
 
             return services;
         }
@@ -25,7 +25,7 @@ namespace Turmerik.AspNetCore.Dependencies
         public static IServiceCollection RegisterAppSettingsRetriever<TImmtblData, TMtblData>(
             IServiceCollection services,
             Func<TMtblData, TImmtblData> normalizerFunc = null) => services.AddSingleton(
-                svcProv => svcProv.GetRequiredService<IAppSettingsRetrieverFactory>(
-                    ).Retriever(normalizerFunc));
+                svcProv => svcProv.GetRequiredService<IAppSettingsServiceFactory>(
+                    ).Service(normalizerFunc));
     }
 }

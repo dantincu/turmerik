@@ -8,12 +8,12 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AppSettingsController : ControllerBase
+    public class AppSettingsController : ApiControllerBase
     {
-        private readonly IAppSettingsRetriever<AppSettingsCoreImmtbl> appSettingsRetriever;
+        private readonly IAppSettingsService<AppSettingsCoreImmtbl> appSettingsRetriever;
 
         public AppSettingsController(
-            IAppSettingsRetriever<AppSettingsCoreImmtbl> appSettingsRetriever)
+            IAppSettingsService<AppSettingsCoreImmtbl> appSettingsRetriever)
         {
             this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(nameof(appSettingsRetriever));
         }
@@ -21,7 +21,9 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
         [HttpGet]
         public ClientAppSettingsCore Get() => new ClientAppSettingsCore
         {
-            TrmrkPfx = Trmrk.TrmrkPfx
+            TrmrkPfx = Trmrk.TrmrkPfx,
+            IsDevEnv = appSettingsRetriever.Data.IsDevEnv,
+            RequiredClientVersion = appSettingsRetriever.Data.RequiredClientVersion
         };
     }
 }

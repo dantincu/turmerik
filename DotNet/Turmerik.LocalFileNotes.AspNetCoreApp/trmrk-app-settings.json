@@ -1,4 +1,6 @@
 {
+  "IsDevEnv": true,
+  "RequiredClientVersion": 1,
   "ClientRedirectUrl": null,
   "NoteDirPairs": {
     "FileNameMaxLength": 100,

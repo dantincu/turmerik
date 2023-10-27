@@ -3,6 +3,7 @@ using Turmerik.AspNetCore.Dependencies;
 using Turmerik.Dependencies;
 using Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies;
 using Turmerik.Notes.AspNetCore.Dependencies;
+using Turmerik.Notes.AspNetCore.Filters;
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -23,7 +24,10 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<RequiredClientVersionFilter>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

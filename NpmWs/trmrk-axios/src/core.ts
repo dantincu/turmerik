@@ -4,6 +4,7 @@ export namespace core {
   export interface ApiConfigData {
     apiHost: string;
     apiRelUriBase: string;
+    clientVersion: number;
   }
 
   export interface AxiosResponse<T> {
@@ -39,17 +40,34 @@ export class ApiService {
   public apiHost!: string;
   public apiRelUriBase!: string;
   public apiUriBase!: string;
+  public clientVersion!: number;
 
   public defaultConfigFactory: (
     data: any
-  ) => AxiosRequestConfig<any> | undefined = () => ({
-    withCredentials: true,
-  });
+  ) => AxiosRequestConfig<any> | undefined = () => undefined;
 
-  public init(data: core.ApiConfigData) {
+  public init(
+    data: core.ApiConfigData,
+    defaultConfigFactory?:
+      | ((data: any) => AxiosRequestConfig<any> | undefined)
+      | null
+      | undefined
+  ) {
     this.apiHost = data.apiHost;
     this.apiRelUriBase = data.apiRelUriBase;
     this.apiUriBase = [this.apiHost, this.apiRelUriBase].join("/");
+    this.clientVersion = data.clientVersion;
+
+    if (defaultConfigFactory !== null) {
+      this.defaultConfigFactory =
+        defaultConfigFactory ??
+        ((data) => ({
+          withCredentials: true,
+          headers: {
+            "trmrk-client-version": this.clientVersion,
+          },
+        }));
+    }
   }
 
   public getUri(relUri: string) {

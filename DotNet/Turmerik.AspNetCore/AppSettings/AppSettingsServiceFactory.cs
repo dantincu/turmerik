@@ -8,24 +8,24 @@ using Turmerik.Text;
 
 namespace Turmerik.AspNetCore.AppSettings
 {
-    public interface IAppSettingsRetrieverFactory
+    public interface IAppSettingsServiceFactory
     {
-        IAppSettingsRetriever<TImmtblData> Retriever<TImmtblData, TMtblData>(
+        IAppSettingsService<TImmtblData> Service<TImmtblData, TMtblData>(
             Func<TMtblData, TImmtblData> normalizerFunc = null);
     }
 
-    public class AppSettingsRetrieverFactory : IAppSettingsRetrieverFactory
+    public class AppSettingsServiceFactory : IAppSettingsServiceFactory
     {
         private readonly IJsonConversion jsonConversion;
 
-        public AppSettingsRetrieverFactory(
+        public AppSettingsServiceFactory(
             IJsonConversion jsonConversion)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(nameof(jsonConversion));
         }
 
-        public IAppSettingsRetriever<TImmtblData> Retriever<TImmtblData, TMtblData>(
-            Func<TMtblData, TImmtblData> normalizerFunc = null) => new AppSettingsRetriever<TImmtblData, TMtblData>(
+        public IAppSettingsService<TImmtblData> Service<TImmtblData, TMtblData>(
+            Func<TMtblData, TImmtblData> normalizerFunc = null) => new AppSettingsService<TImmtblData, TMtblData>(
                 jsonConversion, normalizerFunc.FirstNotNull(
                     src => src.CreateFromSrc<TImmtblData>()));
     }

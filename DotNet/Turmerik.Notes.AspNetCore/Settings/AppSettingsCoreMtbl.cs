@@ -9,6 +9,8 @@ namespace Turmerik.Notes.AspNetCore.Settings
 {
     public class AppSettingsCoreMtbl
     {
+        public bool IsDevEnv { get; set; }
+        public int RequiredClientVersion { get; set; }
         public string ClientRedirectUrl { get; set; }
         public NoteDirsPairSettingsMtbl NoteDirPairs { get; set; }
     }
