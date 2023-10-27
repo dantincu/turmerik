@@ -32,7 +32,9 @@ export default function LoadingAppBar ({
   return (<AppBar sx={{ position: "relative" }}>
     <Grid>
       <Grid gridRow={0}>
-        <IconButton sx={{ color: "#FFF", width: "2em" }}><HomeIcon /></IconButton>
+        <IconButton sx={{ color: "#FFF", width: "2em" }}>
+          <img src="../../assets/Icon-32x30-nobg.png" />
+        </IconButton>
         <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>Turmerik Local File Notes</Typography>
         <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
             onClick={handleClick}><MenuIcon /></IconButton>

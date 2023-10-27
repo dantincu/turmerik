@@ -18,7 +18,7 @@ import { setDarkMode } from '../store/app-theme';
 import { getAppTheme, AppTheme } from "../services/app-theme/app-theme";
 import { AppBarArgs } from "../components/appBar/AppBarArgs";
 import LoadingAppBar from "../components/appBar/LoadingAppBar";
-import MainAppBar from "../components/appBar/LoadingAppBar";
+import MainAppBar from "../components/appBar/MainAppBar";
 
 import ApiError from "../components/apiError/ApiError";
 

@@ -1,0 +1,106 @@
+<style></style>
+
+<div id="drawing"></div>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.2.0/svg.min.js"
+  integrity="sha512-EmfT33UCuNEdtd9zuhgQClh7gidfPpkp93WO8GEfAP3cLD++UM1AG9jsTUitCI9DH5nF72XaFePME92r767dHA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
+<script>
+  const sqMxRowLen = 4;
+  const containerEl = document.getElementById("drawing");
+
+  for (let dim of [1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64]) {
+    let sqSz = dim * 2;
+    let sqSp = dim;
+
+    let sqMxSize = sqMxRowLen * (sqSz + sqSp) + sqSp;
+
+    const drawEl = document.createElement("div", {
+      id: `draw${dim}`,
+    });
+
+    drawEl.style.display = "flex-block";
+    drawEl.style.width = `${sqMxSize}px`;
+    drawEl.style.height = `${sqMxSize}px`;
+    drawEl.style.borderRadius = `${sqSp}px`;
+    drawEl.style.backgroundColor = "#210";
+    drawEl.style.margin = "10px";
+
+    containerEl.appendChild(drawEl);
+
+    var draw = SVG().addTo(drawEl);
+    draw.size(sqMxSize, sqMxSize);
+
+    let mx = [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      [1, 0],
+      [1, 1],
+      [1, 2],
+      [1, 3],
+      [2, 0],
+      [2, 1],
+      [2, 2],
+      [2, 3],
+      [3, 0],
+      [3, 1],
+      [3, 2],
+      [3, 3],
+    ];
+
+    for (let sq of mx) {
+      if (sq) {
+        const [j, i] = sq;
+
+        var rect = draw.rect(sqSz, sqSz);
+        rect.attr({
+          x: i * (sqSz + sqSp) + sqSp,
+          y: j * (sqSz + sqSp) + sqSp,
+          rx: sqSp,
+        });
+        rect.fill("#f80");
+      }
+    }
+
+    const smSqSz = sqSz * 0.5;
+
+    mx = [
+      null,
+      [0, 1],
+      [0, 2],
+      [0, 3],
+      null,
+      null,
+      [1, 2],
+      null,
+      null,
+      [2, 1],
+      null,
+      null,
+      [3, 0],
+      [3, 1],
+      [3, 2],
+      null,
+    ];
+
+    for (let sq of mx) {
+      if (sq) {
+        const [j, i] = sq;
+
+        var rect = draw.rect(smSqSz, smSqSz);
+        rect.attr({
+          x: i * (sqSz + sqSp) + sqSp * 1.5,
+          y: j * (sqSz + sqSp) + sqSp * 1.5,
+          rx: sqSp,
+        });
+        rect.fill("#210");
+      }
+    }
+  }
+</script>

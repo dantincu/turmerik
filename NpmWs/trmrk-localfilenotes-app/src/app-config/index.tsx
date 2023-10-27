@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import store from '../store/store';
 
 import './index.css';
+import "../assets/favicon.ico"
+import "../assets/Icon-32x30-nobg.png"
 import App from './App';
 import { ApiConfigData } from "trmrk-axios"; 
 
