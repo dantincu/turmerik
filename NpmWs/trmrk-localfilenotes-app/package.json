@@ -34,6 +34,7 @@
     "react-router-dom": "^6.17.0",
     "trmrk": "../trmrk",
     "trmrk-axios": "../trmrk-axios",
+    "trmrk-browser-core": "../trmrk-browser-core",
     "trmrk-browser": "../trmrk-browser"
   }
 }

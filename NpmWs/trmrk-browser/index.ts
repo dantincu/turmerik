@@ -1,5 +1,1 @@
-import * as core from "./src/core";
-
-export const browser = {
-  ...core,
-};
+export * from "trmrk-browser-core";

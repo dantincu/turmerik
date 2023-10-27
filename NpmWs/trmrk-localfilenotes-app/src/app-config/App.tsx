@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 
 import { ApiConfigData, ApiResponse } from "trmrk-axios";
-import { browser as trmrkBrwsr } from "trmrk-browser";
+import { browser as trmrkBrwser } from "trmrk-browser";
 
 import { queryKeys } from "./utils";
 import { AppSettingsData } from "../services/settings/app-settings";
@@ -95,7 +95,7 @@ const runAppEffects = (
     if (willSetReduceSearchParams) {
       args.setReduceSearchParams(true);
 
-      const newUrl = trmrkBrwsr.getRelUri(
+      const newUrl = trmrkBrwser.getRelUri(
         searchParams, q => {}, null, null, true
       );
 

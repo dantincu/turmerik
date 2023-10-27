@@ -1,0 +1,23 @@
+{
+  "name": "trmrk-browser-core",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Core browser-related js code related used across Turmerik Apps",
+  "main": "index.js",
+  "scripts": {
+    "build-all": "webpack --config webpack.config.dev.cjs && webpack --config webpack.config.prod.cjs",
+    "build-dev": "webpack --config webpack.config.dev.cjs",
+    "build-prod": "webpack --config webpack.config.prod.cjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "dependencies": {
+    "trmrk": "../trmrk"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.2.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
