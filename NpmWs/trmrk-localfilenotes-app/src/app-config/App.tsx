@@ -91,7 +91,6 @@ const runAppEffects = (
 
   } else {
     const [willSetReduceSearchParams, searchParams] = shouldReduceSearchParams(args.appArgs);
-    const dfAppThemeQ = searchParams.get(queryKeys.dfAppTheme);
 
     if (willSetReduceSearchParams) {
       args.setReduceSearchParams(true);
@@ -102,9 +101,7 @@ const runAppEffects = (
 
       window.history.replaceState(null, "", newUrl);
     } else {
-      const appThemeMode = localStorage.getItem(
-        queryKeys.appTheme) ?? dfAppThemeQ;
-
+      const appThemeMode = localStorage.getItem(queryKeys.appTheme);
       const isDarkModeVal = appThemeMode === "dark";
 
       if (args.isDarkMode !== isDarkModeVal) {

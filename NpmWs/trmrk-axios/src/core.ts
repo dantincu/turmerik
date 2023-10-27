@@ -1,7 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-import { core as trmrk } from "trmrk";
-
 export namespace core {
   export interface ApiConfigData {
     apiHost: string;
@@ -44,7 +42,9 @@ export class ApiService {
 
   public defaultConfigFactory: (
     data: any
-  ) => AxiosRequestConfig<any> | undefined = (data) => undefined;
+  ) => AxiosRequestConfig<any> | undefined = () => ({
+    withCredentials: true,
+  });
 
   public init(data: core.ApiConfigData) {
     this.apiHost = data.apiHost;
