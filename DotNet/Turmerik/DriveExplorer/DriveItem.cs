@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Turmerik.Helpers;
 
 namespace Turmerik.DriveExplorer
 {
-    public enum OfficeLikeFileType
+    public enum OfficeFileType
     {
-        Docs = 1,
-        Sheets,
-        Slides
+        Word = 1,
+        Excel,
+        PowerPoint
     }
 
     public enum FileType
@@ -24,63 +25,90 @@ namespace Turmerik.DriveExplorer
         ZippedFolder
     }
 
-    public class DriveItem
+    public class DriveItem<TDriveItem>
+        where TDriveItem : DriveItem<TDriveItem>
     {
-        private string path;
+        public DriveItem()
+        {
+        }
 
-        private DateTime? creationTime;
-        private DateTime? lastAccessTime;
-        private DateTime? lastWriteTime;
+        public DriveItem(
+            DriveItem<TDriveItem> src,
+            int depth = 0)
+        {
+            Idnf = src.Idnf;
+            Name = src.Name;
+            DisplayName = src.DisplayName;
+            IsFolder = src.IsFolder;
+            FnWoExtn = src.FnWoExtn;
+            FnExtn = src.FnExtn;
+            IsRootFolder = src.IsRootFolder;
+            PrIdnf = src.PrIdnf;
+            FileType = src.FileType;
+            OfficeFileType = src.OfficeFileType;
+            IsTextFile = src.IsTextFile;
+            IsImageFile = src.IsImageFile;
+            IsVideoFile = src.IsVideoFile;
+            IsAudioFile = src.IsAudioFile;
 
-        private DriveItem? parentFolder;
+            if (depth > 0)
+            {
+                int childrenDepth = depth - 1;
 
-        public string Id { get; set; }
+                SubFolders = src.SubFolders?.Select(
+                    item => item.CreateFromSrc<TDriveItem>(null, childrenDepth)).ToList();
+
+                FolderFiles = src.FolderFiles?.Select(
+                    item => item.CreateFromSrc<TDriveItem>(null, 0)).ToList();
+            }
+            else if (depth < 0)
+            {
+                SubFolders = src.SubFolders;
+                FolderFiles = src.FolderFiles;
+            }
+        }
+
+        public string Idnf { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public bool? IsFolder { get; set; }
-        public string FileNameExtension { get; set; }
+        public string FnWoExtn { get; set; }
+        public string FnExtn { get; set; }
         public bool? IsRootFolder { get; set; }
 
-        public string CreationTimeStr { get; set; }
-        public string LastAccessTimeStr { get; set; }
-        public string LastWriteTimeStr { get; set; }
+        public string PrIdnf { get; set; }
+
         public FileType? FileType { get; set; }
-        public OfficeLikeFileType? OfficeLikeFileType { get; set; }
+        public OfficeFileType? OfficeFileType { get; set; }
         public bool? IsTextFile { get; set; }
         public bool? IsImageFile { get; set; }
         public bool? IsVideoFile { get; set; }
         public bool? IsAudioFile { get; set; }
-        public string TextFileContent { get; set; }
-        public byte[] RawFileContent { get; set; }
-        public long? SizeBytesCount { get; set; }
-        public string WebUrl { get; set; }
 
-        public List<DriveItem>? SubFolders { get; set; }
-        public List<DriveItem>? FolderFiles { get; set; }
+        public List<TDriveItem>? SubFolders { get; set; }
+        public List<TDriveItem>? FolderFiles { get; set; }
+    }
 
-        public string GetPath() => path;
+    public class DriveItem : DriveItem<DriveItem>
+    {
+    }
 
-        public void SetPath(
-            string path) => this.path = path;
+    public class DriveItem<TDriveItem, TData> : DriveItem<TDriveItem>
+        where TDriveItem : DriveItem<TDriveItem, TData>
+    {
+        public DriveItem()
+        {
+        }
 
-        public DriveItem? GetParentFolder() => parentFolder;
+        public DriveItem(DriveItem<TDriveItem, TData> src, int depth = 0) : base(src, depth)
+        {
+            Data = src.Data;
+        }
 
-        public DriveItem? SetParentFolder(
-            DriveItem? parentFolder) => parentFolder;
+        public DriveItem(DriveItem<TDriveItem> src, int depth = 0) : base(src, depth)
+        {
+        }
 
-        public DateTime? GetCreationTime() => creationTime;
-
-        public void SetCreationTime(
-            DateTime? creationTime) => this.creationTime = creationTime;
-
-        public DateTime? GetLastAccessTime() => lastAccessTime;
-
-        public void SetLastAccessTime(
-            DateTime? lastAccessTime) => this.creationTime = lastAccessTime;
-
-        public DateTime? GetLastWriteTime() => lastWriteTime;
-
-        public void SetLastWriteTime(
-            DateTime? lastWriteTime) => this.lastWriteTime = lastWriteTime;
+        public TData Data { get; set; }
     }
 }

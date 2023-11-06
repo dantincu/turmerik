@@ -62,6 +62,48 @@ namespace Turmerik.FileSystem
             Directory.Move(sourceDir, destinationDir);
         }
 
+        public static async Task<byte[]> ReadAllBytesAsync(
+            string filePath,
+            int buffSize = 1024)
+        {
+            using var stream = new FileStream(
+                filePath, FileMode.Open,
+                FileAccess.Read);
+
+            var bytesList = new List<byte>();
+            var buff = new byte[buffSize];
+
+            var readCount = await ReadBytesAsync(
+                stream, bytesList, buff, buffSize);
+
+            while (readCount == buffSize)
+            {
+                readCount = await ReadBytesAsync(
+                    stream, bytesList, buff, buffSize);
+            }
+
+            return bytesList.ToArray();
+        }
+
+        public static async Task<int> ReadBytesAsync(
+            this FileStream stream,
+            List<byte> bytesList,
+            byte[] buff,
+            int maxBytesToRead)
+        {
+            int readCount = await stream.ReadAsync(
+                buff, 0, maxBytesToRead);
+
+            if (readCount > 0)
+            {
+                var arr = new byte[readCount];
+                buff.CopyTo(arr, 0);
+                bytesList.AddRange(arr);
+            }
+
+            return readCount;
+        }
+
         /// <summary>
         /// Taken from: https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories
         /// </summary>

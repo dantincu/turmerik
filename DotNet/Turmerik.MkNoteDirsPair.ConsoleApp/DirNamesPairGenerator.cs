@@ -8,10 +8,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
 using Turmerik.MkFsDirsPair.Lib;
+using Turmerik.Notes;
 using Turmerik.Text;
+using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
 namespace Turmerik.MkNoteDirsPair.ConsoleApp
@@ -21,8 +22,8 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
         private readonly INoteDirNamesPairGenerator noteDirNamesPairGenerator;
 
         private readonly AppSettings appSettings;
-        private readonly NoteDirsPairSettingsMtbl trmrk;
-        private readonly NoteDirsPairSettingsMtbl.FileNamesT fileNames;
+        private readonly NoteDirsPairConfigMtbl trmrk;
+        private readonly NoteDirsPairConfigMtbl.FileNamesT fileNames;
 
         private readonly string noteJsonFileName;
         private readonly string noteBookJsonFileName;
@@ -131,12 +132,12 @@ namespace Turmerik.MkNoteDirsPair.ConsoleApp
             string title,
             string content)
         {
-            Console.Out.WithColors(
+            ConsoleH.WithColors(
                 () => Console.Write(
                     title),
                 ConsoleColor.DarkGreen);
 
-            Console.Out.WithColors(
+            ConsoleH.WithColors(
                 () => Console.WriteLine(
                     content),
                 ConsoleColor.Cyan);

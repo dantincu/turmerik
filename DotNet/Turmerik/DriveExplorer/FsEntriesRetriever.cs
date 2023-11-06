@@ -26,10 +26,10 @@ namespace Turmerik.DriveExplorer
         {
             var folderPath = idnf;
             var entry = new DirectoryInfo(folderPath);
-            var folder = GetDriveItem(entry, true);
+            var folder = GetDriveItem(entry, false);
 
             var driveItemsArr = entry.EnumerateFileSystemInfos(
-                ).Select(fi => GetDriveItem(fi, false)).ToArray();
+                ).Select(fi => GetDriveItem(fi, true)).ToArray();
 
             folder.SubFolders = new List<DriveItem>(
                 driveItemsArr.Where(
@@ -48,6 +48,32 @@ namespace Turmerik.DriveExplorer
         public override async Task<bool> FileExistsAsync(
             string idnf) => File.Exists(idnf);
 
+        public override string GetItemIdnf<TDriveItem>(
+            TDriveItem item,
+            bool compute)
+        {
+            string idnf = item.Idnf;
+
+            if (compute || string.IsNullOrEmpty(idnf))
+            {
+                idnf = Path.Combine(
+                    item.PrIdnf ?? string.Empty, item.Name);
+            }
+
+            return idnf;
+        }
+
+        public override async Task<string> GetFileTextAsync(string idnf)
+        {
+            using var reader = new StreamReader(idnf);
+            var text = await reader.ReadToEndAsync();
+
+            return text;
+        }
+
+        public override Task<byte[]> GetFileBytesAsync(
+            string idnf) => FsH.ReadAllBytesAsync(idnf);
+
         protected DriveItem GetDriveItem(
             FileSystemInfo fSysInfo,
             bool isChildItem)
@@ -55,16 +81,7 @@ namespace Turmerik.DriveExplorer
             var fsItem = new DriveItem
             {
                 Name = fSysInfo.Name,
-                CreationTimeStr = GetTimeStampStr(fSysInfo.CreationTime),
-                LastAccessTimeStr = GetTimeStampStr(fSysInfo.LastAccessTime),
-                LastWriteTimeStr = GetTimeStampStr(fSysInfo.LastWriteTime)
             };
-
-            fsItem.SetCreationTime(fSysInfo.CreationTime);
-            fsItem.SetLastAccessTime(fSysInfo.LastAccessTime);
-            fsItem.SetLastWriteTime(fSysInfo.LastWriteTime);
-
-            fsItem.SetPath(fSysInfo.FullName);
 
             if (fSysInfo is DirectoryInfo dirInfo)
             {
@@ -72,31 +89,31 @@ namespace Turmerik.DriveExplorer
             }
             else if (fSysInfo is FileInfo fInfo)
             {
-                string extn = fInfo.Extension.ToLower();
-                fsItem.FileNameExtension = extn;
+                string extn = fSysInfo.Extension.ToLower();
 
-                if ((fsItem.FileType = GetFileType(extn)) == FileType.Document)
+                if (!string.IsNullOrEmpty(extn))
                 {
-                    fsItem.OfficeLikeFileType = GetOfficeLikeFileType(extn);
-                }
+                    if ((fsItem.FileType = GetFileType(extn)) == FileType.Document)
+                    {
+                        fsItem.OfficeFileType = GetOfficeFileType(extn);
+                    }
 
-                fsItem.SizeBytesCount = fInfo.Length;
-
-                if (PathH.CommonTextFileExtensions.Contains(extn))
-                {
-                    fsItem.IsTextFile = true;
-                }
-                else if (PathH.CommonImageFileExtensions.Contains(extn))
-                {
-                    fsItem.IsImageFile = true;
-                }
-                else if (PathH.CommonVideoFileExtensions.Contains(extn))
-                {
-                    fsItem.IsVideoFile = true;
-                }
-                else if (PathH.CommonAudioFileExtensions.Contains(extn))
-                {
-                    fsItem.IsAudioFile = true;
+                    if (PathH.CommonTextFileExtensions.Contains(extn))
+                    {
+                        fsItem.IsTextFile = true;
+                    }
+                    else if (PathH.CommonImageFileExtensions.Contains(extn))
+                    {
+                        fsItem.IsImageFile = true;
+                    }
+                    else if (PathH.CommonVideoFileExtensions.Contains(extn))
+                    {
+                        fsItem.IsVideoFile = true;
+                    }
+                    else if (PathH.CommonAudioFileExtensions.Contains(extn))
+                    {
+                        fsItem.IsAudioFile = true;
+                    }
                 }
             }
 

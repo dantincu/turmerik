@@ -7,12 +7,12 @@ import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 
 import { ApiConfigData, ApiResponse } from "trmrk-axios";
-import { browser as trmrkBrwser } from "trmrk-browser";
+import { browser as trmrkBrwsr } from "trmrk-browser-core";
 
 import { queryKeys } from "./utils";
-import { AppSettingsData } from "../services/settings/app-settings";
-import { apiSvc } from "../services/settings/api/api-service"; 
-import { setAppSettings } from '../store/app-settings';
+import { AppConfigData } from "../services/settings/app-config";
+import { cachedApiSvc } from "../services/settings/api/api-service"; 
+import { setAppConfig } from '../store/app-config';
 import { setDarkMode } from '../store/app-theme';
 
 import { getAppTheme, AppTheme } from "../services/app-theme/app-theme";
@@ -28,9 +28,9 @@ interface AppEffectsArgs {
   setReduceSearchParams: React.Dispatch<React.SetStateAction<boolean>>,
   isDarkMode: boolean,
   setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>
-  setAppSettingsResp: React.Dispatch<React.SetStateAction<ApiResponse<AppSettingsData>>>,
+  setAppSettingsResp: React.Dispatch<React.SetStateAction<ApiResponse<AppConfigData>>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  disaptchSetAppSettings: (data: AppSettingsData) => void
+  disaptchSetAppSettings: (data: AppConfigData) => void
 }
 
 const LoadingEl = ({
@@ -70,7 +70,7 @@ const AppEl = ({
 
 const getAppArgs = (
   appTheme: AppTheme,
-  appSettingsResp: ApiResponse<AppSettingsData>,
+  appSettingsResp: ApiResponse<AppConfigData>,
   setDarkMode: (swToDarkMode: boolean) => void,
   setIsDarkMode: (swToDarkMode: boolean) => void) => ({
   appTheme: appTheme,
@@ -95,7 +95,7 @@ const runAppEffects = (
     if (willSetReduceSearchParams) {
       args.setReduceSearchParams(true);
 
-      const newUrl = trmrkBrwser.getRelUri(
+      const newUrl = trmrkBrwsr.getRelUri(
         searchParams, q => {}, null, null, true
       );
 
@@ -108,7 +108,7 @@ const runAppEffects = (
         args.setIsDarkMode(isDarkModeVal);
       }
       
-      apiSvc.get<AppSettingsData>("AppSettings").then(resp => {
+      cachedApiSvc.apiSvc.get<AppConfigData>("AppSettings").then(resp => {
         args.setAppSettingsResp(resp);
         args.setIsLoading(false);
 
@@ -155,11 +155,21 @@ export default function App({
   envName: "dev" | "prod",
   appConfig: ApiConfigData
 }) {
-  apiSvc.init(appConfig);
+  cachedApiSvc.init({
+    data: appConfig,
+    dbName: "trmrkNotesDB",
+    dbVersion: 1,
+    onIdxedDBSuccess: (ev, db) => {
+      trmrkBrwsr.indexedDB.getOrCreateDbStore();
+      if (db.objectStoreNames.length === 0) {
+
+      }
+    }
+  });
 
   const [ reduceSearchParams, setReduceSearchParams ] = useState(false);
   const [ isLoading, setIsLoading ] = useState(true);
-  const [ appSettingsResp, setAppSettingsResp ] = useState({} as ApiResponse<AppSettingsData>);
+  const [ appSettingsResp, setAppSettingsResp ] = useState({} as ApiResponse<AppConfigData>);
   const [ isDarkMode, setIsDarkMode ] = useState(false);
 
   const appTheme = getAppTheme({
@@ -184,7 +194,7 @@ export default function App({
       setIsDarkMode,
       setAppSettingsResp,
       setIsLoading,
-      disaptchSetAppSettings: value => dispatch(setAppSettings(value))
+      disaptchSetAppSettings: value => dispatch(setAppConfig(value))
     });
   }, [reduceSearchParams, isDarkMode]);
 

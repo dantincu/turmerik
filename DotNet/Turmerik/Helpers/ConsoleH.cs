@@ -8,7 +8,6 @@ namespace Turmerik.Helpers
     public static class ConsoleH
     {
         public static void WithColors(
-            this TextWriter writer,
             Action callback,
             ConsoleColor? forecolor = null,
             ConsoleColor? backcolor = null)
@@ -51,13 +50,10 @@ namespace Turmerik.Helpers
                 backcolor.HasValue);
 
         public static void WithExcp(
-            this TextWriter writer,
             Exception exc,
             Func<Exception, string> msgFactory = null,
             ConsoleColor? forecolor = null,
-            ConsoleColor? backcolor = null)
-        {
-            writer.WithColors(
+            ConsoleColor? backcolor = null) => WithColors(
                 () =>
                 {
                     msgFactory = msgFactory.FirstNotNull(
@@ -69,7 +65,6 @@ namespace Turmerik.Helpers
                     Console.Error.WriteLine(msg);
                 },
                 forecolor ?? ConsoleColor.Red,
-                backcolor);
-        }
+                backcolor ?? ConsoleColor.Black);
     }
 }

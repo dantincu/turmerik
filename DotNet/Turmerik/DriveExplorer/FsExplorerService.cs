@@ -11,11 +11,11 @@ using Turmerik.Utility;
 
 namespace Turmerik.DriveExplorer
 {
-    public interface IFsExplorerServiceEngine : IFsEntriesRetriever, IDriveExplorerService
+    public interface IFsExplorerService : IFsEntriesRetriever, IDriveExplorerService
     {
     }
 
-    public class FsExplorerService : FsEntriesRetriever, IFsExplorerServiceEngine
+    public class FsExplorerService : FsEntriesRetriever, IFsExplorerService
     {
         public FsExplorerService(
             ITimeStampHelper timeStampHelper) : base(timeStampHelper)
@@ -74,7 +74,7 @@ namespace Turmerik.DriveExplorer
         public async Task<DriveItem> CreateOfficeLikeFileAsync(
             string prIdnf,
             string newFileName,
-            OfficeLikeFileType officeLikeFileType)
+            OfficeFileType officeLikeFileType)
         {
             var result = await CreateTextFileAsync(
                 prIdnf,
@@ -123,17 +123,6 @@ namespace Turmerik.DriveExplorer
 
         public async Task<string> GetDriveFileWebUrlAsync(
             string idnf) => GetDriveItemUrl(idnf);
-
-        public async Task<DriveItem> GetTextFileAsync(string idnf)
-        {
-            string path = idnf;
-            var entry = new FileInfo(path);
-
-            var fileItem = GetDriveItem(entry, false);
-            fileItem.TextFileContent = File.ReadAllText(path);
-
-            return fileItem;
-        }
 
         public async Task<DriveItem> MoveFileAsync(
             string idnf,

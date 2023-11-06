@@ -27,5 +27,15 @@ namespace Turmerik.Helpers
 
             return retVal;
         }
+
+        public static bool IsDefault<T>(
+            this T value,
+            IEqualityComparer<T> eqCompr = null)
+        {
+            eqCompr ??= EqualityComparer<T>.Default;
+            bool isDefault = eqCompr.Equals(value, default);
+
+            return isDefault;
+        }
     }
 }

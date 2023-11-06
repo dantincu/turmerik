@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Turmerik.AspNetCore\Turmerik.AspNetCore.csproj" />
+    <ProjectReference Include="..\Turmerik.Notes\Turmerik.Notes.csproj" />
   </ItemGroup>
 
 </Project>

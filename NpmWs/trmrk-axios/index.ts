@@ -1,11 +1,9 @@
-import { ApiService } from "./src/core";
+import { AxiosRequestConfig as AxiosRequestConfigType } from "axios";
+import * as apiCore from "./src/core";
 
-import * as core from "./src/core";
-
-export const axios = {
-  ApiService,
-};
-
-export type ApiConfigData = core.ApiConfigData;
-export type ApiResponse<T> = core.ApiResponse<T>;
-export type AxiosResponse<T> = core.AxiosResponse<T>;
+export type ApiConfigData = apiCore.ApiConfigData;
+export type ApiResponse<T> = apiCore.ApiResponse<T>;
+export type AxiosResponse<T> = apiCore.AxiosResponse<T>;
+export const ApiService = apiCore.ApiService;
+export type ApiServiceType = apiCore.ApiServiceType;
+export type AxiosRequestConfig<D = any> = AxiosRequestConfigType<D>;

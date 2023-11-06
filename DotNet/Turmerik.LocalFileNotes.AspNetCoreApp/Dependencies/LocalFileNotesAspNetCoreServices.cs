@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.AspNetCore.AppSettings;
 using Turmerik.AspNetCore.Dependencies;
-using Turmerik.DriveExplorer;
 using Turmerik.LocalDevice.Core.Env;
 using Turmerik.Notes.AspNetCore.Dependencies;
 using Turmerik.Notes.AspNetCore.Settings;
+using Turmerik.DriveExplorer;
 
 namespace Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies
 {
@@ -19,7 +19,10 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies
             IServiceCollection services)
         {
             NotesAspNetCoreServices.RegisterAll(services);
-            AspNetCoreServices.RegisterAppSettingsRetriever<AppSettingsCoreImmtbl, AppSettingsCoreMtbl>(services);
+            AspNetCoreServices.RegisterAppSettingsRetriever<AppConfigCoreImmtbl, AppConfigCoreMtbl>(services);
+
+            services.AddSingleton<IDriveExplorerService, FsExplorerService>();
+            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
             return services;
         }
     }

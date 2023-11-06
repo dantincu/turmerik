@@ -20,12 +20,15 @@ namespace Turmerik.DriveExplorer
         Task<bool> FolderExistsAsync(string idnf);
         Task<bool> FileExistsAsync(string idnf);
 
-        string DirSeparator { get; }
-    }
+        Task<string> GetFileTextAsync(string idnf);
+        Task<byte[]> GetFileBytesAsync(string idnf);
 
-    public interface IDriveItemsObjMirrorRetriever : IDriveItemsRetriever
-    {
-        DriveItem RoodDriveFolder { get; }
+        string GetItemIdnf<TDriveItem>(
+            TDriveItem item,
+            bool compute)
+            where TDriveItem : DriveItem<TDriveItem>;
+
+        string DirSeparator { get; }
     }
 
     public abstract class DriveItemsRetrieverCoreBase : IDriveItemsRetriever
@@ -41,11 +44,14 @@ namespace Turmerik.DriveExplorer
         public abstract Task<bool> FolderExistsAsync(string idnf);
         public abstract Task<DriveItem> GetFolderAsync(string idnf);
 
+        public abstract Task<string> GetFileTextAsync(string idnf);
+        public abstract Task<byte[]> GetFileBytesAsync(string idnf);
+
         public async Task<DriveItem> GetFolderAsync(
             string idnf, int depth)
         {
             var folder = await GetFolderAsync(idnf);
-            string folderPath = folder.GetPath();
+            string folderPath = idnf;
             var subFolders = folder.SubFolders;
 
             if (subFolders != null && depth > 0)
@@ -66,27 +72,32 @@ namespace Turmerik.DriveExplorer
             return folder;
         }
 
+        public abstract string GetItemIdnf<TDriveItem>(
+            TDriveItem item,
+            bool compute)
+            where TDriveItem : DriveItem<TDriveItem>;
+
         protected abstract string GetDirSeparator();
     }
 
     public abstract class DriveItemsRetrieverBase : DriveItemsRetrieverCoreBase, IDriveItemsRetriever
     {
-        protected static readonly ReadOnlyDictionary<OfficeLikeFileType, ReadOnlyCollection<string>> OfficeLikeFileTypesFileNameExtensions;
+        protected static readonly ReadOnlyDictionary<OfficeFileType, ReadOnlyCollection<string>> OfficeFileTypesFileNameExtensions;
         protected static readonly ReadOnlyDictionary<FileType, ReadOnlyCollection<string>> FileTypesFileNameExtensions;
 
         static DriveItemsRetrieverBase()
         {
-            OfficeLikeFileTypesFileNameExtensions = new Dictionary<OfficeLikeFileType, ReadOnlyCollection<string>>
+            OfficeFileTypesFileNameExtensions = new Dictionary<OfficeFileType, ReadOnlyCollection<string>>
             {
-                { OfficeLikeFileType.Docs, new string[] { ".docx", ".doc" }.RdnlC() },
-                { OfficeLikeFileType.Sheets, new string[] { ".xlsx", ".xls" }.RdnlC() },
-                { OfficeLikeFileType.Slides, new string[] { ".pptx" , ".ppt" }.RdnlC() },
+                { OfficeFileType.Word, new string[] { ".docx", ".doc" }.RdnlC() },
+                { OfficeFileType.Excel, new string[] { ".xlsx", ".xls" }.RdnlC() },
+                { OfficeFileType.PowerPoint, new string[] { ".pptx" , ".ppt" }.RdnlC() },
             }.RdnlD();
 
             FileTypesFileNameExtensions = new Dictionary<FileType, ReadOnlyCollection<string>>
             {
                 { FileType.PlainText, new string [] { ".txt", ".md", ".log", ".logs" }.RdnlC() },
-                { FileType.Document, OfficeLikeFileTypesFileNameExtensions.Values.SelectMany(
+                { FileType.Document, OfficeFileTypesFileNameExtensions.Values.SelectMany(
                     arr => arr).Concat(new string[] { ".pdf", ".rtf" }).RdnlC() },
                 { FileType.Image, new string[] { ".jpg", ".jpeg", ".png", ".giff", ".tiff", ".img", ".ico", ".bmp", ".heic" }.RdnlC() },
                 { FileType.Audio, new string[] { ".mp3", ".flac", ".wav", ".aac" }.RdnlC() },
@@ -139,12 +150,12 @@ namespace Turmerik.DriveExplorer
             return retVal;
         }
 
-        protected OfficeLikeFileType? GetOfficeLikeFileType(string extn)
+        protected OfficeFileType? GetOfficeFileType(string extn)
         {
-            var matchKvp = OfficeLikeFileTypesFileNameExtensions.SingleOrDefault(
+            var matchKvp = OfficeFileTypesFileNameExtensions.SingleOrDefault(
                 kvp => kvp.Value.Contains(extn));
 
-            OfficeLikeFileType? retVal = null;
+            OfficeFileType? retVal = null;
 
             if (matchKvp.Value != null)
             {

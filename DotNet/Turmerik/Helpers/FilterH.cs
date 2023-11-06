@@ -27,6 +27,15 @@ namespace Turmerik.Helpers
             return retVal;
         }
 
+        public static List<T> ReverseOrder<T>(
+            this IEnumerable<T> nmrbl)
+        {
+            var list = nmrbl.ToList();
+            list.Reverse();
+
+            return list;
+        }
+
         public static KeyValuePair<int, T> FirstKvp<T>(
             this IEnumerable<T> nmrbl,
             Func<T, int, bool> predicate)
@@ -49,6 +58,11 @@ namespace Turmerik.Helpers
 
             return retKvp;
         }
+
+        public static KeyValuePair<int, T> FirstKvp<T>(
+            this IEnumerable<T> nmrbl,
+            Func<T, bool> predicate) => nmrbl.FirstKvp(
+                (item, idx) => predicate(item));
 
         public static KeyValuePair<int, T> LastKvp<T>(
             this IList<T> list,
@@ -109,11 +123,6 @@ namespace Turmerik.Helpers
 
             return retKvp;
         }
-
-        public static KeyValuePair<int, T> FirstKvp<T>(
-            this IEnumerable<T> nmrbl,
-            Func<T, bool> predicate) => nmrbl.FirstKvp(
-                (item, idx) => predicate(item));
 
         public static T GetNthVal<T>(
             this IEnumerable<T> nmrbl,

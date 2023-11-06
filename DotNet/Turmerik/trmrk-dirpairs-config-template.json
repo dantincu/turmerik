@@ -1,0 +1,39 @@
+{
+  "IsDevEnv": false,
+  "RequiredClientVersion": 1,
+  "ClientRedirectUrl": null,
+  "NoteDirPairs": {
+    "FileNameMaxLength": 100,
+    // "SerializeToJson": true,
+    "Prefixes": {
+      "NoteBook": "b",
+      "NoteFiles": "f",
+      "NoteInternals": "i",
+      "Note": "n"
+    },
+    "ArgOpts": {
+      "WorkDir": "/wd:",
+      "SortIdx": "/x:",
+      "OpenMdFile": "/o"
+    },
+    "DirNames": {
+      "NoteBook": "[note-book]",
+      "NoteFiles": "[note-files]",
+      "NoteInternals": "[note-internals]",
+      "NoteInternalsPfx": "0",
+      "NoteItemsPfx": "",
+      "JoinStr": "-"
+    },
+    "FileNames": {
+      "NoteBookFileName": "[note-book]",
+      "NoteFileName": "{0}[note]",
+      "NoteFileNameRegex": "\\[note\\]$",
+      "NoteJsonFileName": "[note]",
+      "KeepFileName": ".keep"
+    },
+    "FileContents": {
+      "KeepFileContentsTemplate": "{0}",
+      "NoteFileContentsTemplate": "# {0}  \n\n"
+    }
+  }
+}

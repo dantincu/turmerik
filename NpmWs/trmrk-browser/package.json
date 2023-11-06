@@ -13,7 +13,10 @@
   "author": "Daniel Tincu",
   "license": "MIT",
   "dependencies": {
-    "trmrk": "../trmrk"
+    "axios": "^1.6.0",
+    "trmrk": "../trmrk",
+    "trmrk-axios": "../trmrk-axios",
+    "trmrk-browser-core": "../trmrk-browser-core"
   },
   "devDependencies": {
     "ts-loader": "^9.4.4",

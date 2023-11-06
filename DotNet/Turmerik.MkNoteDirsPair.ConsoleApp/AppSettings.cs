@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
 using Turmerik.MkFsDirsPair.Lib;
+using Turmerik.Notes;
 
 namespace Turmerik.MkNoteDirsPair.ConsoleApp
 {
     public class AppSettings
     {
-        public NoteDirsPairSettingsMtbl NoteDirPairs { get; set; }
+        public NoteDirsPairConfigMtbl NoteDirPairs { get; set; }
     }
 }

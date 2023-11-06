@@ -8,19 +8,21 @@ namespace Turmerik.Text
 {
     public static partial class StringH
     {
-        public static string UPPER_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        public static string LOWER_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+        public const string UPPER_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        public const string LOWER_LETTERS = "abcdefghijklmnopqrstuvwxyz";
         public const string DIGITS = "0123456789";
         public const string PARENS = "{[()]}";
         public const string CODE_OPERATORS = "./%+-*|&<>=:?";
         public const string CODE_IDNF_ALLOWED_NON_ALPHANUMERICS = "@$_";
         public const string OTHER_PUNCTUATION_CHARS = "`,;'\"";
 
+        public const string NL_CHAR = "\n\r";
+
         public static readonly string NL = Environment.NewLine;
 
         public static bool IsNewLineChar(char c)
         {
-            bool retVal = c == '\n';
+            bool retVal = NL_CHAR.Contains(c);
             return retVal;
         }
 

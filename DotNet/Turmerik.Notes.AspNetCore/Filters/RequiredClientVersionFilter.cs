@@ -13,10 +13,10 @@ namespace Turmerik.Notes.AspNetCore.Filters
 {
     public class RequiredClientVersionFilter : IActionFilter
     {
-        private readonly IAppSettingsService<AppSettingsCoreImmtbl> appSettingsRetriever;
+        private readonly IAppConfigService<AppConfigCoreImmtbl> appSettingsRetriever;
 
         public RequiredClientVersionFilter(
-            IAppSettingsService<AppSettingsCoreImmtbl> appSettingsRetriever)
+            IAppConfigService<AppConfigCoreImmtbl> appSettingsRetriever)
         {
             this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(nameof(appSettingsRetriever));
         }

@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Environment;
 using Turmerik.Reflection;
-using Turmerik.Text;
 using System.IO;
 using Turmerik.Utility;
 using Turmerik.Helpers;
+using Turmerik.TextSerialization;
 
 namespace Turmerik.LocalDevice.Core.Env
 {

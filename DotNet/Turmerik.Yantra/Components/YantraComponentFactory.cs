@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
-using Turmerik.Text;
+using Turmerik.TextSerialization;
 
 namespace Turmerik.Yantra.Components
 {

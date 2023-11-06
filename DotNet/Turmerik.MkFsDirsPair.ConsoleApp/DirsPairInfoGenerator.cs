@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
 using Turmerik.MkFsDirsPair.Lib;
+using Turmerik.Notes;
 using Turmerik.Utility;
 
 namespace Turmerik.MkFsDirsPair.ConsoleApp

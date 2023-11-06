@@ -9,7 +9,6 @@ namespace Turmerik.DriveExplorer
     {
         Task<string> GetDriveFolderWebUrlAsync(string idnf);
         Task<string> GetDriveFileWebUrlAsync(string idnf);
-        Task<DriveItem> GetTextFileAsync(string idnf);
         Task<DriveItem> CreateFolderAsync(string prIdnf, string newFolderName);
         Task<DriveItem> RenameFolderAsync(string idnf, string newFolderName);
         Task<DriveItem> CopyFolderAsync(string idnf, string newPrIdnf, string newFolderName);
@@ -20,7 +19,7 @@ namespace Turmerik.DriveExplorer
         Task<DriveItem> CreateOfficeLikeFileAsync(
             string prIdnf,
             string newFileName,
-            OfficeLikeFileType officeLikeFileType);
+            OfficeFileType officeLikeFileType);
 
         Task<DriveItem> RenameFileAsync(string idnf, string newFileName);
         Task<DriveItem> CopyFileAsync(string idnf, string newPrIdnf, string newFileName);

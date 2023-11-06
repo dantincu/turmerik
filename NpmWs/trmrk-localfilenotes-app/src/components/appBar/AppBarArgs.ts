@@ -1,10 +1,10 @@
 import { ApiResponse } from "trmrk-axios";
 
-import { AppSettingsData } from "../../services/settings/app-settings";
+import { AppConfigData } from "../../services/settings/app-config";
 import { AppTheme } from "../../services/app-theme/app-theme";
 
 export interface AppBarArgs {
   appTheme: AppTheme;
-  resp: ApiResponse<AppSettingsData>;
+  resp: ApiResponse<AppConfigData>;
   darkModeToggled: (switchToDarkMode: boolean) => void;
 }

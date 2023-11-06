@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Turmerik.Text;
+using Turmerik.TextSerialization;
 
 namespace Turmerik.Helpers
 {

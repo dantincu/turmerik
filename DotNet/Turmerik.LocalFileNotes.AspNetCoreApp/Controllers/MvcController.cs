@@ -6,9 +6,9 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
 {
     public class MvcController : Controller
     {
-        private readonly IAppSettingsService<AppSettingsCoreImmtbl> appSettingsRetriever;
+        private readonly IAppConfigService<AppConfigCoreImmtbl> appSettingsRetriever;
 
-        public MvcController(IAppSettingsService<AppSettingsCoreImmtbl> appSettingsRetriever)
+        public MvcController(IAppConfigService<AppConfigCoreImmtbl> appSettingsRetriever)
         {
             this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(nameof(appSettingsRetriever));
         }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using Turmerik.Text;
+using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
 namespace Turmerik.LocalDevice.Core.Env

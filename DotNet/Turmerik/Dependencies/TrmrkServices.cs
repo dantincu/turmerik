@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Text;
 using Turmerik.EqualityComparer;
 using Turmerik.Reflection;
-using Turmerik.Text;
 using Turmerik.Utility;
-using Turmerik.DriveExplorer;
 using Turmerik.Async;
+using Turmerik.TextStream;
+using Turmerik.TextSerialization;
+using Turmerik.DriveExplorer;
+using Turmerik.Notes;
 
 namespace Turmerik.Dependencies
 {
@@ -25,13 +27,13 @@ namespace Turmerik.Dependencies
 
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IAsyncMessageQueuerFactory, AsyncMessageQueuerFactory>();
-            
-            services.AddSingleton<INoteDirsPairFullNamePartRetriever, NoteDirsPairFullNamePartRetriever>();
-            services.AddSingleton<INoteDirsPairGeneratorFactory, NoteDirsPairGeneratorFactory>();
-            services.AddSingleton<INoteDirNamesPairGeneratorFactory, NoteDirNamesPairGeneratorFactory>();
-            services.AddSingleton<IDirPairsRetrieverFactory, DirPairsRetrieverFactory>();
-            services.AddSingleton<IConsolePrinter, ConsolePrinter>();
 
+            services.AddSingleton<IControlCharsNormalizer, ControlCharsNormalizer>();
+            services.AddSingleton<ITextBufferLinesRetriever, TextBufferLinesRetriever>();
+            services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
+
+            services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
+            services.AddSingleton<IDirsPairCreator, DirsPairCreator>();
             return services;
         }
     }

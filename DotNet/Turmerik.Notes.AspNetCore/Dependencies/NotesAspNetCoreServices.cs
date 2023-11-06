@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Turmerik.AspNetCore.AppSettings;
 using Turmerik.AspNetCore.Dependencies;
 using Turmerik.LocalDevice.Core.Env;
+using Turmerik.Notes.Dependencies;
 
 namespace Turmerik.Notes.AspNetCore.Dependencies
 {
@@ -16,6 +17,8 @@ namespace Turmerik.Notes.AspNetCore.Dependencies
             IServiceCollection services)
         {
             AspNetCoreServices.RegisterAll(services);
+            TrmrkNoteServices.RegisterAll(services);
+
             return services;
         }
     }

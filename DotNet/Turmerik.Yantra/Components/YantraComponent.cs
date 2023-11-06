@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Turmerik.Helpers;
 using Turmerik.Text;
+using Turmerik.TextSerialization;
 using Turmerik.Utility;
 using YantraJS.Core;
 using YantraJS.Tests;

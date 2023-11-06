@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Turmerik.ConvertFsDirPairsToNotes.ConsoleApp": {
-      "commandName": "Project",
-      "commandLineArgs": ""
-    }
-  }
-}
