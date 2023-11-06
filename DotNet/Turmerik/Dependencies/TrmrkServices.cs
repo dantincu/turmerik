@@ -11,6 +11,7 @@ using Turmerik.TextStream;
 using Turmerik.TextSerialization;
 using Turmerik.DriveExplorer;
 using Turmerik.Notes;
+using Turmerik.ConsoleApps;
 
 namespace Turmerik.Dependencies
 {
@@ -28,11 +29,15 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IAsyncMessageQueuerFactory, AsyncMessageQueuerFactory>();
 
+            services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
+
             services.AddSingleton<IControlCharsNormalizer, ControlCharsNormalizer>();
+            services.AddSingleton<IDelimCharsExtractor, DelimCharsExtractor>();
             services.AddSingleton<ITextBufferLinesRetriever, TextBufferLinesRetriever>();
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
 
             services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
+            services.AddSingleton<IDirsPairGenerator, DirsPairGenerator>();
             services.AddSingleton<IDirsPairCreator, DirsPairCreator>();
             return services;
         }

@@ -8,4 +8,26 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="trmrk-dirpairs-config-template.json" />
+    <None Remove="trmrk-dirpairs-config.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="trmrk-dirpairs-config-template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="trmrk-dirpairs-config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
+  </ItemGroup>
+
 </Project>

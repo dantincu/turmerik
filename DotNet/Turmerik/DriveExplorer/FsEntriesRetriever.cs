@@ -42,6 +42,10 @@ namespace Turmerik.DriveExplorer
             return folder;
         }
 
+        public override async Task<bool> ItemExistsAsync(
+            string idnf) => await FileExistsAsync(
+                idnf) || await FolderExistsAsync(idnf);
+
         public override async Task<bool> FolderExistsAsync(
             string idnf) => Directory.Exists(idnf);
 
@@ -50,14 +54,14 @@ namespace Turmerik.DriveExplorer
 
         public override string GetItemIdnf<TDriveItem>(
             TDriveItem item,
-            bool compute)
+            string prIdnf)
         {
             string idnf = item.Idnf;
 
-            if (compute || string.IsNullOrEmpty(idnf))
+            if (idnf == null)
             {
                 idnf = Path.Combine(
-                    item.PrIdnf ?? string.Empty, item.Name);
+                    prIdnf ?? item.PrIdnf, item.Name);
             }
 
             return idnf;

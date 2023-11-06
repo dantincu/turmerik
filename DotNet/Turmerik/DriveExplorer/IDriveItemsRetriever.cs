@@ -17,6 +17,7 @@ namespace Turmerik.DriveExplorer
         Task<DriveItem> GetFolderAsync(string idnf);
         Task<DriveItem> GetFolderAsync(string idnf, int depth);
 
+        Task<bool> ItemExistsAsync(string idnf);
         Task<bool> FolderExistsAsync(string idnf);
         Task<bool> FileExistsAsync(string idnf);
 
@@ -25,7 +26,7 @@ namespace Turmerik.DriveExplorer
 
         string GetItemIdnf<TDriveItem>(
             TDriveItem item,
-            bool compute)
+            string prIdnf)
             where TDriveItem : DriveItem<TDriveItem>;
 
         string DirSeparator { get; }
@@ -40,6 +41,7 @@ namespace Turmerik.DriveExplorer
 
         public string DirSeparator { get; }
 
+        public abstract Task<bool> ItemExistsAsync(string idnf);
         public abstract Task<bool> FileExistsAsync(string idnf);
         public abstract Task<bool> FolderExistsAsync(string idnf);
         public abstract Task<DriveItem> GetFolderAsync(string idnf);
@@ -74,7 +76,7 @@ namespace Turmerik.DriveExplorer
 
         public abstract string GetItemIdnf<TDriveItem>(
             TDriveItem item,
-            bool compute)
+            string prIdnf)
             where TDriveItem : DriveItem<TDriveItem>;
 
         protected abstract string GetDirSeparator();

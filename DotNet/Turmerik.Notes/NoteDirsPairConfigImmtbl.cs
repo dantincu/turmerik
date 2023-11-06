@@ -57,11 +57,17 @@ namespace Turmerik.Notes
                 WorkDir = src.WorkDir;
                 SortIdx = src.SortIdx;
                 OpenMdFile = src.OpenMdFile;
+                CreateNoteBookDirsPair = src.CreateNoteBookDirsPair;
+                CreateNoteFilesDirsPair = src.CreateNoteFilesDirsPair;
+                CreateNoteInternalsDirsPair = src.CreateNoteInternalsDirsPair;
             }
 
             public string WorkDir { get; }
             public string SortIdx { get; }
             public string OpenMdFile { get; }
+            public string CreateNoteBookDirsPair { get; }
+            public string CreateNoteFilesDirsPair { get; }
+            public string CreateNoteInternalsDirsPair { get; }
         }
 
         public class DirNamesT : NoteDirsPairConfig.IDirNamesT
@@ -89,16 +95,16 @@ namespace Turmerik.Notes
             public FileNamesT(NoteDirsPairConfigMtbl.FileNamesT src)
             {
                 NoteBookFileName = src.NoteBookFileName;
-                NoteFileName = src.NoteFileName;
-                NoteJsonFileName = src.NoteJsonFileName;
+                NoteFileNameTemplate = src.NoteFileNameTemplate;
+                NoteJsonFileNameTemplate = src.NoteJsonFileNameTemplate;
                 NoteFileNameRegex = src.NoteFileNameRegex;
                 KeepFileName = src.KeepFileName;
             }
 
             public string NoteBookFileName { get; }
-            public string NoteFileName { get; }
+            public string NoteFileNameTemplate { get; }
             public string NoteFileNameRegex { get; set; }
-            public string NoteJsonFileName { get; }
+            public string NoteJsonFileNameTemplate { get; }
             public string KeepFileName { get; }
         }
 

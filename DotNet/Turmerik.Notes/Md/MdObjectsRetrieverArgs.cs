@@ -7,7 +7,7 @@ namespace Turmerik.Notes.Md
 {
     public class MdObjectsRetrieverArgs
     {
-        public MdObjectsRetrieverOpts<MarkdownObject> Opts { get; init; }
+        public MdObjectsRetrieverOpts Opts { get; init; }
         public Dictionary<int[], MarkdownObject> RetMap { get; init; }
         public List<int> Path { get; init; }
         public Stack<MarkdownObject> Stack { get; init; }

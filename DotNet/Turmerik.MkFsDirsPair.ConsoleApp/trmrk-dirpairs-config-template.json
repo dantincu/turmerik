@@ -1,0 +1,16 @@
+{
+  "FileNameMaxLength": 100,
+  "ArgOpts": {
+    "WorkDir": "wd",
+    "OpenMdFile": "o",
+    "SkipMdFileCreation": "sk"
+  },
+  "FileNames": {
+    "MdFileName": "{0}",
+    "KeepFileName": ".keep"
+  },
+  "FileContents": {
+    "KeepFileContentsTemplate": "{0}",
+    "MdFileContentsTemplate": "# {0}  \n\n"
+  }
+}

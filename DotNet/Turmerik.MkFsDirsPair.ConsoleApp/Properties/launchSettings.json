@@ -2,8 +2,7 @@
   "profiles": {
     "Turmerik.MkFsDirsPair.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "7998 : asdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf:asdfqwerasdf:asdfqwerasdf:asdfqwerasdf::asdfqwerasdf::asdfqwerasdf::asdfqwerasdf?"
-      // "commandLineArgs": "asdfasd : asdfasdf"
+      "commandLineArgs": "/o 7999 \"asdfasdf asdfasdf asdf\" /wd:../ "
     }
   }
 }

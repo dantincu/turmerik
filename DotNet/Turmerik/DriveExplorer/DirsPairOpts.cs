@@ -16,5 +16,6 @@ namespace Turmerik.Notes
         public string MdFileContentsTemplate { get; set; }
         public string KeepFileName { get; set; }
         public string KeepFileNameContents { get; set; }
+        public bool ThrowIfAnyItemAlreadyExists { get; set; }
     }
 }

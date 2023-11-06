@@ -19,7 +19,8 @@ namespace Turmerik.DriveExplorer
         public DriveItemsCreator(
             IDriveExplorerService dvExplrSvc)
         {
-            this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(nameof(dvExplrSvc));
+            this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
+                nameof(dvExplrSvc));
         }
 
         public async Task<List<DriveItemX>> CreateItemsAsync(
@@ -36,6 +37,9 @@ namespace Turmerik.DriveExplorer
                     {
                         newItem = await dvExplrSvc.CreateFolderAsync(
                             opts.PrIdnf, item.Name);
+
+                        newItem.Idnf ??= dvExplrSvc.GetItemIdnf(
+                            newItem, opts.PrIdnf);
 
                         OnItemCreated(item, newItem);
                         var childrenList = GetChildrenList(item);

@@ -99,5 +99,70 @@ namespace Turmerik
 
             return inVal;
         }
+
+        public static TOut IfNotDefault<TIn, TOut>(
+            this TIn inVal,
+            Func<TIn, TOut> convertor,
+            Func<TOut> defaultValueFactory = null,
+            IEqualityComparer<TIn> inValEqCompr = null)
+        {
+            inValEqCompr ??= EqualityComparer<TIn>.Default;
+            TOut outVal;
+
+            if (!inValEqCompr.Equals(inVal, default))
+            {
+                outVal = convertor(inVal);
+            }
+            else if (defaultValueFactory != null)
+            {
+                outVal = defaultValueFactory();
+            }
+            else
+            {
+                outVal = default;
+            }
+
+            return outVal;
+        }
+
+        public static TVal ActIfNotDefault<TVal>(
+            this TVal inVal,
+            Action<TVal> callback,
+            Action nullCallback = null,
+            IEqualityComparer<TVal> inValEqCompr = null)
+        {
+            inValEqCompr ??= EqualityComparer<TVal>.Default;
+
+            if (inValEqCompr.Equals(inVal, default))
+            {
+                callback(inVal);
+            }
+            else if (nullCallback != null)
+            {
+                nullCallback();
+            }
+
+            return inVal;
+        }
+
+        public static TVal IfDefault<TVal>(
+            this TVal val,
+            Func<TVal> defaultValueFactory = null,
+            Func<TVal, TVal> convertor = null,
+            IEqualityComparer<TVal> inValEqCompr = null)
+        {
+            inValEqCompr ??= EqualityComparer<TVal>.Default;
+
+            if (inValEqCompr.Equals(val, default))
+            {
+                val = defaultValueFactory();
+            }
+            else if (convertor != null)
+            {
+                val = convertor(val);
+            }
+
+            return val;
+        }
     }
 }

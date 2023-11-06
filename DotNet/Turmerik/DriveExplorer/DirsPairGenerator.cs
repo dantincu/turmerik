@@ -10,22 +10,27 @@ namespace Turmerik.Notes
 {
     public interface IDirsPairGenerator
     {
-        List<DriveItemX> GenerateItems(
+        Task<List<DriveItemX>> GenerateItemsAsync(
             DirsPairOpts opts);
     }
 
     public class DirsPairGenerator : IDirsPairGenerator
     {
+        private readonly IDriveExplorerService dvExplrSvc;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
 
         public DirsPairGenerator(
+            IDriveExplorerService dvExplrSvc,
             IFsEntryNameNormalizer fsEntryNameNormalizer)
         {
+            this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
+                nameof(dvExplrSvc));
+
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
                 nameof(fsEntryNameNormalizer));
         }
 
-        public List<DriveItemX> GenerateItems(
+        public async Task<List<DriveItemX>> GenerateItemsAsync(
             DirsPairOpts opts)
         {
             opts.FullDirNamePart ??= fsEntryNameNormalizer.NormalizeFsEntryName(
@@ -33,6 +38,22 @@ namespace Turmerik.Notes
 
             var folderFiles = GetFolderFiles(opts);
             var dirsPair = GetDirsPair(opts, folderFiles);
+
+            if (opts.ThrowIfAnyItemAlreadyExists)
+            {
+                foreach (var item in dirsPair)
+                {
+                    item.Idnf ??= dvExplrSvc.GetItemIdnf(
+                        item, opts.PrIdnf);
+
+                    if (await dvExplrSvc.ItemExistsAsync(
+                        item.Idnf))
+                    {
+                        throw new InvalidOperationException(
+                            $"File path {item.Idnf} already exists");
+                    }
+                }
+            }
 
             return dirsPair;
         }
@@ -44,7 +65,9 @@ namespace Turmerik.Notes
                 new DriveItemX
                 {
                     Name = opts.ShortDirName,
-                    FolderFiles = folderFiles
+                    IsFolder = true,
+                    FolderFiles = folderFiles,
+                    Data = new DriveItemXData()
                 },
                 new DriveItemX
                 {
@@ -52,6 +75,7 @@ namespace Turmerik.Notes
                         opts.JoinStr,
                         opts.ShortDirName,
                         opts.FullDirNamePart),
+                    IsFolder = true,
                     FolderFiles = new DriveItemX
                     {
                         Name = opts.KeepFileName,
@@ -59,7 +83,8 @@ namespace Turmerik.Notes
                         {
                             TextFileContents = opts.KeepFileNameContents
                         }
-                    }.Arr().ToList()
+                    }.Arr().ToList(),
+                    Data = new DriveItemXData()
                 }
             };
 

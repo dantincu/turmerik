@@ -12,9 +12,12 @@
       "Note": "n"
     },
     "ArgOpts": {
-      "WorkDir": "/wd:",
-      "SortIdx": "/x:",
-      "OpenMdFile": "/o"
+      "WorkDir": "wd",
+      "SortIdx": "x",
+      "OpenMdFile": "o",
+      "CreateNoteBookDirsPair": "b",
+      "CreateNoteFilesDirsPair": "f",
+      "CreateNoteInternalsDirsPair": "i"
     },
     "DirNames": {
       "NoteBook": "[note-book]",
@@ -26,7 +29,7 @@
     },
     "FileNames": {
       "NoteBookFileName": "[note-book]",
-      "NoteFileName": "{0}[note]",
+      "NoteFileNameTemplate": "{0}[note]",
       "NoteFileNameRegex": "\\[note\\]$",
       "NoteJsonFileName": "[note]",
       "KeepFileName": ".keep"
