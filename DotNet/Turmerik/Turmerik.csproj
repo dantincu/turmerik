@@ -6,38 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Code%24not-compiled%24\**" />
     <Compile Remove="Reflection\**" />
+    <EmbeddedResource Remove="Code%24not-compiled%24\**" />
     <EmbeddedResource Remove="Reflection\**" />
+    <None Remove="Code%24not-compiled%24\**" />
     <None Remove="Reflection\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Code%24not-compiled%24\CharsListSrcCode.cs" />
-    <Compile Remove="Code%24not-compiled%24\CodeChunkParseArgs.cs" />
-    <Compile Remove="Code%24not-compiled%24\CodeChunkParser.cs" />
-    <Compile Remove="Code%24not-compiled%24\CodeParser.cs" />
-    <Compile Remove="Code%24not-compiled%24\CodeParserH.cs" />
-    <Compile Remove="Code%24not-compiled%24\CodeSyntaxItem.cs" />
-    <Compile Remove="Code%24not-compiled%24\CodeSyntaxItemType.cs" />
-    <Compile Remove="Code%24not-compiled%24\Html\HtmlChunkParseArgs.cs" />
-    <Compile Remove="Code%24not-compiled%24\Html\HtmlChunkParser.cs" />
-    <Compile Remove="Code%24not-compiled%24\Html\HtmlH.cs" />
-    <Compile Remove="Code%24not-compiled%24\Html\HtmlSyntaxItem.cs" />
-    <Compile Remove="Code%24not-compiled%24\ISrcCode.cs" />
-    <Compile Remove="Code%24not-compiled%24\Md\MdChunkParseArgs.cs" />
-    <Compile Remove="Code%24not-compiled%24\Md\MdChunkParser.cs" />
-    <Compile Remove="Code%24not-compiled%24\Md\MdH.cs" />
-    <Compile Remove="Code%24not-compiled%24\Md\MdItemLineType.cs" />
-    <Compile Remove="Code%24not-compiled%24\Md\MdSyntaxItem.cs" />
-    <Compile Remove="Code%24not-compiled%24\SrcCodeBase.cs" />
-    <Compile Remove="Code%24not-compiled%24\StrSrcCode.cs" />
-    <Compile Remove="Code%24not-compiled%24\Xml\XmlChunkParseArgs.cs" />
-    <Compile Remove="Code%24not-compiled%24\Xml\XmlChunkParser.cs" />
-    <Compile Remove="Code%24not-compiled%24\Xml\XmlH.cs" />
-    <Compile Remove="Code%24not-compiled%24\Xml\XmlItemType.cs" />
-    <Compile Remove="Code%24not-compiled%24\Xml\XmlSyntaxItem.cs" />
-    <Compile Remove="Code%24not-compiled%24\Xml\XmlSyntaxParseErrorData.cs" />
-    <Compile Remove="Code%24not-compiled%24\Xml\XmlSyntaxParseStateData.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,47 +45,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Code$not-compiled$\CharsListSrcCode.cs" />
-    <None Include="Code$not-compiled$\CodeChunkParseArgs.cs" />
-    <None Include="Code$not-compiled$\CodeChunkParser.cs" />
-    <None Include="Code$not-compiled$\CodeParser.cs" />
-    <None Include="Code$not-compiled$\CodeParserH.cs" />
-    <None Include="Code$not-compiled$\CodeSyntaxItem.cs" />
-    <None Include="Code$not-compiled$\CodeSyntaxItemType.cs" />
-    <None Include="Code$not-compiled$\Html\HtmlChunkParseArgs.cs" />
-    <None Include="Code$not-compiled$\Html\HtmlChunkParser.cs" />
-    <None Include="Code$not-compiled$\Html\HtmlH.cs" />
-    <None Include="Code$not-compiled$\Html\HtmlSyntaxItem.cs" />
-    <None Include="Code$not-compiled$\ISrcCode.cs" />
-    <None Include="Code$not-compiled$\Md\MdChunkParseArgs.cs" />
-    <None Include="Code$not-compiled$\Md\MdChunkParser.cs" />
-    <None Include="Code$not-compiled$\Md\MdH.cs" />
-    <None Include="Code$not-compiled$\Md\MdItemLineType.cs" />
-    <None Include="Code$not-compiled$\Md\MdSyntaxItem.cs" />
-    <None Include="Code$not-compiled$\SrcCodeBase.cs" />
-    <None Include="Code$not-compiled$\StrSrcCode.cs" />
-    <None Include="Code$not-compiled$\Xml\XmlChunkParseArgs.cs" />
-    <None Include="Code$not-compiled$\Xml\XmlChunkParser.cs" />
-    <None Include="Code$not-compiled$\Xml\XmlH.cs" />
-    <None Include="Code$not-compiled$\Xml\XmlItemType.cs" />
-    <None Include="Code$not-compiled$\Xml\XmlSyntaxItem.cs" />
-    <None Include="Code$not-compiled$\Xml\XmlSyntaxParseErrorData.cs" />
-    <None Include="Code$not-compiled$\Xml\XmlSyntaxParseStateData.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <XamlAppDef Include="Code$not-compiled$\Md\MdChunkParseArgs.cs" />
-    <XamlAppDef Include="Code$not-compiled$\Md\MdChunkParser.cs" />
-    <XamlAppDef Include="Code$not-compiled$\Md\MdH.cs" />
-    <XamlAppDef Include="Code$not-compiled$\Md\MdItemLineType.cs" />
-    <XamlAppDef Include="Code$not-compiled$\Md\MdSyntaxItem.cs" />
   </ItemGroup>
 
 </Project>
