@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
+using Turmerik.Helpers;
 using Turmerik.Notes;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
@@ -37,8 +39,12 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             this.dirsPairCreator = dirsPairCreator ?? throw new ArgumentNullException(
                 nameof(dirsPairCreator));
 
+            string configFilePath = Path.Combine(
+                ProgramH.ExecutingAssemmblyPath,
+                "trmrk-dirpairs-config.json");
+
             config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
-                File.ReadAllText("trmrk-dirpairs-config.json"));
+                File.ReadAllText(configFilePath));
         }
 
         public async Task RunAsync(string[] rawArgs)

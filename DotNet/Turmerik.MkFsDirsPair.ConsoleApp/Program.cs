@@ -13,8 +13,10 @@ services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
 services.AddTransient<ProgramComponent>();
 var svcProv = services.BuildServiceProvider();
 
-var program = svcProv.GetRequiredService<ProgramComponent>();
-
 await ConsoleH.TryExecuteAsync(
-    async () => await program.RunAsync(args),
+    async () =>
+    {
+        var program = svcProv.GetRequiredService<ProgramComponent>();
+        await program.RunAsync(args);
+    },
     false);
