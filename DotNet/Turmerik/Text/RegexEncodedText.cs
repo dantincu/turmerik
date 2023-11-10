@@ -6,7 +6,9 @@ namespace Turmerik.Text
 {
     public readonly struct RegexEncodedText
     {
-        public RegexEncodedText(string rawStr, string encodedStr)
+        public RegexEncodedText(
+            string rawStr,
+            string encodedStr)
         {
             RawStr = rawStr;
             EncodedStr = encodedStr;

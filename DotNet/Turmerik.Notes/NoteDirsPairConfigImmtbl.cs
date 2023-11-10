@@ -12,62 +12,53 @@ namespace Turmerik.Notes
         {
             FileNameMaxLength = src.FileNameMaxLength;
             SerializeToJson = src.SerializeToJson;
+            TrmrkGuidInputName = src.TrmrkGuidInputName;
 
-            Prefixes = src.Prefixes?.ToImmtbl();
             ArgOpts = src.ArgOpts?.ToImmtbl();
             DirNames = src.DirNames?.ToImmtbl();
+            NoteDirNameIdxes = src.NoteDirNameIdxes?.ToImmtbl();
+            NoteInternalDirNameIdxes = src.NoteInternalDirNameIdxes?.ToImmtbl();
             FileNames = src.FileNames?.ToImmtbl();
             FileContents = src.FileContents?.ToImmtbl();
         }
 
         public int? FileNameMaxLength { get; }
         public bool? SerializeToJson { get; }
-        public PrefixesT Prefixes { get; }
+        public string? TrmrkGuidInputName { get; }
         public ArgOptionsT ArgOpts { get; }
         public DirNamesT DirNames { get; }
+        public DirNameIdxesT NoteDirNameIdxes { get; }
+        public DirNameIdxesT NoteInternalDirNameIdxes { get; }
         public FileNamesT FileNames { get; }
         public FileContentsT FileContents { get; }
 
-        public NoteDirsPairConfig.IPrefixesT GetPrefixes() => Prefixes;
         public NoteDirsPairConfig.IArgOptionsT GetArgOpts() => ArgOpts;
         public NoteDirsPairConfig.IDirNamesT GetDirNames() => DirNames;
+        public NoteDirsPairConfig.IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
+        public NoteDirsPairConfig.IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
         public NoteDirsPairConfig.IFileNamesT GetFileNames() => FileNames;
         public NoteDirsPairConfig.IFileContentsT GetFileContents() => FileContents;
-
-        public class PrefixesT : NoteDirsPairConfig.IPrefixesT
-        {
-            public PrefixesT(NoteDirsPairConfigMtbl.PrefixesT src)
-            {
-                NoteBook = src.NoteBook;
-                NoteFiles = src.NoteFiles;
-                NoteInternals = src.NoteInternals;
-                Note = src.Note;
-            }
-
-            public string NoteBook { get; }
-            public string NoteFiles { get; }
-            public string NoteInternals { get; }
-            public string Note { get; }
-        }
 
         public class ArgOptionsT : NoteDirsPairConfig.IArgOptionsT
         {
             public ArgOptionsT(NoteDirsPairConfigMtbl.ArgOptionsT src)
             {
                 WorkDir = src.WorkDir;
+                IsPinned = src.IsPinned;
                 SortIdx = src.SortIdx;
                 OpenMdFile = src.OpenMdFile;
                 CreateNoteBookDirsPair = src.CreateNoteBookDirsPair;
                 CreateNoteFilesDirsPair = src.CreateNoteFilesDirsPair;
-                CreateNoteInternalsDirsPair = src.CreateNoteInternalsDirsPair;
+                CreateNoteInternalDirsPair = src.CreateNoteInternalDirsPair;
             }
 
             public string WorkDir { get; }
+            public string IsPinned { get; }
             public string SortIdx { get; }
             public string OpenMdFile { get; }
             public string CreateNoteBookDirsPair { get; }
             public string CreateNoteFilesDirsPair { get; }
-            public string CreateNoteInternalsDirsPair { get; }
+            public string CreateNoteInternalDirsPair { get; }
         }
 
         public class DirNamesT : NoteDirsPairConfig.IDirNamesT
@@ -90,21 +81,39 @@ namespace Turmerik.Notes
             public string JoinStr { get; }
         }
 
+        public class DirNameIdxesT : NoteDirsPairConfig.IDirNameIdxesT
+        {
+            public DirNameIdxesT(NoteDirsPairConfigMtbl.DirNameIdxesT src)
+            {
+                MinIdx = src.MinIdx;
+                MaxIdx = src.MaxIdx;
+                IncIdx = src.IncIdx;
+                FillGapsByDefault = src.FillGapsByDefault;
+                IdxFmt = src.IdxFmt;
+            }
+
+            public int? MinIdx { get; }
+            public int? MaxIdx { get; }
+            public bool? IncIdx { get; }
+            public bool? FillGapsByDefault { get; }
+            public string? IdxFmt { get; }
+        }
+
         public class FileNamesT : NoteDirsPairConfig.IFileNamesT
         {
             public FileNamesT(NoteDirsPairConfigMtbl.FileNamesT src)
             {
-                NoteBookFileName = src.NoteBookFileName;
-                NoteFileNameTemplate = src.NoteFileNameTemplate;
-                NoteJsonFileNameTemplate = src.NoteJsonFileNameTemplate;
-                NoteFileNameRegex = src.NoteFileNameRegex;
+                NoteBookJsonFileName = src.NoteBookJsonFileName;
+                NoteJsonFileName = src.NoteJsonFileName;
+                NoteMdFileName = src.NoteMdFileName;
+                PrependTitleToNoteMdFileName = src.PrependTitleToNoteMdFileName;
                 KeepFileName = src.KeepFileName;
             }
 
-            public string NoteBookFileName { get; }
-            public string NoteFileNameTemplate { get; }
-            public string NoteFileNameRegex { get; set; }
-            public string NoteJsonFileNameTemplate { get; }
+            public string NoteBookJsonFileName { get; }
+            public string NoteJsonFileName { get; }
+            public string NoteMdFileName { get; }
+            public bool? PrependTitleToNoteMdFileName { get; }
             public string KeepFileName { get; }
         }
 

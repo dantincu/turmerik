@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.EqualityComparer;
-using Turmerik.LocalDevice.UnitTests;
 using Turmerik.TextStream;
 
 namespace Turmerik.UnitTests

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Text;
 
-namespace Turmerik.LocalDevice.UnitTests
+namespace Turmerik.UnitTests
 {
     public class StartsEndsWithStringUnitTest : UnitTestBase
     {

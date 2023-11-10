@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Turmerik.Notes
+namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
 {
-    public class NoteDirsPairOpts
+    public class ProgramArgs
     {
-        public string PrIdnf { get; set; }
-        public string Title { get; set; }
+        public string WorkDir { get; set; }
+        public string NoteTitle { get; set; }
         public int? SortIdx { get; set; }
         public bool IsPinned { get; set; }
         public bool OpenMdFile { get; set; }

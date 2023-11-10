@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Turmerik.Text;
 using Xunit;
 
-namespace Turmerik.LocalDevice.UnitTests
+namespace Turmerik.UnitTests
 {
     public class RSAKeyUnitTest : UnitTestBase
     {

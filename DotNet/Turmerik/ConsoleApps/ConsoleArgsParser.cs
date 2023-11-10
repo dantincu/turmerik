@@ -9,6 +9,28 @@ namespace Turmerik.ConsoleApps
 {
     public interface IConsoleArgsParser
     {
+        ConsoleArgsItemOpts<TArgsMtbl> ArgsItemOpts<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            Action<ConsoleArgsParserData<TArgsMtbl>> handler);
+
+        ConsoleArgsFlagOpts<TArgsMtbl> ArgsFlagOpts<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            Action<ConsoleArgsParserData<TArgsMtbl>> handler,
+            bool shouldNotHaveValue = false);
+
+        void HandleArgs<TArgsMtbl>(
+            ConsoleArgsParseHandlerOpts<TArgsMtbl> opts);
+
+        void HandleArgItems<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            ConsoleArgsItemOpts<TArgsMtbl>[] handlersArr,
+            bool throwOnTooManyArgs = true);
+
+        void HandleFlagArgs<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            Dictionary<string, ConsoleArgsFlagOpts<TArgsMtbl>> handlersMap,
+            bool throwOnUnknownFlag = true);
+
         ConsoleArgsParserData<TArgsMtbl> Parse<TArgsMtbl>(
             ConsoleArgsParserOpts<TArgsMtbl> opts);
     }
@@ -24,6 +46,93 @@ namespace Turmerik.ConsoleApps
             IDelimCharsExtractor delimCharsExtractor)
         {
             this.delimCharsExtractor = delimCharsExtractor ?? throw new ArgumentNullException(nameof(delimCharsExtractor));
+        }
+
+        public ConsoleArgsItemOpts<TArgsMtbl> ArgsItemOpts<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            Action<ConsoleArgsParserData<TArgsMtbl>> handler) => new ConsoleArgsItemOpts<TArgsMtbl>
+            {
+                Handler = handler
+            };
+
+        public ConsoleArgsFlagOpts<TArgsMtbl> ArgsFlagOpts<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            Action<ConsoleArgsParserData<TArgsMtbl>> handler,
+            bool shouldNotHaveValue = false) => new ConsoleArgsFlagOpts<TArgsMtbl>
+            {
+                Handler = handler,
+                ShouldNotHaveValue = shouldNotHaveValue
+            };
+
+        public void HandleArgs<TArgsMtbl>(
+            ConsoleArgsParseHandlerOpts<TArgsMtbl> opts)
+        {
+            var data = opts.Data;
+
+            if (data.ArgFlagName != null)
+            {
+                HandleFlagArgs(data,
+                    opts.FlagHandlersMap,
+                    opts.ThrowOnUnknownFlag);
+            }
+            else
+            {
+                HandleArgItems(data,
+                    opts.ItemHandlersArr,
+                    opts.ThrowOnTooManyArgs);
+            }
+        }
+
+        public void HandleArgItems<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            ConsoleArgsItemOpts<TArgsMtbl>[] handlersArr,
+            bool throwOnTooManyArgs = true)
+        {
+            if (data.Count < handlersArr.Length)
+            {
+                var handler = handlersArr[data.Count - 1];
+                handler.Handler(data);
+            }
+            else if (throwOnTooManyArgs)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"Too many arguments: expected no more than {handlersArr.Length} non-flag arguments");
+            }
+        }
+
+        public void HandleFlagArgs<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            Dictionary<string, ConsoleArgsFlagOpts<TArgsMtbl>> handlersMap,
+            bool throwOnUnknownFlag = true)
+        {
+            var argFlagName = data.ArgFlagName;
+
+            if (handlersMap.TryGetValue(argFlagName, out var handler))
+            {
+                if (handler.ShouldNotHaveValue)
+                {
+                    ThrowIfArgOptHasValues(
+                        data, argFlagName);
+                }
+
+                handler.Handler(data);
+            }
+            else if (throwOnUnknownFlag)
+            {
+                throw new ArgumentException(
+                    $"Invalid flag {argFlagName}");
+            }
+        }
+
+        public void ThrowIfArgOptHasValues<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            string flag)
+        {
+            if (data.ArgFlagValue.Any())
+            {
+                throw new ArgumentException(
+                    $"The flag {flag} should not be given an explicit value");
+            }
         }
 
         public ConsoleArgsParserData<TArgsMtbl> Parse<TArgsMtbl>(

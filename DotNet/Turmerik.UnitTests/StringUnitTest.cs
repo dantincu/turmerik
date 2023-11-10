@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Turmerik.Text;
 
-namespace Turmerik.LocalDevice.UnitTests
+namespace Turmerik.UnitTests
 {
     public class StringUnitTest : UnitTestBase
     {

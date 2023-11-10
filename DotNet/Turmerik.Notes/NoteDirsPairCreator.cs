@@ -8,9 +8,8 @@ namespace Turmerik.Notes
 {
     public interface INoteDirsPairCreator
     {
-        Task<List<DriveItemX>> CreateDirsPair(
-            string prIdnf,
-            DirsPairOpts opts);
+        Task<NoteDirsPair> CreateDirsPairAsync(
+            NoteDirsPairOpts opts);
     }
 
     public class NoteDirsPairCreator : INoteDirsPairCreator
@@ -24,23 +23,24 @@ namespace Turmerik.Notes
         {
             this.generator = generator ?? throw new ArgumentNullException(
                 nameof(generator));
+
             this.itemsCreator = itemsCreator ?? throw new ArgumentNullException(
                 nameof(itemsCreator));
         }
 
-        public async Task<List<DriveItemX>> CreateDirsPair(
-            string prIdnf,
-            DirsPairOpts opts)
+        public async Task<NoteDirsPair> CreateDirsPairAsync(
+            NoteDirsPairOpts opts)
         {
-            var itemsList = generator.GenerateItems(opts);
+            var result = await generator.GenerateItemsAsync(opts);
 
-            itemsList = await itemsCreator.CreateItemsAsync(new DriveItemsCreatorOpts
-            {
-                PrIdnf = prIdnf,
-                ItemsList = itemsList
-            });
+            result.DirPairs = await itemsCreator.CreateItemsAsync(
+                new DriveItemsCreatorOpts
+                {
+                    PrIdnf = opts.PrIdnf,
+                    ItemsList = result.DirPairs
+                });
 
-            return itemsList;
+            return result;
         }
     }
 }

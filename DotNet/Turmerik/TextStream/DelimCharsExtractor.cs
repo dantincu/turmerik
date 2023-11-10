@@ -99,11 +99,16 @@ namespace Turmerik.TextStream
             out bool startsWithDelim)
         {
             startsWithDelim = str.FirstOrDefault() == startDelim;
-            startsWithDelim = startsWithDelim && (str.Length == 1 || str[1] != startDelim);
+            bool startsWithDblDelim = startsWithDelim && str.Length > 1 && str[1] == startDelim;
+            startsWithDelim = startsWithDelim && !startsWithDblDelim;
 
             if (startsWithDelim)
             {
                 str = str.Substring(1);
+            }
+            else if (startsWithDblDelim)
+            {
+                str = str.Substring(2);
             }
 
             return str;

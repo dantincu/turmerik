@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Turmerik.Utility;
 
 namespace Turmerik.Helpers
 {
@@ -17,6 +18,17 @@ namespace Turmerik.Helpers
             return retArr;
         }
 
+        public static List<T> Lst<T>(this T firstVal, params T[] nextItemsArr)
+        {
+            var list = new List<T>
+            {
+                firstVal
+            };
+
+            list.AddRange(nextItemsArr);
+            return list;
+        }
+
         public static TResult WithCount<TResult, TItem, TNmrbl>(
             this TNmrbl nmrbl,
             Func<TNmrbl, int, TResult> factory,
@@ -27,6 +39,26 @@ namespace Turmerik.Helpers
 
             var result = factory(nmrbl, count);
             return result;
+        }
+
+        public static TNmrbl ForEach<TItem, TNmrbl>(
+            this TNmrbl nmrbl,
+            ForCallback<TItem> callback) where TNmrbl : IEnumerable<TItem>
+        {
+            int idx = 0;
+            var @break = new MutableValueWrapper<bool>();
+
+            foreach (var item in nmrbl)
+            {
+                callback(item, idx++, @break);
+
+                if (@break.Value)
+                {
+                    break;
+                }
+            }
+
+            return nmrbl;
         }
 
         public static ReadOnlyCollection<T> RdnlC<T>(

@@ -94,9 +94,13 @@ namespace Turmerik.Notes.Md
                         args.Path.Add(args.Idx);
                         args.Stack.Push(mdObj);
                         args.Parent = mdObj;
-                        args.Current = default;
+                        args.Current = null;
 
                         GetObjects(args);
+
+                        path.RemoveAt(path.Count - 1);
+                        args.Current = args.Parent;
+                        args.Parent = args.Stack.Pop();
                     }
                     else
                     {

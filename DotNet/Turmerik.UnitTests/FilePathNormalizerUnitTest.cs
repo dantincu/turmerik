@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Helpers;
-using Turmerik.LocalDevice.UnitTests;
 using Turmerik.Text;
 
 namespace Turmerik.UnitTests

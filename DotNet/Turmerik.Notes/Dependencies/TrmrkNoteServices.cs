@@ -13,12 +13,13 @@ namespace Turmerik.Notes.Dependencies
         {
             services.AddSingleton<IMdObjectsRetriever, MdObjectsRetriever>();
             services.AddSingleton<INoteTitleRetriever, NoteTitleRetriever>();
-
+            services.AddSingleton<INoteCfgValuesRetriever, NoteCfgValuesRetriever>();
+            services.AddSingleton<IExistingNoteDirPairsRetrieverFactory, ExistingNoteDirPairsRetrieverFactory>();
             services.AddSingleton<INextNoteIdxRetriever, NextNoteIdxRetriever>();
-            services.AddSingleton<IDirsPairGenerator, DirsPairGenerator>();
+            services.AddSingleton<INoteJsonDeserializer, NoteJsonDeserializer>();
 
-            services.AddSingleton<INoteDirsPairGenerator, NoteDirsPairGenerator>();
-            services.AddSingleton<INoteDirsPairCreator, NoteDirsPairCreator>();
+            services.AddSingleton<INoteDirsPairGeneratorFactory, NoteDirsPairGeneratorFactory>();
+            services.AddSingleton<INoteDirsPairCreatorFactory, NoteDirsPairCreatorFactory>();
 
             return services;
         }

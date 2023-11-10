@@ -2,22 +2,17 @@
   "IsDevEnv": false,
   "RequiredClientVersion": 1,
   "ClientRedirectUrl": null,
+  "TrmrkGuidInputName": "trmrk_guid",
   "NoteDirPairs": {
     "FileNameMaxLength": 100,
     // "SerializeToJson": true,
-    "Prefixes": {
-      "NoteBook": "b",
-      "NoteFiles": "f",
-      "NoteInternals": "i",
-      "Note": "n"
-    },
     "ArgOpts": {
       "WorkDir": "wd",
       "SortIdx": "x",
       "OpenMdFile": "o",
       "CreateNoteBookDirsPair": "b",
       "CreateNoteFilesDirsPair": "f",
-      "CreateNoteInternalsDirsPair": "i"
+      "CreateNoteInternalDirsPair": "i"
     },
     "DirNames": {
       "NoteBook": "[note-book]",
@@ -27,16 +22,30 @@
       "NoteItemsPfx": "",
       "JoinStr": "-"
     },
+    "NoteDirNameIdxes": {
+      "MinIdx": 1,
+      "MaxIdx": 999,
+      "IncIdx": true,
+      "FillGapsByDefault": false,
+      "IdxFmt": "D3"
+    },
+    "NoteInternalDirNameIdxes": {
+      "MinIdx": 1,
+      "MaxIdx": 999,
+      "IncIdx": true,
+      "FillGapsByDefault": true,
+      "IdxFmt": "D1"
+    },
     "FileNames": {
-      "NoteBookFileName": "[note-book]",
-      "NoteFileNameTemplate": "{0}[note]",
-      "NoteFileNameRegex": "\\[note\\]$",
-      "NoteJsonFileName": "[note]",
+      "NoteBookJsonFileName": "[note-book].json",
+      "NoteJsonFileName": "[note].json",
+      "NoteMdFileName": "[note].md",
+      "PrependTitleToNoteMdFileName": true,
       "KeepFileName": ".keep"
     },
     "FileContents": {
       "KeepFileContentsTemplate": "{0}",
-      "NoteFileContentsTemplate": "# {0}  \n\n"
+      "NoteFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n"
     }
   }
 }

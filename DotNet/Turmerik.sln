@@ -31,6 +31,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFileNotes.Asp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Notes", "Turmerik.Notes\Turmerik.Notes.csproj", "{6254ABEE-90A0-4550-A891-02CB6CCCFF2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.MkFsNoteDirsPair.ConsoleApp", "Turmerik.MkFsNoteDirsPair.ConsoleApp\Turmerik.MkFsNoteDirsPair.ConsoleApp.csproj", "{25FD0547-55A9-4830-9C42-9220688DCECE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Notes.UnitTests", "Turmerik.Notes.UnitTests\Turmerik.Notes.UnitTests.csproj", "{A4E47B68-CAEE-4AD2-892A-DC464AF46298}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +81,14 @@ Global
 		{6254ABEE-90A0-4550-A891-02CB6CCCFF2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6254ABEE-90A0-4550-A891-02CB6CCCFF2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6254ABEE-90A0-4550-A891-02CB6CCCFF2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25FD0547-55A9-4830-9C42-9220688DCECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25FD0547-55A9-4830-9C42-9220688DCECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25FD0547-55A9-4830-9C42-9220688DCECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25FD0547-55A9-4830-9C42-9220688DCECE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4E47B68-CAEE-4AD2-892A-DC464AF46298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E47B68-CAEE-4AD2-892A-DC464AF46298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E47B68-CAEE-4AD2-892A-DC464AF46298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E47B68-CAEE-4AD2-892A-DC464AF46298}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -94,6 +106,8 @@ Global
 		{D798A65E-31F8-4247-A2B4-FB5549AF43FF} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
 		{29A6AEB6-ECC7-4571-BCEA-4AD569D22526} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
 		{6254ABEE-90A0-4550-A891-02CB6CCCFF2F} = {A5B8430F-B64C-4AE7-B315-72686C296100}
+		{25FD0547-55A9-4830-9C42-9220688DCECE} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{A4E47B68-CAEE-4AD2-892A-DC464AF46298} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

@@ -16,7 +16,6 @@ namespace Turmerik.AspNetCore.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
-            TrmrkServices.RegisterAll(services);
             services.AddSingleton<IAppConfigServiceFactory, AppConfigServiceFactory>();
 
             return services;

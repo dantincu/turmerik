@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Notes.Dependencies;
 
-namespace Turmerik.UnitTests
+namespace Turmerik.Notes.UnitTests
 {
     public class ServiceProviderContainer : ServiceProviderContainerBase
     {
@@ -21,6 +22,7 @@ namespace Turmerik.UnitTests
             IServiceCollection services)
         {
             TrmrkServices.RegisterAll(services);
+            TrmrkNoteServices.RegisterAll(services);
         }
     }
 }

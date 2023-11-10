@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Testing;
 using Turmerik.Dependencies;
+using Turmerik.Notes.UnitTests;
 
-namespace Turmerik.UnitTests
+namespace Turmerik.Notes.UnitTests
 {
     public class UnitTestBase : UnitTestCoreBase
     {

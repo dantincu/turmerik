@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.AspNetCore.AppSettings;
 using Turmerik.AspNetCore.Dependencies;
+using Turmerik.Dependencies;
 using Turmerik.LocalDevice.Core.Env;
 using Turmerik.Notes.Dependencies;
 
@@ -16,6 +17,7 @@ namespace Turmerik.Notes.AspNetCore.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
+            TrmrkServices.RegisterAll(services);
             AspNetCoreServices.RegisterAll(services);
             TrmrkNoteServices.RegisterAll(services);
 

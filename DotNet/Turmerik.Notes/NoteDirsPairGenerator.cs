@@ -5,91 +5,70 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
+using Turmerik.Notes.Md;
+using Turmerik.TextSerialization;
+using Turmerik.Utility;
 
 namespace Turmerik.Notes
 {
     public interface INoteDirsPairGenerator
     {
-        List<DriveItemX> GenerateItems(
-            DirsPairOpts opts);
+        INoteDirsPairConfig Config { get; }
+        NoteDirsPairConfig.IArgOptionsT ArgOptsCfg { get; }
+        NoteDirsPairConfig.IDirNamesT DirNamesCfg { get; }
+        NoteDirsPairConfig.IDirNameIdxesT NoteDirNameIdxesCfg { get; }
+        NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }
+        NoteDirsPairConfig.IFileNamesT FileNamesCfg { get; }
+        NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }
+
+        Task<NoteDirsPair> GenerateItemsAsync(
+            NoteDirsPairOpts opts);
     }
 
-    public class NoteDirsPairGenerator : INoteDirsPairGenerator
+    public class NoteDirsPairGenerator : NoteDirsPairGeneratorBase, INoteDirsPairGenerator
     {
-        private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
-
         public NoteDirsPairGenerator(
-            IFsEntryNameNormalizer fsEntryNameNormalizer)
+            IJsonConversion jsonConversion,
+            IFsEntryNameNormalizer fsEntryNameNormalizer,
+            INextNoteIdxRetriever nextNoteIdxRetriever,
+            IExistingNoteDirPairsRetriever existingNoteDirPairsRetriever,
+            INoteCfgValuesRetriever noteCfgValuesRetriever) : base(
+                jsonConversion,
+                fsEntryNameNormalizer,
+                nextNoteIdxRetriever,
+                existingNoteDirPairsRetriever,
+                noteCfgValuesRetriever)
         {
-            this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
-                nameof(fsEntryNameNormalizer));
         }
 
-        public List<DriveItemX> GenerateItems(
-            DirsPairOpts opts)
+
+        public async Task<NoteDirsPair> GenerateItemsAsync(
+            NoteDirsPairOpts opts)
         {
-            opts.FullDirNamePart ??= fsEntryNameNormalizer.NormalizeFsEntryName(
-                opts.Title, opts.MaxFsEntryNameLength);
-
-            var folderFiles = GetFolderFiles(opts);
-            var dirsPair = GetDirsPair(opts, folderFiles);
-
-            return dirsPair;
-        }
-
-        private List<DriveItemX> GetDirsPair(
-            DirsPairOpts opts,
-            List<DriveItemX> folderFiles) => new List<DriveItemX>
+            var args = new Args(opts)
             {
-                new DriveItemX
-                {
-                    Name = opts.ShortDirName,
-                    FolderFiles = folderFiles
-                },
-                new DriveItemX
-                {
-                    Name = string.Join(
-                        opts.JoinStr,
-                        opts.ShortDirName,
-                        opts.FullDirNamePart),
-                    FolderFiles = new DriveItemX
-                    {
-                        Name = opts.KeepFileName,
-                        Data = new DriveItemXData
-                        {
-                            TextFileContents = opts.KeepFileNameContents
-                        }
-                    }.Arr().ToList()
-                }
+                PrIdnf = opts.PrIdnf,
+                ExistingDirPairs = await ExistingNoteDirPairsRetriever.GetNoteDirPairsAsync(opts.PrIdnf)
             };
 
-        private List<DriveItemX> GetFolderFiles(
-            DirsPairOpts opts)
-        {
-            List<DriveItemX> folderFiles = null;
-
-            if (opts.MdFileNameTemplate != null)
+            if (opts.CreateNoteBookDirsPair)
             {
-                var mdFile = new DriveItemX
-                {
-                    Name = string.Format(
-                        opts.MdFileNameTemplate,
-                        opts.FullDirNamePart),
-                    Data = new DriveItemXData
-                    {
-                        TextFileContents = string.Format(
-                            opts.MdFileContentsTemplate,
-                            opts.Title)
-                    }
-                };
-
-                folderFiles = new List<DriveItemX>
-                {
-                    mdFile
-                };
+                GenerateNoteBook(args);
+            }
+            else if (opts.Title != null)
+            {
+                GenerateNoteItem(args);
+            }
+            else
+            {
+                GenerateInternalDirs(args);
             }
 
-            return folderFiles;
+            return new NoteDirsPair
+            {
+                DirPairs = args.DirsList,
+                NoteItem = args.NoteItem,
+            };
         }
     }
 }
