@@ -28,6 +28,8 @@ namespace Turmerik.Dependencies
 
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IAsyncMessageQueuerFactory, AsyncMessageQueuerFactory>();
+            services.AddScoped<IBestItemRetriever, BestItemRetriever>();
+            services.AddScoped<IBestItemAsyncRetriever, BestItemAsyncRetriever>();
 
             services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
 
@@ -39,6 +41,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
             services.AddSingleton<IDirsPairGenerator, DirsPairGenerator>();
             services.AddSingleton<IDirsPairCreator, DirsPairCreator>();
+            services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
             return services;
         }
     }

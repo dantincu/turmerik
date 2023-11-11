@@ -41,6 +41,8 @@
       "NoteJsonFileName": "[note].json",
       "NoteMdFileName": "[note].md",
       "PrependTitleToNoteMdFileName": true,
+      "RequireTrmrkGuidInNoteJsonFile": true,
+      "RequireTrmrkGuidInNoteMdFile": false,
       "KeepFileName": ".keep"
     },
     "FileContents": {

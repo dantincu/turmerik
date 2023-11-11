@@ -72,7 +72,7 @@ namespace Turmerik.Notes
                 cfg.NoteFileContentsTemplate,
                 noteTitle,
                 Trmrk.TrmrkGuidStrNoDash,
-                trmrkUuidInputName ?? NoteTitleRetriever.TRMRK_GUID_INPUT_NAME);
+                trmrkUuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
 
         public string GetKeepFileContents(
             NoteDirsPairConfig.IFileContentsT cfg) => string.Format(

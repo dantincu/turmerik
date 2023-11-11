@@ -55,6 +55,8 @@ namespace Turmerik.Notes
             string NoteJsonFileName { get; }
             string NoteMdFileName { get; }
             bool? PrependTitleToNoteMdFileName { get; }
+            bool? RequireTrmrkGuidInNoteJsonFile { get; }
+            bool? RequireTrmrkGuidInNoteMdFile { get; }
             string KeepFileName { get; }
         }
 

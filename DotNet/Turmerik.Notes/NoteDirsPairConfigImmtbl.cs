@@ -107,6 +107,8 @@ namespace Turmerik.Notes
                 NoteJsonFileName = src.NoteJsonFileName;
                 NoteMdFileName = src.NoteMdFileName;
                 PrependTitleToNoteMdFileName = src.PrependTitleToNoteMdFileName;
+                RequireTrmrkGuidInNoteJsonFile = src.RequireTrmrkGuidInNoteJsonFile;
+                RequireTrmrkGuidInNoteMdFile = src.RequireTrmrkGuidInNoteMdFile;
                 KeepFileName = src.KeepFileName;
             }
 
@@ -114,6 +116,8 @@ namespace Turmerik.Notes
             public string NoteJsonFileName { get; }
             public string NoteMdFileName { get; }
             public bool? PrependTitleToNoteMdFileName { get; }
+            public bool? RequireTrmrkGuidInNoteJsonFile { get; }
+            public bool? RequireTrmrkGuidInNoteMdFile { get; }
             public string KeepFileName { get; }
         }
 

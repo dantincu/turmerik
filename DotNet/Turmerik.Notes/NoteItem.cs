@@ -18,6 +18,7 @@ namespace Turmerik.Notes
     public class NoteItemCore : NoteItemCoreBase
     {
         public int? ItemIdx { get; set; }
+        public string MdFileName { get; set; }
     }
 
     public class NoteItem : NoteItemCore

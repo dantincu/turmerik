@@ -21,6 +21,26 @@ namespace Turmerik.DriveExplorer
         {
         }
 
+        public override async Task<DriveItem> GetItemAsync(string idnf)
+        {
+            DriveItem item;
+
+            if (Directory.Exists(idnf))
+            {
+                item = await GetFolderAsync(idnf);
+            }
+            else if (File.Exists(idnf))
+            {
+                item = await GetFileAsync(idnf);
+            }
+            else
+            {
+                item = null;
+            }
+
+            return item;
+        }
+
         public override async Task<DriveItem> GetFolderAsync(
             string idnf)
         {
@@ -78,6 +98,15 @@ namespace Turmerik.DriveExplorer
         public override Task<byte[]> GetFileBytesAsync(
             string idnf) => FsH.ReadAllBytesAsync(idnf);
 
+        protected async Task<DriveItem> GetFileAsync(
+            string idnf)
+        {
+            var fSysInfo = new FileInfo(idnf);
+            var item = GetDriveItem(fSysInfo, false);
+
+            return item;
+        }
+
         protected DriveItem GetDriveItem(
             FileSystemInfo fSysInfo,
             bool isChildItem)
@@ -89,7 +118,10 @@ namespace Turmerik.DriveExplorer
 
             if (fSysInfo is DirectoryInfo dirInfo)
             {
-                fsItem.IsFolder = true;
+                if (!isChildItem)
+                {
+                    fsItem.IsFolder = true;
+                }
             }
             else if (fSysInfo is FileInfo fInfo)
             {
@@ -124,6 +156,6 @@ namespace Turmerik.DriveExplorer
             return fsItem;
         }
 
-        protected override string GetDirSeparator() => Path.DirectorySeparatorChar.ToString();
+        protected override char GetDirSeparator() => Path.DirectorySeparatorChar;
     }
 }

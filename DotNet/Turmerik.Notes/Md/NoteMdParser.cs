@@ -11,26 +11,29 @@ using Turmerik.Helpers;
 
 namespace Turmerik.Notes.Md
 {
-    public interface INoteTitleRetriever
+    public interface INoteMdParser
     {
         string? GetNoteTitle(
             MarkdownDocument mdDoc,
             out string? trmrkUuid,
-            string trmrkUuidInputName = null);
+            string? trmrkUuidInputName = null);
 
-        string? GetNoteTitle(
-            string noteMdContent,
-            out string? trmrkUuid,
-            string trmrkUuidInputName = null);
+        MarkdownDocument? TryParse(
+            string mdContent,
+            out NoteItemCore? item,
+            string? trmrkUuidInputName = null);
+
+        MarkdownDocument Parse(
+            string mdContent,
+            out NoteItemCore item,
+            string? trmrkUuidInputName = null);
     }
 
-    public class NoteTitleRetriever : INoteTitleRetriever
+    public class NoteMdParser : INoteMdParser
     {
-        public const string TRMRK_GUID_INPUT_NAME = "trmrk_guid";
-
         private readonly IMdObjectsRetriever mdObjectsRetriever;
 
-        public NoteTitleRetriever(
+        public NoteMdParser(
             IMdObjectsRetriever mdObjectsRetriever)
         {
             this.mdObjectsRetriever = mdObjectsRetriever ?? throw new ArgumentNullException(
@@ -40,9 +43,9 @@ namespace Turmerik.Notes.Md
         public string? GetNoteTitle(
             MarkdownDocument mdDoc,
             out string? trmrkUuid,
-            string trmrkUuidInputName = null)
+            string? trmrkUuidInputName = null)
         {
-            trmrkUuidInputName ??= TRMRK_GUID_INPUT_NAME;
+            trmrkUuidInputName ??= TrmrkNotesH.TRMRK_GUID_INPUT_NAME;
 
             bool seekTrmrkUuid = !string.IsNullOrWhiteSpace(
                 trmrkUuidInputName);
@@ -101,13 +104,50 @@ namespace Turmerik.Notes.Md
             return title;
         }
 
-        public string? GetNoteTitle(
-            string noteMdContent,
-            out string? trmrkUuid,
-            string trmrkUuidInputName = null) => GetNoteTitle(
-                MarkdownParser.Parse(
-                    noteMdContent),
-                out trmrkUuid,
+        public MarkdownDocument? TryParse(
+            string mdContent,
+            out NoteItemCore? item,
+            string? trmrkUuidInputName = null)
+        {
+            MarkdownDocument? mdDoc = null;
+            item = null;
+
+            try
+            {
+                mdDoc = Parse(
+                    mdContent,
+                    out item,
+                    trmrkUuidInputName);
+            }
+            catch
+            {
+            }
+
+            return mdDoc;
+        }
+
+        public MarkdownDocument Parse(
+            string mdContent,
+            out NoteItemCore item,
+            string? trmrkUuidInputName = null)
+        {
+            var mdDoc = Markdown.Parse(mdContent);
+
+            string? title = GetNoteTitle(
+                mdDoc, out string? trmrkUuid,
                 trmrkUuidInputName);
+
+            item = new NoteItemCore
+            {
+                Title = title!,
+            };
+
+            if (Guid.TryParse(trmrkUuid, out var guid))
+            {
+                item.TrmrkGuid = guid;
+            }
+
+            return mdDoc;
+        }
     }
 }

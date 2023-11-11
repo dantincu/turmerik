@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.DriveExplorer;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
@@ -8,8 +9,10 @@ namespace Turmerik.Notes
 {
     public interface INoteJsonDeserializer
     {
-        Tuple<NoteItemCore, bool> TryDeserialize(
-            string fileContents);
+        Tuple<TNoteItem, bool> TryDeserialize<TNoteItem>(
+            string fileContents,
+            bool requireTrmrkGuid = true)
+            where TNoteItem : NoteItemCoreBase;
     }
 
     public class NoteJsonDeserializer : INoteJsonDeserializer
@@ -22,18 +25,20 @@ namespace Turmerik.Notes
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(nameof(jsonConversion));
         }
 
-        public Tuple<NoteItemCore, bool> TryDeserialize(
-            string fileContents)
+        public Tuple<TNoteItem?, bool> TryDeserialize<TNoteItem>(
+            string fileContents,
+            bool requireTrmrkGuid = true)
+            where TNoteItem : NoteItemCoreBase
         {
-            NoteItemCore item;
+            TNoteItem? item;
             bool isValid;
 
             try
             {
-                item = jsonConversion.Adapter.Deserialize<NoteItemCore>(
+                item = jsonConversion.Adapter.Deserialize<TNoteItem>(
                     fileContents);
 
-                isValid = item.TrmrkGuid == Trmrk.TrmrkGuid;
+                isValid = !requireTrmrkGuid || item.TrmrkGuid == Trmrk.TrmrkGuid;
             }
             catch
             {

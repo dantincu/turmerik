@@ -14,6 +14,7 @@ namespace Turmerik.DriveExplorer
 {
     public interface IDriveItemsRetriever
     {
+        Task<DriveItem> GetItemAsync(string idnf);
         Task<DriveItem> GetFolderAsync(string idnf);
         Task<DriveItem> GetFolderAsync(string idnf, int depth);
 
@@ -29,7 +30,7 @@ namespace Turmerik.DriveExplorer
             string prIdnf)
             where TDriveItem : DriveItem<TDriveItem>;
 
-        string DirSeparator { get; }
+        char DirSeparator { get; }
     }
 
     public abstract class DriveItemsRetrieverCoreBase : IDriveItemsRetriever
@@ -39,11 +40,12 @@ namespace Turmerik.DriveExplorer
             DirSeparator = GetDirSeparator();
         }
 
-        public string DirSeparator { get; }
+        public char DirSeparator { get; }
 
         public abstract Task<bool> ItemExistsAsync(string idnf);
         public abstract Task<bool> FileExistsAsync(string idnf);
         public abstract Task<bool> FolderExistsAsync(string idnf);
+        public abstract Task<DriveItem> GetItemAsync(string idnf);
         public abstract Task<DriveItem> GetFolderAsync(string idnf);
 
         public abstract Task<string> GetFileTextAsync(string idnf);
@@ -79,10 +81,10 @@ namespace Turmerik.DriveExplorer
             string prIdnf)
             where TDriveItem : DriveItem<TDriveItem>;
 
-        protected abstract string GetDirSeparator();
+        protected abstract char GetDirSeparator();
     }
 
-    public abstract class DriveItemsRetrieverBase : DriveItemsRetrieverCoreBase, IDriveItemsRetriever
+    public abstract class DriveItemsRetrieverBase : DriveItemsRetrieverCoreBase
     {
         protected static readonly ReadOnlyDictionary<OfficeFileType, ReadOnlyCollection<string>> OfficeFileTypesFileNameExtensions;
         protected static readonly ReadOnlyDictionary<FileType, ReadOnlyCollection<string>> FileTypesFileNameExtensions;

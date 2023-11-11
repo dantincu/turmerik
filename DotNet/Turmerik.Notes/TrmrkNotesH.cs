@@ -7,5 +7,6 @@ namespace Turmerik.Notes
     public static class TrmrkNotesH
     {
         public const string NOTES_DIR_PAIRS_CFG_FILE_NAME = "trmrk-dirpairs-config.json";
+        public const string TRMRK_GUID_INPUT_NAME = "trmrk_guid";
     }
 }
