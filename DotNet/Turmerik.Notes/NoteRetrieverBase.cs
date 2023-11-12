@@ -12,14 +12,14 @@ namespace Turmerik.Notes
     public abstract class NoteRetrieverBase
     {
         protected NoteRetrieverBase(
-            IDriveExplorerService dvExplrSvc,
+            IDriveItemsRetriever driveItemsRetriever,
             IBestItemAsyncRetriever bestItemAsyncRetriever)
         {
-            this.DvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(nameof(dvExplrSvc));
+            this.DriveItemsRetriever = driveItemsRetriever ?? throw new ArgumentNullException(nameof(driveItemsRetriever));
             this.BestItemAsyncRetriever = bestItemAsyncRetriever ?? throw new ArgumentNullException(nameof(bestItemAsyncRetriever));
         }
 
-        protected IDriveExplorerService DvExplrSvc { get; }
+        protected IDriveItemsRetriever DriveItemsRetriever { get; }
         protected IBestItemAsyncRetriever BestItemAsyncRetriever { get; }
 
         protected async Task<TTuple> GetNoteFileCoreAsync<TItem, TTuple>(
@@ -54,7 +54,7 @@ namespace Turmerik.Notes
 
             if (retTuple != null)
             {
-                retTuple.FileIdnf = DvExplrSvc.GetItemIdnf(
+                retTuple.FileIdnf = DriveItemsRetriever.GetItemIdnf(
                     retTuple.File, prIdnf);
             }
 
@@ -114,11 +114,11 @@ namespace Turmerik.Notes
         {
             var tuple = new TTuple
             {
-                FileIdnf = DvExplrSvc.GetItemIdnf(file, prIdnf),
+                FileIdnf = DriveItemsRetriever.GetItemIdnf(file, prIdnf),
                 File = file,
             };
 
-            tuple.RawContent = await DvExplrSvc.GetFileTextAsync(
+            tuple.RawContent = await DriveItemsRetriever.GetFileTextAsync(
                 tuple.FileIdnf);
 
             return tuple;

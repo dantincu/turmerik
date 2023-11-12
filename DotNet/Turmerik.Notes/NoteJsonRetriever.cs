@@ -35,10 +35,10 @@ namespace Turmerik.Notes
     public class NoteJsonRetriever : NoteRetrieverBase, INoteJsonRetriever
     {
         public NoteJsonRetriever(
-            IDriveExplorerService dvExplrSvc,
+            IDriveItemsRetriever driveItemsRetriever,
             INoteJsonDeserializer noteJsonDeserializer,
             IBestItemAsyncRetriever bestItemAsyncRetriever) : base(
-                dvExplrSvc,
+                driveItemsRetriever,
                 bestItemAsyncRetriever)
         {
             this.NoteJsonDeserializer = noteJsonDeserializer ?? throw new ArgumentNullException(

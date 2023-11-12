@@ -15,13 +15,13 @@ namespace Turmerik.Notes
     public class ExistingNoteDirPairsRetrieverFactory : IExistingNoteDirPairsRetrieverFactory
     {
         private readonly IJsonConversion jsonConversion;
-        private readonly IDriveExplorerService dvExplrSvc;
+        private readonly IDriveItemsRetriever dvExplrSvc;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
         private readonly INoteJsonDeserializer noteJsonDeserializer;
 
         public ExistingNoteDirPairsRetrieverFactory(
             IJsonConversion jsonConversion,
-            IDriveExplorerService dvExplrSvc,
+            IDriveItemsRetriever dvExplrSvc,
             INoteCfgValuesRetriever noteCfgValuesRetriever,
             INoteJsonDeserializer noteJsonDeserializer)
         {

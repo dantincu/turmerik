@@ -34,11 +34,11 @@ namespace Turmerik.Notes
     public class NoteMdRetriever : NoteRetrieverBase, INoteMdRetriever
     {
         public NoteMdRetriever(
-            IDriveExplorerService dvExplrSvc,
+            IDriveItemsRetriever driveItemsRetriever,
             INoteMdParser noteMdParser,
             IBestItemAsyncRetriever bestItemAsyncRetriever,
             IFsEntryNameNormalizer fsEntryNameNormalizer) : base(
-                dvExplrSvc,
+                driveItemsRetriever,
                 bestItemAsyncRetriever)
         {
             this.NoteMdParser = noteMdParser ?? throw new ArgumentNullException(

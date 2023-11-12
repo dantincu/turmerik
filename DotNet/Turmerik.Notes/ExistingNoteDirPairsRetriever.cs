@@ -31,13 +31,13 @@ namespace Turmerik.Notes
     public class ExistingNoteDirPairsRetriever : IExistingNoteDirPairsRetriever
     {
         private readonly IJsonConversion jsonConversion;
-        private readonly IDriveExplorerService dvExplrSvc;
+        private readonly IDriveItemsRetriever driveItemsRetriever;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
         private readonly INoteJsonDeserializer noteJsonDeserializer;
 
         public ExistingNoteDirPairsRetriever(
             IJsonConversion jsonConversion,
-            IDriveExplorerService dvExplrSvc,
+            IDriveItemsRetriever driveItemsRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever,
             INoteJsonDeserializer noteJsonDeserializer,
             INoteDirsPairConfig config,
@@ -46,8 +46,8 @@ namespace Turmerik.Notes
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
-            this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
-                nameof(dvExplrSvc));
+            this.driveItemsRetriever = driveItemsRetriever ?? throw new ArgumentNullException(
+                nameof(driveItemsRetriever));
 
             this.noteCfgValuesRetriever = noteCfgValuesRetriever ?? throw new ArgumentNullException(
                 nameof(noteCfgValuesRetriever));
@@ -81,7 +81,7 @@ namespace Turmerik.Notes
         public async Task<NoteDirPairsAgg> GetNoteDirPairsAsync(
             string prIdnf)
         {
-            var prFolder = await dvExplrSvc.GetFolderAsync(prIdnf);
+            var prFolder = await driveItemsRetriever.GetFolderAsync(prIdnf);
 
             var retObj = new NoteDirPairsAgg();
 
