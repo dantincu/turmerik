@@ -21,7 +21,6 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies
             NotesAspNetCoreServices.RegisterAll(services);
             AspNetCoreServices.RegisterAppSettingsRetriever<AppConfigCoreImmtbl, AppConfigCoreMtbl>(services);
 
-            services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
             services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
             services.AddSingleton<IDriveExplorerService, FsExplorerService>();
             services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();

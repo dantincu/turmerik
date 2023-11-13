@@ -10,7 +10,7 @@ namespace Turmerik.DriveExplorer
             DriveItem rootFolder,
             char dirSeparator);
 
-        ICachedCsEntriesRetriever FsEntriesRetriever(
+        ICachedCsEntriesRetriever CsEntriesRetriever(
             DriveItem rootFolder);
     }
 
@@ -21,7 +21,7 @@ namespace Turmerik.DriveExplorer
             char dirSeparator) => new CachedFsEntriesRetriever(
                 rootFolder, dirSeparator);
 
-        public ICachedCsEntriesRetriever FsEntriesRetriever(
+        public ICachedCsEntriesRetriever CsEntriesRetriever(
             DriveItem rootFolder) => new CachedCsEntriesRetriever(
                 rootFolder);
     }

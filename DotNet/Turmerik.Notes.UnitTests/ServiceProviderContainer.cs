@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Notes.Dependencies;
+using Turmerik.DriveExplorer;
 
 namespace Turmerik.Notes.UnitTests
 {
@@ -18,11 +19,19 @@ namespace Turmerik.Notes.UnitTests
         public static Lazy<ServiceProviderContainer> Instance { get; } = new Lazy<ServiceProviderContainer>(
             () => new ServiceProviderContainer(), LazyThreadSafetyMode.ExecutionAndPublication);
 
+        public DriveItem RootDriveItem { get; } = new DriveItem();
+
         protected override void RegisterServices(
             IServiceCollection services)
         {
             TrmrkServices.RegisterAll(services);
             TrmrkNoteServices.RegisterAll(services);
+
+            services.AddSingleton<IDriveItemsRetriever>(
+                svcProv => svcProv.GetRequiredService<ICachedEntriesRetrieverFactory>(
+                    ).FsEntriesRetriever(RootDriveItem, Path.PathSeparator));
+
+            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
         }
     }
 }
