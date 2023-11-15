@@ -1,4 +1,5 @@
-﻿using Markdig;
+﻿using HtmlAgilityPack;
+using Markdig;
 using Markdig.Parsers;
 using Markdig.Renderers.Html;
 using Markdig.Syntax;
@@ -8,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Turmerik.Helpers;
+using Turmerik.Notes.Html;
+using Turmerik.TextParsing;
 
 namespace Turmerik.Notes.Md
 {
@@ -32,12 +35,17 @@ namespace Turmerik.Notes.Md
     public class NoteMdParser : INoteMdParser
     {
         private readonly IMdObjectsRetriever mdObjectsRetriever;
+        private readonly IHtmlNodesRetriever htmlNodesRetriever;
 
         public NoteMdParser(
-            IMdObjectsRetriever mdObjectsRetriever)
+            IMdObjectsRetriever mdObjectsRetriever,
+            IHtmlNodesRetriever htmlNodesRetriever)
         {
             this.mdObjectsRetriever = mdObjectsRetriever ?? throw new ArgumentNullException(
                 nameof(mdObjectsRetriever));
+
+            this.htmlNodesRetriever = htmlNodesRetriever ?? throw new ArgumentNullException(
+                nameof(htmlNodesRetriever));
         }
 
         public string? GetNoteTitle(
@@ -59,8 +67,8 @@ namespace Turmerik.Notes.Md
                     MdDoc = mdDoc,
                     NextStepPredicate = args =>
                     {
-                        var nextStep = MdObjectsRetrieverStep.Push.ToData();
-                        var current = args.Current;
+                        var nextStep = Step.Push.ToData();
+                        var current = args.Current.Data;
 
                         if (current is HeadingBlock block && block.Level == 1)
                         {
@@ -68,32 +76,58 @@ namespace Turmerik.Notes.Md
 
                             if ((!seekTrmrkUuid || trmrkUuidStr != null))
                             {
-                                nextStep = MdObjectsRetrieverStep.Stop.ToData();
+                                args.Stop = true;
                             }
-                        }
-                        else if (seekTrmrkUuid && trmrkUuidStr == null && current is HtmlInline htmlInline && htmlInline.Tag == "input")
-                        {
-                            htmlInline.GetAttributes().Properties?.ActWith(attrsObj =>
+                            else
                             {
-                                if (attrsObj.Any(kvp => kvp.Key == "type" && kvp.Value == "hidden"))
-                                {
-                                    if (attrsObj.FirstOrDefault(
-                                        kvp => kvp.Key == "name").Value == trmrkUuidInputName)
-                                    {
-                                        trmrkUuidStr = attrsObj.FirstOrDefault(
-                                            kvp => kvp.Key == "value").Value;
-                                    }
-
-                                    if (trmrkUuidStr != null && title != null)
-                                    {
-                                        nextStep = MdObjectsRetrieverStep.Stop.ToData();
-                                    }
-                                }
-                            });
+                                nextStep = Step.Next.ToData();
+                            }
                         }
                         else if (current is QuoteBlock || current is FencedCodeBlock)
                         {
-                            nextStep = MdObjectsRetrieverStep.Next.ToData();
+                            nextStep = Step.Next.ToData();
+                        }
+                        else if (seekTrmrkUuid && trmrkUuidStr == null)
+                        {
+                            string html = null;
+
+                            if (current is HtmlInline htmlInline)
+                            {
+                                html = htmlInline.Tag;
+                            }
+                            else if (current is HtmlBlock htmlBlock)
+                            {
+                                html = htmlBlock.Lines.GetHtml();
+                            }
+
+                            if (html != null)
+                            {
+                                htmlNodesRetriever.GetNodes(new HtmlNodesRetrieverOpts
+                                {
+                                    Text = html,
+                                    NextStepPredicate = hAgs =>
+                                    {
+                                        var crntNode = hAgs.Current.Data;
+                                        bool isTextNode = crntNode is HtmlTextNode;
+                                        var nextStep = (isTextNode ? Step.Next : Step.Push).ToData();
+
+                                        if (!isTextNode && crntNode.Name == "input" && crntNode.Attributes.SingleOrDefault(
+                                                a => a.Name == "type")?.Value == "hidden" && crntNode.Attributes.SingleOrDefault(
+                                                a => a.Name == "name")?.Value == trmrkUuidInputName)
+                                        {
+                                            trmrkUuidStr = crntNode.Attributes.SingleOrDefault(
+                                                a => a.Name == "value")?.Value;
+
+                                            if (trmrkUuidStr != null)
+                                            {
+                                                hAgs.Stop = true;
+                                            }
+                                        }
+
+                                        return nextStep;
+                                    },
+                                });
+                            }
                         }
 
                         return nextStep;

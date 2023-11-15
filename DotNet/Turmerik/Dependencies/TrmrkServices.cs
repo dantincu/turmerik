@@ -12,6 +12,7 @@ using Turmerik.TextSerialization;
 using Turmerik.DriveExplorer;
 using Turmerik.Notes;
 using Turmerik.ConsoleApps;
+using Turmerik.TextParsing;
 
 namespace Turmerik.Dependencies
 {
@@ -32,6 +33,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IBestItemAsyncRetriever, BestItemAsyncRetriever>();
 
             services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
+            services.AddSingleton<ITextParserTemplate, TextParserTemplate>();
 
             services.AddSingleton<IControlCharsNormalizer, ControlCharsNormalizer>();
             services.AddSingleton<IDelimCharsExtractor, DelimCharsExtractor>();

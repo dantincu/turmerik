@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.Notes.Html;
 using Turmerik.Notes.Md;
 
 namespace Turmerik.Notes.Dependencies
@@ -11,6 +12,7 @@ namespace Turmerik.Notes.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
+            services.AddSingleton<IHtmlNodesRetriever, HtmlNodesRetriever>();
             services.AddSingleton<IMdObjectsRetriever, MdObjectsRetriever>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
             services.AddSingleton<INoteCfgValuesRetriever, NoteCfgValuesRetriever>();

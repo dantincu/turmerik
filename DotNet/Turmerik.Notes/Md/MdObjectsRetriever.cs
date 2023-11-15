@@ -1,4 +1,5 @@
-﻿using Markdig.Parsers;
+﻿using HtmlAgilityPack;
+using Markdig.Parsers;
 using Markdig.Syntax;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Turmerik.Helpers;
+using Turmerik.TextParsing;
 
 namespace Turmerik.Notes.Md
 {
@@ -13,114 +15,41 @@ namespace Turmerik.Notes.Md
     {
         MdObjectsRetrieverArgs GetObjects(
             MdObjectsRetrieverOpts opts);
+    }
 
-        void GetObjects(
-            MdObjectsRetrieverArgs args);
+    public class MdObjectsRetrieverArgs : TextParserTemplateArgs<MarkdownObject, MdObjectsRetrieverArgs>
+    {
+        public MdObjectsRetrieverArgs(TextParserTemplateOpts<MarkdownObject, MdObjectsRetrieverArgs> opts) : base(opts)
+        {
+        }
+    }
 
-        bool GetObjects(
-            MdObjectsRetrieverArgs args,
-            ref MdObjectsRetrieverStepData nextStep,
-            MarkdownObject childObj);
+    public class MdObjectsRetrieverOpts : TextParserTemplateOpts<MarkdownObject, MdObjectsRetrieverArgs>
+    {
+        public MarkdownDocument MdDoc { get; set; }
     }
 
     public class MdObjectsRetriever : IMdObjectsRetriever
     {
+        private readonly ITextParserTemplate textParserTemplate;
+
+        public MdObjectsRetriever(
+            ITextParserTemplate textParserTemplate)
+        {
+            this.textParserTemplate = textParserTemplate ?? throw new ArgumentNullException(nameof(textParserTemplate));
+        }
+
         public MdObjectsRetrieverArgs GetObjects(
             MdObjectsRetrieverOpts opts)
         {
-            var args = new MdObjectsRetrieverArgs
-            {
-                Opts = opts,
-                RetMap = new Dictionary<int[], MarkdownObject>(),
-                Path = new List<int>(),
-                Stack = new Stack<MarkdownObject>(),
-                Parent = opts.MdDoc ??= MarkdownParser.Parse(opts.MdContent)
-            };
+            opts.MdDoc ??= MarkdownParser.Parse(opts.Text);
 
-            args.Stack.Push(args.Parent);
-            GetObjects(args);
-
+            opts.WithChildrenFactory(
+                node => node.Descendants(),
+                o => opts.MdDoc.Descendants());
+            
+            var args = textParserTemplate.GetNodes(opts);
             return args;
-        }
-
-        public void GetObjects(
-            MdObjectsRetrieverArgs args)
-        {
-            MdObjectsRetrieverStepData nextStep = default;
-            args.Idx = 0;
-
-            foreach (var childObj in args.Parent.Descendants())
-            {
-                if (GetObjects(args, ref nextStep, childObj))
-                {
-                    break;
-                }
-            }
-        }
-
-        public bool GetObjects(
-            MdObjectsRetrieverArgs args,
-            ref MdObjectsRetrieverStepData nextStep,
-            MarkdownObject childObj)
-        {
-            bool @break = nextStep.Value == MdObjectsRetrieverStep.Stop;
-
-            if (!@break)
-            {
-                var path = args.Path;
-                args.Idx = 0;
-
-                args.Current = childObj;
-                nextStep = args.Opts.NextStepPredicate(args);
-
-                if (nextStep.Matches)
-                {
-                    path.Add(args.Idx);
-
-                    args.RetMap.Add(
-                        path.ToArray(),
-                    childObj);
-                    path.RemoveAt(path.Count - 1);
-                }
-
-                if (nextStep.Value == MdObjectsRetrieverStep.Next)
-                {
-                    args.Idx++;
-                }
-                if (nextStep.Value == MdObjectsRetrieverStep.Push)
-                {
-                    if (childObj is MarkdownObject mdObj)
-                    {
-                        args.Path.Add(args.Idx);
-                        args.Stack.Push(mdObj);
-                        args.Parent = mdObj;
-                        args.Current = null;
-
-                        GetObjects(args);
-
-                        path.RemoveAt(path.Count - 1);
-                        args.Current = args.Parent;
-                        args.Parent = args.Stack.Pop();
-                    }
-                    else
-                    {
-                        args.Idx++;
-                    }
-                }
-                else if (nextStep.Value == MdObjectsRetrieverStep.Pop)
-                {
-                    path.RemoveAt(path.Count - 1);
-                    args.Current = args.Parent;
-                    args.Parent = args.Stack.Pop();
-
-                    if (args.Stack.None())
-                    {
-                        nextStep = MdObjectsRetrieverStep.Stop.ToData();
-                    }
-                }
-            }
-
-            return @break;
         }
     }
 }
