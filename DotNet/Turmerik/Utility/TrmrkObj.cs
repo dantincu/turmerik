@@ -6,11 +6,11 @@ namespace Turmerik.Utility
 {
     public interface ITrmrkObj
     {
-        Guid TrmrkGuid { get; }
+        Guid? TrmrkGuid { get; }
     }
 
     public class TrmrkObj : ITrmrkObj
     {
-        public Guid TrmrkGuid { get; set; }
+        public Guid? TrmrkGuid { get; set; }
     }
 }

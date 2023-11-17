@@ -8,6 +8,5 @@ namespace Turmerik.Notes
     public class NoteJsonTupleCore<TItem> : NoteTupleCore<TItem>
         where TItem : NoteItemCoreBase
     {
-        public bool TrmrkGuidIsValid { get; set; }
     }
 }

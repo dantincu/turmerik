@@ -104,20 +104,16 @@ namespace Turmerik.Notes
             public FileNamesT(NoteDirsPairConfigMtbl.FileNamesT src)
             {
                 NoteBookJsonFileName = src.NoteBookJsonFileName;
-                NoteJsonFileName = src.NoteJsonFileName;
-                NoteMdFileName = src.NoteMdFileName;
+                NoteItemJsonFileName = src.NoteItemJsonFileName;
+                NoteItemMdFileName = src.NoteItemMdFileName;
                 PrependTitleToNoteMdFileName = src.PrependTitleToNoteMdFileName;
-                RequireTrmrkGuidInNoteJsonFile = src.RequireTrmrkGuidInNoteJsonFile;
-                RequireTrmrkGuidInNoteMdFile = src.RequireTrmrkGuidInNoteMdFile;
                 KeepFileName = src.KeepFileName;
             }
 
             public string NoteBookJsonFileName { get; }
-            public string NoteJsonFileName { get; }
-            public string NoteMdFileName { get; }
+            public string NoteItemJsonFileName { get; }
+            public string NoteItemMdFileName { get; }
             public bool? PrependTitleToNoteMdFileName { get; }
-            public bool? RequireTrmrkGuidInNoteJsonFile { get; }
-            public bool? RequireTrmrkGuidInNoteMdFile { get; }
             public string KeepFileName { get; }
         }
 
@@ -127,10 +123,14 @@ namespace Turmerik.Notes
             {
                 KeepFileContentsTemplate = src.KeepFileContentsTemplate;
                 KeepFileContentsTemplate = src.KeepFileContentsTemplate;
+                RequireTrmrkGuidInNoteJsonFile = src.RequireTrmrkGuidInNoteJsonFile;
+                RequireTrmrkGuidInNoteMdFile = src.RequireTrmrkGuidInNoteMdFile;
             }
 
             public string KeepFileContentsTemplate { get; }
             public string NoteFileContentsTemplate { get; }
+            public bool? RequireTrmrkGuidInNoteJsonFile { get; }
+            public bool? RequireTrmrkGuidInNoteMdFile { get; }
         }
     }
 }

@@ -2,10 +2,10 @@
   "IsDevEnv": false,
   "RequiredClientVersion": 1,
   "ClientRedirectUrl": null,
-  "TrmrkGuidInputName": "trmrk_guid",
   "NoteDirPairs": {
     "FileNameMaxLength": 100,
     // "SerializeToJson": true,
+    "TrmrkGuidInputName": "trmrk_guid",
     "ArgOpts": {
       "WorkDir": "wd",
       "SortIdx": "x",
@@ -38,16 +38,16 @@
     },
     "FileNames": {
       "NoteBookJsonFileName": "[note-book].json",
-      "NoteJsonFileName": "[note].json",
-      "NoteMdFileName": "[note].md",
+      "NoteItemJsonFileName": "[note].json",
+      "NoteItemMdFileName": "[note].md",
       "PrependTitleToNoteMdFileName": true,
-      "RequireTrmrkGuidInNoteJsonFile": true,
-      "RequireTrmrkGuidInNoteMdFile": false,
       "KeepFileName": ".keep"
     },
     "FileContents": {
       "KeepFileContentsTemplate": "{0}",
-      "NoteFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n"
+      "NoteFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
+      "RequireTrmrkGuidInNoteJsonFile": true,
+      "RequireTrmrkGuidInNoteMdFile": false
     }
   }
 }

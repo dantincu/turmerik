@@ -8,8 +8,8 @@ using Turmerik.AspNetCore.AppSettings;
 using Turmerik.AspNetCore.Dependencies;
 using Turmerik.LocalDevice.Core.Env;
 using Turmerik.Notes.AspNetCore.Dependencies;
-using Turmerik.Notes.AspNetCore.Settings;
 using Turmerik.DriveExplorer;
+using Turmerik.Notes.Settings;
 
 namespace Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies
 {

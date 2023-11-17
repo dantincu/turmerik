@@ -22,7 +22,7 @@ namespace Turmerik.Notes.UnitTests
         public void MainTest()
         {
             PerformTest(
-                $"<div><input type=\"hidden\" name=\"trmrk_guid\" value=\"{Trmrk.TrmrkGuidStrNoDash}\" /></div>\n\n<div>\n\n# asdf  \n\n</div>",
+                $"<div><input type=\"hidden\" name=\"trmrk_guid\" value=\"{Trmrk.TrmrkGuidStrNoDash}\" /></div>\n\n<div>\n\n#  asdf  \n\n</div>",
                 "asdf");
         }
 

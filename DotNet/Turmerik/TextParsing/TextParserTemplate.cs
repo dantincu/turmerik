@@ -82,20 +82,23 @@ namespace Turmerik.TextParsing
             args.Current = treeNode;
             nextStep = args.Opts.NextStepPredicate(args);
 
-            if (nextStep.Value == Step.Next && nextStep.Matches)
+            if (!args.Stop)
             {
-                AddMatching(args, treeNode);
-            }
+                if (nextStep.Value == Step.Next && nextStep.Matches)
+                {
+                    AddMatching(args, treeNode);
+                }
 
-            if (nextStep.Value == Step.Push)
-            {
-                PushStack(args, treeNode);
-                GetNodes<TNode, TArgs>(args);
-            }
+                if (nextStep.Value == Step.Push)
+                {
+                    PushStack(args, treeNode);
+                    GetNodes<TNode, TArgs>(args);
+                }
 
-            if (nextStep.Value > Step.Next)
-            {
-                TryPopStack<TNode, TArgs>(args);
+                if (nextStep.Value > Step.Next)
+                {
+                    TryPopStack<TNode, TArgs>(args);
+                }
             }
 
             return args.Stop;

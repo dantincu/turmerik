@@ -52,11 +52,9 @@ namespace Turmerik.Notes
         public interface IFileNamesT
         {
             string NoteBookJsonFileName { get; }
-            string NoteJsonFileName { get; }
-            string NoteMdFileName { get; }
+            string NoteItemJsonFileName { get; }
+            string NoteItemMdFileName { get; }
             bool? PrependTitleToNoteMdFileName { get; }
-            bool? RequireTrmrkGuidInNoteJsonFile { get; }
-            bool? RequireTrmrkGuidInNoteMdFile { get; }
             string KeepFileName { get; }
         }
 
@@ -64,6 +62,8 @@ namespace Turmerik.Notes
         {
             string KeepFileContentsTemplate { get; }
             string NoteFileContentsTemplate { get; }
+            bool? RequireTrmrkGuidInNoteJsonFile { get; }
+            bool? RequireTrmrkGuidInNoteMdFile { get; }
         }
 
         public static NoteDirsPairConfigImmtbl ToImmtbl(

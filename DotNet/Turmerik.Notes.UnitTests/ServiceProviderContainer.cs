@@ -19,7 +19,11 @@ namespace Turmerik.Notes.UnitTests
         public static Lazy<ServiceProviderContainer> Instance { get; } = new Lazy<ServiceProviderContainer>(
             () => new ServiceProviderContainer(), LazyThreadSafetyMode.ExecutionAndPublication);
 
-        public DriveItem RootDriveItem { get; } = new DriveItem();
+        public DriveItem RootDriveItem { get; } = new DriveItem
+        {
+            SubFolders = new List<DriveItem>(),
+            FolderFiles = new List<DriveItem>(),
+        };
 
         protected override void RegisterServices(
             IServiceCollection services)
@@ -29,7 +33,7 @@ namespace Turmerik.Notes.UnitTests
 
             services.AddSingleton<IDriveItemsRetriever>(
                 svcProv => svcProv.GetRequiredService<ICachedEntriesRetrieverFactory>(
-                    ).FsEntriesRetriever(RootDriveItem, Path.PathSeparator));
+                    ).FsEntriesRetriever(RootDriveItem, Path.DirectorySeparatorChar));
 
             services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
         }

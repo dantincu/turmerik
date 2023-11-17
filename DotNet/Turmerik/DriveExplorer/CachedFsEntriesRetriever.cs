@@ -52,12 +52,12 @@ namespace Turmerik.DriveExplorer
 
         public override async Task<string?> GetFileTextAsync(string idnf)
         {
-            string retStr = null;
-            var item = GetItem(idnf, false);
+            string? retStr = null;
+            var item = GetItem(idnf, false) as TextFile;
 
             if (item != null)
             {
-                retStr = string.Empty;
+                retStr = item.TextFileContents;
             }
 
             return retStr;
@@ -99,7 +99,7 @@ namespace Turmerik.DriveExplorer
             string idnf,
             bool? requireFolder)
         {
-            DriveItem? folder;
+            DriveItem? item;
 
             string? rootFolderPath = RootFolder.Idnf?.Trim(
                 dirSeparator) ?? string.Empty;
@@ -108,11 +108,11 @@ namespace Turmerik.DriveExplorer
             {
                 if (requireFolder != false)
                 {
-                    folder = RootFolder;
+                    item = RootFolder;
                 }
                 else
                 {
-                    folder = null;
+                    item = null;
                 }
             }
             else
@@ -128,16 +128,16 @@ namespace Turmerik.DriveExplorer
                     {
                         if (requireFolder != false)
                         {
-                            folder = RootFolder;
+                            item = RootFolder;
                         }
                         else
                         {
-                            folder = null;
+                            item = null;
                         }
                     }
                     else
                     {
-                        folder = GetItem(
+                        item = GetItem(
                             RootFolder,
                             relPath,
                             requireFolder);
@@ -145,11 +145,11 @@ namespace Turmerik.DriveExplorer
                 }
                 else
                 {
-                    folder = null;
+                    item = null;
                 }
             }
 
-            return folder;
+            return item;
         }
 
         protected DriveItem? GetItem(

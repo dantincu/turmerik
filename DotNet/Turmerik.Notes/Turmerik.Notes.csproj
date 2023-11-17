@@ -7,17 +7,11 @@
 
   <ItemGroup>
     <None Remove="trmrk-notes-config-template.json" />
-    <None Remove="trmrk-notes-config.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="trmrk-notes-config-template.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="trmrk-notes-config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -30,6 +24,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="trmrk-notes-config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

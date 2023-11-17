@@ -58,6 +58,7 @@ namespace Turmerik.Notes
             DriveItem[] filesArr)
         {
             var fileNamesCfg = config.GetFileNames();
+            var fileContentsCfg = config.GetFileContents();
 
             bool ignoreTrmrkGuid = config.TrmrkGuidInputName != null && string.IsNullOrEmpty(
                 config.TrmrkGuidInputName);
@@ -67,36 +68,34 @@ namespace Turmerik.Notes
                 (tuple, idx) => ignoreTrmrkGuid || tuple.Item?.TrmrkGuid == Trmrk.TrmrkGuid,
                 list =>
                 {
-                    noteItem?.ActWith(item =>
-                    {
-                        item.MdFileName?.ActWith(
-                            mdFileName => list.Add(idx => TryGetNoteMdFileAsync(
-                                config, prIdnf, filesArr,
-                                file => file.Name == mdFileName)));
-
-                        item.Title?.ActWith(title =>
-                        {
-                            string noteMdFileNameCore = FsEntryNameNormalizer.NormalizeFsEntryName(
-                                title, config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
-
-                            string mdFileName = noteMdFileNameCore + fileNamesCfg.NoteMdFileName;
-
-                            if (mdFileName != item.MdFileName)
+                    string? mdFileName = fileNamesCfg.PrependTitleToNoteMdFileName?.If(
+                        () => noteItem?.With(item => item.MdFileName ?? item.Title?.With(
+                            title =>
                             {
-                                list.Add(idx => TryGetNoteMdFileAsync(
-                                    config, prIdnf, filesArr,
-                                    file => file.Name == mdFileName));
-                            }
-                        });
-                    });
+                                string noteMdFileNameCore = FsEntryNameNormalizer.NormalizeFsEntryName(
+                                    title, config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
 
-                    list.Add(idx => TryGetNoteMdFileAsync(
-                        config, prIdnf, filesArr,
-                        file => file.Name.EndsWith(
-                            fileNamesCfg.NoteMdFileName)));
+                                string fileName = noteMdFileNameCore + fileNamesCfg.NoteItemMdFileName;
+                                return fileName;
+                            })),
+                        () => fileNamesCfg.NoteItemMdFileName)?.ActWith(fileName =>
+                        {
+                            list.Add(idx => TryGetNoteMdFileAsync(
+                                config, prIdnf, filesArr,
+                                file => file.Name == fileName));
+                        });
+
+                    foreach (var candidateFile in filesArr.Where(
+                        file => file.Name != mdFileName && file.Name.EndsWith(
+                            fileNamesCfg.NoteItemMdFileName)))
+                    {
+                        list.Add(idx => TryGetNoteMdFileAsync(
+                            config, prIdnf, candidateFile));
+                    }
                 },
-                fileNamesCfg.RequireTrmrkGuidInNoteMdFile ?? true,
-                item => item.Item?.TrmrkGuid == Trmrk.TrmrkGuid);
+                fileContentsCfg.RequireTrmrkGuidInNoteMdFile ?? true,
+                tuple => tuple.Item?.TrmrkGuid == Trmrk.TrmrkGuid,
+                tuple => tuple.File?.Name == fileNamesCfg.NoteItemMdFileName);
 
             return retTuple;
         }
@@ -114,9 +113,14 @@ namespace Turmerik.Notes
             INoteDirsPairConfig config,
             string prIdnf,
             DriveItem mdFile) => GetNoteFileCoreAsync<NoteItemCore, NoteMdTuple>(
-                prIdnf, mdFile, (tuple, rawContent) => tuple.MdDoc = NoteMdParser.TryParse(
-                    rawContent,
-                    out var item,
-                    config.TrmrkGuidInputName));
+                prIdnf, mdFile, (tuple, rawContent) =>
+                {
+                    tuple.MdDoc = NoteMdParser.TryParse(
+                        rawContent,
+                        out var item,
+                        config.TrmrkGuidInputName);
+
+                    tuple.Item = item;
+                });
     }
 }

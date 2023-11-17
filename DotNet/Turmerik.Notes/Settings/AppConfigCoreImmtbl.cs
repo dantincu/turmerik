@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Turmerik.Notes.AspNetCore.Settings
+namespace Turmerik.Notes.Settings
 {
     public class AppConfigCoreImmtbl
     {

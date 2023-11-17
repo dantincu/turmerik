@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Content Include="trmrk-dirpairs-config-template.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
+    <ProjectReference Include="..\Turmerik.Notes\Turmerik.Notes.csproj" />
   </ItemGroup>
 
 </Project>

@@ -275,7 +275,7 @@ namespace Turmerik.Notes
 
         protected DriveItemX GetNoteJsonFile(
             NoteItemCore noteItem) => GetFile(
-                FileNamesCfg.NoteJsonFileName,
+                FileNamesCfg.NoteItemJsonFileName,
                 JsonConversion.Adapter.Serialize(
                     noteItem));
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Turmerik.AspNetCore.AppSettings;
-using Turmerik.Notes.AspNetCore.Settings;
+using Turmerik.Notes.Settings;
 
 namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
 {

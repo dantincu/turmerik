@@ -12,5 +12,6 @@ namespace Turmerik.Notes
         public DriveItem? File { get; set; }
         public string? RawContent { get; set; }
         public TItem? Item { get; set; }
+        public bool TrmrkGuidIsValid { get; set; }
     }
 }

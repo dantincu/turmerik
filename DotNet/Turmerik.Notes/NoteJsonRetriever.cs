@@ -12,24 +12,60 @@ namespace Turmerik.Notes
 {
     public interface INoteJsonRetriever
     {
-        Task<NoteJsonTupleCore<TItem>> TryGetNoteJsonFileAsync<TItem>(
-            NoteDirsPairConfig.IFileNamesT fileNamesCfg,
+        Task<TTuple> TryGetNoteJsonFileAsync<TItem, TTuple>(
+            INoteDirsPairConfig config,
             string prIdnf,
-            DriveItem[] filesArr)
-            where TItem : NoteItemCoreBase;
+            DriveItem[] filesArr,
+            string noteJsonFileName)
+            where TItem : NoteItemCoreBase
+            where TTuple : NoteJsonTupleCore<TItem>, new();
 
-        Task<NoteJsonTupleCore<TItem>> TryGetNoteJsonFileAsync<TItem>(
-            NoteDirsPairConfig.IFileNamesT fileNamesCfg,
+        Task<TTuple> TryGetNoteJsonFileAsync<TItem, TTuple>(
+            INoteDirsPairConfig config,
             string prIdnf,
             DriveItem[] filesArr,
             Func<DriveItem, bool> bestFileFactory)
-            where TItem : NoteItemCoreBase;
+            where TItem : NoteItemCoreBase
+            where TTuple : NoteJsonTupleCore<TItem>, new();
 
-        Task<NoteJsonTupleCore<TItem>> TryGetNoteJsonFileAsync<TItem>(
-            NoteDirsPairConfig.IFileNamesT fileNamesCfg,
+        Task<TTuple> TryGetNoteJsonFileAsync<TItem, TTuple>(
+            INoteDirsPairConfig config,
             string prIdnf,
             DriveItem jsonFile)
-            where TItem : NoteItemCoreBase;
+            where TItem : NoteItemCoreBase
+            where TTuple : NoteJsonTupleCore<TItem>, new();
+
+        Task<NoteItemJsonTuple> TryGetNoteItemJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr);
+
+        Task<NoteItemJsonTuple> TryGetNoteItemJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr,
+            Func<DriveItem, bool> bestFileFactory);
+
+        Task<NoteItemJsonTuple> TryGetNoteItemJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem jsonFile);
+
+        Task<NoteBookJsonTuple> TryGetNoteBookJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr);
+
+        Task<NoteBookJsonTuple> TryGetNoteBookJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr,
+            Func<DriveItem, bool> bestFileFactory);
+
+        Task<NoteBookJsonTuple> TryGetNoteBookJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem jsonFile);
     }
 
     public class NoteJsonRetriever : NoteRetrieverBase, INoteJsonRetriever
@@ -47,44 +83,94 @@ namespace Turmerik.Notes
 
         protected INoteJsonDeserializer NoteJsonDeserializer { get; }
 
-        public Task<NoteJsonTupleCore<TItem>> TryGetNoteJsonFileAsync<TItem>(
-            NoteDirsPairConfig.IFileNamesT fileNamesCfg,
+        public Task<TTuple> TryGetNoteJsonFileAsync<TItem, TTuple>(
+            INoteDirsPairConfig config,
             string prIdnf,
-            DriveItem[] filesArr)
-            where TItem : NoteItemCoreBase => GetNoteFileCoreAsync<TItem, NoteJsonTupleCore<TItem>>(
+            DriveItem[] filesArr,
+            string noteJsonFileName)
+            where TItem : NoteItemCoreBase
+            where TTuple : NoteJsonTupleCore<TItem>, new() => GetNoteFileCoreAsync<TItem, TTuple>(
                 prIdnf, (tuple, idx) => tuple.TrmrkGuidIsValid,
-                list => list.AddItems(
-                    idx => TryGetNoteJsonFileAsync<TItem>(
-                        fileNamesCfg, prIdnf, filesArr,
-                        file => file.Name == fileNamesCfg.NoteJsonFileName),
-                    idx => TryGetNoteJsonFileAsync<TItem>(
-                        fileNamesCfg, prIdnf, filesArr,
-                        file => file.Name.EndsWith(
-                            fileNamesCfg.NoteJsonFileName))),
-                fileNamesCfg.RequireTrmrkGuidInNoteJsonFile ?? true,
-                tuple => tuple.Item?.TrmrkGuid == Trmrk.TrmrkGuid);
+                list =>
+                {
+                    list.Add(
+                        idx => TryGetNoteJsonFileAsync<TItem, TTuple>(
+                            config, prIdnf, filesArr,
+                            file => file.Name == noteJsonFileName));
 
-        public Task<NoteJsonTupleCore<TItem>> TryGetNoteJsonFileAsync<TItem>(
-            NoteDirsPairConfig.IFileNamesT fileNamesCfg,
+                    foreach (var candidateFile in filesArr.Where(
+                        file => file.Name != noteJsonFileName && file.Name.EndsWith(
+                            noteJsonFileName)))
+                    {
+                        list.Add(idx => TryGetNoteJsonFileAsync<TItem, TTuple>(
+                            config, prIdnf, candidateFile));
+                    }
+                },
+                config.GetFileContents().RequireTrmrkGuidInNoteJsonFile ?? true,
+                tuple => tuple.Item?.TrmrkGuid == Trmrk.TrmrkGuid,
+                tuple => tuple.File?.Name == noteJsonFileName);
+
+        public Task<TTuple> TryGetNoteJsonFileAsync<TItem, TTuple>(
+            INoteDirsPairConfig config,
             string prIdnf,
             DriveItem[] filesArr,
             Func<DriveItem, bool> bestFileFactory)
-            where TItem : NoteItemCoreBase => GetNoteFileCoreAsync<TItem, NoteJsonTupleCore<TItem>>(
+            where TItem : NoteItemCoreBase
+            where TTuple : NoteJsonTupleCore<TItem>, new() => GetNoteFileCoreAsync<TItem, TTuple>(
                 prIdnf, filesArr, bestFileFactory,
-                (parentIdnf, file) => TryGetNoteJsonFileAsync<TItem>(
-                    fileNamesCfg, prIdnf, file));
+                (parentIdnf, file) => TryGetNoteJsonFileAsync<TItem, TTuple>(
+                    config, prIdnf, file));
 
-        public Task<NoteJsonTupleCore<TItem>> TryGetNoteJsonFileAsync<TItem>(
-            NoteDirsPairConfig.IFileNamesT fileNamesCfg,
+        public Task<TTuple> TryGetNoteJsonFileAsync<TItem, TTuple>(
+            INoteDirsPairConfig config,
             string prIdnf,
-            DriveItem jsonFile) where TItem : NoteItemCoreBase => GetNoteFileCoreAsync<TItem, NoteJsonTupleCore<TItem>>(
+            DriveItem jsonFile)
+            where TItem : NoteItemCoreBase
+            where TTuple : NoteJsonTupleCore<TItem>, new() => GetNoteFileCoreAsync<TItem, TTuple>(
                 prIdnf, jsonFile, (tuple, rawContent) =>
                 {
                     (var item, var isValid) = NoteJsonDeserializer.TryDeserialize<TItem>(
-                        rawContent, fileNamesCfg.RequireTrmrkGuidInNoteJsonFile ?? true);
+                        rawContent, config.GetFileContents().RequireTrmrkGuidInNoteJsonFile ?? true);
 
                     tuple.Item = item;
-                    tuple.TrmrkGuidIsValid = isValid;
                 });
+
+        public Task<NoteItemJsonTuple> TryGetNoteItemJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr) => TryGetNoteJsonFileAsync<NoteItemCore, NoteItemJsonTuple>(
+                config, prIdnf, filesArr, config.GetFileNames().NoteItemJsonFileName);
+
+        public Task<NoteItemJsonTuple> TryGetNoteItemJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr,
+            Func<DriveItem, bool> bestFileFactory) => TryGetNoteJsonFileAsync<NoteItemCore, NoteItemJsonTuple>(
+                config, prIdnf, filesArr, bestFileFactory);
+
+        public Task<NoteItemJsonTuple> TryGetNoteItemJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem jsonFile) => TryGetNoteJsonFileAsync<NoteItemCore, NoteItemJsonTuple>(
+                config, prIdnf, jsonFile);
+
+        public Task<NoteBookJsonTuple> TryGetNoteBookJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr) => TryGetNoteJsonFileAsync<NoteBookCore, NoteBookJsonTuple>(
+                config, prIdnf, filesArr, config.GetFileNames().NoteBookJsonFileName);
+
+        public Task<NoteBookJsonTuple> TryGetNoteBookJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem[] filesArr,
+            Func<DriveItem, bool> bestFileFactory) => TryGetNoteJsonFileAsync<NoteBookCore, NoteBookJsonTuple>(
+                config, prIdnf, filesArr, bestFileFactory);
+
+        public Task<NoteBookJsonTuple> TryGetNoteBookJsonFileAsync(
+            INoteDirsPairConfig config,
+            string prIdnf,
+            DriveItem jsonFile) => TryGetNoteJsonFileAsync<NoteBookCore, NoteBookJsonTuple>(
+                config, prIdnf, jsonFile);
     }
 }

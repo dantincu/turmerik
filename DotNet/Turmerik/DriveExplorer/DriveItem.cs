@@ -40,8 +40,6 @@ namespace Turmerik.DriveExplorer
             Name = src.Name;
             DisplayName = src.DisplayName;
             IsFolder = src.IsFolder;
-            FnWoExtn = src.FnWoExtn;
-            FnExtn = src.FnExtn;
             IsRootFolder = src.IsRootFolder;
             PrIdnf = src.PrIdnf;
             FileType = src.FileType;
@@ -72,8 +70,6 @@ namespace Turmerik.DriveExplorer
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public bool? IsFolder { get; set; }
-        public string FnWoExtn { get; set; }
-        public string FnExtn { get; set; }
         public bool? IsRootFolder { get; set; }
 
         public string PrIdnf { get; set; }

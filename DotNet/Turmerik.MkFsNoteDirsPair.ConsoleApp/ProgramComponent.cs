@@ -8,6 +8,7 @@ using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
 using Turmerik.Notes;
+using Turmerik.Notes.Settings;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
@@ -18,6 +19,7 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleArgsParser parser;
         private readonly INoteDirsPairCreator dirsPairCreator;
+        private readonly AppConfigCoreMtbl appConfig;
         private readonly NoteDirsPairConfigMtbl config;
 
         public ProgramComponent(
@@ -33,11 +35,12 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
 
             string configFilePath = Path.Combine(
                 ProgramH.ExecutingAssemmblyPath,
-                TrmrkNotesH.NOTES_DIR_PAIRS_CFG_FILE_NAME);
+                TrmrkNotesH.NOTES_CFG_FILE_NAME);
 
-            config = jsonConversion.Adapter.Deserialize<NoteDirsPairConfigMtbl>(
+            appConfig = jsonConversion.Adapter.Deserialize<AppConfigCoreMtbl>(
                 File.ReadAllText(configFilePath));
 
+            config = appConfig.NoteDirPairs;
             dirsPairCreator = dirsPairCreatorFactory.Creator(config);
         }
 

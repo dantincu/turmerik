@@ -27,9 +27,10 @@ namespace Turmerik.Notes
             Func<TTuple, int, bool> perfectMatchCondition,
             Action<List<Func<int, Task<TTuple>>>> factoriesBuilder,
             bool requirePerfectMatch,
-            Func<TTuple, bool> perfectMatchPredicate)
+            Func<TTuple, bool> perfectMatchPredicate,
+            Func<TTuple, bool> bestMatchPredicate)
             where TItem : NoteItemCoreBase
-            where TTuple : NoteTupleCore<TItem>
+            where TTuple : NoteTupleCore<TItem>, new()
         {
             var tuplesNmrbl = BestItemAsyncRetriever.RetrieveAsync(
                 new BestItemAsyncRetrieverOpts<TTuple>
@@ -39,16 +40,13 @@ namespace Turmerik.Notes
 
             var tuplesList = await tuplesNmrbl.ToListAsync();
 
-            TTuple retTuple;
+            TTuple retTuple = tuplesList.LastOrDefault(
+                perfectMatchPredicate);
 
-            if (requirePerfectMatch)
+            if (!requirePerfectMatch)
             {
-                retTuple = tuplesList.LastOrDefault(
-                    perfectMatchPredicate);
-            }
-            else
-            {
-                retTuple = tuplesList.LastOrDefault(
+                retTuple ??= tuplesList.LastOrDefault(
+                    bestMatchPredicate) ?? tuplesList.LastOrDefault(
                     item => item.Item != null);
             }
 
@@ -101,6 +99,7 @@ namespace Turmerik.Notes
             if (rawContent != null)
             {
                 onRawContent(tuple, rawContent);
+                tuple.TrmrkGuidIsValid = tuple.Item?.TrmrkGuid == Trmrk.TrmrkGuid;
             }
 
             return tuple;

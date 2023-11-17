@@ -1,12 +1,13 @@
 {
   "FileNameMaxLength": 100,
+  "ThrowIfAnyItemAlreadyExists": true,
   "ArgOpts": {
     "WorkDir": "wd",
     "OpenMdFile": "o",
     "SkipMdFileCreation": "sk"
   },
   "FileNames": {
-    "MdFileName": "{0}",
+    "MdFileNameTemplate": "{0}",
     "KeepFileName": ".keep"
   },
   "FileContents": {

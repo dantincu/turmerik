@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.AspNetCore.AppSettings;
 using Turmerik.AspNetCore.Utility;
-using Turmerik.Notes.AspNetCore.Settings;
+using Turmerik.Notes.Settings;
 
 namespace Turmerik.Notes.AspNetCore.Filters
 {

@@ -83,7 +83,7 @@ namespace Turmerik.Notes
             string noteFullDirNamePart,
             NoteDirsPairConfig.IFileNamesT cfg) => string.Concat(
                 cfg.PrependTitleToNoteMdFileName?.If(
-                    () => noteFullDirNamePart), cfg.NoteMdFileName);
+                    () => noteFullDirNamePart), cfg.NoteItemMdFileName);
 
         public string GetNoteItemShortDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg) => GetShortDirNameRegexStr(
