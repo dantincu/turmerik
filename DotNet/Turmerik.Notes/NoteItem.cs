@@ -24,5 +24,7 @@ namespace Turmerik.Notes
     public class NoteItem : NoteItemCore
     {
         public Dictionary<int, NoteItem> ChildNotes { get; set; }
+        public bool? Created { get; set; }
+        public bool? Removed { get; set; }
     }
 }

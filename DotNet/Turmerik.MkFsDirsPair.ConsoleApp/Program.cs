@@ -8,7 +8,6 @@ var services = TrmrkServices.RegisterAll(
     new ServiceCollection());
 
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();
-services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
 
 services.AddTransient<ProgramComponent>();
 var svcProv = services.BuildServiceProvider();

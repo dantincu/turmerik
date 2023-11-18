@@ -11,10 +11,10 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
     [ApiController]
     public class AppConfigController : ApiControllerBase
     {
-        private readonly IAppConfigService<AppConfigCoreImmtbl> appSettingsRetriever;
+        private readonly IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever;
 
         public AppConfigController(
-            IAppConfigService<AppConfigCoreImmtbl> appSettingsRetriever)
+            IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever)
         {
             this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(nameof(appSettingsRetriever));
         }

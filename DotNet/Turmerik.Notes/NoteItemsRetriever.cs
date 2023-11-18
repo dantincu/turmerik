@@ -81,9 +81,11 @@ namespace Turmerik.Notes
         public async Task<NoteItemsTuple> GetNoteDirPairsAsync(
             string prIdnf)
         {
+            var parentFolder = await driveItemsRetriever.GetFolderAsync(prIdnf);
+
             var retObj = new NoteItemsTuple
             {
-                ParentFolder = await driveItemsRetriever.GetFolderAsync(prIdnf)
+                ParentFolder = parentFolder.ToItemX(-1)
             };
 
             throw new NotImplementedException();

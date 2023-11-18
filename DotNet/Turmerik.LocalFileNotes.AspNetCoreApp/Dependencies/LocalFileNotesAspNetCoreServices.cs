@@ -19,11 +19,10 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies
             IServiceCollection services)
         {
             NotesAspNetCoreServices.RegisterAll(services);
-            AspNetCoreServices.RegisterAppSettingsRetriever<AppConfigCoreImmtbl, AppConfigCoreMtbl>(services);
+            AspNetCoreServices.RegisterAppSettingsRetriever<NotesAppConfigImmtbl, NotesAppConfigMtbl>(services);
 
             services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
             services.AddSingleton<IDriveExplorerService, FsExplorerService>();
-            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
             return services;
         }
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Turmerik.Notes.Settings
 {
-    public interface IAppConfigCore
+    public interface INotesAppConfig
     {
         bool IsDevEnv { get; }
         int RequiredClientVersion { get; }
@@ -12,23 +12,23 @@ namespace Turmerik.Notes.Settings
         INoteDirsPairConfig GetNoteDirPairs();
     }
 
-    public static class AppConfigCore
+    public static class NotesAppConfigH
     {
-        public static AppConfigCoreImmtbl ToImmtbl(
-            this IAppConfigCore src) => new AppConfigCoreImmtbl(src);
+        public static NotesAppConfigImmtbl ToImmtbl(
+            this INotesAppConfig src) => new NotesAppConfigImmtbl(src);
 
-        public static AppConfigCoreMtbl ToMtbl(
-            this IAppConfigCore src) => new AppConfigCoreMtbl(src);
+        public static NotesAppConfigMtbl ToMtbl(
+            this INotesAppConfig src) => new NotesAppConfigMtbl(src);
     }
 
-    public class AppConfigCoreMtbl : IAppConfigCore
+    public class NotesAppConfigMtbl : INotesAppConfig
     {
-        public AppConfigCoreMtbl()
+        public NotesAppConfigMtbl()
         {
         }
 
-        public AppConfigCoreMtbl(
-            IAppConfigCore src)
+        public NotesAppConfigMtbl(
+            INotesAppConfig src)
         {
             IsDevEnv = src.IsDevEnv;
             RequiredClientVersion = src.RequiredClientVersion;
@@ -44,10 +44,10 @@ namespace Turmerik.Notes.Settings
         public INoteDirsPairConfig GetNoteDirPairs() => NoteDirPairs;
     }
 
-    public class AppConfigCoreImmtbl : IAppConfigCore
+    public class NotesAppConfigImmtbl : INotesAppConfig
     {
-        public AppConfigCoreImmtbl(
-            IAppConfigCore src)
+        public NotesAppConfigImmtbl(
+            INotesAppConfig src)
         {
             IsDevEnv = src.IsDevEnv;
             RequiredClientVersion = src.RequiredClientVersion;

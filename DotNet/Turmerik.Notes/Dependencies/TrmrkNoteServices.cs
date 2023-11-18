@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Turmerik.Notes.Html;
 using Turmerik.Notes.Md;
+using Turmerik.Notes.Service;
 
 namespace Turmerik.Notes.Dependencies
 {
@@ -24,6 +25,7 @@ namespace Turmerik.Notes.Dependencies
 
             services.AddSingleton<INoteDirsPairGeneratorFactory, NoteDirsPairGeneratorFactory>();
             services.AddSingleton<INoteDirsPairCreatorFactory, NoteDirsPairCreatorFactory>();
+            services.AddSingleton<INotesExplorerServiceFactory, NotesExplorerServiceFactory>();
 
             return services;
         }

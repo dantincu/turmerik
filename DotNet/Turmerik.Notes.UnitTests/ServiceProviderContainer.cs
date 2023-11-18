@@ -34,8 +34,6 @@ namespace Turmerik.Notes.UnitTests
             services.AddSingleton<IDriveItemsRetriever>(
                 svcProv => svcProv.GetRequiredService<ICachedEntriesRetrieverFactory>(
                     ).FsEntriesRetriever(RootDriveItem, Path.DirectorySeparatorChar));
-
-            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
         }
     }
 }

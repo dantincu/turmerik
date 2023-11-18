@@ -7,10 +7,9 @@ namespace Turmerik.Notes
 {
     public class NoteItemsTuple
     {
-        public DriveItem ParentFolder { get; set; }
-        public NoteItemCore ParentNote { get; set; }
-        public NoteBookCore ParentNoteBook { get; set; }
-        public List<NoteItemCore> ChildNotes { get; set; }
+        public DriveItemX ParentFolder { get; set; }
+        public NoteItem ParentNote { get; set; }
+        public NoteBook ParentNoteBook { get; set; }
         public HashSet<int> AllExistingNoteDirIdxes { get; set; }
         public HashSet<int> AllExistingInternalDirIdxes { get; set; }
         public HashSet<int> ExistingNoteDirIdxes { get; set; }

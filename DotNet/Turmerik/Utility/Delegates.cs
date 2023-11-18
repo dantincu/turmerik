@@ -19,6 +19,11 @@ namespace Turmerik.Utility
         TInput input,
         out TOutput output);
 
+    public delegate bool TryRetrieve2<TInput, TOutput1, TOutput2>(
+        TInput input,
+        out TOutput1 output1,
+        out TOutput2 output2);
+
     public delegate bool TryRetrieve<TObj, TInput, TOutput>(
         TObj @obj,
         TInput input,

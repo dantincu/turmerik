@@ -19,7 +19,7 @@ namespace Turmerik.Notes.UnitTests
         private static readonly IJsonConversion jsonConversion;
         private static readonly INoteMdRetriever noteMdRetriever;
         private static readonly IDriveItemsRetriever driveItemsRetriever;
-        private static readonly AppConfigCoreMtbl appConfig;
+        private static readonly NotesAppConfigMtbl appConfig;
         private static readonly NoteDirsPairConfigMtbl config;
 
         static NoteMdRetrieverUnitTest()
@@ -32,7 +32,7 @@ namespace Turmerik.Notes.UnitTests
                 Environment.CurrentDirectory,
                 TrmrkNotesH.NOTES_CFG_FILE_NAME);
 
-            appConfig = jsonConversion.Adapter.Deserialize<AppConfigCoreMtbl>(
+            appConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
                 File.ReadAllText(configFilePath));
 
             config = appConfig.NoteDirPairs;

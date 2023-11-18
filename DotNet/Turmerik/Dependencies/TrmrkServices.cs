@@ -43,6 +43,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
             services.AddSingleton<IDirsPairGenerator, DirsPairGenerator>();
             services.AddSingleton<IDirsPairCreator, DirsPairCreator>();
+            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
 
             services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();

@@ -175,15 +175,28 @@ namespace Turmerik.Utility
             int millis,
             long ticks);
 
-        bool TryParseDate(string timeStamp, out DateTime? dateTime);
-        bool TryParseTime(string timeStamp, out TimeSpan? dateTime);
-        bool TryParseDateTime(string timeStamp, out DateTime? dateTime);
-        bool TryParseTimeZone(string timeZoneStr, out TimeSpan? timeZoneInfo);
+        bool TryParseDate(
+            string timeStamp,
+            out DateTime? dateTime);
+
+        bool TryParseTime(
+            string timeStamp,
+            out TimeSpan? dateTime);
+
+        bool TryParseDateTime(
+            string timeStamp,
+            out DateTime? dateTime,
+            out TimeSpan? timeZoneOffset);
+
+        bool TryParseTimeZone(
+            string timeZoneStr,
+            out TimeSpan? timeZoneInfo);
     }
 
     public class TimeStampHelper : ITimeStampHelper
     {
         public const int TICKS_COMPONENT_MAX_DIGITS_COUNT = 7;
+        public const int MILLIS_MAGNITUDE = 10000;
 
         public static readonly IReadOnlyDictionary<TmStmp, string> TmStmpsDictnr;
 
@@ -472,13 +485,18 @@ namespace Turmerik.Utility
             return retVal;
         }
 
-        public bool TryParseDateTime(string timeStamp, out DateTime? dateTime)
+        public bool TryParseDateTime(
+            string timeStamp,
+            out DateTime? dateTime,
+            out TimeSpan? timeZoneOffset)
         {
             dateTime = null;
             var stKvp = timeStamp.FirstKvp(c => char.IsDigit(c));
 
             bool retVal = stKvp.Key >= 0;
             string restStr;
+
+            timeZoneOffset = null;
 
             if (retVal)
             {
@@ -496,7 +514,6 @@ namespace Turmerik.Utility
                 {
                     int hours, minutes, seconds, millis;
                     long ticks;
-                    TimeSpan? timeZoneInfo;
 
                     retVal = TryParseTimeParts(
                         restStr,
@@ -505,7 +522,7 @@ namespace Turmerik.Utility
                         out seconds,
                         out millis,
                         out ticks,
-                        out timeZoneInfo);
+                        out timeZoneOffset);
 
                     if (retVal)
                     {
@@ -772,7 +789,7 @@ namespace Turmerik.Utility
 
         private bool TryParseLastTimePart(
             string timeStamp,
-            string[] parts,
+            string[] partsArr,
             out int millis,
             out long ticks,
             out TimeSpan? timeZoneOffset)
@@ -781,9 +798,16 @@ namespace Turmerik.Utility
             ticks = -1;
             timeZoneOffset = null;
             long ticksOrMillis = -1;
-            int partsLen = parts.Length;
+            int partsLen = partsArr.Length;
 
-            var ticksOrMillisPart = parts[3].WithCount<string, char, string>(
+            var part = partsArr[3];
+
+            if (part.All(c => "03".Contains(c)) == true)
+            {
+
+            }
+
+            var ticksOrMillisPart = part.WithCount<string, char, string>(
                 (str, len) => (len < TICKS_COMPONENT_MAX_DIGITS_COUNT).If(
                     () => str + StringH.JoinStrRange(
                         TICKS_COMPONENT_MAX_DIGITS_COUNT - len, "0"),
@@ -803,19 +827,19 @@ namespace Turmerik.Utility
                 }
                 else if (ticksOrMillis < 1000)
                 {
-                    millis = (int)ticksOrMillis;
-                    ticks = 0;
+                    millis = 0;
+                    ticks = (int)ticksOrMillis;
                 }
                 else
                 {
-                    var ticksMagnitude = ticksOrMillis.Magnitude() / 100;
+                    var millisMagnitude = MILLIS_MAGNITUDE;// ticksOrMillis.Magnitude() / 100;
 
-                    millis = (int)(ticksOrMillis / ticksMagnitude);
-                    ticks = (int)(ticksOrMillis % ticksMagnitude);
+                    millis = (int)(ticksOrMillis / millisMagnitude);
+                    ticks = (int)(ticksOrMillis % millisMagnitude);
                 }
 
                 string timeZoneStr = timeStamp.Substring(
-                parts.Take(4).Select(part => part.Length).Sum() + 3);
+                partsArr.Take(4).Select(part => part.Length).Sum() + 3);
 
                 if (partsLen >= 5)
                 {

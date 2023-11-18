@@ -9,6 +9,7 @@ using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
 using Turmerik.Notes;
+using Turmerik.Notes.Service;
 using Turmerik.Notes.Settings;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
@@ -19,14 +20,14 @@ namespace Turmerik.Notes.ConsoleApps
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleArgsParser parser;
-        private readonly INoteDirsPairCreator dirsPairCreator;
-        private readonly IAppConfigCore appConfig;
+        private readonly INotesExplorerService notesExplorerService;
+        private readonly INotesAppConfig appConfig;
         private readonly INoteDirsPairConfig config;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
-            INoteDirsPairCreatorFactory dirsPairCreatorFactory)
+            INotesExplorerServiceFactory notesExplorerServiceFactory)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -38,11 +39,11 @@ namespace Turmerik.Notes.ConsoleApps
                 ProgramH.ExecutingAssemmblyPath,
                 TrmrkNotesH.NOTES_CFG_FILE_NAME);
 
-            appConfig = jsonConversion.Adapter.Deserialize<AppConfigCoreMtbl>(
+            appConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
                 File.ReadAllText(configFilePath));
 
             config = appConfig.GetNoteDirPairs();
-            dirsPairCreator = dirsPairCreatorFactory.Creator(config);
+            notesExplorerService = notesExplorerServiceFactory.Create(appConfig);
         }
 
         public async Task RunAsync(string[] rawArgs)
@@ -52,33 +53,15 @@ namespace Turmerik.Notes.ConsoleApps
             args.DestnDirIdnf ??= Environment.CurrentDirectory;
             args.SrcDirIdnf ??= args.DestnDirIdnf;
 
-            var opts = GetOpts(args);
-            await dirsPairCreator.CreateDirsPairAsync(opts);
+            await notesExplorerService.ExecuteAsync(args);
         }
 
-        private NoteDirsPairOpts GetOpts(
-            ProgramArgs args) => new NoteDirsPairOpts
-            {
-                PrIdnf = args.DestnDirIdnf,
-                Title = args.NoteTitle,
-                SortIdx = args.SortIdx,
-                IsPinned = args.IsPinned,
-                OpenMdFile = args.OpenMdFile,
-                CreateNoteFilesDirsPair = args.CreateNoteFilesDirsPair,
-                CreateNoteInternalDirsPair = args.CreateNoteInternalDirsPair,
-                Command = args.Command,
-                SrcNote = args.SrcNote,
-                SrcNoteIdx = args.SrcNoteIdx,
-                DestnNote = args.DestnNote,
-                DestnNoteIdx = args.DestnNoteIdx
-            };
-
-        private ProgramArgs GetArgs(
+        private NotesExplorerServiceArgs GetArgs(
             string[] rawArgs) => config.GetArgOpts().With(argOpts => parser.Parse(
-                new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
+                new ConsoleArgsParserOpts<NotesExplorerServiceArgs>(rawArgs)
                 {
                     ArgsBuilder = data => parser.HandleArgs(
-                        new ConsoleArgsParseHandlerOpts<ProgramArgs>
+                        new ConsoleArgsParseHandlerOpts<NotesExplorerServiceArgs>
                         {
                             Data = data,
                             ThrowOnTooManyArgs = true,
@@ -131,10 +114,10 @@ namespace Turmerik.Notes.ConsoleApps
                         })
                 })).Args;
 
-        private ConsoleArgsFlagOpts<ProgramArgs> ArgsFlagOpts(
-            ConsoleArgsParserData<ProgramArgs> data,
+        private ConsoleArgsFlagOpts<NotesExplorerServiceArgs> ArgsFlagOpts(
+            ConsoleArgsParserData<NotesExplorerServiceArgs> data,
             NoteDirsPairConfig.IArgOptionT option,
-            Action<ConsoleArgsParserData<ProgramArgs>> action,
+            Action<ConsoleArgsParserData<NotesExplorerServiceArgs>> action,
             bool shouldNotHaveValue = false) => parser.ArgsFlagOpts(data,
                 option.ToStrArr(),
                 action,

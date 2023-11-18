@@ -25,16 +25,13 @@ namespace Turmerik.DriveExplorer
         ZippedFolder
     }
 
-    public class DriveItem<TDriveItem>
-        where TDriveItem : DriveItem<TDriveItem>
+    public class DriveItemCore
     {
-        public DriveItem()
+        public DriveItemCore()
         {
         }
 
-        public DriveItem(
-            DriveItem<TDriveItem> src,
-            int depth = 0)
+        public DriveItemCore(DriveItemCore src)
         {
             Idnf = src.Idnf;
             Name = src.Name;
@@ -48,22 +45,6 @@ namespace Turmerik.DriveExplorer
             IsImageFile = src.IsImageFile;
             IsVideoFile = src.IsVideoFile;
             IsAudioFile = src.IsAudioFile;
-
-            if (depth > 0)
-            {
-                int childrenDepth = depth - 1;
-
-                SubFolders = src.SubFolders?.Select(
-                    item => item.CreateFromSrc<TDriveItem>(null, childrenDepth)).ToList();
-
-                FolderFiles = src.FolderFiles?.Select(
-                    item => item.CreateFromSrc<TDriveItem>(null, 0)).ToList();
-            }
-            else if (depth < 0)
-            {
-                SubFolders = src.SubFolders;
-                FolderFiles = src.FolderFiles;
-            }
         }
 
         public string Idnf { get; set; }
@@ -80,6 +61,29 @@ namespace Turmerik.DriveExplorer
         public bool? IsImageFile { get; set; }
         public bool? IsVideoFile { get; set; }
         public bool? IsAudioFile { get; set; }
+    }
+
+    public class DriveItem<TDriveItem> : DriveItemCore
+        where TDriveItem : DriveItem<TDriveItem>
+    {
+        public DriveItem()
+        {
+        }
+
+        public DriveItem(DriveItemCore src) : base(src)
+        {
+        }
+
+        public DriveItem(
+            DriveItem<TDriveItem> src,
+            int depth = 0) : base(src)
+        {
+            DriveExplorerH.CopyChildren(
+                this,
+                src.SubFolders,
+                src.FolderFiles,
+                depth);
+        }
 
         public List<TDriveItem>? SubFolders { get; set; }
         public List<TDriveItem>? FolderFiles { get; set; }
@@ -93,6 +97,10 @@ namespace Turmerik.DriveExplorer
         where TDriveItem : DriveItem<TDriveItem, TData>
     {
         public DriveItem()
+        {
+        }
+
+        public DriveItem(DriveItemCore src) : base(src)
         {
         }
 

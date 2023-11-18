@@ -18,9 +18,53 @@ namespace Turmerik.UnitTests
         }
 
         [Fact]
-        public void MainTest()
+        public void FirstTest()
         {
             var now = DateTime.Now;
+            var date = now.Date;
+
+            string dateTimeStampStr = timeStampHelper.TmStmp(
+                now, true, TimeStamp.Ticks, true);
+
+            string timeStampStr = timeStampHelper.TmStmp(
+                now, false, TimeStamp.Ticks, true);
+
+            PerformDateTimeParseTest(
+                dateTimeStampStr, now);
+
+            PerformDateParseTest(
+                dateTimeStampStr, date);
+
+            PerformTimeParseTest(
+                timeStampStr, now.TimeOfDay);
+        }
+
+        [Fact]
+        public void SecondTest()
+        {
+            var now = new DateTime(2023, 11, 18, 20, 13, 30, 30, 30);
+            var date = now.Date;
+
+            string dateTimeStampStr = timeStampHelper.TmStmp(
+                now, true, TimeStamp.Ticks, true);
+
+            string timeStampStr = timeStampHelper.TmStmp(
+                now, false, TimeStamp.Ticks, true);
+
+            PerformDateTimeParseTest(
+                dateTimeStampStr, now);
+
+            PerformDateParseTest(
+                dateTimeStampStr, date);
+
+            PerformTimeParseTest(
+                timeStampStr, now.TimeOfDay);
+        }
+
+        [Fact]
+        public void ThirdTest()
+        {
+            var now = new DateTime(2023, 11, 18, 20, 13, 30, 0, 30);
             var date = now.Date;
 
             string dateTimeStampStr = timeStampHelper.TmStmp(
@@ -66,6 +110,36 @@ namespace Turmerik.UnitTests
             TryRetrieve<string, DateTime?> factory)
         {
             Assert.True(factory(timeStamp, out var actualValue));
+            Assert.Equal(expectedValue, actualValue.Value);
+        }
+
+        private void PerformTest(
+            string timeStamp,
+            DateTime expectedValue,
+            TryRetrieve2<string, DateTime?, TimeSpan?> factory)
+        {
+            Assert.True(factory(
+                timeStamp,
+                out var actualValue,
+                out var timeZoneOffset));
+
+            if (timeZoneOffset.HasValue)
+            {
+                var tmZoneOffset = timeZoneOffset.Value;
+                var utcNow = DateTime.UtcNow;
+                var now = DateTime.Now;
+                var currentTz = now - utcNow;
+
+                currentTz = new TimeSpan(
+                    currentTz.Hours,
+                    currentTz.Minutes,
+                    currentTz.Seconds);
+
+                Assert.Equal(
+                    tmZoneOffset,
+                    currentTz);
+            }
+
             Assert.Equal(expectedValue, actualValue.Value);
         }
 

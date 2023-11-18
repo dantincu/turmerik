@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Turmerik.Notes.ConsoleApps
+namespace Turmerik.Notes.Service
 {
-    public class ProgramArgs
+    public class NotesExplorerServiceArgs
     {
         public CmdCommand Command { get; set; }
         public string[] SrcNote { get; set; }

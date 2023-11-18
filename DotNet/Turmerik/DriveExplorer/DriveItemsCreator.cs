@@ -28,7 +28,7 @@ namespace Turmerik.DriveExplorer
         {
             foreach (var item in opts.ItemsList)
             {
-                if (!item.Data.IsCreated)
+                if (item.Data.Created != true)
                 {
                     item.Data ??= new DriveItemXData();
                     DriveItem newItem;
@@ -68,7 +68,7 @@ namespace Turmerik.DriveExplorer
             DriveItem newItem)
         {
             inputItem.Idnf = newItem.Idnf;
-            inputItem.Data.IsCreated = true;
+            inputItem.Data.Created = true;
         }
 
         private List<DriveItemX> GetChildrenList(
