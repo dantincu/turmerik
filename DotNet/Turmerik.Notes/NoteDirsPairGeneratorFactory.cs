@@ -17,14 +17,14 @@ namespace Turmerik.Notes
         private readonly IJsonConversion jsonConversion;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly INextNoteIdxRetriever nextNoteIdxRetriever;
-        private readonly IExistingNoteDirPairsRetrieverFactory existingNoteDirPairsRetrieverFactory;
+        private readonly INoteItemsRetrieverFactory existingNoteDirPairsRetrieverFactory;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
 
         public NoteDirsPairGeneratorFactory(
             IJsonConversion jsonConversion,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             INextNoteIdxRetriever nextNoteIdxRetriever,
-            IExistingNoteDirPairsRetrieverFactory existingNoteDirPairsRetrieverFactory,
+            INoteItemsRetrieverFactory existingNoteDirPairsRetrieverFactory,
             INoteCfgValuesRetriever noteCfgValuesRetriever)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(

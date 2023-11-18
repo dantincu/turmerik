@@ -32,7 +32,7 @@ namespace Turmerik.Notes
             IJsonConversion jsonConversion,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             INextNoteIdxRetriever nextNoteIdxRetriever,
-            IExistingNoteDirPairsRetriever existingNoteDirPairsRetriever,
+            INoteItemsRetriever existingNoteDirPairsRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever) : base(
                 jsonConversion,
                 fsEntryNameNormalizer,

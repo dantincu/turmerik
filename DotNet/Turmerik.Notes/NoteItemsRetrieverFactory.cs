@@ -6,20 +6,20 @@ using Turmerik.TextSerialization;
 
 namespace Turmerik.Notes
 {
-    public interface IExistingNoteDirPairsRetrieverFactory
+    public interface INoteItemsRetrieverFactory
     {
-        IExistingNoteDirPairsRetriever Retriever(
+        INoteItemsRetriever Retriever(
             INoteDirsPairConfig config);
     }
 
-    public class ExistingNoteDirPairsRetrieverFactory : IExistingNoteDirPairsRetrieverFactory
+    public class NoteItemsRetrieverFactory : INoteItemsRetrieverFactory
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IDriveItemsRetriever dvExplrSvc;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
         private readonly INoteJsonDeserializer noteJsonDeserializer;
 
-        public ExistingNoteDirPairsRetrieverFactory(
+        public NoteItemsRetrieverFactory(
             IJsonConversion jsonConversion,
             IDriveItemsRetriever dvExplrSvc,
             INoteCfgValuesRetriever noteCfgValuesRetriever,
@@ -38,8 +38,8 @@ namespace Turmerik.Notes
                 nameof(noteJsonDeserializer));
         }
 
-        public IExistingNoteDirPairsRetriever Retriever(
-            INoteDirsPairConfig config) => new ExistingNoteDirPairsRetriever(
+        public INoteItemsRetriever Retriever(
+            INoteDirsPairConfig config) => new NoteItemsRetriever(
                 jsonConversion,
                 dvExplrSvc,
                 noteCfgValuesRetriever,

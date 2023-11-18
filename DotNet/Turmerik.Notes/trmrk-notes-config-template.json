@@ -73,15 +73,15 @@
       "JoinStr": "-"
     },
     "NoteDirNameIdxes": {
-      "MinIdx": 1,
-      "MaxIdx": 999,
+      "MinIdx": 101,
+      "MaxIdx": 799,
       "IncIdx": true,
       "FillGapsByDefault": false,
       "IdxFmt": "D3"
     },
     "NoteInternalDirNameIdxes": {
       "MinIdx": 1,
-      "MaxIdx": 999,
+      "MaxIdx": 99,
       "IncIdx": true,
       "FillGapsByDefault": true,
       "IdxFmt": "D1"

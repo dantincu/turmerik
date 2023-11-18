@@ -13,7 +13,7 @@ using Turmerik.Utility;
 
 namespace Turmerik.Notes
 {
-    public interface IExistingNoteDirPairsRetriever
+    public interface INoteItemsRetriever
     {
         INoteDirsPairConfig Config { get; }
         NoteDirsPairConfig.IArgOptionsT ArgOptsCfg { get; }
@@ -24,18 +24,18 @@ namespace Turmerik.Notes
         NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }
         ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> DirNamesRegexMap { get; }
 
-        Task<NoteDirPairsAgg> GetNoteDirPairsAsync(
+        Task<NoteItemsTuple> GetNoteDirPairsAsync(
             string prIdnf);
     }
 
-    public class ExistingNoteDirPairsRetriever : IExistingNoteDirPairsRetriever
+    public class NoteItemsRetriever : INoteItemsRetriever
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IDriveItemsRetriever driveItemsRetriever;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
         private readonly INoteJsonDeserializer noteJsonDeserializer;
 
-        public ExistingNoteDirPairsRetriever(
+        public NoteItemsRetriever(
             IJsonConversion jsonConversion,
             IDriveItemsRetriever driveItemsRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever,
@@ -78,23 +78,15 @@ namespace Turmerik.Notes
         public NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }
         public ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> DirNamesRegexMap { get; }
 
-        public async Task<NoteDirPairsAgg> GetNoteDirPairsAsync(
+        public async Task<NoteItemsTuple> GetNoteDirPairsAsync(
             string prIdnf)
         {
-            var prFolder = await driveItemsRetriever.GetFolderAsync(prIdnf);
-
-            var retObj = new NoteDirPairsAgg();
+            var retObj = new NoteItemsTuple
+            {
+                ParentFolder = await driveItemsRetriever.GetFolderAsync(prIdnf)
+            };
 
             throw new NotImplementedException();
         }
-
-        public async Task<Tuple<MarkdownDocument?, string?, NoteItemCore?, DriveItem?>> TryGetNoteMdFileAsync(
-            string prIdnf,
-            string mdFileName,
-            DriveItem[] filesArr)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

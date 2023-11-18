@@ -15,14 +15,14 @@ namespace Turmerik.Notes
         protected IJsonConversion JsonConversion { get; }
         protected IFsEntryNameNormalizer FsEntryNameNormalizer { get; }
         protected INextNoteIdxRetriever NextNoteIdxRetriever { get; }
-        protected IExistingNoteDirPairsRetriever ExistingNoteDirPairsRetriever { get; }
+        protected INoteItemsRetriever ExistingNoteDirPairsRetriever { get; }
         protected INoteCfgValuesRetriever NoteCfgValuesRetriever { get; }
 
         public NoteDirsPairGeneratorBase(
             IJsonConversion jsonConversion,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             INextNoteIdxRetriever nextNoteIdxRetriever,
-            IExistingNoteDirPairsRetriever existingNoteDirPairsRetriever,
+            INoteItemsRetriever existingNoteDirPairsRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever)
         {
             this.JsonConversion = jsonConversion ?? throw new ArgumentNullException(
@@ -320,7 +320,7 @@ namespace Turmerik.Notes
             public NoteDirsPairOpts Opts { get; init; }
             public List<DriveItemX> DirsList { get; init; }
             public string PrIdnf { get; init; }
-            public NoteDirPairsAgg ExistingDirPairs { get; init; }
+            public NoteItemsTuple ExistingDirPairs { get; init; }
             public NoteItemCore NoteItem { get; set; }
             public NoteBookCore NoteBook { get; set; }
         }

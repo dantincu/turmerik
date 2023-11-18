@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -8,12 +9,11 @@ using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
 using Turmerik.Notes;
-using Turmerik.Notes.ConsoleApps;
 using Turmerik.Notes.Settings;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
-namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
+namespace Turmerik.Notes.ConsoleApps
 {
     public class ProgramComponent
     {
@@ -31,7 +31,7 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
-            this.parser = consoleArgsParser ?? throw new ArgumentNullException(
+            parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
 
             string configFilePath = Path.Combine(
@@ -47,7 +47,7 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
 
         public async Task RunAsync(string[] rawArgs)
         {
-            var args = GetArgs(rawArgs.Skip(1).ToArray());
+            var args = GetArgs(rawArgs);
 
             args.DestnDirIdnf ??= Environment.CurrentDirectory;
             args.SrcDirIdnf ??= args.DestnDirIdnf;
@@ -92,7 +92,7 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
                                     switch (data.TotalCount)
                                     {
                                         case 1:
-                                            
+
                                             var matchingKvp = config.ArgOpts.CommandsMap.SingleOrDefault(
                                                 kvp => kvp.Value.ShortArgValue == argItem || kvp.Value.FullArgValue == argItem);
 

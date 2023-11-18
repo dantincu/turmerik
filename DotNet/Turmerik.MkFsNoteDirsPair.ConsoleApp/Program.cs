@@ -2,7 +2,7 @@
 using Turmerik.Dependencies;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
-using Turmerik.MkFsNoteDirsPair.ConsoleApp;
+using Turmerik.Notes.ConsoleApps;
 
 var services = TrmrkServices.RegisterAll(
     new ServiceCollection());
