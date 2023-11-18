@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
+using Turmerik.Notes.ConsoleApps;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
@@ -118,12 +119,6 @@ namespace Turmerik.Notes
         protected void GenerateNoteBook(
             Args args)
         {
-            if (args.Opts.CreateNoteInternalDirsPair || args.Opts.CreateNoteFilesDirsPair)
-            {
-                throw new InvalidOperationException(
-                    "The create note book dirs pair flag cannot be provided along with other create note internal dirs pair flags");
-            }
-
             args.NoteBook = new NoteBookCore
             {
                 Title = args.Opts.Title,
@@ -135,7 +130,7 @@ namespace Turmerik.Notes
                 args.ExistingDirPairs.AllExistingInternalDirIdxes);
 
             AddInternalDir(idxesMap, idxesList,
-                args.Opts.CreateNoteBookDirsPair,
+                args.Opts.Command == CmdCommand.CreateNoteBook,
                 NoteInternalDir.Root, ref idx);
 
             GenerateInternalDirsCore(

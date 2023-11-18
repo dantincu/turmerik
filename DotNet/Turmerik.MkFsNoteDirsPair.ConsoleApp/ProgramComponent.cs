@@ -8,6 +8,7 @@ using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
 using Turmerik.Notes;
+using Turmerik.Notes.ConsoleApps;
 using Turmerik.Notes.Settings;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
@@ -46,25 +47,30 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
 
         public async Task RunAsync(string[] rawArgs)
         {
-            var args = GetArgs(rawArgs);
-            args.WorkDir ??= Environment.CurrentDirectory;
+            var args = GetArgs(rawArgs.Skip(1).ToArray());
+
+            args.DestnDirIdnf ??= Environment.CurrentDirectory;
+            args.SrcDirIdnf ??= args.DestnDirIdnf;
 
             var opts = GetOpts(args);
-
             await dirsPairCreator.CreateDirsPairAsync(opts);
         }
 
         private NoteDirsPairOpts GetOpts(
             ProgramArgs args) => new NoteDirsPairOpts
             {
-                PrIdnf = args.WorkDir,
+                PrIdnf = args.DestnDirIdnf,
                 Title = args.NoteTitle,
                 SortIdx = args.SortIdx,
                 IsPinned = args.IsPinned,
                 OpenMdFile = args.OpenMdFile,
-                CreateNoteBookDirsPair = args.CreateNoteBookDirsPair,
                 CreateNoteFilesDirsPair = args.CreateNoteFilesDirsPair,
-                CreateNoteInternalDirsPair = args.CreateNoteInternalDirsPair
+                CreateNoteInternalDirsPair = args.CreateNoteInternalDirsPair,
+                Command = args.Command,
+                SrcNote = args.SrcNote,
+                SrcNoteIdx = args.SrcNoteIdx,
+                DestnNote = args.DestnNote,
+                DestnNoteIdx = args.DestnNoteIdx
             };
 
         private ProgramArgs GetArgs(
@@ -78,13 +84,67 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
                             ThrowOnTooManyArgs = true,
                             ThrowOnUnknownFlag = true,
                             ItemHandlersArr = parser.ArgsItemOpts(
-                                data, data => data.Args.NoteTitle = data.ArgItem).Arr(),
+                                data, data =>
+                                {
+                                    var args = data.Args;
+                                    string argItem = data.ArgItem;
+
+                                    switch (data.TotalCount)
+                                    {
+                                        case 1:
+                                            
+                                            var matchingKvp = config.ArgOpts.CommandsMap.SingleOrDefault(
+                                                kvp => kvp.Value.ShortArgValue == argItem || kvp.Value.FullArgValue == argItem);
+
+                                            if (matchingKvp.Key > 0)
+                                            {
+                                                args.Command = matchingKvp.Key;
+                                            }
+                                            else
+                                            {
+                                                throw new ArgumentException(
+                                                    $"Unknown command name {argItem}");
+                                            }
+                                            break;
+                                        case 2:
+                                            args.NoteTitle = argItem;
+                                            break;
+                                        default:
+                                            throw new ArgumentException(
+                                                "Too many arguments: expected no more than 1 non-flag argument after the command name");
+                                    }
+                                }).Arr(),
                             FlagHandlersMap = new Dictionary<string, ConsoleArgsFlagOpts<ProgramArgs>>
                             {
                                 {
-                                    config.ArgOpts.WorkDir,
+                                    config.ArgOpts.SrcNote,
                                     parser.ArgsFlagOpts(data,
-                                        data => data.Args.WorkDir = data.ArgFlagValue!.Single())
+                                        data => data.Args.SrcNote = data.ArgFlagValue)
+                                },
+                                {
+                                    config.ArgOpts.SrcDirIdnf,
+                                    parser.ArgsFlagOpts(data,
+                                        data => data.Args.SrcDirIdnf = data.ArgFlagValue!.Single())
+                                },
+                                {
+                                    config.ArgOpts.SrcNoteIdx,
+                                    parser.ArgsFlagOpts(data,
+                                        data => data.Args.SrcNoteIdx = data.ArgFlagValue)
+                                },
+                                {
+                                    config.ArgOpts.DestnNote,
+                                    parser.ArgsFlagOpts(data,
+                                        data => data.Args.DestnNote = data.ArgFlagValue)
+                                },
+                                {
+                                    config.ArgOpts.DestnDirIdnf,
+                                    parser.ArgsFlagOpts(data,
+                                        data => data.Args.DestnDirIdnf = data.ArgFlagValue!.Single())
+                                },
+                                {
+                                    config.ArgOpts.DestnNoteIdx,
+                                    parser.ArgsFlagOpts(data,
+                                        data => data.Args.DestnNoteIdx = data.ArgFlagValue)
                                 },
                                 {
                                     config.ArgOpts.SortIdx,
@@ -97,11 +157,6 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
                                         data => data.Args.OpenMdFile = true, true)
                                 },
                                 {
-                                    config.ArgOpts.CreateNoteBookDirsPair,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.CreateNoteBookDirsPair = true, true)
-                                },
-                                {
                                     config.ArgOpts.CreateNoteFilesDirsPair,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.CreateNoteFilesDirsPair = true, true)
@@ -110,7 +165,7 @@ namespace Turmerik.MkFsNoteDirsPair.ConsoleApp
                                     config.ArgOpts.CreateNoteInternalDirsPair,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.CreateNoteInternalDirsPair = true, true)
-                                }
+                                },
                             }
                         })
                 }).Args;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
+using Turmerik.Notes.ConsoleApps;
 using Turmerik.Notes.Md;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
@@ -51,11 +52,11 @@ namespace Turmerik.Notes
                 ExistingDirPairs = await ExistingNoteDirPairsRetriever.GetNoteDirPairsAsync(opts.PrIdnf)
             };
 
-            if (opts.CreateNoteBookDirsPair)
+            if (opts.Command == CmdCommand.CreateNoteBook)
             {
                 GenerateNoteBook(args);
             }
-            else if (opts.Title != null)
+            else if (opts.Command == CmdCommand.CreateNote)
             {
                 GenerateNoteItem(args);
             }

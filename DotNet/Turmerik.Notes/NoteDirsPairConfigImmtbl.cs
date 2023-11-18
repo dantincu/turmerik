@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using Turmerik.Helpers;
+using Turmerik.Notes.ConsoleApps;
+using static Turmerik.Notes.NoteDirsPairConfig;
 
 namespace Turmerik.Notes
 {
     public class NoteDirsPairConfigImmtbl : INoteDirsPairConfig
     {
         public NoteDirsPairConfigImmtbl(
-            NoteDirsPairConfigMtbl src)
+            INoteDirsPairConfig src)
         {
             FileNameMaxLength = src.FileNameMaxLength;
             SerializeToJson = src.SerializeToJson;
             TrmrkGuidInputName = src.TrmrkGuidInputName;
 
-            ArgOpts = src.ArgOpts?.ToImmtbl();
-            DirNames = src.DirNames?.ToImmtbl();
-            NoteDirNameIdxes = src.NoteDirNameIdxes?.ToImmtbl();
-            NoteInternalDirNameIdxes = src.NoteInternalDirNameIdxes?.ToImmtbl();
-            FileNames = src.FileNames?.ToImmtbl();
-            FileContents = src.FileContents?.ToImmtbl();
+            ArgOpts = src.GetArgOpts()?.ToImmtbl();
+            DirNames = src.GetDirNames()?.ToImmtbl();
+            NoteDirNameIdxes = src.GetNoteDirNameIdxes()?.ToImmtbl();
+            NoteInternalDirNameIdxes = src.GetNoteInternalDirNameIdxes()?.ToImmtbl();
+            FileNames = src.GetFileNames()?.ToImmtbl();
+            FileContents = src.GetFileContents()?.ToImmtbl();
         }
 
         public int? FileNameMaxLength { get; }
@@ -32,38 +36,69 @@ namespace Turmerik.Notes
         public FileNamesT FileNames { get; }
         public FileContentsT FileContents { get; }
 
-        public NoteDirsPairConfig.IArgOptionsT GetArgOpts() => ArgOpts;
-        public NoteDirsPairConfig.IDirNamesT GetDirNames() => DirNames;
-        public NoteDirsPairConfig.IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
-        public NoteDirsPairConfig.IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
-        public NoteDirsPairConfig.IFileNamesT GetFileNames() => FileNames;
-        public NoteDirsPairConfig.IFileContentsT GetFileContents() => FileContents;
+        public IArgOptionsT GetArgOpts() => ArgOpts;
+        public IDirNamesT GetDirNames() => DirNames;
+        public IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
+        public IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
+        public IFileNamesT GetFileNames() => FileNames;
+        public IFileContentsT GetFileContents() => FileContents;
 
-        public class ArgOptionsT : NoteDirsPairConfig.IArgOptionsT
+        public class CmdCommandTupleT : ICmdCommandTupleT
         {
-            public ArgOptionsT(NoteDirsPairConfigMtbl.ArgOptionsT src)
+            public CmdCommandTupleT(ICmdCommandTupleT src)
             {
-                WorkDir = src.WorkDir;
+                Value = src.Value;
+                FullArgValue = src.FullArgValue;
+                ShortArgValue = src.ShortArgValue;
+            }
+
+            public CmdCommand? Value { get; }
+            public string FullArgValue { get; }
+            public string ShortArgValue { get; }
+        }
+
+        public class ArgOptionsT : IArgOptionsT
+        {
+            public ArgOptionsT(IArgOptionsT src)
+            {
+                SrcNote = src.SrcNote;
+                SrcDirIdnf = src.SrcDirIdnf;
+                SrcNoteIdx = src.SrcNoteIdx;
+                DestnNote = src.DestnNote;
+                DestnDirIdnf = src.DestnDirIdnf;
+                DestnNoteIdx = src.DestnNoteIdx;
                 IsPinned = src.IsPinned;
                 SortIdx = src.SortIdx;
                 OpenMdFile = src.OpenMdFile;
-                CreateNoteBookDirsPair = src.CreateNoteBookDirsPair;
                 CreateNoteFilesDirsPair = src.CreateNoteFilesDirsPair;
                 CreateNoteInternalDirsPair = src.CreateNoteInternalDirsPair;
+
+                CommandsMap = src.GetCommandsMap()?.Select(
+                    kvp => new KeyValuePair<CmdCommand, CmdCommandTupleT>(
+                        kvp.Key, kvp.Value?.ToImmtbl())).Dictnr().RdnlD();
             }
 
-            public string WorkDir { get; }
+            public string SrcNote { get; }
+            public string SrcDirIdnf { get; }
+            public string SrcNoteIdx { get; }
+            public string DestnNote { get; }
+            public string DestnDirIdnf { get; }
+            public string DestnNoteIdx { get; }
             public string IsPinned { get; }
             public string SortIdx { get; }
             public string OpenMdFile { get; }
-            public string CreateNoteBookDirsPair { get; }
             public string CreateNoteFilesDirsPair { get; }
             public string CreateNoteInternalDirsPair { get; }
+
+            public ReadOnlyDictionary<CmdCommand, CmdCommandTupleT> CommandsMap { get; }
+
+            public IEnumerable<KeyValuePair<CmdCommand, ICmdCommandTupleT>> GetCommandsMap() => CommandsMap?.Select(
+                kvp => new KeyValuePair<CmdCommand, ICmdCommandTupleT>(kvp.Key, kvp.Value));
         }
 
-        public class DirNamesT : NoteDirsPairConfig.IDirNamesT
+        public class DirNamesT : IDirNamesT
         {
-            public DirNamesT(NoteDirsPairConfigMtbl.DirNamesT src)
+            public DirNamesT(IDirNamesT src)
             {
                 NoteBook = src.NoteBook;
                 NoteFiles = src.NoteFiles;
@@ -81,9 +116,9 @@ namespace Turmerik.Notes
             public string JoinStr { get; }
         }
 
-        public class DirNameIdxesT : NoteDirsPairConfig.IDirNameIdxesT
+        public class DirNameIdxesT : IDirNameIdxesT
         {
-            public DirNameIdxesT(NoteDirsPairConfigMtbl.DirNameIdxesT src)
+            public DirNameIdxesT(IDirNameIdxesT src)
             {
                 MinIdx = src.MinIdx;
                 MaxIdx = src.MaxIdx;
@@ -99,9 +134,9 @@ namespace Turmerik.Notes
             public string? IdxFmt { get; }
         }
 
-        public class FileNamesT : NoteDirsPairConfig.IFileNamesT
+        public class FileNamesT : IFileNamesT
         {
-            public FileNamesT(NoteDirsPairConfigMtbl.FileNamesT src)
+            public FileNamesT(IFileNamesT src)
             {
                 NoteBookJsonFileName = src.NoteBookJsonFileName;
                 NoteItemJsonFileName = src.NoteItemJsonFileName;
@@ -117,9 +152,9 @@ namespace Turmerik.Notes
             public string KeepFileName { get; }
         }
 
-        public class FileContentsT : NoteDirsPairConfig.IFileContentsT
+        public class FileContentsT : IFileContentsT
         {
-            public FileContentsT(NoteDirsPairConfigMtbl.FileContentsT src)
+            public FileContentsT(IFileContentsT src)
             {
                 KeepFileContentsTemplate = src.KeepFileContentsTemplate;
                 KeepFileContentsTemplate = src.KeepFileContentsTemplate;

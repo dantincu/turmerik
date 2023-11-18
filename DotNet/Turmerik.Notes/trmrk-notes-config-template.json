@@ -7,12 +7,62 @@
     // "SerializeToJson": true,
     "TrmrkGuidInputName": "trmrk_guid",
     "ArgOpts": {
-      "WorkDir": "wd",
-      "SortIdx": "x",
+      "SrcNote": "fn",
+      "SrcDirIdnf": "fid",
+      "SrcNoteIdx": "fnx",
+      "DestnNote": "tn",
+      "DestnDirIdnf": "tid",
+      "DestnNoteIdx": "tnx",
+      "SortIdx": "si",
       "OpenMdFile": "o",
-      "CreateNoteBookDirsPair": "b",
       "CreateNoteFilesDirsPair": "f",
-      "CreateNoteInternalDirsPair": "i"
+      "CreateNoteInternalDirsPair": "i",
+      "CommandsMap": {
+        "ListNotes": {
+          "FullArgValue": "list-notes",
+          "ShortArgValue": "ls"
+        },
+        "CreateNoteBook": {
+          "FullArgValue": "create-note-book",
+          "ShortArgValue": "bk"
+        },
+        "CreateNoteBookInternal": {
+          "FullArgValue": "create-note-book-internal",
+          "ShortArgValue": "bki"
+        },
+        "CreateNote": {
+          "FullArgValue": "create-note",
+          "ShortArgValue": "mk"
+        },
+        "CreateNoteInternal": {
+          "FullArgValue": "create-note-internal",
+          "ShortArgValue": "mki"
+        },
+        "CopyNotes": {
+          "FullArgValue": "copy-notes",
+          "ShortArgValue": "cp"
+        },
+        "DeleteNotes": {
+          "FullArgValue": "delete-notes",
+          "ShortArgValue": "dl"
+        },
+        "MoveNotes": {
+          "FullArgValue": "move-notes",
+          "ShortArgValue": "mv"
+        },
+        "RenameNote": {
+          "FullArgValue": "rename-note",
+          "ShortArgValue": "rn"
+        },
+        "NormalizeSortIndexes": {
+          "FullArgValue": "norm-sort-idxes",
+          "ShortArgValue": "normsi"
+        },
+        "NormalizeNoteIndexes": {
+          "FullArgValue": "norm-note-idxes",
+          "ShortArgValue": "normnx"
+        }
+      }
     },
     "DirNames": {
       "NoteBook": "[note-book]",

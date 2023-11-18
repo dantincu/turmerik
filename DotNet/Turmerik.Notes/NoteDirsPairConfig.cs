@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.Notes.ConsoleApps;
 
 namespace Turmerik.Notes
 {
@@ -19,15 +20,28 @@ namespace Turmerik.Notes
 
     public static class NoteDirsPairConfig
     {
+        public interface ICmdCommandTupleT
+        {
+            CmdCommand? Value { get; }
+            string FullArgValue { get; }
+            string ShortArgValue { get; }
+        }
+
         public interface IArgOptionsT
         {
-            string WorkDir { get; }
+            string SrcNote { get; }
+            string SrcDirIdnf { get; }
+            string SrcNoteIdx { get; }
+            string DestnNote { get; }
+            string DestnDirIdnf { get; }
+            string DestnNoteIdx { get; }
             string IsPinned { get; }
             string SortIdx { get; }
             string OpenMdFile { get; }
-            string CreateNoteBookDirsPair { get; }
             string CreateNoteFilesDirsPair { get; }
             string CreateNoteInternalDirsPair { get; }
+
+            IEnumerable<KeyValuePair<CmdCommand, ICmdCommandTupleT>> GetCommandsMap();
         }
 
         public interface IDirNamesT
@@ -67,21 +81,45 @@ namespace Turmerik.Notes
         }
 
         public static NoteDirsPairConfigImmtbl ToImmtbl(
-            this NoteDirsPairConfigMtbl src) => new NoteDirsPairConfigImmtbl(src);
+            this INoteDirsPairConfig src) => new NoteDirsPairConfigImmtbl(src);
+
+        public static NoteDirsPairConfigImmtbl.CmdCommandTupleT ToImmtbl(
+            this ICmdCommandTupleT src) => new NoteDirsPairConfigImmtbl.CmdCommandTupleT(src);
 
         public static NoteDirsPairConfigImmtbl.ArgOptionsT ToImmtbl(
-            this NoteDirsPairConfigMtbl.ArgOptionsT src) => new NoteDirsPairConfigImmtbl.ArgOptionsT(src);
+            this IArgOptionsT src) => new NoteDirsPairConfigImmtbl.ArgOptionsT(src);
 
         public static NoteDirsPairConfigImmtbl.DirNamesT ToImmtbl(
-            this NoteDirsPairConfigMtbl.DirNamesT src) => new NoteDirsPairConfigImmtbl.DirNamesT(src);
+            this IDirNamesT src) => new NoteDirsPairConfigImmtbl.DirNamesT(src);
 
         public static NoteDirsPairConfigImmtbl.DirNameIdxesT ToImmtbl(
-            this NoteDirsPairConfigMtbl.DirNameIdxesT src) => new NoteDirsPairConfigImmtbl.DirNameIdxesT(src);
+            this IDirNameIdxesT src) => new NoteDirsPairConfigImmtbl.DirNameIdxesT(src);
 
         public static NoteDirsPairConfigImmtbl.FileNamesT ToImmtbl(
-            this NoteDirsPairConfigMtbl.FileNamesT src) => new NoteDirsPairConfigImmtbl.FileNamesT(src);
+            this IFileNamesT src) => new NoteDirsPairConfigImmtbl.FileNamesT(src);
 
         public static NoteDirsPairConfigImmtbl.FileContentsT ToImmtbl(
-            this NoteDirsPairConfigMtbl.FileContentsT src) => new NoteDirsPairConfigImmtbl.FileContentsT(src);
+            this IFileContentsT src) => new NoteDirsPairConfigImmtbl.FileContentsT(src);
+
+        public static NoteDirsPairConfigMtbl ToMtbl(
+            this INoteDirsPairConfig src) => new NoteDirsPairConfigMtbl(src);
+
+        public static NoteDirsPairConfigMtbl.CmdCommandTupleT ToMtbl(
+            this ICmdCommandTupleT src) => new NoteDirsPairConfigMtbl.CmdCommandTupleT(src);
+
+        public static NoteDirsPairConfigMtbl.ArgOptionsT ToMtbl(
+            this IArgOptionsT src) => new NoteDirsPairConfigMtbl.ArgOptionsT(src);
+
+        public static NoteDirsPairConfigMtbl.DirNamesT ToMtbl(
+            this IDirNamesT src) => new NoteDirsPairConfigMtbl.DirNamesT(src);
+
+        public static NoteDirsPairConfigMtbl.DirNameIdxesT ToMtbl(
+            this IDirNameIdxesT src) => new NoteDirsPairConfigMtbl.DirNameIdxesT(src);
+
+        public static NoteDirsPairConfigMtbl.FileNamesT ToMtbl(
+            this IFileNamesT src) => new NoteDirsPairConfigMtbl.FileNamesT(src);
+
+        public static NoteDirsPairConfigMtbl.FileContentsT ToMtbl(
+            this IFileContentsT src) => new NoteDirsPairConfigMtbl.FileContentsT(src);
     }
 }

@@ -193,6 +193,8 @@ namespace Turmerik.ConsoleApps
                 data.ArgFlagName = null;
                 data.ArgFlagValue = null;
             }
+
+            data.TotalCount++;
         }
     }
 }
