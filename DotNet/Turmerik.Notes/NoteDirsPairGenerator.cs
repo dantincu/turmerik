@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
-using Turmerik.Notes.ConsoleApps;
 using Turmerik.Notes.Md;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
@@ -15,7 +14,7 @@ namespace Turmerik.Notes
     public interface INoteDirsPairGenerator
     {
         INoteDirsPairConfig Config { get; }
-        NoteDirsPairConfig.IArgOptionsT ArgOptsCfg { get; }
+        NoteDirsPairConfig.IArgOptionsAggT ArgOptsCfg { get; }
         NoteDirsPairConfig.IDirNamesT DirNamesCfg { get; }
         NoteDirsPairConfig.IDirNameIdxesT NoteDirNameIdxesCfg { get; }
         NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }

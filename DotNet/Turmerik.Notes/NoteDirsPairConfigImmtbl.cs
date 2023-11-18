@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Turmerik.Helpers;
-using Turmerik.Notes.ConsoleApps;
 using Turmerik.Utility;
 using static Turmerik.Notes.NoteDirsPairConfig;
 
@@ -17,6 +16,7 @@ namespace Turmerik.Notes
         {
             FileNameMaxLength = src.FileNameMaxLength;
             SerializeToJson = src.SerializeToJson;
+            AllowGetRequestsToPersistChanges = src.AllowGetRequestsToPersistChanges;
             TrmrkGuidInputName = src.TrmrkGuidInputName;
 
             ArgOpts = src.GetArgOpts()?.ToImmtbl();
@@ -29,72 +29,85 @@ namespace Turmerik.Notes
 
         public int? FileNameMaxLength { get; }
         public bool? SerializeToJson { get; }
+        public bool? AllowGetRequestsToPersistChanges { get; }
         public string? TrmrkGuidInputName { get; }
-        public ArgOptionsT ArgOpts { get; }
+        public ArgOptionsAggT ArgOpts { get; }
         public DirNamesT DirNames { get; }
         public DirNameIdxesT NoteDirNameIdxes { get; }
         public DirNameIdxesT NoteInternalDirNameIdxes { get; }
         public FileNamesT FileNames { get; }
         public FileContentsT FileContents { get; }
 
-        public IArgOptionsT GetArgOpts() => ArgOpts;
+        public IArgOptionsAggT GetArgOpts() => ArgOpts;
         public IDirNamesT GetDirNames() => DirNames;
         public IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
         public IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
         public IFileNamesT GetFileNames() => FileNames;
         public IFileContentsT GetFileContents() => FileContents;
 
-        public class CmdCommandTupleT : ICmdCommandTupleT
+        public class ArgOptionT : IArgOptionT
         {
-            public CmdCommandTupleT(ICmdCommandTupleT src)
+            public ArgOptionT(IArgOptionT src)
             {
-                Value = src.Value;
-                FullArgValue = src.FullArgValue;
-                ShortArgValue = src.ShortArgValue;
+                Command = src.Command;
+                FullArg = src.FullArg;
+                ShortArg = src.ShortArg;
             }
 
-            public CmdCommand? Value { get; }
-            public string FullArgValue { get; }
-            public string ShortArgValue { get; }
+            public CmdCommand? Command { get; }
+            public string FullArg { get; }
+            public string ShortArg { get; }
         }
 
-        public class ArgOptionsT : IArgOptionsT
+        public class ArgOptionsAggT : IArgOptionsAggT
         {
-            private ClnblDictionary<CmdCommand, ICmdCommandTupleT, CmdCommandTupleT, NoteDirsPairConfigMtbl.CmdCommandTupleT> commandsMap;
+            private ClnblDictionary<CmdCommand, IArgOptionT, ArgOptionT, NoteDirsPairConfigMtbl.ArgOptionT> commandsMap;
 
-            public ArgOptionsT(IArgOptionsT src)
+            public ArgOptionsAggT(IArgOptionsAggT src)
             {
-                SrcNote = src.SrcNote;
-                SrcDirIdnf = src.SrcDirIdnf;
-                SrcNoteIdx = src.SrcNoteIdx;
-                DestnNote = src.DestnNote;
-                DestnDirIdnf = src.DestnDirIdnf;
-                DestnNoteIdx = src.DestnNoteIdx;
-                IsPinned = src.IsPinned;
-                SortIdx = src.SortIdx;
-                OpenMdFile = src.OpenMdFile;
-                CreateNoteFilesDirsPair = src.CreateNoteFilesDirsPair;
-                CreateNoteInternalDirsPair = src.CreateNoteInternalDirsPair;
+                SrcNote = src.GetSrcNote()?.ToImmtbl();
+                SrcDirIdnf = src.GetSrcDirIdnf()?.ToImmtbl();
+                SrcNoteIdx = src.GetSrcNoteIdx()?.ToImmtbl();
+                DestnNote = src.GetDestnNote()?.ToImmtbl();
+                DestnDirIdnf = src.GetDestnDirIdnf()?.ToImmtbl();
+                DestnNoteIdx = src.GetDestnNoteIdx()?.ToImmtbl();
+                IsPinned = src.GetIsPinned()?.ToImmtbl();
+                SortIdx = src.GetSortIdx()?.ToImmtbl();
+                OpenMdFile = src.GetOpenMdFile()?.ToImmtbl();
+                CreateNoteFilesDirsPair = src.GetCreateNoteFilesDirsPair()?.ToImmtbl();
+                CreateNoteInternalDirsPair = src.GetCreateNoteInternalDirsPair()?.ToImmtbl();
 
                 commandsMap = src.GetCommandsMap()?.Clone();
                 CommandsMap = commandsMap?.AsImmtblDictnr();
             }
 
-            public string SrcNote { get; }
-            public string SrcDirIdnf { get; }
-            public string SrcNoteIdx { get; }
-            public string DestnNote { get; }
-            public string DestnDirIdnf { get; }
-            public string DestnNoteIdx { get; }
-            public string IsPinned { get; }
-            public string SortIdx { get; }
-            public string OpenMdFile { get; }
-            public string CreateNoteFilesDirsPair { get; }
-            public string CreateNoteInternalDirsPair { get; }
+            public ArgOptionT SrcNote { get; }
+            public ArgOptionT SrcDirIdnf { get; }
+            public ArgOptionT SrcNoteIdx { get; }
+            public ArgOptionT DestnNote { get; }
+            public ArgOptionT DestnDirIdnf { get; }
+            public ArgOptionT DestnNoteIdx { get; }
+            public ArgOptionT IsPinned { get; }
+            public ArgOptionT SortIdx { get; }
+            public ArgOptionT OpenMdFile { get; }
+            public ArgOptionT CreateNoteFilesDirsPair { get; }
+            public ArgOptionT CreateNoteInternalDirsPair { get; }
 
-            public ReadOnlyDictionary<CmdCommand, CmdCommandTupleT> CommandsMap { get; }
+            public ReadOnlyDictionary<CmdCommand, ArgOptionT> CommandsMap { get; }
 
-            public ClnblDictionary<CmdCommand, ICmdCommandTupleT, CmdCommandTupleT, NoteDirsPairConfigMtbl.CmdCommandTupleT> GetCommandsMap() => commandsMap;
+            public IArgOptionT GetSrcNote() => SrcNote;
+            public IArgOptionT GetSrcDirIdnf() => SrcDirIdnf;
+            public IArgOptionT GetSrcNoteIdx() => SrcNoteIdx;
+            public IArgOptionT GetDestnNote() => DestnNote;
+            public IArgOptionT GetDestnDirIdnf() => DestnDirIdnf;
+            public IArgOptionT GetDestnNoteIdx() => DestnNoteIdx;
+            public IArgOptionT GetIsPinned() => IsPinned;
+            public IArgOptionT GetSortIdx() => SortIdx;
+            public IArgOptionT GetOpenMdFile() => OpenMdFile;
+            public IArgOptionT GetCreateNoteFilesDirsPair() => CreateNoteFilesDirsPair;
+            public IArgOptionT GetCreateNoteInternalDirsPair() => CreateNoteInternalDirsPair;
+
+            public ClnblDictionary<CmdCommand, IArgOptionT, ArgOptionT, NoteDirsPairConfigMtbl.ArgOptionT> GetCommandsMap() => commandsMap;
         }
 
         public class DirNamesT : IDirNamesT

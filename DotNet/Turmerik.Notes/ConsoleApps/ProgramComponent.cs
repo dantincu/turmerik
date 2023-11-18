@@ -74,7 +74,7 @@ namespace Turmerik.Notes.ConsoleApps
             };
 
         private ProgramArgs GetArgs(
-            string[] rawArgs) => parser.Parse(
+            string[] rawArgs) => config.GetArgOpts().With(argOpts => parser.Parse(
                 new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
                 {
                     ArgsBuilder = data => parser.HandleArgs(
@@ -83,91 +83,61 @@ namespace Turmerik.Notes.ConsoleApps
                             Data = data,
                             ThrowOnTooManyArgs = true,
                             ThrowOnUnknownFlag = true,
-                            ItemHandlersArr = parser.ArgsItemOpts(
-                                data, data =>
+                            ItemHandlersArr = parser.ArgsItemOpts(data, data =>
                                 {
-                                    var args = data.Args;
                                     string argItem = data.ArgItem;
+                                    var commands = config.GetArgOpts().GetCommandsMap();
 
-                                    switch (data.TotalCount)
+                                    var matchingKvp = commands.SingleOrDefault(
+                                        kvp => kvp.Value.Matches(argItem));
+
+                                    if (matchingKvp.Key > 0)
                                     {
-                                        case 1:
-
-                                            var matchingKvp = config.GetArgOpts().GetCommandsMap().SingleOrDefault(
-                                                kvp => kvp.Value.ShortArgValue == argItem || kvp.Value.FullArgValue == argItem);
-
-                                            if (matchingKvp.Key > 0)
-                                            {
-                                                args.Command = matchingKvp.Key;
-                                            }
-                                            else
-                                            {
-                                                throw new ArgumentException(
-                                                    $"Unknown command name {argItem}");
-                                            }
-                                            break;
-                                        case 2:
-                                            args.NoteTitle = argItem;
-                                            break;
-                                        default:
-                                            throw new ArgumentException(
-                                                "Too many arguments: expected no more than 1 non-flag argument after the command name");
+                                        data.Args.Command = matchingKvp.Key;
                                     }
-                                }).Arr(),
-                            FlagHandlersMap = new Dictionary<string, ConsoleArgsFlagOpts<ProgramArgs>>
-                            {
+                                    else
+                                    {
+                                        throw new ArgumentException(
+                                            $"Unknown command name {argItem}");
+                                    }
+                                }).Arr(parser.ArgsItemOpts(data, data =>
                                 {
-                                    config.GetArgOpts().SrcNote,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.SrcNote = data.ArgFlagValue)
-                                },
-                                {
-                                    config.GetArgOpts().SrcDirIdnf,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.SrcDirIdnf = data.ArgFlagValue!.Single())
-                                },
-                                {
-                                    config.GetArgOpts().SrcNoteIdx,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.SrcNoteIdx = data.ArgFlagValue)
-                                },
-                                {
-                                    config.GetArgOpts().DestnNote,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.DestnNote = data.ArgFlagValue)
-                                },
-                                {
-                                    config.GetArgOpts().DestnDirIdnf,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.DestnDirIdnf = data.ArgFlagValue!.Single())
-                                },
-                                {
-                                    config.GetArgOpts().DestnNoteIdx,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.DestnNoteIdx = data.ArgFlagValue)
-                                },
-                                {
-                                    config.GetArgOpts().SortIdx,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.SortIdx = int.Parse(data.ArgFlagValue!.Single()))
-                                },
-                                {
-                                    config.GetArgOpts().OpenMdFile,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.OpenMdFile = true, true)
-                                },
-                                {
-                                    config.GetArgOpts().CreateNoteFilesDirsPair,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.CreateNoteFilesDirsPair = true, true)
-                                },
-                                {
-                                    config.GetArgOpts().CreateNoteInternalDirsPair,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.CreateNoteInternalDirsPair = true, true)
-                                },
-                            }
+                                    data.Args.NoteTitle = data.ArgItem;
+                                })),
+                            FlagHandlersArr = [
+                                ArgsFlagOpts(data, argOpts.GetSrcNote(),
+                                    data => data.Args.SrcNote = data.ArgFlagValue),
+                                ArgsFlagOpts(data, argOpts.GetSrcDirIdnf(),
+                                    data => data.Args.SrcDirIdnf = data.ArgFlagValue!.Single()),
+                                ArgsFlagOpts(data, argOpts.GetSrcNoteIdx(),
+                                    data => data.Args.SrcNoteIdx = data.ArgFlagValue),
+                                ArgsFlagOpts(data, argOpts.GetDestnNote(),
+                                    data => data.Args.DestnNote = data.ArgFlagValue),
+                                ArgsFlagOpts(data, argOpts.GetDestnDirIdnf(),
+                                    data => data.Args.DestnDirIdnf = data.ArgFlagValue!.Single()),
+                                ArgsFlagOpts(data, argOpts.GetDestnNoteIdx(),
+                                    data => data.Args.DestnNoteIdx = data.ArgFlagValue),
+                                ArgsFlagOpts(data, argOpts.GetIsPinned(),
+                                    data => data.Args.IsPinned = true, true),
+                                ArgsFlagOpts(data, argOpts.GetSortIdx(),
+                                    data => data.Args.SortIdx = int.Parse(data.ArgFlagValue!.Single())),
+                                ArgsFlagOpts(data, argOpts.GetOpenMdFile(),
+                                    data => data.Args.OpenMdFile = true, true),
+                                ArgsFlagOpts(data, argOpts.GetCreateNoteFilesDirsPair(),
+                                    data => data.Args.CreateNoteFilesDirsPair = true, true),
+                                ArgsFlagOpts(data, argOpts.GetCreateNoteInternalDirsPair(),
+                                    data => data.Args.CreateNoteInternalDirsPair = true, true)
+                            ]
                         })
-                }).Args;
+                })).Args;
+
+        private ConsoleArgsFlagOpts<ProgramArgs> ArgsFlagOpts(
+            ConsoleArgsParserData<ProgramArgs> data,
+            NoteDirsPairConfig.IArgOptionT option,
+            Action<ConsoleArgsParserData<ProgramArgs>> action,
+            bool shouldNotHaveValue = false) => parser.ArgsFlagOpts(data,
+                option.ToStrArr(),
+                action,
+                shouldNotHaveValue);
     }
 }

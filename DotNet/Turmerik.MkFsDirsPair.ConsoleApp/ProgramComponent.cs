@@ -100,24 +100,14 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
                                 data, data => data.Args.ShortDirName = data.ArgItem).Arr(
                                     parser.ArgsItemOpts(data, data => data.Args.Title = data.ArgItem),
                                     parser.ArgsItemOpts(data, data => data.Args.FullDirNameJoinStr = data.ArgItem)),
-                            FlagHandlersMap = new Dictionary<string, ConsoleArgsFlagOpts<ProgramArgs>>
-                            {
-                                {
-                                    config.ArgOpts.WorkDir,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.WorkDir = data.ArgFlagValue.Single())
-                                },
-                                {
-                                    config.ArgOpts.OpenMdFile,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.OpenMdFile = true, true)
-                                },
-                                {
-                                    config.ArgOpts.SkipMdFileCreation,
-                                    parser.ArgsFlagOpts(data,
-                                        data => data.Args.SkipMdFileCreation = true, true)
-                                }
-                            }
+                            FlagHandlersArr = [
+                                parser.ArgsFlagOpts(data, config.ArgOpts.WorkDir.Arr(),
+                                    data => data.Args.WorkDir = data.ArgFlagValue.Single()),
+                                parser.ArgsFlagOpts(data, config.ArgOpts.OpenMdFile.Arr(),
+                                    data => data.Args.OpenMdFile = true, true),
+                                parser.ArgsFlagOpts(data, config.ArgOpts.SkipMdFileCreation.Arr(),
+                                    data => data.Args.SkipMdFileCreation = true, true)
+                            ]
                         })
                     }).Args;
     }

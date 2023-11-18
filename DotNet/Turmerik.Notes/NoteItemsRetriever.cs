@@ -16,7 +16,7 @@ namespace Turmerik.Notes
     public interface INoteItemsRetriever
     {
         INoteDirsPairConfig Config { get; }
-        NoteDirsPairConfig.IArgOptionsT ArgOptsCfg { get; }
+        NoteDirsPairConfig.IArgOptionsAggT ArgOptsCfg { get; }
         NoteDirsPairConfig.IDirNamesT DirNamesCfg { get; }
         NoteDirsPairConfig.IDirNameIdxesT NoteDirNameIdxesCfg { get; }
         NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }
@@ -70,7 +70,7 @@ namespace Turmerik.Notes
         }
 
         public INoteDirsPairConfig Config { get; }
-        public NoteDirsPairConfig.IArgOptionsT ArgOptsCfg { get; }
+        public NoteDirsPairConfig.IArgOptionsAggT ArgOptsCfg { get; }
         public NoteDirsPairConfig.IDirNamesT DirNamesCfg { get; }
         public NoteDirsPairConfig.IDirNameIdxesT NoteDirNameIdxesCfg { get; }
         public NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }

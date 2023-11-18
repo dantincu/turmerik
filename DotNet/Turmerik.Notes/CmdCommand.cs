@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.Notes.ConsoleApps
+namespace Turmerik.Notes
 {
     public enum CmdCommand
     {
-        ListNotes = 0,
+        Help = 1,
+        ListNotes,
         CreateNoteBook,
         CreateNoteBookInternal,
         CreateNote,

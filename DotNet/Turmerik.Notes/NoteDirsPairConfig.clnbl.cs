@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Notes.ConsoleApps;
 using Turmerik.Utility;
 
 namespace Turmerik.Notes
@@ -10,8 +9,9 @@ namespace Turmerik.Notes
     {
         int? FileNameMaxLength { get; }
         bool? SerializeToJson { get; }
+        bool? AllowGetRequestsToPersistChanges { get; }
         string? TrmrkGuidInputName { get; }
-        NoteDirsPairConfig.IArgOptionsT GetArgOpts();
+        NoteDirsPairConfig.IArgOptionsAggT GetArgOpts();
         NoteDirsPairConfig.IDirNamesT GetDirNames();
         NoteDirsPairConfig.IDirNameIdxesT GetNoteDirNameIdxes();
         NoteDirsPairConfig.IDirNameIdxesT GetNoteInternalDirNameIdxes();
@@ -21,28 +21,28 @@ namespace Turmerik.Notes
 
     public static class NoteDirsPairConfig
     {
-        public interface ICmdCommandTupleT
+        public interface IArgOptionT
         {
-            CmdCommand? Value { get; }
-            string FullArgValue { get; }
-            string ShortArgValue { get; }
+            CmdCommand? Command { get; }
+            string FullArg { get; }
+            string ShortArg { get; }
         }
 
-        public interface IArgOptionsT
+        public interface IArgOptionsAggT
         {
-            string SrcNote { get; }
-            string SrcDirIdnf { get; }
-            string SrcNoteIdx { get; }
-            string DestnNote { get; }
-            string DestnDirIdnf { get; }
-            string DestnNoteIdx { get; }
-            string IsPinned { get; }
-            string SortIdx { get; }
-            string OpenMdFile { get; }
-            string CreateNoteFilesDirsPair { get; }
-            string CreateNoteInternalDirsPair { get; }
+            IArgOptionT GetSrcNote();
+            IArgOptionT GetSrcDirIdnf();
+            IArgOptionT GetSrcNoteIdx();
+            IArgOptionT GetDestnNote();
+            IArgOptionT GetDestnDirIdnf();
+            IArgOptionT GetDestnNoteIdx();
+            IArgOptionT GetIsPinned();
+            IArgOptionT GetSortIdx();
+            IArgOptionT GetOpenMdFile();
+            IArgOptionT GetCreateNoteFilesDirsPair();
+            IArgOptionT GetCreateNoteInternalDirsPair();
 
-            ClnblDictionary<CmdCommand, ICmdCommandTupleT, NoteDirsPairConfigImmtbl.CmdCommandTupleT, NoteDirsPairConfigMtbl.CmdCommandTupleT> GetCommandsMap();
+            ClnblDictionary<CmdCommand, IArgOptionT, NoteDirsPairConfigImmtbl.ArgOptionT, NoteDirsPairConfigMtbl.ArgOptionT> GetCommandsMap();
         }
 
         public interface IDirNamesT
@@ -84,11 +84,11 @@ namespace Turmerik.Notes
         public static NoteDirsPairConfigImmtbl ToImmtbl(
             this INoteDirsPairConfig src) => new NoteDirsPairConfigImmtbl(src);
 
-        public static NoteDirsPairConfigImmtbl.CmdCommandTupleT ToImmtbl(
-            this ICmdCommandTupleT src) => new NoteDirsPairConfigImmtbl.CmdCommandTupleT(src);
+        public static NoteDirsPairConfigImmtbl.ArgOptionT ToImmtbl(
+            this IArgOptionT src) => new NoteDirsPairConfigImmtbl.ArgOptionT(src);
 
-        public static NoteDirsPairConfigImmtbl.ArgOptionsT ToImmtbl(
-            this IArgOptionsT src) => new NoteDirsPairConfigImmtbl.ArgOptionsT(src);
+        public static NoteDirsPairConfigImmtbl.ArgOptionsAggT ToImmtbl(
+            this IArgOptionsAggT src) => new NoteDirsPairConfigImmtbl.ArgOptionsAggT(src);
 
         public static NoteDirsPairConfigImmtbl.DirNamesT ToImmtbl(
             this IDirNamesT src) => new NoteDirsPairConfigImmtbl.DirNamesT(src);
@@ -105,11 +105,11 @@ namespace Turmerik.Notes
         public static NoteDirsPairConfigMtbl ToMtbl(
             this INoteDirsPairConfig src) => new NoteDirsPairConfigMtbl(src);
 
-        public static NoteDirsPairConfigMtbl.CmdCommandTupleT ToMtbl(
-            this ICmdCommandTupleT src) => new NoteDirsPairConfigMtbl.CmdCommandTupleT(src);
+        public static NoteDirsPairConfigMtbl.ArgOptionT ToMtbl(
+            this IArgOptionT src) => new NoteDirsPairConfigMtbl.ArgOptionT(src);
 
-        public static NoteDirsPairConfigMtbl.ArgOptionsT ToMtbl(
-            this IArgOptionsT src) => new NoteDirsPairConfigMtbl.ArgOptionsT(src);
+        public static NoteDirsPairConfigMtbl.ArgOptionsAggT ToMtbl(
+            this IArgOptionsAggT src) => new NoteDirsPairConfigMtbl.ArgOptionsAggT(src);
 
         public static NoteDirsPairConfigMtbl.DirNamesT ToMtbl(
             this IDirNamesT src) => new NoteDirsPairConfigMtbl.DirNamesT(src);
@@ -122,5 +122,12 @@ namespace Turmerik.Notes
 
         public static NoteDirsPairConfigMtbl.FileContentsT ToMtbl(
             this IFileContentsT src) => new NoteDirsPairConfigMtbl.FileContentsT(src);
+
+        public static bool Matches(
+            this IArgOptionT option,
+            string rawArg) => option.ShortArg == rawArg || option.FullArg == rawArg;
+
+        public static string[] ToStrArr(
+            this IArgOptionT option) => new string[] { option.ShortArg, option.FullArg };
     }
 }

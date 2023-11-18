@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
-using Turmerik.Notes.ConsoleApps;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
@@ -50,7 +49,7 @@ namespace Turmerik.Notes
         }
 
         public INoteDirsPairConfig Config { get; }
-        public NoteDirsPairConfig.IArgOptionsT ArgOptsCfg { get; }
+        public NoteDirsPairConfig.IArgOptionsAggT ArgOptsCfg { get; }
         public NoteDirsPairConfig.IDirNamesT DirNamesCfg { get; }
         public NoteDirsPairConfig.IDirNameIdxesT NoteDirNameIdxesCfg { get; }
         public NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }

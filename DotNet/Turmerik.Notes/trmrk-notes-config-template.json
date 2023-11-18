@@ -4,63 +4,98 @@
   "ClientRedirectUrl": null,
   "NoteDirPairs": {
     "FileNameMaxLength": 100,
-    // "SerializeToJson": true,
+    "SerializeToJson": true,
+    "AllowGetRequestsToPersistChanges": true,
     "TrmrkGuidInputName": "trmrk_guid",
     "ArgOpts": {
-      "SrcNote": "fn",
-      "SrcDirIdnf": "fid",
-      "SrcNoteIdx": "fnx",
-      "DestnNote": "tn",
-      "DestnDirIdnf": "tid",
-      "DestnNoteIdx": "tnx",
-      "SortIdx": "si",
-      "OpenMdFile": "o",
-      "CreateNoteFilesDirsPair": "f",
-      "CreateNoteInternalDirsPair": "i",
+      "SrcNote": {
+        "FullArg": "from-note",
+        "ShortArg": "fn"
+      },
+      "SrcDirIdnf": {
+        "FullArg": "from-dir-idnf",
+        "ShortArg": "fid"
+      },
+      "SrcNoteIdx": {
+        "FullArg": "from-note-idx",
+        "ShortArg": "fnx"
+      },
+      "DestnNote": {
+        "FullArg": "to-note",
+        "ShortArg": "tn"
+      },
+      "DestnDirIdnf": {
+        "FullArg": "to-dir-idnf",
+        "ShortArg": "tid"
+      },
+      "DestnNoteIdx": {
+        "FullArg": "to-note-idx",
+        "ShortArg": "tnx"
+      },
+      "SortIdx": {
+        "FullArg": "sort-idx",
+        "ShortArg": "si"
+      },
+      "OpenMdFile": {
+        "FullArg": "open-md-file",
+        "ShortArg": "o"
+      },
+      "CreateNoteFilesDirsPair": {
+        "FullArg": "note-files",
+        "ShortArg": "f"
+      },
+      "CreateNoteInternalDirsPair": {
+        "FullArg": "note-int",
+        "ShortArg": "i"
+      },
       "CommandsMap": {
+        "Help": {
+          "FullArg": "help",
+          "ShortArg": "h"
+        },
         "ListNotes": {
-          "FullArgValue": "list-notes",
-          "ShortArgValue": "ls"
+          "FullArg": "list-notes",
+          "ShortArg": "ls"
         },
         "CreateNoteBook": {
-          "FullArgValue": "create-note-book",
-          "ShortArgValue": "bk"
+          "FullArg": "create-note-book",
+          "ShortArg": "bk"
         },
         "CreateNoteBookInternal": {
-          "FullArgValue": "create-note-book-internal",
-          "ShortArgValue": "bki"
+          "FullArg": "create-note-book-int",
+          "ShortArg": "bki"
         },
         "CreateNote": {
-          "FullArgValue": "create-note",
-          "ShortArgValue": "mk"
+          "FullArg": "create-note",
+          "ShortArg": "mk"
         },
         "CreateNoteInternal": {
-          "FullArgValue": "create-note-internal",
-          "ShortArgValue": "mki"
+          "FullArg": "create-note-int",
+          "ShortArg": "mki"
         },
         "CopyNotes": {
-          "FullArgValue": "copy-notes",
-          "ShortArgValue": "cp"
+          "FullArg": "copy-notes",
+          "ShortArg": "cp"
         },
         "DeleteNotes": {
-          "FullArgValue": "delete-notes",
-          "ShortArgValue": "dl"
+          "FullArg": "delete-notes",
+          "ShortArg": "dl"
         },
         "MoveNotes": {
-          "FullArgValue": "move-notes",
-          "ShortArgValue": "mv"
+          "FullArg": "move-notes",
+          "ShortArg": "mv"
         },
         "RenameNote": {
-          "FullArgValue": "rename-note",
-          "ShortArgValue": "rn"
+          "FullArg": "rename-note",
+          "ShortArg": "rn"
         },
         "NormalizeSortIndexes": {
-          "FullArgValue": "norm-sort-idxes",
-          "ShortArgValue": "normsi"
+          "FullArg": "norm-sort-idxes",
+          "ShortArg": "normsi"
         },
         "NormalizeNoteIndexes": {
-          "FullArgValue": "norm-note-idxes",
-          "ShortArgValue": "normnx"
+          "FullArg": "norm-note-idxes",
+          "ShortArg": "normnx"
         }
       }
     },

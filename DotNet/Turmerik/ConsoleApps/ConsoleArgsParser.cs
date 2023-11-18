@@ -15,6 +15,7 @@ namespace Turmerik.ConsoleApps
 
         ConsoleArgsFlagOpts<TArgsMtbl> ArgsFlagOpts<TArgsMtbl>(
             ConsoleArgsParserData<TArgsMtbl> data,
+            string[] matchingArgs,
             Action<ConsoleArgsParserData<TArgsMtbl>> handler,
             bool shouldNotHaveValue = false);
 
@@ -28,7 +29,7 @@ namespace Turmerik.ConsoleApps
 
         void HandleFlagArgs<TArgsMtbl>(
             ConsoleArgsParserData<TArgsMtbl> data,
-            Dictionary<string, ConsoleArgsFlagOpts<TArgsMtbl>> handlersMap,
+            ConsoleArgsFlagOpts<TArgsMtbl>[] handlersArr,
             bool throwOnUnknownFlag = true);
 
         ConsoleArgsParserData<TArgsMtbl> Parse<TArgsMtbl>(
@@ -57,10 +58,12 @@ namespace Turmerik.ConsoleApps
 
         public ConsoleArgsFlagOpts<TArgsMtbl> ArgsFlagOpts<TArgsMtbl>(
             ConsoleArgsParserData<TArgsMtbl> data,
+            string[] matchingArgs,
             Action<ConsoleArgsParserData<TArgsMtbl>> handler,
             bool shouldNotHaveValue = false) => new ConsoleArgsFlagOpts<TArgsMtbl>
             {
                 Handler = handler,
+                MatchingArgs = matchingArgs,
                 ShouldNotHaveValue = shouldNotHaveValue
             };
 
@@ -72,7 +75,7 @@ namespace Turmerik.ConsoleApps
             if (data.ArgFlagName != null)
             {
                 HandleFlagArgs(data,
-                    opts.FlagHandlersMap,
+                    opts.FlagHandlersArr,
                     opts.ThrowOnUnknownFlag);
             }
             else
@@ -102,12 +105,16 @@ namespace Turmerik.ConsoleApps
 
         public void HandleFlagArgs<TArgsMtbl>(
             ConsoleArgsParserData<TArgsMtbl> data,
-            Dictionary<string, ConsoleArgsFlagOpts<TArgsMtbl>> handlersMap,
+            ConsoleArgsFlagOpts<TArgsMtbl>[] handlersArr,
             bool throwOnUnknownFlag = true)
         {
             var argFlagName = data.ArgFlagName;
 
-            if (handlersMap.TryGetValue(argFlagName, out var handler))
+            var handler = handlersArr.FirstOrDefault(
+                item => item.MatchingArgs.Contains(
+                    argFlagName));
+
+            if (handler != null)
             {
                 if (handler.ShouldNotHaveValue)
                 {
