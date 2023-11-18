@@ -16,7 +16,7 @@ namespace Turmerik.Notes
         DeleteNotes,
         MoveNotes,
         RenameNote,
-        NormalizeSortIndexes,
-        NormalizeNoteIndexes,
+        NormalizeNote,
+        NormalizeNoteIdxes,
     }
 }

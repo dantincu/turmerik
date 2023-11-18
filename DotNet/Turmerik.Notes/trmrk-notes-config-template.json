@@ -89,11 +89,11 @@
           "FullArg": "rename-note",
           "ShortArg": "rn"
         },
-        "NormalizeSortIndexes": {
-          "FullArg": "norm-sort-idxes",
-          "ShortArg": "normsi"
+        "NormalizeNote": {
+          "FullArg": "norm-note",
+          "ShortArg": "normn"
         },
-        "NormalizeNoteIndexes": {
+        "NormalizeNoteIdxes": {
           "FullArg": "norm-note-idxes",
           "ShortArg": "normnx"
         }
