@@ -53,7 +53,19 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             NormalizeArgs(args);
 
             var opts = GetDirsPairOpts(args);
-            await dirsPairCreator.CreateDirsPairAsync(opts);
+            var dirsPair = await dirsPairCreator.CreateDirsPairAsync(opts);
+
+            if (opts.OpenMdFile)
+            {
+                var shortNameDir = dirsPair.First();
+                var file = shortNameDir.FolderFiles.Single();
+
+                string filePath = Path.Combine(
+                    shortNameDir.Idnf,
+                    file.Name);
+
+                ProcessH.OpenWithDefaultProgramIfNotNull(filePath);
+            }
         }
 
         private DirsPairOpts GetDirsPairOpts(
@@ -61,6 +73,7 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             {
                 PrIdnf = args.WorkDir,
                 Title = args.Title,
+                OpenMdFile = args.OpenMdFile,
                 MaxFsEntryNameLength = config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH,
                 ShortDirName = args.ShortDirName,
                 FullDirNamePart = args.FullDirNamePart,

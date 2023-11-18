@@ -8,6 +8,7 @@ namespace Turmerik.Notes
     {
         public string PrIdnf { get; set; }
         public string Title { get; set; }
+        public bool OpenMdFile { get; set; }
         public int MaxFsEntryNameLength { get; set; }
         public string ShortDirName { get; set; }
         public string FullDirNamePart { get; set; }
