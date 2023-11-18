@@ -164,5 +164,42 @@ namespace Turmerik
 
             return val;
         }
+
+        public static TOutVal BothNullOr<TInVal, TOutVal>(
+            TInVal firstVal, TInVal secondVal,
+            Func<TInVal, TInVal, TOutVal> retValFactory,
+            Func<TInVal, TOutVal> secondValNullFactory = null,
+            Func<TInVal, TOutVal> firstValNullFactory = null,
+            Func<TOutVal> bothValuesNullFactory = null)
+        {
+            TOutVal retVal;
+
+            if (firstVal != null)
+            {
+                if (secondVal != null)
+                {
+                    retVal = retValFactory(
+                        firstVal, secondVal);
+                }
+                else if (secondValNullFactory != null)
+                {
+                    retVal = secondValNullFactory(firstVal);
+                }
+                else
+                {
+                    retVal = default;
+                }
+            }
+            else if (firstValNullFactory != null)
+            {
+                retVal = firstValNullFactory(secondVal);
+            }
+            else
+            {
+                retVal = default;
+            }
+
+            return retVal;
+        }
     }
 }

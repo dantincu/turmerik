@@ -20,8 +20,8 @@ namespace Turmerik.Notes.ConsoleApps
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleArgsParser parser;
         private readonly INoteDirsPairCreator dirsPairCreator;
-        private readonly AppConfigCoreMtbl appConfig;
-        private readonly NoteDirsPairConfigMtbl config;
+        private readonly IAppConfigCore appConfig;
+        private readonly INoteDirsPairConfig config;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -41,7 +41,7 @@ namespace Turmerik.Notes.ConsoleApps
             appConfig = jsonConversion.Adapter.Deserialize<AppConfigCoreMtbl>(
                 File.ReadAllText(configFilePath));
 
-            config = appConfig.NoteDirPairs;
+            config = appConfig.GetNoteDirPairs();
             dirsPairCreator = dirsPairCreatorFactory.Creator(config);
         }
 
@@ -93,7 +93,7 @@ namespace Turmerik.Notes.ConsoleApps
                                     {
                                         case 1:
 
-                                            var matchingKvp = config.ArgOpts.CommandsMap.SingleOrDefault(
+                                            var matchingKvp = config.GetArgOpts().GetCommandsMap().SingleOrDefault(
                                                 kvp => kvp.Value.ShortArgValue == argItem || kvp.Value.FullArgValue == argItem);
 
                                             if (matchingKvp.Key > 0)
@@ -117,52 +117,52 @@ namespace Turmerik.Notes.ConsoleApps
                             FlagHandlersMap = new Dictionary<string, ConsoleArgsFlagOpts<ProgramArgs>>
                             {
                                 {
-                                    config.ArgOpts.SrcNote,
+                                    config.GetArgOpts().SrcNote,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.SrcNote = data.ArgFlagValue)
                                 },
                                 {
-                                    config.ArgOpts.SrcDirIdnf,
+                                    config.GetArgOpts().SrcDirIdnf,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.SrcDirIdnf = data.ArgFlagValue!.Single())
                                 },
                                 {
-                                    config.ArgOpts.SrcNoteIdx,
+                                    config.GetArgOpts().SrcNoteIdx,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.SrcNoteIdx = data.ArgFlagValue)
                                 },
                                 {
-                                    config.ArgOpts.DestnNote,
+                                    config.GetArgOpts().DestnNote,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.DestnNote = data.ArgFlagValue)
                                 },
                                 {
-                                    config.ArgOpts.DestnDirIdnf,
+                                    config.GetArgOpts().DestnDirIdnf,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.DestnDirIdnf = data.ArgFlagValue!.Single())
                                 },
                                 {
-                                    config.ArgOpts.DestnNoteIdx,
+                                    config.GetArgOpts().DestnNoteIdx,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.DestnNoteIdx = data.ArgFlagValue)
                                 },
                                 {
-                                    config.ArgOpts.SortIdx,
+                                    config.GetArgOpts().SortIdx,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.SortIdx = int.Parse(data.ArgFlagValue!.Single()))
                                 },
                                 {
-                                    config.ArgOpts.OpenMdFile,
+                                    config.GetArgOpts().OpenMdFile,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.OpenMdFile = true, true)
                                 },
                                 {
-                                    config.ArgOpts.CreateNoteFilesDirsPair,
+                                    config.GetArgOpts().CreateNoteFilesDirsPair,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.CreateNoteFilesDirsPair = true, true)
                                 },
                                 {
-                                    config.ArgOpts.CreateNoteInternalDirsPair,
+                                    config.GetArgOpts().CreateNoteInternalDirsPair,
                                     parser.ArgsFlagOpts(data,
                                         data => data.Args.CreateNoteInternalDirsPair = true, true)
                                 },

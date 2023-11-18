@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Turmerik.Helpers;
 using Turmerik.Notes.ConsoleApps;
+using Turmerik.Utility;
 using static Turmerik.Notes.NoteDirsPairConfig;
 
 namespace Turmerik.Notes
@@ -67,6 +68,8 @@ namespace Turmerik.Notes
 
         public class ArgOptionsT : IArgOptionsT
         {
+            private ClnblDictionary<CmdCommand, ICmdCommandTupleT, NoteDirsPairConfigImmtbl.CmdCommandTupleT, CmdCommandTupleT> commandsMap;
+
             public ArgOptionsT()
             {
             }
@@ -85,9 +88,8 @@ namespace Turmerik.Notes
                 CreateNoteFilesDirsPair = src.CreateNoteFilesDirsPair;
                 CreateNoteInternalDirsPair = src.CreateNoteInternalDirsPair;
 
-                CommandsMap = src.GetCommandsMap()?.Select(
-                    kvp => new KeyValuePair<CmdCommand, CmdCommandTupleT>(
-                        kvp.Key, kvp.Value?.ToMtbl())).Dictnr();
+                commandsMap = src.GetCommandsMap()?.Clone();
+                CommandsMap = commandsMap?.AsMtblDictnr();
             }
 
             public string SrcNote { get; set; }
@@ -104,8 +106,7 @@ namespace Turmerik.Notes
 
             public Dictionary<CmdCommand, CmdCommandTupleT> CommandsMap { get; set; }
 
-            public IEnumerable<KeyValuePair<CmdCommand, ICmdCommandTupleT>> GetCommandsMap() => CommandsMap?.Select(
-                kvp => new KeyValuePair<CmdCommand, ICmdCommandTupleT>(kvp.Key, kvp.Value));
+            public ClnblDictionary<CmdCommand, ICmdCommandTupleT, NoteDirsPairConfigImmtbl.CmdCommandTupleT, CmdCommandTupleT> GetCommandsMap() => commandsMap;
         }
 
         public class DirNamesT : IDirNamesT

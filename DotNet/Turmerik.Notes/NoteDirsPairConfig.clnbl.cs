@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Turmerik.Notes.ConsoleApps;
+using Turmerik.Utility;
 
 namespace Turmerik.Notes
 {
@@ -41,7 +42,7 @@ namespace Turmerik.Notes
             string CreateNoteFilesDirsPair { get; }
             string CreateNoteInternalDirsPair { get; }
 
-            IEnumerable<KeyValuePair<CmdCommand, ICmdCommandTupleT>> GetCommandsMap();
+            ClnblDictionary<CmdCommand, ICmdCommandTupleT, NoteDirsPairConfigImmtbl.CmdCommandTupleT, NoteDirsPairConfigMtbl.CmdCommandTupleT> GetCommandsMap();
         }
 
         public interface IDirNamesT
