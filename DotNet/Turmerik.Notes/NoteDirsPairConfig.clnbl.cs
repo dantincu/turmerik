@@ -26,19 +26,25 @@ namespace Turmerik.Notes
             CmdCommand? Command { get; }
             string FullArg { get; }
             string ShortArg { get; }
+            string Description { get; }
         }
 
         public interface IArgOptionsAggT
         {
+            IArgOptionT GetHelp();
             IArgOptionT GetSrcNote();
             IArgOptionT GetSrcDirIdnf();
             IArgOptionT GetSrcNoteIdx();
             IArgOptionT GetDestnNote();
             IArgOptionT GetDestnDirIdnf();
             IArgOptionT GetDestnNoteIdx();
+            IArgOptionT GetNotesOrder();
+            IArgOptionT GetNoteIdxesOrder();
             IArgOptionT GetIsPinned();
             IArgOptionT GetSortIdx();
+            IArgOptionT GetNoteIdx();
             IArgOptionT GetOpenMdFile();
+            IArgOptionT GetReorderNotes();
             IArgOptionT GetCreateNoteFilesDirsPair();
             IArgOptionT GetCreateNoteInternalDirsPair();
 
@@ -50,9 +56,17 @@ namespace Turmerik.Notes
             string NoteBook { get; }
             string NoteFiles { get; }
             string NoteInternals { get; }
-            string NoteInternalsPfx { get; }
-            string NoteItemsPfx { get; }
+
+            IDirNamePfxesT GetNoteInternalsPfxes();
+            IDirNamePfxesT GetNoteItemsPfxes();
+        }
+
+        public interface IDirNamePfxesT
+        {
+            string MainPfx { get; }
+            string AltPfx { get; }
             string JoinStr { get; }
+            bool? UseAltPfx { get; }
         }
 
         public interface IDirNameIdxesT
@@ -93,6 +107,9 @@ namespace Turmerik.Notes
         public static NoteDirsPairConfigImmtbl.DirNamesT ToImmtbl(
             this IDirNamesT src) => new NoteDirsPairConfigImmtbl.DirNamesT(src);
 
+        public static NoteDirsPairConfigImmtbl.DirNamePfxesT ToImmtbl(
+            this IDirNamePfxesT src) => new NoteDirsPairConfigImmtbl.DirNamePfxesT(src);
+
         public static NoteDirsPairConfigImmtbl.DirNameIdxesT ToImmtbl(
             this IDirNameIdxesT src) => new NoteDirsPairConfigImmtbl.DirNameIdxesT(src);
 
@@ -113,6 +130,9 @@ namespace Turmerik.Notes
 
         public static NoteDirsPairConfigMtbl.DirNamesT ToMtbl(
             this IDirNamesT src) => new NoteDirsPairConfigMtbl.DirNamesT(src);
+
+        public static NoteDirsPairConfigMtbl.DirNamePfxesT ToMtbl(
+            this IDirNamePfxesT src) => new NoteDirsPairConfigMtbl.DirNamePfxesT(src);
 
         public static NoteDirsPairConfigMtbl.DirNameIdxesT ToMtbl(
             this IDirNameIdxesT src) => new NoteDirsPairConfigMtbl.DirNameIdxesT(src);

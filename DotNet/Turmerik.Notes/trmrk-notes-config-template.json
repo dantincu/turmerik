@@ -32,9 +32,21 @@
         "FullArg": "to-note-idx",
         "ShortArg": "tnx"
       },
+      "NotesOrder": {
+        "FullArg": "notes-order",
+        "ShortArg": "no"
+      },
+      "NoteIdxesOrder": {
+        "FullArg": "notes-idxes-order",
+        "ShortArg": "nxo"
+      },
       "SortIdx": {
         "FullArg": "sort-idx",
         "ShortArg": "si"
+      },
+      "NoteIdx": {
+        "FullArg": "note-idx",
+        "ShortArg": "nx"
       },
       "OpenMdFile": {
         "FullArg": "open-md-file",
@@ -89,6 +101,14 @@
           "FullArg": "rename-note",
           "ShortArg": "rn"
         },
+        "UpdateNote": {
+          "FullArg": "update-note",
+          "ShortArg": "u"
+        },
+        "ReorderNotes": {
+          "FullArg": "reorder-notes",
+          "ShortArg": "ron"
+        },
         "NormalizeNote": {
           "FullArg": "norm-note",
           "ShortArg": "normn"
@@ -96,6 +116,10 @@
         "NormalizeNoteIdxes": {
           "FullArg": "norm-note-idxes",
           "ShortArg": "normnx"
+        },
+        "NormalizeNotesHcy": {
+          "FullArg": "norm-notes-hcy",
+          "ShortArg": "normnh"
         }
       }
     },
@@ -103,9 +127,18 @@
       "NoteBook": "[note-book]",
       "NoteFiles": "[note-files]",
       "NoteInternals": "[note-internals]",
-      "NoteInternalsPfx": "0",
-      "NoteItemsPfx": "",
-      "JoinStr": "-"
+      "NoteInternalsPfxes": {
+        "MainPfx": "0",
+        "AltPfx": "t_0",
+        "JoinStr": "-",
+        "UseAltPfx": false
+      },
+      "NoteItemsPfxes": {
+        "MainPfx": "",
+        "AltPfx": "t_",
+        "JoinStr": "-",
+        "UseAltPfx": false
+      }
     },
     "NoteDirNameIdxes": {
       "MinIdx": 101,

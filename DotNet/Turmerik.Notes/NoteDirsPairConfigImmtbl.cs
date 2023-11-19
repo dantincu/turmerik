@@ -52,11 +52,13 @@ namespace Turmerik.Notes
                 Command = src.Command;
                 FullArg = src.FullArg;
                 ShortArg = src.ShortArg;
+                Description = src.Description;
             }
 
             public CmdCommand? Command { get; }
             public string FullArg { get; }
             public string ShortArg { get; }
+            public string Description { get; }
         }
 
         public class ArgOptionsAggT : IArgOptionsAggT
@@ -65,6 +67,7 @@ namespace Turmerik.Notes
 
             public ArgOptionsAggT(IArgOptionsAggT src)
             {
+                Help = src.GetHelp()?.ToImmtbl();
                 SrcNote = src.GetSrcNote()?.ToImmtbl();
                 SrcDirIdnf = src.GetSrcDirIdnf()?.ToImmtbl();
                 SrcNoteIdx = src.GetSrcNoteIdx()?.ToImmtbl();
@@ -73,7 +76,9 @@ namespace Turmerik.Notes
                 DestnNoteIdx = src.GetDestnNoteIdx()?.ToImmtbl();
                 IsPinned = src.GetIsPinned()?.ToImmtbl();
                 SortIdx = src.GetSortIdx()?.ToImmtbl();
+                NoteIdx = src.GetNoteIdx()?.ToImmtbl();
                 OpenMdFile = src.GetOpenMdFile()?.ToImmtbl();
+                ReorderNotes = src.GetReorderNotes()?.ToImmtbl();
                 CreateNoteFilesDirsPair = src.GetCreateNoteFilesDirsPair()?.ToImmtbl();
                 CreateNoteInternalDirsPair = src.GetCreateNoteInternalDirsPair()?.ToImmtbl();
 
@@ -81,29 +86,39 @@ namespace Turmerik.Notes
                 CommandsMap = commandsMap?.AsImmtblDictnr();
             }
 
+            public ArgOptionT Help { get; }
             public ArgOptionT SrcNote { get; }
             public ArgOptionT SrcDirIdnf { get; }
             public ArgOptionT SrcNoteIdx { get; }
             public ArgOptionT DestnNote { get; }
             public ArgOptionT DestnDirIdnf { get; }
             public ArgOptionT DestnNoteIdx { get; }
+            public ArgOptionT NotesOrder { get; }
+            public ArgOptionT NoteIdxesOrder { get; }
             public ArgOptionT IsPinned { get; }
             public ArgOptionT SortIdx { get; }
+            public ArgOptionT NoteIdx { get; }
             public ArgOptionT OpenMdFile { get; }
+            public ArgOptionT ReorderNotes { get; }
             public ArgOptionT CreateNoteFilesDirsPair { get; }
             public ArgOptionT CreateNoteInternalDirsPair { get; }
 
             public ReadOnlyDictionary<CmdCommand, ArgOptionT> CommandsMap { get; }
 
+            public IArgOptionT GetHelp() => Help;
             public IArgOptionT GetSrcNote() => SrcNote;
             public IArgOptionT GetSrcDirIdnf() => SrcDirIdnf;
             public IArgOptionT GetSrcNoteIdx() => SrcNoteIdx;
             public IArgOptionT GetDestnNote() => DestnNote;
             public IArgOptionT GetDestnDirIdnf() => DestnDirIdnf;
             public IArgOptionT GetDestnNoteIdx() => DestnNoteIdx;
+            public IArgOptionT GetNotesOrder() => NotesOrder;
+            public IArgOptionT GetNoteIdxesOrder() => NoteIdxesOrder;
             public IArgOptionT GetIsPinned() => IsPinned;
             public IArgOptionT GetSortIdx() => SortIdx;
+            public IArgOptionT GetNoteIdx() => NoteIdx;
             public IArgOptionT GetOpenMdFile() => OpenMdFile;
+            public IArgOptionT GetReorderNotes() => ReorderNotes;
             public IArgOptionT GetCreateNoteFilesDirsPair() => CreateNoteFilesDirsPair;
             public IArgOptionT GetCreateNoteInternalDirsPair() => CreateNoteInternalDirsPair;
 
@@ -117,17 +132,35 @@ namespace Turmerik.Notes
                 NoteBook = src.NoteBook;
                 NoteFiles = src.NoteFiles;
                 NoteInternals = src.NoteInternals;
-                NoteInternalsPfx = src.NoteInternalsPfx;
-                NoteItemsPfx = src.NoteItemsPfx;
-                JoinStr = src.JoinStr;
+                NoteInternalsPfxes = src.GetNoteInternalsPfxes()?.ToImmtbl();
+                NoteItemsPfxes = src.GetNoteItemsPfxes()?.ToImmtbl();
             }
 
             public string NoteBook { get; }
             public string NoteFiles { get; }
             public string NoteInternals { get; }
-            public string NoteInternalsPfx { get; }
-            public string NoteItemsPfx { get; }
+
+            public DirNamePfxesT NoteInternalsPfxes { get; }
+            public DirNamePfxesT NoteItemsPfxes { get; }
+
+            public IDirNamePfxesT GetNoteInternalsPfxes() => NoteInternalsPfxes;
+            public IDirNamePfxesT GetNoteItemsPfxes() => NoteInternalsPfxes;
+        }
+
+        public class DirNamePfxesT : IDirNamePfxesT
+        {
+            public DirNamePfxesT(IDirNamePfxesT src)
+            {
+                MainPfx = src.MainPfx;
+                AltPfx = src.AltPfx;
+                UseAltPfx = src.UseAltPfx;
+                JoinStr = src.JoinStr;
+            }
+
+            public string MainPfx { get; }
+            public string AltPfx { get; }
             public string JoinStr { get; }
+            public bool? UseAltPfx { get; }
         }
 
         public class DirNameIdxesT : IDirNameIdxesT

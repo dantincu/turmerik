@@ -22,7 +22,7 @@ namespace Turmerik.Notes
         NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }
         NoteDirsPairConfig.IFileNamesT FileNamesCfg { get; }
         NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }
-        ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> DirNamesRegexMap { get; }
+        ReadOnlyDictionary<NoteDirTypeTuple, Regex> DirNamesRegexMap { get; }
 
         Task<NoteItemsTuple> GetNoteDirPairsAsync(
             string prIdnf);
@@ -41,7 +41,7 @@ namespace Turmerik.Notes
             INoteCfgValuesRetriever noteCfgValuesRetriever,
             INoteJsonDeserializer noteJsonDeserializer,
             INoteDirsPairConfig config,
-            ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> dirNamesRegexMap)
+            ReadOnlyDictionary<NoteDirTypeTuple, Regex> dirNamesRegexMap)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -76,7 +76,7 @@ namespace Turmerik.Notes
         public NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }
         public NoteDirsPairConfig.IFileNamesT FileNamesCfg { get; }
         public NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }
-        public ReadOnlyDictionary<NoteDirCategory, ReadOnlyDictionary<NoteDirType, Regex>> DirNamesRegexMap { get; }
+        public ReadOnlyDictionary<NoteDirTypeTuple, Regex> DirNamesRegexMap { get; }
 
         public async Task<NoteItemsTuple> GetNoteDirPairsAsync(
             string prIdnf)

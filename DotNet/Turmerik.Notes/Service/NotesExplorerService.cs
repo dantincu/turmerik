@@ -40,6 +40,7 @@ namespace Turmerik.Notes.Service
                 PrIdnf = args.DestnDirIdnf,
                 Title = args.NoteTitle,
                 SortIdx = args.SortIdx,
+                NoteIdx = args.NoteIdx,
                 IsPinned = args.IsPinned,
                 OpenMdFile = args.OpenMdFile,
                 CreateNoteFilesDirsPair = args.CreateNoteFilesDirsPair,
@@ -48,7 +49,9 @@ namespace Turmerik.Notes.Service
                 SrcNote = args.SrcNote,
                 SrcNoteIdx = args.SrcNoteIdx,
                 DestnNote = args.DestnNote,
-                DestnNoteIdx = args.DestnNoteIdx
+                DestnNoteIdx = args.DestnNoteIdx,
+                NotesOrder = args.NotesOrder,
+                NoteIdxesOrder = args.NoteIdxesOrder,
             };
     }
 }

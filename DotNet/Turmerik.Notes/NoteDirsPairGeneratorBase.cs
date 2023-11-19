@@ -100,7 +100,8 @@ namespace Turmerik.Notes
                 NoteDirNameIdxesCfg,
                 args.ExistingDirPairs.AllExistingNoteDirIdxes.ToArray());
 
-            string shortDirName = DirNamesCfg.NoteItemsPfx;
+            var noteItemsPfxes = DirNamesCfg.GetNoteItemsPfxes();
+            string shortDirName = noteItemsPfxes.MainPfx;
             shortDirName += noteIdx.ToString(
                 NoteDirNameIdxesCfg.IdxFmt ?? "D1");
 
@@ -110,7 +111,8 @@ namespace Turmerik.Notes
             AddDirsPair(
                 args.DirsList,
                 shortDirName,
-                fullDirNamePart);
+                fullDirNamePart,
+                noteItemsPfxes.JoinStr);
 
             return noteIdx;
         }
@@ -176,7 +178,8 @@ namespace Turmerik.Notes
             List<DriveItemX> itemsList)
         {
             var cfg = DirNamesCfg;
-            string shortDirName = cfg.NoteInternalsPfx;
+            var noteInternalsPfxes = cfg.GetNoteInternalsPfxes();
+            string shortDirName = noteInternalsPfxes.MainPfx;
 
             shortDirName += kvp.Value.ToString(
                 NoteInternalDirNameIdxesCfg.IdxFmt ?? "D1");
@@ -184,8 +187,11 @@ namespace Turmerik.Notes
             string fullDirNamePart = GetInternalDirFullNamePart(
                 cfg, kvp.Key);
 
-            AddDirsPair(itemsList,
-                shortDirName, fullDirNamePart);
+            AddDirsPair(
+                itemsList,
+                shortDirName,
+                fullDirNamePart,
+                noteInternalsPfxes.JoinStr);
         }
 
         protected void AddInternalDirs(
@@ -235,11 +241,13 @@ namespace Turmerik.Notes
         protected DriveItemX[] AddDirsPair(
             List<DriveItemX> itemsList,
             string shortDirName,
-            string fullDirNamePart)
+            string fullDirNamePart,
+            string joinStr)
         {
             var dirsPair = GetDirsPair(
                 shortDirName,
-                fullDirNamePart);
+                fullDirNamePart,
+                joinStr);
 
             itemsList.AddRange(dirsPair);
             return dirsPair;
@@ -247,20 +255,23 @@ namespace Turmerik.Notes
 
         protected DriveItemX[] GetDirsPair(
             string shortDirName,
-            string fullDirNamePart) => new DriveItemX
+            string fullDirNamePart,
+            string joinStr) => new DriveItemX
             {
                 Name = shortDirName,
                 IsFolder = true
             }.Arr(GetFullNameFolder(
                 shortDirName,
-                fullDirNamePart));
+                fullDirNamePart,
+                joinStr));
 
         protected DriveItemX GetFullNameFolder(
             string shortDirName,
-            string fullDirNamePart) => new DriveItemX
+            string fullDirNamePart,
+            string joinStr) => new DriveItemX
             {
                 Name = string.Join(
-                    DirNamesCfg.JoinStr,
+                    joinStr,
                     shortDirName,
                     fullDirNamePart),
                 IsFolder = true,
