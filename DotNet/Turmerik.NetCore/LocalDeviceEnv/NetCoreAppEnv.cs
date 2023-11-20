@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.LocalDevice.Core.Env;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
-namespace Turmerik.LocalDevice.Core.Env
+namespace Turmerik.NetCore.LocalDeviceEnv
 {
     public interface INetCoreAppEnv : IAppEnv
     {

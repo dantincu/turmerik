@@ -7,6 +7,7 @@ namespace Turmerik.Utility
     public interface IAppInstanceStartInfoProvider
     {
         AppInstanceStartInfo Data { get; }
+        public string ProcessDirName { get; }
     }
 
     public class AppInstanceStartInfo
@@ -36,8 +37,13 @@ namespace Turmerik.Utility
             Data = new AppInstanceStartInfo(
                 Guid.NewGuid(),
                 DateTime.UtcNow);
+
+            ProcessDirName = string.Format("[{0}][{1}]",
+                Data.InstanceTicks,
+                Data.InstanceGuidStrNoDashes);
         }
 
         public AppInstanceStartInfo Data { get; }
+        public string ProcessDirName { get; }
     }
 }

@@ -10,6 +10,9 @@ namespace Turmerik.Logging.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
+            services.AddSingleton<IAppLoggerConfig, AppLoggerConfig>();
+            services.AddSingleton<ITrmrkJsonFormatterFactory, TrmrkJsonFormatterFactory>();
+            services.AddSingleton<IAppLoggerCreatorFactory, AppLoggerCreatorFactory>();
             return services;
         }
     }

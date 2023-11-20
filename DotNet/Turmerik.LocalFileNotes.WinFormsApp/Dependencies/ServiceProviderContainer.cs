@@ -29,10 +29,9 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Dependencies
 
             services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
             services.AddSingleton<IDriveExplorerService, FsExplorerService>();
-            services.AddSingleton<IAppEnv, AppEnv>();
 
+            services.AddSingleton<IAppEnv, AppEnv>();
             LoggingServices.RegisterAll(services);
-            services.AddSingleton<ILoggerFactory, LoggerFactory>();
         }
 
         public static Lazy<ServiceProviderContainer> Instance { get; } = new (() => new ());

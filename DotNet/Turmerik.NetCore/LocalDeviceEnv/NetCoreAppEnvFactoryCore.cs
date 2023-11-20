@@ -6,7 +6,7 @@ using Turmerik.Reflection;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
-namespace Turmerik.LocalDevice.Core.Env
+namespace Turmerik.NetCore.LocalDeviceEnv
 {
     public interface INetCoreAppEnvFactoryCore
     {
