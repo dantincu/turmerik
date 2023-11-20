@@ -11,6 +11,8 @@ using Turmerik.Logging;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Notes.Dependencies;
 using Turmerik.Notes.Settings;
+using Turmerik.WinForms.Actions;
+using Turmerik.WinForms.Dependencies;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.Dependencies
 {
@@ -35,6 +37,10 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Dependencies
 
             services.AddSingleton(
                 svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create(true));
+
+            WinFormsServices.RegisterAll(services);
+
+            services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();
         }
 
         public static Lazy<ServiceProviderContainer> Instance { get; } = new (() => new ());
