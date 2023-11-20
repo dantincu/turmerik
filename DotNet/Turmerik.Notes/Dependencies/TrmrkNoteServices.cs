@@ -5,6 +5,7 @@ using System.Text;
 using Turmerik.Notes.Html;
 using Turmerik.Notes.Md;
 using Turmerik.Notes.Service;
+using Turmerik.Notes.Settings;
 
 namespace Turmerik.Notes.Dependencies
 {
@@ -27,7 +28,14 @@ namespace Turmerik.Notes.Dependencies
             services.AddSingleton<INoteDirsPairCreatorFactory, NoteDirsPairCreatorFactory>();
             services.AddSingleton<INotesExplorerServiceFactory, NotesExplorerServiceFactory>();
 
+            services.AddSingleton<IAppConfigServiceFactory, AppConfigServiceFactory>();
             return services;
         }
+
+        public static IServiceCollection RegisterAppSettingsRetriever<TImmtblData, TMtblData>(
+            IServiceCollection services,
+            Func<TMtblData, TImmtblData> normalizerFunc = null) => services.AddSingleton(
+                svcProv => svcProv.GetRequiredService<IAppConfigServiceFactory>(
+                    ).Service(normalizerFunc));
     }
 }

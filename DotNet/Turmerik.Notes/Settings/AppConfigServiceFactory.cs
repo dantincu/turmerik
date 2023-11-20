@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Turmerik.Helpers;
 using Turmerik.TextSerialization;
 
-namespace Turmerik.AspNetCore.AppSettings
+namespace Turmerik.Notes.Settings
 {
     public interface IAppConfigServiceFactory
     {

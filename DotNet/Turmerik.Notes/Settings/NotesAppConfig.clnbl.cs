@@ -6,6 +6,7 @@ namespace Turmerik.Notes.Settings
 {
     public interface INotesAppConfig
     {
+        string AppEnvLocatorFilePath { get; }
         bool IsDevEnv { get; }
         int RequiredClientVersion { get; }
         string ClientRedirectUrl { get; }
@@ -30,12 +31,14 @@ namespace Turmerik.Notes.Settings
         public NotesAppConfigMtbl(
             INotesAppConfig src)
         {
+            AppEnvLocatorFilePath = src.AppEnvLocatorFilePath;
             IsDevEnv = src.IsDevEnv;
             RequiredClientVersion = src.RequiredClientVersion;
             ClientRedirectUrl = src.ClientRedirectUrl;
             NoteDirPairs = src.GetNoteDirPairs()?.ToMtbl();
         }
 
+        public string AppEnvLocatorFilePath { get; set; }
         public bool IsDevEnv { get; set; }
         public int RequiredClientVersion { get; set; }
         public string ClientRedirectUrl { get; set; }
@@ -49,12 +52,14 @@ namespace Turmerik.Notes.Settings
         public NotesAppConfigImmtbl(
             INotesAppConfig src)
         {
+            AppEnvLocatorFilePath = src.AppEnvLocatorFilePath;
             IsDevEnv = src.IsDevEnv;
             RequiredClientVersion = src.RequiredClientVersion;
             ClientRedirectUrl = src.ClientRedirectUrl;
             NoteDirPairs = src.GetNoteDirPairs()?.ToImmtbl();
         }
 
+        public string AppEnvLocatorFilePath { get; }
         public bool IsDevEnv { get; }
         public int RequiredClientVersion { get; }
         public string ClientRedirectUrl { get; }

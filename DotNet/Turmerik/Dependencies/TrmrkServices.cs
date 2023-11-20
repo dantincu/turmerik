@@ -21,6 +21,7 @@ namespace Turmerik.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
+            services.AddSingleton<IAppInstanceStartInfoProvider, AppInstanceStartInfoProvider>();
             services.AddSingleton<ITimeStampHelper, TimeStampHelper>();
             services.AddSingleton<ILambdaExprHelper, LambdaExprHelper>();
             services.AddSingleton<ILambdaExprHelperFactory, LambdaExprHelperFactory>();

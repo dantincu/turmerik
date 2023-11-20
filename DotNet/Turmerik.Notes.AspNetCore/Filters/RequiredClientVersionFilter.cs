@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.AspNetCore.AppSettings;
 using Turmerik.AspNetCore.Utility;
 using Turmerik.Notes.Settings;
 
