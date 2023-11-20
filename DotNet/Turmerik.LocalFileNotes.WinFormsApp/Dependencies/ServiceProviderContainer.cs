@@ -32,6 +32,9 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Dependencies
 
             services.AddSingleton<IAppEnv, AppEnv>();
             LoggingServices.RegisterAll(services);
+
+            services.AddSingleton(
+                svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create(true));
         }
 
         public static Lazy<ServiceProviderContainer> Instance { get; } = new (() => new ());
