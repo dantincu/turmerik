@@ -40,6 +40,7 @@
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Turmerik Local File Notes";
+            Load += MainForm_Load;
             ResumeLayout(false);
         }
 

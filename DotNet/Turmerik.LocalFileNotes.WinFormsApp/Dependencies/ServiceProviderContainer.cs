@@ -11,6 +11,7 @@ using Turmerik.Logging;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Notes.Dependencies;
 using Turmerik.Notes.Settings;
+using Turmerik.UIActions;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 

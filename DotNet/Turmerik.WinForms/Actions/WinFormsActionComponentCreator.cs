@@ -11,7 +11,6 @@ namespace Turmerik.WinForms.Actions
     {
         IWinFormsActionComponent Create(
             Type componentType);
-
         IWinFormsActionComponent Create(
             string componentName);
     }

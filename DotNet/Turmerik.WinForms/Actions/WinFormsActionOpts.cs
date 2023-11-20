@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Actions;
+using Turmerik.UIActions;
 
 namespace Turmerik.WinForms.Actions
 {
-    public class WinFormsActionOptsCore<T>
+    public interface IWinFormsActionOptsCore<T> : IUIActionOptsCore<T, IWinFormsMessageTuple>
     {
-        public string ActionName { get; set; }
-        public Func<UIMessageTuple> OnBeforeAction { get; set; }
-        public Func<IActionResult<T>, UIMessageTuple> OnAfterAction { get; set; }
-        public Func<Exception, Tuple<IActionResult<T>, UIMessageTuple>> OnUnhandledError { get; set; }
-        public Func<IActionResult<T>, UIMessageTuple> OnAfterExecution { get; set; }
     }
 
-    public class WinFormsActionOpts<T> : WinFormsActionOptsCore<T>
+    public interface IWinFormsActionOpts<T> : IWinFormsActionOptsCore<T>, IUIActionOpts<T, IWinFormsMessageTuple>
     {
-        public Func<IActionResult<T>> Action { get; set; }
     }
 
-    public class WinFormsAsyncActionOpts<T> : WinFormsActionOptsCore<T>
+    public interface IWinFormsAsyncActionOpts<T> : IWinFormsActionOptsCore<T>, IUIAsyncActionOpts<T, IWinFormsMessageTuple>
     {
-        public Func<Task<IActionResult<T>>> Action { get; set; }
+    }
+
+    public class WinFormsActionOpts<T> : UIActionOpts<T, IWinFormsMessageTuple>, IWinFormsActionOpts<T>
+    {
+    }
+
+    public class WinFormsAsyncActionOpts<T> : UIAsyncActionOpts<T, IWinFormsMessageTuple>, IWinFormsAsyncActionOpts<T>
+    {
     }
 }

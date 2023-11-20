@@ -1,6 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
+using Turmerik.Actions;
 using Turmerik.LocalFileNotes.WinFormsApp.Dependencies;
+using Turmerik.UIActions;
 using Turmerik.WinForms.Actions;
+using Turmerik.WinForms.Helpers;
 
 namespace Turmerik.LocalFilesNotes.WinFormsApp
 {
@@ -16,5 +19,14 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
 
             InitializeComponent();
         }
+
+        #region UI Event Handlers
+
+        private void MainForm_Load(object sender, EventArgs e) => actionComponent.Execute(
+            WinFormsH.ActionOpts(nameof(MainForm_Load),
+                () => new ActionResult(),
+                () => WinFormsMessageTuple.WithOnly()));
+
+        #endregion UI Event Handlers
     }
 }
