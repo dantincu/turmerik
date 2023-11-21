@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Turmerik.Dependencies;
 using Turmerik.DriveExplorer;
 using Turmerik.LocalDevice.Core.Env;
+using Turmerik.LocalFileNotes.WinFormsApp.ViewModels;
 using Turmerik.Logging;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Notes.Dependencies;
@@ -42,6 +43,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Dependencies
             WinFormsServices.RegisterAll(services);
 
             services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();
+
+            services.AddSingleton<IMainFormVM, MainFormVM>();
         }
 
         public static Lazy<ServiceProviderContainer> Instance { get; } = new (() => new ());

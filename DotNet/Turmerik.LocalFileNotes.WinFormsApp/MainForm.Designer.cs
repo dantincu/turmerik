@@ -29,21 +29,46 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            statusStripMain = new StatusStrip();
+            toolStripStatusLabelMain = new ToolStripStatusLabel();
+            statusStripMain.SuspendLayout();
             SuspendLayout();
+            // 
+            // statusStripMain
+            // 
+            statusStripMain.Items.AddRange(new ToolStripItem[] { toolStripStatusLabelMain });
+            statusStripMain.Location = new Point(0, 736);
+            statusStripMain.Name = "statusStripMain";
+            statusStripMain.Size = new Size(1600, 22);
+            statusStripMain.TabIndex = 0;
+            // 
+            // toolStripStatusLabelMain
+            // 
+            toolStripStatusLabelMain.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            toolStripStatusLabelMain.Name = "toolStripStatusLabelMain";
+            toolStripStatusLabelMain.Size = new Size(0, 17);
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1600, 900);
+            ClientSize = new Size(1600, 758);
+            Controls.Add(statusStripMain);
+            Font = new Font("Segoe UI", 9F);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Turmerik Local File Notes";
             Load += MainForm_Load;
+            statusStripMain.ResumeLayout(false);
+            statusStripMain.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private StatusStrip statusStripMain;
+        private ToolStripStatusLabel toolStripStatusLabelMain;
     }
 }

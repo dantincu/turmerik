@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Helpers;
 using Turmerik.Logging;
 
 namespace Turmerik.WinForms.Actions
 {
     public interface IWinFormsActionComponentCreator
     {
-        IWinFormsActionComponent Create(
+        WinFormsStatusLabelActionComponentOpts DefaultStatusLabelOpts { get; set; }
+
+        IWinFormsMsgBoxActionComponent MsgBox(
             Type componentType);
-        IWinFormsActionComponent Create(
+
+        IWinFormsMsgBoxActionComponent MsgBox(
+            string componentName);
+
+        IWinFormsStatusLabelActionComponent StatusLabel(
+            Type componentType);
+
+        IWinFormsStatusLabelActionComponent StatusLabel(
             string componentName);
     }
 
@@ -25,14 +35,28 @@ namespace Turmerik.WinForms.Actions
             this.appLoggerCreator = appLoggerCreator ?? throw new ArgumentNullException(nameof(appLoggerCreator));
         }
 
-        public IWinFormsActionComponent Create(
-            Type componentType) => new WinFormsActionComponent(
+        public WinFormsStatusLabelActionComponentOpts DefaultStatusLabelOpts { get; set; }
+
+        public IWinFormsMsgBoxActionComponent MsgBox(
+            Type componentType) => new WinFormsMsgBoxActionComponent(
                 appLoggerCreator.GetSharedAppLogger(
                     componentType));
 
-        public IWinFormsActionComponent Create(
-            string componentName) => new WinFormsActionComponent(
+        public IWinFormsMsgBoxActionComponent MsgBox(
+            string componentName) => new WinFormsMsgBoxActionComponent(
                 appLoggerCreator.GetSharedAppLogger(
                     componentName));
+
+        public IWinFormsStatusLabelActionComponent StatusLabel(
+            Type componentType) => new WinFormsStatusLabelActionComponent(
+                appLoggerCreator.GetSharedAppLogger(
+                    componentType),
+                LazyH.Lazy(() => DefaultStatusLabelOpts));
+
+        public IWinFormsStatusLabelActionComponent StatusLabel(
+            string componentName) => new WinFormsStatusLabelActionComponent(
+                appLoggerCreator.GetSharedAppLogger(
+                    componentName),
+                LazyH.Lazy(() => DefaultStatusLabelOpts));
     }
 }
