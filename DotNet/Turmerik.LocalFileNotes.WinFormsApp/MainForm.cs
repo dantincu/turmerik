@@ -24,8 +24,11 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
 
         private void MainForm_Load(object sender, EventArgs e) => actionComponent.Execute(
             WinFormsH.ActionOpts(nameof(MainForm_Load),
+                // () => throw new Exception(""),
                 () => new ActionResult(),
-                () => WinFormsMessageTuple.WithOnly()));
+                () => WinFormsMessageTuple.WithOnly()
+                // ex => new WinFormsMessageTuple()));
+                ));
 
         #endregion UI Event Handlers
     }

@@ -19,7 +19,7 @@ namespace Turmerik.WinForms.Actions
         {
         }
 
-        protected virtual string OnUnhandledErrorUIMsgTpl => "An unhandled error has ocurred: [{0}]";
+        protected virtual string OnUnhandledErrorUIMsgTpl => "An unhandled error has ocurred: {0}";
 
         protected override void OnBeforeExecutionLogMsg<T>(
             IUIActionOptsCore<T, IWinFormsMessageTuple> opts,

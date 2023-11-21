@@ -79,7 +79,7 @@ namespace Turmerik.UIActions
 
         protected virtual string OnBeforeExecutionLogMsgTpl => "Executing action [{0}]";
         protected virtual string OnUnhandledErrorLogMsgTpl => "Executing action [{0}] has stopped due to an unhandled error";
-        protected virtual string OnAfterExecutionLogMsgTpl => "Execution of action [{0}] finished [{1}]";
+        protected virtual string OnAfterExecutionLogMsgTpl => "Execution of action [{0}] finished {1}";
 
         protected virtual void OnBeforeExecution<T>(
             IUIActionOptsCore<T, TUIMessageTuple> opts)
