@@ -102,6 +102,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
                 logger.DebugData(optsMtbl,
                     "Turmerik Local File Notes app started");
 
+                // throw new Exception("asdfasdf");
+
                 Run(appOpts);
                 logger.Debug("Turmerik Local File Notes app closed");
             }
@@ -316,7 +318,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             finally
             {
                 noteBookFormSemaphore.Release();
-                Application.ExitThread();
+                ExitThread();
             }
         }
 
