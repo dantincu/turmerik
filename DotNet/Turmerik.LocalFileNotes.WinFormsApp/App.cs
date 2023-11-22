@@ -109,24 +109,49 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
         private AppOptionsImmtbl GetAppOpts(
             IAppLogger logger,
-            AppArgsMtbl appArgs) => new AppOptionsImmtbl(
-            new AppOptionsMtbl
+            AppArgsMtbl appArgs)
+        {
+            bool lastRunCrashed = TryReadLastRunCrashedInfo(
+                logger, out var lastRunCrashInfo);
+
+            var optsMtbl = new AppOptionsMtbl
             {
                 Args = appArgs,
-                LastRunCrashedInfo = TryReadLastRunCrashedInfo(
-                    logger)
-            });
+                LastRunCrashed = lastRunCrashed,
+                LastRunCrashInfo = lastRunCrashInfo
+            };
 
-        private LastRunCrashedInfoMtbl TryReadLastRunCrashedInfo(
+            var opts = new AppOptionsImmtbl(optsMtbl);
+            return opts;
+        }
+
+        private bool TryReadLastRunCrashedInfo(
             IAppLogger logger,
+            out LastRunCrashedInfoMtbl info,
             bool deleteAfterRead = true)
         {
-            LastRunCrashedInfoMtbl info = null;
+            bool lastRunCrashed;
+            bool fileExists = false;
+            info = null;
             lastRunCrashFileMutex.WaitOne();
 
             try
             {
-                if (File.Exists(lastRunCrashFilePath))
+                fileExists = File.Exists(lastRunCrashFilePath);
+                lastRunCrashed = fileExists;
+            }
+            catch (Exception exc)
+            {
+                lastRunCrashed = true;
+
+                logger.Error(exc,
+                    "Could not check if last run crashed info file at {0} exists",
+                    lastRunCrashFilePath);
+            }
+
+            try
+            {
+                if (fileExists)
                 {
                     string json = File.ReadAllText(lastRunCrashFilePath);
 
@@ -149,7 +174,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
                 lastRunCrashFileMutex.ReleaseMutex();
             }
 
-            return info;
+            return lastRunCrashed;
         }
 
         private void TryWriteLastRunCrahedInfo(

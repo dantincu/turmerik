@@ -17,8 +17,10 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
     public interface IAppOptions
     {
+        bool LastRunCrashed { get; }
+
+        ILastRunCrashedInfo GetLastRunCrashInfo();
         IAppArgs GetArgs();
-        ILastRunCrashedInfo GetLastRunCrashedInfo();
     }
 
     public interface ILastRunCrashedInfo
@@ -82,15 +84,17 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
     {
         public AppOptionsImmtbl(IAppOptions src)
         {
+            LastRunCrashed = src.LastRunCrashed;
+            LastRunCrashedInfo = src.GetLastRunCrashInfo()?.ToImmtbl();
             Args = src.GetArgs()?.ToImmtbl();
-            LastRunCrashedInfo = src.GetLastRunCrashedInfo()?.ToImmtbl();
         }
 
-        public AppArgsImmtbl Args { get; }
+        public bool LastRunCrashed { get; }
         public LastRunCrashedInfoImmtbl LastRunCrashedInfo { get; }
+        public AppArgsImmtbl Args { get; }
 
+        public ILastRunCrashedInfo GetLastRunCrashInfo() => LastRunCrashedInfo;
         public IAppArgs GetArgs() => Args;
-        public ILastRunCrashedInfo GetLastRunCrashedInfo() => LastRunCrashedInfo;
     }
 
     public class AppOptionsMtbl : IAppOptions
@@ -101,15 +105,17 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
         public AppOptionsMtbl(IAppOptions src)
         {
+            LastRunCrashed = src.LastRunCrashed;
+            LastRunCrashInfo = src.GetLastRunCrashInfo()?.ToMtbl();
             Args = src.GetArgs()?.ToMtbl();
-            LastRunCrashedInfo = src.GetLastRunCrashedInfo()?.ToMtbl();
         }
 
+        public bool LastRunCrashed { get; set; }
+        public LastRunCrashedInfoMtbl LastRunCrashInfo { get; set; }
         public AppArgsMtbl Args { get; set; }
-        public LastRunCrashedInfoMtbl LastRunCrashedInfo { get; set; }
 
+        public ILastRunCrashedInfo GetLastRunCrashInfo() => LastRunCrashInfo;
         public IAppArgs GetArgs() => Args;
-        public ILastRunCrashedInfo GetLastRunCrashedInfo() => LastRunCrashedInfo;
     }
 
     public class AppWorkArgs
