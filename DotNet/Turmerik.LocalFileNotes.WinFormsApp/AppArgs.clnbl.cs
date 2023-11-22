@@ -18,6 +18,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
     public interface IAppOptions
     {
+        bool LaunchNoteBookFormDirectly { get; }
+        NoteBookFormOpts NoteBookFormOpts { get; }
         bool LastRunCrashed { get; }
 
         ILastRunCrashedInfo GetLastRunCrashInfo();
@@ -88,12 +90,17 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
     {
         public AppOptionsImmtbl(IAppOptions src)
         {
+            LaunchNoteBookFormDirectly = src.LaunchNoteBookFormDirectly;
+            NoteBookFormOpts = src.NoteBookFormOpts;
             LastRunCrashed = src.LastRunCrashed;
             LastRunCrashedInfo = src.GetLastRunCrashInfo()?.ToImmtbl();
             Args = src.GetArgs()?.ToImmtbl();
         }
 
+        public bool LaunchNoteBookFormDirectly { get; }
+        public NoteBookFormOpts NoteBookFormOpts { get; }
         public bool LastRunCrashed { get; }
+
         public LastRunCrashedInfoImmtbl LastRunCrashedInfo { get; }
         public AppArgsImmtbl Args { get; }
 
@@ -109,11 +116,15 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
         public AppOptionsMtbl(IAppOptions src)
         {
+            LaunchNoteBookFormDirectly = src.LaunchNoteBookFormDirectly;
+            NoteBookFormOpts = src.NoteBookFormOpts;
             LastRunCrashed = src.LastRunCrashed;
             LastRunCrashInfo = src.GetLastRunCrashInfo()?.ToMtbl();
             Args = src.GetArgs()?.ToMtbl();
         }
 
+        public bool LaunchNoteBookFormDirectly { get; set; }
+        public NoteBookFormOpts NoteBookFormOpts { get; set; }
         public bool LastRunCrashed { get; set; }
         public LastRunCrashedInfoMtbl LastRunCrashInfo { get; set; }
         public AppArgsMtbl Args { get; set; }

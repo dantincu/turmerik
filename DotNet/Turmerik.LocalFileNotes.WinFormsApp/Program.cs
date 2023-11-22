@@ -26,9 +26,10 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
         {
             var svcProv = RegisterServices();
 
-            using (var app = svcProv.GetRequiredService<App>())
+            using (var appContext = svcProv.GetRequiredService<TrmrkApplicationContextFactory>().Create(args))
             {
-                app.Run(args);
+                // ApplicationConfiguration.Initialize();
+                Application.Run(appContext);
             }
         }
 
@@ -57,9 +58,10 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
                     services.AddSingleton<INoteBookFormVM, NoteBookFormVM>();
                     services.AddSingleton<IManageNoteBooksFormVM, ManageNoteBooksFormVM>();
 
-                    services.AddSingleton<App>();
                     services.AddSingleton<AppArgsParser>();
+                    services.AddSingleton<AppOptionsBuilder>();
                     services.AddSingleton<AppOptionsRetriever>();
+                    services.AddSingleton<TrmrkApplicationContextFactory>();
                 }));
 
             return svcProvContnr.Data;

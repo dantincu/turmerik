@@ -1,27 +1,21 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Helpers;
 using Turmerik.LocalDevice.Core.Env;
-using Turmerik.LocalFileNotes.WinFormsApp.ViewModels;
-using Turmerik.LocalFilesNotes.WinFormsApp;
 using Turmerik.Logging;
-using Turmerik.Notes;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
-using Turmerik.WinForms.Dependencies;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {
-    public partial class App : IDisposable
+    public class TrmrkApplicationContext : ApplicationContext
     {
         const string LAST_RUN_CRASH_INFO_FILE_NAME = "last-run-crash-info.json";
 
         private readonly Type thisType;
-        // private readonly IServiceProvider svcProv;
         private readonly IJsonConversion jsonConversion;
         private readonly IExceptionSerializer exceptionSerializer;
         private readonly IAppInstanceStartInfoProvider appInstanceStartInfoProvider;
@@ -29,6 +23,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
         private readonly IAppEnv appEnv;
         private readonly IAppLoggerCreator appLoggerCreator;
         private readonly AppArgsParser appArgsParser;
+        private readonly AppOptionsBuilder appOptionsBuilder;
         private readonly AppOptionsRetriever appOptionsRetriever;
         private readonly string lastRunCrashDirPath;
         private readonly string lastRunCrashFilePath;
@@ -37,14 +32,16 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
         private ManageNoteBooksForm manageNoteBooksForm;
         private NoteBookForm noteBookForm;
 
-        public App(
+        public TrmrkApplicationContext(
             IJsonConversion jsonConversion,
             IExceptionSerializer exceptionSerializer,
             IAppInstanceStartInfoProvider appInstanceStartInfoProvider,
             IAppEnv appEnv,
             IAppLoggerCreator appLoggerCreator,
             AppArgsParser appArgsParser,
-            AppOptionsRetriever appOptionsRetriever)
+            AppOptionsBuilder appOptionsBuilder,
+            AppOptionsRetriever appOptionsRetriever,
+            string[] args)
         {
             thisType = GetType();
 
@@ -54,6 +51,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             this.appEnv = appEnv ?? throw new ArgumentNullException(nameof(appEnv));
             this.appLoggerCreator = appLoggerCreator ?? throw new ArgumentNullException(nameof(appLoggerCreator));
             this.appArgsParser = appArgsParser ?? throw new ArgumentNullException(nameof(appArgsParser));
+            this.appOptionsBuilder = appOptionsBuilder ?? throw new ArgumentNullException(nameof(appOptionsBuilder));
             this.appOptionsRetriever = appOptionsRetriever ?? throw new ArgumentNullException(nameof(appOptionsRetriever));
 
             appInstanceStartInfo = appInstanceStartInfoProvider.Data;
@@ -71,25 +69,17 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
             lastRunCrashFileMutex = MutexH.Create(
                 lastRunCrashFilePath);
-        }
 
-        public void Dispose()
-        {
-            lastRunCrashFileMutex.Dispose();
-        }
-
-        public void Run(string[] args)
-        {
             using (var logger = appLoggerCreator.GetSharedAppLogger(thisType))
             {
                 try
                 {
                     var appArgs = appArgsParser.Parse(args);
+                    var optsMtbl = GetAppOpts(logger, appArgs);
+                    appOptionsBuilder.BuildAsync(optsMtbl).Wait();
+                    var appOpts = appOptionsRetriever.RegisterData(optsMtbl);
 
-                    var appOpts = GetAppOpts(logger, appArgs);
-                    appOptionsRetriever.RegisterData(appOpts);
-
-                    logger.DebugData(appOpts,
+                    logger.DebugData(optsMtbl,
                         "Turmerik Local File Notes app started");
 
                     Run(appOpts);
@@ -107,20 +97,42 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                lastRunCrashFileMutex.Dispose();
+            }
+        }
+
         private void Run(AppOptionsImmtbl opts)
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
 
-            ApplicationConfiguration.Initialize();
+            // ApplicationConfiguration.Initialize();
 
             manageNoteBooksForm = new ManageNoteBooksForm();
             manageNoteBooksForm.NoteBookChosen += ManageNoteBooksForm_NoteBookChosen;
+            manageNoteBooksForm.FormClosed += ManageNoteBooksForm_FormClosed;
 
-            Application.Run(manageNoteBooksForm);
+            if (opts.LaunchNoteBookFormDirectly)
+            {
+                ShowNoteBookForm(
+                    opts.NoteBookFormOpts,
+                    true);
+            }
+            else
+            {
+                manageNoteBooksForm.Show();
+            }
+
+            // Application.Run(manageNoteBooksForm);
         }
 
-        private AppOptionsImmtbl GetAppOpts(
+        private AppOptionsMtbl GetAppOpts(
             IAppLogger logger,
             AppArgsMtbl appArgs)
         {
@@ -134,8 +146,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
                 LastRunCrashInfo = lastRunCrashInfo
             };
 
-            var opts = new AppOptionsImmtbl(optsMtbl);
-            return opts;
+            return optsMtbl;
         }
 
         private bool TryReadLastRunCrashedInfo(
@@ -227,24 +238,40 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             }
         }
 
+        private void ShowNoteBookForm(
+            NoteBookFormOpts opts,
+            bool showNew)
+        {
+            if (showNew)
+            {
+                noteBookForm?.ActWith(form =>
+                {
+                    form.NoteBookMinimized -= NoteBookForm_NoteBookMinimized;
+                    form.FormClosed -= NoteBookForm_FormClosed;
+                    form.Dispose();
+                });
+                
+                noteBookForm = new NoteBookForm();
+
+                noteBookForm.NoteBookMinimized += NoteBookForm_NoteBookMinimized;
+                noteBookForm.FormClosed += NoteBookForm_FormClosed;
+            }
+
+            if (opts != null)
+            {
+                noteBookForm.SetOpts(opts);
+            }
+
+            noteBookForm.Show();
+        }
+
         #region UI Event Handlers
 
         private void ManageNoteBooksForm_NoteBookChosen(
             NoteBookFormOpts opts)
         {
             manageNoteBooksForm.Hide();
-
-            if (opts != null)
-            {
-                noteBookForm = new NoteBookForm();
-                noteBookForm.SetOpts(opts);
-                noteBookForm.NoteBookMinimized += NoteBookForm_NoteBookMinimized;
-                noteBookForm.Show();
-            }
-            else
-            {
-                noteBookForm.Show();
-            }
+            ShowNoteBookForm(opts, true);
         }
 
         private void NoteBookForm_NoteBookMinimized(
@@ -252,6 +279,20 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
         {
             noteBookForm.Hide();
             manageNoteBooksForm.Show();
+        }
+
+        private void NoteBookForm_FormClosed(
+            object? sender,
+            FormClosedEventArgs e)
+        {
+            ExitThread();
+        }
+
+        private void ManageNoteBooksForm_FormClosed(
+            object? sender,
+            FormClosedEventArgs e)
+        {
+            ExitThread();
         }
 
         #endregion UI Event Handlers

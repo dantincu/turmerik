@@ -7,9 +7,9 @@ using Turmerik.Dependencies;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {
-    public class AppOptionsRetriever : SingletonRegistrarBase<AppOptionsImmtbl, AppOptionsImmtbl>
+    public class AppOptionsRetriever : SingletonRegistrarBase<AppOptionsImmtbl, AppOptionsMtbl>
     {
         protected override AppOptionsImmtbl Convert(
-            AppOptionsImmtbl inputData) => inputData;
+            AppOptionsMtbl inputData) => new AppOptionsImmtbl(inputData);
     }
 }
