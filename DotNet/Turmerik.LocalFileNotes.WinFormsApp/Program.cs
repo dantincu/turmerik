@@ -26,10 +26,10 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
         static void Main(string[] args)
         {
             var svcProv = RegisterServices();
+            ApplicationConfiguration.Initialize();
 
             using (var appContext = svcProv.GetRequiredService<TrmrkApplicationContextFactory>().Create(args))
             {
-                // ApplicationConfiguration.Initialize();
                 Application.Run(appContext);
             }
         }
