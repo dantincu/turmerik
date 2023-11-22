@@ -28,6 +28,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
         private readonly string lastRunCrashDirPath;
         private readonly string lastRunCrashFilePath;
         private readonly Mutex lastRunCrashFileMutex;
+        private readonly SemaphoreSlim noteBookFormSemaphore;
+        private readonly IAppLogger logger;
 
         private ManageNoteBooksForm manageNoteBooksForm;
         private NoteBookForm noteBookForm;
@@ -70,31 +72,10 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             lastRunCrashFileMutex = MutexH.Create(
                 lastRunCrashFilePath);
 
-            using (var logger = appLoggerCreator.GetSharedAppLogger(thisType))
-            {
-                try
-                {
-                    var appArgs = appArgsParser.Parse(args);
-                    var optsMtbl = GetAppOpts(logger, appArgs);
-                    appOptionsBuilder.BuildAsync(optsMtbl).Wait();
-                    var appOpts = appOptionsRetriever.RegisterData(optsMtbl);
+            noteBookFormSemaphore = new SemaphoreSlim(1);
+            logger = appLoggerCreator.GetSharedAppLogger(thisType);
 
-                    logger.DebugData(optsMtbl,
-                        "Turmerik Local File Notes app started");
-
-                    Run(appOpts);
-                    logger.Debug("Turmerik Local File Notes app closed");
-                }
-                catch (Exception ex)
-                {
-                    logger.Fatal(ex, "An unhandled error ocurred and Turmerik Local File Notes app crashed");
-                    TryWriteLastRunCrahedInfo(ex, logger);
-
-                    MessageBox.Show(
-                        "An unexpected error ocurred and Turmerik Local File Notes needs to exit",
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            Run(args);
         }
 
         protected override void Dispose(bool disposing)
@@ -104,6 +85,34 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             if (disposing)
             {
                 lastRunCrashFileMutex.Dispose();
+                noteBookFormSemaphore.Dispose();
+                logger.Dispose();
+            }
+        }
+
+        private void Run(string[] args)
+        {
+            try
+            {
+                var appArgs = appArgsParser.Parse(args);
+                var optsMtbl = GetAppOpts(logger, appArgs);
+                appOptionsBuilder.BuildAsync(optsMtbl).Wait();
+                var appOpts = appOptionsRetriever.RegisterData(optsMtbl);
+
+                logger.DebugData(optsMtbl,
+                    "Turmerik Local File Notes app started");
+
+                Run(appOpts);
+                logger.Debug("Turmerik Local File Notes app closed");
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal(ex, "An unhandled error ocurred and Turmerik Local File Notes app crashed");
+                TryWriteLastRunCrahedInfo(ex, logger);
+
+                MessageBox.Show(
+                    "An unexpected error ocurred and Turmerik Local File Notes needs to exit",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -242,20 +251,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             NoteBookFormOpts opts,
             bool showNew)
         {
-            if (showNew)
-            {
-                noteBookForm?.ActWith(form =>
-                {
-                    form.NoteBookMinimized -= NoteBookForm_NoteBookMinimized;
-                    form.FormClosed -= NoteBookForm_FormClosed;
-                    form.Dispose();
-                });
-                
-                noteBookForm = new NoteBookForm();
-
-                noteBookForm.NoteBookMinimized += NoteBookForm_NoteBookMinimized;
-                noteBookForm.FormClosed += NoteBookForm_FormClosed;
-            }
+            var noteBookForm = GetNoteBookForm(showNew);
 
             if (opts != null)
             {
@@ -263,6 +259,46 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             }
 
             noteBookForm.Show();
+        }
+
+        private NoteBookForm GetNoteBookForm(
+            bool showNew)
+        {
+            NoteBookForm noteBookForm;
+            noteBookFormSemaphore.Wait();
+
+            try
+            {
+                if (showNew)
+                {
+                    this.noteBookForm?.ActWith(form =>
+                    {
+                        form.NoteBookMinimized -= NoteBookForm_NoteBookMinimized;
+                        form.FormClosed -= NoteBookForm_FormClosed;
+                        form.Dispose();
+                    });
+
+                    noteBookForm = this.noteBookForm = GetNewNoteBookForm();
+                }
+                else
+                {
+                    noteBookForm = this.noteBookForm;
+                }
+            }
+            finally
+            {
+                noteBookFormSemaphore.Release();
+            }
+
+            return noteBookForm;
+        }
+
+        private NoteBookForm GetNewNoteBookForm()
+        {
+            var noteBookForm = new NoteBookForm();
+            noteBookForm.NoteBookMinimized += NoteBookForm_NoteBookMinimized;
+            noteBookForm.FormClosed += NoteBookForm_FormClosed;
+            return noteBookForm;
         }
 
         #region UI Event Handlers
