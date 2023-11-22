@@ -113,6 +113,9 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
                 MessageBox.Show(
                     "An unexpected error ocurred and Turmerik Local File Notes needs to exit",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                ExitApp();
+                throw;
             }
         }
 
@@ -299,6 +302,22 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             noteBookForm.NoteBookMinimized += NoteBookForm_NoteBookMinimized;
             noteBookForm.FormClosed += NoteBookForm_FormClosed;
             return noteBookForm;
+        }
+
+        private void ExitApp()
+        {
+            noteBookFormSemaphore.Wait();
+
+            try
+            {
+                noteBookForm?.Dispose();
+                manageNoteBooksForm?.Dispose();
+            }
+            finally
+            {
+                noteBookFormSemaphore.Release();
+                Application.ExitThread();
+            }
         }
 
         #region UI Event Handlers

@@ -16,39 +16,37 @@ namespace Turmerik.WinForms.Controls
         public IconLabel()
         {
             SvcProvContnr = ServiceProviderContainer.Instance.Value;
-            SvcProv = SvcProvContnr.Data;
 
             if (SvcProvContnr.IsRegistered)
             {
+                SvcProv = SvcProvContnr.Data;
                 MatUIIconsRetriever = SvcProv.GetRequiredService<IMatUIIconsRetriever>();
                 fontFamily = MatUIIconsRetriever.IconsFont.Families[0];
 
                 Font = new Font(
-                    FontFamily, 16f,
+                    fontFamily, 16f,
                     FontStyle.Regular);
 
                 Cursor = Cursors.Hand;
             }
         }
 
-        public FontFamily FontFamily
+        public FontFamily GetFontFamily() => fontFamily;
+
+        public void SetFontFamily(
+            FontFamily value)
         {
-            get => fontFamily;
+            fontFamily = value;
 
-            set
+            if (value != null)
             {
-                fontFamily = value;
-
-                if (value != null)
-                {
-                    Font = new Font(
-                        FontFamily,
-                        Font.Size,
-                        Font.Style);
-                }
-
-                Invalidate();
+                Font = new Font(
+                    value,
+                    Font.Size,
+                    Font.Style);
             }
+
+            Invalidate();
         }
 
         protected ServiceProviderContainer SvcProvContnr { get; }

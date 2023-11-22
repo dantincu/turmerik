@@ -13,6 +13,7 @@ using Turmerik.WinForms.Dependencies;
 using Turmerik.LocalDeviceEnv;
 using Turmerik.LocalFileNotes.WinFormsApp;
 using Turmerik.LocalFileNotes.WinFormsApp.Settings;
+using Turmerik.LocalFileNotes.WinFormsApp.Data;
 
 namespace Turmerik.LocalFilesNotes.WinFormsApp
 {
@@ -54,6 +55,8 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();
+
+                    services.AddSingleton<UITextContentsRetriever>();
 
                     services.AddSingleton<INoteBookFormVM, NoteBookFormVM>();
                     services.AddSingleton<IManageNoteBooksFormVM, ManageNoteBooksFormVM>();

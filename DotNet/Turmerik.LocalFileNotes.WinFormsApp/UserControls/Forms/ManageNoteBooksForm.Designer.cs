@@ -29,13 +29,22 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManageNoteBooksForm));
+            clearAppDatauc1 = new UserControls.ClearAppDataUC();
             SuspendLayout();
+            // 
+            // clearAppDatauc1
+            // 
+            clearAppDatauc1.Location = new Point(25, 21);
+            clearAppDatauc1.Name = "clearAppDatauc1";
+            clearAppDatauc1.Size = new Size(300, 23);
+            clearAppDatauc1.TabIndex = 0;
             // 
             // ManageNoteBooksForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1600, 900);
+            Controls.Add(clearAppDatauc1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageNoteBooksForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -45,5 +54,7 @@
         }
 
         #endregion
+
+        private UserControls.ClearAppDataUC clearAppDatauc1;
     }
 }

@@ -10,7 +10,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
     {
         public async Task BuildAsync(AppOptionsMtbl opts)
         {
-            opts.LaunchNoteBookFormDirectly = true;
+            // opts.LaunchNoteBookFormDirectly = true;
 
             opts.NoteBookFormOpts = new NoteBookFormOpts
             {
