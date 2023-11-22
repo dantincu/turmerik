@@ -71,7 +71,8 @@ namespace Turmerik.Notes
 
         public class ArgOptionsAggT : IArgOptionsAggT
         {
-            private ClnblDictionary<CmdCommand, IArgOptionT, NoteDirsPairConfigImmtbl.ArgOptionT, ArgOptionT> commandsMap;
+            private ClnblDictionary<CmdCommand, IArgOptionT, NoteDirsPairConfigImmtbl.ArgOptionT, ArgOptionT> commandsClnblMap;
+            private Dictionary<CmdCommand, ArgOptionT> commandsMap;
 
             public ArgOptionsAggT()
             {
@@ -94,8 +95,7 @@ namespace Turmerik.Notes
                 CreateNoteFilesDirsPair = src.GetCreateNoteFilesDirsPair()?.ToMtbl();
                 CreateNoteInternalDirsPair = src.GetCreateNoteInternalDirsPair()?.ToMtbl();
 
-                commandsMap = src.GetCommandsMap()?.Clone();
-                CommandsMap = commandsMap?.AsMtblDictnr();
+                CommandsMap = src.GetCommandsMap()?.AsMtblDictnr();
             }
 
             public ArgOptionT Help { get; set; }
@@ -115,7 +115,16 @@ namespace Turmerik.Notes
             public ArgOptionT CreateNoteFilesDirsPair { get; set; }
             public ArgOptionT CreateNoteInternalDirsPair { get; set; }
 
-            public Dictionary<CmdCommand, ArgOptionT> CommandsMap { get; set; }
+            public Dictionary<CmdCommand, ArgOptionT> CommandsMap
+            {
+                get => commandsMap;
+
+                set
+                {
+                    commandsMap = value;
+                    commandsClnblMap = new ClnblDictionary<CmdCommand, IArgOptionT, NoteDirsPairConfigImmtbl.ArgOptionT, ArgOptionT>(value);
+                }
+            }
 
             public IArgOptionT GetHelp() => Help;
             public IArgOptionT GetSrcNote() => SrcNote;
@@ -134,7 +143,7 @@ namespace Turmerik.Notes
             public IArgOptionT GetCreateNoteFilesDirsPair() => CreateNoteFilesDirsPair;
             public IArgOptionT GetCreateNoteInternalDirsPair() => CreateNoteInternalDirsPair;
 
-            public ClnblDictionary<CmdCommand, IArgOptionT, NoteDirsPairConfigImmtbl.ArgOptionT, ArgOptionT> GetCommandsMap() => commandsMap;
+            public ClnblDictionary<CmdCommand, IArgOptionT, NoteDirsPairConfigImmtbl.ArgOptionT, ArgOptionT> GetCommandsMap() => commandsClnblMap;
         }
 
         public class DirNamesT : IDirNamesT

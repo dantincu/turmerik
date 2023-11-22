@@ -50,6 +50,16 @@ namespace Turmerik.WinForms.Actions
 
             SetStatusLabelMessage(message,
                 Opts.Value.ErrorForeColor);
+
+            string caption = msgTuple?.Caption;
+
+            if (caption != null)
+            {
+                MessageBox.Show(
+                    message, caption,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         protected override void OnAfterExecutionLogMsg<T>(

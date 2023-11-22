@@ -10,8 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Turmerik.Logging\Turmerik.Logging.csproj" />
     <ProjectReference Include="..\Turmerik.Notes\Turmerik.Notes.csproj" />
+    <ProjectReference Include="..\Turmerik.Sqlite\Turmerik.Sqlite.csproj" />
     <ProjectReference Include="..\Turmerik.WinForms\Turmerik.WinForms.csproj" />
   </ItemGroup>
 

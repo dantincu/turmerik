@@ -28,6 +28,7 @@ namespace Turmerik.Logging
         private const string BUFFERED_LOG_FILE_NAME_PFX = "buffered";
         private const string SHARED_LOG_FILE_NAME_PFX = "shared";
         private const string LOG_FILE_NAME_EXT = ".json";
+        private const string APP_PROCESS_DIR_NAME_PFX = "[[]]";
 
         public AppLogger(AppLoggerOpts.IClnbl opts)
         {
@@ -99,7 +100,19 @@ namespace Turmerik.Logging
             return logDirRelPath;
         }
 
-        private string GetAppProcessDirName() => AppInstanceStartInfoProvider?.ProcessDirName;
+        private string? GetAppProcessDirName()
+        {
+            string? appProcessDirName = AppInstanceStartInfoProvider?.ProcessDirName;
+
+            if (appProcessDirName != null)
+            {
+                appProcessDirName = Path.Combine(
+                    APP_PROCESS_DIR_NAME_PFX,
+                    appProcessDirName);
+            }
+
+            return appProcessDirName;
+        }
 
         private int GetFileSizeLimitBytes()
         {

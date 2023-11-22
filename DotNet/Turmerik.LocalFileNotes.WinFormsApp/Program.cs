@@ -1,8 +1,18 @@
 using Microsoft.Extensions.DependencyInjection;
-using Turmerik.LocalFileNotes.WinFormsApp.Dependencies;
 using Turmerik.Dependencies;
 using Turmerik.Logging;
 using Turmerik.Utility;
+using Turmerik.DriveExplorer;
+using Turmerik.LocalDevice.Core.Env;
+using Turmerik.LocalFileNotes.WinFormsApp.ViewModels;
+using Turmerik.Logging.Dependencies;
+using Turmerik.Notes.Dependencies;
+using Turmerik.Notes.Settings;
+using Turmerik.WinForms.Actions;
+using Turmerik.WinForms.Dependencies;
+using Turmerik.LocalDeviceEnv;
+using Turmerik.LocalFileNotes.WinFormsApp;
+using Turmerik.LocalFileNotes.WinFormsApp.Settings;
 
 namespace Turmerik.LocalFilesNotes.WinFormsApp
 {
@@ -12,42 +22,46 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
+        {
+            var svcProv = RegisterServices();
+
+            using (var app = svcProv.GetRequiredService<App>())
+            {
+                app.Run(args);
+            }
+        }
+
+        private static IServiceProvider RegisterServices()
         {
             var svcProvContnr = ServiceProviderContainer.Instance.Value;
 
             svcProvContnr.RegisterData(
-                new ServiceCollection().AsOpts());
-
-            var svcProv = svcProvContnr.Data;
-            var appLoggerCreator = svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create(true);
-
-            using (var logger = appLoggerCreator.GetSharedAppLogger(typeof(Program)))
-            {
-                try
+                new ServiceCollection().AsOpts(services =>
                 {
-                    var appInstanceStartInfo = svcProv.GetRequiredService<IAppInstanceStartInfoProvider>();
+                    TrmrkNoteServices.RegisterAll(services);
+                    TrmrkNoteServices.RegisterAppSettingsRetriever<NotesAppConfigImmtbl, NotesAppConfigMtbl>(services);
 
-                    logger.DebugData(
-                        appInstanceStartInfo.Data,
-                        "Turmerik Local File Notes app started");
-                    // To customize application configuration such as set high DPI settings or default font,
-                    // see https://aka.ms/applicationconfiguration.
-                    
-                    ApplicationConfiguration.Initialize();
-                    Application.Run(new MainForm());
+                    services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
+                    services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 
-                    logger.Debug("Turmerik Local File Notes app closed");
-                }
-                catch (Exception ex)
-                {
-                    logger.Fatal(ex, "An unhandled error ocurred and Turmerik Local File Notes app crashed");
+                    services.AddSingleton<IAppEnv, AppEnv>();
+                    LoggingServices.RegisterAll(services);
 
-                    MessageBox.Show(
-                        "An unexpected error ocurred and Turmerik Local File Notes needs to exit",
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+                    services.AddSingleton(
+                        svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create());
+
+                    services.AddSingleton<IAppDataFactory, AppDataFactory>();
+                    services.AddSingleton<IAppSettings, AppSettings>();
+
+                    services.AddSingleton<INoteBookFormVM, NoteBookFormVM>();
+                    services.AddSingleton<IManageNoteBooksFormVM, ManageNoteBooksFormVM>();
+
+                    services.AddSingleton<App>();
+                    services.AddSingleton<AppArgsParser>();
+                }));
+
+            return svcProvContnr.Data;
         }
     }
 }

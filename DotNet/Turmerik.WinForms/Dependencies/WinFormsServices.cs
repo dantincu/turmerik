@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.WinForms.Actions;
+using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.WinForms.Dependencies
 {
@@ -12,6 +14,8 @@ namespace Turmerik.WinForms.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
+            services.AddSingleton<IMatUIIconsRetriever, MatUIIconsRetriever>();
+            services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();
             return services;
         }
     }

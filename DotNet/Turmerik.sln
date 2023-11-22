@@ -45,7 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Logging", "Turmeri
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{2020DE95-DD87-4F1F-8BBB-CCCCF6ABB095}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Logging.UnitTests", "Turmerik.Logging.UnitTests\Turmerik.Logging.UnitTests.csproj", "{BFEF0FBE-A515-471D-AA94-E0CDF5809728}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Logging.UnitTests", "Turmerik.Logging.UnitTests\Turmerik.Logging.UnitTests.csproj", "{BFEF0FBE-A515-471D-AA94-E0CDF5809728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Sqlite", "Turmerik.Sqlite\Turmerik.Sqlite.csproj", "{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{BFEF0FBE-A515-471D-AA94-E0CDF5809728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFEF0FBE-A515-471D-AA94-E0CDF5809728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFEF0FBE-A515-471D-AA94-E0CDF5809728}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{ED670482-38DF-402C-81F8-9A588C408A27} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
 		{1EA908C9-BC00-4BAB-8A41-2D2B899660CF} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 		{BFEF0FBE-A515-471D-AA94-E0CDF5809728} = {2020DE95-DD87-4F1F-8BBB-CCCCF6ABB095}
+		{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

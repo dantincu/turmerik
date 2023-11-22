@@ -15,6 +15,8 @@ namespace Turmerik.Dependencies
         private Action<TData> registered;
         private volatile int isRegistered;
 
+        public bool IsRegistered => isRegistered == 1;
+
         public TData Data
         {
             get

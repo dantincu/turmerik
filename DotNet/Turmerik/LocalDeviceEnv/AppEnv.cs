@@ -91,12 +91,15 @@ namespace Turmerik.LocalDevice.Core.Env
 
         protected virtual AppEnvLocator GetDefaultAppEnvLocatorMtbl()
         {
-            var mtbl = new AppEnvLocator
+            /* var mtbl = new AppEnvLocator
             {
                 AppEnvDirBasePath = DefaultDirNames.APP_ENV_DIR_BASE_REL_PATH,
             };
 
-            return mtbl;
+            return mtbl; */
+
+            throw new NotSupportedException(
+                "Default App Env Locator is not supported");
         }
 
         protected string GetStrValue(string value, string defaultValue)

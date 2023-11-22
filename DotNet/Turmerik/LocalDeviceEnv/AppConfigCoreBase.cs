@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading;
+using Turmerik.Helpers;
 using Turmerik.TextSerialization;
 
 namespace Turmerik.LocalDevice.Core.Env
 {
-    public interface IAppConfigCore<TImmtbl, TMtblSrlzbl>
+    public interface IAppConfigCore<TImmtbl, TMtblSrlzbl> : IDisposable
         where TImmtbl : class
     {
         string JsonDirPath { get; }
@@ -37,6 +39,8 @@ namespace Turmerik.LocalDevice.Core.Env
 
             JsonDirPath = GetJsonDirPath();
             JsonFilePath = GetJsonFilePath();
+
+            Mutex = MutexH.Create(JsonFilePath);
         }
 
         public string JsonDirPath { get; }
@@ -49,10 +53,18 @@ namespace Turmerik.LocalDevice.Core.Env
 
         protected TImmtbl DataCore { get; set; }
 
+        protected Mutex Mutex { get; }
+
         public event Action<TImmtbl> DataLoaded
         {
             add => dataLoaded += value;
             remove => dataLoaded -= value;
+        }
+
+        public void Dispose()
+        {
+            Mutex.Dispose();
+            Disposed();
         }
 
         public TImmtbl LoadData() => LoadDataObj();
@@ -72,7 +84,6 @@ namespace Turmerik.LocalDevice.Core.Env
         protected virtual TImmtbl LoadDataObjCore()
         {
             TMtblSrlzbl dataMtblSrlzbl = LoadJsonCore(
-                JsonFilePath,
                 GetDefaultConfig);
 
             var data = NormalizeConfig(dataMtblSrlzbl);
@@ -91,6 +102,38 @@ namespace Turmerik.LocalDevice.Core.Env
             return data;
         }
 
+        protected virtual SrlzblData LoadJsonCore<SrlzblData>(
+            Func<SrlzblData> defaultValueFactory)
+        {
+            SrlzblData srlzblData;
+            string json = null;
+            Mutex.WaitOne();
+
+            try
+            {
+                if (File.Exists(JsonFilePath))
+                {
+                    json = ReadJsonFromFile();
+                }
+            }
+            finally
+            {
+                Mutex.ReleaseMutex();
+            }
+
+            if (json != null)
+            {
+                srlzblData = JsonConversion.Adapter.Deserialize<SrlzblData>(
+                    json, false);
+            }
+            else
+            {
+                srlzblData = defaultValueFactory();
+            }
+
+            return srlzblData;
+        }
+
         protected SrlzblData LoadJsonCore<SrlzblData>(
             string jsonFilePath,
             Func<SrlzblData> defaultValueFactory)
@@ -99,7 +142,8 @@ namespace Turmerik.LocalDevice.Core.Env
 
             if (File.Exists(jsonFilePath))
             {
-                string json = File.ReadAllText(jsonFilePath);
+                string json = File.ReadAllText(
+                    jsonFilePath);
 
                 srlzblData = JsonConversion.Adapter.Deserialize<SrlzblData>(
                     json, false);
@@ -119,8 +163,25 @@ namespace Turmerik.LocalDevice.Core.Env
             string json = JsonConversion.Adapter.Serialize(
                 obj, false);
 
-            Directory.CreateDirectory(JsonDirPath);
-            File.WriteAllText(jsonFilePath, json);
+            Mutex.WaitOne();
+
+            try
+            {
+                Directory.CreateDirectory(JsonDirPath);
+                File.WriteAllText(jsonFilePath, json);
+            }
+            finally
+            {
+                Mutex.ReleaseMutex();
+            }
+        }
+
+        protected virtual string ReadJsonFromFile(
+            ) => File.ReadAllText(
+                JsonFilePath);
+
+        protected virtual void Disposed()
+        {
         }
     }
 }
