@@ -30,6 +30,14 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
 
             using (var appContext = svcProv.GetRequiredService<TrmrkApplicationContextFactory>().Create(args))
             {
+                EventHandler eventHandler = null;
+
+                eventHandler = (sender, e) =>
+                {
+                    appContext.ThreadExit -= eventHandler;
+                };
+
+                appContext.ThreadExit += eventHandler;
                 Application.Run(appContext);
             }
         }
