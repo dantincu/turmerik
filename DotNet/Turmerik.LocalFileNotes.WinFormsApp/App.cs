@@ -21,12 +21,15 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
         const string LAST_RUN_CRASH_INFO_FILE_NAME = "last-run-crash-info.json";
 
         private readonly Type thisType;
-        private readonly IServiceProvider svcProv;
+        // private readonly IServiceProvider svcProv;
         private readonly IJsonConversion jsonConversion;
         private readonly IExceptionSerializer exceptionSerializer;
         private readonly IAppInstanceStartInfoProvider appInstanceStartInfoProvider;
         private readonly IAppInstanceStartInfo appInstanceStartInfo;
         private readonly IAppEnv appEnv;
+        private readonly IAppLoggerCreator appLoggerCreator;
+        private readonly AppArgsParser appArgsParser;
+        private readonly AppOptionsRetriever appOptionsRetriever;
         private readonly string lastRunCrashDirPath;
         private readonly string lastRunCrashFilePath;
         private readonly Mutex lastRunCrashFileMutex;
@@ -34,15 +37,26 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
         private ManageNoteBooksForm manageNoteBooksForm;
         private NoteBookForm noteBookForm;
 
-        public App()
+        public App(
+            IJsonConversion jsonConversion,
+            IExceptionSerializer exceptionSerializer,
+            IAppInstanceStartInfoProvider appInstanceStartInfoProvider,
+            IAppEnv appEnv,
+            IAppLoggerCreator appLoggerCreator,
+            AppArgsParser appArgsParser,
+            AppOptionsRetriever appOptionsRetriever)
         {
             thisType = GetType();
-            svcProv = ServiceProviderContainer.Instance.Value.Data;
-            jsonConversion = svcProv.GetRequiredService<IJsonConversion>();
-            exceptionSerializer = svcProv.GetRequiredService<IExceptionSerializer>();
-            appInstanceStartInfoProvider = svcProv.GetRequiredService<IAppInstanceStartInfoProvider>();
+
+            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(nameof(jsonConversion));
+            this.exceptionSerializer = exceptionSerializer ?? throw new ArgumentNullException(nameof(exceptionSerializer));
+            this.appInstanceStartInfoProvider = appInstanceStartInfoProvider ?? throw new ArgumentNullException(nameof(appInstanceStartInfoProvider));
+            this.appEnv = appEnv ?? throw new ArgumentNullException(nameof(appEnv));
+            this.appLoggerCreator = appLoggerCreator ?? throw new ArgumentNullException(nameof(appLoggerCreator));
+            this.appArgsParser = appArgsParser ?? throw new ArgumentNullException(nameof(appArgsParser));
+            this.appOptionsRetriever = appOptionsRetriever ?? throw new ArgumentNullException(nameof(appOptionsRetriever));
+
             appInstanceStartInfo = appInstanceStartInfoProvider.Data;
-            appEnv = svcProv.GetRequiredService<IAppEnv>();
 
             lastRunCrashDirPath = appEnv.GetTypePath(
                 AppEnvDir.Data,
@@ -66,14 +80,14 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
         public void Run(string[] args)
         {
-            var appLoggerCreator = svcProv.GetRequiredService<IAppLoggerCreator>();
-
             using (var logger = appLoggerCreator.GetSharedAppLogger(thisType))
             {
                 try
                 {
-                    var appArgs = svcProv.GetRequiredService<AppArgsParser>().Parse(args);
+                    var appArgs = appArgsParser.Parse(args);
+
                     var appOpts = GetAppOpts(logger, appArgs);
+                    appOptionsRetriever.RegisterData(appOpts);
 
                     logger.DebugData(appOpts,
                         "Turmerik Local File Notes app started");
@@ -101,9 +115,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             ApplicationConfiguration.Initialize();
 
             manageNoteBooksForm = new ManageNoteBooksForm();
-            manageNoteBooksForm.SetAppOpts(opts);
-
             manageNoteBooksForm.NoteBookChosen += ManageNoteBooksForm_NoteBookChosen;
+
             Application.Run(manageNoteBooksForm);
         }
 

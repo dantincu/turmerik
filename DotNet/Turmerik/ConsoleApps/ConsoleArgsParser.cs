@@ -38,7 +38,7 @@ namespace Turmerik.ConsoleApps
 
     public class ConsoleArgsParser : IConsoleArgsParser
     {
-        public const char OPTS_START_CHAR = '/';
+        public const char OPTS_START_CHAR = ':'; // '/';
         public const char OPTS_ARG_DELIM_CHAR = ':';
 
         private readonly IDelimCharsExtractor delimCharsExtractor;
@@ -91,7 +91,7 @@ namespace Turmerik.ConsoleApps
             ConsoleArgsItemOpts<TArgsMtbl>[] handlersArr,
             bool throwOnTooManyArgs = true)
         {
-            if (data.Count < handlersArr.Length)
+            if (data.Count <= handlersArr.Length)
             {
                 var handler = handlersArr[data.Count - 1];
                 handler.Handler(data);

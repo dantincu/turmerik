@@ -12,6 +12,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 {
     public interface IAppArgs
     {
+        string MainPath { get; }
         IEnumerable<string> GetRawArgs();
     }
 
@@ -56,9 +57,11 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
     {
         public AppArgsImmtbl(IAppArgs src)
         {
+            MainPath = src.MainPath;
             RawArgs = src.GetRawArgs()?.RdnlC();
         }
 
+        public string MainPath { get; }
         public ReadOnlyCollection<string> RawArgs { get; }
 
         public IEnumerable<string> GetRawArgs() => RawArgs;
@@ -75,6 +78,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             RawArgs = src.GetRawArgs()?.ToArray();
         }
 
+        public string MainPath { get; set; }
         public string[] RawArgs { get; set; }
 
         public IEnumerable<string> GetRawArgs() => RawArgs;

@@ -87,7 +87,7 @@ namespace Turmerik.TextStream
             }
             else
             {
-                strArr = new string[] { str };
+                strArr = [ str ];
             }
 
             return strArr;
@@ -102,13 +102,9 @@ namespace Turmerik.TextStream
             bool startsWithDblDelim = startsWithDelim && str.Length > 1 && str[1] == startDelim;
             startsWithDelim = startsWithDelim && !startsWithDblDelim;
 
-            if (startsWithDelim)
+            if (startsWithDelim || startsWithDblDelim)
             {
                 str = str.Substring(1);
-            }
-            else if (startsWithDblDelim)
-            {
-                str = str.Substring(2);
             }
 
             return str;

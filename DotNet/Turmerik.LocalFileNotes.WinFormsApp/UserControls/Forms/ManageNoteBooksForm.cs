@@ -30,6 +30,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
             svcProv = ServiceProviderContainer.Instance.Value.Data;
             viewModel = svcProv.GetRequiredService<IManageNoteBooksFormVM>();
             matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
+            appOpts = svcProv.GetRequiredService<AppOptionsRetriever>().Data;
 
             InitializeComponent();
         }
@@ -38,11 +39,6 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
         {
             add => noteBookChosen += value;
             remove => noteBookChosen -= value;
-        }
-
-        public void SetAppOpts(AppOptionsImmtbl opts)
-        {
-            this.appOpts = opts;
         }
 
         #region UI Event Handlers

@@ -59,6 +59,7 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
 
                     services.AddSingleton<App>();
                     services.AddSingleton<AppArgsParser>();
+                    services.AddSingleton<AppOptionsRetriever>();
                 }));
 
             return svcProvContnr.Data;

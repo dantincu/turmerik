@@ -33,24 +33,26 @@
             toolStripStatusLabelMain = new ToolStripStatusLabel();
             menuStripMain = new MenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            newToolStripMenuItem = new ToolStripMenuItem();
+            fileNewToolStripMenuItem = new ToolStripMenuItem();
             newNoteToolStripMenuItem = new ToolStripMenuItem();
             newTextFileToolStripMenuItem = new ToolStripMenuItem();
-            openToolStripMenuItem = new ToolStripMenuItem();
-            folderToolStripMenuItem = new ToolStripMenuItem();
-            noteToolStripMenuItem = new ToolStripMenuItem();
-            fileToolStripMenuItem1 = new ToolStripMenuItem();
+            fileOpenToolStripMenuItem = new ToolStripMenuItem();
+            openFolderToolStripMenuItem = new ToolStripMenuItem();
+            openNoteToolStripMenuItem = new ToolStripMenuItem();
+            openFileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             saveAllToolStripMenuItem = new ToolStripMenuItem();
             exitAppToolStripMenuItem = new ToolStripMenuItem();
             noteBookToolStripMenuItem = new ToolStripMenuItem();
             switchToNoteBookToolStripMenuItem = new ToolStripMenuItem();
             createNewNoteBookToolStripMenuItem = new ToolStripMenuItem();
-            openToolStripMenuItem1 = new ToolStripMenuItem();
+            openNoteBookToolStripMenuItem = new ToolStripMenuItem();
             manageToolStripMenuItem = new ToolStripMenuItem();
-            settingsToolStripMenuItem = new ToolStripMenuItem();
+            manageSettingsToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
-            aboutToolStripMenuItem = new ToolStripMenuItem();
+            helpAboutToolStripMenuItem = new ToolStripMenuItem();
+            closeNoteBookToolStripMenuItem = new ToolStripMenuItem();
+            closeToolStripMenuItem = new ToolStripMenuItem();
             statusStripMain.SuspendLayout();
             menuStripMain.SuspendLayout();
             SuspendLayout();
@@ -80,59 +82,59 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, openToolStripMenuItem, saveToolStripMenuItem, saveAllToolStripMenuItem, exitAppToolStripMenuItem });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fileNewToolStripMenuItem, fileOpenToolStripMenuItem, saveToolStripMenuItem, saveAllToolStripMenuItem, closeToolStripMenuItem, exitAppToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "&File";
             // 
-            // newToolStripMenuItem
+            // fileNewToolStripMenuItem
             // 
-            newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newNoteToolStripMenuItem, newTextFileToolStripMenuItem });
-            newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(187, 22);
-            newToolStripMenuItem.Text = "&New";
+            fileNewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newNoteToolStripMenuItem, newTextFileToolStripMenuItem });
+            fileNewToolStripMenuItem.Name = "fileNewToolStripMenuItem";
+            fileNewToolStripMenuItem.Size = new Size(187, 22);
+            fileNewToolStripMenuItem.Text = "&New";
             // 
             // newNoteToolStripMenuItem
             // 
             newNoteToolStripMenuItem.Name = "newNoteToolStripMenuItem";
             newNoteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.N;
-            newNoteToolStripMenuItem.Size = new Size(175, 22);
+            newNoteToolStripMenuItem.Size = new Size(180, 22);
             newNoteToolStripMenuItem.Text = "&Note";
             // 
             // newTextFileToolStripMenuItem
             // 
             newTextFileToolStripMenuItem.Name = "newTextFileToolStripMenuItem";
             newTextFileToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
-            newTextFileToolStripMenuItem.Size = new Size(175, 22);
+            newTextFileToolStripMenuItem.Size = new Size(180, 22);
             newTextFileToolStripMenuItem.Text = "Text &File";
             // 
-            // openToolStripMenuItem
+            // fileOpenToolStripMenuItem
             // 
-            openToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { folderToolStripMenuItem, noteToolStripMenuItem, fileToolStripMenuItem1 });
-            openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(187, 22);
-            openToolStripMenuItem.Text = "&Open";
+            fileOpenToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openFolderToolStripMenuItem, openNoteToolStripMenuItem, openFileToolStripMenuItem });
+            fileOpenToolStripMenuItem.Name = "fileOpenToolStripMenuItem";
+            fileOpenToolStripMenuItem.Size = new Size(187, 22);
+            fileOpenToolStripMenuItem.Text = "&Open";
             // 
-            // folderToolStripMenuItem
+            // openFolderToolStripMenuItem
             // 
-            folderToolStripMenuItem.Name = "folderToolStripMenuItem";
-            folderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.O;
-            folderToolStripMenuItem.Size = new Size(205, 22);
-            folderToolStripMenuItem.Text = "Fol&der";
+            openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
+            openFolderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.O;
+            openFolderToolStripMenuItem.Size = new Size(205, 22);
+            openFolderToolStripMenuItem.Text = "Fol&der";
             // 
-            // noteToolStripMenuItem
+            // openNoteToolStripMenuItem
             // 
-            noteToolStripMenuItem.Name = "noteToolStripMenuItem";
-            noteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
-            noteToolStripMenuItem.Size = new Size(205, 22);
-            noteToolStripMenuItem.Text = "&Note";
+            openNoteToolStripMenuItem.Name = "openNoteToolStripMenuItem";
+            openNoteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
+            openNoteToolStripMenuItem.Size = new Size(205, 22);
+            openNoteToolStripMenuItem.Text = "&Note";
             // 
-            // fileToolStripMenuItem1
+            // openFileToolStripMenuItem
             // 
-            fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            fileToolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.O;
-            fileToolStripMenuItem1.Size = new Size(205, 22);
-            fileToolStripMenuItem1.Text = "&File";
+            openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            openFileToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
+            openFileToolStripMenuItem.Size = new Size(205, 22);
+            openFileToolStripMenuItem.Text = "&File";
             // 
             // saveToolStripMenuItem
             // 
@@ -146,7 +148,7 @@
             saveAllToolStripMenuItem.Name = "saveAllToolStripMenuItem";
             saveAllToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
             saveAllToolStripMenuItem.Size = new Size(187, 22);
-            saveAllToolStripMenuItem.Text = "Save All";
+            saveAllToolStripMenuItem.Text = "Save &All";
             // 
             // exitAppToolStripMenuItem
             // 
@@ -156,7 +158,7 @@
             // 
             // noteBookToolStripMenuItem
             // 
-            noteBookToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { switchToNoteBookToolStripMenuItem, createNewNoteBookToolStripMenuItem, openToolStripMenuItem1 });
+            noteBookToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { switchToNoteBookToolStripMenuItem, createNewNoteBookToolStripMenuItem, openNoteBookToolStripMenuItem, closeNoteBookToolStripMenuItem });
             noteBookToolStripMenuItem.Name = "noteBookToolStripMenuItem";
             noteBookToolStripMenuItem.Size = new Size(75, 20);
             noteBookToolStripMenuItem.Text = "Note &Book";
@@ -173,40 +175,53 @@
             createNewNoteBookToolStripMenuItem.Name = "createNewNoteBookToolStripMenuItem";
             createNewNoteBookToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.N;
             createNewNoteBookToolStripMenuItem.Size = new Size(233, 22);
-            createNewNoteBookToolStripMenuItem.Text = "&Create New";
+            createNewNoteBookToolStripMenuItem.Text = "Create &New";
             // 
-            // openToolStripMenuItem1
+            // openNoteBookToolStripMenuItem
             // 
-            openToolStripMenuItem1.Name = "openToolStripMenuItem1";
-            openToolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.B;
-            openToolStripMenuItem1.Size = new Size(233, 22);
-            openToolStripMenuItem1.Text = "&Open";
+            openNoteBookToolStripMenuItem.Name = "openNoteBookToolStripMenuItem";
+            openNoteBookToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.B;
+            openNoteBookToolStripMenuItem.Size = new Size(233, 22);
+            openNoteBookToolStripMenuItem.Text = "&Open";
             // 
             // manageToolStripMenuItem
             // 
-            manageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { settingsToolStripMenuItem });
+            manageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manageSettingsToolStripMenuItem });
             manageToolStripMenuItem.Name = "manageToolStripMenuItem";
             manageToolStripMenuItem.Size = new Size(62, 20);
             manageToolStripMenuItem.Text = "&Manage";
             // 
-            // settingsToolStripMenuItem
+            // manageSettingsToolStripMenuItem
             // 
-            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            settingsToolStripMenuItem.Size = new Size(116, 22);
-            settingsToolStripMenuItem.Text = "&Settings";
+            manageSettingsToolStripMenuItem.Name = "manageSettingsToolStripMenuItem";
+            manageSettingsToolStripMenuItem.Size = new Size(180, 22);
+            manageSettingsToolStripMenuItem.Text = "&Settings";
             // 
             // helpToolStripMenuItem
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { helpAboutToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(44, 20);
             helpToolStripMenuItem.Text = "&Help";
             // 
-            // aboutToolStripMenuItem
+            // helpAboutToolStripMenuItem
             // 
-            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(107, 22);
-            aboutToolStripMenuItem.Text = "&About";
+            helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
+            helpAboutToolStripMenuItem.Size = new Size(180, 22);
+            helpAboutToolStripMenuItem.Text = "&About";
+            // 
+            // closeNoteBookToolStripMenuItem
+            // 
+            closeNoteBookToolStripMenuItem.Name = "closeNoteBookToolStripMenuItem";
+            closeNoteBookToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.C;
+            closeNoteBookToolStripMenuItem.Size = new Size(233, 22);
+            closeNoteBookToolStripMenuItem.Text = "&Close";
+            // 
+            // closeToolStripMenuItem
+            // 
+            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            closeToolStripMenuItem.Size = new Size(187, 22);
+            closeToolStripMenuItem.Text = "&Close";
             // 
             // NoteBookForm
             // 
@@ -236,23 +251,25 @@
         private ToolStripStatusLabel toolStripStatusLabelMain;
         private MenuStrip menuStripMain;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem openToolStripMenuItem;
-        private ToolStripMenuItem newToolStripMenuItem;
+        private ToolStripMenuItem fileOpenToolStripMenuItem;
+        private ToolStripMenuItem fileNewToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem saveAllToolStripMenuItem;
         private ToolStripMenuItem exitAppToolStripMenuItem;
         private ToolStripMenuItem newTextFileToolStripMenuItem;
         private ToolStripMenuItem newNoteToolStripMenuItem;
-        private ToolStripMenuItem noteToolStripMenuItem;
-        private ToolStripMenuItem fileToolStripMenuItem1;
-        private ToolStripMenuItem folderToolStripMenuItem;
+        private ToolStripMenuItem openNoteToolStripMenuItem;
+        private ToolStripMenuItem openFileToolStripMenuItem;
+        private ToolStripMenuItem openFolderToolStripMenuItem;
         private ToolStripMenuItem noteBookToolStripMenuItem;
         private ToolStripMenuItem createNewNoteBookToolStripMenuItem;
         private ToolStripMenuItem switchToNoteBookToolStripMenuItem;
         private ToolStripMenuItem manageToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
-        private ToolStripMenuItem aboutToolStripMenuItem;
-        private ToolStripMenuItem settingsToolStripMenuItem;
-        private ToolStripMenuItem openToolStripMenuItem1;
+        private ToolStripMenuItem helpAboutToolStripMenuItem;
+        private ToolStripMenuItem manageSettingsToolStripMenuItem;
+        private ToolStripMenuItem openNoteBookToolStripMenuItem;
+        private ToolStripMenuItem closeNoteBookToolStripMenuItem;
+        private ToolStripMenuItem closeToolStripMenuItem;
     }
 }

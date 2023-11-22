@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.Settings
 {
+    public enum ReopenNoteBookBehaviorType
+    {
+        Unspecified = 0,
+        StartNewSession,
+        OpenLastSession
+    }
+
     public interface IAppSettingsData
     {
+        ReopenNoteBookBehaviorType? ReopenNoteBookBehaviorType { get; }
     }
 
     public static class AppSettingsData

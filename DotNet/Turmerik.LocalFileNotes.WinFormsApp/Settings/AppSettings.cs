@@ -22,7 +22,10 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Settings
         }
 
         protected override AppSettingsDataMtbl GetDefaultConfigCore(
-            ) => new AppSettingsDataMtbl();
+            ) => new AppSettingsDataMtbl
+            {
+                ReopenNoteBookBehaviorType = ReopenNoteBookBehaviorType.Unspecified
+            };
 
         protected override AppSettingsDataImmtbl NormalizeConfig(
             AppSettingsDataMtbl config) => new AppSettingsDataImmtbl(config);

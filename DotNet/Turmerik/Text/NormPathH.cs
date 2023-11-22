@@ -10,30 +10,38 @@ namespace Turmerik.Text
     public static class NormPathH
     {
         public static string LocalDeviceRootedPathUnixToWinStyle(
-            string path) => string.Concat(path[1], ':', path.Substring(2));
+            string path,
+            Func<string, string>? transformer = null) => string.Concat(
+                path[1], ':', path.Substring(2)).With(NormalizeTransformer(transformer));
 
         public static string RootedPathUnixToWinStyle(
-            string path) => path.StartsWith(PathH.NetworkPathRootPfx) switch
+            string path,
+            Func<string, string>? transformer = null) => path.StartsWith(PathH.NetworkPathRootPfx) switch
             {
-                false => LocalDeviceRootedPathUnixToWinStyle(path),
-                true => path
+                false => LocalDeviceRootedPathUnixToWinStyle(path, transformer),
+                true => path.With(NormalizeTransformer(transformer))
             };
 
         public static string NormRootedPathWinStyle(
-            string path) => PathH.WinDriveRegex.IsMatch(path) switch
+            string path,
+            Func<string, string>? transformer = null) => PathH.WinDriveRegex.IsMatch(path) switch
             {
-                false => NormPathCore(path).With(RootedPathUnixToWinStyle),
-                true => Path.GetFullPath(path)
+                false => NormPathCore(path).With(retPath => RootedPathUnixToWinStyle(retPath, transformer)),
+                true => Path.GetFullPath(path).With(NormalizeTransformer(transformer))
             };
 
         public static string NormPathUnixStyle(
-            string path)
+            string path,
+            Func<string, bool, string>? transformer = null)
         {
             path = NormPath(path);
             path = path.Replace("\\", "/");
+            bool isRootedPath;
 
             if (PathH.WinDriveRegex.IsMatch(path))
             {
+                isRootedPath = true;
+
                 (var drive,
                     var restOfPath) = path.SplitStr(
                         (str, len) => 2);
@@ -41,30 +49,42 @@ namespace Turmerik.Text
                 path = string.Concat(
                     '/', drive[0], restOfPath);
             }
+            else
+            {
+                isRootedPath = path.FirstOrDefault() == '/';
+            }
+
+            if (transformer != null)
+            {
+                path = transformer(path, isRootedPath);
+            }
 
             return path;
         }
 
         public static string NormRootedPath(
-            string path) => LocalDeviceH.IsWinOS switch
+            string path,
+            Func<string, string>? transformer = null) => LocalDeviceH.IsWinOS switch
             {
-                false => Path.GetFullPath(path),
-                true => NormRootedPathWinStyle(path)
+                false => Path.GetFullPath(path).With(NormalizeTransformer(transformer)),
+                true => NormRootedPathWinStyle(path, transformer)
             };
 
         public static string NormPath(
             string path,
-            bool forceUnixStyle) => forceUnixStyle switch
+            bool forceUnixStyle,
+            Func<string, bool, string>? transformer = null) => forceUnixStyle switch
             {
-                false => NormPath(path),
-                true => NormPathUnixStyle(path),
+                false => NormPath(path, transformer),
+                true => NormPathUnixStyle(path, transformer),
             };
 
         public static string NormPath(
-            string path) => Path.IsPathRooted(path) switch
+            string path,
+            Func<string, bool, string>? transformer = null) => Path.IsPathRooted(path) switch
             {
-                false => NormPathCore(path),
-                true => NormRootedPath(path)
+                false => NormPathCore(path, ConvertTransformer(transformer, false)),
+                true => NormRootedPath(path, ConvertTransformer(transformer, true))
             };
 
         /// <summary>
@@ -73,7 +93,9 @@ namespace Turmerik.Text
         /// <param name="path"></param>
         /// <param name="strPrnPntCount"></param>
         /// <returns></returns>
-        public static string NormPathCore(string path)
+        public static string NormPathCore(
+            string path,
+            Func<string, string>? transformer = null)
         {
             var partsArr = TrimAndSplitByDirSepChars(path);
 
@@ -96,6 +118,12 @@ namespace Turmerik.Text
                 PathH.DirSepChar, false);
 
             retPath = retPath.TrimEnd('/', '\\');
+
+            if (transformer != null)
+            {
+                retPath = transformer(retPath);
+            }
+
             return retPath;
         }
 
@@ -146,5 +174,15 @@ namespace Turmerik.Text
         public static void ThrowInvalidPathEntryName(
             string pathPart) => throw new FormatException(
                 $"Invalid path entry name: {pathPart}");
+
+        public static Func<string, string> ConvertTransformer(
+            Func<string, bool, string>? transformer,
+            bool isPathRooted) => path => NormalizeTransformer(transformer).Invoke(path, isPathRooted);
+
+        public static Func<string, string> NormalizeTransformer(
+            Func<string, string>? transformer) => transformer.FirstNotNull(path => path)!;
+
+        public static Func<string, bool, string> NormalizeTransformer(
+            Func<string, bool, string>? transformer) => transformer.FirstNotNull((path, isRooted) => path)!;
     }
 }

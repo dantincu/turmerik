@@ -12,8 +12,12 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Settings
         {
         }
 
-        public AppSettingsDataMtbl(IAppSettingsData src)
+        public AppSettingsDataMtbl(
+            IAppSettingsData src)
         {
+            ReopenNoteBookBehaviorType = src.ReopenNoteBookBehaviorType;
         }
+
+        public ReopenNoteBookBehaviorType? ReopenNoteBookBehaviorType { get; set; }
     }
 }
