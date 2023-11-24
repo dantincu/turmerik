@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Notes.Html;
+using Turmerik.DriveExplorer.Notes;
+using Turmerik.HtmlAgility;
 using Turmerik.Notes.Md;
 using Turmerik.Notes.Service;
 using Turmerik.Notes.Settings;

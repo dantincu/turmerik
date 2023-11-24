@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using Turmerik.Helpers;
 using Turmerik.Utility;
-using static Turmerik.Notes.NoteDirsPairConfig;
+using static Turmerik.DriveExplorer.Notes.NoteDirsPairConfig;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.Notes
 {
     public class NoteDirsPairConfigImmtbl : INoteDirsPairConfig
     {

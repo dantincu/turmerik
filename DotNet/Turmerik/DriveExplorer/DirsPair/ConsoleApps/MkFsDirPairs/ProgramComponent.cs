@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.ConsoleApps;
-using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.DirsPair;
 using Turmerik.Helpers;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
-namespace Turmerik.MkFsDirsPair.ConsoleApp
+namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
 {
     public class ProgramComponent
     {
@@ -30,7 +29,7 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
-            this.parser = consoleArgsParser ?? throw new ArgumentNullException(
+            parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
 
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
@@ -132,6 +131,6 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
                                         data.ArgFlagValue!.Single()])
                             ]
                         })
-                    }).Args;
+                }).Args;
     }
 }

@@ -8,8 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.Helpers;
-using Turmerik.Notes.Html;
+using Turmerik.HtmlAgility;
 using Turmerik.TextParsing;
 using Turmerik.Utility;
 

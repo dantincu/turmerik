@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.Helpers;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;

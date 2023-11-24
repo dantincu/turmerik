@@ -10,6 +10,7 @@ using Turmerik.Notes.Settings;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 using Turmerik.Dependencies;
+using Turmerik.DriveExplorer.Notes;
 
 namespace Turmerik.Notes.UnitTests
 {

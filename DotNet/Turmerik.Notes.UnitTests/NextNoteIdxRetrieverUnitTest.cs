@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Turmerik.DriveExplorer.Notes;
 
 namespace Turmerik.Notes.UnitTests
 {

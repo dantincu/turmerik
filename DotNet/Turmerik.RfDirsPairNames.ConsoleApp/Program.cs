@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Dependencies;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs;
+using Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.Helpers;
 
 var services = TrmrkServices.RegisterAll(
@@ -12,10 +12,10 @@ services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 services.AddTransient<ProgramComponent>();
 var svcProv = services.BuildServiceProvider();
 
-await ConsoleH.TryExecuteAsync(
-    async () =>
+ConsoleH.TryExecute(
+    () =>
     {
         var program = svcProv.GetRequiredService<ProgramComponent>();
-        await program.RunAsync(args);
+        program.Run(args);
     },
     false);

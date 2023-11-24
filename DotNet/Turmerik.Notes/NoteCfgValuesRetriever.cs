@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.Helpers;
 using Turmerik.Notes.Md;
 using Turmerik.Text;

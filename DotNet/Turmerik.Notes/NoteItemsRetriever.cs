@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.Notes.Md;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;

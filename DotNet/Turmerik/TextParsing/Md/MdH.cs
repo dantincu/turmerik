@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Turmerik.Text;
+
+namespace Turmerik.TextParsing.Md
+{
+    public static class MdH
+    {
+        public const string MD_TITLE_PREFIX = "# ";
+
+        public static string TryGetMdTitleFromFile(
+            string filePath,
+            string mdTitleLinePfx = null,
+            bool trimStart = true)
+        {
+            string mdTitle;
+
+            using (var streamReader = File.OpenText(filePath))
+            {
+                mdTitle = TryGetMdTitleFromStream(
+                    streamReader,
+                    mdTitleLinePfx,
+                    trimStart);
+            }
+
+            return mdTitle;
+        }
+
+        public static string TryGetMdTitleFromStream(
+            StreamReader streamReader,
+            string mdTitleLinePfx = null,
+            bool trimStart = true)
+        {
+            var mdLine = streamReader.ReadLine();
+            string? title = null;
+
+            while (mdLine != null)
+            {
+                title ??= TryGetMdTitleFromLine(
+                    mdLine, mdTitleLinePfx,
+                    trimStart)?.Nullify();
+
+                if (title != null)
+                {
+                    break;
+                }
+
+                mdLine = streamReader.ReadLine();
+            }
+
+            return title;
+        }
+
+        public static string TryGetMdTitleFromLine(
+            string mdLine,
+            string mdTitleLinePfx = null,
+            bool trimStart = true)
+        {
+            string title = null;
+            mdTitleLinePfx ??= MD_TITLE_PREFIX;
+
+            if (trimStart)
+            {
+                mdLine = mdLine.TrimStart();
+            }
+
+            if (mdLine.StartsWith(mdTitleLinePfx))
+            {
+                title = mdLine.Substring(
+                    mdTitleLinePfx.Length).Trim();
+            }
+
+            return title;
+        }
+    }
+}

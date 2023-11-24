@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Turmerik.Utility;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.Notes
 {
     public abstract class NoteItemCoreBase : TrmrkObj
     {

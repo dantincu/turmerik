@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer.DirsPair;
 
-namespace Turmerik.MkFsDirsPair.ConsoleApp
+namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
 {
     public class ProgramArgs
     {

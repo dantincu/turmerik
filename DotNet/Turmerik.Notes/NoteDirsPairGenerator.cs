@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.Helpers;
 using Turmerik.Notes.Md;
 using Turmerik.TextSerialization;

@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Turmerik.Helpers;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.Notes
 {
     public interface INextNoteIdxRetriever
     {
@@ -181,7 +181,7 @@ namespace Turmerik.Notes
                 sortedIdxesArr, 1, minVal, maxVal, desc);
 
             int nextIdx = gapFound ? gapStartIdx : gapEndIdx;
-            int incVal = (gapFound && idx == 0) ? 0 : desc ? -1 : 1;
+            int incVal = gapFound && idx == 0 ? 0 : desc ? -1 : 1;
 
             nextIdx += incVal;
             return nextIdx;

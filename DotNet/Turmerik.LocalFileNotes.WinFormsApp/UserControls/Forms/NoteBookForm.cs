@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Actions;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.LocalFileNotes.WinFormsApp.ViewModels;
-using Turmerik.Notes;
 using Turmerik.UIActions;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;

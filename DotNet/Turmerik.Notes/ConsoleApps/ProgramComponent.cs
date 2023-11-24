@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.Helpers;
 using Turmerik.Notes.Service;
 using Turmerik.Notes.Settings;

@@ -1,15 +1,13 @@
 ﻿using HtmlAgilityPack;
-using Markdig.Parsers;
-using Markdig.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Notes.Md;
+using Turmerik;
 using Turmerik.Helpers;
 using Turmerik.TextParsing;
 using Turmerik.Utility;
 
-namespace Turmerik.Notes.Html
+namespace Turmerik.HtmlAgility
 {
     public interface IHtmlNodesRetriever
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.DriveExplorer.Notes;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {
@@ -10,11 +11,9 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
     {
         public async Task BuildAsync(AppOptionsMtbl opts)
         {
-            // opts.LaunchNoteBookFormDirectly = true;
-
             opts.NoteBookFormOpts = new NoteBookFormOpts
             {
-                NoteBook = new Notes.NoteBook
+                NoteBook = new NoteBook
                 {
                     Title = "My Personal Note Book",
                 }

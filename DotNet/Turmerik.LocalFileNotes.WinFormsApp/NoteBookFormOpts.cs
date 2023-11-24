@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Notes;
+using Turmerik.DriveExplorer.Notes;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {

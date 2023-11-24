@@ -8,6 +8,7 @@ using Turmerik.Testing;
 using Turmerik.Dependencies;
 using Turmerik.Notes.UnitTests;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.Notes;
 
 namespace Turmerik.Notes.UnitTests
 {
