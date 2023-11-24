@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.AspNetCore.Dependencies;
 using Turmerik.Dependencies;
+using Turmerik.HtmlAgility.Dependencies;
 using Turmerik.LocalDevice.Core.Env;
 using Turmerik.Notes.Dependencies;
 
@@ -18,6 +19,7 @@ namespace Turmerik.Notes.AspNetCore.Dependencies
         {
             TrmrkServices.RegisterAll(services);
             AspNetCoreServices.RegisterAll(services);
+            HtmlAgilityServices.RegisterAll(services);
             TrmrkNoteServices.RegisterAll(services);
 
             return services;

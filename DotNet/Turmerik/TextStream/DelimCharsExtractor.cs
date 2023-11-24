@@ -9,12 +9,14 @@ namespace Turmerik.TextStream
     {
         string[] SplitStr(
             string inStr,
-            char delim);
+            char delim,
+            char emptyChar);
 
         string[] SplitStr(
             string str,
             char delim,
             char startDelim,
+            char emptyChar,
             out bool startsWithDelim,
             bool onlySplitIfStartsWithDelim = true);
 
@@ -28,7 +30,8 @@ namespace Turmerik.TextStream
     {
         public string[] SplitStr(
             string inStr,
-            char delim)
+            char delim,
+            char emptyChar)
         {
             var strList = new List<string>();
             var chrList = new List<char>();
@@ -38,9 +41,9 @@ namespace Turmerik.TextStream
             {
                 char chr = inStr[i];
 
-                if (chr == delim)
+                if (chr == delim || chr == emptyChar)
                 {
-                    if (prevChar != default && prevChar != delim)
+                    if (chr == delim && prevChar != default && prevChar != chr)
                     {
                         strList.Add(
                             new string(
@@ -48,9 +51,9 @@ namespace Turmerik.TextStream
 
                         chrList.Clear();
                     }
-                    else if (prevChar == delim)
+                    else if (prevChar == chr)
                     {
-                        chrList.Add(delim);
+                        chrList.Add(chr);
                         prevChar = default;
                     }
                 }
@@ -73,17 +76,21 @@ namespace Turmerik.TextStream
             string str,
             char delim,
             char startDelim,
+            char emptyChar,
             out bool startsWithDelim,
             bool onlySplitIfStartsWithDelim = true)
         {
-            str = TrimStr(str, startDelim,
+            str = TrimStr(str,
+                startDelim,
                 out startsWithDelim);
 
             string[] strArr;
 
             if (startsWithDelim || !onlySplitIfStartsWithDelim)
             {
-                strArr = SplitStr(str, delim);
+                strArr = SplitStr(
+                    str, delim,
+                    emptyChar);
             }
             else
             {

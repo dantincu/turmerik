@@ -40,6 +40,7 @@ namespace Turmerik.ConsoleApps
     {
         public const char OPTS_START_CHAR = ':'; // '/';
         public const char OPTS_ARG_DELIM_CHAR = ':';
+        public const char OPTS_ARG_SPACE_CHAR = '?';
 
         private readonly IDelimCharsExtractor delimCharsExtractor;
 
@@ -186,6 +187,7 @@ namespace Turmerik.ConsoleApps
                 data.ArgItem,
                 opts.OptsArgDelimChar,
                 opts.OptsStartChar,
+                opts.OptsArgEmptyChar,
                 out bool startsWithDelim);
 
             if (startsWithDelim)

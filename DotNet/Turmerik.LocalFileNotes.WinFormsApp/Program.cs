@@ -14,6 +14,7 @@ using Turmerik.LocalDeviceEnv;
 using Turmerik.LocalFileNotes.WinFormsApp;
 using Turmerik.LocalFileNotes.WinFormsApp.Settings;
 using Turmerik.LocalFileNotes.WinFormsApp.Data;
+using Turmerik.HtmlAgility.Dependencies;
 
 namespace Turmerik.LocalFilesNotes.WinFormsApp
 {
@@ -49,6 +50,7 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
             svcProvContnr.RegisterData(
                 new ServiceCollection().AsOpts(services =>
                 {
+                    HtmlAgilityServices.RegisterAll(services);
                     TrmrkNoteServices.RegisterAll(services);
                     TrmrkNoteServices.RegisterAppSettingsRetriever<NotesAppConfigImmtbl, NotesAppConfigMtbl>(services);
 

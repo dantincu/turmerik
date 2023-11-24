@@ -147,6 +147,12 @@ namespace Turmerik.Text
             return retStr;
         }
 
+        public static string JoinStr(
+            this string[] strArr,
+            string joinStr = null) => string.Join(
+                joinStr ?? string.Empty,
+                strArr);
+
         public static string[] GetTextLines(
             string text) => text.Split('\n').Select(
                 line => line.TrimEnd('\r')).ToArray();

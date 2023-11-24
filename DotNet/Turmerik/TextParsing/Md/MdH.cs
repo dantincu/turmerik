@@ -41,7 +41,7 @@ namespace Turmerik.TextParsing.Md
             {
                 title ??= TryGetMdTitleFromLine(
                     mdLine, mdTitleLinePfx,
-                    trimStart)?.Nullify();
+                    trimStart)?.Nullify(true);
 
                 if (title != null)
                 {

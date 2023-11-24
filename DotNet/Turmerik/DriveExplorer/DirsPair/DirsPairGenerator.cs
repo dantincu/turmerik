@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.Notes;
 using Turmerik.Helpers;
 using Turmerik.Utility;
 
@@ -19,24 +20,31 @@ namespace Turmerik.DriveExplorer.DirsPair
     {
         private readonly IDriveExplorerService dvExplrSvc;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
+        private readonly INextNoteIdxRetriever nextNoteIdxRetriever;
+        private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
 
         public DirsPairGenerator(
             IDriveExplorerService dvExplrSvc,
-            IFsEntryNameNormalizer fsEntryNameNormalizer)
+            IFsEntryNameNormalizer fsEntryNameNormalizer,
+            INextNoteIdxRetriever nextNoteIdxRetriever,
+            INoteCfgValuesRetriever noteCfgValuesRetriever)
         {
             this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
                 nameof(dvExplrSvc));
 
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
                 nameof(fsEntryNameNormalizer));
+
+            this.nextNoteIdxRetriever = nextNoteIdxRetriever ?? throw new ArgumentNullException(
+                nameof(nextNoteIdxRetriever));
+
+            this.noteCfgValuesRetriever = noteCfgValuesRetriever ?? throw new ArgumentNullException(
+                nameof(noteCfgValuesRetriever));
         }
 
         public async Task<List<DriveItemX>> GenerateItemsAsync(
             DirsPairOpts opts)
         {
-            opts.FullDirNamePart ??= fsEntryNameNormalizer.NormalizeFsEntryName(
-                opts.Title, opts.MaxFsEntryNameLength);
-
             var folderFiles = GetFolderFiles(opts);
             var dirsPair = GetDirsPair(opts, folderFiles);
 
@@ -108,7 +116,7 @@ namespace Turmerik.DriveExplorer.DirsPair
                             opts.MdFileContentsTemplate,
                             opts.Title,
                             Trmrk.TrmrkGuidStrNoDash,
-                            opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME)
+                            opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME) + opts.MdFileFirstContent
                     }
                 };
 

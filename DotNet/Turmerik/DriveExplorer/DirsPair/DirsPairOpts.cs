@@ -15,6 +15,7 @@ namespace Turmerik.DriveExplorer.DirsPair
         public string JoinStr { get; set; }
         public string MdFileNameTemplate { get; set; }
         public string MdFileContentsTemplate { get; set; }
+        public string MdFileFirstContent { get; set; }
         public string KeepFileName { get; set; }
         public string KeepFileNameContents { get; set; }
         public string TrmrkGuidInputName { get; set; }

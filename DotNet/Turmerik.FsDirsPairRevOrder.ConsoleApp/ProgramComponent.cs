@@ -35,7 +35,7 @@ namespace Turmerik.FsDirsPairRevOrder.ConsoleApp
                 path => NormPathH.NormPath(
                     path, (path, isRooted) => isRooted.If(
                         () => path, () => Path.GetFullPath(
-                            path.Nullify() ?? Environment.CurrentDirectory)))) ?? Environment.CurrentDirectory;
+                            path.Nullify(true) ?? Environment.CurrentDirectory)))) ?? Environment.CurrentDirectory;
 
             var wka = new WorkArgs
             {

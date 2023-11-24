@@ -10,7 +10,9 @@
     "CreateNote": "n",
     "CreateNoteBook": "b",
     "CreateNoteInternalsDir": "i",
-    "CreateNoteFilesDir": "f"
+    "CreateNoteFilesDir": "f",
+    "Url": "url",
+    "Uri": "uri"
   },
   "DirNames": {
     "DefaultJoinStr": "-",
@@ -30,11 +32,12 @@
     }
   },
   "FileNames": {
-    "MdFileNameTemplate": "{0}[note]",
+    "MdFileNameTemplate": "{0}[note].md",
     "KeepFileName": ".keep"
   },
   "FileContents": {
     "KeepFileContentsTemplate": "{0}",
-    "MdFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n"
+    "MdFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
+    "MdFileContentSectionTemplate": "{0}  \n\n"
   }
 }

@@ -124,7 +124,7 @@ namespace Turmerik.UIActions
             _ = (msgTuple?.LogMessage ?? opts.ActionName?.With(
                 actionName => string.Format(
                     OnBeforeExecutionLogMsgTpl,
-                    actionName))).Nullify()?.ActWith(
+                    actionName))).Nullify(true)?.ActWith(
                 logMsg => Logger.Verbose(logMsg));
         }
 
@@ -136,7 +136,7 @@ namespace Turmerik.UIActions
             _ = (msgTuple?.LogMessage ?? opts.ActionName?.With(
                 actionName => string.Format(
                     OnUnhandledErrorLogMsgTpl,
-                    actionName))).Nullify()?.ActWith(
+                    actionName))).Nullify(true)?.ActWith(
                 logMsg => Logger.Error(ex, logMsg));
         }
 
@@ -151,7 +151,7 @@ namespace Turmerik.UIActions
                 actionName => string.Format(
                     OnAfterExecutionLogMsgTpl,
                     actionName,
-                    resultStr))).Nullify()?.ActWith(
+                    resultStr))).Nullify(true)?.ActWith(
                         logMsg => Logger.Verbose(logMsg));
         }
     }

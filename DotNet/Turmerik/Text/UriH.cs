@@ -9,16 +9,28 @@ namespace Turmerik.Text
 {
     public static class UriH
     {
+        public const string HTTPS = "https";
+
         public const string URI_SCHEME_REGEX_STR = @"^[a-zA-Z0-9\-_]*\:$";
         public const string URI_SCHEME_START_REGEX_STR = @"^[a-zA-Z0-9\-_]*\:\/{2}";
 
         public static readonly Regex UriSchemeRegex = new Regex(URI_SCHEME_REGEX_STR);
         public static readonly Regex UriSchemeStartRegex = new Regex(URI_SCHEME_START_REGEX_STR);
 
-        public static string GetUriScheme(string uri)
+        public static string? GetUriScheme(
+            string uri,
+            out string restOfUri)
         {
             string schemeStartStr = GetUriSchemeStartStr(uri);
-            string schemeStr = schemeStartStr?.TrimEnd('/');
+            string? schemeStr = schemeStartStr?.TrimEnd('/').TrimEnd(':');
+
+            restOfUri = uri;
+
+            if (schemeStartStr != null)
+            {
+                restOfUri = uri.Substring(
+                    schemeStartStr.Length);
+            }
 
             return schemeStr;
         }
@@ -107,6 +119,44 @@ namespace Turmerik.Text
                 trimFwSlashes);
 
             return relUriWithoutQueryString;
+        }
+
+        public static string AssureUriHasScheme(
+            string uri,
+            out string? scheme,
+            out string restOfUri,
+            string preferedScheme = null)
+        {
+            preferedScheme ??= HTTPS;
+
+            scheme = GetUriScheme(
+                uri, out restOfUri);
+
+            if (string.IsNullOrEmpty(scheme))
+            {
+                string.Join("://", uri, preferedScheme);
+            }
+
+            return uri;
+        }
+
+        public static string AssureUriHasScheme(
+            string uri,
+            Func<string, string, string, string> differentSchemeConverter,
+            string preferedScheme = null)
+        {
+            uri = AssureUriHasScheme(uri,
+                out string scheme,
+                out string restOfUri,
+                preferedScheme);
+
+            if (scheme != null)
+            {
+                uri = differentSchemeConverter(
+                    scheme, restOfUri, uri);
+            }
+
+            return uri;
         }
     }
 }

@@ -25,6 +25,8 @@ namespace Turmerik.DriveExplorer.DirsPair
             public string CreateNoteBook { get; set; }
             public string CreateNoteInternalsDir { get; set; }
             public string CreateNoteFilesDir { get; set; }
+            public string Url { get; set; }
+            public string Uri { get; set; }
         }
 
         public class DirNamesT
@@ -49,6 +51,7 @@ namespace Turmerik.DriveExplorer.DirsPair
         {
             public string KeepFileContentsTemplate { get; set; }
             public string MdFileContentsTemplate { get; set; }
+            public string MdFileContentSectionTemplate { get; set; }
         }
     }
 }

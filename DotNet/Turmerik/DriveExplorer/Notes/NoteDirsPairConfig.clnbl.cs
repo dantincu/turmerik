@@ -91,6 +91,7 @@ namespace Turmerik.DriveExplorer.Notes
         {
             string KeepFileContentsTemplate { get; }
             string NoteFileContentsTemplate { get; }
+            string NoteFileContentSectionTemplate { get; }
             bool? RequireTrmrkGuidInNoteJsonFile { get; }
             bool? RequireTrmrkGuidInNoteMdFile { get; }
         }

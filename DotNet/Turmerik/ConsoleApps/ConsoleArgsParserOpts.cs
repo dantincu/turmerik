@@ -15,6 +15,7 @@ namespace Turmerik.ConsoleApps
         public Func<TArgsMtbl> ArgsFactory { get; set; }
         public char OptsStartChar { get; set; }
         public char OptsArgDelimChar { get; set; }
+        public char OptsArgEmptyChar { get; set; }
         public Action<ConsoleArgsParserData<TArgsMtbl>> ArgsBuilder { get; set; }
     }
 }

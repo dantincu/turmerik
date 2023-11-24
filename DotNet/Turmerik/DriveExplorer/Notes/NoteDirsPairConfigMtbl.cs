@@ -245,13 +245,15 @@ namespace Turmerik.DriveExplorer.Notes
             public FileContentsT(IFileContentsT src)
             {
                 KeepFileContentsTemplate = src.KeepFileContentsTemplate;
-                KeepFileContentsTemplate = src.KeepFileContentsTemplate;
+                NoteFileContentsTemplate = src.NoteFileContentsTemplate;
+                NoteFileContentSectionTemplate = src.NoteFileContentSectionTemplate;
                 RequireTrmrkGuidInNoteJsonFile = src.RequireTrmrkGuidInNoteJsonFile;
                 RequireTrmrkGuidInNoteMdFile = src.RequireTrmrkGuidInNoteMdFile;
             }
 
             public string KeepFileContentsTemplate { get; set; }
             public string NoteFileContentsTemplate { get; set; }
+            public string NoteFileContentSectionTemplate { get; set; }
             public bool? RequireTrmrkGuidInNoteJsonFile { get; set; }
             public bool? RequireTrmrkGuidInNoteMdFile { get; set; }
         }

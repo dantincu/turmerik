@@ -33,7 +33,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
                             {
                                 data.Args.MainPath = NormPathH.NormPath(
                                     data.ArgItem, (path, isRooted) => isRooted.If(
-                                        () => path, () => Path.GetFullPath(path.Nullify() ?? Environment.CurrentDirectory)));
+                                        () => path, () => Path.GetFullPath(path.Nullify(
+                                            true) ?? Environment.CurrentDirectory)));
                             })],
                         FlagHandlersArr = []
                     })

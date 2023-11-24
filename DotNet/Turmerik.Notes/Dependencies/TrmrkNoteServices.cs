@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Turmerik.DriveExplorer.Notes;
 using Turmerik.HtmlAgility;
+using Turmerik.HtmlAgility.Dependencies;
 using Turmerik.Notes.Md;
 using Turmerik.Notes.Service;
 using Turmerik.Notes.Settings;
@@ -15,7 +16,6 @@ namespace Turmerik.Notes.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
-            services.AddSingleton<IHtmlNodesRetriever, HtmlNodesRetriever>();
             services.AddSingleton<IMdObjectsRetriever, MdObjectsRetriever>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
             services.AddSingleton<INoteItemsRetrieverFactory, NoteItemsRetrieverFactory>();
