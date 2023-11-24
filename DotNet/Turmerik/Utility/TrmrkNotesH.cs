@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.Notes
+namespace Turmerik.Utility
 {
     public static class TrmrkNotesH
     {

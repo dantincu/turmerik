@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.UnitTests", "Turme
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{FC13E95F-6405-4DF0-B40C-4D4D077A59AE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{52B63410-2581-4146-9484-89D300FAE7B5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MkFsDirsPair", "MkFsDirsPair", "{52B63410-2581-4146-9484-89D300FAE7B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsPair.ConsoleApp", "Turmerik.MkFsDirsPair.ConsoleApp\Turmerik.MkFsDirsPair.ConsoleApp.csproj", "{ED144131-C48B-49AC-BAFC-D261B6C5405C}"
 EndProject
@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Logging.UnitTests", "Turmerik.Logging.UnitTests\Turmerik.Logging.UnitTests.csproj", "{BFEF0FBE-A515-471D-AA94-E0CDF5809728}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Sqlite", "Turmerik.Sqlite\Turmerik.Sqlite.csproj", "{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Sqlite", "Turmerik.Sqlite\Turmerik.Sqlite.csproj", "{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

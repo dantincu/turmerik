@@ -10,10 +10,10 @@ using Turmerik.Async;
 using Turmerik.TextStream;
 using Turmerik.TextSerialization;
 using Turmerik.DriveExplorer;
-using Turmerik.Notes;
 using Turmerik.ConsoleApps;
 using Turmerik.TextParsing;
 using Turmerik.Text;
+using Turmerik.DriveExplorer.DirsPair;
 
 namespace Turmerik.Dependencies
 {

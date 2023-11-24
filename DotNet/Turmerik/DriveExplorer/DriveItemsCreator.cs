@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Turmerik.DriveExplorer
 {
@@ -28,34 +29,27 @@ namespace Turmerik.DriveExplorer
         {
             foreach (var item in opts.ItemsList)
             {
-                if (item.Data.Created != true)
+                item.Idnf ??= dvExplrSvc.GetItemIdnf(
+                    item, opts.PrIdnf);
+
+                var data = item.Data;
+
+                if (data.Remove == true)
                 {
-                    item.Data ??= new DriveItemXData();
-                    DriveItem newItem;
+                    await RemoveItemCoreAsync(item);
+                }
+                else if (data.IsCreated != true)
+                {
+                    await CreateItemCoreAsync(opts, item);
+                }
+                else
+                {
+                    bool move = !string.IsNullOrWhiteSpace(data.MoveToPrIdnf);
+                    bool rename = !string.IsNullOrWhiteSpace(data.RenameTo);
 
-                    if (item.IsFolder == true)
+                    if (move || rename)
                     {
-                        newItem = await dvExplrSvc.CreateFolderAsync(
-                            opts.PrIdnf, item.Name);
-
-                        newItem.Idnf ??= dvExplrSvc.GetItemIdnf(
-                            newItem, opts.PrIdnf);
-
-                        OnItemCreated(item, newItem);
-                        var childrenList = GetChildrenList(item);
-
-                        await CreateItemsAsync(new DriveItemsCreatorOpts
-                        {
-                            ItemsList = childrenList,
-                            PrIdnf = item.Idnf
-                        });
-                    }
-                    else
-                    {
-                        newItem = await dvExplrSvc.CreateTextFileAsync(
-                            opts.PrIdnf, item.Name, item.Data.TextFileContents);
-
-                        OnItemCreated(item, newItem);
+                        await MoveItemCoreAsync(item, move, rename);
                     }
                 }
             }
@@ -63,12 +57,111 @@ namespace Turmerik.DriveExplorer
             return opts.ItemsList;
         }
 
+        private async Task RemoveItemCoreAsync(
+            DriveItemX item)
+        {
+            var data = item.Data;
+
+            if (data.IsRemoved != true)
+            {
+                if (item.IsFolder == true)
+                {
+                    await dvExplrSvc.DeleteFolderAsync(item.Idnf);
+                }
+                else
+                {
+                    await dvExplrSvc.DeleteFileAsync(item.Idnf);
+                }
+
+                data.IsRemoved = true;
+            }
+        }
+
+        private async Task CreateItemCoreAsync(
+            DriveItemsCreatorOpts opts,
+            DriveItemX item)
+        {
+            var data = item.Data;
+            DriveItem newItem;
+
+            if (item.IsFolder == true)
+            {
+                newItem = await dvExplrSvc.CreateFolderAsync(
+                    opts.PrIdnf, item.Name);
+
+                OnItemCreated(item, newItem);
+                var childrenList = GetChildrenList(item);
+
+                await CreateItemsAsync(new DriveItemsCreatorOpts
+                {
+                    ItemsList = childrenList,
+                    PrIdnf = item.Idnf
+                });
+            }
+            else
+            {
+                newItem = await dvExplrSvc.CreateTextFileAsync(
+                    opts.PrIdnf, item.Name, item.Data.TextFileContents);
+
+                OnItemCreated(item, newItem);
+            }
+        }
+
+        private async Task MoveItemCoreAsync(
+            DriveItemX item, bool move, bool rename)
+        {
+            var data = item.Data;
+            string newItemName = item.Name;
+
+            if (rename)
+            {
+                newItemName = data.RenameTo;
+                data.IsRenamedFrom = item.Name;
+            }
+
+            if (move)
+            {
+                data.IsMovedFromPrIdnf = item.PrIdnf;
+
+                if (item.IsFolder == true)
+                {
+                    await dvExplrSvc.MoveFolderAsync(item.Idnf,
+                        data.MoveToPrIdnf, newItemName);
+                }
+                else
+                {
+                    await dvExplrSvc.MoveFileAsync(item.Idnf,
+                        data.MoveToPrIdnf, newItemName);
+                }
+            }
+            else if (rename)
+            {
+                if (item.IsFolder == true)
+                {
+                    await dvExplrSvc.RenameFolderAsync(
+                        item.Idnf, data.RenameTo);
+                }
+                else
+                {
+                    await dvExplrSvc.RenameFileAsync(
+                        item.Idnf, data.RenameTo);
+                }
+            }
+
+            if (rename)
+            {
+                item.Name = data.RenameTo;
+            }
+        }
+
         private void OnItemCreated(
             DriveItemX inputItem,
             DriveItem newItem)
         {
-            inputItem.Idnf = newItem.Idnf;
-            inputItem.Data.Created = true;
+            inputItem.Idnf ??= newItem.Idnf;
+            inputItem.Data ??= new();
+
+            inputItem.Data.IsCreated = true;
         }
 
         private List<DriveItemX> GetChildrenList(

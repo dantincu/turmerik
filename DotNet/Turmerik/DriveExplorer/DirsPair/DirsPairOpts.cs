@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.DirsPair
 {
     public class DirsPairOpts
     {
@@ -17,6 +17,7 @@ namespace Turmerik.Notes
         public string MdFileContentsTemplate { get; set; }
         public string KeepFileName { get; set; }
         public string KeepFileNameContents { get; set; }
+        public string TrmrkGuidInputName { get; set; }
         public bool ThrowIfAnyItemAlreadyExists { get; set; }
     }
 }

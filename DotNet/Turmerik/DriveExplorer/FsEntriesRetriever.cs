@@ -77,11 +77,13 @@ namespace Turmerik.DriveExplorer
             string prIdnf)
         {
             string idnf = item.Idnf;
+            prIdnf ??= item.PrIdnf;
 
-            if (idnf == null)
+            if (idnf == null && prIdnf != null)
             {
                 idnf = Path.Combine(
-                    prIdnf ?? item.PrIdnf, item.Name);
+                    prIdnf,
+                    item.Name);
             }
 
             return idnf;

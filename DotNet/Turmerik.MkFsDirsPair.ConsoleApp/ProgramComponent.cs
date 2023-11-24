@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.DirsPair;
 using Turmerik.Helpers;
-using Turmerik.Notes;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 
@@ -76,9 +76,15 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
                 OpenMdFile = args.OpenMdFile,
                 MaxFsEntryNameLength = config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH,
                 ShortDirName = args.ShortDirName,
-                FullDirNamePart = args.FullDirNamePart,
+                FullDirNamePart = args.DirNameTpl?.With(
+                    dirNameTpl => string.Format(
+                        dirNameTpl.DirNameTpl,
+                        args.FullDirNamePart)) ?? args.FullDirNamePart,
                 JoinStr = args.FullDirNameJoinStr,
-                MdFileNameTemplate = $"{config.FileNames.MdFileNameTemplate}.md",
+                MdFileNameTemplate = args.DirNameTpl?.MdFileNameTemplate?.With(
+                    mdFileNameTemplate => string.Format(
+                        mdFileNameTemplate,
+                        args.FullDirNamePart)) ?? $"{config.FileNames.MdFileNameTemplate}.md",
                 MdFileContentsTemplate = config.FileContents.MdFileContentsTemplate,
                 KeepFileName = config.FileNames.KeepFileName,
                 KeepFileNameContents = string.Format(
@@ -91,8 +97,8 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
             ProgramArgs args)
         {
             args.WorkDir ??= Environment.CurrentDirectory;
-            args.FullDirNameJoinStr ??= " ";
-            args.FullDirNamePart = GetFullDirNamePart(args.Title);
+            args.FullDirNameJoinStr ??= config.DirNames.DefaultJoinStr;
+            args.FullDirNamePart = GetFullDirNamePart(args.Title ?? string.Empty);
         }
 
         private string GetFullDirNamePart(
@@ -109,17 +115,21 @@ namespace Turmerik.MkFsDirsPair.ConsoleApp
                             Data = data,
                             ThrowOnTooManyArgs = true,
                             ThrowOnUnknownFlag = true,
-                            ItemHandlersArr = parser.ArgsItemOpts(
-                                data, data => data.Args.ShortDirName = data.ArgItem).Arr(
-                                    parser.ArgsItemOpts(data, data => data.Args.Title = data.ArgItem),
-                                    parser.ArgsItemOpts(data, data => data.Args.FullDirNameJoinStr = data.ArgItem)),
+                            ItemHandlersArr = [
+                                parser.ArgsItemOpts(data, data => data.Args.ShortDirName = data.ArgItem),
+                                parser.ArgsItemOpts(data, data => data.Args.Title = data.ArgItem),
+                                parser.ArgsItemOpts(data, data => data.Args.FullDirNameJoinStr = data.ArgItem)
+                            ],
                             FlagHandlersArr = [
                                 parser.ArgsFlagOpts(data, config.ArgOpts.WorkDir.Arr(),
-                                    data => data.Args.WorkDir = data.ArgFlagValue.Single()),
+                                    data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
                                 parser.ArgsFlagOpts(data, config.ArgOpts.OpenMdFile.Arr(),
                                     data => data.Args.OpenMdFile = true, true),
                                 parser.ArgsFlagOpts(data, config.ArgOpts.SkipMdFileCreation.Arr(),
-                                    data => data.Args.SkipMdFileCreation = true, true)
+                                    data => data.Args.SkipMdFileCreation = true, true),
+                                parser.ArgsFlagOpts(data, config.ArgOpts.DirNameTpl.Arr(),
+                                    data => data.Args.DirNameTpl = config.DirNames.DirNamesTplMap[
+                                        data.ArgFlagValue!.Single()])
                             ]
                         })
                     }).Args;

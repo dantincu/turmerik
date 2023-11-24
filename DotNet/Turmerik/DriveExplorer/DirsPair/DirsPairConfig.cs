@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.DriveExplorer
+namespace Turmerik.DriveExplorer.DirsPair
 {
     public class DirsPairConfig
     {
         public int? FileNameMaxLength { get; set; }
         public bool? ThrowIfAnyItemAlreadyExists { get; set; }
+        public string TrmrkGuidInputName { get; set; }
 
         public ArgOptionsT ArgOpts { get; set; }
+        public DirNamesT DirNames { get; set; }
         public FileNamesT FileNames { get; set; }
         public FileContentsT FileContents { get; set; }
 
@@ -18,6 +20,19 @@ namespace Turmerik.DriveExplorer
             public string WorkDir { get; set; }
             public string OpenMdFile { get; set; }
             public string SkipMdFileCreation { get; set; }
+            public string DirNameTpl { get; set; }
+        }
+
+        public class DirNamesT
+        {
+            public string DefaultJoinStr { get; set; }
+            public Dictionary<string, DirNameTplT> DirNamesTplMap { get; set; }
+        }
+
+        public class DirNameTplT
+        {
+            public string DirNameTpl { get; set; }
+            public string MdFileNameTemplate { get; set; }
         }
 
         public class FileNamesT

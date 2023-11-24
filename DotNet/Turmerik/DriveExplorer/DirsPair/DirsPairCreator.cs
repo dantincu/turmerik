@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.DirsPair
 {
     public interface IDirsPairCreator
     {

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using Turmerik.Helpers;
-using Turmerik.Notes;
 using Turmerik.Notes.Md;
 using Turmerik.Text;
 using Turmerik.Utility;

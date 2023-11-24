@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
+using Turmerik.Utility;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.DirsPair
 {
     public interface IDirsPairGenerator
     {
@@ -93,7 +94,8 @@ namespace Turmerik.Notes
         {
             List<DriveItemX> folderFiles = null;
 
-            if (opts.MdFileNameTemplate != null)
+            if (!string.IsNullOrWhiteSpace(
+                opts.MdFileNameTemplate))
             {
                 var mdFile = new DriveItemX
                 {
@@ -104,7 +106,9 @@ namespace Turmerik.Notes
                     {
                         TextFileContents = string.Format(
                             opts.MdFileContentsTemplate,
-                            opts.Title)
+                            opts.Title,
+                            Trmrk.TrmrkGuidStrNoDash,
+                            opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME)
                     }
                 };
 

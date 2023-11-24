@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik.Notes\Turmerik.Notes.csproj" />
+    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 
 </Project>

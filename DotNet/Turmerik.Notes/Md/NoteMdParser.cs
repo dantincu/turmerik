@@ -11,6 +11,7 @@ using System.Text;
 using Turmerik.Helpers;
 using Turmerik.Notes.Html;
 using Turmerik.TextParsing;
+using Turmerik.Utility;
 
 namespace Turmerik.Notes.Md
 {

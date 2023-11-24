@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Turmerik.ConsoleApps;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
-using Turmerik.Notes;
 using Turmerik.Notes.Service;
 using Turmerik.Notes.Settings;
 using Turmerik.TextSerialization;

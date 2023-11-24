@@ -1,17 +1,36 @@
 {
   "FileNameMaxLength": 100,
   "ThrowIfAnyItemAlreadyExists": true,
+  "TrmrkGuidInputName": "trmrk_guid",
   "ArgOpts": {
     "WorkDir": "wd",
     "OpenMdFile": "o",
-    "SkipMdFileCreation": "sk"
+    "SkipMdFileCreation": "sk",
+    "DirNameTpl": "t"
+  },
+  "DirNames": {
+    "DefaultJoinStr": "-",
+    "DirNamesTplMap": {
+      "f": {
+        "DirNameTpl": "[note-files]",
+        "MdFileNameTemplate": ""
+      },
+      "i": {
+        "DirNameTpl": "[note-internals]",
+        "MdFileNameTemplate": ""
+      },
+      "b": {
+        "DirNameTpl": "[note-book]",
+        "MdFileNameTemplate": ""
+      }
+    }
   },
   "FileNames": {
-    "MdFileNameTemplate": "{0}",
+    "MdFileNameTemplate": "{0}[note]",
     "KeepFileName": ".keep"
   },
   "FileContents": {
     "KeepFileContentsTemplate": "{0}",
-    "MdFileContentsTemplate": "# {0}  \n\n"
+    "MdFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n"
   }
 }
