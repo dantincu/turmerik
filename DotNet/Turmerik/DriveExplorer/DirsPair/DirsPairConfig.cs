@@ -18,6 +18,7 @@ namespace Turmerik.DriveExplorer.DirsPair
         public class ArgOptionsT
         {
             public string WorkDir { get; set; }
+            public string InteractiveMode { get; set; }
             public string OpenMdFile { get; set; }
             public string SkipMdFileCreation { get; set; }
             public string DirNameTpl { get; set; }
@@ -43,7 +44,8 @@ namespace Turmerik.DriveExplorer.DirsPair
 
         public class FileNamesT
         {
-            public string MdFileNameTemplate { get; set; }
+            public string MdFileName { get; set; }
+            public bool? PrependTitleToNoteMdFileName { get; set; }
             public string KeepFileName { get; set; }
         }
 

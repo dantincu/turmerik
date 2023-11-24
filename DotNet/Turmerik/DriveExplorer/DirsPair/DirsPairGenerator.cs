@@ -90,7 +90,7 @@ namespace Turmerik.DriveExplorer.DirsPair
                         Name = opts.KeepFileName,
                         Data = new DriveItemXData
                         {
-                            TextFileContents = opts.KeepFileNameContents
+                            TextFileContents = opts.KeepFileContents
                         }
                     }.Arr().ToList(),
                     Data = new DriveItemXData()
@@ -103,13 +103,11 @@ namespace Turmerik.DriveExplorer.DirsPair
             List<DriveItemX> folderFiles = null;
 
             if (!string.IsNullOrWhiteSpace(
-                opts.MdFileNameTemplate))
+                opts.MdFileName))
             {
                 var mdFile = new DriveItemX
                 {
-                    Name = string.Format(
-                        opts.MdFileNameTemplate,
-                        opts.FullDirNamePart),
+                    Name = opts.MdFileName,
                     Data = new DriveItemXData
                     {
                         TextFileContents = string.Format(

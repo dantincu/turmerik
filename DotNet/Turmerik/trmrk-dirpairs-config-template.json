@@ -4,13 +4,14 @@
   "TrmrkGuidInputName": "trmrk_guid",
   "ArgOpts": {
     "WorkDir": "wd",
+    "InteractiveMode": "i",
     "OpenMdFile": "o",
     "SkipMdFileCreation": "sk",
     "DirNameTpl": "t",
-    "CreateNote": "n",
-    "CreateNoteBook": "b",
-    "CreateNoteInternalsDir": "i",
-    "CreateNoteFilesDir": "f",
+    "CreateNote": "nn",
+    "CreateNoteBook": "nb",
+    "CreateNoteInternalsDir": "ni",
+    "CreateNoteFilesDir": "nf",
     "Url": "url",
     "Uri": "uri"
   },
@@ -32,7 +33,8 @@
     }
   },
   "FileNames": {
-    "MdFileNameTemplate": "{0}[note].md",
+    "MdFileName": "[note].md",
+    "PrependTitleToNoteMdFileName": true,
     "KeepFileName": ".keep"
   },
   "FileContents": {

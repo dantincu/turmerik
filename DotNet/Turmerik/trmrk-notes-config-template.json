@@ -55,11 +55,11 @@
       },
       "CreateNoteFilesDirsPair": {
         "FullArg": "note-files",
-        "ShortArg": "f"
+        "ShortArg": "nf"
       },
       "CreateNoteInternalDirsPair": {
         "FullArg": "note-int",
-        "ShortArg": "i"
+        "ShortArg": "ni"
       },
       "CommandsMap": {
         "Help": {

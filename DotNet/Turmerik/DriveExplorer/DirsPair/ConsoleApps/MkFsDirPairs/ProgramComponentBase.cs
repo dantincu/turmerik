@@ -85,24 +85,36 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
                 OpenMdFile = args.OpenMdFile,
                 MaxFsEntryNameLength = config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH,
                 ShortDirName = args.ShortDirName,
-                FullDirNamePart = args.DirNameTpl?.With(
-                    dirNameTpl => string.Format(
-                        dirNameTpl.DirNameTpl,
-                        args.FullDirNamePart)) ?? args.FullDirNamePart,
+                FullDirNamePart = GetFullDirNamePart(args),
                 JoinStr = args.FullDirNameJoinStr,
-                MdFileNameTemplate = args.DirNameTpl?.MdFileNameTemplate?.With(
-                    mdFileNameTemplate => string.Format(
-                        mdFileNameTemplate,
-                        args.FullDirNamePart)) ?? config.FileNames.MdFileNameTemplate,
+                MdFileName = GetMdFileName(args),
                 MdFileContentsTemplate = config.FileContents.MdFileContentsTemplate,
                 KeepFileName = config.FileNames.KeepFileName,
-                KeepFileNameContents = string.Format(
-                    config.FileContents.KeepFileContentsTemplate,
-                    Trmrk.TrmrkGuidStrNoDash),
+                KeepFileContents = GetKeepFileContents(args),
                 MdFileFirstContent = args.MdFirstContent,
                 TrmrkGuidInputName = config.TrmrkGuidInputName,
                 ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true
             };
+
+        private string GetMdFileName(
+            ProgramArgs args) => args.DirNameTpl?.MdFileNameTemplate?.With(
+                mdFileNameTemplate => string.Format(
+                    mdFileNameTemplate,
+                    args.FullDirNamePart)) ?? config.FileNames.With(
+                        fileNames => (fileNames.PrependTitleToNoteMdFileName ?? false).If(
+                            () => args.FullDirNamePart) + fileNames.MdFileName);
+
+        private string GetFullDirNamePart(
+            ProgramArgs args) => args.DirNameTpl?.With(
+                dirNameTpl => string.Format(
+                    dirNameTpl.DirNameTpl,
+                    args.FullDirNamePart)) ?? args.FullDirNamePart;
+
+        private string GetKeepFileContents(
+            ProgramArgs args) => string.Format(
+                config.FileContents.KeepFileContentsTemplate,
+                Trmrk.TrmrkGuidStrNoDash,
+                config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
 
         private async Task NormalizeArgsAsync(
             ProgramArgs args)

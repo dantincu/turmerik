@@ -1,66 +1,303 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik;
+using Turmerik.ConsoleApps;
+using Turmerik.DriveExplorer.Notes;
+using Turmerik.FileSystem;
 using Turmerik.Helpers;
 using Turmerik.Text;
 using Turmerik.TextParsing.Md;
+using Turmerik.TextSerialization;
+using Turmerik.Utility;
 
 namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
 {
     public class ProgramComponent
     {
-        public void Run(string[] args)
+        private readonly IJsonConversion jsonConversion;
+        private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
+        private readonly IConsoleArgsParser consoleArgsParser;
+        private readonly DirsPairConfig config;
+        private readonly INoteDirsPairConfig notesConfig;
+
+        public ProgramComponent(
+            IJsonConversion jsonConversion,
+            IFsEntryNameNormalizer fsEntryNameNormalizer,
+            IConsoleArgsParser consoleArgsParser)
         {
-            var wka = GetWorkArgs(args);
+            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
+                nameof(jsonConversion));
+
+            this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
+                nameof(fsEntryNameNormalizer));
+
+            this.consoleArgsParser = consoleArgsParser ?? throw new ArgumentNullException(
+                nameof(consoleArgsParser));
+
+            config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
+                File.ReadAllText(Path.Combine(
+                    ProgramH.ExecutingAssemmblyPath,
+                    DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
+
+            notesConfig = jsonConversion.Adapter.Deserialize<NoteDirsPairConfigMtbl>(
+                File.ReadAllText(Path.Combine(
+                    ProgramH.ExecutingAssemmblyPath,
+                    TrmrkNotesH.NOTES_CFG_FILE_NAME)));
+        }
+
+        public void Run(string[] rawArgs)
+        {
+            var args = GetWorkArgs(rawArgs);
+
+            var wka = new WorkArgs
+            {
+                Args = args
+            };
+
             Run(wka);
         }
 
         private void Run(WorkArgs wka)
         {
+            var args = wka.Args;
 
+            string newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(wka.Args.MdTitle,
+                config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
+
+            string newMdFileName = GetMdFileName(newFullDirNamePart);
+            
+            string newFullDirName = GetFullDirNamePart(
+                args, newFullDirNamePart);
+
+            if (newMdFileName != args.MdFileName)
+            {
+                TryRenameMdFile(wka, newMdFileName);
+            }
+
+            if (newFullDirName != args.FullDirName)
+            {
+                TryRenameMdFullNameDir(wka, newFullDirName);
+            }
         }
 
-        private WorkArgs GetWorkArgs(string[] args)
+        private void TryRenameMdFile(
+            WorkArgs wka,
+            string newMdFileName)
         {
-            var wka = new WorkArgs
-            {
-                ShortNameDirPath = args.FirstOrDefault()?.With(
-                path => NormPathH.NormPath(
-                    path, (path, isRooted) => isRooted.If(
-                        () => path, () => Path.GetFullPath(
-                            path.Nullify(true) ?? Environment.CurrentDirectory)))) ?? Environment.CurrentDirectory,
-                MdFileName = args.Skip(1).FirstOrDefault()
-            };
+            var args = wka.Args;
 
-            NormalizeArgs(wka);
-            return wka;
+            string newMdFilePath = Path.Combine(
+                args.ShortNameDirPath,
+                newMdFileName);
+
+            if (!File.Exists(newMdFilePath))
+            {
+                File.Move(
+                    args.MdFilePath,
+                    newMdFilePath);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Renamed {args.MdFileName} to {newMdFileName}");
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"File {newMdFileName} already exists");
+                Console.ResetColor();
+                Console.WriteLine();
+            }
         }
 
-        private void NormalizeArgs(WorkArgs wka)
+        private void TryRenameMdFullNameDir(
+            WorkArgs wka,
+            string newFullDirName)
         {
-            if (Directory.Exists(wka.ShortNameDirPath))
+            var args = wka.Args;
+
+            string newFullDirPath = Path.Combine(
+                args.ParentDirPath,
+                newFullDirName);
+
+            if (!Directory.Exists(newFullDirPath))
             {
-                if (wka.MdFileName != null)
+                if (args.FullDirPath != null && Directory.Exists(
+                    args.FullDirPath))
                 {
-                    wka.MdFilePath = Path.Combine(
-                        wka.ShortNameDirPath,
-                        wka.MdFileName);
+                    FsH.MoveDirectory(
+                        args.FullDirPath,
+                        newFullDirPath);
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"Renamed {args.FullDirName} to {newFullDirName}");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Directory.CreateDirectory(
+                        newFullDirPath);
+
+                    string keepFilePath = Path.Combine(
+                        newFullDirPath,
+                        config.FileNames.KeepFileName);
+
+                    string keepFileContents = string.Format(
+                        config.FileContents.KeepFileContentsTemplate,
+                        Trmrk.TrmrkGuidStrNoDash,
+                        config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
+
+                    File.WriteAllText(
+                        keepFilePath,
+                        keepFileContents);
+
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"Create full name dir {args.FullDirName}");
+                    Console.ResetColor();
+                    Console.WriteLine();
                 }
             }
-            else if (File.Exists(wka.ShortNameDirPath))
+            else
             {
-                wka.MdFilePath = wka.ShortNameDirPath;
-
-                wka.MdFileName = Path.GetFileName(
-                    wka.MdFilePath);
-
-                wka.ShortNameDirPath = Path.GetDirectoryName(
-                    wka.MdFilePath);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Folder {newFullDirName} already exists");
+                Console.ResetColor();
+                Console.WriteLine();
             }
+        }
+
+        private ProgramArgs GetWorkArgs(string[] rawArgs)
+        {
+            var args = consoleArgsParser.Parse(
+                new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
+                {
+                    ArgsBuilder = data => consoleArgsParser.HandleArgs(new ConsoleArgsParseHandlerOpts<ProgramArgs>
+                    {
+                        Data = data,
+                        ThrowOnTooManyArgs = true,
+                        ThrowOnUnknownFlag = true,
+                        ItemHandlersArr = [
+                            consoleArgsParser.ArgsItemOpts(data,
+                                data => data.Args.ShortNameDirPath = data.ArgItem.Nullify(true)?.With(
+                                    path => NormPathH.NormPath(
+                                        path, (path, isRooted) => isRooted.If(
+                                            () => path, () => Path.GetFullPath(
+                                                path.Nullify(true) ?? Environment.CurrentDirectory)))) ?? Environment.CurrentDirectory),
+                            consoleArgsParser.ArgsItemOpts(data,
+                                data => data.Args.MdFileName = data.ArgItem.Nullify(true)),
+                            consoleArgsParser.ArgsItemOpts(data,
+                                data => data.Args.MdTitle = data.ArgItem.Nullify(true))
+                        ],
+                        FlagHandlersArr = [
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.InteractiveMode.Arr(),
+                                data => data.Args.InteractiveMode = true)
+                        ]
+                    })
+                }).Args;
+
+            NormalizeArgs(args);
+            return args;
+        }
+
+        private void NormalizeArgs(ProgramArgs args)
+        {
+            bool autoChoose = args.InteractiveMode != true;
+
+            if (Directory.Exists(args.ShortNameDirPath))
+            {
+                string mdTitle = null;
+
+                args.MdFileName ??= GetMdFile(
+                    args.ShortNameDirPath,
+                    out mdTitle,
+                    autoChoose);
+
+                args.MdTitle ??= mdTitle;
+
+                if (args.MdFileName != null)
+                {
+                    args.MdFilePath = Path.Combine(
+                        args.ShortNameDirPath,
+                        args.MdFileName);
+                }
+            }
+            else if (File.Exists(args.ShortNameDirPath))
+            {
+                args.MdFilePath = args.ShortNameDirPath;
+
+                args.MdFileName = Path.GetFileName(
+                    args.MdFilePath);
+
+                args.ShortNameDirPath = Path.GetDirectoryName(
+                    args.MdFilePath);
+            }
+
+            args.ParentDirPath = Path.GetDirectoryName(
+                args.ShortNameDirPath);
+
+            args.ShortDirName = Path.GetFileName(
+                args.ShortNameDirPath);
+
+            if ((args.FullDirName = GetFullDirName(
+                args, autoChoose)) != null)
+            {
+                args.FullDirName = Path.Combine(
+                    args.ParentDirPath,
+                    args.FullDirName);
+            }
+        }
+
+        private string GetMdFileName(
+            string fullDirNamePart) => config.FileNames.With(
+                fileNames => (fileNames.PrependTitleToNoteMdFileName ?? false).If(
+                    () => fullDirNamePart) + fileNames.MdFileName);
+
+        private string GetFullDirNamePart(
+            ProgramArgs args,
+            string newFullDirNamePart) => string.Join(
+                config.DirNames.DefaultJoinStr,
+                args.ShortDirName,
+                newFullDirNamePart);
+
+        private Tuple<string, string>[] GetMdFiles(
+            string shortDirNamePath)
+        {
+            var tuplesArr = Directory.GetFiles(
+                shortDirNamePath, "*.md").Select(
+                file => Tuple.Create(
+                    Path.GetFileName(file), file)).Where(
+                tuple => tuple.Item1.EndsWith(
+                    notesConfig.GetFileNames().NoteItemMdFileName)).ToArray();
+
+            tuplesArr = tuplesArr.Select(
+                tuple => Tuple.Create(
+                    tuple.Item1,
+                    MdH.TryGetMdTitleFromFile(tuple.Item2))).Where(
+                tuple => string.IsNullOrWhiteSpace(
+                    tuple.Item2)).ToArray();
+
+            return tuplesArr;
+        }
+
+        private string[] GetFullDirNames(
+            ProgramArgs args,
+            out string shortDirNamePart)
+        {
+            shortDirNamePart = string.Concat(
+                args.ShortDirName,
+                config.DirNames.DefaultJoinStr);
+
+            string[] dirNamesArr = Directory.GetDirectories(
+                args.ParentDirPath, $"{shortDirNamePart}*");
+
+            return dirNamesArr;
         }
 
         private string GetMdFile(
@@ -68,79 +305,181 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
             out string mdTitle,
             bool autoChooseIfSingle)
         {
-            string mdFileName = null;
-            mdTitle = null;
-
             var tuplesArr = GetMdFiles(
                 shortDirNamePath);
 
-            if (tuplesArr.Any())
-            {
-                if (autoChooseIfSingle && tuplesArr.Length == 1)
+            var retTuple = GetValue(
+                "These are the .md files to set the title from:",
+                "Please type in the index of the .md file to set the title from: ",
+                tuplesArr, (tuple, i) =>
                 {
-                    (mdFileName, mdTitle) = tuplesArr.Single();
-                }
+                    (string fileName, string title) = tuple;
 
-                Console.WriteLine("These are the .md files to set the title from");
+                    WriteIdxLineToConsole(i.ToString());
 
-                for (int i = 0; i < tuplesArr.Length; i++)
+                    WriteWithForegroundsToConsole([
+                        Tuple.Create(ConsoleColor.Blue, fileName),
+                        Tuple.Create(ConsoleColor.Cyan, title),
+                    ]);
+                },
+                autoChooseIfSingle,
+                () =>
                 {
-                    (mdFileName, mdTitle) = tuplesArr[i];
+                    throw new InvalidOperationException(
+                        "Did not find any .md file containing a valid title");
+                });
 
-                    Console.BackgroundColor = ConsoleColor.Magenta;
-                    Console.ForegroundColor = ConsoleColor.Black;
-
-                    Console.Write(i.ToString());
-                    Console.ResetColor();
-                    Console.Write(" > ");
-
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(mdFileName);
-
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(mdTitle);
-
-                    Console.ResetColor();
-                    Console.WriteLine();
-                }
-
-                Console.WriteLine("Please type in the index of the .md file to set the title from");
-                int idx = int.Parse(Console.ReadLine());
-                (mdFileName, mdTitle) = tuplesArr[idx];
-            }
-            else
-            {
-                throw new InvalidOperationException(
-                    "Did not find any .md file containing a valid title");
-            }
-
+            (string mdFileName, mdTitle) = retTuple;
             return mdFileName;
         }
 
-        private Tuple<string, string>[] GetMdFiles(
-            string shortDirNamePath)
+        private string GetFullDirName(
+            ProgramArgs args,
+            bool autoChooseIfSingle)
         {
-            string mdFileName = null;
+            string[] dirNamesArr = GetFullDirNames(
+                args, out string shortDirNamePart);
 
-            string[] filesArr = Directory.GetFiles(
-                shortDirNamePath, "*.md");
+            int shortDirNamePartLen = shortDirNamePart.Length;
 
-            var tuplesArr = filesArr.Select(
-                file => Tuple.Create(
-                    Path.GetFileName(file),
-                    MdH.TryGetMdTitleFromFile(file))).Where(
-                tuple => string.IsNullOrWhiteSpace(
-                    tuple.Item2)).ToArray();
+            string fullDirName = GetValue(
+                "These are the full dir names candidate for being updated",
+                "Please type in the index of the full name dir to update: ",
+                dirNamesArr,
+                (item, i) =>
+                {
+                    string fullDirNamePart = item.Substring(
+                        shortDirNamePartLen);
 
-            return tuplesArr;
+                    WriteIdxLineToConsole(i.ToString());
+
+                    WriteWithForegroundsToConsole([
+                        Tuple.Create(ConsoleColor.Blue, args.ShortDirName),
+                        Tuple.Create(ConsoleColor.Magenta, config.DirNames.DefaultJoinStr),
+                        Tuple.Create(ConsoleColor.Cyan, fullDirNamePart)
+                    ]);
+                },
+                autoChooseIfSingle,
+                () =>
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                    Console.WriteLine(
+                        "Did not find any full dir names candidate for being updated");
+
+                    Console.ResetColor();
+                    Console.WriteLine();
+
+                    return null;
+                });
+
+            return fullDirName;
+        }
+
+        private TValue GetValue<TValue>(
+            string listHeadingMsg,
+            string readIdxPromptMsg,
+            TValue[] inputArr,
+            Action<TValue, int> printItemCallback,
+            bool autoChooseIfSingle,
+            Func<TValue> defaultValueFactory = null)
+        {
+            TValue retVal;
+
+            if (inputArr.Any())
+            {
+                if (autoChooseIfSingle && inputArr.Length == 1)
+                {
+                    retVal = inputArr.Single();
+                }
+                else
+                {
+                    WriteHeadingLineToConsole(listHeadingMsg);
+
+                    for (int i = 0; i < inputArr.Length; i++)
+                    {
+                        printItemCallback(inputArr[i], i);
+                    }
+
+                    ReadIdxFromConsole(
+                        readIdxPromptMsg,
+                        inputArr,
+                        out retVal,
+                        defaultValueFactory);
+                }
+            }
+            else if (defaultValueFactory != null)
+            {
+                retVal = defaultValueFactory();
+            }
+            else
+            {
+                retVal = default;
+            }
+
+            return retVal;
+        }
+
+        private int ReadIdxFromConsole<T>(
+            string caption,
+            T[] arr,
+            out T retVal,
+            Func<T> defaultValueFactory = null)
+        {
+            Console.WriteLine(caption);
+            int idx = int.Parse(Console.ReadLine());
+
+            if (idx >= 0)
+            {
+                retVal = arr[idx];
+            }
+            else if (defaultValueFactory != null)
+            {
+                retVal = defaultValueFactory();
+            }
+            else
+            {
+                retVal = default;
+            }
+
+            return idx;
+        }
+
+        private void WriteWithForegroundsToConsole(
+            Tuple<ConsoleColor, string>[] tuplesArr)
+        {
+            foreach (var tuple in tuplesArr)
+            {
+                Console.ForegroundColor = tuple.Item1;
+                Console.Write(tuple.Item2);
+            }
+
+            Console.ResetColor();
+            Console.WriteLine();
+        }
+
+        private void WriteIdxLineToConsole(
+            string idxStr)
+        {
+            Console.BackgroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.Black;
+
+            Console.Write(idxStr);
+            Console.ResetColor();
+            Console.Write(" > ");
+        }
+
+        private void WriteHeadingLineToConsole(
+            string headingCaption)
+        {
+            Console.WriteLine();
+            Console.WriteLine(headingCaption);
+            Console.WriteLine();
         }
 
         private class WorkArgs
         {
-            public string ShortNameDirPath { get; set; }
-            public string MdFilePath { get; set; }
-            public string MdFileName { get; set; }
-            public string MdTitle { get; set; }
+            public ProgramArgs Args { get; set; }
         }
     }
 }

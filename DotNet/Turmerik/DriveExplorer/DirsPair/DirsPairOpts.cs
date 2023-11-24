@@ -13,11 +13,11 @@ namespace Turmerik.DriveExplorer.DirsPair
         public string ShortDirName { get; set; }
         public string FullDirNamePart { get; set; }
         public string JoinStr { get; set; }
-        public string MdFileNameTemplate { get; set; }
+        public string MdFileName { get; set; }
         public string MdFileContentsTemplate { get; set; }
         public string MdFileFirstContent { get; set; }
         public string KeepFileName { get; set; }
-        public string KeepFileNameContents { get; set; }
+        public string KeepFileContents { get; set; }
         public string TrmrkGuidInputName { get; set; }
         public bool ThrowIfAnyItemAlreadyExists { get; set; }
     }
