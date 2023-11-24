@@ -144,7 +144,7 @@
     "NoteDirNameIdxes": {
       "MinIdx": 101,
       "MaxIdx": 799,
-      "IncIdx": true,
+      "IncIdx": false,
       "FillGapsByDefault": false,
       "IdxFmt": "D3"
     },
