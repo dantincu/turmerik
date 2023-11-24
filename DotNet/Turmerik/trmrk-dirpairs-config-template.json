@@ -6,7 +6,11 @@
     "WorkDir": "wd",
     "OpenMdFile": "o",
     "SkipMdFileCreation": "sk",
-    "DirNameTpl": "t"
+    "DirNameTpl": "t",
+    "CreateNote": "n",
+    "CreateNoteBook": "b",
+    "CreateNoteInternalsDir": "i",
+    "CreateNoteFilesDir": "f"
   },
   "DirNames": {
     "DefaultJoinStr": "-",

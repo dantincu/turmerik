@@ -15,10 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="trmrk-dirpairs-config-template.json" />
     <None Remove="trmrk-notes-config-template.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="trmrk-dirpairs-config-template.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="trmrk-notes-config-template.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
@@ -36,6 +42,9 @@
 
   <ItemGroup>
     <None Update="app-env-locator.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="trmrk-dirpairs-config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="trmrk-notes-config.json">

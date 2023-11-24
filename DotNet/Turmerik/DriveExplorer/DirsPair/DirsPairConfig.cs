@@ -21,6 +21,10 @@ namespace Turmerik.DriveExplorer.DirsPair
             public string OpenMdFile { get; set; }
             public string SkipMdFileCreation { get; set; }
             public string DirNameTpl { get; set; }
+            public string CreateNote { get; set; }
+            public string CreateNoteBook { get; set; }
+            public string CreateNoteInternalsDir { get; set; }
+            public string CreateNoteFilesDir { get; set; }
         }
 
         public class DirNamesT

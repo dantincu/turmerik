@@ -126,6 +126,14 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
                                     data => data.Args.OpenMdFile = true, true),
                                 parser.ArgsFlagOpts(data, config.ArgOpts.SkipMdFileCreation.Arr(),
                                     data => data.Args.SkipMdFileCreation = true, true),
+                                parser.ArgsFlagOpts(data, config.ArgOpts.CreateNote.Arr(),
+                                    data => data.Args.CreateNote = true, true),
+                                parser.ArgsFlagOpts(data, config.ArgOpts.CreateNoteBook.Arr(),
+                                    data => data.Args.CreateNoteBook = true, true),
+                                parser.ArgsFlagOpts(data, config.ArgOpts.CreateNoteInternalsDir.Arr(),
+                                    data => data.Args.CreateNoteInternalsDir = true, true),
+                                parser.ArgsFlagOpts(data, config.ArgOpts.CreateNoteFilesDir.Arr(),
+                                    data => data.Args.CreateNoteFilesDir = true, true),
                                 parser.ArgsFlagOpts(data, config.ArgOpts.DirNameTpl.Arr(),
                                     data => data.Args.DirNameTpl = config.DirNames.DirNamesTplMap[
                                         data.ArgFlagValue!.Single()])

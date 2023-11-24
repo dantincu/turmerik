@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.Helpers;
-using Turmerik.Notes.Md;
 using Turmerik.Text;
 using Turmerik.Utility;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.Notes
 {
     public interface INoteCfgValuesRetriever
     {
@@ -143,16 +141,16 @@ namespace Turmerik.Notes
         public string GetShortDirNameRegexStr(
             string pfx) => string.Concat(
                 "^",
-                RegexH.EncodeForRegex(pfx),
+                pfx.EncodeForRegex(),
                 "\\d+$");
 
         public string GetFullDirNameRegexStr(
             string pfx,
             string joinStr) => string.Concat(
                 "^",
-                RegexH.EncodeForRegex(pfx),
+                pfx.EncodeForRegex(),
                 "\\d+",
-                RegexH.EncodeForRegex(joinStr));
+                joinStr.EncodeForRegex());
 
         public Regex GetMainNoteItemShortDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg) => new Regex(

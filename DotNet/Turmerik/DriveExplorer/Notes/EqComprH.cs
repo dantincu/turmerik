@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.EqualityComparer;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.Notes
 {
     public static class EqComprH
     {

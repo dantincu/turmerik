@@ -16,5 +16,9 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
         public string FullDirNamePart { get; set; }
         public string FullDirNameJoinStr { get; set; }
         public DirsPairConfig.DirNameTplT DirNameTpl { get; set; }
+        public bool CreateNote { get; set; }
+        public bool CreateNoteBook { get; set; }
+        public bool CreateNoteInternalsDir { get; set; }
+        public bool CreateNoteFilesDir { get; set; }
     }
 }

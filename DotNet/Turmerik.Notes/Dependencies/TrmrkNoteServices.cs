@@ -18,9 +18,7 @@ namespace Turmerik.Notes.Dependencies
             services.AddSingleton<IHtmlNodesRetriever, HtmlNodesRetriever>();
             services.AddSingleton<IMdObjectsRetriever, MdObjectsRetriever>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
-            services.AddSingleton<INoteCfgValuesRetriever, NoteCfgValuesRetriever>();
             services.AddSingleton<INoteItemsRetrieverFactory, NoteItemsRetrieverFactory>();
-            services.AddSingleton<INextNoteIdxRetriever, NextNoteIdxRetriever>();
             services.AddSingleton<INoteJsonDeserializer, NoteJsonDeserializer>();
             services.AddSingleton<INoteJsonRetriever, NoteJsonRetriever>();
             services.AddSingleton<INoteMdRetriever, NoteMdRetriever>();

@@ -14,6 +14,7 @@ using Turmerik.ConsoleApps;
 using Turmerik.TextParsing;
 using Turmerik.Text;
 using Turmerik.DriveExplorer.DirsPair;
+using Turmerik.DriveExplorer.Notes;
 
 namespace Turmerik.Dependencies
 {
@@ -51,6 +52,9 @@ namespace Turmerik.Dependencies
 
             services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
+
+            services.AddSingleton<INoteCfgValuesRetriever, NoteCfgValuesRetriever>();
+            services.AddSingleton<INextNoteIdxRetriever, NextNoteIdxRetriever>();
             return services;
         }
     }
