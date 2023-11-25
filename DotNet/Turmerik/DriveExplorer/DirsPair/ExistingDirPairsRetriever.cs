@@ -1,60 +1,43 @@
-﻿using Markdig.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.DirsPair;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.Notes.Md;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
 
-namespace Turmerik.Notes
+namespace Turmerik.DriveExplorer.DirsPair
 {
-    public interface INoteItemsRetriever
+    public interface IExistingDirPairsRetriever
     {
         ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> DirNamesRegexMap { get; }
         INoteDirsPairConfig Config { get; }
 
-        Task<NoteItemsTuple> GetNoteDirPairsAsync(
+        Task<NoteItemsTupleCore> GetNoteDirPairsAsync(
             string prIdnf);
     }
 
-    public class NoteItemsRetriever : INoteItemsRetriever
+    public class ExistingDirPairsRetriever : IExistingDirPairsRetriever
     {
-        private readonly IJsonConversion jsonConversion;
         private readonly IDriveItemsRetriever driveItemsRetriever;
-        private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
-        private readonly INoteJsonDeserializer noteJsonDeserializer;
+        private readonly INoteDirsPairIdxRetriever noteDirsPairIdxRetriever;
 
-        public NoteItemsRetriever(
-            IJsonConversion jsonConversion,
+        public ExistingDirPairsRetriever(
             IDriveItemsRetriever driveItemsRetriever,
-            IExistingDirPairsRetriever existingDirPairsRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever,
-            INoteJsonDeserializer noteJsonDeserializer,
-            INoteDirsPairConfig config,
-            ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexMap)
+            INoteDirsPairIdxRetriever noteDirsPairIdxRetriever,
+            ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexMap,
+            INoteDirsPairConfig config)
         {
-            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
-                nameof(jsonConversion));
-
             this.driveItemsRetriever = driveItemsRetriever ?? throw new ArgumentNullException(
                 nameof(driveItemsRetriever));
-
-            this.existingDirPairsRetriever = existingDirPairsRetriever ?? throw new ArgumentNullException(
-                nameof(existingDirPairsRetriever));
 
             this.noteCfgValuesRetriever = noteCfgValuesRetriever ?? throw new ArgumentNullException(
                 nameof(noteCfgValuesRetriever));
 
-            this.noteJsonDeserializer = noteJsonDeserializer ?? throw new ArgumentNullException(
-                nameof(noteJsonDeserializer));
+            this.noteDirsPairIdxRetriever = noteDirsPairIdxRetriever ?? throw new ArgumentNullException(
+                nameof(noteDirsPairIdxRetriever));
 
             this.DirNamesRegexMap = dirNamesRegexMap ?? throw new ArgumentNullException(
                 nameof(dirNamesRegexMap));
@@ -80,16 +63,19 @@ namespace Turmerik.Notes
         protected NoteDirsPairConfig.IFileNamesT FileNamesCfg { get; }
         protected NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }
 
-        public async Task<NoteItemsTuple> GetNoteDirPairsAsync(
+        public async Task<NoteItemsTupleCore> GetNoteDirPairsAsync(
             string prIdnf)
         {
-            var tupleCore = await existingDirPairsRetriever.GetNoteDirPairsAsync(prIdnf);
+            var parentFolder = await driveItemsRetriever.GetFolderAsync(prIdnf);
 
-            var retTuple = new NoteItemsTuple(tupleCore)
+            var retObj = new NoteItemsTupleCore
             {
+                ParentFolder = parentFolder.ToItemX(-1)
             };
 
             throw new NotImplementedException();
         }
+
+        
     }
 }

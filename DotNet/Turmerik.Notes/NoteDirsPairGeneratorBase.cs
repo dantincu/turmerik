@@ -41,12 +41,12 @@ namespace Turmerik.Notes
                 nameof(noteCfgValuesRetriever));
 
             Config = ExistingNoteDirPairsRetriever.Config;
-            ArgOptsCfg = ExistingNoteDirPairsRetriever.ArgOptsCfg;
-            DirNamesCfg = ExistingNoteDirPairsRetriever.DirNamesCfg;
-            NoteDirNameIdxesCfg = ExistingNoteDirPairsRetriever.NoteDirNameIdxesCfg;
-            NoteInternalDirNameIdxesCfg = ExistingNoteDirPairsRetriever.NoteInternalDirNameIdxesCfg;
-            FileNamesCfg = ExistingNoteDirPairsRetriever.FileNamesCfg;
-            FileContentsCfg = ExistingNoteDirPairsRetriever.FileContentsCfg;
+            ArgOptsCfg = Config.GetArgOpts();
+            DirNamesCfg = Config.GetDirNames();
+            NoteDirNameIdxesCfg = Config.GetNoteDirNameIdxes();
+            NoteInternalDirNameIdxesCfg = Config.GetNoteInternalDirNameIdxes();
+            FileNamesCfg = Config.GetFileNames();
+            FileContentsCfg = Config.GetFileContents();
         }
 
         public INoteDirsPairConfig Config { get; }

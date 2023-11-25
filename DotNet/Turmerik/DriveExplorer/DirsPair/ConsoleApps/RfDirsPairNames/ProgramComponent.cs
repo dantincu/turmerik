@@ -23,7 +23,9 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IConsoleArgsParser consoleArgsParser;
         private readonly DirsPairConfig config;
-        private readonly INoteDirsPairConfig notesConfig;
+        private readonly NotesAppConfigMtbl notesConfig;
+        private readonly NoteDirsPairConfigMtbl noteDirsPairCfg;
+        private readonly NoteDirsPairConfigMtbl.FileNamesT noteFileNamesCfg;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -44,10 +46,13 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                     ProgramH.ExecutingAssemmblyPath,
                     DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
 
-            notesConfig = jsonConversion.Adapter.Deserialize<NoteDirsPairConfigMtbl>(
+            notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
                 File.ReadAllText(Path.Combine(
                     ProgramH.ExecutingAssemmblyPath,
                     TrmrkNotesH.NOTES_CFG_FILE_NAME)));
+
+            noteDirsPairCfg = notesConfig.NoteDirPairs;
+            noteFileNamesCfg = noteDirsPairCfg.FileNames;
         }
 
         public void Run(string[] rawArgs)
@@ -81,7 +86,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
 
             if (newFullDirName != args.FullDirName)
             {
-                TryRenameMdFullNameDir(wka, newFullDirName);
+                TryRenameFullNameDir(wka, newFullDirName);
             }
         }
 
@@ -101,21 +106,26 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                     args.MdFilePath,
                     newMdFilePath);
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Renamed {args.MdFileName} to {newMdFileName}");
-                Console.ResetColor();
-                Console.WriteLine();
+                WriteWithForegroundsToConsole([
+                    Tuple.Create(ConsoleColor.Green, "Renamed"),
+                    Tuple.Create(ConsoleColor.Blue, $" {args.MdFileName} "),
+                    Tuple.Create(ConsoleColor.Green, "to"),
+                    Tuple.Create(ConsoleColor.Cyan, $" {newMdFileName} "),
+                ]);
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"File {newMdFileName} already exists");
-                Console.ResetColor();
-                Console.WriteLine();
+                WriteWithForegroundsToConsole([
+                    Tuple.Create(ConsoleColor.DarkRed, "File"),
+                    Tuple.Create(ConsoleColor.Red, $" {newMdFileName} "),
+                    Tuple.Create(ConsoleColor.DarkRed, "already exists"),
+                ]);
             }
+
+            Console.WriteLine();
         }
 
-        private void TryRenameMdFullNameDir(
+        private void TryRenameFullNameDir(
             WorkArgs wka,
             string newFullDirName)
         {
@@ -134,10 +144,12 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                         args.FullDirPath,
                         newFullDirPath);
 
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"Renamed {args.FullDirName} to {newFullDirName}");
-                    Console.ResetColor();
-                    Console.WriteLine();
+                    WriteWithForegroundsToConsole([
+                        Tuple.Create(ConsoleColor.Green, "Renamed"),
+                        Tuple.Create(ConsoleColor.Blue, $" {args.FullDirName} "),
+                        Tuple.Create(ConsoleColor.Green, "to"),
+                        Tuple.Create(ConsoleColor.Cyan, $" {newFullDirName} "),
+                    ]);
                 }
                 else
                 {
@@ -157,19 +169,22 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                         keepFilePath,
                         keepFileContents);
 
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine($"Create full name dir {args.FullDirName}");
-                    Console.ResetColor();
-                    Console.WriteLine();
+                    WriteWithForegroundsToConsole([
+                        Tuple.Create(ConsoleColor.Blue, "File"),
+                        Tuple.Create(ConsoleColor.Cyan, $" {args.FullDirName} ")
+                    ]);
                 }
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Folder {newFullDirName} already exists");
-                Console.ResetColor();
-                Console.WriteLine();
+                WriteWithForegroundsToConsole([
+                    Tuple.Create(ConsoleColor.DarkRed, "Folder"),
+                    Tuple.Create(ConsoleColor.Red, $" {newFullDirName} "),
+                    Tuple.Create(ConsoleColor.DarkRed, "already exists"),
+                ]);
             }
+
+            Console.WriteLine();
         }
 
         private ProgramArgs GetWorkArgs(string[] rawArgs)
@@ -188,7 +203,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                                     path => NormPathH.NormPath(
                                         path, (path, isRooted) => isRooted.If(
                                             () => path, () => Path.GetFullPath(
-                                                path.Nullify(true) ?? Environment.CurrentDirectory)))) ?? Environment.CurrentDirectory),
+                                                path.Nullify(true) ?? Environment.CurrentDirectory))))!),
                             consoleArgsParser.ArgsItemOpts(data,
                                 data => data.Args.MdFileName = data.ArgItem.Nullify(true)),
                             consoleArgsParser.ArgsItemOpts(data,
@@ -209,6 +224,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
         private void NormalizeArgs(ProgramArgs args)
         {
             bool autoChoose = args.InteractiveMode != true;
+            args.ShortNameDirPath ??= Environment.CurrentDirectory;
 
             if (Directory.Exists(args.ShortNameDirPath))
             {
@@ -248,7 +264,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
             if ((args.FullDirName = GetFullDirName(
                 args, autoChoose)) != null)
             {
-                args.FullDirName = Path.Combine(
+                args.FullDirPath = Path.Combine(
                     args.ParentDirPath,
                     args.FullDirName);
             }
@@ -274,13 +290,13 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                 file => Tuple.Create(
                     Path.GetFileName(file), file)).Where(
                 tuple => tuple.Item1.EndsWith(
-                    notesConfig.GetFileNames().NoteItemMdFileName)).ToArray();
+                    noteFileNamesCfg.NoteItemMdFileName)).ToArray();
 
             tuplesArr = tuplesArr.Select(
                 tuple => Tuple.Create(
                     tuple.Item1,
                     MdH.TryGetMdTitleFromFile(tuple.Item2))).Where(
-                tuple => string.IsNullOrWhiteSpace(
+                tuple => !string.IsNullOrWhiteSpace(
                     tuple.Item2)).ToArray();
 
             return tuplesArr;

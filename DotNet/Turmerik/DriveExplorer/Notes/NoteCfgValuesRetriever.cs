@@ -76,7 +76,31 @@ namespace Turmerik.DriveExplorer.Notes
         Regex GetAltInternalDirFullDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg);
 
-        ReadOnlyDictionary<NoteDirTypeTuple, Regex> GetDirNamesRegexMap(
+        NoteDirRegexTuple GetMainNoteItemShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetMainNoteItemFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetMainInternalDirShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetMainInternalDirFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetAltNoteItemShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetAltNoteItemFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetAltInternalDirShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetAltInternalDirFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> GetDirNamesRegexMap(
             NoteDirsPairConfig.IDirNamesT cfg);
     }
 
@@ -184,64 +208,96 @@ namespace Turmerik.DriveExplorer.Notes
             NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
                 GetAltInternalDirFullDirNameRegexStr(cfg));
 
-        public ReadOnlyDictionary<NoteDirTypeTuple, Regex> GetDirNamesRegexMap(
-            NoteDirsPairConfig.IDirNamesT cfg) => new Dictionary<NoteDirTypeTuple, Regex>
+        public NoteDirRegexTuple GetMainNoteItemShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetMainNoteItemShortDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().MainPfx);
+
+        public NoteDirRegexTuple GetMainNoteItemFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetMainNoteItemFullDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().MainPfx);
+
+        public NoteDirRegexTuple GetMainInternalDirShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetMainInternalDirShortDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteInternalsPfxes().MainPfx);
+
+        public NoteDirRegexTuple GetMainInternalDirFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetMainInternalDirFullDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteInternalsPfxes().MainPfx);
+
+        public NoteDirRegexTuple GetAltNoteItemShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetAltNoteItemShortDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().AltPfx);
+
+        public NoteDirRegexTuple GetAltNoteItemFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetAltNoteItemFullDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().AltPfx);
+
+        public NoteDirRegexTuple GetAltInternalDirShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetAltInternalDirShortDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().AltPfx);
+
+        public NoteDirRegexTuple GetAltInternalDirFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetAltInternalDirFullDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().AltPfx);
+
+        public ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> GetDirNamesRegexMap(
+            NoteDirsPairConfig.IDirNamesT cfg) => new Dictionary<NoteDirTypeTuple, NoteDirRegexTuple>
             {
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Main),
-                    GetMainNoteItemShortDirNameRegex(cfg)
+                    GetMainNoteItemShortDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Alt),
-                    GetAltNoteItemShortDirNameRegex(cfg)
+                    GetAltNoteItemShortDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.FullName,
                         NoteDirPfxType.Main),
-                    GetMainNoteItemFullDirNameRegex(cfg)
+                    GetMainNoteItemFullDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.FullName,
                         NoteDirPfxType.Alt),
-                    GetAltNoteItemFullDirNameRegex(cfg)
+                    GetAltNoteItemFullDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Main),
-                    GetMainInternalDirShortDirNameRegex(cfg)
+                    GetMainInternalDirShortDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Alt),
-                    GetAltInternalDirShortDirNameRegex(cfg)
+                    GetAltInternalDirShortDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.FullName,
                         NoteDirPfxType.Main),
-                    GetMainInternalDirFullDirNameRegex(cfg)
+                    GetMainInternalDirFullDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.FullName,
                         NoteDirPfxType.Alt),
-                    GetAltInternalDirFullDirNameRegex(cfg)
+                    GetAltInternalDirFullDirNameRegexTuple(cfg)
                 }
             }.RdnlD();
     }

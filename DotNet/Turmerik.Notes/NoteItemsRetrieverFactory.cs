@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Turmerik.DriveExplorer;
+using Turmerik.DriveExplorer.DirsPair;
 using Turmerik.DriveExplorer.Notes;
 using Turmerik.TextSerialization;
 
@@ -16,21 +17,26 @@ namespace Turmerik.Notes
     public class NoteItemsRetrieverFactory : INoteItemsRetrieverFactory
     {
         private readonly IJsonConversion jsonConversion;
-        private readonly IDriveItemsRetriever dvExplrSvc;
+        private readonly IDriveItemsRetriever dvItemsRetriever;
+        private readonly IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
         private readonly INoteJsonDeserializer noteJsonDeserializer;
 
         public NoteItemsRetrieverFactory(
             IJsonConversion jsonConversion,
             IDriveItemsRetriever dvExplrSvc,
+            IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
             INoteCfgValuesRetriever noteCfgValuesRetriever,
             INoteJsonDeserializer noteJsonDeserializer)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
-            this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
+            this.dvItemsRetriever = dvExplrSvc ?? throw new ArgumentNullException(
                 nameof(dvExplrSvc));
+
+            this.existingDirPairsRetrieverFactory = existingDirPairsRetrieverFactory ?? throw new ArgumentNullException(
+                nameof(existingDirPairsRetrieverFactory));
 
             this.noteCfgValuesRetriever = noteCfgValuesRetriever ?? throw new ArgumentNullException(
                 nameof(noteCfgValuesRetriever));
@@ -42,7 +48,8 @@ namespace Turmerik.Notes
         public INoteItemsRetriever Retriever(
             INoteDirsPairConfig config) => new NoteItemsRetriever(
                 jsonConversion,
-                dvExplrSvc,
+                dvItemsRetriever,
+                existingDirPairsRetrieverFactory.Retriever(config),
                 noteCfgValuesRetriever,
                 noteJsonDeserializer,
                 config,

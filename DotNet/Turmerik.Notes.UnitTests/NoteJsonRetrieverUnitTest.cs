@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
-using Turmerik.Notes.Settings;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
 using Turmerik.Dependencies;

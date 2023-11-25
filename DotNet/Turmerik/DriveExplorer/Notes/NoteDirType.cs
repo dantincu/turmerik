@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Turmerik.DriveExplorer.Notes
 {
@@ -44,5 +45,19 @@ namespace Turmerik.DriveExplorer.Notes
         public NoteDirCategory DirCat { get; }
         public NoteDirType DirType { get; }
         public NoteDirPfxType DirPfxType { get; }
+    }
+
+    public readonly struct NoteDirRegexTuple
+    {
+        public NoteDirRegexTuple(
+            Regex regex,
+            string prefix)
+        {
+            Regex = regex ?? throw new ArgumentNullException(nameof(regex));
+            Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
+        }
+
+        public Regex Regex { get; }
+        public string Prefix { get; }
     }
 }

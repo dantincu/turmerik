@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.RfDirsPairNames.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": ".\\795"
+    }
+  }
+}

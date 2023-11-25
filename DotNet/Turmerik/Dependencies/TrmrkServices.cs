@@ -55,6 +55,8 @@ namespace Turmerik.Dependencies
 
             services.AddSingleton<INoteCfgValuesRetriever, NoteCfgValuesRetriever>();
             services.AddSingleton<INextNoteIdxRetriever, NextNoteIdxRetriever>();
+            services.AddSingleton<INoteDirsPairIdxRetriever, NoteDirsPairIdxRetriever>();
+            services.AddSingleton<IExistingDirPairsRetrieverFactory, ExistingDirPairsRetrieverFactory>();
             return services;
         }
     }

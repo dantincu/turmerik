@@ -7,7 +7,6 @@ using Turmerik.LocalDevice.Core.Env;
 using Turmerik.LocalFileNotes.WinFormsApp.ViewModels;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Notes.Dependencies;
-using Turmerik.Notes.Settings;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.LocalDeviceEnv;
@@ -15,6 +14,7 @@ using Turmerik.LocalFileNotes.WinFormsApp;
 using Turmerik.LocalFileNotes.WinFormsApp.Settings;
 using Turmerik.LocalFileNotes.WinFormsApp.Data;
 using Turmerik.HtmlAgility.Dependencies;
+using Turmerik.DriveExplorer.Notes;
 
 namespace Turmerik.LocalFilesNotes.WinFormsApp
 {
