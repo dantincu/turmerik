@@ -20,12 +20,14 @@ namespace Turmerik.DriveExplorer.DirsPair
     {
         private readonly IDriveExplorerService dvExplrSvc;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
+        private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly INextNoteIdxRetriever nextNoteIdxRetriever;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
 
         public DirsPairGenerator(
             IDriveExplorerService dvExplrSvc,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
+            IExistingDirPairsRetriever existingDirPairsRetriever,
             INextNoteIdxRetriever nextNoteIdxRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever)
         {
@@ -34,6 +36,9 @@ namespace Turmerik.DriveExplorer.DirsPair
 
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
                 nameof(fsEntryNameNormalizer));
+
+            this.existingDirPairsRetriever = existingDirPairsRetriever ?? throw new ArgumentNullException(
+                nameof(existingDirPairsRetriever));
 
             this.nextNoteIdxRetriever = nextNoteIdxRetriever ?? throw new ArgumentNullException(
                 nameof(nextNoteIdxRetriever));

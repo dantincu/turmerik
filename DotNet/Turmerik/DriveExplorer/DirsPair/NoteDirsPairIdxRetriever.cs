@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Turmerik.DriveExplorer.Notes;
@@ -12,7 +13,29 @@ namespace Turmerik.DriveExplorer.DirsPair
          bool TryGetNoteDirsPairIdx(
             ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexMap,
             string dirName,
-            out Tuple<int, NoteDirTypeTuple, NoteDirRegexTuple> match);
+            NoteDirsPairConfig.IDirNamesT config,
+            out NoteDirMatchTuple match);
+
+        NoteDirMatchTuple GetNoteDirsPairIdx(
+            KeyValuePair<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexKvp,
+            string dirName,
+            NoteDirsPairConfig.IDirNamesT config,
+            string capturedStr);
+
+        bool IsMatchCandidate(
+            NoteDirTypeTuple dirTypeTuple,
+            NoteDirsPairConfig.IDirNamesT config);
+
+        NoteDirsPairConfig.IDirNamePfxesT GetDirNamePfxesCfg(
+            NoteDirTypeTuple dirTypeTuple,
+            NoteDirsPairConfig.IDirNamesT config);
+
+        string GetDirNamePfx(
+            NoteDirsPairConfig.IDirNamePfxesT cfg);
+
+        NoteInternalDir? GetNoteInternalDir(
+            NoteDirsPairConfig.IDirNamesT dirNamesCfg,
+            string fullDirNamePart);
     }
 
     public class NoteDirsPairIdxRetriever : INoteDirsPairIdxRetriever
@@ -20,36 +43,143 @@ namespace Turmerik.DriveExplorer.DirsPair
         public bool TryGetNoteDirsPairIdx(
             ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexMap,
             string dirName,
-            out Tuple<int, NoteDirTypeTuple, NoteDirRegexTuple> match)
+            NoteDirsPairConfig.IDirNamesT config,
+            out NoteDirMatchTuple match)
         {
             bool foundMatch = false;
-            int idx = -1;
-            NoteDirTypeTuple dirTypeTuple = default;
-            NoteDirRegexTuple dirRegexTuple = default;
+            match = default;
 
             foreach (var kvp in dirNamesRegexMap)
             {
-                var regexMatch = kvp.Value.Regex.Match(dirName);
-
-                if (regexMatch?.Success ?? false)
+                if (IsMatchCandidate(
+                    kvp.Key, config))
                 {
-                    string idxStr = regexMatch.Value.Substring(
-                        kvp.Value.Prefix.Length);
+                    var regexMatch = kvp.Value.Regex.Match(dirName);
 
-                    foundMatch = true;
-                    idx = int.Parse(idxStr);
+                    if (regexMatch?.Success ?? false)
+                    {
+                        foundMatch = true;
 
-                    dirTypeTuple = kvp.Key;
-                    dirRegexTuple = kvp.Value;
+                        match = GetNoteDirsPairIdx(
+                            kvp, dirName, config, regexMatch.Value);
 
-                    break;
+                        break;
+                    }
                 }
             }
 
-            match = Tuple.Create(
-                idx, dirTypeTuple, dirRegexTuple);
-
             return foundMatch;
+        }
+
+        public NoteDirMatchTuple GetNoteDirsPairIdx(
+            KeyValuePair<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexKvp,
+            string dirName,
+            NoteDirsPairConfig.IDirNamesT dirNamesCfg,
+            string capturedStr)
+        {
+            var dirTypeTuple = dirNamesRegexKvp.Key;
+            var dirRegexTuple = dirNamesRegexKvp.Value;
+
+            var config = GetDirNamePfxesCfg(
+                dirTypeTuple, dirNamesCfg);
+
+            string pfx = GetDirNamePfx(
+                config) ?? string.Empty;
+
+            string restOfCapturedStr = capturedStr.Substring(
+                pfx.Length);
+
+            string noteIdxStr = new string(
+                restOfCapturedStr.TakeWhile(
+                    c => char.IsDigit(c)).ToArray());
+
+            int noteIdx = int.Parse(noteIdxStr);
+
+            string shortDirName = pfx + noteIdxStr;
+            string shortDirNamePart = null;
+            string fullDirNamePart = null;
+            NoteInternalDir? noteInternalDir = null;
+
+            if (dirTypeTuple.DirType == NoteDirType.FullName)
+            {
+                shortDirNamePart = shortDirName + config.JoinStr;
+
+                fullDirNamePart = dirName.Substring(
+                    shortDirNamePart.Length);
+
+                noteInternalDir = GetNoteInternalDir(
+                    dirNamesCfg, fullDirNamePart);
+            }
+
+            return new NoteDirMatchTuple(
+                dirName,
+                shortDirName,
+                shortDirNamePart,
+                fullDirNamePart,
+                noteIdx,
+                dirTypeTuple,
+                dirRegexTuple,
+                noteInternalDir);
+        }
+
+        public bool IsMatchCandidate(
+            NoteDirTypeTuple dirTypeTuple,
+            NoteDirsPairConfig.IDirNamesT dirNamesCfg)
+        {
+            var config = GetDirNamePfxesCfg(
+                dirTypeTuple, dirNamesCfg);
+
+            bool? useAltPfx = config.UseAltPfx;
+            bool isMatchCandidate;
+
+            if (useAltPfx.HasValue)
+            {
+                isMatchCandidate = useAltPfx.Value == (
+                    dirTypeTuple.DirPfxType == NoteDirPfxType.Alt);
+            }
+            else
+            {
+                isMatchCandidate = true;
+            }
+
+            return isMatchCandidate;
+        }
+
+        public NoteDirsPairConfig.IDirNamePfxesT GetDirNamePfxesCfg(
+            NoteDirTypeTuple dirTypeTuple,
+            NoteDirsPairConfig.IDirNamesT dirNamesCfg) => dirTypeTuple.DirCat switch
+            {
+                NoteDirCategory.Item => dirNamesCfg.GetNoteItemsPfxes(),
+                NoteDirCategory.Internals => dirNamesCfg.GetNoteInternalsPfxes(),
+            };
+
+        public string GetDirNamePfx(
+            NoteDirsPairConfig.IDirNamePfxesT cfg) => (cfg.UseAltPfx ?? false) switch
+            {
+                false => cfg.MainPfx,
+                true => cfg.AltPfx,
+            };
+
+        public NoteInternalDir? GetNoteInternalDir(
+            NoteDirsPairConfig.IDirNamesT dirNamesCfg,
+            string fullDirNamePart)
+        {
+            NoteInternalDir? noteInternalDir = null;
+
+            if (dirNamesCfg.NoteBook == fullDirNamePart)
+            {
+                noteInternalDir = NoteInternalDir.Root;
+            }
+            else if (dirNamesCfg.NoteInternals == fullDirNamePart)
+            {
+                noteInternalDir = NoteInternalDir.Internals;
+            }
+            else if (dirNamesCfg.NoteFiles == fullDirNamePart)
+            {
+                noteInternalDir = NoteInternalDir.Files;
+            }
+
+            return noteInternalDir;
         }
     }
 }

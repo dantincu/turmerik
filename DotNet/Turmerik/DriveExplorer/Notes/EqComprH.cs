@@ -12,10 +12,9 @@ namespace Turmerik.DriveExplorer.Notes
                 (first, second) =>
                 {
                     bool areEqual = first.DirType == second.DirType;
-
                     areEqual = areEqual && first.DirPfxType == second.DirPfxType;
-                    areEqual = areEqual && first.DirCat == second.DirCat;
 
+                    areEqual = areEqual && first.DirCat == second.DirCat;
                     return areEqual;
                 });
     }

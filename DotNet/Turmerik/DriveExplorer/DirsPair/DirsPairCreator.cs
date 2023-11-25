@@ -23,6 +23,7 @@ namespace Turmerik.DriveExplorer.DirsPair
         {
             this.generator = generator ?? throw new ArgumentNullException(
                 nameof(generator));
+
             this.itemsCreator = itemsCreator ?? throw new ArgumentNullException(
                 nameof(itemsCreator));
         }

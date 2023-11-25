@@ -273,28 +273,28 @@ namespace Turmerik.DriveExplorer.Notes
                 },
                 {
                     new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
+                        NoteDirCategory.Internals,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Main),
                     GetMainInternalDirShortDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
+                        NoteDirCategory.Internals,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Alt),
                     GetAltInternalDirShortDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
+                        NoteDirCategory.Internals,
                         NoteDirType.FullName,
                         NoteDirPfxType.Main),
                     GetMainInternalDirFullDirNameRegexTuple(cfg)
                 },
                 {
                     new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
+                        NoteDirCategory.Internals,
                         NoteDirType.FullName,
                         NoteDirPfxType.Alt),
                     GetAltInternalDirFullDirNameRegexTuple(cfg)

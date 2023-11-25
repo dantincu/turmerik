@@ -21,11 +21,11 @@ namespace Turmerik.HtmlAgility.DirsPair.ConsoleApps.MkFsDirPairs
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
-            IDirsPairCreator dirsPairCreator) : base(
+            IDirsPairCreatorFactory dirsPairCreatorFactory) : base(
                 jsonConversion,
                 consoleArgsParser,
                 fsEntryNameNormalizer,
-                dirsPairCreator)
+                dirsPairCreatorFactory)
         {
         }
 

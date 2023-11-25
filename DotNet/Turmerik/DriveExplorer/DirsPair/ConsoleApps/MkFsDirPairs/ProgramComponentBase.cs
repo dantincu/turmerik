@@ -27,12 +27,13 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
         private readonly DirsPairConfig config;
+        private readonly NotesAppConfigMtbl notesConfig;
 
         public ProgramComponentBase(
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
-            IDirsPairCreator dirsPairCreator)
+            IDirsPairCreatorFactory dirsPairCreatorFactory)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -43,15 +44,18 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
                 nameof(fsEntryNameNormalizer));
 
-            this.dirsPairCreator = dirsPairCreator ?? throw new ArgumentNullException(
-                nameof(dirsPairCreator));
-
-            string configFilePath = Path.Combine(
-                ProgramH.ExecutingAssemmblyPath,
-                DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME);
-
             config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
-                File.ReadAllText(configFilePath));
+                File.ReadAllText(Path.Combine(
+                ProgramH.ExecutingAssemmblyPath,
+                DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
+
+            notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
+                File.ReadAllText(Path.Combine(
+                    ProgramH.ExecutingAssemmblyPath,
+                    TrmrkNotesH.NOTES_CFG_FILE_NAME)));
+
+            this.dirsPairCreator = dirsPairCreatorFactory.Creator(
+                notesConfig.GetNoteDirPairs());
         }
 
         public async Task RunAsync(string[] rawArgs)

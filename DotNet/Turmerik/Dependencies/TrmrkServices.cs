@@ -46,8 +46,8 @@ namespace Turmerik.Dependencies
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
 
             services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
-            services.AddSingleton<IDirsPairGenerator, DirsPairGenerator>();
-            services.AddSingleton<IDirsPairCreator, DirsPairCreator>();
+            services.AddSingleton<IDirsPairGeneratorFactory, DirsPairGeneratorFactory>();
+            services.AddSingleton<IDirsPairCreatorFactory, DirsPairCreatorFactory>();
             services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
 
             services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();

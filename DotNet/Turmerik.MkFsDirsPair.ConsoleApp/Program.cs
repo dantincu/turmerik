@@ -8,6 +8,7 @@ using Turmerik.HtmlAgility.DirsPair.ConsoleApps.MkFsDirPairs;
 var services = TrmrkServices.RegisterAll(
     new ServiceCollection());
 
+services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 
 services.AddTransient<IProgramComponent, ProgramComponent>();

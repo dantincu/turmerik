@@ -60,4 +60,36 @@ namespace Turmerik.DriveExplorer.Notes
         public Regex Regex { get; }
         public string Prefix { get; }
     }
+
+    public readonly struct NoteDirMatchTuple
+    {
+        public NoteDirMatchTuple(
+            string dirName,
+            string shortDirName,
+            string? shortDirNamePart,
+            string? fullDirNamePart,
+            int noteIdx,
+            NoteDirTypeTuple dirTypeTuple,
+            NoteDirRegexTuple dirRegexTuple,
+            NoteInternalDir? noteInternalDir)
+        {
+            DirName = dirName ?? throw new ArgumentNullException(nameof(dirName));
+            ShortDirName = shortDirName ?? throw new ArgumentNullException(nameof(shortDirName));
+            ShortDirNamePart = shortDirNamePart;
+            FullDirNamePart = fullDirNamePart;
+            NoteIdx = noteIdx;
+            DirTypeTuple = dirTypeTuple;
+            DirRegexTuple = dirRegexTuple;
+            NoteInternalDir = noteInternalDir;
+        }
+
+        public string DirName { get; }
+        public string ShortDirName { get; }
+        public string? ShortDirNamePart { get; }
+        public string? FullDirNamePart { get; }
+        public int NoteIdx { get; }
+        public NoteDirTypeTuple DirTypeTuple { get; }
+        public NoteDirRegexTuple DirRegexTuple { get; }
+        public NoteInternalDir? NoteInternalDir { get; }
+    }
 }
