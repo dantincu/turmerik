@@ -89,13 +89,13 @@ namespace Turmerik.DriveExplorer.DirsPair
             string restOfCapturedStr = capturedStr.Substring(
                 pfx.Length);
 
-            string noteIdxStr = new string(
+            string noteDirIdxStr = new string(
                 restOfCapturedStr.TakeWhile(
                     c => char.IsDigit(c)).ToArray());
 
-            int noteIdx = int.Parse(noteIdxStr);
+            int noteDirIdx = int.Parse(noteDirIdxStr);
 
-            string shortDirName = pfx + noteIdxStr;
+            string shortDirName = pfx + noteDirIdxStr;
             string shortDirNamePart = null;
             string fullDirNamePart = null;
             NoteInternalDir? noteInternalDir = null;
@@ -116,7 +116,7 @@ namespace Turmerik.DriveExplorer.DirsPair
                 shortDirName,
                 shortDirNamePart,
                 fullDirNamePart,
-                noteIdx,
+                noteDirIdx,
                 dirTypeTuple,
                 dirRegexTuple,
                 noteInternalDir);

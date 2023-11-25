@@ -69,13 +69,16 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
             if (opts.OpenMdFile)
             {
                 var shortNameDir = dirsPair.First();
-                var file = shortNameDir.FolderFiles.Single();
+                var file = shortNameDir.FolderFiles?.SingleOrDefault();
 
-                string filePath = Path.Combine(
-                    shortNameDir.Idnf,
-                    file.Name);
+                if (file != null)
+                {
+                    string filePath = Path.Combine(
+                        shortNameDir.Idnf,
+                        file.Name);
 
-                ProcessH.OpenWithDefaultProgramIfNotNull(filePath);
+                    ProcessH.OpenWithDefaultProgramIfNotNull(filePath);
+                }
             }
         }
 
@@ -97,7 +100,11 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs
                 KeepFileContents = GetKeepFileContents(args),
                 MdFileFirstContent = args.MdFirstContent,
                 TrmrkGuidInputName = config.TrmrkGuidInputName,
-                ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true
+                ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true,
+                CreateNote = args.CreateNote,
+                CreateNoteBook = args.CreateNoteBook,
+                CreateNoteInternalsDir = args.CreateNoteInternalsDir,
+                CreateNoteFilesDir = args.CreateNoteFilesDir,
             };
 
         private string GetMdFileName(

@@ -23,6 +23,10 @@ namespace Turmerik.DriveExplorer.Notes
             string noteFullDirNamePart,
             NoteDirsPairConfig.IFileNamesT cfg);
 
+        string GetDirIdxStr(
+            NoteDirsPairConfig.IDirNameIdxesT cfg,
+            int idx);
+
         string GetMainNoteItemShortDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg);
 
@@ -126,6 +130,11 @@ namespace Turmerik.DriveExplorer.Notes
                 cfg.PrependTitleToNoteMdFileName?.If(
                     () => noteFullDirNamePart), cfg.NoteItemMdFileName);
 
+        public string GetDirIdxStr(
+            NoteDirsPairConfig.IDirNameIdxesT cfg,
+            int idx) => idx.ToString(
+                cfg.IdxFmt ?? "D1");
+
         public string GetMainNoteItemShortDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg) => GetShortDirNameRegexStr(
                 cfg.GetNoteItemsPfxes().MainPfx);
@@ -165,16 +174,16 @@ namespace Turmerik.DriveExplorer.Notes
         public string GetShortDirNameRegexStr(
             string pfx) => string.Concat(
                 "^",
-                pfx.EncodeForRegex(),
+                pfx.EncodeForRegex().EncodedStr,
                 "\\d+$");
 
         public string GetFullDirNameRegexStr(
             string pfx,
             string joinStr) => string.Concat(
                 "^",
-                pfx.EncodeForRegex(),
+                pfx.EncodeForRegex().EncodedStr,
                 "\\d+",
-                joinStr.EncodeForRegex());
+                joinStr.EncodeForRegex().EncodedStr);
 
         public Regex GetMainNoteItemShortDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg) => new Regex(

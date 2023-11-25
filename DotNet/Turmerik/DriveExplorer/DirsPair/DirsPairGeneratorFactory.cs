@@ -41,6 +41,7 @@ namespace Turmerik.DriveExplorer.DirsPair
             this.noteCfgValuesRetriever = noteCfgValuesRetriever ?? throw new ArgumentNullException(
                 nameof(noteCfgValuesRetriever));
         }
+
         public DirsPairGenerator Create(
             INoteDirsPairConfig notesConfig) => new DirsPairGenerator(
                 dvExplrSvc,
@@ -48,6 +49,7 @@ namespace Turmerik.DriveExplorer.DirsPair
                 existingDirPairsRetrieverFactory.Retriever(
                     notesConfig),
                 nextNoteIdxRetriever,
-                noteCfgValuesRetriever);
+                noteCfgValuesRetriever,
+                notesConfig);
     }
 }

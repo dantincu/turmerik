@@ -144,7 +144,7 @@ namespace Turmerik.DriveExplorer.Notes
             public DirNamePfxesT NoteItemsPfxes { get; }
 
             public IDirNamePfxesT GetNoteInternalsPfxes() => NoteInternalsPfxes;
-            public IDirNamePfxesT GetNoteItemsPfxes() => NoteInternalsPfxes;
+            public IDirNamePfxesT GetNoteItemsPfxes() => NoteItemsPfxes;
         }
 
         public class DirNamePfxesT : IDirNamePfxesT

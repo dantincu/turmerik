@@ -20,5 +20,9 @@ namespace Turmerik.DriveExplorer.DirsPair
         public string KeepFileContents { get; set; }
         public string TrmrkGuidInputName { get; set; }
         public bool ThrowIfAnyItemAlreadyExists { get; set; }
+        public bool CreateNote { get; set; }
+        public bool CreateNoteBook { get; set; }
+        public bool CreateNoteInternalsDir { get; set; }
+        public bool CreateNoteFilesDir { get; set; }
     }
 }

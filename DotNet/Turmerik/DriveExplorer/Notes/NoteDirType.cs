@@ -68,7 +68,7 @@ namespace Turmerik.DriveExplorer.Notes
             string shortDirName,
             string? shortDirNamePart,
             string? fullDirNamePart,
-            int noteIdx,
+            int noteDirIdx,
             NoteDirTypeTuple dirTypeTuple,
             NoteDirRegexTuple dirRegexTuple,
             NoteInternalDir? noteInternalDir)
@@ -77,7 +77,7 @@ namespace Turmerik.DriveExplorer.Notes
             ShortDirName = shortDirName ?? throw new ArgumentNullException(nameof(shortDirName));
             ShortDirNamePart = shortDirNamePart;
             FullDirNamePart = fullDirNamePart;
-            NoteIdx = noteIdx;
+            NoteDirIdx = noteDirIdx;
             DirTypeTuple = dirTypeTuple;
             DirRegexTuple = dirRegexTuple;
             NoteInternalDir = noteInternalDir;
@@ -87,7 +87,7 @@ namespace Turmerik.DriveExplorer.Notes
         public string ShortDirName { get; }
         public string? ShortDirNamePart { get; }
         public string? FullDirNamePart { get; }
-        public int NoteIdx { get; }
+        public int NoteDirIdx { get; }
         public NoteDirTypeTuple DirTypeTuple { get; }
         public NoteDirRegexTuple DirRegexTuple { get; }
         public NoteInternalDir? NoteInternalDir { get; }

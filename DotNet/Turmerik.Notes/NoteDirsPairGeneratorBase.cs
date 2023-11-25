@@ -103,8 +103,8 @@ namespace Turmerik.Notes
 
             var noteItemsPfxes = DirNamesCfg.GetNoteItemsPfxes();
             string shortDirName = noteItemsPfxes.MainPfx;
-            shortDirName += noteIdx.ToString(
-                NoteDirNameIdxesCfg.IdxFmt ?? "D1");
+            shortDirName += NoteCfgValuesRetriever.GetDirIdxStr(
+                NoteDirNameIdxesCfg, noteIdx);
 
             fullDirNamePart = FsEntryNameNormalizer.NormalizeFsEntryName(args.Opts.Title,
                 Config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
@@ -182,8 +182,8 @@ namespace Turmerik.Notes
             var noteInternalsPfxes = cfg.GetNoteInternalsPfxes();
             string shortDirName = noteInternalsPfxes.MainPfx;
 
-            shortDirName += kvp.Value.ToString(
-                NoteInternalDirNameIdxesCfg.IdxFmt ?? "D1");
+            shortDirName += NoteCfgValuesRetriever.GetDirIdxStr(
+                NoteDirNameIdxesCfg, kvp.Value);
 
             string fullDirNamePart = GetInternalDirFullNamePart(
                 cfg, kvp.Key);

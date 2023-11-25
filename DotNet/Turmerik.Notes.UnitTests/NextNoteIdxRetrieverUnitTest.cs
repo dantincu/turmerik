@@ -94,6 +94,84 @@ namespace Turmerik.Notes.UnitTests
                 cfg.IncIdx = false;
                 cfg.FillGapsByDefault = true;
             });
+
+            PerformTest(new int[] { 2, 3, 5, 6 }, 7, cfg =>
+            {
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 1, 2, 5, 6 }, 7, cfg =>
+            {
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 1, 2, 3, 4 }, 5, cfg =>
+            {
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 998, 997, 995, 994 }, 993, cfg =>
+            {
+                cfg.IncIdx = false;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 999, 998, 996, 995 }, 994, cfg =>
+            {
+                cfg.IncIdx = false;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 999, 998, 997, 996 }, 995, cfg =>
+            {
+                cfg.IncIdx = false;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 102, 103, 105, 106 }, 107, cfg =>
+            {
+                cfg.MinIdx = 101;
+                cfg.MaxIdx = 199;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 101, 102, 105, 106 }, 107, cfg =>
+            {
+                cfg.MinIdx = 101;
+                cfg.MaxIdx = 199;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 101, 102, 103, 104 }, 105, cfg =>
+            {
+                cfg.MinIdx = 101;
+                cfg.MaxIdx = 199;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 198, 197, 195, 194 }, 193, cfg =>
+            {
+                cfg.MinIdx = 101;
+                cfg.MaxIdx = 199;
+                cfg.IncIdx = false;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 199, 198, 196, 195 }, 194, cfg =>
+            {
+                cfg.MinIdx = 101;
+                cfg.MaxIdx = 199;
+                cfg.IncIdx = false;
+                cfg.FillGapsByDefault = false;
+            });
+
+            PerformTest(new int[] { 199, 198, 197, 196 }, 195, cfg =>
+            {
+                cfg.MinIdx = 101;
+                cfg.MaxIdx = 199;
+                cfg.IncIdx = false;
+                cfg.FillGapsByDefault = false;
+            });
         }
 
         private void PerformTest(

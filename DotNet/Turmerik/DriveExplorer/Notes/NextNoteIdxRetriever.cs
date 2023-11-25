@@ -11,6 +11,10 @@ namespace Turmerik.DriveExplorer.Notes
     {
         int GetNextIdx(
             NoteDirsPairConfig.IDirNameIdxesT cfg,
+            HashSet<int> idxesSet);
+
+        int GetNextIdx(
+            NoteDirsPairConfig.IDirNameIdxesT cfg,
             int[] sortedIdxesArr);
 
         int GetNextIdx(
@@ -55,6 +59,26 @@ namespace Turmerik.DriveExplorer.Notes
     {
         public const int DF_MIN_VALUE = 1;
         public const int DF_MAX_VALUE = 999;
+
+        public int GetNextIdx(
+            NoteDirsPairConfig.IDirNameIdxesT cfg,
+            HashSet<int> idxesSet)
+        {
+            int[] sortedIdxesArr;
+            bool desc = cfg.IncIdx == false;
+
+            if (desc)
+            {
+                sortedIdxesArr = idxesSet.OrderByDescending(x => x).ToArray();
+            }
+            else
+            {
+                sortedIdxesArr = idxesSet.OrderBy(x => x).ToArray();
+            }
+
+            int nextIdx = GetNextIdx(cfg, sortedIdxesArr);
+            return nextIdx;
+        }
 
         public int GetNextIdx(
             NoteDirsPairConfig.IDirNameIdxesT cfg,

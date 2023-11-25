@@ -21,19 +21,18 @@ namespace Turmerik.DriveExplorer.DirsPair
             NoteItemsTupleCore tuple);
 
         DirsPairTuple HandleDir(
-            NoteItemsTupleCore tuple,
+            List<DirsPairTuple> tuplesList,
+            List<string> otherDirNamesList,
             string dirName);
 
-        public DirsPairTuple HandleDirMatch(
-            NoteItemsTupleCore tuple,
+        DirsPairTuple HandleDirMatch(
+            List<DirsPairTuple> tuplesList,
             NoteDirMatchTuple match);
 
-        public DirsPairTuple CreateDirsPairTuple(
-            NoteItemsTupleCore tuple,
+        DirsPairTuple CreateDirsPairTuple(
             NoteDirMatchTuple match);
 
         bool Matches(
-            NoteItemsTupleCore tuple,
             NoteDirMatchTuple match,
             DirsPairTuple dirsPairTuple);
     }
@@ -99,11 +98,24 @@ namespace Turmerik.DriveExplorer.DirsPair
         {
             foreach (var folder in tuple.ParentFolder.SubFolders)
             {
-                HandleDir(tuple, folder.Name);
+                HandleDir(
+                    tuple.DirsPairTuples,
+                    tuple.OtherDirNames,
+                    folder.Name);
+            }
+
+            foreach (var file in tuple.ParentFolder.FolderFiles)
+            {
+                HandleDir(
+                    tuple.FileDirsPairTuples,
+                    tuple.OtherFileNames,
+                    file.Name);
             }
 
             foreach (var dirsPairTuple in tuple.DirsPairTuples)
             {
+                UpdateExistingIdxes(tuple, dirsPairTuple);
+
                 if (dirsPairTuple.DirNamesMap.Count == 2 && dirsPairTuple.DirNamesMap.Where(
                     kvp => kvp.Value == null).Count() == 1)
                 {
@@ -114,10 +126,16 @@ namespace Turmerik.DriveExplorer.DirsPair
                     dirsPairTuple.FullDirNamePart = fullNameDirKvp.Value;
                 }
             }
+
+            foreach (var dirsPairTuple in tuple.FileDirsPairTuples)
+            {
+                UpdateExistingIdxes(tuple, dirsPairTuple);
+            }
         }
 
         public DirsPairTuple HandleDir(
-            NoteItemsTupleCore tuple,
+            List<DirsPairTuple> tuplesList,
+            List<string> otherDirNamesList,
             string dirName)
         {
             DirsPairTuple dirsPairTuple = null;
@@ -127,11 +145,11 @@ namespace Turmerik.DriveExplorer.DirsPair
                 DirNamesCfg, out var match))
             {
                 dirsPairTuple = HandleDirMatch(
-                    tuple, match);
+                    tuplesList, match);
             }
             else
             {
-                tuple.OtherDirNames.Add(
+                otherDirNamesList.Add(
                     dirName);
             }
 
@@ -139,30 +157,28 @@ namespace Turmerik.DriveExplorer.DirsPair
         }
 
         public DirsPairTuple HandleDirMatch(
-            NoteItemsTupleCore tuple,
+            List<DirsPairTuple> tuplesList,
             NoteDirMatchTuple match)
         {
-            var dirsPairTuple = tuple.DirsPairTuples.FirstOrDefault(
-                candTuple => Matches(tuple, match, candTuple));
+            var dirsPairTuple = tuplesList.FirstOrDefault(
+                candTuple => Matches(match, candTuple));
 
             if (dirsPairTuple != null)
             {
                 dirsPairTuple.DirNamesMap.Add(
-                    match.DirName, match.FullDirNamePart);
+                    match.DirName,
+                    match.FullDirNamePart);
             }
             else
             {
-                dirsPairTuple = CreateDirsPairTuple(
-                    tuple, match);
-
-                tuple.DirsPairTuples.Add(dirsPairTuple);
+                dirsPairTuple = CreateDirsPairTuple(match);
+                tuplesList.Add(dirsPairTuple);
             }
 
             return dirsPairTuple;
         }
 
         public DirsPairTuple CreateDirsPairTuple(
-            NoteItemsTupleCore tuple,
             NoteDirMatchTuple match)
         {
             var dirTypeTuple = match.DirTypeTuple;
@@ -171,7 +187,7 @@ namespace Turmerik.DriveExplorer.DirsPair
             {
                 NoteDirCat = dirTypeTuple.DirCat,
                 NoteDirPfxType = dirTypeTuple.DirPfxType,
-                NoteIdx = match.NoteIdx,
+                NoteDirIdx = match.NoteDirIdx,
                 DirNamesMap = new Dictionary<string, string>
                 {
                     { match.DirName, match.FullDirNamePart },
@@ -183,18 +199,33 @@ namespace Turmerik.DriveExplorer.DirsPair
         }
 
         public bool Matches(
-            NoteItemsTupleCore tuple,
             NoteDirMatchTuple match,
             DirsPairTuple dirsPairTuple)
         {
             var noteDirTypeTuple = match.DirTypeTuple;
-            bool matches = dirsPairTuple.NoteIdx == match.NoteIdx;
+            bool matches = dirsPairTuple.NoteDirIdx == match.NoteDirIdx;
             matches = matches && dirsPairTuple.NoteInternalDir == match.NoteInternalDir;
 
             matches = matches && dirsPairTuple.NoteDirCat == noteDirTypeTuple.DirCat;
             matches = matches && dirsPairTuple.NoteDirPfxType == noteDirTypeTuple.DirPfxType;
 
             return matches;
+        }
+
+        private void UpdateExistingIdxes(
+            NoteItemsTupleCore noteItemsTuple,
+            DirsPairTuple dirsPairTuple)
+        {
+            if (dirsPairTuple.NoteDirCat == NoteDirCategory.Item)
+            {
+                noteItemsTuple.ExistingNoteDirIdxes.Add(
+                    dirsPairTuple.NoteDirIdx);
+            }
+            else
+            {
+                noteItemsTuple.ExistingInternalDirIdxes.Add(
+                    dirsPairTuple.NoteDirIdx);
+            }
         }
     }
 }

@@ -59,6 +59,11 @@ namespace Turmerik.DriveExplorer
                 driveItemsArr.Where(
                     item => item.IsFolder != true).ToList());
 
+            foreach (var subFolder in folder.SubFolders)
+            {
+                // subFolder.IsFolder = false;
+            }
+
             return folder;
         }
 
@@ -120,7 +125,7 @@ namespace Turmerik.DriveExplorer
 
             if (fSysInfo is DirectoryInfo dirInfo)
             {
-                if (!isChildItem)
+                // if (!isChildItem)
                 {
                     fsItem.IsFolder = true;
                 }

@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.MkFsDirsPair.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "asdfasdf 7992 :o :uri:https://html-agility-pack.net"
+      "commandLineArgs": "asdfasdf :nn :o"
     }
   }
 }
