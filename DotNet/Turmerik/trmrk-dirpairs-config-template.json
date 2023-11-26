@@ -14,7 +14,8 @@
     "CreateNoteFilesDir": "nf",
     "Url": "url",
     "Uri": "uri",
-    "ShowLastCreatedFirst": "slf"
+    "ShowLastCreatedFirst": "slf",
+    "ShowOtherDirNames": "so"
   },
   "DirNames": {
     "DefaultJoinStr": "-",

@@ -29,6 +29,7 @@ namespace Turmerik.DriveExplorer.DirsPair
             public string Url { get; set; }
             public string Uri { get; set; }
             public string ShowLastCreatedFirst { get; set; }
+            public string ShowOtherDirNames { get; set; }
         }
 
         public class DirNamesT

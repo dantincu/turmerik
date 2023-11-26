@@ -84,9 +84,10 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
             ProgramArgs args)
         {
             SortTuples(args);
+            var noteItemsTuple = args.NoteItemsTuple;
             WriteHeadingLineToConsole("Note Dir Pairs: ");
 
-            foreach (var dirsPair in args.NoteItemsTuple.DirsPairTuples)
+            foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
             {
                 if (dirsPair.FullDirNamePart != null)
                 {
@@ -95,6 +96,38 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
                         Tuple.Create(ConsoleColor.Blue, joinStr),
                         Tuple.Create(ConsoleColor.Cyan, dirsPair.FullDirNamePart)
                     ]);
+                }
+            }
+
+            if (args.ShowOtherDirNames ?? false)
+            {
+                WriteHeadingLineToConsole("Multiple full dir names: ");
+
+                foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
+                {
+                    if (dirsPair.FullDirNamePart == null)
+                    {
+                        WriteWithForegroundsToConsole([
+                            Tuple.Create(ConsoleColor.Magenta, dirsPair.ShortDirName),
+                            Tuple.Create(ConsoleColor.Blue, joinStr)],
+                                true);
+
+                        foreach (var kvp in dirsPair.DirNamesMap)
+                        {
+                            WriteWithForegroundsToConsole([
+                                Tuple.Create(ConsoleColor.Cyan, kvp.Value)]);
+                        }
+
+                        Console.WriteLine();
+                    }
+                }
+
+                WriteHeadingLineToConsole("Other dir names: ", true);
+
+                foreach (string dirName in noteItemsTuple.OtherDirNames)
+                {
+                    WriteWithForegroundsToConsole([
+                        Tuple.Create(ConsoleColor.Blue, dirName)]);
                 }
             }
         }
@@ -119,7 +152,10 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
                             FlagHandlersArr = [
                                 parser.ArgsFlagOpts(data,
                                     config.ArgOpts.ShowLastCreatedFirst.Arr(),
-                                    data => data.Args.ShowLastCreatedFirst = true, true)
+                                    data => data.Args.ShowLastCreatedFirst = true, true),
+                                parser.ArgsFlagOpts(data,
+                                    config.ArgOpts.ShowOtherDirNames.Arr(),
+                                    data => data.Args.ShowOtherDirNames = true, true)
                             ]
                         })
                 }).Args;
@@ -144,7 +180,8 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
         }
 
         private void WriteWithForegroundsToConsole(
-            Tuple<ConsoleColor, string>[] tuplesArr)
+            Tuple<ConsoleColor, string>[] tuplesArr,
+            bool omitTrailingNewLine = false)
         {
             foreach (var tuple in tuplesArr)
             {
@@ -153,15 +190,29 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
             }
 
             Console.ResetColor();
-            Console.WriteLine();
+
+            if (!omitTrailingNewLine)
+            {
+                Console.WriteLine();
+            }
         }
 
         private void WriteHeadingLineToConsole(
-            string headingCaption)
+            string headingCaption,
+            bool omitStartingNewLine = false,
+            bool omitTrailingNewLine = false)
         {
-            Console.WriteLine();
+            if (!omitStartingNewLine)
+            {
+                Console.WriteLine();
+            }
+            
             Console.WriteLine(headingCaption);
-            Console.WriteLine();
+
+            if (!omitTrailingNewLine)
+            {
+                Console.WriteLine();
+            }
         }
     }
 }

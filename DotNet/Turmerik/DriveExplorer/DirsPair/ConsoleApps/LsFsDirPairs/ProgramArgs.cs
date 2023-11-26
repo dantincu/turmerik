@@ -11,6 +11,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
     {
         public string WorkDir { get; set; }
         public bool? ShowLastCreatedFirst { get; set; }
+        public bool? ShowOtherDirNames { get; set; }
         public NoteItemsTupleCore NoteItemsTuple { get; set; }
     }
 }
