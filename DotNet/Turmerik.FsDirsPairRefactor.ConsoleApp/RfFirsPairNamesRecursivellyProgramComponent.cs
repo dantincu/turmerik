@@ -1,30 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.ConsoleApps;
-using Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
+using Turmerik.DriveExplorer.DirsPair;
 using Turmerik.DriveExplorer.Notes;
+using Turmerik.DriveExplorer;
 using Turmerik.Helpers;
-using Turmerik.Text;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
+using Turmerik.Text;
+using RfDirsPairNames = Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
 
-namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
+namespace Turmerik.FsDirsPairRefactor.ConsoleApp
 {
-    public interface IProgramComponent
-    {
-        Task RunAsync(string[] rawArgs);
-    }
-
-    public class ProgramComponent : IProgramComponent
+    public class RfFirsPairNamesRecursivellyProgramComponent
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleArgsParser parser;
+        private readonly RfDirsPairNames.IProgramComponent rfDirsPairNamesProgramComponent;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
@@ -35,9 +30,10 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
         private readonly string joinStr;
         private readonly bool? incIdx;
 
-        public ProgramComponent(
+        public RfFirsPairNamesRecursivellyProgramComponent(
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
+            RfDirsPairNames.IProgramComponent rfDirsPairNamesProgramComponent,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
@@ -45,6 +41,9 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
 
             parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
+
+            this.rfDirsPairNamesProgramComponent = rfDirsPairNamesProgramComponent ?? throw new ArgumentNullException(
+                nameof(rfDirsPairNamesProgramComponent));
 
             config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
                 File.ReadAllText(Path.Combine(
@@ -71,76 +70,52 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
             var args = GetArgs(rawArgs);
             NormalizeArgs(args);
 
-            args.NoteItemsTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(args.WorkDir);
-            Run(args);
+            await RunAsync(args.WorkDir);
         }
 
         private void NormalizeArgs(
-            ProgramArgs args)
+            RfFirsPairNamesRecursivellyProgramArgs args)
         {
             args.WorkDir ??= Environment.CurrentDirectory;
         }
 
-        private void Run(
-            ProgramArgs args)
+        private async Task RunAsync(
+            string dirPath)
         {
-            SortTuples(args);
-            var noteItemsTuple = args.NoteItemsTuple;
-            WriteHeadingLineToConsole("Note Dir Pairs: ");
+            WriteHeadingLineToConsole(
+                $"Refreshing note names for parent dir path {dirPath}",
+                foregroundColor: ConsoleColor.Yellow);
 
+            var noteItemsTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(dirPath);
+            
             foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
             {
-                if (dirsPair.NoteDirCat == NoteDirCategory.Item && dirsPair.FullDirNamePart != null)
+                if (dirsPair.NoteDirCat == NoteDirCategory.Item)
                 {
-                    WriteWithForegroundsToConsole([
-                        Tuple.Create(ConsoleColor.Magenta, dirsPair.ShortDirName),
-                        Tuple.Create(ConsoleColor.Blue, joinStr),
-                        Tuple.Create(ConsoleColor.Cyan, dirsPair.FullDirNamePart)
-                    ]);
+                    WriteHeadingLineToConsole(
+                        $"Refreshing note name for parent dir name {dirsPair.ShortDirName}",
+                        foregroundColor: ConsoleColor.DarkYellow);
+
+                    rfDirsPairNamesProgramComponent.Run([
+                        Path.Combine(dirPath, dirsPair.ShortDirName)]);
                 }
             }
 
-            if (args.ShowOtherDirNames ?? false)
+            foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
             {
-                WriteHeadingLineToConsole("Others full dir names: ",
-                    foregroundColor: ConsoleColor.Red);
-
-                foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
+                if (dirsPair.NoteDirCat == NoteDirCategory.Item)
                 {
-                    if (dirsPair.FullDirNamePart == null)
-                    {
-                        WriteWithForegroundsToConsole([
-                            Tuple.Create(ConsoleColor.Magenta, dirsPair.ShortDirName),
-                            Tuple.Create(ConsoleColor.Blue, joinStr)],
-                                true);
-
-                        foreach (var kvp in dirsPair.DirNamesMap)
-                        {
-                            WriteWithForegroundsToConsole([
-                                Tuple.Create(ConsoleColor.DarkCyan, kvp.Value)]);
-                        }
-
-                        Console.WriteLine();
-                    }
-                }
-
-                WriteHeadingLineToConsole("Other dir names: ", true,
-                    foregroundColor: ConsoleColor.Red);
-
-                foreach (string dirName in noteItemsTuple.OtherDirNames)
-                {
-                    WriteWithForegroundsToConsole([
-                        Tuple.Create(ConsoleColor.Blue, dirName)]);
+                    await RunAsync(Path.Combine(dirPath, dirsPair.ShortDirName));
                 }
             }
         }
 
-        private ProgramArgs GetArgs(
+        private RfFirsPairNamesRecursivellyProgramArgs GetArgs(
             string[] rawArgs) => parser.Parse(
-                new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
+                new ConsoleArgsParserOpts<RfFirsPairNamesRecursivellyProgramArgs>(rawArgs)
                 {
                     ArgsBuilder = data => parser.HandleArgs(
-                        new ConsoleArgsParseHandlerOpts<ProgramArgs>
+                        new ConsoleArgsParseHandlerOpts<RfFirsPairNamesRecursivellyProgramArgs>
                         {
                             Data = data,
                             ThrowOnTooManyArgs = true,
@@ -152,35 +127,9 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
                                             () => path, () => Path.GetFullPath(
                                                 path))))!)
                             ],
-                            FlagHandlersArr = [
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.ShowLastCreatedFirst.Arr(),
-                                    data => data.Args.ShowLastCreatedFirst = true, true),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.ShowOtherDirNames.Arr(),
-                                    data => data.Args.ShowOtherDirNames = true, true)
-                            ]
+                            FlagHandlersArr = []
                         })
                 }).Args;
-
-        private void SortTuples(
-            ProgramArgs args)
-        {
-            Comparison<DirsPairTuple> comparison;
-
-            if ((args.ShowLastCreatedFirst ?? false) != incIdx)
-            {
-                comparison = (tuple1, tuple2) => tuple1.NoteDirIdx.CompareTo(
-                    tuple2.NoteDirIdx);
-            }
-            else
-            {
-                comparison = (tuple1, tuple2) => tuple2.NoteDirIdx.CompareTo(
-                    tuple1.NoteDirIdx);
-            }
-
-            args.NoteItemsTuple.DirsPairTuples.Sort(comparison);
-        }
 
         private void WriteWithForegroundsToConsole(
             Tuple<ConsoleColor, string>[] tuplesArr,
@@ -214,7 +163,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
             ConsoleH.WithColors(
                 () => Console.WriteLine(headingCaption),
                 foregroundColor ?? ConsoleColor.White);
-            
+
             if (!omitTrailingNewLine)
             {
                 Console.WriteLine();

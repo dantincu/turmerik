@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using Turmerik.FileSystem;
 using Turmerik.Text;
 
-namespace Turmerik.FsDirsPairRevOrder.ConsoleApp
+namespace Turmerik.FsDirsPairRefactor.ConsoleApp
 {
-    public class ProgramComponent
+    public class FsDirsPairRevOrderProgramComponent
     {
         private readonly int noteIdxesFloor;
         private readonly int noteIdxesCeil;
@@ -19,7 +19,7 @@ namespace Turmerik.FsDirsPairRevOrder.ConsoleApp
         private readonly Regex shortDirNameRegex;
         private readonly Regex fullDirNameRegex;
 
-        public ProgramComponent()
+        public FsDirsPairRevOrderProgramComponent()
         {
             noteIdxesFloor = 100;
             noteIdxesCeil = 800;

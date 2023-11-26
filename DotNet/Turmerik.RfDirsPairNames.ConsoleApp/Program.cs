@@ -9,13 +9,13 @@ var services = TrmrkServices.RegisterAll(
 
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 
-services.AddTransient<ProgramComponent>();
+services.AddTransient<IProgramComponent, ProgramComponent>();
 var svcProv = services.BuildServiceProvider();
 
 ConsoleH.TryExecute(
     () =>
     {
-        var program = svcProv.GetRequiredService<ProgramComponent>();
+        var program = svcProv.GetRequiredService<IProgramComponent>();
         program.Run(args);
     },
     false);

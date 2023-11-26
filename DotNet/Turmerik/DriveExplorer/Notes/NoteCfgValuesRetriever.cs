@@ -254,34 +254,6 @@ namespace Turmerik.DriveExplorer.Notes
             {
                 {
                     new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
-                        NoteDirType.ShortName,
-                        NoteDirPfxType.Main),
-                    GetMainNoteItemShortDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
-                        NoteDirType.ShortName,
-                        NoteDirPfxType.Alt),
-                    GetAltNoteItemShortDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
-                        NoteDirType.FullName,
-                        NoteDirPfxType.Main),
-                    GetMainNoteItemFullDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
-                        NoteDirCategory.Item,
-                        NoteDirType.FullName,
-                        NoteDirPfxType.Alt),
-                    GetAltNoteItemFullDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
                         NoteDirCategory.Internals,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Main),
@@ -307,6 +279,34 @@ namespace Turmerik.DriveExplorer.Notes
                         NoteDirType.FullName,
                         NoteDirPfxType.Alt),
                     GetAltInternalDirFullDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Item,
+                        NoteDirType.ShortName,
+                        NoteDirPfxType.Main),
+                    GetMainNoteItemShortDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Item,
+                        NoteDirType.ShortName,
+                        NoteDirPfxType.Alt),
+                    GetAltNoteItemShortDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Item,
+                        NoteDirType.FullName,
+                        NoteDirPfxType.Main),
+                    GetMainNoteItemFullDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Item,
+                        NoteDirType.FullName,
+                        NoteDirPfxType.Alt),
+                    GetAltNoteItemFullDirNameRegexTuple(cfg)
                 }
             }.RdnlD();
     }

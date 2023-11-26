@@ -10,6 +10,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
         public string ShortNameDirPath { get; set; }
         public string ShortDirName { get; set; }
         public string FullDirName { get; set; }
+        public string FullDirNamePart { get; set; }
         public string FullDirPath { get; set; }
         public string MdFilePath { get; set; }
         public string MdFileName { get; set; }

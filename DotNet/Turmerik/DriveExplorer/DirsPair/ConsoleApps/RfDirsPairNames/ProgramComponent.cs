@@ -14,10 +14,17 @@ using Turmerik.Text;
 using Turmerik.TextParsing.Md;
 using Turmerik.TextSerialization;
 using Turmerik.Utility;
+using static Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames.ProgramComponent;
 
 namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
 {
-    public class ProgramComponent
+    public interface IProgramComponent
+    {
+        void Run(string[] rawArgs);
+        void Run(WorkArgs wka);
+    }
+
+    public class ProgramComponent : IProgramComponent
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
@@ -67,7 +74,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
             Run(wka);
         }
 
-        private void Run(WorkArgs wka)
+        public void Run(WorkArgs wka)
         {
             var args = wka.Args;
 
@@ -102,16 +109,51 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
 
             if (!File.Exists(newMdFilePath))
             {
-                File.Move(
-                    args.MdFilePath,
-                    newMdFilePath);
+                if (args.MdFilePath != null)
+                {
+                    File.Move(
+                        args.MdFilePath,
+                        newMdFilePath);
 
-                WriteWithForegroundsToConsole([
-                    Tuple.Create(ConsoleColor.Green, "Renamed"),
-                    Tuple.Create(ConsoleColor.Blue, $" {args.MdFileName} "),
-                    Tuple.Create(ConsoleColor.Green, "to"),
-                    Tuple.Create(ConsoleColor.Cyan, $" {newMdFileName} "),
-                ]);
+                    WriteWithForegroundsToConsole([
+                        Tuple.Create(ConsoleColor.Green, "Renamed"),
+                        Tuple.Create(ConsoleColor.Blue, $" {args.MdFileName} "),
+                        Tuple.Create(ConsoleColor.Green, "to"),
+                        Tuple.Create(ConsoleColor.Cyan, $" {newMdFileName} "),
+                    ]);
+                }
+                else
+                {
+                    if (args.FullDirNamePart != null && Directory.GetFiles(
+                        args.ShortNameDirPath, "*.md").None())
+                    {
+                        var fileNamesCfg = config.FileNames;
+
+                        string mdFileName = (fileNamesCfg.PrependTitleToNoteMdFileName ?? false).If(
+                            () => args.FullDirNamePart) + fileNamesCfg.MdFileName;
+
+                        string mdFilePath = Path.Combine(
+                            args.ShortNameDirPath,
+                            mdFileName);
+
+                        string mdContent = string.Format(
+                            config.FileContents.MdFileContentsTemplate,
+                            args.FullDirNamePart,
+                            Trmrk.TrmrkGuidStrNoDash,
+                            config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
+
+                        File.WriteAllText(
+                            mdFilePath,
+                            mdContent);
+
+                        WriteWithForegroundsToConsole([
+                            Tuple.Create(ConsoleColor.DarkMagenta, "No .md file found at all, so wrote title"),
+                            Tuple.Create(ConsoleColor.Magenta, $" {args.FullDirNamePart} "),
+                            Tuple.Create(ConsoleColor.DarkMagenta, "to new md file"),
+                            Tuple.Create(ConsoleColor.Magenta, $" {mdFileName} "),
+                        ]);
+                    }
+                }
             }
             else
             {
@@ -139,41 +181,41 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
             {
                 if (args.FullDirPath != null && Directory.Exists(
                     args.FullDirPath))
-                {
-                    FsH.MoveDirectory(
-                        args.FullDirPath,
-                        newFullDirPath);
+                    {
+                        FsH.MoveDirectory(
+                            args.FullDirPath,
+                            newFullDirPath);
 
-                    WriteWithForegroundsToConsole([
-                        Tuple.Create(ConsoleColor.Green, "Renamed"),
-                        Tuple.Create(ConsoleColor.Blue, $" {args.FullDirName} "),
-                        Tuple.Create(ConsoleColor.Green, "to"),
-                        Tuple.Create(ConsoleColor.Cyan, $" {newFullDirName} "),
-                    ]);
-                }
-                else
-                {
-                    Directory.CreateDirectory(
-                        newFullDirPath);
+                        WriteWithForegroundsToConsole([
+                            Tuple.Create(ConsoleColor.Green, "Renamed"),
+                            Tuple.Create(ConsoleColor.Blue, $" {args.FullDirName} "),
+                            Tuple.Create(ConsoleColor.Green, "to"),
+                            Tuple.Create(ConsoleColor.Cyan, $" {newFullDirName} "),
+                        ]);
+                    }
+                    else
+                    {
+                        Directory.CreateDirectory(
+                            newFullDirPath);
 
-                    string keepFilePath = Path.Combine(
-                        newFullDirPath,
-                        config.FileNames.KeepFileName);
+                        string keepFilePath = Path.Combine(
+                            newFullDirPath,
+                            config.FileNames.KeepFileName);
 
-                    string keepFileContents = string.Format(
-                        config.FileContents.KeepFileContentsTemplate,
-                        Trmrk.TrmrkGuidStrNoDash,
-                        config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
+                        string keepFileContents = string.Format(
+                            config.FileContents.KeepFileContentsTemplate,
+                            Trmrk.TrmrkGuidStrNoDash,
+                            config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
 
-                    File.WriteAllText(
-                        keepFilePath,
-                        keepFileContents);
+                        File.WriteAllText(
+                            keepFilePath,
+                            keepFileContents);
 
-                    WriteWithForegroundsToConsole([
-                        Tuple.Create(ConsoleColor.Blue, "File"),
-                        Tuple.Create(ConsoleColor.Cyan, $" {args.FullDirName} ")
-                    ]);
-                }
+                        WriteWithForegroundsToConsole([
+                            Tuple.Create(ConsoleColor.Blue, "File"),
+                            Tuple.Create(ConsoleColor.Cyan, $" {args.FullDirName} ")
+                        ]);
+                    }
             }
             else
             {
@@ -261,11 +303,14 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                 args.ShortNameDirPath);
 
             if ((args.FullDirName = GetFullDirName(
-                args, autoChoose)) != null)
+                args, autoChoose,
+                out string fullDirNamePartStr)) != null)
             {
                 args.FullDirPath = Path.Combine(
                     args.ParentDirPath,
                     args.FullDirName);
+
+                args.FullDirNamePart = fullDirNamePartStr;
             }
         }
 
@@ -341,8 +386,15 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                 autoChooseIfSingle,
                 () =>
                 {
-                    throw new InvalidOperationException(
+                    Console.ForegroundColor = ConsoleColor.Red;
+
+                    Console.WriteLine(
                         "Did not find any .md file containing a valid title");
+
+                    Console.ResetColor();
+                    Console.WriteLine();
+
+                    return Tuple.Create<string, string>(null, null);
                 });
 
             (string mdFileName, mdTitle) = retTuple;
@@ -351,7 +403,8 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
 
         private string GetFullDirName(
             ProgramArgs args,
-            bool autoChooseIfSingle)
+            bool autoChooseIfSingle,
+            out string fullDirNamePartStr)
         {
             string[] dirNamesArr = GetFullDirNames(
                 args, out string shortDirNamePart);
@@ -388,6 +441,18 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
 
                     return null;
                 });
+
+            if (fullDirName != null)
+            {
+                fullDirNamePartStr = fullDirName.Substring(
+                    shortDirNamePartLen);
+
+                args.MdTitle ??= fullDirNamePartStr;
+            }
+            else
+            {
+                fullDirNamePartStr = null;
+            }
 
             return fullDirName;
         }
@@ -486,14 +551,19 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
         }
 
         private void WriteHeadingLineToConsole(
-            string headingCaption)
+            string headingCaption,
+            ConsoleColor? foregroundColor = null)
         {
             Console.WriteLine();
-            Console.WriteLine(headingCaption);
+
+            ConsoleH.WithColors(
+                () => Console.WriteLine(headingCaption),
+                foregroundColor ?? ConsoleColor.White);
+
             Console.WriteLine();
         }
 
-        private class WorkArgs
+        public class WorkArgs
         {
             public ProgramArgs Args { get; set; }
         }
