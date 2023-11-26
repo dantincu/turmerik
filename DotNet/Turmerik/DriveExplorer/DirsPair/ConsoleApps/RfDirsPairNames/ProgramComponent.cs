@@ -202,8 +202,7 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                                 data => data.Args.ShortNameDirPath = data.ArgItem.Nullify(true)?.With(
                                     path => NormPathH.NormPath(
                                         path, (path, isRooted) => isRooted.If(
-                                            () => path, () => Path.GetFullPath(
-                                                path.Nullify(true) ?? Environment.CurrentDirectory))))!),
+                                            () => path, () => Path.GetFullPath(path))))!),
                             consoleArgsParser.ArgsItemOpts(data,
                                 data => data.Args.MdFileName = data.ArgItem.Nullify(true)),
                             consoleArgsParser.ArgsItemOpts(data,

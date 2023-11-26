@@ -28,6 +28,7 @@ namespace Turmerik.DriveExplorer.DirsPair
             public string CreateNoteFilesDir { get; set; }
             public string Url { get; set; }
             public string Uri { get; set; }
+            public string ShowLastCreatedFirst { get; set; }
         }
 
         public class DirNamesT

@@ -13,7 +13,8 @@
     "CreateNoteInternalsDir": "ni",
     "CreateNoteFilesDir": "nf",
     "Url": "url",
-    "Uri": "uri"
+    "Uri": "uri",
+    "ShowLastCreatedFirst": "slf"
   },
   "DirNames": {
     "DefaultJoinStr": "-",

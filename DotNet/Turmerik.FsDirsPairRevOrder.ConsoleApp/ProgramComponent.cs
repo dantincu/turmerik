@@ -31,11 +31,11 @@ namespace Turmerik.FsDirsPairRevOrder.ConsoleApp
 
         public void Run(string[] args)
         {
-            string rootDirPath = args.FirstOrDefault()?.With(
+            string rootDirPath = args.FirstOrDefault()?.Nullify(true)?.With(
                 path => NormPathH.NormPath(
                     path, (path, isRooted) => isRooted.If(
                         () => path, () => Path.GetFullPath(
-                            path.Nullify(true) ?? Environment.CurrentDirectory)))) ?? Environment.CurrentDirectory;
+                            path)))) ?? Environment.CurrentDirectory;
 
             var wka = new WorkArgs
             {

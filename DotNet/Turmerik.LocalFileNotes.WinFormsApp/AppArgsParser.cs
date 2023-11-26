@@ -31,10 +31,10 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
                         ItemHandlersArr = [
                             parser.ArgsItemOpts(data, data =>
                             {
-                                data.Args.MainPath = NormPathH.NormPath(
-                                    data.ArgItem, (path, isRooted) => isRooted.If(
-                                        () => path, () => Path.GetFullPath(path.Nullify(
-                                            true) ?? Environment.CurrentDirectory)));
+                                data.Args.MainPath = data.ArgItem.Nullify(true)?.With(
+                                    path => NormPathH.NormPath(
+                                        path, (path, isRooted) => isRooted.If(
+                                            () => path, () => Path.GetFullPath(path))))!;
                             })],
                         FlagHandlersArr = []
                     })
