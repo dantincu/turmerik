@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -101,7 +102,8 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
 
             if (args.ShowOtherDirNames ?? false)
             {
-                WriteHeadingLineToConsole("Multiple full dir names: ");
+                WriteHeadingLineToConsole("Multiple full dir names: ",
+                    foregroundColor: ConsoleColor.Red);
 
                 foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
                 {
@@ -115,14 +117,15 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
                         foreach (var kvp in dirsPair.DirNamesMap)
                         {
                             WriteWithForegroundsToConsole([
-                                Tuple.Create(ConsoleColor.Cyan, kvp.Value)]);
+                                Tuple.Create(ConsoleColor.DarkCyan, kvp.Value)]);
                         }
 
                         Console.WriteLine();
                     }
                 }
 
-                WriteHeadingLineToConsole("Other dir names: ", true);
+                WriteHeadingLineToConsole("Other dir names: ", true,
+                    foregroundColor: ConsoleColor.Red);
 
                 foreach (string dirName in noteItemsTuple.OtherDirNames)
                 {
@@ -200,15 +203,18 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
         private void WriteHeadingLineToConsole(
             string headingCaption,
             bool omitStartingNewLine = false,
-            bool omitTrailingNewLine = false)
+            bool omitTrailingNewLine = false,
+            ConsoleColor? foregroundColor = null)
         {
             if (!omitStartingNewLine)
             {
                 Console.WriteLine();
             }
-            
-            Console.WriteLine(headingCaption);
 
+            ConsoleH.WithColors(
+                () => Console.WriteLine(headingCaption),
+                foregroundColor ?? ConsoleColor.White);
+            
             if (!omitTrailingNewLine)
             {
                 Console.WriteLine();
