@@ -310,7 +310,8 @@ namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames
                 config.DirNames.DefaultJoinStr);
 
             string[] dirNamesArr = Directory.GetDirectories(
-                args.ParentDirPath, $"{shortDirNamePart}*");
+                args.ParentDirPath, $"{shortDirNamePart}*").Select(
+                dirName => Path.GetFileName(dirName)).ToArray();
 
             return dirNamesArr;
         }
