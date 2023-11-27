@@ -7,6 +7,7 @@ using Turmerik.Html;
 using Turmerik.Md;
 using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
+using Turmerik.Code.Core;
 
 namespace Turmerik.Dependencies
 {
@@ -23,9 +24,10 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
 
+            services.AddSingleton<IIdentifierNormalizer, IdentifierNormalizer>();
+
             services.AddSingleton<IHtmlNodesRetriever, HtmlNodesRetriever>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
-
             services.AddSingleton<IHtmlDocTitleRetriever, HtmlDocTitleRetriever>();
 
             services.AddSingleton<INoteCfgValuesRetriever, NoteCfgValuesRetriever>();

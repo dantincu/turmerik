@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Code.Core;
 using Turmerik.Core.TextSerialization;
 
 namespace Turmerik.ScrapeMatIconPage.ConsoleApp
@@ -18,11 +19,17 @@ namespace Turmerik.ScrapeMatIconPage.ConsoleApp
         private static readonly string nwLn = Environment.NewLine;
 
         private readonly IJsonConversion jsonConversion;
+        private readonly IIdentifierNormalizer identifierNormalizer;
 
         public ProgramComponent(
-            IJsonConversion jsonConversion)
+            IJsonConversion jsonConversion,
+            IIdentifierNormalizer identifierNormalizer)
         {
-            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(nameof(jsonConversion));
+            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
+                nameof(jsonConversion));
+
+            this.identifierNormalizer = identifierNormalizer ?? throw new ArgumentNullException(
+                nameof(identifierNormalizer));
         }
 
         public void Run(string[] args)
@@ -187,28 +194,10 @@ namespace Turmerik.ScrapeMatIconPage.ConsoleApp
                 matIcon.IconName.Split(' ').Select(
                     word => NormalizeIdnf(word).ToUpper()));
 
-        private string NormalizeIdnf(string idnf)
-        {
-            if (idnf.Any())
+        private string NormalizeIdnf(string idnf) => identifierNormalizer.NormalizeIdnf(
+            new IdentifierNormalizerOpts
             {
-                if (!char.IsLetter(idnf.First()))
-                {
-                    idnf = $"_{idnf}";
-                }
-
-                if (idnf.Any(c => !(char.IsAsciiLetterOrDigit(c) || "_$".Contains(c))))
-                {
-                    idnf = idnf.Replace("&amp;", "_n_");
-
-                    idnf = idnf.Replace("&apos;", "_");
-                    idnf = idnf.Replace("&quot;", "_");
-
-                    idnf = new string(idnf.Select(
-                        c => char.IsAsciiLetterOrDigit(c) || "_$".Contains(c) ? c : '_').ToArray());
-                }
-            }
-
-            return idnf;
-        }
+                InputIdentifier = idnf,
+            });
     }
 }
