@@ -10,9 +10,9 @@ using System.Linq;
 using System.Text;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.Utility;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.Core.Helpers;
 using Turmerik.Html;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Md
 {

@@ -6,7 +6,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.Notes;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Notes
 {

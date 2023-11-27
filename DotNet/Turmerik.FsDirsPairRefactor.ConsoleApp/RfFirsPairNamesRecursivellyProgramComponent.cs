@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
-using Turmerik.DriveExplorer.DirsPair;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.DriveExplorer;
-using RfDirsPairNames = Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
+using RfDirsPairNames = Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
+using Turmerik.DirsPair;
+using Turmerik.Notes.Core;
+using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 
 namespace Turmerik.FsDirsPairRefactor.ConsoleApp
 {
@@ -19,7 +20,7 @@ namespace Turmerik.FsDirsPairRefactor.ConsoleApp
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleArgsParser parser;
-        private readonly RfDirsPairNames.IProgramComponent rfDirsPairNamesProgramComponent;
+        private readonly IProgramComponent rfDirsPairNamesProgramComponent;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
@@ -33,7 +34,7 @@ namespace Turmerik.FsDirsPairRefactor.ConsoleApp
         public RfFirsPairNamesRecursivellyProgramComponent(
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
-            RfDirsPairNames.IProgramComponent rfDirsPairNamesProgramComponent,
+            IProgramComponent rfDirsPairNamesProgramComponent,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(

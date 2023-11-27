@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Turmerik.Core.Utility;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.Notes.AspNetCore.Settings;
+using Turmerik.Notes.Core;
 using Turmerik.Notes.Settings;
 
 namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers

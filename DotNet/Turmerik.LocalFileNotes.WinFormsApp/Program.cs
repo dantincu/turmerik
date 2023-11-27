@@ -10,10 +10,10 @@ using Turmerik.WinForms.Dependencies;
 using Turmerik.LocalFileNotes.WinFormsApp;
 using Turmerik.LocalFileNotes.WinFormsApp.Settings;
 using Turmerik.LocalFileNotes.WinFormsApp.Data;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Dependencies;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.LocalFilesNotes.WinFormsApp
 {

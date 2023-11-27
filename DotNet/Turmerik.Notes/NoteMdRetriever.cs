@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.Core.Helpers;
 using Turmerik.Md;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Notes
 {

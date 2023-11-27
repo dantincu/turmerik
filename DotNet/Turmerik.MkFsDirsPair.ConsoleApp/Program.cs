@@ -2,8 +2,8 @@
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
+using Turmerik.DirsPair.ConsoleApps.MkFsDirPairs;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());

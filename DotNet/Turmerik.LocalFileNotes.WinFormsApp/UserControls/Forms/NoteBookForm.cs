@@ -1,12 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Core.Actions;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.LocalFileNotes.WinFormsApp.ViewModels;
 using Turmerik.Core.UIActions;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.Helpers;
 using Turmerik.WinForms.MatUIIcons;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {

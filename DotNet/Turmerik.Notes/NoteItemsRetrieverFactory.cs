@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Turmerik.Core.TextSerialization;
+using Turmerik.DirsPair;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.DirsPair;
-using Turmerik.DriveExplorer.Notes;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Notes
 {

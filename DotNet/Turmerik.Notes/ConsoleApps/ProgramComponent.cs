@@ -10,7 +10,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.Notes;
+using Turmerik.Notes.Core;
 using Turmerik.Notes.Service;
 
 namespace Turmerik.Notes.ConsoleApps

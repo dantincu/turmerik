@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.DriveExplorer.DirsPair;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.DriveExplorer;
 using Turmerik.Html;
 using Turmerik.Md;
+using Turmerik.DirsPair;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Dependencies
 {

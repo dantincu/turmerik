@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Turmerik.Core.TextSerialization;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.Notes;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Notes
 {

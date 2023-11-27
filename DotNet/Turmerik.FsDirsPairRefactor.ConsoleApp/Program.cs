@@ -2,10 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Dependencies;
 using Turmerik.DriveExplorer;
-using RfDirsPairNames = Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
+using RfDirsPairNames = Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.FsDirsPairRefactor.ConsoleApp;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Helpers;
+using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
@@ -14,7 +15,7 @@ TrmrkServices.RegisterAll(services);
 
 services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();
-services.AddSingleton<RfDirsPairNames.IProgramComponent, RfDirsPairNames.ProgramComponent>();
+services.AddSingleton<IProgramComponent, ProgramComponent>();
 
 services.AddTransient<RfFirsPairNamesRecursivellyProgramComponent>();
 var svcProv = services.BuildServiceProvider();

@@ -8,10 +8,10 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.TextSerialization;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.DirsPair;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.Md;
 using Turmerik.Core.Utility;
+using Turmerik.DirsPair;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Notes
 {

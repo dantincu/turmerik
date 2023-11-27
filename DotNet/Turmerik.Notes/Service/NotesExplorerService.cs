@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer.Notes;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Notes.Service
 {

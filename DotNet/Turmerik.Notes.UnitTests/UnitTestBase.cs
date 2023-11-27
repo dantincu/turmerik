@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Turmerik.Testing;
 using Turmerik.Notes.UnitTests;
 using Turmerik.DriveExplorer;
-using Turmerik.DriveExplorer.Notes;
 using Turmerik.Core.Dependencies;
+using Turmerik.Notes.Core;
 
 namespace Turmerik.Notes.UnitTests
 {

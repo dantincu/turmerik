@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.AspNetCore.Utility;
-using Turmerik.DriveExplorer.Notes;
+using Turmerik.Notes.Core;
 using Turmerik.Notes.Settings;
 
 namespace Turmerik.Notes.AspNetCore.Filters
