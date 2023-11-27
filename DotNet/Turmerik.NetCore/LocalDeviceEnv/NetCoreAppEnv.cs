@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.LocalDevice.Core.Env;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.NetCore.LocalDeviceEnv
 {

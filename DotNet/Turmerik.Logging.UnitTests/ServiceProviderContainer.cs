@@ -1,12 +1,12 @@
-﻿using Turmerik.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.LocalDevice.Core.Env;
 using Turmerik.Logging.Dependencies;
+using Turmerik.Core.Dependencies;
+using Turmerik.Core.LocalDeviceEnv;
 
 namespace Turmerik.Logging.UnitTests
 {
@@ -22,7 +22,7 @@ namespace Turmerik.Logging.UnitTests
         protected override void RegisterServices(
             IServiceCollection services)
         {
-            TrmrkServices.RegisterAll(services);
+            TrmrkCoreServices.RegisterAll(services);
 
             services.AddSingleton<IAppEnv, AppEnv>();
             LoggingServices.RegisterAll(services);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Text;
+using Turmerik.Core.Text;
 
 namespace Turmerik.Yantra.Components
 {

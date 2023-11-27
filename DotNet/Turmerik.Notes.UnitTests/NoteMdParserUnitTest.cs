@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.Notes.Md;
-using Turmerik.Utility;
+using Turmerik.Md;
 
 namespace Turmerik.Notes.UnitTests
 {

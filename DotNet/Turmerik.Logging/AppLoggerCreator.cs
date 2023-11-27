@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
-using Turmerik.Reflection;
-using Turmerik.Text;
-using Turmerik.LocalDevice.Core.Env;
+using Turmerik.Core.Reflection;
 using System.Runtime.CompilerServices;
-using Turmerik.Utility;
-using Turmerik.TextSerialization;
-using Turmerik.Helpers;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Logging;
+using Turmerik.Core.Text;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Logging
 {

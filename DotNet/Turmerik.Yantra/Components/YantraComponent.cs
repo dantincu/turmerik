@@ -5,10 +5,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Turmerik.Helpers;
-using Turmerik.Text;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
+using Turmerik.Core.Text;
 using YantraJS.Core;
 using YantraJS.Tests;
 

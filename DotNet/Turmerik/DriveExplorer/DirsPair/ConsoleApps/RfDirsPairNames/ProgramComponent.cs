@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik;
-using Turmerik.ConsoleApps;
+using Turmerik.Core.ConsoleApps;
+using Turmerik.Core.FileSystem;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.FileSystem;
-using Turmerik.Helpers;
-using Turmerik.Text;
 using Turmerik.TextParsing.Md;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
 using static Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames.ProgramComponent;
 
 namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames

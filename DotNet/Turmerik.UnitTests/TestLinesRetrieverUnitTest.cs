@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.EqualityComparer;
-using Turmerik.TextStream;
+using Turmerik.Core.EqualityComparer;
+using Turmerik.Core.TextStream;
 
 namespace Turmerik.UnitTests
 {

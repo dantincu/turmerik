@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.LocalDevice.Core.Env;
-using Turmerik.Text;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Logging;
+using Turmerik.Core.Text;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Logging
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Turmerik.Logging;
+using Turmerik.Core.Logging;
 
 namespace Turmerik.Logging
 {

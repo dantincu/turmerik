@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Dependencies;
+using Turmerik.Core.Dependencies;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Turmerik.Text;
+using Turmerik.Core.Text;
 
 namespace Turmerik.Logging
 {

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.ConsoleApps;
+using Turmerik.Core.ConsoleApps;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.Helpers;
 using Turmerik.Notes.Service;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
 
 namespace Turmerik.Notes.ConsoleApps
 {

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Helpers;
-using Turmerik.LocalDevice.Core.Env;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Logging;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 using Turmerik.Logging;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {

@@ -1,10 +1,10 @@
-﻿using Turmerik.Dependencies;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.Dependencies;
 
 namespace Turmerik.UnitTests
 {
@@ -20,7 +20,7 @@ namespace Turmerik.UnitTests
         protected override void RegisterServices(
             IServiceCollection services)
         {
-            TrmrkServices.RegisterAll(services);
+            TrmrkCoreServices.RegisterAll(services);
         }
     }
 }

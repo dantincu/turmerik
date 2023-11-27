@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Testing;
-using Turmerik.Dependencies;
 using Turmerik.Notes.UnitTests;
 using Turmerik.DriveExplorer;
 using Turmerik.DriveExplorer.Notes;
+using Turmerik.Core.Dependencies;
 
 namespace Turmerik.Notes.UnitTests
 {

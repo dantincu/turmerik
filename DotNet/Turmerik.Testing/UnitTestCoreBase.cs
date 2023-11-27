@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.EqualityComparer;
+using Turmerik.Core.EqualityComparer;
 using Xunit;
 
 namespace Turmerik.Testing

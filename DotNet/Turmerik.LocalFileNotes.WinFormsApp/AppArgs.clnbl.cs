@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Utility;
-using Turmerik.Helpers;
-using Turmerik.TextSerialization;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {

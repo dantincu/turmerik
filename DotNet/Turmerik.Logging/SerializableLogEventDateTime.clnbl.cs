@@ -6,8 +6,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Helpers;
-using static Turmerik.Logging.SerializableLogEventCore;
+using Turmerik.Core.Helpers;
+using static Turmerik.Core.Logging.SerializableLogEventCore;
 
 namespace Turmerik.Logging
 {

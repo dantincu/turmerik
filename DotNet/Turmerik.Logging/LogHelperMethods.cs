@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Turmerik.Logging;
+using Turmerik.Core.Logging;
 
 namespace Turmerik.Logging
 {

@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Turmerik.Core.TextSerialization;
 using Turmerik.DriveExplorer;
 using Turmerik.DriveExplorer.DirsPair;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.Notes.Md;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Md;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Notes
 {

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.Helpers;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
 
 namespace Turmerik.Notes.UnitTests
 {

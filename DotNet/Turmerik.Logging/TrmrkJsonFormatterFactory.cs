@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Text;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
+using Turmerik.Core.Text;
 
 namespace Turmerik.Logging
 {

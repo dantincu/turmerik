@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using Turmerik.Helpers;
-using Turmerik.Utility;
+using Turmerik.Core.Utility;
+using Turmerik.Core.Helpers;
 using static Turmerik.DriveExplorer.Notes.NoteDirsPairConfig;
 
 namespace Turmerik.DriveExplorer.Notes

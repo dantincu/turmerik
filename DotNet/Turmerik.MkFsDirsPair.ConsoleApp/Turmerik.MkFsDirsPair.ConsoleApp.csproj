@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik.HtmlAgility\Turmerik.HtmlAgility.csproj" />
+    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 
 </Project>

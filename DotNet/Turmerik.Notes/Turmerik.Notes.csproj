@@ -6,16 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.33.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DirsPair\" />
-    <Folder Include="Html\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Turmerik.HtmlAgility\Turmerik.HtmlAgility.csproj" />
+    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 
 </Project>

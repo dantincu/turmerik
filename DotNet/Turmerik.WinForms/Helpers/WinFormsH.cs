@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Actions;
+using Turmerik.Core.Actions;
+using Turmerik.Core.Helpers;
 using Turmerik.WinForms.Actions;
 
 namespace Turmerik.WinForms.Helpers

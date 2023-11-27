@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
-using Turmerik.Utility;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Yantra.Components
 {

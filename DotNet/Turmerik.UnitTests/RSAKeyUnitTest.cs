@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Text;
+using Turmerik.Core.Text;
 using Xunit;
 
 namespace Turmerik.UnitTests

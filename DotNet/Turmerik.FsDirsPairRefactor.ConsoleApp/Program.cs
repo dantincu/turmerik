@@ -4,10 +4,13 @@ using Turmerik.Dependencies;
 using Turmerik.DriveExplorer;
 using RfDirsPairNames = Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.FsDirsPairRefactor.ConsoleApp;
-using Turmerik.Helpers;
+using Turmerik.Core.Dependencies;
+using Turmerik.Core.Helpers;
 
-var services = TrmrkServices.RegisterAll(
+var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
+
+TrmrkServices.RegisterAll(services);
 
 services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();

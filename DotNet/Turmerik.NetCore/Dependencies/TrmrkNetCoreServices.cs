@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.NetCore.LocalDeviceEnv;
-using Turmerik.Utility;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.NetCore.Dependencies
 {

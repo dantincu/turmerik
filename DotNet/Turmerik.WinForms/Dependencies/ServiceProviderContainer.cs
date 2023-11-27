@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Dependencies;
-using Turmerik.DriveExplorer;
-using Turmerik.LocalDevice.Core.Env;
-using Turmerik.Logging;
-using Turmerik.UIActions;
+using Turmerik.Core.Dependencies;
 using Turmerik.WinForms.Actions;
 
 namespace Turmerik.WinForms.Dependencies
@@ -22,7 +18,7 @@ namespace Turmerik.WinForms.Dependencies
         protected override void RegisterServices(
             IServiceCollection services)
         {
-            TrmrkServices.RegisterAll(services);
+            TrmrkCoreServices.RegisterAll(services);
             WinFormsServices.RegisterAll(services);
 
             services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();

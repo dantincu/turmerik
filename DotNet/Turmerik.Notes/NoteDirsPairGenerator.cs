@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.TextSerialization;
 using Turmerik.DriveExplorer;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.Helpers;
-using Turmerik.Notes.Md;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Core.Helpers;
+using Turmerik.Md;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Notes
 {

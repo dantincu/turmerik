@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
-using Turmerik.Helpers;
-using Turmerik.Text;
-using Turmerik.Utility;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.DriveExplorer.Notes
 {

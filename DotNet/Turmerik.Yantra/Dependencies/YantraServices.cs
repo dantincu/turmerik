@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Dependencies;
+using Turmerik.Core.Dependencies;
 using Turmerik.Yantra.Components;
 
 namespace Turmerik.Yantra.Dependencies
@@ -12,7 +12,7 @@ namespace Turmerik.Yantra.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
-            TrmrkServices.RegisterAll(services);
+            TrmrkCoreServices.RegisterAll(services);
             services = RegisterAllCore(services);
 
             return services;

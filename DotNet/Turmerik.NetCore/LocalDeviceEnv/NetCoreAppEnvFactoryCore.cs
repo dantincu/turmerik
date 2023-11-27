@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Reflection;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
+using Turmerik.Core.Reflection;
 
 namespace Turmerik.NetCore.LocalDeviceEnv
 {

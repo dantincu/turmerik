@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Actions;
+using Turmerik.Core.Actions;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.Helpers;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.ViewModels
 {

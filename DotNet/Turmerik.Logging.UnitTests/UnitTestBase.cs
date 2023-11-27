@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Testing;
-using Turmerik.Dependencies;
+using Turmerik.Core.Dependencies;
+using Turmerik.Core.Logging;
 
 namespace Turmerik.Logging.UnitTests
 {

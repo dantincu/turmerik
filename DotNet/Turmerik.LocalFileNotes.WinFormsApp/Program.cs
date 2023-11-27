@@ -1,20 +1,19 @@
 using Microsoft.Extensions.DependencyInjection;
-using Turmerik.Dependencies;
 using Turmerik.Logging;
-using Turmerik.Utility;
+using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer;
-using Turmerik.LocalDevice.Core.Env;
 using Turmerik.LocalFileNotes.WinFormsApp.ViewModels;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Notes.Dependencies;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
-using Turmerik.LocalDeviceEnv;
 using Turmerik.LocalFileNotes.WinFormsApp;
 using Turmerik.LocalFileNotes.WinFormsApp.Settings;
 using Turmerik.LocalFileNotes.WinFormsApp.Data;
-using Turmerik.HtmlAgility.Dependencies;
 using Turmerik.DriveExplorer.Notes;
+using Turmerik.Core.Dependencies;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Dependencies;
 
 namespace Turmerik.LocalFilesNotes.WinFormsApp
 {
@@ -50,7 +49,8 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
             svcProvContnr.RegisterData(
                 new ServiceCollection().AsOpts(services =>
                 {
-                    HtmlAgilityServices.RegisterAll(services);
+                    TrmrkCoreServices.RegisterAll(services);
+                    TrmrkServices.RegisterAll(services);
                     TrmrkNoteServices.RegisterAll(services);
                     TrmrkNoteServices.RegisterAppSettingsRetriever<NotesAppConfigImmtbl, NotesAppConfigMtbl>(services);
 

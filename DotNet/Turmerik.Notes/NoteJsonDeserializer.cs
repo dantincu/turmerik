@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
 
 namespace Turmerik.Notes
 {

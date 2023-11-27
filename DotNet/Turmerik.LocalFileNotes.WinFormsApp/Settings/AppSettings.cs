@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.LocalDevice.Core.Env;
-using Turmerik.LocalDeviceEnv;
-using Turmerik.TextSerialization;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.TextSerialization;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.Settings
 {

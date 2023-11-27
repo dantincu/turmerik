@@ -10,13 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
-using Turmerik.Reflection;
-using Turmerik.LocalDevice;
-using Turmerik.Logging;
-using Turmerik.LocalDevice.Core.Env;
+using Turmerik.Core.Reflection;
 using System.IO;
-using Turmerik.Text;
-using Turmerik.Utility;
+using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Logging;
+using Turmerik.Core.Text;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Logging
 {

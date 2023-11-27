@@ -51,11 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Sqlite", "Turmerik
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.RfDirsPairNames.ConsoleApp", "Turmerik.RfDirsPairNames.ConsoleApp\Turmerik.RfDirsPairNames.ConsoleApp.csproj", "{D6BED816-A198-4768-9D9F-38A3AF9A783F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.HtmlAgility", "Turmerik.HtmlAgility\Turmerik.HtmlAgility.csproj", "{11CE0836-3E63-49DB-B4E6-34101E7D12B9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LsFsDirPairs.ConsoleApp", "Turmerik.LsFsDirPairs.ConsoleApp\Turmerik.LsFsDirPairs.ConsoleApp.csproj", "{94F89D50-8708-4209-9600-DB766CF8CC2A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.FsDirsPairRefactor.ConsoleApp", "Turmerik.FsDirsPairRefactor.ConsoleApp\Turmerik.FsDirsPairRefactor.ConsoleApp.csproj", "{5EC8B0DB-7ADE-4F1F-BB7B-5B2C12111C67}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Core", "Turmerik.Core\Turmerik.Core.csproj", "{B3AA58CE-783A-4988-9579-21A464BCA6CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,10 +135,6 @@ Global
 		{D6BED816-A198-4768-9D9F-38A3AF9A783F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6BED816-A198-4768-9D9F-38A3AF9A783F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6BED816-A198-4768-9D9F-38A3AF9A783F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{11CE0836-3E63-49DB-B4E6-34101E7D12B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{11CE0836-3E63-49DB-B4E6-34101E7D12B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{11CE0836-3E63-49DB-B4E6-34101E7D12B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{11CE0836-3E63-49DB-B4E6-34101E7D12B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{94F89D50-8708-4209-9600-DB766CF8CC2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{94F89D50-8708-4209-9600-DB766CF8CC2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94F89D50-8708-4209-9600-DB766CF8CC2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -147,6 +143,10 @@ Global
 		{5EC8B0DB-7ADE-4F1F-BB7B-5B2C12111C67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EC8B0DB-7ADE-4F1F-BB7B-5B2C12111C67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EC8B0DB-7ADE-4F1F-BB7B-5B2C12111C67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3AA58CE-783A-4988-9579-21A464BCA6CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3AA58CE-783A-4988-9579-21A464BCA6CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3AA58CE-783A-4988-9579-21A464BCA6CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3AA58CE-783A-4988-9579-21A464BCA6CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -172,9 +172,9 @@ Global
 		{BFEF0FBE-A515-471D-AA94-E0CDF5809728} = {2020DE95-DD87-4F1F-8BBB-CCCCF6ABB095}
 		{95F5CF63-3ECB-45DE-88E6-D74C1E4E19A0} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 		{D6BED816-A198-4768-9D9F-38A3AF9A783F} = {52B63410-2581-4146-9484-89D300FAE7B5}
-		{11CE0836-3E63-49DB-B4E6-34101E7D12B9} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 		{94F89D50-8708-4209-9600-DB766CF8CC2A} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{5EC8B0DB-7ADE-4F1F-BB7B-5B2C12111C67} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{B3AA58CE-783A-4988-9579-21A464BCA6CF} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

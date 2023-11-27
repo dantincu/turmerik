@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Turmerik.Helpers;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.DriveExplorer.Notes
 {

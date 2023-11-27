@@ -1,4 +1,4 @@
-using Turmerik.Utils;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Logging.UnitTests
 {

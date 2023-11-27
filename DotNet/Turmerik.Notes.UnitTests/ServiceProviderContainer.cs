@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Notes.Dependencies;
 using Turmerik.DriveExplorer;
-using Turmerik.HtmlAgility.Dependencies;
+using Turmerik.Core.Dependencies;
 
 namespace Turmerik.Notes.UnitTests
 {
@@ -29,9 +29,9 @@ namespace Turmerik.Notes.UnitTests
         protected override void RegisterServices(
             IServiceCollection services)
         {
+            TrmrkCoreServices.RegisterAll(services);
             TrmrkServices.RegisterAll(services);
             TrmrkNoteServices.RegisterAll(services);
-            HtmlAgilityServices.RegisterAll(services);
 
             services.AddSingleton<IDriveItemsRetriever>(
                 svcProv => svcProv.GetRequiredService<ICachedEntriesRetrieverFactory>(

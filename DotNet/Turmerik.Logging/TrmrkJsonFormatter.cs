@@ -13,10 +13,11 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Turmerik.Text;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
+using Turmerik.Core.Text;
 using LE = Turmerik.Logging.SerializableLogEventDateTimeOffset.Immtbl;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.Logging
 {

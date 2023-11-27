@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Turmerik.LocalFileNotes.WinFormsApp.Data;
 using Turmerik.WinForms.Dependencies;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls
 {

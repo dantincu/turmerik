@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.ConsoleApps;
-using Turmerik.Helpers;
-using Turmerik.Text;
+using Turmerik.Core.ConsoleApps;
+using Turmerik.Core.Text;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp
 {

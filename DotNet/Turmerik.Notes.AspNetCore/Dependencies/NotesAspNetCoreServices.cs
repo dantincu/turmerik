@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.AspNetCore.Dependencies;
+using Turmerik.Core.Dependencies;
 using Turmerik.Dependencies;
-using Turmerik.HtmlAgility.Dependencies;
-using Turmerik.LocalDevice.Core.Env;
+using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Notes.Dependencies;
 
 namespace Turmerik.Notes.AspNetCore.Dependencies
@@ -17,9 +17,9 @@ namespace Turmerik.Notes.AspNetCore.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
+            TrmrkCoreServices.RegisterAll(services);
             TrmrkServices.RegisterAll(services);
             AspNetCoreServices.RegisterAll(services);
-            HtmlAgilityServices.RegisterAll(services);
             TrmrkNoteServices.RegisterAll(services);
 
             return services;

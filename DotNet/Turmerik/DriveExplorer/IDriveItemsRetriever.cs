@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Helpers;
-using Turmerik.Text;
-using Turmerik.Utility;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Utility;
+using Turmerik.Core.Text;
 
 namespace Turmerik.DriveExplorer
 {

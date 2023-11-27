@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Actions;
-using Turmerik.Logging;
-using Turmerik.UIActions;
+using Turmerik.Core.Actions;
+using Turmerik.Core.Logging;
+using Turmerik.Core.UIActions;
 
 namespace Turmerik.WinForms.Actions
 {

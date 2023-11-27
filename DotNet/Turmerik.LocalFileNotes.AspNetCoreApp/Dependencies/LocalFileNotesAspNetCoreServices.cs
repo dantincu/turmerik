@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.AspNetCore.Dependencies;
-using Turmerik.LocalDevice.Core.Env;
+using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Notes.AspNetCore.Dependencies;
 using Turmerik.DriveExplorer;
 using Turmerik.Notes.Dependencies;

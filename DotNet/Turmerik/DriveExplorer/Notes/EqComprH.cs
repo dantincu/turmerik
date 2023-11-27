@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.EqualityComparer;
+using Turmerik.Core.EqualityComparer;
 
 namespace Turmerik.DriveExplorer.Notes
 {

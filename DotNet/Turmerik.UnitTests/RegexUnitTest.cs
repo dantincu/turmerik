@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xunit;
-using Turmerik.Text;
+using Turmerik.Core.Text;
 
 namespace Turmerik.UnitTests
 {

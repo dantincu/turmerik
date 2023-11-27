@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.ConsoleApps;
+using Turmerik.Core.ConsoleApps;
 using Turmerik.DriveExplorer.DirsPair;
 using Turmerik.DriveExplorer.Notes;
 using Turmerik.DriveExplorer;
-using Turmerik.Helpers;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
-using Turmerik.Text;
 using RfDirsPairNames = Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.FsDirsPairRefactor.ConsoleApp
 {

@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Dependencies;
-using Turmerik.LocalDevice.Core.Env;
+using Turmerik.Core.Dependencies;
 using Turmerik.NetCore.Dependencies;
 
 namespace Turmerik.AspNetCore.Dependencies

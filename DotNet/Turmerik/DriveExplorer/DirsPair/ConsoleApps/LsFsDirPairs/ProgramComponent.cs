@@ -6,13 +6,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.ConsoleApps;
+using Turmerik.Core.ConsoleApps;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
+using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 using Turmerik.DriveExplorer.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.DriveExplorer.Notes;
-using Turmerik.Helpers;
-using Turmerik.Text;
-using Turmerik.TextSerialization;
-using Turmerik.Utility;
 
 namespace Turmerik.DriveExplorer.DirsPair.ConsoleApps.LsFsDirPairs
 {

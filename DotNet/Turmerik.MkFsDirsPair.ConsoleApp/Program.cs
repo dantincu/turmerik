@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Turmerik.Core.Dependencies;
+using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
 using Turmerik.DriveExplorer;
 using Turmerik.DriveExplorer.DirsPair.ConsoleApps.MkFsDirPairs;
-using Turmerik.Helpers;
-using Turmerik.HtmlAgility.DirsPair.ConsoleApps.MkFsDirPairs;
 
-var services = TrmrkServices.RegisterAll(
+var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
+
+TrmrkServices.RegisterAll(services);
 
 services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();

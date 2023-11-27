@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Turmerik.FileSystem;
-using Turmerik.Text;
+using Turmerik.Core.FileSystem;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
 
 namespace Turmerik.FsDirsPairRefactor.ConsoleApp
 {
