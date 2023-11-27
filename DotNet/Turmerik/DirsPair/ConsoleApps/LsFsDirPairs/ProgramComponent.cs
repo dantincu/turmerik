@@ -109,17 +109,22 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
 
                 foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
                 {
-                    if (dirsPair.FullDirNamePart == null)
+                    if (dirsPair.NoteDirCat != NoteDirCategory.Item || dirsPair.FullDirNamePart == null)
                     {
-                        WriteWithForegroundsToConsole([
-                            Tuple.Create(ConsoleColor.Magenta, dirsPair.ShortDirName),
-                            Tuple.Create(ConsoleColor.Blue, joinStr)],
-                                true);
-
                         foreach (var kvp in dirsPair.DirNamesMap)
                         {
-                            WriteWithForegroundsToConsole([
-                                Tuple.Create(ConsoleColor.DarkCyan, kvp.Value)]);
+                            if (kvp.Value != null)
+                            {
+                                WriteWithForegroundsToConsole([
+                                    Tuple.Create(ConsoleColor.Magenta, dirsPair.ShortDirName),
+                                    Tuple.Create(ConsoleColor.Blue, joinStr),
+                                    Tuple.Create(ConsoleColor.DarkCyan, kvp.Value)]);
+                            }
+                            else
+                            {
+                                WriteWithForegroundsToConsole([
+                                    Tuple.Create(ConsoleColor.Magenta, dirsPair.ShortDirName)]);
+                            }
                         }
 
                         Console.WriteLine();

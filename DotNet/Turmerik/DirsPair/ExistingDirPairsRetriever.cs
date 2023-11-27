@@ -205,7 +205,7 @@ namespace Turmerik.DirsPair
         {
             var noteDirTypeTuple = match.DirTypeTuple;
             bool matches = dirsPairTuple.NoteDirIdx == match.NoteDirIdx;
-            matches = matches && dirsPairTuple.NoteInternalDir == match.NoteInternalDir;
+            // matches = matches && dirsPairTuple.NoteInternalDir == match.NoteInternalDir;
 
             matches = matches && dirsPairTuple.NoteDirCat == noteDirTypeTuple.DirCat;
             matches = matches && dirsPairTuple.NoteDirPfxType == noteDirTypeTuple.DirPfxType;

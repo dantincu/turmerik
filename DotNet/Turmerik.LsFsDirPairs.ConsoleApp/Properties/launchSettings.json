@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.LsFsDirPairs.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":so"
+      "commandLineArgs": "F:\\D\\OneDrive\\0002 :so"
     }
   }
 }
