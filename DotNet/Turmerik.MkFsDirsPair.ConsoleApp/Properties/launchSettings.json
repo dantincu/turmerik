@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.MkFsDirsPair.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "asdfasdf :nn :o"
+      "commandLineArgs": ":nf"
     }
   }
 }

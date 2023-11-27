@@ -27,7 +27,8 @@ namespace Turmerik.DirsPair
         private readonly NoteDirsPairConfig.IFileNamesT fileNamesCfg;
         private readonly NoteDirsPairConfig.IFileContentsT fileContentsCfg;
         private readonly NoteDirsPairConfig.IDirNamesT dirNamesCfg;
-        private readonly NoteDirsPairConfig.IDirNameIdxesT dirNameIdxesCfg;
+        private readonly NoteDirsPairConfig.IDirNameIdxesT noteItemDirNameIdxesCfg;
+        private readonly NoteDirsPairConfig.IDirNameIdxesT internalDirNameIdxesCfg;
         private readonly string keepFileContents;
 
         public DirsPairGenerator(
@@ -59,7 +60,8 @@ namespace Turmerik.DirsPair
             fileNamesCfg = config.GetFileNames();
             fileContentsCfg = config.GetFileContents();
             dirNamesCfg = config.GetDirNames();
-            dirNameIdxesCfg = config.GetNoteDirNameIdxes();
+            noteItemDirNameIdxesCfg = config.GetNoteDirNameIdxes();
+            internalDirNameIdxesCfg = config.GetNoteInternalDirNameIdxes();
 
             keepFileContents = noteCfgValuesRetriever.GetKeepFileContents(
                 fileContentsCfg);
@@ -125,7 +127,7 @@ namespace Turmerik.DirsPair
             DirsPairOpts opts, NoteItemsTupleCore noteItemsTuple)
         {
             int idx = nextNoteIdxRetriever.GetNextIdx(
-                dirNameIdxesCfg, noteItemsTuple.ExistingNoteDirIdxes);
+                noteItemDirNameIdxesCfg, noteItemsTuple.ExistingNoteDirIdxes);
 
             var pfxesCfg = dirNamesCfg.GetNoteItemsPfxes();
 
@@ -194,7 +196,8 @@ namespace Turmerik.DirsPair
         private List<DriveItemX> GenerateInternalDirsPair(
             DirsPairOpts opts)
         {
-            int idx = 1;
+            int idx = noteCfgValuesRetriever.GetDefaultIdx(
+                config.GetNoteInternalDirNameIdxes());
 
             var dirsList = GenerateInternalDirsPair(
                 opts, ref idx, true);
@@ -206,7 +209,7 @@ namespace Turmerik.DirsPair
             DirsPairOpts opts, NoteItemsTupleCore noteItemsTuple)
         {
             int idx = nextNoteIdxRetriever.GetNextIdx(
-                dirNameIdxesCfg, noteItemsTuple.ExistingInternalDirIdxes);
+                internalDirNameIdxesCfg, noteItemsTuple.ExistingInternalDirIdxes);
 
             var dirsList = GenerateInternalDirsPair(
                 opts, ref idx, false);

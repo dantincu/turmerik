@@ -23,6 +23,9 @@ namespace Turmerik.Notes.Core
             string noteFullDirNamePart,
             NoteDirsPairConfig.IFileNamesT cfg);
 
+        int GetDefaultIdx(
+            NoteDirsPairConfig.IDirNameIdxesT cfg);
+
         string GetDirIdxStr(
             NoteDirsPairConfig.IDirNameIdxesT cfg,
             int idx);
@@ -129,6 +132,13 @@ namespace Turmerik.Notes.Core
             NoteDirsPairConfig.IFileNamesT cfg) => string.Concat(
                 cfg.PrependTitleToNoteMdFileName?.If(
                     () => noteFullDirNamePart), cfg.NoteItemMdFileName);
+
+        public int GetDefaultIdx(
+            NoteDirsPairConfig.IDirNameIdxesT cfg) => (cfg.IncIdx ?? true) switch
+            {
+                true => cfg.MinIdx ?? NextNoteIdxRetriever.DF_MIN_VALUE,
+                false => cfg.MaxIdx ?? NextNoteIdxRetriever.DF_MAX_VALUE
+            };
 
         public string GetDirIdxStr(
             NoteDirsPairConfig.IDirNameIdxesT cfg,

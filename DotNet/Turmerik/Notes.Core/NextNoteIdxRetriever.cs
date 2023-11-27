@@ -91,21 +91,28 @@ namespace Turmerik.Notes.Core
 
             bool desc = cfg.IncIdx == false;
 
-            if (cfg.FillGapsByDefault == true)
+            if (sortedIdxesArr.Any())
             {
-                nextIdx = GetNextFillingGapsIdx(
-                    sortedIdxesArr,
-                    minVal,
-                    maxVal,
-                    desc);
+                if (cfg.FillGapsByDefault == true)
+                {
+                    nextIdx = GetNextFillingGapsIdx(
+                        sortedIdxesArr,
+                        minVal,
+                        maxVal,
+                        desc);
+                }
+                else
+                {
+                    nextIdx = GetNextIdx(
+                        sortedIdxesArr,
+                        minVal,
+                        maxVal,
+                        desc);
+                }
             }
             else
             {
-                nextIdx = GetNextIdx(
-                    sortedIdxesArr,
-                    minVal,
-                    maxVal,
-                    desc);
+                nextIdx = desc ? maxVal : minVal;
             }
 
             return nextIdx;
