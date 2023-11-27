@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Turmerik.LocalFileNotes.WinFormsApp.Data;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.Core.Helpers;
+using Turmerik.Ux;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls
 {
@@ -45,7 +46,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 labelExplanation.Text = uITextContentsResetAppData.ExplanationText;
-                iconLabelToggleExplanationLabel.Text = "\ueb8b";
+                iconLabelToggleExplanationLabel.Text = MatUIIconUnicodesH.CommonActions.INFO;
             }
         }
 

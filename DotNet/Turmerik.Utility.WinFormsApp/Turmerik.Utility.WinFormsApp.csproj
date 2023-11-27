@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Turmerik.Logging\Turmerik.Logging.csproj" />
+    <ProjectReference Include="..\Turmerik.WinForms\Turmerik.WinForms.csproj" />
+    <ProjectReference Include="..\Turmerik.Yantra\Turmerik.Yantra.csproj" />
+    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
+</Project>

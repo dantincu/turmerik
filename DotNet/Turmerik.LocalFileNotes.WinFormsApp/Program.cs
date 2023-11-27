@@ -49,7 +49,6 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
             svcProvContnr.RegisterData(
                 new ServiceCollection().AsOpts(services =>
                 {
-                    TrmrkCoreServices.RegisterAll(services);
                     TrmrkServices.RegisterAll(services);
                     TrmrkNoteServices.RegisterAll(services);
                     TrmrkNoteServices.RegisterAppSettingsRetriever<NotesAppConfigImmtbl, NotesAppConfigMtbl>(services);
@@ -68,8 +67,8 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
 
                     services.AddSingleton<UITextContentsRetriever>();
 
-                    services.AddSingleton<INoteBookFormVM, NoteBookFormVM>();
-                    services.AddSingleton<IManageNoteBooksFormVM, ManageNoteBooksFormVM>();
+                    services.AddTransient<INoteBookFormVM, NoteBookFormVM>();
+                    services.AddTransient<IManageNoteBooksFormVM, ManageNoteBooksFormVM>();
 
                     services.AddSingleton<AppArgsParser>();
                     services.AddSingleton<AppOptionsBuilder>();

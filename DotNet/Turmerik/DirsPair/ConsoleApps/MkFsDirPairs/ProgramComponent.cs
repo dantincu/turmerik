@@ -15,6 +15,7 @@ using HtmlAgilityPack;
 using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
 using Turmerik.DriveExplorer;
+using Turmerik.Html;
 
 namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 {
@@ -29,6 +30,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
         private readonly IConsoleArgsParser parser;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
+        private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
 
@@ -85,26 +87,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             }
         }
 
-        private async Task<string> GetResouceTitleAsync(string resUrl)
-        {
-            resUrl = UriH.AssureUriHasScheme(resUrl,
-                (scheme, restOfUri, uri) => uri);
-
-            var web = new HtmlWeb();
-            var htmlDoc = await web.LoadFromWebAsync(resUrl);
-
-            var htmlNode = htmlDoc.DocumentNode.ChildNodes.SingleOrDefault(
-                node => node.Name == "html");
-
-            var headNode = htmlNode?.ChildNodes.SingleOrDefault(
-                node => node.Name == "head");
-
-            var titleNode = headNode?.ChildNodes.SingleOrDefault(
-                node => node.Name == "title");
-
-            string title = titleNode?.InnerText;
-            return title;
-        }
+        private Task<string> GetResouceTitleAsync(
+            string resUrl) => htmlDocTitleRetriever.GetResouceTitleAsync(
+                resUrl);
 
         private DirsPairOpts GetDirsPairOpts(
             ProgramArgs args) => new DirsPairOpts

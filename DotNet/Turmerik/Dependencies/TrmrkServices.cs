@@ -26,6 +26,8 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IHtmlNodesRetriever, HtmlNodesRetriever>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
 
+            services.AddSingleton<IHtmlDocTitleRetriever, HtmlDocTitleRetriever>();
+
             services.AddSingleton<INoteCfgValuesRetriever, NoteCfgValuesRetriever>();
             services.AddSingleton<INextNoteIdxRetriever, NextNoteIdxRetriever>();
             services.AddSingleton<INoteDirsPairIdxRetriever, NoteDirsPairIdxRetriever>();

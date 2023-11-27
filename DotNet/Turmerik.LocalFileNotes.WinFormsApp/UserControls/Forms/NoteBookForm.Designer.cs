@@ -42,17 +42,17 @@
             openFileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             saveAllToolStripMenuItem = new ToolStripMenuItem();
+            closeToolStripMenuItem = new ToolStripMenuItem();
             exitAppToolStripMenuItem = new ToolStripMenuItem();
             noteBookToolStripMenuItem = new ToolStripMenuItem();
             switchToNoteBookToolStripMenuItem = new ToolStripMenuItem();
             createNewNoteBookToolStripMenuItem = new ToolStripMenuItem();
             openNoteBookToolStripMenuItem = new ToolStripMenuItem();
+            closeNoteBookToolStripMenuItem = new ToolStripMenuItem();
             manageToolStripMenuItem = new ToolStripMenuItem();
             manageSettingsToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             helpAboutToolStripMenuItem = new ToolStripMenuItem();
-            closeNoteBookToolStripMenuItem = new ToolStripMenuItem();
-            closeToolStripMenuItem = new ToolStripMenuItem();
             statusStripMain.SuspendLayout();
             menuStripMain.SuspendLayout();
             SuspendLayout();
@@ -60,9 +60,9 @@
             // statusStripMain
             // 
             statusStripMain.Items.AddRange(new ToolStripItem[] { toolStripStatusLabelMain });
-            statusStripMain.Location = new Point(0, 736);
+            statusStripMain.Location = new Point(0, 839);
             statusStripMain.Name = "statusStripMain";
-            statusStripMain.Size = new Size(1600, 22);
+            statusStripMain.Size = new Size(1784, 22);
             statusStripMain.TabIndex = 0;
             // 
             // toolStripStatusLabelMain
@@ -76,7 +76,7 @@
             menuStripMain.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, noteBookToolStripMenuItem, manageToolStripMenuItem, helpToolStripMenuItem });
             menuStripMain.Location = new Point(0, 0);
             menuStripMain.Name = "menuStripMain";
-            menuStripMain.Size = new Size(1600, 24);
+            menuStripMain.Size = new Size(1784, 24);
             menuStripMain.TabIndex = 1;
             menuStripMain.Text = "menuStrip1";
             // 
@@ -98,14 +98,14 @@
             // 
             newNoteToolStripMenuItem.Name = "newNoteToolStripMenuItem";
             newNoteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.N;
-            newNoteToolStripMenuItem.Size = new Size(180, 22);
+            newNoteToolStripMenuItem.Size = new Size(175, 22);
             newNoteToolStripMenuItem.Text = "&Note";
             // 
             // newTextFileToolStripMenuItem
             // 
             newTextFileToolStripMenuItem.Name = "newTextFileToolStripMenuItem";
             newTextFileToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
-            newTextFileToolStripMenuItem.Size = new Size(180, 22);
+            newTextFileToolStripMenuItem.Size = new Size(175, 22);
             newTextFileToolStripMenuItem.Text = "Text &File";
             // 
             // fileOpenToolStripMenuItem
@@ -150,6 +150,12 @@
             saveAllToolStripMenuItem.Size = new Size(187, 22);
             saveAllToolStripMenuItem.Text = "Save &All";
             // 
+            // closeToolStripMenuItem
+            // 
+            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            closeToolStripMenuItem.Size = new Size(187, 22);
+            closeToolStripMenuItem.Text = "&Close";
+            // 
             // exitAppToolStripMenuItem
             // 
             exitAppToolStripMenuItem.Name = "exitAppToolStripMenuItem";
@@ -184,6 +190,13 @@
             openNoteBookToolStripMenuItem.Size = new Size(233, 22);
             openNoteBookToolStripMenuItem.Text = "&Open";
             // 
+            // closeNoteBookToolStripMenuItem
+            // 
+            closeNoteBookToolStripMenuItem.Name = "closeNoteBookToolStripMenuItem";
+            closeNoteBookToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.C;
+            closeNoteBookToolStripMenuItem.Size = new Size(233, 22);
+            closeNoteBookToolStripMenuItem.Text = "&Close";
+            // 
             // manageToolStripMenuItem
             // 
             manageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manageSettingsToolStripMenuItem });
@@ -194,7 +207,7 @@
             // manageSettingsToolStripMenuItem
             // 
             manageSettingsToolStripMenuItem.Name = "manageSettingsToolStripMenuItem";
-            manageSettingsToolStripMenuItem.Size = new Size(180, 22);
+            manageSettingsToolStripMenuItem.Size = new Size(116, 22);
             manageSettingsToolStripMenuItem.Text = "&Settings";
             // 
             // helpToolStripMenuItem
@@ -207,27 +220,14 @@
             // helpAboutToolStripMenuItem
             // 
             helpAboutToolStripMenuItem.Name = "helpAboutToolStripMenuItem";
-            helpAboutToolStripMenuItem.Size = new Size(180, 22);
+            helpAboutToolStripMenuItem.Size = new Size(107, 22);
             helpAboutToolStripMenuItem.Text = "&About";
-            // 
-            // closeNoteBookToolStripMenuItem
-            // 
-            closeNoteBookToolStripMenuItem.Name = "closeNoteBookToolStripMenuItem";
-            closeNoteBookToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.C;
-            closeNoteBookToolStripMenuItem.Size = new Size(233, 22);
-            closeNoteBookToolStripMenuItem.Text = "&Close";
-            // 
-            // closeToolStripMenuItem
-            // 
-            closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            closeToolStripMenuItem.Size = new Size(187, 22);
-            closeToolStripMenuItem.Text = "&Close";
             // 
             // NoteBookForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1600, 758);
+            ClientSize = new Size(1784, 861);
             Controls.Add(statusStripMain);
             Controls.Add(menuStripMain);
             Font = new Font("Segoe UI", 9F);

@@ -43,7 +43,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1600, 900);
+            ClientSize = new Size(1584, 761);
             Controls.Add(clearAppDatauc1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageNoteBooksForm";

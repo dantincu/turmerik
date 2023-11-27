@@ -1,0 +1,9658 @@
+{
+  "GroupsList": [
+    {
+      "GroupName": " UI actions",
+      "IconsList": [
+        {
+          "IconName": "Search"
+        },
+        {
+          "IconName": "Home"
+        },
+        {
+          "IconName": "Menu"
+        },
+        {
+          "IconName": "Close"
+        },
+        {
+          "IconName": "Settings"
+        },
+        {
+          "IconName": "Done"
+        },
+        {
+          "IconName": "Expand More"
+        },
+        {
+          "IconName": "Check Circle"
+        },
+        {
+          "IconName": "Favorite"
+        },
+        {
+          "IconName": "Add"
+        },
+        {
+          "IconName": "Delete"
+        },
+        {
+          "IconName": "Arrow Back"
+        },
+        {
+          "IconName": "Star"
+        },
+        {
+          "IconName": "Chevron Right"
+        },
+        {
+          "IconName": "Logout"
+        },
+        {
+          "IconName": "Arrow Forward iOS"
+        },
+        {
+          "IconName": "Add Circle"
+        },
+        {
+          "IconName": "Cancel"
+        },
+        {
+          "IconName": "Arrow Back iOS"
+        },
+        {
+          "IconName": "Arrow Forward"
+        },
+        {
+          "IconName": "Arrow Drop Down"
+        },
+        {
+          "IconName": "More Vert"
+        },
+        {
+          "IconName": "Check"
+        },
+        {
+          "IconName": "Check Box"
+        },
+        {
+          "IconName": "Toggle On"
+        },
+        {
+          "IconName": "Grade"
+        },
+        {
+          "IconName": "Open In New"
+        },
+        {
+          "IconName": "Refresh"
+        },
+        {
+          "IconName": "Check Box Outline Blank"
+        },
+        {
+          "IconName": "Login"
+        },
+        {
+          "IconName": "Chevron Left"
+        },
+        {
+          "IconName": "Expand Less"
+        },
+        {
+          "IconName": "Radio Button Unchecked"
+        },
+        {
+          "IconName": "More Horiz"
+        },
+        {
+          "IconName": "Apps"
+        },
+        {
+          "IconName": "Download"
+        },
+        {
+          "IconName": "Arrow Right Alt"
+        },
+        {
+          "IconName": "Radio Button Checked"
+        },
+        {
+          "IconName": "Remove"
+        },
+        {
+          "IconName": "Bolt"
+        },
+        {
+          "IconName": "Toggle Off"
+        },
+        {
+          "IconName": "Arrow Upward"
+        },
+        {
+          "IconName": "Filter List"
+        },
+        {
+          "IconName": "Delete Forever"
+        },
+        {
+          "IconName": "Autorenew"
+        },
+        {
+          "IconName": "Key"
+        },
+        {
+          "IconName": "Sync"
+        },
+        {
+          "IconName": "Arrow Downward"
+        },
+        {
+          "IconName": "Block"
+        },
+        {
+          "IconName": "Sort"
+        },
+        {
+          "IconName": "Add Box"
+        },
+        {
+          "IconName": "Arrow Back iOS New"
+        },
+        {
+          "IconName": "Restart Alt"
+        },
+        {
+          "IconName": "Shopping Cart Checkout"
+        },
+        {
+          "IconName": "Menu Open"
+        },
+        {
+          "IconName": "Expand Circle Down"
+        },
+        {
+          "IconName": "Backspace"
+        },
+        {
+          "IconName": "Undo"
+        },
+        {
+          "IconName": "Arrow Circle Right"
+        },
+        {
+          "IconName": "Done All"
+        },
+        {
+          "IconName": "Arrow Right"
+        },
+        {
+          "IconName": "Do Not Disturb On"
+        },
+        {
+          "IconName": "Open In Full"
+        },
+        {
+          "IconName": "Manage Search"
+        },
+        {
+          "IconName": "Double Arrow"
+        },
+        {
+          "IconName": "Sync Alt"
+        },
+        {
+          "IconName": "Zoom In"
+        },
+        {
+          "IconName": "Done Outline"
+        },
+        {
+          "IconName": "Drag Indicator"
+        },
+        {
+          "IconName": "Fullscreen"
+        },
+        {
+          "IconName": "Keyboard Double Arrow Right"
+        },
+        {
+          "IconName": "Star Half"
+        },
+        {
+          "IconName": "Settings Accessibility"
+        },
+        {
+          "IconName": "iOS Share"
+        },
+        {
+          "IconName": "Arrow Drop Up"
+        },
+        {
+          "IconName": "Reply"
+        },
+        {
+          "IconName": "Exit To App"
+        },
+        {
+          "IconName": "Unfold More"
+        },
+        {
+          "IconName": "Library Add"
+        },
+        {
+          "IconName": "Cached"
+        },
+        {
+          "IconName": "Terminal"
+        },
+        {
+          "IconName": "Select Check Box"
+        },
+        {
+          "IconName": "Change Circle"
+        },
+        {
+          "IconName": "Disabled By Default"
+        },
+        {
+          "IconName": "Swap Horiz"
+        },
+        {
+          "IconName": "Swap Vert"
+        },
+        {
+          "IconName": "Close Fullscreen"
+        },
+        {
+          "IconName": "App Registration"
+        },
+        {
+          "IconName": "Download For Offline"
+        },
+        {
+          "IconName": "Arrow Circle Left"
+        },
+        {
+          "IconName": "Arrow Circle Up"
+        },
+        {
+          "IconName": "File Open"
+        },
+        {
+          "IconName": "Minimize"
+        },
+        {
+          "IconName": "Dataset"
+        },
+        {
+          "IconName": "Open With"
+        },
+        {
+          "IconName": "Keyboard Double Arrow Left"
+        },
+        {
+          "IconName": "Add Task"
+        },
+        {
+          "IconName": "Start"
+        },
+        {
+          "IconName": "Keyboard Voice"
+        },
+        {
+          "IconName": "Keyboard Double Arrow Down"
+        },
+        {
+          "IconName": "Create New Folder"
+        },
+        {
+          "IconName": "Forward"
+        },
+        {
+          "IconName": "Downloading"
+        },
+        {
+          "IconName": "Settings Applications"
+        },
+        {
+          "IconName": "Upload"
+        },
+        {
+          "IconName": "Compare Arrows"
+        },
+        {
+          "IconName": "Redo"
+        },
+        {
+          "IconName": "Publish"
+        },
+        {
+          "IconName": "Zoom Out"
+        },
+        {
+          "IconName": "Arrow Left"
+        },
+        {
+          "IconName": "HTML"
+        },
+        {
+          "IconName": "Token"
+        },
+        {
+          "IconName": "Switch Access Shortcut"
+        },
+        {
+          "IconName": "Fullscreen Exit"
+        },
+        {
+          "IconName": "Arrow Circle Down"
+        },
+        {
+          "IconName": "Sort By Alpha"
+        },
+        {
+          "IconName": "Delete Sweep"
+        },
+        {
+          "IconName": "Indeterminate Check Box"
+        },
+        {
+          "IconName": "First Page"
+        },
+        {
+          "IconName": "View Timeline"
+        },
+        {
+          "IconName": "Keyboard Double Arrow Up"
+        },
+        {
+          "IconName": "Settings Backup Restore"
+        },
+        {
+          "IconName": "Arrow Drop Down Circle"
+        },
+        {
+          "IconName": "Assistant Navigation"
+        },
+        {
+          "IconName": "Sync Problem"
+        },
+        {
+          "IconName": "Clear All"
+        },
+        {
+          "IconName": "Density Medium"
+        },
+        {
+          "IconName": "Heart Plus"
+        },
+        {
+          "IconName": "Expand"
+        },
+        {
+          "IconName": "Filter Alt Off"
+        },
+        {
+          "IconName": "Last Page"
+        },
+        {
+          "IconName": "Subdirectory Arrow Right"
+        },
+        {
+          "IconName": "Unfold Less"
+        },
+        {
+          "IconName": "Arrow Outward"
+        },
+        {
+          "IconName": "Download Done"
+        },
+        {
+          "IconName": "123"
+        },
+        {
+          "IconName": "Swipe Left"
+        },
+        {
+          "IconName": "Saved Search"
+        },
+        {
+          "IconName": "System Update Alt"
+        },
+        {
+          "IconName": "Place Item"
+        },
+        {
+          "IconName": "Search Off"
+        },
+        {
+          "IconName": "Output"
+        },
+        {
+          "IconName": "Maximize"
+        },
+        {
+          "IconName": "Javascript"
+        },
+        {
+          "IconName": "Swipe Up"
+        },
+        {
+          "IconName": "Fit Screen"
+        },
+        {
+          "IconName": "Select All"
+        },
+        {
+          "IconName": "Hide Source"
+        },
+        {
+          "IconName": "Dynamic Form"
+        },
+        {
+          "IconName": "Swipe Right"
+        },
+        {
+          "IconName": "Check Small"
+        },
+        {
+          "IconName": "Switch Access Shortcut Add"
+        },
+        {
+          "IconName": "Browse Gallery"
+        },
+        {
+          "IconName": "Density Small"
+        },
+        {
+          "IconName": "CSS"
+        },
+        {
+          "IconName": "Assistant Direction"
+        },
+        {
+          "IconName": "File Download Done"
+        },
+        {
+          "IconName": "Move Up"
+        },
+        {
+          "IconName": "Youtube Searched For"
+        },
+        {
+          "IconName": "Swap Horizontal Circle"
+        },
+        {
+          "IconName": "Data Thresholding"
+        },
+        {
+          "IconName": "Install Mobile"
+        },
+        {
+          "IconName": "Abc"
+        },
+        {
+          "IconName": "Dataset Linked"
+        },
+        {
+          "IconName": "Move Down"
+        },
+        {
+          "IconName": "Restore From Trash"
+        },
+        {
+          "IconName": "Enable"
+        },
+        {
+          "IconName": "Install Desktop"
+        },
+        {
+          "IconName": "Keyboard Command Key"
+        },
+        {
+          "IconName": "View Kanban"
+        },
+        {
+          "IconName": "Browse Activity"
+        },
+        {
+          "IconName": "Reply All"
+        },
+        {
+          "IconName": "Switch Left"
+        },
+        {
+          "IconName": "Compress"
+        },
+        {
+          "IconName": "Swipe Down"
+        },
+        {
+          "IconName": "Swap Vertical Circle"
+        },
+        {
+          "IconName": "Remove Done"
+        },
+        {
+          "IconName": "Apps Outage"
+        },
+        {
+          "IconName": "Filter List Off"
+        },
+        {
+          "IconName": "Star Rate"
+        },
+        {
+          "IconName": "Hide"
+        },
+        {
+          "IconName": "Switch Right"
+        },
+        {
+          "IconName": "Swipe Vertical"
+        },
+        {
+          "IconName": "More Up"
+        },
+        {
+          "IconName": "Sync Disabled"
+        },
+        {
+          "IconName": "Pinch"
+        },
+        {
+          "IconName": "Keyboard Control Key"
+        },
+        {
+          "IconName": "Eject"
+        },
+        {
+          "IconName": "Key Off"
+        },
+        {
+          "IconName": "PHP"
+        },
+        {
+          "IconName": "Subdirectory Arrow Left"
+        },
+        {
+          "IconName": "View Cozy"
+        },
+        {
+          "IconName": "Transcribe"
+        },
+        {
+          "IconName": "Do Not Disturb Off"
+        },
+        {
+          "IconName": "Send Time Extension"
+        },
+        {
+          "IconName": "Width Normal"
+        },
+        {
+          "IconName": "View Comfy Alt"
+        },
+        {
+          "IconName": "Heart Minus"
+        },
+        {
+          "IconName": "Share Reviews"
+        },
+        {
+          "IconName": "Width Full"
+        },
+        {
+          "IconName": "Unfold More Double"
+        },
+        {
+          "IconName": "File Download Off"
+        },
+        {
+          "IconName": "View Compact Alt"
+        },
+        {
+          "IconName": "Extension Off"
+        },
+        {
+          "IconName": "Open In New Off"
+        },
+        {
+          "IconName": "Check Indeterminate Small"
+        },
+        {
+          "IconName": "More Down"
+        },
+        {
+          "IconName": "Width Wide"
+        },
+        {
+          "IconName": "Repartition"
+        },
+        {
+          "IconName": "Density Large"
+        },
+        {
+          "IconName": "Swipe Left Alt"
+        },
+        {
+          "IconName": "Swipe Down Alt"
+        },
+        {
+          "IconName": "Swipe Up Alt"
+        },
+        {
+          "IconName": "Swipe Right Alt"
+        },
+        {
+          "IconName": "Unfold Less Double"
+        },
+        {
+          "IconName": "Cycle"
+        },
+        {
+          "IconName": "Progress Activity"
+        },
+        {
+          "IconName": "Keyboard Option Key"
+        },
+        {
+          "IconName": "HLS"
+        },
+        {
+          "IconName": "HLS Off"
+        },
+        {
+          "IconName": "File Upload Off"
+        },
+        {
+          "IconName": "Expand Content"
+        },
+        {
+          "IconName": "Rebase"
+        },
+        {
+          "IconName": "Expand All"
+        },
+        {
+          "IconName": "Collapse All"
+        },
+        {
+          "IconName": "Rebase Edit"
+        },
+        {
+          "IconName": "Quick Reference All"
+        },
+        {
+          "IconName": "Arrow Split"
+        },
+        {
+          "IconName": "Empty Dashboard"
+        },
+        {
+          "IconName": "Deployed Code"
+        },
+        {
+          "IconName": "Stack"
+        },
+        {
+          "IconName": "Stat 0"
+        },
+        {
+          "IconName": "Acute"
+        },
+        {
+          "IconName": "Arrow Upward Alt"
+        },
+        {
+          "IconName": "Switches"
+        },
+        {
+          "IconName": "Data Check"
+        },
+        {
+          "IconName": "Left Click"
+        },
+        {
+          "IconName": "Arrow Downward Alt"
+        },
+        {
+          "IconName": "Directory Sync"
+        },
+        {
+          "IconName": "Data Alert"
+        },
+        {
+          "IconName": "Quick Reference"
+        },
+        {
+          "IconName": "Page Info"
+        },
+        {
+          "IconName": "Sync Saved Locally"
+        },
+        {
+          "IconName": "Cards"
+        },
+        {
+          "IconName": "Side Navigation"
+        },
+        {
+          "IconName": "Clock Loader 60"
+        },
+        {
+          "IconName": "Data Info Alert"
+        },
+        {
+          "IconName": "Bubble"
+        },
+        {
+          "IconName": "Question Exchange"
+        },
+        {
+          "IconName": "Steppers"
+        },
+        {
+          "IconName": "Move Item"
+        },
+        {
+          "IconName": "Stack Star"
+        },
+        {
+          "IconName": "Arrow Left Alt"
+        },
+        {
+          "IconName": "Point Scan"
+        },
+        {
+          "IconName": "Preliminary"
+        },
+        {
+          "IconName": "Stat 3"
+        },
+        {
+          "IconName": "Captive Portal"
+        },
+        {
+          "IconName": "Search Check"
+        },
+        {
+          "IconName": "Star Rate Half"
+        },
+        {
+          "IconName": "Unknown Med"
+        },
+        {
+          "IconName": "Toolbar"
+        },
+        {
+          "IconName": "Right Panel Close"
+        },
+        {
+          "IconName": "New Window"
+        },
+        {
+          "IconName": "Clock Loader 10"
+        },
+        {
+          "IconName": "Right Panel Open"
+        },
+        {
+          "IconName": "Rule Settings"
+        },
+        {
+          "IconName": "Sweep"
+        },
+        {
+          "IconName": "Responsive Layout"
+        },
+        {
+          "IconName": "Step"
+        },
+        {
+          "IconName": "Patient List"
+        },
+        {
+          "IconName": "Drag Pan"
+        },
+        {
+          "IconName": "Clock Loader 40"
+        },
+        {
+          "IconName": "Expand Circle Right"
+        },
+        {
+          "IconName": "Share Windows"
+        },
+        {
+          "IconName": "Stat Minus 1"
+        },
+        {
+          "IconName": "Arrow Insert"
+        },
+        {
+          "IconName": "Left Panel Close"
+        },
+        {
+          "IconName": "Page Control"
+        },
+        {
+          "IconName": "Dialogs"
+        },
+        {
+          "IconName": "Expand Circle Up"
+        },
+        {
+          "IconName": "Input Circle"
+        },
+        {
+          "IconName": "Heart Check"
+        },
+        {
+          "IconName": "Move Group"
+        },
+        {
+          "IconName": "Stat 2"
+        },
+        {
+          "IconName": "Stat Minus 2"
+        },
+        {
+          "IconName": "Capture"
+        },
+        {
+          "IconName": "Left Panel Open"
+        },
+        {
+          "IconName": "Clock Loader 80"
+        },
+        {
+          "IconName": "Step Into"
+        },
+        {
+          "IconName": "All Match"
+        },
+        {
+          "IconName": "Bottom Panel Open"
+        },
+        {
+          "IconName": "Clock Loader 90"
+        },
+        {
+          "IconName": "Stack Off"
+        },
+        {
+          "IconName": "Stat 1"
+        },
+        {
+          "IconName": "Magnification Small"
+        },
+        {
+          "IconName": "Partner Reports"
+        },
+        {
+          "IconName": "Deployed Code Update"
+        },
+        {
+          "IconName": "Dropdown"
+        },
+        {
+          "IconName": "Magnification Large"
+        },
+        {
+          "IconName": "Resize"
+        },
+        {
+          "IconName": "Bottom Navigation"
+        },
+        {
+          "IconName": "Clock Loader 20"
+        },
+        {
+          "IconName": "Event List"
+        },
+        {
+          "IconName": "Sliders"
+        },
+        {
+          "IconName": "Radio Button Partial"
+        },
+        {
+          "IconName": "Bottom Drawer"
+        },
+        {
+          "IconName": "Drag Click"
+        },
+        {
+          "IconName": "Go To Line"
+        },
+        {
+          "IconName": "Pip"
+        },
+        {
+          "IconName": "Shelf Position"
+        },
+        {
+          "IconName": "Stat Minus 3"
+        },
+        {
+          "IconName": "Tabs"
+        },
+        {
+          "IconName": "Arrow And Edge"
+        },
+        {
+          "IconName": "Bottom Sheets"
+        },
+        {
+          "IconName": "Buttons Alt"
+        },
+        {
+          "IconName": "Chronic"
+        },
+        {
+          "IconName": "Open In New Down"
+        },
+        {
+          "IconName": "Step Over"
+        },
+        {
+          "IconName": "Arrow Range"
+        },
+        {
+          "IconName": "Chip Extraction"
+        },
+        {
+          "IconName": "Iframe"
+        },
+        {
+          "IconName": "Right Click"
+        },
+        {
+          "IconName": "Ripples"
+        },
+        {
+          "IconName": "Move Selection Left"
+        },
+        {
+          "IconName": "Toast"
+        },
+        {
+          "IconName": "Linked Services"
+        },
+        {
+          "IconName": "Reopen Window"
+        },
+        {
+          "IconName": "Subheader"
+        },
+        {
+          "IconName": "Unknown 5"
+        },
+        {
+          "IconName": "Arrow Or Edge"
+        },
+        {
+          "IconName": "Chips"
+        },
+        {
+          "IconName": "Output Circle"
+        },
+        {
+          "IconName": "Switch Access"
+        },
+        {
+          "IconName": "Arrows Outward"
+        },
+        {
+          "IconName": "Bottom Right Click"
+        },
+        {
+          "IconName": "Step Out"
+        },
+        {
+          "IconName": "App Badging"
+        },
+        {
+          "IconName": "Arrow Top Left"
+        },
+        {
+          "IconName": "Back To Tab"
+        },
+        {
+          "IconName": "Pip Exit"
+        },
+        {
+          "IconName": "Key Vertical"
+        },
+        {
+          "IconName": "Amend"
+        },
+        {
+          "IconName": "Error Med"
+        },
+        {
+          "IconName": "Jump To Element"
+        },
+        {
+          "IconName": "Move Selection Right"
+        },
+        {
+          "IconName": "Move Selection Up"
+        },
+        {
+          "IconName": "Arrow Top Right"
+        },
+        {
+          "IconName": "Bubbles"
+        },
+        {
+          "IconName": "Deployed Code History"
+        },
+        {
+          "IconName": "Position Top Right"
+        },
+        {
+          "IconName": "Deployed Code Alert"
+        },
+        {
+          "IconName": "Position Bottom Right"
+        },
+        {
+          "IconName": "Shelf Auto Hide"
+        },
+        {
+          "IconName": "Stacks"
+        },
+        {
+          "IconName": "Bottom App Bar"
+        },
+        {
+          "IconName": "Bottom Panel Close"
+        },
+        {
+          "IconName": "Iframe Off"
+        },
+        {
+          "IconName": "Highlight Mouse Cursor"
+        },
+        {
+          "IconName": "Position Bottom Left"
+        },
+        {
+          "IconName": "Move Selection Down"
+        },
+        {
+          "IconName": "Close Small"
+        },
+        {
+          "IconName": "Upload 2"
+        },
+        {
+          "IconName": "Action Key"
+        },
+        {
+          "IconName": "Deployed Code Account"
+        },
+        {
+          "IconName": "Download 2"
+        },
+        {
+          "IconName": "Settings Heart"
+        },
+        {
+          "IconName": "Switch Access 2"
+        },
+        {
+          "IconName": "Collapse Content"
+        },
+        {
+          "IconName": "Highlight Keyboard Focus"
+        },
+        {
+          "IconName": "Highlight Text Cursor"
+        }
+      ]
+    },
+    {
+      "GroupName": " Social",
+      "IconsList": [
+        {
+          "IconName": "Person"
+        },
+        {
+          "IconName": "Group"
+        },
+        {
+          "IconName": "Share"
+        },
+        {
+          "IconName": "Thumb Up"
+        },
+        {
+          "IconName": "Groups"
+        },
+        {
+          "IconName": "Public"
+        },
+        {
+          "IconName": "Person Add"
+        },
+        {
+          "IconName": "Handshake"
+        },
+        {
+          "IconName": "Support Agent"
+        },
+        {
+          "IconName": "Face"
+        },
+        {
+          "IconName": "Sentiment Satisfied"
+        },
+        {
+          "IconName": "Rocket Launch"
+        },
+        {
+          "IconName": "Group Add"
+        },
+        {
+          "IconName": "Workspace Premium"
+        },
+        {
+          "IconName": "Psychology"
+        },
+        {
+          "IconName": "Diversity 3"
+        },
+        {
+          "IconName": "Emoji Objects"
+        },
+        {
+          "IconName": "Water Drop"
+        },
+        {
+          "IconName": "Eco"
+        },
+        {
+          "IconName": "Travel Explore"
+        },
+        {
+          "IconName": "Pets"
+        },
+        {
+          "IconName": "Mood"
+        },
+        {
+          "IconName": "Sunny"
+        },
+        {
+          "IconName": "Quiz"
+        },
+        {
+          "IconName": "Health And Safety"
+        },
+        {
+          "IconName": "Sentiment Dissatisfied"
+        },
+        {
+          "IconName": "Sentiment Very Satisfied"
+        },
+        {
+          "IconName": "Military Tech"
+        },
+        {
+          "IconName": "Thumb Down"
+        },
+        {
+          "IconName": "Gavel"
+        },
+        {
+          "IconName": "Recycling"
+        },
+        {
+          "IconName": "Diamond"
+        },
+        {
+          "IconName": "Monitor Heart"
+        },
+        {
+          "IconName": "Emoji People"
+        },
+        {
+          "IconName": "Diversity 1"
+        },
+        {
+          "IconName": "Workspaces"
+        },
+        {
+          "IconName": "Vaccines"
+        },
+        {
+          "IconName": "Compost"
+        },
+        {
+          "IconName": "Forest"
+        },
+        {
+          "IconName": "Recommend"
+        },
+        {
+          "IconName": "Waving Hand"
+        },
+        {
+          "IconName": "Person Remove"
+        },
+        {
+          "IconName": "Wc"
+        },
+        {
+          "IconName": "Sentiment Neutral"
+        },
+        {
+          "IconName": "Medication"
+        },
+        {
+          "IconName": "Sentiment Very Dissatisfied"
+        },
+        {
+          "IconName": "Group Work"
+        },
+        {
+          "IconName": "Diversity 2"
+        },
+        {
+          "IconName": "Front Hand"
+        },
+        {
+          "IconName": "Psychology Alt"
+        },
+        {
+          "IconName": "Cruelty Free"
+        },
+        {
+          "IconName": "Man"
+        },
+        {
+          "IconName": "Medical Information"
+        },
+        {
+          "IconName": "Coronavirus"
+        },
+        {
+          "IconName": "Add Reaction"
+        },
+        {
+          "IconName": "Rocket"
+        },
+        {
+          "IconName": "Female"
+        },
+        {
+          "IconName": "Potted Plant"
+        },
+        {
+          "IconName": "Emoji Nature"
+        },
+        {
+          "IconName": "Rainy"
+        },
+        {
+          "IconName": "Person Off"
+        },
+        {
+          "IconName": "Cookie"
+        },
+        {
+          "IconName": "Connect Without Contact"
+        },
+        {
+          "IconName": "Woman"
+        },
+        {
+          "IconName": "Mood Bad"
+        },
+        {
+          "IconName": "Male"
+        },
+        {
+          "IconName": "Bedtime"
+        },
+        {
+          "IconName": "Communication"
+        },
+        {
+          "IconName": "Groups 2"
+        },
+        {
+          "IconName": "Solar Power"
+        },
+        {
+          "IconName": "Thunderstorm"
+        },
+        {
+          "IconName": "Thumbs Up Down"
+        },
+        {
+          "IconName": "Partly Cloudy Day"
+        },
+        {
+          "IconName": "Emoji Flags"
+        },
+        {
+          "IconName": "Masks"
+        },
+        {
+          "IconName": "Hive"
+        },
+        {
+          "IconName": "Sentiment Extremely Dissatisfied"
+        },
+        {
+          "IconName": "Heart Broken"
+        },
+        {
+          "IconName": "Clear Day"
+        },
+        {
+          "IconName": "Boy"
+        },
+        {
+          "IconName": "Whatshot"
+        },
+        {
+          "IconName": "Cloudy Snowing"
+        },
+        {
+          "IconName": "Emoji Food Beverage"
+        },
+        {
+          "IconName": "Wind Power"
+        },
+        {
+          "IconName": "Emoji Transportation"
+        },
+        {
+          "IconName": "Elderly"
+        },
+        {
+          "IconName": "Face 6"
+        },
+        {
+          "IconName": "Reduce Capacity"
+        },
+        {
+          "IconName": "Sick"
+        },
+        {
+          "IconName": "Face 3"
+        },
+        {
+          "IconName": "Pregnant Woman"
+        },
+        {
+          "IconName": "Groups 3"
+        },
+        {
+          "IconName": "Bloodtype"
+        },
+        {
+          "IconName": "Skull"
+        },
+        {
+          "IconName": "Egg"
+        },
+        {
+          "IconName": "Group Remove"
+        },
+        {
+          "IconName": "Medication Liquid"
+        },
+        {
+          "IconName": "Co2"
+        },
+        {
+          "IconName": "Clear Night"
+        },
+        {
+          "IconName": "Weight"
+        },
+        {
+          "IconName": "Emoji Events"
+        },
+        {
+          "IconName": "Follow The Signs"
+        },
+        {
+          "IconName": "Face 4"
+        },
+        {
+          "IconName": "Elderly Woman"
+        },
+        {
+          "IconName": "Oil Barrel"
+        },
+        {
+          "IconName": "Transgender"
+        },
+        {
+          "IconName": "Sanitizer"
+        },
+        {
+          "IconName": "Clean Hands"
+        },
+        {
+          "IconName": "Person 2"
+        },
+        {
+          "IconName": "Bring Your Own Ip"
+        },
+        {
+          "IconName": "Public Off"
+        },
+        {
+          "IconName": "Face 2"
+        },
+        {
+          "IconName": "Routine"
+        },
+        {
+          "IconName": "Social Distance"
+        },
+        {
+          "IconName": "Sign Language"
+        },
+        {
+          "IconName": "South America"
+        },
+        {
+          "IconName": "Sunny Snowing"
+        },
+        {
+          "IconName": "Emoji Symbols"
+        },
+        {
+          "IconName": "Garden Cart"
+        },
+        {
+          "IconName": "Flood"
+        },
+        {
+          "IconName": "Face 5"
+        },
+        {
+          "IconName": "Egg Alt"
+        },
+        {
+          "IconName": "Cyclone"
+        },
+        {
+          "IconName": "Girl"
+        },
+        {
+          "IconName": "Person 4"
+        },
+        {
+          "IconName": "Dentistry"
+        },
+        {
+          "IconName": "Tsunami"
+        },
+        {
+          "IconName": "Group Off"
+        },
+        {
+          "IconName": "Outdoor Garden"
+        },
+        {
+          "IconName": "Partly Cloudy Night"
+        },
+        {
+          "IconName": "Severe Cold"
+        },
+        {
+          "IconName": "Snowing"
+        },
+        {
+          "IconName": "Person 3"
+        },
+        {
+          "IconName": "Tornado"
+        },
+        {
+          "IconName": "Safety Divider"
+        },
+        {
+          "IconName": "Landslide"
+        },
+        {
+          "IconName": "Vaping Rooms"
+        },
+        {
+          "IconName": "Foggy"
+        },
+        {
+          "IconName": "Woman 2"
+        },
+        {
+          "IconName": "No Adult Content"
+        },
+        {
+          "IconName": "Volcano"
+        },
+        {
+          "IconName": "6 Ft Apart"
+        },
+        {
+          "IconName": "Blind"
+        },
+        {
+          "IconName": "Man 2"
+        },
+        {
+          "IconName": "18 Up Rating"
+        },
+        {
+          "IconName": "Not Accessible"
+        },
+        {
+          "IconName": "Vape Free"
+        },
+        {
+          "IconName": "Man 4"
+        },
+        {
+          "IconName": "Partner Exchange"
+        },
+        {
+          "IconName": "Radiology"
+        },
+        {
+          "IconName": "Rib Cage"
+        },
+        {
+          "IconName": "Hand Bones"
+        },
+        {
+          "IconName": "Bedtime Off"
+        },
+        {
+          "IconName": "Rheumatology"
+        },
+        {
+          "IconName": "Man 3"
+        },
+        {
+          "IconName": "Orthopedics"
+        },
+        {
+          "IconName": "Tibia"
+        },
+        {
+          "IconName": "Skeleton"
+        },
+        {
+          "IconName": "Humerus"
+        },
+        {
+          "IconName": "Foot Bones"
+        },
+        {
+          "IconName": "Agender"
+        },
+        {
+          "IconName": "Femur"
+        },
+        {
+          "IconName": "Tibia Alt"
+        },
+        {
+          "IconName": "Communities"
+        },
+        {
+          "IconName": "Diversity 4"
+        },
+        {
+          "IconName": "Femur Alt"
+        },
+        {
+          "IconName": "Cognition"
+        },
+        {
+          "IconName": "Humerus Alt"
+        },
+        {
+          "IconName": "Ulna Radius"
+        },
+        {
+          "IconName": "Digital Wellbeing"
+        },
+        {
+          "IconName": "Ulna Radius Alt"
+        },
+        {
+          "IconName": "Specific Gravity"
+        },
+        {
+          "IconName": "Neurology"
+        },
+        {
+          "IconName": "Labs"
+        },
+        {
+          "IconName": "Psychiatry"
+        },
+        {
+          "IconName": "Eyeglasses"
+        },
+        {
+          "IconName": "Person Raised Hand"
+        },
+        {
+          "IconName": "Crowdsource"
+        },
+        {
+          "IconName": "Footprint"
+        },
+        {
+          "IconName": "Breastfeeding"
+        },
+        {
+          "IconName": "Vital Signs"
+        },
+        {
+          "IconName": "Globe"
+        },
+        {
+          "IconName": "Social Leaderboard"
+        },
+        {
+          "IconName": "Globe Asia"
+        },
+        {
+          "IconName": "Nutrition"
+        },
+        {
+          "IconName": "Demography"
+        },
+        {
+          "IconName": "Tactic"
+        },
+        {
+          "IconName": "Strategy"
+        },
+        {
+          "IconName": "Stethoscope"
+        },
+        {
+          "IconName": "Clinical Notes"
+        },
+        {
+          "IconName": "Mystery"
+        },
+        {
+          "IconName": "Sentiment Excited"
+        },
+        {
+          "IconName": "Taunt"
+        },
+        {
+          "IconName": "Sentiment Calm"
+        },
+        {
+          "IconName": "Conditions"
+        },
+        {
+          "IconName": "Sentiment Stressed"
+        },
+        {
+          "IconName": "Lab Research"
+        },
+        {
+          "IconName": "Globe Uk"
+        },
+        {
+          "IconName": "Pill"
+        },
+        {
+          "IconName": "Chess"
+        },
+        {
+          "IconName": "Crossword"
+        },
+        {
+          "IconName": "Sentiment Sad"
+        },
+        {
+          "IconName": "Folded Hands"
+        },
+        {
+          "IconName": "Genetics"
+        },
+        {
+          "IconName": "Home Health"
+        },
+        {
+          "IconName": "Wrist"
+        },
+        {
+          "IconName": "Altitude"
+        },
+        {
+          "IconName": "Not Accessible Forward"
+        },
+        {
+          "IconName": "Cardiology"
+        },
+        {
+          "IconName": "Falling"
+        },
+        {
+          "IconName": "Glucose"
+        },
+        {
+          "IconName": "Prescriptions"
+        },
+        {
+          "IconName": "Cookie Off"
+        },
+        {
+          "IconName": "Mountain Flag"
+        },
+        {
+          "IconName": "Person Alert"
+        },
+        {
+          "IconName": "Weather Hail"
+        },
+        {
+          "IconName": "Barefoot"
+        },
+        {
+          "IconName": "Deceased"
+        },
+        {
+          "IconName": "Domino Mask"
+        },
+        {
+          "IconName": "Sentiment Content"
+        },
+        {
+          "IconName": "Weather Mix"
+        },
+        {
+          "IconName": "Microbiology"
+        },
+        {
+          "IconName": "Person Check"
+        },
+        {
+          "IconName": "Cheer"
+        },
+        {
+          "IconName": "Emoticon"
+        },
+        {
+          "IconName": "Recent Patient"
+        },
+        {
+          "IconName": "Sentiment Frustrated"
+        },
+        {
+          "IconName": "Share Off"
+        },
+        {
+          "IconName": "Earthquake"
+        },
+        {
+          "IconName": "Mist"
+        },
+        {
+          "IconName": "Person Apron"
+        },
+        {
+          "IconName": "Prayer Times"
+        },
+        {
+          "IconName": "Sword Rose"
+        },
+        {
+          "IconName": "Water Bottle"
+        },
+        {
+          "IconName": "Metabolism"
+        },
+        {
+          "IconName": "Playing Cards"
+        },
+        {
+          "IconName": "Dermatology"
+        },
+        {
+          "IconName": "Dew Point"
+        },
+        {
+          "IconName": "Helicopter"
+        },
+        {
+          "IconName": "Lab Panel"
+        },
+        {
+          "IconName": "Sentiment Worried"
+        },
+        {
+          "IconName": "Bomb"
+        },
+        {
+          "IconName": "Ent"
+        },
+        {
+          "IconName": "Pulmonology"
+        },
+        {
+          "IconName": "Explosion"
+        },
+        {
+          "IconName": "Body System"
+        },
+        {
+          "IconName": "Raven"
+        },
+        {
+          "IconName": "Comic Bubble"
+        },
+        {
+          "IconName": "Infrared"
+        },
+        {
+          "IconName": "Oral Disease"
+        },
+        {
+          "IconName": "Oxygen Saturation"
+        },
+        {
+          "IconName": "Destruction"
+        },
+        {
+          "IconName": "Person Cancel"
+        },
+        {
+          "IconName": "Stethoscope Check"
+        },
+        {
+          "IconName": "Ward"
+        },
+        {
+          "IconName": "Water Lux"
+        },
+        {
+          "IconName": "Humidity Percentage"
+        },
+        {
+          "IconName": "Water Ph"
+        },
+        {
+          "IconName": "Allergies"
+        },
+        {
+          "IconName": "Blood Pressure"
+        },
+        {
+          "IconName": "Manga"
+        },
+        {
+          "IconName": "Stethoscope Arrow"
+        },
+        {
+          "IconName": "Water Voc"
+        },
+        {
+          "IconName": "Allergy"
+        },
+        {
+          "IconName": "Mixture Med"
+        },
+        {
+          "IconName": "Ophthalmology"
+        },
+        {
+          "IconName": "Outpatient"
+        },
+        {
+          "IconName": "Pediatrics"
+        },
+        {
+          "IconName": "Rainy Snow"
+        },
+        {
+          "IconName": "Water Do"
+        },
+        {
+          "IconName": "Body Fat"
+        },
+        {
+          "IconName": "Gastroenterology"
+        },
+        {
+          "IconName": "Gynecology"
+        },
+        {
+          "IconName": "Immunology"
+        },
+        {
+          "IconName": "Oncology"
+        },
+        {
+          "IconName": "Pregnancy"
+        },
+        {
+          "IconName": "Respiratory Rate"
+        },
+        {
+          "IconName": "Short Stay"
+        },
+        {
+          "IconName": "Snowing Heavy"
+        },
+        {
+          "IconName": "Symptoms"
+        },
+        {
+          "IconName": "Syringe"
+        },
+        {
+          "IconName": "Water Bottle Large"
+        },
+        {
+          "IconName": "Water Orp"
+        },
+        {
+          "IconName": "Wounds Injuries"
+        },
+        {
+          "IconName": "Admin Meds"
+        },
+        {
+          "IconName": "Editor Choice"
+        },
+        {
+          "IconName": "Endocrinology"
+        },
+        {
+          "IconName": "Fluid Balance"
+        },
+        {
+          "IconName": "Hematology"
+        },
+        {
+          "IconName": "Inpatient"
+        },
+        {
+          "IconName": "Moving Beds"
+        },
+        {
+          "IconName": "Nephrology"
+        },
+        {
+          "IconName": "Procedure"
+        },
+        {
+          "IconName": "Pulse Alert"
+        },
+        {
+          "IconName": "Rainy Light"
+        },
+        {
+          "IconName": "Salinity"
+        },
+        {
+          "IconName": "Candle"
+        },
+        {
+          "IconName": "Congenital"
+        },
+        {
+          "IconName": "Family Star"
+        },
+        {
+          "IconName": "Fluid"
+        },
+        {
+          "IconName": "Fluid Med"
+        },
+        {
+          "IconName": "Medical Mask"
+        },
+        {
+          "IconName": "Outpatient Med"
+        },
+        {
+          "IconName": "Rainy Heavy"
+        },
+        {
+          "IconName": "Surgical"
+        },
+        {
+          "IconName": "Total Dissolved Solids"
+        },
+        {
+          "IconName": "Urology"
+        },
+        {
+          "IconName": "Water Ec"
+        },
+        {
+          "IconName": "Kid Star"
+        },
+        {
+          "IconName": "Pill Off"
+        }
+      ]
+    },
+    {
+      "GroupName": " Common actions",
+      "IconsList": [
+        {
+          "IconName": "Account Circle"
+        },
+        {
+          "IconName": "Info"
+        },
+        {
+          "IconName": "Visibility"
+        },
+        {
+          "IconName": "Calendar Month"
+        },
+        {
+          "IconName": "Schedule"
+        },
+        {
+          "IconName": "Help"
+        },
+        {
+          "IconName": "Warning"
+        },
+        {
+          "IconName": "Language"
+        },
+        {
+          "IconName": "Lock"
+        },
+        {
+          "IconName": "Error"
+        },
+        {
+          "IconName": "Visibility Off"
+        },
+        {
+          "IconName": "Verified"
+        },
+        {
+          "IconName": "Manage Accounts"
+        },
+        {
+          "IconName": "History"
+        },
+        {
+          "IconName": "Task Alt"
+        },
+        {
+          "IconName": "Event"
+        },
+        {
+          "IconName": "Bookmark"
+        },
+        {
+          "IconName": "Calendar Today"
+        },
+        {
+          "IconName": "Question Mark"
+        },
+        {
+          "IconName": "Lightbulb"
+        },
+        {
+          "IconName": "Fingerprint"
+        },
+        {
+          "IconName": "Category"
+        },
+        {
+          "IconName": "Update"
+        },
+        {
+          "IconName": "Lock Open"
+        },
+        {
+          "IconName": "Priority High"
+        },
+        {
+          "IconName": "Code"
+        },
+        {
+          "IconName": "Build"
+        },
+        {
+          "IconName": "Date Range"
+        },
+        {
+          "IconName": "Supervisor Account"
+        },
+        {
+          "IconName": "Upload File"
+        },
+        {
+          "IconName": "Event Available"
+        },
+        {
+          "IconName": "Ads Click"
+        },
+        {
+          "IconName": "Today"
+        },
+        {
+          "IconName": "Touch App"
+        },
+        {
+          "IconName": "Pending"
+        },
+        {
+          "IconName": "Preview"
+        },
+        {
+          "IconName": "Stars"
+        },
+        {
+          "IconName": "New Releases"
+        },
+        {
+          "IconName": "Celebration"
+        },
+        {
+          "IconName": "Account Box"
+        },
+        {
+          "IconName": "Bug Report"
+        },
+        {
+          "IconName": "Translate"
+        },
+        {
+          "IconName": "How To Reg"
+        },
+        {
+          "IconName": "Push Pin"
+        },
+        {
+          "IconName": "Alarm"
+        },
+        {
+          "IconName": "Edit Calendar"
+        },
+        {
+          "IconName": "Edit Square"
+        },
+        {
+          "IconName": "Label"
+        },
+        {
+          "IconName": "Extension"
+        },
+        {
+          "IconName": "Event Note"
+        },
+        {
+          "IconName": "Record Voice Over"
+        },
+        {
+          "IconName": "Rate Review"
+        },
+        {
+          "IconName": "Web"
+        },
+        {
+          "IconName": "Hourglass Empty"
+        },
+        {
+          "IconName": "Published With Changes"
+        },
+        {
+          "IconName": "Support"
+        },
+        {
+          "IconName": "Notification Important"
+        },
+        {
+          "IconName": "Accessibility New"
+        },
+        {
+          "IconName": "Help Center"
+        },
+        {
+          "IconName": "Bookmarks"
+        },
+        {
+          "IconName": "Pan Tool Alt"
+        },
+        {
+          "IconName": "Dangerous"
+        },
+        {
+          "IconName": "Supervised User Circle"
+        },
+        {
+          "IconName": "Interests"
+        },
+        {
+          "IconName": "Collections Bookmark"
+        },
+        {
+          "IconName": "All Inclusive"
+        },
+        {
+          "IconName": "Rule"
+        },
+        {
+          "IconName": "Priority"
+        },
+        {
+          "IconName": "Change History"
+        },
+        {
+          "IconName": "Event Upcoming"
+        },
+        {
+          "IconName": "Build Circle"
+        },
+        {
+          "IconName": "Api"
+        },
+        {
+          "IconName": "Wysiwyg"
+        },
+        {
+          "IconName": "Pan Tool"
+        },
+        {
+          "IconName": "Hotel Class"
+        },
+        {
+          "IconName": "Circle Notifications"
+        },
+        {
+          "IconName": "Manage History"
+        },
+        {
+          "IconName": "Web Asset"
+        },
+        {
+          "IconName": "Accessible"
+        },
+        {
+          "IconName": "Upgrade"
+        },
+        {
+          "IconName": "Input"
+        },
+        {
+          "IconName": "Bookmark Add"
+        },
+        {
+          "IconName": "Lock Reset"
+        },
+        {
+          "IconName": "Event Busy"
+        },
+        {
+          "IconName": "Model Training"
+        },
+        {
+          "IconName": "More Time"
+        },
+        {
+          "IconName": "Flutter Dash"
+        },
+        {
+          "IconName": "Save As"
+        },
+        {
+          "IconName": "Backup"
+        },
+        {
+          "IconName": "Dynamic Feed"
+        },
+        {
+          "IconName": "Accessibility"
+        },
+        {
+          "IconName": "Alarm On"
+        },
+        {
+          "IconName": "Pageview"
+        },
+        {
+          "IconName": "Home App Logo"
+        },
+        {
+          "IconName": "Label Important"
+        },
+        {
+          "IconName": "Perm Contact Calendar"
+        },
+        {
+          "IconName": "Approval"
+        },
+        {
+          "IconName": "Square Foot"
+        },
+        {
+          "IconName": "History Toggle Off"
+        },
+        {
+          "IconName": "More"
+        },
+        {
+          "IconName": "Swipe"
+        },
+        {
+          "IconName": "Component Exchange"
+        },
+        {
+          "IconName": "Event Repeat"
+        },
+        {
+          "IconName": "Bookmark Added"
+        },
+        {
+          "IconName": "App Shortcut"
+        },
+        {
+          "IconName": "Unpublished"
+        },
+        {
+          "IconName": "Open In Browser"
+        },
+        {
+          "IconName": "Notification Add"
+        },
+        {
+          "IconName": "Offline Bolt"
+        },
+        {
+          "IconName": "No Accounts"
+        },
+        {
+          "IconName": "Free Cancellation"
+        },
+        {
+          "IconName": "Background Replace"
+        },
+        {
+          "IconName": "Running With Errors"
+        },
+        {
+          "IconName": "Webhook"
+        },
+        {
+          "IconName": "Anchor"
+        },
+        {
+          "IconName": "3d Rotation"
+        },
+        {
+          "IconName": "Lock Person"
+        },
+        {
+          "IconName": "New Label"
+        },
+        {
+          "IconName": "Lock Clock"
+        },
+        {
+          "IconName": "Accessible Forward"
+        },
+        {
+          "IconName": "Auto Delete"
+        },
+        {
+          "IconName": "Add Alert"
+        },
+        {
+          "IconName": "Domain Verification"
+        },
+        {
+          "IconName": "Outbound"
+        },
+        {
+          "IconName": "Hand Gesture"
+        },
+        {
+          "IconName": "Tab"
+        },
+        {
+          "IconName": "Chrome Reader Mode"
+        },
+        {
+          "IconName": "Settings Power"
+        },
+        {
+          "IconName": "Online Prediction"
+        },
+        {
+          "IconName": "Gesture"
+        },
+        {
+          "IconName": "Lightbulb Circle"
+        },
+        {
+          "IconName": "Edit Notifications"
+        },
+        {
+          "IconName": "Find Replace"
+        },
+        {
+          "IconName": "Offline Pin"
+        },
+        {
+          "IconName": "Backup Table"
+        },
+        {
+          "IconName": "Ad Units"
+        },
+        {
+          "IconName": "Wifi Protected Setup"
+        },
+        {
+          "IconName": "Http"
+        },
+        {
+          "IconName": "Bookmark Remove"
+        },
+        {
+          "IconName": "Alarm Add"
+        },
+        {
+          "IconName": "Pinch Zoom Out"
+        },
+        {
+          "IconName": "On Device Training"
+        },
+        {
+          "IconName": "Snooze"
+        },
+        {
+          "IconName": "Batch Prediction"
+        },
+        {
+          "IconName": "Code Off"
+        },
+        {
+          "IconName": "Target"
+        },
+        {
+          "IconName": "Pinch Zoom In"
+        },
+        {
+          "IconName": "Commit"
+        },
+        {
+          "IconName": "Feedback"
+        },
+        {
+          "IconName": "Hourglass Disabled"
+        },
+        {
+          "IconName": "Settings Overscan"
+        },
+        {
+          "IconName": "Polymer"
+        },
+        {
+          "IconName": "Youtube Activity"
+        },
+        {
+          "IconName": "Logo Dev"
+        },
+        {
+          "IconName": "Time Auto"
+        },
+        {
+          "IconName": "Voice Over Off"
+        },
+        {
+          "IconName": "Alarm Off"
+        },
+        {
+          "IconName": "Person Add Disabled"
+        },
+        {
+          "IconName": "Update Disabled"
+        },
+        {
+          "IconName": "Timer 10 Alt 1"
+        },
+        {
+          "IconName": "Manufacturing"
+        },
+        {
+          "IconName": "Rounded Corner"
+        },
+        {
+          "IconName": "Label Off"
+        },
+        {
+          "IconName": "Timer 3 Alt 1"
+        },
+        {
+          "IconName": "All Out"
+        },
+        {
+          "IconName": "Tab Unselected"
+        },
+        {
+          "IconName": "Rsvp"
+        },
+        {
+          "IconName": "Web Asset Off"
+        },
+        {
+          "IconName": "Pin Invoke"
+        },
+        {
+          "IconName": "Web Traffic"
+        },
+        {
+          "IconName": "Pin End"
+        },
+        {
+          "IconName": "Code Blocks"
+        },
+        {
+          "IconName": "Arrow Selector Tool"
+        },
+        {
+          "IconName": "Approval Delegation"
+        },
+        {
+          "IconName": "Contacts Product"
+        },
+        {
+          "IconName": "Developer Guide"
+        },
+        {
+          "IconName": "Flutter"
+        },
+        {
+          "IconName": "License"
+        },
+        {
+          "IconName": "Reminder"
+        },
+        {
+          "IconName": "Feature Search"
+        },
+        {
+          "IconName": "Lists"
+        },
+        {
+          "IconName": "Problem"
+        },
+        {
+          "IconName": "User Attributes"
+        },
+        {
+          "IconName": "Browse"
+        },
+        {
+          "IconName": "Sdk"
+        },
+        {
+          "IconName": "Visibility Lock"
+        },
+        {
+          "IconName": "Award Star"
+        },
+        {
+          "IconName": "Release Alert"
+        },
+        {
+          "IconName": "Data Loss Prevention"
+        },
+        {
+          "IconName": "Ad Group"
+        },
+        {
+          "IconName": "Select Window"
+        },
+        {
+          "IconName": "Pan Zoom"
+        },
+        {
+          "IconName": "Search Hands Free"
+        },
+        {
+          "IconName": "Ad"
+        },
+        {
+          "IconName": "Settings Account Box"
+        },
+        {
+          "IconName": "Lock Open Right"
+        },
+        {
+          "IconName": "Draft Orders"
+        },
+        {
+          "IconName": "Ad Group Off"
+        },
+        {
+          "IconName": "Account Child Invert"
+        },
+        {
+          "IconName": "Account Child"
+        },
+        {
+          "IconName": "Shadow"
+        },
+        {
+          "IconName": "Add Ad"
+        },
+        {
+          "IconName": "Circles Ext"
+        },
+        {
+          "IconName": "Calendar Clock"
+        },
+        {
+          "IconName": "Gesture Select"
+        },
+        {
+          "IconName": "Bookmark Manager"
+        },
+        {
+          "IconName": "Hourglass"
+        },
+        {
+          "IconName": "Watch Screentime"
+        },
+        {
+          "IconName": "Account Circle Off"
+        },
+        {
+          "IconName": "Shift"
+        },
+        {
+          "IconName": "Ad Off"
+        },
+        {
+          "IconName": "Select Window Off"
+        },
+        {
+          "IconName": "Indeterminate Question Box"
+        },
+        {
+          "IconName": "Unlicense"
+        },
+        {
+          "IconName": "Alarm Smart Wake"
+        },
+        {
+          "IconName": "Circles"
+        },
+        {
+          "IconName": "Water Lock"
+        },
+        {
+          "IconName": "Help Clinic"
+        },
+        {
+          "IconName": "Scrollable Header"
+        },
+        {
+          "IconName": "Info I"
+        },
+        {
+          "IconName": "Warning Off"
+        },
+        {
+          "IconName": "Supervised User Circle Off"
+        },
+        {
+          "IconName": "Preview Off"
+        },
+        {
+          "IconName": "Domain Verification Off"
+        },
+        {
+          "IconName": "Measuring Tape"
+        },
+        {
+          "IconName": "Shift Lock"
+        },
+        {
+          "IconName": "Delete History"
+        },
+        {
+          "IconName": "Shadow Add"
+        },
+        {
+          "IconName": "Shadow Minus"
+        }
+      ]
+    },
+    {
+      "GroupName": " Communication",
+      "IconsList": [
+        {
+          "IconName": "Mail"
+        },
+        {
+          "IconName": "Call"
+        },
+        {
+          "IconName": "Notifications"
+        },
+        {
+          "IconName": "Send"
+        },
+        {
+          "IconName": "Chat"
+        },
+        {
+          "IconName": "Link"
+        },
+        {
+          "IconName": "Forum"
+        },
+        {
+          "IconName": "Inventory 2"
+        },
+        {
+          "IconName": "Phone In Talk"
+        },
+        {
+          "IconName": "Chat Bubble"
+        },
+        {
+          "IconName": "Contact Support"
+        },
+        {
+          "IconName": "Notifications Active"
+        },
+        {
+          "IconName": "Alternate Email"
+        },
+        {
+          "IconName": "Sms"
+        },
+        {
+          "IconName": "Comment"
+        },
+        {
+          "IconName": "Power Settings New"
+        },
+        {
+          "IconName": "Hub"
+        },
+        {
+          "IconName": "Person Search"
+        },
+        {
+          "IconName": "Import Contacts"
+        },
+        {
+          "IconName": "Contacts"
+        },
+        {
+          "IconName": "Contact Mail"
+        },
+        {
+          "IconName": "Live Help"
+        },
+        {
+          "IconName": "Forward To Inbox"
+        },
+        {
+          "IconName": "Reviews"
+        },
+        {
+          "IconName": "Mark Email Unread"
+        },
+        {
+          "IconName": "Lan"
+        },
+        {
+          "IconName": "Hourglass Top"
+        },
+        {
+          "IconName": "Contact Phone"
+        },
+        {
+          "IconName": "Mode Comment"
+        },
+        {
+          "IconName": "Inbox"
+        },
+        {
+          "IconName": "Drafts"
+        },
+        {
+          "IconName": "Outgoing Mail"
+        },
+        {
+          "IconName": "Hourglass Bottom"
+        },
+        {
+          "IconName": "Mark Email Read"
+        },
+        {
+          "IconName": "Link Off"
+        },
+        {
+          "IconName": "Calendar Add On"
+        },
+        {
+          "IconName": "Add Comment"
+        },
+        {
+          "IconName": "Phone Enabled"
+        },
+        {
+          "IconName": "G Translate"
+        },
+        {
+          "IconName": "Speaker Notes"
+        },
+        {
+          "IconName": "Perm Phone Msg"
+        },
+        {
+          "IconName": "Co Present"
+        },
+        {
+          "IconName": "Notifications Off"
+        },
+        {
+          "IconName": "Call End"
+        },
+        {
+          "IconName": "Topic"
+        },
+        {
+          "IconName": "Cell Tower"
+        },
+        {
+          "IconName": "Mark Chat Unread"
+        },
+        {
+          "IconName": "Schedule Send"
+        },
+        {
+          "IconName": "Dialpad"
+        },
+        {
+          "IconName": "Call Made"
+        },
+        {
+          "IconName": "Satellite Alt"
+        },
+        {
+          "IconName": "Mark Unread Chat Alt"
+        },
+        {
+          "IconName": "Unarchive"
+        },
+        {
+          "IconName": "3p"
+        },
+        {
+          "IconName": "Cancel Presentation"
+        },
+        {
+          "IconName": "Mark As Unread"
+        },
+        {
+          "IconName": "Move To Inbox"
+        },
+        {
+          "IconName": "Attach Email"
+        },
+        {
+          "IconName": "Next Plan"
+        },
+        {
+          "IconName": "Phonelink Ring"
+        },
+        {
+          "IconName": "Unsubscribe"
+        },
+        {
+          "IconName": "Phone Callback"
+        },
+        {
+          "IconName": "Call Received"
+        },
+        {
+          "IconName": "Settings Phone"
+        },
+        {
+          "IconName": "Call Split"
+        },
+        {
+          "IconName": "Present To All"
+        },
+        {
+          "IconName": "Add Call"
+        },
+        {
+          "IconName": "Markunread Mailbox"
+        },
+        {
+          "IconName": "All Inbox"
+        },
+        {
+          "IconName": "Voice Chat"
+        },
+        {
+          "IconName": "Phone Forwarded"
+        },
+        {
+          "IconName": "Mail Lock"
+        },
+        {
+          "IconName": "Attribution"
+        },
+        {
+          "IconName": "Voicemail"
+        },
+        {
+          "IconName": "Duo"
+        },
+        {
+          "IconName": "Contact Emergency"
+        },
+        {
+          "IconName": "Mark Chat Read"
+        },
+        {
+          "IconName": "Upcoming"
+        },
+        {
+          "IconName": "Phone Disabled"
+        },
+        {
+          "IconName": "Swap Calls"
+        },
+        {
+          "IconName": "Outbox"
+        },
+        {
+          "IconName": "Phonelink Lock"
+        },
+        {
+          "IconName": "Spoke"
+        },
+        {
+          "IconName": "Picture In Picture Alt"
+        },
+        {
+          "IconName": "Cancel Schedule Send"
+        },
+        {
+          "IconName": "Ring Volume"
+        },
+        {
+          "IconName": "Notifications Paused"
+        },
+        {
+          "IconName": "Quickreply"
+        },
+        {
+          "IconName": "Phone Missed"
+        },
+        {
+          "IconName": "Comment Bank"
+        },
+        {
+          "IconName": "Chat Add On"
+        },
+        {
+          "IconName": "Send And Archive"
+        },
+        {
+          "IconName": "Phonelink Erase"
+        },
+        {
+          "IconName": "Picture In Picture"
+        },
+        {
+          "IconName": "Settings Bluetooth"
+        },
+        {
+          "IconName": "Comments Disabled"
+        },
+        {
+          "IconName": "Video Chat"
+        },
+        {
+          "IconName": "Score"
+        },
+        {
+          "IconName": "Pause Presentation"
+        },
+        {
+          "IconName": "Speaker Phone"
+        },
+        {
+          "IconName": "Cell Wifi"
+        },
+        {
+          "IconName": "Speaker Notes Off"
+        },
+        {
+          "IconName": "Auto Read Play"
+        },
+        {
+          "IconName": "Mms"
+        },
+        {
+          "IconName": "Call Merge"
+        },
+        {
+          "IconName": "Play For Work"
+        },
+        {
+          "IconName": "Call Missed Outgoing"
+        },
+        {
+          "IconName": "Call Missed"
+        },
+        {
+          "IconName": "Wifi Channel"
+        },
+        {
+          "IconName": "Calendar Apps Script"
+        },
+        {
+          "IconName": "Phone Paused"
+        },
+        {
+          "IconName": "RTT"
+        },
+        {
+          "IconName": "Auto Read Pause"
+        },
+        {
+          "IconName": "Phone Locked"
+        },
+        {
+          "IconName": "Wifi Calling"
+        },
+        {
+          "IconName": "Chat Apps Script"
+        },
+        {
+          "IconName": "Dialer Sip"
+        },
+        {
+          "IconName": "Nat"
+        },
+        {
+          "IconName": "Sip"
+        },
+        {
+          "IconName": "Phone Bluetooth Speaker"
+        },
+        {
+          "IconName": "E911 Avatar"
+        },
+        {
+          "IconName": "Inbox Customize"
+        },
+        {
+          "IconName": "Stacked Email"
+        },
+        {
+          "IconName": "Business Messages"
+        },
+        {
+          "IconName": "Tooltip"
+        },
+        {
+          "IconName": "For You"
+        },
+        {
+          "IconName": "Chat Error"
+        },
+        {
+          "IconName": "Notification Multiple"
+        },
+        {
+          "IconName": "Chat Paste Go"
+        },
+        {
+          "IconName": "Ods"
+        },
+        {
+          "IconName": "Picture In Picture Small"
+        },
+        {
+          "IconName": "Call Quality"
+        },
+        {
+          "IconName": "Picture In Picture Off"
+        },
+        {
+          "IconName": "Signal Cellular Add"
+        },
+        {
+          "IconName": "Call Log"
+        },
+        {
+          "IconName": "Outbox Alt"
+        },
+        {
+          "IconName": "Chat Info"
+        },
+        {
+          "IconName": "Odt"
+        },
+        {
+          "IconName": "Network Intelligence Update"
+        },
+        {
+          "IconName": "Phonelink Ring Off"
+        },
+        {
+          "IconName": "Network Intelligence History"
+        },
+        {
+          "IconName": "Stacked Inbox"
+        },
+        {
+          "IconName": "Wifi Add"
+        },
+        {
+          "IconName": "Picture In Picture Medium"
+        },
+        {
+          "IconName": "Wifi Proxy"
+        },
+        {
+          "IconName": "Network Manage"
+        },
+        {
+          "IconName": "Picture In Picture Center"
+        },
+        {
+          "IconName": "Picture In Picture Large"
+        },
+        {
+          "IconName": "Notifications Unread"
+        },
+        {
+          "IconName": "Picture In Picture Mobile"
+        }
+      ]
+    },
+    {
+      "GroupName": " Photo &amp; Image",
+      "IconsList": [
+        {
+          "IconName": "Edit"
+        },
+        {
+          "IconName": "Photo Camera"
+        },
+        {
+          "IconName": "Filter Alt"
+        },
+        {
+          "IconName": "Image"
+        },
+        {
+          "IconName": "Navigate Next"
+        },
+        {
+          "IconName": "Tune"
+        },
+        {
+          "IconName": "Timer"
+        },
+        {
+          "IconName": "Picture As Pdf"
+        },
+        {
+          "IconName": "Circle"
+        },
+        {
+          "IconName": "Palette"
+        },
+        {
+          "IconName": "Add A Photo"
+        },
+        {
+          "IconName": "Photo Library"
+        },
+        {
+          "IconName": "Navigate Before"
+        },
+        {
+          "IconName": "Auto Stories"
+        },
+        {
+          "IconName": "Add Photo Alternate"
+        },
+        {
+          "IconName": "Brush"
+        },
+        {
+          "IconName": "Imagesmode"
+        },
+        {
+          "IconName": "Nature"
+        },
+        {
+          "IconName": "Flash On"
+        },
+        {
+          "IconName": "Wb Sunny"
+        },
+        {
+          "IconName": "Camera"
+        },
+        {
+          "IconName": "Looks One"
+        },
+        {
+          "IconName": "Straighten"
+        },
+        {
+          "IconName": "Landscape"
+        },
+        {
+          "IconName": "Timelapse"
+        },
+        {
+          "IconName": "Slideshow"
+        },
+        {
+          "IconName": "Grid On"
+        },
+        {
+          "IconName": "Rotate Right"
+        },
+        {
+          "IconName": "Crop Square"
+        },
+        {
+          "IconName": "Crop Free"
+        },
+        {
+          "IconName": "Adjust"
+        },
+        {
+          "IconName": "Style"
+        },
+        {
+          "IconName": "Aspect Ratio"
+        },
+        {
+          "IconName": "Brightness 6"
+        },
+        {
+          "IconName": "Photo"
+        },
+        {
+          "IconName": "Nature People"
+        },
+        {
+          "IconName": "Filter Vintage"
+        },
+        {
+          "IconName": "Image Search"
+        },
+        {
+          "IconName": "Crop"
+        },
+        {
+          "IconName": "Blur On"
+        },
+        {
+          "IconName": "Center Focus Strong"
+        },
+        {
+          "IconName": "Contrast"
+        },
+        {
+          "IconName": "Compare"
+        },
+        {
+          "IconName": "Looks Two"
+        },
+        {
+          "IconName": "Rotate Left"
+        },
+        {
+          "IconName": "Colorize"
+        },
+        {
+          "IconName": "Flare"
+        },
+        {
+          "IconName": "Filter None"
+        },
+        {
+          "IconName": "Wb Incandescent"
+        },
+        {
+          "IconName": "Filter Drama"
+        },
+        {
+          "IconName": "Healing"
+        },
+        {
+          "IconName": "Wb Twilight"
+        },
+        {
+          "IconName": "Looks 3"
+        },
+        {
+          "IconName": "Brightness 5"
+        },
+        {
+          "IconName": "Invert Colors"
+        },
+        {
+          "IconName": "Animation"
+        },
+        {
+          "IconName": "Lens"
+        },
+        {
+          "IconName": "Opacity"
+        },
+        {
+          "IconName": "Incomplete Circle"
+        },
+        {
+          "IconName": "Broken Image"
+        },
+        {
+          "IconName": "Filter Center Focus"
+        },
+        {
+          "IconName": "Add To Photos"
+        },
+        {
+          "IconName": "Brightness 4"
+        },
+        {
+          "IconName": "Flash Off"
+        },
+        {
+          "IconName": "Flip"
+        },
+        {
+          "IconName": "Auto Awesome Motion"
+        },
+        {
+          "IconName": "Center Focus Weak"
+        },
+        {
+          "IconName": "Flip Camera Android"
+        },
+        {
+          "IconName": "Mic External On"
+        },
+        {
+          "IconName": "Grain"
+        },
+        {
+          "IconName": "Lens Blur"
+        },
+        {
+          "IconName": "No Photography"
+        },
+        {
+          "IconName": "Details"
+        },
+        {
+          "IconName": "Panorama"
+        },
+        {
+          "IconName": "Web Stories"
+        },
+        {
+          "IconName": "GIF Box"
+        },
+        {
+          "IconName": "Dehaze"
+        },
+        {
+          "IconName": "Flaky"
+        },
+        {
+          "IconName": "Exposure Plus 1"
+        },
+        {
+          "IconName": "Loupe"
+        },
+        {
+          "IconName": "Settings Brightness"
+        },
+        {
+          "IconName": "Auto Awesome Mosaic"
+        },
+        {
+          "IconName": "Looks 4"
+        },
+        {
+          "IconName": "Texture"
+        },
+        {
+          "IconName": "Filter 1"
+        },
+        {
+          "IconName": "Flip Camera iOS"
+        },
+        {
+          "IconName": "Timer Off"
+        },
+        {
+          "IconName": "Panorama Fish Eye"
+        },
+        {
+          "IconName": "Brightness 1"
+        },
+        {
+          "IconName": "View Compact"
+        },
+        {
+          "IconName": "Filter"
+        },
+        {
+          "IconName": "Control Point Duplicate"
+        },
+        {
+          "IconName": "Photo Camera Front"
+        },
+        {
+          "IconName": "Brightness 7"
+        },
+        {
+          "IconName": "Photo Album"
+        },
+        {
+          "IconName": "Transform"
+        },
+        {
+          "IconName": "View Comfy"
+        },
+        {
+          "IconName": "Linked Camera"
+        },
+        {
+          "IconName": "Crop 16 9"
+        },
+        {
+          "IconName": "Hide Image"
+        },
+        {
+          "IconName": "Looks"
+        },
+        {
+          "IconName": "Looks 5"
+        },
+        {
+          "IconName": "Exposure"
+        },
+        {
+          "IconName": "Filter Hdr"
+        },
+        {
+          "IconName": "Rotate 90 Degrees Ccw"
+        },
+        {
+          "IconName": "GIF"
+        },
+        {
+          "IconName": "Brightness 3"
+        },
+        {
+          "IconName": "Hdr Strong"
+        },
+        {
+          "IconName": "Leak Add"
+        },
+        {
+          "IconName": "Gradient"
+        },
+        {
+          "IconName": "Hdr Auto"
+        },
+        {
+          "IconName": "Crop 7 5"
+        },
+        {
+          "IconName": "Vrpano"
+        },
+        {
+          "IconName": "Crop Portrait"
+        },
+        {
+          "IconName": "Camera Roll"
+        },
+        {
+          "IconName": "Motion Photos Auto"
+        },
+        {
+          "IconName": "Blur Circular"
+        },
+        {
+          "IconName": "Rotate 90 Degrees Cw"
+        },
+        {
+          "IconName": "Photo Size Select Small"
+        },
+        {
+          "IconName": "Brightness 2"
+        },
+        {
+          "IconName": "Looks 6"
+        },
+        {
+          "IconName": "Shutter Speed"
+        },
+        {
+          "IconName": "Camera Front"
+        },
+        {
+          "IconName": "Flash Auto"
+        },
+        {
+          "IconName": "Filter 2"
+        },
+        {
+          "IconName": "Crop Landscape"
+        },
+        {
+          "IconName": "Filter Tilt Shift"
+        },
+        {
+          "IconName": "Deblur"
+        },
+        {
+          "IconName": "Monochrome Photos"
+        },
+        {
+          "IconName": "Night Sight Auto"
+        },
+        {
+          "IconName": "Motion Photos Paused"
+        },
+        {
+          "IconName": "Crop 5 4"
+        },
+        {
+          "IconName": "Filter 4"
+        },
+        {
+          "IconName": "Hdr Weak"
+        },
+        {
+          "IconName": "Filter 3"
+        },
+        {
+          "IconName": "Crop Rotate"
+        },
+        {
+          "IconName": "Crop 3 2"
+        },
+        {
+          "IconName": "Tonality"
+        },
+        {
+          "IconName": "Ev Shadow"
+        },
+        {
+          "IconName": "Switch Camera"
+        },
+        {
+          "IconName": "Fluorescent"
+        },
+        {
+          "IconName": "Photo Frame"
+        },
+        {
+          "IconName": "Exposure Zero"
+        },
+        {
+          "IconName": "Photo Size Select Large"
+        },
+        {
+          "IconName": "Macro Off"
+        },
+        {
+          "IconName": "Filter Frames"
+        },
+        {
+          "IconName": "Party Mode"
+        },
+        {
+          "IconName": "Raw On"
+        },
+        {
+          "IconName": "Motion Blur"
+        },
+        {
+          "IconName": "Exposure Plus 2"
+        },
+        {
+          "IconName": "Photo Camera Back"
+        },
+        {
+          "IconName": "Blur Linear"
+        },
+        {
+          "IconName": "Exposure Neg 1"
+        },
+        {
+          "IconName": "Filter B And W"
+        },
+        {
+          "IconName": "Motion Photos Off"
+        },
+        {
+          "IconName": "Wb Iridescent"
+        },
+        {
+          "IconName": "Face Retouching Off"
+        },
+        {
+          "IconName": "Switch Video"
+        },
+        {
+          "IconName": "Panorama Horizontal"
+        },
+        {
+          "IconName": "Filter 5"
+        },
+        {
+          "IconName": "Blur Medium"
+        },
+        {
+          "IconName": "Invert Colors Off"
+        },
+        {
+          "IconName": "Filter 7"
+        },
+        {
+          "IconName": "Burst Mode"
+        },
+        {
+          "IconName": "Panorama Photosphere"
+        },
+        {
+          "IconName": "Hdr On"
+        },
+        {
+          "IconName": "Grid Off"
+        },
+        {
+          "IconName": "Filter 9 Plus"
+        },
+        {
+          "IconName": "Timer 10"
+        },
+        {
+          "IconName": "Filter 8"
+        },
+        {
+          "IconName": "Blur Short"
+        },
+        {
+          "IconName": "Dirty Lens"
+        },
+        {
+          "IconName": "Filter 9"
+        },
+        {
+          "IconName": "Wb Shade"
+        },
+        {
+          "IconName": "No Flash"
+        },
+        {
+          "IconName": "Filter 6"
+        },
+        {
+          "IconName": "Image Aspect Ratio"
+        },
+        {
+          "IconName": "Trail Length"
+        },
+        {
+          "IconName": "Exposure Neg 2"
+        },
+        {
+          "IconName": "Vignette"
+        },
+        {
+          "IconName": "Timer 3"
+        },
+        {
+          "IconName": "Leak Remove"
+        },
+        {
+          "IconName": "Blur Off"
+        },
+        {
+          "IconName": "60fps Select"
+        },
+        {
+          "IconName": "Perm Camera Mic"
+        },
+        {
+          "IconName": "30fps Select"
+        },
+        {
+          "IconName": "Trail Length Medium"
+        },
+        {
+          "IconName": "Camera Rear"
+        },
+        {
+          "IconName": "Mic External Off"
+        },
+        {
+          "IconName": "Trail Length Short"
+        },
+        {
+          "IconName": "Panorama Vertical"
+        },
+        {
+          "IconName": "Night Sight Auto Off"
+        },
+        {
+          "IconName": "Autofps Select"
+        },
+        {
+          "IconName": "Panorama Wide Angle"
+        },
+        {
+          "IconName": "Hdr Enhanced Select"
+        },
+        {
+          "IconName": "Mp"
+        },
+        {
+          "IconName": "Hdr Off"
+        },
+        {
+          "IconName": "24mp"
+        },
+        {
+          "IconName": "Hdr On Select"
+        },
+        {
+          "IconName": "22mp"
+        },
+        {
+          "IconName": "10mp"
+        },
+        {
+          "IconName": "12mp"
+        },
+        {
+          "IconName": "Hdr Plus"
+        },
+        {
+          "IconName": "18mp"
+        },
+        {
+          "IconName": "Hdr Auto Select"
+        },
+        {
+          "IconName": "Raw Off"
+        },
+        {
+          "IconName": "Wb Auto"
+        },
+        {
+          "IconName": "9mp"
+        },
+        {
+          "IconName": "13mp"
+        },
+        {
+          "IconName": "Hevc"
+        },
+        {
+          "IconName": "20mp"
+        },
+        {
+          "IconName": "5mp"
+        },
+        {
+          "IconName": "7mp"
+        },
+        {
+          "IconName": "15mp"
+        },
+        {
+          "IconName": "Hdr Off Select"
+        },
+        {
+          "IconName": "16mp"
+        },
+        {
+          "IconName": "19mp"
+        },
+        {
+          "IconName": "2mp"
+        },
+        {
+          "IconName": "14mp"
+        },
+        {
+          "IconName": "23mp"
+        },
+        {
+          "IconName": "8mp"
+        },
+        {
+          "IconName": "3mp"
+        },
+        {
+          "IconName": "6mp"
+        },
+        {
+          "IconName": "11mp"
+        },
+        {
+          "IconName": "21mp"
+        },
+        {
+          "IconName": "4mp"
+        },
+        {
+          "IconName": "17mp"
+        },
+        {
+          "IconName": "Gallery Thumbnail"
+        },
+        {
+          "IconName": "Masked Transitions"
+        },
+        {
+          "IconName": "Motion Photos On"
+        },
+        {
+          "IconName": "Settings B Roll"
+        },
+        {
+          "IconName": "Vr180 Create2d"
+        },
+        {
+          "IconName": "Settings Photo Camera"
+        },
+        {
+          "IconName": "Photo Prints"
+        },
+        {
+          "IconName": "Settings Video Camera"
+        },
+        {
+          "IconName": "Planner Banner Ad Pt"
+        },
+        {
+          "IconName": "Settings Panorama"
+        },
+        {
+          "IconName": "Settings Timelapse"
+        },
+        {
+          "IconName": "Settings Night Sight"
+        },
+        {
+          "IconName": "Unknown 2"
+        },
+        {
+          "IconName": "Motion Mode"
+        },
+        {
+          "IconName": "Settings Motion Mode"
+        },
+        {
+          "IconName": "Settings Cinematic Blur"
+        },
+        {
+          "IconName": "Vr180 Create2d Off"
+        },
+        {
+          "IconName": "Filter Retrolux"
+        },
+        {
+          "IconName": "50mp"
+        },
+        {
+          "IconName": "Background Dot Large"
+        },
+        {
+          "IconName": "Background Grid Small"
+        },
+        {
+          "IconName": "High Res"
+        },
+        {
+          "IconName": "Photo Auto Merge"
+        },
+        {
+          "IconName": "Settings Slow Motion"
+        },
+        {
+          "IconName": "Shutter Speed Add"
+        },
+        {
+          "IconName": "Macro Auto"
+        },
+        {
+          "IconName": "Texture Add"
+        },
+        {
+          "IconName": "Background Dot Small"
+        },
+        {
+          "IconName": "Crop 9 16"
+        },
+        {
+          "IconName": "Ev Shadow Add"
+        },
+        {
+          "IconName": "High Density"
+        },
+        {
+          "IconName": "Low Density"
+        },
+        {
+          "IconName": "Shutter Speed Minus"
+        },
+        {
+          "IconName": "Texture Minus"
+        },
+        {
+          "IconName": "Transition Dissolve"
+        },
+        {
+          "IconName": "Transition Fade"
+        },
+        {
+          "IconName": "Contrast Rtl Off"
+        },
+        {
+          "IconName": "Ev Shadow Minus"
+        },
+        {
+          "IconName": "Hdr Plus Off"
+        },
+        {
+          "IconName": "Transition Slide"
+        },
+        {
+          "IconName": "Transition Chop"
+        },
+        {
+          "IconName": "Transition Push"
+        }
+      ]
+    },
+    {
+      "GroupName": " Business &amp; Payments",
+      "IconsList": [
+        {
+          "IconName": "Shopping Cart"
+        },
+        {
+          "IconName": "Payments"
+        },
+        {
+          "IconName": "Shopping Bag"
+        },
+        {
+          "IconName": "Monitoring"
+        },
+        {
+          "IconName": "Credit Card"
+        },
+        {
+          "IconName": "Receipt Long"
+        },
+        {
+          "IconName": "Attach Money"
+        },
+        {
+          "IconName": "Storefront"
+        },
+        {
+          "IconName": "Database"
+        },
+        {
+          "IconName": "Trending Up"
+        },
+        {
+          "IconName": "Sell"
+        },
+        {
+          "IconName": "Account Balance"
+        },
+        {
+          "IconName": "Work"
+        },
+        {
+          "IconName": "Paid"
+        },
+        {
+          "IconName": "Account Balance Wallet"
+        },
+        {
+          "IconName": "Analytics"
+        },
+        {
+          "IconName": "Query Stats"
+        },
+        {
+          "IconName": "Store"
+        },
+        {
+          "IconName": "Savings"
+        },
+        {
+          "IconName": "Monetization On"
+        },
+        {
+          "IconName": "Calculate"
+        },
+        {
+          "IconName": "Qr Code Scanner"
+        },
+        {
+          "IconName": "Bar Chart"
+        },
+        {
+          "IconName": "Account Tree"
+        },
+        {
+          "IconName": "Add Shopping Cart"
+        },
+        {
+          "IconName": "Receipt"
+        },
+        {
+          "IconName": "Redeem"
+        },
+        {
+          "IconName": "Currency Exchange"
+        },
+        {
+          "IconName": "Trending Flat"
+        },
+        {
+          "IconName": "Shopping Basket"
+        },
+        {
+          "IconName": "Qr Code 2"
+        },
+        {
+          "IconName": "Domain"
+        },
+        {
+          "IconName": "Precision Manufacturing"
+        },
+        {
+          "IconName": "Qr Code"
+        },
+        {
+          "IconName": "Leaderboard"
+        },
+        {
+          "IconName": "Corporate Fare"
+        },
+        {
+          "IconName": "Timeline"
+        },
+        {
+          "IconName": "Insert Chart"
+        },
+        {
+          "IconName": "Currency Rupee"
+        },
+        {
+          "IconName": "Wallet"
+        },
+        {
+          "IconName": "Show Chart"
+        },
+        {
+          "IconName": "Work History"
+        },
+        {
+          "IconName": "Euro"
+        },
+        {
+          "IconName": "Meeting Room"
+        },
+        {
+          "IconName": "Credit Score"
+        },
+        {
+          "IconName": "Barcode Scanner"
+        },
+        {
+          "IconName": "Pie Chart"
+        },
+        {
+          "IconName": "Loyalty"
+        },
+        {
+          "IconName": "Copyright"
+        },
+        {
+          "IconName": "Conversion Path"
+        },
+        {
+          "IconName": "Barcode"
+        },
+        {
+          "IconName": "Trending Down"
+        },
+        {
+          "IconName": "Track Changes"
+        },
+        {
+          "IconName": "Price Check"
+        },
+        {
+          "IconName": "Euro Symbol"
+        },
+        {
+          "IconName": "Schema"
+        },
+        {
+          "IconName": "Add Business"
+        },
+        {
+          "IconName": "Add Card"
+        },
+        {
+          "IconName": "Card Membership"
+        },
+        {
+          "IconName": "Currency Bitcoin"
+        },
+        {
+          "IconName": "Price Change"
+        },
+        {
+          "IconName": "Production Quantity Limits"
+        },
+        {
+          "IconName": "Donut Large"
+        },
+        {
+          "IconName": "Tenancy"
+        },
+        {
+          "IconName": "Data Exploration"
+        },
+        {
+          "IconName": "Bubble Chart"
+        },
+        {
+          "IconName": "Donut Small"
+        },
+        {
+          "IconName": "Contactless"
+        },
+        {
+          "IconName": "Money"
+        },
+        {
+          "IconName": "Stacked Line Chart"
+        },
+        {
+          "IconName": "Stacked Bar Chart"
+        },
+        {
+          "IconName": "Toll"
+        },
+        {
+          "IconName": "Money Off"
+        },
+        {
+          "IconName": "Cases"
+        },
+        {
+          "IconName": "Currency Yen"
+        },
+        {
+          "IconName": "Currency Pound"
+        },
+        {
+          "IconName": "Area Chart"
+        },
+        {
+          "IconName": "Atr"
+        },
+        {
+          "IconName": "Remove Shopping Cart"
+        },
+        {
+          "IconName": "Room Preferences"
+        },
+        {
+          "IconName": "Add Chart"
+        },
+        {
+          "IconName": "Shop"
+        },
+        {
+          "IconName": "Domain Add"
+        },
+        {
+          "IconName": "Grouped Bar Chart"
+        },
+        {
+          "IconName": "Card Travel"
+        },
+        {
+          "IconName": "Legend Toggle"
+        },
+        {
+          "IconName": "Scatter Plot"
+        },
+        {
+          "IconName": "Credit Card Off"
+        },
+        {
+          "IconName": "Mediation"
+        },
+        {
+          "IconName": "Ssid Chart"
+        },
+        {
+          "IconName": "Candlestick Chart"
+        },
+        {
+          "IconName": "Waterfall Chart"
+        },
+        {
+          "IconName": "Full Stacked Bar Chart"
+        },
+        {
+          "IconName": "Currency Ruble"
+        },
+        {
+          "IconName": "Domain Disabled"
+        },
+        {
+          "IconName": "Shop Two"
+        },
+        {
+          "IconName": "Strikethrough S"
+        },
+        {
+          "IconName": "Atm"
+        },
+        {
+          "IconName": "Next Week"
+        },
+        {
+          "IconName": "Multiline Chart"
+        },
+        {
+          "IconName": "Currency Lira"
+        },
+        {
+          "IconName": "Currency Yuan"
+        },
+        {
+          "IconName": "No Meeting Room"
+        },
+        {
+          "IconName": "Troubleshoot"
+        },
+        {
+          "IconName": "Currency Franc"
+        },
+        {
+          "IconName": "Shoppingmode"
+        },
+        {
+          "IconName": "Finance Mode"
+        },
+        {
+          "IconName": "Data Table"
+        },
+        {
+          "IconName": "Source Environment"
+        },
+        {
+          "IconName": "Finance"
+        },
+        {
+          "IconName": "Orders"
+        },
+        {
+          "IconName": "Bar Chart 4 Bars"
+        },
+        {
+          "IconName": "Bid Landscape"
+        },
+        {
+          "IconName": "Enterprise"
+        },
+        {
+          "IconName": "Contactless Off"
+        },
+        {
+          "IconName": "Chart Data"
+        },
+        {
+          "IconName": "Podium"
+        },
+        {
+          "IconName": "Universal Currency Alt"
+        },
+        {
+          "IconName": "Planner Review"
+        },
+        {
+          "IconName": "Family History"
+        },
+        {
+          "IconName": "Conveyor Belt"
+        },
+        {
+          "IconName": "Flowsheet"
+        },
+        {
+          "IconName": "Order Approve"
+        },
+        {
+          "IconName": "Quick Reorder"
+        },
+        {
+          "IconName": "Energy"
+        },
+        {
+          "IconName": "Network Node"
+        },
+        {
+          "IconName": "Checkbook"
+        },
+        {
+          "IconName": "Universal Currency"
+        },
+        {
+          "IconName": "Send Money"
+        },
+        {
+          "IconName": "Box"
+        },
+        {
+          "IconName": "Mintmark"
+        },
+        {
+          "IconName": "Forklift"
+        },
+        {
+          "IconName": "Inactive Order"
+        },
+        {
+          "IconName": "Qr Code 2 Add"
+        },
+        {
+          "IconName": "Box Add"
+        },
+        {
+          "IconName": "Front Loader"
+        },
+        {
+          "IconName": "Pallet"
+        },
+        {
+          "IconName": "Mitre"
+        },
+        {
+          "IconName": "Enterprise Off"
+        },
+        {
+          "IconName": "Trolley"
+        },
+        {
+          "IconName": "Bid Landscape Disabled"
+        },
+        {
+          "IconName": "Barcode Reader"
+        },
+        {
+          "IconName": "Work Update"
+        },
+        {
+          "IconName": "Work Alert"
+        },
+        {
+          "IconName": "Conversion Path Off"
+        },
+        {
+          "IconName": "Order Play"
+        },
+        {
+          "IconName": "Box Edit"
+        },
+        {
+          "IconName": "Credit Card Heart"
+        },
+        {
+          "IconName": "Credit Card Gear"
+        }
+      ]
+    },
+    {
+      "GroupName": " Maps",
+      "IconsList": [
+        {
+          "IconName": "Pin Drop"
+        },
+        {
+          "IconName": "Location On"
+        },
+        {
+          "IconName": "Map"
+        },
+        {
+          "IconName": "Home Pin"
+        },
+        {
+          "IconName": "Explore"
+        },
+        {
+          "IconName": "Restaurant"
+        },
+        {
+          "IconName": "Flag"
+        },
+        {
+          "IconName": "My Location"
+        },
+        {
+          "IconName": "Local Fire Department"
+        },
+        {
+          "IconName": "Person Pin Circle"
+        },
+        {
+          "IconName": "Local Mall"
+        },
+        {
+          "IconName": "Near Me"
+        },
+        {
+          "IconName": "Where To Vote"
+        },
+        {
+          "IconName": "Business Center"
+        },
+        {
+          "IconName": "East"
+        },
+        {
+          "IconName": "Restaurant Menu"
+        },
+        {
+          "IconName": "Handyman"
+        },
+        {
+          "IconName": "Factory"
+        },
+        {
+          "IconName": "Local Library"
+        },
+        {
+          "IconName": "Home Work"
+        },
+        {
+          "IconName": "Medical Services"
+        },
+        {
+          "IconName": "Layers"
+        },
+        {
+          "IconName": "Local Activity"
+        },
+        {
+          "IconName": "Share Location"
+        },
+        {
+          "IconName": "Emergency"
+        },
+        {
+          "IconName": "North East"
+        },
+        {
+          "IconName": "Add Location"
+        },
+        {
+          "IconName": "Fastfood"
+        },
+        {
+          "IconName": "Navigation"
+        },
+        {
+          "IconName": "Warehouse"
+        },
+        {
+          "IconName": "Person Pin"
+        },
+        {
+          "IconName": "Local Parking"
+        },
+        {
+          "IconName": "Home Repair Service"
+        },
+        {
+          "IconName": "Local Hospital"
+        },
+        {
+          "IconName": "Local Police"
+        },
+        {
+          "IconName": "South"
+        },
+        {
+          "IconName": "Zoom Out Map"
+        },
+        {
+          "IconName": "Location Searching"
+        },
+        {
+          "IconName": "Local Florist"
+        },
+        {
+          "IconName": "Location Away"
+        },
+        {
+          "IconName": "Crisis Alert"
+        },
+        {
+          "IconName": "West"
+        },
+        {
+          "IconName": "Local Gas Station"
+        },
+        {
+          "IconName": "Park"
+        },
+        {
+          "IconName": "Maps Ugc"
+        },
+        {
+          "IconName": "Cleaning Services"
+        },
+        {
+          "IconName": "Local Atm"
+        },
+        {
+          "IconName": "360"
+        },
+        {
+          "IconName": "Package"
+        },
+        {
+          "IconName": "Electrical Services"
+        },
+        {
+          "IconName": "Flag Circle"
+        },
+        {
+          "IconName": "North"
+        },
+        {
+          "IconName": "Add Location Alt"
+        },
+        {
+          "IconName": "Directions"
+        },
+        {
+          "IconName": "Fmd Bad"
+        },
+        {
+          "IconName": "Theater Comedy"
+        },
+        {
+          "IconName": "Local Drink"
+        },
+        {
+          "IconName": "Location Home"
+        },
+        {
+          "IconName": "Local Pizza"
+        },
+        {
+          "IconName": "Not Listed Location"
+        },
+        {
+          "IconName": "Local Post Office"
+        },
+        {
+          "IconName": "Wine Bar"
+        },
+        {
+          "IconName": "Beenhere"
+        },
+        {
+          "IconName": "Signpost"
+        },
+        {
+          "IconName": "Local Convenience Store"
+        },
+        {
+          "IconName": "Alt Route"
+        },
+        {
+          "IconName": "Tour"
+        },
+        {
+          "IconName": "Traffic"
+        },
+        {
+          "IconName": "Trip Origin"
+        },
+        {
+          "IconName": "Church"
+        },
+        {
+          "IconName": "Local Laundry Service"
+        },
+        {
+          "IconName": "Safety Check"
+        },
+        {
+          "IconName": "Ev Station"
+        },
+        {
+          "IconName": "Takeout Dining"
+        },
+        {
+          "IconName": "Moving"
+        },
+        {
+          "IconName": "Zoom In Map"
+        },
+        {
+          "IconName": "Soup Kitchen"
+        },
+        {
+          "IconName": "Pest Control"
+        },
+        {
+          "IconName": "Stadium"
+        },
+        {
+          "IconName": "Transfer Within A Station"
+        },
+        {
+          "IconName": "Location Off"
+        },
+        {
+          "IconName": "Connecting Airports"
+        },
+        {
+          "IconName": "Wrong Location"
+        },
+        {
+          "IconName": "Multiple Stop"
+        },
+        {
+          "IconName": "Edit Location"
+        },
+        {
+          "IconName": "Plumbing"
+        },
+        {
+          "IconName": "Mode Of Travel"
+        },
+        {
+          "IconName": "Minor Crash"
+        },
+        {
+          "IconName": "South East"
+        },
+        {
+          "IconName": "Local Pharmacy"
+        },
+        {
+          "IconName": "Add Road"
+        },
+        {
+          "IconName": "Fire Truck"
+        },
+        {
+          "IconName": "Castle"
+        },
+        {
+          "IconName": "Dry Cleaning"
+        },
+        {
+          "IconName": "Set Meal"
+        },
+        {
+          "IconName": "Baby Changing Station"
+        },
+        {
+          "IconName": "Edit Location Alt"
+        },
+        {
+          "IconName": "Layers Clear"
+        },
+        {
+          "IconName": "North West"
+        },
+        {
+          "IconName": "Mosque"
+        },
+        {
+          "IconName": "Edit Attributes"
+        },
+        {
+          "IconName": "Local Car Wash"
+        },
+        {
+          "IconName": "Run Circle"
+        },
+        {
+          "IconName": "Transit Enterexit"
+        },
+        {
+          "IconName": "Sos"
+        },
+        {
+          "IconName": "Satellite"
+        },
+        {
+          "IconName": "Edit Road"
+        },
+        {
+          "IconName": "South West"
+        },
+        {
+          "IconName": "Streetview"
+        },
+        {
+          "IconName": "Add Home"
+        },
+        {
+          "IconName": "Kebab Dining"
+        },
+        {
+          "IconName": "Airline Stops"
+        },
+        {
+          "IconName": "Fire Hydrant"
+        },
+        {
+          "IconName": "Local See"
+        },
+        {
+          "IconName": "Assist Walker"
+        },
+        {
+          "IconName": "Add Home Work"
+        },
+        {
+          "IconName": "Flight Class"
+        },
+        {
+          "IconName": "Remove Road"
+        },
+        {
+          "IconName": "No Meals"
+        },
+        {
+          "IconName": "Synagogue"
+        },
+        {
+          "IconName": "Fort"
+        },
+        {
+          "IconName": "Temple Buddhist"
+        },
+        {
+          "IconName": "Location Disabled"
+        },
+        {
+          "IconName": "Compass Calibration"
+        },
+        {
+          "IconName": "Temple Hindu"
+        },
+        {
+          "IconName": "Explore Off"
+        },
+        {
+          "IconName": "Pest Control Rodent"
+        },
+        {
+          "IconName": "Directions Alt"
+        },
+        {
+          "IconName": "Near Me Disabled"
+        },
+        {
+          "IconName": "Pergola"
+        },
+        {
+          "IconName": "Directions Off"
+        },
+        {
+          "IconName": "Things To Do"
+        },
+        {
+          "IconName": "Pet Supplies"
+        },
+        {
+          "IconName": "Directions Alt Off"
+        },
+        {
+          "IconName": "Explore Nearby"
+        },
+        {
+          "IconName": "Package 2"
+        },
+        {
+          "IconName": "Universal Local"
+        },
+        {
+          "IconName": "File Map"
+        },
+        {
+          "IconName": "Moved Location"
+        },
+        {
+          "IconName": "Move Location"
+        },
+        {
+          "IconName": "Safety Check Off"
+        },
+        {
+          "IconName": "Moving Ministry"
+        },
+        {
+          "IconName": "Move"
+        }
+      ]
+    },
+    {
+      "GroupName": " Text Formatting",
+      "IconsList": [
+        {
+          "IconName": "Description"
+        },
+        {
+          "IconName": "Content Copy"
+        },
+        {
+          "IconName": "Dashboard"
+        },
+        {
+          "IconName": "Edit Note"
+        },
+        {
+          "IconName": "Menu Book"
+        },
+        {
+          "IconName": "Grid View"
+        },
+        {
+          "IconName": "List"
+        },
+        {
+          "IconName": "Folder"
+        },
+        {
+          "IconName": "List Alt"
+        },
+        {
+          "IconName": "Inventory"
+        },
+        {
+          "IconName": "Folder Open"
+        },
+        {
+          "IconName": "Article"
+        },
+        {
+          "IconName": "Fact Check"
+        },
+        {
+          "IconName": "Attach File"
+        },
+        {
+          "IconName": "Format List Bulleted"
+        },
+        {
+          "IconName": "Assignment"
+        },
+        {
+          "IconName": "Task"
+        },
+        {
+          "IconName": "Checklist"
+        },
+        {
+          "IconName": "Cloud Upload"
+        },
+        {
+          "IconName": "Draft"
+        },
+        {
+          "IconName": "Summarize"
+        },
+        {
+          "IconName": "Cloud"
+        },
+        {
+          "IconName": "Draw"
+        },
+        {
+          "IconName": "Feed"
+        },
+        {
+          "IconName": "Newspaper"
+        },
+        {
+          "IconName": "View List"
+        },
+        {
+          "IconName": "File Copy"
+        },
+        {
+          "IconName": "Note Add"
+        },
+        {
+          "IconName": "Border Color"
+        },
+        {
+          "IconName": "Book"
+        },
+        {
+          "IconName": "History Edu"
+        },
+        {
+          "IconName": "Design Services"
+        },
+        {
+          "IconName": "Pending Actions"
+        },
+        {
+          "IconName": "Format Quote"
+        },
+        {
+          "IconName": "Post Add"
+        },
+        {
+          "IconName": "Request Quote"
+        },
+        {
+          "IconName": "Cloud Download"
+        },
+        {
+          "IconName": "Drag Handle"
+        },
+        {
+          "IconName": "Table"
+        },
+        {
+          "IconName": "Contact Page"
+        },
+        {
+          "IconName": "Archive"
+        },
+        {
+          "IconName": "Space Dashboard"
+        },
+        {
+          "IconName": "Content Paste"
+        },
+        {
+          "IconName": "Percent"
+        },
+        {
+          "IconName": "Attachment"
+        },
+        {
+          "IconName": "Assignment Ind"
+        },
+        {
+          "IconName": "Format List Numbered"
+        },
+        {
+          "IconName": "Assignment Turned In"
+        },
+        {
+          "IconName": "Tag"
+        },
+        {
+          "IconName": "Table Chart"
+        },
+        {
+          "IconName": "Dashboard Customize"
+        },
+        {
+          "IconName": "Sticky Note 2"
+        },
+        {
+          "IconName": "Text Fields"
+        },
+        {
+          "IconName": "Reorder"
+        },
+        {
+          "IconName": "Format Bold"
+        },
+        {
+          "IconName": "Integration Instructions"
+        },
+        {
+          "IconName": "Find In Page"
+        },
+        {
+          "IconName": "Text Snippet"
+        },
+        {
+          "IconName": "Note"
+        },
+        {
+          "IconName": "Document Scanner"
+        },
+        {
+          "IconName": "Checklist Rtl"
+        },
+        {
+          "IconName": "Note Alt"
+        },
+        {
+          "IconName": "Edit Document"
+        },
+        {
+          "IconName": "Cloud Sync"
+        },
+        {
+          "IconName": "Table Rows"
+        },
+        {
+          "IconName": "Perm Media"
+        },
+        {
+          "IconName": "Cloud Done"
+        },
+        {
+          "IconName": "Title"
+        },
+        {
+          "IconName": "Table View"
+        },
+        {
+          "IconName": "Content Cut"
+        },
+        {
+          "IconName": "Data Object"
+        },
+        {
+          "IconName": "Notes"
+        },
+        {
+          "IconName": "Cut"
+        },
+        {
+          "IconName": "Subject"
+        },
+        {
+          "IconName": "Functions"
+        },
+        {
+          "IconName": "Format Italic"
+        },
+        {
+          "IconName": "Content Paste Search"
+        },
+        {
+          "IconName": "Folder Shared"
+        },
+        {
+          "IconName": "Format Color Fill"
+        },
+        {
+          "IconName": "Plagiarism"
+        },
+        {
+          "IconName": "Horizontal Rule"
+        },
+        {
+          "IconName": "File Present"
+        },
+        {
+          "IconName": "Folder Copy"
+        },
+        {
+          "IconName": "Cloud Off"
+        },
+        {
+          "IconName": "Format Paint"
+        },
+        {
+          "IconName": "Ballot"
+        },
+        {
+          "IconName": "Team Dashboard"
+        },
+        {
+          "IconName": "Format Align Left"
+        },
+        {
+          "IconName": "Add Link"
+        },
+        {
+          "IconName": "View Column"
+        },
+        {
+          "IconName": "Difference"
+        },
+        {
+          "IconName": "Read More"
+        },
+        {
+          "IconName": "View Agenda"
+        },
+        {
+          "IconName": "Format Size"
+        },
+        {
+          "IconName": "Format Underlined"
+        },
+        {
+          "IconName": "Toc"
+        },
+        {
+          "IconName": "Vertical Align Top"
+        },
+        {
+          "IconName": "Height"
+        },
+        {
+          "IconName": "Vertical Align Bottom"
+        },
+        {
+          "IconName": "View Week"
+        },
+        {
+          "IconName": "Copy All"
+        },
+        {
+          "IconName": "Drive Folder Upload"
+        },
+        {
+          "IconName": "Assignment Late"
+        },
+        {
+          "IconName": "Format Color Text"
+        },
+        {
+          "IconName": "Drive File Move"
+        },
+        {
+          "IconName": "Low Priority"
+        },
+        {
+          "IconName": "View Module"
+        },
+        {
+          "IconName": "Assignment Return"
+        },
+        {
+          "IconName": "Folder Special"
+        },
+        {
+          "IconName": "Segment"
+        },
+        {
+          "IconName": "Format Align Center"
+        },
+        {
+          "IconName": "Calendar View Month"
+        },
+        {
+          "IconName": "Folder Zip"
+        },
+        {
+          "IconName": "Square"
+        },
+        {
+          "IconName": "Breaking News Alt 1"
+        },
+        {
+          "IconName": "Polyline"
+        },
+        {
+          "IconName": "Format Align Right"
+        },
+        {
+          "IconName": "Grading"
+        },
+        {
+          "IconName": "View Headline"
+        },
+        {
+          "IconName": "Linear Scale"
+        },
+        {
+          "IconName": "Edit Off"
+        },
+        {
+          "IconName": "View Quilt"
+        },
+        {
+          "IconName": "View Carousel"
+        },
+        {
+          "IconName": "Text Increase"
+        },
+        {
+          "IconName": "Request Page"
+        },
+        {
+          "IconName": "View Sidebar"
+        },
+        {
+          "IconName": "Pages"
+        },
+        {
+          "IconName": "Text Format"
+        },
+        {
+          "IconName": "Format Align Justify"
+        },
+        {
+          "IconName": "Calendar View Week"
+        },
+        {
+          "IconName": "Numbers"
+        },
+        {
+          "IconName": "Hexagon"
+        },
+        {
+          "IconName": "Docs Add On"
+        },
+        {
+          "IconName": "Folder Delete"
+        },
+        {
+          "IconName": "Forms Add On"
+        },
+        {
+          "IconName": "Format Shapes"
+        },
+        {
+          "IconName": "Imagesearch Roller"
+        },
+        {
+          "IconName": "Calendar View Day"
+        },
+        {
+          "IconName": "Video File"
+        },
+        {
+          "IconName": "Font Download"
+        },
+        {
+          "IconName": "Format List Numbered Rtl"
+        },
+        {
+          "IconName": "Add To Drive"
+        },
+        {
+          "IconName": "Join Inner"
+        },
+        {
+          "IconName": "Content Paste Go"
+        },
+        {
+          "IconName": "Restore Page"
+        },
+        {
+          "IconName": "Rectangle"
+        },
+        {
+          "IconName": "Format Color Reset"
+        },
+        {
+          "IconName": "Vertical Split"
+        },
+        {
+          "IconName": "Rule Folder"
+        },
+        {
+          "IconName": "View Stream"
+        },
+        {
+          "IconName": "Cloud Circle"
+        },
+        {
+          "IconName": "Format Indent Increase"
+        },
+        {
+          "IconName": "Spellcheck"
+        },
+        {
+          "IconName": "Data Array"
+        },
+        {
+          "IconName": "Assignment Returned"
+        },
+        {
+          "IconName": "Align Horizontal Left"
+        },
+        {
+          "IconName": "Pivot Table Chart"
+        },
+        {
+          "IconName": "Text Decrease"
+        },
+        {
+          "IconName": "Deselect"
+        },
+        {
+          "IconName": "Vertical Align Center"
+        },
+        {
+          "IconName": "Pentagon"
+        },
+        {
+          "IconName": "Space Bar"
+        },
+        {
+          "IconName": "Merge Type"
+        },
+        {
+          "IconName": "Format Strikethrough"
+        },
+        {
+          "IconName": "Short Text"
+        },
+        {
+          "IconName": "View Day"
+        },
+        {
+          "IconName": "Flip To Front"
+        },
+        {
+          "IconName": "Join Left"
+        },
+        {
+          "IconName": "Border All"
+        },
+        {
+          "IconName": "Shape Line"
+        },
+        {
+          "IconName": "Format Line Spacing"
+        },
+        {
+          "IconName": "Line Weight"
+        },
+        {
+          "IconName": "Horizontal Split"
+        },
+        {
+          "IconName": "Format Indent Decrease"
+        },
+        {
+          "IconName": "Join Right"
+        },
+        {
+          "IconName": "Align Horizontal Center"
+        },
+        {
+          "IconName": "Subtitles Off"
+        },
+        {
+          "IconName": "Snippet Folder"
+        },
+        {
+          "IconName": "Align Vertical Bottom"
+        },
+        {
+          "IconName": "Folder Off"
+        },
+        {
+          "IconName": "Glyphs"
+        },
+        {
+          "IconName": "Format Clear"
+        },
+        {
+          "IconName": "Align Horizontal Right"
+        },
+        {
+          "IconName": "Function"
+        },
+        {
+          "IconName": "Vertical Distribute"
+        },
+        {
+          "IconName": "Insert Page Break"
+        },
+        {
+          "IconName": "Content Paste Off"
+        },
+        {
+          "IconName": "Line Axis"
+        },
+        {
+          "IconName": "Horizontal Distribute"
+        },
+        {
+          "IconName": "Superscript"
+        },
+        {
+          "IconName": "Line Style"
+        },
+        {
+          "IconName": "Flip To Back"
+        },
+        {
+          "IconName": "Align Vertical Center"
+        },
+        {
+          "IconName": "Align Vertical Top"
+        },
+        {
+          "IconName": "Counter 1"
+        },
+        {
+          "IconName": "Margin"
+        },
+        {
+          "IconName": "Clarify"
+        },
+        {
+          "IconName": "Wrap Text"
+        },
+        {
+          "IconName": "Subscript"
+        },
+        {
+          "IconName": "View Array"
+        },
+        {
+          "IconName": "Border Style"
+        },
+        {
+          "IconName": "Border Clear"
+        },
+        {
+          "IconName": "Amp Stories"
+        },
+        {
+          "IconName": "Border Outer"
+        },
+        {
+          "IconName": "Ink Pen"
+        },
+        {
+          "IconName": "Ink Eraser"
+        },
+        {
+          "IconName": "Type Specimen"
+        },
+        {
+          "IconName": "Newsmode"
+        },
+        {
+          "IconName": "Text Rotate Vertical"
+        },
+        {
+          "IconName": "Padding"
+        },
+        {
+          "IconName": "Forms Apps Script"
+        },
+        {
+          "IconName": "Border Vertical"
+        },
+        {
+          "IconName": "Text Rotation None"
+        },
+        {
+          "IconName": "Format Textdirection L To R"
+        },
+        {
+          "IconName": "Docs Apps Script"
+        },
+        {
+          "IconName": "Format Overline"
+        },
+        {
+          "IconName": "Ink Highlighter"
+        },
+        {
+          "IconName": "Border Horizontal"
+        },
+        {
+          "IconName": "Font Download Off"
+        },
+        {
+          "IconName": "Format Textdirection R To L"
+        },
+        {
+          "IconName": "Finance Chip"
+        },
+        {
+          "IconName": "News"
+        },
+        {
+          "IconName": "Text Rotation Angleup"
+        },
+        {
+          "IconName": "Border Bottom"
+        },
+        {
+          "IconName": "Text Rotation Down"
+        },
+        {
+          "IconName": "Border Inner"
+        },
+        {
+          "IconName": "Border Left"
+        },
+        {
+          "IconName": "Border Top"
+        },
+        {
+          "IconName": "Assignment Add"
+        },
+        {
+          "IconName": "Text Rotation Angledown"
+        },
+        {
+          "IconName": "Equal"
+        },
+        {
+          "IconName": "Text Rotate Up"
+        },
+        {
+          "IconName": "Border Right"
+        },
+        {
+          "IconName": "Format H1"
+        },
+        {
+          "IconName": "Note Stack Add"
+        },
+        {
+          "IconName": "Frame Inspect"
+        },
+        {
+          "IconName": "Join"
+        },
+        {
+          "IconName": "View Column 2"
+        },
+        {
+          "IconName": "Counter 2"
+        },
+        {
+          "IconName": "Note Stack"
+        },
+        {
+          "IconName": "Overview"
+        },
+        {
+          "IconName": "Full Coverage"
+        },
+        {
+          "IconName": "Colors"
+        },
+        {
+          "IconName": "Signature"
+        },
+        {
+          "IconName": "Export Notes"
+        },
+        {
+          "IconName": "Slide Library"
+        },
+        {
+          "IconName": "Breaking News"
+        },
+        {
+          "IconName": "Format Underlined Squiggle"
+        },
+        {
+          "IconName": "Counter 3"
+        },
+        {
+          "IconName": "Lab Profile"
+        },
+        {
+          "IconName": "Format H2"
+        },
+        {
+          "IconName": "Format List Bulleted Add"
+        },
+        {
+          "IconName": "Format Paragraph"
+        },
+        {
+          "IconName": "Variables"
+        },
+        {
+          "IconName": "Format Image Left"
+        },
+        {
+          "IconName": "File Save"
+        },
+        {
+          "IconName": "Csv"
+        },
+        {
+          "IconName": "Rubric"
+        },
+        {
+          "IconName": "Reset Image"
+        },
+        {
+          "IconName": "Width"
+        },
+        {
+          "IconName": "Ink Marker"
+        },
+        {
+          "IconName": "Format Image Right"
+        },
+        {
+          "IconName": "Format Ink Highlighter"
+        },
+        {
+          "IconName": "Draw Abstract"
+        },
+        {
+          "IconName": "Remove Selection"
+        },
+        {
+          "IconName": "Format H3"
+        },
+        {
+          "IconName": "Text Fields Alt"
+        },
+        {
+          "IconName": "Process Chart"
+        },
+        {
+          "IconName": "Counter 4"
+        },
+        {
+          "IconName": "Shapes"
+        },
+        {
+          "IconName": "Contract"
+        },
+        {
+          "IconName": "Format H5"
+        },
+        {
+          "IconName": "Format H6"
+        },
+        {
+          "IconName": "Unknown Document"
+        },
+        {
+          "IconName": "Voting Chip"
+        },
+        {
+          "IconName": "Contract Edit"
+        },
+        {
+          "IconName": "Scan Delete"
+        },
+        {
+          "IconName": "Select"
+        },
+        {
+          "IconName": "Diagnosis"
+        },
+        {
+          "IconName": "Dictionary"
+        },
+        {
+          "IconName": "Add Notes"
+        },
+        {
+          "IconName": "Format H4"
+        },
+        {
+          "IconName": "Location Chip"
+        },
+        {
+          "IconName": "Stylus Laser Pointer"
+        },
+        {
+          "IconName": "Frame Source"
+        },
+        {
+          "IconName": "Sticky Note"
+        },
+        {
+          "IconName": "Article Shortcut"
+        },
+        {
+          "IconName": "Grid Guides"
+        },
+        {
+          "IconName": "Tab Duplicate"
+        },
+        {
+          "IconName": "Folder Managed"
+        },
+        {
+          "IconName": "Regular Expression"
+        },
+        {
+          "IconName": "Table Chart View"
+        },
+        {
+          "IconName": "Text Ad"
+        },
+        {
+          "IconName": "Cell Merge"
+        },
+        {
+          "IconName": "Lasso Select"
+        },
+        {
+          "IconName": "Smb Share"
+        },
+        {
+          "IconName": "Stock Media"
+        },
+        {
+          "IconName": "Table Rows Narrow"
+        },
+        {
+          "IconName": "Counter 5"
+        },
+        {
+          "IconName": "List Alt Add"
+        },
+        {
+          "IconName": "Business Chip"
+        },
+        {
+          "IconName": "Format Letter Spacing Standard"
+        },
+        {
+          "IconName": "Source Notes"
+        },
+        {
+          "IconName": "Text Select Move Forward Character"
+        },
+        {
+          "IconName": "Ungroup"
+        },
+        {
+          "IconName": "Format Text Overflow"
+        },
+        {
+          "IconName": "Line End Circle"
+        },
+        {
+          "IconName": "Book 2"
+        },
+        {
+          "IconName": "Custom Typography"
+        },
+        {
+          "IconName": "Decimal Increase"
+        },
+        {
+          "IconName": "Insert Text"
+        },
+        {
+          "IconName": "Match Case"
+        },
+        {
+          "IconName": "Scan"
+        },
+        {
+          "IconName": "Tab Group"
+        },
+        {
+          "IconName": "Line End Arrow"
+        },
+        {
+          "IconName": "Counter 6"
+        },
+        {
+          "IconName": "Folder Supervised"
+        },
+        {
+          "IconName": "Line End"
+        },
+        {
+          "IconName": "Line Start"
+        },
+        {
+          "IconName": "Thumbnail Bar"
+        },
+        {
+          "IconName": "Format Letter Spacing"
+        },
+        {
+          "IconName": "Format Letter Spacing 2"
+        },
+        {
+          "IconName": "Ink Highlighter Move"
+        },
+        {
+          "IconName": "Line Curve"
+        },
+        {
+          "IconName": "Line End Arrow Notch"
+        },
+        {
+          "IconName": "Tab Close"
+        },
+        {
+          "IconName": "Draw Collage"
+        },
+        {
+          "IconName": "Stroke Full"
+        },
+        {
+          "IconName": "Contract Delete"
+        },
+        {
+          "IconName": "Other Admission"
+        },
+        {
+          "IconName": "Text Select Start"
+        },
+        {
+          "IconName": "Top Panel Close"
+        },
+        {
+          "IconName": "Counter 0"
+        },
+        {
+          "IconName": "Counter 7"
+        },
+        {
+          "IconName": "Counter 8"
+        },
+        {
+          "IconName": "Counter 9"
+        },
+        {
+          "IconName": "Highlighter Size 3"
+        },
+        {
+          "IconName": "Line End Square"
+        },
+        {
+          "IconName": "Stroke Partial"
+        },
+        {
+          "IconName": "Text Select Jump To Beginning"
+        },
+        {
+          "IconName": "Flex Wrap"
+        },
+        {
+          "IconName": "Heap Snapshot Thumbnail"
+        },
+        {
+          "IconName": "Language Chinese Quick"
+        },
+        {
+          "IconName": "Language Spanish"
+        },
+        {
+          "IconName": "Line End Diamond"
+        },
+        {
+          "IconName": "Line Start Diamond"
+        },
+        {
+          "IconName": "Post"
+        },
+        {
+          "IconName": "Format Letter Spacing Wide"
+        },
+        {
+          "IconName": "Format Letter Spacing Wider"
+        },
+        {
+          "IconName": "Heap Snapshot Multiple"
+        },
+        {
+          "IconName": "Line Start Circle"
+        },
+        {
+          "IconName": "Match Word"
+        },
+        {
+          "IconName": "Person Book"
+        },
+        {
+          "IconName": "Attach File Add"
+        },
+        {
+          "IconName": "File Save Off"
+        },
+        {
+          "IconName": "Fit Width"
+        },
+        {
+          "IconName": "Flex Direction"
+        },
+        {
+          "IconName": "Heap Snapshot Large"
+        },
+        {
+          "IconName": "Ink Eraser Off"
+        },
+        {
+          "IconName": "Line Start Arrow"
+        },
+        {
+          "IconName": "Markdown Copy"
+        },
+        {
+          "IconName": "Special Character"
+        },
+        {
+          "IconName": "Tab Move"
+        },
+        {
+          "IconName": "Top Panel Open"
+        },
+        {
+          "IconName": "Tsv"
+        },
+        {
+          "IconName": "Align Justify Space Around"
+        },
+        {
+          "IconName": "Align Justify Space Between"
+        },
+        {
+          "IconName": "Align Space Between"
+        },
+        {
+          "IconName": "Format Text Clip"
+        },
+        {
+          "IconName": "Frame Reload"
+        },
+        {
+          "IconName": "Language French"
+        },
+        {
+          "IconName": "Language International"
+        },
+        {
+          "IconName": "Language Korean Latin"
+        },
+        {
+          "IconName": "Pen Size 5"
+        },
+        {
+          "IconName": "Tab New Right"
+        },
+        {
+          "IconName": "Text Select Jump To End"
+        },
+        {
+          "IconName": "Text Select Move Forward Word"
+        },
+        {
+          "IconName": "Align Justify Space Even"
+        },
+        {
+          "IconName": "Book 3"
+        },
+        {
+          "IconName": "Book 5"
+        },
+        {
+          "IconName": "Folder Data"
+        },
+        {
+          "IconName": "Language Gb English"
+        },
+        {
+          "IconName": "Line Start Square"
+        },
+        {
+          "IconName": "Pageless"
+        },
+        {
+          "IconName": "Pen Size 2"
+        },
+        {
+          "IconName": "Sheets Rtl"
+        },
+        {
+          "IconName": "Tab Close Right"
+        },
+        {
+          "IconName": "Tab Recent"
+        },
+        {
+          "IconName": "Text Select Move Back Word"
+        },
+        {
+          "IconName": "Text Select Move Up"
+        },
+        {
+          "IconName": "Two Pager"
+        },
+        {
+          "IconName": "Align Center"
+        },
+        {
+          "IconName": "Align Flex Center"
+        },
+        {
+          "IconName": "Decimal Decrease"
+        },
+        {
+          "IconName": "Fit Page"
+        },
+        {
+          "IconName": "Highlighter Size 5"
+        },
+        {
+          "IconName": "Language Chinese Dayi"
+        },
+        {
+          "IconName": "Language Chinese Wubi"
+        },
+        {
+          "IconName": "Language Pinyin"
+        },
+        {
+          "IconName": "Letter Switch"
+        },
+        {
+          "IconName": "Line Start Arrow Notch"
+        },
+        {
+          "IconName": "Pen Size 3"
+        },
+        {
+          "IconName": "Text Select Move Down"
+        },
+        {
+          "IconName": "Align Flex Start"
+        },
+        {
+          "IconName": "Align Justify Center"
+        },
+        {
+          "IconName": "Align Justify Flex End"
+        },
+        {
+          "IconName": "Align Justify Flex Start"
+        },
+        {
+          "IconName": "Align Self Stretch"
+        },
+        {
+          "IconName": "Align Space Around"
+        },
+        {
+          "IconName": "Align Space Even"
+        },
+        {
+          "IconName": "Asterisk"
+        },
+        {
+          "IconName": "Format Text Wrap"
+        },
+        {
+          "IconName": "Highlighter Size 4"
+        },
+        {
+          "IconName": "Language Chinese Array"
+        },
+        {
+          "IconName": "Language Chinese Cangjie"
+        },
+        {
+          "IconName": "Language Chinese Pinyin"
+        },
+        {
+          "IconName": "Language Us"
+        },
+        {
+          "IconName": "Language Us Colemak"
+        },
+        {
+          "IconName": "Language Us Dvorak"
+        },
+        {
+          "IconName": "Markdown"
+        },
+        {
+          "IconName": "Pen Size 4"
+        },
+        {
+          "IconName": "Text Select End"
+        },
+        {
+          "IconName": "Text Select Move Back Character"
+        },
+        {
+          "IconName": "Variable Add"
+        },
+        {
+          "IconName": "Align End"
+        },
+        {
+          "IconName": "Align Flex End"
+        },
+        {
+          "IconName": "Align Items Stretch"
+        },
+        {
+          "IconName": "Align Justify Stretch"
+        },
+        {
+          "IconName": "Align Start"
+        },
+        {
+          "IconName": "Align Stretch"
+        },
+        {
+          "IconName": "Book 4"
+        },
+        {
+          "IconName": "Flex No Wrap"
+        },
+        {
+          "IconName": "Highlighter Size 1"
+        },
+        {
+          "IconName": "Highlighter Size 2"
+        },
+        {
+          "IconName": "Language Japanese Kana"
+        },
+        {
+          "IconName": "Markdown Paste"
+        },
+        {
+          "IconName": "Pen Size 1"
+        },
+        {
+          "IconName": "Variable Insert"
+        },
+        {
+          "IconName": "Variable Remove"
+        }
+      ]
+    },
+    {
+      "GroupName": " Audio &amp; Video",
+      "IconsList": [
+        {
+          "IconName": "Play Arrow"
+        },
+        {
+          "IconName": "Play Circle"
+        },
+        {
+          "IconName": "Mic"
+        },
+        {
+          "IconName": "Videocam"
+        },
+        {
+          "IconName": "Volume Up"
+        },
+        {
+          "IconName": "Pause"
+        },
+        {
+          "IconName": "Music Note"
+        },
+        {
+          "IconName": "Library Books"
+        },
+        {
+          "IconName": "Movie"
+        },
+        {
+          "IconName": "Speed"
+        },
+        {
+          "IconName": "Skip Next"
+        },
+        {
+          "IconName": "Replay"
+        },
+        {
+          "IconName": "Volume Off"
+        },
+        {
+          "IconName": "Pause Circle"
+        },
+        {
+          "IconName": "View In Ar"
+        },
+        {
+          "IconName": "Fiber Manual Record"
+        },
+        {
+          "IconName": "Skip Previous"
+        },
+        {
+          "IconName": "Stop Circle"
+        },
+        {
+          "IconName": "Stop"
+        },
+        {
+          "IconName": "Equalizer"
+        },
+        {
+          "IconName": "Subscriptions"
+        },
+        {
+          "IconName": "Video Library"
+        },
+        {
+          "IconName": "Fast Forward"
+        },
+        {
+          "IconName": "Playlist Add"
+        },
+        {
+          "IconName": "Video Call"
+        },
+        {
+          "IconName": "Repeat"
+        },
+        {
+          "IconName": "Volume Mute"
+        },
+        {
+          "IconName": "Shuffle"
+        },
+        {
+          "IconName": "Mic Off"
+        },
+        {
+          "IconName": "Hearing"
+        },
+        {
+          "IconName": "Library Music"
+        },
+        {
+          "IconName": "Playlist Add Check"
+        },
+        {
+          "IconName": "Podcasts"
+        },
+        {
+          "IconName": "Fast Rewind"
+        },
+        {
+          "IconName": "Queue Music"
+        },
+        {
+          "IconName": "Sound Detection Dog Barking"
+        },
+        {
+          "IconName": "Video Camera Front"
+        },
+        {
+          "IconName": "Subtitles"
+        },
+        {
+          "IconName": "Volume Down"
+        },
+        {
+          "IconName": "Play Pause"
+        },
+        {
+          "IconName": "Album"
+        },
+        {
+          "IconName": "Radio"
+        },
+        {
+          "IconName": "Discover Tune"
+        },
+        {
+          "IconName": "Av Timer"
+        },
+        {
+          "IconName": "Library Add Check"
+        },
+        {
+          "IconName": "Closed Caption"
+        },
+        {
+          "IconName": "Videocam Off"
+        },
+        {
+          "IconName": "Stream"
+        },
+        {
+          "IconName": "Forward 10"
+        },
+        {
+          "IconName": "Not Started"
+        },
+        {
+          "IconName": "Replay 10"
+        },
+        {
+          "IconName": "Fiber New"
+        },
+        {
+          "IconName": "Playlist Play"
+        },
+        {
+          "IconName": "Branding Watermark"
+        },
+        {
+          "IconName": "Text To Speech"
+        },
+        {
+          "IconName": "Recent Actors"
+        },
+        {
+          "IconName": "Playlist Remove"
+        },
+        {
+          "IconName": "Interpreter Mode"
+        },
+        {
+          "IconName": "Slow Motion Video"
+        },
+        {
+          "IconName": "Frame Person"
+        },
+        {
+          "IconName": "Playlist Add Check Circle"
+        },
+        {
+          "IconName": "Settings Voice"
+        },
+        {
+          "IconName": "Video Settings"
+        },
+        {
+          "IconName": "Featured Play List"
+        },
+        {
+          "IconName": "Sound Detection Loud Sound"
+        },
+        {
+          "IconName": "Audio File"
+        },
+        {
+          "IconName": "Lyrics"
+        },
+        {
+          "IconName": "Play Lesson"
+        },
+        {
+          "IconName": "Hd"
+        },
+        {
+          "IconName": "Repeat One"
+        },
+        {
+          "IconName": "Call To Action"
+        },
+        {
+          "IconName": "High Quality"
+        },
+        {
+          "IconName": "Add To Queue"
+        },
+        {
+          "IconName": "Music Off"
+        },
+        {
+          "IconName": "Video Camera Back"
+        },
+        {
+          "IconName": "Spatial Audio Off"
+        },
+        {
+          "IconName": "Shuffle On"
+        },
+        {
+          "IconName": "Playlist Add Circle"
+        },
+        {
+          "IconName": "Volume Down Alt"
+        },
+        {
+          "IconName": "Hearing Disabled"
+        },
+        {
+          "IconName": "Featured Video"
+        },
+        {
+          "IconName": "Replay 5"
+        },
+        {
+          "IconName": "Repeat On"
+        },
+        {
+          "IconName": "Queue Play Next"
+        },
+        {
+          "IconName": "Speech To Text"
+        },
+        {
+          "IconName": "Spatial Audio"
+        },
+        {
+          "IconName": "Art Track"
+        },
+        {
+          "IconName": "Explicit"
+        },
+        {
+          "IconName": "Airplay"
+        },
+        {
+          "IconName": "4k"
+        },
+        {
+          "IconName": "Forward 30"
+        },
+        {
+          "IconName": "Forward 5"
+        },
+        {
+          "IconName": "Music Video"
+        },
+        {
+          "IconName": "Replay 30"
+        },
+        {
+          "IconName": "Spatial Tracking"
+        },
+        {
+          "IconName": "Control Camera"
+        },
+        {
+          "IconName": "Closed Caption Disabled"
+        },
+        {
+          "IconName": "Digital Out Of Home"
+        },
+        {
+          "IconName": "Brand Awareness"
+        },
+        {
+          "IconName": "Video Label"
+        },
+        {
+          "IconName": "Fiber Smart Record"
+        },
+        {
+          "IconName": "Play Disabled"
+        },
+        {
+          "IconName": "Repeat One On"
+        },
+        {
+          "IconName": "Broadcast On Personal"
+        },
+        {
+          "IconName": "Sd"
+        },
+        {
+          "IconName": "Missed Video Call"
+        },
+        {
+          "IconName": "Surround Sound"
+        },
+        {
+          "IconName": "Fiber Pin"
+        },
+        {
+          "IconName": "10k"
+        },
+        {
+          "IconName": "60fps"
+        },
+        {
+          "IconName": "Sound Detection Glass Break"
+        },
+        {
+          "IconName": "Remove From Queue"
+        },
+        {
+          "IconName": "Broadcast On Home"
+        },
+        {
+          "IconName": "Fiber Dvr"
+        },
+        {
+          "IconName": "30fps"
+        },
+        {
+          "IconName": "4k Plus"
+        },
+        {
+          "IconName": "Video Stable"
+        },
+        {
+          "IconName": "8k"
+        },
+        {
+          "IconName": "1k"
+        },
+        {
+          "IconName": "Privacy"
+        },
+        {
+          "IconName": "Instant Mix"
+        },
+        {
+          "IconName": "8k Plus"
+        },
+        {
+          "IconName": "2k"
+        },
+        {
+          "IconName": "7k"
+        },
+        {
+          "IconName": "1k Plus"
+        },
+        {
+          "IconName": "9k Plus"
+        },
+        {
+          "IconName": "9k"
+        },
+        {
+          "IconName": "5k"
+        },
+        {
+          "IconName": "6k"
+        },
+        {
+          "IconName": "2k Plus"
+        },
+        {
+          "IconName": "5k Plus"
+        },
+        {
+          "IconName": "6k Plus"
+        },
+        {
+          "IconName": "3k"
+        },
+        {
+          "IconName": "3k Plus"
+        },
+        {
+          "IconName": "7k Plus"
+        },
+        {
+          "IconName": "Voice Selection"
+        },
+        {
+          "IconName": "Ar On You"
+        },
+        {
+          "IconName": "Music Cast"
+        },
+        {
+          "IconName": "No Sound"
+        },
+        {
+          "IconName": "Video Search"
+        },
+        {
+          "IconName": "Genres"
+        },
+        {
+          "IconName": "Hangout Video"
+        },
+        {
+          "IconName": "Cinematic Blur"
+        },
+        {
+          "IconName": "Media Link"
+        },
+        {
+          "IconName": "Video Camera Front Off"
+        },
+        {
+          "IconName": "Autoplay"
+        },
+        {
+          "IconName": "Movie Edit"
+        },
+        {
+          "IconName": "Artist"
+        },
+        {
+          "IconName": "Mic Double"
+        },
+        {
+          "IconName": "Autopause"
+        },
+        {
+          "IconName": "Forward Media"
+        },
+        {
+          "IconName": "Resume"
+        },
+        {
+          "IconName": "Ar Stickers"
+        },
+        {
+          "IconName": "Movie Info"
+        },
+        {
+          "IconName": "Select To Speak"
+        },
+        {
+          "IconName": "Audio Description"
+        },
+        {
+          "IconName": "Full Hd"
+        },
+        {
+          "IconName": "2d"
+        },
+        {
+          "IconName": "Hangout Video Off"
+        },
+        {
+          "IconName": "Autostop"
+        },
+        {
+          "IconName": "Forward Circle"
+        },
+        {
+          "IconName": "Frame Person Off"
+        },
+        {
+          "IconName": "Sound Sampler"
+        },
+        {
+          "IconName": "View In Ar Off"
+        }
+      ]
+    },
+    {
+      "GroupName": " Transportation",
+      "IconsList": [
+        {
+          "IconName": "Local Shipping"
+        },
+        {
+          "IconName": "Directions Car"
+        },
+        {
+          "IconName": "Flight"
+        },
+        {
+          "IconName": "Directions Run"
+        },
+        {
+          "IconName": "Directions Walk"
+        },
+        {
+          "IconName": "Flight Takeoff"
+        },
+        {
+          "IconName": "Directions Bus"
+        },
+        {
+          "IconName": "Train"
+        },
+        {
+          "IconName": "Directions Bike"
+        },
+        {
+          "IconName": "Airport Shuttle"
+        },
+        {
+          "IconName": "Pedal Bike"
+        },
+        {
+          "IconName": "Directions Boat"
+        },
+        {
+          "IconName": "Two Wheeler"
+        },
+        {
+          "IconName": "Agriculture"
+        },
+        {
+          "IconName": "Local Taxi"
+        },
+        {
+          "IconName": "Sailing"
+        },
+        {
+          "IconName": "Electric Car"
+        },
+        {
+          "IconName": "Flight Land"
+        },
+        {
+          "IconName": "Hail"
+        },
+        {
+          "IconName": "No Crash"
+        },
+        {
+          "IconName": "Commute"
+        },
+        {
+          "IconName": "Motorcycle"
+        },
+        {
+          "IconName": "Car Crash"
+        },
+        {
+          "IconName": "Tram"
+        },
+        {
+          "IconName": "Departure Board"
+        },
+        {
+          "IconName": "Subway"
+        },
+        {
+          "IconName": "Electric Moped"
+        },
+        {
+          "IconName": "Turn Right"
+        },
+        {
+          "IconName": "Electric Scooter"
+        },
+        {
+          "IconName": "Fork Right"
+        },
+        {
+          "IconName": "Directions Subway"
+        },
+        {
+          "IconName": "Tire Repair"
+        },
+        {
+          "IconName": "Electric Bike"
+        },
+        {
+          "IconName": "Rv Hookup"
+        },
+        {
+          "IconName": "Bus Alert"
+        },
+        {
+          "IconName": "Turn Left"
+        },
+        {
+          "IconName": "Transportation"
+        },
+        {
+          "IconName": "Airlines"
+        },
+        {
+          "IconName": "Taxi Alert"
+        },
+        {
+          "IconName": "U Turn Left"
+        },
+        {
+          "IconName": "Directions Railway"
+        },
+        {
+          "IconName": "Electric Rickshaw"
+        },
+        {
+          "IconName": "Turn Slight Right"
+        },
+        {
+          "IconName": "U Turn Right"
+        },
+        {
+          "IconName": "Fork Left"
+        },
+        {
+          "IconName": "Railway Alert"
+        },
+        {
+          "IconName": "Bike Scooter"
+        },
+        {
+          "IconName": "Turn Sharp Right"
+        },
+        {
+          "IconName": "Turn Slight Left"
+        },
+        {
+          "IconName": "No Transfer"
+        },
+        {
+          "IconName": "Snowmobile"
+        },
+        {
+          "IconName": "Turn Sharp Left"
+        },
+        {
+          "IconName": "Flightsmode"
+        },
+        {
+          "IconName": "Swap Driving Apps Wheel"
+        },
+        {
+          "IconName": "Swap Driving Apps"
+        },
+        {
+          "IconName": "Auto Towing"
+        },
+        {
+          "IconName": "Ambulance"
+        },
+        {
+          "IconName": "Auto Transmission"
+        }
+      ]
+    },
+    {
+      "GroupName": " Activities",
+      "IconsList": [
+        {
+          "IconName": "School"
+        },
+        {
+          "IconName": "Campaign"
+        },
+        {
+          "IconName": "Construction"
+        },
+        {
+          "IconName": "Engineering"
+        },
+        {
+          "IconName": "Volunteer Activism"
+        },
+        {
+          "IconName": "Science"
+        },
+        {
+          "IconName": "Sports Esports"
+        },
+        {
+          "IconName": "Confirmation Number"
+        },
+        {
+          "IconName": "Real Estate Agent"
+        },
+        {
+          "IconName": "Cake"
+        },
+        {
+          "IconName": "Self Improvement"
+        },
+        {
+          "IconName": "Sports Soccer"
+        },
+        {
+          "IconName": "Air"
+        },
+        {
+          "IconName": "Biotech"
+        },
+        {
+          "IconName": "Water"
+        },
+        {
+          "IconName": "Hiking"
+        },
+        {
+          "IconName": "Architecture"
+        },
+        {
+          "IconName": "Sports Score"
+        },
+        {
+          "IconName": "Personal Injury"
+        },
+        {
+          "IconName": "Sports Basketball"
+        },
+        {
+          "IconName": "Waves"
+        },
+        {
+          "IconName": "Theaters"
+        },
+        {
+          "IconName": "Sports Tennis"
+        },
+        {
+          "IconName": "Switch Account"
+        },
+        {
+          "IconName": "Nights Stay"
+        },
+        {
+          "IconName": "Sports Gymnastics"
+        },
+        {
+          "IconName": "How To Vote"
+        },
+        {
+          "IconName": "Backpack"
+        },
+        {
+          "IconName": "Sports Motorsports"
+        },
+        {
+          "IconName": "Surfing"
+        },
+        {
+          "IconName": "Sports Kabaddi"
+        },
+        {
+          "IconName": "Piano"
+        },
+        {
+          "IconName": "Experiment"
+        },
+        {
+          "IconName": "Sports"
+        },
+        {
+          "IconName": "Toys"
+        },
+        {
+          "IconName": "Sports Volleyball"
+        },
+        {
+          "IconName": "Camping"
+        },
+        {
+          "IconName": "Sports Baseball"
+        },
+        {
+          "IconName": "Sports Martial Arts"
+        },
+        {
+          "IconName": "Swords"
+        },
+        {
+          "IconName": "Downhill Skiing"
+        },
+        {
+          "IconName": "Scoreboard"
+        },
+        {
+          "IconName": "Kayaking"
+        },
+        {
+          "IconName": "Phishing"
+        },
+        {
+          "IconName": "Sports Handball"
+        },
+        {
+          "IconName": "Sports Football"
+        },
+        {
+          "IconName": "Skateboarding"
+        },
+        {
+          "IconName": "Trophy"
+        },
+        {
+          "IconName": "Sports Golf"
+        },
+        {
+          "IconName": "Toys Fan"
+        },
+        {
+          "IconName": "Sports Cricket"
+        },
+        {
+          "IconName": "Nordic Walking"
+        },
+        {
+          "IconName": "Roller Skating"
+        },
+        {
+          "IconName": "Kitesurfing"
+        },
+        {
+          "IconName": "Rowing"
+        },
+        {
+          "IconName": "Scuba Diving"
+        },
+        {
+          "IconName": "Storm"
+        },
+        {
+          "IconName": "Sports Mma"
+        },
+        {
+          "IconName": "Paragliding"
+        },
+        {
+          "IconName": "Featured Seasonal And Gifts"
+        },
+        {
+          "IconName": "Snowboarding"
+        },
+        {
+          "IconName": "Sports Hockey"
+        },
+        {
+          "IconName": "Ice Skating"
+        },
+        {
+          "IconName": "Snowshoeing"
+        },
+        {
+          "IconName": "Sports Rugby"
+        },
+        {
+          "IconName": "Sledding"
+        },
+        {
+          "IconName": "Family Link"
+        },
+        {
+          "IconName": "Piano Off"
+        },
+        {
+          "IconName": "No Backpack"
+        },
+        {
+          "IconName": "Rewarded Ads"
+        },
+        {
+          "IconName": "Ifl"
+        },
+        {
+          "IconName": "Steps"
+        },
+        {
+          "IconName": "Sprint"
+        },
+        {
+          "IconName": "Ecg Heart"
+        },
+        {
+          "IconName": "Health Metrics"
+        },
+        {
+          "IconName": "Toys And Games"
+        },
+        {
+          "IconName": "Mindfulness"
+        },
+        {
+          "IconName": "Cake Add"
+        },
+        {
+          "IconName": "Service Toolbox"
+        },
+        {
+          "IconName": "Readiness Score"
+        },
+        {
+          "IconName": "Exercise"
+        },
+        {
+          "IconName": "Stress Management"
+        },
+        {
+          "IconName": "Laps"
+        },
+        {
+          "IconName": "Sports And Outdoors"
+        },
+        {
+          "IconName": "Person Celebrate"
+        },
+        {
+          "IconName": "Person Play"
+        },
+        {
+          "IconName": "Newsstand"
+        },
+        {
+          "IconName": "Menstrual Health"
+        },
+        {
+          "IconName": "Azm"
+        },
+        {
+          "IconName": "Floor"
+        },
+        {
+          "IconName": "Relax"
+        },
+        {
+          "IconName": "Distance"
+        },
+        {
+          "IconName": "Pace"
+        },
+        {
+          "IconName": "Avg Pace"
+        },
+        {
+          "IconName": "Bath Private"
+        },
+        {
+          "IconName": "Play Shapes"
+        },
+        {
+          "IconName": "Water Medium"
+        },
+        {
+          "IconName": "Avg Time"
+        },
+        {
+          "IconName": "Interactive Space"
+        },
+        {
+          "IconName": "Water Full"
+        },
+        {
+          "IconName": "Bath Outdoor"
+        },
+        {
+          "IconName": "Onsen"
+        },
+        {
+          "IconName": "Fertile"
+        },
+        {
+          "IconName": "Spo2"
+        },
+        {
+          "IconName": "Eda"
+        },
+        {
+          "IconName": "Podiatry"
+        },
+        {
+          "IconName": "Elevation"
+        },
+        {
+          "IconName": "Bia"
+        },
+        {
+          "IconName": "Cleaning"
+        },
+        {
+          "IconName": "Glass Cup"
+        },
+        {
+          "IconName": "Hr Resting"
+        },
+        {
+          "IconName": "Bath Public Large"
+        },
+        {
+          "IconName": "Science Off"
+        },
+        {
+          "IconName": "Water Loss"
+        },
+        {
+          "IconName": "Check In Out"
+        },
+        {
+          "IconName": "Monitor Weight Loss"
+        },
+        {
+          "IconName": "Sauna"
+        },
+        {
+          "IconName": "Monitor Weight Gain"
+        },
+        {
+          "IconName": "Physical Therapy"
+        },
+        {
+          "IconName": "Sleep Score"
+        }
+      ]
+    },
+    {
+      "GroupName": " Hardware",
+      "IconsList": [
+        {
+          "IconName": "Phone iPhone"
+        },
+        {
+          "IconName": "Save"
+        },
+        {
+          "IconName": "Smartphone"
+        },
+        {
+          "IconName": "Print"
+        },
+        {
+          "IconName": "Keyboard Arrow Down"
+        },
+        {
+          "IconName": "Computer"
+        },
+        {
+          "IconName": "Devices"
+        },
+        {
+          "IconName": "Desktop Windows"
+        },
+        {
+          "IconName": "Smart Display"
+        },
+        {
+          "IconName": "Dns"
+        },
+        {
+          "IconName": "Keyboard Backspace"
+        },
+        {
+          "IconName": "Headphones"
+        },
+        {
+          "IconName": "Smart Toy"
+        },
+        {
+          "IconName": "Phone Android"
+        },
+        {
+          "IconName": "Memory"
+        },
+        {
+          "IconName": "Keyboard Arrow Right"
+        },
+        {
+          "IconName": "Keyboard"
+        },
+        {
+          "IconName": "Live Tv"
+        },
+        {
+          "IconName": "Laptop Mac"
+        },
+        {
+          "IconName": "Tv"
+        },
+        {
+          "IconName": "Headset Mic"
+        },
+        {
+          "IconName": "Keyboard Arrow Up"
+        },
+        {
+          "IconName": "Device Thermostat"
+        },
+        {
+          "IconName": "Mouse"
+        },
+        {
+          "IconName": "Balance"
+        },
+        {
+          "IconName": "Route"
+        },
+        {
+          "IconName": "Point Of Sale"
+        },
+        {
+          "IconName": "Keyboard Arrow Left"
+        },
+        {
+          "IconName": "Laptop Chromebook"
+        },
+        {
+          "IconName": "Keyboard Return"
+        },
+        {
+          "IconName": "Watch"
+        },
+        {
+          "IconName": "Power"
+        },
+        {
+          "IconName": "Laptop Windows"
+        },
+        {
+          "IconName": "Router"
+        },
+        {
+          "IconName": "Developer Board"
+        },
+        {
+          "IconName": "Display Settings"
+        },
+        {
+          "IconName": "Scale"
+        },
+        {
+          "IconName": "Book Online"
+        },
+        {
+          "IconName": "Cast"
+        },
+        {
+          "IconName": "Developer Mode"
+        },
+        {
+          "IconName": "Fax"
+        },
+        {
+          "IconName": "Videogame Asset"
+        },
+        {
+          "IconName": "Cast For Education"
+        },
+        {
+          "IconName": "Device Hub"
+        },
+        {
+          "IconName": "Straight"
+        },
+        {
+          "IconName": "Screen Search Desktop"
+        },
+        {
+          "IconName": "Mobile Friendly"
+        },
+        {
+          "IconName": "Desktop Mac"
+        },
+        {
+          "IconName": "Settings Input Antenna"
+        },
+        {
+          "IconName": "Settings Ethernet"
+        },
+        {
+          "IconName": "Monitor"
+        },
+        {
+          "IconName": "Devices Other"
+        },
+        {
+          "IconName": "Send To Mobile"
+        },
+        {
+          "IconName": "Important Devices"
+        },
+        {
+          "IconName": "Tablet Mac"
+        },
+        {
+          "IconName": "System Update"
+        },
+        {
+          "IconName": "Settings Remote"
+        },
+        {
+          "IconName": "Monitor Weight"
+        },
+        {
+          "IconName": "Screen Rotation"
+        },
+        {
+          "IconName": "Screen Share"
+        },
+        {
+          "IconName": "Keyboard Alt"
+        },
+        {
+          "IconName": "Settings Input Component"
+        },
+        {
+          "IconName": "Sim Card"
+        },
+        {
+          "IconName": "Speaker"
+        },
+        {
+          "IconName": "Merge"
+        },
+        {
+          "IconName": "Tablet"
+        },
+        {
+          "IconName": "Vibration"
+        },
+        {
+          "IconName": "Keyboard Tab"
+        },
+        {
+          "IconName": "Connected Tv"
+        },
+        {
+          "IconName": "Power Off"
+        },
+        {
+          "IconName": "Screenshot Monitor"
+        },
+        {
+          "IconName": "Remember Me"
+        },
+        {
+          "IconName": "Browser Updated"
+        },
+        {
+          "IconName": "Security Update Good"
+        },
+        {
+          "IconName": "Sd Card"
+        },
+        {
+          "IconName": "Cast Connected"
+        },
+        {
+          "IconName": "Device Unknown"
+        },
+        {
+          "IconName": "Tablet Android"
+        },
+        {
+          "IconName": "Charging Station"
+        },
+        {
+          "IconName": "Phonelink Setup"
+        },
+        {
+          "IconName": "Punch Clock"
+        },
+        {
+          "IconName": "Screenshot"
+        },
+        {
+          "IconName": "Scanner"
+        },
+        {
+          "IconName": "Settings Input Hdmi"
+        },
+        {
+          "IconName": "Stay Current Portrait"
+        },
+        {
+          "IconName": "Tap And Play"
+        },
+        {
+          "IconName": "Keyboard Hide"
+        },
+        {
+          "IconName": "Print Disabled"
+        },
+        {
+          "IconName": "Security Update Warning"
+        },
+        {
+          "IconName": "Keyboard Capslock"
+        },
+        {
+          "IconName": "Speaker Group"
+        },
+        {
+          "IconName": "Disc Full"
+        },
+        {
+          "IconName": "App Blocking"
+        },
+        {
+          "IconName": "Mobile Screen Share"
+        },
+        {
+          "IconName": "Aod"
+        },
+        {
+          "IconName": "Sd Card Alert"
+        },
+        {
+          "IconName": "Tty"
+        },
+        {
+          "IconName": "Add To Home Screen"
+        },
+        {
+          "IconName": "Lift To Talk"
+        },
+        {
+          "IconName": "Earbuds"
+        },
+        {
+          "IconName": "Perm Device Information"
+        },
+        {
+          "IconName": "Stop Screen Share"
+        },
+        {
+          "IconName": "Mobile Off"
+        },
+        {
+          "IconName": "Headset Off"
+        },
+        {
+          "IconName": "Desktop Access Disabled"
+        },
+        {
+          "IconName": "Screen Lock Portrait"
+        },
+        {
+          "IconName": "Reset Tv"
+        },
+        {
+          "IconName": "Offline Share"
+        },
+        {
+          "IconName": "Adf Scanner"
+        },
+        {
+          "IconName": "Headphones Battery"
+        },
+        {
+          "IconName": "Dock"
+        },
+        {
+          "IconName": "Roundabout Right"
+        },
+        {
+          "IconName": "Settop Component"
+        },
+        {
+          "IconName": "Watch Off"
+        },
+        {
+          "IconName": "Settings Input Svideo"
+        },
+        {
+          "IconName": "Smart Screen"
+        },
+        {
+          "IconName": "Stay Current Landscape"
+        },
+        {
+          "IconName": "Chromecast Device"
+        },
+        {
+          "IconName": "Settings Cell"
+        },
+        {
+          "IconName": "Home Max"
+        },
+        {
+          "IconName": "Earbuds Battery"
+        },
+        {
+          "IconName": "Power Input"
+        },
+        {
+          "IconName": "No Sim"
+        },
+        {
+          "IconName": "Ramp Right"
+        },
+        {
+          "IconName": "Screen Lock Landscape"
+        },
+        {
+          "IconName": "Roundabout Left"
+        },
+        {
+          "IconName": "Stay Primary Portrait"
+        },
+        {
+          "IconName": "Stay Primary Landscape"
+        },
+        {
+          "IconName": "Developer Board Off"
+        },
+        {
+          "IconName": "Tv Off"
+        },
+        {
+          "IconName": "Home Mini"
+        },
+        {
+          "IconName": "Phonelink Off"
+        },
+        {
+          "IconName": "Open In Phone"
+        },
+        {
+          "IconName": "Ramp Left"
+        },
+        {
+          "IconName": "Screen Lock Rotation"
+        },
+        {
+          "IconName": "Videogame Asset Off"
+        },
+        {
+          "IconName": "Aod Tablet"
+        },
+        {
+          "IconName": "Gamepad"
+        },
+        {
+          "IconName": "Robot"
+        },
+        {
+          "IconName": "Devices Wearables"
+        },
+        {
+          "IconName": "Google Home Devices"
+        },
+        {
+          "IconName": "Robot 2"
+        },
+        {
+          "IconName": "Rear Camera"
+        },
+        {
+          "IconName": "Tv Options Edit Channels"
+        },
+        {
+          "IconName": "Jamboard Kiosk"
+        },
+        {
+          "IconName": "App Promo"
+        },
+        {
+          "IconName": "Developer Mode Tv"
+        },
+        {
+          "IconName": "Mimo"
+        },
+        {
+          "IconName": "Joystick"
+        },
+        {
+          "IconName": "Touchpad Mouse"
+        },
+        {
+          "IconName": "Memory Alt"
+        },
+        {
+          "IconName": "Mimo Disconnect"
+        },
+        {
+          "IconName": "Tv Options Input Settings"
+        },
+        {
+          "IconName": "Camera Video"
+        },
+        {
+          "IconName": "Tv Signin"
+        },
+        {
+          "IconName": "Devices Off"
+        },
+        {
+          "IconName": "Lightning Stand"
+        },
+        {
+          "IconName": "Aod Watch"
+        },
+        {
+          "IconName": "Hard Drive"
+        },
+        {
+          "IconName": "Tv Guide"
+        },
+        {
+          "IconName": "Ecg"
+        },
+        {
+          "IconName": "Night Sight Max"
+        },
+        {
+          "IconName": "General Device"
+        },
+        {
+          "IconName": "Missing Controller"
+        },
+        {
+          "IconName": "Assistant Device"
+        },
+        {
+          "IconName": "Reset Wrench"
+        },
+        {
+          "IconName": "Stream Apps"
+        },
+        {
+          "IconName": "Keyboard Tab Rtl"
+        },
+        {
+          "IconName": "Open Jam"
+        },
+        {
+          "IconName": "Cast Warning"
+        },
+        {
+          "IconName": "Deskphone"
+        },
+        {
+          "IconName": "Screenshot Tablet"
+        },
+        {
+          "IconName": "Cast Pause"
+        },
+        {
+          "IconName": "Hard Drive 2"
+        },
+        {
+          "IconName": "Pacemaker"
+        },
+        {
+          "IconName": "Tv Remote"
+        },
+        {
+          "IconName": "Watch Wake"
+        },
+        {
+          "IconName": "Audio Video Receiver"
+        },
+        {
+          "IconName": "Lda"
+        },
+        {
+          "IconName": "Print Connect"
+        },
+        {
+          "IconName": "Print Error"
+        },
+        {
+          "IconName": "Print Add"
+        },
+        {
+          "IconName": "Print Lock"
+        },
+        {
+          "IconName": "Ventilator"
+        },
+        {
+          "IconName": "Watch Button Press"
+        },
+        {
+          "IconName": "P2p"
+        },
+        {
+          "IconName": "Security Key"
+        }
+      ]
+    },
+    {
+      "GroupName": " Android",
+      "IconsList": [
+        {
+          "IconName": "Dark Mode"
+        },
+        {
+          "IconName": "Light Mode"
+        },
+        {
+          "IconName": "Wifi"
+        },
+        {
+          "IconName": "Signal Cellular Alt"
+        },
+        {
+          "IconName": "Password"
+        },
+        {
+          "IconName": "Widgets"
+        },
+        {
+          "IconName": "Android"
+        },
+        {
+          "IconName": "Storage"
+        },
+        {
+          "IconName": "Pin"
+        },
+        {
+          "IconName": "Rss Feed"
+        },
+        {
+          "IconName": "Battery Full"
+        },
+        {
+          "IconName": "Wifi Off"
+        },
+        {
+          "IconName": "Bluetooth"
+        },
+        {
+          "IconName": "Battery Charging Full"
+        },
+        {
+          "IconName": "Thermostat"
+        },
+        {
+          "IconName": "Dvr"
+        },
+        {
+          "IconName": "Graphic Eq"
+        },
+        {
+          "IconName": "Nightlight"
+        },
+        {
+          "IconName": "Battery 5 Bar"
+        },
+        {
+          "IconName": "Signal Wifi 4 Bar"
+        },
+        {
+          "IconName": "Gpp Maybe"
+        },
+        {
+          "IconName": "Cable"
+        },
+        {
+          "IconName": "Gpp Bad"
+        },
+        {
+          "IconName": "Data Usage"
+        },
+        {
+          "IconName": "Battery 4 Bar"
+        },
+        {
+          "IconName": "Signal Cellular 4 Bar"
+        },
+        {
+          "IconName": "Radar"
+        },
+        {
+          "IconName": "Battery Full Alt"
+        },
+        {
+          "IconName": "Airplanemode Active"
+        },
+        {
+          "IconName": "Cameraswitch"
+        },
+        {
+          "IconName": "Battery 0 Bar"
+        },
+        {
+          "IconName": "Wallpaper"
+        },
+        {
+          "IconName": "Flashlight On"
+        },
+        {
+          "IconName": "Signal Disconnected"
+        },
+        {
+          "IconName": "Network Check"
+        },
+        {
+          "IconName": "Battery 6 Bar"
+        },
+        {
+          "IconName": "Charger"
+        },
+        {
+          "IconName": "Wifi Tethering"
+        },
+        {
+          "IconName": "Sim Card Download"
+        },
+        {
+          "IconName": "Usb"
+        },
+        {
+          "IconName": "Quick Phrases"
+        },
+        {
+          "IconName": "Splitscreen"
+        },
+        {
+          "IconName": "ADB"
+        },
+        {
+          "IconName": "Battery 3 Bar"
+        },
+        {
+          "IconName": "Battery 1 Bar"
+        },
+        {
+          "IconName": "Network Wifi 3 Bar"
+        },
+        {
+          "IconName": "Battery Low"
+        },
+        {
+          "IconName": "Battery Alert"
+        },
+        {
+          "IconName": "Network Wifi"
+        },
+        {
+          "IconName": "Bluetooth Searching"
+        },
+        {
+          "IconName": "Bluetooth Connected"
+        },
+        {
+          "IconName": "Wifi Find"
+        },
+        {
+          "IconName": "5g"
+        },
+        {
+          "IconName": "Battery 2 Bar"
+        },
+        {
+          "IconName": "Brightness High"
+        },
+        {
+          "IconName": "Network Cell"
+        },
+        {
+          "IconName": "Nfc"
+        },
+        {
+          "IconName": "Pattern"
+        },
+        {
+          "IconName": "Data Saver On"
+        },
+        {
+          "IconName": "Bluetooth Disabled"
+        },
+        {
+          "IconName": "Signal Wifi Statusbar Not Connected"
+        },
+        {
+          "IconName": "Signal Wifi Bad"
+        },
+        {
+          "IconName": "Signal Cellular 3 Bar"
+        },
+        {
+          "IconName": "Network Wifi 2 Bar"
+        },
+        {
+          "IconName": "Network Wifi 1 Bar"
+        },
+        {
+          "IconName": "Noise Control Off"
+        },
+        {
+          "IconName": "Brightness Medium"
+        },
+        {
+          "IconName": "Signal Wifi Off"
+        },
+        {
+          "IconName": "Mode Standby"
+        },
+        {
+          "IconName": "Brightness Low"
+        },
+        {
+          "IconName": "Battery Very Low"
+        },
+        {
+          "IconName": "Mobiledata Off"
+        },
+        {
+          "IconName": "Signal Wifi 0 Bar"
+        },
+        {
+          "IconName": "Battery Charging 20"
+        },
+        {
+          "IconName": "Battery Charging 80"
+        },
+        {
+          "IconName": "Battery Saver"
+        },
+        {
+          "IconName": "Grid 4x4"
+        },
+        {
+          "IconName": "Battery Charging 90"
+        },
+        {
+          "IconName": "Flashlight Off"
+        },
+        {
+          "IconName": "Signal Wifi Statusbar Null"
+        },
+        {
+          "IconName": "Battery Charging 50"
+        },
+        {
+          "IconName": "Settings System Daydream"
+        },
+        {
+          "IconName": "Battery Unknown"
+        },
+        {
+          "IconName": "Signal Cellular 2 Bar"
+        },
+        {
+          "IconName": "Screen Rotation Alt"
+        },
+        {
+          "IconName": "Signal Cellular 1 Bar"
+        },
+        {
+          "IconName": "Wifi Calling 3"
+        },
+        {
+          "IconName": "Wifi Lock"
+        },
+        {
+          "IconName": "Badge Critical Battery"
+        },
+        {
+          "IconName": "4g Mobiledata"
+        },
+        {
+          "IconName": "Noise Aware"
+        },
+        {
+          "IconName": "Do Not Disturb On Total Silence"
+        },
+        {
+          "IconName": "Battery Charging 60"
+        },
+        {
+          "IconName": "Signal Cellular Connected No Internet 0 Bar"
+        },
+        {
+          "IconName": "Nearby Error"
+        },
+        {
+          "IconName": "Signal Cellular 0 Bar"
+        },
+        {
+          "IconName": "Battery Charging 30"
+        },
+        {
+          "IconName": "Network Ping"
+        },
+        {
+          "IconName": "Signal Cellular Connected No Internet 4 Bar"
+        },
+        {
+          "IconName": "Wifi Tethering Error"
+        },
+        {
+          "IconName": "Brightness Auto"
+        },
+        {
+          "IconName": "Edgesensor High"
+        },
+        {
+          "IconName": "Wifi Calling 1"
+        },
+        {
+          "IconName": "Signal Cellular Nodata"
+        },
+        {
+          "IconName": "Wifi 2 Bar"
+        },
+        {
+          "IconName": "Grid 3x3"
+        },
+        {
+          "IconName": "LTE Mobiledata"
+        },
+        {
+          "IconName": "1x Mobiledata"
+        },
+        {
+          "IconName": "Airplanemode Inactive"
+        },
+        {
+          "IconName": "Perm Data Setting"
+        },
+        {
+          "IconName": "Signal Cellular Alt 2 Bar"
+        },
+        {
+          "IconName": "Devices Fold"
+        },
+        {
+          "IconName": "Bluetooth Drive"
+        },
+        {
+          "IconName": "Perm Scan Wifi"
+        },
+        {
+          "IconName": "Network Locked"
+        },
+        {
+          "IconName": "4g Plus Mobiledata"
+        },
+        {
+          "IconName": "Media Bluetooth On"
+        },
+        {
+          "IconName": "Wifi Calling 2"
+        },
+        {
+          "IconName": "Signal Cellular Off"
+        },
+        {
+          "IconName": "Timer 10 Select"
+        },
+        {
+          "IconName": "Wifi Tethering Off"
+        },
+        {
+          "IconName": "Edgesensor Low"
+        },
+        {
+          "IconName": "Signal Cellular Alt 1 Bar"
+        },
+        {
+          "IconName": "Wifi 1 Bar"
+        },
+        {
+          "IconName": "3g Mobiledata"
+        },
+        {
+          "IconName": "Usb Off"
+        },
+        {
+          "IconName": "Apk Install"
+        },
+        {
+          "IconName": "Signal Cellular Null"
+        },
+        {
+          "IconName": "LTE Plus Mobiledata"
+        },
+        {
+          "IconName": "iOS"
+        },
+        {
+          "IconName": "Grid Goldenratio"
+        },
+        {
+          "IconName": "G Mobiledata"
+        },
+        {
+          "IconName": "Portable Wifi Off"
+        },
+        {
+          "IconName": "Noise Control On"
+        },
+        {
+          "IconName": "Media Bluetooth Off"
+        },
+        {
+          "IconName": "Timer 3 Select"
+        },
+        {
+          "IconName": "Apk Document"
+        },
+        {
+          "IconName": "E Mobiledata"
+        },
+        {
+          "IconName": "Nearby Off"
+        },
+        {
+          "IconName": "H Mobiledata"
+        },
+        {
+          "IconName": "R Mobiledata"
+        },
+        {
+          "IconName": "H Plus Mobiledata"
+        },
+        {
+          "IconName": "Dock To Left"
+        },
+        {
+          "IconName": "Dual Screen"
+        },
+        {
+          "IconName": "Stylus Note"
+        },
+        {
+          "IconName": "Bigtop Updates"
+        },
+        {
+          "IconName": "Stylus"
+        },
+        {
+          "IconName": "Nearby"
+        },
+        {
+          "IconName": "Overview Key"
+        },
+        {
+          "IconName": "Dock To Right"
+        },
+        {
+          "IconName": "Screenshot Region"
+        },
+        {
+          "IconName": "Brightness Alert"
+        },
+        {
+          "IconName": "Screenshot Frame"
+        },
+        {
+          "IconName": "Display External Input"
+        },
+        {
+          "IconName": "Network Wifi 3 Bar Locked"
+        },
+        {
+          "IconName": "Screen Record"
+        },
+        {
+          "IconName": "Brightness Empty"
+        },
+        {
+          "IconName": "Battery Status Good"
+        },
+        {
+          "IconName": "Keyboard Keys"
+        },
+        {
+          "IconName": "Splitscreen Left"
+        },
+        {
+          "IconName": "Splitscreen Right"
+        },
+        {
+          "IconName": "Screenshot Keyboard"
+        },
+        {
+          "IconName": "Keyboard External Input"
+        },
+        {
+          "IconName": "Magnify Docked"
+        },
+        {
+          "IconName": "Battery Error"
+        },
+        {
+          "IconName": "Screen Rotation Up"
+        },
+        {
+          "IconName": "Magnify Fullscreen"
+        },
+        {
+          "IconName": "Wallpaper Slideshow"
+        },
+        {
+          "IconName": "Dock To Bottom"
+        },
+        {
+          "IconName": "Keyboard Off"
+        },
+        {
+          "IconName": "Network Wifi 2 Bar Locked"
+        },
+        {
+          "IconName": "Network Wifi Locked"
+        },
+        {
+          "IconName": "Battery Plus"
+        },
+        {
+          "IconName": "Keyboard Capslock Badge"
+        },
+        {
+          "IconName": "Backlight Low"
+        },
+        {
+          "IconName": "Battery Change"
+        },
+        {
+          "IconName": "Network Wifi 1 Bar Locked"
+        },
+        {
+          "IconName": "1x Mobiledata Badge"
+        },
+        {
+          "IconName": "5g Mobiledata Badge"
+        },
+        {
+          "IconName": "Keyboard Full"
+        },
+        {
+          "IconName": "Wifi Home"
+        },
+        {
+          "IconName": "Wifi Notification"
+        },
+        {
+          "IconName": "Backlight High"
+        },
+        {
+          "IconName": "H Plus Mobiledata Badge"
+        },
+        {
+          "IconName": "Keyboard Onscreen"
+        },
+        {
+          "IconName": "Keyboard Previous Language"
+        },
+        {
+          "IconName": "LTE Mobiledata Badge"
+        },
+        {
+          "IconName": "Splitscreen Bottom"
+        },
+        {
+          "IconName": "Splitscreen Top"
+        },
+        {
+          "IconName": "3g Mobiledata Badge"
+        },
+        {
+          "IconName": "4g Mobiledata Badge"
+        },
+        {
+          "IconName": "E Mobiledata Badge"
+        },
+        {
+          "IconName": "G Mobiledata Badge"
+        },
+        {
+          "IconName": "Grid 3x3 Off"
+        },
+        {
+          "IconName": "H Mobiledata Badge"
+        },
+        {
+          "IconName": "LTE Plus Mobiledata Badge"
+        },
+        {
+          "IconName": "Battery Share"
+        },
+        {
+          "IconName": "Ev Mobiledata Badge"
+        },
+        {
+          "IconName": "Signal Cellular Pause"
+        }
+      ]
+    },
+    {
+      "GroupName": " Privacy &amp; Security",
+      "IconsList": [
+        {
+          "IconName": "Badge"
+        },
+        {
+          "IconName": "Verified User"
+        },
+        {
+          "IconName": "Admin Panel Settings"
+        },
+        {
+          "IconName": "Report"
+        },
+        {
+          "IconName": "Security"
+        },
+        {
+          "IconName": "Vpn Key"
+        },
+        {
+          "IconName": "Shield"
+        },
+        {
+          "IconName": "Policy"
+        },
+        {
+          "IconName": "Exclamation"
+        },
+        {
+          "IconName": "Privacy Tip"
+        },
+        {
+          "IconName": "Assured Workload"
+        },
+        {
+          "IconName": "Vpn Lock"
+        },
+        {
+          "IconName": "Disabled Visible"
+        },
+        {
+          "IconName": "E911 Emergency"
+        },
+        {
+          "IconName": "Enhanced Encryption"
+        },
+        {
+          "IconName": "Private Connectivity"
+        },
+        {
+          "IconName": "Vpn Key Off"
+        },
+        {
+          "IconName": "Add Moderator"
+        },
+        {
+          "IconName": "Encrypted"
+        },
+        {
+          "IconName": "No Encryption"
+        },
+        {
+          "IconName": "Sync Lock"
+        },
+        {
+          "IconName": "Wifi Password"
+        },
+        {
+          "IconName": "Key Visualizer"
+        },
+        {
+          "IconName": "Remove Moderator"
+        },
+        {
+          "IconName": "Report Off"
+        },
+        {
+          "IconName": "Passkey"
+        },
+        {
+          "IconName": "Shield Lock"
+        },
+        {
+          "IconName": "Shield Person"
+        },
+        {
+          "IconName": "Shield Locked"
+        },
+        {
+          "IconName": "Vpn Key Alert"
+        },
+        {
+          "IconName": "Shield Question"
+        }
+      ]
+    },
+    {
+      "GroupName": " Travel",
+      "IconsList": [
+        {
+          "IconName": "Apartment"
+        },
+        {
+          "IconName": "Location City"
+        },
+        {
+          "IconName": "Fitness Center"
+        },
+        {
+          "IconName": "Lunch Dining"
+        },
+        {
+          "IconName": "Spa"
+        },
+        {
+          "IconName": "Cottage"
+        },
+        {
+          "IconName": "Local Cafe"
+        },
+        {
+          "IconName": "Hotel"
+        },
+        {
+          "IconName": "Family Restroom"
+        },
+        {
+          "IconName": "Beach Access"
+        },
+        {
+          "IconName": "Local Bar"
+        },
+        {
+          "IconName": "Pool"
+        },
+        {
+          "IconName": "Other Houses"
+        },
+        {
+          "IconName": "Luggage"
+        },
+        {
+          "IconName": "Liquor"
+        },
+        {
+          "IconName": "Casino"
+        },
+        {
+          "IconName": "Airplane Ticket"
+        },
+        {
+          "IconName": "Room Service"
+        },
+        {
+          "IconName": "Sports Bar"
+        },
+        {
+          "IconName": "Bakery Dining"
+        },
+        {
+          "IconName": "Ramen Dining"
+        },
+        {
+          "IconName": "Nightlife"
+        },
+        {
+          "IconName": "Local Dining"
+        },
+        {
+          "IconName": "Holiday Village"
+        },
+        {
+          "IconName": "Icecream"
+        },
+        {
+          "IconName": "Escalator Warning"
+        },
+        {
+          "IconName": "Dinner Dining"
+        },
+        {
+          "IconName": "Museum"
+        },
+        {
+          "IconName": "Food Bank"
+        },
+        {
+          "IconName": "Night Shelter"
+        },
+        {
+          "IconName": "Festival"
+        },
+        {
+          "IconName": "Attractions"
+        },
+        {
+          "IconName": "Golf Course"
+        },
+        {
+          "IconName": "Stairs"
+        },
+        {
+          "IconName": "Villa"
+        },
+        {
+          "IconName": "Smoke Free"
+        },
+        {
+          "IconName": "Smoking Rooms"
+        },
+        {
+          "IconName": "Car Rental"
+        },
+        {
+          "IconName": "Airline Seat Recline Normal"
+        },
+        {
+          "IconName": "Elevator"
+        },
+        {
+          "IconName": "Gite"
+        },
+        {
+          "IconName": "Child Friendly"
+        },
+        {
+          "IconName": "Airline Seat Recline Extra"
+        },
+        {
+          "IconName": "Breakfast Dining"
+        },
+        {
+          "IconName": "Carpenter"
+        },
+        {
+          "IconName": "Car Repair"
+        },
+        {
+          "IconName": "Cabin"
+        },
+        {
+          "IconName": "Brunch Dining"
+        },
+        {
+          "IconName": "Do Not Touch"
+        },
+        {
+          "IconName": "No Food"
+        },
+        {
+          "IconName": "Houseboat"
+        },
+        {
+          "IconName": "Tapas"
+        },
+        {
+          "IconName": "Rice Bowl"
+        },
+        {
+          "IconName": "Wheelchair Pickup"
+        },
+        {
+          "IconName": "Bento"
+        },
+        {
+          "IconName": "No Drinks"
+        },
+        {
+          "IconName": "Do Not Step"
+        },
+        {
+          "IconName": "Airline Seat Flat"
+        },
+        {
+          "IconName": "Bungalow"
+        },
+        {
+          "IconName": "Escalator"
+        },
+        {
+          "IconName": "Airline Seat Individual Suite"
+        },
+        {
+          "IconName": "Chalet"
+        },
+        {
+          "IconName": "No Luggage"
+        },
+        {
+          "IconName": "Travel"
+        },
+        {
+          "IconName": "Airline Seat Legroom Extra"
+        },
+        {
+          "IconName": "Airline Seat Flat Angled"
+        },
+        {
+          "IconName": "Airline Seat Legroom Normal"
+        },
+        {
+          "IconName": "Airline Seat Legroom Reduced"
+        },
+        {
+          "IconName": "No Stroller"
+        },
+        {
+          "IconName": "Flights And Hotels"
+        },
+        {
+          "IconName": "Personal Places"
+        },
+        {
+          "IconName": "Trip"
+        },
+        {
+          "IconName": "Travel Luggage And Bags"
+        },
+        {
+          "IconName": "Personal Bag"
+        },
+        {
+          "IconName": "Checked Bag"
+        },
+        {
+          "IconName": "Concierge"
+        },
+        {
+          "IconName": "Personal Bag Question"
+        },
+        {
+          "IconName": "Carry On Bag Question"
+        },
+        {
+          "IconName": "Your Trips"
+        },
+        {
+          "IconName": "Checked Bag Question"
+        },
+        {
+          "IconName": "Carry On Bag Checked"
+        },
+        {
+          "IconName": "Carry On Bag"
+        },
+        {
+          "IconName": "Personal Bag Off"
+        },
+        {
+          "IconName": "Carry On Bag Inactive"
+        }
+      ]
+    },
+    {
+      "GroupName": " Household",
+      "IconsList": [
+        {
+          "IconName": "House"
+        },
+        {
+          "IconName": "Bed"
+        },
+        {
+          "IconName": "Ac Unit"
+        },
+        {
+          "IconName": "Chair"
+        },
+        {
+          "IconName": "Electric Bolt"
+        },
+        {
+          "IconName": "Coffee"
+        },
+        {
+          "IconName": "Sensors"
+        },
+        {
+          "IconName": "Child Care"
+        },
+        {
+          "IconName": "Back Hand"
+        },
+        {
+          "IconName": "Emergency Home"
+        },
+        {
+          "IconName": "Checkroom"
+        },
+        {
+          "IconName": "Grass"
+        },
+        {
+          "IconName": "Shower"
+        },
+        {
+          "IconName": "Mode Fan"
+        },
+        {
+          "IconName": "Mop"
+        },
+        {
+          "IconName": "Kitchen"
+        },
+        {
+          "IconName": "Thermometer"
+        },
+        {
+          "IconName": "Styler"
+        },
+        {
+          "IconName": "Yard"
+        },
+        {
+          "IconName": "Bathtub"
+        },
+        {
+          "IconName": "King Bed"
+        },
+        {
+          "IconName": "Roofing"
+        },
+        {
+          "IconName": "Energy Savings Leaf"
+        },
+        {
+          "IconName": "Window"
+        },
+        {
+          "IconName": "Valve"
+        },
+        {
+          "IconName": "Cooking"
+        },
+        {
+          "IconName": "Garage Home"
+        },
+        {
+          "IconName": "Door Front"
+        },
+        {
+          "IconName": "Mode Heat"
+        },
+        {
+          "IconName": "Light"
+        },
+        {
+          "IconName": "Foundation"
+        },
+        {
+          "IconName": "Garage"
+        },
+        {
+          "IconName": "Outdoor Grill"
+        },
+        {
+          "IconName": "Table Restaurant"
+        },
+        {
+          "IconName": "Dining"
+        },
+        {
+          "IconName": "Sensor Occupied"
+        },
+        {
+          "IconName": "Deck"
+        },
+        {
+          "IconName": "Weekend"
+        },
+        {
+          "IconName": "Coffee Maker"
+        },
+        {
+          "IconName": "Humidity High"
+        },
+        {
+          "IconName": "Flatware"
+        },
+        {
+          "IconName": "Highlight"
+        },
+        {
+          "IconName": "Fireplace"
+        },
+        {
+          "IconName": "Humidity Low"
+        },
+        {
+          "IconName": "Mode Night"
+        },
+        {
+          "IconName": "Electric Meter"
+        },
+        {
+          "IconName": "Tv Gen"
+        },
+        {
+          "IconName": "Humidity Mid"
+        },
+        {
+          "IconName": "Bedroom Parent"
+        },
+        {
+          "IconName": "Chair Alt"
+        },
+        {
+          "IconName": "Blender"
+        },
+        {
+          "IconName": "Scene"
+        },
+        {
+          "IconName": "Microwave"
+        },
+        {
+          "IconName": "Heat Pump"
+        },
+        {
+          "IconName": "Bedroom Baby"
+        },
+        {
+          "IconName": "Single Bed"
+        },
+        {
+          "IconName": "Oven Gen"
+        },
+        {
+          "IconName": "Bathroom"
+        },
+        {
+          "IconName": "Hardware"
+        },
+        {
+          "IconName": "In Home Mode"
+        },
+        {
+          "IconName": "Hot Tub"
+        },
+        {
+          "IconName": "Mode Off On"
+        },
+        {
+          "IconName": "Sprinkler"
+        },
+        {
+          "IconName": "Table Bar"
+        },
+        {
+          "IconName": "Gas Meter"
+        },
+        {
+          "IconName": "Mode Cool"
+        },
+        {
+          "IconName": "Crib"
+        },
+        {
+          "IconName": "Propane Tank"
+        },
+        {
+          "IconName": "Soap"
+        },
+        {
+          "IconName": "Living"
+        },
+        {
+          "IconName": "Countertops"
+        },
+        {
+          "IconName": "Home Iot Device"
+        },
+        {
+          "IconName": "Fire Extinguisher"
+        },
+        {
+          "IconName": "Outlet"
+        },
+        {
+          "IconName": "Gate"
+        },
+        {
+          "IconName": "Remote Gen"
+        },
+        {
+          "IconName": "Matter"
+        },
+        {
+          "IconName": "Sensor Door"
+        },
+        {
+          "IconName": "Event Seat"
+        },
+        {
+          "IconName": "Airware"
+        },
+        {
+          "IconName": "Faucet"
+        },
+        {
+          "IconName": "Dishwasher Gen"
+        },
+        {
+          "IconName": "Air Freshener"
+        },
+        {
+          "IconName": "Energy Program Saving"
+        },
+        {
+          "IconName": "Balcony"
+        },
+        {
+          "IconName": "Water Damage"
+        },
+        {
+          "IconName": "Wash"
+        },
+        {
+          "IconName": "Camera Indoor"
+        },
+        {
+          "IconName": "Bedroom Child"
+        },
+        {
+          "IconName": "House Siding"
+        },
+        {
+          "IconName": "Switch"
+        },
+        {
+          "IconName": "Microwave Gen"
+        },
+        {
+          "IconName": "Detector Smoke"
+        },
+        {
+          "IconName": "Door Sliding"
+        },
+        {
+          "IconName": "Iron"
+        },
+        {
+          "IconName": "Energy Program Time Used"
+        },
+        {
+          "IconName": "Desk"
+        },
+        {
+          "IconName": "Umbrella"
+        },
+        {
+          "IconName": "Water Heater"
+        },
+        {
+          "IconName": "Fence"
+        },
+        {
+          "IconName": "Dresser"
+        },
+        {
+          "IconName": "Doorbell"
+        },
+        {
+          "IconName": "Door Back"
+        },
+        {
+          "IconName": "Mode Fan Off"
+        },
+        {
+          "IconName": "Hvac"
+        },
+        {
+          "IconName": "Emergency Share"
+        },
+        {
+          "IconName": "Kettle"
+        },
+        {
+          "IconName": "Camera Outdoor"
+        },
+        {
+          "IconName": "Air Purifier Gen"
+        },
+        {
+          "IconName": "Emergency Heat"
+        },
+        {
+          "IconName": "Stroller"
+        },
+        {
+          "IconName": "Curtains"
+        },
+        {
+          "IconName": "Multicooker"
+        },
+        {
+          "IconName": "Shield Moon"
+        },
+        {
+          "IconName": "Sensors Off"
+        },
+        {
+          "IconName": "Mode Heat Cool"
+        },
+        {
+          "IconName": "Emergency Recording"
+        },
+        {
+          "IconName": "Thermostat Auto"
+        },
+        {
+          "IconName": "Smart Outlet"
+        },
+        {
+          "IconName": "Controller Gen"
+        },
+        {
+          "IconName": "Blinds"
+        },
+        {
+          "IconName": "Roller Shades"
+        },
+        {
+          "IconName": "Dry"
+        },
+        {
+          "IconName": "Blinds Closed"
+        },
+        {
+          "IconName": "Roller Shades Closed"
+        },
+        {
+          "IconName": "Propane"
+        },
+        {
+          "IconName": "Sensor Window"
+        },
+        {
+          "IconName": "Thermostat Carbon"
+        },
+        {
+          "IconName": "Apparel"
+        },
+        {
+          "IconName": "Range Hood"
+        },
+        {
+          "IconName": "Tv With Assistant"
+        },
+        {
+          "IconName": "Doorbell 3p"
+        },
+        {
+          "IconName": "Blanket"
+        },
+        {
+          "IconName": "Vertical Shades Closed"
+        },
+        {
+          "IconName": "Vertical Shades"
+        },
+        {
+          "IconName": "Curtains Closed"
+        },
+        {
+          "IconName": "Mode Heat Off"
+        },
+        {
+          "IconName": "Mode Cool Off"
+        },
+        {
+          "IconName": "Family Home"
+        },
+        {
+          "IconName": "Health And Beauty"
+        },
+        {
+          "IconName": "Tamper Detection Off"
+        },
+        {
+          "IconName": "Grocery"
+        },
+        {
+          "IconName": "Light Off"
+        },
+        {
+          "IconName": "Shelves"
+        },
+        {
+          "IconName": "Household Supplies"
+        },
+        {
+          "IconName": "Vacuum"
+        },
+        {
+          "IconName": "Wall Art"
+        },
+        {
+          "IconName": "Garage Door"
+        },
+        {
+          "IconName": "Dishwasher"
+        },
+        {
+          "IconName": "Home And Garden"
+        },
+        {
+          "IconName": "Thermometer Add"
+        },
+        {
+          "IconName": "Thermometer Gain"
+        },
+        {
+          "IconName": "Air Purifier"
+        },
+        {
+          "IconName": "Home Improvement And Tools"
+        },
+        {
+          "IconName": "Oven"
+        },
+        {
+          "IconName": "Thermometer Loss"
+        },
+        {
+          "IconName": "Hallway"
+        },
+        {
+          "IconName": "Thermometer Minus"
+        },
+        {
+          "IconName": "Emergency Share Off"
+        },
+        {
+          "IconName": "Skillet"
+        },
+        {
+          "IconName": "Stockpot"
+        },
+        {
+          "IconName": "Skillet Cooktop"
+        }
+      ]
+    },
+    {
+      "GroupName": " Home",
+      "IconsList": [
+        {
+          "IconName": "Stadia Controller"
+        },
+        {
+          "IconName": "Door Open"
+        },
+        {
+          "IconName": "Nest Eco Leaf"
+        },
+        {
+          "IconName": "Device Reset"
+        },
+        {
+          "IconName": "Nest Remote Comfort Sensor"
+        },
+        {
+          "IconName": "Nest Clock Farsight Analog"
+        },
+        {
+          "IconName": "Laundry"
+        },
+        {
+          "IconName": "Battery Horiz 075"
+        },
+        {
+          "IconName": "Shield With Heart"
+        },
+        {
+          "IconName": "Temp Preferences Eco"
+        },
+        {
+          "IconName": "Familiar Face And Zone"
+        },
+        {
+          "IconName": "Tools Power Drill"
+        },
+        {
+          "IconName": "Airwave"
+        },
+        {
+          "IconName": "Productivity"
+        },
+        {
+          "IconName": "Battery Horiz 050"
+        },
+        {
+          "IconName": "Nest Heat Link Gen 3"
+        },
+        {
+          "IconName": "Nest Display"
+        },
+        {
+          "IconName": "Weather Snowy"
+        },
+        {
+          "IconName": "Ev Charger"
+        },
+        {
+          "IconName": "Activity Zone"
+        },
+        {
+          "IconName": "Nest Remote"
+        },
+        {
+          "IconName": "Cleaning Bucket"
+        },
+        {
+          "IconName": "Settings Alert"
+        },
+        {
+          "IconName": "Nest Cam Indoor"
+        },
+        {
+          "IconName": "Arrows More Up"
+        },
+        {
+          "IconName": "Home Storage"
+        },
+        {
+          "IconName": "Nest Heat Link E"
+        },
+        {
+          "IconName": "Nest Multi Room"
+        },
+        {
+          "IconName": "Nest Secure Alarm"
+        },
+        {
+          "IconName": "Battery Horiz 000"
+        },
+        {
+          "IconName": "Light Group"
+        },
+        {
+          "IconName": "Nest Cam Outdoor"
+        },
+        {
+          "IconName": "Google Wifi"
+        },
+        {
+          "IconName": "Detection And Zone"
+        },
+        {
+          "IconName": "Nest Thermostat Gen 3"
+        },
+        {
+          "IconName": "Mfg Nest Yale Lock"
+        },
+        {
+          "IconName": "Tools Pliers Wire Stripper"
+        },
+        {
+          "IconName": "Detector Alarm"
+        },
+        {
+          "IconName": "Tools Ladder"
+        },
+        {
+          "IconName": "Early On"
+        },
+        {
+          "IconName": "Nest Cam Iq Outdoor"
+        },
+        {
+          "IconName": "Nest Mini"
+        },
+        {
+          "IconName": "Floor Lamp"
+        },
+        {
+          "IconName": "Nest Cam Iq"
+        },
+        {
+          "IconName": "Nest Clock Farsight Digital"
+        },
+        {
+          "IconName": "Home Speaker"
+        },
+        {
+          "IconName": "Nest Hello Doorbell"
+        },
+        {
+          "IconName": "Nest Audio"
+        },
+        {
+          "IconName": "Home Max Dots"
+        },
+        {
+          "IconName": "Motion Sensor Active"
+        },
+        {
+          "IconName": "Nest Wifi Router"
+        },
+        {
+          "IconName": "Cool To Dry"
+        },
+        {
+          "IconName": "House With Shield"
+        },
+        {
+          "IconName": "Zone Person Urgent"
+        },
+        {
+          "IconName": "Nest Display Max"
+        },
+        {
+          "IconName": "Nest Farsight Weather"
+        },
+        {
+          "IconName": "Shield With House"
+        },
+        {
+          "IconName": "Chromecast 2"
+        },
+        {
+          "IconName": "Battery Profile"
+        },
+        {
+          "IconName": "Heat Pump Balance"
+        },
+        {
+          "IconName": "Window Closed"
+        },
+        {
+          "IconName": "Arming Countdown"
+        },
+        {
+          "IconName": "Nest Found Savings"
+        },
+        {
+          "IconName": "Self Care"
+        },
+        {
+          "IconName": "Detector Status"
+        },
+        {
+          "IconName": "Window Open"
+        },
+        {
+          "IconName": "Tools Level"
+        },
+        {
+          "IconName": "Nest Thermostat Zirconium Eu"
+        },
+        {
+          "IconName": "Zone Person Alert"
+        },
+        {
+          "IconName": "Arrows More Down"
+        },
+        {
+          "IconName": "Nest True Radiant"
+        },
+        {
+          "IconName": "Detector"
+        },
+        {
+          "IconName": "Nest Cam Wired Stand"
+        },
+        {
+          "IconName": "Nest Detect"
+        },
+        {
+          "IconName": "Climate Mini Split"
+        },
+        {
+          "IconName": "Door Sensor"
+        },
+        {
+          "IconName": "Nest Wifi Point"
+        },
+        {
+          "IconName": "Nest Doorbell Visitor"
+        },
+        {
+          "IconName": "Nest Cam Floodlight"
+        },
+        {
+          "IconName": "Nest Tag"
+        },
+        {
+          "IconName": "Quiet Time"
+        },
+        {
+          "IconName": "Tools Installation Kit"
+        },
+        {
+          "IconName": "Nest Connect"
+        },
+        {
+          "IconName": "Nest Thermostat Sensor"
+        },
+        {
+          "IconName": "Nest Thermostat Sensor Eu"
+        },
+        {
+          "IconName": "Nest Sunblock"
+        },
+        {
+          "IconName": "Tools Phillips"
+        },
+        {
+          "IconName": "Doorbell Chime"
+        },
+        {
+          "IconName": "Nest Thermostat E Eu"
+        },
+        {
+          "IconName": "Detector Co"
+        },
+        {
+          "IconName": "Table Lamp"
+        },
+        {
+          "IconName": "Detector Battery"
+        },
+        {
+          "IconName": "Tools Flat Head"
+        },
+        {
+          "IconName": "Nest Wake On Approach"
+        },
+        {
+          "IconName": "Nest Wake On Press"
+        },
+        {
+          "IconName": "Motion Sensor Urgent"
+        },
+        {
+          "IconName": "Motion Sensor Alert"
+        },
+        {
+          "IconName": "Window Sensor"
+        },
+        {
+          "IconName": "Tamper Detection On"
+        },
+        {
+          "IconName": "Nest Cam Magnet Mount"
+        },
+        {
+          "IconName": "Zone Person Idle"
+        },
+        {
+          "IconName": "Quiet Time Active"
+        },
+        {
+          "IconName": "Nest Cam Stand"
+        },
+        {
+          "IconName": "Nest Cam Wall Mount"
+        },
+        {
+          "IconName": "Wall Lamp"
+        },
+        {
+          "IconName": "Detector Offline"
+        },
+        {
+          "IconName": "Motion Sensor Idle"
+        },
+        {
+          "IconName": "Water Pump"
+        },
+        {
+          "IconName": "Sensors Krx"
+        },
+        {
+          "IconName": "Nest Thermostat"
+        },
+        {
+          "IconName": "Heat"
+        },
+        {
+          "IconName": "Assistant On Hub"
+        },
+        {
+          "IconName": "Mode Dual"
+        },
+        {
+          "IconName": "Nest Protect"
+        },
+        {
+          "IconName": "Aq Indoor"
+        },
+        {
+          "IconName": "On Hub Device"
+        },
+        {
+          "IconName": "Google Tv Remote"
+        },
+        {
+          "IconName": "Aq"
+        },
+        {
+          "IconName": "Sensors Krx Off"
+        },
+        {
+          "IconName": "Nest Wifi Pro"
+        },
+        {
+          "IconName": "Nest Wifi Pro 2"
+        },
+        {
+          "IconName": "Farsight Digital"
+        },
+        {
+          "IconName": "Humidity Indoor"
+        }
+      ]
+    },
+    {
+      "GroupName": " Brand",
+      "IconsList": [
+        {
+          "IconName": "Nest Gale Wifi"
+        }
+      ]
+    }
+  ]
+}
