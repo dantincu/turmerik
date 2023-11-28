@@ -35,8 +35,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly UISettingsRetriever uISettingsRetriever;
         private readonly IAppSettings appSettings;
 
-        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxAutoCopyResourceTitleToClipboardEvtAdapter;
-        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxTitleFetchToCB_EvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxMdLinkFetchToCB_EvtAdapter;
 
         private readonly Color defaultBackColor;
         private readonly Color defaultForeColor;
@@ -74,43 +74,27 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 iconLabelResourceUrl.Text = MatUIIconUnicodesH.UIActions.DOWNLOAD;
-                iconLabelResourceTitle.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
-                iconLabelTitleResourceMdLink.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
 
-                CreateEventAdapters(
-                    out var checkBoxAutoCopyResourceTitleToClipboardEvtAdapter,
-                    out var checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter);
+                iconLabelResxTitleToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+                iconLabelResxTitleFetchToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
 
-                this.checkBoxAutoCopyResourceTitleToClipboardEvtAdapter = checkBoxAutoCopyResourceTitleToClipboardEvtAdapter;
-                this.checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter = checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter;
+                iconLabelResxMdLinkToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+                iconLabelResxMdLinkFetchToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+
+                this.checkBoxResxTitleFetchToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxResxTitleFetchToCB,
+                    (source, e, isChecked) => SetResxTitleFetchToCB(isChecked),
+                    beforeHandler: (source, e, isChecked, evtWasEnabled) => isChecked.If(
+                        () => checkBoxResxMdLinkFetchToCB.Checked = false));
+
+                this.checkBoxResxMdLinkFetchToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxResxMdLinkFetchToCB,
+                    (source, e, isChecked) => SetResxMdLinkFetchToCB(isChecked),
+                    beforeHandler: (source, e, isChecked, evtWasEnabled) => isChecked.If(
+                        () => checkBoxResxTitleFetchToCB.Checked = false));
             }
 
             uISettingsRetriever.SubscribeToData(OnUISettingsData);
-        }
-
-        private void CreateEventAdapters(
-            out IPropChangedEventAdapter<bool, EventArgs> checkBoxAutoCopyResourceTitleToClipboardEvtAdapter,
-            out IPropChangedEventAdapter<bool, EventArgs> checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter)
-        {
-            checkBoxAutoCopyResourceTitleToClipboardEvtAdapter = propChangedEventAdapterFactory.Create(
-                new PropChangedEventAdapterOpts<bool, EventArgs>
-                {
-                    SynchronizedValueAdapter = controlsSynchronizer,
-                    PropValGetter = () => checkBoxAutoCopyResourceTitleToClipboard.Checked,
-                    AfterHandler = (source, e, isChecked, evtWasEnabled) => isChecked.If(
-                        () => checkBoxAutoCopyResourceMdLinkToClipboard.Checked = false),
-                    EnabledHandler = (source, e, isChecked) => SetAutoCopyResourceTitleToClipboard(isChecked)
-                });
-
-            checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter = propChangedEventAdapterFactory.Create(
-                new PropChangedEventAdapterOpts<bool, EventArgs>
-                {
-                    SynchronizedValueAdapter = controlsSynchronizer,
-                    PropValGetter = () => checkBoxAutoCopyResourceMdLinkToClipboard.Checked,
-                    BeforeHandler = (source, e, isChecked, evtWasEnabled) => isChecked.If(
-                        () => checkBoxAutoCopyResourceTitleToClipboard.Checked = false),
-                    EnabledHandler = (source, e, isChecked) => SetAutoCopyResourceMdLinkToClipboard(isChecked)
-                });
         }
 
         private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
@@ -134,6 +118,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 textBoxResourceTitle,
                 textBoxResourceUrl]);
 
+            iconLabelResxTitleFetchToCB.ForeColor = uISettingsData.InfoIconColor;
+            iconLabelResxMdLinkFetchToCB.ForeColor = uISettingsData.InfoIconColor;
+
             appSettings.Data.ActWith(appSettingsData =>
             {
                 var webResSettingsData = appSettingsData.FetchWebResource;
@@ -141,8 +128,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 controlsSynchronizer.Execute(false,
                     (wasEnabled) =>
                     {
-                        checkBoxAutoCopyResourceTitleToClipboard.Checked = webResSettingsData.AutoCopyResourceTitleToClipboard ?? false;
-                        checkBoxAutoCopyResourceMdLinkToClipboard.Checked = webResSettingsData.AutoCopyResourceMdLinkToClipboard ?? false;
+                        checkBoxResxTitleFetchToCB.Checked = webResSettingsData.ResxTitleFetchToCB ?? false;
+                        checkBoxResxMdLinkFetchToCB.Checked = webResSettingsData.ResxMdLinkFetchToCB ?? false;
                     });
             });
         }
@@ -170,28 +157,28 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         }
 
-        private void SetAutoCopyResourceTitleToClipboard(
+        private void SetResxTitleFetchToCB(
             bool enabled)
         {
             appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
             {
                 var webResSettingsData = mtbl.FetchWebResource;
-                webResSettingsData.AutoCopyResourceMdLinkToClipboard = null;
+                webResSettingsData.ResxMdLinkFetchToCB = null;
 
-                webResSettingsData.AutoCopyResourceTitleToClipboard = enabled.If(
+                webResSettingsData.ResxTitleFetchToCB = enabled.If(
                     () => (bool?)true, () => null);
             });
         }
 
-        private void SetAutoCopyResourceMdLinkToClipboard(
+        private void SetResxMdLinkFetchToCB(
             bool enabled)
         {
             appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
             {
                 var webResSettingsData = mtbl.FetchWebResource;
-                webResSettingsData.AutoCopyResourceTitleToClipboard = null;
+                webResSettingsData.ResxTitleFetchToCB = null;
 
-                webResSettingsData.AutoCopyResourceMdLinkToClipboard = enabled.If(
+                webResSettingsData.ResxMdLinkFetchToCB = enabled.If(
                     () => (bool?)true, () => null);
             });
         }
@@ -199,10 +186,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void ToggleEnableControls(bool enable)
         {
             iconLabelResourceUrl.Enabled = enable;
-            iconLabelResourceTitle.Enabled = enable;
-            iconLabelTitleResourceMdLink.Enabled = enable;
-            checkBoxAutoCopyResourceMdLinkToClipboard.Enabled = enable;
-            checkBoxAutoCopyResourceTitleToClipboard.Enabled = enable;
+            iconLabelResxTitleToCB.Enabled = enable;
+            iconLabelResxMdLinkToCB.Enabled = enable;
+            checkBoxResxMdLinkFetchToCB.Enabled = enable;
+            checkBoxResxTitleFetchToCB.Enabled = enable;
             textBoxResourceTitle.Enabled = enable;
             textBoxResourceMdLink.Enabled = enable;
             textBoxResourceUrl.Enabled = enable;
@@ -285,11 +272,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         }
 
-        private void CheckBoxAutoCopyResourceTitleToClipboard_CheckedChanged(
-            object sender, EventArgs e) => checkBoxAutoCopyResourceTitleToClipboardEvtAdapter.FireEventIfRequired(sender, e);
+        private void IconLabelResxTitleFetchToCB_Click(object sender, EventArgs e)
+        {
+            checkBoxResxTitleFetchToCB.Checked = true;
+        }
 
-        private void CheckBoxAutoCopyResourceMdLinkToClipboard_CheckedChanged(
-            object sender, EventArgs e) => checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter.FireEventIfRequired(sender, e);
+        private void IconLabelResxMdLinkFetchToCB_Click(object sender, EventArgs e)
+        {
+            checkBoxResxMdLinkFetchToCB.Checked = true;
+        }
 
         #endregion UI Event Handlers
     }

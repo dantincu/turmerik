@@ -31,19 +31,21 @@
             splitContainerMain = new SplitContainer();
             panelTitleResourceMdLink = new Panel();
             labelTitleResourceMdLink = new Label();
-            iconLabelTitleResourceMdLink = new WinForms.Controls.IconLabel();
+            iconLabelResxMdLinkToCB = new WinForms.Controls.IconLabel();
             panelTitleResourceTitle = new Panel();
             labelTitleResourceTitle = new Label();
-            iconLabelResourceTitle = new WinForms.Controls.IconLabel();
+            iconLabelResxTitleToCB = new WinForms.Controls.IconLabel();
             panelTitleResourceUrl = new Panel();
             labelTitleResourceUrl = new Label();
             iconLabelResourceUrl = new WinForms.Controls.IconLabel();
             panelResourceMdLink = new Panel();
             textBoxResourceMdLink = new TextBox();
-            checkBoxAutoCopyResourceMdLinkToClipboard = new CheckBox();
+            checkBoxResxMdLinkFetchToCB = new CheckBox();
+            iconLabelResxMdLinkFetchToCB = new WinForms.Controls.IconLabel();
             panelResourceTitle = new Panel();
             textBoxResourceTitle = new TextBox();
-            checkBoxAutoCopyResourceTitleToClipboard = new CheckBox();
+            checkBoxResxTitleFetchToCB = new CheckBox();
+            iconLabelResxTitleFetchToCB = new WinForms.Controls.IconLabel();
             panelResourceUrl = new Panel();
             textBoxResourceUrl = new TextBox();
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).BeginInit();
@@ -83,7 +85,7 @@
             // panelTitleResourceMdLink
             // 
             panelTitleResourceMdLink.Controls.Add(labelTitleResourceMdLink);
-            panelTitleResourceMdLink.Controls.Add(iconLabelTitleResourceMdLink);
+            panelTitleResourceMdLink.Controls.Add(iconLabelResxMdLinkToCB);
             panelTitleResourceMdLink.Dock = DockStyle.Top;
             panelTitleResourceMdLink.Location = new Point(0, 46);
             panelTitleResourceMdLink.Name = "panelTitleResourceMdLink";
@@ -101,22 +103,22 @@
             labelTitleResourceMdLink.TabIndex = 0;
             labelTitleResourceMdLink.Text = "Md Link";
             // 
-            // iconLabelTitleResourceMdLink
+            // iconLabelResxMdLinkToCB
             // 
-            iconLabelTitleResourceMdLink.AutoSize = true;
-            iconLabelTitleResourceMdLink.Dock = DockStyle.Right;
-            iconLabelTitleResourceMdLink.Location = new Point(80, 0);
-            iconLabelTitleResourceMdLink.Name = "iconLabelTitleResourceMdLink";
-            iconLabelTitleResourceMdLink.Padding = new Padding(3);
-            iconLabelTitleResourceMdLink.Size = new Size(20, 21);
-            iconLabelTitleResourceMdLink.TabIndex = 0;
-            iconLabelTitleResourceMdLink.Text = "R";
-            iconLabelTitleResourceMdLink.Click += IconLabelTitleResourceMdLink_Click;
+            iconLabelResxMdLinkToCB.AutoSize = true;
+            iconLabelResxMdLinkToCB.Dock = DockStyle.Right;
+            iconLabelResxMdLinkToCB.Location = new Point(80, 0);
+            iconLabelResxMdLinkToCB.Name = "iconLabelResxMdLinkToCB";
+            iconLabelResxMdLinkToCB.Padding = new Padding(3);
+            iconLabelResxMdLinkToCB.Size = new Size(20, 21);
+            iconLabelResxMdLinkToCB.TabIndex = 0;
+            iconLabelResxMdLinkToCB.Text = "R";
+            iconLabelResxMdLinkToCB.Click += IconLabelTitleResourceMdLink_Click;
             // 
             // panelTitleResourceTitle
             // 
             panelTitleResourceTitle.Controls.Add(labelTitleResourceTitle);
-            panelTitleResourceTitle.Controls.Add(iconLabelResourceTitle);
+            panelTitleResourceTitle.Controls.Add(iconLabelResxTitleToCB);
             panelTitleResourceTitle.Dock = DockStyle.Top;
             panelTitleResourceTitle.Location = new Point(0, 23);
             panelTitleResourceTitle.Name = "panelTitleResourceTitle";
@@ -134,17 +136,17 @@
             labelTitleResourceTitle.TabIndex = 0;
             labelTitleResourceTitle.Text = "Title";
             // 
-            // iconLabelResourceTitle
+            // iconLabelResxTitleToCB
             // 
-            iconLabelResourceTitle.AutoSize = true;
-            iconLabelResourceTitle.Dock = DockStyle.Right;
-            iconLabelResourceTitle.Location = new Point(80, 0);
-            iconLabelResourceTitle.Name = "iconLabelResourceTitle";
-            iconLabelResourceTitle.Padding = new Padding(3);
-            iconLabelResourceTitle.Size = new Size(20, 21);
-            iconLabelResourceTitle.TabIndex = 0;
-            iconLabelResourceTitle.Text = "R";
-            iconLabelResourceTitle.Click += IconLabelResourceTitle_Click;
+            iconLabelResxTitleToCB.AutoSize = true;
+            iconLabelResxTitleToCB.Dock = DockStyle.Right;
+            iconLabelResxTitleToCB.Location = new Point(80, 0);
+            iconLabelResxTitleToCB.Name = "iconLabelResxTitleToCB";
+            iconLabelResxTitleToCB.Padding = new Padding(3);
+            iconLabelResxTitleToCB.Size = new Size(20, 21);
+            iconLabelResxTitleToCB.TabIndex = 0;
+            iconLabelResxTitleToCB.Text = "R";
+            iconLabelResxTitleToCB.Click += IconLabelResourceTitle_Click;
             // 
             // panelTitleResourceUrl
             // 
@@ -182,7 +184,8 @@
             // panelResourceMdLink
             // 
             panelResourceMdLink.Controls.Add(textBoxResourceMdLink);
-            panelResourceMdLink.Controls.Add(checkBoxAutoCopyResourceMdLinkToClipboard);
+            panelResourceMdLink.Controls.Add(checkBoxResxMdLinkFetchToCB);
+            panelResourceMdLink.Controls.Add(iconLabelResxMdLinkFetchToCB);
             panelResourceMdLink.Dock = DockStyle.Top;
             panelResourceMdLink.Location = new Point(0, 46);
             panelResourceMdLink.Name = "panelResourceMdLink";
@@ -194,27 +197,42 @@
             textBoxResourceMdLink.Dock = DockStyle.Fill;
             textBoxResourceMdLink.Location = new Point(0, 0);
             textBoxResourceMdLink.Name = "textBoxResourceMdLink";
-            textBoxResourceMdLink.Size = new Size(1343, 23);
+            textBoxResourceMdLink.Size = new Size(1401, 23);
             textBoxResourceMdLink.TabIndex = 3;
             textBoxResourceMdLink.KeyUp += TextBoxResourceMdLink_KeyUp;
             // 
-            // checkBoxAutoCopyResourceMdLinkToClipboard
+            // checkBoxResxMdLinkFetchToCB
             // 
-            checkBoxAutoCopyResourceMdLinkToClipboard.AutoSize = true;
-            checkBoxAutoCopyResourceMdLinkToClipboard.Dock = DockStyle.Right;
-            checkBoxAutoCopyResourceMdLinkToClipboard.Location = new Point(1343, 0);
-            checkBoxAutoCopyResourceMdLinkToClipboard.Name = "checkBoxAutoCopyResourceMdLinkToClipboard";
-            checkBoxAutoCopyResourceMdLinkToClipboard.Size = new Size(153, 23);
-            checkBoxAutoCopyResourceMdLinkToClipboard.TabIndex = 0;
-            checkBoxAutoCopyResourceMdLinkToClipboard.TabStop = false;
-            checkBoxAutoCopyResourceMdLinkToClipboard.Text = "Auto Copy To Clipboard";
-            checkBoxAutoCopyResourceMdLinkToClipboard.UseVisualStyleBackColor = true;
-            checkBoxAutoCopyResourceMdLinkToClipboard.CheckedChanged += CheckBoxAutoCopyResourceMdLinkToClipboard_CheckedChanged;
+            checkBoxResxMdLinkFetchToCB.AutoSize = true;
+            checkBoxResxMdLinkFetchToCB.Cursor = Cursors.Hand;
+            checkBoxResxMdLinkFetchToCB.Dock = DockStyle.Right;
+            checkBoxResxMdLinkFetchToCB.Location = new Point(1401, 0);
+            checkBoxResxMdLinkFetchToCB.Name = "checkBoxResxMdLinkFetchToCB";
+            checkBoxResxMdLinkFetchToCB.Padding = new Padding(5, 0, 0, 0);
+            checkBoxResxMdLinkFetchToCB.Size = new Size(75, 23);
+            checkBoxResxMdLinkFetchToCB.TabIndex = 0;
+            checkBoxResxMdLinkFetchToCB.TabStop = false;
+            checkBoxResxMdLinkFetchToCB.Text = "Fetch To";
+            checkBoxResxMdLinkFetchToCB.UseVisualStyleBackColor = true;
+            // 
+            // iconLabelResxMdLinkFetchToCB
+            // 
+            iconLabelResxMdLinkFetchToCB.AutoSize = true;
+            iconLabelResxMdLinkFetchToCB.Dock = DockStyle.Right;
+            iconLabelResxMdLinkFetchToCB.ForeColor = SystemColors.ControlText;
+            iconLabelResxMdLinkFetchToCB.Location = new Point(1476, 0);
+            iconLabelResxMdLinkFetchToCB.Name = "iconLabelResxMdLinkFetchToCB";
+            iconLabelResxMdLinkFetchToCB.Padding = new Padding(3);
+            iconLabelResxMdLinkFetchToCB.Size = new Size(20, 21);
+            iconLabelResxMdLinkFetchToCB.TabIndex = 4;
+            iconLabelResxMdLinkFetchToCB.Text = "R";
+            iconLabelResxMdLinkFetchToCB.Click += IconLabelResxMdLinkFetchToCB_Click;
             // 
             // panelResourceTitle
             // 
             panelResourceTitle.Controls.Add(textBoxResourceTitle);
-            panelResourceTitle.Controls.Add(checkBoxAutoCopyResourceTitleToClipboard);
+            panelResourceTitle.Controls.Add(checkBoxResxTitleFetchToCB);
+            panelResourceTitle.Controls.Add(iconLabelResxTitleFetchToCB);
             panelResourceTitle.Dock = DockStyle.Top;
             panelResourceTitle.Location = new Point(0, 23);
             panelResourceTitle.Name = "panelResourceTitle";
@@ -226,22 +244,36 @@
             textBoxResourceTitle.Dock = DockStyle.Fill;
             textBoxResourceTitle.Location = new Point(0, 0);
             textBoxResourceTitle.Name = "textBoxResourceTitle";
-            textBoxResourceTitle.Size = new Size(1343, 23);
+            textBoxResourceTitle.Size = new Size(1401, 23);
             textBoxResourceTitle.TabIndex = 2;
             textBoxResourceTitle.KeyUp += TextBoxResourceTitle_KeyUp;
             // 
-            // checkBoxAutoCopyResourceTitleToClipboard
+            // checkBoxResxTitleFetchToCB
             // 
-            checkBoxAutoCopyResourceTitleToClipboard.AutoSize = true;
-            checkBoxAutoCopyResourceTitleToClipboard.Dock = DockStyle.Right;
-            checkBoxAutoCopyResourceTitleToClipboard.Location = new Point(1343, 0);
-            checkBoxAutoCopyResourceTitleToClipboard.Name = "checkBoxAutoCopyResourceTitleToClipboard";
-            checkBoxAutoCopyResourceTitleToClipboard.Size = new Size(153, 23);
-            checkBoxAutoCopyResourceTitleToClipboard.TabIndex = 0;
-            checkBoxAutoCopyResourceTitleToClipboard.TabStop = false;
-            checkBoxAutoCopyResourceTitleToClipboard.Text = "Auto Copy To Clipboard";
-            checkBoxAutoCopyResourceTitleToClipboard.UseVisualStyleBackColor = true;
-            checkBoxAutoCopyResourceTitleToClipboard.CheckedChanged += CheckBoxAutoCopyResourceTitleToClipboard_CheckedChanged;
+            checkBoxResxTitleFetchToCB.AutoSize = true;
+            checkBoxResxTitleFetchToCB.Cursor = Cursors.Hand;
+            checkBoxResxTitleFetchToCB.Dock = DockStyle.Right;
+            checkBoxResxTitleFetchToCB.Location = new Point(1401, 0);
+            checkBoxResxTitleFetchToCB.Name = "checkBoxResxTitleFetchToCB";
+            checkBoxResxTitleFetchToCB.Padding = new Padding(5, 0, 0, 0);
+            checkBoxResxTitleFetchToCB.Size = new Size(75, 23);
+            checkBoxResxTitleFetchToCB.TabIndex = 0;
+            checkBoxResxTitleFetchToCB.TabStop = false;
+            checkBoxResxTitleFetchToCB.Text = "Fetch To";
+            checkBoxResxTitleFetchToCB.UseVisualStyleBackColor = true;
+            // 
+            // iconLabelResxTitleFetchToCB
+            // 
+            iconLabelResxTitleFetchToCB.AutoSize = true;
+            iconLabelResxTitleFetchToCB.Dock = DockStyle.Right;
+            iconLabelResxTitleFetchToCB.ForeColor = SystemColors.ControlText;
+            iconLabelResxTitleFetchToCB.Location = new Point(1476, 0);
+            iconLabelResxTitleFetchToCB.Name = "iconLabelResxTitleFetchToCB";
+            iconLabelResxTitleFetchToCB.Padding = new Padding(3);
+            iconLabelResxTitleFetchToCB.Size = new Size(20, 21);
+            iconLabelResxTitleFetchToCB.TabIndex = 3;
+            iconLabelResxTitleFetchToCB.Text = "R";
+            iconLabelResxTitleFetchToCB.Click += IconLabelResxTitleFetchToCB_Click;
             // 
             // panelResourceUrl
             // 
@@ -296,16 +328,18 @@
         private Panel panelResourceUrl;
         private TextBox textBoxResourceUrl;
         private Panel panelResourceMdLink;
-        private CheckBox checkBoxAutoCopyResourceMdLinkToClipboard;
+        private CheckBox checkBoxResxMdLinkFetchToCB;
         private TextBox textBoxResourceMdLink;
         private Panel panelResourceTitle;
-        private CheckBox checkBoxAutoCopyResourceTitleToClipboard;
+        private CheckBox checkBoxResxTitleFetchToCB;
         private TextBox textBoxResourceTitle;
         private Panel panelTitleResourceMdLink;
         private Label labelTitleResourceMdLink;
-        private WinForms.Controls.IconLabel iconLabelTitleResourceMdLink;
+        private WinForms.Controls.IconLabel iconLabelResxMdLinkToCB;
         private Panel panelTitleResourceTitle;
         private Label labelTitleResourceTitle;
-        private WinForms.Controls.IconLabel iconLabelResourceTitle;
+        private WinForms.Controls.IconLabel iconLabelResxTitleToCB;
+        private WinForms.Controls.IconLabel iconLabelResxMdLinkFetchToCB;
+        private WinForms.Controls.IconLabel iconLabelResxTitleFetchToCB;
     }
 }

@@ -15,8 +15,8 @@ namespace Turmerik.Utility.WinFormsApp.Settings
     {
         public interface IFetchWebResource
         {
-            bool? AutoCopyResourceTitleToClipboard { get; }
-            bool? AutoCopyResourceMdLinkToClipboard { get; }
+            bool? ResxTitleFetchToCB { get; }
+            bool? ResxMdLinkFetchToCB { get; }
         }
 
         public class FetchWebResourceImmtbl : IFetchWebResource
@@ -24,12 +24,12 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public FetchWebResourceImmtbl(
                 IFetchWebResource src)
             {
-                AutoCopyResourceTitleToClipboard = src.AutoCopyResourceTitleToClipboard;
-                AutoCopyResourceMdLinkToClipboard = src.AutoCopyResourceMdLinkToClipboard;
+                ResxTitleFetchToCB = src.ResxTitleFetchToCB;
+                ResxMdLinkFetchToCB = src.ResxMdLinkFetchToCB;
             }
 
-            public bool? AutoCopyResourceTitleToClipboard { get; }
-            public bool? AutoCopyResourceMdLinkToClipboard { get; }
+            public bool? ResxTitleFetchToCB { get; }
+            public bool? ResxMdLinkFetchToCB { get; }
         }
 
         public class FetchWebResourceMtbl : IFetchWebResource
@@ -41,12 +41,12 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public FetchWebResourceMtbl(
                 IFetchWebResource src)
             {
-                AutoCopyResourceTitleToClipboard = src.AutoCopyResourceTitleToClipboard;
-                AutoCopyResourceMdLinkToClipboard = src.AutoCopyResourceMdLinkToClipboard;
+                ResxTitleFetchToCB = src.ResxTitleFetchToCB;
+                ResxMdLinkFetchToCB = src.ResxMdLinkFetchToCB;
             }
 
-            public bool? AutoCopyResourceTitleToClipboard { get; set; }
-            public bool? AutoCopyResourceMdLinkToClipboard { get; set; }
+            public bool? ResxTitleFetchToCB { get; set; }
+            public bool? ResxMdLinkFetchToCB { get; set; }
         }
 
         public static AppSettingsDataImmtbl ToImmtbl(

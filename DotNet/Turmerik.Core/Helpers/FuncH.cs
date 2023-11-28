@@ -17,7 +17,7 @@ namespace Turmerik.Core.Helpers
             this TVal val,
             Action<TVal> callback)
         {
-            callback(val);
+            callback?.Invoke(val);
             return val;
         }
 
