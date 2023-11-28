@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace Turmerik.Core.Async
+namespace Turmerik.Core.Threading
 {
     public interface IBackgroundCleanupComponent<TComponent>
         where TComponent : IDisposable
@@ -17,7 +17,7 @@ namespace Turmerik.Core.Async
     {
         public BackgroundCleanupComponent(
             IIntermitentBackgroundWorkerFactory intermitentBackgroundWorkerFactory,
-            ConcurrentQueue<TComponent> components = null)
+            ConcurrentQueue<TComponent> components)
         {
             BgWorker = intermitentBackgroundWorkerFactory.Worker(new IntermitentBackgroundWorkerOpts
             {

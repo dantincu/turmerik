@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace Turmerik.Core.Async
+namespace Turmerik.Core.Threading
 {
     public interface IBackgroundCleanupComponentFactory
     {
         IBackgroundCleanupComponent<TComponent> Create<TComponent>(
-            ) where TComponent : IDisposable;
+            ConcurrentQueue<TComponent> components = null) where TComponent : IDisposable;
     }
 
     public class BackgroundCleanupComponentFactory : IBackgroundCleanupComponentFactory
@@ -23,8 +23,8 @@ namespace Turmerik.Core.Async
         }
 
         public IBackgroundCleanupComponent<TComponent> Create<TComponent>(
-            ) where TComponent : IDisposable => new BackgroundCleanupComponent<TComponent>(
+            ConcurrentQueue<TComponent> components = null) where TComponent : IDisposable => new BackgroundCleanupComponent<TComponent>(
                 intermitentBackgroundWorkerFactory,
-                new ConcurrentQueue<TComponent>());
+                components ?? new ConcurrentQueue<TComponent>());
     }
 }

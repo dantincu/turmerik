@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Turmerik.Core.Actions;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.Threading;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.ViewModels;
@@ -27,6 +28,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IControlBlinkTimersManager controlBlinkTimersManager;
         private readonly IFetchWebResourceWM viewModel;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
+        private readonly ISynchronizedValueWrapper<bool> controlsSynchronizer;
         private readonly UISettingsRetriever uISettingsRetriever;
         private readonly IAppSettings appSettings;
 
@@ -34,7 +36,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly Color defaultForeColor;
 
         private UISettingsDataImmtbl uISettingsData;
-        private bool initComplete;
 
         private ControlBlinkTimerOptsImmtbl inconsClickSuccessBlinkTimerOpts;
         private ControlBlinkTimerOptsImmtbl inconsClickErrorBlinkTimerOpts;
@@ -49,6 +50,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 controlBlinkTimersManager = svcProv.GetRequiredService<IControlBlinkTimersManager>();
                 viewModel = svcProv.GetRequiredService<IFetchWebResourceWM>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
+
+                controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueWrapperFactory>().Create(
+                    initialValue: true);
+
                 uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
                 appSettings = svcProv.GetRequiredService<IAppSettings>();
             }
@@ -93,10 +98,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             {
                 var webResSettingsData = appSettingsData.FetchWebResource;
 
-                checkBoxAutoCopyResourceTitleToClipboard.Checked = webResSettingsData.AutoCopyResourceTitleToClipboard ?? false;
-                checkBoxAutoCopyResourceMdLinkToClipboard.Checked = webResSettingsData.AutoCopyResourceMdLinkToClipboard ?? false;
-
-                initComplete = true;
+                controlsSynchronizer.Execute(false,
+                    (isEnabled, wasEnabled) =>
+                    {
+                        checkBoxAutoCopyResourceTitleToClipboard.Checked = webResSettingsData.AutoCopyResourceTitleToClipboard ?? false;
+                        checkBoxAutoCopyResourceMdLinkToClipboard.Checked = webResSettingsData.AutoCopyResourceMdLinkToClipboard ?? false;
+                    });
             });
         }
 
@@ -126,27 +133,27 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void SetAutoCopyResourceTitleToClipboard(
             bool enabled)
         {
-            if (initComplete)
+            appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
             {
-                appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
-                {
-                    mtbl.FetchWebResource.AutoCopyResourceTitleToClipboard = enabled.If(
-                        () => (bool?)true, () => null);
-                });
-            }
+                var webResSettingsData = mtbl.FetchWebResource;
+                webResSettingsData.AutoCopyResourceMdLinkToClipboard = null;
+
+                webResSettingsData.AutoCopyResourceTitleToClipboard = enabled.If(
+                    () => (bool?)true, () => null);
+            });
         }
 
         private void SetAutoCopyResourceMdLinkToClipboard(
             bool enabled)
         {
-            if (initComplete)
+            appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
             {
-                appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
-                {
-                    mtbl.FetchWebResource.AutoCopyResourceMdLinkToClipboard = enabled.If(
-                        () => (bool?)true, () => null);
-                });
-            }
+                var webResSettingsData = mtbl.FetchWebResource;
+                webResSettingsData.AutoCopyResourceTitleToClipboard = null;
+
+                webResSettingsData.AutoCopyResourceMdLinkToClipboard = enabled.If(
+                    () => (bool?)true, () => null);
+            });
         }
 
         private void ToggleEnableControls(bool enable)
@@ -240,20 +247,38 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void CheckBoxAutoCopyResourceTitleToClipboard_CheckedChanged(object sender, EventArgs e)
         {
-            SetAutoCopyResourceTitleToClipboard(
-                checkBoxAutoCopyResourceTitleToClipboard.Checked.ActIf(() =>
+            bool isChecked = checkBoxAutoCopyResourceTitleToClipboard.Checked;
+
+            if (isChecked)
+            {
+                controlsSynchronizer.Execute(false, (isEnabled, wasEnabled) =>
                 {
                     checkBoxAutoCopyResourceMdLinkToClipboard.Checked = false;
-                }));
+                });
+            }
+
+            if (controlsSynchronizer.Value)
+            {
+                SetAutoCopyResourceTitleToClipboard(isChecked);
+            }
         }
 
         private void CheckBoxAutoCopyResourceMdLinkToClipboard_CheckedChanged(object sender, EventArgs e)
         {
-            SetAutoCopyResourceMdLinkToClipboard(
-                checkBoxAutoCopyResourceMdLinkToClipboard.Checked.ActIf(() =>
+            bool isChecked = checkBoxAutoCopyResourceMdLinkToClipboard.Checked;
+
+            if (isChecked)
+            {
+                controlsSynchronizer.Execute(false, (isEnabled, wasEnabled) =>
                 {
                     checkBoxAutoCopyResourceTitleToClipboard.Checked = false;
-                }));
+                });
+            }
+
+            if (controlsSynchronizer.Value)
+            {
+                SetAutoCopyResourceMdLinkToClipboard(isChecked);
+            }
         }
 
         #endregion UI Event Handlers

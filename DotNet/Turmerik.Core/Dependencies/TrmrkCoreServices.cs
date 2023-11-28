@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using Turmerik.Core.Reflection;
 using Turmerik.Core.Actions;
-using Turmerik.Core.Async;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.EqualityComparer;
 using Turmerik.Core.Text;
@@ -12,6 +11,7 @@ using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Core.TextStream;
+using Turmerik.Core.Threading;
 
 namespace Turmerik.Core.Dependencies
 {
@@ -29,6 +29,7 @@ namespace Turmerik.Core.Dependencies
 
             services.AddSingleton<IIntermitentBackgroundWorkerFactory, IntermitentBackgroundWorkerFactory>();
             services.AddSingleton<IBackgroundCleanupComponentFactory, BackgroundCleanupComponentFactory>();
+            services.AddSingleton<ISynchronizedValueWrapperFactory, SynchronizedValueWrapperFactory>();
 
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IBestItemRetriever, BestItemRetriever>();

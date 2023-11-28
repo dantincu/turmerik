@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
-namespace Turmerik.Core.Async
+namespace Turmerik.Core.Threading
 {
     public interface IIntermitentBackgroundWorkerFactory
     {
@@ -13,6 +14,12 @@ namespace Turmerik.Core.Async
     public class IntermitentBackgroundWorkerFactory : IIntermitentBackgroundWorkerFactory
     {
         public IIntermitentBackgroundWorker Worker(
-            IntermitentBackgroundWorkerOpts opts) => new IntermitentBackgroundWorker(opts);
+            IntermitentBackgroundWorkerOpts opts)
+        {
+            opts.Semaphore ??= new SemaphoreSlim(1);
+
+            var worker = new IntermitentBackgroundWorker(opts);
+            return worker;
+        }
     }
 }

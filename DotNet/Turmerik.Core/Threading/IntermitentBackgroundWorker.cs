@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace Turmerik.Core.Async
+namespace Turmerik.Core.Threading
 {
     public interface IIntermitentBackgroundWorker
     {
@@ -23,7 +23,8 @@ namespace Turmerik.Core.Async
         public IntermitentBackgroundWorker(
             IntermitentBackgroundWorkerOpts opts)
         {
-            semaphore = new SemaphoreSlim(1);
+            this.semaphore = opts.Semaphore ?? throw new ArgumentNullException(
+                nameof(semaphore));
 
             LoopCallback = opts.LoopCallback ?? throw new ArgumentNullException(
                 nameof(LoopCallback));
