@@ -5,20 +5,20 @@ using System.Threading;
 
 namespace Turmerik.Core.Threading
 {
-    public interface ISynchronizedValueWrapperFactory
+    public interface ISynchronizedValueAdapterFactory
     {
-        ISynchronizedValueWrapper<TValue> Create<TValue>(
+        ISynchronizedValueAdapter<TValue> Create<TValue>(
             SemaphoreSlim semaphore = null,
             IEqualityComparer<TValue> eqCompr = null,
             TValue initialValue = default);
     }
 
-    public class SynchronizedValueWrapperFactory : ISynchronizedValueWrapperFactory
+    public class SynchronizedValueAdapterFactory : ISynchronizedValueAdapterFactory
     {
-        public ISynchronizedValueWrapper<TValue> Create<TValue>(
+        public ISynchronizedValueAdapter<TValue> Create<TValue>(
             SemaphoreSlim semaphore = null,
             IEqualityComparer<TValue> eqCompr = null,
-            TValue initialValue = default) => new SynchronizedValueWrapper<TValue>(
+            TValue initialValue = default) => new SynchronizedValueAdapter<TValue>(
                 semaphore ?? new SemaphoreSlim(1),
                 eqCompr ?? EqualityComparer<TValue>.Default,
                 initialValue);

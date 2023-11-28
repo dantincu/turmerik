@@ -29,7 +29,7 @@ namespace Turmerik.Core.Dependencies
 
             services.AddSingleton<IIntermitentBackgroundWorkerFactory, IntermitentBackgroundWorkerFactory>();
             services.AddSingleton<IBackgroundCleanupComponentFactory, BackgroundCleanupComponentFactory>();
-            services.AddSingleton<ISynchronizedValueWrapperFactory, SynchronizedValueWrapperFactory>();
+            services.AddSingleton<ISynchronizedValueAdapterFactory, SynchronizedValueAdapterFactory>();
 
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IBestItemRetriever, BestItemRetriever>();

@@ -6,7 +6,7 @@ using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.Threading
 {
-    public interface ISynchronizedValueWrapper<TValue>
+    public interface ISynchronizedValueAdapter<TValue>
     {
         TValue Value { get; }
 
@@ -15,22 +15,22 @@ namespace Turmerik.Core.Threading
 
         TValue Execute(
             Action<AccessorsTuple<TValue>> beforeAction,
-            Action<TValue, TValue> action,
+            Action<TValue> action,
             Action<AccessorsTuple<TValue>, Exception> afterAction);
 
         TValue Execute(
             TValue tempVal,
-            Action<TValue, TValue> action,
+            Action<TValue> action,
             Action<Exception> exceptionHandler = null);
     }
 
-    public class SynchronizedValueWrapper<TValue> : ISynchronizedValueWrapper<TValue>
+    public class SynchronizedValueAdapter<TValue> : ISynchronizedValueAdapter<TValue>
     {
         private readonly SemaphoreSlim semaphore;
         private readonly IEqualityComparer<TValue> eqCompr;
         private TValue value;
 
-        public SynchronizedValueWrapper(
+        public SynchronizedValueAdapter(
             SemaphoreSlim semaphore,
             IEqualityComparer<TValue> eqCompr,
             TValue value = default)
@@ -76,7 +76,7 @@ namespace Turmerik.Core.Threading
 
         public TValue Execute(
             Action<AccessorsTuple<TValue>> beforeAction,
-            Action<TValue, TValue> action,
+            Action<TValue> action,
             Action<AccessorsTuple<TValue>, Exception> afterAction)
         {
             Exception excp = null;
@@ -85,9 +85,9 @@ namespace Turmerik.Core.Threading
             try
             {
                 var initialValue = this.value;
-                var currentVal = ExecuteConcurrent(beforeAction);
+                ExecuteConcurrent(beforeAction);
 
-                action(initialValue, currentVal);
+                action(initialValue);
             }
             catch(Exception exc)
             {
@@ -105,7 +105,7 @@ namespace Turmerik.Core.Threading
 
         public TValue Execute(
             TValue tempVal,
-            Action<TValue, TValue> action,
+            Action<TValue> action,
             Action<Exception> exceptionHandler = null)
         {
             TValue initialValue = this.value;

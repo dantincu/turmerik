@@ -18,6 +18,7 @@ namespace Turmerik.WinForms.Dependencies
             services.AddSingleton<IMatUIIconsRetriever, MatUIIconsRetriever>();
             services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();
             services.AddSingleton<IControlBlinkTimersManager, ControlBlinkTimersManager>();
+            services.AddSingleton<IPropChangedEventAdapterFactory, PropChangedEventAdapterFactory>();
 
             return services;
         }
