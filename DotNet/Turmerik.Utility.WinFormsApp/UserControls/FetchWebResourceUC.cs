@@ -97,17 +97,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 {
                     SynchronizedValueAdapter = controlsSynchronizer,
                     PropValGetter = () => checkBoxAutoCopyResourceTitleToClipboard.Checked,
-                    AfterHandler = (source, e, isChecked, evtWasEnabled) =>
-                    {
-                        if (isChecked)
-                        {
-                            checkBoxAutoCopyResourceMdLinkToClipboard.Checked = false;
-                        }
-                    },
-                    EnabledHandler = (source, e, isChecked) =>
-                    {
-                        SetAutoCopyResourceTitleToClipboard(isChecked);
-                    }
+                    AfterHandler = (source, e, isChecked, evtWasEnabled) => isChecked.If(
+                        () => checkBoxAutoCopyResourceMdLinkToClipboard.Checked = false),
+                    EnabledHandler = (source, e, isChecked) => SetAutoCopyResourceTitleToClipboard(isChecked)
                 });
 
             checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter = propChangedEventAdapterFactory.Create(
@@ -115,17 +107,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 {
                     SynchronizedValueAdapter = controlsSynchronizer,
                     PropValGetter = () => checkBoxAutoCopyResourceMdLinkToClipboard.Checked,
-                    BeforeHandler = (source, e, isChecked, evtWasEnabled) =>
-                    {
-                        if (isChecked)
-                        {
-                            checkBoxAutoCopyResourceTitleToClipboard.Checked = false;
-                        }
-                    },
-                    EnabledHandler = (source, e, isChecked) =>
-                    {
-                        SetAutoCopyResourceMdLinkToClipboard(isChecked);
-                    }
+                    BeforeHandler = (source, e, isChecked, evtWasEnabled) => isChecked.If(
+                        () => checkBoxAutoCopyResourceTitleToClipboard.Checked = false),
+                    EnabledHandler = (source, e, isChecked) => SetAutoCopyResourceMdLinkToClipboard(isChecked)
                 });
         }
 
