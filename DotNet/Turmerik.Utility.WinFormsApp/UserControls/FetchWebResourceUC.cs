@@ -301,37 +301,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         }
 
-        private void CheckBoxAutoCopyResourceTitleToClipboard_CheckedChanged(object sender, EventArgs e)
-        {
-            checkBoxAutoCopyResourceTitleToClipboardEvtAdapter.FireEventIfRequired(sender, e);
+        private void CheckBoxAutoCopyResourceTitleToClipboard_CheckedChanged(
+            object sender, EventArgs e) => checkBoxAutoCopyResourceTitleToClipboardEvtAdapter.FireEventIfRequired(sender, e);
 
-            /* checkBoxAutoCopyResourceTitleToClipboard.Checked.ActWith(isChecked =>
-            {
-                controlsSynchronizer.Execute(false, (wasEnabled) =>
-                {
-                    if (isChecked)
-                    {
-                        checkBoxAutoCopyResourceMdLinkToClipboard.Checked = false;
-                    }
-                }).ActIf(() => SetAutoCopyResourceTitleToClipboard(isChecked));
-            }); */
-        }
-
-        private void CheckBoxAutoCopyResourceMdLinkToClipboard_CheckedChanged(object sender, EventArgs e)
-        {
-            checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter.FireEventIfRequired(sender, e);
-
-            /* checkBoxAutoCopyResourceMdLinkToClipboard.Checked.ActWith(isChecked =>
-            {
-                controlsSynchronizer.Execute(false, (wasEnabled) =>
-                {
-                    if (isChecked)
-                    {
-                        checkBoxAutoCopyResourceTitleToClipboard.Checked = false;
-                    }
-                }).ActIf(() => SetAutoCopyResourceMdLinkToClipboard(isChecked));
-            }); */
-        }
+        private void CheckBoxAutoCopyResourceMdLinkToClipboard_CheckedChanged(
+            object sender, EventArgs e) => checkBoxAutoCopyResourceMdLinkToClipboardEvtAdapter.FireEventIfRequired(sender, e);
 
         #endregion UI Event Handlers
     }
