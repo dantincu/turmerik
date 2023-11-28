@@ -272,15 +272,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         }
 
-        private void IconLabelResxTitleFetchToCB_Click(object sender, EventArgs e)
-        {
-            checkBoxResxTitleFetchToCB.Checked = true;
-        }
+        private void IconLabelResxTitleFetchToCB_Click(
+            object sender, EventArgs e) => checkBoxResxTitleFetchToCB.ActWith(
+                checkBox => checkBox.Checked = !checkBox.Checked);
 
-        private void IconLabelResxMdLinkFetchToCB_Click(object sender, EventArgs e)
-        {
-            checkBoxResxMdLinkFetchToCB.Checked = true;
-        }
+        private void IconLabelResxMdLinkFetchToCB_Click(
+            object sender, EventArgs e) => checkBoxResxMdLinkFetchToCB.ActWith(
+                checkBox => checkBox.Checked = !checkBox.Checked);
 
         #endregion UI Event Handlers
     }
