@@ -230,7 +230,7 @@
             ClientSize = new Size(1784, 861);
             Controls.Add(statusStripMain);
             Controls.Add(menuStripMain);
-            Font = new Font("Segoe UI", 9F);
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStripMain;
             Name = "NoteBookForm";

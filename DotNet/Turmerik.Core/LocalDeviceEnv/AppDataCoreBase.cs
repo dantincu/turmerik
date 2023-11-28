@@ -53,7 +53,7 @@ namespace Turmerik.Core.LocalDeviceEnv
         public TImmtbl Update(
             RefAction<TMtblSrlzbl> updateAction)
         {
-            var srlzblData = SerializeConfig(DataCore);
+            var srlzblData = SerializeConfig(Data);
             updateAction(ref srlzblData);
 
             var data = NormalizeConfig(srlzblData);
@@ -122,8 +122,9 @@ namespace Turmerik.Core.LocalDeviceEnv
 
             if (start)
             {
-                jsonFileWatcher = new FileSystemWatcher(JsonFilePath)
+                jsonFileWatcher = new FileSystemWatcher(JsonDirPath)
                 {
+                    Filter = JSON_FILE_NAME,
                     NotifyFilter = NotifyFilters.LastWrite,
                     EnableRaisingEvents = true,
                 };

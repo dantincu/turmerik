@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.WinForms.Actions;
+using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.WinForms.Dependencies
@@ -16,6 +17,8 @@ namespace Turmerik.WinForms.Dependencies
         {
             services.AddSingleton<IMatUIIconsRetriever, MatUIIconsRetriever>();
             services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();
+            services.AddSingleton<IControlBlinkTimersManager, ControlBlinkTimersManager>();
+
             return services;
         }
     }

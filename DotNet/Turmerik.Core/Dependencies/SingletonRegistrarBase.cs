@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Turmerik.Core.Dependencies
 {
-    public abstract class SingletonRegistrarBase<TData, TInputData>
+    public abstract class SingletonRegistrarBase<TData, TInputData> : IDisposable
     {
         private readonly object syncLock = new object();
 
@@ -49,6 +50,40 @@ namespace Turmerik.Core.Dependencies
             remove => registered -= value;
         }
 
+        public bool SubscribeToData(Action<TData> callback)
+        {
+            TData data = default;
+            bool hasData = false;
+
+            if (isRegistered == 0)
+            {
+                lock (syncLock)
+                {
+                    if (isRegistered == 0)
+                    {
+                        registered += callback;
+                    }
+                    else
+                    {
+                        hasData = true;
+                        data = this.data;
+                    }
+                }
+            }
+            else
+            {
+                hasData = true;
+                data = this.data;
+            }
+
+            if (hasData)
+            {
+                callback(data);
+            }
+
+            return hasData;
+        }
+
         public TData RegisterData(TInputData inputData)
         {
             bool registeredNow = false;
@@ -80,6 +115,11 @@ namespace Turmerik.Core.Dependencies
             }
 
             return data;
+        }
+
+        public virtual void Dispose()
+        {
+            registered = null;
         }
 
         protected abstract TData Convert(TInputData inputData);

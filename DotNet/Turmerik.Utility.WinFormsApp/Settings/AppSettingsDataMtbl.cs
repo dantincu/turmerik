@@ -15,6 +15,11 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         public AppSettingsDataMtbl(
             IAppSettingsData src)
         {
+            FetchWebResource = src.GetFetchWebResource()?.ToMtbl();
         }
+
+        public AppSettingsData.FetchWebResourceMtbl FetchWebResource { get; set; }
+
+        public AppSettingsData.IFetchWebResource GetFetchWebResource() => FetchWebResource;
     }
 }

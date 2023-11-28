@@ -31,15 +31,15 @@
             statusStripMain = new StatusStrip();
             toolStripStatusLabelMain = new ToolStripStatusLabel();
             tabControlMain = new TabControl();
-            tabPageFetchWebResource = new TabPage();
+            tabPageTextUtils = new TabPage();
+            fetchWebResourceUC = new UserControls.TextUtilsUC();
             tabPageMdLinesIndent = new TabPage();
-            tabPageMdTableLines = new TabPage();
-            fetchWebResourceUC = new UserControls.FetchWebResourceUC();
             mdLinesIndentUC = new UserControls.MdLinesIndentUC();
+            tabPageMdTableLines = new TabPage();
             mdTableLinesUC = new ViewModels.MdTableLinesUC();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
-            tabPageFetchWebResource.SuspendLayout();
+            tabPageTextUtils.SuspendLayout();
             tabPageMdLinesIndent.SuspendLayout();
             tabPageMdTableLines.SuspendLayout();
             SuspendLayout();
@@ -60,7 +60,7 @@
             // 
             // tabControlMain
             // 
-            tabControlMain.Controls.Add(tabPageFetchWebResource);
+            tabControlMain.Controls.Add(tabPageTextUtils);
             tabControlMain.Controls.Add(tabPageMdLinesIndent);
             tabControlMain.Controls.Add(tabPageMdTableLines);
             tabControlMain.Dock = DockStyle.Fill;
@@ -70,16 +70,24 @@
             tabControlMain.Size = new Size(1800, 878);
             tabControlMain.TabIndex = 2;
             // 
-            // tabPageFetchWebResource
+            // tabPageTextUtils
             // 
-            tabPageFetchWebResource.Controls.Add(fetchWebResourceUC);
-            tabPageFetchWebResource.Location = new Point(4, 24);
-            tabPageFetchWebResource.Name = "tabPageFetchWebResource";
-            tabPageFetchWebResource.Padding = new Padding(3);
-            tabPageFetchWebResource.Size = new Size(1792, 850);
-            tabPageFetchWebResource.TabIndex = 0;
-            tabPageFetchWebResource.Text = "Fetch Web Resource";
-            tabPageFetchWebResource.UseVisualStyleBackColor = true;
+            tabPageTextUtils.Controls.Add(fetchWebResourceUC);
+            tabPageTextUtils.Location = new Point(4, 24);
+            tabPageTextUtils.Name = "tabPageTextUtils";
+            tabPageTextUtils.Padding = new Padding(3);
+            tabPageTextUtils.Size = new Size(1792, 850);
+            tabPageTextUtils.TabIndex = 0;
+            tabPageTextUtils.Text = "Text Utils";
+            tabPageTextUtils.UseVisualStyleBackColor = true;
+            // 
+            // fetchWebResourceUC
+            // 
+            fetchWebResourceUC.Dock = DockStyle.Fill;
+            fetchWebResourceUC.Location = new Point(3, 3);
+            fetchWebResourceUC.Name = "fetchWebResourceUC";
+            fetchWebResourceUC.Size = new Size(1786, 844);
+            fetchWebResourceUC.TabIndex = 0;
             // 
             // tabPageMdLinesIndent
             // 
@@ -92,6 +100,14 @@
             tabPageMdLinesIndent.Text = "Md Lines Indent";
             tabPageMdLinesIndent.UseVisualStyleBackColor = true;
             // 
+            // mdLinesIndentUC
+            // 
+            mdLinesIndentUC.Dock = DockStyle.Fill;
+            mdLinesIndentUC.Location = new Point(3, 3);
+            mdLinesIndentUC.Name = "mdLinesIndentUC";
+            mdLinesIndentUC.Size = new Size(1786, 844);
+            mdLinesIndentUC.TabIndex = 0;
+            // 
             // tabPageMdTableLines
             // 
             tabPageMdTableLines.Controls.Add(mdTableLinesUC);
@@ -102,22 +118,6 @@
             tabPageMdTableLines.TabIndex = 2;
             tabPageMdTableLines.Text = "Md Table Lines";
             tabPageMdTableLines.UseVisualStyleBackColor = true;
-            // 
-            // fetchWebResourceUC
-            // 
-            fetchWebResourceUC.Dock = DockStyle.Fill;
-            fetchWebResourceUC.Location = new Point(3, 3);
-            fetchWebResourceUC.Name = "fetchWebResourceUC";
-            fetchWebResourceUC.Size = new Size(1786, 844);
-            fetchWebResourceUC.TabIndex = 0;
-            // 
-            // mdLinesIndentUC
-            // 
-            mdLinesIndentUC.Dock = DockStyle.Fill;
-            mdLinesIndentUC.Location = new Point(3, 3);
-            mdLinesIndentUC.Name = "mdLinesIndentUC";
-            mdLinesIndentUC.Size = new Size(1786, 844);
-            mdLinesIndentUC.TabIndex = 0;
             // 
             // mdTableLinesUC
             // 
@@ -134,12 +134,14 @@
             ClientSize = new Size(1800, 900);
             Controls.Add(tabControlMain);
             Controls.Add(statusStripMain);
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             Name = "MainForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Turmerik Utility";
             statusStripMain.ResumeLayout(false);
             statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
-            tabPageFetchWebResource.ResumeLayout(false);
+            tabPageTextUtils.ResumeLayout(false);
             tabPageMdLinesIndent.ResumeLayout(false);
             tabPageMdTableLines.ResumeLayout(false);
             ResumeLayout(false);
@@ -151,10 +153,10 @@
         private StatusStrip statusStripMain;
         private ToolStripStatusLabel toolStripStatusLabelMain;
         private TabControl tabControlMain;
-        private TabPage tabPageFetchWebResource;
+        private TabPage tabPageTextUtils;
         private TabPage tabPageMdLinesIndent;
         private TabPage tabPageMdTableLines;
-        private UserControls.FetchWebResourceUC fetchWebResourceUC;
+        private UserControls.TextUtilsUC fetchWebResourceUC;
         private UserControls.MdLinesIndentUC mdLinesIndentUC;
         private ViewModels.MdTableLinesUC mdTableLinesUC;
     }

@@ -1694,7 +1694,7 @@
             public const string CONTACT_PAGE = null;
             public const string ARCHIVE = null;
             public const string SPACE_DASHBOARD = null;
-            public const string CONTENT_PASTE = null;
+            public const string CONTENT_PASTE = "\ue14f";
             public const string PERCENT = null;
             public const string ATTACHMENT = null;
             public const string ASSIGNMENT_IND = null;

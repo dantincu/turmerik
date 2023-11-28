@@ -45,6 +45,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1584, 761);
             Controls.Add(clearAppDatauc1);
+            Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ManageNoteBooksForm";
             StartPosition = FormStartPosition.CenterScreen;

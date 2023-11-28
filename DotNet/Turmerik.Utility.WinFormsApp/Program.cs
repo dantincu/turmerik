@@ -8,6 +8,7 @@ using Turmerik.Logging.Dependencies;
 using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.ViewModels;
+using Turmerik.Utility.WinFormsApp.Settings.UI;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -46,8 +47,10 @@ namespace Turmerik.Utility.WinFormsApp
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();
+                    services.AddSingleton<UISettingsRetriever>();
 
-                    services.AddTransient<IFetchWebResourceVM, FetchWebResourceVM>();
+                    services.AddTransient<IFetchWebResourceWM, FetchWebResourceWM>();
+                    services.AddTransient<ITextUtilsVM, TextUtilsVM>();
                     services.AddTransient<IMdLinesIndentVM, MdLinesIndentVM>();
                     services.AddTransient<IMdTableLinesVM, MdTableLinesVM>();
                     services.AddTransient<IMainFormVM, MainFormVM>();
