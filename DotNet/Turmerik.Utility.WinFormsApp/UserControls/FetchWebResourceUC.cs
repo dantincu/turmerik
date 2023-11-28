@@ -99,7 +99,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 var webResSettingsData = appSettingsData.FetchWebResource;
 
                 controlsSynchronizer.Execute(false,
-                    (isEnabled, wasEnabled) =>
+                    (wasEnabled, isEnabled) =>
                     {
                         checkBoxAutoCopyResourceTitleToClipboard.Checked = webResSettingsData.AutoCopyResourceTitleToClipboard ?? false;
                         checkBoxAutoCopyResourceMdLinkToClipboard.Checked = webResSettingsData.AutoCopyResourceMdLinkToClipboard ?? false;
@@ -251,7 +251,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             if (isChecked)
             {
-                controlsSynchronizer.Execute(false, (isEnabled, wasEnabled) =>
+                controlsSynchronizer.Execute(false, (wasEnabled, isEnabled) =>
                 {
                     checkBoxAutoCopyResourceMdLinkToClipboard.Checked = false;
                 });
@@ -269,7 +269,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             if (isChecked)
             {
-                controlsSynchronizer.Execute(false, (isEnabled, wasEnabled) =>
+                controlsSynchronizer.Execute(false, (wasEnabled, isEnabled) =>
                 {
                     checkBoxAutoCopyResourceTitleToClipboard.Checked = false;
                 });

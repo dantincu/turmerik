@@ -11,12 +11,12 @@ namespace Turmerik.Core.Threading
         TValue Value { get; }
 
         TValue ExecuteConcurrent(
-            RefAction<TValue> action);
+            Action<AccessorsTuple<TValue>> action);
 
         TValue Execute(
-            RefAction<TValue> beforeAction,
-            Action<TValue> action,
-            RefAction<TValue, Exception> afterAction);
+            Action<AccessorsTuple<TValue>> beforeAction,
+            Action<TValue, TValue> action,
+            Action<AccessorsTuple<TValue>, Exception> afterAction);
 
         TValue Execute(
             TValue tempVal,
@@ -42,6 +42,9 @@ namespace Turmerik.Core.Threading
                 nameof(eqCompr));
 
             this.value = value;
+
+            Accessors = new AccessorsTuple<TValue>(
+                () => this.value, value => this.value = value);
         }
 
         public TValue Value
@@ -50,15 +53,17 @@ namespace Turmerik.Core.Threading
             set => SetValue(value);
         }
 
+        protected AccessorsTuple<TValue> Accessors { get; }
+
         public TValue ExecuteConcurrent(
-            RefAction<TValue> action)
+            Action<AccessorsTuple<TValue>> action)
         {
             semaphore.Wait();
             TValue retVal;
 
             try
             {
-                action(ref this.value);
+                action(Accessors);
                 retVal = this.value;
             }
             finally
@@ -70,17 +75,19 @@ namespace Turmerik.Core.Threading
         }
 
         public TValue Execute(
-            RefAction<TValue> beforeAction,
-            Action<TValue> action,
-            RefAction<TValue, Exception> afterAction)
+            Action<AccessorsTuple<TValue>> beforeAction,
+            Action<TValue, TValue> action,
+            Action<AccessorsTuple<TValue>, Exception> afterAction)
         {
             Exception excp = null;
             TValue retVal;
 
             try
             {
-                var val = ExecuteConcurrent(beforeAction);
-                action(val);
+                var initialValue = this.value;
+                var currentVal = ExecuteConcurrent(beforeAction);
+
+                action(initialValue, currentVal);
             }
             catch(Exception exc)
             {
@@ -89,8 +96,8 @@ namespace Turmerik.Core.Threading
             finally
             {
                 retVal = ExecuteConcurrent(
-                    (ref TValue value) => afterAction(
-                        ref value, excp));
+                    accessors => afterAction(
+                        accessors, excp));
             }
 
             return retVal;
@@ -104,15 +111,15 @@ namespace Turmerik.Core.Threading
             TValue initialValue = this.value;
 
             var retVal = Execute(
-                (ref TValue val) =>
+                accessors =>
                 {
-                    initialValue = val;
-                    val = tempVal;
+                    initialValue = accessors.Getter();
+                    accessors.Setter(tempVal);
                 },
-                tmpVal => action(initialValue, tmpVal),
-                (ref TValue val, Exception exc) =>
+                action,
+                (accessors, exc) =>
                 {
-                    val = initialValue;
+                    accessors.Setter(initialValue);
 
                     if (exc != null)
                     {
