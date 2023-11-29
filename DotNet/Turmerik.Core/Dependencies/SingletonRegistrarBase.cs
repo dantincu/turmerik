@@ -84,7 +84,9 @@ namespace Turmerik.Core.Dependencies
             return hasData;
         }
 
-        public TData RegisterData(TInputData inputData)
+        public TData RegisterData(
+            TInputData inputData,
+            Action<TData> callback = null)
         {
             bool registeredNow = false;
 
@@ -108,6 +110,8 @@ namespace Turmerik.Core.Dependencies
                     }
                 }
             }
+
+            callback?.Invoke(data);
 
             if (registeredNow)
             {

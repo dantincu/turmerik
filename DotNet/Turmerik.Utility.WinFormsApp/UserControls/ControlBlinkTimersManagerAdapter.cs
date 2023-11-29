@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Turmerik.Core.Actions;
+using Turmerik.Core.Helpers;
+using Turmerik.Utility.WinFormsApp.Settings.UI;
+using Turmerik.WinForms.Controls;
+
+namespace Turmerik.Utility.WinFormsApp.UserControls
+{
+    public class ControlBlinkTimersManagerAdapter
+    {
+        public ControlBlinkTimersManagerAdapter(
+            IControlBlinkTimersManager timersManager,
+            UISettingsRetriever uISettings,
+            ControlBlinkTimersManagerAdapterOpts opts)
+        {
+            TimersManager = timersManager ?? throw new ArgumentNullException(
+                nameof(TimersManager));
+
+            UISettingsData = uISettings.Data;
+
+            RefUxControl = opts.RefUxControl ?? throw new ArgumentNullException(
+                nameof(RefUxControl));
+
+            InconsClickSuccessBlinkTimerOpts = GetControlBlinkTimerOpts(
+                opts =>
+                {
+                    opts.ForeColor = UISettingsData.SuccessColor;
+                }).ToImmtbl();
+
+            InconsClickErrorBlinkTimerOpts = GetControlBlinkTimerOpts(
+                opts =>
+                {
+                    opts.ForeColor = UISettingsData.ErrorColor;
+                }).ToImmtbl();
+        }
+
+        public IControlBlinkTimersManager TimersManager { get; }
+        public IUISettingsData UISettingsData { get; }
+        public Control RefUxControl { get; }
+
+        public ControlBlinkTimerOptsImmtbl InconsClickSuccessBlinkTimerOpts { get; }
+        public ControlBlinkTimerOptsImmtbl InconsClickErrorBlinkTimerOpts { get; }
+
+        public ControlBlinkTimerOptsMtbl GetControlBlinkTimerOpts(
+            Action<ControlBlinkTimerOptsMtbl> callback = null) => ControlBlinkTimerOptsMtbl.WithControlInitialColors(
+                RefUxControl, opts =>
+                {
+                    opts.IntervalLength = UISettingsData.SlowBlinkIntervalMillis;
+                    opts.IntervalsCount = 2;
+
+                    callback?.Invoke(opts);
+                });
+
+        public void BlinkIconLabel(
+            IconLabel iconLabel,
+            IActionResult result,
+            bool condition = true) => BlinkIconLabel(
+                iconLabel,
+                result.IsSuccess,
+                condition);
+
+        public void BlinkIconLabel(
+            IconLabel iconLabel,
+            bool isSuccess,
+            bool condition = true)
+        {
+            if (condition)
+            {
+                var optsMtbl = GetControlBlinkTimerOptsMtbl(
+                iconLabel, isSuccess);
+
+                TimersManager.Blink(optsMtbl);
+            }
+        }
+
+        public ControlBlinkTimerOptsMtbl GetControlBlinkTimerOptsMtbl(
+            IconLabel iconLabel,
+            bool isSuccess) => GetControlBlinkTimerOptsImmtbl(
+                isSuccess).With(immtbl => new ControlBlinkTimerOptsMtbl(immtbl)
+                {
+                    Control = iconLabel
+                });
+
+        public ControlBlinkTimerOptsImmtbl GetControlBlinkTimerOptsImmtbl(
+            bool isSuccess) => isSuccess switch
+            {
+                true => InconsClickSuccessBlinkTimerOpts,
+                false => InconsClickErrorBlinkTimerOpts
+            };
+    }
+}

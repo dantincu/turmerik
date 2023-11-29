@@ -63,6 +63,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_one-time-job-apps", "_one-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.ScrapeMatIconPage.ConsoleApp", "Turmerik.ScrapeMatIconPage.ConsoleApp\Turmerik.ScrapeMatIconPage.ConsoleApp.csproj", "{76A3DA76-F85F-425A-A170-4FEA139AB413}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.YantraJs", "Turmerik.YantraJs\Turmerik.YantraJs.csproj", "{93403A82-35F6-49D0-B5E8-317304CCA75F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,10 @@ Global
 		{76A3DA76-F85F-425A-A170-4FEA139AB413}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76A3DA76-F85F-425A-A170-4FEA139AB413}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76A3DA76-F85F-425A-A170-4FEA139AB413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93403A82-35F6-49D0-B5E8-317304CCA75F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93403A82-35F6-49D0-B5E8-317304CCA75F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93403A82-35F6-49D0-B5E8-317304CCA75F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93403A82-35F6-49D0-B5E8-317304CCA75F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -188,6 +194,7 @@ Global
 		{34840327-AFDC-4465-88BE-DE8BE254D4BF} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{D9246AE3-53C4-4F02-B24F-6E02B5557AA9} = {FC13E95F-6405-4DF0-B40C-4D4D077A59AE}
 		{76A3DA76-F85F-425A-A170-4FEA139AB413} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
+		{93403A82-35F6-49D0-B5E8-317304CCA75F} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

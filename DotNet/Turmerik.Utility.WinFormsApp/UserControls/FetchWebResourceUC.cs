@@ -30,7 +30,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
         private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
-        private readonly IControlBlinkTimersManager controlBlinkTimersManager;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
@@ -48,9 +47,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly Color defaultForeColor;
 
         private UISettingsDataImmtbl uISettingsData;
-
-        private ControlBlinkTimerOptsImmtbl inconsClickSuccessBlinkTimerOpts;
-        private ControlBlinkTimerOptsImmtbl inconsClickErrorBlinkTimerOpts;
+        private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
 
         public FetchWebResourceUC()
         {
@@ -60,7 +57,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             {
                 svcProv = svcProvContnr.Data;
                 htmlDocTitleRetriever = svcProv.GetRequiredService<IHtmlDocTitleRetriever>();
-                controlBlinkTimersManager = svcProv.GetRequiredService<IControlBlinkTimersManager>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
                 controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueAdapterFactory>().Create(
@@ -106,21 +102,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             uISettingsRetriever.SubscribeToData(OnUISettingsData);
         }
 
+        public IconLabel RefUxControl => iconLabelResourceUrl;
+
         private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
         {
             this.uISettingsData = uISettingsData;
 
-            inconsClickSuccessBlinkTimerOpts = GetControlBlinkTimerOpts(
-                opts =>
-                {
-                    opts.ForeColor = uISettingsData.SuccessColor;
-                }).ToImmtbl();
-
-            inconsClickErrorBlinkTimerOpts = GetControlBlinkTimerOpts(
-                opts =>
-                {
-                    opts.ForeColor = uISettingsData.ErrorColor;
-                }).ToImmtbl();
+            controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
 
             uISettingsData.ApplyBgColor([this,
                 textBoxResourceMdLink,
@@ -210,7 +198,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 return ActionResultH.Create(title);
             }
-        }).ActWith(result => BlinkIconLabel(
+        }).ActWith(result => controlBlinkTimersManagerAdapter.BlinkIconLabel(
             iconLabelResxTitleToCB,
             result,
             result.Value != null));
@@ -227,7 +215,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 return ActionResultH.Create(title);
             }
-        }).ActWith(result => BlinkIconLabel(
+        }).ActWith(result => controlBlinkTimersManagerAdapter.BlinkIconLabel(
             iconLabelResxMdLinkToCB,
             result,
             result.Value != null));
@@ -269,53 +257,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             textBoxResourceMdLink.Enabled = enable;
             textBoxResourceUrl.Enabled = enable;
         }
-
-        private ControlBlinkTimerOptsMtbl GetControlBlinkTimerOpts(
-            Action<ControlBlinkTimerOptsMtbl> callback = null) => ControlBlinkTimerOptsMtbl.WithControlInitialColors(
-                iconLabelResourceUrl, opts =>
-                {
-                    opts.IntervalLength = uISettingsData.SlowBlinkIntervalMillis;
-                    opts.IntervalsCount = 2;
-
-                    callback?.Invoke(opts);
-                });
-
-        private void BlinkIconLabel(
-            IconLabel iconLabel,
-            IActionResult result,
-            bool condition = true) => BlinkIconLabel(
-                iconLabel,
-                result.IsSuccess,
-                condition);
-
-        private void BlinkIconLabel(
-            IconLabel iconLabel,
-            bool isSuccess,
-            bool condition = true)
-        {
-            if (condition)
-            {
-                var optsMtbl = GetControlBlinkTimerOptsMtbl(
-                iconLabel, isSuccess);
-
-                controlBlinkTimersManager.Blink(optsMtbl);
-            }
-        }
-
-        private ControlBlinkTimerOptsMtbl GetControlBlinkTimerOptsMtbl(
-            IconLabel iconLabel,
-            bool isSuccess) => GetControlBlinkTimerOptsImmtbl(
-                isSuccess).With(immtbl => new ControlBlinkTimerOptsMtbl(immtbl)
-                {
-                    Control = iconLabel
-                });
-
-        private ControlBlinkTimerOptsImmtbl GetControlBlinkTimerOptsImmtbl(
-            bool isSuccess) => isSuccess switch
-            {
-                true => inconsClickSuccessBlinkTimerOpts,
-                false => inconsClickErrorBlinkTimerOpts
-            };
 
         #region UI Event Handlers
 

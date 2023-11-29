@@ -24,7 +24,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
 
-            services.AddSingleton<IIdentifierNormalizer, IdentifierNormalizer>();
+            services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();
 
             services.AddSingleton<IHtmlNodesRetriever, HtmlNodesRetriever>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();

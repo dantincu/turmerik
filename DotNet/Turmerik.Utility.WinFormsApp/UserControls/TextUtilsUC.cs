@@ -18,7 +18,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
-        private readonly ITextUtilsVM viewModel;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         public TextUtilsUC()
@@ -28,7 +27,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
-                viewModel = svcProv.GetRequiredService<ITextUtilsVM>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
             }
 
@@ -38,5 +36,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             {
             }
         }
+
+        public Control RefUxControl => fetchWebResourceUC.RefUxControl;
     }
 }

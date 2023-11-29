@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Core.Helpers;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
+using Turmerik.Utility.WinFormsApp.UserControls;
+using Turmerik.Utility.WinFormsApp.UserControls.Forms;
 using Turmerik.Utility.WinFormsApp.ViewModels;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
@@ -13,10 +15,10 @@ namespace Turmerik.Utility.WinFormsApp
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
-        private readonly IMainFormVM viewModel;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
         private readonly UISettingsRetriever uISettingsRetriever;
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
+        private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
 
         public MainForm()
         {
@@ -25,10 +27,10 @@ namespace Turmerik.Utility.WinFormsApp
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
-                viewModel = svcProv.GetRequiredService<IMainFormVM>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
                 uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
                 actionComponentCreator = svcProv.GetRequiredService<IWinFormsActionComponentCreator>();
+                controlBlinkTimersManagerAdapterFactory = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterFactory>();
             }
 
             InitializeComponent();
@@ -39,7 +41,16 @@ namespace Turmerik.Utility.WinFormsApp
                     UISettingsDataCore.GetDefaultData().With(
                         coreMtbl => new UISettingsDataMtbl(coreMtbl)
                         {
-                        }));
+                        }),
+                        data =>
+                        {
+                            svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RegisterData(
+                                controlBlinkTimersManagerAdapterFactory.Create(
+                                    new ControlBlinkTimersManagerAdapterOpts
+                                    {
+                                        RefUxControl = textUtilsUC.RefUxControl,
+                                    }));
+                        });
 
                 actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
                 {

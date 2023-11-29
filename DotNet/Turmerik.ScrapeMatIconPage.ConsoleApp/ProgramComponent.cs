@@ -19,17 +19,17 @@ namespace Turmerik.ScrapeMatIconPage.ConsoleApp
         private static readonly string nwLn = Environment.NewLine;
 
         private readonly IJsonConversion jsonConversion;
-        private readonly IIdentifierNormalizer identifierNormalizer;
+        private readonly INameToIdnfConverter nameToIdnfConverter;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
-            IIdentifierNormalizer identifierNormalizer)
+            INameToIdnfConverter nameToIdnfConverter)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
-            this.identifierNormalizer = identifierNormalizer ?? throw new ArgumentNullException(
-                nameof(identifierNormalizer));
+            this.nameToIdnfConverter = nameToIdnfConverter ?? throw new ArgumentNullException(
+                nameof(nameToIdnfConverter));
         }
 
         public void Run(string[] args)
@@ -194,8 +194,8 @@ namespace Turmerik.ScrapeMatIconPage.ConsoleApp
                 matIcon.IconName.Split(' ').Select(
                     word => NormalizeIdnf(word).ToUpper()));
 
-        private string NormalizeIdnf(string idnf) => identifierNormalizer.NormalizeIdnf(
-            new IdentifierNormalizerOpts
+        private string NormalizeIdnf(string idnf) => nameToIdnfConverter.Convert(
+            new NameToIdnfConverterOpts
             {
                 InputIdentifier = idnf,
             });

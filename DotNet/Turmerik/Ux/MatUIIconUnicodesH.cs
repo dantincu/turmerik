@@ -2095,7 +2095,7 @@
 
         public static class AudioAndVideo
         {
-            public const string PLAY_ARROW = null;
+            public const string PLAY_ARROW = "\ue037";
             public const string PLAY_CIRCLE = null;
             public const string MIC = null;
             public const string VIDEOCAM = null;

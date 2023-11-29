@@ -18,7 +18,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
-        private readonly IMdLinesIndentVM viewModel;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         public MdLinesIndentUC()
@@ -28,7 +27,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
-                viewModel = svcProv.GetRequiredService<IMdLinesIndentVM>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
             }
 

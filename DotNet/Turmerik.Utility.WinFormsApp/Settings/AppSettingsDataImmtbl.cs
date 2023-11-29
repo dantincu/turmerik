@@ -12,10 +12,13 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             IAppSettingsData src)
         {
             FetchWebResource = src.GetFetchWebResource()?.ToImmtbl();
+            NameToIdnfConverter = src.GetNameToIdnfConverter()?.ToImmtbl();
         }
 
         public AppSettingsData.FetchWebResourceImmtbl FetchWebResource { get; }
+        public AppSettingsData.NameToIdnfConverterImmtbl NameToIdnfConverter { get; }
 
         public AppSettingsData.IFetchWebResource GetFetchWebResource() => FetchWebResource;
+        public AppSettingsData.INameToIdnfConverter GetNameToIdnfConverter() => NameToIdnfConverter;
     }
 }

@@ -9,6 +9,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
     public interface IAppSettingsData
     {
         AppSettingsData.IFetchWebResource GetFetchWebResource();
+        AppSettingsData.INameToIdnfConverter GetNameToIdnfConverter();
     }
 
     public static class AppSettingsData
@@ -18,6 +19,11 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             string MdLinkTemplate { get; }
             bool? ResxTitleFetchToCB { get; }
             bool? ResxMdLinkFetchToCB { get; }
+        }
+
+        public interface INameToIdnfConverter
+        {
+            bool? NameConvertToCB { get; }
         }
 
         public class FetchWebResourceImmtbl : IFetchWebResource
@@ -54,6 +60,32 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public bool? ResxMdLinkFetchToCB { get; set; }
         }
 
+        public class NameToIdnfConverterImmtbl : INameToIdnfConverter
+        {
+            public NameToIdnfConverterImmtbl(
+                INameToIdnfConverter src)
+            {
+                NameConvertToCB = src.NameConvertToCB;
+            }
+
+            public bool? NameConvertToCB { get; }
+        }
+
+        public class NameToIdnfConverterMtbl : INameToIdnfConverter
+        {
+            public NameToIdnfConverterMtbl()
+            {
+            }
+
+            public NameToIdnfConverterMtbl(
+                INameToIdnfConverter src)
+            {
+                NameConvertToCB = src.NameConvertToCB;
+            }
+
+            public bool? NameConvertToCB { get; set; }
+        }
+
         public static AppSettingsDataImmtbl ToImmtbl(
             this IAppSettingsData src) => new AppSettingsDataImmtbl(src);
 
@@ -65,5 +97,11 @@ namespace Turmerik.Utility.WinFormsApp.Settings
 
         public static FetchWebResourceMtbl ToMtbl(
             this IFetchWebResource src) => new FetchWebResourceMtbl(src);
+
+        public static NameToIdnfConverterImmtbl ToImmtbl(
+            this INameToIdnfConverter src) => new NameToIdnfConverterImmtbl(src);
+
+        public static NameToIdnfConverterMtbl ToMtbl(
+            this INameToIdnfConverter src) => new NameToIdnfConverterMtbl(src);
     }
 }

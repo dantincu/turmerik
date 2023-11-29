@@ -32,7 +32,7 @@
             toolStripStatusLabelMain = new ToolStripStatusLabel();
             tabControlMain = new TabControl();
             tabPageTextUtils = new TabPage();
-            fetchWebResourceUC = new UserControls.TextUtilsUC();
+            textUtilsUC = new UserControls.TextUtilsUC();
             tabPageMdLinesIndent = new TabPage();
             mdLinesIndentUC = new UserControls.MdLinesIndentUC();
             tabPageMdTableLines = new TabPage();
@@ -72,7 +72,7 @@
             // 
             // tabPageTextUtils
             // 
-            tabPageTextUtils.Controls.Add(fetchWebResourceUC);
+            tabPageTextUtils.Controls.Add(textUtilsUC);
             tabPageTextUtils.Location = new Point(4, 24);
             tabPageTextUtils.Name = "tabPageTextUtils";
             tabPageTextUtils.Padding = new Padding(3);
@@ -83,11 +83,11 @@
             // 
             // fetchWebResourceUC
             // 
-            fetchWebResourceUC.Dock = DockStyle.Fill;
-            fetchWebResourceUC.Location = new Point(3, 3);
-            fetchWebResourceUC.Name = "fetchWebResourceUC";
-            fetchWebResourceUC.Size = new Size(1786, 844);
-            fetchWebResourceUC.TabIndex = 0;
+            textUtilsUC.Dock = DockStyle.Fill;
+            textUtilsUC.Location = new Point(3, 3);
+            textUtilsUC.Name = "textUtilsUC";
+            textUtilsUC.Size = new Size(1786, 844);
+            textUtilsUC.TabIndex = 0;
             // 
             // tabPageMdLinesIndent
             // 
@@ -156,7 +156,7 @@
         private TabPage tabPageTextUtils;
         private TabPage tabPageMdLinesIndent;
         private TabPage tabPageMdTableLines;
-        private UserControls.TextUtilsUC fetchWebResourceUC;
+        private UserControls.TextUtilsUC textUtilsUC;
         private UserControls.MdLinesIndentUC mdLinesIndentUC;
         private ViewModels.MdTableLinesUC mdTableLinesUC;
     }

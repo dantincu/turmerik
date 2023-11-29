@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Turmerik.Code.Core
 {
-    public class IdentifierNormalizerOpts
+    public class NameToIdnfConverterOpts
     {
         public string InputIdentifier { get; set; }
         public string OtherAllowedChars { get; set; }

@@ -7,16 +7,16 @@ using Turmerik.Core.Text;
 
 namespace Turmerik.Code.Core
 {
-    public interface IIdentifierNormalizer
+    public interface INameToIdnfConverter
     {
-        string NormalizeIdnf(
-            IdentifierNormalizerOpts opts);
+        string Convert(
+            NameToIdnfConverterOpts opts);
     }
 
-    public class IdentifierNormalizer : IIdentifierNormalizer
+    public class NameToIdnfConverter : INameToIdnfConverter
     {
-        public string NormalizeIdnf(
-            IdentifierNormalizerOpts opts)
+        public string Convert(
+            NameToIdnfConverterOpts opts)
         {
             DestructureNormalizeOpts(opts,
                 out var idnf,
@@ -77,7 +77,7 @@ namespace Turmerik.Code.Core
         }
 
         private void DestructureNormalizeOpts(
-            IdentifierNormalizerOpts opts,
+            NameToIdnfConverterOpts opts,
             out string idnf,
             out string otherAllowedChars,
             out string otherStartingAllowedChars,

@@ -17,7 +17,6 @@ namespace Turmerik.Utility.WinFormsApp.ViewModels
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
-        private readonly IMdTableLinesVM viewModel;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         public MdTableLinesUC()
@@ -27,7 +26,6 @@ namespace Turmerik.Utility.WinFormsApp.ViewModels
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
-                viewModel = svcProv.GetRequiredService<IMdTableLinesVM>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
             }
 

@@ -9,6 +9,8 @@ using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.ViewModels;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
+using Turmerik.Utility.WinFormsApp.UserControls;
+using Turmerik.Utility.WinFormsApp.UserControls.Forms;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -48,11 +50,8 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();
                     services.AddSingleton<UISettingsRetriever>();
-
-                    services.AddTransient<ITextUtilsVM, TextUtilsVM>();
-                    services.AddTransient<IMdLinesIndentVM, MdLinesIndentVM>();
-                    services.AddTransient<IMdTableLinesVM, MdTableLinesVM>();
-                    services.AddTransient<IMainFormVM, MainFormVM>();
+                    services.AddSingleton<ControlBlinkTimersManagerAdapterFactory>();
+                    services.AddSingleton<ControlBlinkTimersManagerAdapterContainer>();
                 }));
 
             return svcProv;
