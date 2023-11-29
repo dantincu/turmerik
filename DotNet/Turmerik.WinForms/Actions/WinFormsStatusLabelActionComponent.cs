@@ -11,19 +11,19 @@ namespace Turmerik.WinForms.Actions
 {
     public interface IWinFormsStatusLabelActionComponent : IUIActionComponent<IWinFormsMessageTuple>
     {
-        Lazy<WinFormsStatusLabelActionComponentOpts> Opts { get; }
+        Func<WinFormsStatusLabelActionComponentOpts> OptsRetriever { get; }
     }
 
     public class WinFormsStatusLabelActionComponent : UIActionComponent<IWinFormsMessageTuple>, IWinFormsStatusLabelActionComponent
     {
         public WinFormsStatusLabelActionComponent(
             IAppLogger logger,
-            Lazy<WinFormsStatusLabelActionComponentOpts> opts) : base(logger)
+            Func<WinFormsStatusLabelActionComponentOpts> optsRetriever) : base(logger)
         {
-            Opts = opts ?? throw new ArgumentNullException(nameof(opts));
+            OptsRetriever = optsRetriever ?? throw new ArgumentNullException(nameof(optsRetriever));
         }
 
-        public Lazy<WinFormsStatusLabelActionComponentOpts> Opts { get; }
+        public Func<WinFormsStatusLabelActionComponentOpts> OptsRetriever { get; }
 
         protected virtual string OnUnhandledErrorUIMsgTpl => "An unhandled error has ocurred: {0}";
 
@@ -32,10 +32,10 @@ namespace Turmerik.WinForms.Actions
             IWinFormsMessageTuple msgTuple)
         {
             base.OnBeforeExecutionLogMsg(opts, msgTuple);
-            string message = msgTuple?.Message;
+            string message = msgTuple?.StatusMessage;
 
             SetStatusLabelMessage(message,
-                Opts.Value.DefaultForeColor);
+                OptsRetriever().DefaultForeColor);
         }
 
         protected override void OnUnhandledErrorLogMsg<T>(
@@ -44,21 +44,25 @@ namespace Turmerik.WinForms.Actions
         {
             base.OnUnhandledErrorLogMsg(opts, ex, msgTuple);
 
-            string message = msgTuple?.Message ?? string.Format(
+            string statusMessage = msgTuple?.StatusMessage ?? string.Format(
                 OnUnhandledErrorUIMsgTpl,
                 ex.Message);
 
-            SetStatusLabelMessage(message,
-                Opts.Value.ErrorForeColor);
+            SetStatusLabelMessage(statusMessage,
+                OptsRetriever().ErrorForeColor);
 
-            string caption = msgTuple?.Caption;
-
-            if (caption != null)
+            if (msgTuple != null)
             {
-                MessageBox.Show(
-                    message, caption,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                string message = msgTuple.Message;
+                string caption = msgTuple.Caption ?? "Error";
+
+                if (!string.IsNullOrEmpty(message))
+                {
+                    MessageBox.Show(
+                        message, caption,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -70,20 +74,20 @@ namespace Turmerik.WinForms.Actions
             base.OnAfterExecutionLogMsg(
                 opts, actionResult, msgTuple);
 
-            string message = msgTuple?.Message;
+            string message = msgTuple?.StatusMessage;
 
             SetStatusLabelMessage(message,
-                Opts.Value.DefaultForeColor);
+                OptsRetriever().DefaultForeColor);
         }
 
         private void SetStatusLabelMessage(
-            string message,
+            string statusMessage,
             Color foreColor)
         {
-            if (!string.IsNullOrEmpty(message))
+            if (!string.IsNullOrEmpty(statusMessage))
             {
-                var statusLabel = Opts.Value.StatusLabel;
-                statusLabel.Text = message;
+                var statusLabel = OptsRetriever().StatusLabel;
+                statusLabel.Text = statusMessage;
                 statusLabel.ForeColor = foreColor;
             }
         }

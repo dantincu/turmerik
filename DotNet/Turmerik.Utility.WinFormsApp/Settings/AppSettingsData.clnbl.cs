@@ -15,6 +15,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
     {
         public interface IFetchWebResource
         {
+            string MdLinkTemplate { get; }
             bool? ResxTitleFetchToCB { get; }
             bool? ResxMdLinkFetchToCB { get; }
         }
@@ -24,10 +25,12 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public FetchWebResourceImmtbl(
                 IFetchWebResource src)
             {
+                MdLinkTemplate = src.MdLinkTemplate;
                 ResxTitleFetchToCB = src.ResxTitleFetchToCB;
                 ResxMdLinkFetchToCB = src.ResxMdLinkFetchToCB;
             }
 
+            public string MdLinkTemplate { get; }
             public bool? ResxTitleFetchToCB { get; }
             public bool? ResxMdLinkFetchToCB { get; }
         }
@@ -41,10 +44,12 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public FetchWebResourceMtbl(
                 IFetchWebResource src)
             {
+                MdLinkTemplate = src.MdLinkTemplate;
                 ResxTitleFetchToCB = src.ResxTitleFetchToCB;
                 ResxMdLinkFetchToCB = src.ResxMdLinkFetchToCB;
             }
 
+            public string MdLinkTemplate { get; set; }
             public bool? ResxTitleFetchToCB { get; set; }
             public bool? ResxMdLinkFetchToCB { get; set; }
         }

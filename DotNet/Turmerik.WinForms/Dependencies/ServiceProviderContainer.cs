@@ -20,8 +20,6 @@ namespace Turmerik.WinForms.Dependencies
         {
             TrmrkCoreServices.RegisterAll(services);
             WinFormsServices.RegisterAll(services);
-
-            services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();
         }
 
         public static Lazy<ServiceProviderContainer> Instance { get; } = new(() => new());

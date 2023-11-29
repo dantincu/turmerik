@@ -19,7 +19,7 @@ namespace Turmerik.Core.Actions
 
         public static IActionResult<T> Create<T>(
             T value,
-            Exception exc,
+            Exception exc = null,
             bool? isFail = null) => new ActionResult<T>(
                 value, exc, isFail);
     }

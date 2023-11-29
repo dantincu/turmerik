@@ -9,6 +9,7 @@ namespace Turmerik.WinForms.Actions
 {
     public interface IWinFormsMessageTuple : IUIMessageTuple
     {
+        public string StatusMessage { get; }
         public string Message { get; }
         public string Caption { get; }
     }
@@ -17,21 +18,26 @@ namespace Turmerik.WinForms.Actions
     {
         public WinFormsMessageTuple(
             string logMessage = null,
+            string statusMessage = null,
             string message = null,
             string caption = null) : base(logMessage)
         {
+            StatusMessage = statusMessage;
             Message = message;
             Caption = caption;
         }
 
+        public string StatusMessage { get; set; }
         public string Message { get; set; }
         public string Caption { get; set; }
 
         public static WinFormsMessageTuple WithOnly(
-            string logMessage = null,
+            string statusMessage = null,
             string message = null,
-            string caption = null) => new WinFormsMessageTuple(
+            string caption = null,
+            string logMessage = null) => new WinFormsMessageTuple(
                 logMessage ?? string.Empty,
+                statusMessage ?? string.Empty,
                 message ?? string.Empty,
                 caption ?? string.Empty);
     }

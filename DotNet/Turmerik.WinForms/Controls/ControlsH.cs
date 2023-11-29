@@ -23,6 +23,33 @@ namespace Turmerik.WinForms.Controls
             }
         }
 
+        public static bool ToggleEnabled(
+            this Control control)
+        {
+            bool enabled = !control.Enabled;
+            control.Enabled = enabled;
+
+            return enabled;
+        }
+
+        public static bool ToggleChecked(
+            this CheckBox checkBox)
+        {
+            bool @checked = !checkBox.Checked;
+            checkBox.Checked = @checked;
+
+            return @checked;
+        }
+
+        public static bool ToggleReadOnly(
+            this TextBoxBase textBox)
+        {
+            bool readOnly = !textBox.ReadOnly;
+            textBox.ReadOnly = readOnly;
+
+            return readOnly;
+        }
+
         public static IPropChangedEventAdapter<bool, EventArgs> CheckedChanged(
             this IPropChangedEventAdapterFactory factory,
             CheckBox checkBox,
@@ -44,5 +71,55 @@ namespace Turmerik.WinForms.Controls
                 }.ActWith(optsBuilder)).ActWith(adapter => attachEventHandler.ActIf(
                     () => checkBox.CheckedChanged += (sender, evtArgs) => adapter.FireEventIfRequired(
                         sender, evtArgs)));
+
+        public static Keys ControlKeys(this KeyEventArgs e)
+        {
+            Keys retVal = default;
+
+            if (e.Control)
+            {
+                retVal |= Keys.Control;
+            }
+
+            if (e.Alt)
+            {
+                retVal |= Keys.Alt;
+            }
+
+            if (e.Shift)
+            {
+                retVal |= Keys.Shift;
+            }
+
+            return retVal;
+        }
+
+        public static Keys KeyboardKey(
+            this KeyEventArgs e,
+            Keys keyboardKey)
+        {
+            var controlKeys = e.ControlKeys();
+            var retVal = controlKeys | keyboardKey;
+
+            return retVal;
+        }
+
+        public static bool IsKeyboardKey(
+            this KeyEventArgs e,
+            Keys keyboardKey,
+            char? keyboardChar = null)
+        {
+            var refValue = e.KeyboardKey(
+                keyboardKey);
+
+            bool retVal = refValue == keyboardKey;
+
+            if (keyboardChar.HasValue)
+            {
+                retVal = retVal && keyboardChar == e.KeyValue;
+            }
+
+            return retVal;
+        }
     }
 }

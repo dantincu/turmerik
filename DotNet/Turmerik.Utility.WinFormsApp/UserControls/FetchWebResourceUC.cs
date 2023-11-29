@@ -15,9 +15,13 @@ using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.ViewModels;
 using Turmerik.Ux;
+using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
+using Turmerik.Core.Utility;
+using Turmerik.Core.Text;
+using Turmerik.Html;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -25,8 +29,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
+        private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
         private readonly IControlBlinkTimersManager controlBlinkTimersManager;
-        private readonly IFetchWebResourceWM viewModel;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
@@ -34,6 +38,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private readonly UISettingsRetriever uISettingsRetriever;
         private readonly IAppSettings appSettings;
+
+        private readonly IWinFormsStatusLabelActionComponent actionComponent;
 
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxTitleFetchToCB_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxMdLinkFetchToCB_EvtAdapter;
@@ -53,8 +59,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
+                htmlDocTitleRetriever = svcProv.GetRequiredService<IHtmlDocTitleRetriever>();
                 controlBlinkTimersManager = svcProv.GetRequiredService<IControlBlinkTimersManager>();
-                viewModel = svcProv.GetRequiredService<IFetchWebResourceWM>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
                 controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueAdapterFactory>().Create(
@@ -73,6 +79,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             if (svcProvContnr.IsRegistered)
             {
+                actionComponent = svcProv.GetRequiredService<IWinFormsActionComponentCreator>(
+                    ).StatusLabel(GetType());
+
                 iconLabelResourceUrl.Text = MatUIIconUnicodesH.UIActions.DOWNLOAD;
 
                 iconLabelResxTitleToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
@@ -137,25 +146,91 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private async Task FetchResourceAsync()
         {
             ToggleEnableControls(false);
-            iconLabelResourceUrl.ForeColor = Color.FromArgb(0, 0, 255);
+            iconLabelResourceUrl.ForeColor = uISettingsData.ActiveIconColor;
 
-            (await viewModel.FetchResourceAsync(
-                textBoxResourceUrl.Text)).ActWith(result =>
+            await actionComponent.ExecuteAsync(new WinFormsAsyncActionOpts<string?>
+            {
+                OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+                Action = async () =>
+                {
+                    string url = textBoxResourceUrl.Text.Nullify(true);
+                    string? title = null;
+
+                    if (url != null)
+                    {
+                        title = await htmlDocTitleRetriever.GetResouceTitleAsync(url);
+
+                        textBoxResourceTitle.Text = title;
+
+                        textBoxResourceMdLink.Text = string.Format(
+                            appSettings.Data.FetchWebResource.MdLinkTemplate,
+                            title, url);
+                    }
+                    else
+                    {
+                        throw new TrmrkException(
+                            "Please type or paste the resource's url address");
+                    }
+
+                    return ActionResultH.Create(title);
+                },
+                OnUnhandledError = exc => WinFormsMessageTuple.WithOnly(
+                    exc.Message, exc.Message),
+                OnAfterExecution = result =>
                 {
                     ToggleEnableControls(true);
                     iconLabelResourceUrl.ForeColor = defaultForeColor;
+
+                    if (result.IsSuccess)
+                    {
+                        if (checkBoxResxTitleFetchToCB.Checked)
+                        {
+                            CopyResourceTitleToClipboard();
+                        }
+                        else if (checkBoxResxMdLinkFetchToCB.Checked)
+                        {
+                            CopyResourceMdLinkToClipboard();
+                        }
+                    }
+
+                    return null;
+                }
+            });
+        }
+
+        private void CopyResourceTitleToClipboard() => actionComponent.Execute(new WinFormsActionOpts<string?>
+        {
+            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+            Action = () =>
+            {
+                string? title = textBoxResourceTitle.Text.Nullify(true)?.ActWith(title =>
+                {
+                    Clipboard.SetText(title);
                 });
-        }
 
-        private void CopyResourceTitleToClipboard()
+                return ActionResultH.Create(title);
+            }
+        }).ActWith(result => BlinkIconLabel(
+            iconLabelResxTitleToCB,
+            result,
+            result.Value != null));
+
+        private void CopyResourceMdLinkToClipboard() => actionComponent.Execute(new WinFormsActionOpts<string?>
         {
+            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+            Action = () =>
+            {
+                string? title = textBoxResourceMdLink.Text.Nullify(true)?.ActWith(title =>
+                {
+                    Clipboard.SetText(title);
+                });
 
-        }
-
-        private void CopyResourceMdLinkToClipboard()
-        {
-
-        }
+                return ActionResultH.Create(title);
+            }
+        }).ActWith(result => BlinkIconLabel(
+            iconLabelResxMdLinkToCB,
+            result,
+            result.Value != null));
 
         private void SetResxTitleFetchToCB(
             bool enabled)
@@ -207,22 +282,24 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void BlinkIconLabel(
             IconLabel iconLabel,
-            IActionResult result)
-        {
-            var optsMtbl = GetControlBlinkTimerOptsMtbl(
-                iconLabel, result.IsSuccess);
-
-            controlBlinkTimersManager.Blink(optsMtbl);
-        }
+            IActionResult result,
+            bool condition = true) => BlinkIconLabel(
+                iconLabel,
+                result.IsSuccess,
+                condition);
 
         private void BlinkIconLabel(
             IconLabel iconLabel,
-            bool isSuccess)
+            bool isSuccess,
+            bool condition = true)
         {
-            var optsMtbl = GetControlBlinkTimerOptsMtbl(
+            if (condition)
+            {
+                var optsMtbl = GetControlBlinkTimerOptsMtbl(
                 iconLabel, isSuccess);
 
-            controlBlinkTimersManager.Blink(optsMtbl);
+                controlBlinkTimersManager.Blink(optsMtbl);
+            }
         }
 
         private ControlBlinkTimerOptsMtbl GetControlBlinkTimerOptsMtbl(
@@ -247,38 +324,46 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             FetchResourceAsync();
         }
 
-        private void IconLabelResourceTitle_Click(object sender, EventArgs e)
-        {
+        private void IconLabelResourceTitle_Click(
+            object sender, EventArgs e) => CopyResourceTitleToClipboard();
 
-        }
-
-        private void IconLabelTitleResourceMdLink_Click(object sender, EventArgs e)
-        {
-
-        }
+        private void IconLabelTitleResourceMdLink_Click(
+            object sender, EventArgs e) => CopyResourceMdLinkToClipboard();
 
         private void TextBoxResourceUrl_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (e.Control)
+                {
+                    checkBoxResxMdLinkFetchToCB.Checked = !e.Shift;
+                }
 
+                FetchResourceAsync();
+            }
         }
 
         private void TextBoxResourceTitle_KeyUp(object sender, KeyEventArgs e)
         {
-
+            if (e.KeyCode == Keys.Enter)
+            {
+                checkBoxResxTitleFetchToCB.Checked = !e.Control;
+            }
         }
 
         private void TextBoxResourceMdLink_KeyUp(object sender, KeyEventArgs e)
         {
-
+            if (e.KeyCode == Keys.Enter)
+            {
+                checkBoxResxMdLinkFetchToCB.Checked = !e.Control;
+            }
         }
 
         private void IconLabelResxTitleFetchToCB_Click(
-            object sender, EventArgs e) => checkBoxResxTitleFetchToCB.ActWith(
-                checkBox => checkBox.Checked = !checkBox.Checked);
+            object sender, EventArgs e) => checkBoxResxTitleFetchToCB.ToggleChecked();
 
         private void IconLabelResxMdLinkFetchToCB_Click(
-            object sender, EventArgs e) => checkBoxResxMdLinkFetchToCB.ActWith(
-                checkBox => checkBox.Checked = !checkBox.Checked);
+            object sender, EventArgs e) => checkBoxResxMdLinkFetchToCB.ToggleChecked();
 
         #endregion UI Event Handlers
     }

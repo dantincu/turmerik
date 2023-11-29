@@ -27,7 +27,7 @@ namespace Turmerik.WinForms.Actions
         {
             base.OnUnhandledErrorLogMsg(opts, ex, msgTuple);
 
-            string message = msgTuple?.Message ?? string.Format(
+            string message = msgTuple?.StatusMessage ?? string.Format(
                 OnUnhandledErrorUIMsgTpl,
                 ex.Message);
 

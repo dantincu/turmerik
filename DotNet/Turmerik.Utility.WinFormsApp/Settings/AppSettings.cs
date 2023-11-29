@@ -23,7 +23,10 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         protected override AppSettingsDataMtbl GetDefaultConfigCore(
             ) => new AppSettingsDataMtbl
             {
-                FetchWebResource = new AppSettingsData.FetchWebResourceMtbl()
+                FetchWebResource = new AppSettingsData.FetchWebResourceMtbl
+                {
+                    MdLinkTemplate = "[{0}]({1})"
+                }
             };
 
         protected override AppSettingsDataImmtbl NormalizeConfig(

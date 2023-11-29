@@ -49,7 +49,6 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<IAppSettings, AppSettings>();
                     services.AddSingleton<UISettingsRetriever>();
 
-                    services.AddTransient<IFetchWebResourceWM, FetchWebResourceWM>();
                     services.AddTransient<ITextUtilsVM, TextUtilsVM>();
                     services.AddTransient<IMdLinesIndentVM, MdLinesIndentVM>();
                     services.AddTransient<IMdTableLinesVM, MdTableLinesVM>();

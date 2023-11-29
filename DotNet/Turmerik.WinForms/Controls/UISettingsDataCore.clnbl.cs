@@ -14,6 +14,7 @@ namespace Turmerik.WinForms.Controls
         Color ErrorColor { get; }
         Color WarningColor { get; }
         Color InfoIconColor { get; }
+        Color ActiveIconColor { get; }
         int SlowBlinkIntervalMillis { get; }
         int DefaultBlinkIntervalMillis { get; }
         int FastBlinkIntervalMillis { get; }
@@ -35,6 +36,7 @@ namespace Turmerik.WinForms.Controls
             ErrorColor = Color.FromArgb(192, 0, 0),
             WarningColor = Color.FromArgb(160, 96, 0),
             InfoIconColor = Color.FromArgb(48, 64, 80),
+            ActiveIconColor = Color.FromArgb(0, 0, 255),
             SlowBlinkIntervalMillis = 375,
             DefaultBlinkIntervalMillis = 125,
             FastBlinkIntervalMillis = 40
@@ -52,6 +54,7 @@ namespace Turmerik.WinForms.Controls
             ErrorColor = src.ErrorColor;
             WarningColor = src.WarningColor;
             InfoIconColor = src.InfoIconColor;
+            ActiveIconColor = src.ActiveIconColor;
             SlowBlinkIntervalMillis = src.SlowBlinkIntervalMillis;
             DefaultBlinkIntervalMillis = src.DefaultBlinkIntervalMillis;
             FastBlinkIntervalMillis = src.FastBlinkIntervalMillis;
@@ -63,6 +66,7 @@ namespace Turmerik.WinForms.Controls
         public Color ErrorColor { get; }
         public Color WarningColor { get; }
         public Color InfoIconColor { get; }
+        public Color ActiveIconColor { get; }
         public int SlowBlinkIntervalMillis { get; }
         public int DefaultBlinkIntervalMillis { get; }
         public int FastBlinkIntervalMillis { get; }
@@ -83,6 +87,7 @@ namespace Turmerik.WinForms.Controls
             ErrorColor = src.ErrorColor;
             WarningColor = src.WarningColor;
             InfoIconColor = src.InfoIconColor;
+            ActiveIconColor = src.ActiveIconColor;
             SlowBlinkIntervalMillis = src.SlowBlinkIntervalMillis;
             DefaultBlinkIntervalMillis = src.DefaultBlinkIntervalMillis;
             FastBlinkIntervalMillis = src.FastBlinkIntervalMillis;
@@ -94,6 +99,7 @@ namespace Turmerik.WinForms.Controls
         public Color ErrorColor { get; set; }
         public Color WarningColor { get; set; }
         public Color InfoIconColor { get; set; }
+        public Color ActiveIconColor { get; set; }
         public int SlowBlinkIntervalMillis { get; set; }
         public int DefaultBlinkIntervalMillis { get; set; }
         public int FastBlinkIntervalMillis { get; set; }

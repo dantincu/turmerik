@@ -134,7 +134,7 @@ namespace Turmerik.Core.Text
 
             if (string.IsNullOrEmpty(scheme))
             {
-                string.Join("://", uri, preferedScheme);
+                uri = string.Join("://", preferedScheme, uri);
             }
 
             return uri;
