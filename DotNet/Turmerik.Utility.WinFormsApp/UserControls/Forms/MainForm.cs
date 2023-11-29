@@ -3,7 +3,6 @@ using Turmerik.Core.Helpers;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
 using Turmerik.Utility.WinFormsApp.UserControls.Forms;
-using Turmerik.Utility.WinFormsApp.ViewModels;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
@@ -34,6 +33,7 @@ namespace Turmerik.Utility.WinFormsApp
             }
 
             InitializeComponent();
+            var refUxControl = textUtilsUC.RefUxControl;
 
             if (svcProvContnr.IsRegistered)
             {
@@ -41,6 +41,8 @@ namespace Turmerik.Utility.WinFormsApp
                     UISettingsDataCore.GetDefaultData().With(
                         coreMtbl => new UISettingsDataMtbl(coreMtbl)
                         {
+                            DefaultBackColor = refUxControl.BackColor,
+                            DefaultForeColor = refUxControl.ForeColor,
                         }),
                         data =>
                         {
@@ -48,7 +50,7 @@ namespace Turmerik.Utility.WinFormsApp
                                 controlBlinkTimersManagerAdapterFactory.Create(
                                     new ControlBlinkTimersManagerAdapterOpts
                                     {
-                                        RefUxControl = textUtilsUC.RefUxControl,
+                                        RefUxControl = refUxControl,
                                     }));
                         });
 

@@ -18,7 +18,6 @@ using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Helpers;
 using Turmerik.Code.Core;
-using static Turmerik.Utility.WinFormsApp.Settings.AppSettingsData;
 using Turmerik.Core.Actions;
 using Turmerik.Core.UIActions;
 
@@ -40,9 +39,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
 
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxNameConvertToCB_EvtAdapter;
-
-        private readonly Color defaultBackColor;
-        private readonly Color defaultForeColor;
 
         private UISettingsDataImmtbl uISettingsData;
 
@@ -69,9 +65,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             InitializeComponent();
 
-            defaultBackColor = iconLabelIdnfToCB.BackColor;
-            defaultForeColor = iconLabelIdnfToCB.ForeColor;
-
             if (svcProvContnr.IsRegistered)
             {
                 actionComponent = svcProv.GetRequiredService<IWinFormsActionComponentCreator>(
@@ -94,12 +87,18 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             this.uISettingsData = uISettingsData;
 
             controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-            uISettingsData.ApplyBgColor([this,
-                textBoxName,
-                textBoxIndf]);
-
             iconLabelNameConvertToCB.ForeColor = uISettingsData.InfoIconColor;
+
+            appSettings.Data.ActWith(appSettingsData =>
+            {
+                var nameToIdnfSettings = appSettingsData.NameToIdnfConverter;
+
+                controlsSynchronizer.Execute(false,
+                    (wasEnabled) =>
+                    {
+                        checkBoxNameConvertToCB.Checked = nameToIdnfSettings.NameConvertToCB ?? false;
+                    });
+            });
         }
 
         private void SetIdnfToCB(bool enabled)
@@ -152,9 +151,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }));
 
-#region UI Event Handlers
+        #region UI Event Handlers
 
-private void IconLabelConvertName_Click(object sender, EventArgs e)
+        private void IconLabelConvertName_Click(object sender, EventArgs e)
         {
             ConvertNameToIdnf();
         }

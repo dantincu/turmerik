@@ -13,7 +13,6 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.Threading;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
-using Turmerik.Utility.WinFormsApp.ViewModels;
 using Turmerik.Ux;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
@@ -43,9 +42,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxTitleFetchToCB_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxMdLinkFetchToCB_EvtAdapter;
 
-        private readonly Color defaultBackColor;
-        private readonly Color defaultForeColor;
-
         private UISettingsDataImmtbl uISettingsData;
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
 
@@ -69,9 +65,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
 
             InitializeComponent();
-
-            defaultBackColor = iconLabelResourceUrl.BackColor;
-            defaultForeColor = iconLabelResourceUrl.ForeColor;
 
             if (svcProvContnr.IsRegistered)
             {
@@ -107,14 +100,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
         {
             this.uISettingsData = uISettingsData;
-
             controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-            uISettingsData.ApplyBgColor([this,
-                textBoxResourceMdLink,
-                textBoxResourceTitle,
-                textBoxResourceUrl]);
-
             iconLabelResxTitleFetchToCB.ForeColor = uISettingsData.InfoIconColor;
             iconLabelResxMdLinkFetchToCB.ForeColor = uISettingsData.InfoIconColor;
 

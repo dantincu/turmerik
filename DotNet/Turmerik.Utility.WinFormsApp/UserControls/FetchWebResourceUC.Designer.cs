@@ -96,7 +96,7 @@
             // 
             labelTitleResourceMdLink.AutoSize = true;
             labelTitleResourceMdLink.Dock = DockStyle.Right;
-            labelTitleResourceMdLink.Location = new Point(24, 0);
+            labelTitleResourceMdLink.Location = new Point(30, 0);
             labelTitleResourceMdLink.Name = "labelTitleResourceMdLink";
             labelTitleResourceMdLink.Padding = new Padding(3);
             labelTitleResourceMdLink.Size = new Size(56, 21);
@@ -107,10 +107,9 @@
             // 
             iconLabelResxMdLinkToCB.AutoSize = true;
             iconLabelResxMdLinkToCB.Dock = DockStyle.Right;
-            iconLabelResxMdLinkToCB.Location = new Point(80, 0);
+            iconLabelResxMdLinkToCB.Location = new Point(86, 0);
             iconLabelResxMdLinkToCB.Name = "iconLabelResxMdLinkToCB";
-            iconLabelResxMdLinkToCB.Padding = new Padding(3);
-            iconLabelResxMdLinkToCB.Size = new Size(20, 21);
+            iconLabelResxMdLinkToCB.Size = new Size(14, 15);
             iconLabelResxMdLinkToCB.TabIndex = 0;
             iconLabelResxMdLinkToCB.Text = "R";
             iconLabelResxMdLinkToCB.Click += IconLabelTitleResourceMdLink_Click;
@@ -129,7 +128,7 @@
             // 
             labelTitleResourceTitle.AutoSize = true;
             labelTitleResourceTitle.Dock = DockStyle.Right;
-            labelTitleResourceTitle.Location = new Point(45, 0);
+            labelTitleResourceTitle.Location = new Point(51, 0);
             labelTitleResourceTitle.Name = "labelTitleResourceTitle";
             labelTitleResourceTitle.Padding = new Padding(3);
             labelTitleResourceTitle.Size = new Size(35, 21);
@@ -140,10 +139,9 @@
             // 
             iconLabelResxTitleToCB.AutoSize = true;
             iconLabelResxTitleToCB.Dock = DockStyle.Right;
-            iconLabelResxTitleToCB.Location = new Point(80, 0);
+            iconLabelResxTitleToCB.Location = new Point(86, 0);
             iconLabelResxTitleToCB.Name = "iconLabelResxTitleToCB";
-            iconLabelResxTitleToCB.Padding = new Padding(3);
-            iconLabelResxTitleToCB.Size = new Size(20, 21);
+            iconLabelResxTitleToCB.Size = new Size(14, 15);
             iconLabelResxTitleToCB.TabIndex = 0;
             iconLabelResxTitleToCB.Text = "R";
             iconLabelResxTitleToCB.Click += IconLabelResourceTitle_Click;
@@ -162,7 +160,7 @@
             // 
             labelTitleResourceUrl.AutoSize = true;
             labelTitleResourceUrl.Dock = DockStyle.Right;
-            labelTitleResourceUrl.Location = new Point(52, 0);
+            labelTitleResourceUrl.Location = new Point(58, 0);
             labelTitleResourceUrl.Name = "labelTitleResourceUrl";
             labelTitleResourceUrl.Padding = new Padding(3);
             labelTitleResourceUrl.Size = new Size(28, 21);
@@ -173,10 +171,9 @@
             // 
             iconLabelResourceUrl.AutoSize = true;
             iconLabelResourceUrl.Dock = DockStyle.Right;
-            iconLabelResourceUrl.Location = new Point(80, 0);
+            iconLabelResourceUrl.Location = new Point(86, 0);
             iconLabelResourceUrl.Name = "iconLabelResourceUrl";
-            iconLabelResourceUrl.Padding = new Padding(3);
-            iconLabelResourceUrl.Size = new Size(20, 21);
+            iconLabelResourceUrl.Size = new Size(14, 15);
             iconLabelResourceUrl.TabIndex = 0;
             iconLabelResourceUrl.Text = "R";
             iconLabelResourceUrl.Click += IconLabelResourceUrl_Click;
@@ -197,7 +194,7 @@
             textBoxResourceMdLink.Dock = DockStyle.Fill;
             textBoxResourceMdLink.Location = new Point(0, 0);
             textBoxResourceMdLink.Name = "textBoxResourceMdLink";
-            textBoxResourceMdLink.Size = new Size(1401, 23);
+            textBoxResourceMdLink.Size = new Size(1407, 23);
             textBoxResourceMdLink.TabIndex = 3;
             textBoxResourceMdLink.KeyUp += TextBoxResourceMdLink_KeyUp;
             // 
@@ -206,7 +203,7 @@
             checkBoxResxMdLinkFetchToCB.AutoSize = true;
             checkBoxResxMdLinkFetchToCB.Cursor = Cursors.Hand;
             checkBoxResxMdLinkFetchToCB.Dock = DockStyle.Right;
-            checkBoxResxMdLinkFetchToCB.Location = new Point(1401, 0);
+            checkBoxResxMdLinkFetchToCB.Location = new Point(1407, 0);
             checkBoxResxMdLinkFetchToCB.Name = "checkBoxResxMdLinkFetchToCB";
             checkBoxResxMdLinkFetchToCB.Padding = new Padding(5, 0, 0, 0);
             checkBoxResxMdLinkFetchToCB.Size = new Size(75, 23);
@@ -220,10 +217,9 @@
             iconLabelResxMdLinkFetchToCB.AutoSize = true;
             iconLabelResxMdLinkFetchToCB.Dock = DockStyle.Right;
             iconLabelResxMdLinkFetchToCB.ForeColor = SystemColors.ControlText;
-            iconLabelResxMdLinkFetchToCB.Location = new Point(1476, 0);
+            iconLabelResxMdLinkFetchToCB.Location = new Point(1482, 0);
             iconLabelResxMdLinkFetchToCB.Name = "iconLabelResxMdLinkFetchToCB";
-            iconLabelResxMdLinkFetchToCB.Padding = new Padding(3);
-            iconLabelResxMdLinkFetchToCB.Size = new Size(20, 21);
+            iconLabelResxMdLinkFetchToCB.Size = new Size(14, 15);
             iconLabelResxMdLinkFetchToCB.TabIndex = 4;
             iconLabelResxMdLinkFetchToCB.Text = "R";
             iconLabelResxMdLinkFetchToCB.Click += IconLabelResxMdLinkFetchToCB_Click;
@@ -244,7 +240,7 @@
             textBoxResourceTitle.Dock = DockStyle.Fill;
             textBoxResourceTitle.Location = new Point(0, 0);
             textBoxResourceTitle.Name = "textBoxResourceTitle";
-            textBoxResourceTitle.Size = new Size(1401, 23);
+            textBoxResourceTitle.Size = new Size(1407, 23);
             textBoxResourceTitle.TabIndex = 2;
             textBoxResourceTitle.KeyUp += TextBoxResourceTitle_KeyUp;
             // 
@@ -253,7 +249,7 @@
             checkBoxResxTitleFetchToCB.AutoSize = true;
             checkBoxResxTitleFetchToCB.Cursor = Cursors.Hand;
             checkBoxResxTitleFetchToCB.Dock = DockStyle.Right;
-            checkBoxResxTitleFetchToCB.Location = new Point(1401, 0);
+            checkBoxResxTitleFetchToCB.Location = new Point(1407, 0);
             checkBoxResxTitleFetchToCB.Name = "checkBoxResxTitleFetchToCB";
             checkBoxResxTitleFetchToCB.Padding = new Padding(5, 0, 0, 0);
             checkBoxResxTitleFetchToCB.Size = new Size(75, 23);
@@ -267,10 +263,9 @@
             iconLabelResxTitleFetchToCB.AutoSize = true;
             iconLabelResxTitleFetchToCB.Dock = DockStyle.Right;
             iconLabelResxTitleFetchToCB.ForeColor = SystemColors.ControlText;
-            iconLabelResxTitleFetchToCB.Location = new Point(1476, 0);
+            iconLabelResxTitleFetchToCB.Location = new Point(1482, 0);
             iconLabelResxTitleFetchToCB.Name = "iconLabelResxTitleFetchToCB";
-            iconLabelResxTitleFetchToCB.Padding = new Padding(3);
-            iconLabelResxTitleFetchToCB.Size = new Size(20, 21);
+            iconLabelResxTitleFetchToCB.Size = new Size(14, 15);
             iconLabelResxTitleFetchToCB.TabIndex = 3;
             iconLabelResxTitleFetchToCB.Text = "R";
             iconLabelResxTitleFetchToCB.Click += IconLabelResxTitleFetchToCB_Click;

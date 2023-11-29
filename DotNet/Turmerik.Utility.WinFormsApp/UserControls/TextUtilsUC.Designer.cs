@@ -32,8 +32,11 @@
             fetchWebResourceUC = new FetchWebResourceUC();
             groupBoxConvertNameToIdnf = new GroupBox();
             nameToIdnfConverterUC = new NameToIdnfConverterUC();
+            groupBoxTransformText = new GroupBox();
+            transformTextuc1 = new TransformTextUC();
             groupBoxFetchWebResource.SuspendLayout();
             groupBoxConvertNameToIdnf.SuspendLayout();
+            groupBoxTransformText.SuspendLayout();
             SuspendLayout();
             // 
             // groupBoxFetchWebResource
@@ -77,16 +80,38 @@
             nameToIdnfConverterUC.Size = new Size(1594, 50);
             nameToIdnfConverterUC.TabIndex = 0;
             // 
+            // groupBoxTransformText
+            // 
+            groupBoxTransformText.Controls.Add(transformTextuc1);
+            groupBoxTransformText.Dock = DockStyle.Fill;
+            groupBoxTransformText.Location = new Point(0, 172);
+            groupBoxTransformText.Name = "groupBoxTransformText";
+            groupBoxTransformText.Size = new Size(1600, 628);
+            groupBoxTransformText.TabIndex = 2;
+            groupBoxTransformText.TabStop = false;
+            groupBoxTransformText.Text = "Transform Text";
+            // 
+            // transformTextuc1
+            // 
+            transformTextuc1.BorderStyle = BorderStyle.Fixed3D;
+            transformTextuc1.Dock = DockStyle.Fill;
+            transformTextuc1.Location = new Point(3, 19);
+            transformTextuc1.Name = "transformTextuc1";
+            transformTextuc1.Size = new Size(1594, 606);
+            transformTextuc1.TabIndex = 0;
+            // 
             // TextUtilsUC
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(groupBoxTransformText);
             Controls.Add(groupBoxConvertNameToIdnf);
             Controls.Add(groupBoxFetchWebResource);
             Name = "TextUtilsUC";
             Size = new Size(1600, 800);
             groupBoxFetchWebResource.ResumeLayout(false);
             groupBoxConvertNameToIdnf.ResumeLayout(false);
+            groupBoxTransformText.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -95,5 +120,7 @@
         private FetchWebResourceUC fetchWebResourceUC;
         private GroupBox groupBoxConvertNameToIdnf;
         private NameToIdnfConverterUC nameToIdnfConverterUC;
+        private GroupBox groupBoxTransformText;
+        private TransformTextUC transformTextuc1;
     }
 }

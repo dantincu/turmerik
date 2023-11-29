@@ -33,15 +33,9 @@
             tabControlMain = new TabControl();
             tabPageTextUtils = new TabPage();
             textUtilsUC = new UserControls.TextUtilsUC();
-            tabPageMdLinesIndent = new TabPage();
-            mdLinesIndentUC = new UserControls.MdLinesIndentUC();
-            tabPageMdTableLines = new TabPage();
-            mdTableLinesUC = new ViewModels.MdTableLinesUC();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
-            tabPageMdLinesIndent.SuspendLayout();
-            tabPageMdTableLines.SuspendLayout();
             SuspendLayout();
             // 
             // statusStripMain
@@ -61,8 +55,6 @@
             // tabControlMain
             // 
             tabControlMain.Controls.Add(tabPageTextUtils);
-            tabControlMain.Controls.Add(tabPageMdLinesIndent);
-            tabControlMain.Controls.Add(tabPageMdTableLines);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Location = new Point(0, 0);
             tabControlMain.Name = "tabControlMain";
@@ -81,51 +73,13 @@
             tabPageTextUtils.Text = "Text Utils";
             tabPageTextUtils.UseVisualStyleBackColor = true;
             // 
-            // fetchWebResourceUC
+            // textUtilsUC
             // 
             textUtilsUC.Dock = DockStyle.Fill;
             textUtilsUC.Location = new Point(3, 3);
             textUtilsUC.Name = "textUtilsUC";
             textUtilsUC.Size = new Size(1786, 844);
             textUtilsUC.TabIndex = 0;
-            // 
-            // tabPageMdLinesIndent
-            // 
-            tabPageMdLinesIndent.Controls.Add(mdLinesIndentUC);
-            tabPageMdLinesIndent.Location = new Point(4, 24);
-            tabPageMdLinesIndent.Name = "tabPageMdLinesIndent";
-            tabPageMdLinesIndent.Padding = new Padding(3);
-            tabPageMdLinesIndent.Size = new Size(1792, 850);
-            tabPageMdLinesIndent.TabIndex = 1;
-            tabPageMdLinesIndent.Text = "Md Lines Indent";
-            tabPageMdLinesIndent.UseVisualStyleBackColor = true;
-            // 
-            // mdLinesIndentUC
-            // 
-            mdLinesIndentUC.Dock = DockStyle.Fill;
-            mdLinesIndentUC.Location = new Point(3, 3);
-            mdLinesIndentUC.Name = "mdLinesIndentUC";
-            mdLinesIndentUC.Size = new Size(1786, 844);
-            mdLinesIndentUC.TabIndex = 0;
-            // 
-            // tabPageMdTableLines
-            // 
-            tabPageMdTableLines.Controls.Add(mdTableLinesUC);
-            tabPageMdTableLines.Location = new Point(4, 24);
-            tabPageMdTableLines.Name = "tabPageMdTableLines";
-            tabPageMdTableLines.Padding = new Padding(3);
-            tabPageMdTableLines.Size = new Size(1792, 850);
-            tabPageMdTableLines.TabIndex = 2;
-            tabPageMdTableLines.Text = "Md Table Lines";
-            tabPageMdTableLines.UseVisualStyleBackColor = true;
-            // 
-            // mdTableLinesUC
-            // 
-            mdTableLinesUC.Dock = DockStyle.Fill;
-            mdTableLinesUC.Location = new Point(3, 3);
-            mdTableLinesUC.Name = "mdTableLinesUC";
-            mdTableLinesUC.Size = new Size(1786, 844);
-            mdTableLinesUC.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -142,8 +96,6 @@
             statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
             tabPageTextUtils.ResumeLayout(false);
-            tabPageMdLinesIndent.ResumeLayout(false);
-            tabPageMdTableLines.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -154,10 +106,6 @@
         private ToolStripStatusLabel toolStripStatusLabelMain;
         private TabControl tabControlMain;
         private TabPage tabPageTextUtils;
-        private TabPage tabPageMdLinesIndent;
-        private TabPage tabPageMdTableLines;
         private UserControls.TextUtilsUC textUtilsUC;
-        private UserControls.MdLinesIndentUC mdLinesIndentUC;
-        private ViewModels.MdTableLinesUC mdTableLinesUC;
     }
 }

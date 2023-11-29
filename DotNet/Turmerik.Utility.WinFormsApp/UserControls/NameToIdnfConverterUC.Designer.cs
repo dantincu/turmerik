@@ -65,7 +65,7 @@
             checkBoxNameConvertToCB.AutoSize = true;
             checkBoxNameConvertToCB.Cursor = Cursors.Hand;
             checkBoxNameConvertToCB.Dock = DockStyle.Right;
-            checkBoxNameConvertToCB.Location = new Point(1388, 0);
+            checkBoxNameConvertToCB.Location = new Point(1394, 0);
             checkBoxNameConvertToCB.Name = "checkBoxNameConvertToCB";
             checkBoxNameConvertToCB.Padding = new Padding(5, 0, 0, 0);
             checkBoxNameConvertToCB.Size = new Size(88, 23);
@@ -79,10 +79,9 @@
             iconLabelNameConvertToCB.AutoSize = true;
             iconLabelNameConvertToCB.Dock = DockStyle.Right;
             iconLabelNameConvertToCB.ForeColor = SystemColors.ControlText;
-            iconLabelNameConvertToCB.Location = new Point(1476, 0);
+            iconLabelNameConvertToCB.Location = new Point(1482, 0);
             iconLabelNameConvertToCB.Name = "iconLabelNameConvertToCB";
-            iconLabelNameConvertToCB.Padding = new Padding(3);
-            iconLabelNameConvertToCB.Size = new Size(20, 21);
+            iconLabelNameConvertToCB.Size = new Size(14, 15);
             iconLabelNameConvertToCB.TabIndex = 3;
             iconLabelNameConvertToCB.Text = "R";
             iconLabelNameConvertToCB.Click += IconLabelNameConvertToCB_Click;
@@ -103,7 +102,7 @@
             textBoxIndf.Dock = DockStyle.Fill;
             textBoxIndf.Location = new Point(0, 0);
             textBoxIndf.Name = "textBoxIndf";
-            textBoxIndf.Size = new Size(1388, 23);
+            textBoxIndf.Size = new Size(1394, 23);
             textBoxIndf.TabIndex = 2;
             textBoxIndf.KeyUp += TextBoxIndf_KeyUp;
             // 
@@ -120,7 +119,7 @@
             // 
             labelTitleName.AutoSize = true;
             labelTitleName.Dock = DockStyle.Right;
-            labelTitleName.Location = new Point(35, 0);
+            labelTitleName.Location = new Point(41, 0);
             labelTitleName.Name = "labelTitleName";
             labelTitleName.Padding = new Padding(3);
             labelTitleName.Size = new Size(45, 21);
@@ -131,10 +130,9 @@
             // 
             iconLabelConvertName.AutoSize = true;
             iconLabelConvertName.Dock = DockStyle.Right;
-            iconLabelConvertName.Location = new Point(80, 0);
+            iconLabelConvertName.Location = new Point(86, 0);
             iconLabelConvertName.Name = "iconLabelConvertName";
-            iconLabelConvertName.Padding = new Padding(3);
-            iconLabelConvertName.Size = new Size(20, 21);
+            iconLabelConvertName.Size = new Size(14, 15);
             iconLabelConvertName.TabIndex = 0;
             iconLabelConvertName.Text = "R";
             iconLabelConvertName.Click += IconLabelConvertName_Click;
@@ -143,7 +141,7 @@
             // 
             labelTitleIdnf.AutoSize = true;
             labelTitleIdnf.Dock = DockStyle.Right;
-            labelTitleIdnf.Location = new Point(20, 0);
+            labelTitleIdnf.Location = new Point(26, 0);
             labelTitleIdnf.Name = "labelTitleIdnf";
             labelTitleIdnf.Padding = new Padding(3);
             labelTitleIdnf.Size = new Size(60, 21);
@@ -154,10 +152,9 @@
             // 
             iconLabelIdnfToCB.AutoSize = true;
             iconLabelIdnfToCB.Dock = DockStyle.Right;
-            iconLabelIdnfToCB.Location = new Point(80, 0);
+            iconLabelIdnfToCB.Location = new Point(86, 0);
             iconLabelIdnfToCB.Name = "iconLabelIdnfToCB";
-            iconLabelIdnfToCB.Padding = new Padding(3);
-            iconLabelIdnfToCB.Size = new Size(20, 21);
+            iconLabelIdnfToCB.Size = new Size(14, 15);
             iconLabelIdnfToCB.TabIndex = 0;
             iconLabelIdnfToCB.Text = "R";
             iconLabelIdnfToCB.Click += IconLabelIdnfToCB_Click;

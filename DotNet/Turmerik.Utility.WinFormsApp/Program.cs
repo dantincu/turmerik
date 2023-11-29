@@ -7,7 +7,6 @@ using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings;
-using Turmerik.Utility.WinFormsApp.ViewModels;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
 using Turmerik.Utility.WinFormsApp.UserControls.Forms;
