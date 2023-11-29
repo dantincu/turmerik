@@ -17,6 +17,10 @@ using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Helpers;
+using Turmerik.Code.Core;
+using static Turmerik.Utility.WinFormsApp.Settings.AppSettingsData;
+using Turmerik.Core.Actions;
+using Turmerik.Core.UIActions;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -24,6 +28,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
+        private readonly Code.Core.INameToIdnfConverter nameToIdnfConverter;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
@@ -50,6 +55,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
+                nameToIdnfConverter = svcProv.GetRequiredService<Code.Core.INameToIdnfConverter>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
                 controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueAdapterFactory>().Create(
@@ -78,9 +84,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 this.checkBoxNameConvertToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxNameConvertToCB,
                     (source, e, isChecked) => SetIdnfToCB(isChecked));
-            }
 
-            uISettingsRetriever.SubscribeToData(OnUISettingsData);
+                uISettingsRetriever.SubscribeToData(OnUISettingsData);
+            }
         }
 
         private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
@@ -92,6 +98,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             uISettingsData.ApplyBgColor([this,
                 textBoxName,
                 textBoxIndf]);
+
+            iconLabelNameConvertToCB.ForeColor = uISettingsData.InfoIconColor;
         }
 
         private void SetIdnfToCB(bool enabled)
@@ -105,26 +113,81 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             });
         }
 
-        #region UI Event Handlers
-
-        private void IconLabelConvertName_Click(object sender, EventArgs e)
+        private void ConvertNameToIdnf() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
+            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+            Action = () =>
+            {
+                string idnf = nameToIdnfConverter.Convert(
+                    new NameToIdnfConverterOpts
+                    {
+                        InputIdentifier = textBoxName.Text,
+                    });
 
+                textBoxIndf.Text = idnf;
+                return ActionResultH.Create(idnf);
+            }
+        }).With(result => (result.IsSuccess && checkBoxNameConvertToCB.Checked).ActIf(
+            () => CopyIdnfToCB(result.Value)));
+
+        private void CopyIdnfToCB(string idnf = null) => actionComponent.Execute(new WinFormsActionOpts<string>
+        {
+            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+            Action = () =>
+            {
+                idnf ??= textBoxIndf.Text;
+                Clipboard.SetText(idnf);
+                return ActionResultH.Create(idnf);
+            }
+        }).With(result => actionComponent.Execute(new WinFormsActionOpts<string>
+        {
+            Action = () =>
+            {
+                controlBlinkTimersManagerAdapter.BlinkIconLabel(
+                    iconLabelIdnfToCB,
+                    result,
+                    result.Value != null);
+
+                return result;
+            }
+        }));
+
+#region UI Event Handlers
+
+private void IconLabelConvertName_Click(object sender, EventArgs e)
+        {
+            ConvertNameToIdnf();
         }
 
         private void IconLabelIdnfToCB_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void CheckBoxNameConvertToCB_CheckedChanged(object sender, EventArgs e)
-        {
-
+            CopyIdnfToCB();
         }
 
         private void IconLabelNameConvertToCB_Click(object sender, EventArgs e)
         {
+            checkBoxNameConvertToCB.ToggleChecked();
+        }
 
+        private void TextBoxName_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (e.Control)
+                {
+                    checkBoxNameConvertToCB.Checked = !e.Shift;
+                }
+
+                ConvertNameToIdnf();
+            }
+        }
+
+        private void TextBoxIndf_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                checkBoxNameConvertToCB.Checked = !e.Control;
+            }
         }
 
         #endregion UI Event Handlers

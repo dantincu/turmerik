@@ -97,9 +97,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     (source, e, isChecked) => SetResxMdLinkFetchToCB(isChecked),
                     beforeHandler: (source, e, isChecked, evtWasEnabled) => isChecked.If(
                         () => checkBoxResxTitleFetchToCB.Checked = false));
-            }
 
-            uISettingsRetriever.SubscribeToData(OnUISettingsData);
+                uISettingsRetriever.SubscribeToData(OnUISettingsData);
+            }
         }
 
         public IconLabel RefUxControl => iconLabelResourceUrl;
@@ -134,7 +134,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private async Task FetchResourceAsync()
         {
             ToggleEnableControls(false);
-            iconLabelResourceUrl.ForeColor = uISettingsData.ActiveIconColor;
 
             await actionComponent.ExecuteAsync(new WinFormsAsyncActionOpts<string?>
             {
@@ -167,7 +166,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 OnAfterExecution = result =>
                 {
                     ToggleEnableControls(true);
-                    iconLabelResourceUrl.ForeColor = defaultForeColor;
 
                     if (result.IsSuccess)
                     {

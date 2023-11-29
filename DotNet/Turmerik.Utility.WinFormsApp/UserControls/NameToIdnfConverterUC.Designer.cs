@@ -58,6 +58,7 @@
             textBoxName.Name = "textBoxName";
             textBoxName.Size = new Size(1496, 23);
             textBoxName.TabIndex = 1;
+            textBoxName.KeyUp += TextBoxName_KeyUp;
             // 
             // checkBoxNameConvertToCB
             // 
@@ -72,7 +73,6 @@
             checkBoxNameConvertToCB.TabStop = false;
             checkBoxNameConvertToCB.Text = "Convert To";
             checkBoxNameConvertToCB.UseVisualStyleBackColor = true;
-            checkBoxNameConvertToCB.CheckedChanged += CheckBoxNameConvertToCB_CheckedChanged;
             // 
             // iconLabelNameConvertToCB
             // 
@@ -105,6 +105,7 @@
             textBoxIndf.Name = "textBoxIndf";
             textBoxIndf.Size = new Size(1388, 23);
             textBoxIndf.TabIndex = 2;
+            textBoxIndf.KeyUp += TextBoxIndf_KeyUp;
             // 
             // panelName
             // 
@@ -119,12 +120,12 @@
             // 
             labelTitleName.AutoSize = true;
             labelTitleName.Dock = DockStyle.Right;
-            labelTitleName.Location = new Point(52, 0);
+            labelTitleName.Location = new Point(35, 0);
             labelTitleName.Name = "labelTitleName";
             labelTitleName.Padding = new Padding(3);
-            labelTitleName.Size = new Size(28, 21);
+            labelTitleName.Size = new Size(45, 21);
             labelTitleName.TabIndex = 0;
-            labelTitleName.Text = "Url";
+            labelTitleName.Text = "Name";
             // 
             // iconLabelConvertName
             // 

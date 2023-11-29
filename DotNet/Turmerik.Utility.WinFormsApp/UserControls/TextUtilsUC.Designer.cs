@@ -28,45 +28,72 @@
         /// </summary>
         private void InitializeComponent()
         {
+            groupBoxFetchWebResource = new GroupBox();
             fetchWebResourceUC = new FetchWebResourceUC();
-            groupBoxFetchResource = new GroupBox();
-            groupBoxFetchResource.SuspendLayout();
+            groupBoxConvertNameToIdnf = new GroupBox();
+            nameToIdnfConverterUC = new NameToIdnfConverterUC();
+            groupBoxFetchWebResource.SuspendLayout();
+            groupBoxConvertNameToIdnf.SuspendLayout();
             SuspendLayout();
+            // 
+            // groupBoxFetchWebResource
+            // 
+            groupBoxFetchWebResource.Controls.Add(fetchWebResourceUC);
+            groupBoxFetchWebResource.Dock = DockStyle.Top;
+            groupBoxFetchWebResource.ForeColor = SystemColors.ControlText;
+            groupBoxFetchWebResource.Location = new Point(0, 0);
+            groupBoxFetchWebResource.Name = "groupBoxFetchWebResource";
+            groupBoxFetchWebResource.Size = new Size(1600, 100);
+            groupBoxFetchWebResource.TabIndex = 0;
+            groupBoxFetchWebResource.TabStop = false;
+            groupBoxFetchWebResource.Text = "Fetch Web Resource";
             // 
             // fetchWebResourceUC
             // 
+            fetchWebResourceUC.BorderStyle = BorderStyle.Fixed3D;
             fetchWebResourceUC.Dock = DockStyle.Fill;
-            fetchWebResourceUC.ForeColor = Color.Black;
             fetchWebResourceUC.Location = new Point(3, 19);
             fetchWebResourceUC.Name = "fetchWebResourceUC";
-            fetchWebResourceUC.Size = new Size(1594, 70);
+            fetchWebResourceUC.Size = new Size(1594, 78);
             fetchWebResourceUC.TabIndex = 0;
             // 
-            // groupBoxFetchResource
+            // groupBoxConvertNameToIdnf
             // 
-            groupBoxFetchResource.Controls.Add(fetchWebResourceUC);
-            groupBoxFetchResource.Dock = DockStyle.Top;
-            groupBoxFetchResource.ForeColor = Color.FromArgb(0, 0, 64);
-            groupBoxFetchResource.Location = new Point(0, 0);
-            groupBoxFetchResource.Name = "groupBoxFetchResource";
-            groupBoxFetchResource.Size = new Size(1600, 92);
-            groupBoxFetchResource.TabIndex = 0;
-            groupBoxFetchResource.TabStop = false;
-            groupBoxFetchResource.Text = "Fetch Resource";
+            groupBoxConvertNameToIdnf.Controls.Add(nameToIdnfConverterUC);
+            groupBoxConvertNameToIdnf.Dock = DockStyle.Top;
+            groupBoxConvertNameToIdnf.Location = new Point(0, 100);
+            groupBoxConvertNameToIdnf.Name = "groupBoxConvertNameToIdnf";
+            groupBoxConvertNameToIdnf.Size = new Size(1600, 72);
+            groupBoxConvertNameToIdnf.TabIndex = 1;
+            groupBoxConvertNameToIdnf.TabStop = false;
+            groupBoxConvertNameToIdnf.Text = "Convert Name To Identifier";
+            // 
+            // nameToIdnfConverterUC
+            // 
+            nameToIdnfConverterUC.BorderStyle = BorderStyle.Fixed3D;
+            nameToIdnfConverterUC.Dock = DockStyle.Fill;
+            nameToIdnfConverterUC.Location = new Point(3, 19);
+            nameToIdnfConverterUC.Name = "nameToIdnfConverterUC";
+            nameToIdnfConverterUC.Size = new Size(1594, 50);
+            nameToIdnfConverterUC.TabIndex = 0;
             // 
             // TextUtilsUC
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(groupBoxFetchResource);
+            Controls.Add(groupBoxConvertNameToIdnf);
+            Controls.Add(groupBoxFetchWebResource);
             Name = "TextUtilsUC";
             Size = new Size(1600, 800);
-            groupBoxFetchResource.ResumeLayout(false);
+            groupBoxFetchWebResource.ResumeLayout(false);
+            groupBoxConvertNameToIdnf.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
+        private GroupBox groupBoxFetchWebResource;
         private FetchWebResourceUC fetchWebResourceUC;
-        private GroupBox groupBoxFetchResource;
+        private GroupBox groupBoxConvertNameToIdnf;
+        private NameToIdnfConverterUC nameToIdnfConverterUC;
     }
 }

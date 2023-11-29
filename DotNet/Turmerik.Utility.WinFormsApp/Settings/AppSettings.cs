@@ -26,6 +26,10 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 FetchWebResource = new AppSettingsData.FetchWebResourceMtbl
                 {
                     MdLinkTemplate = "[{0}]({1})"
+                },
+                NameToIdnfConverter = new AppSettingsData.NameToIdnfConverterMtbl
+                {
+
                 }
             };
 
