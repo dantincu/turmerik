@@ -6,6 +6,7 @@ using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -15,6 +16,7 @@ namespace Turmerik.Utility.WinFormsApp
         private readonly IServiceProvider svcProv;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
         private readonly UISettingsRetriever uISettingsRetriever;
+        private readonly IUIThemeRetriever uIThemeRetriever;
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
 
@@ -27,6 +29,7 @@ namespace Turmerik.Utility.WinFormsApp
                 svcProv = svcProvContnr.Data;
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
                 uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
+                uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 actionComponentCreator = svcProv.GetRequiredService<IWinFormsActionComponentCreator>();
                 controlBlinkTimersManagerAdapterFactory = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterFactory>();
             }
@@ -38,11 +41,7 @@ namespace Turmerik.Utility.WinFormsApp
             {
                 var uISettings = uISettingsRetriever.RegisterData(
                     UISettingsDataCore.GetDefaultData().With(
-                        coreMtbl => new UISettingsDataMtbl(coreMtbl)
-                        {
-                            DefaultBackColor = refUxControl.BackColor,
-                            DefaultForeColor = refUxControl.ForeColor,
-                        }),
+                        coreMtbl => new UISettingsDataMtbl(coreMtbl)),
                         data =>
                         {
                             svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RegisterData(
@@ -53,13 +52,23 @@ namespace Turmerik.Utility.WinFormsApp
                                     }));
                         });
 
-                actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
+                uIThemeRetriever.Data.ActWith(uiTheme =>
                 {
-                    StatusLabel = toolStripStatusLabelMain,
-                    DefaultForeColor = uISettings.DefaultForeColor,
-                    WarningForeColor = uISettings.WarningColor,
-                    ErrorForeColor = uISettings.ErrorColor,
-                };
+                    uiTheme.ApplyBgColor([
+                        this,
+                        this.tabControlMain,
+                        this.tabPageTextUtils,
+                        this.textUtilsUC
+                    ]);
+
+                    actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
+                    {
+                        StatusLabel = toolStripStatusLabelMain,
+                        DefaultForeColor = uiTheme.DefaultForeColor,
+                        WarningForeColor = uiTheme.WarningColor,
+                        ErrorForeColor = uiTheme.ErrorColor,
+                    };
+                });
             }
         }
     }

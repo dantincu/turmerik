@@ -41,14 +41,14 @@ namespace Turmerik.TestWinFormsApp
 
             if (svcProvContnr.IsRegistered)
             {
-                var uISettings = UISettingsDataCore.GetDefaultData();
+                var uITheme = UIThemeDataCore.GetDefaultData();
 
                 actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
                 {
                     StatusLabel = toolStripStatusLabelMain,
-                    DefaultForeColor = uISettings.DefaultForeColor,
-                    WarningForeColor = uISettings.WarningColor,
-                    ErrorForeColor = uISettings.ErrorColor,
+                    DefaultForeColor = uITheme.DefaultForeColor.Value,
+                    WarningForeColor = uITheme.WarningColor.Value,
+                    ErrorForeColor = uITheme.ErrorColor.Value,
                 };
             }
 

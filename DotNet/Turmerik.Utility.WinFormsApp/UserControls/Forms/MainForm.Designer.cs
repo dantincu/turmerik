@@ -56,6 +56,7 @@
             // 
             tabControlMain.Controls.Add(tabPageTextUtils);
             tabControlMain.Dock = DockStyle.Fill;
+            tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControlMain.Location = new Point(0, 0);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
@@ -65,10 +66,10 @@
             // tabPageTextUtils
             // 
             tabPageTextUtils.Controls.Add(textUtilsUC);
-            tabPageTextUtils.Location = new Point(4, 24);
+            tabPageTextUtils.Location = new Point(4, 25);
             tabPageTextUtils.Name = "tabPageTextUtils";
             tabPageTextUtils.Padding = new Padding(3);
-            tabPageTextUtils.Size = new Size(1792, 850);
+            tabPageTextUtils.Size = new Size(1792, 849);
             tabPageTextUtils.TabIndex = 0;
             tabPageTextUtils.Text = "Text Utils";
             tabPageTextUtils.UseVisualStyleBackColor = true;
@@ -76,9 +77,10 @@
             // textUtilsUC
             // 
             textUtilsUC.Dock = DockStyle.Fill;
+            textUtilsUC.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             textUtilsUC.Location = new Point(3, 3);
             textUtilsUC.Name = "textUtilsUC";
-            textUtilsUC.Size = new Size(1786, 844);
+            textUtilsUC.Size = new Size(1786, 843);
             textUtilsUC.TabIndex = 0;
             // 
             // MainForm

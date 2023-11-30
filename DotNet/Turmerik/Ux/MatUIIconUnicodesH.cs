@@ -717,7 +717,7 @@
             public const string UPDATE = null;
             public const string LOCK_OPEN = null;
             public const string PRIORITY_HIGH = null;
-            public const string CODE = null;
+            public const string CODE = "\ue86f";
             public const string BUILD = null;
             public const string DATE_RANGE = null;
             public const string SUPERVISOR_ACCOUNT = null;
@@ -836,7 +836,7 @@
             public const string ON_DEVICE_TRAINING = null;
             public const string SNOOZE = null;
             public const string BATCH_PREDICTION = null;
-            public const string CODE_OFF = null;
+            public const string CODE_OFF = "\ue4f3";
             public const string TARGET = null;
             public const string PINCH_ZOOM_IN = null;
             public const string COMMIT = null;
@@ -2117,7 +2117,7 @@
             public const string EQUALIZER = null;
             public const string SUBSCRIPTIONS = null;
             public const string VIDEO_LIBRARY = null;
-            public const string FAST_FORWARD = null;
+            public const string FAST_FORWARD = "\ue01f";
             public const string PLAYLIST_ADD = null;
             public const string VIDEO_CALL = null;
             public const string REPEAT = null;
@@ -2128,7 +2128,7 @@
             public const string LIBRARY_MUSIC = null;
             public const string PLAYLIST_ADD_CHECK = null;
             public const string PODCASTS = null;
-            public const string FAST_REWIND = null;
+            public const string FAST_REWIND = "\ue020";
             public const string QUEUE_MUSIC = null;
             public const string SOUND_DETECTION_DOG_BARKING = null;
             public const string VIDEO_CAMERA_FRONT = null;

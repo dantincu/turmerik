@@ -15,12 +15,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         public ControlBlinkTimersManagerAdapter(
             IControlBlinkTimersManager timersManager,
             UISettingsRetriever uISettings,
+            IUIThemeRetriever uIThemeRetriever,
             ControlBlinkTimersManagerAdapterOpts opts)
         {
             TimersManager = timersManager ?? throw new ArgumentNullException(
                 nameof(TimersManager));
 
             UISettingsData = uISettings.Data;
+            UITheme = uIThemeRetriever.Data;
 
             RefUxControl = opts.RefUxControl ?? throw new ArgumentNullException(
                 nameof(RefUxControl));
@@ -28,18 +30,19 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             InconsClickSuccessBlinkTimerOpts = GetControlBlinkTimerOpts(
                 opts =>
                 {
-                    opts.ForeColor = UISettingsData.SuccessColor;
+                    opts.ForeColor = UITheme.SuccessColor;
                 }).ToImmtbl();
 
             InconsClickErrorBlinkTimerOpts = GetControlBlinkTimerOpts(
                 opts =>
                 {
-                    opts.ForeColor = UISettingsData.ErrorColor;
+                    opts.ForeColor = UITheme.ErrorColor;
                 }).ToImmtbl();
         }
 
         public IControlBlinkTimersManager TimersManager { get; }
         public IUISettingsData UISettingsData { get; }
+        public IUIThemeData UITheme { get; }
         public Control RefUxControl { get; }
 
         public ControlBlinkTimerOptsImmtbl InconsClickSuccessBlinkTimerOpts { get; }

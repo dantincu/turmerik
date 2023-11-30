@@ -33,6 +33,8 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             string MdTableSrcTextTabSeparator { get; }
             bool? GetSrcTextFromCB { get; }
             bool? SetResultTextToCB { get; }
+            bool? HtmlDecodeOnRmMdQtLvl { get; }
+            bool? HtmlEncodeOnAddMdQtLvl { get; }
         }
 
         public class FetchWebResourceImmtbl : IFetchWebResource
@@ -104,12 +106,16 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
                 GetSrcTextFromCB = src.GetSrcTextFromCB;
                 SetResultTextToCB = src.SetResultTextToCB;
+                HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
+                HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
             }
 
             public bool? MdTableSrcTextIsTabSeparated { get; }
             public string MdTableSrcTextTabSeparator { get; }
             public bool? GetSrcTextFromCB { get; }
             public bool? SetResultTextToCB { get; }
+            public bool? HtmlDecodeOnRmMdQtLvl { get; }
+            public bool? HtmlEncodeOnAddMdQtLvl { get; }
         }
 
         public class TextToMdMtbl : ITextToMd
@@ -125,12 +131,16 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
                 GetSrcTextFromCB = src.GetSrcTextFromCB;
                 SetResultTextToCB = src.SetResultTextToCB;
+                HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
+                HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
             }
 
             public bool? MdTableSrcTextIsTabSeparated { get; set; }
             public string MdTableSrcTextTabSeparator { get; set; }
             public bool? GetSrcTextFromCB { get; set; }
             public bool? SetResultTextToCB { get; set; }
+            public bool? HtmlDecodeOnRmMdQtLvl { get; set; }
+            public bool? HtmlEncodeOnAddMdQtLvl { get; set; }
         }
 
         public static AppSettingsDataImmtbl ToImmtbl(

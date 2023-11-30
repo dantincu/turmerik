@@ -34,6 +34,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapterFactory propChangedEventAdapterFactory;
 
         private readonly UISettingsRetriever uISettingsRetriever;
+        private readonly IUIThemeRetriever uIThemeRetriever;
         private readonly IAppSettings appSettings;
 
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
@@ -41,7 +42,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxNameConvertToCB_EvtAdapter;
 
         private UISettingsDataImmtbl uISettingsData;
-
+        private UIThemeDataImmtbl uIThemeData;
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
 
         public NameToIdnfConverterUC()
@@ -60,6 +61,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 propChangedEventAdapterFactory = svcProv.GetRequiredService<IPropChangedEventAdapterFactory>();
 
                 uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
+                uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 appSettings = svcProv.GetRequiredService<IAppSettings>();
             }
 
@@ -85,9 +87,18 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
         {
             this.uISettingsData = uISettingsData;
-
             controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-            iconLabelNameConvertToCB.ForeColor = uISettingsData.InfoIconColor;
+
+            uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+            {
+                uiTheme.ApplyBgColor([
+                    this.textBoxName,
+                    this.textBoxIndf,
+                    this.checkBoxNameConvertToCB,
+                ], uiTheme.InputBackColor);
+
+                iconLabelNameConvertToCB.ForeColor = uiTheme.InfoIconColor;
+            });
 
             appSettings.Data.ActWith(appSettingsData =>
             {

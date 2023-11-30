@@ -11,7 +11,7 @@ namespace Turmerik.WinForms.Controls
     public static class ControlsH
     {
         public static void ApplyBgColor(
-            this IUISettingsDataCore uISettingsData,
+            this IUIThemeDataCore uISettingsData,
             Control[] controlsArr,
             Color? backColorNllbl = null)
         {

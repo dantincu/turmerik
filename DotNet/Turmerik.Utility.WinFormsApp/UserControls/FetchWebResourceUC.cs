@@ -21,6 +21,7 @@ using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Utility;
 using Turmerik.Core.Text;
 using Turmerik.Html;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -35,6 +36,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapterFactory propChangedEventAdapterFactory;
 
         private readonly UISettingsRetriever uISettingsRetriever;
+        private readonly IUIThemeRetriever uIThemeRetriever;
         private readonly IAppSettings appSettings;
 
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
@@ -43,6 +45,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxMdLinkFetchToCB_EvtAdapter;
 
         private UISettingsDataImmtbl uISettingsData;
+        private UIThemeDataImmtbl uIThemeData;
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
 
         public FetchWebResourceUC()
@@ -61,6 +64,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 propChangedEventAdapterFactory = svcProv.GetRequiredService<IPropChangedEventAdapterFactory>();
 
                 uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
+                uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 appSettings = svcProv.GetRequiredService<IAppSettings>();
             }
 
@@ -101,8 +105,20 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             this.uISettingsData = uISettingsData;
             controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-            iconLabelResxTitleFetchToCB.ForeColor = uISettingsData.InfoIconColor;
-            iconLabelResxMdLinkFetchToCB.ForeColor = uISettingsData.InfoIconColor;
+
+            uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+            {
+                uiTheme.ApplyBgColor([
+                    this.textBoxResourceUrl,
+                    this.textBoxResourceTitle,
+                    this.textBoxResourceMdLink,
+                    this.checkBoxResxMdLinkFetchToCB,
+                    this.checkBoxResxTitleFetchToCB
+                ], uiTheme.InputBackColor);
+
+                iconLabelResxTitleFetchToCB.ForeColor = uiTheme.InfoIconColor;
+                iconLabelResxMdLinkFetchToCB.ForeColor = uiTheme.InfoIconColor;
+            });
 
             appSettings.Data.ActWith(appSettingsData =>
             {

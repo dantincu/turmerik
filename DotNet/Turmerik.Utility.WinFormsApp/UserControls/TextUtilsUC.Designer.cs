@@ -43,10 +43,12 @@
             // 
             groupBoxFetchWebResource.Controls.Add(fetchWebResourceUC);
             groupBoxFetchWebResource.Dock = DockStyle.Top;
+            groupBoxFetchWebResource.Font = new Font("Arial", 9.75F, FontStyle.Bold);
             groupBoxFetchWebResource.ForeColor = SystemColors.ControlText;
             groupBoxFetchWebResource.Location = new Point(0, 0);
             groupBoxFetchWebResource.Name = "groupBoxFetchWebResource";
-            groupBoxFetchWebResource.Size = new Size(1600, 100);
+            groupBoxFetchWebResource.Padding = new Padding(3, 5, 3, 5);
+            groupBoxFetchWebResource.Size = new Size(1600, 110);
             groupBoxFetchWebResource.TabIndex = 0;
             groupBoxFetchWebResource.TabStop = false;
             groupBoxFetchWebResource.Text = "Fetch Web Resource";
@@ -55,18 +57,21 @@
             // 
             fetchWebResourceUC.BorderStyle = BorderStyle.Fixed3D;
             fetchWebResourceUC.Dock = DockStyle.Fill;
-            fetchWebResourceUC.Location = new Point(3, 19);
+            fetchWebResourceUC.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            fetchWebResourceUC.Location = new Point(3, 20);
             fetchWebResourceUC.Name = "fetchWebResourceUC";
-            fetchWebResourceUC.Size = new Size(1594, 78);
+            fetchWebResourceUC.Size = new Size(1594, 85);
             fetchWebResourceUC.TabIndex = 0;
             // 
             // groupBoxConvertNameToIdnf
             // 
             groupBoxConvertNameToIdnf.Controls.Add(nameToIdnfConverterUC);
             groupBoxConvertNameToIdnf.Dock = DockStyle.Top;
-            groupBoxConvertNameToIdnf.Location = new Point(0, 100);
+            groupBoxConvertNameToIdnf.Font = new Font("Arial", 9.75F, FontStyle.Bold);
+            groupBoxConvertNameToIdnf.Location = new Point(0, 110);
             groupBoxConvertNameToIdnf.Name = "groupBoxConvertNameToIdnf";
-            groupBoxConvertNameToIdnf.Size = new Size(1600, 72);
+            groupBoxConvertNameToIdnf.Padding = new Padding(3, 5, 3, 5);
+            groupBoxConvertNameToIdnf.Size = new Size(1600, 80);
             groupBoxConvertNameToIdnf.TabIndex = 1;
             groupBoxConvertNameToIdnf.TabStop = false;
             groupBoxConvertNameToIdnf.Text = "Convert Name To Identifier";
@@ -75,18 +80,21 @@
             // 
             nameToIdnfConverterUC.BorderStyle = BorderStyle.Fixed3D;
             nameToIdnfConverterUC.Dock = DockStyle.Fill;
-            nameToIdnfConverterUC.Location = new Point(3, 19);
+            nameToIdnfConverterUC.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            nameToIdnfConverterUC.Location = new Point(3, 20);
             nameToIdnfConverterUC.Name = "nameToIdnfConverterUC";
-            nameToIdnfConverterUC.Size = new Size(1594, 50);
+            nameToIdnfConverterUC.Size = new Size(1594, 55);
             nameToIdnfConverterUC.TabIndex = 0;
             // 
             // groupBoxTextToMd
             // 
             groupBoxTextToMd.Controls.Add(textToMdUC);
             groupBoxTextToMd.Dock = DockStyle.Fill;
-            groupBoxTextToMd.Location = new Point(0, 172);
+            groupBoxTextToMd.Font = new Font("Arial", 9.75F, FontStyle.Bold);
+            groupBoxTextToMd.Location = new Point(0, 190);
             groupBoxTextToMd.Name = "groupBoxTextToMd";
-            groupBoxTextToMd.Size = new Size(1600, 628);
+            groupBoxTextToMd.Padding = new Padding(3, 5, 3, 5);
+            groupBoxTextToMd.Size = new Size(1600, 610);
             groupBoxTextToMd.TabIndex = 2;
             groupBoxTextToMd.TabStop = false;
             groupBoxTextToMd.Text = "Text To Md";
@@ -95,9 +103,10 @@
             // 
             textToMdUC.BorderStyle = BorderStyle.Fixed3D;
             textToMdUC.Dock = DockStyle.Fill;
-            textToMdUC.Location = new Point(3, 19);
+            textToMdUC.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            textToMdUC.Location = new Point(3, 20);
             textToMdUC.Name = "textToMdUC";
-            textToMdUC.Size = new Size(1594, 606);
+            textToMdUC.Size = new Size(1594, 585);
             textToMdUC.TabIndex = 0;
             // 
             // TextUtilsUC

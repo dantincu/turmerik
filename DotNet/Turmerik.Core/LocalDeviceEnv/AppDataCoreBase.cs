@@ -161,43 +161,4 @@ namespace Turmerik.Core.LocalDeviceEnv
 
         #endregion Event Handlers
     }
-
-    public class AppDataCore<TImmtbl, TMtblSrlzbl> : AppDataCoreBase<TImmtbl, TMtblSrlzbl>
-        where TImmtbl : class
-    {
-        public AppDataCore(
-            IJsonConversion jsonConversion,
-            IAppEnv appEnv,
-            AppDataCoreOpts<TImmtbl, TMtblSrlzbl> opts = null,
-            string jsonDirRelPath = null) : base(
-                jsonConversion,
-                appEnv,
-                jsonDirRelPath)
-        {
-            opts ??= new AppDataCoreOpts<TImmtbl, TMtblSrlzbl>();
-
-            DefaultDataFactory = opts.DefaultDataFactory.FirstNotNull(
-                () => throw new NotSupportedException(
-                    $"Default data is not supported for {JsonFilePath}"));
-
-            DataNormalizer = opts.DataNormalizer.FirstNotNull(
-                mtbl => mtbl.CreateFromSrc<TImmtbl>());
-
-            DataSerializer = opts.DataSerializer.FirstNotNull(
-                immtbl => immtbl.CreateFromSrc<TMtblSrlzbl>());
-        }
-
-        private Func<TMtblSrlzbl> DefaultDataFactory { get; }
-        private Func<TMtblSrlzbl, TImmtbl> DataNormalizer { get; }
-        private Func<TImmtbl, TMtblSrlzbl> DataSerializer { get; }
-
-        protected override TMtblSrlzbl GetDefaultConfigCore(
-            ) => DefaultDataFactory();
-
-        protected override TImmtbl NormalizeConfig(
-            TMtblSrlzbl config) => DataNormalizer(config);
-
-        protected override TMtblSrlzbl SerializeConfig(
-            TImmtbl config) => DataSerializer(config);
-    }
 }

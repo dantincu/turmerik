@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Turmerik.Code.Core;
+using Turmerik.Core.Actions;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Threading;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
@@ -30,6 +32,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapterFactory propChangedEventAdapterFactory;
 
         private readonly UISettingsRetriever uISettingsRetriever;
+        private readonly IUIThemeRetriever uIThemeRetriever;
         private readonly IAppSettings appSettings;
 
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
@@ -37,8 +40,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxSrcFromCB_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResultsToCB_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxMdTblSrcTxtIsTabSep_EvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxRmMdQtLvlAndHtmlDecode_EvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter;
 
         private UISettingsDataImmtbl uISettingsData;
+        private UIThemeDataImmtbl uIThemeData;
 
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
 
@@ -57,6 +63,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 propChangedEventAdapterFactory = svcProv.GetRequiredService<IPropChangedEventAdapterFactory>();
 
                 uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
+                uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 appSettings = svcProv.GetRequiredService<IAppSettings>();
             }
 
@@ -70,19 +77,39 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     ).StatusLabel(GetType());
 
                 iconLabelSrcFromCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
-                iconLabelResultsToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+                iconLabelResultToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+
+                iconLabelRmMdQtLvl.Text = MatUIIconUnicodesH.AudioAndVideo.FAST_REWIND;
+                iconLabelHtmlDecode.Text = MatUIIconUnicodesH.CommonActions.CODE_OFF;
+
+                iconLabelAddMdQtLvl.Text = MatUIIconUnicodesH.AudioAndVideo.FAST_FORWARD;
+                iconLabelHtmlEncode.Text = MatUIIconUnicodesH.CommonActions.CODE;
+
+                iconLabelCopyResultToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
 
                 this.checkBoxSrcFromCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxSrcFromCB,
                     (source, e, isChecked) => SetSrcFromCB(isChecked));
 
                 this.checkBoxResultsToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
-                    checkBoxResultsToCB,
+                    checkBoxResultToCB,
                     (source, e, isChecked) => SetResultToCB(isChecked));
 
                 this.checkBoxMdTblSrcTxtIsTabSep_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxMdTableSrcTextIsTabSeparated,
-                    (source, e, isChecked) => SetMdTablSrcTxtIsTabSepCB(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        textBoxMdTableSrcTextSep.ReadOnly = checkBoxMdTableSrcTextIsTabSeparated.Checked;
+                        SetMdTblSrcTxtSep(isChecked);
+                    });
+
+                this.checkBoxRmMdQtLvlAndHtmlDecode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxRmMdQtLvlAndHtmlDecode,
+                    (source, e, isChecked) => SetHtmlDecodeOnRmMdQtLvl(isChecked));
+
+                this.checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxAddMdQtLvlAndHtmlEncode,
+                    (source, e, isChecked) => SetHtmlEncodeOnAddMdQtLvl(isChecked));
 
                 uISettingsRetriever.SubscribeToData(OnUISettingsData);
             }
@@ -92,13 +119,41 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             this.uISettingsData = uISettingsData;
             controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-            iconLabelSrcFromCB.ForeColor = uISettingsData.InfoIconColor;
-            iconLabelResultsToCB.ForeColor = uISettingsData.InfoIconColor;
+
+            uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+            {
+                uiTheme.ApplyBgColor([
+                    this.buttonMdTable,
+                    this.textBoxMdTableSrcTextSep,
+                    this.checkBoxMdTableSrcTextIsTabSeparated,
+                    this.checkBoxRmMdQtLvlAndHtmlDecode,
+                    this.checkBoxAddMdQtLvlAndHtmlEncode,
+                    this.richTextBoxSrcText,
+                    this.richTextBoxConvertedText,
+                ], uiTheme.InputBackColor);
+
+                iconLabelSrcFromCB.ForeColor = uiTheme.InfoIconColor;
+                iconLabelResultToCB.ForeColor = uiTheme.InfoIconColor;
+            });
 
             ApplyHorizontalSplitPanelsSettings([
                 horizontalSplitPanelSrcFromCB,
-                horizontalSplitPanelResultsToCB
+                horizontalSplitPanelResultToCB
             ]);
+
+            appSettings.Data.ActWith(appSettingsData =>
+            {
+                var textToMdSettings = appSettingsData.TextToMd;
+                textBoxMdTableSrcTextSep.Text = textToMdSettings.MdTableSrcTextTabSeparator;
+
+                controlsSynchronizer.Execute(false,
+                    (wasEnabled) =>
+                    {
+                        checkBoxSrcFromCB.Checked = textToMdSettings.GetSrcTextFromCB ?? false;
+                        checkBoxResultToCB.Checked = textToMdSettings.SetResultTextToCB ?? false;
+                        checkBoxMdTableSrcTextIsTabSeparated.Checked = textToMdSettings.MdTableSrcTextIsTabSeparated ?? true;
+                    });
+            });
         }
 
         private void ApplyHorizontalSplitPanelsSettings(
@@ -110,7 +165,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 panel.SetBorderRadius(3);
 
                 panel.SetBorderColor(
-                    uISettingsData.BorderColor);
+                    uIThemeData.LightBorderColor);
             }
         }
 
@@ -124,10 +179,44 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
         }
 
-        private void SetMdTablSrcTxtIsTabSepCB(
-            bool enabled)
+        private void SetMdTblSrcTxtSep(
+            bool isTabSeparated)
         {
         }
+
+        private void SetHtmlDecodeOnRmMdQtLvl(
+            bool enabled)
+        {
+
+        }
+
+        private void SetHtmlEncodeOnAddMdQtLvl(
+            bool enabled)
+        {
+
+        }
+
+        private void CopyResultToCB() => actionComponent.Execute(new WinFormsActionOpts<string>
+        {
+            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+            Action = () =>
+            {
+                string result = richTextBoxConvertedText.Text;
+                Clipboard.SetText(result);
+                return ActionResultH.Create(result);
+            }
+        }).With(result => actionComponent.Execute(new WinFormsActionOpts<string>
+        {
+            Action = () =>
+            {
+                controlBlinkTimersManagerAdapter.BlinkIconLabel(
+                    iconLabelCopyResultToCB,
+                    result,
+                    result.Value != null);
+
+                return result;
+            }
+        }));
 
         #region UI Event Handlers
 
@@ -141,14 +230,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         }
 
-        private void CheckBoxMdTableSrcTextIsTabSeparated_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void TextBoxMdTableSrcTextSep_KeyUp(object sender, KeyEventArgs e)
         {
-
+            if (e.KeyCode == Keys.Enter)
+            {
+                SetMdTblSrcTxtSep(false);
+            }
         }
 
         private void IconLabelSrcFromCB_Click(object sender, EventArgs e)
@@ -158,7 +245,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void IconLabelResultsToCB_Click(object sender, EventArgs e)
         {
-            checkBoxResultsToCB.ToggleChecked();
+            checkBoxResultToCB.ToggleChecked();
+        }
+
+        private void IconLabelCopyResultToCB_Click(object sender, EventArgs e)
+        {
+            CopyResultToCB();
         }
 
         #endregion UI Event Handlers
