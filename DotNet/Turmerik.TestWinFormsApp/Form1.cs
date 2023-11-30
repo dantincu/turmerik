@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using Turmerik.Core.Helpers;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
@@ -30,7 +32,9 @@ namespace Turmerik.TestWinFormsApp
 
             InitializeComponent();
 
-            borderPen = new Pen(new SolidBrush(Color.Gray));
+            borderPen = new Pen(
+                new SolidBrush(Color.FromArgb(32, 32, 32)),
+                2F);
 
             if (svcProvContnr.IsRegistered)
             {
@@ -55,6 +59,8 @@ namespace Turmerik.TestWinFormsApp
 
         private void Form1_Paint(object? sender, PaintEventArgs e)
         {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
             DrawingH.DrawWithRoundedCorners(
                 e.Graphics, borderPen,
                 ClientRectangle.With(rctngl => new Rectangle(
@@ -62,6 +68,15 @@ namespace Turmerik.TestWinFormsApp
                     rctngl.Top + 50,
                     rctngl.Width - 100,
                     200)), 50F);
+
+
+            DrawingH.DrawWithRoundedCorners(
+                e.Graphics, borderPen,
+                ClientRectangle.With(rctngl => new Rectangle(
+                    rctngl.Left + 100,
+                    rctngl.Top + 100,
+                    rctngl.Width - 200,
+                    23)), 5F);
         }
 
         #endregion UI Event Handlers
