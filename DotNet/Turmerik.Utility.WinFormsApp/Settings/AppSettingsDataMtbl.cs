@@ -17,12 +17,15 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         {
             FetchWebResource = src.GetFetchWebResource()?.ToMtbl();
             NameToIdnfConverter = src.GetNameToIdnfConverter()?.ToMtbl();
+            TextToMd = src.GetTextToMd()?.ToMtbl();
         }
 
         public AppSettingsData.FetchWebResourceMtbl FetchWebResource { get; set; }
         public AppSettingsData.NameToIdnfConverterMtbl NameToIdnfConverter { get; set; }
+        public AppSettingsData.TextToMdMtbl TextToMd { get; set; }
 
         public AppSettingsData.IFetchWebResource GetFetchWebResource() => FetchWebResource;
         public AppSettingsData.INameToIdnfConverter GetNameToIdnfConverter() => NameToIdnfConverter;
+        public AppSettingsData.ITextToMd GetTextToMd() => TextToMd;
     }
 }

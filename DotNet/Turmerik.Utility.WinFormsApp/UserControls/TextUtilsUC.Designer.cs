@@ -32,11 +32,11 @@
             fetchWebResourceUC = new FetchWebResourceUC();
             groupBoxConvertNameToIdnf = new GroupBox();
             nameToIdnfConverterUC = new NameToIdnfConverterUC();
-            groupBoxTransformText = new GroupBox();
-            transformTextuc1 = new TransformTextUC();
+            groupBoxTextToMd = new GroupBox();
+            textToMdUC = new TextToMdUC();
             groupBoxFetchWebResource.SuspendLayout();
             groupBoxConvertNameToIdnf.SuspendLayout();
-            groupBoxTransformText.SuspendLayout();
+            groupBoxTextToMd.SuspendLayout();
             SuspendLayout();
             // 
             // groupBoxFetchWebResource
@@ -80,38 +80,38 @@
             nameToIdnfConverterUC.Size = new Size(1594, 50);
             nameToIdnfConverterUC.TabIndex = 0;
             // 
-            // groupBoxTransformText
+            // groupBoxTextToMd
             // 
-            groupBoxTransformText.Controls.Add(transformTextuc1);
-            groupBoxTransformText.Dock = DockStyle.Fill;
-            groupBoxTransformText.Location = new Point(0, 172);
-            groupBoxTransformText.Name = "groupBoxTransformText";
-            groupBoxTransformText.Size = new Size(1600, 628);
-            groupBoxTransformText.TabIndex = 2;
-            groupBoxTransformText.TabStop = false;
-            groupBoxTransformText.Text = "Transform Text";
+            groupBoxTextToMd.Controls.Add(textToMdUC);
+            groupBoxTextToMd.Dock = DockStyle.Fill;
+            groupBoxTextToMd.Location = new Point(0, 172);
+            groupBoxTextToMd.Name = "groupBoxTextToMd";
+            groupBoxTextToMd.Size = new Size(1600, 628);
+            groupBoxTextToMd.TabIndex = 2;
+            groupBoxTextToMd.TabStop = false;
+            groupBoxTextToMd.Text = "Text To Md";
             // 
-            // transformTextuc1
+            // textToMdUC
             // 
-            transformTextuc1.BorderStyle = BorderStyle.Fixed3D;
-            transformTextuc1.Dock = DockStyle.Fill;
-            transformTextuc1.Location = new Point(3, 19);
-            transformTextuc1.Name = "transformTextuc1";
-            transformTextuc1.Size = new Size(1594, 606);
-            transformTextuc1.TabIndex = 0;
+            textToMdUC.BorderStyle = BorderStyle.Fixed3D;
+            textToMdUC.Dock = DockStyle.Fill;
+            textToMdUC.Location = new Point(3, 19);
+            textToMdUC.Name = "textToMdUC";
+            textToMdUC.Size = new Size(1594, 606);
+            textToMdUC.TabIndex = 0;
             // 
             // TextUtilsUC
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(groupBoxTransformText);
+            Controls.Add(groupBoxTextToMd);
             Controls.Add(groupBoxConvertNameToIdnf);
             Controls.Add(groupBoxFetchWebResource);
             Name = "TextUtilsUC";
             Size = new Size(1600, 800);
             groupBoxFetchWebResource.ResumeLayout(false);
             groupBoxConvertNameToIdnf.ResumeLayout(false);
-            groupBoxTransformText.ResumeLayout(false);
+            groupBoxTextToMd.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -120,7 +120,7 @@
         private FetchWebResourceUC fetchWebResourceUC;
         private GroupBox groupBoxConvertNameToIdnf;
         private NameToIdnfConverterUC nameToIdnfConverterUC;
-        private GroupBox groupBoxTransformText;
-        private TransformTextUC transformTextuc1;
+        private GroupBox groupBoxTextToMd;
+        private TextToMdUC textToMdUC;
     }
 }

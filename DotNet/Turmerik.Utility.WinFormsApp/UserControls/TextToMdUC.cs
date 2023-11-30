@@ -20,7 +20,7 @@ using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
-    public partial class TransformTextUC : UserControl
+    public partial class TextToMdUC : UserControl
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
@@ -34,11 +34,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
 
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxSrcFromCB_EvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResultsToCB_EvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxMdTblSrcTxtIsTabSep_EvtAdapter;
+
         private UISettingsDataImmtbl uISettingsData;
 
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
 
-        public TransformTextUC()
+        public TextToMdUC()
         {
             svcProvContnr = ServiceProviderContainer.Instance.Value;
 
@@ -65,7 +69,21 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 actionComponent = svcProv.GetRequiredService<IWinFormsActionComponentCreator>(
                     ).StatusLabel(GetType());
 
-                iconLabelConvert.Text = MatUIIconUnicodesH.AudioAndVideo.PLAY_ARROW;
+                iconLabelSrcFromCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+                iconLabelResultsToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+
+                this.checkBoxSrcFromCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxSrcFromCB,
+                    (source, e, isChecked) => SetSrcFromCB(isChecked));
+
+                this.checkBoxResultsToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxResultsToCB,
+                    (source, e, isChecked) => SetResultToCB(isChecked));
+
+                this.checkBoxMdTblSrcTxtIsTabSep_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxMdTableSrcTextIsTabSeparated,
+                    (source, e, isChecked) => SetMdTablSrcTxtIsTabSepCB(isChecked));
+
                 uISettingsRetriever.SubscribeToData(OnUISettingsData);
             }
         }
@@ -74,6 +92,23 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             this.uISettingsData = uISettingsData;
             controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
+            iconLabelSrcFromCB.ForeColor = uISettingsData.InfoIconColor;
+            iconLabelResultsToCB.ForeColor = uISettingsData.InfoIconColor;
+        }
+
+        private void SetSrcFromCB(
+            bool enabled)
+        {
+        }
+
+        private void SetResultToCB(
+            bool enabled)
+        {
+        }
+
+        private void SetMdTablSrcTxtIsTabSepCB(
+            bool enabled)
+        {
         }
 
         #region UI Event Handlers
@@ -81,6 +116,51 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void PanelOptionControls_SizeChanged(object? sender, EventArgs e)
         {
             splitContainerMain.SplitterDistance = panelOptionControls.Height;
+        }
+
+        private void ButtonMdTable_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CheckBoxMdTableSrcTextIsTabSeparated_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void TextBoxMdTableSrcTextSep_KeyUp(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void ButtonAddMdQuotedLevel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonAddMdQuotedLevelEncode_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonRmMdQuotedLevel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonRmMdQuotedLevelDecode_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void IconLabelSrcFromCB_Click(object sender, EventArgs e)
+        {
+            checkBoxSrcFromCB.ToggleChecked();
+        }
+
+        private void IconLabelResultsToCB_Click(object sender, EventArgs e)
+        {
+            checkBoxResultsToCB.ToggleChecked();
         }
 
         #endregion UI Event Handlers

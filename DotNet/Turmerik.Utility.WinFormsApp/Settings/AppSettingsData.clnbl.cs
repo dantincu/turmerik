@@ -10,6 +10,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
     {
         AppSettingsData.IFetchWebResource GetFetchWebResource();
         AppSettingsData.INameToIdnfConverter GetNameToIdnfConverter();
+        AppSettingsData.ITextToMd GetTextToMd();
     }
 
     public static class AppSettingsData
@@ -24,6 +25,14 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         public interface INameToIdnfConverter
         {
             bool? NameConvertToCB { get; }
+        }
+
+        public interface ITextToMd
+        {
+            bool? MdTableSrcTextIsTabSeparated { get; }
+            string MdTableSrcTextTabSeparator { get; }
+            bool? GetSrcTextFromCB { get; }
+            bool? SetResultTextToCB { get; }
         }
 
         public class FetchWebResourceImmtbl : IFetchWebResource
@@ -86,6 +95,40 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public bool? NameConvertToCB { get; set; }
         }
 
+        public class TextToMdImmtbl : ITextToMd
+        {
+            public TextToMdImmtbl(
+                ITextToMd src)
+            {
+                MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
+                GetSrcTextFromCB = src.GetSrcTextFromCB;
+                SetResultTextToCB = src.SetResultTextToCB;
+            }
+
+            public bool? MdTableSrcTextIsTabSeparated { get; }
+            public bool? GetSrcTextFromCB { get; }
+            public bool? SetResultTextToCB { get; }
+        }
+
+        public class TextToMdMtbl : ITextToMd
+        {
+            public TextToMdMtbl()
+            {
+            }
+
+            public TextToMdMtbl(
+                ITextToMd src)
+            {
+                MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
+                GetSrcTextFromCB = src.GetSrcTextFromCB;
+                SetResultTextToCB = src.SetResultTextToCB;
+            }
+
+            public bool? MdTableSrcTextIsTabSeparated { get; }
+            public bool? GetSrcTextFromCB { get; }
+            public bool? SetResultTextToCB { get; }
+        }
+
         public static AppSettingsDataImmtbl ToImmtbl(
             this IAppSettingsData src) => new AppSettingsDataImmtbl(src);
 
@@ -103,5 +146,11 @@ namespace Turmerik.Utility.WinFormsApp.Settings
 
         public static NameToIdnfConverterMtbl ToMtbl(
             this INameToIdnfConverter src) => new NameToIdnfConverterMtbl(src);
+
+        public static TextToMdImmtbl ToImmtbl(
+            this ITextToMd src) => new TextToMdImmtbl(src);
+
+        public static TextToMdMtbl ToMtbl(
+            this ITextToMd src) => new TextToMdMtbl(src);
     }
 }
