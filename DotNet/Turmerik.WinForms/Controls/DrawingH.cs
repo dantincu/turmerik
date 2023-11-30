@@ -8,7 +8,6 @@ namespace Turmerik.WinForms.Controls
 {
     public partial class DrawingH
     {
-
         public static void DrawWithRoundedCorners(
             this Graphics g,
             Pen pen,

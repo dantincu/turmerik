@@ -9,7 +9,6 @@ using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
-using Turmerik.Utility.WinFormsApp.UserControls.Forms;
 
 namespace Turmerik.Utility.WinFormsApp
 {

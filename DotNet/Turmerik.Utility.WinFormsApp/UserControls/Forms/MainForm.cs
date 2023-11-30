@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Core.Helpers;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
-using Turmerik.Utility.WinFormsApp.UserControls.Forms;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;

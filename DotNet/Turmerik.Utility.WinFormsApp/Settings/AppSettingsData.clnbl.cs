@@ -101,11 +101,13 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 ITextToMd src)
             {
                 MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
+                MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
                 GetSrcTextFromCB = src.GetSrcTextFromCB;
                 SetResultTextToCB = src.SetResultTextToCB;
             }
 
             public bool? MdTableSrcTextIsTabSeparated { get; }
+            public string MdTableSrcTextTabSeparator { get; }
             public bool? GetSrcTextFromCB { get; }
             public bool? SetResultTextToCB { get; }
         }
@@ -120,13 +122,15 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 ITextToMd src)
             {
                 MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
+                MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
                 GetSrcTextFromCB = src.GetSrcTextFromCB;
                 SetResultTextToCB = src.SetResultTextToCB;
             }
 
-            public bool? MdTableSrcTextIsTabSeparated { get; }
-            public bool? GetSrcTextFromCB { get; }
-            public bool? SetResultTextToCB { get; }
+            public bool? MdTableSrcTextIsTabSeparated { get; set; }
+            public string MdTableSrcTextTabSeparator { get; set; }
+            public bool? GetSrcTextFromCB { get; set; }
+            public bool? SetResultTextToCB { get; set; }
         }
 
         public static AppSettingsDataImmtbl ToImmtbl(

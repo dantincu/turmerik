@@ -173,6 +173,12 @@ namespace Turmerik.WinForms.Controls
                 rctngl.Width - leftTopOffset.X - bottomRightOffset.X,
                 rctngl.Height - leftTopOffset.Y - bottomRightOffset.Y);
 
+        public static Rectangle Shrink(
+            this Rectangle rctngl,
+            Padding padding) => Shrink(rctngl,
+                padding.Left.Point(padding.Top),
+                padding.Right.Point(padding.Bottom));
+
         public static RectangleF ShrinkF(
             this RectangleF rctngl,
             PointF leftTopOffset,
@@ -181,6 +187,12 @@ namespace Turmerik.WinForms.Controls
                 rctngl.Y + leftTopOffset.Y,
                 rctngl.Width - leftTopOffset.X - bottomRightOffset.X,
                 rctngl.Height - leftTopOffset.Y - bottomRightOffset.Y);
+
+        public static RectangleF ShrinkF(
+            this RectangleF rctngl,
+            Padding padding) => ShrinkF(rctngl,
+                ((float)padding.Left).PointF(padding.Top),
+                ((float)padding.Right).PointF(padding.Bottom));
 
         public static Point TopLeftVertix(
             this Rectangle rctngl) => new Point(

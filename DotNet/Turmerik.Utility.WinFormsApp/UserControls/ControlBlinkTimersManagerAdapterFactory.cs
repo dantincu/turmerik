@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.WinForms.Controls;
 
-namespace Turmerik.Utility.WinFormsApp.UserControls.Forms
+namespace Turmerik.Utility.WinFormsApp.UserControls
 {
     public class ControlBlinkTimersManagerAdapterFactory
     {

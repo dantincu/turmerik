@@ -17,7 +17,8 @@ namespace Turmerik.TestWinFormsApp
 
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
 
-        private Pen borderPen;
+        private Pen borderPen1Px;
+        private Pen borderPen1P5Px;
 
         public Form1()
         {
@@ -32,9 +33,11 @@ namespace Turmerik.TestWinFormsApp
 
             InitializeComponent();
 
-            borderPen = new Pen(
-                new SolidBrush(Color.FromArgb(32, 32, 32)),
-                2F);
+            borderPen1Px = new Pen(new SolidBrush(
+                    Color.FromArgb(32, 32, 32)), 1F);
+
+            borderPen1P5Px = new Pen(new SolidBrush(
+                    Color.FromArgb(32, 32, 32)), 1.5F);
 
             if (svcProvContnr.IsRegistered)
             {
@@ -62,7 +65,7 @@ namespace Turmerik.TestWinFormsApp
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             DrawingH.DrawWithRoundedCorners(
-                e.Graphics, borderPen,
+                e.Graphics, borderPen1Px,
                 ClientRectangle.With(rctngl => new Rectangle(
                     rctngl.Left + 50,
                     rctngl.Top + 50,
@@ -71,12 +74,30 @@ namespace Turmerik.TestWinFormsApp
 
 
             DrawingH.DrawWithRoundedCorners(
-                e.Graphics, borderPen,
+                e.Graphics, borderPen1Px,
                 ClientRectangle.With(rctngl => new Rectangle(
                     rctngl.Left + 100,
                     rctngl.Top + 100,
                     rctngl.Width - 200,
                     23)), 5F);
+
+
+            DrawingH.DrawWithRoundedCorners(
+                e.Graphics, borderPen1P5Px,
+                ClientRectangle.With(rctngl => new Rectangle(
+                    rctngl.Left + 100,
+                    rctngl.Top + 150,
+                    rctngl.Width - 200,
+                    23)), 5F);
+
+
+            DrawingH.DrawWithRoundedCorners(
+                e.Graphics, borderPen1P5Px,
+                ClientRectangle.With(rctngl => new Rectangle(
+                    rctngl.Left + 100,
+                    rctngl.Top + 200,
+                    rctngl.Width - 200,
+                    23)), 3F);
         }
 
         #endregion UI Event Handlers

@@ -94,6 +94,24 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
             iconLabelSrcFromCB.ForeColor = uISettingsData.InfoIconColor;
             iconLabelResultsToCB.ForeColor = uISettingsData.InfoIconColor;
+
+            ApplyHorizontalSplitPanelsSettings([
+                horizontalSplitPanelSrcFromCB,
+                horizontalSplitPanelResultsToCB
+            ]);
+        }
+
+        private void ApplyHorizontalSplitPanelsSettings(
+            HorizontalSplitPanel[] panelsArr)
+        {
+            foreach (var panel in panelsArr)
+            {
+                panel.SetBorderWidth(1);
+                panel.SetBorderRadius(3);
+
+                panel.SetBorderColor(
+                    uISettingsData.BorderColor);
+            }
         }
 
         private void SetSrcFromCB(
@@ -129,26 +147,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         private void TextBoxMdTableSrcTextSep_KeyUp(object sender, KeyEventArgs e)
-        {
-
-        }
-
-        private void ButtonAddMdQuotedLevel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ButtonAddMdQuotedLevelEncode_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ButtonRmMdQuotedLevel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ButtonRmMdQuotedLevelDecode_Click(object sender, EventArgs e)
         {
 
         }

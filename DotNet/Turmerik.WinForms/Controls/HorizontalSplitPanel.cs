@@ -15,7 +15,7 @@ namespace Turmerik.WinForms.Controls
         private Color? borderColor;
         private float borderWidth;
         private float borderRadius;
-        private Pen borderPen;
+        private Pen? borderPen;
 
         public HorizontalSplitPanel()
         {
@@ -24,6 +24,7 @@ namespace Turmerik.WinForms.Controls
             LeftPanel = CreateLeftPanel();
             RightPanel = CreateRightPanel();
 
+            Padding = new Padding(1);
             this.Paint += HorizontalSplitPanel_Paint;
         }
 
@@ -92,29 +93,35 @@ namespace Turmerik.WinForms.Controls
             Invalidate();
         }
 
-        private Pen GetNewBorderPen() => new Pen(
-            new SolidBrush(
-                borderColor.Value),
-            borderWidth);
+        private Pen? GetNewBorderPen(
+            ) => borderColor?.With(
+                color => new Pen(
+                    new SolidBrush(
+                        color),
+                    borderWidth));
 
         #region UI Event Handlers
 
         private void HorizontalSplitPanel_Paint(
             object? sender, PaintEventArgs e)
         {
-            var rectangle = this.ClientRectangle;
+            var rectangle = this.ClientRectangle.Shrink(Padding);
             var graphics = e.Graphics;
             var pen = this.borderPen;
             var radius = this.borderRadius;
 
-            if (radius == 0)
+            if (pen != null)
             {
-                graphics.DrawRectangle(
-                    pen, rectangle);
-            }
-            else
-            {
-
+                if (radius == 0)
+                {
+                    graphics.DrawRectangle(
+                        pen, rectangle);
+                }
+                else
+                {
+                    DrawingH.DrawWithRoundedCorners(
+                        graphics, pen, rectangle, radius);
+                }
             }
         }
 

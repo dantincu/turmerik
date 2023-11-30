@@ -13,6 +13,7 @@ namespace Turmerik.WinForms.Controls
         Color SuccessColor { get; }
         Color ErrorColor { get; }
         Color WarningColor { get; }
+        Color BorderColor { get; }
         Color InfoIconColor { get; }
         Color ActiveIconColor { get; }
         int SlowBlinkIntervalMillis { get; }
@@ -35,6 +36,7 @@ namespace Turmerik.WinForms.Controls
             SuccessColor = Color.FromArgb(0, 128, 0),
             ErrorColor = Color.FromArgb(192, 0, 0),
             WarningColor = Color.FromArgb(160, 96, 0),
+            BorderColor = Color.FromArgb(32, 32, 32),
             InfoIconColor = Color.FromArgb(48, 64, 80),
             ActiveIconColor = Color.FromArgb(0, 0, 255),
             SlowBlinkIntervalMillis = 375,
@@ -53,6 +55,7 @@ namespace Turmerik.WinForms.Controls
             SuccessColor = src.SuccessColor;
             ErrorColor = src.ErrorColor;
             WarningColor = src.WarningColor;
+            BorderColor = src.BorderColor;
             InfoIconColor = src.InfoIconColor;
             ActiveIconColor = src.ActiveIconColor;
             SlowBlinkIntervalMillis = src.SlowBlinkIntervalMillis;
@@ -65,6 +68,7 @@ namespace Turmerik.WinForms.Controls
         public Color SuccessColor { get; }
         public Color ErrorColor { get; }
         public Color WarningColor { get; }
+        public Color BorderColor { get; }
         public Color InfoIconColor { get; }
         public Color ActiveIconColor { get; }
         public int SlowBlinkIntervalMillis { get; }
@@ -86,6 +90,7 @@ namespace Turmerik.WinForms.Controls
             SuccessColor = src.SuccessColor;
             ErrorColor = src.ErrorColor;
             WarningColor = src.WarningColor;
+            BorderColor = src.BorderColor;
             InfoIconColor = src.InfoIconColor;
             ActiveIconColor = src.ActiveIconColor;
             SlowBlinkIntervalMillis = src.SlowBlinkIntervalMillis;
@@ -98,6 +103,7 @@ namespace Turmerik.WinForms.Controls
         public Color SuccessColor { get; set; }
         public Color ErrorColor { get; set; }
         public Color WarningColor { get; set; }
+        public Color BorderColor { get; set; }
         public Color InfoIconColor { get; set; }
         public Color ActiveIconColor { get; set; }
         public int SlowBlinkIntervalMillis { get; set; }
