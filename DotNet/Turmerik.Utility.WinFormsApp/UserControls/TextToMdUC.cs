@@ -46,6 +46,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxMdTableSurroundRowWithCellSep_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxRmMdQtLvlAndHtmlDecode_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxInsertSpacesBetweenTokens_EvtAdapter;
 
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
@@ -118,6 +119,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     checkBoxAddMdQtLvlAndHtmlEncode,
                     (source, e, isChecked) => SetHtmlEncodeOnAddMdQtLvl(isChecked));
 
+                checkBoxInsertSpacesBetweenTokens_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxInsertSpacesBetweenTokens,
+                    (source, e, isChecked) => SetInsertSpacesBetweenTokens(isChecked));
+
                 uISettingsRetriever.SubscribeToData(OnUISettingsData);
             }
         }
@@ -167,6 +172,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                                     checkBoxMdTableSurroundRowWithCellSep.Checked = textToMdSettings.MdTableSurroundRowWithCellSep ?? true;
                                     checkBoxAddMdQtLvlAndHtmlEncode.Checked = textToMdSettings.HtmlEncodeOnAddMdQtLvl ?? true;
                                     checkBoxRmMdQtLvlAndHtmlDecode.Checked = textToMdSettings.HtmlDecodeOnRmMdQtLvl ?? true;
+                                    checkBoxInsertSpacesBetweenTokens.Checked = textToMdSettings.InsertSpacesBetweenTokens ?? true;
                                 });
                         });
 
@@ -237,6 +243,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         () => null, () => (bool?)false);
                 }));
 
+        private void SetInsertSpacesBetweenTokens(
+            bool enabled) => actionComponent.UpdateAppSettings(
+                appSettings, settings => settings.TextToMd.ActWith(mtbl =>
+                {
+                    mtbl.InsertSpacesBetweenTokens = enabled.If(
+                        () => null, () => (bool?)false);
+                }));
+
         private void CopyResultToCB() => actionComponent.CopyTextToClipboard(
             controlBlinkTimersManagerAdapter,
             iconLabelCopyResultToCB,
@@ -257,10 +271,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 }
 
                 string outputText = service.SrcTextToMdTable(
-                    richTextBoxSrcText.Text,
-                    separator,
-                    checkBoxMdTableFirstLineIsHeader.Checked,
-                    checkBoxMdTableSurroundRowWithCellSep.Checked);
+                    new SrcTextToMdTableOpts
+                    {
+                        InputText = richTextBoxSrcText.Text,
+                        Separator = separator,
+                        FirstLineIsHeader= checkBoxMdTableFirstLineIsHeader.Checked,
+                        SurroundLineWithCellSep = checkBoxMdTableSurroundRowWithCellSep.Checked,
+                        InsertSpacesBetweenTokens = checkBoxInsertSpacesBetweenTokens.Checked,
+                    });
 
                 richTextBoxConvertedText.Text = outputText;
                 return ActionResultH.Create(outputText);
@@ -275,7 +293,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             Action = () =>
             {
                 string outputText = service.ResultTextRmMdQtLvl(
-                    richTextBoxConvertedText.Text);
+                    richTextBoxConvertedText.Text,
+                    checkBoxInsertSpacesBetweenTokens.Checked);
 
                 richTextBoxSrcText.Text = outputText;
                 return ActionResultH.Create(outputText);
@@ -301,7 +320,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             Action = () =>
             {
                 string outputText = service.SrcTextAddMdQtLvl(
-                    richTextBoxSrcText.Text);
+                    richTextBoxSrcText.Text,
+                    checkBoxInsertSpacesBetweenTokens.Checked);
 
                 richTextBoxConvertedText.Text = outputText;
                 return ActionResultH.Create(outputText);

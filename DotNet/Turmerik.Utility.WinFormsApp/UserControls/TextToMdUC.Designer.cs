@@ -30,6 +30,7 @@
         {
             splitContainerMain = new SplitContainer();
             panelOptionControls = new Panel();
+            checkBoxInsertSpacesBetweenTokens = new CheckBox();
             iconLabelCopyResultToCB = new WinForms.Controls.IconLabel();
             horizontalSplitPanelHtmlEncode = new WinForms.Controls.HorizontalSplitPanel();
             checkBoxAddMdQtLvlAndHtmlEncode = new CheckBox();
@@ -88,6 +89,7 @@
             // panelOptionControls
             // 
             panelOptionControls.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelOptionControls.Controls.Add(checkBoxInsertSpacesBetweenTokens);
             panelOptionControls.Controls.Add(iconLabelCopyResultToCB);
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlEncode);
             panelOptionControls.Controls.Add(horizontalSplitPanelResultToCB);
@@ -103,6 +105,19 @@
             panelOptionControls.Padding = new Padding(5, 3, 0, 0);
             panelOptionControls.Size = new Size(1400, 33);
             panelOptionControls.TabIndex = 0;
+            // 
+            // checkBoxInsertSpacesBetweenTokens
+            // 
+            checkBoxInsertSpacesBetweenTokens.AutoSize = true;
+            checkBoxInsertSpacesBetweenTokens.Dock = DockStyle.Left;
+            checkBoxInsertSpacesBetweenTokens.Location = new Point(929, 3);
+            checkBoxInsertSpacesBetweenTokens.Name = "checkBoxInsertSpacesBetweenTokens";
+            checkBoxInsertSpacesBetweenTokens.Padding = new Padding(5, 5, 0, 0);
+            checkBoxInsertSpacesBetweenTokens.Size = new Size(183, 30);
+            checkBoxInsertSpacesBetweenTokens.TabIndex = 3;
+            checkBoxInsertSpacesBetweenTokens.TabStop = false;
+            checkBoxInsertSpacesBetweenTokens.Text = "InsertSpaces Between Tokens";
+            checkBoxInsertSpacesBetweenTokens.UseVisualStyleBackColor = true;
             // 
             // iconLabelCopyResultToCB
             // 
@@ -423,5 +438,6 @@
         private WinForms.Controls.IconLabel iconLabelCopyResultToCB;
         private CheckBox checkBoxMdTableFirstLineIsHeader;
         private CheckBox checkBoxMdTableSurroundRowWithCellSep;
+        private CheckBox checkBoxInsertSpacesBetweenTokens;
     }
 }

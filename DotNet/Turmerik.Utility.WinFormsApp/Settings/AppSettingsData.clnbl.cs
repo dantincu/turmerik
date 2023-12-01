@@ -36,6 +36,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             bool? SetResultTextToCB { get; }
             bool? HtmlDecodeOnRmMdQtLvl { get; }
             bool? HtmlEncodeOnAddMdQtLvl { get; }
+            bool? InsertSpacesBetweenTokens { get; }
         }
 
         public class FetchWebResourceImmtbl : IFetchWebResource
@@ -110,6 +111,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 SetResultTextToCB = src.SetResultTextToCB;
                 HtmlDecodeOnRmMdQtLvl = src.HtmlDecodeOnRmMdQtLvl;
                 HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
+                InsertSpacesBetweenTokens = src.InsertSpacesBetweenTokens;
             }
 
             public bool? MdTblFirstLineIsHeader { get; }
@@ -119,6 +121,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public bool? SetResultTextToCB { get; }
             public bool? HtmlDecodeOnRmMdQtLvl { get; }
             public bool? HtmlEncodeOnAddMdQtLvl { get; }
+            public bool? InsertSpacesBetweenTokens { get; }
         }
 
         public class TextToMdMtbl : ITextToMd
@@ -137,6 +140,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 SetResultTextToCB = src.SetResultTextToCB;
                 HtmlDecodeOnRmMdQtLvl = src.HtmlDecodeOnRmMdQtLvl;
                 HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
+                InsertSpacesBetweenTokens = src.InsertSpacesBetweenTokens;
             }
 
             public bool? MdTblFirstLineIsHeader { get; set; }
@@ -146,6 +150,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public bool? SetResultTextToCB { get; set; }
             public bool? HtmlDecodeOnRmMdQtLvl { get; set; }
             public bool? HtmlEncodeOnAddMdQtLvl { get; set; }
+            public bool? InsertSpacesBetweenTokens { get; set; }
         }
 
         public static AppSettingsDataImmtbl ToImmtbl(

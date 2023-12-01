@@ -10,15 +10,13 @@ namespace Turmerik.Utility.WinFormsApp.Services
     public class TextToMdService
     {
         public string SrcTextToMdTable(
-            string inputText,
-            string separator,
-            bool firstLineIsHeader,
-            bool surroundLineWithCellSep) => ConvertText(
-                inputText,
+            SrcTextToMdTableOpts opts) => ConvertText(
+                opts.InputText,
                 (line, idx) => throw new NotImplementedException());
 
         public string ResultTextRmMdQtLvl(
-            string inputText) => ConvertText(
+            string inputText,
+            bool insertSpacesBetweenTokens) => ConvertText(
                 inputText, (line, idx) => throw new NotImplementedException());
 
         public string ResultTextDecodeHtml(
@@ -26,7 +24,8 @@ namespace Turmerik.Utility.WinFormsApp.Services
                 inputText, (line, idx) => throw new NotImplementedException());
 
         public string SrcTextAddMdQtLvl(
-            string inputText) => ConvertText(
+            string inputText,
+            bool insertSpacesBetweenTokens) => ConvertText(
                 inputText, (line, idx) => throw new NotImplementedException());
 
         public string SrcTextEncodeHtml(
