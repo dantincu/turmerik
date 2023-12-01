@@ -101,37 +101,44 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         public IconLabel RefUxControl => iconLabelResourceUrl;
 
-        private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
-        {
-            this.uISettingsData = uISettingsData;
-            controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-            uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
-            {
-                uiTheme.ApplyBgColor([
-                    this.textBoxResourceUrl,
-                    this.textBoxResourceTitle,
-                    this.textBoxResourceMdLink,
-                    this.checkBoxResxMdLinkFetchToCB,
-                    this.checkBoxResxTitleFetchToCB
-                ], uiTheme.InputBackColor);
-
-                iconLabelResxTitleFetchToCB.ForeColor = uiTheme.InfoIconColor;
-                iconLabelResxMdLinkFetchToCB.ForeColor = uiTheme.InfoIconColor;
-            });
-
-            appSettings.Data.ActWith(appSettingsData =>
-            {
-                var webResSettingsData = appSettingsData.FetchWebResource;
-
-                controlsSynchronizer.Execute(false,
-                    (wasEnabled) =>
+        private void OnUISettingsData(
+            UISettingsDataImmtbl uISettingsData) => actionComponent.Execute(
+                new WinFormsActionOpts<int>
+                {
+                    Action = () =>
                     {
-                        checkBoxResxTitleFetchToCB.Checked = webResSettingsData.ResxTitleFetchToCB ?? false;
-                        checkBoxResxMdLinkFetchToCB.Checked = webResSettingsData.ResxMdLinkFetchToCB ?? false;
-                    });
-            });
-        }
+                        this.uISettingsData = uISettingsData;
+                        controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
+
+                        uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+                        {
+                            uiTheme.ApplyBgColor([
+                                this.textBoxResourceUrl,
+                                this.textBoxResourceTitle,
+                                this.textBoxResourceMdLink,
+                                this.checkBoxResxMdLinkFetchToCB,
+                                this.checkBoxResxTitleFetchToCB
+                            ], uiTheme.InputBackColor);
+
+                            iconLabelResxTitleFetchToCB.ForeColor = uiTheme.InfoIconColor;
+                            iconLabelResxMdLinkFetchToCB.ForeColor = uiTheme.InfoIconColor;
+                        });
+
+                        appSettings.Data.ActWith(appSettingsData =>
+                        {
+                            var webResSettingsData = appSettingsData.FetchWebResource;
+
+                            controlsSynchronizer.Execute(false,
+                                (wasEnabled) =>
+                                {
+                                    checkBoxResxTitleFetchToCB.Checked = webResSettingsData.ResxTitleFetchToCB ?? false;
+                                    checkBoxResxMdLinkFetchToCB.Checked = webResSettingsData.ResxMdLinkFetchToCB ?? false;
+                                });
+                        });
+
+                        return ActionResultH.Create(0);
+                    }
+                });
 
         private async Task FetchResourceAsync()
         {
@@ -221,30 +228,40 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             result.Value != null));
 
         private void SetResxTitleFetchToCB(
-            bool enabled)
-        {
-            appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
+            bool enabled) => actionComponent.Execute(new WinFormsActionOpts<bool>
             {
-                var webResSettingsData = mtbl.FetchWebResource;
-                webResSettingsData.ResxMdLinkFetchToCB = null;
+                Action = () =>
+                {
+                    appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
+                    {
+                        var webResSettingsData = mtbl.FetchWebResource;
+                        webResSettingsData.ResxMdLinkFetchToCB = null;
 
-                webResSettingsData.ResxTitleFetchToCB = enabled.If(
-                    () => (bool?)true, () => null);
+                        webResSettingsData.ResxTitleFetchToCB = enabled.If(
+                            () => (bool?)true, () => null);
+                    });
+
+                    return ActionResultH.Create(enabled);
+                }
             });
-        }
 
         private void SetResxMdLinkFetchToCB(
-            bool enabled)
-        {
-            appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
+            bool enabled) => actionComponent.Execute(new WinFormsActionOpts<bool>
             {
-                var webResSettingsData = mtbl.FetchWebResource;
-                webResSettingsData.ResxTitleFetchToCB = null;
+                Action = () =>
+                {
+                    appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
+                    {
+                        var webResSettingsData = mtbl.FetchWebResource;
+                        webResSettingsData.ResxTitleFetchToCB = null;
 
-                webResSettingsData.ResxMdLinkFetchToCB = enabled.If(
-                    () => (bool?)true, () => null);
+                        webResSettingsData.ResxMdLinkFetchToCB = enabled.If(
+                            () => (bool?)true, () => null);
+                    });
+
+                    return ActionResultH.Create(enabled);
+                }
             });
-        }
 
         private void ToggleEnableControls(bool enable)
         {

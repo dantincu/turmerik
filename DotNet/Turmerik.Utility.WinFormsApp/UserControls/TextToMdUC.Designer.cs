@@ -152,6 +152,7 @@
             iconLabelAddMdQtLvl.Size = new Size(14, 20);
             iconLabelAddMdQtLvl.TabIndex = 13;
             iconLabelAddMdQtLvl.Text = "R";
+            iconLabelAddMdQtLvl.Click += IconLabelAddMdQtLvl_Click;
             // 
             // iconLabelHtmlEncode
             // 
@@ -164,6 +165,7 @@
             iconLabelHtmlEncode.Size = new Size(14, 20);
             iconLabelHtmlEncode.TabIndex = 12;
             iconLabelHtmlEncode.Text = "R";
+            iconLabelHtmlEncode.Click += IconLabelHtmlEncode_Click;
             // 
             // horizontalSplitPanelResultToCB
             // 
@@ -238,6 +240,7 @@
             iconLabelRmMdQtLvl.Size = new Size(14, 20);
             iconLabelRmMdQtLvl.TabIndex = 12;
             iconLabelRmMdQtLvl.Text = "R";
+            iconLabelRmMdQtLvl.Click += IconLabelRmMdQtLvl_Click;
             // 
             // iconLabelHtmlDecode
             // 
@@ -250,6 +253,7 @@
             iconLabelHtmlDecode.Size = new Size(14, 20);
             iconLabelHtmlDecode.TabIndex = 11;
             iconLabelHtmlDecode.Text = "R";
+            iconLabelHtmlDecode.Click += IconLabelHtmlDecode_Click;
             // 
             // horizontalSplitPanelSrcFromCB
             // 

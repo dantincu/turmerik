@@ -84,44 +84,56 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
-        private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
-        {
-            this.uISettingsData = uISettingsData;
-            controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-            uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
-            {
-                uiTheme.ApplyBgColor([
-                    this.textBoxName,
-                    this.textBoxIndf,
-                    this.checkBoxNameConvertToCB,
-                ], uiTheme.InputBackColor);
-
-                iconLabelNameConvertToCB.ForeColor = uiTheme.InfoIconColor;
-            });
-
-            appSettings.Data.ActWith(appSettingsData =>
-            {
-                var nameToIdnfSettings = appSettingsData.NameToIdnfConverter;
-
-                controlsSynchronizer.Execute(false,
-                    (wasEnabled) =>
+        private void OnUISettingsData(
+            UISettingsDataImmtbl uISettingsData) => actionComponent.Execute(
+                new WinFormsActionOpts<int>
+                {
+                    Action = () =>
                     {
-                        checkBoxNameConvertToCB.Checked = nameToIdnfSettings.NameConvertToCB ?? false;
-                    });
-            });
-        }
+                        this.uISettingsData = uISettingsData;
+                        controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
 
-        private void SetIdnfToCB(bool enabled)
+                        uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+                        {
+                            uiTheme.ApplyBgColor([
+                                this.textBoxName,
+                                this.textBoxIndf,
+                                this.checkBoxNameConvertToCB,
+                            ], uiTheme.InputBackColor);
+
+                            iconLabelNameConvertToCB.ForeColor = uiTheme.InfoIconColor;
+                        });
+
+                        appSettings.Data.ActWith(appSettingsData =>
+                        {
+                            var nameToIdnfSettings = appSettingsData.NameToIdnfConverter;
+
+                            controlsSynchronizer.Execute(false,
+                                (wasEnabled) =>
+                                {
+                                    checkBoxNameConvertToCB.Checked = nameToIdnfSettings.NameConvertToCB ?? false;
+                                });
+                        });
+
+                        return ActionResultH.Create(0);
+                    }
+                });
+
+        private void SetIdnfToCB(bool enabled) => actionComponent.Execute(new WinFormsActionOpts<bool>
         {
-            appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
+            Action = () =>
             {
-                var nameToIdnfConverter = mtbl.NameToIdnfConverter;
+                appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
+                {
+                    var nameToIdnfConverter = mtbl.NameToIdnfConverter;
 
-                nameToIdnfConverter.NameConvertToCB = enabled.If(
-                    () => (bool?)true, () => null);
-            });
-        }
+                    nameToIdnfConverter.NameConvertToCB = enabled.If(
+                        () => (bool?)true, () => null);
+                });
+                
+                return ActionResultH.Create(enabled);
+            }
+        });
 
         private void ConvertNameToIdnf() => actionComponent.Execute(new WinFormsActionOpts<string>
         {

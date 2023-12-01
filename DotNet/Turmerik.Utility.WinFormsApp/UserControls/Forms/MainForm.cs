@@ -1,5 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.Logging;
+using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
 using Turmerik.WinForms.Actions;
@@ -14,6 +16,7 @@ namespace Turmerik.Utility.WinFormsApp
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
+        private readonly IAppLogger logger;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
         private readonly UISettingsRetriever uISettingsRetriever;
         private readonly IUIThemeRetriever uIThemeRetriever;
@@ -27,6 +30,7 @@ namespace Turmerik.Utility.WinFormsApp
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
+                logger = svcProv.GetRequiredService<IAppLoggerCreator>().GetSharedAppLogger(GetType());
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
                 uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
                 uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
@@ -39,6 +43,34 @@ namespace Turmerik.Utility.WinFormsApp
 
             if (svcProvContnr.IsRegistered)
             {
+                try
+                {
+                    uIThemeRetriever.Data.ActWith(uiTheme =>
+                    {
+                        uiTheme.ApplyBgColor([
+                            this,
+                            this.tabControlMain,
+                            this.tabPageTextUtils,
+                            this.textUtilsUC
+                        ]);
+
+                        actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
+                        {
+                            StatusLabel = toolStripStatusLabelMain,
+                            DefaultForeColor = uiTheme.DefaultForeColor,
+                            WarningForeColor = uiTheme.WarningColor,
+                            ErrorForeColor = uiTheme.ErrorColor,
+                        };
+                    });
+                }
+                catch (Exception ex)
+                {
+                    logger.Fatal(ex, "Could not retrieve the UI Theme");
+                    MessageBox.Show($"An unhandled error has occurred: {ex}");
+
+                    throw;
+                }
+
                 var uISettings = uISettingsRetriever.RegisterData(
                     UISettingsDataCore.GetDefaultData().With(
                         coreMtbl => new UISettingsDataMtbl(coreMtbl)),
@@ -51,24 +83,6 @@ namespace Turmerik.Utility.WinFormsApp
                                         RefUxControl = refUxControl,
                                     }));
                         });
-
-                uIThemeRetriever.Data.ActWith(uiTheme =>
-                {
-                    uiTheme.ApplyBgColor([
-                        this,
-                        this.tabControlMain,
-                        this.tabPageTextUtils,
-                        this.textUtilsUC
-                    ]);
-
-                    actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
-                    {
-                        StatusLabel = toolStripStatusLabelMain,
-                        DefaultForeColor = uiTheme.DefaultForeColor,
-                        WarningForeColor = uiTheme.WarningColor,
-                        ErrorForeColor = uiTheme.ErrorColor,
-                    };
-                });
             }
         }
     }

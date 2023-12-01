@@ -115,46 +115,53 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
-        private void OnUISettingsData(UISettingsDataImmtbl uISettingsData)
-        {
-            this.uISettingsData = uISettingsData;
-            controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-            uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
-            {
-                uiTheme.ApplyBgColor([
-                    this.buttonMdTable,
-                    this.textBoxMdTableSrcTextSep,
-                    this.checkBoxMdTableSrcTextIsTabSeparated,
-                    this.checkBoxRmMdQtLvlAndHtmlDecode,
-                    this.checkBoxAddMdQtLvlAndHtmlEncode,
-                    this.richTextBoxSrcText,
-                    this.richTextBoxConvertedText,
-                ], uiTheme.InputBackColor);
-
-                iconLabelSrcFromCB.ForeColor = uiTheme.InfoIconColor;
-                iconLabelResultToCB.ForeColor = uiTheme.InfoIconColor;
-            });
-
-            ApplyHorizontalSplitPanelsSettings([
-                horizontalSplitPanelSrcFromCB,
-                horizontalSplitPanelResultToCB
-            ]);
-
-            appSettings.Data.ActWith(appSettingsData =>
-            {
-                var textToMdSettings = appSettingsData.TextToMd;
-                textBoxMdTableSrcTextSep.Text = textToMdSettings.MdTableSrcTextTabSeparator;
-
-                controlsSynchronizer.Execute(false,
-                    (wasEnabled) =>
+        private void OnUISettingsData(
+            UISettingsDataImmtbl uISettingsData) => actionComponent.Execute(
+                new WinFormsActionOpts<int>
+                {
+                    Action = () =>
                     {
-                        checkBoxSrcFromCB.Checked = textToMdSettings.GetSrcTextFromCB ?? false;
-                        checkBoxResultToCB.Checked = textToMdSettings.SetResultTextToCB ?? false;
-                        checkBoxMdTableSrcTextIsTabSeparated.Checked = textToMdSettings.MdTableSrcTextIsTabSeparated ?? true;
-                    });
-            });
-        }
+                        this.uISettingsData = uISettingsData;
+                        controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
+
+                        uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+                        {
+                            uiTheme.ApplyBgColor([
+                                this.buttonMdTable,
+                                this.textBoxMdTableSrcTextSep,
+                                this.checkBoxMdTableSrcTextIsTabSeparated,
+                                this.checkBoxRmMdQtLvlAndHtmlDecode,
+                                this.checkBoxAddMdQtLvlAndHtmlEncode,
+                                this.richTextBoxSrcText,
+                                this.richTextBoxConvertedText,
+                            ], uiTheme.InputBackColor);
+
+                            iconLabelSrcFromCB.ForeColor = uiTheme.InfoIconColor;
+                            iconLabelResultToCB.ForeColor = uiTheme.InfoIconColor;
+                        });
+
+                        ApplyHorizontalSplitPanelsSettings([
+                            horizontalSplitPanelSrcFromCB,
+                            horizontalSplitPanelResultToCB
+                        ]);
+
+                        appSettings.Data.ActWith(appSettingsData =>
+                        {
+                            var textToMdSettings = appSettingsData.TextToMd;
+                            textBoxMdTableSrcTextSep.Text = textToMdSettings.MdTableSrcTextTabSeparator;
+
+                            controlsSynchronizer.Execute(false,
+                                (wasEnabled) =>
+                                {
+                                    checkBoxSrcFromCB.Checked = textToMdSettings.GetSrcTextFromCB ?? false;
+                                    checkBoxResultToCB.Checked = textToMdSettings.SetResultTextToCB ?? false;
+                                    checkBoxMdTableSrcTextIsTabSeparated.Checked = textToMdSettings.MdTableSrcTextIsTabSeparated ?? true;
+                                });
+                        });
+
+                        return ActionResultH.Create(0);
+                    }
+                });
 
         private void ApplyHorizontalSplitPanelsSettings(
             HorizontalSplitPanel[] panelsArr)
@@ -172,6 +179,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void SetSrcFromCB(
             bool enabled)
         {
+            
         }
 
         private void SetResultToCB(
@@ -218,6 +226,31 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }));
 
+        private void SrcTextToMdTable()
+        {
+
+        }
+
+        private void ResultTextRmMdQtLvl()
+        {
+
+        }
+
+        private void ResultTextDecodeHtml()
+        {
+
+        }
+
+        private void SrcTextAddMdQtLvl()
+        {
+
+        }
+
+        private void SrcTextEncodeHtml()
+        {
+
+        }
+
         #region UI Event Handlers
 
         private void PanelOptionControls_SizeChanged(object? sender, EventArgs e)
@@ -227,7 +260,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void ButtonMdTable_Click(object sender, EventArgs e)
         {
-
+            SrcTextToMdTable();
         }
 
         private void TextBoxMdTableSrcTextSep_KeyUp(object sender, KeyEventArgs e)
@@ -251,6 +284,26 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void IconLabelCopyResultToCB_Click(object sender, EventArgs e)
         {
             CopyResultToCB();
+        }
+
+        private void IconLabelRmMdQtLvl_Click(object sender, EventArgs e)
+        {
+            ResultTextRmMdQtLvl();
+        }
+
+        private void IconLabelHtmlDecode_Click(object sender, EventArgs e)
+        {
+            ResultTextDecodeHtml();
+        }
+
+        private void IconLabelAddMdQtLvl_Click(object sender, EventArgs e)
+        {
+            SrcTextAddMdQtLvl();
+        }
+
+        private void IconLabelHtmlEncode_Click(object sender, EventArgs e)
+        {
+            SrcTextEncodeHtml();
         }
 
         #endregion UI Event Handlers
