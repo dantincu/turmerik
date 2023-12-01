@@ -20,6 +20,7 @@ using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Text;
+using Turmerik.Utility.WinFormsApp.Services;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -27,6 +28,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
+        private readonly TextToMdService service;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
@@ -38,8 +40,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
 
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxMdTblFirstLineIsHeader_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResultsToCB_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxMdTblSrcTxtIsTabSep_EvtAdapter;
+        private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxMdTableSurroundRowWithCellSep_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxRmMdQtLvlAndHtmlDecode_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter;
 
@@ -55,6 +59,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
+                service = svcProv.GetRequiredService<TextToMdService>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
                 controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueAdapterFactory>().Create(
@@ -85,11 +90,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 iconLabelAddMdQtLvl.Text = MatUIIconUnicodesH.AudioAndVideo.FAST_FORWARD;
                 iconLabelHtmlEncode.Text = MatUIIconUnicodesH.CommonActions.CODE;
 
-                this.checkBoxResultsToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                checkBoxMdTblFirstLineIsHeader_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxMdTableFirstLineIsHeader,
+                    (source, e, isChecked) => SetMdTblFirstLineIsHeader(isChecked));
+
+                checkBoxResultsToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxResultToCB,
                     (source, e, isChecked) => SetResultToCB(isChecked));
 
-                this.checkBoxMdTblSrcTxtIsTabSep_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                checkBoxMdTblSrcTxtIsTabSep_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxMdTableSrcTextIsTabSeparated,
                     (source, e, isChecked) =>
                     {
@@ -97,11 +106,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         SetMdTblSrcTxtSep(isChecked);
                     });
 
-                this.checkBoxRmMdQtLvlAndHtmlDecode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                checkBoxMdTableSurroundRowWithCellSep_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                    checkBoxMdTableSurroundRowWithCellSep,
+                    (source, e, isChecked) => SetMdTableSurroundRowWithCellSep(isChecked));
+
+                checkBoxRmMdQtLvlAndHtmlDecode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxRmMdQtLvlAndHtmlDecode,
                     (source, e, isChecked) => SetHtmlDecodeOnRmMdQtLvl(isChecked));
 
-                this.checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
+                checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxAddMdQtLvlAndHtmlEncode,
                     (source, e, isChecked) => SetHtmlEncodeOnAddMdQtLvl(isChecked));
 
@@ -148,10 +161,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                             controlsSynchronizer.Execute(false,
                                 (wasEnabled) =>
                                 {
+                                    checkBoxMdTableFirstLineIsHeader.Checked = textToMdSettings.MdTblFirstLineIsHeader ?? true;
                                     checkBoxResultToCB.Checked = textToMdSettings.SetResultTextToCB ?? false;
+                                    checkBoxMdTableSrcTextIsTabSeparated.Checked = mdTableSrcTextIsTabSeparated;
+                                    checkBoxMdTableSurroundRowWithCellSep.Checked = textToMdSettings.MdTableSurroundRowWithCellSep ?? true;
                                     checkBoxAddMdQtLvlAndHtmlEncode.Checked = textToMdSettings.HtmlEncodeOnAddMdQtLvl ?? true;
                                     checkBoxRmMdQtLvlAndHtmlDecode.Checked = textToMdSettings.HtmlDecodeOnRmMdQtLvl ?? true;
-                                    checkBoxMdTableSrcTextIsTabSeparated.Checked = mdTableSrcTextIsTabSeparated;
                                 });
                         });
 
@@ -172,6 +187,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        private void SetMdTblFirstLineIsHeader(
+            bool enabled) => actionComponent.UpdateAppSettings(
+                appSettings, settings => settings.TextToMd.ActWith(mtbl =>
+                {
+                    mtbl.MdTblFirstLineIsHeader = enabled.If(
+                        () => null, () => (bool?)false);
+                }));
+
         private void SetResultToCB(
             bool enabled) => actionComponent.UpdateAppSettings(
                 appSettings, settings => settings.TextToMd.ActWith(mtbl =>
@@ -187,6 +210,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     mtbl.MdTableSrcTextTabSeparator = textBoxMdTableSrcTextSep.Text;
 
                     mtbl.MdTableSrcTextIsTabSeparated = isTabSeparated.If(
+                        () => null, () => (bool?)false);
+                }));
+
+        private void SetMdTableSurroundRowWithCellSep(
+            bool enabled) => actionComponent.UpdateAppSettings(
+                appSettings, settings => settings.TextToMd.ActWith(mtbl =>
+                {
+                    mtbl.MdTableSurroundRowWithCellSep = enabled.If(
                         () => null, () => (bool?)false);
                 }));
 
@@ -216,45 +247,79 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                throw new NotImplementedException();
-            }
-        }).ActWith(result => result.IsSuccess.ActIf(() => CopyResultToCB()));
+                string separator = checkBoxMdTableSrcTextIsTabSeparated.Checked ? "\t" : textBoxMdTableSrcTextSep.Text;
+
+                if (string.IsNullOrEmpty(
+                    separator))
+                {
+                    throw new InvalidOperationException(
+                        "Cannot convert text to markdown table with the empty string as separator for table cells");
+                }
+
+                string outputText = service.SrcTextToMdTable(
+                    richTextBoxSrcText.Text,
+                    separator,
+                    checkBoxMdTableFirstLineIsHeader.Checked,
+                    checkBoxMdTableSurroundRowWithCellSep.Checked);
+
+                richTextBoxConvertedText.Text = outputText;
+                return ActionResultH.Create(outputText);
+            },
+            OnUnhandledError = exc => WinFormsMessageTuple.WithOnly(
+                exc.Message, exc.Message),
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
 
         private void ResultTextRmMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                throw new NotImplementedException();
+                string outputText = service.ResultTextRmMdQtLvl(
+                    richTextBoxConvertedText.Text);
+
+                richTextBoxSrcText.Text = outputText;
+                return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => result.IsSuccess.ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
 
         private void ResultTextDecodeHtml() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                throw new NotImplementedException();
+                string outputText = service.ResultTextDecodeHtml(
+                    richTextBoxConvertedText.Text);
+
+                richTextBoxSrcText.Text= outputText;
+                return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => result.IsSuccess.ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
 
         private void SrcTextAddMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                throw new NotImplementedException();
+                string outputText = service.SrcTextAddMdQtLvl(
+                    richTextBoxSrcText.Text);
+
+                richTextBoxConvertedText.Text = outputText;
+                return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => result.IsSuccess.ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
 
         private void SrcTextEncodeHtml() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                throw new NotImplementedException();
+                string outputText = service.SrcTextEncodeHtml(
+                    richTextBoxSrcText.Text);
+
+                richTextBoxConvertedText.Text = outputText;
+                return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => result.IsSuccess.ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
 
         #region UI Event Handlers
 

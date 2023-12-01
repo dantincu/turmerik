@@ -9,6 +9,7 @@ using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
+using Turmerik.Utility.WinFormsApp.Services;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -51,6 +52,7 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<IUIThemeRetriever, UIThemeRetriever>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterFactory>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterContainer>();
+                    services.AddSingleton<TextToMdService>();
                 }));
 
             return svcProv;

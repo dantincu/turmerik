@@ -29,8 +29,10 @@ namespace Turmerik.Utility.WinFormsApp.Settings
 
         public interface ITextToMd
         {
+            bool? MdTblFirstLineIsHeader { get; }
             bool? MdTableSrcTextIsTabSeparated { get; }
             string MdTableSrcTextTabSeparator { get; }
+            bool? MdTableSurroundRowWithCellSep { get; }
             bool? SetResultTextToCB { get; }
             bool? HtmlDecodeOnRmMdQtLvl { get; }
             bool? HtmlEncodeOnAddMdQtLvl { get; }
@@ -101,15 +103,19 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public TextToMdImmtbl(
                 ITextToMd src)
             {
+                MdTblFirstLineIsHeader = src.MdTblFirstLineIsHeader;
                 MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
                 MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
+                MdTableSurroundRowWithCellSep = src.MdTableSurroundRowWithCellSep;
                 SetResultTextToCB = src.SetResultTextToCB;
                 HtmlDecodeOnRmMdQtLvl = src.HtmlDecodeOnRmMdQtLvl;
                 HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
             }
 
+            public bool? MdTblFirstLineIsHeader { get; }
             public bool? MdTableSrcTextIsTabSeparated { get; }
             public string MdTableSrcTextTabSeparator { get; }
+            public bool? MdTableSurroundRowWithCellSep { get; }
             public bool? SetResultTextToCB { get; }
             public bool? HtmlDecodeOnRmMdQtLvl { get; }
             public bool? HtmlEncodeOnAddMdQtLvl { get; }
@@ -124,15 +130,19 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             public TextToMdMtbl(
                 ITextToMd src)
             {
+                MdTblFirstLineIsHeader = src.MdTblFirstLineIsHeader;
                 MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
                 MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
+                MdTableSurroundRowWithCellSep = src.MdTableSurroundRowWithCellSep;
                 SetResultTextToCB = src.SetResultTextToCB;
                 HtmlDecodeOnRmMdQtLvl = src.HtmlDecodeOnRmMdQtLvl;
                 HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
             }
 
+            public bool? MdTblFirstLineIsHeader { get; set; }
             public bool? MdTableSrcTextIsTabSeparated { get; set; }
             public string MdTableSrcTextTabSeparator { get; set; }
+            public bool? MdTableSurroundRowWithCellSep { get; set; }
             public bool? SetResultTextToCB { get; set; }
             public bool? HtmlDecodeOnRmMdQtLvl { get; set; }
             public bool? HtmlEncodeOnAddMdQtLvl { get; set; }

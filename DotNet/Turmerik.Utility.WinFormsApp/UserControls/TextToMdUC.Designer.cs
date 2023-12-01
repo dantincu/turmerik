@@ -42,9 +42,11 @@
             checkBoxRmMdQtLvlAndHtmlDecode = new CheckBox();
             iconLabelRmMdQtLvl = new WinForms.Controls.IconLabel();
             iconLabelHtmlDecode = new WinForms.Controls.IconLabel();
+            checkBoxMdTableSurroundRowWithCellSep = new CheckBox();
             checkBoxMdTableSrcTextIsTabSeparated = new CheckBox();
             panelMdTableSrcTextSep = new Panel();
             textBoxMdTableSrcTextSep = new TextBox();
+            checkBoxMdTableFirstLineIsHeader = new CheckBox();
             buttonMdTable = new Button();
             splitContainerTextAreas = new SplitContainer();
             richTextBoxSrcText = new RichTextBox();
@@ -90,8 +92,10 @@
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlEncode);
             panelOptionControls.Controls.Add(horizontalSplitPanelResultToCB);
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlDecode);
+            panelOptionControls.Controls.Add(checkBoxMdTableSurroundRowWithCellSep);
             panelOptionControls.Controls.Add(checkBoxMdTableSrcTextIsTabSeparated);
             panelOptionControls.Controls.Add(panelMdTableSrcTextSep);
+            panelOptionControls.Controls.Add(checkBoxMdTableFirstLineIsHeader);
             panelOptionControls.Controls.Add(buttonMdTable);
             panelOptionControls.Dock = DockStyle.Top;
             panelOptionControls.Location = new Point(0, 0);
@@ -105,7 +109,7 @@
             iconLabelCopyResultToCB.AutoSize = true;
             iconLabelCopyResultToCB.Dock = DockStyle.Left;
             iconLabelCopyResultToCB.ForeColor = SystemColors.ControlText;
-            iconLabelCopyResultToCB.Location = new Point(606, 3);
+            iconLabelCopyResultToCB.Location = new Point(915, 3);
             iconLabelCopyResultToCB.Name = "iconLabelCopyResultToCB";
             iconLabelCopyResultToCB.Padding = new Padding(0, 5, 0, 0);
             iconLabelCopyResultToCB.Size = new Size(14, 20);
@@ -119,7 +123,7 @@
             horizontalSplitPanelHtmlEncode.Controls.Add(iconLabelAddMdQtLvl);
             horizontalSplitPanelHtmlEncode.Controls.Add(iconLabelHtmlEncode);
             horizontalSplitPanelHtmlEncode.Dock = DockStyle.Left;
-            horizontalSplitPanelHtmlEncode.Location = new Point(481, 3);
+            horizontalSplitPanelHtmlEncode.Location = new Point(790, 3);
             horizontalSplitPanelHtmlEncode.Name = "horizontalSplitPanelHtmlEncode";
             horizontalSplitPanelHtmlEncode.Padding = new Padding(1);
             horizontalSplitPanelHtmlEncode.Size = new Size(125, 30);
@@ -169,7 +173,7 @@
             horizontalSplitPanelResultToCB.Controls.Add(checkBoxResultToCB);
             horizontalSplitPanelResultToCB.Controls.Add(iconLabelResultToCB);
             horizontalSplitPanelResultToCB.Dock = DockStyle.Left;
-            horizontalSplitPanelResultToCB.Location = new Point(359, 3);
+            horizontalSplitPanelResultToCB.Location = new Point(668, 3);
             horizontalSplitPanelResultToCB.Name = "horizontalSplitPanelResultToCB";
             horizontalSplitPanelResultToCB.Padding = new Padding(1);
             horizontalSplitPanelResultToCB.Size = new Size(122, 30);
@@ -208,7 +212,7 @@
             horizontalSplitPanelHtmlDecode.Controls.Add(iconLabelRmMdQtLvl);
             horizontalSplitPanelHtmlDecode.Controls.Add(iconLabelHtmlDecode);
             horizontalSplitPanelHtmlDecode.Dock = DockStyle.Left;
-            horizontalSplitPanelHtmlDecode.Location = new Point(234, 3);
+            horizontalSplitPanelHtmlDecode.Location = new Point(543, 3);
             horizontalSplitPanelHtmlDecode.Name = "horizontalSplitPanelHtmlDecode";
             horizontalSplitPanelHtmlDecode.Padding = new Padding(1);
             horizontalSplitPanelHtmlDecode.Size = new Size(125, 30);
@@ -253,11 +257,24 @@
             iconLabelHtmlDecode.Text = "R";
             iconLabelHtmlDecode.Click += IconLabelHtmlDecode_Click;
             // 
+            // checkBoxMdTableSurroundRowWithCellSep
+            // 
+            checkBoxMdTableSurroundRowWithCellSep.AutoSize = true;
+            checkBoxMdTableSurroundRowWithCellSep.Dock = DockStyle.Left;
+            checkBoxMdTableSurroundRowWithCellSep.Location = new Point(364, 3);
+            checkBoxMdTableSurroundRowWithCellSep.Name = "checkBoxMdTableSurroundRowWithCellSep";
+            checkBoxMdTableSurroundRowWithCellSep.Padding = new Padding(5, 5, 0, 0);
+            checkBoxMdTableSurroundRowWithCellSep.Size = new Size(179, 30);
+            checkBoxMdTableSurroundRowWithCellSep.TabIndex = 2;
+            checkBoxMdTableSurroundRowWithCellSep.TabStop = false;
+            checkBoxMdTableSurroundRowWithCellSep.Text = "Surround Row With Cell Sep";
+            checkBoxMdTableSurroundRowWithCellSep.UseVisualStyleBackColor = true;
+            // 
             // checkBoxMdTableSrcTextIsTabSeparated
             // 
             checkBoxMdTableSrcTextIsTabSeparated.AutoSize = true;
             checkBoxMdTableSrcTextIsTabSeparated.Dock = DockStyle.Left;
-            checkBoxMdTableSrcTextIsTabSeparated.Location = new Point(130, 3);
+            checkBoxMdTableSrcTextIsTabSeparated.Location = new Point(260, 3);
             checkBoxMdTableSrcTextIsTabSeparated.Name = "checkBoxMdTableSrcTextIsTabSeparated";
             checkBoxMdTableSrcTextIsTabSeparated.Padding = new Padding(5, 5, 0, 0);
             checkBoxMdTableSrcTextIsTabSeparated.Size = new Size(104, 30);
@@ -270,7 +287,7 @@
             // 
             panelMdTableSrcTextSep.Controls.Add(textBoxMdTableSrcTextSep);
             panelMdTableSrcTextSep.Dock = DockStyle.Left;
-            panelMdTableSrcTextSep.Location = new Point(80, 3);
+            panelMdTableSrcTextSep.Location = new Point(210, 3);
             panelMdTableSrcTextSep.Name = "panelMdTableSrcTextSep";
             panelMdTableSrcTextSep.Padding = new Padding(5);
             panelMdTableSrcTextSep.Size = new Size(50, 30);
@@ -285,6 +302,19 @@
             textBoxMdTableSrcTextSep.TabIndex = 0;
             textBoxMdTableSrcTextSep.TabStop = false;
             textBoxMdTableSrcTextSep.KeyUp += TextBoxMdTableSrcTextSep_KeyUp;
+            // 
+            // checkBoxMdTableFirstLineIsHeader
+            // 
+            checkBoxMdTableFirstLineIsHeader.AutoSize = true;
+            checkBoxMdTableFirstLineIsHeader.Dock = DockStyle.Left;
+            checkBoxMdTableFirstLineIsHeader.Location = new Point(80, 3);
+            checkBoxMdTableFirstLineIsHeader.Name = "checkBoxMdTableFirstLineIsHeader";
+            checkBoxMdTableFirstLineIsHeader.Padding = new Padding(5, 5, 0, 0);
+            checkBoxMdTableFirstLineIsHeader.Size = new Size(130, 30);
+            checkBoxMdTableFirstLineIsHeader.TabIndex = 1;
+            checkBoxMdTableFirstLineIsHeader.TabStop = false;
+            checkBoxMdTableFirstLineIsHeader.Text = "First Line Is Header";
+            checkBoxMdTableFirstLineIsHeader.UseVisualStyleBackColor = true;
             // 
             // buttonMdTable
             // 
@@ -391,5 +421,7 @@
         private CheckBox checkBoxAddMdQtLvlAndHtmlEncode;
         private Button buttonMdTable;
         private WinForms.Controls.IconLabel iconLabelCopyResultToCB;
+        private CheckBox checkBoxMdTableFirstLineIsHeader;
+        private CheckBox checkBoxMdTableSurroundRowWithCellSep;
     }
 }

@@ -18,12 +18,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             this IWinFormsStatusLabelActionComponent actionComponent,
             ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter,
             IconLabel iconLabel,
-            string? text) => actionComponent.Execute(new WinFormsActionOpts<string?>
+            string? text) => text.Nullify(true).With(text => actionComponent.Execute(new WinFormsActionOpts<string?>
             {
-                OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+                OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(
+                    text != null ? " " : null),
                 Action = () =>
                 {
-                    text = text.Nullify(true)?.ActWith(title =>
+                    text?.ActWith(title =>
                     {
                         Clipboard.SetText(title);
                     });
@@ -33,7 +34,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }).ActWith(result => controlBlinkTimersManagerAdapter.BlinkIconLabel(
                 iconLabel,
                 result,
-                result.Value != null));
+                result.Value != null)));
 
         public static void UpdateAppSettings(
             this IWinFormsStatusLabelActionComponent actionComponent,
