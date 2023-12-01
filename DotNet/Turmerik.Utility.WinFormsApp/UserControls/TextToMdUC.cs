@@ -204,27 +204,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         }
 
-        private void CopyResultToCB() => actionComponent.Execute(new WinFormsActionOpts<string>
-        {
-            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
-            Action = () =>
-            {
-                string result = richTextBoxConvertedText.Text;
-                Clipboard.SetText(result);
-                return ActionResultH.Create(result);
-            }
-        }).With(result => actionComponent.Execute(new WinFormsActionOpts<string>
-        {
-            Action = () =>
-            {
-                controlBlinkTimersManagerAdapter.BlinkIconLabel(
-                    iconLabelCopyResultToCB,
-                    result,
-                    result.Value != null);
-
-                return result;
-            }
-        }));
+        private void CopyResultToCB() => actionComponent.CopyTextToClipboard(
+                controlBlinkTimersManagerAdapter,
+                iconLabelCopyResultToCB,
+                richTextBoxConvertedText.Text);
 
         private void SrcTextToMdTable()
         {

@@ -119,21 +119,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     }
                 });
 
-        private void SetIdnfToCB(bool enabled) => actionComponent.Execute(new WinFormsActionOpts<bool>
-        {
-            Action = () =>
-            {
-                appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
+        private void SetIdnfToCB(bool enabled) => actionComponent.UpdateAppSettings(
+                appSettings, settings => settings.NameToIdnfConverter.ActWith(mtbl =>
                 {
-                    var nameToIdnfConverter = mtbl.NameToIdnfConverter;
-
-                    nameToIdnfConverter.NameConvertToCB = enabled.If(
+                    mtbl.NameConvertToCB = enabled.If(
                         () => (bool?)true, () => null);
-                });
-                
-                return ActionResultH.Create(enabled);
-            }
-        });
+                }));
 
         private void ConvertNameToIdnf() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -152,27 +143,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }).With(result => (result.IsSuccess && checkBoxNameConvertToCB.Checked).ActIf(
             () => CopyIdnfToCB(result.Value)));
 
-        private void CopyIdnfToCB(string idnf = null) => actionComponent.Execute(new WinFormsActionOpts<string>
-        {
-            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
-            Action = () =>
-            {
-                idnf ??= textBoxIndf.Text;
-                Clipboard.SetText(idnf);
-                return ActionResultH.Create(idnf);
-            }
-        }).With(result => actionComponent.Execute(new WinFormsActionOpts<string>
-        {
-            Action = () =>
-            {
-                controlBlinkTimersManagerAdapter.BlinkIconLabel(
-                    iconLabelIdnfToCB,
-                    result,
-                    result.Value != null);
-
-                return result;
-            }
-        }));
+        private void CopyIdnfToCB(
+            string idnf = null) => actionComponent.CopyTextToClipboard(
+                controlBlinkTimersManagerAdapter,
+                iconLabelIdnfToCB,
+                idnf ?? textBoxIndf.Text);
 
         #region UI Event Handlers
 

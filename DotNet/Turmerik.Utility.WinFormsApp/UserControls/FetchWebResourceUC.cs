@@ -21,7 +21,6 @@ using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Utility;
 using Turmerik.Core.Text;
 using Turmerik.Html;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -193,75 +192,37 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             });
         }
 
-        private void CopyResourceTitleToClipboard() => actionComponent.Execute(new WinFormsActionOpts<string?>
-        {
-            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
-            Action = () =>
-            {
-                string? title = textBoxResourceTitle.Text.Nullify(true)?.ActWith(title =>
-                {
-                    Clipboard.SetText(title);
-                });
+        private void CopyResourceTitleToClipboard(
+            ) => actionComponent.CopyTextToClipboard(
+                controlBlinkTimersManagerAdapter,
+                iconLabelResxTitleToCB,
+                textBoxResourceTitle.Text);
 
-                return ActionResultH.Create(title);
-            }
-        }).ActWith(result => controlBlinkTimersManagerAdapter.BlinkIconLabel(
-            iconLabelResxTitleToCB,
-            result,
-            result.Value != null));
-
-        private void CopyResourceMdLinkToClipboard() => actionComponent.Execute(new WinFormsActionOpts<string?>
-        {
-            OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
-            Action = () =>
-            {
-                string? title = textBoxResourceMdLink.Text.Nullify(true)?.ActWith(title =>
-                {
-                    Clipboard.SetText(title);
-                });
-
-                return ActionResultH.Create(title);
-            }
-        }).ActWith(result => controlBlinkTimersManagerAdapter.BlinkIconLabel(
-            iconLabelResxMdLinkToCB,
-            result,
-            result.Value != null));
+        private void CopyResourceMdLinkToClipboard(
+            ) => actionComponent.CopyTextToClipboard(
+                controlBlinkTimersManagerAdapter,
+                iconLabelResxMdLinkToCB,
+                textBoxResourceMdLink.Text);
 
         private void SetResxTitleFetchToCB(
-            bool enabled) => actionComponent.Execute(new WinFormsActionOpts<bool>
-            {
-                Action = () =>
+            bool enabled) => actionComponent.UpdateAppSettings(
+                appSettings, settings => settings.FetchWebResource.ActWith(mtbl =>
                 {
-                    appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
-                    {
-                        var webResSettingsData = mtbl.FetchWebResource;
-                        webResSettingsData.ResxMdLinkFetchToCB = null;
+                    mtbl.ResxMdLinkFetchToCB = null;
 
-                        webResSettingsData.ResxTitleFetchToCB = enabled.If(
-                            () => (bool?)true, () => null);
-                    });
-
-                    return ActionResultH.Create(enabled);
-                }
-            });
+                    mtbl.ResxTitleFetchToCB = enabled.If(
+                        () => (bool?)true, () => null);
+                }));
 
         private void SetResxMdLinkFetchToCB(
-            bool enabled) => actionComponent.Execute(new WinFormsActionOpts<bool>
-            {
-                Action = () =>
+            bool enabled) => actionComponent.UpdateAppSettings(
+                appSettings, settings => settings.FetchWebResource.ActWith(mtbl =>
                 {
-                    appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
-                    {
-                        var webResSettingsData = mtbl.FetchWebResource;
-                        webResSettingsData.ResxTitleFetchToCB = null;
+                    mtbl.ResxTitleFetchToCB = null;
 
-                        webResSettingsData.ResxMdLinkFetchToCB = enabled.If(
-                            () => (bool?)true, () => null);
-                    });
-
-                    return ActionResultH.Create(enabled);
-                }
-            });
+                    mtbl.ResxMdLinkFetchToCB = enabled.If(
+                        () => (bool?)true, () => null);
+                }));
 
         private void ToggleEnableControls(bool enable)
         {
