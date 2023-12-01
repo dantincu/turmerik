@@ -42,9 +42,6 @@
             checkBoxRmMdQtLvlAndHtmlDecode = new CheckBox();
             iconLabelRmMdQtLvl = new WinForms.Controls.IconLabel();
             iconLabelHtmlDecode = new WinForms.Controls.IconLabel();
-            horizontalSplitPanelSrcFromCB = new WinForms.Controls.HorizontalSplitPanel();
-            iconLabelSrcFromCB = new WinForms.Controls.IconLabel();
-            checkBoxSrcFromCB = new CheckBox();
             checkBoxMdTableSrcTextIsTabSeparated = new CheckBox();
             panelMdTableSrcTextSep = new Panel();
             textBoxMdTableSrcTextSep = new TextBox();
@@ -60,7 +57,6 @@
             horizontalSplitPanelHtmlEncode.SuspendLayout();
             horizontalSplitPanelResultToCB.SuspendLayout();
             horizontalSplitPanelHtmlDecode.SuspendLayout();
-            horizontalSplitPanelSrcFromCB.SuspendLayout();
             panelMdTableSrcTextSep.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerTextAreas).BeginInit();
             splitContainerTextAreas.Panel1.SuspendLayout();
@@ -85,6 +81,7 @@
             splitContainerMain.Size = new Size(1400, 600);
             splitContainerMain.SplitterDistance = 300;
             splitContainerMain.TabIndex = 0;
+            splitContainerMain.TabStop = false;
             // 
             // panelOptionControls
             // 
@@ -93,7 +90,6 @@
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlEncode);
             panelOptionControls.Controls.Add(horizontalSplitPanelResultToCB);
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlDecode);
-            panelOptionControls.Controls.Add(horizontalSplitPanelSrcFromCB);
             panelOptionControls.Controls.Add(checkBoxMdTableSrcTextIsTabSeparated);
             panelOptionControls.Controls.Add(panelMdTableSrcTextSep);
             panelOptionControls.Controls.Add(buttonMdTable);
@@ -102,18 +98,18 @@
             panelOptionControls.Name = "panelOptionControls";
             panelOptionControls.Padding = new Padding(5, 3, 0, 0);
             panelOptionControls.Size = new Size(1400, 33);
-            panelOptionControls.TabIndex = 1;
+            panelOptionControls.TabIndex = 0;
             // 
             // iconLabelCopyResultToCB
             // 
             iconLabelCopyResultToCB.AutoSize = true;
             iconLabelCopyResultToCB.Dock = DockStyle.Left;
             iconLabelCopyResultToCB.ForeColor = SystemColors.ControlText;
-            iconLabelCopyResultToCB.Location = new Point(734, 3);
+            iconLabelCopyResultToCB.Location = new Point(606, 3);
             iconLabelCopyResultToCB.Name = "iconLabelCopyResultToCB";
             iconLabelCopyResultToCB.Padding = new Padding(0, 5, 0, 0);
             iconLabelCopyResultToCB.Size = new Size(14, 20);
-            iconLabelCopyResultToCB.TabIndex = 15;
+            iconLabelCopyResultToCB.TabIndex = 0;
             iconLabelCopyResultToCB.Text = "R";
             iconLabelCopyResultToCB.Click += IconLabelCopyResultToCB_Click;
             // 
@@ -123,11 +119,11 @@
             horizontalSplitPanelHtmlEncode.Controls.Add(iconLabelAddMdQtLvl);
             horizontalSplitPanelHtmlEncode.Controls.Add(iconLabelHtmlEncode);
             horizontalSplitPanelHtmlEncode.Dock = DockStyle.Left;
-            horizontalSplitPanelHtmlEncode.Location = new Point(609, 3);
+            horizontalSplitPanelHtmlEncode.Location = new Point(481, 3);
             horizontalSplitPanelHtmlEncode.Name = "horizontalSplitPanelHtmlEncode";
             horizontalSplitPanelHtmlEncode.Padding = new Padding(1);
             horizontalSplitPanelHtmlEncode.Size = new Size(125, 30);
-            horizontalSplitPanelHtmlEncode.TabIndex = 2;
+            horizontalSplitPanelHtmlEncode.TabIndex = 0;
             // 
             // checkBoxAddMdQtLvlAndHtmlEncode
             // 
@@ -137,7 +133,8 @@
             checkBoxAddMdQtLvlAndHtmlEncode.Name = "checkBoxAddMdQtLvlAndHtmlEncode";
             checkBoxAddMdQtLvlAndHtmlEncode.Padding = new Padding(10, 5, 0, 0);
             checkBoxAddMdQtLvlAndHtmlEncode.Size = new Size(95, 28);
-            checkBoxAddMdQtLvlAndHtmlEncode.TabIndex = 15;
+            checkBoxAddMdQtLvlAndHtmlEncode.TabIndex = 0;
+            checkBoxAddMdQtLvlAndHtmlEncode.TabStop = false;
             checkBoxAddMdQtLvlAndHtmlEncode.Text = "and";
             checkBoxAddMdQtLvlAndHtmlEncode.UseVisualStyleBackColor = true;
             // 
@@ -150,7 +147,7 @@
             iconLabelAddMdQtLvl.Name = "iconLabelAddMdQtLvl";
             iconLabelAddMdQtLvl.Padding = new Padding(0, 5, 0, 0);
             iconLabelAddMdQtLvl.Size = new Size(14, 20);
-            iconLabelAddMdQtLvl.TabIndex = 13;
+            iconLabelAddMdQtLvl.TabIndex = 0;
             iconLabelAddMdQtLvl.Text = "R";
             iconLabelAddMdQtLvl.Click += IconLabelAddMdQtLvl_Click;
             // 
@@ -163,7 +160,7 @@
             iconLabelHtmlEncode.Name = "iconLabelHtmlEncode";
             iconLabelHtmlEncode.Padding = new Padding(0, 5, 0, 0);
             iconLabelHtmlEncode.Size = new Size(14, 20);
-            iconLabelHtmlEncode.TabIndex = 12;
+            iconLabelHtmlEncode.TabIndex = 0;
             iconLabelHtmlEncode.Text = "R";
             iconLabelHtmlEncode.Click += IconLabelHtmlEncode_Click;
             // 
@@ -172,11 +169,11 @@
             horizontalSplitPanelResultToCB.Controls.Add(checkBoxResultToCB);
             horizontalSplitPanelResultToCB.Controls.Add(iconLabelResultToCB);
             horizontalSplitPanelResultToCB.Dock = DockStyle.Left;
-            horizontalSplitPanelResultToCB.Location = new Point(487, 3);
+            horizontalSplitPanelResultToCB.Location = new Point(359, 3);
             horizontalSplitPanelResultToCB.Name = "horizontalSplitPanelResultToCB";
             horizontalSplitPanelResultToCB.Padding = new Padding(1);
             horizontalSplitPanelResultToCB.Size = new Size(122, 30);
-            horizontalSplitPanelResultToCB.TabIndex = 12;
+            horizontalSplitPanelResultToCB.TabIndex = 0;
             // 
             // checkBoxResultToCB
             // 
@@ -187,7 +184,7 @@
             checkBoxResultToCB.Name = "checkBoxResultToCB";
             checkBoxResultToCB.Padding = new Padding(5, 5, 0, 0);
             checkBoxResultToCB.Size = new Size(83, 28);
-            checkBoxResultToCB.TabIndex = 7;
+            checkBoxResultToCB.TabIndex = 0;
             checkBoxResultToCB.TabStop = false;
             checkBoxResultToCB.Text = "Results To";
             checkBoxResultToCB.UseVisualStyleBackColor = true;
@@ -201,7 +198,7 @@
             iconLabelResultToCB.Name = "iconLabelResultToCB";
             iconLabelResultToCB.Padding = new Padding(0, 5, 0, 0);
             iconLabelResultToCB.Size = new Size(14, 20);
-            iconLabelResultToCB.TabIndex = 8;
+            iconLabelResultToCB.TabIndex = 0;
             iconLabelResultToCB.Text = "R";
             iconLabelResultToCB.Click += IconLabelResultsToCB_Click;
             // 
@@ -211,11 +208,11 @@
             horizontalSplitPanelHtmlDecode.Controls.Add(iconLabelRmMdQtLvl);
             horizontalSplitPanelHtmlDecode.Controls.Add(iconLabelHtmlDecode);
             horizontalSplitPanelHtmlDecode.Dock = DockStyle.Left;
-            horizontalSplitPanelHtmlDecode.Location = new Point(362, 3);
+            horizontalSplitPanelHtmlDecode.Location = new Point(234, 3);
             horizontalSplitPanelHtmlDecode.Name = "horizontalSplitPanelHtmlDecode";
             horizontalSplitPanelHtmlDecode.Padding = new Padding(1);
             horizontalSplitPanelHtmlDecode.Size = new Size(125, 30);
-            horizontalSplitPanelHtmlDecode.TabIndex = 3;
+            horizontalSplitPanelHtmlDecode.TabIndex = 0;
             // 
             // checkBoxRmMdQtLvlAndHtmlDecode
             // 
@@ -225,7 +222,8 @@
             checkBoxRmMdQtLvlAndHtmlDecode.Name = "checkBoxRmMdQtLvlAndHtmlDecode";
             checkBoxRmMdQtLvlAndHtmlDecode.Padding = new Padding(10, 5, 0, 0);
             checkBoxRmMdQtLvlAndHtmlDecode.Size = new Size(95, 28);
-            checkBoxRmMdQtLvlAndHtmlDecode.TabIndex = 14;
+            checkBoxRmMdQtLvlAndHtmlDecode.TabIndex = 0;
+            checkBoxRmMdQtLvlAndHtmlDecode.TabStop = false;
             checkBoxRmMdQtLvlAndHtmlDecode.Text = "and";
             checkBoxRmMdQtLvlAndHtmlDecode.UseVisualStyleBackColor = true;
             // 
@@ -238,7 +236,7 @@
             iconLabelRmMdQtLvl.Name = "iconLabelRmMdQtLvl";
             iconLabelRmMdQtLvl.Padding = new Padding(0, 5, 0, 0);
             iconLabelRmMdQtLvl.Size = new Size(14, 20);
-            iconLabelRmMdQtLvl.TabIndex = 12;
+            iconLabelRmMdQtLvl.TabIndex = 0;
             iconLabelRmMdQtLvl.Text = "R";
             iconLabelRmMdQtLvl.Click += IconLabelRmMdQtLvl_Click;
             // 
@@ -251,47 +249,9 @@
             iconLabelHtmlDecode.Name = "iconLabelHtmlDecode";
             iconLabelHtmlDecode.Padding = new Padding(0, 5, 0, 0);
             iconLabelHtmlDecode.Size = new Size(14, 20);
-            iconLabelHtmlDecode.TabIndex = 11;
+            iconLabelHtmlDecode.TabIndex = 0;
             iconLabelHtmlDecode.Text = "R";
             iconLabelHtmlDecode.Click += IconLabelHtmlDecode_Click;
-            // 
-            // horizontalSplitPanelSrcFromCB
-            // 
-            horizontalSplitPanelSrcFromCB.Controls.Add(iconLabelSrcFromCB);
-            horizontalSplitPanelSrcFromCB.Controls.Add(checkBoxSrcFromCB);
-            horizontalSplitPanelSrcFromCB.Dock = DockStyle.Left;
-            horizontalSplitPanelSrcFromCB.Location = new Point(234, 3);
-            horizontalSplitPanelSrcFromCB.Name = "horizontalSplitPanelSrcFromCB";
-            horizontalSplitPanelSrcFromCB.Padding = new Padding(1);
-            horizontalSplitPanelSrcFromCB.Size = new Size(128, 30);
-            horizontalSplitPanelSrcFromCB.TabIndex = 11;
-            // 
-            // iconLabelSrcFromCB
-            // 
-            iconLabelSrcFromCB.AutoSize = true;
-            iconLabelSrcFromCB.Dock = DockStyle.Right;
-            iconLabelSrcFromCB.ForeColor = SystemColors.ControlText;
-            iconLabelSrcFromCB.Location = new Point(113, 1);
-            iconLabelSrcFromCB.Name = "iconLabelSrcFromCB";
-            iconLabelSrcFromCB.Padding = new Padding(0, 5, 0, 0);
-            iconLabelSrcFromCB.Size = new Size(14, 20);
-            iconLabelSrcFromCB.TabIndex = 10;
-            iconLabelSrcFromCB.Text = "R";
-            iconLabelSrcFromCB.Click += IconLabelSrcFromCB_Click;
-            // 
-            // checkBoxSrcFromCB
-            // 
-            checkBoxSrcFromCB.AutoSize = true;
-            checkBoxSrcFromCB.Cursor = Cursors.Hand;
-            checkBoxSrcFromCB.Dock = DockStyle.Left;
-            checkBoxSrcFromCB.Location = new Point(1, 1);
-            checkBoxSrcFromCB.Name = "checkBoxSrcFromCB";
-            checkBoxSrcFromCB.Padding = new Padding(5, 5, 0, 0);
-            checkBoxSrcFromCB.Size = new Size(98, 28);
-            checkBoxSrcFromCB.TabIndex = 9;
-            checkBoxSrcFromCB.TabStop = false;
-            checkBoxSrcFromCB.Text = "Source From";
-            checkBoxSrcFromCB.UseVisualStyleBackColor = true;
             // 
             // checkBoxMdTableSrcTextIsTabSeparated
             // 
@@ -301,7 +261,8 @@
             checkBoxMdTableSrcTextIsTabSeparated.Name = "checkBoxMdTableSrcTextIsTabSeparated";
             checkBoxMdTableSrcTextIsTabSeparated.Padding = new Padding(5, 5, 0, 0);
             checkBoxMdTableSrcTextIsTabSeparated.Size = new Size(104, 30);
-            checkBoxMdTableSrcTextIsTabSeparated.TabIndex = 2;
+            checkBoxMdTableSrcTextIsTabSeparated.TabIndex = 0;
+            checkBoxMdTableSrcTextIsTabSeparated.TabStop = false;
             checkBoxMdTableSrcTextIsTabSeparated.Text = "Tab Separated";
             checkBoxMdTableSrcTextIsTabSeparated.UseVisualStyleBackColor = true;
             // 
@@ -313,7 +274,7 @@
             panelMdTableSrcTextSep.Name = "panelMdTableSrcTextSep";
             panelMdTableSrcTextSep.Padding = new Padding(5);
             panelMdTableSrcTextSep.Size = new Size(50, 30);
-            panelMdTableSrcTextSep.TabIndex = 13;
+            panelMdTableSrcTextSep.TabIndex = 0;
             // 
             // textBoxMdTableSrcTextSep
             // 
@@ -321,7 +282,8 @@
             textBoxMdTableSrcTextSep.Location = new Point(5, 5);
             textBoxMdTableSrcTextSep.Name = "textBoxMdTableSrcTextSep";
             textBoxMdTableSrcTextSep.Size = new Size(40, 23);
-            textBoxMdTableSrcTextSep.TabIndex = 1;
+            textBoxMdTableSrcTextSep.TabIndex = 0;
+            textBoxMdTableSrcTextSep.TabStop = false;
             textBoxMdTableSrcTextSep.KeyUp += TextBoxMdTableSrcTextSep_KeyUp;
             // 
             // buttonMdTable
@@ -330,7 +292,8 @@
             buttonMdTable.Location = new Point(5, 3);
             buttonMdTable.Name = "buttonMdTable";
             buttonMdTable.Size = new Size(75, 30);
-            buttonMdTable.TabIndex = 14;
+            buttonMdTable.TabIndex = 0;
+            buttonMdTable.TabStop = false;
             buttonMdTable.Text = "Md Table";
             buttonMdTable.UseVisualStyleBackColor = true;
             buttonMdTable.Click += ButtonMdTable_Click;
@@ -350,26 +313,31 @@
             splitContainerTextAreas.Panel2.Controls.Add(richTextBoxConvertedText);
             splitContainerTextAreas.Size = new Size(1400, 296);
             splitContainerTextAreas.SplitterDistance = 700;
-            splitContainerTextAreas.TabIndex = 1;
+            splitContainerTextAreas.TabIndex = 0;
+            splitContainerTextAreas.TabStop = false;
             // 
             // richTextBoxSrcText
             // 
+            richTextBoxSrcText.AcceptsTab = true;
             richTextBoxSrcText.Dock = DockStyle.Fill;
             richTextBoxSrcText.Font = new Font("Consolas", 9F, FontStyle.Bold);
             richTextBoxSrcText.Location = new Point(0, 0);
             richTextBoxSrcText.Name = "richTextBoxSrcText";
             richTextBoxSrcText.Size = new Size(700, 296);
             richTextBoxSrcText.TabIndex = 0;
+            richTextBoxSrcText.TabStop = false;
             richTextBoxSrcText.Text = "";
             // 
             // richTextBoxConvertedText
             // 
+            richTextBoxConvertedText.AcceptsTab = true;
             richTextBoxConvertedText.Dock = DockStyle.Fill;
             richTextBoxConvertedText.Font = new Font("Consolas", 9F, FontStyle.Bold);
             richTextBoxConvertedText.Location = new Point(0, 0);
             richTextBoxConvertedText.Name = "richTextBoxConvertedText";
             richTextBoxConvertedText.Size = new Size(696, 296);
-            richTextBoxConvertedText.TabIndex = 1;
+            richTextBoxConvertedText.TabIndex = 0;
+            richTextBoxConvertedText.TabStop = false;
             richTextBoxConvertedText.Text = "";
             // 
             // TextToMdUC
@@ -391,8 +359,6 @@
             horizontalSplitPanelResultToCB.PerformLayout();
             horizontalSplitPanelHtmlDecode.ResumeLayout(false);
             horizontalSplitPanelHtmlDecode.PerformLayout();
-            horizontalSplitPanelSrcFromCB.ResumeLayout(false);
-            horizontalSplitPanelSrcFromCB.PerformLayout();
             panelMdTableSrcTextSep.ResumeLayout(false);
             panelMdTableSrcTextSep.PerformLayout();
             splitContainerTextAreas.Panel1.ResumeLayout(false);
@@ -411,11 +377,8 @@
         private Panel panelOptionControls;
         private TextBox textBoxMdTableSrcTextSep;
         private CheckBox checkBoxMdTableSrcTextIsTabSeparated;
-        private CheckBox checkBoxSrcFromCB;
-        private WinForms.Controls.IconLabel iconLabelSrcFromCB;
         private CheckBox checkBoxResultToCB;
         private WinForms.Controls.IconLabel iconLabelResultToCB;
-        private WinForms.Controls.HorizontalSplitPanel horizontalSplitPanelSrcFromCB;
         private WinForms.Controls.HorizontalSplitPanel horizontalSplitPanelResultToCB;
         private Panel panelMdTableSrcTextSep;
         private WinForms.Controls.HorizontalSplitPanel horizontalSplitPanelHtmlEncode;

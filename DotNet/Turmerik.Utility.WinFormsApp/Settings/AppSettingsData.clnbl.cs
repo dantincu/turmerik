@@ -31,7 +31,6 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         {
             bool? MdTableSrcTextIsTabSeparated { get; }
             string MdTableSrcTextTabSeparator { get; }
-            bool? GetSrcTextFromCB { get; }
             bool? SetResultTextToCB { get; }
             bool? HtmlDecodeOnRmMdQtLvl { get; }
             bool? HtmlEncodeOnAddMdQtLvl { get; }
@@ -104,15 +103,13 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             {
                 MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
                 MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
-                GetSrcTextFromCB = src.GetSrcTextFromCB;
                 SetResultTextToCB = src.SetResultTextToCB;
-                HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
+                HtmlDecodeOnRmMdQtLvl = src.HtmlDecodeOnRmMdQtLvl;
                 HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
             }
 
             public bool? MdTableSrcTextIsTabSeparated { get; }
             public string MdTableSrcTextTabSeparator { get; }
-            public bool? GetSrcTextFromCB { get; }
             public bool? SetResultTextToCB { get; }
             public bool? HtmlDecodeOnRmMdQtLvl { get; }
             public bool? HtmlEncodeOnAddMdQtLvl { get; }
@@ -129,15 +126,13 @@ namespace Turmerik.Utility.WinFormsApp.Settings
             {
                 MdTableSrcTextIsTabSeparated = src.MdTableSrcTextIsTabSeparated;
                 MdTableSrcTextTabSeparator = src.MdTableSrcTextTabSeparator;
-                GetSrcTextFromCB = src.GetSrcTextFromCB;
                 SetResultTextToCB = src.SetResultTextToCB;
-                HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
+                HtmlDecodeOnRmMdQtLvl = src.HtmlDecodeOnRmMdQtLvl;
                 HtmlEncodeOnAddMdQtLvl = src.HtmlEncodeOnAddMdQtLvl;
             }
 
             public bool? MdTableSrcTextIsTabSeparated { get; set; }
             public string MdTableSrcTextTabSeparator { get; set; }
-            public bool? GetSrcTextFromCB { get; set; }
             public bool? SetResultTextToCB { get; set; }
             public bool? HtmlDecodeOnRmMdQtLvl { get; set; }
             public bool? HtmlEncodeOnAddMdQtLvl { get; set; }

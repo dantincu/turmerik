@@ -95,7 +95,7 @@
             groupBoxTextToMd.Name = "groupBoxTextToMd";
             groupBoxTextToMd.Padding = new Padding(3, 5, 3, 5);
             groupBoxTextToMd.Size = new Size(1600, 610);
-            groupBoxTextToMd.TabIndex = 2;
+            groupBoxTextToMd.TabIndex = 0;
             groupBoxTextToMd.TabStop = false;
             groupBoxTextToMd.Text = "Text To Md";
             // 
@@ -108,6 +108,7 @@
             textToMdUC.Name = "textToMdUC";
             textToMdUC.Size = new Size(1594, 585);
             textToMdUC.TabIndex = 0;
+            textToMdUC.TabStop = false;
             // 
             // TextUtilsUC
             // 
