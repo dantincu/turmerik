@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
+using Turmerik.Core.Actions;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Logging;
+using Turmerik.Core.UIActions;
 using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
@@ -9,6 +11,7 @@ using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Turmerik.WinForms.Controls.UISettingsDataCore;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -18,9 +21,10 @@ namespace Turmerik.Utility.WinFormsApp
         private readonly IServiceProvider svcProv;
         private readonly IAppLogger logger;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
-        private readonly UISettingsRetriever uISettingsRetriever;
+        private readonly IUISettingsRetriever uISettingsRetriever;
         private readonly IUIThemeRetriever uIThemeRetriever;
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
+        private readonly IWinFormsStatusLabelActionComponent actionComponent;
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
 
         public MainForm()
@@ -32,9 +36,10 @@ namespace Turmerik.Utility.WinFormsApp
                 svcProv = svcProvContnr.Data;
                 logger = svcProv.GetRequiredService<IAppLoggerCreator>().GetSharedAppLogger(GetType());
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
-                uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
+                uISettingsRetriever = svcProv.GetRequiredService<IUISettingsRetriever>();
                 uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 actionComponentCreator = svcProv.GetRequiredService<IWinFormsActionComponentCreator>();
+                actionComponent = actionComponentCreator.StatusLabel(GetType());
                 controlBlinkTimersManagerAdapterFactory = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterFactory>();
             }
 
@@ -71,19 +76,76 @@ namespace Turmerik.Utility.WinFormsApp
                     throw;
                 }
 
-                var uISettings = uISettingsRetriever.RegisterData(
-                    UISettingsDataCore.GetDefaultData().With(
-                        coreMtbl => new UISettingsDataMtbl(coreMtbl)),
-                        data =>
+                var uISettings = uISettingsRetriever.Data;
+
+                svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RegisterData(
+                    controlBlinkTimersManagerAdapterFactory.Create(
+                        new ControlBlinkTimersManagerAdapterOpts
                         {
-                            svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RegisterData(
-                                controlBlinkTimersManagerAdapterFactory.Create(
-                                    new ControlBlinkTimersManagerAdapterOpts
-                                    {
-                                        RefUxControl = refUxControl,
-                                    }));
-                        });
+                            RefUxControl = refUxControl,
+                        }));
+
+                var comboBox = toolStripComboBoxShowHints.ComboBox;
+
+                foreach (var delay in uISettings.ToolTipDelays)
+                {
+                    comboBox.Items.Add(
+                        delay.Name);
+                }
             }
         }
+
+        #region UI Event Handlers
+
+        private void ToolStripComboBoxShowHints_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var delaysCollctn = uISettingsRetriever.Data.ToolTipDelays;
+
+            toolStripComboBoxShowHints.ComboBox.SelectedIndex.ActWith(
+                selIdx =>
+                {
+                    if (selIdx >= 0 && selIdx < delaysCollctn.Count)
+                    {
+                        uISettingsRetriever.Update(mtbl => mtbl.ToolTipDelays.ActWith(collctn =>
+                        {
+                            for (int i = 0; i < collctn.Count; i++)
+                            {
+                                var delay = collctn[i];
+
+                                delay.IsSelected = (selIdx == i).If(
+                                    () => (bool?)true, () => null);
+                            }
+                        }));
+
+                        var delay = delaysCollctn[selIdx];
+                        textUtilsUC.ShowHints(delay);
+                    }
+                });
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            if (svcProvContnr.IsRegistered)
+            {
+                actionComponent.Execute(new WinFormsActionOpts<int>
+                {
+                    Action = () =>
+                    {
+                        int delayIdx = uISettingsRetriever.Data.ToolTipDelays.FirstKvp(
+                            (delay, idx) => delay.IsSelected == true).ActWith(kvp =>
+                            {
+                                if (kvp.Key >= 0)
+                                {
+                                    toolStripComboBoxShowHints.ComboBox.SelectedIndex = kvp.Key;
+                                }
+                            }).Key;
+
+                        return ActionResultH.Create(delayIdx);
+                    }
+                });
+            }
+        }
+
+        #endregion UI Event Handlers
     }
 }

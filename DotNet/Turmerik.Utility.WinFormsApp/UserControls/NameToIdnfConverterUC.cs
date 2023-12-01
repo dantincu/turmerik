@@ -20,6 +20,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.Code.Core;
 using Turmerik.Core.Actions;
 using Turmerik.Core.UIActions;
+using static Turmerik.WinForms.Controls.UISettingsDataCore;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -33,13 +34,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
         private readonly IPropChangedEventAdapterFactory propChangedEventAdapterFactory;
 
-        private readonly UISettingsRetriever uISettingsRetriever;
+        private readonly IUISettingsRetriever uISettingsRetriever;
         private readonly IUIThemeRetriever uIThemeRetriever;
         private readonly IAppSettings appSettings;
 
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
 
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxNameConvertToCB_EvtAdapter;
+
+        private readonly ToolTip toolTip;
 
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
@@ -60,12 +63,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 propChangedEventAdapterFactory = svcProv.GetRequiredService<IPropChangedEventAdapterFactory>();
 
-                uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
+                uISettingsRetriever = svcProv.GetRequiredService<IUISettingsRetriever>();
                 uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 appSettings = svcProv.GetRequiredService<IAppSettings>();
             }
 
             InitializeComponent();
+            toolTip = new ToolTip();
 
             if (svcProvContnr.IsRegistered)
             {
@@ -80,44 +84,16 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     checkBoxNameConvertToCB,
                     (source, e, isChecked) => SetIdnfToCB(isChecked));
 
-                uISettingsRetriever.SubscribeToData(OnUISettingsData);
+                uISettingsData = uISettingsRetriever.Data;
             }
         }
 
-        private void OnUISettingsData(
-            UISettingsDataImmtbl uISettingsData) => actionComponent.Execute(
-                new WinFormsActionOpts<int>
-                {
-                    Action = () =>
-                    {
-                        this.uISettingsData = uISettingsData;
-                        controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-                        uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
-                        {
-                            uiTheme.ApplyBgColor([
-                                this.textBoxName,
-                                this.textBoxIndf,
-                                this.checkBoxNameConvertToCB,
-                            ], uiTheme.InputBackColor);
-
-                            iconLabelNameConvertToCB.ForeColor = uiTheme.InfoIconColor;
-                        });
-
-                        appSettings.Data.ActWith(appSettingsData =>
-                        {
-                            var nameToIdnfSettings = appSettingsData.NameToIdnfConverter;
-
-                            controlsSynchronizer.Execute(false,
-                                (wasEnabled) =>
-                                {
-                                    checkBoxNameConvertToCB.Checked = nameToIdnfSettings.NameConvertToCB ?? false;
-                                });
-                        });
-
-                        return ActionResultH.Create(0);
-                    }
-                });
+        public void ShowHints(
+            ToolTipDelayImmtbl toolTipDelay)
+        {
+            bool isEnabled = toolTip.UpdateToolTip(
+                toolTipDelay);
+        }
 
         private void SetIdnfToCB(bool enabled) => actionComponent.UpdateAppSettings(
                 appSettings, settings => settings.NameToIdnfConverter.ActWith(mtbl =>
@@ -150,6 +126,39 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 idnf ?? textBoxIndf.Text);
 
         #region UI Event Handlers
+
+        private void NameToIdnfConverterUC_Load(object sender, EventArgs e) => actionComponent.Execute(
+            new WinFormsActionOpts<int>
+            {
+                Action = () =>
+                {
+                    controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
+
+                    uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+                    {
+                        uiTheme.ApplyBgColor([
+                            this.textBoxName,
+                            this.textBoxIndf,
+                            this.checkBoxNameConvertToCB,
+                        ], uiTheme.InputBackColor);
+
+                        iconLabelNameConvertToCB.ForeColor = uiTheme.InfoIconColor;
+                    });
+
+                    appSettings.Data.ActWith(appSettingsData =>
+                    {
+                        var nameToIdnfSettings = appSettingsData.NameToIdnfConverter;
+
+                        controlsSynchronizer.Execute(false,
+                            (wasEnabled) =>
+                            {
+                                checkBoxNameConvertToCB.Checked = nameToIdnfSettings.NameConvertToCB ?? false;
+                            });
+                    });
+
+                    return ActionResultH.Create(0);
+                }
+            });
 
         private void IconLabelConvertName_Click(object sender, EventArgs e)
         {

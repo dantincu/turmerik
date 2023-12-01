@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Threading;
+using static Turmerik.WinForms.Controls.UISettingsDataCore;
 
 namespace Turmerik.WinForms.Controls
 {
@@ -48,6 +49,15 @@ namespace Turmerik.WinForms.Controls
             textBox.ReadOnly = readOnly;
 
             return readOnly;
+        }
+
+        public static bool ToggleChecked(
+            this ToolStripMenuItem toolStripMenuItem)
+        {
+            bool @checked = !toolStripMenuItem.Checked;
+            toolStripMenuItem.Checked = @checked;
+
+            return @checked;
         }
 
         public static IPropChangedEventAdapter<bool, EventArgs> CheckedChanged(
@@ -121,5 +131,43 @@ namespace Turmerik.WinForms.Controls
 
             return retVal;
         }
+
+        public static bool UpdateToolTip(
+            this ToolTip toolTip,
+            ToolTipDelayImmtbl toolTipDelay,
+            IEnumerable<ControlToolTipTuple> controlTuplesNmrbl = null)
+        {
+            bool isEnabled = toolTipDelay.Disabled != true;
+
+            if (isEnabled)
+            {
+                toolTip.ShowAlways = toolTipDelay.ShowAlways == true;
+                toolTip.IsBalloon = toolTipDelay.IsBalloon == true;
+                toolTip.InitialDelay = toolTipDelay.Delay ?? 1;
+            }
+
+            if (controlTuplesNmrbl != null)
+            {
+                foreach (var tuple in controlTuplesNmrbl)
+                {
+                    string? toolTipText = isEnabled switch
+                    {
+                        true => tuple.ToolTip,
+                        false => null
+                    };
+
+                    toolTip.SetToolTip(
+                        tuple.Control,
+                        toolTipText);
+                }
+            }
+
+            return isEnabled;
+        }
+
+        public static ControlToolTipTuple ToolTipTuple(
+            this Control control,
+            string toolTipText) => new ControlToolTipTuple(
+                control, toolTipText);
     }
 }

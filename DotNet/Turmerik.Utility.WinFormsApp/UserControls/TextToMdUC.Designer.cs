@@ -372,6 +372,7 @@
             richTextBoxSrcText.TabIndex = 0;
             richTextBoxSrcText.TabStop = false;
             richTextBoxSrcText.Text = "";
+            richTextBoxSrcText.KeyUp += RichTextBoxSrcText_KeyUp;
             // 
             // richTextBoxConvertedText
             // 
@@ -384,6 +385,7 @@
             richTextBoxConvertedText.TabIndex = 0;
             richTextBoxConvertedText.TabStop = false;
             richTextBoxConvertedText.Text = "";
+            richTextBoxConvertedText.KeyUp += RichTextBoxConvertedText_KeyUp;
             // 
             // TextToMdUC
             // 
@@ -392,6 +394,7 @@
             Controls.Add(splitContainerMain);
             Name = "TextToMdUC";
             Size = new Size(1400, 600);
+            Load += TextToMdUC_Load;
             splitContainerMain.Panel1.ResumeLayout(false);
             splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();

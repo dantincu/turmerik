@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Utility.WinFormsApp.Settings.UI;
 
 namespace Turmerik.Utility.WinFormsApp.Settings
 {
     public interface IAppSettingsData
     {
+        IUISettingsData GetUISettings();
+
         AppSettingsData.IFetchWebResource GetFetchWebResource();
         AppSettingsData.INameToIdnfConverter GetNameToIdnfConverter();
         AppSettingsData.ITextToMd GetTextToMd();

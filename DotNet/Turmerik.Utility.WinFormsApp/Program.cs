@@ -48,7 +48,7 @@ namespace Turmerik.Utility.WinFormsApp
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();
-                    services.AddSingleton<UISettingsRetriever>();
+                    services.AddSingleton<IUISettingsRetriever, UISettingsRetriever>();
                     services.AddSingleton<IUIThemeRetriever, UIThemeRetriever>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterFactory>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterContainer>();

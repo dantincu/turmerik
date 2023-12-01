@@ -19,6 +19,9 @@ namespace Turmerik.Core.LocalDeviceEnv
         event Action<TImmtbl> DataSaved;
 
         TImmtbl Update(RefAction<TMtblSrlzbl> updateAction);
+        TImmtbl Update(Func<TMtblSrlzbl, TMtblSrlzbl> updateAction);
+        TImmtbl Update(Action<TMtblSrlzbl> updateAction);
+
         TImmtbl ResetToDefault();
         void Delete();
     }
@@ -67,6 +70,18 @@ namespace Turmerik.Core.LocalDeviceEnv
 
             return data;
         }
+
+        public TImmtbl Update(Func<TMtblSrlzbl, TMtblSrlzbl> updateAction) => Update(
+            (ref TMtblSrlzbl srlzbl) =>
+            {
+                srlzbl = updateAction(srlzbl);
+            });
+
+        public TImmtbl Update(Action<TMtblSrlzbl> updateAction) => Update(
+            (ref TMtblSrlzbl srlzbl) =>
+            {
+                updateAction(srlzbl);
+            });
 
         public TImmtbl ResetToDefault() => Update((ref TMtblSrlzbl data) =>
         {

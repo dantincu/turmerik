@@ -14,7 +14,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         public ControlBlinkTimersManagerAdapter(
             IControlBlinkTimersManager timersManager,
-            UISettingsRetriever uISettings,
+            IUISettingsRetriever uISettings,
             IUIThemeRetriever uIThemeRetriever,
             ControlBlinkTimersManagerAdapterOpts opts)
         {

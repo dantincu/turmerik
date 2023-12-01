@@ -21,6 +21,8 @@ using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Utility;
 using Turmerik.Core.Text;
 using Turmerik.Html;
+using static Turmerik.WinForms.Controls.UISettingsDataCore;
+using System.Collections.ObjectModel;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -34,7 +36,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
         private readonly IPropChangedEventAdapterFactory propChangedEventAdapterFactory;
 
-        private readonly UISettingsRetriever uISettingsRetriever;
+        private readonly IUISettingsRetriever uISettingsRetriever;
         private readonly IUIThemeRetriever uIThemeRetriever;
         private readonly IAppSettings appSettings;
 
@@ -42,6 +44,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxTitleFetchToCB_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxMdLinkFetchToCB_EvtAdapter;
+
+        private readonly ToolTip toolTip;
+        private readonly ReadOnlyCollection<ControlToolTipTuple> toolTipTuples;
 
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
@@ -62,12 +67,26 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 propChangedEventAdapterFactory = svcProv.GetRequiredService<IPropChangedEventAdapterFactory>();
 
-                uISettingsRetriever = svcProv.GetRequiredService<UISettingsRetriever>();
+                uISettingsRetriever = svcProv.GetRequiredService<IUISettingsRetriever>();
                 uIThemeRetriever = svcProv.GetRequiredService<IUIThemeRetriever>();
                 appSettings = svcProv.GetRequiredService<IAppSettings>();
             }
 
             InitializeComponent();
+            toolTip = new ToolTip();
+
+            toolTipTuples = iconLabelResourceUrl.ToolTipTuple(
+                    "Click here to fetch the resource from this url").Arr(
+                iconLabelResxTitleToCB.ToolTipTuple(
+                    "Click here to copy this title to clipboard"),
+                iconLabelResxMdLinkToCB.ToolTipTuple(
+                    "Click here to copy this markdown link to clipboard"),
+                iconLabelResxTitleFetchToCB.ToolTipTuple(string.Concat(
+                    "Click here to enable or disable automatic copying of the resource title",
+                    "to clipboard after the resource has been fetched")),
+                iconLabelResxTitleFetchToCB.ToolTipTuple(string.Concat(
+                    "Click here to enable or disable automatic copying of the resource markdown link",
+                    "to clipboard after the resource has been fetched"))).RdnlC();
 
             if (svcProvContnr.IsRegistered)
             {
@@ -94,50 +113,19 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     beforeHandler: (source, e, isChecked, evtWasEnabled) => isChecked.If(
                         () => checkBoxResxTitleFetchToCB.Checked = false));
 
-                uISettingsRetriever.SubscribeToData(OnUISettingsData);
+                uISettingsData = uISettingsRetriever.Data;
             }
         }
 
         public IconLabel RefUxControl => iconLabelResourceUrl;
 
-        private void OnUISettingsData(
-            UISettingsDataImmtbl uISettingsData) => actionComponent.Execute(
-                new WinFormsActionOpts<int>
-                {
-                    Action = () =>
-                    {
-                        this.uISettingsData = uISettingsData;
-                        controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-                        uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
-                        {
-                            uiTheme.ApplyBgColor([
-                                this.textBoxResourceUrl,
-                                this.textBoxResourceTitle,
-                                this.textBoxResourceMdLink,
-                                this.checkBoxResxMdLinkFetchToCB,
-                                this.checkBoxResxTitleFetchToCB
-                            ], uiTheme.InputBackColor);
-
-                            iconLabelResxTitleFetchToCB.ForeColor = uiTheme.InfoIconColor;
-                            iconLabelResxMdLinkFetchToCB.ForeColor = uiTheme.InfoIconColor;
-                        });
-
-                        appSettings.Data.ActWith(appSettingsData =>
-                        {
-                            var webResSettingsData = appSettingsData.FetchWebResource;
-
-                            controlsSynchronizer.Execute(false,
-                                (wasEnabled) =>
-                                {
-                                    checkBoxResxTitleFetchToCB.Checked = webResSettingsData.ResxTitleFetchToCB ?? false;
-                                    checkBoxResxMdLinkFetchToCB.Checked = webResSettingsData.ResxMdLinkFetchToCB ?? false;
-                                });
-                        });
-
-                        return ActionResultH.Create(0);
-                    }
-                });
+        public void ShowHints(
+            ToolTipDelayImmtbl toolTipDelay)
+        {
+            bool isEnabled = toolTip.UpdateToolTip(
+                toolTipDelay,
+                toolTipTuples);
+        }
 
         private async Task FetchResourceAsync()
         {
@@ -237,6 +225,43 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         #region UI Event Handlers
+
+        private void FetchWebResourceUC_Load(object sender, EventArgs e) => actionComponent.Execute(
+            new WinFormsActionOpts<int>
+            {
+                Action = () =>
+                {
+                    controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
+
+                    uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
+                    {
+                        uiTheme.ApplyBgColor([
+                            this.textBoxResourceUrl,
+                            this.textBoxResourceTitle,
+                            this.textBoxResourceMdLink,
+                            this.checkBoxResxMdLinkFetchToCB,
+                            this.checkBoxResxTitleFetchToCB
+                        ], uiTheme.InputBackColor);
+
+                        iconLabelResxTitleFetchToCB.ForeColor = uiTheme.InfoIconColor;
+                        iconLabelResxMdLinkFetchToCB.ForeColor = uiTheme.InfoIconColor;
+                    });
+
+                    appSettings.Data.ActWith(appSettingsData =>
+                    {
+                        var webResSettingsData = appSettingsData.FetchWebResource;
+
+                        controlsSynchronizer.Execute(false,
+                            (wasEnabled) =>
+                            {
+                                checkBoxResxTitleFetchToCB.Checked = webResSettingsData.ResxTitleFetchToCB ?? false;
+                                checkBoxResxMdLinkFetchToCB.Checked = webResSettingsData.ResxMdLinkFetchToCB ?? false;
+                            });
+                    });
+
+                    return ActionResultH.Create(0);
+                }
+            });
 
         private void IconLabelResourceUrl_Click(object sender, EventArgs e)
         {

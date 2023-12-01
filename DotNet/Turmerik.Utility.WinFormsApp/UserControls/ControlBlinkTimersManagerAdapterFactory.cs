@@ -11,12 +11,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     public class ControlBlinkTimersManagerAdapterFactory
     {
         private IControlBlinkTimersManager timersManager;
-        private UISettingsRetriever uISettings;
+        private IUISettingsRetriever uISettings;
         private IUIThemeRetriever uITheme;
 
         public ControlBlinkTimersManagerAdapterFactory(
             IControlBlinkTimersManager timersManager,
-            UISettingsRetriever uISettings,
+            IUISettingsRetriever uISettings,
             IUIThemeRetriever uITheme)
         {
             this.timersManager = timersManager ?? throw new ArgumentNullException(nameof(timersManager));

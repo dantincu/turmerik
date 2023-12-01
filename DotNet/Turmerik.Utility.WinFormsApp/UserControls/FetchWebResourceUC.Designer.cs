@@ -295,6 +295,7 @@
             Controls.Add(splitContainerMain);
             Name = "FetchWebResourceUC";
             Size = new Size(1600, 71);
+            Load += FetchWebResourceUC_Load;
             splitContainerMain.Panel1.ResumeLayout(false);
             splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();

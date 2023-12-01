@@ -100,6 +100,35 @@ namespace Turmerik.TestWinFormsApp
                     23)), 3F);
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Create the ToolTip and associate with the Form container.
+            ToolTip toolTip1 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip1.AutoPopDelay = 0;
+            toolTip1.InitialDelay = 1;
+            toolTip1.ReshowDelay = 0;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip1.ShowAlways = true;
+            toolTip1.IsBalloon = true;
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip1.SetToolTip(this.button1, "My button1");
+
+            ToolTip toolTip2 = new ToolTip();
+
+            // Set up the delays for the ToolTip.
+            toolTip2.AutoPopDelay = 0;
+            toolTip2.InitialDelay = 1000;
+            toolTip2.ReshowDelay = 0;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip2.ShowAlways = true;
+            toolTip2.IsBalloon = true;
+            // Set up the ToolTip text for the Button and Checkbox.
+            toolTip2.SetToolTip(this.label1, "My label1");
+
+        }
+
         #endregion UI Event Handlers
     }
 }

@@ -43,11 +43,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             {
                 Action = () =>
                 {
-                    appSettings.Update((ref AppSettingsDataMtbl mtbl) =>
-                    {
-                        updateAction(mtbl);
-                    });
-
+                    appSettings.Update(updateAction);
                     return ActionResultH.Create(0);
                 }
             });

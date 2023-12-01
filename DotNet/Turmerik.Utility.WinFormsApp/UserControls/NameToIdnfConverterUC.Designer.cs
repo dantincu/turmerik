@@ -206,6 +206,7 @@
             Controls.Add(splitContainerMain);
             Name = "NameToIdnfConverterUC";
             Size = new Size(1600, 48);
+            Load += NameToIdnfConverterUC_Load;
             panelIdnf.ResumeLayout(false);
             panelIdnf.PerformLayout();
             panelName.ResumeLayout(false);

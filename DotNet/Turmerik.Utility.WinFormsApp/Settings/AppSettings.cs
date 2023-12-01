@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextSerialization;
+using Turmerik.WinForms.Controls;
 
 namespace Turmerik.Utility.WinFormsApp.Settings
 {
@@ -23,6 +25,8 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         protected override AppSettingsDataMtbl GetDefaultConfigCore(
             ) => new AppSettingsDataMtbl
             {
+                UISettings = UISettingsDataCore.GetDefaultData().With(
+                        coreMtbl => new UI.UISettingsDataMtbl(coreMtbl)),
                 FetchWebResource = new AppSettingsData.FetchWebResourceMtbl
                 {
                     MdLinkTemplate = "[{0}]({1})"

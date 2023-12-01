@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
+using static Turmerik.WinForms.Controls.UISettingsDataCore;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -37,5 +38,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public Control RefUxControl => fetchWebResourceUC.RefUxControl;
+
+        public void ShowHints(
+            ToolTipDelayImmtbl toolTipDelay)
+        {
+            fetchWebResourceUC.ShowHints(toolTipDelay);
+            nameToIdnfConverterUC.ShowHints(toolTipDelay);
+            textToMdUC.ShowHints(toolTipDelay);
+        }
     }
 }
