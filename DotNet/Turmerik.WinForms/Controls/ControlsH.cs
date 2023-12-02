@@ -134,8 +134,7 @@ namespace Turmerik.WinForms.Controls
 
         public static bool UpdateToolTip(
             this ToolTip toolTip,
-            ToolTipDelayImmtbl toolTipDelay,
-            IEnumerable<ControlToolTipTuple> controlTuplesNmrbl = null)
+            ToolTipDelayImmtbl toolTipDelay)
         {
             bool isEnabled = toolTipDelay.Disabled != true;
 
@@ -146,28 +145,21 @@ namespace Turmerik.WinForms.Controls
                 toolTip.InitialDelay = toolTipDelay.Delay ?? 1;
             }
 
-            if (controlTuplesNmrbl != null)
-            {
-                foreach (var tuple in controlTuplesNmrbl)
-                {
-                    string? toolTipText = isEnabled switch
-                    {
-                        true => tuple.ToolTip,
-                        false => null
-                    };
-
-                    toolTip.SetToolTip(
-                        tuple.Control,
-                        toolTipText);
-                }
-            }
-
             return isEnabled;
         }
 
-        public static ControlToolTipTuple ToolTipTuple(
+        public static ToolTipHint Hint(
+            this ToolTipHintOpts opts) => new ToolTipHint(opts);
+
+        public static ToolTipHintsGroup HintsGroup(
+            this ToolTipHintsGroupOpts opts) => new ToolTipHintsGroup(opts);
+
+        public static ToolTipHintOpts HintOpts(
             this Control control,
-            string toolTipText) => new ControlToolTipTuple(
-                control, toolTipText);
+            Func<string> toolTipTextFactory) => new ToolTipHintOpts
+            {
+                Control = control,
+                ToolTipTextFactory = toolTipTextFactory
+            };
     }
 }

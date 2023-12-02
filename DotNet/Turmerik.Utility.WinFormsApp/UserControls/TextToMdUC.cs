@@ -53,8 +53,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
-
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
+        private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
+        private ToolTipHintsGroup toolTipHintsGroup;
 
         public TextToMdUC()
         {
@@ -132,13 +133,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
-        public void ShowHints(
-            ToolTipDelayImmtbl toolTipDelay)
-        {
-            bool isEnabled = toolTip.UpdateToolTip(
-                toolTipDelay);
-        }
-
         private void ApplyHorizontalSplitPanelsSettings(
             HorizontalSplitPanel[] panelsArr)
         {
@@ -214,6 +208,16 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             controlBlinkTimersManagerAdapter,
             iconLabelCopyResultToCB,
             richTextBoxConvertedText.Text);
+
+        private ToolTipHintsGroupOpts GetToolTipHintsGroupOpts()
+        {
+            var optsList = new List<ToolTipHintOpts>();
+
+            return new ToolTipHintsGroupOpts
+            {
+                HintOpts = optsList,
+            };
+        }
 
         private void SrcTextToMdTable() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -348,6 +352,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                                 checkBoxInsertSpacesBetweenTokens.Checked = textToMdSettings.InsertSpacesBetweenTokens ?? true;
                             });
                     });
+
+                    toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().Data;
+
+                    toolTipHintsOrchestrator.HintGroups.Add(
+                        toolTipHintsGroup = GetToolTipHintsGroupOpts().HintsGroup());
 
                     return ActionResultH.Create(0);
                 }

@@ -47,6 +47,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
+        private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
+        private ToolTipHintsGroup toolTipHintsGroup;
 
         public NameToIdnfConverterUC()
         {
@@ -88,13 +90,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
-        public void ShowHints(
-            ToolTipDelayImmtbl toolTipDelay)
-        {
-            bool isEnabled = toolTip.UpdateToolTip(
-                toolTipDelay);
-        }
-
         private void SetIdnfToCB(bool enabled) => actionComponent.UpdateAppSettings(
                 appSettings, settings => settings.NameToIdnfConverter.ActWith(mtbl =>
                 {
@@ -124,6 +119,16 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 controlBlinkTimersManagerAdapter,
                 iconLabelIdnfToCB,
                 idnf ?? textBoxIndf.Text);
+
+        private ToolTipHintsGroupOpts GetToolTipHintsGroupOpts()
+        {
+            var optsList = new List<ToolTipHintOpts>();
+
+            return new ToolTipHintsGroupOpts
+            {
+                HintOpts = optsList,
+            };
+        }
 
         #region UI Event Handlers
 
@@ -155,6 +160,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                                 checkBoxNameConvertToCB.Checked = nameToIdnfSettings.NameConvertToCB ?? false;
                             });
                     });
+
+                    toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().Data;
+
+                    toolTipHintsOrchestrator.HintGroups.Add(
+                        toolTipHintsGroup = GetToolTipHintsGroupOpts().HintsGroup());
 
                     return ActionResultH.Create(0);
                 }

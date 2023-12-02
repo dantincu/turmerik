@@ -10,8 +10,6 @@ using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static Turmerik.WinForms.Controls.UISettingsDataCore;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -26,6 +24,8 @@ namespace Turmerik.Utility.WinFormsApp
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
+
+        private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
 
         public MainForm()
         {
@@ -85,6 +85,20 @@ namespace Turmerik.Utility.WinFormsApp
                             RefUxControl = refUxControl,
                         }));
 
+                toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().RegisterData(
+                    svcProv.GetRequiredService<IToolTipHintsOrchestratorFactory>().Create(
+                        new ToolTipHintsOrchestratorOpts
+                        {
+                            ToolTip = new ToolTip()
+                        }));
+
+                var toolTipDelays = uISettings.ToolTipDelays;
+
+                var selectedToolTipDelay = toolTipDelays.FirstOrDefault(
+                    delay => delay.IsSelected == true) ?? toolTipDelays.First();
+
+                toolTipHintsOrchestrator.ToolTipDelay = selectedToolTipDelay;
+
                 var comboBox = toolStripComboBoxShowHints.ComboBox;
 
                 foreach (var delay in uISettings.ToolTipDelays)
@@ -118,7 +132,7 @@ namespace Turmerik.Utility.WinFormsApp
                         }));
 
                         var delay = delaysCollctn[selIdx];
-                        textUtilsUC.ShowHints(delay);
+                        toolTipHintsOrchestrator.ToolTipDelay = delay;
                     }
                 });
         }
@@ -140,6 +154,7 @@ namespace Turmerik.Utility.WinFormsApp
                                 }
                             }).Key;
 
+                        toolTipHintsOrchestrator.UpdateToolTipsText(new ());
                         return ActionResultH.Create(delayIdx);
                     }
                 });

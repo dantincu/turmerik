@@ -45,12 +45,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxTitleFetchToCB_EvtAdapter;
         private readonly IPropChangedEventAdapter<bool, EventArgs> checkBoxResxMdLinkFetchToCB_EvtAdapter;
 
-        private readonly ToolTip toolTip;
-        private readonly ReadOnlyCollection<ControlToolTipTuple> toolTipTuples;
-
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
+        private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
+        private ToolTipHintsGroup toolTipHintsGroup;
 
         public FetchWebResourceUC()
         {
@@ -73,20 +72,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
 
             InitializeComponent();
-            toolTip = new ToolTip();
-
-            toolTipTuples = iconLabelResourceUrl.ToolTipTuple(
-                    "Click here to fetch the resource from this url").Arr(
-                iconLabelResxTitleToCB.ToolTipTuple(
-                    "Click here to copy this title to clipboard"),
-                iconLabelResxMdLinkToCB.ToolTipTuple(
-                    "Click here to copy this markdown link to clipboard"),
-                iconLabelResxTitleFetchToCB.ToolTipTuple(string.Concat(
-                    "Click here to enable or disable automatic copying of the resource title",
-                    "to clipboard after the resource has been fetched")),
-                iconLabelResxTitleFetchToCB.ToolTipTuple(string.Concat(
-                    "Click here to enable or disable automatic copying of the resource markdown link",
-                    "to clipboard after the resource has been fetched"))).RdnlC();
 
             if (svcProvContnr.IsRegistered)
             {
@@ -103,13 +88,21 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 this.checkBoxResxTitleFetchToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxResxTitleFetchToCB,
-                    (source, e, isChecked) => SetResxTitleFetchToCB(isChecked),
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new ());
+                        SetResxTitleFetchToCB(isChecked);
+                    },
                     beforeHandler: (source, e, isChecked, evtWasEnabled) => isChecked.If(
                         () => checkBoxResxMdLinkFetchToCB.Checked = false));
 
                 this.checkBoxResxMdLinkFetchToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxResxMdLinkFetchToCB,
-                    (source, e, isChecked) => SetResxMdLinkFetchToCB(isChecked),
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetResxMdLinkFetchToCB(isChecked);
+                    },
                     beforeHandler: (source, e, isChecked, evtWasEnabled) => isChecked.If(
                         () => checkBoxResxTitleFetchToCB.Checked = false));
 
@@ -118,14 +111,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public IconLabel RefUxControl => iconLabelResourceUrl;
-
-        public void ShowHints(
-            ToolTipDelayImmtbl toolTipDelay)
-        {
-            bool isEnabled = toolTip.UpdateToolTip(
-                toolTipDelay,
-                toolTipTuples);
-        }
 
         private async Task FetchResourceAsync()
         {
@@ -224,6 +209,70 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             textBoxResourceUrl.Enabled = enable;
         }
 
+        private ToolTipHintsGroupOpts GetToolTipHintsGroupOpts()
+        {
+            var optsList = new List<ToolTipHintOpts>();
+
+            Func<string> resxTitleFetchToCBHintFactory = () => string.Concat(
+                "Click here to ",
+                checkBoxResxTitleFetchToCB.Checked ? "dis" : "",
+                $"activate the automatic copying of the ",
+                "resource's title to clipboard after it has been fetched");
+
+            Func<string> resxMdLinkFetchToCBHintFactory = () => string.Concat(
+                "Click here to ",
+                checkBoxResxMdLinkFetchToCB.Checked ? "dis" : "",
+                $"activate the automatic copying of the ",
+                "resource's markdown link to clipboard after it has been fetched");
+
+            optsList.AddRange(iconLabelResourceUrl.HintOpts(
+                    () => "Click here to fetch the resource title from this url").Arr(
+                iconLabelResxTitleToCB.HintOpts(
+                    () => "Click here to copy the resource's title to clipboard"),
+                iconLabelResxMdLinkToCB.HintOpts(
+                    () => "Click here to copy the resource's markdown link to clipboard"),
+                checkBoxResxTitleFetchToCB.HintOpts(
+                    resxTitleFetchToCBHintFactory),
+                iconLabelResxTitleFetchToCB.HintOpts(
+                    resxTitleFetchToCBHintFactory),
+                checkBoxResxMdLinkFetchToCB.HintOpts(
+                    resxMdLinkFetchToCBHintFactory),
+                iconLabelResxMdLinkFetchToCB.HintOpts(
+                    resxMdLinkFetchToCBHintFactory),
+                textBoxResourceUrl.HintOpts(() => string.Join("\n",
+                    "Type or paste here the url of the resource which title you want to get.",
+                    "Then press the ENTER key to fetch the url title.",
+                    this.checkBoxResxMdLinkFetchToCB.Checked switch
+                    {
+                        true => "Press the CTRL + SHIFT + ENTER keys to disactivate the automatic copying",
+                        false => "Press the CTRL + ENTER keys to activate the automatic copying",
+                    },
+                    "of the resource markdown link to clipboard and then fetch the resource title")),
+                textBoxResourceTitle.HintOpts(() => string.Join("\n",
+                    "The resource's title will show up here after it has been fetched.",
+                    this.checkBoxResxTitleFetchToCB.Checked switch
+                    {
+                        true => "Press the CTRL + ENTER keys to disactivate the automatic copying",
+                        false => "Press the ENTER key to activate the automatic copying"
+                    },
+                    "of the resource's title after it has been fetched"
+                    )),
+                textBoxResourceMdLink.HintOpts(() => string.Join("\n",
+                    "The resource's markdown link will show up here after it has been fetched.",
+                    this.checkBoxResxTitleFetchToCB.Checked switch
+                    {
+                        true => "Press the CTRL + ENTER keys to disactivate the automatic copying",
+                        false => "Press the ENTER key to activate the automatic copying"
+                    },
+                    "of the resource's markdown link after it has been fetched"
+                    ))));
+
+            return new ToolTipHintsGroupOpts
+            {
+                HintOpts = optsList,
+            };
+        }
+
         #region UI Event Handlers
 
         private void FetchWebResourceUC_Load(object sender, EventArgs e) => actionComponent.Execute(
@@ -258,6 +307,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                                 checkBoxResxMdLinkFetchToCB.Checked = webResSettingsData.ResxMdLinkFetchToCB ?? false;
                             });
                     });
+
+                    toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().Data;
+
+                    toolTipHintsOrchestrator.HintGroups.Add(
+                        toolTipHintsGroup = GetToolTipHintsGroupOpts().HintsGroup());
 
                     return ActionResultH.Create(0);
                 }

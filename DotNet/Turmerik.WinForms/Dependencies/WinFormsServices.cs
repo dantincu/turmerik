@@ -19,6 +19,7 @@ namespace Turmerik.WinForms.Dependencies
             services.AddSingleton<IWinFormsActionComponentCreator, WinFormsActionComponentCreator>();
             services.AddSingleton<IControlBlinkTimersManager, ControlBlinkTimersManager>();
             services.AddSingleton<IPropChangedEventAdapterFactory, PropChangedEventAdapterFactory>();
+            services.AddSingleton<IToolTipHintsOrchestratorFactory, ToolTipHintsOrchestratorFactory>();
 
             return services;
         }

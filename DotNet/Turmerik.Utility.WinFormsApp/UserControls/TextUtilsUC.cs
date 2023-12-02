@@ -38,13 +38,5 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public Control RefUxControl => fetchWebResourceUC.RefUxControl;
-
-        public void ShowHints(
-            ToolTipDelayImmtbl toolTipDelay)
-        {
-            fetchWebResourceUC.ShowHints(toolTipDelay);
-            nameToIdnfConverterUC.ShowHints(toolTipDelay);
-            textToMdUC.ShowHints(toolTipDelay);
-        }
     }
 }
