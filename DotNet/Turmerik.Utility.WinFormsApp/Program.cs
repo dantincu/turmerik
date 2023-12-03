@@ -9,7 +9,6 @@ using Turmerik.Logging;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
-using Turmerik.Utility.WinFormsApp.Services;
 using Turmerik.WinForms.Controls;
 using Turmerik.Core.Helpers;
 using Turmerik.WinForms.Actions;
@@ -17,6 +16,8 @@ using Turmerik.Core.Actions;
 using Serilog.Core;
 using Turmerik.Utility.WinFormsApp.UserControls.Forms;
 using System.Windows.Forms;
+using Turmerik.NetCore.Md;
+using Turmerik.NetCore.Dependencies;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -160,7 +161,6 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<IUIThemeRetriever, UIThemeRetriever>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterFactory>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterContainer>();
-                    services.AddSingleton<TextToMdService>();
                     services.AddSingleton<ToolTipHintsOrchestratorRetriever>();
                 }));
 

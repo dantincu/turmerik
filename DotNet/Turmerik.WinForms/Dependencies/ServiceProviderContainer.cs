@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Dependencies;
+using Turmerik.NetCore.Dependencies;
 using Turmerik.WinForms.Actions;
 
 namespace Turmerik.WinForms.Dependencies
@@ -19,6 +20,7 @@ namespace Turmerik.WinForms.Dependencies
             IServiceCollection services)
         {
             TrmrkCoreServices.RegisterAll(services);
+            TrmrkNetCoreServices.RegisterAll(services);
             WinFormsServices.RegisterAll(services);
         }
 

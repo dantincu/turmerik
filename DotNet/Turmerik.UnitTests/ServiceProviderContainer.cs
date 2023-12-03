@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Dependencies;
+using Turmerik.NetCore.Dependencies;
 
 namespace Turmerik.UnitTests
 {
@@ -21,6 +22,7 @@ namespace Turmerik.UnitTests
             IServiceCollection services)
         {
             TrmrkCoreServices.RegisterAll(services);
+            TrmrkNetCoreServices.RegisterAll(services);
         }
     }
 }

@@ -30,6 +30,7 @@
         {
             splitContainerMain = new SplitContainer();
             panelOptionControls = new Panel();
+            iconLabelEncodeAllHtml = new WinForms.Controls.IconLabel();
             checkBoxInsertSpacesBetweenTokens = new CheckBox();
             iconLabelCopyResultToCB = new WinForms.Controls.IconLabel();
             horizontalSplitPanelHtmlEncode = new WinForms.Controls.HorizontalSplitPanel();
@@ -89,6 +90,7 @@
             // panelOptionControls
             // 
             panelOptionControls.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelOptionControls.Controls.Add(iconLabelEncodeAllHtml);
             panelOptionControls.Controls.Add(checkBoxInsertSpacesBetweenTokens);
             panelOptionControls.Controls.Add(iconLabelCopyResultToCB);
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlEncode);
@@ -105,6 +107,19 @@
             panelOptionControls.Padding = new Padding(5, 3, 0, 0);
             panelOptionControls.Size = new Size(1400, 33);
             panelOptionControls.TabIndex = 0;
+            // 
+            // iconLabelEncodeAllHtml
+            // 
+            iconLabelEncodeAllHtml.AutoSize = true;
+            iconLabelEncodeAllHtml.Dock = DockStyle.Left;
+            iconLabelEncodeAllHtml.ForeColor = SystemColors.ControlText;
+            iconLabelEncodeAllHtml.Location = new Point(1112, 3);
+            iconLabelEncodeAllHtml.Name = "iconLabelEncodeAllHtml";
+            iconLabelEncodeAllHtml.Padding = new Padding(0, 5, 0, 0);
+            iconLabelEncodeAllHtml.Size = new Size(14, 20);
+            iconLabelEncodeAllHtml.TabIndex = 4;
+            iconLabelEncodeAllHtml.Text = "R";
+            iconLabelEncodeAllHtml.Click += IconLabelEncodeAllHtml_Click;
             // 
             // checkBoxInsertSpacesBetweenTokens
             // 
@@ -442,5 +457,6 @@
         private CheckBox checkBoxMdTableFirstLineIsHeader;
         private CheckBox checkBoxMdTableSurroundRowWithCellSep;
         private CheckBox checkBoxInsertSpacesBetweenTokens;
+        private WinForms.Controls.IconLabel iconLabelEncodeAllHtml;
     }
 }

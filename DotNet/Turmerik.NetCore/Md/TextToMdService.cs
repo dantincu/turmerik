@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 
-namespace Turmerik.Utility.WinFormsApp.Services
+namespace Turmerik.NetCore.Md
 {
     public class TextToMdService
     {
+        public const string MD_QUOTED_LINE_START_STR = ">";
         public const string MD_TABLE_CELL_DELIM_STR = "|";
         public const string MD_TABLE_HEADER_ROW_DELIM_CELL_STR = "--";
 
         public string SrcTextToMdTable(
-            SrcTextToMdTableOpts opts)
+            TextToMdTableOpts opts)
         {
             string outputText;
             string inputText = opts.InputText;
@@ -49,7 +52,7 @@ namespace Turmerik.Utility.WinFormsApp.Services
                                 idx => MD_TABLE_HEADER_ROW_DELIM_CELL_STR).ToArray().JoinStr(
                                 mdTableCellDelimStr);
 
-                            outputLines = [outputLines[0], headerDelimLine, ..outputLines[1..^0]];
+                            outputLines = [outputLines[0], headerDelimLine, .. outputLines[1..^0]];
                         }
 
                         if (opts.SurroundLineWithCellSep)
@@ -70,23 +73,143 @@ namespace Turmerik.Utility.WinFormsApp.Services
             return outputText;
         }
 
+        public bool TryParseAsMdQuotedLine(
+            string line,
+            out string mdQtStartStr,
+            out string restOfLine)
+        {
+            bool isMdQuotedLine = line.Contains(MD_QUOTED_LINE_START_STR);
+
+            if (isMdQuotedLine)
+            {
+                Func<char, int, bool> mdQuotedLineStartCharPredicate = (
+                    chr, idx) => char.IsWhiteSpace(chr) || line.Matches(
+                        idx, out _, MD_QUOTED_LINE_START_STR);
+
+                isMdQuotedLine = line.All(
+                    mdQuotedLineStartCharPredicate);
+
+                if (isMdQuotedLine)
+                {
+                    mdQtStartStr = line;
+                    restOfLine = null;
+                }
+                else
+                {
+                    (mdQtStartStr, restOfLine) = line.SplitStr(
+                        (lineStr, lineLen) => lineStr.FirstKvp(
+                            (chr, idx) => !mdQuotedLineStartCharPredicate(chr, idx)).Key);
+
+                    isMdQuotedLine = restOfLine != null && !string.IsNullOrEmpty(mdQtStartStr);
+
+                    if (!isMdQuotedLine)
+                    {
+                        restOfLine = line;
+                        mdQtStartStr = null;
+                    }
+                }
+            }
+            else
+            {
+                mdQtStartStr = null;
+                restOfLine = line;
+            }
+
+            return isMdQuotedLine;
+        }
+
+        public bool TryRemoveMdQuotedLineLevel(
+            string line,
+            out string outputLine,
+            bool insertSpacesBetweenTokens)
+        {
+            bool isMdQuotedLine = TryParseAsMdQuotedLine(line,
+                out var mdQtStartStr,
+                out var restOfLine);
+
+            if (isMdQuotedLine)
+            {
+                int idxOfToken = mdQtStartStr.LastIndexOf(
+                    MD_QUOTED_LINE_START_STR);
+
+                mdQtStartStr = mdQtStartStr.Substring(
+                    0, idxOfToken);
+
+                if (insertSpacesBetweenTokens)
+                {
+                    if (idxOfToken >= 0 && mdQtStartStr.FirstOrDefault() == ' ' && !mdQtStartStr.StartsWith(
+                        $" {MD_QUOTED_LINE_START_STR}"))
+                    {
+                        mdQtStartStr = mdQtStartStr.Substring(1);
+                    }
+                }
+
+                outputLine = mdQtStartStr + restOfLine;
+            }
+            else
+            {
+                outputLine = line;
+            }
+
+            return isMdQuotedLine;
+        }
+
+        public string AddMdQuotedLineLevel(
+            string line,
+            bool insertSpacesBetweenTokens)
+        {
+            string toPrependStr = MD_QUOTED_LINE_START_STR;
+
+            if (insertSpacesBetweenTokens)
+            {
+                toPrependStr = ' ' + toPrependStr;
+
+                if (line.FirstOrDefault() != ' ')
+                {
+                    toPrependStr += ' ';
+                }
+            }
+
+            line = toPrependStr + line;
+            return line;
+        }
+
         public string ResultTextRmMdQtLvl(
             string inputText,
             bool insertSpacesBetweenTokens) => ConvertText(
-                inputText, (line, idx) => throw new NotImplementedException());
+                inputText, (line, idx) =>
+                {
+                    TryRemoveMdQuotedLineLevel(
+                        line, out string outputLine,
+                        insertSpacesBetweenTokens);
+
+                    return outputLine;
+                });
 
         public string ResultTextDecodeHtml(
             string inputText) => ConvertText(
-                inputText, (line, idx) => throw new NotImplementedException());
+                inputText, (line, idx) => HttpUtility.HtmlDecode(line));
 
         public string SrcTextAddMdQtLvl(
             string inputText,
             bool insertSpacesBetweenTokens) => ConvertText(
-                inputText, (line, idx) => throw new NotImplementedException());
+                inputText, (line, idx) => AddMdQuotedLineLevel(
+                    line, insertSpacesBetweenTokens));
 
         public string SrcTextEncodeHtml(
             string inputText) => ConvertText(
-                inputText, (line, idx) => throw new NotImplementedException());
+                inputText, (line, idx) =>
+                {
+                    TryParseAsMdQuotedLine(line,
+                        out var mdQtStartStr,
+                        out var restOfLine);
+
+                    restOfLine = HttpUtility.HtmlEncode(
+                        restOfLine);
+
+                    line = mdQtStartStr + restOfLine;
+                    return line;
+                });
 
         private string ConvertText(
             string inputText,

@@ -20,8 +20,10 @@ using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Text;
-using Turmerik.Utility.WinFormsApp.Services;
 using static Turmerik.WinForms.Controls.UISettingsDataCore;
+using Turmerik.Md;
+using Turmerik.NetCore.Md;
+using System.Web;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -96,6 +98,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 iconLabelAddMdQtLvl.Text = MatUIIconUnicodesH.AudioAndVideo.FAST_FORWARD;
                 iconLabelHtmlEncode.Text = MatUIIconUnicodesH.CommonActions.CODE;
+                iconLabelEncodeAllHtml.Text = MatUIIconUnicodesH.CommonActions.CODE;
 
                 checkBoxMdTblFirstLineIsHeader_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxMdTableFirstLineIsHeader,
@@ -234,7 +237,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 }
 
                 string outputText = service.SrcTextToMdTable(
-                    new SrcTextToMdTableOpts
+                    new TextToMdTableOpts
                     {
                         InputText = richTextBoxSrcText.Text,
                         Separator = separator,
@@ -259,6 +262,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     richTextBoxConvertedText.Text,
                     checkBoxInsertSpacesBetweenTokens.Checked);
 
+                if (checkBoxRmMdQtLvlAndHtmlDecode.Checked)
+                {
+                    outputText = service.ResultTextDecodeHtml(outputText);
+                }
+
                 richTextBoxSrcText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
@@ -269,7 +277,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                string outputText = service.ResultTextDecodeHtml(
+                string outputText = HttpUtility.HtmlDecode(
                     richTextBoxConvertedText.Text);
 
                 richTextBoxSrcText.Text = outputText;
@@ -282,8 +290,15 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                string outputText = service.SrcTextAddMdQtLvl(
-                    richTextBoxSrcText.Text,
+                string outputText = richTextBoxSrcText.Text;
+
+                if (checkBoxAddMdQtLvlAndHtmlEncode.Checked)
+                {
+                    outputText = service.SrcTextEncodeHtml(outputText);
+                }
+
+                outputText = service.SrcTextAddMdQtLvl(
+                    outputText,
                     checkBoxInsertSpacesBetweenTokens.Checked);
 
                 richTextBoxConvertedText.Text = outputText;
@@ -291,13 +306,23 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
 
-        private void SrcTextEncodeHtml() => actionComponent.Execute(new WinFormsActionOpts<string>
+        private void SrcTextEncodeHtml(bool encodeFull = false) => actionComponent.Execute(new WinFormsActionOpts<string>
         {
             OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
             Action = () =>
             {
-                string outputText = service.SrcTextEncodeHtml(
-                    richTextBoxSrcText.Text);
+                string outputText;
+
+                if (encodeFull)
+                {
+                    outputText = HttpUtility.HtmlEncode(
+                        richTextBoxSrcText.Text);
+                }
+                else
+                {
+                    outputText = service.SrcTextEncodeHtml(
+                        richTextBoxSrcText.Text);
+                }
 
                 richTextBoxConvertedText.Text = outputText;
                 return ActionResultH.Create(outputText);
@@ -408,6 +433,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void IconLabelHtmlEncode_Click(object sender, EventArgs e)
         {
             SrcTextEncodeHtml();
+        }
+
+        private void IconLabelEncodeAllHtml_Click(object sender, EventArgs e)
+        {
+            SrcTextEncodeHtml(true);
         }
 
         private void RichTextBoxSrcText_KeyUp(object sender, KeyEventArgs e)

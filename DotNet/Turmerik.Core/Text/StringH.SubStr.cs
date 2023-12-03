@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.Text
@@ -18,7 +19,7 @@ namespace Turmerik.Core.Text
 
             int idx = splitter(inputStr, inputLen);
 
-            if (idx >= 0)
+            if (idx >= 0 && idx < inputStr.Length)
             {
                 string firstStr = inputStr.Substring(0, idx);
                 string secondStr = inputStr.Substring(idx);
@@ -139,5 +140,55 @@ namespace Turmerik.Core.Text
 
             return startsWith;
         }
+
+        public static bool Matches(
+            this string inputStr,
+            int startIdx,
+            out int relIdx,
+            Func<char, int, bool> partialMatchPredicate,
+            Func<char, int, bool> fullMatchPredicate = null)
+        {
+            fullMatchPredicate = fullMatchPredicate.FirstNotNull(
+                (chr, idx) => true);
+
+            int strLen = inputStr.Length;
+            int idx = startIdx;
+            relIdx = 0;
+
+            bool matches = false;
+
+            while (idx < strLen)
+            {
+                char chr = inputStr[idx];
+
+                if (!(matches = partialMatchPredicate(
+                    chr, relIdx)))
+                {
+                    break;
+                }
+
+                if (fullMatchPredicate(chr, relIdx))
+                {
+                    break;
+                }
+
+                matches = false;
+                idx++;
+                relIdx++;
+            }
+
+            return matches;
+        }
+
+        public static bool Matches(
+            this string inputStr,
+            int startIdx,
+            out int relIdx,
+            string str) => Matches(
+                inputStr,
+                startIdx,
+                out relIdx,
+                (chr, idx) => idx < str.Length && chr == str[idx],
+                (chr, idx) => idx + 1 == str.Length);
     }
 }

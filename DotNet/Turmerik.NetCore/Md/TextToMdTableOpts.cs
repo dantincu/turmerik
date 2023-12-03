@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Turmerik.Utility.WinFormsApp.Services
+namespace Turmerik.NetCore.Md
 {
-    public class SrcTextToMdTableOpts
+    public class TextToMdTableOpts
     {
         public string InputText { get; set; }
         public string Separator { get; set; }
