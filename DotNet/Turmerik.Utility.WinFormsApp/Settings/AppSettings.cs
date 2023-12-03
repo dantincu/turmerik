@@ -25,8 +25,6 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         protected override AppSettingsDataMtbl GetDefaultConfigCore(
             ) => new AppSettingsDataMtbl
             {
-                UISettings = UISettingsDataCore.GetDefaultData().With(
-                        coreMtbl => new UI.UISettingsDataMtbl(coreMtbl)),
                 FetchWebResource = new AppSettingsData.FetchWebResourceMtbl
                 {
                     MdLinkTemplate = "[{0}]({1})"

@@ -99,6 +99,7 @@ namespace Turmerik.WinForms.Controls
                     Delay = 1000,
                     IsBalloon = true,
                     ShowAlways = true,
+                    IsSelected = true,
                 }.Lst(
                 new ToolTipDelayMtbl
                 {

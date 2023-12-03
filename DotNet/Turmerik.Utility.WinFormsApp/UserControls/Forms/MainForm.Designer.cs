@@ -37,6 +37,7 @@
             helpToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItemShowHints = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
+            startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
@@ -99,7 +100,7 @@
             // 
             // helpToolStripMenuItem
             // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItemShowHints });
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItemShowHints, startAppRecoveryToolToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             helpToolStripMenuItem.Size = new Size(44, 20);
             helpToolStripMenuItem.Text = "&Help";
@@ -108,7 +109,7 @@
             // 
             toolStripMenuItemShowHints.DropDownItems.AddRange(new ToolStripItem[] { toolStripComboBoxShowHints });
             toolStripMenuItemShowHints.Name = "toolStripMenuItemShowHints";
-            toolStripMenuItemShowHints.Size = new Size(134, 22);
+            toolStripMenuItemShowHints.Size = new Size(199, 22);
             toolStripMenuItemShowHints.Text = "Show &Hints";
             // 
             // toolStripComboBoxShowHints
@@ -117,6 +118,13 @@
             toolStripComboBoxShowHints.Name = "toolStripComboBoxShowHints";
             toolStripComboBoxShowHints.Size = new Size(100, 23);
             toolStripComboBoxShowHints.SelectedIndexChanged += ToolStripComboBoxShowHints_SelectedIndexChanged;
+            // 
+            // startAppRecoveryToolToolStripMenuItem
+            // 
+            startAppRecoveryToolToolStripMenuItem.Name = "startAppRecoveryToolToolStripMenuItem";
+            startAppRecoveryToolToolStripMenuItem.Size = new Size(199, 22);
+            startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
+            startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -152,5 +160,6 @@
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItemShowHints;
         private ToolStripComboBox toolStripComboBoxShowHints;
+        private ToolStripMenuItem startAppRecoveryToolToolStripMenuItem;
     }
 }

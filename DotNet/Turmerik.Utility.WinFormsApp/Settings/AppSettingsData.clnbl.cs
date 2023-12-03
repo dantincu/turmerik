@@ -9,8 +9,6 @@ namespace Turmerik.Utility.WinFormsApp.Settings
 {
     public interface IAppSettingsData
     {
-        IUISettingsData GetUISettings();
-
         AppSettingsData.IFetchWebResource GetFetchWebResource();
         AppSettingsData.INameToIdnfConverter GetNameToIdnfConverter();
         AppSettingsData.ITextToMd GetTextToMd();

@@ -42,7 +42,7 @@
             // 
             // buttonRestartApp
             // 
-            buttonRestartApp.Location = new Point(163, 10);
+            buttonRestartApp.Location = new Point(177, 10);
             buttonRestartApp.Name = "buttonRestartApp";
             buttonRestartApp.Size = new Size(85, 23);
             buttonRestartApp.TabIndex = 1;
@@ -52,7 +52,7 @@
             // 
             // buttonExit
             // 
-            buttonExit.Location = new Point(254, 10);
+            buttonExit.Location = new Point(268, 10);
             buttonExit.Name = "buttonExit";
             buttonExit.Size = new Size(42, 23);
             buttonExit.TabIndex = 2;

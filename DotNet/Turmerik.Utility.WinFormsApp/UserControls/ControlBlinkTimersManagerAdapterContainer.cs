@@ -7,7 +7,7 @@ using Turmerik.Core.Dependencies;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
-    public class ControlBlinkTimersManagerAdapterContainer : SingletonRegistrarBase<ControlBlinkTimersManagerAdapter, ControlBlinkTimersManagerAdapter>
+    public class ControlBlinkTimersManagerAdapterContainer : SingleInstanceRetrieverBase<ControlBlinkTimersManagerAdapter, ControlBlinkTimersManagerAdapter>
     {
         protected override ControlBlinkTimersManagerAdapter Convert(
             ControlBlinkTimersManagerAdapter inputData) => inputData;

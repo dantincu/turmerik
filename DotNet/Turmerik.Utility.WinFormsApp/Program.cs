@@ -16,6 +16,7 @@ using Turmerik.WinForms.Actions;
 using Turmerik.Core.Actions;
 using Serilog.Core;
 using Turmerik.Utility.WinFormsApp.UserControls.Forms;
+using System.Windows.Forms;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -55,14 +56,27 @@ namespace Turmerik.Utility.WinFormsApp
         private static DialogResult TryRunApp(
             IWinFormsMsgBoxActionComponent actionComponent)
         {
-            var appCrashDialogResult = DialogResult.None;
+            var dialogResult = DialogResult.None;
 
             actionComponent.Execute(new WinFormsActionOpts<int>
             {
                 ActionName = "Run Application",
                 Action = () =>
                 {
-                    Application.Run(new MainForm());
+                    Action appRecoveryToolRequested = () =>
+                    {
+                        dialogResult = DialogResult.Yes;
+                    };
+
+                    using (var mainForm = new MainForm())
+                    {
+                        mainForm.AppRecoveryToolRequested += appRecoveryToolRequested;
+                        Application.Run(mainForm);
+
+                        mainForm.AppRecoveryToolRequested -= appRecoveryToolRequested;
+                        mainForm.UnregisterContainers();
+                    }
+
                     return ActionResultH.Create(0);
                 },
                 OnUnhandledError = exc =>
@@ -70,7 +84,7 @@ namespace Turmerik.Utility.WinFormsApp
                     actionComponent.Logger.Fatal(
                         exc, "An unhandled error ocurred while running the app");
 
-                    appCrashDialogResult = MessageBox.Show(string.Join('\n',
+                    dialogResult = MessageBox.Show(string.Join('\n',
                         $"An unhandled error ocurred while running the app: {exc.Message}.\n",
                         "Do you want to want to launch the app recovery tool or just quit the app?"),
                         "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error);
@@ -79,7 +93,7 @@ namespace Turmerik.Utility.WinFormsApp
                 }
             });
 
-            return appCrashDialogResult;
+            return dialogResult;
         }
 
         private static DialogResult TryRunAppRecoveryTool(

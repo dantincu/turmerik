@@ -7,7 +7,7 @@ using Turmerik.Core.Dependencies;
 
 namespace Turmerik.WinForms.Controls
 {
-    public class ToolTipHintsOrchestratorRetriever : SingletonRegistrarBase<ToolTipHintsOrchestrator, ToolTipHintsOrchestrator>
+    public class ToolTipHintsOrchestratorRetriever : SingleInstanceRetrieverBase<ToolTipHintsOrchestrator, ToolTipHintsOrchestrator>
     {
         protected override ToolTipHintsOrchestrator Convert(
             ToolTipHintsOrchestrator inputData) => inputData;

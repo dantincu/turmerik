@@ -96,7 +96,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             ActionName = nameof(IconLabelInfoMainAction_Click),
             Action = () =>
             {
-                foreach (var type in new Type[] { })
+                foreach (var type in new Type[]
+                {
+                    typeof(Settings.AppSettings),
+                    typeof(Settings.UI.UISettingsRetriever),
+                    typeof(Settings.UI.UIThemeRetriever)
+                })
                 {
                     var dirPath = appEnv.GetTypePath(AppEnvDir.Data, type);
                     Directory.Delete(dirPath, true);

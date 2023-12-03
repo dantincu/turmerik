@@ -27,6 +27,8 @@ namespace Turmerik.Utility.WinFormsApp
 
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
 
+        private Action appRecoveryToolRequested;
+
         public MainForm()
         {
             svcProvContnr = ServiceProviderContainer.Instance.Value;
@@ -78,14 +80,14 @@ namespace Turmerik.Utility.WinFormsApp
 
                 var uISettings = uISettingsRetriever.Data;
 
-                svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RegisterData(
+                svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().AssignData(
                     controlBlinkTimersManagerAdapterFactory.Create(
                         new ControlBlinkTimersManagerAdapterOpts
                         {
                             RefUxControl = refUxControl,
                         }));
 
-                toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().RegisterData(
+                toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().AssignData(
                     svcProv.GetRequiredService<IToolTipHintsOrchestratorFactory>().Create(
                         new ToolTipHintsOrchestratorOpts
                         {
@@ -107,6 +109,18 @@ namespace Turmerik.Utility.WinFormsApp
                         delay.Name);
                 }
             }
+        }
+
+        public event Action AppRecoveryToolRequested
+        {
+            add => appRecoveryToolRequested += value;
+            remove => appRecoveryToolRequested -= value;
+        }
+
+        public void UnregisterContainers()
+        {
+            svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RemoveData();
+            svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().RemoveData();
         }
 
         #region UI Event Handlers
@@ -154,8 +168,24 @@ namespace Turmerik.Utility.WinFormsApp
                                 }
                             }).Key;
 
-                        toolTipHintsOrchestrator.UpdateToolTipsText(new ());
+                        toolTipHintsOrchestrator.UpdateToolTipsText(new());
                         return ActionResultH.Create(delayIdx);
+                    }
+                });
+            }
+        }
+
+        private void StartAppRecoveryToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (svcProvContnr.IsRegistered)
+            {
+                actionComponent.Execute(new WinFormsActionOpts<int>
+                {
+                    Action = () =>
+                    {
+                        appRecoveryToolRequested?.Invoke();
+                        Close();
+                        return ActionResultH.Create(0);
                     }
                 });
             }

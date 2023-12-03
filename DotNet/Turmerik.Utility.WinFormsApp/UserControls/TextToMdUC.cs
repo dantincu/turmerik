@@ -306,7 +306,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         #region UI Event Handlers
 
-        private void TextToMdUC_Load(object sender, EventArgs e) => actionComponent.Execute(
+        private void TextToMdUC_Load(object sender, EventArgs e) => actionComponent?.Execute(
             new WinFormsActionOpts<int>
             {
                 Action = () =>
