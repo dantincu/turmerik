@@ -98,7 +98,7 @@ namespace Turmerik.WinForms.Controls
                     Name = "Show",
                     Delay = 1000,
                     IsBalloon = true,
-                    ShowAlways = true,
+                    // ShowAlways = true,
                     IsSelected = true,
                 }.Lst(
                 new ToolTipDelayMtbl
@@ -106,14 +106,14 @@ namespace Turmerik.WinForms.Controls
                     Name = "Show Instantly",
                     Delay = 1,
                     IsBalloon = true,
-                    ShowAlways = true,
+                    // ShowAlways = true,
                 },
                 new ToolTipDelayMtbl
                 {
                     Name = "Show Delayed",
                     Delay = 2000,
                     IsBalloon = true,
-                    ShowAlways = true,
+                    // ShowAlways = true,
                 },
                 new ToolTipDelayMtbl
                 {

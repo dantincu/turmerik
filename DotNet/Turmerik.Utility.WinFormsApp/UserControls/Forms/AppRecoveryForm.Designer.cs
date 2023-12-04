@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AppRecoveryForm));
             clearAppDatauc1 = new ClearAppDataUC();
             buttonRestartApp = new Button();
             buttonExit = new Button();
@@ -68,6 +69,7 @@
             Controls.Add(buttonExit);
             Controls.Add(buttonRestartApp);
             Controls.Add(clearAppDatauc1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AppRecoveryForm";
             Text = "App Recovery";
             Load += AppRecoveryForm_Load;

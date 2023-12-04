@@ -110,7 +110,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     });
 
                 checkBoxResultsToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
-                    checkBoxResultToCB,
+                    checkBoxResultTextToCB,
                     (source, e, isChecked) =>
                     {
                         toolTipHintsGroup?.UpdateToolTipsText(new());
@@ -236,7 +236,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void CopyResultTextToCB() => actionComponent.CopyTextToClipboard(
             controlBlinkTimersManagerAdapter,
             iconLabelCopyResultTextToCB,
-            richTextBoxConvertedText.Text);
+            richTextBoxResultText.Text);
 
         private void CopySrcTextToCB() => actionComponent.CopyTextToClipboard(
             controlBlinkTimersManagerAdapter,
@@ -260,7 +260,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 "(or adding a quotation level if the source text is already a markdown quoted text block)");
 
             Func<string> resultToCBHintTextFactory = () => string.Concat(
-                "Click here to ", checkBoxResultToCB.Checked ? "dis" : null,
+                "Click here to ", checkBoxResultTextToCB.Checked ? "dis" : null,
                 "activate the automatic copying of the converted text to clipboard");
 
             optsList.AddRange(buttonMdTable.HintOpts(
@@ -303,7 +303,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     () => string.Join("\n",
                         "Click here to convert the source text to a markdown quoted text block",
                         "(or add a quotation level if the source text is already a markdown quoted text block)")),
-                checkBoxResultToCB.HintOpts(
+                checkBoxResultTextToCB.HintOpts(
                     resultToCBHintTextFactory),
                 iconLabelResultToCB.HintOpts(
                     resultToCBHintTextFactory),
@@ -320,7 +320,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     () => "Click here to html encode the whole source text (including any markdown quoted text line start tokens, which they will also be encoded)"),
                 richTextBoxSrcText.HintOpts(
                     () => "Type or paste here the source text you want to convert to markdown text"),
-                richTextBoxConvertedText.HintOpts(
+                richTextBoxResultText.HintOpts(
                     () => "The markdown text will show up here after it has been converted from the source text")));
 
             return new ToolTipHintsGroupOpts
@@ -353,12 +353,16 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         InsertSpacesBetweenTokens = checkBoxInsertSpacesBetweenTokens.Checked,
                     });
 
-                richTextBoxConvertedText.Text = outputText;
+                richTextBoxResultText.Text = outputText;
                 return ActionResultH.Create(outputText);
             },
             OnUnhandledError = exc => WinFormsMessageTuple.WithOnly(
                 exc.Message, exc.Message),
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultTextToCB()));
+        }).ActWith(result => result.IsSuccess.ActIf(() => 
+        {
+            checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
+            richTextBoxResultText.Focus();
+        }));
 
         private void ResultTextRmMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -366,7 +370,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             Action = () =>
             {
                 string outputText = service.ResultTextRmMdQtLvl(
-                    richTextBoxConvertedText.Text,
+                    richTextBoxResultText.Text,
                     checkBoxInsertSpacesBetweenTokens.Checked);
 
                 if (checkBoxRmMdQtLvlAndHtmlDecode.Checked)
@@ -377,7 +381,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 richTextBoxSrcText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopySrcTextToCB()));
+        }).ActWith(result => result.IsSuccess.ActIf(() =>
+        {
+            checkBoxResultTextToCB.Checked.ActIf(() => CopySrcTextToCB());
+            richTextBoxSrcText.Focus();
+        }));
 
         private void ResultTextDecodeHtml() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -385,12 +393,16 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             Action = () =>
             {
                 string outputText = HttpUtility.HtmlDecode(
-                    richTextBoxConvertedText.Text);
+                    richTextBoxResultText.Text);
 
                 richTextBoxSrcText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopySrcTextToCB()));
+        }).ActWith(result => result.IsSuccess.ActIf(() =>
+        {
+            checkBoxResultTextToCB.Checked.ActIf(() => CopySrcTextToCB());
+            richTextBoxSrcText.Focus();
+        }));
 
         private void SrcTextAddMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -408,10 +420,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     outputText,
                     checkBoxInsertSpacesBetweenTokens.Checked);
 
-                richTextBoxConvertedText.Text = outputText;
+                richTextBoxResultText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultTextToCB()));
+        }).ActWith(result => result.IsSuccess.ActIf(() =>
+        {
+            checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
+            richTextBoxResultText.Focus();
+        }));
 
         private void SrcTextEncodeHtml(bool encodeFull = false) => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -431,10 +447,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         richTextBoxSrcText.Text);
                 }
 
-                richTextBoxConvertedText.Text = outputText;
+                richTextBoxResultText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultTextToCB()));
+        }).ActWith(result => result.IsSuccess.ActIf(() =>
+        {
+            checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
+            richTextBoxResultText.Focus();
+        }));
 
         #region UI Event Handlers
 
@@ -454,7 +474,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                             this.checkBoxRmMdQtLvlAndHtmlDecode,
                             this.checkBoxAddMdQtLvlAndHtmlEncode,
                             this.richTextBoxSrcText,
-                            this.richTextBoxConvertedText,
+                            this.richTextBoxResultText,
                         ], uiTheme.InputBackColor);
 
                         iconLabelResultToCB.ForeColor = uiTheme.InfoIconColor;
@@ -476,7 +496,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                             (wasEnabled) =>
                             {
                                 checkBoxMdTableFirstLineIsHeader.Checked = textToMdSettings.MdTblFirstLineIsHeader ?? true;
-                                checkBoxResultToCB.Checked = textToMdSettings.SetResultTextToCB ?? false;
+                                checkBoxResultTextToCB.Checked = textToMdSettings.SetResultTextToCB ?? false;
                                 checkBoxMdTableSrcTextIsTabSeparated.Checked = mdTableSrcTextIsTabSeparated;
                                 checkBoxMdTableSurroundRowWithCellSep.Checked = textToMdSettings.MdTableSurroundRowWithCellSep ?? true;
                                 checkBoxAddMdQtLvlAndHtmlEncode.Checked = textToMdSettings.HtmlEncodeOnAddMdQtLvl ?? true;
@@ -514,17 +534,19 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void IconLabelResultsToCB_Click(object sender, EventArgs e)
         {
-            checkBoxResultToCB.ToggleChecked();
+            checkBoxResultTextToCB.ToggleChecked();
         }
 
         private void IconLabelCopyResultToCB_Click(object sender, EventArgs e)
         {
             CopyResultTextToCB();
+            richTextBoxResultText.Focus();
         }
 
         private void IconLabelCopySrcTextToClipboard_Click(object sender, EventArgs e)
         {
             CopySrcTextToCB();
+            richTextBoxSrcText.Focus();
         }
 
         private void IconLabelRmMdQtLvl_Click(object sender, EventArgs e)
@@ -554,15 +576,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void RichTextBoxSrcText_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
-            {
-
-            }
         }
 
         private void RichTextBoxConvertedText_KeyUp(object sender, KeyEventArgs e)
         {
-
         }
 
         #endregion UI Event Handlers

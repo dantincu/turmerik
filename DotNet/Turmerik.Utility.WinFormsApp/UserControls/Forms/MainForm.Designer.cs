@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             statusStripMain = new StatusStrip();
             toolStripStatusLabelMain = new ToolStripStatusLabel();
             tabControlMain = new TabControl();
@@ -135,6 +136,7 @@
             Controls.Add(statusStripMain);
             Controls.Add(menuStrip1);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Turmerik Utility";
