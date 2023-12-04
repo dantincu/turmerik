@@ -159,6 +159,7 @@ namespace Turmerik.NetCore.Md
             bool insertSpacesBetweenTokens)
         {
             string toPrependStr = MD_QUOTED_LINE_START_STR;
+            string toAppendStr = null;
 
             if (insertSpacesBetweenTokens)
             {
@@ -168,9 +169,21 @@ namespace Turmerik.NetCore.Md
                 {
                     toPrependStr += ' ';
                 }
+
+                if (!line.EndsWith("  "))
+                {
+                    if (line.LastOrDefault() != ' ')
+                    {
+                        toAppendStr = "  ";
+                    }
+                    else
+                    {
+                        toAppendStr = " ";
+                    }
+                }
             }
 
-            line = toPrependStr + line;
+            line = toPrependStr + line + toAppendStr;
             return line;
         }
 
