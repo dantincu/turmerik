@@ -38,7 +38,8 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
-            IDirsPairCreatorFactory dirsPairCreatorFactory)
+            IDirsPairCreatorFactory dirsPairCreatorFactory,
+            IHtmlDocTitleRetriever htmlDocTitleRetriever)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -61,6 +62,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 
             dirsPairCreator = dirsPairCreatorFactory.Creator(
                 notesConfig.GetNoteDirPairs());
+
+            this.htmlDocTitleRetriever = htmlDocTitleRetriever ?? throw new ArgumentNullException(
+                nameof(htmlDocTitleRetriever));
         }
 
         public async Task RunAsync(string[] rawArgs)
