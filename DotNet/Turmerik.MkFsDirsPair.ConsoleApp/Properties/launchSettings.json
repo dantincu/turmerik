@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.MkFsDirsPair.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":nn :o :url:https://youtube.com/@ronadelmundo7050?si=r6fe3RHdp1zlqXWO"
+      "commandLineArgs": ":nn :o asdfasdf"
     }
   }
 }

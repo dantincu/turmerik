@@ -75,9 +75,17 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             var opts = GetDirsPairOpts(args);
             var dirsPair = await dirsPairCreator.CreateDirsPairAsync(opts);
 
+            var shortNameDir = dirsPair.First();
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("Short dir name: ");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(shortNameDir.Name);
+            Console.ResetColor();
+
             if (opts.OpenMdFile)
             {
-                var shortNameDir = dirsPair.First();
                 var file = shortNameDir.FolderFiles?.SingleOrDefault();
 
                 if (file != null)

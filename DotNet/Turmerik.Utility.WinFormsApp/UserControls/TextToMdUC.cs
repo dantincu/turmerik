@@ -374,7 +374,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 buttonMdTable, result);
 
             checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
-            richTextBoxResultText.Focus();
         }));
 
         private void ResultTextRmMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
@@ -400,7 +399,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 iconLabelRmMdQtLvl, result);
 
             checkBoxResultTextToCB.Checked.ActIf(() => CopySrcTextToCB());
-            richTextBoxSrcText.Focus();
         }));
 
         private void ResultTextDecodeHtml() => actionComponent.Execute(new WinFormsActionOpts<string>
@@ -420,7 +418,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 iconLabelHtmlDecode, result);
 
             checkBoxResultTextToCB.Checked.ActIf(() => CopySrcTextToCB());
-            richTextBoxSrcText.Focus();
         }));
 
         private void SrcTextAddMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
@@ -448,7 +445,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 iconLabelAddMdQtLvl, result);
 
             checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
-            richTextBoxResultText.Focus();
         }));
 
         private void SrcTextEncodeHtml(bool encodeFull = false) => actionComponent.Execute(new WinFormsActionOpts<string>
@@ -479,7 +475,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 result);
 
             checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
-            richTextBoxResultText.Focus();
         }));
 
         #region UI Event Handlers
@@ -566,13 +561,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void IconLabelCopyResultToCB_Click(object sender, EventArgs e)
         {
             CopyResultTextToCB();
-            richTextBoxResultText.Focus();
         }
 
         private void IconLabelCopySrcTextToClipboard_Click(object sender, EventArgs e)
         {
             CopySrcTextToCB();
-            richTextBoxSrcText.Focus();
         }
 
         private void IconLabelRmMdQtLvl_Click(object sender, EventArgs e)
