@@ -259,7 +259,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     )),
                 textBoxResourceMdLink.HintOpts(() => string.Join("\n",
                     "The resource's markdown link will show up here after it has been fetched.",
-                    this.checkBoxResxTitleFetchToCB.Checked switch
+                    this.checkBoxResxMdLinkFetchToCB.Checked switch
                     {
                         true => "Press the CTRL + ENTER keys to disactivate the automatic copying",
                         false => "Press the ENTER key to activate the automatic copying"

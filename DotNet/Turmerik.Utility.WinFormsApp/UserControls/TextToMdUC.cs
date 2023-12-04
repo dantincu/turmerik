@@ -91,7 +91,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     ).StatusLabel(GetType());
 
                 iconLabelResultToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
-                iconLabelCopyResultToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+                iconLabelCopyResultTextToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
+                iconLabelCopySrcTextToCB.Text = MatUIIconUnicodesH.TextFormatting.CONTENT_PASTE;
 
                 iconLabelRmMdQtLvl.Text = MatUIIconUnicodesH.AudioAndVideo.FAST_REWIND;
                 iconLabelHtmlDecode.Text = MatUIIconUnicodesH.CommonActions.CODE_OFF;
@@ -102,35 +103,60 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 checkBoxMdTblFirstLineIsHeader_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxMdTableFirstLineIsHeader,
-                    (source, e, isChecked) => SetMdTblFirstLineIsHeader(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetMdTblFirstLineIsHeader(isChecked);
+                    });
 
                 checkBoxResultsToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxResultToCB,
-                    (source, e, isChecked) => SetResultToCB(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetResultTextToCB(isChecked);
+                    });
 
                 checkBoxMdTblSrcTxtIsTabSep_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxMdTableSrcTextIsTabSeparated,
                     (source, e, isChecked) =>
                     {
                         textBoxMdTableSrcTextSep.ReadOnly = checkBoxMdTableSrcTextIsTabSeparated.Checked;
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
                         SetMdTblSrcTxtSep(isChecked);
                     });
 
                 checkBoxMdTableSurroundRowWithCellSep_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxMdTableSurroundRowWithCellSep,
-                    (source, e, isChecked) => SetMdTableSurroundRowWithCellSep(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetMdTableSurroundRowWithCellSep(isChecked);
+                    });
 
                 checkBoxRmMdQtLvlAndHtmlDecode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxRmMdQtLvlAndHtmlDecode,
-                    (source, e, isChecked) => SetHtmlDecodeOnRmMdQtLvl(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetHtmlDecodeOnRmMdQtLvl(isChecked);
+                    });
 
                 checkBoxAddMdQtLvlAndHtmlEncode_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxAddMdQtLvlAndHtmlEncode,
-                    (source, e, isChecked) => SetHtmlEncodeOnAddMdQtLvl(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetHtmlEncodeOnAddMdQtLvl(isChecked);
+                    });
 
                 checkBoxInsertSpacesBetweenTokens_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxInsertSpacesBetweenTokens,
-                    (source, e, isChecked) => SetInsertSpacesBetweenTokens(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetInsertSpacesBetweenTokens(isChecked);
+                    });
 
                 uISettingsData = uISettingsRetriever.Data;
             }
@@ -157,7 +183,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         () => null, () => (bool?)false);
                 }));
 
-        private void SetResultToCB(
+        private void SetResultTextToCB(
             bool enabled) => actionComponent.UpdateAppSettings(
                 appSettings, settings => settings.TextToMd.ActWith(mtbl =>
                 {
@@ -207,14 +233,95 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         () => null, () => (bool?)false);
                 }));
 
-        private void CopyResultToCB() => actionComponent.CopyTextToClipboard(
+        private void CopyResultTextToCB() => actionComponent.CopyTextToClipboard(
             controlBlinkTimersManagerAdapter,
-            iconLabelCopyResultToCB,
+            iconLabelCopyResultTextToCB,
             richTextBoxConvertedText.Text);
+
+        private void CopySrcTextToCB() => actionComponent.CopyTextToClipboard(
+            controlBlinkTimersManagerAdapter,
+            iconLabelCopySrcTextToCB,
+            richTextBoxSrcText.Text);
 
         private ToolTipHintsGroupOpts GetToolTipHintsGroupOpts()
         {
             var optsList = new List<ToolTipHintOpts>();
+
+            Func<string> rmMdQtLvlAndHtmlDecodeHintTextFactory = () => string.Concat(
+                "Click here to ", checkBoxRmMdQtLvlAndHtmlDecode.Checked ? "dis" : null,
+                "activate the automatic html decoding of the quoted text block from the result text box ",
+                "when transforming it to a regular text block ",
+                "(or removing a quotation level if the markdown quoted text block from the result text box is multi-level nested markdown quoted text block)");
+
+            Func<string> addMdQtLvlAndHtmlDecodeHintTextFactory = () => string.Concat(
+                "Click here to ", checkBoxAddMdQtLvlAndHtmlEncode.Checked ? "dis" : null,
+                "activate the automatic html encoding of the source text ",
+                "when transforming it to a markdown quoted text block ",
+                "(or adding a quotation level if the source text is already a markdown quoted text block)");
+
+            Func<string> resultToCBHintTextFactory = () => string.Concat(
+                "Click here to ", checkBoxResultToCB.Checked ? "dis" : null,
+                "activate the automatic copying of the converted text to clipboard");
+
+            optsList.AddRange(buttonMdTable.HintOpts(
+                    () => "Click here to convert the source text to markdown table").Arr(
+                checkBoxMdTableFirstLineIsHeader.HintOpts(
+                    () => string.Concat("Click here to specify whether the first line of the source text ",
+                        "represents the table's header (i.e. it contains the names of the table's columns)")),
+                checkBoxMdTableSrcTextIsTabSeparated.HintOpts(
+                    () => string.Concat("Click here to ",
+                    checkBoxMdTableSrcTextIsTabSeparated.Checked switch
+                    {
+                        true => "specify a custom table cells delimiter for the source text",
+                        false => "specify that the table cells delimiter for the source text is the tab character"
+                    })),
+                textBoxMdTableSrcTextSep.HintOpts(
+                    () => checkBoxMdTableSrcTextIsTabSeparated.Checked switch
+                    {
+                        true => null!,
+                        false => string.Join("\n",
+                            "Type or paste here the custom table cells delimiter for the source text.")
+                    }),
+                checkBoxMdTableSurroundRowWithCellSep.HintOpts(
+                    () => string.Concat(
+                        "Click here to ",
+                        checkBoxMdTableSurroundRowWithCellSep.Checked ? "dis" : null,
+                        "activate the surrounding of markdown table lines with the markdown table cell delimiter")),
+                iconLabelRmMdQtLvl.HintOpts(
+                    () => string.Join("\n",
+                        "Click here to convert the markdown quoted text block from the result text box to regular text block",
+                        "(or remove a quotation level if the markdown quoted text block from the result text box is multi-level nested markdown quoted text block)")),
+                checkBoxRmMdQtLvlAndHtmlDecode.HintOpts(
+                    rmMdQtLvlAndHtmlDecodeHintTextFactory),
+                checkBoxAddMdQtLvlAndHtmlEncode.HintOpts(
+                    addMdQtLvlAndHtmlDecodeHintTextFactory),
+                iconLabelHtmlEncode.HintOpts(
+                    () => "Click here to html encode the source text (while preserving any markdown quoted text line start tokens)"),
+                iconLabelHtmlDecode.HintOpts(
+                    () => "Click here to html decode the text from the result text box"),
+                iconLabelAddMdQtLvl.HintOpts(
+                    () => string.Join("\n",
+                        "Click here to convert the source text to a markdown quoted text block",
+                        "(or add a quotation level if the source text is already a markdown quoted text block)")),
+                checkBoxResultToCB.HintOpts(
+                    resultToCBHintTextFactory),
+                iconLabelResultToCB.HintOpts(
+                    resultToCBHintTextFactory),
+                iconLabelCopySrcTextToCB.HintOpts(
+                    () => "Click here to copy the source text to clipboard"),
+                iconLabelCopyResultTextToCB.HintOpts(
+                    () => "Click here to copy the result text to clipboard"),
+                checkBoxInsertSpacesBetweenTokens.HintOpts(
+                    () => string.Concat("Click here to ",
+                    checkBoxInsertSpacesBetweenTokens.Checked ? "dis" : null,
+                    "activate the inserting of spaces between tokens for text to markdown transformations (makes the converted text more ",
+                    checkBoxInsertSpacesBetweenTokens.Checked ? "compact)" : "readable)")),
+                iconLabelEncodeAllHtml.HintOpts(
+                    () => "Click here to html encode the whole source text (including any markdown quoted text line start tokens, which they will also be encoded)"),
+                richTextBoxSrcText.HintOpts(
+                    () => "Type or paste here the source text you want to convert to markdown text"),
+                richTextBoxConvertedText.HintOpts(
+                    () => "The markdown text will show up here after it has been converted from the source text")));
 
             return new ToolTipHintsGroupOpts
             {
@@ -251,7 +358,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             },
             OnUnhandledError = exc => WinFormsMessageTuple.WithOnly(
                 exc.Message, exc.Message),
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultTextToCB()));
 
         private void ResultTextRmMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -270,7 +377,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 richTextBoxSrcText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopySrcTextToCB()));
 
         private void ResultTextDecodeHtml() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -283,7 +390,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 richTextBoxSrcText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopySrcTextToCB()));
 
         private void SrcTextAddMdQtLvl() => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -304,7 +411,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 richTextBoxConvertedText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultTextToCB()));
 
         private void SrcTextEncodeHtml(bool encodeFull = false) => actionComponent.Execute(new WinFormsActionOpts<string>
         {
@@ -327,7 +434,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 richTextBoxConvertedText.Text = outputText;
                 return ActionResultH.Create(outputText);
             }
-        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultToCB()));
+        }).ActWith(result => (result.IsSuccess && checkBoxResultToCB.Checked).ActIf(() => CopyResultTextToCB()));
 
         #region UI Event Handlers
 
@@ -412,7 +519,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void IconLabelCopyResultToCB_Click(object sender, EventArgs e)
         {
-            CopyResultToCB();
+            CopyResultTextToCB();
+        }
+
+        private void IconLabelCopySrcTextToClipboard_Click(object sender, EventArgs e)
+        {
+            CopySrcTextToCB();
         }
 
         private void IconLabelRmMdQtLvl_Click(object sender, EventArgs e)

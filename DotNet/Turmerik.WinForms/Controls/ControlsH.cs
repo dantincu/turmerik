@@ -140,9 +140,12 @@ namespace Turmerik.WinForms.Controls
 
             if (isEnabled)
             {
+                int delay = toolTipDelay.Delay ?? 1;
+
                 toolTip.ShowAlways = toolTipDelay.ShowAlways == true;
                 toolTip.IsBalloon = toolTipDelay.IsBalloon == true;
-                toolTip.InitialDelay = toolTipDelay.Delay ?? 1;
+                toolTip.InitialDelay = delay;
+                toolTip.ReshowDelay = delay;
             }
 
             return isEnabled;

@@ -32,7 +32,7 @@
             panelOptionControls = new Panel();
             iconLabelEncodeAllHtml = new WinForms.Controls.IconLabel();
             checkBoxInsertSpacesBetweenTokens = new CheckBox();
-            iconLabelCopyResultToCB = new WinForms.Controls.IconLabel();
+            iconLabelCopyResultTextToCB = new WinForms.Controls.IconLabel();
             horizontalSplitPanelHtmlEncode = new WinForms.Controls.HorizontalSplitPanel();
             checkBoxAddMdQtLvlAndHtmlEncode = new CheckBox();
             iconLabelAddMdQtLvl = new WinForms.Controls.IconLabel();
@@ -44,6 +44,7 @@
             checkBoxRmMdQtLvlAndHtmlDecode = new CheckBox();
             iconLabelRmMdQtLvl = new WinForms.Controls.IconLabel();
             iconLabelHtmlDecode = new WinForms.Controls.IconLabel();
+            iconLabelCopySrcTextToCB = new WinForms.Controls.IconLabel();
             checkBoxMdTableSurroundRowWithCellSep = new CheckBox();
             checkBoxMdTableSrcTextIsTabSeparated = new CheckBox();
             panelMdTableSrcTextSep = new Panel();
@@ -92,10 +93,11 @@
             panelOptionControls.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panelOptionControls.Controls.Add(iconLabelEncodeAllHtml);
             panelOptionControls.Controls.Add(checkBoxInsertSpacesBetweenTokens);
-            panelOptionControls.Controls.Add(iconLabelCopyResultToCB);
+            panelOptionControls.Controls.Add(iconLabelCopyResultTextToCB);
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlEncode);
             panelOptionControls.Controls.Add(horizontalSplitPanelResultToCB);
             panelOptionControls.Controls.Add(horizontalSplitPanelHtmlDecode);
+            panelOptionControls.Controls.Add(iconLabelCopySrcTextToCB);
             panelOptionControls.Controls.Add(checkBoxMdTableSurroundRowWithCellSep);
             panelOptionControls.Controls.Add(checkBoxMdTableSrcTextIsTabSeparated);
             panelOptionControls.Controls.Add(panelMdTableSrcTextSep);
@@ -113,7 +115,7 @@
             iconLabelEncodeAllHtml.AutoSize = true;
             iconLabelEncodeAllHtml.Dock = DockStyle.Left;
             iconLabelEncodeAllHtml.ForeColor = SystemColors.ControlText;
-            iconLabelEncodeAllHtml.Location = new Point(1112, 3);
+            iconLabelEncodeAllHtml.Location = new Point(1126, 3);
             iconLabelEncodeAllHtml.Name = "iconLabelEncodeAllHtml";
             iconLabelEncodeAllHtml.Padding = new Padding(0, 5, 0, 0);
             iconLabelEncodeAllHtml.Size = new Size(14, 20);
@@ -125,7 +127,7 @@
             // 
             checkBoxInsertSpacesBetweenTokens.AutoSize = true;
             checkBoxInsertSpacesBetweenTokens.Dock = DockStyle.Left;
-            checkBoxInsertSpacesBetweenTokens.Location = new Point(929, 3);
+            checkBoxInsertSpacesBetweenTokens.Location = new Point(943, 3);
             checkBoxInsertSpacesBetweenTokens.Name = "checkBoxInsertSpacesBetweenTokens";
             checkBoxInsertSpacesBetweenTokens.Padding = new Padding(5, 5, 0, 0);
             checkBoxInsertSpacesBetweenTokens.Size = new Size(183, 30);
@@ -134,18 +136,18 @@
             checkBoxInsertSpacesBetweenTokens.Text = "InsertSpaces Between Tokens";
             checkBoxInsertSpacesBetweenTokens.UseVisualStyleBackColor = true;
             // 
-            // iconLabelCopyResultToCB
+            // iconLabelCopyResultTextToCB
             // 
-            iconLabelCopyResultToCB.AutoSize = true;
-            iconLabelCopyResultToCB.Dock = DockStyle.Left;
-            iconLabelCopyResultToCB.ForeColor = SystemColors.ControlText;
-            iconLabelCopyResultToCB.Location = new Point(915, 3);
-            iconLabelCopyResultToCB.Name = "iconLabelCopyResultToCB";
-            iconLabelCopyResultToCB.Padding = new Padding(0, 5, 0, 0);
-            iconLabelCopyResultToCB.Size = new Size(14, 20);
-            iconLabelCopyResultToCB.TabIndex = 0;
-            iconLabelCopyResultToCB.Text = "R";
-            iconLabelCopyResultToCB.Click += IconLabelCopyResultToCB_Click;
+            iconLabelCopyResultTextToCB.AutoSize = true;
+            iconLabelCopyResultTextToCB.Dock = DockStyle.Left;
+            iconLabelCopyResultTextToCB.ForeColor = SystemColors.ControlText;
+            iconLabelCopyResultTextToCB.Location = new Point(929, 3);
+            iconLabelCopyResultTextToCB.Name = "iconLabelCopyResultTextToCB";
+            iconLabelCopyResultTextToCB.Padding = new Padding(0, 5, 0, 0);
+            iconLabelCopyResultTextToCB.Size = new Size(14, 20);
+            iconLabelCopyResultTextToCB.TabIndex = 0;
+            iconLabelCopyResultTextToCB.Text = "R";
+            iconLabelCopyResultTextToCB.Click += IconLabelCopyResultToCB_Click;
             // 
             // horizontalSplitPanelHtmlEncode
             // 
@@ -153,7 +155,7 @@
             horizontalSplitPanelHtmlEncode.Controls.Add(iconLabelAddMdQtLvl);
             horizontalSplitPanelHtmlEncode.Controls.Add(iconLabelHtmlEncode);
             horizontalSplitPanelHtmlEncode.Dock = DockStyle.Left;
-            horizontalSplitPanelHtmlEncode.Location = new Point(790, 3);
+            horizontalSplitPanelHtmlEncode.Location = new Point(804, 3);
             horizontalSplitPanelHtmlEncode.Name = "horizontalSplitPanelHtmlEncode";
             horizontalSplitPanelHtmlEncode.Padding = new Padding(1);
             horizontalSplitPanelHtmlEncode.Size = new Size(125, 30);
@@ -203,7 +205,7 @@
             horizontalSplitPanelResultToCB.Controls.Add(checkBoxResultToCB);
             horizontalSplitPanelResultToCB.Controls.Add(iconLabelResultToCB);
             horizontalSplitPanelResultToCB.Dock = DockStyle.Left;
-            horizontalSplitPanelResultToCB.Location = new Point(668, 3);
+            horizontalSplitPanelResultToCB.Location = new Point(682, 3);
             horizontalSplitPanelResultToCB.Name = "horizontalSplitPanelResultToCB";
             horizontalSplitPanelResultToCB.Padding = new Padding(1);
             horizontalSplitPanelResultToCB.Size = new Size(122, 30);
@@ -242,7 +244,7 @@
             horizontalSplitPanelHtmlDecode.Controls.Add(iconLabelRmMdQtLvl);
             horizontalSplitPanelHtmlDecode.Controls.Add(iconLabelHtmlDecode);
             horizontalSplitPanelHtmlDecode.Dock = DockStyle.Left;
-            horizontalSplitPanelHtmlDecode.Location = new Point(543, 3);
+            horizontalSplitPanelHtmlDecode.Location = new Point(557, 3);
             horizontalSplitPanelHtmlDecode.Name = "horizontalSplitPanelHtmlDecode";
             horizontalSplitPanelHtmlDecode.Padding = new Padding(1);
             horizontalSplitPanelHtmlDecode.Size = new Size(125, 30);
@@ -286,6 +288,19 @@
             iconLabelHtmlDecode.TabIndex = 0;
             iconLabelHtmlDecode.Text = "R";
             iconLabelHtmlDecode.Click += IconLabelHtmlDecode_Click;
+            // 
+            // iconLabelCopySrcTextToCB
+            // 
+            iconLabelCopySrcTextToCB.AutoSize = true;
+            iconLabelCopySrcTextToCB.Dock = DockStyle.Left;
+            iconLabelCopySrcTextToCB.ForeColor = SystemColors.ControlText;
+            iconLabelCopySrcTextToCB.Location = new Point(543, 3);
+            iconLabelCopySrcTextToCB.Name = "iconLabelCopySrcTextToCB";
+            iconLabelCopySrcTextToCB.Padding = new Padding(0, 5, 0, 0);
+            iconLabelCopySrcTextToCB.Size = new Size(14, 20);
+            iconLabelCopySrcTextToCB.TabIndex = 5;
+            iconLabelCopySrcTextToCB.Text = "R";
+            iconLabelCopySrcTextToCB.Click += IconLabelCopySrcTextToClipboard_Click;
             // 
             // checkBoxMdTableSurroundRowWithCellSep
             // 
@@ -453,10 +468,11 @@
         private CheckBox checkBoxRmMdQtLvlAndHtmlDecode;
         private CheckBox checkBoxAddMdQtLvlAndHtmlEncode;
         private Button buttonMdTable;
-        private WinForms.Controls.IconLabel iconLabelCopyResultToCB;
+        private WinForms.Controls.IconLabel iconLabelCopyResultTextToCB;
         private CheckBox checkBoxMdTableFirstLineIsHeader;
         private CheckBox checkBoxMdTableSurroundRowWithCellSep;
         private CheckBox checkBoxInsertSpacesBetweenTokens;
         private WinForms.Controls.IconLabel iconLabelEncodeAllHtml;
+        private WinForms.Controls.IconLabel iconLabelCopySrcTextToCB;
     }
 }

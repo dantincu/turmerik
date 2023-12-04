@@ -124,6 +124,43 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             var optsList = new List<ToolTipHintOpts>();
 
+            Func<string> nameConvertToCBHintFactory = () => string.Concat(
+                "Click here to ",
+                checkBoxNameConvertToCB.Checked ? "dis" : "",
+                $"activate the automatic copying of the ",
+                "code identifier to clipboard after it has been generated");
+
+            optsList.AddRange(iconLabelConvertName.HintOpts(
+                    () => "Click here to generate a valid code identifier from this text").Arr(
+                iconLabelIdnfToCB.HintOpts(
+                    () => "Click here to copy the generated code identifier to clipboard"),
+                checkBoxNameConvertToCB.HintOpts(
+                    nameConvertToCBHintFactory),
+                iconLabelNameConvertToCB.HintOpts(
+                    nameConvertToCBHintFactory),
+                textBoxName.HintOpts(
+                    () => string.Join("\n",
+                        "Type or paste here the text you want to generate a code identifier from.",
+                        "Then press the ENTER key to generate the code identifier.",
+                        string.Concat("Press ",
+                            checkBoxNameConvertToCB.Checked switch
+                            {
+                                true => "CTRL + SHIFT + ENTER keys to disactivate ",
+                                false => "CTRL + ENTER keys to activate "
+                            },
+                            "the automatic copying of the ",
+                            "code identifier to clipboard after it has been generated"))),
+                textBoxIndf.HintOpts(
+                    () => string.Concat("\n",
+                        "Press ",
+                        checkBoxNameConvertToCB.Checked switch
+                        {
+                            true => "CTRL + ENTER keys to disactivate ",
+                            false => "the ENTER key to activate "
+                        },
+                        "the automatic copying of the ",
+                        "code identifier to clipboard after it has been generated"))));
+
             return new ToolTipHintsGroupOpts
             {
                 HintOpts = optsList,
