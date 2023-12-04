@@ -1662,7 +1662,7 @@
             public const string FOLDER = null;
             public const string LIST_ALT = null;
             public const string INVENTORY = null;
-            public const string FOLDER_OPEN = null;
+            public const string FOLDER_OPEN = "\ue2c8";
             public const string ARTICLE = null;
             public const string FACT_CHECK = null;
             public const string ATTACH_FILE = null;

@@ -9,8 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Turmerik.Core.Actions;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Logging;
+using Turmerik.Ux;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
@@ -45,6 +47,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls.Forms
 
             if (svcProvContnr.IsRegistered)
             {
+                iconLabelOpenAppDataFolder.Text = MatUIIconUnicodesH.TextFormatting.FOLDER_OPEN;
+                iconLabelOpenAppConfigFolder.Text = MatUIIconUnicodesH.TextFormatting.FOLDER_OPEN;
+                iconLabelOpenAppLogsFolder.Text = MatUIIconUnicodesH.TextFormatting.FOLDER_OPEN;
             }
         }
 
@@ -87,6 +92,45 @@ namespace Turmerik.Utility.WinFormsApp.UserControls.Forms
                     Close();
                     return ActionResultH.Create(0);
                 },
+            });
+
+        private void IconLabelOpenAppDataFolder_Click(
+            object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(IconLabelOpenAppDataFolder_Click),
+                Action = () =>
+                {
+                    ProcessH.OpenWithDefaultProgramIfNotNull(
+                        appEnv.GetPath(AppEnvDir.Data));
+
+                    return ActionResultH.Create(0);
+                }
+            });
+
+        private void IconLabelOpenAppConfigFolder_Click(
+            object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(IconLabelOpenAppConfigFolder_Click),
+                Action = () =>
+                {
+                    ProcessH.OpenWithDefaultProgramIfNotNull(
+                        appEnv.GetPath(AppEnvDir.Config));
+
+                    return ActionResultH.Create(0);
+                }
+            });
+
+        private void IconLabelOpenAppLogsFolder_Click(
+            object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(IconLabelOpenAppLogsFolder_Click),
+                Action = () =>
+                {
+                    ProcessH.OpenWithDefaultProgramIfNotNull(
+                        appEnv.GetPath(AppEnvDir.Logs));
+
+                    return ActionResultH.Create(0);
+                }
             });
 
         #endregion UI Event Handlers
