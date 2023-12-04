@@ -38,5 +38,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public Control RefUxControl => fetchWebResourceUC.RefUxControl;
+
+        public void GoToWebResourceUrlTool() => fetchWebResourceUC.GoToWebResourceUrlTool();
+        public void GoToMarkdownSourceText() => textToMdUC.GoToMarkdownSourceText();
+        public void GoToMarkdownResultText() => textToMdUC.GoToMarkdownResultText();
     }
 }

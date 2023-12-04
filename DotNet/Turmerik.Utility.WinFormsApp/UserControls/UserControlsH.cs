@@ -31,7 +31,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                     return ActionResultH.Create(text);
                 }
-            }).ActWith(result => controlBlinkTimersManagerAdapter.BlinkIconLabel(
+            }).ActWith(result => controlBlinkTimersManagerAdapter.BlinkControl(
                 iconLabel,
                 result,
                 result.Value != null)));

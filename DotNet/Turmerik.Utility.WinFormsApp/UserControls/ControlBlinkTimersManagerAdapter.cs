@@ -58,16 +58,16 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     callback?.Invoke(opts);
                 });
 
-        public void BlinkIconLabel(
-            IconLabel iconLabel,
+        public void BlinkControl(
+            Control iconLabel,
             IActionResult result,
-            bool condition = true) => BlinkIconLabel(
+            bool condition = true) => BlinkControl(
                 iconLabel,
                 result.IsSuccess,
                 condition);
 
-        public void BlinkIconLabel(
-            IconLabel iconLabel,
+        public void BlinkControl(
+            Control iconLabel,
             bool isSuccess,
             bool condition = true)
         {
@@ -81,11 +81,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public ControlBlinkTimerOptsMtbl GetControlBlinkTimerOptsMtbl(
-            IconLabel iconLabel,
+            Control control,
             bool isSuccess) => GetControlBlinkTimerOptsImmtbl(
                 isSuccess).With(immtbl => new ControlBlinkTimerOptsMtbl(immtbl)
                 {
-                    Control = iconLabel
+                    Control = control
                 });
 
         public ControlBlinkTimerOptsImmtbl GetControlBlinkTimerOptsImmtbl(

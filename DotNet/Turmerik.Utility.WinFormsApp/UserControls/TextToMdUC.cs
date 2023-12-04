@@ -162,6 +162,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        public void GoToMarkdownSourceText() => richTextBoxSrcText.Focus();
+        public void GoToMarkdownResultText() => richTextBoxResultText.Focus();
+
         private void ApplyHorizontalSplitPanelsSettings(
             HorizontalSplitPanel[] panelsArr)
         {
@@ -318,10 +321,17 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     checkBoxInsertSpacesBetweenTokens.Checked ? "compact)" : "readable)")),
                 iconLabelEncodeAllHtml.HintOpts(
                     () => "Click here to html encode the whole source text (including any markdown quoted text line start tokens, which they will also be encoded)"),
-                richTextBoxSrcText.HintOpts(
-                    () => "Type or paste here the source text you want to convert to markdown text"),
-                richTextBoxResultText.HintOpts(
-                    () => "The markdown text will show up here after it has been converted from the source text")));
+                richTextBoxSrcText.HintOpts(() => string.Join("\n",
+                    "Type or paste here the source text you want to convert to markdown text.",
+                    "Press CTRL + T keys to convert the source text to markdown table.",
+                    "Press CTRL + Q keys to convert the source text to a markdown quoted text block.",
+                    " (or add a quotation level if the source text is already a markdown quoted text block)",
+                    "Press CTRL + SHIFT + Q keys to html encode the source text (while preserving any markdown quoted text line start tokens)")),
+                richTextBoxResultText.HintOpts(() => string.Join("\n",
+                    "The markdown text will show up here after it has been converted from the source text.",
+                    "Press CTRL + Q keys to convert the markdown quoted text block from the result text box to regular text block.",
+                    " (or remove a quotation level if the markdown quoted text block from the result text box is multi-level nested markdown quoted text block)",
+                    "Press CTRL + SHIFT + Q keys to html decode the text from the result text box"))));
 
             return new ToolTipHintsGroupOpts
             {
@@ -360,6 +370,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 exc.Message, exc.Message),
         }).ActWith(result => result.IsSuccess.ActIf(() => 
         {
+            controlBlinkTimersManagerAdapter.BlinkControl(
+                buttonMdTable, result);
+
             checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
             richTextBoxResultText.Focus();
         }));
@@ -383,6 +396,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }).ActWith(result => result.IsSuccess.ActIf(() =>
         {
+            controlBlinkTimersManagerAdapter.BlinkControl(
+                iconLabelRmMdQtLvl, result);
+
             checkBoxResultTextToCB.Checked.ActIf(() => CopySrcTextToCB());
             richTextBoxSrcText.Focus();
         }));
@@ -400,6 +416,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }).ActWith(result => result.IsSuccess.ActIf(() =>
         {
+            controlBlinkTimersManagerAdapter.BlinkControl(
+                iconLabelHtmlDecode, result);
+
             checkBoxResultTextToCB.Checked.ActIf(() => CopySrcTextToCB());
             richTextBoxSrcText.Focus();
         }));
@@ -425,6 +444,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }).ActWith(result => result.IsSuccess.ActIf(() =>
         {
+            controlBlinkTimersManagerAdapter.BlinkControl(
+                iconLabelAddMdQtLvl, result);
+
             checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
             richTextBoxResultText.Focus();
         }));
@@ -452,6 +474,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }).ActWith(result => result.IsSuccess.ActIf(() =>
         {
+            controlBlinkTimersManagerAdapter.BlinkControl(
+                encodeFull ? iconLabelEncodeAllHtml : iconLabelHtmlEncode,
+                result);
+
             checkBoxResultTextToCB.Checked.ActIf(() => CopyResultTextToCB());
             richTextBoxResultText.Focus();
         }));
@@ -576,10 +602,47 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void RichTextBoxSrcText_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.T:
+                        SrcTextToMdTable();
+                        break;
+                    case Keys.Q:
+                        if (e.Shift)
+                        {
+                            SrcTextEncodeHtml();
+                        }
+                        else
+                        {
+                            SrcTextAddMdQtLvl();
+                        }
+
+                        break;
+                }
+            }
         }
 
         private void RichTextBoxConvertedText_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Q:
+                        if (e.Shift)
+                        {
+                            ResultTextDecodeHtml();
+                        }
+                        else
+                        {
+                            ResultTextRmMdQtLvl();
+                        }
+
+                        break;
+                }
+            }
         }
 
         #endregion UI Event Handlers

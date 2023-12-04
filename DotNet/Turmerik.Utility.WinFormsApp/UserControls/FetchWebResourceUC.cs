@@ -112,6 +112,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         public IconLabel RefUxControl => iconLabelResourceUrl;
 
+        public void GoToWebResourceUrlTool() => textBoxResourceUrl.Focus();
+
         private async Task FetchResourceAsync()
         {
             ToggleEnableControls(false);

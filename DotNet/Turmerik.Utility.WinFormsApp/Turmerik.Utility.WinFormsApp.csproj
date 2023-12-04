@@ -25,6 +25,7 @@
     <None Include="..\..\Content\UtilityWinFormsApp\Icon\Icon128x126.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

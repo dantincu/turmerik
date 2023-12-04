@@ -191,6 +191,21 @@ namespace Turmerik.Utility.WinFormsApp
             }
         }
 
+        private void GoToWebResourceUrlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textUtilsUC.GoToWebResourceUrlTool();
+        }
+
+        private void GoToMarkdownSourceTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textUtilsUC.GoToMarkdownSourceText();
+        }
+
+        private void GoToMarkdownResultTextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textUtilsUC.GoToMarkdownResultText();
+        }
+
         #endregion UI Event Handlers
     }
 }

@@ -39,6 +39,10 @@
             toolStripMenuItemShowHints = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
+            actionsToolStripMenuItem = new ToolStripMenuItem();
+            goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
+            goToMarkdownSourceTextToolStripMenuItem = new ToolStripMenuItem();
+            goToMarkdownResultTextToolStripMenuItem = new ToolStripMenuItem();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
@@ -92,7 +96,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { helpToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { actionsToolStripMenuItem, helpToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1800, 24);
@@ -126,6 +130,34 @@
             startAppRecoveryToolToolStripMenuItem.Size = new Size(199, 22);
             startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
             startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
+            // 
+            // actionsToolStripMenuItem
+            // 
+            actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { goToWebResourceUrlToolStripMenuItem, goToMarkdownSourceTextToolStripMenuItem, goToMarkdownResultTextToolStripMenuItem });
+            actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
+            actionsToolStripMenuItem.Size = new Size(59, 20);
+            actionsToolStripMenuItem.Text = "&Actions";
+            // 
+            // goToWebResourceUrlToolStripMenuItem
+            // 
+            goToWebResourceUrlToolStripMenuItem.Name = "goToWebResourceUrlToolStripMenuItem";
+            goToWebResourceUrlToolStripMenuItem.Size = new Size(227, 22);
+            goToWebResourceUrlToolStripMenuItem.Text = "Go To &Web Resource Url";
+            goToWebResourceUrlToolStripMenuItem.Click += GoToWebResourceUrlToolStripMenuItem_Click;
+            // 
+            // goToMarkdownSourceTextToolStripMenuItem
+            // 
+            goToMarkdownSourceTextToolStripMenuItem.Name = "goToMarkdownSourceTextToolStripMenuItem";
+            goToMarkdownSourceTextToolStripMenuItem.Size = new Size(227, 22);
+            goToMarkdownSourceTextToolStripMenuItem.Text = "Go To Markdown &Source Text";
+            goToMarkdownSourceTextToolStripMenuItem.Click += GoToMarkdownSourceTextToolStripMenuItem_Click;
+            // 
+            // goToMarkdownResultTextToolStripMenuItem
+            // 
+            goToMarkdownResultTextToolStripMenuItem.Name = "goToMarkdownResultTextToolStripMenuItem";
+            goToMarkdownResultTextToolStripMenuItem.Size = new Size(227, 22);
+            goToMarkdownResultTextToolStripMenuItem.Text = "Go To Markdown &Result Text";
+            goToMarkdownResultTextToolStripMenuItem.Click += GoToMarkdownResultTextToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -163,5 +195,9 @@
         private ToolStripMenuItem toolStripMenuItemShowHints;
         private ToolStripComboBox toolStripComboBoxShowHints;
         private ToolStripMenuItem startAppRecoveryToolToolStripMenuItem;
+        private ToolStripMenuItem actionsToolStripMenuItem;
+        private ToolStripMenuItem goToWebResourceUrlToolStripMenuItem;
+        private ToolStripMenuItem goToMarkdownSourceTextToolStripMenuItem;
+        private ToolStripMenuItem goToMarkdownResultTextToolStripMenuItem;
     }
 }
