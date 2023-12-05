@@ -82,6 +82,11 @@ namespace Turmerik.Core.Helpers
             return outVal;
         }
 
+        public static T IfNull<T>(
+            this T inVal,
+            Func<T> defaultValueFactory) => inVal.IfNotNull(
+                val => val, defaultValueFactory);
+
         public static TVal ActIfNotNull<TVal>(
             this TVal inVal,
             Action<TVal> callback,
@@ -200,5 +205,15 @@ namespace Turmerik.Core.Helpers
 
             return retVal;
         }
+
+        public static void ExecuteFirstAction(
+            this Action firstAction,
+            params Action[] nextActionsArr) => firstAction.FirstNotNull(
+                nextActionsArr).Invoke();
+
+        public static T ExecuteFirstFunc<T>(
+            this Func<T> firstFunc,
+            params Func<T>[] nextFuncsArr) => firstFunc.FirstNotNull(
+                nextFuncsArr).Invoke();
     }
 }

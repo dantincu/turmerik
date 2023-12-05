@@ -21,7 +21,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IDirsPairCreatorFactory, DirsPairCreatorFactory>();
             services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
 
-            services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
+            services.AddSingleton<IFsItemsRetriever, FsItemsRetriever>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
 
             services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();

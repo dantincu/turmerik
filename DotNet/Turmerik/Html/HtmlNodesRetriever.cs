@@ -1,8 +1,8 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
-using Turmerik.Core.TextParsing;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
@@ -14,40 +14,53 @@ namespace Turmerik.Html
             HtmlNodesRetrieverOpts opts);
     }
 
-    public class HtmlNodesRetrieverArgs : TextParserTemplateArgs<HtmlNode, HtmlNodesRetrieverArgs>
-    {
-        public HtmlNodesRetrieverArgs(TextParserTemplateOpts<HtmlNode, HtmlNodesRetrieverArgs> opts) : base(opts)
-        {
-        }
-    }
-
-    public class HtmlNodesRetrieverOpts : TextParserTemplateOpts<HtmlNode, HtmlNodesRetrieverArgs>
-    {
-        public HtmlDocument HtmlDoc { get; set; }
-    }
-
     public class HtmlNodesRetriever : IHtmlNodesRetriever
     {
-        private readonly ITextParserTemplate textParserTemplate;
+        private readonly IDataTreeGenerator dataTreeGenerator;
 
         public HtmlNodesRetriever(
-            ITextParserTemplate textParserTemplate)
+            IDataTreeGenerator dataTreeGenerator)
         {
-            this.textParserTemplate = textParserTemplate ?? throw new ArgumentNullException(nameof(textParserTemplate));
+            this.dataTreeGenerator = dataTreeGenerator ?? throw new ArgumentNullException(
+                nameof(dataTreeGenerator));
         }
 
         public HtmlNodesRetrieverArgs GetNodes(
             HtmlNodesRetrieverOpts opts)
         {
-            opts.HtmlDoc ??= new HtmlDocument().ActWith(
+            opts = NormalizeOpts(opts);
+
+            var args = dataTreeGenerator.GetNodes<HtmlNode, HtmlNodesRetrieverNode, HtmlNodesRetrieverOpts, HtmlNodesRetrieverArgs>(opts);
+            return args;
+        }
+
+        private HtmlNodesRetrieverOpts NormalizeOpts(
+            HtmlNodesRetrieverOpts opts)
+        {
+            var htmlDoc = opts.HtmlDoc ?? new HtmlDocument().ActWith(
                 doc => doc.LoadHtml(opts.Text));
 
-            opts.WithChildrenFactory(
-                node => node.ChildNodes,
-                o => opts.HtmlDoc.DocumentNode.ChildNodes);
+            var rootNodes = opts.RootNodes ?? ((IEnumerable<HtmlNode>)htmlDoc.DocumentNode.ChildNodes).GetEnumerator();
+            Func<HtmlNode, TryRetrieve1<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode, HtmlNodesRetrieverNode>> childNodesRetrieverFactory = null;
 
-            var args = textParserTemplate.GetNodes(opts);
-            return args;
+            childNodesRetrieverFactory = htmlNode => ((IEnumerable<HtmlNode>)htmlNode.ChildNodes).GetEnumerator(
+                ).GetRetriever(htmlNode => new HtmlNodesRetrieverNode(
+                    htmlNode, childNodesRetrieverFactory!(htmlNode)),
+                    default(HtmlNodesRetrieverNode),
+                    default(HtmlNodesRetrieverArgs))!;
+
+            opts = new HtmlNodesRetrieverOpts(
+                opts.ArgsFactory, opts.NextRootNodeRetriever.IfNull(
+                   () => rootNodes.GetRetriever(htmlNode => new HtmlNodesRetrieverNode(
+                        htmlNode, childNodesRetrieverFactory(
+                            htmlNode)), default(HtmlNodesRetrieverArgs))!),
+                opts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
+            {
+                HtmlDoc = htmlDoc,
+                RootNodes = rootNodes
+            };
+
+            return opts;
         }
     }
 }

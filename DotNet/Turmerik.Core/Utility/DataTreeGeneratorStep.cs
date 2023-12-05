@@ -2,26 +2,26 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.Core.TextParsing
+namespace Turmerik.Core.Utility
 {
-    public enum Step
+    public enum DataTreeGeneratorStep
     {
         Next = 0,
         Push,
         Pop
     }
 
-    public readonly struct StepData
+    public readonly struct DataTreeGeneratorStepData
     {
-        public StepData(
+        public DataTreeGeneratorStepData(
             bool matches,
-            Step value)
+            DataTreeGeneratorStep value)
         {
             Matches = matches;
             Value = value;
         }
 
         public bool Matches { get; }
-        public Step Value { get; }
+        public DataTreeGeneratorStep Value { get; }
     }
 }

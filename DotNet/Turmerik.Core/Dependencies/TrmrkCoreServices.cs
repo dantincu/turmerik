@@ -7,11 +7,11 @@ using Turmerik.Core.Actions;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.EqualityComparer;
 using Turmerik.Core.Text;
-using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Core.TextStream;
 using Turmerik.Core.Threading;
+using Turmerik.Core.FileSystem;
 
 namespace Turmerik.Core.Dependencies
 {
@@ -36,7 +36,7 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IBestItemAsyncRetriever, BestItemAsyncRetriever>();
 
             services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
-            services.AddSingleton<ITextParserTemplate, TextParserTemplate>();
+            services.AddSingleton<IDataTreeGenerator, DataTreeGenerator>();
             services.AddSingleton<IStringTemplateParser, StringTemplateParser>();
             services.AddSingleton<IExceptionSerializer, ExceptionSerializer>();
 
@@ -44,6 +44,9 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IDelimCharsExtractor, DelimCharsExtractor>();
             services.AddSingleton<ITextBufferLinesRetriever, TextBufferLinesRetriever>();
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
+
+            services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
+            services.AddSingleton<IStrPartsMatcher, StrPartsMatcher>();
 
             return services;
         }

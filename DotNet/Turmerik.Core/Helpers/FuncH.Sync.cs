@@ -73,6 +73,11 @@ namespace Turmerik.Core.Helpers
             return outVal;
         }
 
+        public static Task<T> IfNullSync<T>(
+            this Task<T> inTask,
+            Func<T> defaultValueFactory) => inTask.IfNotNullSync(
+                val => val, defaultValueFactory);
+
         public static async Task<TVal> ActIfNotNullSync<TVal>(
             this Task<TVal> task,
             Action<TVal> callback,

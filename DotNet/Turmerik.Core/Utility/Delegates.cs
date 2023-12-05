@@ -16,7 +16,15 @@ namespace Turmerik.Core.Utility
 
     public delegate int IdxRetriever<T, TNmrbl>(TNmrbl nmrbl, int count) where TNmrbl : IEnumerable<T>;
 
+    public delegate bool TryRetrieve<TOutput>(
+        out TOutput output);
+
     public delegate bool TryRetrieve<TInput, TOutput>(
+        TInput input,
+        out TOutput output);
+
+    public delegate bool TryRetrieve1<TObj, TInput, TOutput>(
+        TObj @obj,
         TInput input,
         out TOutput output);
 
@@ -24,11 +32,6 @@ namespace Turmerik.Core.Utility
         TInput input,
         out TOutput1 output1,
         out TOutput2 output2);
-
-    public delegate bool TryRetrieve<TObj, TInput, TOutput>(
-        TObj @obj,
-        TInput input,
-        out TOutput output);
 
     public delegate TValue UpdateDictnrValue<TKey, TValue>(
         TKey key,

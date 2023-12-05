@@ -164,6 +164,16 @@ namespace Turmerik.Core.Helpers
             return outVal;
         }
 
+        public static Task<T> IfNullAsync<T>(
+            this T inVal,
+            Func<Task<T>> defaultValueFactory) => inVal.IfNotNullAsync(
+                val => Task.FromResult(val), defaultValueFactory);
+
+        public static Task<T> IfNullAsync<T>(
+            this Task<T> inTask,
+            Func<Task<T>> defaultValueFactory) => inTask.IfNotNullAsync(
+                val => val, defaultValueFactory);
+
         public static async Task<TVal> ActIfNotNullAsync<TVal>(
             this TVal inVal,
             Func<TVal, Task> callback,

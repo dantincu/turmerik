@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.Core.Utility;
 
-namespace Turmerik.Core.TextParsing
+namespace Turmerik.Core.Utility
 {
-    public class TextParserTemplateArgs<TNode, TArgs>
-        where TArgs : TextParserTemplateArgs<TNode, TArgs>
+    public class DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+        where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+        where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+        where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
     {
-        public TextParserTemplateArgs(
-            TextParserTemplateOpts<TNode, TArgs> opts)
+        public DataTreeGeneratorArgs(
+            TOpts opts)
         {
             Opts = opts ?? throw new ArgumentNullException(nameof(opts));
             RootNodes = new List<DataTreeNode<TNode>>();
             Stack = new Stack<DataTreeNode<TNode>>();
         }
 
-        public TextParserTemplateOpts<TNode, TArgs> Opts { get; }
+        public TOpts Opts { get; }
         public List<DataTreeNode<TNode>> RootNodes { get; }
         public Stack<DataTreeNode<TNode>> Stack { get; }
 

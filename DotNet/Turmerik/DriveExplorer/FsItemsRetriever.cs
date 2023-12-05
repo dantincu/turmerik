@@ -11,13 +11,13 @@ using Turmerik.Core.Utility;
 
 namespace Turmerik.DriveExplorer
 {
-    public interface IFsEntriesRetriever : IDriveItemsRetriever
+    public interface IFsItemsRetriever : IDriveItemsRetriever
     {
     }
 
-    public class FsEntriesRetriever : DriveItemsRetrieverBase, IFsEntriesRetriever
+    public class FsItemsRetriever : DriveItemsRetrieverBase, IFsItemsRetriever
     {
-        public FsEntriesRetriever(ITimeStampHelper timeStampHelper) : base(timeStampHelper)
+        public FsItemsRetriever(ITimeStampHelper timeStampHelper) : base(timeStampHelper)
         {
         }
 

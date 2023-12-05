@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Turmerik.Core.TextParsing;
 using Turmerik.Core.Utility;
 using Turmerik.Core.Helpers;
 using Turmerik.Html;
@@ -64,13 +63,11 @@ namespace Turmerik.Md
             string? title = null;
 
             mdObjectsRetriever.GetObjects(
-                new MdObjectsRetrieverOpts
-                {
-                    MdDoc = mdDoc,
-                    NextStepPredicate = args =>
+                new MdObjectsRetrieverOpts(
+                    null, null, args =>
                     {
-                        var nextStep = Step.Push.ToData();
-                        var current = args.Current.Data;
+                        var nextStep = DataTreeGeneratorStep.Push.ToData();
+                        var current = args.Current.Data.Value;
 
                         if (current is HeadingBlock block && block.Level == 1)
                         {
@@ -82,12 +79,12 @@ namespace Turmerik.Md
                             }
                             else
                             {
-                                nextStep = Step.Next.ToData();
+                                nextStep = DataTreeGeneratorStep.Next.ToData();
                             }
                         }
                         else if (current is QuoteBlock || current is FencedCodeBlock)
                         {
-                            nextStep = Step.Next.ToData();
+                            nextStep = DataTreeGeneratorStep.Next.ToData();
                         }
                         else if (seekTrmrkUuid && trmrkUuidStr == null)
                         {
@@ -104,14 +101,12 @@ namespace Turmerik.Md
 
                             if (html != null)
                             {
-                                htmlNodesRetriever.GetNodes(new HtmlNodesRetrieverOpts
-                                {
-                                    Text = html,
-                                    NextStepPredicate = hAgs =>
+                                htmlNodesRetriever.GetNodes(new HtmlNodesRetrieverOpts(
+                                    null, null, hAgs =>
                                     {
-                                        var crntNode = hAgs.Current.Data;
+                                        var crntNode = hAgs.Current.Data.Value;
                                         bool isTextNode = crntNode is HtmlTextNode;
-                                        var nextStep = (isTextNode ? Step.Next : Step.Push).ToData();
+                                        var nextStep = (isTextNode ? DataTreeGeneratorStep.Next : DataTreeGeneratorStep.Push).ToData();
 
                                         if (!isTextNode && crntNode.Name == "input" && crntNode.Attributes.SingleOrDefault(
                                                 a => a.Name == "type")?.Value == "hidden" && crntNode.Attributes.SingleOrDefault(
@@ -127,13 +122,17 @@ namespace Turmerik.Md
                                         }
 
                                         return nextStep;
-                                    },
+                                    })
+                                {
+                                    Text = html,
                                 });
                             }
                         }
 
                         return nextStep;
-                    }
+                    })
+                {
+                    MdDoc = mdDoc,
                 });
 
             trmrkUuid = trmrkUuidStr;

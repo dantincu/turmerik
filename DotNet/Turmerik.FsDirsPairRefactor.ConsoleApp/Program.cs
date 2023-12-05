@@ -13,7 +13,7 @@ var services = TrmrkCoreServices.RegisterAll(
 
 TrmrkServices.RegisterAll(services);
 
-services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
+services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 services.AddSingleton<IProgramComponent, ProgramComponent>();
 

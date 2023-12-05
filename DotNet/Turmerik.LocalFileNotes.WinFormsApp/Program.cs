@@ -53,7 +53,7 @@ namespace Turmerik.LocalFilesNotes.WinFormsApp
                     TrmrkNoteServices.RegisterAll(services);
                     TrmrkNoteServices.RegisterAppSettingsRetriever<NotesAppConfigImmtbl, NotesAppConfigMtbl>(services);
 
-                    services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
+                    services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
                     services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 
                     services.AddSingleton<IAppEnv, AppEnv>();

@@ -146,7 +146,7 @@ namespace Turmerik.Utility.WinFormsApp
                 new ServiceCollection().AsOpts(services =>
                 {
                     TrmrkServices.RegisterAll(services);
-                    services.AddSingleton<IDriveItemsRetriever, FsEntriesRetriever>();
+                    services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
                     services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 
                     services.AddSingleton<IAppEnv, AppEnv>();

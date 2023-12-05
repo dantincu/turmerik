@@ -11,11 +11,11 @@ using Turmerik.Core.Text;
 
 namespace Turmerik.DriveExplorer
 {
-    public interface IFsExplorerService : IFsEntriesRetriever, IDriveExplorerService
+    public interface IFsExplorerService : IFsItemsRetriever, IDriveExplorerService
     {
     }
 
-    public class FsExplorerService : FsEntriesRetriever, IFsExplorerService
+    public class FsExplorerService : FsItemsRetriever, IFsExplorerService
     {
         public FsExplorerService(
             ITimeStampHelper timeStampHelper) : base(timeStampHelper)

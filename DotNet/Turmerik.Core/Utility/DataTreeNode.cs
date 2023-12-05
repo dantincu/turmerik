@@ -35,8 +35,8 @@ namespace Turmerik.Core.Utility
             ChildNodes = childNodes;
         }
 
-        public T Data { get; set; }
-        public DataTreeNode<T> ParentNode { get; set; }
-        public List<DataTreeNode<T>> ChildNodes { get; set; }
+        public T Data { get; }
+        public DataTreeNode<T> ParentNode { get; }
+        public List<DataTreeNode<T>> ChildNodes { get; }
     }
 }
