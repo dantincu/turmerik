@@ -14,12 +14,10 @@ namespace Turmerik.Core.Utility
         {
             Opts = opts ?? throw new ArgumentNullException(nameof(opts));
             RootNodes = new List<DataTreeNode<TNode>>();
-            Stack = new Stack<DataTreeNode<TNode>>();
         }
 
         public TOpts Opts { get; }
         public List<DataTreeNode<TNode>> RootNodes { get; }
-        public Stack<DataTreeNode<TNode>> Stack { get; }
 
         public int Idx { get; set; }
         public DataTreeNode<TNode> Current { get; set; }

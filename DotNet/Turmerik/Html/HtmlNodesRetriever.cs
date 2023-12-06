@@ -50,8 +50,8 @@ namespace Turmerik.Html
 
             var opts = new HtmlNodesRetrieverOpts(
                 null, args => rootNodes.GetRetriever(htmlNode => new HtmlNodesRetrieverNode(
-                        htmlNode, childNodesRetrieverFactory(
-                            htmlNode)), default(HtmlNodesRetrieverArgs))!,
+                    htmlNode, childNodesRetrieverFactory(
+                        htmlNode)), default(HtmlNodesRetrieverArgs))!,
                 inOpts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
             {
                 HtmlDoc = htmlDoc,

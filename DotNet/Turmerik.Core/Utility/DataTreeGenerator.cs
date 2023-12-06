@@ -28,35 +28,18 @@ namespace Turmerik.Core.Utility
                 o => o.CreateFromSrc<TArgs>());
 
             var args = argsFactory(opts);
-            GetNodes<TData, TNode, TOpts, TArgs>(args);
+            var stack = new Stack<DataTreeNode<TNode>>();
 
+            GetNodes<TData, TNode, TOpts, TArgs>(args, stack);
             return args;
         }
 
         protected abstract void GetNodes<TData, TNode, TOpts, TArgs>(
-            TArgs args)
+            TArgs args,
+            Stack<DataTreeNode<TNode>> stack)
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>;
-
-        protected void PushStack<TData, TNode, TOpts, TArgs>(
-            TArgs args,
-            DataTreeNode<TNode> treeNode,
-            List<DataTreeNode<TNode>> treeNodesList)
-            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
-            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
-            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
-        {
-            AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, treeNodesList);
-
-            if (args.Current != null)
-            {
-                args.Stack.Push(args.Current);
-            }
-
-            args.Current = treeNode;
-            args.Next = default;
-        }
 
         protected void AddToTreeNodesList<TData, TNode, TOpts, TArgs>(
             DataTreeNode<TNode> treeNode,
@@ -69,22 +52,49 @@ namespace Turmerik.Core.Utility
                 nameof(treeNode)));
         }
 
-        protected void TryPopStack<TData, TNode, TOpts, TArgs>(
-            TArgs args)
+        protected bool TryPushStack<TData, TNode, TOpts, TArgs>(
+            TArgs args,
+            DataTreeNode<TNode> treeNode,
+            List<DataTreeNode<TNode>> treeNodesList,
+            Stack<DataTreeNode<TNode>> stack)
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+        {
+            AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, treeNodesList);
+            bool push = args.Current != null;
+
+            if (push)
+            {
+                stack.Push(args.Current);
+            }
+
+            args.Current = treeNode;
+            args.Next = default;
+
+            return push;
+        }
+
+        protected bool TryPopStack<TData, TNode, TOpts, TArgs>(
+            TArgs args,
+            Stack<DataTreeNode<TNode>> stack)
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
             args.Next = args.Current;
+            bool pop = stack.Any();
 
-            if (args.Stack.Any())
+            if (pop)
             {
-                args.Current = args.Stack.Pop();
+                args.Current = stack.Pop();
             }
             else
             {
                 args.Current = default;
             }
+
+            return pop;
         }
     }
 }
