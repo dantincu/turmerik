@@ -37,7 +37,7 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IBestItemAsyncRetriever, BestItemAsyncRetriever>();
 
             services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
-            services.AddSingleton<IDataTreeGenerator, DataTreeGenerator>();
+            services.AddSingleton<IDataTreeGenerator, RecursiveDataTreeGenerator>();
             services.AddSingleton<IStringTemplateParser, StringTemplateParser>();
             services.AddSingleton<IExceptionSerializer, ExceptionSerializer>();
 
