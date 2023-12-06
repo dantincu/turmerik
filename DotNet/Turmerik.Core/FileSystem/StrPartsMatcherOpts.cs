@@ -11,11 +11,11 @@ namespace Turmerik.Core.FileSystem
     {
         public StrPartsMatcherOpts(
             Func<StrPartsMatcherOpts, StrPartsMatcherArgs> argsFactory,
-            TryRetrieve1In1Out<StrPartsMatcherArgs, StrPartsMatcherNode> nextRootNodeRetriever,
+            Func<StrPartsMatcherArgs, TryRetrieve1In1Out<StrPartsMatcherArgs, StrPartsMatcherNode>> nextRootNodeRetrieverFactory,
             Func<StrPartsMatcherArgs, DataTreeGeneratorStepData> nextStepPredicate,
             StrPartsMatcherOptions inputOpts) : base(
                 argsFactory,
-                nextRootNodeRetriever,
+                nextRootNodeRetrieverFactory,
                 nextStepPredicate)
         {
             InputStr = inputOpts.InputStr;

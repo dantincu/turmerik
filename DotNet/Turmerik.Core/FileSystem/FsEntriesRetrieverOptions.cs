@@ -14,18 +14,14 @@ namespace Turmerik.Core.FileSystem
             FsEntriesRetrieverOptions src)
         {
             RootDirPath = src.RootDirPath;
-            ParentDirPathFactory = src.ParentDirPathFactory;
             InputNmrblFactory = src.InputNmrblFactory;
-            FsEntryDataFactory = src.FsEntryDataFactory;
             FsEntryPredicate = src.FsEntryPredicate;
             OutputNmrblFactory = src.OutputNmrblFactory;
         }
 
         public string RootDirPath { get; set; }
-        public Func<FsEntriesRetrieverArgs, string> ParentDirPathFactory { get; set; }
-        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> InputNmrblFactory { get; set; }
-        public Func<FsEntriesRetrieverArgs, string, int, FsEntriesRetrieverNode> FsEntryDataFactory { get; set; }
-        public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNode, int, bool> FsEntryPredicate { get; set; }
-        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> OutputNmrblFactory { get; set; }
+        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNodeData>, IEnumerable<FsEntriesRetrieverNodeData>> InputNmrblFactory { get; set; }
+        public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNodeData, int, bool> FsEntryPredicate { get; set; }
+        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNodeData>, IEnumerable<FsEntriesRetrieverNodeData>> OutputNmrblFactory { get; set; }
     }
 }

@@ -54,12 +54,15 @@ namespace Turmerik.Core.Utility
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
             DataTreeGeneratorStepData nextStep = default;
-            var nextNodeRetriever = args.Opts.NextRootNodeRetriever;
+            TryRetrieve1In1Out<TArgs, TNode> nextNodeRetriever;
             
             if (args.Current != null)
             {
-                nextNodeRetriever = (TArgs ag, out TNode node) => args.Current.Data.NextChildNodeRetriever(
-                    ag, args.Current.Data, out node);
+                nextNodeRetriever = args.Current.Data.NextChildNodeRetrieverFactory(args);
+            }
+            else
+            {
+                nextNodeRetriever = args.Opts.NextRootNodeRetrieverFactory(args);
             }
 
             int idx = 0;
@@ -131,7 +134,11 @@ namespace Turmerik.Core.Utility
         {
             AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, treeNodesList);
 
-            args.Stack.Push(treeNode);
+            if (args.Current != null)
+            {
+                args.Stack.Push(args.Current);
+            }
+            
             args.Current = treeNode;
             args.Next = default;
         }
@@ -162,7 +169,6 @@ namespace Turmerik.Core.Utility
             else
             {
                 args.Current = default;
-                args.Stop = true;
             }
         }
     }

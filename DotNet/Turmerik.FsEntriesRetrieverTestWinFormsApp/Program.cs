@@ -7,7 +7,7 @@ using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Logging;
 
-namespace Turmerik.TestWinFormsApp
+namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
 {
     internal static class Program
     {
@@ -43,6 +43,7 @@ namespace Turmerik.TestWinFormsApp
                         svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create());
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
+                    services.AddSingleton<FsEntriesTreeViewAdapter>();
                 }));
 
             return svcProv;

@@ -11,7 +11,7 @@ namespace Turmerik.Html
     public interface IHtmlNodesRetriever
     {
         HtmlNodesRetrieverArgs GetNodes(
-            HtmlNodesRetrieverOpts opts);
+            HtmlNodesRetrieverOptions opts);
     }
 
     public class HtmlNodesRetriever : IHtmlNodesRetriever
@@ -26,35 +26,33 @@ namespace Turmerik.Html
         }
 
         public HtmlNodesRetrieverArgs GetNodes(
-            HtmlNodesRetrieverOpts opts)
+            HtmlNodesRetrieverOptions inOpts)
         {
-            opts = NormalizeOpts(opts);
+            var opts = CreateOpts(inOpts);
 
             var args = dataTreeGenerator.GetNodes<HtmlNode, HtmlNodesRetrieverNode, HtmlNodesRetrieverOpts, HtmlNodesRetrieverArgs>(opts);
             return args;
         }
 
-        private HtmlNodesRetrieverOpts NormalizeOpts(
-            HtmlNodesRetrieverOpts opts)
+        private HtmlNodesRetrieverOpts CreateOpts(
+            HtmlNodesRetrieverOptions inOpts)
         {
-            var htmlDoc = opts.HtmlDoc ?? new HtmlDocument().ActWith(
-                doc => doc.LoadHtml(opts.Text));
+            var htmlDoc = inOpts.HtmlDoc ?? new HtmlDocument().ActWith(
+                doc => doc.LoadHtml(inOpts.Text));
 
-            var rootNodes = opts.RootNodes ?? ((IEnumerable<HtmlNode>)htmlDoc.DocumentNode.ChildNodes).GetEnumerator();
-            Func<HtmlNode, TryRetrieve2In1Out<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode, HtmlNodesRetrieverNode>> childNodesRetrieverFactory = null;
+            var rootNodes = inOpts.RootNodes ?? ((IEnumerable<HtmlNode>)htmlDoc.DocumentNode.ChildNodes).GetEnumerator();
+            Func<HtmlNode, Func< HtmlNodesRetrieverArgs, TryRetrieve1In1Out <HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode>>> childNodesRetrieverFactory = null;
 
-            childNodesRetrieverFactory = htmlNode => ((IEnumerable<HtmlNode>)htmlNode.ChildNodes).GetEnumerator(
+            childNodesRetrieverFactory = htmlNode => a => ((IEnumerable<HtmlNode>)htmlNode.ChildNodes).GetEnumerator(
                 ).GetRetriever(htmlNode => new HtmlNodesRetrieverNode(
                     htmlNode, childNodesRetrieverFactory!(htmlNode)),
-                    default(HtmlNodesRetrieverNode),
                     default(HtmlNodesRetrieverArgs))!;
 
-            opts = new HtmlNodesRetrieverOpts(
-                opts.ArgsFactory, opts.NextRootNodeRetriever.IfNull(
-                   () => rootNodes.GetRetriever(htmlNode => new HtmlNodesRetrieverNode(
+            var opts = new HtmlNodesRetrieverOpts(
+                null, args => rootNodes.GetRetriever(htmlNode => new HtmlNodesRetrieverNode(
                         htmlNode, childNodesRetrieverFactory(
-                            htmlNode)), default(HtmlNodesRetrieverArgs))!),
-                opts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
+                            htmlNode)), default(HtmlNodesRetrieverArgs))!,
+                inOpts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
             {
                 HtmlDoc = htmlDoc,
                 RootNodes = rootNodes

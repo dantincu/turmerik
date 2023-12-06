@@ -16,7 +16,7 @@ namespace Turmerik.Md
     public interface IMdObjectsRetriever
     {
         MdObjectsRetrieverArgs GetObjects(
-            MdObjectsRetrieverOpts opts);
+            MdObjectsRetrieverOptions opts);
     }
 
     public class MdObjectsRetriever : IMdObjectsRetriever
@@ -31,34 +31,32 @@ namespace Turmerik.Md
         }
 
         public MdObjectsRetrieverArgs GetObjects(
-            MdObjectsRetrieverOpts opts)
+            MdObjectsRetrieverOptions inOpts)
         {
-            opts = NormalizeOpts(opts);
+            var opts = CreateOpts(inOpts);
 
             var args = dataTreeGenerator.GetNodes<MarkdownObject, MdObjectsRetrieverNode, MdObjectsRetrieverOpts, MdObjectsRetrieverArgs>(opts);
             return args;
         }
 
-        private MdObjectsRetrieverOpts NormalizeOpts(
-            MdObjectsRetrieverOpts opts)
+        private MdObjectsRetrieverOpts CreateOpts(
+            MdObjectsRetrieverOptions inOpts)
         {
-            var mdDoc = opts.MdDoc ?? MarkdownParser.Parse(opts.Text);
-            var rootNodes = opts.RootNodes ?? mdDoc.Descendants().GetEnumerator();
+            var mdDoc = inOpts.MdDoc ?? MarkdownParser.Parse(inOpts.Text);
+            var rootNodes = inOpts.RootNodes ?? mdDoc.Descendants().GetEnumerator();
 
-            Func<MarkdownObject, TryRetrieve2In1Out<MdObjectsRetrieverArgs, MdObjectsRetrieverNode, MdObjectsRetrieverNode>> childNodesRetrieverFactory = null;
+            Func<MarkdownObject, Func< MdObjectsRetrieverArgs, TryRetrieve1In1Out <MdObjectsRetrieverArgs, MdObjectsRetrieverNode>>> childNodesRetrieverFactory = null;
 
-            childNodesRetrieverFactory = mdNode => mdNode.Descendants().GetEnumerator(
+            childNodesRetrieverFactory = mdNode => a => mdNode.Descendants().GetEnumerator(
                 ).GetRetriever(mdChildNode => new MdObjectsRetrieverNode(mdChildNode,
                     childNodesRetrieverFactory!(mdChildNode)),
-                    default(MdObjectsRetrieverNode),
                     default(MdObjectsRetrieverArgs))!;
 
-            opts = new MdObjectsRetrieverOpts(
-                opts.ArgsFactory, opts.NextRootNodeRetriever.IfNull(
-                   () => rootNodes.GetRetriever(mdNode => new MdObjectsRetrieverNode(
+            var opts = new MdObjectsRetrieverOpts(
+                null, args => rootNodes.GetRetriever(mdNode => new MdObjectsRetrieverNode(
                         mdNode, childNodesRetrieverFactory(
-                            mdNode)), default(MdObjectsRetrieverArgs))!),
-                opts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
+                            mdNode)), default(MdObjectsRetrieverArgs))!,
+                inOpts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
             {
                 MdDoc = mdDoc,
                 RootNodes = rootNodes

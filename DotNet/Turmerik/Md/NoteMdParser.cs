@@ -63,9 +63,10 @@ namespace Turmerik.Md
             string? title = null;
 
             mdObjectsRetriever.GetObjects(
-                new MdObjectsRetrieverOpts(
-                    null, null, args =>
-                    {
+                new MdObjectsRetrieverOptions
+                {
+                    MdDoc = mdDoc,
+                    NextStepPredicate = args => {
                         var nextStep = DataTreeGeneratorStep.Push.ToData();
                         var next = args.Next.Data.Value;
 
@@ -101,8 +102,10 @@ namespace Turmerik.Md
 
                             if (html != null)
                             {
-                                htmlNodesRetriever.GetNodes(new HtmlNodesRetrieverOpts(
-                                    null, null, hAgs =>
+                                htmlNodesRetriever.GetNodes(new HtmlNodesRetrieverOptions
+                                {
+                                    Text = html,
+                                    NextStepPredicate = hAgs =>
                                     {
                                         var nextNode = hAgs.Next.Data.Value;
                                         bool isTextNode = nextNode is HtmlTextNode;
@@ -122,17 +125,13 @@ namespace Turmerik.Md
                                         }
 
                                         return nextStep;
-                                    })
-                                {
-                                    Text = html,
+                                    }
                                 });
                             }
                         }
 
                         return nextStep;
-                    })
-                {
-                    MdDoc = mdDoc,
+                    }
                 });
 
             trmrkUuid = trmrkUuidStr;

@@ -9,7 +9,7 @@ using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.TestWinFormsApp
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
@@ -20,7 +20,7 @@ namespace Turmerik.TestWinFormsApp
         private Pen borderPen1Px;
         private Pen borderPen1P5Px;
 
-        public Form1()
+        public MainForm()
         {
             svcProvContnr = ServiceProviderContainer.Instance.Value;
 

@@ -9,7 +9,7 @@ namespace Turmerik.Core.FileSystem
     {
         public FsEntriesRetrieverNode(
             FsEntriesRetrieverNodeData value,
-            TryRetrieve2In1Out<FsEntriesRetrieverArgs, FsEntriesRetrieverNode, FsEntriesRetrieverNode> nextChildNodeRetriever) : base(
+            Func<FsEntriesRetrieverArgs, TryRetrieve1In1Out<FsEntriesRetrieverArgs, FsEntriesRetrieverNode>> nextChildNodeRetriever) : base(
                 value, nextChildNodeRetriever)
         {
         }

@@ -78,18 +78,18 @@ namespace Turmerik.Core.FileSystem
             int maxLevel = inOpts.StrParts.Length - 1;
             string firstPart = inOpts.StrParts.First();
 
-            TryRetrieve1In1Out<StrPartsMatcherArgs, StrPartsMatcherNode> rootNodesRetriever = null;
-            TryRetrieve2In1Out<StrPartsMatcherArgs, StrPartsMatcherNode, StrPartsMatcherNode> childNodesRetriever = null;
+            Func<StrPartsMatcherArgs, TryRetrieve1In1Out < StrPartsMatcherArgs, StrPartsMatcherNode>> rootNodesRetrieverFactory = null;
+            Func < StrPartsMatcherArgs, TryRetrieve1In1Out<StrPartsMatcherArgs, StrPartsMatcherNode>> childNodesRetriever = null;
             Func<StrPartsMatcherArgs, DataTreeGeneratorStepData> nextStepPredicate;
 
             if (matchesAnyStart)
             {
-                rootNodesRetriever = ((IEnumerable<string>)inOpts.StrParts.First().Arr()).GetEnumerator().GetRetriever(
+                rootNodesRetrieverFactory = args => ((IEnumerable<string>)inOpts.StrParts.First().Arr()).GetEnumerator().GetRetriever(
                     str => new StrPartsMatcherNode(CreateData(0, 0), childNodesRetriever), default(StrPartsMatcherArgs))!;
             }
             else
             {
-                rootNodesRetriever = (StrPartsMatcherArgs args, out StrPartsMatcherNode node) =>
+                rootNodesRetrieverFactory = args => (StrPartsMatcherArgs args, out StrPartsMatcherNode node) =>
                 {
                     args.FirstPartStIdx = args.Opts.InputStr.IndexOf(
                         firstPart, args.FirstPartStIdx + 1,
@@ -112,9 +112,9 @@ namespace Turmerik.Core.FileSystem
                 };
             }
 
-            childNodesRetriever = (StrPartsMatcherArgs args, StrPartsMatcherNode currentNode, out StrPartsMatcherNode nextNode) =>
+            childNodesRetriever = a => (StrPartsMatcherArgs args, out StrPartsMatcherNode nextNode) =>
             {
-                var currentData = currentNode.Value;
+                var currentData = args.Current.Data.Value;
                 var opts = args.Opts;
                 int nextLevel = currentData.ChildLevelIdx + 1;
 
@@ -172,7 +172,7 @@ namespace Turmerik.Core.FileSystem
                 o => new StrPartsMatcherArgs(o)
                 {
                     FirstPartStIdx = -1
-                }, rootNodesRetriever, nextStepPredicate, inOpts);
+                }, rootNodesRetrieverFactory, nextStepPredicate, inOpts);
 
             return opts;
         }
@@ -200,8 +200,8 @@ namespace Turmerik.Core.FileSystem
 
         private bool SinglePartMatches(
             StrPartsMatcherOptions opts,
-            string singlePart) => string.IsNullOrEmpty(
-                singlePart) || string.Compare(
+            string singlePart) => !string.IsNullOrEmpty(
+                singlePart) && string.Compare(
                     opts.InputStr,
                     singlePart,
                     opts.StringComparison.Value) == 0;

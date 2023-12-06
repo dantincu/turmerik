@@ -10,7 +10,7 @@ namespace Turmerik.Html
     {
         public HtmlNodesRetrieverNode(
             HtmlNode value,
-            TryRetrieve2In1Out<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode, HtmlNodesRetrieverNode> nextChildNodeRetriever) : base(
+            Func<HtmlNodesRetrieverArgs, TryRetrieve1In1Out<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode>> nextChildNodeRetriever) : base(
                 value,
                 nextChildNodeRetriever)
         {

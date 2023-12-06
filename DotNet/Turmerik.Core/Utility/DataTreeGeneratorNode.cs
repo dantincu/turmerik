@@ -11,15 +11,15 @@ namespace Turmerik.Core.Utility
     {
         public DataTreeGeneratorNode(
             TData value,
-            TryRetrieve2In1Out<TArgs, TNode, TNode> nextChildNodeRetriever)
+            Func<TArgs, TryRetrieve1In1Out<TArgs, TNode>> nextChildNodeRetrieverFactory)
         {
             Value = value;
 
-            NextChildNodeRetriever = nextChildNodeRetriever ?? throw new ArgumentNullException(
-                nameof(nextChildNodeRetriever));
+            NextChildNodeRetrieverFactory = nextChildNodeRetrieverFactory ?? throw new ArgumentNullException(
+                nameof(nextChildNodeRetrieverFactory));
         }
 
         public TData Value { get; }
-        public TryRetrieve2In1Out<TArgs, TNode, TNode> NextChildNodeRetriever { get; }
+        public Func<TArgs, TryRetrieve1In1Out<TArgs, TNode>> NextChildNodeRetrieverFactory { get; }
     }
 }

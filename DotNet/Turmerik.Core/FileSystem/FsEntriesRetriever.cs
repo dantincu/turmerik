@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Turmerik.Core.EqualityComparer;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
@@ -11,78 +12,108 @@ namespace Turmerik.Core.FileSystem
     public interface IFsEntriesRetriever
     {
         FsEntriesRetrieverArgs Retrieve(
-            FsEntriesRetrieverOpts opts);
-
-        void NormalizeOpts(FsEntriesRetrieverOpts opts);
+            FsEntriesRetrieverOptions opts);
     }
 
     public class FsEntriesRetriever : IFsEntriesRetriever
     {
         private readonly IDataTreeGenerator dataTreeGenerator;
+        private readonly IBasicComparerFactory basicComparerFactory;
+        private readonly BasicComparer<bool?> isFolderComparer;
 
         public FsEntriesRetriever(
-            IDataTreeGenerator dataTreeGenerator)
+            IDataTreeGenerator dataTreeGenerator,
+            IBasicComparerFactory basicComparerFactory)
         {
-            this.dataTreeGenerator = dataTreeGenerator ?? throw new ArgumentNullException(nameof(dataTreeGenerator));
+            this.dataTreeGenerator = dataTreeGenerator ?? throw new ArgumentNullException(
+                nameof(dataTreeGenerator));
+
+            this.basicComparerFactory = basicComparerFactory ?? throw new ArgumentNullException(
+                nameof(basicComparerFactory));
+
+            isFolderComparer = basicComparerFactory.BoolNllbl();
         }
 
         public FsEntriesRetrieverArgs Retrieve(
-            FsEntriesRetrieverOpts opts)
+            FsEntriesRetrieverOptions options)
         {
-            NormalizeOpts(opts);
+            var opts = CreateOpts(options);
             var retObj = dataTreeGenerator.GetNodes<FsEntriesRetrieverNodeData, FsEntriesRetrieverNode, FsEntriesRetrieverOpts, FsEntriesRetrieverArgs>(opts);
             return retObj;
         }
 
-        public void NormalizeOpts(FsEntriesRetrieverOpts opts)
+        public FsEntriesRetrieverOpts CreateOpts(FsEntriesRetrieverOptions inOpts)
         {
-            /* opts.ParentDirPathFactory = opts.ParentDirPathFactory.IfNull(
-                GetParentDirPathFactory);
-
-            opts.InputNmrblFactory = opts.InputNmrblFactory.IfNull(
-                GetInputNmrblFactory);
-
-            opts.FsEntryDataFactory = opts.FsEntryDataFactory.IfNull(
-                GetFsEntryDataFactory);
-
-            opts.FsEntryPredicate = opts.FsEntryPredicate.IfNull(
-                GetFsEntryPredicate);
-
-            opts.OutputNmrblFactory = opts.OutputNmrblFactory.IfNull(
-                GetOutputNmrblFactory);
-
-            opts.ChildrenNmrblFactory = opts.ChildrenNmrblFactory.IfNull(
-                GetChildrenFactory); */
-        }
-
-        /* public Func<FsEntriesRetrieverArgs, string> GetParentDirPathFactory(
-            ) => args => Path.Combine(
-                [args.Opts.RootDirPath, .. args.Stack.Select(
-                    node => node.Data.Name).ToArray()]);
-
-        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> GetInputNmrblFactory(
-            ) => (args, nmrbl) => nmrbl.OrderBy(data => data.Name);
-
-        public Func<FsEntriesRetrieverArgs, string, int, FsEntriesRetrieverNode> GetFsEntryDataFactory(
-            ) => (args, path, idx) => new FsEntriesRetrieverNode
+            inOpts = new FsEntriesRetrieverOptions(inOpts)
             {
-                Name = Path.GetFileName(path),
-                IsFolder = Directory.Exists(path) ? true : null
+                InputNmrblFactory = inOpts.InputNmrblFactory.FirstNotNull(
+                    (args, nmrbl) => nmrbl.OrderBy(data => data.Name).OrderByDescending(
+                        data => data.IsFolder, isFolderComparer)),
+                FsEntryPredicate = inOpts.FsEntryPredicate.FirstNotNull(
+                    (args, fsEntry, idx) => true),
+                OutputNmrblFactory = inOpts.OutputNmrblFactory.FirstNotNull(
+                    (args, nmrbl) => nmrbl.ToArray()),
             };
 
-        public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNode, int, bool> GetFsEntryPredicate(
-            ) => (args, fsEntry, idx) => true;
+            Func<FsEntriesRetrieverArgs, string, int, TryRetrieve1In1Out <FsEntriesRetrieverArgs, FsEntriesRetrieverNode>> nextChildNodeRetrieverFactory = null!;
 
-        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> GetOutputNmrblFactory(
-            ) => (args, nmrbl) => nmrbl.ToArray();
+            Func<FsEntriesRetrieverArgs, string, int, IEnumerable <FsEntriesRetrieverNode>> childNodesNmrblFactory = null!;
 
-        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>> GetChildrenFactory(
-            ) => args => args.Opts.ParentDirPathFactory(args).With(
-                parentDirPath => Directory.EnumerateFileSystemEntries(
-                    parentDirPath).Select((entry, idx) => args.Opts.FsEntryDataFactory(
-                        args, entry, idx)).With(
-                            nmrbl => args.Opts.InputNmrblFactory(args, nmrbl)).Where(
-                        (data, idx) => args.Opts.FsEntryPredicate(args, data, idx)).With(
-                            nmrbl => args.Opts.OutputNmrblFactory(args, nmrbl))); */
+            childNodesNmrblFactory = (
+                args, path, idx) => Directory.EnumerateFileSystemEntries(path).With(childEntriesNmrbl =>
+                {
+                    var dataEntriesNmrbl = childEntriesNmrbl.Select(
+                        (entry, idx) => GetNodeData(entry, idx));
+
+                    dataEntriesNmrbl = args.Opts.InputNmrblFactory(args, dataEntriesNmrbl);
+
+                    dataEntriesNmrbl = dataEntriesNmrbl.Where(
+                        (data, idx) => args.Opts.FsEntryPredicate(args, data, idx));
+
+                    dataEntriesNmrbl = args.Opts.OutputNmrblFactory(args, dataEntriesNmrbl);
+
+                    var retNode = dataEntriesNmrbl.Select(
+                        (data, idx) => new FsEntriesRetrieverNode(data,
+                            a => nextChildNodeRetrieverFactory(
+                                args, data.Path, idx)));
+
+                    return retNode;
+                });
+
+            nextChildNodeRetrieverFactory = (args, path, idx) => childNodesNmrblFactory(
+                args, path, idx).GetEnumerator().GetRetriever(
+                node => node, default(FsEntriesRetrieverArgs))!;
+
+            var opts = new FsEntriesRetrieverOpts(
+                null, args => nextChildNodeRetrieverFactory(
+                    args, inOpts.RootDirPath, 0), args =>
+                {
+                    var nextNodeData = args.Next.Data;
+                    var nextNodeValue = nextNodeData.Value;
+
+                    bool matches = args.Opts.FsEntryPredicate(
+                        args, nextNodeValue,
+                        nextNodeValue.Idx);
+
+                    var nextStep = ((matches && nextNodeValue.IsFolder == true) switch
+                    {
+                        true => DataTreeGeneratorStep.Push,
+                        false => DataTreeGeneratorStep.Next
+                    }).ToData(matches);
+
+                    return nextStep;
+                }, inOpts);
+
+            return opts;
+        }
+
+        private FsEntriesRetrieverNodeData GetNodeData(
+            string path, int idx) => new FsEntriesRetrieverNodeData
+            {
+                Path = path,
+                Name = Path.GetFileName(path),
+                Idx = idx,
+                IsFolder = Directory.Exists(path) ? true : null
+            };
     }
 }
