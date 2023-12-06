@@ -17,6 +17,8 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
         private static readonly ReadOnlyCollection<char> invalidWilcardFilePathChars = Path.GetInvalidPathChars().Except(['*']).RdnlC();
         private static readonly ReadOnlyCollection<char> invalidWilcardFileNameChars = Path.GetInvalidFileNameChars().Except(['*', '/', '\\']).RdnlC();
 
+        private readonly string[] progArgs;
+
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
         private readonly IAppLogger logger;
@@ -31,8 +33,9 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
 
         private string[][] pathFilters;
 
-        public MainForm()
+        public MainForm(string[] args)
         {
+            progArgs = args;
             svcProvContnr = ServiceProviderContainer.Instance.Value;
             svcProv = svcProvContnr.Data;
             logger = svcProv.GetRequiredService<IAppLoggerCreator>().GetSharedAppLogger(GetType());
@@ -47,7 +50,8 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
             rootFolderPathTextBoxAdapter = new EditableTextBoxAdapter(new EditableTextBoxAdapterOpts
             {
                 TextBox = textBoxRootFolderPath,
-                InitialText = Directory.GetCurrentDirectory(),
+                InitialText = Path.GetFullPath(
+                    progArgs.FirstOrDefault() ?? Directory.GetCurrentDirectory()),
                 EditModeForeColorFactory = color => editModeForeColor
             });
 
@@ -70,6 +74,10 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
                     ErrorForeColor = Color.FromArgb(192, 0, 0),
                 };
             }
+        }
+
+        public MainForm() : this([])
+        {
         }
 
         private void RefreshMainTreeView()

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.FsEntriesRetrieverTestWinFormsApp": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../"
+    }
+  }
+}

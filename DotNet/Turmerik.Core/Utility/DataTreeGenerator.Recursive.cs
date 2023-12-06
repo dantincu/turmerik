@@ -10,8 +10,7 @@ namespace Turmerik.Core.Utility
     public class RecursiveDataTreeGenerator : DataTreeGeneratorBase
     {
         protected override void GetNodes<TData, TNode, TOpts, TArgs>(
-            TArgs args,
-            Stack<DataTreeNode<TNode>> stack)
+            TArgs args)
         {
             DataTreeGeneratorStepData nextStep = default;
             TryRetrieve1In1Out<TArgs, TNode> nextNodeRetriever;
@@ -35,7 +34,7 @@ namespace Turmerik.Core.Utility
 
                 if (GetNodes<TData, TNode, TOpts, TArgs>(
                     args, ref nextStep,
-                    treeNode, stack))
+                    treeNode))
                 {
                     break;
                 }
@@ -49,8 +48,7 @@ namespace Turmerik.Core.Utility
         private bool GetNodes<TData, TNode, TOpts, TArgs>(
             TArgs args,
             ref DataTreeGeneratorStepData nextStep,
-            DataTreeNode<TNode> treeNode,
-            Stack<DataTreeNode<TNode>> stack)
+            DataTreeNode<TNode> treeNode)
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
@@ -68,12 +66,12 @@ namespace Turmerik.Core.Utility
                         () => AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, sibblingsList)),
                     DataTreeGeneratorStep.Push => () =>
                     {
-                        TryPushStack<TData, TNode, TOpts, TArgs>(args, treeNode, sibblingsList, stack);
-                        GetNodes<TData, TNode, TOpts, TArgs>(args, stack);
-                        TryPopStack<TData, TNode, TOpts, TArgs>(args, stack);
+                        TryPushStack<TData, TNode, TOpts, TArgs>(args, treeNode, sibblingsList);
+                        GetNodes<TData, TNode, TOpts, TArgs>(args);
+                        TryPopStack<TData, TNode, TOpts, TArgs>(args);
                     }
                     ,
-                    DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args, stack),
+                    DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args),
                     _ => () => { }
                 });
             }
