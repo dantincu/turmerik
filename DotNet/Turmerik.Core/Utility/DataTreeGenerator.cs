@@ -56,10 +56,10 @@ namespace Turmerik.Core.Utility
             DataTreeGeneratorStepData nextStep = default;
             var nextNodeRetriever = args.Opts.NextRootNodeRetriever;
             
-            if (args.Parent != null)
+            if (args.Current != null)
             {
-                nextNodeRetriever = (TArgs ag, out TNode node) => args.Parent.Data.NextChildNodeRetriever(
-                    ag, args.Parent.Data, out node);
+                nextNodeRetriever = (TArgs ag, out TNode node) => args.Current.Data.NextChildNodeRetriever(
+                    ag, args.Current.Data, out node);
             }
 
             int idx = 0;
@@ -68,7 +68,7 @@ namespace Turmerik.Core.Utility
             while (hasNode)
             {
                 var treeNode = new DataTreeNode<TNode>(
-                    node, args.Parent);
+                    node, args.Current);
 
                 if (GetNodes<TData, TNode, TOpts, TArgs>(
                     args,
@@ -92,8 +92,8 @@ namespace Turmerik.Core.Utility
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
-            args.Current = treeNode;
-            var sibblingsList = args.Parent?.ChildNodes ?? args.RootNodes;
+            args.Next = treeNode;
+            var sibblingsList = args.Current?.ChildNodes ?? args.RootNodes;
             nextStep = args.Opts.NextStepPredicate(args);
             var nxtStp = nextStep;
 
@@ -102,7 +102,7 @@ namespace Turmerik.Core.Utility
                 FuncH.ExecuteFirstAction(nxtStp.Value switch
                 {
                     DataTreeGeneratorStep.Next => () => nxtStp.Matches.ActIf(
-                        () => sibblingsList.Add(treeNode)),
+                        () => AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, sibblingsList)),
                     DataTreeGeneratorStep.Push => () =>
                     {
                         PushStack<TData, TNode, TOpts, TArgs>(args, treeNode, sibblingsList);
@@ -112,6 +112,10 @@ namespace Turmerik.Core.Utility
                     DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args),
                     _ => () => { }
                 });
+            }
+            else if (nxtStp.Matches)
+            {
+                AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, sibblingsList);
             }
 
             return args.Stop;
@@ -125,11 +129,22 @@ namespace Turmerik.Core.Utility
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
-            treeNodesList.Add(treeNode);
-            args.Stack.Push(treeNode);
+            AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, treeNodesList);
 
-            args.Parent = treeNode;
-            args.Current = default;
+            args.Stack.Push(treeNode);
+            args.Current = treeNode;
+            args.Next = default;
+        }
+
+        private void AddToTreeNodesList<TData, TNode, TOpts, TArgs>(
+            DataTreeNode<TNode> treeNode,
+            List<DataTreeNode<TNode>> treeNodesList)
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+        {
+            treeNodesList.Add(treeNode ?? throw new ArgumentNullException(
+                nameof(treeNode)));
         }
 
         private void TryPopStack<TData, TNode, TOpts, TArgs>(
@@ -138,15 +153,15 @@ namespace Turmerik.Core.Utility
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
-            args.Current = args.Parent;
+            args.Next = args.Current;
 
             if (args.Stack.Any())
             {
-                args.Parent = args.Stack.Pop();
+                args.Current = args.Stack.Pop();
             }
             else
             {
-                args.Parent = default;
+                args.Current = default;
                 args.Stop = true;
             }
         }

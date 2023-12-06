@@ -10,7 +10,7 @@ namespace Turmerik.Md
     {
         public MdObjectsRetrieverOpts(
             Func<MdObjectsRetrieverOpts, MdObjectsRetrieverArgs> argsFactory,
-            TryRetrieve<MdObjectsRetrieverArgs, MdObjectsRetrieverNode> nextRootNodeRetriever,
+            TryRetrieve1In1Out<MdObjectsRetrieverArgs, MdObjectsRetrieverNode> nextRootNodeRetriever,
             Func<MdObjectsRetrieverArgs, DataTreeGeneratorStepData> nextStepPredicate) : base(
                 argsFactory,
                 nextRootNodeRetriever,

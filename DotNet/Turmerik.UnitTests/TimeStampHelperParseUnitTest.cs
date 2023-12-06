@@ -107,7 +107,7 @@ namespace Turmerik.UnitTests
         private void PerformTest(
             string timeStamp,
             DateTime expectedValue,
-            TryRetrieve<string, DateTime?> factory)
+            TryRetrieve1In1Out<string, DateTime?> factory)
         {
             Assert.True(factory(timeStamp, out var actualValue));
             Assert.Equal(expectedValue, actualValue.Value);
@@ -116,7 +116,7 @@ namespace Turmerik.UnitTests
         private void PerformTest(
             string timeStamp,
             DateTime expectedValue,
-            TryRetrieve2<string, DateTime?, TimeSpan?> factory)
+            TryRetrieve1In2Out<string, DateTime?, TimeSpan?> factory)
         {
             Assert.True(factory(
                 timeStamp,
@@ -146,7 +146,7 @@ namespace Turmerik.UnitTests
         private void PerformTest(
             string timeStamp,
             TimeSpan expectedValue,
-            TryRetrieve<string, TimeSpan?> factory)
+            TryRetrieve1In1Out<string, TimeSpan?> factory)
         {
             Assert.True(factory(timeStamp, out var actualValue));
             Assert.Equal(expectedValue, actualValue.Value);

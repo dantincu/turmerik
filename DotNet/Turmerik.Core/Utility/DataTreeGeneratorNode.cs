@@ -11,7 +11,7 @@ namespace Turmerik.Core.Utility
     {
         public DataTreeGeneratorNode(
             TData value,
-            TryRetrieve1<TArgs, TNode, TNode> nextChildNodeRetriever)
+            TryRetrieve2In1Out<TArgs, TNode, TNode> nextChildNodeRetriever)
         {
             Value = value;
 
@@ -20,6 +20,6 @@ namespace Turmerik.Core.Utility
         }
 
         public TData Value { get; }
-        public TryRetrieve1<TArgs, TNode, TNode> NextChildNodeRetriever { get; }
+        public TryRetrieve2In1Out<TArgs, TNode, TNode> NextChildNodeRetriever { get; }
     }
 }

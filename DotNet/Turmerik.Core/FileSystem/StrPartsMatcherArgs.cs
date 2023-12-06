@@ -9,9 +9,9 @@ namespace Turmerik.Core.FileSystem
     {
         public StrPartsMatcherArgs(StrPartsMatcherOpts opts) : base(opts)
         {
-            PartsQueue = new Queue<StrPartsMatcherNodeData>();
         }
 
-        public Queue<StrPartsMatcherNodeData> PartsQueue { get; }
+        public int FirstPartStIdx { get; set; }
+        public bool Matches { get; set; }
     }
 }

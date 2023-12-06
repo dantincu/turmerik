@@ -80,7 +80,7 @@ namespace Turmerik.Core.EqualityComparer
 
         DictionaryBasicEqualityComparer<TDictnr, TKey, TValue> GetDictionaryBasicEqualityComparer<TDictnr, TKey, TValue>(
             Func<TDictnr, IEnumerable<TKey>> keysFactory,
-            TryRetrieve1<TDictnr, TKey, TValue> valueRetriever,
+            TryRetrieve2In1Out<TDictnr, TKey, TValue> valueRetriever,
             Func<TValue, TValue, bool> valueEqualsFunc = null,
             Func<TKey, TKey, bool> keyEqualsFunc = null,
             bool valuesCanBeNull = true,
@@ -253,7 +253,7 @@ namespace Turmerik.Core.EqualityComparer
 
         public DictionaryBasicEqualityComparer<TDictnr, TKey, TValue> GetDictionaryBasicEqualityComparer<TDictnr, TKey, TValue>(
             Func<TDictnr, IEnumerable<TKey>> keysFactory,
-            TryRetrieve1<TDictnr, TKey, TValue> valueRetriever,
+            TryRetrieve2In1Out<TDictnr, TKey, TValue> valueRetriever,
             Func<TValue, TValue, bool> valueEqualsFunc = null,
             Func<TKey, TKey, bool> keyEqualsFunc = null,
             bool valuesCanBeNull = true,
@@ -429,7 +429,7 @@ namespace Turmerik.Core.EqualityComparer
 
         private Func<TDictnr, TDictnr, bool> GetDictnrEqualityComparerPredicate<TDictnr, TKey, TValue>(
             Func<TDictnr, IEnumerable<TKey>> keysFactory,
-            TryRetrieve1<TDictnr, TKey, TValue> valueRetriever,
+            TryRetrieve2In1Out<TDictnr, TKey, TValue> valueRetriever,
             Func<TValue, TValue, bool> valueEqualsFunc = null,
             Func<TKey, TKey, bool> keyEqualsFunc = null,
             bool valuesCanBeNull = true,

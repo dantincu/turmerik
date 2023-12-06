@@ -41,7 +41,7 @@ namespace Turmerik.Html
                 doc => doc.LoadHtml(opts.Text));
 
             var rootNodes = opts.RootNodes ?? ((IEnumerable<HtmlNode>)htmlDoc.DocumentNode.ChildNodes).GetEnumerator();
-            Func<HtmlNode, TryRetrieve1<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode, HtmlNodesRetrieverNode>> childNodesRetrieverFactory = null;
+            Func<HtmlNode, TryRetrieve2In1Out<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode, HtmlNodesRetrieverNode>> childNodesRetrieverFactory = null;
 
             childNodesRetrieverFactory = htmlNode => ((IEnumerable<HtmlNode>)htmlNode.ChildNodes).GetEnumerator(
                 ).GetRetriever(htmlNode => new HtmlNodesRetrieverNode(

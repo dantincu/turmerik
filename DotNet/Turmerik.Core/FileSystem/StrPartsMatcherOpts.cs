@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.FileSystem
@@ -9,16 +11,20 @@ namespace Turmerik.Core.FileSystem
     {
         public StrPartsMatcherOpts(
             Func<StrPartsMatcherOpts, StrPartsMatcherArgs> argsFactory,
-            TryRetrieve<StrPartsMatcherArgs, StrPartsMatcherNode> nextRootNodeRetriever,
-            Func<StrPartsMatcherArgs, DataTreeGeneratorStepData> nextStepPredicate) : base(
+            TryRetrieve1In1Out<StrPartsMatcherArgs, StrPartsMatcherNode> nextRootNodeRetriever,
+            Func<StrPartsMatcherArgs, DataTreeGeneratorStepData> nextStepPredicate,
+            StrPartsMatcherOptions inputOpts) : base(
                 argsFactory,
                 nextRootNodeRetriever,
                 nextStepPredicate)
         {
+            InputStr = inputOpts.InputStr;
+            StrParts = inputOpts.StrParts.RdnlC();
+            StringComparison = inputOpts.StringComparison.Value;
         }
 
-        public string InputStr { get; set; }
-        public string[] StrParts { get; set; }
-        public StringComparison? StringComparison { get; set; }
+        public string InputStr { get; }
+        public ReadOnlyCollection<string> StrParts { get; }
+        public StringComparison StringComparison { get; }
     }
 }

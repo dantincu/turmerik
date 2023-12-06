@@ -10,7 +10,7 @@ namespace Turmerik.Html
     {
         public HtmlNodesRetrieverOpts(
             Func<HtmlNodesRetrieverOpts, HtmlNodesRetrieverArgs> argsFactory,
-            TryRetrieve<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode> nextRootNodeRetriever,
+            TryRetrieve1In1Out<HtmlNodesRetrieverArgs, HtmlNodesRetrieverNode> nextRootNodeRetriever,
             Func<HtmlNodesRetrieverArgs, DataTreeGeneratorStepData> nextStepPredicate) : base(
                 argsFactory,
                 nextRootNodeRetriever,

@@ -22,14 +22,23 @@ namespace Turmerik.Notes.UnitTests
         public void MainTest()
         {
             PerformTest(["asdfsadf"]);
-            PerformTest(["asdfsadf", "qwwqerw"]);
             PerformTest(["asdfsadf", "qwwqerw"], " ");
+            PerformTest(["asdfsadf", "qwwqerw"]);
+            PerformTest(["asdfsadf", "qwwqerw", "zxcvzxcv"]);
+            PerformTest(["asdfsadf", "qwwqerw", "zxcvzxcv"], " ");
+
+            PerformTest("asdfqwerzxcv", ["asdf", "zxcv"], true);
+            PerformTest("asdfqwerzxcvp", ["asdf", "zxcv"], false);
+            PerformTest("pasdfqwerzxcv", ["asdf", "zxcv"], false);
+            PerformTest("pasdfqwerzxcv", ["", "asdf", "zxcv"], true);
+            PerformTest("asdfqwerzxcvp", ["asdf", "zxcv", ""], true);
+            PerformTest("pasdfqwerzxcvp", ["", "asdf", "zxcv", ""], true);
         }
 
         private void PerformTest(
             string[] strParts,
             string joinStr = null) => PerformTest(
-                strParts.JoinStr(joinStr),
+                joinStr + strParts.JoinStr(joinStr) + joinStr,
                 strParts,
                 string.IsNullOrEmpty(joinStr));
 
@@ -38,14 +47,14 @@ namespace Turmerik.Notes.UnitTests
             string[] strParts,
             bool expectedResult)
         {
-            /* bool actualResult = strPartsMatcher.Matches(
-                new StrPartsMatcherOpts
+            bool actualResult = strPartsMatcher.Matches(
+                new StrPartsMatcherOptions
                 {
                     InputStr = inputStr,
                     StrParts = strParts,
                 });
 
-            Assert.Equal(expectedResult, actualResult); */
+            Assert.Equal(expectedResult, actualResult);
         }
     }
 }

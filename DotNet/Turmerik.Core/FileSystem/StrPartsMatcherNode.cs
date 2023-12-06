@@ -9,7 +9,7 @@ namespace Turmerik.Core.FileSystem
     {
         public StrPartsMatcherNode(
             StrPartsMatcherNodeData value,
-            TryRetrieve1<StrPartsMatcherArgs, StrPartsMatcherNode, StrPartsMatcherNode> nextChildNodeRetriever) : base(
+            TryRetrieve2In1Out<StrPartsMatcherArgs, StrPartsMatcherNode, StrPartsMatcherNode> nextChildNodeRetriever) : base(
                 value,
                 nextChildNodeRetriever)
         {

@@ -67,9 +67,9 @@ namespace Turmerik.Md
                     null, null, args =>
                     {
                         var nextStep = DataTreeGeneratorStep.Push.ToData();
-                        var current = args.Current.Data.Value;
+                        var next = args.Next.Data.Value;
 
-                        if (current is HeadingBlock block && block.Level == 1)
+                        if (next is HeadingBlock block && block.Level == 1)
                         {
                             title = block.GetTitleStr();
 
@@ -82,7 +82,7 @@ namespace Turmerik.Md
                                 nextStep = DataTreeGeneratorStep.Next.ToData();
                             }
                         }
-                        else if (current is QuoteBlock || current is FencedCodeBlock)
+                        else if (next is QuoteBlock || next is FencedCodeBlock)
                         {
                             nextStep = DataTreeGeneratorStep.Next.ToData();
                         }
@@ -90,11 +90,11 @@ namespace Turmerik.Md
                         {
                             string html = null;
 
-                            if (current is HtmlInline htmlInline)
+                            if (next is HtmlInline htmlInline)
                             {
                                 html = htmlInline.Tag;
                             }
-                            else if (current is HtmlBlock htmlBlock)
+                            else if (next is HtmlBlock htmlBlock)
                             {
                                 html = htmlBlock.Lines.GetHtml();
                             }
@@ -104,15 +104,15 @@ namespace Turmerik.Md
                                 htmlNodesRetriever.GetNodes(new HtmlNodesRetrieverOpts(
                                     null, null, hAgs =>
                                     {
-                                        var crntNode = hAgs.Current.Data.Value;
-                                        bool isTextNode = crntNode is HtmlTextNode;
+                                        var nextNode = hAgs.Next.Data.Value;
+                                        bool isTextNode = nextNode is HtmlTextNode;
                                         var nextStep = (isTextNode ? DataTreeGeneratorStep.Next : DataTreeGeneratorStep.Push).ToData();
 
-                                        if (!isTextNode && crntNode.Name == "input" && crntNode.Attributes.SingleOrDefault(
-                                                a => a.Name == "type")?.Value == "hidden" && crntNode.Attributes.SingleOrDefault(
+                                        if (!isTextNode && nextNode.Name == "input" && nextNode.Attributes.SingleOrDefault(
+                                                a => a.Name == "type")?.Value == "hidden" && nextNode.Attributes.SingleOrDefault(
                                                 a => a.Name == "name")?.Value == trmrkUuidInputName)
                                         {
-                                            trmrkUuidStr = crntNode.Attributes.SingleOrDefault(
+                                            trmrkUuidStr = nextNode.Attributes.SingleOrDefault(
                                                 a => a.Name == "value")?.Value;
 
                                             if (trmrkUuidStr != null)

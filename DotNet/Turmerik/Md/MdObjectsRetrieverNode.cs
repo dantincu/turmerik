@@ -11,7 +11,7 @@ namespace Turmerik.Md
     {
         public MdObjectsRetrieverNode(
             MarkdownObject value,
-            TryRetrieve1<MdObjectsRetrieverArgs, MdObjectsRetrieverNode, MdObjectsRetrieverNode> nextChildNodeRetriever) : base(
+            TryRetrieve2In1Out<MdObjectsRetrieverArgs, MdObjectsRetrieverNode, MdObjectsRetrieverNode> nextChildNodeRetriever) : base(
                 value,
                 nextChildNodeRetriever)
         {

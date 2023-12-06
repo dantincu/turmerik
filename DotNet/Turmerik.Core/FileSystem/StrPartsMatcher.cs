@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
@@ -10,7 +11,7 @@ namespace Turmerik.Core.FileSystem
     public interface IStrPartsMatcher
     {
         bool Matches(
-            StrPartsMatcherOpts opts);
+            StrPartsMatcherOptions opts);
     }
 
     public class StrPartsMatcher : IStrPartsMatcher
@@ -24,83 +25,186 @@ namespace Turmerik.Core.FileSystem
         }
 
         public bool Matches(
-            StrPartsMatcherOpts opts) => opts.ActWith(nOpts =>
+            StrPartsMatcherOptions inOpts)
+        {
+            inOpts = new StrPartsMatcherOptions(inOpts)
             {
-                /* opts.StringComparison ??= StringComparison.InvariantCulture;
+                InputStr = inOpts.InputStr,
+                StrParts = inOpts.StrParts,
+                StringComparison = inOpts.StringComparison ?? StringComparison.InvariantCulture,
+            };
 
-                opts.ChildrenNmrblFactory = opts.ChildrenNmrblFactory.FirstNotNull(
-                    args => args.PartsQueue);
+            var strParts = inOpts.StrParts;
+            int partsCount = strParts.Count();
+            bool matches = partsCount == 0;
 
-                opts.ArgsFactory = opts.ArgsFactory.FirstNotNull(opts => new StrPartsMatcherArgs(opts).ActWith(args =>
+            if (!matches)
+            {
+                if (partsCount == 1)
                 {
-                    args.PartsQueue.Enqueue(CreateData(0, 0));
-                }));
-
-                opts.NextStepPredicate = opts.NextStepPredicate.FirstNotNull(args =>
+                    matches = SinglePartMatches(
+                        inOpts, strParts.Single());
+                }
+                else
                 {
-                    var nextStep = DataTreeGeneratorStep.Push.ToData();
-                    var opts = args.Opts;
+                    string firstPart = strParts[0];
+                    bool matchesAnyStart = string.IsNullOrEmpty(firstPart);
+                    bool isSettled = !matchesAnyStart;
 
-                    var parentData = args.Parent?.Data ?? args.PartsQueue.Dequeue();
-
-                    int charStIdx = parentData.ChildCharStIdx;
-                    int levelIdx = parentData.ChildLevelIdx;
-                    int refLen = opts.StrParts.Length;
-                    int maxLevel = refLen - 1;
-
-                    if (levelIdx == 0)
+                    if (isSettled)
                     {
-                        if (charStIdx == 0 && !string.IsNullOrEmpty(
-                            opts.StrParts.First()))
+                        if (inOpts.InputStr.StartsWith(
+                            firstPart))
                         {
-                            if (opts.StrParts.Length > 1 && !opts.InputStr.StartsWith(
-                                opts.StrParts[1], opts.StringComparison.Value))
-                            {
-                                nextStep = DataTreeGeneratorStep.Next.ToData();
-                                args.Stop = true;
-                            }
-                        }
-                    }
-                    else if (levelIdx == maxLevel)
-                    {
-                        string lastPart = opts.StrParts.Last();
-
-                        if (string.IsNullOrEmpty(lastPart) || opts.InputStr.EndsWith(
-                            lastPart, opts.StringComparison.Value))
-                        {
-                            nextStep = DataTreeGeneratorStep.Next.ToData(true);
-                            args.Stop = true;
-                        }
-                        else
-                        {
-                            nextStep = DataTreeGeneratorStep.Pop.ToData();
-                            parentData.ChildCharStIdx++;
+                            isSettled = false;
                         }
                     }
 
-                    if (!args.Stop)
+                    if (!isSettled)
                     {
-                        int nextCharIdx = opts.InputStr.IndexOf(
-                            opts.StrParts[levelIdx],
-                            charStIdx);
+                        var opts = CreateOpts(inOpts, matchesAnyStart);
+                        matches = dataTreeGenerator.GetNodes<StrPartsMatcherNodeData, StrPartsMatcherNode, StrPartsMatcherOpts, StrPartsMatcherArgs>(opts).Matches;
+                    }
+                }
+            }
 
-                        if (nextCharIdx >= 0)
-                        {
-                            nextStep = DataTreeGeneratorStep.Push.ToData();
+            return matches;
+        }
 
-                            args.PartsQueue.Enqueue(
-                                CreateData(nextCharIdx, levelIdx + 1));
-                        }
-                        else
-                        {
-                            nextStep = DataTreeGeneratorStep.Pop.ToData();
-                            parentData.ChildCharStIdx++;
-                        }
+        private StrPartsMatcherOpts CreateOpts(
+            StrPartsMatcherOptions inOpts,
+            bool matchesAnyStart)
+        {
+            int maxLevel = inOpts.StrParts.Length - 1;
+            string firstPart = inOpts.StrParts.First();
+
+            TryRetrieve1In1Out<StrPartsMatcherArgs, StrPartsMatcherNode> rootNodesRetriever = null;
+            TryRetrieve2In1Out<StrPartsMatcherArgs, StrPartsMatcherNode, StrPartsMatcherNode> childNodesRetriever = null;
+            Func<StrPartsMatcherArgs, DataTreeGeneratorStepData> nextStepPredicate;
+
+            if (matchesAnyStart)
+            {
+                rootNodesRetriever = ((IEnumerable<string>)inOpts.StrParts.First().Arr()).GetEnumerator().GetRetriever(
+                    str => new StrPartsMatcherNode(CreateData(0, 0), childNodesRetriever), default(StrPartsMatcherArgs))!;
+            }
+            else
+            {
+                rootNodesRetriever = (StrPartsMatcherArgs args, out StrPartsMatcherNode node) =>
+                {
+                    args.FirstPartStIdx = args.Opts.InputStr.IndexOf(
+                        firstPart, args.FirstPartStIdx + 1,
+                        args.Opts.StringComparison);
+
+                    bool hasValue = args.FirstPartStIdx >= 0;
+
+                    if (hasValue)
+                    {
+                        node = new StrPartsMatcherNode(
+                            CreateData(args.FirstPartStIdx, 0),
+                            childNodesRetriever);
+                    }
+                    else
+                    {
+                        node = null;
                     }
 
-                    return nextStep;
-                }); */
-            }).With(nOpts => dataTreeGenerator.GetNodes<StrPartsMatcherNodeData, StrPartsMatcherNode, StrPartsMatcherOpts, StrPartsMatcherArgs>(nOpts).RootNodes.Any());
+                    return hasValue;
+                };
+            }
+
+            childNodesRetriever = (StrPartsMatcherArgs args, StrPartsMatcherNode currentNode, out StrPartsMatcherNode nextNode) =>
+            {
+                var currentData = currentNode.Value;
+                var opts = args.Opts;
+                int nextLevel = currentData.ChildLevelIdx + 1;
+
+                currentData.ChildCharStIdx = opts.InputStr.IndexOf(
+                    opts.StrParts[nextLevel],
+                    currentData.ChildCharStIdx + 1,
+                    opts.StringComparison);
+
+                bool hasValue = currentData.ChildLevelIdx >= 0;
+
+                if (hasValue)
+                {
+                    nextNode = new StrPartsMatcherNode(
+                        CreateData(
+                            currentData.ChildCharStIdx,
+                            nextLevel),
+                        childNodesRetriever);
+                }
+                else
+                {
+                    nextNode = null;
+                }
+
+                return hasValue;
+            };
+
+            nextStepPredicate = args =>
+            {
+                DataTreeGeneratorStepData nextStep;
+
+                var currentData = args.Current?.Data;
+                var currentValue = currentData?.Value ?? CreateData(0, 0);
+
+                var opts = args.Opts;
+                int nextLevel = currentValue.ChildLevelIdx + 1;
+                var nextPart = opts.StrParts[nextLevel];
+
+                if (nextLevel == maxLevel)
+                {
+                    nextStep = DataTreeGeneratorStep.Next.ToData(
+                        LastPartMatches(opts, nextPart, currentValue));
+
+                    args.Matches = nextStep.Matches;
+                    args.Stop = true;
+                }
+                else
+                {
+                    nextStep = DataTreeGeneratorStep.Push.ToData();
+                }
+
+                return nextStep;
+            };
+
+            var opts = new StrPartsMatcherOpts(
+                o => new StrPartsMatcherArgs(o)
+                {
+                    FirstPartStIdx = -1
+                }, rootNodesRetriever, nextStepPredicate, inOpts);
+
+            return opts;
+        }
+
+        private bool LastPartMatches(
+            StrPartsMatcherOpts opts,
+            string lastPart,
+            StrPartsMatcherNodeData currentValue)
+        {
+            bool matches = string.IsNullOrEmpty(lastPart);
+
+            if (!matches)
+            {
+                string prevPart = opts.StrParts[currentValue.ChildLevelIdx];
+
+                string inputStrEnd = opts.InputStr.Substring(
+                    currentValue.CharStIdx + prevPart.Length);
+
+                matches = inputStrEnd.EndsWith(
+                    lastPart, opts.StringComparison);
+            }
+
+            return matches;
+        }
+
+        private bool SinglePartMatches(
+            StrPartsMatcherOptions opts,
+            string singlePart) => string.IsNullOrEmpty(
+                singlePart) || string.Compare(
+                    opts.InputStr,
+                    singlePart,
+                    opts.StringComparison.Value) == 0;
 
         private StrPartsMatcherNodeData CreateData(
             int charStIdx,

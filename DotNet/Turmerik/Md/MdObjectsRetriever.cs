@@ -45,7 +45,7 @@ namespace Turmerik.Md
             var mdDoc = opts.MdDoc ?? MarkdownParser.Parse(opts.Text);
             var rootNodes = opts.RootNodes ?? mdDoc.Descendants().GetEnumerator();
 
-            Func<MarkdownObject, TryRetrieve1<MdObjectsRetrieverArgs, MdObjectsRetrieverNode, MdObjectsRetrieverNode>> childNodesRetrieverFactory = null;
+            Func<MarkdownObject, TryRetrieve2In1Out<MdObjectsRetrieverArgs, MdObjectsRetrieverNode, MdObjectsRetrieverNode>> childNodesRetrieverFactory = null;
 
             childNodesRetrieverFactory = mdNode => mdNode.Descendants().GetEnumerator(
                 ).GetRetriever(mdChildNode => new MdObjectsRetrieverNode(mdChildNode,

@@ -10,19 +10,26 @@ namespace Turmerik.Core.FileSystem
     {
         public FsEntriesRetrieverOpts(
             Func<FsEntriesRetrieverOpts, FsEntriesRetrieverArgs> argsFactory,
-            TryRetrieve<FsEntriesRetrieverArgs, FsEntriesRetrieverNode> nextRootNodeRetriever,
-            Func<FsEntriesRetrieverArgs, DataTreeGeneratorStepData> nextStepPredicate) : base(
+            TryRetrieve1In1Out<FsEntriesRetrieverArgs, FsEntriesRetrieverNode> nextRootNodeRetriever,
+            Func<FsEntriesRetrieverArgs, DataTreeGeneratorStepData> nextStepPredicate,
+            FsEntriesRetrieverOptions inputOpts) : base(
                 argsFactory,
                 nextRootNodeRetriever,
                 nextStepPredicate)
         {
+            RootDirPath = inputOpts.RootDirPath;
+            ParentDirPathFactory = inputOpts.ParentDirPathFactory;
+            InputNmrblFactory = inputOpts.InputNmrblFactory;
+            FsEntryDataFactory = inputOpts.FsEntryDataFactory;
+            FsEntryPredicate = inputOpts.FsEntryPredicate;
+            OutputNmrblFactory = inputOpts.OutputNmrblFactory;
         }
 
-        public string RootDirPath { get; set; }
-        public Func<FsEntriesRetrieverArgs, string> ParentDirPathFactory { get; set; }
-        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> InputNmrblFactory { get; set; }
-        public Func<FsEntriesRetrieverArgs, string, int, FsEntriesRetrieverNode> FsEntryDataFactory { get; set; }
-        public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNode, int, bool> FsEntryPredicate { get; set; }
-        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> OutputNmrblFactory { get; set; }
+        public string RootDirPath { get; }
+        public Func<FsEntriesRetrieverArgs, string> ParentDirPathFactory { get; }
+        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> InputNmrblFactory { get; }
+        public Func<FsEntriesRetrieverArgs, string, int, FsEntriesRetrieverNode> FsEntryDataFactory { get; }
+        public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNode, int, bool> FsEntryPredicate { get; }
+        public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNode>, IEnumerable<FsEntriesRetrieverNode>> OutputNmrblFactory { get; }
     }
 }

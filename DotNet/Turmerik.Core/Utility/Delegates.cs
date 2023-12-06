@@ -16,19 +16,19 @@ namespace Turmerik.Core.Utility
 
     public delegate int IdxRetriever<T, TNmrbl>(TNmrbl nmrbl, int count) where TNmrbl : IEnumerable<T>;
 
-    public delegate bool TryRetrieve<TOutput>(
+    public delegate bool TryRetrieve1Out<TOutput>(
         out TOutput output);
 
-    public delegate bool TryRetrieve<TInput, TOutput>(
+    public delegate bool TryRetrieve1In1Out<TInput, TOutput>(
         TInput input,
         out TOutput output);
 
-    public delegate bool TryRetrieve1<TObj, TInput, TOutput>(
-        TObj @obj,
-        TInput input,
+    public delegate bool TryRetrieve2In1Out<TInput1, TInput2, TOutput>(
+        TInput1 input1,
+        TInput2 input2,
         out TOutput output);
 
-    public delegate bool TryRetrieve2<TInput, TOutput1, TOutput2>(
+    public delegate bool TryRetrieve1In2Out<TInput, TOutput1, TOutput2>(
         TInput input,
         out TOutput1 output1,
         out TOutput2 output2);

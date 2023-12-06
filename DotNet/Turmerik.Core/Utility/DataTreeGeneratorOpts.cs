@@ -11,7 +11,7 @@ namespace Turmerik.Core.Utility
     {
         public DataTreeGeneratorOpts(
             Func<TOpts, TArgs> argsFactory,
-            TryRetrieve<TArgs, TNode> nextRootNodeRetriever,
+            TryRetrieve1In1Out<TArgs, TNode> nextRootNodeRetriever,
             Func<TArgs, DataTreeGeneratorStepData> nextStepPredicate)
         {
             ArgsFactory = argsFactory;
@@ -20,7 +20,7 @@ namespace Turmerik.Core.Utility
         }
 
         public Func<TOpts, TArgs> ArgsFactory { get; }
-        public TryRetrieve<TArgs, TNode> NextRootNodeRetriever { get; }
+        public TryRetrieve1In1Out<TArgs, TNode> NextRootNodeRetriever { get; }
         public Func<TArgs, DataTreeGeneratorStepData> NextStepPredicate { get; }
     }
 }
