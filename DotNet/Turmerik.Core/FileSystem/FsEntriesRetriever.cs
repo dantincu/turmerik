@@ -96,14 +96,7 @@ namespace Turmerik.Core.FileSystem
                     var nextNodeData = args.Next.Data;
                     var nextNodeValue = nextNodeData.Value;
 
-                    bool matches = args.Opts.FsEntryPredicate(
-                        args, nextNodeValue,
-                        nextNodeValue.Idx);
-
-                    if (matches)
-                    {
-                        matches = nextNodeValue.IsFolder == true || !nextNodeValue.OnlyMatchesIfHasChildren;
-                    }
+                    bool matches = args.Opts.NodePredicate(args);
 
                     var nextStep = ((matches && nextNodeValue.IsFolder == true) switch
                     {

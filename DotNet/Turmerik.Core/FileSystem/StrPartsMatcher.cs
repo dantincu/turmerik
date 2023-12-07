@@ -36,9 +36,9 @@ namespace Turmerik.Core.FileSystem
 
             var strParts = inOpts.StrParts;
             int partsCount = strParts.Count();
-            bool matches = partsCount == 0;
+            bool matches = partsCount > 0;
 
-            if (!matches)
+            if (matches)
             {
                 if (partsCount == 1)
                 {
@@ -49,18 +49,10 @@ namespace Turmerik.Core.FileSystem
                 {
                     string firstPart = strParts[0];
                     bool matchesAnyStart = string.IsNullOrEmpty(firstPart);
-                    bool isSettled = !matchesAnyStart;
 
-                    if (isSettled)
-                    {
-                        if (inOpts.InputStr.StartsWith(
-                            firstPart))
-                        {
-                            isSettled = false;
-                        }
-                    }
+                    matches = matchesAnyStart || inOpts.InputStr.StartsWith(firstPart);
 
-                    if (!isSettled)
+                    if (matches)
                     {
                         var opts = CreateOpts(inOpts, matchesAnyStart);
                         matches = dataTreeGenerator.GetNodes<StrPartsMatcherNodeData, StrPartsMatcherNode, StrPartsMatcherOpts, StrPartsMatcherArgs>(opts).Matches;

@@ -22,12 +22,14 @@ namespace Turmerik.Core.FileSystem
             RootDirPath = inputOpts.RootDirPath;
             InputNmrblFactory = inputOpts.InputNmrblFactory;
             FsEntryPredicate = inputOpts.FsEntryPredicate;
+            NodePredicate = inputOpts.NodePredicate;
             OutputNmrblFactory = inputOpts.OutputNmrblFactory;
         }
 
         public string RootDirPath { get; }
         public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNodeData>, IEnumerable<FsEntriesRetrieverNodeData>> InputNmrblFactory { get; }
         public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNodeData, int, bool> FsEntryPredicate { get; }
+        public Func<FsEntriesRetrieverArgs, bool> NodePredicate { get; }
         public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNodeData>, IEnumerable<FsEntriesRetrieverNodeData>> OutputNmrblFactory { get; }
     }
 }

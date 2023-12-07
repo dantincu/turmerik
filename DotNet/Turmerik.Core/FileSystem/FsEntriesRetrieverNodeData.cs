@@ -18,7 +18,6 @@ namespace Turmerik.Core.FileSystem
             IsFolder = src.IsFolder;
             Idx = src.Idx;
             LevelIdx = src.LevelIdx;
-            OnlyMatchesIfHasChildren = src.OnlyMatchesIfHasChildren;
         }
 
         public string Path { get; init; }
@@ -26,6 +25,5 @@ namespace Turmerik.Core.FileSystem
         public bool? IsFolder { get; init; }
         public int Idx { get; init; }
         public int LevelIdx { get; init; }
-        public bool OnlyMatchesIfHasChildren { get; init; }
     }
 }

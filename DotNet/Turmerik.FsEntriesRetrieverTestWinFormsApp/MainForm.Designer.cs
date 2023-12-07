@@ -31,16 +31,20 @@
             statusStripMain = new StatusStrip();
             toolStripStatusLabelMain = new ToolStripStatusLabel();
             panelActionControls = new Panel();
-            panelPathFilters = new Panel();
-            textBoxPathFilters = new TextBox();
-            labelTitlePathFilters = new Label();
+            panelExcludedPaths = new Panel();
+            textBoxExcludedPaths = new TextBox();
+            labelTitleExcludedPaths = new Label();
+            panelIncludedPaths = new Panel();
+            textBoxIncludedPaths = new TextBox();
+            labelTitleIncludedPaths = new Label();
             panelRootFolderPath = new Panel();
             textBoxRootFolderPath = new TextBox();
             labelTitleRootFolderPath = new Label();
             treeViewMain = new TreeView();
             statusStripMain.SuspendLayout();
             panelActionControls.SuspendLayout();
-            panelPathFilters.SuspendLayout();
+            panelExcludedPaths.SuspendLayout();
+            panelIncludedPaths.SuspendLayout();
             panelRootFolderPath.SuspendLayout();
             SuspendLayout();
             // 
@@ -60,43 +64,74 @@
             // 
             // panelActionControls
             // 
-            panelActionControls.Controls.Add(panelPathFilters);
+            panelActionControls.Controls.Add(panelExcludedPaths);
+            panelActionControls.Controls.Add(panelIncludedPaths);
             panelActionControls.Controls.Add(panelRootFolderPath);
             panelActionControls.Dock = DockStyle.Top;
             panelActionControls.Location = new Point(0, 0);
             panelActionControls.Name = "panelActionControls";
-            panelActionControls.Size = new Size(1784, 46);
+            panelActionControls.Size = new Size(1784, 69);
             panelActionControls.TabIndex = 3;
             // 
-            // panelPathFilters
+            // panelExcludedPaths
             // 
-            panelPathFilters.Controls.Add(textBoxPathFilters);
-            panelPathFilters.Controls.Add(labelTitlePathFilters);
-            panelPathFilters.Dock = DockStyle.Top;
-            panelPathFilters.Location = new Point(0, 23);
-            panelPathFilters.Name = "panelPathFilters";
-            panelPathFilters.Size = new Size(1784, 23);
-            panelPathFilters.TabIndex = 1;
+            panelExcludedPaths.Controls.Add(textBoxExcludedPaths);
+            panelExcludedPaths.Controls.Add(labelTitleExcludedPaths);
+            panelExcludedPaths.Dock = DockStyle.Top;
+            panelExcludedPaths.Location = new Point(0, 46);
+            panelExcludedPaths.Name = "panelExcludedPaths";
+            panelExcludedPaths.Size = new Size(1784, 23);
+            panelExcludedPaths.TabIndex = 2;
             // 
-            // textBoxPathFilters
+            // textBoxExcludedPaths
             // 
-            textBoxPathFilters.Dock = DockStyle.Fill;
-            textBoxPathFilters.Font = new Font("Consolas", 9F, FontStyle.Bold);
-            textBoxPathFilters.Location = new Point(118, 0);
-            textBoxPathFilters.Name = "textBoxPathFilters";
-            textBoxPathFilters.Size = new Size(1666, 22);
-            textBoxPathFilters.TabIndex = 2;
+            textBoxExcludedPaths.Dock = DockStyle.Fill;
+            textBoxExcludedPaths.Font = new Font("Consolas", 9F, FontStyle.Bold);
+            textBoxExcludedPaths.Location = new Point(118, 0);
+            textBoxExcludedPaths.Name = "textBoxExcludedPaths";
+            textBoxExcludedPaths.Size = new Size(1666, 22);
+            textBoxExcludedPaths.TabIndex = 2;
             // 
-            // labelTitlePathFilters
+            // labelTitleExcludedPaths
             // 
-            labelTitlePathFilters.Dock = DockStyle.Left;
-            labelTitlePathFilters.Location = new Point(0, 0);
-            labelTitlePathFilters.Name = "labelTitlePathFilters";
-            labelTitlePathFilters.Padding = new Padding(0, 0, 3, 0);
-            labelTitlePathFilters.Size = new Size(118, 23);
-            labelTitlePathFilters.TabIndex = 1;
-            labelTitlePathFilters.Text = "Path Filters";
-            labelTitlePathFilters.TextAlign = ContentAlignment.MiddleRight;
+            labelTitleExcludedPaths.Dock = DockStyle.Left;
+            labelTitleExcludedPaths.Location = new Point(0, 0);
+            labelTitleExcludedPaths.Name = "labelTitleExcludedPaths";
+            labelTitleExcludedPaths.Padding = new Padding(0, 0, 3, 0);
+            labelTitleExcludedPaths.Size = new Size(118, 23);
+            labelTitleExcludedPaths.TabIndex = 1;
+            labelTitleExcludedPaths.Text = "Excluded Paths";
+            labelTitleExcludedPaths.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // panelIncludedPaths
+            // 
+            panelIncludedPaths.Controls.Add(textBoxIncludedPaths);
+            panelIncludedPaths.Controls.Add(labelTitleIncludedPaths);
+            panelIncludedPaths.Dock = DockStyle.Top;
+            panelIncludedPaths.Location = new Point(0, 23);
+            panelIncludedPaths.Name = "panelIncludedPaths";
+            panelIncludedPaths.Size = new Size(1784, 23);
+            panelIncludedPaths.TabIndex = 1;
+            // 
+            // textBoxIncludedPaths
+            // 
+            textBoxIncludedPaths.Dock = DockStyle.Fill;
+            textBoxIncludedPaths.Font = new Font("Consolas", 9F, FontStyle.Bold);
+            textBoxIncludedPaths.Location = new Point(118, 0);
+            textBoxIncludedPaths.Name = "textBoxIncludedPaths";
+            textBoxIncludedPaths.Size = new Size(1666, 22);
+            textBoxIncludedPaths.TabIndex = 2;
+            // 
+            // labelTitleIncludedPaths
+            // 
+            labelTitleIncludedPaths.Dock = DockStyle.Left;
+            labelTitleIncludedPaths.Location = new Point(0, 0);
+            labelTitleIncludedPaths.Name = "labelTitleIncludedPaths";
+            labelTitleIncludedPaths.Padding = new Padding(0, 0, 3, 0);
+            labelTitleIncludedPaths.Size = new Size(118, 23);
+            labelTitleIncludedPaths.TabIndex = 1;
+            labelTitleIncludedPaths.Text = "Included Paths";
+            labelTitleIncludedPaths.TextAlign = ContentAlignment.MiddleRight;
             // 
             // panelRootFolderPath
             // 
@@ -131,9 +166,9 @@
             // treeViewMain
             // 
             treeViewMain.Dock = DockStyle.Fill;
-            treeViewMain.Location = new Point(0, 46);
+            treeViewMain.Location = new Point(0, 69);
             treeViewMain.Name = "treeViewMain";
-            treeViewMain.Size = new Size(1784, 793);
+            treeViewMain.Size = new Size(1784, 770);
             treeViewMain.TabIndex = 4;
             // 
             // MainForm
@@ -151,8 +186,10 @@
             statusStripMain.ResumeLayout(false);
             statusStripMain.PerformLayout();
             panelActionControls.ResumeLayout(false);
-            panelPathFilters.ResumeLayout(false);
-            panelPathFilters.PerformLayout();
+            panelExcludedPaths.ResumeLayout(false);
+            panelExcludedPaths.PerformLayout();
+            panelIncludedPaths.ResumeLayout(false);
+            panelIncludedPaths.PerformLayout();
             panelRootFolderPath.ResumeLayout(false);
             panelRootFolderPath.PerformLayout();
             ResumeLayout(false);
@@ -165,11 +202,14 @@
         private ToolStripStatusLabel toolStripStatusLabelMain;
         private Panel panelActionControls;
         private Panel panelRootFolderPath;
-        private Panel panelPathFilters;
+        private Panel panelIncludedPaths;
         private Label labelTitleRootFolderPath;
-        private Label labelTitlePathFilters;
+        private Label labelTitleIncludedPaths;
         private TextBox textBoxRootFolderPath;
-        private TextBox textBoxPathFilters;
+        private TextBox textBoxIncludedPaths;
         private TreeView treeViewMain;
+        private Panel panelExcludedPaths;
+        private TextBox textBoxExcludedPaths;
+        private Label labelTitleExcludedPaths;
     }
 }
