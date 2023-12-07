@@ -23,5 +23,6 @@ namespace Turmerik.Core.Utility
         public DataTreeNode<TNode> Current { get; set; }
         public DataTreeNode<TNode> Next { get; set; }
         public bool Stop { get; set; }
+        public int RemoveOnPop { get; set; }
     }
 }

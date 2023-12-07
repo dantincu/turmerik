@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Turmerik.Core.Helpers;
 
@@ -11,6 +14,111 @@ namespace Turmerik.Core.Utility
     {
         protected override void GetNodes<TData, TNode, TOpts, TArgs>(
             TArgs args)
+        {
+            var stack = new Stack<StackData<TData, TNode, TOpts, TArgs>>();
+            DataTreeGeneratorStepData nextStep = default;
+            var nextNodeRetriever = args.Opts.NextRootNodeRetrieverFactory(args);
+
+            var stackData = new StackData<TData, TNode, TOpts, TArgs>(
+                nextNodeRetriever);
+
+            DataTreeNode<TNode> treeNode;
+            bool hasNode;
+
+            var sibblingsList = args.RootNodes;
+
+            while (!args.Stop && stackData != null)
+            {
+                hasNode = nextNodeRetriever(args, out var node);
+
+                if (hasNode)
+                {
+                    treeNode = new DataTreeNode<TNode>(
+                        node, args.Current);
+
+                    args.Next = treeNode;
+                    args.Idx = ++stackData.CurrentChildIdx;
+
+                    nextStep = args.Opts.NextStepPredicate(args);
+
+                    switch (nextStep.Value)
+                    {
+                        case DataTreeGeneratorStep.Next:
+                            AddToTreeNodesList<TData, TNode, TOpts, TArgs>(
+                                treeNode, sibblingsList);
+                            break;
+                        case DataTreeGeneratorStep.Push:
+                            TryPushStack(args,
+                                treeNode, stack,
+                                ref stackData,
+                                ref nextNodeRetriever,
+                                ref sibblingsList);
+                            break;
+                        case DataTreeGeneratorStep.Pop:
+                            TryPopStack(args, stack,
+                                ref stackData,
+                                ref nextNodeRetriever,
+                                ref sibblingsList);
+                            break;
+                    }
+                }
+                else
+                {
+                    TryPopStack(args, stack,
+                        ref stackData,
+                        ref nextNodeRetriever,
+                        ref sibblingsList);
+                }
+            }
+        }
+
+        private void TryPushStack<TData, TNode, TOpts, TArgs>(
+            TArgs args,
+            DataTreeNode<TNode> treeNode,
+            Stack<StackData<TData, TNode, TOpts, TArgs>> stack,
+            ref StackData<TData, TNode, TOpts, TArgs> stackData,
+            ref TryRetrieve1In1Out<TArgs, TNode> nextNodeRetriever,
+            ref List<DataTreeNode<TNode>> sibblingsList)
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+        {
+            stack.Push(stackData);
+            nextNodeRetriever = treeNode.Data.NextChildNodeRetrieverFactory(args);
+            stackData = new StackData<TData, TNode, TOpts, TArgs>(nextNodeRetriever);
+
+            TryPushStack<TData, TNode, TOpts, TArgs>(
+                args, treeNode, ref sibblingsList);
+        }
+
+        private void TryPopStack<TData, TNode, TOpts, TArgs>(
+            TArgs args,
+            Stack<StackData<TData, TNode, TOpts, TArgs>> stack,
+            ref StackData<TData, TNode, TOpts, TArgs> stackData,
+            ref TryRetrieve1In1Out<TArgs, TNode> nextNodeRetriever,
+            ref List<DataTreeNode<TNode>> sibblingsList)
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+        {
+            if (stack.Any())
+            {
+                stackData = stack.Pop();
+                nextNodeRetriever = stackData.NextChildRetriever;
+                TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList);
+            }
+            else
+            {
+                stackData = null;
+                nextNodeRetriever = null;
+            }
+        }
+
+        protected void GetNodes1<TData, TNode, TOpts, TArgs>(
+            TArgs args)
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
             throw new NotImplementedException();
             DataTreeGeneratorStepData nextStep = default;
@@ -68,12 +176,12 @@ namespace Turmerik.Core.Utility
                         () => AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, sibblingsList)),
                     DataTreeGeneratorStep.Push => () =>
                     {
-                        TryPushStack<TData, TNode, TOpts, TArgs>(args, treeNode, sibblingsList);
+                        TryPushStack<TData, TNode, TOpts, TArgs>(args, treeNode, ref sibblingsList);
                         GetNodes<TData, TNode, TOpts, TArgs>(args);
-                        TryPopStack<TData, TNode, TOpts, TArgs>(args);
+                        TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList);
                     }
                     ,
-                    DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args),
+                    DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList),
                     _ => () => { }
                 });
             }
@@ -83,6 +191,25 @@ namespace Turmerik.Core.Utility
             }
 
             return args.Stop;
+        }
+
+        private class StackData<TData, TNode, TOpts, TArgs>
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+        {
+            public StackData(
+                TryRetrieve1In1Out<TArgs, TNode> nextChildRetriever,
+                int currentChildIdx = -1)
+            {
+                NextChildRetriever = nextChildRetriever ?? throw new ArgumentNullException(
+                    nameof(nextChildRetriever));
+
+                CurrentChildIdx = currentChildIdx;
+            }
+
+            public TryRetrieve1In1Out<TArgs, TNode> NextChildRetriever { get; }
+            public int CurrentChildIdx { get; set; }
         }
     }
 }

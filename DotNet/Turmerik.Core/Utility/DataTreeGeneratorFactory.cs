@@ -34,7 +34,7 @@ namespace Turmerik.Core.Utility
             NonRecursive = new NonRecursiveDataTreeGenerator();
         }
 
-        public IDataTreeGenerator Default => Recursive;
+        public IDataTreeGenerator Default => NonRecursive;
         public IDataTreeGenerator Recursive { get; }
         public IDataTreeGenerator NonRecursive { get; }
 

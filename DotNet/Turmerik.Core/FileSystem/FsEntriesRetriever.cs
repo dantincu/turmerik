@@ -66,6 +66,12 @@ namespace Turmerik.Core.FileSystem
 
                     dataEntriesNmrbl = args.Opts.InputNmrblFactory(args, dataEntriesNmrbl);
 
+                    dataEntriesNmrbl = dataEntriesNmrbl.Select(
+                        (data, idx) => new FsEntriesRetrieverNodeData(data)
+                        {
+                            Idx = idx,
+                        });
+
                     dataEntriesNmrbl = dataEntriesNmrbl.Where(
                         (data, idx) => args.Opts.FsEntryPredicate(args, data, idx));
 

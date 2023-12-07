@@ -78,7 +78,7 @@ namespace Turmerik.Core.Utility
         protected void TryPushStack<TData, TNode, TOpts, TArgs>(
             TArgs args,
             DataTreeNode<TNode> treeNode,
-            List<DataTreeNode<TNode>> treeNodesList)
+            ref List<DataTreeNode<TNode>> treeNodesList)
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
@@ -87,18 +87,33 @@ namespace Turmerik.Core.Utility
 
             args.Current = treeNode;
             args.Next = default;
+
+            treeNodesList = treeNode.ChildNodes;
         }
 
         protected void TryPopStack<TData, TNode, TOpts, TArgs>(
-            TArgs args)
+            TArgs args,
+            ref List<DataTreeNode<TNode>> treeNodesList)
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
+            if (args.RemoveOnPop > 0 && args.Next != null)
+            {
+                treeNodesList.Remove(args.Next);
+                args.RemoveOnPop--;
+            }
+
             if ((args.Next = args.Current) != null)
             {
                 args.Current = args.Current.ParentNode;
             }
+            else
+            {
+                args.Current = null;
+            }
+
+            treeNodesList = args.Current?.ChildNodes ?? args.RootNodes;
         }
     }
 }

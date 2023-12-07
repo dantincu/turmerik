@@ -66,12 +66,12 @@ namespace Turmerik.Core.Utility
                         () => AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, sibblingsList)),
                     DataTreeGeneratorStep.Push => () =>
                     {
-                        TryPushStack<TData, TNode, TOpts, TArgs>(args, treeNode, sibblingsList);
+                        TryPushStack<TData, TNode, TOpts, TArgs>(args, treeNode, ref sibblingsList);
                         GetNodes<TData, TNode, TOpts, TArgs>(args);
-                        TryPopStack<TData, TNode, TOpts, TArgs>(args);
+                        TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList);
                     }
                     ,
-                    DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args),
+                    DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList),
                     _ => () => { }
                 });
             }
