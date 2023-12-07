@@ -105,7 +105,90 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
             var foldersHcy = fsEntriesRetriever.Retrieve(new FsEntriesRetrieverOptions
             {
                 RootDirPath = rootFolderPathTextBoxAdapter.Text,
-                NodePredicate = args => true
+                FsEntryPredicate = (args, node, idx) =>
+                {
+                    var parent = args.Current;
+                    
+                    IEnumerable<string[][]> potentialInlcuders;
+                    IEnumerable<string[][]> potentialExcluders;
+
+                    if (parent == null)
+                    {
+                        potentialInlcuders = includedPaths;
+                        potentialExcluders = excludedPaths;
+                    }
+                    else
+                    {
+                        var filteredParent = nodesMap[parent.Data.Value];
+                        potentialInlcuders = filteredParent.MatchingIncluders;
+                        potentialExcluders = filteredParent.MatchingExcluders;
+                    }
+
+                    bool matches = true;
+
+                    Func<string[][], bool> filterMatchPredicate = filter => strPartsMatcher.Matches(
+                        new StrPartsMatcherOptions
+                        {
+                            InputStr = node.Name,
+                            StringComparison = StringComparison.InvariantCultureIgnoreCase,
+                            StrParts = filter[args.LevelIdx]
+                        });
+
+                    Func<string[][], bool> filterLevelPredicate;
+
+                    if (node.IsFolder != true)
+                    {
+                        filterLevelPredicate = filter => filter.Length - args.LevelIdx == 1;
+                    }
+                    else
+                    {
+                        filterLevelPredicate = filter => filter.Length - args.LevelIdx >= 1;
+                    }
+
+                    Func<string[][], bool> filterPredicate = filter => (
+                        filter.Length - args.LevelIdx < 1) || (filterLevelPredicate(
+                        filter) && filterMatchPredicate(filter));
+
+                    potentialInlcuders = potentialInlcuders.Where(filterPredicate).ToArray();
+                    matches = potentialInlcuders.Any();
+
+                    if (matches)
+                    {
+                        potentialExcluders = potentialExcluders.Where(filterPredicate).ToArray();
+                        matches = potentialExcluders.None();
+                    }
+
+                    if (matches)
+                    {
+                        var filteredFsNode = new FilteredFsNode(node);
+
+                        filteredFsNode.MatchingIncluders.AddRange(potentialInlcuders);
+                        filteredFsNode.MatchingExcluders.AddRange(potentialExcluders);
+
+                        nodesMap.Add(node, filteredFsNode);
+                    }
+
+                    return matches;
+                },
+                NodePredicate = args => true,
+                OnNodeChildrenIterated = (args, node) =>
+                {
+                    var treeNode = (args.Next ?? args.Current);
+                    bool matches = treeNode.ChildNodes.Any();
+
+                    if (!matches)
+                    {
+                        var filtered = nodesMap[node.Value];
+
+                        matches = filtered.MatchingIncluders.Any(
+                            includer => includer.Length - node.Value.LevelIdx == 1);
+
+                        matches = matches && filtered.MatchingExcluders.None(
+                            excluder => excluder.Length - node.Value.LevelIdx == 1);
+                    }
+
+                    return matches;
+                }
             }).RootNodes;
 
             fsEntriesTreeViewAdapter.AddTreeViewNodes(

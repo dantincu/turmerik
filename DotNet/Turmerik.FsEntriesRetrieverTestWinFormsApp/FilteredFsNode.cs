@@ -12,12 +12,15 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
         public FilteredFsNode(
             FsEntriesRetrieverNodeData nodeData)
         {
-            NodeData = nodeData ?? throw new ArgumentNullException(nameof(nodeData));
+            NodeData = nodeData ?? throw new ArgumentNullException(
+                nameof(nodeData));
+
+            MatchingIncluders = new List<string[][]>();
+            MatchingExcluders = new List<string[][]>();
         }
 
         public FsEntriesRetrieverNodeData NodeData { get; }
         public List<string[][]> MatchingIncluders { get; }
         public List<string[][]> MatchingExcluders { get; }
-        public bool Exclude { get; set; }
     }
 }

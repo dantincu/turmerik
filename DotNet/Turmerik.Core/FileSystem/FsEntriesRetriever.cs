@@ -51,7 +51,7 @@ namespace Turmerik.Core.FileSystem
                 FsEntryPredicate = inOpts.FsEntryPredicate.FirstNotNull(
                     (args, fsEntry, idx) => true),
                 OutputNmrblFactory = inOpts.OutputNmrblFactory.FirstNotNull(
-                    (args, nmrbl) => nmrbl.ToArray()),
+                    (args, nmrbl) => nmrbl),
             };
 
             Func<FsEntriesRetrieverArgs, string, int, TryRetrieve1In1Out <FsEntriesRetrieverArgs, FsEntriesRetrieverNode>> nextChildNodeRetrieverFactory = null!;
