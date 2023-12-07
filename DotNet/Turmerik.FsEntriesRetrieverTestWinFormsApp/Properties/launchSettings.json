@@ -3,6 +3,8 @@
     "Turmerik.FsEntriesRetrieverTestWinFormsApp": {
       "commandName": "Project",
       "commandLineArgs": "..\\..\\..\\"
+      // "commandLineArgs": "..\\..\\..\\ bin\\*",
+      // "commandLineArgs": "F:\\Z\\tt tt1\\*"
     }
   }
 }

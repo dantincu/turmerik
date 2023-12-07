@@ -26,7 +26,6 @@ namespace Turmerik.Core.Utility
             bool hasNode;
 
             var sibblingsList = args.RootNodes;
-
             while (!args.Stop && stackData != null)
             {
                 hasNode = nextNodeRetriever(args, out var node);
@@ -83,12 +82,12 @@ namespace Turmerik.Core.Utility
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
+            TryPushStack<TData, TNode, TOpts, TArgs>(
+                args, treeNode, ref sibblingsList);
+
             stack.Push(stackData);
             nextNodeRetriever = treeNode.Data.NextChildNodeRetrieverFactory(args);
             stackData = new StackData<TData, TNode, TOpts, TArgs>(nextNodeRetriever);
-
-            TryPushStack<TData, TNode, TOpts, TArgs>(
-                args, treeNode, ref sibblingsList);
         }
 
         private void TryPopStack<TData, TNode, TOpts, TArgs>(
@@ -101,11 +100,12 @@ namespace Turmerik.Core.Utility
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
+            TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList);
+
             if (stack.Any())
             {
                 stackData = stack.Pop();
                 nextNodeRetriever = stackData.NextChildRetriever;
-                TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList);
             }
             else
             {

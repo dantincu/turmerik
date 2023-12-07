@@ -19,6 +19,7 @@ namespace Turmerik.Core.Utility
         public TOpts Opts { get; }
         public List<DataTreeNode<TNode>> RootNodes { get; }
 
+        public int LevelIdx { get; set; }
         public int Idx { get; set; }
         public DataTreeNode<TNode> Current { get; set; }
         public DataTreeNode<TNode> Next { get; set; }

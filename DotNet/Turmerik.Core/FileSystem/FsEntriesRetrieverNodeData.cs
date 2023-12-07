@@ -15,13 +15,15 @@ namespace Turmerik.Core.FileSystem
         {
             Path = src.Path;
             Name = src.Name;
-            Idx = src.Idx;
             IsFolder = src.IsFolder;
+            Idx = src.Idx;
+            LevelIdx = src.LevelIdx;
         }
 
         public string Path { get; set; }
         public string Name { get; set; }
-        public int Idx { get; set; }
         public bool? IsFolder { get; set; }
+        public int Idx { get; set; }
+        public int LevelIdx { get; set; }
     }
 }

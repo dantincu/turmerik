@@ -23,6 +23,7 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
         private readonly IServiceProvider svcProv;
         private readonly IAppLogger logger;
         private readonly IFsEntriesRetriever fsEntriesRetriever;
+        private readonly IStrPartsMatcher strPartsMatcher;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
@@ -40,6 +41,7 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
             svcProv = svcProvContnr.Data;
             logger = svcProv.GetRequiredService<IAppLoggerCreator>().GetSharedAppLogger(GetType());
             fsEntriesRetriever = svcProv.GetRequiredService<IFsEntriesRetriever>();
+            strPartsMatcher = svcProv.GetRequiredService<IStrPartsMatcher>();
             matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
             actionComponentCreator = svcProv.GetRequiredService<IWinFormsActionComponentCreator>();
             actionComponent = actionComponentCreator.StatusLabel(GetType());
@@ -64,6 +66,8 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
             rootFolderPathTextBoxAdapter.TextUpdated += RootFolderPathTextUpdated;
             pathFiltersTextBoxAdapter.TextUpdated += PathFiltersTextUpdated;
 
+            pathFilters = [];
+
             if (svcProvContnr.IsRegistered)
             {
                 actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
@@ -87,6 +91,26 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
             var foldersHcy = fsEntriesRetriever.Retrieve(new FsEntriesRetrieverOptions
             {
                 RootDirPath = rootFolderPathTextBoxAdapter.Text,
+                FsEntryPredicate = (args, node, idx) =>
+                {
+                    bool retVal = node.LevelIdx >= pathFilters.Length;
+
+                    if (!retVal)
+                    {
+                        retVal = strPartsMatcher.Matches(new StrPartsMatcherOptions
+                        {
+                            InputStr = node.Name,
+                            StrParts = pathFilters[node.LevelIdx],
+                            StringComparison = StringComparison.InvariantCultureIgnoreCase
+                        });
+                    }
+                    else
+                    {
+
+                    }
+
+                    return retVal;
+                }
             }).RootNodes;
 
             fsEntriesTreeViewAdapter.AddTreeViewNodes(
@@ -95,14 +119,10 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
 
         #region UI Event Handlers
 
-        private void MainForm_Load(object sender, EventArgs e) => actionComponent.Execute(new WinFormsActionOpts<int>
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            Action = () =>
-            {
-                RefreshMainTreeView();
-                return ActionResultH.Create(0);
-            }
-        });
+            pathFiltersTextBoxAdapter.SetText(progArgs.Skip(1).FirstOrDefault() ?? "*");
+        }
 
         private void PathFiltersTextUpdated(
             string newPathFilters) => actionComponent.Execute(

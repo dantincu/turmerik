@@ -63,6 +63,8 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
         {
             this.text = text;
             this.TextBox.Text = text;
+            ToggleEditMode(false);
+            this.textUpdated?.Invoke(this.text);
         }
 
         private void ToggleEditMode(

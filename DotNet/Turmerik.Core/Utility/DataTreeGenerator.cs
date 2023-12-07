@@ -87,6 +87,7 @@ namespace Turmerik.Core.Utility
 
             args.Current = treeNode;
             args.Next = default;
+            args.LevelIdx++;
 
             treeNodesList = treeNode.ChildNodes;
         }
@@ -113,6 +114,7 @@ namespace Turmerik.Core.Utility
                 args.Current = null;
             }
 
+            args.LevelIdx--;
             treeNodesList = args.Current?.ChildNodes ?? args.RootNodes;
         }
     }

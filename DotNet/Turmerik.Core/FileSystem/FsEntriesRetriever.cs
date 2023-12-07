@@ -62,7 +62,7 @@ namespace Turmerik.Core.FileSystem
                 args, path, idx) => Directory.EnumerateFileSystemEntries(path).With(childEntriesNmrbl =>
                 {
                     var dataEntriesNmrbl = childEntriesNmrbl.Select(
-                        (entry, idx) => GetNodeData(entry, idx));
+                        (entry, idx) => GetNodeData(entry, args.LevelIdx, idx));
 
                     dataEntriesNmrbl = args.Opts.InputNmrblFactory(args, dataEntriesNmrbl);
 
@@ -113,12 +113,13 @@ namespace Turmerik.Core.FileSystem
         }
 
         private FsEntriesRetrieverNodeData GetNodeData(
-            string path, int idx) => new FsEntriesRetrieverNodeData
+            string path, int levelIdx, int idx) => new FsEntriesRetrieverNodeData
             {
                 Path = path,
                 Name = Path.GetFileName(path),
+                IsFolder = Directory.Exists(path) ? true : null,
                 Idx = idx,
-                IsFolder = Directory.Exists(path) ? true : null
+                LevelIdx = levelIdx,
             };
     }
 }
