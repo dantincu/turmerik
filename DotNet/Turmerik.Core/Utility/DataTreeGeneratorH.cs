@@ -31,6 +31,6 @@ namespace Turmerik.Core.Utility
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs> => (
-                args, node) => node.OnlyMatchesIfHasChildren != true || args.Current.ChildNodes.Any();
+                args, node) => !node.OnlyMatchesIfHasChildren || args.Next.ChildNodes.Any();
     }
 }

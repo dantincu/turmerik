@@ -18,6 +18,7 @@ namespace Turmerik.Core.Utility
 
             NextChildNodeRetrieverFactory = nextChildNodeRetrieverFactory ?? throw new ArgumentNullException(
                 nameof(nextChildNodeRetrieverFactory));
+
             OnlyMatchesIfHasChildren = onlyMatchesIfHasChildren;
         }
 

@@ -2,8 +2,8 @@
   "profiles": {
     "Turmerik.FsEntriesRetrieverTestWinFormsApp": {
       "commandName": "Project",
-      "commandLineArgs": "..\\..\\..\\"
-      // "commandLineArgs": "..\\..\\..\\ bin\\*",
+      // "commandLineArgs": ". *\\MaterialIcons*"
+      "commandLineArgs": "..\\..\\..\\ */Debug/*/Turmerik*"
       // "commandLineArgs": "F:\\Z\\tt tt1\\*"
     }
   }

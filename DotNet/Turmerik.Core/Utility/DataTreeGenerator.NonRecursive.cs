@@ -54,6 +54,8 @@ namespace Turmerik.Core.Utility
                                 ref sibblingsList);
                             break;
                         case DataTreeGeneratorStep.Pop:
+                            OnChildNodesIterated<TData, TNode, TOpts, TArgs>(args);
+
                             TryPopStack(args, stack,
                                 ref stackData,
                                 ref nextNodeRetriever,
@@ -63,7 +65,7 @@ namespace Turmerik.Core.Utility
                 }
                 else
                 {
-                    OnChildNodesIterated<TData, TNode, TOpts, TArgs>(args, sibblingsList);
+                    OnChildNodesIterated<TData, TNode, TOpts, TArgs>(args);
 
                     TryPopStack(args, stack,
                         ref stackData,

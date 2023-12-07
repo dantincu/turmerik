@@ -18,12 +18,14 @@ namespace Turmerik.Core.FileSystem
             IsFolder = src.IsFolder;
             Idx = src.Idx;
             LevelIdx = src.LevelIdx;
+            OnlyMatchesIfHasChildren = src.OnlyMatchesIfHasChildren;
         }
 
-        public string Path { get; set; }
-        public string Name { get; set; }
-        public bool? IsFolder { get; set; }
-        public int Idx { get; set; }
-        public int LevelIdx { get; set; }
+        public string Path { get; init; }
+        public string Name { get; init; }
+        public bool? IsFolder { get; init; }
+        public int Idx { get; init; }
+        public int LevelIdx { get; init; }
+        public bool OnlyMatchesIfHasChildren { get; init; }
     }
 }

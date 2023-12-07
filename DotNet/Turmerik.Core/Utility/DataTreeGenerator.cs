@@ -119,16 +119,26 @@ namespace Turmerik.Core.Utility
         }
 
         protected void OnChildNodesIterated<TData, TNode, TOpts, TArgs>(
-            TArgs args,
-            List<DataTreeNode<TNode>> sibblingsList = null)
+            TArgs args)
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
         {
-            if (args.Current != null && !args.Opts.OnChildNodesIterated(args, args.Current.Data))
+            if (args.Next != null)
             {
-                sibblingsList ??= (args.Current.ParentNode?.ChildNodes ?? args.RootNodes);
-                sibblingsList.Remove(args.Current);
+                if (!args.Opts.OnChildNodesIterated(args, args.Next.Data))
+                {
+                    var sibblingsList = (args.Current?.ChildNodes ?? args.RootNodes);
+                    sibblingsList.Remove(args.Next);
+                }
+            }
+            else if (args.Current != null)
+            {
+                if (!args.Opts.OnChildNodesIterated(args, args.Current.Data))
+                {
+                    var sibblingsList = (args.Current.ParentNode?.ChildNodes ?? args.RootNodes);
+                    sibblingsList.Remove(args.Current);
+                }
             }
         }
     }

@@ -93,7 +93,8 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
                 RootDirPath = rootFolderPathTextBoxAdapter.Text,
                 FsEntryPredicate = (args, node, idx) =>
                 {
-                    bool retVal = node.LevelIdx >= pathFilters.Length;
+                    int maxConditionalLevel = pathFilters.Length - 1;
+                    bool retVal = node.LevelIdx > maxConditionalLevel;
 
                     if (!retVal)
                     {
@@ -103,13 +104,39 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
                             StrParts = pathFilters[node.LevelIdx],
                             StringComparison = StringComparison.InvariantCultureIgnoreCase
                         });
-                    }
-                    else
-                    {
 
+                        if (retVal)
+                        {
+                            retVal = node.IsFolder == true || node.LevelIdx == maxConditionalLevel;
+                        }
                     }
 
                     return retVal;
+                },
+                OutputNmrblFactory = (args, nmrbl) =>
+                {
+                    if (pathFilters.Length - args.LevelIdx > 1)
+                    {
+                        nmrbl = nmrbl.Select(
+                            item => new FsEntriesRetrieverNodeData(item)
+                            {
+                                OnlyMatchesIfHasChildren = true,
+                            });
+                    }
+
+                    nmrbl = nmrbl.ToArray();
+                    return nmrbl;
+                },
+                OnNodeChildrenIterated = (args, node) =>
+                {
+                    bool keepNode = !node.Value.OnlyMatchesIfHasChildren;
+
+                    if (!keepNode)
+                    {
+                        keepNode = (args.Next ?? args.Current).ChildNodes.Any();
+                    }
+
+                    return keepNode;
                 }
             }).RootNodes;
 
@@ -121,7 +148,8 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            pathFiltersTextBoxAdapter.SetText(progArgs.Skip(1).FirstOrDefault() ?? "*");
+            pathFiltersTextBoxAdapter.SetText(
+                progArgs.Skip(1).FirstOrDefault() ?? "*");
         }
 
         private void PathFiltersTextUpdated(

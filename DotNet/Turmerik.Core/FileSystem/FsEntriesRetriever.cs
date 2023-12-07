@@ -100,6 +100,11 @@ namespace Turmerik.Core.FileSystem
                         args, nextNodeValue,
                         nextNodeValue.Idx);
 
+                    if (matches)
+                    {
+                        matches = nextNodeValue.IsFolder == true || !nextNodeValue.OnlyMatchesIfHasChildren;
+                    }
+
                     var nextStep = ((matches && nextNodeValue.IsFolder == true) switch
                     {
                         true => DataTreeGeneratorStep.Push,
@@ -113,7 +118,7 @@ namespace Turmerik.Core.FileSystem
         }
 
         private FsEntriesRetrieverNodeData GetNodeData(
-            string path, int levelIdx, int idx) => new FsEntriesRetrieverNodeData
+            string path, int levelIdx, int idx) => new FsEntriesRetrieverNodeData()
             {
                 Path = path,
                 Name = Path.GetFileName(path),

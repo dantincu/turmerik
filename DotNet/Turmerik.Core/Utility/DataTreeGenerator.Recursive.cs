@@ -73,7 +73,7 @@ namespace Turmerik.Core.Utility
                         TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList);
                     }
                     ,
-                    DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList),
+                    // DataTreeGeneratorStep.Pop => () => TryPopStack<TData, TNode, TOpts, TArgs>(args, ref sibblingsList),
                     _ => () => { }
                 });
             }
@@ -82,7 +82,7 @@ namespace Turmerik.Core.Utility
                 AddToTreeNodesList<TData, TNode, TOpts, TArgs>(treeNode, sibblingsList);
             }
 
-            return args.Stop;
+            return args.Stop || nxtStp.Value == DataTreeGeneratorStep.Pop;
         }
     }
 }
