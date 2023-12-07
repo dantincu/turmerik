@@ -19,10 +19,9 @@ namespace Turmerik.Html
         private readonly IDataTreeGenerator dataTreeGenerator;
 
         public HtmlNodesRetriever(
-            IDataTreeGenerator dataTreeGenerator)
+            IDataTreeGeneratorFactory dataTreeGeneratorFactory)
         {
-            this.dataTreeGenerator = dataTreeGenerator ?? throw new ArgumentNullException(
-                nameof(dataTreeGenerator));
+            this.dataTreeGenerator = dataTreeGeneratorFactory.Default;
         }
 
         public HtmlNodesRetrieverArgs GetNodes(

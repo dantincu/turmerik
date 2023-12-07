@@ -22,11 +22,10 @@ namespace Turmerik.Core.FileSystem
         private readonly BasicComparer<bool?> isFolderComparer;
 
         public FsEntriesRetriever(
-            IDataTreeGenerator dataTreeGenerator,
+            IDataTreeGeneratorFactory dataTreeGeneratorFactory,
             IBasicComparerFactory basicComparerFactory)
         {
-            this.dataTreeGenerator = dataTreeGenerator ?? throw new ArgumentNullException(
-                nameof(dataTreeGenerator));
+            this.dataTreeGenerator = dataTreeGeneratorFactory.Default;
 
             this.basicComparerFactory = basicComparerFactory ?? throw new ArgumentNullException(
                 nameof(basicComparerFactory));

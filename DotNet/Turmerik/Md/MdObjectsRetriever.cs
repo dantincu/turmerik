@@ -24,10 +24,9 @@ namespace Turmerik.Md
         private readonly IDataTreeGenerator dataTreeGenerator;
 
         public MdObjectsRetriever(
-            IDataTreeGenerator dataTreeGenerator)
+            IDataTreeGeneratorFactory dataTreeGeneratorFactory)
         {
-            this.dataTreeGenerator = dataTreeGenerator ?? throw new ArgumentNullException(
-                nameof(dataTreeGenerator));
+            this.dataTreeGenerator = dataTreeGeneratorFactory.Default;
         }
 
         public MdObjectsRetrieverArgs GetObjects(

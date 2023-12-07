@@ -19,9 +19,9 @@ namespace Turmerik.Core.FileSystem
         private readonly IDataTreeGenerator dataTreeGenerator;
 
         public StrPartsMatcher(
-            IDataTreeGenerator dataTreeGenerator)
+            IDataTreeGeneratorFactory dataTreeGeneratorFactory)
         {
-            this.dataTreeGenerator = dataTreeGenerator ?? throw new ArgumentNullException(nameof(dataTreeGenerator));
+            this.dataTreeGenerator = dataTreeGeneratorFactory.Default;
         }
 
         public bool Matches(

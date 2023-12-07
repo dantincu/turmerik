@@ -7,6 +7,14 @@ using Turmerik.Core.Helpers;
 
 namespace Turmerik.Core.Utility
 {
+    public interface IDataTreeGenerator<TData, TNode, TOpts, TArgs>
+        where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+        where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+        where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+    {
+        TArgs GetNodes(TOpts opts);
+    }
+
     public interface IDataTreeGenerator
     {
         TArgs GetNodes<TData, TNode, TOpts, TArgs>(
@@ -14,6 +22,23 @@ namespace Turmerik.Core.Utility
             where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
             where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
             where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>;
+    }
+
+    public class DataTreeGenerator<TData, TNode, TOpts, TArgs> : IDataTreeGenerator<TData, TNode, TOpts, TArgs>
+        where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+        where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+        where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+    {
+        private readonly IDataTreeGenerator innerGenerator;
+
+        public DataTreeGenerator(
+            IDataTreeGenerator innerGenerator)
+        {
+            this.innerGenerator = innerGenerator ?? throw new ArgumentNullException(
+                nameof(innerGenerator));
+        }
+
+        public TArgs GetNodes(TOpts opts) => innerGenerator.GetNodes<TData, TNode, TOpts, TArgs>(opts);
     }
 
     public abstract class DataTreeGeneratorBase : IDataTreeGenerator
