@@ -201,6 +201,7 @@ namespace Turmerik.Core.ConsoleApps
                 data.Count++;
                 data.ArgFlagName = null;
                 data.ArgFlagValue = null;
+                data.ArgItem = argItemArr.Single();
             }
 
             data.TotalCount++;
