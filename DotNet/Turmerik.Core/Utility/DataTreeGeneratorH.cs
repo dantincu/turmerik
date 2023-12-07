@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Turmerik.Core.Helpers;
 
@@ -25,5 +26,11 @@ namespace Turmerik.Core.Utility
 
             return stackList;
         }
+
+        public static Func<TArgs, TNode, bool> OnChildNodesIterated<TData, TNode, TOpts, TArgs>()
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs> => (
+                args, node) => node.OnlyMatchesIfHasChildren != true || args.Current.ChildNodes.Any();
     }
 }

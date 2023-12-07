@@ -55,7 +55,8 @@ namespace Turmerik.Md
                 null, args => rootNodes.GetRetriever(mdNode => new MdObjectsRetrieverNode(
                         mdNode, childNodesRetrieverFactory(
                             mdNode)), default(MdObjectsRetrieverArgs))!,
-                inOpts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
+                inOpts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)),
+                inOpts.OnNodeChildrenIterated)
             {
                 MdDoc = mdDoc,
                 RootNodes = rootNodes

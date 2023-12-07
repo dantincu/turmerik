@@ -13,5 +13,7 @@ namespace Turmerik.Core.FileSystem
                 value, nextChildNodeRetriever)
         {
         }
+
+        public bool? OnlyMatchesIfHasChildren { get; set; }
     }
 }

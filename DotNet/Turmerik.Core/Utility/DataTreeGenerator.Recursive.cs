@@ -43,6 +43,8 @@ namespace Turmerik.Core.Utility
                 args.Idx = idx;
                 hasNode = nextNodeRetriever(args, out node);
             }
+
+            OnChildNodesIterated<TData, TNode, TOpts, TArgs>(args);
         }
 
         private bool GetNodes<TData, TNode, TOpts, TArgs>(

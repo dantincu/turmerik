@@ -17,5 +17,7 @@ namespace Turmerik.Html
         }
 
         public IEnumerator<HtmlNode> ChildNodes { get; init; }
+
+        public bool? OnlyMatchesIfHasChildren { get; set; }
     }
 }

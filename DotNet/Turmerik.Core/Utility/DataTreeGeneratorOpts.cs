@@ -12,7 +12,8 @@ namespace Turmerik.Core.Utility
         public DataTreeGeneratorOpts(
             Func<TOpts, TArgs> argsFactory,
             Func<TArgs, TryRetrieve1In1Out<TArgs, TNode>> nextRootNodeRetrieverFactory,
-            Func<TArgs, DataTreeGeneratorStepData> nextStepPredicate)
+            Func<TArgs, DataTreeGeneratorStepData> nextStepPredicate,
+            Func<TArgs, TNode, bool> onChildNodesIterated = null)
         {
             ArgsFactory = argsFactory;
 
@@ -21,10 +22,13 @@ namespace Turmerik.Core.Utility
 
             NextStepPredicate = nextStepPredicate ?? throw new ArgumentNullException(
                 nameof(nextStepPredicate));
+
+            OnChildNodesIterated = onChildNodesIterated ?? DataTreeGeneratorH.OnChildNodesIterated<TData, TNode, TOpts, TArgs>();
         }
 
         public Func<TOpts, TArgs> ArgsFactory { get; }
         public Func<TArgs, TryRetrieve1In1Out<TArgs, TNode>> NextRootNodeRetrieverFactory { get; }
         public Func<TArgs, DataTreeGeneratorStepData> NextStepPredicate { get; }
+        public Func<TArgs, TNode, bool> OnChildNodesIterated { get; }
     }
 }

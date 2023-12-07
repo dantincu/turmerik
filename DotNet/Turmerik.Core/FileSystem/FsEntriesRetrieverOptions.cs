@@ -17,11 +17,13 @@ namespace Turmerik.Core.FileSystem
             InputNmrblFactory = src.InputNmrblFactory;
             FsEntryPredicate = src.FsEntryPredicate;
             OutputNmrblFactory = src.OutputNmrblFactory;
+            OnNodeChildrenIterated = src.OnNodeChildrenIterated;
         }
 
         public string RootDirPath { get; set; }
         public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNodeData>, IEnumerable<FsEntriesRetrieverNodeData>> InputNmrblFactory { get; set; }
         public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNodeData, int, bool> FsEntryPredicate { get; set; }
         public Func<FsEntriesRetrieverArgs, IEnumerable<FsEntriesRetrieverNodeData>, IEnumerable<FsEntriesRetrieverNodeData>> OutputNmrblFactory { get; set; }
+        public Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNode, bool> OnNodeChildrenIterated { get; set; }
     }
 }

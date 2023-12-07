@@ -13,10 +13,12 @@ namespace Turmerik.Core.FileSystem
             Func<StrPartsMatcherOpts, StrPartsMatcherArgs> argsFactory,
             Func<StrPartsMatcherArgs, TryRetrieve1In1Out<StrPartsMatcherArgs, StrPartsMatcherNode>> nextRootNodeRetrieverFactory,
             Func<StrPartsMatcherArgs, DataTreeGeneratorStepData> nextStepPredicate,
-            StrPartsMatcherOptions inputOpts) : base(
+            StrPartsMatcherOptions inputOpts,
+            Func<StrPartsMatcherArgs, StrPartsMatcherNode, bool> onChildNodesIterated = null) : base(
                 argsFactory,
                 nextRootNodeRetrieverFactory,
-                nextStepPredicate)
+                nextStepPredicate,
+                onChildNodesIterated)
         {
             InputStr = inputOpts.InputStr;
             StrParts = inputOpts.StrParts.RdnlC();

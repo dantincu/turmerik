@@ -63,6 +63,8 @@ namespace Turmerik.Core.Utility
                 }
                 else
                 {
+                    OnChildNodesIterated<TData, TNode, TOpts, TArgs>(args, sibblingsList);
+
                     TryPopStack(args, stack,
                         ref stackData,
                         ref nextNodeRetriever,

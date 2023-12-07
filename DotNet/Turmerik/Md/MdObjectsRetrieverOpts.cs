@@ -11,10 +11,12 @@ namespace Turmerik.Md
         public MdObjectsRetrieverOpts(
             Func<MdObjectsRetrieverOpts, MdObjectsRetrieverArgs> argsFactory,
             Func<MdObjectsRetrieverArgs, TryRetrieve1In1Out<MdObjectsRetrieverArgs, MdObjectsRetrieverNode>> nextRootNodeRetrieverFactory,
-            Func<MdObjectsRetrieverArgs, DataTreeGeneratorStepData> nextStepPredicate) : base(
+            Func<MdObjectsRetrieverArgs, DataTreeGeneratorStepData> nextStepPredicate,
+            Func<MdObjectsRetrieverArgs, MdObjectsRetrieverNode, bool> onChildNodesIterated = null) : base(
                 argsFactory,
                 nextRootNodeRetrieverFactory,
-                nextStepPredicate)
+                nextStepPredicate,
+                onChildNodesIterated)
         {
         }
 

@@ -107,7 +107,7 @@ namespace Turmerik.Core.FileSystem
                     }).ToData(matches);
 
                     return nextStep;
-                }, inOpts);
+                }, inOpts, inOpts.OnNodeChildrenIterated);
 
             return opts;
         }

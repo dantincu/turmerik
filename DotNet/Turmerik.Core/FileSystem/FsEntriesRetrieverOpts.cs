@@ -12,10 +12,12 @@ namespace Turmerik.Core.FileSystem
             Func<FsEntriesRetrieverOpts, FsEntriesRetrieverArgs> argsFactory,
             Func<FsEntriesRetrieverArgs, TryRetrieve1In1Out<FsEntriesRetrieverArgs, FsEntriesRetrieverNode>> nextRootNodeRetrieverFactory,
             Func<FsEntriesRetrieverArgs, DataTreeGeneratorStepData> nextStepPredicate,
-            FsEntriesRetrieverOptions inputOpts) : base(
+            FsEntriesRetrieverOptions inputOpts,
+            Func<FsEntriesRetrieverArgs, FsEntriesRetrieverNode, bool> onChildNodesIterated = null) : base(
                 argsFactory,
                 nextRootNodeRetrieverFactory,
-                nextStepPredicate)
+                nextStepPredicate,
+                onChildNodesIterated)
         {
             RootDirPath = inputOpts.RootDirPath;
             InputNmrblFactory = inputOpts.InputNmrblFactory;

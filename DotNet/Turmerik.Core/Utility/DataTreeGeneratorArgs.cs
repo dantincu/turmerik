@@ -25,5 +25,8 @@ namespace Turmerik.Core.Utility
         public DataTreeNode<TNode> Next { get; set; }
         public bool Stop { get; set; }
         public int RemoveOnPop { get; set; }
+
+        public List<DataTreeNode<TNode>> GetSibblingsList(
+            ) => Current?.ParentNode?.ChildNodes ?? RootNodes;
     }
 }

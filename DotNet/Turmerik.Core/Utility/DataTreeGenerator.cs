@@ -117,5 +117,19 @@ namespace Turmerik.Core.Utility
             args.LevelIdx--;
             treeNodesList = args.Current?.ChildNodes ?? args.RootNodes;
         }
+
+        protected void OnChildNodesIterated<TData, TNode, TOpts, TArgs>(
+            TArgs args,
+            List<DataTreeNode<TNode>> sibblingsList = null)
+            where TNode : DataTreeGeneratorNode<TData, TNode, TOpts, TArgs>
+            where TOpts : DataTreeGeneratorOpts<TData, TNode, TOpts, TArgs>
+            where TArgs : DataTreeGeneratorArgs<TData, TNode, TOpts, TArgs>
+        {
+            if (args.Current != null && !args.Opts.OnChildNodesIterated(args, args.Current.Data))
+            {
+                sibblingsList ??= (args.Current.ParentNode?.ChildNodes ?? args.RootNodes);
+                sibblingsList.Remove(args.Current);
+            }
+        }
     }
 }

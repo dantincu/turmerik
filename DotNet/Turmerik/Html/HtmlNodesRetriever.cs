@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Turmerik.Core.Helpers;
@@ -51,7 +52,8 @@ namespace Turmerik.Html
                 null, args => rootNodes.GetRetriever(htmlNode => new HtmlNodesRetrieverNode(
                     htmlNode, childNodesRetrieverFactory(
                         htmlNode)), default(HtmlNodesRetrieverArgs))!,
-                inOpts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)))
+                inOpts.NextStepPredicate.FirstNotNull(args => DataTreeGeneratorStep.Push.ToData(true)),
+                inOpts.OnNodeChildrenIterated)
             {
                 HtmlDoc = htmlDoc,
                 RootNodes = rootNodes
