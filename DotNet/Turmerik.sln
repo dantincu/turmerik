@@ -71,6 +71,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsBackup.Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.FsEntriesRetrieverTestWinFormsApp", "Turmerik.FsEntriesRetrieverTestWinFormsApp\Turmerik.FsEntriesRetrieverTestWinFormsApp.csproj", "{2944434A-7FC1-46C1-BE80-573D247CCE74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrmrkMkFsDirsPair", "TrmrkMkFsDirsPair\TrmrkMkFsDirsPair.csproj", "{35906741-8946-49B9-B891-C41183591CC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +179,10 @@ Global
 		{2944434A-7FC1-46C1-BE80-573D247CCE74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2944434A-7FC1-46C1-BE80-573D247CCE74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2944434A-7FC1-46C1-BE80-573D247CCE74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35906741-8946-49B9-B891-C41183591CC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35906741-8946-49B9-B891-C41183591CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35906741-8946-49B9-B891-C41183591CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35906741-8946-49B9-B891-C41183591CC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,6 +218,7 @@ Global
 		{1C10D6ED-0FF3-46DF-A9EB-89AEB5952FD2} = {FC13E95F-6405-4DF0-B40C-4D4D077A59AE}
 		{41862B45-0D77-4BA8-BE57-C296C6049A77} = {1C10D6ED-0FF3-46DF-A9EB-89AEB5952FD2}
 		{2944434A-7FC1-46C1-BE80-573D247CCE74} = {FCA0DE8B-04E5-46F5-9549-654541BC02DC}
+		{35906741-8946-49B9-B891-C41183591CC6} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
