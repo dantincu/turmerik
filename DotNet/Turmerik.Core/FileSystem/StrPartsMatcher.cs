@@ -35,7 +35,7 @@ namespace Turmerik.Core.FileSystem
             };
 
             var strParts = inOpts.StrParts;
-            int partsCount = strParts.Count();
+            int partsCount = strParts.Count;
             bool matches = partsCount > 0;
 
             if (matches)
@@ -67,7 +67,7 @@ namespace Turmerik.Core.FileSystem
             StrPartsMatcherOptions inOpts,
             bool matchesAnyStart)
         {
-            int maxLevel = inOpts.StrParts.Length - 1;
+            int maxLevel = inOpts.StrParts.Count - 1;
             string firstPart = inOpts.StrParts.First();
 
             Func<StrPartsMatcherArgs, TryRetrieve1In1Out < StrPartsMatcherArgs, StrPartsMatcherNode>> rootNodesRetrieverFactory = null;

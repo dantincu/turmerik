@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,14 +12,21 @@ namespace Turmerik.Core.FileSystem
     {
         public const char WILDCARD_CHAR = '*';
 
+        public static readonly ReadOnlyCollection<char> PathSeparators = '\\'.Arr('/').RdnlC();
+
         public static PathSegmentFilter PathSegment(
             IEnumerable<string> strNmrbl) => new PathSegmentFilter(
                 strNmrbl.RdnlC());
 
         public static PathSegmentFilter PathSegment(
             string str,
-            char wildcardChar = WILDCARD_CHAR) => PathSegment(
-                str.Split(wildcardChar));
+            char wildcardChar = WILDCARD_CHAR)
+        {
+            var strParts = str.Split(wildcardChar);
+            var segment = PathSegment(strParts);
+
+            return segment;
+        }
 
         public static PathFilter PathFilter(
             IEnumerable<PathSegmentFilter> segmentsNmrbl,
@@ -42,12 +50,12 @@ namespace Turmerik.Core.FileSystem
         public static PathFilter PathFilter(
             string path,
             char wildcardChar = WILDCARD_CHAR,
-            char? dirSep = null)
+            IEnumerable<char>? dirSepArr = null)
         {
             bool isPathRooted = Path.IsPathRooted(path);
-            char dirSepChar = dirSep ?? Path.DirectorySeparatorChar;
+            dirSepArr ??= PathSeparators;
 
-            var pathSegments = path.Split(dirSepChar.Arr(),
+            var pathSegments = path.Split(dirSepArr.ToArray(),
                 StringSplitOptions.RemoveEmptyEntries);
 
             var pathFilter = PathFilter(

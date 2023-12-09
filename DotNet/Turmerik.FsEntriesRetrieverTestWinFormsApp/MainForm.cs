@@ -5,7 +5,7 @@ using Turmerik.Core.Actions;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Logging;
-using Turmerik.Core.Utility;
+using Turmerik.Core.Text;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
@@ -24,7 +24,7 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
         private readonly IAppLogger logger;
-        private readonly IFsEntriesRetriever fsEntriesRetriever;
+        private readonly IFilteredFsEntriesRetriever filteredFsEntriesRetriever;
         private readonly IStrPartsMatcher strPartsMatcher;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
@@ -35,8 +35,8 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
         private readonly EditableTextBoxAdapter includedPathsTextBoxAdapter;
         private readonly EditableTextBoxAdapter excludedPathsTextBoxAdapter;
 
-        private string[][][] includedPaths;
-        private string[][][] excludedPaths;
+        private string[] includedPaths;
+        private string[] excludedPaths;
 
         public MainForm(string[] args)
         {
@@ -44,7 +44,7 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
             svcProvContnr = ServiceProviderContainer.Instance.Value;
             svcProv = svcProvContnr.Data;
             logger = svcProv.GetRequiredService<IAppLoggerCreator>().GetSharedAppLogger(GetType());
-            fsEntriesRetriever = svcProv.GetRequiredService<IFsEntriesRetriever>();
+            filteredFsEntriesRetriever = svcProv.GetRequiredService<IFilteredFsEntriesRetriever>();
             strPartsMatcher = svcProv.GetRequiredService<IStrPartsMatcher>();
             matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
             actionComponentCreator = svcProv.GetRequiredService<IWinFormsActionComponentCreator>();
@@ -100,110 +100,21 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
         {
             this.treeViewMain.Nodes.Clear();
 
-            var nodesMap = new Dictionary<FsEntriesRetrieverNodeData, FilteredFsNode>();
-
-            var foldersHcy = fsEntriesRetriever.Retrieve(new FsEntriesRetrieverOptions
+            var foldersHcy = filteredFsEntriesRetriever.Retrieve(new FilteredFsEntriesRetrieverOptions
             {
                 RootDirPath = rootFolderPathTextBoxAdapter.Text,
-                FsEntryPredicate = (args, node, idx) =>
-                {
-                    var parent = args.Current;
-                    
-                    IEnumerable<string[][]> potentialInlcuders;
-                    IEnumerable<string[][]> potentialExcluders;
-
-                    if (parent == null)
-                    {
-                        potentialInlcuders = includedPaths;
-                        potentialExcluders = excludedPaths;
-                    }
-                    else
-                    {
-                        var filteredParent = nodesMap[parent.Data.Value];
-                        potentialInlcuders = filteredParent.MatchingIncluders;
-                        potentialExcluders = filteredParent.MatchingExcluders;
-                    }
-
-                    bool matches = true;
-
-                    Func<string[][], bool> filterMatchPredicate = filter => strPartsMatcher.Matches(
-                        new StrPartsMatcherOptions
-                        {
-                            InputStr = node.Name,
-                            StringComparison = StringComparison.InvariantCultureIgnoreCase,
-                            StrParts = filter[args.LevelIdx]
-                        });
-
-                    Func<string[][], bool> filterLevelPredicate;
-
-                    if (node.IsFolder != true)
-                    {
-                        filterLevelPredicate = filter => filter.Length - args.LevelIdx == 1;
-                    }
-                    else
-                    {
-                        filterLevelPredicate = filter => filter.Length - args.LevelIdx >= 1;
-                    }
-
-                    Func<string[][], bool> filterPredicate = filter => (
-                        filter.Length - args.LevelIdx < 1) || (filterLevelPredicate(
-                        filter) && filterMatchPredicate(filter));
-
-                    potentialInlcuders = potentialInlcuders.Where(filterPredicate).ToArray();
-                    matches = potentialInlcuders.Any();
-
-                    if (matches)
-                    {
-                        potentialExcluders = potentialExcluders.Where(filterPredicate).ToArray();
-                        matches = potentialExcluders.None();
-                    }
-
-                    if (matches)
-                    {
-                        var filteredFsNode = new FilteredFsNode(node);
-
-                        filteredFsNode.MatchingIncluders.AddRange(potentialInlcuders);
-                        filteredFsNode.MatchingExcluders.AddRange(potentialExcluders);
-
-                        nodesMap.Add(node, filteredFsNode);
-                    }
-
-                    return matches;
-                },
-                NodePredicate = args => true,
-                OnNodeChildrenIterated = (args, node) =>
-                {
-                    var treeNode = (args.Next ?? args.Current);
-                    bool matches = treeNode.ChildNodes.Any();
-
-                    if (!matches)
-                    {
-                        var filtered = nodesMap[node.Value];
-
-                        matches = filtered.MatchingIncluders.Any(
-                            includer => includer.Length - node.Value.LevelIdx == 1);
-
-                        matches = matches && filtered.MatchingExcluders.None(
-                            excluder => excluder.Length - node.Value.LevelIdx == 1);
-                    }
-
-                    return matches;
-                }
+                IncludedPaths = includedPaths,
+                ExcludedPaths = excludedPaths,
             }).RootNodes;
 
             fsEntriesTreeViewAdapter.AddTreeViewNodes(
                 treeViewMain, foldersHcy);
         }
 
-        private string[][][] GetPathFilter(
+        private string[] GetPathFilter(
             string newPathFilters)
         {
-            var newFilter = newPathFilters.Split(';'.Arr(),
-                StringSplitOptions.RemoveEmptyEntries).Select(
-                    path => path.Split('/'.Arr('\\'),
-                        StringSplitOptions.RemoveEmptyEntries).Select(
-                            pathSegment => pathSegment.Split(
-                                '*')).ToArray()).ToArray();
+            string[] newFilter = newPathFilters.Split(';');
 
             var invalidPathCharKvp = newPathFilters.FirstKvp(
                 (c, i) => invalidWilcardFileNameChars.Contains(c));
@@ -246,7 +157,9 @@ namespace Turmerik.FsEntriesRetrieverTestWinFormsApp
                     Action = () =>
                     {
                         this.treeViewMain.Nodes.Clear();
-                        excludedPaths = GetPathFilter(newPathFilters);
+
+                        excludedPaths = GetPathFilter(newPathFilters).Select(
+                            path => path.Nullify()).NotNull().NullifyN()?.ToArray() ?? [];
 
                         RefreshMainTreeView();
                         return ActionResultH.Create(0);

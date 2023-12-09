@@ -48,6 +48,7 @@ namespace Turmerik.Core.Dependencies
 
             services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
             services.AddSingleton<IStrPartsMatcher, StrPartsMatcher>();
+            services.AddSingleton<IFilteredFsEntriesRetriever, FilteredFsEntriesRetriever>();
 
             return services;
         }
