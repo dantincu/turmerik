@@ -220,7 +220,7 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
 
             ConsoleH.WithColors(
                 () => Console.WriteLine(headingCaption),
-                foregroundColor ?? ConsoleColor.White);
+                (foregroundColor ?? ConsoleColor.White).Tuple());
 
             if (!omitTrailingNewLine)
             {

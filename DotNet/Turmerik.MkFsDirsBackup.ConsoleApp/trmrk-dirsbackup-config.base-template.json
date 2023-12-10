@@ -1,0 +1,115 @@
+{
+  "Sections": [
+    {
+      "SectionKey": "turmerik",
+      "SectionIdx": 0,
+      "Groups": [
+        {
+          "GroupKey": "main",
+          "GroupIdx": 0,
+          "AddToArchive": true,
+          "DfBckpDir": {
+            "SrcDirRelPath": {
+              "DirPrependRelPath": "DotNet",
+              "DirRelPath": null,
+              "DirAppendRelPath": "bin\\Release\\net8.0"
+            },
+            "DestnDirRelPath": {
+              "DirPrependRelPath": "Bin",
+              "DirRelPath": null,
+              "DirAppendRelPath": "Release\\net8.0"
+            },
+            "SrcDirPathFilters": {
+              "IncludedPaths": [ "*" ],
+              "ExcludedPaths": [ "app-env-locator.json" ]
+            },
+            "DestnDirPathFilters": {
+              "IncludedPaths": [ "*" ],
+              "ExcludedPaths": [ "app-env-locator.json", "_*.exe" ]
+            }
+          },
+          "BckpDirs": [
+            {
+              "DirIdx": 0,
+              "DirKey": "Utility_WnFrms",
+              "SrcDirRelPath": {
+                "DirRelPath": "Turmerik.Utility.WinFormsApp",
+                "DirAppendRelPath": "bin\\Release\\net8.0-windows"
+              },
+              "DestnDirRelPath": {
+                "DirAppendRelPath": "Release\\net8.0-windows"
+              }
+            },
+            {
+              "DirIdx": 1,
+              "DirKey": "LsFsDirsPair",
+              "SrcDirRelPath": {
+                "DirRelPath": "Turmerik.LsFsDirsPair.ConsoleApp"
+              }
+            },
+            {
+              "DirIdx": 2,
+              "DirKey": "MkFsDirsPair",
+              "SrcDirRelPath": {
+                "DirRelPath": "Turmerik.MkFsDirsPair.ConsoleApp"
+              }
+            },
+            {
+              "DirIdx": 3,
+              "DirKey": "RfDirsPairNames",
+              "SrcDirRelPath": {
+                "DirRelPath": "Turmerik.RfDirsPairNames.ConsoleApp"
+              }
+            },
+            {
+              "DirIdx": 5,
+              "DirKey": "MkFsDirsBackup_Self",
+              "SrcDirRelPath": {
+                "DirRelPath": "Turmerik.MkFsDirsBackup_Self.ConsoleApp"
+              },
+              "DestnDirRelPath": {
+                "DirRelPath": "Turmerik.MkFsDirsBackup.ConsoleApp"
+              },
+              "DestnDirPathFilters": {
+                "IncludedPaths": [ "*" ],
+                "ExcludedPaths": [ "app-env-locator.json", "_*.exe", "trmrk-dirsbackup-config*.json" ]
+              }
+            },
+            {
+              "DirIdx": 6,
+              "DirKey": "Config",
+              "DestnDirRelPath": "Config",
+              "DestnDirPathFilters": {
+                "IncludedPaths": [ "*" ]
+              }
+            },
+            {
+              "DirIdx": 7,
+              "DirKey": "Data",
+              "DestnDirRelPath": "Data",
+              "DestnDirPathFilters": {
+                "IncludedPaths": [ "*" ]
+              }
+            }
+          ]
+        },
+        {
+          "GroupKey": "bckp_bckp_app",
+          "GroupIdx": 1,
+          "DestnOnly": true,
+          "AddToArchive": false,
+          "BckpDirs": [
+            {
+              "DirIdx": 0,
+              "DirKey": "MkFsDirsBackup",
+              "SrcDirRelPath": {
+                "DirRelPath": "Turmerik.MkFsDirsBackup.ConsoleApp"
+              },
+              "AddToArchive": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

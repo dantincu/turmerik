@@ -8,12 +8,21 @@ namespace Turmerik.Core.Helpers
 {
     public static class ConsoleH
     {
+        public static ConsoleColorsTuple Tuple(
+            this ConsoleColor foreColor,
+            ConsoleColor? backColor = null) => new ConsoleColorsTuple(
+                foreColor, backColor);
+
+        public static ConsoleColorsTuple Tuple(
+            this ConsoleColor? foreColor,
+            ConsoleColor? backColor = null) => new ConsoleColorsTuple(
+                foreColor, backColor);
+
         public static void WithColors(
             Action callback,
-            ConsoleColor? forecolor = null,
-            ConsoleColor? backcolor = null)
+            ConsoleColorsTuple colors)
         {
-            SetColors(forecolor, backcolor);
+            SetColors(colors);
 
             try
             {
@@ -50,11 +59,15 @@ namespace Turmerik.Core.Helpers
                 forecolor.HasValue,
                 backcolor.HasValue);
 
+        public static void SetColors(
+            ConsoleColorsTuple colors) => SetColors(
+                colors.ForeColor,
+                colors.BackColor);
+
         public static void WithExcp(
             Exception exc,
             Func<Exception, string> msgFactory = null,
-            ConsoleColor? forecolor = null,
-            ConsoleColor? backcolor = null) => WithColors(
+            ConsoleColorsTuple colors = default) => WithColors(
                 () =>
                 {
                     msgFactory = msgFactory.FirstNotNull(
@@ -65,8 +78,8 @@ namespace Turmerik.Core.Helpers
                     var msg = msgFactory(exc);
                     Console.Out.WriteLine(msg);
                 },
-                forecolor ?? ConsoleColor.Red,
-                backcolor ?? ConsoleColor.Black);
+                (colors.ForeColor ?? ConsoleColor.Red).Tuple(
+                    colors.BackColor ?? ConsoleColor.Black));
 
         public static void TryExecute(
             Action action,
@@ -105,6 +118,46 @@ namespace Turmerik.Core.Helpers
                 {
                     throw;
                 }
+            }
+        }
+
+        public static void Print(
+            this ConsoleMessage[] messagesArr,
+            bool resetColors = true)
+        {
+            foreach (var message in messagesArr)
+            {
+                Print(message, false);
+            }
+
+            if (resetColors)
+            {
+                Console.ResetColor();
+            }
+        }
+
+        public static void Print(
+            this ConsoleMessage message,
+            bool resetColors = true)
+        {
+            PrintNwLines(message.NwLnsBefore);
+            SetColors(message.Colors);
+
+            Console.Write(message.Message);
+
+            if (resetColors)
+            {
+                Console.ResetColor();
+            }
+
+            PrintNwLines(message.NwLnsAfter);
+        }
+
+        public static void PrintNwLines(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Console.WriteLine();
             }
         }
     }

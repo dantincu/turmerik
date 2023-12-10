@@ -163,7 +163,7 @@ namespace Turmerik.FsDirsPairRefactor.ConsoleApp
 
             ConsoleH.WithColors(
                 () => Console.WriteLine(headingCaption),
-                foregroundColor ?? ConsoleColor.White);
+                (foregroundColor ?? ConsoleColor.White).Tuple());
 
             if (!omitTrailingNewLine)
             {

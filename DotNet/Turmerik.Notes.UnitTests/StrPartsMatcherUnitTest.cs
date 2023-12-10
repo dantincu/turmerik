@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 
 namespace Turmerik.Notes.UnitTests
@@ -51,7 +52,7 @@ namespace Turmerik.Notes.UnitTests
                 new StrPartsMatcherOptions
                 {
                     InputStr = inputStr,
-                    StrParts = strParts,
+                    StrParts = strParts.RdnlC(),
                 });
 
             Assert.Equal(expectedResult, actualResult);

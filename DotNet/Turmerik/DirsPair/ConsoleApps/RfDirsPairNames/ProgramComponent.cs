@@ -559,7 +559,7 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
 
             ConsoleH.WithColors(
                 () => Console.WriteLine(headingCaption),
-                foregroundColor ?? ConsoleColor.White);
+                (foregroundColor ?? ConsoleColor.White).Tuple());
 
             Console.WriteLine();
         }

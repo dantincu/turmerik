@@ -1,20 +1,3 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Turmerik.Core.Dependencies;
-using Turmerik.Core.Helpers;
-using Turmerik.MkFsDirsBackup.ConsoleApp;
+﻿using Turmerik.Core.ConsoleApps.MkFsBackup;
 
-var services = TrmrkCoreServices.RegisterAll(
-    new ServiceCollection());
-
-TrmrkCoreServices.RegisterAll(services);
-
-services.AddTransient<ProgramComponent>();
-var svcProv = services.BuildServiceProvider();
-
-ConsoleH.TryExecute(
-    () =>
-    {
-        var program = svcProv.GetRequiredService<ProgramComponent>();
-        program.Run(args);
-    },
-    false);
+MkFsBckpH.Run(args);

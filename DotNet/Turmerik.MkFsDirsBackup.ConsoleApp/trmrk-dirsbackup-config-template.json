@@ -1,42 +1,25 @@
 {
-  // "SrcRepoDirPath": "<repo-dir-path>",
-  "SrcProjectsBaseDirRelPath": "DotNet",
-  // "DestnDirBasePath": "<destn-dir-path>",
-  "DestnBinDirRelPath": "Bin",
-  "DestnConfigDirRelPath": "Config",
-  "DestnDataDirRelPath": "Data",
-  // "DestnArchivesDirPath": "<destn-archives-dir-path>",
-  "DestnArchiveFileName": "Turmerik Directly Executable Apps.zip",
-  "IncludedConfigDirRelPaths": [
-    "Turmerik.Utility.WinFormsApp.Settings.UI.UIThemeRetriever"
-  ],
-  "SrcBinDirs": [
+  "Sections": [
     {
-      "ProjectDirName": "Turmerik.LsFsDirsPair.ConsoleApp",
-      "ProjectBinsDirRelPath": "Release\\net8.0",
-      "IgnoredSrcBinRelFilePaths": [ "app-env-locator.json" ],
-      "IgnoredDestnBinRelFilePaths": [ "_ls.exe" ],
-      "AddToArchive": true
-    },
-    {
-      "ProjectDirName": "Turmerik.MkFsDirsPair.ConsoleApp",
-      "ProjectBinsDirRelPath": "Release\\net8.0",
-      "IgnoredSrcBinRelFilePaths": [ "app-env-locator.json" ],
-      "IgnoredDestnBinRelFilePaths": [ "_p.exe" ],
-      "AddToArchive": true
-    },
-    {
-      "ProjectDirName": "Turmerik.RfDirsPairNames.ConsoleApp",
-      "ProjectBinsDirRelPath": "Release\\net8.0",
-      "IgnoredSrcBinRelFilePaths": [ "app-env-locator.json" ],
-      "IgnoredDestnBinRelFilePaths": [ "_rf.exe" ],
-      "AddToArchive": true
-    },
-    {
-      "ProjectDirName": "Turmerik.Utility.WinFormsApp",
-      "ProjectBinsDirRelPath": "Release\\net8.0-windows",
-      "IgnoredSrcBinRelFilePaths": [ "app-env-locator.json" ],
-      "AddToArchive": true
+      // "SectionKey": <repo-name>,
+      "SectionIdx": 0,
+      // "SrcBasePath": <repo-path>,
+      // "DestnBasePath": <destination-base-path>,
+      // "DestnArchiveDirPath": <destination-archive-dir-path>,
+      "DestnArchiveFileName": "Turmerik Directly Executable Apps.zip",
+      "DestnArchiveFileNameTpl": "{0}-{1:yyyy-MM-dd_HH-mm-ss.FFFFFFFK}",
+      "RetainedDestnArchiveFilesCount": 10,
+      "DestnArchiveFileNameTestRegex": "^Turmerik Directly Executable Apps\\-\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}\\-\\d{2}\\-\\d{2}\\.\\d{7}[\\+\\-]\\d{4}\\.zip$",
+      "Groups": [
+        {
+          "GroupKey": "main",
+          "GroupIdx": 0
+        },
+        {
+          "GroupKey": "bckp_self",
+          "GroupIdx": 1
+        }
+      ]
     }
   ]
 }
