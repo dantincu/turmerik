@@ -11,7 +11,6 @@ namespace Turmerik.Notes.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
-            services.AddSingleton<IMdObjectsRetriever, MdObjectsRetriever>();
             services.AddSingleton<INoteItemsRetrieverFactory, NoteItemsRetrieverFactory>();
             services.AddSingleton<INoteJsonDeserializer, NoteJsonDeserializer>();
             services.AddSingleton<INoteJsonRetriever, NoteJsonRetriever>();

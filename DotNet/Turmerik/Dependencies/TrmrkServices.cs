@@ -26,6 +26,7 @@ namespace Turmerik.Dependencies
 
             services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();
 
+            services.AddSingleton<IMdObjectsRetriever, MdObjectsRetriever>();
             services.AddSingleton<IHtmlNodesRetriever, HtmlNodesRetriever>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
             services.AddSingleton<IHtmlDocTitleRetriever, HtmlDocTitleRetriever>();
