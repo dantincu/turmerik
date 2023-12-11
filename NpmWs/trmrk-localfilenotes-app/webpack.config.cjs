@@ -3,13 +3,6 @@ const path = require("path");
 
 const nodeEnv = process.env.NODE_ENV?.trim();
 const prod = (nodeEnv === "production");
-
-/* console.log("nodeEnv", nodeEnv);
-console.log("typeof nodeEnv", typeof nodeEnv);
-console.log("prod", prod);
-console.log("nodeEnv.length", nodeEnv.length);
-console.log("production.length", "production".length); */
-
 const envName = prod ? "prod" : "dev";
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -62,12 +55,10 @@ module.exports = {
     new MiniCssExtractPlugin(),
   ],
   devServer: {
-      // ...
-      /* https: {
-          key: fs.readFileSync("devsslcert/cert.key"),
-          cert: fs.readFileSync("devsslcert/cert.crt"),
-          ca: fs.readFileSync("devsslcert/ca.crt"),
-      },*/
-      // ....
+      host: "localhost",
+      https: {
+          key: fs.readFileSync("devsslcert/privatekey.key"),
+          cert: fs.readFileSync("devsslcert/certificate.crt"),
+      }
   },
 };
