@@ -21,8 +21,6 @@ using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Utility;
 using Turmerik.Core.Text;
 using Turmerik.Html;
-using static Turmerik.WinForms.Controls.UISettingsDataCore;
-using System.Collections.ObjectModel;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -111,6 +109,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public IconLabel RefUxControl => iconLabelResourceUrl;
+        public IconLabel AltRefUxControl => iconLabelResxTitleFetchToCB;
 
         public void GoToWebResourceUrlTool() => textBoxResourceUrl.Focus();
 
@@ -290,8 +289,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                             this.textBoxResourceUrl,
                             this.textBoxResourceTitle,
                             this.textBoxResourceMdLink,
-                            this.checkBoxResxMdLinkFetchToCB,
-                            this.checkBoxResxTitleFetchToCB
+                            // this.checkBoxResxMdLinkFetchToCB,
+                            // this.checkBoxResxTitleFetchToCB
                         ], uiTheme.InputBackColor);
 
                         iconLabelResxTitleFetchToCB.ForeColor = uiTheme.InfoIconColor;

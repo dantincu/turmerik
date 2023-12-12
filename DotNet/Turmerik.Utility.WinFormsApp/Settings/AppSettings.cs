@@ -30,6 +30,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                     MdLinkTemplate = "[{0}]({1})"
                 },
                 NameToIdnfConverter = new AppSettingsData.NameToIdnfConverterMtbl(),
+                PathConverter = new AppSettingsData.PathConverterMtbl(),
                 TextToMd = new AppSettingsData.TextToMdMtbl()
             };
 

@@ -56,8 +56,9 @@
             textBoxName.Dock = DockStyle.Fill;
             textBoxName.Location = new Point(0, 0);
             textBoxName.Name = "textBoxName";
-            textBoxName.Size = new Size(1496, 23);
+            textBoxName.Size = new Size(1446, 23);
             textBoxName.TabIndex = 1;
+            textBoxName.TabStop = false;
             textBoxName.KeyUp += TextBoxName_KeyUp;
             // 
             // checkBoxNameConvertToCB
@@ -65,7 +66,7 @@
             checkBoxNameConvertToCB.AutoSize = true;
             checkBoxNameConvertToCB.Cursor = Cursors.Hand;
             checkBoxNameConvertToCB.Dock = DockStyle.Right;
-            checkBoxNameConvertToCB.Location = new Point(1394, 0);
+            checkBoxNameConvertToCB.Location = new Point(1344, 0);
             checkBoxNameConvertToCB.Name = "checkBoxNameConvertToCB";
             checkBoxNameConvertToCB.Padding = new Padding(5, 0, 0, 0);
             checkBoxNameConvertToCB.Size = new Size(88, 23);
@@ -79,7 +80,7 @@
             iconLabelNameConvertToCB.AutoSize = true;
             iconLabelNameConvertToCB.Dock = DockStyle.Right;
             iconLabelNameConvertToCB.ForeColor = SystemColors.ControlText;
-            iconLabelNameConvertToCB.Location = new Point(1482, 0);
+            iconLabelNameConvertToCB.Location = new Point(1432, 0);
             iconLabelNameConvertToCB.Name = "iconLabelNameConvertToCB";
             iconLabelNameConvertToCB.Size = new Size(14, 15);
             iconLabelNameConvertToCB.TabIndex = 3;
@@ -94,7 +95,7 @@
             panelIdnf.Dock = DockStyle.Top;
             panelIdnf.Location = new Point(0, 23);
             panelIdnf.Name = "panelIdnf";
-            panelIdnf.Size = new Size(1496, 23);
+            panelIdnf.Size = new Size(1446, 23);
             panelIdnf.TabIndex = 1;
             // 
             // textBoxIndf
@@ -102,8 +103,9 @@
             textBoxIndf.Dock = DockStyle.Fill;
             textBoxIndf.Location = new Point(0, 0);
             textBoxIndf.Name = "textBoxIndf";
-            textBoxIndf.Size = new Size(1394, 23);
+            textBoxIndf.Size = new Size(1344, 23);
             textBoxIndf.TabIndex = 2;
+            textBoxIndf.TabStop = false;
             textBoxIndf.KeyUp += TextBoxIndf_KeyUp;
             // 
             // panelName
@@ -112,14 +114,14 @@
             panelName.Dock = DockStyle.Top;
             panelName.Location = new Point(0, 0);
             panelName.Name = "panelName";
-            panelName.Size = new Size(1496, 23);
+            panelName.Size = new Size(1446, 23);
             panelName.TabIndex = 0;
             // 
             // labelTitleName
             // 
             labelTitleName.AutoSize = true;
             labelTitleName.Dock = DockStyle.Right;
-            labelTitleName.Location = new Point(41, 0);
+            labelTitleName.Location = new Point(91, 0);
             labelTitleName.Name = "labelTitleName";
             labelTitleName.Padding = new Padding(3);
             labelTitleName.Size = new Size(45, 21);
@@ -130,7 +132,7 @@
             // 
             iconLabelConvertName.AutoSize = true;
             iconLabelConvertName.Dock = DockStyle.Right;
-            iconLabelConvertName.Location = new Point(86, 0);
+            iconLabelConvertName.Location = new Point(136, 0);
             iconLabelConvertName.Name = "iconLabelConvertName";
             iconLabelConvertName.Size = new Size(14, 15);
             iconLabelConvertName.TabIndex = 0;
@@ -141,7 +143,7 @@
             // 
             labelTitleIdnf.AutoSize = true;
             labelTitleIdnf.Dock = DockStyle.Right;
-            labelTitleIdnf.Location = new Point(26, 0);
+            labelTitleIdnf.Location = new Point(76, 0);
             labelTitleIdnf.Name = "labelTitleIdnf";
             labelTitleIdnf.Padding = new Padding(3);
             labelTitleIdnf.Size = new Size(60, 21);
@@ -152,7 +154,7 @@
             // 
             iconLabelIdnfToCB.AutoSize = true;
             iconLabelIdnfToCB.Dock = DockStyle.Right;
-            iconLabelIdnfToCB.Location = new Point(86, 0);
+            iconLabelIdnfToCB.Location = new Point(136, 0);
             iconLabelIdnfToCB.Name = "iconLabelIdnfToCB";
             iconLabelIdnfToCB.Size = new Size(14, 15);
             iconLabelIdnfToCB.TabIndex = 0;
@@ -166,7 +168,7 @@
             panelTitleIdnf.Dock = DockStyle.Top;
             panelTitleIdnf.Location = new Point(0, 23);
             panelTitleIdnf.Name = "panelTitleIdnf";
-            panelTitleIdnf.Size = new Size(100, 23);
+            panelTitleIdnf.Size = new Size(150, 23);
             panelTitleIdnf.TabIndex = 2;
             // 
             // splitContainerMain
@@ -185,7 +187,7 @@
             splitContainerMain.Panel2.Controls.Add(panelIdnf);
             splitContainerMain.Panel2.Controls.Add(panelName);
             splitContainerMain.Size = new Size(1600, 48);
-            splitContainerMain.SplitterDistance = 100;
+            splitContainerMain.SplitterDistance = 150;
             splitContainerMain.TabIndex = 1;
             splitContainerMain.TabStop = false;
             // 
@@ -196,7 +198,7 @@
             panelTitleName.Dock = DockStyle.Top;
             panelTitleName.Location = new Point(0, 0);
             panelTitleName.Name = "panelTitleName";
-            panelTitleName.Size = new Size(100, 23);
+            panelTitleName.Size = new Size(150, 23);
             panelTitleName.TabIndex = 1;
             // 
             // NameToIdnfConverterUC

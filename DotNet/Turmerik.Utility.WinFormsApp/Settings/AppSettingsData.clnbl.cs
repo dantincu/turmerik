@@ -11,6 +11,7 @@ namespace Turmerik.Utility.WinFormsApp.Settings
     {
         AppSettingsData.IFetchWebResource GetFetchWebResource();
         AppSettingsData.INameToIdnfConverter GetNameToIdnfConverter();
+        AppSettingsData.IPathConverter GetPathConverter();
         AppSettingsData.ITextToMd GetTextToMd();
     }
 
@@ -26,6 +27,15 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         public interface INameToIdnfConverter
         {
             bool? NameConvertToCB { get; }
+            bool? IsShown { get; }
+        }
+
+        public interface IPathConverter
+        {
+            bool? WinPathToCB { get; }
+            bool? EscWinPathToCB { get; }
+            bool? UnixPathToCB { get; }
+            bool? IsShown { get; }
         }
 
         public interface ITextToMd
@@ -80,9 +90,11 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 INameToIdnfConverter src)
             {
                 NameConvertToCB = src.NameConvertToCB;
+                IsShown = src.IsShown;
             }
 
             public bool? NameConvertToCB { get; }
+            public bool? IsShown { get; }
         }
 
         public class NameToIdnfConverterMtbl : INameToIdnfConverter
@@ -95,9 +107,47 @@ namespace Turmerik.Utility.WinFormsApp.Settings
                 INameToIdnfConverter src)
             {
                 NameConvertToCB = src.NameConvertToCB;
+                IsShown = src.IsShown;
             }
 
             public bool? NameConvertToCB { get; set; }
+            public bool? IsShown { get; set; }
+        }
+
+        public class PathConverterImmtbl : IPathConverter
+        {
+            public PathConverterImmtbl(IPathConverter src)
+            {
+                WinPathToCB = src.WinPathToCB;
+                EscWinPathToCB = src.EscWinPathToCB;
+                UnixPathToCB = src.UnixPathToCB;
+                IsShown = src.IsShown;
+            }
+
+            public bool? WinPathToCB { get; }
+            public bool? EscWinPathToCB { get; }
+            public bool? UnixPathToCB { get; }
+            public bool? IsShown { get; }
+        }
+
+        public class PathConverterMtbl : IPathConverter
+        {
+            public PathConverterMtbl()
+            {
+            }
+
+            public PathConverterMtbl(IPathConverter src)
+            {
+                WinPathToCB = src.WinPathToCB;
+                EscWinPathToCB = src.EscWinPathToCB;
+                UnixPathToCB = src.UnixPathToCB;
+                IsShown = src.IsShown;
+            }
+
+            public bool? WinPathToCB { get; set; }
+            public bool? EscWinPathToCB { get; set; }
+            public bool? UnixPathToCB { get; set; }
+            public bool? IsShown { get; set; }
         }
 
         public class TextToMdImmtbl : ITextToMd
@@ -157,25 +207,31 @@ namespace Turmerik.Utility.WinFormsApp.Settings
         public static AppSettingsDataImmtbl ToImmtbl(
             this IAppSettingsData src) => new AppSettingsDataImmtbl(src);
 
-        public static AppSettingsDataMtbl ToMtbl(
-            this IAppSettingsData src) => new AppSettingsDataMtbl(src);
-
         public static FetchWebResourceImmtbl ToImmtbl(
             this IFetchWebResource src) => new FetchWebResourceImmtbl(src);
-
-        public static FetchWebResourceMtbl ToMtbl(
-            this IFetchWebResource src) => new FetchWebResourceMtbl(src);
 
         public static NameToIdnfConverterImmtbl ToImmtbl(
             this INameToIdnfConverter src) => new NameToIdnfConverterImmtbl(src);
 
-        public static NameToIdnfConverterMtbl ToMtbl(
-            this INameToIdnfConverter src) => new NameToIdnfConverterMtbl(src);
+        public static PathConverterImmtbl ToImmtbl(
+            this IPathConverter src) => new PathConverterImmtbl(src);
 
         public static TextToMdImmtbl ToImmtbl(
             this ITextToMd src) => new TextToMdImmtbl(src);
 
+        public static AppSettingsDataMtbl ToMtbl(
+            this IAppSettingsData src) => new AppSettingsDataMtbl(src);
+
+        public static FetchWebResourceMtbl ToMtbl(
+            this IFetchWebResource src) => new FetchWebResourceMtbl(src);
+
+        public static NameToIdnfConverterMtbl ToMtbl(
+            this INameToIdnfConverter src) => new NameToIdnfConverterMtbl(src);
+
         public static TextToMdMtbl ToMtbl(
             this ITextToMd src) => new TextToMdMtbl(src);
+
+        public static PathConverterMtbl ToMtbl(
+            this IPathConverter src) => new PathConverterMtbl(src);
     }
 }

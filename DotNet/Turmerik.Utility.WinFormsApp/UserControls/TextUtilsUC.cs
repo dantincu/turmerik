@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using static Turmerik.WinForms.Controls.UISettingsDataCore;
@@ -31,6 +32,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
 
             InitializeComponent();
+            textLineConvertUC.SizeChanged += TextLineConvertUC_SizeChanged;
 
             if (svcProvContnr.IsRegistered)
             {
@@ -38,9 +40,19 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         public Control RefUxControl => fetchWebResourceUC.RefUxControl;
+        public IconLabel AltRefUxControl => fetchWebResourceUC.AltRefUxControl;
 
         public void GoToWebResourceUrlTool() => fetchWebResourceUC.GoToWebResourceUrlTool();
         public void GoToMarkdownSourceText() => textToMdUC.GoToMarkdownSourceText();
         public void GoToMarkdownResultText() => textToMdUC.GoToMarkdownResultText();
+
+        #region UI Event Handlers
+
+        private void TextLineConvertUC_SizeChanged(object? sender, EventArgs e)
+        {
+            groupBoxTextLineConvert.Height = textLineConvertUC.Height + 30;
+        }
+
+        #endregion UI Event Handlers
     }
 }

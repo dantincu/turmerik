@@ -46,7 +46,6 @@ namespace Turmerik.Utility.WinFormsApp
             }
 
             InitializeComponent();
-            var refUxControl = textUtilsUC.RefUxControl;
 
             if (svcProvContnr.IsRegistered)
             {
@@ -60,6 +59,8 @@ namespace Turmerik.Utility.WinFormsApp
                             this.tabPageTextUtils,
                             this.textUtilsUC
                         ]);
+
+                        textUtilsUC.AltRefUxControl.ForeColor = uiTheme.InfoIconColor;
 
                         actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
                         {
@@ -78,14 +79,21 @@ namespace Turmerik.Utility.WinFormsApp
                     throw;
                 }
 
-                var uISettings = uISettingsRetriever.Data;
-
                 svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().AssignData(
                     controlBlinkTimersManagerAdapterFactory.Create(
                         new ControlBlinkTimersManagerAdapterOpts
                         {
-                            RefUxControl = refUxControl,
+                            RefUxControl = textUtilsUC.RefUxControl,
                         }));
+
+                svcProv.GetRequiredService<ControlBlinkTimersManagerAltAdapterContainer>().AssignData(
+                    controlBlinkTimersManagerAdapterFactory.Create(
+                        new ControlBlinkTimersManagerAdapterOpts
+                        {
+                            RefUxControl = textUtilsUC.AltRefUxControl,
+                        }));
+
+                var uISettings = uISettingsRetriever.Data;
 
                 toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().AssignData(
                     svcProv.GetRequiredService<IToolTipHintsOrchestratorFactory>().Create(

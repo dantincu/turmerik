@@ -211,7 +211,7 @@
             horizontalSplitPanelResultToCB.Size = new Size(122, 30);
             horizontalSplitPanelResultToCB.TabIndex = 0;
             // 
-            // checkBoxResultToCB
+            // checkBoxResultTextToCB
             // 
             checkBoxResultTextToCB.AutoSize = true;
             checkBoxResultTextToCB.Cursor = Cursors.Hand;
@@ -404,7 +404,7 @@
             richTextBoxSrcText.Text = "";
             richTextBoxSrcText.KeyUp += RichTextBoxSrcText_KeyUp;
             // 
-            // richTextBoxConvertedText
+            // richTextBoxResultText
             // 
             richTextBoxResultText.AcceptsTab = true;
             richTextBoxResultText.Dock = DockStyle.Fill;

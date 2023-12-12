@@ -161,6 +161,7 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<IUIThemeRetriever, UIThemeRetriever>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterFactory>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterContainer>();
+                    services.AddSingleton<ControlBlinkTimersManagerAltAdapterContainer>();
                     services.AddSingleton<ToolTipHintsOrchestratorRetriever>();
                 }));
 

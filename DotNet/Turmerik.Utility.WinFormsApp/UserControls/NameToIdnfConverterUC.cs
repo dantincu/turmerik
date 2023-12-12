@@ -28,7 +28,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
-        private readonly Code.Core.INameToIdnfConverter nameToIdnfConverter;
+        private readonly INameToIdnfConverter nameToIdnfConverter;
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
@@ -84,7 +84,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                 this.checkBoxNameConvertToCB_EvtAdapter = propChangedEventAdapterFactory.CheckedChanged(
                     checkBoxNameConvertToCB,
-                    (source, e, isChecked) => SetIdnfToCB(isChecked));
+                    (source, e, isChecked) =>
+                    {
+                        toolTipHintsGroup?.UpdateToolTipsText(new());
+                        SetIdnfToCB(isChecked);
+                    });
 
                 uISettingsData = uISettingsRetriever.Data;
             }
@@ -181,7 +185,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         uiTheme.ApplyBgColor([
                             this.textBoxName,
                             this.textBoxIndf,
-                            this.checkBoxNameConvertToCB,
+                            // this.checkBoxNameConvertToCB,
                         ], uiTheme.InputBackColor);
 
                         iconLabelNameConvertToCB.ForeColor = uiTheme.InfoIconColor;

@@ -491,9 +491,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         uiTheme.ApplyBgColor([
                             this.buttonMdTable,
                             this.textBoxMdTableSrcTextSep,
-                            this.checkBoxMdTableSrcTextIsTabSeparated,
-                            this.checkBoxRmMdQtLvlAndHtmlDecode,
-                            this.checkBoxAddMdQtLvlAndHtmlEncode,
+                            // this.checkBoxMdTableSrcTextIsTabSeparated,
+                            // this.checkBoxRmMdQtLvlAndHtmlDecode,
+                            // this.checkBoxAddMdQtLvlAndHtmlEncode,
                             this.richTextBoxSrcText,
                             this.richTextBoxResultText,
                         ], uiTheme.InputBackColor);
