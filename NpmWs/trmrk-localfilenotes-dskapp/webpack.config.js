@@ -22,6 +22,7 @@ module.exports = {
         
       return `${filepath}/[name][ext]`;
     },
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -55,13 +56,14 @@ module.exports = {
     new MiniCssExtractPlugin(),
   ],
   devServer: {
-      host: "localhost",
-      server: {
-        type: "https",
-        options: {
-          key: "devsslcert/cert.key",
-          cert: "devsslcert/cert.crt",
-        }
+    historyApiFallback: true,
+    host: "localhost",
+    server: {
+      type: "https",
+      options: {
+        key: "devsslcert/cert.key",
+        cert: "devsslcert/cert.crt",
       }
+    }
   },
 };

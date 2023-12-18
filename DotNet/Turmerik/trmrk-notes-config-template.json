@@ -146,7 +146,7 @@
       "MaxIdx": 799,
       "IncIdx": false,
       "FillGapsByDefault": false,
-      "IdxFmt": "D3"
+      "IdxFmt": "D1"
     },
     "NoteInternalDirNameIdxes": {
       "MinIdx": 1,

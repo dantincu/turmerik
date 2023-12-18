@@ -5,19 +5,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 
-import { ApiConfigData, ApiResponse } from "trmrk-axios";
+import { ApiResponse } from "trmrk-axios";
 import { apiSvc } from "../services/settings/api/api-service"; 
 
 import { AppBarArgs } from "../components/appBar/AppBarArgs";
 import LoadingAppBar from "../components/appBar/LoadingAppBar";
-import MainAppBar from "../components/appBar/MainAppBar";
 
 import ApiError from "../components/apiError/ApiError";
 
 import { localStorageKeys, jsonBool, getJsonBool } from "./utils";
-import { getAppTheme, AppTheme } from "../services/app-theme/app-theme";
+import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppConfigData } from "../services/settings/app-config"; 
 import { reducer, actions, AppData } from "./app-data";
+
+import MainEl from "../components/main/Main";
 
 const LoadingEl = ({
   args
@@ -38,17 +39,6 @@ const LoadErrorEl = ({
   return (<Paper className="trmrk-app-error">
     <LoadingAppBar args={args} />
     <Container sx={{ position: "relative" }} maxWidth="xl"><ApiError apiResp={args.resp} /></Container>
-  </Paper>);
-}
-
-const MainEl = ({
-  args
-}: {
-  args: AppBarArgs
-}) => {
-  return (<Paper className="trmrk-app">
-    <MainAppBar args={args} />
-    <Container sx={{ position: "relative" }} maxWidth="xl">{JSON.stringify(args.resp.data)}</Container>
   </Paper>);
 }
 
