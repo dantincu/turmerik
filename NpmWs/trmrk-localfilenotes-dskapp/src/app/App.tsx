@@ -19,6 +19,7 @@ import { AppConfigData } from "../services/settings/app-config";
 import { reducer, actions, AppData } from "./app-data";
 
 import MainEl from "../components/main/Main";
+import { AppDataContext } from "./AppContext";
 
 const LoadingEl = ({
   args
@@ -48,8 +49,6 @@ const AppEl = ({
   args: AppBarArgs
 }) => args.resp ? args.resp.isSuccessStatus ?
   <MainEl args={args} /> : <LoadErrorEl args={args} /> : <LoadingEl args={args} />;
-
-const AppDataContext = React.createContext({} as AppData);
 
 const App = () => {
   const initialState = {

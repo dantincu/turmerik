@@ -4,9 +4,7 @@ export interface AppThemeMode {
   isDarkMode: boolean;
 }
 
-export interface AppTheme {
-  theme: Theme;
-  isDark: boolean;
+export interface AppThemeMainColors {
   txtPrimaryColor: string;
   txtSecondaryColor: string;
   txtDisabledColor: string;
@@ -19,6 +17,16 @@ export interface AppTheme {
   dfSuccessColor: string;
 }
 
+export interface AppThemeColors {
+  main: AppThemeMainColors;
+}
+
+export interface AppTheme {
+  theme: Theme;
+  isDark: boolean;
+  colors: AppThemeColors;
+}
+
 const createAppTheme = (mode: "light" | "dark") => {
   const theme = createTheme({
     palette: {
@@ -26,23 +34,31 @@ const createAppTheme = (mode: "light" | "dark") => {
     },
   });
 
+  const isDarkMode = mode === "dark";
+  const palette = theme.palette;
+
   const appTheme = {
     theme: theme,
-    isDark: mode === "dark",
+    isDark: isDarkMode,
+    colors: {
+      main: {
+        txtPrimaryColor: palette.text.primary,
+        txtSecondaryColor: palette.text.secondary,
+        txtDisabledColor: palette.text.disabled,
+        dfBgColor: palette.background.default,
+        dfPrimaryColor: palette.primary.main,
+        dfSecondaryColor: palette.secondary.main,
+        dfErrorColor: palette.error.main,
+        dfWarningColor: palette.warning.main,
+        dfInfoColor: palette.info.main,
+        dfSuccessColor: palette.success.main,
+      },
+    },
   } as AppTheme;
 
-  appTheme.txtPrimaryColor = theme.palette.text.primary;
-  appTheme.txtSecondaryColor = theme.palette.text.secondary;
-  appTheme.txtDisabledColor = theme.palette.text.disabled;
-
-  appTheme.dfBgColor = theme.palette.background.default;
-
-  appTheme.dfPrimaryColor = theme.palette.primary.main;
-  appTheme.dfSecondaryColor = theme.palette.secondary.main;
-  appTheme.dfErrorColor = theme.palette.error.main;
-  appTheme.dfWarningColor = theme.palette.warning.main;
-  appTheme.dfInfoColor = theme.palette.info.main;
-  appTheme.dfSuccessColor = theme.palette.success.main;
+  if (isDarkMode) {
+  } else {
+  }
 
   return appTheme;
 };

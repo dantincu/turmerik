@@ -22,6 +22,8 @@ import AudioViewer from "../textFileViewer/TextFileViewer";
 
 import NotFound from "../notFound/NotFound";
 
+import { appRoutes } from "../../app/routes";
+
 const MainEl = ({
   args
 }: {
@@ -35,19 +37,19 @@ const MainEl = ({
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
-          <Route path="/home" Component={Home} />
-          <Route path="/files" element={<FilesHcy />} />
-          <Route path="/notes" element={<NotesHcy />} />
-          <Route path="/files/:idnf" element={<FilesHcy parentDirPath={idnf} />} />
-          <Route path="/notes/:idnf" element={<NotesHcy crntNoteIdnf={idnf} />} />
-          <Route path="/pics/:idnf" element={<PicturesExplorer parentDirIdnf={idnf} />} />
-          <Route path="/view-text-file/:idnf" element={<TextFileViewer fileIdnf={idnf} />} />
-          <Route path="/edit-text-file/:idnf" element={<TextFileEditor fileIdnf={idnf} />} />
-          <Route path="/view-note/:idnf" element={<NoteViewer noteIdnf={idnf} />} />
-          <Route path="/edit-note/:idnf" element={<NoteEditor noteIdnf={idnf} />} />
-          <Route path="/view-picture/:idnf" element={<PictureViewer fileIdnf={idnf} />} />
-          <Route path="/view-video/:idnf" element={<VideoViewer fileIdnf={idnf} />} />
-          <Route path="/view-audio/:idnf" element={<AudioViewer fileIdnf={idnf} />} />
+          <Route path={appRoutes.home} Component={Home} />
+          <Route path={appRoutes.filesRoot} element={<FilesHcy />} />
+          <Route path={appRoutes.notesRoot} element={<NotesHcy />} />
+          <Route path={appRoutes.files} element={<FilesHcy parentDirPath={idnf} />} />
+          <Route path={appRoutes.notes} element={<NotesHcy crntNoteIdnf={idnf} />} />
+          <Route path={appRoutes.pics} element={<PicturesExplorer parentDirIdnf={idnf} />} />
+          <Route path={appRoutes.viewTextFile} element={<TextFileViewer fileIdnf={idnf} />} />
+          <Route path={appRoutes.editTextFile} element={<TextFileEditor fileIdnf={idnf} />} />
+          <Route path={appRoutes.viewNote} element={<NoteViewer noteIdnf={idnf} />} />
+          <Route path={appRoutes.editNote} element={<NoteEditor noteIdnf={idnf} />} />
+          <Route path={appRoutes.viewPicture} element={<PictureViewer fileIdnf={idnf} />} />
+          <Route path={appRoutes.viewVideo} element={<VideoViewer fileIdnf={idnf} />} />
+          <Route path={appRoutes.viewAudio} element={<AudioViewer fileIdnf={idnf} />} />
           <Route path="*" Component={NotFound} />
         </Routes>
       </BrowserRouter>
