@@ -1,6 +1,0 @@
-@Turmerik.LocalFilesExplorer.AspNetCoreApp_HostAddress = http://localhost:5295
-
-GET {{Turmerik.LocalFilesExplorer.AspNetCoreApp_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

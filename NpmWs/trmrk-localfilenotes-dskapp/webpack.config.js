@@ -10,7 +10,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: prod ? 'production' : 'development',
-  entry: `./src/app-config/${envName}/index.tsx`,
+  entry: `./src/app/${envName}/index.tsx`,
   output: {
     path: __dirname + '/dist/',
     assetModuleFilename: (pathData) => {

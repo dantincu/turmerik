@@ -19,11 +19,12 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
         }
 
         [HttpGet]
-        public ClientAppConfigCore Get() => new ClientAppConfigCore
+        public ClientAppConfig Get() => new ClientAppConfig
         {
             TrmrkPfx = Trmrk.TrmrkPfx,
             IsDevEnv = appSettingsRetriever.Data.IsDevEnv,
-            RequiredClientVersion = appSettingsRetriever.Data.RequiredClientVersion
+            RequiredClientVersion = appSettingsRetriever.Data.RequiredClientVersion,
+            NoteDirPairs = appSettingsRetriever.Data.NoteDirPairs
         };
     }
 }
