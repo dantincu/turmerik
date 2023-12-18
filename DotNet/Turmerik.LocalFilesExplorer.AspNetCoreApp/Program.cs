@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Turmerik.AspNetCore.Dependencies;
 using Turmerik.Dependencies;
 using Turmerik.LocalFilesExplorer.AspNetCoreApp.Dependencies;
@@ -25,7 +27,9 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers(options =>
 {
-    // options.Filters.Add<RequiredClientVersionFilter>();
+    options.Filters.Add<RequiredClientVersionFilter>();
+}).AddJsonOptions(options => {
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

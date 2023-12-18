@@ -31,7 +31,7 @@ namespace Turmerik.Notes.AspNetCore.Filters
             {
                 var clientVersionStr = context.HttpContext.Request.Headers[TrmrkHeaderNamesH.CLIENT_VERSION_HEADER_NAME].ToString();
 
-                if (int.TryParse(clientVersionStr, out var clientVersionNum) || clientVersionNum < appSettingsRetriever.Data.RequiredClientVersion)
+                if (!int.TryParse(clientVersionStr, out var clientVersionNum) || clientVersionNum < appSettingsRetriever.Data.RequiredClientVersion)
                 {
                     context.HttpContext.Response.StatusCode = StatusCodesH.STATUS_428_PRECONDITION_REQUIRED;
                     context.HttpContext.Response.Headers[TrmrkHeaderNamesH.REQUIRED_CLIENT_VERSION_HEADER_NAME] = appSettingsRetriever.Data.RequiredClientVersion.ToString();
