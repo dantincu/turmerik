@@ -94,6 +94,10 @@ export interface AppConfigData {
   isDevEnv: string;
   requiredClientVersion: string;
   noteDirPairs: NoteDirPairsT;
+  invalidFileNameChars: string[];
+  pathSep: string;
+  altPathSep: string;
+  isWinOS: boolean;
 }
 
 export const getCommand = (

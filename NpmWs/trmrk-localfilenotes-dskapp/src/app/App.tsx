@@ -15,7 +15,7 @@ import ApiError from "../components/apiError/ApiError";
 
 import { localStorageKeys, jsonBool, getJsonBool } from "./utils";
 import { getAppTheme } from "../services/app-theme/app-theme";
-import { AppConfigData } from "../services/settings/app-config"; 
+import { AppConfigData } from "trmrk/src/notes-app-config"; 
 import { reducer, actions, AppData } from "./app-data";
 
 import MainEl from "../components/main/Main";

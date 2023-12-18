@@ -28,3 +28,13 @@ export const any = <T>(
   arr: T[],
   predicate: (item: T, idx: number, array: T[]) => boolean
 ) => arr.filter(predicate).length >= 0;
+
+export const containsAnyOfArr = (
+  inStr: string,
+  strArr: string[] | readonly string[]
+) => strArr.filter((chr) => inStr.indexOf(chr) >= 0).length == 0;
+
+export const containsAnyOfMx = (
+  inStr: string,
+  strMx: (string[] | readonly string[])[]
+) => strMx.filter((strArr) => containsAnyOfArr(inStr, strArr)).length == 0;

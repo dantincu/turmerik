@@ -1,4 +1,4 @@
-import { AppConfigData } from "../services/settings/app-config";
+import { AppConfigData } from "trmrk/src/notes-app-config";
 
 export interface AppData {
   appConfig: AppConfigData;
