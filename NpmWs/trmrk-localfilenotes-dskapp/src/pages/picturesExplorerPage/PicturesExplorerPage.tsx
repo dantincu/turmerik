@@ -9,14 +9,14 @@ import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 
-const NoteViewer = ({ noteIdnf }: { noteIdnf?: string | null | undefined }) => {
+const PicturesExplorerPage = ({ parentDirIdnf }: { parentDirIdnf?: string | null | undefined }) => {
   const appData = React.useContext(AppDataContext);
 
-  if (trmrk.isNonEmptyStr(noteIdnf, true)) { 
+  if (trmrk.isNonEmptyStr(parentDirIdnf, true)) { 
     (<NotFound />);
   } else {
     return (<Container sx={{ position: "relative" }} maxWidth="xl"></Container>);
   }
 }
 
-export default NoteViewer;
+export default PicturesExplorerPage;

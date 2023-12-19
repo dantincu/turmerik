@@ -9,7 +9,7 @@ import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 
-const PicturesExplorer = ({ parentDirIdnf }: { parentDirIdnf?: string | null | undefined }) => {
+const AudioViewerPage = ({ parentDirIdnf }: { parentDirIdnf?: string | null | undefined }) => {
   const appData = React.useContext(AppDataContext);
 
   if (trmrk.isNonEmptyStr(parentDirIdnf, true)) { 
@@ -19,4 +19,4 @@ const PicturesExplorer = ({ parentDirIdnf }: { parentDirIdnf?: string | null | u
   }
 }
 
-export default PicturesExplorer;
+export default AudioViewerPage;

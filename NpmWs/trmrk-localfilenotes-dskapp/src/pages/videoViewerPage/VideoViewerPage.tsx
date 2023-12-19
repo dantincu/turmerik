@@ -9,7 +9,7 @@ import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 
-const PictureViewer = ({ parentDirIdnf }: { parentDirIdnf?: string | null | undefined }) => {
+const VideoViewerPage = ({ parentDirIdnf }: { parentDirIdnf?: string | null | undefined }) => {
   const appData = React.useContext(AppDataContext);
 
   if (trmrk.isNonEmptyStr(parentDirIdnf, true)) { 
@@ -19,4 +19,4 @@ const PictureViewer = ({ parentDirIdnf }: { parentDirIdnf?: string | null | unde
   }
 }
 
-export default PictureViewer;
+export default VideoViewerPage;

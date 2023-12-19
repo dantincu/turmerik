@@ -8,7 +8,7 @@ import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../notFound/NotFound";
 
-const Note = ({ crntNoteIdnf }: { crntNoteIdnf?: string | null | undefined }) => {
+const NotesHcy = ({ crntNoteIdnf }: { crntNoteIdnf?: string | null | undefined }) => {
   const appData = React.useContext(AppDataContext);
 
   if (trmrk.isNonEmptyStr(crntNoteIdnf, true)) { 
@@ -18,4 +18,4 @@ const Note = ({ crntNoteIdnf }: { crntNoteIdnf?: string | null | undefined }) =>
   }
 }
 
-export default Note;
+export default NotesHcy;

@@ -9,7 +9,7 @@ import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 
-const FileDownloader = ({ fileIdnf }: { fileIdnf?: string | null | undefined }) => {
+const TextFileViewerPage = ({ fileIdnf }: { fileIdnf?: string | null | undefined }) => {
   const appData = React.useContext(AppDataContext);
 
   if (trmrk.isNonEmptyStr(fileIdnf, true)) { 
@@ -19,4 +19,4 @@ const FileDownloader = ({ fileIdnf }: { fileIdnf?: string | null | undefined }) 
   }
 }
 
-export default FileDownloader;
+export default TextFileViewerPage;

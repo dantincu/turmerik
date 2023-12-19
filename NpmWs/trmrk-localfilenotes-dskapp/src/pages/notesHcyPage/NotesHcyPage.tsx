@@ -9,14 +9,14 @@ import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 
-const TextFileViewer = ({ fileIdnf }: { fileIdnf?: string | null | undefined }) => {
+const NotesHcyPage = ({ crntNoteIdnf }: { crntNoteIdnf?: string | null | undefined }) => {
   const appData = React.useContext(AppDataContext);
 
-  if (trmrk.isNonEmptyStr(fileIdnf, true)) { 
+  if (trmrk.isNonEmptyStr(crntNoteIdnf, true)) { 
     (<NotFound />);
   } else {
     return (<Container sx={{ position: "relative" }} maxWidth="xl"></Container>);
   }
 }
 
-export default TextFileViewer;
+export default NotesHcyPage;
