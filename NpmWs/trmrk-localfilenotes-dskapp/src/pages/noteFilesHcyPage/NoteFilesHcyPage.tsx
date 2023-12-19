@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -6,16 +7,21 @@ import Container from "@mui/material/Container";
 import { core as trmrk } from "trmrk";
 
 import { reducer, actions, AppData } from "../../app/app-data";
-import { AppDataContext } from "../../app/AppContext";
+import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 
-const NoteFilesHcyPage = ({ noteIdnf }: { noteIdnf ?: string | null | undefined}) => {
+const NoteFilesHcyPage = () => {
+  const { idnf } = useParams();
   const appData = React.useContext(AppDataContext);
+  
+  useEffect(() => {
+    updateAppTitle(appData, idnf);
+  }, []);
 
-  if (trmrk.isNonEmptyStr(noteIdnf, true)) { 
+  if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl"></Container>);
+    return (<Container sx={{ position: "relative" }} maxWidth="xl">NoteFilesHcyPage</Container>);
   }
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { BrowserRouter, Routes, Route, useParams, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Paper from "@mui/material/Paper";
 
@@ -8,20 +8,20 @@ import { AppBarArgs } from "../appBar/AppBarArgs";
 import MainAppBar from "../appBar/MainAppBar";
 
 import HomePage from "../../pages/homePage/HomePage";
-import FilesHcy from "../filesHcy/FilesHcy";
-import NotesHcy from "../notesHcy/NotesHcy";
+import FilesHcyPage from "../../pages/filesHcyPage/FilesHcyPage";
+import NotesHcyPage from "../../pages/notesHcyPage/NotesHcyPage";
 import NoteFilesHcy from "../noteFilesHcy/NoteFilesHcy";
 import PicturesExplorerPage from "../../pages/picturesExplorerPage/PicturesExplorerPage";
 import NoteViewerPage from "../../pages/noteViewerPage/NoteViewerPage";
 import NoteEditorPage from "../../pages/noteEditorPage/NoteEditorPage";
 import TextFileViewerPage from "../../pages/textFileViewerPage/TextFileViewerPage";
 import TextFileEditorPage from "../../pages/textFileEditorPage/TextFileEditorPage";
-import PictureViewer from "../../pages/textFileViewerPage/TextFileViewerPage";
-import VideoViewer from "../../pages/textFileViewerPage/TextFileViewerPage";
-import AudioViewer from "../../pages/textFileViewerPage/TextFileViewerPage";
+import PictureViewerPage from "../../pages/pictureViewerPage/PictureViewerPage";
+import VideoViewerPage from "../../pages/textFileViewerPage/TextFileViewerPage";
+import AudioViewerPage from "../../pages/audioViewerPage/AudioViewerPage";
 import FileDownloaderPage from "../../pages/fileDownloaderPage/FileDownloaderPage";
 
-import NotFound from "../notFound/NotFound";
+import NotFoundPage from "../../pages/notFoundPage/NotFoundPage";
 
 import { appRoutes } from "../../app/routes";
 
@@ -30,8 +30,6 @@ const MainEl = ({
 }: {
   args: AppBarArgs
 }) => {
-  const { idnf } = useParams();
-
   return (
     <BrowserRouter>
       <Paper className="trmrk-app">
@@ -40,21 +38,21 @@ const MainEl = ({
           <Route path="" element={<Navigate to="/home" />} />
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path={appRoutes.home} Component={HomePage} />
-          <Route path={appRoutes.filesRoot} element={<FilesHcy />} />
-          <Route path={appRoutes.notesRoot} element={<NotesHcy />} />
-          <Route path={appRoutes.files} element={<FilesHcy crntDirPath={idnf} />} />
-          <Route path={appRoutes.notes} element={<NotesHcy crntNoteIdnf={idnf} />} />
-          <Route path={appRoutes.noteFiles} element={<NoteFilesHcy noteIdnf={idnf} />} />
-          <Route path={appRoutes.pics} element={<PicturesExplorerPage parentDirIdnf={idnf} />} />
-          <Route path={appRoutes.viewTextFile} element={<TextFileViewerPage fileIdnf={idnf} />} />
-          <Route path={appRoutes.editTextFile} element={<TextFileEditorPage fileIdnf={idnf} />} />
-          <Route path={appRoutes.viewNote} element={<NoteViewerPage noteIdnf={idnf} />} />
-          <Route path={appRoutes.editNote} element={<NoteEditorPage noteIdnf={idnf} />} />
-          <Route path={appRoutes.viewPicture} element={<PictureViewer fileIdnf={idnf} />} />
-          <Route path={appRoutes.viewVideo} element={<VideoViewer fileIdnf={idnf} />} />
-          <Route path={appRoutes.viewAudio} element={<AudioViewer fileIdnf={idnf} />} />
-          <Route path={appRoutes.downloadFile} element={<FileDownloaderPage fileIdnf={idnf} />} />
-          <Route path="*" Component={NotFound} />
+          <Route path={appRoutes.filesRoot} Component={FilesHcyPage} />
+          <Route path={appRoutes.notesRoot} Component={NotesHcyPage} />
+          <Route path={appRoutes.files} Component={FilesHcyPage} />
+          <Route path={appRoutes.notes} Component={NotesHcyPage}  />
+          <Route path={appRoutes.noteFiles} Component={NoteFilesHcy}  />
+          <Route path={appRoutes.pics} Component={PicturesExplorerPage}  />
+          <Route path={appRoutes.viewTextFile} Component={TextFileViewerPage} />
+          <Route path={appRoutes.editTextFile} Component={TextFileEditorPage} />
+          <Route path={appRoutes.viewNote} Component={NoteViewerPage} />
+          <Route path={appRoutes.editNote} Component={NoteEditorPage} />
+          <Route path={appRoutes.viewPicture} Component={PictureViewerPage} />
+          <Route path={appRoutes.viewVideo} Component={VideoViewerPage} />
+          <Route path={appRoutes.viewAudio} Component={AudioViewerPage} />
+          <Route path={appRoutes.downloadFile} Component={FileDownloaderPage} />
+          <Route path="*" Component={NotFoundPage} />
         </Routes>
       </Paper>
     </BrowserRouter>);

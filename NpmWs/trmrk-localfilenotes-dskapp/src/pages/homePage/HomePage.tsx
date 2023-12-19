@@ -4,12 +4,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import { reducer, actions, AppData } from "../../app/app-data";
-import { AppDataContext } from "../../app/AppContext";
+import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 
 const HomePage = () => {
   const appData = React.useContext(AppDataContext);
 
-  return (<Container sx={{ position: "relative" }} maxWidth="xl"></Container>);
+  useEffect(() => {
+    updateAppTitle(appData, "");
+  }, []);
+
+  return (<Container sx={{ position: "relative" }} maxWidth="xl">HomePage</Container>);
 }
 
 export default HomePage;

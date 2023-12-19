@@ -37,7 +37,7 @@ export default function MainAppBar ({
           <img src="../../assets/Icon-32x30-nobg.png" />
         </IconButton>
       </Link>
-      <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>Turmerik Local File Notes</Typography>
+      <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>{appData.appTitle}</Typography>
       <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
           onClick={handleClick}><MenuIcon /></IconButton>
     </Grid>

@@ -14,13 +14,13 @@ import LoadingAppBar from "../components/appBar/LoadingAppBar";
 
 import ApiError from "../components/apiError/ApiError";
 
-import { localStorageKeys, jsonBool, getJsonBool } from "./utils";
+import { localStorageKeys, jsonBool } from "./utils";
 import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppConfigData } from "trmrk/src/notes-app-config"; 
-import { reducer, actions, AppData } from "./app-data";
+import { reducer, AppData } from "./app-data";
 
 import MainEl from "../components/main/Main";
-import { AppDataContext } from "./AppContext";
+import { AppDataContext, createAppContext } from "./AppContext";
 
 const LoadingEl = ({
   args
@@ -53,24 +53,17 @@ const AppEl = ({
 
 const App = () => {
   const initialState = {
-    isDarkMode: localStorage.getItem(localStorageKeys.appThemeIsDarkMode) === jsonBool.true
+    isDarkMode: localStorage.getItem(localStorageKeys.appThemeIsDarkMode) === jsonBool.true,
+    baseLocation: trmrk.url.getBaseLocation(),
+    htmlDocTitle: "Turmerik Local File Notes",
+    appTitle: "Turmerik Local File Notes",
   } as AppData;
 
   const [ state, dispatch ] = React.useReducer(reducer, initialState);
   const [ isLoading, setIsLoading ] = useState(false);
   const [ appSettingsResp, setAppSettingsResp ] = useState(null as ApiResponse<AppConfigData> | null);
 
-  const appContext = {
-    ...state,
-    baseLocation: trmrk.url.getBaseLocation(),
-    setIsDarkMode: (isDarkMode: boolean) => {
-      localStorage.setItem(localStorageKeys.appThemeIsDarkMode, getJsonBool(isDarkMode));
-      dispatch({ type: actions.SET_IS_DARK_MODE, payload: isDarkMode });
-    },
-    setAppConfig: (appConfig: AppConfigData) => {
-      dispatch({ type: actions.SET_APP_CONFIG, payload: appConfig });
-    },
-  };
+  const appContext = createAppContext(state, dispatch)
 
   const appTheme = getAppTheme({
     isDarkMode: state.isDarkMode
