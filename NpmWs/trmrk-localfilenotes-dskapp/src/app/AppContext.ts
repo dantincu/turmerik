@@ -41,17 +41,17 @@ export const updateAppTitle = (
   idnf: string | null | undefined
 ) => {
   let appTitle = "Turmerik Local file Notes";
+  let htmlDocTitle = appTitle;
 
   if (idnf) {
-    appTitle =
-      idnf.split(appData.appConfig.pathSep).splice(-1, 1)[0] + " - " + appTitle;
+    const name = idnf.split(appData.appConfig.pathSep).splice(-1, 1)[0];
+    htmlDocTitle = name + " - " + htmlDocTitle;
+    appTitle += " - " + name;
   }
-
-  console.log("appTitle", appTitle);
 
   if (appTitle !== appData.appTitle) {
     appData.setAppTitle(appTitle);
   }
 
-  appData.setHtmlDocTitle(appTitle);
+  appData.setHtmlDocTitle(htmlDocTitle);
 };

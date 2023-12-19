@@ -37,7 +37,11 @@ export default function MainAppBar ({
           <img src="../../assets/Icon-32x30-nobg.png" />
         </IconButton>
       </Link>
-      <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>{appData.appTitle}</Typography>
+      <Typography variantMapping={{"h6": "label"}} variant="h6"
+        sx={{ position: "relative", top: "0.2em", display:"inline-flex", width: "80%", maxWidth: "80%",
+        overflow: "hidden",
+        textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {appData.appTitle}</Typography>
       <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
           onClick={handleClick}><MenuIcon /></IconButton>
     </Grid>
