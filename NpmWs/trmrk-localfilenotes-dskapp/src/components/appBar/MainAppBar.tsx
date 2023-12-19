@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { Link } from "react-router-dom";
+
 import Typography from "@mui/material/Typography";
 
 import AppBar from "@mui/material/AppBar";
@@ -29,16 +31,25 @@ export default function MainAppBar ({
     setAnchorEl(null);
   };
 
+  const onAppIconClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    window.history.pushState(null, "",
+      appData.appConfig.baseLocation);
+
+    return false;
+  }
+
   return (<AppBar sx={{ position: "relative" }}>
-    <Grid>
-      <Grid gridRow={0}>
+    <Grid gridRow={0}>
+      <Link to={appData.appConfig.baseLocation}>
         <IconButton sx={{ color: "#FFF", width: "2em" }}>
-          <a href={appData.appConfig.baseLocation}><img src="../../assets/Icon-32x30-nobg.png" /></a>
+          <img src="../../assets/Icon-32x30-nobg.png" />
         </IconButton>
-        <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>Turmerik Local File Notes</Typography>
-        <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
-            onClick={handleClick}><MenuIcon /></IconButton>
-      </Grid>
+      </Link>
+      <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>Turmerik Local File Notes</Typography>
+      <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
+          onClick={handleClick}><MenuIcon /></IconButton>
     </Grid>
     <Menu 
         open={open}

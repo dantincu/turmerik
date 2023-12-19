@@ -22,6 +22,7 @@ export const routes = Object.freeze({
   viewPicture: "view-picture",
   viewVideo: "view-video",
   viewAudio: "view-audio",
+  downloadFile: "download-file",
 });
 
 export const appRoutes = Object.freeze({
@@ -38,4 +39,5 @@ export const appRoutes = Object.freeze({
   viewPicture: route(routes.viewPicture),
   viewVideo: route(routes.viewVideo),
   viewAudio: route(routes.viewAudio),
+  downloadFile: route(routes.downloadFile),
 });

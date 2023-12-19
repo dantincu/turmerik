@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
-
-import Typography from "@mui/material/Typography";
+import React from "react";
 
 const NotFound = () => {
-  return (
-    <div>
-      <h1>404 Page not found</h1>
-    </div>);
+  return (<h1 className="trmrk-not-found">404 Page not found</h1>);
 }
 
 export default NotFound;

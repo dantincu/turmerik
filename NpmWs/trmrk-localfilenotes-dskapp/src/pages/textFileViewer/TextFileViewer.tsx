@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
 
 import { core as trmrk } from "trmrk";
 
 import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
-import NotFound from "../notFound/NotFound";
+import NotFound from "../../components/notFound/NotFound";
 
 const TextFileViewer = ({ fileIdnf }: { fileIdnf?: string | null | undefined }) => {
   const appData = React.useContext(AppDataContext);
@@ -14,7 +15,7 @@ const TextFileViewer = ({ fileIdnf }: { fileIdnf?: string | null | undefined }) 
   if (trmrk.isNonEmptyStr(fileIdnf, true)) { 
     (<NotFound />);
   } else {
-    return (<div></div>);
+    return (<Container sx={{ position: "relative" }} maxWidth="xl"></Container>);
   }
 }
 
