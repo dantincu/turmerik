@@ -9,7 +9,6 @@ import Grid from "@mui/material/Grid";
 import Menu from '@mui/material/Menu';
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
 
 import { AppBarArgs } from "./AppBarArgs";
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
@@ -30,15 +29,6 @@ export default function MainAppBar ({
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const onAppIconClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-
-    window.history.pushState(null, "",
-      appData.appConfig.baseLocation);
-
-    return false;
-  }
 
   return (<AppBar sx={{ position: "relative" }}>
     <Grid gridRow={0}>

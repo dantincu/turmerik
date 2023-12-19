@@ -10,6 +10,7 @@ import MainAppBar from "../appBar/MainAppBar";
 import HomePage from "../../pages/homePage/HomePage";
 import FilesHcy from "../filesHcy/FilesHcy";
 import NotesHcy from "../notesHcy/NotesHcy";
+import NoteFilesHcy from "../noteFilesHcy/NoteFilesHcy";
 import PicturesExplorerPage from "../../pages/picturesExplorerPage/PicturesExplorerPage";
 import NoteViewerPage from "../../pages/noteViewerPage/NoteViewerPage";
 import NoteEditorPage from "../../pages/noteEditorPage/NoteEditorPage";
@@ -41,8 +42,9 @@ const MainEl = ({
           <Route path={appRoutes.home} Component={HomePage} />
           <Route path={appRoutes.filesRoot} element={<FilesHcy />} />
           <Route path={appRoutes.notesRoot} element={<NotesHcy />} />
-          <Route path={appRoutes.files} element={<FilesHcy parentDirPath={idnf} />} />
+          <Route path={appRoutes.files} element={<FilesHcy crntDirPath={idnf} />} />
           <Route path={appRoutes.notes} element={<NotesHcy crntNoteIdnf={idnf} />} />
+          <Route path={appRoutes.noteFiles} element={<NoteFilesHcy noteIdnf={idnf} />} />
           <Route path={appRoutes.pics} element={<PicturesExplorerPage parentDirIdnf={idnf} />} />
           <Route path={appRoutes.viewTextFile} element={<TextFileViewerPage fileIdnf={idnf} />} />
           <Route path={appRoutes.editTextFile} element={<TextFileEditorPage fileIdnf={idnf} />} />

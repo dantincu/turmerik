@@ -118,6 +118,7 @@ namespace Turmerik.DriveExplorer
             var fsItem = new DriveItem
             {
                 Name = fSysInfo.Name,
+                Idnf = fSysInfo.FullName,
             };
 
             if (fSysInfo is DirectoryInfo dirInfo)
@@ -158,5 +159,16 @@ namespace Turmerik.DriveExplorer
         }
 
         protected override char GetDirSeparator() => Path.DirectorySeparatorChar;
+
+        protected override void RemoveAdditionalInfoIfReq(
+            DriveItem item, bool retMinimalInfo)
+        {
+            base.RemoveAdditionalInfoIfReq(item, retMinimalInfo);
+
+            if (retMinimalInfo)
+            {
+                item.Idnf = null;
+            }
+        }
     }
 }

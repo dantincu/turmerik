@@ -95,11 +95,12 @@ namespace Turmerik.DriveExplorer
 
         protected abstract char GetDirSeparator();
 
-        protected void RemoveAdditionalInfoIfReq(
+        protected virtual void RemoveAdditionalInfoIfReq(
             DriveItem item, bool retMinimalInfo)
         {
             if (retMinimalInfo)
             {
+                item.PrIdnf = null;
                 item.IsFolder = null;
                 item.IsRootFolder = null;
 
