@@ -17,7 +17,7 @@ const unixInvalidSeqncs = Object.freeze(createInvalidSeqncs("/", "\\"));
 const getInvalidSeqncs = (isWinOs: boolean) =>
   isWinOs ? winInvalidSeqncs : unixInvalidSeqncs;
 
-export const isValidFsPath = (cfg: AppConfigData, path: string) => {
+export const isValidRootedFsPath = (cfg: AppConfigData, path: string) => {
   let isValid =
     !isNonEmptyStr(path) &&
     !containsAnyOfMx(path, [cfg.invalidFileNameChars, baseInvalidSeqncs]);
@@ -33,5 +33,15 @@ export const isValidFsPath = (cfg: AppConfigData, path: string) => {
     isValid = isValid && !containsAnyOfArr(path, invalidSeqncs);
   }
 
+  return isValid;
+};
+
+export const isValidFsPath = (cfg: AppConfigData, path: string) => {
+  if (path.startsWith("..")) {
+  } else if (path.startsWith(".")) {
+    path = path.substring(1);
+  }
+
+  const isValid = isValidRootedFsPath(cfg, path);
   return isValid;
 };

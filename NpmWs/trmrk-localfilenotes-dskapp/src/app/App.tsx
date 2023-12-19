@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { core as trmrk } from "trmrk";
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
@@ -66,6 +67,7 @@ const App = () => {
       dispatch({ type: actions.SET_IS_DARK_MODE, payload: isDarkMode });
     },
     setAppConfig: (appConfig: AppConfigData) => {
+      appConfig.baseLocation ??= trmrk.url.getBaseLocation();
       dispatch({ type: actions.SET_APP_CONFIG, payload: appConfig });
     }
   };

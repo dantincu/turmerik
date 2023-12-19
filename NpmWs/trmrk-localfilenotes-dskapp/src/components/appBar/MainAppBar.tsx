@@ -11,12 +11,15 @@ import HomeIcon from '@mui/icons-material/Home';
 
 import { AppBarArgs } from "./AppBarArgs";
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
+import { AppDataContext } from "../../app/AppContext";
 
 export default function MainAppBar ({
   args
 }: {
   args: AppBarArgs
 }) {
+  const appData = React.useContext(AppDataContext);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,7 +33,7 @@ export default function MainAppBar ({
     <Grid>
       <Grid gridRow={0}>
         <IconButton sx={{ color: "#FFF", width: "2em" }}>
-          <img src="../../assets/Icon-32x30-nobg.png" />
+          <a href={appData.appConfig.baseLocation}><img src="../../assets/Icon-32x30-nobg.png" /></a>
         </IconButton>
         <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>Turmerik Local File Notes</Typography>
         <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
