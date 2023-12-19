@@ -62,14 +62,14 @@ const App = () => {
 
   const appContext = {
     ...state,
+    baseLocation: trmrk.url.getBaseLocation(),
     setIsDarkMode: (isDarkMode: boolean) => {
       localStorage.setItem(localStorageKeys.appThemeIsDarkMode, getJsonBool(isDarkMode));
       dispatch({ type: actions.SET_IS_DARK_MODE, payload: isDarkMode });
     },
     setAppConfig: (appConfig: AppConfigData) => {
-      appConfig.baseLocation ??= trmrk.url.getBaseLocation();
       dispatch({ type: actions.SET_APP_CONFIG, payload: appConfig });
-    }
+    },
   };
 
   const appTheme = getAppTheme({

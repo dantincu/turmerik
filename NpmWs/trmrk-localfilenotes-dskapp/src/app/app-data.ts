@@ -2,6 +2,7 @@ import { AppConfigData } from "trmrk/src/notes-app-config";
 
 export interface AppData {
   appConfig: AppConfigData;
+  baseLocation: string;
   isDarkMode: boolean;
 }
 

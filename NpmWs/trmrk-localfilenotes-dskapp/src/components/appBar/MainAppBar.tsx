@@ -32,7 +32,7 @@ export default function MainAppBar ({
 
   return (<AppBar sx={{ position: "relative" }}>
     <Grid gridRow={0}>
-      <Link to={appData.appConfig.baseLocation}>
+      <Link to={appData.baseLocation}>
         <IconButton sx={{ color: "#FFF", width: "2em" }}>
           <img src="../../assets/Icon-32x30-nobg.png" />
         </IconButton>

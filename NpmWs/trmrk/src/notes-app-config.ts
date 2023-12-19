@@ -98,7 +98,6 @@ export interface AppConfigData {
   pathSep: string;
   altPathSep: string;
   isWinOS: boolean;
-  baseLocation: string;
 }
 
 export const getCommand = (

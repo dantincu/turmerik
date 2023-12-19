@@ -11,6 +11,10 @@ body {
   height: 100vh;
 }
 
-.trmrk-not-found {
+.trmrk-error {
   text-align: center;
+}
+
+.trmrk-error > h2 {
+  color: orangered;
 }

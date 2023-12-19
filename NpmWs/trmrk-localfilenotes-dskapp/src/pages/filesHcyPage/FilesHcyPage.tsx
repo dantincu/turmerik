@@ -8,6 +8,7 @@ import { core as trmrk } from "trmrk";
 import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
+import FilesHcy from "../../components/filesHcy/FilesHcy";
 
 const FilesHcyPage = ({ parentDirPath }: { parentDirPath ?: string | null | undefined}) => {
   const appData = React.useContext(AppDataContext);

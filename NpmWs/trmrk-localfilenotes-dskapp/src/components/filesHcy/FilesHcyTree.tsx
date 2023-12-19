@@ -6,15 +6,9 @@ import { core as trmrk } from "trmrk";
 
 import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext } from "../../app/AppContext";
-import FilesHcyTree from "./FilesHcyTree";
+import NotFound from "../notFound/NotFound";
 
-const FilesHcy = ({
-    rootDirPath,
-    crntDirPath
-  }: {
-    rootDirPath ?: string | null | undefined,
-    crntDirPath ?: string | null | undefined
-  }) => {
+const FilesHcyTree = ({ crntDirPath }: { crntDirPath ?: string | null | undefined}) => {
   const appData = React.useContext(AppDataContext);
 
   if (trmrk.isNonEmptyStr(crntDirPath, true)) { 
@@ -23,4 +17,4 @@ const FilesHcy = ({
   return (<div></div>);
 }
 
-export default FilesHcy;
+export default FilesHcyTree;
