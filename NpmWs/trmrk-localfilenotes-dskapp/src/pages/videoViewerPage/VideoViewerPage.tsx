@@ -21,7 +21,7 @@ const VideoViewerPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">VideoViewerPage</Container>);
+    return (<Container className="trmrk-video-viewer-page" sx={{ position: "relative" }} maxWidth="xl">VideoViewerPage</Container>);
   }
 }
 

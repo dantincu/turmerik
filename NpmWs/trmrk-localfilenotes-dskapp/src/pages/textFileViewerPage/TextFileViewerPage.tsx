@@ -21,7 +21,7 @@ const TextFileViewerPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">TextFileViewerPage</Container>);
+    return (<Container className="trmrk-text-file-viewer-page" sx={{ position: "relative" }} maxWidth="xl">TextFileViewerPage</Container>);
   }
 }
 

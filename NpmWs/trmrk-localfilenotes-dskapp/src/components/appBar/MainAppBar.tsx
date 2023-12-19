@@ -38,11 +38,10 @@ export default function MainAppBar ({
         </IconButton>
       </Link>
       <Typography variantMapping={{"h6": "label"}} variant="h6"
-        sx={{ position: "relative", top: "0.2em", display:"inline-flex", width: "80%", maxWidth: "80%",
-        overflow: "hidden",
-        textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        sx={{ position: "relative", top: "0.2em", display:"inline-flex",
+        overflow: "hidden", whiteSpace: "nowrap" }} className="trmrk-app-title">
           {appData.appTitle}</Typography>
-      <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
+      <IconButton sx={{ color: "#FFF", width: "2em", float: "right", marginTop: "4px" }}
           onClick={handleClick}><MenuIcon /></IconButton>
     </Grid>
     <Menu 

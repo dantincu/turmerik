@@ -10,6 +10,7 @@ import { reducer, actions, AppData } from "../../app/app-data";
 import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 import FilesHcy from "../../components/filesHcy/FilesHcy";
+import AddressBar from "../../components/addressBar/AddressBar";
 
 const FilesHcyPage = () => {
   const { idnf } = useParams();
@@ -23,7 +24,19 @@ const FilesHcyPage = () => {
     
   }
 
-  return (<Container sx={{ position: "relative" }} maxWidth="xl">FilesHcyPage</Container>);
+  const onAddressChanged = (newAddress: string) => {
+
+  }
+
+  const addressValidator = (newAddress: string) => {
+    let errMsg: string | null = null;
+    return errMsg;
+  };
+
+  return (<Container className="trmrk-files-hcy-page" sx={{ position: "relative" }} maxWidth="xl">
+    <AddressBar label="File Path" address={idnf ?? ""} onAddressChanged={onAddressChanged} addressValidator={addressValidator}
+      className="trmrk-main-address-bar" />
+  </Container>);
 }
 
 export default FilesHcyPage;

@@ -14,7 +14,7 @@ const NotFoundPage = () => {
     updateAppTitle(appData, "Page Not Found");
   }, []);
 
-  return (<Container sx={{ position: "relative" }} maxWidth="xl">
+  return (<Container className="trmrk-not-found-page" sx={{ position: "relative" }} maxWidth="xl">
     <NotFound />
   </Container>);
 }

@@ -21,7 +21,7 @@ const NoteViewerPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">NoteViewerPage</Container>);
+    return (<Container className="trmrk-note-viewer-page" sx={{ position: "relative" }} maxWidth="xl">NoteViewerPage</Container>);
   }
 }
 

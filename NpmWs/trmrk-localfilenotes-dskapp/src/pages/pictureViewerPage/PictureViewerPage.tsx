@@ -21,7 +21,7 @@ const PictureViewerPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">PictureViewerPage</Container>);
+    return (<Container className="trmrk-picture-viewer-page" sx={{ position: "relative" }} maxWidth="xl">PictureViewerPage</Container>);
   }
 }
 

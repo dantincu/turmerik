@@ -21,7 +21,7 @@ const FileDownloaderPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">FileDownloaderPage</Container>);
+    return (<Container className="trmrk-file-downloader-page" sx={{ position: "relative" }} maxWidth="xl">FileDownloaderPage</Container>);
   }
 }
 

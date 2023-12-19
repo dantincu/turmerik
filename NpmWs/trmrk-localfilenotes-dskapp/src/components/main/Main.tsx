@@ -22,7 +22,7 @@ import AudioViewerPage from "../../pages/audioViewerPage/AudioViewerPage";
 import FileDownloaderPage from "../../pages/fileDownloaderPage/FileDownloaderPage";
 
 import NotFoundPage from "../../pages/notFoundPage/NotFoundPage";
-
+import { AppDataContext } from "../../app/AppContext";
 import { appRoutes } from "../../app/routes";
 
 const MainEl = ({
@@ -30,9 +30,11 @@ const MainEl = ({
 }: {
   args: AppBarArgs
 }) => {
+  const appData = React.useContext(AppDataContext);
+
   return (
     <BrowserRouter>
-      <Paper className="trmrk-app">
+      <Paper className={["trmrk-app", appData.isDarkMode ? "trmrk-theme-dark" : "trmrk-theme-light"].join(" ")}>
         <MainAppBar args={args} />
         <Routes>
           <Route path="" element={<Navigate to="/home" />} />

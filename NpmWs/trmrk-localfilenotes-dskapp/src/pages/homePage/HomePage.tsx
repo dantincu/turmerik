@@ -13,7 +13,7 @@ const HomePage = () => {
     updateAppTitle(appData, "");
   }, []);
 
-  return (<Container sx={{ position: "relative" }} maxWidth="xl">HomePage</Container>);
+  return (<Container className="trmrk-home-page" sx={{ position: "relative" }} maxWidth="xl">HomePage</Container>);
 }
 
 export default HomePage;

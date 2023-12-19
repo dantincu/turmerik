@@ -21,7 +21,7 @@ const TextFileEditorPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">v</Container>);
+    return (<Container className="trmrk-text-file-editor-page" sx={{ position: "relative" }} maxWidth="xl">v</Container>);
   }
 }
 

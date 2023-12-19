@@ -21,7 +21,7 @@ const NoteFilesHcyPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">NoteFilesHcyPage</Container>);
+    return (<Container className="trmrk-note-files-hcy-page" sx={{ position: "relative" }} maxWidth="xl">NoteFilesHcyPage</Container>);
   }
 }
 

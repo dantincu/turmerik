@@ -21,7 +21,7 @@ const NoteEditorPage = () => {
   if (trmrk.isNonEmptyStr(idnf, true)) { 
     (<NotFound />);
   } else {
-    return (<Container sx={{ position: "relative" }} maxWidth="xl">NoteEditorPage</Container>);
+    return (<Container className="trmrk-note-editor-page" sx={{ position: "relative" }} maxWidth="xl">NoteEditorPage</Container>);
   }
 }
 

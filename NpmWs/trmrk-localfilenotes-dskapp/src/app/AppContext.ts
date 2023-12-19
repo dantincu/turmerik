@@ -40,7 +40,7 @@ export const updateAppTitle = (
   appData: AppData,
   idnf: string | null | undefined
 ) => {
-  let appTitle = "Turmerik Local file Notes";
+  let appTitle = "Turmerik Local File Notes";
   let htmlDocTitle = appTitle;
 
   if (idnf) {
