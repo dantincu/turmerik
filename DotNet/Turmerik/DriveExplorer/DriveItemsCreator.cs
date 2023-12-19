@@ -66,7 +66,7 @@ namespace Turmerik.DriveExplorer
             {
                 if (item.IsFolder == true)
                 {
-                    await dvExplrSvc.DeleteFolderAsync(item.Idnf);
+                    await dvExplrSvc.DeleteFolderAsync(item.Idnf, false);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace Turmerik.DriveExplorer
             if (item.IsFolder == true)
             {
                 newItem = await dvExplrSvc.CreateFolderAsync(
-                    opts.PrIdnf, item.Name);
+                    opts.PrIdnf, item.Name, false);
 
                 OnItemCreated(item, newItem);
                 var childrenList = GetChildrenList(item);
@@ -126,7 +126,7 @@ namespace Turmerik.DriveExplorer
                 if (item.IsFolder == true)
                 {
                     await dvExplrSvc.MoveFolderAsync(item.Idnf,
-                        data.MoveToPrIdnf, newItemName);
+                        data.MoveToPrIdnf, newItemName, false);
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace Turmerik.DriveExplorer
                 if (item.IsFolder == true)
                 {
                     await dvExplrSvc.RenameFolderAsync(
-                        item.Idnf, data.RenameTo);
+                        item.Idnf, data.RenameTo, false);
                 }
                 else
                 {

@@ -530,7 +530,7 @@ namespace Turmerik.Notes.UnitTests
             try
             {
                 RefreshRootItem(rootItemBuilder);
-                var parentDir = await driveItemsRetriever.GetFolderAsync(parentPath);
+                var parentDir = await driveItemsRetriever.GetFolderAsync(parentPath, false);
 
                 var filesArr = parentDir.FolderFiles.ToArray();
                 var prIdnf = parentPath;

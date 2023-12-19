@@ -33,7 +33,7 @@ namespace Turmerik.DriveExplorer
             File.Copy(idnf, newPath);
 
             var newEntry = new FileInfo(newPath);
-            var item = GetDriveItem(newEntry, false);
+            var item = GetDriveItem(newEntry);
 
             return item;
         }
@@ -41,7 +41,8 @@ namespace Turmerik.DriveExplorer
         public async Task<DriveItem> CopyFolderAsync(
             string idnf,
             string newPrIdnf,
-            string newFolderName)
+            string newFolderName,
+            bool retMinimalInfo)
         {
             string newPath = Path.Combine(
                 newPrIdnf, newFolderName);
@@ -51,14 +52,16 @@ namespace Turmerik.DriveExplorer
                 newPath);
 
             var newEntry = new DirectoryInfo(newPath);
-            var item = GetDriveItem(newEntry, false);
+            var item = GetDriveItem(newEntry);
 
+            RemoveAdditionalInfoIfReq(item, retMinimalInfo);
             return item;
         }
 
         public async Task<DriveItem> CreateFolderAsync(
             string prIdnf,
-            string newFolderName)
+            string newFolderName,
+            bool retMinimalInfo)
         {
             string newPath = Path.Combine(
                 prIdnf, newFolderName);
@@ -66,8 +69,9 @@ namespace Turmerik.DriveExplorer
             Directory.CreateDirectory(newPath);
 
             var newEntry = new DirectoryInfo(newPath);
-            var item = GetDriveItem(newEntry, false);
+            var item = GetDriveItem(newEntry);
 
+            RemoveAdditionalInfoIfReq(item, retMinimalInfo);
             return item;
         }
 
@@ -95,7 +99,7 @@ namespace Turmerik.DriveExplorer
             File.WriteAllText(newPath, text);
 
             var newEntry = new FileInfo(newPath);
-            var item = GetDriveItem(newEntry, false);
+            var item = GetDriveItem(newEntry);
 
             return item;
         }
@@ -103,18 +107,22 @@ namespace Turmerik.DriveExplorer
         public async Task<DriveItem> DeleteFileAsync(string idnf)
         {
             var fileInfo = new FileInfo(idnf);
-            var driveItem = GetDriveItem(fileInfo, false);
+            var driveItem = GetDriveItem(fileInfo);
 
             fileInfo.Delete();
             return driveItem;
         }
 
-        public async Task<DriveItem> DeleteFolderAsync(string idnf)
+        public async Task<DriveItem> DeleteFolderAsync(
+            string idnf,
+            bool retMinimalInfo)
         {
             var dirInfo = new DirectoryInfo(idnf);
-            var driveItem = GetDriveItem(dirInfo, false);
+            var driveItem = GetDriveItem(dirInfo);
 
             dirInfo.Delete(true);
+
+            RemoveAdditionalInfoIfReq(driveItem, retMinimalInfo);
             return driveItem;
         }
 
@@ -135,14 +143,15 @@ namespace Turmerik.DriveExplorer
             File.Move(path, newPath);
             var newEntry = new FileInfo(newPath);
 
-            var item = GetDriveItem(newEntry, false);
+            var item = GetDriveItem(newEntry);
             return item;
         }
 
         public async Task<DriveItem> MoveFolderAsync(
             string idnf,
             string newPrIdnf,
-            string newFolderName)
+            string newFolderName,
+            bool retMinimalInfo)
         {
             string path = idnf;
             string newPrPath = newPrIdnf;
@@ -153,8 +162,9 @@ namespace Turmerik.DriveExplorer
             FsH.MoveDirectory(path, newPath);
 
             var newEntry = new DirectoryInfo(newPath);
-            var item = GetDriveItem(newEntry, false);
+            var item = GetDriveItem(newEntry);
 
+            RemoveAdditionalInfoIfReq(item, retMinimalInfo);
             return item;
         }
 
@@ -172,12 +182,13 @@ namespace Turmerik.DriveExplorer
 
         public async Task<DriveItem> RenameFolderAsync(
             string idnf,
-            string newFolderName)
+            string newFolderName,
+            bool retMinimalInfo)
         {
             string parentIdnf = Path.GetDirectoryName(idnf);
 
             var result = await MoveFolderAsync(
-                idnf, parentIdnf, newFolderName);
+                idnf, parentIdnf, newFolderName, retMinimalInfo);
 
             return result;
         }

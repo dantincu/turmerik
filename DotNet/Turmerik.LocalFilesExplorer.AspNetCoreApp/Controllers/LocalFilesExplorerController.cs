@@ -19,11 +19,11 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Controllers
 
         [HttpGet]
         public Task<DriveItem> GetItemAsync(
-            string idnf) => dvExplrSvc.GetItemAsync(idnf);
+            string idnf) => dvExplrSvc.GetItemAsync(idnf, true);
 
         [HttpGet]
         public Task<DriveItem> GetFolderAsync(
-            string idnf) => dvExplrSvc.GetFolderAsync(idnf);
+            string idnf) => dvExplrSvc.GetFolderAsync(idnf, true);
 
         [HttpGet]
         public Task<bool> ItemExistsAsync(
@@ -54,26 +54,26 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Controllers
         [HttpPost]
         public Task<DriveItem> CreateFolderAsync(
             string prIdnf, string newFolderName) => dvExplrSvc.CreateFolderAsync(
-                prIdnf, newFolderName);
+                prIdnf, newFolderName, true);
 
         [HttpPost]
         public Task<DriveItem> RenameFolderAsync(
             string idnf, string newFolderName) => dvExplrSvc.RenameFolderAsync(
-                idnf, newFolderName);
+                idnf, newFolderName, true);
 
         [HttpPost]
         public Task<DriveItem> CopyFolderAsync(
             string idnf, string newPrIdnf, string newFolderName) => dvExplrSvc.CopyFolderAsync(
-                idnf, newPrIdnf, newFolderName);
+                idnf, newPrIdnf, newFolderName, true);
 
         [HttpPost]
         public Task<DriveItem> MoveFolderAsync(
             string idnf, string newPrIdnf, string newFolderName) => dvExplrSvc.MoveFolderAsync(
-                idnf, newPrIdnf, newFolderName);
+                idnf, newPrIdnf, newFolderName, true);
 
         [HttpPost]
         public Task<DriveItem> DeleteFolderAsync(
-            string idnf) => dvExplrSvc.DeleteFolderAsync(idnf);
+            string idnf) => dvExplrSvc.DeleteFolderAsync(idnf, true);
 
         [HttpPost]
         public Task<DriveItem> CreateTextFileAsync(

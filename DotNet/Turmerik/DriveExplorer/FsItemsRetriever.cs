@@ -21,13 +21,15 @@ namespace Turmerik.DriveExplorer
         {
         }
 
-        public override async Task<DriveItem> GetItemAsync(string idnf)
+        public override async Task<DriveItem> GetItemAsync(
+            string idnf, bool retMinimalInfo)
         {
             DriveItem item;
 
             if (Directory.Exists(idnf))
             {
-                item = await GetFolderAsync(idnf);
+                item = await GetFolderAsync(
+                    idnf, retMinimalInfo);
             }
             else if (File.Exists(idnf))
             {
@@ -42,14 +44,14 @@ namespace Turmerik.DriveExplorer
         }
 
         public override async Task<DriveItem> GetFolderAsync(
-            string idnf)
+            string idnf, bool retMinimalInfo)
         {
             var folderPath = idnf;
             var entry = new DirectoryInfo(folderPath);
-            var folder = GetDriveItem(entry, false);
+            var folder = GetDriveItem(entry);
 
             var driveItemsArr = entry.EnumerateFileSystemInfos(
-                ).Select(fi => GetDriveItem(fi, true)).ToArray();
+                ).Select(fi => GetDriveItem(fi)).ToArray();
 
             folder.SubFolders = new List<DriveItem>(
                 driveItemsArr.Where(
@@ -59,11 +61,7 @@ namespace Turmerik.DriveExplorer
                 driveItemsArr.Where(
                     item => item.IsFolder != true).ToList());
 
-            foreach (var subFolder in folder.SubFolders)
-            {
-                // subFolder.IsFolder = false;
-            }
-
+            RemoveAdditionalInfoIfReq(folder, retMinimalInfo);
             return folder;
         }
 
@@ -109,14 +107,13 @@ namespace Turmerik.DriveExplorer
             string idnf)
         {
             var fSysInfo = new FileInfo(idnf);
-            var item = GetDriveItem(fSysInfo, false);
+            var item = GetDriveItem(fSysInfo);
 
             return item;
         }
 
         protected DriveItem GetDriveItem(
-            FileSystemInfo fSysInfo,
-            bool isChildItem)
+            FileSystemInfo fSysInfo)
         {
             var fsItem = new DriveItem
             {
@@ -125,10 +122,7 @@ namespace Turmerik.DriveExplorer
 
             if (fSysInfo is DirectoryInfo dirInfo)
             {
-                // if (!isChildItem)
-                {
-                    fsItem.IsFolder = true;
-                }
+                fsItem.IsFolder = true;
             }
             else if (fSysInfo is FileInfo fInfo)
             {

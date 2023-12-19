@@ -27,20 +27,20 @@ namespace Turmerik.DriveExplorer
         public override async Task<bool> FileExistsAsync(
             string idnf)
         {
-            var item = GetItem(idnf, false);
+            var item = GetItem(idnf, false, false);
             return item != null;
         }
 
         public override async Task<bool> FolderExistsAsync(string idnf)
         {
-            var item = GetItem(idnf, true);
+            var item = GetItem(idnf, true, false);
             return item != null;
         }
 
         public override async Task<byte[]?> GetFileBytesAsync(string idnf)
         {
             byte[] retArr = null;
-            var item = GetItem(idnf, false);
+            var item = GetItem(idnf, false, false);
 
             if (item != null)
             {
@@ -53,7 +53,7 @@ namespace Turmerik.DriveExplorer
         public override async Task<string?> GetFileTextAsync(string idnf)
         {
             string? retStr = null;
-            var item = GetItem(idnf, false) as TextFile;
+            var item = GetItem(idnf, false, false) as TextFile;
 
             if (item != null)
             {
@@ -64,10 +64,11 @@ namespace Turmerik.DriveExplorer
         }
 
         public override async Task<DriveItem> GetItemAsync(
-            string idnf) => GetItem(idnf, false);
+            string idnf, bool retMinimalInfo) => GetItem(
+                idnf, false, retMinimalInfo);
 
         public override async Task<DriveItem?> GetFolderAsync(
-            string idnf) => GetItem(idnf, true);
+            string idnf, bool retMinimalInfo) => GetItem(idnf, true, retMinimalInfo);
 
         public override string GetItemIdnf<TDriveItem>(
             TDriveItem item,
@@ -99,7 +100,8 @@ namespace Turmerik.DriveExplorer
 
         protected DriveItem GetItem(
             string idnf,
-            bool? requireFolder)
+            bool? requireFolder,
+            bool retMinimalInfo)
         {
             DriveItem? item;
 
@@ -151,6 +153,7 @@ namespace Turmerik.DriveExplorer
                 }
             }
 
+            RemoveAdditionalInfoIfReq(item, retMinimalInfo);
             return item;
         }
 

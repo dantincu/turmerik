@@ -14,15 +14,23 @@ namespace Turmerik.DriveExplorer
 {
     public interface IDriveItemsRetriever
     {
-        Task<DriveItem> GetItemAsync(string idnf);
-        Task<DriveItem> GetFolderAsync(string idnf);
-        Task<DriveItem> GetFolderAsync(string idnf, int depth);
+        Task<DriveItem> GetItemAsync(
+            string idnf, bool retMinimalInfo);
+
+        Task<DriveItem> GetFolderAsync(
+            string idnf, bool retMinimalInfo);
+
+        Task<DriveItem> GetFolderAsync(
+            string idnf, int depth, bool retMinimalInfo);
 
         Task<bool> ItemExistsAsync(string idnf);
+
         Task<bool> FolderExistsAsync(string idnf);
+
         Task<bool> FileExistsAsync(string idnf);
 
         Task<string> GetFileTextAsync(string idnf);
+
         Task<byte[]> GetFileBytesAsync(string idnf);
 
         string GetItemIdnf<TDriveItem>(
@@ -45,16 +53,20 @@ namespace Turmerik.DriveExplorer
         public abstract Task<bool> ItemExistsAsync(string idnf);
         public abstract Task<bool> FileExistsAsync(string idnf);
         public abstract Task<bool> FolderExistsAsync(string idnf);
-        public abstract Task<DriveItem> GetItemAsync(string idnf);
-        public abstract Task<DriveItem> GetFolderAsync(string idnf);
+
+        public abstract Task<DriveItem> GetItemAsync(
+            string idnf, bool retMinimalInfo);
+
+        public abstract Task<DriveItem> GetFolderAsync(
+            string idnf, bool retMinimalInfo);
 
         public abstract Task<string> GetFileTextAsync(string idnf);
         public abstract Task<byte[]> GetFileBytesAsync(string idnf);
 
         public async Task<DriveItem> GetFolderAsync(
-            string idnf, int depth)
+            string idnf, int depth, bool retMinimalInfo)
         {
-            var folder = await GetFolderAsync(idnf);
+            var folder = await GetFolderAsync(idnf, retMinimalInfo);
             string folderPath = idnf;
             var subFolders = folder.SubFolders;
 
@@ -69,7 +81,7 @@ namespace Turmerik.DriveExplorer
                         subFolders[i].Name);
 
                     subFolders[i] = await GetFolderAsync(
-                        childIdnf, depth - 1);
+                        childIdnf, depth - 1, retMinimalInfo);
                 }
             }
 
@@ -82,6 +94,42 @@ namespace Turmerik.DriveExplorer
             where TDriveItem : DriveItem<TDriveItem>;
 
         protected abstract char GetDirSeparator();
+
+        protected void RemoveAdditionalInfoIfReq(
+            DriveItem item, bool retMinimalInfo)
+        {
+            if (retMinimalInfo)
+            {
+                item.IsFolder = null;
+                item.IsRootFolder = null;
+
+                item.OfficeFileType = null;
+                item.FileType = null;
+
+                item.IsTextFile = null;
+                item.IsImageFile = null;
+                item.IsVideoFile = null;
+                item.IsAudioFile = null;
+
+                if (item.SubFolders != null)
+                {
+                    foreach (var folder in item.SubFolders)
+                    {
+                        RemoveAdditionalInfoIfReq(
+                            folder, retMinimalInfo);
+                    }
+                }
+
+                if (item.FolderFiles != null)
+                {
+                    foreach (var file in item.FolderFiles)
+                    {
+                        RemoveAdditionalInfoIfReq(
+                            file, retMinimalInfo);
+                    }
+                }
+            }
+        }
     }
 
     public abstract class DriveItemsRetrieverBase : DriveItemsRetrieverCoreBase

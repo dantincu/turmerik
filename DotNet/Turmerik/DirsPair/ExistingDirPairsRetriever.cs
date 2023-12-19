@@ -88,7 +88,7 @@ namespace Turmerik.DirsPair
             string prIdnf)
         {
             var tuple = NoteItemsTupleCore.Create(
-                await driveItemsRetriever.GetFolderAsync(prIdnf));
+                await driveItemsRetriever.GetFolderAsync(prIdnf, false));
 
             GetNoteDirPairs(tuple);
             return tuple;

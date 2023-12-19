@@ -10,23 +10,22 @@ export enum FileType {
 }
 
 export enum OfficeLikeFileType {
-  docs = 1,
-  sheets,
-  slides,
+  word = 1,
+  excel,
+  powerPoint,
 }
 
 export interface DriveItem {
-  id: string | null | undefined;
+  idnf: string | null | undefined;
   name: string;
   displayName: string | null | undefined;
   isFolder?: boolean | null | undefined;
-  fileNameExtension?: string | null | undefined;
+  isRootFolder?: boolean | null | undefined;
+  prIdnf: string | null | undefined;
   fileType?: FileType | null | undefined;
-  officeLikeFileType?: OfficeLikeFileType | null | undefined;
+  officeFileType?: OfficeLikeFileType | null | undefined;
   isTextFile?: boolean | null | undefined;
   isImageFile?: boolean | null | undefined;
   isVideoFile?: boolean | null | undefined;
   isAudioFile?: boolean | null | undefined;
-  webUrl?: string | null | undefined;
-  parentId?: string | null | undefined;
 }
