@@ -6,7 +6,7 @@ import { ApiConfigData } from "trmrk-axios";
 import './index.css';
 import "../assets/favicon.ico"
 import "../assets/Icon-32x30-nobg.png"
-import { apiSvc } from "../services/settings/api/api-service"; 
+import { apiSvc } from "../services/settings/api/apiService"; 
 import App from './App';
 
 export const createApp = (

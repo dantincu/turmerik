@@ -1,8 +1,65 @@
-import { isNonEmptyStr, containsAnyOfMx, containsAnyOfArr } from "./core";
+import {
+  isNonEmptyStr,
+  containsAnyOfMx,
+  containsAnyOfArr,
+  Kvp,
+  findKvp,
+  MtblRefValue,
+} from "./core";
 
 import { AppConfigData } from "./notes-app-config";
 
-const createInvalidSeqncs = (sep: string, opSep: string) => [
+export const trmrkPathSep = "/";
+export const trmrkPathStartTkn = "<";
+
+export const trmrkHomePathTkn = "~";
+export const trmrkHomePathStr = [trmrkPathStartTkn, trmrkHomePathTkn].join("");
+export const trmrkHomePathStartStr = [trmrkHomePathStr, trmrkPathSep].join("");
+
+export const getPath = (
+  pathParts: string[] | readonly string[],
+  relToTrmrkHome: boolean | null | undefined = null
+) => {
+  const partsArr = [...pathParts];
+
+  if (typeof relToTrmrkHome === "boolean") {
+    if (isNonEmptyStr(partsArr[0])) {
+      partsArr.splice(0, 0, "");
+    }
+
+    if (relToTrmrkHome === true) {
+      partsArr[0] = trmrkHomePathStr;
+    }
+  }
+
+  const path = partsArr.join(trmrkPathSep);
+  return path;
+};
+
+export enum PathValidationErrCode {
+  None = 0,
+  NullOrEmpty,
+  InvalidPathChars,
+  IsNotRooted,
+}
+
+export interface PathValidationResult {
+  isValid: boolean;
+  errCode: PathValidationErrCode;
+  invalidChar: Kvp<number, string | null | undefined>;
+}
+
+export const dfPathValidationResult = () =>
+  ({
+    isValid: false,
+    errCode: PathValidationErrCode.None,
+    invalidChar: {
+      key: -1,
+      value: null,
+    },
+  } as PathValidationResult);
+
+export const createInvalidSeqncs = (sep: string, opSep: string) => [
   opSep,
   sep + sep,
   sep + " ",
@@ -11,14 +68,14 @@ const createInvalidSeqncs = (sep: string, opSep: string) => [
   "." + sep,
 ];
 
-const baseInvalidSeqncs = Object.freeze(["  ", " .", "..", ". "]);
-const winInvalidSeqncs = Object.freeze(createInvalidSeqncs("\\", "/"));
-const unixInvalidSeqncs = Object.freeze(createInvalidSeqncs("/", "\\"));
+export const baseInvalidSeqncs = Object.freeze(["  ", " .", "..", ". "]);
+export const winInvalidSeqncs = Object.freeze(createInvalidSeqncs("\\", "/"));
+export const unixInvalidSeqncs = Object.freeze(createInvalidSeqncs("/", "\\"));
 
-const getInvalidSeqncs = (isWinOs: boolean) =>
+export const getInvalidSeqncs = (isWinOs: boolean) =>
   isWinOs ? winInvalidSeqncs : unixInvalidSeqncs;
 
-const normalizeIfNetworkPath = (
+export const normalizeIfNetworkPath = (
   path: string,
   sep: string,
   allowNetworkPath: boolean
@@ -34,7 +91,7 @@ const normalizeIfNetworkPath = (
   return path;
 };
 
-const normalizeIfRelPath = (path: string, sep: string) => {
+export const normalizeIfRelPath = (path: string, sep: string) => {
   if (path.startsWith(".." + sep)) {
     path = path.substring(2);
   } else if (path.startsWith("." + sep)) {
@@ -44,60 +101,127 @@ const normalizeIfRelPath = (path: string, sep: string) => {
   return path;
 };
 
-const isValidRootedPathCore = (cfg: AppConfigData, path: string) =>
-  !isNonEmptyStr(path) &&
-  !containsAnyOfMx(path, [cfg.invalidFileNameChars, baseInvalidSeqncs]);
+export const checkPathNotContainsInvalidChars = (
+  path: string,
+  result: PathValidationResult,
+  invalidStrMx: (string[] | readonly string[])[]
+) => {
+  let matching = {} as MtblRefValue<
+    Kvp<number, Kvp<number, string | null | undefined>>
+  >;
+
+  if (!(result.isValid = !containsAnyOfMx(path, invalidStrMx, matching))) {
+    result.errCode = PathValidationErrCode.InvalidPathChars;
+    result.invalidChar = matching.value.value;
+  }
+
+  return result.isValid;
+};
+
+export const isValidRootedPathCore = (
+  cfg: AppConfigData,
+  path: string,
+  result: PathValidationResult
+) => {
+  if (!(result.isValid = isNonEmptyStr(path, true))) {
+    result.errCode = PathValidationErrCode.NullOrEmpty;
+  } else {
+    checkPathNotContainsInvalidChars(path, result, [
+      cfg.invalidFileNameChars,
+      baseInvalidSeqncs,
+    ]);
+  }
+
+  return result.isValid;
+};
 
 export const isValidRootedPath = (
   cfg: AppConfigData,
   path: string,
-  allowNetworkPath: boolean = false
+  result: PathValidationResult | null | undefined = null,
+  allowNetworkPath: boolean = true
 ) => {
-  let isValid = isValidRootedPathCore(cfg, path);
+  result ??= dfPathValidationResult();
+  result.isValid = isValidRootedPathCore(cfg, path, result);
 
-  if (isValid) {
+  if (result.isValid) {
     path = normalizeIfNetworkPath(path, cfg.pathSep, allowNetworkPath);
 
-    isValid = path.startsWith("/") || path.startsWith("<~/");
-    isValid = isValid && !containsAnyOfArr(path, unixInvalidSeqncs);
+    if (
+      !(result.isValid =
+        path.startsWith("/") || path.startsWith(trmrkHomePathStartStr))
+    ) {
+      result.errCode = PathValidationErrCode.IsNotRooted;
+    }
   }
 
-  return isValid;
+  if (result.isValid) {
+    checkPathNotContainsInvalidChars(path, result, [unixInvalidSeqncs]);
+  }
+
+  return result.isValid;
 };
 
 export const isValidRootedFsPath = (
   cfg: AppConfigData,
   path: string,
-  allowNetworkPath: boolean = false
+  result: PathValidationResult | null | undefined = null,
+  allowNetworkPath: boolean = true
 ) => {
-  let isValid = isValidRootedPathCore(cfg, path);
+  result ??= dfPathValidationResult();
 
-  if (isValid) {
-    path = normalizeIfNetworkPath(path, cfg.pathSep, allowNetworkPath);
-
-    if (cfg.isWinOS) {
-      isValid = /^[a-zA-Z]\:/.test(path) || path.startsWith("\\");
+  if (cfg.isWinOS) {
+    if ((result.isValid = /^[a-zA-Z]\:/.test(path))) {
+      path = path.substring(2);
     } else {
-      isValid = path.startsWith("/");
+      result.isValid = path.startsWith("\\");
     }
-
-    const invalidSeqncs = getInvalidSeqncs(cfg.isWinOS);
-    isValid = isValid && !containsAnyOfArr(path, invalidSeqncs);
+  } else {
+    result.isValid = path.startsWith("/");
   }
 
-  return isValid;
+  if (result.isValid) {
+    path = normalizeIfNetworkPath(path, cfg.pathSep, allowNetworkPath);
+
+    result.isValid = checkPathNotContainsInvalidChars(path, result, [
+      cfg.invalidFileNameChars,
+      baseInvalidSeqncs,
+    ]);
+  } else {
+    result.errCode = PathValidationErrCode.IsNotRooted;
+  }
+
+  result.isValid =
+    result.isValid &&
+    checkPathNotContainsInvalidChars(path, result, [
+      getInvalidSeqncs(cfg.isWinOS),
+    ]);
+
+  return result.isValid;
 };
 
-export const isValidPath = (cfg: AppConfigData, path: string) => {
+export const isValidPath = (
+  cfg: AppConfigData,
+  path: string,
+  result: PathValidationResult | null | undefined = null,
+  allowNetworkPath: boolean = true
+) => {
+  result ??= dfPathValidationResult();
   path = normalizeIfRelPath(path, cfg.pathSep);
-  const isValid = isValidRootedPath(cfg, path);
 
-  return isValid;
+  result.isValid = isValidRootedPath(cfg, path, result, allowNetworkPath);
+  return result.isValid;
 };
 
-export const isValidFsPath = (cfg: AppConfigData, path: string) => {
+export const isValidFsPath = (
+  cfg: AppConfigData,
+  path: string,
+  result: PathValidationResult | null | undefined = null,
+  allowNetworkPath: boolean = true
+) => {
+  result ??= dfPathValidationResult();
   path = normalizeIfRelPath(path, cfg.pathSep);
-  const isValid = isValidRootedFsPath(cfg, path);
 
-  return isValid;
+  result.isValid = isValidRootedFsPath(cfg, path, result, allowNetworkPath);
+  return result.isValid;
 };

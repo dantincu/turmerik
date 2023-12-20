@@ -1,5 +1,14 @@
 export const allWsRegex = /^\s+$/g;
 
+export interface MtblRefValue<T> {
+  value: T;
+}
+
+export interface Kvp<TKey, TValue> {
+  key: TKey;
+  value: TValue;
+}
+
 export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   let retVal = "string" === typeof arg;
   retVal = retVal && arg !== "";
@@ -9,6 +18,35 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   }
 
   return retVal;
+};
+
+export const findKvp = <TValue>(
+  arr: TValue[] | readonly TValue[],
+  predicate: (
+    value: TValue,
+    idx: number,
+    array: TValue[] | readonly TValue[]
+  ) => boolean
+) => {
+  let retIdx = -1;
+  let retVal: TValue | null = null;
+
+  for (let i = 0; i < arr.length; i++) {
+    const val = arr[i];
+
+    if (predicate(val, i, arr)) {
+      retIdx = i;
+      retVal = val;
+      break;
+    }
+  }
+
+  const retKvp: Kvp<number, TValue | null> = {
+    key: retIdx,
+    value: retVal,
+  };
+
+  return retKvp;
 };
 
 export const forEach = <T>(
@@ -31,10 +69,63 @@ export const any = <T>(
 
 export const containsAnyOfArr = (
   inStr: string,
-  strArr: string[] | readonly string[]
-) => strArr.filter((chr) => inStr.indexOf(chr) >= 0).length == 0;
+  strArr: string[] | readonly string[],
+  matching?:
+    | MtblRefValue<Kvp<number, string | null | undefined>>
+    | null
+    | undefined
+) => {
+  matching ??= {
+    value: {
+      key: -1,
+      value: null,
+    },
+  };
+
+  const kvp = findKvp(strArr, (chr) => inStr.indexOf(chr) >= 0);
+  const retVal = kvp.key >= 0;
+
+  if (retVal) {
+    matching.value = kvp;
+  }
+
+  return retVal;
+};
 
 export const containsAnyOfMx = (
   inStr: string,
-  strMx: (string[] | readonly string[])[]
-) => strMx.filter((strArr) => containsAnyOfArr(inStr, strArr)).length == 0;
+  strMx: (string[] | readonly string[])[],
+  matching?:
+    | MtblRefValue<Kvp<number, Kvp<number, string | null | undefined>>>
+    | null
+    | undefined
+) => {
+  matching ??= {
+    value: {
+      key: -1,
+      value: {
+        key: -1,
+        value: null,
+      },
+    },
+  };
+
+  const innerMatching = {} as MtblRefValue<
+    Kvp<number, string | null | undefined>
+  >;
+
+  const kvp = findKvp(strMx, (strArr) =>
+    containsAnyOfArr(inStr, strArr, innerMatching)
+  );
+
+  const retVal = kvp.key >= 0;
+
+  if (retVal) {
+    matching.value = {
+      key: kvp.key,
+      value: innerMatching.value,
+    };
+  }
+
+  return retVal;
+};

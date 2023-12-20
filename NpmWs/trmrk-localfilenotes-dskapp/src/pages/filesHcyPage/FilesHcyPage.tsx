@@ -11,6 +11,7 @@ import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 import FilesHcy from "../../components/filesHcy/FilesHcy";
 import AddressBar from "../../components/addressBar/AddressBar";
+import { validateRootedFsPath } from "../../services/notes/notePath";
 
 const FilesHcyPage = () => {
   const { idnf } = useParams();
@@ -29,7 +30,7 @@ const FilesHcyPage = () => {
   }
 
   const addressValidator = (newAddress: string) => {
-    let errMsg: string | null = null;
+    let errMsg = validateRootedFsPath(appData.appConfig, newAddress);
     return errMsg;
   };
 

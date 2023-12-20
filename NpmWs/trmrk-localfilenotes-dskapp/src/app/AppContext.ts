@@ -36,17 +36,25 @@ export const createAppContext = (
   };
 };
 
+export const defaultAppTitle = "Turmerik Local File Notes";
+
 export const updateAppTitle = (
   appData: AppData,
-  idnf: string | null | undefined
+  idnf: string | null | undefined,
+  idnfIsPath: boolean = true
 ) => {
-  let appTitle = "Turmerik Local File Notes";
-  let htmlDocTitle = appTitle;
+  if (idnf && idnfIsPath) {
+    idnf = idnf
+      .split(appData.appConfig.pathSep)
+      .filter((seg) => seg.trim())
+      .splice(-1, 1)[0];
+  }
+
+  const appTitle = idnf ?? defaultAppTitle;
+  let htmlDocTitle = defaultAppTitle;
 
   if (idnf) {
-    const name = idnf.split(appData.appConfig.pathSep).splice(-1, 1)[0];
-    htmlDocTitle = name + " - " + htmlDocTitle;
-    appTitle += " - " + name;
+    htmlDocTitle = idnf + " - " + htmlDocTitle;
   }
 
   if (appTitle !== appData.appTitle) {

@@ -27,7 +27,7 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
             IsDevEnv = appSettingsRetriever.Data.IsDevEnv,
             RequiredClientVersion = appSettingsRetriever.Data.RequiredClientVersion,
             NoteDirPairs = appSettingsRetriever.Data.NoteDirPairs,
-            InvalidFileNameChars = PathH.InvalidFileNameChars,
+            InvalidFileNameChars = PathH.InvalidFileNameCharsExclSep,
             PathSep = PathH.DirSepChar,
             AltPathSep = PathH.AltDirSepChar,
             IsWinOS = LocalDeviceH.IsWinOS

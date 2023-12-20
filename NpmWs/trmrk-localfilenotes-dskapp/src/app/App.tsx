@@ -7,7 +7,7 @@ import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 
 import { ApiResponse } from "trmrk-axios";
-import { apiSvc } from "../services/settings/api/api-service"; 
+import { apiSvc } from "../services/settings/api/apiService"; 
 
 import { AppBarArgs } from "../components/appBar/AppBarArgs";
 import LoadingAppBar from "../components/appBar/LoadingAppBar";

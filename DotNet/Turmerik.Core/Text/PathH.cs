@@ -16,10 +16,12 @@ namespace Turmerik.Core.Text
 
         public static readonly ReadOnlyCollection<char> InvalidPathChars;
         public static readonly ReadOnlyCollection<char> InvalidFileNameChars;
+        public static readonly ReadOnlyCollection<char> InvalidFileNameCharsExclSep;
         public static readonly ReadOnlyCollection<char> DirSeparatorChars;
 
         public static readonly string InvalidPathCharsStr;
         public static readonly string InvalidFileNameCharsStr;
+        public static readonly string InvalidFileNameCharsExclSepStr;
 
         public static readonly ReadOnlyCollection<string> CommonTextFileExtensions = new string[]
         {
@@ -56,13 +58,16 @@ namespace Turmerik.Core.Text
         {
             var invalidPathChars = Path.GetInvalidPathChars();
             var invalidFileNameChars = Path.GetInvalidFileNameChars();
+            var invalidFileNameCharsExcSep = invalidFileNameChars.Except([Path.DirectorySeparatorChar]).ToArray();
 
             InvalidPathChars = invalidPathChars.RdnlC();
             InvalidFileNameChars = invalidFileNameChars.RdnlC();
+            InvalidFileNameCharsExclSep = invalidFileNameCharsExcSep.RdnlC();
             DirSeparatorChars = new char[] { '\\', '/' }.RdnlC();
 
             InvalidPathCharsStr = invalidPathChars.ToStr();
             InvalidFileNameCharsStr = invalidFileNameChars.ToStr();
+            InvalidFileNameCharsExclSepStr = invalidFileNameCharsExcSep.ToStr();
         }
 
         public static string CombinePaths(

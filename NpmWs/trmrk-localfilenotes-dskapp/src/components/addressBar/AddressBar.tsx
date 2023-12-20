@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 
 import Paper from "@mui/material/Paper";
-import Popover from '@mui/material/Popover';
+import Popper from '@mui/material/Popper';
+import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -67,16 +68,12 @@ const EditableAddressBar = ({
 
   return (<div className="trmrk-edtbl">
       <IconButton onClick={onEditCanceled}><CancelIcon /></IconButton>
-      <Popover
+      <Popper
         open={hasError}
         anchorEl={textInput.current}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
       >
-        <Typography sx={{ color: "red" }}>{validationErr}</Typography>
-      </Popover>
+        <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper', color: "red" }}>{validationErr}</Box>
+      </Popper>
       <input type="text" value={editedAddress} onChange={onTextChanged} ref={textInput} onKeyUp={onKeyUp} />
       <IconButton onClick={onClearText}><ClearIcon /></IconButton>
       <IconButton onClick={onSubmit} disabled={hasError}><SubmitIcon /></IconButton>
