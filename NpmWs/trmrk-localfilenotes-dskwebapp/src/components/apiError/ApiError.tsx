@@ -4,6 +4,8 @@ import { purple } from '@mui/material/colors';
 
 import { ApiResponse } from "trmrk-axios";
 
+import './styles.scss';
+
 export default function ApiError({
   apiResp
 }: {

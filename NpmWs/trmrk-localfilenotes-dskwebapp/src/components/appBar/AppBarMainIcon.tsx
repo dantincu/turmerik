@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import './styles.scss';
+
 import AudioViewerAppBarMainIcon from "../../pages/audioViewerPage/AudioViewerAppBarMainIcon";
 import FileDownloaderAppBarMainIcon from "../../pages/fileDownloaderPage/FileDownloaderAppBarMainIcon";
 import FilesHcyAppBarMainIcon from "../../pages/filesHcyPage/FilesHcyAppBarMainIcon";

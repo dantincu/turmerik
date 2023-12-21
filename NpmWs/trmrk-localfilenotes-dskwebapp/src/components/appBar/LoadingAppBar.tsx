@@ -10,6 +10,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 
+import './styles.scss';
+
 import { AppBarArgs } from "./AppBarArgs";
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 

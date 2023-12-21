@@ -12,6 +12,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
+import './styles.scss';
+
 import { AppBarArgs } from "./AppBarArgs";
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import { AppDataContext } from "../../app/AppContext";

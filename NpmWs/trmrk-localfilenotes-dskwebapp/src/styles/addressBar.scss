@@ -1,3 +1,5 @@
+@import "./_mixins";
+
 .trmrk-address-bar {
   display: inline-flex;
 }
@@ -18,21 +20,21 @@
 .trmrk-address-bar input[type=text] {
   display: inline-flex;
   cursor: pointer;
-  padding: 1px 1px 0px 1px;
-  margin: 1px 1px 0px 1px;
+  @include padding(1, 1, 0, 1);
+  @include margin(1, 1, 0, 1);
 }
 
 .trmrk-address-bar label {
   display: inline-flex;
   width: 5em;
-  padding: 1px 0px 0px 2px;
-  margin: 1px 0px 0px 2px;
+  @include padding(1, 1, 0, 2);
+  @include margin(1, 1, 0, 2);
 }
 
 .trmrk-address-bar > .trmrk-edtbl > .MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium {
   width: 1em;
-  padding: 0px 1px 0px 1px;
-  margin: 0px 1px 0px 1px;
+  @include padding(0, 1, 0, 1);
+  @include margin(0, 1, 0, 1);
 }
 
 .trmrk-main-address-bar {

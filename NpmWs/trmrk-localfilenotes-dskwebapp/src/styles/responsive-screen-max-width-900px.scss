@@ -1,0 +1,11 @@
+@import "./_mixins";
+
+@media only screen and (max-width: 900px) {
+  .trmrk-app-title {
+    width: $trmrk-screen-max-width-900px-app-title-width;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar input[type=text] {
+    width: $trmrk-screen-max-width-900px-app-title-width;
+  }
+}

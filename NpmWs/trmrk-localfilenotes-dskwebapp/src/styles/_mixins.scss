@@ -1,1 +1,9 @@
 @import "./_variables";
+
+@mixin padding($topPx, $leftPx, $bottomPx, $rightPx) {
+  padding: $topPx"px" $leftPx"px" $bottomPx"px" $rightPx"px"
+}
+
+@mixin margin($topPx, $leftPx, $bottomPx, $rightPx) {
+  margin: $topPx"px" $leftPx"px" $bottomPx"px" $rightPx"px"
+}

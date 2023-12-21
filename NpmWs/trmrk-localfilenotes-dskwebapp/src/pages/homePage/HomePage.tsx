@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
+import './styles.scss';
+
 import { reducer, actions, AppData } from "../../app/appData";
 import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 

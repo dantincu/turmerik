@@ -9,6 +9,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ClearIcon from '@mui/icons-material/Clear';
 import SubmitIcon from '@mui/icons-material/ArrowForwardIos';
 
+import './styles.scss';
+
 import { AddressBarProps } from "./AddressBarProps";
 
 const EditableAddressBar = ({

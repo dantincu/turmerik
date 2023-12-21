@@ -7,6 +7,8 @@ import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { AppBarArgs } from "./AppBarArgs";
 
+import './styles.scss';
+
 const ColorThemeLabel = styled.span`
   padding-right: 1em
 `;

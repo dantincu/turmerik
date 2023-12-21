@@ -5,6 +5,8 @@ import Container from "@mui/material/Container";
 
 import { core as trmrk } from "trmrk";
 
+import './styles.scss';
+
 import { reducer, actions, AppData } from "../../app/appData";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../notFound/NotFound";
