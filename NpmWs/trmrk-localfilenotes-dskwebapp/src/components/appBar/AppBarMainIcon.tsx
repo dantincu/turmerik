@@ -24,8 +24,6 @@ export default function AppBarMainIcon({
     appPage: AppPage
   }) {
   switch (appPage) {
-    case AppPage.Home:
-      return <HomeAppBarMainIcon />
     case AppPage.ViewNoteItem:
       return <NoteViewerAppBarMainIcon />
     case AppPage.EditNoteItem:
@@ -50,5 +48,7 @@ export default function AppBarMainIcon({
       return <AudioViewerAppBarMainIcon />
     case AppPage.DownloadMiscFile:
       return <FileDownloaderAppBarMainIcon />
+    default:
+      return <HomeAppBarMainIcon />
   }
 }

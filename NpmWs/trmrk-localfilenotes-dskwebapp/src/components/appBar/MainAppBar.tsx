@@ -9,7 +9,6 @@ import Grid from "@mui/material/Grid";
 import Menu from '@mui/material/Menu';
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import './styles.scss';
@@ -17,6 +16,8 @@ import './styles.scss';
 import { AppBarArgs } from "./AppBarArgs";
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
+import AppBarMainIcon from "./AppBarMainIcon";
+import AppBarOptionsIcon from "./AppBarOptionsIcon";
 import { AppDataContext, getAppThemeCssClassName } from "../../app/AppContext";
 
 export default function MainAppBar ({
@@ -43,12 +44,13 @@ export default function MainAppBar ({
         <Grid gridRow={0}>
           <IconButton sx={{ float: "left" }}
               onClick={handleSettingsClick}><MenuIcon /></IconButton>
+          <AppBarMainIcon appPage={appBarOpts.appPage} />
           <Typography variantMapping={{"h6": "label"}} variant="h6"
             sx={{ position: "relative", display:"inline-flex", top: "0.2em",
             overflow: "hidden", whiteSpace: "nowrap" }} className="trmrk-app-title">
               {appData.appTitle}</Typography>
           <IconButton sx={{ float: "right" }}><RefreshIcon /></IconButton>
-          <IconButton sx={{ float: "right" }}><MoreVertIcon /></IconButton>
+          <AppBarOptionsIcon appPage={appBarOpts.appPage} />
         </Grid>
         <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData)].join(" ")}
             open={settingsOpen}

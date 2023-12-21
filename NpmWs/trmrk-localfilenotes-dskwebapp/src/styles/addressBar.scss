@@ -22,12 +22,6 @@
   @include margin(1, 1, 0, 2);
 }
 
-.trmrk-address-bar > .trmrk-edtbl > .MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium {
-  width: 1em;
-  @include padding(0, 1, 0, 1);
-  @include margin(0, 1, 0, 1);
-}
-
 .trmrk-main-address-bar {
   width: 100%;
 }
