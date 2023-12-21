@@ -1,0 +1,12 @@
+@import "./main.scss";
+@import "./responsive.scss";
+@import "./addressBar.scss";
+
+.trmrk-app .trmrk-files-hcy-page {
+  width: 100%;
+  max-width: 100%;
+}
+
+.trmrk-files-hcy-page .trmrk-main-address-bar {
+  margin-top: 0.5em;
+}

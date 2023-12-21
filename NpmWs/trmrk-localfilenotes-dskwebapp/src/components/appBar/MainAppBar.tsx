@@ -1,0 +1,59 @@
+import React, { useEffect, useState } from "react";
+
+import { Link } from "react-router-dom";
+
+import Typography from "@mui/material/Typography";
+
+import AppBar from "@mui/material/AppBar";
+import Grid from "@mui/material/Grid";
+import Menu from '@mui/material/Menu';
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from '@mui/icons-material/Menu';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import RefreshIcon from '@mui/icons-material/Refresh';
+
+import { AppBarArgs } from "./AppBarArgs";
+import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
+import { AppDataContext } from "../../app/AppContext";
+
+export default function MainAppBar ({
+  args
+}: {
+  args: AppBarArgs
+}) {
+  const appData = React.useContext(AppDataContext);
+  const appBarOpts = appData.appBarOpts;
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const settingsOpen = Boolean(anchorEl);
+
+  const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleSettingsClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (<div className="trmrk-app-nav-bar">
+      <AppBar sx={{ position: "relative", height: "2.5em" }} className={["trmrk-app-bar", appBarOpts.appBarCssClass].join(" ")}>
+        <Grid gridRow={0}>
+          <IconButton sx={{ float: "left" }}
+              onClick={handleSettingsClick}><MenuIcon /></IconButton>
+          <Typography variantMapping={{"h6": "label"}} variant="h6"
+            sx={{ position: "relative", display:"inline-flex", top: "0.2em",
+            overflow: "hidden", whiteSpace: "nowrap" }} className="trmrk-app-title">
+              {appData.appTitle}</Typography>
+          <IconButton sx={{ float: "right" }}><RefreshIcon /></IconButton>
+          <IconButton sx={{ float: "right" }}><MoreVertIcon /></IconButton>
+        </Grid>
+        <Menu 
+            open={settingsOpen}
+            onClose={handleSettingsClose}
+            onClick={handleSettingsClose}
+            anchorEl={anchorEl}>
+          <ToggleDarkModeBtn args={args} setAnchorEl={el => setAnchorEl(el)} />
+        </Menu>
+      </AppBar>
+    </div>);
+}

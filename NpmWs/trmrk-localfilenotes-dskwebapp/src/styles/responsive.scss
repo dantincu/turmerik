@@ -1,0 +1,72 @@
+.trmrk-app-title {
+  width: 92%;
+}
+
+.trmrk-files-hcy-page .trmrk-main-address-bar input[type=text] {
+  width: 92%;
+}
+
+@media only screen and (max-width: 1600px) {
+  .trmrk-app-title {
+    width: 90%;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar input[type=text] {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .trmrk-app-title {
+    width: 86%;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar input[type=text] {
+    width: 86%;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .trmrk-app-title {
+    width: 84%;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar input[type=text] {
+    width: 84%;
+  }
+}
+
+@media only screen and (max-width: 750px) {
+  .trmrk-app-title {
+    width: 80%;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar input[type=text] {
+    width: 80%;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar.trmrk-address-bar label {
+    padding: 1px 0px 0px 0px;
+    margin: 1px 0px 0px 0px;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar.trmrk-address-bar input[type=text] {
+    padding: 1px 0px 0px 0px;
+    margin: 1px 0px 0px 0px;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar.trmrk-address-bar > .trmrk-edtbl > .MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .trmrk-app-title {
+    width: 75%;
+  }
+
+  .trmrk-files-hcy-page .trmrk-main-address-bar.trmrk-address-bar input[type=text] {
+    width: 75%;
+  }
+}
