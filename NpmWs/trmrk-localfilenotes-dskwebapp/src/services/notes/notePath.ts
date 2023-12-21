@@ -1,6 +1,8 @@
 import {
   isValidRootedFsPath,
   isValidFsPath,
+  isValidRootedPath,
+  isValidPath,
   PathValidationErrCode,
   PathValidationResult,
   dfPathValidationResult,
@@ -8,25 +10,35 @@ import {
 
 import { AppConfigData } from "trmrk/src/notes-app-config";
 
-export const validateRootedFsPath = (
+export const validateRootedPath = (
   cfg: AppConfigData,
   path: string,
   allowNetworkPath: boolean = true
 ) => {
   const result = dfPathValidationResult();
-  isValidRootedFsPath(cfg, path, result, allowNetworkPath);
+
+  if (cfg.isLocalFileNotesApp) {
+    isValidRootedFsPath(cfg, path, result, allowNetworkPath);
+  } else {
+    isValidRootedPath(cfg, path, result, allowNetworkPath);
+  }
 
   const errMsg = getPathErrMsg(result);
   return errMsg;
 };
 
-export const validateRelFsPath = (
+export const validateRelPath = (
   cfg: AppConfigData,
   path: string,
   allowNetworkPath: boolean = true
 ) => {
   const result = dfPathValidationResult();
-  isValidFsPath(cfg, path, result, allowNetworkPath);
+
+  if (cfg.isLocalFileNotesApp) {
+    isValidFsPath(cfg, path, result, allowNetworkPath);
+  } else {
+    isValidPath(cfg, path, result, allowNetworkPath);
+  }
 
   const errMsg = getPathErrMsg(result);
   return errMsg;

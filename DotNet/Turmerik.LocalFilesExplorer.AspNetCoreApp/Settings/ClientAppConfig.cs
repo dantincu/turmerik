@@ -13,5 +13,6 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Settings
         public string PathSep { get; init; }
         public string AltPathSep { get; init; }
         public bool IsWinOS { get; init; }
+        public bool IsLocalFileNotesApp { get; init; }
     }
 }
