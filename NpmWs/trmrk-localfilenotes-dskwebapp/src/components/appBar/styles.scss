@@ -1,1 +1,20 @@
 @import "../../styles/mixins";
+
+@import "./styles-light-mode.scss";
+@import "./styles-dark-mode.scss";
+
+.trmrk-app-settings-menu {
+  .trmrk-app-mode-menu-item {
+    height: 2.4em;
+
+    .MuiSvgIcon-root.trmrk-icon-toggle-on {
+      width: 2em;
+      height: 2em;
+    }
+
+    .MuiSvgIcon-root.trmrk-icon-toggle-off {
+      width: 2em;
+      height: 2em;
+    }
+  }
+}

@@ -23,6 +23,13 @@ export const createAppContext = (
       );
       dispatch({ type: actions.SET_IS_DARK_MODE, payload: isDarkMode });
     },
+    setIsCompactMode: (isCompactMode: boolean) => {
+      localStorage.setItem(
+        localStorageKeys.appIsCompactMode,
+        getJsonBool(isCompactMode)
+      );
+      dispatch({ type: actions.SET_IS_COMPACT_MODE, payload: isCompactMode });
+    },
     setAppConfig: (appConfig: AppConfigData) => {
       dispatch({ type: actions.SET_APP_CONFIG, payload: appConfig });
     },
@@ -66,3 +73,6 @@ export const updateAppTitle = (
 
   appData.setHtmlDocTitle(htmlDocTitle);
 };
+
+export const getAppThemeCssClassName = (appData: AppData) =>
+  appData.isDarkMode ? "trmrk-theme-dark" : "trmrk-theme-light";

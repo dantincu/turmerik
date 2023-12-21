@@ -26,10 +26,12 @@ export interface AppData {
   appConfig: AppConfigData;
   baseLocation: string;
   isDarkMode: boolean;
+  isCompactMode: boolean;
   htmlDocTitle: string;
   appTitle: string;
   appBarOpts: AppBarOpts;
   setIsDarkMode: (isDarkMode: boolean) => void;
+  setIsCompactMode: (isCompactMode: boolean) => void;
   setAppConfig: (appConfig: AppConfigData) => void;
   setHtmlDocTitle: (newHtmlDocTitle: string) => void;
   setAppTitle: (newAppTitle: string) => void;
@@ -38,6 +40,7 @@ export interface AppData {
 
 export const actions = Object.freeze({
   SET_IS_DARK_MODE: "SET_IS_DARK_MODE",
+  SET_IS_COMPACT_MODE: "SET_IS_COMPACT_MODE",
   SET_APP_CONFIG: "SET_APP_CONFIG",
   SET_HTML_DOC_TITLE: "SET_HTML_DOC_TITLE",
   SET_APP_TITLE: "SET_APP_TITLE",
@@ -51,6 +54,16 @@ const onSetIsDarkMode = (
   return {
     ...state,
     isDarkMode: action.payload,
+  };
+};
+
+const onSetIsCompactMode = (
+  state: AppData,
+  action: { type: string; payload: boolean }
+) => {
+  return {
+    ...state,
+    isCompactMode: action.payload,
   };
 };
 
@@ -101,6 +114,8 @@ export const reducer = (
   switch (action.type) {
     case actions.SET_IS_DARK_MODE:
       return onSetIsDarkMode(state, action);
+    case actions.SET_IS_COMPACT_MODE:
+      return onSetIsCompactMode(state, action);
     case actions.SET_APP_CONFIG:
       return onSetAppConfig(state, action);
     case actions.SET_HTML_DOC_TITLE:

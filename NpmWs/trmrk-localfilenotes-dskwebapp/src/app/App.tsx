@@ -54,6 +54,7 @@ const AppEl = ({
 const App = () => {
   const initialState = {
     isDarkMode: localStorage.getItem(localStorageKeys.appThemeIsDarkMode) === jsonBool.true,
+    isCompactMode: localStorage.getItem(localStorageKeys.appIsCompactMode) !== jsonBool.false,
     baseLocation: trmrk.url.getBaseLocation(),
     htmlDocTitle: "Turmerik Local File Notes",
     appTitle: "Turmerik Local File Notes",
@@ -72,10 +73,14 @@ const App = () => {
 
   const appArgs = {
     appTheme: appTheme,
+    isCompactMode: state.isCompactMode,
+    resp: appSettingsResp,
     darkModeToggled: (isDarkMode) => {
       appContext.setIsDarkMode(isDarkMode);
     },
-    resp: appSettingsResp
+    appModeToggled: (isCompactMode) => {
+      appContext.setIsCompactMode(isCompactMode);
+    },
   } as AppBarArgs;
 
   useEffect(() => {

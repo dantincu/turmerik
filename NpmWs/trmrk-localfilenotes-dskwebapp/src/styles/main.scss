@@ -15,8 +15,18 @@ body {
 
 .trmrk-error {
   text-align: center;
+
+  > h2 {
+    color: orangered;
+  }
 }
 
-.trmrk-error > h2 {
-  color: orangered;
+.trmrk-app {
+  .trmrk-app-nav-bar {
+    .trmrk-app-bar {
+      .MuiGrid-root > .MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium {
+        color: white;
+      }
+    }
+  }
 }

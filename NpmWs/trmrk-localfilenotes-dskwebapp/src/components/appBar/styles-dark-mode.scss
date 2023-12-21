@@ -1,0 +1,16 @@
+@import "../../styles/mixins";
+
+.trmrk-app.trmrk-theme-dark {
+  .trmrk-address-bar input[type=text] {
+    background-color: #222222;
+    color: white;
+  }
+}
+
+.trmrk-theme-dark.trmrk-app-settings-menu {
+  .trmrk-app-mode-menu-item {
+    .MuiSvgIcon-root.trmrk-icon-toggle-on {
+      color: #48F;
+    }
+  }
+}

@@ -16,7 +16,8 @@ import './styles.scss';
 
 import { AppBarArgs } from "./AppBarArgs";
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
-import { AppDataContext } from "../../app/AppContext";
+import ToggleAppModeBtn from "./ToggleAppModeBtn";
+import { AppDataContext, getAppThemeCssClassName } from "../../app/AppContext";
 
 export default function MainAppBar ({
   args
@@ -25,8 +26,8 @@ export default function MainAppBar ({
 }) {
   const appData = React.useContext(AppDataContext);
   const appBarOpts = appData.appBarOpts;
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const settingsOpen = Boolean(anchorEl);
 
   const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -49,11 +50,12 @@ export default function MainAppBar ({
           <IconButton sx={{ float: "right" }}><RefreshIcon /></IconButton>
           <IconButton sx={{ float: "right" }}><MoreVertIcon /></IconButton>
         </Grid>
-        <Menu 
+        <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData)].join(" ")}
             open={settingsOpen}
             onClose={handleSettingsClose}
             onClick={handleSettingsClose}
             anchorEl={anchorEl}>
+          <ToggleAppModeBtn args={args} setAnchorEl={el => setAnchorEl(el)} />
           <ToggleDarkModeBtn args={args} setAnchorEl={el => setAnchorEl(el)} />
         </Menu>
       </AppBar>

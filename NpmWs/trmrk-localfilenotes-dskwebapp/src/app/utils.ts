@@ -1,6 +1,6 @@
 export const jsonBool = Object.freeze({
-  false: "false",
-  true: "true",
+  false: JSON.stringify(false),
+  true: JSON.stringify(true),
 });
 
 export const getJsonBool = (value: boolean) =>
@@ -10,6 +10,7 @@ export const queryKeys = Object.freeze({});
 
 export const localStorageKeys = Object.freeze({
   appThemeIsDarkMode: "appThemeIsDarkMode",
+  appIsCompactMode: "appIsCompactMode",
 });
 
 export const idxedDBNames = Object.freeze({

@@ -27,7 +27,7 @@ export default function ToggleDarkModeBtn({
   };
 
   return (
-    <MenuItem onClick={handleClick}>
+    <MenuItem onClick={handleClick} className="trmrk-app-theme-mode-menu-item">
       <ColorThemeLabel>Color Theme</ColorThemeLabel>
       { args.appTheme.isDark ? <LightModeIcon /> : <DarkModeIcon /> }
     </MenuItem>);
