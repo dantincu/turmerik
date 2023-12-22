@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-import { core as trmrk } from "trmrk";
+import localforage from "localforage";
+
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 
+import { core as trmrk } from "trmrk";
 import { ApiResponse } from "trmrk-axios";
-import { apiSvc } from "../services/settings/api/apiService"; 
+import { TrmrkDBResp } from "trmrk-browser";
+import { cachedApiSvc } from "../services/settings/api/apiService"; 
 
 import { AppBarArgs } from "../components/appBar/AppBarArgs";
 import LoadingAppBar from "../components/appBar/LoadingAppBar";
@@ -18,6 +21,7 @@ import { localStorageKeys, jsonBool } from "./utils";
 import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppConfigData } from "trmrk/src/notes-app-config"; 
 import { reducer, AppData } from "./appData";
+import { cachedEntries } from "./localForage";
 
 import MainEl from "../components/main/Main";
 import { AppDataContext, createAppContext } from "./AppContext";
@@ -85,7 +89,32 @@ const App = () => {
 
   useEffect(() => {
     if (!isLoading && !appSettingsResp) {
-      apiSvc.get<AppConfigData>("AppConfig").then(resp => {
+      cachedApiSvc.req<AppConfigData>({
+        apiCall: async apiSvc => await apiSvc.get<AppConfigData>("AppConfig"),
+        localForageGet: async () => {
+          const data = await localforage.getItem<AppConfigData>(cachedEntries.keys.appConfig);
+
+          const dbResp: TrmrkDBResp<AppConfigData> = {
+            cacheMatch: !!data,
+            data: data!,
+            cacheError: null
+          }
+
+          return dbResp;
+        },
+        localForageSet: async data => {
+          await localforage.setItem<AppConfigData>(
+            cachedEntries.keys.appConfig, data);
+
+          const dbResp: TrmrkDBResp<AppConfigData> = {
+            cacheMatch: typeof data === "object",
+            data: data!,
+            cacheError: null
+          }
+
+          return dbResp;
+        }
+      }).then(resp => {
         setAppSettingsResp(resp);
         setIsLoading(false);
 

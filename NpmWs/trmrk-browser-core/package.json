@@ -13,6 +13,7 @@
   "author": "Daniel Tincu",
   "license": "MIT",
   "dependencies": {
+    "localforage": "^1.10.0",
     "trmrk": "../trmrk"
   },
   "devDependencies": {

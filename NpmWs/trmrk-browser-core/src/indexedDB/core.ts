@@ -1,3 +1,5 @@
+import { SyncLock } from "trmrk";
+
 export interface TrmrkDBStoreObjIdxOpts {
   name: string;
   keyPath: string | string[];
@@ -20,20 +22,29 @@ export interface IdxedDBInitOpts {
   dbVersion?: number;
   onIdxedDBSuccess?: ((ev: Event, db: IDBDatabase) => any) | undefined;
   onIdxedDBerror?: ((ev: Event) => any) | undefined;
-  onIdxedDBupgradeneeded?: ((ev: IDBVersionChangeEvent) => any) | undefined;
+  onIdxedDBupgradeneeded?:
+    | ((ev: IDBVersionChangeEvent, db: IDBDatabase) => Promise<IDBDatabase>)
+    | undefined;
   onIdxedDBblocked?: ((ev: IDBVersionChangeEvent) => any) | undefined;
 }
 
 export class TrmrkIdxedDB {
-  private _dbReq: IDBOpenDBRequest | null = null;
+  private readonly syncLock: SyncLock;
+
   private _db: IDBDatabase | null = null;
 
   dbName!: string;
   version?: number | undefined;
   onerror?: ((ev: Event) => any) | undefined;
-  onupgradeneeded?: ((ev: IDBVersionChangeEvent) => any) | undefined;
+  onupgradeneeded?:
+    | ((ev: IDBVersionChangeEvent, db: IDBDatabase) => Promise<IDBDatabase>)
+    | undefined;
   onblocked?: ((ev: IDBVersionChangeEvent) => any) | undefined;
   onsuccess?: ((ev: Event, db: IDBDatabase) => any) | undefined;
+
+  constructor(dfTimeout: number | null | undefined = undefined) {
+    this.syncLock = new SyncLock(dfTimeout);
+  }
 
   init(opts: IdxedDBInitOpts) {
     this.dbName = opts.dbName;
@@ -44,55 +55,64 @@ export class TrmrkIdxedDB {
     this.onsuccess = opts.onIdxedDBSuccess;
   }
 
-  getDb() {
-    return new Promise<IDBDatabase>((resolve, reject) => {
-      const db = this._db;
+  public getDb(dbVersion: number | null | undefined = null) {
+    return this.syncLock.get<IDBDatabase>(
+      () =>
+        new Promise((resolve, reject) => {
+          if (this._db) {
+            resolve(this._db);
+          } else {
+            dbVersion ??= this.version;
 
-      if (db) {
-        resolve(db);
-      } else {
-        let dbReq = this._dbReq;
+            if (dbVersion === 0) {
+              dbVersion = undefined;
+            }
 
-        if (!dbReq) {
-        } else {
-          dbReq = indexedDB.open(this.dbName, this.version);
-          this._dbReq = dbReq;
+            const dbReq = indexedDB.open(this.dbName, dbVersion);
 
-          dbReq.onsuccess = (ev: Event) => {
-            const db = (ev.target as any).result as IDBDatabase;
-            this._db = db;
-            this._dbReq = null;
-            this.onsuccess?.call(this, ev, db);
-            resolve(db);
-          };
+            this.reqOnSuccess(dbReq, resolve);
+            this.reqOnError(dbReq, reject);
+            this.reqOnBlocked(dbReq, reject);
 
-          dbReq.onerror = (ev: Event) => {
-            this._dbReq = null;
-            this.onerror?.call(this, ev);
-            reject(ev);
-          };
+            dbReq.onupgradeneeded = (ev: IDBVersionChangeEvent) => {
+              if (this.onupgradeneeded) {
+                const innerDbReq = indexedDB.open(this.dbName);
 
-          dbReq.onupgradeneeded = (ev: IDBVersionChangeEvent) => {
-            this._dbReq = null;
-            this.onupgradeneeded?.call(this, ev);
-            reject(ev);
-          };
+                this.reqOnSuccess(innerDbReq, resolve);
+                this.reqOnError(innerDbReq, reject);
+                this.reqOnBlocked(innerDbReq, reject);
 
-          dbReq.onblocked = (ev: IDBVersionChangeEvent) => {
-            this._dbReq = null;
-            this.onblocked?.call(this, ev);
-            reject(ev);
-          };
-        }
-      }
-    });
+                innerDbReq.onupgradeneeded = (ev: IDBVersionChangeEvent) => {
+                  this.onblocked?.call(this, ev);
+                  reject(ev);
+                };
+              } else {
+                reject(ev);
+              }
+            };
+
+            dbReq.onerror = (ev: Event) => {
+              this.onerror?.call(this, ev);
+              reject(ev);
+            };
+
+            dbReq.onblocked = (ev: IDBVersionChangeEvent) => {
+              this.onblocked?.call(this, ev);
+              reject(ev);
+            };
+          }
+        })
+    );
   }
 
-  async withDb<T>(action: (db: IDBDatabase) => TrmrkDBResp<T>) {
+  public async withDb<T>(
+    action: (db: IDBDatabase) => TrmrkDBResp<T>,
+    dbVersion: number | null | undefined = null
+  ) {
     let resp: TrmrkDBResp<T>;
 
     try {
-      var db = await this.getDb();
+      var db = await this.getDb(dbVersion);
       resp = action(db);
     } catch (err: any) {
       resp = {
@@ -101,6 +121,34 @@ export class TrmrkIdxedDB {
     }
 
     return resp;
+  }
+
+  private reqOnSuccess(
+    dbReq: IDBOpenDBRequest,
+    resolve: (db: IDBDatabase | PromiseLike<IDBDatabase>) => void
+  ) {
+    dbReq.onsuccess = (ev: Event) => {
+      this._db = (ev.target as any).result as IDBDatabase;
+      this.onsuccess?.call(this, ev, this._db);
+      resolve(this._db);
+    };
+  }
+
+  private reqOnError(dbReq: IDBOpenDBRequest, reject: (reason?: any) => void) {
+    dbReq.onerror = (ev: Event) => {
+      this.onerror?.call(this, ev);
+      reject(ev);
+    };
+  }
+
+  private reqOnBlocked(
+    dbReq: IDBOpenDBRequest,
+    reject: (reason?: any) => void
+  ) {
+    dbReq.onblocked = (ev: IDBVersionChangeEvent) => {
+      this.onblocked?.call(this, ev);
+      reject(ev);
+    };
   }
 }
 

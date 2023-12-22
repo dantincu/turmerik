@@ -397,4 +397,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+.parcel-cache
+
 DotNet/Turmerik.ConvertFsDirPairsToNotes.ConsoleApp/programSettings.json

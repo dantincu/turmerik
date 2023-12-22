@@ -2,10 +2,11 @@ export * from "trmrk-browser-core";
 
 import * as trmrkBrowser from "./src";
 
-import { axiosIdxedDB } from "./src";
+import { axiosIdxedDB, axiosLocalForage } from "./src";
 
 export const browser = {
   axiosIdxedDB,
+  axiosLocalForage,
 };
 
 export type AxiosIdxedDB = trmrkBrowser.AxiosIdxedDB;
