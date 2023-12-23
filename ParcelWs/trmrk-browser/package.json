@@ -1,0 +1,25 @@
+{
+  "name": "trmrk-browser",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Browser-related js code related used across Turmerik Apps",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.5.1",
+    "localforage": "^1.10.0",
+    "trmrk": "../trmrk",
+    "trmrk-axios": "../trmrk-axios",
+    "trmrk-browser-core": "../trmrk-browser-core"
+  },
+  "devDependencies": {
+    "parcel": "^2.10.3",
+    "typescript": "^5.2.2"
+  }
+}

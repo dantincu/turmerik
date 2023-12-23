@@ -1,0 +1,12 @@
+@import "../../styles/mixins";
+
+.trmrk-app .trmrk-files-hcy-page {
+  width: 100%;
+  max-width: 100%;
+}
+
+.trmrk-files-hcy-page .trmrk-main-address-bar {
+  .trmrk-rdnl, label {
+    margin-top: 0.5em;
+  }
+}

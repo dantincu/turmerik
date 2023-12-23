@@ -1,0 +1,37 @@
+{
+  "name": "trmrk-localfilenotes-dskwebapp",
+  "version": "0.1.0",
+  "description": "Turmerik Local File Notes Desktop Web App (with React)",
+  "source": "src/index.html",
+  "scripts": {
+    "start": "parcel --port=9001 --host=localhost --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "build": "parcel build"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.10.3",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "buffer": "^6.0.3",
+    "parcel": "^2.10.3",
+    "process": "^0.11.10",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.15",
+    "@mui/material": "^5.14.15",
+    "axios": "^1.5.1",
+    "localforage": "^1.10.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.17.0",
+    "trmrk": "../trmrk",
+    "trmrk-axios": "../trmrk-axios",
+    "trmrk-browser": "../trmrk-browser",
+    "trmrk-browser-core": "../trmrk-browser-core",
+    "uuid": "^9.0.1"
+  }
+}
