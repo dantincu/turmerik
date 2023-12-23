@@ -35,6 +35,7 @@ export namespace ns {
 
   export const trmrkHeaderNames = {
     clientVersion: "trmrk-client-version",
+    clientUserUuid: "trmrk-client-user-uuid",
     requiredClientVersion: "trmrk-required-client-version",
   };
 
@@ -43,6 +44,7 @@ export namespace ns {
     public apiRelUriBase!: string;
     public apiUriBase!: string;
     public clientVersion!: number;
+    public clientUserUuid!: string;
 
     public defaultConfigFactory: (
       data: any
@@ -67,6 +69,8 @@ export namespace ns {
 
           headers[ns.trmrkHeaderNames.clientVersion] =
             this.clientVersion.toString();
+
+          headers[ns.trmrkHeaderNames.clientUserUuid] = this.clientUserUuid;
 
           return {
             withCredentials: true,

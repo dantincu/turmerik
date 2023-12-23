@@ -12,8 +12,6 @@ import {
 import { browser as trmrkBrowser, TrmrkDBResp } from "trmrk-browser-core";
 
 export interface AxiosLocalForageInitOpts {
-  dbName: string;
-  dbVersion?: number;
   data: ApiConfigData;
   defaultConfigFactory?:
     | ((data: any) => AxiosRequestConfig<any> | undefined)
@@ -32,25 +30,13 @@ export interface AxiosLocalForageResp<T>
     TrmrkDBResp<T> {}
 
 export class AxiosLocalForage {
-  dbName?: string;
-  dbVersion?: number;
-
   constructor(public readonly apiSvc: ApiServiceType) {}
 
   public init(opts: AxiosLocalForageInitOpts) {
-    this.dbName = opts.dbName;
-    this.dbVersion = opts.dbVersion;
-
     this.apiSvc.init(opts.data, opts.defaultConfigFactory);
-
-    localforage.config({
-      name: this.dbName,
-      version: this.dbVersion,
-    });
   }
 
   public async req<T>(opts: AxiosLocalForageReq<T>) {
-    debugger;
     let resp = (await opts.localForageGet()) as AxiosLocalForageResp<T>;
 
     if (!resp.cacheMatch) {

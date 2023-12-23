@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Turmerik.AspNetCore\Turmerik.AspNetCore.csproj" />
+    <ProjectReference Include="..\Turmerik.Logging\Turmerik.Logging.csproj" />
     <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 

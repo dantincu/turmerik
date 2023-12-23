@@ -7,15 +7,13 @@ import '../styles/index.scss';
 import "../assets/favicon.ico"
 import "../assets/Icon-32x30-nobg.png"
 import { cachedApiSvc } from "../services/settings/api/apiService"; 
-import { cachedEntries } from "./localForage";
+import { cacheKeys } from "./localForage";
 import App from './App';
 
 export const createApp = (
   apiConfig: ApiConfigData) => {
   cachedApiSvc.init({
     data: apiConfig,
-    dbName: cachedEntries.dbName,
-    dbVersion: cachedEntries.dbVersion
   });
 
   const container = document.getElementById('app-root')!;

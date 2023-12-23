@@ -99,6 +99,7 @@ export interface AppConfigData {
   altPathSep: string;
   isWinOS: boolean;
   isLocalFileNotesApp: boolean;
+  clientUserUuid: string;
 }
 
 export const getCommand = (

@@ -6,6 +6,8 @@ using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
 using Turmerik.LocalFilesExplorer.AspNetCoreApp.Settings;
 using Turmerik.Notes.Core;
+using Turmerik.NetCore.Utility;
+using Turmerik.AspNetCore.UserSessions;
 
 namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
 {
@@ -14,17 +16,23 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
     public class AppConfigController : ControllerBase
     {
         private readonly IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever;
+        private readonly IUsersManager usersManager;
 
         public AppConfigController(
-            IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever)
+            IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever,
+            IUsersManager usersManager)
         {
-            this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(nameof(appSettingsRetriever));
+            this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(
+                nameof(appSettingsRetriever));
+
+            this.usersManager = usersManager ?? throw new ArgumentNullException(
+                nameof(usersManager));
         }
 
         [HttpGet]
-        public ClientAppConfig Get() => GetCore();
+        public Task<ClientAppConfig> Get() => GetCore();
 
-        private ClientAppConfig GetCore() => new ClientAppConfig
+        private async Task<ClientAppConfig> GetCore() => new ClientAppConfig
         {
             TrmrkPfx = Trmrk.TrmrkPfx,
             IsDevEnv = appSettingsRetriever.Data.IsDevEnv,
@@ -34,10 +42,11 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
             PathSep = PathH.AltDirSepChar,
             AltPathSep = PathH.AltDirSepChar,
             IsWinOS = LocalDeviceH.IsWinOS,
-            IsLocalFileNotesApp = true
+            IsLocalFileNotesApp = true,
+            ClientUserUuid = (await HttpContext.GetLocalFilesUserIdnfAsync(usersManager)).UserUuid.ToString("N"),
         };
 
-        private ClientAppConfig GetForCloudStorageCore() => new ClientAppConfig
+        private async Task<ClientAppConfig> GetForCloudStorageCore() => new ClientAppConfig
         {
             TrmrkPfx = Trmrk.TrmrkPfx,
             IsDevEnv = appSettingsRetriever.Data.IsDevEnv,
@@ -47,7 +56,8 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
             PathSep = "/",
             AltPathSep = PathH.AltDirSepChar,
             // IsWinOS = LocalDeviceH.IsWinOS,
-            IsLocalFileNotesApp = false
+            IsLocalFileNotesApp = false,
+            ClientUserUuid = (await HttpContext.GetLocalFilesUserIdnfAsync(usersManager)).UserUuid.ToString("N"),
         };
     }
 }

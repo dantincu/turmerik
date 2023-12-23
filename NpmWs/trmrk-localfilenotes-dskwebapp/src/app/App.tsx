@@ -21,7 +21,7 @@ import { localStorageKeys, jsonBool } from "./utils";
 import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppConfigData } from "trmrk/src/notes-app-config"; 
 import { reducer, AppData } from "./appData";
-import { cachedEntries } from "./localForage";
+import { cacheKeys } from "./localForage";
 
 import MainEl from "../components/main/Main";
 import { AppDataContext, createAppContext } from "./AppContext";
@@ -92,7 +92,7 @@ const App = () => {
       cachedApiSvc.req<AppConfigData>({
         apiCall: async apiSvc => await apiSvc.get<AppConfigData>("AppConfig"),
         localForageGet: async () => {
-          const data = await localforage.getItem<AppConfigData>(cachedEntries.keys.appConfig);
+          const data = await cachedApiSvc.dfCacheDb.appConfig.getItem<AppConfigData>(cacheKeys.appConfig);
 
           const dbResp: TrmrkDBResp<AppConfigData> = {
             cacheMatch: !!data,
@@ -103,8 +103,8 @@ const App = () => {
           return dbResp;
         },
         localForageSet: async data => {
-          await localforage.setItem<AppConfigData>(
-            cachedEntries.keys.appConfig, data);
+          await cachedApiSvc.dfCacheDb.appConfig.setItem<AppConfigData>(
+            cacheKeys.appConfig, data);
 
           const dbResp: TrmrkDBResp<AppConfigData> = {
             cacheMatch: typeof data === "object",
@@ -115,6 +115,8 @@ const App = () => {
           return dbResp;
         }
       }).then(resp => {
+        cachedApiSvc.initMainCacheDb(resp.data.clientUserUuid);
+
         setAppSettingsResp(resp);
         setIsLoading(false);
 

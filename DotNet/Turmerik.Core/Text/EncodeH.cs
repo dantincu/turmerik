@@ -11,17 +11,35 @@ namespace Turmerik.Core.Text
 {
     public static class EncodeH
     {
-        public static byte[] EncodeSha1(string input)
+        public static byte[] EncodeSha1(byte[] input)
         {
             byte[] hash;
 
             using (var sha1 = SHA1.Create())
             {
-                hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
+                hash = sha1.ComputeHash(input);
             }
 
             return hash;
         }
+
+        public static byte[] EncodeSha1(string input) => EncodeSha1(
+            Encoding.UTF8.GetBytes(input));
+
+        public static byte[] EncodeSha256(byte[] input)
+        {
+            byte[] hash;
+
+            using (SHA256 mySHA256 = SHA256.Create())
+            {
+                hash = mySHA256.ComputeHash(input);
+            }
+
+            return hash;
+        }
+
+        public static byte[] EncodeSha256(string input) => EncodeSha256(
+            Encoding.UTF8.GetBytes(input));
 
         public static byte[] TryDecodeFromBase64(string str)
         {

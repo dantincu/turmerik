@@ -27,7 +27,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add<RequiredClientVersionFilter>();
+    options.Filters.Add<ClientVersionAndUserUuidFilter>();
 }).AddJsonOptions(options => {
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
