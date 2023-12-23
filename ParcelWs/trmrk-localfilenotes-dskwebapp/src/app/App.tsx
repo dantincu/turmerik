@@ -95,6 +95,7 @@ const App = () => {
           const data = await cachedApiSvc.dfCacheDb.appConfig.getItem<AppConfigData>(cacheKeys.appConfig);
 
           const dbResp: TrmrkDBResp<AppConfigData> = {
+            // cacheMatch: false,
             cacheMatch: !!data,
             data: data!,
             cacheError: null

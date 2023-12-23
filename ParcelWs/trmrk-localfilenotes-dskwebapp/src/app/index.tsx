@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client';
 import { ApiConfigData } from "trmrk-axios/src/core";
 
 import '../styles/index.scss';
-import "../assets/Icon-32x30-nobg.png"
 import { cachedApiSvc } from "../services/settings/api/apiService"; 
 import App from './App';
 

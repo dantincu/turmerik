@@ -2957,7 +2957,6 @@ var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _client = require("react-dom/client");
 var _indexScss = require("../styles/index.scss");
-var _icon32X30NobgPng = require("../assets/Icon-32x30-nobg.png");
 var _apiService = require("../services/settings/api/apiService");
 var _app = require("./App");
 var _appDefault = parcelHelpers.interopDefault(_app);
@@ -2969,7 +2968,7 @@ const createApp = (apiConfig)=>{
     const root = (0, _client.createRoot)(container);
     root.render(/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _appDefault.default), {}, void 0, false, {
         fileName: "src/app/index.tsx",
-        lineNumber: 19,
+        lineNumber: 18,
         columnNumber: 15
     }, undefined));
 };
@@ -2979,7 +2978,7 @@ const createApp = (apiConfig)=>{
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","react-dom/client":"lOjBx","../styles/index.scss":"aSOSS","../assets/Icon-32x30-nobg.png":"lV58t","../services/settings/api/apiService":"6xfxo","./App":"4a8xz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"iTorj":[function(require,module,exports) {
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","react-dom/client":"lOjBx","../styles/index.scss":"aSOSS","../services/settings/api/apiService":"6xfxo","./App":"4a8xz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"iTorj":[function(require,module,exports) {
 "use strict";
 module.exports = require("ee51401569654d91");
 
@@ -27166,45 +27165,7 @@ module.exports = require("ef03b89c8fe2794e");
     /* global __REACT_DEVTOOLS_GLOBAL_HOOK__ */ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop(new Error());
 })();
 
-},{}],"aSOSS":[function() {},{}],"lV58t":[function(require,module,exports) {
-module.exports = require("1316bc70e806380f").getBundleURL("jEAkp") + "Icon-32x30-nobg.7565f82b.png" + "?" + Date.now();
-
-},{"1316bc70e806380f":"lgJ39"}],"lgJ39":[function(require,module,exports) {
-"use strict";
-var bundleURL = {};
-function getBundleURLCached(id) {
-    var value = bundleURL[id];
-    if (!value) {
-        value = getBundleURL();
-        bundleURL[id] = value;
-    }
-    return value;
-}
-function getBundleURL() {
-    try {
-        throw new Error();
-    } catch (err) {
-        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
-        if (matches) // The first two stack frames will be this function and getBundleURLCached.
-        // Use the 3rd one, which will be a runtime in the original bundle.
-        return getBaseURL(matches[2]);
-    }
-    return "/";
-}
-function getBaseURL(url) {
-    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
-}
-// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
-function getOrigin(url) {
-    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
-    if (!matches) throw new Error("Origin not found");
-    return matches[0];
-}
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-exports.getOrigin = getOrigin;
-
-},{}],"6xfxo":[function(require,module,exports) {
+},{}],"aSOSS":[function() {},{}],"6xfxo":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "apiSvc", ()=>apiSvc);
@@ -27278,7 +27239,7 @@ class AxiosLocalForage extends (0, _core1.AxiosLocalForage) {
 }
 const cachedApiSvc = new AxiosLocalForage(apiSvc);
 
-},{"localforage":"cTE28","trmrk":"lyL2j","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","trmrk-axios/src/core":"13H3g","trmrk-browser/src/axiosLocalForage/core":"4BD3G"}],"cTE28":[function(require,module,exports) {
+},{"localforage":"cTE28","trmrk":"lyL2j","trmrk-axios/src/core":"13H3g","trmrk-browser/src/axiosLocalForage/core":"4BD3G","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cTE28":[function(require,module,exports) {
 var global = arguments[3];
 /*!
     localForage -- Offline Storage, Improved
@@ -29506,7 +29467,7 @@ const core = {
 };
 const SyncLock = (0, _syncLock.SyncLock); // export type SyncLock = SyncLockT;
 
-},{"./core":"kXjL9","./notes-app-config":"4jlyN","./url":"0566y","./sync-lock":"afT5C","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./drive-item":"99f45","./notes-item":"agsU6","./notes-path":"1ZvwH"}],"kXjL9":[function(require,module,exports) {
+},{"./core":"kXjL9","./drive-item":"99f45","./notes-app-config":"4jlyN","./notes-item":"agsU6","./notes-path":"1ZvwH","./url":"0566y","./sync-lock":"afT5C","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kXjL9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "allWsRegex", ()=>allWsRegex);
@@ -29610,7 +29571,30 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"4jlyN":[function(require,module,exports) {
+},{}],"99f45":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "FileType", ()=>FileType);
+parcelHelpers.export(exports, "OfficeLikeFileType", ()=>OfficeLikeFileType);
+var FileType;
+(function(FileType) {
+    FileType[FileType["plainText"] = 1] = "plainText";
+    FileType[FileType["document"] = 2] = "document";
+    FileType[FileType["image"] = 3] = "image";
+    FileType[FileType["audio"] = 4] = "audio";
+    FileType[FileType["video"] = 5] = "video";
+    FileType[FileType["code"] = 6] = "code";
+    FileType[FileType["binary"] = 7] = "binary";
+    FileType[FileType["zippedFolder"] = 8] = "zippedFolder";
+})(FileType || (FileType = {}));
+var OfficeLikeFileType;
+(function(OfficeLikeFileType) {
+    OfficeLikeFileType[OfficeLikeFileType["word"] = 1] = "word";
+    OfficeLikeFileType[OfficeLikeFileType["excel"] = 2] = "excel";
+    OfficeLikeFileType[OfficeLikeFileType["powerPoint"] = 3] = "powerPoint";
+})(OfficeLikeFileType || (OfficeLikeFileType = {}));
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4jlyN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "CmdCommand", ()=>CmdCommand);
@@ -29640,80 +29624,6 @@ const getCommand = (commandsMap, cmd)=>{
     return cmdVal;
 };
 const getCmd = (noteDirPairs, cmd)=>getCommand(noteDirPairs.argOpts.commandsMap, cmd);
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"0566y":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "getBaseLocation", ()=>getBaseLocation);
-const getBaseLocation = ()=>{
-    let baseLocation = [
-        window.location.protocol,
-        window.location.host
-    ].join("//");
-    return baseLocation;
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"afT5C":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "SyncLock", ()=>SyncLock);
-class SyncLock {
-    static dfVal = BigInt(0);
-    static incVal = BigInt(1);
-    dfTimeout;
-    syncRoot = new BigInt64Array(1);
-    constructor(dfTimeout){
-        this.dfTimeout = dfTimeout ?? undefined;
-    }
-    run(action, timeout) {
-        return new Promise((resolve, reject)=>{
-            if (Atomics.add(this.syncRoot, 0, SyncLock.incVal) === SyncLock.dfVal || Atomics.wait(this.syncRoot, 0, SyncLock.dfVal, timeout ?? this.dfTimeout) !== "timed-out") action().then(()=>{
-                Atomics.sub(this.syncRoot, 0, SyncLock.incVal);
-                resolve();
-            }, (reason)=>{
-                Atomics.sub(this.syncRoot, 0, SyncLock.incVal);
-                reject(reason);
-            });
-            else reject(new Error("While waiting for previously enqueued actions to finish their execution, more than the specified timeout has elapsed"));
-        });
-    }
-    get(action) {
-        return new Promise((resolve, reject)=>{
-            let retVal = null;
-            this.run(()=>new Promise((rslv, rjct)=>{
-                    action().then((value)=>{
-                        retVal = value;
-                        rslv();
-                    }, rjct);
-                })).then(()=>{
-                resolve(retVal);
-            }, reject);
-        });
-    }
-}
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"99f45":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "FileType", ()=>FileType);
-parcelHelpers.export(exports, "OfficeLikeFileType", ()=>OfficeLikeFileType);
-var FileType;
-(function(FileType) {
-    FileType[FileType["plainText"] = 1] = "plainText";
-    FileType[FileType["document"] = 2] = "document";
-    FileType[FileType["image"] = 3] = "image";
-    FileType[FileType["audio"] = 4] = "audio";
-    FileType[FileType["video"] = 5] = "video";
-    FileType[FileType["code"] = 6] = "code";
-    FileType[FileType["binary"] = 7] = "binary";
-    FileType[FileType["zippedFolder"] = 8] = "zippedFolder";
-})(FileType || (FileType = {}));
-var OfficeLikeFileType;
-(function(OfficeLikeFileType) {
-    OfficeLikeFileType[OfficeLikeFileType["word"] = 1] = "word";
-    OfficeLikeFileType[OfficeLikeFileType["excel"] = 2] = "excel";
-    OfficeLikeFileType[OfficeLikeFileType["powerPoint"] = 3] = "powerPoint";
-})(OfficeLikeFileType || (OfficeLikeFileType = {}));
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"agsU6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -29888,7 +29798,58 @@ const isValidFsPath = (cfg, path, result = null, allowNetworkPath = true)=>{
     return result.isValid;
 };
 
-},{"./core":"kXjL9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"13H3g":[function(require,module,exports) {
+},{"./core":"kXjL9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"0566y":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getBaseLocation", ()=>getBaseLocation);
+const getBaseLocation = ()=>{
+    let baseLocation = [
+        window.location.protocol,
+        window.location.host
+    ].join("//");
+    return baseLocation;
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"afT5C":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "SyncLock", ()=>SyncLock);
+class SyncLock {
+    static dfVal = BigInt(0);
+    static incVal = BigInt(1);
+    dfTimeout;
+    syncRoot = new BigInt64Array(1);
+    constructor(dfTimeout){
+        this.dfTimeout = dfTimeout ?? undefined;
+    }
+    run(action, timeout) {
+        return new Promise((resolve, reject)=>{
+            if (Atomics.add(this.syncRoot, 0, SyncLock.incVal) === SyncLock.dfVal || Atomics.wait(this.syncRoot, 0, SyncLock.dfVal, timeout ?? this.dfTimeout) !== "timed-out") action().then(()=>{
+                Atomics.sub(this.syncRoot, 0, SyncLock.incVal);
+                resolve();
+            }, (reason)=>{
+                Atomics.sub(this.syncRoot, 0, SyncLock.incVal);
+                reject(reason);
+            });
+            else reject(new Error("While waiting for previously enqueued actions to finish their execution, more than the specified timeout has elapsed"));
+        });
+    }
+    get(action) {
+        return new Promise((resolve, reject)=>{
+            let retVal = null;
+            this.run(()=>new Promise((rslv, rjct)=>{
+                    action().then((value)=>{
+                        retVal = value;
+                        rslv();
+                    }, rjct);
+                })).then(()=>{
+                resolve(retVal);
+            }, reject);
+        });
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"13H3g":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "ns", ()=>ns);
@@ -34586,6 +34547,7 @@ const App = ()=>{
                 localForageGet: async ()=>{
                     const data = await (0, _apiService.cachedApiSvc).dfCacheDb.appConfig.getItem((0, _localForage.cacheKeys).appConfig);
                     const dbResp = {
+                        // cacheMatch: false,
                         cacheMatch: !!data,
                         data: data,
                         cacheError: null
@@ -34626,25 +34588,25 @@ const App = ()=>{
             children: [
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _cssBaselineDefault.default), {}, void 0, false, {
                     fileName: "src/app/App.tsx",
-                    lineNumber: 141,
+                    lineNumber: 142,
                     columnNumber: 9
                 }, undefined),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(AppEl, {
                     args: appArgs
                 }, void 0, false, {
                     fileName: "src/app/App.tsx",
-                    lineNumber: 142,
+                    lineNumber: 143,
                     columnNumber: 9
                 }, undefined)
             ]
         }, void 0, true, {
             fileName: "src/app/App.tsx",
-            lineNumber: 140,
+            lineNumber: 141,
             columnNumber: 7
         }, undefined)
     }, void 0, false, {
         fileName: "src/app/App.tsx",
-        lineNumber: 139,
+        lineNumber: 140,
         columnNumber: 5
     }, undefined);
 };
@@ -42144,7 +42106,60 @@ function extendSxProp(props) {
     });
 }
 
-},{"@babel/runtime/helpers/esm/extends":"fTBFS","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"adHgr","@mui/utils":"cttLn","./defaultSxConfig":"39Yr5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc03s":[function(require,module,exports) {
+},{"@babel/runtime/helpers/esm/extends":"fTBFS","@babel/runtime/helpers/esm/objectWithoutPropertiesLoose":"adHgr","@mui/utils":"cttLn","./defaultSxConfig":"39Yr5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"doQe9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>(0, _boxDefault.default));
+parcelHelpers.export(exports, "boxClasses", ()=>(0, _boxClassesDefault.default));
+var _box = require("./Box");
+var _boxDefault = parcelHelpers.interopDefault(_box);
+var _boxClasses = require("./boxClasses");
+var _boxClassesDefault = parcelHelpers.interopDefault(_boxClasses);
+parcelHelpers.exportAll(_boxClasses, exports);
+"use client";
+
+},{"./Box":"f1LqV","./boxClasses":false,"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f1LqV":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _propTypes = require("prop-types");
+var _propTypesDefault = parcelHelpers.interopDefault(_propTypes);
+var _utils = require("@mui/utils");
+var _createBox = require("../createBox");
+var _createBoxDefault = parcelHelpers.interopDefault(_createBox);
+var _boxClasses = require("./boxClasses");
+var _boxClassesDefault = parcelHelpers.interopDefault(_boxClasses);
+"use client";
+const Box = (0, _createBoxDefault.default)({
+    defaultClassName: (0, _boxClassesDefault.default).root,
+    generateClassName: (0, _utils.unstable_ClassNameGenerator).generate
+});
+Box.propTypes /* remove-proptypes */  = {
+    // ----------------------------- Warning --------------------------------
+    // | These PropTypes are generated from the TypeScript type definitions |
+    // |     To update them edit the d.ts file and run "yarn proptypes"     |
+    // ----------------------------------------------------------------------
+    /**
+   * @ignore
+   */ children: (0, _propTypesDefault.default).node,
+    /**
+   * The component used for the root node.
+   * Either a string to use a HTML element or a component.
+   */ component: (0, _propTypesDefault.default).elementType,
+    /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */ sx: (0, _propTypesDefault.default).oneOfType([
+        (0, _propTypesDefault.default).arrayOf((0, _propTypesDefault.default).oneOfType([
+            (0, _propTypesDefault.default).func,
+            (0, _propTypesDefault.default).object,
+            (0, _propTypesDefault.default).bool
+        ])),
+        (0, _propTypesDefault.default).func,
+        (0, _propTypesDefault.default).object
+    ])
+};
+exports.default = Box;
+
+},{"prop-types":"7wKI2","@mui/utils":"cttLn","../createBox":"bc03s","./boxClasses":"6beOu","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bc03s":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>createBox);
@@ -42204,7 +42219,16 @@ function clsx() {
 }
 exports.default = clsx;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"csGHh":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6beOu":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _utils = require("@mui/utils");
+const boxClasses = (0, _utils.unstable_generateUtilityClasses)("MuiBox", [
+    "root"
+]);
+exports.default = boxClasses;
+
+},{"@mui/utils":"cttLn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"csGHh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 // Update /system/styled/#api in case if this changes
@@ -44612,6 +44636,8 @@ var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _typography = require("@mui/material/Typography");
 var _typographyDefault = parcelHelpers.interopDefault(_typography);
+var _box = require("@mui/system/Box");
+var _boxDefault = parcelHelpers.interopDefault(_box);
 var _appBar = require("@mui/material/AppBar");
 var _appBarDefault = parcelHelpers.interopDefault(_appBar);
 var _grid = require("@mui/material/Grid");
@@ -44623,6 +44649,8 @@ var _iconButtonDefault = parcelHelpers.interopDefault(_iconButton);
 var _menu1 = require("@mui/icons-material/Menu");
 var _menuDefault1 = parcelHelpers.interopDefault(_menu1);
 var _stylesScss = require("./styles.scss");
+var _icon32X30NobgPng = require("../../assets/Icon-32x30-nobg.png");
+var _icon32X30NobgPngDefault = parcelHelpers.interopDefault(_icon32X30NobgPng);
 var _toggleDarkModeBtn = require("./ToggleDarkModeBtn");
 var _toggleDarkModeBtnDefault = parcelHelpers.interopDefault(_toggleDarkModeBtn);
 var _s = $RefreshSig$();
@@ -44650,16 +44678,18 @@ function LoadingAppBar({ args }) {
                                 color: "#FFF",
                                 width: "2em"
                             },
-                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("img", {
-                                src: "./assets/Icon-32x30-nobg.png"
+                            children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _boxDefault.default), {
+                                component: "img",
+                                className: "trmrk-icon",
+                                src: (0, _icon32X30NobgPngDefault.default)
                             }, void 0, false, {
                                 fileName: "src/components/appBar/LoadingAppBar.tsx",
-                                lineNumber: 38,
+                                lineNumber: 40,
                                 columnNumber: 11
                             }, this)
                         }, void 0, false, {
                             fileName: "src/components/appBar/LoadingAppBar.tsx",
-                            lineNumber: 37,
+                            lineNumber: 39,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _typographyDefault.default), {
@@ -44674,7 +44704,7 @@ function LoadingAppBar({ args }) {
                             children: "Turmerik Local File Notes"
                         }, void 0, false, {
                             fileName: "src/components/appBar/LoadingAppBar.tsx",
-                            lineNumber: 40,
+                            lineNumber: 42,
                             columnNumber: 9
                         }, this),
                         /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _iconButtonDefault.default), {
@@ -44686,23 +44716,23 @@ function LoadingAppBar({ args }) {
                             onClick: handleClick,
                             children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _menuDefault1.default), {}, void 0, false, {
                                 fileName: "src/components/appBar/LoadingAppBar.tsx",
-                                lineNumber: 42,
+                                lineNumber: 44,
                                 columnNumber: 35
                             }, this)
                         }, void 0, false, {
                             fileName: "src/components/appBar/LoadingAppBar.tsx",
-                            lineNumber: 41,
+                            lineNumber: 43,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "src/components/appBar/LoadingAppBar.tsx",
-                    lineNumber: 36,
+                    lineNumber: 38,
                     columnNumber: 7
                 }, this)
             }, void 0, false, {
                 fileName: "src/components/appBar/LoadingAppBar.tsx",
-                lineNumber: 35,
+                lineNumber: 37,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _menuDefault.default), {
@@ -44715,18 +44745,18 @@ function LoadingAppBar({ args }) {
                     setAnchorEl: (el)=>setAnchorEl(el)
                 }, void 0, false, {
                     fileName: "src/components/appBar/LoadingAppBar.tsx",
-                    lineNumber: 50,
+                    lineNumber: 52,
                     columnNumber: 7
                 }, this)
             }, void 0, false, {
                 fileName: "src/components/appBar/LoadingAppBar.tsx",
-                lineNumber: 45,
+                lineNumber: 47,
                 columnNumber: 5
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/components/appBar/LoadingAppBar.tsx",
-        lineNumber: 34,
+        lineNumber: 36,
         columnNumber: 11
     }, this);
 }
@@ -44740,7 +44770,7 @@ $RefreshReg$(_c, "LoadingAppBar");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","@mui/material/Typography":"faxSz","@mui/material/AppBar":"c3vaq","@mui/material/Grid":"c17UE","@mui/material/Menu":"dOURT","@mui/material/IconButton":"38BrD","@mui/icons-material/Menu":"eYtXA","./styles.scss":"iuCo7","./ToggleDarkModeBtn":"aPCV9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"faxSz":[function(require,module,exports) {
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","@mui/material/Typography":"faxSz","@mui/material/AppBar":"c3vaq","@mui/material/Grid":"c17UE","@mui/material/Menu":"dOURT","@mui/material/IconButton":"38BrD","@mui/icons-material/Menu":"eYtXA","./styles.scss":"iuCo7","./ToggleDarkModeBtn":"aPCV9","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","@mui/system/Box":"doQe9","../../assets/Icon-32x30-nobg.png":"lV58t"}],"faxSz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>(0, _typographyDefault.default));
@@ -55869,7 +55899,45 @@ function registerExportsForReactRefresh(module1) {
     }
 }
 
-},{"7422ead32dcc1e6b":"786KC"}],"jOnsP":[function(require,module,exports) {
+},{"7422ead32dcc1e6b":"786KC"}],"lV58t":[function(require,module,exports) {
+module.exports = require("1316bc70e806380f").getBundleURL("jEAkp") + "Icon-32x30-nobg.7565f82b.png" + "?" + Date.now();
+
+},{"1316bc70e806380f":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"jOnsP":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$e2a4 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
