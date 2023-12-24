@@ -35,7 +35,6 @@ export class MainCacheDb {
     this._dbName = `user-${userUuid}`;
 
     this._entries = this.createStore("entries");
-    console.log("MainCacheDb initialized", userUuid);
   }
 
   public get entries() {

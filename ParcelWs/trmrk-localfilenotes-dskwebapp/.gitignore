@@ -2,3 +2,5 @@ sslcert
 devsslcert
 src/app/env/api-config.json
 dist
+.env
+.env.*
