@@ -28,7 +28,7 @@ export default function ToggleAppModeBtn({
 
   return (
     <MenuItem onClick={handleClick} className="trmrk-app-mode-menu-item">
-      <ColorThemeLabel>Compact Mode</ColorThemeLabel>
+      <ColorThemeLabel>{ args.isCompactMode ? "Compact Mode" : "Full Mode" }</ColorThemeLabel>
       { args.isCompactMode ? <ToggleOnIcon className="trmrk-icon-toggle-on" /> : <ToggleOffIcon className="trmrk-icon-toggle-off" /> }
     </MenuItem>);
 }

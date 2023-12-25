@@ -28,14 +28,16 @@ export interface AppData {
   isDarkMode: boolean;
   isCompactMode: boolean;
   htmlDocTitle: string;
-  appTitle: string;
   appBarOpts: AppBarOpts;
+  floatingAppBarHeightEm: number;
+  updateFloatingBarTopOffset: boolean;
   setIsDarkMode: (isDarkMode: boolean) => void;
   setIsCompactMode: (isCompactMode: boolean) => void;
   setAppConfig: (appConfig: AppConfigData) => void;
   setHtmlDocTitle: (newHtmlDocTitle: string) => void;
-  setAppTitle: (newAppTitle: string) => void;
   setAppBarOpts: (appBar: AppBarOpts) => void;
+  setFloatingAppBarHeightEm: (floatingAppBarHeightEm: number) => void;
+  setUpdateFloatingBarTopOffset: (updateFloatingBarTopOffset: boolean) => void;
 }
 
 export const actions = Object.freeze({
@@ -43,88 +45,40 @@ export const actions = Object.freeze({
   SET_IS_COMPACT_MODE: "SET_IS_COMPACT_MODE",
   SET_APP_CONFIG: "SET_APP_CONFIG",
   SET_HTML_DOC_TITLE: "SET_HTML_DOC_TITLE",
-  SET_APP_TITLE: "SET_APP_TITLE",
   SET_APP_BAR_OPTS: "SET_APP_BAR_OPTS",
+  SET_FLOATING_BAR_TOP_HEIGHT_EM: "SET_FLOATING_BAR_TOP_HEIGHT_EM",
+  SET_UPDATE_FLOATING_BAR_TOP_OFFSET: "UPDATE_FLOATING_BAR_TOP_OFFSET",
 });
-
-const onSetIsDarkMode = (
-  state: AppData,
-  action: { type: string; payload: boolean }
-) => {
-  return {
-    ...state,
-    isDarkMode: action.payload,
-  };
-};
-
-const onSetIsCompactMode = (
-  state: AppData,
-  action: { type: string; payload: boolean }
-) => {
-  return {
-    ...state,
-    isCompactMode: action.payload,
-  };
-};
-
-const onSetAppConfig = (
-  state: AppData,
-  action: { type: string; payload: AppConfigData }
-) => {
-  return {
-    ...state,
-    appConfig: action.payload,
-  };
-};
-
-const onSetHtmlDocTitle = (
-  state: AppData,
-  action: { type: string; payload: string }
-) => {
-  return {
-    ...state,
-    htmlDocTitle: action.payload,
-  };
-};
-
-const onSetAppTitle = (
-  state: AppData,
-  action: { type: string; payload: string }
-) => {
-  return {
-    ...state,
-    appTitle: action.payload,
-  };
-};
-
-const onSetAppBarOpts = (
-  state: AppData,
-  action: { type: string; payload: AppBarOpts }
-) => {
-  return {
-    ...state,
-    appBarOpts: action.payload,
-  };
-};
 
 export const reducer = (
   state: AppData,
   action: { type: string; payload: any }
 ) => {
+  const retState = { ...state };
+
   switch (action.type) {
     case actions.SET_IS_DARK_MODE:
-      return onSetIsDarkMode(state, action);
+      retState.isDarkMode = action.payload;
+      break;
     case actions.SET_IS_COMPACT_MODE:
-      return onSetIsCompactMode(state, action);
+      retState.isCompactMode = action.payload;
+      break;
     case actions.SET_APP_CONFIG:
-      return onSetAppConfig(state, action);
+      retState.appConfig = action.payload;
+      break;
     case actions.SET_HTML_DOC_TITLE:
-      return onSetHtmlDocTitle(state, action);
-    case actions.SET_APP_TITLE:
-      return onSetAppTitle(state, action);
+      retState.htmlDocTitle = action.payload;
+      break;
     case actions.SET_APP_BAR_OPTS:
-      return onSetAppBarOpts(state, action);
-    default:
-      return state;
+      retState.appBarOpts = action.payload;
+      break;
+    case actions.SET_FLOATING_BAR_TOP_HEIGHT_EM:
+      retState.floatingAppBarHeightEm = action.payload;
+      break;
+    case actions.SET_UPDATE_FLOATING_BAR_TOP_OFFSET:
+      retState.updateFloatingBarTopOffset = action.payload;
+      break;
   }
+
+  return retState;
 };

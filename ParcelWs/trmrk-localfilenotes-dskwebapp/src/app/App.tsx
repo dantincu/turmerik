@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import localforage from "localforage";
-
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper from "@mui/material/Paper";
@@ -62,7 +60,9 @@ const App = () => {
     baseLocation: trmrk.url.getBaseLocation(),
     htmlDocTitle: "Turmerik Local File Notes",
     appTitle: "Turmerik Local File Notes",
-    appBarOpts: {}
+    appBarOpts: {},
+    floatingAppBarHeightEm: 1,
+    updateFloatingBarTopOffset: true
   } as AppData;
 
   const [ state, dispatch ] = React.useReducer(reducer, initialState);

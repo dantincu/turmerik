@@ -37,11 +37,20 @@ export const createAppContext = (
       updateHtmlDocTitle(newHtmlDocTitle);
       dispatch({ type: actions.SET_HTML_DOC_TITLE, payload: newHtmlDocTitle });
     },
-    setAppTitle: (newAppTitle: string) => {
-      dispatch({ type: actions.SET_APP_TITLE, payload: newAppTitle });
-    },
     setAppBarOpts: (appBar: AppBarOpts) => {
       dispatch({ type: actions.SET_APP_BAR_OPTS, payload: appBar });
+    },
+    setFloatingBarTopHeightEm: (floatingBarTopHeightEm: number) => {
+      dispatch({
+        type: actions.SET_FLOATING_BAR_TOP_HEIGHT_EM,
+        payload: floatingBarTopHeightEm,
+      });
+    },
+    setUpdateFloatingBarTopOffset: (updateFloatingBarTopOffset: boolean) => {
+      dispatch({
+        type: actions.SET_UPDATE_FLOATING_BAR_TOP_OFFSET,
+        payload: updateFloatingBarTopOffset,
+      });
     },
   };
 };
@@ -60,15 +69,10 @@ export const updateAppTitle = (
       .splice(-1, 1)[0];
   }
 
-  const appTitle = idnf ?? defaultAppTitle;
   let htmlDocTitle = defaultAppTitle;
 
   if (idnf) {
     htmlDocTitle = idnf + " - " + htmlDocTitle;
-  }
-
-  if (appTitle !== appData.appTitle) {
-    appData.setAppTitle(appTitle);
   }
 
   appData.setHtmlDocTitle(htmlDocTitle);
