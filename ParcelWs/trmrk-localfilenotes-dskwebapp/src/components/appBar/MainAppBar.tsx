@@ -7,12 +7,18 @@ import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import Grid from "@mui/material/Grid";
 import Menu from '@mui/material/Menu';
-import { Dropdown } from '@mui/base/Dropdown';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowRightIcon from '@mui/icons-material/ArrowRightOutlined';
+import NorthWestIcon from '@mui/icons-material/NorthWest';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import UndoIcon from '@mui/icons-material/Undo';
+import RedoIcon from '@mui/icons-material/Redo';
+import CloseIcon from '@mui/icons-material/Close';
 
 import './styles.scss';
 
@@ -20,7 +26,7 @@ import { AppBarArgs } from "./AppBarArgs";
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
 import AppBarOptionsIcon from "./AppBarOptionsIcon";
-import { AppDataContext, getAppThemeCssClassName } from "../../app/AppContext";
+import { AppDataContext, getAppThemeCssClassName, isDocEditMode } from "../../app/AppContext";
 
 export default function MainAppBar ({
   args
@@ -29,6 +35,7 @@ export default function MainAppBar ({
 }) {
   const appData = React.useContext(AppDataContext);
   const appBarOpts = appData.appBarOpts;
+  const isDocEditModeVal = isDocEditMode(appData);
 
   const [settingsMenuAnchorEl, setSettingsMenuAnchorEl] = React.useState<null | HTMLElement>(null);
   const [appThemeMenuAnchorEl, setAppThemeMenuAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -59,6 +66,21 @@ export default function MainAppBar ({
             onClick={handleSettingsClick}><MenuIcon /></IconButton>
         <AppBarOptionsIcon appPage={appBarOpts.appPage} />
       </Grid>
+      {
+        appBarOpts.hasContextRow ? <Grid gridRow={1}>
+            <IconButton sx={{ float: "right" }}><CloseIcon /></IconButton>
+          </Grid> : isDocEditModeVal ? <Grid gridRow={1}>
+            <IconButton sx={{ float: "left" }}><ArrowBackIcon /></IconButton>
+            <IconButton sx={{ float: "left" }}><ArrowForwardIcon /></IconButton>
+            <IconButton sx={{ float: "left" }}><UndoIcon /></IconButton>
+            <IconButton sx={{ float: "left" }}><RedoIcon /></IconButton>
+          </Grid> : <Grid gridRow={1}>
+            <IconButton sx={{ float: "left" }}><NorthWestIcon /></IconButton>
+            <IconButton sx={{ float: "left" }}><SouthEastIcon /></IconButton>
+            <IconButton sx={{ float: "left" }}><ArrowBackIcon /></IconButton>
+            <IconButton sx={{ float: "left" }}><ArrowForwardIcon /></IconButton>
+          </Grid>
+      }
       <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData)].join(" ")}
           open={settingsMenuOpen}
           onClose={handleSettingsMenuClose}

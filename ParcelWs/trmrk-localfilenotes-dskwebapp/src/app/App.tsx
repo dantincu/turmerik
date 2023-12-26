@@ -59,9 +59,8 @@ const App = () => {
     isCompactMode: localStorage.getItem(localStorageKeys.appIsCompactMode) !== jsonBool.false,
     baseLocation: trmrk.url.getBaseLocation(),
     htmlDocTitle: "Turmerik Local File Notes",
-    appTitle: "Turmerik Local File Notes",
     appBarOpts: {},
-    floatingAppBarHeightEm: 1,
+    floatingAppBarHeightEm: 2,
     updateFloatingBarTopOffset: true
   } as AppData;
 

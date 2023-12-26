@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { reducer, actions, AppData, AppBarOpts } from "./appData";
+import { reducer, actions, AppData, AppBarOpts, AppPage } from "./appData";
 import { AppConfigData } from "trmrk/src/notes-app-config";
 import { localStorageKeys, jsonBool, getJsonBool } from "./utils";
 import { updateHtmlDocTitle } from "../services/htmlDoc/htmlDocTitle";
@@ -80,3 +80,17 @@ export const updateAppTitle = (
 
 export const getAppThemeCssClassName = (appData: AppData) =>
   appData.isDarkMode ? "trmrk-theme-dark" : "trmrk-theme-light";
+
+export const isDocEditMode = (appData: AppData) => {
+  const appPage = appData.appBarOpts.appPage;
+  let retVal = false;
+
+  switch (appPage) {
+    case AppPage.EditNoteItem:
+    case AppPage.EditTextFile:
+      retVal = true;
+      break;
+  }
+
+  return retVal;
+};

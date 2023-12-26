@@ -78,7 +78,7 @@ const MainEl = ({
   return (
     <BrowserRouter>
       <Paper className={["trmrk-app", appThemeClassName, appModeClassName].join(" ")}>
-        <div className={["trmrk-app-nav-bar", `trmrk-heigh-x${appData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
+        <div className={["trmrk-app-nav-bar", `trmrk-height-x${appData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
           <MainAppBar args={args} />
         </div>
         <div className="trmrk-app-main" ref={appBodyEl}>

@@ -20,6 +20,7 @@ export interface AppBarOpts {
   appBarCssClass: string;
   resxIconCssClass: string;
   appPage: AppPage;
+  hasContextRow: boolean;
 }
 
 export interface AppData {
