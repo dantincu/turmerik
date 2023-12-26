@@ -21,7 +21,9 @@ export default function ToggleDarkModeBtn() {
     const switchToDarkMode = !appData.isDarkMode;
     appData.setIsDarkMode(switchToDarkMode);
 
-    appBarData.setAppThemeMenuIsOpen(false);
+    if (appBarData.setAppThemeMenuIsOpen) {
+      appBarData.setAppThemeMenuIsOpen(false);
+    }
   };
 
   return (

@@ -6,10 +6,8 @@ import Box from "@mui/system/Box";
 import AppBar from "@mui/material/AppBar";
 import Grid from "@mui/material/Grid";
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from '@mui/icons-material/Menu';
-import HomeIcon from '@mui/icons-material/Home';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import './styles.scss';
 import trmrkLogo from "../../assets/Icon-32x30-nobg.png";
@@ -41,7 +39,7 @@ export default function LoadingAppBar ({
         </IconButton>
         <Typography variantMapping={{"h6": "label"}} variant="h6" sx={{ position: "relative", top: "0.2em" }}>Turmerik Local File Notes</Typography>
         <IconButton sx={{ color: "#FFF", width: "2em", float: "right" }}
-            onClick={handleClick}><MenuIcon /></IconButton>
+            onClick={handleClick}><MoreVertIcon /></IconButton>
       </Grid>
     </Grid>
     <Menu 
@@ -49,7 +47,7 @@ export default function LoadingAppBar ({
         onClose={handleClose}
         onClick={handleClose}
         anchorEl={anchorEl}>
-      <ToggleDarkModeBtn setAnchorEl={el => setAnchorEl(el)} />
+      <ToggleDarkModeBtn />
     </Menu>
   </AppBar>);
 }
