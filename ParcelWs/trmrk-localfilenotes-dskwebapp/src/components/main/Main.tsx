@@ -24,13 +24,30 @@ import AudioViewerPage from "../../pages/audioViewerPage/AudioViewerPage";
 import FileDownloaderPage from "../../pages/fileDownloaderPage/FileDownloaderPage";
 
 import NotFoundPage from "../../pages/notFoundPage/NotFoundPage";
-import { AppDataContext, AppBarDataContext, getAppThemeCssClassName } from "../../app/AppContext";
+import { AppBarData, appBarCtxReducer } from "../../app/appData";
+import { AppDataContext, AppBarDataContext, createAppBarContext, getAppThemeCssClassName } from "../../app/AppContext";
 import { appRoutes } from "../../app/routes";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "./floatingBarTopOffsetUpdater";
 
 const MainEl = () => {
+  const appBarInitialState = {
+    appBarOpts: {},
+    floatingAppBarHeightEm: 2,
+    updateFloatingBarTopOffset: true,
+    appSettingsMenuOpts: {
+      isOpen: false,
+      appThemeMenuOpts: {
+        isOpen: false
+      }
+    },
+    appOptionsMenuOpts: {
+      isOpen: false
+    }
+  } as AppBarData;
+
   const appData = React.useContext(AppDataContext);
-  const appBarData = React.useContext(AppBarDataContext);
+  const [ appBarState, appBarStateDispatch ] = React.useReducer(appBarCtxReducer, appBarInitialState);
+  const appBarData = createAppBarContext(appBarState, appBarStateDispatch);
 
   const appThemeClassName = getAppThemeCssClassName(appData);
   const appModeClassName = appData.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
@@ -72,33 +89,35 @@ const MainEl = () => {
 
   return (
     <BrowserRouter>
-      <Paper className={["trmrk-app", appThemeClassName, appModeClassName].join(" ")}>
-        <div className={["trmrk-app-nav-bar", `trmrk-height-x${appBarData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
-          <MainAppBar />
-        </div>
-        <div className="trmrk-app-main" ref={appBodyEl}>
-          <Routes>
-            <Route path="" element={<Navigate to="/home" />} />
-            <Route path="/" element={<Navigate to="/home" />} />
-            <Route path={appRoutes.home} Component={HomePage} />
-            <Route path={appRoutes.filesRoot} Component={FilesHcyPage} />
-            <Route path={appRoutes.notesRoot} Component={NotesHcyPage} />
-            <Route path={appRoutes.files} Component={FilesHcyPage} />
-            <Route path={appRoutes.notes} Component={NotesHcyPage}  />
-            <Route path={appRoutes.noteFiles} Component={NoteFilesHcy}  />
-            <Route path={appRoutes.pics} Component={PicturesExplorerPage}  />
-            <Route path={appRoutes.viewTextFile} Component={TextFileViewerPage} />
-            <Route path={appRoutes.editTextFile} Component={TextFileEditorPage} />
-            <Route path={appRoutes.viewNote} Component={NoteViewerPage} />
-            <Route path={appRoutes.editNote} Component={NoteEditorPage} />
-            <Route path={appRoutes.viewPicture} Component={PictureViewerPage} />
-            <Route path={appRoutes.viewVideo} Component={VideoViewerPage} />
-            <Route path={appRoutes.viewAudio} Component={AudioViewerPage} />
-            <Route path={appRoutes.downloadFile} Component={FileDownloaderPage} />
-            <Route path="*" Component={NotFoundPage} />
-          </Routes>
-        </div>
-      </Paper>
+      <AppBarDataContext.Provider value={appBarData}>
+        <Paper className={["trmrk-app", appThemeClassName, appModeClassName].join(" ")}>
+          <div className={["trmrk-app-nav-bar", `trmrk-height-x${appBarData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
+            <MainAppBar />
+          </div>
+          <div className="trmrk-app-main" ref={appBodyEl}>
+            <Routes>
+              <Route path="" element={<Navigate to="/home" />} />
+              <Route path="/" element={<Navigate to="/home" />} />
+              <Route path={appRoutes.home} Component={HomePage} />
+              <Route path={appRoutes.filesRoot} Component={FilesHcyPage} />
+              <Route path={appRoutes.notesRoot} Component={NotesHcyPage} />
+              <Route path={appRoutes.files} Component={FilesHcyPage} />
+              <Route path={appRoutes.notes} Component={NotesHcyPage}  />
+              <Route path={appRoutes.noteFiles} Component={NoteFilesHcy}  />
+              <Route path={appRoutes.pics} Component={PicturesExplorerPage}  />
+              <Route path={appRoutes.viewTextFile} Component={TextFileViewerPage} />
+              <Route path={appRoutes.editTextFile} Component={TextFileEditorPage} />
+              <Route path={appRoutes.viewNote} Component={NoteViewerPage} />
+              <Route path={appRoutes.editNote} Component={NoteEditorPage} />
+              <Route path={appRoutes.viewPicture} Component={PictureViewerPage} />
+              <Route path={appRoutes.viewVideo} Component={VideoViewerPage} />
+              <Route path={appRoutes.viewAudio} Component={AudioViewerPage} />
+              <Route path={appRoutes.downloadFile} Component={FileDownloaderPage} />
+              <Route path="*" Component={NotFoundPage} />
+            </Routes>
+          </div>
+        </Paper>
+      </AppBarDataContext.Provider>
     </BrowserRouter>);
 }
 
