@@ -7,7 +7,13 @@ import '../styles/index.scss';
 import { cachedApiSvc } from "../services/settings/api/apiService"; 
 import App from './App';
 
-export const createApp = (
+const appConfigData: ApiConfigData = {
+  apiHost: process.env.API_HOST!,
+  apiRelUriBase: process.env.API_REL_URI_BASE!,
+  clientVersion: parseFloat(process.env.CLIENT_VERSION!)
+}
+
+const createApp = (
   apiConfig: ApiConfigData) => {
   cachedApiSvc.init({
     data: apiConfig,
@@ -18,3 +24,4 @@ export const createApp = (
   root.render(<App />);
 }
 
+createApp(appConfigData);

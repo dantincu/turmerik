@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
-import { AppBarArgs } from "./AppBarArgs";
+import { AppDataContext, AppBarDataContext } from "../../app/AppContext";
 
 import './styles.scss';
 
@@ -13,22 +13,20 @@ const ColorThemeLabel = styled.span`
   padding-right: 1em
 `;
 
-export default function ToggleDarkModeBtn({
-  args,
-  setAnchorEl
-}: {
-  args: AppBarArgs,
-  setAnchorEl: (anchorEl: HTMLElement | null) => void,
-}) {
+export default function ToggleDarkModeBtn() {
+  const appData = React.useContext(AppDataContext);
+  const appBarData = React.useContext(AppBarDataContext);
+  
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-    const switchToDarkMode = !args.appTheme.isDark;
-    args.darkModeToggled(switchToDarkMode);
+    const switchToDarkMode = !appData.isDarkMode;
+    appData.setIsDarkMode(switchToDarkMode);
+
+    appBarData.setAppThemeMenuIsOpen(false);
   };
 
   return (
     <MenuItem onClick={handleClick} className="trmrk-app-theme-mode-menu-item">
-      <ColorThemeLabel>{ args.appTheme.isDark ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
-      { args.appTheme.isDark ? <LightModeIcon /> : <DarkModeIcon /> }
+      <ColorThemeLabel>{ appData.isDarkMode ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
+      { appData.isDarkMode ? <LightModeIcon /> : <DarkModeIcon /> }
     </MenuItem>);
 }

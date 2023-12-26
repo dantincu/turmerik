@@ -24,16 +24,13 @@ import AudioViewerPage from "../../pages/audioViewerPage/AudioViewerPage";
 import FileDownloaderPage from "../../pages/fileDownloaderPage/FileDownloaderPage";
 
 import NotFoundPage from "../../pages/notFoundPage/NotFoundPage";
-import { AppDataContext, getAppThemeCssClassName } from "../../app/AppContext";
+import { AppDataContext, AppBarDataContext, getAppThemeCssClassName } from "../../app/AppContext";
 import { appRoutes } from "../../app/routes";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "./floatingBarTopOffsetUpdater";
 
-const MainEl = ({
-  args
-}: {
-  args: AppBarArgs
-}) => {
+const MainEl = () => {
   const appData = React.useContext(AppDataContext);
+  const appBarData = React.useContext(AppBarDataContext);
 
   const appThemeClassName = getAppThemeCssClassName(appData);
   const appModeClassName = appData.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
@@ -56,20 +53,18 @@ const MainEl = ({
   }
 
   useEffect(() => {
-    console.log("add listeners");
     const bodyEl = appBodyEl.current!;
     offset.lastBodyScrollTop = 0;
 
     bodyEl.addEventListener("scroll", onUserScroll);
     window.addEventListener("resize", onUserScroll);
 
-    if (appData.updateFloatingBarTopOffset) {
+    if (appBarData.updateFloatingBarTopOffset) {
       onUpdateFloatingBarTopOffset();
-      appData.setUpdateFloatingBarTopOffset(false);
+      appBarData.setUpdateFloatingBarTopOffset(false);
     }
 
     return () => {
-      console.log("remove listeners");
       bodyEl.removeEventListener("scroll", onUserScroll);
       window.removeEventListener("resize", onUserScroll);
     };
@@ -78,8 +73,8 @@ const MainEl = ({
   return (
     <BrowserRouter>
       <Paper className={["trmrk-app", appThemeClassName, appModeClassName].join(" ")}>
-        <div className={["trmrk-app-nav-bar", `trmrk-height-x${appData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
-          <MainAppBar args={args} />
+        <div className={["trmrk-app-nav-bar", `trmrk-height-x${appBarData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
+          <MainAppBar />
         </div>
         <div className="trmrk-app-main" ref={appBodyEl}>
           <Routes>

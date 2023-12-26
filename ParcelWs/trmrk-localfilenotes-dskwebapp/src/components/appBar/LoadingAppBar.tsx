@@ -49,7 +49,7 @@ export default function LoadingAppBar ({
         onClose={handleClose}
         onClick={handleClose}
         anchorEl={anchorEl}>
-      <ToggleDarkModeBtn args={args} setAnchorEl={el => setAnchorEl(el)} />
+      <ToggleDarkModeBtn setAnchorEl={el => setAnchorEl(el)} />
     </Menu>
   </AppBar>);
 }

@@ -4,8 +4,6 @@ import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-import './styles.scss';
-
 import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 

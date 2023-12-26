@@ -8,7 +8,7 @@ import { core as trmrk } from "trmrk";
 
 import './styles.scss';
 
-import { reducer, actions, AppData } from "../../app/appData";
+import { appCtxReducer, appCtxActions, AppData } from "../../app/appData";
 import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
 

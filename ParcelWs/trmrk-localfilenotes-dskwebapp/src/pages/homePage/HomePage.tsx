@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 
 import './styles.scss';
 
-import { reducer, actions, AppData } from "../../app/appData";
+import { appCtxReducer, appCtxActions, AppData } from "../../app/appData";
 import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 
 const HomePage = () => {

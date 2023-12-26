@@ -18,7 +18,7 @@ import ApiError from "../components/apiError/ApiError";
 import { localStorageKeys, jsonBool } from "./utils";
 import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppConfigData } from "trmrk/src/notes-app-config"; 
-import { reducer, AppData } from "./appData";
+import { appCtxReducer, AppData } from "./appData";
 import { cacheKeys } from "./localForage";
 
 import MainEl from "../components/main/Main";
@@ -51,39 +51,29 @@ const AppEl = ({
 }: {
   args: AppBarArgs
 }) => args.resp ? args.resp.isSuccessStatus ?
-  <MainEl args={args} /> : <LoadErrorEl args={args} /> : <LoadingEl args={args} />;
+  <MainEl /> : <LoadErrorEl args={args} /> : <LoadingEl args={args} />;
 
 const App = () => {
-  const initialState = {
+  const appInitialState = {
     isDarkMode: localStorage.getItem(localStorageKeys.appThemeIsDarkMode) === jsonBool.true,
     isCompactMode: localStorage.getItem(localStorageKeys.appIsCompactMode) !== jsonBool.false,
     baseLocation: trmrk.url.getBaseLocation(),
     htmlDocTitle: "Turmerik Local File Notes",
-    appBarOpts: {},
-    floatingAppBarHeightEm: 2,
-    updateFloatingBarTopOffset: true
   } as AppData;
 
-  const [ state, dispatch ] = React.useReducer(reducer, initialState);
+  const [ appState, appStateDispatch ] = React.useReducer(appCtxReducer, appInitialState);
+
   const [ isLoading, setIsLoading ] = useState(false);
   const [ appSettingsResp, setAppSettingsResp ] = useState(null as ApiResponse<AppConfigData> | null);
 
-  const appContext = createAppContext(state, dispatch)
+  const appContext = createAppContext(appState, appStateDispatch);
 
   const appTheme = getAppTheme({
-    isDarkMode: state.isDarkMode
+    isDarkMode: appState.isDarkMode
   });
 
   const appArgs = {
-    appTheme: appTheme,
-    isCompactMode: state.isCompactMode,
     resp: appSettingsResp,
-    darkModeToggled: (isDarkMode) => {
-      appContext.setIsDarkMode(isDarkMode);
-    },
-    appModeToggled: (isCompactMode) => {
-      appContext.setIsCompactMode(isCompactMode);
-    },
   } as AppBarArgs;
 
   useEffect(() => {
