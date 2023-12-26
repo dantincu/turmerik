@@ -29,7 +29,12 @@ export default function FilesHcyPageBar() {
   }
 
   const addressValidator = (newAddress: string) => {
-    let errMsg = validateRootedPath(appData.appConfig, newAddress);
+    let errMsg: string | null = null;
+
+    if (trmrk.isNonEmptyStr(newAddress)) {
+      errMsg = validateRootedPath(appData.appConfig, newAddress);
+    }
+
     return errMsg;
   };
 
