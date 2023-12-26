@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 
 import { AppDataContext, getAppThemeCssClassName, AppBarDataContext } from "../../app/AppContext";
 import AppThemeMenu from "./AppThemeMenu";
+import { getAppTheme } from "../../services/app-theme/app-theme";
 
 export default function AppSettingsMenu({
     menuAnchorEl
@@ -18,6 +19,10 @@ export default function AppSettingsMenu({
   }) {
   const appData = React.useContext(AppDataContext);
   const appBarData = React.useContext(AppBarDataContext);
+
+  const appTheme = getAppTheme({
+    isDarkMode: appData.isDarkMode
+  });
 
   const [ appThemeMenuIconBtnEl, setAppThemeMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
 
@@ -36,8 +41,9 @@ export default function AppSettingsMenu({
       onClose={handleSettingsMenuClose}
       anchorEl={menuAnchorEl}>
       <MenuList dense>
-        <MenuItem onClick={handleAppThemeClick}>App Theme <IconButton sx={{ float: "right" }}>
-          <ArrowRightIcon /></IconButton></MenuItem>
+        <MenuItem onClick={handleAppThemeClick}>App Theme
+          <IconButton><ArrowRightIcon /></IconButton>
+        </MenuItem>
       </MenuList>
     </Menu>
     <AppThemeMenu menuAnchorEl={appThemeMenuIconBtnEl!} />

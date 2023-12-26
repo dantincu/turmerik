@@ -3,7 +3,7 @@ import React from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import ArrowRightIcon from '@mui/icons-material/ArrowRightOutlined';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeftOutlined';
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
 import IconButton from "@mui/material/IconButton";
@@ -20,8 +20,12 @@ export default function AppThemeMenu({
   const appBarData = React.useContext(AppBarDataContext);
 
   const handleAppThemeMenuClose = () => {
-    appBarData.setAppThemeMenuIsOpen(false);
+    appBarData.setAppSettingsMenuIsOpen(false);
   };
+
+  const handleCloseAppThemeMenuClick = () => {
+    appBarData.setAppThemeMenuIsOpen(false);
+  }
 
   return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appData)].join(" ")}
         open={appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen}
@@ -30,7 +34,7 @@ export default function AppThemeMenu({
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         anchorPosition={ { top: 0, left: 100 } }>
       <MenuList dense>
-        <ToggleAppModeBtn />
+        <IconButton sx={{ float: "left" }} onClick={handleCloseAppThemeMenuClick}><ArrowLeftIcon /></IconButton><ToggleAppModeBtn />
         <ToggleDarkModeBtn />
       </MenuList>
     </Menu>);
