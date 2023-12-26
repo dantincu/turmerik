@@ -1,44 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-import { core as trmrk } from "trmrk";
-
+import { AppPage } from "../../app/appData";
+import { AppDataContext, AppBarDataContext, updateAppTitle } from "../../app/AppContext";
 import './styles.scss';
 
-import { appCtxReducer, appCtxActions, AppData } from "../../app/appData";
-import { AppDataContext, updateAppTitle } from "../../app/AppContext";
-import NotFound from "../../components/notFound/NotFound";
-import FilesHcy from "../../components/filesHcy/FilesHcy";
-import AddressBar from "../../components/addressBar/AddressBar";
-import { validateRootedPath } from "../../services/notes/notePath";
+export const appPage = AppPage.FilesHcy;
 
 const FilesHcyPage = () => {
   const { idnf } = useParams();
   const appData = React.useContext(AppDataContext);
   
-  useEffect(() => {
+  const appBarData = React.useContext(AppBarDataContext);
+  const appBarOpts = appBarData.appBarOpts;
+
+  React.useEffect(() => {
     updateAppTitle(appData, idnf);
-  }, []);
 
-  if (trmrk.isNonEmptyStr(idnf, true)) { 
-    
-  }
-
-  const onAddressChanged = (newAddress: string) => {
-
-  }
-
-  const addressValidator = (newAddress: string) => {
-    let errMsg = validateRootedPath(appData.appConfig, newAddress);
-    return errMsg;
-  };
+    if (appBarOpts.appPage !== appPage) {
+      appBarData.setAppPage(appPage);
+    }
+  }, [])
 
   return (<Container className="trmrk-files-hcy-page" sx={{ position: "relative" }} maxWidth="xl">
-    <AddressBar label="File Path" address={idnf ?? ""} onAddressChanged={onAddressChanged} addressValidator={addressValidator}
-      className="trmrk-main-address-bar" />
   </Container>);
 }
 

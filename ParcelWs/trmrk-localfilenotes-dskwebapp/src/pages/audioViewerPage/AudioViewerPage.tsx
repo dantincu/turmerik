@@ -8,15 +8,26 @@ import { core as trmrk } from "trmrk";
 
 import './styles.scss';
 
-import { AppDataContext, updateAppTitle } from "../../app/AppContext";
+import { AppPage } from "../../app/appData";
+import { AppDataContext, AppBarDataContext, updateAppTitle } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
+
+export const appPage = AppPage.ViewAudioFile;
 
 const AudioViewerPage = () => {
   const { idnf } = useParams();
   const appData = React.useContext(AppDataContext);
+
+  const appBarData = React.useContext(AppBarDataContext);
+  const appBarOpts = appBarData.appBarOpts;
   
   useEffect(() => {
-    updateAppTitle(appData, idnf);
+  updateAppTitle(appData, idnf);
+
+  if (appBarOpts.appPage !== appPage) {
+    appBarData.setAppPage(appPage);
+  }
+    
   }, []);
 
   if (trmrk.isNonEmptyStr(idnf, true)) { 

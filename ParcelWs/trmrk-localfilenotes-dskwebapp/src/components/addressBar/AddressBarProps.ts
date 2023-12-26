@@ -1,5 +1,4 @@
 export interface AddressBarProps {
-  label: string;
   address: string;
   isEditMode?: boolean | null | undefined;
   isEditable?: boolean | null | undefined;

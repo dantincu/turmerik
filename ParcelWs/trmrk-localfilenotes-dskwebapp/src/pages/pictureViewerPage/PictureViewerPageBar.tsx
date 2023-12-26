@@ -6,5 +6,5 @@ import { AppBarData, appBarCtxReducer, AppPage } from "../../app/appData";
 import { AppBarDataContext, isDocEditMode, createAppBarContext } from "../../app/AppContext";
 
 export default function PictureViewerPageBar() {
-  return (<Grid gridRow={1}  className="trmrk-app-page-bar trmrk-picture-viewer-page-bar"></Grid>)
+  return (<div className="trmrk-app-page-bar trmrk-picture-viewer-page-bar"></div>)
 }

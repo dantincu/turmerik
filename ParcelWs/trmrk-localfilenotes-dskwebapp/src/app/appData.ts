@@ -55,11 +55,11 @@ export interface AppBarData {
   appSettingsMenuOpts: AppSettingsMenuOpts;
   appOptionsMenuOpts: AppOptionsMenuOpts;
   setAppBarOpts: (appBar: AppBarOpts) => void;
+  setAppPage: (appPage: AppPage) => void;
   setFloatingAppBarHeightEm: (floatingAppBarHeightEm: number) => void;
   setUpdateFloatingBarTopOffset: (updateFloatingBarTopOffset: boolean) => void;
   setAppSettingsMenuOpts: (appSettingsMenuOpts: AppSettingsMenuOpts) => void;
   setAppOptionsMenuOpts: (appOptionsMenuOpts: AppOptionsMenuOpts) => void;
-
   setAppSettingsMenuIsOpen: (isOpen: boolean) => void;
   setAppThemeMenuIsOpen: (isOpen: boolean) => void;
   setAppOptionsMenuIsOpen: (isOpen: boolean) => void;
@@ -74,11 +74,11 @@ export const appCtxActions = Object.freeze({
 
 export const appBarCtxActions = Object.freeze({
   SET_APP_BAR_OPTS: "SET_APP_BAR_OPTS",
+  SET_APP_PAGE: "SET_APP_PAGE",
   SET_FLOATING_BAR_TOP_HEIGHT_EM: "SET_FLOATING_BAR_TOP_HEIGHT_EM",
   SET_UPDATE_FLOATING_BAR_TOP_OFFSET: "UPDATE_FLOATING_BAR_TOP_OFFSET",
   SET_APP_SETTINGS_MENU_OPTS: "SET_APP_SETTINGS_MENU_OPTS",
   SET_APP_OPTIONS_MENU_OPTS: "SET_APP_OPTIONS_MENU_OPTS",
-
   SET_APP_SETTINGS_MENU_IS_OPEN: "SET_APP_SETTINGS_MENU_IS_OPEN",
   SET_APP_THEME_MENU_IS_OPEN: "SET_APP_THEME_MENU_IS_OPEN",
   SET_APP_OPTIONS_MENU_IS_OPEN: "SET_APP_OPTIONS_MENU_IS_OPEN",
@@ -160,6 +160,12 @@ export const appBarCtxReducer = (
   switch (action.type) {
     case appBarCtxActions.SET_APP_BAR_OPTS:
       retState.appBarOpts = action.payload;
+      break;
+    case appBarCtxActions.SET_APP_PAGE:
+      retState.appBarOpts = {
+        ...retState.appBarOpts,
+        appPage: action.payload,
+      };
       break;
     case appBarCtxActions.SET_FLOATING_BAR_TOP_HEIGHT_EM:
       retState.floatingAppBarHeightEm = action.payload;

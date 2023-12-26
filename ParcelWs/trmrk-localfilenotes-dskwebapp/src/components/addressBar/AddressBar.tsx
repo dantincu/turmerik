@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import Paper from "@mui/material/Paper";
 import Popper from '@mui/material/Popper';
 import Box from '@mui/material/Box';
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import CancelIcon from '@mui/icons-material/Cancel';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -15,11 +13,13 @@ import { AddressBarProps } from "./AddressBarProps";
 
 const EditableAddressBar = ({
     address,
+    className,
     addressValidator,
     onAddressChanged,
     onEditCanceled
   }: {
     address: string,
+    className: string,
     addressValidator: (newAddress: string) => string | null,
     onAddressChanged: (newAddress: string) => void,
     onEditCanceled: () => void
@@ -68,8 +68,8 @@ const EditableAddressBar = ({
     textInput.current?.select();
   }, []);
 
-  return (<div className="trmrk-edtbl">
-      <IconButton onClick={onEditCanceled}><CancelIcon /></IconButton>
+  return (<div className={["trmrk-address-bar", "trmrk-edtbl", className].join(" ")}>
+      <IconButton onClick={onEditCanceled} sx={{ position: "absolute", left: "0em", top: "-0.4em" }}><CancelIcon /></IconButton>
       <Popper
         open={hasError}
         anchorEl={textInput.current}
@@ -77,16 +77,18 @@ const EditableAddressBar = ({
         <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper', color: "red" }}>{validationErr}</Box>
       </Popper>
       <input type="text" value={editedAddress} onChange={onTextChanged} ref={textInput} onKeyUp={onKeyUp} />
-      <IconButton onClick={onClearText}><ClearIcon /></IconButton>
-      <IconButton onClick={onSubmit} disabled={hasError}><SubmitIcon /></IconButton>
+      <IconButton onClick={onClearText} sx={{ position: "absolute", left: "1.5em", top: "-0.4em" }}><ClearIcon /></IconButton>
+      <IconButton onClick={onSubmit} disabled={hasError} sx={{ position: "absolute", right: "0px", top: "-0.4em" }}><SubmitIcon /></IconButton>
     </div>);
 }
 
 const ReadonlyAddressBar = ({
     address,
+    className,
     onEditRequested
   }: {
     address: string,
+    className: string,
     onEditRequested: () => void
   }) => {
 
@@ -97,7 +99,8 @@ const ReadonlyAddressBar = ({
         break;
     }
   }
-  return (<div className="trmrk-rdnl"><input type="text" onClick={onEditRequested} value={address} readOnly={true} onKeyUp={onKeyUp} /></div>);
+  return (<div className={["trmrk-address-bar", "trmrk-rdnl", className].join(" ")}>
+    <input type="text" onClick={onEditRequested} value={address} readOnly={true} onKeyUp={onKeyUp} /></div>);
 }
 
 export default function AddressBar (props: AddressBarProps) {
@@ -120,17 +123,17 @@ export default function AddressBar (props: AddressBarProps) {
     props.onAddressChanged(newAddress);
   }
 
-  return (
-    <div className={["trmrk-address-bar", props.className].join(" ")}>
-      <label>{props.label}</label> {
-      isEditMode ?
-        <EditableAddressBar
-          address={address}
-          addressValidator={props.addressValidator}
-          onAddressChanged={onAddressChanged}
-          onEditCanceled={onEditCanceled} /> : 
-        <ReadonlyAddressBar
-          address={address}
-          onEditRequested={onEditRequested} />
-      } </div>);
+  if (isEditMode) {
+    return (<EditableAddressBar
+      address={address}
+      className={props.className}
+      addressValidator={props.addressValidator}
+      onAddressChanged={onAddressChanged}
+      onEditCanceled={onEditCanceled} />);
+  } else {
+    return (<ReadonlyAddressBar
+      address={address}
+      className={props.className}
+      onEditRequested={onEditRequested} />);
+  }
 };

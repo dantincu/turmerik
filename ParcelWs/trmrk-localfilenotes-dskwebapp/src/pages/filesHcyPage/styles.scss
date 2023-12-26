@@ -5,8 +5,28 @@
   max-width: 100%;
 }
 
-.trmrk-files-hcy-page .trmrk-main-address-bar {
-  .trmrk-rdnl, label {
-    margin-top: 0.5em;
+.trmrk-app-page-bar.trmrk-files-hcy-page-bar {
+  .trmrk-label {
+    width: 10em;
+    padding-left: 0.5em;
   }
+}
+
+.trmrk-app-page-bar.trmrk-files-hcy-page-bar {
+  padding-top: 0.5em;
+}
+
+.trmrk-app-page-bar.trmrk-files-hcy-page-bar .trmrk-address-bar.trmrk-main-address-bar {
+  display: inline-flex;
+  position: absolute;
+}
+
+.trmrk-app-page-bar.trmrk-files-hcy-page-bar .trmrk-address-bar.trmrk-main-address-bar.trmrk-rdnl {
+  left: 5.2em;
+  right: 1em;
+}
+
+.trmrk-app-page-bar.trmrk-files-hcy-page-bar .trmrk-address-bar.trmrk-main-address-bar.trmrk-edtbl {
+  left: 4.8em;
+  right: 0em;
 }

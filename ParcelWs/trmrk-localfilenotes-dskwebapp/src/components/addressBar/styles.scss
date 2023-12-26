@@ -1,1 +1,40 @@
 @import "../../styles/mixins";
+
+.trmrk-address-bar {
+  display: inline-flex;
+
+  .trmrk-label {
+    display: inline-flex;
+  }
+}
+
+.trmrk-address-bar {
+  input[type=text] {
+    position: absolute;
+    display: inline-flex;
+    cursor: pointer;
+  } 
+}
+
+.trmrk-address-bar.trmrk-rdnl {
+  input[type=text] {
+    left: 0em;
+    right: 0em;
+    border-radius: 3px;
+  }
+}
+  
+
+.trmrk-address-bar.trmrk-edtbl {
+  input[type=text] {
+    left: 6em;
+    right: 3.5em;
+  }
+}
+
+.trmrk-theme-dark .trmrk-address-bar {
+  input[type=text] {
+    background-color: #121212;
+    color: white;
+  }
+}

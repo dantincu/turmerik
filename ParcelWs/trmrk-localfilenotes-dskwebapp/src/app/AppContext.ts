@@ -70,6 +70,9 @@ export const createAppBarContext = (
     setAppBarOpts: (appBar: AppBarOpts) => {
       dispatch({ type: appBarCtxActions.SET_APP_BAR_OPTS, payload: appBar });
     },
+    setAppPage: (appPage: AppPage) => {
+      dispatch({ type: appBarCtxActions.SET_APP_PAGE, payload: appPage });
+    },
     setFloatingBarTopHeightEm: (floatingBarTopHeightEm: number) => {
       dispatch({
         type: appBarCtxActions.SET_FLOATING_BAR_TOP_HEIGHT_EM,
