@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useSelector, useDispatch } from 'react-redux'
 
 import styled from '@emotion/styled';
 import MenuItem from '@mui/material/MenuItem';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
-import { AppDataContext, AppBarDataContext } from "../../app/AppContext";
+import { setIsDarkMode, setAppThemeMenuIsOpen } from "../../store/appDataSlice";
+import { AppData } from "../../services/appData";
 
 import './styles.scss';
 
@@ -14,16 +16,13 @@ const ColorThemeLabel = styled.span`
 `;
 
 export default function ToggleDarkModeBtn() {
-  const appData = React.useContext(AppDataContext);
-  const appBarData = React.useContext(AppBarDataContext);
+  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const dispatch = useDispatch();
   
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = () => {
     const switchToDarkMode = !appData.isDarkMode;
-    appData.setIsDarkMode(switchToDarkMode);
-
-    if (appBarData.setAppThemeMenuIsOpen) {
-      appBarData.setAppThemeMenuIsOpen(false);
-    }
+    dispatch(setIsDarkMode(switchToDarkMode));
+    dispatch(setAppThemeMenuIsOpen(false));
   };
 
   return (

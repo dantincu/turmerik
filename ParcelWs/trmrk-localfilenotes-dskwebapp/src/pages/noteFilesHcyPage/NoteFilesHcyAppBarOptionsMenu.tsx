@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useSelector, useDispatch } from 'react-redux'
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -6,27 +7,31 @@ import MenuList from '@mui/material/MenuList';
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import { AppDataContext, AppBarDataContext, getAppThemeCssClassName } from "../../app/AppContext";
+import { setAppOptionsMenuIsOpen } from "../../store/appDataSlice";
+import { AppData } from "../../services/appData";
+import { getAppThemeCssClassName } from "../../services/utils";
 
 export default function NoteFilesHcyAppBarOptionsMenu({
     menuAnchorEl
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appData = React.useContext(AppDataContext);
-  const appBarData = React.useContext(AppBarDataContext);
+  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const dispatch = useDispatch();
+
+  const appBarData = appData.appBarData;
   const appOptionsMenuOpts = appBarData.appOptionsMenuOpts;
 
   const handleMenuClose = () => {
-    appBarData.setAppOptionsMenuIsOpen(false);
+    dispatch(setAppOptionsMenuIsOpen(false));
   };
 
   const handleRefreshClick = () => {
-    appBarData.setAppOptionsMenuIsOpen(false);
+    dispatch(setAppOptionsMenuIsOpen(false));
   }
 
   const handleViewOpenItemsClick = () => {
-    appBarData.setAppOptionsMenuIsOpen(false);
+    dispatch(setAppOptionsMenuIsOpen(false));
   }
 
   return (

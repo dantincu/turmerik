@@ -13,6 +13,10 @@
     line-height: 0.5em;
     height: 1.8em;
 
+    /* &::before, &:after, &:hover::before, &:hover::after {
+      content: none;
+    } */
+
     input[type=text] {
       cursor: pointer;
       padding-left: 0.5em;
@@ -27,18 +31,10 @@
     right: 0em;
   }
 }
-  
 
 .trmrk-address-bar.trmrk-edtbl {
   .trmrk-text-box {
     left: 5em;
     right: 2.8em;
-  }
-}
-
-.trmrk-theme-dark .trmrk-address-bar {
-  .trmrk-text-box {
-    background-color: #121212;
-    color: white;
   }
 }

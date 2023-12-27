@@ -43,11 +43,12 @@ export interface AppData {
   isCompactMode: boolean;
   htmlDocTitle: string;
   currentIdnf: string | null;
-  setIsDarkMode: (isDarkMode: boolean) => void;
+  appBarData: AppBarData;
+  /* setIsDarkMode: (isDarkMode: boolean) => void;
   setIsCompactMode: (isCompactMode: boolean) => void;
   setAppConfig: (appConfig: AppConfigData) => void;
   setHtmlDocTitle: (newHtmlDocTitle: string) => void;
-  setCurrentIdnf: (currentIdnf: string | null) => void;
+  setCurrentIdnf: (currentIdnf: string | null) => void; */
 }
 
 export interface AppBarData {
@@ -56,7 +57,7 @@ export interface AppBarData {
   updateFloatingBarTopOffset: boolean;
   appSettingsMenuOpts: AppSettingsMenuOpts;
   appOptionsMenuOpts: AppOptionsMenuOpts;
-  setAppBarOpts: (appBar: AppBarOpts) => void;
+  /* setAppBarOpts: (appBar: AppBarOpts) => void;
   setAppPage: (appPage: AppPage) => void;
   setFloatingAppBarHeightEm: (floatingAppBarHeightEm: number) => void;
   setUpdateFloatingBarTopOffset: (updateFloatingBarTopOffset: boolean) => void;
@@ -64,10 +65,10 @@ export interface AppBarData {
   setAppOptionsMenuOpts: (appOptionsMenuOpts: AppOptionsMenuOpts) => void;
   setAppSettingsMenuIsOpen: (isOpen: boolean) => void;
   setAppThemeMenuIsOpen: (isOpen: boolean) => void;
-  setAppOptionsMenuIsOpen: (isOpen: boolean) => void;
+  setAppOptionsMenuIsOpen: (isOpen: boolean) => void; */
 }
 
-export const appCtxActions = Object.freeze({
+/* export const appCtxActions = Object.freeze({
   SET_IS_DARK_MODE: "SET_IS_DARK_MODE",
   SET_IS_COMPACT_MODE: "SET_IS_COMPACT_MODE",
   SET_APP_CONFIG: "SET_APP_CONFIG",
@@ -196,4 +197,4 @@ export const appBarCtxReducer = (
   }
 
   return retState;
-};
+}; */

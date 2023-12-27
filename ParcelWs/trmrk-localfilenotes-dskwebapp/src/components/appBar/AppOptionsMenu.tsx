@@ -16,7 +16,7 @@ import TextFileEditorAppBarOptionsMenu from "../../pages/textFileEditorPage/Text
 import TextFileViewerAppBarOptionsMenu from "../../pages/textFileViewerPage/TextFileViewerAppBarOptionsMenu";
 import VideoViewerAppBarOptionsMenu from "../../pages/videoViewerPage/VideoViewerAppBarOptionsMenu";
 
-import { AppPage } from "../../app/appData";
+import { AppPage } from "../../services/appData";
 
 export default function AppOptionsMenu({
     appPage,

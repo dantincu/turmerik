@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector, useDispatch } from 'react-redux'
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,23 +9,26 @@ import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
 import IconButton from "@mui/material/IconButton";
 
-import { AppDataContext, getAppThemeCssClassName, AppBarDataContext } from "../../app/AppContext";
-
+import { AppData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appDataSlice";
+import { getAppThemeCssClassName } from "../../services/utils";
 
 export default function AppThemeMenu({
     menuAnchorEl
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appData = React.useContext(AppDataContext);
-  const appBarData = React.useContext(AppBarDataContext);
+  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const dispatch = useDispatch();
+
+  const appBarData = appData.appBarData;
 
   const handleAppThemeMenuClose = () => {
-    appBarData.setAppSettingsMenuIsOpen(false);
+    dispatch(setAppSettingsMenuIsOpen(false));
   };
 
   const handleCloseAppThemeMenuClick = () => {
-    appBarData.setAppThemeMenuIsOpen(false);
+    dispatch(setAppThemeMenuIsOpen(false));
   }
 
   return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appData)].join(" ")}

@@ -1,9 +1,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-
-import { ApiConfigData } from "trmrk-axios/src/core";
+import { Provider } from 'react-redux'
 
 import '../styles/index.scss';
+import appDataStore from "../store/appDataStore";
+
+import { ApiConfigData } from "trmrk-axios/src/core";
 import { cachedApiSvc } from "../services/settings/api/apiService"; 
 import App from './App';
 
@@ -21,7 +23,11 @@ const createApp = (
 
   const container = document.getElementById('app-root')!;
   const root = createRoot(container);
-  root.render(<App />);
+
+  root.render(
+    <Provider store={appDataStore}>
+      <App />
+    </Provider>);
 }
 
 createApp(appConfigData);

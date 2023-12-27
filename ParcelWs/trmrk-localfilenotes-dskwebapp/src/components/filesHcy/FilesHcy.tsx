@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 
 import { core as trmrk } from "trmrk";
 
-import { appCtxReducer, appCtxActions, AppData } from "../../app/appData";
+import { appCtxReducer, appCtxActions, AppData } from "../../services/appData";
 import { AppDataContext } from "../../app/AppContext";
 import FilesHcyTree from "./FilesHcyTree";
 

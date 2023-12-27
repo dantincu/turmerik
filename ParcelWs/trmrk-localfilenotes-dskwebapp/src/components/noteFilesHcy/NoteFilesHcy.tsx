@@ -7,13 +7,9 @@ import { core as trmrk } from "trmrk";
 
 import './styles.scss';
 
-import { appCtxReducer, appCtxActions, AppData } from "../../app/appData";
-import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../notFound/NotFound";
 
 const NoteFilesHcy = ({ noteIdnf }: { noteIdnf ?: string | null | undefined}) => {
-  const appData = React.useContext(AppDataContext);
-
   if (trmrk.isNonEmptyStr(noteIdnf, true)) { 
     (<NotFound />);
   } else {

@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
 
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import { core as trmrk } from "trmrk";
 
 import './styles.scss';
 
-import { AppPage } from "../../app/appData";
-import { AppDataContext, AppBarDataContext, updateAppTitle } from "../../app/AppContext";
+import { setCurrentIdnf, setAppPage } from "../../store/appDataSlice";
+import { AppData, AppPage } from "../../services/appData";
+import { updateAppTitle } from "../../services/utils";
+
 import NotFound from "../../components/notFound/NotFound";
 
 export const appPage = AppPage.ViewVideoFile;
 
 const VideoViewerPage = () => {
   const { idnf } = useParams();
-  const appData = React.useContext(AppDataContext);
-  const appBarData = React.useContext(AppBarDataContext);
+  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const dispatch = useDispatch();
+
+  const appBarData = appData.appBarData;
   const appBarOpts = appBarData.appBarOpts;
   
   useEffect(() => {
-    appData.setCurrentIdnf(idnf ?? null);
-    updateAppTitle(appData, idnf);
+    dispatch(setCurrentIdnf(null));
+    updateAppTitle(appData, "");
 
     if (appBarOpts.appPage !== appPage) {
-      appBarData.setAppPage(appPage);
+      dispatch(setAppPage(appPage));
     }
   }, []);
 

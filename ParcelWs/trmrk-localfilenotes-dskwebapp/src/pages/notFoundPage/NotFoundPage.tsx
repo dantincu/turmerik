@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from 'react-redux'
 
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 import NotFound from "../../components/notFound/NotFound";
+import { updateAppTitle } from "../../services/utils";
+
+import { AppData } from "../../services/appData";
 
 const NotFoundPage = () => {
-  const appData = React.useContext(AppDataContext);
+  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
 
   useEffect(() => {
     updateAppTitle(appData, "Page Not Found");

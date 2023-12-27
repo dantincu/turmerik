@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from 'react-redux'
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -6,7 +7,6 @@ import Paper from "@mui/material/Paper";
 
 import "./styles.scss";
 
-import { AppBarArgs } from "../appBar/AppBarArgs";
 import MainAppBar from "../appBar/MainAppBar";
 
 import HomePage from "../../pages/homePage/HomePage";
@@ -24,30 +24,17 @@ import AudioViewerPage from "../../pages/audioViewerPage/AudioViewerPage";
 import FileDownloaderPage from "../../pages/fileDownloaderPage/FileDownloaderPage";
 
 import NotFoundPage from "../../pages/notFoundPage/NotFoundPage";
-import { AppBarData, appBarCtxReducer } from "../../app/appData";
-import { AppDataContext, AppBarDataContext, createAppBarContext, getAppThemeCssClassName } from "../../app/AppContext";
-import { appRoutes } from "../../app/routes";
+import { AppData } from "../../services/appData";
+import { getAppThemeCssClassName } from "../../services/utils";
+import { appRoutes } from "../../services/routes";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "./floatingBarTopOffsetUpdater";
+import { setUpdateFloatingBarTopOffset } from "../../store/appDataSlice";
 
 const MainEl = () => {
-  const appBarInitialState = {
-    appBarOpts: {},
-    floatingAppBarHeightEm: 2,
-    updateFloatingBarTopOffset: true,
-    appSettingsMenuOpts: {
-      isOpen: false,
-      appThemeMenuOpts: {
-        isOpen: false
-      }
-    },
-    appOptionsMenuOpts: {
-      isOpen: false
-    }
-  } as AppBarData;
+  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const dispatch = useDispatch();
 
-  const appData = React.useContext(AppDataContext);
-  const [ appBarState, appBarStateDispatch ] = React.useReducer(appBarCtxReducer, appBarInitialState);
-  const appBarData = createAppBarContext(appBarState, appBarStateDispatch);
+  const appBarData = appData.appBarData;
 
   const appThemeClassName = getAppThemeCssClassName(appData);
   const appModeClassName = appData.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
@@ -78,7 +65,7 @@ const MainEl = () => {
 
     if (appBarData.updateFloatingBarTopOffset) {
       onUpdateFloatingBarTopOffset();
-      appBarData.setUpdateFloatingBarTopOffset(false);
+      dispatch(setUpdateFloatingBarTopOffset(false));
     }
 
     return () => {
@@ -89,7 +76,6 @@ const MainEl = () => {
 
   return (
     <BrowserRouter>
-      <AppBarDataContext.Provider value={appBarData}>
         <Paper className={["trmrk-app", appThemeClassName, appModeClassName].join(" ")}>
           <div className={["trmrk-app-nav-bar", `trmrk-height-x${appBarData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
             <MainAppBar />
@@ -117,7 +103,6 @@ const MainEl = () => {
             </Routes>
           </div>
         </Paper>
-      </AppBarDataContext.Provider>
     </BrowserRouter>);
 }
 

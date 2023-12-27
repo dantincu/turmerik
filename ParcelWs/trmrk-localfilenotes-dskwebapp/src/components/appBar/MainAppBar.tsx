@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector, useDispatch } from 'react-redux'
 
 import AppBar from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
@@ -8,14 +9,18 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './styles.scss';
 
 import AppOptionsMenu from "./AppOptionsMenu";
-import { AppBarDataContext, isDocEditMode, createAppBarContext } from "../../app/AppContext";
-
 import AppSettingsMenu from "./AppSettingsMenu";
 import AppTabsBar from "./AppTabsBar";
 import AppPageBar from "./AppPageBar";
 
+import { AppData, AppBarData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen, setAppOptionsMenuIsOpen } from "../../store/appDataSlice";
+
 export default function MainAppBar () {
-  const appBarData = React.useContext(AppBarDataContext);
+  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const dispatch = useDispatch();
+
+  const appBarData = appData.appBarData;
   const appBarOpts = appBarData.appBarOpts;
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
@@ -23,12 +28,12 @@ export default function MainAppBar () {
 
   const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
     setSettingsMenuIconBtnEl(event.currentTarget);
-    appBarData.setAppSettingsMenuIsOpen(true);
+    dispatch(setAppSettingsMenuIsOpen(true));
   };
 
   const handleOptionsClick = (event: React.MouseEvent<HTMLElement>) => {
     setOptionsMenuIconBtnEl(event.currentTarget);
-    appBarData.setAppOptionsMenuIsOpen(true);
+    dispatch(setAppOptionsMenuIsOpen(true));
   };
 
   return (<AppBar sx={{ position: "relative", height: "100%" }} className={["trmrk-app-bar", appBarOpts.appBarCssClass].join(" ")}>

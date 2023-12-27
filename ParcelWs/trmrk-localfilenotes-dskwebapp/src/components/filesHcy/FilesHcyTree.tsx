@@ -6,7 +6,7 @@ import { core as trmrk } from "trmrk";
 
 import './styles.scss';
 
-import { appCtxReducer, appCtxActions, AppData } from "../../app/appData";
+import { appCtxReducer, appCtxActions, AppData } from "../../services/appData";
 import { AppDataContext } from "../../app/AppContext";
 import NotFound from "../notFound/NotFound";
 
