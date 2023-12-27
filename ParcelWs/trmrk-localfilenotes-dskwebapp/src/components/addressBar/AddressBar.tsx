@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 import Popper from '@mui/material/Popper';
 import Box from '@mui/material/Box';
@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import CancelIcon from '@mui/icons-material/Cancel';
 import ClearIcon from '@mui/icons-material/Clear';
 import SubmitIcon from '@mui/icons-material/ArrowForwardIos';
+import Input from '@mui/material/Input';
 
 import './styles.scss';
 
@@ -37,7 +38,7 @@ const EditableAddressBar = ({
   }
 
   const hasError = typeof validationErr === "string";
-  const textInput = useRef<HTMLInputElement>(null);
+  let textInputRef = React.useRef<HTMLInputElement>();
 
   const onTextChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateText(e.target.value);
@@ -47,7 +48,7 @@ const EditableAddressBar = ({
     switch (e.key) {
       case "Enter":
         if (!hasError) {
-          onAddressChanged((e.target as HTMLInputElement).value);
+          onAddressChanged((e.target as HTMLDivElement).innerText);
         }
         break;
       case "Escape":
@@ -65,18 +66,18 @@ const EditableAddressBar = ({
   }
 
   useEffect(() => {
-    textInput.current?.select();
+    textInputRef.current?.select();
   }, []);
 
   return (<div className={["trmrk-address-bar", "trmrk-edtbl", className].join(" ")}>
       <IconButton onClick={onEditCanceled} sx={{ position: "absolute", left: "0em", top: "-0.4em" }}><CancelIcon /></IconButton>
       <Popper
         open={hasError}
-        anchorEl={textInput.current}
+        anchorEl={textInputRef.current}
       >
         <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper', color: "red" }}>{validationErr}</Box>
       </Popper>
-      <input type="text" value={editedAddress} onChange={onTextChanged} ref={textInput} onKeyUp={onKeyUp} />
+      <Input type="text" className="trmrk-text-box" value={editedAddress} onChange={onTextChanged} onKeyUp={onKeyUp} inputRef={textInputRef} />
       <IconButton onClick={onClearText} sx={{ position: "absolute", left: "1.5em", top: "-0.4em" }}><ClearIcon /></IconButton>
       <IconButton onClick={onSubmit} disabled={hasError} sx={{ position: "absolute", right: "0px", top: "-0.4em" }}><SubmitIcon /></IconButton>
     </div>);
@@ -100,7 +101,7 @@ const ReadonlyAddressBar = ({
     }
   }
   return (<div className={["trmrk-address-bar", "trmrk-rdnl", className].join(" ")}>
-    <input type="text" onClick={onEditRequested} value={address} readOnly={true} onKeyUp={onKeyUp} /></div>);
+    <Input type="text" readOnly={true} value={address} className="trmrk-text-box" onClick={onEditRequested} onKeyUp={onKeyUp} /></div>);
 }
 
 export default function AddressBar (props: AddressBarProps) {

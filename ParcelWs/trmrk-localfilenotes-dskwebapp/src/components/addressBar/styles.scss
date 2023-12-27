@@ -9,31 +9,39 @@
 }
 
 .trmrk-address-bar {
-  input[type=text] {
+  .trmrk-text-box {
     position: absolute;
-    display: inline-flex;
+    top: -0.2em;
     cursor: pointer;
+    border-radius: 5px;
+    line-height: 0.5em;
+    height: 1.8em;
+
+    input[type=text] {
+      cursor: pointer;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+    }
   } 
 }
 
 .trmrk-address-bar.trmrk-rdnl {
-  input[type=text] {
+  .trmrk-text-box {
     left: 0em;
     right: 0em;
-    border-radius: 3px;
   }
 }
   
 
 .trmrk-address-bar.trmrk-edtbl {
-  input[type=text] {
-    left: 6em;
-    right: 3.5em;
+  .trmrk-text-box {
+    left: 5em;
+    right: 2.8em;
   }
 }
 
 .trmrk-theme-dark .trmrk-address-bar {
-  input[type=text] {
+  .trmrk-text-box {
     background-color: #121212;
     color: white;
   }

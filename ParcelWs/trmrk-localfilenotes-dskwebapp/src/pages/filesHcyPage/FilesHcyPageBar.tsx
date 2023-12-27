@@ -13,8 +13,6 @@ import { validateRootedPath } from "../../services/notes/notePath";
 export default function FilesHcyPageBar() {
   const { idnf } = useParams();
   const appData = React.useContext(AppDataContext);
-  
-  console.log("address", idnf);
 
   React.useEffect(() => {
     updateAppTitle(appData, idnf);
@@ -40,6 +38,6 @@ export default function FilesHcyPageBar() {
 
   return (<div className="trmrk-app-page-bar trmrk-files-hcy-page-bar">
     <span className="trmrk-label">File Path</span>
-    <AddressBar address={idnf ?? ""} onAddressChanged={onAddressChanged} addressValidator={addressValidator}
+    <AddressBar address={idnf ?? "asdf"} onAddressChanged={onAddressChanged} addressValidator={addressValidator}
       className="trmrk-main-address-bar" /></div>)
 }
