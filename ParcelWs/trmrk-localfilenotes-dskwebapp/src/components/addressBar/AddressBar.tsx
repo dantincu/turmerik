@@ -48,7 +48,7 @@ const EditableAddressBar = ({
     switch (e.key) {
       case "Enter":
         if (!hasError) {
-          onAddressChanged((e.target as HTMLDivElement).innerText);
+          onAddressChanged((e.currentTarget).value);
         }
         break;
       case "Escape":

@@ -55,6 +55,12 @@ export const createAppContext = (
         payload: newHtmlDocTitle,
       });
     },
+    setCurrentIdnf: (currentIdnf: string | null) => {
+      dispatch({
+        type: appCtxActions.SET_CURRENT_IDNF,
+        payload: currentIdnf,
+      });
+    },
   };
 };
 

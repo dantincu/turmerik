@@ -22,11 +22,12 @@ const AudioViewerPage = () => {
   const appBarOpts = appBarData.appBarOpts;
   
   useEffect(() => {
-  updateAppTitle(appData, idnf);
+    appData.setCurrentIdnf(idnf ?? null);
+    updateAppTitle(appData, idnf);
 
-  if (appBarOpts.appPage !== appPage) {
-    appBarData.setAppPage(appPage);
-  }
+    if (appBarOpts.appPage !== appPage) {
+      appBarData.setAppPage(appPage);
+    }
     
   }, []);
 

@@ -21,6 +21,7 @@ const PicturesExplorerPage = () => {
   const appBarOpts = appBarData.appBarOpts;
   
   useEffect(() => {
+    appData.setCurrentIdnf(idnf ?? null);
     updateAppTitle(appData, idnf);
 
     if (appBarOpts.appPage !== appPage) {

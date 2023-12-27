@@ -1,8 +1,9 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from '@mui/icons-material/Menu';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import { core as trmrk } from "trmrk";
 
@@ -11,19 +12,13 @@ import { AppDataContext, updateAppTitle } from "../../app/AppContext";
 import { validateRootedPath } from "../../services/notes/notePath";
 
 export default function FilesHcyPageBar() {
-  const { idnf } = useParams();
   const appData = React.useContext(AppDataContext);
-
-  React.useEffect(() => {
-    updateAppTitle(appData, idnf);
-  }, []);
-
-  if (trmrk.isNonEmptyStr(idnf, true)) { 
-    
-  }
+  const navigate = useNavigate();
 
   const onAddressChanged = (newAddress: string) => {
-
+    console.log("newAddress", newAddress);
+    const idnf = encodeURIComponent(newAddress);
+    navigate(`files/${idnf}`);
   }
 
   const addressValidator = (newAddress: string) => {
@@ -37,7 +32,11 @@ export default function FilesHcyPageBar() {
   };
 
   return (<div className="trmrk-app-page-bar trmrk-files-hcy-page-bar">
-    <span className="trmrk-label">File Path</span>
-    <AddressBar address={idnf ?? "asdf"} onAddressChanged={onAddressChanged} addressValidator={addressValidator}
-      className="trmrk-main-address-bar" /></div>)
+      <IconButton className="trmrk-icon-button"><ArrowLeftIcon /></IconButton>
+      <IconButton className="trmrk-icon-button"><ArrowRightIcon /></IconButton>
+      <AddressBar address={appData.currentIdnf ?? ""}
+        onAddressChanged={onAddressChanged}
+        addressValidator={addressValidator}
+        className="trmrk-main-address-bar" />
+    </div>)
 }

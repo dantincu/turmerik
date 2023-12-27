@@ -42,10 +42,12 @@ export interface AppData {
   isDarkMode: boolean;
   isCompactMode: boolean;
   htmlDocTitle: string;
+  currentIdnf: string | null;
   setIsDarkMode: (isDarkMode: boolean) => void;
   setIsCompactMode: (isCompactMode: boolean) => void;
   setAppConfig: (appConfig: AppConfigData) => void;
   setHtmlDocTitle: (newHtmlDocTitle: string) => void;
+  setCurrentIdnf: (currentIdnf: string | null) => void;
 }
 
 export interface AppBarData {
@@ -70,6 +72,7 @@ export const appCtxActions = Object.freeze({
   SET_IS_COMPACT_MODE: "SET_IS_COMPACT_MODE",
   SET_APP_CONFIG: "SET_APP_CONFIG",
   SET_HTML_DOC_TITLE: "SET_HTML_DOC_TITLE",
+  SET_CURRENT_IDNF: "SET_CURRENT_IDNF",
 });
 
 export const appBarCtxActions = Object.freeze({
@@ -103,6 +106,8 @@ export const appCtxReducer = (
     case appCtxActions.SET_HTML_DOC_TITLE:
       retState.htmlDocTitle = action.payload;
       break;
+    case appCtxActions.SET_CURRENT_IDNF:
+      retState.currentIdnf = action.payload;
   }
 
   return retState;

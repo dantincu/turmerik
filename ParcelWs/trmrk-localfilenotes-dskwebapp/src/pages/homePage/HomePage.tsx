@@ -16,6 +16,7 @@ const HomePage = () => {
   const appBarOpts = appBarData.appBarOpts;
 
   useEffect(() => {
+    appData.setCurrentIdnf(null);
     updateAppTitle(appData, "");
 
     if (appBarOpts.appPage !== appPage) {

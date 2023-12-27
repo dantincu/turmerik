@@ -17,6 +17,7 @@ const FilesHcyPage = () => {
   const appBarOpts = appBarData.appBarOpts;
 
   React.useEffect(() => {
+    appData.setCurrentIdnf(idnf ?? null);
     updateAppTitle(appData, idnf);
 
     if (appBarOpts.appPage !== appPage) {
