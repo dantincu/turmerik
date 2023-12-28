@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from "react-router-dom";
 
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import { core as trmrk } from "trmrk";

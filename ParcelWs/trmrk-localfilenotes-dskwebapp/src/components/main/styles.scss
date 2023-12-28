@@ -6,10 +6,8 @@
     position: absolute;
     top: 0px;
 
-    .trmrk-app-bar {
-      .MuiGrid-root > .MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium {
-        color: white;
-      }
+    .trmrk-app-bar * {
+      color: white;
     }
   }
 

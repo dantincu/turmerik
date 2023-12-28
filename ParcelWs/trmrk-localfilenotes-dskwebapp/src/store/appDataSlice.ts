@@ -41,16 +41,16 @@ export interface AppDataReducer {
 
 const reducer = {
   setIsDarkMode: (state, action) => {
-    state.isDarkMode = action.payload;
+    state.appPages.isDarkMode = action.payload;
   },
   setIsCompactMode: (state, action) => {
-    state.isCompactMode = action.payload;
+    state.appPages.isCompactMode = action.payload;
   },
   setAppConfig: (state, action) => {
     state.appConfig = action.payload;
   },
   setCurrentIdnf: (state, action) => {
-    state.currentIdnf = action.payload;
+    state.appPages.currentIdnf = action.payload;
   },
   setAppBarOpts: (state, action) => {
     state.appBarData.appBarOpts = action.payload;
@@ -86,14 +86,15 @@ const reducer = {
 const appDataSlice = createSlice({
   name: "appData",
   initialState: {
-    isDarkMode:
-      localStorage.getItem(localStorageKeys.appThemeIsDarkMode) ===
-      jsonBool.true,
-    isCompactMode:
-      localStorage.getItem(localStorageKeys.appIsCompactMode) !==
-      jsonBool.false,
     baseLocation: trmrk.url.getBaseLocation(),
-    htmlDocTitle: "Turmerik Local File Notes",
+    appPages: {
+      isDarkMode:
+        localStorage.getItem(localStorageKeys.appThemeIsDarkMode) ===
+        jsonBool.true,
+      isCompactMode:
+        localStorage.getItem(localStorageKeys.appIsCompactMode) !==
+        jsonBool.false,
+    },
     appBarData: {
       appBarOpts: {},
       floatingAppBarHeightEm: 2,

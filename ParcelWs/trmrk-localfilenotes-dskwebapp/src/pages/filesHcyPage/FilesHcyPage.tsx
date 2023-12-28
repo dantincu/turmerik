@@ -20,15 +20,10 @@ const FilesHcyPage = () => {
   const appBarData = appData.appBarData;
   const appBarOpts = appBarData.appBarOpts;
 
-  const currentIdnf = appData.currentIdnf ?? "";
-
-  console.log("idnf", idnf, appData.currentIdnf);
+  const currentIdnf = appData.appPages.currentIdnf ?? "";
 
   React.useEffect(() => {
-    console.log("PAGE EFFECT");
-
-    if (appData.currentIdnf !== currentIdnf) {
-      console.log("setting current idnf");
+    if (appData.appPages.currentIdnf !== currentIdnf) {
       dispatch(setCurrentIdnf(currentIdnf));
     }
     

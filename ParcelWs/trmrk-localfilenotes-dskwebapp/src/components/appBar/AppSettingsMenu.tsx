@@ -22,11 +22,6 @@ export default function AppSettingsMenu({
   const dispatch = useDispatch();
 
   const appBarData = appData.appBarData;
-  const appBarOpts = appBarData.appBarOpts;
-
-  const appTheme = getAppTheme({
-    isDarkMode: appData.isDarkMode
-  });
 
   const [ appThemeMenuIconBtnEl, setAppThemeMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
 

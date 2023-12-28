@@ -37,7 +37,8 @@ const MainEl = () => {
   const appBarData = appData.appBarData;
 
   const appThemeClassName = getAppThemeCssClassName(appData);
-  const appModeClassName = appData.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
+  console.log("appThemeClassName", appThemeClassName);
+  const appModeClassName = appData.appPages.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
   
   const appHeaderEl = useRef<HTMLDivElement>(null);
   const appBodyEl = useRef<HTMLDivElement>(null);

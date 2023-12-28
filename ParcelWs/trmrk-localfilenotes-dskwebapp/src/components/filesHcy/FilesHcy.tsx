@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import Typography from "@mui/material/Typography";
-
 import { core as trmrk } from "trmrk";
-
-import { appCtxReducer, appCtxActions, AppData } from "../../services/appData";
-import { AppDataContext } from "../../app/AppContext";
-import FilesHcyTree from "./FilesHcyTree";
 
 const FilesHcy = ({
     rootDirPath,
@@ -15,8 +9,6 @@ const FilesHcy = ({
     rootDirPath ?: string | null | undefined,
     crntDirPath ?: string | null | undefined
   }) => {
-  const appData = React.useContext(AppDataContext);
-
   if (trmrk.isNonEmptyStr(crntDirPath, true)) { 
     
   }

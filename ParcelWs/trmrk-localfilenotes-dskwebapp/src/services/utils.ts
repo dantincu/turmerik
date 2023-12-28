@@ -39,8 +39,13 @@ export const updateAppTitle = (
   updateHtmlDocTitle(htmlDocTitle);
 };
 
-export const getAppThemeCssClassName = (appData: AppData) =>
-  appData.isDarkMode ? "trmrk-theme-dark" : "trmrk-theme-light";
+export const getAppThemeCssClassName = (appData: AppData) => {
+  const appThemeClassName = appData.appPages.isDarkMode
+    ? "trmrk-theme-dark"
+    : "trmrk-theme-light";
+
+  return appThemeClassName;
+};
 
 export const isDocEditMode = (appBarData: AppBarData) => {
   const appPage = appBarData.appBarOpts.appPage;

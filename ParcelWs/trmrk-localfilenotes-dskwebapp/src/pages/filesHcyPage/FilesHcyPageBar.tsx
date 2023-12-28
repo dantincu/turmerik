@@ -34,21 +34,14 @@ export default function FilesHcyPageBar() {
   const filesHcyHistory = filesHcyData.history;
   const filesHcyCurrentIdx = filesHcyHistory.currentIdx ?? -1;
 
-  console.log("filesHcyHistory", filesHcyHistory);
-
   const btnGoBackIsDisabled = filesHcyCurrentIdx < 0;
   const btnGoForwardIsDisabled = filesHcyHistory.items.length - filesHcyCurrentIdx <= 1;
 
-  const currentIdnf = appData.currentIdnf ?? "";
+  const currentIdnf = appData.appPages.currentIdnf ?? "";
   const navigate = useNavigate();
 
-  console.log("currentIdnf", currentIdnf, filesHcyHistory.currentItem?.idnf);
-
   useEffect(() => {
-    console.log("PAGE BAR EFFECT");
-
     if (!filesHcyHistory.currentItem || filesHcyHistory.currentItem.idnf !== currentIdnf) {
-      console.log("pushing current idnf");
       filesHcyData.historyPush({
         idnf: currentIdnf
       });

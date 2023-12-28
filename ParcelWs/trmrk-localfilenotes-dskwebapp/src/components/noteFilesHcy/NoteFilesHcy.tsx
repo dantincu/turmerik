@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 import { core as trmrk } from "trmrk";

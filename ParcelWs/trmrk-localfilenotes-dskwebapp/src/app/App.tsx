@@ -60,7 +60,7 @@ const App = () => {
   const [ appSettingsResp, setAppSettingsResp ] = useState(null as ApiResponse<AppConfigData> | null);
 
   const appTheme = getAppTheme({
-    isDarkMode: appData.isDarkMode
+    isDarkMode: appData.appPages.isDarkMode
   });
 
   const appArgs = {
