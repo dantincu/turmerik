@@ -6,7 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
-import { setIsDarkMode, setAppThemeMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appDataSlice";
+import { setAppThemeMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
+import { setIsDarkMode } from "../../store/appPagesSlice";
 import { AppData, AppPagesData } from "../../services/appData";
 
 import { localStorageKeys, jsonBool } from "../../services/utils";
@@ -18,7 +19,7 @@ const ColorThemeLabel = styled.span`
 `;
 
 export default function ToggleDarkModeBtn() {
-  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
+  const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
   
   const handleClick = () => {

@@ -15,10 +15,10 @@ import { FilesHcyData, filesHcyCtxReducer } from "./FilesHcyData";
 import { createFilesHcyContext, FilesHcyContext } from "./FilesHcyDataContext";
 import { validateRootedPath } from "../../services/notes/notePath";
 
-import { AppData } from "../../services/appData";
+import { AppData, AppPagesData } from "../../services/appData";
 
 export default function FilesHcyPageBar() {
-  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
+  const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
   const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
   const dispatch = useDispatch();
 

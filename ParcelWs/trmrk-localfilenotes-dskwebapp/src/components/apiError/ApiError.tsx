@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
-import { purple } from '@mui/material/colors';
+import { Box, Typography } from '@mui/material';
 
 import { ApiResponse } from "trmrk-axios/src/core";
 

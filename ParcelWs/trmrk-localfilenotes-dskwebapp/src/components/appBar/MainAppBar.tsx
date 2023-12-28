@@ -13,12 +13,12 @@ import AppSettingsMenu from "./AppSettingsMenu";
 import AppTabsBar from "./AppTabsBar";
 import AppPageBar from "./AppPageBar";
 
-import { AppData, AppBarData, AppPagesData } from "../../services/appData";
-import { setAppSettingsMenuIsOpen, setAppOptionsMenuIsOpen } from "../../store/appDataSlice";
+import { AppBarData, AppPagesData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen, setAppOptionsMenuIsOpen } from "../../store/appBarDataSlice";
 
 export default function MainAppBar () {
-  const appBarData = useSelector<{ appData: AppData }, AppBarData>(state => state.appData.appBarData);
-  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
+  const appBarData = useSelector<{ appBarData: AppBarData }, AppBarData>(state => state.appBarData);
+  const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
 
   const appBarOpts = appBarData.appBarOpts;

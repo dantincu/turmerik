@@ -6,8 +6,8 @@ import Container from "@mui/material/Container";
 
 import { core as trmrk } from "trmrk";
 
-import { setCurrentIdnf, setAppPage } from "../../store/appDataSlice";
-import { AppData, AppPage } from "../../services/appData";
+import { setCurrentIdnf, setAppPage } from "../../store/appPagesSlice";
+import { AppData, AppPage, AppPagesData } from "../../services/appData";
 import { updateAppTitle } from "../../services/utils";
 
 import NotFound from "../../components/notFound/NotFound";
@@ -17,7 +17,7 @@ export const appPage = AppPage.ViewNoteItem;
 const NoteViewerPage = () => {
   const { idnf } = useParams();
   const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
-  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
+  const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
   const dispatch = useDispatch();
   
   useEffect(() => {

@@ -53,7 +53,7 @@ const AppEl = ({
   <MainEl /> : <LoadErrorEl args={args} /> : <LoadingEl args={args} />;
 
 const App = () => {
-  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
+  const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
 
   const [ isLoading, setIsLoading ] = useState(false);

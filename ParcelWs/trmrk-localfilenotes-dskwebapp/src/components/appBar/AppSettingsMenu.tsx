@@ -8,9 +8,8 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRightOutlined';
 import IconButton from "@mui/material/IconButton";
 
 import AppThemeMenu from "./AppThemeMenu";
-import { getAppTheme } from "../../services/app-theme/app-theme";
-import { AppData, AppBarData, AppPagesData } from "../../services/appData";
-import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appDataSlice";
+import { AppBarData, AppPagesData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appBarDataSlice";
 import { getAppThemeCssClassName } from "../../services/utils";
 
 export default function AppSettingsMenu({
@@ -18,8 +17,8 @@ export default function AppSettingsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBarData = useSelector<{ appData: AppData }, AppBarData>(state => state.appData.appBarData);
-  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
+  const appBarData = useSelector<{ appBarData: AppBarData }, AppBarData>(state => state.appBarData);
+  const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
 
   const [ appThemeMenuIconBtnEl, setAppThemeMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);

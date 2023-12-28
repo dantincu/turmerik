@@ -6,8 +6,9 @@ import MenuItem from '@mui/material/MenuItem';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 
-import { setIsCompactMode, setAppThemeMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appDataSlice";
-import { AppData, AppPagesData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
+import { setIsCompactMode } from "../../store/appPagesSlice";
+import { AppPagesData } from "../../services/appData";
 
 import { localStorageKeys, jsonBool } from "../../services/utils";
 
@@ -18,7 +19,7 @@ const ColorThemeLabel = styled.span`
 `;
 
 export default function ToggleAppModeBtn() {
-  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
+  const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
 
   const handleClick = () => {

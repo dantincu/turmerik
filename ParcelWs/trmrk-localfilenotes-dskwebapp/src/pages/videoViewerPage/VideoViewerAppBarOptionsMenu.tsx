@@ -7,8 +7,8 @@ import MenuList from '@mui/material/MenuList';
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import { setAppOptionsMenuIsOpen } from "../../store/appDataSlice";
-import { AppData } from "../../services/appData";
+import { setAppOptionsMenuIsOpen } from "../../store/appBarDataSlice";
+import { AppData, AppPagesData, AppBarData } from "../../services/appData";
 import { getAppThemeCssClassName } from "../../services/utils";
 
 export default function VideoViewerAppBarOptionsMenu({
@@ -16,8 +16,8 @@ export default function VideoViewerAppBarOptionsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
-  const appBarData = useSelector((state: { appData: AppData }) => state.appData.appBarData);
+  const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
+  const appBarData = useSelector((state: { appBarData: AppBarData }) => state.appBarData);
   const dispatch = useDispatch();
 
   const appOptionsMenuOpts = appBarData.appOptionsMenuOpts;

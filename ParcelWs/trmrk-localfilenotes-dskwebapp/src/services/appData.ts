@@ -55,6 +55,6 @@ export interface AppTabsData {}
 export interface AppData {
   appConfig: AppConfigData;
   baseLocation: string;
-  appBarData: AppBarData;
-  appPages: AppPagesData;
+  /* appBarData: AppBarData;
+  appPages: AppPagesData; */
 }

@@ -1,9 +1,4 @@
-import {
-  NoteItem,
-  InternalDir,
-  DirType,
-  DirCategory,
-} from "trmrk/src/notes-item";
+import { NoteItem } from "trmrk/src/notes-item";
 
 export interface DragAndDropNotesOp {
   prNote: NoteItem;

@@ -24,15 +24,15 @@ import AudioViewerPage from "../../pages/audioViewerPage/AudioViewerPage";
 import FileDownloaderPage from "../../pages/fileDownloaderPage/FileDownloaderPage";
 
 import NotFoundPage from "../../pages/notFoundPage/NotFoundPage";
-import { AppData } from "../../services/appData";
+import { AppBarData, AppPagesData } from "../../services/appData";
 import { getAppThemeCssClassName } from "../../services/utils";
 import { appRoutes } from "../../services/routes";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "./floatingBarTopOffsetUpdater";
-import { setUpdateFloatingBarTopOffset } from "../../store/appDataSlice";
+import { setUpdateFloatingBarTopOffset } from "../../store/appBarDataSlice";
 
 const MainEl = () => {
-  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
-  const appBarData = useSelector((state: { appData: AppData }) => state.appData.appBarData);
+  const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
+  const appBarData = useSelector((state: { appBarData: AppBarData }) => state.appBarData);
   const dispatch = useDispatch();
 
   const appThemeClassName = getAppThemeCssClassName(appPages);

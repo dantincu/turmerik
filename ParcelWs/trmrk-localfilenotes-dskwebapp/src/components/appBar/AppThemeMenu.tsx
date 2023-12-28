@@ -2,15 +2,14 @@ import React from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeftOutlined';
 import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
 import IconButton from "@mui/material/IconButton";
 
-import { AppData, AppBarData, AppPagesData } from "../../services/appData";
-import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appDataSlice";
+import { AppBarData, AppPagesData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appBarDataSlice";
 import { getAppThemeCssClassName } from "../../services/utils";
 
 export default function AppThemeMenu({
@@ -18,8 +17,8 @@ export default function AppThemeMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBarData = useSelector<{ appData: AppData }, AppBarData>(state => state.appData.appBarData);
-  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
+  const appBarData = useSelector<{ appBarData: AppBarData }, AppBarData>(state => state.appBarData);
+  const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
 
   const handleAppThemeMenuClose = () => {
