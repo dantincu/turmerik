@@ -35,7 +35,7 @@ export default function PictureViewerAppBarOptionsMenu({
   }
 
   return (
-    <Menu className={["trmrk-app-options-menu", getAppThemeCssClassName(appData)].join(" ")}
+    <Menu className={["trmrk-app-options-menu", getAppThemeCssClassName(appData.appPages)].join(" ")}
       open={appOptionsMenuOpts.isOpen}
       onClose={handleMenuClose}
       anchorEl={menuAnchorEl}>

@@ -1,4 +1,4 @@
-import { AppData, AppBarData, AppPage } from "./appData";
+import { AppData, AppBarData, AppPage, AppPagesData } from "./appData";
 import { updateHtmlDocTitle } from "./htmlDoc/htmlDocTitle";
 
 export const jsonBool = Object.freeze({
@@ -39,16 +39,16 @@ export const updateAppTitle = (
   updateHtmlDocTitle(htmlDocTitle);
 };
 
-export const getAppThemeCssClassName = (appData: AppData) => {
-  const appThemeClassName = appData.appPages.isDarkMode
+export const getAppThemeCssClassName = (appPages: AppPagesData) => {
+  const appThemeClassName = appPages.isDarkMode
     ? "trmrk-theme-dark"
     : "trmrk-theme-light";
 
   return appThemeClassName;
 };
 
-export const isDocEditMode = (appBarData: AppBarData) => {
-  const appPage = appBarData.appBarOpts.appPage;
+export const isDocEditMode = (appPagesData: AppPagesData) => {
+  const appPage = appPagesData.currentAppPage;
   let retVal = false;
 
   switch (appPage) {

@@ -38,3 +38,25 @@
     right: 2.8em;
   }
 }
+
+.trmrk-app.trmrk-theme-light .trmrk-address-bar {
+  .trmrk-text-box {
+    &::before {
+      border-bottom: 1px solid #FFFFFFAA;
+    }
+    
+    &::after {
+      border-bottom: 1px solid #FFFFFFAA;
+    }
+  }
+  
+  .trmrk-text-box:hover {
+    &::before {
+      border-bottom: 2px solid #FFFFFFFF;
+    }
+    
+    &::after {
+      border-bottom: 2px solid #FFFFFFFF;
+    }
+  }
+}

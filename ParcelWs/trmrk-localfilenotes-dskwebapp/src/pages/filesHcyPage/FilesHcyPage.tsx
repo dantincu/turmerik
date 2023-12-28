@@ -19,6 +19,7 @@ const FilesHcyPage = () => {
 
   const appBarData = appData.appBarData;
   const appBarOpts = appBarData.appBarOpts;
+  const appPages = appData.appPages;
 
   const currentIdnf = appData.appPages.currentIdnf ?? "";
 
@@ -29,7 +30,7 @@ const FilesHcyPage = () => {
     
     updateAppTitle(appData, idnf);
 
-    if (appBarOpts.appPage !== appPage) {
+    if (appPages.currentAppPage !== appPage) {
       dispatch(setAppPage(appPage));
     }
   }, [])

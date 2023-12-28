@@ -27,9 +27,9 @@ export interface AppDataReducer {
   setIsDarkMode: DispatcherType<boolean>;
   setIsCompactMode: DispatcherType<boolean>;
   setAppConfig: DispatcherType<AppConfigData>;
+  setAppPage: DispatcherType<AppPage>;
   setCurrentIdnf: DispatcherType<string | null>;
   setAppBarOpts: DispatcherType<AppBarOpts>;
-  setAppPage: DispatcherType<AppPage>;
   setFloatingBarTopHeightEm: DispatcherType<number>;
   setUpdateFloatingBarTopOffset: DispatcherType<boolean>;
   setAppSettingsMenuOpts: DispatcherType<AppSettingsMenuOpts>;
@@ -49,14 +49,14 @@ const reducer = {
   setAppConfig: (state, action) => {
     state.appConfig = action.payload;
   },
+  setAppPage: (state, action) => {
+    state.appPages.currentAppPage = action.payload;
+  },
   setCurrentIdnf: (state, action) => {
     state.appPages.currentIdnf = action.payload;
   },
   setAppBarOpts: (state, action) => {
     state.appBarData.appBarOpts = action.payload;
-  },
-  setAppPage: (state, action) => {
-    state.appBarData.appBarOpts.appPage = action.payload;
   },
   setFloatingBarTopHeightEm: (state, action) => {
     state.appBarData.floatingAppBarHeightEm = action.payload;

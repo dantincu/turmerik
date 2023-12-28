@@ -23,12 +23,13 @@ const NoteEditorPage = () => {
 
   const appBarData = appData.appBarData;
   const appBarOpts = appBarData.appBarOpts;
+  const appPages = appData.appPages;
   
   useEffect(() => {
     dispatch(setCurrentIdnf(null));
     updateAppTitle(appData, "");
 
-    if (appBarOpts.appPage !== appPage) {
+    if (appPages.currentAppPage !== appPage) {
       dispatch(setAppPage(appPage));
     }
   }, []);

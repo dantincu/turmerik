@@ -35,7 +35,7 @@ export default function AppSettingsMenu({
   };
 
   return (<>
-    <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData)].join(" ")}
+    <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData.appPages)].join(" ")}
       open={appBarData.appSettingsMenuOpts.isOpen}
       onClose={handleSettingsMenuClose}
       anchorEl={menuAnchorEl}>

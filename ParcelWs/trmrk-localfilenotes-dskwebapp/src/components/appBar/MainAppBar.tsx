@@ -22,6 +22,7 @@ export default function MainAppBar () {
 
   const appBarData = appData.appBarData;
   const appBarOpts = appBarData.appBarOpts;
+  const appPages = appData.appPages;
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
   const [optionsMenuIconBtnEl, setOptionsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
@@ -47,9 +48,9 @@ export default function MainAppBar () {
             onClick={handleOptionsClick}>
           <MoreVertIcon /></IconButton>
       </div>
-      <AppPageBar appPage={appBarOpts.appPage} />
+      <AppPageBar appPage={appPages.currentAppPage} />
       <AppSettingsMenu menuAnchorEl={settingsMenuIconBtnEl!} />
       <AppOptionsMenu menuAnchorEl={optionsMenuIconBtnEl!}
-        appPage={appBarOpts.appPage} />
+        appPage={appPages.currentAppPage} />
     </AppBar>);
 }

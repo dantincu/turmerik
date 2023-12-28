@@ -19,7 +19,6 @@ export enum AppPage {
 export interface AppBarOpts {
   appBarCssClass: string;
   resxIconCssClass: string;
-  appPage: AppPage;
   hasContextRow: boolean;
 }
 
@@ -47,6 +46,7 @@ export interface AppBarData {
 export interface AppPagesData {
   isDarkMode: boolean;
   isCompactMode: boolean;
+  currentAppPage: AppPage;
   currentIdnf: string | null;
 }
 

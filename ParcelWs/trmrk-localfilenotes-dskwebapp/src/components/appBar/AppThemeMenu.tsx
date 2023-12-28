@@ -31,7 +31,7 @@ export default function AppThemeMenu({
     dispatch(setAppThemeMenuIsOpen(false));
   }
 
-  return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appData)].join(" ")}
+  return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appData.appPages)].join(" ")}
         open={appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen}
         onClose={handleAppThemeMenuClose}
         anchorEl={menuAnchorEl}
