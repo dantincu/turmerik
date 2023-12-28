@@ -15,6 +15,74 @@ import {
 
 import { AppConfigData } from "trmrk/src/notes-app-config";
 
+declare type DispatcherType<TPropVal> = (
+  state: AppData,
+  action: {
+    type: string;
+    payload: TPropVal;
+  }
+) => void;
+
+export interface AppDataReducer {
+  setIsDarkMode: DispatcherType<boolean>;
+  setIsCompactMode: DispatcherType<boolean>;
+  setAppConfig: DispatcherType<AppConfigData>;
+  setCurrentIdnf: DispatcherType<string | null>;
+  setAppBarOpts: DispatcherType<AppBarOpts>;
+  setAppPage: DispatcherType<AppPage>;
+  setFloatingBarTopHeightEm: DispatcherType<number>;
+  setUpdateFloatingBarTopOffset: DispatcherType<boolean>;
+  setAppSettingsMenuOpts: DispatcherType<AppSettingsMenuOpts>;
+  setAppOptionsMenuOpts: DispatcherType<AppOptionsMenuOpts>;
+  setAppSettingsMenuIsOpen: DispatcherType<boolean>;
+  setAppThemeMenuIsOpen: DispatcherType<boolean>;
+  setAppOptionsMenuIsOpen: DispatcherType<boolean>;
+}
+
+const reducer = {
+  setIsDarkMode: (state, action) => {
+    state.isDarkMode = action.payload;
+  },
+  setIsCompactMode: (state, action) => {
+    state.isCompactMode = action.payload;
+  },
+  setAppConfig: (state, action) => {
+    state.appConfig = action.payload;
+  },
+  setCurrentIdnf: (state, action) => {
+    state.currentIdnf = action.payload;
+  },
+  setAppBarOpts: (state, action) => {
+    state.appBarData.appBarOpts = action.payload;
+  },
+  setAppPage: (state, action) => {
+    state.appBarData.appBarOpts.appPage = action.payload;
+  },
+  setFloatingBarTopHeightEm: (state, action) => {
+    state.appBarData.floatingAppBarHeightEm = action.payload;
+  },
+  setUpdateFloatingBarTopOffset: (state, action) => {
+    state.appBarData.updateFloatingBarTopOffset = action.payload;
+  },
+  setAppSettingsMenuOpts: (state, action) => {
+    state.appBarData.appSettingsMenuOpts = action.payload;
+  },
+  setAppOptionsMenuOpts: (state, action) => {
+    state.appBarData.appOptionsMenuOpts = action.payload;
+  },
+  setAppSettingsMenuIsOpen: (state, action) => {
+    state.appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen = false;
+    state.appBarData.appSettingsMenuOpts.isOpen = action.payload;
+  },
+  setAppThemeMenuIsOpen: (state, action) => {
+    state.appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen =
+      action.payload;
+  },
+  setAppOptionsMenuIsOpen: (state, action) => {
+    state.appBarData.appOptionsMenuOpts.isOpen = action.payload;
+  },
+} as AppDataReducer;
+
 const appDataSlice = createSlice({
   name: "appData",
   initialState: {
@@ -42,125 +110,7 @@ const appDataSlice = createSlice({
     } as AppBarData,
   } as AppData,
   reducers: {
-    setIsDarkMode(
-      state,
-      action: {
-        type: string;
-        payload: boolean;
-      }
-    ) {
-      state.isDarkMode = action.payload;
-    },
-    setIsCompactMode(
-      state,
-      action: {
-        type: string;
-        payload: boolean;
-      }
-    ) {
-      state.isCompactMode = action.payload;
-    },
-    setAppConfig(
-      state,
-      action: {
-        type: string;
-        payload: AppConfigData;
-      }
-    ) {
-      state.appConfig = action.payload;
-    },
-    setCurrentIdnf(
-      state,
-      action: {
-        type: string;
-        payload: string | null;
-      }
-    ) {
-      state.currentIdnf = action.payload;
-    },
-    setAppBarOpts(
-      state,
-      action: {
-        type: string;
-        payload: AppBarOpts;
-      }
-    ) {
-      state.appBarData.appBarOpts = action.payload;
-    },
-    setAppPage(
-      state,
-      action: {
-        type: string;
-        payload: AppPage;
-      }
-    ) {
-      state.appBarData.appBarOpts.appPage = action.payload;
-    },
-    setFloatingBarTopHeightEm(
-      state,
-      action: {
-        type: string;
-        payload: number;
-      }
-    ) {
-      state.appBarData.floatingAppBarHeightEm = action.payload;
-    },
-    setUpdateFloatingBarTopOffset(
-      state,
-      action: {
-        type: string;
-        payload: boolean;
-      }
-    ) {
-      state.appBarData.updateFloatingBarTopOffset = action.payload;
-    },
-    setAppSettingsMenuOpts(
-      state,
-      action: {
-        type: string;
-        payload: AppSettingsMenuOpts;
-      }
-    ) {
-      state.appBarData.appSettingsMenuOpts = action.payload;
-    },
-    setAppOptionsMenuOpts(
-      state,
-      action: {
-        type: string;
-        payload: AppOptionsMenuOpts;
-      }
-    ) {
-      state.appBarData.appOptionsMenuOpts = action.payload;
-    },
-    setAppSettingsMenuIsOpen(
-      state,
-      action: {
-        type: string;
-        payload: boolean;
-      }
-    ) {
-      state.appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen = false;
-      state.appBarData.appSettingsMenuOpts.isOpen = action.payload;
-    },
-    setAppThemeMenuIsOpen(
-      state,
-      action: {
-        type: string;
-        payload: boolean;
-      }
-    ) {
-      state.appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen =
-        action.payload;
-    },
-    setAppOptionsMenuIsOpen(
-      state,
-      action: {
-        type: string;
-        payload: boolean;
-      }
-    ) {
-      state.appBarData.appOptionsMenuOpts.isOpen = action.payload;
-    },
+    ...reducer,
   },
 });
 
@@ -181,3 +131,5 @@ export const {
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;
+
+export type Dispatcher<TPropVal> = DispatcherType<TPropVal>;
