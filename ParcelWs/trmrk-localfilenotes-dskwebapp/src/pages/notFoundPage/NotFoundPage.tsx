@@ -9,10 +9,10 @@ import { updateAppTitle } from "../../services/utils";
 import { AppData } from "../../services/appData";
 
 const NotFoundPage = () => {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
 
   useEffect(() => {
-    updateAppTitle(appData, "Page Not Found");
+    updateAppTitle(appConfig, "Page Not Found");
   }, []);
 
   return (<Container className="trmrk-not-found-page" sx={{ position: "relative" }} maxWidth="xl">

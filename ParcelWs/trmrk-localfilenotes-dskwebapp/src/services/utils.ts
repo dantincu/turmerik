@@ -1,3 +1,4 @@
+import { AppConfigData } from "trmrk/src/notes-app-config";
 import { AppData, AppBarData, AppPage, AppPagesData } from "./appData";
 import { updateHtmlDocTitle } from "./htmlDoc/htmlDocTitle";
 
@@ -19,13 +20,13 @@ export const localStorageKeys = Object.freeze({
 export const defaultAppTitle = "Turmerik Local File Notes";
 
 export const updateAppTitle = (
-  appData: AppData,
+  appConfig: AppConfigData,
   idnf: string | null | undefined,
   idnfIsPath: boolean = true
 ) => {
   if (idnf && idnfIsPath) {
     idnf = idnf
-      .split(appData.appConfig.pathSep)
+      .split(appConfig.pathSep)
       .filter((seg) => seg.trim())
       .splice(-1, 1)[0];
   }

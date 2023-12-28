@@ -16,16 +16,13 @@ export const appPage = AppPage.ViewNoteItem;
 
 const NoteViewerPage = () => {
   const { idnf } = useParams();
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
+  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
   const dispatch = useDispatch();
-
-  const appBarData = appData.appBarData;
-  const appBarOpts = appBarData.appBarOpts;
-  const appPages = appData.appPages;
   
   useEffect(() => {
     dispatch(setCurrentIdnf(null));
-    updateAppTitle(appData, "");
+    updateAppTitle(appConfig, "");
 
     if (appPages.currentAppPage !== appPage) {
       dispatch(setAppPage(appPage));

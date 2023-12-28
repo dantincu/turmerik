@@ -13,16 +13,15 @@ import AppSettingsMenu from "./AppSettingsMenu";
 import AppTabsBar from "./AppTabsBar";
 import AppPageBar from "./AppPageBar";
 
-import { AppData, AppBarData } from "../../services/appData";
+import { AppData, AppBarData, AppPagesData } from "../../services/appData";
 import { setAppSettingsMenuIsOpen, setAppOptionsMenuIsOpen } from "../../store/appDataSlice";
 
 export default function MainAppBar () {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appBarData = useSelector<{ appData: AppData }, AppBarData>(state => state.appData.appBarData);
+  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
   const dispatch = useDispatch();
 
-  const appBarData = appData.appBarData;
   const appBarOpts = appBarData.appBarOpts;
-  const appPages = appData.appPages;
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
   const [optionsMenuIconBtnEl, setOptionsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);

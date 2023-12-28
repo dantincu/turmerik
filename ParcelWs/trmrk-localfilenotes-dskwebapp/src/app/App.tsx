@@ -17,7 +17,7 @@ import ApiError from "../components/apiError/ApiError";
 
 import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppConfigData } from "trmrk/src/notes-app-config"; 
-import { AppData } from "../services/appData";
+import { AppData, AppPagesData } from "../services/appData";
 import { setAppConfig } from "../store/appDataSlice";
 import { cacheKeys } from "../services/localForage";
 
@@ -53,14 +53,14 @@ const AppEl = ({
   <MainEl /> : <LoadErrorEl args={args} /> : <LoadingEl args={args} />;
 
 const App = () => {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
   const dispatch = useDispatch();
 
   const [ isLoading, setIsLoading ] = useState(false);
   const [ appSettingsResp, setAppSettingsResp ] = useState(null as ApiResponse<AppConfigData> | null);
 
   const appTheme = getAppTheme({
-    isDarkMode: appData.appPages.isDarkMode
+    isDarkMode: appPages.isDarkMode
   });
 
   const appArgs = {

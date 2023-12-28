@@ -16,10 +16,10 @@ export default function TextFileViewerAppBarOptionsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
+  const appBarData = useSelector((state: { appData: AppData }) => state.appData.appBarData);
   const dispatch = useDispatch();
 
-  const appBarData = appData.appBarData;
   const appOptionsMenuOpts = appBarData.appOptionsMenuOpts;
 
   const handleMenuClose = () => {
@@ -35,7 +35,7 @@ export default function TextFileViewerAppBarOptionsMenu({
   }
 
   return (
-    <Menu className={["trmrk-app-options-menu", getAppThemeCssClassName(appData.appPages)].join(" ")}
+    <Menu className={["trmrk-app-options-menu", getAppThemeCssClassName(appPages)].join(" ")}
       open={appOptionsMenuOpts.isOpen}
       onClose={handleMenuClose}
       anchorEl={menuAnchorEl}>

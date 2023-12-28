@@ -18,7 +18,8 @@ import { validateRootedPath } from "../../services/notes/notePath";
 import { AppData } from "../../services/appData";
 
 export default function FilesHcyPageBar() {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
+  const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
   const dispatch = useDispatch();
 
   const filesHcyCtxInitialState = {
@@ -37,7 +38,7 @@ export default function FilesHcyPageBar() {
   const btnGoBackIsDisabled = filesHcyCurrentIdx < 0;
   const btnGoForwardIsDisabled = filesHcyHistory.items.length - filesHcyCurrentIdx <= 1;
 
-  const currentIdnf = appData.appPages.currentIdnf ?? "";
+  const currentIdnf = appPages.currentIdnf ?? "";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,7 +86,7 @@ export default function FilesHcyPageBar() {
     let errMsg: string | null = null;
 
     if (trmrk.isNonEmptyStr(newAddress)) {
-      errMsg = validateRootedPath(appData.appConfig, newAddress);
+      errMsg = validateRootedPath(appConfig, newAddress);
     }
 
     return errMsg;

@@ -14,21 +14,18 @@ export const appPage = AppPage.FilesHcy;
 
 const FilesHcyPage = () => {
   const { idnf } = useParams();
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
+  const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
   const dispatch = useDispatch();
 
-  const appBarData = appData.appBarData;
-  const appBarOpts = appBarData.appBarOpts;
-  const appPages = appData.appPages;
-
-  const currentIdnf = appData.appPages.currentIdnf ?? "";
+  const currentIdnf = appPages.currentIdnf ?? "";
 
   React.useEffect(() => {
-    if (appData.appPages.currentIdnf !== currentIdnf) {
+    if (appPages.currentIdnf !== currentIdnf) {
       dispatch(setCurrentIdnf(currentIdnf));
     }
     
-    updateAppTitle(appData, idnf);
+    updateAppTitle(appConfig, idnf);
 
     if (appPages.currentAppPage !== appPage) {
       dispatch(setAppPage(appPage));

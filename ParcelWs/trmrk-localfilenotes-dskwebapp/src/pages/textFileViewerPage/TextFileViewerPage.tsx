@@ -18,16 +18,13 @@ export const appPage = AppPage.ViewTextFile;
 
 const TextFileViewerPage = () => {
   const { idnf } = useParams();
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
+  const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
   const dispatch = useDispatch();
-
-  const appBarData = appData.appBarData;
-  const appBarOpts = appBarData.appBarOpts;
-  const appPages = appData.appPages;
   
   useEffect(() => {
     dispatch(setCurrentIdnf(null));
-    updateAppTitle(appData, "");
+    updateAppTitle(appConfig, "");
 
     if (appPages.currentAppPage !== appPage) {
       dispatch(setAppPage(appPage));

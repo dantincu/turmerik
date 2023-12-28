@@ -7,7 +7,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { setIsDarkMode, setAppThemeMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appDataSlice";
-import { AppData } from "../../services/appData";
+import { AppData, AppPagesData } from "../../services/appData";
 
 import { localStorageKeys, jsonBool } from "../../services/utils";
 
@@ -18,11 +18,11 @@ const ColorThemeLabel = styled.span`
 `;
 
 export default function ToggleDarkModeBtn() {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
   const dispatch = useDispatch();
   
   const handleClick = () => {
-    const switchToDarkMode = !appData.appPages.isDarkMode;
+    const switchToDarkMode = !appPages.isDarkMode;
     dispatch(setIsDarkMode(switchToDarkMode));
     dispatch(setAppSettingsMenuIsOpen(false));
     localStorage.setItem(localStorageKeys.appThemeIsDarkMode, switchToDarkMode ? jsonBool.true : jsonBool.false);
@@ -30,7 +30,7 @@ export default function ToggleDarkModeBtn() {
 
   return (
     <MenuItem onClick={handleClick} className="trmrk-app-theme-mode-menu-item">
-      <ColorThemeLabel>{ appData.appPages.isDarkMode ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
-      { appData.appPages.isDarkMode ? <LightModeIcon /> : <DarkModeIcon /> }
+      <ColorThemeLabel>{ appPages.isDarkMode ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
+      { appPages.isDarkMode ? <LightModeIcon /> : <DarkModeIcon /> }
     </MenuItem>);
 }

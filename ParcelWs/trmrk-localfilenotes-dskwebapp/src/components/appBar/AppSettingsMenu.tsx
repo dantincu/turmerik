@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 
 import AppThemeMenu from "./AppThemeMenu";
 import { getAppTheme } from "../../services/app-theme/app-theme";
-import { AppData } from "../../services/appData";
+import { AppData, AppBarData, AppPagesData } from "../../services/appData";
 import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appDataSlice";
 import { getAppThemeCssClassName } from "../../services/utils";
 
@@ -18,10 +18,9 @@ export default function AppSettingsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appBarData = useSelector<{ appData: AppData }, AppBarData>(state => state.appData.appBarData);
+  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
   const dispatch = useDispatch();
-
-  const appBarData = appData.appBarData;
 
   const [ appThemeMenuIconBtnEl, setAppThemeMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
 
@@ -35,7 +34,7 @@ export default function AppSettingsMenu({
   };
 
   return (<>
-    <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData.appPages)].join(" ")}
+    <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appPages)].join(" ")}
       open={appBarData.appSettingsMenuOpts.isOpen}
       onClose={handleSettingsMenuClose}
       anchorEl={menuAnchorEl}>

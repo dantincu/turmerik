@@ -31,13 +31,12 @@ import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "./floatingBarT
 import { setUpdateFloatingBarTopOffset } from "../../store/appDataSlice";
 
 const MainEl = () => {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appPages = useSelector((state: { appData: AppData }) => state.appData.appPages);
+  const appBarData = useSelector((state: { appData: AppData }) => state.appData.appBarData);
   const dispatch = useDispatch();
 
-  const appBarData = appData.appBarData;
-
-  const appThemeClassName = getAppThemeCssClassName(appData.appPages);
-  const appModeClassName = appData.appPages.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
+  const appThemeClassName = getAppThemeCssClassName(appPages);
+  const appModeClassName = appPages.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
   
   const appHeaderEl = useRef<HTMLDivElement>(null);
   const appBodyEl = useRef<HTMLDivElement>(null);

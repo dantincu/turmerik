@@ -9,7 +9,7 @@ import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
 import IconButton from "@mui/material/IconButton";
 
-import { AppData } from "../../services/appData";
+import { AppData, AppBarData, AppPagesData } from "../../services/appData";
 import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appDataSlice";
 import { getAppThemeCssClassName } from "../../services/utils";
 
@@ -18,10 +18,9 @@ export default function AppThemeMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appBarData = useSelector<{ appData: AppData }, AppBarData>(state => state.appData.appBarData);
+  const appPages = useSelector<{ appData: AppData }, AppPagesData>(state => state.appData.appPages);
   const dispatch = useDispatch();
-
-  const appBarData = appData.appBarData;
 
   const handleAppThemeMenuClose = () => {
     dispatch(setAppSettingsMenuIsOpen(false));
@@ -31,7 +30,7 @@ export default function AppThemeMenu({
     dispatch(setAppThemeMenuIsOpen(false));
   }
 
-  return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appData.appPages)].join(" ")}
+  return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appPages)].join(" ")}
         open={appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen}
         onClose={handleAppThemeMenuClose}
         anchorEl={menuAnchorEl}
