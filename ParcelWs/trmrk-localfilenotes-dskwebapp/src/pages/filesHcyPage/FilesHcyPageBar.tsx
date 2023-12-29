@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom";
 
@@ -9,9 +9,10 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { core as trmrk } from "trmrk";
 
 import { routes } from "../../services/routes";
+import { getRoute } from "../../services/utils";
 
 import AddressBar from "../../components/addressBar/AddressBar";
-import { FilesHcyHistory, FilesHcyHistoryItem } from "../../services/appData";
+import { FilesHcyHistory } from "../../services/appData";
 import { filesHcyHistoryGoBack, filesHcyHistoryGoForward, filesHcyHistoryPush, filesHcyHistoryReplace } from "../../store/filesHcyHistorySlice";
 import { validateRootedPath } from "../../services/notes/notePath";
 
@@ -23,21 +24,28 @@ export default function FilesHcyPageBar() {
   const filesHcyHistory = useSelector((state: { filesHcyHistory: FilesHcyHistory }) => state.filesHcyHistory);
   const dispatch = useDispatch();
 
+  const [ currentIdnf, setCurrentIdnf ] = useState(appPages.currentIdnf ?? "");
+
   const filesHcyCurrentIdx = filesHcyHistory.currentIdx ?? -1;
 
   const btnGoBackIsDisabled = filesHcyCurrentIdx < 0;
   const btnGoForwardIsDisabled = filesHcyHistory.items.length - filesHcyCurrentIdx <= 1;
 
-  const currentIdnf = appPages.currentIdnf ?? "";
   const navigate = useNavigate();
+  console.log("bar - currentIdnf0", currentIdnf, btnGoForwardIsDisabled);
+  console.log("bar - filesHcyHistory", filesHcyHistory);
 
   useEffect(() => {
+    console.log("bar - currentIdnf1", currentIdnf);
+    console.log("bar - filesHcyHistory.currentItem?.idnf", filesHcyHistory.currentItem?.idnf)
     if (!filesHcyHistory.currentItem || filesHcyHistory.currentItem.idnf !== currentIdnf) {
+      console.log("bar - currentIdnf2", currentIdnf);
       dispatch(filesHcyHistoryPush({
         idnf: currentIdnf
       }));
+      console.log("bar - currentIdnf3", currentIdnf);
     }
-  }, []);
+  }, [ currentIdnf ]);
 
   const onBtnGoBackClick = () => {
     let nextIdnf = "";
@@ -54,22 +62,30 @@ export default function FilesHcyPageBar() {
       nextIdnf = filesHcyHistory.items[filesHcyCurrentIdx - 1].idnf;
       dispatch(filesHcyHistoryGoBack());
     }
-    
-    const idnf = encodeURIComponent(nextIdnf);
-    navigate([routes.files, idnf].join("/"));
+
+    console.log("bar - nextIdnf", nextIdnf);
+
+    navigate(getRoute(routes.files, nextIdnf));
+    setCurrentIdnf(nextIdnf);
   }
 
   const onBtnGoForwardClick = () => {
     const nextIdnf = filesHcyHistory.items[filesHcyCurrentIdx + 1].idnf;
     dispatch(filesHcyHistoryGoForward());
 
-    const idnf = encodeURIComponent(nextIdnf);
-    navigate([routes.files, idnf].join("/"));
+    navigate(getRoute(routes.files, nextIdnf));
+    setCurrentIdnf(nextIdnf);
   }
 
   const onAddressChanged = (newAddress: string) => {
-    const idnf = encodeURIComponent(newAddress);
-    navigate([routes.files, idnf].join("/"));
+    console.log("bar - newAddress", newAddress);
+    
+    dispatch(filesHcyHistoryPush({
+      idnf: newAddress
+    }));
+
+    navigate(getRoute(routes.files, newAddress));
+    setCurrentIdnf(newAddress);
   }
 
   const addressValidator = (newAddress: string) => {

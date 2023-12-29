@@ -61,3 +61,9 @@ export const isDocEditMode = (appPagesData: AppPagesData) => {
 
   return retVal;
 };
+
+export const getRoute = (routeBase: string, idnf: string) => {
+  const encodedIdnf = encodeURIComponent(idnf);
+  const route = [routeBase, encodedIdnf].join("/");
+  return route;
+};

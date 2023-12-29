@@ -107,6 +107,13 @@ const ReadonlyAddressBar = ({
 export default function AddressBar (props: AddressBarProps) {
   const [ isEditMode, setIsEditMode ] = useState(props.isEditMode ?? false);
   const [ address, setAddress ] = useState(props.address);
+  
+  useEffect(() => {
+    if (address !== props.address) {
+      setAddress(props.address);
+      setIsEditMode(false);
+    }
+  }, [ props ]);
 
   const onEditRequested = () => {
     if (props.isEditable ?? true) {

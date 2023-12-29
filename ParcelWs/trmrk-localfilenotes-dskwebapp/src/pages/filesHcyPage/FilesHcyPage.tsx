@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import Container from "@mui/material/Container";
 
 import { setCurrentIdnf, setAppPage } from "../../store/appPagesSlice";
-import { AppData, AppPage, AppPagesData } from "../../services/appData";
+import { filesHcyHistoryPush } from "../../store/filesHcyHistorySlice";
+import { AppData, AppPage, AppPagesData, FilesHcyHistory } from "../../services/appData";
 import { updateAppTitle } from "../../services/utils";
 
 import './styles.scss';
@@ -18,19 +19,19 @@ const FilesHcyPage = () => {
   const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
   const dispatch = useDispatch();
 
-  const currentIdnf = appPages.currentIdnf ?? "";
+  const nextIdnf = idnf ?? "";
 
   React.useEffect(() => {
-    if (appPages.currentIdnf !== currentIdnf) {
-      dispatch(setCurrentIdnf(currentIdnf));
-    }
-    
     updateAppTitle(appConfig, idnf);
+
+    if (appPages.currentIdnf !== nextIdnf) {
+      dispatch(setCurrentIdnf(nextIdnf));
+    }
 
     if (appPages.currentAppPage !== appPage) {
       dispatch(setAppPage(appPage));
     }
-  }, [])
+  }, [ idnf ])
 
   return (<Container className="trmrk-files-hcy-page" sx={{ position: "relative" }} maxWidth="xl">
   </Container>);
