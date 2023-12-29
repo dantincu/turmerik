@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
 
@@ -13,17 +14,67 @@ namespace Turmerik.DriveExplorer
 {
     public interface IFsItemsRetriever : IDriveItemsRetriever
     {
+        string RootDirPath { get; init; }
     }
 
     public class FsItemsRetriever : DriveItemsRetrieverBase, IFsItemsRetriever
     {
+        protected readonly static string systemDrivePathRoot;
+        protected readonly static string userProfilePath;
+        protected readonly static string appDataDirName;
+        protected readonly static string appDataPath;
+        protected readonly static string appDataChildRelPathStartStr;
+
+        protected readonly string rootDirPath;
+        protected readonly bool hasRootDirPath;
+
+        static FsItemsRetriever()
+        {
+            systemDrivePathRoot = Path.GetPathRoot(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.System));
+
+            userProfilePath = Environment.GetFolderPath(
+                Environment.SpecialFolder.UserProfile);
+
+            appDataDirName = Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData).Substring(
+                    userProfilePath.Length).Split(
+                        Path.DirectorySeparatorChar.Arr(),
+                        StringSplitOptions.RemoveEmptyEntries)[0];
+
+            appDataPath = Path.Combine(
+                userProfilePath,
+                appDataDirName);
+
+            appDataChildRelPathStartStr = appDataDirName + Path.DirectorySeparatorChar;
+        }
+
         public FsItemsRetriever(ITimeStampHelper timeStampHelper) : base(timeStampHelper)
         {
+            this.rootDirPath = string.Empty;
+        }
+
+        public bool AllowSysFolders { get; init; }
+
+        public string RootDirPath
+        {
+            get => rootDirPath;
+
+            init
+            {
+                if (!string.IsNullOrEmpty(value))
+                {
+                    hasRootDirPath = true;
+                    rootDirPath = value;
+                }
+            }
         }
 
         public override async Task<DriveItem> GetItemAsync(
             string idnf, bool retMinimalInfo)
         {
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, true);
             DriveItem item;
 
             if (Directory.Exists(idnf))
@@ -46,6 +97,8 @@ namespace Turmerik.DriveExplorer
         public override async Task<DriveItem> GetFolderAsync(
             string idnf, bool retMinimalInfo)
         {
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, true);
+
             var folderPath = idnf;
             var entry = new DirectoryInfo(folderPath);
             var folder = GetDriveItem(entry);
@@ -70,15 +123,17 @@ namespace Turmerik.DriveExplorer
                 idnf) || await FolderExistsAsync(idnf);
 
         public override async Task<bool> FolderExistsAsync(
-            string idnf) => Directory.Exists(idnf);
+            string idnf) => ThrowIfPathIsNotValidAgainstRootPath(idnf, true) && Directory.Exists(idnf);
 
         public override async Task<bool> FileExistsAsync(
-            string idnf) => File.Exists(idnf);
+            string idnf) => ThrowIfPathIsNotValidAgainstRootPath(idnf, false) && File.Exists(idnf);
 
         public override string GetItemIdnf<TDriveItem>(
             TDriveItem item,
             string prIdnf)
         {
+            ThrowIfPathIsNotValidAgainstRootPath(prIdnf, true);
+
             string idnf = item.Idnf;
             prIdnf ??= item.PrIdnf;
 
@@ -94,6 +149,8 @@ namespace Turmerik.DriveExplorer
 
         public override async Task<string> GetFileTextAsync(string idnf)
         {
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
+
             using var reader = new StreamReader(idnf);
             var text = await reader.ReadToEndAsync();
 
@@ -101,11 +158,19 @@ namespace Turmerik.DriveExplorer
         }
 
         public override Task<byte[]> GetFileBytesAsync(
-            string idnf) => FsH.ReadAllBytesAsync(idnf);
+            string idnf)
+        {
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
+
+            var bytesArr = FsH.ReadAllBytesAsync(idnf);
+            return bytesArr;
+        }
 
         protected async Task<DriveItem> GetFileAsync(
             string idnf)
         {
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
+
             var fSysInfo = new FileInfo(idnf);
             var item = GetDriveItem(fSysInfo);
 
@@ -170,5 +235,111 @@ namespace Turmerik.DriveExplorer
                 item.Idnf = null;
             }
         }
+
+        protected bool ThrowIfPathIsNotValidAgainstRootPath(
+            string path, bool allowsRootPath)
+        {
+            bool isValid = PathIsValidAgainstRootPath(path, allowsRootPath);
+
+            if (!isValid)
+            {
+                if (hasRootDirPath)
+                {
+                    throw new InvalidOperationException(
+                        $"All paths are required to fall under root path {rootDirPath}");
+                }
+                else
+                {
+                    throw new InvalidOperationException(
+                        string.Join(" ", $"All paths are required to either have a different root than the system root or fall under user profile path {userProfilePath}",
+                            $"as a nested folder that does not start with the dot char '.' and is not equal to the app data dir name {appDataDirName}"));
+                }
+            }
+
+            return isValid;
+        }
+
+        protected bool PathIsValidAgainstRootPath(
+            string path, bool allowsRootPath)
+        {
+            bool canBeValid = path != null && path == path.Trim() && Path.IsPathRooted(
+                path) && !path.Contains(
+                "..") && !path.ContainsAny(
+                    PathH.InvalidPathCharsStr) && !path.EndsWith(":");
+
+            bool isValid = canBeValid;
+            
+            if (isValid)
+            {
+                isValid = !hasRootDirPath;
+            }
+
+            if (canBeValid && !isValid)
+            {
+                isValid = IsChildPathOf(
+                    rootDirPath, path,
+                    allowsRootPath, out _);
+            }
+
+            if (isValid && !AllowSysFolders)
+            {
+                if (Path.GetPathRoot(path) == systemDrivePathRoot)
+                {
+                    isValid = IsChildPathOf(
+                        userProfilePath, path, false,
+                        out string? restOfPath);
+
+                    isValid = isValid && restOfPath.First() != '.' && (
+                        restOfPath != appDataDirName) && !restOfPath.StartsWith(
+                            appDataChildRelPathStartStr);
+                }
+            }
+
+            return isValid;
+        }
+
+        protected bool IsChildPathOf(
+            string basePath,
+            string trgPath,
+            bool allowsEqualToBasePath,
+            out string? restOfPath)
+        {
+            restOfPath = null;
+            bool isChildOf = trgPath.StartsWith(basePath);
+
+            if (isChildOf)
+            {
+                string restOfPathStr = trgPath.Substring(
+                    basePath.Length);
+
+                string trimmedRestOfPath = PathTrimStart(
+                    restOfPathStr);
+
+                bool restOfPathIsEmpty = string.IsNullOrWhiteSpace(
+                    trimmedRestOfPath);
+
+                if (restOfPathIsEmpty)
+                {
+                    isChildOf = allowsEqualToBasePath;
+                }
+                else
+                {
+                    isChildOf = restOfPathStr.First() == Path.DirectorySeparatorChar;
+                }
+
+                if (isChildOf)
+                {
+                    restOfPath = trimmedRestOfPath;
+                }
+            }
+
+            return isChildOf;
+        }
+
+        private string PathTrimStart(
+            string path) => path.TrimStart(
+            Path.DirectorySeparatorChar,
+            Path.AltDirectorySeparatorChar,
+            '.', ' ');
     }
 }

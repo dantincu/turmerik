@@ -8,6 +8,7 @@ using Turmerik.AspNetCore.Dependencies;
 using Turmerik.AspNetCore.UserSessions;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Utility;
 using Turmerik.Dependencies;
 using Turmerik.DriveExplorer;
 using Turmerik.LocalFilesExplorer.AspNetCoreApp.Settings;
@@ -34,8 +35,14 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Dependencies
             services.AddSingleton(
                 svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create());
 
-            services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
-            services.AddSingleton<IDriveExplorerService, FsExplorerService>();
+            services.AddSingleton<FsExplorerServiceFactory>();
+
+            services.AddSingleton<IDriveItemsRetriever>(
+                svcProv => svcProv.GetRequiredService<FsExplorerServiceFactory>().Retriever());
+
+            services.AddSingleton<IDriveExplorerService>(
+                svcProv => svcProv.GetRequiredService<FsExplorerServiceFactory>().Explorer());
+
             services.AddSingleton<IAppConfigServiceFactory, AppConfigServiceFactory>();
 
             services.AddSingleton(
@@ -45,5 +52,36 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Dependencies
             services.AddSingleton<IUsersIdnfStorage, LocalJsonFileUsersIdnfStorage>();
             return services;
         }
+    }
+
+    public class FsExplorerServiceFactory
+    {
+        private readonly IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever;
+        private readonly ITimeStampHelper timeStampHelper;
+
+        public FsExplorerServiceFactory(
+            IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever,
+            ITimeStampHelper timeStampHelper)
+        {
+            this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(
+                nameof(appSettingsRetriever));
+
+            this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
+                nameof(timeStampHelper));
+        }
+
+        public FsExplorerService Explorer(
+            ) => new FsExplorerService(
+                timeStampHelper)
+            {
+                RootDirPath = appSettingsRetriever.Data.FsExplorerServiceReqRootPath
+            };
+
+        public FsItemsRetriever Retriever(
+            ) => new FsItemsRetriever(
+                timeStampHelper)
+            {
+                RootDirPath = appSettingsRetriever.Data.FsExplorerServiceReqRootPath
+            };
     }
 }

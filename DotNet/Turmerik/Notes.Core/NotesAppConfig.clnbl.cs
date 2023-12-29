@@ -6,6 +6,7 @@ namespace Turmerik.Notes.Core
 {
     public interface INotesAppConfig
     {
+        string FsExplorerServiceReqRootPath { get; }
         string AppEnvLocatorFilePath { get; }
         bool IsDevEnv { get; }
         int RequiredClientVersion { get; }
@@ -31,6 +32,7 @@ namespace Turmerik.Notes.Core
         public NotesAppConfigMtbl(
             INotesAppConfig src)
         {
+            FsExplorerServiceReqRootPath = src.FsExplorerServiceReqRootPath;
             AppEnvLocatorFilePath = src.AppEnvLocatorFilePath;
             IsDevEnv = src.IsDevEnv;
             RequiredClientVersion = src.RequiredClientVersion;
@@ -38,6 +40,7 @@ namespace Turmerik.Notes.Core
             NoteDirPairs = src.GetNoteDirPairs()?.ToMtbl();
         }
 
+        public string FsExplorerServiceReqRootPath { get; set; }
         public string AppEnvLocatorFilePath { get; set; }
         public bool IsDevEnv { get; set; }
         public int RequiredClientVersion { get; set; }
@@ -52,6 +55,7 @@ namespace Turmerik.Notes.Core
         public NotesAppConfigImmtbl(
             INotesAppConfig src)
         {
+            FsExplorerServiceReqRootPath = src.FsExplorerServiceReqRootPath;
             AppEnvLocatorFilePath = src.AppEnvLocatorFilePath;
             IsDevEnv = src.IsDevEnv;
             RequiredClientVersion = src.RequiredClientVersion;
@@ -59,6 +63,7 @@ namespace Turmerik.Notes.Core
             NoteDirPairs = src.GetNoteDirPairs()?.ToImmtbl();
         }
 
+        public string FsExplorerServiceReqRootPath { get; }
         public string AppEnvLocatorFilePath { get; }
         public bool IsDevEnv { get; }
         public int RequiredClientVersion { get; }
