@@ -1,19 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { core as trmrk } from "trmrk";
-
-import { localStorageKeys, jsonBool } from "../services/utils";
-
 import {
   AppBarData,
   AppBarOpts,
-  AppData,
   AppOptionsMenuOpts,
-  AppPage,
   AppSettingsMenuOpts,
 } from "../services/appData";
-
-import { AppConfigData } from "trmrk/src/notes-app-config";
 
 declare type DispatcherType<TPropVal> = (
   state: AppBarData,

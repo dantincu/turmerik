@@ -11,8 +11,8 @@ import { core as trmrk } from "trmrk";
 import { routes } from "../../services/routes";
 
 import AddressBar from "../../components/addressBar/AddressBar";
-import { FilesHcyData, filesHcyCtxReducer } from "./FilesHcyData";
-import { createFilesHcyContext, FilesHcyContext } from "./FilesHcyDataContext";
+import { FilesHcyHistory, FilesHcyHistoryItem } from "../../services/appData";
+import { filesHcyHistoryGoBack, filesHcyHistoryGoForward, filesHcyHistoryPush, filesHcyHistoryReplace } from "../../store/filesHcyHistorySlice";
 import { validateRootedPath } from "../../services/notes/notePath";
 
 import { AppData, AppPagesData } from "../../services/appData";
@@ -20,19 +20,9 @@ import { AppData, AppPagesData } from "../../services/appData";
 export default function FilesHcyPageBar() {
   const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
   const appConfig = useSelector((state: { appData: AppData }) => state.appData.appConfig);
+  const filesHcyHistory = useSelector((state: { filesHcyHistory: FilesHcyHistory }) => state.filesHcyHistory);
   const dispatch = useDispatch();
 
-  const filesHcyCtxInitialState = {
-    history: {
-      items: [],
-      currentIdx: null,
-      currentItem: null
-    }
-  } as unknown as FilesHcyData;
-
-  const [ filesHcyState, filesHcyStateDispatch ] = React.useReducer(filesHcyCtxReducer, filesHcyCtxInitialState);
-  const filesHcyData = createFilesHcyContext(filesHcyState, filesHcyStateDispatch);
-  const filesHcyHistory = filesHcyData.history;
   const filesHcyCurrentIdx = filesHcyHistory.currentIdx ?? -1;
 
   const btnGoBackIsDisabled = filesHcyCurrentIdx < 0;
@@ -43,9 +33,9 @@ export default function FilesHcyPageBar() {
 
   useEffect(() => {
     if (!filesHcyHistory.currentItem || filesHcyHistory.currentItem.idnf !== currentIdnf) {
-      filesHcyData.historyPush({
+      dispatch(filesHcyHistoryPush({
         idnf: currentIdnf
-      });
+      }));
     }
   }, []);
 
@@ -53,16 +43,16 @@ export default function FilesHcyPageBar() {
     let nextIdnf = "";
 
     if (filesHcyCurrentIdx === 0) {
-      filesHcyData.historyReplace({
+      dispatch(filesHcyHistoryReplace({
         items: [{
           idnf: ""
         }],
         currentIdx: null,
         currentItem: null
-      });
+      }));
     } else {
       nextIdnf = filesHcyHistory.items[filesHcyCurrentIdx - 1].idnf;
-      filesHcyData.historyGoBack();
+      dispatch(filesHcyHistoryGoBack());
     }
     
     const idnf = encodeURIComponent(nextIdnf);
@@ -71,7 +61,7 @@ export default function FilesHcyPageBar() {
 
   const onBtnGoForwardClick = () => {
     const nextIdnf = filesHcyHistory.items[filesHcyCurrentIdx + 1].idnf;
-    filesHcyData.historyGoForward();
+    dispatch(filesHcyHistoryGoForward());
 
     const idnf = encodeURIComponent(nextIdnf);
     navigate([routes.files, idnf].join("/"));
@@ -92,14 +82,12 @@ export default function FilesHcyPageBar() {
     return errMsg;
   };
 
-  return (<FilesHcyContext.Provider value={filesHcyData}>
-      <div className="trmrk-app-page-bar trmrk-files-hcy-page-bar">
-        <IconButton className="trmrk-icon-button" disabled={btnGoBackIsDisabled} onClick={onBtnGoBackClick}><ArrowLeftIcon /></IconButton>
-        <IconButton className="trmrk-icon-button" disabled={btnGoForwardIsDisabled} onClick={onBtnGoForwardClick}><ArrowRightIcon /></IconButton>
-        <AddressBar address={currentIdnf}
-          onAddressChanged={onAddressChanged}
-          addressValidator={addressValidator}
-          className="trmrk-main-address-bar" />
-      </div>
-    </FilesHcyContext.Provider>)
+  return (<div className="trmrk-app-page-bar trmrk-files-hcy-page-bar">
+      <IconButton className="trmrk-icon-button" disabled={btnGoBackIsDisabled} onClick={onBtnGoBackClick}><ArrowLeftIcon /></IconButton>
+      <IconButton className="trmrk-icon-button" disabled={btnGoForwardIsDisabled} onClick={onBtnGoForwardClick}><ArrowRightIcon /></IconButton>
+      <AddressBar address={currentIdnf}
+        onAddressChanged={onAddressChanged}
+        addressValidator={addressValidator}
+        className="trmrk-main-address-bar" />
+    </div>)
 }

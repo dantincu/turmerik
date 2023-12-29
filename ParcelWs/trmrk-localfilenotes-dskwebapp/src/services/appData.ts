@@ -1,5 +1,10 @@
 import { AppConfigData } from "trmrk/src/notes-app-config";
 
+export interface AppData {
+  appConfig: AppConfigData;
+  baseLocation: string;
+}
+
 export enum AppPage {
   Home = 0,
   ViewNoteItem,
@@ -52,9 +57,12 @@ export interface AppPagesData {
 
 export interface AppTabsData {}
 
-export interface AppData {
-  appConfig: AppConfigData;
-  baseLocation: string;
-  /* appBarData: AppBarData;
-  appPages: AppPagesData; */
+export interface FilesHcyHistoryItem {
+  idnf: string;
+}
+
+export interface FilesHcyHistory {
+  items: FilesHcyHistoryItem[];
+  currentIdx: number | null | undefined;
+  currentItem: FilesHcyHistoryItem | null | undefined;
 }
