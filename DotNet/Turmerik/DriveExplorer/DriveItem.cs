@@ -34,11 +34,14 @@ namespace Turmerik.DriveExplorer
         public DriveItemCore(DriveItemCore src)
         {
             Idnf = src.Idnf;
+            PrIdnf = src.PrIdnf;
+            CsId = src.CsId;
+            PrCsId = src.PrCsId;
+            PrPath = src.PrPath;
             Name = src.Name;
             DisplayName = src.DisplayName;
             IsFolder = src.IsFolder;
             IsRootFolder = src.IsRootFolder;
-            PrIdnf = src.PrIdnf;
             FileType = src.FileType;
             OfficeFileType = src.OfficeFileType;
             IsTextFile = src.IsTextFile;
@@ -48,12 +51,16 @@ namespace Turmerik.DriveExplorer
         }
 
         public string Idnf { get; set; }
+        public string PrIdnf { get; set; }
+        public string CsId { get; set; }
+        public string PrCsId { get; set; }
+        public string PrPath { get; set; }
+
         public string Name { get; set; }
         public string DisplayName { get; set; }
+
         public bool? IsFolder { get; set; }
         public bool? IsRootFolder { get; set; }
-
-        public string PrIdnf { get; set; }
 
         public FileType? FileType { get; set; }
         public OfficeFileType? OfficeFileType { get; set; }

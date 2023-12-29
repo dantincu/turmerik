@@ -17,11 +17,17 @@ export enum OfficeLikeFileType {
 
 export interface DriveItem {
   idnf: string | null | undefined;
+  prIdnf: string | null | undefined;
+  csId: string | null | undefined;
+  prCsId: string | null | undefined;
+  prPath: string | null | undefined;
+
   name: string;
   displayName: string | null | undefined;
+
   isFolder?: boolean | null | undefined;
   isRootFolder?: boolean | null | undefined;
-  prIdnf: string | null | undefined;
+
   fileType?: FileType | null | undefined;
   officeFileType?: OfficeLikeFileType | null | undefined;
   isTextFile?: boolean | null | undefined;
