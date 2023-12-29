@@ -5,8 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Container from "@mui/material/Container";
 
 import { setCurrentIdnf, setAppPage } from "../../store/appPagesSlice";
-import { filesHcyHistoryPush } from "../../store/filesHcyHistorySlice";
-import { AppData, AppPage, AppPagesData, FilesHcyHistory } from "../../services/appData";
+import { AppData, AppPage, AppPagesData } from "../../services/appData";
 import { updateAppTitle } from "../../services/utils";
 
 import './styles.scss';

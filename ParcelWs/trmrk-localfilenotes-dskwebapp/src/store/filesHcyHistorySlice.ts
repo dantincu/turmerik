@@ -14,6 +14,11 @@ export interface FilesHcyHistoryReducer {
   filesHcyHistoryGoBack: DispatcherType<void>;
   filesHcyHistoryGoForward: DispatcherType<void>;
   filesHcyHistoryPush: DispatcherType<FilesHcyHistoryItem>;
+  filesHcyHistoryInsert: DispatcherType<{
+    idx: number;
+    items: FilesHcyHistoryItem[];
+    currentIdx: number | null | undefined;
+  }>;
   filesHcyHistoryReplace: DispatcherType<FilesHcyHistory>;
 }
 
@@ -53,6 +58,12 @@ const reducer = {
     state.currentItem = action.payload;
     state.items.push(state.currentItem!);
   },
+  filesHcyHistoryInsert: (state, action) => {
+    const { items, idx, currentIdx } = action.payload;
+    state.items.splice(idx ?? 0, 0, ...items);
+    state.currentIdx = currentIdx ?? (state.currentIdx ?? -1) + items.length;
+    state.currentItem = state.items[state.currentIdx];
+  },
   filesHcyHistoryReplace: (state, action) => {
     const newState = action.payload as FilesHcyHistory;
     state.items = newState.items ?? [];
@@ -85,6 +96,7 @@ export const {
   filesHcyHistoryGoBack,
   filesHcyHistoryGoForward,
   filesHcyHistoryPush,
+  filesHcyHistoryInsert,
   filesHcyHistoryReplace,
 } = filesHcyHistorySlice.actions;
 

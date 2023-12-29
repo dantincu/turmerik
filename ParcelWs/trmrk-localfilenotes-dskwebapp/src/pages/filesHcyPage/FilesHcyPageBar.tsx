@@ -13,7 +13,7 @@ import { getRoute } from "../../services/utils";
 
 import AddressBar from "../../components/addressBar/AddressBar";
 import { FilesHcyHistory } from "../../services/appData";
-import { filesHcyHistoryGoBack, filesHcyHistoryGoForward, filesHcyHistoryPush, filesHcyHistoryReplace } from "../../store/filesHcyHistorySlice";
+import { filesHcyHistoryGoBack, filesHcyHistoryGoForward, filesHcyHistoryPush, filesHcyHistoryInsert } from "../../store/filesHcyHistorySlice";
 import { validateRootedPath } from "../../services/notes/notePath";
 
 import { AppData, AppPagesData } from "../../services/appData";
@@ -28,22 +28,18 @@ export default function FilesHcyPageBar() {
 
   const filesHcyCurrentIdx = filesHcyHistory.currentIdx ?? -1;
 
-  const btnGoBackIsDisabled = filesHcyCurrentIdx < 0;
+  const btnGoBackIsDisabled = filesHcyCurrentIdx < 0 || (filesHcyCurrentIdx === 0 && !trmrk.isNonEmptyStr(currentIdnf, true));
   const btnGoForwardIsDisabled = filesHcyHistory.items.length - filesHcyCurrentIdx <= 1;
 
   const navigate = useNavigate();
-  console.log("bar - currentIdnf0", currentIdnf, btnGoForwardIsDisabled);
-  console.log("bar - filesHcyHistory", filesHcyHistory);
+  console.log("bar - filesHcyHistory0", filesHcyHistory);
 
   useEffect(() => {
-    console.log("bar - currentIdnf1", currentIdnf);
-    console.log("bar - filesHcyHistory.currentItem?.idnf", filesHcyHistory.currentItem?.idnf)
+  console.log("bar - filesHcyHistory1", filesHcyHistory);
     if (!filesHcyHistory.currentItem || filesHcyHistory.currentItem.idnf !== currentIdnf) {
-      console.log("bar - currentIdnf2", currentIdnf);
       dispatch(filesHcyHistoryPush({
         idnf: currentIdnf
       }));
-      console.log("bar - currentIdnf3", currentIdnf);
     }
   }, [ currentIdnf ]);
 
@@ -51,22 +47,24 @@ export default function FilesHcyPageBar() {
     let nextIdnf = "";
 
     if (filesHcyCurrentIdx === 0) {
-      dispatch(filesHcyHistoryReplace({
-        items: [{
-          idnf: ""
-        }],
-        currentIdx: null,
-        currentItem: null
-      }));
+      if (trmrk.isNonEmptyStr(currentIdnf, true)) {
+        dispatch(filesHcyHistoryInsert({
+          items: [{
+            idnf: ""
+          }],
+          idx: 0,
+          currentIdx: 0,
+        }));
+      }
     } else {
       nextIdnf = filesHcyHistory.items[filesHcyCurrentIdx - 1].idnf;
       dispatch(filesHcyHistoryGoBack());
     }
 
-    console.log("bar - nextIdnf", nextIdnf);
-
-    navigate(getRoute(routes.files, nextIdnf));
-    setCurrentIdnf(nextIdnf);
+    if (nextIdnf !== currentIdnf) {
+      navigate(getRoute(routes.files, nextIdnf));
+      setCurrentIdnf(nextIdnf);
+    }
   }
 
   const onBtnGoForwardClick = () => {
@@ -78,8 +76,6 @@ export default function FilesHcyPageBar() {
   }
 
   const onAddressChanged = (newAddress: string) => {
-    console.log("bar - newAddress", newAddress);
-    
     dispatch(filesHcyHistoryPush({
       idnf: newAddress
     }));
