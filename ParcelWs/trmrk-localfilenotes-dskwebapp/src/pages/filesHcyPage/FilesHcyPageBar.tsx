@@ -28,7 +28,8 @@ export default function FilesHcyPageBar() {
 
   const filesHcyCurrentIdx = filesHcyHistory.currentIdx ?? -1;
 
-  const btnGoBackIsDisabled = filesHcyCurrentIdx < 0 || (filesHcyCurrentIdx === 0 && !trmrk.isNonEmptyStr(currentIdnf, true));
+  // const btnGoBackIsDisabled = filesHcyCurrentIdx < 0 || (filesHcyCurrentIdx === 0 && !trmrk.isNonEmptyStr(currentIdnf, true));
+  const btnGoBackIsDisabled = filesHcyCurrentIdx <= 0;
   const btnGoForwardIsDisabled = filesHcyHistory.items.length - filesHcyCurrentIdx <= 1;
 
   const navigate = useNavigate();

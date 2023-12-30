@@ -7,6 +7,4 @@ export const browser = {
   indexedDB: idxedDB.indexedDB,
 };
 
-export type TrmrkIdxedDBType = idxedDB.TrmrkIdxedDBType;
 export type TrmrkDBResp<T> = idxedDB.TrmrkDBRespType<T>;
-export type IdxedDBInitOpts = idxedDB.IdxedDBInitOpts;

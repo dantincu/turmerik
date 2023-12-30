@@ -103,18 +103,20 @@ namespace Turmerik.DriveExplorer
             var entry = new DirectoryInfo(folderPath);
             var folder = GetDriveItem(entry);
 
-            var driveItemsArr = entry.EnumerateFileSystemInfos(
-                ).Select(fi => GetDriveItem(fi)).ToArray();
+            var driveItemsList = entry.EnumerateFileSystemInfos(
+                ).Select(fi => GetDriveItem(fi)).ToList();
 
             folder.SubFolders = new List<DriveItem>(
-                driveItemsArr.Where(
+                driveItemsList.Where(
                     item => item.IsFolder == true));
 
             folder.FolderFiles = new List<DriveItem>(
-                driveItemsArr.Where(
+                driveItemsList.Where(
                     item => item.IsFolder != true).ToList());
 
+            SortChildItems(folder);
             RemoveAdditionalInfoIfReq(folder, retMinimalInfo);
+
             return folder;
         }
 

@@ -45,9 +45,10 @@ export class AxiosLocalForage {
       if (resp.isSuccessStatus) {
         const setResp = await opts.localForageSet(resp.data);
         resp.cacheError = setResp.cacheError;
+        resp.isSuccess = resp.cacheMatch;
       }
     } else {
-      resp.isSuccessStatus = true;
+      resp.isSuccess = true;
     }
 
     return resp;

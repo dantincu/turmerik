@@ -217,5 +217,11 @@ namespace Turmerik.DriveExplorer
 
             return retVal;
         }
+
+        protected void SortChildItems(DriveItem folder)
+        {
+            folder.SubFolders.Sort((f1, f2) => f1.Name.CompareTo(f2.Name));
+            folder.FolderFiles.Sort((f1, f2) => f1.Name.CompareTo(f2.Name));
+        }
     }
 }

@@ -136,7 +136,9 @@ namespace Turmerik.DriveExplorer
 
             dirInfo.Delete(true);
 
+            SortChildItems(driveItem);
             RemoveAdditionalInfoIfReq(driveItem, retMinimalInfo);
+
             return driveItem;
         }
 
@@ -184,7 +186,9 @@ namespace Turmerik.DriveExplorer
             var newEntry = new DirectoryInfo(newPath);
             var item = GetDriveItem(newEntry);
 
+            SortChildItems(item);
             RemoveAdditionalInfoIfReq(item, retMinimalInfo);
+
             return item;
         }
 

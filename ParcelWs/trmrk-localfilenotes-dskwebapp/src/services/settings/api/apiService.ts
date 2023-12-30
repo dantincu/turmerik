@@ -1,6 +1,7 @@
 import localforage from "localforage";
 
 import { core as trmrk } from "trmrk";
+import { MtblRefValue } from "trmrk/src/core";
 import { ApiService, ApiServiceType } from "trmrk-axios/src/core";
 
 import { AxiosLocalForage as AxiosLocalForageBase } from "trmrk-browser/src/axiosLocalForage/core";
@@ -10,11 +11,14 @@ export const apiSvc = new ApiService();
 export const dbVersion = 1;
 
 export class DefaultCacheDb {
+  private readonly _idxedDbNamePfx: string;
   private readonly _appConfig: LocalForage;
 
-  constructor() {
+  constructor(idxedDbNamePfx: string) {
+    this._idxedDbNamePfx = idxedDbNamePfx;
+
     this._appConfig = localforage.createInstance({
-      name: "users-all",
+      name: this._idxedDbNamePfx + "users-all",
       version: dbVersion,
       storeName: "appConfig",
     });
@@ -26,13 +30,15 @@ export class DefaultCacheDb {
 }
 
 export class MainCacheDb {
-  private _userUuid: string;
+  private readonly _idxedDbNamePfx: string;
+  private readonly _userUuid: string;
   private readonly _dbName: string;
   private readonly _entries: LocalForage;
 
-  constructor(userUuid: string) {
+  constructor(idxedDbNamePfx: string, userUuid: string) {
+    this._idxedDbNamePfx = idxedDbNamePfx;
     this._userUuid = userUuid;
-    this._dbName = `user-${userUuid}`;
+    this._dbName = this._idxedDbNamePfx + `user-${userUuid}`;
 
     this._entries = this.createStore("entries");
   }
@@ -53,14 +59,16 @@ export class MainCacheDb {
 }
 
 export class AxiosLocalForage extends AxiosLocalForageBase {
+  private readonly _idxedDbNamePfx: string;
   private readonly _dfCacheDb: DefaultCacheDb;
 
   private _mainCacheDb: MainCacheDb | null;
 
-  constructor(apiSvc: ApiServiceType) {
+  constructor(idxedDbNamePfx: string, apiSvc: ApiServiceType) {
     super(apiSvc);
+    this._idxedDbNamePfx = idxedDbNamePfx;
 
-    this._dfCacheDb = new DefaultCacheDb();
+    this._dfCacheDb = new DefaultCacheDb(this._idxedDbNamePfx);
     this._mainCacheDb = null;
   }
 
@@ -83,11 +91,12 @@ export class AxiosLocalForage extends AxiosLocalForageBase {
       );
     }
 
-    this._mainCacheDb = new MainCacheDb(userUuid);
+    this._mainCacheDb = new MainCacheDb(this._idxedDbNamePfx, userUuid);
     this.apiSvc.clientUserUuid = userUuid;
   }
 }
 
 export type AxiosLocalForageType = AxiosLocalForage;
 
-export const cachedApiSvc: AxiosLocalForageType = new AxiosLocalForage(apiSvc);
+// export const cachedApiSvc: AxiosLocalForageType = new AxiosLocalForage(apiSvc);
+export const cachedApiSvc = {} as MtblRefValue<AxiosLocalForageType>;

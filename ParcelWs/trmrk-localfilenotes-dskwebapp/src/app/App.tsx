@@ -17,7 +17,7 @@ import ApiError from "../components/apiError/ApiError";
 
 import { getAppTheme } from "../services/app-theme/app-theme";
 import { AppConfigData } from "trmrk/src/notes-app-config"; 
-import { AppData, AppPagesData } from "../services/appData";
+import { AppPagesData } from "../services/appData";
 import { setAppConfig } from "../store/appDataSlice";
 import { cacheKeys } from "../services/localForage";
 
@@ -49,7 +49,7 @@ const AppEl = ({
   args
 }: {
   args: AppBarArgs
-}) => args.resp ? args.resp.isSuccessStatus ?
+}) => args.resp ? args.resp.isSuccess ?
   <MainEl /> : <LoadErrorEl args={args} /> : <LoadingEl args={args} />;
 
 const App = () => {
@@ -69,10 +69,10 @@ const App = () => {
 
   useEffect(() => {
     if (!isLoading && !appSettingsResp) {
-      cachedApiSvc.req<AppConfigData>({
+      cachedApiSvc.value.req<AppConfigData>({
         apiCall: async (apiSvc: ApiServiceType) => await apiSvc.get<AppConfigData>("AppConfig"),
         localForageGet: async () => {
-          const data = await cachedApiSvc.dfCacheDb.appConfig.getItem<AppConfigData>(cacheKeys.appConfig);
+          const data = await cachedApiSvc.value.dfCacheDb.appConfig.getItem<AppConfigData>(cacheKeys.appConfig);
 
           const dbResp: TrmrkDBResp<AppConfigData> = {
             // cacheMatch: false,
@@ -84,7 +84,7 @@ const App = () => {
           return dbResp;
         },
         localForageSet: async data => {
-          await cachedApiSvc.dfCacheDb.appConfig.setItem<AppConfigData>(
+          await cachedApiSvc.value.dfCacheDb.appConfig.setItem<AppConfigData>(
             cacheKeys.appConfig, data);
 
           const dbResp: TrmrkDBResp<AppConfigData> = {
@@ -99,8 +99,8 @@ const App = () => {
         setAppSettingsResp(resp);
         setIsLoading(false);
 
-        if (resp.isSuccessStatus) {
-          cachedApiSvc.initMainCacheDb(resp.data.clientUserUuid);
+        if (resp.isSuccess) {
+          cachedApiSvc.value.initMainCacheDb(resp.data.clientUserUuid);
           dispatch(setAppConfig(resp.data));
         }
       }, reason => {

@@ -5,6 +5,7 @@ export namespace ns {
     apiHost: string;
     apiRelUriBase: string;
     clientVersion: number;
+    idxedDbNamePfx: string | null;
   }
 
   export interface AxiosResponse<T> {
@@ -19,6 +20,7 @@ export namespace ns {
     error?: any | null | undefined;
     errTitle?: string | null | undefined;
     errMessage?: string | null | undefined;
+    isSuccess?: boolean | null | undefined;
     isSuccessStatus?: boolean | null | undefined;
     isRedirectStatus?: boolean | null | undefined;
     isInfoStatus?: boolean | null | undefined;
