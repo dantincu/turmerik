@@ -48,6 +48,9 @@ namespace Turmerik.DriveExplorer
             IsImageFile = src.IsImageFile;
             IsVideoFile = src.IsVideoFile;
             IsAudioFile = src.IsAudioFile;
+            CreationTime = src.CreationTime;
+            LastWriteTime = src.LastWriteTime;
+            LastAccessTime = src.LastAccessTime;
         }
 
         public string Idnf { get; set; }
@@ -68,6 +71,10 @@ namespace Turmerik.DriveExplorer
         public bool? IsImageFile { get; set; }
         public bool? IsVideoFile { get; set; }
         public bool? IsAudioFile { get; set; }
+
+        public DateTime? CreationTime { get; set; }
+        public DateTime? LastWriteTime { get; set; }
+        public DateTime? LastAccessTime { get; set; }
     }
 
     public class DriveItem<TDriveItem> : DriveItemCore

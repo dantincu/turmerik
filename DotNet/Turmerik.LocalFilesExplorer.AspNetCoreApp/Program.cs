@@ -11,6 +11,12 @@ var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 LocalFilesExplorerAspNetCoreServices.RegisterAll(builder.Services);
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = null;
+    serverOptions.Limits.MaxResponseBufferSize = null;
+});
+
 var clientHost = builder.Configuration.GetValue<string>("ClientHost");
 
 builder.Services.AddCors(options =>

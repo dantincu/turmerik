@@ -11,7 +11,7 @@ using Turmerik.AspNetCore.UserSessions;
 
 namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AppConfigController : ControllerBase
     {
@@ -29,8 +29,12 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Controllers
                 nameof(usersManager));
         }
 
+        [Route("/api/[controller]")]
         [HttpGet]
         public Task<ClientAppConfig> Get() => GetCore();
+
+        /* [HttpPost]
+        public void GCCollect() => GC.Collect(); */
 
         private async Task<ClientAppConfig> GetCore() => new ClientAppConfig
         {
