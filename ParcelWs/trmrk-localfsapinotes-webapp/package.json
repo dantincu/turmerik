@@ -1,11 +1,11 @@
 {
-  "name": "trmrk-localfilenotes-dskwebapp",
+  "name": "trmrk-localfsapinotes-dskwebapp",
   "version": "0.1.0",
-  "description": "Turmerik Local File Notes Web App (with React)",
+  "description": "Turmerik Local File System Api Notes Web App (with React)",
   "type": "module",
   "source": "src/index.html",
   "scripts": {
-    "start": "parcel --port=9001 --host=localhost --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "start": "parcel --port=9002 --host=localhost --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
     "build": "parcel build"
   },
   "author": "Daniel Tincu",
