@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import { AppData } from "../services/appData";
 import { getAppTheme } from "../services/app-theme/app-theme";
 import { appRoutes } from "../services/routes";
-import { getAppThemeCssClassName } from "../services/utils";
+import { getAppThemeCssClassName, getAppModeCssClassName } from "../services/utils";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/floatingBarTopOffsetUpdater";
 
 import HomePage from "../pages/home/HomePage";
@@ -19,14 +19,14 @@ import NotFoundPage from "../pages/notFound/NotFoundPage";
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
 
 export default function App() {
-  const appData = useSelector<{ appData: AppData }, AppData>(state => state.appData);
+  const appData = useSelector((state: { appData: AppData }) => state.appData);
 
   const appTheme = getAppTheme({
     isDarkMode: appData.isDarkMode
   });
 
   const appThemeClassName = getAppThemeCssClassName(appData);
-  const appModeClassName = appData.isCompactMode ? "trmrk-full-mode" : "trmrk-compact-mode";
+  const appModeClassName = getAppModeCssClassName(appData);
   
   const appHeaderEl = useRef<HTMLDivElement>(null);
   const appBodyEl = useRef<HTMLDivElement>(null);
@@ -62,11 +62,14 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
-        <Box sx={{ }}>
-          <Box className="trmrk-app-bar" ref={appHeaderEl} sx={{ width: "100%", height: "5em", position: "absolute", top: "0px" }}>
+        <Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
+          <Box className="trmrk-app-bar" ref={appHeaderEl} sx={{
+              width: "100%", height: "5em", position: "absolute", top: "0px" }}>
             <TrmrkAppBar />
           </Box>
-          <Box className="trmrk-app-main" ref={appBodyEl} sx={{ width: "100%", overflowY: "scroll", position: "absolute", top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
+          <Box className="trmrk-app-main" ref={appBodyEl} sx={{
+              width: "100%", overflowY: "scroll", position: "absolute",
+              top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
             <Routes>
               <Route path="" element={<Navigate to="/home" />} />
               <Route path="/" element={<Navigate to="/home" />} />

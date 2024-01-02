@@ -48,6 +48,14 @@ export const getAppThemeCssClassName = (appData: AppData) => {
   return appThemeClassName;
 };
 
+export const getAppModeCssClassName = (appData: AppData) => {
+  const appModeClassName = appData.isCompactMode
+    ? "trmrk-mode-compact"
+    : "trmrk-mode-full";
+
+  return appModeClassName;
+};
+
 export const getRoute = (routeBase: string, idnf: string) => {
   const encodedIdnf = encodeURIComponent(idnf);
   const route = [routeBase, encodedIdnf].join("/");
