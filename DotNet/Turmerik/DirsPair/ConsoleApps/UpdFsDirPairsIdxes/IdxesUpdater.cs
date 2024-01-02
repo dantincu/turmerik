@@ -216,6 +216,14 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                             " ", $"Filter with start idx {idxesFilter.StartIdx} and end idx {idxesFilter.EndIdx}",
                             $"totals a count of {trgCount} which is different than the source idxes count which is {count}"));
                     }
+
+                    if (wka.Opts.IdxComparison(
+                        idxesFilter.StartIdx.Value,
+                        idxesFilter.EndIdx.Value) > 0)
+                    {
+                        throw new ArgumentException(string.Join(" ",
+                            $"The provided interval boundaries are not in the correct order: {idxesFilter.StartIdx} - {idxesFilter.EndIdx}"));
+                    }
                 }
 
                 nmrbl = nmrbl.Select(i => idxesFilter.StartIdx.Value + i * opts.IdxIncVal);

@@ -99,6 +99,10 @@ namespace Turmerik.Core.Helpers
                     throw;
                 }
             }
+            finally
+            {
+                Console.ResetColor();
+            }
         }
 
         public static async Task TryExecuteAsync(
@@ -118,6 +122,10 @@ namespace Turmerik.Core.Helpers
                 {
                     throw;
                 }
+            }
+            finally
+            {
+                Console.ResetColor();
             }
         }
 

@@ -115,6 +115,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             GetLoopWorkArgsItemsList(wka);
 
             Console.ResetColor();
+            bool userCancelledExecution = false;
+
             if (wka.Args.InteractiveMode == true)
             {
                 Console.WriteLine();
@@ -123,6 +125,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
                 if (answer.ToUpper() != "Y")
                 {
+                    userCancelledExecution = true;
                     Console.WriteLine("No renaming will be performed. Exiting the program");
                 }
                 else
@@ -133,7 +136,10 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                 Console.WriteLine();
             }
 
-            Run(wka);
+            if (!userCancelledExecution)
+            {
+                Run(wka);
+            }
         }
 
         public void Run(WorkArgs wka)
@@ -141,23 +147,38 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             Console.ForegroundColor = ConsoleColor.Black;
 
             RunCore(wka, "Renaming dir pairs to temp names",
-                ConsoleColor.Blue, loopWka =>
-                {
-                    FsH.MoveDirectory(loopWka.ShortDirName, loopWka.TempShortDirName);
-                    FsH.MoveDirectory(loopWka.FullDirName, loopWka.TempFullDirName);
-                });
+                ConsoleColor.Blue, loopWka => new Dictionary<string, string>
+                    {
+                        { loopWka.ShortDirName, loopWka.TempShortDirName },
+                        { loopWka.FullDirName, loopWka.TempFullDirName }
+                    });
 
             RunCore(wka, "Renaming dir pairs to final names",
-                ConsoleColor.Cyan, loopWka =>
-                {
-                    FsH.MoveDirectory(loopWka.TempShortDirName, loopWka.NewShortDirName);
-                    FsH.MoveDirectory(loopWka.TempFullDirName, loopWka.NewFullDirName);
-                });
+                ConsoleColor.Cyan, loopWka => new Dictionary<string, string>
+                    {
+                        { loopWka.TempShortDirName, loopWka.NewShortDirName },
+                        { loopWka.TempFullDirName, loopWka.NewFullDirName }
+                    });
 
             PrintActionName(
                 "Successfully renamed dir pairs to final names",
                 ConsoleColor.Green);
         }
+
+        private void RunCore(
+            WorkArgs wka,
+            string actionName,
+            ConsoleColor backgroundColor,
+            Func<LoopWorkArgsItem, Dictionary<string, string>> dirNamesMapFactory) => RunCore(wka, actionName, backgroundColor, loopWka =>
+                {
+                    foreach (var kvp in dirNamesMapFactory(loopWka))
+                    {
+                        var srcDirPath = Path.Combine(wka.Args.WorkDir, kvp.Key);
+                        var trgDirPath = Path.Combine(wka.Args.WorkDir, kvp.Value);
+
+                        FsH.MoveDirectory(srcDirPath, trgDirPath);
+                    }
+                });
 
         private void RunCore(
             WorkArgs wka,
@@ -276,6 +297,10 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                 throw new ArgumentNullException(
                     $"Invalid idxes filter: {rawArg}");
             }
+            else
+            {
+                trgFilter = trgFilter.Substring(1);
+            }
 
             var mapping = new IdxesUpdateMapping
             {
@@ -304,6 +329,9 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             }
             else
             {
+                endIdxStr = endIdxStr.Substring(
+                    ITEMS_SPREAD_STR.Length);
+
                 if (!string.IsNullOrEmpty(stIdxStr))
                 {
                     idxesFilter.StartIdx = int.Parse(stIdxStr);
@@ -418,23 +446,9 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         {
             Console.WriteLine();
 
-            PrintToConsole("Will rename ", true, ConsoleColor.White);
-            PrintToConsole(loopWka.ShortDirName, true, ConsoleColor.DarkMagenta);
-
-            PrintToConsole("to ", true, ConsoleColor.White);
-            PrintToConsole(loopWka.NewShortDirName, true, ConsoleColor.Magenta);
-
-            Console.WriteLine();
-
-            PrintToConsole("Will rename ", true, ConsoleColor.White);
-            PrintToConsole(loopWka.ShortDirName, false, ConsoleColor.DarkMagenta);
-            PrintToConsole(NoteDirNameJoinStr, false, ConsoleColor.DarkGreen);
-            PrintToConsole(loopWka.FullDirNamePart, true, ConsoleColor.DarkCyan);
-
-            PrintToConsole("to ", true, ConsoleColor.White);
-            PrintToConsole(loopWka.NewShortDirName, false, ConsoleColor.Magenta);
-            PrintToConsole(NoteDirNameJoinStr, false, ConsoleColor.Green);
-            PrintToConsole(loopWka.FullDirNamePart, true, ConsoleColor.Cyan);
+            PrintToConsole(loopWka.ShortDirName, false, ConsoleColor.DarkCyan);
+            PrintToConsole(" -> ", false, ConsoleColor.DarkGray);
+            PrintToConsole(loopWka.NewShortDirName, true, ConsoleColor.Cyan);
 
             Console.WriteLine();
         }
@@ -447,11 +461,11 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             if (withNl)
             {
-                Console.Write(msg);
+                Console.WriteLine(msg);
             }
             else
             {
-                Console.WriteLine(msg);
+                Console.Write(msg);
             }
         }
 

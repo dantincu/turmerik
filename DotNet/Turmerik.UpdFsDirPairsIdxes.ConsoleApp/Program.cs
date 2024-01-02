@@ -10,6 +10,7 @@ var services = TrmrkCoreServices.RegisterAll(
 
 TrmrkServices.RegisterAll(services);
 
+services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
 services.AddSingleton<IDriveExplorerService, FsExplorerService>();
 services.AddSingleton<IdxesUpdater>();
 services.AddTransient<IProgramComponent, ProgramComponent>();
