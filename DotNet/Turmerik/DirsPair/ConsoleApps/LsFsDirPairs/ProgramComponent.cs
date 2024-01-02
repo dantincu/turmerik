@@ -175,7 +175,12 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
         {
             Comparison<DirsPairTuple> comparison;
 
-            if ((args.ShowLastCreatedFirst ?? false) != incIdx)
+            if (args.ShowLastCreatedFirst ?? false)
+            {
+                args.NoteItemsTuple.DirsPairTuples.Reverse();
+            }
+
+            /* if ((args.ShowLastCreatedFirst ?? false) != incIdx)
             {
                 comparison = (tuple1, tuple2) => tuple1.NoteDirIdx.CompareTo(
                     tuple2.NoteDirIdx);
@@ -186,7 +191,7 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
                     tuple1.NoteDirIdx);
             }
 
-            args.NoteItemsTuple.DirsPairTuples.Sort(comparison);
+            args.NoteItemsTuple.DirsPairTuples.Sort(comparison); */
         }
 
         private void WriteWithForegroundsToConsole(

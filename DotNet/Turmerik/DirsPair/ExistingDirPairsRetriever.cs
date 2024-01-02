@@ -91,6 +91,43 @@ namespace Turmerik.DirsPair
                 await driveItemsRetriever.GetFolderAsync(prIdnf, false));
 
             GetNoteDirPairs(tuple);
+
+            int noteDirNameIncIdx = (NoteDirNameIdxesCfg.IncIdx ?? true) ? 1 : -1;
+            int noteInternalDirNameIncIdx = (NoteInternalDirNameIdxesCfg.IncIdx ?? true) ? 1 : -1;
+
+            Comparison<DirsPairTuple> comparison = (n1, n2) =>
+            {
+                int retVal;
+
+                if (n1.NoteDirCat == NoteDirCategory.Item)
+                {
+                    if (n2.NoteDirCat == NoteDirCategory.Item)
+                    {
+                        retVal = n1.NoteDirIdx.CompareTo(n2.NoteDirIdx) * noteDirNameIncIdx;
+                    }
+                    else
+                    {
+                        retVal = 1;
+                    }
+                }
+                else
+                {
+                    if (n2.NoteDirCat == NoteDirCategory.Item)
+                    {
+                        retVal = -1;
+                    }
+                    else
+                    {
+                        retVal = n1.NoteDirIdx.CompareTo(n2.NoteDirIdx) * noteInternalDirNameIncIdx;
+                    }
+                }
+
+                return retVal;
+            };
+
+            tuple.DirsPairTuples.Sort(comparison);
+            tuple.FileDirsPairTuples.Sort(comparison);
+
             return tuple;
         }
 

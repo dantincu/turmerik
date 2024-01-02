@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.UpdFsDirPairsIdxes.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": ":wd:workDir"
+    }
+  }
+}

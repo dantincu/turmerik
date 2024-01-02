@@ -71,7 +71,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsBackup.Con
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.FsEntriesRetrieverTestWinFormsApp", "Turmerik.FsEntriesRetrieverTestWinFormsApp\Turmerik.FsEntriesRetrieverTestWinFormsApp.csproj", "{2944434A-7FC1-46C1-BE80-573D247CCE74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.LocalFilesExplorer.AspNetCoreApp", "Turmerik.LocalFilesExplorer.AspNetCoreApp\Turmerik.LocalFilesExplorer.AspNetCoreApp.csproj", "{B912757C-DAB4-447D-B564-04CC4E5D69BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFilesExplorer.AspNetCoreApp", "Turmerik.LocalFilesExplorer.AspNetCoreApp\Turmerik.LocalFilesExplorer.AspNetCoreApp.csproj", "{B912757C-DAB4-447D-B564-04CC4E5D69BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.UpdFsDirPairsIdxes.ConsoleApp", "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\Turmerik.UpdFsDirPairsIdxes.ConsoleApp.csproj", "{9AF90827-6F03-4206-B7EA-8B77C7983C41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -183,6 +185,10 @@ Global
 		{B912757C-DAB4-447D-B564-04CC4E5D69BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B912757C-DAB4-447D-B564-04CC4E5D69BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B912757C-DAB4-447D-B564-04CC4E5D69BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF90827-6F03-4206-B7EA-8B77C7983C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF90827-6F03-4206-B7EA-8B77C7983C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF90827-6F03-4206-B7EA-8B77C7983C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF90827-6F03-4206-B7EA-8B77C7983C41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,6 +225,7 @@ Global
 		{41862B45-0D77-4BA8-BE57-C296C6049A77} = {1C10D6ED-0FF3-46DF-A9EB-89AEB5952FD2}
 		{2944434A-7FC1-46C1-BE80-573D247CCE74} = {FCA0DE8B-04E5-46F5-9549-654541BC02DC}
 		{B912757C-DAB4-447D-B564-04CC4E5D69BA} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
+		{9AF90827-6F03-4206-B7EA-8B77C7983C41} = {52B63410-2581-4146-9484-89D300FAE7B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

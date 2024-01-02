@@ -9,6 +9,7 @@ using Turmerik.Notes.UnitTests;
 using Turmerik.DriveExplorer;
 using Turmerik.Core.Dependencies;
 using Turmerik.Notes.Core;
+using Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes;
 
 namespace Turmerik.Notes.UnitTests
 {
@@ -19,7 +20,10 @@ namespace Turmerik.Notes.UnitTests
             var svcProvContnr = ServiceProviderContainer.Instance.Value;
 
             svcProvContnr.RegisterData(
-                new ServiceCollection().AsOpts());
+                new ServiceCollection().AsOpts(services =>
+                {
+                    services.AddSingleton<IdxesUpdater>();
+                }));
 
             SvcProv = svcProvContnr.Data;
             RootDriveItem = svcProvContnr.RootDriveItem;
