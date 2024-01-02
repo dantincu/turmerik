@@ -38,7 +38,6 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IBestItemAsyncRetriever, BestItemAsyncRetriever>();
 
             services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
-            services.AddSingleton<IDataTreeGeneratorFactory, DataTreeGeneratorFactory>();
             services.AddSingleton<IStringTemplateParser, StringTemplateParser>();
             services.AddSingleton<IExceptionSerializer, ExceptionSerializer>();
 
@@ -46,10 +45,6 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IDelimCharsExtractor, DelimCharsExtractor>();
             services.AddSingleton<ITextBufferLinesRetriever, TextBufferLinesRetriever>();
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
-
-            services.AddSingleton<IFsEntriesRetriever, FsEntriesRetriever>();
-            services.AddSingleton<IStrPartsMatcher, StrPartsMatcher>();
-            services.AddSingleton<IFilteredFsEntriesRetriever, FilteredFsEntriesRetriever>();
 
             return services;
         }

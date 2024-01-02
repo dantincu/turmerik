@@ -16,14 +16,6 @@ namespace Turmerik.Html
 
     public class HtmlDocTitleRetriever : IHtmlDocTitleRetriever
     {
-        private readonly IHtmlNodesRetriever htmlNodesRetriever;
-
-        public HtmlDocTitleRetriever(
-            IHtmlNodesRetriever htmlNodesRetriever)
-        {
-            this.htmlNodesRetriever = htmlNodesRetriever ?? throw new ArgumentNullException(nameof(htmlNodesRetriever));
-        }
-
         public async Task<string> GetResouceTitleAsync(string resUrl)
         {
             resUrl = UriH.AssureUriHasScheme(resUrl,
