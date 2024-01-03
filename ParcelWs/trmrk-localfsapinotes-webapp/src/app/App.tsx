@@ -16,7 +16,10 @@ import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/fl
 import HomePage from "../pages/home/HomePage";
 import FilesHcyPage from "../pages/filesHcy/FilesHcyPage";
 import NotFoundPage from "../pages/notFound/NotFoundPage";
+import AppLoadingPage from "../pages/appLoading/AppLoadingPage";
+
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
+import AppLoadingBar from "../components/appBar/AppLoadingBar";
 
 export default function App() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
@@ -46,39 +49,46 @@ export default function App() {
   }
 
   useEffect(() => {
-    const bodyEl = appBodyEl.current!;
     offset.lastBodyScrollTop = 0;
+    const bodyEl = appBodyEl.current;
 
-    bodyEl.addEventListener("scroll", onUserScroll);
-    window.addEventListener("resize", onUserScroll);
+    if (bodyEl) {
+      bodyEl.addEventListener("scroll", onUserScroll);
+      window.addEventListener("resize", onUserScroll);
 
-    return () => {
-      bodyEl.removeEventListener("scroll", onUserScroll);
-      window.removeEventListener("resize", onUserScroll);
-    };
+      return () => {
+        bodyEl.removeEventListener("scroll", onUserScroll);
+        window.removeEventListener("resize", onUserScroll);
+      };
+    }
   }, []);
 
   return (
     <BrowserRouter>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
-        <Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
-          <Box className="trmrk-app-bar" ref={appHeaderEl} sx={{
-              width: "100%", height: "5em", position: "absolute", top: "0px" }}>
-            <TrmrkAppBar />
+        {
+          appData.hasFsApiRootDirHandler ? (<Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
+            <Box className="trmrk-app-bar" ref={appHeaderEl} sx={{
+                width: "100%", height: "5em", position: "absolute", top: "0px" }}>
+              <TrmrkAppBar />
+            </Box>
+            <Box className="trmrk-app-main" ref={appBodyEl} sx={{
+                width: "100%", overflowY: "scroll", position: "absolute",
+                top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
+              <Routes>
+                <Route path="" element={<Navigate to="/home" />} />
+                <Route path="/" element={<Navigate to="/home" />} />
+                <Route path={appRoutes.home} Component={HomePage} />
+                <Route path={appRoutes.filesRoot} Component={FilesHcyPage} />
+                <Route path="*" Component={NotFoundPage} />
+              </Routes>
+            </Box>
+          </Box>) : <Box className={[ "trmrk-app-loading", appThemeClassName ].join(" ")}>
+            <AppLoadingBar />
+            <AppLoadingPage />
           </Box>
-          <Box className="trmrk-app-main" ref={appBodyEl} sx={{
-              width: "100%", overflowY: "scroll", position: "absolute",
-              top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
-            <Routes>
-              <Route path="" element={<Navigate to="/home" />} />
-              <Route path="/" element={<Navigate to="/home" />} />
-              <Route path={appRoutes.home} Component={HomePage} />
-              <Route path={appRoutes.filesRoot} Component={FilesHcyPage} />
-              <Route path="*" Component={NotFoundPage} />
-            </Routes>
-          </Box>
-        </Box>
+        } 
       </ThemeProvider>
     </BrowserRouter>
   );

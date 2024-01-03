@@ -33,10 +33,8 @@ export default function FilesHcyPageBar() {
   const btnGoForwardIsDisabled = filesHcyHistory.items.length - filesHcyCurrentIdx <= 1;
 
   const navigate = useNavigate();
-  console.log("bar - filesHcyHistory0", filesHcyHistory);
 
   useEffect(() => {
-  console.log("bar - filesHcyHistory1", filesHcyHistory);
     if (!filesHcyHistory.currentItem || filesHcyHistory.currentItem.idnf !== currentIdnf) {
       dispatch(filesHcyHistoryPush({
         idnf: currentIdnf

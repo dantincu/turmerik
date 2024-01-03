@@ -1,6 +1,6 @@
-import { AppConfigData } from "trmrk/src/notes-app-config";
+import { v4 as uuidv4 } from "uuid";
+
 import { AppData } from "./appData";
-import { updateHtmlDocTitle } from "./htmlDoc/htmlDocTitle";
 
 export const jsonBool = Object.freeze({
   false: JSON.stringify(false),
@@ -17,28 +17,18 @@ export const localStorageKeys = Object.freeze({
   appIsCompactMode: "appIsCompactMode",
 });
 
-export const defaultAppTitle = "Turmerik Notes";
+export const localForageKeys = Object.freeze({});
 
-export const updateAppTitle = (
-  appConfig: AppConfigData,
-  idnf: string | null | undefined,
-  idnfIsPath: boolean = true
+export const getLocalForageDbNameNewPfx = (
+  uuidStr?: string | null | undefined
 ) => {
-  if (idnf && idnfIsPath) {
-    idnf = idnf
-      .split(appConfig.pathSep)
-      .filter((seg) => seg.trim())
-      .splice(-1, 1)[0];
-  }
+  uuidStr ??= uuidv4().replaceAll("-", "");
+  const newPfx = `localFsApiNotes/${uuidStr}/`;
 
-  let htmlDocTitle = defaultAppTitle;
-
-  if (idnf) {
-    htmlDocTitle = idnf + " - " + htmlDocTitle;
-  }
-
-  updateHtmlDocTitle(htmlDocTitle);
+  return newPfx;
 };
+
+export const defaultAppTitle = "Turmerik Notes";
 
 export const getAppThemeCssClassName = (appData: AppData) => {
   const appThemeClassName = appData.isDarkMode

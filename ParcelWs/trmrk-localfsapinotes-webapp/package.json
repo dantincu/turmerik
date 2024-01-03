@@ -16,6 +16,7 @@
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "@types/uuid": "^9.0.7",
     "buffer": "^6.0.3",
     "parcel": "^2.10.3",
     "parcel-namer-rewrite": "^2.10.3-rc.2",

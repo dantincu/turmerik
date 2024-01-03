@@ -8,5 +8,5 @@ import { core as trmrk } from "trmrk";
 
 export default function HomePage() {
   return (
-    <Container className="trmrk-home-page" sx={{ position: "relative", height: "1000px" }} maxWidth="xl">Home</Container>);
+    <Container className="trmrk-home-page" maxWidth="xl">Home</Container>);
 }

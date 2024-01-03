@@ -29,6 +29,5 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
   headerEl.style.top = offset.lastHeaderTopOffset + "px";
   bodyEl.style.top = offset.lastHeaderTopOffset + headerHeight + "px";
 
-  console.log("offset", offset);
   return offset;
 };
