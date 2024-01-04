@@ -250,14 +250,14 @@ namespace Turmerik.DriveExplorer
             {
                 if (hasRootDirPath)
                 {
-                    throw new InvalidOperationException(
-                        $"All paths are required to fall under root path {rootDirPath}");
+                    throw new DriveExplorerException(
+                        $"All paths are required to fall under root path `{rootDirPath}`");
                 }
                 else
                 {
-                    throw new InvalidOperationException(
-                        string.Join(" ", $"All paths are required to either have a different root than the system root or fall under user profile path {userProfilePath}",
-                            $"as a nested folder that does not start with the dot char '.' and is not equal to the app data dir name {appDataDirName}"));
+                    throw new DriveExplorerException(
+                        string.Join(" ", $"All paths are required to either have a different root than the system root or fall under user profile path `{userProfilePath}`",
+                            $"as a nested folder that does not start with the dot char '.' and is not equal to the app data dir name `{appDataDirName}`"));
                 }
             }
 

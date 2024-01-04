@@ -126,6 +126,16 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Controllers
             {
                 HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
             }
+            catch (DriveExplorerException exc)
+            {
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                await HttpContext.Response.WriteAsJsonAsync(exc.Message);
+                await HttpContext.Response.CompleteAsync();
+            }
+            catch
+            {
+                HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
 
             return result;
         }
