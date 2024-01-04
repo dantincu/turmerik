@@ -94,7 +94,7 @@ namespace Turmerik.Notes
                             config, prIdnf, candidateFile));
                     }
                 },
-                fileContentsCfg.RequireTrmrkGuidInNoteMdFile ?? true,
+                fileContentsCfg.ExpectTrmrkGuidInNoteMdFile ?? true,
                 tuple => tuple.Item?.TrmrkGuid == Trmrk.TrmrkGuid,
                 tuple => tuple.File?.Name == fileNamesCfg.NoteItemMdFileName);
 

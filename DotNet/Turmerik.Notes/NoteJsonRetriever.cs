@@ -107,7 +107,7 @@ namespace Turmerik.Notes
                             config, prIdnf, candidateFile));
                     }
                 },
-                config.GetFileContents().RequireTrmrkGuidInNoteJsonFile ?? true,
+                config.GetFileContents().ExpectTrmrkGuidInNoteJsonFile ?? true,
                 tuple => tuple.Item?.TrmrkGuid == Trmrk.TrmrkGuid,
                 tuple => tuple.File?.Name == noteJsonFileName);
 
@@ -131,7 +131,7 @@ namespace Turmerik.Notes
                 prIdnf, jsonFile, (tuple, rawContent) =>
                 {
                     (var item, var isValid) = NoteJsonDeserializer.TryDeserialize<TItem>(
-                        rawContent, config.GetFileContents().RequireTrmrkGuidInNoteJsonFile ?? true);
+                        rawContent, config.GetFileContents().ExpectTrmrkGuidInNoteJsonFile ?? true);
 
                     tuple.Item = item;
                 });

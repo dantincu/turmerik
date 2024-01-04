@@ -1,6 +1,7 @@
 import * as axiosLocalForage from "./axiosLocalForage";
-import * as fileSystemApiDriveExplorer from "./FileSystemApiDriveExplorer";
+import * as fsApiDriveExplorer from "./FsApiDriveExplorer";
 
 export const browser = {
   axiosLocalForage,
+  fsApiDriveExplorer,
 };

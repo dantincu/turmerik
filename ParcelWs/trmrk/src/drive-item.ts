@@ -9,13 +9,13 @@ export enum FileType {
   zippedFolder,
 }
 
-export enum OfficeLikeFileType {
+export enum OfficeFileType {
   word = 1,
   excel,
   powerPoint,
 }
 
-export interface DriveItem {
+export interface DriveItemCore {
   idnf: string | null | undefined;
   prIdnf: string | null | undefined;
   csId: string | null | undefined;
@@ -29,9 +29,18 @@ export interface DriveItem {
   isRootFolder?: boolean | null | undefined;
 
   fileType?: FileType | null | undefined;
-  officeFileType?: OfficeLikeFileType | null | undefined;
+  officeFileType?: OfficeFileType | null | undefined;
   isTextFile?: boolean | null | undefined;
   isImageFile?: boolean | null | undefined;
   isVideoFile?: boolean | null | undefined;
   isAudioFile?: boolean | null | undefined;
+
+  creationTime?: Date | null | undefined;
+  lastWriteTime?: Date | null | undefined;
+  lastAccessTime?: Date | null | undefined;
+}
+
+export interface DriveItem extends DriveItemCore {
+  subFolders: DriveItem[];
+  folderFiles: DriveItem[];
 }

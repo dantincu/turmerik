@@ -129,3 +129,65 @@ export const containsAnyOfMx = (
 
   return retVal;
 };
+
+export const filterAsync = async <TIn>(
+  inArr: TIn[],
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean>
+) => {
+  const outArr: TIn[] = [];
+  const syncLock = new Uint32Array(new SharedArrayBuffer(32));
+
+  for (let i = 0; i < inArr.length; i++) {
+    const iVal = i;
+
+    if (await predicate(inArr[iVal], iVal, inArr)) {
+      const idx = Atomics.add(syncLock, 0, 1);
+      outArr[idx] = inArr[iVal];
+    }
+  }
+};
+
+export const mapAsync = async <TIn, TOut>(
+  inArr: TIn[],
+  factory: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<TOut>
+) => {
+  const outArr: TOut[] = [];
+
+  for (let i = 0; i < inArr.length; i++) {
+    outArr[i] = await factory(inArr[i], i, inArr);
+  }
+
+  return outArr;
+};
+
+export const findIdxAsync = async <TIn>(
+  inArr: TIn[],
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean>
+) => {
+  let idx = -1;
+
+  for (let i = 0; i < inArr.length; i++) {
+    const iVal = i;
+
+    if (await predicate(inArr[iVal], iVal, inArr)) {
+      idx = iVal;
+      break;
+    }
+  }
+
+  return idx;
+};
+
+export const findAsync = async <TIn>(
+  inArr: TIn[],
+  predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean>
+) => {
+  const idx = await findIdxAsync(inArr, predicate);
+  let retVal: TIn | null = null;
+
+  if (idx >= 0) {
+    retVal = inArr[idx];
+  }
+
+  return retVal;
+};

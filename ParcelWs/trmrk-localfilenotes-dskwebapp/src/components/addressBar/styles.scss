@@ -1,0 +1,62 @@
+@import "../../styles/mixins";
+
+.trmrk-address-bar {
+  display: inline-flex;
+}
+
+.trmrk-address-bar {
+  .trmrk-text-box {
+    position: absolute;
+    top: -0.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    line-height: 0.5em;
+    height: 1.8em;
+
+    /* &::before, &:after, &:hover::before, &:hover::after {
+      content: none;
+    } */
+
+    input[type=text] {
+      cursor: pointer;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+    }
+  } 
+}
+
+.trmrk-address-bar.trmrk-rdnl {
+  .trmrk-text-box {
+    left: 0em;
+    right: 0em;
+  }
+}
+
+.trmrk-address-bar.trmrk-edtbl {
+  .trmrk-text-box {
+    left: 5em;
+    right: 2.8em;
+  }
+}
+
+.trmrk-app.trmrk-theme-light .trmrk-address-bar {
+  .trmrk-text-box {
+    &::before {
+      border-bottom: 1px solid #FFFFFFAA;
+    }
+    
+    &::after {
+      border-bottom: 1px solid #FFFFFFAA;
+    }
+  }
+  
+  .trmrk-text-box:hover {
+    &::before {
+      border-bottom: 2px solid #FFFFFFFF;
+    }
+    
+    &::after {
+      border-bottom: 2px solid #FFFFFFFF;
+    }
+  }
+}

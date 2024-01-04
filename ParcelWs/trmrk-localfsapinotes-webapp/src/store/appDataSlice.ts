@@ -16,7 +16,7 @@ declare type DispatcherType<TPropVal> = (
 export interface AppDataReducer {
   setIsDarkMode: DispatcherType<boolean>;
   setIsCompactMode: DispatcherType<boolean>;
-  setHasFsApiRootDirHandler: DispatcherType<boolean>;
+  setHasFsApiRootDirHandle: DispatcherType<boolean>;
 }
 
 const reducer = {
@@ -26,8 +26,8 @@ const reducer = {
   setIsCompactMode: (state, action) => {
     state.isCompactMode = action.payload;
   },
-  setHasFsApiRootDirHandler: (state, action) => {
-    state.hasFsApiRootDirHandler = action.payload;
+  setHasFsApiRootDirHandle: (state, action) => {
+    state.hasFsApiRootDirHandle = action.payload;
   },
 } as AppDataReducer;
 
@@ -41,14 +41,14 @@ const appDataSlice = createSlice({
     isCompactMode:
       localStorage.getItem(localStorageKeys.appIsCompactMode) !==
       jsonBool.false,
-    hasFsApiRootDirHandler: false,
+    hasFsApiRootDirHandle: false,
   } as AppData,
   reducers: {
     ...reducer,
   },
 });
 
-export const { setIsDarkMode, setIsCompactMode, setHasFsApiRootDirHandler } =
+export const { setIsDarkMode, setIsCompactMode, setHasFsApiRootDirHandle } =
   appDataSlice.actions;
 
 export default appDataSlice.reducer;

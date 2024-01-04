@@ -36,7 +36,7 @@ namespace Turmerik.Notes.UnitTests
                 File.ReadAllText(configFilePath));
 
             config = appConfig.NoteDirPairs;
-            config.FileContents.RequireTrmrkGuidInNoteJsonFile = false;
+            config.FileContents.ExpectTrmrkGuidInNoteJsonFile = false;
         }
 
         [Fact]

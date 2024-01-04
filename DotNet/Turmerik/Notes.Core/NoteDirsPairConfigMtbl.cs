@@ -247,15 +247,15 @@ namespace Turmerik.Notes.Core
                 KeepFileContentsTemplate = src.KeepFileContentsTemplate;
                 NoteFileContentsTemplate = src.NoteFileContentsTemplate;
                 NoteFileContentSectionTemplate = src.NoteFileContentSectionTemplate;
-                RequireTrmrkGuidInNoteJsonFile = src.RequireTrmrkGuidInNoteJsonFile;
-                RequireTrmrkGuidInNoteMdFile = src.RequireTrmrkGuidInNoteMdFile;
+                ExpectTrmrkGuidInNoteJsonFile = src.ExpectTrmrkGuidInNoteJsonFile;
+                ExpectTrmrkGuidInNoteMdFile = src.ExpectTrmrkGuidInNoteMdFile;
             }
 
             public string KeepFileContentsTemplate { get; set; }
             public string NoteFileContentsTemplate { get; set; }
             public string NoteFileContentSectionTemplate { get; set; }
-            public bool? RequireTrmrkGuidInNoteJsonFile { get; set; }
-            public bool? RequireTrmrkGuidInNoteMdFile { get; set; }
+            public bool? ExpectTrmrkGuidInNoteJsonFile { get; set; }
+            public bool? ExpectTrmrkGuidInNoteMdFile { get; set; }
         }
     }
 }

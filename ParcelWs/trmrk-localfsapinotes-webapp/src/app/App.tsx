@@ -68,7 +68,7 @@ export default function App() {
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
         {
-          appData.hasFsApiRootDirHandler ? (<Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
+          appData.hasFsApiRootDirHandle ? (<Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
             <Box className="trmrk-app-bar" ref={appHeaderEl} sx={{
                 width: "100%", height: "5em", position: "absolute", top: "0px" }}>
               <TrmrkAppBar />
@@ -81,6 +81,7 @@ export default function App() {
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path={appRoutes.home} Component={HomePage} />
                 <Route path={appRoutes.filesRoot} Component={FilesHcyPage} />
+                <Route path={appRoutes.files} Component={FilesHcyPage} />
                 <Route path="*" Component={NotFoundPage} />
               </Routes>
             </Box>

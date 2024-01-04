@@ -7,6 +7,20 @@ import appDataStore from "../store/appDataStore";
 
 import App from './App';
 
+import { appCfg, AppConfig } from "../services/appConfig";
+
+import devAppConfig from "./env/dev/app-config.json";
+import prodAppConfig from "./env/dev/app-config.json";
+
+let appConfig: AppConfig;
+
+if (process.env.NODE_ENV === 'development') {
+  appConfig = devAppConfig;
+} else {
+  appConfig = prodAppConfig
+}
+appCfg.value = appConfig;
+
 const container = document.getElementById('app-root')!;
 const root = createRoot(container);
 

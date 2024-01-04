@@ -92,8 +92,8 @@ namespace Turmerik.Notes.Core
             string KeepFileContentsTemplate { get; }
             string NoteFileContentsTemplate { get; }
             string NoteFileContentSectionTemplate { get; }
-            bool? RequireTrmrkGuidInNoteJsonFile { get; }
-            bool? RequireTrmrkGuidInNoteMdFile { get; }
+            bool? ExpectTrmrkGuidInNoteJsonFile { get; }
+            bool? ExpectTrmrkGuidInNoteMdFile { get; }
         }
 
         public static NoteDirsPairConfigImmtbl ToImmtbl(

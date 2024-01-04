@@ -2,7 +2,7 @@ export interface AppData {
   baseLocation: string;
   isDarkMode: boolean;
   isCompactMode: boolean;
-  hasFsApiRootDirHandler: boolean;
+  hasFsApiRootDirHandle: boolean;
 }
 
 export enum AppPage {

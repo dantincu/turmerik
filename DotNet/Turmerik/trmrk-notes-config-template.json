@@ -167,8 +167,8 @@
       "KeepFileContentsTemplate": "{0}",
       "NoteFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
       "NoteFileContentSectionTemplate": "{0}  \n\n",
-      "RequireTrmrkGuidInNoteJsonFile": true,
-      "RequireTrmrkGuidInNoteMdFile": false
+      "ExpectTrmrkGuidInNoteJsonFile": true,
+      "ExpectTrmrkGuidInNoteMdFile": false
     }
   }
 }

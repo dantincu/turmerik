@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -7,7 +7,7 @@ import IconButton from "@mui/material/IconButton";
 
 import FolderOpenIcon from "@mui/icons-material/FolderOpen"
 
-import { setHasFsApiRootDirHandler } from "../../store/appDataSlice";
+import { setHasFsApiRootDirHandle } from "../../store/appDataSlice";
 import Error from "../../components/error/Error";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import { fsApiSvc } from "../../services/fsApi/fsApiSvc";
@@ -23,7 +23,7 @@ export default function AppLoadingPage() {
         startIn: "documents"
       }) as Promise<FileSystemDirectoryHandle>).then(handle => {
         fsApiSvc.rootDirHandle = handle;
-        dispatch(setHasFsApiRootDirHandler(true));
+        dispatch(setHasFsApiRootDirHandle(true));
       }, reason => {
         setError(reason);
       });

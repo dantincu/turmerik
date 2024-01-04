@@ -21,92 +21,92 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Controllers
         }
 
         [HttpGet]
-        public Task<DriveItem> GetItemAsync(
+        public Task<DriveItem> GetItem(
             string idnf) => TryGetAsync(() => dvExplrSvc.GetItemAsync(idnf, true));
 
         [HttpGet]
-        public Task<DriveItem> GetFolderAsync(
+        public Task<DriveItem> GetFolder(
             string idnf) => TryGetAsync(() => dvExplrSvc.GetFolderAsync(idnf, true));
 
         [HttpGet]
-        public Task<bool> ItemExistsAsync(
+        public Task<bool> ItemExists(
             string idnf) => TryGetAsync(() => dvExplrSvc.ItemExistsAsync(idnf));
 
         [HttpGet]
-        public Task<bool> FolderExistsAsync(
+        public Task<bool> FolderExists(
             string idnf) => TryGetAsync(() => dvExplrSvc.FolderExistsAsync(idnf));
 
         [HttpGet]
-        public Task<bool> FileExistsAsync(
+        public Task<bool> FileExists(
             string idnf) => TryGetAsync(() => dvExplrSvc.FileExistsAsync(idnf));
 
         [HttpGet]
-        public Task<string> GetFileTextAsync(
+        public Task<string> GetFileText(
             string idnf) => TryGetAsync(() => dvExplrSvc.GetFileTextAsync(idnf));
 
         [HttpGet]
-        public Task<string> GetDriveFolderWebUrlAsync(
+        public Task<string> GetDriveFolderWebUrl(
             string idnf) => TryGetAsync(() => dvExplrSvc.GetDriveFolderWebUrlAsync(
                 idnf));
 
         [HttpGet]
-        public Task<string> GetDriveFileWebUrlAsync(
+        public Task<string> GetDriveFileWebUrl(
             string idnf) => TryGetAsync(() => dvExplrSvc.GetDriveFileWebUrlAsync(
                 idnf));
 
         [HttpPost]
-        public Task<DriveItem> CreateFolderAsync(
+        public Task<DriveItem> CreateFolder(
             string prIdnf, string newFolderName) => TryGetAsync(() => dvExplrSvc.CreateFolderAsync(
                 prIdnf, newFolderName, true));
 
         [HttpPost]
-        public Task<DriveItem> RenameFolderAsync(
+        public Task<DriveItem> RenameFolder(
             string idnf, string newFolderName) => TryGetAsync(() => dvExplrSvc.RenameFolderAsync(
                 idnf, newFolderName, true));
 
         [HttpPost]
-        public Task<DriveItem> CopyFolderAsync(
+        public Task<DriveItem> CopyFolder(
             string idnf, string newPrIdnf, string newFolderName) => TryGetAsync(() => dvExplrSvc.CopyFolderAsync(
                 idnf, newPrIdnf, newFolderName, true));
 
         [HttpPost]
-        public Task<DriveItem> MoveFolderAsync(
+        public Task<DriveItem> MoveFolder(
             string idnf, string newPrIdnf, string newFolderName) => TryGetAsync(() => dvExplrSvc.MoveFolderAsync(
                 idnf, newPrIdnf, newFolderName, true));
 
         [HttpPost]
-        public Task<DriveItem> DeleteFolderAsync(
+        public Task<DriveItem> DeleteFolder(
             string idnf) => TryGetAsync(() => dvExplrSvc.DeleteFolderAsync(idnf, true));
 
         [HttpPost]
-        public Task<DriveItem> CreateTextFileAsync(
+        public Task<DriveItem> CreateTextFile(
             string prIdnf, string newFileName, string text) => TryGetAsync(() => dvExplrSvc.CreateTextFileAsync(
                 prIdnf, newFileName, text));
 
         [HttpPost]
-        public Task<DriveItem> CreateOfficeLikeFileAsync(
+        public Task<DriveItem> CreateOfficeLikeFile(
             string prIdnf,
             string newFileName,
             OfficeFileType officeLikeFileType) => TryGetAsync(() => dvExplrSvc.CreateOfficeLikeFileAsync(
                 prIdnf, newFileName, officeLikeFileType));
 
         [HttpPost]
-        public Task<DriveItem> RenameFileAsync(
+        public Task<DriveItem> RenameFile(
             string idnf, string newFileName) => TryGetAsync(() => dvExplrSvc.RenameFileAsync(
                 idnf, newFileName));
 
         [HttpPost]
-        public Task<DriveItem> CopyFileAsync(
+        public Task<DriveItem> CopyFile(
             string idnf, string newPrIdnf, string newFileName) => TryGetAsync(() => dvExplrSvc.CopyFileAsync(
                 idnf, newPrIdnf, newFileName));
 
         [HttpPost]
-        public Task<DriveItem> MoveFileAsync(
+        public Task<DriveItem> MoveFile(
             string idnf, string newPrIdnf, string newFileName) => TryGetAsync(() => dvExplrSvc.MoveFileAsync(
                 idnf, newPrIdnf, newFileName));
 
         [HttpPost]
-        public Task<DriveItem> DeleteFileAsync(
+        public Task<DriveItem> DeleteFile(
             string idnf) => TryGetAsync(() => dvExplrSvc.DeleteFileAsync(idnf));
 
         private async Task<TResult> TryGetAsync<TResult>(
