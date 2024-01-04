@@ -1,13 +1,13 @@
 import { core as trmrk } from "trmrk";
 
 import { FsApiFolder, SrcTrgPair } from "./core";
-import { copyFile, moveFile, readFileBytes, writeToFile } from "./file";
+import { copyFile, moveFile, readFileBytes, writeToFileCore } from "./file";
 
 import {
   cloneDirsHcy,
   cloneDirsHcyCore,
-  getDescendantHandles,
-  getHcyHandles,
+  getDescendants,
+  getDirsHcy,
   throwIfContainedInFolder,
   withDirsHcyCloned,
   withDirsHcy,
@@ -15,19 +15,28 @@ import {
 
 export const copyFolderCore = async (hcy: SrcTrgPair<FsApiFolder>) => {
   await withDirsHcyCloned(hcy, async (obj) => {
-    for (let i = 0; i < obj.src.folderFiles.length; i++) {
+    const { src, trg } = obj;
+    trg.folderFiles = [];
+
+    for (let i = 0; i < src.folderFiles.length; i++) {
       const iVal = i;
 
-      const file = await obj.src.folderFiles[iVal].getFile();
-      await copyFile(file, obj.trg.folderHandle);
+      const file = await src.folderFiles[iVal].handle.getFile();
+      const fileHandle = await copyFile(file, trg.handle);
+
+      trg.folderFiles[iVal] = {
+        name: file.name,
+        handle: fileHandle,
+        isFolder: false,
+      };
     }
 
-    for (let i = 0; i < obj.src.subFolders.length; i++) {
+    for (let i = 0; i < src.subFolders.length; i++) {
       const iVal = i;
 
       await copyFolderCore({
-        src: obj.src.subFolders[iVal],
-        trg: obj.trg.subFolders[iVal],
+        src: src.subFolders[iVal],
+        trg: trg.subFolders[iVal],
       });
     }
   });
@@ -42,29 +51,29 @@ export const deleteFolderCore = async (
   await withDirsHcy(hcy, async (obj) => {
     for (let i = 0; i < obj.subFolders.length; i++) {
       const iVal = i;
-      await deleteFolderCore(obj.folderHandle, obj.subFolders[iVal]);
+      await deleteFolderCore(obj.handle, obj.subFolders[iVal]);
     }
 
     for (let i = 0; i < obj.folderFiles.length; i++) {
       const iVal = i;
-      await obj.folderHandle.removeEntry(obj.folderFiles[iVal].name);
+      await obj.handle.removeEntry(obj.folderFiles[iVal].name);
     }
 
-    await prFolderHandler.removeEntry(obj.folderHandle.name);
+    await prFolderHandler.removeEntry(obj.handle.name);
   });
 
   return hcy;
 };
 
 export const copyFolder = async (
-  prFolderHandle: FileSystemDirectoryHandle,
+  folderHandle: FileSystemDirectoryHandle,
   newPrFolderHandle: FileSystemDirectoryHandle,
   newFolderName: string | null = null
 ) => {
-  newFolderName ??= prFolderHandle.name;
+  newFolderName ??= folderHandle.name;
 
   const hcy = await cloneDirsHcy(
-    prFolderHandle,
+    folderHandle,
     newPrFolderHandle,
     newFolderName
   );
@@ -75,13 +84,14 @@ export const copyFolder = async (
 
 export const moveFolder = async (
   prFolderHandle: FileSystemDirectoryHandle,
+  folderHandle: FileSystemDirectoryHandle,
   newPrFolderHandle: FileSystemDirectoryHandle,
   newFolderName: string | null = null
 ) => {
-  newFolderName ??= prFolderHandle.name;
+  newFolderName ??= folderHandle.name;
 
   const hcy = await cloneDirsHcy(
-    prFolderHandle,
+    folderHandle,
     newPrFolderHandle,
     newFolderName
   );
@@ -89,14 +99,17 @@ export const moveFolder = async (
   await copyFolderCore(hcy);
   await deleteFolderCore(prFolderHandle, hcy.src);
 
+  await prFolderHandle.removeEntry(folderHandle.name);
   return hcy;
 };
 
 export const deleteFolder = async (
-  prFolderHandle: FileSystemDirectoryHandle
+  prFolderHandle: FileSystemDirectoryHandle,
+  folderHandle: FileSystemDirectoryHandle
 ) => {
-  const hcy = await getHcyHandles(prFolderHandle);
+  const hcy = await getDirsHcy(folderHandle);
   await deleteFolderCore(prFolderHandle, hcy);
 
+  await prFolderHandle.removeEntry(folderHandle.name);
   return hcy;
 };

@@ -22,12 +22,12 @@ export interface IDriveExplorerApi {
   CopyFolder: (
     idnf: string,
     newPrIdnf: string,
-    newFolderName: string
+    newFolderName: string | null
   ) => Promise<DriveItem | null>;
   MoveFolder: (
     idnf: string,
     newPrIdnf: string,
-    newFolderName: string
+    newFolderName: string | null
   ) => Promise<DriveItem | null>;
   DeleteFolder: (idnf: string) => Promise<DriveItem | null>;
   CreateTextFile: (
@@ -44,12 +44,12 @@ export interface IDriveExplorerApi {
   CopyFile: (
     idnf: string,
     newPrIdnf: string,
-    newFileName: string
+    newFileName: string | null
   ) => Promise<DriveItem | null>;
   MoveFile: (
     idnf: string,
     newPrIdnf: string,
-    newFileName: string
+    newFileName: string | null
   ) => Promise<DriveItem | null>;
   DeleteFile: (idnf: string) => Promise<DriveItem | null>;
 }
@@ -112,7 +112,7 @@ export class DriveExplorerApi implements IDriveExplorerApi {
   public CopyFolder(
     idnf: string,
     newPrIdnf: string,
-    newFolderName: string
+    newFolderName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);
@@ -122,7 +122,7 @@ export class DriveExplorerApi implements IDriveExplorerApi {
   public MoveFolder(
     idnf: string,
     newPrIdnf: string,
-    newFolderName: string
+    newFolderName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);
@@ -163,7 +163,7 @@ export class DriveExplorerApi implements IDriveExplorerApi {
   public CopyFile(
     idnf: string,
     newPrIdnf: string,
-    newFileName: string
+    newFileName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);
@@ -173,7 +173,7 @@ export class DriveExplorerApi implements IDriveExplorerApi {
   public MoveFile(
     idnf: string,
     newPrIdnf: string,
-    newFileName: string
+    newFileName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);

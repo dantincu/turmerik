@@ -27,7 +27,7 @@ export const readFileBytes = (file: File) => {
   });
 };
 
-export const writeToFile = async (
+export const writeToFileCore = async (
   fileStream: FileSystemWritableFileStream,
   data: ArrayBuffer | DataView | Blob | string
 ) => {
@@ -35,6 +35,15 @@ export const writeToFile = async (
   await streamWriter.write(data);
 
   await streamWriter.close();
+};
+
+export const writeToFile = async (
+  fileHandle: FileSystemFileHandle,
+  data: ArrayBuffer | DataView | Blob | string
+) => {
+  const fileStream = await fileHandle.createWritable();
+  await writeToFileCore(fileStream, data);
+  await fileStream.close();
 };
 
 export const copyFile = async (
@@ -53,7 +62,7 @@ export const copyFile = async (
     keepExistingData: false,
   });
 
-  await writeToFile(newFile, arrayBuffer);
+  await writeToFileCore(newFile, arrayBuffer);
   return newFileHandle;
 };
 

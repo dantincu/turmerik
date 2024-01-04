@@ -2,12 +2,33 @@ import { core as trmrk } from "trmrk";
 
 import { DriveItem, FileType, OfficeFileType } from "trmrk/src/drive-item";
 
-import { getDescendantHandles } from "trmrk-browser-core/src/fsApi/core";
+import {
+  FsApiEntry,
+  FsApiFile,
+  FsApiFolder,
+  SrcTrgPair,
+} from "trmrk-browser-core/src/fsApi/core";
+
+import { getDescendants } from "trmrk-browser-core/src/fsApi/hcy";
+
+import {
+  copyFile,
+  moveFile,
+  writeToFile,
+} from "trmrk-browser-core/src/fsApi/file";
+
+import {
+  copyFolder,
+  deleteFolder,
+  moveFolder,
+} from "trmrk-browser-core/src/fsApi/folder";
+
 import { IDriveExplorerApi, getPathSegments } from "../DriveExplorerApi/core";
 
 interface IDriveItemNode {
   item: DriveItem;
   name: string;
+  isFolder: boolean;
   handle: FileSystemHandle;
   dirHandle?: FileSystemDirectoryHandle | null | undefined;
   fileHandle?: FileSystemFileHandle | null | undefined;
@@ -54,7 +75,7 @@ class DriveItemNode implements IDriveItemNode {
     return this._name;
   }
 
-  public get isFolder(): boolean | null | undefined {
+  public get isFolder(): boolean {
     return this._isFolder;
   }
 
@@ -175,45 +196,67 @@ export class FsApiDriveExplorer implements IDriveExplorerApi {
     newFolderName: string
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
-    const parentFolder = await this.getParentFolder(pathSegs);
-    let retNode: IDriveItemNode | null = null;
 
-    if (parentFolder) {
-      this.throwIfFolderAlreadyContainsItemName(parentFolder, newFolderName);
-      const handle = parentFolder.dirHandle!;
-    }
+    const retNode = await this.copyOrMoveFolder(
+      pathSegs,
+      true,
+      null,
+      newFolderName
+    );
+
+    return retNode;
   }
 
   public async CopyFolder(
     idnf: string,
     newPrIdnf: string,
-    newFolderName: string
+    newFolderName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);
 
-    const parentFolder = await this.getParentFolder(pathSegs);
-    const newParentFolder = await this.getParentFolder(newPrPathSegs);
-    let retNode: IDriveItemNode | null = null;
+    const retNode = await this.copyOrMoveFolder(
+      pathSegs,
+      false,
+      newPrPathSegs,
+      newFolderName
+    );
+
+    return retNode;
   }
 
   public async MoveFolder(
     idnf: string,
     newPrIdnf: string,
-    newFolderName: string
+    newFolderName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);
 
-    const parentFolder = await this.getParentFolder(pathSegs);
-    const newParentFolder = await this.getParentFolder(newPrPathSegs);
-    let retNode: IDriveItemNode | null = null;
+    const retNode = await this.copyOrMoveFolder(
+      pathSegs,
+      true,
+      newPrPathSegs,
+      newFolderName
+    );
+
+    return retNode;
   }
 
   public async DeleteFolder(idnf: string): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const parentFolder = await this.getParentFolder(pathSegs);
     let retNode: IDriveItemNode | null = null;
+
+    if (parentFolder) {
+      retNode = this.getSubFolder(parentFolder, pathSegs.slice(-1)[0]) ?? null;
+
+      if (retNode) {
+        await deleteFolder(parentFolder.dirHandle!, retNode.dirHandle!);
+      }
+    }
+
+    return retNode?.item ?? null;
   }
 
   public async CreateTextFile(
@@ -222,8 +265,24 @@ export class FsApiDriveExplorer implements IDriveExplorerApi {
     text: string
   ): Promise<DriveItem | null> {
     const prPathSegs = this.getPathSegments(prIdnf);
-    const parentFolder = await this.getParentFolder(prPathSegs);
+    const parentFolder = await this.getNode(prPathSegs);
     let retNode: IDriveItemNode | null = null;
+
+    if (parentFolder) {
+      const file = await parentFolder.dirHandle!.getFileHandle(newFileName, {
+        create: true,
+      });
+
+      await writeToFile(file, text);
+
+      retNode = await this.toNode({
+        name: newFileName,
+        isFolder: false,
+        handle: file,
+      });
+    }
+
+    return retNode?.item ?? null;
   }
 
   public async CreateOfficeLikeFile(
@@ -231,9 +290,8 @@ export class FsApiDriveExplorer implements IDriveExplorerApi {
     newFileName: string,
     officeLikeFileType: OfficeFileType
   ): Promise<DriveItem | null> {
-    const prPathSegs = this.getPathSegments(prIdnf);
-    const parentFolder = await this.getParentFolder(prPathSegs);
-    let retNode: IDriveItemNode | null = null;
+    const retItem = await this.CreateTextFile(prIdnf, newFileName, "");
+    return retItem;
   }
 
   public async RenameFile(
@@ -241,40 +299,172 @@ export class FsApiDriveExplorer implements IDriveExplorerApi {
     newFileName: string
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
-    const parentFolder = await this.getParentFolder(pathSegs);
-    let retNode: IDriveItemNode | null = null;
+
+    const retItem = await this.copyOrMoveFile(
+      pathSegs,
+      false,
+      null,
+      newFileName
+    );
+
+    return retItem;
   }
 
   public async CopyFile(
     idnf: string,
     newPrIdnf: string,
-    newFileName: string
+    newFileName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);
 
-    const parentFolder = await this.getParentFolder(pathSegs);
-    const newParentFolder = await this.getParentFolder(newPrPathSegs);
-    let retNode: IDriveItemNode | null = null;
+    const retItem = await this.copyOrMoveFile(
+      pathSegs,
+      false,
+      newPrPathSegs,
+      newFileName
+    );
+
+    return retItem;
   }
 
   public async MoveFile(
     idnf: string,
     newPrIdnf: string,
-    newFileName: string
+    newFileName: string | null = null
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const newPrPathSegs = this.getPathSegments(newPrIdnf);
 
-    const parentFolder = await this.getParentFolder(pathSegs);
-    const newParentFolder = await this.getParentFolder(newPrPathSegs);
-    let retNode: IDriveItemNode | null = null;
+    const retItem = await this.copyOrMoveFile(
+      pathSegs,
+      true,
+      newPrPathSegs,
+      newFileName
+    );
+
+    return retItem;
   }
 
   public async DeleteFile(idnf: string): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(idnf);
     const parentFolder = await this.getParentFolder(pathSegs);
     let retNode: IDriveItemNode | null = null;
+    const fileName = pathSegs.slice(-1)[0];
+
+    if (parentFolder) {
+      retNode = this.getFolderFile(parentFolder, pathSegs.slice(-1)[0]) ?? null;
+
+      if (retNode) {
+        const parentDirHandle = parentFolder.dirHandle!;
+        await parentDirHandle.removeEntry(fileName);
+      }
+    }
+
+    return retNode?.item ?? null;
+  }
+
+  private async copyOrMoveFolder(
+    pathSegs: string[],
+    isMove: boolean,
+    newPrPathSegs: string[] | null = null,
+    newFolderName: string | null = null
+  ) {
+    const parentFolder = await this.getParentFolder(pathSegs);
+    let retNode: IDriveItemNode | null = null;
+    let newParentFolder: IDriveItemNode | null = null;
+    const folderName = pathSegs.slice(-1)[0];
+
+    if (parentFolder) {
+      newFolderName ??= folderName;
+      this.throwIfFolderAlreadyContainsItemName(parentFolder, newFolderName);
+      const folder = this.getSubFolder(parentFolder, folderName);
+
+      if (newPrPathSegs) {
+        newParentFolder = await this.getNode(newPrPathSegs);
+      } else {
+        newParentFolder = parentFolder;
+      }
+
+      if (newParentFolder && folder) {
+        let hcy: SrcTrgPair<FsApiFolder>;
+
+        if (isMove) {
+          hcy = await moveFolder(
+            parentFolder.dirHandle!,
+            folder.dirHandle!,
+            newParentFolder.dirHandle!,
+            newFolderName
+          );
+        } else {
+          hcy = await copyFolder(
+            folder.dirHandle!,
+            newParentFolder.dirHandle!,
+            newFolderName
+          );
+        }
+
+        const trg = hcy.trg;
+        retNode = this.toNode(trg);
+
+        retNode.subFolders = trg.subFolders.map((obj) => this.toNode(obj));
+        retNode.folderFiles = trg.folderFiles.map((obj) => this.toNode(obj));
+      }
+    }
+
+    return retNode?.item ?? null;
+  }
+
+  private async copyOrMoveFile(
+    pathSegs: string[],
+    isMove: boolean,
+    newPrPathSegs: string[] | null = null,
+    newFileName: string | null = null
+  ) {
+    const parentFolder = await this.getParentFolder(pathSegs);
+    let retNode: IDriveItemNode | null = null;
+    let newParentFolder: IDriveItemNode | null = null;
+    const fileName = pathSegs.slice(-1)[0];
+
+    if (parentFolder) {
+      newFileName ??= fileName;
+      this.throwIfFolderAlreadyContainsItemName(parentFolder, newFileName);
+      const fileNode = this.getFolderFile(parentFolder, fileName);
+
+      if (newPrPathSegs) {
+        newParentFolder = await this.getNode(newPrPathSegs);
+      } else {
+        newParentFolder = parentFolder;
+      }
+
+      if (newParentFolder && fileNode) {
+        const file = await fileNode.fileHandle!.getFile();
+        let newFileHandle: FileSystemFileHandle;
+
+        if (isMove) {
+          newFileHandle = await moveFile(
+            parentFolder.dirHandle!,
+            file,
+            newParentFolder.dirHandle!,
+            newFileName
+          );
+        } else {
+          newFileHandle = await copyFile(
+            file,
+            newParentFolder.dirHandle!,
+            newFileName
+          );
+        }
+
+        retNode = this.toNode({
+          name: newFileName,
+          isFolder: false,
+          handle: newFileHandle,
+        });
+      }
+    }
+
+    return retNode?.item ?? null;
   }
 
   private async getNode(
@@ -311,31 +501,6 @@ export class FsApiDriveExplorer implements IDriveExplorerApi {
     }
 
     return retItem ?? null;
-  }
-
-  private async createNode(handle: FileSystemHandle) {
-    const item = await this.createItem(handle);
-    const node = new DriveItemNode(handle, item);
-
-    return node;
-  }
-
-  private async createItem(handle: FileSystemHandle) {
-    const item = {
-      name: handle.name,
-      isFolder: handle.kind === "directory",
-    } as DriveItem;
-
-    if (!item.isFolder) {
-      const fileHandle = handle as FileSystemFileHandle;
-      const file = await fileHandle.getFile();
-
-      if (file.lastModified) {
-        item.lastWriteTime = new Date(file.lastModified);
-      }
-    }
-
-    return item;
   }
 
   private async getParentFolder(
@@ -403,20 +568,62 @@ export class FsApiDriveExplorer implements IDriveExplorerApi {
 
   private async fillFolderDescendants(folder: IDriveItemNode) {
     const dirHandle = folder.dirHandle!;
-    const descendants = await getDescendantHandles(dirHandle);
+    const descendants = await getDescendants(dirHandle);
 
     folder.subFolders = await trmrk.mapAsync(
       descendants.subFolders,
-      async (folderNode) => await this.createNode(folderNode.folderHandle)
+      async (folderNode) => await this.createNode(folderNode.handle)
     );
 
     folder.folderFiles = await trmrk.mapAsync(
       descendants.folderFiles,
-      async (fileHandle) => await this.createNode(fileHandle)
+      async (fileNode) => await this.createNode(fileNode.handle)
     );
 
     this.sortItems(folder.subFolders);
     this.sortItems(folder.folderFiles);
+  }
+
+  private toNode(node: FsApiEntry<FileSystemHandle>) {
+    const item = this.toItem(node);
+    const retNode = new DriveItemNode(node.handle, item);
+
+    return retNode;
+  }
+
+  private toItem(node: FsApiEntry<FileSystemHandle>) {
+    const item = {
+      name: node.name,
+      isFolder: node.isFolder,
+      lastWriteTime: new Date(),
+    } as DriveItem;
+
+    return item;
+  }
+
+  private async createNode(handle: FileSystemHandle) {
+    const item = await this.createItem(handle);
+    const node = new DriveItemNode(handle, item);
+
+    return node;
+  }
+
+  private async createItem(handle: FileSystemHandle) {
+    const item = {
+      name: handle.name,
+      isFolder: handle.kind === "directory",
+    } as DriveItem;
+
+    if (!item.isFolder) {
+      const fileHandle = handle as FileSystemFileHandle;
+      const file = await fileHandle.getFile();
+
+      if (file.lastModified) {
+        item.lastWriteTime = new Date(file.lastModified);
+      }
+    }
+
+    return item;
   }
 
   private getSubFolder(parentFolder: IDriveItemNode, folderName: string) {

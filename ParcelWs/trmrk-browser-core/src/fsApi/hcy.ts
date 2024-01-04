@@ -1,8 +1,8 @@
 import { core as trmrk } from "trmrk";
 
-import { FsApiFolder, SrcTrgPair } from "./core";
+import { FsApiFolder, FsApiFile, SrcTrgPair } from "./core";
 
-export const getDescendantHandles = async (
+export const getDescendants = async (
   prFolderHandle: FileSystemDirectoryHandle
 ) => {
   const handlesArr: FileSystemHandle[] = [];
@@ -22,55 +22,63 @@ export const getDescendantHandles = async (
     }
   }
 
-  const retObj = {
-    folderHandle: prFolderHandle,
+  const hcy = {
+    name: prFolderHandle.name,
+    handle: prFolderHandle,
     subFolders: foldersArr.map(
       (folder) =>
         ({
-          folderHandle: folder,
+          name: folder.name,
+          handle: folder,
+          isFolder: true,
         } as FsApiFolder)
     ),
-    folderFiles: filesArr,
+    folderFiles: filesArr.map(
+      (file) =>
+        ({
+          name: file.name,
+          handle: file,
+          isFolder: false,
+        } as FsApiFile)
+    ),
   } as FsApiFolder;
 
-  return retObj;
+  return hcy;
 };
 
-export const getHcyHandles = async (
-  prFolderHandle: FileSystemDirectoryHandle
-) => {
-  const descendantsHandles = await getDescendantHandles(prFolderHandle);
+export const getDirsHcy = async (prFolderHandle: FileSystemDirectoryHandle) => {
+  const hcy = await getDescendants(prFolderHandle);
 
-  descendantsHandles.subFolders = await trmrk.mapAsync(
-    descendantsHandles.subFolders,
-    async (folder) => await getDescendantHandles(folder.folderHandle)
+  hcy.subFolders = await trmrk.mapAsync(
+    hcy.subFolders,
+    async (folder) => await getDirsHcy(folder.handle)
   );
 
-  return descendantsHandles;
+  return hcy;
 };
 
 export const cloneDirsHcy = async (
-  prFolderHandle: FileSystemDirectoryHandle,
+  folderHandle: FileSystemDirectoryHandle,
   newPrFolderHandle: FileSystemDirectoryHandle,
   newFolderName: string | null = null,
   checkValidity: boolean | null = null
 ) => {
   if (checkValidity ?? true) {
-    throwIfContainedInFolder(prFolderHandle, newPrFolderHandle);
+    throwIfContainedInFolder(folderHandle, newPrFolderHandle);
   }
 
-  const srcHcyHandles = await getHcyHandles(prFolderHandle);
+  const srcHcy = await getDirsHcy(folderHandle);
 
-  const trgHcyHandles = await cloneDirsHcyCore(
-    srcHcyHandles,
+  const trgHcy = await cloneDirsHcyCore(
+    srcHcy,
     newPrFolderHandle,
     newFolderName,
     false
   );
 
   return {
-    src: srcHcyHandles,
-    trg: trgHcyHandles,
+    src: srcHcy,
+    trg: trgHcy,
   } as SrcTrgPair<FsApiFolder>;
 };
 
@@ -81,10 +89,10 @@ export const cloneDirsHcyCore = async (
   checkValidity: boolean | null = null
 ) => {
   if (checkValidity ?? true) {
-    throwIfContainedInFolder(srcHcyHandles.folderHandle, newPrFolderHandle);
+    throwIfContainedInFolder(srcHcyHandles.handle, newPrFolderHandle);
   }
 
-  newFolderName ??= srcHcyHandles.folderHandle.name;
+  newFolderName ??= srcHcyHandles.name;
 
   const trgFolderHandle = await newPrFolderHandle.getDirectoryHandle(
     newFolderName,
@@ -98,7 +106,8 @@ export const cloneDirsHcyCore = async (
   );
 
   const trgHcyHandles = {
-    folderHandle: trgFolderHandle,
+    name: trgFolderHandle.name,
+    handle: trgFolderHandle,
     subFolders: trgSubFolderHandles,
   } as FsApiFolder;
 
