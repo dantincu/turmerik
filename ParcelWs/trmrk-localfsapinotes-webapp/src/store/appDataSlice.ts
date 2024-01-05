@@ -14,12 +14,20 @@ declare type DispatcherType<TPropVal> = (
 ) => void;
 
 export interface AppDataReducer {
+  setAppBarHeight: DispatcherType<number | null>;
+  setShowAppBar: DispatcherType<boolean>;
   setIsDarkMode: DispatcherType<boolean>;
   setIsCompactMode: DispatcherType<boolean>;
   setHasFsApiRootDirHandle: DispatcherType<boolean>;
 }
 
 const reducer = {
+  setAppBarHeight: (state, action) => {
+    state.appBarHeight = action.payload;
+  },
+  setShowAppBar: (state, action) => {
+    state.showAppBar = action.payload;
+  },
   setIsDarkMode: (state, action) => {
     state.isDarkMode = action.payload;
   },
@@ -35,6 +43,8 @@ const appDataSlice = createSlice({
   name: "appData",
   initialState: {
     baseLocation: trmrk.url.getBaseLocation(),
+    appBarHeight: null,
+    showAppBar: true,
     isDarkMode:
       localStorage.getItem(localStorageKeys.appThemeIsDarkMode) ===
       jsonBool.true,
@@ -48,8 +58,13 @@ const appDataSlice = createSlice({
   },
 });
 
-export const { setIsDarkMode, setIsCompactMode, setHasFsApiRootDirHandle } =
-  appDataSlice.actions;
+export const {
+  setAppBarHeight,
+  setShowAppBar,
+  setIsDarkMode,
+  setIsCompactMode,
+  setHasFsApiRootDirHandle,
+} = appDataSlice.actions;
 
 export default appDataSlice.reducer;
 

@@ -2,7 +2,6 @@ import React from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import styled from '@emotion/styled';

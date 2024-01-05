@@ -1,5 +1,7 @@
 export interface AppData {
   baseLocation: string;
+  appBarHeight: number | null;
+  showAppBar: boolean;
   isDarkMode: boolean;
   isCompactMode: boolean;
   hasFsApiRootDirHandle: boolean;

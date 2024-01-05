@@ -50,6 +50,11 @@ body {
 }
 
 .trmrk-app.trmrk-theme-light {
+  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
+    color: #FFF;
+    background-color: #1976d2;
+  }
+
   .trmrk-app-bar .trmrk-top-bar * {
     color: #FFF;
   }
