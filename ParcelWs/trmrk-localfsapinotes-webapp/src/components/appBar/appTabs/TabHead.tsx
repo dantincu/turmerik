@@ -23,7 +23,7 @@ export default function TabHead({
     tab: AppTab
   }) {
     const resxCssClassName = getResxCssClassName(tab.appPage);
-    const horizBorder = (tab.isCurrent ? "2.5px" : "1.5px") + " solid";
+    const border = (tab.isCurrent ? "2.5px" : "1.5px") + " solid";
     const marginTop = (tab.isCurrent ? "0.3em" : "0.25em");
 
     return (<Box className={[
@@ -31,10 +31,8 @@ export default function TabHead({
       tab.isCurrent ? "trmrk-current" : null,
       tab.isEdited ? "trmrk-edited" : null ].join(" ")}
       sx={{
-        width: "15em", height: "2em", top: marginTop, border: "1.5px solid",
-        borderBottom: horizBorder,
-        borderTop: horizBorder,
-        borderRadius: "0.25em",
+        width: "15em", height: "2em", top: marginTop,
+        border: border, borderRadius: "0.25em",
         position: "relative", display: "inline-block", marginLeft: "0.125em" }}>
         <IconButton className="trmrk-tab-head-icon" sx={{ padding: "0.1em" }}>
           <TabHeadIcon tab={tab} />
@@ -43,11 +41,11 @@ export default function TabHead({
           sx={{ display: "block", position: "absolute", top: "0.5em", left: "2em", right: "1.8em",
             overflow: "hidden", fontSize: "0.85em",
             fontStyle: tab.isPreview ? "italic" : "normal",
-            fontWeight: tab.isCurrent ? "bold" : "normal",
+            // fontWeight: tab.isCurrent ? "bold" : "normal",
             wordBreak: "keep-all", whiteSpace: "nowrap", cursor: "pointer" }}>
           { tab.name }
         </Box>
-        { tab.isEdited ? <EditedSymbol className="trmrk-edited-symbol">*</EditedSymbol> : null }
+        { /* tab.isEdited ? <EditedSymbol className="trmrk-edited-symbol">*</EditedSymbol> : null */ }
         <IconButton className="trmrk-tab-close-icon" sx={{ padding: "0.1em", paddingRight: "0px", float: "right" }}>
           <CloseButton />
         </IconButton>

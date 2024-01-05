@@ -54,35 +54,21 @@ body {
   }
 
   .trmrk-tab-head {
-    border-color: #aaa;
-  }
-
-  .trmrk-tab-head.trmrk-edited {
-    border-color: $trmrk-edited-tab-head-color-theme-dark;
-  }
-
-  .trmrk-tab-head.trmrk-current {
-    border-color: #FFF;
-  }
-
-  .trmrk-tab-head.trmrk-current.trmrk-edited {
-    border-color: $trmrk-edited-tab-head-color-theme-dark;
+    color: #CCC;
+    border-color: #CCC;
+    background-color: #404040;
   }
 
   .trmrk-tab-head * {
-    color: #aaa;
+    color: #CCC;
   }
 
-  .trmrk-tab-head.trmrk-edited .trmrk-tab-head-title {
-    color: $trmrk-edited-tab-head-color-theme-dark;
+  .trmrk-tab-head.trmrk-current {
+    background-color: #262626;
   }
 
   .trmrk-tab-head.trmrk-current * {
     color: #FFF;
-  }
-
-  .trmrk-tab-head.trmrk-current.trmrk-edited .trmrk-tab-head-title {
-    color: $trmrk-edited-tab-head-color-theme-dark;
   }
 
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
@@ -132,35 +118,23 @@ body {
   }
 
   .trmrk-tab-head {
-    border-color: #ddd;
-  }
-
-  .trmrk-tab-head.trmrk-edited {
-    border-color: $trmrk-edited-tab-head-color-theme-light;
-  }
-
-  .trmrk-tab-head.trmrk-current {
-    border-color: #FFF;
-  }
-
-  .trmrk-tab-head.trmrk-current.trmrk-edited {
-    border-color: $trmrk-edited-tab-head-color-theme-light;
+    color: #EEE;
+    border-color: #EEE;
   }
 
   .trmrk-tab-head * {
-    color: #ddd;
+    color: #EEE;
+  }
+
+  .trmrk-tab-head.trmrk-current {
+    color: #FFF;
+    // background-color: #2090FF;
+    background-color: #0050a0;
+    border-color: #FFF;
   }
 
   .trmrk-tab-head.trmrk-current * {
     color: #FFF;
-  }
-
-  .trmrk-tab-head.trmrk-edited .trmrk-tab-head-title {
-    color: $trmrk-edited-tab-head-color-theme-light;
-  }
-
-  .trmrk-tab-head.trmrk-current.trmrk-edited .trmrk-tab-head-title {
-    color: $trmrk-edited-tab-head-color-theme-light;
   }
 
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
