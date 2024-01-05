@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
-import { AppData } from "./appData";
+import { AppData, AppPage } from "./appData";
 
 export const jsonBool = Object.freeze({
   false: JSON.stringify(false),
@@ -64,4 +64,46 @@ export const getRoute = (routeBase: string, idnf: string) => {
   const encodedIdnf = encodeURIComponent(idnf);
   const route = [routeBase, encodedIdnf].join("/");
   return route;
+};
+
+export const getResxCssClassNameCore = (appPage: AppPage) => {
+  switch (appPage) {
+    case AppPage.ViewNoteItem:
+      return "view-note-item";
+    case AppPage.EditNoteItem:
+      return "edit-note-item";
+    case AppPage.NotesHcy:
+      return "notes-hcy";
+    case AppPage.NoteFilesHcy:
+      return "note-files-hcy";
+    case AppPage.FilesHcy:
+      return "files-hcy";
+    case AppPage.PicturesExplorer:
+      return "picsnvids-explorer";
+    case AppPage.ViewTextFile:
+      return "view-text-file";
+    case AppPage.EditTextFile:
+      return "edit-text-file";
+    case AppPage.ViewPictureFile:
+      return "view-picture-file";
+    case AppPage.ViewVideoFile:
+      return "view-video-file";
+    case AppPage.ViewAudioFile:
+      return "view-audio-file";
+    case AppPage.DownloadMiscFile:
+      return "download-misc-file";
+    case AppPage.Home:
+      return "home";
+  }
+};
+
+export const getResxCssClassName = (appPage: AppPage) => {
+  const classNameCore = getResxCssClassNameCore(appPage);
+  let className: string | null = null;
+
+  if (classNameCore) {
+    className = "trmrk-resx-" + classNameCore;
+  }
+
+  return className;
 };

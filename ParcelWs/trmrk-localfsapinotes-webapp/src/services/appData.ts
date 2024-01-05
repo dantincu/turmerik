@@ -48,6 +48,8 @@ export interface AppTab {
   name: string;
   tabUuid: string;
   isCurrent: boolean | null;
+  isEdited: boolean | null;
+  isPreview: boolean | null;
 }
 
 export interface AppTabsData {

@@ -52,6 +52,53 @@ body {
   .trmrk-app-main::-webkit-scrollbar-thumb:hover {
     background-color: #404040;
   }
+
+  .trmrk-tab-head {
+    border-color: #aaa;
+  }
+
+  .trmrk-tab-head.trmrk-edited {
+    border-color: $trmrk-edited-tab-head-color-theme-dark;
+  }
+
+  .trmrk-tab-head.trmrk-current {
+    border-color: #FFF;
+  }
+
+  .trmrk-tab-head.trmrk-current.trmrk-edited {
+    border-color: $trmrk-edited-tab-head-color-theme-dark;
+  }
+
+  .trmrk-tab-head * {
+    color: #aaa;
+  }
+
+  .trmrk-tab-head.trmrk-edited .trmrk-tab-head-title {
+    color: $trmrk-edited-tab-head-color-theme-dark;
+  }
+
+  .trmrk-tab-head.trmrk-current * {
+    color: #FFF;
+  }
+
+  .trmrk-tab-head.trmrk-current.trmrk-edited .trmrk-tab-head-title {
+    color: $trmrk-edited-tab-head-color-theme-dark;
+  }
+
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-edit-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
+    color: $trmrk-note-color-theme-dark;
+
+    svg {
+      color: $trmrk-note-color-theme-dark;
+
+      path {
+        color: $trmrk-note-color-theme-dark;
+      }
+    }
+  }
 }
 
 .trmrk-app.trmrk-theme-light {
@@ -60,7 +107,7 @@ body {
     background-color: #1976d2;
   }
 
-  .trmrk-app-bar .trmrk-top-bar * {
+  .trmrk-app-bar * {
     color: #FFF;
   }
 
@@ -82,5 +129,52 @@ body {
 
   .trmrk-app-main::-webkit-scrollbar-thumb:hover {
     background-color: #bcbcbc;
+  }
+
+  .trmrk-tab-head {
+    border-color: #ddd;
+  }
+
+  .trmrk-tab-head.trmrk-edited {
+    border-color: $trmrk-edited-tab-head-color-theme-light;
+  }
+
+  .trmrk-tab-head.trmrk-current {
+    border-color: #FFF;
+  }
+
+  .trmrk-tab-head.trmrk-current.trmrk-edited {
+    border-color: $trmrk-edited-tab-head-color-theme-light;
+  }
+
+  .trmrk-tab-head * {
+    color: #ddd;
+  }
+
+  .trmrk-tab-head.trmrk-current * {
+    color: #FFF;
+  }
+
+  .trmrk-tab-head.trmrk-edited .trmrk-tab-head-title {
+    color: $trmrk-edited-tab-head-color-theme-light;
+  }
+
+  .trmrk-tab-head.trmrk-current.trmrk-edited .trmrk-tab-head-title {
+    color: $trmrk-edited-tab-head-color-theme-light;
+  }
+
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-edit-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
+    color: $trmrk-note-color-theme-light;
+
+    svg {
+      color: $trmrk-note-color-theme-light;
+
+      path {
+        color: $trmrk-note-color-theme-light;
+      }
+    }
   }
 }

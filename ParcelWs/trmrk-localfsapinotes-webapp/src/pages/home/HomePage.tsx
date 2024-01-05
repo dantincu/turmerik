@@ -13,18 +13,81 @@ import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 
 export default function HomePage() {
   const openAppTabs = useSelector((state: { appTabs: AppTabsData }) => state.appTabs.openTabs);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     updateHtmlDocTitle();
 
     if (openAppTabs.length === 0) {
-      addTab({
-        name: "Home",
+      dispatch(addTab({
+        name: "Turmerik asdfasdf masdf asd fasd  fasd",
         idnf: null,
-        appPage: AppPage.Home,
+        appPage: AppPage.ViewNoteItem,
         tabUuid: newUUid(),
-        isCurrent: true
-      })
+        isCurrent: true,
+        isEdited: true,
+        isPreview: true,
+      }));
+
+      dispatch(addTab({
+        name: "Turmerik asdfasdf masdf asd fasd  fasd",
+        idnf: null,
+        appPage: AppPage.EditNoteItem,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: null,
+        isPreview: true,
+      }));
+      
+      dispatch(addTab({
+        name: "Turmerik asd fasd  fasd Turmerikasd",
+        idnf: null,
+        appPage: AppPage.ViewTextFile,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: true,
+        isPreview: null,
+      }));
+      
+      dispatch(addTab({
+        name: "Turmerik asd fasd  fasd Tur*ikasd",
+        idnf: null,
+        appPage: AppPage.EditTextFile,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: true,
+        isPreview: null,
+      }));
+      
+      dispatch(addTab({
+        name: "Notes",
+        idnf: null,
+        appPage: AppPage.NotesHcy,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: true,
+        isPreview: null,
+      }));
+      
+      dispatch(addTab({
+        name: "Note Files",
+        idnf: null,
+        appPage: AppPage.NoteFilesHcy,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: true,
+        isPreview: null,
+      }));
+      
+      dispatch(addTab({
+        name: "Files",
+        idnf: null,
+        appPage: AppPage.FilesHcy,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: true,
+        isPreview: null,
+      }));
     }
   });
 
