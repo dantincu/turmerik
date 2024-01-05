@@ -8,7 +8,7 @@ import filesHcyHistorySlice from "./filesHcyHistorySlice";
 export default configureStore({
   reducer: {
     appData: appDataReducer,
-    appBarData: appBarDataSlice,
+    appBar: appBarDataSlice,
     appPages: appPagesSlice,
     filesHcyHistory: filesHcyHistorySlice,
   },

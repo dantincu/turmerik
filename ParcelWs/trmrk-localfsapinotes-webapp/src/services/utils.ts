@@ -17,18 +17,32 @@ export const localStorageKeys = Object.freeze({
   appIsCompactMode: "appIsCompactMode",
 });
 
-export const localForageKeys = Object.freeze({});
+export const localForageKeys = Object.freeze({
+  openAppTabs: "openAppTabs",
+});
+
+export const newUUid = () => uuidv4().replaceAll("-", "");
 
 export const getLocalForageDbNameNewPfx = (
   uuidStr?: string | null | undefined
 ) => {
-  uuidStr ??= uuidv4().replaceAll("-", "");
+  uuidStr ??= newUUid();
   const newPfx = `localFsApiNotes/${uuidStr}/`;
 
   return newPfx;
 };
 
 export const defaultAppTitle = "Turmerik Notes";
+
+export const getAppTitle = (name: string | null = null) => {
+  let title = defaultAppTitle;
+
+  if (typeof name === "string") {
+    title = [name, defaultAppTitle].join(" - ");
+  }
+
+  return title;
+};
 
 export const getAppThemeCssClassName = (appData: AppData) => {
   const appThemeClassName = appData.isDarkMode

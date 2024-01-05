@@ -17,10 +17,10 @@ export default function VideoViewerAppBarOptionsMenu({
     menuAnchorEl: HTMLElement
   }) {
   const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
-  const appBarData = useSelector((state: { appBarData: AppBarData }) => state.appBarData);
+  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
   const dispatch = useDispatch();
 
-  const appOptionsMenuOpts = appBarData.appOptionsMenuOpts;
+  const appOptionsMenuOpts = appBar.appOptionsMenuOpts;
 
   const handleMenuClose = () => {
     dispatch(setAppOptionsMenuIsOpen(false));

@@ -6,11 +6,11 @@ import MenuItem from '@mui/material/MenuItem';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
-import { setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
-import { setIsDarkMode } from "../../store/appDataSlice";
-import { AppData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
+import { setIsDarkMode } from "../../../store/appDataSlice";
+import { AppData } from "../../../services/appData";
 
-import { localStorageKeys, jsonBool } from "../../services/utils";
+import { localStorageKeys, jsonBool } from "../../../services/utils";
 
 const ColorThemeLabel = styled.span`
   padding-right: 1em

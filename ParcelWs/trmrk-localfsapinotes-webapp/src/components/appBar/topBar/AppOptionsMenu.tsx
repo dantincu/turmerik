@@ -7,16 +7,16 @@ import MenuList from '@mui/material/MenuList';
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import { AppBarData, AppData } from "../../services/appData";
-import { setAppOptionsMenuIsOpen } from "../../store/appBarDataSlice";
-import { getAppThemeCssClassName } from "../../services/utils";
+import { AppBarData, AppData } from "../../../services/appData";
+import { setAppOptionsMenuIsOpen, setShowTabsNavArrows } from "../../../store/appBarDataSlice";
+import { getAppThemeCssClassName } from "../../../services/utils";
 
 export default function AppOptionsMenu({
     menuAnchorEl
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBarData = useSelector((state: { appBarData: AppBarData }) => state.appBarData);
+  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const dispatch = useDispatch();
 
@@ -28,12 +28,17 @@ export default function AppOptionsMenu({
     dispatch(setAppOptionsMenuIsOpen(false));
   }
 
-  const handleViewOpenItemsClick = () => {
+  const handleToggleShowTabsNavigationArrowsClick = () => {
+    dispatch(setShowTabsNavArrows(!appBar.showTabsNavArrows));
+    dispatch(setAppOptionsMenuIsOpen(false));
+  }
+
+  const handleViewOpenTabsClick = () => {
     dispatch(setAppOptionsMenuIsOpen(false));
   }
 
   return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appData)].join(" ")}
-        open={appBarData.appOptionsMenuOpts.isOpen}
+        open={appBar.appOptionsMenuOpts.isOpen}
         onClose={handleAppOptionsMenuClose}
         anchorEl={menuAnchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -41,7 +46,9 @@ export default function AppOptionsMenu({
       <MenuList dense>
         <MenuItem onClick={handleRefreshClick}>Refresh <IconButton sx={{ float: "right" }}>
           <RefreshIcon /></IconButton></MenuItem>
-        <MenuItem onClick={handleViewOpenItemsClick}>View Open Items</MenuItem>
+        <MenuItem onClick={handleToggleShowTabsNavigationArrowsClick}>
+          { appBar.showTabsNavArrows ? "Hide" : "Show" } Tabs Navigation Arrows</MenuItem>
+        <MenuItem onClick={handleViewOpenTabsClick}>View Open Tabs</MenuItem>
       </MenuList>
     </Menu>);
 };

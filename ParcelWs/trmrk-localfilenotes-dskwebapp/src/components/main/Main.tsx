@@ -32,7 +32,7 @@ import { setUpdateFloatingBarTopOffset } from "../../store/appBarDataSlice";
 
 const MainEl = () => {
   const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
-  const appBarData = useSelector((state: { appBarData: AppBarData }) => state.appBarData);
+  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
   const dispatch = useDispatch();
 
   const appThemeClassName = getAppThemeCssClassName(appPages);
@@ -62,7 +62,7 @@ const MainEl = () => {
     bodyEl.addEventListener("scroll", onUserScroll);
     window.addEventListener("resize", onUserScroll);
 
-    if (appBarData.updateFloatingBarTopOffset) {
+    if (appBar.updateFloatingBarTopOffset) {
       onUpdateFloatingBarTopOffset();
       dispatch(setUpdateFloatingBarTopOffset(false));
     }
@@ -76,7 +76,7 @@ const MainEl = () => {
   return (
     <BrowserRouter>
         <Paper className={["trmrk-app", appThemeClassName, appModeClassName].join(" ")}>
-          <div className={["trmrk-app-nav-bar", `trmrk-height-x${appBarData.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
+          <div className={["trmrk-app-nav-bar", `trmrk-height-x${appBar.floatingAppBarHeightEm}`].join(" ")} ref={appHeaderEl}>
             <MainAppBar />
           </div>
           <div className="trmrk-app-main" ref={appBodyEl}>

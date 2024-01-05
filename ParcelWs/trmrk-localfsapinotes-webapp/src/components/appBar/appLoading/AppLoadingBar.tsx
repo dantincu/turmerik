@@ -8,9 +8,9 @@ import styled from '@emotion/styled';
 
 import AppBar from "@mui/material/AppBar";
 
-import { AppData } from "../../services/appData";
-import { setIsDarkMode } from "../../store/appDataSlice";
-import { localStorageKeys, jsonBool } from "../../services/utils";
+import { AppData } from "../../../services/appData";
+import { setIsDarkMode } from "../../../store/appDataSlice";
+import { localStorageKeys, jsonBool } from "../../../services/utils";
 
 const ColorThemeLabel = styled.span`
   padding-right: 1em

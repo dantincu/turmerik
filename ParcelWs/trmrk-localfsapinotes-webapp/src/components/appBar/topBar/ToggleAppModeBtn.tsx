@@ -6,11 +6,11 @@ import MenuItem from '@mui/material/MenuItem';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 
-import { setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
-import { setIsCompactMode } from "../../store/appDataSlice";
-import { AppData } from "../../services/appData";
+import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
+import { setIsCompactMode } from "../../../store/appDataSlice";
+import { AppData } from "../../../services/appData";
 
-import { localStorageKeys, jsonBool } from "../../services/utils";
+import { localStorageKeys, jsonBool } from "../../../services/utils";
 
 const ColorThemeLabel = styled.span`
   padding-right: 1em

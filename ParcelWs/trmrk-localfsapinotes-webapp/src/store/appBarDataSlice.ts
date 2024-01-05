@@ -15,14 +15,18 @@ declare type DispatcherType<TPropVal> = (
 ) => void;
 
 export interface AppBarDataReducer {
+  setShowTabsNavArrows: DispatcherType<boolean>;
   setAppSettingsMenuOpts: DispatcherType<AppSettingsMenuOpts>;
   setAppOptionsMenuOpts: DispatcherType<AppOptionsMenuOpts>;
   setAppSettingsMenuIsOpen: DispatcherType<boolean>;
-  setAppThemeMenuIsOpen: DispatcherType<boolean>;
+  setAppearenceMenuIsOpen: DispatcherType<boolean>;
   setAppOptionsMenuIsOpen: DispatcherType<boolean>;
 }
 
 const reducer = {
+  setShowTabsNavArrows: (state, action) => {
+    state.showTabsNavArrows = action.payload;
+  },
   setAppSettingsMenuOpts: (state, action) => {
     state.appSettingsMenuOpts = action.payload;
   },
@@ -30,11 +34,11 @@ const reducer = {
     state.appOptionsMenuOpts = action.payload;
   },
   setAppSettingsMenuIsOpen: (state, action) => {
-    state.appSettingsMenuOpts.appThemeMenuOpts.isOpen = false;
+    state.appSettingsMenuOpts.appearenceMenuOpts.isOpen = false;
     state.appSettingsMenuOpts.isOpen = action.payload;
   },
-  setAppThemeMenuIsOpen: (state, action) => {
-    state.appSettingsMenuOpts.appThemeMenuOpts.isOpen = action.payload;
+  setAppearenceMenuIsOpen: (state, action) => {
+    state.appSettingsMenuOpts.appearenceMenuOpts.isOpen = action.payload;
   },
   setAppOptionsMenuIsOpen: (state, action) => {
     state.appOptionsMenuOpts.isOpen = action.payload;
@@ -42,14 +46,12 @@ const reducer = {
 } as AppBarDataReducer;
 
 const appBarDataSlice = createSlice({
-  name: "appBarData",
+  name: "appBar",
   initialState: {
-    appBarOpts: {},
-    floatingAppBarHeightEm: 2,
-    updateFloatingBarTopOffset: true,
+    showTabsNavArrows: false,
     appSettingsMenuOpts: {
       isOpen: false,
-      appThemeMenuOpts: {
+      appearenceMenuOpts: {
         isOpen: false,
       },
     },
@@ -63,11 +65,12 @@ const appBarDataSlice = createSlice({
 });
 
 export const {
+  setShowTabsNavArrows,
   setAppOptionsMenuIsOpen,
   setAppOptionsMenuOpts,
   setAppSettingsMenuIsOpen,
   setAppSettingsMenuOpts,
-  setAppThemeMenuIsOpen,
+  setAppearenceMenuIsOpen,
 } = appBarDataSlice.actions;
 
 export default appBarDataSlice.reducer;

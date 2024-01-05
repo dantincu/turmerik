@@ -28,6 +28,11 @@ body {
 }
 
 .trmrk-app.trmrk-theme-dark {
+  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
+    background-color: #121212;
+  }
+
   .trmrk-app-main::-webkit-scrollbar {
     width: 15px;
   }

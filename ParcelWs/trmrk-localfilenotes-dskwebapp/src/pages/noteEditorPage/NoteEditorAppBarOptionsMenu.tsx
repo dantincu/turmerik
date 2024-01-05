@@ -16,11 +16,11 @@ export default function NoteEditorAppBarOptionsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBarData = useSelector((state: { appBarData: AppBarData }) => state.appBarData);
+  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
   const appPages = useSelector((state: { appPages: AppPagesData }) => state.appPages);
   const dispatch = useDispatch();
 
-  const appOptionsMenuOpts = appBarData.appOptionsMenuOpts;
+  const appOptionsMenuOpts = appBar.appOptionsMenuOpts;
 
   const handleMenuClose = () => {
     dispatch(setAppOptionsMenuIsOpen(false));

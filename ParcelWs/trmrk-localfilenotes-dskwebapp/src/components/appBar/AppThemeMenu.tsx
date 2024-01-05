@@ -17,7 +17,7 @@ export default function AppThemeMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBarData = useSelector<{ appBarData: AppBarData }, AppBarData>(state => state.appBarData);
+  const appBar = useSelector<{ appBar: AppBarData }, AppBarData>(state => state.appBar);
   const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
 
@@ -30,7 +30,7 @@ export default function AppThemeMenu({
   }
 
   return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appPages)].join(" ")}
-        open={appBarData.appSettingsMenuOpts.appThemeMenuOpts.isOpen}
+        open={appBar.appSettingsMenuOpts.appThemeMenuOpts.isOpen}
         onClose={handleAppThemeMenuClose}
         anchorEl={menuAnchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}

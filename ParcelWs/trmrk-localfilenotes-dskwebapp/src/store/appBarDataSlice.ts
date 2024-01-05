@@ -55,7 +55,7 @@ const reducer = {
 } as AppBarDataReducer;
 
 const appBarDataSlice = createSlice({
-  name: "appBarData",
+  name: "appBar",
   initialState: {
     appBarOpts: {},
     floatingAppBarHeightEm: 2,

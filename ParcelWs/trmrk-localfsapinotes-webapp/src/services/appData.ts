@@ -25,10 +25,10 @@ export enum AppPage {
 
 export interface AppSettingsMenuOpts {
   isOpen: boolean;
-  appThemeMenuOpts: AppThemeMenuOpts;
+  appearenceMenuOpts: AppearenceMenuOpts;
 }
 
-export interface AppThemeMenuOpts {
+export interface AppearenceMenuOpts {
   isOpen: boolean;
 }
 
@@ -37,11 +37,22 @@ export interface AppOptionsMenuOpts {
 }
 
 export interface AppBarData {
+  showTabsNavArrows: boolean;
   appSettingsMenuOpts: AppSettingsMenuOpts;
   appOptionsMenuOpts: AppOptionsMenuOpts;
 }
 
-export interface AppTabsData {}
+export interface AppTab {
+  appPage: AppPage;
+  idnf: string | null;
+  name: string;
+  tabUuid: string;
+  isCurrent: boolean | null;
+}
+
+export interface AppTabsData {
+  openTabs: AppTab[];
+}
 
 export interface FilesHcyHistoryItem {
   idnf: string;

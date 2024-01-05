@@ -7,42 +7,42 @@ import MenuList from '@mui/material/MenuList';
 import ArrowRightIcon from '@mui/icons-material/ArrowRightOutlined';
 import IconButton from "@mui/material/IconButton";
 
-import AppThemeMenu from "./AppThemeMenu";
-import { AppBarData, AppData } from "../../services/appData";
-import { setAppSettingsMenuIsOpen, setAppThemeMenuIsOpen } from "../../store/appBarDataSlice";
-import { getAppThemeCssClassName } from "../../services/utils";
+import AppearenceMenu from "./AppearenceMenu";
+import { AppBarData, AppData } from "../../../services/appData";
+import { setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";
+import { getAppThemeCssClassName } from "../../../services/utils";
 
 export default function AppSettingsMenu({
     menuAnchorEl
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBarData = useSelector((state: { appBarData: AppBarData }) => state.appBarData);
+  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const dispatch = useDispatch();
 
-  const [ appThemeMenuIconBtnEl, setAppThemeMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
+  const [ appearenceMenuIconBtnEl, setAppearenceMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
 
   const handleSettingsMenuClose = () => {
     dispatch(setAppSettingsMenuIsOpen(false));
   };
 
-  const handleAppThemeClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAppThemeMenuIconBtnEl(event.currentTarget);
-    dispatch(setAppThemeMenuIsOpen(true));
+  const handleAppearenceClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAppearenceMenuIconBtnEl(event.currentTarget);
+    dispatch(setAppearenceMenuIsOpen(true));
   };
 
   return (<>
     <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData)].join(" ")}
-      open={appBarData.appSettingsMenuOpts.isOpen}
+      open={appBar.appSettingsMenuOpts.isOpen}
       onClose={handleSettingsMenuClose}
       anchorEl={menuAnchorEl}>
       <MenuList dense>
-        <MenuItem onClick={handleAppThemeClick}>App Theme
+        <MenuItem onClick={handleAppearenceClick}>Appearence
           <IconButton><ArrowRightIcon /></IconButton>
         </MenuItem>
       </MenuList>
     </Menu>
-    <AppThemeMenu menuAnchorEl={appThemeMenuIconBtnEl!} />
+    <AppearenceMenu menuAnchorEl={appearenceMenuIconBtnEl!} />
   </>);
 }

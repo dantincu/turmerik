@@ -20,7 +20,7 @@ import AppLoadingPage from "../pages/appLoading/AppLoadingPage";
 import MainContent from "../components/mainContent/MainContent";
 
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
-import AppLoadingBar from "../components/appBar/AppLoadingBar";
+import AppLoadingBar from "../components/appBar/appLoading/AppLoadingBar";
 
 export default function App() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
@@ -78,7 +78,7 @@ export default function App() {
         <CssBaseline />
           { appData.hasFsApiRootDirHandle ? (<Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
             <IconButton onClick={onOnAppBarToggled} sx={{
-              position: "fixed", top: "0px", left: "0px", zIndex: 1101 }}
+              position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
               className={ appData.showAppBar ? "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" }>
               { appData.showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
             </IconButton>

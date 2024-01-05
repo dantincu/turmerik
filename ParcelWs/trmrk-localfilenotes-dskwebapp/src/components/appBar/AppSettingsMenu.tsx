@@ -17,7 +17,7 @@ export default function AppSettingsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBarData = useSelector<{ appBarData: AppBarData }, AppBarData>(state => state.appBarData);
+  const appBar = useSelector<{ appBar: AppBarData }, AppBarData>(state => state.appBar);
   const appPages = useSelector<{ appPages: AppPagesData }, AppPagesData>(state => state.appPages);
   const dispatch = useDispatch();
 
@@ -34,7 +34,7 @@ export default function AppSettingsMenu({
 
   return (<>
     <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appPages)].join(" ")}
-      open={appBarData.appSettingsMenuOpts.isOpen}
+      open={appBar.appSettingsMenuOpts.isOpen}
       onClose={handleSettingsMenuClose}
       anchorEl={menuAnchorEl}>
       <MenuList dense>
