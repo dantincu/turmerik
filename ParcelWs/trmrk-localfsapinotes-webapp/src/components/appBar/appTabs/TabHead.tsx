@@ -10,7 +10,7 @@ import { AppTabsData, AppTab, AppPage } from "../../../services/appData";
 import { getResxCssClassName } from "../../../services/utils";
 import TabHeadIcon from "./TabHeadIcon";
 
-import MyCloseIcon from "../../iconButtons/closeIcon/CloseIcon";
+import CharIcon from "../../iconButtons/CharIcon";
 
 export default function TabHead({
     tab
@@ -41,8 +41,8 @@ export default function TabHead({
         </Box>
         <IconButton className="trmrk-tab-close-icon" sx={{ padding: "0.1em", float: "right" }}>
           { tab.isEdited ? <CircleIcon sx={{
-            fontSize: "0.75em", marginTop: tab.isCurrent ? "0.15em" : "0.2em", marginRight: "0.1em" }} /> : <MyCloseIcon
-            fontSize="1.5em" lineHeight="0.8" marginTop={ tab.isCurrent ? "-0.03em" : "0em" } /> }
+            fontSize: "0.75em", marginTop: tab.isCurrent ? "0.15em" : "0.2em", marginRight: "0.1em" }} /> : <CharIcon
+            fontSize="1.5em" lineHeight="0.8" marginTop={ tab.isCurrent ? "-0.03em" : "0em" } >&times;</CharIcon> }
         </IconButton>
       </Box>);
 }
