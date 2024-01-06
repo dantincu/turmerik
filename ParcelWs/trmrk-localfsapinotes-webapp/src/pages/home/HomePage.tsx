@@ -20,13 +20,13 @@ export default function HomePage() {
 
     if (openAppTabs.length === 0) {
       dispatch(addTab({
-        name: "Turmerik asdfasdf masdf asd fasd  fasd",
+        name: "Home",
         idnf: null,
         appPage: AppPage.ViewNoteItem,
         tabUuid: newUUid(),
         isCurrent: true,
         isEdited: true,
-        isPreview: true,
+        isPreview: null,
       }));
 
       dispatch(addTab({

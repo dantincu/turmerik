@@ -3,19 +3,14 @@ import React from "react";
 import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import CloseButton from "@mui/icons-material/Close";
+import CloseIcon from "@mui/icons-material/Close";
+import CircleIcon from "@mui/icons-material/Circle";
 
 import { AppTabsData, AppTab, AppPage } from "../../../services/appData";
 import { getResxCssClassName } from "../../../services/utils";
 import TabHeadIcon from "./TabHeadIcon";
 
-const EditedSymbol = styled.span`
-  position: absolute;
-  right: 1em;
-  top: -0.3em;
-  font-size: 1.5em;
-  font-weight: bold;
-`;
+import MyCloseIcon from "../../iconButtons/closeIcon/CloseIcon";
 
 export default function TabHead({
     tab
@@ -38,16 +33,16 @@ export default function TabHead({
           <TabHeadIcon tab={tab} />
         </IconButton>
         <Box className="trmrk-tab-head-title"
-          sx={{ display: "block", position: "absolute", top: "0.5em", left: "2em", right: "1.8em",
+          sx={{ display: "block", position: "absolute", top: "0.45em", left: "2em", right: "2em",
             overflow: "hidden", fontSize: "0.85em",
             fontStyle: tab.isPreview ? "italic" : "normal",
-            // fontWeight: tab.isCurrent ? "bold" : "normal",
             wordBreak: "keep-all", whiteSpace: "nowrap", cursor: "pointer" }}>
           { tab.name }
         </Box>
-        { /* tab.isEdited ? <EditedSymbol className="trmrk-edited-symbol">*</EditedSymbol> : null */ }
-        <IconButton className="trmrk-tab-close-icon" sx={{ padding: "0.1em", paddingRight: "0px", float: "right" }}>
-          <CloseButton />
+        <IconButton className="trmrk-tab-close-icon" sx={{ padding: "0.1em", float: "right" }}>
+          { tab.isEdited ? <CircleIcon sx={{
+            fontSize: "0.75em", marginTop: tab.isCurrent ? "0.15em" : "0.2em", marginRight: "0.1em" }} /> : <MyCloseIcon
+            fontSize="1.5em" lineHeight="0.8" marginTop={ tab.isCurrent ? "-0.03em" : "0em" } /> }
         </IconButton>
       </Box>);
 }
