@@ -26,6 +26,8 @@ export default function App() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const dispatch = useDispatch();
 
+  const [ isCompactMode, setIsCompactMode ] = useState(appData.isCompactMode);
+
   const appTheme = getAppTheme({
     isDarkMode: appData.isDarkMode
   });
@@ -51,9 +53,10 @@ export default function App() {
     lastHeaderTopOffset: 0
   }
 
-  const onUpdateFloatingBarTopOffset = () => {
+  const onUpdateFloatingBarTopOffset = (
+  showAllAppBar: boolean | null = null) => {
       updateFloatingBarTopOffset(
-        offset, appHeaderEl?.current, appBodyEl?.current, appData.appBarHeight);
+        offset, appHeaderEl?.current, appBodyEl?.current, appData.appBarHeight, showAllAppBar);
   }
 
   const onOnAppBarToggled = () => {
@@ -69,8 +72,11 @@ export default function App() {
   }
 
   useEffect(() => {
-    onUpdateFloatingBarTopOffset();
-  }, [ appHeaderEl, appBodyEl, appData ]);
+    if (appData.isCompactMode != isCompactMode) {
+    onUpdateFloatingBarTopOffset(true);
+      setIsCompactMode(appData.isCompactMode);
+    }
+  }, [ appHeaderEl, appBodyEl, appData, isCompactMode ]);
 
   return (
     <BrowserRouter>
@@ -82,7 +88,7 @@ export default function App() {
               className={ appData.showAppBar ? "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" }>
               { appData.showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
             </IconButton>
-            { appData.showAppBar ? <Box className="trmrk-app-bar" sx={{
+            { appData.showAppBar ? <Box className={["trmrk-app-bar"].join(" ")} sx={{
                 width: "100%", height: "5em", position: "absolute", top: "0px" }}>
               <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
             </Box> : null }

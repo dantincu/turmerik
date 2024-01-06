@@ -22,7 +22,7 @@ export default function HomePage() {
       dispatch(addTab({
         name: "Home",
         idnf: null,
-        appPage: AppPage.ViewNoteItem,
+        appPage: AppPage.Home,
         tabUuid: newUUid(),
         isCurrent: true,
         isEdited: null,
@@ -32,5 +32,5 @@ export default function HomePage() {
   });
 
   return (
-    <Container className="trmrk-home-page" maxWidth="xl" sx={{ height: "800px" }}>Home</Container>);
+    <Container className="trmrk-home-page" maxWidth="xl" sx={{ height: "1000px" }}>Home</Container>);
 }

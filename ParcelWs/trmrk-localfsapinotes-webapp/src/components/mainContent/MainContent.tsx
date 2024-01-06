@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from 'react-redux'
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 
 import { appRoutes } from "../../services/routes";
+import { AppData } from "../../services/appData";
 
 import HomePage from "../../pages/home/HomePage";
 import FilesHcyPage from "../../pages/filesHcy/FilesHcyPage";
@@ -17,6 +19,7 @@ export default function MainContent({
     setAppBodyEl: (appBodyElem: HTMLDivElement) => void,
     onUserScroll: () => void
   }) {
+  const appData = useSelector((state: { appData: AppData }) => state.appData);
   const appBodyEl = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export default function MainContent({
   }, []);
 
   return (<Box className="trmrk-app-main" ref={appBodyEl} sx={{
-        width: "100%", overflowY: "scroll", position: "absolute",
+        width: "100%", overflowY: appData.isCompactMode ? "scroll" : "hidden", position: "absolute",
         top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
       <Routes>
         <Route path="" element={<Navigate to="/home" />} />

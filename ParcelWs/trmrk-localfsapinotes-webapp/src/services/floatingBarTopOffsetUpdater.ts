@@ -10,7 +10,8 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
   offset: FloatingBarTopOffset,
   appBarEl: Element | null,
   appMainEl: Element | null,
-  appBarHeight: number | null = null
+  appBarHeight: number | null = null,
+  showAllAppBar: boolean | null = null
 ) => {
   if (typeof offset.showHeader === "boolean") {
     offset.lastHeaderTopOffset = 0;
@@ -33,21 +34,28 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
     }
   } else {
     if (appBarEl && appMainEl) {
-      const bodyScrollTop = appMainEl.scrollTop;
       appBarHeight ??= appBarEl.clientHeight;
 
-      const bodyScrollTopDiff = bodyScrollTop - offset.lastBodyScrollTop;
-      offset.lastBodyScrollTop = bodyScrollTop;
+      if (showAllAppBar) {
+        appBarEl.style.top = "0px";
+        appMainEl.style.top = appBarHeight + "px";
 
-      const headerTopOffset = Math.max(
-        offset.lastHeaderTopOffset - bodyScrollTopDiff,
-        -1 * appBarHeight
-      );
+        offset.lastHeaderTopOffset = 0;
+      } else {
+        const bodyScrollTop = appMainEl.scrollTop;
+        const bodyScrollTopDiff = bodyScrollTop - offset.lastBodyScrollTop;
 
-      offset.lastHeaderTopOffset = Math.min(0, headerTopOffset);
+        const headerTopOffset = Math.max(
+          offset.lastHeaderTopOffset - bodyScrollTopDiff,
+          -1 * appBarHeight
+        );
 
-      appBarEl.style.top = offset.lastHeaderTopOffset + "px";
-      appMainEl.style.top = offset.lastHeaderTopOffset + appBarHeight + "px";
+        offset.lastBodyScrollTop = bodyScrollTop;
+        offset.lastHeaderTopOffset = Math.min(0, headerTopOffset);
+
+        appBarEl.style.top = offset.lastHeaderTopOffset + "px";
+        appMainEl.style.top = offset.lastHeaderTopOffset + appBarHeight + "px";
+      }
     }
   }
 };
