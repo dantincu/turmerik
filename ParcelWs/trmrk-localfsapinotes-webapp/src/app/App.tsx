@@ -22,6 +22,15 @@ import MainContent from "../components/mainContent/MainContent";
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
 import AppLoadingBar from "../components/appBar/appLoading/AppLoadingBar";
 
+const offset: FloatingBarTopOffset = {
+  dateCreated: new Date(),
+  showHeader: null,
+  headerIsHidden: false,
+  appBarHeight: null,
+  lastBodyScrollTop: 0,
+  lastHeaderTopOffset: 0
+}
+
 export default function App() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const dispatch = useDispatch();
@@ -47,16 +56,9 @@ export default function App() {
     appBodyEl.current = appBodyElem;
   }
 
-  const offset: FloatingBarTopOffset = {
-    showHeader: null,
-    lastBodyScrollTop: 0,
-    lastHeaderTopOffset: 0
-  }
-
-  const onUpdateFloatingBarTopOffset = (
-  showAllAppBar: boolean | null = null) => {
+  const onUpdateFloatingBarTopOffset = () => {
       updateFloatingBarTopOffset(
-        offset, appHeaderEl?.current, appBodyEl?.current, appData.appBarHeight, showAllAppBar);
+        offset, appHeaderEl?.current, appBodyEl?.current);
   }
 
   const onOnAppBarToggled = () => {
@@ -67,13 +69,17 @@ export default function App() {
     onUpdateFloatingBarTopOffset();
   }
 
-  const onAppBodyUserScroll = () => {
-    onUpdateFloatingBarTopOffset();
+  const onAppBodyUserScroll = (isResize: boolean) => {
+    if (!isResize) {
+      onUpdateFloatingBarTopOffset();
+    }
   }
 
   useEffect(() => {
-    if (appData.isCompactMode != isCompactMode) {
-    onUpdateFloatingBarTopOffset(true);
+    offset.showHeader = (appData.isCompactMode != isCompactMode) ? true : null;
+
+    if (offset.showHeader) {
+      onUpdateFloatingBarTopOffset();
       setIsCompactMode(appData.isCompactMode);
     }
   }, [ appHeaderEl, appBodyEl, appData, isCompactMode ]);

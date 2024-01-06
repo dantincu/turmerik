@@ -17,24 +17,27 @@ export default function MainContent({
     onUserScroll
   }: {
     setAppBodyEl: (appBodyElem: HTMLDivElement) => void,
-    onUserScroll: () => void
+    onUserScroll: (isResize: boolean) => void
   }) {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const appBodyEl = useRef<HTMLDivElement>(null);
+
+  const onScroll = () => onUserScroll(false);
+  const onResize = () => onUserScroll(true);
 
   useEffect(() => {
     const bodyEl = appBodyEl.current!;
     setAppBodyEl(bodyEl);
 
-    bodyEl!.addEventListener("scroll", onUserScroll);
-    window.addEventListener("resize", onUserScroll);
+    bodyEl!.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onResize);
     return () => {
-      bodyEl!.removeEventListener("scroll", onUserScroll);
-      window.removeEventListener("resize", onUserScroll);
+      bodyEl!.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
-  return (<Box className="trmrk-app-main" ref={appBodyEl} sx={{
+  return (<Box className="trmrk-app-main trmrk-scrollable" ref={appBodyEl} sx={{
         width: "100%", overflowY: appData.isCompactMode ? "scroll" : "hidden", position: "absolute",
         top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
       <Routes>

@@ -27,30 +27,54 @@ body {
   height: 100%;
 }
 
+.trmrk-scrollable {
+  overflow-y: scroll;
+}
+
+.trmrk-scrollable::-webkit-scrollbar {
+  width: 15px;
+}
+
+.trmrk-theme-dark {
+  .trmrk-scrollable::-webkit-scrollbar-thumb {
+    background-color: #303030;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track {
+    background-color: #1e1e1e;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track:hover {
+    background-color: #262626;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #404040;
+  }
+}
+
+.trmrk-theme-light {
+  .trmrk-scrollable::-webkit-scrollbar-thumb {
+    background-color: #cdcdcd;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track {
+    background-color: #efefef;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track:hover {
+    background-color: #dedede;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #bcbcbc;
+  }
+}
+
 .trmrk-app.trmrk-theme-dark {
   .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
     background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
     background-color: #121212;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar {
-    width: 15px;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-thumb {
-    background-color: #303030;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-track {
-    background-color: #1e1e1e;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-track:hover {
-    background-color: #262626;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-thumb:hover {
-    background-color: #404040;
   }
 
   .trmrk-tab-head {
@@ -95,26 +119,6 @@ body {
 
   .trmrk-app-bar * {
     color: #FFF;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar {
-    width: 15px;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-thumb {
-    background-color: #cdcdcd;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-track {
-    background-color: #efefef;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-track:hover {
-    background-color: #dedede;
-  }
-
-  .trmrk-app-main::-webkit-scrollbar-thumb:hover {
-    background-color: #bcbcbc;
   }
 
   .trmrk-tab-head {

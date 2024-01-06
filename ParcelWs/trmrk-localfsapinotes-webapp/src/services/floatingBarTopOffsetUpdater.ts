@@ -1,7 +1,10 @@
 import React from "react";
 
 export interface FloatingBarTopOffset {
+  dateCreated: Date;
   showHeader: boolean | null;
+  headerIsHidden: boolean;
+  appBarHeight: number | null;
   lastHeaderTopOffset: number;
   lastBodyScrollTop: number;
 }
@@ -9,9 +12,7 @@ export interface FloatingBarTopOffset {
 export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
   offset: FloatingBarTopOffset,
   appBarEl: Element | null,
-  appMainEl: Element | null,
-  appBarHeight: number | null = null,
-  showAllAppBar: boolean | null = null
+  appMainEl: Element | null
 ) => {
   if (typeof offset.showHeader === "boolean") {
     offset.lastHeaderTopOffset = 0;
@@ -19,42 +20,47 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
 
     if (offset.showHeader === true) {
       if (appBarEl) {
+        offset.appBarHeight ??= appBarEl.clientHeight;
         appBarEl.style.top = "0px";
+
+        offset.headerIsHidden = false;
         offset.showHeader = null;
 
         if (appMainEl) {
-          appMainEl.style.top = appBarEl.clientHeight + "px";
+          appMainEl.style.top = offset.appBarHeight + "px";
+        } else {
         }
       }
     } else if (offset.showHeader === false) {
       if (appMainEl) {
-        appMainEl.style.top = (appBarHeight ?? 0) + "px";
+        offset.appBarHeight ??= appBarEl?.clientHeight ?? 0;
+        appMainEl.style.top = "0px";
+
+        offset.headerIsHidden = true;
         offset.showHeader = null;
       }
     }
   } else {
     if (appBarEl && appMainEl) {
-      appBarHeight ??= appBarEl.clientHeight;
+      offset.appBarHeight ??= appBarEl.clientHeight;
 
-      if (showAllAppBar) {
-        appBarEl.style.top = "0px";
-        appMainEl.style.top = appBarHeight + "px";
-
-        offset.lastHeaderTopOffset = 0;
+      if (offset.headerIsHidden) {
+        appMainEl.style.top = "0px";
       } else {
         const bodyScrollTop = appMainEl.scrollTop;
         const bodyScrollTopDiff = bodyScrollTop - offset.lastBodyScrollTop;
 
         const headerTopOffset = Math.max(
           offset.lastHeaderTopOffset - bodyScrollTopDiff,
-          -1 * appBarHeight
+          -1 * offset.appBarHeight
         );
 
         offset.lastBodyScrollTop = bodyScrollTop;
         offset.lastHeaderTopOffset = Math.min(0, headerTopOffset);
 
         appBarEl.style.top = offset.lastHeaderTopOffset + "px";
-        appMainEl.style.top = offset.lastHeaderTopOffset + appBarHeight + "px";
+        appMainEl.style.top =
+          offset.lastHeaderTopOffset + offset.appBarHeight + "px";
       }
     }
   }

@@ -2,16 +2,18 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 
-import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
 
 import { core as trmrk } from "trmrk";
 
 import { addTab } from "../../store/appTabsDataSlice";
-import { AppPage, AppTabsData } from "../../services/appData";
+import { AppPage, AppTabsData, AppData } from "../../services/appData";
 import { newUUid } from "../../services/utils";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
+import Panel from "../../components/panel/Panel";
 
 export default function HomePage() {
+  const appData = useSelector((state: { appData: AppData }) => state.appData);
   const openAppTabs = useSelector((state: { appTabs: AppTabsData }) => state.appTabs.openTabs);
   const dispatch = useDispatch();
 
@@ -32,5 +34,9 @@ export default function HomePage() {
   });
 
   return (
-    <Container className="trmrk-home-page" maxWidth="xl" sx={{ height: "1000px" }}>Home</Container>);
+    <Box className="trmrk-home-page">Home
+      <Panel isScrollable={!appData.isCompactMode} style={{ width: "33%" }}>
+        <Box sx={{ height: "800px",  }}>Home</Box>
+      </Panel>
+    </Box>);
 }
