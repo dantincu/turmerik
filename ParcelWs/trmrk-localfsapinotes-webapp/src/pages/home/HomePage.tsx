@@ -26,7 +26,27 @@ export default function HomePage() {
         idnf: null,
         appPage: AppPage.Home,
         tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: null,
+        isPreview: null,
+      }));
+      
+      dispatch(addTab({
+        name: "Home",
+        idnf: null,
+        appPage: AppPage.Home,
+        tabUuid: newUUid(),
         isCurrent: true,
+        isEdited: null,
+        isPreview: null,
+      }));
+      
+      dispatch(addTab({
+        name: "Home",
+        idnf: null,
+        appPage: AppPage.Home,
+        tabUuid: newUUid(),
+        isCurrent: null,
         isEdited: null,
         isPreview: null,
       }));

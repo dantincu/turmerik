@@ -71,10 +71,22 @@ body {
   }
 }
 
+.trmrk-app .trmrk-tab-head {
+  margin-right: 0.125em;
+}
+
+.trmrk-app .trmrk-tab-head:last-child {
+  margin-right: 0px;
+}
+
 .trmrk-app.trmrk-theme-dark {
   .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
     background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
     background-color: #121212;
+  }
+
+  .trmrk-app-tabs-bar {
+    border-bottom-color: #CCC;
   }
 
   .trmrk-tab-head {
@@ -88,7 +100,9 @@ body {
   }
 
   .trmrk-tab-head.trmrk-current {
-    background-color: #262626;
+    background-color: #121212;
+    border-bottom-color: #262626;
+    background-image: linear-gradient(#121212, #262626);
   }
 
   .trmrk-tab-head.trmrk-current * {
@@ -117,6 +131,10 @@ body {
     background-color: #1976d2;
   }
 
+  .trmrk-app-tabs-bar {
+    border-bottom-color: #EEE;
+  }
+
   .trmrk-app-bar * {
     color: #FFF;
   }
@@ -132,8 +150,10 @@ body {
 
   .trmrk-tab-head.trmrk-current {
     color: #FFF;
-    background-color: #0050a0;
     border-color: #FFF;
+    border-bottom-color: #1976d2;
+    background-color: #0050a0;
+    background-image: linear-gradient(#0050a0, #1976d2);
   }
 
   .trmrk-tab-head.trmrk-current * {

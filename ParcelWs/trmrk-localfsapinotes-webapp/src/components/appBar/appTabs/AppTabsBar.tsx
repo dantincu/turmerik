@@ -12,7 +12,8 @@ export default function AppPageBar() {
 
   return (<Box className="trmrk-app-tabs-bar" sx={{
     position: "absolute", left: "5em", right: "5em", overflow: "hidden", height: "2.5em", whiteSpace: "nowrap" }}>
-    <Box className="trmrk-tabs-list">
+    <Box className="trmrk-tabs-list" sx={{
+        display: "inline-flex", position: "relative", height: "2.2em", top: "0.25em", borderBottom: "1.5px solid" }}>
       {openTabs.map(tab => <TabHead tab={tab} key={tab.tabUuid} />)}
     </Box>
   </Box>)
