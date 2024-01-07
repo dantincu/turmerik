@@ -117,6 +117,7 @@ body {
       background-color: $trmrk-note-back-color-theme-dark;
       color: $trmrk-note-fore-color-theme-dark;
       border-radius: 3px;
+      border-top-left-radius: 5px;
 
       path {
         background-color: $trmrk-note-back-color-theme-dark;
@@ -167,7 +168,8 @@ body {
     svg {
       background-color: $trmrk-note-back-color-theme-light;
       color: $trmrk-note-fore-color-theme-light;
-    border-radius: 3px;
+      border-radius: 3px;
+      border-top-left-radius: 5px;
 
       path {
         background-color: $trmrk-note-back-color-theme-light;
