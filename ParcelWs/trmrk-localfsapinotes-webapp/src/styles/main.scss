@@ -148,7 +148,7 @@ body {
     border-color: #1976d2;
     background-color: #0030a0;
     background-image: linear-gradient(#0030a0, #1976d2);
-    border-bottom: 2px groove #1976d2;
+    border-bottom: 2px groove #1C84EB;
   }
 
   .trmrk-tab-head.trmrk-current * {
@@ -171,7 +171,20 @@ body {
   }
 }
 
-.trmrk-page-panel {
-  display: inline-flex;
-  position: absolute;
+.trmrk-app {
+  .trmrk-page-panel {
+    display: inline-flex;
+    position: absolute;
+  }
+
+  .trmrk-tab-head.trmrk-edit-mode {
+    border-bottom-style: ridge;
+    border-bottom-width: 3px;
+  }
+
+  .trmrk-tab-head.trmrk-edit-mode.trmrk-current {
+    border-bottom-style: ridge;
+    border-bottom-width: 3px;
+  }
+
 }
