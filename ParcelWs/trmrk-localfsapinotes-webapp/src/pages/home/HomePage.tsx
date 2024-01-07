@@ -22,33 +22,58 @@ export default function HomePage() {
 
     if (openAppTabs.length === 0) {
       dispatch(addTab({
-        name: "Home",
+        name: "NotesHcy",
         idnf: null,
-        appPage: AppPage.Home,
+        appPage: AppPage.NotesHcy,
         tabUuid: newUUid(),
         isCurrent: true,
+        isEditMode: null,
+        isPreviewMode: null,
         isEdited: null,
-        isPreview: null,
+      }));
+
+      dispatch(addTab({
+        name: "NoteFilesHcy",
+        idnf: null,
+        appPage: AppPage.NoteFilesHcy,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEditMode: null,
+        isPreviewMode: true,
+        isEdited: null,
+      }));
+
+      dispatch(addTab({
+        name: "FilesHcy",
+        idnf: null,
+        appPage: AppPage.FilesHcy,
+        tabUuid: newUUid(),
+        isCurrent: true,
+        isEditMode: true,
+        isPreviewMode: null,
+        isEdited: null,
       }));
       
       dispatch(addTab({
-        name: "Home",
+        name: "NoteItem",
         idnf: null,
-        appPage: AppPage.Home,
+        appPage: AppPage.NoteItem,
         tabUuid: newUUid(),
         isCurrent: null,
+        isEditMode: true,
+        isPreviewMode: null,
         isEdited: null,
-        isPreview: null,
       }));
       
       dispatch(addTab({
-        name: "Home",
+        name: "TextFile",
         idnf: null,
-        appPage: AppPage.Home,
+        appPage: AppPage.TextFile,
         tabUuid: newUUid(),
         isCurrent: null,
+        isEditMode: true,
+        isPreviewMode: null,
         isEdited: null,
-        isPreview: null,
       }));
     }
   });

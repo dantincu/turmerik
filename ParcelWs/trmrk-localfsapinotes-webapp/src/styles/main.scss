@@ -85,14 +85,11 @@ body {
     background-color: #121212;
   }
 
-  .trmrk-app-tabs-bar {
-    border-bottom-color: #CCC;
-  }
-
   .trmrk-tab-head {
     color: #CCC;
-    border-color: #CCC;
+    border-color: #606060;
     background-color: #404040;
+    border-bottom: 2px groove #606060;
   }
 
   .trmrk-tab-head * {
@@ -103,6 +100,7 @@ body {
     background-color: #121212;
     border-bottom-color: #262626;
     background-image: linear-gradient(#121212, #262626);
+    border-bottom: 2px groove #404040;
   }
 
   .trmrk-tab-head.trmrk-current * {
@@ -110,7 +108,7 @@ body {
   }
 
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-edit-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
     color: $trmrk-note-color-theme-dark;
@@ -131,17 +129,14 @@ body {
     background-color: #1976d2;
   }
 
-  .trmrk-app-tabs-bar {
-    border-bottom-color: #EEE;
-  }
-
   .trmrk-app-bar * {
     color: #FFF;
   }
 
   .trmrk-tab-head {
     color: #EEE;
-    border-color: #EEE;
+    border-color: #1C84EB;
+    border-bottom: 2px groove #1C84EB;
   }
 
   .trmrk-tab-head * {
@@ -150,10 +145,10 @@ body {
 
   .trmrk-tab-head.trmrk-current {
     color: #FFF;
-    border-color: #FFF;
-    border-bottom-color: #1976d2;
-    background-color: #0050a0;
-    background-image: linear-gradient(#0050a0, #1976d2);
+    border-color: #1976d2;
+    background-color: #0030a0;
+    background-image: linear-gradient(#0030a0, #1976d2);
+    border-bottom: 2px groove #1976d2;
   }
 
   .trmrk-tab-head.trmrk-current * {
@@ -161,7 +156,7 @@ body {
   }
 
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-edit-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
     color: $trmrk-note-color-theme-light;

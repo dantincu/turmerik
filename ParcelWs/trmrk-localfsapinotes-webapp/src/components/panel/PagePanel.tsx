@@ -31,8 +31,6 @@ export default function PagePanel({
   style ??= {};
   style = trmrk.merge(style, [ dfStyle ]);
 
-  console.log("style", style);
-
   return (<Panel isScrollable={isScrollable ?? !appData.isCompactMode} isResizable={isResizable ?? !appData.isCompactMode}
       className={["trmrk-page-panel", className ?? null].join(" ")}
       style={style}>

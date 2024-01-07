@@ -1,14 +1,9 @@
 import React from "react";
 
-import DescriptionIcon from "@mui/icons-material/Description";
 import ArticleIcon from "@mui/icons-material/Article";
-import NoteIcon from "@mui/icons-material/Note";
-import EditNoteIcon from "@mui/icons-material/EditNote";
+import NotesIcon from "@mui/icons-material/Notes";
 
 import FolderIcon from "@mui/icons-material/Folder";
-import FolderOpenIcon from "@mui/icons-material/FolderOpen";
-import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
-import NotesIcon from "@mui/icons-material/Notes";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 
 import DownloadIcon from "@mui/icons-material/Download";
@@ -18,33 +13,29 @@ import BrowseGalleryIcon from "@mui/icons-material/BrowseGallery";
 
 import HomeIcon from "@mui/icons-material/Home";
 
-import { AppTabsData, AppTab, AppPage } from "../../../services/appData";
+import { AppTab, AppPage } from "../../../services/appData";
 
 export default function TabHeadIcon({
-    tab
+    tab,
   }: {
-    tab: AppTab
+    tab: AppTab,
   }) {
     switch (tab.appPage) {
-      case AppPage.ViewNoteItem:
-        return <DescriptionIcon />
-      case AppPage.EditNoteItem:
+      case AppPage.NoteItem:
         return <ArticleIcon />;
 
       case AppPage.NotesHcy:
-        return <FolderIcon />
+        return <NotesIcon />;
       case AppPage.NoteFilesHcy:
-        return <FolderOpenIcon />
+        return <FolderIcon />;
       case AppPage.FilesHcy:
-        return <FolderOutlinedIcon />;
+        return <FolderIcon />;
 
       case AppPage.PicturesExplorer:
         return <BrowseGalleryIcon />;
 
-      case AppPage.ViewTextFile:
-        return <NoteIcon />
-      case AppPage.EditTextFile:
-        return <EditNoteIcon />;
+      case AppPage.TextFile:
+        return <ArticleIcon />;
 
       case AppPage.ViewPictureFile:
         return <ImageIcon />;

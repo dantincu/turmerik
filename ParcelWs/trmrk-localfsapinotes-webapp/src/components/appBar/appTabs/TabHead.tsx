@@ -25,11 +25,12 @@ export default function TabHead({
     return (<Box className={[
       "trmrk-tab-head", resxCssClassName,
       tab.isCurrent ? "trmrk-current" : null,
+      tab.isEditMode ? "trmrk-edit-mode" : null,
       tab.isEdited ? "trmrk-edited" : null ].join(" ")}
       sx={{
         width: "15em", height: "2.2em", top: marginTop,
         border: border,
-        borderTopLeftRadius: "0.25em", borderTopRightRadius: "0.25em",
+        borderTopLeftRadius: "0.5em", borderTopRightRadius: "0.5em",
         position: "relative", display: "inline-block" }}>
         <IconButton className="trmrk-tab-head-icon" sx={{ padding: "0.1em", paddingTop: "0.15em" }}>
           <TabHeadIcon tab={tab} />
@@ -37,7 +38,8 @@ export default function TabHead({
         <Box className="trmrk-tab-head-title"
           sx={{ display: "block", position: "absolute", top: "0.6em", left: "2em", right: "2em",
             overflowX: "hidden", fontSize: "0.85em",
-            fontStyle: tab.isPreview ? "italic" : "normal",
+            fontStyle: tab.isPreviewMode ? "italic" : "normal",
+            // textDecoration: tab.isEditMode ? "underline": "none",
             wordBreak: "keep-all", whiteSpace: "nowrap", cursor: "pointer" }}>
           { tab.name }
         </Box>

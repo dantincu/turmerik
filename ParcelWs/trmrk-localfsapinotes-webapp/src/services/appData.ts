@@ -9,14 +9,12 @@ export interface AppData {
 
 export enum AppPage {
   Home = 0,
-  ViewNoteItem,
-  EditNoteItem,
+  NoteItem,
   NotesHcy,
   NoteFilesHcy,
   FilesHcy,
   PicturesExplorer,
-  ViewTextFile,
-  EditTextFile,
+  TextFile,
   ViewPictureFile,
   ViewVideoFile,
   ViewAudioFile,
@@ -48,8 +46,9 @@ export interface AppTab {
   name: string;
   tabUuid: string;
   isCurrent: boolean | null;
+  isEditMode: boolean | null;
+  isPreviewMode: boolean | null;
   isEdited: boolean | null;
-  isPreview: boolean | null;
 }
 
 export interface AppTabsData {

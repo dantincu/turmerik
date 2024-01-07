@@ -68,10 +68,8 @@ export const getRoute = (routeBase: string, idnf: string) => {
 
 export const getResxCssClassNameCore = (appPage: AppPage) => {
   switch (appPage) {
-    case AppPage.ViewNoteItem:
-      return "view-note-item";
-    case AppPage.EditNoteItem:
-      return "edit-note-item";
+    case AppPage.NoteItem:
+      return "note-item";
     case AppPage.NotesHcy:
       return "notes-hcy";
     case AppPage.NoteFilesHcy:
@@ -80,10 +78,8 @@ export const getResxCssClassNameCore = (appPage: AppPage) => {
       return "files-hcy";
     case AppPage.PicturesExplorer:
       return "picsnvids-explorer";
-    case AppPage.ViewTextFile:
-      return "view-text-file";
-    case AppPage.EditTextFile:
-      return "edit-text-file";
+    case AppPage.TextFile:
+      return "text-file";
     case AppPage.ViewPictureFile:
       return "view-picture-file";
     case AppPage.ViewVideoFile:
