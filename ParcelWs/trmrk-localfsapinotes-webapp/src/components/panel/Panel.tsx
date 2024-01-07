@@ -7,11 +7,13 @@ import { SxProps, Theme } from "@mui/material";
 export default function Panel({
     children,
     isScrollable,
+    isResizable,
     className,
     style,
   }: {
     children: React.ReactNode,
     isScrollable: boolean,
+    isResizable: boolean,
     className?: string | null | undefined
     style?: SxProps<Theme> | null | undefined
   }) {

@@ -10,7 +10,7 @@ import { addTab } from "../../store/appTabsDataSlice";
 import { AppPage, AppTabsData, AppData } from "../../services/appData";
 import { newUUid } from "../../services/utils";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
-import Panel from "../../components/panel/Panel";
+import PagePanel from "../../components/panel/PagePanel";
 
 export default function HomePage() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
@@ -21,16 +21,6 @@ export default function HomePage() {
     updateHtmlDocTitle();
 
     if (openAppTabs.length === 0) {
-      dispatch(addTab({
-        name: "Home",
-        idnf: null,
-        appPage: AppPage.Home,
-        tabUuid: newUUid(),
-        isCurrent: null,
-        isEdited: null,
-        isPreview: null,
-      }));
-      
       dispatch(addTab({
         name: "Home",
         idnf: null,
@@ -50,13 +40,28 @@ export default function HomePage() {
         isEdited: null,
         isPreview: null,
       }));
+      
+      dispatch(addTab({
+        name: "Home",
+        idnf: null,
+        appPage: AppPage.Home,
+        tabUuid: newUUid(),
+        isCurrent: null,
+        isEdited: null,
+        isPreview: null,
+      }));
     }
   });
 
   return (
     <Box className="trmrk-home-page">Home
-      <Panel isScrollable={!appData.isCompactMode} style={{ width: "33%" }}>
-        <Box sx={{ height: "800px",  }}>Home</Box>
-      </Panel>
+      <PagePanel
+        style={{ width: "20em", left: "0px" }}>
+        <Box sx={{ height: "800px",  }}>Home1</Box>
+      </PagePanel>
+      <PagePanel
+        style={{ width: "33%", left: "20em" }}>
+        <Box sx={{ height: "100px",  }}>Home2</Box>
+      </PagePanel>
     </Box>);
 }

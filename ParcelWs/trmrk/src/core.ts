@@ -130,6 +130,31 @@ export const containsAnyOfMx = (
   return retVal;
 };
 
+export const merge = <TTrgObj extends Object>(
+  trgObj: TTrgObj,
+  srcObjsArr: Object[],
+  depth: number = 0
+) => {
+  const trgObjMap = trgObj as { [key: string]: any };
+
+  for (let srcObj of srcObjsArr) {
+    const srcObjMap = srcObj as { [key: string]: any };
+    for (let propName of Object.getOwnPropertyNames(srcObj)) {
+      const srcPropVal = srcObjMap[propName];
+
+      if (srcPropVal ?? false) {
+        if (!(trgObjMap[propName] ?? false) ?? false) {
+          trgObjMap[propName] = srcPropVal;
+        } else if (depth > 0) {
+          merge(trgObj, [srcObj], depth - 1);
+        }
+      }
+    }
+  }
+
+  return trgObj;
+};
+
 export const filterAsync = async <TIn>(
   inArr: TIn[],
   predicate: (inVal: TIn, idx?: number, arr?: TIn[]) => Promise<boolean>
