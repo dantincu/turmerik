@@ -111,13 +111,16 @@ body {
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
-    color: $trmrk-note-color-theme-dark;
+    color: $trmrk-note-fore-color-theme-dark;
 
     svg {
-      color: $trmrk-note-color-theme-dark;
+      background-color: $trmrk-note-back-color-theme-dark;
+      color: $trmrk-note-fore-color-theme-dark;
+      border-radius: 3px;
 
       path {
-        color: $trmrk-note-color-theme-dark;
+        background-color: $trmrk-note-back-color-theme-dark;
+        color: $trmrk-note-fore-color-theme-dark;
       }
     }
   }
@@ -159,13 +162,16 @@ body {
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
   .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
-    color: $trmrk-note-color-theme-light;
+    color: $trmrk-note-fore-color-theme-light;
 
     svg {
-      color: $trmrk-note-color-theme-light;
+      background-color: $trmrk-note-back-color-theme-light;
+      color: $trmrk-note-fore-color-theme-light;
+    border-radius: 3px;
 
       path {
-        color: $trmrk-note-color-theme-light;
+        background-color: $trmrk-note-back-color-theme-light;
+        color: $trmrk-note-fore-color-theme-light;
       }
     }
   }
