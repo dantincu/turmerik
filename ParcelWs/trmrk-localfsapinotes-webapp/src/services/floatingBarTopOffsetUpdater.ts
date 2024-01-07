@@ -16,7 +16,6 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
 ) => {
   if (typeof offset.showHeader === "boolean") {
     offset.lastHeaderTopOffset = 0;
-    offset.lastBodyScrollTop = 0;
 
     if (offset.showHeader === true) {
       if (appBarEl) {
@@ -27,7 +26,8 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
         offset.showHeader = null;
 
         if (appMainEl) {
-          appMainEl.style.top = offset.appBarHeight + "px";
+          appMainEl.style.top =
+            offset.lastHeaderTopOffset + offset.appBarHeight + "px";
         } else {
         }
       }

@@ -69,12 +69,6 @@ export default function App() {
     onUpdateFloatingBarTopOffset();
   }
 
-  const onAppBodyUserScroll = (isResize: boolean) => {
-    if (!isResize) {
-      onUpdateFloatingBarTopOffset();
-    }
-  }
-
   useEffect(() => {
     offset.showHeader = (appData.isCompactMode != isCompactMode) ? true : null;
 
@@ -98,7 +92,7 @@ export default function App() {
                 width: "100%", height: "5em", position: "absolute", top: "0px" }}>
               <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
             </Box> : null }
-            <MainContent onUserScroll={onAppBodyUserScroll} setAppBodyEl={onSetAppBodyEl} />
+            <MainContent onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
           </Box>) : <Box className={[ "trmrk-app-loading", appThemeClassName ].join(" ")}>
             <AppLoadingBar />
             <AppLoadingPage />

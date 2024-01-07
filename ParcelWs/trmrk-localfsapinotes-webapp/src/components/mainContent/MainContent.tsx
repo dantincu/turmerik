@@ -17,23 +17,20 @@ export default function MainContent({
     onUserScroll
   }: {
     setAppBodyEl: (appBodyElem: HTMLDivElement) => void,
-    onUserScroll: (isResize: boolean) => void
+    onUserScroll: () => void
   }) {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const appBodyEl = useRef<HTMLDivElement>(null);
 
-  const onScroll = () => onUserScroll(false);
-  const onResize = () => onUserScroll(true);
+  const onScroll = () => onUserScroll();
 
   useEffect(() => {
     const bodyEl = appBodyEl.current!;
     setAppBodyEl(bodyEl);
 
     bodyEl!.addEventListener("scroll", onScroll);
-    window.addEventListener("resize", onResize);
     return () => {
       bodyEl!.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
     };
   }, []);
 
