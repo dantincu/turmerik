@@ -17,7 +17,7 @@ import { getAppThemeCssClassName, getAppModeCssClassName } from "../services/uti
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/floatingBarTopOffsetUpdater";
 
 import AppLoadingPage from "../pages/appLoading/AppLoadingPage";
-import MainContent from "../components/mainContent/MainContent";
+import MainContentContainer from "../components/mainContent/MainContainer";
 
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
 import AppLoadingBar from "../components/appBar/appLoading/AppLoadingBar";
@@ -92,7 +92,7 @@ export default function App() {
                 width: "100%", height: "5em", position: "absolute", top: "0px" }}>
               <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
             </Box> : null }
-            <MainContent onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
+            <MainContentContainer onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
           </Box>) : <Box className={[ "trmrk-app-loading", appThemeClassName ].join(" ")}>
             <AppLoadingBar />
             <AppLoadingPage />

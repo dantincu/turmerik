@@ -13,7 +13,8 @@ export default function Panel({
     className,
     style,
     onResize,
-    setPanelEl: setPanelEl
+    setPanelEl: setPanelEl,
+    onMouseUp,
   }: {
     children: React.ReactNode,
     isScrollable: boolean,
@@ -21,7 +22,8 @@ export default function Panel({
     className?: string | null | undefined
     style?: SxProps<Theme> | null | undefined,
     onResize?: ((dx: number) => void) | null | undefined,
-    setPanelEl?: ((el: HTMLDivElement) => void) | null | undefined
+    setPanelEl?: ((el: HTMLDivElement) => void) | null | undefined,
+    onMouseUp: () => void,
   }) {
     const panelElRef = useRef<HTMLDivElement>();
     
@@ -51,6 +53,10 @@ export default function Panel({
 
     const mouseup = (e: MouseEvent) => {
       document.removeEventListener("mousemove", resize, false);
+
+      if (onMouseUp) {
+        onMouseUp();
+      }
     }
 
     useEffect(() => {

@@ -12,7 +12,7 @@ import HomePage from "../../pages/home/HomePage";
 import FilesHcyPage from "../../pages/filesHcy/FilesHcyPage";
 import NotFoundPage from "../../pages/notFound/NotFoundPage";
 
-export default function MainContent({
+export default function MainContentContainer({
     setAppBodyEl,
     onUserScroll
   }: {
@@ -27,8 +27,8 @@ export default function MainContent({
   useEffect(() => {
     const bodyEl = appBodyEl.current!;
     setAppBodyEl(bodyEl);
-
     bodyEl!.addEventListener("scroll", onScroll);
+
     return () => {
       bodyEl!.removeEventListener("scroll", onScroll);
     };
