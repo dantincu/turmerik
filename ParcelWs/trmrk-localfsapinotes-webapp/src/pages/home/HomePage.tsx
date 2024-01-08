@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -12,10 +12,32 @@ import { newUUid } from "../../services/utils";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import PagePanel from "../../components/panel/PagePanel";
 
+import { updateResizablePanelOffset } from "../../services/resizablePanelOffsetUpdater";
+
 export default function HomePage() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const openAppTabs = useSelector((state: { appTabs: AppTabsData }) => state.appTabs.openTabs);
   const dispatch = useDispatch();
+
+  const leftPanelElRef = useRef<HTMLDivElement | null>(null);
+  const rightPanelElRef = useRef<HTMLDivElement | null>(null);
+
+  const onSetLeftPanelEl = (refEl: HTMLDivElement) => {
+    leftPanelElRef.current = refEl;
+  }
+
+  const onSetRightPanelEl = (refEl: HTMLDivElement) => {
+    rightPanelElRef.current = refEl;
+  }
+
+  const onResize = (dx: number) => {
+    updateResizablePanelOffset(
+      leftPanelElRef.current,
+      rightPanelElRef.current,
+      dx,
+      null
+    );
+  };
 
   useEffect(() => {
     updateHtmlDocTitle();
@@ -80,12 +102,14 @@ export default function HomePage() {
 
   return (
     <Box className="trmrk-home-page">Home
-      <PagePanel
+      <PagePanel setPanelEl={onSetLeftPanelEl}
+        leftIsResizable={false}
         style={{ width: "20em", left: "0px" }}>
         <Box sx={{ height: "800px",  }}>Home1</Box>
       </PagePanel>
-      <PagePanel
-        style={{ width: "33%", left: "20em" }}>
+      <PagePanel setPanelEl={onSetRightPanelEl}
+        onResize={onResize}
+        style={{ right: "0px", left: "20em" }}>
         <Box sx={{ height: "100px",  }}>Home2</Box>
       </PagePanel>
     </Box>);

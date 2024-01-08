@@ -9,14 +9,14 @@ export interface TabsListOffset {
   currentTabIdx: number;
 }
 
-export interface TabsListKeyElements<Element extends HTMLDivElement> {
+export interface TabsListKeyElements<Element extends HTMLElement> {
   tabsBarRefEl: Element | null | undefined;
   tabsListRefEl: Element | null | undefined;
   tabsListLeftSpacerRefEl: Element | null | undefined;
   tabsListRightSpacerRefEl: Element | null | undefined;
 }
 
-export const assureOffsetHasWidth = <Element extends HTMLDivElement>(
+export const assureOffsetHasWidth = <Element extends HTMLElement>(
   offset: TabsListOffset,
   elems: TabsListKeyElements<Element>
 ) => {
@@ -36,7 +36,7 @@ export const assureOffsetHasWidth = <Element extends HTMLDivElement>(
   }
 };
 
-export const updateTabsBarListOffset = <Element extends HTMLDivElement>(
+export const updateTabsBarListOffset = <Element extends HTMLElement>(
   offset: TabsListOffset,
   elems: TabsListKeyElements<Element>
 ) => {
@@ -82,7 +82,5 @@ export const updateTabsBarListOffset = <Element extends HTMLDivElement>(
         }
       }
     }
-
-    console.log("offset", offset);
   }
 };

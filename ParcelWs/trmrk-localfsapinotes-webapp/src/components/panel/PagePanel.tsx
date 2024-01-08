@@ -12,15 +12,19 @@ import Panel from "../../components/panel/Panel";
 export default function PagePanel({
     children,
     isScrollable,
-    isResizable,
+    leftIsResizable,
     className,
     style,
+    onResize,
+    setPanelEl: setPanelEl
   }: {
     children: React.ReactNode,
     isScrollable?: boolean | null | undefined,
-    isResizable?: boolean | null | undefined,
+    leftIsResizable?: boolean | null | undefined,
     className?: string | null | undefined
-    style?: SxProps<Theme> | null | undefined
+    style?: SxProps<Theme> | null | undefined,
+    onResize?: ((dx: number) => void) | null | undefined,
+    setPanelEl?: ((el: HTMLDivElement) => void) | null | undefined
   }) {
   const dfStyle = {
     top: "0px",
@@ -31,9 +35,11 @@ export default function PagePanel({
   style ??= {};
   style = trmrk.merge(style, [ dfStyle ]);
 
-  return (<Panel isScrollable={isScrollable ?? !appData.isCompactMode} isResizable={isResizable ?? !appData.isCompactMode}
-      className={["trmrk-page-panel", className ?? null].join(" ")}
-      style={style}>
+  return (<Panel onResize={onResize} setPanelEl={setPanelEl}
+        isScrollable={isScrollable ?? !appData.isCompactMode}
+        leftIsResizable={leftIsResizable ?? !appData.isCompactMode}
+        className={["trmrk-page-panel", className ?? null].join(" ")}
+        style={style}>
       { children }
     </Panel>);
 }
