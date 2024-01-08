@@ -16,7 +16,7 @@ const ColorThemeLabel = styled.span`
   padding-right: 1em
 `;
 
-export default function AppLoadingBar() {
+export default function AppSetupBar() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const dispatch = useDispatch();
   

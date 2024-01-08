@@ -15,10 +15,14 @@ import prodAppConfig from "./env/dev/app-config.json";
 let appConfig: AppConfig;
 
 if (process.env.NODE_ENV === 'development') {
-  appConfig = devAppConfig;
+  appConfig = devAppConfig as AppConfig;
 } else {
-  appConfig = prodAppConfig
+  appConfig = prodAppConfig as AppConfig
 }
+
+appConfig.apiIsLocalFiles = !!appConfig.apiHost && (
+  appConfig.apiIsLocalFilesUnix || appConfig.apiIsLocalFilesWin);
+
 appCfg.value = appConfig;
 
 const container = document.getElementById('app-root')!;

@@ -4,7 +4,8 @@ export interface AppData {
   showAppBar: boolean;
   isDarkMode: boolean;
   isCompactMode: boolean;
-  hasFsApiRootDirHandle: boolean;
+  hasFilesRootLocation: boolean;
+  hasNotesRootLocation: boolean;
 }
 
 export enum AppPage {

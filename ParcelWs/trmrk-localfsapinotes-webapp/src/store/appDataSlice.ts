@@ -18,7 +18,8 @@ export interface AppDataReducer {
   setShowAppBar: DispatcherType<boolean>;
   setIsDarkMode: DispatcherType<boolean>;
   setIsCompactMode: DispatcherType<boolean>;
-  setHasFsApiRootDirHandle: DispatcherType<boolean>;
+  setHasFilesRootLocation: DispatcherType<boolean>;
+  setHasNotesRootLocation: DispatcherType<boolean>;
 }
 
 const reducer = {
@@ -34,8 +35,11 @@ const reducer = {
   setIsCompactMode: (state, action) => {
     state.isCompactMode = action.payload;
   },
-  setHasFsApiRootDirHandle: (state, action) => {
-    state.hasFsApiRootDirHandle = action.payload;
+  setHasFilesRootLocation: (state, action) => {
+    state.hasFilesRootLocation = action.payload;
+  },
+  setHasNotesRootLocation: (state, action) => {
+    state.hasNotesRootLocation = action.payload;
   },
 } as AppDataReducer;
 
@@ -51,7 +55,7 @@ const appDataSlice = createSlice({
     isCompactMode:
       localStorage.getItem(localStorageKeys.appIsCompactMode) !==
       jsonBool.false,
-    hasFsApiRootDirHandle: false,
+    hasFilesRootLocation: false,
   } as AppData,
   reducers: {
     ...reducer,
@@ -63,7 +67,7 @@ export const {
   setShowAppBar,
   setIsDarkMode,
   setIsCompactMode,
-  setHasFsApiRootDirHandle,
+  setHasFilesRootLocation,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;

@@ -16,11 +16,11 @@ import { getAppTheme } from "../services/app-theme/app-theme";
 import { getAppThemeCssClassName, getAppModeCssClassName } from "../services/utils";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/floatingBarTopOffsetUpdater";
 
-import AppLoadingPage from "../pages/appLoading/AppLoadingPage";
+import AppSetupPage from "../pages/appSetup/AppSetupPage";
 import MainContentContainer from "../components/mainContent/MainContainer";
 
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
-import AppLoadingBar from "../components/appBar/appLoading/AppLoadingBar";
+import AppSetupBar from "../components/appBar/appSetup/AppSetupBar";
 
 const offset: FloatingBarTopOffset = {
   dateCreated: new Date(),
@@ -34,6 +34,8 @@ const offset: FloatingBarTopOffset = {
 export default function App() {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const dispatch = useDispatch();
+
+  const showAppEl = appData.hasFilesRootLocation && appData.hasNotesRootLocation;
 
   const [ isCompactMode, setIsCompactMode ] = useState(appData.isCompactMode);
 
@@ -82,7 +84,7 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
-          { appData.hasFsApiRootDirHandle ? (<Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
+          { showAppEl ? (<Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
             <IconButton onClick={onOnAppBarToggled} sx={{
               position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
               className={ appData.showAppBar ? "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" }>
@@ -93,9 +95,9 @@ export default function App() {
               <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
             </Box> : null }
             <MainContentContainer onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
-          </Box>) : <Box className={[ "trmrk-app-loading", appThemeClassName ].join(" ")}>
-            <AppLoadingBar />
-            <AppLoadingPage />
+          </Box>) : <Box className={[ "trmrk-app-setup", appThemeClassName ].join(" ")}>
+            <AppSetupBar />
+            <AppSetupPage />
           </Box>
         } 
       </ThemeProvider>
