@@ -1,12 +1,9 @@
-import React, { useEffect, useRef } from "react";
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useRef } from "react";
 
-import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/material";
 
 import { core as trmrk } from "trmrk";
 
-import { AppPage, AppTabsData, AppData } from "../../services/appData";
 import Panel from "../../components/panel/Panel";
 
 export default function PagePanel({
@@ -47,14 +44,14 @@ export default function PagePanel({
     const el = refEl.current;
 
     if (el && onResized) {
-      onResized(el.clientWidth);
+      onResized(parseInt(getComputedStyle(el, "").width));
     }
   }
 
   style ??= {};
   style = trmrk.merge(style, [ dfStyle ]);
 
-  return (<Panel onResize={onResize} setPanelEl={onSetPanel} onMouseUp={onMouseUp}
+  return (<Panel onResize={onResize} setPanelEl={onSetPanel} onResized={onMouseUp}
         isScrollable={isScrollable}
         leftIsResizable={leftIsResizable}
         className={["trmrk-page-panel", className ?? null].join(" ")}

@@ -15,6 +15,7 @@ export const queryKeys = Object.freeze({});
 export const localStorageKeys = Object.freeze({
   appThemeIsDarkMode: "appThemeIsDarkMode",
   appIsCompactMode: "appIsCompactMode",
+  pgContnrLeftPnlDfWidth: "pgContnrLeftPnlDfWidth",
 });
 
 export const localForageKeys = Object.freeze({

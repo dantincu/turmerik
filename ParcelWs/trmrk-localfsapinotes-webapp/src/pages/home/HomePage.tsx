@@ -12,15 +12,9 @@ import { newUUid } from "../../services/utils";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import PageContainer from "../../components/mainContent/PageContainer";
 
-import { updateResizablePanelOffset } from "../../services/resizablePanelOffsetUpdater";
-
 export default function HomePage() {
   const openAppTabs = useSelector((state: { appTabs: AppTabsData }) => state.appTabs.openTabs);
   const dispatch = useDispatch();
-
-  const onResized = (width: number) => {
-    console.log("width", width);
-  }
 
   useEffect(() => {
     updateHtmlDocTitle();
@@ -86,9 +80,7 @@ export default function HomePage() {
   return (
     <PageContainer
         className="trmrk-home-page"
-        leftPanelComponent={() => <div>asdf</div>}
-        leftPanelWidth="33%"
-        onResized={onResized}>
+        leftPanelComponent={() => <div>asdf</div>}>
       Home
     </PageContainer>);
 }

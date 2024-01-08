@@ -14,7 +14,7 @@ export default function Panel({
     style,
     onResize,
     setPanelEl: setPanelEl,
-    onMouseUp,
+    onResized,
   }: {
     children: React.ReactNode,
     isScrollable: boolean,
@@ -23,11 +23,10 @@ export default function Panel({
     style?: SxProps<Theme> | null | undefined,
     onResize?: ((dx: number) => void) | null | undefined,
     setPanelEl?: ((el: HTMLDivElement) => void) | null | undefined,
-    onMouseUp: () => void,
+    onResized: () => void,
   }) {
     const panelElRef = useRef<HTMLDivElement>();
-    
-    const mousePos = useRef<number>();
+    const mousePos = useRef<number | null>(null);
 
     const resize = (e: MouseEvent) => {
       const panelEl = panelElRef.current;
@@ -52,10 +51,13 @@ export default function Panel({
     }
 
     const mouseup = (e: MouseEvent) => {
-      document.removeEventListener("mousemove", resize, false);
+      if (mousePos.current ?? false) {
+        mousePos.current = null;
+        document.removeEventListener("mousemove", resize, false);
 
-      if (onMouseUp) {
-        onMouseUp();
+        if (onResized) {
+          onResized();
+        }
       }
     }
 
