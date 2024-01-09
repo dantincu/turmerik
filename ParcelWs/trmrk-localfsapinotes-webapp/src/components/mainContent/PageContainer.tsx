@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 
 import PagePanel from "../panel/PagePanel";
 import { AppData } from "../../services/appData";
-import { updateResizablePanelOffset, RESIZABLE_BORDER_SIZE } from "../../services/resizablePanelOffsetUpdater";
+import { updateResizablePanelOffset, RESIZABLE_BORDER_SIZE } from "../../services/htmlDoc/resizablePanelOffsetUpdater";
 import { localStorageKeys } from "../../services/utils";
 
 export default function PageContainer({

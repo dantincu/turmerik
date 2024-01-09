@@ -14,7 +14,7 @@ import { AppData } from "../services/appData";
 import { setAppBarHeight, setShowAppBar } from "../store/appDataSlice";
 import { getAppTheme, currentAppTheme } from "../services/app-theme/app-theme";
 import { getAppModeCssClassName } from "../services/utils";
-import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/floatingBarTopOffsetUpdater";
+import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/htmlDoc/floatingBarTopOffsetUpdater";
 
 import AppSetupPage from "../pages/appSetup/AppSetupPage";
 import MainContentContainer from "../components/mainContent/MainContainer";
@@ -23,7 +23,6 @@ import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
 import AppSetupBar from "../components/appBar/appSetup/AppSetupBar";
 
 const offset: FloatingBarTopOffset = {
-  dateCreated: new Date(),
   showHeader: null,
   headerIsHidden: false,
   appBarHeight: null,

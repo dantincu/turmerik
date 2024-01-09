@@ -1,7 +1,6 @@
 import React from "react";
 
 export interface FloatingBarTopOffset {
-  dateCreated: Date;
   showHeader: boolean | null;
   headerIsHidden: boolean;
   appBarHeight: number | null;

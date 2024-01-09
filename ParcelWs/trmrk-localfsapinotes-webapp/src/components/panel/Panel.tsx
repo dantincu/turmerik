@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Box from "@mui/material/Box";
 import { SxProps, Theme } from "@mui/material";
 
-import { RESIZABLE_BORDER_SIZE } from "../../services/resizablePanelOffsetUpdater";
+import { RESIZABLE_BORDER_SIZE } from "../../services/htmlDoc/resizablePanelOffsetUpdater";
 
 export default function Panel({
     children,

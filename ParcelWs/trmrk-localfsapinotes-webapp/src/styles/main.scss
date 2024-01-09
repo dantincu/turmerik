@@ -31,7 +31,7 @@ body {
   height: 100%;
 }
 
-.trmrk-app-setup-modal-wrapper .trmrk-app-setup-modal {
+.trmrk-app-setup-modal .trmrk-app-setup-modal-content {
   position: absolute;
   top: 0px;
   bottom: 0px;
@@ -39,10 +39,10 @@ body {
   right: 0px;
   padding: 0px;
 
-  .trmrk-title {
+  .trmrk-header {
     position: absolute;
-    top: 1em;
-    left: 1em;
+    top: 0em;
+    left: 0em;
     text-align: center;
     width: 100%;
 
@@ -54,13 +54,17 @@ body {
   .trmrk-close-btn {
     position: absolute;
     top: 0em;
-    right: 1em;
+    right: 0.75em;
     z-index: 1;
   }
-    
+
+  .trmrk-modal-container {
+    height: 100%;
+  }
+  
   .trmrk-container {
     position: absolute;
-    top: 4em;
+    top: 6em;
     bottom: 1em;
     width: 100%;
     max-width: 100%;
@@ -75,29 +79,36 @@ body {
   }
 
   .trmrk-address-bar {
-    width: 100%;
+    width: 80%;
+    margin: auto;
     position: relative;
+    top: 1.5em;
 
     .trmrk-edit-bar, .trmrk-readonly-bar {
       width: 100%;
     }
 
-    .trmrk-edit-bar {
+    .trmrk-text-input {
+      position: absolute;
+      left: 1em;
+      right: 1em;
+    }
+
+    .trmrk-edit-input {
 
     }
 
-    .trmrk-readonly-bar {
+    .trmrk-readonly-input {
 
     }
   }
 }
 
 @media only screen and (max-width: 600px) {
-  .trmrk-app-setup-modal-wrapper .trmrk-app-setup-modal {
-    .trmrk-title {
+  .trmrk-app-setup-modal .trmrk-app-setup-modal-content {
+    .trmrk-header {
       position: absolute;
-      top: 0.5em;
-      left: 0.5em;
+      left: 2em;
       
       h2 {
         text-align: left;
@@ -105,13 +116,18 @@ body {
     }
 
     .trmrk-close-btn {
-      right: 0em;
+      right: 1.3em;
     }
     
     .trmrk-container {
       .trmrk-content {
         width: 100%;
       }
+    }
+    
+    .trmrk-address-bar {
+      width: 95%;
+      left: -2.25em;
     }
   }
 }

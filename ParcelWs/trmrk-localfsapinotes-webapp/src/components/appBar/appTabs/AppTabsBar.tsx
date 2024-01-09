@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Box from "@mui/material/Box";
 
 import { AppTabsData } from "../../../services/appData";
-import { TabsListOffset, TabsListKeyElements, assureOffsetHasWidth, updateTabsBarListOffset } from "../../../services/tabsBarListOffsetUpdater";
+import { TabsListOffset, TabsListKeyElements, assureOffsetHasWidth, updateTabsBarListOffset } from "../../../services/htmlDoc/tabsBarListOffsetUpdater";
 
 import TabHead from "./TabHead";
 
