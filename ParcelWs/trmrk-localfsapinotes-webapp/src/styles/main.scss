@@ -53,22 +53,41 @@ body {
 
   .trmrk-close-btn {
     position: absolute;
-    top: 0.5em;
+    top: 0em;
     right: 1em;
     z-index: 1;
   }
     
   .trmrk-container {
     position: absolute;
-    top: 5em;
+    top: 4em;
+    bottom: 1em;
     width: 100%;
     max-width: 100%;
     padding: 0px;
     margin: 0px;
 
     .trmrk-content {
-      width: 75%;
+      width: 80%;
       margin: auto;
+      padding: 1em;
+    }
+  }
+
+  .trmrk-address-bar {
+    width: 100%;
+    position: relative;
+
+    .trmrk-edit-bar, .trmrk-readonly-bar {
+      width: 100%;
+    }
+
+    .trmrk-edit-bar {
+
+    }
+
+    .trmrk-readonly-bar {
+
     }
   }
 }
@@ -86,8 +105,13 @@ body {
     }
 
     .trmrk-close-btn {
-      top: 0em;
       right: 0em;
+    }
+    
+    .trmrk-container {
+      .trmrk-content {
+        width: 100%;
+      }
     }
   }
 }

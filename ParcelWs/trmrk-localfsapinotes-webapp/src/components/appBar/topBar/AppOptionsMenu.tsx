@@ -9,7 +9,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { AppBarData, AppData } from "../../../services/appData";
 import { setAppOptionsMenuIsOpen, setShowTabsNavArrows } from "../../../store/appBarDataSlice";
-import { getAppThemeCssClassName } from "../../../services/utils";
+import { currentAppTheme } from "../../../services/app-theme/app-theme";
 
 export default function AppOptionsMenu({
     menuAnchorEl
@@ -37,7 +37,7 @@ export default function AppOptionsMenu({
     dispatch(setAppOptionsMenuIsOpen(false));
   }
 
-  return (<Menu className={["trmrk-app-theme-menu", getAppThemeCssClassName(appData)].join(" ")}
+  return (<Menu className={["trmrk-app-theme-menu", currentAppTheme.value.cssClassName].join(" ")}
         open={appBar.appOptionsMenuOpts.isOpen}
         onClose={handleAppOptionsMenuClose}
         anchorEl={menuAnchorEl}

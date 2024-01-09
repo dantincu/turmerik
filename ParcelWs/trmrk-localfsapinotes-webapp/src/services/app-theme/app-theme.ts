@@ -1,5 +1,7 @@
 import { createTheme, Theme } from "@mui/material/styles";
 
+import { MtblRefValue } from "trmrk";
+
 export interface AppThemeMode {
   isDarkMode: boolean;
 }
@@ -23,6 +25,7 @@ export interface AppThemeColors {
 
 export interface AppTheme {
   theme: Theme;
+  cssClassName: string;
   isDark: boolean;
   colors: AppThemeColors;
 }
@@ -39,6 +42,7 @@ const createAppTheme = (mode: "light" | "dark") => {
 
   const appTheme = {
     theme: theme,
+    cssClassName: ["trmrk-theme", mode].join("-"),
     isDark: isDarkMode,
     colors: {
       main: {
@@ -70,3 +74,7 @@ export const appThemesMap = {
 
 export const getAppTheme = (mode: AppThemeMode) =>
   appThemesMap[mode.isDarkMode ? "dark" : "light"];
+
+export const currentAppTheme = {
+  value: null,
+} as any as MtblRefValue<AppTheme>;

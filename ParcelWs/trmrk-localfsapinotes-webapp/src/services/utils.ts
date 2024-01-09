@@ -45,14 +45,6 @@ export const getAppTitle = (name: string | null = null) => {
   return title;
 };
 
-export const getAppThemeCssClassName = (appData: AppData) => {
-  const appThemeClassName = appData.isDarkMode
-    ? "trmrk-theme-dark"
-    : "trmrk-theme-light";
-
-  return appThemeClassName;
-};
-
 export const getAppModeCssClassName = (appData: AppData) => {
   const appModeClassName = appData.isCompactMode
     ? "trmrk-mode-compact"

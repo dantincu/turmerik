@@ -12,8 +12,8 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 
 import { AppData } from "../services/appData";
 import { setAppBarHeight, setShowAppBar } from "../store/appDataSlice";
-import { getAppTheme } from "../services/app-theme/app-theme";
-import { getAppThemeCssClassName, getAppModeCssClassName } from "../services/utils";
+import { getAppTheme, currentAppTheme } from "../services/app-theme/app-theme";
+import { getAppModeCssClassName } from "../services/utils";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/floatingBarTopOffsetUpdater";
 
 import AppSetupPage from "../pages/appSetup/AppSetupPage";
@@ -43,7 +43,9 @@ export default function App() {
     isDarkMode: appData.isDarkMode
   });
 
-  const appThemeClassName = getAppThemeCssClassName(appData);
+  currentAppTheme.value = appTheme;
+
+  const appThemeClassName = appTheme.cssClassName;
   const appModeClassName = getAppModeCssClassName(appData);
 
   const appHeaderEl = useRef<HTMLDivElement | null>(null);

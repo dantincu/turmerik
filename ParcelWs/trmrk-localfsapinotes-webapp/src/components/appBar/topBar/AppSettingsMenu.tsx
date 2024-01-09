@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import AppearenceMenu from "./AppearenceMenu";
 import { AppBarData, AppData } from "../../../services/appData";
 import { setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";
-import { getAppThemeCssClassName } from "../../../services/utils";
+import { currentAppTheme } from "../../../services/app-theme/app-theme";
 
 export default function AppSettingsMenu({
     menuAnchorEl
@@ -33,7 +33,7 @@ export default function AppSettingsMenu({
   };
 
   return (<>
-    <Menu className={["trmrk-app-settings-menu", getAppThemeCssClassName(appData)].join(" ")}
+    <Menu className={["trmrk-app-settings-menu", currentAppTheme.value.cssClassName].join(" ")}
       open={appBar.appSettingsMenuOpts.isOpen}
       onClose={handleSettingsMenuClose}
       anchorEl={menuAnchorEl}>

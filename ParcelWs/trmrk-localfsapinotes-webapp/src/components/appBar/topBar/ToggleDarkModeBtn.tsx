@@ -10,6 +10,7 @@ import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
 import { setIsDarkMode } from "../../../store/appDataSlice";
 import { AppData } from "../../../services/appData";
 
+import { getAppTheme, currentAppTheme } from "../../../services/app-theme/app-theme";
 import { localStorageKeys, jsonBool } from "../../../services/utils";
 
 const ColorThemeLabel = styled.span`
@@ -22,6 +23,11 @@ export default function ToggleDarkModeBtn() {
   
   const handleClick = () => {
     const switchToDarkMode = !appData.isDarkMode;
+
+    currentAppTheme.value = getAppTheme({
+      isDarkMode: switchToDarkMode
+    });
+
     dispatch(setIsDarkMode(switchToDarkMode));
     dispatch(setAppSettingsMenuIsOpen(false));
     localStorage.setItem(localStorageKeys.appThemeIsDarkMode, switchToDarkMode ? jsonBool.true : jsonBool.false);
