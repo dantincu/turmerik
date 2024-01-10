@@ -13,7 +13,7 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 import { AppData } from "../services/appData";
 import { setAppBarHeight, setShowAppBar } from "../store/appDataSlice";
 import { getAppTheme, currentAppTheme } from "../services/app-theme/app-theme";
-import { getAppModeCssClassName } from "../services/utils";
+import { getAppModeCssClassName, appModeCssClass, appModeCssClasses } from "../services/utils";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/htmlDoc/floatingBarTopOffsetUpdater";
 
 import AppSetupPage from "../pages/appSetup/AppSetupPage";
@@ -45,7 +45,7 @@ export default function App() {
   currentAppTheme.value = appTheme;
 
   const appThemeClassName = appTheme.cssClassName;
-  const appModeClassName = getAppModeCssClassName(appData);
+  appModeCssClass.value = getAppModeCssClassName(appData);
 
   const appHeaderEl = useRef<HTMLDivElement | null>(null);
   const appBodyEl = useRef<HTMLDivElement | null>(null);
@@ -85,7 +85,7 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
-          { showAppEl ? (<Box className={[ "trmrk-app", appThemeClassName, appModeClassName ].join(" ")}>
+          { showAppEl ? (<Box className={[ "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>
             <IconButton onClick={onOnAppBarToggled} sx={{
               position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
               className={ appData.showAppBar ? "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" }>
@@ -96,7 +96,7 @@ export default function App() {
               <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
             </Box> : null }
             <MainContentContainer onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
-          </Box>) : <Box className={[ "trmrk-app-setup", appThemeClassName ].join(" ")}>
+          </Box>) : <Box className={[ "trmrk-app-setup", appThemeClassName, appModeCssClasses.compactMode ].join(" ")}>
             <AppSetupBar />
             <AppSetupPage />
           </Box>

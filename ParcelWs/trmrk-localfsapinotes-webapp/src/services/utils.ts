@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
+import { MtblRefValue } from "trmrk";
+
 import { AppData, AppPage } from "./appData";
 
 export const jsonBool = Object.freeze({
@@ -45,10 +47,15 @@ export const getAppTitle = (name: string | null = null) => {
   return title;
 };
 
+export const appModeCssClasses = {
+  compactMode: "trmrk-mode-compact",
+  fullMode: "trmrk-mode-full",
+};
+
 export const getAppModeCssClassName = (appData: AppData) => {
   const appModeClassName = appData.isCompactMode
-    ? "trmrk-mode-compact"
-    : "trmrk-mode-full";
+    ? appModeCssClasses.compactMode
+    : appModeCssClasses.fullMode;
 
   return appModeClassName;
 };
@@ -96,3 +103,5 @@ export const getResxCssClassName = (appPage: AppPage) => {
 
   return className;
 };
+
+export const appModeCssClass = {} as MtblRefValue<string>;

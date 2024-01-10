@@ -9,6 +9,11 @@ export interface Kvp<TKey, TValue> {
   value: TValue;
 }
 
+export interface ValueOrError<TValue, TError = Error | any> {
+  value?: TValue | undefined;
+  error?: TError | undefined;
+}
+
 export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   let retVal = "string" === typeof arg;
   retVal = retVal && arg !== "";

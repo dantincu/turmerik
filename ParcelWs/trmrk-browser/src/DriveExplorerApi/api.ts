@@ -3,6 +3,7 @@ import { core as trmrk } from "trmrk";
 import { DriveItem, FileType, OfficeFileType } from "trmrk/src/drive-item";
 
 import {
+  RootedPathResolvedArgs,
   IDriveItemNodeCore,
   DriveItemNodeCore,
   DriveExplorerApiBase,
@@ -28,35 +29,41 @@ export class DriveExplorerApi
     throw new Error("Method not implemented.");
   }
 
-  public override GetFileText(path: string): Promise<string | null> {
-    const pathSegs = this.getPathSegments(path);
+  public override GetFileText(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<string | null> {
+    const pathSegs = this.getPathSegments(pathArgs);
     throw new Error("Method is not implemented");
   }
 
   public override CreateFolder(
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFolderName: string
   ): Promise<DriveItem | null> {
-    const prPathSegs = this.getPathSegments(prPath);
+    const prPathSegs = this.getPathSegments(prPathArgs);
     throw new Error("Method is not implemented");
   }
 
-  public override DeleteFolder(path: string): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+  public override DeleteFolder(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<DriveItem | null> {
+    const pathSegs = this.getPathSegments(pathArgs);
     throw new Error("Method is not implemented");
   }
 
   public override CreateTextFile(
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFileName: string,
     text: string
   ): Promise<DriveItem | null> {
-    const prPathSegs = this.getPathSegments(prPath);
+    const prPathSegs = this.getPathSegments(prPathArgs);
     throw new Error("Method is not implemented");
   }
 
-  public override DeleteFile(path: string): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+  public override DeleteFile(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<DriveItem | null> {
+    const pathSegs = this.getPathSegments(pathArgs);
     throw new Error("Method is not implemented");
   }
 

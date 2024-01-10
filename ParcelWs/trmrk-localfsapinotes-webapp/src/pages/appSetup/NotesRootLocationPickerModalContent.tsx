@@ -3,13 +3,21 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 
 import Box from '@mui/material/Box';
 import Input from '@mui/material/Input';
 
+import NorthWestIcon from "@mui/icons-material/NorthWest";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+
+import { getRootedPathSegments } from "trmrk-browser/src/DriveExplorerApi/core";
+
 import { AppData } from "../../services/appData";
 import CharIcon from "../../components/iconButtons/CharIcon";
 import { FloatingBarTopOffset } from "../../services/htmlDoc/floatingBarTopOffsetUpdater";
+
+import FilesHcy from "../../components/filesHcy/FilesHcy";
 
 const offset: FloatingBarTopOffset = {
   showHeader: null,
@@ -31,6 +39,40 @@ export default function NotesRootLocationPickerModalContent({
 
   const headerElRef = useRef<HTMLDivElement | null>(null);
   const bodyElRef = useRef<HTMLDivElement | null>(null);
+  const textAddressElRef = useRef<HTMLInputElement | null>(null);
+
+  const [ currentPath, setCurrentPath ] = useState("");
+  const [ editedPath, setEditedPath ] = useState("");
+
+  const onAddressInputClick = () => {
+    if (!editAddressBar) {
+      setEditAddressBar(true);
+      textAddressElRef.current?.getElementsByTagName("input")[0]?.select();
+    }
+  }
+
+  const onAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedPath(e.currentTarget.value);
+  }
+
+  const onAddressEditSubmit = () => {
+    setCurrentPath(editedPath);
+    setEditAddressBar(false);
+  }
+
+  const onAddressEditCancel = () => {
+    setEditedPath(currentPath);
+    setEditAddressBar(false);
+  }
+
+  const onRootFolderIconClick = () => {
+    setCurrentPath("");
+    setEditedPath("");
+  }
+
+  const onAddressSelect = () => {
+    
+  }
 
   const onUpdateFloatingBarTopOffset = () => {
     const headerEl = headerElRef.current;
@@ -97,7 +139,17 @@ export default function NotesRootLocationPickerModalContent({
                 "trmrk-text-input",
                 editAddressBar ? "trmrk-edit-input" : "trmrk-readonly-input"
               ].join(" ")}>
-            <Input type="text" readOnly={!editAddressBar} fullWidth={true} sx={{ }} />
+            { editAddressBar ? <IconButton
+              className="trmrk-cancel-edit-icon" onClick={onAddressEditCancel}><NorthWestIcon /></IconButton> : <IconButton
+              className="trmrk-root-folder-icon" onClick={onRootFolderIconClick}><CharIcon css="">{"/"}</CharIcon></IconButton> }
+            <Input type="text" readOnly={!editAddressBar} ref={textAddressElRef} sx={{
+              position: "absolute",
+              left: editAddressBar ? "2em" : "2em",
+              right: editAddressBar ? "2em" : "2em" }} onClick={onAddressInputClick}
+              value={editAddressBar ? editedPath : currentPath } onChange={onAddressChange} />
+            { editAddressBar ? <IconButton
+              className="trmrk-submit-edit-icon" onClick={onAddressEditSubmit}><ArrowForwardIosIcon /></IconButton> : <Button
+              className="trmrk-folder-choose-btn" onClick={onAddressSelect}>Select Folder</Button> }
           </Box>
         </Box>
       </Box>

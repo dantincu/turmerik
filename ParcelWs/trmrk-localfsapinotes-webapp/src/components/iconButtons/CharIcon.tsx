@@ -4,12 +4,14 @@ import styled from "@emotion/styled";
 
 export default function CharIcon({
     children,
+    className,
     css,
     fontSize,
     lineHeight,
     marginTop,
   }: {
     children: React.ReactNode,
+    className?: string | null | undefined,
     css?: string | null | undefined,
     fontSize?: string | null | undefined,
     lineHeight?: string | null | undefined,
@@ -21,6 +23,9 @@ export default function CharIcon({
     margin-top: ${marginTop};
   `;
 
-  const CharIconEl = styled.span(css);
-  return (<CharIconEl>{ children }</CharIconEl>);
+  const cssClass = className ?? "";
+  const InnerEl = ({ className }: { className?: string }) => <span className={[cssClass, className ?? ""].join(" ")}>{ children }</span>
+
+  const CharIconEl = styled(InnerEl)(css);
+  return (<CharIconEl />);
 }

@@ -9,6 +9,7 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpen"
 import Container from '@mui/material/Container';
 import Modal from '@mui/material/Modal';
 
+import { appModeCssClasses } from "../../services/utils";
 import { currentAppTheme } from "../../services/app-theme/app-theme";
 import { AppData } from "../../services/appData";
 import { setHasFilesRootLocation } from "../../store/appDataSlice";
@@ -53,7 +54,7 @@ export default function AppSetupPage() {
     
     { appData.hasNotesRootLocation ? null :
       <Typography sx={{ margin: "1em", fontSize: "1.2em", cursor: "pointer", textAlign: "center" }}
-          onClick={onPickFilesRootLocationClick}>
+          onClick={onPickFilesRootLocationClick} className="trmrk-caption">
         <IconButton>
           <FolderOpenIcon
             sx={{ width: "1.2em", height: "1.2em", color: "#FF8800" }} />
@@ -61,7 +62,7 @@ export default function AppSetupPage() {
         Pick a location on your device where you want to create notes
       </Typography>
     }
-    <Modal className={["trmrk-app-setup-modal", currentAppTheme.value.cssClassName].join(" ")}
+    <Modal className={["trmrk-modal trmrk-app-setup-modal", currentAppTheme.value.cssClassName, appModeCssClasses.compactMode ].join(" ")}
         open={pickNotesRootLocModalIsOpen}
         onClose={handlePickNotesRootLocModalClose}
         >

@@ -2,6 +2,12 @@ import { core as trmrk } from "trmrk";
 
 import { DriveItem, FileType, OfficeFileType } from "trmrk/src/drive-item";
 
+export interface RootedPathResolvedArgs {
+  path: string;
+  basePathSegs?: string[] | null | undefined;
+  homePathSegs?: string[] | null | undefined;
+}
+
 export interface IDriveItemNodeCore<
   TDriveItemNode extends IDriveItemNodeCore<TDriveItemNode>
 > {
@@ -53,55 +59,58 @@ export class DriveItemNodeCore<
 }
 
 export interface IDriveExplorerApi {
-  GetItem: (path: string) => Promise<DriveItem | null>;
-  GetFolder: (path: string) => Promise<DriveItem | null>;
-  ItemExists: (path: string) => Promise<boolean>;
-  FolderExists: (path: string) => Promise<boolean>;
-  FileExists: (path: string) => Promise<boolean>;
-  GetFileText: (path: string) => Promise<string | null>;
+  GetItem: (pathArgs: RootedPathResolvedArgs) => Promise<DriveItem | null>;
+  GetFolder: (pathArgs: RootedPathResolvedArgs) => Promise<DriveItem | null>;
+  ItemExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
+  FolderExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
+  FileExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
+  GetFileText: (pathArgs: RootedPathResolvedArgs) => Promise<string | null>;
   GetDriveFolderWebUrl: (path: string) => Promise<string | null>;
   GetDriveFileWebUrl: (path: string) => Promise<string | null>;
   CreateFolder: (
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFolderName: string
   ) => Promise<DriveItem | null>;
   RenameFolder: (
-    path: string,
+    pathArgs: RootedPathResolvedArgs,
     newFolderName: string
   ) => Promise<DriveItem | null>;
   CopyFolder: (
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFolderName: string | null
   ) => Promise<DriveItem | null>;
   MoveFolder: (
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFolderName: string | null
   ) => Promise<DriveItem | null>;
-  DeleteFolder: (path: string) => Promise<DriveItem | null>;
+  DeleteFolder: (pathArgs: RootedPathResolvedArgs) => Promise<DriveItem | null>;
   CreateTextFile: (
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFileName: string,
     text: string
   ) => Promise<DriveItem | null>;
   CreateOfficeLikeFile: (
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFileName: string,
     officeLikeFileType: OfficeFileType
   ) => Promise<DriveItem | null>;
-  RenameFile: (path: string, newFileName: string) => Promise<DriveItem | null>;
+  RenameFile: (
+    pathArgs: RootedPathResolvedArgs,
+    newFileName: string
+  ) => Promise<DriveItem | null>;
   CopyFile: (
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFileName: string | null
   ) => Promise<DriveItem | null>;
   MoveFile: (
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFileName: string | null
   ) => Promise<DriveItem | null>;
-  DeleteFile: (path: string) => Promise<DriveItem | null>;
+  DeleteFile: (pathArgs: RootedPathResolvedArgs) => Promise<DriveItem | null>;
 }
 
 export abstract class DriveExplorerApiBase<
@@ -110,37 +119,39 @@ export abstract class DriveExplorerApiBase<
   protected abstract get rootDirNode(): TDriveItemNode;
 
   public async GetItem(
-    path: string,
+    pathArgs: RootedPathResolvedArgs,
     refreshDepth: number | null = null
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+    const pathSegs = this.getPathSegments(pathArgs);
     let retNode = await this.getNode(pathSegs, null, refreshDepth);
 
     return retNode?.item ?? null;
   }
 
   public async GetFolder(
-    path: string,
+    pathArgs: RootedPathResolvedArgs,
     refreshDepth: number | null = null
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+    const pathSegs = this.getPathSegments(pathArgs);
     let retNode = await this.getNode(pathSegs, true, refreshDepth);
 
     return retNode?.item ?? null;
   }
 
-  public async ItemExists(path: string): Promise<boolean> {
-    let retItem = await this.GetItem(path);
+  public async ItemExists(pathArgs: RootedPathResolvedArgs): Promise<boolean> {
+    let retItem = await this.GetItem(pathArgs);
     return !!retItem;
   }
 
-  public async FolderExists(path: string): Promise<boolean> {
-    let retItem = await this.GetFolder(path);
+  public async FolderExists(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<boolean> {
+    let retItem = await this.GetFolder(pathArgs);
     return !!retItem;
   }
 
-  public async FileExists(path: string): Promise<boolean> {
-    let retItem = await this.GetItem(path);
+  public async FileExists(pathArgs: RootedPathResolvedArgs): Promise<boolean> {
+    let retItem = await this.GetItem(pathArgs);
     const retVal = !!retItem && retItem.isFolder !== true;
 
     return retVal;
@@ -155,10 +166,10 @@ export abstract class DriveExplorerApiBase<
   }
 
   public async RenameFolder(
-    path: string,
+    pathArgs: RootedPathResolvedArgs,
     newFolderName: string
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+    const pathSegs = this.getPathSegments(pathArgs);
 
     const retNode = await this.copyOrMoveFolder(
       pathSegs,
@@ -171,12 +182,12 @@ export abstract class DriveExplorerApiBase<
   }
 
   public async CopyFolder(
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFolderName: string | null = null
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
-    const newPrPathSegs = this.getPathSegments(newPrPath);
+    const pathSegs = this.getPathSegments(pathArgs);
+    const newPrPathSegs = this.getPathSegments(newPrPathArgs);
 
     const retNode = await this.copyOrMoveFolder(
       pathSegs,
@@ -189,12 +200,12 @@ export abstract class DriveExplorerApiBase<
   }
 
   public async MoveFolder(
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFolderName: string | null = null
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
-    const newPrPathSegs = this.getPathSegments(newPrPath);
+    const pathSegs = this.getPathSegments(pathArgs);
+    const newPrPathSegs = this.getPathSegments(newPrPathArgs);
 
     const retNode = await this.copyOrMoveFolder(
       pathSegs,
@@ -206,19 +217,19 @@ export abstract class DriveExplorerApiBase<
     return retNode;
   }
   public async CreateOfficeLikeFile(
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFileName: string,
     officeLikeFileType: OfficeFileType
   ): Promise<DriveItem | null> {
-    const retItem = await this.CreateTextFile(prPath, newFileName, "");
+    const retItem = await this.CreateTextFile(prPathArgs, newFileName, "");
     return retItem;
   }
 
   public async RenameFile(
-    path: string,
+    pathArgs: RootedPathResolvedArgs,
     newFileName: string
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+    const pathSegs = this.getPathSegments(pathArgs);
 
     const retItem = await this.copyOrMoveFile(
       pathSegs,
@@ -231,12 +242,12 @@ export abstract class DriveExplorerApiBase<
   }
 
   public async CopyFile(
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFileName: string | null = null
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
-    const newPrPathSegs = this.getPathSegments(newPrPath);
+    const pathSegs = this.getPathSegments(pathArgs);
+    const newPrPathSegs = this.getPathSegments(newPrPathArgs);
 
     const retItem = await this.copyOrMoveFile(
       pathSegs,
@@ -249,12 +260,12 @@ export abstract class DriveExplorerApiBase<
   }
 
   public async MoveFile(
-    path: string,
-    newPrPath: string,
+    pathArgs: RootedPathResolvedArgs,
+    newPrPathArgs: RootedPathResolvedArgs,
     newFileName: string | null = null
   ): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
-    const newPrPathSegs = this.getPathSegments(newPrPath);
+    const pathSegs = this.getPathSegments(pathArgs);
+    const newPrPathSegs = this.getPathSegments(newPrPathArgs);
 
     const retItem = await this.copyOrMoveFile(
       pathSegs,
@@ -267,19 +278,25 @@ export abstract class DriveExplorerApiBase<
   }
 
   public abstract CreateFolder(
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFolderName: string
   ): Promise<DriveItem | null>;
 
   public abstract CreateTextFile(
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFileName: string,
     text: string
   ): Promise<DriveItem | null>;
 
-  public abstract GetFileText(path: string): Promise<string | null>;
-  public abstract DeleteFolder(path: string): Promise<DriveItem | null>;
-  public abstract DeleteFile(path: string): Promise<DriveItem | null>;
+  public abstract GetFileText(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<string | null>;
+  public abstract DeleteFolder(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<DriveItem | null>;
+  public abstract DeleteFile(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<DriveItem | null>;
 
   protected abstract copyOrMoveFolder(
     pathSegs: string[],
@@ -463,29 +480,25 @@ export abstract class DriveExplorerApiBase<
     return idx >= 0;
   }
 
-  protected getPathSegments(path: string) {
-    const segments = getRootedPathSegments(path);
+  protected getPathSegments(args: RootedPathResolvedArgs) {
+    const segments = getRootedPathSegments(args);
     return segments;
   }
 }
 
 export const dirPointers = Object.freeze([".", ".."]);
 
-export const getRootedPathSegments = (
-  path: string,
-  basePathSegs: string[] | null = null,
-  homePathSegs: string[] | null = null
-) => {
-  const segments = path
+export const getRootedPathSegments = (args: RootedPathResolvedArgs) => {
+  const segments = args.path
     .split("/")
     .filter((seg) => trmrk.isNonEmptyStr(seg, true));
 
-  if (path.startsWith(".")) {
-    if (basePathSegs) {
+  if (args.path.startsWith(".")) {
+    if (args.basePathSegs) {
       let sIdx = 0;
       let seg = segments[sIdx];
 
-      let bsIdx = basePathSegs.length - 1;
+      let bsIdx = args.basePathSegs.length - 1;
       let $keepLoop = bsIdx >= 0;
 
       while ($keepLoop) {
@@ -504,22 +517,22 @@ export const getRootedPathSegments = (
         seg = segments[sIdx];
       }
 
-      const baseSegsToAdd = basePathSegs.slice(0, bsIdx);
+      const baseSegsToAdd = args.basePathSegs.slice(0, bsIdx);
       segments.splice(0, sIdx, ...baseSegsToAdd);
     } else {
       throw new Error(
         "Relative paths are only allowed if base path segments are also provided"
       );
     }
-  } else if (homePathSegs && path.startsWith("~/")) {
-    const homePathSegsCount = homePathSegs.length;
+  } else if (args.homePathSegs && args.path.startsWith("~/")) {
+    const homePathSegsCount = args.homePathSegs.length;
     let idx = 1;
 
     while (idx <= homePathSegsCount && segments[idx] === "..") {
       idx++;
     }
 
-    const pointedHomePathSegs = homePathSegs.slice(
+    const pointedHomePathSegs = args.homePathSegs.slice(
       homePathSegsCount - idx,
       homePathSegsCount
     );

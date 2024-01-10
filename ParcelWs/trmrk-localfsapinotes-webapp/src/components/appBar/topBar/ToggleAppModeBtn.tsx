@@ -10,7 +10,7 @@ import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
 import { setIsCompactMode } from "../../../store/appDataSlice";
 import { AppData } from "../../../services/appData";
 
-import { localStorageKeys, jsonBool } from "../../../services/utils";
+import { localStorageKeys, jsonBool, getAppModeCssClassName, appModeCssClass } from "../../../services/utils";
 
 const ColorThemeLabel = styled.span`
   padding-right: 1em
@@ -23,6 +23,7 @@ export default function ToggleAppModeBtn() {
   const handleClick = () => {
     const switchToCompactMode = !appData.isCompactMode;
     dispatch(setIsCompactMode(switchToCompactMode));
+    appModeCssClass.value = getAppModeCssClassName(appData);
     dispatch(setAppSettingsMenuIsOpen(false));
     localStorage.setItem(localStorageKeys.appIsCompactMode, switchToCompactMode ? jsonBool.true : jsonBool.false);
   };

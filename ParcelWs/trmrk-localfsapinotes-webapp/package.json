@@ -5,8 +5,8 @@
   "type": "module",
   "source": "src/index.html",
   "scripts": {
-    "start": "parcel --port=9002 --host=localhost --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
-    "build": "parcel build"
+    "start": "parcel --dist-dir ./dist/dev --port=9002 --host=localhost --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "build": "parcel build --dist-dir ./dist/prod"
   },
   "author": "Daniel Tincu",
   "license": "MIT",
@@ -19,7 +19,6 @@
     "@types/uuid": "^9.0.7",
     "buffer": "^6.0.3",
     "parcel": "^2.10.3",
-    "parcel-namer-rewrite": "^2.10.3-rc.2",
     "process": "^0.11.10",
     "typescript": "^5.3.3"
   },

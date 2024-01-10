@@ -24,6 +24,7 @@ import {
 } from "trmrk-browser-core/src/fsApi/folder";
 
 import {
+  RootedPathResolvedArgs,
   IDriveExplorerApi,
   getRootedPathSegments,
   IDriveItemNodeCore,
@@ -91,8 +92,10 @@ export class FsApiDriveExplorer
     return this._rootDirNode;
   }
 
-  public override async GetFileText(path: string): Promise<string | null> {
-    const pathSegs = this.getPathSegments(path);
+  public override async GetFileText(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<string | null> {
+    const pathSegs = this.getPathSegments(pathArgs);
     let retNode = await this.getNode(pathSegs, false);
     let text: string | null = null;
 
@@ -107,10 +110,10 @@ export class FsApiDriveExplorer
   }
 
   public override async CreateFolder(
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFolderName: string
   ): Promise<DriveItem | null> {
-    const prPathSegs = this.getPathSegments(prPath);
+    const prPathSegs = this.getPathSegments(prPathArgs);
     const parentFolder = await this.getParentFolder(prPathSegs);
     let retNode: IDriveItemNode | null = null;
 
@@ -129,8 +132,10 @@ export class FsApiDriveExplorer
     return retNode?.item ?? null;
   }
 
-  public override async DeleteFolder(path: string): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+  public override async DeleteFolder(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<DriveItem | null> {
+    const pathSegs = this.getPathSegments(pathArgs);
     const parentFolder = await this.getParentFolder(pathSegs);
     let retNode: IDriveItemNode | null = null;
 
@@ -146,11 +151,11 @@ export class FsApiDriveExplorer
   }
 
   public override async CreateTextFile(
-    prPath: string,
+    prPathArgs: RootedPathResolvedArgs,
     newFileName: string,
     text: string
   ): Promise<DriveItem | null> {
-    const prPathSegs = this.getPathSegments(prPath);
+    const prPathSegs = this.getPathSegments(prPathArgs);
     const parentFolder = await this.getNode(prPathSegs);
     let retNode: IDriveItemNode | null = null;
 
@@ -171,8 +176,10 @@ export class FsApiDriveExplorer
     return retNode?.item ?? null;
   }
 
-  public override async DeleteFile(path: string): Promise<DriveItem | null> {
-    const pathSegs = this.getPathSegments(path);
+  public override async DeleteFile(
+    pathArgs: RootedPathResolvedArgs
+  ): Promise<DriveItem | null> {
+    const pathSegs = this.getPathSegments(pathArgs);
     const parentFolder = await this.getParentFolder(pathSegs);
     let retNode: IDriveItemNode | null = null;
     const fileName = pathSegs.slice(-1)[0];
