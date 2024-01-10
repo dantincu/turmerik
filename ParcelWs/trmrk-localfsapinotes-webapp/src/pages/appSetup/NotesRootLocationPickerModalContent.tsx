@@ -18,6 +18,7 @@ import CharIcon from "../../components/iconButtons/CharIcon";
 import { FloatingBarTopOffset } from "../../services/htmlDoc/floatingBarTopOffsetUpdater";
 
 import FilesHcy from "../../components/filesHcy/FilesHcy";
+import { setHasFilesRootLocation, setHasNotesRootLocation } from "../../store/appDataSlice";
 
 const offset: FloatingBarTopOffset = {
   showHeader: null,
@@ -71,7 +72,7 @@ export default function NotesRootLocationPickerModalContent({
   }
 
   const onAddressSelect = () => {
-    
+    dispatch(setHasNotesRootLocation(true));
   }
 
   const onUpdateFloatingBarTopOffset = () => {

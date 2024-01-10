@@ -68,6 +68,7 @@ export const {
   setIsDarkMode,
   setIsCompactMode,
   setHasFilesRootLocation,
+  setHasNotesRootLocation,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;
