@@ -80,7 +80,7 @@ export default function HomePage() {
   return (
     <PageContainer
         className="trmrk-home-page"
-        leftPanelComponent={() => <div>asdf</div>}>
-      Home
+        leftPanelComponent={() => <></>}>
+      <Box sx={{ height: "1000vh" }}>asdf</Box>
     </PageContainer>);
 }
