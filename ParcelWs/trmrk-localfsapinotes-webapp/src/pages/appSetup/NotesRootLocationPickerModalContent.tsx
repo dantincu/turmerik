@@ -130,7 +130,7 @@ export default function NotesRootLocationPickerModalContent({
       <Box className="trmrk-header" ref={headerElRef} sx={{ height: "6em" }}>
         <IconButton className="trmrk-close-btn" onClick={onModalClose}>
           <CharIcon
-            fontSize="1.8em" lineHeight="0.5">&times;</CharIcon>
+            fontSize="3em" lineHeight="0.5">&times;</CharIcon>
         </IconButton>
         <Typography variant="h6" component="h2">
           Choose a default location for your notes
@@ -143,11 +143,10 @@ export default function NotesRootLocationPickerModalContent({
             { editAddressBar ? <IconButton
               className="trmrk-cancel-edit-icon" onClick={onAddressEditCancel}><NorthWestIcon /></IconButton> : <IconButton
               className="trmrk-root-folder-icon" onClick={onRootFolderIconClick}><CharIcon css="">{"/"}</CharIcon></IconButton> }
-            <Input type="text" readOnly={!editAddressBar} ref={textAddressElRef} sx={{
-              position: "absolute",
-              left: editAddressBar ? "2em" : "2em",
-              right: editAddressBar ? "2em" : "2em" }} onClick={onAddressInputClick}
-              value={editAddressBar ? editedPath : currentPath } onChange={onAddressChange} />
+            <Input type="text" readOnly={!editAddressBar} ref={textAddressElRef} onClick={onAddressInputClick}
+              value={editAddressBar ? editedPath : currentPath } onChange={onAddressChange} sx={{
+                position: "absolute", left: "1em", right: "1em"
+              }} />
             { editAddressBar ? <IconButton
               className="trmrk-submit-edit-icon" onClick={onAddressEditSubmit}><ArrowForwardIosIcon /></IconButton> : <Button
               className="trmrk-folder-choose-btn" onClick={onAddressSelect}>Select Folder</Button> }

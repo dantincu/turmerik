@@ -13,12 +13,17 @@ body {
   height: 100%;
 }
 
-.trmrk-error {
+.trmrk-app-error {
   text-align: center;
 
   > h2 {
     color: orangered;
+    font-size: 2em;
   }
+}
+
+.trmrk-app, .trmrk-modal {
+  user-select: none;
 }
 
 .trmrk-app-setup-page h1 {
@@ -45,16 +50,19 @@ body {
     left: 0em;
     text-align: center;
     width: 100%;
+    height: 8em;
+    padding-top: 0.4em;
 
     h2 {
       text-align: center;
+      font-size: 1.47em;
     }
   }
 
   .trmrk-close-btn {
     position: absolute;
-    top: 0em;
-    right: 0.75em;
+    top: 0.1em;
+    right: 0.4em;
     z-index: 1;
   }
 
@@ -64,12 +72,12 @@ body {
   
   .trmrk-container {
     position: absolute;
-    top: 6em;
-    bottom: 1em;
+    bottom: 0em;
     width: 100%;
     max-width: 100%;
     padding: 0px;
     margin: 0px;
+    top: 8em;
 
     .trmrk-content {
       width: 80%;
@@ -79,95 +87,98 @@ body {
   }
 
   .trmrk-address-bar {
-    width: 80%;
     margin: auto;
-    position: relative;
-    top: 0.5em;
-
-    .trmrk-edit-bar, .trmrk-readonly-bar {
-      width: 100%;
-    }
+    position: absolute;
+    top: 3.5em;
+    left: 10%;
+    right: 10%;
 
     .trmrk-text-input {
       position: absolute;
-      left: 1em;
-      right: 1em;
+      left: 0em;
+      right: 10em;
     }
 
     .trmrk-root-folder-icon {
       cursor: pointer;
       position: absolute;
       font-size: 2em;
+      font-weight: bold;
       z-index: 1;
       width: 1.5em;
       height: 1.5em;
-      left: -0.75em;
+      left: -1.5em;
     }
 
     .trmrk-cancel-edit-icon {
       cursor: pointer;
       position: absolute;
       z-index: 1;
-      left: -1em;
+      left: -2em;
       
       svg {
-        font-size: 1.2em;
+        font-size: 1.5em;
       }
     }
 
     .trmrk-submit-edit-icon {
       cursor: pointer;
       position: absolute;
-      right: -1em;
+      right: -2em;
       
       svg {
-        font-size: 1.2em;
+        font-size: 1.5em;
       }
     }
 
     .trmrk-folder-choose-btn {
       position: absolute;
-      font-size: 1.2em;
+      font-size: 1.5em;
       text-transform: none;
-      right: -6em;
-    }
-
-    .trmrk-readonly-input {
-      right: 7em;
+      right: -7em;
     }
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 900px) {
   .trmrk-app-setup-modal .trmrk-app-setup-modal-content {
     .trmrk-header {
-      position: absolute;
-      left: 2em;
+      left: 0.5em;
       
       h2 {
         text-align: left;
       }
     }
 
-    .trmrk-close-btn {
-      right: 1.3em;
-    }
-    
     .trmrk-container {
+      width: 100%;
+
       .trmrk-content {
         width: 100%;
       }
     }
     
     .trmrk-address-bar {
-      width: 95%;
-      left: -2.25em;
+      left: 2em;
+
+      .trmrk-text-input {
+        right: 8em;
+      }
+
+      .trmrk-edit-input {
+        left: 1em;
+        right: 1em;
+      }
+
+      .trmrk-root-folder-icon {
+        left: -1.0em;
+      }
+
+      .trmrk-folder-choose-btn {
+        right: -6.5em;
+      }
     }
   }
-}
-
-.trmrk-app {
-  user-select: none;
 }
 
 .trmrk-scrollable {
@@ -191,58 +202,6 @@ body {
     cursor: ew-resize;
 }
 
-.trmrk-theme-dark {
-  .trmrk-scrollable::-webkit-scrollbar-thumb {
-    background-color: #303030;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track {
-    background-color: #1e1e1e;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track:hover {
-    background-color: #262626;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
-    background-color: #404040;
-  }
-
-  .trmrk-left-resizable::after {
-    background-color: #606060;
-  }
-}
-
-.trmrk-theme-light {
-  .trmrk-scrollable::-webkit-scrollbar-thumb {
-    background-color: #cdcdcd;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track {
-    background-color: #efefef;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track:hover {
-    background-color: #dedede;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
-    background-color: #bcbcbc;
-  }
-
-  .trmrk-left-resizable::after {
-    background-color: #ababab;
-  }
-}
-
-.trmrk-app .trmrk-tab-head {
-  margin-right: 0.125em;
-}
-
-.trmrk-app .trmrk-tab-head:last-child {
-  margin-right: 0px;
-}
-
 .trmrk-app-tabs-bar {
   .trmrk-tabs-list-spacer {
     display: inline-flex;
@@ -261,123 +220,15 @@ body {
   }
 }
 
-.trmrk-app.trmrk-theme-dark {
-  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
-    background-color: #121212;
-  }
-
-  .trmrk-tabs-list-spacer.trmrk-before {
-    background-image: linear-gradient(270deg, #26262600, #262626);
-  }
-
-  .trmrk-tabs-list-spacer.trmrk-after {
-    background-image: linear-gradient(90deg, #26262600, #262626);
-  }
-
-  .trmrk-tab-head {
-    color: #CCC;
-    border-color: #606060;
-    background-color: #404040;
-    border-bottom: 2px groove #606060;
-  }
-
-  .trmrk-tab-head * {
-    color: #CCC;
-  }
-
-  .trmrk-tab-head.trmrk-current {
-    background-color: #121212;
-    border-bottom-color: #262626;
-    background-image: linear-gradient(#121212, #262626);
-    border-bottom: 2px groove #404040;
-  }
-
-  .trmrk-tab-head.trmrk-current * {
-    color: #FFF;
-  }
-
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
-    color: $trmrk-note-fore-color-theme-dark;
-
-    svg {
-      background-color: $trmrk-note-back-color-theme-dark;
-      color: $trmrk-note-fore-color-theme-dark;
-      border-radius: 3px;
-      border-top-left-radius: 5px;
-
-      path {
-        background-color: $trmrk-note-back-color-theme-dark;
-        color: $trmrk-note-fore-color-theme-dark;
-      }
-    }
-  }
-}
-
-.trmrk-app.trmrk-theme-light {
-  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
-    color: #FFF;
-    background-color: #1976d2;
-  }
-
-  .trmrk-tabs-list-spacer.trmrk-before {
-    background-image: linear-gradient(270deg, #1976d200, #1976d2);
-  }
-
-  .trmrk-tabs-list-spacer.trmrk-after {
-    background-image: linear-gradient(90deg, #1976d200, #1976d2);
-  }
-
-  .trmrk-app-bar * {
-    color: #FFF;
-  }
-
-  .trmrk-tab-head {
-    color: #EEE;
-    border-color: #1C84EB;
-    border-bottom: 2px groove #1C84EB;
-  }
-
-  .trmrk-tab-head * {
-    color: #EEE;
-  }
-
-  .trmrk-tab-head.trmrk-current {
-    color: #FFF;
-    border-color: #1976d2;
-    background-color: #0030a0;
-    background-image: linear-gradient(#0030a0, #1976d2);
-    border-bottom: 2px groove #1C84EB;
-  }
-
-  .trmrk-tab-head.trmrk-current * {
-    color: #FFF;
-  }
-
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
-  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
-    color: $trmrk-note-fore-color-theme-light;
-
-    svg {
-      background-color: $trmrk-note-back-color-theme-light;
-      color: $trmrk-note-fore-color-theme-light;
-      border-radius: 3px;
-      border-top-left-radius: 5px;
-
-      path {
-        background-color: $trmrk-note-back-color-theme-light;
-        color: $trmrk-note-fore-color-theme-light;
-      }
-    }
-  }
-}
-
 .trmrk-app {
+  .trmrk-tab-head {
+    margin-right: 0.125em;
+  }
+
+  .trmrk-tab-head:last-child {
+    margin-right: 0px;
+  }
+
   .trmrk-page-panel {
     display: inline-flex;
     position: absolute;
@@ -392,5 +243,4 @@ body {
     border-bottom-style: ridge;
     border-bottom-width: 3px;
   }
-
 }
