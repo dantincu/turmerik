@@ -130,7 +130,7 @@ export default function NotesRootLocationPickerModalContent({
       <Box className="trmrk-header" ref={headerElRef} sx={{ height: "6em" }}>
         <IconButton className="trmrk-close-btn" onClick={onModalClose}>
           <CharIcon
-            fontSize="3em" lineHeight="0.5">&times;</CharIcon>
+            fontSize="2.5em" lineHeight="0.5">&times;</CharIcon>
         </IconButton>
         <Typography variant="h6" component="h2">
           Choose a default location for your notes
