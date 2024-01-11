@@ -1,0 +1,161 @@
+@import "./_mixins";
+
+.trmrk-theme-dark {
+  .trmrk-scrollable::-webkit-scrollbar-thumb {
+    background-color: #303030;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track {
+    background-color: #1e1e1e;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track:hover {
+    background-color: #262626;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #404040;
+  }
+
+  .trmrk-left-resizable::after {
+    background-color: #606060;
+  }
+}
+
+.trmrk-theme-light {
+  .trmrk-scrollable::-webkit-scrollbar-thumb {
+    background-color: #cdcdcd;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track {
+    background-color: #efefef;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-track:hover {
+    background-color: #dedede;
+  }
+
+  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #bcbcbc;
+  }
+
+  .trmrk-left-resizable::after {
+    background-color: #ababab;
+  }
+}
+
+.trmrk-app.trmrk-theme-dark {
+  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
+    background-color: #121212;
+  }
+
+  .trmrk-tabs-list-spacer.trmrk-before {
+    background-image: linear-gradient(270deg, #26262600, #262626);
+  }
+
+  .trmrk-tabs-list-spacer.trmrk-after {
+    background-image: linear-gradient(90deg, #26262600, #262626);
+  }
+
+  .trmrk-tab-head {
+    color: #CCC;
+    border-color: #606060;
+    background-color: #404040;
+    border-bottom: 2px groove #606060;
+  }
+
+  .trmrk-tab-head * {
+    color: #CCC;
+  }
+
+  .trmrk-tab-head.trmrk-current {
+    background-color: #121212;
+    border-bottom-color: #262626;
+    background-image: linear-gradient(#121212, #262626);
+    border-bottom: 2px groove #404040;
+  }
+
+  .trmrk-tab-head.trmrk-current * {
+    color: #FFF;
+  }
+
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
+    color: $trmrk-note-fore-color-theme-dark;
+
+    svg {
+      background-color: $trmrk-note-back-color-theme-dark;
+      color: $trmrk-note-fore-color-theme-dark;
+      border-radius: 3px;
+      border-top-left-radius: 5px;
+
+      path {
+        background-color: $trmrk-note-back-color-theme-dark;
+        color: $trmrk-note-fore-color-theme-dark;
+      }
+    }
+  }
+}
+
+.trmrk-app.trmrk-theme-light {
+  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
+    color: #FFF;
+    background-color: #1976d2;
+  }
+
+  .trmrk-tabs-list-spacer.trmrk-before {
+    background-image: linear-gradient(270deg, #1976d200, #1976d2);
+  }
+
+  .trmrk-tabs-list-spacer.trmrk-after {
+    background-image: linear-gradient(90deg, #1976d200, #1976d2);
+  }
+
+  .trmrk-app-bar * {
+    color: #FFF;
+  }
+
+  .trmrk-tab-head {
+    color: #EEE;
+    border-color: #1C84EB;
+    border-bottom: 2px groove #1C84EB;
+  }
+
+  .trmrk-tab-head * {
+    color: #EEE;
+  }
+
+  .trmrk-tab-head.trmrk-current {
+    color: #FFF;
+    border-color: #1976d2;
+    background-color: #0030a0;
+    background-image: linear-gradient(#0030a0, #1976d2);
+    border-bottom: 2px groove #1C84EB;
+  }
+
+  .trmrk-tab-head.trmrk-current * {
+    color: #FFF;
+  }
+
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-view-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-item .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-notes-hcy .trmrk-tab-head-icon,
+  .trmrk-tabs-list .trmrk-tab-head.trmrk-resx-note-files-hcy .trmrk-tab-head-icon {
+    color: $trmrk-note-fore-color-theme-light;
+
+    svg {
+      background-color: $trmrk-note-back-color-theme-light;
+      color: $trmrk-note-fore-color-theme-light;
+      border-radius: 3px;
+      border-top-left-radius: 5px;
+
+      path {
+        background-color: $trmrk-note-back-color-theme-light;
+        color: $trmrk-note-fore-color-theme-light;
+      }
+    }
+  }
+}
