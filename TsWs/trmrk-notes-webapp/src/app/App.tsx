@@ -88,7 +88,7 @@ export default function App() {
   }, [ appHeaderEl, appBodyEl, appData, isCompactMode ]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={appCfg.value.basePath ?? "/" }>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
           { showAppEl ? (<Box className={[ "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>

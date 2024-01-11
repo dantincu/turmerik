@@ -46,6 +46,7 @@ export interface NoteDirPairs {
 }
 
 export interface AppConfig {
+  basePath: string | null | undefined;
   allowUserToChooseStorageOptions: boolean | null | undefined;
   apiHost: string | null | undefined;
   apiIsLocalFiles: boolean | null | undefined;

@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 
 interface DeviceStats {
+  userAgent: string,
   dpi: number,
   viewPortWidth: number,
   viewPortHeight: number,
@@ -18,6 +19,7 @@ export default function App() {
     const bodyEl = document.body;
 
     const deviceStatsValue: DeviceStats = {
+      userAgent: window.navigator.userAgent,
       dpi: window.devicePixelRatio,
       viewPortWidth: bodyEl.clientWidth,
       viewPortHeight: bodyEl.clientHeight
@@ -40,20 +42,22 @@ export default function App() {
     <BrowserRouter>
         <CssBaseline />
           <Box className={[ "trmrk-app" ].join(" ")} sx={{ margin: "0px" }}>
-            { deviceStats ? <Box className="trmrk-container" sx={{ height: "100%", paddingLeft: "10%", paddingRight: "10%", paddingTop: "2.5em" }}>
+            { deviceStats ? <Box className="trmrk-container">
               <h1>Device Stats</h1>
-              <Box className="trmrk-row">
-                <Box className="trmrk-field-name"><span className="trmrk-text">DPI Resolution: </span></Box>
-                <Box className="trmrk-field-value"><span className="trmrk-text">{ deviceStats.dpi }</span></Box>
-              </Box>
-              <Box className="trmrk-row">
-                <Box className="trmrk-field-name"><span className="trmrk-text">Viewport Width: </span></Box>
-                <Box className="trmrk-field-value"><span className="trmrk-text">{ deviceStats.viewPortWidth }</span></Box>
-              </Box>
-              <Box className="trmrk-row">
-                <Box className="trmrk-field-name"><span className="trmrk-text">Viewport Height: </span></Box>
-                <Box className="trmrk-field-value"><span className="trmrk-text">{ deviceStats.viewPortHeight }</span></Box>
-              </Box>
+              <table className="trmrk-grid" cellSpacing={0} cellPadding={0}>
+                <tr>
+                  <td>User Agent</td><td>{ deviceStats.userAgent }</td>
+                </tr>
+                <tr>
+                  <td>DPI Resolution</td><td>{ deviceStats.dpi }</td>
+                </tr>
+                <tr>
+                  <td>Viewport Width</td><td>{ deviceStats.viewPortWidth }</td>
+                </tr>
+                <tr>
+                  <td>Viewport Height</td><td>{ deviceStats.viewPortHeight }</td>
+                </tr>
+              </table>
             </Box> : null }
           </Box>
     </BrowserRouter>

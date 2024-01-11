@@ -149,7 +149,7 @@ body {
   }
 }
 
-@media screen and (min-resolution: 192dpi) {  
+@media screen and (min-resolution: 192dpi) and (orientation: portrait) {  
   html {
     font-size: 3em;
   }
