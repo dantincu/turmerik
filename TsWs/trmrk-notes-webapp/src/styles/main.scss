@@ -5,15 +5,15 @@ html {
   font-size: 16px;
 }
 
-@media only screen and (min-resolution: 300dpi) {  
+@media only screen and (min-resolution: 192dpi) {  
   html {
-    font-size: 48px;
+    font-size: 24px;
   }
 }
 
-@media only screen and (min-resolution: 192dpi) {  
+@media only screen and (min-resolution: 288dpi) {  
   html {
-    font-size: 32px;
+    font-size: 48px;
   }
 }
 
