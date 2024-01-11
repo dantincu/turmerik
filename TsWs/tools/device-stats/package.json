@@ -1,21 +1,19 @@
 {
-  "name": "trmrk-notes-webapp",
+  "name": "device-stats",
   "version": "0.1.0",
-  "description": "Turmerik Notes Web App (with React)",
+  "description": "Web App for viewing device stats (dpi resolution, view port size)",
   "type": "module",
   "scripts": {
-    "start": "parcel ./src/targets/any/index.html --dist-dir ./dist/dev-any --port=9002 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "start": "parcel ./src/targets/any/index.html --dist-dir ./dist/dev-any --port=9100 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
     "build": "parcel build ./src/targets/any/index.html --dist-dir ./dist/prod-any"
   },
   "author": "Daniel Tincu",
   "license": "MIT",
   "devDependencies": {
-    "@parcel/plugin": "^2.10.3",
     "@parcel/transformer-sass": "^2.10.3",
     "@types/node": "^20.10.5",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "@types/uuid": "^9.0.7",
     "buffer": "^6.0.3",
     "parcel": "^2.10.3",
     "process": "^0.11.10",

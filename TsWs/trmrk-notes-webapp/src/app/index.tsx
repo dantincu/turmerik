@@ -20,9 +20,6 @@ export const createApp = () => {
     appConfig = prodAppConfig as AppConfig
   }
 
-  appConfig.apiIsLocalFiles = !!appConfig.apiHost && (
-    appConfig.apiIsLocalFilesUnix || appConfig.apiIsLocalFilesWin);
-
   appCfg.value = appConfig;
 
   const container = document.getElementById('app-root')!;

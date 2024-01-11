@@ -46,10 +46,11 @@ export interface NoteDirPairs {
 }
 
 export interface AppConfig {
+  allowUserToChooseStorageOptions: boolean | null | undefined;
   apiHost: string | null | undefined;
   apiIsLocalFiles: boolean | null | undefined;
   apiIsLocalFilesWin: boolean | null | undefined;
-  apiIsLocalFilesUnix: boolean | null | undefined;
+  apiIsMsGraph: boolean | null | undefined;
   NoteDirPairs: NoteDirPairs;
 }
 

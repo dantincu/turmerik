@@ -26,8 +26,8 @@ export default function AppSetupBar() {
     localStorage.setItem(localStorageKeys.appThemeIsDarkMode, switchToDarkMode ? jsonBool.true : jsonBool.false);
   };
 
-  return (<AppBar sx={{ position: "relative", height: "2.5em" }} className={["trmrk-app-header" ].join(" ")}>
-      <Button onClick={handleClick} sx={{ width: "10em", fontSize: "1em", color: "#FFF", textTransform: "none" }}>
+  return (<AppBar sx={{ position: "relative", height: "2.5em" }} className={["trmrk-app-setup-header" ].join(" ")}>
+      <Button onClick={handleClick} sx={{ width: "10em", fontSize: "1em", height: "2.5em", color: "#FFF", textTransform: "none" }}>
         <ColorThemeLabel>{ appData.isDarkMode ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
         { appData.isDarkMode ? <DarkModeIcon sx={{ fontSize: "2em" }} /> :  <LightModeIcon sx={{ fontSize: "2em" }} /> }
       </Button>

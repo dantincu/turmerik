@@ -19,7 +19,6 @@ export default function TabHead({
   }) {
     const resxCssClassName = getResxCssClassName(tab.appPage);
     const border = (tab.isCurrent ? "2.5px" : "1.5px") + " solid";
-    // const marginTop = (tab.isCurrent ? "0.25em" : "0.25em");
     const marginTop = "0em";
 
     return (<Box className={[

@@ -20,6 +20,7 @@ export interface AppDataReducer {
   setIsCompactMode: DispatcherType<boolean>;
   setHasFilesRootLocation: DispatcherType<boolean>;
   setHasNotesRootLocation: DispatcherType<boolean>;
+  setUseIndexedDbForStorage: DispatcherType<boolean>;
 }
 
 const reducer = {
@@ -41,6 +42,9 @@ const reducer = {
   setHasNotesRootLocation: (state, action) => {
     state.hasNotesRootLocation = action.payload;
   },
+  setUseIndexedDbForStorage: (state, action) => {
+    state.useIndexedDbForStorage = action.payload;
+  },
 } as AppDataReducer;
 
 const appDataSlice = createSlice({
@@ -56,6 +60,7 @@ const appDataSlice = createSlice({
       localStorage.getItem(localStorageKeys.appIsCompactMode) !==
       jsonBool.false,
     hasFilesRootLocation: false,
+    hasNotesRootLocation: false,
   } as AppData,
   reducers: {
     ...reducer,
@@ -69,6 +74,7 @@ export const {
   setIsCompactMode,
   setHasFilesRootLocation,
   setHasNotesRootLocation,
+  setUseIndexedDbForStorage,
 } = appDataSlice.actions;
 
 export default appDataSlice.reducer;

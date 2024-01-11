@@ -2,13 +2,6 @@
 
 html {
   height: 100%;
-  font-size: 16px;
-}
-
-@media only screen and (min-resolution: 192dpi) {  
-  html {
-    font-size: 48px;
-  }
 }
 
 body {
@@ -41,6 +34,15 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.trmrk-app-setup-page {
+  .trmrk-caption {
+    margin: 1em;
+    font-size: 1.25em;
+    cursor: pointer;
+    text-align: center;
+  }
 }
 
 .trmrk-app-setup-modal .trmrk-app-setup-modal-content {
@@ -147,7 +149,53 @@ body {
   }
 }
 
-@media only screen and (max-width: 900px) {
+@media screen and (min-resolution: 192dpi) {  
+  html {
+    font-size: 3em;
+  }
+
+  .trmrk-app-error {
+    > h2 {
+      font-size: 1em;
+    }
+  }
+
+  .trmrk-app-setup-page {
+    h1 {
+      font-size: 1.25em;
+    }
+    
+    .trmrk-caption {
+      margin: 1em;
+      font-size: 1em;
+    }
+  }
+
+  .trmrk-app {
+    .trmrk-icon-btn-main {
+      width: 1.5em;
+      height: 1.8em;
+    }
+
+    .trmrk-app-bar-toggle-icon {
+      right: 0.25em;
+    }
+
+    .trmrk-settings-btn, .trmrk-home-btn {
+      left: 0.15em;
+    }
+  }
+}
+
+  /* .trmrk-app {
+    .trmrk-icon-btn-main {
+      color: red;
+      width: 1.5em;
+      height: 1.5em;
+    }
+  } */
+
+/* @media only screen and (max-width: 1000px) {
   .trmrk-app-setup-modal .trmrk-app-setup-modal-content {
     .trmrk-header {
       left: 0.5em;
@@ -186,7 +234,7 @@ body {
       }
     }
   }
-}
+} */
 
 .trmrk-scrollable {
   overflow-y: scroll;
@@ -209,26 +257,26 @@ body {
     cursor: ew-resize;
 }
 
-.trmrk-app-tabs-bar {
-  .trmrk-tabs-list-spacer {
-    display: inline-flex;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    width: 1em;
-    z-index: 1;
-  }
-  
-  .trmrk-tabs-list-spacer.trmrk-before {
-    left: 0px;
-  }
-  
-  .trmrk-tabs-list-spacer.trmrk-after {
-    right: 0px;
-  }
-}
-
 .trmrk-app {
+  .trmrk-app-tabs-bar {
+    .trmrk-tabs-list-spacer {
+      display: inline-flex;
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      width: 1em;
+      z-index: 1;
+    }
+    
+    .trmrk-tabs-list-spacer.trmrk-before {
+      left: 0px;
+    }
+    
+    .trmrk-tabs-list-spacer.trmrk-after {
+      right: 0px;
+    }
+  }
+
   .trmrk-tab-head {
     margin-right: 0.125em;
   }

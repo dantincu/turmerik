@@ -1,0 +1,36 @@
+html, body {
+  height: 100%;
+}
+
+#app-root {
+  height: 100%;
+  background-color: #FFF8E0;
+}
+
+
+.trmrk-field-name, .trmrk-field-value {
+  font-weight: bold;
+  display: inline-flex;
+  position: relative;
+  
+  .trmrk-text {
+    display: inline-flex;
+    position: absolute;
+  }
+}
+
+.trmrk-field-name {
+  font-style: italic;
+  width: 150px;
+
+  .trmrk-text {
+    right: 0px;
+  }
+}
+
+.trmrk-field-value {
+  .trmrk-text {
+    left: 0.5em;
+    color: blue;
+  }
+}

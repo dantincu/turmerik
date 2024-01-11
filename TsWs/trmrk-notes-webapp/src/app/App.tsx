@@ -10,8 +10,9 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
+import { appCfg } from "../services/appConfig";
 import { AppData } from "../services/appData";
-import { setAppBarHeight, setShowAppBar } from "../store/appDataSlice";
+import { setAppBarHeight, setShowAppBar, setHasFilesRootLocation, setHasNotesRootLocation } from "../store/appDataSlice";
 import { getAppTheme, currentAppTheme } from "../services/app-theme/app-theme";
 import { getAppModeCssClassName, appModeCssClass, appModeCssClasses } from "../services/utils";
 import { FloatingBarTopOffset, updateFloatingBarTopOffset } from "../services/htmlDoc/floatingBarTopOffsetUpdater";
@@ -73,6 +74,11 @@ export default function App() {
   }
 
   useEffect(() => {
+    if (!appCfg.value.allowUserToChooseStorageOptions) {
+      dispatch(setHasFilesRootLocation(true));
+      dispatch(setHasNotesRootLocation(true));
+    }
+
     offset.showHeader = (appData.isCompactMode != isCompactMode) ? true : null;
 
     if (offset.showHeader) {
@@ -88,7 +94,7 @@ export default function App() {
           { showAppEl ? (<Box className={[ "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>
             <IconButton onClick={onOnAppBarToggled} sx={{
               position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
-              className={ appData.showAppBar ? "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" }>
+              className={ [ "trmrk-icon-btn-main trmrk-app-bar-toggle-icon", appData.showAppBar ? "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" ].join(" ") }>
               { appData.showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
             </IconButton>
             { appData.showAppBar ? <Box className={["trmrk-app-bar"].join(" ")} sx={{

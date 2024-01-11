@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
 import Box from "@mui/material/Box";
 
-import { AppTabsData } from "../../../services/appData";
+import { AppTabsData, AppData } from "../../../services/appData";
 import { TabsListOffset, TabsListKeyElements, assureOffsetHasWidth, updateTabsBarListOffset } from "../../../services/htmlDoc/tabsBarListOffsetUpdater";
 
 import TabHead from "./TabHead";
@@ -19,9 +19,11 @@ const tabsListOffset: TabsListOffset = {
   currentTabIdx: -1
 }
 
-export default function AppPageBar() {
+export default function AppTabsBar() {
   const openTabs = useSelector((state: { appTabs: AppTabsData }) => state.appTabs.openTabs);
-  const firstOpenTab = openTabs[0];
+  const appData = useSelector((state: { appData: AppData }) => state.appData);
+
+  const [ appBarVisible, setAppBarVisible ] = useState(false);
 
   const tabsBarRef = React.useRef<HTMLDivElement>();
   const tabsListRef = React.useRef<HTMLDivElement>();
@@ -50,6 +52,10 @@ export default function AppPageBar() {
   }
 
   useEffect(() => {
+    if (appData.showAppBar) {
+      setAppBarVisible(appData.showAppBar);
+    }
+
     assureOffsetHasWidth(tabsListOffset, tabsListKeyElems);
     window.addEventListener("resize", onUpdateTabsBarListOffset);
     onUpdateTabsBarListOffset();
@@ -57,7 +63,7 @@ export default function AppPageBar() {
     return () => {
       window.removeEventListener("resize", onUpdateTabsBarListOffset);
     };
-  }, [ openTabs, tabsListLeftSpacerRef, tabsListRightSpacerRef ]);
+  }, [ appBarVisible, openTabs, tabsListLeftSpacerRef, tabsListRightSpacerRef ]);
 
   return (<Box className="trmrk-app-tabs-bar" sx={{
       position: "absolute", left: "5em", right: "5em", overflow: "hidden", height: "2.5em", whiteSpace: "nowrap" }} ref={tabsBarRef}>

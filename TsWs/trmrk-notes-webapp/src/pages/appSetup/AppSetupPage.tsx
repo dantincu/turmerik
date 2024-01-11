@@ -16,6 +16,8 @@ import { setHasFilesRootLocation } from "../../store/appDataSlice";
 import Error from "../../components/error/Error";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import { fsApiSvc } from "../../services/fsApi/fsApiSvc";
+import { supportedFeatures } from "../../services/htmlDoc/htmlFeatures";
+import { appCfg } from "../../services/appConfig";
 
 import NotesRootLocationPickerModalContent from "./NotesRootLocationPickerModalContent";
 
@@ -24,9 +26,14 @@ export default function AppSetupPage() {
   const dispatch = useDispatch();
 
   const [ error, setError ] = useState<any | null | undefined>(null);
+  const [ storageOptionChosen, setStorageOptionChosen ] = useState(!(appCfg.value.allowUserToChooseStorageOptions ?? false));
   const [ pickNotesRootLocModalIsOpen, setPickNotesRootLocModalIsOpen ] = useState(false);
-  
+
+  let chooseNotesRootLocationCaption: string = [
+    "Pick a location on your", appData.useFileSystemApiForStorage ? "device" : "drive" ].join(" ");
+
   const onPickFilesRootLocationClick = () => {
+    try {
       ((window as any).showDirectoryPicker({
         id: "rootFolder",
         mode: "readwrite",
@@ -38,6 +45,10 @@ export default function AppSetupPage() {
       }, reason => {
         setError(reason);
       });
+    }
+    catch (err) {
+      setError(err);
+    }
   }
 
   const handlePickNotesRootLocModalClose = () => {
@@ -53,14 +64,18 @@ export default function AppSetupPage() {
       errMessage={error?.message ?? error?.cause} /> : <h1>Welcome to Turmerik Notes</h1> }
     
     { appData.hasNotesRootLocation ? null :
-      <Typography sx={{ margin: "1em", fontSize: "2em", cursor: "pointer", textAlign: "center" }}
+      storageOptionChosen ? <Typography
           onClick={onPickFilesRootLocationClick} className="trmrk-caption">
         <IconButton>
           <FolderOpenIcon
-            sx={{ width: "2em", height: "2em", color: "#FF8800" }} />
+            sx={{ width: "1em", height: "1em", color: "#FF8800" }} />
         </IconButton>
-        Pick a location on your device where you want to create notes
+        { chooseNotesRootLocationCaption }
+      </Typography> : <Box className="trmrk-storage-options-list">
+      <Typography className="trmrk-caption">
+        Choose one of the available storage options for your notes
       </Typography>
+    </Box>
     }
     <Modal className={["trmrk-modal trmrk-app-setup-modal", currentAppTheme.value.cssClassName, appModeCssClasses.compactMode ].join(" ")}
         open={pickNotesRootLocModalIsOpen}

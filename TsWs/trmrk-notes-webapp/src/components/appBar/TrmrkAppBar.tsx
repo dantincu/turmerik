@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, lazy, Suspense } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from "react-router-dom";
 
@@ -15,8 +15,11 @@ import { AppBarData } from "../../services/appData";
 import { setAppOptionsMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
 import { routes } from "../../services/routes";
 import { getRoute } from "../../services/utils";
+import { deviceConstants } from "../../services/htmlDoc/deviceConstants";
 
-import AppTabsBar from "./appTabs/AppTabsBar";
+const AppTabsBar = lazy(() => import("./appTabs/AppTabsBar"));
+const AppTabsBarMobile = lazy(() => import("./appTabs/AppTabsBarMobile"));
+
 import AppPageBar from "./appPage/AppPageBar";
 import AppSettingsMenu from "./topBar/AppSettingsMenu";
 import AppOptionsMenu from "./topBar/AppOptionsMenu";
@@ -66,22 +69,26 @@ export default function TrmrkAppBar({
 
   return (<AppBar sx={{ position: "relative", height: "100%" }} className={["trmrk-app-header" ].join(" ")} ref={appHeaderEl}>
       <Box className="trmrk-top-bar" sx={{ marginRight: "2.5em" }}>
-        { appBar.showTabsNavArrows ? <IconButton sx={{ float: "left" }}
+        { appBar.showTabsNavArrows ? <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-nav-back-btn"
             onClick={handleAppTabsNavBackClick} disabled={appTabsNavGoBackBtnDisabled}>
             <ArrowLeftIcon />
-        </IconButton> : <IconButton sx={{ float: "left" }}
+        </IconButton> : <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-settings-btn"
             onClick={handleSettingsClick}>
             <MenuIcon />
         </IconButton> }
-        { appBar.showTabsNavArrows ? <IconButton sx={{ float: "left" }}
+        { appBar.showTabsNavArrows ? <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-nav-forward-btn"
             onClick={handleAppTabsNavForwardClick} disabled={appTabsNavGoForwardBtnDisabled}>
             <ArrowRightIcon />
-        </IconButton> : <IconButton sx={{ float: "left" }}
+        </IconButton> : <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-home-btn"
             onClick={handleHomeClick}>
             <HomeIcon />
         </IconButton> }
-        <AppTabsBar />
-        <IconButton sx={{ float: "right" }}
+        { deviceConstants.isMobile ? <Suspense fallback={"..."}>
+            <AppTabsBarMobile />
+          </Suspense> : <Suspense fallback={"..."}>
+            <AppTabsBar />
+          </Suspense> }
+        <IconButton sx={{ float: "right" }} className="trmrk-icon-btn-main"
             onClick={handleOptionsClick}>
           <MoreVertIcon /></IconButton>
       </Box>

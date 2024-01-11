@@ -1,0 +1,17 @@
+{
+  "name": "device-stats",
+  "version": "0.1.0",
+  "description": "Landing page for Turmerik Notes App hosted on dantincu.github.io",
+  "type": "module",
+  "scripts": {
+    "start": "parcel ./src/index.html --dist-dir ./dist/dev --port=9101 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "build": "parcel build ./src/index.html --dist-dir ./dist/prod"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.10.3"
+  },
+  "dependencies": {}
+}

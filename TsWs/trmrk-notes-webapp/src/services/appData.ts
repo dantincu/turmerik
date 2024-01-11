@@ -4,6 +4,10 @@ export interface AppData {
   showAppBar: boolean;
   isDarkMode: boolean;
   isCompactMode: boolean;
+  useIndexedDbForStorage: boolean;
+  useFileSystemApiForStorage: boolean;
+  useMsGraphForStorage: boolean;
+  hasChosenStorageOption: boolean;
   hasFilesRootLocation: boolean;
   hasNotesRootLocation: boolean;
 }
