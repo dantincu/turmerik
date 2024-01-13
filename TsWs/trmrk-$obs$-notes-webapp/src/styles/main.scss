@@ -150,10 +150,6 @@ body {
 }
 
 @media screen and (min-resolution: 192dpi) and (orientation: portrait) {  
-  html {
-    font-size: 3em;
-  }
-
   .trmrk-app-error {
     > h2 {
       font-size: 1em;

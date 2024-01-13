@@ -9,7 +9,7 @@ import App from './App';
 import { appCfg, AppConfig } from "../services/appConfig";
 
 import devAppConfig from "./env/dev/app-config.json";
-import prodAppConfig from "./env/dev/app-config.json";
+import prodAppConfig from "./env/prod/app-config.json";
 
 export const createApp = () => {
   let appConfig: AppConfig;

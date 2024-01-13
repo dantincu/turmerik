@@ -94,7 +94,8 @@ export default function App() {
           { showAppEl ? (<Box className={[ "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>
             <IconButton onClick={onOnAppBarToggled} sx={{
               position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
-              className={ [ "trmrk-icon-btn-main trmrk-app-bar-toggle-icon", appData.showAppBar ? "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" ].join(" ") }>
+              className={ [ "trmrk-icon-btn-main trmrk-app-bar-toggle-icon", appData.showAppBar ?
+                "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" ].join(" ") }>
               { appData.showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
             </IconButton>
             { appData.showAppBar ? <Box className={["trmrk-app-bar"].join(" ")} sx={{
