@@ -14,7 +14,8 @@ import { getResxCssClassName } from "../../../services/utils";
 import TabHeadIcon from "./TabHeadIcon";
 
 import CharIcon from "../../iconButtons/CharIcon";
-export default function AppTabsBarMobile() {
+
+export default function AppTabsBarPortrait() {
   const openTabs = useSelector((state: { appTabs: AppTabsData }) => state.appTabs.openTabs);
   const currentTab = openTabs.find(tab => tab.isCurrent)!;
 

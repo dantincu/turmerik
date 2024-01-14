@@ -45,7 +45,7 @@ export default function TabHead({
         <IconButton className="trmrk-tab-close-icon" sx={{ padding: "0.1em", paddingTop: "0.15em", float: "right" }}>
           { tab.isEdited ? <CircleIcon sx={{
             fontSize: "0.75em", marginTop: tab.isCurrent ? "0.15em" : "0.2em", marginRight: "0.1em" }} /> : <CharIcon
-            fontSize="1.5em" lineHeight="0.8" marginTop={ tab.isCurrent ? "-0.03em" : "0em" } >&times;</CharIcon> }
+            fontSize="1.5em" lineHeight="0.8" marginTop={ tab.isCurrent ? "-0.03em" : "0em" }>&times;</CharIcon> }
         </IconButton>
       </Box>);
 }

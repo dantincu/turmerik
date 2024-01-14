@@ -11,6 +11,24 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
   appBarEl: Element | null,
   appMainEl: Element | null
 ) => {
+  let bodyScrollTop: number | null = null;
+  let bodyScrollTopDiff: number | null = null;
+
+  if (appMainEl) {
+    offset.appBarHeight ??= appBarEl?.clientHeight ?? null;
+
+    bodyScrollTop = appMainEl.scrollTop;
+    bodyScrollTopDiff = bodyScrollTop - offset.lastBodyScrollTop;
+    offset.lastBodyScrollTop = bodyScrollTop;
+
+    let headerTopOffset = Math.max(
+      offset.lastHeaderTopOffset - bodyScrollTopDiff,
+      -1 * (offset.appBarHeight ?? 0)
+    );
+
+    offset.lastHeaderTopOffset = Math.min(0, headerTopOffset);
+  }
+
   if (typeof offset.showHeader === "boolean") {
     offset.lastHeaderTopOffset = 0;
 
@@ -25,7 +43,6 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
         if (appMainEl) {
           appMainEl.style.top =
             offset.lastHeaderTopOffset + offset.appBarHeight + "px";
-        } else {
         }
       }
     } else if (offset.showHeader === false) {
@@ -39,29 +56,17 @@ export const updateFloatingBarTopOffset = <Element extends HTMLElement>(
     }
   } else {
     if (appMainEl) {
-      offset.appBarHeight ??= appBarEl?.clientHeight ?? null;
-
       if (offset.headerIsHidden) {
         appMainEl.style.top = "0px";
       } else {
-        const bodyScrollTop = appMainEl.scrollTop;
-        const bodyScrollTopDiff = bodyScrollTop - offset.lastBodyScrollTop;
-
-        if (bodyScrollTop > 0) {
-          const headerTopOffset = Math.max(
-            offset.lastHeaderTopOffset - bodyScrollTopDiff,
-            -1 * (offset.appBarHeight ?? 0)
-          );
-
-          offset.lastBodyScrollTop = bodyScrollTop;
-          offset.lastHeaderTopOffset = Math.min(0, headerTopOffset);
-
+        if ((bodyScrollTop ?? 0) > 0) {
+          // on iOs this property can be negative when dragging by the top of the page
           if (appBarEl) {
             appBarEl.style.top = offset.lastHeaderTopOffset + "px";
-          }
 
-          appMainEl.style.top =
-            offset.lastHeaderTopOffset + (offset?.appBarHeight ?? 0) + "px";
+            appMainEl.style.top =
+              offset.lastHeaderTopOffset + (offset.appBarHeight ?? 0) + "px";
+          }
         }
       }
     }

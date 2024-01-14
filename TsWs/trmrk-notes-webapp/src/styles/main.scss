@@ -26,10 +26,6 @@ body {
   user-select: none;
 }
 
-.trmrk-app-setup-page h1 {
-  text-align: center;
-}
-
 .trmrk-app, .trmrk-app-error, .trmrk-app-setup {
   position: relative;
   width: 100%;
@@ -79,6 +75,10 @@ body {
 
   .trmrk-tab-head {
     margin-right: 0.125em;
+
+    .trmrk-tab-close-icon {
+      margin-right: 0.1em;
+    }
   }
 
   .trmrk-tab-head:last-child {

@@ -10,6 +10,8 @@ interface DeviceStats {
   dpi: number,
   viewPortWidth: number,
   viewPortHeight: number,
+  screenOrientationType: OrientationType,
+  screenOrientationAngle: number
 }
 
 export default function App() {
@@ -22,7 +24,9 @@ export default function App() {
       userAgent: window.navigator.userAgent,
       dpi: window.devicePixelRatio,
       viewPortWidth: bodyEl.clientWidth,
-      viewPortHeight: bodyEl.clientHeight
+      viewPortHeight: bodyEl.clientHeight,
+      screenOrientationType: screen.orientation.type,
+      screenOrientationAngle: screen.orientation.angle,
     }
 
     setDeviceStats(deviceStatsValue);
@@ -32,9 +36,11 @@ export default function App() {
     updateDeviceStats();
 
     document.addEventListener("resize", updateDeviceStats);
+    screen.orientation.addEventListener("change", updateDeviceStats);
 
     return () => {
       document.removeEventListener("resize", updateDeviceStats);
+      screen.orientation.removeEventListener("change", updateDeviceStats);
     }
   }, [ deviceStats ]);
 
@@ -56,6 +62,12 @@ export default function App() {
                 </tr>
                 <tr>
                   <td>Viewport Height</td><td>{ deviceStats.viewPortHeight }</td>
+                </tr>
+                <tr>
+                  <td>Screen Orientation Type</td><td>{ deviceStats.screenOrientationType }</td>
+                </tr>
+                <tr>
+                  <td>Screen Orientation Angle</td><td>{ deviceStats.screenOrientationAngle }</td>
                 </tr>
               </table>
             </Box> : null }

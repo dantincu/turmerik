@@ -14,11 +14,11 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { AppBarData } from "../../services/appData";
 import { setAppOptionsMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
 import { routes } from "../../services/routes";
-import { getRoute } from "../../services/utils";
+import { isScreenPortraitMode } from "../../services/htmlDoc/deviceOrientation";
 import { deviceConstants } from "../../services/htmlDoc/deviceConstants";
 
 const AppTabsBar = lazy(() => import("./appTabs/AppTabsBar"));
-const AppTabsBarMobile = lazy(() => import("./appTabs/AppTabsBarMobile"));
+const AppTabsBarPortrait = lazy(() => import("./appTabs/AppTabsBarPortrait"));
 
 import AppPageBar from "./appPage/AppPageBar";
 import AppSettingsMenu from "./topBar/AppSettingsMenu";
@@ -37,6 +37,7 @@ export default function TrmrkAppBar({
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
   const [optionsMenuIconBtnEl, setOptionsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
+  const [ isPortraitMode, setIsPortraitMode ] = React.useState(false);
 
   const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
     setSettingsMenuIconBtnEl(event.currentTarget);
@@ -60,11 +61,23 @@ export default function TrmrkAppBar({
     dispatch(setAppOptionsMenuIsOpen(true));
   };
 
+  const onScreenOrientationChanged = () => {
+    const isPortraitModeValue = isScreenPortraitMode();
+    setIsPortraitMode(isPortraitModeValue);
+  }
+
   const appTabsNavGoBackBtnDisabled = false;
   const appTabsNavGoForwardBtnDisabled = false;
 
   useEffect(() => {
     setAppHeaderEl(appHeaderEl.current!);
+
+    screen.orientation.addEventListener("change", onScreenOrientationChanged);
+    onScreenOrientationChanged();
+
+    return () => {
+      screen.orientation.removeEventListener("change", onScreenOrientationChanged);
+    }
   }, []);
 
   return (<AppBar sx={{ position: "relative", height: "100%" }} className={["trmrk-app-header" ].join(" ")} ref={appHeaderEl}>
@@ -83,8 +96,8 @@ export default function TrmrkAppBar({
             onClick={handleHomeClick}>
             <HomeIcon />
         </IconButton> }
-        { deviceConstants.isMobile ? <Suspense fallback={"..."}>
-            <AppTabsBarMobile />
+        { isPortraitMode ? <Suspense fallback={"..."}>
+            <AppTabsBarPortrait />
           </Suspense> : <Suspense fallback={"..."}>
             <AppTabsBar />
           </Suspense> }
