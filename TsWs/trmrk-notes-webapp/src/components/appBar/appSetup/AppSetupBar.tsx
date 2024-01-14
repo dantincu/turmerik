@@ -1,35 +1,55 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
 import Button from '@mui/material/Button';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import styled from '@emotion/styled';
+import MenuIcon from '@mui/icons-material/Menu';
+import Menu from '@mui/material/Menu';
+import MenuList from '@mui/material/MenuList';
 
 import AppBar from "@mui/material/AppBar";
 
-import { AppData } from "../../../services/appData";
-import { setIsDarkMode } from "../../../store/appDataSlice";
-import { localStorageKeys, jsonBool } from "../../../services/utils";
+import { AppData, AppBarData } from "../../../services/appData";
+import { currentAppTheme } from "../../../services/app-theme/app-theme";
+import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
 
-const ColorThemeLabel = styled.span`
-  padding-right: 1em
-`;
+import ToggleDarkModeBtn from "../topBar/ToggleDarkModeBtn";
 
-export default function AppSetupBar() {
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+export default function AppSetupBar({
+  setAppHeaderEl
+  }: {
+    setAppHeaderEl: (appHeaderElem: HTMLDivElement) => void;
+  }) {
+  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
   const dispatch = useDispatch();
+
+  const menuAnchorEl = useRef<HTMLButtonElement | null>(null);
+  const appHeaderEl = useRef<HTMLDivElement>(null);
   
-  const handleClick = () => {
-    const switchToDarkMode = !appData.isDarkMode;
-    dispatch(setIsDarkMode(switchToDarkMode));
-    localStorage.setItem(localStorageKeys.appThemeIsDarkMode, switchToDarkMode ? jsonBool.true : jsonBool.false);
+  const handleSettingsBtnClick = () => {
+    dispatch(setAppSettingsMenuIsOpen(true));
   };
 
-  return (<AppBar sx={{ position: "relative", height: "2.5em" }} className={["trmrk-app-setup-header" ].join(" ")}>
-      <Button onClick={handleClick} sx={{ width: "10em", fontSize: "1em", height: "2.5em", color: "#FFF", textTransform: "none" }}>
-        <ColorThemeLabel>{ appData.isDarkMode ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
-        { appData.isDarkMode ? <DarkModeIcon sx={{ fontSize: "2em" }} /> :  <LightModeIcon sx={{ fontSize: "2em" }} /> }
+  const handleAppThemeMenuClose = () => {
+    dispatch(setAppSettingsMenuIsOpen(false));
+  }
+
+  useEffect(() => {
+    setAppHeaderEl(appHeaderEl.current!);
+  }, [] );
+
+  return (<AppBar sx={{ position: "relative", height: "100%" }} className={["trmrk-app-setup-header" ].join(" ")} ref={appHeaderEl}>
+      <Button onClick={handleSettingsBtnClick} className="trmrk-main-icon-btn" ref={menuAnchorEl}>
+        <MenuIcon />
       </Button>
+      <Menu className={["trmrk-app-theme-menu", currentAppTheme.value.cssClassName].join(" ")}
+        open={appBar.appSettingsMenuOpts.isOpen}
+        onClose={handleAppThemeMenuClose}
+        anchorEl={menuAnchorEl.current}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorPosition={ { top: 0, left: 100 } }>
+        <MenuList dense>
+          <ToggleDarkModeBtn />
+        </MenuList>
+      </Menu>
     </AppBar>);
 }

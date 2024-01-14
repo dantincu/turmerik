@@ -22,6 +22,7 @@ import MainContentContainer from "../components/mainContent/MainContainer";
 
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
 import AppSetupBar from "../components/appBar/appSetup/AppSetupBar";
+import ToggleAppBarButton from "../components/appBar/ToggleAppBarButton";
 
 const offset: FloatingBarTopOffset = {
   showHeader: null,
@@ -92,20 +93,19 @@ export default function App() {
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
           { showAppEl ? (<Box className={[ "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>
-            <IconButton onClick={onOnAppBarToggled} sx={{
-              position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
-              className={ [ "trmrk-icon-btn-main trmrk-app-bar-toggle-icon", appData.showAppBar ?
-                "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" ].join(" ") }>
-              { appData.showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
-            </IconButton>
+            <ToggleAppBarButton offset={offset} onUpdateFloatingBarTopOffset={onUpdateFloatingBarTopOffset} />
             { appData.showAppBar ? <Box className={["trmrk-app-bar"].join(" ")} sx={{
                 width: "100%", height: "5em", position: "absolute", top: "0px" }}>
               <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
             </Box> : null }
             <MainContentContainer onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
           </Box>) : <Box className={[ "trmrk-app-setup", appThemeClassName, appModeCssClasses.compactMode ].join(" ")}>
-            <AppSetupBar />
-            <AppSetupPage />
+            <ToggleAppBarButton offset={offset} onUpdateFloatingBarTopOffset={onUpdateFloatingBarTopOffset} />
+             { appData.showAppBar ? <Box className={["trmrk-app-setup-bar"].join(" ")} sx={{
+                width: "100%", height: "5em", position: "absolute", top: "0px" }}>
+              <AppSetupBar setAppHeaderEl={onSetAppHeaderEl} />
+            </Box> : null }
+            <AppSetupPage onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
           </Box>
         } 
       </ThemeProvider>

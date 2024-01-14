@@ -1,12 +1,10 @@
 import React from "react";
 
-import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import CircleIcon from "@mui/icons-material/Circle";
 
-import { AppTabsData, AppTab, AppPage } from "../../../services/appData";
+import { AppTab } from "../../../services/appData";
 import { getResxCssClassName } from "../../../services/utils";
 import TabHeadIcon from "./TabHeadIcon";
 
@@ -35,10 +33,10 @@ export default function TabHead({
           <TabHeadIcon tab={tab} />
         </IconButton>
         <Box className="trmrk-tab-head-title"
-          sx={{ display: "block", position: "absolute", top: "0.6em", left: "2em", right: "2em",
+          sx={{ display: "block", position: "absolute",
+            top: "0.6em", left: "2em", right: "2em",
             overflowX: "hidden", fontSize: "0.85em",
             fontStyle: tab.isPreviewMode ? "italic" : "normal",
-            // textDecoration: tab.isEditMode ? "underline": "none",
             wordBreak: "keep-all", whiteSpace: "nowrap", cursor: "pointer" }}>
           { tab.name }
         </Box>

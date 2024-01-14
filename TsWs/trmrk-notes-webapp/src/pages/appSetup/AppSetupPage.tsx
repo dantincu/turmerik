@@ -6,24 +6,26 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 
 import FolderOpenIcon from "@mui/icons-material/FolderOpen"
-import Container from '@mui/material/Container';
-import Modal from '@mui/material/Modal';
 
-import { appModeCssClasses } from "../../services/utils";
 import { currentAppTheme } from "../../services/app-theme/app-theme";
 import { AppData } from "../../services/appData";
 import { setHasFilesRootLocation } from "../../store/appDataSlice";
 import Error from "../../components/error/Error";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import { fsApiSvc } from "../../services/fsApi/fsApiSvc";
-import { supportedFeatures } from "../../services/htmlDoc/htmlFeatures";
 import { appCfg } from "../../services/appConfig";
 
-import NotesRootLocationPickerModalContent from "./NotesRootLocationPickerModalContent";
-
-export default function AppSetupPage() {
+export default function AppSetupPage({
+    setAppBodyEl,
+    onUserScroll
+  }: {
+    setAppBodyEl: (appBodyElem: HTMLDivElement) => void,
+    onUserScroll: () => void
+  }) {
   const appData = useSelector((state: { appData: AppData }) => state.appData);
   const dispatch = useDispatch();
+
+  const appBodyEl = useRef<HTMLDivElement>(null);
 
   const [ error, setError ] = useState<any | null | undefined>(null);
   const [ storageOptionChosen, setStorageOptionChosen ] = useState(!(appCfg.value.allowUserToChooseStorageOptions ?? false));
@@ -51,15 +53,20 @@ export default function AppSetupPage() {
     }
   }
 
-  const handlePickNotesRootLocModalClose = () => {
-    setPickNotesRootLocModalIsOpen(false);
-  }
+  const onScroll = () => onUserScroll();
 
   useEffect(() => {
     updateHtmlDocTitle("Turmerik Notes");
+    const bodyEl = appBodyEl.current!;
+    setAppBodyEl(bodyEl);
+    bodyEl!.addEventListener("scroll", onScroll);
+
+    return () => {
+      bodyEl!.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
-  return (<Container className="trmrk-app-setup-page" maxWidth="xl">
+  return (<Box className={["trmrk-app-setup-page", "trmrk-scrollable", currentAppTheme.value.cssClassName].join(" ")} ref={appBodyEl}>
     { error ? <Error errCaption={"No location chosen for notes"}
       errMessage={error?.message ?? error?.cause} /> : <h1>Welcome to Turmerik Notes</h1> }
     
@@ -72,18 +79,10 @@ export default function AppSetupPage() {
         </IconButton>
         { chooseNotesRootLocationCaption }
       </Typography> : <Box className="trmrk-storage-options-list">
-      <Typography className="trmrk-caption">
+      <Typography className="trmrk-caption" sx={{ height: "1000vh" }}>
         Choose one of the available storage options for your notes
       </Typography>
     </Box>
     }
-    <Modal className={["trmrk-modal trmrk-app-setup-modal", currentAppTheme.value.cssClassName, appModeCssClasses.compactMode ].join(" ")}
-        open={pickNotesRootLocModalIsOpen}
-        onClose={handlePickNotesRootLocModalClose}
-        >
-        <Box className="trmrk-modal-container">
-          <NotesRootLocationPickerModalContent onModalClose={handlePickNotesRootLocModalClose} />
-        </Box>
-      </Modal>
-  </Container>);
+  </Box>);
 };
