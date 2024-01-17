@@ -80,9 +80,24 @@ export default function Panel({
       
     }, [ leftIsResizable, panelElRef, mousePos ]);
 
-    return (<Box className={[
-          isScrollable ? "trmrk-scrollable" : null, className ?? null,
-          leftIsResizable ? "trmrk-left-resizable" : null, className ?? null ].join(" ")} sx={style ?? {}} ref={panelElRef}>
+    style ??= {};
+    className ??= null;
+
+    const classNamesArr = [
+      isScrollable ? "trmrk-scrollable" : null,
+      leftIsResizable ? "trmrk-left-resizable" : null,
+      className
+    ]; 
+
+    const classNamesStr = classNamesArr.join(" ");
+
+    if (leftIsResizable) {
+      return (<Box className={classNamesStr} sx={style} ref={panelElRef}>
+        <Box className="trmrk-left-resizable-content">{ children }</Box>
+      </Box>);
+    } else {
+      return (<Box className={classNamesStr} sx={style} ref={panelElRef}>
         { children }
       </Box>);
+    }
 }

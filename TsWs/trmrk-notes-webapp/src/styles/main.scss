@@ -46,15 +46,25 @@ body {
 
 .trmrk-left-resizable {
   padding-left: 4px;
-}
-
-.trmrk-left-resizable::after {
-    content: '';
+    
+  .trmrk-left-resizable-content {
     position: absolute;
+    overflow-y: visible;
+    width: 100%;
     left: 0;
-    width: 4px;
-    height: 100%;
-    cursor: ew-resize;
+    top: 0px;
+    padding-left: 4px;
+  }
+
+  .trmrk-left-resizable-content::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 4px;
+      top: 0px;
+      bottom: 0px;
+      cursor: ew-resize;
+  }
 }
 
 .trmrk-app {

@@ -11,7 +11,7 @@ import { ValueOrError } from "trmrk/src/core";
 
 import { DriveItem, FileType, OfficeFileType } from "trmrk/src/drive-item"
 
-import { IDriveExplorerApi } from "trmrk-browser/src/DriveExplorerApi/core";
+import { IDriveExplorerApi } from "trmrk/src/DriveExplorerApi/core";
 
 import LoadingDotPulse from "../loading/DotPulse";
 import FilesHcyNode from "./FilesHcyNode";
