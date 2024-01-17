@@ -1,35 +1,32 @@
+.trmrk-app-setup-header {
+  button.trmrk-main-icon-btn {
+    width: 2.5em;
+    font-size: 1em;
+    color: #FFF;
+  }
+}
+
 .trmrk-app-setup-page {
+  cursor: pointer;
+  text-align: center;
   display: block;
   position: absolute;
   top: 5em;
   bottom: 0em;
   left: 0em;
   right: 0em;
-}
 
-.trmrk-app-setup-header {
-  button.trmrk-main-icon-btn {
-    width: 0em;
-    height: 2.5em;
-    font-size: 1em;
-    text-transform: none;
-    display: inline-flex;
-    color: #FFF;
-    padding-left: 0em;
-    padding-right: 0em;
-    min-width: 2.5em;
-  }
-}
-
-.trmrk-app-setup-page {
-  h1 {
-    text-align: center;
-  }
-  
   .trmrk-caption {
     margin: 1em;
     font-size: 1.25em;
-    cursor: pointer;
-    text-align: center;
   }
+
+  button.trmrk-main-btn {
+    text-transform: none;
+    font-size: 1em;
+  }
+}
+
+.trmrk-app-setup-page.trmrk-app-page-no-app-bar {
+  top: 0px;
 }

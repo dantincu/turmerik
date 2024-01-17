@@ -1,12 +1,6 @@
 @import "../_mixins";
 
 @media screen and (orientation: portrait) {
-  .trmrk-app-error {
-    > h2 {
-      font-size: 1em;
-    }
-  }
-
   .trmrk-app {
     .trmrk-icon-btn-main {
       width: 1.5em;

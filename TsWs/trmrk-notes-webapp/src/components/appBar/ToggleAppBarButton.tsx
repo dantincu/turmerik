@@ -1,35 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
-import { AppData } from "../../services/appData";
-import { setShowAppBar } from "../../store/appDataSlice";
-import { FloatingBarTopOffset } from "../../services/htmlDoc/floatingBarTopOffsetUpdater";
 import IconButton from '@mui/material/IconButton';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
+import { getShowAppBar, setShowAppBar } from "../../store/appDataSlice";
+
 export default function ToggleAppBarButton({
-    offset,
     onUpdateFloatingBarTopOffset
   }: {
-    offset: FloatingBarTopOffset,
     onUpdateFloatingBarTopOffset: () => void
   }) {
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+  const showAppBar = useSelector(getShowAppBar);
   const dispatch = useDispatch();
     
   const onOnAppBarToggled = () => {
-    const showAppBar = !appData.showAppBar;
-    dispatch(setShowAppBar(showAppBar));
-
-    offset.showHeader = showAppBar;
+    dispatch(setShowAppBar(!showAppBar));
     onUpdateFloatingBarTopOffset();
   }
 
   return (<IconButton onClick={onOnAppBarToggled} sx={{
       position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
-      className={ [ "trmrk-icon-btn-main trmrk-app-bar-toggle-icon", appData.showAppBar ?
+      className={ [ "trmrk-icon-btn-main trmrk-app-bar-toggle-icon", showAppBar ?
         "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" ].join(" ") }>
-      { appData.showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
+      { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
     </IconButton>);
 }

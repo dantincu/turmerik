@@ -45,13 +45,36 @@ export interface NoteDirPairs {
   FileContents: FileContents;
 }
 
+export enum TrmrkStorageOption {
+  IndexedDB,
+  FileSystemApi,
+  MsGraphApi,
+  GoogleApi,
+  DropBoxApi,
+  LocalFilesTrmrkRestApi,
+  WinOSLocalFilesTrmrkRestApi,
+  MsGraphTrmrkRestApi,
+  GoogleTrmrkRestApi,
+  DropBoxTrmrkRestApi,
+}
+
+export interface TrmrkNotesStorageOption {
+  name: string;
+  noteBookPath: string;
+  storage: TrmrkStorageOption;
+  isCloudStorage?: boolean | null | undefined;
+  trmrkRestApiHost?: string | null | undefined;
+  isApi?: boolean | null | undefined;
+  isTrmrkRestApi?: boolean | null | undefined;
+  isLocalFilesTrmrkRestApi?: boolean | null | undefined;
+  isCloudStorageApi?: boolean | null | undefined;
+  isCloudStorageTrmrkRestApi?: boolean | null | undefined;
+}
+
 export interface AppConfig {
   basePath: string | null | undefined;
-  allowUserToChooseStorageOptions: boolean | null | undefined;
-  apiHost: string | null | undefined;
-  apiIsLocalFiles: boolean | null | undefined;
-  apiIsLocalFilesWin: boolean | null | undefined;
-  apiIsMsGraph: boolean | null | undefined;
+  storageOptions: TrmrkNotesStorageOption[] | null | undefined;
+  singleStorageOption?: TrmrkNotesStorageOption | null | undefined;
   NoteDirPairs: NoteDirPairs;
 }
 

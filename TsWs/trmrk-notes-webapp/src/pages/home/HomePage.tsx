@@ -8,12 +8,13 @@ import trmrk from "trmrk";
 
 import { addTab } from "../../store/appTabsDataSlice";
 import { AppPage, AppTabsData, AppData } from "../../services/appData";
+import { getOpenTabs } from "../../store/appTabsDataSlice";
 import { newUUid } from "../../services/utils";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import PageContainer from "../../components/mainContent/PageContainer";
 
 export default function HomePage() {
-  const openAppTabs = useSelector((state: { appTabs: AppTabsData }) => state.appTabs.openTabs);
+  const openAppTabs = useSelector(getOpenTabs);
   const dispatch = useDispatch();
 
   useEffect(() => {

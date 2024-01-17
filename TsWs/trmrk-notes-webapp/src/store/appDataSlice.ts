@@ -13,14 +13,26 @@ declare type DispatcherType<TPropVal> = (
   }
 ) => void;
 
+declare type SelectorType<TPropVal> = ({
+  appData,
+}: {
+  appData: AppData;
+}) => TPropVal;
+
 export interface AppDataReducer {
   setAppBarHeight: DispatcherType<number | null>;
   setShowAppBar: DispatcherType<boolean>;
+  setShowAppBarToggleBtn: DispatcherType<boolean>;
   setIsDarkMode: DispatcherType<boolean>;
   setIsCompactMode: DispatcherType<boolean>;
-  setHasFilesRootLocation: DispatcherType<boolean>;
-  setHasNotesRootLocation: DispatcherType<boolean>;
-  setUseIndexedDbForStorage: DispatcherType<boolean>;
+}
+
+export interface AppDataSelector {
+  getAppBarHeight: SelectorType<number | null>;
+  getShowAppBar: SelectorType<boolean>;
+  getShowAppBarToggleBtn: SelectorType<boolean>;
+  getIsDarkMode: SelectorType<boolean>;
+  getIsCompactMode: SelectorType<boolean>;
 }
 
 const reducer = {
@@ -30,22 +42,24 @@ const reducer = {
   setShowAppBar: (state, action) => {
     state.showAppBar = action.payload;
   },
+  setShowAppBarToggleBtn: (state, action) => {
+    state.showAppBarToggleBtn = action.payload;
+  },
   setIsDarkMode: (state, action) => {
     state.isDarkMode = action.payload;
   },
   setIsCompactMode: (state, action) => {
     state.isCompactMode = action.payload;
   },
-  setHasFilesRootLocation: (state, action) => {
-    state.hasFilesRootLocation = action.payload;
-  },
-  setHasNotesRootLocation: (state, action) => {
-    state.hasNotesRootLocation = action.payload;
-  },
-  setUseIndexedDbForStorage: (state, action) => {
-    state.useIndexedDbForStorage = action.payload;
-  },
 } as AppDataReducer;
+
+const selector = {
+  getAppBarHeight: ({ appData }) => appData.appBarHeight,
+  getShowAppBar: ({ appData }) => appData.showAppBar,
+  getShowAppBarToggleBtn: ({ appData }) => appData.showAppBarToggleBtn,
+  getIsDarkMode: ({ appData }) => appData.isDarkMode,
+  getIsCompactMode: ({ appData }) => appData.isCompactMode,
+} as AppDataSelector;
 
 const appDataSlice = createSlice({
   name: "appData",
@@ -53,14 +67,13 @@ const appDataSlice = createSlice({
     baseLocation: trmrk.url.getBaseLocation(),
     appBarHeight: null,
     showAppBar: true,
+    showAppBarToggleBtn: true,
     isDarkMode:
       localStorage.getItem(localStorageKeys.appThemeIsDarkMode) ===
       jsonBool.true,
     isCompactMode:
       localStorage.getItem(localStorageKeys.appIsCompactMode) !==
       jsonBool.false,
-    hasFilesRootLocation: false,
-    hasNotesRootLocation: false,
   } as AppData,
   reducers: {
     ...reducer,
@@ -70,12 +83,18 @@ const appDataSlice = createSlice({
 export const {
   setAppBarHeight,
   setShowAppBar,
+  setShowAppBarToggleBtn,
   setIsDarkMode,
   setIsCompactMode,
-  setHasFilesRootLocation,
-  setHasNotesRootLocation,
-  setUseIndexedDbForStorage,
 } = appDataSlice.actions;
+
+export const {
+  getAppBarHeight,
+  getIsCompactMode,
+  getIsDarkMode,
+  getShowAppBar,
+  getShowAppBarToggleBtn,
+} = selector;
 
 export default appDataSlice.reducer;
 

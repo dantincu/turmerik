@@ -7,9 +7,10 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
 import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
-import { setIsDarkMode } from "../../../store/appDataSlice";
+import { setIsDarkMode, getIsDarkMode } from "../../../store/appDataSlice";
 import { AppData } from "../../../services/appData";
 
+import { getShowAppBar, setShowAppBar } from "../../../store/appDataSlice";
 import { getAppTheme, currentAppTheme } from "../../../services/app-theme/app-theme";
 import { localStorageKeys, jsonBool } from "../../../services/utils";
 
@@ -18,11 +19,11 @@ const ColorThemeLabel = styled.span`
 `;
 
 export default function ToggleDarkModeBtn() {
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+  const isDarkMode = useSelector(getIsDarkMode);
   const dispatch = useDispatch();
   
   const handleClick = () => {
-    const switchToDarkMode = !appData.isDarkMode;
+    const switchToDarkMode = !isDarkMode;
 
     currentAppTheme.value = getAppTheme({
       isDarkMode: switchToDarkMode
@@ -35,7 +36,7 @@ export default function ToggleDarkModeBtn() {
 
   return (
     <MenuItem onClick={handleClick}>
-      <ColorThemeLabel>{ appData.isDarkMode ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
-      { appData.isDarkMode ? <DarkModeIcon /> :  <LightModeIcon /> }
+      <ColorThemeLabel>{ isDarkMode ? "Dark Mode" : "Light Mode" }</ColorThemeLabel>
+      { isDarkMode ? <DarkModeIcon /> :  <LightModeIcon /> }
     </MenuItem>);
 }

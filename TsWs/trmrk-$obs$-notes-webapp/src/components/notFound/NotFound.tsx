@@ -1,9 +1,9 @@
 import React from "react";
 
-import Error from "../error/Error";
+import ErrorEl from "../error/ErrorEl";
 
 const NotFound = () => {
-  return (<Error errCaption="404" errMessage="Page not found"></Error>);
+  return (<ErrorEl errCaption="404" errMessage="Page not found"></ErrorEl>);
 }
 
 export default NotFound;

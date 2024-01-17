@@ -10,6 +10,12 @@ declare type DispatcherType<TPropVal> = (
   }
 ) => void;
 
+declare type SelectorType<TPropVal> = ({
+  filesHcyHistory,
+}: {
+  filesHcyHistory: FilesHcyHistory;
+}) => TPropVal;
+
 export interface FilesHcyHistoryReducer {
   filesHcyHistoryGoBack: DispatcherType<void>;
   filesHcyHistoryGoForward: DispatcherType<void>;
@@ -20,6 +26,12 @@ export interface FilesHcyHistoryReducer {
     currentIdx: number | null | undefined;
   }>;
   filesHcyHistoryReplace: DispatcherType<FilesHcyHistory>;
+}
+
+export interface FilesHcyHistorySelector {
+  getItems: SelectorType<FilesHcyHistoryItem[]>;
+  getCurrentIdx: SelectorType<number | null | undefined>;
+  getCurrentItem: SelectorType<FilesHcyHistoryItem | null | undefined>;
 }
 
 const reducer = {
@@ -80,6 +92,12 @@ const reducer = {
   },
 } as FilesHcyHistoryReducer;
 
+const selector = {
+  getItems: ({ filesHcyHistory }) => filesHcyHistory.items,
+  getCurrentIdx: ({ filesHcyHistory }) => filesHcyHistory.currentIdx,
+  getCurrentItem: ({ filesHcyHistory }) => filesHcyHistory.currentItem,
+} as FilesHcyHistorySelector;
+
 const filesHcyHistorySlice = createSlice({
   name: "filesHcyHistory",
   initialState: {
@@ -99,6 +117,8 @@ export const {
   filesHcyHistoryInsert,
   filesHcyHistoryReplace,
 } = filesHcyHistorySlice.actions;
+
+export const { getCurrentIdx, getCurrentItem, getItems } = selector;
 
 export default filesHcyHistorySlice.reducer;
 

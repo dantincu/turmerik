@@ -10,12 +10,26 @@ declare type DispatcherType<TPropVal> = (
   }
 ) => void;
 
+declare type SelectorType<TPropVal> = ({
+  appTabs,
+}: {
+  appTabs: AppTabsData;
+}) => TPropVal;
+
 export interface AppTabsReducer {
   setCurrentTab: DispatcherType<string>;
   closeTab: DispatcherType<string>;
   addTab: DispatcherType<AppTab>;
   setTabsOrder: DispatcherType<string[]>;
 }
+
+export interface AppTabsSelector {
+  getOpenTabs: SelectorType<AppTab[]>;
+}
+
+const selector = {
+  getOpenTabs: ({ appTabs }) => appTabs.openTabs,
+} as AppTabsSelector;
 
 const reducer = {
   setCurrentTab: (state, action) => {
@@ -71,6 +85,8 @@ const appTabsSlice = createSlice({
 
 export const { addTab, closeTab, setCurrentTab, setTabsOrder } =
   appTabsSlice.actions;
+
+export const { getOpenTabs } = selector;
 
 export default appTabsSlice.reducer;
 

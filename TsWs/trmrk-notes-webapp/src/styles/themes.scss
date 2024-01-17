@@ -1,6 +1,8 @@
 @import "./_mixins";
 
 .trmrk-theme-dark {
+  color: white;
+
   .trmrk-scrollable::-webkit-scrollbar-thumb {
     background-color: #303030;
   }
@@ -44,8 +46,8 @@
   }
 }
 
-.trmrk-app.trmrk-theme-dark {
-  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
+.trmrk-theme-dark {
+  .trmrk-app-bar-toggle-icon {
     background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
     background-color: #121212;
   }
@@ -100,8 +102,8 @@
   }
 }
 
-.trmrk-app.trmrk-theme-light {
-  .trmrk-app-bar-toggle-hide-icon, .trmrk-app-bar-toggle-show-icon {
+.trmrk-theme-light {
+  .trmrk-app-bar-toggle-icon, .trmrk-app-bar-toggle-icon:hover {
     color: #FFF;
     background-color: #1976d2;
   }

@@ -1,15 +1,17 @@
+import { TrmrkNotesStorageOption, TrmrkStorageOption } from "./appConfig";
+
+export interface TrmrkNotesStorageOptionData {
+  askUser: boolean;
+  option: TrmrkNotesStorageOption | null;
+}
+
 export interface AppData {
   baseLocation: string;
   appBarHeight: number | null;
   showAppBar: boolean;
+  showAppBarToggleBtn: boolean;
   isDarkMode: boolean;
   isCompactMode: boolean;
-  useIndexedDbForStorage: boolean;
-  useFileSystemApiForStorage: boolean;
-  useMsGraphForStorage: boolean;
-  hasChosenStorageOption: boolean;
-  hasFilesRootLocation: boolean;
-  hasNotesRootLocation: boolean;
 }
 
 export enum AppPage {

@@ -13,7 +13,7 @@ import { appModeCssClasses } from "../../services/utils";
 import { currentAppTheme } from "../../services/app-theme/app-theme";
 import { AppData } from "../../services/appData";
 import { setHasFilesRootLocation } from "../../store/appDataSlice";
-import Error from "../../components/error/Error";
+import ErrorEl from "../../components/error/ErrorEl";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import { fsApiSvc } from "../../services/fsApi/fsApiSvc";
 import { supportedFeatures } from "../../services/htmlDoc/htmlFeatures";
@@ -60,7 +60,7 @@ export default function AppSetupPage() {
   }, []);
 
   return (<Container className="trmrk-app-setup-page" maxWidth="xl">
-    { error ? <Error errCaption={"No location chosen for notes"}
+    { error ? <ErrorEl errCaption={"No location chosen for notes"}
       errMessage={error?.message ?? error?.cause} /> : <h1>Welcome to Turmerik Notes</h1> }
     
     { appData.hasNotesRootLocation ? null :

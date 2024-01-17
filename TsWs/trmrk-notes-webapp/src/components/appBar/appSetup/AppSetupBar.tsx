@@ -1,25 +1,25 @@
 import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
-import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 
 import AppBar from "@mui/material/AppBar";
 
-import { AppData, AppBarData } from "../../../services/appData";
 import { currentAppTheme } from "../../../services/app-theme/app-theme";
-import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
+import { getAppSettingsMenuIsOpen, setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
 
 import ToggleDarkModeBtn from "../topBar/ToggleDarkModeBtn";
 
 export default function AppSetupBar({
-  setAppHeaderEl
+    setAppHeaderEl
   }: {
-    setAppHeaderEl: (appHeaderElem: HTMLDivElement) => void;
+    setAppHeaderEl: (appHeaderElem: HTMLDivElement | null) => void;
   }) {
-  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
+  const appSettingsMenuIsOpen = useSelector(getAppSettingsMenuIsOpen);
   const dispatch = useDispatch();
 
   const menuAnchorEl = useRef<HTMLButtonElement | null>(null);
@@ -35,14 +35,21 @@ export default function AppSetupBar({
 
   useEffect(() => {
     setAppHeaderEl(appHeaderEl.current!);
-  }, [] );
 
-  return (<AppBar sx={{ position: "relative", height: "100%" }} className={["trmrk-app-setup-header" ].join(" ")} ref={appHeaderEl}>
-      <Button onClick={handleSettingsBtnClick} className="trmrk-main-icon-btn" ref={menuAnchorEl}>
+    return () => {
+      setAppHeaderEl(null);
+    }
+  }, [ appHeaderEl ] );
+
+  return (<AppBar
+    sx={{ position: "relative", height: "100%" }}
+    className={["trmrk-app-setup-header" ].join(" ")}
+    ref={appHeaderEl}>
+      <IconButton onClick={handleSettingsBtnClick} className="trmrk-main-icon-btn" ref={menuAnchorEl}>
         <MenuIcon />
-      </Button>
+      </IconButton>
       <Menu className={["trmrk-app-theme-menu", currentAppTheme.value.cssClassName].join(" ")}
-        open={appBar.appSettingsMenuOpts.isOpen}
+        open={appSettingsMenuIsOpen}
         onClose={handleAppThemeMenuClose}
         anchorEl={menuAnchorEl.current}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}

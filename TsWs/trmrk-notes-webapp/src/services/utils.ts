@@ -15,6 +15,7 @@ export const getJsonBool = (value: boolean) =>
 export const queryKeys = Object.freeze({});
 
 export const localStorageKeys = Object.freeze({
+  storageOption: "storageOption",
   appThemeIsDarkMode: "appThemeIsDarkMode",
   appIsCompactMode: "appIsCompactMode",
   pgContnrLeftPnlDfWidth: "pgContnrLeftPnlDfWidth",
@@ -52,8 +53,8 @@ export const appModeCssClasses = {
   fullMode: "trmrk-mode-full",
 };
 
-export const getAppModeCssClassName = (appData: AppData) => {
-  const appModeClassName = appData.isCompactMode
+export const getAppModeCssClassName = (isCompactMode: boolean) => {
+  const appModeClassName = isCompactMode
     ? appModeCssClasses.compactMode
     : appModeCssClasses.fullMode;
 

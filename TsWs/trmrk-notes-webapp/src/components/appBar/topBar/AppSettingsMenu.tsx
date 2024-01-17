@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 
 import AppearenceMenu from "./AppearenceMenu";
 import { AppBarData, AppData } from "../../../services/appData";
-import { setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";
+import { getAppSettingsMenuIsOpen, setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";
 import { currentAppTheme } from "../../../services/app-theme/app-theme";
 
 export default function AppSettingsMenu({
@@ -17,8 +17,7 @@ export default function AppSettingsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+  const appSettingsMenuIsOpen = useSelector(getAppSettingsMenuIsOpen);
   const dispatch = useDispatch();
 
   const [ appearenceMenuIconBtnEl, setAppearenceMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
@@ -34,7 +33,7 @@ export default function AppSettingsMenu({
 
   return (<>
     <Menu className={["trmrk-app-settings-menu", currentAppTheme.value.cssClassName].join(" ")}
-      open={appBar.appSettingsMenuOpts.isOpen}
+      open={appSettingsMenuIsOpen}
       onClose={handleSettingsMenuClose}
       anchorEl={menuAnchorEl}>
       <MenuList dense>

@@ -12,7 +12,7 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import { AppBarData } from "../../services/appData";
-import { setAppOptionsMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
+import { getShowTabsNavArrows, setAppOptionsMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
 import { routes } from "../../services/routes";
 import { isScreenPortraitMode } from "../../services/htmlDoc/deviceOrientation";
 import { deviceConstants } from "../../services/htmlDoc/deviceConstants";
@@ -27,9 +27,9 @@ import AppOptionsMenu from "./topBar/AppOptionsMenu";
 export default function TrmrkAppBar({
     setAppHeaderEl,
   }: {
-    setAppHeaderEl: (appHeaderElem: HTMLDivElement) => void;
+    setAppHeaderEl: (appHeaderElem: HTMLDivElement | null) => void;
   }) {
-  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
+  const showTabsNavArrows = useSelector(getShowTabsNavArrows);
   const dispatch = useDispatch();
   const appHeaderEl = useRef<HTMLDivElement>(null);
 
@@ -77,19 +77,20 @@ export default function TrmrkAppBar({
 
     return () => {
       screen.orientation.removeEventListener("change", onScreenOrientationChanged);
+      setAppHeaderEl(null);
     }
-  }, []);
+  }, [ appHeaderEl ]);
 
   return (<AppBar sx={{ position: "relative", height: "100%" }} className={["trmrk-app-header" ].join(" ")} ref={appHeaderEl}>
       <Box className="trmrk-top-bar" sx={{ marginRight: "2.5em" }}>
-        { appBar.showTabsNavArrows ? <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-nav-back-btn"
+        { showTabsNavArrows ? <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-nav-back-btn"
             onClick={handleAppTabsNavBackClick} disabled={appTabsNavGoBackBtnDisabled}>
             <ArrowLeftIcon />
         </IconButton> : <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-settings-btn"
             onClick={handleSettingsClick}>
             <MenuIcon />
         </IconButton> }
-        { appBar.showTabsNavArrows ? <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-nav-forward-btn"
+        { showTabsNavArrows ? <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-nav-forward-btn"
             onClick={handleAppTabsNavForwardClick} disabled={appTabsNavGoForwardBtnDisabled}>
             <ArrowRightIcon />
         </IconButton> : <IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-home-btn"

@@ -14,6 +14,13 @@ export interface ValueOrError<TValue, TError = Error | any> {
   error?: TError | undefined;
 }
 
+export const isNotNullObj = (arg: any) => {
+  let retVal = "object" === typeof arg;
+  retVal = retVal && arg !== null;
+
+  return retVal;
+};
+
 export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   let retVal = "string" === typeof arg;
   retVal = retVal && arg !== "";
@@ -135,6 +142,25 @@ export const containsAnyOfMx = (
   return retVal;
 };
 
+export const forEachProp = <TObj extends Object>(
+  obj: TObj,
+  callback: (
+    propVal: any,
+    propName: string,
+    objMap: { [key: string]: any },
+    objPropNames: string[],
+    obj: TObj
+  ) => void
+) => {
+  const objMap = obj as { [key: string]: any };
+  const objPropNames = Object.getOwnPropertyNames(obj);
+
+  for (let propName of objPropNames) {
+    const propVal = objMap[propName];
+    callback(propVal, propName, objMap, objPropNames, obj);
+  }
+};
+
 export const merge = <TTrgObj extends Object>(
   trgObj: TTrgObj,
   srcObjsArr: Object[],
@@ -221,3 +247,8 @@ export const findAsync = async <TIn>(
 
   return retVal;
 };
+
+export const withVal = <TIn, TOut>(
+  inVal: TIn,
+  convertor: (input: TIn) => TOut
+) => convertor(inVal);

@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import trmrk from "trmrk";
 import { DriveItem, FileType, OfficeFileType } from "trmrk/src/drive-item"
 
-import { IDriveExplorerApi } from "trmrk-browser/src/DriveExplorerApi/core";
+import { IDriveExplorerApi } from "trmrk/src/DriveExplorerApi/core";
 
 import FilesHcyNodesList from "./FilesHcyNodesList";
 import LoadingDotPulse from "../loading/DotPulse";

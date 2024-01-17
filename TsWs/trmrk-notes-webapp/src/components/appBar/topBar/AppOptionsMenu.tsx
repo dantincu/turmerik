@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
 
 import { AppBarData, AppData } from "../../../services/appData";
-import { setAppOptionsMenuIsOpen, setShowTabsNavArrows } from "../../../store/appBarDataSlice";
+import { getAppOptionsMenuIsOpen, setAppOptionsMenuIsOpen, getShowTabsNavArrows, setShowTabsNavArrows } from "../../../store/appBarDataSlice";
 import { currentAppTheme } from "../../../services/app-theme/app-theme";
 
 export default function AppOptionsMenu({
@@ -16,8 +16,8 @@ export default function AppOptionsMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+  const appOptionsMenuIsOpen = useSelector(getAppOptionsMenuIsOpen);
+  const showTabsNavArrows = useSelector(getShowTabsNavArrows);
   const dispatch = useDispatch();
 
   const handleAppOptionsMenuClose = () => {
@@ -29,7 +29,7 @@ export default function AppOptionsMenu({
   }
 
   const handleToggleShowTabsNavigationArrowsClick = () => {
-    dispatch(setShowTabsNavArrows(!appBar.showTabsNavArrows));
+    dispatch(setShowTabsNavArrows(!showTabsNavArrows));
     dispatch(setAppOptionsMenuIsOpen(false));
   }
 
@@ -38,7 +38,7 @@ export default function AppOptionsMenu({
   }
 
   return (<Menu className={["trmrk-app-theme-menu", currentAppTheme.value.cssClassName].join(" ")}
-        open={appBar.appOptionsMenuOpts.isOpen}
+        open={appOptionsMenuIsOpen}
         onClose={handleAppOptionsMenuClose}
         anchorEl={menuAnchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -47,7 +47,7 @@ export default function AppOptionsMenu({
         <MenuItem onClick={handleRefreshClick}>Refresh <IconButton sx={{ float: "right" }}>
           <RefreshIcon /></IconButton></MenuItem>
         <MenuItem onClick={handleToggleShowTabsNavigationArrowsClick}>
-          { appBar.showTabsNavArrows ? "Hide" : "Show" } Tabs Navigation Arrows</MenuItem>
+          { showTabsNavArrows ? "Hide" : "Show" } Tabs Navigation Arrows</MenuItem>
         <MenuItem onClick={handleViewOpenTabsClick}>View Open Tabs</MenuItem>
       </MenuList>
     </Menu>);

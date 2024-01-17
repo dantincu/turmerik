@@ -8,8 +8,7 @@ import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
 import IconButton from "@mui/material/IconButton";
 
-import { AppBarData, AppData } from "../../../services/appData";
-import { setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";
+import { getAppearenceMenuIsOpen, setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";
 import { currentAppTheme } from "../../../services/app-theme/app-theme";
 
 export default function AppearenceMenu({
@@ -17,8 +16,7 @@ export default function AppearenceMenu({
   }: {
     menuAnchorEl: HTMLElement
   }) {
-  const appBar = useSelector((state: { appBar: AppBarData }) => state.appBar);
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+  const appearenceMenuIsOpen = useSelector(getAppearenceMenuIsOpen);
   const dispatch = useDispatch();
 
   const handleAppThemeMenuClose = () => {
@@ -30,7 +28,7 @@ export default function AppearenceMenu({
   }
 
   return (<Menu className={["trmrk-app-theme-menu", currentAppTheme.value.cssClassName].join(" ")}
-        open={appBar.appSettingsMenuOpts.appearenceMenuOpts.isOpen}
+        open={appearenceMenuIsOpen}
         onClose={handleAppThemeMenuClose}
         anchorEl={menuAnchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}

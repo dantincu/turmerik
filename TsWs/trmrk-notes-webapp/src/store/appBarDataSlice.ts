@@ -14,6 +14,12 @@ declare type DispatcherType<TPropVal> = (
   }
 ) => void;
 
+declare type SelectorType<TPropVal> = ({
+  appBar,
+}: {
+  appBar: AppBarData;
+}) => TPropVal;
+
 export interface AppBarDataReducer {
   setShowTabsNavArrows: DispatcherType<boolean>;
   setAppSettingsMenuOpts: DispatcherType<AppSettingsMenuOpts>;
@@ -21,6 +27,15 @@ export interface AppBarDataReducer {
   setAppSettingsMenuIsOpen: DispatcherType<boolean>;
   setAppearenceMenuIsOpen: DispatcherType<boolean>;
   setAppOptionsMenuIsOpen: DispatcherType<boolean>;
+}
+
+export interface AppBarDataSelector {
+  getShowTabsNavArrows: SelectorType<boolean>;
+  getAppSettingsMenuOpts: SelectorType<AppSettingsMenuOpts>;
+  getAppOptionsMenuOpts: SelectorType<AppOptionsMenuOpts>;
+  getAppSettingsMenuIsOpen: SelectorType<boolean>;
+  getAppearenceMenuIsOpen: SelectorType<boolean>;
+  getAppOptionsMenuIsOpen: SelectorType<boolean>;
 }
 
 const reducer = {
@@ -44,6 +59,16 @@ const reducer = {
     state.appOptionsMenuOpts.isOpen = action.payload;
   },
 } as AppBarDataReducer;
+
+const selector = {
+  getShowTabsNavArrows: ({ appBar }) => appBar.showTabsNavArrows,
+  getAppSettingsMenuOpts: ({ appBar }) => appBar.appSettingsMenuOpts,
+  getAppOptionsMenuOpts: ({ appBar }) => appBar.appOptionsMenuOpts,
+  getAppSettingsMenuIsOpen: ({ appBar }) => appBar.appSettingsMenuOpts.isOpen,
+  getAppearenceMenuIsOpen: ({ appBar }) =>
+    appBar.appSettingsMenuOpts.appearenceMenuOpts.isOpen,
+  getAppOptionsMenuIsOpen: ({ appBar }) => appBar.appOptionsMenuOpts.isOpen,
+} as AppBarDataSelector;
 
 const appBarDataSlice = createSlice({
   name: "appBar",
@@ -72,6 +97,15 @@ export const {
   setAppSettingsMenuOpts,
   setAppearenceMenuIsOpen,
 } = appBarDataSlice.actions;
+
+export const {
+  getShowTabsNavArrows,
+  getAppOptionsMenuIsOpen,
+  getAppOptionsMenuOpts,
+  getAppSettingsMenuIsOpen,
+  getAppSettingsMenuOpts,
+  getAppearenceMenuIsOpen,
+} = selector;
 
 export default appBarDataSlice.reducer;
 

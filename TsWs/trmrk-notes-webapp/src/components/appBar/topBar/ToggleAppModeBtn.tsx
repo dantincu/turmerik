@@ -7,8 +7,7 @@ import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 
 import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
-import { setIsCompactMode } from "../../../store/appDataSlice";
-import { AppData } from "../../../services/appData";
+import { getIsCompactMode, setIsCompactMode } from "../../../store/appDataSlice";
 
 import { localStorageKeys, jsonBool, getAppModeCssClassName, appModeCssClass } from "../../../services/utils";
 
@@ -17,20 +16,20 @@ const ColorThemeLabel = styled.span`
 `;
 
 export default function ToggleAppModeBtn() {
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+  const isCompactMode = useSelector(getIsCompactMode);
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    const switchToCompactMode = !appData.isCompactMode;
+    const switchToCompactMode = !isCompactMode;
     dispatch(setIsCompactMode(switchToCompactMode));
-    appModeCssClass.value = getAppModeCssClassName(appData);
+    appModeCssClass.value = getAppModeCssClassName(isCompactMode);
     dispatch(setAppSettingsMenuIsOpen(false));
     localStorage.setItem(localStorageKeys.appIsCompactMode, switchToCompactMode ? jsonBool.true : jsonBool.false);
   };
 
   return (
     <MenuItem onClick={handleClick}>
-      <ColorThemeLabel>{ appData.isCompactMode ? "Compact Mode" : "Full Mode" }</ColorThemeLabel>
-      { appData.isCompactMode ? <ToggleOnIcon /> : <ToggleOffIcon /> }
+      <ColorThemeLabel>{ isCompactMode ? "Compact Mode" : "Full Mode" }</ColorThemeLabel>
+      { isCompactMode ? <ToggleOnIcon /> : <ToggleOffIcon /> }
     </MenuItem>);
 }

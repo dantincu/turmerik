@@ -6,11 +6,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 
 import { appRoutes } from "../../services/routes";
-import { AppData } from "../../services/appData";
 
 import HomePage from "../../pages/home/HomePage";
 import FilesHcyPage from "../../pages/filesHcy/FilesHcyPage";
 import NotFoundPage from "../../pages/notFound/NotFoundPage";
+import { getIsCompactMode } from "../../store/appDataSlice";
 
 export default function MainContentContainer({
     setAppBodyEl,
@@ -19,7 +19,7 @@ export default function MainContentContainer({
     setAppBodyEl: (appBodyElem: HTMLDivElement) => void,
     onUserScroll: () => void
   }) {
-  const appData = useSelector((state: { appData: AppData }) => state.appData);
+  const isCompactMode = useSelector(getIsCompactMode);
   const appBodyEl = useRef<HTMLDivElement>(null);
 
   const onScroll = () => onUserScroll();
@@ -35,7 +35,7 @@ export default function MainContentContainer({
   }, []);
 
   return (<Box className="trmrk-app-main trmrk-scrollable" ref={appBodyEl} sx={{
-        width: "100%", overflowY: appData.isCompactMode ? "scroll" : "hidden", position: "absolute",
+        width: "100%", overflowY: isCompactMode ? "scroll" : "hidden", position: "absolute",
         top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
       <Routes>
         <Route path="" element={<Navigate to="/home" />} />

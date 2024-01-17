@@ -1,6 +1,4 @@
-import trmrk from "../index";
-
-import { DriveItem, FileType, OfficeFileType } from "../drive-item";
+import { DriveItem, FileType, OfficeFileType } from "trmrk/src/drive-item";
 
 import {
   RootedPathResolvedArgs,
@@ -8,7 +6,7 @@ import {
   DriveItemNodeCore,
   DriveExplorerApiBase,
   IDriveExplorerApi,
-} from "./core";
+} from "trmrk/src/DriveExplorerApi/core";
 
 interface IDriveItemNode extends IDriveItemNodeCore<IDriveItemNode> {}
 
