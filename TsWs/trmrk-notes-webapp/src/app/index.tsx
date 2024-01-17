@@ -30,7 +30,6 @@ export const createApp = () => {
         arr: (TrmrkNotesStorageOption | null)[]
       ) => boolean) | null | undefined = null;
 
-      console.log("supportedFeatures.fileSystemApi", supportedFeatures.fileSystemApi);
     if (!supportedFeatures.fileSystemApi) {
       filter = ((obj) => !!obj && obj.storage !== TrmrkStorageOption.FileSystemApi);
     }
