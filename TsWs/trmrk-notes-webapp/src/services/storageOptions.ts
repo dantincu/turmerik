@@ -67,11 +67,19 @@ export const storageOptionsMap = new TrmrkStorageOptionMap();
 
 export const normalizeStorageOptionsArr = (
   jsonArr: (Object | string | null | undefined)[],
-  throwIfInvalid: boolean = true
+  throwIfInvalid: boolean = true,
+  filter?:
+    | ((
+        obj: TrmrkNotesStorageOption | null,
+        idx: number,
+        arr: (TrmrkNotesStorageOption | null)[]
+      ) => boolean)
+    | null
+    | undefined
 ) =>
   jsonArr
     .map((obj) => normalizeStorageOption(obj, throwIfInvalid))
-    .filter((obj) => obj) as TrmrkNotesStorageOption[];
+    .filter(filter ?? ((obj) => obj)) as TrmrkNotesStorageOption[];
 
 export const normalizeStorageOption = (
   obj: Object | string | null | undefined,
