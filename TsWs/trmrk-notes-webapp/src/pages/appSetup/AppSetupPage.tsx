@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 
+import styled from "@emotion/styled";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -16,6 +17,7 @@ import trmrk from "trmrk";
 
 import { currentAppTheme } from "../../services/app-theme/app-theme";
 import ErrorEl from "../../components/error/ErrorEl";
+import FilesHcy from "../../components/filesHcy/FilesHcy";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import { driveExplorerSvc } from "../../services/driveExplorer/DriveExplorerSvc";
 import { appCfg, TrmrkStorageOption } from "../../services/appConfig";
@@ -47,6 +49,9 @@ export default function AppSetupPage({
   const [ error, setError ] = useState<Error | any | null | undefined>(null);
   const [ storageOptionVal, setStorageOptionVal ] = useState(storageOption);
 
+  const [ debugJson, setDebugJson ] = useState<any | null>(null);
+  const [ debugJsonErr, setDebugJsonErr ] = useState<Error | any | null>(null);
+
   // decides whether the step number is 3 or less
   const [ chooseNoteBookRootLocation, setChooseNoteBookRootLocation ] = useState<boolean>(false);
 
@@ -77,6 +82,19 @@ export default function AppSetupPage({
     setStorageOptionVal(chosenOption);
   }
 
+  const setJsonData = async () => {
+    try {
+      const rootFolder = await driveExplorerSvc.svc!.GetFolder({
+        path: ""
+      });
+
+      setDebugJson(rootFolder);
+    }
+    catch (err) {
+      setDebugJsonErr((err as Error)?.message ?? err);
+    }
+  }
+
   // Called when the user decides to pick a location where their notes will be stored (step 2)
   const onPickFilesRootLocationClick = () => {
     try {
@@ -87,6 +105,7 @@ export default function AppSetupPage({
             startIn: "documents"
           }) as Promise<FileSystemDirectoryHandle>).then(handle => {
             driveExplorerSvc.svc = new FsDriveExplorerApi(handle);
+            setJsonData();
             setChooseNoteBookRootLocation(true);
             dispatch(setShowAppBar(true));
             dispatch(setShowAppBarToggleBtn(true));
@@ -126,7 +145,7 @@ export default function AppSetupPage({
         bodyEl!.removeEventListener("scroll", onScroll);
       };
     }
-  }, [ appBodyEl.current, lastBodyScrollTop, chooseNoteBookRootLocation ]);
+  }, [ appBodyEl.current, lastBodyScrollTop, chooseNoteBookRootLocation, debugJsonErr, debugJson ]);
 
   const ContainerEl = ({
     children,
@@ -144,9 +163,14 @@ export default function AppSetupPage({
     </Typography>;
 
   if (chooseNoteBookRootLocation) {
+    const json = debugJsonErr ?? debugJson;
+    const PreEl = styled.pre`width: 100%; text-align: left; padding: 0em 1em; ${debugJsonErr ? "color: orangered;" : ""}`;
+
     return (
     <ContainerEl>
-      <Box  sx={{ height: "1000vh" }}></Box>
+      { // <PreEl>{ JSON.stringify(json, null, " ") } </PreEl>
+      }
+      <FilesHcy driveExplorerSvc={driveExplorerSvc.svc!} />
     </ContainerEl>);
   } else {
     return (

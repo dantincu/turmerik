@@ -30,6 +30,6 @@ export default function FilesHcyNodesList({
 
   return (<li key={driveItem.name} className={["trmrk-node", isFolder ? "trmrk-folder" : "trmrk-file",
         className ].join(" ")}>
-
+          {driveItem.name}
       </li>);
 }

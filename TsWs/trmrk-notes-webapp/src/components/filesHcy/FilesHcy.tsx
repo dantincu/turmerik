@@ -45,8 +45,8 @@ export default function FilesHcy({
     className ??= null;
 
     return (<Box className={["trmrk-files-hcy", className].join(" ")}>
-      { folderNode ? error ? <Box className="trmrk-error">
-        { error.message ?? error.cause ?? "Could not load the root folder" }</Box> : <FilesHcyNodesList
-        driveExplorerSvc={driveExplorerSvc} parentFolder={folderNode} isRootFolder={true}></FilesHcyNodesList> : <LoadingDotPulse />}
+      { folderNode ? <FilesHcyNodesList
+        driveExplorerSvc={driveExplorerSvc} parentFolder={folderNode} isRootFolder={true}></FilesHcyNodesList> : error ? <Box className="trmrk-error">
+        { error.message ?? error.cause ?? "Could not load the root folder" }</Box> : <LoadingDotPulse />}
     </Box>);
 }

@@ -7,8 +7,8 @@ export const getDescendants = async (
 ) => {
   const handlesArr: FileSystemHandle[] = [];
 
-  for await (let kvp of (prFolderHandle as any).entries()) {
-    handlesArr.push(kvp.value);
+  for await (let [name, handle] of (prFolderHandle as any).entries()) {
+    handlesArr.push(handle);
   }
 
   const foldersArr: FileSystemDirectoryHandle[] = [];

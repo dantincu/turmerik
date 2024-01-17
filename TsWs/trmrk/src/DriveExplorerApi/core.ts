@@ -27,8 +27,8 @@ export class DriveItemNodeCore<
   private readonly _name: string;
   private readonly _isFolder: boolean;
 
-  private readonly _subFolders?: TDriveItemNode[] | null | undefined;
-  private readonly _folderFiles?: TDriveItemNode[] | null | undefined;
+  private _subFolders?: TDriveItemNode[] | null | undefined;
+  private _folderFiles?: TDriveItemNode[] | null | undefined;
 
   constructor(item: DriveItem) {
     this._item = item;
@@ -53,14 +53,29 @@ export class DriveItemNodeCore<
     return this._subFolders;
   }
 
+  public set subFolders(value: TDriveItemNode[] | null | undefined) {
+    this._subFolders = value;
+  }
+
   public get folderFiles(): TDriveItemNode[] | null | undefined {
     return this._folderFiles;
+  }
+
+  public set folderFiles(value: TDriveItemNode[] | null | undefined) {
+    this._folderFiles = value;
   }
 }
 
 export interface IDriveExplorerApi {
-  GetItem: (pathArgs: RootedPathResolvedArgs) => Promise<DriveItem | null>;
-  GetFolder: (pathArgs: RootedPathResolvedArgs) => Promise<DriveItem | null>;
+  GetItem: (
+    pathArgs: RootedPathResolvedArgs,
+    parentRefreshDepth?: number | null | undefined
+  ) => Promise<DriveItem | null>;
+  GetFolder: (
+    pathArgs: RootedPathResolvedArgs,
+    depth?: number | null | undefined,
+    parentRefreshDepth?: number | null | undefined
+  ) => Promise<DriveItem | null>;
   ItemExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
   FolderExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
   FileExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
@@ -120,22 +135,51 @@ export abstract class DriveExplorerApiBase<
 
   public async GetItem(
     pathArgs: RootedPathResolvedArgs,
-    refreshDepth: number | null = null
+    parentRefreshDepth?: number | null | undefined
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(pathArgs);
-    let retNode = await this.getNode(pathSegs, null, refreshDepth);
+    let retNode = await this.getNode(pathSegs, null, parentRefreshDepth);
 
     return retNode?.item ?? null;
   }
 
   public async GetFolder(
     pathArgs: RootedPathResolvedArgs,
-    refreshDepth: number | null = null
+    depth?: number | null | undefined,
+    parentRefreshDepth?: number | null | undefined
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(pathArgs);
-    let retNode = await this.getNode(pathSegs, true, refreshDepth);
+    let retNode = await this.getNode(pathSegs, true, parentRefreshDepth);
 
-    return retNode?.item ?? null;
+    let subFolders = retNode?.subFolders;
+    depth ??= -1;
+
+    if (depth > 0 && subFolders) {
+      const tempSubFolders = [...subFolders];
+
+      for (let i = 0; i < tempSubFolders.length; i++) {
+        let subFolder = tempSubFolders[i];
+
+        subFolder = (await this.getNode(
+          [...pathSegs, subFolder.name],
+          true,
+          depth - 1
+        ))!;
+
+        if (!subFolder) {
+          throw new Error("One of the sub folders could not be refreshed");
+        } else {
+          tempSubFolders[i] = subFolder;
+        }
+      }
+
+      for (let i = 0; i < subFolders.length; i++) {
+        subFolders[i] = tempSubFolders[i];
+      }
+    }
+
+    const folder = retNode?.item ?? null;
+    return folder;
   }
 
   public async ItemExists(pathArgs: RootedPathResolvedArgs): Promise<boolean> {
@@ -319,7 +363,7 @@ export abstract class DriveExplorerApiBase<
   protected async getNode(
     pathSegs: string[],
     isFolder: boolean | null = null,
-    refreshDepth: number | null = null
+    parentRefreshDepth: number | null = null
   ) {
     let retItem: TDriveItemNode | null = null;
 
@@ -328,7 +372,7 @@ export abstract class DriveExplorerApiBase<
         pathSegs,
         null,
         null,
-        refreshDepth
+        parentRefreshDepth
       );
 
       if (parentFolder) {
@@ -347,6 +391,7 @@ export abstract class DriveExplorerApiBase<
       }
     } else if (isFolder) {
       retItem = this.rootDirNode;
+      await this.assureFolderHasDescendants(retItem);
     }
 
     return retItem ?? null;
@@ -356,12 +401,12 @@ export abstract class DriveExplorerApiBase<
     pathSegs: string[],
     parent: TDriveItemNode | null = null,
     level: number | null = null,
-    refreshDepth: number | null = null
+    parentRefreshDepth: number | null = null
   ): Promise<TDriveItemNode | null> {
     let retParent: TDriveItemNode | null = null;
 
     level ??= -1;
-    refreshDepth ??= -1;
+    parentRefreshDepth ??= -1;
 
     if (!parent) {
       if (pathSegs.length > 1) {
@@ -370,7 +415,7 @@ export abstract class DriveExplorerApiBase<
           pathSegs,
           parent,
           level + 1,
-          refreshDepth
+          parentRefreshDepth
         );
       } else {
         retParent = this.rootDirNode;
@@ -388,7 +433,7 @@ export abstract class DriveExplorerApiBase<
             pathSegs,
             node,
             level + 1,
-            refreshDepth
+            parentRefreshDepth
           );
         }
       } else {
@@ -399,7 +444,7 @@ export abstract class DriveExplorerApiBase<
     if (retParent) {
       await this.assureFolderHasDescendants(
         retParent,
-        level + refreshDepth - pathSegs.length >= 0
+        level + parentRefreshDepth - pathSegs.length >= 0
       );
     }
 
@@ -420,6 +465,9 @@ export abstract class DriveExplorerApiBase<
   ) {
     if (refresh || !folder.subFolders || !folder.folderFiles) {
       await this.fillFolderDescendants(folder);
+
+      folder.item.subFolders = folder.subFolders!.map((node) => node.item);
+      folder.item.folderFiles = folder.folderFiles!.map((node) => node.item);
     }
   }
 
