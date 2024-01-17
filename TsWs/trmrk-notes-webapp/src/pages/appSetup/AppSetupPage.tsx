@@ -15,7 +15,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import trmrk from "trmrk";
 
 import { currentAppTheme } from "../../services/app-theme/app-theme";
-import ErrorEl from "../../components/error/Error";
+import ErrorEl from "../../components/error/ErrorEl";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import { driveExplorerSvc } from "../../services/driveExplorer/DriveExplorerSvc";
 import { appCfg, TrmrkStorageOption } from "../../services/appConfig";
@@ -121,8 +121,6 @@ export default function AppSetupPage({
 
       bodyEl.scrollTop = lastBodyScrollTop.current;
       bodyEl!.addEventListener("scroll", onScroll);
-
-      console.log("bodyEl", bodyEl);
 
       return () => {
         bodyEl!.removeEventListener("scroll", onScroll);

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Error = ({
+const ErrorEl = ({
     errCaption,
     errMessage
   }: {
@@ -13,4 +13,4 @@ const Error = ({
     </div>);
 }
 
-export default Error;
+export default ErrorEl;
