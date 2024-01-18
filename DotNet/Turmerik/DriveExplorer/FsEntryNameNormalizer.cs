@@ -31,7 +31,7 @@ namespace Turmerik.DriveExplorer
                 maxLength);
 
             return new string(
-                charsList.ToArray());
+                charsList.ToArray()).Trim();
         }
 
         private List<char> GetCharsList(

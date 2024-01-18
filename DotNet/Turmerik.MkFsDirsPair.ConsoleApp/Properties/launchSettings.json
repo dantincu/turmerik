@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.MkFsDirsPair.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":nn :o asdfasdf"
+      "commandLineArgs": ":nn :o :url:https://github.com/roshaneforde/rawjs/tree/master"
     }
   }
 }
