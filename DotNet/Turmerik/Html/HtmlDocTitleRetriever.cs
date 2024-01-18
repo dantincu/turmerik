@@ -36,7 +36,7 @@ namespace Turmerik.Html
             var headNode = htmlNode?.ChildNodes.SingleOrDefault(
                 node => node.Name == "head");
 
-            var titleNode = headNode?.ChildNodes.SingleOrDefault(
+            var titleNode = headNode?.ChildNodes.FirstOrDefault(
                 node => node.Name == "title");
 
             string title = titleNode?.InnerText;
