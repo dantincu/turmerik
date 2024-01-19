@@ -6,10 +6,10 @@ import MenuItem from '@mui/material/MenuItem';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 
-import { setAppSettingsMenuIsOpen } from "../../../store/appBarDataSlice";
-import { getIsCompactMode, setIsCompactMode } from "../../../store/appDataSlice";
+import { setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
+import { getIsCompactMode, setIsCompactMode } from "../../store/appDataSlice";
 
-import { localStorageKeys, jsonBool, getAppModeCssClassName, appModeCssClass } from "../../../services/utils";
+import { localStorageKeys, jsonBool, getAppModeCssClassName, appModeCssClass } from "../../services/utils";
 
 const ColorThemeLabel = styled.span`
   padding-right: 1em

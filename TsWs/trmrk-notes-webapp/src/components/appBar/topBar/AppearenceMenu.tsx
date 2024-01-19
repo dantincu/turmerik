@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeftOutlined';
-import ToggleDarkModeBtn from "./ToggleDarkModeBtn";
-import ToggleAppModeBtn from "./ToggleAppModeBtn";
+import ToggleDarkModeBtn from "../ToggleDarkModeBtn";
+import ToggleAppModeBtn from "../ToggleAppModeBtn";
 import IconButton from "@mui/material/IconButton";
 
 import { getAppearenceMenuIsOpen, setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";
@@ -27,14 +27,15 @@ export default function AppearenceMenu({
     dispatch(setAppearenceMenuIsOpen(false));
   }
 
-  return (<Menu className={["trmrk-app-theme-menu", currentAppTheme.value.cssClassName].join(" ")}
+  return (<Menu className={["trmrk-appearence-menu", currentAppTheme.value.cssClassName].join(" ")}
         open={appearenceMenuIsOpen}
         onClose={handleAppThemeMenuClose}
         anchorEl={menuAnchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         anchorPosition={ { top: 0, left: 100 } }>
       <MenuList dense>
-        <IconButton sx={{ float: "left" }} onClick={handleCloseAppThemeMenuClick}><ArrowLeftIcon /></IconButton><ToggleAppModeBtn />
+        <IconButton sx={{ float: "left" }} onClick={handleCloseAppThemeMenuClick}><ArrowLeftIcon /></IconButton>
+        <ToggleAppModeBtn />
         <ToggleDarkModeBtn />
       </MenuList>
     </Menu>);

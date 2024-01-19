@@ -11,6 +11,7 @@ import HomePage from "../../pages/home/HomePage";
 import FilesHcyPage from "../../pages/filesHcy/FilesHcyPage";
 import NotFoundPage from "../../pages/notFound/NotFoundPage";
 import { getIsCompactMode } from "../../store/appDataSlice";
+import { appModeCssClass } from "../../services/utils";
 
 export default function MainContentContainer({
     setAppBodyEl,
@@ -19,7 +20,6 @@ export default function MainContentContainer({
     setAppBodyEl: (appBodyElem: HTMLDivElement) => void,
     onUserScroll: () => void
   }) {
-  const isCompactMode = useSelector(getIsCompactMode);
   const appBodyEl = useRef<HTMLDivElement>(null);
 
   const onScroll = () => onUserScroll();
@@ -34,8 +34,8 @@ export default function MainContentContainer({
     };
   }, []);
 
-  return (<Box className="trmrk-app-main trmrk-scrollable" ref={appBodyEl} sx={{
-        width: "100%", overflowY: isCompactMode ? "scroll" : "hidden", position: "absolute",
+  return (<Box className={[ "trmrk-app-main", appModeCssClass.value ].join("  ")} ref={appBodyEl} sx={{
+        width: "100%", position: "absolute",
         top: "5em", left: "0px", bottom: "0px", right: "0px" }}>
       <Routes>
         <Route path="" element={<Navigate to="/home" />} />

@@ -16,6 +16,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import trmrk from "trmrk";
 
 import { currentAppTheme } from "../../services/app-theme/app-theme";
+import { appModeCssClass } from "../../services/utils";
 import ErrorEl from "../../components/error/ErrorEl";
 import FilesHcy from "../../components/filesHcy/FilesHcy";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
@@ -64,19 +65,9 @@ export default function AppSetupPage({
   // Called when the user confirms the selected storage type (step 1)
   const handleAuthorizeStorage = () => {
     if (storageOptionVal) {
-      if (storageOptionVal.storage === TrmrkStorageOption.IndexedDB) {
-        dispatch(setStorageOption({
-          ...storageOptionVal, noteBookPath: ""
-        }));
-
-        dispatch(setShowAppBar(true));
-        dispatch(setShowAppBarToggleBtn(true));
-        dispatch(setShowSetupPage(false));
-      } else {
-        dispatch(setStorageOption({
-          ...storageOptionVal
-        }));
-      }
+      dispatch(setStorageOption({
+        ...storageOptionVal
+      }));
     } else {
       dispatch(setStorageOption(null));
     }
@@ -154,14 +145,17 @@ export default function AppSetupPage({
 
   const ContainerEl = ({
     children,
-    className
+    className,
+    useCompactMode
   } : {
     children: React.ReactNode,
-    className?: string | null
+    className?: string | null,
+    useCompactMode?: boolean | null | undefined
   }) => <PageContainer
-      className={["trmrk-app-setup-page", currentAppTheme.value.cssClassName, className ?? ""].join(" ")}
+      className={["trmrk-app-setup-page", currentAppTheme.value.cssClassName, appModeCssClass.value, className ?? ""].join(" ")}
       setRefEl={onSetAppBodyEl}
-      leftPanelComponent={() => null}>
+      leftPanelComponent={() => null}
+      useCompactMode={useCompactMode}>
     { children }
   </PageContainer>;
 
@@ -182,7 +176,7 @@ export default function AppSetupPage({
     </ContainerEl>);
   } else {
     return (
-    <ContainerEl className="trmrk-app-page-no-app-bar">
+    <ContainerEl className="trmrk-app-page-no-app-bar" useCompactMode={true}>
       <TitleEl />
       <Box className="trmrk-storage-options-list">
         <Typography className="trmrk-caption">

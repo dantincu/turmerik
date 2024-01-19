@@ -3,7 +3,7 @@ import { TrmrkNotesStorageOption, TrmrkStorageOption } from "./appConfig";
 export interface TrmrkNotesStorageOptionData {
   showSetupPage: boolean;
   storageOption: TrmrkNotesStorageOption | null;
-  noteBookPath: string | null;
+  noteBookPath: string;
 }
 
 export interface AppData {

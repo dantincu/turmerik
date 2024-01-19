@@ -12,7 +12,7 @@ import { TrmrkNotesStorageOptionData } from "../services/appData";
 import { getShowAppBar, getShowAppBarToggleBtn, setShowAppBar, getIsCompactMode, setShowAppBarToggleBtn, getIsDarkMode } from "../store/appDataSlice";
 import { getShowSetupPage, setShowSetupPage, getStorageOption, setStorageOption } from "../store/storageOptionSlice";
 import { getAppTheme, currentAppTheme } from "../services/app-theme/app-theme";
-import { getAppModeCssClassName, appModeCssClass, appModeCssClasses, localStorageKeys } from "../services/utils";
+import { getAppModeCssClassName, appModeCssClass } from "../services/utils";
 import { navSvc } from "../services/navigation/NavigationSvc";
 
 import AppSetupPage from "../pages/appSetup/AppSetupPage";
@@ -136,7 +136,7 @@ export default function App({
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
         <Box className={[ showSetupPage ? "trmrk-app-setup" : "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>
-          <ToggleAppBarButton onUpdateFloatingBarTopOffset={onUpdateFloatingBarTopOffset} />
+          { showAppBarToggleBtn ? <ToggleAppBarButton onUpdateFloatingBarTopOffset={onUpdateFloatingBarTopOffset} /> : null }
 
           { showAppBar ? (<Box className="trmrk-app-bar" sx={appBarWrapperSx}>
               <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />

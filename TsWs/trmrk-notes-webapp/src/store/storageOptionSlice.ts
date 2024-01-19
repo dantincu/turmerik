@@ -26,13 +26,13 @@ declare type SelectorType<TPropVal> = ({
 export interface StorageOptionsReducer {
   setShowSetupPage: DispatcherType<boolean>;
   setStorageOption: DispatcherType<TrmrkNotesStorageOption | null>;
-  setNoteBookPath: DispatcherType<string | null>;
+  setNoteBookPath: DispatcherType<string>;
 }
 
 export interface StorageOptionsSelector {
   getShowSetupPage: SelectorType<boolean>;
   getStorageOption: SelectorType<TrmrkNotesStorageOption | null>;
-  getNoteBookPath: SelectorType<string | null>;
+  getNoteBookPath: SelectorType<string>;
 }
 
 const reducer = {
@@ -57,6 +57,7 @@ const storageOptionSlice = createSlice({
   name: "storageOption",
   initialState: {
     storageOption: null,
+    noteBookPath: "",
   } as TrmrkNotesStorageOptionData,
   reducers: {
     ...reducer,

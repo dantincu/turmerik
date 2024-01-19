@@ -21,11 +21,14 @@ import { navSvc } from "../../services/navigation/NavigationSvc";
 
 const AppTabsBar = lazy(() => import("./appTabs/AppTabsBar"));
 const AppTabsBarPortrait = lazy(() => import("./appTabs/AppTabsBarPortrait"));
-import AppSetupTopBar from "./appSetup/AppSetupTopBar";
 
-import AppPageBar from "./appPage/AppPageBar";
 import AppSettingsMenu from "./topBar/AppSettingsMenu";
-import AppOptionsMenu from "./topBar/AppOptionsMenu";
+
+const AppSetupTopBar = lazy(() => import("./appSetup/AppSetupTopBar"));
+const AppSetupPageBar = lazy(() => import("./appSetup/appSetupPageBar/AppSetupPageBar"));
+const AppSetupOptionsMenu = lazy(() => import("./appSetup/appSetupTopBar/AppSetupOptionsMenu"));
+const AppOptionsMenu = lazy(() => import("./topBar/AppOptionsMenu"));
+const AppPageBar = lazy(() => import("./appPage/AppPageBar"));
 
 export default function TrmrkAppBar({
     setAppHeaderEl,
@@ -105,8 +108,8 @@ export default function TrmrkAppBar({
             onClick={handleHomeClick}>
             <HomeIcon />
         </IconButton> }
-        { showSetupPage ? <AppSetupTopBar />
-          : isPortraitMode ? <Suspense fallback={"..."}>
+        { showSetupPage ? <Suspense fallback={"..."}>
+          <AppSetupTopBar /></Suspense> : isPortraitMode ? <Suspense fallback={"..."}>
               <AppTabsBarPortrait />
             </Suspense> : <Suspense fallback={"..."}>
               <AppTabsBar />
@@ -116,8 +119,12 @@ export default function TrmrkAppBar({
             onClick={handleOptionsClick}>
           <MoreVertIcon /></IconButton>
       </Box>
-      <AppPageBar />
+      { showSetupPage ? <Suspense fallback={"..."}><AppSetupPageBar /></Suspense> :
+        <Suspense fallback={"..."}><AppPageBar /></Suspense> }
+
       <AppSettingsMenu menuAnchorEl={settingsMenuIconBtnEl!} />
-      <AppOptionsMenu menuAnchorEl={optionsMenuIconBtnEl!} />
+
+      { showSetupPage ? <Suspense fallback={"..."}><AppSetupOptionsMenu menuAnchorEl={optionsMenuIconBtnEl!} /></Suspense> : 
+        <Suspense fallback={"..."}><AppOptionsMenu menuAnchorEl={optionsMenuIconBtnEl!} /></Suspense>}
     </AppBar>);
 }

@@ -16,7 +16,8 @@ export default function PageContainer({
     onResized,
     className,
     saveLeftPanelWidthToLocalStorage,
-    setRefEl
+    setRefEl,
+    useCompactMode
   }: {
     children: React.ReactNode,
     leftPanelComponent: () => React.ReactNode,
@@ -24,10 +25,12 @@ export default function PageContainer({
     onResized?: ((width: number) => void) | null | undefined,
     className?: string | null | undefined,
     saveLeftPanelWidthToLocalStorage?: ((mainEl: HTMLDivElement, mainPanelWidth: number) => void) | null | undefined,
-    setRefEl: (el: HTMLDivElement) => void
+    setRefEl: (el: HTMLDivElement) => void,
+    useCompactMode?: boolean | null | undefined
   }) {
   const isCompactMode = useSelector(getIsCompactMode);
   leftPanelWidth ??= localStorage.getItem(localStorageKeys.pgContnrLeftPnlDfWidth) ?? "25%";
+  useCompactMode ??= isCompactMode;
 
   saveLeftPanelWidthToLocalStorage ??= (mainEl: HTMLDivElement, mainPanelWidth: number) =>
   {
@@ -76,13 +79,13 @@ export default function PageContainer({
   }, [ mainElRef.current ] );
 
   return (<Box className={[ "trmrk-app-page", className ?? null ].join(" ")} ref={mainElRef}>
-    { isCompactMode ? null : <PagePanel
+    { useCompactMode ? null : <PagePanel
           leftIsResizable={false} isScrollable={true}
           setPanelEl={onSetLeftPanelEl}
           style={{ width: leftPanelWidth, left: "0px" }}>
         { leftPanelComponent() }
       </PagePanel> }
-    { isCompactMode ? children : (
+    { useCompactMode ? children : (
       <PagePanel
           leftIsResizable={true} isScrollable={true}
           setPanelEl={onSetRightPanelEl}
