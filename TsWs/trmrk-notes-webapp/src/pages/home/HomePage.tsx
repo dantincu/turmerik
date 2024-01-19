@@ -81,7 +81,8 @@ export default function HomePage() {
   return (
     <PageContainer
         className="trmrk-home-page"
-        leftPanelComponent={() => <></>}>
+        leftPanelComponent={() => <></>}
+        setRefEl={el => {}}>
       <Box sx={{ height: "1000vh" }}>asdf</Box>
     </PageContainer>);
 }

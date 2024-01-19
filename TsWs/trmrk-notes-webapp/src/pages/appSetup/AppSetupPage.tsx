@@ -21,9 +21,10 @@ import FilesHcy from "../../components/filesHcy/FilesHcy";
 import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
 import { driveExplorerSvc } from "../../services/driveExplorer/DriveExplorerSvc";
 import { appCfg, TrmrkStorageOption } from "../../services/appConfig";
-import { getOption, setOption, setAskUser } from "../../store/storageOptionSlice";
+import { getStorageOption, setStorageOption, setShowSetupPage } from "../../store/storageOptionSlice";
 import { setShowAppBar, setShowAppBarToggleBtn } from "../../store/appDataSlice";
 import { DriveExplorerApi as FsDriveExplorerApi } from "trmrk-browser/src/DriveExplorerApi/api";
+import PageContainer from "../../components/mainContent/PageContainer";
 
 /* 
 There are 3 steps in the setup page:
@@ -39,11 +40,11 @@ export default function AppSetupPage({
     setAppBodyEl: (appBodyElem: HTMLDivElement) => void,
     onUserScroll: () => void
   }) {
-  const storageOption = useSelector(getOption);
+  const storageOption = useSelector(getStorageOption);
   const dispatch = useDispatch();
   const appConfig = appCfg.value;
 
-  const appBodyEl = useRef<HTMLDivElement>(null);
+  const appBodyEl = useRef<HTMLDivElement | null>(null);
   const lastBodyScrollTop = useRef(0);
 
   const [ error, setError ] = useState<Error | any | null | undefined>(null);
@@ -55,24 +56,29 @@ export default function AppSetupPage({
   // decides whether the step number is 3 or less
   const [ chooseNoteBookRootLocation, setChooseNoteBookRootLocation ] = useState<boolean>(false);
 
+  const onSetAppBodyEl = (el: HTMLDivElement) => {
+    appBodyEl.current = el;
+    setAppBodyEl(el);
+  }
+
   // Called when the user confirms the selected storage type (step 1)
   const handleAuthorizeStorage = () => {
     if (storageOptionVal) {
       if (storageOptionVal.storage === TrmrkStorageOption.IndexedDB) {
-        dispatch(setOption({
+        dispatch(setStorageOption({
           ...storageOptionVal, noteBookPath: ""
         }));
 
         dispatch(setShowAppBar(true));
         dispatch(setShowAppBarToggleBtn(true));
-        dispatch(setAskUser(false));
+        dispatch(setShowSetupPage(false));
       } else {
-        dispatch(setOption({
+        dispatch(setStorageOption({
           ...storageOptionVal
         }));
       }
     } else {
-      dispatch(setOption(null));
+      dispatch(setStorageOption(null));
     }
   }
 
@@ -136,7 +142,6 @@ export default function AppSetupPage({
       setError(new Error("Invalid Configuration File"));
     } else {
       const bodyEl = appBodyEl.current!;
-      setAppBodyEl(bodyEl);
 
       bodyEl.scrollTop = lastBodyScrollTop.current;
       bodyEl!.addEventListener("scroll", onScroll);
@@ -153,9 +158,12 @@ export default function AppSetupPage({
   } : {
     children: React.ReactNode,
     className?: string | null
-  }) => <Box className={["trmrk-app-setup-page", "trmrk-scrollable", currentAppTheme.value.cssClassName, className ?? ""].join(" ")} ref={appBodyEl}>
+  }) => <PageContainer
+      className={["trmrk-app-setup-page", currentAppTheme.value.cssClassName, className ?? ""].join(" ")}
+      setRefEl={onSetAppBodyEl}
+      leftPanelComponent={() => null}>
     { children }
-  </Box>;
+  </PageContainer>;
 
   const TitleEl = () => <Typography variant="h2" component="h1" sx={{
       padding: "0.2em", textAlign: "center" }}>

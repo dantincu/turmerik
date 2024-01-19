@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from 'react-redux'
 
 import Box from "@mui/material/Box";
@@ -15,14 +15,16 @@ export default function PageContainer({
     leftPanelWidth,
     onResized,
     className,
-    saveLeftPanelWidthToLocalStorage
+    saveLeftPanelWidthToLocalStorage,
+    setRefEl
   }: {
     children: React.ReactNode,
     leftPanelComponent: () => React.ReactNode,
     leftPanelWidth?: string | null | undefined,
     onResized?: ((width: number) => void) | null | undefined,
     className?: string | null | undefined,
-    saveLeftPanelWidthToLocalStorage?: ((mainEl: HTMLDivElement, mainPanelWidth: number) => void) | null | undefined;
+    saveLeftPanelWidthToLocalStorage?: ((mainEl: HTMLDivElement, mainPanelWidth: number) => void) | null | undefined,
+    setRefEl: (el: HTMLDivElement) => void
   }) {
   const isCompactMode = useSelector(getIsCompactMode);
   leftPanelWidth ??= localStorage.getItem(localStorageKeys.pgContnrLeftPnlDfWidth) ?? "25%";
@@ -68,6 +70,10 @@ export default function PageContainer({
       onResized(mainPanelWidth);
     }
   }
+
+  useEffect(() => {
+    setRefEl(mainElRef.current!);
+  }, [ mainElRef.current ] );
 
   return (<Box className={[ "trmrk-app-page", className ?? null ].join(" ")} ref={mainElRef}>
     { isCompactMode ? null : <PagePanel

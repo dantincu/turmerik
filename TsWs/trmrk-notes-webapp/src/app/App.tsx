@@ -10,15 +10,15 @@ import Box from "@mui/material/Box";
 import { appCfg, TrmrkNotesStorageOption } from "../services/appConfig";
 import { TrmrkNotesStorageOptionData } from "../services/appData";
 import { getShowAppBar, getShowAppBarToggleBtn, setShowAppBar, getIsCompactMode, setShowAppBarToggleBtn, getIsDarkMode } from "../store/appDataSlice";
-import { getAskUser, setAskUser, getOption, setOption } from "../store/storageOptionSlice";
+import { getShowSetupPage, setShowSetupPage, getStorageOption, setStorageOption } from "../store/storageOptionSlice";
 import { getAppTheme, currentAppTheme } from "../services/app-theme/app-theme";
 import { getAppModeCssClassName, appModeCssClass, appModeCssClasses, localStorageKeys } from "../services/utils";
+import { navSvc } from "../services/navigation/NavigationSvc";
 
 import AppSetupPage from "../pages/appSetup/AppSetupPage";
 import MainContentContainer from "../components/mainContent/MainContainer";
 
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
-import AppSetupBar from "../components/appBar/appSetup/AppSetupBar";
 import ToggleAppBarButton from "../components/appBar/ToggleAppBarButton";
 
 interface FloatingBarTopOffset {
@@ -44,8 +44,8 @@ export default function App({
   const showAppBarToggleBtn = useSelector(getShowAppBarToggleBtn);
   const isCompactMode = useSelector(getIsCompactMode);
   const isDarkMode = useSelector(getIsDarkMode);
-  const storageOption = useSelector(getOption);
-  const askUser = useSelector(getAskUser);
+  const storageOption = useSelector(getStorageOption);
+  const showSetupPage = useSelector(getShowSetupPage);
 
   const dispatch = useDispatch();
   const appConfig = appCfg.value;
@@ -69,6 +69,10 @@ export default function App({
   const onSetAppBodyEl = (appBodyElem: HTMLDivElement) => {
     appBodyEl.current = appBodyElem;
   }
+
+  const beforeNavigate = () => {
+
+  };
 
   const onUpdateFloatingBarTopOffset = () => {
     const appBarEl = appHeaderEl.current;
@@ -108,54 +112,39 @@ export default function App({
   }
 
   useEffect(() => {
+    navSvc.beforeNavigate = beforeNavigate;
+
     if (!storageOption) {
-      if (!askUser) {
+      if (!showSetupPage) {
         if (notesStorageOption) {
-          dispatch(setOption(notesStorageOption));
+          dispatch(setStorageOption(notesStorageOption));
         } else {
           dispatch(setShowAppBar(false));
           dispatch(setShowAppBarToggleBtn(false));
-          dispatch(setAskUser(true));
+          dispatch(setShowSetupPage(true));
         }
       }
     }
     
     onUpdateFloatingBarTopOffset();
-  }, [ appHeaderEl.current, appBodyEl.current, isCompactMode, storageOption, showAppBar, askUser, showAppBarToggleBtn ]);
+  }, [ appHeaderEl.current, appBodyEl.current, isCompactMode, storageOption, showAppBar, showSetupPage, showAppBarToggleBtn ]);
 
   const appBarWrapperSx = {width: "100%", height: "5em", position: "absolute", top: "0px" };
-  const appSetupBarWrapperSx = {...appBarWrapperSx};
 
   return (
     <BrowserRouter basename={appConfig.basePath ?? "/" }>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
+        <Box className={[ showSetupPage ? "trmrk-app-setup" : "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>
+          <ToggleAppBarButton onUpdateFloatingBarTopOffset={onUpdateFloatingBarTopOffset} />
 
-          { (!askUser) ? (
-            <Box className={[ "trmrk-app", appThemeClassName, appModeCssClass.value ].join(" ")}>
-
-              <ToggleAppBarButton onUpdateFloatingBarTopOffset={onUpdateFloatingBarTopOffset} />
-
-              { showAppBar ? (<Box className="trmrk-app-bar" sx={appBarWrapperSx}>
-                  <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
-                </Box>) : null }
-
-              <MainContentContainer onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
-
-            </Box>) : (
-            <Box className={[ "trmrk-app-setup", appThemeClassName, appModeCssClasses.compactMode ].join(" ")}>
-
-              { (showAppBarToggleBtn) ? (
-                <ToggleAppBarButton onUpdateFloatingBarTopOffset={onUpdateFloatingBarTopOffset} />) : null }
-
-              { showAppBar ? (<Box className="trmrk-app-setup-bar" sx={appSetupBarWrapperSx}>
-                  <AppSetupBar setAppHeaderEl={onSetAppHeaderEl} />
-                </Box>) : null }
-
-              <AppSetupPage onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} />
-
-            </Box>)}
-
+          { showAppBar ? (<Box className="trmrk-app-bar" sx={appBarWrapperSx}>
+              <TrmrkAppBar setAppHeaderEl={onSetAppHeaderEl} />
+            </Box>) : null }
+          
+          { showSetupPage ? <AppSetupPage onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} /> : 
+            <MainContentContainer onUserScroll={onUpdateFloatingBarTopOffset} setAppBodyEl={onSetAppBodyEl} /> }
+        </Box>
       </ThemeProvider>
     </BrowserRouter>
   );

@@ -13,12 +13,15 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import { AppBarData } from "../../services/appData";
 import { getShowTabsNavArrows, setAppOptionsMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
+import { getShowSetupPage, setNoteBookPath } from "../../store/storageOptionSlice";
 import { routes } from "../../services/routes";
 import { isScreenPortraitMode } from "../../services/htmlDoc/deviceOrientation";
 import { deviceConstants } from "../../services/htmlDoc/deviceConstants";
+import { navSvc } from "../../services/navigation/NavigationSvc";
 
 const AppTabsBar = lazy(() => import("./appTabs/AppTabsBar"));
 const AppTabsBarPortrait = lazy(() => import("./appTabs/AppTabsBarPortrait"));
+import AppSetupTopBar from "./appSetup/AppSetupTopBar";
 
 import AppPageBar from "./appPage/AppPageBar";
 import AppSettingsMenu from "./topBar/AppSettingsMenu";
@@ -30,6 +33,7 @@ export default function TrmrkAppBar({
     setAppHeaderEl: (appHeaderElem: HTMLDivElement | null) => void;
   }) {
   const showTabsNavArrows = useSelector(getShowTabsNavArrows);
+  const showSetupPage = useSelector(getShowSetupPage);
   const dispatch = useDispatch();
   const appHeaderEl = useRef<HTMLDivElement>(null);
 
@@ -53,7 +57,11 @@ export default function TrmrkAppBar({
   }
 
   const handleHomeClick = (event: React.MouseEvent<HTMLElement>) => {
-      navigate(routes.home);
+    if (showSetupPage) {
+      dispatch(setNoteBookPath(""));
+    } else {
+      navSvc.navigate(() => navigate(routes.home));
+    }
   }
 
   const handleOptionsClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -97,11 +105,13 @@ export default function TrmrkAppBar({
             onClick={handleHomeClick}>
             <HomeIcon />
         </IconButton> }
-        { isPortraitMode ? <Suspense fallback={"..."}>
-            <AppTabsBarPortrait />
-          </Suspense> : <Suspense fallback={"..."}>
-            <AppTabsBar />
-          </Suspense> }
+        { showSetupPage ? <AppSetupTopBar />
+          : isPortraitMode ? <Suspense fallback={"..."}>
+              <AppTabsBarPortrait />
+            </Suspense> : <Suspense fallback={"..."}>
+              <AppTabsBar />
+            </Suspense>
+        }
         <IconButton sx={{ float: "right" }} className="trmrk-icon-btn-main"
             onClick={handleOptionsClick}>
           <MoreVertIcon /></IconButton>

@@ -24,42 +24,49 @@ declare type SelectorType<TPropVal> = ({
 }) => TPropVal;
 
 export interface StorageOptionsReducer {
-  setAskUser: DispatcherType<boolean>;
-  setOption: DispatcherType<TrmrkNotesStorageOption | null>;
+  setShowSetupPage: DispatcherType<boolean>;
+  setStorageOption: DispatcherType<TrmrkNotesStorageOption | null>;
+  setNoteBookPath: DispatcherType<string | null>;
 }
 
 export interface StorageOptionsSelector {
-  getAskUser: SelectorType<boolean>;
-  getOption: SelectorType<TrmrkNotesStorageOption | null>;
+  getShowSetupPage: SelectorType<boolean>;
+  getStorageOption: SelectorType<TrmrkNotesStorageOption | null>;
+  getNoteBookPath: SelectorType<string | null>;
 }
 
 const reducer = {
-  setAskUser: (state, action) => {
-    state.askUser = action.payload;
+  setShowSetupPage: (state, action) => {
+    state.showSetupPage = action.payload;
   },
-  setOption: (state, action) => {
-    state.option = action.payload;
+  setStorageOption: (state, action) => {
+    state.storageOption = action.payload;
+  },
+  setNoteBookPath: (state, action) => {
+    state.noteBookPath = action.payload;
   },
 } as StorageOptionsReducer;
 
 const selector = {
-  getAskUser: ({ storageOption }) => storageOption.askUser,
-  getOption: ({ storageOption }) => storageOption.option,
+  getShowSetupPage: ({ storageOption }) => storageOption.showSetupPage,
+  getStorageOption: ({ storageOption }) => storageOption.storageOption,
+  getNoteBookPath: ({ storageOption }) => storageOption.noteBookPath,
 } as StorageOptionsSelector;
 
 const storageOptionSlice = createSlice({
   name: "storageOption",
   initialState: {
-    option: null,
+    storageOption: null,
   } as TrmrkNotesStorageOptionData,
   reducers: {
     ...reducer,
   },
 });
 
-export const { setAskUser, setOption } = storageOptionSlice.actions;
+export const { setShowSetupPage, setStorageOption, setNoteBookPath } =
+  storageOptionSlice.actions;
 
-export const { getAskUser, getOption } = selector;
+export const { getShowSetupPage, getStorageOption, getNoteBookPath } = selector;
 
 export default storageOptionSlice.reducer;
 

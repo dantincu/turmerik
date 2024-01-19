@@ -1,8 +1,9 @@
 import { TrmrkNotesStorageOption, TrmrkStorageOption } from "./appConfig";
 
 export interface TrmrkNotesStorageOptionData {
-  askUser: boolean;
-  option: TrmrkNotesStorageOption | null;
+  showSetupPage: boolean;
+  storageOption: TrmrkNotesStorageOption | null;
+  noteBookPath: string | null;
 }
 
 export interface AppData {
