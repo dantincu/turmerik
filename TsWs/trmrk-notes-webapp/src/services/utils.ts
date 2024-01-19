@@ -21,10 +21,6 @@ export const localStorageKeys = Object.freeze({
   pgContnrLeftPnlDfWidth: "pgContnrLeftPnlDfWidth",
 });
 
-export const localForageKeys = Object.freeze({
-  openAppTabs: "openAppTabs",
-});
-
 export const newUUid = () => uuidv4().replaceAll("-", "");
 
 export const getLocalForageDbNameNewPfx = (
