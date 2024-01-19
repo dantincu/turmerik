@@ -24,7 +24,7 @@ import { driveExplorerSvc } from "../../services/driveExplorer/DriveExplorerSvc"
 import { appCfg, TrmrkStorageOption } from "../../services/appConfig";
 import { getStorageOption, setStorageOption, setShowSetupPage } from "../../store/storageOptionSlice";
 import { setShowAppBar, setShowAppBarToggleBtn } from "../../store/appDataSlice";
-import { DriveExplorerApi as FsDriveExplorerApi } from "trmrk-browser/src/DriveExplorerApi/api";
+import { DriveExplorerApi as FsDriveExplorerApi } from "trmrk-browser/src/FsApiDriveExplorer/api";
 import PageContainer from "../../components/mainContent/PageContainer";
 
 /* 
