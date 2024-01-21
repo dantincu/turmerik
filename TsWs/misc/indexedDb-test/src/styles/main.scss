@@ -26,6 +26,7 @@ html, body, #app-root {
 .trmrk-page {
   width: 75%;
   margin-top: 1em;
+  padding: 0em 1em;
 }
 
 .trmrk-modal {
@@ -49,12 +50,7 @@ html, body, #app-root {
   font-weight: bold;
   display: flex;
   max-width: 100%;
-  flex-wrap: wrap;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  white-space: wrap;
   text-wrap: wrap;
-  overflow: visible;
 }
 
 .trmrk-databases-list-item {

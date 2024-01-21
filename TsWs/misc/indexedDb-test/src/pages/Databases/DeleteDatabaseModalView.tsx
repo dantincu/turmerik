@@ -54,9 +54,9 @@ export default function DeleteDatabaseModalView({
       <Typography id="trmrk-modal-title" variant="h5" component="h2">
         Delete database
       </Typography>
-      <Box className="trmrk-form-field" sx={{ display: "flex" }}>
-        <InputLabel>Are you sure you want to delete database <br /> <label className="trmrk-item-label">{ databaseName }</label> ?</InputLabel>
-      </Box>
+      <p>Are you sure you want to delete database</p>
+      <p className="trmrk-item-label">{ databaseName }</p>
+      <p>?</p>
       { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
       { warning ? <Box className="trmrk-form-field"><label className="trmrk-warning">{ warning }</label></Box> : null }
       { deleting ? <Box className="trmrk-loading dot-elastic" sx={{ left: "1em" }}></Box> : null }

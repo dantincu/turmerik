@@ -78,7 +78,7 @@ export default function DatabasesListPage({
     <DeleteDatabaseModalView databaseName={databaseName} modalClosed={deleteDatabaseModalIsClosed} mainElRef={ref} />));
 
   return (<Box className="trmrk-page trmrk-databases-list-page">
-    <Typography variant="h5" component="h1">Databases</Typography>
+    <Typography variant="h5" component="h1">Existing databases</Typography>
     <Box className="trmrk-page-actions">
       <IconButton disabled={mainActionButtonsDisabled} className="trmrk-main-icon-button" onClick={createDatabaseClick}>
         <AddIcon className="trmrk-add-icon" /></IconButton>

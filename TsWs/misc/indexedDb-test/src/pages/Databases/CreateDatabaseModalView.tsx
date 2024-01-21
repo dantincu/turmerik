@@ -118,6 +118,7 @@ export default function CreateDatabaseModalView({
           required
           value={databaseName}
           onChange={onDatabaseNameChanged}
+          fullWidth={true}
         />
         { databaseNameValidationError ? <Typography className="trmrk-error">{ databaseNameValidationError }</Typography> : null }
       </Box>
