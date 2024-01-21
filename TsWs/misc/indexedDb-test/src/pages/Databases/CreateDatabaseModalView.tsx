@@ -26,6 +26,7 @@ export default function CreateDatabaseModalView({
 
   const [ saving, setSaving ] = useState(false);
   const [ error, setError ] = useState<string | null>(null);
+  const [ warning, setwarning ] = useState<string | null>(null);
 
   const [ databaseNameValidationError, setDatabaseNameValidationError ] = useState<string | null>(null);
   const [ databaseVersionValidationError, setDatabaseVersionValidationError ] = useState<string | null>(null);
@@ -62,6 +63,9 @@ export default function CreateDatabaseModalView({
   }
 
   const saveDatabaseClick = () => {
+    setError(null);
+    setwarning(null);
+
     if (databaseName && !databaseNameValidationError && !databaseVersionValidationError) {
       setSaving(true);
       
@@ -75,6 +79,8 @@ export default function CreateDatabaseModalView({
         }
       }, errMsg => {
         setError(errMsg);
+      }, warnMsg => {
+        setwarning(warnMsg);
       });
     } else if (!databaseName) {
       setDatabaseNameValidationError(databaseNameValidationMsg);
@@ -124,6 +130,8 @@ export default function CreateDatabaseModalView({
         { databaseVersionValidationError ? <Typography className="trmrk-error">{ databaseVersionValidationError }</Typography> : null }
       </Box>
       { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
+      { warning ? <Box className="trmrk-form-field"><label className="trmrk-warning">{ warning }</label></Box> : null }
+      { saving ? <Box className="trmrk-loading dot-elastic" sx={{ left: "1em" }}></Box> : null }
       <Box className="trmrk-form-field">
         <Button className="trmrk-main-button" disabled={saving} sx={{ color: "#080" }} onClick={saveDatabaseClick}>Save</Button>
         <Button className="trmrk-main-button" disabled={saving} onClick={cancelCreateDatabaseClick}>Cancel</Button>

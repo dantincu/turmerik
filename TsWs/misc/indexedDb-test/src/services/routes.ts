@@ -1,6 +1,17 @@
-const dbNameParam = ":dbName";
-const dbStoreNameParam = ":dbStoreName";
-const dbStoreRecordPkParam = ":dbStoreRecordPk";
+export interface RouteParam {
+  param: string;
+  paramName: string;
+}
+
+const getRouteParam = (paramName: string) =>
+  ({
+    param: `:${paramName}`,
+    paramName: paramName,
+  } as RouteParam);
+
+export const dbNameParam = getRouteParam("dbName");
+export const dbStoreNameParam = getRouteParam("dbStoreName");
+export const dbStoreRecordPkParam = getRouteParam("dbStoreRecordPk");
 
 const getRouteTemplate = (
   routeName: string,
@@ -11,13 +22,13 @@ const getRouteTemplate = (
   const partsArr = ["", routeName];
 
   if (hasDbName) {
-    partsArr.push(dbNameParam);
+    partsArr.push(dbNameParam.param);
 
     if (hasDbStoreName) {
-      partsArr.push(dbStoreNameParam);
+      partsArr.push(dbStoreNameParam.param);
 
       if (hasDbRecord) {
-        partsArr.push(dbStoreRecordPkParam);
+        partsArr.push(dbStoreRecordPkParam.param);
       }
     }
   }

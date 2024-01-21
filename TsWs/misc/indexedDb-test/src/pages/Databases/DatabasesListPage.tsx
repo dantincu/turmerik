@@ -14,7 +14,6 @@ import { appRoutes, routes, getRoute } from "../../services/routes";
 import ErrorEl from "../../components/error/ErrorEl";
 import CreateDatabaseModalView from "./CreateDatabaseModalView";
 import DeleteDatabaseModalView from "./DeleteDatabaseModalView";
-import { Label } from "@mui/icons-material";
 
 export default function DatabasesListPage({
   }: {
@@ -81,7 +80,8 @@ export default function DatabasesListPage({
   return (<Box className="trmrk-page trmrk-databases-list-page">
     <Typography variant="h5" component="h1">Databases</Typography>
     <Box className="trmrk-page-actions">
-      <IconButton disabled={mainActionButtonsDisabled} className="trmrk-main-icon-button" onClick={createDatabaseClick}><AddIcon className="trmrk-add-icon" /></IconButton>
+      <IconButton disabled={mainActionButtonsDisabled} className="trmrk-main-icon-button" onClick={createDatabaseClick}>
+        <AddIcon className="trmrk-add-icon" /></IconButton>
     </Box>
     { databases ? <ul className="trmrk-databases-list">{ databases.map(db => <li key={db.name} className="trmrk-databases-list-item">
       <Box className="trmrk-item-label" onClick={() => databaseClick(db)}>{ db.name }</Box>

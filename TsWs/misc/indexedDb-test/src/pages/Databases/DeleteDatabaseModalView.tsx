@@ -24,9 +24,11 @@ export default function DeleteDatabaseModalView({
   }) {
   const [ deleting, setDeleting ] = useState(false);
   const [ error, setError ] = useState<string | null>(null);
+  const [ warning, setwarning ] = useState<string | null>(null);
 
   const deleteDatabaseClick = () => {
     setError(null);
+    setwarning(null);
     setDeleting(true);
     
     var req = indexedDB.deleteDatabase(databaseName!);
@@ -39,6 +41,8 @@ export default function DeleteDatabaseModalView({
       }
     }, errMsg => {
       setError(errMsg);
+    }, warnMsg => {
+      setwarning(warnMsg);
     });
   }
 
@@ -54,6 +58,8 @@ export default function DeleteDatabaseModalView({
         <InputLabel>Are you sure you want to delete database <br /> <label className="trmrk-item-label">{ databaseName }</label> ?</InputLabel>
       </Box>
       { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
+      { warning ? <Box className="trmrk-form-field"><label className="trmrk-warning">{ warning }</label></Box> : null }
+      { deleting ? <Box className="trmrk-loading dot-elastic" sx={{ left: "1em" }}></Box> : null }
       <Box className="trmrk-form-field">
         <Button className="trmrk-main-button" disabled={deleting} sx={{ color: "#F00" }} onClick={deleteDatabaseClick}>Delete</Button>
         <Button className="trmrk-main-button" disabled={deleting} onClick={cancelDeleteDatabaseClick}>Cancel</Button>
