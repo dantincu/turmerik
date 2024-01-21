@@ -23,7 +23,8 @@ export default function HomePage() {
     if (openAppTabs.length === 0) {
       dispatch(addTab({
         name: "NotesHcy",
-        idnf: null,
+        path: null,
+        relPath: null,
         appPage: AppPage.NotesHcy,
         tabUuid: newUUid(),
         isCurrent: true,
@@ -34,7 +35,8 @@ export default function HomePage() {
 
       dispatch(addTab({
         name: "NoteFilesHcy",
-        idnf: null,
+        path: null,
+        relPath: null,
         appPage: AppPage.NoteFilesHcy,
         tabUuid: newUUid(),
         isCurrent: null,
@@ -45,7 +47,8 @@ export default function HomePage() {
 
       dispatch(addTab({
         name: "FilesHcy",
-        idnf: null,
+        path: null,
+        relPath: null,
         appPage: AppPage.FilesHcy,
         tabUuid: newUUid(),
         isCurrent: true,
@@ -56,7 +59,8 @@ export default function HomePage() {
       
       dispatch(addTab({
         name: "NoteItem",
-        idnf: null,
+        path: null,
+        relPath: null,
         appPage: AppPage.NoteItem,
         tabUuid: newUUid(),
         isCurrent: null,
@@ -67,7 +71,8 @@ export default function HomePage() {
       
       dispatch(addTab({
         name: "TextFile",
-        idnf: null,
+        path: null,
+        relPath: null,
         appPage: AppPage.TextFile,
         tabUuid: newUUid(),
         isCurrent: null,

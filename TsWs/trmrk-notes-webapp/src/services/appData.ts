@@ -50,7 +50,8 @@ export interface AppBarData {
 
 export interface AppTab {
   appPage: AppPage;
-  idnf: string | null;
+  path: string | null;
+  relPath: string | null;
   name: string;
   tabUuid: string;
   isCurrent: boolean | null;
@@ -64,7 +65,8 @@ export interface AppTabsData {
 }
 
 export interface FilesHcyHistoryItem {
-  idnf: string;
+  path: string | null;
+  relPath: string | null;
 }
 
 export interface FilesHcyHistory {

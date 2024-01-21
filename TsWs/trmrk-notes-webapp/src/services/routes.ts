@@ -1,10 +1,19 @@
-const idnf = "idnf";
+const path = "path";
+const relPath = "relPath";
 
-const route = (routeName: string, hasIdnf: boolean = true) => {
+const route = (
+  routeName: string,
+  hasPath: boolean = true,
+  hasRelPath: boolean = false
+) => {
   let route = `/${routeName}`;
 
-  if (hasIdnf) {
-    route = `${route}/:${idnf}`;
+  if (hasPath) {
+    if (hasRelPath) {
+      route = `${route}/:${path}/:${relPath}`;
+    } else {
+      route = `${route}/:${path}`;
+    }
   }
 
   return route;

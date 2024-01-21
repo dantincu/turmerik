@@ -1,5 +1,5 @@
 {
-  "name": "trmrk-browser-core",
+  "name": "trmrk-browser",
   "version": "0.1.0",
   "type": "module",
   "description": "Core browser-related js code related used across Turmerik Apps",
