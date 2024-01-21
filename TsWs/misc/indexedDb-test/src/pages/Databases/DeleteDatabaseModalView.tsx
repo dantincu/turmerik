@@ -11,6 +11,8 @@ import trmrk from "trmrk";
 
 import ErrorEl from "../../components/error/ErrorEl";
 
+import { attachDefaultHandlersToDbOpenRequest, databaseDeleteErrMsg } from "../../services/indexedDb";
+
 export default function DeleteDatabaseModalView({
     databaseName,
     mainElRef,
@@ -21,46 +23,26 @@ export default function DeleteDatabaseModalView({
     modalClosed: (saved: boolean) => void
   }) {
   const [ deleting, setDeleting ] = useState(false);
-  const [ error, setError ] = useState<Error | any | null>(null);
+  const [ error, setError ] = useState<string | null>(null);
 
-  const getErrMsg = (req: IDBRequest, e: IDBVersionChangeEvent) => {
-    const errMSg = [
-      req.error?.message?.toString(),
-      `Old Version: ${e.oldVersion}`,
-      `New Version: ${e.newVersion}`].join("; ");
-
-    return errMSg;
-  }
-
-  const saveDatabaseClick = () => {
+  const deleteDatabaseClick = () => {
+    setError(null);
     setDeleting(true);
     
     var req = indexedDB.deleteDatabase(databaseName!);
 
-    req.onsuccess = (e: Event) => {
+    attachDefaultHandlersToDbOpenRequest(req, databaseDeleteErrMsg, success => {
       setDeleting(false);
-      modalClosed(true);
-    }
 
-    req.onerror = (e: Event) => {
-      setDeleting(false);
-      setError(req.error);
-    };
-
-    req.onblocked = (e: IDBVersionChangeEvent) => {
-      setDeleting(false);
-      const errMSg = getErrMsg(req, e);
-      setError(errMSg);
-    };
-
-    req.onupgradeneeded = (e: IDBVersionChangeEvent) => {
-      setDeleting(false);
-      const errMSg = getErrMsg(req, e);
-      setError(errMSg);
-    };
+      if (success) {
+        modalClosed(true);
+      }
+    }, errMsg => {
+      setError(errMsg);
+    });
   }
 
-  const cancelCreateDatabaseClick = () => {
+  const cancelDeleteDatabaseClick = () => {
     modalClosed(false);
   }
 
@@ -71,10 +53,10 @@ export default function DeleteDatabaseModalView({
       <Box className="trmrk-form-field" sx={{ display: "flex" }}>
         <InputLabel>Are you sure you want to delete database <br /> <label className="trmrk-item-label">{ databaseName }</label> ?</InputLabel>
       </Box>
-      { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error.message?.toString() ?? "Something went wrong..." }</label></Box> : null }
+      { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
       <Box className="trmrk-form-field">
-        <Button className="trmrk-main-button" disabled={deleting} sx={{ color: "#F00" }} onClick={saveDatabaseClick}>Delete</Button>
-        <Button className="trmrk-main-button" disabled={deleting} onClick={cancelCreateDatabaseClick}>Cancel</Button>
+        <Button className="trmrk-main-button" disabled={deleting} sx={{ color: "#F00" }} onClick={deleteDatabaseClick}>Delete</Button>
+        <Button className="trmrk-main-button" disabled={deleting} onClick={cancelDeleteDatabaseClick}>Cancel</Button>
       </Box>
     </DialogContent>);
   }

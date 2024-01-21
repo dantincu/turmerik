@@ -11,6 +11,8 @@ import trmrk from "trmrk";
 
 import ErrorEl from "../../components/error/ErrorEl";
 
+import { attachDefaultHandlersToDbOpenRequest, databaseCreateErrMsg, databaseNameValidationMsg, databaseNumberValidationMsg } from "../../services/indexedDb";
+
 export default function CreateDatabaseModalView({
     mainElRef,
     modalClosed
@@ -23,13 +25,10 @@ export default function CreateDatabaseModalView({
   const [ databaseVersionNumber, setDatabaseVersionNumber ] = useState<number | null>(null);
 
   const [ saving, setSaving ] = useState(false);
-  const [ error, setError ] = useState<Error | any | null>(null);
+  const [ error, setError ] = useState<string | null>(null);
 
   const [ databaseNameValidationError, setDatabaseNameValidationError ] = useState<string | null>(null);
   const [ databaseVersionValidationError, setDatabaseVersionValidationError ] = useState<string | null>(null);
-
-  const databaseNameValidationMsg = "The database name is required";
-  const databaseNumberValidationMsg = "The database version must be a positive integer number";
 
   const validateDatabaseName = (text: string) => {
     let err: string | null = null;
@@ -62,42 +61,21 @@ export default function CreateDatabaseModalView({
     return [ err, value ];
   }
 
-  const getErrMsg = (req: IDBRequest, e: IDBVersionChangeEvent) => {
-    const errMSg = [
-      req.error?.message?.toString(),
-      `Old Version: ${e.oldVersion}`,
-      `New Version: ${e.newVersion}`].join("; ");
-
-    return errMSg;
-  }
-
   const saveDatabaseClick = () => {
     if (databaseName && !databaseNameValidationError && !databaseVersionValidationError) {
       setSaving(true);
       
       var req = indexedDB.open(databaseName, databaseVersionNumber ?? undefined);
 
-      req.onsuccess = (e: Event) => {
+      attachDefaultHandlersToDbOpenRequest(req, databaseCreateErrMsg, success => {
         setSaving(false);
-        modalClosed(true);
-      }
 
-      req.onerror = (e: Event) => {
-        setSaving(false);
-        setError(req.error);
-      };
-
-      req.onblocked = (e: IDBVersionChangeEvent) => {
-        setSaving(false);
-        const errMSg = getErrMsg(req, e);
-        setError(errMSg);
-      };
-
-      req.onupgradeneeded = (e: IDBVersionChangeEvent) => {
-        setSaving(false);
-        const errMSg = getErrMsg(req, e);
-        setError(errMSg);
-      };
+        if (success) {
+          modalClosed(true);
+        }
+      }, errMsg => {
+        setError(errMsg);
+      });
     } else if (!databaseName) {
       setDatabaseNameValidationError(databaseNameValidationMsg);
     }
@@ -145,7 +123,7 @@ export default function CreateDatabaseModalView({
         />
         { databaseVersionValidationError ? <Typography className="trmrk-error">{ databaseVersionValidationError }</Typography> : null }
       </Box>
-      { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error.message?.toString() ?? "Something went wrong..." }</label></Box> : null }
+      { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
       <Box className="trmrk-form-field">
         <Button className="trmrk-main-button" disabled={saving} sx={{ color: "#080" }} onClick={saveDatabaseClick}>Save</Button>
         <Button className="trmrk-main-button" disabled={saving} onClick={cancelCreateDatabaseClick}>Cancel</Button>

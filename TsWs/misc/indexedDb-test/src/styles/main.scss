@@ -17,18 +17,18 @@ html, body, #app-root {
 
 .trmrk-page, .trmrk-modal {
   margin: auto;
-  margin-top: 1em;
-  display: block;
+}
+
+.trmrk-page {
   width: 75%;
+  margin-top: 1em;
 }
 
 .trmrk-modal {
+  width: 77.5%;
   background-color: #FFF8E0;
   min-height: 100%;
-}
-
-.trmrk-popup {
-  z-index: 1300;
+  margin-top: -0.3em;
 }
 
 .trmrk-form-field {
