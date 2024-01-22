@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import DialogContent from '@mui/material/DialogContent';
 
@@ -11,18 +12,32 @@ import trmrk from "trmrk";
 
 import ErrorEl from "../../components/error/ErrorEl";
 
-import { attachDefaultHandlersToDbOpenRequest, databaseOpenErrMsg, databaseNameValidationMsg, databaseNumberValidationMsg } from "../../services/indexedDb";
+import {
+  attachDefaultHandlersToDbOpenRequest,
+  dfDatabaseOpenErrMsg,
+  dfDatabaseNameValidationMsg,
+  getDfDatabaseNumberValidationMsg,
+  dfDatabaseNumberValidationMsg
+} from "../../services/indexedDb";
 
-export default function CreateDatabaseModalView({
+import { EditedDbObjectStore, EditedDatabase } from "./DataTypes";
+
+export default function EditDatabaseModalView({
+    dbToEdit,
     mainElRef,
     modalClosed
   }: {
+    dbToEdit?: EditedDatabase | null | undefined,
     mainElRef: React.ForwardedRef<Element>
     modalClosed: (saved: boolean) => void
   }) {
-  const [ databaseName, setDatabaseName ] = useState<string>("");
-  const [ databaseVersion, setDatabaseVersion ] = useState<string>("");
-  const [ databaseVersionNumber, setDatabaseVersionNumber ] = useState<number | null>(null);
+  const dfDbVersionNumber = dbToEdit ? (dbToEdit.databaseVersion ?? 1) + 1 : null;
+  const minVersionNumber = dfDbVersionNumber ?? 1;
+  const databaseNumberValidationMsg = dbToEdit ? dfDatabaseNumberValidationMsg : getDfDatabaseNumberValidationMsg(minVersionNumber);
+
+  const [ databaseName, setDatabaseName ] = useState<string>(dbToEdit?.databaseName ?? "");
+  const [ databaseVersionNumber, setDatabaseVersionNumber ] = useState<number | null>(dfDbVersionNumber);
+  const [ databaseVersion, setDatabaseVersion ] = useState<string>(dfDbVersionNumber?.toString() ?? "");
 
   const [ saving, setSaving ] = useState(false);
   const [ error, setError ] = useState<string | null>(null);
@@ -35,7 +50,7 @@ export default function CreateDatabaseModalView({
     let err: string | null = null;
 
     if (!trmrk.isNonEmptyStr(text)) {
-      err = databaseNameValidationMsg;
+      err = dfDatabaseNameValidationMsg;
     }
 
     return err;
@@ -52,12 +67,18 @@ export default function CreateDatabaseModalView({
         if (isNaN(value) || value <= 0) {
           value = null;
           err = databaseNumberValidationMsg;
+        } else if (dbToEdit) {
+          if (value < minVersionNumber) {
+            err = databaseNumberValidationMsg;
+          }
         }
       } catch (exc) {
         value = null;
         err = databaseNumberValidationMsg;
       }
-    };
+    } else if (dbToEdit) {
+      err = databaseNumberValidationMsg;
+    }
 
     return [ err, value ];
   }
@@ -71,7 +92,7 @@ export default function CreateDatabaseModalView({
       
       var req = indexedDB.open(databaseName, databaseVersionNumber ?? undefined);
 
-      attachDefaultHandlersToDbOpenRequest(req, databaseOpenErrMsg, success => {
+      attachDefaultHandlersToDbOpenRequest(req, dfDatabaseOpenErrMsg, success => {
         setSaving(false);
 
         if (success) {
@@ -84,7 +105,7 @@ export default function CreateDatabaseModalView({
         setwarning(warnMsg);
       });
     } else if (!databaseName) {
-      setDatabaseNameValidationError(databaseNameValidationMsg);
+      setDatabaseNameValidationError(dfDatabaseNameValidationMsg);
     }
   }
 
@@ -115,12 +136,12 @@ export default function CreateDatabaseModalView({
       </Typography>
       <Box className="trmrk-form-field">
         <InputLabel>Database name</InputLabel>
-        <TextField
+        { dbToEdit ? <Box className="trmrk-value">{ dbToEdit.databaseName }</Box> : <TextField
           required
           value={databaseName}
           onChange={onDatabaseNameChanged}
           fullWidth={true}
-        />
+        /> }
         { databaseNameValidationError ? <Typography className="trmrk-error">{ databaseNameValidationError }</Typography> : null }
       </Box>
       <Box className="trmrk-form-field">

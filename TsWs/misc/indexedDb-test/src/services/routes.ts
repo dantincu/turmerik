@@ -127,16 +127,6 @@ const createRoutesObj = () => {
       pathname: "databases",
       appTitle: "Existing databases",
     }),
-    datastore: addRoute("datastore"),
-    datastoresRoot: addRoute({
-      pathname: "datastores",
-      appTitle: "Existing datastores",
-    }),
-    datarecord: addRoute("datarecord"),
-    datarecordsRoot: addRoute({
-      pathname: "datarecords",
-      appTitle: "Existing datarecords",
-    }),
   });
 
   return { routes, routesArr };
@@ -147,10 +137,6 @@ export const { routes, routesArr } = createRoutesObj();
 export const appRoutes = Object.freeze({
   databasesRoot: getRouteTemplate(routes.databasesRoot.pathname),
   database: getRouteTemplate(routes.database.pathname),
-  datastoresRoot: getRouteTemplate(routes.datastoresRoot.pathname),
-  datastore: getRouteTemplate(routes.datastore.pathname),
-  datarecordsRoot: getRouteTemplate(routes.datarecordsRoot.pathname),
-  datarecord: getRouteTemplate(routes.datarecord.pathname),
 });
 
 export const getRouteInfo = (pathname: string) => {

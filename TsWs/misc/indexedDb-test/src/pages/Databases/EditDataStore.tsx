@@ -12,20 +12,20 @@ import trmrk from "trmrk";
 
 import { MtblRefValue } from "trmrk/src/core";
 
-import { attachDefaultHandlersToDbOpenRequest, databaseOpenErrMsg, datastoreCreateErrMsg, datastoreNameValidationMsg, getErrMsg } from "../../services/indexedDb";
+import { attachDefaultHandlersToDbOpenRequest, dfDatabaseOpenErrMsg, dfDatastoreCreateErrMsg, dfDatastoreNameValidationMsg, getErrMsg } from "../../services/indexedDb";
 
-import { EditedDataStore } from "./EditedDataStore";
+import { EditedDbObjectStore } from "./DataTypes";
 
 export default function EditDatastoreModalView({
     initialData,
     dataFactory
   }: {
-    initialData: EditedDataStore
-    dataFactory: React.MutableRefObject<(() => EditedDataStore) | null>
+    initialData: EditedDbObjectStore
+    dataFactory: React.MutableRefObject<(() => EditedDbObjectStore) | null>
   }) {
-  const [ datastoreName, setDatastoreName ] = useState<string>(initialData.datastoreName);
-  const [ datastoreAutoIncrement, setDatastoreAutoIncrement ] = useState(initialData.datastoreAutoIncrement);
-  const [ datastoreKeyPathStr, setDatastoreKeyPathStr ] = useState<string>(initialData.datastoreKeyPathStr);
+  const [ datastoreName, setDatastoreName ] = useState<string>(initialData.storeName);
+  const [ datastoreAutoIncrement, setDatastoreAutoIncrement ] = useState(initialData.autoIncrement);
+  const [ datastoreKeyPathStr, setDatastoreKeyPathStr ] = useState<string>(initialData.keyPathStr);
 
   const [ datastoreNameValidationError, setDatastoreNameValidationError ] = useState<string | null>(null);
   const [ datastoreKeyPathValidationError, setDatastoreKeyPathValidationError ] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function EditDatastoreModalView({
     let err: string | null = null;
 
     if (!trmrk.isNonEmptyStr(text)) {
-      err = datastoreNameValidationMsg;
+      err = dfDatastoreNameValidationMsg;
     }
 
     return err;
@@ -67,11 +67,11 @@ export default function EditDatastoreModalView({
 
   useEffect(() => {
     dataFactory.current = () => ({
-      datastoreName,
-      datastoreAutoIncrement,
-      datastoreKeyPathStr,
+      storeName: datastoreName,
+      autoIncrement: datastoreAutoIncrement,
+      keyPathStr: datastoreKeyPathStr,
       hasError: !!(datastoreNameValidationError || datastoreKeyPathValidationError)
-    });
+    } as EditedDbObjectStore);
 
     return () => {
       dataFactory.current = null;

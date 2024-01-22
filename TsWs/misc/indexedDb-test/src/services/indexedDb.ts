@@ -1,14 +1,21 @@
-export const databaseOpenErrMsg = "Could not open the database";
-export const databaseDeleteErrMsg = "Could not delete the database";
+export const dfDatabaseOpenErrMsg = "Could not open the database";
+export const dfDatabaseDeleteErrMsg = "Could not delete the database";
 
-export const databaseNameValidationMsg = "The database name is required";
+export const dfDatabaseNameValidationMsg = "The database name is required";
 
-export const databaseNumberValidationMsg =
+export const dfDatabaseNumberValidationMsg =
   "The database version must be a positive integer number";
 
-export const datastoreCreateErrMsg = "Could not create the data store";
-export const datastoreDeleteErrMsg = "Could not delete the data store";
-export const datastoreNameValidationMsg = "The datastore name is required";
+export const getDfDatabaseNumberValidationMsg = (minVersionNumber: number) =>
+  [
+    dfDatabaseNumberValidationMsg,
+    "greater than or equal to",
+    minVersionNumber,
+  ].join(" ");
+
+export const dfDatastoreCreateErrMsg = "Could not create the data store";
+export const dfDatastoreDeleteErrMsg = "Could not delete the data store";
+export const dfDatastoreNameValidationMsg = "The datastore name is required";
 
 export const getErrMsg = (error: Error | any | null | undefined) =>
   error?.message?.toString();
@@ -36,10 +43,10 @@ export const getDbRequestWarningMsg = (msg: string, e: IDBVersionChangeEvent) =>
   );
 
 export const getCreateDbRequestErrMsg = (req: IDBRequest) =>
-  getDbRequestErrMsg(req, databaseOpenErrMsg);
+  getDbRequestErrMsg(req, dfDatabaseOpenErrMsg);
 
 export const getDeleteDbRequestErrMsg = (req: IDBRequest) =>
-  getDbRequestErrMsg(req, databaseDeleteErrMsg);
+  getDbRequestErrMsg(req, dfDatabaseDeleteErrMsg);
 
 export const attachDefaultHandlersToDbOpenRequest = (
   req: IDBOpenDBRequest,
@@ -69,13 +76,66 @@ export const attachDefaultHandlersToDbOpenRequest = (
   };
 };
 
-export const getObjectStoreNames = (db: IDBDatabase) => {
-  const objStoreNamesArr: string[] = [];
+export const domStrListToArr = (list: DOMStringList) => {
+  const arr: string[] = [];
 
-  for (let i = 0; i < db.objectStoreNames.length; i++) {
-    const objStoreName = db.objectStoreNames[i];
-    objStoreNamesArr.push(objStoreName);
+  for (let i = 0; i < list.length; i++) {
+    const str = list[i];
+    arr.push(str);
   }
 
-  return objStoreNamesArr;
+  return arr;
+};
+
+export const getObjectStoreNames = (db: IDBDatabase) =>
+  domStrListToArr(db.objectStoreNames);
+
+export interface IDbIndexInfo {
+  name: string;
+}
+
+export interface IDbObjectStoreInfo {
+  storeName: string;
+  autoIncrement: boolean;
+  keyPath: string | string[];
+  indexNames: string[];
+  indexes: IDbIndexInfo[];
+}
+
+export const getObjectStoresInfoAgg = (db: IDBDatabase) => {
+  let objStoresArr: IDbObjectStoreInfo[] = [];
+  const objStoreNamesArr = getObjectStoreNames(db);
+
+  if (objStoreNamesArr.length > 0) {
+    const transaction = db.transaction(objStoreNamesArr, "readonly");
+
+    objStoresArr = objStoreNamesArr.map((objStoreName) =>
+      getObjectStoreInfo(transaction.objectStore(objStoreName))
+    );
+  }
+
+  return objStoresArr;
+};
+
+export const getObjectStoreIndexInfo = (index: IDBIndex) => {
+  const info = {
+    name: index.name,
+  } as IDbIndexInfo;
+
+  return info;
+};
+
+export const getObjectStoreInfo = (objStore: IDBObjectStore) => {
+  const info = {
+    storeName: objStore.name,
+    autoIncrement: objStore.autoIncrement,
+    keyPath: objStore.keyPath,
+    indexNames: domStrListToArr(objStore.indexNames),
+  } as IDbObjectStoreInfo;
+
+  info.indexes = info.indexNames.map((indexName) =>
+    getObjectStoreIndexInfo(objStore.index(indexName))
+  );
+
+  return info;
 };

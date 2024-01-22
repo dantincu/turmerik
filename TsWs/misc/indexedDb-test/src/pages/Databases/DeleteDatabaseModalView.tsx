@@ -11,7 +11,7 @@ import trmrk from "trmrk";
 
 import ErrorEl from "../../components/error/ErrorEl";
 
-import { attachDefaultHandlersToDbOpenRequest, databaseDeleteErrMsg } from "../../services/indexedDb";
+import { attachDefaultHandlersToDbOpenRequest, dfDatabaseDeleteErrMsg } from "../../services/indexedDb";
 
 export default function DeleteDatabaseModalView({
     databaseName,
@@ -33,7 +33,7 @@ export default function DeleteDatabaseModalView({
     
     var req = indexedDB.deleteDatabase(databaseName!);
 
-    attachDefaultHandlersToDbOpenRequest(req, databaseDeleteErrMsg, success => {
+    attachDefaultHandlersToDbOpenRequest(req, dfDatabaseDeleteErrMsg, success => {
       setDeleting(false);
 
       if (success) {

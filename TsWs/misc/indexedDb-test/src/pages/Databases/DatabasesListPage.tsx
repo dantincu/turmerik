@@ -13,7 +13,7 @@ import { routes, getRoute } from "../../services/routes";
 import { setCurrentRoutePathName, getCurrentRoutePathName } from "../../store/appDataSlice";
 
 import ErrorEl from "../../components/error/ErrorEl";
-import CreateDatabaseModalView from "./CreateDatabaseModalView";
+import EditDatabaseModalView from "./EditDatabaseModalView";
 import DeleteDatabaseModalView from "./DeleteDatabaseModalView";
 
 export default function DatabasesListPage({
@@ -80,7 +80,7 @@ export default function DatabasesListPage({
   }, [ databases, error ]);
 
   const CreateDatabaseModalViewEl = React.forwardRef<Element>((props, ref) => (
-    <CreateDatabaseModalView modalClosed={createDatabaseModalClosed} mainElRef={ref} />));
+    <EditDatabaseModalView modalClosed={createDatabaseModalClosed} mainElRef={ref} />));
     
   const DeleteDatabaseModalViewEl = React.forwardRef<Element, { databaseName: string | undefined }>(({ databaseName }, ref) => (
     <DeleteDatabaseModalView databaseName={databaseName!} modalClosed={deleteDatabaseModalIsClosed} mainElRef={ref} />));
