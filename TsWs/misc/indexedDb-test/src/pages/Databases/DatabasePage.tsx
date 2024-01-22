@@ -10,6 +10,8 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
+import { v4 as uuidv4 } from 'uuid';
+
 import trmrk from "trmrk";
 
 import {
@@ -25,7 +27,7 @@ import {
 import { setCurrentRoutePathName, getCurrentRoutePathName } from "../../store/appDataSlice";
 import { routes, getRoute, defaultPageNotFoundHtmlDocTitle } from "../../services/routes";
 import { appRoutes, dbNameParam, dbStoreNameParam, dbStoreRecordPkParam } from "../../services/routes";
-import { EditedDbObjectStore } from "./DataTypes";
+import { EditedDbObjectStore, EditedDbObjectStoreImpl } from "./DataTypes";
 
 import DeleteDatabaseModalView from "./DeleteDatabaseModalView";
 import EditDatabaseModalView from "./EditDatabaseModalView";
@@ -132,7 +134,7 @@ export default function DatabasePage({
     <EditDatabaseModalView dbToEdit={{
       databaseName: dbName!,
       databaseVersion: dbVersion ?? 1,
-      datastores: dbStores as EditedDbObjectStore[]
+      datastores: dbStores!
     }} modalClosed={editDatabaseModalIsClosed} mainElRef={ref} />));
 
   const objectStoresUrl = getRoute({
@@ -166,10 +168,10 @@ export default function DatabasePage({
     { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
     { warning ? <Box className="trmrk-form-field"><label className="trmrk-warning">{ warning }</label></Box> : null }
 
-    { dbStoreName ? <Link to={objectStoresUrl}>All Object Stores</Link> : null }
+    { dbStoreName ? <Link to={objectStoresUrl}>All Data Stores</Link> : null }
 
     <Typography variant="h6" component="h2">
-      { dbStoreName ? "Object Store" : dbStores?.length ? "Object Stores" : "No Object Stores" }
+      { dbStoreName ? "Data Store" : dbStores?.length ? "Data Stores" : "No Data Stores" }
     </Typography>
     
     { dbStores ? <ul className="trmrk-page-list">{ dbStores.map(dataStore =>

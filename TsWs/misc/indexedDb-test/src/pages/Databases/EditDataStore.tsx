@@ -1,27 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import InputLabel from '@mui/material/InputLabel';
-import DialogContent from '@mui/material/DialogContent';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import trmrk from "trmrk";
 
 import { MtblRefValue } from "trmrk/src/core";
 
-import { attachDefaultHandlersToDbOpenRequest, dfDatabaseOpenErrMsg, dfDatastoreCreateErrMsg, dfDatastoreNameValidationMsg, getErrMsg } from "../../services/indexedDb";
+import {
+  attachDefaultHandlersToDbOpenRequest,
+  dfDatabaseOpenErrMsg,
+  dfDatastoreCreateErrMsg,
+  dfDatastoreNameValidationMsg,
+  getErrMsg
+} from "../../services/indexedDb";
 
 import { EditedDbObjectStore } from "./DataTypes";
 
-export default function EditDatastoreModalView({
+export default function EditDatastore({
     initialData,
-    dataFactory
   }: {
     initialData: EditedDbObjectStore
-    dataFactory: React.MutableRefObject<(() => EditedDbObjectStore) | null>
   }) {
   const [ datastoreName, setDatastoreName ] = useState<string>(initialData.storeName);
   const [ datastoreAutoIncrement, setDatastoreAutoIncrement ] = useState(initialData.autoIncrement);
@@ -65,20 +69,29 @@ export default function EditDatastoreModalView({
     setDatastoreKeyPathValidationError(err);
   }
 
+  const dataFactory = () => ({
+    storeName: datastoreName,
+    autoIncrement: datastoreAutoIncrement,
+    keyPathStr: datastoreKeyPathStr,
+    hasError: !!(datastoreNameValidationError || datastoreKeyPathValidationError)
+  } as EditedDbObjectStore);
+
   useEffect(() => {
-    dataFactory.current = () => ({
-      storeName: datastoreName,
-      autoIncrement: datastoreAutoIncrement,
-      keyPathStr: datastoreKeyPathStr,
-      hasError: !!(datastoreNameValidationError || datastoreKeyPathValidationError)
-    } as EditedDbObjectStore);
+    initialData.dataFactory.subscribe(dataFactory);
 
     return () => {
-      dataFactory.current = null;
+      initialData.dataFactory.unsubscribe(dataFactory);
     };
   }, []);
 
-  return (<Box className="trmrk-edit-item trmrk-edit-datastore">
+  return (<Box className="trmrk-edit-item trmrk-edit-datastore" sx={{
+        border: "1px solid #888",
+        marginTop: "1em",
+        padding: "1em",
+        borderRadius: "5px",
+        position: "relative"
+      }}>
+      <IconButton sx={{ position: "absolute", top: "0em", right: "0em" }} onClick={() => initialData.onRemoved()}><DeleteIcon /></IconButton>
       <Box className="trmrk-form-field">
         <InputLabel>Datastore name</InputLabel>
         <TextField
