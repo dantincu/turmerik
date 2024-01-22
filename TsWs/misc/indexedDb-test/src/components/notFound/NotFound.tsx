@@ -2,8 +2,14 @@ import React from "react";
 
 import ErrorEl from "../error/ErrorEl";
 
-const NotFound = () => {
-  return (<ErrorEl errCaption="404" errMessage="Page not found"></ErrorEl>);
+const NotFound = ({
+    errCaption,
+    errMessage
+  }: {
+    errCaption?: string | null | undefined
+    errMessage?: string | null | undefined
+  }) => {
+  return (<ErrorEl errCaption={errCaption ?? "404"} errMessage={errMessage ?? "Page not found"}></ErrorEl>);
 }
 
 export default NotFound;

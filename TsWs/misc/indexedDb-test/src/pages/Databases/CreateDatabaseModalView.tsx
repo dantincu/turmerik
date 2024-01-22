@@ -11,7 +11,7 @@ import trmrk from "trmrk";
 
 import ErrorEl from "../../components/error/ErrorEl";
 
-import { attachDefaultHandlersToDbOpenRequest, databaseCreateErrMsg, databaseNameValidationMsg, databaseNumberValidationMsg } from "../../services/indexedDb";
+import { attachDefaultHandlersToDbOpenRequest, databaseOpenErrMsg, databaseNameValidationMsg, databaseNumberValidationMsg } from "../../services/indexedDb";
 
 export default function CreateDatabaseModalView({
     mainElRef,
@@ -71,10 +71,11 @@ export default function CreateDatabaseModalView({
       
       var req = indexedDB.open(databaseName, databaseVersionNumber ?? undefined);
 
-      attachDefaultHandlersToDbOpenRequest(req, databaseCreateErrMsg, success => {
+      attachDefaultHandlersToDbOpenRequest(req, databaseOpenErrMsg, success => {
         setSaving(false);
 
         if (success) {
+          req.result.close();
           modalClosed(true);
         }
       }, errMsg => {
@@ -108,7 +109,7 @@ export default function CreateDatabaseModalView({
     setDatabaseVersionNumber(value);
   }
 
-  return (<DialogContent className="trmrk-modal" ref={mainElRef} tabIndex={-1}>
+  return (<DialogContent className="trmrk-modal trmrk-modal-full-viewport" ref={mainElRef} tabIndex={-1}>
       <Typography id="trmrk-modal-title" variant="h5" component="h2">
         Create database
       </Typography>

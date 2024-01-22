@@ -1,67 +1,166 @@
-export interface RouteParam {
-  param: string;
-  paramName: string;
-}
+import trmrk from "trmrk";
+import { Kvp } from "trmrk/src/core";
 
-const getRouteParam = (paramName: string) =>
-  ({
-    param: `:${paramName}`,
-    paramName: paramName,
-  } as RouteParam);
+import { AppRouteInfo } from "./appData";
 
-export const dbNameParam = getRouteParam("dbName");
-export const dbStoreNameParam = getRouteParam("dbStoreName");
-export const dbStoreRecordPkParam = getRouteParam("dbStoreRecordPk");
+export const dbNameParam = "dbName";
+export const dbStoreNameParam = "dbStoreName";
+export const dbStoreRecordPkParam = "dbStoreRecordPk";
+
+export const defaultHtmlDocTitleSuffix = "IndexedDb Test";
+export const defaultPageNotFoundHtmlDocTitle = "Page Not Found";
 
 const getRouteTemplate = (
   routeName: string,
-  hasDbName: boolean = false,
-  hasDbStoreName: boolean = false,
-  hasDbRecord: boolean = false
-) => {
-  const partsArr = ["", routeName];
+  startsWithSlash?: boolean | null | undefined
+) => (startsWithSlash ?? true ? `/${routeName}` : routeName);
 
-  if (hasDbName) {
-    partsArr.push(dbNameParam.param);
+const getDefaultAppTitle = (pathname: string) => {
+  let defaultAppTitle = pathname.split("/").find((str) => str.length) ?? "";
+  defaultAppTitle = trmrk.capitalizeFirstLetter(defaultAppTitle);
 
-    if (hasDbStoreName) {
-      partsArr.push(dbStoreNameParam.param);
-
-      if (hasDbRecord) {
-        partsArr.push(dbStoreRecordPkParam.param);
-      }
-    }
-  }
-
-  let routeTemplate = partsArr.join("/");
-  return routeTemplate;
+  return defaultAppTitle;
 };
 
+const getDefaultHtmlDocTitle = (
+  pathname: string,
+  defaultAppTitle?: string | null | undefined
+) => {
+  defaultAppTitle ??= getDefaultAppTitle(pathname);
+
+  const defaultHtmlDocTitle = [defaultAppTitle, defaultHtmlDocTitleSuffix]
+    .filter((str) => str)
+    .join(" - ");
+
+  return defaultHtmlDocTitle;
+};
+
+export interface GetRouteArgs {
+  routeName: string;
+  dbName?: string | null | undefined;
+  dbStoreName?: string | null | undefined;
+  dbStoreRecordPk?: string | null | undefined;
+  startsWithSlash?: boolean | null | undefined;
+}
+
 export const getRoute = (
-  routeName: string,
+  routeName: string | GetRouteArgs,
   dbName: string | null = null,
   dbStoreName: string | null = null,
-  dbStoreRecordPk: string | null = null
+  dbStoreRecordPk: string | null = null,
+  startsWithSlash: boolean = true
 ) => {
-  const partsArr = ["", routeName, dbName, dbStoreName, dbStoreRecordPk]
-    .filter((part) => typeof part === "string")
-    .map((part) => encodeURIComponent(part!));
+  let routeArgs: GetRouteArgs = routeName as GetRouteArgs;
 
-  const routeStr = partsArr.join("/");
+  if (typeof routeArgs !== "object") {
+    routeArgs = {
+      routeName,
+      dbName,
+      dbStoreName,
+      dbStoreRecordPk,
+      startsWithSlash,
+    } as GetRouteArgs;
+  }
+
+  let routeStr = getRouteTemplate(
+    routeArgs.routeName,
+    routeArgs.startsWithSlash
+  );
+
+  let queryParamsArr: Kvp<string, string>[] = [];
+
+  if (routeArgs.dbName) {
+    queryParamsArr.push({
+      key: dbNameParam,
+      value: routeArgs.dbName,
+    });
+  }
+
+  if (routeArgs.dbStoreName) {
+    queryParamsArr.push({
+      key: dbStoreNameParam,
+      value: routeArgs.dbStoreName,
+    });
+  }
+
+  if (routeArgs.dbStoreRecordPk) {
+    queryParamsArr.push({
+      key: dbStoreRecordPkParam,
+      value: routeArgs.dbStoreRecordPk,
+    });
+  }
+
+  if (queryParamsArr.length > 0) {
+    const queryStr = queryParamsArr
+      .map((kvp) => [kvp.key, encodeURIComponent(kvp.value)].join("="))
+      .join("&");
+
+    routeStr = [routeStr, queryStr].join("?");
+  }
+
   return routeStr;
 };
 
-export const routes = Object.freeze({
-  databases: "databases",
-  datastores: "datastores",
-  datarecords: "datarecords",
-});
+const createRoutesObj = () => {
+  const routesArr: AppRouteInfo[] = [];
+
+  const addRoute = (routeObj: AppRouteInfo | { pathname: string } | string) => {
+    if (typeof routeObj !== "object") {
+      routeObj = { pathname: routeObj };
+    }
+
+    const appRouteInfo = routeObj as AppRouteInfo;
+    appRouteInfo.appTitle ??= getDefaultAppTitle(routeObj.pathname);
+
+    appRouteInfo.htmlDocTitle ??= getDefaultHtmlDocTitle(
+      routeObj.pathname,
+      appRouteInfo.appTitle
+    );
+
+    routesArr.push(appRouteInfo);
+    return routeObj;
+  };
+
+  const routes = Object.freeze({
+    database: addRoute("database"),
+    databasesRoot: addRoute({
+      pathname: "databases",
+      appTitle: "Existing databases",
+    }),
+    datastore: addRoute("datastore"),
+    datastoresRoot: addRoute({
+      pathname: "datastores",
+      appTitle: "Existing datastores",
+    }),
+    datarecord: addRoute("datarecord"),
+    datarecordsRoot: addRoute({
+      pathname: "datarecords",
+      appTitle: "Existing datarecords",
+    }),
+  });
+
+  return { routes, routesArr };
+};
+
+export const { routes, routesArr } = createRoutesObj();
 
 export const appRoutes = Object.freeze({
-  databasesRoot: getRouteTemplate(routes.databases),
-  databases: getRouteTemplate(routes.databases, true),
-  datastoresRoot: getRouteTemplate(routes.datastores, true),
-  datastores: getRouteTemplate(routes.datastores, true, true),
-  datarecordsRoot: getRouteTemplate(routes.datarecords, true, true),
-  datarecords: getRouteTemplate(routes.datarecords, true, true, true),
+  databasesRoot: getRouteTemplate(routes.databasesRoot.pathname),
+  database: getRouteTemplate(routes.database.pathname),
+  datastoresRoot: getRouteTemplate(routes.datastoresRoot.pathname),
+  datastore: getRouteTemplate(routes.datastore.pathname),
+  datarecordsRoot: getRouteTemplate(routes.datarecordsRoot.pathname),
+  datarecord: getRouteTemplate(routes.datarecord.pathname),
 });
+
+export const getRouteInfo = (pathname: string) => {
+  pathname = trmrk.trimStr(pathname, {
+    trimStr: "/",
+    trimStart: true,
+  });
+
+  const routeInfo =
+    routesArr.find((route) => route.pathname === pathname) ?? null;
+
+  return routeInfo;
+};

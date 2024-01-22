@@ -19,28 +19,39 @@ html, body, #app-root {
   color: #604000;
 }
 
+.trmrk-top-bar {
+  height: 2.5em;
+}
+
 .trmrk-page, .trmrk-modal {
   margin: auto;
 }
 
 .trmrk-page {
   width: 75%;
-  margin-top: 1em;
+  margin-top: 2.5em;
   padding: 0em 1em;
 }
 
-.trmrk-modal {
-  width: 77.5%;
+.trmrk-modal.trmrk-modal-full-viewport {
   background-color: #FFF8E0;
-  min-height: 100%;
-  margin-top: -0.3em;
+  height: 100%;
+  padding: 1em 13.5%;
 }
 
 .trmrk-form-field {
   margin: 1em 0em;
+
+  .trmrk-name {
+    font-style: italic;
+  }
+
+  .trmrk-value {
+    font-weight: bold;
+  }
 }
 
-.trmrk-databases-list {
+.trmrk-page-list {
   list-style-type: none;
   padding-left: 0.1em;
   padding-right: 0.1em;
@@ -53,7 +64,7 @@ html, body, #app-root {
   text-wrap: wrap;
 }
 
-.trmrk-databases-list-item {
+.trmrk-page-list-item {
   border: 1px solid #888;
   padding: 0em 1em;
   display: grid;
@@ -80,18 +91,18 @@ html, body, #app-root {
     display: flex;
     font-size: 0.8em;
     margin: 0em;
-  }
 
-  .trmrk-name, .trmrk-value {
-    font-style: italic;
-  }
+    .trmrk-name, .trmrk-value {
+      font-style: italic;
+    }
 
-  .trmrk-value {
-    font-weight: bold;
+    .trmrk-value {
+      font-weight: bold;
+    }
   }
 
   .trmrk-item-action-buttons {
-    grid-column: 1;
+    grid-column: 2;
     grid-row-start: 1;
     grid-row-end: 2;
   }

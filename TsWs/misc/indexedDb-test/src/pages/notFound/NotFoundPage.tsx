@@ -11,6 +11,6 @@ export default function NotFoundPage() {
   }, []);
 
   return (<Container className="trmrk-not-found-page" sx={{ position: "relative" }} maxWidth="xl">
-    <NotFound />
+    <NotFound errCaption="" />
   </Container>);
 };

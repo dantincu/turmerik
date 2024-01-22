@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { AppData } from "../services/appData";
+import { AppRouteInfo, AppData } from "../services/appData";
 
 declare type DispatcherType<TPropVal> = (
   state: AppData,
@@ -10,35 +10,52 @@ declare type DispatcherType<TPropVal> = (
   }
 ) => void;
 
+declare type SelectorType<TPropVal> = ({
+  appData,
+}: {
+  appData: AppData;
+}) => TPropVal;
+
 export interface AppDataReducer {
-  setShowAppBar: DispatcherType<boolean>;
-  setIsCompactMode: DispatcherType<boolean>;
+  setCurrentRoute: DispatcherType<AppRouteInfo>;
+  setCurrentRoutePathName: DispatcherType<string>;
+}
+
+export interface AppDataSelector {
+  getCurrentRoute: SelectorType<AppRouteInfo>;
+  getCurrentRoutePathName: SelectorType<string>;
 }
 
 const reducer = {
-  setShowAppBar: (state, action) => {
-    state.showAppBar = action.payload;
+  setCurrentRoute: (state, action) => {
+    state.currentRoute = action.payload;
   },
-  setIsCompactMode: (state, action) => {
-    state.isCompactMode = action.payload;
+  setCurrentRoutePathName: (state, action) => {
+    state.currentRoute.pathname = action.payload;
   },
 } as AppDataReducer;
+
+const selector = {
+  getCurrentRoute: ({ appData }) => appData.currentRoute,
+  getCurrentRoutePathName: ({ appData }) => appData.currentRoute.pathname,
+} as AppDataSelector;
 
 const appDataSlice = createSlice({
   name: "appData",
   initialState: {
-    showAppBar: true,
-    isCompactMode: true,
+    currentRoute: {
+      pathname: "/",
+    },
   } as AppData,
   reducers: {
     ...reducer,
   },
 });
 
-export const {
-  setShowAppBar,
-  setIsCompactMode,
-} = appDataSlice.actions;
+export const { setCurrentRoute, setCurrentRoutePathName } =
+  appDataSlice.actions;
+
+export const { getCurrentRoute, getCurrentRoutePathName } = selector;
 
 export default appDataSlice.reducer;
 

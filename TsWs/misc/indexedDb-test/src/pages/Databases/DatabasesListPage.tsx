@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
 
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -7,9 +8,9 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
-import styled from "@emotion/styled";
 
-import { appRoutes, routes, getRoute } from "../../services/routes";
+import { routes, getRoute } from "../../services/routes";
+import { setCurrentRoutePathName, getCurrentRoutePathName } from "../../store/appDataSlice";
 
 import ErrorEl from "../../components/error/ErrorEl";
 import CreateDatabaseModalView from "./CreateDatabaseModalView";
@@ -18,6 +19,8 @@ import DeleteDatabaseModalView from "./DeleteDatabaseModalView";
 export default function DatabasesListPage({
   }: {
   }) {
+  const dispatch = useDispatch();
+  const currentRoutePathName = useSelector(getCurrentRoutePathName);
   const [ databases, setDatabases ] = useState<IDBDatabaseInfo[] | null>(null);
   const [ error, setError ] = useState<Error | any | null>(null);
 
@@ -49,11 +52,12 @@ export default function DatabasesListPage({
   }
 
   const databaseClick = (database: IDBDatabaseInfo) => {
-    const route = getRoute(routes.databases, database.name);
+    const route = getRoute(routes.database.pathname, database.name);
     navigate(route);
   }
 
-  const deleteDatabaseClick = (database: IDBDatabaseInfo) => {
+  const deleteDatabaseClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, database: IDBDatabaseInfo) => {
+    e.stopPropagation();
     setDatabaseToDelete(database);
   }
 
@@ -66,6 +70,10 @@ export default function DatabasesListPage({
   }
 
   useEffect(() => {
+    if (currentRoutePathName !== routes.databasesRoot.pathname) {
+      dispatch(setCurrentRoutePathName(routes.databasesRoot.pathname));
+    }
+
     if (!databases && !error) {
       loadDatabases();
     }
@@ -75,26 +83,26 @@ export default function DatabasesListPage({
     <CreateDatabaseModalView modalClosed={createDatabaseModalClosed} mainElRef={ref} />));
     
   const DeleteDatabaseModalViewEl = React.forwardRef<Element, { databaseName: string | undefined }>(({ databaseName }, ref) => (
-    <DeleteDatabaseModalView databaseName={databaseName} modalClosed={deleteDatabaseModalIsClosed} mainElRef={ref} />));
+    <DeleteDatabaseModalView databaseName={databaseName!} modalClosed={deleteDatabaseModalIsClosed} mainElRef={ref} />));
 
   return (<Box className="trmrk-page trmrk-databases-list-page">
-    <Typography variant="h5" component="h1">Existing databases</Typography>
     <Box className="trmrk-page-actions">
       <IconButton disabled={mainActionButtonsDisabled} className="trmrk-main-icon-button" onClick={createDatabaseClick}>
         <AddIcon className="trmrk-add-icon" /></IconButton>
     </Box>
-    { databases ? <ul className="trmrk-databases-list">{ databases.map(db => <li key={db.name} className="trmrk-databases-list-item">
-      <Box className="trmrk-item-label" onClick={() => databaseClick(db)}>{ db.name }</Box>
-      <Box className="trmrk-item-summary">
-        <Box className="trmrk-summary-item">
-          <span className="trmrk-name">Version:</span>
-          <span className="trmrk-value">{ db.version }</span>
+    { databases ? <ul className="trmrk-page-list">{ databases.map(db =>
+      <li key={db.name} className="trmrk-page-list-item" onClick={() => databaseClick(db)}>
+        <Box className="trmrk-item-label">{ db.name }</Box>
+        <Box className="trmrk-item-summary">
+          <Box className="trmrk-summary-item">
+            <span className="trmrk-name">Version:</span>
+            <span className="trmrk-value">{ db.version }</span>
+          </Box>
         </Box>
-      </Box>
-      <Box className=".trmrk-item-action-buttons" onClick={() => deleteDatabaseClick(db)}>
-        <IconButton className="trmrk-icon-button"><DeleteIcon className="trmrk-delete-icon" /></IconButton>
-      </Box>
-    </li>) }</ul> : error ? <ErrorEl
+        <Box className="trmrk-item-action-buttons">
+          <IconButton className="trmrk-icon-button" onClick={(e) => deleteDatabaseClick(e, db)}><DeleteIcon className="trmrk-delete-icon" /></IconButton>
+        </Box>
+      </li>) }</ul> : error ? <ErrorEl
       errCaption={"Could not load databases"}
       errMessage={error.message?.toString() ?? "Something went wrong"} /> : <Box
         className="trmrk-loading dot-elastic" sx={{ left: "1em" }}></Box> }

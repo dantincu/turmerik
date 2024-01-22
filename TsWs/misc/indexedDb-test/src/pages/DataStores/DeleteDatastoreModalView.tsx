@@ -11,14 +11,16 @@ import trmrk from "trmrk";
 
 import ErrorEl from "../../components/error/ErrorEl";
 
-import { attachDefaultHandlersToDbOpenRequest, databaseDeleteErrMsg } from "../../services/indexedDb";
+import { attachDefaultHandlersToDbOpenRequest, databaseOpenErrMsg, getErrMsg } from "../../services/indexedDb";
 
-export default function DeleteDatabaseModalView({
+export default function DeleteDatastoreModalView({
     databaseName,
+    datastoreName,
     mainElRef,
     modalClosed
   }: {
     databaseName: string,
+    datastoreName: string | undefined,
     mainElRef: React.ForwardedRef<Element>
     modalClosed: (saved: boolean) => void
   }) {
@@ -26,19 +28,27 @@ export default function DeleteDatabaseModalView({
   const [ error, setError ] = useState<string | null>(null);
   const [ warning, setwarning ] = useState<string | null>(null);
 
-  const deleteDatabaseClick = () => {
+  const deleteDatastoreClick = () => {
     setError(null);
     setwarning(null);
     setDeleting(true);
     
-    var req = indexedDB.deleteDatabase(databaseName!);
+    var req = indexedDB.open(databaseName!);
 
-    attachDefaultHandlersToDbOpenRequest(req, databaseDeleteErrMsg, success => {
-      setDeleting(false);
-
+    attachDefaultHandlersToDbOpenRequest(req, databaseOpenErrMsg, success => {
       if (success) {
-        modalClosed(true);
+        try {
+          const db = req.result;
+          db.deleteObjectStore(datastoreName!);
+        
+          modalClosed(true);
+        } catch (err) {
+          const errMsg = getErrMsg(err);
+          setError(errMsg);
+        }
       }
+
+      setDeleting(false);
     }, errMsg => {
       setError(errMsg);
     }, warnMsg => {
@@ -46,23 +56,25 @@ export default function DeleteDatabaseModalView({
     });
   }
 
-  const cancelDeleteDatabaseClick = () => {
+  const cancelDeleteDatastoreClick = () => {
     modalClosed(false);
   }
 
   return (<DialogContent className="trmrk-modal trmrk-modal-full-viewport" ref={mainElRef} tabIndex={-1}>
       <Typography id="trmrk-modal-title" variant="h5" component="h2">
-        Delete database
+        Delete datastore
       </Typography>
-      <p>Are you sure you want to delete database</p>
+      <p>Are you sure you want to delete datastore</p>
+      <p className="trmrk-item-label">{ datastoreName }</p>
+      <p>belonging to database</p>
       <p className="trmrk-item-label">{ databaseName }</p>
       <p>?</p>
       { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
       { warning ? <Box className="trmrk-form-field"><label className="trmrk-warning">{ warning }</label></Box> : null }
       { deleting ? <Box className="trmrk-loading dot-elastic" sx={{ left: "1em" }}></Box> : null }
       <Box className="trmrk-form-field">
-        <Button className="trmrk-main-button" disabled={deleting} sx={{ color: "#F00" }} onClick={deleteDatabaseClick}>Delete</Button>
-        <Button className="trmrk-main-button" disabled={deleting} onClick={cancelDeleteDatabaseClick}>Cancel</Button>
+        <Button className="trmrk-main-button" disabled={deleting} sx={{ color: "#F00" }} onClick={deleteDatastoreClick}>Delete</Button>
+        <Button className="trmrk-main-button" disabled={deleting} onClick={cancelDeleteDatastoreClick}>Cancel</Button>
       </Box>
     </DialogContent>);
   }
