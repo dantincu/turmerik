@@ -10,8 +10,6 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
-import { v4 as uuidv4 } from 'uuid';
-
 import trmrk from "trmrk";
 
 import {
@@ -27,7 +25,8 @@ import {
 import { setCurrentRoutePathName, getCurrentRoutePathName } from "../../store/appDataSlice";
 import { routes, getRoute, defaultPageNotFoundHtmlDocTitle } from "../../services/routes";
 import { appRoutes, dbNameParam, dbStoreNameParam, dbStoreRecordPkParam } from "../../services/routes";
-import { EditedDbObjectStore, EditedDbObjectStoreImpl } from "./DataTypes";
+import ExistingDataStoresList from "./ExistingDataStoresList";
+import { EditedDbObjectStore } from "../../services/indexedDbData";
 
 import DeleteDatabaseModalView from "./DeleteDatabaseModalView";
 import EditDatabaseModalView from "./EditDatabaseModalView";
@@ -49,7 +48,7 @@ export default function DatabasePage({
   const [ isLoading, setIsloading ] = useState(false);
   const [ isLoaded, setIsLoaded ] = useState(false);
   const [ dbVersion, setDbVersion ] = useState<number | null>(null);
-  const [ dbStores, setDbStores ] = useState<IDbObjectStoreInfo[] | null>(null);
+  const [ dbStores, setDbStores ] = useState<EditedDbObjectStore[] | null>(null);
 
   const [ error, setError ] = useState<Error | any | null>(null);
   const [ warning, setWarning ] = useState<string | null>(null);
@@ -108,7 +107,7 @@ export default function DatabasePage({
               
               try {
                 const objStoreNames = getObjectStoresInfoAgg(db);
-                setDbStores(objStoreNames);
+                setDbStores(objStoreNames as EditedDbObjectStore[]);
               } catch (err) {
                 setError(getErrMsg(err));
               }
@@ -174,11 +173,7 @@ export default function DatabasePage({
       { dbStoreName ? "Data Store" : dbStores?.length ? "Data Stores" : "No Data Stores" }
     </Typography>
     
-    { dbStores ? <ul className="trmrk-page-list">{ dbStores.map(dataStore =>
-      <li key={dataStore.storeName} className="trmrk-page-list-item" onClick={() => datastoreClick(dataStore)}>
-        <Box className="trmrk-item-label">{ dataStore.storeName }</Box>
-      </li>) }
-    </ul> : null }
+    { dbStores ? <ExistingDataStoresList dbStores={dbStores} datastoreClick={datastoreClick} /> : null }
     <Modal
       open={showDeleteDatabaseModal}
       hideBackdrop={true}

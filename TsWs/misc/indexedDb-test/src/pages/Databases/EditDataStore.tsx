@@ -20,7 +20,7 @@ import {
   getErrMsg
 } from "../../services/indexedDb";
 
-import { EditedDbObjectStore } from "./DataTypes";
+import { EditedDbObjectStore } from "../../services/indexedDbData";
 
 export default function EditDatastore({
     initialData,

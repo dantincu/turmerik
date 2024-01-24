@@ -7,7 +7,6 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
 
 import { routes, getRoute } from "../../services/routes";
 import { setCurrentRoutePathName, getCurrentRoutePathName } from "../../store/appDataSlice";

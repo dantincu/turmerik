@@ -9,11 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 
-import { v4 as uuidv4 } from 'uuid';
-
 import trmrk from "trmrk";
-
-import ErrorEl from "../../components/error/ErrorEl";
 
 import {
   attachDefaultHandlersToDbOpenRequest,
@@ -24,9 +20,10 @@ import {
   IDbObjectStoreInfo
 } from "../../services/indexedDb";
 
-import { EditedDbObjectStore, EditedDbObjectStoreImpl, EditedDatabase } from "./DataTypes";
+import { EditedDbObjectStore, EditedDatabase, mapObjectStoresAgg, convertObjectStore } from "../../services/indexedDbData";
 
 import EditDatastore from "./EditDatastore";
+import ExistingDataStoresList from "./ExistingDataStoresList";
 
 export default function EditDatabaseModalView({
     dbToEdit,
@@ -41,35 +38,31 @@ export default function EditDatabaseModalView({
   const minVersionNumber = dfDbVersionNumber ?? 1;
   const databaseNumberValidationMsg = dbToEdit ? dfDatabaseNumberValidationMsg : getDfDatabaseNumberValidationMsg(minVersionNumber);
 
-  const dbStoresRef = React.useRef<EditedDbObjectStore[]>([]);
-
-  const removeStore = (store: EditedDbObjectStore) => {
-    console.log("removeStore", store, dbStoresRef.current);
-    const idx = dbStoresRef.current!.findIndex(obj => obj.uuid === store.uuid);
+  const removeExistingStore = (store: EditedDbObjectStore) => {
+    const idx = existingDbStoresRef.current.findIndex(obj => obj.uuid === store.uuid);
 
     if (idx >= 0) {
-      console.log("removeStore", store, idx);
-      const newDbStores = [...dbStoresRef.current!];
-      newDbStores.splice(idx, 1);
-      setDbStores(newDbStores);
+      const newDbStores = [...existingDbStores];
+      const dbStore = {...store};
+
+      dbStore.isDeleted = !dbStore.isDeleted;
+      newDbStores[idx] = dbStore;
+
+      setExistingDbStores(newDbStores);
     }
   }
 
-  const convertDataStore = (store: IDbObjectStoreInfo) => {
-    const retStore: EditedDbObjectStore = new EditedDbObjectStoreImpl({
-      ...store,
-      uuid: uuidv4(),
-      onRemoved: () => removeStore(retStore)} as EditedDbObjectStore);
+  const existingDbStoresRef = useRef<EditedDbObjectStore[]>(
+    mapObjectStoresAgg(dbToEdit?.datastores ?? [], removeExistingStore));
 
-    return retStore;
-  };
-
-  dbStoresRef.current = dbToEdit?.datastores.map(store => convertDataStore(store)) ?? []
+  const addedDbStoresRef = useRef<EditedDbObjectStore[]>([]);
 
   const [ databaseName, setDatabaseName ] = useState<string>(dbToEdit?.databaseName ?? "");
   const [ databaseVersionNumber, setDatabaseVersionNumber ] = useState<number | null>(dfDbVersionNumber);
   const [ databaseVersion, setDatabaseVersion ] = useState<string>(dfDbVersionNumber?.toString() ?? "");
-  const [ dbStores, setDbStores ] = useState<EditedDbObjectStore[]>(dbStoresRef.current);
+
+  const [ existingDbStores, setExistingDbStores ] = useState<EditedDbObjectStore[]>(existingDbStoresRef.current);
+  const [ addedDbStores, setAddedDbStores ] = useState<EditedDbObjectStore[]>(addedDbStoresRef.current);
 
   const [ saving, setSaving ] = useState(false);
   const [ error, setError ] = useState<string | null>(null);
@@ -162,14 +155,29 @@ export default function EditDatabaseModalView({
     setDatabaseVersionNumber(value);
   }
 
+  const removeAddedStore = (store: EditedDbObjectStore) => {
+    const idx = addedDbStoresRef.current.findIndex(obj => obj.uuid === store.uuid);
+
+    if (idx >= 0) {
+      const newDbStores = [...addedDbStoresRef.current];
+      newDbStores.splice(idx, 1);
+      setAddedDbStores(newDbStores);
+    }
+  }
+
   const onAddDatastoreClick = () => {
-    dbStoresRef.current = [...dbStores, convertDataStore({} as IDbObjectStoreInfo)];
-    setDbStores(dbStoresRef.current);
+    const newDbStore = convertObjectStore({
+        storeName: ""
+      } as IDbObjectStoreInfo, removeAddedStore);
+
+    const newAddedDbStores = [...addedDbStoresRef.current, newDbStore];
+    setAddedDbStores(newAddedDbStores);
   }
 
   useEffect(() => {
-    dbStoresRef.current = dbStores;
-  }, [ dbStores, dbStoresRef ]);
+    existingDbStoresRef.current = existingDbStores;
+    addedDbStoresRef.current = addedDbStores;
+  }, [ existingDbStores, addedDbStores, existingDbStoresRef, addedDbStoresRef ]);
 
   return (<DialogContent className="trmrk-modal trmrk-modal-full-viewport" ref={mainElRef} tabIndex={-1}>
       <Typography id="trmrk-modal-title" variant="h5" component="h2">
@@ -195,9 +203,10 @@ export default function EditDatabaseModalView({
       </Box>
       
       <Typography variant="h6" component="h3">
-        { dbStores.length ? "Data Stores" : "No Data Stores" }
+        { (existingDbStores.length + addedDbStores.length) ? "Data Stores" : "No Data Stores" }
+      <ExistingDataStoresList dbStores={existingDbStores} datastoreClick={store => {}} />
       </Typography>
-      { dbStores.map(dataStore =>
+      { addedDbStores.map(dataStore =>
         <EditDatastore key={dataStore.uuid} initialData={dataStore} />) }
       <IconButton onClick={onAddDatastoreClick}><AddIcon /></IconButton>
       { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
