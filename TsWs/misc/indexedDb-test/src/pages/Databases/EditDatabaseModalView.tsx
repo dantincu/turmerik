@@ -17,7 +17,8 @@ import {
   dfDatabaseNameValidationMsg,
   getDfDatabaseNumberValidationMsg,
   dfDatabaseNumberValidationMsg,
-  IDbObjectStoreInfo
+  IDbObjectStoreInfo,
+  getCreateDbRequestErrMsg
 } from "../../services/indexedDb";
 
 import { EditedDbObjectStore, EditedDatabase, mapObjectStoresAgg, convertObjectStore } from "../../services/indexedDbData";
@@ -35,29 +36,14 @@ export default function EditDatabaseModalView({
     modalClosed: (saved: boolean) => void
   }) {
   const dfDbVersionNumber = dbToEdit ? (dbToEdit.databaseVersion ?? 1) + 1 : null;
-  const minVersionNumber = dfDbVersionNumber ?? 1;
-  const databaseNumberValidationMsg = dbToEdit ? dfDatabaseNumberValidationMsg : getDfDatabaseNumberValidationMsg(minVersionNumber);
-
-  const removeExistingStore = (store: EditedDbObjectStore) => {
-    const idx = existingDbStoresRef.current.findIndex(obj => obj.uuid === store.uuid);
-
-    if (idx >= 0) {
-      const newDbStores = [...existingDbStores];
-      const dbStore = {...store};
-
-      dbStore.isDeleted = !dbStore.isDeleted;
-      newDbStores[idx] = dbStore;
-
-      setExistingDbStores(newDbStores);
-    }
-  }
 
   const existingDbStoresRef = useRef<EditedDbObjectStore[]>(
-    mapObjectStoresAgg(dbToEdit?.datastores ?? [], removeExistingStore));
+    mapObjectStoresAgg(dbToEdit?.datastores ?? []));
 
   const addedDbStoresRef = useRef<EditedDbObjectStore[]>([]);
 
   const [ databaseName, setDatabaseName ] = useState<string>(dbToEdit?.databaseName ?? "");
+  const [ databaseMinVersionNumber, setDatabaseMinVersionNumber ] = useState(dfDbVersionNumber ?? 1);
   const [ databaseVersionNumber, setDatabaseVersionNumber ] = useState<number | null>(dfDbVersionNumber);
   const [ databaseVersion, setDatabaseVersion ] = useState<string>(dfDbVersionNumber?.toString() ?? "");
 
@@ -66,7 +52,7 @@ export default function EditDatabaseModalView({
 
   const [ saving, setSaving ] = useState(false);
   const [ error, setError ] = useState<string | null>(null);
-  const [ warning, setwarning ] = useState<string | null>(null);
+  const [ warning, setWarning ] = useState<string | null>(null);
 
   const [ databaseNameValidationError, setDatabaseNameValidationError ] = useState<string | null>(null);
   const [ databaseVersionValidationError, setDatabaseVersionValidationError ] = useState<string | null>(null);
@@ -91,18 +77,18 @@ export default function EditDatabaseModalView({
 
         if (isNaN(value) || value <= 0) {
           value = null;
-          err = databaseNumberValidationMsg;
+          err = getDfDatabaseNumberValidationMsg(databaseMinVersionNumber);
         } else if (dbToEdit) {
-          if (value < minVersionNumber) {
-            err = databaseNumberValidationMsg;
+          if (value < databaseMinVersionNumber) {
+            err = getDfDatabaseNumberValidationMsg(databaseMinVersionNumber);
           }
         }
       } catch (exc) {
         value = null;
-        err = databaseNumberValidationMsg;
+        err = getDfDatabaseNumberValidationMsg(databaseMinVersionNumber);
       }
     } else if (dbToEdit) {
-      err = databaseNumberValidationMsg;
+      err = getDfDatabaseNumberValidationMsg(databaseMinVersionNumber);
     }
 
     return [ err, value ];
@@ -110,26 +96,71 @@ export default function EditDatabaseModalView({
 
   const saveDatabaseClick = () => {
     setError(null);
-    setwarning(null);
+    setWarning(null);
 
-    if (databaseName && !databaseNameValidationError && !databaseVersionValidationError) {
+    let hasError = false;
+
+    const addedStores = addedDbStoresRef.current.map(
+      store => store.dataFactory.factories.findLast(obj => obj)!());
+
+    if (addedStores.find(obj => obj.hasError)) {
+      hasError = true;
+      setError("Please fix the current errors before submiting the changes");
+    } else if (databaseName && !databaseNameValidationError && !databaseVersionValidationError) {
       setSaving(true);
-      
       var req = indexedDB.open(databaseName, databaseVersionNumber ?? undefined);
 
       attachDefaultHandlersToDbOpenRequest(req, dfDatabaseOpenErrMsg, success => {
-        setSaving(false);
+        if (!hasError) {
+          let errMsg: string | null = null;
 
-        if (success) {
-          req.result.close();
-          modalClosed(true);
+          try {
+            req.result.close();
+          } catch (err) {
+            hasError = true;
+            errMsg = (err as Error).message ?? "Could not close the database connection";
+          }
+          
+          setWarning(null);
+          setError(errMsg);
+          setSaving(false);
+
+          if (success && !hasError) {
+            modalClosed(true);
+          }
+        } else {
+          setWarning(null);
+          setSaving(false);
         }
       }, errMsg => {
+        hasError = true;
         setError(errMsg);
       }, warnMsg => {
-        setwarning(warnMsg);
+        setWarning(warnMsg);
+      }, e => {
+        try {
+          const db = req.result;
+
+          for (let store of existingDbStoresRef.current) {
+            if (store.isDeleted) {
+              db.deleteObjectStore(store.storeName);
+            }
+          }
+
+          for (let store of addedStores) {
+            db.createObjectStore(store.storeName, {
+              keyPath: store.keyPath,
+              autoIncrement: store.autoIncrement,
+            });
+          }
+        } catch (err) {
+          hasError = true;
+          const errMsg = (err as Error).message ?? "Could not upgrade the database";
+          setError(errMsg);
+        }
       });
     } else if (!databaseName) {
+      hasError = true;
       setDatabaseNameValidationError(dfDatabaseNameValidationMsg);
     }
   }
@@ -155,6 +186,20 @@ export default function EditDatabaseModalView({
     setDatabaseVersionNumber(value);
   }
 
+  const removeExistingStore = (store: EditedDbObjectStore) => {
+    const idx = existingDbStoresRef.current.findIndex(obj => obj.uuid === store.uuid);
+
+    if (idx >= 0) {
+      const newDbStores = [...existingDbStoresRef.current];
+      const dbStore = {...store};
+
+      dbStore.isDeleted = !dbStore.isDeleted;
+      newDbStores[idx] = dbStore;
+
+      setExistingDbStores(newDbStores);
+    }
+  }
+
   const removeAddedStore = (store: EditedDbObjectStore) => {
     const idx = addedDbStoresRef.current.findIndex(obj => obj.uuid === store.uuid);
 
@@ -168,7 +213,7 @@ export default function EditDatabaseModalView({
   const onAddDatastoreClick = () => {
     const newDbStore = convertObjectStore({
         storeName: ""
-      } as IDbObjectStoreInfo, removeAddedStore);
+      } as IDbObjectStoreInfo);
 
     const newAddedDbStores = [...addedDbStoresRef.current, newDbStore];
     setAddedDbStores(newAddedDbStores);
@@ -177,7 +222,7 @@ export default function EditDatabaseModalView({
   useEffect(() => {
     existingDbStoresRef.current = existingDbStores;
     addedDbStoresRef.current = addedDbStores;
-  }, [ existingDbStores, addedDbStores, existingDbStoresRef, addedDbStoresRef ]);
+  }, [ existingDbStores, addedDbStores, databaseVersionNumber, databaseMinVersionNumber, existingDbStoresRef, addedDbStoresRef ]);
 
   return (<DialogContent className="trmrk-modal trmrk-modal-full-viewport" ref={mainElRef} tabIndex={-1}>
       <Typography id="trmrk-modal-title" variant="h5" component="h2">
@@ -204,10 +249,12 @@ export default function EditDatabaseModalView({
       
       <Typography variant="h6" component="h3">
         { (existingDbStores.length + addedDbStores.length) ? "Data Stores" : "No Data Stores" }
-      <ExistingDataStoresList dbStores={existingDbStores} datastoreClick={store => {}} />
       </Typography>
+      <ExistingDataStoresList dbStores={existingDbStores} isEditable={true} datastoreDelete={removeExistingStore} />
+
       { addedDbStores.map(dataStore =>
-        <EditDatastore key={dataStore.uuid} initialData={dataStore} />) }
+        <EditDatastore key={dataStore.uuid} initialData={dataStore} datastoreDelete={() => removeAddedStore(dataStore)} />) }
+      
       <IconButton onClick={onAddDatastoreClick}><AddIcon /></IconButton>
       { error ? <Box className="trmrk-form-field"><label className="trmrk-error">{ error }</label></Box> : null }
       { warning ? <Box className="trmrk-form-field"><label className="trmrk-warning">{ warning }</label></Box> : null }

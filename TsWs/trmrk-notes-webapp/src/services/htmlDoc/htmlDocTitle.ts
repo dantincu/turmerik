@@ -1,4 +1,4 @@
-import { getAppTitle, defaultAppTitle } from "../utils";
+import { getAppTitle } from "../utils";
 
 export const updateHtmlDocTitle = (
   title: string | null = null,

@@ -53,7 +53,8 @@ export const attachDefaultHandlersToDbOpenRequest = (
   defaultErrMsg: string,
   setReqFinished: (success: boolean) => void,
   setError: (errMessage: string) => void,
-  setWarning: (warnMessage: string) => void
+  setWarning: (warnMessage: string) => void,
+  onupgradeneeded?: ((e: IDBVersionChangeEvent) => void) | null | undefined
 ) => {
   req.onsuccess = (e: Event) => {
     setReqFinished(true);
@@ -70,10 +71,12 @@ export const attachDefaultHandlersToDbOpenRequest = (
     setWarning(warnMsg);
   };
 
-  req.onupgradeneeded = (e: IDBVersionChangeEvent) => {
-    const warnMsg = getDbRequestWarningMsg("database needs upgrade", e);
-    setWarning(warnMsg);
-  };
+  req.onupgradeneeded =
+    onupgradeneeded ??
+    ((e: IDBVersionChangeEvent) => {
+      const warnMsg = getDbRequestWarningMsg("database needs upgrade", e);
+      setWarning(warnMsg);
+    });
 };
 
 export const domStrListToArr = (list: DOMStringList) => {

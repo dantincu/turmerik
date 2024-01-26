@@ -19,7 +19,7 @@ import { currentAppTheme } from "../../services/app-theme/app-theme";
 import { appModeCssClass } from "../../services/utils";
 import ErrorEl from "../../components/error/ErrorEl";
 import FilesHcy from "../../components/filesHcy/FilesHcy";
-import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
+import { updateHtmlDocTitle } from "trmrk-browser/src/domUtils/htmlDocTitle";
 import { driveExplorerSvc } from "../../services/driveExplorer/DriveExplorerSvc";
 import { appCfg, TrmrkStorageOption } from "../../services/appConfig";
 import { getStorageOption, setStorageOption, setShowSetupPage } from "../../store/storageOptionSlice";

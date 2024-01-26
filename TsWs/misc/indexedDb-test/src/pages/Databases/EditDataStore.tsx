@@ -24,8 +24,12 @@ import { EditedDbObjectStore } from "../../services/indexedDbData";
 
 export default function EditDatastore({
     initialData,
+    datastoreClick,
+    datastoreDelete
   }: {
-    initialData: EditedDbObjectStore
+    initialData: EditedDbObjectStore,
+    datastoreClick?: (() => void) | null | undefined,
+    datastoreDelete?: (() => void) | null | undefined
   }) {
   const [ datastoreName, setDatastoreName ] = useState<string>(initialData.storeName);
   const [ datastoreAutoIncrement, setDatastoreAutoIncrement ] = useState(initialData.autoIncrement);
@@ -33,6 +37,10 @@ export default function EditDatastore({
 
   const [ datastoreNameValidationError, setDatastoreNameValidationError ] = useState<string | null>(null);
   const [ datastoreKeyPathValidationError, setDatastoreKeyPathValidationError ] = useState<string | null>(null);
+
+  const datastoreNameRef = useRef(initialData.storeName);
+  const datastoreAutoIncrementRef = useRef(initialData.autoIncrement ?? false);
+  const datastoreKeyPathStrRef = useRef(initialData.keyPathStr);
 
   const validateDatastoreName = (text: string) => {
     let err: string | null = null;
@@ -69,20 +77,32 @@ export default function EditDatastore({
     setDatastoreKeyPathValidationError(err);
   }
 
-  const dataFactory = () => ({
-    storeName: datastoreName,
-    autoIncrement: datastoreAutoIncrement,
-    keyPathStr: datastoreKeyPathStr,
-    hasError: !!(datastoreNameValidationError || datastoreKeyPathValidationError)
-  } as EditedDbObjectStore);
+  const dataFactory = () => {
+    const retObj = {
+      storeName: datastoreNameRef.current,
+      autoIncrement: datastoreAutoIncrementRef.current,
+      keyPathStr: datastoreKeyPathStrRef.current,
+      keyPath: datastoreKeyPathStrRef.current.split("\n"),
+      hasError: !!(datastoreNameValidationError || datastoreKeyPathValidationError)
+    } as EditedDbObjectStore;
+
+    return retObj;
+  };
 
   useEffect(() => {
+    datastoreNameRef.current = datastoreName;
+    datastoreAutoIncrementRef.current = datastoreAutoIncrement;
+    datastoreKeyPathStrRef.current = datastoreKeyPathStr;
+
     initialData.dataFactory.subscribe(dataFactory);
 
     return () => {
       initialData.dataFactory.unsubscribe(dataFactory);
     };
-  }, []);
+  }, [ datastoreName, datastoreAutoIncrement, datastoreKeyPathStr ]);
+
+  const onDatastoreClick = datastoreClick ?? (() => {});
+  const onDatastoreDelete = datastoreDelete ?? (() => {});
 
   return (<Box className="trmrk-edit-item trmrk-edit-datastore" sx={{
         border: "1px solid #888",
@@ -90,8 +110,8 @@ export default function EditDatastore({
         padding: "1em",
         borderRadius: "5px",
         position: "relative"
-      }}>
-      <IconButton sx={{ position: "absolute", top: "0em", right: "0em" }} onClick={() => initialData.onRemoved()}><DeleteIcon /></IconButton>
+      }} onClick={() => onDatastoreClick()}>
+      <IconButton sx={{ position: "absolute", top: "0em", right: "0em" }} onClick={() => onDatastoreDelete()}><DeleteIcon /></IconButton>
       <Box className="trmrk-form-field">
         <InputLabel>Datastore name</InputLabel>
         <TextField

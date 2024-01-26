@@ -6,6 +6,7 @@ import * as notesPath from "./notes-path";
 import * as url from "./url";
 import * as syncLock from "./sync-lock";
 import * as arrayAdapter from "./array-adapter";
+import * as FactoryRefObj from "./FactoryRef";
 
 import * as driveExplorerApi from "./DriveExplorerApi";
 
@@ -18,6 +19,7 @@ const core = {
   notesPath,
   url,
   ...arrayAdapter,
+  ...FactoryRefObj,
 
   ...driveExplorerApi,
 };

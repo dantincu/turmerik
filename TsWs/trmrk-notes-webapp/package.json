@@ -34,6 +34,7 @@
     "trmrk": "../trmrk",
     "trmrk-axios": "../trmrk-axios",
     "trmrk-browser": "../trmrk-browser",
+    "trmrk-react": "../trmrk-react",
     "uuid": "^9.0.1"
   }
 }

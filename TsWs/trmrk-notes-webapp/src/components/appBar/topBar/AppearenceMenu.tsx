@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeftOutlined';
-import ToggleDarkModeBtn from "../ToggleDarkModeBtn";
-import ToggleAppModeBtn from "../ToggleAppModeBtn";
+import ToggleDarkModeBtn from "trmrk-react/src/components/appBar/ToggleDarkModeBtn";
+import ToggleAppModeBtn from "trmrk-react/src/components/appBar/ToggleAppModeBtn";
 import IconButton from "@mui/material/IconButton";
 
 import { getAppearenceMenuIsOpen, setAppSettingsMenuIsOpen, setAppearenceMenuIsOpen } from "../../../store/appBarDataSlice";

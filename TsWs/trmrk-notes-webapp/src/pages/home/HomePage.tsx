@@ -10,7 +10,7 @@ import { addTab } from "../../store/appTabsDataSlice";
 import { AppPage, AppTabsData, AppData } from "../../services/appData";
 import { getOpenTabs } from "../../store/appTabsDataSlice";
 import { newUUid } from "../../services/utils";
-import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
+import { updateHtmlDocTitle } from "trmrk-browser/src/domUtils/htmlDocTitle";
 import PageContainer from "../../components/mainContent/PageContainer";
 
 export default function HomePage() {

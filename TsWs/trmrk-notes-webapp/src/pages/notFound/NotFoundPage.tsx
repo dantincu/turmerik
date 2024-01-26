@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Container from "@mui/material/Container";
 
 import NotFound from "../../components/notFound/NotFound";
-import { updateHtmlDocTitle } from "../../services/htmlDoc/htmlDocTitle";
+import { updateHtmlDocTitle } from "trmrk-browser/src/domUtils/htmlDocTitle";
 
 export default function NotFoundPage() {
   useEffect(() => {

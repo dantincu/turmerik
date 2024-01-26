@@ -124,7 +124,7 @@ export default function DatabasePage({
     } else {
       dispatch(setCurrentRoutePathName(defaultPageNotFoundHtmlDocTitle));
     }
-  }, [ currentRoutePathName, isLoading, isLoaded, dbVersion ]);
+  }, [ currentRoutePathName, isLoading, isLoaded ]);
 
   const DeleteDatabaseModalViewEl = React.forwardRef<Element>((props, ref) => (
     <DeleteDatabaseModalView databaseName={dbName!} modalClosed={deleteDatabaseModalIsClosed} mainElRef={ref} />));

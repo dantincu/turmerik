@@ -9,7 +9,7 @@ import App from './App';
 import { appCfg, AppConfig, TrmrkStorageOption, TrmrkNotesStorageOption } from "../services/appConfig";
 import { normalizeStorageOption, normalizeStorageOptionsArr } from "../services/storageOptions";
 import { localStorageKeys } from "../services/utils";
-import { supportedFeatures } from "../services/htmlDoc/htmlFeatures";
+import { supportedFeatures } from "trmrk-browser/src/domUtils/htmlFeatures";
 
 import devAppConfig from "./env/dev/app-config.json";
 import prodAppConfig from "./env/prod/app-config.json";

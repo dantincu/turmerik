@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import trmrk from "trmrk";
 
-import { localStorageKeys, jsonBool } from "../services/utils";
+import { localStorageKeys } from "../services/utils";
 import { AppData } from "../services/appData";
 
 declare type DispatcherType<TPropVal> = (
@@ -70,10 +70,10 @@ const appDataSlice = createSlice({
     showAppBarToggleBtn: true,
     isDarkMode:
       localStorage.getItem(localStorageKeys.appThemeIsDarkMode) ===
-      jsonBool.true,
+      trmrk.jsonBool.true,
     isCompactMode:
       localStorage.getItem(localStorageKeys.appIsCompactMode) !==
-      jsonBool.false,
+      trmrk.jsonBool.false,
   } as AppData,
   reducers: {
     ...reducer,

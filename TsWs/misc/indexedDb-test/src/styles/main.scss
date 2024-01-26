@@ -85,6 +85,13 @@ html, body, #app-root {
     line-height: 1em;
   }
 
+  &.trmrk-deleted-item {
+    .trmrk-item-label {
+      text-decoration: line-through;
+      font-style: italic;
+    }
+  }
+
   .trmrk-item-summary {
     grid-column: 1;
     grid-row: 2;
@@ -92,12 +99,27 @@ html, body, #app-root {
     font-size: 0.8em;
     margin: 0em;
 
+    .trmrk-summary-item {
+      margin-right: 1em;
+    }
+
     .trmrk-name, .trmrk-value {
       font-style: italic;
     }
 
     .trmrk-value {
       font-weight: bold;
+    }
+
+    .trmrk-value-multiple::after {
+      content: " / ";
+      font-weight: bold;
+      font-style: normal;
+      color: #44F;
+    }
+
+    .trmrk-value-multiple:last-child::after {
+      content: "";
     }
   }
 

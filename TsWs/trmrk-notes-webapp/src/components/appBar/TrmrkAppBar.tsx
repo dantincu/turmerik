@@ -15,8 +15,8 @@ import { AppBarData } from "../../services/appData";
 import { getShowTabsNavArrows, setAppOptionsMenuIsOpen, setAppSettingsMenuIsOpen } from "../../store/appBarDataSlice";
 import { getShowSetupPage, setNoteBookPath } from "../../store/storageOptionSlice";
 import { routes } from "../../services/routes";
-import { isScreenPortraitMode } from "../../services/htmlDoc/deviceOrientation";
-import { deviceConstants } from "../../services/htmlDoc/deviceConstants";
+import { isScreenPortraitMode } from "trmrk-browser/src/domUtils/deviceOrientation";
+import { deviceConstants } from "trmrk-browser/src/domUtils/deviceConstants";
 import { navSvc } from "../../services/navigation/NavigationSvc";
 
 const AppTabsBar = lazy(() => import("./appTabs/AppTabsBar"));

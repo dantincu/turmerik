@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
+import trmrk from "trmrk";
+
 import {
   IDbIndexInfo,
   IDbObjectStoreInfo,
@@ -21,13 +23,13 @@ export class EditedDbObjectStoreFactory {
   }
 
   public unsubscribe(factory: () => EditedDbObjectStore) {
-    const idx = this.factories.findIndex(factory);
+    const kvp = trmrk.findKvp(this.factories, (fact, idx) => fact === factory);
 
-    if (idx >= 0) {
-      this.factories.splice(idx, 1);
+    if (kvp.key >= 0) {
+      this.factories.splice(kvp.key, 1);
     }
 
-    return idx;
+    return kvp.key;
   }
 }
 
@@ -38,7 +40,6 @@ export interface EditedDbObjectStore extends IDbObjectStoreInfo {
   isDeleted: boolean | null | undefined;
   hasError: boolean | null | undefined;
   dataFactory: EditedDbObjectStoreFactory;
-  onRemoved: () => void;
 }
 
 export interface EditedDatabase {
@@ -50,7 +51,6 @@ export interface EditedDatabase {
 export class EditedDbObjectStoreImpl implements EditedDbObjectStore {
   constructor(src: EditedDbObjectStore) {
     this.dataFactory = new EditedDbObjectStoreFactory();
-    this.onRemoved = src.onRemoved;
     this.storeName = src.storeName;
     this.autoIncrement = src.autoIncrement;
     this.keyPath = src.keyPath;
@@ -64,7 +64,6 @@ export class EditedDbObjectStoreImpl implements EditedDbObjectStore {
   }
 
   readonly dataFactory: EditedDbObjectStoreFactory;
-  onRemoved: () => void;
 
   storeName: string;
   autoIncrement: boolean;
@@ -79,39 +78,38 @@ export class EditedDbObjectStoreImpl implements EditedDbObjectStore {
   hasError: boolean | null | undefined;
 }
 
-export const convertObjectStore = (
-  store: IDbObjectStoreInfo,
-  removeStore: (store: EditedDbObjectStore) => void
-) => {
-  const retStore: EditedDbObjectStore = new EditedDbObjectStoreImpl({
+export const convertObjectStore = (store: IDbObjectStoreInfo) =>
+  new EditedDbObjectStoreImpl({
     ...store,
     uuid: uuidv4(),
-    onRemoved: () => removeStore(retStore),
   } as EditedDbObjectStore);
 
-  return retStore;
-};
+export const mapObjectStoresAgg = (stores: IDbObjectStoreInfo[]) =>
+  stores.map((store) => convertObjectStore(store));
 
-export const mapObjectStoresAgg = (
-  stores: IDbObjectStoreInfo[],
-  removeStore: (store: EditedDbObjectStore) => void
-) => stores.map((store) => convertObjectStore(store, removeStore));
-
-export const getObjectStore = (
-  objStore: IDBObjectStore,
-  removeStore: (store: EditedDbObjectStore) => void
-) => {
+export const getObjectStore = (objStore: IDBObjectStore) => {
   const store = getObjectStoreInfo(objStore);
-  const retStore = convertObjectStore(store, removeStore);
+  const retStore = convertObjectStore(store);
   return retStore;
 };
 
-export const getObjectStoresAgg = (
-  db: IDBDatabase,
-  removeStore: (store: EditedDbObjectStore) => void
-) => {
+export const getObjectStoresAgg = (db: IDBDatabase) => {
   const storesArr = getObjectStoresInfoAgg(db);
-  const retStores = mapObjectStoresAgg(storesArr, removeStore);
+  const retStores = mapObjectStoresAgg(storesArr);
 
   return retStores;
+};
+
+export const normalizeKeyPath = (
+  keyPath: string | string[] | null | undefined
+) => {
+  let normKeyPath = keyPath;
+
+  if (typeof normKeyPath === "string") {
+    normKeyPath = [normKeyPath];
+  } else if (!(normKeyPath ?? false)) {
+    normKeyPath = [];
+  }
+
+  return normKeyPath as string[];
 };

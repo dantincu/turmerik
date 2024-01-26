@@ -19,7 +19,7 @@ import AppSetupPage from "../pages/appSetup/AppSetupPage";
 import MainContentContainer from "../components/mainContent/MainContainer";
 
 import TrmrkAppBar from "../components/appBar/TrmrkAppBar";
-import ToggleAppBarButton from "../components/appBar/ToggleAppBarButton";
+import ToggleAppBarButton from "trmrk-react/src/components/appBar/ToggleAppBarButton";
 
 interface FloatingBarTopOffset {
   headerIsHidden: boolean;

@@ -1,16 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
-
 import { MtblRefValue } from "trmrk/src/core";
 
-import { AppData, AppPage } from "./appData";
-
-export const jsonBool = Object.freeze({
-  false: JSON.stringify(false),
-  true: JSON.stringify(true),
-});
-
-export const getJsonBool = (value: boolean) =>
-  value ? jsonBool.true : jsonBool.false;
+import { AppPage } from "./appData";
 
 export const queryKeys = Object.freeze({});
 
@@ -20,17 +10,6 @@ export const localStorageKeys = Object.freeze({
   appIsCompactMode: "appIsCompactMode",
   pgContnrLeftPnlDfWidth: "pgContnrLeftPnlDfWidth",
 });
-
-export const newUUid = () => uuidv4().replaceAll("-", "");
-
-export const getLocalForageDbNameNewPfx = (
-  uuidStr?: string | null | undefined
-) => {
-  uuidStr ??= newUUid();
-  const newPfx = `localFsApiNotes/${uuidStr}/`;
-
-  return newPfx;
-};
 
 export const defaultAppTitle = "Turmerik Notes";
 
@@ -42,34 +21,6 @@ export const getAppTitle = (name: string | null = null) => {
   }
 
   return title;
-};
-
-export const appModeCssClasses = {
-  compactMode: "trmrk-mode-compact",
-  fullMode: "trmrk-mode-full",
-};
-
-export const getAppModeCssClassName = (isCompactMode: boolean) => {
-  const appModeClassName = isCompactMode
-    ? appModeCssClasses.compactMode
-    : appModeCssClasses.fullMode;
-
-  return appModeClassName;
-};
-
-export const getRoute = (
-  routeBase: string,
-  path: string | null | undefined = null,
-  relPath: string | null | undefined = null
-) => {
-  const partsArr = [path, relPath]
-    .filter((value) => value)
-    .map((value) => encodeURIComponent(value!));
-
-  partsArr.splice(0, 0, routeBase);
-  const route = partsArr.join("/");
-
-  return route;
 };
 
 export const getResxCssClassNameCore = (appPage: AppPage) => {
@@ -109,5 +60,3 @@ export const getResxCssClassName = (appPage: AppPage) => {
 
   return className;
 };
-
-export const appModeCssClass = {} as MtblRefValue<string>;
