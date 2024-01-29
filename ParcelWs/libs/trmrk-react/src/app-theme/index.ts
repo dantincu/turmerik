@@ -1,5 +1,5 @@
 import * as core from "./core";
 
-export default {
+export const app_theme = {
   ...core,
 };

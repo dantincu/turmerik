@@ -1,7 +1,7 @@
 import * as indexedDbInspector from "./indexedDbInspector";
 import DevTools from "./DevTools";
 
-export default {
+export const devTools = {
   DevTools,
   ...indexedDbInspector,
 };

@@ -1,5 +1,5 @@
 import IndexedDbInspector from "./IndexedDbInspector";
 
-export default {
+export const indexedDbInspector = {
   IndexedDbInspector,
 };

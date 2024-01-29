@@ -1,11 +1,9 @@
-import * as forms from "../../forms";
-import * as components from "../../components";
-import * as appTheme from "../../app-theme";
+import { components } from "../../components";
+import { app_theme } from "../../app-theme";
 import * as store from "../../store";
 
-export default {
-  forms,
+export const trmrk_react = {
   components,
-  appTheme,
+  ...app_theme,
   store,
 };

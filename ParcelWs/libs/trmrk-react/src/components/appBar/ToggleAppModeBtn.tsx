@@ -10,25 +10,27 @@ import trmrk from "trmrk";
 
 import { localStorageKeys, appModeCssClass, getAppModeCssClassName } from "../../utils";
 
-import { getIsCompactMode, setIsCompactMode } from "../../store/appDataSlice";
+import { AppDataSliceOps } from "../../store/appDataSlice";
 
 const ColorThemeLabel = styled.span`
   padding-right: 1em
 `;
 
 export default function ToggleAppModeBtn({
-    clicked
+    appDataSliceOps,
+    clicked,
   }: {
+    appDataSliceOps: AppDataSliceOps,
     clicked?: (() => void) | null | undefined
   }) {
-  const isCompactMode = useSelector(getIsCompactMode);
+  const isCompactMode = useSelector(appDataSliceOps.selectors.getIsCompactMode);
   const dispatch = useDispatch();
 
   const onClick = clicked ?? (() => {});
 
   const handleClick = () => {
     const switchToCompactMode = !isCompactMode;
-    dispatch(setIsCompactMode(switchToCompactMode));
+    dispatch(appDataSliceOps.actions.setIsCompactMode(switchToCompactMode));
     appModeCssClass.value = getAppModeCssClassName(isCompactMode);
     localStorage.setItem(localStorageKeys.appIsCompactMode, switchToCompactMode ? trmrk.jsonBool.true : trmrk.jsonBool.false);
     onClick();

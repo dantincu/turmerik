@@ -6,5 +6,5 @@ export default function DevTools({
   }: {
   }) {
   
-    return (<Box></Box>);
+    return (<Box sx={{ width: "100%", height: "1000vh" }}></Box>);
 };

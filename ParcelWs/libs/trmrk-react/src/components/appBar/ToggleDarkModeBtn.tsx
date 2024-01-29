@@ -7,24 +7,23 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
 import trmrk from "trmrk";
-
-import { setIsDarkMode, getIsDarkMode } from "../../../../trmrk-notes-webapp/src/store/appDataSlice";
-
-import { core as appThemeCore } from "../../app-theme";
+import { currentAppTheme, getAppTheme } from "../../app-theme/core";
 import { localStorageKeys } from "../../utils";
 
-const { getAppTheme, currentAppTheme } = appThemeCore;
+import { AppDataSliceOps } from "../../store/appDataSlice";
 
 const ColorThemeLabel = styled.span`
   padding-right: 1em
 `;
 
 export default function ToggleDarkModeBtn({
+    appDataSliceOps,
     clicked
   }: {
+    appDataSliceOps: AppDataSliceOps,
     clicked?: (() => void) | null | undefined
   }) {
-  const isDarkMode = useSelector(getIsDarkMode);
+  const isDarkMode = useSelector(appDataSliceOps.selectors.getIsDarkMode);
   const dispatch = useDispatch();
   
   const onClick = clicked ?? (() => {});
@@ -36,7 +35,7 @@ export default function ToggleDarkModeBtn({
       isDarkMode: switchToDarkMode
     });
 
-    dispatch(setIsDarkMode(switchToDarkMode));
+    dispatch(appDataSliceOps.actions.setIsDarkMode(switchToDarkMode));
     localStorage.setItem(localStorageKeys.appThemeIsDarkMode, switchToDarkMode ? trmrk.jsonBool.true : trmrk.jsonBool.false);
     onClick();
   };

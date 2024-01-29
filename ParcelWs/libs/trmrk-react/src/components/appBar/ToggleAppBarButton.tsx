@@ -5,19 +5,21 @@ import IconButton from '@mui/material/IconButton';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
-import { getShowAppBar, setShowAppBar } from "../../store/appDataSlice";
+import { AppDataSliceOps } from "../../store/appDataSlice";
 
 export default function ToggleAppBarButton({
-    onUpdateFloatingBarTopOffset
+    appDataSliceOps,
+    onToggled
   }: {
-    onUpdateFloatingBarTopOffset: () => void
+    appDataSliceOps: AppDataSliceOps,
+    onToggled: () => void
   }) {
-  const showAppBar = useSelector(getShowAppBar);
+  const showAppBar = useSelector(appDataSliceOps.selectors.getShowAppBar);
   const dispatch = useDispatch();
     
   const onOnAppBarToggled = () => {
-    dispatch(setShowAppBar(!showAppBar));
-    onUpdateFloatingBarTopOffset();
+    dispatch(appDataSliceOps.actions.setShowAppBar(!showAppBar));
+    onToggled();
   }
 
   return (<IconButton onClick={onOnAppBarToggled} sx={{
