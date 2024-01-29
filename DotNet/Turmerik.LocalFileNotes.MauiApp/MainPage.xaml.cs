@@ -1,4 +1,6 @@
-﻿namespace Turmerik.LocalFileNotes.MauiApp
+﻿using MauiIcons.Core;
+
+namespace Turmerik.LocalFileNotes.MauiApp
 {
     public partial class MainPage : ContentPage
     {
@@ -7,6 +9,8 @@
         public MainPage()
         {
             InitializeComponent();
+            // Temporary Workaround for url styled namespace in xaml
+            _ = new MauiIcon();
         }
 
         private void OnCounterClicked(object sender, EventArgs e)

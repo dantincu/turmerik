@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Turmerik.LocalFileNotes.MauiApp.MainPage">
+             x:Class="Turmerik.LocalFileNotes.MauiApp.MainPage"
+             xmlns:mi="http://www.aathifmahir.com/dotnet/2022/maui/icons">
 
     <ScrollView>
         <VerticalStackLayout
@@ -30,6 +31,7 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill" />
+            <mi:MauiIcon Icon="{mi:Material ABC}"/>
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MauiIcons.Material;
+using Microsoft.Extensions.Logging;
 
 using MsHosting = Microsoft.Maui.Hosting;
 
@@ -9,13 +10,14 @@ namespace Turmerik.LocalFileNotes.MauiApp
         public static MsHosting.MauiApp CreateMauiApp()
         {
             var builder = MsHosting.MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                }).UseMaterialMauiIcons();
 
 #if DEBUG
     		builder.Logging.AddDebug();
