@@ -1,0 +1,22 @@
+{
+  "name": "trmrk-notes-blazorapp",
+  "version": "0.1.0",
+  "description": "Turmierk Notes Blazor client side app",
+  "type": "module",
+  "scripts": {
+    "start": "parcel ./src/index.html --dist-dir ./dist/dev --port=9101 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "build": "parcel build ./src/index.html --dist-dir ./dist/prod"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "^2.10.3"
+  },
+  "dependencies": {
+    "trmrk": "../../libs/trmrk",
+    "trmrk-axios": "../../libs/trmrk-axios",
+    "trmrk-blazor": "../../libs/trmrk-blazor",
+    "trmrk-browser": "../../libs/trmrk-browser"
+  }
+}
