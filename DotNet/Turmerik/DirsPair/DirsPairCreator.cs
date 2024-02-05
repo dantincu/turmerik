@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.DirsPair
 {

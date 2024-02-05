@@ -4,17 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
+using Turmerik.Core.ConsoleApps.TempDir;
+using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.FileSystem;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.UnitTests
 {
-    public class FilteredDriveEntriesRetrieverUnitTest : UnitTestBase
+    public class FilteredDriveEntriesRetrieverUnitTest : FilteredDriveEntriesRetrieverUnitTestBase
     {
-        private readonly IFilteredDriveEntriesRetriever component;
-
-        public FilteredDriveEntriesRetrieverUnitTest()
+        [Fact]
+        public async Task MainTest()
         {
-            component = SvcProv.GetRequiredService<IFilteredDriveEntriesRetriever>();
+
         }
+
+        private Task PerformTestAsync(
+            DriveItem inputRootFolder,
+            DriveEntriesSerializableFilter driveEntriesFilter,
+            DriveItem expectedRootFolder) => PerformTestAsyncCore(
+                inputRootFolder, driveEntriesFilter, expectedRootFolder,
+                (tempDir, filteredResult) => expectedRootFolder);
     }
 }

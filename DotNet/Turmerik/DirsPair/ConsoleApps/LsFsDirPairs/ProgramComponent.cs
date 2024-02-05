@@ -12,9 +12,9 @@ using Turmerik.Core.Text;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.DirsPair;
-using Turmerik.DriveExplorer;
 using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.Notes.Core;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
 {

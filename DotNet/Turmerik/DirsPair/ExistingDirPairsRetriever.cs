@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Turmerik.DriveExplorer;
+using Turmerik.Core.DriveExplorer;
 using Turmerik.Notes.Core;
 
 namespace Turmerik.DirsPair

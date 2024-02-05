@@ -2,8 +2,8 @@
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Helpers;
 using Turmerik.NetCore.Dependencies;
-using Turmerik.FilesCloner.ConsoleApp;
-using Turmerik.DriveExplorer;
+using Turmerik.Core.DriveExplorer;
+using Turmerik.NetCore.ConsoleApps.FilesCloner;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());

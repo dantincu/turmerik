@@ -14,8 +14,8 @@ using Turmerik.Core.Text;
 using HtmlAgilityPack;
 using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
-using Turmerik.DriveExplorer;
 using Turmerik.Html;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 {

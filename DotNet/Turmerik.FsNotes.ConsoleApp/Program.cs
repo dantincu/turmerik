@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Core.Dependencies;
+using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
-using Turmerik.DriveExplorer;
 using Turmerik.Notes.ConsoleApps;
 
 var services = TrmrkCoreServices.RegisterAll(

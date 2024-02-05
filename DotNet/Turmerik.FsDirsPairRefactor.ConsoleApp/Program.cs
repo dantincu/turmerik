@@ -1,12 +1,12 @@
 ﻿
 using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Dependencies;
-using Turmerik.DriveExplorer;
 using RfDirsPairNames = Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.FsDirsPairRefactor.ConsoleApp;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Helpers;
 using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
+using Turmerik.Core.DriveExplorer;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());

@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.DriveExplorer;
 using Turmerik.Html;
 using Turmerik.Md;
 using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
 using Turmerik.Code.Core;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.Dependencies
 {

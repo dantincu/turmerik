@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
-using Turmerik.DriveExplorer;
 using Turmerik.Notes.Core;
 using Turmerik.Notes.Service;
 

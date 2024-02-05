@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Turmerik.DriveExplorer;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.Notes.Core
 {

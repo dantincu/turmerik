@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.Core.Dependencies;
 using Turmerik.Dependencies;
-using Turmerik.DriveExplorer;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Logging;
@@ -18,6 +17,7 @@ using Turmerik.Utility.WinFormsApp.UserControls.Forms;
 using System.Windows.Forms;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Dependencies;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.Utility.WinFormsApp
 {

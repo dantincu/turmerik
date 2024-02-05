@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.Core.DriveExplorer;
 using Turmerik.DirsPair;
-using Turmerik.DriveExplorer;
 
 namespace Turmerik.Notes.Core
 {

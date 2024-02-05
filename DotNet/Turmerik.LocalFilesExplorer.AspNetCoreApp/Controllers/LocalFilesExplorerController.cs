@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Turmerik.AspNetCore.Utility;
-using Turmerik.DriveExplorer;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Controllers
 {

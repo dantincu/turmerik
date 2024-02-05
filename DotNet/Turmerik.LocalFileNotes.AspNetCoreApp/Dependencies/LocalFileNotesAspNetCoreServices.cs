@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Turmerik.AspNetCore.Dependencies;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Notes.AspNetCore.Dependencies;
-using Turmerik.DriveExplorer;
 using Turmerik.Notes.Dependencies;
 using Turmerik.Notes.Core;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies
 {

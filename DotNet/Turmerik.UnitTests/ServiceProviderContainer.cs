@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Dependencies;
+using Turmerik.Core.DriveExplorer;
 using Turmerik.Dependencies;
-using Turmerik.DriveExplorer;
 using Turmerik.NetCore.Dependencies;
 
 namespace Turmerik.UnitTests

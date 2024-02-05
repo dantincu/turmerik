@@ -7,11 +7,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.TextSerialization;
-using Turmerik.DriveExplorer;
 using Turmerik.Md;
 using Turmerik.Core.Utility;
 using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.Notes
 {

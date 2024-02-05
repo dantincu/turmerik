@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
-using Turmerik.DriveExplorer;
 using RfDirsPairNames = Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
@@ -13,6 +12,7 @@ using Turmerik.Core.Utility;
 using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
 using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.FsDirsPairRefactor.ConsoleApp
 {

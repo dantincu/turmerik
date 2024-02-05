@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Turmerik.Notes
+namespace Turmerik.Core.Helpers
 {
     public static class ListH
     {
@@ -14,23 +14,38 @@ namespace Turmerik.Notes
             list.AddRange(itemsArr);
         }
 
-        public static void RemoveWhere<T>(
+        public static int RemoveWhere<T>(
             this List<T> list,
             Func<T, int, bool> predicate)
         {
-            int i = list.Count - 1;
+            int removedCount = 0;
+            int remainingCount = list.Count;
 
-            while (i >= 0)
+            int i = 0;
+            int idx = 0;
+
+            while (remainingCount > 0)
             {
-                if (predicate(list[i], i))
+                if (predicate(list[i], idx))
                 {
                     list.RemoveAt(i);
+                    removedCount++;
                 }
                 else
                 {
-                    i--;
+                    i++;
                 }
+
+                remainingCount--;
+                idx++;
             }
+
+            return removedCount;
         }
+
+        public static int RemoveWhere<T>(
+            this List<T> list,
+            Func<T, bool> predicate) => list.RemoveWhere(
+                (item, i) => predicate(item));
     }
 }
