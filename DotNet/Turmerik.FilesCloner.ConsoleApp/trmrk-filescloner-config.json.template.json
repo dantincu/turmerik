@@ -1,0 +1,93 @@
+{
+  "Profiles": [
+    {
+      "ProfileName": "notes-blazorapp",
+      "FileGroups": [
+        {
+          "CloneBaseDirLocator": {
+            "EntryBasePath": "./wwwroot"
+          },
+          "Files": [
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./trmrk-notes-config.json"
+              },
+              "CloneFileLocator": {
+                "EntryRelPath": "./trmrk-notes-config"
+              },
+              "UseChecksum": true
+            }
+          ]
+        },
+        {
+          "InputBaseDirLocator": {
+            "EntryBasePath": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
+          },
+          "CloneBaseDirLocator": {
+            "EntryBasePath": "./wwwroot"
+          },
+          "Files": [
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./dist/dev/index.js"
+              },
+              "CloneFileLocator": {
+                "EntryRelPath": "./js/dev"
+              },
+              "UseChecksum": true,
+              "CloneTplLines": [
+                "{0}",
+                "export const turmerik = window.turmerik;"
+              ]
+            },
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./dist/prod/index.js"
+              },
+              "CloneFileLocator": {
+                "EntryRelPath": "./js/prod"
+              },
+              "UseChecksum": true,
+              "CloneTplLines": [
+                "{0}",
+                "export const turmerik = window.turmerik;"
+              ]
+            }
+          ]
+        }
+      ],
+      "ScriptGroups": [
+        {
+          "WorkDir": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp",
+          "OnBeforeScripts": [
+            {
+              "Command": "rimraf .parcel-cache"
+            },
+            {
+              "Command": "rimraf dist"
+            },
+            {
+              "Command": "npm run build-dev"
+            },
+            {
+              "Command": "npm run build-prod"
+            },
+          ]
+        },
+        {
+          "WorkDir": "./wwwroot",
+          "OnBeforeScripts": [
+            {
+              "WorkDir": "./wwwroot",
+              "Command": "rimraf js"
+            },
+            {
+              "WorkDir": "./wwwroot",
+              "Command": "rimraf trmrk-notes-config"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

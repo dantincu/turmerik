@@ -69,7 +69,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFilesExplorer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.UpdFsDirPairsIdxes.ConsoleApp", "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\Turmerik.UpdFsDirPairsIdxes.ConsoleApp.csproj", "{9AF90827-6F03-4206-B7EA-8B77C7983C41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Notes.BlazorApp", "Turmerik.Notes.BlazorApp\Turmerik.Notes.BlazorApp.csproj", "{C66C8714-1777-4979-A818-22E34624B00D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Notes.BlazorApp", "Turmerik.Notes.BlazorApp\Turmerik.Notes.BlazorApp.csproj", "{C66C8714-1777-4979-A818-22E34624B00D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.FilesCloner.ConsoleApp", "Turmerik.FilesCloner.ConsoleApp\Turmerik.FilesCloner.ConsoleApp.csproj", "{6DCDDFDE-8317-4903-A34A-40DBFB77E231}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.TestConsoleApp", "Turmerik.TestConsoleApp\Turmerik.TestConsoleApp.csproj", "{8D4A4408-5008-4901-AF1E-87AA5D3F67A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +185,14 @@ Global
 		{C66C8714-1777-4979-A818-22E34624B00D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C66C8714-1777-4979-A818-22E34624B00D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C66C8714-1777-4979-A818-22E34624B00D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DCDDFDE-8317-4903-A34A-40DBFB77E231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DCDDFDE-8317-4903-A34A-40DBFB77E231}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DCDDFDE-8317-4903-A34A-40DBFB77E231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DCDDFDE-8317-4903-A34A-40DBFB77E231}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D4A4408-5008-4901-AF1E-87AA5D3F67A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D4A4408-5008-4901-AF1E-87AA5D3F67A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D4A4408-5008-4901-AF1E-87AA5D3F67A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D4A4408-5008-4901-AF1E-87AA5D3F67A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +228,8 @@ Global
 		{B912757C-DAB4-447D-B564-04CC4E5D69BA} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
 		{9AF90827-6F03-4206-B7EA-8B77C7983C41} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{C66C8714-1777-4979-A818-22E34624B00D} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
+		{6DCDDFDE-8317-4903-A34A-40DBFB77E231} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{8D4A4408-5008-4901-AF1E-87AA5D3F67A2} = {FCA0DE8B-04E5-46F5-9549-654541BC02DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

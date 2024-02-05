@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Testing;
 using Turmerik.Core.Dependencies;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Utility;
+using Turmerik.Core.LocalDeviceEnv;
 
 namespace Turmerik.UnitTests
 {
@@ -17,6 +20,11 @@ namespace Turmerik.UnitTests
                 new ServiceCollection().AsOpts());
         }
 
-        protected IServiceProvider SvcProv { get; } = ServiceProviderContainer.Instance.Value.Data;
+        public UnitTestBase()
+        {
+            SvcProv = ServiceProviderContainer.Instance.Value.Data;
+        }
+
+        protected IServiceProvider SvcProv { get; }
     }
 }

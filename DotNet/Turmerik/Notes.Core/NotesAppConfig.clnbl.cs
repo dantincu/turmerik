@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using Turmerik.Core.Helpers;
 
 namespace Turmerik.Notes.Core
 {
@@ -12,6 +15,9 @@ namespace Turmerik.Notes.Core
         int RequiredClientVersion { get; }
         string ClientRedirectUrl { get; }
         INoteDirsPairConfig GetNoteDirPairs();
+
+        IEnumerable<NotesAppConfig.ITrmrkNotesStorageOption> GetStorageOptions();
+        NotesAppConfig.ITrmrkNotesStorageOption GetSingleStorageOption();
     }
 
     public static class NotesAppConfigH
@@ -21,55 +27,36 @@ namespace Turmerik.Notes.Core
 
         public static NotesAppConfigMtbl ToMtbl(
             this INotesAppConfig src) => new NotesAppConfigMtbl(src);
+
+        public static NotesAppConfigImmtbl.TrmrkNotesStorageOptionImmtbl ToImmtbl(
+            this NotesAppConfig.ITrmrkNotesStorageOption src) => new NotesAppConfigImmtbl.TrmrkNotesStorageOptionImmtbl(src);
+
+        public static NotesAppConfigMtbl.TrmrkNotesStorageOptionMtbl ToMtbl(
+            this NotesAppConfig.ITrmrkNotesStorageOption src) => new NotesAppConfigMtbl.TrmrkNotesStorageOptionMtbl(src);
+
+        public static ReadOnlyCollection<NotesAppConfigImmtbl.TrmrkNotesStorageOptionImmtbl> ToImmtblRdnlC(
+            this IEnumerable<NotesAppConfig.ITrmrkNotesStorageOption> src) => src.Select(
+                item => item.ToImmtbl()).RdnlC();
+
+        public static List<NotesAppConfigMtbl.TrmrkNotesStorageOptionMtbl> ToMtblList(
+            this IEnumerable<NotesAppConfig.ITrmrkNotesStorageOption> src) => src.Select(
+                item => item.ToMtbl()).ToList();
     }
 
-    public class NotesAppConfigMtbl : INotesAppConfig
+    public static class NotesAppConfig
     {
-        public NotesAppConfigMtbl()
+        public interface ITrmrkNotesStorageOption
         {
+            string Name { get; }
+            string NoteBookPath { get; }
+            TrmrkStorageOption? Storage { get; }
+            bool? IsCloudStorage { get; }
+            string TrmrkRestApiHost { get; }
+            bool? IsApi { get; }
+            bool? IsTrmrkRestApi { get; }
+            bool? IsLocalFilesTrmrkRestApi { get; }
+            bool? IsCloudStorageApi { get; }
+            bool? IsCloudStorageTrmrkRestApi { get; }
         }
-
-        public NotesAppConfigMtbl(
-            INotesAppConfig src)
-        {
-            FsExplorerServiceReqRootPath = src.FsExplorerServiceReqRootPath;
-            AppEnvLocatorFilePath = src.AppEnvLocatorFilePath;
-            IsDevEnv = src.IsDevEnv;
-            RequiredClientVersion = src.RequiredClientVersion;
-            ClientRedirectUrl = src.ClientRedirectUrl;
-            NoteDirPairs = src.GetNoteDirPairs()?.ToMtbl();
-        }
-
-        public string FsExplorerServiceReqRootPath { get; set; }
-        public string AppEnvLocatorFilePath { get; set; }
-        public bool IsDevEnv { get; set; }
-        public int RequiredClientVersion { get; set; }
-        public string ClientRedirectUrl { get; set; }
-        public NoteDirsPairConfigMtbl NoteDirPairs { get; set; }
-
-        public INoteDirsPairConfig GetNoteDirPairs() => NoteDirPairs;
-    }
-
-    public class NotesAppConfigImmtbl : INotesAppConfig
-    {
-        public NotesAppConfigImmtbl(
-            INotesAppConfig src)
-        {
-            FsExplorerServiceReqRootPath = src.FsExplorerServiceReqRootPath;
-            AppEnvLocatorFilePath = src.AppEnvLocatorFilePath;
-            IsDevEnv = src.IsDevEnv;
-            RequiredClientVersion = src.RequiredClientVersion;
-            ClientRedirectUrl = src.ClientRedirectUrl;
-            NoteDirPairs = src.GetNoteDirPairs()?.ToImmtbl();
-        }
-
-        public string FsExplorerServiceReqRootPath { get; }
-        public string AppEnvLocatorFilePath { get; }
-        public bool IsDevEnv { get; }
-        public int RequiredClientVersion { get; }
-        public string ClientRedirectUrl { get; }
-        public NoteDirsPairConfigImmtbl NoteDirPairs { get; }
-
-        public INoteDirsPairConfig GetNoteDirPairs() => NoteDirPairs;
     }
 }

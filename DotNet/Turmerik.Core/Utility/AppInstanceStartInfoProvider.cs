@@ -95,24 +95,28 @@ namespace Turmerik.Core.Utility
 
     public class AppInstanceStartInfoProvider : IAppInstanceStartInfoProvider
     {
-        public AppInstanceStartInfoProvider()
+        public AppInstanceStartInfoProvider(
+            ITrmrkUniqueDirRetriever trmrkUniqueDirRetriever)
         {
-            Guid guid = Guid.NewGuid();
             var timeStamp = DateTime.UtcNow;
+
+            var uniqueDir = trmrkUniqueDirRetriever.GetTrmrkUniqueDir(
+                new TrmrkUniqueDirOpts
+                {
+                    DirNameTicks = timeStamp.Ticks,
+                });
 
             Data = new AppInstanceStartInfoImmtbl(
                 new AppInstanceStartInfoMtbl
                 {
-                    InstanceGuid = guid,
+                    InstanceGuid = uniqueDir.DirNameGuid,
                     InstanceTimeStamp = timeStamp,
                     InstanceTicks = timeStamp.Ticks,
-                    InstanceGuidStr = guid.ToString("D"),
-                    InstanceGuidStrNoDashes = guid.ToString("N")
+                    InstanceGuidStr = uniqueDir.DirNameGuid.ToString("D"),
+                    InstanceGuidStrNoDashes = uniqueDir.DirNameGuid.ToString("N")
                 });
 
-            ProcessDirName = string.Format("[{0}][{1}]",
-                Data.InstanceTicks,
-                Data.GetInstanceGuidStrNoDashes());
+            ProcessDirName = uniqueDir.DirName;
         }
 
         public IAppInstanceStartInfo Data { get; }

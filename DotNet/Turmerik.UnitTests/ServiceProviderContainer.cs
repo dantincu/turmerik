@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Dependencies;
+using Turmerik.Dependencies;
+using Turmerik.DriveExplorer;
 using Turmerik.NetCore.Dependencies;
 
 namespace Turmerik.UnitTests
@@ -23,6 +25,10 @@ namespace Turmerik.UnitTests
         {
             TrmrkCoreServices.RegisterAll(services);
             TrmrkNetCoreServices.RegisterAll(services);
+            TrmrkServices.RegisterAll(services);
+
+            services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
+            services.AddSingleton<IDriveExplorerService, FsExplorerService>();
         }
     }
 }

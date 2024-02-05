@@ -67,13 +67,15 @@ namespace Turmerik.Core.Helpers
         public static void WithExcp(
             Exception exc,
             Func<Exception, string> msgFactory = null,
-            ConsoleColorsTuple colors = default) => WithColors(
+            ConsoleColorsTuple colors = default,
+            string msgCaption = null) => WithColors(
                 () =>
                 {
                     msgFactory = msgFactory.FirstNotNull(
                         ex => string.Join(": ",
+                            msgCaption.Arr(
                             ex.GetType().FullName,
-                            ex.Message));
+                            ex.Message).NotNull()));
 
                     var msg = msgFactory(exc);
                     Console.Out.WriteLine(msg);

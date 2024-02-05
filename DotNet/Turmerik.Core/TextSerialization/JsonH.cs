@@ -147,7 +147,7 @@ namespace Turmerik.Core.TextSerialization
             string escapedStr = $"\\{quoteStr}";
 
             idnf = idnf.Replace(
-                "\"", "\"\"").Replace(
+                "\\", "\\\\").Replace(
                 quoteStr, escapedStr);
 
             return idnf;

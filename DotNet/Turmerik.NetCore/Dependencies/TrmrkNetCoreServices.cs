@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Turmerik.NetCore.LocalDeviceEnv;
 using Turmerik.Core.Utility;
 using Turmerik.NetCore.Md;
+using Turmerik.NetCore.Utility;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -15,8 +16,10 @@ namespace Turmerik.NetCore.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
+            services.AddSingleton<IProcessLauncher, ProcessLauncher>();
             services.AddSingleton<INetCoreAppEnvFactoryCore, NetCoreAppEnvFactoryCore>();
             services.AddSingleton<TextToMdService>();
+
             return services;
         }
     }

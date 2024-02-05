@@ -12,6 +12,8 @@ using Turmerik.Core.Utility;
 using Turmerik.Core.TextStream;
 using Turmerik.Core.Threading;
 using Turmerik.Core.FileSystem;
+using Turmerik.Core.ConsoleApps.TempDir;
+using Turmerik.Core.LocalDeviceEnv;
 
 namespace Turmerik.Core.Dependencies
 {
@@ -32,12 +34,16 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IIntermitentBackgroundWorkerFactory, IntermitentBackgroundWorkerFactory>();
             services.AddSingleton<IBackgroundCleanupComponentFactory, BackgroundCleanupComponentFactory>();
             services.AddSingleton<ISynchronizedValueAdapterFactory, SynchronizedValueAdapterFactory>();
+            services.AddSingleton<IProcessLauncherCore, ProcessLauncherCore>();
 
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IBestItemRetriever, BestItemRetriever>();
             services.AddSingleton<IBestItemAsyncRetriever, BestItemAsyncRetriever>();
 
             services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
+            services.AddSingleton<ITrmrkUniqueDirRetriever, TrmrkUniqueDirRetriever>();
+            services.AddSingleton<ITrmrkUniqueDirCreator, TrmrkUniqueDirCreator>();
+            services.AddSingleton<ITempDirConsoleApp, TempDirConsoleApp>();
             services.AddSingleton<IStringTemplateParser, StringTemplateParser>();
             services.AddSingleton<IExceptionSerializer, ExceptionSerializer>();
 
@@ -45,6 +51,8 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IDelimCharsExtractor, DelimCharsExtractor>();
             services.AddSingleton<ITextBufferLinesRetriever, TextBufferLinesRetriever>();
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
+
+            services.AddSingleton<IChecksumCalculator, ChecksumCalculator>();
 
             return services;
         }

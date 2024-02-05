@@ -1,9 +1,19 @@
 {
   "FsExplorerServiceReqRootPath": null,
   "AppEnvLocatorFilePath": null,
-  "IsDevEnv": false,
+  "IsDevEnv": true,
   "RequiredClientVersion": 1,
   "ClientRedirectUrl": null,
+  "StorageOptions": [
+    {
+      "Name": "Browser's IndexedDB (browser only storage)",
+      "Storage": 0
+    },
+    {
+      "Name": "Browser's File System API (local device storage)",
+      "Storage": 1
+    }
+  ],
   "NoteDirPairs": {
     "FileNameMaxLength": 100,
     "SerializeToJson": true,

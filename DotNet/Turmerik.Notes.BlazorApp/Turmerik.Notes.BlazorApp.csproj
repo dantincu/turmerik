@@ -22,4 +22,10 @@
     <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\dev\" />
+    <Folder Include="wwwroot\js\prod\" />
+    <Folder Include="wwwroot\trmrk-notes-config\" />
+  </ItemGroup>
+
 </Project>

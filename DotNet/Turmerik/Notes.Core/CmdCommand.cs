@@ -22,4 +22,18 @@ namespace Turmerik.Notes.Core
         NormalizeNoteIdxes,
         NormalizeNotesHcy,
     }
+
+    public enum TrmrkStorageOption
+    {
+        IndexedDB,
+        FileSystemApi,
+        MsGraphApi,
+        GoogleApi,
+        DropBoxApi,
+        LocalFilesTrmrkRestApi,
+        WinOSLocalFilesTrmrkRestApi,
+        MsGraphTrmrkRestApi,
+        GoogleTrmrkRestApi,
+        DropBoxTrmrkRestApi,
+    }
 }

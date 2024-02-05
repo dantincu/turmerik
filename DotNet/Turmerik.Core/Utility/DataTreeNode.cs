@@ -4,7 +4,20 @@ using System.Text;
 
 namespace Turmerik.Core.Utility
 {
-    public class DataTreeNode<T>
+    public interface IDataTreeNodeCore<T>
+    {
+        T Data { get; }
+    }
+
+    public interface IDataTreeNode<T, TNode, TChildNodes> : IDataTreeNodeCore<T>
+        where TNode : IDataTreeNode<T, TNode, TChildNodes>
+        where TChildNodes : IEnumerable<TNode>
+    {
+        TNode ParentNode { get; }
+        TChildNodes ChildNodes { get; }
+    }
+
+    public class DataTreeNode<T> : IDataTreeNode<T, DataTreeNode<T>, List<DataTreeNode<T>>>
     {
         public DataTreeNode()
         {

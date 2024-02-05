@@ -1,4 +1,32 @@
-﻿@inherits LayoutComponentBase
+﻿@using Newtonsoft.Json
+@using Turmerik.Core.TextSerialization
+@using Turmerik.Notes.BlazorApp.Services
+@using Turmerik.Notes.Core
+@inherits LayoutComponentBase
+
+@inject NotesBlazorAppModule AppModule;
+
+@code {
+    private IJSObjectReference appModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        appModule = await AppModule.GetAppModule();
+
+        if (firstRender)
+        {
+            var json = JsonConvert.SerializeObject(AppModule.AppConfig);
+            json = JsonH.EscapeQuotes(json);
+
+            await AppModule.JS.InvokeVoidAsync("eval", $"window.trmrkApp.init(\"{json}\");");
+        }
+    }
+
+    private async void OnInitializedAsync()
+    {
+    }
+}
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />

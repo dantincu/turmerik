@@ -23,6 +23,8 @@ namespace Turmerik.Dependencies
 
             services.AddSingleton<IFsItemsRetriever, FsItemsRetriever>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
+            services.AddSingleton<IFilteredDriveEntriesRetriever, FilteredDriveEntriesRetriever>();
+            services.AddSingleton<IFilteredDriveEntriesRemover, FilteredDriveEntriesRemover>();
 
             services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();
 

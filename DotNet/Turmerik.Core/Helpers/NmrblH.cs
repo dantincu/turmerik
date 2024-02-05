@@ -74,5 +74,15 @@ namespace Turmerik.Core.Helpers
         public static Dictionary<TKey, TValue> Dictnr<TKey, TValue>(
             this IEnumerable<KeyValuePair<TKey, TValue>> kvpNmrbl) => kvpNmrbl.ToDictionary(
                 kvp => kvp.Key, kvp => kvp.Value);
+
+        public static void AddRange<T>(
+            this ICollection<T> collection,
+            IEnumerable<T> itemsNmrbl)
+        {
+            foreach (var item in itemsNmrbl)
+            {
+                collection.Add(item);
+            }
+        }
     }
 }
