@@ -30,9 +30,10 @@ namespace Turmerik.Core.ConsoleApps.TempDir
         public async void Run(
             TempDirConsoleAppOpts opts)
         {
-            var tempDir = TryCreateTempDir(opts);
+            var tempDir = TryCreateTempDir(
+                opts, out var exitProgram);
 
-            if (tempDir != null)
+            if (tempDir != null && !exitProgram)
             {
                 try
                 {
@@ -59,9 +60,10 @@ namespace Turmerik.Core.ConsoleApps.TempDir
         public async Task RunAsync(
             TempDirAsyncConsoleAppOpts opts)
         {
-            var tempDir = TryCreateTempDir(opts);
+            var tempDir = TryCreateTempDir(
+                opts, out var exitProgram);
 
-            if (tempDir != null)
+            if (tempDir != null && !exitProgram)
             {
                 try
                 {
@@ -106,8 +108,10 @@ namespace Turmerik.Core.ConsoleApps.TempDir
         }
 
         private TrmrkUniqueDir TryCreateTempDir(
-            TempDirConsoleAppOptsCore opts)
+            TempDirConsoleAppOptsCore opts,
+            out bool exitProgram)
         {
+            exitProgram = false;
             TrmrkUniqueDir tempDir = null;
 
             try
@@ -121,9 +125,13 @@ namespace Turmerik.Core.ConsoleApps.TempDir
                     Path.GetDirectoryName(
                         tempDir.DirPath));
 
-                DeleteExistingTempDirsIfReq(opts, tempDir);
-                Directory.CreateDirectory(tempDir.DirPath);
+                exitProgram = DeleteExistingTempDirsIfReq(
+                    opts, tempDir);
 
+                if (!exitProgram)
+                {
+                    Directory.CreateDirectory(tempDir.DirPath);
+                }
             }
             catch (Exception exc)
             {
@@ -234,15 +242,13 @@ namespace Turmerik.Core.ConsoleApps.TempDir
             bool onBeforeAction)
         {
             Console.WriteLine();
-            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Blue;
 
             Console.WriteLine(onBeforeAction switch
             {
                 true => "Deleting existing temp folders before executing this app",
                 false => "Deleting the temp folder this app has been using"
             });
-
-            Console.WriteLine();
 
             foreach (var dirPath in dirNamesToRemoveArr)
             {
@@ -254,6 +260,8 @@ namespace Turmerik.Core.ConsoleApps.TempDir
                 true => "Successfully deleted existing temp folders before executing this app",
                 false => "Successfully deleted the temp folder this app has been using"
             });
+
+            Console.ResetColor();
         }
 
         private bool HandleDeleteTempDirsErr(
@@ -292,12 +300,11 @@ namespace Turmerik.Core.ConsoleApps.TempDir
                     "or anything else to leave the existing folders as they are and exit the program")
             });
 
-            Console.ResetColor();
-
             string answer = Console.ReadLine().ToUpper();
             bool exitProgram = answer == "X";
-
             tryAgain = answer == "Y";
+
+            Console.ResetColor();
             return exitProgram;
         }
 
@@ -316,15 +323,13 @@ namespace Turmerik.Core.ConsoleApps.TempDir
                 false => "The following temp folder has been used to execute this app:"
             });
 
-            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
 
             foreach (var dirName in dirNamesToRemoveArr)
             {
-                Console.WriteLine(dirName);
+                Console.WriteLine(Path.GetFileName(dirName));
             }
 
-            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
 
             bool exitProgram = false;
@@ -343,11 +348,12 @@ namespace Turmerik.Core.ConsoleApps.TempDir
                         false => "Type Y to confirm or anything else to not exit the program."
                     }));
 
-                string answer = Console.ReadLine();
-                removeDirs = answer.ToUpper() == "Y";
+                string answer = Console.ReadLine().ToUpper();
+                removeDirs = answer == "Y";
                 exitProgram = answer == "X";
             }
 
+            Console.ResetColor();
             return exitProgram;
         }
     }
