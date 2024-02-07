@@ -227,14 +227,14 @@ namespace Turmerik.UnitTests
         protected Tuple<DriveEntriesSerializableFilter, DriveEntriesSerializableFilter, DriveEntriesSerializableFilter, DriveEntriesSerializableFilter> CreateDefaultFilters(
             ) => Tuple.Create(
                 CrFvFltr(
-                    ["^\\/D0\\/.*\\/F[1-5]_[1-2]", "^\\/D0\\/.*\\/D[1-5]_[1-2]\\/"],
-                    ["^\\/D0\\/.*\\/F[4-5]_1", "^\\/D0\\/.*\\/D[4-5]_2\\/"]),
+                    ["^\\/D0\\/(.+\\/)?F[1-5]_[1-2]", "^\\/D0\\/(.+\\/)?D[1-5]_[1-2]\\/"],
+                    ["^\\/D0\\/(.+\\/)?F[1-5]_1", "^\\/D0\\/(.+\\/)?D[1-5]_2\\/"]),
                 CrFvFltr(
                     ["^\\/D0\\/.*F[1-5]_[1-2]", "D_[1-5]_[1-2]"],
-                    ["^\\/D0\\/.*F[4-5]_1", "D[4-5]_2"]),
+                    ["^\\/D0\\/.*F[1-5]_1", "D[1-5]_2"]),
                 CrFvFltr(
                     ["[1-5]_[1-2]"],
-                    ["F[4-5]_1", "D[4-5]_2"]),
+                    ["F[1-5]_1", "D[1-5]_2"]),
                 CrFvFltr(
                     ["\\/[1-5]_[1-2]", "[1-2]_[1-2]\\/"],
                     ["F1_2"]));
@@ -250,13 +250,7 @@ namespace Turmerik.UnitTests
                         CrDvItm("D3_1",
                             CrDvItm("F4_2").Lst(),
                             CrDvItm("D4_1",
-                                CrDvItm("F5_2").Lst()).Lst(
-                            CrDvItm("D4_2",
-                                CrDvItm("F5_2").Lst()))).Lst(
-                        CrDvItm("D3_2",
-                            CrDvItm("F4_2").Lst()))).Lst(
-                    CrDvItm("D2_2",
-                        CrDvItm("F3_2").Lst()))).Lst());
+                                CrDvItm("F5_2").Lst()).Lst()).Lst()).Lst()).Lst());
 
             var item4 = CrDvItm("D0",
                 CrDvItm("F1_1").Lst(),
