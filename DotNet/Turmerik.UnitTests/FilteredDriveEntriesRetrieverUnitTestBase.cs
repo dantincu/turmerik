@@ -47,9 +47,11 @@ namespace Turmerik.UnitTests
                         new FilteredDriveRetrieverMatcherOpts
                         {
                             FsEntriesSerializableFilter = driveEntriesFilter,
-                            PrFolderIdnf = prFolderPath
+                            PrFolderIdnf = prFolderPath,
+                            CheckRetNodeValidityDepth = int.MaxValue
                         });
 
+                    FilteredDriveEntriesH.AssertTreeNodeIsValid(result, int.MaxValue);
                     var actualRootFolder = actualRootFolderRetriever(tempDir, result);
 
                     AssertFoldersAreEqual(
@@ -102,12 +104,6 @@ namespace Turmerik.UnitTests
 
             Assert.Equal(removedCount, filter.FilteredFolderFiles.Count);
 
-            removedCount = inputFolder.SubFolders.RemoveWhere(
-                inputFile => filter.FilteredSubFolders.Any(
-                    file => file.Name == inputFile.Name));
-
-            Assert.Equal(removedCount, filter.FilteredSubFolders.Count);
-
             foreach (var childNode in filterResult.ChildNodes)
             {
                 var subFolder = inputFolder.SubFolders.Single(
@@ -116,6 +112,42 @@ namespace Turmerik.UnitTests
                 RemoveFromTempFolder(
                     subFolder, childNode);
             }
+
+            removedCount = inputFolder.SubFolders.RemoveWhere(
+                subFolder => subFolder.SubFolders.None() && subFolder.FolderFiles.None());
+        }
+
+        protected DriveItem ToTempFolder(
+            DriveItem inputFolder,
+            DataTreeNodeMtbl<FilteredDriveEntries> filterResult)
+        {
+            inputFolder ??= new DriveItem();
+            var filter = filterResult.Data;
+            inputFolder.FolderFiles = filter.FilteredFolderFiles;
+
+            inputFolder.SubFolders = filter.FilteredSubFolders.Select(
+                folder =>
+                {
+                    DriveItem retFolder;
+
+                    var matchingNode = filterResult.ChildNodes.SingleOrDefault(
+                        node => node.Data.PrFolderName == folder.Name);
+
+                    if (matchingNode != null)
+                    {
+                        retFolder = ToTempFolder(folder,
+                            matchingNode);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "Did not find matching child node");
+                    }
+
+                    return retFolder;
+                }).ToList();
+
+            return inputFolder;
         }
 
         protected bool AssertFoldersAreEqual(
@@ -138,7 +170,7 @@ namespace Turmerik.UnitTests
                 expectedFolder.SubFolders,
                 actualFolder.SubFolders,
                 eqComprFactory,
-                (expected, actual) => AssertFoldersAreEqual(expected, actualFolder));
+                (expected, actual) => AssertFoldersAreEqual(expected, actual));
 
             return true;
         }

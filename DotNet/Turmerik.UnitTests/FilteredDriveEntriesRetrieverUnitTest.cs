@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps.TempDir;
@@ -44,6 +45,9 @@ namespace Turmerik.UnitTests
             DriveEntriesSerializableFilter driveEntriesFilter,
             DriveItem expectedRootFolder) => PerformTestAsyncCore(
                 inputRootFolder, driveEntriesFilter, expectedRootFolder,
-                (tempDir, filteredResult) => expectedRootFolder);
+                (tempDir, filteredResult) => ToTempFolder(new DriveItem
+                {
+                    Name = inputRootFolder.Name,
+                }, filteredResult));
     }
 }

@@ -16,10 +16,12 @@ namespace Turmerik.Core.DriveExplorer
             PrFolderIdnf = src.PrFolderIdnf;
             FsEntriesSerializableFilter = src.FsEntriesSerializableFilter;
             FsEntriesFilter = src.FsEntriesFilter;
+            CheckRetNodeValidityDepth = src.CheckRetNodeValidityDepth;
         }
 
         public string PrFolderIdnf { get; set; }
         public DriveEntriesSerializableFilter FsEntriesSerializableFilter { get; set; }
         public DriveEntriesFilter FsEntriesFilter { get; set; }
+        public int? CheckRetNodeValidityDepth { get; set; }
     }
 }

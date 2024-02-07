@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
@@ -41,9 +42,14 @@ namespace Turmerik.Core.DriveExplorer
             await FindMatchingAsync(opts, retNode,
                 CombinePaths(prFolder.Name));
 
+            if (opts.CheckRetNodeValidityDepth.HasValue)
+            {
+                FilteredDriveEntriesH.AssertTreeNodeIsValid(
+                    retNode, opts.CheckRetNodeValidityDepth.Value);
+            }
+
             return retNode;
         }
-
         private async Task FindMatchingAsync(
             FilteredDriveRetrieverMatcherOpts opts,
             DataTreeNodeMtbl<FilteredDriveEntries> node,
@@ -64,8 +70,14 @@ namespace Turmerik.Core.DriveExplorer
             await RetrieveSubFolders(
                 node.Data.FilteredSubFolders);
 
-            await FilterOutFolders(opts, prFolderPath,
+            node.ChildNodes = await FilterOutFolders(opts, prFolderPath,
                 node.Data.FilteredSubFolders);
+
+            if (opts.CheckRetNodeValidityDepth.HasValue)
+            {
+                FilteredDriveEntriesH.AssertTreeNodeIsValid(
+                    node, opts.CheckRetNodeValidityDepth.Value);
+            }
         }
 
         private DataTreeNodeMtbl<FilteredDriveEntries> ToDataTreeNode(
@@ -90,38 +102,43 @@ namespace Turmerik.Core.DriveExplorer
             }
         }
 
-        private async Task FilterOutFolders(
+        private async Task<List<DataTreeNodeMtbl<FilteredDriveEntries>>> FilterOutFolders(
             FilteredDriveRetrieverMatcherOpts opts,
             string prFolderPath,
             List<DriveItem> subFolders)
         {
             int j = 0;
+            var retList = new List<DataTreeNodeMtbl<FilteredDriveEntries>>();
 
             while (j < subFolders.Count)
             {
-                var keepFolder = await ShouldKeepFolderAsync(
+                var node = await GetFolderNode(
                     opts, prFolderPath, subFolders[j]);
 
-                if (!keepFolder)
+                if (node == null)
                 {
                     subFolders.RemoveAt(j);
                 }
                 else
                 {
+                    retList.Add(node);
                     j++;
                 }
             }
+
+            return retList;
         }
 
-        private async Task<bool> ShouldKeepFolderAsync(
+        private async Task<DataTreeNodeMtbl<FilteredDriveEntries>> GetFolderNode(
             FilteredDriveRetrieverMatcherOpts opts,
             string prFolderPath,
             DriveItem folder)
         {
             string folderPath = CombinePaths(folder.Name, prFolderPath);
+            var retNode = ToDataTreeNode(folder);
 
             await FindMatchingAsync(
-                opts, ToDataTreeNode(folder),
+                opts, retNode,
                 folderPath);
 
             bool keepFolder = folder.FolderFiles.Any() || folder.SubFolders.Any();
@@ -129,7 +146,7 @@ namespace Turmerik.Core.DriveExplorer
             keepFolder = keepFolder || opts.FsEntriesFilter.IncludedRelPathRegexes.Any(
                 regex => regex.IsMatch(folderPath));
 
-            return keepFolder;
+            return retNode;
         }
 
         private void FilterEntries(
