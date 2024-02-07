@@ -40,14 +40,48 @@ namespace Turmerik.UnitTests
             }
         }
 
-        private Task PerformTestAsync(
+        private async Task PerformTestAsync(
             DriveItem inputRootFolder,
             DriveEntriesSerializableFilter driveEntriesFilter,
-            DriveItem expectedRootFolder) => PerformTestAsyncCore(
-                inputRootFolder, driveEntriesFilter, expectedRootFolder,
-                (tempDir, filteredResult) => ToTempFolder(new DriveItem
+            DriveItem expectedRootFolder)
+        {
+            await TempDirConsoleApp.RunAsync(new TempDirAsyncConsoleAppOpts
+            {
+                Action = async (tempDir) =>
                 {
-                    Name = inputRootFolder.Name,
-                }, filteredResult));
+                    string prFolderPath = Path.Combine(
+                        tempDir.DirPath, inputRootFolder.Name);
+
+                    FillTempFolder(
+                        inputRootFolder,
+                        prFolderPath);
+
+                    var result = await FilteredRetriever.FindMatchingAsync(
+                        new FilteredDriveRetrieverMatcherOpts
+                        {
+                            FsEntriesSerializableFilter = driveEntriesFilter,
+                            PrFolderIdnf = prFolderPath,
+                            CheckRetNodeValidityDepth = int.MaxValue
+                        });
+
+                    FilteredDriveEntriesH.AssertTreeNodeIsValid(result, int.MaxValue);
+
+                    var actualRootFolder = ToTempFolder(new DriveItem
+                    {
+                        Name = "D0"
+                    }, result);
+
+                    AssertFoldersAreEqual(
+                        expectedRootFolder,
+                        actualRootFolder);
+                },
+                RemoveExistingTempDirsBeforeAction = true,
+                RemoveTempDirAfterAction = true,
+                TempDirOpts = new TrmrkUniqueDirOpts
+                {
+                    DirNameType = GetType()
+                }
+            });
+        }
     }
 }

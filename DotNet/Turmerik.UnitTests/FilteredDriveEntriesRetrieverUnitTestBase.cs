@@ -18,53 +18,14 @@ namespace Turmerik.UnitTests
         protected readonly ITempDirConsoleApp TempDirConsoleApp;
         protected readonly IDriveItemsRetriever DriveItemsRetriever;
         protected readonly IFilteredDriveEntriesRetriever FilteredRetriever;
+        protected readonly IFilteredDriveEntriesRemover FilteredRemover;
 
         protected FilteredDriveEntriesRetrieverUnitTestBase()
         {
             TempDirConsoleApp = SvcProv.GetRequiredService<ITempDirConsoleApp>();
             DriveItemsRetriever = SvcProv.GetRequiredService<IDriveItemsRetriever>();
             FilteredRetriever = SvcProv.GetRequiredService<IFilteredDriveEntriesRetriever>();
-        }
-
-        protected async Task PerformTestAsyncCore(
-            DriveItem inputRootFolder,
-            DriveEntriesSerializableFilter driveEntriesFilter,
-            DriveItem expectedRootFolder,
-            Func<TrmrkUniqueDir, DataTreeNodeMtbl<FilteredDriveEntries>, DriveItem> actualRootFolderRetriever)
-        {
-            await TempDirConsoleApp.RunAsync(new TempDirAsyncConsoleAppOpts
-            {
-                Action = async (tempDir) =>
-                {
-                    string prFolderPath = Path.Combine(
-                        tempDir.DirPath, inputRootFolder.Name);
-
-                    FillTempFolder(
-                        inputRootFolder,
-                        prFolderPath);
-
-                    var result = await FilteredRetriever.FindMatchingAsync(
-                        new FilteredDriveRetrieverMatcherOpts
-                        {
-                            FsEntriesSerializableFilter = driveEntriesFilter,
-                            PrFolderIdnf = prFolderPath,
-                            CheckRetNodeValidityDepth = int.MaxValue
-                        });
-
-                    FilteredDriveEntriesH.AssertTreeNodeIsValid(result, int.MaxValue);
-                    var actualRootFolder = actualRootFolderRetriever(tempDir, result);
-
-                    AssertFoldersAreEqual(
-                        expectedRootFolder,
-                        actualRootFolder);
-                },
-                RemoveExistingTempDirsBeforeAction = true,
-                RemoveTempDirAfterAction = true,
-                TempDirOpts = new TrmrkUniqueDirOpts
-                {
-                    DirNameType = GetType()
-                }
-            });
+            FilteredRemover = SvcProv.GetRequiredService<IFilteredDriveEntriesRemover>();
         }
 
         protected void FillTempFolder(
@@ -92,6 +53,20 @@ namespace Turmerik.UnitTests
             }
         }
 
+        protected async Task<DriveItem> LoadTempFolderAsync(
+            string prFolderPath)
+        {
+            var folder = await DriveItemsRetriever.GetFolderAsync(prFolderPath, false);
+
+            for (int i = 0; i < folder.SubFolders.Count; i++)
+            {
+                folder.SubFolders[i] = await LoadTempFolderAsync(
+                    Path.Combine(folder.SubFolders[i].Idnf));
+            }
+
+            return folder;
+        }
+
         protected void RemoveFromTempFolder(
             DriveItem inputFolder,
             DataTreeNodeMtbl<FilteredDriveEntries> filterResult)
@@ -115,6 +90,26 @@ namespace Turmerik.UnitTests
 
             removedCount = inputFolder.SubFolders.RemoveWhere(
                 subFolder => subFolder.SubFolders.None() && subFolder.FolderFiles.None());
+        }
+
+        protected void RemoveFromTempFolder(
+            DriveItem inputFolder,
+            DriveItem folderToRemove)
+        {
+            int removedCount = inputFolder.FolderFiles.RemoveWhere(
+                inputFile => folderToRemove.FolderFiles.Any(
+                    file => file.Name == inputFile.Name));
+
+            Assert.Equal(removedCount, folderToRemove.FolderFiles.Count);
+
+            foreach (var subFolderToRemove in folderToRemove.SubFolders)
+            {
+                var subFolder = inputFolder.SubFolders.Single(
+                    folder => folder.Name == subFolderToRemove.Name);
+
+                RemoveFromTempFolder(
+                    subFolder, subFolderToRemove);
+            }
         }
 
         protected DriveItem ToTempFolder(

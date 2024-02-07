@@ -14,13 +14,6 @@ namespace Turmerik.UnitTests
 {
     public class FilteredDriveEntriesRemoverUnitTest : FilteredDriveEntriesRetrieverUnitTestBase
     {
-        private readonly IFilteredDriveEntriesRemover remover;
-
-        public FilteredDriveEntriesRemoverUnitTest()
-        {
-            remover = SvcProv.GetRequiredService<IFilteredDriveEntriesRemover>();
-        }
-
         [Fact]
         public async Task MainTest()
         {
@@ -46,22 +39,51 @@ namespace Turmerik.UnitTests
             }
         }
 
-        private Task PerformTestAsync(
+        private async Task PerformTestAsync(
             DriveItem inputRootFolder,
             DriveEntriesSerializableFilter driveEntriesFilter,
-            DriveItem expectedRootFolder) => PerformTestAsyncCore(
-                inputRootFolder, driveEntriesFilter, expectedRootFolder,
-                (tempDir, filteredResult) =>
+            DriveItem expectedRootFolder)
+        {
+            await TempDirConsoleApp.RunAsync(new TempDirAsyncConsoleAppOpts
+            {
+                Action = async (tempDir) =>
                 {
-                    var expectedRootFolderClone = new DriveItem(
+                    string prFolderPath = Path.Combine(
+                        tempDir.DirPath, inputRootFolder.Name);
+
+                    FillTempFolder(
                         inputRootFolder,
-                        int.MaxValue);
+                        prFolderPath);
 
-                    RemoveFromTempFolder(
-                        expectedRootFolderClone,
-                        filteredResult);
+                    var clonedInputFolder = new DriveItem(inputRootFolder, int.MaxValue);
 
-                    return expectedRootFolderClone;
-                });
+                    var filter = await FilteredRetriever.FindMatchingAsync(
+                        new FilteredDriveRetrieverMatcherOpts
+                        {
+                            FsEntriesSerializableFilter = driveEntriesFilter,
+                            PrFolderIdnf = prFolderPath,
+                            CheckRetNodeValidityDepth = int.MaxValue
+                        });
+
+                    await FilteredRemover.RemoveEntriesAsync(filter, true);
+                    RemoveFromTempFolder(clonedInputFolder, expectedRootFolder);
+
+                    FilteredDriveEntriesH.AssertTreeNodeIsValid(filter, int.MaxValue);
+
+                    var actualRootFolder = await LoadTempFolderAsync(
+                        prFolderPath);
+
+                    AssertFoldersAreEqual(
+                        clonedInputFolder,
+                        actualRootFolder);
+                },
+                RemoveExistingTempDirsBeforeAction = true,
+                RemoveTempDirAfterAction = true,
+                TempDirOpts = new TrmrkUniqueDirOpts
+                {
+                    DirNameType = GetType()
+                }
+            });
+        }
     }
 }
