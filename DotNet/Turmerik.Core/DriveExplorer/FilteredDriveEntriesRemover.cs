@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
-using Turmerik.Notes;
 
 namespace Turmerik.Core.DriveExplorer
 {

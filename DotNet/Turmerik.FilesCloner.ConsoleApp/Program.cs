@@ -10,8 +10,8 @@ var services = TrmrkCoreServices.RegisterAll(
 
 TrmrkNetCoreServices.RegisterAll(services);
 
-services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
-services.AddSingleton<IDriveExplorerService, FsExplorerService>();
+DriveExplorerH.AddFsRetrieverAndExplorer(
+    services, null, true);
 
 services.AddScoped<FileCloneComponent>();
 services.AddScoped<CloningProfileComponent>();

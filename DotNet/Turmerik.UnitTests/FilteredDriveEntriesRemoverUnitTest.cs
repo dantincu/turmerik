@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps.TempDir;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.FileSystem;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
 namespace Turmerik.UnitTests
@@ -23,12 +24,26 @@ namespace Turmerik.UnitTests
         [Fact]
         public async Task MainTest()
         {
-            var rootInputFolder = CreateDefaultRootInputFolder();
             var filters = CreateDefaultFilters();
             var expectedResults = CreateDefaultExpectedFilteredResults();
 
+            var filtersArr = filters.Item1.Arr(
+                filters.Item1,
+                filters.Item1,
+                filters.Item2);
 
-            await PerformTestAsync();
+            var expectedResultsArr = expectedResults.Item1.Arr(
+                expectedResults.Item1,
+                expectedResults.Item1,
+                expectedResults.Item2);
+
+            for (int i = 0; i < filtersArr.Length; i++)
+            {
+                await PerformTestAsync(
+                    CreateDefaultRootInputFolder(),
+                    filtersArr[i],
+                    expectedResultsArr[i]);
+            }
         }
 
         private Task PerformTestAsync(
@@ -39,7 +54,7 @@ namespace Turmerik.UnitTests
                 (tempDir, filteredResult) =>
                 {
                     var expectedRootFolderClone = new DriveItem(
-                        expectedRootFolder,
+                        inputRootFolder,
                         int.MaxValue);
 
                     RemoveFromTempFolder(

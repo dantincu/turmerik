@@ -33,8 +33,9 @@ namespace Turmerik.TestWinFormsApp
                 new ServiceCollection().AsOpts(services =>
                 {
                     TrmrkServices.RegisterAll(services);
-                    services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
-                    services.AddSingleton<IDriveExplorerService, FsExplorerService>();
+
+                    DriveExplorerH.AddFsRetrieverAndExplorer(
+                        services, null, true);
 
                     services.AddSingleton<IAppEnv, AppEnv>();
                     LoggingServices.RegisterAll(services);

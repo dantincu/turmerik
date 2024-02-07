@@ -35,13 +35,10 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Dependencies
             services.AddSingleton(
                 svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create());
 
-            services.AddSingleton<FsExplorerServiceFactory>();
+            services.AddSingleton<Core.DriveExplorer.FsExplorerServiceFactory>();
 
-            services.AddSingleton<IDriveItemsRetriever>(
-                svcProv => svcProv.GetRequiredService<FsExplorerServiceFactory>().Retriever());
-
-            services.AddSingleton<IDriveExplorerService>(
-                svcProv => svcProv.GetRequiredService<FsExplorerServiceFactory>().Explorer());
+            DriveExplorerH.AddFsRetrieverAndExplorer(
+                services, null, false, null);
 
             services.AddSingleton<IAppConfigServiceFactory, AppConfigServiceFactory>();
 
@@ -54,34 +51,30 @@ namespace Turmerik.LocalFilesExplorer.AspNetCoreApp.Dependencies
         }
     }
 
-    public class FsExplorerServiceFactory
+    public class FsExplorerServiceFactory : IFsExplorerServiceFactory
     {
+        private readonly Core.DriveExplorer.FsExplorerServiceFactory baseFactory;
         private readonly IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever;
-        private readonly ITimeStampHelper timeStampHelper;
 
         public FsExplorerServiceFactory(
-            IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever,
-            ITimeStampHelper timeStampHelper)
+            Core.DriveExplorer.FsExplorerServiceFactory baseFactory,
+            IAppConfigService<NotesAppConfigImmtbl> appSettingsRetriever)
         {
+            this.baseFactory = baseFactory ?? throw new ArgumentNullException(
+                nameof(baseFactory));
+
             this.appSettingsRetriever = appSettingsRetriever ?? throw new ArgumentNullException(
                 nameof(appSettingsRetriever));
-
-            this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
-                nameof(timeStampHelper));
         }
 
-        public FsExplorerService Explorer(
-            ) => new FsExplorerService(
-                timeStampHelper)
-            {
-                RootDirPath = appSettingsRetriever.Data.FsExplorerServiceReqRootPath
-            };
+        public IFsExplorerService Explorer(
+            bool allowSysFolders = false,
+            string rootDirPath = null) => baseFactory.Explorer(allowSysFolders,
+                rootDirPath ?? appSettingsRetriever.Data.FsExplorerServiceReqRootPath);
 
-        public FsItemsRetriever Retriever(
-            ) => new FsItemsRetriever(
-                timeStampHelper)
-            {
-                RootDirPath = appSettingsRetriever.Data.FsExplorerServiceReqRootPath
-            };
+        public IFsItemsRetriever Retriever(
+            bool allowSysFolders = false,
+            string rootDirPath = null) => baseFactory.Retriever(allowSysFolders,
+                rootDirPath ?? appSettingsRetriever.Data.FsExplorerServiceReqRootPath);
     }
 }

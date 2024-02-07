@@ -4,8 +4,8 @@
   "description": "Turmierk Notes Blazor client side app",
   "type": "module",
   "scripts": {
-    "start": "parcel ./src/index.html --dist-dir ./dist/dev --port=9101 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
-    "build": "parcel build ./src/index.html --dist-dir ./dist/prod"
+    "build-dev": "parcel build ./src/env/any/index.ts --no-optimize --dist-dir ./dist/dev",
+    "build-prod": "parcel build ./src/env/any/index.ts --dist-dir ./dist/prod"
   },
   "author": "Daniel Tincu",
   "license": "MIT",

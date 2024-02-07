@@ -21,8 +21,8 @@ namespace Turmerik.LocalFileNotes.AspNetCoreApp.Dependencies
             NotesAspNetCoreServices.RegisterAll(services);
             TrmrkNoteServices.RegisterAppSettingsRetriever<NotesAppConfigImmtbl, NotesAppConfigMtbl>(services);
 
-            services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
-            services.AddSingleton<IDriveExplorerService, FsExplorerService>();
+            DriveExplorerH.AddFsRetrieverAndExplorer(services);
+
             return services;
         }
     }

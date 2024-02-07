@@ -13,8 +13,9 @@ var services = TrmrkCoreServices.RegisterAll(
 
 TrmrkServices.RegisterAll(services);
 
-services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
-services.AddSingleton<IDriveExplorerService, FsExplorerService>();
+DriveExplorerH.AddFsRetrieverAndExplorer(
+    services, null, true);
+
 services.AddSingleton<IProgramComponent, ProgramComponent>();
 
 services.AddTransient<RfFirsPairNamesRecursivellyProgramComponent>();

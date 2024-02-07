@@ -14,6 +14,7 @@ using Turmerik.Core.Threading;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.ConsoleApps.TempDir;
 using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.DriveExplorer;
 
 namespace Turmerik.Core.Dependencies
 {
