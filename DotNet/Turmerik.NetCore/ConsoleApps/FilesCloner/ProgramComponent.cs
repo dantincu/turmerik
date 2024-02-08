@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Text;
 using Turmerik.Core.TextSerialization;
 
@@ -14,6 +16,11 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
     public class ProgramComponent
     {
         private const string CFG_FILE_NAME = "trmrk-filescloner-config.json";
+
+        private static readonly ReadOnlyDictionary<string, string> defaultPathsMap = new Dictionary<string, string>
+        {
+            { PathVariables.USER_PROFILE, Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) }
+        }.RdnlD();
 
         private readonly IConsoleArgsParser parser;
         private readonly IJsonConversion jsonConversion;
@@ -51,6 +58,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             var args = new ProgramArgs
             {
+                LocalDevicePathsMap = LocalDevicePathsMapH.LoadFromConfigFile(
+                    jsonConversion),
                 Config = jsonConversion.Adapter.Deserialize<ProgramConfig>(
                     File.ReadAllText(Path.Combine(
                         ProgramH.ExecutingAssemmblyPath,
@@ -153,7 +162,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
                 if (args.SingleFileArgs.File != null)
                 {
-                    NormalizeFileCloneArgs(args.SingleFileArgs);
+                    NormalizeFileCloneArgs(
+                        args.LocalDevicePathsMap,
+                        args.SingleFileArgs);
                 }
             }
         }
@@ -171,15 +182,20 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             foreach (var filesGroup in profile.FileGroups)
             {
-                NormalizeFilesGroup(filesGroup, args.WorkDir);
+                NormalizeFilesGroup(
+                    args.LocalDevicePathsMap,
+                    filesGroup,
+                    args.WorkDir);
             }
         }
 
         private void NormalizeFilesGroup(
+            LocalDevicePathsMap localDevicePathsMap,
             ProgramConfig.FilesGroup filesGroup,
             string workDir)
         {
             NormalizeFileLocators(
+                localDevicePathsMap,
                 filesGroup.InputBaseDirLocator ??= new FsEntryLocator(),
                 filesGroup.CloneBaseDirLocator ??= new FsEntryLocator(),
                 filesGroup.WorkDir ??= workDir);
@@ -188,7 +204,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             {
                 foreach (var file in filesGroup.Files)
                 {
-                    NormalizeFileArgs(file, filesGroup.WorkDir);
+                    NormalizeFileArgs(
+                        localDevicePathsMap,
+                        file, filesGroup.WorkDir);
                 }
             }
 
@@ -202,13 +220,16 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             {
                 foreach (var dir in filesGroup.Dirs)
                 {
-                    NormalizeDirArgs(filesGroup, dir, filesGroup.WorkDir);
+                    NormalizeDirArgs(
+                        localDevicePathsMap,
+                        filesGroup, dir, filesGroup.WorkDir);
                 }
             }
 
             if (filesGroup.CloneArchiveDirLocator != null)
             {
                 NormalizeFileLocator(
+                localDevicePathsMap,
                     filesGroup.CloneArchiveDirLocator,
                     filesGroup.WorkDir);
 
@@ -217,29 +238,35 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         }
 
         private void NormalizeFileCloneArgs(
+            LocalDevicePathsMap localDevicePathsMap,
             FileCloneArgs cloneArgs)
         {
             NormalizeFileArgs(
+                localDevicePathsMap,
                 cloneArgs.File,
                 cloneArgs.WorkDir);
         }
 
         private void NormalizeFileArgs(
+            LocalDevicePathsMap localDevicePathsMap,
             FileArgs fileArgs,
             string workDir)
         {
             NormalizeFileLocators(
+                localDevicePathsMap,
                 fileArgs.InputFileLocator ??= new FsEntryLocator(),
                 fileArgs.CloneDirLocator ??= new FsEntryLocator(),
                 workDir);
         }
 
         private void NormalizeDirArgs(
+            LocalDevicePathsMap localDevicePathsMap,
             ProgramConfig.FilesGroup filesGroup,
             DirArgs dirArgs,
             string workDir)
         {
             NormalizeFileLocators(
+                localDevicePathsMap,
                 dirArgs.InputDirLocator ??= new FsEntryLocator(),
                 dirArgs.CloneDirLocator ??= new FsEntryLocator(),
                 workDir);
@@ -254,32 +281,39 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         }
 
         private void NormalizeFileLocators(
+            LocalDevicePathsMap localDevicePathsMap,
             FsEntryLocator inputFileLocator,
             FsEntryLocator cloneFileLocator,
             string workDir)
         {
             NormalizeFileLocator(
+                localDevicePathsMap,
                 inputFileLocator,
                 workDir);
 
             NormalizeFileLocator(
+                localDevicePathsMap,
                 cloneFileLocator,
                 workDir,
                 () => string.Empty);
         }
 
         private void NormalizeFileLocator(
+            LocalDevicePathsMap localDevicePathsMap,
             FsEntryLocator fileLocator,
             string workDir,
             Func<string> defaultEmptyRelPathFactory = null)
         {
             fileLocator.EntryBasePath = NormalizePathIfNotNull(
+                localDevicePathsMap,
                 fileLocator.EntryBasePath);
 
             fileLocator.EntryRelPath = NormalizePathIfNotNull(
+                localDevicePathsMap,
                 fileLocator.EntryRelPath);
 
             fileLocator.EntryPath = NormalizePathIfNotNull(
+                localDevicePathsMap,
                 fileLocator.EntryPath);
 
             fileLocator.Normalize(
@@ -287,14 +321,39 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 defaultEmptyRelPathFactory);
         }
 
-        private string NormalizePathIfNotNull(string path)
+        private string NormalizePathIfNotNull(
+            LocalDevicePathsMap localDevicePathsMap,
+            string path)
         {
             if (path != null)
             {
-                path = path.Replace(
-                    PathVariables.USER_PROFILE,
-                    Environment.GetFolderPath(
-                        Environment.SpecialFolder.UserProfile));
+                path = NormalizePath(path,
+                    [ defaultPathsMap,
+                    localDevicePathsMap.PathsMap ]);
+            }
+
+            return path;
+        }
+
+        private string NormalizePath(
+            string path,
+            IEnumerable<KeyValuePair<string, string>>[] pathMapsArr)
+        {
+            foreach (var map in pathMapsArr)
+            {
+                NormalizePath(path, map);
+            }
+
+            return path;
+        }
+
+        private string NormalizePath(
+            string path,
+            IEnumerable<KeyValuePair<string, string>> pathsMap)
+        {
+            foreach (var kvp in pathsMap)
+            {
+                path = path.Replace(kvp.Key, kvp.Value);
             }
 
             return path;

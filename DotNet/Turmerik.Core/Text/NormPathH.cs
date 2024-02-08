@@ -184,5 +184,20 @@ namespace Turmerik.Core.Text
 
         public static Func<string, bool, string> NormalizeTransformer(
             Func<string, bool, string>? transformer) => transformer.FirstNotNull((path, isRooted) => path)!;
+
+        public static string AssurePathIsRooted(
+            string path,
+            Func<string> basePathFactory)
+        {
+            if (!Path.IsPathRooted(path))
+            {
+                string basePath = basePathFactory();
+
+                path = Path.Combine(
+                    basePath, path);
+            }
+
+            return path;
+        }
     }
 }

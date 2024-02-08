@@ -61,10 +61,10 @@
           "WorkDir": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp",
           "OnBeforeScripts": [
             {
-              "Command": "rimraf .parcel-cache"
+              "Command": "rimraf .\\.parcel-cache"
             },
             {
-              "Command": "rimraf dist"
+              "Command": "rimraf .\\dist"
             },
             {
               "Command": "npm run build-dev"
@@ -86,6 +86,24 @@
               "Command": "rimraf trmrk-notes-config"
             }
           ]
+        }
+      ]
+    },
+    {
+      "ProfileName": "dotnet-util-bins",
+      "FileGroups": [
+        {
+          "InputBaseDirLocator": {
+            "EntryRelPath": "./DotNet"
+          },
+          "CloneBaseDirLocator": {
+            "EntryBasePath": "<@USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps",
+            "EntryRelPath": "Bin"
+          },
+          "CloneArchiveDirLocator": {
+            "EntryBasePath": "<@USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+          },
+          "CloneArchiveFileNameTpl": "Apps[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip"
         }
       ]
     }

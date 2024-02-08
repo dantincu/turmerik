@@ -40,8 +40,7 @@ namespace Turmerik.Core.DriveExplorer
             var retNode = ToDataTreeNode(prFolder);
 
             FilterEntries(
-                opts.FsEntriesFilter,
-                "/",
+                opts.FsEntriesFilter, "/",
                 retNode.Data.FilteredSubFolders);
 
             await FindMatchingAsync(opts, retNode,

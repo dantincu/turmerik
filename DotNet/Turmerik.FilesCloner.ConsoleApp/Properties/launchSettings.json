@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.ChecksumCalculator.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":i:./dir/input.txt :o"
+      "commandLineArgs": ":p:dotnet-util-bins"
     }
   }
 }
