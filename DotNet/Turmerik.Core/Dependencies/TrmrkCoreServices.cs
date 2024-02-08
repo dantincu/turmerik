@@ -37,6 +37,13 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<ISynchronizedValueAdapterFactory, SynchronizedValueAdapterFactory>();
             services.AddSingleton<IProcessLauncherCore, ProcessLauncherCore>();
 
+            services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
+            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
+            services.AddSingleton<IFilteredDriveEntriesRetriever, FilteredDriveEntriesRetriever>();
+            services.AddSingleton<IFilteredDriveEntriesRemover, FilteredDriveEntriesRemover>();
+            services.AddSingleton<IFilteredDriveEntriesCloner, FilteredDriveEntriesCloner>();
+            services.AddSingleton<IDriveEntriesCloner, DriveEntriesCloner>();
+
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IBestItemRetriever, BestItemRetriever>();
             services.AddSingleton<IBestItemAsyncRetriever, BestItemAsyncRetriever>();

@@ -8,5 +8,15 @@ namespace Turmerik.Core.FileSystem
     {
         public List<string> IncludedRelPathRegexes { get; set; }
         public List<string> ExcludedRelPathRegexes { get; set; }
+
+        public static DriveEntriesSerializableFilter IncludeAll() => new DriveEntriesSerializableFilter
+        {
+            IncludedRelPathRegexes = new List<string> { ".*" }
+        };
+
+        public static DriveEntriesSerializableFilter IncludeNone() => new DriveEntriesSerializableFilter
+        {
+            IncludedRelPathRegexes = new List<string>()
+        };
     }
 }

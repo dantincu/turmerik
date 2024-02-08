@@ -192,11 +192,11 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 }
             }
 
-            NormalizeFsEntriesFilter(
-                filesGroup.DfInputDirFilter ??= new DriveEntriesSerializableFilter());
+            NormalizeFsEntriesFilterIfReq(
+                filesGroup.DfInputDirFilter ??= DriveEntriesSerializableFilter.IncludeAll());
 
-            NormalizeFsEntriesFilter(
-                filesGroup.DfBeforeCloneDestnCleanupFilter ??= new DriveEntriesSerializableFilter());
+            NormalizeFsEntriesFilterIfReq(
+                filesGroup.DfBeforeCloneDestnCleanupFilter);
 
             if (filesGroup.Dirs != null)
             {
@@ -208,8 +208,11 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             if (filesGroup.CloneArchiveDirLocator != null)
             {
+                NormalizeFileLocator(
+                    filesGroup.CloneArchiveDirLocator,
+                    filesGroup.WorkDir);
+
                 filesGroup.CloneArchiveFileNameTpl ??= "{0}.{2}";
-                filesGroup.DfBeforeCloneArchiveDirCleanupFilter ??= new DriveEntriesSerializableFilter();
             }
         }
 
@@ -241,12 +244,12 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 dirArgs.CloneDirLocator ??= new FsEntryLocator(),
                 workDir);
 
-            NormalizeFsEntriesFilter(
-                dirArgs.InputDirFilter ??= new DriveEntriesSerializableFilter(),
+            NormalizeFsEntriesFilterIfReq(
+                dirArgs.InputDirFilter ??= DriveEntriesSerializableFilter.IncludeAll(),
                 filesGroup.DfInputDirFilter);
 
-            NormalizeFsEntriesFilter(
-                dirArgs.BeforeCloneDestnCleanupFilter ??= new DriveEntriesSerializableFilter(),
+            NormalizeFsEntriesFilterIfReq(
+                dirArgs.BeforeCloneDestnCleanupFilter,
                 filesGroup.DfBeforeCloneDestnCleanupFilter);
         }
 
@@ -297,20 +300,23 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             return path;
         }
 
-        private void NormalizeFsEntriesFilter(
+        private void NormalizeFsEntriesFilterIfReq(
             DriveEntriesSerializableFilter filter,
             DriveEntriesSerializableFilter dfFilter = null)
         {
-            filter.IncludedRelPathRegexes ??= new List<string>();
-            filter.ExcludedRelPathRegexes ??= new List<string>();
-
-            if (dfFilter != null)
+            if (filter != null)
             {
-                filter.IncludedRelPathRegexes.InsertRange(
-                    0, dfFilter.IncludedRelPathRegexes);
+                filter.IncludedRelPathRegexes ??= new List<string>();
+                filter.ExcludedRelPathRegexes ??= new List<string>();
 
-                filter.ExcludedRelPathRegexes.InsertRange(
-                    0, dfFilter.ExcludedRelPathRegexes);
+                if (dfFilter != null)
+                {
+                    filter.IncludedRelPathRegexes.InsertRange(
+                        0, dfFilter.IncludedRelPathRegexes);
+
+                    filter.ExcludedRelPathRegexes.InsertRange(
+                        0, dfFilter.ExcludedRelPathRegexes);
+                }
             }
         }
 

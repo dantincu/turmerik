@@ -19,14 +19,8 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
             services.AddSingleton<IDirsPairGeneratorFactory, DirsPairGeneratorFactory>();
             services.AddSingleton<IDirsPairCreatorFactory, DirsPairCreatorFactory>();
-            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
-
-            services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
-            services.AddSingleton<IFilteredDriveEntriesRetriever, FilteredDriveEntriesRetriever>();
-            services.AddSingleton<IFilteredDriveEntriesRemover, FilteredDriveEntriesRemover>();
 
             services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();
-
             services.AddSingleton<INoteMdParser, NoteMdParser>();
             services.AddSingleton<IHtmlDocTitleRetriever, HtmlDocTitleRetriever>();
 
