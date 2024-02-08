@@ -6,8 +6,8 @@ using Turmerik.Core.TextSerialization;
 
 namespace Turmerik.Core.LocalDeviceEnv
 {
-    public class LocalDevicePathsMap
+    public static class LocalDevicePathMacrosMapH
     {
-        public Dictionary<string, string> PathsMap { get; set; }
+        public const string CONFIG_FILE_NAME = "trmrk-localdevice-paths.json";
     }
 }
