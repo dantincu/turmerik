@@ -137,11 +137,11 @@ namespace Turmerik.DirsPair
                 true => pfxesCfg.AltPfx,
             };
 
-            string shortDirName = pfx + noteCfgValuesRetriever.GetDirIdxStr(
-                config.GetNoteDirNameIdxes(), idx);
+            string shortDirName = opts.ShortDirName ?? (pfx + noteCfgValuesRetriever.GetDirIdxStr(
+                config.GetNoteDirNameIdxes(), idx));
 
             string fullDirName = string.Join(
-                pfxesCfg.JoinStr,
+                opts.JoinStr ?? pfxesCfg.JoinStr,
                 shortDirName,
                 opts.FullDirNamePart);
 

@@ -30,6 +30,9 @@ namespace Turmerik.DirsPair
             public string Uri { get; set; }
             public string ShowLastCreatedFirst { get; set; }
             public string ShowOtherDirNames { get; set; }
+            public string HcyChildNode { get; set; }
+            public string HcyParentNode { get; set; }
+            public string HcySibblingNode { get; set; }
         }
 
         public class DirNamesT

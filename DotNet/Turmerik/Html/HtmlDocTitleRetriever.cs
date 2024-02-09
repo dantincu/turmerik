@@ -10,13 +10,22 @@ namespace Turmerik.Html
 {
     public interface IHtmlDocTitleRetriever
     {
-        Task<string> GetResouceTitleAsync(string resUrl);
-        string GetHtmlDocTitle(HtmlDocument htmlDoc);
+        Task<string> GetResouceTitleAsync(
+            string resUrl,
+            bool normalizeTitle = true);
+
+        string GetHtmlDocTitle(
+            HtmlDocument htmlDoc);
+
+        string NormalizeTitle(
+            string title);
     }
 
     public class HtmlDocTitleRetriever : IHtmlDocTitleRetriever
     {
-        public async Task<string> GetResouceTitleAsync(string resUrl)
+        public async Task<string> GetResouceTitleAsync(
+            string resUrl,
+            bool normalizeTitle = true)
         {
             resUrl = UriH.AssureUriHasScheme(resUrl,
                 (scheme, restOfUri, uri) => uri);
@@ -25,10 +34,17 @@ namespace Turmerik.Html
             var htmlDoc = await web.LoadFromWebAsync(resUrl);
 
             string title = GetHtmlDocTitle(htmlDoc);
+
+            if (title != null && normalizeTitle)
+            {
+                title = NormalizeTitle(title);
+            }
+
             return title;
         }
 
-        public string GetHtmlDocTitle(HtmlDocument htmlDoc)
+        public string GetHtmlDocTitle(
+            HtmlDocument htmlDoc)
         {
             var htmlNode = htmlDoc.DocumentNode.ChildNodes.SingleOrDefault(
                 node => node.Name == "html");
@@ -42,5 +58,8 @@ namespace Turmerik.Html
             string title = titleNode?.InnerText;
             return title;
         }
+
+        public string NormalizeTitle(
+            string title) => title.NormalizeWhitespaces();
     }
 }

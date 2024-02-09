@@ -15,7 +15,10 @@
     "Url": "url",
     "Uri": "uri",
     "ShowLastCreatedFirst": "slf",
-    "ShowOtherDirNames": "so"
+    "ShowOtherDirNames": "so",
+    "HcyChildNode": "+",
+    "HcyParentNode": "-",
+    "HcySibblingNode": "="
   },
   "DirNames": {
     "DefaultJoinStr": "-",

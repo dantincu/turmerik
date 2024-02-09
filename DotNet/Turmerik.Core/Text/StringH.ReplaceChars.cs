@@ -80,17 +80,33 @@ namespace Turmerik.Core.Text
         public static string ReplaceChars(
             this string str,
             Func<char, char> replaceFactory,
-            IEnumerable<char> replacedChars)
+            Func<char, bool> replacePredicate)
         {
+            replacePredicate = replacePredicate.FirstNotNull(
+                c => false);
+
             replaceFactory = replaceFactory.FirstNotNull(
-                c => default);
+                c => c);
 
             char[] retChars = str.Select(
-                c => replacedChars.Contains(c) ? replaceFactory(c) : c).ToArray();
+                c => replacePredicate(c) ? replaceFactory(c) : c).ToArray();
 
             string retStr = retChars.ToStr();
             return retStr;
         }
+
+        public static string ReplaceChars(
+            this string str,
+            Func<char, char> replaceFactory,
+            IEnumerable<char> replacedChars) => str.ReplaceChars(
+                replaceFactory,
+                c => replacedChars.Contains(c));
+
+        public static string ReplaceChars(
+            this string str,
+            Func<char, char> replaceFactory) => str.ReplaceChars(
+                replaceFactory,
+                c => true);
 
         public static string ChangeChar(
             this string str,

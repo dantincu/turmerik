@@ -16,6 +16,7 @@ using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
 using Turmerik.Html;
 using Turmerik.Core.DriveExplorer;
+using System.Runtime.InteropServices;
 
 namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 {
@@ -72,10 +73,30 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             var args = GetArgs(rawArgs);
             await NormalizeArgsAsync(args);
 
-            var opts = GetDirsPairOpts(args);
+            foreach (var nodeArgs in args.RootNodes)
+            {
+                await RunAsync(
+                    args.WorkDir, nodeArgs);
+            }
+        }
+
+        private async Task RunAsync(
+            string workDir,
+            ProgramArgs.Node nodeArgs)
+        {
+            var opts = GetDirsPairOpts(workDir, nodeArgs);
             var dirsPair = await dirsPairCreator.CreateDirsPairAsync(opts);
 
             var shortNameDir = dirsPair.First();
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("Work dir path: ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(workDir);
+
+            Console.ResetColor();
+            Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write("Short dir name: ");
@@ -97,6 +118,15 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                     ProcessH.OpenWithDefaultProgramIfNotNull(filePath);
                 }
             }
+
+            string childNodesWorkDir = Path.Combine(
+                workDir, shortNameDir.Name);
+
+            foreach (var childNodeArgs in nodeArgs.ChildNodes)
+            {
+                await RunAsync(
+                    childNodesWorkDir, childNodeArgs);
+            }
         }
 
         private Task<string> GetResouceTitleAsync(
@@ -104,44 +134,44 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                 resUrl);
 
         private DirsPairOpts GetDirsPairOpts(
-            ProgramArgs args) => new DirsPairOpts
+            string workDir,
+            ProgramArgs.Node nodeArgs) => new DirsPairOpts
             {
-                PrIdnf = args.WorkDir,
-                Title = args.Title,
-                OpenMdFile = args.OpenMdFile,
+                PrIdnf = workDir,
+                Title = nodeArgs.Title,
+                OpenMdFile = nodeArgs.OpenMdFile,
                 MaxFsEntryNameLength = config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH,
-                ShortDirName = args.ShortDirName,
-                FullDirNamePart = GetFullDirNamePart(args),
-                JoinStr = args.FullDirNameJoinStr,
-                MdFileName = GetMdFileName(args),
+                ShortDirName = nodeArgs.ShortDirName,
+                FullDirNamePart = GetFullDirNamePart(nodeArgs),
+                JoinStr = nodeArgs.FullDirNameJoinStr,
+                MdFileName = GetMdFileName(nodeArgs),
                 MdFileContentsTemplate = config.FileContents.MdFileContentsTemplate,
                 KeepFileName = config.FileNames.KeepFileName,
-                KeepFileContents = GetKeepFileContents(args),
-                MdFileFirstContent = args.MdFirstContent,
+                KeepFileContents = GetKeepFileContents(),
+                MdFileFirstContent = nodeArgs.MdFirstContent,
                 TrmrkGuidInputName = config.TrmrkGuidInputName,
                 ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true,
-                CreateNote = args.CreateNote,
-                CreateNoteBook = args.CreateNoteBook,
-                CreateNoteInternalsDir = args.CreateNoteInternalsDir,
-                CreateNoteFilesDir = args.CreateNoteFilesDir,
+                CreateNote = nodeArgs.CreateNote,
+                CreateNoteBook = nodeArgs.CreateNoteBook,
+                CreateNoteInternalsDir = nodeArgs.CreateNoteInternalsDir,
+                CreateNoteFilesDir = nodeArgs.CreateNoteFilesDir,
             };
 
         private string GetMdFileName(
-            ProgramArgs args) => args.DirNameTpl?.MdFileNameTemplate?.With(
+            ProgramArgs.Node nodeArgs) => nodeArgs.DirNameTpl?.MdFileNameTemplate?.With(
                 mdFileNameTemplate => string.Format(
                     mdFileNameTemplate,
-                    args.FullDirNamePart)) ?? config.FileNames.With(
+                    nodeArgs.FullDirNamePart)) ?? config.FileNames.With(
                         fileNames => (fileNames.PrependTitleToNoteMdFileName ?? false).If(
-                            () => args.FullDirNamePart) + fileNames.MdFileName);
+                            () => nodeArgs.FullDirNamePart) + fileNames.MdFileName);
 
         private string GetFullDirNamePart(
-            ProgramArgs args) => args.DirNameTpl?.With(
+            ProgramArgs.Node nodeArgs) => nodeArgs.DirNameTpl?.With(
                 dirNameTpl => string.Format(
                     dirNameTpl.DirNameTpl,
-                    args.FullDirNamePart)) ?? args.FullDirNamePart;
+                    nodeArgs.FullDirNamePart)) ?? nodeArgs.FullDirNamePart;
 
-        private string GetKeepFileContents(
-            ProgramArgs args) => string.Format(
+        private string GetKeepFileContents() => string.Format(
                 config.FileContents.KeepFileContentsTemplate,
                 Trmrk.TrmrkGuidStrNoDash,
                 config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
@@ -149,76 +179,106 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
         private async Task NormalizeArgsAsync(
             ProgramArgs args)
         {
-            bool hasUrl = !string.IsNullOrWhiteSpace(args.Url);
-            bool hasUri = !string.IsNullOrWhiteSpace(args.Uri);
+            args.WorkDir ??= Environment.CurrentDirectory;
+
+            foreach (var nodeArgs in args.RootNodes)
+            {
+                await NormalizeArgsAsync(nodeArgs);
+            }
+        }
+
+        private async Task NormalizeArgsAsync(
+            ProgramArgs.Node nodeArgs)
+        {
+            bool hasUrl = !string.IsNullOrWhiteSpace(nodeArgs.Url);
+            bool hasUri = !string.IsNullOrWhiteSpace(nodeArgs.Uri);
 
             if (hasUrl || hasUri)
             {
                 await FetchResourceAsync(
-                    args, hasUrl, hasUri);
+                    nodeArgs, hasUrl, hasUri);
             }
 
-            args.Title ??= args.ResTitle;
+            nodeArgs.Title ??= nodeArgs.ResTitle;
+            nodeArgs.FullDirNameJoinStr ??= config.DirNames.DefaultJoinStr;
 
-            args.WorkDir ??= Environment.CurrentDirectory;
-            args.FullDirNameJoinStr ??= config.DirNames.DefaultJoinStr;
+            nodeArgs.FullDirNamePart = GetFullDirNamePart(
+                nodeArgs.Title ?? string.Empty);
 
-            args.FullDirNamePart = GetFullDirNamePart(
-                args.Title ?? string.Empty);
+            foreach (var childNodeArgs in nodeArgs.ChildNodes)
+            {
+                await NormalizeArgsAsync(childNodeArgs);
+            }
         }
 
         private async Task FetchResourceAsync(
-            ProgramArgs args,
+            ProgramArgs.Node nodeArgs,
             bool hasUrl,
             bool hasUri)
         {
-            string url = hasUrl ? args.Url : args.Uri;
+            string url = hasUrl ? nodeArgs.Url : nodeArgs.Uri;
+            string[] urlParts = url.Split('|');
 
-            WriteSectionToConsole(
-                "Fetching resource from the following url: ",
-                url, ConsoleColor.Blue);
+            string resTitle = null;
 
-            string resTitle = (await GetResouceTitleAsync(
-                url)).Nullify(true);
+            if (urlParts.Length > 1)
+            {
+                resTitle = urlParts[0].Nullify(true);
+            }
 
-            if (resTitle != null)
+            if (resTitle == null)
             {
                 WriteSectionToConsole(
-                    "The resource at the provided url has the following title: ",
-                    resTitle, ConsoleColor.Cyan);
+                    "Fetching resource from the following url: ",
+                    url, ConsoleColor.Blue);
 
-                if (hasUri)
+                resTitle = (await GetResouceTitleAsync(
+                    url)).Nullify(true);
+
+                if (resTitle != null)
                 {
-                    Console.WriteLine(string.Join(" ",
-                        "Are you want to use this title? If you do, then just",
-                        "press enter next; otherwise, type a title yourself: "));
+                    WriteSectionToConsole(
+                        "The resource at the provided url has the following title: ",
+                        resTitle, ConsoleColor.Cyan);
 
-                    string newResTitle = Console.ReadLine().Nullify(true);
-
-                    if (newResTitle != null)
+                    if (hasUri)
                     {
-                        args.ResTitle = newResTitle;
+                        Console.WriteLine(string.Join(" ",
+                            "Are you want to use this title? If you do, then just",
+                            "press enter next; otherwise, type a title yourself: "));
+
+                        string newResTitle = Console.ReadLine().Nullify(true);
+
+                        if (newResTitle != null)
+                        {
+                            resTitle = newResTitle;
+                        }
                     }
                 }
+                else
+                {
+                    Console.WriteLine(
+                        "The resource at the provided url doesn't have a title; please type a title yourself: ");
 
-                args.ResTitle ??= resTitle;
+                    resTitle = Console.ReadLine().Nullify(
+                        true) ?? nodeArgs.Title ?? throw new ArgumentNullException(
+                            nameof(resTitle));
+
+                    Console.WriteLine();
+                }
             }
             else
             {
-                Console.WriteLine(
-                    "The resource at the provided url doesn't have a title; please type a title yourself: ");
-
-                resTitle = Console.ReadLine().Nullify(
-                    true) ?? args.Title ?? throw new ArgumentNullException(
-                        nameof(resTitle));
-
-                args.ResTitle = resTitle;
-                Console.WriteLine();
+                WriteSectionToConsole(
+                    "Using the following resource title: ",
+                    resTitle, ConsoleColor.Cyan);
             }
 
-            args.MdFirstContent = string.Format(
+            nodeArgs.ResTitle ??= resTitle;
+
+            nodeArgs.MdFirstContent = string.Format(
                 config.FileContents.MdFileContentSectionTemplate,
-                $"[{args.ResTitle}]({url})");
+                $"[{nodeArgs.ResTitle}]({url})");
         }
 
         private string GetFullDirNamePart(
@@ -229,51 +289,135 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             string[] rawArgs) => parser.Parse(
                 new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
                 {
-                    ArgsBuilder = data => parser.HandleArgs(
-                        new ConsoleArgsParseHandlerOpts<ProgramArgs>
+                    ArgsFactory = () => new ProgramArgs().ActWith(args =>
+                    {
+                        args.Current = new ProgramArgs.Node
                         {
-                            Data = data,
-                            ThrowOnTooManyArgs = true,
-                            ThrowOnUnknownFlag = true,
-                            ItemHandlersArr = [
-                                parser.ArgsItemOpts(data, data => data.Args.Title = data.ArgItem.Nullify(true)),
-                                parser.ArgsItemOpts(data, data => data.Args.ShortDirName = data.ArgItem),
-                                parser.ArgsItemOpts(data, data => data.Args.FullDirNameJoinStr = data.ArgItem)
-                            ],
-                            FlagHandlersArr = [
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.WorkDir.Arr(),
-                                    data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.Url.Arr(),
-                                    data => data.Args.Url = data.ArgFlagValue!.JoinStr(":")),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.Uri.Arr(),
-                                    data => data.Args.Uri = data.ArgFlagValue!.JoinStr(":")),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.OpenMdFile.Arr(),
-                                    data => data.Args.OpenMdFile = true, true),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.SkipMdFileCreation.Arr(),
-                                    data => data.Args.SkipMdFileCreation = true, true),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.CreateNote.Arr(),
-                                    data => data.Args.CreateNote = true, true),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.CreateNoteBook.Arr(),
-                                    data => data.Args.CreateNoteBook = true, true),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.CreateNoteInternalsDir.Arr(),
-                                    data => data.Args.CreateNoteInternalsDir = true, true),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.CreateNoteFilesDir.Arr(),
-                                    data => data.Args.CreateNoteFilesDir = true, true),
-                                parser.ArgsFlagOpts(data,
-                                    config.ArgOpts.DirNameTpl.Arr(),
-                                    data => data.Args.DirNameTpl = config.DirNames.DirNamesTplMap[
-                                        data.ArgFlagValue!.Single()])
-                            ]
-                        })
+                            ChildNodes = new List<ProgramArgs.Node>()
+                        };
+
+                        args.RootNodes = new List<ProgramArgs.Node> { args.Current };
+                        args.CurrentSibblings = args.RootNodes;
+                    }),
+                    ArgsBuilder = data =>
+                    {
+                        var args = data.Args;
+
+                        if (data.ArgFlagName == null)
+                        {
+                            switch (args.Current.ArgsCount)
+                            {
+                                case 0:
+                                    args.Current.Title = data.ArgItem.Nullify(true);
+                                    break;
+                                case 1:
+                                    args.Current.ShortDirName = data.ArgItem.Nullify(true);
+                                    break;
+                                case 2:
+                                    args.Current.FullDirNameJoinStr = data.ArgItem;
+                                    break;
+                                default:
+                                    throw new ArgumentException(
+                                        "Expected no more than 3 arguments for each node but already received the 4th");
+                            }
+
+                            args.Current.ArgsCount++;
+                        }
+                        else
+                        {
+                            parser.HandleArgs(
+                                new ConsoleArgsParseHandlerOpts<ProgramArgs>
+                                {
+                                    Data = data,
+                                    ThrowOnTooManyArgs = false,
+                                    ThrowOnUnknownFlag = true,
+                                    ItemHandlersArr = [],
+                                    FlagHandlersArr = [
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.HcyChildNode.Arr(),
+                                            data =>
+                                            {
+                                                var args = data.Args;
+                                                var nextParent = args.Current;
+
+                                                args.Current = new ProgramArgs.Node
+                                                {
+                                                    ParentNode = nextParent,
+                                                    ChildNodes = new List<ProgramArgs.Node>()
+                                                };
+
+                                                args.CurrentSibblings = nextParent.ChildNodes;
+                                                args.CurrentSibblings.Add(args.Current);
+                                            }),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.HcyParentNode.Arr(),
+                                            data =>
+                                            {
+                                                var args = data.Args;
+                                                var nextCurrent = args.Current.ParentNode;
+                                                var nextParent = nextCurrent.ParentNode;
+
+                                                args.Current = nextCurrent;
+
+                                                if (nextParent != null)
+                                                {
+                                                    args.CurrentSibblings = nextParent.ChildNodes;
+                                                }
+                                                else
+                                                {
+                                                    args.CurrentSibblings = args.RootNodes;
+                                                }
+                                            }),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.HcySibblingNode.Arr(),
+                                            data =>
+                                            {
+                                                var args = data.Args;
+                                                var parent = args.Current.ParentNode;
+
+                                                args.Current = new ProgramArgs.Node
+                                                {
+                                                    ParentNode = parent,
+                                                    ChildNodes = new List<ProgramArgs.Node>()
+                                                };
+
+                                                args.CurrentSibblings.Add(args.Current);
+                                            }),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.WorkDir.Arr(),
+                                            data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.Url.Arr(),
+                                            data => data.Args.Current.Url = data.ArgFlagValue!.JoinStr(":")),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.Uri.Arr(),
+                                            data => data.Args.Current.Uri = data.ArgFlagValue!.JoinStr(":")),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.OpenMdFile.Arr(),
+                                            data => data.Args.Current.OpenMdFile = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.SkipMdFileCreation.Arr(),
+                                            data => data.Args.Current.SkipMdFileCreation = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.CreateNote.Arr(),
+                                            data => data.Args.Current.CreateNote = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.CreateNoteBook.Arr(),
+                                            data => data.Args.Current.CreateNoteBook = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.CreateNoteInternalsDir.Arr(),
+                                            data => data.Args.Current.CreateNoteInternalsDir = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.CreateNoteFilesDir.Arr(),
+                                            data => data.Args.Current.CreateNoteFilesDir = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.DirNameTpl.Arr(),
+                                            data => data.Args.Current.DirNameTpl = config.DirNames.DirNamesTplMap[
+                                                data.ArgFlagValue!.Single()])
+                                    ]
+                                });
+                        }
+                    }
                 }).Args;
 
         private void WriteSectionToConsole(

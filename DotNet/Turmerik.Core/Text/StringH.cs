@@ -156,5 +156,22 @@ namespace Turmerik.Core.Text
         public static string[] GetTextLines(
             string text) => text.Split('\n').Select(
                 line => line.TrimEnd('\r')).ToArray();
+
+        public static string NormalizeWhitespaces(
+            this string text,
+            bool allowConsecutiveWhitespaces = true)
+        {
+            text = text.ReplaceChars(
+                c => ' ', c => char.IsWhiteSpace(c));
+
+            if (!allowConsecutiveWhitespaces)
+            {
+                while (text != (text = text.Replace("  ", "")))
+                {
+                }
+            }
+
+            return text;
+        }
     }
 }
