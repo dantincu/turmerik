@@ -15,6 +15,7 @@ using Turmerik.Core.FileSystem;
 using Turmerik.Core.ConsoleApps.TempDir;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.TextParsing;
 
 namespace Turmerik.Core.Dependencies
 {
@@ -37,16 +38,6 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<ISynchronizedValueAdapterFactory, SynchronizedValueAdapterFactory>();
             services.AddSingleton<IProcessLauncherCore, ProcessLauncherCore>();
 
-            services.AddSingleton<ILocalDevicePathMacrosRetriever, LocalDevicePathMacrosRetriever>();
-            services.AddSingleton<ILocalDevicePathMacrosReplacer, LocalDevicePathMacrosReplacer>();
-
-            services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
-            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
-            services.AddSingleton<IFilteredDriveEntriesRetriever, FilteredDriveEntriesRetriever>();
-            services.AddSingleton<IFilteredDriveEntriesRemover, FilteredDriveEntriesRemover>();
-            services.AddSingleton<IFilteredDriveEntriesCloner, FilteredDriveEntriesCloner>();
-            services.AddSingleton<IDriveEntriesCloner, DriveEntriesCloner>();
-
             services.AddSingleton<IActionErrorCatcherFactory, ActionErrorCatcherFactory>();
             services.AddSingleton<IBestItemRetriever, BestItemRetriever>();
             services.AddSingleton<IBestItemAsyncRetriever, BestItemAsyncRetriever>();
@@ -55,13 +46,22 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<ITrmrkUniqueDirRetriever, TrmrkUniqueDirRetriever>();
             services.AddSingleton<ITrmrkUniqueDirCreator, TrmrkUniqueDirCreator>();
             services.AddSingleton<ITempDirConsoleApp, TempDirConsoleApp>();
+
             services.AddSingleton<IStringTemplateParser, StringTemplateParser>();
             services.AddSingleton<IExceptionSerializer, ExceptionSerializer>();
-
             services.AddSingleton<IControlCharsNormalizer, ControlCharsNormalizer>();
             services.AddSingleton<IDelimCharsExtractor, DelimCharsExtractor>();
             services.AddSingleton<ITextBufferLinesRetriever, TextBufferLinesRetriever>();
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
+            services.AddSingleton<IRegexReplacer, RegexReplacer>();
+            services.AddSingleton<ILocalDevicePathMacrosRetriever, LocalDevicePathMacrosRetriever>();
+            services.AddSingleton<ITextMacrosReplacer, TextMacrosReplacer>();
+            services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
+            services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();
+            services.AddSingleton<IFilteredDriveEntriesRetriever, FilteredDriveEntriesRetriever>();
+            services.AddSingleton<IFilteredDriveEntriesRemover, FilteredDriveEntriesRemover>();
+            services.AddSingleton<IFilteredDriveEntriesCloner, FilteredDriveEntriesCloner>();
+            services.AddSingleton<IDriveEntriesCloner, DriveEntriesCloner>();
 
             services.AddSingleton<IChecksumCalculator, ChecksumCalculator>();
 

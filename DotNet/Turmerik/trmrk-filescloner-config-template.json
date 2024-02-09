@@ -71,7 +71,7 @@
             },
             {
               "Command": "npm run build-prod"
-            },
+            }
           ]
         },
         {

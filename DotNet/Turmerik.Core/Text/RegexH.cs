@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Turmerik.Core.TextParsing;
 
 namespace Turmerik.Core.Text
 {
@@ -56,5 +57,33 @@ namespace Turmerik.Core.Text
 
             return new RegexEncodedText(str, sb.ToString());
         }
+
+        public static Match[] MatchesToArr(
+            this MatchCollection matchCollection)
+        {
+            int matchesCount = matchCollection.Count;
+            var arr = new Match[matchesCount];
+
+            for (int i = 0; i < matchesCount; i++)
+            {
+                arr[i] = matchCollection[i];
+            }
+
+            return arr;
+        }
+
+        public static MatchDataMtbl ToMtblMatch(
+            this Match data) => new MatchDataMtbl
+            {
+                Data = data,
+                Index = data.Index,
+                ReplIndex = data.Index,
+                Length = data.Length,
+                Value = data.Value
+            };
+
+        public static MatchDataMtbl[] ToMtblMatchesArr(
+            this MatchCollection matchCollection) => matchCollection.MatchesToArr(
+                ).Select(ToMtblMatch).ToArray();
     }
 }

@@ -9,6 +9,7 @@ using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Text;
+using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
@@ -20,7 +21,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         private readonly IConsoleArgsParser parser;
         private readonly IJsonConversion jsonConversion;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
-        private readonly ILocalDevicePathMacrosReplacer localDevicePathMacrosReplacer;
+        private readonly ITextMacrosReplacer localDevicePathMacrosReplacer;
         private readonly FileCloneComponent fileCloneComponent;
         private readonly CloningProfileComponent cloningProfileComponent;
 
@@ -28,7 +29,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             IConsoleArgsParser parser,
             IJsonConversion jsonConversion,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
-            ILocalDevicePathMacrosReplacer localDevicePathMacrosReplacer,
+            ITextMacrosReplacer localDevicePathMacrosReplacer,
             FileCloneComponent fileCloneComponent,
             CloningProfileComponent cloningProfileComponent)
         {
@@ -332,7 +333,11 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             if (path != null)
             {
                 path = localDevicePathMacrosReplacer.ReplacePathMacros(
-                    path, localDevicePathsMap);
+                    new TextMacrosReplacerOpts
+                    {
+                        InputText = path,
+                        MacrosMap = localDevicePathsMap.GetPathsMap(),
+                    });
             }
 
             return path;
