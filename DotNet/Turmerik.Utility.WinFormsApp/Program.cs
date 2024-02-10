@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Dependencies;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.Code.CSharp.Dependencies;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -146,14 +147,17 @@ namespace Turmerik.Utility.WinFormsApp
                 new ServiceCollection().AsOpts(services =>
                 {
                     TrmrkServices.RegisterAll(services);
-                    services.AddSingleton<IDriveItemsRetriever, FsItemsRetriever>();
-                    services.AddSingleton<IDriveExplorerService, FsExplorerService>();
+
+                    DriveExplorerH.AddFsRetrieverAndExplorer(
+                        services, null, true);
 
                     services.AddSingleton<IAppEnv, AppEnv>();
                     LoggingServices.RegisterAll(services);
 
                     services.AddSingleton(
                         svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create());
+
+                    TrmrkCSharpCodeServices.RegisterAll(services);
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();

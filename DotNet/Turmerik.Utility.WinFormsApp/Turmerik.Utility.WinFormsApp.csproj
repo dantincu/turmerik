@@ -11,9 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Turmerik.Code.CSharp\Turmerik.Code.CSharp.csproj" />
     <ProjectReference Include="..\Turmerik.Logging\Turmerik.Logging.csproj" />
     <ProjectReference Include="..\Turmerik.WinForms\Turmerik.WinForms.csproj" />
-    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 
   <ItemGroup>

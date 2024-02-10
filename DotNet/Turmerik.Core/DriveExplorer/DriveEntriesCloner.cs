@@ -17,9 +17,11 @@ namespace Turmerik.Core.DriveExplorer
     {
         private readonly IDriveExplorerService driveExplorerService;
 
-        public DriveEntriesCloner(IDriveExplorerService driveExplorerService)
+        public DriveEntriesCloner(
+            IDriveExplorerService driveExplorerService)
         {
-            this.driveExplorerService = driveExplorerService ?? throw new ArgumentNullException(nameof(driveExplorerService));
+            this.driveExplorerService = driveExplorerService ?? throw new ArgumentNullException(
+                nameof(driveExplorerService));
         }
 
         public async Task<DriveItem> CopyItemsAsync(

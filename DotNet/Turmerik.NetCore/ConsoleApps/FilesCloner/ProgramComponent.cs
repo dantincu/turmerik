@@ -76,7 +76,10 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             Action<ConsoleArgsParserData<ProgramArgs>> assureSingleFileArgsAssigned = (data) =>
             {
-                data.Args.SingleFileArgs = (singleFileArgs ??= new FileCloneArgs());
+                data.Args.SingleFileArgs = (singleFileArgs ??= new FileCloneArgs
+                {
+                    CloneInputFile = true
+                });
             };
 
             Action assureSingleFileAssigned = () =>
@@ -139,6 +142,14 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
                                         singleFile!.CloneFileNameTpl = data.ArgFlagValue!.SingleOrDefault()!;
                                     }),
+                                parser.ArgsFlagOpts(data, ["cksm"],
+                                    data =>
+                                    {
+                                        assureSingleFileArgsAssigned(data);
+                                        assureSingleFileAssigned();
+
+                                        singleFile!.UseChecksum = true;
+                                    }, true),
                                 parser.ArgsFlagOpts(data, ["p"],
                                     data =>
                                     {

@@ -16,15 +16,18 @@ namespace Turmerik.Core.Utility
     {
         public string Checksum(byte[] bytesArr)
         {
-            string retStr = string.Concat(bytesArr.Select(
-                @byte => @byte.ToString("x")));
+            var encodedBytesArr = EncodeH.EncodeSha1(bytesArr);
+
+            string retStr = string.Concat(
+                encodedBytesArr.Select(
+                    @byte => @byte.ToString("x2")));
 
             return retStr;
         }
 
         public string Checksum(string text)
         {
-            var bytesArr = EncodeH.EncodeSha1(text);
+            var bytesArr = Encoding.UTF8.GetBytes(text);
             string retStr = Checksum(bytesArr);
 
             return retStr;

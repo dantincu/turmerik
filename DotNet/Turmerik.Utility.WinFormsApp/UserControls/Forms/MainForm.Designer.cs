@@ -34,18 +34,21 @@
             tabControlMain = new TabControl();
             tabPageTextUtils = new TabPage();
             textUtilsUC = new UserControls.TextUtilsUC();
+            tabPageCloneables = new TabPage();
             menuStrip1 = new MenuStrip();
-            helpToolStripMenuItem = new ToolStripMenuItem();
-            toolStripMenuItemShowHints = new ToolStripMenuItem();
-            toolStripComboBoxShowHints = new ToolStripComboBox();
-            startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
             actionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
             goToMarkdownSourceTextToolStripMenuItem = new ToolStripMenuItem();
             goToMarkdownResultTextToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItemShowHints = new ToolStripMenuItem();
+            toolStripComboBoxShowHints = new ToolStripComboBox();
+            startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
+            cloneablesUC = new UserControls.CloneablesUC();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
+            tabPageCloneables.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -66,6 +69,7 @@
             // tabControlMain
             // 
             tabControlMain.Controls.Add(tabPageTextUtils);
+            tabControlMain.Controls.Add(tabPageCloneables);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControlMain.Location = new Point(0, 24);
@@ -94,6 +98,16 @@
             textUtilsUC.Size = new Size(1786, 819);
             textUtilsUC.TabIndex = 0;
             // 
+            // tabPageCloneables
+            // 
+            tabPageCloneables.Controls.Add(cloneablesUC);
+            tabPageCloneables.Location = new Point(4, 25);
+            tabPageCloneables.Name = "tabPageCloneables";
+            tabPageCloneables.Size = new Size(1792, 825);
+            tabPageCloneables.TabIndex = 1;
+            tabPageCloneables.Text = "Cloneables";
+            tabPageCloneables.UseVisualStyleBackColor = true;
+            // 
             // menuStrip1
             // 
             menuStrip1.Items.AddRange(new ToolStripItem[] { actionsToolStripMenuItem, helpToolStripMenuItem });
@@ -102,34 +116,6 @@
             menuStrip1.Size = new Size(1800, 24);
             menuStrip1.TabIndex = 3;
             menuStrip1.Text = "menuStrip1";
-            // 
-            // helpToolStripMenuItem
-            // 
-            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItemShowHints, startAppRecoveryToolToolStripMenuItem });
-            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(44, 20);
-            helpToolStripMenuItem.Text = "&Help";
-            // 
-            // toolStripMenuItemShowHints
-            // 
-            toolStripMenuItemShowHints.DropDownItems.AddRange(new ToolStripItem[] { toolStripComboBoxShowHints });
-            toolStripMenuItemShowHints.Name = "toolStripMenuItemShowHints";
-            toolStripMenuItemShowHints.Size = new Size(199, 22);
-            toolStripMenuItemShowHints.Text = "Show &Hints";
-            // 
-            // toolStripComboBoxShowHints
-            // 
-            toolStripComboBoxShowHints.DropDownStyle = ComboBoxStyle.DropDownList;
-            toolStripComboBoxShowHints.Name = "toolStripComboBoxShowHints";
-            toolStripComboBoxShowHints.Size = new Size(100, 23);
-            toolStripComboBoxShowHints.SelectedIndexChanged += ToolStripComboBoxShowHints_SelectedIndexChanged;
-            // 
-            // startAppRecoveryToolToolStripMenuItem
-            // 
-            startAppRecoveryToolToolStripMenuItem.Name = "startAppRecoveryToolToolStripMenuItem";
-            startAppRecoveryToolToolStripMenuItem.Size = new Size(199, 22);
-            startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
-            startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
             // 
             // actionsToolStripMenuItem
             // 
@@ -159,6 +145,42 @@
             goToMarkdownResultTextToolStripMenuItem.Text = "Go To Markdown &Result Text";
             goToMarkdownResultTextToolStripMenuItem.Click += GoToMarkdownResultTextToolStripMenuItem_Click;
             // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItemShowHints, startAppRecoveryToolToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(44, 20);
+            helpToolStripMenuItem.Text = "&Help";
+            // 
+            // toolStripMenuItemShowHints
+            // 
+            toolStripMenuItemShowHints.DropDownItems.AddRange(new ToolStripItem[] { toolStripComboBoxShowHints });
+            toolStripMenuItemShowHints.Name = "toolStripMenuItemShowHints";
+            toolStripMenuItemShowHints.Size = new Size(199, 22);
+            toolStripMenuItemShowHints.Text = "Show &Hints";
+            // 
+            // toolStripComboBoxShowHints
+            // 
+            toolStripComboBoxShowHints.DropDownStyle = ComboBoxStyle.DropDownList;
+            toolStripComboBoxShowHints.Name = "toolStripComboBoxShowHints";
+            toolStripComboBoxShowHints.Size = new Size(100, 23);
+            toolStripComboBoxShowHints.SelectedIndexChanged += ToolStripComboBoxShowHints_SelectedIndexChanged;
+            // 
+            // startAppRecoveryToolToolStripMenuItem
+            // 
+            startAppRecoveryToolToolStripMenuItem.Name = "startAppRecoveryToolToolStripMenuItem";
+            startAppRecoveryToolToolStripMenuItem.Size = new Size(199, 22);
+            startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
+            startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
+            // 
+            // cloneablesUC
+            // 
+            cloneablesUC.Dock = DockStyle.Fill;
+            cloneablesUC.Location = new Point(0, 0);
+            cloneablesUC.Name = "cloneablesUC";
+            cloneablesUC.Size = new Size(1792, 825);
+            cloneablesUC.TabIndex = 0;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -177,6 +199,7 @@
             statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
             tabPageTextUtils.ResumeLayout(false);
+            tabPageCloneables.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -199,5 +222,7 @@
         private ToolStripMenuItem goToWebResourceUrlToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownSourceTextToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownResultTextToolStripMenuItem;
+        private TabPage tabPageCloneables;
+        private UserControls.CloneablesUC cloneablesUC;
     }
 }

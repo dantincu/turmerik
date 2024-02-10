@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "Turmerik.ChecksumCalculator.ConsoleApp": {
+    "Turmerik.FilesCloner.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":p:dotnet-util-bins"
+      "commandLineArgs": ":w:dir :i:input.txt :o: :cksm"
     }
   }
 }
