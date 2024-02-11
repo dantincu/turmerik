@@ -282,5 +282,28 @@ namespace Turmerik.Core.Text
             var retStr = new string(charsList.ToArray());
             return retStr;
         }
+
+        public static string CamelCaseToWords(
+            string str,
+            bool? capitalizeWordFirstLetters = null)
+        {
+            var partsArr = CamelToKebabCase(str).Split('_');
+
+            if (capitalizeWordFirstLetters != false)
+            {
+                if (capitalizeWordFirstLetters ?? false)
+                {
+                    partsArr[0] = partsArr[0].CapitalizeFirstLetter();
+                }
+                else
+                {
+                    partsArr = partsArr.Select(
+                        word => word.CapitalizeFirstLetter()).ToArray();
+                }
+            }
+
+            var kebabCase = string.Join(" ", partsArr);
+            return kebabCase;
+        }
     }
 }

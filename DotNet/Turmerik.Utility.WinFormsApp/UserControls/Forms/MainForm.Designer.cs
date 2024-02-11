@@ -35,6 +35,7 @@
             tabPageTextUtils = new TabPage();
             textUtilsUC = new UserControls.TextUtilsUC();
             tabPageCloneables = new TabPage();
+            cloneablesUC = new UserControls.CloneablesUC();
             menuStrip1 = new MenuStrip();
             actionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
@@ -44,7 +45,6 @@
             toolStripMenuItemShowHints = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
-            cloneablesUC = new UserControls.CloneablesUC();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
@@ -107,6 +107,15 @@
             tabPageCloneables.TabIndex = 1;
             tabPageCloneables.Text = "Cloneables";
             tabPageCloneables.UseVisualStyleBackColor = true;
+            // 
+            // cloneablesUC
+            // 
+            cloneablesUC.Dock = DockStyle.Fill;
+            cloneablesUC.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            cloneablesUC.Location = new Point(0, 0);
+            cloneablesUC.Name = "cloneablesUC";
+            cloneablesUC.Size = new Size(1792, 825);
+            cloneablesUC.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -172,14 +181,6 @@
             startAppRecoveryToolToolStripMenuItem.Size = new Size(199, 22);
             startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
             startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
-            // 
-            // cloneablesUC
-            // 
-            cloneablesUC.Dock = DockStyle.Fill;
-            cloneablesUC.Location = new Point(0, 0);
-            cloneablesUC.Name = "cloneablesUC";
-            cloneablesUC.Size = new Size(1792, 825);
-            cloneablesUC.TabIndex = 0;
             // 
             // MainForm
             // 

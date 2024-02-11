@@ -34,12 +34,20 @@
             splitContainerMain = new SplitContainer();
             panelOptionControls = new Panel();
             buttonGenerateCloneables = new Button();
-            panelMutableClassName = new Panel();
-            textBoxMutableClassName = new TextBox();
-            panelImmutableClassName = new Panel();
-            textBoxImmutableClassName = new TextBox();
+            panelMtblClassNameSuffix = new Panel();
+            textBoxMtblClassNameSuffix = new TextBox();
+            panelMtblClassName = new Panel();
+            textBoxMtblClassName = new TextBox();
+            panelImmtblClassNameSuffix = new Panel();
+            textBoxImmtblClassNameSuffix = new TextBox();
+            panelImmtblClassName = new Panel();
+            textBoxImmtblClassName = new TextBox();
             panelStaticClassName = new Panel();
             textBoxStaticClassName = new TextBox();
+            iconLabelRefreshAllTypeNames = new WinForms.Controls.IconLabel();
+            iconLabelClearAllTypeNames = new WinForms.Controls.IconLabel();
+            panelCodeType = new Panel();
+            comboBoxCodeType = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)splitContainerTextAreas).BeginInit();
             splitContainerTextAreas.Panel1.SuspendLayout();
             splitContainerTextAreas.Panel2.SuspendLayout();
@@ -49,9 +57,12 @@
             splitContainerMain.Panel2.SuspendLayout();
             splitContainerMain.SuspendLayout();
             panelOptionControls.SuspendLayout();
-            panelMutableClassName.SuspendLayout();
-            panelImmutableClassName.SuspendLayout();
+            panelMtblClassNameSuffix.SuspendLayout();
+            panelMtblClassName.SuspendLayout();
+            panelImmtblClassNameSuffix.SuspendLayout();
+            panelImmtblClassName.SuspendLayout();
             panelStaticClassName.SuspendLayout();
+            panelCodeType.SuspendLayout();
             SuspendLayout();
             // 
             // richTextBoxResultText
@@ -95,6 +106,7 @@
             richTextBoxSrcText.TabIndex = 0;
             richTextBoxSrcText.TabStop = false;
             richTextBoxSrcText.Text = "";
+            richTextBoxSrcText.KeyUp += RichTextBoxSrcText_KeyUp;
             // 
             // splitContainerMain
             // 
@@ -118,75 +130,123 @@
             // panelOptionControls
             // 
             panelOptionControls.Controls.Add(buttonGenerateCloneables);
-            panelOptionControls.Controls.Add(panelMutableClassName);
-            panelOptionControls.Controls.Add(panelImmutableClassName);
+            panelOptionControls.Controls.Add(panelMtblClassNameSuffix);
+            panelOptionControls.Controls.Add(panelMtblClassName);
+            panelOptionControls.Controls.Add(panelImmtblClassNameSuffix);
+            panelOptionControls.Controls.Add(panelImmtblClassName);
             panelOptionControls.Controls.Add(panelStaticClassName);
+            panelOptionControls.Controls.Add(iconLabelRefreshAllTypeNames);
+            panelOptionControls.Controls.Add(iconLabelClearAllTypeNames);
+            panelOptionControls.Controls.Add(panelCodeType);
             panelOptionControls.Dock = DockStyle.Top;
             panelOptionControls.Location = new Point(0, 0);
             panelOptionControls.Name = "panelOptionControls";
+            panelOptionControls.Padding = new Padding(5, 3, 0, 0);
             panelOptionControls.Size = new Size(1600, 33);
             panelOptionControls.TabIndex = 0;
             // 
             // buttonGenerateCloneables
             // 
             buttonGenerateCloneables.Dock = DockStyle.Left;
-            buttonGenerateCloneables.Location = new Point(750, 0);
+            buttonGenerateCloneables.Location = new Point(1233, 3);
             buttonGenerateCloneables.Name = "buttonGenerateCloneables";
-            buttonGenerateCloneables.Size = new Size(65, 33);
+            buttonGenerateCloneables.Size = new Size(78, 30);
             buttonGenerateCloneables.TabIndex = 4;
             buttonGenerateCloneables.TabStop = false;
             buttonGenerateCloneables.Text = "Generate";
             buttonGenerateCloneables.UseVisualStyleBackColor = true;
             buttonGenerateCloneables.Click += ButtonGenerateCloneables_Click;
             // 
-            // panelMutableClassName
+            // panelMtblClassNameSuffix
             // 
-            panelMutableClassName.Controls.Add(textBoxMutableClassName);
-            panelMutableClassName.Dock = DockStyle.Left;
-            panelMutableClassName.Location = new Point(500, 0);
-            panelMutableClassName.Name = "panelMutableClassName";
-            panelMutableClassName.Padding = new Padding(5);
-            panelMutableClassName.Size = new Size(250, 33);
-            panelMutableClassName.TabIndex = 0;
+            panelMtblClassNameSuffix.Controls.Add(textBoxMtblClassNameSuffix);
+            panelMtblClassNameSuffix.Dock = DockStyle.Left;
+            panelMtblClassNameSuffix.Location = new Point(1133, 3);
+            panelMtblClassNameSuffix.Name = "panelMtblClassNameSuffix";
+            panelMtblClassNameSuffix.Padding = new Padding(5);
+            panelMtblClassNameSuffix.Size = new Size(100, 30);
+            panelMtblClassNameSuffix.TabIndex = 10;
             // 
-            // textBoxMutableClassName
+            // textBoxMtblClassNameSuffix
             // 
-            textBoxMutableClassName.Dock = DockStyle.Fill;
-            textBoxMutableClassName.Location = new Point(5, 5);
-            textBoxMutableClassName.Name = "textBoxMutableClassName";
-            textBoxMutableClassName.Size = new Size(240, 23);
-            textBoxMutableClassName.TabIndex = 3;
-            textBoxMutableClassName.TabStop = false;
-            textBoxMutableClassName.TextChanged += TextBoxMutableClassName_TextChanged;
+            textBoxMtblClassNameSuffix.Dock = DockStyle.Fill;
+            textBoxMtblClassNameSuffix.Location = new Point(5, 5);
+            textBoxMtblClassNameSuffix.Name = "textBoxMtblClassNameSuffix";
+            textBoxMtblClassNameSuffix.Size = new Size(90, 23);
+            textBoxMtblClassNameSuffix.TabIndex = 3;
+            textBoxMtblClassNameSuffix.TabStop = false;
+            textBoxMtblClassNameSuffix.Text = "Mtbl";
+            textBoxMtblClassNameSuffix.KeyUp += TextBoxMtblClassNameSuffix_KeyUp;
             // 
-            // panelImmutableClassName
+            // panelMtblClassName
             // 
-            panelImmutableClassName.Controls.Add(textBoxImmutableClassName);
-            panelImmutableClassName.Dock = DockStyle.Left;
-            panelImmutableClassName.Location = new Point(250, 0);
-            panelImmutableClassName.Name = "panelImmutableClassName";
-            panelImmutableClassName.Padding = new Padding(5);
-            panelImmutableClassName.Size = new Size(250, 33);
-            panelImmutableClassName.TabIndex = 0;
+            panelMtblClassName.Controls.Add(textBoxMtblClassName);
+            panelMtblClassName.Dock = DockStyle.Left;
+            panelMtblClassName.Location = new Point(883, 3);
+            panelMtblClassName.Name = "panelMtblClassName";
+            panelMtblClassName.Padding = new Padding(5);
+            panelMtblClassName.Size = new Size(250, 30);
+            panelMtblClassName.TabIndex = 0;
             // 
-            // textBoxImmutableClassName
+            // textBoxMtblClassName
             // 
-            textBoxImmutableClassName.Dock = DockStyle.Fill;
-            textBoxImmutableClassName.Location = new Point(5, 5);
-            textBoxImmutableClassName.Name = "textBoxImmutableClassName";
-            textBoxImmutableClassName.Size = new Size(240, 23);
-            textBoxImmutableClassName.TabIndex = 2;
-            textBoxImmutableClassName.TabStop = false;
-            textBoxImmutableClassName.TextChanged += TextBoxImmutableClassName_TextChanged;
+            textBoxMtblClassName.Dock = DockStyle.Fill;
+            textBoxMtblClassName.Location = new Point(5, 5);
+            textBoxMtblClassName.Name = "textBoxMtblClassName";
+            textBoxMtblClassName.Size = new Size(240, 23);
+            textBoxMtblClassName.TabIndex = 3;
+            textBoxMtblClassName.TabStop = false;
+            textBoxMtblClassName.KeyUp += TextBoxMutableClassName_KeyUp;
+            // 
+            // panelImmtblClassNameSuffix
+            // 
+            panelImmtblClassNameSuffix.Controls.Add(textBoxImmtblClassNameSuffix);
+            panelImmtblClassNameSuffix.Dock = DockStyle.Left;
+            panelImmtblClassNameSuffix.Location = new Point(783, 3);
+            panelImmtblClassNameSuffix.Name = "panelImmtblClassNameSuffix";
+            panelImmtblClassNameSuffix.Padding = new Padding(5);
+            panelImmtblClassNameSuffix.Size = new Size(100, 30);
+            panelImmtblClassNameSuffix.TabIndex = 9;
+            // 
+            // textBoxImmtblClassNameSuffix
+            // 
+            textBoxImmtblClassNameSuffix.Dock = DockStyle.Fill;
+            textBoxImmtblClassNameSuffix.Location = new Point(5, 5);
+            textBoxImmtblClassNameSuffix.Name = "textBoxImmtblClassNameSuffix";
+            textBoxImmtblClassNameSuffix.Size = new Size(90, 23);
+            textBoxImmtblClassNameSuffix.TabIndex = 3;
+            textBoxImmtblClassNameSuffix.TabStop = false;
+            textBoxImmtblClassNameSuffix.Text = "Immtbl";
+            textBoxImmtblClassNameSuffix.KeyUp += TextBoxImmtblClassNameSuffix_KeyUp;
+            // 
+            // panelImmtblClassName
+            // 
+            panelImmtblClassName.Controls.Add(textBoxImmtblClassName);
+            panelImmtblClassName.Dock = DockStyle.Left;
+            panelImmtblClassName.Location = new Point(533, 3);
+            panelImmtblClassName.Name = "panelImmtblClassName";
+            panelImmtblClassName.Padding = new Padding(5);
+            panelImmtblClassName.Size = new Size(250, 30);
+            panelImmtblClassName.TabIndex = 0;
+            // 
+            // textBoxImmtblClassName
+            // 
+            textBoxImmtblClassName.Dock = DockStyle.Fill;
+            textBoxImmtblClassName.Location = new Point(5, 5);
+            textBoxImmtblClassName.Name = "textBoxImmtblClassName";
+            textBoxImmtblClassName.Size = new Size(240, 23);
+            textBoxImmtblClassName.TabIndex = 2;
+            textBoxImmtblClassName.TabStop = false;
+            textBoxImmtblClassName.KeyUp += TextBoxImmutableClassName_KeyUp;
             // 
             // panelStaticClassName
             // 
             panelStaticClassName.Controls.Add(textBoxStaticClassName);
             panelStaticClassName.Dock = DockStyle.Left;
-            panelStaticClassName.Location = new Point(0, 0);
+            panelStaticClassName.Location = new Point(283, 3);
             panelStaticClassName.Name = "panelStaticClassName";
             panelStaticClassName.Padding = new Padding(5);
-            panelStaticClassName.Size = new Size(250, 33);
+            panelStaticClassName.Size = new Size(250, 30);
             panelStaticClassName.TabIndex = 0;
             // 
             // textBoxStaticClassName
@@ -197,7 +257,53 @@
             textBoxStaticClassName.Size = new Size(240, 23);
             textBoxStaticClassName.TabIndex = 1;
             textBoxStaticClassName.TabStop = false;
-            textBoxStaticClassName.TextChanged += TextBoxStaticClassName_TextChanged;
+            textBoxStaticClassName.KeyUp += TextBoxStaticClassName_KeyUp;
+            // 
+            // iconLabelRefreshAllTypeNames
+            // 
+            iconLabelRefreshAllTypeNames.AutoSize = true;
+            iconLabelRefreshAllTypeNames.Dock = DockStyle.Left;
+            iconLabelRefreshAllTypeNames.ForeColor = SystemColors.ControlText;
+            iconLabelRefreshAllTypeNames.Location = new Point(269, 3);
+            iconLabelRefreshAllTypeNames.Name = "iconLabelRefreshAllTypeNames";
+            iconLabelRefreshAllTypeNames.Padding = new Padding(0, 5, 0, 0);
+            iconLabelRefreshAllTypeNames.Size = new Size(14, 20);
+            iconLabelRefreshAllTypeNames.TabIndex = 8;
+            iconLabelRefreshAllTypeNames.Text = "R";
+            iconLabelRefreshAllTypeNames.Click += IconLabelRefreshAllTypeNames_Click;
+            // 
+            // iconLabelClearAllTypeNames
+            // 
+            iconLabelClearAllTypeNames.AutoSize = true;
+            iconLabelClearAllTypeNames.Dock = DockStyle.Left;
+            iconLabelClearAllTypeNames.ForeColor = SystemColors.ControlText;
+            iconLabelClearAllTypeNames.Location = new Point(255, 3);
+            iconLabelClearAllTypeNames.Name = "iconLabelClearAllTypeNames";
+            iconLabelClearAllTypeNames.Padding = new Padding(0, 5, 0, 0);
+            iconLabelClearAllTypeNames.Size = new Size(14, 20);
+            iconLabelClearAllTypeNames.TabIndex = 7;
+            iconLabelClearAllTypeNames.Text = "R";
+            iconLabelClearAllTypeNames.Click += IconLabelClearAllTypeNames_Click;
+            // 
+            // panelCodeType
+            // 
+            panelCodeType.Controls.Add(comboBoxCodeType);
+            panelCodeType.Dock = DockStyle.Left;
+            panelCodeType.Location = new Point(5, 3);
+            panelCodeType.Name = "panelCodeType";
+            panelCodeType.Padding = new Padding(5);
+            panelCodeType.Size = new Size(250, 30);
+            panelCodeType.TabIndex = 6;
+            // 
+            // comboBoxCodeType
+            // 
+            comboBoxCodeType.Dock = DockStyle.Fill;
+            comboBoxCodeType.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCodeType.FormattingEnabled = true;
+            comboBoxCodeType.Location = new Point(5, 5);
+            comboBoxCodeType.Name = "comboBoxCodeType";
+            comboBoxCodeType.Size = new Size(240, 23);
+            comboBoxCodeType.TabIndex = 5;
             // 
             // CloneablesUC
             // 
@@ -206,6 +312,7 @@
             Controls.Add(splitContainerMain);
             Name = "CloneablesUC";
             Size = new Size(1600, 800);
+            Load += CloneablesUC_Load;
             splitContainerTextAreas.Panel1.ResumeLayout(false);
             splitContainerTextAreas.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerTextAreas).EndInit();
@@ -215,12 +322,18 @@
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();
             splitContainerMain.ResumeLayout(false);
             panelOptionControls.ResumeLayout(false);
-            panelMutableClassName.ResumeLayout(false);
-            panelMutableClassName.PerformLayout();
-            panelImmutableClassName.ResumeLayout(false);
-            panelImmutableClassName.PerformLayout();
+            panelOptionControls.PerformLayout();
+            panelMtblClassNameSuffix.ResumeLayout(false);
+            panelMtblClassNameSuffix.PerformLayout();
+            panelMtblClassName.ResumeLayout(false);
+            panelMtblClassName.PerformLayout();
+            panelImmtblClassNameSuffix.ResumeLayout(false);
+            panelImmtblClassNameSuffix.PerformLayout();
+            panelImmtblClassName.ResumeLayout(false);
+            panelImmtblClassName.PerformLayout();
             panelStaticClassName.ResumeLayout(false);
             panelStaticClassName.PerformLayout();
+            panelCodeType.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -233,10 +346,18 @@
         private Panel panelOptionControls;
         private Panel panelStaticClassName;
         private TextBox textBoxStaticClassName;
-        private Panel panelMutableClassName;
-        private TextBox textBoxMutableClassName;
-        private Panel panelImmutableClassName;
-        private TextBox textBoxImmutableClassName;
+        private Panel panelMtblClassName;
+        private TextBox textBoxMtblClassName;
+        private Panel panelImmtblClassName;
+        private TextBox textBoxImmtblClassName;
         private Button buttonGenerateCloneables;
+        private ComboBox comboBoxCodeType;
+        private Panel panelCodeType;
+        private WinForms.Controls.IconLabel iconLabelRefreshAllTypeNames;
+        private WinForms.Controls.IconLabel iconLabelClearAllTypeNames;
+        private Panel panelImmtblClassNameSuffix;
+        private TextBox textBoxImmtblClassNameSuffix;
+        private Panel panelMtblClassNameSuffix;
+        private TextBox textBoxMtblClassNameSuffix;
     }
 }

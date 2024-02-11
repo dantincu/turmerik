@@ -82,7 +82,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             InitializeComponent();
             toolTip = new ToolTip();
 
-            splitContainerMain.SplitterDistance = panelOptionControls.Height;
+            UpdateMainSplitContainerDistance();
             panelOptionControls.SizeChanged += PanelOptionControls_SizeChanged;
 
             if (svcProvContnr.IsRegistered)
@@ -164,6 +164,11 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         public void GoToMarkdownSourceText() => richTextBoxSrcText.Focus();
         public void GoToMarkdownResultText() => richTextBoxResultText.Focus();
+
+        private void UpdateMainSplitContainerDistance()
+        {
+            splitContainerMain.SplitterDistance = panelOptionControls.Height + 5;
+        }
 
         private void ApplyHorizontalSplitPanelsSettings(
             HorizontalSplitPanel[] panelsArr)
@@ -491,9 +496,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         uiTheme.ApplyBgColor([
                             this.buttonMdTable,
                             this.textBoxMdTableSrcTextSep,
-                            // this.checkBoxMdTableSrcTextIsTabSeparated,
-                            // this.checkBoxRmMdQtLvlAndHtmlDecode,
-                            // this.checkBoxAddMdQtLvlAndHtmlEncode,
                             this.richTextBoxSrcText,
                             this.richTextBoxResultText,
                         ], uiTheme.InputBackColor);
@@ -537,7 +539,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void PanelOptionControls_SizeChanged(object? sender, EventArgs e)
         {
-            splitContainerMain.SplitterDistance = panelOptionControls.Height;
+            UpdateMainSplitContainerDistance();
         }
 
         private void ButtonMdTable_Click(object sender, EventArgs e)

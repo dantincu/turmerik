@@ -120,7 +120,7 @@
             public const string FULLSCREEN_EXIT = null;
             public const string ARROW_CIRCLE_DOWN = null;
             public const string SORT_BY_ALPHA = null;
-            public const string DELETE_SWEEP = null;
+            public const string DELETE_SWEEP = "\ue16c";
             public const string INDETERMINATE_CHECK_BOX = null;
             public const string FIRST_PAGE = null;
             public const string VIEW_TIMELINE = null;
