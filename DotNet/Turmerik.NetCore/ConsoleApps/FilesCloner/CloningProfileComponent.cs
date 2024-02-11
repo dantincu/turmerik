@@ -8,7 +8,12 @@ using System.IO.Compression;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
-    public class CloningProfileComponent
+    public interface ICloningProfileComponent
+    {
+        Task RunAsync(Profile profile);
+    }
+
+    public class CloningProfileComponent : ICloningProfileComponent
     {
         private readonly IProcessLauncher processLauncher;
         private readonly IFilteredDriveEntriesRetriever filteredFsEntriesRetriever;
@@ -16,7 +21,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         private readonly IFilteredDriveEntriesCloner filteredDriveEntriesCloner;
         private readonly IDriveEntriesCloner driveEntriesCloner;
         private readonly ITempDirConsoleApp tempDirConsoleApp;
-        private readonly FileCloneComponent fileCloneComponent;
+        private readonly IFileCloneComponent fileCloneComponent;
 
         public CloningProfileComponent(
             IProcessLauncher processLauncher,
@@ -24,7 +29,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             IFilteredDriveEntriesRemover filteredFsEntriesRemover,
             IFilteredDriveEntriesCloner filteredDriveEntriesCloner,
             ITempDirConsoleApp tempDirConsoleApp,
-            FileCloneComponent fileCloneComponent)
+            IFileCloneComponent fileCloneComponent)
         {
             this.processLauncher = processLauncher ?? throw new ArgumentNullException(
                 nameof(processLauncher));

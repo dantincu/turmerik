@@ -11,7 +11,7 @@ namespace Turmerik.Core.DriveExplorer
     {
         public static IServiceCollection AddRetriever(
             IServiceCollection services,
-            DependencyLifetime? dependencyLifetime = null,
+            ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
             string rootDirPath = null)
         {
@@ -26,7 +26,7 @@ namespace Turmerik.Core.DriveExplorer
 
         public static IServiceCollection AddExplorer(
             IServiceCollection services,
-            DependencyLifetime? dependencyLifetime = null,
+            ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
             string rootDirPath = null)
         {
@@ -41,7 +41,7 @@ namespace Turmerik.Core.DriveExplorer
 
         public static IServiceCollection AddFsRetrieverAndExplorer(
             IServiceCollection services,
-            DependencyLifetime? dependencyLifetime = null,
+            ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
             string rootDirPath = null)
         {

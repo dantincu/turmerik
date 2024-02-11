@@ -14,24 +14,39 @@ using Turmerik.Core.TextSerialization;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
-    public class ProgramComponent
+    public interface IProgramComponent
     {
-        private const string CFG_FILE_NAME = "trmrk-filescloner-config.json";
+        Task RunAsync(
+            string[] rawArgs);
+
+        ProgramArgs GetArgs(
+            string[] rawArgs);
+
+        void NormalizeArgs(
+            ProgramArgs args);
+
+        Task RunAsync(
+            ProgramArgs args);
+    }
+
+    public class ProgramComponent : IProgramComponent
+    {
+        public const string CFG_FILE_NAME = "trmrk-filescloner-config.json";
 
         private readonly IConsoleArgsParser parser;
         private readonly IJsonConversion jsonConversion;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly ITextMacrosReplacer localDevicePathMacrosReplacer;
-        private readonly FileCloneComponent fileCloneComponent;
-        private readonly CloningProfileComponent cloningProfileComponent;
+        private readonly IFileCloneComponent fileCloneComponent;
+        private readonly ICloningProfileComponent cloningProfileComponent;
 
         public ProgramComponent(
             IConsoleArgsParser parser,
             IJsonConversion jsonConversion,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             ITextMacrosReplacer localDevicePathMacrosReplacer,
-            FileCloneComponent fileCloneComponent,
-            CloningProfileComponent cloningProfileComponent)
+            IFileCloneComponent fileCloneComponent,
+            ICloningProfileComponent cloningProfileComponent)
         {
             this.parser = parser ?? throw new ArgumentNullException(nameof(parser));
 
@@ -59,7 +74,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             await RunAsync(args);
         }
 
-        private ProgramArgs GetArgs(
+        public ProgramArgs GetArgs(
             string[] rawArgs)
         {
             var args = new ProgramArgs
@@ -163,7 +178,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             return args;
         }
 
-        private void NormalizeArgs(
+        public void NormalizeArgs(
             ProgramArgs args)
         {
             args.WorkDir = args.SingleFileArgs?.WorkDir ?? Environment.CurrentDirectory;
@@ -182,6 +197,21 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                         args.LocalDevicePathsMap,
                         args.SingleFileArgs);
                 }
+            }
+        }
+
+        public async Task RunAsync(
+            ProgramArgs args)
+        {
+            if (args.SingleFileArgs != null)
+            {
+                fileCloneComponent.Run(
+                    args.SingleFileArgs);
+            }
+            else
+            {
+                await cloningProfileComponent.RunAsync(
+                    args.Profile);
             }
         }
 
@@ -371,19 +401,6 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                     filter.ExcludedRelPathRegexes.InsertRange(
                         0, dfFilter.ExcludedRelPathRegexes);
                 }
-            }
-        }
-
-        private async Task RunAsync(
-            ProgramArgs args)
-        {
-            if (args.SingleFileArgs != null)
-            {
-                fileCloneComponent.Run(args.SingleFileArgs);
-            }
-            else
-            {
-                await cloningProfileComponent.RunAsync(args.Profile);
             }
         }
     }

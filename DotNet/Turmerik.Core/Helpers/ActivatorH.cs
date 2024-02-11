@@ -20,5 +20,22 @@ namespace Turmerik.Core.Helpers
 
             return retObj;
         }
+
+        public static object? GetTypeDefaultValue(
+            this Type type)
+        {
+            object? defaultValue;
+
+            if (type.IsValueType)
+            {
+                defaultValue = Activator.CreateInstance(type);
+            }
+            else
+            {
+                defaultValue = null;
+            }
+
+            return defaultValue;
+        }
     }
 }

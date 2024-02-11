@@ -2,7 +2,12 @@
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
-    public class FileCloneComponent
+    public interface IFileCloneComponent
+    {
+        void Run(FileCloneArgs args);
+    }
+
+    public class FileCloneComponent : IFileCloneComponent
     {
         private readonly IChecksumCalculator checksumCalculator;
 

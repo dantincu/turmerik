@@ -16,16 +16,14 @@ DriveExplorerH.AddFsRetrieverAndExplorer(
 
 services.AddSingleton<IAppEnv, AppEnv>();
 
-services.AddScoped<FileCloneComponent>();
-services.AddScoped<CloningProfileComponent>();
-services.AddScoped<ProgramComponent>();
+TrmrkNetCoreServices.AddFilesClonerServices(services);
 
 var svcProv = services.BuildServiceProvider();
 
 await ConsoleH.TryExecuteAsync(
     async () =>
     {
-        var program = svcProv.GetRequiredService<ProgramComponent>();
+        var program = svcProv.GetRequiredService<IProgramComponent>();
         await program.RunAsync(args);
     },
     false);

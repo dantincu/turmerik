@@ -8,6 +8,8 @@ using Turmerik.NetCore.LocalDeviceEnv;
 using Turmerik.Core.Utility;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Utility;
+using Turmerik.NetCore.ConsoleApps.FilesCloner;
+using Turmerik.Core.Dependencies;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -19,6 +21,24 @@ namespace Turmerik.NetCore.Dependencies
             services.AddSingleton<IProcessLauncher, ProcessLauncher>();
             services.AddSingleton<INetCoreAppEnvFactoryCore, NetCoreAppEnvFactoryCore>();
             services.AddSingleton<TextToMdService>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddFilesClonerServices(
+            IServiceCollection services,
+            ServiceLifetime fileCloneServicesLifetime = ServiceLifetime.Scoped,
+            ServiceLifetime? cloningProfileServiceLifetime = null,
+            ServiceLifetime? programServiceLifetime = null)
+        {
+            services.AddSvc<IFileCloneComponent, FileCloneComponent>(
+                fileCloneServicesLifetime);
+
+            services.AddSvc<ICloningProfileComponent, CloningProfileComponent>(
+                cloningProfileServiceLifetime ?? fileCloneServicesLifetime);
+
+            services.AddSvc<IProgramComponent, ProgramComponent>(
+                programServiceLifetime ?? fileCloneServicesLifetime);
 
             return services;
         }

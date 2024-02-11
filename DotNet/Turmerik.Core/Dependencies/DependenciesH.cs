@@ -31,7 +31,7 @@ namespace Turmerik.Core.Dependencies
         public static IServiceCollection AddSvcIfReq<TService>(
             this IServiceCollection services,
             Func<IServiceProvider, TService> factory,
-            DependencyLifetime? dependencyLifetime = null,
+            ServiceLifetime? dependencyLifetime = null,
             Func<IServiceCollection, bool> condition = null)
             where TService : class
         {
@@ -46,7 +46,7 @@ namespace Turmerik.Core.Dependencies
 
         public static IServiceCollection AddSvcIfReq<TService, TImplementation>(
             this IServiceCollection services,
-            DependencyLifetime? dependencyLifetime = null,
+            ServiceLifetime? dependencyLifetime = null,
             Action<IServiceCollection> singletonCallback = null,
             Action<IServiceCollection> scopedCallback = null,
             Action<IServiceCollection> transientCallback = null,
@@ -74,7 +74,7 @@ namespace Turmerik.Core.Dependencies
             Action<IServiceCollection> singletonCallback,
             Action<IServiceCollection> scopedCallback,
             Action<IServiceCollection> transientCallback,
-            DependencyLifetime? dependencyLifetime = null,
+            ServiceLifetime? dependencyLifetime = null,
             Func<IServiceCollection, bool> condition = null)
         {
             if (NormalizeSvcCondition(condition).Invoke(services))
@@ -92,7 +92,7 @@ namespace Turmerik.Core.Dependencies
         public static IServiceCollection AddSvc<TService>(
             this IServiceCollection services,
             Func<IServiceProvider, TService> factory,
-            DependencyLifetime? dependencyLifetime = null)
+            ServiceLifetime? dependencyLifetime = null)
             where TService : class => AddSvc<TService>(
                 services,
                 svcs => svcs.AddSingleton(factory),
@@ -102,7 +102,7 @@ namespace Turmerik.Core.Dependencies
 
         public static IServiceCollection AddSvc<TService, TImplementation>(
             this IServiceCollection services,
-            DependencyLifetime? dependencyLifetime = null,
+            ServiceLifetime? dependencyLifetime = null,
             Action<IServiceCollection> singletonCallback = null,
             Action<IServiceCollection> scopedCallback = null,
             Action<IServiceCollection> transientCallback = null)
@@ -121,19 +121,19 @@ namespace Turmerik.Core.Dependencies
             Action<IServiceCollection> singletonCallback,
             Action<IServiceCollection> scopedCallback,
             Action<IServiceCollection> transientCallback,
-            DependencyLifetime? dependencyLifetime = null)
+            ServiceLifetime? dependencyLifetime = null)
         {
-            dependencyLifetime ??= DependencyLifetime.Singleton;
+            dependencyLifetime ??= ServiceLifetime.Singleton;
 
             switch (dependencyLifetime)
             {
-                case DependencyLifetime.Transient:
+                case ServiceLifetime.Transient:
                     transientCallback(services);
                     break;
-                case DependencyLifetime.Scoped:
+                case ServiceLifetime.Scoped:
                     scopedCallback(services);
                     break;
-                case DependencyLifetime.Singleton:
+                case ServiceLifetime.Singleton:
                     singletonCallback(services);
                     break;
                 default:
