@@ -20,7 +20,6 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             public FsEntryLocator CloneArchiveDirLocator { get; set; }
             public string CloneArchiveFileNameTpl { get; set; }
-            public DriveEntriesSerializableFilter DfBeforeCloneArchiveDirCleanupFilter { get; set; }
 
             public DriveEntriesSerializableFilter DfInputDirFilter { get; set; }
             public DriveEntriesSerializableFilter DfBeforeCloneDestnCleanupFilter { get; set; }

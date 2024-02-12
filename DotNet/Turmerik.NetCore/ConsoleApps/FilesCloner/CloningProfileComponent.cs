@@ -148,19 +148,6 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
                 if (filesGroup.CloneArchiveDirLocator != null)
                 {
-                    if (filesGroup.DfBeforeCloneArchiveDirCleanupFilter != null)
-                    {
-                        var destnFolder = await filteredFsEntriesRetriever.FindMatchingAsync(
-                            new FilteredDriveRetrieverMatcherOpts
-                            {
-                                PrFolderIdnf = filesGroup.CloneArchiveDirLocator.EntryPath,
-                                FsEntriesSerializableFilter = filesGroup.DfBeforeCloneArchiveDirCleanupFilter
-                            });
-
-                        await filteredFsEntriesRemover.RemoveEntriesAsync(
-                            destnFolder);
-                    }
-
                     string archiveFileName = string.Format(
                         filesGroup.CloneArchiveFileNameTpl,
                         DateTime.UtcNow);
@@ -260,8 +247,26 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                         FsEntriesSerializableFilter = dirArgs.BeforeCloneDestnCleanupFilter
                     });
 
+                if (dirArgs.OnBeforeCloneDestnPerformingCleanup != null)
+                {
+                    dirArgs.OnBeforeCloneDestnPerformingCleanup(
+                        dirArgs.CloneDirLocator.EntryPath);
+                }
+
                 await filteredFsEntriesRemover.RemoveEntriesAsync(
                     destnFolder);
+
+                if (dirArgs.OnBeforeCloneDestnPerformedCleanup != null)
+                {
+                    dirArgs.OnBeforeCloneDestnPerformedCleanup(
+                        dirArgs.CloneDirLocator.EntryPath);
+                }
+            }
+
+            if (dirArgs.OnPerformingCloneDestn != null)
+            {
+                dirArgs.OnPerformingCloneDestn(
+                    dirArgs.CloneDirLocator.EntryPath);
             }
 
             var clonedItems = await filteredDriveEntriesCloner.CopyFilteredItemsAsync(
@@ -269,6 +274,12 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 {
                     Idnf = dirArgs.CloneDirLocator.EntryPath
                 });
+
+            if (dirArgs.OnPerformedCloneDestn != null)
+            {
+                dirArgs.OnPerformedCloneDestn(
+                    dirArgs.CloneDirLocator.EntryPath);
+            }
 
             return clonedItems;
         }

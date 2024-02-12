@@ -95,17 +95,12 @@
             "EntryRelPath": "./DotNet"
           },
           "CloneBaseDirLocator": {
-            "EntryRelPath": "<$USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+            "EntryRelPath": "<$$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR>"
           },
           "CloneArchiveDirLocator": {
             "EntryPath": "<$ONEDRIVE_DIR>\\<$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR>"
           },
           "CloneArchiveFileNameTpl": "Apps[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
-          "DfBeforeCloneArchiveDirCleanupFilter": {
-            "IncludedRelPathRegexes": [
-              "\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
-            ]
-          },
           "DfInputDirFilter": {
             "ExcludedRelPathRegexes": [
               "^\\/app-env-locator.json$"
@@ -172,6 +167,11 @@
                   "\\/Config\\/",
                   "\\/Content\\/",
                   "\\/Data\\/"
+                ]
+              },
+              "BeforeCloneDestnCleanupFilter": {
+                "IncludedRelPathRegexes": [
+                  "\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
                 ]
               }
             }
