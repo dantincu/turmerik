@@ -118,15 +118,28 @@ namespace Turmerik.UnitTests
                                     },
                                     new ProgramConfig.Script
                                     {
-                                        Command = "rimraf .\\.dist"
+                                        Command = "powershell.exe",
+                                        Arguments = new List<string>
+                                        {
+                                            "rmdirfull.ps1",
+                                            ".dist"
+                                        }
                                     },
                                     new ProgramConfig.Script
                                     {
-                                        Command = "npm run build-dev"
+                                        Command = "npm",
+                                        Arguments = new List<string>
+                                        {
+                                            "run", "build-dev"
+                                        }
                                     },
                                     new ProgramConfig.Script
                                     {
-                                        Command = "npm run build-prod"
+                                        Command = "npm",
+                                        Arguments = new List<string>
+                                        {
+                                            "run", "build-prod"
+                                        }
                                     }
                                 }
                             },
@@ -138,12 +151,22 @@ namespace Turmerik.UnitTests
                                     new ProgramConfig.Script
                                     {
                                         WorkDir = "./wwwroot",
-                                        Command = "rimraf js"
+                                        Command = "powershell.exe",
+                                        Arguments = new List<string>
+                                        {
+                                            "rmdirfull.ps1",
+                                            "js"
+                                        }
                                     },
                                     new ProgramConfig.Script
                                     {
                                         WorkDir = "./wwwroot",
-                                        Command = "rimraf trmrk-notes-config"
+                                        Command = "powershell.exe",
+                                        Arguments = new List<string>
+                                        {
+                                            "rmdirfull.ps1",
+                                            "trmrk-notes-config"
+                                        }
                                     }
                                 }
                             }
