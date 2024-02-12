@@ -31,6 +31,9 @@ namespace Turmerik.NetCore.Dependencies
             ServiceLifetime? cloningProfileServiceLifetime = null,
             ServiceLifetime? programServiceLifetime = null)
         {
+            services.AddSingleton<IProgramArgsRetriever, ProgramArgsRetriever>();
+            services.AddSingleton<IProgramArgsNormalizer, ProgramArgsNormalizer>();
+
             services.AddSvc<IFileCloneComponent, FileCloneComponent>(
                 fileCloneServicesLifetime);
 

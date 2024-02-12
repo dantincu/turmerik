@@ -5,12 +5,15 @@ using Turmerik.NetCore.Utility;
 using Turmerik.Core.Text;
 using static Turmerik.NetCore.ConsoleApps.FilesCloner.ProgramConfig;
 using System.IO.Compression;
+using Turmerik.Core.LocalDeviceEnv;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
     public interface ICloningProfileComponent
     {
-        Task RunAsync(Profile profile);
+        Task RunAsync(
+            ProgramArgs pgArgs,
+            Profile profile);
     }
 
     public class CloningProfileComponent : ICloningProfileComponent
@@ -21,6 +24,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         private readonly IFilteredDriveEntriesCloner filteredDriveEntriesCloner;
         private readonly IDriveEntriesCloner driveEntriesCloner;
         private readonly ITempDirConsoleApp tempDirConsoleApp;
+        private readonly IProgramArgsNormalizer programArgsNormalizer;
+        private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly IFileCloneComponent fileCloneComponent;
 
         public CloningProfileComponent(
@@ -29,6 +34,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             IFilteredDriveEntriesRemover filteredFsEntriesRemover,
             IFilteredDriveEntriesCloner filteredDriveEntriesCloner,
             ITempDirConsoleApp tempDirConsoleApp,
+            IProgramArgsNormalizer programArgsNormalizer,
+            ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             IFileCloneComponent fileCloneComponent)
         {
             this.processLauncher = processLauncher ?? throw new ArgumentNullException(
@@ -46,15 +53,26 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             this.tempDirConsoleApp = tempDirConsoleApp ?? throw new ArgumentNullException(
                 nameof(tempDirConsoleApp));
 
+            this.programArgsNormalizer = programArgsNormalizer ?? throw new ArgumentNullException(
+                nameof(programArgsNormalizer));
+
+            this.localDevicePathMacrosRetriever = localDevicePathMacrosRetriever ?? throw new ArgumentNullException(
+                nameof(localDevicePathMacrosRetriever));
+
             this.fileCloneComponent = fileCloneComponent ?? throw new ArgumentNullException(
                 nameof(fileCloneComponent));
         }
 
         public async Task RunAsync(
+            ProgramArgs pgArgs,
             Profile profile)
         {
             await RunOnBeforeScripts(profile);
-            await RunCoreAsync(profile);
+
+            await RunCoreAsync(
+                pgArgs.LocalDevicePathsMap,
+                profile);
+
             await RunOnAfterScripts(profile);
         }
 
@@ -90,12 +108,16 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         }
 
         private async Task RunCoreAsync(
+            LocalDevicePathMacrosMapMtbl localDevicePathsMap,
             Profile profile)
         {
             foreach (var filesGroup in profile.FileGroups)
             {
                 CloneFilesIfReq(filesGroup);
-                await CloneDirsIfReqAsync(filesGroup);
+
+                await CloneDirsIfReqAsync(
+                    localDevicePathsMap,
+                    filesGroup);
             }
         }
 
@@ -112,6 +134,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         }
 
         private async Task CloneDirsIfReqAsync(
+            LocalDevicePathMacrosMapMtbl localDevicePathsMap,
             FilesGroup filesGroup)
         {
             if (filesGroup.Dirs != null)
@@ -150,6 +173,14 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                     {
                         Action = async tempDir =>
                         {
+                            localDevicePathsMap.TurmerikTempDir = new LocalDevicePathsMap.FolderMtbl
+                            {
+                                DirPath = tempDir.DirPath,
+                                VarName = "<$TURMERIK_TEMP_DIR>"
+                            };
+
+                            localDevicePathMacrosRetriever.Normalize(localDevicePathsMap);
+
                             for (int i = 0; i < dirsToArchiveArr.Count; i++)
                             {
                                 var dirToArchive = dirsToArchiveArr[i];
@@ -169,7 +200,21 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                                     });
                             }
 
-                            ZipFile.CreateFromDirectory(tempDir.DirPath, archiveFilePath);
+                            if (filesGroup.DestnToArchiveDirs != null)
+                            {
+                                foreach (var dir in filesGroup.DestnToArchiveDirs)
+                                {
+                                    programArgsNormalizer.NormalizeDirArgs(
+                                        localDevicePathsMap,
+                                        filesGroup, dir, filesGroup.WorkDir);
+
+                                    await RunCore(dir);
+                                }
+                            }
+
+                            ZipFile.CreateFromDirectory(
+                                tempDir.DirPath,
+                                archiveFilePath);
                         },
                         RemoveTempDirAfterAction = true,
                         RemoveExistingTempDirsBeforeAction = true,

@@ -27,6 +27,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             public List<FileArgs> Files { get; set; }
             public List<DirArgs> Dirs { get; set; }
+            public List<DirArgs> DestnToArchiveDirs { get; set; }
         }
 
         public class Script

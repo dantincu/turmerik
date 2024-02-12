@@ -28,6 +28,10 @@ namespace Turmerik.UnitTests
             var inputObj = new LocalDevicePathMacrosMapMtbl
             {
                 PathsMap = new Dictionary<string, string>(),
+                TurmerikTempDir = new LocalDevicePathsMap.FolderMtbl
+                {
+                    DirPath = Environment.CurrentDirectory
+                },
                 OnedriveDir = new LocalDevicePathsMap.FolderMtbl
                 {
                     DirPath = "OnedriveDir"
@@ -52,6 +56,7 @@ namespace Turmerik.UnitTests
 
             var cloneObj = new LocalDevicePathMacrosMapMtbl(inputObj)
             {
+                TurmerikTempDir = null,
                 UserProfileDir = null,
                 OnedriveDir = null,
                 OnedriveTurmerikDotNetUtilityAppsArchiveReldir = null,
@@ -74,6 +79,8 @@ namespace Turmerik.UnitTests
             var outputObj = pathMacrosRetriever.LoadFromConfigFile(
                 objDumpFilePath);
 
+            Assert.Equal(inputObj.TurmerikTempDir.VarName, outputObj.TurmerikTempDir.VarName);
+            Assert.Equal(inputObj.TurmerikTempDir.DirPath, outputObj.TurmerikTempDir.DirPath);
             Assert.Equal(inputObj.UserProfileDir.VarName, outputObj.UserProfileDir.VarName);
             Assert.Equal(inputObj.UserProfileDir.DirPath, outputObj.UserProfileDir.DirPath);
             Assert.Equal(inputObj.OnedriveDir.VarName, outputObj.OnedriveDir.VarName);

@@ -28,6 +28,255 @@ namespace Turmerik.UnitTests
             basicEqualityComparerFactory = SvcProv.GetRequiredService<IBasicEqualityComparerFactory>();
         }
 
+        [Fact]
+        public void MainTest()
+        {
+            AssertConfigObj(new ProgramConfig
+            {
+                Profiles = new List<ProgramConfig.Profile>
+                {
+                    new ProgramConfig.Profile
+                    {
+                        ProfileName = "notes-blazorapp",
+                        FileGroups = new List<ProgramConfig.FilesGroup>
+                        {
+                            new ProgramConfig.FilesGroup
+                            {
+                                CloneBaseDirLocator = new FsEntryLocator
+                                {
+                                    EntryRelPath = "./wwwroot"
+                                },
+                                Files = new List<FileArgs>
+                                {
+                                    new FileArgs
+                                    {
+                                        InputFileLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./trmrk-notes-config.json"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator(),
+                                        UseChecksum = true
+                                    }
+                                }
+                            },
+                            new ProgramConfig.FilesGroup
+                            {
+                                InputBaseDirLocator = new FsEntryLocator
+                                {
+                                    EntryBasePath = "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
+                                },
+                                CloneBaseDirLocator = new FsEntryLocator
+                                {
+                                    EntryBasePath = "./wwwroot"
+                                },
+                                Files = new List<FileArgs>
+                                {
+                                    new FileArgs
+                                    {
+                                        InputFileLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./dist/dev/index.js"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./js/dev"
+                                        },
+                                        UseChecksum = true,
+                                        CloneTplLines = [ "{0}",
+                                            "export const turmerik = window.turmerik;" ]
+                                    },
+                                    new FileArgs
+                                    {
+                                        InputFileLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./dist/prod/index.js"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./js/dev"
+                                        },
+                                        UseChecksum = true,
+                                        CloneTplLines = [ "{0}",
+                                            "export const turmerik = window.turmerik;" ]
+                                    }
+                                }
+                            }
+                        },
+                        ScriptGroups = new List<ProgramConfig.ScriptsGroup>
+                        {
+                            new ProgramConfig.ScriptsGroup
+                            {
+                                WorkDir = "../../ParcelWs-V2/apps/trmrk-notes-blazorapp",
+                                OnBeforeScripts = new List<ProgramConfig.Script>
+                                {
+                                    new ProgramConfig.Script
+                                    {
+                                        Command = "rimraf .\\.parcel-cache"
+                                    },
+                                    new ProgramConfig.Script
+                                    {
+                                        Command = "rimraf .\\.dist"
+                                    },
+                                    new ProgramConfig.Script
+                                    {
+                                        Command = "npm run build-dev"
+                                    },
+                                    new ProgramConfig.Script
+                                    {
+                                        Command = "npm run build-prod"
+                                    }
+                                }
+                            },
+                            new ProgramConfig.ScriptsGroup
+                            {
+                                WorkDir = "./wwwroot",
+                                OnBeforeScripts = new List<ProgramConfig.Script>
+                                {
+                                    new ProgramConfig.Script
+                                    {
+                                        WorkDir = "./wwwroot",
+                                        Command = "rimraf js"
+                                    },
+                                    new ProgramConfig.Script
+                                    {
+                                        WorkDir = "./wwwroot",
+                                        Command = "rimraf trmrk-notes-config"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    new ProgramConfig.Profile
+                    {
+                        ProfileName = "dotnet-util-bins",
+                        FileGroups = new List<ProgramConfig.FilesGroup>
+                        {
+                            new ProgramConfig.FilesGroup
+                            {
+                                InputBaseDirLocator = new FsEntryLocator
+                                {
+                                    EntryRelPath = "./DotNet"
+                                },
+                                CloneBaseDirLocator = new FsEntryLocator
+                                {
+                                    EntryRelPath = "<$USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+                                },
+                                CloneArchiveDirLocator = new FsEntryLocator
+                                {
+                                    EntryPath = "<$ONEDRIVE_DIR>\\<$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR>"
+                                },
+                                CloneArchiveFileNameTpl = "Apps[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+                                DfBeforeCloneArchiveDirCleanupFilter = new DriveEntriesSerializableFilter
+                                {
+                                    IncludedRelPathRegexes = new List<string>
+                                    {
+                                        // \/Apps\[\d{4}\-\d{2}\-\d{2}_\d{2}-\d{2}\-\d{2}\.\d+[\-\+]\d{4}\]\.zip
+                                        // matches
+                                        // /Apps[2024-02-12_07-49-00.000+0000].zip
+                                        "\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
+                                    }
+                                },
+                                Dirs = new List<DirArgs>
+                                {
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Bin\\Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                        }
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                        }
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+                                        }
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+                                        }
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+                                        }
+                                    }
+                                },
+                                DfInputDirFilter = new DriveEntriesSerializableFilter
+                                {
+                                    ExcludedRelPathRegexes = new List<string>
+                                    {
+                                        "^\\/app-env-locator.json$"
+                                    }
+                                },
+                                DfBeforeCloneDestnCleanupFilter = new DriveEntriesSerializableFilter
+                                {
+                                    ExcludedRelPathRegexes = new List<string>
+                                    {
+                                        "^\\/app-env-locator.json$",
+                                        "^\\/_.+\\.exe"
+                                    }
+                                },
+                                DestnToArchiveDirs = new List<DirArgs>
+                                {
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryPath = "<$USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryPath = "<$TURMERIK_TEMP_DIR>"
+                                        },
+                                        InputDirFilter = new DriveEntriesSerializableFilter
+                                        {
+                                            IncludedRelPathRegexes = new List<string>
+                                            {
+                                                "\\/Config\\/", "\\/Content\\/", "\\/Data\\/"
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }, true);
+        }
+
         private void AssertConfigObj(
             ProgramConfig inputConfig,
             bool dumpToFile = false)
@@ -207,6 +456,16 @@ namespace Turmerik.UnitTests
                     AssertSequenceEqual(
                         inputConfig.Dirs,
                         outputConfig.Dirs,
+                        basicEqualityComparerFactory,
+                        (inCfg, outCfg) =>
+                        {
+                            AssertConfigObj(inCfg, outCfg);
+                            return true;
+                        }, false);
+
+                    AssertSequenceEqual(
+                        inputConfig.DestnToArchiveDirs,
+                        outputConfig.DestnToArchiveDirs,
                         basicEqualityComparerFactory,
                         (inCfg, outCfg) =>
                         {
@@ -442,12 +701,15 @@ namespace Turmerik.UnitTests
         }
 
         private string GetDumpConfigFilePath() => appEnv.GetTypePath(
-            AppEnvDir.Temp, GetType(), ProgramComponent.CFG_FILE_NAME);
+            AppEnvDir.Temp, GetType(), ProgramArgsRetriever.CFG_FILE_NAME);
 
         private string DumpConfigToFile(
             string json)
         {
             string configDumpFilePath = GetDumpConfigFilePath();
+            string configDumpDirPath = Path.GetDirectoryName(configDumpFilePath);
+
+            Directory.CreateDirectory(configDumpDirPath);
             File.WriteAllText(configDumpFilePath, json);
 
             return configDumpFilePath;

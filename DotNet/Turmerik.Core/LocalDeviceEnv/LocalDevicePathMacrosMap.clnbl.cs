@@ -11,6 +11,7 @@ namespace Turmerik.Core.LocalDeviceEnv
 {
     public interface ILocalDevicePathMacrosMap
     {
+        IFolder GetTurmerikTempDir();
         IFolder GetUserProfileDir();
         IFolder GetTurmerikRepoDir();
         IFolder GetTurmerikDotnetUtilityAppsEnvDir();
@@ -73,6 +74,7 @@ namespace Turmerik.Core.LocalDeviceEnv
     {
         public LocalDevicePathMacrosMapImmtbl(ILocalDevicePathMacrosMap src)
         {
+            TurmerikTempDir = src.GetTurmerikTempDir()?.ToImmtbl()!;
             UserProfileDir = src.GetUserProfileDir()?.ToImmtbl()!;
             TurmerikRepoDir = src.GetTurmerikRepoDir()?.ToImmtbl()!;
             TurmerikDotnetUtilityAppsEnvDir = src.GetTurmerikDotnetUtilityAppsEnvDir()?.ToImmtbl()!;
@@ -81,6 +83,7 @@ namespace Turmerik.Core.LocalDeviceEnv
             PathsMap = src.GetPathsMap()?.Dictnr().RdnlD()!;
         }
 
+        public FolderImmtbl TurmerikTempDir { get; }
         public FolderImmtbl UserProfileDir { get; }
         public FolderImmtbl TurmerikRepoDir { get; }
         public FolderImmtbl TurmerikDotnetUtilityAppsEnvDir { get; }
@@ -89,6 +92,7 @@ namespace Turmerik.Core.LocalDeviceEnv
 
         public ReadOnlyDictionary<string, string> PathsMap { get; }
 
+        public IFolder GetTurmerikTempDir() => TurmerikTempDir;
         public IFolder GetUserProfileDir() => UserProfileDir;
         public IFolder GetTurmerikRepoDir() => TurmerikRepoDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDir() => TurmerikDotnetUtilityAppsEnvDir;
@@ -106,6 +110,7 @@ namespace Turmerik.Core.LocalDeviceEnv
 
         public LocalDevicePathMacrosMapMtbl(ILocalDevicePathMacrosMap src)
         {
+            TurmerikTempDir = src.GetTurmerikTempDir()?.ToMtbl()!;
             UserProfileDir = src.GetUserProfileDir()?.ToMtbl()!;
             TurmerikRepoDir = src.GetTurmerikRepoDir()?.ToMtbl()!;
             TurmerikDotnetUtilityAppsEnvDir = src.GetTurmerikDotnetUtilityAppsEnvDir()?.ToMtbl()!;
@@ -114,6 +119,7 @@ namespace Turmerik.Core.LocalDeviceEnv
             PathsMap = src.GetPathsMap()?.Dictnr()!;
         }
 
+        public FolderMtbl TurmerikTempDir { get; set; }
         public FolderMtbl UserProfileDir { get; set; }
         public FolderMtbl TurmerikRepoDir { get; set; }
         public FolderMtbl TurmerikDotnetUtilityAppsEnvDir { get; set; }
@@ -122,6 +128,7 @@ namespace Turmerik.Core.LocalDeviceEnv
 
         public Dictionary<string, string> PathsMap { get; set; }
 
+        public IFolder GetTurmerikTempDir() => TurmerikTempDir;
         public IFolder GetUserProfileDir() => UserProfileDir;
         public IFolder GetTurmerikRepoDir() => TurmerikRepoDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDir() => TurmerikDotnetUtilityAppsEnvDir;

@@ -2,60 +2,6 @@
   "Profiles": [
     {
       "ProfileName": "notes-blazorapp",
-      "FileGroups": [
-        {
-          "CloneBaseDirLocator": {
-            "EntryBasePath": "./wwwroot"
-          },
-          "Files": [
-            {
-              "InputFileLocator": {
-                "EntryRelPath": "./trmrk-notes-config.json"
-              },
-              "CloneFileLocator": {
-                "EntryRelPath": "./trmrk-notes-config"
-              },
-              "UseChecksum": true
-            }
-          ]
-        },
-        {
-          "InputBaseDirLocator": {
-            "EntryBasePath": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
-          },
-          "CloneBaseDirLocator": {
-            "EntryBasePath": "./wwwroot"
-          },
-          "Files": [
-            {
-              "InputFileLocator": {
-                "EntryRelPath": "./dist/dev/index.js"
-              },
-              "CloneFileLocator": {
-                "EntryRelPath": "./js/dev"
-              },
-              "UseChecksum": true,
-              "CloneTplLines": [
-                "{0}",
-                "export const turmerik = window.turmerik;"
-              ]
-            },
-            {
-              "InputFileLocator": {
-                "EntryRelPath": "./dist/prod/index.js"
-              },
-              "CloneFileLocator": {
-                "EntryRelPath": "./js/prod"
-              },
-              "UseChecksum": true,
-              "CloneTplLines": [
-                "{0}",
-                "export const turmerik = window.turmerik;"
-              ]
-            }
-          ]
-        }
-      ],
       "ScriptGroups": [
         {
           "WorkDir": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp",
@@ -64,7 +10,7 @@
               "Command": "rimraf .\\.parcel-cache"
             },
             {
-              "Command": "rimraf .\\dist"
+              "Command": "rimraf .\\.dist"
             },
             {
               "Command": "npm run build-dev"
@@ -87,6 +33,58 @@
             }
           ]
         }
+      ],
+      "FileGroups": [
+        {
+          "CloneBaseDirLocator": {
+            "EntryRelPath": "./wwwroot"
+          },
+          "Files": [
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./trmrk-notes-config.json"
+              },
+              "CloneDirLocator": {},
+              "UseChecksum": true
+            }
+          ]
+        },
+        {
+          "InputBaseDirLocator": {
+            "EntryBasePath": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
+          },
+          "CloneBaseDirLocator": {
+            "EntryBasePath": "./wwwroot"
+          },
+          "Files": [
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./dist/dev/index.js"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "./js/dev"
+              },
+              "UseChecksum": true,
+              "CloneTplLines": [
+                "{0}",
+                "export const turmerik = window.turmerik;"
+              ]
+            },
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./dist/prod/index.js"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "./js/dev"
+              },
+              "UseChecksum": true,
+              "CloneTplLines": [
+                "{0}",
+                "export const turmerik = window.turmerik;"
+              ]
+            }
+          ]
+        }
       ]
     },
     {
@@ -97,13 +95,87 @@
             "EntryRelPath": "./DotNet"
           },
           "CloneBaseDirLocator": {
-            "EntryBasePath": "<@USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps",
-            "EntryRelPath": "Bin"
+            "EntryRelPath": "<$USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
           },
           "CloneArchiveDirLocator": {
-            "EntryBasePath": "<@USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+            "EntryPath": "<$ONEDRIVE_DIR>\\<$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR>"
           },
-          "CloneArchiveFileNameTpl": "Apps[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip"
+          "CloneArchiveFileNameTpl": "Apps[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+          "DfBeforeCloneArchiveDirCleanupFilter": {
+            "IncludedRelPathRegexes": [
+              "\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
+            ]
+          },
+          "DfInputDirFilter": {
+            "ExcludedRelPathRegexes": [
+              "^\\/app-env-locator.json$"
+            ]
+          },
+          "DfBeforeCloneDestnCleanupFilter": {
+            "ExcludedRelPathRegexes": [
+              "^\\/app-env-locator.json$",
+              "^\\/_.+\\.exe"
+            ]
+          },
+          "Dirs": [
+            {
+              "InputDirLocator": {
+                "EntryRelPath": "Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "Bin\\Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+              }
+            },
+            {
+              "InputDirLocator": {
+                "EntryRelPath": "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+              }
+            },
+            {
+              "InputDirLocator": {
+                "EntryRelPath": "Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+              }
+            },
+            {
+              "InputDirLocator": {
+                "EntryRelPath": "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+              }
+            },
+            {
+              "InputDirLocator": {
+                "EntryRelPath": "Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+              }
+            }
+          ],
+          "DestnToArchiveDirs": [
+            {
+              "InputDirLocator": {
+                "EntryPath": "<$USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+              },
+              "CloneDirLocator": {
+                "EntryPath": "<$TURMERIK_TEMP_DIR>"
+              },
+              "InputDirFilter": {
+                "IncludedRelPathRegexes": [
+                  "\\/Config\\/",
+                  "\\/Content\\/",
+                  "\\/Data\\/"
+                ]
+              }
+            }
+          ]
         }
       ]
     }
