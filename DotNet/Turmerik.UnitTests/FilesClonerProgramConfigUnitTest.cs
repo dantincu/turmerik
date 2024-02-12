@@ -353,10 +353,10 @@ namespace Turmerik.UnitTests
                                         {
                                             IncludedRelPathRegexes = new List<string>
                                             {
-                                                // \/Turmerik.MkFsDirsPair.ConsoleApp\[\d{4}\-\d{2}\-\d{2}_\d{2}-\d{2}\-\d{2}\.\d+[\-\+]\d{4}\]\.zip
+                                                // \/Turmerik.FilesCloner.ConsoleApp\[\d{4}\-\d{2}\-\d{2}_\d{2}-\d{2}\-\d{2}\.\d+[\-\+]\d{4}\]\.zip
                                                 // matches
                                                 // /Apps[2024-02-12_07-49-00.000+0000].zip
-                                                "\\/Turmerik.MkFsDirsPair.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
+                                                "\\/Turmerik.FilesCloner.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
                                             }
                                         },
                                     }
