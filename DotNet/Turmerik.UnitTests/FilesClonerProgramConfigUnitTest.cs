@@ -61,11 +61,11 @@ namespace Turmerik.UnitTests
                             {
                                 InputBaseDirLocator = new FsEntryLocator
                                 {
-                                    EntryBasePath = "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
+                                    EntryRelPath = "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
                                 },
                                 CloneBaseDirLocator = new FsEntryLocator
                                 {
-                                    EntryBasePath = "./wwwroot"
+                                    EntryRelPath = "./wwwroot"
                                 },
                                 Files = new List<FileArgs>
                                 {
@@ -157,7 +157,7 @@ namespace Turmerik.UnitTests
                                 },
                                 CloneBaseDirLocator = new FsEntryLocator
                                 {
-                                    EntryRelPath = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
+                                    EntryPath = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
                                 },
                                 CloneArchiveDirLocator = new FsEntryLocator
                                 {

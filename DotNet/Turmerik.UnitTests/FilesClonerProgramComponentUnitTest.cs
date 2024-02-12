@@ -7,31 +7,52 @@ using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps.TempDir;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Utility;
 using Turmerik.NetCore.ConsoleApps.FilesCloner;
 
 namespace Turmerik.UnitTests
 {
     public class FilesClonerProgramComponentUnitTest : UnitTestBase
     {
+        private readonly IAppInstanceStartInfoProvider appInstanceStartInfoProvider;
         private readonly IProgramArgsRetriever programArgsRetriever;
         private readonly IProgramArgsNormalizer programArgsNormalizer;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly IProgramComponent programComponent;
         private readonly ITempDirConsoleApp tempDirConsoleApp;
+        private readonly TrmrkUniqueDirOpts trmrkUniqueDirOpts;
 
         public FilesClonerProgramComponentUnitTest()
         {
+            appInstanceStartInfoProvider = SvcProv.GetRequiredService<IAppInstanceStartInfoProvider>();
             programArgsRetriever = SvcProv.GetRequiredService<IProgramArgsRetriever>();
             programArgsNormalizer = SvcProv.GetRequiredService<IProgramArgsNormalizer>();
             localDevicePathMacrosRetriever = SvcProv.GetRequiredService<ILocalDevicePathMacrosRetriever>();
             programComponent = SvcProv.GetRequiredService<IProgramComponent>();
             tempDirConsoleApp = SvcProv.GetRequiredService<ITempDirConsoleApp>();
+
+            trmrkUniqueDirOpts = new TrmrkUniqueDirOpts
+            {
+                AppInstanceStartInfo = appInstanceStartInfoProvider.Data,
+                DirNameType = GetType(),
+                CreateDirectory = true
+            };
+
+            tempDirConsoleApp.Run(new TempDirConsoleAppOpts
+            {
+                Action = tempDir =>
+                {
+                },
+                TempDirOpts = trmrkUniqueDirOpts,
+                RemoveExistingTempDirsBeforeAction = true,
+                RemoveTempDirAfterAction = false,
+            });
         }
 
         [Fact]
         public async Task LocalFileTest()
         {
-            await PerformTestAsync([ ":w:|$TURMERIK_TEMP_DIR|\\temp\\local", ":i:input.txt", ":o:", ":cksm"],
+            await PerformTestAsync([ ":w:|$TURMERIK_TEMP_DIR|", ":i:temp\\local\\input.txt", ":o:temp\\local", ":cksm"],
                 (tempDir, pgArgs) =>
                 {
                     var dirPath = Path.Combine(tempDir.DirPath, "temp\\local");
@@ -48,10 +69,43 @@ namespace Turmerik.UnitTests
                 });
         }
 
+        [Fact]
+        public async Task BlazorAppTest()
+        {
+            await PerformTestAsync([":w:|$TURMERIK_TEMP_DIR|\\temp\\blazorapp", ":p:notes-blazorapp"],
+                (tempDir, pgArgs) =>
+                {
+                }, (tempDir, pgArgs) =>
+                {
+                });
+        }
+
+        [Fact]
+        public async Task UtilityBinsTest()
+        {
+            await PerformTestAsync([":w:|$TURMERIK_TEMP_DIR|\\temp\\utility-bins", ":p:dotnet-util-bins"],
+                (tempDir, pgArgs) =>
+                {
+                }, (tempDir, pgArgs) =>
+                {
+                });
+        }
+
+        [Fact]
+        public async Task BkpBinsTest()
+        {
+            await PerformTestAsync([":w:|$TURMERIK_TEMP_DIR|\\temp\\bkp-bins", ":p:dotnet-bkp-bins"],
+                (tempDir, pgArgs) =>
+                {
+                }, (tempDir, pgArgs) =>
+                {
+                });
+        }
+
         private async Task PerformTestAsync(
             string[] rawArgs,
-            Action<Core.Utility.TrmrkUniqueDir, ProgramArgs> pgArgsModifier,
-            Action<Core.Utility.TrmrkUniqueDir, ProgramArgs> onCompleteCallback)
+            Action<TrmrkUniqueDir, ProgramArgs> pgArgsModifier,
+            Action<TrmrkUniqueDir, ProgramArgs> onCompleteCallback)
         {
             await tempDirConsoleApp.RunAsync(new TempDirAsyncConsoleAppOpts
             {
@@ -102,11 +156,8 @@ namespace Turmerik.UnitTests
                     await programComponent.RunAsync(args);
                     onCompleteCallback(tempDir, args);
                 },
-                TempDirOpts = new Core.Utility.TrmrkUniqueDirOpts
-                {
-                    DirNameType = GetType(),
-                },
-                RemoveExistingTempDirsBeforeAction = true,
+                TempDirOpts = trmrkUniqueDirOpts,
+                RemoveExistingTempDirsBeforeAction = false,
                 RemoveTempDirAfterAction = false
             });
         }

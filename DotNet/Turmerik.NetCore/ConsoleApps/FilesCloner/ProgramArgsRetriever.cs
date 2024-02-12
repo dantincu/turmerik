@@ -90,9 +90,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                                 parser.ArgsFlagOpts(data, ["w"],
                                     data =>
                                     {
-                                        assureSingleFileArgsAssigned(data);
-
-                                        singleFileArgs!.WorkDir = data.ArgFlagValue!.Single().Nullify(true);
+                                        data.Args.WorkDir = data.ArgFlagValue!.Single().Nullify(true);
                                     }),
                                 parser.ArgsFlagOpts(data, ["i"],
                                     data =>
