@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
+using Turmerik.Core.ConsoleApps.TempDir;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
+using static Turmerik.NetCore.ConsoleApps.FilesCloner.ProgramConfig;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
@@ -25,17 +27,22 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
     public class ProgramComponent : IProgramComponent
     {
+        private readonly ITempDirConsoleApp tempDirConsoleApp;
         private readonly IProgramArgsRetriever programArgsRetriever;
         private readonly IProgramArgsNormalizer programArgsNormalizer;
         private readonly IFileCloneComponent fileCloneComponent;
         private readonly ICloningProfileComponent cloningProfileComponent;
 
         public ProgramComponent(
+            ITempDirConsoleApp tempDirConsoleApp,
             IProgramArgsRetriever programArgsRetriever,
             IProgramArgsNormalizer programArgsNormalizer,
             IFileCloneComponent fileCloneComponent,
             ICloningProfileComponent cloningProfileComponent)
         {
+            this.tempDirConsoleApp = tempDirConsoleApp ?? throw new ArgumentNullException(
+                nameof(tempDirConsoleApp));
+
             this.programArgsRetriever = programArgsRetriever ?? throw new ArgumentNullException(
                 nameof(programArgsRetriever));
 
@@ -51,10 +58,24 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
         public async Task RunAsync(string[] rawArgs)
         {
-            var args = programArgsRetriever.GetArgs(rawArgs);
-            programArgsNormalizer.NormalizeArgs(args);
+            await tempDirConsoleApp.RunAsync(new TempDirAsyncConsoleAppOpts
+            {
+                Action = async (tempDir) =>
+                {
+                    var args = programArgsRetriever.GetArgs(rawArgs);
+                    args.TempDir = tempDir;
 
-            await RunAsync(args);
+                    programArgsNormalizer.NormalizeArgs(args);
+                    await RunAsync(args);
+                },
+                RemoveTempDirAfterAction = true,
+                RemoveExistingTempDirsBeforeAction = true,
+                TempDirOpts = new Core.Utility.TrmrkUniqueDirOpts
+                {
+                    DirNameType = GetType(),
+                    PathPartsArr = [ "temp" ]
+                }
+            });
         }
 
         public async Task RunAsync(

@@ -38,7 +38,7 @@ namespace Turmerik.Core.LocalDeviceEnv
 
             propNamesMap = pubPropInfos.ToDictionary(
                 propInfo => propInfo.Name,
-                propInfo => string.Format("<${0}>", StringH.CamelToKebabCase(
+                propInfo => string.Format("|${0}|", StringH.CamelToKebabCase(
                     propInfo.Name, true))).RdnlD();
         }
 
@@ -50,7 +50,7 @@ namespace Turmerik.Core.LocalDeviceEnv
 
         public ReadOnlyDictionary<string, string> DefaultPathsMap { get; } = new Dictionary<string, string>
         {
-            { "<$USER_PROFILE_DIR>", Environment.GetFolderPath(
+            { "|$USER_PROFILE_DIR|", Environment.GetFolderPath(
                 Environment.SpecialFolder.UserProfile) }
         }.RdnlD();
 

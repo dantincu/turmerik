@@ -22,12 +22,12 @@ namespace Turmerik.UnitTests
         public void MainTest()
         {
             PerformTest(
-                "asdf<$MACRO1>qwer<$MACRO1_1>zxcv<$MACRO2>tyui",
+                "asdf|$MACRO1|qwer|$MACRO1_1|zxcv|$MACRO2|tyui",
                 new Dictionary<string, string>
                 {
-                    { "<$MACRO1>", "Macro1_<$MACRO1_1>_Macro1" },
-                    { "<$MACRO1_1>", "Macro1_1" },
-                    { "<$MACRO2>", "Macro2" }
+                    { "|$MACRO1|", "Macro1_|$MACRO1_1|_Macro1" },
+                    { "|$MACRO1_1|", "Macro1_1" },
+                    { "|$MACRO2|", "Macro2" }
                 },
                 "asdfMacro1_Macro1_1_Macro1qwerMacro1_1zxcvMacro2tyui");
         }

@@ -92,10 +92,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                                     {
                                         assureSingleFileArgsAssigned(data);
 
-                                        singleFileArgs!.WorkDir = data.ArgFlagValue!.Single().Nullify(true)?.With(
-                                            path => NormPathH.NormPath(path,
-                                                (path, isRooted) => isRooted.If(
-                                                    () => path, () => Path.GetFullPath(path))))!;
+                                        singleFileArgs!.WorkDir = data.ArgFlagValue!.Single().Nullify(true);
                                     }),
                                 parser.ArgsFlagOpts(data, ["i"],
                                     data =>

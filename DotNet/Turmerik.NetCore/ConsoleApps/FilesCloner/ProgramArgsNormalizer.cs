@@ -24,18 +24,33 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
     {
         private readonly ITextMacrosReplacer textMacrosReplacer;
+        private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
 
         public ProgramArgsNormalizer(
-            ITextMacrosReplacer textMacrosReplacer)
+            ITextMacrosReplacer textMacrosReplacer,
+            ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever)
         {
             this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
                 nameof(textMacrosReplacer));
+
+            this.localDevicePathMacrosRetriever = localDevicePathMacrosRetriever ?? throw new ArgumentNullException(
+                nameof(localDevicePathMacrosRetriever));
         }
 
         public void NormalizeArgs(
             ProgramArgs args)
         {
+            args.LocalDevicePathsMap.TurmerikTempDir = new LocalDevicePathsMap.FolderMtbl
+            {
+                DirPath = args.TempDir.DirPath
+            };
+
+            localDevicePathMacrosRetriever.Normalize(args.LocalDevicePathsMap);
             args.WorkDir = args.SingleFileArgs?.WorkDir ?? Environment.CurrentDirectory;
+
+            args.WorkDir = NormalizePathIfNotNull(
+                args.LocalDevicePathsMap,
+                args.WorkDir);
 
             if (args.Profile != null)
             {
@@ -44,6 +59,10 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             else
             {
                 args.SingleFileArgs!.WorkDir ??= Environment.CurrentDirectory;
+
+                args.SingleFileArgs!.WorkDir = NormalizePathIfNotNull(
+                    args.LocalDevicePathsMap,
+                    args.SingleFileArgs!.WorkDir);
 
                 if (args.SingleFileArgs.File != null)
                 {

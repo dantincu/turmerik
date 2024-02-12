@@ -30,8 +30,8 @@ namespace Turmerik.Core.TextParsing
             this.regexReplacer = regexReplacer ?? throw new ArgumentNullException(
                 nameof(regexReplacer));
 
-            DefaultMacroRegex = new Regex(@"\<[^\>]+\>");
-            DefaultValidMacroRegex = new Regex(@"^\<[^\<\>]+\>$");
+            DefaultMacroRegex = new Regex(@"\|\$[^\|]+\|");
+            DefaultValidMacroRegex = new Regex(@"^\|\$[^\|]+\|$");
         }
 
         public string MacroRegexStr { get; }

@@ -157,11 +157,11 @@ namespace Turmerik.UnitTests
                                 },
                                 CloneBaseDirLocator = new FsEntryLocator
                                 {
-                                    EntryRelPath = "<$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR>"
+                                    EntryRelPath = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
                                 },
                                 CloneArchiveDirLocator = new FsEntryLocator
                                 {
-                                    EntryPath = "<$ONEDRIVE_DIR>\\<$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR>"
+                                    EntryPath = "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|"
                                 },
                                 CloneArchiveFileNameTpl = "Apps[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
                                 Dirs = new List<DirArgs>
@@ -254,11 +254,11 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryPath = "<$USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+                                            EntryPath = "|USER_PROFILE|\\AppData\\Roaming\\Turmerik\\Apps"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
-                                            EntryPath = "<$TURMERIK_TEMP_DIR>"
+                                            EntryPath = "|TURMERIK_TEMP_DIR|"
                                         },
                                         InputDirFilter = new DriveEntriesSerializableFilter
                                         {
@@ -295,11 +295,11 @@ namespace Turmerik.UnitTests
                                 },
                                 CloneBaseDirLocator = new FsEntryLocator
                                 {
-                                    EntryRelPath = "<$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR>"
+                                    EntryRelPath = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
                                 },
                                 CloneArchiveDirLocator = new FsEntryLocator
                                 {
-                                    EntryPath = "<$ONEDRIVE_DIR>\\<$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR>"
+                                    EntryPath = "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|"
                                 },
                                 CloneArchiveFileNameTpl = "Turmerik.MkFsDirsPair.ConsoleApp[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
                                 Dirs = new List<DirArgs>
@@ -339,11 +339,11 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryPath = "<$USER_PROFILE>\\AppData\\Roaming\\Turmerik\\Apps"
+                                            EntryPath = "|$USER_PROFILE|\\AppData\\Roaming\\Turmerik\\Apps"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
-                                            EntryPath = "<$TURMERIK_TEMP_DIR>"
+                                            EntryPath = "|$TURMERIK_TEMP_DIR|"
                                         },
                                         InputDirFilter = new DriveEntriesSerializableFilter
                                         {
