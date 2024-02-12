@@ -123,6 +123,14 @@
             },
             {
               "InputDirLocator": {
+                "EntryRelPath": "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+              }
+            },
+            {
+              "InputDirLocator": {
                 "EntryRelPath": "Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
               },
               "CloneDirLocator": {
@@ -143,6 +151,14 @@
               },
               "CloneDirLocator": {
                 "EntryRelPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+              }
+            },
+            {
+              "InputDirLocator": {
+                "EntryRelPath": "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "Bin\\Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
               }
             }
           ],
@@ -172,7 +188,7 @@
       ]
     },
     {
-      "ProfileName": "dotnet-mkbckp-bins",
+      "ProfileName": "dotnet-bkp-bins",
       "FileGroups": [
         {
           "InputBaseDirLocator": {
@@ -201,10 +217,10 @@
           "Dirs": [
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
               },
               "CloneDirLocator": {
-                "EntryRelPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Bin\\Turmerik.FilesCloner.CmdApp\\Release\\net8.0"
               }
             }
           ],

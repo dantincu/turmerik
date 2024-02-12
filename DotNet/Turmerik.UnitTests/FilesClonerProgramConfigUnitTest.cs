@@ -181,6 +181,17 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
+                                            EntryRelPath = "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                        }
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
                                             EntryRelPath = "Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
@@ -208,6 +219,17 @@ namespace Turmerik.UnitTests
                                         CloneDirLocator = new FsEntryLocator
                                         {
                                             EntryRelPath = "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+                                        }
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "Bin\\Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
                                         }
                                     }
                                 },
@@ -262,7 +284,7 @@ namespace Turmerik.UnitTests
                     },
                     new ProgramConfig.Profile
                     {
-                        ProfileName = "dotnet-mkbckp-bins",
+                        ProfileName = "dotnet-bkp-bins",
                         FileGroups = new List<ProgramConfig.FilesGroup>
                         {
                             new ProgramConfig.FilesGroup
@@ -286,11 +308,11 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Bin\\Turmerik.FilesCloner.CmdApp\\Release\\net8.0"
                                         }
                                     }
                                 },
