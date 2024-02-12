@@ -109,7 +109,12 @@ namespace Turmerik.UnitTests
                                 {
                                     new ProgramConfig.Script
                                     {
-                                        Command = "rimraf .\\.parcel-cache"
+                                        Command = "powershell.exe",
+                                        Arguments = new List<string>
+                                        {
+                                            "rmdirfull.ps1",
+                                            ".parcel-cache"
+                                        }
                                     },
                                     new ProgramConfig.Script
                                     {

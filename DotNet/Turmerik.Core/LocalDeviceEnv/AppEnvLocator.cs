@@ -14,7 +14,8 @@ namespace Turmerik.Core.LocalDeviceEnv
         Content,
         Bin,
         Temp,
-        Src
+        Src,
+        Scripts
     }
 
     public partial class AppEnvLocator

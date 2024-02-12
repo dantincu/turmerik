@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps.TempDir;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.TextParsing;
 using Turmerik.Core.Utility;
 using Turmerik.NetCore.ConsoleApps.FilesCloner;
 
@@ -20,6 +21,7 @@ namespace Turmerik.UnitTests
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly IProgramComponent programComponent;
         private readonly ITempDirConsoleApp tempDirConsoleApp;
+        private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly TrmrkUniqueDirOpts trmrkUniqueDirOpts;
 
         public FilesClonerProgramComponentUnitTest()
@@ -30,6 +32,7 @@ namespace Turmerik.UnitTests
             localDevicePathMacrosRetriever = SvcProv.GetRequiredService<ILocalDevicePathMacrosRetriever>();
             programComponent = SvcProv.GetRequiredService<IProgramComponent>();
             tempDirConsoleApp = SvcProv.GetRequiredService<ITempDirConsoleApp>();
+            textMacrosReplacer = SvcProv.GetRequiredService<ITextMacrosReplacer>();
 
             trmrkUniqueDirOpts = new TrmrkUniqueDirOpts
             {
@@ -114,8 +117,12 @@ namespace Turmerik.UnitTests
                     var args = programArgsRetriever.GetArgs(rawArgs);
                     args.TempDir = tempDir;
 
-                    args.WorkDir = tempDir.DirPath;
                     programArgsNormalizer.NormalizeArgs(args);
+
+                    if (!Path.IsPathRooted(args.WorkDir))
+                    {
+                        args.WorkDir = Path.Combine(tempDir.DirPath, args.WorkDir);
+                    }
 
                     var localDevicePathsMap = args.LocalDevicePathsMap;
 
@@ -136,10 +143,17 @@ namespace Turmerik.UnitTests
                     args.Config.Profiles.Single(
                         profile => profile.ProfileName == "notes-blazorapp").ActWith(profile =>
                         {
-                            profile.ScriptGroups[0].WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-notes-blazorapp";
-                            profile.ScriptGroups[1].WorkDir = "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp";
+                            var blazorAppRepoDirPath = Path.Combine(
+                                localDevicePathsMap.TurmerikRepoDir.DirPath,
+                                "DotNet\\Turmerik.Notes.BlazorApp");
 
-                            profile.FileGroups[0].WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-notes-blazorapp";
+                            profile.ScriptGroups[0].WorkDir = Path.Combine(
+                                blazorAppRepoDirPath, profile.ScriptGroups[0].WorkDir);
+
+                            profile.ScriptGroups[1].WorkDir = Path.Combine(
+                                blazorAppRepoDirPath, profile.ScriptGroups[1].WorkDir);
+
+                            profile.FileGroups[0].WorkDir = blazorAppRepoDirPath;
 
                             foreach (var file in profile.FileGroups[1].Files)
                             {

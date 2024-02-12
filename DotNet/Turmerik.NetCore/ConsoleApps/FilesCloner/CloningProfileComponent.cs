@@ -91,8 +91,11 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             foreach (var script in scriptsList)
             {
+                string workDir = Path.GetFullPath(
+                    scriptsGroup.WorkDir);
+
                 await processLauncher.Launch(
-                    scriptsGroup.WorkDir,
+                    workDir,
                     script.Command,
                     script.Arguments);
             }

@@ -103,6 +103,16 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             foreach (var scriptsGroup in profile.ScriptGroups)
             {
                 scriptsGroup.WorkDir ??= args.WorkDir;
+
+                scriptsGroup.WorkDir = NormalizePathIfNotNull(
+                    args.LocalDevicePathsMap,
+                    scriptsGroup.WorkDir);
+
+                NormalizeScriptsListIfNotNull(
+                    args, scriptsGroup, scriptsGroup.OnBeforeScripts);
+
+                NormalizeScriptsListIfNotNull(
+                    args, scriptsGroup, scriptsGroup.OnAfterScripts);
             }
 
             foreach (var filesGroup in profile.FileGroups)
@@ -111,6 +121,24 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                     args.LocalDevicePathsMap,
                     filesGroup,
                     args.WorkDir);
+            }
+        }
+
+        private void NormalizeScriptsListIfNotNull(
+            ProgramArgs args,
+            ProgramConfig.ScriptsGroup scriptsGroup,
+            List<ProgramConfig.Script> scriptsList)
+        {
+            if (scriptsList != null)
+            {
+                foreach (var script in scriptsList)
+                {
+                    script.WorkDir = NormalizePathIfNotNull(
+                        args.LocalDevicePathsMap,
+                        script.WorkDir);
+
+                    script.WorkDir ??= scriptsGroup.WorkDir;
+                }
             }
         }
 
