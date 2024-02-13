@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using Turmerik.Core.Dependencies;
 using Turmerik.NetCore.Dependencies;
 using Turmerik.NetCore.Utility;
@@ -21,7 +22,7 @@ var filePath = Path.Combine(dirName, "in.txt");
 
 File.WriteAllText(filePath, "asdfasdf");
 
-pwsAdapter.Invoke(new PowerShellAdapterOpts
+/* pwsAdapter.Invoke(new PowerShellAdapterOpts
 {
     Commands = new List<PowerShellCommandOpts>
     {
@@ -31,17 +32,27 @@ pwsAdapter.Invoke(new PowerShellAdapterOpts
             CommandArguments = [ "\"asdf\"" ]
         }
     }
-});
+}); */
+var processStartInfo = new ProcessStartInfo
+{
+    FileName = "npm",
+    Arguments = "install",
+    WorkingDirectory = @"F:\T\turmerik\ParcelWs-V2\apps\trmrk-notes-blazorapp",
+    // RedirectStandardOutput = true,
+    // RedirectStandardError = true,
+    UseShellExecute = true, // Set this to true
+    CreateNoWindow = true
+};
 
-/* await processLauncher.Launch(
-    Environment.CurrentDirectory,
-    "powershell.exe",
-    // ["-ExecutionPolicy", "Bypass", "-File", "rmdirfull1", dirName],
-    // [ "-Command", $"& rmdirfull \"{dirName}\"" ],
-    // [ "-Command", $"if (Test-Path -Path (\"{dirName}\\\") -PathType Container) {{ Remove-Item \"{dirName}\\*\" -Recurse -Force; Remove-Item \"{dirName}\\*\"; \"removed\" | Out-File -FilePath \"out.txt\"\" }} else {{ \"not removed\" | Out-File -FilePath \"out.txt\" }}" ],
-    ["-Command", $"if (Test-Path -Path (\"{dirName}\\\") -PathType Container) {{ \"removed\" | Out-File -FilePath \"out.txt\"\" }} else {{ \"not removed\" | Out-File -FilePath \"out.txt\" }}"],
-    // ["-Command", $"\"removing\" | Out-File -FilePath \"out.txt\""],
-    startInfo =>
-    {
+using (var process = new Process { StartInfo = processStartInfo })
+{
+    process.Start();
+    // var output = process.StandardOutput.ReadToEnd();
+    // var error = process.StandardError.ReadToEnd();
+    process.WaitForExit();
 
-    });*/
+    Console.WriteLine("Output:");
+    // Console.WriteLine(output);
+    Console.WriteLine("Error:");
+    // Console.WriteLine(error);
+}

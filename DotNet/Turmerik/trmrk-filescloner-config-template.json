@@ -11,55 +11,60 @@
                 "Commands": [
                   {
                     "CommandName": "rmdirfull",
-                    "CommandArguments": [ ".parcel-cache" ]
-                  }
-                ]
-              }
-            },
-            {
-              "PowerShellCmd": {
-                "Commands": [
+                    "CommandArguments": [
+                      ".parcel-cache"
+                    ]
+                  },
                   {
                     "CommandName": "rmdirfull",
-                    "CommandArguments": [ "dist" ]
+                    "CommandArguments": [
+                      "dist"
+                    ]
                   }
                 ]
               }
             },
             {
-              "Command": "npm",
-              "Arguments": [
-                "run",
-                "build-dev"
-              ]
+              "WinShellCmd": {
+                "FileName": "npm",
+                "ArgumentsNmrbl": [
+                  "run",
+                  "build-dev"
+                ]
+              }
             },
             {
-              "Command": "npm",
-              "Arguments": [
-                "run",
-                "build-prod"
-              ]
+              "WinShellCmd": {
+                "FileName": "npm",
+                "ArgumentsNmrbl": [
+                  "run",
+                  "build-prod"
+                ]
+              }
             }
           ]
         },
         {
-          "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp\\wwwroot",
+          "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
           "OnBeforeScripts": [
             {
               "WorkDir": "./wwwroot",
-              "Command": "powershell.exe",
-              "Arguments": [
-                "rmdirfull.ps1",
-                "js"
-              ]
-            },
-            {
-              "WorkDir": "./wwwroot",
-              "Command": "powershell.exe",
-              "Arguments": [
-                "rmdirfull.ps1",
-                "trmrk-notes-config"
-              ]
+              "PowerShellCmd": {
+                "Commands": [
+                  {
+                    "CommandName": "rmdirfull",
+                    "CommandArguments": [
+                      "js"
+                    ]
+                  },
+                  {
+                    "CommandName": "rmdirfull",
+                    "CommandArguments": [
+                      "trmrk-notes-config"
+                    ]
+                  }
+                ]
+              }
             }
           ]
         }

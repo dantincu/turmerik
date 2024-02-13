@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.EqualityComparer;
 using Turmerik.Core.FileSystem;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextSerialization;
 using Turmerik.NetCore.ConsoleApps.FilesCloner;
@@ -111,64 +112,57 @@ namespace Turmerik.UnitTests
                                 {
                                     new ProgramConfig.Script
                                     {
-                                        Command = "powershell.exe",
-                                        Arguments = new List<string>
+                                        PowerShellCmd = new NetCore.Utility.PowerShellAdapterOpts
                                         {
-                                            "rmdirfull.ps1",
-                                            ".parcel-cache"
+                                            Commands = new NetCore.Utility.PowerShellCommandOpts
+                                            {
+                                                CommandName = "rmdirfull",
+                                                CommandArguments = [ ".parcel-cache" ]
+                                            }.Lst(new NetCore.Utility.PowerShellCommandOpts
+                                            {
+                                                CommandName = "rmdirfull",
+                                                CommandArguments = [ "dist" ]
+                                            })
                                         }
                                     },
                                     new ProgramConfig.Script
                                     {
-                                        Command = "powershell.exe",
-                                        Arguments = new List<string>
+                                        WinShellCmd = new Core.Utility.ProcessLauncherOpts
                                         {
-                                            "rmdirfull.ps1",
-                                            "dist"
+                                            FileName = "npm",
+                                            ArgumentsNmrbl = [ "run", "build-dev" ]
                                         }
                                     },
                                     new ProgramConfig.Script
                                     {
-                                        Command = "npm",
-                                        Arguments = new List<string>
+                                        WinShellCmd = new Core.Utility.ProcessLauncherOpts
                                         {
-                                            "run", "build-dev"
-                                        }
-                                    },
-                                    new ProgramConfig.Script
-                                    {
-                                        Command = "npm",
-                                        Arguments = new List<string>
-                                        {
-                                            "run", "build-prod"
+                                            FileName = "npm",
+                                            ArgumentsNmrbl = [ "run", "build-prod" ]
                                         }
                                     }
                                 }
                             },
                             new ProgramConfig.ScriptsGroup
                             {
-                                WorkDir = "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp\\wwwroot",
+                                WorkDir = "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
                                 OnBeforeScripts = new List<ProgramConfig.Script>
                                 {
                                     new ProgramConfig.Script
                                     {
-                                        WorkDir = "./wwwroot",
-                                        Command = "powershell.exe",
-                                        Arguments = new List<string>
+                                        PowerShellCmd = new NetCore.Utility.PowerShellAdapterOpts
                                         {
-                                            "rmdirfull.ps1",
-                                            "js"
-                                        }
-                                    },
-                                    new ProgramConfig.Script
-                                    {
-                                        WorkDir = "./wwwroot",
-                                        Command = "powershell.exe",
-                                        Arguments = new List<string>
-                                        {
-                                            "rmdirfull.ps1",
-                                            "trmrk-notes-config"
-                                        }
+                                            Commands = new NetCore.Utility.PowerShellCommandOpts
+                                            {
+                                                CommandName = "rmdirfull",
+                                                CommandArguments = [ "js" ]
+                                            }.Lst(new NetCore.Utility.PowerShellCommandOpts
+                                            {
+                                                CommandName = "rmdirfull",
+                                                CommandArguments = [ "trmrk-notes-config" ]
+                                            })
+                                        },
+                                        WorkDir = "./wwwroot"
                                     }
                                 }
                             }
@@ -514,14 +508,6 @@ namespace Turmerik.UnitTests
                     Assert.Equal(
                         inputConfig.WorkDir,
                         outputConfig.WorkDir);
-
-                    Assert.Equal(
-                        inputConfig.Command,
-                        outputConfig.Command);
-
-                    AssertSequenceEqual(
-                        inputConfig.Arguments,
-                        outputConfig.Arguments);
                 }, allowNull);
 
         private void AssertConfigObj(

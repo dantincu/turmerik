@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
+using Turmerik.Core.Utility;
 using Turmerik.NetCore.Utility;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
@@ -33,9 +34,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         public class Script
         {
             public string WorkDir { get; set; }
-            public string Command { get; set; }
-            public List<string> Arguments { get; set; }
 
+            public ProcessLauncherOpts WinShellCmd { get; set; }
             public PowerShellAdapterOpts PowerShellCmd { get; set; }
         }
 

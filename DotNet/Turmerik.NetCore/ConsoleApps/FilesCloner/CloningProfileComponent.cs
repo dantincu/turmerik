@@ -77,7 +77,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             foreach (var scriptGroup in profile.ScriptGroups)
             {
-                await RunScriptsAsync(scriptGroup, scriptGroup.OnBeforeScripts);
+                await RunScriptsAsync(scriptGroup.OnBeforeScripts);
             }
         }
 
@@ -86,19 +86,15 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             foreach (var scriptGroup in profile.ScriptGroups)
             {
-                await RunScriptsAsync(scriptGroup, scriptGroup.OnAfterScripts);
+                await RunScriptsAsync(scriptGroup.OnAfterScripts);
             }
         }
 
         private async Task RunScriptsAsync(
-            ScriptsGroup scriptsGroup,
             List<Script> scriptsList)
         {
             foreach (var script in scriptsList)
             {
-                string workDir = Path.GetFullPath(
-                    scriptsGroup.WorkDir);
-
                 if (script.PowerShellCmd != null)
                 {
                     powerShellAdapter.Invoke(
@@ -107,9 +103,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 else
                 {
                     await processLauncher.Launch(
-                        workDir,
-                        script.Command,
-                        script.Arguments);
+                        script.WinShellCmd);
                 }
             }
         }
