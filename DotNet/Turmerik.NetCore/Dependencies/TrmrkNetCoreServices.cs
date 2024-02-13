@@ -19,6 +19,7 @@ namespace Turmerik.NetCore.Dependencies
             IServiceCollection services)
         {
             services.AddSingleton<IProcessLauncher, ProcessLauncher>();
+            services.AddSingleton<IPowerShellAdapter, PowerShellAdapter>();
             services.AddSingleton<INetCoreAppEnvFactoryCore, NetCoreAppEnvFactoryCore>();
             services.AddSingleton<TextToMdService>();
 

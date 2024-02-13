@@ -138,6 +138,13 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                         script.WorkDir);
 
                     script.WorkDir ??= scriptsGroup.WorkDir;
+
+                    if (script.PowerShellCmd != null)
+                    {
+                        script.PowerShellCmd.WorkDir ??= script.WorkDir;
+                        script.PowerShellCmd.CreateRunSpace ??= true;
+                        script.PowerShellCmd.ExecutionPolicy ??= Microsoft.PowerShell.ExecutionPolicy.Unrestricted;
+                    }
                 }
             }
         }

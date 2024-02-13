@@ -40,6 +40,7 @@ namespace Turmerik.UnitTests
                         {
                             new ProgramConfig.FilesGroup
                             {
+                                WorkDir = "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
                                 CloneBaseDirLocator = new FsEntryLocator
                                 {
                                     EntryRelPath = "./wwwroot"
@@ -52,13 +53,14 @@ namespace Turmerik.UnitTests
                                         {
                                             EntryRelPath = "./trmrk-notes-config.json"
                                         },
-                                        CloneDirLocator = new FsEntryLocator(),
+                                        CloneDirLocator = FsEntryLocatorH.FromPath(string.Empty),
                                         UseChecksum = true
                                     }
                                 }
                             },
                             new ProgramConfig.FilesGroup
                             {
+                                WorkDir = "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
                                 InputBaseDirLocator = new FsEntryLocator
                                 {
                                     EntryRelPath = "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
@@ -104,7 +106,7 @@ namespace Turmerik.UnitTests
                         {
                             new ProgramConfig.ScriptsGroup
                             {
-                                WorkDir = "../../ParcelWs-V2/apps/trmrk-notes-blazorapp",
+                                WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2/apps/trmrk-notes-blazorapp",
                                 OnBeforeScripts = new List<ProgramConfig.Script>
                                 {
                                     new ProgramConfig.Script
@@ -122,7 +124,7 @@ namespace Turmerik.UnitTests
                                         Arguments = new List<string>
                                         {
                                             "rmdirfull.ps1",
-                                            ".dist"
+                                            "dist"
                                         }
                                     },
                                     new ProgramConfig.Script
@@ -145,7 +147,7 @@ namespace Turmerik.UnitTests
                             },
                             new ProgramConfig.ScriptsGroup
                             {
-                                WorkDir = "./wwwroot",
+                                WorkDir = "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp\\wwwroot",
                                 OnBeforeScripts = new List<ProgramConfig.Script>
                                 {
                                     new ProgramConfig.Script

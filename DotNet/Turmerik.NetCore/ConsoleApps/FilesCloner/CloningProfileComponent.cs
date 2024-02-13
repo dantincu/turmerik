@@ -19,6 +19,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
     public class CloningProfileComponent : ICloningProfileComponent
     {
         private readonly IProcessLauncher processLauncher;
+        private readonly IPowerShellAdapter powerShellAdapter;
         private readonly IFilteredDriveEntriesRetriever filteredFsEntriesRetriever;
         private readonly IFilteredDriveEntriesRemover filteredFsEntriesRemover;
         private readonly IFilteredDriveEntriesCloner filteredDriveEntriesCloner;
@@ -29,6 +30,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
         public CloningProfileComponent(
             IProcessLauncher processLauncher,
+            IPowerShellAdapter powerShellAdapter,
             IFilteredDriveEntriesRetriever filteredFsEntriesRetriever,
             IFilteredDriveEntriesRemover filteredFsEntriesRemover,
             IFilteredDriveEntriesCloner filteredDriveEntriesCloner,
@@ -38,6 +40,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             this.processLauncher = processLauncher ?? throw new ArgumentNullException(
                 nameof(processLauncher));
+
+            this.powerShellAdapter = powerShellAdapter ?? throw new ArgumentNullException(
+                nameof(powerShellAdapter));
 
             this.filteredFsEntriesRetriever = filteredFsEntriesRetriever ?? throw new ArgumentNullException(
                 nameof(filteredFsEntriesRetriever));
@@ -94,10 +99,18 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 string workDir = Path.GetFullPath(
                     scriptsGroup.WorkDir);
 
-                await processLauncher.Launch(
-                    workDir,
-                    script.Command,
-                    script.Arguments);
+                if (script.PowerShellCmd != null)
+                {
+                    powerShellAdapter.Invoke(
+                        script.PowerShellCmd);
+                }
+                else
+                {
+                    await processLauncher.Launch(
+                        workDir,
+                        script.Command,
+                        script.Arguments);
+                }
             }
         }
 

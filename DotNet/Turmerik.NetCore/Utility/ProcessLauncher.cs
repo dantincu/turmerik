@@ -14,7 +14,8 @@ namespace Turmerik.NetCore.Utility
         Task Launch(
             string workingDirectory,
             string fileName,
-            IEnumerable<string> argumentsNmrbl = null);
+            IEnumerable<string> argumentsNmrbl = null,
+            Action<ProcessStartInfo> startInfoBuilder = null);
 
         Task Launch(ProcessLauncherOpts opts);
 
@@ -27,12 +28,14 @@ namespace Turmerik.NetCore.Utility
         public Task Launch(
             string workingDirectory,
             string fileName,
-            IEnumerable<string> argumentsNmrbl = null) => Launch(
+            IEnumerable<string> argumentsNmrbl = null,
+            Action<ProcessStartInfo> startInfoBuilder = null) => Launch(
                 new ProcessLauncherOpts
                 {
                     WorkingDirectory = workingDirectory,
                     FileName = fileName,
-                    ArgumentsNmrbl = argumentsNmrbl
+                    ArgumentsNmrbl = argumentsNmrbl,
+                    StartInfoBuilder = startInfoBuilder
                 });
 
         public async Task Launch(ProcessLauncherOpts opts)
@@ -44,7 +47,7 @@ namespace Turmerik.NetCore.Utility
         public ProcessStartInfo CreateProcessStartInfo(
             ProcessLauncherOpts opts)
         {
-            var processStartInfo = new ProcessStartInfo
+            var startInfo = new ProcessStartInfo
             {
                 WorkingDirectory = opts.WorkingDirectory,
                 FileName = opts.FileName,
@@ -52,10 +55,19 @@ namespace Turmerik.NetCore.Utility
 
             if (opts.ArgumentsNmrbl != null)
             {
-                processStartInfo.ArgumentList.AddRange(opts.ArgumentsNmrbl);
+                startInfo.ArgumentList.AddRange(opts.ArgumentsNmrbl);
             }
 
-            return processStartInfo;
+            startInfo.RedirectStandardError = opts.RedirectStandardError ?? true;
+            startInfo.RedirectStandardOutput = opts.RedirectStandardOutput ?? true;
+            startInfo.RedirectStandardInput = opts.RedirectStandardInput ?? true;
+
+            startInfo.UseShellExecute = opts.UseShellExecute ?? false;
+
+            opts.StartInfoBuilder?.Invoke(
+                startInfo);
+
+            return startInfo;
         }
     }
 }

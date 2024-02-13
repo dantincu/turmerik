@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.LaunchProces.TestConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "asdf"
+    }
+  }
+}

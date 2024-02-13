@@ -4,38 +4,69 @@
       "ProfileName": "notes-blazorapp",
       "ScriptGroups": [
         {
-          "WorkDir": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp",
+          "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2/apps/trmrk-notes-blazorapp",
           "OnBeforeScripts": [
             {
-              "Command": "rimraf .\\.parcel-cache"
+              "PowerShellCmd": {
+                "Commands": [
+                  {
+                    "CommandName": "rmdirfull",
+                    "CommandArguments": [ ".parcel-cache" ]
+                  }
+                ]
+              }
             },
             {
-              "Command": "rimraf .\\.dist"
+              "PowerShellCmd": {
+                "Commands": [
+                  {
+                    "CommandName": "rmdirfull",
+                    "CommandArguments": [ "dist" ]
+                  }
+                ]
+              }
             },
             {
-              "Command": "npm run build-dev"
+              "Command": "npm",
+              "Arguments": [
+                "run",
+                "build-dev"
+              ]
             },
             {
-              "Command": "npm run build-prod"
+              "Command": "npm",
+              "Arguments": [
+                "run",
+                "build-prod"
+              ]
             }
           ]
         },
         {
-          "WorkDir": "./wwwroot",
+          "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp\\wwwroot",
           "OnBeforeScripts": [
             {
               "WorkDir": "./wwwroot",
-              "Command": "rimraf js"
+              "Command": "powershell.exe",
+              "Arguments": [
+                "rmdirfull.ps1",
+                "js"
+              ]
             },
             {
               "WorkDir": "./wwwroot",
-              "Command": "rimraf trmrk-notes-config"
+              "Command": "powershell.exe",
+              "Arguments": [
+                "rmdirfull.ps1",
+                "trmrk-notes-config"
+              ]
             }
           ]
         }
       ],
       "FileGroups": [
         {
+          "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
           "CloneBaseDirLocator": {
             "EntryRelPath": "./wwwroot"
           },
@@ -44,17 +75,20 @@
               "InputFileLocator": {
                 "EntryRelPath": "./trmrk-notes-config.json"
               },
-              "CloneDirLocator": {},
+              "CloneDirLocator": {
+                "EntryRelPath": ""
+              },
               "UseChecksum": true
             }
           ]
         },
         {
+          "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
           "InputBaseDirLocator": {
-            "EntryBasePath": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
+            "EntryRelPath": "../../ParcelWs-V2/apps/trmrk-notes-blazorapp"
           },
           "CloneBaseDirLocator": {
-            "EntryBasePath": "./wwwroot"
+            "EntryRelPath": "./wwwroot"
           },
           "Files": [
             {
@@ -95,7 +129,7 @@
             "EntryRelPath": "./DotNet"
           },
           "CloneBaseDirLocator": {
-            "EntryRelPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
+            "EntryPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
           },
           "CloneArchiveDirLocator": {
             "EntryPath": "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|"

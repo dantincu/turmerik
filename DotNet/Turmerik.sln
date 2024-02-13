@@ -77,6 +77,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.TestConsoleApp", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Code.CSharp", "Turmerik.Code.CSharp\Turmerik.Code.CSharp.csproj", "{8E24E6AD-DF16-4176-B0DB-8A1EBE55AC9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.LaunchProces.TestConsoleApp", "Turmerik.LaunchProces.TestConsoleApp\Turmerik.LaunchProces.TestConsoleApp.csproj", "{FE96FFE8-F379-4FE0-BF6C-BB040021E1AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +201,10 @@ Global
 		{8E24E6AD-DF16-4176-B0DB-8A1EBE55AC9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E24E6AD-DF16-4176-B0DB-8A1EBE55AC9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E24E6AD-DF16-4176-B0DB-8A1EBE55AC9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE96FFE8-F379-4FE0-BF6C-BB040021E1AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE96FFE8-F379-4FE0-BF6C-BB040021E1AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE96FFE8-F379-4FE0-BF6C-BB040021E1AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE96FFE8-F379-4FE0-BF6C-BB040021E1AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -237,6 +243,7 @@ Global
 		{6DCDDFDE-8317-4903-A34A-40DBFB77E231} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{8D4A4408-5008-4901-AF1E-87AA5D3F67A2} = {FCA0DE8B-04E5-46F5-9549-654541BC02DC}
 		{8E24E6AD-DF16-4176-B0DB-8A1EBE55AC9D} = {A5B8430F-B64C-4AE7-B315-72686C296100}
+		{FE96FFE8-F379-4FE0-BF6C-BB040021E1AA} = {FCA0DE8B-04E5-46F5-9549-654541BC02DC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
