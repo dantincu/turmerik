@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing;
+using static Turmerik.NetCore.ConsoleApps.FilesCloner.ProgramConfig;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
@@ -46,11 +47,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             };
 
             localDevicePathMacrosRetriever.Normalize(args.LocalDevicePathsMap);
-            args.WorkDir ??= Environment.CurrentDirectory;
 
             args.WorkDir = NormalizePathIfNotNull(
-                args.LocalDevicePathsMap,
-                args.WorkDir);
+                args.LocalDevicePathsMap, args.WorkDir ?? Environment.CurrentDirectory);
 
             if (args.Profile != null)
             {
@@ -58,11 +57,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             }
             else
             {
-                args.SingleFileArgs!.WorkDir ??= args.WorkDir;
-
                 args.SingleFileArgs!.WorkDir = NormalizePathIfNotNull(
-                    args.LocalDevicePathsMap,
-                    args.SingleFileArgs!.WorkDir);
+                    args.LocalDevicePathsMap, args.SingleFileArgs!.WorkDir ?? args.WorkDir);
 
                 if (args.SingleFileArgs.File != null)
                 {
@@ -102,11 +98,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             foreach (var scriptsGroup in profile.ScriptGroups)
             {
-                scriptsGroup.WorkDir ??= args.WorkDir;
-
                 scriptsGroup.WorkDir = NormalizePathIfNotNull(
-                    args.LocalDevicePathsMap,
-                    scriptsGroup.WorkDir);
+                    args.LocalDevicePathsMap, scriptsGroup.WorkDir ?? args.WorkDir);
 
                 NormalizeScriptsListIfNotNull(
                     args, scriptsGroup, scriptsGroup.OnBeforeScripts);
@@ -126,18 +119,15 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
         private void NormalizeScriptsListIfNotNull(
             ProgramArgs args,
-            ProgramConfig.ScriptsGroup scriptsGroup,
-            List<ProgramConfig.Script> scriptsList)
+            ScriptsGroup scriptsGroup,
+            List<Script> scriptsList)
         {
             if (scriptsList != null)
             {
                 foreach (var script in scriptsList)
                 {
                     script.WorkDir = NormalizePathIfNotNull(
-                        args.LocalDevicePathsMap,
-                        script.WorkDir);
-
-                    script.WorkDir ??= scriptsGroup.WorkDir;
+                        args.LocalDevicePathsMap, script.WorkDir ?? scriptsGroup.WorkDir);
 
                     if (script.PowerShellCmd != null)
                     {
@@ -163,7 +153,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 localDevicePathsMap,
                 filesGroup.InputBaseDirLocator ??= FsEntryLocatorH.FromPath(string.Empty),
                 filesGroup.CloneBaseDirLocator ??= FsEntryLocatorH.FromPath(string.Empty),
-                filesGroup.WorkDir ??= workDir);
+                filesGroup.WorkDir = NormalizePathIfNotNull(
+                    localDevicePathsMap, filesGroup.WorkDir ?? workDir));
 
             if (filesGroup.Files != null)
             {

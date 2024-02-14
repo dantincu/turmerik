@@ -93,17 +93,20 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         private async Task RunScriptsAsync(
             List<Script> scriptsList)
         {
-            foreach (var script in scriptsList)
+            if (scriptsList != null)
             {
-                if (script.PowerShellCmd != null)
+                foreach (var script in scriptsList)
                 {
-                    powerShellAdapter.Invoke(
-                        script.PowerShellCmd);
-                }
-                else
-                {
-                    await processLauncher.Launch(
-                        script.WinShellCmd);
+                    if (script.PowerShellCmd != null)
+                    {
+                        powerShellAdapter.Invoke(
+                            script.PowerShellCmd);
+                    }
+                    else
+                    {
+                        await processLauncher.Launch(
+                            script.WinShellCmd);
+                    }
                 }
             }
         }
