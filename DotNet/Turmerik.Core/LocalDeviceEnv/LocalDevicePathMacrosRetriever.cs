@@ -58,8 +58,16 @@ namespace Turmerik.Core.LocalDeviceEnv
             string configFilePath = null,
             bool normalize = true)
         {
+            if (configFilePath == null && ProgramH.FilePathExists(
+                LocalDevicePathMacrosMapH.CONFIG_FILE_NAME,
+                out string filePath))
+            {
+                configFilePath = filePath;
+            }
+
             var localDevicePathsMap = jsonConversion.Adapter.Deserialize<LocalDevicePathMacrosMapMtbl>(
-                File.ReadAllText(configFilePath ?? LocalDevicePathMacrosMapH.CONFIG_FILE_NAME));
+                File.ReadAllText(configFilePath ?? throw new InvalidOperationException(
+                    $"No config file containing local device path macros was found")));
 
             if (normalize)
             {

@@ -64,7 +64,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="trmrk-localdevice-paths-template.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="trmrk-localdevice-paths.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -76,14 +76,21 @@ namespace Turmerik.Core.LocalDeviceEnv
             string appEnvLocatorFilePath = AppEnvLocatorFilePath;
 
             if (!string.IsNullOrWhiteSpace(
-                appEnvLocatorFilePath) && File.Exists(
-                    appEnvLocatorFilePath))
+                appEnvLocatorFilePath))
             {
-                var appEnvLocatorJson = File.ReadAllText(
-                    appEnvLocatorFilePath);
+                // Console.WriteLine($"appEnvLocatorFilePath: {appEnvLocatorFilePath}");
 
-                appEnvLocator = JsonConversion.Adapter.Deserialize<AppEnvLocator>(
-                    appEnvLocatorJson);
+                if (ProgramH.FilePathExists(
+                    appEnvLocatorFilePath,
+                    out string fullPath))
+                {
+                    var appEnvLocatorJson = File.ReadAllText(fullPath);
+
+                    appEnvLocator = JsonConversion.Adapter.Deserialize<AppEnvLocator>(
+                        appEnvLocatorJson);
+                }
+
+                // Console.WriteLine($"appEnvLocatorFilePath: {appEnvLocatorFilePath}");
             }
 
             return appEnvLocator;

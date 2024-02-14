@@ -349,7 +349,7 @@ namespace Turmerik.UnitTests
                                 {
                                     EntryPath = "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|"
                                 },
-                                CloneArchiveFileNameTpl = "Turmerik.MkFsDirsPair.ConsoleApp[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+                                CloneArchiveFileNameTpl = "Turmerik.FilesCloner.ConsoleApp[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
                                 Dirs = new List<DirArgs>
                                 {
                                     new DirArgs
@@ -419,7 +419,7 @@ namespace Turmerik.UnitTests
                                                 // \/Turmerik.FilesCloner.ConsoleApp\[\d{4}\-\d{2}\-\d{2}_\d{2}-\d{2}\-\d{2}\.\d+[\-\+]\d{4}\]\.zip
                                                 // matches
                                                 // /Apps[2024-02-12_07-49-00.000+0000].zip
-                                                "^\\/Turmerik.FilesCloner.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
+                                                "^\\/Turmerik\\.FilesCloner\\.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
                                             }
                                         },
                                     }
