@@ -87,7 +87,7 @@ namespace Turmerik.UnitTests
                                         },
                                         UseChecksum = true,
                                         CloneTplLines = [ "{0}",
-                                            "export const turmerik = window.turmerik;" ]
+                                            "export const turmerik = turmerikObj.turmerik;" ]
                                     },
                                     new FileArgs
                                     {
@@ -101,7 +101,7 @@ namespace Turmerik.UnitTests
                                         },
                                         UseChecksum = true,
                                         CloneTplLines = [ "{0}",
-                                            "export const turmerik = window.turmerik;" ]
+                                            "export const turmerik = turmerikObj.turmerik;" ]
                                     }
                                 }
                             }

@@ -1,4 +1,5 @@
-﻿using Turmerik.Core.Utility;
+﻿using System.Text;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
@@ -23,19 +24,23 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             string checksum = null;
 
+            string inputText = args.InputText ?? File.ReadAllText(
+                args.File.InputFileLocator.EntryPath);
+
+            string[] outputTextLines = args.File.CloneTplLines.Select(
+                line => string.Format(
+                    line, inputText)).ToArray();
+
+            string outputText = string.Join(
+                Environment.NewLine,
+                outputTextLines);
+
             if (args.File.UseChecksum == true)
             {
-                if (args.InputText != null)
-                {
-                    checksum = checksumCalculator.Checksum(args.InputText);
-                }
-                else
-                {
-                    var bytesArr = File.ReadAllBytes(
-                        args.File.InputFileLocator.EntryPath);
+                var bytesArr = Encoding.UTF8.GetBytes(
+                    outputText);
 
-                    checksum = checksumCalculator.Checksum(bytesArr);
-                }
+                checksum = checksumCalculator.Checksum(bytesArr);
 
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine("Computed the following checksum: ");
@@ -78,14 +83,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 }
                 else
                 {
-                    if (args.InputText != null)
-                    {
-                        File.WriteAllText(cloneFilePath, args.InputText);
-                    }
-                    else
-                    {
-                        File.Copy(args.File.InputFileLocator.EntryPath, cloneFilePath);
-                    }
+                    File.WriteAllLines(cloneFilePath, outputTextLines);
 
                     Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.WriteLine("Created the clone file successfully");

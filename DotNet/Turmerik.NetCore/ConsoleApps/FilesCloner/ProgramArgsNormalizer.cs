@@ -219,6 +219,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             FilesGroup? filesGroup,
             string workDir = null)
         {
+            fileArgs.CloneTplLines ??= new List<string> { "{0}" };
+
             NormalizeFileLocators(
                 localDevicePathsMap,
                 fileArgs.InputFileLocator ??= FsEntryLocatorH.FromPath(string.Empty),

@@ -1,3 +1,4 @@
+const turmerikObj = {};
 (() => {
 
 function $parcel$export(e, n, v, s) {
@@ -844,16 +845,13 @@ class $8eb34e2ca2a1a4f9$export$fe330a9df595e087 {
 
 const $60fb29786a51d6b7$export$e7d7a4aa4a6e95f1 = new (0, $8eb34e2ca2a1a4f9$export$fe330a9df595e087)();
 const $60fb29786a51d6b7$export$69b554e0c3f6c520 = (0, $058d7906f4bc6ba6$export$2e2bcd8739ae039);
-const $60fb29786a51d6b7$export$a19d84b187d33177 = {
+turmerikObj.turmerik = {
     trmrk: $60fb29786a51d6b7$export$69b554e0c3f6c520,
     trmrkApp: $60fb29786a51d6b7$export$e7d7a4aa4a6e95f1
 };
-window.turmerik = $60fb29786a51d6b7$export$a19d84b187d33177;
-var $60fb29786a51d6b7$export$2e2bcd8739ae039 = {
-    turmerik: $60fb29786a51d6b7$export$a19d84b187d33177,
-    trmrk: $60fb29786a51d6b7$export$69b554e0c3f6c520,
-    trmrkApp: $60fb29786a51d6b7$export$e7d7a4aa4a6e95f1
-};
+const $60fb29786a51d6b7$export$a19d84b187d33177 = turmerikObj.turmerik;
 
 })();
 //# sourceMappingURL=index.js.map
+
+export const turmerik = turmerikObj.turmerik;
