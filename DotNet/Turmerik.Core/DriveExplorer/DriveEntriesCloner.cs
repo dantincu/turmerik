@@ -40,9 +40,14 @@ namespace Turmerik.Core.DriveExplorer
 
             foreach (var folder in srcFolder.SubFolders)
             {
-                destnFolder.SubFolders.Add(
-                    await driveExplorerService.CreateFolderAsync(
-                    destnFolder.Idnf, folder.Name, false));
+                var destnSubFolder = await driveExplorerService.CreateFolderAsync(
+                    destnFolder.Idnf, folder.Name, false);
+
+                destnFolder.SubFolders.Add(destnSubFolder);
+
+                await CopyItemsAsync(
+                    folder,
+                    destnSubFolder);
             }
 
             return destnFolder;

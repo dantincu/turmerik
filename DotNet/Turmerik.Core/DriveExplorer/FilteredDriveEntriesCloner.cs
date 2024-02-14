@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Utility;
@@ -39,11 +40,17 @@ namespace Turmerik.Core.DriveExplorer
                         file.Idnf, destnFolder.Idnf, file.Name));
             }
 
-            foreach (var folder in filtered.FilteredFolderFiles)
+            foreach (var folder in filtered.FilteredSubFolders)
             {
-                destnFolder.SubFolders.Add(
-                    await driveExplorerService.CreateFolderAsync(
-                    destnFolder.Idnf, folder.Name, false));
+                var destnSubFolder = await driveExplorerService.CreateFolderAsync(
+                    destnFolder.Idnf, folder.Name, false);
+
+                destnFolder.SubFolders.Add(destnSubFolder);
+
+                await CopyFilteredItemsAsync(
+                    filteredEntries.ChildNodes.Single(
+                        node => node.Data.PrFolderName == folder.Name),
+                    destnSubFolder);
             }
 
             return destnFolder;

@@ -34,6 +34,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             IFilteredDriveEntriesRetriever filteredFsEntriesRetriever,
             IFilteredDriveEntriesRemover filteredFsEntriesRemover,
             IFilteredDriveEntriesCloner filteredDriveEntriesCloner,
+            IDriveEntriesCloner driveEntriesCloner,
             IProgramArgsNormalizer programArgsNormalizer,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             IFileCloneComponent fileCloneComponent)
@@ -52,6 +53,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             this.filteredDriveEntriesCloner = filteredDriveEntriesCloner ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesCloner));
+
+            this.driveEntriesCloner = driveEntriesCloner ?? throw new ArgumentNullException(
+                nameof(driveEntriesCloner));
 
             this.programArgsNormalizer = programArgsNormalizer ?? throw new ArgumentNullException(
                 nameof(programArgsNormalizer));
@@ -159,8 +163,13 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                         filesGroup.CloneArchiveDirLocator.EntryPath,
                         archiveFileName);
 
-                    localDevicePathMacrosRetriever.Normalize(
-                        pgArgs.LocalDevicePathsMap);
+                    if (filesGroup.DestnToArchiveDirs != null)
+                    {
+                        foreach (var dir in filesGroup.DestnToArchiveDirs)
+                        {
+                            await RunCore(dir);
+                        }
+                    }
 
                     for (int i = 0; i < dirsToArchiveArr.Count; i++)
                     {
@@ -179,18 +188,6 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                             {
                                 Idnf = dirPath
                             });
-                    }
-
-                    if (filesGroup.DestnToArchiveDirs != null)
-                    {
-                        foreach (var dir in filesGroup.DestnToArchiveDirs)
-                        {
-                            programArgsNormalizer.NormalizeDirArgs(
-                                pgArgs.LocalDevicePathsMap,
-                                filesGroup, dir, filesGroup.WorkDir);
-
-                            await RunCore(dir);
-                        }
                     }
 
                     ZipFile.CreateFromDirectory(

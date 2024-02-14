@@ -48,8 +48,21 @@ namespace Turmerik.UnitTests
             {
                 Action = async (tempDir) =>
                 {
-                    string prFolderPath = Path.Combine(
-                        tempDir.DirPath, inputRootFolder.Name);
+                    inputRootFolder = new DriveItem
+                    {
+                        Name = tempDir.DirName,
+                        FolderFiles = new List<DriveItem>(),
+                        SubFolders = new List<DriveItem> { inputRootFolder }
+                    };
+
+                    expectedRootFolder = new DriveItem
+                    {
+                        Name = tempDir.DirName,
+                        FolderFiles = new List<DriveItem>(),
+                        SubFolders = new List<DriveItem> { expectedRootFolder }
+                    };
+
+                    string prFolderPath = tempDir.DirPath;
 
                     FillTempFolder(
                         inputRootFolder,
@@ -65,7 +78,7 @@ namespace Turmerik.UnitTests
                             CheckRetNodeValidityDepth = int.MaxValue
                         });
 
-                    await FilteredRemover.RemoveEntriesAsync(filter, true);
+                    await FilteredRemover.RemoveEntriesAsync(filter);
                     RemoveFromTempFolder(clonedInputFolder, expectedRootFolder);
 
                     FilteredDriveEntriesH.AssertTreeNodeIsValid(filter, int.MaxValue);

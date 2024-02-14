@@ -49,8 +49,21 @@ namespace Turmerik.UnitTests
             {
                 Action = async (tempDir) =>
                 {
-                    string prFolderPath = Path.Combine(
-                        tempDir.DirPath, inputRootFolder.Name);
+                    inputRootFolder = new DriveItem
+                    {
+                        Name = tempDir.DirName,
+                        FolderFiles = new List<DriveItem>(),
+                        SubFolders = new List<DriveItem> { inputRootFolder }
+                    };
+
+                    expectedRootFolder = new DriveItem
+                    {
+                        Name = tempDir.DirName,
+                        FolderFiles = new List<DriveItem>(),
+                        SubFolders = new List<DriveItem> { expectedRootFolder }
+                    };
+
+                    string prFolderPath = tempDir.DirPath;
 
                     FillTempFolder(
                         inputRootFolder,
@@ -68,7 +81,7 @@ namespace Turmerik.UnitTests
 
                     var actualRootFolder = ToTempFolder(new DriveItem
                     {
-                        Name = "D0"
+                        Name = tempDir.DirName,
                     }, result);
 
                     AssertFoldersAreEqual(

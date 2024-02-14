@@ -54,13 +54,15 @@
                   {
                     "CommandName": "rmdirfull",
                     "CommandArguments": [
-                      "js"
+                      "js",
+                      ":kr"
                     ]
                   },
                   {
                     "CommandName": "rmdirfull",
                     "CommandArguments": [
-                      "trmrk-notes-config"
+                      "trmrk-notes-config",
+                      ":kr"
                     ]
                   }
                 ]
@@ -81,7 +83,7 @@
                 "EntryRelPath": "./trmrk-notes-config.json"
               },
               "CloneDirLocator": {
-                "EntryRelPath": ""
+                "EntryRelPath": "./trmrk-notes-config"
               },
               "UseChecksum": true
             }
@@ -105,8 +107,9 @@
               },
               "UseChecksum": true,
               "CloneTplLines": [
+                "const turmerikObj = {{}};",
                 "{0}",
-                "export const turmerik = window.turmerik;"
+                "export const turmerik = turmerikObj.turmerik;"
               ]
             },
             {
@@ -114,12 +117,13 @@
                 "EntryRelPath": "./dist/prod/index.js"
               },
               "CloneDirLocator": {
-                "EntryRelPath": "./js/dev"
+                "EntryRelPath": "./js/prod"
               },
               "UseChecksum": true,
               "CloneTplLines": [
+                "const turmerikObj = {{}};",
                 "{0}",
-                "export const turmerik = window.turmerik;"
+                "export const turmerik = turmerikObj.turmerik;"
               ]
             }
           ]
@@ -130,6 +134,7 @@
       "ProfileName": "dotnet-util-bins",
       "FileGroups": [
         {
+          "WorkDir": "|$TURMERIK_REPO_DIR|",
           "InputBaseDirLocator": {
             "EntryRelPath": "./DotNet"
           },
@@ -154,15 +159,15 @@
           "Dirs": [
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Turmerik.LsFsDirPairs.ConsoleApp\\bin\\Release\\net8.0"
               },
               "CloneDirLocator": {
-                "EntryRelPath": "Bin\\Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net8.0"
               }
             },
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Turmerik.MkFsDirsPair.ConsoleApp\\bin\\Release\\net8.0"
               },
               "CloneDirLocator": {
                 "EntryRelPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
@@ -170,7 +175,7 @@
             },
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Turmerik.RfDirsPairNames.ConsoleApp\\bin\\Release\\net8.0"
               },
               "CloneDirLocator": {
                 "EntryRelPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
@@ -178,7 +183,7 @@
             },
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\bin\\Release\\net8.0"
               },
               "CloneDirLocator": {
                 "EntryRelPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
@@ -186,7 +191,7 @@
             },
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+                "EntryRelPath": "Turmerik.Utility.WinFormsApp\\bin\\Release\\net8.0-windows"
               },
               "CloneDirLocator": {
                 "EntryRelPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
@@ -194,7 +199,7 @@
             },
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Turmerik.FilesCloner.ConsoleApp\\bin\\Release\\net8.0"
               },
               "CloneDirLocator": {
                 "EntryRelPath": "Bin\\Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
@@ -204,21 +209,32 @@
           "DestnToArchiveDirs": [
             {
               "InputDirLocator": {
-                "EntryPath": "|USER_PROFILE|\\AppData\\Roaming\\Turmerik\\Apps"
+                "EntryPath": "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Turmerik\\Apps"
               },
               "CloneDirLocator": {
-                "EntryPath": "|TURMERIK_TEMP_DIR|"
+                "EntryPath": "|$TURMERIK_TEMP_DIR|"
               },
               "InputDirFilter": {
                 "IncludedRelPathRegexes": [
-                  "\\/Config\\/",
-                  "\\/Content\\/",
-                  "\\/Data\\/"
+                  "^\\/Config\\/",
+                  "^\\/Content\\/",
+                  "^\\/Data\\/"
                 ]
+              }
+            },
+            {
+              "InputDirLocator": {
+                "EntryPath": "|$TURMERIK_TEMP_DIR|"
+              },
+              "CloneDirLocator": {
+                "EntryPath": "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|"
+              },
+              "InputDirFilter": {
+                "IncludedRelPathRegexes": []
               },
               "BeforeCloneDestnCleanupFilter": {
                 "IncludedRelPathRegexes": [
-                  "\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
+                  "^\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
                 ]
               }
             }
@@ -230,6 +246,7 @@
       "ProfileName": "dotnet-bkp-bins",
       "FileGroups": [
         {
+          "WorkDir": "|$TURMERIK_REPO_DIR|",
           "InputBaseDirLocator": {
             "EntryRelPath": "./DotNet"
           },
@@ -256,7 +273,7 @@
           "Dirs": [
             {
               "InputDirLocator": {
-                "EntryRelPath": "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
+                "EntryRelPath": "Turmerik.FilesCloner.ConsoleApp\\bin\\Release\\net8.0"
               },
               "CloneDirLocator": {
                 "EntryRelPath": "Bin\\Turmerik.FilesCloner.CmdApp\\Release\\net8.0"
@@ -266,17 +283,28 @@
           "DestnToArchiveDirs": [
             {
               "InputDirLocator": {
-                "EntryPath": "|$USER_PROFILE|\\AppData\\Roaming\\Turmerik\\Apps"
+                "EntryPath": "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Turmerik\\Apps"
               },
               "CloneDirLocator": {
                 "EntryPath": "|$TURMERIK_TEMP_DIR|"
               },
               "InputDirFilter": {
                 "IncludedRelPathRegexes": []
+              }
+            },
+            {
+              "InputDirLocator": {
+                "EntryPath": "|$TURMERIK_TEMP_DIR|"
+              },
+              "CloneDirLocator": {
+                "EntryPath": "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|"
+              },
+              "InputDirFilter": {
+                "IncludedRelPathRegexes": []
               },
               "BeforeCloneDestnCleanupFilter": {
                 "IncludedRelPathRegexes": [
-                  "\\/Turmerik.FilesCloner.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
+                  "^\\/Turmerik.FilesCloner.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
                 ]
               }
             }

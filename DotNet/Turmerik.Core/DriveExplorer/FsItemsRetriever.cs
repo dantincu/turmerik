@@ -19,14 +19,15 @@ namespace Turmerik.Core.DriveExplorer
 
     public class FsItemsRetriever : DriveItemsRetrieverBase, IFsItemsRetriever
     {
-        protected readonly static string systemDrivePathRoot;
-        protected readonly static string userProfilePath;
-        protected readonly static string appDataDirName;
-        protected readonly static string appDataPath;
-        protected readonly static string appDataChildRelPathStartStr;
+        private readonly static string systemDrivePathRoot;
+        private readonly static string userProfilePath;
+        private readonly static string appDataDirName;
+        private readonly static string appDataPath;
+        private readonly static string appDataChildRelPathStartStr;
 
-        protected readonly string rootDirPath;
-        protected readonly bool hasRootDirPath;
+        private readonly bool allowSysFolders;
+        private readonly string rootDirPath;
+        private readonly bool hasRootDirPath;
 
         static FsItemsRetriever()
         {
@@ -55,7 +56,15 @@ namespace Turmerik.Core.DriveExplorer
             rootDirPath = string.Empty;
         }
 
-        public bool AllowSysFolders { get; init; }
+        public bool AllowSysFolders
+        {
+            get => allowSysFolders;
+
+            init
+            {
+                allowSysFolders = value;
+            }
+        }
 
         public string RootDirPath
         {

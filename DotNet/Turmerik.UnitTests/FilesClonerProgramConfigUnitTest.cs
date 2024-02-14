@@ -86,7 +86,9 @@ namespace Turmerik.UnitTests
                                             EntryRelPath = "./js/dev"
                                         },
                                         UseChecksum = true,
-                                        CloneTplLines = [ "{0}",
+                                        CloneTplLines = [
+                                            "const turmerikObj = {{}};",
+                                            "{0}",
                                             "export const turmerik = turmerikObj.turmerik;" ]
                                     },
                                     new FileArgs
@@ -100,7 +102,9 @@ namespace Turmerik.UnitTests
                                             EntryRelPath = "./js/prod"
                                         },
                                         UseChecksum = true,
-                                        CloneTplLines = [ "{0}",
+                                        CloneTplLines = [
+                                            "const turmerikObj = {{}};",
+                                            "{0}",
                                             "export const turmerik = turmerikObj.turmerik;" ]
                                     }
                                 }
@@ -178,6 +182,7 @@ namespace Turmerik.UnitTests
                         {
                             new ProgramConfig.FilesGroup
                             {
+                                WorkDir = "|$TURMERIK_REPO_DIR|",
                                 InputBaseDirLocator = new FsEntryLocator
                                 {
                                     EntryRelPath = "./DotNet"
@@ -197,18 +202,18 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Turmerik.LsFsDirPairs.ConsoleApp\\bin\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Bin\\Turmerik.LsFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net8.0"
                                         }
                                     },
                                     new DirArgs
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Turmerik.MkFsDirsPair.ConsoleApp\\bin\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
@@ -219,7 +224,7 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Turmerik.RfDirsPairNames.ConsoleApp\\bin\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
@@ -230,7 +235,7 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\bin\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
@@ -241,7 +246,7 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+                                            EntryRelPath = "Turmerik.Utility.WinFormsApp\\bin\\Release\\net8.0-windows"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
@@ -252,7 +257,7 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Turmerik.FilesCloner.ConsoleApp\\bin\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
@@ -281,18 +286,33 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryPath = "|USER_PROFILE|\\AppData\\Roaming\\Turmerik\\Apps"
+                                            EntryPath = "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Turmerik\\Apps"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
-                                            EntryPath = "|TURMERIK_TEMP_DIR|"
+                                            EntryPath = "|$TURMERIK_TEMP_DIR|"
                                         },
                                         InputDirFilter = new DriveEntriesSerializableFilter
                                         {
                                             IncludedRelPathRegexes = new List<string>
                                             {
-                                                "\\/Config\\/", "\\/Content\\/", "\\/Data\\/"
+                                                "^\\/Config\\/", "^\\/Content\\/", "^\\/Data\\/"
                                             }
+                                        }
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryPath = "|$TURMERIK_TEMP_DIR|"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryPath = "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
+                                        },
+                                        InputDirFilter = new DriveEntriesSerializableFilter
+                                        {
+                                            IncludedRelPathRegexes = new List<string> { }
                                         },
                                         BeforeCloneDestnCleanupFilter = new DriveEntriesSerializableFilter
                                         {
@@ -301,7 +321,7 @@ namespace Turmerik.UnitTests
                                                 // \/Apps\[\d{4}\-\d{2}\-\d{2}_\d{2}-\d{2}\-\d{2}\.\d+[\-\+]\d{4}\]\.zip
                                                 // matches
                                                 // /Apps[2024-02-12_07-49-00.000+0000].zip
-                                                "\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
+                                                "^\\/Apps\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
                                             }
                                         },
                                     }
@@ -316,6 +336,7 @@ namespace Turmerik.UnitTests
                         {
                             new ProgramConfig.FilesGroup
                             {
+                                WorkDir = "|$TURMERIK_REPO_DIR|",
                                 InputBaseDirLocator = new FsEntryLocator
                                 {
                                     EntryRelPath = "./DotNet"
@@ -335,7 +356,7 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
+                                            EntryRelPath = "Turmerik.FilesCloner.ConsoleApp\\bin\\Release\\net8.0"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
@@ -366,11 +387,26 @@ namespace Turmerik.UnitTests
                                     {
                                         InputDirLocator = new FsEntryLocator
                                         {
-                                            EntryPath = "|$USER_PROFILE|\\AppData\\Roaming\\Turmerik\\Apps"
+                                            EntryPath = "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Turmerik\\Apps"
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
                                             EntryPath = "|$TURMERIK_TEMP_DIR|"
+                                        },
+                                        InputDirFilter = new DriveEntriesSerializableFilter
+                                        {
+                                            IncludedRelPathRegexes = new List<string> { }
+                                        },
+                                    },
+                                    new DirArgs
+                                    {
+                                        InputDirLocator = new FsEntryLocator
+                                        {
+                                            EntryPath = "|$TURMERIK_TEMP_DIR|"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryPath = "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
                                         },
                                         InputDirFilter = new DriveEntriesSerializableFilter
                                         {
@@ -383,7 +419,7 @@ namespace Turmerik.UnitTests
                                                 // \/Turmerik.FilesCloner.ConsoleApp\[\d{4}\-\d{2}\-\d{2}_\d{2}-\d{2}\-\d{2}\.\d+[\-\+]\d{4}\]\.zip
                                                 // matches
                                                 // /Apps[2024-02-12_07-49-00.000+0000].zip
-                                                "\\/Turmerik.FilesCloner.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+[\\-\\+]\\d{4}\\]\\.zip"
+                                                "^\\/Turmerik.FilesCloner.ConsoleApp\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
                                             }
                                         },
                                     }

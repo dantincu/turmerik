@@ -38,13 +38,7 @@ namespace Turmerik.Core.DriveExplorer
                 opts.PrFolderIdnf, false);
 
             var retNode = ToDataTreeNode(prFolder);
-
-            FilterEntries(
-                opts.FsEntriesFilter, "/",
-                retNode.Data.FilteredSubFolders);
-
-            await FindMatchingAsync(opts, retNode,
-                CombinePaths(prFolder.Name));
+            await FindMatchingAsync(opts, retNode, "/");
 
             if (opts.CheckRetNodeValidityDepth.HasValue)
             {
@@ -64,12 +58,14 @@ namespace Turmerik.Core.DriveExplorer
             FilterEntries(
                 fsEntriesFilter,
                 prFolderPath,
-                node.Data.FilteredSubFolders);
+                node.Data.FilteredSubFolders,
+                true);
 
             FilterEntries(
                 fsEntriesFilter,
                 prFolderPath,
-                node.Data.FilteredFolderFiles);
+                node.Data.FilteredFolderFiles,
+                false);
 
             await RetrieveSubFolders(
                 node.Data.FilteredSubFolders);
@@ -138,17 +134,23 @@ namespace Turmerik.Core.DriveExplorer
             string prFolderPath,
             DriveItem folder)
         {
-            string folderPath = CombinePaths(folder.Name, prFolderPath);
+            string folderPath = CombinePaths(folder.Name, prFolderPath, true);
             var retNode = ToDataTreeNode(folder);
 
             await FindMatchingAsync(
                 opts, retNode,
                 folderPath);
 
-            bool keepFolder = folder.FolderFiles.Any() || folder.SubFolders.Any();
+            bool keepFolder = retNode.Data.FilteredFolderFiles.Any(
+                ) || retNode.Data.FilteredSubFolders.Any();
 
             keepFolder = keepFolder || opts.FsEntriesFilter.IncludedRelPathRegexes.Any(
                 regex => regex.IsMatch(folderPath));
+
+            if (!keepFolder)
+            {
+                retNode = null;
+            }
 
             return retNode;
         }
@@ -156,15 +158,22 @@ namespace Turmerik.Core.DriveExplorer
         private void FilterEntries(
             DriveEntriesFilter fsEntriesFilter,
             string prFolderPath,
-            List<DriveItem> childEntries)
+            List<DriveItem> childEntries,
+            bool isFolderEntry)
         {
             childEntries.RemoveWhere(
                 entry =>
                 {
-                    string entryPath = CombinePaths(entry.Name, prFolderPath);
+                    string entryPath = CombinePaths(entry.Name, prFolderPath, isFolderEntry);
 
                     bool filterOut = fsEntriesFilter.ExcludedRelPathRegexes.Any(
                         regex => regex.IsMatch(entryPath));
+
+                    if (!filterOut && !isFolderEntry)
+                    {
+                        filterOut = fsEntriesFilter.IncludedRelPathRegexes.None(
+                            regex => regex.IsMatch(entryPath));
+                    }
 
                     return filterOut;
                 });
@@ -189,6 +198,10 @@ namespace Turmerik.Core.DriveExplorer
 
         private string CombinePaths(
             string entryName,
-            string? prPath = null) => $"{prPath ?? "/"}{entryName}/";
+            string? prPath = null,
+            bool isFolderEntry = false) => string.Concat(
+                prPath ?? "/",
+                entryName,
+                isFolderEntry ? "/" : "");
     }
 }

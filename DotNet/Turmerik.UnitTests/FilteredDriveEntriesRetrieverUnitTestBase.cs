@@ -222,17 +222,17 @@ namespace Turmerik.UnitTests
         protected Tuple<DriveEntriesSerializableFilter, DriveEntriesSerializableFilter, DriveEntriesSerializableFilter, DriveEntriesSerializableFilter> CreateDefaultFilters(
             ) => Tuple.Create(
                 CrFvFltr(
-                    ["^\\/D0\\/(.+\\/)?F[1-5]_[1-2]", "^\\/D0\\/(.+\\/)?D[1-5]_[1-2]\\/"],
-                    ["^\\/D0\\/(.+\\/)?F[1-5]_1", "^\\/D0\\/(.+\\/)?D[1-5]_2\\/"]),
+                    ["^\\/D0\\/(.+\\/)?F[1-5]_[1-2]$", "^\\/D0\\/(.+\\/)?D[1-5]_[1-2]\\/"],
+                    ["^\\/D0\\/(.+\\/)?F[1-5]_1$", "^\\/D0\\/(.+\\/)?D[1-5]_2\\/"]),
                 CrFvFltr(
-                    ["^\\/D0\\/.*F[1-5]_[1-2]", "D_[1-5]_[1-2]"],
-                    ["^\\/D0\\/.*F[1-5]_1", "D[1-5]_2"]),
+                    ["^\\/D0\\/.*F[1-5]_[1-2]$", "D_[1-5]_[1-2]"],
+                    ["^\\/D0\\/.*F[1-5]_1$", "D[1-5]_2"]),
                 CrFvFltr(
                     ["[1-5]_[1-2]"],
-                    ["F[1-5]_1", "D[1-5]_2"]),
+                    ["F[1-5]_1$", "D[1-5]_2"]),
                 CrFvFltr(
                     ["\\/[1-5]_[1-2]", "[1-2]_[1-2]\\/"],
-                    ["F1_2"]));
+                    ["F1_2$"]));
 
         protected Tuple<DriveItem, DriveItem, DriveItem, DriveItem> CreateDefaultExpectedFilteredResults()
         {

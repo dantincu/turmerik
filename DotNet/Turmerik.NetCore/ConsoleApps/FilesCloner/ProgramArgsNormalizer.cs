@@ -90,7 +90,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 filesGroup.DfInputDirFilter);
 
             NormalizeFsEntriesFilterIfReq(
-                dirArgs.BeforeCloneDestnCleanupFilter,
+                dirArgs.BeforeCloneDestnCleanupFilter ??= filesGroup.DfBeforeCloneDestnCleanupFilter.Clone(),
                 filesGroup.DfBeforeCloneDestnCleanupFilter);
         }
 
@@ -179,11 +179,21 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 filesGroup.DfInputDirFilter ??= DriveEntriesSerializableFilter.IncludeAll());
 
             NormalizeFsEntriesFilterIfReq(
-                filesGroup.DfBeforeCloneDestnCleanupFilter);
+                filesGroup.DfBeforeCloneDestnCleanupFilter.Clone());
 
             if (filesGroup.Dirs != null)
             {
                 foreach (var dir in filesGroup.Dirs)
+                {
+                    NormalizeDirArgs(
+                        localDevicePathsMap,
+                        filesGroup, dir, filesGroup.WorkDir);
+                }
+            }
+
+            if (filesGroup.DestnToArchiveDirs != null)
+            {
+                foreach (var dir in filesGroup.DestnToArchiveDirs)
                 {
                     NormalizeDirArgs(
                         localDevicePathsMap,
@@ -312,16 +322,22 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             if (filter != null)
             {
-                filter.IncludedRelPathRegexes ??= new List<string>();
+                filter.IncludedRelPathRegexes ??= new List<string> { ".*" };
                 filter.ExcludedRelPathRegexes ??= new List<string>();
 
                 if (dfFilter != null)
                 {
-                    filter.IncludedRelPathRegexes.InsertRange(
-                        0, dfFilter.IncludedRelPathRegexes);
+                    if (dfFilter.IncludedRelPathRegexes != null)
+                    {
+                        filter.IncludedRelPathRegexes.InsertRange(
+                            0, dfFilter.IncludedRelPathRegexes.Except([ ".*" ]));
+                    }
 
-                    filter.ExcludedRelPathRegexes.InsertRange(
-                        0, dfFilter.ExcludedRelPathRegexes);
+                    if (dfFilter.ExcludedRelPathRegexes != null)
+                    {
+                        filter.ExcludedRelPathRegexes.InsertRange(
+                            0, dfFilter.ExcludedRelPathRegexes);
+                    }
                 }
             }
         }
