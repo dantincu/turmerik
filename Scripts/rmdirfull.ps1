@@ -1,15 +1,45 @@
-$firstArg = $args[0].Trim("""");
-$searchDirName = $firstArg + "\";
-$dirName = $firstArg;
-$dirContents = $firstArg + "\*";
+$lwrArgs = New-Object string[] $args.Length;
+$keepRootDir = $false;
+$dirName = "";
 
-# Write-Output ("removing " + $firstArg + " " + $searchDirName + " " + $dirName + " " + $dirContents)
-# ("removing " + $firstArg + " " + $searchDirName + " " + $dirName + " " + $dirContents) | Out-File -FilePath "out.txt"
+for ($i = 0; $i -lt $args.Length; $i++) {
+  $arg = $args[$i].ToLower();
+  $stWtColon = $arg.StartsWith(":");
+  $stWtDblColonr = $stWtColon -and $arg.StartsWith("::");
+  $isFlag = $stWtColon -and (-not $stWtDblColonr);
+
+  if (-not $isFlag) {
+    if ($stWtDblColonr) {
+      $arg = $arg.Substring(1);
+    }
+
+    $dirName = $arg.Trim("""");
+  }
+
+  $arg = $lwrArgs[$i] = $arg.ToLower();
+
+  if ($isFlag) {
+    if ($arg -eq ":kr") {
+      $keepRootDir = $true;
+    }
+  }
+}
+
+$searchDirName = $dirName + "\";
+$dirContents = $dirName + "\*";
+
+# Write-Output ("removing " + $dirName + " " + $searchDirName + " " + $dirName + " " + $dirContents)
+# ("removing " + $dirName + " " + $searchDirName + " " + $dirName + " " + $dirContents) | Out-File -FilePath "out.txt"
 
 if (Test-Path -Path "$searchDirName" -PathType Container) {
-  Remove-Item "$dirName" -Recurse -Force
-  # Remove-Item "$dirContents"
-  # ("removed " + $firstArg + " " + $searchDirName + " " + $dirName + " " + $dirContents) | Out-File -FilePath "out.txt"
+  if ($keepRootDir) {
+    Remove-Item "$dirContents" -Recurse -Force
+  } else {
+    Remove-Item "$dirName" -Recurse -Force
+  }
+  
+  Remove-Item "$dirContents"
+  # ("removed " + $dirName + " " + $searchDirName + " " + $dirName + " " + $dirContents) | Out-File -FilePath "out.txt"
 } else {
-  # ("not removed " + $firstArg + " " + $searchDirName + " " + $dirName + " " + $dirContents) | Out-File -FilePath "out.txt"
+  # ("not removed " + $dirName + " " + $searchDirName + " " + $dirName + " " + $dirContents) | Out-File -FilePath "out.txt"
 }

@@ -54,7 +54,10 @@ namespace Turmerik.UnitTests
                                         {
                                             EntryRelPath = "./trmrk-notes-config.json"
                                         },
-                                        CloneDirLocator = FsEntryLocatorH.FromPath(string.Empty),
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./trmrk-notes-config"
+                                        },
                                         UseChecksum = true
                                     }
                                 }
@@ -94,7 +97,7 @@ namespace Turmerik.UnitTests
                                         },
                                         CloneDirLocator = new FsEntryLocator
                                         {
-                                            EntryRelPath = "./js/dev"
+                                            EntryRelPath = "./js/prod"
                                         },
                                         UseChecksum = true,
                                         CloneTplLines = [ "{0}",
@@ -155,11 +158,11 @@ namespace Turmerik.UnitTests
                                             Commands = new NetCore.Utility.PowerShellCommandOpts
                                             {
                                                 CommandName = "rmdirfull",
-                                                CommandArguments = [ "js" ]
+                                                CommandArguments = [ "js", ":kr" ]
                                             }.Lst(new NetCore.Utility.PowerShellCommandOpts
                                             {
                                                 CommandName = "rmdirfull",
-                                                CommandArguments = [ "trmrk-notes-config" ]
+                                                CommandArguments = [ "trmrk-notes-config", ":kr" ]
                                             })
                                         },
                                         WorkDir = "./wwwroot"
