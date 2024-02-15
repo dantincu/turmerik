@@ -855,3 +855,4 @@ const $60fb29786a51d6b7$export$a19d84b187d33177 = turmerikObj.turmerik;
 //# sourceMappingURL=index.js.map
 
 export const turmerik = turmerikObj.turmerik;
+window.turmerik = turmerik;

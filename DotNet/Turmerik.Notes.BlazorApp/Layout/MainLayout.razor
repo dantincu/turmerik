@@ -9,21 +9,21 @@
 @code {
     private IJSObjectReference appModule;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        appModule = await AppModule.GetAppModule();
-
-        if (firstRender)
-        {
-            var json = JsonConvert.SerializeObject(AppModule.AppConfig);
-            json = JsonH.EscapeQuotes(json);
-
-            await AppModule.JS.InvokeVoidAsync("eval", $"window.trmrkApp.init(\"{json}\");");
-        }
     }
 
-    private async void OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            appModule = await AppModule.GetAppModule();
+
+            var json = JsonConvert.SerializeObject(AppModule.AppConfig);
+            // json = JsonH.EscapeQuotes(json);
+
+            await appModule.InvokeVoidAsync("turmerik.trmrkApp.init", json);
+        }
     }
 }
 

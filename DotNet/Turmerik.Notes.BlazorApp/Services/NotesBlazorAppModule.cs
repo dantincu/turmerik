@@ -21,25 +21,25 @@ namespace Turmerik.Notes.BlazorApp.Services
 
         public NotesBlazorAppModule Create(
             INotesBlazorAppConfig appConfig) => new NotesBlazorAppModule(
-                js, synchronizedAdapterFactory.SempahoreSlim(
-                    new SemaphoreSlim(1)), appConfig);
+                js, /* synchronizedAdapterFactory.SempahoreSlim(
+                    new SemaphoreSlim(1)), */ appConfig);
     }
 
     public class NotesBlazorAppModule
     {
-        private readonly ISemaphoreSlimAdapter semaphoreSlimAdapter;
+        // private readonly ISemaphoreSlimAdapter semaphoreSlimAdapter;
 
         private IJSObjectReference? module;
 
         public NotesBlazorAppModule(
             IJSRuntime js,
-            ISemaphoreSlimAdapter semaphoreSlimAdapter,
+            // ISemaphoreSlimAdapter semaphoreSlimAdapter,
             INotesBlazorAppConfig appConfig)
         {
             JS = js ?? throw new ArgumentNullException(nameof(js));
 
-            this.semaphoreSlimAdapter = semaphoreSlimAdapter ?? throw new ArgumentNullException(
-                nameof(semaphoreSlimAdapter));
+            /* this.semaphoreSlimAdapter = semaphoreSlimAdapter ?? throw new ArgumentNullException(
+                nameof(semaphoreSlimAdapter)); */
 
             AppConfig = appConfig ?? throw new ArgumentNullException(
                 nameof(appConfig));
@@ -50,13 +50,13 @@ namespace Turmerik.Notes.BlazorApp.Services
 
         public async Task<IJSObjectReference> GetAppModule()
         {
-            await semaphoreSlimAdapter.ExecuteAsync(async () =>
-            {
+            // await semaphoreSlimAdapter.ExecuteAsync(async () =>
+            // {
                 if (module == null)
                 {
                     module = await JS.InvokeAsync<IJSObjectReference>("import", AppConfig.JsFilePath);
                 }
-            });
+            // });
 
             return module!;
         }

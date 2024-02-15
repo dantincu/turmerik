@@ -112,7 +112,8 @@ namespace Turmerik.UnitTests
                                         CloneTplLines = [
                                             "const turmerikObj = {{}};",
                                             "{0}",
-                                            "export const turmerik = turmerikObj.turmerik;" ]
+                                            "export const turmerik = turmerikObj.turmerik;",
+                                            "window.turmerik = turmerik;" ]
                                     },
                                     new FileArgs
                                     {

@@ -8,7 +8,9 @@ using Turmerik.Notes.Core;
 
 async Task<INotesBlazorAppConfig> GetAppConfig(HttpClient httpClient)
 {
-    string json = await httpClient.GetStringAsync($"trmrk-notes-config/trmrk-notes-config.{FileCheckSums.TRMRK_NOTES_CONFIG_FILE}.json");
+    string json = await httpClient.GetStringAsync(
+        $"trmrk-notes-config/trmrk-notes-config.{FileCheckSums.TRMRK_NOTES_CONFIG_FILE}.json");
+
     var notesAppConfig = JsonConvert.DeserializeObject<NotesBlazorAppConfigMtbl>(json)!;
 
     string jsDirName = notesAppConfig.IsDevEnv ? "dev" : "prod";
@@ -19,6 +21,7 @@ async Task<INotesBlazorAppConfig> GetAppConfig(HttpClient httpClient)
     notesAppConfig.JsFilePath = Path.Combine(
         "/js",
         jsDirName,
+        // "test.js");
         jsFileName);
 
     return notesAppConfig;

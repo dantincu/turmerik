@@ -86,6 +86,25 @@
                 "EntryRelPath": "./trmrk-notes-config"
               },
               "UseChecksum": true
+            },
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./trmrk-notes-config.json"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "../"
+              },
+              "CloneFileNameTpl": "FileCheckSums.TrmrkNotesConfigFile.cs",
+              "ForceOverwrite": true,
+              "CloneTplLines": [
+                "namespace Turmerik.Notes.BlazorApp",
+                "{{",
+                "    public static partial class FileCheckSums",
+                "    {{",
+                "        public const string TRMRK_NOTES_CONFIG_FILE = \"{1}\";",
+                "    }}",
+                "}}"
+              ]
             }
           ]
         },
@@ -109,7 +128,8 @@
               "CloneTplLines": [
                 "const turmerikObj = {{}};",
                 "{0}",
-                "export const turmerik = turmerikObj.turmerik;"
+                "export const turmerik = turmerikObj.turmerik;",
+                "window.turmerik = turmerik;"
               ]
             },
             {
@@ -124,6 +144,26 @@
                 "const turmerikObj = {{}};",
                 "{0}",
                 "export const turmerik = turmerikObj.turmerik;"
+              ]
+            },
+            {
+              "InputFileLocator": {
+                "EntryRelPath": "./dist/dev/index.js"
+              },
+              "CloneDirLocator": {
+                "EntryRelPath": "../"
+              },
+              "CloneFileNameTpl": "FileCheckSums.JsFile.cs",
+              "ForceOverwrite": true,
+              "CloneTplLines": [
+                "namespace Turmerik.Notes.BlazorApp",
+                "{{",
+                "    public static partial class FileCheckSums",
+                "    {{",
+                "        public const string DEV_JS_FILE = \"{1}\";",
+                "        public const string PROD_JS_FILE = \"{2}\";",
+                "    }}",
+                "}}"
               ]
             }
           ]
