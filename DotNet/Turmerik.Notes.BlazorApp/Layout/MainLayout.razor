@@ -9,10 +9,6 @@
 @code {
     private IJSObjectReference appModule;
 
-    protected override async Task OnInitializedAsync()
-    {
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -20,8 +16,6 @@
             appModule = await AppModule.GetAppModule();
 
             var json = JsonConvert.SerializeObject(AppModule.AppConfig);
-            // json = JsonH.EscapeQuotes(json);
-
             await appModule.InvokeVoidAsync("turmerik.trmrkApp.init", json);
         }
     }

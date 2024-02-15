@@ -40,7 +40,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddSingleton(svcProv => notesAppConfig);
 
-builder.Services.AddSingleton(svcProv => svcProv.GetRequiredService<NotesBlazorAppModuleFactory>(
-    ).Create(notesAppConfig));
+builder.Services.AddSingleton(svcProv => svcProv.GetRequiredService<NotesBlazorModuleFactory>(
+    ).AppModule(notesAppConfig));
 
 await builder.Build().RunAsync();

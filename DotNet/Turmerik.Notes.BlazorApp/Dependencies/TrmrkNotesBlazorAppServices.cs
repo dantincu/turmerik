@@ -14,7 +14,7 @@ namespace Turmerik.Notes.BlazorApp.Dependencies
             TrmrkServices.RegisterAll(services);
             TrmrkNetCoreServices.RegisterAll(services);
 
-            services.AddSingleton<NotesBlazorAppModuleFactory>();
+            services.AddSingleton<NotesBlazorModuleFactory>();
             return services;
         }
     }

@@ -23,9 +23,11 @@ namespace Turmerik.Core.Threading
     {
         private readonly SemaphoreSlim sempahore;
 
-        public SemaphoreSlimAdapter(SemaphoreSlim sempahore)
+        public SemaphoreSlimAdapter(
+            SemaphoreSlim sempahore)
         {
-            this.sempahore = sempahore ?? throw new ArgumentNullException(nameof(sempahore));
+            this.sempahore = sempahore ?? throw new ArgumentNullException(
+                nameof(sempahore));
         }
 
         public void Dispose()

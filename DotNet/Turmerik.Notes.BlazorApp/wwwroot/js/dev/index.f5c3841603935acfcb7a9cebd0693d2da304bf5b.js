@@ -840,6 +840,9 @@ class $8eb34e2ca2a1a4f9$export$fe330a9df595e087 {
         if (typeof initData === "string") initData = JSON.parse(initData);
         this.data = initData;
     }
+    logData(msg) {
+        console.log(msg ?? "app data", this.data);
+    }
 }
 
 

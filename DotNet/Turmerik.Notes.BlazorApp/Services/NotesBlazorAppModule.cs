@@ -4,42 +4,31 @@ using Turmerik.Core.Threading;
 
 namespace Turmerik.Notes.BlazorApp.Services
 {
-    public class NotesBlazorAppModuleFactory
+    public class NotesBlazorModuleFactory
     {
         private readonly IJSRuntime js;
-        private readonly ISynchronizedAdapterFactory synchronizedAdapterFactory;
 
-        public NotesBlazorAppModuleFactory(
-            IJSRuntime js,
-            ISynchronizedAdapterFactory synchronizedAdapterFactory)
+        public NotesBlazorModuleFactory(
+            IJSRuntime js)
         {
             this.js = js ?? throw new ArgumentNullException(nameof(js));
-
-            this.synchronizedAdapterFactory = synchronizedAdapterFactory ?? throw new ArgumentNullException(
-                nameof(synchronizedAdapterFactory));
         }
 
-        public NotesBlazorAppModule Create(
+        public NotesBlazorAppModule AppModule(
             INotesBlazorAppConfig appConfig) => new NotesBlazorAppModule(
-                js, /* synchronizedAdapterFactory.SempahoreSlim(
-                    new SemaphoreSlim(1)), */ appConfig);
+                js, appConfig);
     }
 
     public class NotesBlazorAppModule
     {
-        // private readonly ISemaphoreSlimAdapter semaphoreSlimAdapter;
-
         private IJSObjectReference? module;
+        private ValueTask<IJSObjectReference>? moduleTask;
 
         public NotesBlazorAppModule(
             IJSRuntime js,
-            // ISemaphoreSlimAdapter semaphoreSlimAdapter,
             INotesBlazorAppConfig appConfig)
         {
             JS = js ?? throw new ArgumentNullException(nameof(js));
-
-            /* this.semaphoreSlimAdapter = semaphoreSlimAdapter ?? throw new ArgumentNullException(
-                nameof(semaphoreSlimAdapter)); */
 
             AppConfig = appConfig ?? throw new ArgumentNullException(
                 nameof(appConfig));
@@ -50,13 +39,11 @@ namespace Turmerik.Notes.BlazorApp.Services
 
         public async Task<IJSObjectReference> GetAppModule()
         {
-            // await semaphoreSlimAdapter.ExecuteAsync(async () =>
-            // {
-                if (module == null)
-                {
-                    module = await JS.InvokeAsync<IJSObjectReference>("import", AppConfig.JsFilePath);
-                }
-            // });
+            if (module == null)
+            {
+                moduleTask ??= JS.InvokeAsync<IJSObjectReference>("import", AppConfig.JsFilePath);
+                module = await moduleTask.Value;
+            }
 
             return module!;
         }

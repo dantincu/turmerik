@@ -1,4 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Turmerik.Notes.BlazorApp.Services
+
+@inject NotesBlazorAppModule AppModule;
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Turmerik Notes</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -28,9 +32,19 @@
 </div>
 
 @code {
+    private IJSObjectReference appModule;
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            appModule = await AppModule.GetAppModule();
+            await appModule.InvokeVoidAsync("turmerik.trmrkApp.logData");
+        }
+    }
 
     private void ToggleNavMenu()
     {

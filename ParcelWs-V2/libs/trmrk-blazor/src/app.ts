@@ -8,4 +8,8 @@ export class TrmrkBlazorApp<TInitData> {
 
     this.data = initData as TInitData;
   }
+
+  public logData(msg?: string | null | undefined) {
+    console.log(msg ?? "app data", this.data);
+  }
 }
