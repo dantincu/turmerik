@@ -2,7 +2,8 @@
   "profiles": {
     "Turmerik.MkFsDirsPair.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":nn :o :url:asdf|https://github.com/roshaneforde/rawjs/tree/master qwer xzcv \" \" :+ :nn asdf :+ :nn :ni :- := :nn :nf := oiuy iut \"\""
+      //"commandLineArgs": ":nn :url:https://ing.ro/informatii-utile/ING-lanseaza-in-premiera-serviciul-de-geolocalizare := :nn :o :url:asdf|https://github.com/roshaneforde/rawjs/tree/master qwer xzcv \" \" :+ :nn asdf :+ :nn :ni :- := :nn :nf := oiuy iut \"\""
+        "commandLineArgs": ":nn :url:https://ing.ro/informatii-utile/ING-lanseaza-in-premiera-serviciul-de-geolocalizare"
     }
   }
 }

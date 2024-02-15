@@ -90,7 +90,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 filesGroup.DfInputDirFilter);
 
             NormalizeFsEntriesFilterIfReq(
-                dirArgs.BeforeCloneDestnCleanupFilter ??= filesGroup.DfBeforeCloneDestnCleanupFilter.Clone(),
+                dirArgs.BeforeCloneDestnCleanupFilter ??= filesGroup.DfBeforeCloneDestnCleanupFilter?.Clone(),
                 filesGroup.DfBeforeCloneDestnCleanupFilter);
         }
 
@@ -179,7 +179,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 filesGroup.DfInputDirFilter ??= DriveEntriesSerializableFilter.IncludeAll());
 
             NormalizeFsEntriesFilterIfReq(
-                filesGroup.DfBeforeCloneDestnCleanupFilter.Clone());
+                filesGroup.DfBeforeCloneDestnCleanupFilter?.Clone());
 
             if (filesGroup.Dirs != null)
             {

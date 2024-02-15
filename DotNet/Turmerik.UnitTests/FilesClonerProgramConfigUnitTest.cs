@@ -59,6 +59,29 @@ namespace Turmerik.UnitTests
                                             EntryRelPath = "./trmrk-notes-config"
                                         },
                                         UseChecksum = true
+                                    },
+                                    new FileArgs
+                                    {
+                                        InputFileLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./trmrk-notes-config.json"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "../"
+                                        },
+                                        CloneFileNameTpl = "FileCheckSums.TrmrkNotesConfigFile.cs",
+                                        CloneTplLines = new List<string>
+                                        {
+                                            "namespace Turmerik.Notes.BlazorApp",
+                                            "{{",
+                                            "    public static partial class FileCheckSums",
+                                            "    {{",
+                                            "        public const string TRMRK_NOTES_CONFIG_FILE = \"{1}\";",
+                                            "    }}",
+                                            "}}"
+                                        },
+                                        ForceOverwrite = true
                                     }
                                 }
                             },
@@ -106,6 +129,30 @@ namespace Turmerik.UnitTests
                                             "const turmerikObj = {{}};",
                                             "{0}",
                                             "export const turmerik = turmerikObj.turmerik;" ]
+                                    },
+                                    new FileArgs
+                                    {
+                                        InputFileLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "./dist/dev/index.js"
+                                        },
+                                        CloneDirLocator = new FsEntryLocator
+                                        {
+                                            EntryRelPath = "../"
+                                        },
+                                        CloneFileNameTpl = "FileCheckSums.JsFile.cs",
+                                        CloneTplLines = new List<string>
+                                        {
+                                            "namespace Turmerik.Notes.BlazorApp",
+                                            "{{",
+                                            "    public static partial class FileCheckSums",
+                                            "    {{",
+                                            "        public const string DEV_JS_FILE = \"{1}\";",
+                                            "        public const string PROD_JS_FILE = \"{2}\";",
+                                            "    }}",
+                                            "}}"
+                                        },
+                                        ForceOverwrite = true
                                     }
                                 }
                             }

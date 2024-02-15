@@ -133,9 +133,17 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             if (filesGroup.Files != null)
             {
+                var prevCheckSums = new List<string>();
+
                 foreach (var file in filesGroup.Files)
                 {
-                    RunCore(filesGroup, file);
+                    string nextChecksum = RunCore(
+                        filesGroup, file, prevCheckSums);
+
+                    if (nextChecksum != null)
+                    {
+                        prevCheckSums.Add(nextChecksum);
+                    }
                 }
             }
         }
@@ -197,17 +205,15 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             }
         }
 
-        private void RunCore(
+        private string RunCore(
             FilesGroup filesGroup,
-            FileArgs fileArgs)
-        {
-            fileCloneComponent.Run(new FileCloneArgs
+            FileArgs fileArgs,
+            List<string> prevCheckSums) => fileCloneComponent.Run(new FileCloneArgs
             {
                 File = fileArgs,
                 CloneInputFile = true,
                 WorkDir = filesGroup.WorkDir
-            });
-        }
+            }, prevCheckSums);
 
         private async Task<DriveItem> RunCore(
             DirArgs dirArgs)

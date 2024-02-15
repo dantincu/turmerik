@@ -5,7 +5,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 {
     public interface IFileCloneComponent
     {
-        void Run(FileCloneArgs args);
+        string Run(
+            FileCloneArgs args,
+            List<string> prevCheckSums = null);
     }
 
     public class FileCloneComponent : IFileCloneComponent
@@ -19,17 +21,22 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 nameof(checksumCalculator));
         }
 
-        public void Run(
-            FileCloneArgs args)
+        public string Run(
+            FileCloneArgs args,
+            List<string> prevCheckSums = null)
         {
+            var outputTextArgsList = prevCheckSums?.ToList() ?? new List<string>();
+            
             string checksum = null;
 
             string inputText = args.InputText ?? File.ReadAllText(
                 args.File.InputFileLocator.EntryPath);
 
+            outputTextArgsList.Insert(0, inputText);
+
             string[] outputTextLines = args.File.CloneTplLines.Select(
-                line => string.Format(
-                    line, inputText)).ToArray();
+                line => string.Format(line,
+                    outputTextArgsList.ToArray())).ToArray();
 
             string outputText = string.Join(
                 Environment.NewLine,
@@ -73,10 +80,14 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 Console.WriteLine();
                 Console.ResetColor();
 
-                if (File.Exists(cloneFilePath))
+                if (args.File.ForceOverwrite != true && File.Exists(
+                    cloneFilePath))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Clone file already exists; exiting without creating the clone file");
+
+                    Console.WriteLine(string.Join(" ",
+                        "Clone file already exists and the force overwrite flag has not been provided;",
+                        "exiting without creating the clone file"));
 
                     Console.WriteLine();
                     Console.ResetColor();
@@ -92,6 +103,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                     Console.ResetColor();
                 }
             }
+
+            return checksum;
         }
 
         private string GetCloneFileName(
