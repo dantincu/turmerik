@@ -19,7 +19,7 @@ namespace Turmerik.Notes.BlazorApp.Services
                 js, appConfig);
     }
 
-    public class NotesBlazorAppModule
+    public class NotesBlazorAppModule : IAsyncDisposable
     {
         private IJSObjectReference? module;
         private ValueTask<IJSObjectReference>? moduleTask;
@@ -36,6 +36,14 @@ namespace Turmerik.Notes.BlazorApp.Services
 
         public IJSRuntime JS { get; }
         public INotesBlazorAppConfig AppConfig { get; }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (moduleTask.HasValue)
+            {
+                await moduleTask.Value.Result.DisposeAsync();
+            }
+        }
 
         public async Task<IJSObjectReference> GetAppModule()
         {
