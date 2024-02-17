@@ -80,8 +80,8 @@ namespace Turmerik.UnitTests
                 });
 
             string js = string.Join(Environment.NewLine,
-                "var turmerik = {",
-                "  add: function(x, y) { return x + y; },",
+                "this.turmerik = {",
+                "  add: (x, y) => x + y,",
                 "  getExportedMembers: () => ({",
                 "    AddMethodName: \"turmerik.add\"",
                 "   })",
