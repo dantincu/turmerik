@@ -110,11 +110,6 @@ namespace Turmerik.Core.LocalDeviceEnv
             AppEnvDir.Data,
             GetType());
 
-        protected override string GetJsonFilePath() => AppEnv.GetTypePath(
-            AppEnvDir.Data,
-            GetType(),
-            JSON_FILE_NAME);
-
         protected override TMtblSrlzbl GetDefaultConfig() => LoadJsonCore(
             DefaultJsonFilePath,
             GetDefaultConfigCore);

@@ -293,7 +293,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         {
             if (path != null)
             {
-                path = textMacrosReplacer.ReplacePathMacros(
+                path = textMacrosReplacer.ReplaceMacros(
                     new TextMacrosReplacerOpts
                     {
                         InputText = path,

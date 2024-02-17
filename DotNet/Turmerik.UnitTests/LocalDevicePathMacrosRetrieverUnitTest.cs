@@ -47,6 +47,10 @@ namespace Turmerik.UnitTests
                 TurmerikDotnetUtilityAppsEnvDir = new LocalDevicePathsMap.FolderMtbl
                 {
                     DirPath = "TurmerikDotnetUtilityAppsEnvDir"
+                },
+                TurmerikDotnetUtilityAppsEnvDirTypeName = new LocalDevicePathsMap.FolderMtbl
+                {
+                    DirPath = "TurmerikDotnetUtilityAppsEnvDirTypeName"
                 }
             };
 
@@ -62,6 +66,7 @@ namespace Turmerik.UnitTests
                 OnedriveTurmerikDotNetUtilityAppsArchiveReldir = null,
                 TurmerikRepoDir = null,
                 TurmerikDotnetUtilityAppsEnvDir = null,
+                TurmerikDotnetUtilityAppsEnvDirTypeName = null
             };
 
             var objDumpDirPath = appEnv.GetTypePath(

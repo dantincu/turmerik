@@ -7,6 +7,7 @@ namespace Turmerik.Code.CSharp.Utility
     public enum CSharpTypeKind
     {
         Struct = 1,
+        Record,
         Class,
         Interface,
         Delegate

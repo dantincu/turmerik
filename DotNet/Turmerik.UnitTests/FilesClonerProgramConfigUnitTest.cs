@@ -317,14 +317,18 @@ namespace Turmerik.UnitTests
                                 {
                                     ExcludedRelPathRegexes = new List<string>
                                     {
-                                        "^\\/app-env-locator.json$"
+                                        "^\\/app-env-locator\\.json$",
+                                        "^\\/trmrk-localdevice-paths\\.json$",
+                                        "^\\/trmrk-filescloner-config\\.json$"
                                     }
                                 },
                                 DfBeforeCloneDestnCleanupFilter = new DriveEntriesSerializableFilter
                                 {
                                     ExcludedRelPathRegexes = new List<string>
                                     {
-                                        "^\\/app-env-locator.json$",
+                                        "^\\/app-env-locator\\.json$",
+                                        "^\\/trmrk-localdevice-paths\\.json$",
+                                        "^\\/trmrk-filescloner-config\\.json$",
                                         "^\\/_.+\\.exe"
                                     }
                                 },
@@ -416,16 +420,18 @@ namespace Turmerik.UnitTests
                                 {
                                     ExcludedRelPathRegexes = new List<string>
                                     {
-                                        "^\\/app-env-locator.json$",
-                                        "^\\/trmrk-filescloner-config.json$"
+                                        "^\\/app-env-locator\\.json$",
+                                        "^\\/trmrk-localdevice-paths\\.json$",
+                                        "^\\/trmrk-filescloner-config\\.json$"
                                     }
                                 },
                                 DfBeforeCloneDestnCleanupFilter = new DriveEntriesSerializableFilter
                                 {
                                     ExcludedRelPathRegexes = new List<string>
                                     {
-                                        "^\\/app-env-locator.json$",
-                                        "^\\/trmrk-filescloner-config.json$",
+                                        "^\\/app-env-locator\\.json$",
+                                        "^\\/trmrk-localdevice-paths\\.json$",
+                                        "^\\/trmrk-filescloner-config\\.json$",
                                         "^\\/_.+\\.exe"
                                     }
                                 },

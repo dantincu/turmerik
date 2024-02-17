@@ -13,7 +13,7 @@ namespace Turmerik.Core.TextParsing
         Regex DefaultMacroRegex { get; }
         Regex DefaultValidMacroRegex { get; }
 
-        string ReplacePathMacros(
+        string ReplaceMacros(
             TextMacrosReplacerOpts opts);
 
         TextMacrosReplacerOpts NormalizeOpts(
@@ -38,7 +38,7 @@ namespace Turmerik.Core.TextParsing
         public Regex DefaultMacroRegex { get; }
         public Regex DefaultValidMacroRegex { get; }
 
-        public string ReplacePathMacros(
+        public string ReplaceMacros(
             TextMacrosReplacerOpts opts)
         {
             opts = NormalizeOpts(opts);
@@ -54,7 +54,8 @@ namespace Turmerik.Core.TextParsing
                     {
                         true => replStr,
                         false => opts.DefaultReplacer(rslt, match, inputText)
-                    }
+                    },
+                ReplaceRecursively = true
             });
 
             return result.ReplacedText;

@@ -15,6 +15,7 @@ namespace Turmerik.Core.LocalDeviceEnv
         IFolder GetUserProfileDir();
         IFolder GetTurmerikRepoDir();
         IFolder GetTurmerikDotnetUtilityAppsEnvDir();
+        IFolder GetTurmerikDotnetUtilityAppsEnvDirTypeName();
         IFolder GetOnedriveDir();
         IFolder GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir();
 
@@ -78,6 +79,7 @@ namespace Turmerik.Core.LocalDeviceEnv
             UserProfileDir = src.GetUserProfileDir()?.ToImmtbl()!;
             TurmerikRepoDir = src.GetTurmerikRepoDir()?.ToImmtbl()!;
             TurmerikDotnetUtilityAppsEnvDir = src.GetTurmerikDotnetUtilityAppsEnvDir()?.ToImmtbl()!;
+            TurmerikDotnetUtilityAppsEnvDirTypeName = src.GetTurmerikDotnetUtilityAppsEnvDirTypeName()?.ToImmtbl()!;
             OnedriveDir = src.GetOnedriveDir()?.ToImmtbl()!;
             OnedriveTurmerikDotNetUtilityAppsArchiveReldir = src.GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir()?.ToImmtbl()!;
             PathsMap = src.GetPathsMap()?.Dictnr().RdnlD()!;
@@ -87,6 +89,7 @@ namespace Turmerik.Core.LocalDeviceEnv
         public FolderImmtbl UserProfileDir { get; }
         public FolderImmtbl TurmerikRepoDir { get; }
         public FolderImmtbl TurmerikDotnetUtilityAppsEnvDir { get; }
+        public FolderImmtbl TurmerikDotnetUtilityAppsEnvDirTypeName { get; }
         public FolderImmtbl OnedriveDir { get; }
         public FolderImmtbl OnedriveTurmerikDotNetUtilityAppsArchiveReldir { get; }
 
@@ -96,6 +99,7 @@ namespace Turmerik.Core.LocalDeviceEnv
         public IFolder GetUserProfileDir() => UserProfileDir;
         public IFolder GetTurmerikRepoDir() => TurmerikRepoDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDir() => TurmerikDotnetUtilityAppsEnvDir;
+        public IFolder GetTurmerikDotnetUtilityAppsEnvDirTypeName() => TurmerikDotnetUtilityAppsEnvDirTypeName;
         public IFolder GetOnedriveDir() => OnedriveDir;
         public IFolder GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir() => OnedriveTurmerikDotNetUtilityAppsArchiveReldir;
 
@@ -114,6 +118,7 @@ namespace Turmerik.Core.LocalDeviceEnv
             UserProfileDir = src.GetUserProfileDir()?.ToMtbl()!;
             TurmerikRepoDir = src.GetTurmerikRepoDir()?.ToMtbl()!;
             TurmerikDotnetUtilityAppsEnvDir = src.GetTurmerikDotnetUtilityAppsEnvDir()?.ToMtbl()!;
+            TurmerikDotnetUtilityAppsEnvDirTypeName = src.GetTurmerikDotnetUtilityAppsEnvDirTypeName()?.ToMtbl()!;
             OnedriveDir = src.GetOnedriveDir()?.ToMtbl()!;
             OnedriveTurmerikDotNetUtilityAppsArchiveReldir = src.GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir()?.ToMtbl()!;
             PathsMap = src.GetPathsMap()?.Dictnr()!;
@@ -123,6 +128,7 @@ namespace Turmerik.Core.LocalDeviceEnv
         public FolderMtbl UserProfileDir { get; set; }
         public FolderMtbl TurmerikRepoDir { get; set; }
         public FolderMtbl TurmerikDotnetUtilityAppsEnvDir { get; set; }
+        public FolderMtbl TurmerikDotnetUtilityAppsEnvDirTypeName { get; set; }
         public FolderMtbl OnedriveDir { get; set; }
         public FolderMtbl OnedriveTurmerikDotNetUtilityAppsArchiveReldir { get; set; }
 
@@ -132,6 +138,7 @@ namespace Turmerik.Core.LocalDeviceEnv
         public IFolder GetUserProfileDir() => UserProfileDir;
         public IFolder GetTurmerikRepoDir() => TurmerikRepoDir;
         public IFolder GetTurmerikDotnetUtilityAppsEnvDir() => TurmerikDotnetUtilityAppsEnvDir;
+        public IFolder GetTurmerikDotnetUtilityAppsEnvDirTypeName() => TurmerikDotnetUtilityAppsEnvDirTypeName;
         public IFolder GetOnedriveDir() => OnedriveDir;
         public IFolder GetOnedriveTurmerikDotNetUtilityAppsArchiveReldir() => OnedriveTurmerikDotNetUtilityAppsArchiveReldir;
 

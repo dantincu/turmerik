@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Jint" Version="3.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.6.6" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
@@ -24,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Turmerik.Jint\Turmerik.Jint.csproj" />
     <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
     <ProjectReference Include="..\Turmerik.Testing\Turmerik.Testing.csproj" />
     <ProjectReference Include="..\Turmerik\Turmerik.csproj" />

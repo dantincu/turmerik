@@ -41,6 +41,7 @@ namespace Turmerik.Core.LocalDeviceEnv
             JsonFilePath = GetJsonFilePath();
 
             Mutex = MutexH.Create(JsonFilePath);
+            ThisType = GetType();
         }
 
         public string JsonDirPath { get; }
@@ -54,6 +55,8 @@ namespace Turmerik.Core.LocalDeviceEnv
         protected TImmtbl DataCore { get; set; }
 
         protected Mutex Mutex { get; }
+
+        protected Type ThisType { get; }
 
         public event Action<TImmtbl> DataLoaded
         {
@@ -76,10 +79,8 @@ namespace Turmerik.Core.LocalDeviceEnv
             AppEnvDir.Config,
             GetType());
 
-        protected virtual string GetJsonFilePath() => AppEnv.GetTypePath(
-            AppEnvDir.Config,
-            GetType(),
-            JSON_FILE_NAME);
+        protected virtual string GetJsonFilePath() => Path.Combine(
+            JsonDirPath, JSON_FILE_NAME);
 
         protected virtual TImmtbl LoadDataObjCore()
         {

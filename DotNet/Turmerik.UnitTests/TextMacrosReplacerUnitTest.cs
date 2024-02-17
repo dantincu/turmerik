@@ -37,7 +37,7 @@ namespace Turmerik.UnitTests
             Dictionary<string, string> macrosMap,
             string expectedResult)
         {
-            var actualResult = textMacrosReplacer.ReplacePathMacros(new TextMacrosReplacerOpts
+            var actualResult = textMacrosReplacer.ReplaceMacros(new TextMacrosReplacerOpts
             {
                 InputText = inputText,
                 MacrosMap = macrosMap

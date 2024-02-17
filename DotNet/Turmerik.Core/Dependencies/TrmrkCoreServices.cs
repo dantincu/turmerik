@@ -55,6 +55,7 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
             services.AddSingleton<IRegexReplacer, RegexReplacer>();
             services.AddSingleton<ILocalDevicePathMacrosRetriever, LocalDevicePathMacrosRetriever>();
+            services.AddSingleton<IStringLiteralTransformer, StringLiteralTransformer>();
             services.AddSingleton<ITextMacrosReplacer, TextMacrosReplacer>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
             services.AddSingleton<IDriveItemsCreator, DriveItemsCreator>();

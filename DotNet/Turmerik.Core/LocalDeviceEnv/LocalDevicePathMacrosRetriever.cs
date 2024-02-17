@@ -16,18 +16,25 @@ namespace Turmerik.Core.LocalDeviceEnv
     {
         ReadOnlyDictionary<string, string> DefaultPathsMap { get; }
 
+        string PropNameToMacro(
+            string propName,
+            string template = null);
+
         LocalDevicePathMacrosMapMtbl LoadFromConfigFile(
             string configFilePath = null,
-            bool normalize = true);
+            bool normalize = true,
+            IAppEnv appEnv = null);
 
         LocalDevicePathMacrosMapMtbl Normalize(
-            LocalDevicePathMacrosMapMtbl localDevicePathsMap);
+            LocalDevicePathMacrosMapMtbl localDevicePathsMap,
+            IAppEnv appEnv = null);
     }
 
     public class LocalDevicePathMacrosRetriever : ILocalDevicePathMacrosRetriever
     {
-        private static ReadOnlyCollection<PropertyInfo> pubPropInfos;
+        public const string MACRO_TEMPLATE = "|${0}|";
 
+        private static ReadOnlyCollection<PropertyInfo> pubPropInfos;
         private static ReadOnlyDictionary<string, string> propNamesMap;
 
         private readonly IJsonConversion jsonConversion;
@@ -38,11 +45,12 @@ namespace Turmerik.Core.LocalDeviceEnv
 
             propNamesMap = pubPropInfos.ToDictionary(
                 propInfo => propInfo.Name,
-                propInfo => string.Format("|${0}|", StringH.CamelToKebabCase(
-                    propInfo.Name, true))).RdnlD();
+                propInfo => ConvertPropNameToMacro(
+                    propInfo.Name)).RdnlD();
         }
 
-        public LocalDevicePathMacrosRetriever(IJsonConversion jsonConversion)
+        public LocalDevicePathMacrosRetriever(
+            IJsonConversion jsonConversion)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -54,9 +62,21 @@ namespace Turmerik.Core.LocalDeviceEnv
                 Environment.SpecialFolder.UserProfile) }
         }.RdnlD();
 
+        public static string ConvertPropNameToMacro(
+            string propName,
+            string template = null) => string.Format(
+                template ?? MACRO_TEMPLATE, StringH.CamelToKebabCase(
+                    propName, true));
+
+        public string PropNameToMacro(
+            string propName,
+            string template = null) => ConvertPropNameToMacro(
+                propName, template);
+
         public LocalDevicePathMacrosMapMtbl LoadFromConfigFile(
             string configFilePath = null,
-            bool normalize = true)
+            bool normalize = true,
+            IAppEnv appEnv = null)
         {
             if (configFilePath == null && ProgramH.FilePathExists(
                 LocalDevicePathMacrosMapH.CONFIG_FILE_NAME,
@@ -71,19 +91,29 @@ namespace Turmerik.Core.LocalDeviceEnv
 
             if (normalize)
             {
-                localDevicePathsMap = Normalize(localDevicePathsMap);
+                localDevicePathsMap = Normalize(
+                    localDevicePathsMap, appEnv);
             }
 
             return localDevicePathsMap;
         }
 
         public LocalDevicePathMacrosMapMtbl Normalize(
-            LocalDevicePathMacrosMapMtbl localDevicePathsMap)
+            LocalDevicePathMacrosMapMtbl localDevicePathsMap,
+            IAppEnv appEnv = null)
         {
             foreach (var kvp in DefaultPathsMap)
             {
                 localDevicePathsMap.PathsMap.GetOrAdd(
                     kvp.Key, key => kvp.Value);
+            }
+
+            if (appEnv != null)
+            {
+                localDevicePathsMap.TurmerikDotnetUtilityAppsEnvDir ??= new LocalDevicePathsMap.FolderMtbl
+                {
+                    DirPath = appEnv.AppEnvDirBasePath,
+                };
             }
 
             foreach (var propInfo in pubPropInfos)

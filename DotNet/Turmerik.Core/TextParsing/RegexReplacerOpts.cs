@@ -26,6 +26,8 @@ namespace Turmerik.Core.TextParsing
             AllowInvalidMatch = src.AllowInvalidMatch;
             AllowOverlappingMatch = src.AllowOverlappingMatch;
             NextMatchReplacer = src.NextMatchReplacer;
+            ReplaceRecursively = src.ReplaceRecursively;
+            ContinuePredicate = src.ContinuePredicate;
         }
 
         public string InputText { get; set; }
@@ -46,5 +48,7 @@ namespace Turmerik.Core.TextParsing
         public bool? AllowOverlappingMatch { get; set; }
 
         public Func<RegexReplacerResult, MatchDataMtbl, string, string> NextMatchReplacer { get; set; }
+        public bool? ReplaceRecursively { get; set; }
+        public Func<RegexReplacerResult, bool> ContinuePredicate { get; set; }
     }
 }

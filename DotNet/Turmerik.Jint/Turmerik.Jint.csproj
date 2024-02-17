@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="YantraJS.Core" Version="1.2.206" />
+    <PackageReference Include="Jint" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

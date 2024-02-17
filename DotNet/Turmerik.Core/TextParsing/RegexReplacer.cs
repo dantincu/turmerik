@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml.XPath;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.TextParsing
 {
@@ -67,6 +68,13 @@ namespace Turmerik.Core.TextParsing
                         {
                             result.MatchesList[j].Index += lenDiff;
                         }
+                    }
+
+                    @continue = opts.ContinuePredicate(result);
+
+                    if (!@continue)
+                    {
+                        break;
                     }
                 }
             }
@@ -154,6 +162,24 @@ namespace Turmerik.Core.TextParsing
 
             opts.InvalidMatchHandler ??= (result, match) => false;
             opts.OverlappingMatchHandler ??= (result, prevMatch, match) => false;
+            opts.ReplaceRecursively ??= false;
+
+            opts.ContinuePredicate ??= new MutableValueWrapper<bool>().With(mtbl =>
+            {
+                Func<RegexReplacerResult, bool> continuePredicate = result =>
+                {
+                    bool retVal = !mtbl.Value || opts.ReplaceRecursively == true;
+
+                    if (!mtbl.Value)
+                    {
+                        mtbl.Value = true;
+                    }
+
+                    return retVal;
+                };
+
+                return continuePredicate;
+            });
 
             return opts;
         }

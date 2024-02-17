@@ -34,8 +34,7 @@
             tabControlMain = new TabControl();
             tabPageTextUtils = new TabPage();
             textUtilsUC = new UserControls.TextUtilsUC();
-            tabPageCloneables = new TabPage();
-            cloneablesUC = new UserControls.CloneablesUC();
+            tabPageTextReplace = new TabPage();
             menuStrip1 = new MenuStrip();
             actionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
@@ -45,10 +44,11 @@
             toolStripMenuItemShowHints = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
+            textReplaceUC = new UserControls.TextReplaceUC();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
-            tabPageCloneables.SuspendLayout();
+            tabPageTextReplace.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -69,7 +69,7 @@
             // tabControlMain
             // 
             tabControlMain.Controls.Add(tabPageTextUtils);
-            tabControlMain.Controls.Add(tabPageCloneables);
+            tabControlMain.Controls.Add(tabPageTextReplace);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControlMain.Location = new Point(0, 24);
@@ -98,24 +98,15 @@
             textUtilsUC.Size = new Size(1786, 819);
             textUtilsUC.TabIndex = 0;
             // 
-            // tabPageCloneables
+            // tabPageTextReplace
             // 
-            tabPageCloneables.Controls.Add(cloneablesUC);
-            tabPageCloneables.Location = new Point(4, 25);
-            tabPageCloneables.Name = "tabPageCloneables";
-            tabPageCloneables.Size = new Size(1792, 825);
-            tabPageCloneables.TabIndex = 1;
-            tabPageCloneables.Text = "Cloneables";
-            tabPageCloneables.UseVisualStyleBackColor = true;
-            // 
-            // cloneablesUC
-            // 
-            cloneablesUC.Dock = DockStyle.Fill;
-            cloneablesUC.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            cloneablesUC.Location = new Point(0, 0);
-            cloneablesUC.Name = "cloneablesUC";
-            cloneablesUC.Size = new Size(1792, 825);
-            cloneablesUC.TabIndex = 0;
+            tabPageTextReplace.Controls.Add(textReplaceUC);
+            tabPageTextReplace.Location = new Point(4, 25);
+            tabPageTextReplace.Name = "tabPageTextReplace";
+            tabPageTextReplace.Size = new Size(1792, 825);
+            tabPageTextReplace.TabIndex = 1;
+            tabPageTextReplace.Text = "Text Replace";
+            tabPageTextReplace.UseVisualStyleBackColor = true;
             // 
             // menuStrip1
             // 
@@ -182,6 +173,14 @@
             startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
             startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
             // 
+            // textReplaceUC
+            // 
+            textReplaceUC.Dock = DockStyle.Fill;
+            textReplaceUC.Location = new Point(0, 0);
+            textReplaceUC.Name = "textReplaceUC";
+            textReplaceUC.Size = new Size(1792, 825);
+            textReplaceUC.TabIndex = 0;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -200,7 +199,7 @@
             statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
             tabPageTextUtils.ResumeLayout(false);
-            tabPageCloneables.ResumeLayout(false);
+            tabPageTextReplace.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -223,7 +222,7 @@
         private ToolStripMenuItem goToWebResourceUrlToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownSourceTextToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownResultTextToolStripMenuItem;
-        private TabPage tabPageCloneables;
-        private UserControls.CloneablesUC cloneablesUC;
+        private TabPage tabPageTextReplace;
+        private UserControls.TextReplaceUC textReplaceUC;
     }
 }

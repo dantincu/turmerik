@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.Core.Dependencies;
-using Turmerik.Dependencies;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Logging;
@@ -18,7 +17,7 @@ using System.Windows.Forms;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Dependencies;
 using Turmerik.Core.DriveExplorer;
-using Turmerik.Code.CSharp.Dependencies;
+using Turmerik.Dependencies;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -156,8 +155,6 @@ namespace Turmerik.Utility.WinFormsApp
 
                     services.AddSingleton(
                         svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create());
-
-                    TrmrkCSharpCodeServices.RegisterAll(services);
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();
