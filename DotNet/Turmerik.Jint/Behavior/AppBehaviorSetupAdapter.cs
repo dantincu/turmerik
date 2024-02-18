@@ -68,7 +68,7 @@ namespace Turmerik.Jint.Behavior
                 localDevicePathsMap.TurmerikDotnetUtilityAppsEnvDirTypeName.VarName), true), "|"),
             JintH.BEHAVIOR_JS_FILE_NAME);
 
-        public Tuple<ITrmrkJintAdapter, TExportedMembersSrlzbl> LoadDataObjCore(
+        public Tuple<ITrmrkJintAdapter, TExportedMembersSrlzbl> LoadDataObj(
             AppBehaviorConfigImmtbl config,
             string jsonDirPath)
         {

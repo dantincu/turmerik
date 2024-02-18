@@ -42,7 +42,7 @@ namespace Turmerik.Jint.Behavior
         {
             var retObj = base.LoadDataObjCore();
 
-            (var behavior, var exportedMembers) = AppBehaviorSetupAdapter.LoadDataObjCore(
+            (var behavior, var exportedMembers) = AppBehaviorSetupAdapter.LoadDataObj(
                 retObj, JsonDirPath);
 
             BehaviorCore = behavior;
