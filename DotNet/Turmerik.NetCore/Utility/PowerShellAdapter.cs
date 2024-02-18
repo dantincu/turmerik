@@ -33,6 +33,23 @@ namespace Turmerik.NetCore.Utility
                 {
                     pws.AddCommand(cmd.CommandName);
 
+                    if (cmd.CommandParameters != null)
+                    {
+                        foreach (var param in cmd.CommandParameters)
+                        {
+                            if (param.Value != null)
+                            {
+                                pws.AddParameter(
+                                    param.Key,
+                                    param.Value);
+                            }
+                            else
+                            {
+                                pws.AddParameter(param.Key);
+                            }
+                        }
+                    }
+
                     if (cmd.CommandArguments != null)
                     {
                         foreach (var arg in cmd.CommandArguments)
@@ -77,8 +94,10 @@ namespace Turmerik.NetCore.Utility
 
             if (opts.WorkDir != null)
             {
-                pws.Commands.AddCommand(
-                    "Set-Location").AddArgument(
+                var cmd = pws.Commands.AddCommand(
+                    "Set-Location");
+
+                cmd.AddArgument(
                     opts.WorkDir);
             }
 

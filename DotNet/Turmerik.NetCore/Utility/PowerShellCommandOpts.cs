@@ -10,5 +10,6 @@ namespace Turmerik.NetCore.Utility
     {
         public string CommandName { get; set; }
         public IEnumerable<string> CommandArguments { get; set; }
+        public Dictionary<string, object?> CommandParameters { get; set; }
     }
 }

@@ -83,6 +83,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
     public class TextTransformBehaviorDataMtbl : ITextTransformBehaviorData
     {
+        public TextTransformBehaviorDataMtbl()
+        {
+        }
+
         public TextTransformBehaviorDataMtbl(
             ITextTransformBehaviorData src)
         {
@@ -126,6 +130,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             ChildNodes = src.GetChildNodes()?.ToMtblList()!;
         }
 
+        public TextTransformNodeMtbl()
+        {
+        }
+
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -155,6 +163,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
     public class TextTransformItemMtbl : ITextTransformItem
     {
+        public TextTransformItemMtbl()
+        {
+        }
+
         public TextTransformItemMtbl(
             ITextTransformItem src)
         {

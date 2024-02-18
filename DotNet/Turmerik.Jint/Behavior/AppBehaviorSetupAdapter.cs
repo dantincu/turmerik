@@ -65,7 +65,7 @@ namespace Turmerik.Jint.Behavior
             localDevicePathsMap.TurmerikDotnetUtilityAppsEnvDir.VarName,
             appEnvDir.ToString(),
             string.Concat("|$", StringH.CamelToKebabCase(nameof(
-                localDevicePathsMap.TurmerikDotnetUtilityAppsEnvDirTypeName.VarName), true), "|"),
+                localDevicePathsMap.TurmerikDotnetUtilityAppsEnvDirTypeName), true), "|"),
             JintH.BEHAVIOR_JS_FILE_NAME);
 
         public Tuple<ITrmrkJintAdapter, TExportedMembersSrlzbl> LoadDataObj(

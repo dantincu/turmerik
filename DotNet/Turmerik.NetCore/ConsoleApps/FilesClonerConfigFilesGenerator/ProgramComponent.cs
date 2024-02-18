@@ -23,6 +23,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
 
     public partial class ProgramComponent : IProgramComponent
     {
+        public const string DEV_DIR = "|$D|";
+        public const string PROD_DIR = "|$P|";
+
         private readonly IAppEnv appEnv;
         private readonly IJsonConversion jsonConversion;
         private readonly ITextMacrosReplacer textMacrosReplacer;
@@ -49,20 +52,22 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
 
             localDevicePathMacrosMap = localDevicePathMacrosRetriever.LoadFromConfigFile();
 
-            localDevicePathMacrosMap.PathsMap.Add("|$P|", "Turmerik\\Apps");
-            localDevicePathMacrosMap.PathsMap.Add("|$D|", "Turmerik\\Apps-DEV");
+            localDevicePathMacrosMap.PathsMap.Add(PROD_DIR, "Turmerik\\Apps");
+            localDevicePathMacrosMap.PathsMap.Add(DEV_DIR, "Turmerik\\Apps-DEV");
         }
 
         public async Task RunAsync(string[] rawArgs)
         {
-            var configJson = GenerateConfigJson(
-                out var externalProfilesJson);
-
             string dirPath = GetPaths(
                 rawArgs,
                 out var envDirPath,
                 out var profilesDirPath,
-                out var envProfilesDirPath);
+                out var envProfilesDirPath,
+                out bool isDevEnv);
+
+            var configJson = GenerateConfigJson(
+                isDevEnv,
+                out var externalProfilesJson);
 
             RemoveDirsContent(
                 dirPath,
@@ -85,7 +90,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
             string[] rawArgs,
             out string envDirPath,
             out string profilesDirPath,
-            out string envProfilesDirPath)
+            out string envProfilesDirPath,
+            out bool isDevEnv)
         {
             string dirPath = Path.Combine(
                 "|$TURMERIK_REPO_DIR|",
@@ -99,7 +105,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                 MacrosMap = localDevicePathMacrosMap.GetPathsMap()
             });
 
-            var appEnvDirBasePath = GetEnvDirBasePath(rawArgs);
+            var appEnvDirBasePath = GetEnvDirBasePath(
+                rawArgs, out isDevEnv);
 
             envDirPath = Path.Combine(
                 appEnvDirBasePath,
@@ -117,9 +124,10 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
         }
 
         private string GenerateConfigJson(
+            bool isDevEnv,
             out Dictionary<string, string> externalProfilesJson)
         {
-            var config = GenerateConfigCore();
+            var config = GenerateConfigCore(isDevEnv);
 
             var externalProfiles = config.Profiles.Where(
                 profile => profile.ProfileRelFilePath != null).ToList();
@@ -144,7 +152,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
         }
 
         private string GetEnvDirBasePath(
-            string[] rawArgs)
+            string[] rawArgs,
+            out bool isDevEnv)
         {
             string appEnvDirBasePath;
 
@@ -190,6 +199,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
 
             if (!string.IsNullOrWhiteSpace(appEnvDirBasePath))
             {
+                isDevEnv = appEnvDirBasePath.Contains(DEV_DIR);
+
                 appEnvDirBasePath = textMacrosReplacer.ReplaceMacros(new TextMacrosReplacerOpts
                 {
                     InputText = appEnvDirBasePath,
@@ -205,6 +216,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
             }
             else
             {
+                isDevEnv = false;
                 appEnvDirBasePath = appEnv.AppEnvDirBasePath;
             }
 
@@ -268,15 +280,16 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
             }
         }
 
-        private ProgramConfig GenerateConfigCore() => new ProgramConfig
+        private ProgramConfig GenerateConfigCore(
+            bool isDevEnv) => new ProgramConfig
         {
             Profiles = new List<Profile>
             {
-                GenerateDotNetBkpBinsCfgProfile(),
-                GenerateDotNetUtilBinsCfgProfile(),
-                GenerateDotNetUtilEnvDirsCfgProfile(),
-                GenerateBlazorAppCfgProfile(),
-                GenerateTextTransformBehaviorCfgProfile()
+                GenerateDotNetBkpBinsCfgProfile(isDevEnv),
+                GenerateDotNetUtilBinsCfgProfile(isDevEnv),
+                GenerateDotNetUtilEnvDirsCfgProfile(isDevEnv),
+                GenerateBlazorAppCfgProfile(isDevEnv),
+                GenerateTextTransformBehaviorCfgProfile(isDevEnv)
             }
         };
 

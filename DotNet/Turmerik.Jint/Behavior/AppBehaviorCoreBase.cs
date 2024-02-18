@@ -18,8 +18,11 @@ namespace Turmerik.Jint.Behavior
                 GetType(), AppEnvDir.Config);
         }
 
-        public ITrmrkJintAdapter Behavior { get; protected set; }
-        public TExportedMembersImmtbl ExportedMembers { get; protected set; }
+        public ITrmrkJintAdapter Behavior => BehaviorCore ?? LoadBehaviorCore();
+        public TExportedMembersImmtbl ExportedMembers => ExportedMembersCore ?? LoadExportedMembersCore();
+
+        protected ITrmrkJintAdapter BehaviorCore { get; set; }
+        protected TExportedMembersImmtbl ExportedMembersCore { get; set; }
 
         protected AppBehaviorSetupAdapter<TExportedMembersImmtbl, TExportedMembersSrlzbl> AppBehaviorSetupAdapter { get; }
 
@@ -39,9 +42,9 @@ namespace Turmerik.Jint.Behavior
             (var behavior, var exportedMembers) = AppBehaviorSetupAdapter.LoadDataObj(
                 retObj, JsonDirPath);
 
-            Behavior = behavior;
+            BehaviorCore = behavior;
 
-            ExportedMembers = NormalizeExportedMembers(
+            ExportedMembersCore = NormalizeExportedMembers(
                 exportedMembers);
 
             return retObj;
@@ -50,5 +53,17 @@ namespace Turmerik.Jint.Behavior
         protected override string GetJsonFilePath(
             ) => Path.Combine(JsonDirPath,
                 JintH.BEHAVIOR_JSON_FILE_NAME);
+
+        protected ITrmrkJintAdapter LoadBehaviorCore()
+        {
+            _ = Data;
+            return BehaviorCore;
+        }
+
+        protected TExportedMembersImmtbl LoadExportedMembersCore()
+        {
+            _ = Data;
+            return ExportedMembers;
+        }
     }
 }

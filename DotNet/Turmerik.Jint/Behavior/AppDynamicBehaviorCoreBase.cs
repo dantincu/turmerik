@@ -19,10 +19,10 @@ namespace Turmerik.Jint.Behavior
         }
 
         public ITrmrkJintAdapter Behavior => BehaviorCore ?? LoadBehaviorCore();
-
-        public TExportedMembersImmtbl ExportedMembers { get; protected set; }
+        public TExportedMembersImmtbl ExportedMembers => ExportedMembersCore ?? LoadExportedMembersCore();
 
         protected ITrmrkJintAdapter BehaviorCore { get; set; }
+        protected TExportedMembersImmtbl ExportedMembersCore { get; set; }
 
         protected AppBehaviorSetupAdapter<TExportedMembersImmtbl, TExportedMembersSrlzbl> AppBehaviorSetupAdapter { get; }
 
@@ -47,7 +47,7 @@ namespace Turmerik.Jint.Behavior
 
             BehaviorCore = behavior;
 
-            ExportedMembers = NormalizeExportedMembers(
+            ExportedMembersCore = NormalizeExportedMembers(
                 exportedMembers);
 
             return retObj;
@@ -61,6 +61,12 @@ namespace Turmerik.Jint.Behavior
         {
             _ = Data;
             return BehaviorCore;
+        }
+
+        protected TExportedMembersImmtbl LoadExportedMembersCore()
+        {
+            _ = Data;
+            return ExportedMembers;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
     public partial class ProgramComponent
     {
         private ProgramConfig.Profile GenerateBlazorAppCfgProfile(
-            ) => GenerateConfigProfile("notes-blazorapp",
+            bool isDevEnv) => GenerateConfigProfile("notes-blazorapp",
                 new ProgramConfig.Profile
                 {
                     FileGroups = new List<ProgramConfig.FilesGroup>
@@ -80,11 +80,13 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                 {
                                     InputFileLocator = new FsEntryLocator
                                     {
-                                        EntryRelPath = "./dist/dev/index.js"
+                                        EntryRelPath = Path.Combine("dist",
+                                            isDevEnv ? "dev" : "prod", "index.js")
                                     },
                                     CloneDirLocator = new FsEntryLocator
                                     {
-                                        EntryRelPath = "./js/dev"
+                                        EntryRelPath = Path.Combine("js",
+                                            isDevEnv ? "dev" : "prod")
                                     },
                                     UseChecksum = true,
                                     CloneTplLines = [
@@ -97,23 +99,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                 {
                                     InputFileLocator = new FsEntryLocator
                                     {
-                                        EntryRelPath = "./dist/prod/index.js"
-                                    },
-                                    CloneDirLocator = new FsEntryLocator
-                                    {
-                                        EntryRelPath = "./js/prod"
-                                    },
-                                    UseChecksum = true,
-                                    CloneTplLines = [
-                                        "const turmerikObj = {{}};",
-                                        "{0}",
-                                        "export const turmerik = turmerikObj.turmerik;" ]
-                                },
-                                new FileArgs
-                                {
-                                    InputFileLocator = new FsEntryLocator
-                                    {
-                                        EntryRelPath = "./dist/dev/index.js"
+                                        EntryRelPath = "./dist/dev/index.js" // bogus, will not be used
                                     },
                                     CloneDirLocator = new FsEntryLocator
                                     {
@@ -145,13 +131,13 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                             {
                                 new ProgramConfig.Script
                                 {
-                                    PowerShellCmd = new NetCore.Utility.PowerShellAdapterOpts
+                                    PowerShellCmd = new Utility.PowerShellAdapterOpts
                                     {
-                                        Commands = new NetCore.Utility.PowerShellCommandOpts
+                                        Commands = new Utility.PowerShellCommandOpts
                                         {
                                             CommandName = "rmdirfull",
                                             CommandArguments = [ ".parcel-cache" ]
-                                        }.Lst(new NetCore.Utility.PowerShellCommandOpts
+                                        }.Lst(new Utility.PowerShellCommandOpts
                                         {
                                             CommandName = "rmdirfull",
                                             CommandArguments = [ "dist" ]
@@ -163,15 +149,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                     WinShellCmd = new Core.Utility.ProcessLauncherOpts
                                     {
                                         FileName = "npm",
-                                        ArgumentsNmrbl = [ "run", "build-dev" ]
-                                    }
-                                },
-                                new ProgramConfig.Script
-                                {
-                                    WinShellCmd = new Core.Utility.ProcessLauncherOpts
-                                    {
-                                        FileName = "npm",
-                                        ArgumentsNmrbl = [ "run", "build-prod" ]
+                                        ArgumentsNmrbl = [ "run", isDevEnv ? "build-dev" : "build-prod" ]
                                     }
                                 }
                             }
@@ -183,13 +161,13 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                             {
                                 new ProgramConfig.Script
                                 {
-                                    PowerShellCmd = new NetCore.Utility.PowerShellAdapterOpts
+                                    PowerShellCmd = new Utility.PowerShellAdapterOpts
                                     {
-                                        Commands = new NetCore.Utility.PowerShellCommandOpts
+                                        Commands = new Utility.PowerShellCommandOpts
                                         {
                                             CommandName = "rmdirfull",
                                             CommandArguments = [ "js", ":kr" ]
-                                        }.Lst(new NetCore.Utility.PowerShellCommandOpts
+                                        }.Lst(new Utility.PowerShellCommandOpts
                                         {
                                             CommandName = "rmdirfull",
                                             CommandArguments = [ "trmrk-notes-config", ":kr" ]

@@ -18,6 +18,7 @@ using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Dependencies;
+using Turmerik.Jint.Dependencies;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -156,6 +157,8 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton(
                         svcProv => svcProv.GetRequiredService<IAppLoggerCreatorFactory>().Create());
 
+                    TrmrkJintServices.RegisterAll(services);
+
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();
                     services.AddSingleton<IUISettingsRetriever, UISettingsRetriever>();
@@ -164,6 +167,7 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<ControlBlinkTimersManagerAdapterContainer>();
                     services.AddSingleton<ControlBlinkTimersManagerAltAdapterContainer>();
                     services.AddSingleton<ToolTipHintsOrchestratorRetriever>();
+                    services.AddSingleton<TextTransformBehavior>();
                 }));
 
             return svcProv;

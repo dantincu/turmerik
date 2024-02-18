@@ -15,6 +15,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
+        private readonly TextTransformBehavior textTransformBehavior;
+
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
         private readonly ISynchronizedValueAdapter<bool> controlsSynchronizer;
@@ -28,6 +30,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private readonly ToolTip toolTip;
 
+        private TextTransformBehaviorDataImmtbl textTransformers;
         private UISettingsDataImmtbl uISettingsData;
         private UIThemeDataImmtbl uIThemeData;
         private ControlBlinkTimersManagerAdapter controlBlinkTimersManagerAdapter;
@@ -41,6 +44,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
+                textTransformBehavior = svcProv.GetRequiredService<TextTransformBehavior>();
+
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
                 controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueAdapterFactory>().Create(
@@ -75,6 +80,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             };
         }
 
+        private void FillTransformersTreeViewNodes()
+        {
+        }
+
         #region UI Event Handlers
 
         private void TextTransformUC_Load(object sender, EventArgs e) => actionComponent?.Execute(
@@ -84,9 +93,17 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 {
                     controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
 
+                    textTransformBehavior.ExportedMembers.ActWith(behavior =>
+                    {
+                        textTransformers = behavior;
+                        FillTransformersTreeViewNodes();
+                    });
+
                     uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
                     {
                         uiTheme.ApplyBgColor([
+                            this.richTextBoxSrcText,
+                            this.richTextBoxResultText,
                         ], uiTheme.InputBackColor);
                     });
 

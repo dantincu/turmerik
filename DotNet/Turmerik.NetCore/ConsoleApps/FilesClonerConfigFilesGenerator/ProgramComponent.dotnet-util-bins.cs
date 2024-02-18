@@ -11,7 +11,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
     public partial class ProgramComponent
     {
         private ProgramConfig.Profile GenerateDotNetUtilBinsCfgProfile(
-            ) => GenerateConfigProfile("dotnet-util-bins",
+            bool isDevEnv) => GenerateConfigProfile("dotnet-util-bins",
                 new ProgramConfig.Profile
                 {
                     FileGroups = new List<ProgramConfig.FilesGroup>

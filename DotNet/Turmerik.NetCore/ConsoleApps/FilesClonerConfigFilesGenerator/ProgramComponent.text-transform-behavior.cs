@@ -12,7 +12,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
     public partial class ProgramComponent
     {
         private ProgramConfig.Profile GenerateTextTransformBehaviorCfgProfile(
-            ) => GenerateConfigProfile("text-transform-behavior",
+            bool isDevEnv) => GenerateConfigProfile("text-transform-behavior",
                 new ProgramConfig.Profile
                 {
                     FileGroups = new List<ProgramConfig.FilesGroup>
@@ -30,7 +30,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                 {
                                     InputFileLocator = new FsEntryLocator
                                     {
-                                        EntryRelPath = "./dist/prod/index.js"
+                                        EntryRelPath = Path.Combine("dist",
+                                            isDevEnv ? "dev" : "prod", "index.js")
                                     },
                                     CloneDirLocator = new FsEntryLocator
                                     {
@@ -72,15 +73,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                     WinShellCmd = new Core.Utility.ProcessLauncherOpts
                                     {
                                         FileName = "npm",
-                                        ArgumentsNmrbl = [ "run", "build-dev" ]
-                                    }
-                                },
-                                new ProgramConfig.Script
-                                {
-                                    WinShellCmd = new Core.Utility.ProcessLauncherOpts
-                                    {
-                                        FileName = "npm",
-                                        ArgumentsNmrbl = [ "run", "build-prod" ]
+                                        ArgumentsNmrbl = [ "run", isDevEnv ? "build-dev" : "build-prod" ]
                                     }
                                 }
                             }
@@ -92,14 +85,26 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                             {
                                 new ProgramConfig.Script
                                 {
-                                    PowerShellCmd = new Utility.PowerShellAdapterOpts
+                                    WinShellCmd = new Core.Utility.ProcessLauncherOpts
+                                    {
+                                        FileName = "cmd",
+                                        ArgumentsNmrbl = [ "/c", "del", "behavior.js" ],
+                                        UseShellExecute = false
+                                    }
+                                    /* PowerShellCmd = new Utility.PowerShellAdapterOpts
                                     {
                                         Commands = new Utility.PowerShellCommandOpts
                                         {
                                             CommandName = "Remove-Item",
-                                            CommandArguments = [ "behavior.js" ]
-                                        }.Lst()
-                                    }
+                                            CommandArguments = [ "behavior.js" ],
+                                            CommandParameters = new Dictionary<string, object?>
+                                            {
+                                                { "Force", null }
+                                            }
+                                        }.Lst(),
+                                        CreateRunSpace = true,
+                                        ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted
+                                    }*/
                                 }
                             }
                         }
