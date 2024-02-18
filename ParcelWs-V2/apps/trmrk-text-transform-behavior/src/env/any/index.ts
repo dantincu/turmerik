@@ -1,6 +1,7 @@
 import trmrk_lib from "trmrk";
 
 import { TextTransformBehaviorLib, getExportedMembers } from "./core";
+import { getAllTransformers } from "./main";
 
 export const trmrk = trmrk_lib;
 
@@ -11,7 +12,7 @@ turmerikObj.turmerik = {
     trmrk,
   },
   behavior: {
-    Transformers: [],
+    Transformers: getAllTransformers(),
   },
   exportedMembers: {
     Transformers: [],

@@ -13,7 +13,7 @@ export interface TextTransformItemCore {
   Name: string;
   Description: string;
   JsMethod: string;
-  IsValidCSharpCode: boolean;
+  IsValidCSharpCode?: boolean | null | undefined;
 }
 
 export interface TextTransformBehaviorData {
@@ -23,15 +23,15 @@ export interface TextTransformBehaviorData {
 export interface TextTransformNode {
   Name: string;
   Description: string;
-  Items: TextTransformItem[];
-  ChildNodes: TextTransformNode[];
+  Items?: TextTransformItem[] | null | undefined;
+  ChildNodes?: TextTransformNode[] | null | undefined;
 }
 
 export interface TextTransformItem {
   Name: string;
   Description: string;
   JsMethod: (inputText: string) => string;
-  IsValidCSharpCode: boolean;
+  IsValidCSharpCode?: boolean | null | undefined;
 }
 
 export interface TextTransformBehaviorLib {
