@@ -60,7 +60,7 @@
     <None Update="trmrk-dirpairs-config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="trmrk-filescloner-config.json">
+    <None Update="trmrk-localdevice-paths.prod.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="trmrk-localdevice-paths-template.json">

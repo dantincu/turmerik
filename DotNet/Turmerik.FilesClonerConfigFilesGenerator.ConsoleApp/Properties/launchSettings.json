@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.FilesClonerConfigFilesGenerator.ConsoleApp": {
+      "commandName": "Project",
+      // "commandLineArgs": "Apps"
+    }
+  }
+}

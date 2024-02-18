@@ -8,8 +8,10 @@ using Turmerik.NetCore.LocalDeviceEnv;
 using Turmerik.Core.Utility;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Utility;
-using Turmerik.NetCore.ConsoleApps.FilesCloner;
 using Turmerik.Core.Dependencies;
+
+using FilesCloner = Turmerik.NetCore.ConsoleApps.FilesCloner;
+using ClonerConfigGenerator = Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -32,16 +34,20 @@ namespace Turmerik.NetCore.Dependencies
             ServiceLifetime? cloningProfileServiceLifetime = null,
             ServiceLifetime? programServiceLifetime = null)
         {
-            services.AddSingleton<IProgramArgsRetriever, ProgramArgsRetriever>();
-            services.AddSingleton<IProgramArgsNormalizer, ProgramArgsNormalizer>();
+            services.AddSingleton<FilesCloner.IProgramConfigRetriever, FilesCloner.ProgramConfigRetriever>();
+            services.AddSingleton<FilesCloner.IProgramArgsRetriever, FilesCloner.ProgramArgsRetriever>();
+            services.AddSingleton<FilesCloner.IProgramArgsNormalizer, FilesCloner.ProgramArgsNormalizer>();
 
-            services.AddSvc<IFileCloneComponent, FileCloneComponent>(
+            services.AddSvc<FilesCloner.IFileCloneComponent, FilesCloner.FileCloneComponent>(
                 fileCloneServicesLifetime);
 
-            services.AddSvc<ICloningProfileComponent, CloningProfileComponent>(
+            services.AddSvc<FilesCloner.ICloningProfileComponent, FilesCloner.CloningProfileComponent>(
                 cloningProfileServiceLifetime ?? fileCloneServicesLifetime);
 
-            services.AddSvc<IProgramComponent, ProgramComponent>(
+            services.AddSvc<FilesCloner.IProgramComponent, FilesCloner.ProgramComponent>(
+                programServiceLifetime ?? fileCloneServicesLifetime);
+
+            services.AddSvc<ClonerConfigGenerator.IProgramComponent, ClonerConfigGenerator.ProgramComponent>(
                 programServiceLifetime ?? fileCloneServicesLifetime);
 
             return services;

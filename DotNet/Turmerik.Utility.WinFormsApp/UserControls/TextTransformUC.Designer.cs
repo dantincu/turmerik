@@ -1,6 +1,6 @@
 ﻿namespace Turmerik.Utility.WinFormsApp.UserControls
 {
-    partial class TextReplaceUC
+    partial class TextTransformUC
     {
         /// <summary> 
         /// Required designer variable.
@@ -34,9 +34,9 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Name = "TextReplaceUC";
+            Name = "TextTransformUC";
             Size = new Size(1600, 800);
-            Load += TextReplaceUC_Load;
+            Load += TextTransformUC_Load;
             ResumeLayout(false);
         }
 

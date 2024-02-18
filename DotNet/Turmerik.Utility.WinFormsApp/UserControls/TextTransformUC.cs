@@ -11,7 +11,7 @@ using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
-    public partial class TextReplaceUC : UserControl
+    public partial class TextTransformUC : UserControl
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
@@ -34,7 +34,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
         private ToolTipHintsGroup toolTipHintsGroup;
 
-        public TextReplaceUC()
+        public TextTransformUC()
         {
             svcProvContnr = ServiceProviderContainer.Instance.Value;
 
@@ -77,7 +77,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         #region UI Event Handlers
 
-        private void TextReplaceUC_Load(object sender, EventArgs e) => actionComponent?.Execute(
+        private void TextTransformUC_Load(object sender, EventArgs e) => actionComponent?.Execute(
             new WinFormsActionOpts<int>
             {
                 Action = () =>

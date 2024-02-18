@@ -187,12 +187,16 @@
           "CloneArchiveFileNameTpl": "Apps[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
           "DfInputDirFilter": {
             "ExcludedRelPathRegexes": [
-              "^\\/app-env-locator.json$"
+              "^\\/app-env-locator\\.json$",
+              "^\\/trmrk-localdevice-paths\\.json$",
+              "^\\/trmrk-filescloner-config\\.json$"
             ]
           },
           "DfBeforeCloneDestnCleanupFilter": {
             "ExcludedRelPathRegexes": [
-              "^\\/app-env-locator.json$",
+              "^\\/app-env-locator\\.json$",
+              "^\\/trmrk-localdevice-paths\\.json$",
+              "^\\/trmrk-filescloner-config\\.json$",
               "^\\/_.+\\.exe"
             ]
           },
@@ -299,14 +303,16 @@
           "CloneArchiveFileNameTpl": "Turmerik.FilesCloner.ConsoleApp[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
           "DfInputDirFilter": {
             "ExcludedRelPathRegexes": [
-              "^\\/app-env-locator.json$",
-              "^\\/trmrk-filescloner-config.json$"
+              "^\\/app-env-locator\\.json$",
+              "^\\/trmrk-localdevice-paths\\.json$",
+              "^\\/trmrk-filescloner-config\\.json$"
             ]
           },
           "DfBeforeCloneDestnCleanupFilter": {
             "ExcludedRelPathRegexes": [
-              "^\\/app-env-locator.json$",
-              "^\\/trmrk-filescloner-config.json$",
+              "^\\/app-env-locator\\.json$",
+              "^\\/trmrk-localdevice-paths\\.json$",
+              "^\\/trmrk-filescloner-config\\.json$",
               "^\\/_.+\\.exe"
             ]
           },

@@ -24,11 +24,13 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
         private readonly IConsoleArgsParser parser;
         private readonly IJsonConversion jsonConversion;
+        private readonly IProgramConfigRetriever programConfigRetriever;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
 
         public ProgramArgsRetriever(
             IConsoleArgsParser parser,
             IJsonConversion jsonConversion,
+            IProgramConfigRetriever programConfigRetriever,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever)
         {
             this.parser = parser ?? throw new ArgumentNullException(
@@ -36,6 +38,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
 
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
+
+            this.programConfigRetriever = programConfigRetriever ?? throw new ArgumentNullException(
+                nameof(programConfigRetriever));
 
             this.localDevicePathMacrosRetriever = localDevicePathMacrosRetriever ?? throw new ArgumentNullException(
                 nameof(localDevicePathMacrosRetriever));
@@ -47,10 +52,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             var args = new ProgramArgs
             {
                 LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile(),
-                Config = jsonConversion.Adapter.Deserialize<ProgramConfig>(
-                    File.ReadAllText(Path.Combine(
-                        ProgramH.ExecutingAssemmblyPath,
-                        CFG_FILE_NAME)))
+                Config = programConfigRetriever.LoadProgramConfig()
             };
 
             FileCloneArgs singleFileArgs = null;

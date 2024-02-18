@@ -34,7 +34,8 @@
             tabControlMain = new TabControl();
             tabPageTextUtils = new TabPage();
             textUtilsUC = new UserControls.TextUtilsUC();
-            tabPageTextReplace = new TabPage();
+            tabPageTextTransform = new TabPage();
+            textTransformUC = new UserControls.TextTransformUC();
             menuStrip1 = new MenuStrip();
             actionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
@@ -44,11 +45,10 @@
             toolStripMenuItemShowHints = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
-            textReplaceUC = new UserControls.TextReplaceUC();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
-            tabPageTextReplace.SuspendLayout();
+            tabPageTextTransform.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -69,7 +69,7 @@
             // tabControlMain
             // 
             tabControlMain.Controls.Add(tabPageTextUtils);
-            tabControlMain.Controls.Add(tabPageTextReplace);
+            tabControlMain.Controls.Add(tabPageTextTransform);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControlMain.Location = new Point(0, 24);
@@ -98,15 +98,23 @@
             textUtilsUC.Size = new Size(1786, 819);
             textUtilsUC.TabIndex = 0;
             // 
-            // tabPageTextReplace
+            // tabPageTextTransform
             // 
-            tabPageTextReplace.Controls.Add(textReplaceUC);
-            tabPageTextReplace.Location = new Point(4, 25);
-            tabPageTextReplace.Name = "tabPageTextReplace";
-            tabPageTextReplace.Size = new Size(1792, 825);
-            tabPageTextReplace.TabIndex = 1;
-            tabPageTextReplace.Text = "Text Replace";
-            tabPageTextReplace.UseVisualStyleBackColor = true;
+            tabPageTextTransform.Controls.Add(textTransformUC);
+            tabPageTextTransform.Location = new Point(4, 25);
+            tabPageTextTransform.Name = "tabPageTextTransform";
+            tabPageTextTransform.Size = new Size(1792, 825);
+            tabPageTextTransform.TabIndex = 1;
+            tabPageTextTransform.Text = "Text Transform";
+            tabPageTextTransform.UseVisualStyleBackColor = true;
+            // 
+            // textTransformUC
+            // 
+            textTransformUC.Dock = DockStyle.Fill;
+            textTransformUC.Location = new Point(0, 0);
+            textTransformUC.Name = "textTransformUC";
+            textTransformUC.Size = new Size(1792, 825);
+            textTransformUC.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -173,14 +181,6 @@
             startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
             startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
             // 
-            // textReplaceUC
-            // 
-            textReplaceUC.Dock = DockStyle.Fill;
-            textReplaceUC.Location = new Point(0, 0);
-            textReplaceUC.Name = "textReplaceUC";
-            textReplaceUC.Size = new Size(1792, 825);
-            textReplaceUC.TabIndex = 0;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -199,7 +199,7 @@
             statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
             tabPageTextUtils.ResumeLayout(false);
-            tabPageTextReplace.ResumeLayout(false);
+            tabPageTextTransform.ResumeLayout(false);
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -222,7 +222,7 @@
         private ToolStripMenuItem goToWebResourceUrlToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownSourceTextToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownResultTextToolStripMenuItem;
-        private TabPage tabPageTextReplace;
-        private UserControls.TextReplaceUC textReplaceUC;
+        private TabPage tabPageTextTransform;
+        private UserControls.TextTransformUC textTransformUC;
     }
 }

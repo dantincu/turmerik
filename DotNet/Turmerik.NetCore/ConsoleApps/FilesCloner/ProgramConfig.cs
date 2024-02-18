@@ -50,6 +50,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
         public class Profile
         {
             public string ProfileName { get; set; }
+            public string ProfileRelFilePath { get; set; }
 
             public List<ScriptsGroup> ScriptGroups { get; set; }
             public List<FilesGroup> FileGroups { get; set; }
