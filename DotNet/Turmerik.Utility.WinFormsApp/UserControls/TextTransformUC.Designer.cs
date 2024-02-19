@@ -34,6 +34,11 @@
             splitContainerMain = new SplitContainer();
             splitContainerTransformers = new SplitContainer();
             treeViewTransformers = new TreeView();
+            panelCurrentTransformer = new Panel();
+            richTextBoxCurrentTransformerDescription = new RichTextBox();
+            panelCurrentTransformerName = new Panel();
+            textBoxCurrentTransformerName = new TextBox();
+            iconLabelRunCurrentTransformer = new WinForms.Controls.IconLabel();
             ((System.ComponentModel.ISupportInitialize)splitContainerTextAreas).BeginInit();
             splitContainerTextAreas.Panel1.SuspendLayout();
             splitContainerTextAreas.Panel2.SuspendLayout();
@@ -44,7 +49,10 @@
             splitContainerMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerTransformers).BeginInit();
             splitContainerTransformers.Panel1.SuspendLayout();
+            splitContainerTransformers.Panel2.SuspendLayout();
             splitContainerTransformers.SuspendLayout();
+            panelCurrentTransformer.SuspendLayout();
+            panelCurrentTransformerName.SuspendLayout();
             SuspendLayout();
             // 
             // richTextBoxResultText
@@ -117,6 +125,11 @@
             // splitContainerTransformers.Panel1
             // 
             splitContainerTransformers.Panel1.Controls.Add(treeViewTransformers);
+            // 
+            // splitContainerTransformers.Panel2
+            // 
+            splitContainerTransformers.Panel2.Controls.Add(panelCurrentTransformer);
+            splitContainerTransformers.Panel2.Controls.Add(panelCurrentTransformerName);
             splitContainerTransformers.Size = new Size(1600, 400);
             splitContainerTransformers.SplitterDistance = 533;
             splitContainerTransformers.TabIndex = 0;
@@ -128,6 +141,59 @@
             treeViewTransformers.Name = "treeViewTransformers";
             treeViewTransformers.Size = new Size(533, 400);
             treeViewTransformers.TabIndex = 0;
+            treeViewTransformers.NodeMouseClick += TreeViewTransformers_NodeMouseClick;
+            // 
+            // panelCurrentTransformer
+            // 
+            panelCurrentTransformer.Controls.Add(richTextBoxCurrentTransformerDescription);
+            panelCurrentTransformer.Dock = DockStyle.Top;
+            panelCurrentTransformer.Location = new Point(0, 26);
+            panelCurrentTransformer.Name = "panelCurrentTransformer";
+            panelCurrentTransformer.Size = new Size(1063, 100);
+            panelCurrentTransformer.TabIndex = 0;
+            // 
+            // richTextBoxCurrentTransformerDescription
+            // 
+            richTextBoxCurrentTransformerDescription.Dock = DockStyle.Fill;
+            richTextBoxCurrentTransformerDescription.Font = new Font("Consolas", 9F, FontStyle.Bold);
+            richTextBoxCurrentTransformerDescription.Location = new Point(0, 0);
+            richTextBoxCurrentTransformerDescription.Name = "richTextBoxCurrentTransformerDescription";
+            richTextBoxCurrentTransformerDescription.ReadOnly = true;
+            richTextBoxCurrentTransformerDescription.Size = new Size(1063, 100);
+            richTextBoxCurrentTransformerDescription.TabIndex = 1;
+            richTextBoxCurrentTransformerDescription.Text = "";
+            // 
+            // panelCurrentTransformerName
+            // 
+            panelCurrentTransformerName.Controls.Add(textBoxCurrentTransformerName);
+            panelCurrentTransformerName.Controls.Add(iconLabelRunCurrentTransformer);
+            panelCurrentTransformerName.Dock = DockStyle.Top;
+            panelCurrentTransformerName.Location = new Point(0, 0);
+            panelCurrentTransformerName.Name = "panelCurrentTransformerName";
+            panelCurrentTransformerName.Size = new Size(1063, 26);
+            panelCurrentTransformerName.TabIndex = 2;
+            // 
+            // textBoxCurrentTransformerName
+            // 
+            textBoxCurrentTransformerName.Dock = DockStyle.Fill;
+            textBoxCurrentTransformerName.Font = new Font("Consolas", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            textBoxCurrentTransformerName.Location = new Point(0, 0);
+            textBoxCurrentTransformerName.Name = "textBoxCurrentTransformerName";
+            textBoxCurrentTransformerName.ReadOnly = true;
+            textBoxCurrentTransformerName.Size = new Size(1049, 23);
+            textBoxCurrentTransformerName.TabIndex = 0;
+            // 
+            // iconLabelRunCurrentTransformer
+            // 
+            iconLabelRunCurrentTransformer.AutoSize = true;
+            iconLabelRunCurrentTransformer.Dock = DockStyle.Right;
+            iconLabelRunCurrentTransformer.Enabled = false;
+            iconLabelRunCurrentTransformer.Location = new Point(1049, 0);
+            iconLabelRunCurrentTransformer.Name = "iconLabelRunCurrentTransformer";
+            iconLabelRunCurrentTransformer.Size = new Size(14, 15);
+            iconLabelRunCurrentTransformer.TabIndex = 0;
+            iconLabelRunCurrentTransformer.Text = "R";
+            iconLabelRunCurrentTransformer.Click += IconLabelRunCurrentTransformer_Click;
             // 
             // TextTransformUC
             // 
@@ -146,8 +212,12 @@
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();
             splitContainerMain.ResumeLayout(false);
             splitContainerTransformers.Panel1.ResumeLayout(false);
+            splitContainerTransformers.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerTransformers).EndInit();
             splitContainerTransformers.ResumeLayout(false);
+            panelCurrentTransformer.ResumeLayout(false);
+            panelCurrentTransformerName.ResumeLayout(false);
+            panelCurrentTransformerName.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -159,5 +229,10 @@
         private SplitContainer splitContainerMain;
         private SplitContainer splitContainerTransformers;
         private TreeView treeViewTransformers;
+        private Panel panelCurrentTransformer;
+        private TextBox textBoxCurrentTransformerName;
+        private RichTextBox richTextBoxCurrentTransformerDescription;
+        private Panel panelCurrentTransformerName;
+        private WinForms.Controls.IconLabel iconLabelRunCurrentTransformer;
     }
 }

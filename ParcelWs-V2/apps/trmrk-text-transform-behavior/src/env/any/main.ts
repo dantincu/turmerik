@@ -5,7 +5,7 @@ import {
 } from "./core";
 
 export const regexes = {
-  startWithDigits: /^\w*\d+\w*/,
+  startWithDigits: /^\s*\d+\s*/,
 };
 
 export const transformEachLine = (

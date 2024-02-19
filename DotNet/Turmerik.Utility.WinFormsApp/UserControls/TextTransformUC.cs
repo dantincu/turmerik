@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.ServiceModel;
 using Turmerik.Core.Actions;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Threading;
+using Turmerik.Utility.WinFormsApp.Properties;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
+using Turmerik.Ux;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
@@ -37,6 +40,9 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
         private ToolTipHintsGroup toolTipHintsGroup;
 
+        private ITextTransformNode? currentTransformNode;
+        private ITextTransformItem? currentTransformItem;
+
         public TextTransformUC()
         {
             svcProvContnr = ServiceProviderContainer.Instance.Value;
@@ -66,6 +72,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 actionComponent = svcProv.GetRequiredService<IWinFormsActionComponentCreator>(
                     ).StatusLabel(GetType());
 
+                iconLabelRunCurrentTransformer.Text = MatUIIconUnicodesH.AudioAndVideo.PLAY_ARROW;
+
                 uISettingsData = uISettingsRetriever.Data;
             }
         }
@@ -82,6 +90,93 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void FillTransformersTreeViewNodes()
         {
+            var rootNodesArr = textTransformers.GetTransformers(
+                ).Select(TransformerNodeToTreeNode).ToArray();
+
+            treeViewTransformers.Nodes.AddRange(
+                rootNodesArr);
+        }
+
+        private TreeNode TransformerNodeToTreeNode(
+            ITextTransformNode transformNode) => new TreeNode(
+                transformNode.Name, 0, 0,
+                transformNode.GetChildNodes().Select(
+                    TransformerNodeToTreeNode).Concat(
+                    transformNode.GetItems().Select(
+                        TransformerItemToTreeNode)).ToArray())
+            {
+                Tag = transformNode,
+                ToolTipText = transformNode.Description
+            };
+
+        private TreeNode TransformerItemToTreeNode(
+            ITextTransformItem transformItem) => new TreeNode(
+                transformItem.Name, 1, 1)
+            {
+                Tag = transformItem,
+                ToolTipText = transformItem.Description
+            };
+
+        private void SetCurrentTransformer(
+            object tag)
+        {
+            ClearCurrentTransformer();
+
+            if (tag is ITextTransformNode transformNode)
+            {
+                SetCurrentTransformerNode(
+                    transformNode);
+            }
+            else if (tag is ITextTransformItem transformItem)
+            {
+                SetCurrentTransformerItem(
+                    transformItem);
+            }
+        }
+
+        private void ClearCurrentTransformer()
+        {
+            iconLabelRunCurrentTransformer.Enabled = false;
+            currentTransformNode = null;
+            currentTransformItem = null;
+            textBoxCurrentTransformerName.Text = string.Empty;
+            richTextBoxCurrentTransformerDescription.Text = string.Empty;
+            textBoxCurrentTransformerName.BackColor = Color.FromArgb(255, 255, 255);
+        }
+
+        private void SetCurrentTransformerNode(
+            ITextTransformNode transformNode)
+        {
+            currentTransformNode = transformNode;
+            textBoxCurrentTransformerName.Text = transformNode.Name;
+            richTextBoxCurrentTransformerDescription.Text = transformNode.Description;
+            textBoxCurrentTransformerName.BackColor = Color.FromArgb(255, 232, 208);
+        }
+
+        private void SetCurrentTransformerItem(
+            ITextTransformItem transformItem)
+        {
+            currentTransformItem = transformItem;
+            textBoxCurrentTransformerName.Text = currentTransformItem.Name;
+            richTextBoxCurrentTransformerDescription.Text = currentTransformItem.Description;
+            textBoxCurrentTransformerName.BackColor = Color.FromArgb(208, 255, 208);
+            iconLabelRunCurrentTransformer.Enabled = true;
+        }
+
+        private void ToggleControlsEnabled(bool enabled)
+        {
+            treeViewTransformers.Enabled = enabled;
+            richTextBoxSrcText.Enabled = enabled;
+            richTextBoxResultText.Enabled = enabled;
+
+            if (enabled)
+            {
+                iconLabelRunCurrentTransformer.Enabled = currentTransformItem != null;
+            }
+            else
+            {
+                iconLabelRunCurrentTransformer.Enabled = false;
+            }
         }
 
         #region UI Event Handlers
@@ -89,15 +184,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void TextTransformUC_Load(object sender, EventArgs e) => actionComponent?.Execute(
             new WinFormsActionOpts<int>
             {
+                ActionName = nameof(TextTransformUC_Load),
                 Action = () =>
                 {
                     controlBlinkTimersManagerAdapter = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().Data;
-
-                    textTransformBehavior.ExportedMembers.ActWith(behavior =>
-                    {
-                        textTransformers = behavior;
-                        FillTransformersTreeViewNodes();
-                    });
 
                     uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
                     {
@@ -115,12 +205,71 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                             });
                     });
 
+                    treeViewTransformers.ImageList = new ImageList();
+
+                    treeViewTransformers.ImageList.Images.AddRange(
+                        [Resources.orange_rounded_rectangle_fill_32x32,
+                            Resources.orange_rounded_rectangle_32x32]);
+
+                    textTransformBehavior.ExportedMembers.ActWith(behavior =>
+                    {
+                        textTransformers = behavior;
+                        FillTransformersTreeViewNodes();
+                    });
+
                     toolTipHintsOrchestrator = svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().Data;
 
                     toolTipHintsOrchestrator.HintGroups.Add(
                         toolTipHintsGroup = GetToolTipHintsGroupOpts().HintsGroup());
 
                     return ActionResultH.Create(0);
+                }
+            });
+
+        private void TreeViewTransformers_NodeMouseClick(
+            object sender, TreeNodeMouseClickEventArgs e) => actionComponent.Execute(
+            new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(TreeViewTransformers_NodeMouseClick),
+                OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+                Action = () =>
+                {
+                    SetCurrentTransformer(e.Node.Tag);
+                    return ActionResultH.Create(0);
+                }
+            });
+
+        private async void IconLabelRunCurrentTransformer_Click(
+            object sender, EventArgs e) => await actionComponent.ExecuteAsync(new WinFormsAsyncActionOpts<int>
+            {
+                ActionName = nameof(IconLabelRunCurrentTransformer_Click),
+                OnBeforeExecution = () =>
+                {
+                    ToggleControlsEnabled(false);
+                    return WinFormsMessageTuple.WithOnly(" ");
+                },
+                Action = async () =>
+                {
+                    if (currentTransformItem != null)
+                    {
+                        string inputText = richTextBoxSrcText.Text;
+
+                        string outputText = textTransformBehavior.Behavior.Invoke<string>(
+                            currentTransformItem.JsMethod, [inputText]);
+                        
+                        richTextBoxResultText.Text = outputText;
+                    }
+                    else
+                    {
+                        MessageBox.Show("There is no transformer currently selected");
+                    }
+
+                    return ActionResultH.Create(0);
+                },
+                OnAfterExecution = result =>
+                {
+                    ToggleControlsEnabled(true);
+                    return null;
                 }
             });
 

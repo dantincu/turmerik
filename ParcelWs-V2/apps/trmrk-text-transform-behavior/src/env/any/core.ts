@@ -1,3 +1,5 @@
+export interface CSharpSyntaxTree {}
+
 export interface TextTransformBehaviorDataCore {
   Transformers: TextTransformNodeCore[];
 }
@@ -30,7 +32,7 @@ export interface TextTransformNode {
 export interface TextTransformItem {
   Name: string;
   Description: string;
-  JsMethod: (inputText: string) => string;
+  JsMethod: (inputText: string, csharpSyntaxTree?: CSharpSyntaxTree) => string;
   IsValidCSharpCode?: boolean | null | undefined;
 }
 
@@ -53,7 +55,7 @@ export const exportTransformerNode = (
     Description: src.Description,
     Items: src.Items
       ? src.Items.map((item, idx) =>
-          exportTransformerItem(`${itemsParentPath}[${idx}]`, item)
+          exportTransformerItem(`${itemsParentPath}[${idx}].JsMethod`, item)
         )
       : [],
     ChildNodes: src.ChildNodes
