@@ -59,12 +59,12 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                     {
                                         Commands = new Utility.PowerShellCommandOpts
                                         {
-                                            CommandName = "rmdirfull",
-                                            CommandArguments = [ ".parcel-cache" ]
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ ".parcel-cache", ":fr", ":rc" ]
                                         }.Lst(new Utility.PowerShellCommandOpts
                                         {
-                                            CommandName = "rmdirfull",
-                                            CommandArguments = [ "dist" ]
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ "dist", ":fr", ":rc" ]
                                         })
                                     }
                                 },
@@ -85,26 +85,20 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                             {
                                 new ProgramConfig.Script
                                 {
-                                    WinShellCmd = new Core.Utility.ProcessLauncherOpts
+                                    /* WinShellCmd = new Core.Utility.ProcessLauncherOpts
                                     {
                                         FileName = "cmd",
                                         ArgumentsNmrbl = [ "/c", "del", "behavior.js" ],
                                         UseShellExecute = false
-                                    }
-                                    /* PowerShellCmd = new Utility.PowerShellAdapterOpts
+                                    }*/
+                                    PowerShellCmd = new Utility.PowerShellAdapterOpts
                                     {
                                         Commands = new Utility.PowerShellCommandOpts
                                         {
-                                            CommandName = "Remove-Item",
-                                            CommandArguments = [ "behavior.js" ],
-                                            CommandParameters = new Dictionary<string, object?>
-                                            {
-                                                { "Force", null }
-                                            }
-                                        }.Lst(),
-                                        CreateRunSpace = true,
-                                        ExecutionPolicy = Microsoft.PowerShell.ExecutionPolicy.Unrestricted
-                                    }*/
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ "behavior.js", ":fr", ":rc" ]
+                                        }.Lst()
+                                    }
                                 }
                             }
                         }

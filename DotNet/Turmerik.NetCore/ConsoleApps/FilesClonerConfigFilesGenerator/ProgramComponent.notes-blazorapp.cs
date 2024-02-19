@@ -135,12 +135,12 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                     {
                                         Commands = new Utility.PowerShellCommandOpts
                                         {
-                                            CommandName = "rmdirfull",
-                                            CommandArguments = [ ".parcel-cache" ]
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ ".parcel-cache", ":fr", ":rc" ]
                                         }.Lst(new Utility.PowerShellCommandOpts
                                         {
-                                            CommandName = "rmdirfull",
-                                            CommandArguments = [ "dist" ]
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ "dist", ":fr", ":rc" ]
                                         })
                                     }
                                 },
@@ -165,12 +165,12 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                     {
                                         Commands = new Utility.PowerShellCommandOpts
                                         {
-                                            CommandName = "rmdirfull",
-                                            CommandArguments = [ "js", ":kr" ]
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ "js", ":fr", ":rc" ]
                                         }.Lst(new Utility.PowerShellCommandOpts
                                         {
-                                            CommandName = "rmdirfull",
-                                            CommandArguments = [ "trmrk-notes-config", ":kr" ]
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ "trmrk-notes-config", ":fr", ":rc" ]
                                         })
                                     },
                                     WorkDir = "./wwwroot"

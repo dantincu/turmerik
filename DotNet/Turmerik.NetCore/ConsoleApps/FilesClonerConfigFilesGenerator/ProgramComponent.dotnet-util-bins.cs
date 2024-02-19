@@ -100,17 +100,6 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                         EntryRelPath = "Bin\\Turmerik.FilesCloner.ConsoleApp\\Release\\net8.0"
                                     }
                                 },
-                                /* new DirArgs
-                                {
-                                    InputDirLocator = new FsEntryLocator
-                                    {
-                                        EntryRelPath = "Turmerik.FilesClonerConfigFilesGenerator.ConsoleApp\\bin\\Release\\net8.0"
-                                    },
-                                    CloneDirLocator = new FsEntryLocator
-                                    {
-                                        EntryRelPath = "Bin\\Turmerik.FilesClonerConfigFilesGenerator.ConsoleApp\\Release\\net8.0"
-                                    }
-                                } */
                             },
                             DfInputDirFilter = new DriveEntriesSerializableFilter
                             {
