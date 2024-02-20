@@ -4,17 +4,37 @@ import {
   TextTransformNode,
 } from "./core";
 
-export const regexes = {
-  startWithDigits: /^\s*\d+\s*/,
+export const printableWhitespaces = Object.freeze([" ", "\n", "\t"]);
+
+export const regexes = Object.freeze({
+  whitespace: /\s/,
+  startWithDigits: /^[\s\d]+/,
+});
+
+export const isPrintableChar = (chr: string) => {
+  let isPrintable =
+    !regexes.whitespace.test(chr) || printableWhitespaces.indexOf(chr) >= 0;
+
+  return isPrintable;
 };
+
+export const removeUnprintableChars = (str: string) =>
+  [...str].map((chr) => (isPrintableChar(chr) ? chr : "")).join("");
 
 export const transformEachLine = (
   inputText: string,
-  transformer: (line: string, idx?: number) => string
+  transformer: (line: string, idx?: number) => string,
+  remUnprintableChars: boolean | null | undefined = null
 ) => {
   const inputLines = inputText.split("\n");
   const outputLines = inputLines.map(transformer);
-  const outputText = outputLines.join("\n");
+
+  let outputText = outputLines.join("\n");
+
+  if (remUnprintableChars ?? true) {
+    outputText = removeUnprintableChars(outputText);
+  }
+
   return outputText;
 };
 

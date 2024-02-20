@@ -96,6 +96,7 @@
             richTextBoxSrcText.TabIndex = 0;
             richTextBoxSrcText.TabStop = false;
             richTextBoxSrcText.Text = "";
+            richTextBoxSrcText.KeyUp += RichTextBoxSrcText_KeyUp;
             // 
             // splitContainerMain
             // 

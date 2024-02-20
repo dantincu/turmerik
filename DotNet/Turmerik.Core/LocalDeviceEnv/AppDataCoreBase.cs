@@ -114,7 +114,10 @@ namespace Turmerik.Core.LocalDeviceEnv
             DefaultJsonFilePath,
             GetDefaultConfigCore);
 
-        protected virtual string GetDefaultJsonFilePath() => base.GetJsonFilePath();
+        protected virtual string GetDefaultJsonFilePath() => AppEnv.GetTypePath(
+            AppEnvDir.Config,
+            GetType(),
+            JSON_FILE_NAME);
 
         protected void OnDataSaved(TImmtbl data) => dataSaved?.Invoke(data);
 

@@ -179,6 +179,41 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        private async Task<IActionResult<string?>> RunCurrentTransform() => await actionComponent.ExecuteAsync(new WinFormsAsyncActionOpts<string?>
+        {
+            ActionName = nameof(RunCurrentTransform),
+            OnBeforeExecution = () =>
+            {
+                ToggleControlsEnabled(false);
+                return WinFormsMessageTuple.WithOnly(" ");
+            },
+            Action = async () =>
+            {
+                string? outputText = null;
+
+                if (currentTransformItem != null)
+                {
+                    string inputText = richTextBoxSrcText.Text;
+
+                    outputText = textTransformBehavior.Behavior.Invoke<string>(
+                        currentTransformItem.JsMethod, [inputText]);
+
+                    richTextBoxResultText.Text = outputText;
+                }
+                else
+                {
+                    MessageBox.Show("There is no transformer currently selected");
+                }
+
+                return ActionResultH.Create(outputText);
+            },
+            OnAfterExecution = result =>
+            {
+                ToggleControlsEnabled(true);
+                return null;
+            }
+        });
+
         #region UI Event Handlers
 
         private void TextTransformUC_Load(object sender, EventArgs e) => actionComponent?.Execute(
@@ -240,38 +275,20 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             });
 
         private async void IconLabelRunCurrentTransformer_Click(
-            object sender, EventArgs e) => await actionComponent.ExecuteAsync(new WinFormsAsyncActionOpts<int>
+            object sender, EventArgs e) => await RunCurrentTransform();
+
+        private async void RichTextBoxSrcText_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.Shift && e.KeyCode == Keys.Enter)
             {
-                ActionName = nameof(IconLabelRunCurrentTransformer_Click),
-                OnBeforeExecution = () =>
-                {
-                    ToggleControlsEnabled(false);
-                    return WinFormsMessageTuple.WithOnly(" ");
-                },
-                Action = async () =>
-                {
-                    if (currentTransformItem != null)
-                    {
-                        string inputText = richTextBoxSrcText.Text;
+                var result = await RunCurrentTransform();
 
-                        string outputText = textTransformBehavior.Behavior.Invoke<string>(
-                            currentTransformItem.JsMethod, [inputText]);
-                        
-                        richTextBoxResultText.Text = outputText;
-                    }
-                    else
-                    {
-                        MessageBox.Show("There is no transformer currently selected");
-                    }
-
-                    return ActionResultH.Create(0);
-                },
-                OnAfterExecution = result =>
+                if (result.IsSuccess && result.Value != null)
                 {
-                    ToggleControlsEnabled(true);
-                    return null;
+                    Clipboard.SetText(result.Value);
                 }
-            });
+            }
+        }
 
         #endregion UI Event Handlers
     }
