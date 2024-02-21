@@ -73,6 +73,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     ).StatusLabel(GetType());
 
                 iconLabelRunCurrentTransformer.Text = MatUIIconUnicodesH.AudioAndVideo.PLAY_ARROW;
+                iconLabelSrcTextBoxIncreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.ADD;
+                iconLabelSrcTextBoxDecreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.REMOVE;
 
                 uISettingsData = uISettingsRetriever.Data;
             }
@@ -214,6 +216,37 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         });
 
+        private IActionResult<float> TrySetZoomFactor(
+            float newValue = 0) => actionComponent.Execute(
+                new WinFormsActionOpts<float>
+                {
+                    ActionName = nameof(TrySetZoomFactor),
+                    OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
+                    Action = () =>
+                    {
+                        if (newValue <= 0)
+                        {
+                            newValue = float.Parse(
+                                textBoxSrcTextBoxNewZoomValue.Text);
+
+                            newValue = newValue / 100;
+                        }
+
+                        if (newValue > 0)
+                        {
+                            richTextBoxSrcText.ZoomFactor = newValue;
+
+                            string newValueStr = Convert.ToInt32(
+                                Math.Round(newValue * 100)).ToString();
+
+                            textBoxSrcTextBoxNewZoomValue.Text = newValueStr;
+                            labelSrcTextBoxZoom.Text = $"{newValueStr}%";
+                        }
+
+                        return ActionResultH.Create(newValue);
+                    }
+                });
+
         #region UI Event Handlers
 
         private void TextTransformUC_Load(object sender, EventArgs e) => actionComponent?.Execute(
@@ -277,17 +310,55 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private async void IconLabelRunCurrentTransformer_Click(
             object sender, EventArgs e) => await RunCurrentTransform();
 
-        private async void RichTextBoxSrcText_KeyUp(object sender, KeyEventArgs e)
+        private async void RichTextBoxSrcText_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.Shift && e.KeyCode == Keys.Enter)
+            if (e.Control && e.Alt)
             {
-                var result = await RunCurrentTransform();
-
-                if (result.IsSuccess && result.Value != null)
+                switch (e.KeyCode)
                 {
-                    Clipboard.SetText(result.Value);
+                    case Keys.Enter:
+                        var result = await RunCurrentTransform();
+
+                        if (result.IsSuccess && !string.IsNullOrEmpty(result.Value))
+                        {
+                            Clipboard.SetText(result.Value);
+                        }
+                        break;
+                    case Keys.Add:
+                    case Keys.A:
+                        TrySetZoomFactor(richTextBoxSrcText.ZoomFactor * 1.25F);
+                        break;
+                    case Keys.Subtract:
+                    case Keys.S:
+                        TrySetZoomFactor(richTextBoxSrcText.ZoomFactor / 1.25F);
+                        break;
                 }
+
+                richTextBoxSrcText.Focus();
             }
+        }
+
+        private void TextBoxSrcTextBoxNewZoomValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                TrySetZoomFactor();
+            }
+        }
+
+        private void ButtonSetSrcTextBoxZoomFactor_Click(object sender, EventArgs e)
+        {
+            TrySetZoomFactor();
+        }
+
+        private void IconLabelSrcTextBoxIncreaseZoomFactory_Click(object sender, EventArgs e)
+        {
+            TrySetZoomFactor(richTextBoxSrcText.ZoomFactor * 1.25F);
+        }
+
+        private void IconLabelSrcTextBoxDecreaseZoomFactory_Click(object sender, EventArgs e)
+        {
+            TrySetZoomFactor(richTextBoxSrcText.ZoomFactor / 1.25F);
         }
 
         #endregion UI Event Handlers

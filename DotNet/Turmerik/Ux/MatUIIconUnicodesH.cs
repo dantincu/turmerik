@@ -13,7 +13,7 @@
             public const string EXPAND_MORE = "\ue5cf";
             public const string CHECK_CIRCLE = "\ue86c";
             public const string FAVORITE = null;
-            public const string ADD = null;
+            public const string ADD = "\ue145";
             public const string DELETE = "\ue872";
             public const string ARROW_BACK = "\ue5c4";
             public const string STAR = "\ue838";
@@ -42,7 +42,7 @@
             public const string DOWNLOAD = "\uf090";
             public const string ARROW_RIGHT_ALT = "\ue941";
             public const string RADIO_BUTTON_CHECKED = "\ue837";
-            public const string REMOVE = null;
+            public const string REMOVE = "\ue15b";
             public const string BOLT = null;
             public const string TOGGLE_OFF = "\ue9fc";
             public const string ARROW_UPWARD = "\ue5d8";
