@@ -53,6 +53,11 @@ namespace Turmerik.Jint.Behavior
             return retObj;
         }
 
+        protected override string GetDefaultJsonFilePath() => AppEnv.GetTypePath(
+            AppEnvDir.Config,
+            GetType(),
+            JintH.BEHAVIOR_JSON_FILE_NAME);
+
         protected override string GetJsonFilePath(
             ) => Path.Combine(JsonDirPath,
                 JintH.BEHAVIOR_JSON_FILE_NAME);

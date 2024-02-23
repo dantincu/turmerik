@@ -39,9 +39,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                     },
                                     CloneFileNameTpl = "behavior.js",
                                     CloneTplLines = [
-                                        "const turmerikObj = {{}};",
+                                        "globalThis.turmerikObj = {{}};",
                                         "{0}",
-                                        "this.turmerik = turmerikObj.turmerik;" ]
+                                        "globalThis.turmerik = turmerikObj.turmerik;" ]
                                 },
                             }
                         },

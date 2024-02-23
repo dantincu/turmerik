@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using Turmerik.Core.Actions;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Threading;
 using Turmerik.Utility.WinFormsApp.Properties;
 using Turmerik.Utility.WinFormsApp.Settings;
@@ -10,6 +11,7 @@ using Turmerik.Ux;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
+using Turmerik.WinForms.Helpers;
 using Turmerik.WinForms.MatUIIcons;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
@@ -18,7 +20,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
     {
         private readonly ServiceProviderContainer svcProvContnr;
         private readonly IServiceProvider svcProv;
+        private readonly IJsonConversion jsonConversion;
         private readonly TextTransformBehavior textTransformBehavior;
+        private readonly IRichTextBoxPseudoMarkupRetriever richTextBoxPseudoMarkupRetriever;
+        private readonly IRichTextBoxPseudoMarkupAdapter richTextBoxPseudoMarkupAdapter;
 
         private readonly IMatUIIconsRetriever matUIIconsRetriever;
 
@@ -41,7 +46,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private ToolTipHintsGroup toolTipHintsGroup;
 
         private ITextTransformNode? currentTransformNode;
-        private ITextTransformItem? currentTransformItem;
+        private ITextTransformItem? currentTextTransformItem;
+        private ITextTransformItem? currentRichTextTransformItem;
 
         public TextTransformUC()
         {
@@ -50,7 +56,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
+                jsonConversion = svcProv.GetRequiredService<IJsonConversion>();
                 textTransformBehavior = svcProv.GetRequiredService<TextTransformBehavior>();
+                richTextBoxPseudoMarkupRetriever = svcProv.GetRequiredService<IRichTextBoxPseudoMarkupRetriever>();
+                richTextBoxPseudoMarkupAdapter = svcProv.GetRequiredService<IRichTextBoxPseudoMarkupAdapter>();
 
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
@@ -92,7 +101,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         private void FillTransformersTreeViewNodes()
         {
-            var rootNodesArr = textTransformers.GetTransformers(
+            var rootNodesArr = textTransformers.GetTextTransformers(
                 ).Select(TransformerNodeToTreeNode).ToArray();
 
             treeViewTransformers.Nodes.AddRange(
@@ -104,16 +113,27 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 transformNode.Name, 0, 0,
                 transformNode.GetChildNodes().Select(
                     TransformerNodeToTreeNode).Concat(
-                    transformNode.GetItems().Select(
-                        TransformerItemToTreeNode)).ToArray())
+                        transformNode.GetTextTransformItems().Select(
+                            TextTransformerItemToTreeNode)).Concat(
+                        transformNode.GetRichTextTransformItems().Select(
+                            RichTextTransformerItemToTreeNode)).ToArray())
             {
                 Tag = transformNode,
                 ToolTipText = transformNode.Description
             };
 
+        private TreeNode TextTransformerItemToTreeNode(
+            ITextTransformItem transformItem) => TransformerItemToTreeNode(
+                transformItem, 1);
+
+        private TreeNode RichTextTransformerItemToTreeNode(
+            ITextTransformItem transformItem) => TransformerItemToTreeNode(
+                transformItem, 2);
+
         private TreeNode TransformerItemToTreeNode(
-            ITextTransformItem transformItem) => new TreeNode(
-                transformItem.Name, 1, 1)
+            ITextTransformItem transformItem,
+            int imageIndex) => new TreeNode(
+                transformItem.Name, imageIndex, imageIndex)
             {
                 Tag = transformItem,
                 ToolTipText = transformItem.Description
@@ -126,13 +146,21 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             if (tag is ITextTransformNode transformNode)
             {
-                SetCurrentTransformerNode(
+                SetCurrentTextTransformerNode(
                     transformNode);
             }
             else if (tag is ITextTransformItem transformItem)
             {
-                SetCurrentTransformerItem(
-                    transformItem);
+                if (transformItem.TransformsRichText.Value)
+                {
+                    SetCurrentRichTextTransformerItem(
+                        transformItem);
+                }
+                else
+                {
+                    SetCurrentTextTransformerItem(
+                        transformItem);
+                }
             }
         }
 
@@ -140,29 +168,39 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             iconLabelRunCurrentTransformer.Enabled = false;
             currentTransformNode = null;
-            currentTransformItem = null;
+            currentTextTransformItem = null;
+            currentRichTextTransformItem = null;
             textBoxCurrentTransformerName.Text = string.Empty;
             richTextBoxCurrentTransformerDescription.Text = string.Empty;
-            textBoxCurrentTransformerName.BackColor = Color.FromArgb(255, 255, 255);
+            iconLabelRunCurrentTransformer.ForeColor = Color.Black;
         }
 
-        private void SetCurrentTransformerNode(
+        private void SetCurrentTextTransformerNode(
             ITextTransformNode transformNode)
         {
             currentTransformNode = transformNode;
             textBoxCurrentTransformerName.Text = transformNode.Name;
             richTextBoxCurrentTransformerDescription.Text = transformNode.Description;
-            textBoxCurrentTransformerName.BackColor = Color.FromArgb(255, 232, 208);
         }
 
-        private void SetCurrentTransformerItem(
+        private void SetCurrentTextTransformerItem(
             ITextTransformItem transformItem)
         {
-            currentTransformItem = transformItem;
-            textBoxCurrentTransformerName.Text = currentTransformItem.Name;
-            richTextBoxCurrentTransformerDescription.Text = currentTransformItem.Description;
-            textBoxCurrentTransformerName.BackColor = Color.FromArgb(208, 255, 208);
+            currentTextTransformItem = transformItem;
+            textBoxCurrentTransformerName.Text = transformItem.Name;
+            richTextBoxCurrentTransformerDescription.Text = transformItem.Description;
             iconLabelRunCurrentTransformer.Enabled = true;
+            iconLabelRunCurrentTransformer.ForeColor = Color.Blue;
+        }
+
+        private void SetCurrentRichTextTransformerItem(
+            ITextTransformItem transformItem)
+        {
+            currentRichTextTransformItem = transformItem;
+            textBoxCurrentTransformerName.Text = transformItem.Name;
+            richTextBoxCurrentTransformerDescription.Text = transformItem.Description;
+            iconLabelRunCurrentTransformer.Enabled = true;
+            iconLabelRunCurrentTransformer.ForeColor = Color.OrangeRed;
         }
 
         private void ToggleControlsEnabled(bool enabled)
@@ -173,7 +211,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             if (enabled)
             {
-                iconLabelRunCurrentTransformer.Enabled = currentTransformItem != null;
+                iconLabelRunCurrentTransformer.Enabled = currentTextTransformItem != null;
             }
             else
             {
@@ -181,40 +219,69 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
-        private async Task<IActionResult<string?>> RunCurrentTransform() => await actionComponent.ExecuteAsync(new WinFormsAsyncActionOpts<string?>
-        {
-            ActionName = nameof(RunCurrentTransform),
-            OnBeforeExecution = () =>
+        private async Task<IActionResult<string?>> RunCurrentTransform() => await actionComponent.ExecuteAsync(
+            new WinFormsAsyncActionOpts<string?>
             {
-                ToggleControlsEnabled(false);
-                return WinFormsMessageTuple.WithOnly(" ");
-            },
-            Action = async () =>
-            {
-                string? outputText = null;
-
-                if (currentTransformItem != null)
+                ActionName = nameof(RunCurrentTransform),
+                OnBeforeExecution = () =>
                 {
-                    string inputText = richTextBoxSrcText.Text;
-
-                    outputText = textTransformBehavior.Behavior.Invoke<string>(
-                        currentTransformItem.JsMethod, [inputText]);
-
-                    richTextBoxResultText.Text = outputText;
-                }
-                else
+                    ToggleControlsEnabled(false);
+                    return WinFormsMessageTuple.WithOnly(" ");
+                },
+                Action = async () =>
                 {
-                    MessageBox.Show("There is no transformer currently selected");
-                }
+                    string? outputText = null;
 
-                return ActionResultH.Create(outputText);
-            },
-            OnAfterExecution = result =>
-            {
-                ToggleControlsEnabled(true);
-                return null;
-            }
-        });
+                    if (currentTextTransformItem != null)
+                    {
+                        string inputText = richTextBoxSrcText.Text;
+
+                        outputText = textTransformBehavior.Behavior.Invoke<string>(
+                            currentTextTransformItem.JsMethod, [inputText]);
+
+                        richTextBoxResultText.Text = outputText;
+                    }
+                    else if (currentRichTextTransformItem != null)
+                    {
+                        string inputText = richTextBoxSrcText.Text;
+
+                        var pseudoMarkup = richTextBoxPseudoMarkupRetriever.GetPseudoMarkup(
+                            new RichTextBoxPseudoMarkupRetrieverOptsMtbl
+                            {
+                                RichTextBox = richTextBoxSrcText
+                            });
+
+                        /* var pseudoMarkupJson = jsonConversion.Adapter.Serialize(pseudoMarkup);
+                        File.WriteAllText("pseudoMarkup.json", pseudoMarkupJson); */
+
+                        pseudoMarkup = textTransformBehavior.Behavior.Invoke<RichTextBoxPseudoMarkupMtbl>(
+                            currentRichTextTransformItem.JsMethod, [inputText, pseudoMarkup]);
+
+                        richTextBoxPseudoMarkupAdapter.InsertPseudoMarkup(
+                            new RichTextBoxPseudoMarkupAdapterOptsMtbl
+                            {
+                                InsertIdx = int.MaxValue,
+                                PseudoMarkup = pseudoMarkup,
+                                RichTextBox = richTextBoxResultText
+                            });
+                    }
+                    else
+                    {
+                        MessageBox.Show("There is no transformer currently selected");
+                    }
+
+                    return ActionResultH.Create(outputText);
+                },
+                OnAfterExecution = result =>
+                {
+                    iconLabelRunCurrentTransformer.InvokeIfReq(() =>
+                    {
+                        ToggleControlsEnabled(true);
+                    });
+
+                    return null;
+                }
+            });
 
         private IActionResult<float> TrySetZoomFactor(
             float newValue = 0) => actionComponent.Execute(
@@ -277,6 +344,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                     treeViewTransformers.ImageList.Images.AddRange(
                         [Resources.orange_rounded_rectangle_fill_32x32,
+                            Resources.blue_rounded_rectangle_32x32,
                             Resources.orange_rounded_rectangle_32x32]);
 
                     textTransformBehavior.ExportedMembers.ActWith(behavior =>

@@ -1,21 +1,22 @@
 import trmrk_lib from "trmrk";
 
-import { TextTransformBehaviorLib, getExportedMembers } from "./core";
-import { getAllTransformers } from "./main";
+import { TextTransformBehaviorLib, getExportedMembers } from "../../core";
+import { getAllTextTransformers } from "../../main";
 
 export const trmrk = trmrk_lib;
 
-declare const turmerikObj: { turmerik: TextTransformBehaviorLib };
+const turmerikObj: { turmerik: TextTransformBehaviorLib } =
+  (globalThis as any).turmerikObj ?? {};
 
 turmerikObj.turmerik = {
   libs: {
     trmrk,
   },
   behavior: {
-    Transformers: getAllTransformers(),
+    TextTransformers: getAllTextTransformers(),
   },
   exportedMembers: {
-    Transformers: [],
+    TextTransformers: [],
   },
   getExportedMembers: () => turmerik.exportedMembers,
 };

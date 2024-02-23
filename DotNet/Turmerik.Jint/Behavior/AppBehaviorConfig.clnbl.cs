@@ -10,6 +10,7 @@ namespace Turmerik.Jint.Behavior
     public interface IAppBehaviorConfig
     {
         string ExportedMembersRetrieverJsCode { get; }
+        bool? SetJsConsole { get; }
 
         IEnumerable<string> GetJsFilePaths();
     }
@@ -29,10 +30,12 @@ namespace Turmerik.Jint.Behavior
             IAppBehaviorConfig src)
         {
             ExportedMembersRetrieverJsCode = src.ExportedMembersRetrieverJsCode;
+            SetJsConsole = src.SetJsConsole;
             JsFilePaths = src.GetJsFilePaths()?.RdnlC();
         }
 
         public string ExportedMembersRetrieverJsCode { get; }
+        public bool? SetJsConsole { get; }
         public ReadOnlyCollection<string> JsFilePaths { get; }
 
         public IEnumerable<string> GetJsFilePaths() => JsFilePaths;
@@ -48,10 +51,12 @@ namespace Turmerik.Jint.Behavior
             IAppBehaviorConfig src)
         {
             ExportedMembersRetrieverJsCode = src.ExportedMembersRetrieverJsCode;
+            SetJsConsole = src.SetJsConsole;
             JsFilePaths = src.GetJsFilePaths()?.ToList();
         }
 
         public string ExportedMembersRetrieverJsCode { get; set; }
+        public bool? SetJsConsole { get; set; }
         public List<string> JsFilePaths { get; set; }
 
         public IEnumerable<string> GetJsFilePaths() => JsFilePaths;

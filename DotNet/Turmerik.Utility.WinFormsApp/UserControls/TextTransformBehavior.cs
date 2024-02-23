@@ -22,6 +22,36 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         }
 
         protected override TextTransformBehaviorDataImmtbl NormalizeExportedMembers(
-            TextTransformBehaviorDataMtbl members) => new TextTransformBehaviorDataImmtbl(members);
+            TextTransformBehaviorDataMtbl members)
+        {
+            NormalizeData(members);
+            return new TextTransformBehaviorDataImmtbl(members);
+        }
+
+        private void NormalizeData(
+            TextTransformBehaviorDataMtbl data)
+        {
+            foreach (var node in data.TextTransformers)
+            {
+                NormalizeNode(node);
+            }
+        }
+
+        private void NormalizeNode(
+            TextTransformNodeMtbl node)
+        {
+            NormalizeItemsList(node.TextTransformItems, false);
+            NormalizeItemsList(node.RichTextTransformItems, true);
+        }
+
+        private void NormalizeItemsList(
+            List<TextTransformItemMtbl> itemsList,
+            bool transformsRichText)
+        {
+            foreach (var item in itemsList)
+            {
+                item.TransformsRichText = transformsRichText;
+            }
+        }
     }
 }

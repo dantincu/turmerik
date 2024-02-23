@@ -79,7 +79,8 @@ namespace Turmerik.Jint.Behavior
                         fileName => NormalizeFilePath(
                             jsonDirPath, fileName)).Select(
                         filePath => File.ReadAllText(
-                            filePath)).RdnlC()
+                            filePath)).RdnlC(),
+                    SetJsConsole = config.SetJsConsole
                 });
 
             var exportedMembers = behavior.Evaluate<TExportedMembersSrlzbl>(

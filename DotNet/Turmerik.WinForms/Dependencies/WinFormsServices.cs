@@ -20,6 +20,8 @@ namespace Turmerik.WinForms.Dependencies
             services.AddSingleton<IControlBlinkTimersManager, ControlBlinkTimersManager>();
             services.AddSingleton<IPropChangedEventAdapterFactory, PropChangedEventAdapterFactory>();
             services.AddSingleton<IToolTipHintsOrchestratorFactory, ToolTipHintsOrchestratorFactory>();
+            services.AddSingleton<IRichTextBoxPseudoMarkupRetriever, RichTextBoxPseudoMarkupRetriever>();
+            services.AddSingleton<IRichTextBoxPseudoMarkupAdapter, RichTextBoxPseudoMarkupAdapter>();
 
             return services;
         }

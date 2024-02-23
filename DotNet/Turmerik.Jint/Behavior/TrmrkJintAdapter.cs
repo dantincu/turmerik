@@ -45,6 +45,13 @@ namespace Turmerik.Jint.Behavior
             Engine = opts.Engine ?? JintH.CreateEngine(
                 JsScripts);
 
+            if (opts.SetJsConsole == true)
+            {
+                Engine.SetConsoleLog(
+                    jsonConversion.Adapter,
+                    opts.JsConsoleCallbacksMap);
+            }
+
             JsonSerializer = new JsonSerializer(Engine);
         }
 

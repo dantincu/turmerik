@@ -10,7 +10,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 {
     public interface ITextTransformBehaviorData
     {
-        IEnumerable<ITextTransformNode> GetTransformers();
+        IEnumerable<ITextTransformNode> GetTextTransformers();
     }
 
     public interface ITextTransformNode
@@ -18,7 +18,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         string Name { get; }
         string Description { get; }
 
-        IEnumerable<ITextTransformItem> GetItems();
+        IEnumerable<ITextTransformItem> GetTextTransformItems();
+        IEnumerable<ITextTransformItem> GetRichTextTransformItems();
         IEnumerable<ITextTransformNode> GetChildNodes();
     }
 
@@ -29,6 +30,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
         string JsMethod { get; }
         bool IsValidCSharpCode { get; }
+        bool? TransformsRichText { get; }
     }
 
     public static class TextTransformBehaviorData
@@ -73,12 +75,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         public TextTransformBehaviorDataImmtbl(
             ITextTransformBehaviorData src)
         {
-            Transformers = src.GetTransformers()?.ToImmtblRdnlC()!;
+            TextTransformers = src.GetTextTransformers()?.ToImmtblRdnlC()!;
         }
 
-        public ReadOnlyCollection<TextTransformNodeImmtbl> Transformers { get; }
+        public ReadOnlyCollection<TextTransformNodeImmtbl> TextTransformers { get; }
 
-        public IEnumerable<ITextTransformNode> GetTransformers() => Transformers;
+        public IEnumerable<ITextTransformNode> GetTextTransformers() => TextTransformers;
     }
 
     public class TextTransformBehaviorDataMtbl : ITextTransformBehaviorData
@@ -90,12 +92,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         public TextTransformBehaviorDataMtbl(
             ITextTransformBehaviorData src)
         {
-            Transformers = src.GetTransformers()?.ToMtblList()!;
+            TextTransformers = src.GetTextTransformers()?.ToMtblList()!;
         }
 
-        public List<TextTransformNodeMtbl> Transformers { get; set; }
+        public List<TextTransformNodeMtbl> TextTransformers { get; set; }
 
-        public IEnumerable<ITextTransformNode> GetTransformers() => Transformers;
+        public IEnumerable<ITextTransformNode> GetTextTransformers() => TextTransformers;
     }
 
     public class TextTransformNodeImmtbl : ITextTransformNode
@@ -105,17 +107,20 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             Name = src.Name;
             Description = src.Description;
-            Items = src.GetItems()?.ToImmtblRdnlC()!;
+            TextTransformItems = src.GetTextTransformItems()?.ToImmtblRdnlC()!;
+            RichTextTransformItems = src.GetRichTextTransformItems()?.ToImmtblRdnlC()!;
             ChildNodes = src.GetChildNodes()?.ToImmtblRdnlC()!;
         }
 
         public string Name { get; }
         public string Description { get; }
 
-        public ReadOnlyCollection<TextTransformItemImmtbl> Items { get; }
+        public ReadOnlyCollection<TextTransformItemImmtbl> TextTransformItems { get; }
+        public ReadOnlyCollection<TextTransformItemImmtbl> RichTextTransformItems { get; }
         public ReadOnlyCollection<TextTransformNodeImmtbl> ChildNodes { get; }
 
-        public IEnumerable<ITextTransformItem> GetItems() => Items;
+        public IEnumerable<ITextTransformItem> GetTextTransformItems() => TextTransformItems;
+        public IEnumerable<ITextTransformItem> GetRichTextTransformItems() => RichTextTransformItems;
         public IEnumerable<ITextTransformNode> GetChildNodes() => ChildNodes;
     }
 
@@ -126,7 +131,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             Name = src.Name;
             Description = src.Description;
-            Items = src.GetItems()?.ToMtblList()!;
+            TextTransformItems = src.GetTextTransformItems()?.ToMtblList()!;
+            RichTextTransformItems = src.GetRichTextTransformItems()?.ToMtblList()!;
             ChildNodes = src.GetChildNodes()?.ToMtblList()!;
         }
 
@@ -137,10 +143,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public List<TextTransformItemMtbl> Items { get; set; }
+        public List<TextTransformItemMtbl> TextTransformItems { get; set; }
+        public List<TextTransformItemMtbl> RichTextTransformItems { get; set; }
         public List<TextTransformNodeMtbl> ChildNodes { get; set; }
 
-        public IEnumerable<ITextTransformItem> GetItems() => Items;
+        public IEnumerable<ITextTransformItem> GetTextTransformItems() => TextTransformItems;
+        public IEnumerable<ITextTransformItem> GetRichTextTransformItems() => RichTextTransformItems;
         public IEnumerable<ITextTransformNode> GetChildNodes() => ChildNodes;
     }
 
@@ -153,12 +161,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             Description = src.Description;
             JsMethod = src.JsMethod;
             IsValidCSharpCode = src.IsValidCSharpCode;
+            TransformsRichText = src.TransformsRichText;
         }
 
         public string Name { get; }
         public string Description { get; }
         public string JsMethod { get; }
         public bool IsValidCSharpCode { get; }
+        public bool? TransformsRichText { get; }
     }
 
     public class TextTransformItemMtbl : ITextTransformItem
@@ -174,11 +184,13 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             Description = src.Description;
             JsMethod = src.JsMethod;
             IsValidCSharpCode = src.IsValidCSharpCode;
+            TransformsRichText = src.TransformsRichText;
         }
 
         public string Name { get; set; }
         public string Description { get; set; }
         public string JsMethod { get; set; }
         public bool IsValidCSharpCode { get; set; }
+        public bool? TransformsRichText { get; set; }
     }
 }
