@@ -84,6 +84,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 iconLabelRunCurrentTransformer.Text = MatUIIconUnicodesH.AudioAndVideo.PLAY_ARROW;
                 iconLabelSrcTextBoxIncreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.ADD;
                 iconLabelSrcTextBoxDecreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.REMOVE;
+                iconLabelResultTextBoxIncreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.ADD;
+                iconLabelResultTextBoxDecreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.REMOVE;
 
                 uISettingsData = uISettingsRetriever.Data;
             }
@@ -264,6 +266,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                                 PseudoMarkup = pseudoMarkup,
                                 RichTextBox = richTextBoxResultText
                             });
+
+                        outputText = richTextBoxResultText.Text;
                     }
                     else
                     {
@@ -284,31 +288,38 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             });
 
         private IActionResult<float> TrySetZoomFactor(
-            float newValue = 0) => actionComponent.Execute(
+            RichTextBox richTextBox,
+            TextBox textBoxZoomFactor,
+            Label labelZoomFactory,
+            Func<float, float> newValueFactory = null) => actionComponent.Execute(
                 new WinFormsActionOpts<float>
                 {
                     ActionName = nameof(TrySetZoomFactor),
                     OnBeforeExecution = () => WinFormsMessageTuple.WithOnly(" "),
                     Action = () =>
                     {
-                        if (newValue <= 0)
+                        float newValue;
+
+                        if (newValueFactory == null)
                         {
                             newValue = float.Parse(
-                                textBoxSrcTextBoxNewZoomValue.Text);
+                                textBoxZoomFactor.Text);
 
                             newValue = newValue / 100;
                         }
-
-                        if (newValue > 0)
+                        else
                         {
-                            richTextBoxSrcText.ZoomFactor = newValue;
-
-                            string newValueStr = Convert.ToInt32(
-                                Math.Round(newValue * 100)).ToString();
-
-                            textBoxSrcTextBoxNewZoomValue.Text = newValueStr;
-                            labelSrcTextBoxZoom.Text = $"{newValueStr}%";
+                            newValue = newValueFactory(
+                                richTextBox.ZoomFactor);
                         }
+
+                        richTextBox.ZoomFactor = newValue;
+
+                        string newValueStr = Convert.ToInt32(
+                            Math.Round(newValue * 100)).ToString();
+
+                        textBoxZoomFactor.Text = newValueStr;
+                        labelZoomFactory.Text = $"{newValueStr}%";
 
                         return ActionResultH.Create(newValue);
                     }
@@ -394,11 +405,19 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         break;
                     case Keys.Add:
                     case Keys.A:
-                        TrySetZoomFactor(richTextBoxSrcText.ZoomFactor * 1.25F);
+                        TrySetZoomFactor(
+                            richTextBoxSrcText,
+                            textBoxSrcTextBoxNewZoomValue,
+                            labelSrcTextBoxZoom,
+                            zoomFactor => zoomFactor * 1.25F);
                         break;
                     case Keys.Subtract:
                     case Keys.S:
-                        TrySetZoomFactor(richTextBoxSrcText.ZoomFactor / 1.25F);
+                        TrySetZoomFactor(
+                            richTextBoxSrcText,
+                            textBoxSrcTextBoxNewZoomValue,
+                            labelSrcTextBoxZoom,
+                            zoomFactor => zoomFactor / 1.25F);
                         break;
                 }
 
@@ -410,23 +429,102 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                TrySetZoomFactor();
+                TrySetZoomFactor(
+                    richTextBoxSrcText,
+                    textBoxSrcTextBoxNewZoomValue,
+                    labelSrcTextBoxZoom);
             }
         }
 
         private void ButtonSetSrcTextBoxZoomFactor_Click(object sender, EventArgs e)
         {
-            TrySetZoomFactor();
+            TrySetZoomFactor(
+                richTextBoxSrcText,
+                textBoxSrcTextBoxNewZoomValue,
+                labelSrcTextBoxZoom);
         }
 
         private void IconLabelSrcTextBoxIncreaseZoomFactory_Click(object sender, EventArgs e)
         {
-            TrySetZoomFactor(richTextBoxSrcText.ZoomFactor * 1.25F);
+            TrySetZoomFactor(
+                richTextBoxSrcText,
+                textBoxSrcTextBoxNewZoomValue,
+                labelSrcTextBoxZoom,
+                zoomFactor => zoomFactor * 1.25F);
         }
 
         private void IconLabelSrcTextBoxDecreaseZoomFactory_Click(object sender, EventArgs e)
         {
-            TrySetZoomFactor(richTextBoxSrcText.ZoomFactor / 1.25F);
+            TrySetZoomFactor(
+                richTextBoxSrcText,
+                textBoxSrcTextBoxNewZoomValue,
+                labelSrcTextBoxZoom,
+                zoomFactor => zoomFactor / 1.25F);
+        }
+
+        private void RichTextBoxResultText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.Alt)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.Add:
+                    case Keys.A:
+                        TrySetZoomFactor(
+                            richTextBoxResultText,
+                            textBoxResultTextBoxNewZoomValue,
+                            labelResultTextBoxZoom,
+                            zoomFactor => zoomFactor * 1.25F);
+                        break;
+                    case Keys.Subtract:
+                    case Keys.S:
+                        TrySetZoomFactor(
+                            richTextBoxResultText,
+                            textBoxResultTextBoxNewZoomValue,
+                            labelResultTextBoxZoom,
+                            zoomFactor => zoomFactor / 1.25F);
+                        break;
+                }
+
+                richTextBoxSrcText.Focus();
+            }
+        }
+
+        private void TextBoxResultTextBoxNewZoomValue_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                TrySetZoomFactor(
+                    richTextBoxResultText,
+                    textBoxResultTextBoxNewZoomValue,
+                    labelResultTextBoxZoom);
+            }
+        }
+
+        private void ButtonSetResultTextBoxZoomFactor_Click(object sender, EventArgs e)
+        {
+            TrySetZoomFactor(
+                    richTextBoxResultText,
+                    textBoxResultTextBoxNewZoomValue,
+                    labelResultTextBoxZoom);
+        }
+
+        private void IconLabelResultTextBoxIncreaseZoomFactory_Click(object sender, EventArgs e)
+        {
+            TrySetZoomFactor(
+                richTextBoxResultText,
+                textBoxResultTextBoxNewZoomValue,
+                labelResultTextBoxZoom,
+                zoomFactor => zoomFactor * 1.25F);
+        }
+
+        private void IconLabelResultTextBoxDecreaseZoomFactory_Click(object sender, EventArgs e)
+        {
+            TrySetZoomFactor(
+                richTextBoxResultText,
+                textBoxResultTextBoxNewZoomValue,
+                labelResultTextBoxZoom,
+                zoomFactor => zoomFactor / 1.25F);
         }
 
         #endregion UI Event Handlers

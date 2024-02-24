@@ -38,6 +38,13 @@
             textBoxSrcTextBoxNewZoomValue = new TextBox();
             labelSrcTextBoxZoom = new Label();
             labelTitleScrTextBoxZoom = new Label();
+            panelResultTextBoxTopControls = new Panel();
+            iconLabelResultTextBoxDecreaseZoomFactory = new WinForms.Controls.IconLabel();
+            iconLabelResultTextBoxIncreaseZoomFactory = new WinForms.Controls.IconLabel();
+            buttonSetResultTextBoxZoomFactor = new Button();
+            textBoxResultTextBoxNewZoomValue = new TextBox();
+            labelResultTextBoxZoom = new Label();
+            labelTitleResultTextBoxZoom = new Label();
             splitContainerMain = new SplitContainer();
             splitContainerTransformers = new SplitContainer();
             treeViewTransformers = new TreeView();
@@ -51,6 +58,7 @@
             splitContainerTextAreas.Panel2.SuspendLayout();
             splitContainerTextAreas.SuspendLayout();
             panelSrcTextBoxTopControls.SuspendLayout();
+            panelResultTextBoxTopControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).BeginInit();
             splitContainerMain.Panel1.SuspendLayout();
             splitContainerMain.Panel2.SuspendLayout();
@@ -68,12 +76,13 @@
             richTextBoxResultText.AcceptsTab = true;
             richTextBoxResultText.Dock = DockStyle.Fill;
             richTextBoxResultText.Font = new Font("Consolas", 9F, FontStyle.Bold);
-            richTextBoxResultText.Location = new Point(0, 0);
+            richTextBoxResultText.Location = new Point(0, 23);
             richTextBoxResultText.Name = "richTextBoxResultText";
-            richTextBoxResultText.Size = new Size(796, 396);
+            richTextBoxResultText.Size = new Size(796, 373);
             richTextBoxResultText.TabIndex = 0;
             richTextBoxResultText.TabStop = false;
             richTextBoxResultText.Text = "";
+            richTextBoxResultText.KeyDown += RichTextBoxResultText_KeyDown;
             // 
             // splitContainerTextAreas
             // 
@@ -89,6 +98,7 @@
             // splitContainerTextAreas.Panel2
             // 
             splitContainerTextAreas.Panel2.Controls.Add(richTextBoxResultText);
+            splitContainerTextAreas.Panel2.Controls.Add(panelResultTextBoxTopControls);
             splitContainerTextAreas.Size = new Size(1600, 396);
             splitContainerTextAreas.SplitterDistance = 800;
             splitContainerTextAreas.TabIndex = 0;
@@ -187,6 +197,87 @@
             labelTitleScrTextBoxZoom.Size = new Size(45, 21);
             labelTitleScrTextBoxZoom.TabIndex = 0;
             labelTitleScrTextBoxZoom.Text = "Zoom";
+            // 
+            // panelResultTextBoxTopControls
+            // 
+            panelResultTextBoxTopControls.Controls.Add(iconLabelResultTextBoxDecreaseZoomFactory);
+            panelResultTextBoxTopControls.Controls.Add(iconLabelResultTextBoxIncreaseZoomFactory);
+            panelResultTextBoxTopControls.Controls.Add(buttonSetResultTextBoxZoomFactor);
+            panelResultTextBoxTopControls.Controls.Add(textBoxResultTextBoxNewZoomValue);
+            panelResultTextBoxTopControls.Controls.Add(labelResultTextBoxZoom);
+            panelResultTextBoxTopControls.Controls.Add(labelTitleResultTextBoxZoom);
+            panelResultTextBoxTopControls.Dock = DockStyle.Top;
+            panelResultTextBoxTopControls.Location = new Point(0, 0);
+            panelResultTextBoxTopControls.Name = "panelResultTextBoxTopControls";
+            panelResultTextBoxTopControls.Size = new Size(796, 23);
+            panelResultTextBoxTopControls.TabIndex = 2;
+            // 
+            // iconLabelResultTextBoxDecreaseZoomFactory
+            // 
+            iconLabelResultTextBoxDecreaseZoomFactory.AutoSize = true;
+            iconLabelResultTextBoxDecreaseZoomFactory.Dock = DockStyle.Left;
+            iconLabelResultTextBoxDecreaseZoomFactory.Location = new Point(173, 0);
+            iconLabelResultTextBoxDecreaseZoomFactory.Name = "iconLabelResultTextBoxDecreaseZoomFactory";
+            iconLabelResultTextBoxDecreaseZoomFactory.Size = new Size(14, 15);
+            iconLabelResultTextBoxDecreaseZoomFactory.TabIndex = 5;
+            iconLabelResultTextBoxDecreaseZoomFactory.Text = "R";
+            iconLabelResultTextBoxDecreaseZoomFactory.Click += IconLabelResultTextBoxDecreaseZoomFactory_Click;
+            // 
+            // iconLabelResultTextBoxIncreaseZoomFactory
+            // 
+            iconLabelResultTextBoxIncreaseZoomFactory.AutoSize = true;
+            iconLabelResultTextBoxIncreaseZoomFactory.Dock = DockStyle.Left;
+            iconLabelResultTextBoxIncreaseZoomFactory.Location = new Point(159, 0);
+            iconLabelResultTextBoxIncreaseZoomFactory.Name = "iconLabelResultTextBoxIncreaseZoomFactory";
+            iconLabelResultTextBoxIncreaseZoomFactory.Size = new Size(14, 15);
+            iconLabelResultTextBoxIncreaseZoomFactory.TabIndex = 4;
+            iconLabelResultTextBoxIncreaseZoomFactory.Text = "R";
+            iconLabelResultTextBoxIncreaseZoomFactory.Click += IconLabelResultTextBoxIncreaseZoomFactory_Click;
+            // 
+            // buttonSetResultTextBoxZoomFactor
+            // 
+            buttonSetResultTextBoxZoomFactor.Dock = DockStyle.Left;
+            buttonSetResultTextBoxZoomFactor.Location = new Point(121, 0);
+            buttonSetResultTextBoxZoomFactor.Name = "buttonSetResultTextBoxZoomFactor";
+            buttonSetResultTextBoxZoomFactor.Size = new Size(38, 23);
+            buttonSetResultTextBoxZoomFactor.TabIndex = 3;
+            buttonSetResultTextBoxZoomFactor.Text = "Set";
+            buttonSetResultTextBoxZoomFactor.UseVisualStyleBackColor = true;
+            buttonSetResultTextBoxZoomFactor.Click += ButtonSetResultTextBoxZoomFactor_Click;
+            // 
+            // textBoxResultTextBoxNewZoomValue
+            // 
+            textBoxResultTextBoxNewZoomValue.Dock = DockStyle.Left;
+            textBoxResultTextBoxNewZoomValue.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBoxResultTextBoxNewZoomValue.Location = new Point(86, 0);
+            textBoxResultTextBoxNewZoomValue.Name = "textBoxResultTextBoxNewZoomValue";
+            textBoxResultTextBoxNewZoomValue.Size = new Size(35, 22);
+            textBoxResultTextBoxNewZoomValue.TabIndex = 2;
+            textBoxResultTextBoxNewZoomValue.Text = "100";
+            textBoxResultTextBoxNewZoomValue.KeyDown += TextBoxResultTextBoxNewZoomValue_KeyDown;
+            // 
+            // labelResultTextBoxZoom
+            // 
+            labelResultTextBoxZoom.AutoSize = true;
+            labelResultTextBoxZoom.Dock = DockStyle.Left;
+            labelResultTextBoxZoom.Font = new Font("Consolas", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            labelResultTextBoxZoom.Location = new Point(45, 0);
+            labelResultTextBoxZoom.Name = "labelResultTextBoxZoom";
+            labelResultTextBoxZoom.Padding = new Padding(3);
+            labelResultTextBoxZoom.Size = new Size(41, 20);
+            labelResultTextBoxZoom.TabIndex = 1;
+            labelResultTextBoxZoom.Text = "100%";
+            // 
+            // labelTitleResultTextBoxZoom
+            // 
+            labelTitleResultTextBoxZoom.AutoSize = true;
+            labelTitleResultTextBoxZoom.Dock = DockStyle.Left;
+            labelTitleResultTextBoxZoom.Location = new Point(0, 0);
+            labelTitleResultTextBoxZoom.Name = "labelTitleResultTextBoxZoom";
+            labelTitleResultTextBoxZoom.Padding = new Padding(3);
+            labelTitleResultTextBoxZoom.Size = new Size(45, 21);
+            labelTitleResultTextBoxZoom.TabIndex = 0;
+            labelTitleResultTextBoxZoom.Text = "Zoom";
             // 
             // splitContainerMain
             // 
@@ -300,6 +391,8 @@
             splitContainerTextAreas.ResumeLayout(false);
             panelSrcTextBoxTopControls.ResumeLayout(false);
             panelSrcTextBoxTopControls.PerformLayout();
+            panelResultTextBoxTopControls.ResumeLayout(false);
+            panelResultTextBoxTopControls.PerformLayout();
             splitContainerMain.Panel1.ResumeLayout(false);
             splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();
@@ -334,5 +427,12 @@
         private Button buttonSetSrcTextBoxZoomFactor;
         private WinForms.Controls.IconLabel iconLabelSrcTextBoxIncreaseZoomFactory;
         private WinForms.Controls.IconLabel iconLabelSrcTextBoxDecreaseZoomFactory;
+        private Panel panelResultTextBoxTopControls;
+        private WinForms.Controls.IconLabel iconLabelResultTextBoxDecreaseZoomFactory;
+        private WinForms.Controls.IconLabel iconLabelResultTextBoxIncreaseZoomFactory;
+        private Button buttonSetResultTextBoxZoomFactor;
+        private TextBox textBoxResultTextBoxNewZoomValue;
+        private Label labelResultTextBoxZoom;
+        private Label labelTitleResultTextBoxZoom;
     }
 }
