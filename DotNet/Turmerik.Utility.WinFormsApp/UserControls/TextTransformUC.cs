@@ -76,16 +76,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             InitializeComponent();
             toolTip = new ToolTip();
 
+            this.richTextBoxUCSrc.RichTextBox.KeyDown += RichTextBoxUCSrc_KeyDown;
+
             if (svcProvContnr.IsRegistered)
             {
                 actionComponent = svcProv.GetRequiredService<IWinFormsActionComponentCreator>(
                     ).StatusLabel(GetType());
 
                 iconLabelRunCurrentTransformer.Text = MatUIIconUnicodesH.AudioAndVideo.PLAY_ARROW;
-                iconLabelSrcTextBoxIncreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.ADD;
-                iconLabelSrcTextBoxDecreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.REMOVE;
-                iconLabelResultTextBoxIncreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.ADD;
-                iconLabelResultTextBoxDecreaseZoomFactory.Text = MatUIIconUnicodesH.UIActions.REMOVE;
 
                 uISettingsData = uISettingsRetriever.Data;
             }
@@ -208,12 +206,12 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         private void ToggleControlsEnabled(bool enabled)
         {
             treeViewTransformers.Enabled = enabled;
-            richTextBoxSrcText.Enabled = enabled;
-            richTextBoxResultText.Enabled = enabled;
+            richTextBoxUCSrc.Enabled = enabled;
+            richTextBoxUCResult.Enabled = enabled;
 
             if (enabled)
             {
-                iconLabelRunCurrentTransformer.Enabled = currentTextTransformItem != null;
+                iconLabelRunCurrentTransformer.Enabled = (currentTextTransformItem != null || currentRichTextTransformItem != null);
             }
             else
             {
@@ -236,25 +234,22 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                     if (currentTextTransformItem != null)
                     {
-                        string inputText = richTextBoxSrcText.Text;
+                        string inputText = richTextBoxUCSrc.RichTextBox.Text;
 
                         outputText = textTransformBehavior.Behavior.Invoke<string>(
                             currentTextTransformItem.JsMethod, [inputText]);
 
-                        richTextBoxResultText.Text = outputText;
+                        richTextBoxUCResult.RichTextBox.Text = outputText;
                     }
                     else if (currentRichTextTransformItem != null)
                     {
-                        string inputText = richTextBoxSrcText.Text;
+                        string inputText = richTextBoxUCSrc.RichTextBox.Text;
 
                         var pseudoMarkup = richTextBoxPseudoMarkupRetriever.GetPseudoMarkup(
                             new RichTextBoxPseudoMarkupRetrieverOptsMtbl
                             {
-                                RichTextBox = richTextBoxSrcText
+                                RichTextBox = richTextBoxUCSrc.RichTextBox
                             });
-
-                        /* var pseudoMarkupJson = jsonConversion.Adapter.Serialize(pseudoMarkup);
-                        File.WriteAllText("pseudoMarkup.json", pseudoMarkupJson); */
 
                         pseudoMarkup = textTransformBehavior.Behavior.Invoke<RichTextBoxPseudoMarkupMtbl>(
                             currentRichTextTransformItem.JsMethod, [inputText, pseudoMarkup]);
@@ -264,10 +259,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                             {
                                 InsertIdx = int.MaxValue,
                                 PseudoMarkup = pseudoMarkup,
-                                RichTextBox = richTextBoxResultText
+                                RichTextBox = richTextBoxUCResult.RichTextBox
                             });
 
-                        outputText = richTextBoxResultText.Text;
+                        outputText = richTextBoxUCResult.RichTextBox.Text;
                     }
                     else
                     {
@@ -338,8 +333,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     uIThemeData = uIThemeRetriever.Data.ActWith(uiTheme =>
                     {
                         uiTheme.ApplyBgColor([
-                            this.richTextBoxSrcText,
-                            this.richTextBoxResultText,
                         ], uiTheme.InputBackColor);
                     });
 
@@ -386,145 +379,36 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 }
             });
 
-        private async void IconLabelRunCurrentTransformer_Click(
-            object sender, EventArgs e) => await RunCurrentTransform();
+        private void IconLabelRunCurrentTransformer_Click(
+            object sender, EventArgs e)
+        {
+            RunCurrentTransform().ContinueWith(task =>
+            {
+                iconLabelRunCurrentTransformer.Invoke(() =>
+                {
+                    ToggleControlsEnabled(true);
+                });
+            });
+        }
 
-        private async void RichTextBoxSrcText_KeyDown(object sender, KeyEventArgs e)
+        private void RichTextBoxUCSrc_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.Control && e.Alt)
             {
                 switch (e.KeyCode)
                 {
                     case Keys.Enter:
-                        var result = await RunCurrentTransform();
-
-                        if (result.IsSuccess && !string.IsNullOrEmpty(result.Value))
+                        RunCurrentTransform().ContinueWith(task =>
                         {
-                            Clipboard.SetText(result.Value);
-                        }
-                        break;
-                    case Keys.Add:
-                    case Keys.A:
-                        TrySetZoomFactor(
-                            richTextBoxSrcText,
-                            textBoxSrcTextBoxNewZoomValue,
-                            labelSrcTextBoxZoom,
-                            zoomFactor => zoomFactor * 1.25F);
-                        break;
-                    case Keys.Subtract:
-                    case Keys.S:
-                        TrySetZoomFactor(
-                            richTextBoxSrcText,
-                            textBoxSrcTextBoxNewZoomValue,
-                            labelSrcTextBoxZoom,
-                            zoomFactor => zoomFactor / 1.25F);
+                            iconLabelRunCurrentTransformer.Invoke(() =>
+                            {
+                                ToggleControlsEnabled(true);
+                                Clipboard.SetText(task.Result.Value);
+                            });
+                        });
                         break;
                 }
-
-                richTextBoxSrcText.Focus();
             }
-        }
-
-        private void TextBoxSrcTextBoxNewZoomValue_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                TrySetZoomFactor(
-                    richTextBoxSrcText,
-                    textBoxSrcTextBoxNewZoomValue,
-                    labelSrcTextBoxZoom);
-            }
-        }
-
-        private void ButtonSetSrcTextBoxZoomFactor_Click(object sender, EventArgs e)
-        {
-            TrySetZoomFactor(
-                richTextBoxSrcText,
-                textBoxSrcTextBoxNewZoomValue,
-                labelSrcTextBoxZoom);
-        }
-
-        private void IconLabelSrcTextBoxIncreaseZoomFactory_Click(object sender, EventArgs e)
-        {
-            TrySetZoomFactor(
-                richTextBoxSrcText,
-                textBoxSrcTextBoxNewZoomValue,
-                labelSrcTextBoxZoom,
-                zoomFactor => zoomFactor * 1.25F);
-        }
-
-        private void IconLabelSrcTextBoxDecreaseZoomFactory_Click(object sender, EventArgs e)
-        {
-            TrySetZoomFactor(
-                richTextBoxSrcText,
-                textBoxSrcTextBoxNewZoomValue,
-                labelSrcTextBoxZoom,
-                zoomFactor => zoomFactor / 1.25F);
-        }
-
-        private void RichTextBoxResultText_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.Alt)
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.Add:
-                    case Keys.A:
-                        TrySetZoomFactor(
-                            richTextBoxResultText,
-                            textBoxResultTextBoxNewZoomValue,
-                            labelResultTextBoxZoom,
-                            zoomFactor => zoomFactor * 1.25F);
-                        break;
-                    case Keys.Subtract:
-                    case Keys.S:
-                        TrySetZoomFactor(
-                            richTextBoxResultText,
-                            textBoxResultTextBoxNewZoomValue,
-                            labelResultTextBoxZoom,
-                            zoomFactor => zoomFactor / 1.25F);
-                        break;
-                }
-
-                richTextBoxSrcText.Focus();
-            }
-        }
-
-        private void TextBoxResultTextBoxNewZoomValue_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                TrySetZoomFactor(
-                    richTextBoxResultText,
-                    textBoxResultTextBoxNewZoomValue,
-                    labelResultTextBoxZoom);
-            }
-        }
-
-        private void ButtonSetResultTextBoxZoomFactor_Click(object sender, EventArgs e)
-        {
-            TrySetZoomFactor(
-                    richTextBoxResultText,
-                    textBoxResultTextBoxNewZoomValue,
-                    labelResultTextBoxZoom);
-        }
-
-        private void IconLabelResultTextBoxIncreaseZoomFactory_Click(object sender, EventArgs e)
-        {
-            TrySetZoomFactor(
-                richTextBoxResultText,
-                textBoxResultTextBoxNewZoomValue,
-                labelResultTextBoxZoom,
-                zoomFactor => zoomFactor * 1.25F);
-        }
-
-        private void IconLabelResultTextBoxDecreaseZoomFactory_Click(object sender, EventArgs e)
-        {
-            TrySetZoomFactor(
-                richTextBoxResultText,
-                textBoxResultTextBoxNewZoomValue,
-                labelResultTextBoxZoom,
-                zoomFactor => zoomFactor / 1.25F);
         }
 
         #endregion UI Event Handlers
