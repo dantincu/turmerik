@@ -254,6 +254,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         pseudoMarkup = textTransformBehavior.Behavior.Invoke<RichTextBoxPseudoMarkupMtbl>(
                             currentRichTextTransformItem.JsMethod, [inputText, pseudoMarkup]);
 
+                        richTextBoxUCResult.RichTextBox.Clear();
+
                         richTextBoxPseudoMarkupAdapter.InsertPseudoMarkup(
                             new RichTextBoxPseudoMarkupAdapterOptsMtbl
                             {

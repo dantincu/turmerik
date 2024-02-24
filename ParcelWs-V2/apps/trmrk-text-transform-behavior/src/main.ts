@@ -89,7 +89,7 @@ export const ngBook2CodeSectionRemStartingDigits = (
                 line.Segments.length - j
               );
 
-              pseudoMarkup.Lines.splice(i, 0, {
+              pseudoMarkup.Lines.splice(i + 1, 0, {
                 Segments: delSegments,
               });
 

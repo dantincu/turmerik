@@ -9,18 +9,6 @@ const pseudoMarkup: RichTextBoxPseudoMarkup = {
       Segments: [
         {
           StartIdx: 0,
-          Length: 2,
-          Text: "1 ",
-          ForegroundColor: "Gray",
-          BackgroundColor: "232, 255, 232",
-          Font: {
-            FontFamilyName: "Microsoft Sans Serif",
-            FontSize: 7.0,
-            FontStyle: "Regular",
-          },
-        },
-        {
-          StartIdx: 2,
           Length: 7,
           Text: "import ",
           ForegroundColor: "Green",
@@ -29,6 +17,18 @@ const pseudoMarkup: RichTextBoxPseudoMarkup = {
             FontFamilyName: "Microsoft Sans Serif",
             FontSize: 8.0,
             FontStyle: "Bold",
+          },
+        },
+        {
+          StartIdx: 7,
+          Length: 2,
+          Text: "1 ",
+          ForegroundColor: "Gray",
+          BackgroundColor: "232, 255, 232",
+          Font: {
+            FontFamilyName: "Microsoft Sans Serif",
+            FontSize: 7.0,
+            FontStyle: "Regular",
           },
         },
         {
