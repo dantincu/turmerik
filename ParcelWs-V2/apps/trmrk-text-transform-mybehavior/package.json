@@ -1,7 +1,7 @@
 {
-  "name": "trmrk-text-transform-behavior-testapp",
+  "name": "trmrk-text-transform-mybehavior",
   "version": "0.1.0",
-  "description": "Turmierk Text Transform Behavior Test App",
+  "description": "Turmierk Text Transform Behavior",
   "type": "module",
   "scripts": {
     "build-dev": "parcel build ./src/env/any/index.ts --no-optimize --dist-dir ./dist/dev",
@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "trmrk": "../../libs/trmrk",
-    "trmrk-text-transform-behavior": "../trmrk-text-transform-behavior",
-    "trmrk-text-transform-mybehavior": "../trmrk-text-transform-mybehavior"
+    "trmrk-text-transform-behavior": "../trmrk-text-transform-behavior"
   }
 }

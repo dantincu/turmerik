@@ -1,7 +1,7 @@
 import trmrk_lib from "trmrk";
 
-import { turmerik } from "trmrk_text_transform_behavior/src/env/any";
-import { RichTextBoxPseudoMarkup } from "trmrk_text_transform_behavior/src/core";
+import { turmerik } from "trmrk-text-transform-mybehavior/src/env/any";
+import { RichTextBoxPseudoMarkup } from "trmrk-text-transform-behavior/src/core";
 
 const pseudoMarkup: RichTextBoxPseudoMarkup = {
   Lines: [

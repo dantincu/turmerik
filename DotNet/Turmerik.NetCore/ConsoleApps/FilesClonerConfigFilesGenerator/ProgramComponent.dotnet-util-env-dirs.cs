@@ -45,7 +45,9 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                                         ExcludedRelPathRegexes = new List<string>
                                         {
                                             "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.FilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/config\\.json",
-                                            "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.FilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/profiles\\/.+\\.config\\.json"
+                                            "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.FilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/profiles\\/.+\\.config\\.json",
+                                            "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.js",
+                                            "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.json"
                                         }
                                     },
                                 },

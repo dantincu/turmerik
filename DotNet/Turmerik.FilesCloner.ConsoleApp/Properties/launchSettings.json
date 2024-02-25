@@ -7,8 +7,8 @@
       // "commandLineArgs": ":p:dotnet-util-bins",
       // "commandLineArgs": ":p:dotnet-util-env-dirs",
       // "commandLineArgs": ":p:dotnet-bkp-bins",
-      // "commandLineArgs": ":p:text-transform-behavior",
-      "commandLineArgs": ":p:ng-book-2"
+      "commandLineArgs": ":p:text-transform-behavior",
+      // "commandLineArgs": ":p:ng-book-2"
     }
   }
 }

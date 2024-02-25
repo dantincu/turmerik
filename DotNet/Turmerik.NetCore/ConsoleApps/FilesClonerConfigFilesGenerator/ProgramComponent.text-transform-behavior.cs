@@ -19,7 +19,35 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                     {
                         new ProgramConfig.FilesGroup
                         {
-                            WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-text-transform-behavior",
+                            WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-text-transform-mybehavior",
+                            CloneBaseDirLocator = new FsEntryLocator
+                            {
+                                EntryPath = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
+                            },
+                            Files = new List<FileArgs>
+                            {
+                                new FileArgs
+                                {
+                                    InputFileLocator = new FsEntryLocator
+                                    {
+                                        EntryRelPath = Path.Combine("dist",
+                                            isDevEnv ? "dev" : "prod", "index.js")
+                                    },
+                                    CloneDirLocator = new FsEntryLocator
+                                    {
+                                        EntryRelPath = ".\\Data\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
+                                    },
+                                    CloneFileNameTpl = "behavior.js",
+                                    CloneTplLines = [
+                                        "globalThis.turmerikObj = {{}};",
+                                        "{0}",
+                                        "globalThis.turmerik = turmerikObj.turmerik;" ]
+                                },
+                            }
+                        },
+                        new ProgramConfig.FilesGroup
+                        {
+                            WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-text-transform-defaultbehavior",
                             CloneBaseDirLocator = new FsEntryLocator
                             {
                                 EntryPath = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|"
@@ -50,7 +78,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                     {
                         new ProgramConfig.ScriptsGroup
                         {
-                            WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-text-transform-behavior",
+                            WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-text-transform-mybehavior",
                             OnBeforeScripts = new List<ProgramConfig.Script>
                             {
                                 new ProgramConfig.Script
@@ -80,17 +108,53 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                         },
                         new ProgramConfig.ScriptsGroup
                         {
-                            WorkDir = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Config\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
+                            WorkDir = "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-text-transform-defaultbehavior",
                             OnBeforeScripts = new List<ProgramConfig.Script>
                             {
                                 new ProgramConfig.Script
                                 {
-                                    /* WinShellCmd = new Core.Utility.ProcessLauncherOpts
+                                    PowerShellCmd = new Utility.PowerShellAdapterOpts
                                     {
-                                        FileName = "cmd",
-                                        ArgumentsNmrbl = [ "/c", "del", "behavior.js" ],
-                                        UseShellExecute = false
-                                    }*/
+                                        Commands = new Utility.PowerShellCommandOpts
+                                        {
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ ".parcel-cache", ":fr", ":rc" ]
+                                        }.Lst(new Utility.PowerShellCommandOpts
+                                        {
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ "dist", ":fr", ":rc" ]
+                                        })
+                                    }
+                                },
+                                new ProgramConfig.Script
+                                {
+                                    WinShellCmd = new Core.Utility.ProcessLauncherOpts
+                                    {
+                                        FileName = "npm",
+                                        ArgumentsNmrbl = [ "run", isDevEnv ? "build-dev" : "build-prod" ]
+                                    }
+                                }
+                            }
+                        },
+                        new ProgramConfig.ScriptsGroup
+                        {
+                            OnBeforeScripts = new List<ProgramConfig.Script>
+                            {
+                                new ProgramConfig.Script
+                                {
+                                    WorkDir = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Config\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
+                                    PowerShellCmd = new Utility.PowerShellAdapterOpts
+                                    {
+                                        Commands = new Utility.PowerShellCommandOpts
+                                        {
+                                            CommandName = "rmitem",
+                                            CommandArguments = [ "behavior.js", ":fr", ":rc" ]
+                                        }.Lst()
+                                    }
+                                },
+                                new ProgramConfig.Script
+                                {
+                                    WorkDir = "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Data\\Turmerik.Utility.WinFormsApp.UserControls.TextTransformBehavior",
                                     PowerShellCmd = new Utility.PowerShellAdapterOpts
                                     {
                                         Commands = new Utility.PowerShellCommandOpts
