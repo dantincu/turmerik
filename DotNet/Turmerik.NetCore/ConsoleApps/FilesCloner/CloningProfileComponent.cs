@@ -221,7 +221,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
             var srcFolder = await filteredFsEntriesRetriever.FindMatchingAsync(
                 new FilteredDriveRetrieverMatcherOpts
                 {
-                    PrFolderIdnf = dirArgs.InputDirLocator.EntryPath,
+                    PrFolderIdnf = Path.GetFullPath(dirArgs.InputDirLocator.EntryPath),
                     FsEntriesSerializableFilter = dirArgs.InputDirFilter,
                 });
 
@@ -230,7 +230,7 @@ namespace Turmerik.NetCore.ConsoleApps.FilesCloner
                 var destnFolder = await filteredFsEntriesRetriever.FindMatchingAsync(
                     new FilteredDriveRetrieverMatcherOpts
                     {
-                        PrFolderIdnf = dirArgs.CloneDirLocator.EntryPath,
+                        PrFolderIdnf = Path.GetFullPath(dirArgs.CloneDirLocator.EntryPath),
                         FsEntriesSerializableFilter = dirArgs.BeforeCloneDestnCleanupFilter
                     });
 

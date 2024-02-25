@@ -289,7 +289,8 @@ namespace Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator
                 GenerateDotNetUtilBinsCfgProfile(isDevEnv),
                 GenerateDotNetUtilEnvDirsCfgProfile(isDevEnv),
                 GenerateBlazorAppCfgProfile(isDevEnv),
-                GenerateTextTransformBehaviorCfgProfile(isDevEnv)
+                GenerateTextTransformBehaviorCfgProfile(isDevEnv),
+                GenerateNgBook2Profile(isDevEnv)
             }
         };
 

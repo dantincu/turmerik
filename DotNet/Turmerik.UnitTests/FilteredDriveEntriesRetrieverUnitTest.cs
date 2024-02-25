@@ -73,7 +73,7 @@ namespace Turmerik.UnitTests
                         new FilteredDriveRetrieverMatcherOpts
                         {
                             FsEntriesSerializableFilter = driveEntriesFilter,
-                            PrFolderIdnf = prFolderPath,
+                            PrFolderIdnf = Path.GetFullPath(prFolderPath),
                             CheckRetNodeValidityDepth = int.MaxValue
                         });
 
