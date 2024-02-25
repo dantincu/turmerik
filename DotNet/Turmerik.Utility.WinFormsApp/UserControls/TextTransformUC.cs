@@ -89,6 +89,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             }
         }
 
+        public void GoToSrcTextBox() => richTextBoxUCSrc.RichTextBox.Focus();
+
         private ToolTipHintsGroupOpts GetToolTipHintsGroupOpts()
         {
             var optsList = new List<ToolTipHintOpts>();

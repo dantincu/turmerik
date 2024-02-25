@@ -36,11 +36,13 @@
             textUtilsUC = new UserControls.TextUtilsUC();
             tabPageTextTransform = new TabPage();
             textTransformUC = new UserControls.TextTransformUC();
-            menuStrip1 = new MenuStrip();
-            actionsToolStripMenuItem = new ToolStripMenuItem();
+            menuStripMain = new MenuStrip();
+            textUtilsActionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
             goToMarkdownSourceTextToolStripMenuItem = new ToolStripMenuItem();
             goToMarkdownResultTextToolStripMenuItem = new ToolStripMenuItem();
+            textTransformActionsToolStripMenuItem = new ToolStripMenuItem();
+            goToTextTransformSrcTextBoxToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItemShowHints = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
@@ -49,7 +51,7 @@
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
             tabPageTextTransform.SuspendLayout();
-            menuStrip1.SuspendLayout();
+            menuStripMain.SuspendLayout();
             SuspendLayout();
             // 
             // statusStripMain
@@ -77,6 +79,7 @@
             tabControlMain.SelectedIndex = 0;
             tabControlMain.Size = new Size(1800, 854);
             tabControlMain.TabIndex = 2;
+            tabControlMain.SelectedIndexChanged += TabControlMain_SelectedIndexChanged;
             // 
             // tabPageTextUtils
             // 
@@ -103,7 +106,7 @@
             tabPageTextTransform.Controls.Add(textTransformUC);
             tabPageTextTransform.Location = new Point(4, 25);
             tabPageTextTransform.Name = "tabPageTextTransform";
-            tabPageTextTransform.Size = new Size(1792, 825);
+            tabPageTextTransform.Size = new Size(192, 71);
             tabPageTextTransform.TabIndex = 1;
             tabPageTextTransform.Text = "Text Transform";
             tabPageTextTransform.UseVisualStyleBackColor = true;
@@ -113,24 +116,24 @@
             textTransformUC.Dock = DockStyle.Fill;
             textTransformUC.Location = new Point(0, 0);
             textTransformUC.Name = "textTransformUC";
-            textTransformUC.Size = new Size(1792, 825);
+            textTransformUC.Size = new Size(192, 71);
             textTransformUC.TabIndex = 0;
             // 
-            // menuStrip1
+            // menuStripMain
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { actionsToolStripMenuItem, helpToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1800, 24);
-            menuStrip1.TabIndex = 3;
-            menuStrip1.Text = "menuStrip1";
+            menuStripMain.Items.AddRange(new ToolStripItem[] { textUtilsActionsToolStripMenuItem, textTransformActionsToolStripMenuItem, helpToolStripMenuItem });
+            menuStripMain.Location = new Point(0, 0);
+            menuStripMain.Name = "menuStripMain";
+            menuStripMain.Size = new Size(1800, 24);
+            menuStripMain.TabIndex = 3;
+            menuStripMain.Text = "menuStrip1";
             // 
-            // actionsToolStripMenuItem
+            // textUtilsActionsToolStripMenuItem
             // 
-            actionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { goToWebResourceUrlToolStripMenuItem, goToMarkdownSourceTextToolStripMenuItem, goToMarkdownResultTextToolStripMenuItem });
-            actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
-            actionsToolStripMenuItem.Size = new Size(59, 20);
-            actionsToolStripMenuItem.Text = "&Actions";
+            textUtilsActionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { goToWebResourceUrlToolStripMenuItem, goToMarkdownSourceTextToolStripMenuItem, goToMarkdownResultTextToolStripMenuItem });
+            textUtilsActionsToolStripMenuItem.Name = "textUtilsActionsToolStripMenuItem";
+            textUtilsActionsToolStripMenuItem.Size = new Size(59, 20);
+            textUtilsActionsToolStripMenuItem.Text = "&Actions";
             // 
             // goToWebResourceUrlToolStripMenuItem
             // 
@@ -152,6 +155,20 @@
             goToMarkdownResultTextToolStripMenuItem.Size = new Size(227, 22);
             goToMarkdownResultTextToolStripMenuItem.Text = "Go To Markdown &Result Text";
             goToMarkdownResultTextToolStripMenuItem.Click += GoToMarkdownResultTextToolStripMenuItem_Click;
+            // 
+            // textTransformActionsToolStripMenuItem
+            // 
+            textTransformActionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { goToTextTransformSrcTextBoxToolStripMenuItem });
+            textTransformActionsToolStripMenuItem.Name = "textTransformActionsToolStripMenuItem";
+            textTransformActionsToolStripMenuItem.Size = new Size(59, 20);
+            textTransformActionsToolStripMenuItem.Text = "&Actions";
+            // 
+            // goToTextTransformSrcTextBoxToolStripMenuItem
+            // 
+            goToTextTransformSrcTextBoxToolStripMenuItem.Name = "goToTextTransformSrcTextBoxToolStripMenuItem";
+            goToTextTransformSrcTextBoxToolStripMenuItem.Size = new Size(180, 22);
+            goToTextTransformSrcTextBoxToolStripMenuItem.Text = "Go To &Src TextBox";
+            goToTextTransformSrcTextBoxToolStripMenuItem.Click += GoToTextTransformSrcTextBoxToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -188,7 +205,7 @@
             ClientSize = new Size(1800, 900);
             Controls.Add(tabControlMain);
             Controls.Add(statusStripMain);
-            Controls.Add(menuStrip1);
+            Controls.Add(menuStripMain);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
@@ -200,8 +217,8 @@
             tabControlMain.ResumeLayout(false);
             tabPageTextUtils.ResumeLayout(false);
             tabPageTextTransform.ResumeLayout(false);
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            menuStripMain.ResumeLayout(false);
+            menuStripMain.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -213,16 +230,18 @@
         private TabControl tabControlMain;
         private TabPage tabPageTextUtils;
         private UserControls.TextUtilsUC textUtilsUC;
-        private MenuStrip menuStrip1;
+        private MenuStrip menuStripMain;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem toolStripMenuItemShowHints;
         private ToolStripComboBox toolStripComboBoxShowHints;
         private ToolStripMenuItem startAppRecoveryToolToolStripMenuItem;
-        private ToolStripMenuItem actionsToolStripMenuItem;
+        private ToolStripMenuItem textUtilsActionsToolStripMenuItem;
         private ToolStripMenuItem goToWebResourceUrlToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownSourceTextToolStripMenuItem;
         private ToolStripMenuItem goToMarkdownResultTextToolStripMenuItem;
         private TabPage tabPageTextTransform;
         private UserControls.TextTransformUC textTransformUC;
+        private ToolStripMenuItem textTransformActionsToolStripMenuItem;
+        private ToolStripMenuItem goToTextTransformSrcTextBoxToolStripMenuItem;
     }
 }

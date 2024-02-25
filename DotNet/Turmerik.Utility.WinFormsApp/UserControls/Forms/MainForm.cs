@@ -131,6 +131,15 @@ namespace Turmerik.Utility.WinFormsApp
             svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().RemoveData();
         }
 
+        private void HideAllActionMenuStripItems()
+        {
+            menuStripMain.Items.Remove(
+                textUtilsActionsToolStripMenuItem);
+
+            menuStripMain.Items.Remove(
+                textTransformActionsToolStripMenuItem);
+        }
+
         #region UI Event Handlers
 
         private void ToolStripComboBoxShowHints_SelectedIndexChanged(object sender, EventArgs e)
@@ -177,6 +186,10 @@ namespace Turmerik.Utility.WinFormsApp
                             }).Key;
 
                         toolTipHintsOrchestrator.UpdateToolTipsText(new());
+
+                        HideAllActionMenuStripItems();
+                        menuStripMain.Items.Insert(0, textUtilsActionsToolStripMenuItem);
+
                         return ActionResultH.Create(delayIdx);
                     }
                 });
@@ -212,6 +225,26 @@ namespace Turmerik.Utility.WinFormsApp
         private void GoToMarkdownResultTextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             textUtilsUC.GoToMarkdownResultText();
+        }
+
+        private void GoToTextTransformSrcTextBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textTransformUC.GoToSrcTextBox();
+        }
+
+        private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (tabControlMain.SelectedIndex)
+            {
+                case 0:
+                    HideAllActionMenuStripItems();
+                    menuStripMain.Items.Insert(0, textUtilsActionsToolStripMenuItem);
+                    break;
+                case 1:
+                    HideAllActionMenuStripItems();
+                    menuStripMain.Items.Insert(0, textTransformActionsToolStripMenuItem);
+                    break;
+            }
         }
 
         #endregion UI Event Handlers
