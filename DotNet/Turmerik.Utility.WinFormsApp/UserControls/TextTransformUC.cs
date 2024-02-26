@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.ServiceModel;
+using System.Threading.Tasks;
 using Turmerik.Core.Actions;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
@@ -280,6 +281,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     iconLabelRunCurrentTransformer.InvokeIfReq(() =>
                     {
                         ToggleControlsEnabled(true);
+                        richTextBoxUCSrc.RichTextBox.Focus();
                     });
 
                     return null;
@@ -383,33 +385,25 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 }
             });
 
-        private void IconLabelRunCurrentTransformer_Click(
+        private async void IconLabelRunCurrentTransformer_Click(
             object sender, EventArgs e)
         {
-            RunCurrentTransform().ContinueWith(task =>
-            {
-                iconLabelRunCurrentTransformer.Invoke(() =>
-                {
-                    ToggleControlsEnabled(true);
-                });
-            });
+            await RunCurrentTransform();
         }
 
-        private void RichTextBoxUCSrc_KeyDown(object? sender, KeyEventArgs e)
+        private async void RichTextBoxUCSrc_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.Control && e.Alt)
             {
                 switch (e.KeyCode)
                 {
                     case Keys.Enter:
-                        RunCurrentTransform().ContinueWith(task =>
+                        var result = await RunCurrentTransform();
+
+                        if (!string.IsNullOrEmpty(result.Value))
                         {
-                            iconLabelRunCurrentTransformer.Invoke(() =>
-                            {
-                                ToggleControlsEnabled(true);
-                                Clipboard.SetText(task.Result.Value);
-                            });
-                        });
+                            Clipboard.SetText(result.Value);
+                        }
                         break;
                 }
             }

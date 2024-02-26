@@ -40,6 +40,35 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   return retVal;
 };
 
+/**
+ * taken from https://stackoverflow.com/questions/33547583/safe-way-to-extract-property-names
+ **/
+export const proxiedPropsOf = <TObj>(obj?: TObj) => {
+  return new Proxy(
+    {},
+    {
+      get: (_, prop) => prop,
+      set: () => {
+        throw Error("Set not supported");
+      },
+    }
+  ) as {
+    [P in keyof TObj]?: P;
+  };
+};
+
+export const propOf = <TObj>(name: keyof TObj) => {
+  return name;
+};
+
+export const propsOf = <TObj>(_obj: TObj | undefined = undefined) => {
+  const result = <T extends keyof TObj>(name: T) => {
+    return name;
+  };
+
+  return result;
+};
+
 export const findKvp = <TValue>(
   arr: TValue[] | readonly TValue[],
   predicate: (
