@@ -23,6 +23,7 @@ import { appBarReducers, appBarSelectors } from "../store/appBarDataSlice";
 import { appBarDataSliceOps } from "../../../../../ParcelWs/apps/trmrk-devtools-webapp/src/store/appBarDataSlice";
 
 import AppModule from "./AppModule";
+import "./App.scss";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
@@ -58,15 +59,17 @@ const App = withErrorBoundary(() => {
 
   if (error) {
     return (
-      <div role="alert" className="trmrk-app-error">
-        <h2>Something went wrong:</h2>
-        <pre>{((error as Error).message ?? error).toString()}</pre>
-        { /* <Button onClick={resetError}>Try again</Button> */ }
-      </div>
+      <ThemeProvider theme={appTheme.theme}>
+        <CssBaseline />
+
+        <Paper className={["trmrk-app-error", appThemeClassName].join(" ")}>
+          <h2>Something went wrong:</h2>
+          <pre>{((error as Error).message ?? error).toString()}</pre>
+          { /* <Button onClick={resetError}>Try again</Button> */ }
+        </Paper>
+      </ThemeProvider>
     );
   }
-
-  console.log("appTheme.theme", appTheme.theme);
 
   return (
     <BrowserRouter>
@@ -74,19 +77,22 @@ const App = withErrorBoundary(() => {
         <CssBaseline />
 
         <AppModule
-          className={["trmrk-app", appThemeClassName, appModeCssClass.value].join(" ")}
+          className={["trmrk-app"].join(" ")}
           headerClassName="trmrk-app-header"
           headerContent={<AppBar className="trmrk-app-bar"></AppBar>}
-          afterHeaderClassName="trmrk-app-header-toggle-btn"
+          afterHeaderClassName="trmrk-app-header-toggle"
           afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
             { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
           mainContent={
-            <Paper className="trmrk-app-main">
+            <Paper className="trmrk-app-main-content">
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            </Paper> } />
+            </Paper> }
+          showHeader={showAppBar}
+          isCompactMode={isCompactMode}
+          isDarkMode={isDarkMode} />
       </ThemeProvider>
     </BrowserRouter>
   );

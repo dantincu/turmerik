@@ -1,0 +1,25 @@
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+#app-root {
+  height: 100%;
+}
+
+.trmrk-modal {
+  user-select: none;
+}
+
+.trmrk-scrollable {
+  overflow-y: scroll;
+}

@@ -1,52 +1,6 @@
 @import "./_mixins";
 
 .trmrk-theme-dark {
-  color: white;
-
-  .trmrk-scrollable::-webkit-scrollbar-thumb {
-    background-color: #303030;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track {
-    background-color: #1e1e1e;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track:hover {
-    background-color: #262626;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
-    background-color: #404040;
-  }
-
-  .trmrk-left-resizable-content::after {
-    background-color: #606060;
-  }
-}
-
-.trmrk-theme-light {
-  .trmrk-scrollable::-webkit-scrollbar-thumb {
-    background-color: #cdcdcd;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track {
-    background-color: #efefef;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-track:hover {
-    background-color: #dedede;
-  }
-
-  .trmrk-scrollable::-webkit-scrollbar-thumb:hover {
-    background-color: #bcbcbc;
-  }
-
-  .trmrk-left-resizable-content::after {
-    background-color: #ababab;
-  }
-}
-
-.trmrk-theme-dark {
   .trmrk-app-bar-toggle-icon {
     background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
     background-color: #121212;

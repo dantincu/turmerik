@@ -5,7 +5,10 @@ import { Provider } from 'react-redux';
 
 import appDataStore from "../../store/appDataStore";
 
+import "trmrk-react/src/styles/all.scss";
+
 import "../../styles/index-any.scss"
+
 import App from '../../app/App';
 
 import { createAppThemesMap } from "trmrk-react/src/app-theme/core";
