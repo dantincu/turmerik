@@ -1,5 +1,5 @@
-import AppBar from "./appBar/AppBar";
+import AppModule from "./appModule/AppModule";
 
 export const components = {
-  AppBar,
+  AppModule,
 };

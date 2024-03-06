@@ -13,17 +13,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
 import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
-import { trmrk_react } from "trmrk-react";
-const trmrkReactComponents = trmrk_react.components;
 
-// const AppModuleCore = trmrkReactComponents.appModule.AppModuleCore;
-// const DevTools = trmrkReactComponents.devTools.DevTools;
-import AppModuleCore from "./AppModuleCore";
-import DevTools from "./DevTools";
-const AppSettingsMenu = trmrkReactComponents.appBar.appSettingsMenu.AppSettingsMenu;
-
-import { appDataSliceOps } from "../store/appDataSlice";
-import { appBarDataSliceOps } from "../store/appBarDataSlice";
+import { appDataReducers, appDataSelectors } from "../store/appDataSlice";
+import { appBarReducers, appBarSelectors } from "../store/appBarDataSlice";
+import { appBarDataSliceOps } from "../../../../../ParcelWs/apps/trmrk-devtools-webapp/src/store/appBarDataSlice";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
@@ -31,8 +24,8 @@ const App = withErrorBoundary(() => {
     // (error, errorInfo) => logErrorToMyService(error, errorInfo)
   );
 
-  const isCompactMode = useSelector(appDataSliceOps.selectors.getIsCompactMode);
-  const isDarkMode = useSelector(appDataSliceOps.selectors.getIsDarkMode);
+  const isCompactMode = useSelector(appDataSelectors.getIsCompactMode);
+  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
   const dispatch = useDispatch();
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
@@ -48,7 +41,7 @@ const App = withErrorBoundary(() => {
 
   const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
     setSettingsMenuIconBtnEl(event.currentTarget);
-    dispatch(appDataSliceOps.actions.setAppSettingsMenuIsOpen(true));
+    dispatch(appBarReducers.setAppSettingsMenuIsOpen(true));
   };
 
   useEffect(() => {
@@ -70,23 +63,7 @@ const App = withErrorBoundary(() => {
     <BrowserRouter>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
-        <AppModuleCore
-          appDataSliceOps={appDataSliceOps}
-          className={["trmrk-app-module", appThemeClassName, appModeCssClass.value].join(" ")}
-          headerClassName="trmrk-app-bar"
-          bodyClassName="trmrk-app-page"
-          headerChildren={
-            <AppBar sx={{ position: "relative", height: "100%", width: "100%" }}>
-              <Box className="trmrk-top-bar" sx={{ marginRight: "2.5em" }}><IconButton sx={{ float: "left" }} className="trmrk-icon-btn-main trmrk-settings-btn"
-                onClick={handleSettingsClick}>
-                <MenuIcon /></IconButton>Turmerik Dev Tools</Box>
-            </AppBar> }
-          bodyChildren={<DevTools />} />
-          
-          <AppSettingsMenu
-            menuAnchorEl={settingsMenuIconBtnEl!}
-            appDataSliceOps={appDataSliceOps}
-            appBarDataSliceOps={appBarDataSliceOps}></AppSettingsMenu>
+        
       </ThemeProvider>
     </BrowserRouter>
   );

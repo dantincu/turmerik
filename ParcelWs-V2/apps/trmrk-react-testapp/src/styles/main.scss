@@ -1,0 +1,53 @@
+@import "./_mixins";
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+}
+
+#app-root {
+  height: 100%;
+}
+
+.trmrk-app-error {
+  text-align: center;
+
+  > h2 {
+    color: orangered;
+    font-size: 1.25em;
+  }
+}
+
+.trmrk-error {
+  color: orangered;
+}
+
+.trmrk-app, .trmrk-modal {
+  user-select: none;
+}
+
+.trmrk-app-bar-toggle-icon {
+  color: white;
+}
+
+.trmrk-app, .trmrk-app-error, .trmrk-app-setup {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.trmrk-scrollable {
+  overflow-y: scroll;
+}
+
+.trmrk-scrollable::-webkit-scrollbar {
+  width: 15px;
+}
