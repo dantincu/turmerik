@@ -85,7 +85,7 @@ export default function AppModule(props: AppModuleProps) {
     const parentEl = parentRef.current;
     const mainEl = mainRef.current;
     const headerEl = headerRef.current;
-    const addListeners = !!(parentEl && mainEl && headerEl);
+    const addListeners = props.isCompactMode && !!(parentEl && mainEl && headerEl);
 
     if (addListeners) {
       appBarData.current = {
@@ -94,6 +94,8 @@ export default function AppModule(props: AppModuleProps) {
         headerHeight: headerEl.clientHeight,
         mainElLastScrollTop: mainEl.scrollTop
       };
+
+      console.log("appBarData.current", appBarData.current);
 
       scrollHandler(appBarData.current);
 
@@ -109,14 +111,14 @@ export default function AppModule(props: AppModuleProps) {
         mainEl.removeEventListener("scroll", onScroll);
       };
     }
-  }, [ props.showHeader, props.lastRefreshTmStmp, appBarData, parentRef, headerRef, mainRef ]);
+  }, [ props.showHeader, props.isCompactMode, props.lastRefreshTmStmp, appBarData, parentRef, headerRef, mainRef ]);
 
   return (<div className={["trmrk-app-module", appThemeClassName, appModeCssClass.value, props.className].join(" ")} ref={parentRef}>
     { props.showHeader ? <div className={["trmrk-app-module-header", props.headerClassName].join(" ")} ref={headerRef}>
       { props.headerContent }</div> : null }
     { (props.afterHeaderClassName && props.afterHeaderContent) ? 
       <div className={[props.afterHeaderClassName].join(" ")}>{props.afterHeaderContent}</div> : null }
-    <main className={["trmrk-app-module-main-content trmrk-scrollable", props.mainClassName ?? ""].join(" ")} ref={mainRef}>
+    <main className={["trmrk-app-module-main-content", props.isCompactMode ? "trmrk-scrollable" : "", props.mainClassName ?? ""].join(" ")} ref={mainRef}>
       {props.mainContent}</main>
   </div>);
 }

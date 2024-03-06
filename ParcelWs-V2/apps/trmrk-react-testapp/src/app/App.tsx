@@ -39,6 +39,7 @@ const App = withErrorBoundary(() => {
   const dispatch = useDispatch();
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
+  const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
 
   const appTheme = getAppTheme({
     isDarkMode: isDarkMode
@@ -53,6 +54,10 @@ const App = withErrorBoundary(() => {
     setSettingsMenuIconBtnEl(event.currentTarget);
     dispatch(appBarReducers.setAppSettingsMenuIsOpen(true));
   };
+
+  const handleRefreshClick = () => {
+    setLastRefreshTmStmp(new Date());
+  }
 
   useEffect(() => {
   }, [ ]);
@@ -85,6 +90,7 @@ const App = withErrorBoundary(() => {
             { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
           mainContent={
             <Paper className="trmrk-app-main-content">
+              <Button sx={{ position: "fixed" }} onClick={handleRefreshClick}>Refresh</Button>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
@@ -92,7 +98,8 @@ const App = withErrorBoundary(() => {
             </Paper> }
           showHeader={showAppBar}
           isCompactMode={isCompactMode}
-          isDarkMode={isDarkMode} />
+          isDarkMode={isDarkMode}
+          lastRefreshTmStmp={lastRefreshTmStmp} />
       </ThemeProvider>
     </BrowserRouter>
   );
