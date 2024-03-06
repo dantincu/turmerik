@@ -1,0 +1,71 @@
+@mixin scrollable($track, $thumb, $track-hover, $thumb-hover) {
+  &::-webkit-scrollbar-corner {
+    background-color: $track;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: $track;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $thumb;
+  }
+
+  &::-webkit-scrollbar-track:hover {
+    background-color: $thumb-hover;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: $track-hover;
+  }
+}
+
+@mixin resizable-panel($color, $hover-color) {
+  .trmrk-draggable-margin, .trmrk-draggable-corner {
+    background-color: $color;
+
+    &:hover {
+      background-color: $hover-color;
+    }
+  }
+
+  .trmrk-draggable-from-top-left {
+    &:hover ~ .trmrk-draggable-from-top {
+      background-color: $color;
+    }
+
+    &:hover ~ .trmrk-draggable-from-left {
+      background-color: $color;
+    }
+  }
+
+  .trmrk-draggable-from-top-right {
+    &:hover ~ .trmrk-draggable-from-top {
+      background-color: $color;
+    }
+
+    &:hover ~ .trmrk-draggable-from-right {
+      background-color: $color;
+    }
+  }
+
+  .trmrk-draggable-from-bottom-left {
+    &:hover ~ .trmrk-draggable-from-bottom {
+      background-color: $color;
+    }
+
+    &:hover ~ .trmrk-draggable-from-left {
+      background-color: $color;
+    }
+  }
+
+  .trmrk-draggable-from-bottom-right {
+    &:hover ~ .trmrk-draggable-from-bottom {
+      background-color: $color;
+    }
+
+    &:hover ~ .trmrk-draggable-from-right {
+      background-color: $color;
+    }
+  }
+}
