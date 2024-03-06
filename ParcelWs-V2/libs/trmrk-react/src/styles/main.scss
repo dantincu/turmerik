@@ -20,6 +20,10 @@ ul {
   user-select: none;
 }
 
-.trmrk-scrollable {
+.trmrk-scrollableY {
   overflow-y: scroll;
+}
+
+.trmrk-scrollableX {
+  overflow-x: scroll;
 }

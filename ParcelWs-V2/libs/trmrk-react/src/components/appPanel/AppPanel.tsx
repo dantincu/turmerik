@@ -11,8 +11,9 @@ export interface AppPanelProps {
   afterHeaderClassName?: string | null | undefined;
   afterHeaderContent?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   showHeader: boolean;
-  alwaysShowHeader: boolean;
-  isDarkMode: boolean;
+  pinHeader: boolean;
+  scrollableY?: boolean | null | undefined;
+  scrollableX?: boolean | null | undefined;
   lastRefreshTmStmp?: Date | number | null | undefined
 }
 
@@ -74,7 +75,7 @@ export default function AppPanel(props: AppPanelProps) {
     const mainEl = mainRef.current;
     const headerEl = headerRef.current;
     const canAddListeners = !!(parentEl && mainEl && headerEl);
-    const addListeners = canAddListeners && !props.alwaysShowHeader;
+    const addListeners = canAddListeners && !props.pinHeader;
 
     if (addListeners) {
       appPanelHeaderData.current = {
@@ -100,15 +101,19 @@ export default function AppPanel(props: AppPanelProps) {
         mainEl.removeEventListener("scroll", onScroll);
       };
     }
-  }, [ props.showHeader, props.alwaysShowHeader, props.lastRefreshTmStmp, appPanelHeaderData, parentRef, headerRef, mainRef ]);
+  }, [ props.showHeader, props.pinHeader, props.lastRefreshTmStmp, appPanelHeaderData, parentRef, headerRef, mainRef ]);
 
   return (<div className={["trmrk-app-panel", props.className].join(" ")} ref={parentRef}>
-    { (props.headerContent && (props.showHeader || props.alwaysShowHeader)) ?
+    { (props.headerContent && (props.showHeader || props.pinHeader)) ?
       <div className={["trmrk-app-panel-header", props.headerClassName ?? ""].join(" ")} ref={headerRef}>
       { props.headerContent }</div> : null }
     { (props.afterHeaderClassName && props.afterHeaderContent) ? 
       <div className={[props.afterHeaderClassName].join(" ")}>{props.afterHeaderContent}</div> : null }
-    <div className={["trmrk-app-panel-body", props.alwaysShowHeader ? "" : "trmrk-scrollable", props.bodyClassName ?? ""].join(" ")} ref={mainRef}>
+    <div className={["trmrk-app-panel-body",
+      props.scrollableX ? "trmrk-scrollableX" : "",
+      props.scrollableY ? "trmrk-scrollableY" : "",
+      (props.scrollableX || props.scrollableY) ? "trmrk-scrollable" : "",
+      props.bodyClassName ?? ""].join(" ")} ref={mainRef}>
       {props.bodyContent}</div>
   </div>);
 }

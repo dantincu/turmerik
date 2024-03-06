@@ -8,19 +8,23 @@ import { appModeCssClass, getAppModeCssClassName } from "../../utils";
 import "./AppModule.scss";
 
 export interface AppModuleProps extends AppPanelProps {
-  isCompactMode?: boolean | null | undefined
+  isDarkMode?: boolean | null | undefined;
+  isCompactMode?: boolean | null | undefined;
 }
 
 export default function AppModule(
   props: AppModuleProps
 ) {
-  
-  const appTheme = getAppTheme({
-    isDarkMode: props.isDarkMode
-  });
+  let appThemeClassName = "";
 
-  currentAppTheme.value = appTheme;
-  const appThemeClassName = appTheme.cssClassName;
+  if (typeof props.isDarkMode === "boolean") {
+    const appTheme = getAppTheme({
+      isDarkMode: props.isDarkMode
+    });
+
+    currentAppTheme.value = appTheme;
+    appThemeClassName = appTheme.cssClassName;
+  }
 
   if (typeof props.isCompactMode === "boolean") {
     appModeCssClass.value = getAppModeCssClassName(props.isCompactMode);
