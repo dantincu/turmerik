@@ -22,7 +22,7 @@ import { appDataReducers, appDataSelectors } from "../store/appDataSlice";
 import { appBarReducers, appBarSelectors } from "../store/appBarDataSlice";
 import { appBarDataSliceOps } from "../../../../../ParcelWs/apps/trmrk-devtools-webapp/src/store/appBarDataSlice";
 
-import AppModule from "./AppModule";
+import AppModule from "trmrk-react/src/components/appModule/AppModule";
 import "./App.scss";
 
 const App = withErrorBoundary(() => {
