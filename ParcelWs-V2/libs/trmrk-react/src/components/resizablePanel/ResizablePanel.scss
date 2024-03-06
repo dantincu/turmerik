@@ -2,7 +2,7 @@ $resizable-margin-width: 5;
 $resizable-margin-widthPx: 5px;
 
 .trmrk-resizable-panel {
-  .trmrk-draggable-margin {
+  .trmrk-draggable-margin, .trmrk-draggable-corner {
     position: absolute;
     display: block;
   }
@@ -28,6 +28,22 @@ $resizable-margin-widthPx: 5px;
     height: $resizable-margin-widthPx;
     cursor: ns-resize;
   }
+
+  .trmrk-draggable-from-top-left {
+    top: 0px;
+    left: 0px;
+    width: $resizable-margin-widthPx;
+    height: $resizable-margin-widthPx;
+    cursor: nw-resize;
+  }
+
+  .trmrk-draggable-from-top-right {
+    top: 0px;
+    right: 0px;
+    width: $resizable-margin-widthPx;
+    height: $resizable-margin-widthPx;
+    cursor: ne-resize;
+  }
 }
 
 .trmrk-resizable-from-bottom {
@@ -41,6 +57,22 @@ $resizable-margin-widthPx: 5px;
     right: 0px;
     height: $resizable-margin-widthPx;
     cursor: ns-resize;
+  }
+
+  .trmrk-draggable-from-bottom-left {
+    bottom: 0px;
+    left: 0px;
+    width: $resizable-margin-widthPx;
+    height: $resizable-margin-widthPx;
+    cursor: ne-resize;
+  }
+
+  .trmrk-draggable-from-bottom-right {
+    bottom: 0px;
+    right: 0px;
+    width: $resizable-margin-widthPx;
+    height: $resizable-margin-widthPx;
+    cursor: nw-resize;
   }
 }
 
@@ -69,5 +101,45 @@ $resizable-margin-widthPx: 5px;
     bottom: 0px;
     width: $resizable-margin-widthPx;
     cursor: ew-resize;
+  }
+}
+
+.trmrk-resizable-from-left.trmrk-resizable-from-top {
+  .trmrk-draggable-from-left {
+    top: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-top {
+    left: $resizable-margin-widthPx;
+  }
+}
+
+.trmrk-resizable-from-top.trmrk-resizable-from-right {
+  .trmrk-draggable-from-top {
+    right: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-right {
+    top: $resizable-margin-widthPx;
+  }
+}
+
+.trmrk-resizable-from-right.trmrk-resizable-from-bottom {
+  .trmrk-draggable-from-right {
+    bottom: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-bottom {
+    right: $resizable-margin-widthPx;
+  }
+}
+
+.trmrk-resizable-from-bottom.trmrk-resizable-from-left {
+  .trmrk-draggable-from-bottom {
+    left: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-left {
+    bottom: $resizable-margin-widthPx;
   }
 }

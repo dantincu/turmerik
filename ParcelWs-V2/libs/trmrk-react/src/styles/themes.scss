@@ -22,12 +22,52 @@
   }
 
   .trmrk-resizable-panel {
-    .trmrk-draggable-margin {
+    .trmrk-draggable-margin, .trmrk-draggable-corner {
       background-color: #606060;
+
+      &:hover {
+        background-color: #808080;
+      }
     }
 
-    .trmrk-draggable-margin:hover {
-      background-color: #808080;
+    .trmrk-draggable-from-top-left {
+      &:hover ~ .trmrk-draggable-from-top {
+        background-color: #808080;
+      }
+
+      &:hover ~ .trmrk-draggable-from-left {
+        background-color: #808080;
+      }
+    }
+
+    .trmrk-draggable-from-top-right {
+      &:hover ~ .trmrk-draggable-from-top {
+        background-color: #808080;
+      }
+
+      &:hover ~ .trmrk-draggable-from-right {
+        background-color: #808080;
+      }
+    }
+
+    .trmrk-draggable-from-bottom-left {
+      &:hover ~ .trmrk-draggable-from-bottom {
+        background-color: #808080;
+      }
+
+      &:hover ~ .trmrk-draggable-from-left {
+        background-color: #808080;
+      }
+    }
+
+    .trmrk-draggable-from-bottom-right {
+      &:hover ~ .trmrk-draggable-from-bottom {
+        background-color: #808080;
+      }
+
+      &:hover ~ .trmrk-draggable-from-right {
+        background-color: #808080;
+      }
     }
   }
 }
@@ -54,12 +94,52 @@
   }
 
   .trmrk-resizable-panel {
-    .trmrk-draggable-margin {
+    .trmrk-draggable-margin, .trmrk-draggable-corner {
       background-color: #ababab;
+
+      &:hover {
+        background-color: #9a9a9a;
+      }
     }
 
-    .trmrk-draggable-margin:hover {
-      background-color: #9a9a9a;
+    .trmrk-draggable-from-top-left {
+      &:hover ~ .trmrk-draggable-from-top {
+        background-color: #9a9a9a;
+      }
+
+      &:hover ~ .trmrk-draggable-from-left {
+        background-color: #9a9a9a;
+      }
+    }
+
+    .trmrk-draggable-from-top-right {
+      &:hover ~ .trmrk-draggable-from-top {
+        background-color: #9a9a9a;
+      }
+
+      &:hover ~ .trmrk-draggable-from-right {
+        background-color: #9a9a9a;
+      }
+    }
+
+    .trmrk-draggable-from-bottom-left {
+      &:hover ~ .trmrk-draggable-from-bottom {
+        background-color: #9a9a9a;
+      }
+
+      &:hover ~ .trmrk-draggable-from-left {
+        background-color: #9a9a9a;
+      }
+    }
+
+    .trmrk-draggable-from-bottom-right {
+      &:hover ~ .trmrk-draggable-from-bottom {
+        background-color: #9a9a9a;
+      }
+
+      &:hover ~ .trmrk-draggable-from-right {
+        background-color: #9a9a9a;
+      }
     }
   }
 }

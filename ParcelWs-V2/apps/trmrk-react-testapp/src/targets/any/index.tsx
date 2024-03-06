@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import appDataStore from "../../store/appDataStore";
 
 import "trmrk-react/src/styles/all.scss";
+import "trmrk-react/src/styles/themes.scss";
 
 import "../../styles/index-any.scss"
 
