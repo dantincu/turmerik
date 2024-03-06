@@ -34,7 +34,7 @@ ul {
   user-select: none;
 }
 
-.trmrk-app-bar-toggle-icon {
+.trmrk-app-header-toggle-btn {
   color: white;
 }
 
@@ -50,4 +50,8 @@ ul {
 
 .trmrk-scrollable::-webkit-scrollbar {
   width: 15px;
+}
+
+.trmrk-app-header {
+  height: 5em;
 }

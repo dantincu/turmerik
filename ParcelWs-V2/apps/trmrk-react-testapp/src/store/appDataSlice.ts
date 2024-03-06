@@ -15,9 +15,7 @@ const appDataSlice = createSlice({
     baseLocation: trmrk.url.getBaseLocation(),
     showAppBar: true,
     showAppBarToggleBtn: true,
-    isDarkMode:
-      localStorage.getItem(localStorageKeys.appThemeIsDarkMode) ===
-      trmrk.jsonBool.true,
+    isDarkMode: trmrk_react_utils.isDarkMode(),
     isCompactMode:
       localStorage.getItem(localStorageKeys.appIsCompactMode) !==
       trmrk.jsonBool.false,

@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
+import trmrk from "trmrk";
 import { MtblRefValue } from "trmrk/src/core";
 
 export const localStorageKeys = Object.freeze({
@@ -38,3 +39,31 @@ export const getRoute = (
 };
 
 export const appModeCssClass = {} as MtblRefValue<string>;
+
+export const prefersDarkMode = () =>
+  window.matchMedia &&
+  window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+export const isDarkMode = (
+  localStorageIsDarkModeKey: string | null | undefined = null
+) => {
+  const localStorageIsDarkMode = localStorage.getItem(
+    localStorageIsDarkModeKey ?? localStorageKeys.appThemeIsDarkMode
+  );
+
+  let isDarkMode: boolean;
+
+  if (localStorageIsDarkMode) {
+    if (trmrk.jsonBool.true === localStorageIsDarkMode) {
+      isDarkMode = true;
+    } else if (trmrk.jsonBool.false === localStorageIsDarkMode) {
+      isDarkMode = false;
+    } else {
+      isDarkMode = prefersDarkMode();
+    }
+  } else {
+    isDarkMode = prefersDarkMode();
+  }
+
+  return isDarkMode;
+};
