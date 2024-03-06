@@ -1,9 +1,9 @@
-.trmrk-scrollable::-webkit-scrollbar {
-  width: 15px;
-}
-
 .trmrk-theme-dark {
   color: white;
+
+  .trmrk-scrollable::-webkit-scrollbar-corner {
+    background-color: #1e1e1e;
+  }
 
   .trmrk-scrollable::-webkit-scrollbar-thumb {
     background-color: #303030;
@@ -21,12 +21,22 @@
     background-color: #404040;
   }
 
-  .trmrk-left-resizable-content::after {
-    background-color: #606060;
+  .trmrk-resizable-panel {
+    .trmrk-draggable-margin {
+      background-color: #606060;
+    }
+
+    .trmrk-draggable-margin:hover {
+      background-color: #808080;
+    }
   }
 }
 
 .trmrk-theme-light {
+  .trmrk-scrollable::-webkit-scrollbar-corner {
+    background-color: #efefef;
+  }
+
   .trmrk-scrollable::-webkit-scrollbar-thumb {
     background-color: #cdcdcd;
   }
@@ -43,7 +53,13 @@
     background-color: #bcbcbc;
   }
 
-  .trmrk-left-resizable-content::after {
-    background-color: #ababab;
+  .trmrk-resizable-panel {
+    .trmrk-draggable-margin {
+      background-color: #ababab;
+    }
+
+    .trmrk-draggable-margin:hover {
+      background-color: #9a9a9a;
+    }
   }
 }

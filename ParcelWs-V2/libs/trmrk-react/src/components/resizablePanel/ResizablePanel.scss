@@ -1,0 +1,73 @@
+$resizable-margin-width: 5;
+$resizable-margin-widthPx: 5px;
+
+.trmrk-resizable-panel {
+  .trmrk-draggable-margin {
+    position: absolute;
+    display: block;
+  }
+}
+
+.trmrk-resizable-content {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+.trmrk-resizable-from-top {
+  .trmrk-resizable-content {
+    top: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-top {
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: $resizable-margin-widthPx;
+    cursor: ns-resize;
+  }
+}
+
+.trmrk-resizable-from-bottom {
+  .trmrk-resizable-content {
+    bottom: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-bottom {
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: $resizable-margin-widthPx;
+    cursor: ns-resize;
+  }
+}
+
+.trmrk-resizable-from-left {
+  .trmrk-resizable-content {
+    left: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-left {
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: $resizable-margin-widthPx;
+    cursor: ew-resize;
+  }
+}
+
+.trmrk-resizable-from-right {
+  .trmrk-resizable-content {
+    right: $resizable-margin-widthPx;
+  }
+
+  .trmrk-draggable-from-right {
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: $resizable-margin-widthPx;
+    cursor: ew-resize;
+  }
+}

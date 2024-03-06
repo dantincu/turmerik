@@ -10,3 +10,12 @@
   top: 0px;
   z-index: 1;
 }
+
+.my-resizable-panel {
+  background-color: darkslateblue;
+  width: 200px;
+  height: 200px;
+  margin-left: 100px;
+  position: absolute;
+  display: block;
+}
