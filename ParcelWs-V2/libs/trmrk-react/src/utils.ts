@@ -38,7 +38,9 @@ export const getRoute = (
   return route;
 };
 
-export const appModeCssClass = {} as MtblRefValue<string>;
+export const appModeCssClass = {
+  value: "",
+} as MtblRefValue<string>;
 
 export const prefersDarkMode = () =>
   window.matchMedia &&

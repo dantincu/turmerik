@@ -1,15 +1,10 @@
-.trmrk-app-module {
-  user-select: none;
-}
-
-.trmrk-app-module-header {
-  display: block;
-  position: fixed;
+.trmrk-app-panel-header.trmrk-app-module-header {
   width: 100%;
+  position: fixed;
 }
 
-.trmrk-app-module-main-content {
-  position: fixed;
+.trmrk-app-panel-body.trmrk-app-module-body {
   width: 100%;
   height: 100%;
+  position: fixed;
 }
