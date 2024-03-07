@@ -75,6 +75,32 @@ export const getDraggableBorderOpacityClassName = (draggableBorderOpacity?: Resi
   return draggableBorderOpacityClassName;
 }
 
+export const combineOrtoResizeHandlers = (ortoHandler: (
+  e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => void) => (
+  e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => {
+    switch (rszDir) {
+      case ResizeDirection.FromTopLeft:
+        ortoHandler(e, mouseMovement, ResizeDirection.FromTop);
+        ortoHandler(e, mouseMovement, ResizeDirection.FromLeft);
+        break;
+      case ResizeDirection.FromTopRight:
+        ortoHandler(e, mouseMovement, ResizeDirection.FromTop);
+        ortoHandler(e, mouseMovement, ResizeDirection.FromRight);
+        break;
+      case ResizeDirection.FromBottomRight:
+        ortoHandler(e, mouseMovement, ResizeDirection.FromBottom);
+        ortoHandler(e, mouseMovement, ResizeDirection.FromRight);
+        break;
+      case ResizeDirection.FromBottomLeft:
+        ortoHandler(e, mouseMovement, ResizeDirection.FromBottom);
+        ortoHandler(e, mouseMovement, ResizeDirection.FromLeft);
+        break;
+      default:
+        ortoHandler(e, mouseMovement, rszDir);
+        break;
+    }
+  };
+
 export default function ResizablePanel(props: ResizablePanelOpts) {
   const resizableFromLeftRef = React.createRef<HTMLDivElement>();
   const resizableFromTopLeftRef = React.createRef<HTMLDivElement>();

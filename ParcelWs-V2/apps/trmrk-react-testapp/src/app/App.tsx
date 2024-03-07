@@ -23,7 +23,12 @@ import { appBarReducers, appBarSelectors } from "../store/appBarDataSlice";
 import { appBarDataSliceOps } from "../../../../../ParcelWs/apps/trmrk-devtools-webapp/src/store/appBarDataSlice";
 
 import AppModule from "trmrk-react/src/components/appModule/AppModule";
-import ResizablePanel, { ResizablePanelBorderSize, ResizablePanelBorderOpacity, MouseMovement, ResizeDirection } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
+import ResizablePanel, { 
+  ResizablePanelBorderSize,
+  ResizablePanelBorderOpacity,
+  MouseMovement,
+  ResizeDirection,
+  combineOrtoResizeHandlers } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
 import "./App.scss";
 
@@ -163,52 +168,37 @@ const App = withErrorBoundary(() => {
   }
 
   const panelResizing = (
-    e: MouseEvent, mouseMovement:
-    MouseMovement,
+    e: MouseEvent,
+    mouseMovement: MouseMovement,
     rszDir: ResizeDirection,
     panelRef: React.RefObject<HTMLDivElement>,
     panelX: React.MutableRefObject<number>,
     panelY: React.MutableRefObject<number>,
     panelW: React.MutableRefObject<number>,
     panelH: React.MutableRefObject<number>) => {
-      switch (rszDir) {
-      case ResizeDirection.FromLeft:
-        updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
-        updatePanelW(panelRef.current!, panelW, panelW.current - mouseMovement.movementX);
-        break;
-      case ResizeDirection.FromTopLeft:
-        updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
-        updatePanelY(panelRef.current!, panelY, panelY.current + mouseMovement.movementY);
-        updatePanelW(panelRef.current!, panelW, panelW.current - mouseMovement.movementX);
-        updatePanelH(panelRef.current!, panelH, panelH.current - mouseMovement.movementY);
-        break;
-      case ResizeDirection.FromTop:
-        updatePanelY(panelRef.current!, panelY, panelY.current + mouseMovement.movementY);
-        updatePanelH(panelRef.current!, panelH, panelH.current - mouseMovement.movementY);
-        break;
-      case ResizeDirection.FromTopRight:
-        updatePanelY(panelRef.current!, panelY, panelY.current + mouseMovement.movementY);
-        updatePanelW(panelRef.current!, panelW, panelW.current + mouseMovement.movementX);
-        updatePanelH(panelRef.current!, panelH, panelH.current - mouseMovement.movementY);
-        break;
-      case ResizeDirection.FromRight:
-        updatePanelW(panelRef.current!, panelW, panelW.current + mouseMovement.movementX);
-        break;
-      case ResizeDirection.FromBottomRight:
-        updatePanelH(panelRef.current!, panelH, panelH.current + mouseMovement.movementY);
-        updatePanelW(panelRef.current!, panelW, panelW.current + mouseMovement.movementX);
-        break;
-      case ResizeDirection.FromBottom:
-        updatePanelH(panelRef.current!, panelH, panelH.current + mouseMovement.movementY);
-        break;
-      case ResizeDirection.FromBottomLeft:
-        updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
-        updatePanelH(panelRef.current!, panelH, panelH.current + mouseMovement.movementY);
-        updatePanelW(panelRef.current!, panelW, panelW.current - mouseMovement.movementX);
-        break;
-      default:
-        throw new Error(`Invalid resize direction: ${rszDir}`);
-    }
+      combineOrtoResizeHandlers(
+        (e: MouseEvent,
+        mouseMovement: MouseMovement,
+        rszDir: ResizeDirection) => {
+          switch (rszDir) {
+            case ResizeDirection.FromLeft:
+              updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
+              updatePanelW(panelRef.current!, panelW, panelW.current - mouseMovement.movementX);
+              break;
+            case ResizeDirection.FromTop:
+              updatePanelY(panelRef.current!, panelY, panelY.current + mouseMovement.movementY);
+              updatePanelH(panelRef.current!, panelH, panelH.current - mouseMovement.movementY);
+              break;
+            case ResizeDirection.FromRight:
+              updatePanelW(panelRef.current!, panelW, panelW.current + mouseMovement.movementX);
+              break;
+            case ResizeDirection.FromBottom:
+              updatePanelH(panelRef.current!, panelH, panelH.current + mouseMovement.movementY);
+              break;
+            default:
+              throw new Error(`Invalid resize direction: ${rszDir}`);
+          }
+      })(e, mouseMovement, rszDir);
   }
 
   const topPanelResizing = (e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => {
