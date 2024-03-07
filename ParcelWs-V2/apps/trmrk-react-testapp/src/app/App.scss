@@ -12,10 +12,14 @@
 }
 
 .my-resizable-panel {
-  background-color: darkslateblue;
+  background-color: chocolate;
   width: 200px;
   height: 200px;
   margin-left: 100px;
   position: absolute;
   display: block;
+}
+
+.my-resizable-panel .trmrk-resizable-content {
+  background-color: darkslateblue;
 }

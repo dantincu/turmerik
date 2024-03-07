@@ -1,5 +1,8 @@
 @import "./_mixins.scss";
 
+$resizable-draggable-margin-hover-color-theme-dark: #FFFFFF44;
+$resizable-draggable-margin-hover-color-theme-light: #00000044;
+
 .trmrk-theme-dark {
   color: white;
 
@@ -8,55 +11,7 @@
   }
 
   .trmrk-resizable-panel {
-    /* @include resizable-panel(#606060, #808080); */
-
-    .trmrk-draggable-margin, .trmrk-draggable-corner {
-      background-color: #606060;
-
-      &:hover {
-        background-color: #808080;
-      }
-    }
-
-    .trmrk-draggable-from-top-left {
-      &:hover ~ .trmrk-draggable-from-top {
-        background-color: #808080;
-      }
-
-      &:hover ~ .trmrk-draggable-from-left {
-        background-color: #808080;
-      }
-    }
-
-    .trmrk-draggable-from-top-right {
-      &:hover ~ .trmrk-draggable-from-top {
-        background-color: #808080;
-      }
-
-      &:hover ~ .trmrk-draggable-from-right {
-        background-color: #808080;
-      }
-    }
-
-    .trmrk-draggable-from-bottom-left {
-      &:hover ~ .trmrk-draggable-from-bottom {
-        background-color: #808080;
-      }
-
-      &:hover ~ .trmrk-draggable-from-left {
-        background-color: #808080;
-      }
-    }
-
-    .trmrk-draggable-from-bottom-right {
-      &:hover ~ .trmrk-draggable-from-bottom {
-        background-color: #808080;
-      }
-
-      &:hover ~ .trmrk-draggable-from-right {
-        background-color: #808080;
-      }
-    }
+    @include resizable-panel-colors(#FFFFFF44);
   }
 }
 
@@ -66,52 +21,6 @@
   }
 
   .trmrk-resizable-panel {
-    .trmrk-draggable-margin, .trmrk-draggable-corner {
-      background-color: #ababab;
-
-      &:hover {
-        background-color: #9a9a9a;
-      }
-    }
-
-    .trmrk-draggable-from-top-left {
-      &:hover ~ .trmrk-draggable-from-top {
-        background-color: #9a9a9a;
-      }
-
-      &:hover ~ .trmrk-draggable-from-left {
-        background-color: #9a9a9a;
-      }
-    }
-
-    .trmrk-draggable-from-top-right {
-      &:hover ~ .trmrk-draggable-from-top {
-        background-color: #9a9a9a;
-      }
-
-      &:hover ~ .trmrk-draggable-from-right {
-        background-color: #9a9a9a;
-      }
-    }
-
-    .trmrk-draggable-from-bottom-left {
-      &:hover ~ .trmrk-draggable-from-bottom {
-        background-color: #9a9a9a;
-      }
-
-      &:hover ~ .trmrk-draggable-from-left {
-        background-color: #9a9a9a;
-      }
-    }
-
-    .trmrk-draggable-from-bottom-right {
-      &:hover ~ .trmrk-draggable-from-bottom {
-        background-color: #9a9a9a;
-      }
-
-      &:hover ~ .trmrk-draggable-from-right {
-        background-color: #9a9a9a;
-      }
-    }
+    @include resizable-panel-colors(#00000044);
   }
 }

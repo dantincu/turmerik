@@ -1,14 +1,15 @@
-$resizable-margin-width: 5;
-$resizable-margin-widthPx: 5px;
+@import "../../styles/_mixins.scss";
 
 .trmrk-resizable-panel {
-  .trmrk-draggable-margin, .trmrk-draggable-corner {
+  .trmrk-draggable-margin, .trmrk-draggable-corner, .trmrk-resizable-content {
     position: absolute;
     display: block;
   }
+
+  @include resizable-panel(4px, 0px);
 }
 
-.trmrk-resizable-content {
+/* .trmrk-resizable-content {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -142,4 +143,4 @@ $resizable-margin-widthPx: 5px;
   .trmrk-draggable-from-left {
     bottom: $resizable-margin-widthPx;
   }
-}
+} */
