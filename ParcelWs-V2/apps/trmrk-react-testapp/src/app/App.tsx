@@ -81,10 +81,10 @@ const App = withErrorBoundary(() => {
         <AppModule
           className={["trmrk-app"].join(" ")}
           headerClassName="trmrk-app-header"
-          headerContent={<AppBar className="trmrk-app-bar trmrk-app-module-bar">
+          headerContent={<AppBar className="trmrk-app-module-bar">
             <Link href="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
           </AppBar>}
-          afterHeaderClassName="trmrk-app-header-toggle trmrk-icon-btn"
+          afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
           afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
             { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
           bodyClassName="trmrk-app-body"
