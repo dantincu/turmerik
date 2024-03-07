@@ -1,39 +1,3 @@
-.trmrk-app-header {
-  height: 5em;
-}
-
-.trmrk-icon-btn {
-  display: inline-flex;
-  width: 2.5em;
-  height: 2.5em;
-}
-
-.trmrk-app-header-toggle {
-  color: white;
-  position: fixed;
-  right: 0px;
-  top: 0px;
-  z-index: 1100;
-}
-
-.trmrk-app-body {
-  top: 5em;
-}
-
-.trmrk-app-module-header .trmrk-app-bar {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: relative;
-  margin: 0;
-  padding: 0;
-}
-
-.trmrk-app-module-header .trmrk-app-bar .trmrk-icon-btn {
-  width: 1.66em;
-  height: 1.66em;
-}
-
 .trmrk-app-main-content {
   display: flex;
   position: absolute;
