@@ -1,20 +1,23 @@
 @import "./_mixins.scss";
 
-html {
+/* html {
   height: 100%;
 }
 
 body {
   height: 100%;
   margin: 0;
-}
-
-ul {
-  list-style-type: none;
+  padding: 0;
 }
 
 #app-root {
   height: 100%;
+  margin: 0;
+  padding: 0;
+} */
+
+ul {
+  list-style-type: none;
 }
 
 .trmrk-modal {

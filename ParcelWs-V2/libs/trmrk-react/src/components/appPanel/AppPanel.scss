@@ -1,15 +1,15 @@
 .trmrk-app-panel {
   user-select: none;
-  display: block;
+  display: flex;
 }
 
 .trmrk-app-panel-header {
-  display: block;
+  display: flex;
   position: absolute;
 }
 
 .trmrk-app-panel-body {
-  display: block;
+  display: flex;
   position: absolute;
   bottom: 0px;
 }
