@@ -2,8 +2,20 @@ import React from "react";
 
 import "./ResizablePanel.scss";
 
+export enum ResizablePanelBorderSize {
+  Regular,
+  Thick
+}
+
+export enum ResizablePanelBorderOpacity {
+  Opc25,
+  Opc50
+}
+
 export interface ResizablePanelOpts {
   className?: string | null | undefined;
+  draggableBorderSize?: ResizablePanelBorderSize | null | undefined;
+  draggableBorderOpacity?: ResizablePanelBorderOpacity | null | undefined;
   resizableFromTop?: boolean | null | undefined;
   resizableFromBottom?: boolean | null | undefined;
   resizableFromLeft?: boolean | null | undefined;
@@ -12,7 +24,30 @@ export interface ResizablePanelOpts {
 }
 
 export default function ResizablePanel(props: ResizablePanelOpts) {
+  let draggableBorderSizeClassName = "";
+  let draggableBorderOpacityClassName = "";
+
+  switch (props.draggableBorderSize) {
+    case ResizablePanelBorderSize.Regular:
+      draggableBorderSizeClassName = "trmrk-regular-border";
+      break;
+    case ResizablePanelBorderSize.Thick:
+      draggableBorderSizeClassName = "trmrk-thick-border";
+      break;
+  }
+
+  switch (props.draggableBorderOpacity) {
+    case ResizablePanelBorderOpacity.Opc25:
+      draggableBorderOpacityClassName = "trmrk-border-alpha-25";
+      break;
+    case ResizablePanelBorderOpacity.Opc50:
+      draggableBorderOpacityClassName = "trmrk-border-alpha-50";
+      break;
+  }
+
   return (<div className={["trmrk-resizable-panel",
+    draggableBorderSizeClassName,
+    draggableBorderOpacityClassName,
     props.className ?? "",
     props.resizableFromTop ? "trmrk-resizable-from-top" : "",
     props.resizableFromBottom ? "trmrk-resizable-from-bottom" : "",

@@ -23,7 +23,7 @@ import { appBarReducers, appBarSelectors } from "../store/appBarDataSlice";
 import { appBarDataSliceOps } from "../../../../../ParcelWs/apps/trmrk-devtools-webapp/src/store/appBarDataSlice";
 
 import AppModule from "trmrk-react/src/components/appModule/AppModule";
-import ResizablePanel from "trmrk-react/src/components/resizablePanel/ResizablePanel";
+import ResizablePanel, { ResizablePanelBorderSize, ResizablePanelBorderOpacity } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
 import "./App.scss";
 
@@ -100,7 +100,9 @@ const App = withErrorBoundary(() => {
                 resizableFromBottom={true}
                 resizableFromRight={true}
                 resizableFromLeft={true}
-                className="my-resizable-panel">
+                className="my-resizable-panel"
+                draggableBorderSize={ResizablePanelBorderSize.Regular}
+                draggableBorderOpacity={ResizablePanelBorderOpacity.Opc50}>
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               </ResizablePanel>
@@ -110,7 +112,9 @@ const App = withErrorBoundary(() => {
                 resizableFromBottom={true}
                 resizableFromRight={true}
                 resizableFromLeft={true}
-                className="my-resizable-panel trmrk-thick-border">
+                className="my-resizable-panel"
+                draggableBorderSize={ResizablePanelBorderSize.Thick}
+                draggableBorderOpacity={ResizablePanelBorderOpacity.Opc25}>
                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               </ResizablePanel>

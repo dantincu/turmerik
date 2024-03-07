@@ -10,8 +10,12 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
     @include scrollable(#1e1e1e, #303030, #262626, #404040);
   }
 
-  .trmrk-resizable-panel {
+  .trmrk-resizable-panel.trmrk-border-alpha-25 {
     @include resizable-panel-colors(#FFFFFF44);
+  }
+
+  .trmrk-resizable-panel.trmrk-border-alpha-50 {
+    @include resizable-panel-colors(#FFFFFF88);
   }
 }
 
@@ -20,7 +24,11 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
     @include scrollable(#efefef, #cdcdcd, #dedede, #bcbcbc);
   }
 
-  .trmrk-resizable-panel {
+  .trmrk-resizable-panel.trmrk-border-alpha-25 {
     @include resizable-panel-colors(#00000044);
+  }
+
+  .trmrk-resizable-panel.trmrk-border-alpha-50 {
+    @include resizable-panel-colors(#00000088);
   }
 }
