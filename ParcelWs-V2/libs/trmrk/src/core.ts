@@ -290,6 +290,14 @@ export const withVal = <TIn, TOut>(
   convertor: (input: TIn) => TOut
 ) => convertor(inVal);
 
+export const actWithVal = <TVal>(
+  val: TVal,
+  action: (value: TVal) => unknown | any | void
+) => {
+  action(val);
+  return val;
+};
+
 export const subStr = (
   str: string,
   opts: {
