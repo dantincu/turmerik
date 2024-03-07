@@ -20,7 +20,7 @@
   }
 }
 
-@mixin resizable-panel($resizable-margin-widthPx, $resizable-base-margin-widthPx) {
+@mixin resizable-panel-base($resizable-base-margin-widthPx) {
   .trmrk-resizable-content {
     top: $resizable-base-margin-widthPx;
     right: $resizable-base-margin-widthPx;
@@ -29,32 +29,84 @@
   }
     
   &.trmrk-resizable-from-top {
-    .trmrk-resizable-content {
-      top: $resizable-margin-widthPx;
-    }
-
     .trmrk-draggable-from-top {
       top: $resizable-base-margin-widthPx;
       left: $resizable-base-margin-widthPx;
       right: $resizable-base-margin-widthPx;
-      height: $resizable-margin-widthPx;
       cursor: ns-resize;
     }
 
     .trmrk-draggable-from-top-left {
       top: $resizable-base-margin-widthPx;
       left: $resizable-base-margin-widthPx;
-      width: $resizable-margin-widthPx;
-      height: $resizable-margin-widthPx;
       cursor: nw-resize;
     }
 
     .trmrk-draggable-from-top-right {
       top: $resizable-base-margin-widthPx;
       right: $resizable-base-margin-widthPx;
+      cursor: ne-resize;
+    }
+  }
+
+  &.trmrk-resizable-from-bottom {
+    .trmrk-draggable-from-bottom {
+      bottom: $resizable-base-margin-widthPx;
+      left: $resizable-base-margin-widthPx;
+      right: $resizable-base-margin-widthPx;
+      cursor: ns-resize;
+    }
+
+    .trmrk-draggable-from-bottom-left {
+      bottom: $resizable-base-margin-widthPx;
+      left: $resizable-base-margin-widthPx;
+      cursor: ne-resize;
+    }
+
+    .trmrk-draggable-from-bottom-right {
+      bottom: $resizable-base-margin-widthPx;
+      right: $resizable-base-margin-widthPx;
+      cursor: nw-resize;
+    }
+  }
+
+  &.trmrk-resizable-from-left {
+    .trmrk-draggable-from-left {
+      left: $resizable-base-margin-widthPx;
+      top: $resizable-base-margin-widthPx;
+      bottom: $resizable-base-margin-widthPx;
+      cursor: ew-resize;
+    }
+  }
+
+  &.trmrk-resizable-from-right {
+    .trmrk-draggable-from-right {
+      right: $resizable-base-margin-widthPx;
+      top: $resizable-base-margin-widthPx;
+      bottom: $resizable-base-margin-widthPx;
+      cursor: ew-resize;
+    }
+  }
+}
+
+@mixin resizable-panel($resizable-margin-widthPx) {
+  &.trmrk-resizable-from-top {
+    .trmrk-resizable-content {
+      top: $resizable-margin-widthPx;
+    }
+
+    .trmrk-draggable-from-top {
+      height: $resizable-margin-widthPx;
+    }
+
+    .trmrk-draggable-from-top-left {
       width: $resizable-margin-widthPx;
       height: $resizable-margin-widthPx;
-      cursor: ne-resize;
+    }
+
+    .trmrk-draggable-from-top-right {
+      width: $resizable-margin-widthPx;
+      height: $resizable-margin-widthPx;
     }
   }
 
@@ -64,27 +116,17 @@
     }
 
     .trmrk-draggable-from-bottom {
-      bottom: $resizable-base-margin-widthPx;
-      left: $resizable-base-margin-widthPx;
-      right: $resizable-base-margin-widthPx;
       height: $resizable-margin-widthPx;
-      cursor: ns-resize;
     }
 
     .trmrk-draggable-from-bottom-left {
-      bottom: $resizable-base-margin-widthPx;
-      left: $resizable-base-margin-widthPx;
       width: $resizable-margin-widthPx;
       height: $resizable-margin-widthPx;
-      cursor: ne-resize;
     }
 
     .trmrk-draggable-from-bottom-right {
-      bottom: $resizable-base-margin-widthPx;
-      right: $resizable-base-margin-widthPx;
       width: $resizable-margin-widthPx;
       height: $resizable-margin-widthPx;
-      cursor: nw-resize;
     }
   }
 
@@ -94,11 +136,7 @@
     }
 
     .trmrk-draggable-from-left {
-      left: $resizable-base-margin-widthPx;
-      top: $resizable-base-margin-widthPx;
-      bottom: $resizable-base-margin-widthPx;
       width: $resizable-margin-widthPx;
-      cursor: ew-resize;
     }
   }
 
@@ -108,11 +146,7 @@
     }
 
     .trmrk-draggable-from-right {
-      right: $resizable-base-margin-widthPx;
-      top: $resizable-base-margin-widthPx;
-      bottom: $resizable-base-margin-widthPx;
       width: $resizable-margin-widthPx;
-      cursor: ew-resize;
     }
   }
 
