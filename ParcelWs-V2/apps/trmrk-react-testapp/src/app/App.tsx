@@ -43,6 +43,8 @@ const App = withErrorBoundary(() => {
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] = React.useState<null | HTMLElement>(null);
   const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
 
+  const parentEl = React.createRef<HTMLDivElement>();
+
   const appTheme = getAppTheme({
     isDarkMode: isDarkMode
   });
@@ -62,7 +64,7 @@ const App = withErrorBoundary(() => {
   }
 
   useEffect(() => {
-  }, [ ]);
+  }, [ parentEl ]);
 
   if (error) {
     return (
@@ -91,7 +93,7 @@ const App = withErrorBoundary(() => {
           afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
             { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
           bodyContent={
-            <Paper className="trmrk-app-main-content">
+            <Paper className="trmrk-app-main-content" ref={parentEl}>
               <Button sx={{ position: "fixed" }} onClick={handleRefreshClick}>Refresh</Button>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
               <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
@@ -100,6 +102,7 @@ const App = withErrorBoundary(() => {
                 resizableFromBottom={true}
                 resizableFromRight={true}
                 resizableFromLeft={true}
+                parentRef={parentEl}
                 className="my-resizable-panel"
                 draggableBorderSize={ResizablePanelBorderSize.Regular}
                 draggableBorderOpacity={ResizablePanelBorderOpacity.Opc50}>
@@ -112,6 +115,7 @@ const App = withErrorBoundary(() => {
                 resizableFromBottom={true}
                 resizableFromRight={true}
                 resizableFromLeft={true}
+                parentRef={parentEl}
                 className="my-resizable-panel"
                 draggableBorderSize={ResizablePanelBorderSize.Thick}
                 draggableBorderOpacity={ResizablePanelBorderOpacity.Opc25}>

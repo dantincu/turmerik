@@ -24,6 +24,7 @@ export enum ResizeDirection {
 }
 
 export interface ResizablePanelOpts {
+  parentRef: React.RefObject<HTMLElement>,
   className?: string | null | undefined;
   draggableBorderSize?: ResizablePanelBorderSize | null | undefined;
   draggableBorderOpacity?: ResizablePanelBorderOpacity | null | undefined;
@@ -66,8 +67,6 @@ export const getDraggableBorderOpacityClassName = (draggableBorderOpacity?: Resi
 }
 
 export default function ResizablePanel(props: ResizablePanelOpts) {
-  const parentRef = React.createRef<HTMLDivElement>();
-
   const resizableFromLeftRef = React.createRef<HTMLDivElement>();
   const resizableFromTopLeftRef = React.createRef<HTMLDivElement>();
   const resizableFromTopRef = React.createRef<HTMLDivElement>();
@@ -105,95 +104,121 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
       mousePosY.current = e.clientY;
     }
 
-    const removeResizeHandler = () => {
-      console.log("removeResizeHandler");
+    const removeResizeHandlerOnMouseUpIfReq = (e: MouseEvent | null | undefined = null) => {
+      removeResizeHandlerIfReq(e, true);
+    }
+
+    const removeResizeHandlerOnMouseOutIfReq = (e: MouseEvent | null | undefined = null) => {
+      removeResizeHandlerIfReq(e, null);
+    }
+
+    const removeResizeHandlerIfReq = (e: MouseEvent | null | undefined, remove: boolean | null) => {
       mousePosX.current = 0;
       mousePosY.current = 0;
 
-      const parentEl = parentRef.current!;
       const handler = onResizeHandler.current;
+      const parentEl = props.parentRef.current!;
+      console.log("e.target", e?.target);
       
-      if (handler){
-        parentEl.removeEventListener("mouseup", removeResizeHandler);
-        parentEl.removeEventListener("mouseout", removeResizeHandler);
+      if (handler && (!e || remove || e.target === parentEl)){
+        console.log("removeResizeHandler");
+
+        parentEl.removeEventListener("mouseup", removeResizeHandlerOnMouseUpIfReq, {
+          capture: true
+        });
+
+        parentEl.removeEventListener("mouseleave", removeResizeHandlerOnMouseOutIfReq, {
+          capture: true
+        });
+
         parentEl.removeEventListener("mousemove", handler);
         onResizeHandler.current = null;
       }
     }
 
     const draggableFromLeftMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromLeft);
+      addResizeHandlerIfReq(e, ResizeDirection.FromLeft);
     }
 
     const draggableFromTopLeftMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromTopLeft);
+      addResizeHandlerIfReq(e, ResizeDirection.FromTopLeft);
     }
 
     const draggableFromTopMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromTop);
+      addResizeHandlerIfReq(e, ResizeDirection.FromTop);
     }
 
     const draggableFromTopRightMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromTopRight);
+      addResizeHandlerIfReq(e, ResizeDirection.FromTopRight);
     }
 
     const draggableFromRightMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromRight);
+      addResizeHandlerIfReq(e, ResizeDirection.FromRight);
     }
 
     const draggableFromBottomRightMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromBottomRight);
+      addResizeHandlerIfReq(e, ResizeDirection.FromBottomRight);
     }
 
     const draggableFromBottomMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromBottom);
+      addResizeHandlerIfReq(e, ResizeDirection.FromBottom);
     }
 
     const draggableFromBottomLeftMouseDown = (e: MouseEvent) => {
-      addResizeHandler(e, ResizeDirection.FromBottomLeft);
+      addResizeHandlerIfReq(e, ResizeDirection.FromBottomLeft);
     }
 
-    const addResizeHandler = (e: MouseEvent, rszDir: ResizeDirection) => {
-      const handler: (e: MouseEvent) => void = (e: MouseEvent) => {
-        console.log("rszDir", rszDir);
-        switch (rszDir) {
-          case ResizeDirection.FromLeft:
-            const diffX = e.clientX - mousePosX.current;
-            break;
-          case ResizeDirection.FromTopLeft:
-            
-            break;
-          case ResizeDirection.FromTop:
-            
-            break;
-          case ResizeDirection.FromTopRight:
-            
-            break;
-          case ResizeDirection.FromRight:
-            
-            break;
-          case ResizeDirection.FromBottomRight:
-            
-            break;
-          case ResizeDirection.FromBottom:
-            
-            break;
-          case ResizeDirection.FromBottomLeft:
-            
-            break;
-          default:
-            throw new Error(`Invalid resize direction: ${rszDir}`);
+    const addResizeHandlerIfReq = (e: MouseEvent, rszDir: ResizeDirection) => {
+      if (!onResizeHandler.current) {
+        const handler: (e: MouseEvent) => void = (e: MouseEvent) => {
+          console.log("rszDir", rszDir);
+
+          switch (rszDir) {
+            case ResizeDirection.FromLeft:
+              const diffX = e.clientX - mousePosX.current;
+              break;
+            case ResizeDirection.FromTopLeft:
+              
+              break;
+            case ResizeDirection.FromTop:
+              
+              break;
+            case ResizeDirection.FromTopRight:
+              
+              break;
+            case ResizeDirection.FromRight:
+              
+              break;
+            case ResizeDirection.FromBottomRight:
+              
+              break;
+            case ResizeDirection.FromBottom:
+              
+              break;
+            case ResizeDirection.FromBottomLeft:
+              
+              break;
+            default:
+              throw new Error(`Invalid resize direction: ${rszDir}`);
+          }
+          
+          updateMousePos(e);
         }
-        
+
         updateMousePos(e);
+        onResizeHandler.current = handler;
+        const parentEl = props.parentRef.current!;
+
+        parentEl.addEventListener("mouseleave", removeResizeHandlerOnMouseOutIfReq, {
+          capture: true
+        });
+
+        parentEl.addEventListener("mouseup", removeResizeHandlerOnMouseUpIfReq, {
+          capture: true
+        });
+
+        parentEl.addEventListener("mousemove", handler);
       }
-
-      onResizeHandler.current = handler;
-      const parentEl = parentRef.current!;
-
-      parentEl.addEventListener("mouseout", removeResizeHandler);
-      parentEl.addEventListener("mouseup", removeResizeHandler);
-      parentEl.addEventListener("mousemove", handler);
     }
 
     if (resizableFromLeftEl) {
@@ -229,7 +254,7 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
     }
 
     return () => {
-      removeResizeHandler();
+      removeResizeHandlerIfReq(null, null);
 
       if (resizableFromLeftEl) {
         resizableFromLeftEl.removeEventListener("mousedown", draggableFromLeftMouseDown);
@@ -272,7 +297,7 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
     props.resizableFromTop ? "trmrk-resizable-from-top" : "",
     props.resizableFromBottom ? "trmrk-resizable-from-bottom" : "",
     props.resizableFromLeft ? "trmrk-resizable-from-left" : "",
-    props.resizableFromRight ? "trmrk-resizable-from-right" : ""].join(" ")} ref={parentRef}>
+    props.resizableFromRight ? "trmrk-resizable-from-right" : ""].join(" ")}>
       <div className="trmrk-resizable-content">
         {props.children}
       </div>
