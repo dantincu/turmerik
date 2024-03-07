@@ -45,6 +45,10 @@ const App = withErrorBoundary(() => {
 
   const parentEl = React.createRef<HTMLDivElement>();
 
+  const domBodyEl = {
+    current: document.body
+  } as React.RefObject<HTMLElement>;
+
   const appTheme = getAppTheme({
     isDarkMode: isDarkMode
   });
@@ -102,7 +106,7 @@ const App = withErrorBoundary(() => {
                 resizableFromBottom={true}
                 resizableFromRight={true}
                 resizableFromLeft={true}
-                parentRef={parentEl}
+                parentRef={domBodyEl}
                 className="my-resizable-panel"
                 draggableBorderSize={ResizablePanelBorderSize.Regular}
                 draggableBorderOpacity={ResizablePanelBorderOpacity.Opc50}>
@@ -115,7 +119,7 @@ const App = withErrorBoundary(() => {
                 resizableFromBottom={true}
                 resizableFromRight={true}
                 resizableFromLeft={true}
-                parentRef={parentEl}
+                parentRef={domBodyEl}
                 className="my-resizable-panel"
                 draggableBorderSize={ResizablePanelBorderSize.Thick}
                 draggableBorderOpacity={ResizablePanelBorderOpacity.Opc25}>
