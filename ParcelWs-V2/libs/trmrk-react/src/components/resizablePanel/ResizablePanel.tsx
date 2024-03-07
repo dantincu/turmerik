@@ -75,31 +75,43 @@ export const getDraggableBorderOpacityClassName = (draggableBorderOpacity?: Resi
   return draggableBorderOpacityClassName;
 }
 
-export const combineOrtoResizeHandlers = (ortoHandler: (
+export type ResizeHandlersMap = { [ key in ResizeDirection ]: (e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => void };
+
+export const normalizeOrtoResizeHandler = (ortoHandler: (
   e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => void) => (
-  e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => {
+  e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => normalizeOrtoResizeHandlerCore(
+    (dir) => ortoHandler(e, mouseMovement, dir), rszDir);
+
+export const combineOrtoResizeHandlers = (handlersMap: ResizeHandlersMap) => (
+  e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => normalizeOrtoResizeHandlerCore(
+  (dir) => handlersMap[dir](e, mouseMovement, dir), rszDir);
+
+export const normalizeOrtoResizeHandlerCore = (
+  handler: (dir: ResizeDirection) => void,
+  rszDir: ResizeDirection
+) => {
     switch (rszDir) {
       case ResizeDirection.FromTopLeft:
-        ortoHandler(e, mouseMovement, ResizeDirection.FromTop);
-        ortoHandler(e, mouseMovement, ResizeDirection.FromLeft);
+        handler(ResizeDirection.FromTop);
+        handler(ResizeDirection.FromLeft);
         break;
       case ResizeDirection.FromTopRight:
-        ortoHandler(e, mouseMovement, ResizeDirection.FromTop);
-        ortoHandler(e, mouseMovement, ResizeDirection.FromRight);
+        handler(ResizeDirection.FromTop);
+        handler(ResizeDirection.FromRight);
         break;
       case ResizeDirection.FromBottomRight:
-        ortoHandler(e, mouseMovement, ResizeDirection.FromBottom);
-        ortoHandler(e, mouseMovement, ResizeDirection.FromRight);
+        handler(ResizeDirection.FromBottom);
+        handler(ResizeDirection.FromRight);
         break;
       case ResizeDirection.FromBottomLeft:
-        ortoHandler(e, mouseMovement, ResizeDirection.FromBottom);
-        ortoHandler(e, mouseMovement, ResizeDirection.FromLeft);
+        handler(ResizeDirection.FromBottom);
+        handler(ResizeDirection.FromLeft);
         break;
       default:
-        ortoHandler(e, mouseMovement, rszDir);
+        handler(rszDir);
         break;
     }
-  };
+}
 
 export default function ResizablePanel(props: ResizablePanelOpts) {
   const resizableFromLeftRef = React.createRef<HTMLDivElement>();

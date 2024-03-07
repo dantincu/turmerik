@@ -28,7 +28,9 @@ import ResizablePanel, {
   ResizablePanelBorderOpacity,
   MouseMovement,
   ResizeDirection,
-  combineOrtoResizeHandlers } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
+  normalizeOrtoResizeHandler,
+  combineOrtoResizeHandlers,
+  ResizeHandlersMap } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
 import "./App.scss";
 
@@ -176,10 +178,8 @@ const App = withErrorBoundary(() => {
     panelY: React.MutableRefObject<number>,
     panelW: React.MutableRefObject<number>,
     panelH: React.MutableRefObject<number>) => {
-      combineOrtoResizeHandlers(
-        (e: MouseEvent,
-        mouseMovement: MouseMovement,
-        rszDir: ResizeDirection) => {
+      normalizeOrtoResizeHandler(
+        (e, mouseMovement, rszDir) => {
           switch (rszDir) {
             case ResizeDirection.FromLeft:
               updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
@@ -201,12 +201,44 @@ const App = withErrorBoundary(() => {
       })(e, mouseMovement, rszDir);
   }
 
+  const panelResizing1 = (
+    e: MouseEvent,
+    mouseMovement: MouseMovement,
+    rszDir: ResizeDirection,
+    panelRef: React.RefObject<HTMLDivElement>,
+    panelX: React.MutableRefObject<number>,
+    panelY: React.MutableRefObject<number>,
+    panelW: React.MutableRefObject<number>,
+    panelH: React.MutableRefObject<number>) => {
+      const handlersMap = {} as ResizeHandlersMap;
+
+      handlersMap[ResizeDirection.FromLeft] = (e, mouseMovement, rszDir) => {
+        updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
+        updatePanelW(panelRef.current!, panelW, panelW.current - mouseMovement.movementX);
+      }
+
+      handlersMap[ResizeDirection.FromTop] = (e, mouseMovement, rszDir) => {
+        updatePanelY(panelRef.current!, panelY, panelY.current + mouseMovement.movementY);
+        updatePanelH(panelRef.current!, panelH, panelH.current - mouseMovement.movementY);
+      }
+
+      handlersMap[ResizeDirection.FromRight] = (e, mouseMovement, rszDir) => {
+        updatePanelW(panelRef.current!, panelW, panelW.current + mouseMovement.movementX);
+      }
+
+      handlersMap[ResizeDirection.FromBottom] = (e, mouseMovement, rszDir) => {
+        updatePanelH(panelRef.current!, panelH, panelH.current + mouseMovement.movementY);
+      }
+
+      combineOrtoResizeHandlers(handlersMap)(e, mouseMovement, rszDir);
+    }
+
   const topPanelResizing = (e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => {
     panelResizing(e, mouseMovement, rszDir, topPanelRef, topPanelX, topPanelY, topPanelW, topPanelH);
   }
 
   const bottomPanelResizing = (e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => {
-    panelResizing(e, mouseMovement, rszDir, bottomPanelRef, bottomPanelX, bottomPanelY, bottomPanelW, bottomPanelH);
+    panelResizing1(e, mouseMovement, rszDir, bottomPanelRef, bottomPanelX, bottomPanelY, bottomPanelW, bottomPanelH);
   }
 
   return (
