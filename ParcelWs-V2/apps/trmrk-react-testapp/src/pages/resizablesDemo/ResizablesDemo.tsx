@@ -1,17 +1,10 @@
 import React from "react";
 
-import { useSelector } from 'react-redux'
-
 import Button  from "@mui/material/Button";
 import Paper  from "@mui/material/Paper";
-import AppBar  from "@mui/material/AppBar";
-import IconButton from "@mui/material/IconButton";
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
 import trmrk from "trmrk";
 
-import AppModule from "trmrk-react/src/components/appModule/AppModule";
 import ResizablePanel, { 
   ResizablePanelBorderSize,
   ResizablePanelBorderOpacity,
@@ -21,14 +14,7 @@ import ResizablePanel, {
   combineOrtoResizeHandlers,
   ResizeHandlersMap } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
-import { appDataSelectors } from "../../store/appDataSlice";
-
 export default function ResizablesDemo() {
-  const isCompactMode = useSelector(appDataSelectors.getIsCompactMode);
-  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
-  const showAppBar = useSelector(appDataSelectors.getShowAppBar);
-  const showAppBarToggleBtn = useSelector(appDataSelectors.getShowAppBarToggleBtn);
-
   const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
 
   const parentRef = React.createRef<HTMLDivElement>();
@@ -192,49 +178,50 @@ export default function ResizablesDemo() {
     panelResizing1(e, mouseMovement, rszDir, bottomPanelRef, bottomPanelX, bottomPanelY, bottomPanelW, bottomPanelH);
   }
 
-  return (<Paper className="trmrk-app-main-content" ref={parentRef}>
-          <Button sx={{ position: "fixed" }} onClick={handleRefreshClick}>Refresh</Button>
+  return (
+    <Paper className="trmrk-app-main-content" ref={parentRef}>
+      <Button sx={{ position: "fixed" }} onClick={handleRefreshClick}>Refresh</Button>
 
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 
-          <ResizablePanel
-            resizableFromTop={true}
-            resizableFromBottom={true}
-            resizableFromRight={true}
-            resizableFromLeft={true}
-            parentRef={domBodyEl}
-            panelRef={topPanelRef}
-            className="my-resizable-panel"
-            draggableBorderSize={ResizablePanelBorderSize.Regular}
-            draggableBorderOpacity={ResizablePanelBorderOpacity.Opc50}
-            resizeStarted={topPanelResizeStarted}
-            resizeEnded={topPanelResizeEnded}
-            resizing={topPanelResizing}>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-          </ResizablePanel>
+      <ResizablePanel
+        resizableFromTop={true}
+        resizableFromBottom={true}
+        resizableFromRight={true}
+        resizableFromLeft={true}
+        parentRef={domBodyEl}
+        panelRef={topPanelRef}
+        className="my-resizable-panel"
+        draggableBorderSize={ResizablePanelBorderSize.Regular}
+        draggableBorderOpacity={ResizablePanelBorderOpacity.Opc50}
+        resizeStarted={topPanelResizeStarted}
+        resizeEnded={topPanelResizeEnded}
+        resizing={topPanelResizing}>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      </ResizablePanel>
 
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 
-          <ResizablePanel
-            resizableFromTop={true}
-            resizableFromBottom={true}
-            resizableFromRight={true}
-            resizableFromLeft={true}
-            parentRef={domBodyEl}
-            panelRef={bottomPanelRef}
-            className="my-resizable-panel1"
-            draggableBorderSize={ResizablePanelBorderSize.Thick}
-            draggableBorderOpacity={ResizablePanelBorderOpacity.Opc25}
-            resizeStarted={bottomPanelResizeStarted}
-            resizeEnded={bottomPanelResizeEnded}
-            resizing={bottomPanelResizing}>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-          </ResizablePanel>
+      <ResizablePanel
+        resizableFromTop={true}
+        resizableFromBottom={true}
+        resizableFromRight={true}
+        resizableFromLeft={true}
+        parentRef={domBodyEl}
+        panelRef={bottomPanelRef}
+        className="my-resizable-panel1"
+        draggableBorderSize={ResizablePanelBorderSize.Thick}
+        draggableBorderOpacity={ResizablePanelBorderOpacity.Opc25}
+        resizeStarted={bottomPanelResizeStarted}
+        resizeEnded={bottomPanelResizeEnded}
+        resizing={bottomPanelResizing}>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      </ResizablePanel>
 
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
 
-        </Paper>);
+    </Paper>);
 }

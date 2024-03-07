@@ -6,10 +6,11 @@ import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
-import Button  from "@mui/material/Button";
 import Paper  from "@mui/material/Paper";
+import Link  from "@mui/material/Link";
 import AppBar  from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
+import HomeIcon from "@mui/icons-material/Home";
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 
@@ -80,8 +81,10 @@ const App = withErrorBoundary(() => {
         <AppModule
           className={["trmrk-app"].join(" ")}
           headerClassName="trmrk-app-header"
-          headerContent={<AppBar className="trmrk-app-bar"></AppBar>}
-          afterHeaderClassName="trmrk-app-header-toggle"
+          headerContent={<AppBar className="trmrk-app-bar">
+            <Link href="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
+          </AppBar>}
+          afterHeaderClassName="trmrk-app-header-toggle trmrk-icon-btn"
           afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
             { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
           bodyClassName="trmrk-app-body"
