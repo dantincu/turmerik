@@ -14,7 +14,7 @@ export interface AppPanelProps {
   pinHeader: boolean;
   scrollableY?: boolean | null | undefined;
   scrollableX?: boolean | null | undefined;
-  lastRefreshTmStmp?: Date | number | null | undefined
+  lastRefreshTmStmp?: Date | number | null | undefined;
 }
 
 interface AppPanelHeaderData {
