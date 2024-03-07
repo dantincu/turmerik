@@ -25,6 +25,7 @@ export enum ResizeDirection {
 
 export interface ResizablePanelOpts {
   parentRef: React.RefObject<HTMLElement>,
+  panelRef: React.RefObject<HTMLDivElement>,
   className?: string | null | undefined;
   draggableBorderSize?: ResizablePanelBorderSize | null | undefined;
   draggableBorderOpacity?: ResizablePanelBorderOpacity | null | undefined;
@@ -116,10 +117,10 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
     const removeResizeHandlerIfReq = (e: MouseEvent | null | undefined, remove: boolean | null) => {
       const handler = onResizeHandler.current;
       const parentEl = props.parentRef.current!;
-      console.log("e.target", e?.target);
+      // console.log("e.target", e?.target);
       
       if (handler && (!e || remove || e.target === parentEl)){
-        console.log("removeResizeHandler");
+        // console.log("removeResizeHandler");
 
         parentEl.removeEventListener("mouseup", removeResizeHandlerOnMouseUpIfReq, {
           capture: true
@@ -185,7 +186,7 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
 
       if (!onResizeHandler.current) {
         const handler: (e: MouseEvent) => void = (e: MouseEvent) => {
-          console.log("rszDir", rszDir, e);
+          // console.log("rszDir", rszDir, e);
 
           props.resizing(e, {
             movementX: e.movementX,
@@ -286,15 +287,10 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
     props.resizableFromTop ? "trmrk-resizable-from-top" : "",
     props.resizableFromBottom ? "trmrk-resizable-from-bottom" : "",
     props.resizableFromLeft ? "trmrk-resizable-from-left" : "",
-    props.resizableFromRight ? "trmrk-resizable-from-right" : ""].join(" ")}>
+    props.resizableFromRight ? "trmrk-resizable-from-right" : ""].join(" ")} ref={props.panelRef}>
       <div className="trmrk-resizable-content">
         {props.children}
       </div>
-
-      { props.resizableFromLeft ? <div className="trmrk-draggable-margin trmrk-draggable-from-left" ref={resizableFromLeftRef}></div> : null }
-      { props.resizableFromTop ? <div className="trmrk-draggable-margin trmrk-draggable-from-top" ref={resizableFromTopRef}></div> : null }
-      { props.resizableFromRight ? <div className="trmrk-draggable-margin trmrk-draggable-from-right" ref={resizableFromRightRef}></div> : null }
-      { props.resizableFromBottom ? <div className="trmrk-draggable-margin trmrk-draggable-from-bottom" ref={resizableFromBottomRef}></div> : null }
 
       { (props.resizableFromTop && props.resizableFromLeft) ? <div
         className="trmrk-draggable-corner trmrk-draggable-from-top-left" ref={resizableFromTopLeftRef}></div> : null }
@@ -304,5 +300,11 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
         className="trmrk-draggable-corner trmrk-draggable-from-bottom-right" ref={resizableFromBottomRightRef}></div> : null }
       { (props.resizableFromBottom && props.resizableFromLeft) ? <div
         className="trmrk-draggable-corner trmrk-draggable-from-bottom-left" ref={resizableFromBottomLeftRef}></div> : null }
+        
+      { props.resizableFromLeft ? <div className="trmrk-draggable-margin trmrk-draggable-from-left" ref={resizableFromLeftRef}></div> : null }
+      { props.resizableFromTop ? <div className="trmrk-draggable-margin trmrk-draggable-from-top" ref={resizableFromTopRef}></div> : null }
+      { props.resizableFromRight ? <div className="trmrk-draggable-margin trmrk-draggable-from-right" ref={resizableFromRightRef}></div> : null }
+      { props.resizableFromBottom ? <div className="trmrk-draggable-margin trmrk-draggable-from-bottom" ref={resizableFromBottomRef}></div> : null }
+
     </div>);
 }

@@ -85,7 +85,7 @@ export default function AppPanel(props: AppPanelProps) {
         mainElLastScrollTop: mainEl.scrollTop
       };
 
-      console.log("appBarData.current", appPanelHeaderData.current);
+      // console.log("appBarData.current", appPanelHeaderData.current);
 
       scrollHandler(appPanelHeaderData.current);
 

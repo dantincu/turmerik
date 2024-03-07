@@ -1,4 +1,13 @@
+.trmrk-app {
+  display: block;
+  position: absolute;
+  inset: 0px;
+}
+
 .trmrk-app-header {
+  display: block;
+  position: absolute;
+  width: 100%;
   height: 5em;
 }
 
@@ -9,6 +18,15 @@
   right: 0px;
   top: 0px;
   z-index: 1;
+}
+
+.trmrk-app-body {
+  display: block;
+  position: absolute;
+  top: 5em;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
 }
 
 .my-resizable-panel {
@@ -23,4 +41,15 @@
 
 .my-resizable-panel .trmrk-resizable-content {
   background-color: darkslateblue;
+}
+
+.trmrk-app-main-content {
+  display: block;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+  height: 100%;
 }
