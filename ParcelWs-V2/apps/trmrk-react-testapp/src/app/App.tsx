@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
@@ -7,7 +7,7 @@ import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import Paper  from "@mui/material/Paper";
-import Link  from "@mui/material/Link";
+
 import AppBar  from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
@@ -71,12 +71,10 @@ const App = withErrorBoundary(() => {
     headerRef.current = data.headerEl;
     bodyRef.current = data.bodyEl;
 
-    if (refreshBtnRef.current) {
-      if (appBarRowsCount === 0) {
-        const newAppBarRowsCount = Math.round(data.headerHeight / appBarRowHeightPx);
-        console.log("newAppBarRowsCount", newAppBarRowsCount);
-        setAppBarRowsCount(newAppBarRowsCount);
-      }
+    if (appBarRowsCount === 0) {
+      const newAppBarRowsCount = Math.round(data.headerHeight / appBarRowHeightPx);
+      console.log("newAppBarRowsCount", newAppBarRowsCount);
+      setAppBarRowsCount(newAppBarRowsCount);
     }
 
     console.log("appHeaderScrolling", data.headerEl.style.height, data.bodyEl.style.top, data.headerEl.style.top);
@@ -135,7 +133,7 @@ const App = withErrorBoundary(() => {
           className={["trmrk-app"].join(" ")}
           headerClassName="trmrk-app-header"
           headerContent={<AppBar className="trmrk-app-module-bar">
-            <Link href="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
+            <Link to="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
             <IconButton className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>
             <IconButton className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>
           </AppBar>}

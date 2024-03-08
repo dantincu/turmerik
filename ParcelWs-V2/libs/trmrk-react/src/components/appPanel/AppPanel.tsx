@@ -31,7 +31,6 @@ export interface AppPanelHeaderOffset {
 }
 
 export default function AppPanel(props: AppPanelProps) {
-  const lastRefreshTmStmp = React.useRef(props.lastRefreshTmStmp ?? null);
   const parentRef = React.createRef<HTMLDivElement>();
   const headerRef = React.createRef<HTMLDivElement>();
   const bodyRef = React.createRef<HTMLDivElement>();
@@ -114,8 +113,6 @@ export default function AppPanel(props: AppPanelProps) {
       mainEl.addEventListener("scroll", onScroll);
     } else if (mainEl) {
       mainEl.style.top = "0px";
-    } else if ((props.lastRefreshTmStmp ?? null) !== lastRefreshTmStmp.current) {
-      lastRefreshTmStmp.current = props.lastRefreshTmStmp ?? null;
     }
 
     if (addListeners) {
@@ -124,7 +121,7 @@ export default function AppPanel(props: AppPanelProps) {
         mainEl.removeEventListener("scroll", onScroll);
       };
     }
-  }, [ props.showHeader, props.pinHeader, props.lastRefreshTmStmp, lastRefreshTmStmp, appPanelHeaderData, parentRef, headerRef, bodyRef ]);
+  }, [ props.showHeader, props.pinHeader, props.lastRefreshTmStmp, appPanelHeaderData, parentRef, headerRef, bodyRef ]);
 
   return (<div className={["trmrk-app-panel", props.className].join(" ")} ref={parentRef}>
     { (props.headerContent && (props.showHeader || props.pinHeader)) ?

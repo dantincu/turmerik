@@ -1,9 +1,10 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 import styled from "@emotion/styled";
 
 import Paper from "@mui/material/Paper";
-import Link from "@mui/material/Link";
 
 const Ul = styled.ul({
   margin: "0px",
@@ -13,7 +14,7 @@ const Ul = styled.ul({
 export default function HomePage() {
   return (<Paper sx={{ height: "100%" }}>
     <Ul>
-      <li><Link href="/resizables-demo">Resizables Demo</Link></li>
+      <li><Link to="/resizables-demo">Resizables Demo</Link></li>
     </Ul>
   </Paper>);
 }
