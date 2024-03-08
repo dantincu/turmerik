@@ -14,43 +14,64 @@ export interface AppPanelProps {
   pinHeader: boolean;
   scrollableY?: boolean | null | undefined;
   scrollableX?: boolean | null | undefined;
+  scrolling?: (data: AppPanelHeaderData, offset: AppPanelHeaderOffset) => void;
   lastRefreshTmStmp?: Date | number | null | undefined;
 }
 
-interface AppPanelHeaderData {
+export interface AppPanelHeaderData {
   headerEl: HTMLDivElement;
-  mainEl: HTMLDivElement;
+  bodyEl: HTMLDivElement;
   headerHeight: number;
-  mainElLastScrollTop: number;
+  bodyElLastScrollTop: number;
+}
+
+export interface AppPanelHeaderOffset {
+  headerElTopOffset: number;
+  mainElTopOffset: number;
 }
 
 export default function AppPanel(props: AppPanelProps) {
+  const lastRefreshTmStmp = React.useRef(props.lastRefreshTmStmp ?? null);
   const parentRef = React.createRef<HTMLDivElement>();
   const headerRef = React.createRef<HTMLDivElement>();
-  const mainRef = React.createRef<HTMLDivElement>();
+  const bodyRef = React.createRef<HTMLDivElement>();
 
   const appPanelHeaderData = useRef({} as AppPanelHeaderData);
 
   const scrollHandler = (data: AppPanelHeaderData) => {
-    const scrollTop = data.mainEl.scrollTop;
+    const scrollTop = data.bodyEl.scrollTop;
 
     if (scrollTop <= 0) { /* technically, the scrollTop should never be negative, but I've previously seen a negative value for
       this property on ios when using the document as main element and scrolling top and then dragging the top margin (like in a mobile refresh request) */
-      data.mainEl.style.top = `${data.headerHeight}px`;
+      data.bodyEl.style.top = `${data.headerHeight}px`;
       data.headerEl.style.top = `0px`;
+
+      if (props.scrolling) {
+        props.scrolling(data, {
+          headerElTopOffset: 0,
+          mainElTopOffset: data.headerHeight,
+        });
+      }
     } else {
-      const prevScrollTop = data.mainElLastScrollTop;
-      data.mainElLastScrollTop = scrollTop;
+      const prevScrollTop = data.bodyElLastScrollTop;
+      data.bodyElLastScrollTop = scrollTop;
 
       const scrollTopDiff = scrollTop - prevScrollTop;
-      let mainElTopOffset = data.mainEl.offsetTop - scrollTopDiff;
+      let mainElTopOffset = data.bodyEl.offsetTop - scrollTopDiff;
 
       mainElTopOffset = Math.max(0, mainElTopOffset);
       mainElTopOffset = Math.min(mainElTopOffset, data.headerHeight);
       const headerElTopOffset = mainElTopOffset - data.headerHeight;
 
-      data.mainEl.style.top = `${mainElTopOffset}px`;
+      data.bodyEl.style.top = `${mainElTopOffset}px`;
       data.headerEl.style.top = `${headerElTopOffset}px`;
+
+      if (props.scrolling) {
+        props.scrolling(data, {
+          headerElTopOffset: headerElTopOffset,
+          mainElTopOffset: mainElTopOffset,
+        });
+      }
     }
   }
 
@@ -72,7 +93,7 @@ export default function AppPanel(props: AppPanelProps) {
     }
 
     const parentEl = parentRef.current;
-    const mainEl = mainRef.current;
+    const mainEl = bodyRef.current;
     const headerEl = headerRef.current;
     const canAddListeners = !!(parentEl && mainEl && headerEl);
     const addListeners = canAddListeners && !props.pinHeader;
@@ -80,9 +101,9 @@ export default function AppPanel(props: AppPanelProps) {
     if (addListeners) {
       appPanelHeaderData.current = {
         headerEl: headerEl,
-        mainEl: mainEl,
+        bodyEl: mainEl,
         headerHeight: headerEl.clientHeight,
-        mainElLastScrollTop: mainEl.scrollTop
+        bodyElLastScrollTop: mainEl.scrollTop
       };
 
       // console.log("appBarData.current", appPanelHeaderData.current);
@@ -93,6 +114,8 @@ export default function AppPanel(props: AppPanelProps) {
       mainEl.addEventListener("scroll", onScroll);
     } else if (mainEl) {
       mainEl.style.top = "0px";
+    } else if ((props.lastRefreshTmStmp ?? null) !== lastRefreshTmStmp.current) {
+      lastRefreshTmStmp.current = props.lastRefreshTmStmp ?? null;
     }
 
     if (addListeners) {
@@ -101,7 +124,7 @@ export default function AppPanel(props: AppPanelProps) {
         mainEl.removeEventListener("scroll", onScroll);
       };
     }
-  }, [ props.showHeader, props.pinHeader, props.lastRefreshTmStmp, appPanelHeaderData, parentRef, headerRef, mainRef ]);
+  }, [ props.showHeader, props.pinHeader, props.lastRefreshTmStmp, lastRefreshTmStmp, appPanelHeaderData, parentRef, headerRef, bodyRef ]);
 
   return (<div className={["trmrk-app-panel", props.className].join(" ")} ref={parentRef}>
     { (props.headerContent && (props.showHeader || props.pinHeader)) ?
@@ -113,7 +136,7 @@ export default function AppPanel(props: AppPanelProps) {
       props.scrollableX ? "trmrk-scrollableX" : "",
       props.scrollableY ? "trmrk-scrollableY" : "",
       (props.scrollableX || props.scrollableY) ? "trmrk-scrollable" : "",
-      props.bodyClassName ?? ""].join(" ")} ref={mainRef}>
+      props.bodyClassName ?? ""].join(" ")} ref={bodyRef}>
       {props.bodyContent}</div>
   </div>);
 }
