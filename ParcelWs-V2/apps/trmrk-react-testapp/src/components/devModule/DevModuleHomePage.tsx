@@ -14,7 +14,7 @@ const Ul = styled.ul({
 export default function DevModuleHomePage() {
   return (<Paper sx={{ height: "100%" }}>
     <Ul>
-      <li><Link to="indexeddb-browser">IndexedDB Browser</Link></li>
+      <li><Link to="indexeddb-browser" className="trmrk-nav-link">IndexedDB Browser</Link></li>
     </Ul>
   </Paper>);
 }

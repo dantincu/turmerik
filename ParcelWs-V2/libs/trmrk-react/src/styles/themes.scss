@@ -5,6 +5,9 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
 .trmrk-theme-dark {
   color: white;
+  .trmrk-nav-link {
+    color: white;
+  }
 
   .trmrk-scrollable {
     @include scrollable(#1e1e1e, #303030, #262626, #404040);

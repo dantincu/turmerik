@@ -14,8 +14,8 @@ const Ul = styled.ul({
 export default function HomePage() {
   return (<Paper sx={{ height: "100%" }}>
     <Ul>
-      <li><Link to="resizables-demo">Resizables Demo</Link></li>
-      <li><Link to="dev">Development Module</Link></li>
+      <li><Link to="resizables-demo" className="trmrk-nav-link">Resizables Demo</Link></li>
+      <li><Link to="dev" className="trmrk-nav-link">Development Module</Link></li>
     </Ul>
   </Paper>);
 }
