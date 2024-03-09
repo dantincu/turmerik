@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 import AppBar  from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
@@ -10,12 +10,18 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 
 import { Route, Routes } from "react-router-dom";
 
-import { appDataSelectors } from "../../store/appDataSlice";
+import { appDataSelectors, appDataReducers } from "../../store/appDataSlice";
 
 import AppModule from "trmrk-react/src/components/appModule/AppModule";
 
 import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbBrowser from "../indexedDbBrowser/IndexedDbBrowser";
+
+import ToggleAppBarBtn from "../../components/appBar/ToggleAppBarBtn";
+import ToggleAppModeBtn from "../../components/settingsMenu/ToggleAppModeBtn";
+import ToggleDarkModeBtn from "../../components/settingsMenu/ToggleDarkModeBtn";
+import SettingsMenuList from "../../components/settingsMenu/SettingsMenuList";
+import AppearenceSettingsMenuList from "../../components/settingsMenu/AppearenceSettingsMenuList";
 
 export interface DevModuleProps {
   className?: string | null | undefined;
@@ -31,6 +37,12 @@ export default function DevModule(
   const showAppBarToggleBtn = useSelector(appDataSelectors.getShowAppBarToggleBtn);
   const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
 
+  const dispatch = useDispatch();
+
+  const appBarToggled = (showAppBar: boolean) => {
+    dispatch(appDataReducers.setShowAppBar(showAppBar));
+  }
+
   console.log("props.basePath", props.basePath);
 
   return (<AppModule
@@ -40,8 +52,7 @@ export default function DevModule(
         <Link to={props.basePath}><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
       </AppBar>}
       afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
-      afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
-        { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
+      afterHeaderContent={ showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={showAppBar} appBarToggled={appBarToggled} /> : null }
       bodyClassName="trmrk-app-body"
       showHeader={showAppBar}
       pinHeader={!isCompactMode}

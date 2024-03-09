@@ -82,7 +82,7 @@ export default function ResizablesDemo({
   }
 
   React.useEffect(() => {
-    console.log("lastRefreshTmStmp", lastRefreshTmStmp);
+    // console.log("lastRefreshTmStmp", lastRefreshTmStmp);
   }, [ lastRefreshTmStmp, parentRef, topPanelRef, bottomPanelRef ]);
 
   const topPanelResizeStarted = (e: MouseEvent, rszDir: ResizeDirection) => {
@@ -93,11 +93,11 @@ export default function ResizablesDemo({
     updatePanelH(topPanelEl, topPanelH, topPanelEl.clientHeight);
     topPanelEl.style.marginTop = "0px";
     topPanelEl.style.marginLeft = "0px";
-    console.log("top panel resize started", topPanelEl.offsetLeft, topPanelEl.offsetTop, new Date());
+    // console.log("top panel resize started", topPanelEl.offsetLeft, topPanelEl.offsetTop, new Date());
   }
 
   const topPanelResizeEnded = (e: MouseEvent | null, rszDir: ResizeDirection) => {
-    console.log("top panel resize ended", new Date());
+    // console.log("top panel resize ended", new Date());
   }
 
   const bottomPanelResizeStarted = (e: MouseEvent, rszDir: ResizeDirection) => {
@@ -108,11 +108,11 @@ export default function ResizablesDemo({
     updatePanelH(bottomPanelEl, bottomPanelH, bottomPanelEl.clientHeight);
     bottomPanelEl.style.marginTop = "0px";
     bottomPanelEl.style.marginLeft = "0px";
-    console.log("bottom panel resize started", bottomPanelEl, bottomPanelEl.offsetTop, new Date());
+    // console.log("bottom panel resize started", bottomPanelEl, bottomPanelEl.offsetTop, new Date());
   }
 
   const bottomPanelResizeEnded = (e: MouseEvent | null, rszDir: ResizeDirection) => {
-    console.log("bottom panel resize ended", new Date());
+    // console.log("bottom panel resize ended", new Date());
   }
 
   const panelResizing = (

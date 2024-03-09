@@ -22,7 +22,7 @@ import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
 import AppModule from "trmrk-react/src/components/appModule/AppModule";
 import { AppPanelHeaderData, AppPanelHeaderOffset } from "trmrk-react/src/components/appPanel/AppPanel";
 
-import { appDataSelectors } from "../store/appDataSlice";
+import { appDataSelectors, appDataReducers } from "../store/appDataSlice";
 import { appBarReducers } from "../store/appBarDataSlice";
 
 import "./App.scss";
@@ -30,6 +30,11 @@ import "./App.scss";
 import HomePage from "../pages/home/HomePage";
 import ResizablesDemo from "../pages/resizablesDemo/ResizablesDemo";
 import DevModule from "../components/devModule/DevModule";
+import ToggleAppBarBtn from "../components/appBar/ToggleAppBarBtn";
+import ToggleAppModeBtn from "../components/settingsMenu/ToggleAppModeBtn";
+import ToggleDarkModeBtn from "../components/settingsMenu/ToggleDarkModeBtn";
+import SettingsMenuList from "../components/settingsMenu/SettingsMenuList";
+import AppearenceSettingsMenuList from "../components/settingsMenu/AppearenceSettingsMenuList";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
@@ -38,6 +43,7 @@ const App = withErrorBoundary(() => {
   );
 
   const [ appBarRowsCount, setAppBarRowsCount ] = React.useState(0);
+  const [ appHeaderHeight, setAppHeaderHeight ] = React.useState<number | null>(null);
 
   const appBarRowHeightPx = 40;
   const refreshBtnRef = React.createRef<HTMLButtonElement>();
@@ -68,17 +74,23 @@ const App = withErrorBoundary(() => {
     dispatch(appBarReducers.setAppSettingsMenuIsOpen(true));
   };
 
+  const appBarToggled = (showAppBar: boolean) => {
+    dispatch(appDataReducers.setShowAppBar(showAppBar));
+  }
+
   const appHeaderScrolling = (data: AppPanelHeaderData, offset: AppPanelHeaderOffset) => {
     headerRef.current = data.headerEl;
     bodyRef.current = data.bodyEl;
 
     if (appBarRowsCount === 0) {
       const newAppBarRowsCount = Math.round(data.headerHeight / appBarRowHeightPx);
-      console.log("newAppBarRowsCount", newAppBarRowsCount);
       setAppBarRowsCount(newAppBarRowsCount);
     }
 
-    console.log("appHeaderScrolling", data.headerEl.style.height, data.bodyEl.style.top, data.headerEl.style.top);
+    if (appHeaderHeight === null) {
+      console.log("data.headerHeight", data.headerHeight);
+      setAppHeaderHeight(data.headerHeight);
+    }
   }
 
   const updateHeaderHeight = (newAppBarRowsCount: number) => {
@@ -91,12 +103,10 @@ const App = withErrorBoundary(() => {
     bodyEl.style.top = `${newHeaderHeight}px`;
     headerEl.style.top = "0px";
 
-    console.log("newHeaderHeight", newHeaderHeight, headerEl.style.height, bodyEl.style.top, headerEl.style.top);
-
-    console.log("cssClasses", headerEl.className, bodyEl.className);
-
     setAppBarRowsCount(newAppBarRowsCount);
-    setLastRefreshTmStmp(new Date());
+    setAppHeaderHeight(newHeaderHeight);
+    console.log("newHeaderHeight", newHeaderHeight);
+    // setLastRefreshTmStmp(new Date());
   }
 
   const increaseHeaderHeightBtnClicked = () => {
@@ -110,7 +120,7 @@ const App = withErrorBoundary(() => {
   }
 
   useEffect(() => {
-  }, [ refreshBtnRef, appBarRowsCount, lastRefreshTmStmp ]);
+  }, [ refreshBtnRef, appBarRowsCount, lastRefreshTmStmp, appHeaderHeight, showAppBar ]);
 
   if (error) {
     return (
@@ -141,10 +151,10 @@ const App = withErrorBoundary(() => {
                 <IconButton className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>
               </AppBar>}
               afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
-              afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
-                { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
+              afterHeaderContent={ showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={showAppBar} appBarToggled={appBarToggled} /> : null }
               bodyClassName="trmrk-app-body"
               showHeader={showAppBar}
+              headerHeight={appHeaderHeight}
               pinHeader={!isCompactMode}
               isDarkMode={isDarkMode}
               isCompactMode={isCompactMode}

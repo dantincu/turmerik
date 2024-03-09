@@ -12,6 +12,7 @@ export interface AppPanelProps {
   afterHeaderContent?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   showHeader: boolean;
   pinHeader: boolean;
+  headerHeight?: number | null | undefined;
   scrollableY?: boolean | null | undefined;
   scrollableX?: boolean | null | undefined;
   scrolling?: (data: AppPanelHeaderData, offset: AppPanelHeaderOffset) => void;
@@ -23,6 +24,7 @@ export interface AppPanelHeaderData {
   bodyEl: HTMLDivElement;
   headerHeight: number;
   bodyElLastScrollTop: number;
+  showHeaderNow: boolean;
 }
 
 export interface AppPanelHeaderOffset {
@@ -37,10 +39,13 @@ export default function AppPanel(props: AppPanelProps) {
 
   const appPanelHeaderData = useRef({} as AppPanelHeaderData);
 
+  const [ showHeader, setShowHeader]  = React.useState(props.showHeader);
+  const [ headerHeight, setHeaderHeight ] = React.useState(props.headerHeight);
+
   const scrollHandler = (data: AppPanelHeaderData) => {
     const scrollTop = data.bodyEl.scrollTop;
 
-    if (scrollTop <= 0) { /* technically, the scrollTop should never be negative, but I've previously seen a negative value for
+    if (scrollTop <= 0 || data.showHeaderNow) { /* technically, the scrollTop should never be negative, but I've previously seen a negative value for
       this property on ios when using the document as main element and scrolling top and then dragging the top margin (like in a mobile refresh request) */
       data.bodyEl.style.top = `${data.headerHeight}px`;
       data.headerEl.style.top = `0px`;
@@ -97,13 +102,24 @@ export default function AppPanel(props: AppPanelProps) {
     const canAddListeners = !!(parentEl && mainEl && headerEl);
     const addListeners = canAddListeners && !props.pinHeader;
 
+    const showHeaderToggled = showHeader !== props.showHeader;
+    const headerHeightChanged = headerHeight !== props.headerHeight;
+
     if (addListeners) {
+      if ((showHeaderToggled || headerHeightChanged) && props.headerHeight !== null){
+        headerEl.style.height = `${props.headerHeight}px`;
+        console.log("newprops.headerHeight", props.headerHeight, headerEl.clientHeight);
+      }
+
       appPanelHeaderData.current = {
         headerEl: headerEl,
         bodyEl: mainEl,
         headerHeight: headerEl.clientHeight,
-        bodyElLastScrollTop: mainEl.scrollTop
+        bodyElLastScrollTop: mainEl.scrollTop,
+        showHeaderNow: showHeaderToggled && props.showHeader
       };
+
+      console.log("props.headerHeight", props.headerHeight, headerHeightChanged, headerEl.clientHeight);
 
       // console.log("appBarData.current", appPanelHeaderData.current);
 
@@ -115,13 +131,21 @@ export default function AppPanel(props: AppPanelProps) {
       mainEl.style.top = "0px";
     }
 
+    if (showHeaderToggled) {
+      setShowHeader(props.showHeader);
+    }
+
+    if (headerHeightChanged) {
+      setHeaderHeight(props.headerHeight);
+    }
+
     if (addListeners) {
       return () => {
         parentEl.removeEventListener("resize", onResize);
         mainEl.removeEventListener("scroll", onScroll);
       };
     }
-  }, [ props.showHeader, props.pinHeader, props.lastRefreshTmStmp, appPanelHeaderData, parentRef, headerRef, bodyRef ]);
+  }, [ props.showHeader, showHeader, props.pinHeader, props.lastRefreshTmStmp, props.headerHeight, appPanelHeaderData, parentRef, headerRef, bodyRef ]);
 
   return (<div className={["trmrk-app-panel", props.className].join(" ")} ref={parentRef}>
     { (props.headerContent && (props.showHeader || props.pinHeader)) ?
