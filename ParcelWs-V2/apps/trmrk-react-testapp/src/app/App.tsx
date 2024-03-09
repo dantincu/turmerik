@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
@@ -29,6 +29,7 @@ import "./App.scss";
 
 import HomePage from "../pages/home/HomePage";
 import ResizablesDemo from "../pages/resizablesDemo/ResizablesDemo";
+import DevModule from "../components/devModule/DevModule";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
@@ -129,32 +130,38 @@ const App = withErrorBoundary(() => {
     <BrowserRouter>
       <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
-        <AppModule
-          className={["trmrk-app"].join(" ")}
-          headerClassName="trmrk-app-header"
-          headerContent={<AppBar className="trmrk-app-module-bar">
-            <Link to="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
-            <IconButton className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>
-            <IconButton className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>
-          </AppBar>}
-          afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
-          afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
-            { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
-          bodyClassName="trmrk-app-body"
-          showHeader={showAppBar}
-          pinHeader={!isCompactMode}
-          isDarkMode={isDarkMode}
-          isCompactMode={isCompactMode}
-          lastRefreshTmStmp={lastRefreshTmStmp}
-          scrollableX={true}
-          scrollableY={isCompactMode}
-          scrolling={appHeaderScrolling}
-          bodyContent={
         <Routes>
-          <Route path="/resizables-demo" element={
-            <ResizablesDemo refreshBtnRef={refreshBtnRef} />}></Route>
-          <Route path="/" Component={HomePage}></Route>
-        </Routes>} />
+          <Route path="/" element={
+            <AppModule
+              className={["trmrk-app"].join(" ")}
+              headerClassName="trmrk-app-header"
+              headerContent={<AppBar className="trmrk-app-module-bar">
+                <Link to="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
+                <IconButton className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>
+                <IconButton className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>
+              </AppBar>}
+              afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
+              afterHeaderContent={ showAppBarToggleBtn ? <IconButton>
+                { showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }</IconButton> : null }
+              bodyClassName="trmrk-app-body"
+              showHeader={showAppBar}
+              pinHeader={!isCompactMode}
+              isDarkMode={isDarkMode}
+              isCompactMode={isCompactMode}
+              lastRefreshTmStmp={lastRefreshTmStmp}
+              scrollableX={true}
+              scrollableY={isCompactMode}
+              scrolling={appHeaderScrolling}
+              bodyContent={<Outlet />} />
+          }>
+            <Route path="resizables-demo" element={
+              <ResizablesDemo refreshBtnRef={refreshBtnRef} />}></Route>
+            <Route path="" Component={HomePage}></Route>
+          </Route>
+          <Route path="/dev/*" element={
+            <DevModule basePath="/dev" />
+          } />
+        </Routes>
       </ThemeProvider>
     </BrowserRouter>
   );

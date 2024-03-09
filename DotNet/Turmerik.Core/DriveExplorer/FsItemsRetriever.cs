@@ -195,9 +195,9 @@ namespace Turmerik.Core.DriveExplorer
             {
                 Name = fSysInfo.Name,
                 Idnf = fSysInfo.FullName,
-                CreationTime = fSysInfo.CreationTime,
-                LastWriteTime = fSysInfo.LastWriteTime,
-                LastAccessTime = fSysInfo.LastAccessTime,
+                CreationTimeUtcTicks = fSysInfo.CreationTime.ToUniversalTime().Ticks,
+                LastWriteTimeUtcTicks = fSysInfo.LastWriteTime.ToUniversalTime().Ticks,
+                LastAccessTimeUtcTicks = fSysInfo.LastAccessTime.ToUniversalTime().Ticks,
             };
 
             if (fSysInfo is DirectoryInfo dirInfo)

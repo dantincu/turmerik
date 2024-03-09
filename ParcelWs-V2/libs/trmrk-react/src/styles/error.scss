@@ -6,6 +6,11 @@
     color: orangered;
     font-size: 1.25em;
   }
+
+  > pre {
+    word-wrap: break-word;
+    text-wrap: wrap;
+  }
 }
 
 .trmrk-error {

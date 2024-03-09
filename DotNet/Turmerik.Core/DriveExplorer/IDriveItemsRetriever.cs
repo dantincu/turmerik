@@ -112,6 +112,14 @@ namespace Turmerik.Core.DriveExplorer
                 item.IsVideoFile = null;
                 item.IsAudioFile = null;
 
+                item.CreationTime = null;
+                item.LastWriteTime = null;
+                item.LastAccessTime = null;
+
+                item.CreationTimeUtcTicks = null;
+                item.LastWriteTimeUtcTicks = null;
+                item.LastAccessTimeUtcTicks = null;
+
                 if (item.SubFolders != null)
                 {
                     foreach (var folder in item.SubFolders)

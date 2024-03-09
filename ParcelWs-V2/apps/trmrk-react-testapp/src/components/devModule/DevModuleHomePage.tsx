@@ -11,11 +11,10 @@ const Ul = styled.ul({
   padding: "1em"
 });
 
-export default function HomePage() {
+export default function DevModuleHomePage() {
   return (<Paper sx={{ height: "100%" }}>
     <Ul>
-      <li><Link to="resizables-demo">Resizables Demo</Link></li>
-      <li><Link to="dev">Development Module</Link></li>
+      <li><Link to="indexeddb-browser">IndexedDB Browser</Link></li>
     </Ul>
   </Paper>);
 }

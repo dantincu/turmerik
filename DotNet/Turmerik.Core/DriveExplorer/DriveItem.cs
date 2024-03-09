@@ -51,6 +51,9 @@ namespace Turmerik.Core.DriveExplorer
             CreationTime = src.CreationTime;
             LastWriteTime = src.LastWriteTime;
             LastAccessTime = src.LastAccessTime;
+            CreationTimeUtcTicks = src.CreationTimeUtcTicks;
+            LastWriteTimeUtcTicks = src.LastWriteTimeUtcTicks;
+            LastAccessTimeUtcTicks = src.LastAccessTimeUtcTicks;
         }
 
         public string Idnf { get; set; }
@@ -75,6 +78,10 @@ namespace Turmerik.Core.DriveExplorer
         public DateTime? CreationTime { get; set; }
         public DateTime? LastWriteTime { get; set; }
         public DateTime? LastAccessTime { get; set; }
+
+        public long? CreationTimeUtcTicks { get; set; }
+        public long? LastWriteTimeUtcTicks { get; set; }
+        public long? LastAccessTimeUtcTicks { get; set; }
     }
 
     public class DriveItem<TDriveItem> : DriveItemCore
