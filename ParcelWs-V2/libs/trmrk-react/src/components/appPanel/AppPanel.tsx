@@ -108,7 +108,6 @@ export default function AppPanel(props: AppPanelProps) {
     if (addListeners) {
       if ((showHeaderToggled || headerHeightChanged) && props.headerHeight !== null){
         headerEl.style.height = `${props.headerHeight}px`;
-        console.log("newprops.headerHeight", props.headerHeight, headerEl.clientHeight);
       }
 
       appPanelHeaderData.current = {
@@ -118,10 +117,6 @@ export default function AppPanel(props: AppPanelProps) {
         bodyElLastScrollTop: mainEl.scrollTop,
         showHeaderNow: showHeaderToggled && props.showHeader
       };
-
-      console.log("props.headerHeight", props.headerHeight, headerHeightChanged, headerEl.clientHeight);
-
-      // console.log("appBarData.current", appPanelHeaderData.current);
 
       scrollHandler(appPanelHeaderData.current);
 

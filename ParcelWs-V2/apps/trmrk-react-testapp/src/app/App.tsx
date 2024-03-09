@@ -9,15 +9,15 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Paper  from "@mui/material/Paper";
 
 import AppBar  from "@mui/material/AppBar";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
 import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
+import { TrmrkError } from "trmrk/src/TrmrkError";
 
 import AppModule from "trmrk-react/src/components/appModule/AppModule";
 import { AppPanelHeaderData, AppPanelHeaderOffset } from "trmrk-react/src/components/appPanel/AppPanel";
@@ -88,7 +88,7 @@ const App = withErrorBoundary(() => {
     }
 
     if (appHeaderHeight === null) {
-      console.log("data.headerHeight", data.headerHeight);
+      // console.log("data.headerHeight", data.headerHeight);
       setAppHeaderHeight(data.headerHeight);
     }
   }
@@ -105,7 +105,7 @@ const App = withErrorBoundary(() => {
 
     setAppBarRowsCount(newAppBarRowsCount);
     setAppHeaderHeight(newHeaderHeight);
-    console.log("newHeaderHeight", newHeaderHeight);
+    // console.log("newHeaderHeight", newHeaderHeight);
     // setLastRefreshTmStmp(new Date());
   }
 
@@ -119,6 +119,10 @@ const App = withErrorBoundary(() => {
     }
   }
 
+  const refreshCurrentPage = () => {
+    window.location.reload();
+  }
+
   useEffect(() => {
   }, [ refreshBtnRef, appBarRowsCount, lastRefreshTmStmp, appHeaderHeight, showAppBar ]);
 
@@ -130,7 +134,7 @@ const App = withErrorBoundary(() => {
         <Paper className={["trmrk-app-error", appThemeClassName].join(" ")}>
           <h2>Something went wrong:</h2>
           <pre>{((error as Error).message ?? error).toString()}</pre>
-          { /* <Button onClick={resetError}>Try again</Button> */ }
+          { (error as TrmrkError).showPageRefreshOption !== false ? <Button onClick={refreshCurrentPage}>Try reloading the page</Button> : null }
         </Paper>
       </ThemeProvider>
     );

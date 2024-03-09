@@ -43,7 +43,7 @@ export default function DevModule(
     dispatch(appDataReducers.setShowAppBar(showAppBar));
   }
 
-  console.log("props.basePath", props.basePath);
+  // console.log("props.basePath", props.basePath);
 
   return (<AppModule
       className={["trmrk-dev"].join(" ")}
