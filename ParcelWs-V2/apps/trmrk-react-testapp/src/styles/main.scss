@@ -1,1 +1,9 @@
 @import "./_mixins";
+
+.trmrk-app-module-header .trmrk-app-module-bar {
+  color: white;
+
+  .trmrk-icon-btn {
+    color: white;
+  }
+}

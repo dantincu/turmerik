@@ -4,7 +4,7 @@ import { ReducerAction } from "trmrk-react/src/redux/core";
 import { AppBarData, AppSettingsMenuOpts } from "../services/appBarData";
 
 const appBarDataSlice = createSlice({
-  name: "appData",
+  name: "appBar",
   initialState: {
     appSettingsMenuOpts: {
       isOpen: false,

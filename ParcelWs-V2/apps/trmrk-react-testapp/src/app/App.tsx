@@ -12,6 +12,7 @@ import AppBar  from "@mui/material/AppBar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
+import MenuIcon from "@mui/icons-material/Menu";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
@@ -23,7 +24,7 @@ import AppModule from "trmrk-react/src/components/appModule/AppModule";
 import { AppPanelHeaderData, AppPanelHeaderOffset } from "trmrk-react/src/components/appPanel/AppPanel";
 
 import { appDataSelectors, appDataReducers } from "../store/appDataSlice";
-import { appBarReducers } from "../store/appBarDataSlice";
+import { appBarSelectors, appBarReducers } from "../store/appBarDataSlice";
 
 import "./App.scss";
 
@@ -31,10 +32,8 @@ import HomePage from "../pages/home/HomePage";
 import ResizablesDemo from "../pages/resizablesDemo/ResizablesDemo";
 import DevModule from "../components/devModule/DevModule";
 import ToggleAppBarBtn from "../components/appBar/ToggleAppBarBtn";
-import ToggleAppModeBtn from "../components/settingsMenu/ToggleAppModeBtn";
-import ToggleDarkModeBtn from "../components/settingsMenu/ToggleDarkModeBtn";
-import SettingsMenuList from "../components/settingsMenu/SettingsMenuList";
-import AppearenceSettingsMenuList from "../components/settingsMenu/AppearenceSettingsMenuList";
+import SettingsMenu from "../components/settingsMenu/SettingsMenu";
+import AppearenceSettingsMenu from "../components/settingsMenu/AppearenceSettingsMenu";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
@@ -55,9 +54,13 @@ const App = withErrorBoundary(() => {
   const showAppBar = useSelector(appDataSelectors.getShowAppBar);
   const showAppBarToggleBtn = useSelector(appDataSelectors.getShowAppBarToggleBtn);
 
+  const appSettingsMenuIsOpen = useSelector(appBarSelectors.getAppSettingsMenuIsOpen);
+  const appearenceMenuIsOpen = useSelector(appBarSelectors.getAppearenceMenuIsOpen);
+
   const dispatch = useDispatch();
 
   const [ settingsMenuIconBtnEl, setSettingsMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
+  const [ appearenceMenuIconBtnEl, setAppearenceMenuIconBtnEl ] = React.useState<null | HTMLButtonElement>(null);
   const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
 
   const appTheme = getAppTheme({
@@ -73,6 +76,34 @@ const App = withErrorBoundary(() => {
     setSettingsMenuIconBtnEl(event.currentTarget);
     dispatch(appBarReducers.setAppSettingsMenuIsOpen(true));
   };
+
+  const appearenceMenuBtnRefAvailable = (btnRef: HTMLButtonElement | null) => {
+    setAppearenceMenuIconBtnEl(btnRef);
+  }
+
+  const handleSettingsMenuToggled = (showSettingsMenu: boolean) => {
+    dispatch(appBarReducers.setAppSettingsMenuIsOpen(showSettingsMenu));
+
+    if (!showSettingsMenu) {
+      dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
+    }
+  }
+
+  const handleAppearenceMenuToggled = (showAppearenceMenu: boolean) => {
+    dispatch(appBarReducers.setAppearenceMenuIsOpen(showAppearenceMenu));
+  }
+
+  const handleCompactModeToggled = (isCompactMode: boolean) => {
+    dispatch(appDataReducers.setIsCompactMode(isCompactMode));
+    dispatch(appBarReducers.setAppSettingsMenuIsOpen(false));
+      dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
+  }
+
+  const handleDarkModeToggled = (isDarkMode: boolean) => {
+    dispatch(appDataReducers.setIsDarkMode(isDarkMode));
+    dispatch(appBarReducers.setAppSettingsMenuIsOpen(false));
+      dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
+  }
 
   const appBarToggled = (showAppBar: boolean) => {
     dispatch(appDataReducers.setShowAppBar(showAppBar));
@@ -106,7 +137,6 @@ const App = withErrorBoundary(() => {
     setAppBarRowsCount(newAppBarRowsCount);
     setAppHeaderHeight(newHeaderHeight);
     // console.log("newHeaderHeight", newHeaderHeight);
-    // setLastRefreshTmStmp(new Date());
   }
 
   const increaseHeaderHeightBtnClicked = () => {
@@ -124,7 +154,15 @@ const App = withErrorBoundary(() => {
   }
 
   useEffect(() => {
-  }, [ refreshBtnRef, appBarRowsCount, lastRefreshTmStmp, appHeaderHeight, showAppBar ]);
+  }, [
+    refreshBtnRef,
+    appBarRowsCount,
+    lastRefreshTmStmp,
+    appHeaderHeight,
+    showAppBar,
+    appSettingsMenuIsOpen,
+    appearenceMenuIsOpen,
+    appearenceMenuIconBtnEl ]);
 
   if (error) {
     return (
@@ -150,9 +188,27 @@ const App = withErrorBoundary(() => {
               className={["trmrk-app"].join(" ")}
               headerClassName="trmrk-app-header"
               headerContent={<AppBar className="trmrk-app-module-bar">
+                <IconButton onClick={handleSettingsClick} className="trmrk-icon-btn"><MenuIcon /></IconButton>
                 <Link to="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
                 <IconButton className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>
                 <IconButton className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>
+                <SettingsMenu
+                  appearenceMenuBtnRefAvailable={appearenceMenuBtnRefAvailable}
+                  showMenu={appSettingsMenuIsOpen}
+                  showAppearenceMenu={appearenceMenuIsOpen}
+                  menuAnchorEl={settingsMenuIconBtnEl!}
+                  menuToggled={handleSettingsMenuToggled}
+                  appearenceMenuToggled={handleAppearenceMenuToggled}>
+                </SettingsMenu>
+                <AppearenceSettingsMenu
+                  showAppearenceMenu={appearenceMenuIsOpen}
+                  isCompactMode={isCompactMode}
+                  isDarkMode={isDarkMode}
+                  compactModeToggled={handleCompactModeToggled}
+                  darkModeToggled={handleDarkModeToggled}
+                  menuToggled={handleAppearenceMenuToggled}
+                  menuAnchorEl={appearenceMenuIconBtnEl!}>
+                </AppearenceSettingsMenu>
               </AppBar>}
               afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
               afterHeaderContent={ showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={showAppBar} appBarToggled={appBarToggled} /> : null }

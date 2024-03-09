@@ -123,7 +123,14 @@ export default function AppPanel(props: AppPanelProps) {
       parentEl.addEventListener("resize", onResize);
       mainEl.addEventListener("scroll", onScroll);
     } else if (mainEl) {
-      mainEl.style.top = "0px";
+      if (headerEl) {
+        if ((showHeaderToggled || headerHeightChanged) && props.headerHeight !== null){
+          headerEl.style.height = `${props.headerHeight}px`;
+          mainEl.style.top = `${props.headerHeight}px`;
+        }
+      } else {
+        mainEl.style.top = "0px";
+      }
     }
 
     if (showHeaderToggled) {
@@ -143,7 +150,7 @@ export default function AppPanel(props: AppPanelProps) {
   }, [ props.showHeader, showHeader, props.pinHeader, props.lastRefreshTmStmp, props.headerHeight, appPanelHeaderData, parentRef, headerRef, bodyRef ]);
 
   return (<div className={["trmrk-app-panel", props.className].join(" ")} ref={parentRef}>
-    { (props.headerContent && (props.showHeader || props.pinHeader)) ?
+    { (props.headerContent && props.showHeader) ?
       <div className={["trmrk-app-panel-header", props.headerClassName ?? ""].join(" ")} ref={headerRef}>
       { props.headerContent }</div> : null }
     { (props.afterHeaderClassName && props.afterHeaderContent) ? 
