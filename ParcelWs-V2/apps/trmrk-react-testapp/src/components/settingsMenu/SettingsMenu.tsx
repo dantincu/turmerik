@@ -10,32 +10,24 @@ export interface SettingsMenuProps {
   menuAnchorEl: HTMLElement;
   menuListClassName?: string | null | undefined;
   showMenu: boolean;
-  showAppearenceMenu: boolean;
-  menuToggled?: ((showMenu: boolean) => void) | null | undefined;
-  appearenceMenuToggled: (showAppearenceMenu: boolean) => void;
+  menuClosed: () => void;
+  appearenceMenuOpen: () => void;
   appearenceMenuBtnRefAvailable: (btnRef: HTMLButtonElement | null) => void;
 }
 
 export default function SettingsMenu(
   props: SettingsMenuProps
 ) {
-  const menuToggled = () => {
-    if (props.menuToggled) {
-      props.menuToggled(false);
-    }
-  }
-
   React.useEffect(() => {
-  }, [ props.showMenu, props.showAppearenceMenu, props.menuAnchorEl ]);
+  }, [ props.showMenu, props.menuAnchorEl ]);
 
   return (<Menu className={[ props.className ?? "" ].join(" ")}
     open={props.showMenu}
-    onClose={menuToggled}
+    onClose={props.menuClosed}
     anchorEl={props.menuAnchorEl}>
       <SettingsMenuList
         className={props.menuListClassName}
-        showAppearenceMenu={props.showAppearenceMenu}
-        appearenceMenuToggled={props.appearenceMenuToggled}
+        appearenceMenuOpen={props.appearenceMenuOpen}
         appearenceMenuBtnRefAvailable={props.appearenceMenuBtnRefAvailable}>
           { props.children }
         </SettingsMenuList>

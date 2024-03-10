@@ -81,16 +81,17 @@ const App = withErrorBoundary(() => {
     setAppearenceMenuIconBtnEl(btnRef);
   }
 
-  const handleSettingsMenuToggled = (showSettingsMenu: boolean) => {
-    dispatch(appBarReducers.setAppSettingsMenuIsOpen(showSettingsMenu));
-
-    if (!showSettingsMenu) {
-      dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
-    }
+  const handleSettingsMenuClosed = () => {
+    dispatch(appBarReducers.setAppSettingsMenuIsOpen(false));
+    dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
   }
 
-  const handleAppearenceMenuToggled = (showAppearenceMenu: boolean) => {
-    dispatch(appBarReducers.setAppearenceMenuIsOpen(showAppearenceMenu));
+  const handleAppearenceMenuClosed = () => {
+    dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
+  }
+
+  const appearenceMenuOpen = () => {
+    dispatch(appBarReducers.setAppearenceMenuIsOpen(true));
   }
 
   const handleCompactModeToggled = (isCompactMode: boolean) => {
@@ -195,18 +196,18 @@ const App = withErrorBoundary(() => {
                 <SettingsMenu
                   appearenceMenuBtnRefAvailable={appearenceMenuBtnRefAvailable}
                   showMenu={appSettingsMenuIsOpen}
-                  showAppearenceMenu={appearenceMenuIsOpen}
                   menuAnchorEl={settingsMenuIconBtnEl!}
-                  menuToggled={handleSettingsMenuToggled}
-                  appearenceMenuToggled={handleAppearenceMenuToggled}>
+                  menuClosed={handleSettingsMenuClosed}
+                  appearenceMenuOpen={appearenceMenuOpen}>
                 </SettingsMenu>
                 <AppearenceSettingsMenu
-                  showAppearenceMenu={appearenceMenuIsOpen}
+                  showMenu={appearenceMenuIsOpen}
                   isCompactMode={isCompactMode}
                   isDarkMode={isDarkMode}
                   compactModeToggled={handleCompactModeToggled}
                   darkModeToggled={handleDarkModeToggled}
-                  menuToggled={handleAppearenceMenuToggled}
+                  menuClosed={handleSettingsMenuClosed}
+                  appearenceMenuClosed={handleAppearenceMenuClosed}
                   menuAnchorEl={appearenceMenuIconBtnEl!}>
                 </AppearenceSettingsMenu>
               </AppBar>}

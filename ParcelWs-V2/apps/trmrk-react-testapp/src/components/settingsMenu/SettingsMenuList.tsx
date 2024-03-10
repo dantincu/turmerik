@@ -8,8 +8,7 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 export interface SettingsMenuListProps {
   className?: string | null | undefined,
   children: React.ReactNode | Iterable<React.ReactNode>
-  showAppearenceMenu: boolean,
-  appearenceMenuToggled: (showAppearenceMenu: boolean) => void;
+  appearenceMenuOpen: () => void;
   appearenceMenuBtnRefAvailable: (btnRef: HTMLButtonElement | null) => void;
 }
 
@@ -18,17 +17,13 @@ export default function SettingsMenuList(
 ) {
   const appearenceAnchorEl = React.createRef<HTMLButtonElement>();
 
-  const handleClick = () => {
-    props.appearenceMenuToggled(!props.showAppearenceMenu);
-  }
-
   React.useEffect(() => {
     props.appearenceMenuBtnRefAvailable(appearenceAnchorEl.current);
-  }, [ props.showAppearenceMenu, appearenceAnchorEl ]);
+  }, [ appearenceAnchorEl ]);
 
   return (<MenuList className={[props.className ?? ""].join(" ")}>
     { props.children }
-    <MenuItem onClick={handleClick}>
+    <MenuItem dense onClick={props.appearenceMenuOpen}>
       Appearence
       <IconButton ref={appearenceAnchorEl}>
         <ArrowRightIcon />

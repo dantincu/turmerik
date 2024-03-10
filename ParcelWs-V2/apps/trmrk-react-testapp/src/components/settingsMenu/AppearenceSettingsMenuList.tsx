@@ -1,6 +1,9 @@
 import React from "react";
 
 import MenuList from "@mui/material/MenuList";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 
 export interface AppearenceSettingsMenuListProps {
   className?: string | null | undefined;
@@ -9,6 +12,7 @@ export interface AppearenceSettingsMenuListProps {
   isDarkMode: boolean;
   compactModeToggled: (isCompactMode: boolean) => void;
   darkModeToggled: (isdarkMode: boolean) => void;
+  appearenceMenuClosed: () => void;
 }
 
 import ToggleAppModeBtn from "./ToggleAppModeBtn";
@@ -20,8 +24,13 @@ export default function AppearenceSettingsMenuList(
   React.useEffect(() => {
   }, [ props.isCompactMode, props.isDarkMode ]);
 
-  return (<MenuList className={[props.className ?? ""].join(" ")}>
-    { props.className }
+  return (<MenuList dense className={[props.className ?? ""].join(" ")}>
+    <MenuItem onClick={props.appearenceMenuClosed}>
+      <IconButton className="trmrk-icon-btn">
+        <ArrowLeftIcon />
+      </IconButton>
+    </MenuItem>
+    { props.children }
     <ToggleAppModeBtn isCompactMode={props.isCompactMode} compactModeToggled={props.compactModeToggled} />
     <ToggleDarkModeBtn isDarkMode={props.isDarkMode} darkModeToggled={props.darkModeToggled} />
   </MenuList>);

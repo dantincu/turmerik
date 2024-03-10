@@ -9,10 +9,11 @@ export interface AppearenceSettingsMenuProps {
   children?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
   menuAnchorEl: HTMLElement;
   menuListClassName?: string | null | undefined;
-  showAppearenceMenu: boolean;
+  showMenu: boolean;
   isCompactMode: boolean;
   isDarkMode: boolean;
-  menuToggled?: ((showMenu: boolean) => void) | null | undefined;
+  menuClosed: () => void;
+  appearenceMenuClosed: () => void;
   compactModeToggled: (isCompactMode: boolean) => void;
   darkModeToggled: (isdarkMode: boolean) => void;
 }
@@ -20,23 +21,18 @@ export interface AppearenceSettingsMenuProps {
 export default function AppearenceSettingsMenu(
   props: AppearenceSettingsMenuProps
 ) {
-  const menuToggled = () => {
-    if (props.menuToggled) {
-      props.menuToggled(false);
-    }
-  }
-
   React.useEffect(() => {
-  }, [ props.isCompactMode, props.isDarkMode, props.showAppearenceMenu, props.menuAnchorEl ]);
+  }, [ props.isCompactMode, props.isDarkMode, props.showMenu, props.menuAnchorEl ]);
 
   return (<Menu className={[ props.className ?? "" ].join(" ")}
-    open={props.showAppearenceMenu}
-    onClose={menuToggled}
+    open={props.showMenu}
+    onClose={props.menuClosed}
     anchorEl={props.menuAnchorEl}>
       <AppearenceSettingsMenuList
         className={props.menuListClassName}
         isCompactMode={props.isCompactMode}
         isDarkMode={props.isDarkMode}
+        appearenceMenuClosed={props.appearenceMenuClosed}
         compactModeToggled={props.compactModeToggled}
         darkModeToggled={props.darkModeToggled}>
           { props.children }

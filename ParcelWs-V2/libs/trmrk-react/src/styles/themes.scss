@@ -3,9 +3,17 @@
 $resizable-draggable-margin-hover-color-theme-dark: #FFFFFF44;
 $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
-.trmrk-theme-dark {
+.trmrk-app-module-header .trmrk-app-module-bar {
   color: white;
 
+  .trmrk-icon-btn {
+    color: white;
+  }
+}
+
+.trmrk-theme-dark {
+  color: white;
+  
   .trmrk-nav-link {
     color: #bbbbFF;
   }
