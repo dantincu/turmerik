@@ -20,7 +20,7 @@ export default function ToggleAppModeBtn(
 
   return (
     <MenuItem onClick={handleClick}>
-      <ListItemIcon>{ props.isCompactMode ? <ToggleOnIcon /> : <ToggleOffIcon /> }</ListItemIcon>
+      <ListItemIcon className="trmrk-icon-btn">{ props.isCompactMode ? <ToggleOnIcon /> : <ToggleOffIcon /> }</ListItemIcon>
       <ListItemText>{ props.isCompactMode ? "Compact Mode" : "Full Mode" }</ListItemText>
     </MenuItem>);
 }

@@ -31,7 +31,8 @@ import "./App.scss";
 import HomePage from "../pages/home/HomePage";
 import ResizablesDemo from "../pages/resizablesDemo/ResizablesDemo";
 import DevModule from "../components/devModule/DevModule";
-import ToggleAppBarBtn from "../components/appBar/ToggleAppBarBtn";
+
+import ToggleAppBarBtn from "trmrk-react/src/components/appBar/ToggleAppBarBtn";
 import SettingsMenu from "../components/settingsMenu/SettingsMenu";
 import AppearenceSettingsMenu from "../components/settingsMenu/AppearenceSettingsMenu";
 
@@ -156,6 +157,7 @@ const App = withErrorBoundary(() => {
 
   useEffect(() => {
   }, [
+    appTheme,
     refreshBtnRef,
     appBarRowsCount,
     lastRefreshTmStmp,
@@ -194,6 +196,7 @@ const App = withErrorBoundary(() => {
                 <IconButton className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>
                 <IconButton className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>
                 <SettingsMenu
+                  appTheme={appTheme}
                   appearenceMenuBtnRefAvailable={appearenceMenuBtnRefAvailable}
                   showMenu={appSettingsMenuIsOpen}
                   menuAnchorEl={settingsMenuIconBtnEl!}
@@ -201,6 +204,7 @@ const App = withErrorBoundary(() => {
                   appearenceMenuOpen={appearenceMenuOpen}>
                 </SettingsMenu>
                 <AppearenceSettingsMenu
+                  appTheme={appTheme}
                   showMenu={appearenceMenuIsOpen}
                   isCompactMode={isCompactMode}
                   isDarkMode={isDarkMode}

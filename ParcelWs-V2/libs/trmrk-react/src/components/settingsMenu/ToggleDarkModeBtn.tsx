@@ -1,6 +1,5 @@
 import React from "react";
 
-import styled from '@emotion/styled';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -12,10 +11,6 @@ export interface ToggleDarkModeBtnProps {
   darkModeToggled: (isDarkMode: boolean) => void;
 }
 
-const ColorThemeLabel = styled.span`
-  padding-right: 1em
-`;
-
 export default function ToggleDarkModeBtn(
   props: ToggleDarkModeBtnProps
 ) {
@@ -25,7 +20,7 @@ export default function ToggleDarkModeBtn(
 
   return (
     <MenuItem onClick={handleClick}>
-      <ListItemIcon>{ props.isDarkMode ? <DarkModeIcon /> :  <LightModeIcon /> }</ListItemIcon>
+      <ListItemIcon className="trmrk-icon-btn">{ props.isDarkMode ? <DarkModeIcon /> :  <LightModeIcon /> }</ListItemIcon>
       <ListItemText>{ props.isDarkMode ? "Dark Mode" : "Light Mode" }</ListItemText>
     </MenuItem>);
 }

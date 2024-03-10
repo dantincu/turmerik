@@ -2,11 +2,14 @@ import React from "react";
 
 import Menu from "@mui/material/Menu";
 
-import SettingsMenuList from "./SettingsMenuList";
+import SettingsMenuList from "trmrk-react/src/components/settingsMenu/SettingsMenuList";
+
+import { AppTheme } from "trmrk-react/src/app-theme/core";
 
 export interface SettingsMenuProps {
   className?: string | null | undefined;
-  children?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined
+  children?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
+  appTheme: AppTheme;
   menuAnchorEl: HTMLElement;
   menuListClassName?: string | null | undefined;
   showMenu: boolean;
@@ -21,15 +24,17 @@ export default function SettingsMenu(
   React.useEffect(() => {
   }, [ props.showMenu, props.menuAnchorEl ]);
 
-  return (<Menu className={[ props.className ?? "" ].join(" ")}
-    open={props.showMenu}
-    onClose={props.menuClosed}
-    anchorEl={props.menuAnchorEl}>
-      <SettingsMenuList
-        className={props.menuListClassName}
-        appearenceMenuOpen={props.appearenceMenuOpen}
-        appearenceMenuBtnRefAvailable={props.appearenceMenuBtnRefAvailable}>
-          { props.children }
-        </SettingsMenuList>
-    </Menu>);
+  return (
+      <Menu className={[ "trmrk-menu", props.appTheme.cssClassName, props.className ?? "" ].join(" ")}
+        open={props.showMenu}
+        onClose={props.menuClosed}
+        anchorEl={props.menuAnchorEl}>
+          <SettingsMenuList
+            className={props.menuListClassName}
+            appearenceMenuOpen={props.appearenceMenuOpen}
+            appearenceMenuBtnRefAvailable={props.appearenceMenuBtnRefAvailable}>
+              { props.children }
+            </SettingsMenuList>
+      </Menu>
+    );
 }

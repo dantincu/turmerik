@@ -2,11 +2,14 @@ import React from "react";
 
 import Menu from "@mui/material/Menu";
 
-import AppearenceSettingsMenuList from "./AppearenceSettingsMenuList";
+import AppearenceSettingsMenuList from "trmrk-react/src/components/settingsMenu/AppearenceSettingsMenuList";
+
+import { AppTheme } from "trmrk-react/src/app-theme/core";
 
 export interface AppearenceSettingsMenuProps {
   className?: string | null | undefined;
   children?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
+  appTheme: AppTheme;
   menuAnchorEl: HTMLElement;
   menuListClassName?: string | null | undefined;
   showMenu: boolean;
@@ -24,7 +27,7 @@ export default function AppearenceSettingsMenu(
   React.useEffect(() => {
   }, [ props.isCompactMode, props.isDarkMode, props.showMenu, props.menuAnchorEl ]);
 
-  return (<Menu className={[ props.className ?? "" ].join(" ")}
+  return (<Menu className={[ "trmrk-menu", props.appTheme.cssClassName, props.className ?? "" ].join(" ")}
     open={props.showMenu}
     onClose={props.menuClosed}
     anchorEl={props.menuAnchorEl}>

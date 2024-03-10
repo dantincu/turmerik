@@ -17,11 +17,11 @@ import AppModule from "trmrk-react/src/components/appModule/AppModule";
 import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbBrowser from "../indexedDbBrowser/IndexedDbBrowser";
 
-import ToggleAppBarBtn from "../../components/appBar/ToggleAppBarBtn";
-import ToggleAppModeBtn from "../../components/settingsMenu/ToggleAppModeBtn";
-import ToggleDarkModeBtn from "../../components/settingsMenu/ToggleDarkModeBtn";
-import SettingsMenuList from "../../components/settingsMenu/SettingsMenuList";
-import AppearenceSettingsMenuList from "../../components/settingsMenu/AppearenceSettingsMenuList";
+import ToggleAppBarBtn from "trmrk-react/src/components/appBar/ToggleAppBarBtn";
+import ToggleAppModeBtn from "trmrk-react/src/components/settingsMenu/ToggleAppModeBtn";
+import ToggleDarkModeBtn from "trmrk-react/src/components/settingsMenu/ToggleDarkModeBtn";
+import SettingsMenuList from "trmrk-react/src/components/settingsMenu/SettingsMenuList";
+import AppearenceSettingsMenuList from "trmrk-react/src/components/settingsMenu/AppearenceSettingsMenuList";
 
 export interface DevModuleProps {
   className?: string | null | undefined;

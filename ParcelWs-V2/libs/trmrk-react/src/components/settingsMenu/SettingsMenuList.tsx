@@ -21,13 +21,15 @@ export default function SettingsMenuList(
     props.appearenceMenuBtnRefAvailable(appearenceAnchorEl.current);
   }, [ appearenceAnchorEl ]);
 
-  return (<MenuList className={[props.className ?? ""].join(" ")}>
-    { props.children }
-    <MenuItem dense onClick={props.appearenceMenuOpen}>
-      Appearence
-      <IconButton ref={appearenceAnchorEl}>
-        <ArrowRightIcon />
-      </IconButton>
-    </MenuItem>
-  </MenuList>);
+  return (
+    <MenuList className={[ "trmrk-menu-list", props.className ?? ""].join(" ")}>
+      { props.children }
+      <MenuItem dense onClick={props.appearenceMenuOpen}>
+        Appearence
+        <IconButton ref={appearenceAnchorEl} className="trmrk-icon-btn">
+          <ArrowRightIcon />
+        </IconButton>
+      </MenuItem>
+    </MenuList>
+  );
 }
