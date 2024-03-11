@@ -35,7 +35,7 @@ import ToggleAppBarBtn from "trmrk-react/src/components/appBar/ToggleAppBarBtn";
 import SettingsMenu from "../components/settingsMenu/SettingsMenu";
 import AppearenceSettingsMenu from "../components/settingsMenu/AppearenceSettingsMenu";
 
-import { useAppBar } from "../hooks/useAppBar/useAppBar";
+import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
@@ -53,89 +53,6 @@ const App = withErrorBoundary(() => {
   
   const refreshBtnRef = React.createRef<HTMLButtonElement>();
 
-  /* const [ appBarRowsCount, setAppBarRowsCount ] = React.useState(2);
-  const [ appHeaderHeight, setAppHeaderHeight ] = React.useState<number | null>(null);
-
-  const appBarRowHeightPx = React.useRef(0);
-  const headerRef = React.useRef<HTMLDivElement>();
-  const bodyRef = React.useRef<HTMLDivElement>();
-
-  const isCompactMode = useSelector(appDataSelectors.getIsCompactMode);
-  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
-  const showAppBar = useSelector(appDataSelectors.getShowAppBar);
-  const showAppBarToggleBtn = useSelector(appDataSelectors.getShowAppBarToggleBtn);
-
-  const appSettingsMenuIsOpen = useSelector(appBarSelectors.getAppSettingsMenuIsOpen);
-  const appearenceMenuIsOpen = useSelector(appBarSelectors.getAppearenceMenuIsOpen);
-
-  const dispatch = useDispatch();
-
-  const [ settingsMenuIconBtnEl, setSettingsMenuIconBtnEl ] = React.useState<null | HTMLElement>(null);
-  const [ appearenceMenuIconBtnEl, setAppearenceMenuIconBtnEl ] = React.useState<null | HTMLButtonElement>(null);
-  const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
-
-  const appTheme = getAppTheme({
-    isDarkMode: isDarkMode
-  });
-
-  currentAppTheme.value = appTheme;
-
-  const appThemeClassName = appTheme.cssClassName;
-  appModeCssClass.value = getAppModeCssClassName(isCompactMode);
-
-  const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
-    setSettingsMenuIconBtnEl(event.currentTarget);
-    dispatch(appBarReducers.setAppSettingsMenuIsOpen(true));
-  };
-
-  const appearenceMenuBtnRefAvailable = (btnRef: HTMLButtonElement | null) => {
-    setAppearenceMenuIconBtnEl(btnRef);
-  }
-
-  const handleSettingsMenuClosed = () => {
-    dispatch(appBarReducers.setAppSettingsMenuIsOpen(false));
-    dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
-  }
-
-  const handleAppearenceMenuClosed = () => {
-    dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
-  }
-
-  const appearenceMenuOpen = () => {
-    dispatch(appBarReducers.setAppearenceMenuIsOpen(true));
-  }
-
-  const handleCompactModeToggled = (isCompactMode: boolean) => {
-    dispatch(appDataReducers.setIsCompactMode(isCompactMode));
-    dispatch(appBarReducers.setAppSettingsMenuIsOpen(false));
-      dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
-  }
-
-  const handleDarkModeToggled = (isDarkMode: boolean) => {
-    dispatch(appDataReducers.setIsDarkMode(isDarkMode));
-    dispatch(appBarReducers.setAppSettingsMenuIsOpen(false));
-      dispatch(appBarReducers.setAppearenceMenuIsOpen(false));
-  }
-
-  const appBarToggled = (showAppBar: boolean) => {
-    dispatch(appDataReducers.setShowAppBar(showAppBar));
-  }
-
-  const appHeaderScrolling = (data: AppPanelHeaderData, offset: AppPanelHeaderOffset) => {
-    headerRef.current = data.headerEl;
-    bodyRef.current = data.bodyEl;
-
-    if (appBarRowHeightPx.current === 0) {
-      const newAppBarRowHeightPx = Math.round(data.headerHeight / appBarRowsCount);
-      appBarRowHeightPx.current = newAppBarRowHeightPx;
-    }
-
-    if (appHeaderHeight === null) {
-      // console.log("data.headerHeight", data.headerHeight);
-      setAppHeaderHeight(data.headerHeight);
-    }
-  } */
-
   const updateHeaderHeight = (newAppBarRowsCount: number) => {
     const headerEl = appBar.headerRef.current!;
     const bodyEl = appBar.bodyRef.current!;
@@ -148,7 +65,6 @@ const App = withErrorBoundary(() => {
 
     appBar.setAppBarRowsCount(newAppBarRowsCount);
     appBar.setAppHeaderHeight(newHeaderHeight);
-    // console.log("newHeaderHeight", newHeaderHeight);
   }
 
   const increaseHeaderHeightBtnClicked = () => {

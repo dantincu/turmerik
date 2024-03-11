@@ -1,8 +1,4 @@
-import {
-  createSlice,
-  Selector,
-  ActionCreatorWithPayload,
-} from "@reduxjs/toolkit";
+import { Selector, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 export interface AppearenceMenuOpts {
   isOpen: boolean;

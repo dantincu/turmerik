@@ -1,15 +1,9 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-  AppDataSelectors,
-  AppDataReducers,
-} from "trmrk-react/src/redux/appData";
+import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 
-import {
-  AppBarReducers,
-  AppBarSelectors,
-} from "trmrk-react/src/redux/appBarData";
+import { AppBarReducers, AppBarSelectors } from "../..//redux/appBarData";
 
 export interface UseAppBarProps {
   appDataSelectors: AppDataSelectors;
@@ -19,13 +13,13 @@ export interface UseAppBarProps {
   appBarRowsCount: number;
 }
 
-import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
-import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
+import { getAppTheme, currentAppTheme } from "../../app-theme/core";
+import { appModeCssClass, getAppModeCssClassName } from "../..//utils";
 
 import {
   AppPanelHeaderData,
   AppPanelHeaderOffset,
-} from "trmrk-react/src/components/appPanel/AppPanel";
+} from "../..//components/appPanel/AppPanel";
 
 export const useAppBar = (props: UseAppBarProps) => {
   const [appBarRowsCount, setAppBarRowsCount] = React.useState(
