@@ -8,11 +8,12 @@ import trmrk from "trmrk";
 import ResizablePanel, { 
   ResizablePanelBorderSize,
   ResizablePanelBorderOpacity,
-  MouseMovement,
+  TouchOrMousePosition,
   ResizeDirection,
   normalizeOrtoResizeHandler,
   combineOrtoResizeHandlers,
-  ResizeHandlersMap } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
+  ResizeHandlersMap,
+  getTouchOrMousePosition } from "../../components/resizablePanel/ResizablePanel";
 
 export default function ResizablesDemo({
     refreshBtnRef
@@ -22,8 +23,8 @@ export default function ResizablesDemo({
   const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
 
   const parentRef = React.createRef<HTMLDivElement>();
-  const topPanelRef = React.createRef<HTMLDivElement>();
-  const bottomPanelRef = React.createRef<HTMLDivElement>();
+  const topPanelRef = React.useRef<HTMLDivElement | null>(null);
+  const bottomPanelRef = React.useRef<HTMLDivElement | null>(null);
 
   const topPanelX = React.useRef(0);
   const topPanelY = React.useRef(0);
@@ -36,6 +37,12 @@ export default function ResizablesDemo({
 
   const bottomPanelW = React.useRef(0);
   const bottomPanelH = React.useRef(0);
+
+  const prevTouchOrMousePos = React.useRef<TouchOrMousePosition>({
+    screenX: 0,
+    screenY: 0,
+    touch: null
+  });
 
   const updatePanelX = (
       panelEl: HTMLDivElement,
@@ -83,9 +90,10 @@ export default function ResizablesDemo({
 
   React.useEffect(() => {
     // console.log("lastRefreshTmStmp", lastRefreshTmStmp);
-  }, [ lastRefreshTmStmp, parentRef, topPanelRef, bottomPanelRef ]);
+  }, [ lastRefreshTmStmp, parentRef, topPanelRef, bottomPanelRef, prevTouchOrMousePos ]);
 
-  const topPanelResizeStarted = (e: MouseEvent, rszDir: ResizeDirection) => {
+  const topPanelResizeStarted = (e: MouseEvent | TouchEvent, rszDir: ResizeDirection) => {
+    prevTouchOrMousePos.current = getTouchOrMousePosition(e);
     const topPanelEl = topPanelRef.current!;
     updatePanelX(topPanelEl, topPanelX, topPanelEl.offsetLeft);
     updatePanelY(topPanelEl, topPanelY, topPanelEl.offsetTop);
@@ -96,11 +104,17 @@ export default function ResizablesDemo({
     // console.log("top panel resize started", topPanelEl.offsetLeft, topPanelEl.offsetTop, new Date());
   }
 
-  const topPanelResizeEnded = (e: MouseEvent | null, rszDir: ResizeDirection) => {
+  const topPanelResizeEnded = (e: MouseEvent | TouchEvent | null, rszDir: ResizeDirection) => {
+    prevTouchOrMousePos.current = {
+      screenX: 0,
+      screenY: 0,
+      touch: null
+    };
     // console.log("top panel resize ended", new Date());
   }
 
-  const bottomPanelResizeStarted = (e: MouseEvent, rszDir: ResizeDirection) => {
+  const bottomPanelResizeStarted = (e: MouseEvent | TouchEvent, rszDir: ResizeDirection) => {
+    prevTouchOrMousePos.current = getTouchOrMousePosition(e);
     const bottomPanelEl = bottomPanelRef.current!;
     updatePanelX(bottomPanelEl, bottomPanelX, bottomPanelEl.offsetLeft);
     updatePanelY(bottomPanelEl, bottomPanelY, bottomPanelEl.offsetTop);
@@ -111,43 +125,48 @@ export default function ResizablesDemo({
     // console.log("bottom panel resize started", bottomPanelEl, bottomPanelEl.offsetTop, new Date());
   }
 
-  const bottomPanelResizeEnded = (e: MouseEvent | null, rszDir: ResizeDirection) => {
+  const bottomPanelResizeEnded = (e: MouseEvent | TouchEvent | null, rszDir: ResizeDirection) => {
+    prevTouchOrMousePos.current = {
+      screenX: 0,
+      screenY: 0,
+      touch: null
+    };
     // console.log("bottom panel resize ended", new Date());
   }
 
   const panelResizing = (
     e: MouseEvent,
-    mouseMovement: MouseMovement,
+    touchOrMousePos: TouchOrMousePosition,
     rszDir: ResizeDirection,
-    panelRef: React.RefObject<HTMLDivElement>,
+    panelRef: React.MutableRefObject<HTMLDivElement | null>,
     panelX: React.MutableRefObject<number>,
     panelY: React.MutableRefObject<number>,
     panelW: React.MutableRefObject<number>,
     panelH: React.MutableRefObject<number>) => normalizeOrtoResizeHandler(
-      (e, mouseMovement, rszDir) => {
+      (e, touchOrMousePos, rszDir) => {
         switch (rszDir) {
           case ResizeDirection.FromLeft:
-            updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
-            updatePanelW(panelRef.current!, panelW, panelW.current - mouseMovement.movementX);
+            updatePanelX(panelRef.current!, panelX, panelX.current + (touchOrMousePos.screenX - prevTouchOrMousePos.current.screenX));
+            updatePanelW(panelRef.current!, panelW, panelW.current - (touchOrMousePos.screenX - prevTouchOrMousePos.current.screenX));
             break;
           case ResizeDirection.FromTop:
-            updatePanelY(panelRef.current!, panelY, panelY.current + mouseMovement.movementY);
-            updatePanelH(panelRef.current!, panelH, panelH.current - mouseMovement.movementY);
+            updatePanelY(panelRef.current!, panelY, panelY.current + (touchOrMousePos.screenY - prevTouchOrMousePos.current.screenY));
+            updatePanelH(panelRef.current!, panelH, panelH.current - (touchOrMousePos.screenY - prevTouchOrMousePos.current.screenY));
             break;
           case ResizeDirection.FromRight:
-            updatePanelW(panelRef.current!, panelW, panelW.current + mouseMovement.movementX);
+            updatePanelW(panelRef.current!, panelW, panelW.current + (touchOrMousePos.screenX - prevTouchOrMousePos.current.screenX));
             break;
           case ResizeDirection.FromBottom:
-            updatePanelH(panelRef.current!, panelH, panelH.current + mouseMovement.movementY);
+            updatePanelH(panelRef.current!, panelH, panelH.current + (touchOrMousePos.screenY - prevTouchOrMousePos.current.screenY));
             break;
           default:
             throw new Error(`Invalid resize direction: ${rszDir}`);
         }
-    })(e, mouseMovement, rszDir);
+    })(e, touchOrMousePos, rszDir);
 
   const panelResizing1 = (
-    e: MouseEvent,
-    mouseMovement: MouseMovement,
+    e: MouseEvent | TouchEvent,
+    touchOrMousePos: TouchOrMousePosition,
     rszDir: ResizeDirection,
     panelRef: React.RefObject<HTMLDivElement>,
     panelX: React.MutableRefObject<number>,
@@ -155,31 +174,41 @@ export default function ResizablesDemo({
     panelW: React.MutableRefObject<number>,
     panelH: React.MutableRefObject<number>) => combineOrtoResizeHandlers(
       trmrk.actWithVal({} as ResizeHandlersMap, (handlersMap: ResizeHandlersMap) => {
-        handlersMap[ResizeDirection.FromLeft] = (e, mouseMovement, rszDir) => {
-          updatePanelX(panelRef.current!, panelX, panelX.current + mouseMovement.movementX);
-          updatePanelW(panelRef.current!, panelW, panelW.current - mouseMovement.movementX);
+        handlersMap[ResizeDirection.FromLeft] = (e, touchOrMousePos, rszDir) => {
+          updatePanelX(panelRef.current!, panelX, panelX.current + (touchOrMousePos.screenX - prevTouchOrMousePos.current.screenX));
+          updatePanelW(panelRef.current!, panelW, panelW.current - (touchOrMousePos.screenX - prevTouchOrMousePos.current.screenX));
         }
 
-        handlersMap[ResizeDirection.FromTop] = (e, mouseMovement, rszDir) => {
-          updatePanelY(panelRef.current!, panelY, panelY.current + mouseMovement.movementY);
-          updatePanelH(panelRef.current!, panelH, panelH.current - mouseMovement.movementY);
+        handlersMap[ResizeDirection.FromTop] = (e, touchOrMousePos, rszDir) => {
+          updatePanelY(panelRef.current!, panelY, panelY.current + (touchOrMousePos.screenY - prevTouchOrMousePos.current.screenY));
+          updatePanelH(panelRef.current!, panelH, panelH.current - (touchOrMousePos.screenY - prevTouchOrMousePos.current.screenY));
         }
 
-        handlersMap[ResizeDirection.FromRight] = (e, mouseMovement, rszDir) => {
-          updatePanelW(panelRef.current!, panelW, panelW.current + mouseMovement.movementX);
+        handlersMap[ResizeDirection.FromRight] = (e, touchOrMousePos, rszDir) => {
+          updatePanelW(panelRef.current!, panelW, panelW.current + (touchOrMousePos.screenX - prevTouchOrMousePos.current.screenX));
         }
 
-        handlersMap[ResizeDirection.FromBottom] = (e, mouseMovement, rszDir) => {
-          updatePanelH(panelRef.current!, panelH, panelH.current + mouseMovement.movementY);
+        handlersMap[ResizeDirection.FromBottom] = (e, touchOrMousePos, rszDir) => {
+          updatePanelH(panelRef.current!, panelH, panelH.current + (touchOrMousePos.screenY - prevTouchOrMousePos.current.screenY));
         }
-      }))(e, mouseMovement, rszDir);
+      }))(e, touchOrMousePos, rszDir);
 
-  const topPanelResizing = (e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => {
-    panelResizing(e, mouseMovement, rszDir, topPanelRef, topPanelX, topPanelY, topPanelW, topPanelH);
+  const topPanelResizing = (e: MouseEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
+    panelResizing(e, touchOrMousePos, rszDir, topPanelRef, topPanelX, topPanelY, topPanelW, topPanelH);
+    prevTouchOrMousePos.current = getTouchOrMousePosition(e);
   }
 
-  const bottomPanelResizing = (e: MouseEvent, mouseMovement: MouseMovement, rszDir: ResizeDirection) => {
-    panelResizing1(e, mouseMovement, rszDir, bottomPanelRef, bottomPanelX, bottomPanelY, bottomPanelW, bottomPanelH);
+  const bottomPanelResizing = (e: MouseEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
+    panelResizing1(e, touchOrMousePos, rszDir, bottomPanelRef, bottomPanelX, bottomPanelY, bottomPanelW, bottomPanelH);
+    prevTouchOrMousePos.current = getTouchOrMousePosition(e);
+  }
+
+  const topPanelElAvailable = (topPanelEl: HTMLDivElement) => {
+    topPanelRef.current = topPanelEl;
+  }
+
+  const bottomPanelElAvailable = (bottomPanelEl: HTMLDivElement) => {
+    bottomPanelRef.current = bottomPanelEl;
   }
 
   return (
@@ -195,7 +224,7 @@ export default function ResizablesDemo({
         resizableFromRight={true}
         resizableFromLeft={true}
         parentRef={domBodyEl}
-        panelRef={topPanelRef}
+        panelElAvailable={topPanelElAvailable}
         className="my-resizable-panel"
         draggableBorderSize={ResizablePanelBorderSize.Regular}
         draggableBorderOpacity={ResizablePanelBorderOpacity.Opc50}
@@ -214,7 +243,7 @@ export default function ResizablesDemo({
         resizableFromRight={true}
         resizableFromLeft={true}
         parentRef={domBodyEl}
-        panelRef={bottomPanelRef}
+        panelElAvailable={bottomPanelElAvailable}
         className="my-resizable-panel1"
         draggableBorderSize={ResizablePanelBorderSize.Thick}
         draggableBorderOpacity={ResizablePanelBorderOpacity.Opc25}
