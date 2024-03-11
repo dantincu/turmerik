@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { ReducerAction } from "trmrk-react/src/redux/core";
-import { AppBarData, AppSettingsMenuOpts } from "../services/appBarData";
+import {
+  AppBarData,
+  AppSettingsMenuOpts,
+  AppBarReducers,
+  AppBarSelectors,
+} from "trmrk-react/src/redux/appBarData";
 
 const appBarDataSlice = createSlice({
   name: "appBar",
@@ -48,13 +53,13 @@ const {
   getAppearenceMenuIsOpen,
 } = appBarDataSlice.selectors;
 
-export const appBarReducers = {
+export const appBarReducers: AppBarReducers = {
   setAppSettingsMenuOpts,
   setAppSettingsMenuIsOpen,
   setAppearenceMenuIsOpen,
 };
 
-export const appBarSelectors = {
+export const appBarSelectors: AppBarSelectors = {
   getAppSettingsMenuOpts,
   getAppSettingsMenuIsOpen,
   getAppearenceMenuIsOpen,

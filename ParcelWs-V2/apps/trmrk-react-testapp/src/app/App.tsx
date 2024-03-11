@@ -21,7 +21,6 @@ import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
 import { TrmrkError } from "trmrk/src/TrmrkError";
 
 import AppModule from "trmrk-react/src/components/appModule/AppModule";
-import { AppPanelHeaderData, AppPanelHeaderOffset } from "trmrk-react/src/components/appPanel/AppPanel";
 
 import { appDataSelectors, appDataReducers } from "../store/appDataSlice";
 import { appBarSelectors, appBarReducers } from "../store/appBarDataSlice";
@@ -36,17 +35,28 @@ import ToggleAppBarBtn from "trmrk-react/src/components/appBar/ToggleAppBarBtn";
 import SettingsMenu from "../components/settingsMenu/SettingsMenu";
 import AppearenceSettingsMenu from "../components/settingsMenu/AppearenceSettingsMenu";
 
+import { useAppBar } from "../hooks/useAppBar/useAppBar";
+
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
     // You can optionally log the error to an error reporting service
     // (error, errorInfo) => logErrorToMyService(error, errorInfo)
   );
 
-  const [ appBarRowsCount, setAppBarRowsCount ] = React.useState(2);
+  const appBar = useAppBar({
+    appBarReducers: appBarReducers,
+    appBarSelectors: appBarSelectors,
+    appDataReducers: appDataReducers,
+    appDataSelectors: appDataSelectors,
+    appBarRowsCount: 2
+  });
+  
+  const refreshBtnRef = React.createRef<HTMLButtonElement>();
+
+  /* const [ appBarRowsCount, setAppBarRowsCount ] = React.useState(2);
   const [ appHeaderHeight, setAppHeaderHeight ] = React.useState<number | null>(null);
 
   const appBarRowHeightPx = React.useRef(0);
-  const refreshBtnRef = React.createRef<HTMLButtonElement>();
   const headerRef = React.useRef<HTMLDivElement>();
   const bodyRef = React.useRef<HTMLDivElement>();
 
@@ -124,30 +134,30 @@ const App = withErrorBoundary(() => {
       // console.log("data.headerHeight", data.headerHeight);
       setAppHeaderHeight(data.headerHeight);
     }
-  }
+  } */
 
   const updateHeaderHeight = (newAppBarRowsCount: number) => {
-    const headerEl = headerRef.current!;
-    const bodyEl = bodyRef.current!;
+    const headerEl = appBar.headerRef.current!;
+    const bodyEl = appBar.bodyRef.current!;
 
-    const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
+    const newHeaderHeight = newAppBarRowsCount * appBar.appBarRowHeightPx.current;
 
     headerEl.style.height = `${newHeaderHeight}px`;
     bodyEl.style.top = `${newHeaderHeight}px`;
     headerEl.style.top = "0px";
 
-    setAppBarRowsCount(newAppBarRowsCount);
-    setAppHeaderHeight(newHeaderHeight);
+    appBar.setAppBarRowsCount(newAppBarRowsCount);
+    appBar.setAppHeaderHeight(newHeaderHeight);
     // console.log("newHeaderHeight", newHeaderHeight);
   }
 
   const increaseHeaderHeightBtnClicked = () => {
-    updateHeaderHeight(appBarRowsCount + 1);
+    updateHeaderHeight(appBar.appBarRowsCount + 1);
   }
 
   const decreaseHeaderHeightBtnClicked = () => {
-    if (appBarRowsCount > 1) {
-      updateHeaderHeight(appBarRowsCount - 1);
+    if (appBar.appBarRowsCount > 1) {
+      updateHeaderHeight(appBar.appBarRowsCount - 1);
     }
   }
 
@@ -157,23 +167,23 @@ const App = withErrorBoundary(() => {
 
   useEffect(() => {
   }, [
-    appTheme,
+    appBar.appTheme,
     refreshBtnRef,
-    appBarRowsCount,
-    lastRefreshTmStmp,
-    appHeaderHeight,
-    showAppBar,
-    appSettingsMenuIsOpen,
-    appearenceMenuIsOpen,
-    appearenceMenuIconBtnEl,
-    appBarRowHeightPx ]);
+    appBar.appBarRowsCount,
+    appBar.lastRefreshTmStmp,
+    appBar.appHeaderHeight,
+    appBar.showAppBar,
+    appBar.appSettingsMenuIsOpen,
+    appBar.appearenceMenuIsOpen,
+    appBar.appearenceMenuIconBtnEl,
+    appBar.appBarRowHeightPx ]);
 
   if (error) {
     return (
-      <ThemeProvider theme={appTheme.theme}>
+      <ThemeProvider theme={appBar.appTheme.theme}>
         <CssBaseline />
 
-        <Paper className={["trmrk-app-error", appThemeClassName].join(" ")}>
+        <Paper className={["trmrk-app-error", appBar.appThemeClassName].join(" ")}>
           <h2>Something went wrong:</h2>
           <pre>{((error as Error).message ?? error).toString()}</pre>
           { (error as TrmrkError).showPageRefreshOption !== false ? <Button onClick={refreshCurrentPage}>Try reloading the page</Button> : null }
@@ -184,7 +194,7 @@ const App = withErrorBoundary(() => {
 
   return (
     <BrowserRouter>
-      <ThemeProvider theme={appTheme.theme}>
+      <ThemeProvider theme={appBar.appTheme.theme}>
         <CssBaseline />
         <Routes>
           <Route path="/" element={
@@ -192,42 +202,42 @@ const App = withErrorBoundary(() => {
               className={["trmrk-app"].join(" ")}
               headerClassName="trmrk-app-header"
               headerContent={<AppBar className="trmrk-app-module-bar">
-                <IconButton onClick={handleSettingsClick} className="trmrk-icon-btn"><MenuIcon /></IconButton>
+                <IconButton onClick={appBar.handleSettingsClick} className="trmrk-icon-btn"><MenuIcon /></IconButton>
                 <Link to="/"><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
                 <IconButton className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>
                 <IconButton className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>
                 <SettingsMenu
-                  appTheme={appTheme}
-                  appearenceMenuBtnRefAvailable={appearenceMenuBtnRefAvailable}
-                  showMenu={appSettingsMenuIsOpen}
-                  menuAnchorEl={settingsMenuIconBtnEl!}
-                  menuClosed={handleSettingsMenuClosed}
-                  appearenceMenuOpen={appearenceMenuOpen}>
+                  appTheme={appBar.appTheme}
+                  appearenceMenuBtnRefAvailable={appBar.appearenceMenuBtnRefAvailable}
+                  showMenu={appBar.appSettingsMenuIsOpen}
+                  menuAnchorEl={appBar.settingsMenuIconBtnEl!}
+                  menuClosed={appBar.handleSettingsMenuClosed}
+                  appearenceMenuOpen={appBar.appearenceMenuOpen}>
                 </SettingsMenu>
                 <AppearenceSettingsMenu
-                  appTheme={appTheme}
-                  showMenu={appearenceMenuIsOpen}
-                  isCompactMode={isCompactMode}
-                  isDarkMode={isDarkMode}
-                  compactModeToggled={handleCompactModeToggled}
-                  darkModeToggled={handleDarkModeToggled}
-                  menuClosed={handleSettingsMenuClosed}
-                  appearenceMenuClosed={handleAppearenceMenuClosed}
-                  menuAnchorEl={appearenceMenuIconBtnEl!}>
+                  appTheme={appBar.appTheme}
+                  showMenu={appBar.appearenceMenuIsOpen}
+                  isCompactMode={appBar.isCompactMode}
+                  isDarkMode={appBar.isDarkMode}
+                  compactModeToggled={appBar.handleCompactModeToggled}
+                  darkModeToggled={appBar.handleDarkModeToggled}
+                  menuClosed={appBar.handleSettingsMenuClosed}
+                  appearenceMenuClosed={appBar.handleAppearenceMenuClosed}
+                  menuAnchorEl={appBar.appearenceMenuIconBtnEl!}>
                 </AppearenceSettingsMenu>
               </AppBar>}
               afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
-              afterHeaderContent={ showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={showAppBar} appBarToggled={appBarToggled} /> : null }
+              afterHeaderContent={ appBar.showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={appBar.showAppBar} appBarToggled={appBar.appBarToggled} /> : null }
               bodyClassName="trmrk-app-body"
-              showHeader={showAppBar}
-              headerHeight={appHeaderHeight}
-              pinHeader={!isCompactMode}
-              isDarkMode={isDarkMode}
-              isCompactMode={isCompactMode}
-              lastRefreshTmStmp={lastRefreshTmStmp}
+              showHeader={appBar.showAppBar}
+              headerHeight={appBar.appHeaderHeight}
+              pinHeader={!appBar.isCompactMode}
+              isDarkMode={appBar.isDarkMode}
+              isCompactMode={appBar.isCompactMode}
+              lastRefreshTmStmp={appBar.lastRefreshTmStmp}
               scrollableX={true}
-              scrollableY={isCompactMode}
-              scrolling={appHeaderScrolling}
+              scrollableY={appBar.isCompactMode}
+              scrolling={appBar.appHeaderScrolling}
               bodyContent={<Outlet />} />
           }>
             <Route path="resizables-demo" element={

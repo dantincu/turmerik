@@ -1,10 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  Selector,
+  ActionCreatorWithPayload,
+} from "@reduxjs/toolkit";
 
 import trmrk from "trmrk";
 
 import { trmrk_react } from "trmrk-react";
 import { ReducerAction } from "trmrk-react/src/redux/core";
-import { AppData } from "../services/appData";
+import {
+  AppData,
+  AppDataSelectors,
+  AppDataReducers,
+} from "trmrk-react/src/redux/appData";
 
 const trmrk_react_utils = trmrk_react.utils;
 const { localStorageKeys } = trmrk_react_utils;
@@ -56,14 +64,14 @@ const {
   getShowAppBarToggleBtn,
 } = appDataSlice.selectors;
 
-export const appDataReducers = {
+export const appDataReducers: AppDataReducers = {
   setIsCompactMode,
   setIsDarkMode,
   setShowAppBar,
   setShowAppBarToggleBtn,
 };
 
-export const appDataSelectors = {
+export const appDataSelectors: AppDataSelectors = {
   getIsCompactMode,
   getIsDarkMode,
   getShowAppBar,
