@@ -42,10 +42,10 @@ const App = withErrorBoundary(() => {
     // (error, errorInfo) => logErrorToMyService(error, errorInfo)
   );
 
-  const [ appBarRowsCount, setAppBarRowsCount ] = React.useState(0);
+  const [ appBarRowsCount, setAppBarRowsCount ] = React.useState(2);
   const [ appHeaderHeight, setAppHeaderHeight ] = React.useState<number | null>(null);
 
-  const appBarRowHeightPx = 40;
+  const appBarRowHeightPx = React.useRef(0);
   const refreshBtnRef = React.createRef<HTMLButtonElement>();
   const headerRef = React.useRef<HTMLDivElement>();
   const bodyRef = React.useRef<HTMLDivElement>();
@@ -115,9 +115,9 @@ const App = withErrorBoundary(() => {
     headerRef.current = data.headerEl;
     bodyRef.current = data.bodyEl;
 
-    if (appBarRowsCount === 0) {
-      const newAppBarRowsCount = Math.round(data.headerHeight / appBarRowHeightPx);
-      setAppBarRowsCount(newAppBarRowsCount);
+    if (appBarRowHeightPx.current === 0) {
+      const newAppBarRowHeightPx = Math.round(data.headerHeight / appBarRowsCount);
+      appBarRowHeightPx.current = newAppBarRowHeightPx;
     }
 
     if (appHeaderHeight === null) {
@@ -130,7 +130,7 @@ const App = withErrorBoundary(() => {
     const headerEl = headerRef.current!;
     const bodyEl = bodyRef.current!;
 
-    const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx;
+    const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
 
     headerEl.style.height = `${newHeaderHeight}px`;
     bodyEl.style.top = `${newHeaderHeight}px`;
@@ -165,7 +165,8 @@ const App = withErrorBoundary(() => {
     showAppBar,
     appSettingsMenuIsOpen,
     appearenceMenuIsOpen,
-    appearenceMenuIconBtnEl ]);
+    appearenceMenuIconBtnEl,
+    appBarRowHeightPx ]);
 
   if (error) {
     return (
