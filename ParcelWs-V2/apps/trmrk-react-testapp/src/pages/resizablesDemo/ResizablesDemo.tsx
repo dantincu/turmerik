@@ -13,7 +13,7 @@ import ResizablePanel, {
   normalizeOrtoResizeHandler,
   combineOrtoResizeHandlers,
   ResizeHandlersMap,
-  getTouchOrMousePosition } from "../../components/resizablePanel/ResizablePanel";
+  getTouchOrMousePosition } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
 export default function ResizablesDemo({
     refreshBtnRef
