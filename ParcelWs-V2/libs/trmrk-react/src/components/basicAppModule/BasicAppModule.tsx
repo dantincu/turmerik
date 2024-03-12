@@ -19,6 +19,8 @@ export interface BasicAppModuleProps {
   headerClassName?: string | null | undefined;
   appBarClassName?: string | null | undefined;
   bodyClassName?: string | null | undefined;
+  bodyScrollableY?: boolean | null | undefined;
+  bodyScrollableX?: boolean | null | undefined;
   basePath: string;
   settingsMenuClassName?: string | null | undefined;
   settingsMenuListClassName?: string | null | undefined;
@@ -71,6 +73,8 @@ export default function BasicAppModule(
     props.headerClassName,
     props.appBarClassName,
     props.bodyClassName,
+    props.bodyScrollableX,
+    props.bodyScrollableY,
     props.settingsMenuClassName,
     props.settingsMenuListClassName,
     props.appearenceMenuClassName,
@@ -122,8 +126,8 @@ export default function BasicAppModule(
       isDarkMode={props.appBar.isDarkMode}
       isCompactMode={props.appBar.isCompactMode}
       lastRefreshTmStmp={props.appBar.lastRefreshTmStmp}
-      scrollableX={props.appBar.isCompactMode}
-      scrollableY={props.appBar.isCompactMode}
+      scrollableX={props.bodyScrollableX ?? props.appBar.isCompactMode}
+      scrollableY={props.bodyScrollableY ?? props.appBar.isCompactMode}
       scrolling={props.appBar.appHeaderScrolling}
       bodyContent={props.children} />);
 }

@@ -114,7 +114,8 @@ const App = withErrorBoundary(() => {
                 appBarChildren={[
                   <IconButton key={0} className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>,
                   <IconButton key={1} className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>]}
-                bodyClassName="trmrk-app-body">
+                bodyClassName="trmrk-app-body"
+                bodyScrollableY={true}>
                   <Outlet />
               </BasicAppModule> }>
 
