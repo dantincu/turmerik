@@ -156,8 +156,8 @@ export default function AppPanel(props: AppPanelProps) {
     { (props.afterHeaderClassName && props.afterHeaderContent) ? 
       <div className={[props.afterHeaderClassName].join(" ")}>{props.afterHeaderContent}</div> : null }
     <div className={["trmrk-app-panel-body",
-      props.scrollableX ? "trmrk-scrollableX" : "",
-      props.scrollableY ? "trmrk-scrollableY" : "",
+      typeof props.scrollableX === "boolean" ? props.scrollableX ? "trmrk-scrollableX" : "trmrk-overflowX-hidden" : "",
+      typeof props.scrollableY === "boolean" ? props.scrollableY ? "trmrk-scrollableY" : "trmrk-overflowY-hidden" : "",
       (props.scrollableX || props.scrollableY) ? "trmrk-scrollable" : "",
       props.bodyClassName ?? ""].join(" ")} ref={bodyRef}>
       {props.bodyContent}</div>
