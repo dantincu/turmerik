@@ -23,6 +23,10 @@ ul {
   width: 15px;
 }
 
+.trmrk-scrollable::-webkit-scrollbar-thumb {
+  cursor: grabbing;
+}
+
 .trmrk-scrollableY {
   overflow-y: scroll;
 }

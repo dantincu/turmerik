@@ -12,11 +12,11 @@
   }
 
   &::-webkit-scrollbar-track:hover {
-    background-color: $thumb-hover;
+    background-color: $track-hover;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background-color: $track-hover;
+    background-color: $thumb-hover;
   }
 }
 

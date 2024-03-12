@@ -17,9 +17,10 @@ import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbBrowser from "../indexedDbBrowser/IndexedDbBrowser";
 
 import ToggleAppBarBtn from "trmrk-react/src/components/appBar/ToggleAppBarBtn";
-import SettingsMenu from "../settingsMenu/SettingsMenu";
-import AppearenceSettingsMenu from "../settingsMenu/AppearenceSettingsMenu";
+import SettingsMenu from "trmrk-react/src/components/settingsMenu/SettingsMenu";
+import AppearenceSettingsMenu from "trmrk-react/src/components/settingsMenu/AppearenceSettingsMenu";
 import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
+import BasicAppModule from "trmrk-react/src/components/basicAppModule/BasicAppModule"
 
 export interface DevModuleProps {
   className?: string | null | undefined;
@@ -49,47 +50,15 @@ export default function DevModule(
     appBar.appearenceMenuIconBtnEl,
     appBar.appBarRowHeightPx ]);
 
-  return (<AppModule
-      className={["trmrk-dev"].join(" ")}
+  return (<BasicAppModule
+      className="trmrk-dev"
+      appBar={appBar}
+      basePath={props.basePath}
       headerClassName="trmrk-dev-header"
-      headerContent={<AppBar className="trmrk-dev-module-bar trmrk-app-module-bar">
-        <IconButton onClick={appBar.handleSettingsClick} className="trmrk-icon-btn"><MenuIcon /></IconButton>
-        <Link to={props.basePath}><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
-        <SettingsMenu
-          appTheme={appBar.appTheme}
-          appearenceMenuBtnRefAvailable={appBar.appearenceMenuBtnRefAvailable}
-          showMenu={appBar.appSettingsMenuIsOpen}
-          menuAnchorEl={appBar.settingsMenuIconBtnEl!}
-          menuClosed={appBar.handleSettingsMenuClosed}
-          appearenceMenuOpen={appBar.appearenceMenuOpen}>
-        </SettingsMenu>
-        <AppearenceSettingsMenu
-          appTheme={appBar.appTheme}
-          showMenu={appBar.appearenceMenuIsOpen}
-          isCompactMode={appBar.isCompactMode}
-          isDarkMode={appBar.isDarkMode}
-          compactModeToggled={appBar.handleCompactModeToggled}
-          darkModeToggled={appBar.handleDarkModeToggled}
-          menuClosed={appBar.handleSettingsMenuClosed}
-          appearenceMenuClosed={appBar.handleAppearenceMenuClosed}
-          menuAnchorEl={appBar.appearenceMenuIconBtnEl!}>
-        </AppearenceSettingsMenu>
-      </AppBar>}
-      afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
-      afterHeaderContent={ appBar.showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={appBar.showAppBar} appBarToggled={appBar.appBarToggled} /> : null }
-      bodyClassName="trmrk-app-body"
-      showHeader={appBar.showAppBar}
-      headerHeight={appBar.appHeaderHeight}
-      pinHeader={!appBar.isCompactMode}
-      isDarkMode={appBar.isDarkMode}
-      isCompactMode={appBar.isCompactMode}
-      lastRefreshTmStmp={appBar.lastRefreshTmStmp}
-      scrollableX={true}
-      scrollableY={appBar.isCompactMode}
-      scrolling={appBar.appHeaderScrolling}
-      bodyContent={
-    <Routes>
-      <Route path={`indexeddb-browser`} element={<IndexedDbBrowser />} />
-      <Route path="/" element={<DevModuleHomePage />} />
-    </Routes>} />);
+      bodyClassName="trmrk-app-body">
+        <Routes>
+          <Route path={"indexeddb-browser"} element={<IndexedDbBrowser />} />
+          <Route path="/" element={<DevModuleHomePage />} />
+        </Routes>
+      </BasicAppModule>);
 }

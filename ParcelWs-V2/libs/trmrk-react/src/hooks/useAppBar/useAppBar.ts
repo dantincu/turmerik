@@ -17,15 +17,58 @@ export interface UseAppBarProps {
   appBarRowsCount: number;
 }
 
-import { getAppTheme, currentAppTheme } from "../../app-theme/core";
+export interface UseAppBarResult {
+  appBarRowsCount: number;
+  setAppBarRowsCount: React.Dispatch<React.SetStateAction<number>>;
+  appHeaderHeight: number | null;
+  setAppHeaderHeight: React.Dispatch<React.SetStateAction<number | null>>;
+  appBarRowHeightPx: React.MutableRefObject<number>;
+  headerRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  bodyRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  isCompactMode: boolean;
+  isDarkMode: boolean;
+  showAppBar: boolean;
+  showAppBarToggleBtn: boolean;
+  appSettingsMenuIsOpen: boolean;
+  appearenceMenuIsOpen: boolean;
+  settingsMenuIconBtnEl: HTMLButtonElement | null;
+  setSettingsMenuIconBtnEl: React.Dispatch<
+    React.SetStateAction<HTMLButtonElement | null>
+  >;
+  appearenceMenuIconBtnEl: HTMLButtonElement | null;
+  setAppearenceMenuIconBtnEl: React.Dispatch<
+    React.SetStateAction<HTMLButtonElement | null>
+  >;
+  lastRefreshTmStmp: Date;
+  setLastRefreshTmStmp: React.Dispatch<React.SetStateAction<Date>>;
+  appTheme: AppTheme;
+  currentAppTheme: MtblRefValue<AppTheme>;
+  appThemeClassName: string;
+  appModeCssClass: MtblRefValue<string>;
+  handleSettingsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  appearenceMenuBtnRefAvailable: (btnRef: HTMLButtonElement | null) => void;
+  handleSettingsMenuClosed: () => void;
+  handleAppearenceMenuClosed: () => void;
+  appearenceMenuOpen: () => void;
+  handleCompactModeToggled: (isCompactMode: boolean) => void;
+  handleDarkModeToggled: (isDarkMode: boolean) => void;
+  appBarToggled: (showAppBar: boolean) => void;
+  appHeaderScrolling: (
+    data: AppPanelHeaderData,
+    offset: AppPanelHeaderOffset
+  ) => void;
+}
+
+import { AppTheme, getAppTheme, currentAppTheme } from "../../app-theme/core";
 import { appModeCssClass, getAppModeCssClassName } from "../..//utils";
 
 import {
   AppPanelHeaderData,
   AppPanelHeaderOffset,
 } from "../..//components/appPanel/AppPanel";
+import { MtblRefValue } from "trmrk/src/core";
 
-export const useAppBar = (props: UseAppBarProps) => {
+export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   const [appBarRowsCount, setAppBarRowsCount] = React.useState(
     props.appBarRowsCount
   );
@@ -57,7 +100,7 @@ export const useAppBar = (props: UseAppBarProps) => {
   const dispatch = useDispatch();
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] =
-    React.useState<null | HTMLElement>(null);
+    React.useState<null | HTMLButtonElement>(null);
 
   const [appearenceMenuIconBtnEl, setAppearenceMenuIconBtnEl] =
     React.useState<null | HTMLButtonElement>(null);
@@ -73,7 +116,7 @@ export const useAppBar = (props: UseAppBarProps) => {
   const appThemeClassName = appTheme.cssClassName;
   appModeCssClass.value = getAppModeCssClassName(isCompactMode);
 
-  const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleSettingsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setSettingsMenuIconBtnEl(event.currentTarget);
     dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(true));
   };

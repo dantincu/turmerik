@@ -2,9 +2,9 @@ import React from "react";
 
 import Menu from "@mui/material/Menu";
 
-import SettingsMenuList from "trmrk-react/src/components/settingsMenu/SettingsMenuList";
+import SettingsMenuList from "./SettingsMenuList";
 
-import { AppTheme } from "trmrk-react/src/app-theme/core";
+import { AppTheme } from "../../app-theme/core";
 
 export interface SettingsMenuProps {
   className?: string | null | undefined;
