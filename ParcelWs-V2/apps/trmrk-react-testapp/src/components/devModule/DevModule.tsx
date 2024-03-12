@@ -1,16 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux'
 
 import AppBar  from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import MenuIcon from "@mui/icons-material/Menu";
 
 import { Route, Routes } from "react-router-dom";
 
 import { appDataSelectors, appDataReducers } from "../../store/appDataSlice";
+import { appBarReducers, appBarSelectors } from "../../store/appBarDataSlice";
 
 import AppModule from "trmrk-react/src/components/appModule/AppModule";
 
@@ -18,10 +17,9 @@ import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbBrowser from "../indexedDbBrowser/IndexedDbBrowser";
 
 import ToggleAppBarBtn from "trmrk-react/src/components/appBar/ToggleAppBarBtn";
-import ToggleAppModeBtn from "trmrk-react/src/components/settingsMenu/ToggleAppModeBtn";
-import ToggleDarkModeBtn from "trmrk-react/src/components/settingsMenu/ToggleDarkModeBtn";
-import SettingsMenuList from "trmrk-react/src/components/settingsMenu/SettingsMenuList";
-import AppearenceSettingsMenuList from "trmrk-react/src/components/settingsMenu/AppearenceSettingsMenuList";
+import SettingsMenu from "../settingsMenu/SettingsMenu";
+import AppearenceSettingsMenu from "../settingsMenu/AppearenceSettingsMenu";
+import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
 
 export interface DevModuleProps {
   className?: string | null | undefined;
@@ -31,36 +29,64 @@ export interface DevModuleProps {
 export default function DevModule(
   props: DevModuleProps
 ) {
-  const isCompactMode = useSelector(appDataSelectors.getIsCompactMode);
-  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
-  const showAppBar = useSelector(appDataSelectors.getShowAppBar);
-  const showAppBarToggleBtn = useSelector(appDataSelectors.getShowAppBarToggleBtn);
-  const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
-
-  const dispatch = useDispatch();
-
-  const appBarToggled = (showAppBar: boolean) => {
-    dispatch(appDataReducers.setShowAppBar(showAppBar));
-  }
-
-  // console.log("props.basePath", props.basePath);
+  const appBar = useAppBar({
+    appBarReducers: appBarReducers,
+    appBarSelectors: appBarSelectors,
+    appDataReducers: appDataReducers,
+    appDataSelectors: appDataSelectors,
+    appBarRowsCount: 2
+  });
+  
+  React.useEffect(() => {
+  }, [
+    appBar.appTheme,
+    appBar.appBarRowsCount,
+    appBar.lastRefreshTmStmp,
+    appBar.appHeaderHeight,
+    appBar.showAppBar,
+    appBar.appSettingsMenuIsOpen,
+    appBar.appearenceMenuIsOpen,
+    appBar.appearenceMenuIconBtnEl,
+    appBar.appBarRowHeightPx ]);
 
   return (<AppModule
       className={["trmrk-dev"].join(" ")}
       headerClassName="trmrk-dev-header"
       headerContent={<AppBar className="trmrk-dev-module-bar trmrk-app-module-bar">
+        <IconButton onClick={appBar.handleSettingsClick} className="trmrk-icon-btn"><MenuIcon /></IconButton>
         <Link to={props.basePath}><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
+        <SettingsMenu
+          appTheme={appBar.appTheme}
+          appearenceMenuBtnRefAvailable={appBar.appearenceMenuBtnRefAvailable}
+          showMenu={appBar.appSettingsMenuIsOpen}
+          menuAnchorEl={appBar.settingsMenuIconBtnEl!}
+          menuClosed={appBar.handleSettingsMenuClosed}
+          appearenceMenuOpen={appBar.appearenceMenuOpen}>
+        </SettingsMenu>
+        <AppearenceSettingsMenu
+          appTheme={appBar.appTheme}
+          showMenu={appBar.appearenceMenuIsOpen}
+          isCompactMode={appBar.isCompactMode}
+          isDarkMode={appBar.isDarkMode}
+          compactModeToggled={appBar.handleCompactModeToggled}
+          darkModeToggled={appBar.handleDarkModeToggled}
+          menuClosed={appBar.handleSettingsMenuClosed}
+          appearenceMenuClosed={appBar.handleAppearenceMenuClosed}
+          menuAnchorEl={appBar.appearenceMenuIconBtnEl!}>
+        </AppearenceSettingsMenu>
       </AppBar>}
       afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
-      afterHeaderContent={ showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={showAppBar} appBarToggled={appBarToggled} /> : null }
+      afterHeaderContent={ appBar.showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={appBar.showAppBar} appBarToggled={appBar.appBarToggled} /> : null }
       bodyClassName="trmrk-app-body"
-      showHeader={showAppBar}
-      pinHeader={!isCompactMode}
-      isDarkMode={isDarkMode}
-      isCompactMode={isCompactMode}
-      lastRefreshTmStmp={lastRefreshTmStmp}
+      showHeader={appBar.showAppBar}
+      headerHeight={appBar.appHeaderHeight}
+      pinHeader={!appBar.isCompactMode}
+      isDarkMode={appBar.isDarkMode}
+      isCompactMode={appBar.isCompactMode}
+      lastRefreshTmStmp={appBar.lastRefreshTmStmp}
       scrollableX={true}
-      scrollableY={isCompactMode}
+      scrollableY={appBar.isCompactMode}
+      scrolling={appBar.appHeaderScrolling}
       bodyContent={
     <Routes>
       <Route path={`indexeddb-browser`} element={<IndexedDbBrowser />} />

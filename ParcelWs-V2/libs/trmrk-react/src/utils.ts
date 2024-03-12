@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 
 import trmrk from "trmrk";
-import { MtblRefValue } from "trmrk/src/core";
+import { MtblRefValue, jsonBool } from "trmrk/src/core";
 
 export const localStorageKeys = Object.freeze({
   appThemeIsDarkMode: "appThemeIsDarkMode",
@@ -69,3 +69,45 @@ export const isDarkMode = (
 
   return isDarkMode;
 };
+
+export const isCompactMode = (
+  localStorageIsCompactModeKey: string | null | undefined = null
+) => {
+  const localStorageIsCompactMode = localStorage.getItem(
+    localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode
+  );
+
+  let isCompactMode: boolean;
+
+  if (localStorageIsCompactMode) {
+    if (trmrk.jsonBool.true === localStorageIsCompactMode) {
+      isCompactMode = true;
+    } else if (trmrk.jsonBool.false === localStorageIsCompactMode) {
+      isCompactMode = false;
+    } else {
+      isCompactMode = true;
+    }
+  } else {
+    isCompactMode = true;
+  }
+
+  return isCompactMode;
+};
+
+export const setIsDarkModeToLocalStorage = (
+  isDarkMode: boolean,
+  localStorageIsDarkModeKey: string | null | undefined = null
+) =>
+  localStorage.setItem(
+    localStorageIsDarkModeKey ?? localStorageKeys.appThemeIsDarkMode,
+    isDarkMode ? jsonBool.true : jsonBool.false
+  );
+
+export const setIsCompactModeToLocalStorage = (
+  isCompactMode: boolean,
+  localStorageIsCompactModeKey: string | null | undefined = null
+) =>
+  localStorage.setItem(
+    localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode,
+    isCompactMode ? jsonBool.true : jsonBool.false
+  );

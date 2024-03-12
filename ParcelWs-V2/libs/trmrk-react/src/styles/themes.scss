@@ -27,7 +27,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
   }
 
   .trmrk-scrollable {
-    @include scrollable(#1e1e1e, #303030, #262626, #404040);
+    @include scrollable(#222, #444, #333, #555);
   }
 
   .trmrk-resizable-panel.trmrk-border-alpha-25 {
@@ -41,7 +41,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
 .trmrk-theme-light {
   .trmrk-scrollable {
-    @include scrollable(#efefef, #cdcdcd, #dedede, #bcbcbc);
+    @include scrollable(#eee, #ccc, #ddd, #bbb);
   }
 
   .trmrk-resizable-panel.trmrk-border-alpha-25 {

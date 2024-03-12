@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
+import {
+  setIsDarkModeToLocalStorage,
+  setIsCompactModeToLocalStorage,
+} from "../../utils";
 
+import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 import { AppBarReducers, AppBarSelectors } from "../..//redux/appBarData";
 
 export interface UseAppBarProps {
@@ -95,12 +99,14 @@ export const useAppBar = (props: UseAppBarProps) => {
     dispatch(props.appDataReducers.setIsCompactMode(isCompactMode));
     dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(false));
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
+    setIsCompactModeToLocalStorage(isCompactMode);
   };
 
   const handleDarkModeToggled = (isDarkMode: boolean) => {
     dispatch(props.appDataReducers.setIsDarkMode(isDarkMode));
     dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(false));
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
+    setIsDarkModeToLocalStorage(isDarkMode);
   };
 
   const appBarToggled = (showAppBar: boolean) => {

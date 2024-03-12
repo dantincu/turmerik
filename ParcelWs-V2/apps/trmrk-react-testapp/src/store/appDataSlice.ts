@@ -24,9 +24,7 @@ const appDataSlice = createSlice({
     showAppBar: true,
     showAppBarToggleBtn: true,
     isDarkMode: trmrk_react_utils.isDarkMode(),
-    isCompactMode:
-      localStorage.getItem(localStorageKeys.appIsCompactMode) !==
-      trmrk.jsonBool.false,
+    isCompactMode: trmrk_react_utils.isCompactMode(),
   } as AppData,
   reducers: {
     setShowAppBar: (state, action: ReducerAction<boolean>) => {
