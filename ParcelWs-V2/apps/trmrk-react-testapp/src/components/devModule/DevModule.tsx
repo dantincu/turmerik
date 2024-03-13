@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import IconButton from "@mui/material/IconButton";
-import SvgIcon from "@mui/material/SvgIcon";
-import MenuIcon from "@mui/icons-material/Menu";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -30,12 +29,18 @@ export interface DevModuleProps {
   basePath: string
 }
 
-const getAppBarContents = (basePath: string, urlPath: string): React.ReactNode | Iterable<React.ReactNode > => {
+const getAppBarContents = (basePath: string, urlPath: string, baseUrlPath: string): React.ReactNode | Iterable<React.ReactNode > => {
   const retNodes: React.ReactNode[] = [];
+
+  console.log("baseUrlPath", baseUrlPath);
+
+  if (baseUrlPath.length > 1) {
+    retNodes.push(<Link key={0} to={`${basePath}${baseUrlPath}`}><IconButton className="trmrk-icon-btn"><ArrowUpwardIcon /></IconButton></Link>);
+  }
 
   switch (urlPath) {
     case "/indexeddb-browser":
-      retNodes.push(<Link key={0} to={`${basePath}/indexeddb-browser/create-db`}>
+      retNodes.push(<Link key={1} to={`${basePath}/indexeddb-browser/create-db`}>
         <IconButton className="trmrk-icon-btn"><span className="material-symbols-outlined">database</span></IconButton></Link>);
       break;
     case "/indexeddb-browser/create-db":
@@ -101,10 +106,10 @@ export default function DevModule(
   return (<BasicAppModule
       className="trmrk-dev"
       appBar={appBar}
-      basePath={`${props.basePath}${baseUrlPath}`}
+      basePath={props.basePath}
       headerClassName="trmrk-dev-header"
       bodyClassName="trmrk-app-body"
-      appBarChildren={getAppBarContents(props.basePath, urlPath)}>
+      appBarChildren={getAppBarContents(props.basePath, urlPath, baseUrlPath)}>
         <Routes>
           <Route path={"/indexeddb-browser"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser`} />} />
           <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
