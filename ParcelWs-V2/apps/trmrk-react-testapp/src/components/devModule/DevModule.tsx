@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import IconButton from "@mui/material/IconButton";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { Route, Routes } from "react-router-dom";
 
@@ -32,10 +32,8 @@ export interface DevModuleProps {
 const getAppBarContents = (basePath: string, urlPath: string, baseUrlPath: string): React.ReactNode | Iterable<React.ReactNode > => {
   const retNodes: React.ReactNode[] = [];
 
-  console.log("baseUrlPath", baseUrlPath);
-
   if (baseUrlPath.length > 1) {
-    retNodes.push(<Link key={0} to={`${basePath}${baseUrlPath}`}><IconButton className="trmrk-icon-btn"><ArrowUpwardIcon /></IconButton></Link>);
+    retNodes.push(<Link key={0} to={`${basePath}${baseUrlPath}`}><IconButton className="trmrk-icon-btn"><ArrowBackIcon /></IconButton></Link>);
   }
 
   switch (urlPath) {
