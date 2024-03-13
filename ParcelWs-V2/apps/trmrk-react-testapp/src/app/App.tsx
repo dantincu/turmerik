@@ -39,7 +39,7 @@ const App = withErrorBoundary(() => {
     appDataSelectors: appDataSelectors,
     appBarRowsCount: 2
   });
-  
+
   const refreshBtnRef = React.createRef<HTMLButtonElement>();
 
   const updateHeaderHeight = (newAppBarRowsCount: number) => {
@@ -120,8 +120,8 @@ const App = withErrorBoundary(() => {
               </BasicAppModule> }>
 
             <Route path="resizables-demo" element={
-              <ResizablesDemo refreshBtnRef={refreshBtnRef} />}></Route>
-            <Route path="" Component={HomePage}></Route>
+              <ResizablesDemo refreshBtnRef={refreshBtnRef} urlPath="/resizables-demo" />}></Route>
+            <Route path="" element={<HomePage urlPath="/" />}></Route>
           </Route>
 
           <Route path="/dev/*"

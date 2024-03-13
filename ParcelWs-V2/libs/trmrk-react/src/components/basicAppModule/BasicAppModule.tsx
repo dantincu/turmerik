@@ -75,6 +75,7 @@ export default function BasicAppModule(
     props.bodyClassName,
     props.bodyScrollableX,
     props.bodyScrollableY,
+    props.basePath,
     props.settingsMenuClassName,
     props.settingsMenuListClassName,
     props.appearenceMenuClassName,

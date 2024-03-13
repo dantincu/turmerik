@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 
 import Button  from "@mui/material/Button";
 import Paper  from "@mui/material/Paper";
@@ -15,11 +16,16 @@ import ResizablePanel, {
   ResizeHandlersMap,
   getTouchOrMousePosition } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
-export default function ResizablesDemo({
-    refreshBtnRef
-  }: {
-    refreshBtnRef: React.RefObject<HTMLButtonElement>
-  }) {
+import { appDataReducers } from "../../store/appDataSlice";
+
+export interface ResizablesDemoProps {
+  urlPath: string;
+  refreshBtnRef: React.RefObject<HTMLButtonElement>
+}
+
+export default function ResizablesDemo(
+  props: ResizablesDemoProps) {
+  const dispatch = useDispatch();
   const [ lastRefreshTmStmp, setLastRefreshTmStmp ] = React.useState(new Date());
 
   const parentRef = React.createRef<HTMLDivElement>();
@@ -89,10 +95,11 @@ export default function ResizablesDemo({
   }
 
   React.useEffect(() => {
+    dispatch(appDataReducers.setCurrentUrlPath(props.urlPath));
     // console.log("lastRefreshTmStmp", lastRefreshTmStmp);
   }, [ lastRefreshTmStmp, parentRef, topPanelRef, bottomPanelRef, prevTouchOrMousePos ]);
 
-  const topPanelResizeStarted = (e: MouseEvent | TouchEvent, rszDir: ResizeDirection) => {
+  const topPanelResizeStarted = (e: MouseEvent | TouchEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
     prevTouchOrMousePos.current = getTouchOrMousePosition(e);
     const topPanelEl = topPanelRef.current!;
     updatePanelX(topPanelEl, topPanelX, topPanelEl.offsetLeft);
@@ -104,7 +111,7 @@ export default function ResizablesDemo({
     // console.log("top panel resize started", topPanelEl.offsetLeft, topPanelEl.offsetTop, new Date());
   }
 
-  const topPanelResizeEnded = (e: MouseEvent | TouchEvent | null, rszDir: ResizeDirection) => {
+  const topPanelResizeEnded = (e: MouseEvent | TouchEvent | null, touchOrMousePos: TouchOrMousePosition | null, rszDir: ResizeDirection) => {
     prevTouchOrMousePos.current = {
       screenX: 0,
       screenY: 0,
@@ -113,7 +120,7 @@ export default function ResizablesDemo({
     // console.log("top panel resize ended", new Date());
   }
 
-  const bottomPanelResizeStarted = (e: MouseEvent | TouchEvent, rszDir: ResizeDirection) => {
+  const bottomPanelResizeStarted = (e: MouseEvent | TouchEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
     prevTouchOrMousePos.current = getTouchOrMousePosition(e);
     const bottomPanelEl = bottomPanelRef.current!;
     updatePanelX(bottomPanelEl, bottomPanelX, bottomPanelEl.offsetLeft);
@@ -125,7 +132,7 @@ export default function ResizablesDemo({
     // console.log("bottom panel resize started", bottomPanelEl, bottomPanelEl.offsetTop, new Date());
   }
 
-  const bottomPanelResizeEnded = (e: MouseEvent | TouchEvent | null, rszDir: ResizeDirection) => {
+  const bottomPanelResizeEnded = (e: MouseEvent | TouchEvent | null, touchOrMousePos: TouchOrMousePosition | null, rszDir: ResizeDirection) => {
     prevTouchOrMousePos.current = {
       screenX: 0,
       screenY: 0,
@@ -193,12 +200,12 @@ export default function ResizablesDemo({
         }
       }))(e, touchOrMousePos, rszDir);
 
-  const topPanelResizing = (e: MouseEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
+  const topPanelResizing = (e: MouseEvent | TouchEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
     panelResizing(e, touchOrMousePos, rszDir, topPanelRef, topPanelX, topPanelY, topPanelW, topPanelH);
     prevTouchOrMousePos.current = getTouchOrMousePosition(e);
   }
 
-  const bottomPanelResizing = (e: MouseEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
+  const bottomPanelResizing = (e: MouseEvent | TouchEvent, touchOrMousePos: TouchOrMousePosition, rszDir: ResizeDirection) => {
     panelResizing1(e, touchOrMousePos, rszDir, bottomPanelRef, bottomPanelX, bottomPanelY, bottomPanelW, bottomPanelH);
     prevTouchOrMousePos.current = getTouchOrMousePosition(e);
   }
@@ -213,7 +220,7 @@ export default function ResizablesDemo({
 
   return (
     <Paper className="trmrk-app-main-content" ref={parentRef}>
-      <Button sx={{ position: "fixed" }} onClick={handleRefreshClick} ref={refreshBtnRef}>Refresh</Button>
+      <Button sx={{ position: "fixed" }} onClick={handleRefreshClick} ref={props.refreshBtnRef}>Refresh</Button>
 
       <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
       <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>

@@ -15,18 +15,21 @@ import {
 } from "trmrk-react/src/redux/appData";
 
 const trmrk_react_utils = trmrk_react.utils;
-const { localStorageKeys } = trmrk_react_utils;
 
 const appDataSlice = createSlice({
   name: "appData",
   initialState: {
     baseLocation: trmrk.url.getBaseLocation(),
+    currentUrlPath: "/",
     showAppBar: true,
     showAppBarToggleBtn: true,
     isDarkMode: trmrk_react_utils.isDarkMode(),
     isCompactMode: trmrk_react_utils.isCompactMode(),
   } as AppData,
   reducers: {
+    setCurrentPath: (state, action: ReducerAction<string>) => {
+      state.currentUrlPath = action.payload;
+    },
     setShowAppBar: (state, action: ReducerAction<boolean>) => {
       state.showAppBar = action.payload;
     },
@@ -41,6 +44,7 @@ const appDataSlice = createSlice({
     },
   },
   selectors: {
+    getCurrentPath: (appData) => appData.currentUrlPath,
     getShowAppBar: (appData) => appData.showAppBar,
     getShowAppBarToggleBtn: (appData) => appData.showAppBarToggleBtn,
     getIsDarkMode: (appData) => appData.isDarkMode,
@@ -49,6 +53,7 @@ const appDataSlice = createSlice({
 });
 
 const {
+  setCurrentPath,
   setIsCompactMode,
   setIsDarkMode,
   setShowAppBar,
@@ -56,6 +61,7 @@ const {
 } = appDataSlice.actions;
 
 const {
+  getCurrentPath,
   getIsCompactMode,
   getIsDarkMode,
   getShowAppBar,
@@ -63,6 +69,7 @@ const {
 } = appDataSlice.selectors;
 
 export const appDataReducers: AppDataReducers = {
+  setCurrentUrlPath: setCurrentPath,
   setIsCompactMode,
   setIsDarkMode,
   setShowAppBar,
@@ -70,6 +77,7 @@ export const appDataReducers: AppDataReducers = {
 };
 
 export const appDataSelectors: AppDataSelectors = {
+  getCurrentUrlPath: getCurrentPath,
   getIsCompactMode,
   getIsDarkMode,
   getShowAppBar,

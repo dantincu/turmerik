@@ -2,6 +2,7 @@ import { Selector, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 export interface AppData {
   baseLocation: string;
+  currentUrlPath: string;
   showAppBar: boolean;
   showAppBarToggleBtn: boolean;
   isDarkMode: boolean;
@@ -9,6 +10,15 @@ export interface AppData {
 }
 
 export interface AppDataSelectors {
+  getCurrentUrlPath: Selector<
+    {
+      appData: AppData;
+    },
+    string,
+    []
+  > & {
+    unwrapped: (appData: AppData) => string;
+  };
   getIsCompactMode: Selector<
     {
       appData: AppData;
@@ -48,6 +58,7 @@ export interface AppDataSelectors {
 }
 
 export interface AppDataReducers {
+  setCurrentUrlPath: ActionCreatorWithPayload<string, "appData/setCurrentPath">;
   setIsCompactMode: ActionCreatorWithPayload<
     boolean,
     "appData/setIsCompactMode"
