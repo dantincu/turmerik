@@ -4,6 +4,7 @@ import { trmrk_hooks } from "../../hooks";
 import { trmrk_redux } from "../../redux";
 import { trmrk_icons } from "../../icons";
 import * as utils from "../../utils";
+import * as constants from "../../constants";
 
 export const trmrk_react = {
   app_theme,
@@ -12,4 +13,5 @@ export const trmrk_react = {
   trmrk_redux,
   trmrk_icons,
   utils,
+  constants,
 };

@@ -2,6 +2,8 @@ import React, { useRef } from "react";
 
 import "./AppPanel.scss";
 
+import { isIPadOrIphone, isAndroid, isMobile } from "../../constants";
+
 export interface AppPanelProps {
   className: string,
   headerClassName?: string | null | undefined,
@@ -54,7 +56,9 @@ export default function AppPanel(props: AppPanelProps) {
       data.headerEl.style.top = `0px`;
       /* const bodyHeight = data.parentHeight - data.headerHeight;
       data.bodyEl.style.height = `${bodyHeight}px`; */
-      data.bodyEl.style.paddingBottom = "0px";
+      if (isMobile) {
+        data.bodyEl.style.paddingBottom = "0px";
+      }
 
       if (props.scrolling) {
         props.scrolling(data, {
@@ -77,7 +81,13 @@ export default function AppPanel(props: AppPanelProps) {
       data.headerEl.style.top = `${headerElTopOffset}px`;
       /* const bodyHeight = data.parentHeight - mainElTopOffset;
       data.bodyEl.style.height = `${bodyHeight}px`;*/
-      data.bodyEl.style.paddingBottom = `${2 * data.headerHeight}px`;
+      if (isMobile) {// This is needed to prevent the screen shaking upon scrolling to the bottom of the page on mobile devices
+        if (isIPadOrIphone) {
+          data.bodyEl.style.paddingBottom = `${2 * data.headerHeight}px`;
+        } else if (isAndroid) {
+          data.bodyEl.style.paddingBottom = `${data.headerHeight}px`;
+        }
+      }
 
       if (props.scrolling) {
         props.scrolling(data, {

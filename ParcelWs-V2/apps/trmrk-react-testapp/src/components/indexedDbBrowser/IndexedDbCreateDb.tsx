@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
@@ -79,7 +80,7 @@ export default function IndexedDbCreateDb(
     }
   }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr ]);
 
-  return (<div className="trmrk-indexeddb-create-db">
+  return (<Paper className="trmrk-indexeddb-create-db">
     <FormGroup className="trmrk-form-group">
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbName" required>Database name</InputLabel>
@@ -97,5 +98,5 @@ export default function IndexedDbCreateDb(
         Db Stores <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton></Typography>
     </FormControl>
     { dbStoresArr.map((dbStore, idx) => <IndexedDbCreateDbStore model={dbStore} key={idx} /> ) }
-  </div>);
+  </Paper>);
 }

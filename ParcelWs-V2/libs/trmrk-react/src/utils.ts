@@ -111,3 +111,6 @@ export const setIsCompactModeToLocalStorage = (
     localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode,
     isCompactMode ? jsonBool.true : jsonBool.false
   );
+
+export const isIPadOrIphone = () => /iPad|iPhone/.test(navigator.userAgent);
+export const isAndroid = () => /Android/.test(navigator.userAgent);

@@ -48,6 +48,9 @@ body, #app-root {
 
 .trmrk-indexeddb-create-db {
   display: block;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  min-height: 100%;
 
   .trmrk-form-group {
     display: block;
@@ -55,6 +58,10 @@ body, #app-root {
     padding: 1em;
     border: 1px solid #888;
     border-radius: 3px;
+  }
+
+  .trmrk-form-group:first-child {
+    margin-top: 0em;
   }
 
   .trmrk-form-field {
