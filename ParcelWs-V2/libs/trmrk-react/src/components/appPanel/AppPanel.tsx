@@ -24,6 +24,7 @@ export interface AppPanelHeaderData {
   bodyEl: HTMLDivElement;
   parentHeight: number;
   headerHeight: number;
+  bodyElBeforeLastScrollTop: number;
   bodyElLastScrollTop: number;
   showHeaderNow: boolean;
 }
@@ -48,11 +49,12 @@ export default function AppPanel(props: AppPanelProps) {
 
     if (scrollTop <= 0 || data.showHeaderNow) { /* technically, the scrollTop should never be negative, but I've previously seen a negative value for
       this property on ios when using the document as main element and scrolling top and then dragging the top margin (like in a mobile refresh request) */
+      data.bodyElLastScrollTop = 0;
       data.bodyEl.style.top = `${data.headerHeight}px`;
       data.headerEl.style.top = `0px`;
       /* const bodyHeight = data.parentHeight - data.headerHeight;
-      data.bodyEl.style.height = `${bodyHeight}px`;
-      data.bodyEl.style.marginBottom = "0px"; */
+      data.bodyEl.style.height = `${bodyHeight}px`; */
+      data.bodyEl.style.paddingBottom = "0px";
 
       if (props.scrolling) {
         props.scrolling(data, {
@@ -74,8 +76,8 @@ export default function AppPanel(props: AppPanelProps) {
       data.bodyEl.style.top = `${mainElTopOffset}px`;
       data.headerEl.style.top = `${headerElTopOffset}px`;
       /* const bodyHeight = data.parentHeight - mainElTopOffset;
-      data.bodyEl.style.height = `${bodyHeight}px`;
-      data.bodyEl.style.marginBottom = `${mainElTopOffset}px`; */
+      data.bodyEl.style.height = `${bodyHeight}px`;*/
+      data.bodyEl.style.paddingBottom = `${2 * data.headerHeight}px`;
 
       if (props.scrolling) {
         props.scrolling(data, {
@@ -123,6 +125,7 @@ export default function AppPanel(props: AppPanelProps) {
         bodyEl: mainEl,
         headerHeight: headerEl.clientHeight,
         parentHeight: parentEl.clientHeight,
+        bodyElBeforeLastScrollTop: mainEl.scrollTop,
         bodyElLastScrollTop: mainEl.scrollTop,
         showHeaderNow: showHeaderToggled && props.showHeader
       };
