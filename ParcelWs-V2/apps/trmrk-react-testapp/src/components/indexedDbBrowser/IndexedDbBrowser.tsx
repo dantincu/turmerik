@@ -110,12 +110,11 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
 });
 
 export interface IndexedDbBrowserProps {
-  className?: string | null | undefined;
 }
 
 export default function IndexedDbBrowser(
   props: IndexedDbBrowserProps) {
-  return (<div className={["trmrk-indexeddb-browser" , props.className ?? ""].join(" ")}>
+  return (<div className="trmrk-indexeddb-browser">
     <TreeView
       aria-label="indexeddb"
       defaultExpanded={['3']}

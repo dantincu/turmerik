@@ -10,14 +10,12 @@ import { Route, Routes } from "react-router-dom";
 
 import trmrk from "trmrk";
 
-import AppModule from "trmrk-react/src/components/appModule/AppModule";
-
 import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbDemo from "../../pages/dev/indexedDbDemo/IndexedDbDemo";
+import IndexedDbDemoCreateDb from "../../pages/dev/indexedDbDemo/IndexedDbDemoCreateDb";
+import IndexDbBrowserAppBarContent from "../indexedDbBrowser/IndexDbBrowserAppBarContent";
+import IndexDbCreateDbAppBarContent from "../indexedDbBrowser/IndexDbCreateDbAppBarContent";
 
-import ToggleAppBarBtn from "trmrk-react/src/components/appBar/ToggleAppBarBtn";
-import SettingsMenu from "trmrk-react/src/components/settingsMenu/SettingsMenu";
-import AppearenceSettingsMenu from "trmrk-react/src/components/settingsMenu/AppearenceSettingsMenu";
 import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
 import BasicAppModule from "trmrk-react/src/components/basicAppModule/BasicAppModule"
 
@@ -29,7 +27,10 @@ export interface DevModuleProps {
   basePath: string
 }
 
-const getAppBarContents = (basePath: string, urlPath: string, baseUrlPath: string): React.ReactNode | Iterable<React.ReactNode > => {
+const getAppBarContents = (
+  basePath: string,
+  urlPath: string,
+  baseUrlPath: string): React.ReactNode | Iterable<React.ReactNode > => {
   const retNodes: React.ReactNode[] = [];
 
   if (baseUrlPath.length > 1) {
@@ -40,8 +41,11 @@ const getAppBarContents = (basePath: string, urlPath: string, baseUrlPath: strin
     case "/indexeddb-browser":
       retNodes.push(<Link key={1} to={`${basePath}/indexeddb-browser/create-db`}>
         <IconButton className="trmrk-icon-btn"><span className="material-symbols-outlined">database</span></IconButton></Link>);
+      retNodes.push(<IndexDbBrowserAppBarContent key={2} basePath={basePath} />);
       break;
     case "/indexeddb-browser/create-db":
+      
+      retNodes.push(<IndexDbCreateDbAppBarContent key={3} />);
       break;
   }
 
@@ -80,7 +84,7 @@ export default function DevModule(
       props.basePath.length);
 
   const [ baseUrlPath, setBaseUrlPath ] = React.useState('');
-  
+
   React.useEffect(() => {
     const relUrlPathVal = getRelUrlPath(urlPath);
 
@@ -110,7 +114,7 @@ export default function DevModule(
       appBarChildren={getAppBarContents(props.basePath, urlPath, baseUrlPath)}>
         <Routes>
           <Route path={"/indexeddb-browser"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser`} />} />
-          <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
+          <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbDemoCreateDb urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
           <Route path="/" element={<DevModuleHomePage urlPath={props.basePath} />} />
         </Routes>
       </BasicAppModule>);

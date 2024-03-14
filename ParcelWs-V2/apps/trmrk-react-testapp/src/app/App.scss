@@ -35,3 +35,35 @@
 .my-resizable-panel1 .trmrk-resizable-content {
   background-color: darkslateblue;
 }
+
+.trmrk-app-module-bar .trmrk-page-title {
+  display: block;
+  text-align: center;
+  line-height: 1.5em;
+  font-size: 1.75em;
+  margin-top: 0em;
+}
+
+.trmrk-indexeddb-create-db {
+  display: block;
+
+  .trmrk-form-group {
+    display: block;
+    margin-top: 1em;
+  }
+
+  .trmrk-form-field {
+    width: 300px;
+    margin-top: 2em;
+    margin-left: 2em;
+  }
+}
+
+.trmrk-indexeddb-browser-app-bar-content { 
+  display: block;
+}
+
+.trmrk-indexeddb-create-db-app-bar-content {
+  display: block;
+  margin-top: -2.5em;
+}

@@ -58,7 +58,10 @@ export interface AppDataSelectors {
 }
 
 export interface AppDataReducers {
-  setCurrentUrlPath: ActionCreatorWithPayload<string, "appData/setCurrentPath">;
+  setCurrentUrlPath: ActionCreatorWithPayload<
+    string,
+    "appData/setCurrentUrlPath"
+  >;
   setIsCompactMode: ActionCreatorWithPayload<
     boolean,
     "appData/setIsCompactMode"
