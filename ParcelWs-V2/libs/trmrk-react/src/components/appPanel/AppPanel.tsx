@@ -22,6 +22,7 @@ export interface AppPanelProps {
 export interface AppPanelHeaderData {
   headerEl: HTMLDivElement;
   bodyEl: HTMLDivElement;
+  parentHeight: number;
   headerHeight: number;
   bodyElLastScrollTop: number;
   showHeaderNow: boolean;
@@ -49,6 +50,9 @@ export default function AppPanel(props: AppPanelProps) {
       this property on ios when using the document as main element and scrolling top and then dragging the top margin (like in a mobile refresh request) */
       data.bodyEl.style.top = `${data.headerHeight}px`;
       data.headerEl.style.top = `0px`;
+      /* const bodyHeight = data.parentHeight - data.headerHeight;
+      data.bodyEl.style.height = `${bodyHeight}px`;
+      data.bodyEl.style.marginBottom = "0px"; */
 
       if (props.scrolling) {
         props.scrolling(data, {
@@ -69,6 +73,9 @@ export default function AppPanel(props: AppPanelProps) {
 
       data.bodyEl.style.top = `${mainElTopOffset}px`;
       data.headerEl.style.top = `${headerElTopOffset}px`;
+      /* const bodyHeight = data.parentHeight - mainElTopOffset;
+      data.bodyEl.style.height = `${bodyHeight}px`;
+      data.bodyEl.style.marginBottom = `${mainElTopOffset}px`; */
 
       if (props.scrolling) {
         props.scrolling(data, {
@@ -80,10 +87,11 @@ export default function AppPanel(props: AppPanelProps) {
   }
 
   React.useEffect(() => {
-    const onResize = () => {
+    const onResize = (ev: UIEvent) => {
       const appBarDataValue = appPanelHeaderData.current;
 
       if (appBarDataValue) {
+        appBarDataValue.parentHeight = (ev.target as HTMLElement).clientHeight;
         scrollHandler(appBarDataValue);
       }
     }
@@ -114,6 +122,7 @@ export default function AppPanel(props: AppPanelProps) {
         headerEl: headerEl,
         bodyEl: mainEl,
         headerHeight: headerEl.clientHeight,
+        parentHeight: parentEl.clientHeight,
         bodyElLastScrollTop: mainEl.scrollTop,
         showHeaderNow: showHeaderToggled && props.showHeader
       };

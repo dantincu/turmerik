@@ -1,12 +1,12 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 
-export interface IndexDbBrowserAppBarContentProps {
+export interface IndexedDbBrowserAppBarContentProps {
   basePath: string;
 }
 
-export default function IndexDbBrowserAppBarContent(
-  props: IndexDbBrowserAppBarContentProps
+export default function IndexedDbBrowserAppBarContent(
+  props: IndexedDbBrowserAppBarContentProps
   ) {
   React.useEffect(() => {
 

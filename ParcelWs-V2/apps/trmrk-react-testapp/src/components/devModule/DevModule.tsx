@@ -13,8 +13,8 @@ import trmrk from "trmrk";
 import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbDemo from "../../pages/dev/indexedDbDemo/IndexedDbDemo";
 import IndexedDbDemoCreateDb from "../../pages/dev/indexedDbDemo/IndexedDbDemoCreateDb";
-import IndexDbBrowserAppBarContent from "../indexedDbBrowser/IndexDbBrowserAppBarContent";
-import IndexDbCreateDbAppBarContent from "../indexedDbBrowser/IndexDbCreateDbAppBarContent";
+import IndexedDbBrowserAppBarContent from "../indexedDbBrowser/IndexedDbBrowserAppBarContent";
+import IndexedDbCreateDbAppBarContent from "../indexedDbBrowser/IndexedDbCreateDbAppBarContent";
 
 import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
 import BasicAppModule from "trmrk-react/src/components/basicAppModule/BasicAppModule"
@@ -41,11 +41,11 @@ const getAppBarContents = (
     case "/indexeddb-browser":
       retNodes.push(<Link key={1} to={`${basePath}/indexeddb-browser/create-db`}>
         <IconButton className="trmrk-icon-btn"><span className="material-symbols-outlined">database</span></IconButton></Link>);
-      retNodes.push(<IndexDbBrowserAppBarContent key={2} basePath={basePath} />);
+      retNodes.push(<IndexedDbBrowserAppBarContent key={2} basePath={basePath} />);
       break;
     case "/indexeddb-browser/create-db":
       
-      retNodes.push(<IndexDbCreateDbAppBarContent key={3} />);
+      retNodes.push(<IndexedDbCreateDbAppBarContent key={3} />);
       break;
   }
 

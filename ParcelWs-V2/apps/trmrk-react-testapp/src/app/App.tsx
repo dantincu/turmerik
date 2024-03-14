@@ -17,8 +17,6 @@ import { TrmrkError } from "trmrk/src/TrmrkError";
 import { appDataSelectors, appDataReducers } from "../store/appDataSlice";
 import { appBarSelectors, appBarReducers } from "../store/appBarDataSlice";
 
-import "./App.scss";
-
 import HomePage from "../pages/home/HomePage";
 import ResizablesDemo from "../pages/resizablesDemo/ResizablesDemo";
 import DevModule from "../components/devModule/DevModule";

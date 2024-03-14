@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -7,14 +7,19 @@ import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import { FormGroup } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
 
-import { devModuleIndexedDbBrowserSelectors } from "../../store/devModuleIndexedDbBrowserSlice";
+import { devModuleIndexedDbBrowserSelectors, devModuleIndexedDbBrowserReducers } from "../../store/devModuleIndexedDbBrowserSlice";
+import IndexedDbCreateDbStore, { IndexedDbCreateDbStoreProps } from "./IndexedDbCreateDbStore";
 
-export interface IndexDbCreateDbProps {
+import { IndexedDbDatabase, IndexedDbStore } from "./models";
+
+export interface IndexedDbCreateDbProps {
 }
 
-export default function IndexDbCreateDb(
-  props: IndexDbCreateDbProps
+export default function IndexedDbCreateDb(
+  props: IndexedDbCreateDbProps
   ) {
   const [ dbName, setDbName ] = React.useState("");
   const [ dbNameErr, setDbNameErr ] = React.useState<string | null>(null);
@@ -22,10 +27,14 @@ export default function IndexDbCreateDb(
   const [ dbVersion, setDbVersion ] = React.useState<number | null>(1);
   const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
 
+  const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
+
   const createDbAddDatastoreReqsCount = useSelector(
     devModuleIndexedDbBrowserSelectors.getCreateDbAddDatastoreReqsCount);
 
   const createDbAddDatastoreReqsCountRef = React.useRef(0);
+
+  const dispatch = useDispatch();
 
   const dbNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbName = e.target.value;
@@ -51,12 +60,24 @@ export default function IndexDbCreateDb(
     }
   }
 
+  const addDbStoreClicked = () => {
+    dispatch(devModuleIndexedDbBrowserReducers.incCreateDbAddDatastoreReqsCount());
+  }
+
   React.useEffect(() => {
     if (createDbAddDatastoreReqsCount !== createDbAddDatastoreReqsCountRef.current) {
-      console.log("createDbAddDatastoreReqsCount", createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef.current);
+      // console.log("createDbAddDatastoreReqsCount", createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef.current);
       createDbAddDatastoreReqsCountRef.current = createDbAddDatastoreReqsCount;
+
+      const newDbStoresArr = [...dbStoresArr];
+
+      newDbStoresArr.push({
+        dbStoreName: ""
+      });
+
+      setDbStoresArr(newDbStoresArr);
     }
-  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef ]);
+  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr ]);
 
   return (<div className="trmrk-indexeddb-create-db">
     <FormGroup className="trmrk-form-group">
@@ -72,7 +93,9 @@ export default function IndexDbCreateDb(
       </FormControl>
     </FormGroup>
     <FormControl className="trmrk-form-field">
-    <Typography component="h2" variant="h5" className="trmrk-form-group-title">Db Stores</Typography>
+      <Typography component="h2" variant="h5" className="trmrk-form-group-title">
+        Db Stores <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton></Typography>
     </FormControl>
+    { dbStoresArr.map((dbStore, idx) => <IndexedDbCreateDbStore model={dbStore} key={idx} /> ) }
   </div>);
 }

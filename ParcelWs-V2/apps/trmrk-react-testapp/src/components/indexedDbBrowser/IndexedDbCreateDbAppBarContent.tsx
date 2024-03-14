@@ -6,13 +6,13 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { devModuleIndexedDbBrowserReducers } from "../../store/devModuleIndexedDbBrowserSlice";
 
-export interface IndexDbCreateDbAppBarContentProps {
+export interface IndexedDbCreateDbAppBarContentProps {
 }
 
-export default function IndexDbCreateDbAppBarContent(
-  props: IndexDbCreateDbAppBarContentProps
+export default function IndexedDbCreateDbAppBarContent(
+  props: IndexedDbCreateDbAppBarContentProps
   ) {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const addDbStoreClicked = () => {
     dispatch(devModuleIndexedDbBrowserReducers.incCreateDbAddDatastoreReqsCount());
