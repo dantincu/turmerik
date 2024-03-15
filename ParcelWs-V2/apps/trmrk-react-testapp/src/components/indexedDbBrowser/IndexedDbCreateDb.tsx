@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -9,6 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import { FormGroup } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
 import { devModuleIndexedDbBrowserSelectors, devModuleIndexedDbBrowserReducers } from "../../store/devModuleIndexedDbBrowserSlice";
@@ -17,6 +19,7 @@ import IndexedDbCreateDbStore, { IndexedDbCreateDbStoreProps } from "./IndexedDb
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 
 export interface IndexedDbCreateDbProps {
+  basePath: string
 }
 
 export default function IndexedDbCreateDb(
@@ -30,6 +33,10 @@ export default function IndexedDbCreateDb(
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
   const [ dbStoresErrIdxesArr, setDbStoresErrIdxesArr ] = React.useState<number[]>([]);
+
+  const [ formCanBeSubmitted, setFormCanBeSubmitted ] = React.useState(false);
+
+  const navigate = useNavigate();
 
   const createDbAddDatastoreReqsCount = useSelector(
     devModuleIndexedDbBrowserSelectors.getCreateDbAddDatastoreReqsCount);
@@ -68,21 +75,26 @@ export default function IndexedDbCreateDb(
 
   const refreshDbStoreErrIdxesArr = (idx: number, hasError: boolean) => {
     const idxOfIdx = dbStoresErrIdxesArr.indexOf(idx);
+    let newDbStoreErrIdxesArr: number[] | null = null;
 
     if (hasError) {
       if (idxOfIdx < 0) {
-        const newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
+        newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
         newDbStoreErrIdxesArr.push(idx);
         setDbStoresErrIdxesArr(newDbStoreErrIdxesArr);
       }
     } else {
       if (idxOfIdx >= 0) {
-        const newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
+        newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
         newDbStoreErrIdxesArr.splice(idxOfIdx, 1);
         setDbStoresErrIdxesArr(newDbStoreErrIdxesArr);
       }
     }
 
+    if (newDbStoreErrIdxesArr) {
+      setFormCanBeSubmitted(!!newDbStoreErrIdxesArr.length);
+    }
+    
     return idxOfIdx;
   }
 
@@ -116,6 +128,14 @@ export default function IndexedDbCreateDb(
     setDbStoresArr(newDbStoresArr);
   }
 
+  const onSaveClick = () => {
+
+  }
+
+  const onCancelClick = () => {
+    navigate(props.basePath);
+  }
+
   React.useEffect(() => {
     if (createDbAddDatastoreReqsCount !== createDbAddDatastoreReqsCountRef.current) {
       createDbAddDatastoreReqsCountRef.current = createDbAddDatastoreReqsCount;
@@ -131,10 +151,10 @@ export default function IndexedDbCreateDb(
       setDbStoresArr(newDbStoresArr);
     }
 
-    console.log("newDbStoreErrIdxesArr", dbStoresErrIdxesArr);
+    console.log("props.basePath", props.basePath);
   }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr, dbStoresErrIdxesArr ]);
 
-  return (<Paper className="trmrk-indexeddb-create-db">
+  return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
     <FormGroup className="trmrk-form-group">
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbName" required>Database name</InputLabel>
@@ -156,5 +176,9 @@ export default function IndexedDbCreateDb(
         dbStoreNameChanged={createDbStoreNameChangedHandler(idx)}
         autoIncrementChanged={createDbStoreAutoIncrementChangedHandler(idx)}
         keyPathChanged={createDbStoreKeyPathChangedHandler(idx)} /> ) }
+    <div className="trmrk-form-action-buttons">
+        <Button color="primary" onClick={onSaveClick}>Save</Button>
+        <Button color="secondary" onClick={onCancelClick}>Cancel</Button>
+    </div>
   </Paper>);
 }

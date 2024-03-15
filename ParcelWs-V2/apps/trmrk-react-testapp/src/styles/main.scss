@@ -46,7 +46,7 @@ body, #app-root {
   margin-top: 0em;
 }
 
-.trmrk-indexeddb-create-db {
+.trmrk-page-form {
   display: block;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -68,6 +68,12 @@ body, #app-root {
     width: 300px;
     margin-top: 1em;
     margin-left: 1em;
+  }
+
+  .trmrk-form-action-buttons {
+    display: block;
+    margin: 1em;
+    padding: 1em;
   }
 }
 
