@@ -66,13 +66,7 @@ export default function IndexedDbCreateDb(
     dispatch(devModuleIndexedDbBrowserReducers.incCreateDbAddDatastoreReqsCount());
   }
 
-  const createDbStoreNameChangedHandler = (idx: number) => (newDbStoreName: string, hasError: boolean) => {
-    const newDbStoresArr = [...dbStoresArr];
-    const dbStore = newDbStoresArr[idx];
-
-    dbStore.dbStoreName = newDbStoreName;
-    dbStore.hasError = hasError;
-
+  const refreshDbStoreErrIdxesArr = (idx: number, hasError: boolean) => {
     const idxOfIdx = dbStoresErrIdxesArr.indexOf(idx);
 
     if (hasError) {
@@ -89,6 +83,36 @@ export default function IndexedDbCreateDb(
       }
     }
 
+    return idxOfIdx;
+  }
+
+  const createDbStoreNameChangedHandler = (idx: number) => (newDbStoreName: string, hasError: boolean) => {
+    const newDbStoresArr = [...dbStoresArr];
+    const dbStore = newDbStoresArr[idx];
+
+    dbStore.dbStoreName = newDbStoreName;
+    dbStore.hasError = hasError;
+
+    refreshDbStoreErrIdxesArr(idx, hasError);
+    setDbStoresArr(newDbStoresArr);
+  }
+
+  const createDbStoreAutoIncrementChangedHandler = (idx: number) => (newAutoIncrement: boolean) => {
+    const newDbStoresArr = [...dbStoresArr];
+    const dbStore = newDbStoresArr[idx];
+
+    dbStore.autoIncrement = newAutoIncrement;
+    setDbStoresArr(newDbStoresArr);
+  };
+
+  const createDbStoreKeyPathChangedHandler = (idx: number) => (newKeyPath: string, hasError: boolean) => {
+    const newDbStoresArr = [...dbStoresArr];
+    const dbStore = newDbStoresArr[idx];
+
+    dbStore.keyPath = newKeyPath;
+    dbStore.hasError = hasError;
+
+    refreshDbStoreErrIdxesArr(idx, hasError);
     setDbStoresArr(newDbStoresArr);
   }
 
@@ -99,7 +123,9 @@ export default function IndexedDbCreateDb(
       const newDbStoresArr = [...dbStoresArr];
 
       newDbStoresArr.push({
-        dbStoreName: ""
+        dbStoreName: "",
+        autoIncrement: true,
+        keyPath: ""
       });
 
       setDbStoresArr(newDbStoresArr);
@@ -127,6 +153,8 @@ export default function IndexedDbCreateDb(
     </FormControl>
     { dbStoresArr.map((dbStore, idx) => <IndexedDbCreateDbStore
         model={dbStore} key={idx}
-        dbStoreNameChanged={createDbStoreNameChangedHandler(idx)} /> ) }
+        dbStoreNameChanged={createDbStoreNameChangedHandler(idx)}
+        autoIncrementChanged={createDbStoreAutoIncrementChangedHandler(idx)}
+        keyPathChanged={createDbStoreKeyPathChangedHandler(idx)} /> ) }
   </Paper>);
 }

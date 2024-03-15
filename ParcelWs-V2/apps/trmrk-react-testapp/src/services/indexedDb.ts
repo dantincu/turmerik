@@ -95,6 +95,9 @@ export const getObjectStoreNames = (db: IDBDatabase) =>
 
 export interface IDbIndexInfo {
   name: string;
+  keyPath: string | string[];
+  multiEntry: boolean;
+  unique: boolean;
 }
 
 export interface IDbObjectStoreInfo {
@@ -121,9 +124,12 @@ export const getObjectStoresInfoAgg = (db: IDBDatabase) => {
 };
 
 export const getObjectStoreIndexInfo = (index: IDBIndex) => {
-  const info = {
+  const info: IDbIndexInfo = {
     name: index.name,
-  } as IDbIndexInfo;
+    keyPath: index.keyPath,
+    multiEntry: index.multiEntry,
+    unique: index.unique,
+  };
 
   return info;
 };
