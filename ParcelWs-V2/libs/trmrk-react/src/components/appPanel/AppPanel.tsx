@@ -2,8 +2,6 @@ import React, { useRef } from "react";
 
 import "./AppPanel.scss";
 
-import { isIPadOrIphone, isAndroid, isMobile } from "../../constants";
-
 export interface AppPanelProps {
   className: string,
   headerClassName?: string | null | undefined,
@@ -19,6 +17,7 @@ export interface AppPanelProps {
   scrollableX?: boolean | null | undefined;
   scrolling?: (data: AppPanelHeaderData, offset: AppPanelHeaderOffset) => void;
   lastRefreshTmStmp?: Date | number | null | undefined;
+  bodyBottomPaddingFactor?: number | null | undefined;
 }
 
 export interface AppPanelHeaderData {
@@ -29,6 +28,7 @@ export interface AppPanelHeaderData {
   bodyElBeforeLastScrollTop: number;
   bodyElLastScrollTop: number;
   showHeaderNow: boolean;
+  bodyBottomPaddingFactor: number;
 }
 
 export interface AppPanelHeaderOffset {
@@ -56,7 +56,7 @@ export default function AppPanel(props: AppPanelProps) {
       data.headerEl.style.top = `0px`;
       /* const bodyHeight = data.parentHeight - data.headerHeight;
       data.bodyEl.style.height = `${bodyHeight}px`; */
-      if (isMobile) {
+      if (data.bodyBottomPaddingFactor > 0) {
         data.bodyEl.style.paddingBottom = "0px";
       }
 
@@ -81,12 +81,8 @@ export default function AppPanel(props: AppPanelProps) {
       data.headerEl.style.top = `${headerElTopOffset}px`;
       /* const bodyHeight = data.parentHeight - mainElTopOffset;
       data.bodyEl.style.height = `${bodyHeight}px`;*/
-      if (isMobile) {// This is needed to prevent the screen shaking upon scrolling to the bottom of the page on mobile devices
-        if (isIPadOrIphone) {
-          data.bodyEl.style.paddingBottom = `${2 * data.headerHeight}px`;
-        } else if (isAndroid) {
-          data.bodyEl.style.paddingBottom = `${data.headerHeight}px`;
-        }
+      if (data.bodyBottomPaddingFactor > 0) {// This is needed to prevent the screen shaking upon scrolling to the bottom of the page on mobile devices
+        data.bodyEl.style.paddingBottom = `${data.bodyBottomPaddingFactor * data.headerHeight}px`;
       }
 
       if (props.scrolling) {
@@ -137,7 +133,8 @@ export default function AppPanel(props: AppPanelProps) {
         parentHeight: parentEl.clientHeight,
         bodyElBeforeLastScrollTop: mainEl.scrollTop,
         bodyElLastScrollTop: mainEl.scrollTop,
-        showHeaderNow: showHeaderToggled && props.showHeader
+        showHeaderNow: showHeaderToggled && props.showHeader,
+        bodyBottomPaddingFactor: props.bodyBottomPaddingFactor ?? 0
       };
 
       scrollHandler(appPanelHeaderData.current);
@@ -169,7 +166,17 @@ export default function AppPanel(props: AppPanelProps) {
         mainEl.removeEventListener("scroll", onScroll);
       };
     }
-  }, [ props.showHeader, showHeader, props.pinHeader, props.lastRefreshTmStmp, props.headerHeight, appPanelHeaderData, parentRef, headerRef, bodyRef ]);
+  }, [
+    props.showHeader,
+    showHeader,
+    props.pinHeader,
+    props.lastRefreshTmStmp,
+    props.headerHeight,
+    appPanelHeaderData,
+    parentRef,
+    headerRef,
+    bodyRef,
+    props.bodyBottomPaddingFactor ]);
 
   return (<div className={["trmrk-app-panel", props.className].join(" ")} ref={parentRef}>
     { (props.headerContent && props.showHeader) ?
