@@ -54,8 +54,7 @@ export default function AppPanel(props: AppPanelProps) {
       data.bodyElLastScrollTop = 0;
       data.bodyEl.style.top = `${data.headerHeight}px`;
       data.headerEl.style.top = `0px`;
-      /* const bodyHeight = data.parentHeight - data.headerHeight;
-      data.bodyEl.style.height = `${bodyHeight}px`; */
+      
       if (data.bodyBottomPaddingFactor > 0) {
         data.bodyEl.style.paddingBottom = "0px";
       }
@@ -79,8 +78,7 @@ export default function AppPanel(props: AppPanelProps) {
 
       data.bodyEl.style.top = `${mainElTopOffset}px`;
       data.headerEl.style.top = `${headerElTopOffset}px`;
-      /* const bodyHeight = data.parentHeight - mainElTopOffset;
-      data.bodyEl.style.height = `${bodyHeight}px`;*/
+
       if (data.bodyBottomPaddingFactor > 0) {// This is needed to prevent the screen shaking upon scrolling to the bottom of the page on mobile devices
         data.bodyEl.style.paddingBottom = `${data.bodyBottomPaddingFactor * data.headerHeight}px`;
       }

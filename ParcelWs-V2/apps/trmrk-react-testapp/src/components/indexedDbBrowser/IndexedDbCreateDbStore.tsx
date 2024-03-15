@@ -12,6 +12,7 @@ import { IndexedDbDatabase, IndexedDbStore } from "./models";
 
 export interface IndexedDbCreateDbStoreProps {
   model: IndexedDbStore;
+  dbStoreNameChanged: (newDbStoreName: string, hasError: boolean) => void;
 }
 
 export default function IndexedDbCreateDbStore(
@@ -23,12 +24,16 @@ export default function IndexedDbCreateDbStore(
   const dbStoreNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbStoreName = e.target.value;
     setDbStoreName(newDbStoreName);
+    let newDbStoreNameErr: string | null = null;
 
     if (newDbStoreName.length === 0) {
-      setDbStoreNameErr("The DB Store name is required");
+      newDbStoreNameErr = "The DB Store name is required"
     } else {
-      setDbStoreNameErr(null);
+      newDbStoreNameErr = null
     }
+
+    setDbStoreNameErr(newDbStoreNameErr);
+    props.dbStoreNameChanged(newDbStoreName, !!newDbStoreNameErr);
   }
 
   React.useEffect(() => {

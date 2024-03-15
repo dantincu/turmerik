@@ -29,6 +29,7 @@ export default function IndexedDbCreateDb(
   const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
+  const [ dbStoresErrIdxesArr, setDbStoresErrIdxesArr ] = React.useState<number[]>([]);
 
   const createDbAddDatastoreReqsCount = useSelector(
     devModuleIndexedDbBrowserSelectors.getCreateDbAddDatastoreReqsCount);
@@ -65,9 +66,34 @@ export default function IndexedDbCreateDb(
     dispatch(devModuleIndexedDbBrowserReducers.incCreateDbAddDatastoreReqsCount());
   }
 
+  const createDbStoreNameChangedHandler = (idx: number) => (newDbStoreName: string, hasError: boolean) => {
+    const newDbStoresArr = [...dbStoresArr];
+    const dbStore = newDbStoresArr[idx];
+
+    dbStore.dbStoreName = newDbStoreName;
+    dbStore.hasError = hasError;
+
+    const idxOfIdx = dbStoresErrIdxesArr.indexOf(idx);
+
+    if (hasError) {
+      if (idxOfIdx < 0) {
+        const newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
+        newDbStoreErrIdxesArr.push(idx);
+        setDbStoresErrIdxesArr(newDbStoreErrIdxesArr);
+      }
+    } else {
+      if (idxOfIdx >= 0) {
+        const newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
+        newDbStoreErrIdxesArr.splice(idxOfIdx, 1);
+        setDbStoresErrIdxesArr(newDbStoreErrIdxesArr);
+      }
+    }
+
+    setDbStoresArr(newDbStoresArr);
+  }
+
   React.useEffect(() => {
     if (createDbAddDatastoreReqsCount !== createDbAddDatastoreReqsCountRef.current) {
-      // console.log("createDbAddDatastoreReqsCount", createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef.current);
       createDbAddDatastoreReqsCountRef.current = createDbAddDatastoreReqsCount;
 
       const newDbStoresArr = [...dbStoresArr];
@@ -78,7 +104,9 @@ export default function IndexedDbCreateDb(
 
       setDbStoresArr(newDbStoresArr);
     }
-  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr ]);
+
+    console.log("newDbStoreErrIdxesArr", dbStoresErrIdxesArr);
+  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr, dbStoresErrIdxesArr ]);
 
   return (<Paper className="trmrk-indexeddb-create-db">
     <FormGroup className="trmrk-form-group">
@@ -97,6 +125,8 @@ export default function IndexedDbCreateDb(
       <Typography component="h2" variant="h5" className="trmrk-form-group-title">
         Db Stores <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton></Typography>
     </FormControl>
-    { dbStoresArr.map((dbStore, idx) => <IndexedDbCreateDbStore model={dbStore} key={idx} /> ) }
+    { dbStoresArr.map((dbStore, idx) => <IndexedDbCreateDbStore
+        model={dbStore} key={idx}
+        dbStoreNameChanged={createDbStoreNameChangedHandler(idx)} /> ) }
   </Paper>);
 }
