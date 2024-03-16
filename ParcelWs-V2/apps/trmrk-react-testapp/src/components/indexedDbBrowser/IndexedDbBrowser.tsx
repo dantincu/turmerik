@@ -22,13 +22,20 @@ declare module 'react' {
 }
 
 type StyledTreeItemProps = TreeItemProps & {
+  idx: number;
+  lvlIdx: number;
   bgColor?: string;
   bgColorForDarkMode?: string;
+  borderColor?: string;
+  borderColorForDarkMode?: string;
+  borderAltColor?: string;
+  borderAltColorForDarkMode?: string;
   color?: string;
   colorForDarkMode?: string;
   labelIcon?: React.ElementType<SvgIconProps> | null | undefined;
   labelIconEl?: HTMLElement | null | undefined;
   labelText: string;
+  labelWeight?: "bold" | "regular" | null | undefined
 };
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
@@ -66,6 +73,12 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
 ) {
   const theme = useTheme();
   const {
+    idx,
+    lvlIdx,
+    borderColor,
+    borderColorForDarkMode,
+    borderAltColor,
+    borderAltColorForDarkMode,
     bgColor,
     color,
     labelIcon: LabelIcon,
@@ -73,14 +86,23 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
     labelText,
     colorForDarkMode,
     bgColorForDarkMode,
+    labelWeight,
     ...other
   } = props;
 
+  const isLightMode = theme.palette.mode !== 'dark';
+  console.log("isLightMode", isLightMode);
+
   const styleProps = {
-    '--tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
-    '--tree-view-bg-color':
-      theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
+    '--tree-view-color': isLightMode ? color : colorForDarkMode,
+    '--tree-view-bg-color': isLightMode ? bgColor : bgColorForDarkMode,
   };
+
+  const bottomBorderColor = isLightMode ? borderColor : borderColorForDarkMode;
+  console.log("bottomBorderColor", bottomBorderColor, borderColor, borderColorForDarkMode);
+  const bottomBorderAltColor = isLightMode ? borderAltColor : borderAltColorForDarkMode;
+  const bottomBorderColorValue = (idx % 2) === (lvlIdx % 2) ? bottomBorderColor : bottomBorderAltColor;
+  console.log("bottomBorderColorValue", bottomBorderColorValue);
 
   return (
     <StyledTreeItemRoot
@@ -94,11 +116,20 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
           }}
         >
           { LabelIcon ? <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} /> : labelIconEl }
-          <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+          <Typography variant="body2" sx={{ fontWeight: labelWeight ?? 'inherit', flexGrow: 1,
+            height: "1.66em", borderBottom: `1px solid ${bottomBorderColorValue}` }}>
             {labelText}
           </Typography>
-        </Box>
-      }
+          { /* <Box className='trmrk-border' sx={{
+            display: "block",
+            position: "absolute",
+            height: "1px",
+            top: "2em",
+            left: "0em",
+            right: "0em",
+            backgroundColor: bottomBorderColorValue }}></Box> */ }
+          </Box>
+        }
       style={styleProps}
       {...other}
       ref={ref}
@@ -157,15 +188,22 @@ export default function IndexedDbBrowser(
     </Paper>
     <div className={['trmrk-pinned-top-bar-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")} ref={pinnedTopBarBgSpacerRef}>
     </div>
-    { databases ? <TreeView
+    { databases ? <TreeView className="trmrk-tree-view trmrk-indexeddb-tree-view"
         defaultCollapseIcon={<ArrowDropDownIcon />}
         defaultExpandIcon={<ArrowRightIcon />}
-        sx={{ flexGrow: 1, minWidth: "100%", overflowY: 'auto' }}>
-      { databases.map(db => <StyledTreeItem
+        sx={{ flexGrow: 1, minWidth: "100%" }}>
+      { databases.map((db, idx) => <StyledTreeItem
+          idx={idx}
+          lvlIdx={0}
+          borderColor="#bb8"
+          borderColorForDarkMode='#440'
+          borderAltColor="#dd8"
+          borderAltColorForDarkMode='#220'
+          labelWeight="bold"
           nodeId={db.name ?? ""}
           key={db.name}
           labelText={db.name ?? ""}
-          labelIconEl={<span className="material-symbols-outlined">database</span>}>
+          labelIconEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>}>
         <span className='trmrk-parent-not-leaf-node'></span>
       </StyledTreeItem>) }
     </TreeView> : null }

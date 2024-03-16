@@ -131,6 +131,11 @@ body, #app-root {
 }
 
 .trmrk-indexeddb-browser {
+  .trmrk-indexeddb-tree-view {
+    .trmrk-icon-database {
+      color: #880;
+    }
+  }
 }
 
 .trmrk-indexeddb-create-dbstore {
