@@ -32,8 +32,6 @@ export default function IndexedDbCreateDb(
   const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
-  const [ dbStoresErrIdxesArr, setDbStoresErrIdxesArr ] = React.useState<number[]>([]);
-
   const [ formCanBeSubmitted, setFormCanBeSubmitted ] = React.useState(false);
 
   const navigate = useNavigate();
@@ -49,53 +47,55 @@ export default function IndexedDbCreateDb(
     const newDbName = e.target.value;
     setDbName(newDbName);
 
+    let dbNameErr: string | null = null;
+
     if (newDbName.length === 0) {
-      setDbNameErr("The database name is required");
-    } else {
-      setDbNameErr(null);
+      dbNameErr = "The database name is required";
     }
+
+    setDbNameErr(dbNameErr);
+
+    refreshFormCanBeSubmitted(
+      dbNameErr,
+      dbVersionErr,
+      dbStoresArr);
   }
 
   const dbVersionChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbVersionStr = e.target.value;
+    let dbVersionErr: string | null = null;
 
     if (newDbVersionStr.length > 0) {
       const newDbversion = parseFloat(newDbVersionStr);
       setDbVersion(newDbversion);
-      setDbVersionErr(null);
+
+      if (newDbversion <= 0) {
+        dbVersionErr = "The database version must be a positive number";
+      }
     } else {
       setDbVersion(null);
-      setDbVersionErr("The database version number is required");
+      dbVersionErr = "The database version number is required";
     }
+
+    setDbVersionErr(dbVersionErr);
+
+    refreshFormCanBeSubmitted(
+      dbNameErr,
+      dbVersionErr,
+      dbStoresArr);
   }
 
   const addDbStoreClicked = () => {
     dispatch(devModuleIndexedDbBrowserReducers.incCreateDbAddDatastoreReqsCount());
+    setFormCanBeSubmitted(false);
   }
 
-  const refreshDbStoreErrIdxesArr = (idx: number, hasError: boolean) => {
-    const idxOfIdx = dbStoresErrIdxesArr.indexOf(idx);
-    let newDbStoreErrIdxesArr: number[] | null = null;
+  const refreshFormCanBeSubmitted = (dbNameErr: string | null, dbVersionErr: string | null, dbStoresArr: IndexedDbStore[]) => {
+    const newFormCanBeSubmitted = !dbNameErr && !dbVersionErr && !dbStoresArr.find(store => store.hasError);
 
-    if (hasError) {
-      if (idxOfIdx < 0) {
-        newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
-        newDbStoreErrIdxesArr.push(idx);
-        setDbStoresErrIdxesArr(newDbStoreErrIdxesArr);
-      }
-    } else {
-      if (idxOfIdx >= 0) {
-        newDbStoreErrIdxesArr = [...dbStoresErrIdxesArr];
-        newDbStoreErrIdxesArr.splice(idxOfIdx, 1);
-        setDbStoresErrIdxesArr(newDbStoreErrIdxesArr);
-      }
+    if (newFormCanBeSubmitted !== formCanBeSubmitted) {
+      setFormCanBeSubmitted(newFormCanBeSubmitted);
     }
-
-    if (newDbStoreErrIdxesArr) {
-      setFormCanBeSubmitted(!!newDbStoreErrIdxesArr.length);
-    }
-    
-    return idxOfIdx;
   }
 
   const createDbStoreNameChangedHandler = (idx: number) => (newDbStoreName: string, hasError: boolean) => {
@@ -105,7 +105,11 @@ export default function IndexedDbCreateDb(
     dbStore.dbStoreName = newDbStoreName;
     dbStore.hasError = hasError;
 
-    refreshDbStoreErrIdxesArr(idx, hasError);
+    refreshFormCanBeSubmitted(
+      dbNameErr,
+      dbVersionErr,
+      dbStoresArr);
+
     setDbStoresArr(newDbStoresArr);
   }
 
@@ -124,7 +128,11 @@ export default function IndexedDbCreateDb(
     dbStore.keyPath = newKeyPath;
     dbStore.hasError = hasError;
 
-    refreshDbStoreErrIdxesArr(idx, hasError);
+    refreshFormCanBeSubmitted(
+      dbNameErr,
+      dbVersionErr,
+      dbStoresArr);
+      
     setDbStoresArr(newDbStoresArr);
   }
 
@@ -145,14 +153,14 @@ export default function IndexedDbCreateDb(
       newDbStoresArr.push({
         dbStoreName: "",
         autoIncrement: true,
-        keyPath: ""
+        keyPath: "",
+        hasError: true
       });
 
       setDbStoresArr(newDbStoresArr);
     }
 
-    console.log("props.basePath", props.basePath);
-  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr, dbStoresErrIdxesArr ]);
+  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr, formCanBeSubmitted ]);
 
   return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
     <FormGroup className="trmrk-form-group">
@@ -163,7 +171,9 @@ export default function IndexedDbCreateDb(
       </FormControl>
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbVersion" required>Database version number</InputLabel>
-        <Input name="dbVersion" type="number" onChange={dbVersionChanged} value={dbVersion} fullWidth />
+        <Input name="dbVersion" type="number" onChange={dbVersionChanged} value={dbVersion} fullWidth inputProps={{
+          min: 1,
+        }} />
         { typeof dbVersionErr === "string" ? <FormHelperText error>{dbVersionErr}</FormHelperText> : null }
       </FormControl>
     </FormGroup>
@@ -176,9 +186,9 @@ export default function IndexedDbCreateDb(
         dbStoreNameChanged={createDbStoreNameChangedHandler(idx)}
         autoIncrementChanged={createDbStoreAutoIncrementChangedHandler(idx)}
         keyPathChanged={createDbStoreKeyPathChangedHandler(idx)} /> ) }
-    <div className="trmrk-form-action-buttons">
-        <Button color="primary" onClick={onSaveClick}>Save</Button>
-        <Button color="secondary" onClick={onCancelClick}>Cancel</Button>
+    <div className="trmrk-buttons-group">
+        <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick} disabled={!formCanBeSubmitted}>Save</Button>
+        <Button onClick={onCancelClick}>Cancel</Button>
     </div>
   </Paper>);
 }

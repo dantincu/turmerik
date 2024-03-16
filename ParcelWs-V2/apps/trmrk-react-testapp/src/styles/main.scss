@@ -9,6 +9,14 @@ body, #app-root {
   border-radius: 3px;
 }
 
+.trmrk-btn.trmrk-btn-text {
+  color: white;
+}
+
+.trmrk-btn.trmrk-btn-text.trmrk-btn-text-primary {
+  background-color: #00F;
+}
+
 .my-resizable-panel {
   background-color: chocolate;
   width: 200px;
@@ -70,10 +78,14 @@ body, #app-root {
     margin-left: 1em;
   }
 
-  .trmrk-form-action-buttons {
+  .trmrk-buttons-group {
     display: block;
     margin: 1em;
     padding: 1em;
+
+    .trmrk-btn.trmrk-btn-text {
+      margin-right: 1em;
+    }
   }
 }
 

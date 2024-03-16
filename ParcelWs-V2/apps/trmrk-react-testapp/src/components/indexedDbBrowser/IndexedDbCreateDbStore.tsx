@@ -64,7 +64,6 @@ export default function IndexedDbCreateDbStore(
   }
 
   React.useEffect(() => {
-
   }, [ props.model.dbStoreName, dbStoreNameErr, props.model.autoIncrement, props.model.keyPath, keyPathErr ] );
 
   return (<div className="trmrk-indexeddb-create-dbstore">
