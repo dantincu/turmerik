@@ -18,6 +18,16 @@ import IndexedDbCreateDbStore, { IndexedDbCreateDbStoreProps } from "./IndexedDb
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 
+import {
+  attachDefaultHandlersToDbOpenRequest,
+  dfDatabaseOpenErrMsg,
+  dfDatabaseNameValidationMsg,
+  getDfDatabaseNumberValidationMsg,
+  dfDatabaseNumberValidationMsg,
+  IDbObjectStoreInfo,
+  getCreateDbRequestErrMsg
+} from "../../services/indexedDb";
+
 export interface IndexedDbCreateDbProps {
   basePath: string
 }
@@ -34,13 +44,16 @@ export default function IndexedDbCreateDb(
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
   const [ formCanBeSubmitted, setFormCanBeSubmitted ] = React.useState(false);
 
+  const [ saving, setSaving ] = React.useState(false);
+  const [ error, setError ] = React.useState<string | null>(null);
+  const [ warning, setWarning ] = React.useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const createDbAddDatastoreReqsCount = useSelector(
     devModuleIndexedDbBrowserSelectors.getCreateDbAddDatastoreReqsCount);
 
   const createDbAddDatastoreReqsCountRef = React.useRef(0);
-
   const dispatch = useDispatch();
 
   const dbNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,12 +145,67 @@ export default function IndexedDbCreateDb(
       dbNameErr,
       dbVersionErr,
       dbStoresArr);
-      
+
     setDbStoresArr(newDbStoresArr);
   }
 
   const onSaveClick = () => {
+    setError(null);
+    setWarning(null);
 
+    let hasError = false;
+
+    const addedStores = dbStoresArr.map(
+      store => store);
+
+    if (addedStores.find(obj => obj.hasError)) {
+      hasError = true;
+      setError("Please fix the current errors before submiting the changes");
+    } else {
+      setSaving(true);
+      var req = indexedDB.open(dbName, dbVersion ?? undefined);
+
+      attachDefaultHandlersToDbOpenRequest(req, dfDatabaseOpenErrMsg, success => {
+        if (success) {
+          let errMsg: string | null = null;
+
+          try {
+            req.result.close();
+          } catch (err) {
+            hasError = true;
+            errMsg = (err as Error).message ?? "Could not close the database connection";
+          }
+          
+          setWarning(null);
+          setError(errMsg);
+          navigate(`${props.basePath}/edit-db?showCreateSuccessMsg=true`);
+        } else {
+          setWarning(null);
+        }
+
+        setSaving(false);
+      }, errMsg => {
+        hasError = true;
+        setError(errMsg);
+      }, warnMsg => {
+        setWarning(warnMsg);
+      }, e => {
+        try {
+          const db = req.result;
+
+          for (let store of addedStores) {
+            db.createObjectStore(store.dbStoreName, {
+              keyPath: store.keyPath,
+              autoIncrement: store.autoIncrement,
+            });
+          }
+        } catch (err) {
+          hasError = true;
+          const errMsg = (err as Error).message ?? "Could not upgrade the database";
+          setError(errMsg);
+        }
+      });
+    }
   }
 
   const onCancelClick = () => {
@@ -187,7 +255,7 @@ export default function IndexedDbCreateDb(
         autoIncrementChanged={createDbStoreAutoIncrementChangedHandler(idx)}
         keyPathChanged={createDbStoreKeyPathChangedHandler(idx)} /> ) }
     <div className="trmrk-buttons-group">
-        <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick} disabled={!formCanBeSubmitted}>Save</Button>
+        <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>
         <Button onClick={onCancelClick}>Cancel</Button>
     </div>
   </Paper>);

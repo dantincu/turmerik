@@ -2,6 +2,7 @@ import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 import MailIcon from '@mui/icons-material/Mail';
 import CircleIcon from '@mui/icons-material/Circle';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
@@ -16,6 +17,8 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem, TreeItemProps, treeItemClasses } from '@mui/x-tree-view/TreeItem';
+
+import LoadingDotPulse from '../loading/LoadingDotPulse';
 
 // Code taken from https://mui.com/x/react-tree-view
 
@@ -114,18 +117,34 @@ export interface IndexedDbBrowserProps {
 
 export default function IndexedDbBrowser(
   props: IndexedDbBrowserProps) {
+
+  const [ isLoadingRoot, setIsLoadingRoot ] = React.useState(false);
+  const pinnedTopRowRef = React.createRef<HTMLDivElement>();
+
+  React.useEffect(() =>{
+    setIsLoadingRoot(true);
+  }, [ isLoadingRoot ]);
+
   return (<div className="trmrk-indexeddb-browser">
+    <Paper className={['trmrk-pinned-top-row', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")} ref={pinnedTopRowRef}>
+      <span className='trmrk-hcy-root-token'>&#47;</span>
+      { isLoadingRoot ? <LoadingDotPulse /> : null }
+    </Paper>
+    <div className={['trmrk-pinned-top-row-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
+    </div>
     <TreeView
       aria-label="indexeddb"
-      defaultExpanded={['3']}
+      defaultExpanded={[]/* ['3'] */}
       defaultCollapseIcon={<ArrowDropDownIcon />}
       defaultExpandIcon={<ArrowRightIcon />}
       defaultParentIcon={/* <div style={{ width: 24 }}><CircleIcon /></div> */ null }
       defaultEndIcon={/* <div style={{ width: 24 }}><CircleOutlinedIcon /></div> */ null }
-      sx={{ height: 264, flexGrow: 1, minWidth: "100%", overflowY: 'auto' }}
+      sx={{ flexGrow: 1, minWidth: "100%", overflowY: 'auto' }}
     >
       <StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
-      <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
+      <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon}>
+        <span></span>
+      </StyledTreeItem>
       <StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
         <StyledTreeItem
           nodeId="5"
@@ -164,6 +183,63 @@ export default function IndexedDbBrowser(
           bgColorForDarkMode="#0C130D"
         />
       </StyledTreeItem>
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
+      <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
       <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} />
     </TreeView>
   </div>);
