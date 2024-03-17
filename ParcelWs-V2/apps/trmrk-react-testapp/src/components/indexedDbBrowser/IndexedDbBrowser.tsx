@@ -22,16 +22,20 @@ declare module 'react' {
 }
 
 type StyledTreeItemProps = TreeItemProps & {
+  className?: string | null | undefined;
   idx: number;
   lvlIdx: number;
   bgColor?: string;
   bgColorForDarkMode?: string;
-  borderColor?: string;
-  borderColorForDarkMode?: string;
-  borderAltColor?: string;
-  borderAltColorForDarkMode?: string;
+  border?: string | null | undefined;
+  borderColor?: string | null | undefined;
+  borderColorForDarkMode?: string | null | undefined;
+  borderAltColor?: string | null | undefined;
+  borderAltColorForDarkMode?: string | null | undefined;
   color?: string;
   colorForDarkMode?: string;
+  labelColor?: string;
+  labelColorForDarkMode?: string;
   labelIcon?: React.ElementType<SvgIconProps> | null | undefined;
   labelIconEl?: HTMLElement | null | undefined;
   labelText: string;
@@ -75,6 +79,7 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
   const {
     idx,
     lvlIdx,
+    border,
     borderColor,
     borderColorForDarkMode,
     borderAltColor,
@@ -86,23 +91,29 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
     labelText,
     colorForDarkMode,
     bgColorForDarkMode,
+    labelColor,
+    labelColorForDarkMode,
     labelWeight,
     ...other
   } = props;
 
   const isLightMode = theme.palette.mode !== 'dark';
-  console.log("isLightMode", isLightMode);
 
   const styleProps = {
     '--tree-view-color': isLightMode ? color : colorForDarkMode,
     '--tree-view-bg-color': isLightMode ? bgColor : bgColorForDarkMode,
   };
 
-  const bottomBorderColor = isLightMode ? borderColor : borderColorForDarkMode;
-  console.log("bottomBorderColor", bottomBorderColor, borderColor, borderColorForDarkMode);
-  const bottomBorderAltColor = isLightMode ? borderAltColor : borderAltColorForDarkMode;
-  const bottomBorderColorValue = (idx % 2) === (lvlIdx % 2) ? bottomBorderColor : bottomBorderAltColor;
-  console.log("bottomBorderColorValue", bottomBorderColorValue);
+  let bottomBorder = "";
+
+  if (border) {
+    const bottomBorderColor = isLightMode ? borderColor : borderColorForDarkMode;
+    const bottomBorderAltColor = isLightMode ? borderAltColor : borderAltColorForDarkMode;
+    const bottomBorderColorValue = (idx % 2) === (lvlIdx % 2) ? bottomBorderColor : bottomBorderAltColor;
+    bottomBorder = `${border} ${bottomBorderColorValue}`;
+  }
+
+  const labelColorValue = isLightMode ? labelColor : labelColorForDarkMode;
 
   return (
     <StyledTreeItemRoot
@@ -116,8 +127,8 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
           }}
         >
           { LabelIcon ? <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} /> : labelIconEl }
-          <Typography variant="body2" sx={{ fontWeight: labelWeight ?? 'inherit', flexGrow: 1,
-            height: "1.66em", borderBottom: `1px solid ${bottomBorderColorValue}` }}>
+          <Typography className='trmrk-label' variant="body2" sx={{ fontWeight: labelWeight ?? 'inherit', flexGrow: 1,
+            height: "1.66em", borderBottom: bottomBorder, color: labelColorValue ?? "" }}>
             {labelText}
           </Typography>
           { /* <Box className='trmrk-border' sx={{
@@ -165,6 +176,7 @@ export default function IndexedDbBrowser(
   const loadDatabases = () => {
     setIsLoadingRoot(true);
     indexedDB.databases().then(databases => {
+      databases.sort((a, b) => a.name!.localeCompare(b.name!));
       setDatabases(databases);
     }, reason => {
       setError(reason);
@@ -189,16 +201,16 @@ export default function IndexedDbBrowser(
     <div className={['trmrk-pinned-top-bar-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")} ref={pinnedTopBarBgSpacerRef}>
     </div>
     { databases ? <TreeView className="trmrk-tree-view trmrk-indexeddb-tree-view"
-        defaultCollapseIcon={<ArrowDropDownIcon />}
-        defaultExpandIcon={<ArrowRightIcon />}
+        defaultCollapseIcon={<ArrowDropDownIcon className='trmrk-mat-icon trmrk-mat-icon-arrow-drop-down' />}
+        defaultExpandIcon={<ArrowRightIcon className='trmrk-mat-icon trmrk-mat-icon-arrow-right' />}
         sx={{ flexGrow: 1, minWidth: "100%" }}>
       { databases.map((db, idx) => <StyledTreeItem
+          className='trmrk-tree-node trmrk-indexeddb-tree-node'
           idx={idx}
           lvlIdx={0}
-          borderColor="#bb8"
-          borderColorForDarkMode='#440'
-          borderAltColor="#dd8"
-          borderAltColorForDarkMode='#220'
+          border="1px none"
+          labelColor='#880'
+          labelColorForDarkMode='#880'
           labelWeight="bold"
           nodeId={db.name ?? ""}
           key={db.name}

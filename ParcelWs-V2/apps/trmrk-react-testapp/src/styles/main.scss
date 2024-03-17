@@ -17,7 +17,9 @@ body, #app-root {
   background-color: #00F;
 }
 
-.trmrk-panel {  
+.trmrk-panel {
+  width: 100%;
+
   .trmrk-pinned-top-bar-bg-spacer {
     display: block;
     position: relative;
@@ -131,10 +133,37 @@ body, #app-root {
 }
 
 .trmrk-indexeddb-browser {
-  .trmrk-indexeddb-tree-view {
-    .trmrk-icon-database {
+  .trmrk-indexeddb-tree-node {
+    .trmrk-icon-database, .trmrk-mat-icon-arrow-drop-down, .trmrk-mat-icon-arrow-right {
       color: #880;
     }
+  }
+}
+
+.trmrk-tree-view {
+  width: 100%;
+    overflow: visible;
+}
+
+.trmrk-tree-node {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve-spaces;
+  line-break: auto;
+  overflow: visible;
+
+  .trmrk-label {
+    display: flex;
+    flex-wrap: nowrap;
+    text-wrap: nowrap;
+    word-break: keep-all;
+    white-space-collapse: preserve-spaces;
+    line-break: auto;
+    overflow: visible;
+    flex-shrink: 0;
   }
 }
 

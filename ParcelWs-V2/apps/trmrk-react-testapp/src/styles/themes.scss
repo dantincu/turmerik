@@ -5,11 +5,27 @@
     background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
     background-color: #121212;
   }
+ 
+  .trmrk-indexeddb-browser {
+    .trmrk-indexeddb-tree-node {
+      .trmrk-icon-database {
+        color: #660;
+      }
+    }
+  }
 }
 
 .trmrk-theme-light {
   .trmrk-app-bar-toggle-icon, .trmrk-app-bar-toggle-icon:hover {
     color: #FFF;
     background-color: #1976d2;
+  }
+ 
+  .trmrk-indexeddb-browser {
+    .trmrk-indexeddb-tree-node {
+      .trmrk-icon-database {
+        color: #aa0;
+      }
+    }
   }
 }
