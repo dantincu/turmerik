@@ -24,9 +24,9 @@ export default function AppearenceSettingsMenuList(
   React.useEffect(() => {
   }, [ props.isCompactMode, props.isDarkMode ]);
 
-  return (<MenuList dense className={[ "trmrk-menu-list", props.className ?? ""].join(" ")}>
+  return (<MenuList className={[ "trmrk-menu-list", props.className ?? ""].join(" ")}>
     <MenuItem onClick={props.appearenceMenuClosed}>
-      <IconButton className="trmrk-icon-btn" className="trmrk-icon-btn">
+      <IconButton className="trmrk-icon-btn">
         <ArrowLeftIcon />
       </IconButton>
     </MenuItem>

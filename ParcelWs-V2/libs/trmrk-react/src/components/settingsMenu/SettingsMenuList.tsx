@@ -24,7 +24,7 @@ export default function SettingsMenuList(
   return (
     <MenuList className={[ "trmrk-menu-list", props.className ?? ""].join(" ")}>
       { props.children }
-      <MenuItem dense onClick={props.appearenceMenuOpen}>
+      <MenuItem onClick={props.appearenceMenuOpen}>
         Appearence
         <IconButton ref={appearenceAnchorEl} className="trmrk-icon-btn">
           <ArrowRightIcon />

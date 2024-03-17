@@ -20,7 +20,7 @@ export interface TrmrkTreeNodeProps<TTreeNodeState extends TrmrkTreeNodeState> {
   collapseNodeEl?: React.ReactNode | null | undefined;
   iconNodeEl: React.ReactNode;
   expandedToggled?: ((state: TTreeNodeState) => void) | null | undefined;
-  nodeClicked: (state: TTreeNodeState, location: TrmrkTreeNodeClickLocation) => boolean | null | undefined | void;
+  nodeClicked: (state: TTreeNodeState, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => boolean | null | undefined | void;
 }
 
 export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>(
@@ -28,6 +28,8 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
 ) {
   const [ isExpanded, setIsExpanded ] = React.useState(props.state.isExpanded);
   const [ isCurrent, setisCurrent ] = React.useState(props.state.isCurrent);
+
+  const labelRef = React.createRef<HTMLDivElement>();
 
   const expandedToggled = () => {
     const isExpandedNewVal = !isExpanded;
@@ -45,7 +47,9 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
     if (!props.nodeClicked({
       ...props.state,
       isCurrent: true
-    }, TrmrkTreeNodeClickLocation.Icon)) {
+    },
+    labelRef.current!,
+    TrmrkTreeNodeClickLocation.Icon)) {
       setisCurrent(true);
     }
   }
@@ -54,7 +58,9 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
     if (!props.nodeClicked({
       ...props.state,
       isCurrent: true
-    }, TrmrkTreeNodeClickLocation.Label)) {
+    },
+    labelRef.current!,
+    TrmrkTreeNodeClickLocation.Label)) {
       setisCurrent(true);
     }
   }
@@ -88,7 +94,7 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
     <Box className="trmrk-tree-node-icon" onClick={iconClicked}>
       { props.iconNodeEl }
     </Box>
-    <Box className="trmrk-tree-node-label" onClick={labelClicked}>
+    <Box className="trmrk-tree-node-label" onClick={labelClicked} ref={labelRef}>
       { props.state.nodeLabel }
     </Box>
   </li>
