@@ -1,0 +1,38 @@
+@import "./_mixins";
+
+.trmrk-indexeddb-browser {
+  .trmrk-indexeddb-tree-node {
+    .trmrk-icon-database {
+      color: #880;
+    }
+
+    .trmrk-tree-node-toggle-icon {
+      color: #880;
+    }
+
+    .trmrk-tree-node-label {
+      border: 2px solid #880;
+    }
+
+    &.trmrk-current-item {
+      .trmrk-tree-node-label {
+        background-color: #880;
+        color: white;
+      }
+    }
+  }
+}
+
+.trmrk-theme-dark {
+  .trmrk-app-bar-toggle-icon {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
+    background-color: #121212;
+  }
+}
+
+.trmrk-theme-light {
+  .trmrk-app-bar-toggle-icon, .trmrk-app-bar-toggle-icon:hover {
+    color: #FFF;
+    background-color: #1976d2;
+  }
+}

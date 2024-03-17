@@ -46,6 +46,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
   color: theme.palette.text.secondary,
   [`& .${treeItemClasses.content}`]: {
     color: theme.palette.text.secondary,
+    backgroundColor: theme.palette.background,
     paddingRight: theme.spacing(1),
     fontWeight: theme.typography.fontWeightMedium,
     '&.Mui-expanded': {
@@ -55,7 +56,10 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
       backgroundColor: theme.palette.action.hover,
     },
     '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
+      backgroundColor: theme.palette.background,
+    }
+    /* '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.background})`,
       color: 'var(--tree-view-color)',
     },
     [`& .${treeItemClasses.label}`]: {
@@ -67,7 +71,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     marginLeft: 0,
     [`& .${treeItemClasses.content}`]: {
       paddingLeft: theme.spacing(2),
-    },
+    }, */
   },
 })) as unknown as typeof TreeItem;
 
@@ -75,6 +79,8 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
   props: StyledTreeItemProps,
   ref: React.Ref<HTMLLIElement>,
 ) {
+  const labelRef = React.createRef<HTMLSpanElement>();
+
   const theme = useTheme();
   const {
     idx,
@@ -115,6 +121,22 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
 
   const labelColorValue = isLightMode ? labelColor : labelColorForDarkMode;
 
+  const labelClick = (event: MouseEvent) => {
+    event.stopPropagation();
+  }
+
+  React.useEffect(() => {
+    const labelEl = labelRef.current!;
+    
+    labelEl.addEventListener("mousedown", labelClick);
+    labelEl.addEventListener("click", labelClick);
+
+    return () => {
+      labelEl.removeEventListener("mousedown", labelClick);
+      labelEl.removeEventListener("click", labelClick);
+    };
+  }, [ labelRef ]);
+
   return (
     <StyledTreeItemRoot
       label={
@@ -128,7 +150,7 @@ const StyledTreeItem = React.forwardRef(function StyledTreeItem(
         >
           { LabelIcon ? <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} /> : labelIconEl }
           <Typography className='trmrk-label' variant="body2" sx={{ fontWeight: labelWeight ?? 'inherit', flexGrow: 1,
-            height: "1.66em", borderBottom: bottomBorder, color: labelColorValue ?? "" }}>
+            height: "1.66em", borderBottom: bottomBorder, color: labelColorValue ?? "" }} onClick={labelClick} ref={labelRef}>
             {labelText}
           </Typography>
           { /* <Box className='trmrk-border' sx={{
@@ -196,7 +218,6 @@ export default function IndexedDbBrowser(
   return (<div className="trmrk-panel trmrk-indexeddb-browser">
     <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")} ref={pinnedTopBarRef}>
       <span className='trmrk-hcy-root-node-token'>&#47;</span>
-      { isLoadingRoot ? <LoadingDotPulse /> : null }
     </Paper>
     <div className={['trmrk-pinned-top-bar-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")} ref={pinnedTopBarBgSpacerRef}>
     </div>
