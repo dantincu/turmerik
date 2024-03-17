@@ -4,30 +4,30 @@ import Box from "@mui/material/Box";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
-import { TrmrkTreeNodeState } from "./TreeNodeState";
+import { TrmrkTreeNodeData } from "./TrmrkTreeNodeData";
 
-export type TrmrkTreeNodeType<TTreeNodeState extends TrmrkTreeNodeState> = typeof TrmrkTreeNode<TTreeNodeState>;
+export type TrmrkTreeNodeType<TTreeNodeData extends TrmrkTreeNodeData> = typeof TrmrkTreeNode<TTreeNodeData>;
 
 export enum TrmrkTreeNodeClickLocation {
   Icon,
   Label
 }
 
-export interface TrmrkTreeNodeProps<TTreeNodeState extends TrmrkTreeNodeState> {
+export interface TrmrkTreeNodeProps<TTreeNodeData extends TrmrkTreeNodeData> {
   className?: string | null | undefined;
-  state: TTreeNodeState;
+  data: TTreeNodeData;
   expandNodeEl?: React.ReactNode | null | undefined;
   collapseNodeEl?: React.ReactNode | null | undefined;
   iconNodeEl: React.ReactNode;
-  expandedToggled?: ((state: TTreeNodeState) => void) | null | undefined;
-  nodeClicked: (state: TTreeNodeState, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => boolean | null | undefined | void;
+  expandedToggled?: ((state: TTreeNodeData) => void) | null | undefined;
+  nodeClicked: (state: TTreeNodeData, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => boolean | null | undefined | void;
 }
 
-export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>(
-  props: TrmrkTreeNodeProps<TTreeNodeState>
+export default function TrmrkTreeNode<TTreeNodeData extends TrmrkTreeNodeData>(
+  props: TrmrkTreeNodeProps<TTreeNodeData>
 ) {
-  const [ isExpanded, setIsExpanded ] = React.useState(props.state.isExpanded);
-  const [ isCurrent, setisCurrent ] = React.useState(props.state.isCurrent);
+  const [ isExpanded, setIsExpanded ] = React.useState(props.data.isExpanded ?? false);
+  const [ isCurrent, setIsCurrent ] = React.useState(props.data.isCurrent ?? false);
 
   const labelRef = React.createRef<HTMLDivElement>();
 
@@ -37,7 +37,7 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
 
     if (props.expandedToggled) {
       props.expandedToggled({
-        ...props.state,
+        ...props.data,
         isExpanded: isExpandedNewVal
       });
     }
@@ -45,23 +45,23 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
 
   const iconClicked = () => {
     if (!props.nodeClicked({
-      ...props.state,
+      ...props.data,
       isCurrent: true
     },
     labelRef.current!,
     TrmrkTreeNodeClickLocation.Icon)) {
-      setisCurrent(true);
+      setIsCurrent(true);
     }
   }
 
   const labelClicked = () => {
     if (!props.nodeClicked({
-      ...props.state,
+      ...props.data,
       isCurrent: true
     },
     labelRef.current!,
     TrmrkTreeNodeClickLocation.Label)) {
-      setisCurrent(true);
+      setIsCurrent(true);
     }
   }
 
@@ -69,18 +69,19 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
   const collapseNodeEl = props.collapseNodeEl ?? <ArrowDropDownIcon className="trmrk-svg-icon"></ArrowDropDownIcon>;
   
   React.useEffect(() => {
-    if (props.state.isExpanded !== isExpanded) {
-      setIsExpanded(props.state.isExpanded);
+    if (!!props.data.isExpanded !== isExpanded) {
+      setIsExpanded(props.data.isExpanded ?? false);
     }
 
-    if (props.state.isCurrent !== isCurrent) {
-      setisCurrent(props.state.isCurrent);
+    if (!!props.data.isCurrent !== isCurrent) {
+      setIsCurrent(props.data.isCurrent ?? false);
     }
   }, [
     props.className,
-    props.state.isExpanded,
-    props.state.isCurrent,
-    props.state.nodeLabel,
+    props.data,
+    props.data.isExpanded,
+    props.data.isCurrent,
+    props.data.nodeLabel,
     props.expandNodeEl,
     props.collapseNodeEl,
     props.expandedToggled,
@@ -95,7 +96,7 @@ export default function TrmrkTreeNode<TTreeNodeState extends TrmrkTreeNodeState>
       { props.iconNodeEl }
     </Box>
     <Box className="trmrk-tree-node-label" onClick={labelClicked} ref={labelRef}>
-      { props.state.nodeLabel }
+      { props.data.nodeLabel }
     </Box>
   </li>
 }

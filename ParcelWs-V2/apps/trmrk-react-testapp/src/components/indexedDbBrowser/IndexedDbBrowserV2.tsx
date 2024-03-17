@@ -11,9 +11,9 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import LoadingDotPulse from '../loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
 import TrmrkTreeNode, { TrmrkTreeNodeClickLocation } from './TrmrkTreeNode';
-import { TrmrkTreeNodeState } from './TreeNodeState';
+import { TrmrkTreeNodeData } from './TrmrkTreeNodeData';
 
-export interface IndexedDbTrmrkTreeNodeData {
+export interface IndexedDbTrmrkTreeNodeDataValue {
   dbInfo: IDBDatabaseInfo;
 }
 
@@ -25,7 +25,7 @@ export default function IndexedDbBrowser(
 
   const [ isLoadingRoot, setIsLoadingRoot ] = React.useState(false);
 
-  const [ databases, setDatabases ] = React.useState<TrmrkTreeNodeState<IndexedDbTrmrkTreeNodeData>[] | null>(null);
+  const [ databases, setDatabases ] = React.useState<TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>[] | null>(null);
   const [ error, setError ] = React.useState<Error | any | null>(null);
 
   const [ isDbMenuOpen, setIsDbMenuOpen ] = React.useState(false);
@@ -39,14 +39,12 @@ export default function IndexedDbBrowser(
       const databasesArr = databases.map((db, idx) => ({
         key: db.name ?? idx,
         nodeLabel: db.name ?? "",
-        isExpanded: false,
-        isCurrent: false,
         idx: idx,
         lvlIdx: 0,
-        data: {
+        value: {
           dbInfo: db
         },
-      }));
+      }) as TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>);
 
       setDatabases(databasesArr);
     }, reason => {
@@ -56,11 +54,14 @@ export default function IndexedDbBrowser(
     });
   }
 
-  const dbNodeClicked = (state: TrmrkTreeNodeState<IndexedDbTrmrkTreeNodeData>, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => {
+  const dbNodeClicked = (
+      data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>,
+      labelEl: HTMLDivElement,
+      location: TrmrkTreeNodeClickLocation) => {
     const databasesArr = databases!.map(db => ({
       ...db,
-      isCurrent: db.key === state.key
-    }) as TrmrkTreeNodeState<IndexedDbTrmrkTreeNodeData>);
+      isCurrent: (db.key === data.key) ? true : false
+    }) as TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>);
 
     setDatabases(databasesArr);
     currentDbLabelRef.current = labelEl;
@@ -74,6 +75,8 @@ export default function IndexedDbBrowser(
   React.useEffect(() =>{
     if (!databases && !error) {
       loadDatabases();
+    } else {
+      // console.log("databases", databases!.filter(db => db.isCurrent).map(db => db.key));
     }
   }, [ isLoadingRoot, databases, error, isDbMenuOpen, currentDbLabelRef ]);
 
@@ -88,7 +91,7 @@ export default function IndexedDbBrowser(
       className="trmrk-indexeddb-tree-view"
       dataArr={databases ?? []}
       isLoading={isLoadingRoot}
-      nodeFactory={data => <TrmrkTreeNode className="trmrk-indexeddb-tree-node" state={data} key={data.key} nodeClicked={dbNodeClicked}
+      nodeFactory={data => <TrmrkTreeNode className="trmrk-indexeddb-tree-node" data={data} key={data.key} nodeClicked={dbNodeClicked}
         iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>} />}
       loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}>
     </TrmrkTreeNodesList> : null }

@@ -1,16 +1,16 @@
 import React from "react";
 
-import { TrmrkTreeNodeState } from "./TreeNodeState";
+import { TrmrkTreeNodeData } from "./TrmrkTreeNodeData";
 
-export interface TrmrkTreeNodesListProps<TTreeNodeState extends TrmrkTreeNodeState> {
+export interface TrmrkTreeNodesListProps<TTreeNodeData extends TrmrkTreeNodeData> {
   className?: string | null | undefined;
-  dataArr: TTreeNodeState[];
+  dataArr: TTreeNodeData[];
   isLoading?: boolean | null | undefined;
-  nodeFactory: (state: TTreeNodeState) => React.ReactNode | Iterable<React.ReactNode>;
+  nodeFactory: (data: TTreeNodeData) => React.ReactNode | Iterable<React.ReactNode>;
   loadingNodeFactory: () => React.ReactNode | Iterable<React.ReactNode>;
 }
 
-export default function TrmrkTreeNodesList<TTreeNodeState extends TrmrkTreeNodeState>(
+export default function TrmrkTreeNodesList<TTreeNodeState extends TrmrkTreeNodeData>(
   props: TrmrkTreeNodesListProps<TTreeNodeState>
 ) {
   React.useEffect(() => {
