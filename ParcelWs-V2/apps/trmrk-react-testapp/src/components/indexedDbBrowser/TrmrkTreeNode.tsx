@@ -19,6 +19,7 @@ export interface TrmrkTreeNodeProps<TTreeNodeData extends TrmrkTreeNodeData> {
   expandNodeEl?: React.ReactNode | null | undefined;
   collapseNodeEl?: React.ReactNode | null | undefined;
   iconNodeEl: React.ReactNode;
+  children?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   expandedToggled: (data: TTreeNodeData) => void;
   nodeClicked: (data: TTreeNodeData, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => void;
 }
@@ -81,5 +82,6 @@ export default function TrmrkTreeNode<TTreeNodeData extends TrmrkTreeNodeData>(
     <Box className="trmrk-tree-node-label" onClick={labelClicked} ref={labelRef}>
       { props.data.nodeLabel }
     </Box>
+    { props.children }
   </li>
 }

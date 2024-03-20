@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,6 +11,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import HeightIcon from '@mui/icons-material/Height';
 
 import LoadingDotPulse from '../loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
@@ -116,7 +118,9 @@ export default function IndexedDbBrowser(
       isLoading={isLoadingRoot}
       nodeFactory={data => <TrmrkTreeNode className="trmrk-indexeddb-tree-node" data={data} key={data.key}
         nodeClicked={dbNodeClicked} expandedToggled={expandedToggled}
-        iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>} />}
+        iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>}>
+          <Box sx={{ display: "block", position: "absolute" }}>asdf</Box>
+        </TrmrkTreeNode>}
       loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}>
     </TrmrkTreeNodesList> : null }
     <Menu className="trmrk-menu"
@@ -125,7 +129,7 @@ export default function IndexedDbBrowser(
         onClose={onPinnedTopBarMenuClose}>
       <MenuList className='trmrk-menu-list'>
         <MenuItem>
-          <IconButton><RefreshIcon /></IconButton>
+          <IconButton><HeightIcon /></IconButton>
         </MenuItem>
       </MenuList>
     </Menu>
