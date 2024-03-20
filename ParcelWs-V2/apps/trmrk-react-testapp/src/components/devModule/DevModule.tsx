@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -71,12 +71,13 @@ const getRelUrlPath = (urlPath: string) => {
 export default function DevModule(
   props: DevModuleProps
 ) {
+  const dispatch = useDispatch();
+
   const appBar = useAppBar({
     appBarReducers: appBarReducers,
     appBarSelectors: appBarSelectors,
     appDataReducers: appDataReducers,
     appDataSelectors: appDataSelectors,
-    appBarRowsCount: 2
   });
   
   const urlPath = useSelector(
@@ -90,6 +91,7 @@ export default function DevModule(
 
     if (relUrlPathVal !== baseUrlPath) {
       setBaseUrlPath(relUrlPathVal);
+      dispatch(appBarReducers.setAppBarRowsCount(1));
     }
   }, [
     appBar.appTheme,

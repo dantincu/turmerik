@@ -10,10 +10,20 @@ export interface AppSettingsMenuOpts {
 }
 
 export interface AppBarData {
+  appBarRowsCount: number;
   appSettingsMenuOpts: AppSettingsMenuOpts;
 }
 
 export interface AppBarSelectors {
+  getAppBarRowsCount: Selector<
+    {
+      appBar: AppBarData;
+    },
+    number,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => number;
+  };
   getAppSettingsMenuOpts: Selector<
     {
       appBar: AppBarData;
@@ -44,6 +54,10 @@ export interface AppBarSelectors {
 }
 
 export interface AppBarReducers {
+  setAppBarRowsCount: ActionCreatorWithPayload<
+    number,
+    "appBar/setAppBarRowsCount"
+  >;
   setAppSettingsMenuOpts: ActionCreatorWithPayload<
     AppSettingsMenuOpts,
     "appBar/setAppSettingsMenuOpts"

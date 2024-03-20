@@ -38,7 +38,6 @@ export default function BasicAppModule(
   React.useEffect(() => {
   }, [
     props.appBar.appBarRowsCount,
-    props.appBar.setAppBarRowsCount,
     props.appBar.appHeaderHeight,
     props.appBar.setAppHeaderHeight,
     props.appBar.appBarRowHeightPx,

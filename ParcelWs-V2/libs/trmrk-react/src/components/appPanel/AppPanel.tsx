@@ -47,16 +47,18 @@ export default function AppPanel(props: AppPanelProps) {
   const [ headerHeight, setHeaderHeight ] = React.useState(props.headerHeight);
 
   const scrollHandler = (data: AppPanelHeaderData) => {
-    const scrollTop = data.bodyEl.scrollTop;
+    const bodyEl = data.bodyEl;
+    const headerEl = data.headerEl;
+    const scrollTop = bodyEl.scrollTop;
 
     if (scrollTop <= 0 || data.showHeaderNow) { /* technically, the scrollTop should never be negative, but I've previously seen a negative value for
       this property on ios when using the document as main element and scrolling top and then dragging the top margin (like in a mobile refresh request) */
       data.bodyElLastScrollTop = 0;
-      data.bodyEl.style.top = `${data.headerHeight}px`;
-      data.headerEl.style.top = `0px`;
+      bodyEl.style.top = `${data.headerHeight}px`;
+      headerEl.style.top = `0px`;
       
       if (data.bodyBottomPaddingFactor > 0) {
-        data.bodyEl.style.paddingBottom = "0px";
+        bodyEl.style.paddingBottom = "0px";
       }
 
       if (props.scrolling) {
@@ -65,7 +67,7 @@ export default function AppPanel(props: AppPanelProps) {
           mainElTopOffset: data.headerHeight,
         });
       }
-    } else {
+    } else if (bodyEl.scrollHeight - bodyEl.scrollTop - bodyEl.clientHeight >= 1) {
       const prevScrollTop = data.bodyElLastScrollTop;
       data.bodyElLastScrollTop = scrollTop;
 
@@ -76,11 +78,11 @@ export default function AppPanel(props: AppPanelProps) {
       mainElTopOffset = Math.min(mainElTopOffset, data.headerHeight);
       const headerElTopOffset = mainElTopOffset - data.headerHeight;
 
-      data.bodyEl.style.top = `${mainElTopOffset}px`;
-      data.headerEl.style.top = `${headerElTopOffset}px`;
+      bodyEl.style.top = `${mainElTopOffset}px`;
+      headerEl.style.top = `${headerElTopOffset}px`;
 
       if (data.bodyBottomPaddingFactor > 0) {// This is needed to prevent the screen shaking upon scrolling to the bottom of the page on mobile devices
-        data.bodyEl.style.paddingBottom = `${data.bodyBottomPaddingFactor * data.headerHeight}px`;
+        bodyEl.style.paddingBottom = `${data.bodyBottomPaddingFactor * data.headerHeight}px`;
       }
 
       if (props.scrolling) {

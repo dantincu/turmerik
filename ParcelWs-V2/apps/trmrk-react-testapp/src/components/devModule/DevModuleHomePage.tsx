@@ -14,8 +14,9 @@ export interface DevModuleHomePageProps {
 }
 
 const Ul = styled.ul({
-  margin: "0px",
-  padding: "1em"
+  margin: "1em",
+  padding: "1em",
+  marginTop: "0px"
 });
 
 export default function DevModuleHomePage(
@@ -29,6 +30,7 @@ export default function DevModuleHomePage(
 
   return (<Paper sx={{ height: "100%" }}>
     <Ul>
+      <li><Link to="/" className="trmrk-nav-link">Home</Link></li>
       <li><Link to="indexeddb-browser" className="trmrk-nav-link">IndexedDB Browser</Link></li>
     </Ul>
   </Paper>);

@@ -14,12 +14,10 @@ export interface UseAppBarProps {
   appDataReducers: AppDataReducers;
   appBarSelectors: AppBarSelectors;
   appBarReducers: AppBarReducers;
-  appBarRowsCount: number;
 }
 
 export interface UseAppBarResult {
   appBarRowsCount: number;
-  setAppBarRowsCount: React.Dispatch<React.SetStateAction<number>>;
   appHeaderHeight: number | null;
   setAppHeaderHeight: React.Dispatch<React.SetStateAction<number | null>>;
   appBarRowHeightPx: React.MutableRefObject<number>;
@@ -57,6 +55,7 @@ export interface UseAppBarResult {
     data: AppPanelHeaderData,
     offset: AppPanelHeaderOffset
   ) => void;
+  updateHeaderHeight: (newAppBarRowsCount: number) => void;
 }
 
 import { AppTheme, getAppTheme, currentAppTheme } from "../../app-theme/core";
@@ -69,10 +68,6 @@ import {
 import { MtblRefValue } from "trmrk/src/core";
 
 export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
-  const [appBarRowsCount, setAppBarRowsCount] = React.useState(
-    props.appBarRowsCount
-  );
-
   const [appHeaderHeight, setAppHeaderHeight] = React.useState<number | null>(
     null
   );
@@ -81,6 +76,7 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   const headerRef = React.useRef<HTMLDivElement>();
   const bodyRef = React.useRef<HTMLDivElement>();
 
+  const appBarRowsCount = useSelector(props.appBarSelectors.getAppBarRowsCount);
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
   const showAppBar = useSelector(props.appDataSelectors.getShowAppBar);
@@ -175,9 +171,22 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     }
   };
 
+  const updateHeaderHeight = (newAppBarRowsCount: number) => {
+    const headerEl = headerRef.current!;
+    const bodyEl = bodyRef.current!;
+
+    const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
+
+    headerEl.style.height = `${newHeaderHeight}px`;
+    bodyEl.style.top = `${newHeaderHeight}px`;
+    headerEl.style.top = "0px";
+
+    dispatch(props.appBarReducers.setAppBarRowsCount(newAppBarRowsCount));
+    setAppHeaderHeight(newHeaderHeight);
+  };
+
   useEffect(() => {}, [
     appTheme,
-    props.appBarRowsCount,
     appBarRowsCount,
     lastRefreshTmStmp,
     appHeaderHeight,
@@ -190,7 +199,6 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
 
   return {
     appBarRowsCount,
-    setAppBarRowsCount,
     appHeaderHeight,
     setAppHeaderHeight,
     appBarRowHeightPx,
@@ -221,5 +229,6 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     handleDarkModeToggled,
     appBarToggled,
     appHeaderScrolling,
+    updateHeaderHeight,
   };
 };

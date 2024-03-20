@@ -13,8 +13,9 @@ export interface HomePageProps {
 }
 
 const Ul = styled.ul({
-  margin: "0px",
-  padding: "1em"
+  margin: "1em",
+  padding: "1em",
+  marginTop: "0px"
 });
 
 export default function HomePage(
@@ -26,7 +27,7 @@ export default function HomePage(
     dispatch(appDataReducers.setCurrentUrlPath(props.urlPath));
   });
 
-  return (<Paper sx={{ height: "100%" }}>
+  return (<Paper sx={{ height: "100%", marginTop: "0px", paddingTop: "0px" }}>
     <Ul>
       <li><Link to="resizables-demo" className="trmrk-nav-link">Resizables Demo</Link></li>
       <li><Link to="dev" className="trmrk-nav-link">Development Module</Link></li>

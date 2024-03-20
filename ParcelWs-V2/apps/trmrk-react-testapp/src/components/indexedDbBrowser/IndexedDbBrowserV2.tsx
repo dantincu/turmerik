@@ -5,8 +5,10 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import LoadingDotPulse from '../loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
@@ -28,7 +30,10 @@ export default function IndexedDbBrowser(
   const [ databases, setDatabases ] = React.useState<TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>[] | null>(null);
   const [ error, setError ] = React.useState<Error | any | null>(null);
 
+  const [ isPinnedTopBarMenuOpen, setIsPinnedTopBarMenuOpen ] = React.useState(false);
   const [ isDbMenuOpen, setIsDbMenuOpen ] = React.useState(false);
+
+  const pinnedTopBarRef = React.useRef<HTMLButtonElement | null>(null);
   const currentDbLabelRef = React.useRef<HTMLDivElement | null>(null);
 
   const loadDatabases = () => {
@@ -54,6 +59,11 @@ export default function IndexedDbBrowser(
     });
   }
 
+  const pinnedTopBarOptionsClicked = (e: React.MouseEvent<HTMLButtonElement>) => {
+    pinnedTopBarRef.current = e.target as HTMLButtonElement;
+    setIsPinnedTopBarMenuOpen(true);
+  }
+
   const dbNodeClicked = (
       data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>,
       labelEl: HTMLDivElement,
@@ -68,6 +78,10 @@ export default function IndexedDbBrowser(
     setIsDbMenuOpen(true);
   }
 
+  const onPinnedTopBarMenuClose = () => {
+    setIsPinnedTopBarMenuOpen(false);
+  }
+
   const onDbMenuClose = () => {
     setIsDbMenuOpen(false);
   }
@@ -78,12 +92,11 @@ export default function IndexedDbBrowser(
     } else {
       // console.log("databases", databases!.filter(db => db.isCurrent).map(db => db.key));
     }
-  }, [ isLoadingRoot, databases, error, isDbMenuOpen, currentDbLabelRef ]);
+  }, [ isLoadingRoot, databases, error, isPinnedTopBarMenuOpen, isDbMenuOpen, pinnedTopBarRef, currentDbLabelRef ]);
 
   return (<div className="trmrk-panel trmrk-indexeddb-browser">
     <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
-      <span className='trmrk-hcy-root-node-token'>&#47;</span>
-      { isLoadingRoot ? <LoadingDotPulse /> : null }
+      <IconButton ref={pinnedTopBarRef} onClick={pinnedTopBarOptionsClicked}><MoreVertIcon /></IconButton>
     </Paper>
     <div className={['trmrk-pinned-top-bar-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
     </div>
@@ -96,11 +109,22 @@ export default function IndexedDbBrowser(
       loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}>
     </TrmrkTreeNodesList> : null }
     <Menu className="trmrk-menu"
+        open={isPinnedTopBarMenuOpen}
+        anchorEl={pinnedTopBarRef.current}
+        onClose={onPinnedTopBarMenuClose}>
+      <MenuList className='trmrk-menu-list'>
+        <MenuItem>
+          <IconButton><RefreshIcon /></IconButton>
+        </MenuItem>
+      </MenuList>
+    </Menu>
+    <Menu className="trmrk-menu"
         open={isDbMenuOpen}
         anchorEl={currentDbLabelRef.current}
         onClose={onDbMenuClose}>
       <MenuList className='trmrk-menu-list'>
         <MenuItem>
+          <IconButton><VisibilityIcon /></IconButton>
           <IconButton><EditIcon /></IconButton>
           <IconButton><MoreVertIcon /></IconButton>
           <IconButton><ArrowForwardIcon /></IconButton>

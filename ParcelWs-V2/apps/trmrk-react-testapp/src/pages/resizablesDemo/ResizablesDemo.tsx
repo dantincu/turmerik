@@ -142,7 +142,7 @@ export default function ResizablesDemo(
   }
 
   const panelResizing = (
-    e: MouseEvent,
+    e: MouseEvent | TouchEvent,
     touchOrMousePos: TouchOrMousePosition,
     rszDir: ResizeDirection,
     panelRef: React.MutableRefObject<HTMLDivElement | null>,

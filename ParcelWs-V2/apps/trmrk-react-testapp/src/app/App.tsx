@@ -35,32 +35,17 @@ const App = withErrorBoundary(() => {
     appBarSelectors: appBarSelectors,
     appDataReducers: appDataReducers,
     appDataSelectors: appDataSelectors,
-    appBarRowsCount: 2
   });
 
   const refreshBtnRef = React.createRef<HTMLButtonElement>();
 
-  const updateHeaderHeight = (newAppBarRowsCount: number) => {
-    const headerEl = appBar.headerRef.current!;
-    const bodyEl = appBar.bodyRef.current!;
-
-    const newHeaderHeight = newAppBarRowsCount * appBar.appBarRowHeightPx.current;
-
-    headerEl.style.height = `${newHeaderHeight}px`;
-    bodyEl.style.top = `${newHeaderHeight}px`;
-    headerEl.style.top = "0px";
-
-    appBar.setAppBarRowsCount(newAppBarRowsCount);
-    appBar.setAppHeaderHeight(newHeaderHeight);
-  }
-
   const increaseHeaderHeightBtnClicked = () => {
-    updateHeaderHeight(appBar.appBarRowsCount + 1);
+    appBar.updateHeaderHeight(appBar.appBarRowsCount + 1);
   }
 
   const decreaseHeaderHeightBtnClicked = () => {
     if (appBar.appBarRowsCount > 1) {
-      updateHeaderHeight(appBar.appBarRowsCount - 1);
+      appBar.updateHeaderHeight(appBar.appBarRowsCount - 1);
     }
   }
 
