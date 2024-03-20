@@ -19,21 +19,17 @@ export interface TrmrkTreeNodeProps<TTreeNodeData extends TrmrkTreeNodeData> {
   expandNodeEl?: React.ReactNode | null | undefined;
   collapseNodeEl?: React.ReactNode | null | undefined;
   iconNodeEl: React.ReactNode;
-  expandedToggled?: ((state: TTreeNodeData) => void) | null | undefined;
-  nodeClicked: (state: TTreeNodeData, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => boolean | null | undefined | void;
+  expandedToggled: (data: TTreeNodeData) => void;
+  nodeClicked: (data: TTreeNodeData, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => void;
 }
 
 export default function TrmrkTreeNode<TTreeNodeData extends TrmrkTreeNodeData>(
   props: TrmrkTreeNodeProps<TTreeNodeData>
 ) {
-  const [ isExpanded, setIsExpanded ] = React.useState(props.data.isExpanded ?? false);
-  const [ isCurrent, setIsCurrent ] = React.useState(props.data.isCurrent ?? false);
-
   const labelRef = React.createRef<HTMLDivElement>();
 
   const expandedToggled = () => {
-    const isExpandedNewVal = !isExpanded;
-    setIsExpanded(isExpandedNewVal);
+    const isExpandedNewVal = !props.data.isExpanded;
 
     if (props.expandedToggled) {
       props.expandedToggled({
@@ -44,38 +40,27 @@ export default function TrmrkTreeNode<TTreeNodeData extends TrmrkTreeNodeData>(
   }
 
   const iconClicked = () => {
-    if (!props.nodeClicked({
+    props.nodeClicked({
       ...props.data,
       isCurrent: true
     },
     labelRef.current!,
-    TrmrkTreeNodeClickLocation.Icon)) {
-      setIsCurrent(true);
-    }
+    TrmrkTreeNodeClickLocation.Icon)
   }
 
   const labelClicked = () => {
-    if (!props.nodeClicked({
+    props.nodeClicked({
       ...props.data,
       isCurrent: true
     },
     labelRef.current!,
-    TrmrkTreeNodeClickLocation.Label)) {
-      setIsCurrent(true);
-    }
+    TrmrkTreeNodeClickLocation.Label)
   }
 
   const expandNodeEl = props.expandNodeEl ?? <ArrowRightIcon className="trmrk-svg-icon"></ArrowRightIcon>;
   const collapseNodeEl = props.collapseNodeEl ?? <ArrowDropDownIcon className="trmrk-svg-icon"></ArrowDropDownIcon>;
   
   React.useEffect(() => {
-    if (!!props.data.isExpanded !== isExpanded) {
-      setIsExpanded(props.data.isExpanded ?? false);
-    }
-
-    if (!!props.data.isCurrent !== isCurrent) {
-      setIsCurrent(props.data.isCurrent ?? false);
-    }
   }, [
     props.className,
     props.data,
@@ -84,13 +69,11 @@ export default function TrmrkTreeNode<TTreeNodeData extends TrmrkTreeNodeData>(
     props.data.nodeLabel,
     props.expandNodeEl,
     props.collapseNodeEl,
-    props.expandedToggled,
-    isExpanded,
-    isCurrent ]);
+    props.expandedToggled ]);
 
-  return <li className={["trmrk-tree-node", isCurrent ? "trmrk-current-item" : "", props.className ?? ""].join(" ")}>
+  return <li className={["trmrk-tree-node", props.data.isCurrent ? "trmrk-current-item" : "", props.className ?? ""].join(" ")}>
     <Box className="trmrk-tree-node-toggle-icon" onClick={expandedToggled}>
-      { isExpanded ? collapseNodeEl : expandNodeEl }
+      { props.data.isExpanded ? collapseNodeEl : expandNodeEl }
     </Box>
     <Box className="trmrk-tree-node-icon" onClick={iconClicked}>
       { props.iconNodeEl }

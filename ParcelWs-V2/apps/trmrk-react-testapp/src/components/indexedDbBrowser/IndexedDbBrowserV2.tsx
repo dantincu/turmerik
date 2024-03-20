@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import SettingsIcon from '@mui/icons-material/Settings';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -78,6 +79,15 @@ export default function IndexedDbBrowser(
     setIsDbMenuOpen(true);
   }
 
+  const expandedToggled = (data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>) => {
+    const databasesArr = databases!.map(db => ({
+      ...db,
+      isExpanded: (db.key === data.key) ? data.isExpanded : db.isExpanded
+    }) as TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>);
+
+    setDatabases(databasesArr);
+  }
+
   const onPinnedTopBarMenuClose = () => {
     setIsPinnedTopBarMenuOpen(false);
   }
@@ -96,7 +106,7 @@ export default function IndexedDbBrowser(
 
   return (<div className="trmrk-panel trmrk-indexeddb-browser">
     <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
-      <IconButton ref={pinnedTopBarRef} onClick={pinnedTopBarOptionsClicked}><MoreVertIcon /></IconButton>
+      <IconButton ref={pinnedTopBarRef} onClick={pinnedTopBarOptionsClicked}><SettingsIcon /></IconButton>
     </Paper>
     <div className={['trmrk-pinned-top-bar-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
     </div>
@@ -104,7 +114,8 @@ export default function IndexedDbBrowser(
       className="trmrk-indexeddb-tree-view"
       dataArr={databases ?? []}
       isLoading={isLoadingRoot}
-      nodeFactory={data => <TrmrkTreeNode className="trmrk-indexeddb-tree-node" data={data} key={data.key} nodeClicked={dbNodeClicked}
+      nodeFactory={data => <TrmrkTreeNode className="trmrk-indexeddb-tree-node" data={data} key={data.key}
+        nodeClicked={dbNodeClicked} expandedToggled={expandedToggled}
         iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>} />}
       loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}>
     </TrmrkTreeNodesList> : null }
