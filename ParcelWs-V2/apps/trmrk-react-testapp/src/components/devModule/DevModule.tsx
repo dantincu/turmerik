@@ -91,7 +91,8 @@ export default function DevModule(
 
     if (relUrlPathVal !== baseUrlPath) {
       setBaseUrlPath(relUrlPathVal);
-      dispatch(appBarReducers.setAppBarRowsCount(1));
+      dispatch(appBarReducers.setShowOptionsMenuBtn(true));
+      dispatch(appBarReducers.setAppBarRowsCount(2));
     }
   }, [
     appBar.appTheme,
@@ -113,7 +114,8 @@ export default function DevModule(
       basePath={props.basePath}
       headerClassName="trmrk-dev-header"
       bodyClassName="trmrk-app-body"
-      appBarChildren={getAppBarContents(props.basePath, urlPath, baseUrlPath)}>
+      appBarChildren={getAppBarContents(props.basePath, urlPath, baseUrlPath)}
+      refreshBtnClicked={() => {}}>
         <Routes>
           <Route path={"/indexeddb-browser"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser`} />} />
           <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbDemoCreateDb urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />

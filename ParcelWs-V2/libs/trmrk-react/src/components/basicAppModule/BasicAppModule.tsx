@@ -5,12 +5,14 @@ import AppBar  from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import AppModule from "../appModule/AppModule";
 
 import ToggleAppBarBtn from "../appBar/ToggleAppBarBtn";
 import SettingsMenu from "../settingsMenu/SettingsMenu";
 import AppearenceSettingsMenu from "../settingsMenu/AppearenceSettingsMenu";
+import OptionsMenu from "../settingsMenu/OptionsMenu";
 import { UseAppBarResult } from "../../hooks/useAppBar/useAppBar";
 
 export interface BasicAppModuleProps {
@@ -26,15 +28,29 @@ export interface BasicAppModuleProps {
   settingsMenuListClassName?: string | null | undefined;
   appearenceMenuClassName?: string | null | undefined;
   appearenceMenuListClassName?: string | null | undefined;
+  optionsMenuClassName?: string | null | undefined;
+  optionsMenuListClassName?: string | null | undefined;
   children?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
   appBarChildren?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
   settingsMenuChildren?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
   appearenceMenuChildren?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
+  optionsMenuChildren?: (React.ReactNode | Iterable<React.ReactNode>) | null | undefined;
+  refreshBtnClicked?: (() => boolean | null | undefined | void);
 }
 
 export default function BasicAppModule(
   props: BasicAppModuleProps
 ) {
+  const refreshBtnClicked = () => {
+    if (props.refreshBtnClicked) {
+      if (!props.refreshBtnClicked()) {
+        props.appBar.handleOptionsMenuClosed();
+      }
+    } else {
+      props.appBar.handleOptionsMenuClosed();
+    }
+  }
+
   React.useEffect(() => {
   }, [
     props.appBar.appBarRowsCount,
@@ -47,12 +63,16 @@ export default function BasicAppModule(
     props.appBar.isDarkMode,
     props.appBar.showAppBar,
     props.appBar.showAppBarToggleBtn,
+    props.appBar.showOptionsMenuBtn,
     props.appBar.appSettingsMenuIsOpen,
     props.appBar.appearenceMenuIsOpen,
+    props.appBar.optionsMenuIsOpen,
     props.appBar.settingsMenuIconBtnEl,
     props.appBar.setSettingsMenuIconBtnEl,
     props.appBar.appearenceMenuIconBtnEl,
     props.appBar.setAppearenceMenuIconBtnEl,
+    props.appBar.optionsMenuIconBtnEl,
+    props.appBar.setOptionsMenuIconBtnEl,
     props.appBar.lastRefreshTmStmp,
     props.appBar.setLastRefreshTmStmp,
     props.appBar.appTheme,
@@ -79,17 +99,25 @@ export default function BasicAppModule(
     props.settingsMenuListClassName,
     props.appearenceMenuClassName,
     props.settingsMenuListClassName,
+    props.optionsMenuClassName,
+    props.optionsMenuListClassName,
     props.children,
     props.appBarChildren,
     props.settingsMenuChildren,
-    props.appearenceMenuChildren ]);
+    props.appearenceMenuChildren,
+    props.optionsMenuChildren,
+    props.refreshBtnClicked, ]);
 
   return (<AppModule
       className={props.className}
       headerClassName={props.headerClassName}
       headerContent={<AppBar className={["trmrk-app-module-bar", props.appBarClassName ?? ""].join(" ")}>
-        <IconButton onClick={props.appBar.handleSettingsClick} className="trmrk-icon-btn"><MenuIcon /></IconButton>
-        <Link to={props.basePath}><IconButton className="trmrk-icon-btn"><HomeIcon /></IconButton></Link>
+        <IconButton onClick={props.appBar.handleSettingsClick} className="trmrk-icon-btn trmrk-settings-btn"><MenuIcon /></IconButton>
+        <Link to={props.basePath}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link>
+        { props.appBar.showOptionsMenuBtn ? <IconButton
+          onClick={props.appBar.handleOptionsClick}
+          className="trmrk-icon-btn trmrk-options-btn">
+            <MoreHorizIcon /></IconButton> : null }
         { props.appBarChildren }
         <SettingsMenu
           className={props.settingsMenuClassName}
@@ -116,6 +144,14 @@ export default function BasicAppModule(
           menuAnchorEl={props.appBar.appearenceMenuIconBtnEl!}>
             { props.appearenceMenuChildren }
         </AppearenceSettingsMenu>
+        <OptionsMenu
+          className={props.optionsMenuClassName}
+          menuListClassName={props.optionsMenuListClassName}
+          appTheme={props.appBar.appTheme}
+          showMenu={props.appBar.optionsMenuIsOpen}
+          menuClosed={props.appBar.handleOptionsMenuClosed}
+          menuAnchorEl={props.appBar.optionsMenuIconBtnEl!}
+          refreshBtnClicked={refreshBtnClicked} />
       </AppBar>}
       afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
       afterHeaderContent={ props.appBar.showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={props.appBar.showAppBar} appBarToggled={props.appBar.appBarToggled} /> : null }

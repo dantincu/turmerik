@@ -29,12 +29,18 @@ export interface UseAppBarResult {
   showAppBarToggleBtn: boolean;
   appSettingsMenuIsOpen: boolean;
   appearenceMenuIsOpen: boolean;
+  showOptionsMenuBtn: boolean;
+  optionsMenuIsOpen: boolean;
   settingsMenuIconBtnEl: HTMLButtonElement | null;
   setSettingsMenuIconBtnEl: React.Dispatch<
     React.SetStateAction<HTMLButtonElement | null>
   >;
   appearenceMenuIconBtnEl: HTMLButtonElement | null;
   setAppearenceMenuIconBtnEl: React.Dispatch<
+    React.SetStateAction<HTMLButtonElement | null>
+  >;
+  optionsMenuIconBtnEl: HTMLButtonElement | null;
+  setOptionsMenuIconBtnEl: React.Dispatch<
     React.SetStateAction<HTMLButtonElement | null>
   >;
   lastRefreshTmStmp: Date;
@@ -44,9 +50,11 @@ export interface UseAppBarResult {
   appThemeClassName: string;
   appModeCssClass: MtblRefValue<string>;
   handleSettingsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleOptionsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   appearenceMenuBtnRefAvailable: (btnRef: HTMLButtonElement | null) => void;
   handleSettingsMenuClosed: () => void;
   handleAppearenceMenuClosed: () => void;
+  handleOptionsMenuClosed: () => void;
   appearenceMenuOpen: () => void;
   handleCompactModeToggled: (isCompactMode: boolean) => void;
   handleDarkModeToggled: (isDarkMode: boolean) => void;
@@ -93,12 +101,23 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     props.appBarSelectors.getAppearenceMenuIsOpen
   );
 
+  const showOptionsMenuBtn = useSelector(
+    props.appBarSelectors.getShowOptionsMenuBtn
+  );
+
+  const optionsMenuIsOpen = useSelector(
+    props.appBarSelectors.getOptionsMenuIsOpen
+  );
+
   const dispatch = useDispatch();
 
   const [settingsMenuIconBtnEl, setSettingsMenuIconBtnEl] =
     React.useState<null | HTMLButtonElement>(null);
 
   const [appearenceMenuIconBtnEl, setAppearenceMenuIconBtnEl] =
+    React.useState<null | HTMLButtonElement>(null);
+
+  const [optionsMenuIconBtnEl, setOptionsMenuIconBtnEl] =
     React.useState<null | HTMLButtonElement>(null);
 
   const [lastRefreshTmStmp, setLastRefreshTmStmp] = React.useState(new Date());
@@ -117,6 +136,11 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(true));
   };
 
+  const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setOptionsMenuIconBtnEl(event.currentTarget);
+    dispatch(props.appBarReducers.setOptionsMenuIsOpen(true));
+  };
+
   const appearenceMenuBtnRefAvailable = (btnRef: HTMLButtonElement | null) => {
     setAppearenceMenuIconBtnEl(btnRef);
   };
@@ -128,6 +152,10 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
 
   const handleAppearenceMenuClosed = () => {
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
+  };
+
+  const handleOptionsMenuClosed = () => {
+    dispatch(props.appBarReducers.setOptionsMenuIsOpen(false));
   };
 
   const appearenceMenuOpen = () => {
@@ -191,8 +219,11 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     lastRefreshTmStmp,
     appHeaderHeight,
     showAppBar,
+    showAppBarToggleBtn,
+    showOptionsMenuBtn,
     appSettingsMenuIsOpen,
     appearenceMenuIsOpen,
+    optionsMenuIsOpen,
     appearenceMenuIconBtnEl,
     appBarRowHeightPx,
   ]);
@@ -208,12 +239,16 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     isDarkMode,
     showAppBar,
     showAppBarToggleBtn,
+    showOptionsMenuBtn,
     appSettingsMenuIsOpen,
     appearenceMenuIsOpen,
+    optionsMenuIsOpen,
     settingsMenuIconBtnEl,
     setSettingsMenuIconBtnEl,
     appearenceMenuIconBtnEl,
     setAppearenceMenuIconBtnEl,
+    optionsMenuIconBtnEl,
+    setOptionsMenuIconBtnEl,
     lastRefreshTmStmp,
     setLastRefreshTmStmp,
     appTheme,
@@ -221,9 +256,11 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     appThemeClassName,
     appModeCssClass,
     handleSettingsClick,
+    handleOptionsClick,
     appearenceMenuBtnRefAvailable,
     handleSettingsMenuClosed,
     handleAppearenceMenuClosed,
+    handleOptionsMenuClosed,
     appearenceMenuOpen,
     handleCompactModeToggled,
     handleDarkModeToggled,

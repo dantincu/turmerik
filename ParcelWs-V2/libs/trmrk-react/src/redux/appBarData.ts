@@ -9,9 +9,15 @@ export interface AppSettingsMenuOpts {
   appearenceMenuOpts: AppearenceMenuOpts;
 }
 
+export interface OptionsMenuOpts {
+  isOpen: boolean;
+}
+
 export interface AppBarData {
   appBarRowsCount: number;
   appSettingsMenuOpts: AppSettingsMenuOpts;
+  showOptionsMenuBtn: boolean;
+  optionsMenuOpts: OptionsMenuOpts;
 }
 
 export interface AppBarSelectors {
@@ -42,7 +48,43 @@ export interface AppBarSelectors {
   > & {
     unwrapped: (appData: AppBarData) => boolean;
   };
+  getAppearenceMenuOpts: Selector<
+    {
+      appBar: AppBarData;
+    },
+    AppearenceMenuOpts,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => AppearenceMenuOpts;
+  };
   getAppearenceMenuIsOpen: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => boolean;
+  };
+  getShowOptionsMenuBtn: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => boolean;
+  };
+  getOptionsMenuOpts: Selector<
+    {
+      appBar: AppBarData;
+    },
+    OptionsMenuOpts,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => OptionsMenuOpts;
+  };
+  getOptionsMenuIsOpen: Selector<
     {
       appBar: AppBarData;
     },
@@ -66,8 +108,24 @@ export interface AppBarReducers {
     boolean,
     "appBar/setAppSettingsMenuIsOpen"
   >;
+  setAppearenceMenuOpts: ActionCreatorWithPayload<
+    AppearenceMenuOpts,
+    "appBar/setAppearenceMenuOpts"
+  >;
   setAppearenceMenuIsOpen: ActionCreatorWithPayload<
     boolean,
     "appBar/setAppearenceMenuIsOpen"
+  >;
+  setShowOptionsMenuBtn: ActionCreatorWithPayload<
+    boolean,
+    "appBar/setShowOptionsMenuBtn"
+  >;
+  setOptionsMenuOpts: ActionCreatorWithPayload<
+    OptionsMenuOpts,
+    "appBar/setOptionsMenuOpts"
+  >;
+  setOptionsMenuIsOpen: ActionCreatorWithPayload<
+    boolean,
+    "appBar/setOptionsMenuIsOpen"
   >;
 }

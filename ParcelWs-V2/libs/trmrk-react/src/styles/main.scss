@@ -48,9 +48,16 @@ body, #app-root {
   height: 100%;
   display: block;
   position: relative;
+
+  .trmrk-icon-btn {
+    width: 1.66em;
+    height: 1.66em;
+  }
+
+  .trmrk-options-btn {
+    right: 1.66em;
+    position: absolute;
+    top: 0em;
+  }
 }
 
-.trmrk-app-module-header .trmrk-app-module-bar .trmrk-icon-btn {
-  width: 1.66em;
-  height: 1.66em;
-}
