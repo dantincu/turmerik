@@ -93,6 +93,11 @@ export const domStrListToArr = (list: DOMStringList) => {
 export const getObjectStoreNames = (db: IDBDatabase) =>
   domStrListToArr(db.objectStoreNames);
 
+export interface IDbDatabaseInfo {
+  name?: string;
+  version?: number;
+}
+
 export interface IDbIndexInfo {
   name: string;
   keyPath: string | string[];
@@ -107,6 +112,11 @@ export interface IDbObjectStoreInfo {
   indexNames: string[];
   indexes: IDbIndexInfo[];
 }
+
+export const getDbInfo = (dbInfo: IDBDatabaseInfo): IDbDatabaseInfo => ({
+  name: dbInfo.name,
+  version: dbInfo.version,
+});
 
 export const getObjectStoresInfoAgg = (db: IDBDatabase) => {
   let objStoresArr: IDbObjectStoreInfo[] = [];

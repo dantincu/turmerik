@@ -145,7 +145,7 @@ body, #app-root {
     margin-left: 1.5em;
   }
 
-  .trmrk-tree-node {
+  .trmrk-tree-node, .trmrk-tree-node-leaf {
     position: relative;
     display: grid;
     grid-template-rows: 2.5em auto;
@@ -179,18 +179,6 @@ body, #app-root {
         border-radius: 2px;
       }
 
-      .trmrk-tree-node-toggle-icon {
-        position: relative;
-        width: 2.5em;
-        height: 2.5em;
-
-        .trmrk-svg-icon {
-          position: relative;
-          width: 1.75em;
-          height: 1.75em;
-        }
-      }
-
       .trmrk-tree-node-icon {
         position: relative;
         width: 2.5em;
@@ -203,12 +191,39 @@ body, #app-root {
         }
       }
     }
+  }
+
+  .trmrk-tree-node-leaf {
+    padding-left: 2.5em;
+  }
+
+  .trmrk-tree-node {
+    .trmrk-tree-node-content {
+      .trmrk-tree-node-toggle-icon {
+        position: relative;
+        width: 2.5em;
+        height: 2.5em;
+
+        .trmrk-svg-icon {
+          position: relative;
+          width: 1.75em;
+          height: 1.75em;
+        }
+      }
+    }
 
     > .trmrk-tree-node-children {
       display: flex;
       position: relative;
       grid-row: 2;
-      padding-left: 5em;
+      padding-left: 1em;
+    }
+
+    &.trmrk-is-loading {
+
+      > .trmrk-tree-node-children {
+        height: 1.5em;
+      }
     }
   }
 }

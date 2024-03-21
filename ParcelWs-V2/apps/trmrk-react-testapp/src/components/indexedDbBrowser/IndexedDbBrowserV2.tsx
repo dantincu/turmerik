@@ -13,14 +13,16 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import HeightIcon from '@mui/icons-material/Height';
 
+import trmrk from "trmrk";
+
 import LoadingDotPulse from '../loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
-import TrmrkTreeNode, { TrmrkTreeNodeClickLocation } from './TrmrkTreeNode';
-import { TrmrkTreeNodeData } from './TrmrkTreeNodeData';
+import TrmrkTreeNode from './TrmrkTreeNode';
+import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';
 
-export interface IndexedDbTrmrkTreeNodeDataValue {
-  dbInfo: IDBDatabaseInfo;
-}
+import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../services/indexedDb";
+import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue } from "./data";
+import IndexedDbTreeNode, { IndexedDbTreeNodeProps } from "./IndexedDbTreeNode";
 
 export interface IndexedDbBrowserProps {
 }
@@ -41,18 +43,19 @@ export default function IndexedDbBrowser(
 
   const loadDatabases = () => {
     setIsLoadingRoot(true);
+
     indexedDB.databases().then(databases => {
       databases.sort((a, b) => a.name!.localeCompare(b.name!));
 
-      const databasesArr = databases.map((db, idx) => ({
+      const databasesArr = databases.map((db, idx): TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue> => ({
         key: db.name ?? idx,
         nodeLabel: db.name ?? "",
         idx: idx,
         lvlIdx: 0,
         value: {
-          dbInfo: db
+          dbInfo: getDbInfo(db),
         },
-      }) as TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>);
+      }));
 
       setDatabases(databasesArr);
     }, reason => {
@@ -81,7 +84,7 @@ export default function IndexedDbBrowser(
     setIsDbMenuOpen(true);
   }
 
-  const expandedToggled = (data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>) => {
+  const dbExpandedToggled = (data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>) => {
     const databasesArr = databases!.map(db => ({
       ...db,
       isExpanded: (db.key === data.key) ? data.isExpanded : db.isExpanded
@@ -116,12 +119,13 @@ export default function IndexedDbBrowser(
       className="trmrk-indexeddb-tree-view"
       dataArr={databases ?? []}
       isLoading={isLoadingRoot}
-      nodeFactory={data => <TrmrkTreeNode className="trmrk-indexeddb-tree-node" data={data} key={data.key}
-        nodeClicked={dbNodeClicked} expandedToggled={expandedToggled}
-        iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>}
-        expandedChildren={() => <LoadingDotPulse />}>
-        </TrmrkTreeNode>}
-      loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}>
+      hasError={!!error}
+      error={error}
+      nodeFactory={data => <IndexedDbTreeNode data={data} key={data.key}
+        nodeClicked={dbNodeClicked} expandedToggled={dbExpandedToggled}>
+        </IndexedDbTreeNode>}
+      loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}
+      errorNodeFactory={error => <div className='trmrk-error'>{ trmrk.errToString(error) ?? "Something went wrong" }</div>}>
     </TrmrkTreeNodesList> : null }
     <Menu className="trmrk-menu"
         open={isPinnedTopBarMenuOpen}

@@ -40,6 +40,31 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   return retVal;
 };
 
+export const errToString = (
+  error: Error | any,
+  nullifyEmptyStr?: boolean | null | undefined
+) => {
+  let errMsg: string | null = null;
+  const errTypeOf = typeof error;
+
+  if (errTypeOf === "string") {
+    errMsg = error;
+  } else if (errTypeOf === "object") {
+    errMsg = error.message ?? error.cause;
+  } else {
+    errMsg = error?.toString();
+  }
+
+  errMsg ??= null;
+  nullifyEmptyStr ??= true;
+
+  if (nullifyEmptyStr && typeof errMsg === "string" && errMsg.length === 0) {
+    errMsg = null;
+  }
+
+  return errMsg;
+};
+
 /**
  * taken from https://stackoverflow.com/questions/33547583/safe-way-to-extract-property-names
  **/

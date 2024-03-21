@@ -4,14 +4,9 @@ import Box from "@mui/material/Box";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
-import { TrmrkTreeNodeData } from "./TrmrkTreeNodeData";
+import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from "./TrmrkTreeNodeData";
 
 export type TrmrkTreeNodeType<TTreeNodeData extends TrmrkTreeNodeData> = typeof TrmrkTreeNode<TTreeNodeData>;
-
-export enum TrmrkTreeNodeClickLocation {
-  Icon,
-  Label
-}
 
 export interface TrmrkTreeNodeProps<TTreeNodeData extends TrmrkTreeNodeData> {
   className?: string | null | undefined;
