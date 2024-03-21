@@ -20,6 +20,7 @@ export interface TrmrkTreeNodeProps<TTreeNodeData extends TrmrkTreeNodeData> {
   collapseNodeEl?: React.ReactNode | null | undefined;
   iconNodeEl: React.ReactNode;
   children?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  expandedChildren: (() => React.ReactNode | Iterable<React.ReactNode>);
   expandedToggled: (data: TTreeNodeData) => void;
   nodeClicked: (data: TTreeNodeData, labelEl: HTMLDivElement, location: TrmrkTreeNodeClickLocation) => void;
 }
@@ -72,16 +73,22 @@ export default function TrmrkTreeNode<TTreeNodeData extends TrmrkTreeNodeData>(
     props.collapseNodeEl,
     props.expandedToggled ]);
 
-  return <li className={["trmrk-tree-node", props.data.isCurrent ? "trmrk-current-item" : "", props.className ?? ""].join(" ")}>
-    <Box className="trmrk-tree-node-toggle-icon" onClick={expandedToggled}>
-      { props.data.isExpanded ? collapseNodeEl : expandNodeEl }
-    </Box>
-    <Box className="trmrk-tree-node-icon" onClick={iconClicked}>
-      { props.iconNodeEl }
-    </Box>
-    <Box className="trmrk-tree-node-label" onClick={labelClicked} ref={labelRef}>
-      { props.data.nodeLabel }
+  return <li className={["trmrk-tree-node",
+      props.data.isExpanded ? "trmrk-tree-node-expanded" : "trmrk-tree-node-collapsed",
+      props.data.isCurrent ? "trmrk-current-item" : "",
+      props.className ?? ""].join(" ")}>
+    <Box className="trmrk-tree-node-content">
+      <Box className="trmrk-tree-node-toggle-icon" onClick={expandedToggled}>
+        { props.data.isExpanded ? collapseNodeEl : expandNodeEl }
+      </Box>
+      <Box className="trmrk-tree-node-icon" onClick={iconClicked}>
+        { props.iconNodeEl }
+      </Box>
+      <Box className="trmrk-tree-node-label" onClick={labelClicked} ref={labelRef}>
+        { props.data.nodeLabel }
+      </Box>
     </Box>
     { props.children }
+    { props.data.isExpanded ? <Box className='trmrk-tree-node-children'>{ props.expandedChildren() }</Box> : null }
   </li>
 }

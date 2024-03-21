@@ -147,54 +147,68 @@ body, #app-root {
 
   .trmrk-tree-node {
     position: relative;
-    display: flex;
-    /* flex-wrap: nowrap;
-    text-wrap: nowrap;
-    word-break: keep-all;
-    white-space-collapse: preserve;
-    line-break: auto;
-    overflow: visible; */
-    cursor: pointer;
+    display: grid;
+    grid-template-rows: 2.5em auto;
 
-    .trmrk-tree-node-label {
+    .trmrk-tree-node-content {
+      position: relative;
       display: flex;
-      flex-wrap: nowrap;
+      grid-row: 1s;
+      /* flex-wrap: nowrap;
       text-wrap: nowrap;
       word-break: keep-all;
       white-space-collapse: preserve;
       line-break: auto;
-      overflow: visible;
-      flex-shrink: 0;
-      min-width: 2em;
-      line-height: 1.75em;
-      margin: 0.25em;
-      padding-left: 0.25em;
-      padding-right: 0.25em;
-      border-radius: 2px;
-    }
+      overflow: visible; */
+      cursor: pointer;
 
-    .trmrk-tree-node-toggle-icon {
-      position: relative;
-      width: 2.5em;
-      height: 2.5em;
+      .trmrk-tree-node-label {
+        display: flex;
+        flex-wrap: nowrap;
+        text-wrap: nowrap;
+        word-break: keep-all;
+        white-space-collapse: preserve;
+        line-break: auto;
+        overflow: visible;
+        flex-shrink: 0;
+        min-width: 2em;
+        line-height: 1.75em;
+        margin: 0.25em;
+        padding-left: 0.25em;
+        padding-right: 0.25em;
+        border-radius: 2px;
+      }
 
-      .trmrk-svg-icon {
+      .trmrk-tree-node-toggle-icon {
         position: relative;
-        width: 1.75em;
-        height: 1.75em;
+        width: 2.5em;
+        height: 2.5em;
+
+        .trmrk-svg-icon {
+          position: relative;
+          width: 1.75em;
+          height: 1.75em;
+        }
+      }
+
+      .trmrk-tree-node-icon {
+        position: relative;
+        width: 2.5em;
+        height: 2.5em;
+        padding-top: 0.35em;
+        padding-right: 0.75em;
+
+        .trmrk-icon {
+          font-size: 1.75em;
+        }
       }
     }
 
-    .trmrk-tree-node-icon {
+    > .trmrk-tree-node-children {
+      display: flex;
       position: relative;
-      width: 2.5em;
-      height: 2.5em;
-      padding-top: 0.35em;
-      padding-right: 0.75em;
-
-      .trmrk-icon {
-        font-size: 1.75em;
-      }
+      grid-row: 2;
+      padding-left: 5em;
     }
   }
 }

@@ -118,8 +118,8 @@ export default function IndexedDbBrowser(
       isLoading={isLoadingRoot}
       nodeFactory={data => <TrmrkTreeNode className="trmrk-indexeddb-tree-node" data={data} key={data.key}
         nodeClicked={dbNodeClicked} expandedToggled={expandedToggled}
-        iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>}>
-          <Box sx={{ display: "block", position: "absolute" }}>asdf</Box>
+        iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>}
+        expandedChildren={() => <LoadingDotPulse />}>
         </TrmrkTreeNode>}
       loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}>
     </TrmrkTreeNodesList> : null }
