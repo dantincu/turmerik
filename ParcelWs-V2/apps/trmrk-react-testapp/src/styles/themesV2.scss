@@ -1,25 +1,8 @@
 @import "./_mixins";
 
-.trmrk-indexeddb-browser {
-  .trmrk-indexeddb-tree-node {
-    .trmrk-icon-database {
-      color: #880;
-    }
-
-    .trmrk-tree-node-toggle-icon {
-      color: #880;
-    }
-
-    .trmrk-tree-node-label {
-      border: 2px solid #880;
-    }
-
-    &.trmrk-current-item {
-      .trmrk-tree-node-label {
-        background-color: #880;
-        color: white;
-      }
-    }
+.trmrk-indexeddb-tree-view {
+  > .trmrk-tree-node {
+    @include trmrk-tree-node-color(#880);
   }
 }
 
