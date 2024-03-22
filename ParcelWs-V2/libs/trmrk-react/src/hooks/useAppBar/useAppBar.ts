@@ -216,7 +216,6 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   };
 
   useEffect(() => {
-    console.log("updateHeaderHeight", appBarRowsCount);
     updateHeaderHeight(appBarRowsCount);
   }, [
     appTheme,

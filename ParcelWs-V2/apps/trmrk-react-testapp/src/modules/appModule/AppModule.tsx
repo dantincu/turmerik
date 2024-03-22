@@ -29,7 +29,7 @@ export default function AppModule(props: AppModuleProps) {
     appDataSelectors: appDataSelectors,
   });
 
-  const [ isFirstVisit, setIsFirstVisit ] = React.useState(true);
+  const [ isFirstRender, setIsFirstRender ] = React.useState(true);
   const appBarRowsCount = useSelector(appBarSelectors.getAppBarRowsCount);
 
   const refreshBtnRef = React.createRef<HTMLButtonElement>();
@@ -48,12 +48,12 @@ export default function AppModule(props: AppModuleProps) {
   }
 
   useEffect(() => {
-    if (isFirstVisit) {
-      setIsFirstVisit(false);
+    if (isFirstRender) {
+      setIsFirstRender(false);
       dispatch(appBarReducers.setAppBarRowsCount(1));
     }
   }, [
-    isFirstVisit,
+    isFirstRender,
     props.basePath,
     props.rootPath,
     appBar.appTheme,

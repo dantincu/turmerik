@@ -10,6 +10,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import trmrk from "trmrk";
+import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
 
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
@@ -109,7 +110,7 @@ export default function IndexedDbTreeNode(
     warning] );
 
   return (<TrmrkTreeNode className={["trmrk-indexeddb-tree-node", isLoading ? "trmrk-is-loading" : "" ].join(" ")}
-    iconNodeEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>}
+    iconNodeEl={<MatUIIcon className="trmrk-icon trmrk-icon-database" iconName="database" />}
     data={props.data}
     expandedChildren={ () => <TrmrkTreeNodesList
       className="trmrk-indexeddbStore-tree-nodes-list"
@@ -118,7 +119,7 @@ export default function IndexedDbTreeNode(
       hasError={!!error}
       error={error}
       nodeFactory={data => <TrmrkTreeNodeLeaf className="trmrk-indexeddbStore-tree-node"
-        iconNodeEl={<span className="trmrk-icon trmrk-icon-table material-symbols-outlined">table</span>}
+        iconNodeEl={<MatUIIcon className="trmrk-icon trmrk-icon-table" iconName="table" />}
         data={data} nodeClicked={dbStoreNodeClicked} />}
       loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}
       errorNodeFactory={error => <div className='trmrk-error'>{ trmrk.errToString(error) ?? "Something went wrong" }</div>}

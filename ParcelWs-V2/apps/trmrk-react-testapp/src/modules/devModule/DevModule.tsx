@@ -10,6 +10,8 @@ import { Route, Routes } from "react-router-dom";
 
 import trmrk from "trmrk";
 
+import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
+
 import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbDemo from "./pages/indexedDbDemo/IndexedDbDemo";
 import IndexedDbDemoCreateDb from "./pages/indexedDbDemo/IndexedDbDemoCreateDb";
@@ -42,7 +44,7 @@ const getAppBarContents = (
   switch (urlPath) {
     case "/indexeddb-browser":
       retNodes.push(<Link key={1} to={`${basePath}/indexeddb-browser/create-db`}>
-        <IconButton className="trmrk-icon-btn"><span className="material-symbols-outlined">database</span></IconButton></Link>);
+        <IconButton className="trmrk-icon-btn"><MatUIIcon iconName="database" /></IconButton></Link>);
       retNodes.push(<IndexedDbBrowserAppBarContent key={2} basePath={basePath} />);
       break;
     case "/indexeddb-browser/create-db":
@@ -91,7 +93,6 @@ export default function DevModule(
   const [ baseUrlPath, setBaseUrlPath ] = React.useState('');
 
   React.useEffect(() => {
-    console.log("asdfsadf");
     const relUrlPathVal = getRelUrlPath(urlPath);
 
     if (relUrlPathVal !== baseUrlPath) {

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
@@ -10,14 +9,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import HeightIcon from '@mui/icons-material/Height';
 
 import trmrk from "trmrk";
 
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
-import TrmrkTreeNode from './TrmrkTreeNode';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';
 
 import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../../services/indexedDb";

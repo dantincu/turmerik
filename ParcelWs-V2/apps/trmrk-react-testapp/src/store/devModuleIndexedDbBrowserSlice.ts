@@ -29,6 +29,14 @@ export interface DevModuleIndexedDbBrowserDataReducers {
     void,
     "devModuleIndexedDbBrowser/incCreateDbAddDatastoreReqsCount"
   >;
+  decCreateDbAddDatastoreReqsCount: ActionCreatorWithPayload<
+    void,
+    "devModuleIndexedDbBrowser/decCreateDbAddDatastoreReqsCount"
+  >;
+  resetCreateDbAddDatastoreReqsCount: ActionCreatorWithPayload<
+    void,
+    "devModuleIndexedDbBrowser/resetCreateDbAddDatastoreReqsCount"
+  >;
 }
 
 const devModuleIndexedDbBrowserSlice = createSlice({
@@ -40,6 +48,15 @@ const devModuleIndexedDbBrowserSlice = createSlice({
     incCreateDbAddDatastoreReqsCount: (state, action: ReducerAction<void>) => {
       state.createDbAddDatastoreReqsCount++;
     },
+    decCreateDbAddDatastoreReqsCount: (state, action: ReducerAction<void>) => {
+      state.createDbAddDatastoreReqsCount--;
+    },
+    resetCreateDbAddDatastoreReqsCount: (
+      state,
+      action: ReducerAction<void>
+    ) => {
+      state.createDbAddDatastoreReqsCount = 0;
+    },
   },
   selectors: {
     getCreateDbAddDatastoreReqsCount: (appData) =>
@@ -47,8 +64,11 @@ const devModuleIndexedDbBrowserSlice = createSlice({
   },
 });
 
-const { incCreateDbAddDatastoreReqsCount } =
-  devModuleIndexedDbBrowserSlice.actions;
+const {
+  incCreateDbAddDatastoreReqsCount,
+  decCreateDbAddDatastoreReqsCount,
+  resetCreateDbAddDatastoreReqsCount,
+} = devModuleIndexedDbBrowserSlice.actions;
 
 const { getCreateDbAddDatastoreReqsCount } =
   devModuleIndexedDbBrowserSlice.selectors;
@@ -56,6 +76,8 @@ const { getCreateDbAddDatastoreReqsCount } =
 export const devModuleIndexedDbBrowserReducers: DevModuleIndexedDbBrowserDataReducers =
   {
     incCreateDbAddDatastoreReqsCount,
+    decCreateDbAddDatastoreReqsCount,
+    resetCreateDbAddDatastoreReqsCount,
   };
 
 export const devModuleIndexedDbBrowserSelectors: DevModuleIndexedDbBrowserDataSelectors =

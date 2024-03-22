@@ -71,7 +71,7 @@ export default function IndexedDbCreateDbStore(
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbStoreName" required>DB Store Name</InputLabel>
         <TextField name="dbStoreName" onChange={dbStoreNameChanged} value={dbStoreName} required fullWidth />
-        { dbStoreNameErr ? <FormHelperText error>{dbStoreNameErr}</FormHelperText> : null }
+        { (dbStoreNameErr ?? null) !== null ? <FormHelperText error>{dbStoreNameErr}</FormHelperText> : null }
       </FormControl>
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="autoIncrement" required>Auto increment</InputLabel>
@@ -80,7 +80,7 @@ export default function IndexedDbCreateDbStore(
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="autoIncrement" required>Key Path</InputLabel>
         <TextField name="autoIncrement" className="trmrk-textarea" onChange={keyPathChanged} value={keyPath} required multiline fullWidth />
-        { keyPathErr ? <FormHelperText error>{keyPathErr}</FormHelperText> : null }
+        { (keyPathErr ?? null) !== null ? <FormHelperText error>{keyPathErr}</FormHelperText> : null }
       </FormControl>
     </FormGroup>
   </div>);

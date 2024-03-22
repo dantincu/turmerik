@@ -13,8 +13,8 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
-import { devModuleIndexedDbBrowserSelectors, devModuleIndexedDbBrowserReducers } from "../../../store/devModuleIndexedDbBrowserSlice";
 import IndexedDbCreateDbStore, { IndexedDbCreateDbStoreProps } from "./IndexedDbCreateDbStore";
+import { devModuleIndexedDbBrowserReducers, devModuleIndexedDbBrowserSelectors } from "../../../store/devModuleIndexedDbBrowserSlice";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 
@@ -42,18 +42,17 @@ export default function IndexedDbCreateDb(
   const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
-  const [ formCanBeSubmitted, setFormCanBeSubmitted ] = React.useState(false);
+  
+  const createDbAddDatastoreReqsCount = useSelector(devModuleIndexedDbBrowserSelectors.getCreateDbAddDatastoreReqsCount);
+  const createDbAddDatastoreReqsCountRef = React.useRef(0);
+
+  const [ isFirstRender, setIsFirstRender ] = React.useState(true);
 
   const [ saving, setSaving ] = React.useState(false);
   const [ error, setError ] = React.useState<string | null>(null);
   const [ warning, setWarning ] = React.useState<string | null>(null);
 
   const navigate = useNavigate();
-
-  const createDbAddDatastoreReqsCount = useSelector(
-    devModuleIndexedDbBrowserSelectors.getCreateDbAddDatastoreReqsCount);
-
-  const createDbAddDatastoreReqsCountRef = React.useRef(0);
   const dispatch = useDispatch();
 
   const dbNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,11 +66,6 @@ export default function IndexedDbCreateDb(
     }
 
     setDbNameErr(dbNameErr);
-
-    refreshFormCanBeSubmitted(
-      dbNameErr,
-      dbVersionErr,
-      dbStoresArr);
   }
 
   const dbVersionChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,25 +85,17 @@ export default function IndexedDbCreateDb(
     }
 
     setDbVersionErr(dbVersionErr);
-
-    refreshFormCanBeSubmitted(
-      dbNameErr,
-      dbVersionErr,
-      dbStoresArr);
   }
 
   const addDbStoreClicked = () => {
     dispatch(devModuleIndexedDbBrowserReducers.incCreateDbAddDatastoreReqsCount());
-    setFormCanBeSubmitted(false);
   }
 
-  const refreshFormCanBeSubmitted = (dbNameErr: string | null, dbVersionErr: string | null, dbStoresArr: IndexedDbStore[]) => {
-    const newFormCanBeSubmitted = !dbNameErr && !dbVersionErr && !dbStoresArr.find(store => store.hasError);
-
-    if (newFormCanBeSubmitted !== formCanBeSubmitted) {
-      setFormCanBeSubmitted(newFormCanBeSubmitted);
-    }
-  }
+  const getFormCanBeSubmitted = (
+    dbNameErr: string | null,
+    dbVersionErr: string | null,
+    dbStoresArr: IndexedDbStore[]) => (dbNameErr ?? null) === null && (dbVersionErr ?? null) === null && (
+      dbStoresArr.find(store => store.hasError) ?? null) === null;
 
   const createDbStoreNameChangedHandler = (idx: number) => (newDbStoreName: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
@@ -117,11 +103,6 @@ export default function IndexedDbCreateDb(
 
     dbStore.dbStoreName = newDbStoreName;
     dbStore.hasError = hasError;
-
-    refreshFormCanBeSubmitted(
-      dbNameErr,
-      dbVersionErr,
-      dbStoresArr);
 
     setDbStoresArr(newDbStoresArr);
   }
@@ -141,11 +122,6 @@ export default function IndexedDbCreateDb(
     dbStore.keyPath = newKeyPath;
     dbStore.hasError = hasError;
 
-    refreshFormCanBeSubmitted(
-      dbNameErr,
-      dbVersionErr,
-      dbStoresArr);
-
     setDbStoresArr(newDbStoresArr);
   }
 
@@ -153,12 +129,12 @@ export default function IndexedDbCreateDb(
     setError(null);
     setWarning(null);
 
-    let hasError = false;
+    let hasError: boolean;
 
     const addedStores = dbStoresArr.map(
       store => store);
 
-    if (addedStores.find(obj => obj.hasError)) {
+    if (!getFormCanBeSubmitted(dbNameErr, dbVersionErr, dbStoresArr)) {
       hasError = true;
       setError("Please fix the current errors before submiting the changes");
     } else {
@@ -213,7 +189,10 @@ export default function IndexedDbCreateDb(
   }
 
   React.useEffect(() => {
-    if (createDbAddDatastoreReqsCount !== createDbAddDatastoreReqsCountRef.current) {
+    if (isFirstRender) {
+      dispatch(devModuleIndexedDbBrowserReducers.resetCreateDbAddDatastoreReqsCount());
+      setIsFirstRender(false);
+    } else if (createDbAddDatastoreReqsCount !== createDbAddDatastoreReqsCountRef.current) {
       createDbAddDatastoreReqsCountRef.current = createDbAddDatastoreReqsCount;
 
       const newDbStoresArr = [...dbStoresArr];
@@ -228,21 +207,21 @@ export default function IndexedDbCreateDb(
       setDbStoresArr(newDbStoresArr);
     }
 
-  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr, formCanBeSubmitted ]);
+  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr, saving, error, warning, dbNameErr, dbVersionErr ]);
 
   return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
     <FormGroup className="trmrk-form-group">
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbName" required>Database name</InputLabel>
         <Input name="dbName" onChange={dbNameChanged} value={dbName} fullWidth />
-        { typeof dbNameErr === "string" ? <FormHelperText error>{dbNameErr}</FormHelperText> : null }
+        { (dbNameErr ?? null) !== null ? <FormHelperText error>{dbNameErr}</FormHelperText> : null }
       </FormControl>
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbVersion" required>Database version number</InputLabel>
         <Input name="dbVersion" type="number" onChange={dbVersionChanged} value={dbVersion} fullWidth inputProps={{
           min: 1,
         }} />
-        { typeof dbVersionErr === "string" ? <FormHelperText error>{dbVersionErr}</FormHelperText> : null }
+        { (dbVersionErr ?? null) !== null ? <FormHelperText error>{dbVersionErr}</FormHelperText> : null }
       </FormControl>
     </FormGroup>
     <FormControl className="trmrk-form-field">
@@ -258,5 +237,7 @@ export default function IndexedDbCreateDb(
         <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>
         <Button onClick={onCancelClick}>Cancel</Button>
     </div>
+    { (error ?? null) !== null ? <FormHelperText error>{error}</FormHelperText> : null }
+    { (warning ?? null) !== null ? <FormHelperText className="trmrk-warning">{warning}</FormHelperText> : null }
   </Paper>);
 }
