@@ -26,7 +26,7 @@
     }
   }
 
-  &.trmrk-tree-node-expanded {
-    border-left: 1px solid $color;
+  &.trmrk-tree-node-expanded::before {
+    background-color: $color;
   }
 }
