@@ -52,6 +52,7 @@ export default function BasicAppModule(
   }
 
   React.useEffect(() => {
+    console.log("props.appBar.appBarRowsCount", props.appBar.appBarRowsCount);
   }, [
     props.appBar.appBarRowsCount,
     props.appBar.appHeaderHeight,

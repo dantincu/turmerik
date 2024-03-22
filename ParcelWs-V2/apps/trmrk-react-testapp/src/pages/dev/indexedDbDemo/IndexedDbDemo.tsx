@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import IndexedDbBrowser from "../../../components/indexedDbBrowser/IndexedDbBrowserV2";
+import IndexedDbBrowser from "../../../components/indexedDbBrowser/IndexedDbBrowser";
 
 import { appDataReducers } from "../../../store/appDataSlice";
 

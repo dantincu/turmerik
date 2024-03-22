@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 
@@ -38,14 +39,17 @@ const App = withErrorBoundary(() => {
   });
 
   const refreshBtnRef = React.createRef<HTMLButtonElement>();
+  const dispatch = useDispatch();
 
   const increaseHeaderHeightBtnClicked = () => {
-    appBar.updateHeaderHeight(appBar.appBarRowsCount + 1);
+    // appBar.updateHeaderHeight(appBar.appBarRowsCount + 1);
+    dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount + 1));
   }
 
   const decreaseHeaderHeightBtnClicked = () => {
     if (appBar.appBarRowsCount > 1) {
-      appBar.updateHeaderHeight(appBar.appBarRowsCount - 1);
+      // appBar.updateHeaderHeight(appBar.appBarRowsCount - 1);
+      dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount - 1));
     }
   }
 

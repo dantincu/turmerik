@@ -209,11 +209,13 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     bodyEl.style.top = `${newHeaderHeight}px`;
     headerEl.style.top = "0px";
 
-    dispatch(props.appBarReducers.setAppBarRowsCount(newAppBarRowsCount));
+    // dispatch(props.appBarReducers.setAppBarRowsCount(newAppBarRowsCount));
     setAppHeaderHeight(newHeaderHeight);
   };
 
-  useEffect(() => {}, [
+  useEffect(() => {
+    updateHeaderHeight(appBarRowsCount);
+  }, [
     appTheme,
     appBarRowsCount,
     lastRefreshTmStmp,

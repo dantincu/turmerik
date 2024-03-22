@@ -1,174 +1,28 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { SvgIconProps } from '@mui/material/SvgIcon';
-import { TreeView } from '@mui/x-tree-view/TreeView';
-import { TreeItem, TreeItemProps, treeItemClasses } from '@mui/x-tree-view/TreeItem';
+import Box from '@mui/material/Box';
+import Menu from '@mui/material/Menu';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import SettingsIcon from '@mui/icons-material/Settings';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import HeightIcon from '@mui/icons-material/Height';
+
+import trmrk from "trmrk";
 
 import LoadingDotPulse from '../loading/LoadingDotPulse';
+import TrmrkTreeNodesList from './TrmrkTreeNodesList';
+import TrmrkTreeNode from './TrmrkTreeNode';
+import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';
 
-// Code taken from https://mui.com/x/react-tree-view
-
-declare module 'react' {
-  interface CSSProperties {
-    '--tree-view-color'?: string;
-    '--tree-view-bg-color'?: string;
-  }
-}
-
-type StyledTreeItemProps = TreeItemProps & {
-  className?: string | null | undefined;
-  idx: number;
-  lvlIdx: number;
-  bgColor?: string;
-  bgColorForDarkMode?: string;
-  border?: string | null | undefined;
-  borderColor?: string | null | undefined;
-  borderColorForDarkMode?: string | null | undefined;
-  borderAltColor?: string | null | undefined;
-  borderAltColorForDarkMode?: string | null | undefined;
-  color?: string;
-  colorForDarkMode?: string;
-  labelColor?: string;
-  labelColorForDarkMode?: string;
-  labelIcon?: React.ElementType<SvgIconProps> | null | undefined;
-  labelIconEl?: HTMLElement | null | undefined;
-  labelText: string;
-  labelWeight?: "bold" | "regular" | null | undefined
-};
-
-const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  [`& .${treeItemClasses.content}`]: {
-    color: theme.palette.text.secondary,
-    backgroundColor: theme.palette.background,
-    paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
-    '&.Mui-expanded': {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-      backgroundColor: theme.palette.background,
-    }
-    /* '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.background})`,
-      color: 'var(--tree-view-color)',
-    },
-    [`& .${treeItemClasses.label}`]: {
-      fontWeight: 'inherit',
-      color: 'inherit',
-    },
-  },
-  [`& .${treeItemClasses.group}`]: {
-    marginLeft: 0,
-    [`& .${treeItemClasses.content}`]: {
-      paddingLeft: theme.spacing(2),
-    }, */
-  },
-})) as unknown as typeof TreeItem;
-
-const StyledTreeItem = React.forwardRef(function StyledTreeItem(
-  props: StyledTreeItemProps,
-  ref: React.Ref<HTMLLIElement>,
-) {
-  const labelRef = React.createRef<HTMLSpanElement>();
-
-  const theme = useTheme();
-  const {
-    idx,
-    lvlIdx,
-    border,
-    borderColor,
-    borderColorForDarkMode,
-    borderAltColor,
-    borderAltColorForDarkMode,
-    bgColor,
-    color,
-    labelIcon: LabelIcon,
-    labelIconEl,
-    labelText,
-    colorForDarkMode,
-    bgColorForDarkMode,
-    labelColor,
-    labelColorForDarkMode,
-    labelWeight,
-    ...other
-  } = props;
-
-  const isLightMode = theme.palette.mode !== 'dark';
-
-  const styleProps = {
-    '--tree-view-color': isLightMode ? color : colorForDarkMode,
-    '--tree-view-bg-color': isLightMode ? bgColor : bgColorForDarkMode,
-  };
-
-  let bottomBorder = "";
-
-  if (border) {
-    const bottomBorderColor = isLightMode ? borderColor : borderColorForDarkMode;
-    const bottomBorderAltColor = isLightMode ? borderAltColor : borderAltColorForDarkMode;
-    const bottomBorderColorValue = (idx % 2) === (lvlIdx % 2) ? bottomBorderColor : bottomBorderAltColor;
-    bottomBorder = `${border} ${bottomBorderColorValue}`;
-  }
-
-  const labelColorValue = isLightMode ? labelColor : labelColorForDarkMode;
-
-  const labelClick = (event: MouseEvent) => {
-    event.stopPropagation();
-  }
-
-  React.useEffect(() => {
-    const labelEl = labelRef.current!;
-    
-    labelEl.addEventListener("mousedown", labelClick);
-    labelEl.addEventListener("click", labelClick);
-
-    return () => {
-      labelEl.removeEventListener("mousedown", labelClick);
-      labelEl.removeEventListener("click", labelClick);
-    };
-  }, [ labelRef ]);
-
-  return (
-    <StyledTreeItemRoot
-      label={
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            p: 0.5,
-            pr: 0,
-          }}
-        >
-          { LabelIcon ? <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} /> : labelIconEl }
-          <Typography className='trmrk-label' variant="body2" sx={{ fontWeight: labelWeight ?? 'inherit', flexGrow: 1,
-            height: "1.66em", borderBottom: bottomBorder, color: labelColorValue ?? "" }} onClick={labelClick} ref={labelRef}>
-            {labelText}
-          </Typography>
-          { /* <Box className='trmrk-border' sx={{
-            display: "block",
-            position: "absolute",
-            height: "1px",
-            top: "2em",
-            left: "0em",
-            right: "0em",
-            backgroundColor: bottomBorderColorValue }}></Box> */ }
-          </Box>
-        }
-      style={styleProps}
-      {...other}
-      ref={ref}
-    />
-  );
-});
+import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../services/indexedDb";
+import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue } from "./data";
+import IndexedDbTreeNode, { IndexedDbTreeNodeProps } from "./IndexedDbTreeNode";
 
 export interface IndexedDbBrowserProps {
 }
@@ -177,29 +31,33 @@ export default function IndexedDbBrowser(
   props: IndexedDbBrowserProps) {
 
   const [ isLoadingRoot, setIsLoadingRoot ] = React.useState(false);
-  const [ pinnedTopRowsCount, setPinnedTopRowsCount ] = React.useState(1);
 
-  const [ databases, setDatabases ] = React.useState<IDBDatabaseInfo[] | null>(null);
+  const [ databases, setDatabases ] = React.useState<TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>[] | null>(null);
   const [ error, setError ] = React.useState<Error | any | null>(null);
 
-  const pinnedTopBarRef = React.createRef<HTMLDivElement>();
-  const pinnedTopBarBgSpacerRef = React.createRef<HTMLDivElement>();
+  const [ isPinnedTopBarMenuOpen, setIsPinnedTopBarMenuOpen ] = React.useState(false);
+  const [ isDbMenuOpen, setIsDbMenuOpen ] = React.useState(false);
 
-  const updatePinnedTopBarHeight = (isLoadingRoot: boolean, pinnedTopRowsCount: number) => {
-    if (isLoadingRoot) {
-      pinnedTopRowsCount++;
-    }
-
-    const heightPx = `${pinnedTopRowsCount * 2}em`;
-    pinnedTopBarRef.current!.style.height = heightPx;
-    pinnedTopBarBgSpacerRef.current!.style.height = heightPx;
-  }
+  const pinnedTopBarRef = React.useRef<HTMLButtonElement | null>(null);
+  const currentDbLabelRef = React.useRef<HTMLDivElement | null>(null);
 
   const loadDatabases = () => {
     setIsLoadingRoot(true);
+
     indexedDB.databases().then(databases => {
       databases.sort((a, b) => a.name!.localeCompare(b.name!));
-      setDatabases(databases);
+
+      const databasesArr = databases.map((db, idx): TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue> => ({
+        key: db.name ?? idx,
+        nodeLabel: db.name ?? "",
+        idx: idx,
+        lvlIdx: 0,
+        value: {
+          dbInfo: getDbInfo(db),
+        },
+      }));
+
+      setDatabases(databasesArr);
     }, reason => {
       setError(reason);
     }).finally(() => {
@@ -207,38 +65,90 @@ export default function IndexedDbBrowser(
     });
   }
 
-  React.useEffect(() =>{
-    updatePinnedTopBarHeight(isLoadingRoot, pinnedTopRowsCount);
+  const pinnedTopBarOptionsClicked = (e: React.MouseEvent<HTMLButtonElement>) => {
+    pinnedTopBarRef.current = e.target as HTMLButtonElement;
+    setIsPinnedTopBarMenuOpen(true);
+  }
 
+  const dbNodeClicked = (
+      data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>,
+      labelEl: HTMLDivElement,
+      location: TrmrkTreeNodeClickLocation) => {
+    const databasesArr = databases!.map(db => ({
+      ...db,
+      isCurrent: (db.key === data.key) ? true : false
+    }) as TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>);
+
+    setDatabases(databasesArr);
+    currentDbLabelRef.current = labelEl;
+    setIsDbMenuOpen(true);
+  }
+
+  const dbExpandedToggled = (data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>) => {
+    const databasesArr = databases!.map(db => ({
+      ...db,
+      isExpanded: (db.key === data.key) ? data.isExpanded : db.isExpanded
+    }) as TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>);
+
+    setDatabases(databasesArr);
+  }
+
+  const onPinnedTopBarMenuClose = () => {
+    setIsPinnedTopBarMenuOpen(false);
+  }
+
+  const onDbMenuClose = () => {
+    setIsDbMenuOpen(false);
+  }
+
+  React.useEffect(() =>{
     if (!databases && !error) {
       loadDatabases();
+    } else {
+      // console.log("databases", databases!.filter(db => db.isCurrent).map(db => db.key));
     }
-  }, [ isLoadingRoot, pinnedTopBarRef, pinnedTopBarBgSpacerRef, databases, error ]);
+  }, [ isLoadingRoot, databases, error, isPinnedTopBarMenuOpen, isDbMenuOpen, pinnedTopBarRef, currentDbLabelRef ]);
 
   return (<div className="trmrk-panel trmrk-indexeddb-browser">
-    <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")} ref={pinnedTopBarRef}>
-      <span className='trmrk-hcy-root-node-token'>&#47;</span>
+    <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
+      <IconButton ref={pinnedTopBarRef} onClick={pinnedTopBarOptionsClicked}><SettingsIcon /></IconButton>
     </Paper>
-    <div className={['trmrk-pinned-top-bar-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")} ref={pinnedTopBarBgSpacerRef}>
+    <div className={['trmrk-pinned-top-bar-bg-spacer', isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
     </div>
-    { databases ? <TreeView className="trmrk-tree-view trmrk-indexeddb-tree-view"
-        defaultCollapseIcon={<ArrowDropDownIcon className='trmrk-mat-icon trmrk-mat-icon-arrow-drop-down' />}
-        defaultExpandIcon={<ArrowRightIcon className='trmrk-mat-icon trmrk-mat-icon-arrow-right' />}
-        sx={{ flexGrow: 1, minWidth: "100%" }}>
-      { databases.map((db, idx) => <StyledTreeItem
-          className='trmrk-tree-node trmrk-indexeddb-tree-node'
-          idx={idx}
-          lvlIdx={0}
-          border="1px none"
-          labelColor='#880'
-          labelColorForDarkMode='#880'
-          labelWeight="bold"
-          nodeId={db.name ?? ""}
-          key={db.name}
-          labelText={db.name ?? ""}
-          labelIconEl={<span className="trmrk-icon trmrk-icon-database material-symbols-outlined">database</span>}>
-        <span className='trmrk-parent-not-leaf-node'></span>
-      </StyledTreeItem>) }
-    </TreeView> : null }
+    { databases ? <TrmrkTreeNodesList
+      className="trmrk-indexeddb-tree-view"
+      dataArr={databases ?? []}
+      isLoading={isLoadingRoot}
+      hasError={!!error}
+      error={error}
+      nodeFactory={data => <IndexedDbTreeNode data={data} key={data.key}
+        nodeClicked={dbNodeClicked} expandedToggled={dbExpandedToggled}>
+        </IndexedDbTreeNode>}
+      loadingNodeFactory={() => <LoadingDotPulse parentElTagName={"li"} />}
+      errorNodeFactory={error => <div className='trmrk-error'>{ trmrk.errToString(error) ?? "Something went wrong" }</div>}>
+    </TrmrkTreeNodesList> : null }
+    <Menu className="trmrk-menu"
+        open={isPinnedTopBarMenuOpen}
+        anchorEl={pinnedTopBarRef.current}
+        onClose={onPinnedTopBarMenuClose}>
+      <MenuList className='trmrk-menu-list'>
+        <MenuItem>
+          <IconButton><HeightIcon /></IconButton>
+        </MenuItem>
+      </MenuList>
+    </Menu>
+    <Menu className="trmrk-menu"
+        open={isDbMenuOpen}
+        anchorEl={currentDbLabelRef.current}
+        onClose={onDbMenuClose}>
+      <MenuList className='trmrk-menu-list'>
+        <MenuItem>
+          <IconButton><VisibilityIcon /></IconButton>
+          <IconButton><EditIcon /></IconButton>
+          <IconButton><MoreVertIcon /></IconButton>
+          <IconButton><ArrowForwardIcon /></IconButton>
+        </MenuItem>
+      </MenuList>
+    </Menu>
   </div>);
 }
