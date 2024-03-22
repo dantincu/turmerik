@@ -1,15 +1,15 @@
 import React from "react";
 
-import AppPanel, { AppPanelProps } from "../appPanel/AppPanel";
+import AppPanel, { FloatingTopBarPanelProps } from "../floatingTopBarPanel/FloatingTopBarPanel";
 
 import { isIPadOrIphone, isAndroid, isMobile } from "../../constants";
 
 import { getAppTheme, currentAppTheme } from "../../app-theme/core";
 import { appModeCssClass, getAppModeCssClassName } from "../../utils";
 
-import "./AppModule.scss";
+import "./FloatingTopBarModule.scss";
 
-export interface AppModuleProps extends AppPanelProps {
+export interface FloatingTopBarModuleProps extends FloatingTopBarPanelProps {
   isDarkMode?: boolean | null | undefined;
   isCompactMode?: boolean | null | undefined;
 }
@@ -30,8 +30,8 @@ export const getBodyBottomPaddingFactor = () => {
 
 export const bodyBottomPaddingFactor = getBodyBottomPaddingFactor();
 
-export default function AppModule(
-  props: AppModuleProps
+export default function FloatingTopBarModule(
+  props: FloatingTopBarModuleProps
 ) {
   let appThemeClassName = "";
 
@@ -53,9 +53,9 @@ export default function AppModule(
   retProps.headerClassName ??= "";
   retProps.bodyClassName ??= "";
 
-  retProps.className = ["trmrk-app-module", appThemeClassName, appModeCssClass.value, retProps.className].join(" ");
-  retProps.headerClassName = ["trmrk-app-module-header", retProps.headerClassName].join(" ");
-  retProps.bodyClassName = ["trmrk-app-module-body", retProps.bodyClassName].join(" ");
+  retProps.className = ["trmrk-ftb-module", appThemeClassName, appModeCssClass.value, retProps.className].join(" ");
+  retProps.headerClassName = ["trmrk-ftb-module-header", retProps.headerClassName].join(" ");
+  retProps.bodyClassName = ["trmrk-ftb-module-body", retProps.bodyClassName].join(" ");
   retProps.bodyBottomPaddingFactor ??= bodyBottomPaddingFactor;
 
   return (<AppPanel {...retProps}></AppPanel>);

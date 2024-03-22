@@ -1,9 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import IndexedDbBrowser from "../../../components/indexedDbBrowser/IndexedDbBrowser";
+import IndexedDbBrowser from "../../indexedDbBrowser/IndexedDbBrowser";
 
-import { appDataReducers } from "../../../store/appDataSlice";
+import { appDataReducers } from "../../../../store/appDataSlice";
 
 export interface IndexedDbDemoProps {
   urlPath: string

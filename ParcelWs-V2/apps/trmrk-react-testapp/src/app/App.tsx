@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 
@@ -9,21 +9,18 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Paper  from "@mui/material/Paper";
 
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { TrmrkError } from "trmrk/src/TrmrkError";
 
-import { appDataSelectors, appDataReducers } from "../store/appDataSlice";
-import { appBarSelectors, appBarReducers } from "../store/appBarDataSlice";
+import { appDataSelectors } from "../store/appDataSlice";
 
-import HomePage from "../pages/home/HomePage";
-import ResizablesDemo from "../pages/resizablesDemo/ResizablesDemo";
-import DevModule from "../components/devModule/DevModule";
+import DevModule from "../modules/devModule/DevModule";
 
-import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
-import BasicAppModule from "trmrk-react/src/components/basicAppModule/BasicAppModule"
+import AppModule from "../modules/appModule/AppModule";
+import NotFound from "../pages/notFound/NotFound";
+
+import {  getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
+import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(
@@ -31,51 +28,28 @@ const App = withErrorBoundary(() => {
     // (error, errorInfo) => logErrorToMyService(error, errorInfo)
   );
 
-  const appBar = useAppBar({
-    appBarReducers: appBarReducers,
-    appBarSelectors: appBarSelectors,
-    appDataReducers: appDataReducers,
-    appDataSelectors: appDataSelectors,
+  const isCompactMode = useSelector(appDataSelectors.getIsCompactMode);
+  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
+
+  const appTheme = getAppTheme({
+    isDarkMode: isDarkMode,
   });
 
-  const refreshBtnRef = React.createRef<HTMLButtonElement>();
-  const dispatch = useDispatch();
+  currentAppTheme.value = appTheme;
 
-  const increaseHeaderHeightBtnClicked = () => {
-    // appBar.updateHeaderHeight(appBar.appBarRowsCount + 1);
-    dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount + 1));
-  }
-
-  const decreaseHeaderHeightBtnClicked = () => {
-    if (appBar.appBarRowsCount > 1) {
-      // appBar.updateHeaderHeight(appBar.appBarRowsCount - 1);
-      dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount - 1));
-    }
-  }
+  const appThemeClassName = appTheme.cssClassName;
+  appModeCssClass.value = getAppModeCssClassName(isCompactMode);
 
   const refreshCurrentPage = () => {
     window.location.reload();
   }
 
-  useEffect(() => {
-  }, [
-    appBar.appTheme,
-    refreshBtnRef,
-    appBar.appBarRowsCount,
-    appBar.lastRefreshTmStmp,
-    appBar.appHeaderHeight,
-    appBar.showAppBar,
-    appBar.appSettingsMenuIsOpen,
-    appBar.appearenceMenuIsOpen,
-    appBar.appearenceMenuIconBtnEl,
-    appBar.appBarRowHeightPx ]);
-
   if (error) {
     return (
-      <ThemeProvider theme={appBar.appTheme.theme}>
+      <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
 
-        <Paper className={["trmrk-app-error", appBar.appThemeClassName].join(" ")}>
+        <Paper className={["trmrk-app-error", appThemeClassName].join(" ")}>
           <h2>Something went wrong:</h2>
           <pre>{((error as Error).message ?? error).toString()}</pre>
           { (error as TrmrkError).showPageRefreshOption !== false ? <Button onClick={refreshCurrentPage}>Try reloading the page</Button> : null }
@@ -86,35 +60,14 @@ const App = withErrorBoundary(() => {
 
   return (
     <BrowserRouter>
-      <ThemeProvider theme={appBar.appTheme.theme}>
+      <ThemeProvider theme={appTheme.theme}>
         <CssBaseline />
 
         <Routes>
-          <Route path="/"
-            element={
-              <BasicAppModule
-                className="trmrk-app"
-                headerClassName="trmrk-app-header"
-                appBar={appBar}
-                basePath="/"
-                appBarClassName="trmrk-app-module-bar"
-                appBarChildren={[
-                  <IconButton key={0} className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>,
-                  <IconButton key={1} className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>]}
-                bodyClassName="trmrk-app-body"
-                bodyScrollableY={true}
-                refreshBtnClicked={() => {}}>
-                  <Outlet />
-              </BasicAppModule> }>
-
-            <Route path="resizables-demo" element={
-              <ResizablesDemo refreshBtnRef={refreshBtnRef} urlPath="/resizables-demo" />}></Route>
-            <Route path="" element={<HomePage urlPath="/" />}></Route>
-          </Route>
-
-          <Route path="/dev/*"
-            element={
-              <DevModule basePath="/dev" /> } />
+          <Route path="/app/*" element={ <AppModule basePath="/app" rootPath="/" /> } />
+          <Route path="/dev/*" element={ <DevModule basePath="/dev" rootPath="/" /> } />
+          <Route path="/" element={ <Navigate to="/app" /> } />
+          <Route path="*" element={ <NotFound /> } />
         </Routes>
 
       </ThemeProvider>

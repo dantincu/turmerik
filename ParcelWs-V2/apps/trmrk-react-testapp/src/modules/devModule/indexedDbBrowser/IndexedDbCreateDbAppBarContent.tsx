@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 
-import { devModuleIndexedDbBrowserReducers } from "../../store/devModuleIndexedDbBrowserSlice";
+import { devModuleIndexedDbBrowserReducers } from "../../../store/devModuleIndexedDbBrowserSlice";
 
 export interface IndexedDbCreateDbAppBarContentProps {
 }

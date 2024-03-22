@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
@@ -60,8 +60,8 @@ export interface UseAppBarResult {
   handleDarkModeToggled: (isDarkMode: boolean) => void;
   appBarToggled: (showAppBar: boolean) => void;
   appHeaderScrolling: (
-    data: AppPanelHeaderData,
-    offset: AppPanelHeaderOffset
+    data: FloatingTopBarPanelHeaderData,
+    offset: FloatingTopBarPanelHeaderOffset
   ) => void;
   updateHeaderHeight: (newAppBarRowsCount: number) => void;
 }
@@ -70,9 +70,9 @@ import { AppTheme, getAppTheme, currentAppTheme } from "../../app-theme/core";
 import { appModeCssClass, getAppModeCssClassName } from "../..//utils";
 
 import {
-  AppPanelHeaderData,
-  AppPanelHeaderOffset,
-} from "../..//components/appPanel/AppPanel";
+  FloatingTopBarPanelHeaderData,
+  FloatingTopBarPanelHeaderOffset,
+} from "../../components/floatingTopBarPanel/FloatingTopBarPanel";
 import { MtblRefValue } from "trmrk/src/core";
 
 export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
@@ -80,7 +80,7 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     null
   );
 
-  const appBarRowHeightPx = React.useRef(0);
+  const appBarRowHeightPx = React.useRef(40);
   const headerRef = React.useRef<HTMLDivElement>();
   const bodyRef = React.useRef<HTMLDivElement>();
 
@@ -181,18 +181,18 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   };
 
   const appHeaderScrolling = (
-    data: AppPanelHeaderData,
-    offset: AppPanelHeaderOffset
+    data: FloatingTopBarPanelHeaderData,
+    offset: FloatingTopBarPanelHeaderOffset
   ) => {
     headerRef.current = data.headerEl;
     bodyRef.current = data.bodyEl;
 
-    if (appBarRowHeightPx.current === 0) {
+    /* if (appBarRowHeightPx.current === 0) {
       const newAppBarRowHeightPx = Math.round(
         data.headerHeight / appBarRowsCount
       );
       appBarRowHeightPx.current = newAppBarRowHeightPx;
-    }
+    } */
 
     if (appHeaderHeight === null) {
       setAppHeaderHeight(data.headerHeight);
@@ -200,20 +200,23 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   };
 
   const updateHeaderHeight = (newAppBarRowsCount: number) => {
-    const headerEl = headerRef.current!;
-    const bodyEl = bodyRef.current!;
+    const headerEl = headerRef.current;
+    const bodyEl = bodyRef.current;
 
-    const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
+    if (headerEl && bodyEl) {
+      const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
 
-    headerEl.style.height = `${newHeaderHeight}px`;
-    bodyEl.style.top = `${newHeaderHeight}px`;
-    headerEl.style.top = "0px";
+      headerEl.style.height = `${newHeaderHeight}px`;
+      bodyEl.style.top = `${newHeaderHeight}px`;
+      headerEl.style.top = "0px";
 
-    // dispatch(props.appBarReducers.setAppBarRowsCount(newAppBarRowsCount));
-    setAppHeaderHeight(newHeaderHeight);
+      // dispatch(props.appBarReducers.setAppBarRowsCount(newAppBarRowsCount));
+      setAppHeaderHeight(newHeaderHeight);
+    }
   };
 
   useEffect(() => {
+    console.log("updateHeaderHeight", appBarRowsCount);
     updateHeaderHeight(appBarRowsCount);
   }, [
     appTheme,

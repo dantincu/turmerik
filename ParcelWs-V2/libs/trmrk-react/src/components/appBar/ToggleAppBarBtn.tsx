@@ -18,8 +18,8 @@ export default function ToggleAppBarBtn(
 
   return (<IconButton onClick={handleClick} sx={{
       position: "fixed", top: "0px", right: "0px", zIndex: 1101 }}
-      className={ [ "trmrk-icon-btn trmrk-app-bar-toggle-icon", props.showAppBar ?
-        "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" ].join(" ") }>
+      className={ [ "trmrk-icon-btn trmrk-ftb-bar-toggle-icon", props.showAppBar ?
+        "trmrk-ftb-bar-toggle-hide-icon" : "trmrk-ftb-bar-toggle-show-icon" ].join(" ") }>
       { props.showAppBar ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
     </IconButton>);
 }

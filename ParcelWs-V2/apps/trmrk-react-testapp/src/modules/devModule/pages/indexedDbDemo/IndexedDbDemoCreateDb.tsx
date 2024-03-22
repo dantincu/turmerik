@@ -3,9 +3,9 @@ import { useDispatch } from "react-redux";
 
 import trmrk from "trmrk";
 
-import IndexedDbCreateDb from "../../../components/indexedDbBrowser/IndexedDbCreateDb";
+import IndexedDbCreateDb from "../../indexedDbBrowser/IndexedDbCreateDb";
 
-import { appDataReducers } from "../../../store/appDataSlice";
+import { appDataReducers } from "../../../../store/appDataSlice";
 
 export interface IndexedDbDemoCreateDbProps {
   urlPath: string;

@@ -15,12 +15,12 @@ import HeightIcon from '@mui/icons-material/Height';
 
 import trmrk from "trmrk";
 
-import LoadingDotPulse from '../loading/LoadingDotPulse';
+import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
 import TrmrkTreeNode from './TrmrkTreeNode';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';
 
-import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../services/indexedDb";
+import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../../services/indexedDb";
 import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue } from "./data";
 import IndexedDbTreeNode, { IndexedDbTreeNodeProps } from "./IndexedDbTreeNode";
 

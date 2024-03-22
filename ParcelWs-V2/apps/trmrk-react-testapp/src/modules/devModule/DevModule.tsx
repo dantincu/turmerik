@@ -11,20 +11,22 @@ import { Route, Routes } from "react-router-dom";
 import trmrk from "trmrk";
 
 import DevModuleHomePage from "./DevModuleHomePage";
-import IndexedDbDemo from "../../pages/dev/indexedDbDemo/IndexedDbDemo";
-import IndexedDbDemoCreateDb from "../../pages/dev/indexedDbDemo/IndexedDbDemoCreateDb";
-import IndexedDbBrowserAppBarContent from "../indexedDbBrowser/IndexedDbBrowserAppBarContent";
-import IndexedDbCreateDbAppBarContent from "../indexedDbBrowser/IndexedDbCreateDbAppBarContent";
+import IndexedDbDemo from "./pages/indexedDbDemo/IndexedDbDemo";
+import IndexedDbDemoCreateDb from "./pages/indexedDbDemo/IndexedDbDemoCreateDb";
+import IndexedDbBrowserAppBarContent from "./indexedDbBrowser/IndexedDbBrowserAppBarContent";
+import IndexedDbCreateDbAppBarContent from "./indexedDbBrowser/IndexedDbCreateDbAppBarContent";
 
 import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
-import BasicAppModule from "trmrk-react/src/components/basicAppModule/BasicAppModule"
+import FloatingTopBarAppModule from "trmrk-react/src/components/floatingTopBarAppModule/FloatingTopBarAppModule";
+import NotFound from "../../pages/notFound/NotFound";;
 
 import { appDataSelectors, appDataReducers } from "../../store/appDataSlice";
 import { appBarReducers, appBarSelectors } from "../../store/appBarDataSlice";
 
 export interface DevModuleProps {
   className?: string | null | undefined;
-  basePath: string
+  basePath: string;
+  rootPath: string;
 }
 
 const getAppBarContents = (
@@ -79,6 +81,8 @@ export default function DevModule(
     appDataReducers: appDataReducers,
     appDataSelectors: appDataSelectors,
   });
+
+  const appBarRowsCount = useSelector(appBarSelectors.getAppBarRowsCount);
   
   const urlPath = useSelector(
     appDataSelectors.getCurrentUrlPath).substring(
@@ -87,14 +91,18 @@ export default function DevModule(
   const [ baseUrlPath, setBaseUrlPath ] = React.useState('');
 
   React.useEffect(() => {
+    console.log("asdfsadf");
     const relUrlPathVal = getRelUrlPath(urlPath);
 
     if (relUrlPathVal !== baseUrlPath) {
       setBaseUrlPath(relUrlPathVal);
       dispatch(appBarReducers.setShowOptionsMenuBtn(true));
-      dispatch(appBarReducers.setAppBarRowsCount(2));
     }
+
+    dispatch(appBarReducers.setAppBarRowsCount(2));
+    // appBar.updateHeaderHeight(2);
   }, [
+    appBarRowsCount,
     appBar.appTheme,
     appBar.appBarRowsCount,
     appBar.lastRefreshTmStmp,
@@ -105,21 +113,23 @@ export default function DevModule(
     appBar.appearenceMenuIconBtnEl,
     appBar.appBarRowHeightPx,
     props.basePath,
+    props.rootPath,
     urlPath,
     baseUrlPath ]);
 
-  return (<BasicAppModule
+  return (<FloatingTopBarAppModule
       className="trmrk-dev"
       appBar={appBar}
       basePath={props.basePath}
       headerClassName="trmrk-dev-header"
-      bodyClassName="trmrk-app-body"
+      bodyClassName="trmrk-dev-body"
       appBarChildren={getAppBarContents(props.basePath, urlPath, baseUrlPath)}
       refreshBtnClicked={() => {}}>
         <Routes>
           <Route path={"/indexeddb-browser"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser`} />} />
           <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbDemoCreateDb urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
-          <Route path="/" element={<DevModuleHomePage urlPath={props.basePath} />} />
+          <Route path="/" element={<DevModuleHomePage exitPath={props.rootPath} urlPath={props.basePath} />} />
+          <Route path="*" element={ <NotFound /> } />
         </Routes>
-      </BasicAppModule>);
+      </FloatingTopBarAppModule>);
 }

@@ -11,13 +11,13 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import trmrk from "trmrk";
 
-import LoadingDotPulse from "../loading/LoadingDotPulse";
+import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
 import TrmrkTreeNode, { TrmrkTreeNodeProps } from './TrmrkTreeNode';
 import TrmrkTreeNodeLeaf, { TrmrkTreeNodeLeafProps } from './TrmrkTreeNodeLeaf';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';
 import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue } from "./data";
-import { attachDefaultHandlersToDbOpenRequest, getObjectStoresInfoAgg, getErrMsg, dfDatabaseOpenErrMsg } from "../../services/indexedDb";
+import { attachDefaultHandlersToDbOpenRequest, getObjectStoresInfoAgg, getErrMsg, dfDatabaseOpenErrMsg } from "../../../services/indexedDb";
 
 export interface IndexedDbTreeNodeProps {
   data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>;

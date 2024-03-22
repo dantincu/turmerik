@@ -7,7 +7,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import AppModule from "../appModule/AppModule";
+import FloatingTopBarModule from "../floatingTopBarModule/FloatingTopBarModule";
 
 import ToggleAppBarBtn from "../appBar/ToggleAppBarBtn";
 import SettingsMenu from "../settingsMenu/SettingsMenu";
@@ -15,7 +15,7 @@ import AppearenceSettingsMenu from "../settingsMenu/AppearenceSettingsMenu";
 import OptionsMenu from "../settingsMenu/OptionsMenu";
 import { UseAppBarResult } from "../../hooks/useAppBar/useAppBar";
 
-export interface BasicAppModuleProps {
+export interface FloatingTopBarAppModuleProps {
   appBar: UseAppBarResult,
   className: string;
   headerClassName?: string | null | undefined;
@@ -38,8 +38,8 @@ export interface BasicAppModuleProps {
   refreshBtnClicked?: (() => boolean | null | undefined | void);
 }
 
-export default function BasicAppModule(
-  props: BasicAppModuleProps
+export default function FloatingTopBarAppModule(
+  props: FloatingTopBarAppModuleProps
 ) {
   const refreshBtnClicked = () => {
     if (props.refreshBtnClicked) {
@@ -52,7 +52,6 @@ export default function BasicAppModule(
   }
 
   React.useEffect(() => {
-    console.log("props.appBar.appBarRowsCount", props.appBar.appBarRowsCount);
   }, [
     props.appBar.appBarRowsCount,
     props.appBar.appHeaderHeight,
@@ -109,10 +108,10 @@ export default function BasicAppModule(
     props.optionsMenuChildren,
     props.refreshBtnClicked, ]);
 
-  return (<AppModule
+  return (<FloatingTopBarModule
       className={props.className}
       headerClassName={props.headerClassName}
-      headerContent={<AppBar className={["trmrk-app-module-bar", props.appBarClassName ?? ""].join(" ")}>
+      headerContent={<AppBar className={["trmrk-ftb-module-bar", props.appBarClassName ?? ""].join(" ")}>
         <IconButton onClick={props.appBar.handleSettingsClick} className="trmrk-icon-btn trmrk-settings-btn"><MenuIcon /></IconButton>
         <Link to={props.basePath}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link>
         { props.appBar.showOptionsMenuBtn ? <IconButton
@@ -154,7 +153,7 @@ export default function BasicAppModule(
           menuAnchorEl={props.appBar.optionsMenuIconBtnEl!}
           refreshBtnClicked={refreshBtnClicked} />
       </AppBar>}
-      afterHeaderClassName="trmrk-app-module-header-toggle trmrk-icon-btn"
+      afterHeaderClassName="trmrk-ftb-module-header-toggle trmrk-icon-btn"
       afterHeaderContent={ props.appBar.showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={props.appBar.showAppBar} appBarToggled={props.appBar.appBarToggled} /> : null }
       bodyClassName={props.bodyClassName}
       showHeader={props.appBar.showAppBar}

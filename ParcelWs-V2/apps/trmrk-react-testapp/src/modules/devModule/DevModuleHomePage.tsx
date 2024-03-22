@@ -11,6 +11,7 @@ import { appDataReducers } from "../../store/appDataSlice";
 
 export interface DevModuleHomePageProps {
   urlPath: string;
+  exitPath: string;
 }
 
 const Ul = styled.ul({
@@ -30,7 +31,7 @@ export default function DevModuleHomePage(
 
   return (<Paper sx={{ height: "100%" }}>
     <Ul>
-      <li><Link to="/" className="trmrk-nav-link">Home</Link></li>
+      <li><Link to={props.exitPath} className="trmrk-nav-link">Exit</Link></li>
       <li><Link to="indexeddb-browser" className="trmrk-nav-link">IndexedDB Browser</Link></li>
     </Ul>
   </Paper>);

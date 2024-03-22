@@ -16,10 +16,13 @@ import ResizablePanel, {
   ResizeHandlersMap,
   getTouchOrMousePosition } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
-import { appDataReducers } from "../../store/appDataSlice";
+import { appDataReducers } from "../../../../store/appDataSlice";
+import { appBarReducers } from "../../../../store/appBarDataSlice";
 
 export interface ResizablesDemoProps {
   urlPath: string;
+  basePath: string;
+  rootPath: string;
   refreshBtnRef: React.RefObject<HTMLButtonElement>
 }
 

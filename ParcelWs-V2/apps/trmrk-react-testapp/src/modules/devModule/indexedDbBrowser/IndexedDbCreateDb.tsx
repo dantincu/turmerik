@@ -13,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
-import { devModuleIndexedDbBrowserSelectors, devModuleIndexedDbBrowserReducers } from "../../store/devModuleIndexedDbBrowserSlice";
+import { devModuleIndexedDbBrowserSelectors, devModuleIndexedDbBrowserReducers } from "../../../store/devModuleIndexedDbBrowserSlice";
 import IndexedDbCreateDbStore, { IndexedDbCreateDbStoreProps } from "./IndexedDbCreateDbStore";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
@@ -26,7 +26,7 @@ import {
   dfDatabaseNumberValidationMsg,
   IDbObjectStoreInfo,
   getCreateDbRequestErrMsg
-} from "../../services/indexedDb";
+} from "../../../services/indexedDb";
 
 export interface IndexedDbCreateDbProps {
   basePath: string
