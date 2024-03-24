@@ -1,0 +1,24 @@
+{
+  "ProfileName": "ng-book-2",
+  "ProfileRelFilePath": "profiles\\arch-ng-book-2.config.json",
+  "FileGroups": [
+    {
+      "CloneArchiveDirPath": "|$ONEDRIVE_DIR|\\0002\\786\\795\\792\\799\\01\\2004\\01",
+      "CloneArchiveFileNameTpl": "ng-book-2[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+      "BeforeArchiveCleanupFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/ng\\-book\\-2\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
+        ]
+      },
+      "Folders": [
+        {
+          "InputDirPath": "|$TURMERIK_REPO_DIR|\\..\\prvtncvd\\7994\\7999",
+          "CloneDirPath": "|$TURMERIK_TEMP_DIR|",
+          "InputDirFilter": {
+            "ExcludedRelPathRegexes": ["\\/node_modules\\/"]
+          }
+        }
+      ]
+    }
+  ]
+}

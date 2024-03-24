@@ -1,0 +1,22 @@
+{
+  "Profiles": [
+    {
+      "ProfileRelFilePath": "profiles\\arch-dotnet-util-env-dirs.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\arch-ng-book-2.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-dotnet-bkp-bins.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-dotnet-util-bins.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-notes-blazorapp.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-text-transform-behavior.config.json"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ using Turmerik.Core.Dependencies;
 
 using FilesCloner = Turmerik.NetCore.ConsoleApps.FilesCloner;
 using ClonerConfigGenerator = Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator;
+using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -49,6 +50,25 @@ namespace Turmerik.NetCore.Dependencies
 
             services.AddSvc<ClonerConfigGenerator.IProgramComponent, ClonerConfigGenerator.ProgramComponent>(
                 programServiceLifetime ?? fileCloneServicesLifetime);
+
+            services.AddSvc<FilesCloner.IFileCloneComponent, FilesCloner.FileCloneComponent>(
+                fileCloneServicesLifetime);
+
+            services.AddSingleton<LocalFilesCloner.IProgramConfigRetriever, LocalFilesCloner.ProgramConfigRetriever>();
+            services.AddSingleton<LocalFilesCloner.IProgramArgsRetriever, LocalFilesCloner.ProgramArgsRetriever>();
+            services.AddSingleton<LocalFilesCloner.IProgramArgsNormalizer, LocalFilesCloner.ProgramArgsNormalizer>();
+
+            services.AddSvc<LocalFilesCloner.IFileCloneComponent, LocalFilesCloner.FileCloneComponent>(
+                fileCloneServicesLifetime);
+
+            services.AddSvc<LocalFilesCloner.ICloningProfileComponent, LocalFilesCloner.CloningProfileComponent>(
+                cloningProfileServiceLifetime ?? fileCloneServicesLifetime);
+
+            services.AddSvc<LocalFilesCloner.IProgramComponent, LocalFilesCloner.ProgramComponent>(
+                programServiceLifetime ?? fileCloneServicesLifetime);
+
+            services.AddSvc<LocalFilesCloner.IFileCloneComponent, LocalFilesCloner.FileCloneComponent>(
+                fileCloneServicesLifetime);
 
             return services;
         }

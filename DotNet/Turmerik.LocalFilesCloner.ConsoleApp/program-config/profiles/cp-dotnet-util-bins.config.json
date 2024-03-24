@@ -1,0 +1,56 @@
+{
+  "ProfileName": "dotnet-util-bins",
+  "ProfileRelFilePath": "profiles\\cp-dotnet-util-bins.config.json",
+  "FileGroups": [
+    {
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet",
+      "CloneDirPath": "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Turmerik\\Apps",
+      "DfInputDirFilter": {
+        "ExcludedRelPathRegexes": [
+          "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$",
+          "^\\/trmrk-filescloner-config\\.json$",
+          "^\\/trmrk-localfilescloner-config\\.json$"
+        ]
+      },
+      "DfBeforeCloneDestnCleanupFilter": {
+        "ExcludedRelPathRegexes": [
+          "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$",
+          "^\\/trmrk-filescloner-config\\.json$",
+          "^\\/trmrk-localfilescloner-config\\.json$"
+        ]
+      },
+      "Dirs": [
+        {
+          "InputDirPath": "Bin\\TrmrkMkFsDirsPair\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\TrmrkMkFsDirsPair\\Release\\net8.0"
+        },
+        {
+          "InputDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "InputDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "InputDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "InputDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "InputDirPath": "Bin\\Turmerik.WinFormsApp.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.WinFormsApp.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "InputDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net8.0"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "ProfileName": "notes-blazorapp",
+  "ProfileRelFilePath": "profiles\\cp-notes-blazorapp.config.json",
+  "ScriptGroups": [
+    {
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2/apps/trmrk-notes-blazorapp",
+      "OnBeforeScripts": [
+        {
+          "PowerShellCmd": {
+            "Commands": [
+              {
+                "CommandName": "rmitem",
+                "CommandArguments": [".parcel-cache", ":fr", ":rc"]
+              },
+              {
+                "CommandName": "rmitem",
+                "CommandArguments": ["dist", ":fr", ":rc"]
+              }
+            ]
+          }
+        },
+        {
+          "WinShellCmd": {
+            "FileName": "npm",
+            "ArgumentsNmrbl": ["run", "build-prod"]
+          }
+        }
+      ]
+    },
+    {
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
+      "OnBeforeScripts": [
+        {
+          "WorkDir": "./wwwroot",
+          "PowerShellCmd": {
+            "Commands": [
+              {
+                "CommandName": "rmitem",
+                "CommandArguments": ["js", ":fr", ":rc"]
+              },
+              {
+                "CommandName": "rmitem",
+                "CommandArguments": ["trmrk-notes-config", ":fr", ":rc"]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "FileGroups": [
+    {
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
+      "CloneDirPath": "",
+      "Files": [
+        {
+          "InputFilePath": "trmrk-notes-config.json",
+          "CloneDirPath": "wwwroot\\trmrk-notes-config",
+          "UseChecksum": true
+        },
+        {
+          "InputFilePath": "trmrk-notes-config.json",
+          "CloneDirPath": "",
+          "CloneFileNameTpl": "FileCheckSums.TrmrkNotesConfigFile.cs",
+          "ForceOverwrite": true,
+          "CloneTplLines": [
+            "namespace Turmerik.Notes.BlazorApp",
+            "{{",
+            "    public static partial class FileCheckSums",
+            "    {{",
+            "        public const string TRMRK_NOTES_CONFIG_FILE = \"{1}\";",
+            "    }}",
+            "}}"
+          ]
+        }
+      ]
+    },
+    {
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-notes-blazorapp",
+      "CloneDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
+      "Files": [
+        {
+          "InputFilePath": "dist\\prod\\index.js",
+          "CloneDirPath": "wwwroot\\js\\prod",
+          "UseChecksum": true,
+          "CloneTplLines": [
+            "const turmerikObj = {{}};",
+            "{0}",
+            "export const turmerik = turmerikObj.turmerik;",
+            "window.turmerik = turmerik;"
+          ]
+        },
+        {
+          "InputFilePath": "dist\\dev\\index.js",
+          "CloneDirPath": "",
+          "CloneFileNameTpl": "FileCheckSums.JsFile.cs",
+          "ForceOverwrite": true,
+          "CloneTplLines": [
+            "namespace Turmerik.Notes.BlazorApp",
+            "{{",
+            "    public static partial class FileCheckSums",
+            "    {{",
+            "        public const string DEV_JS_FILE = \"{1}\";",
+            "        public const string PROD_JS_FILE = \"{2}\";",
+            "    }}",
+            "}}"
+          ]
+        }
+      ]
+    }
+  ]
+}
