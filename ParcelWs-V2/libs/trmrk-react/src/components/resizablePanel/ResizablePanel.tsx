@@ -230,35 +230,35 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
     }
 
     const draggableFromLeftMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromLeft);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromLeft);
     }
 
     const draggableFromTopLeftMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromTopLeft);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromTopLeft);
     }
 
     const draggableFromTopMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromTop);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromTop);
     }
 
     const draggableFromTopRightMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromTopRight);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromTopRight);
     }
 
     const draggableFromRightMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromRight);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromRight);
     }
 
     const draggableFromBottomRightMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromBottomRight);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromBottomRight);
     }
 
     const draggableFromBottomMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromBottom);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromBottom);
     }
 
     const draggableFromBottomLeftMouseDown = (e: MouseEvent | TouchEvent) => {
-      addResizeHandlerIfReq(e, ResizeDirection.FromBottomLeft);
+      return addResizeHandlerIfReq(e, ResizeDirection.FromBottomLeft);
     }
 
     const addResizeHandlerIfReq = (e: MouseEvent | TouchEvent, rszDir: ResizeDirection) => {
@@ -273,6 +273,9 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
           // console.log("rszDir", rszDir, e);
 
           props.resizing(e, getTouchOrMousePosition(e), rszDir);
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
         }
 
         onResizeHandler.current = handler;
@@ -302,6 +305,10 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
           capture: true
         });
       }
+
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
     }
 
     const resizableHandlersMap: Kvp<HTMLDivElement | null, (e: MouseEvent | TouchEvent) => void>[] = [
