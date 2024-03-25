@@ -1,6 +1,5 @@
 {
-  "ProfileName": "text-transform-behavior",
-  "ProfileRelFilePath": "profiles\\cp-text-transform-behavior.config.json",
+  "ProfileName": "cp-text-transform-behavior",
   "ScriptGroups": [
     {
       "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-text-transform-mybehavior",

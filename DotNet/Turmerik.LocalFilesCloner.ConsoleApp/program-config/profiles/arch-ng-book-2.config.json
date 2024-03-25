@@ -1,6 +1,5 @@
 {
-  "ProfileName": "ng-book-2",
-  "ProfileRelFilePath": "profiles\\arch-ng-book-2.config.json",
+  "ProfileName": "arch-ng-book-2",
   "FileGroups": [
     {
       "CloneArchiveDirPath": "|$ONEDRIVE_DIR|\\0002\\786\\795\\792\\799\\01\\2004\\01",

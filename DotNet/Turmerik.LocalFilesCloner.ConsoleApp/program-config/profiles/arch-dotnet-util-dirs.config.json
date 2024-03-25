@@ -1,6 +1,5 @@
 {
-  "ProfileName": "dotnet-util-env-dirs",
-  "ProfileRelFilePath": "profiles\\arch-dotnet-util-env-dirs.config.json",
+  "ProfileName": "arch-dotnet-util-dirs",
   "FileGroups": [
     {
       "CloneArchiveDirPath": "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
@@ -17,25 +16,23 @@
           "InputDirFilter": {
             "IncludedRelPathRegexes": [
               "^\\/Bin\\/TrmrkMkFsDirsPair\\/.*",
+              "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.UpdFsDirPairsIdxes\\.ConsoleApp\\/.*",
-              "^\\/Bin\\/Turmerik\\.WinFormsApp\\.ConsoleApp\\/.*",
-              "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
+              "^\\/Bin\\/Turmerik\\.Utility.WinFormsApp\\/.*",
               "^\\/Config\\/",
               "^\\/Content\\/",
               "^\\/Data\\/"
             ],
             "ExcludedRelPathRegexes": [
-              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.FilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/config\\.json$",
-              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.FilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/profiles\\/.+\\.config\\.json$",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/config\\.json$",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/profiles\\/.+\\.config\\.json$",
               "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.js$",
               "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.json$",
               "^\\/Bin\\/[^\\/]+\\/app-env-locator\\.json$",
-              "^\\/Bin\\/[^\\/]+\\/trmrk-localdevice-paths\\.json$",
-              "^\\/Bin\\/[^\\/]+\\/trmrk-filescloner-config\\.json$",
-              "^\\/Bin\\/[^\\/]+\\/trmrk-localfilescloner-config\\.json$"
+              "^\\/Bin\\/[^\\/]+\\/trmrk-localdevice-paths\\.json$"
             ]
           }
         }

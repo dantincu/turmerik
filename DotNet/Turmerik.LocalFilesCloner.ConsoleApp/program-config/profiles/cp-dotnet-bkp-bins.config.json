@@ -1,6 +1,5 @@
 {
-  "ProfileName": "dotnet-bkp-bins",
-  "ProfileRelFilePath": "profiles\\cp-dotnet-bkp-bins.config.json",
+  "ProfileName": "cp-dotnet-bkp-bins",
   "FileGroups": [
     {
       "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet",
@@ -9,16 +8,12 @@
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
           "^\\/trmrk-localdevice-paths\\.json$",
-          "^\\/trmrk-filescloner-config\\.json$",
-          "^\\/trmrk-localfilescloner-config\\.json$"
         ]
       },
       "DfBeforeCloneDestnCleanupFilter": {
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
           "^\\/trmrk-localdevice-paths\\.json$",
-          "^\\/trmrk-filescloner-config\\.json$",
-          "^\\/trmrk-localfilescloner-config\\.json$",
           "^\\/_.+\\.exe"
         ]
       },

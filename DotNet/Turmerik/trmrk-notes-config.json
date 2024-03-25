@@ -1,0 +1,184 @@
+{
+  "FsExplorerServiceReqRootPath": null,
+  "AppEnvLocatorFilePath": null,
+  "IsDevEnv": true,
+  "RequiredClientVersion": 1,
+  "ClientRedirectUrl": null,
+  "StorageOptions": [
+    {
+      "Name": "Browser's IndexedDB (browser only storage)",
+      "Storage": 0
+    },
+    {
+      "Name": "Browser's File System API (local device storage)",
+      "Storage": 1
+    }
+  ],
+  "NoteDirPairs": {
+    "FileNameMaxLength": 100,
+    "SerializeToJson": true,
+    "AllowGetRequestsToPersistChanges": true,
+    "TrmrkGuidInputName": "trmrk_guid",
+    "ArgOpts": {
+      "SrcNote": {
+        "FullArg": "from-note",
+        "ShortArg": "fn"
+      },
+      "SrcDirIdnf": {
+        "FullArg": "from-dir-idnf",
+        "ShortArg": "fid"
+      },
+      "SrcNoteIdx": {
+        "FullArg": "from-note-idx",
+        "ShortArg": "fnx"
+      },
+      "DestnNote": {
+        "FullArg": "to-note",
+        "ShortArg": "tn"
+      },
+      "DestnDirIdnf": {
+        "FullArg": "to-dir-idnf",
+        "ShortArg": "tid"
+      },
+      "DestnNoteIdx": {
+        "FullArg": "to-note-idx",
+        "ShortArg": "tnx"
+      },
+      "NotesOrder": {
+        "FullArg": "notes-order",
+        "ShortArg": "no"
+      },
+      "NoteIdxesOrder": {
+        "FullArg": "notes-idxes-order",
+        "ShortArg": "nxo"
+      },
+      "SortIdx": {
+        "FullArg": "sort-idx",
+        "ShortArg": "si"
+      },
+      "NoteIdx": {
+        "FullArg": "note-idx",
+        "ShortArg": "nx"
+      },
+      "OpenMdFile": {
+        "FullArg": "open-md-file",
+        "ShortArg": "o"
+      },
+      "CreateNoteFilesDirsPair": {
+        "FullArg": "note-files",
+        "ShortArg": "nf"
+      },
+      "CreateNoteInternalDirsPair": {
+        "FullArg": "note-int",
+        "ShortArg": "ni"
+      },
+      "CommandsMap": {
+        "Help": {
+          "FullArg": "help",
+          "ShortArg": "h"
+        },
+        "ListNotes": {
+          "FullArg": "list-notes",
+          "ShortArg": "ls"
+        },
+        "CreateNoteBook": {
+          "FullArg": "create-note-book",
+          "ShortArg": "bk"
+        },
+        "CreateNoteBookInternal": {
+          "FullArg": "create-note-book-int",
+          "ShortArg": "bki"
+        },
+        "CreateNote": {
+          "FullArg": "create-note",
+          "ShortArg": "mk"
+        },
+        "CreateNoteInternal": {
+          "FullArg": "create-note-int",
+          "ShortArg": "mki"
+        },
+        "CopyNotes": {
+          "FullArg": "copy-notes",
+          "ShortArg": "cp"
+        },
+        "DeleteNotes": {
+          "FullArg": "delete-notes",
+          "ShortArg": "dl"
+        },
+        "MoveNotes": {
+          "FullArg": "move-notes",
+          "ShortArg": "mv"
+        },
+        "RenameNote": {
+          "FullArg": "rename-note",
+          "ShortArg": "rn"
+        },
+        "UpdateNote": {
+          "FullArg": "update-note",
+          "ShortArg": "u"
+        },
+        "ReorderNotes": {
+          "FullArg": "reorder-notes",
+          "ShortArg": "ron"
+        },
+        "NormalizeNote": {
+          "FullArg": "norm-note",
+          "ShortArg": "normn"
+        },
+        "NormalizeNoteIdxes": {
+          "FullArg": "norm-note-idxes",
+          "ShortArg": "normnx"
+        },
+        "NormalizeNotesHcy": {
+          "FullArg": "norm-notes-hcy",
+          "ShortArg": "normnh"
+        }
+      }
+    },
+    "DirNames": {
+      "NoteBook": "[note-book]",
+      "NoteFiles": "[note-files]",
+      "NoteInternals": "[note-internals]",
+      "NoteInternalsPfxes": {
+        "MainPfx": "0",
+        "AltPfx": "t_0",
+        "JoinStr": "-",
+        "UseAltPfx": false
+      },
+      "NoteItemsPfxes": {
+        "MainPfx": "",
+        "AltPfx": "t_",
+        "JoinStr": "-",
+        "UseAltPfx": false
+      }
+    },
+    "NoteDirNameIdxes": {
+      "MinIdx": 101,
+      "MaxIdx": 799,
+      "IncIdx": false,
+      "FillGapsByDefault": false,
+      "IdxFmt": "D1"
+    },
+    "NoteInternalDirNameIdxes": {
+      "MinIdx": 1,
+      "MaxIdx": 99,
+      "IncIdx": true,
+      "FillGapsByDefault": true,
+      "IdxFmt": "D1"
+    },
+    "FileNames": {
+      "NoteBookJsonFileName": "[note-book].json",
+      "NoteItemJsonFileName": "[note].json",
+      "NoteItemMdFileName": "[note].md",
+      "PrependTitleToNoteMdFileName": true,
+      "KeepFileName": ".keep"
+    },
+    "FileContents": {
+      "KeepFileContentsTemplate": "{0}",
+      "NoteFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
+      "NoteFileContentSectionTemplate": "{0}  \n\n",
+      "ExpectTrmrkGuidInNoteJsonFile": true,
+      "ExpectTrmrkGuidInNoteMdFile": false
+    }
+  }
+}

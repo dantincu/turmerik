@@ -1,7 +1,7 @@
 {
   "Profiles": [
     {
-      "ProfileRelFilePath": "profiles\\arch-dotnet-util-env-dirs.config.json"
+      "ProfileRelFilePath": "profiles\\arch-dotnet-util-dirs.config.json"
     },
     {
       "ProfileRelFilePath": "profiles\\arch-ng-book-2.config.json"

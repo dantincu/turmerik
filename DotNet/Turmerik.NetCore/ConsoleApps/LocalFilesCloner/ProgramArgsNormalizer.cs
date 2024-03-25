@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing;
-using Turmerik.NetCore.ConsoleApps.FilesCloner;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
 using static Turmerik.NetCore.ConsoleApps.LocalFilesCloner.ProgramConfig;
 
 namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
@@ -95,9 +96,9 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
             foreach (var scriptsGroup in profile.ScriptGroups)
             {
-                scriptsGroup.WorkDir = NormalizePathIfNotNull(
-                    args.LocalDevicePathsMap, scriptsGroup.WorkDir ?? Environment.CurrentDirectory,
-                    () => Environment.CurrentDirectory);
+                scriptsGroup.WorkDir = NormalizePath(
+                    args.LocalDevicePathsMap, scriptsGroup.WorkDir,
+                    Environment.CurrentDirectory);
 
                 NormalizeScriptsListIfNotNull(
                     args, scriptsGroup, scriptsGroup.OnBeforeScripts);
@@ -123,9 +124,9 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
             {
                 foreach (var script in scriptsList)
                 {
-                    script.WorkDir = NormalizePathIfNotNull(
-                        args.LocalDevicePathsMap, script.WorkDir ?? scriptsGroup.WorkDir,
-                        () => scriptsGroup.WorkDir);
+                    script.WorkDir = NormalizePath(
+                        args.LocalDevicePathsMap, script.WorkDir,
+                        scriptsGroup.WorkDir);
 
                     if (script.PowerShellCmd != null)
                     {
@@ -155,6 +156,14 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
                 localDevicePathsMap,
                 filesGroup.CloneDirPath,
                 filesGroup?.CloneDirPath);
+
+            if (filesGroup.CloneArchiveDirPath != null)
+            {
+                filesGroup.CloneArchiveDirPath = NormalizePath(
+                    localDevicePathsMap,
+                    filesGroup.CloneArchiveDirPath,
+                    Environment.CurrentDirectory);
+            }
 
             if (filesGroup.Files != null)
             {
@@ -218,27 +227,10 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         private string NormalizePath(
             LocalDevicePathMacrosMapMtbl localDevicePathsMap,
-            string path,
+            string? path,
             string? baseDirPath)
         {
-            path = NormalizePathIfNotNull(
-                localDevicePathsMap,
-                path, () => null);
-
-            if (!Path.IsPathRooted(path) && baseDirPath != null)
-            {
-                path = Path.Combine(baseDirPath, path);
-            }
-
-            return path;
-        }
-
-        private string NormalizePathIfNotNull(
-            LocalDevicePathMacrosMapMtbl localDevicePathsMap,
-            string path,
-            Func<string?> basePathFactory)
-        {
-            if (path != null)
+            if (!string.IsNullOrWhiteSpace(path))
             {
                 path = textMacrosReplacer.ReplaceMacros(
                     new TextMacrosReplacerOpts
@@ -249,15 +241,14 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
                 if (!Path.IsPathRooted(path))
                 {
-                    string? basePath = basePathFactory();
-
-                    if (basePath != null)
-                    {
-                        path = Path.Combine(
-                            basePath,
-                            path);
-                    }
+                    path = Path.Combine(
+                        baseDirPath?.Nullify() ?? Environment.CurrentDirectory,
+                        path);
                 }
+            }
+            else
+            {
+                path = baseDirPath?.Nullify() ?? Environment.CurrentDirectory;
             }
 
             return path;

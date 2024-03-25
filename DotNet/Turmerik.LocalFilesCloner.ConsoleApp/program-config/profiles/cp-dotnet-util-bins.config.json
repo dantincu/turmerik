@@ -1,6 +1,5 @@
 {
-  "ProfileName": "dotnet-util-bins",
-  "ProfileRelFilePath": "profiles\\cp-dotnet-util-bins.config.json",
+  "ProfileName": "cp-dotnet-util-bins",
   "FileGroups": [
     {
       "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet",
@@ -9,22 +8,18 @@
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
           "^\\/trmrk-localdevice-paths\\.json$",
-          "^\\/trmrk-filescloner-config\\.json$",
-          "^\\/trmrk-localfilescloner-config\\.json$"
         ]
       },
       "DfBeforeCloneDestnCleanupFilter": {
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
           "^\\/trmrk-localdevice-paths\\.json$",
-          "^\\/trmrk-filescloner-config\\.json$",
-          "^\\/trmrk-localfilescloner-config\\.json$"
         ]
       },
       "Dirs": [
         {
-          "InputDirPath": "Bin\\TrmrkMkFsDirsPair\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\TrmrkMkFsDirsPair\\Release\\net8.0"
+          "InputDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net8.0"
         },
         {
           "InputDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\bin\\Release\\net8.0",
@@ -43,12 +38,8 @@
           "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
         },
         {
-          "InputDirPath": "Bin\\Turmerik.WinFormsApp.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.WinFormsApp.ConsoleApp\\Release\\net8.0"
-        },
-        {
-          "InputDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0"
         }
       ]
     }

@@ -1,0 +1,50 @@
+{
+  "FileNameMaxLength": 100,
+  "ThrowIfAnyItemAlreadyExists": true,
+  "TrmrkGuidInputName": "trmrk_guid",
+  "ArgOpts": {
+    "WorkDir": "wd",
+    "InteractiveMode": "i",
+    "OpenMdFile": "o",
+    "SkipMdFileCreation": "sk",
+    "DirNameTpl": "t",
+    "CreateNote": "nn",
+    "CreateNoteBook": "nb",
+    "CreateNoteInternalsDir": "ni",
+    "CreateNoteFilesDir": "nf",
+    "Url": "url",
+    "Uri": "uri",
+    "ShowLastCreatedFirst": "slf",
+    "ShowOtherDirNames": "so",
+    "HcyChildNode": "+",
+    "HcyParentNode": "-",
+    "HcySibblingNode": "="
+  },
+  "DirNames": {
+    "DefaultJoinStr": "-",
+    "DirNamesTplMap": {
+      "f": {
+        "DirNameTpl": "[note-files]",
+        "MdFileNameTemplate": ""
+      },
+      "i": {
+        "DirNameTpl": "[note-internals]",
+        "MdFileNameTemplate": ""
+      },
+      "b": {
+        "DirNameTpl": "[note-book]",
+        "MdFileNameTemplate": ""
+      }
+    }
+  },
+  "FileNames": {
+    "MdFileName": "[note].md",
+    "PrependTitleToNoteMdFileName": true,
+    "KeepFileName": ".keep"
+  },
+  "FileContents": {
+    "KeepFileContentsTemplate": "{0}",
+    "MdFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
+    "MdFileContentSectionTemplate": "{0}  \n\n"
+  }
+}

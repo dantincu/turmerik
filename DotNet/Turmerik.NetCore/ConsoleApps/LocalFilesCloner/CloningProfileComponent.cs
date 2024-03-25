@@ -65,18 +65,24 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
         private async Task RunOnBeforeScripts(
             Profile profile)
         {
-            foreach (var scriptGroup in profile.ScriptGroups)
+            if (profile.ScriptGroups != null)
             {
-                await RunScriptsAsync(scriptGroup.OnBeforeScripts);
+                foreach (var scriptGroup in profile.ScriptGroups)
+                {
+                    await RunScriptsAsync(scriptGroup.OnBeforeScripts);
+                }
             }
         }
 
         private async Task RunOnAfterScripts(
             Profile profile)
         {
-            foreach (var scriptGroup in profile.ScriptGroups)
+            if (profile.ScriptGroups != null)
             {
-                await RunScriptsAsync(scriptGroup.OnAfterScripts);
+                foreach (var scriptGroup in profile.ScriptGroups)
+                {
+                    await RunScriptsAsync(scriptGroup.OnAfterScripts);
+                }
             }
         }
 

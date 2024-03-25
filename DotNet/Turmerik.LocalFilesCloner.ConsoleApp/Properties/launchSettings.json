@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Turmerik.LocalFilesCloner.ConsoleApp": {
+      "commandName": "Project",
+      // "commandLineArgs": ":i:dir\\input.txt :o:dir :cksm"
+      // "commandLineArgs": ":p:notes-blazorapp"
+      // "commandLineArgs": ":p:arch-dotnet-util-dirs"
+      // "commandLineArgs": ":p:arch-ng-book-2",
+      "commandLineArgs": ":p:cp-dotnet-bkp-bins",
+      // "commandLineArgs": ":p:cp-dotnet-util-bins",
+      // "commandLineArgs": ":p:cp-text-transform-behavior"
+    }
+  }
+}

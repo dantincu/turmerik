@@ -1,20 +1,19 @@
 {
-  "ProfileName": "notes-blazorapp",
-  "ProfileRelFilePath": "profiles\\cp-notes-blazorapp.config.json",
+  "ProfileName": "cp-notes-blazorapp",
   "ScriptGroups": [
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2/apps/trmrk-notes-blazorapp",
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-notes-blazorapp",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
             "Commands": [
               {
                 "CommandName": "rmitem",
-                "CommandArguments": [".parcel-cache", ":fr", ":rc"]
+                "CommandArguments": [ ".parcel-cache", ":fr", ":rc" ]
               },
               {
                 "CommandName": "rmitem",
-                "CommandArguments": ["dist", ":fr", ":rc"]
+                "CommandArguments": [ "dist", ":fr", ":rc" ]
               }
             ]
           }
@@ -22,7 +21,13 @@
         {
           "WinShellCmd": {
             "FileName": "npm",
-            "ArgumentsNmrbl": ["run", "build-prod"]
+            "ArgumentsNmrbl": [ "run", "build-dev" ]
+          }
+        },
+        {
+          "WinShellCmd": {
+            "FileName": "npm",
+            "ArgumentsNmrbl": [ "run", "build-prod" ]
           }
         }
       ]
@@ -31,7 +36,7 @@
       "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
       "OnBeforeScripts": [
         {
-          "WorkDir": "./wwwroot",
+          "WorkDir": "wwwroot",
           "PowerShellCmd": {
             "Commands": [
               {
@@ -51,7 +56,7 @@
   "FileGroups": [
     {
       "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
-      "CloneDirPath": "",
+      "CloneDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
       "Files": [
         {
           "InputFilePath": "trmrk-notes-config.json",
@@ -78,8 +83,18 @@
     {
       "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-notes-blazorapp",
       "CloneDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
       "Files": [
+        {
+          "InputFilePath": "dist\\dev\\index.js",
+          "CloneDirPath": "wwwroot\\js\\dev",
+          "UseChecksum": true,
+          "CloneTplLines": [
+            "const turmerikObj = {{}};",
+            "{0}",
+            "export const turmerik = turmerikObj.turmerik;",
+            "window.turmerik = turmerik;"
+          ]
+        },
         {
           "InputFilePath": "dist\\prod\\index.js",
           "CloneDirPath": "wwwroot\\js\\prod",
