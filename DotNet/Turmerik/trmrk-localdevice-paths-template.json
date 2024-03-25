@@ -1,8 +1,8 @@
 {
   "PathsMap": {
-    "<$TURMERIK_REPO_DIR>": "<TurmerikRepoDir>",
-    "<$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR>": "<TurmerikDotnetUtilityAppsEnvDir>",
-    "<$ONEDRIVE_DIR>": "<OnedriveDir>",
-    "<$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR>": "<OnedriveTurmerikDotNetUtilityAppsArchiveReldir>"
+    "|$TURMERIK_REPO_DIR|": "<TurmerikRepoDir>",
+    "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|": "<TurmerikDotnetUtilityAppsEnvDir>",
+    "|$ONEDRIVE_DIR|": "<OnedriveDir>",
+    "|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<OnedriveTurmerikDotNetUtilityAppsArchiveReldir>"
   }
 }

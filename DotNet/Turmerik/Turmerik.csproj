@@ -60,11 +60,11 @@
     <None Update="trmrk-dirpairs-config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="trmrk-localdevice-paths.prod.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="trmrk-localdevice-paths-template.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="trmrk-localdevice-paths.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="trmrk-notes-config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
