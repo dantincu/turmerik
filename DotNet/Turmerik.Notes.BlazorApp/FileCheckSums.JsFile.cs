@@ -2,7 +2,7 @@ namespace Turmerik.Notes.BlazorApp
 {
     public static partial class FileCheckSums
     {
-        public const string DEV_JS_FILE = "f5c3841603935acfcb7a9cebd0693d2da304bf5b";
-        public const string PROD_JS_FILE = "e8b158e76066c915e096275985fe9eb9d23c2f04";
+        public const string DEV_JS_FILE = "7884a0574b8ab4747857f3d50247818a4e3d86bc";
+        public const string PROD_JS_FILE = "4b02740babd69721ed39d759002b7fa13068fbc8";
     }
 }

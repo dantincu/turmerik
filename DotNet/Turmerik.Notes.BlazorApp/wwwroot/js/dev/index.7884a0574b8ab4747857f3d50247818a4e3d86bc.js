@@ -15,6 +15,10 @@ $parcel$export($c9fa8fa2ea083dbf$exports, "jsonBool", () => $c9fa8fa2ea083dbf$ex
 $parcel$export($c9fa8fa2ea083dbf$exports, "getJsonBool", () => $c9fa8fa2ea083dbf$export$d34b50c22cf045a9);
 $parcel$export($c9fa8fa2ea083dbf$exports, "isNotNullObj", () => $c9fa8fa2ea083dbf$export$f3866741a0567798);
 $parcel$export($c9fa8fa2ea083dbf$exports, "isNonEmptyStr", () => $c9fa8fa2ea083dbf$export$3030f957b72eb0a);
+$parcel$export($c9fa8fa2ea083dbf$exports, "errToString", () => $c9fa8fa2ea083dbf$export$6b5d3deb5b398519);
+$parcel$export($c9fa8fa2ea083dbf$exports, "proxiedPropsOf", () => $c9fa8fa2ea083dbf$export$4052d3e3cbed5b64);
+$parcel$export($c9fa8fa2ea083dbf$exports, "propOf", () => $c9fa8fa2ea083dbf$export$a732faaf13de1fd2);
+$parcel$export($c9fa8fa2ea083dbf$exports, "propsOf", () => $c9fa8fa2ea083dbf$export$f08c8e3d07bd2fc3);
 $parcel$export($c9fa8fa2ea083dbf$exports, "findKvp", () => $c9fa8fa2ea083dbf$export$3c98c05de17f0b14);
 $parcel$export($c9fa8fa2ea083dbf$exports, "forEach", () => $c9fa8fa2ea083dbf$export$4b80e395e36b5a56);
 $parcel$export($c9fa8fa2ea083dbf$exports, "contains", () => $c9fa8fa2ea083dbf$export$2344b14b097df817);
@@ -28,6 +32,7 @@ $parcel$export($c9fa8fa2ea083dbf$exports, "mapAsync", () => $c9fa8fa2ea083dbf$ex
 $parcel$export($c9fa8fa2ea083dbf$exports, "findIdxAsync", () => $c9fa8fa2ea083dbf$export$69f2a614aa1972b7);
 $parcel$export($c9fa8fa2ea083dbf$exports, "findAsync", () => $c9fa8fa2ea083dbf$export$4650fa2d799cbf63);
 $parcel$export($c9fa8fa2ea083dbf$exports, "withVal", () => $c9fa8fa2ea083dbf$export$5b60df21e72b9cdb);
+$parcel$export($c9fa8fa2ea083dbf$exports, "actWithVal", () => $c9fa8fa2ea083dbf$export$438b63ad15919b14);
 $parcel$export($c9fa8fa2ea083dbf$exports, "subStr", () => $c9fa8fa2ea083dbf$export$2ca8acdb52d6facf);
 $parcel$export($c9fa8fa2ea083dbf$exports, "trimStr", () => $c9fa8fa2ea083dbf$export$457d92f283ecacb0);
 $parcel$export($c9fa8fa2ea083dbf$exports, "capitalizeFirstLetter", () => $c9fa8fa2ea083dbf$export$d07f57595c356899);
@@ -47,6 +52,34 @@ const $c9fa8fa2ea083dbf$export$3030f957b72eb0a = (arg, allWsSameAsEmpty = false)
     retVal = retVal && arg !== "";
     if (retVal && allWsSameAsEmpty) retVal = !$c9fa8fa2ea083dbf$export$13fee8e9430c8208.test(arg);
     return retVal;
+};
+const $c9fa8fa2ea083dbf$export$6b5d3deb5b398519 = (error, nullifyEmptyStr)=>{
+    let errMsg = null;
+    const errTypeOf = typeof error;
+    if (errTypeOf === "string") errMsg = error;
+    else if (errTypeOf === "object") errMsg = error.message ?? error.cause;
+    else errMsg = error?.toString();
+    errMsg ??= null;
+    nullifyEmptyStr ??= true;
+    if (nullifyEmptyStr && typeof errMsg === "string" && errMsg.length === 0) errMsg = null;
+    return errMsg;
+};
+const $c9fa8fa2ea083dbf$export$4052d3e3cbed5b64 = (obj)=>{
+    return new Proxy({}, {
+        get: (_, prop)=>prop,
+        set: ()=>{
+            throw Error("Set not supported");
+        }
+    });
+};
+const $c9fa8fa2ea083dbf$export$a732faaf13de1fd2 = (name)=>{
+    return name;
+};
+const $c9fa8fa2ea083dbf$export$f08c8e3d07bd2fc3 = (_obj)=>{
+    const result = (name)=>{
+        return name;
+    };
+    return result;
 };
 const $c9fa8fa2ea083dbf$export$3c98c05de17f0b14 = (arr, predicate)=>{
     let retIdx = -1;
@@ -161,6 +194,10 @@ const $c9fa8fa2ea083dbf$export$4650fa2d799cbf63 = async (inArr, predicate)=>{
     return retVal;
 };
 const $c9fa8fa2ea083dbf$export$5b60df21e72b9cdb = (inVal, convertor)=>convertor(inVal);
+const $c9fa8fa2ea083dbf$export$438b63ad15919b14 = (val, action)=>{
+    action(val);
+    return val;
+};
 const $c9fa8fa2ea083dbf$export$2ca8acdb52d6facf = (str, opts)=>{
     opts ??= {};
     const stIdx = opts.stIdx ?? 0;
@@ -841,7 +878,7 @@ class $8eb34e2ca2a1a4f9$export$fe330a9df595e087 {
         this.data = initData;
     }
     logData(msg) {
-        console.log(msg ?? "app data", this.data);
+    // console.log(msg ?? "app data", this.data);
     }
 }
 
