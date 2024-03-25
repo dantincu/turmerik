@@ -6,12 +6,14 @@
       "CloneDirPath": "|$USER_PROFILE_DIR|\\AppData\\Roaming\\Turmerik\\Apps",
       "DfInputDirFilter": {
         "ExcludedRelPathRegexes": [
-          "^\\/app-env-locator\\.json$"
+          "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$"
         ]
       },
       "DfBeforeCloneDestnCleanupFilter": {
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$",
           "^\\/_.+\\.exe"
         ]
       },

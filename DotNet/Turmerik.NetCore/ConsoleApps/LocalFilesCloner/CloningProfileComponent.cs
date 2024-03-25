@@ -6,7 +6,6 @@ using Turmerik.Core.Text;
 using static Turmerik.NetCore.ConsoleApps.LocalFilesCloner.ProgramConfig;
 using System.IO.Compression;
 using Turmerik.Core.LocalDeviceEnv;
-using Turmerik.NetCore.ConsoleApps.FilesCloner;
 
 namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 {

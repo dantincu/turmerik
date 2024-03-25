@@ -10,8 +10,6 @@ using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Utility;
 using Turmerik.Core.Dependencies;
 
-using FilesCloner = Turmerik.NetCore.ConsoleApps.FilesCloner;
-using ClonerConfigGenerator = Turmerik.NetCore.ConsoleApps.FilesClonerConfigFilesGenerator;
 using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
 
 namespace Turmerik.NetCore.Dependencies
@@ -35,25 +33,6 @@ namespace Turmerik.NetCore.Dependencies
             ServiceLifetime? cloningProfileServiceLifetime = null,
             ServiceLifetime? programServiceLifetime = null)
         {
-            services.AddSingleton<FilesCloner.IProgramConfigRetriever, FilesCloner.ProgramConfigRetriever>();
-            services.AddSingleton<FilesCloner.IProgramArgsRetriever, FilesCloner.ProgramArgsRetriever>();
-            services.AddSingleton<FilesCloner.IProgramArgsNormalizer, FilesCloner.ProgramArgsNormalizer>();
-
-            services.AddSvc<FilesCloner.IFileCloneComponent, FilesCloner.FileCloneComponent>(
-                fileCloneServicesLifetime);
-
-            services.AddSvc<FilesCloner.ICloningProfileComponent, FilesCloner.CloningProfileComponent>(
-                cloningProfileServiceLifetime ?? fileCloneServicesLifetime);
-
-            services.AddSvc<FilesCloner.IProgramComponent, FilesCloner.ProgramComponent>(
-                programServiceLifetime ?? fileCloneServicesLifetime);
-
-            services.AddSvc<ClonerConfigGenerator.IProgramComponent, ClonerConfigGenerator.ProgramComponent>(
-                programServiceLifetime ?? fileCloneServicesLifetime);
-
-            services.AddSvc<FilesCloner.IFileCloneComponent, FilesCloner.FileCloneComponent>(
-                fileCloneServicesLifetime);
-
             services.AddSingleton<LocalFilesCloner.IProgramConfigRetriever, LocalFilesCloner.ProgramConfigRetriever>();
             services.AddSingleton<LocalFilesCloner.IProgramArgsRetriever, LocalFilesCloner.ProgramArgsRetriever>();
             services.AddSingleton<LocalFilesCloner.IProgramArgsNormalizer, LocalFilesCloner.ProgramArgsNormalizer>();
