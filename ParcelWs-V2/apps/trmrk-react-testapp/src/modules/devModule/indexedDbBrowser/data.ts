@@ -10,3 +10,7 @@ export interface IndexedDbTrmrkTreeNodeDataValue {
 export interface IndexedDbStoreTrmrkTreeNodeDataValue {
   dbStoreInfo: IDbObjectStoreInfo;
 }
+
+export const searchQuery = Object.freeze({
+  showCreateSuccessMsg: "showCreateSuccessMsg",
+});

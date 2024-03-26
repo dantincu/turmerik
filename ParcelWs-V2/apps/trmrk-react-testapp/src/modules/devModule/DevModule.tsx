@@ -15,8 +15,10 @@ import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
 import DevModuleHomePage from "./DevModuleHomePage";
 import IndexedDbDemo from "./pages/indexedDbDemo/IndexedDbDemo";
 import IndexedDbDemoCreateDb from "./pages/indexedDbDemo/IndexedDbDemoCreateDb";
+import IndexedDbDemoEditDb from "./pages/indexedDbDemo/IndexedDbDemoEditDb";
 import IndexedDbBrowserAppBarContent from "./indexedDbBrowser/IndexedDbBrowserAppBarContent";
 import IndexedDbCreateDbAppBarContent from "./indexedDbBrowser/IndexedDbCreateDbAppBarContent";
+import IndexedDbEditDbAppBarContent from "./indexedDbBrowser/IndexedDbEditDbAppBarContent";
 
 import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
 import FloatingTopBarAppModule from "trmrk-react/src/components/floatingTopBarAppModule/FloatingTopBarAppModule";
@@ -48,8 +50,10 @@ const getAppBarContents = (
       retNodes.push(<IndexedDbBrowserAppBarContent key={2} basePath={basePath} />);
       break;
     case "/indexeddb-browser/create-db":
-      
-      retNodes.push(<IndexedDbCreateDbAppBarContent key={3} />);
+      retNodes.push(<IndexedDbCreateDbAppBarContent key={1} />);
+      break;
+    case "/indexeddb-browser/edit-db":
+      retNodes.push(<IndexedDbEditDbAppBarContent key={1} />);
       break;
   }
 
@@ -129,6 +133,7 @@ export default function DevModule(
         <Routes>
           <Route path={"/indexeddb-browser"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser`} />} />
           <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbDemoCreateDb urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
+          <Route path={"/indexeddb-browser/edit-db"} element={<IndexedDbDemoEditDb urlPath={`${props.basePath}/indexeddb-browser/edit-db`} />} />
           <Route path="/" element={<DevModuleHomePage exitPath={props.rootPath} urlPath={props.basePath} />} />
           <Route path="*" element={ <NotFound /> } />
         </Routes>

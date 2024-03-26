@@ -6,11 +6,11 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { devModuleIndexedDbBrowserReducers } from "../../../store/devModuleIndexedDbBrowserSlice";
 
-export interface IndexedDbCreateDbAppBarContentProps {
+export interface IndexedDbEditDbAppBarContentProps {
 }
 
-export default function IndexedDbCreateDbAppBarContent(
-  props: IndexedDbCreateDbAppBarContentProps
+export default function IndexedDbEditDbAppBarContent(
+  props: IndexedDbEditDbAppBarContentProps
   ) {
   const dispatch = useDispatch();
 
@@ -18,8 +18,8 @@ export default function IndexedDbCreateDbAppBarContent(
     dispatch(devModuleIndexedDbBrowserReducers.incEditDbAddDatastoreReqsCount());
   }
 
-  return (<div className="trmrk-indexeddb-create-db-app-bar-content">
+  return (<div className="trmrk-indexeddb-edit-db-app-bar-content">
     <IconButton className="trmrk-icon-btn" sx={{ marginLeft: "5em" }} onClick={addDbStoreClicked}><AddIcon /></IconButton>
-    <Typography variant="h4" component="h1" className="trmrk-page-title">Create Database</Typography>
+    <Typography variant="h4" component="h1" className="trmrk-page-title">Edit Database</Typography>
     </div>);
 }

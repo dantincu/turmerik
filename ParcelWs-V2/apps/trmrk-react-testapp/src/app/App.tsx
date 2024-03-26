@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Outlet, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
@@ -19,7 +19,7 @@ import DevModule from "../modules/devModule/DevModule";
 import AppModule from "../modules/appModule/AppModule";
 import NotFound from "../pages/notFound/NotFound";
 
-import {  getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
+import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
 import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
 
 const App = withErrorBoundary(() => {

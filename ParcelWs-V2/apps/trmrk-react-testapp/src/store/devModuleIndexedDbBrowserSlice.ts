@@ -7,11 +7,11 @@ import {
 import { ReducerAction } from "trmrk-react/src/redux/core";
 
 export interface DevModuleIndexedDbBrowserData {
-  createDbAddDatastoreReqsCount: number;
+  editDbAddDatastoreReqsCount: number;
 }
 
 export interface DevModuleIndexedDbBrowserDataSelectors {
-  getCreateDbAddDatastoreReqsCount: Selector<
+  getEditDbAddDatastoreReqsCount: Selector<
     {
       devModuleIndexedDbBrowser: DevModuleIndexedDbBrowserData;
     },
@@ -25,64 +25,61 @@ export interface DevModuleIndexedDbBrowserDataSelectors {
 }
 
 export interface DevModuleIndexedDbBrowserDataReducers {
-  incCreateDbAddDatastoreReqsCount: ActionCreatorWithPayload<
+  incEditDbAddDatastoreReqsCount: ActionCreatorWithPayload<
     void,
-    "devModuleIndexedDbBrowser/incCreateDbAddDatastoreReqsCount"
+    "devModuleIndexedDbBrowser/incEditDbAddDatastoreReqsCount"
   >;
-  decCreateDbAddDatastoreReqsCount: ActionCreatorWithPayload<
+  decEditDbAddDatastoreReqsCount: ActionCreatorWithPayload<
     void,
-    "devModuleIndexedDbBrowser/decCreateDbAddDatastoreReqsCount"
+    "devModuleIndexedDbBrowser/decEditDbAddDatastoreReqsCount"
   >;
-  resetCreateDbAddDatastoreReqsCount: ActionCreatorWithPayload<
+  resetEditDbAddDatastoreReqsCount: ActionCreatorWithPayload<
     void,
-    "devModuleIndexedDbBrowser/resetCreateDbAddDatastoreReqsCount"
+    "devModuleIndexedDbBrowser/resetEditDbAddDatastoreReqsCount"
   >;
 }
 
 const devModuleIndexedDbBrowserSlice = createSlice({
   name: "devModuleIndexedDbBrowser",
   initialState: {
-    createDbAddDatastoreReqsCount: 0,
+    editDbAddDatastoreReqsCount: 0,
   } as DevModuleIndexedDbBrowserData,
   reducers: {
-    incCreateDbAddDatastoreReqsCount: (state, action: ReducerAction<void>) => {
-      state.createDbAddDatastoreReqsCount++;
+    incEditDbAddDatastoreReqsCount: (state, action: ReducerAction<void>) => {
+      state.editDbAddDatastoreReqsCount++;
     },
-    decCreateDbAddDatastoreReqsCount: (state, action: ReducerAction<void>) => {
-      state.createDbAddDatastoreReqsCount--;
+    decEditDbAddDatastoreReqsCount: (state, action: ReducerAction<void>) => {
+      state.editDbAddDatastoreReqsCount--;
     },
-    resetCreateDbAddDatastoreReqsCount: (
-      state,
-      action: ReducerAction<void>
-    ) => {
-      state.createDbAddDatastoreReqsCount = 0;
+    resetEditDbAddDatastoreReqsCount: (state, action: ReducerAction<void>) => {
+      state.editDbAddDatastoreReqsCount = 0;
     },
   },
   selectors: {
-    getCreateDbAddDatastoreReqsCount: (appData) =>
-      appData.createDbAddDatastoreReqsCount,
+    getEditDbAddDatastoreReqsCount: (appData) =>
+      appData.editDbAddDatastoreReqsCount,
   },
 });
 
 const {
-  incCreateDbAddDatastoreReqsCount,
-  decCreateDbAddDatastoreReqsCount,
-  resetCreateDbAddDatastoreReqsCount,
+  incEditDbAddDatastoreReqsCount,
+  decEditDbAddDatastoreReqsCount,
+  resetEditDbAddDatastoreReqsCount,
 } = devModuleIndexedDbBrowserSlice.actions;
 
-const { getCreateDbAddDatastoreReqsCount } =
+const { getEditDbAddDatastoreReqsCount } =
   devModuleIndexedDbBrowserSlice.selectors;
 
 export const devModuleIndexedDbBrowserReducers: DevModuleIndexedDbBrowserDataReducers =
   {
-    incCreateDbAddDatastoreReqsCount,
-    decCreateDbAddDatastoreReqsCount,
-    resetCreateDbAddDatastoreReqsCount,
+    incEditDbAddDatastoreReqsCount,
+    decEditDbAddDatastoreReqsCount,
+    resetEditDbAddDatastoreReqsCount,
   };
 
 export const devModuleIndexedDbBrowserSelectors: DevModuleIndexedDbBrowserDataSelectors =
   {
-    getCreateDbAddDatastoreReqsCount,
+    getEditDbAddDatastoreReqsCount,
   };
 
 export default devModuleIndexedDbBrowserSlice.reducer;

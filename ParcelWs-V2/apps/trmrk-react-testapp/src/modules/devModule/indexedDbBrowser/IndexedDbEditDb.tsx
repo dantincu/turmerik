@@ -12,6 +12,8 @@ import { FormGroup } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import Snackbar from '@mui/material/Snackbar';
 
 import IndexedDbCreateDbStore, { IndexedDbCreateDbStoreProps } from "./IndexedDbCreateDbStore";
 import { devModuleIndexedDbBrowserReducers, devModuleIndexedDbBrowserSelectors } from "../../../store/devModuleIndexedDbBrowserSlice";
@@ -28,14 +30,13 @@ import {
   getCreateDbRequestErrMsg
 } from "../../../services/indexedDb";
 
-import { searchQuery } from "./data";
-
-export interface IndexedDbCreateDbProps {
-  basePath: string
+export interface IndexedDbEditDbProps {
+  basePath: string;
+  showCreateSuccessMsg?: boolean | null | undefined;
 }
 
-export default function IndexedDbCreateDb(
-  props: IndexedDbCreateDbProps
+export default function IndexedDbEditDb(
+  props: IndexedDbEditDbProps
   ) {
   const [ dbName, setDbName ] = React.useState("");
   const [ dbNameErr, setDbNameErr ] = React.useState<string | null>(null);
@@ -54,8 +55,14 @@ export default function IndexedDbCreateDb(
   const [ error, setError ] = React.useState<string | null>(null);
   const [ warning, setWarning ] = React.useState<string | null>(null);
 
+  const [ showCreateSuccessMsg, setShowCreateSuccessMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const onCreateSuccessMsgClose = () => {
+    setShowCreateSuccessMsg(false);
+  }
 
   const dbNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbName = e.target.value;
@@ -156,7 +163,7 @@ export default function IndexedDbCreateDb(
           
           setWarning(null);
           setError(errMsg);
-          navigate(`${props.basePath}/edit-db?${searchQuery.showCreateSuccessMsg}=true`);
+          navigate(`${props.basePath}/edit-db?showCreateSuccessMsg=true`);
         } else {
           setWarning(null);
         }
@@ -209,9 +216,34 @@ export default function IndexedDbCreateDb(
       setDbStoresArr(newDbStoresArr);
     }
 
-  }, [ createDbAddDatastoreReqsCount, createDbAddDatastoreReqsCountRef, dbStoresArr, saving, error, warning, dbNameErr, dbVersionErr ]);
+  }, [ createDbAddDatastoreReqsCount,
+    createDbAddDatastoreReqsCountRef,
+    dbStoresArr,
+    saving,
+    error,
+    warning,
+    dbNameErr,
+    dbVersionErr,
+    props.showCreateSuccessMsg,
+    showCreateSuccessMsg ]);
 
   return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
+    <Snackbar className="trmrk-snackbar"
+      open={showCreateSuccessMsg}
+      autoHideDuration={600000}
+      onClose={onCreateSuccessMsgClose}
+      message="Database created successfully"
+      action={<React.Fragment>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={onCreateSuccessMsgClose}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </React.Fragment>}
+    />
     <FormGroup className="trmrk-form-group">
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbName" required>Database name</InputLabel>
