@@ -11,6 +11,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import { FormGroup } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import Snackbar from '@mui/material/Snackbar';
@@ -228,22 +229,16 @@ export default function IndexedDbEditDb(
     showCreateSuccessMsg ]);
 
   return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
-    <Snackbar className="trmrk-snackbar"
-      open={showCreateSuccessMsg}
-      autoHideDuration={600000}
-      onClose={onCreateSuccessMsgClose}
-      message="Database created successfully"
-      action={<React.Fragment>
-        <IconButton
-          size="small"
-          aria-label="close"
-          color="inherit"
-          onClick={onCreateSuccessMsgClose}
-        >
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </React.Fragment>}
-    />
+    <Snackbar open={showCreateSuccessMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
+      <Alert
+        onClose={onCreateSuccessMsgClose}
+        severity="success"
+        variant="filled"
+        sx={{ width: '100%' }}
+      >
+        Database created successfully
+      </Alert>
+    </Snackbar>
     <FormGroup className="trmrk-form-group">
       <FormControl className="trmrk-form-field">
         <InputLabel htmlFor="dbName" required>Database name</InputLabel>

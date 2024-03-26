@@ -11,26 +11,11 @@
     background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
     background-color: #121212;
   }
-
-  /*
-  MuiPaper-root MuiPaper-elevation MuiPaper-elevation6 MuiSnackbarContent-root css-ni0ryk-MuiPaper-root-MuiSnackbarContent-root 
-  */
-
-  .trmrk-snackbar .MuiPaper-root {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
-    background-color: #121212;
-    color: white;
-  }
 }
 
 .trmrk-theme-light {
   .trmrk-ftb-bar-toggle-icon, .trmrk-ftb-bar-toggle-icon:hover {
     color: #FFF;
     background-color: #1976d2;
-  }
-
-  .trmrk-snackbar .MuiPaper-root {
-    background-color: white;
-    color: rgba(0, 0, 0, 0.87);
   }
 }
