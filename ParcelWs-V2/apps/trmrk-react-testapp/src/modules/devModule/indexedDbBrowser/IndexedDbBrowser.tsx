@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Paper from '@mui/material/Paper';
 import Menu from '@mui/material/Menu';
+import Box from '@mui/material/Box';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
@@ -128,24 +129,20 @@ export default function IndexedDbBrowser(
         open={isPinnedTopBarMenuOpen}
         anchorEl={pinnedTopBarRef.current}
         onClose={onPinnedTopBarMenuClose}>
-      <MenuList className='trmrk-menu-list'>
-        <MenuItem>
-          <IconButton><HeightIcon /></IconButton>
-        </MenuItem>
-      </MenuList>
+      <Box className="trmrk-icons-menu-list">
+        <IconButton><HeightIcon /></IconButton>
+      </Box>
     </Menu>
     <Menu className="trmrk-menu"
         open={isDbMenuOpen}
         anchorEl={currentDbLabelRef.current}
         onClose={onDbMenuClose}>
-      <MenuList className='trmrk-menu-list'>
-        <MenuItem>
+        <Box className="trmrk-icons-menu-list">
           <IconButton><VisibilityIcon /></IconButton>
           <IconButton><EditIcon /></IconButton>
           <IconButton><MoreVertIcon /></IconButton>
           <IconButton><ArrowForwardIcon /></IconButton>
-        </MenuItem>
-      </MenuList>
+        </Box>
     </Menu>
   </div>);
 }
