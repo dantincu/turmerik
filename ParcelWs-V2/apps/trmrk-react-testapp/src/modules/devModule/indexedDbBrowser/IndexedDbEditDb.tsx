@@ -307,7 +307,7 @@ export default function IndexedDbEditDb(
           setEditResultMsgSeverity("info");
           setEditSuccessMsg("Database opened successfully");
           setShowEditResultMsg(true);
-          load();
+          // load();
         }
       }, errMsg => {
         hasError = true;
