@@ -8,7 +8,7 @@ import Input from '@mui/material/Input';
 import FormHelperText from '@mui/material/FormHelperText';
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
+import Alert, { AlertColor } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -102,7 +102,8 @@ export default function IndexedDbEditDb(
   const [ editSuccessMsg, setEditSuccessMsg ] = React.useState(
     (props.showCreateSuccessMsg ?? false) === true ? "Database created successfully" : "");
   
-  const [ showEditSuccessMsg, setShowEditSuccessMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
+  const [ showEditResultMsg, setShowEditResultMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
+  const [ editResultMsgSeverity, setEditResultMsgSeverity ] = React.useState<AlertColor>(props.showCreateSuccessMsg ? "success" : "info");
   const [ validateDbStoresReqsCount, setValidateDbStoresReqsCount ] = React.useState(0);
 
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ export default function IndexedDbEditDb(
 
   const onCreateSuccessMsgClose = () => {
     setEditSuccessMsg("");
-    setShowEditSuccessMsg(false);
+    setShowEditResultMsg(false);
   }
 
   const dbNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,8 +304,10 @@ export default function IndexedDbEditDb(
         setSaving(false);
 
         if (!migrated) {
-          setEditSuccessMsg("Database saved successfully");
-          setShowEditSuccessMsg(true);
+          setEditResultMsgSeverity("info");
+          setEditSuccessMsg("Database opened successfully");
+          setShowEditResultMsg(true);
+          load();
         }
       }, errMsg => {
         hasError = true;
@@ -323,8 +326,10 @@ export default function IndexedDbEditDb(
           }
 
           migrated = true;
-          setEditSuccessMsg("Database migrated successfully");
-          setShowEditSuccessMsg(true);
+          setEditResultMsgSeverity("success");
+          setEditSuccessMsg("Database saved successfully");
+          setShowEditResultMsg(true);
+          load();
         } catch (err) {
           hasError = true;
           const errMsg = (err as Error).message ?? "Could not upgrade the database";
@@ -363,7 +368,7 @@ export default function IndexedDbEditDb(
 
       setDbStoresArr(newDbStoresArr);
     } else {
-      if (!props.isNewDb && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
+      if (!props.isNewDb && !isLoading && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
         load();
       }
     }
@@ -384,21 +389,11 @@ export default function IndexedDbEditDb(
     dbNameErr,
     dbVersionErr,
     props.showCreateSuccessMsg,
-    showEditSuccessMsg,
+    showEditResultMsg,
     props.isNewDb,
     validateDbStoresReqsCount ]);
 
   return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
-    <Snackbar open={showEditSuccessMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
-      <Alert
-        onClose={onCreateSuccessMsgClose}
-        severity="success"
-        variant="filled"
-        sx={{ width: '100%' }}
-      >
-        { editSuccessMsg }
-      </Alert>
-    </Snackbar>
     { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><FormHelperText error>{loadError}</FormHelperText></Box></Box> : (
         loadWarning ?? null) !== null ? <Box className="trmrk-flex-row">
@@ -443,5 +438,15 @@ export default function IndexedDbEditDb(
           { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText error>{error}</FormHelperText></Box></Box> : null }
           { (warning ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText className="trmrk-warning">{warning}</FormHelperText></Box></Box> : null }
         </React.Fragment> }
+    <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
+      <Alert
+        onClose={onCreateSuccessMsgClose}
+        severity={editResultMsgSeverity}
+        variant="filled"
+        sx={{ width: '100%' }}
+      >
+        { editSuccessMsg }
+      </Alert>
+    </Snackbar>
   </Paper>);
 }
