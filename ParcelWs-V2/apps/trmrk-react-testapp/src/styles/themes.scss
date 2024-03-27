@@ -11,11 +11,40 @@
     background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
     background-color: #121212;
   }
+
+  .trmrk-page-form {
+    .trmrk-flex-row {
+      .trmrk-cell {
+        .trmrk-title {
+          color: #ccc;
+        }
+
+        .trmrk-readonly {
+          background:
+            linear-gradient(#FFF0, #FFF1, #FFF0);
+        }
+      }
+    }
+  }
 }
 
 .trmrk-theme-light {
   .trmrk-ftb-bar-toggle-icon, .trmrk-ftb-bar-toggle-icon:hover {
     color: #FFF;
     background-color: #1976d2;
+  }
+
+  .trmrk-page-form {
+    .trmrk-flex-row {
+      .trmrk-cell {
+        .trmrk-title {
+          color: #444;
+        }
+
+        .trmrk-readonly {
+          background: linear-gradient(#0000, #0001, #0000);
+        }
+      }
+    }
   }
 }

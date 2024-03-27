@@ -18,6 +18,7 @@ import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEdit
 import { devModuleIndexedDbBrowserReducers, devModuleIndexedDbBrowserSelectors } from "../../../store/devModuleIndexedDbBrowserSlice";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
+import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 
 import {
   attachDefaultHandlersToDbOpenRequest,
@@ -26,8 +27,13 @@ import {
   getDfDatabaseNumberValidationMsg,
   dfDatabaseNumberValidationMsg,
   IDbObjectStoreInfo,
-  getCreateDbRequestErrMsg
+  getDbInfo,
+  IDbDatabaseInfo,
+  getCreateDbRequestErrMsg,
+  getObjectStoresInfoAgg
 } from "../../../services/indexedDb";
+
+import { searchQuery } from "./data";
 
 export interface IndexedDbEditDbProps {
   basePath: string;
@@ -70,6 +76,11 @@ const validateDbVersionNumber = (dbVersionStr: string): [ string | null, number 
 export default function IndexedDbEditDb(
   props: IndexedDbEditDbProps
   ) {
+  const [ isLoading, setIsLoading ] = React.useState(false);
+  const [ db, setDb ] = React.useState<IDbDatabaseInfo | null>(null);
+  const [ loadError, setLoadError ] = React.useState<string | null>((props.dbName ?? null) === null && !props.isNewDb ? "Database name is required" : null);
+  const [ loadWarning, setLoadWarning ] = React.useState<string | null>(null);
+
   const [ dbName, setDbName ] = React.useState(props.dbName ?? "");
   const [ dbNameErr, setDbNameErr ] = React.useState<string | null>("");
 
@@ -88,6 +99,9 @@ export default function IndexedDbEditDb(
   const [ error, setError ] = React.useState<string | null>(null);
   const [ warning, setWarning ] = React.useState<string | null>(null);
 
+  const [ editSuccessMsg, setEditSuccessMsg ] = React.useState(
+    (props.showCreateSuccessMsg ?? false) === true ? "Database created successfully" : "");
+  
   const [ showEditSuccessMsg, setShowEditSuccessMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
   const [ validateDbStoresReqsCount, setValidateDbStoresReqsCount ] = React.useState(0);
 
@@ -95,6 +109,7 @@ export default function IndexedDbEditDb(
   const dispatch = useDispatch();
 
   const onCreateSuccessMsgClose = () => {
+    setEditSuccessMsg("");
     setShowEditSuccessMsg(false);
   }
 
@@ -132,7 +147,7 @@ export default function IndexedDbEditDb(
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
-    dbStore.dbStoreName = newDbStoreName;
+    dbStore.dbStore.storeName = newDbStoreName;
     dbStore.dbStoreNameHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
@@ -143,7 +158,7 @@ export default function IndexedDbEditDb(
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
-    dbStore.autoIncrement = newAutoIncrement;
+    dbStore.dbStore.autoIncrement = newAutoIncrement;
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
   };
@@ -152,7 +167,7 @@ export default function IndexedDbEditDb(
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
-    dbStore.keyPath = newKeyPath;
+    dbStore.dbStore.serializedKeyPath = newKeyPath;
     dbStore.dbStoreKeyPathHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
@@ -182,11 +197,55 @@ export default function IndexedDbEditDb(
     dbVersionErr: string | null,
     dbStoresArr: IndexedDbStore[]) => {
     const formCanBeSubmitted = getFormCanBeSubmitted(dbNameErr, dbVersionErr, dbStoresArr);
-    console.log("formCanBeSubmitted", formCanBeSubmitted, dbNameErr, dbVersionErr, dbStoresArr);
 
     if (formCanBeSubmitted) {
       setError(null);
     }
+  }
+
+  const load = () => {
+    setIsLoading(true);
+    var req = indexedDB.open(dbName);
+
+    let hasError: boolean;
+    
+    attachDefaultHandlersToDbOpenRequest(req, dfDatabaseOpenErrMsg, success => {
+      if (success) {
+        let errMsg: string | null = null;
+
+        try {
+          setDb(getDbInfo(req.result));
+          const dbStores = getObjectStoresInfoAgg(req.result);
+
+          const dbStoresArr = dbStores.map(store => ({
+            dbStore: store,
+            canBeEdited: false
+          }) as IndexedDbStore);
+
+          setDbStoresArr(dbStoresArr);
+          req.result.close();
+
+          setDbNameErr(null);
+          setDbVersionErr(null);
+        } catch (err) {
+          hasError = true;
+          errMsg = (err as Error).message ?? "Could not close the database connection";
+        }
+        
+        setLoadWarning(null);
+        setLoadError(errMsg);
+      } else {
+        setLoadWarning(null);
+      }
+
+      setIsLoading(false);
+    },
+    errMsg => {
+      hasError = true;
+      setLoadError(errMsg);
+    }, warnMsg => {
+      setLoadWarning(warnMsg);
+    });
   }
 
   const onSaveClick = () => {
@@ -228,9 +287,8 @@ export default function IndexedDbEditDb(
           setError(errMsg);
 
           if (props.isNewDb) {
-            navigate(`${props.basePath}/edit-db?showCreateSuccessMsg=true`);
-          } else {
-            setShowEditSuccessMsg(true);
+            const encodedDbName = encodeURIComponent(dbName);
+            navigate(`${props.basePath}/edit-db?${searchQuery.showCreateSuccessMsg}=true&${searchQuery.dbName}=${encodedDbName}`);
           }
         } else {
           setWarning(null);
@@ -247,11 +305,14 @@ export default function IndexedDbEditDb(
           const db = req.result;
 
           for (let store of addedStores) {
-            db.createObjectStore(store.dbStoreName, {
-              keyPath: store.keyPath,
-              autoIncrement: store.autoIncrement,
+            db.createObjectStore(store.dbStore.storeName, {
+              keyPath: store.dbStore.serializedKeyPath,
+              autoIncrement: store.dbStore.autoIncrement,
             });
           }
+
+          setEditSuccessMsg("Database saved successfully");
+          setShowEditSuccessMsg(true);
         } catch (err) {
           hasError = true;
           const errMsg = (err as Error).message ?? "Could not upgrade the database";
@@ -275,19 +336,31 @@ export default function IndexedDbEditDb(
       const newDbStoresArr = [...dbStoresArr];
 
       newDbStoresArr.push({
-        dbStoreName: "",
-        autoIncrement: true,
-        keyPath: "",
-        dbStoreNameHasError: true
+        dbStore: {
+          storeName: "",
+          autoIncrement: true,
+          keyPath: "",
+          serializedKeyPath: "",
+          indexes: [],
+          indexNames: []
+        },
+        dbStoreNameHasError: true,
+        dbStoreKeyPathHasError: true,
+        canBeEdited: true
       });
 
       setDbStoresArr(newDbStoresArr);
     } else {
-      if (!props.isNewDb) {
-
+      if (!props.isNewDb && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
+        load();
       }
     }
-  }, [ editDbAddDatastoreReqsCount,
+  }, [ isLoading,
+    loadError,
+    loadWarning,
+    db,
+    isFirstRender,
+    editDbAddDatastoreReqsCount,
     editDbAddDatastoreReqsCountRef,
     props.dbName,
     dbName,
@@ -311,43 +384,52 @@ export default function IndexedDbEditDb(
         variant="filled"
         sx={{ width: '100%' }}
       >
-        Database saved successfully
+        { editSuccessMsg }
       </Alert>
     </Snackbar>
-    <Box className="trmrk-flex-rows-group">
-      <Box className="trmrk-flex-row">
-        <Box className="trmrk-cell"><label htmlFor="dbName">Database name</label></Box>
-        <Box className="trmrk-cell"><Input id="dbName" onChange={dbNameChanged} value={dbName} required fullWidth readOnly={!!props.isNewDb} /></Box>
-          { (dbNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbNameErr}</FormHelperText></Box> : null }
-      </Box>
-      <Box className="trmrk-flex-row">
-        <Box className="trmrk-cell"><label htmlFor="dbVersion">Database version number</label></Box>
-        <Box className="trmrk-cell"><Input id="dbVersion" type="number" onChange={dbVersionChanged}
-          value={dbVersion} required fullWidth inputProps={{ min: 1 }} /></Box>
-          { (dbVersionErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbVersionErr}</FormHelperText></Box> : null }
-      </Box>
-    </Box>
-    <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell">
-      <Typography component="h2" variant="h5" className="trmrk-form-group-title">
-        Db Stores <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton></Typography>
-      </Box>
-    </Box>
-    { dbStoresArr.map((dbStore, idx) => <IndexedDbEditDbStore
-        model={dbStore} key={idx} idx={idx}
-        validateReqsCount={validateDbStoresReqsCount}
-        dbStoreNameChanged={editDbStoreNameChangedHandler(idx, dbStoresArr)}
-        autoIncrementChanged={editDbStoreAutoIncrementChangedHandler(idx, dbStoresArr)}
-        keyPathChanged={editDbStoreKeyPathChangedHandler(idx, dbStoresArr)}
-        dbStoreNameHasErrorChanged={editDbStoreNameHasErrorChangedHandler(idx)}
-        keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(idx)} /> ) }
-    <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell trmrk-buttons-group">
-        <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>
-        <Button onClick={onCancelClick}>Cancel</Button>
-      </Box>
-    </Box>
-    { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText error>{error}</FormHelperText></Box></Box> : null }
-    { (warning ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText className="trmrk-warning">{warning}</FormHelperText></Box></Box> : null }
+    { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">
+      <Box className="trmrk-cell"><FormHelperText error>{loadError}</FormHelperText></Box></Box> : (
+        loadWarning ?? null) !== null ? <Box className="trmrk-flex-row">
+      <Box className="trmrk-cell"><FormHelperText className="trmrk-warning">{loadWarning}</FormHelperText></Box>
+      </Box> : <React.Fragment>
+        <Box className="trmrk-flex-rows-group">
+          <Box className="trmrk-flex-row">
+            <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbName">Database name</label></Box>
+            <Box className="trmrk-cell"><Input id="dbName" onChange={dbNameChanged} value={dbName}
+              required fullWidth readOnly={!props.isNewDb}
+              className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
+              { (dbNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbNameErr}</FormHelperText></Box> : null }
+          </Box>
+          <Box className="trmrk-flex-row">
+            <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbVersion">Database version number</label></Box>
+            <Box className="trmrk-cell"><Input id="dbVersion" type="number" onChange={dbVersionChanged}
+              value={dbVersion} required fullWidth inputProps={{ min: 1 }}
+              className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
+              { (dbVersionErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbVersionErr}</FormHelperText></Box> : null }
+          </Box>
+        </Box>
+        <Box className="trmrk-flex-row">
+          <Box className="trmrk-cell">
+          <Typography component="h2" variant="h5" className="trmrk-form-group-title">
+            Db Stores <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton></Typography>
+          </Box>
+        </Box>
+        { dbStoresArr.map((dbStore, idx) => <IndexedDbEditDbStore
+              model={dbStore} key={idx} idx={idx}
+              validateReqsCount={validateDbStoresReqsCount}
+              dbStoreNameChanged={editDbStoreNameChangedHandler(idx, dbStoresArr)}
+              autoIncrementChanged={editDbStoreAutoIncrementChangedHandler(idx, dbStoresArr)}
+              keyPathChanged={editDbStoreKeyPathChangedHandler(idx, dbStoresArr)}
+              dbStoreNameHasErrorChanged={editDbStoreNameHasErrorChangedHandler(idx)}
+              keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(idx)} /> ) }
+          <Box className="trmrk-flex-row">
+            <Box className="trmrk-cell trmrk-buttons-group">
+              <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>
+              <Button onClick={onCancelClick}>Cancel</Button>
+            </Box>
+          </Box>
+          { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText error>{error}</FormHelperText></Box></Box> : null }
+          { (warning ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText className="trmrk-warning">{warning}</FormHelperText></Box></Box> : null }
+        </React.Fragment> }
   </Paper>);
 }

@@ -56,6 +56,11 @@ body, #app-root {
   align-items: center;
   padding-top: 0.25em;
 
+  > .trmrk-loading {
+    margin-top: 0.5em;
+    margin-left: 1em;
+  }
+
   .trmrk-flex-row {
     display: flex;
     position: relative;
@@ -77,6 +82,10 @@ body, #app-root {
 
       .trmrk-textarea {
         height: 5em;
+      }
+
+      .trmrk-input {
+        padding: 0em 0.5em;
       }
     }
   }

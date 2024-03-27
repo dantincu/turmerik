@@ -13,9 +13,9 @@ import trmrk from "trmrk";
 import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
 
 import DevModuleHomePage from "./DevModuleHomePage";
-import IndexedDbDemo from "./pages/indexedDbDemo/IndexedDbDemo";
-import IndexedDbDemoCreateDb from "./pages/indexedDbDemo/IndexedDbDemoCreateDb";
-import IndexedDbDemoEditDb from "./pages/indexedDbDemo/IndexedDbDemoEditDb";
+import IndexedDbBrowser from "./pages/indexedDbBrowser/IndexedDbBrowserPage";
+import IndexedDbBrowserCreateDbPage from "./pages/indexedDbBrowser/IndexedDbBrowserCreateDbPage";
+import IndexedDbBrowserEditDbPage from "./pages/indexedDbBrowser/IndexedDbBrowserEditDbPage";
 import IndexedDbBrowserAppBarContent from "./indexedDbBrowser/IndexedDbBrowserAppBarContent";
 import IndexedDbCreateDbAppBarContent from "./indexedDbBrowser/IndexedDbCreateDbAppBarContent";
 import IndexedDbEditDbAppBarContent from "./indexedDbBrowser/IndexedDbEditDbAppBarContent";
@@ -131,9 +131,9 @@ export default function DevModule(
       appBarChildren={getAppBarContents(props.basePath, urlPath, baseUrlPath)}
       refreshBtnClicked={() => {}}>
         <Routes>
-          <Route path={"/indexeddb-browser"} element={<IndexedDbDemo urlPath={`${props.basePath}/indexeddb-browser`} />} />
-          <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbDemoCreateDb urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
-          <Route path={"/indexeddb-browser/edit-db"} element={<IndexedDbDemoEditDb urlPath={`${props.basePath}/indexeddb-browser/edit-db`} />} />
+          <Route path={"/indexeddb-browser"} element={<IndexedDbBrowser urlPath={`${props.basePath}/indexeddb-browser`} />} />
+          <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbBrowserCreateDbPage urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
+          <Route path={"/indexeddb-browser/edit-db"} element={<IndexedDbBrowserEditDbPage urlPath={`${props.basePath}/indexeddb-browser/edit-db`} />} />
           <Route path="/" element={<DevModuleHomePage exitPath={props.rootPath} urlPath={props.basePath} />} />
           <Route path="*" element={ <NotFound /> } />
         </Routes>

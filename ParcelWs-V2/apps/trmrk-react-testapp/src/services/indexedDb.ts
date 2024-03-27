@@ -90,6 +90,17 @@ export const domStrListToArr = (list: DOMStringList) => {
   return arr;
 };
 
+export const serializeKeyPath = (
+  keyPath: string | string[],
+  joinStr?: string | null | undefined
+) => {
+  if (typeof keyPath === "object") {
+    keyPath = keyPath.join(joinStr ?? "\n");
+  }
+
+  return keyPath;
+};
+
 export const getObjectStoreNames = (db: IDBDatabase) =>
   domStrListToArr(db.objectStoreNames);
 
@@ -109,6 +120,7 @@ export interface IDbObjectStoreInfo {
   storeName: string;
   autoIncrement: boolean;
   keyPath: string | string[];
+  serializedKeyPath: string;
   indexNames: string[];
   indexes: IDbIndexInfo[];
 }
@@ -118,7 +130,9 @@ export const getDbInfo = (dbInfo: IDBDatabaseInfo): IDbDatabaseInfo => ({
   version: dbInfo.version,
 });
 
-export const getObjectStoresInfoAgg = (db: IDBDatabase) => {
+export const getObjectStoresInfoAgg = (
+  db: IDBDatabase
+): IDbObjectStoreInfo[] => {
   let objStoresArr: IDbObjectStoreInfo[] = [];
   const objStoreNamesArr = getObjectStoreNames(db);
 
@@ -149,6 +163,7 @@ export const getObjectStoreInfo = (objStore: IDBObjectStore) => {
     storeName: objStore.name,
     autoIncrement: objStore.autoIncrement,
     keyPath: objStore.keyPath,
+    serializedKeyPath: serializeKeyPath(objStore.keyPath),
     indexNames: domStrListToArr(objStore.indexNames),
   } as IDbObjectStoreInfo;
 

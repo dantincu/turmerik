@@ -1,11 +1,15 @@
+import {
+  IDbDatabaseInfo,
+  IDbObjectStoreInfo,
+} from "../../../services/indexedDb";
+
 export interface IndexedDbStore {
-  dbStoreName: string;
-  keyPath: string;
-  autoIncrement: boolean;
+  dbStore: IDbObjectStoreInfo;
+  canBeEdited: boolean;
   dbStoreNameHasError?: boolean | null | undefined;
   dbStoreKeyPathHasError?: boolean | null | undefined;
 }
 
 export interface IndexedDbDatabase {
-  dbName: string;
+  db: IDbDatabaseInfo;
 }

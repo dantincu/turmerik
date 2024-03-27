@@ -12,5 +12,6 @@ export interface IndexedDbStoreTrmrkTreeNodeDataValue {
 }
 
 export const searchQuery = Object.freeze({
-  showCreateSuccessMsg: "showCreateSuccessMsg",
+  dbName: "db-name",
+  showCreateSuccessMsg: "show-create-success-msg",
 });

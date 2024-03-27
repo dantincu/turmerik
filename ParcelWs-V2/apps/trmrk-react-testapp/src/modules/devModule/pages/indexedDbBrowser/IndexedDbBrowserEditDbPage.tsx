@@ -12,12 +12,12 @@ import IndexedDbEditDb from "../../indexedDbBrowser/IndexedDbEditDb";
 
 import { appDataReducers } from "../../../../store/appDataSlice";
 
-export interface IndexedDbDemoEditDbProps {
+export interface IndexedDbBrowserEditDbPageProps {
   urlPath: string;
 }
 
-export default function IndexedDbDemoEditDb(
-  props: IndexedDbDemoEditDbProps) {
+export default function IndexedDbBrowserEditDbPage(
+  props: IndexedDbBrowserEditDbPageProps) {
   const dispatch = useDispatch();
 
   const basePath = trmrk.trimStr(props.urlPath, {
@@ -25,6 +25,9 @@ export default function IndexedDbDemoEditDb(
   }).split('/').filter((_, idx, arr) => idx < arr.length - 1).join("/");
 
   const [ searchParams, setSearchParams ] = useSearchParams();
+
+  const [ dbName, setDbName ] = React.useState(
+    searchParams.get(searchQuery.dbName));
 
   const [ showCreateSuccessMsgValue, setShowCreateSuccessMsgValue ] = React.useState(
     searchParams.get(searchQuery.showCreateSuccessMsg));
@@ -42,8 +45,9 @@ export default function IndexedDbDemoEditDb(
     }
   }, [ props.urlPath,
     searchParams,
+    dbName,
     showCreateSuccessMsgValue,
     showCreateSuccessMsg ]);
 
-  return (<IndexedDbEditDb basePath={basePath} isNewDb={false} showCreateSuccessMsg={showCreateSuccessMsg} />);
+  return (<IndexedDbEditDb basePath={basePath} isNewDb={false} dbName={dbName} showCreateSuccessMsg={showCreateSuccessMsg} />);
 }

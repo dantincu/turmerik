@@ -1,15 +1,14 @@
 import * as React from 'react';
+import { useNavigate } from "react-router-dom";
+
 import Paper from '@mui/material/Paper';
 import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import SettingsIcon from '@mui/icons-material/Settings';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardTwoTone from '@mui/icons-material/ArrowForwardTwoTone';
 import HeightIcon from '@mui/icons-material/Height';
 
 import trmrk from "trmrk";
@@ -19,10 +18,11 @@ import TrmrkTreeNodesList from './TrmrkTreeNodesList';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';
 
 import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../../services/indexedDb";
-import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue } from "./data";
+import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue, searchQuery } from "./data";
 import IndexedDbTreeNode, { IndexedDbTreeNodeProps } from "./IndexedDbTreeNode";
 
 export interface IndexedDbBrowserProps {
+  basePath: string;
 }
 
 export default function IndexedDbBrowser(
@@ -34,10 +34,13 @@ export default function IndexedDbBrowser(
   const [ error, setError ] = React.useState<Error | any | null>(null);
 
   const [ isPinnedTopBarMenuOpen, setIsPinnedTopBarMenuOpen ] = React.useState(false);
+  const [ currentDb, setCurrentDb ] = React.useState<TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue> | null>(null);
   const [ isDbMenuOpen, setIsDbMenuOpen ] = React.useState(false);
 
   const pinnedTopBarRef = React.useRef<HTMLButtonElement | null>(null);
   const currentDbLabelRef = React.useRef<HTMLDivElement | null>(null);
+
+  const navigate = useNavigate();
 
   const loadDatabases = () => {
     setIsLoadingRoot(true);
@@ -80,6 +83,32 @@ export default function IndexedDbBrowser(
     setDatabases(databasesArr);
     currentDbLabelRef.current = labelEl;
     setIsDbMenuOpen(true);
+    setCurrentDb(databasesArr.find(db => db.key === data.key)!);
+  }
+
+  const currentDbNodeExpandToggleClicked = () => {
+    if (currentDb) {
+      const databasesArr = databases!.map(db => ({
+        ...db,
+        isExpanded: (db.key === currentDb.key) ? !currentDb.isExpanded : db.isExpanded
+      }) as TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>);
+    
+      setDatabases(databasesArr);
+
+      setCurrentDb({
+        ...currentDb,
+        isExpanded: !currentDb.isExpanded
+      });
+    
+      setIsDbMenuOpen(false);
+    }
+  }
+
+  const currentDbNodeGoToClicked = () => {
+    if (currentDb) {
+      const encodedDbName = encodeURIComponent(currentDb.value.dbInfo.name ?? "");
+      navigate(`${props.basePath}/edit-db?${searchQuery.dbName}=${encodedDbName}`);
+    }
   }
 
   const dbExpandedToggled = (data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>) => {
@@ -105,7 +134,15 @@ export default function IndexedDbBrowser(
     } else {
       // console.log("databases", databases!.filter(db => db.isCurrent).map(db => db.key));
     }
-  }, [ isLoadingRoot, databases, error, isPinnedTopBarMenuOpen, isDbMenuOpen, pinnedTopBarRef, currentDbLabelRef ]);
+  }, [ isLoadingRoot,
+    databases,
+    error,
+    isPinnedTopBarMenuOpen,
+    isDbMenuOpen,
+    pinnedTopBarRef,
+    currentDbLabelRef,
+    currentDb,
+    currentDb?.isExpanded ]);
 
   return (<div className="trmrk-panel trmrk-indexeddb-browser">
     <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
@@ -137,12 +174,10 @@ export default function IndexedDbBrowser(
         open={isDbMenuOpen}
         anchorEl={currentDbLabelRef.current}
         onClose={onDbMenuClose}>
-        <Box className="trmrk-icons-menu-list">
-          <IconButton><VisibilityIcon /></IconButton>
-          <IconButton><EditIcon /></IconButton>
-          <IconButton><MoreVertIcon /></IconButton>
-          <IconButton><ArrowForwardIcon /></IconButton>
-        </Box>
+        {currentDb ? <Box className="trmrk-icons-menu-list">
+          <IconButton onClick={currentDbNodeExpandToggleClicked}> { currentDb.isExpanded ? <ArrowDropDownIcon /> : <ArrowRightIcon /> } </IconButton>
+          <IconButton onClick={currentDbNodeGoToClicked}><ArrowForwardTwoTone /></IconButton>
+        </Box> : null }
     </Menu>
   </div>);
 }

@@ -6,12 +6,12 @@ import IndexedDbEditDb from "../../indexedDbBrowser/IndexedDbEditDb";
 import { appDataReducers } from "../../../../store/appDataSlice";
 
 import trmrk from "trmrk";
-export interface IndexedDbDemoCreateDbProps {
+export interface IndexedDbBrowserCreateDbPageProps {
   urlPath: string;
 }
 
-export default function IndexedDbDemoCreateDb(
-  props: IndexedDbDemoCreateDbProps) {
+export default function IndexedDbBrowserCreateDbPage(
+  props: IndexedDbBrowserCreateDbPageProps) {
   const dispatch = useDispatch();
 
   const basePath = trmrk.trimStr(props.urlPath, {

@@ -49,12 +49,12 @@ export default function IndexedDbEditDbStore(
   props: IndexedDbEditDbStoreProps
 ) {
   const [ validateReqsCount, setValidateReqsCount ] = React.useState(props.validateReqsCount ?? 0);
-  const [ dbStoreName, setDbStoreName ] = React.useState(props.model.dbStoreName);
+  const [ dbStoreName, setDbStoreName ] = React.useState(props.model.dbStore.storeName);
   const [ dbStoreNameErr, setDbStoreNameErr ] = React.useState<string | null>(null);
 
-  const [ autoIncrement, setAutoIncrement ] = React.useState(props.model.autoIncrement);
+  const [ autoIncrement, setAutoIncrement ] = React.useState(props.model.dbStore.autoIncrement);
 
-  const [ keyPath, setKeyPath ] = React.useState(props.model.keyPath);
+  const [ keyPath, setKeyPath ] = React.useState(props.model.dbStore.serializedKeyPath);
   const [ keyPathErr, setKeyPathErr ] = React.useState<string | null>(null);
 
   const dbStoreNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,11 +95,11 @@ export default function IndexedDbEditDbStore(
       props.dbStoreNameHasErrorChanged((newDbStoreNameErr ?? null) !== null);
       props.keyPathHasErrorChanged((newkeyPathErr ?? null) !== null);
     }
-  }, [ props.model.dbStoreName,
+  }, [ props.model.dbStore.storeName,
     dbStoreName,
     dbStoreNameErr,
-    props.model.autoIncrement,
-    props.model.keyPath,
+    props.model.dbStore.autoIncrement,
+    props.model.dbStore.keyPath,
     keyPath,
     keyPathErr,
     props.idx,
@@ -108,19 +108,22 @@ export default function IndexedDbEditDbStore(
 
   return (<Box className="trmrk-flex-rows-group">
     <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell"><label htmlFor={`dbStoreName_${props.idx}`}>DB Store Name</label></Box>
-      <Box className="trmrk-cell"><Input id={`dbStoreName_${props.idx}`} onChange={dbStoreNameChanged} value={dbStoreName} required fullWidth /></Box>
+      <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreName_${props.idx}`}>DB Store Name</label></Box>
+      <Box className="trmrk-cell"><Input id={`dbStoreName_${props.idx}`} onChange={dbStoreNameChanged} value={dbStoreName}
+        required fullWidth className={[ "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
+        readOnly={!props.model.canBeEdited} /></Box>
         { (dbStoreNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbStoreNameErr}</FormHelperText></Box> : null }
     </Box>
     <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell"><label htmlFor={`dbStoreAutoincrement_${props.idx}`}>Auto increment</label></Box>
-      <Box className="trmrk-cell"><Checkbox id={`dbStoreAutoincrement_${props.idx}`} className="trmrk-checkbox" onChange={autoIncrementChanged} value={autoIncrement} /></Box>
+      <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreAutoincrement_${props.idx}`}>Auto increment</label></Box>
+      <Box className="trmrk-cell"><Checkbox id={`dbStoreAutoincrement_${props.idx}`}
+      className={[ "trmrk-checkbox", "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")} onChange={autoIncrementChanged} value={autoIncrement} readOnly={!props.model.canBeEdited} /></Box>
     </Box>
     <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell"><label htmlFor={`dbStoreKeyPath_${props.idx}`}>Key Path</label></Box>
+      <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreKeyPath_${props.idx}`}>Key Path</label></Box>
       <Box className="trmrk-cell trmrk-height-x2"><TextField id={`dbStoreKeyPath_${props.idx}`}
-        className="trmrk-textarea" onChange={keyPathChanged} value={keyPath}
-        required multiline fullWidth /></Box>
+        className={[ "trmrk-textarea", "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
+        onChange={keyPathChanged} value={keyPath} readOnly={!props.model.canBeEdited} required multiline fullWidth /></Box>
         { (keyPathErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{keyPathErr}</FormHelperText></Box> : null }
     </Box>
   </Box>);

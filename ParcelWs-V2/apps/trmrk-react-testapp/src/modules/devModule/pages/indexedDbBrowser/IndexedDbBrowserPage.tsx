@@ -5,17 +5,17 @@ import IndexedDbBrowser from "../../indexedDbBrowser/IndexedDbBrowser";
 
 import { appDataReducers } from "../../../../store/appDataSlice";
 
-export interface IndexedDbDemoProps {
+export interface IndexedDbBrowserPageProps {
   urlPath: string
 }
 
-export default function IndexedDbDemo(
-  props: IndexedDbDemoProps) {
+export default function IndexedDbBrowserPage(
+  props: IndexedDbBrowserPageProps) {
   const dispatch = useDispatch();
   
   React.useEffect(() => {
     dispatch(appDataReducers.setCurrentUrlPath(props.urlPath));
   });
 
-  return (<IndexedDbBrowser />);
+  return (<IndexedDbBrowser basePath={props.urlPath} />);
 }

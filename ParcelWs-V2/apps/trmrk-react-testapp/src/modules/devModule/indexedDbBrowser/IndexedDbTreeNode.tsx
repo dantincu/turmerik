@@ -5,9 +5,9 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import trmrk from "trmrk";
 import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
@@ -132,10 +132,9 @@ export default function IndexedDbTreeNode(
         onClose={onDbStoreMenuClose}>
         <MenuList className='trmrk-menu-list'>
           <MenuItem>
-            <IconButton><VisibilityIcon /></IconButton>
+            <IconButton> { props.data.isExpanded ? <ArrowDropDownIcon /> : <ArrowRightIcon /> } </IconButton>
             <IconButton><EditIcon /></IconButton>
             <IconButton><MoreVertIcon /></IconButton>
-            <IconButton><ArrowForwardIcon /></IconButton>
           </MenuItem>
         </MenuList>
       </Menu>
