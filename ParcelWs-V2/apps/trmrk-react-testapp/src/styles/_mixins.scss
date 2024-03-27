@@ -30,3 +30,19 @@
     background-color: $color;
   }
 }
+
+@mixin no-wrap-anywhere() {
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: auto;
+}
+
+@mixin no-wrap() {
+  flex-wrap: wrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: anywhere;
+}

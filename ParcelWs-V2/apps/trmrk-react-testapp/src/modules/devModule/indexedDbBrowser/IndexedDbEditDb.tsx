@@ -4,19 +4,17 @@ import { useNavigate } from "react-router-dom";
 
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
 import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import { FormGroup } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import Snackbar from '@mui/material/Snackbar';
 
-import IndexedDbCreateDbStore, { IndexedDbCreateDbStoreProps } from "./IndexedDbCreateDbStore";
+import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEditDbStore";
 import { devModuleIndexedDbBrowserReducers, devModuleIndexedDbBrowserSelectors } from "../../../store/devModuleIndexedDbBrowserSlice";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
@@ -33,22 +31,56 @@ import {
 
 export interface IndexedDbEditDbProps {
   basePath: string;
+  dbName?: string | null | undefined;
+  isNewDb: boolean | null | undefined;
   showCreateSuccessMsg?: boolean | null | undefined;
+}
+
+const dbNameReqErrMsg = "The database name is required";
+const dbVersionNameReqErrMsg = "The database version number is required";
+const dbVersionNameReqToBePositiveNumErrMsg = "The database version number must be a positive number";
+
+const validateDbName = (dbName: string) => {
+  let dbNameErr: string | null = null;
+
+  if (dbName.length === 0) {
+    dbNameErr = dbNameReqErrMsg;
+  }
+
+  return dbNameErr;
+}
+
+const validateDbVersionNumber = (dbVersionStr: string): [ string | null, number | null ] => {
+  let dbVersionErr: string | null = null;
+  let dbversion: number | null = null;
+
+  if (dbVersionStr.length > 0) {
+    dbversion = parseFloat(dbVersionStr);
+
+    if (dbversion <= 0) {
+      dbVersionErr = dbVersionNameReqToBePositiveNumErrMsg;
+    }
+  } else {
+    dbVersionErr = dbVersionNameReqErrMsg;
+  }
+
+  return [ dbVersionErr, dbversion ];
 }
 
 export default function IndexedDbEditDb(
   props: IndexedDbEditDbProps
   ) {
-  const [ dbName, setDbName ] = React.useState("");
-  const [ dbNameErr, setDbNameErr ] = React.useState<string | null>(null);
+  const [ dbName, setDbName ] = React.useState(props.dbName ?? "");
+  const [ dbNameErr, setDbNameErr ] = React.useState<string | null>("");
 
+  const [ dbVersionStr, setDbVersionStr ] = React.useState<string>("1");
   const [ dbVersion, setDbVersion ] = React.useState<number | null>(1);
   const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
   
-  const createDbAddDatastoreReqsCount = useSelector(devModuleIndexedDbBrowserSelectors.getEditDbAddDatastoreReqsCount);
-  const createDbAddDatastoreReqsCountRef = React.useRef(0);
+  const editDbAddDatastoreReqsCount = useSelector(devModuleIndexedDbBrowserSelectors.getEditDbAddDatastoreReqsCount);
+  const editDbAddDatastoreReqsCountRef = React.useRef(0);
 
   const [ isFirstRender, setIsFirstRender ] = React.useState(true);
 
@@ -56,45 +88,34 @@ export default function IndexedDbEditDb(
   const [ error, setError ] = React.useState<string | null>(null);
   const [ warning, setWarning ] = React.useState<string | null>(null);
 
-  const [ showCreateSuccessMsg, setShowCreateSuccessMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
+  const [ showEditSuccessMsg, setShowEditSuccessMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
+  const [ validateDbStoresReqsCount, setValidateDbStoresReqsCount ] = React.useState(0);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onCreateSuccessMsgClose = () => {
-    setShowCreateSuccessMsg(false);
+    setShowEditSuccessMsg(false);
   }
 
   const dbNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbName = e.target.value;
     setDbName(newDbName);
 
-    let dbNameErr: string | null = null;
-
-    if (newDbName.length === 0) {
-      dbNameErr = "The database name is required";
-    }
-
+    const dbNameErr = validateDbName(newDbName);
     setDbNameErr(dbNameErr);
+    refreshError(dbNameErr, dbVersionErr, dbStoresArr);
   }
 
   const dbVersionChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbVersionStr = e.target.value;
-    let dbVersionErr: string | null = null;
+    setDbVersionStr(newDbVersionStr);
 
-    if (newDbVersionStr.length > 0) {
-      const newDbversion = parseFloat(newDbVersionStr);
-      setDbVersion(newDbversion);
+    const [ dbVersionErr, newDbversion ] = validateDbVersionNumber(newDbVersionStr);
 
-      if (newDbversion <= 0) {
-        dbVersionErr = "The database version must be a positive number";
-      }
-    } else {
-      setDbVersion(null);
-      dbVersionErr = "The database version number is required";
-    }
-
+    setDbVersion(newDbversion);
     setDbVersionErr(dbVersionErr);
+    refreshError(dbNameErr, dbVersionErr, dbStoresArr);
   }
 
   const addDbStoreClicked = () => {
@@ -105,34 +126,67 @@ export default function IndexedDbEditDb(
     dbNameErr: string | null,
     dbVersionErr: string | null,
     dbStoresArr: IndexedDbStore[]) => (dbNameErr ?? null) === null && (dbVersionErr ?? null) === null && (
-      dbStoresArr.find(store => store.hasError) ?? null) === null;
+      dbStoresArr.find(store => store.dbStoreNameHasError || store.dbStoreKeyPathHasError) ?? null) === null;
 
-  const createDbStoreNameChangedHandler = (idx: number) => (newDbStoreName: string, hasError: boolean) => {
+  const editDbStoreNameChangedHandler = (idx: number, dbStoresArr: IndexedDbStore[]) => (newDbStoreName: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
     dbStore.dbStoreName = newDbStoreName;
-    dbStore.hasError = hasError;
+    dbStore.dbStoreNameHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
+    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
   }
 
-  const createDbStoreAutoIncrementChangedHandler = (idx: number) => (newAutoIncrement: boolean) => {
+  const editDbStoreAutoIncrementChangedHandler = (idx: number, dbStoresArr: IndexedDbStore[]) => (newAutoIncrement: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
     dbStore.autoIncrement = newAutoIncrement;
     setDbStoresArr(newDbStoresArr);
+    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
   };
 
-  const createDbStoreKeyPathChangedHandler = (idx: number) => (newKeyPath: string, hasError: boolean) => {
+  const editDbStoreKeyPathChangedHandler = (idx: number, dbStoresArr: IndexedDbStore[]) => (newKeyPath: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
     dbStore.keyPath = newKeyPath;
-    dbStore.hasError = hasError;
+    dbStore.dbStoreKeyPathHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
+    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+  }
+
+  const editDbStoreNameHasErrorChangedHandler = (idx: number) => (hasError: boolean) => {
+    const newDbStoresArr = [...dbStoresArr];
+    const dbStore = newDbStoresArr[idx];
+    dbStore.dbStoreNameHasError = hasError;
+
+    setDbStoresArr(newDbStoresArr);
+    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+  }
+
+  const editDbStoreKeyPathHasErrorChangedHandler = (idx: number) => (hasError: boolean) => {
+    const newDbStoresArr = [...dbStoresArr];
+    const dbStore = newDbStoresArr[idx];
+    dbStore.dbStoreKeyPathHasError = hasError;
+
+    setDbStoresArr(newDbStoresArr);
+    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+  }
+
+  const refreshError = (
+    dbNameErr: string | null,
+    dbVersionErr: string | null,
+    dbStoresArr: IndexedDbStore[]) => {
+    const formCanBeSubmitted = getFormCanBeSubmitted(dbNameErr, dbVersionErr, dbStoresArr);
+    console.log("formCanBeSubmitted", formCanBeSubmitted, dbNameErr, dbVersionErr, dbStoresArr);
+
+    if (formCanBeSubmitted) {
+      setError(null);
+    }
   }
 
   const onSaveClick = () => {
@@ -147,6 +201,14 @@ export default function IndexedDbEditDb(
     if (!getFormCanBeSubmitted(dbNameErr, dbVersionErr, dbStoresArr)) {
       hasError = true;
       setError("Please fix the current errors before submiting the changes");
+
+      const dbNameErr = validateDbName(dbName);
+      const [ dbVersionErr ] = validateDbVersionNumber(dbVersionStr);
+
+      setDbNameErr(dbNameErr)
+      setDbVersionErr(dbVersionErr);
+
+      setValidateDbStoresReqsCount(validateDbStoresReqsCount + 1);
     } else {
       setSaving(true);
       var req = indexedDB.open(dbName, dbVersion ?? undefined);
@@ -164,7 +226,12 @@ export default function IndexedDbEditDb(
           
           setWarning(null);
           setError(errMsg);
-          navigate(`${props.basePath}/edit-db?showCreateSuccessMsg=true`);
+
+          if (props.isNewDb) {
+            navigate(`${props.basePath}/edit-db?showCreateSuccessMsg=true`);
+          } else {
+            setShowEditSuccessMsg(true);
+          }
         } else {
           setWarning(null);
         }
@@ -202,8 +269,8 @@ export default function IndexedDbEditDb(
     if (isFirstRender) {
       dispatch(devModuleIndexedDbBrowserReducers.resetEditDbAddDatastoreReqsCount());
       setIsFirstRender(false);
-    } else if (createDbAddDatastoreReqsCount !== createDbAddDatastoreReqsCountRef.current) {
-      createDbAddDatastoreReqsCountRef.current = createDbAddDatastoreReqsCount;
+    } else if (editDbAddDatastoreReqsCount !== editDbAddDatastoreReqsCountRef.current) {
+      editDbAddDatastoreReqsCountRef.current = editDbAddDatastoreReqsCount;
 
       const newDbStoresArr = [...dbStoresArr];
 
@@ -211,14 +278,20 @@ export default function IndexedDbEditDb(
         dbStoreName: "",
         autoIncrement: true,
         keyPath: "",
-        hasError: true
+        dbStoreNameHasError: true
       });
 
       setDbStoresArr(newDbStoresArr);
-    }
+    } else {
+      if (!props.isNewDb) {
 
-  }, [ createDbAddDatastoreReqsCount,
-    createDbAddDatastoreReqsCountRef,
+      }
+    }
+  }, [ editDbAddDatastoreReqsCount,
+    editDbAddDatastoreReqsCountRef,
+    props.dbName,
+    dbName,
+    dbVersion,
     dbStoresArr,
     saving,
     error,
@@ -226,47 +299,55 @@ export default function IndexedDbEditDb(
     dbNameErr,
     dbVersionErr,
     props.showCreateSuccessMsg,
-    showCreateSuccessMsg ]);
+    showEditSuccessMsg,
+    props.isNewDb,
+    validateDbStoresReqsCount ]);
 
   return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
-    <Snackbar open={showCreateSuccessMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
+    <Snackbar open={showEditSuccessMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
       <Alert
         onClose={onCreateSuccessMsgClose}
         severity="success"
         variant="filled"
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', color: "white" }}
       >
-        Database created successfully
+        Database saved successfully
       </Alert>
     </Snackbar>
-    <FormGroup className="trmrk-form-group">
-      <FormControl className="trmrk-form-field">
-        <InputLabel htmlFor="dbName" required>Database name</InputLabel>
-        <Input name="dbName" onChange={dbNameChanged} value={dbName} fullWidth />
-        { (dbNameErr ?? null) !== null ? <FormHelperText error>{dbNameErr}</FormHelperText> : null }
-      </FormControl>
-      <FormControl className="trmrk-form-field">
-        <InputLabel htmlFor="dbVersion" required>Database version number</InputLabel>
-        <Input name="dbVersion" type="number" onChange={dbVersionChanged} value={dbVersion} fullWidth inputProps={{
-          min: 1,
-        }} />
-        { (dbVersionErr ?? null) !== null ? <FormHelperText error>{dbVersionErr}</FormHelperText> : null }
-      </FormControl>
-    </FormGroup>
-    <FormControl className="trmrk-form-field">
+    <Box className="trmrk-flex-rows-group">
+      <Box className="trmrk-flex-row">
+        <Box className="trmrk-cell"><label htmlFor="dbName">Database name</label></Box>
+        <Box className="trmrk-cell"><Input id="dbName" onChange={dbNameChanged} value={dbName} required fullWidth readOnly={!!props.isNewDb} /></Box>
+          { (dbNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbNameErr}</FormHelperText></Box> : null }
+      </Box>
+      <Box className="trmrk-flex-row">
+        <Box className="trmrk-cell"><label htmlFor="dbVersion">Database version number</label></Box>
+        <Box className="trmrk-cell"><Input id="dbVersion" type="number" onChange={dbVersionChanged}
+          value={dbVersion} required fullWidth inputProps={{ min: 1 }} /></Box>
+          { (dbVersionErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbVersionErr}</FormHelperText></Box> : null }
+      </Box>
+    </Box>
+    <Box className="trmrk-flex-row">
+      <Box className="trmrk-cell">
       <Typography component="h2" variant="h5" className="trmrk-form-group-title">
         Db Stores <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton></Typography>
-    </FormControl>
-    { dbStoresArr.map((dbStore, idx) => <IndexedDbCreateDbStore
-        model={dbStore} key={idx}
-        dbStoreNameChanged={createDbStoreNameChangedHandler(idx)}
-        autoIncrementChanged={createDbStoreAutoIncrementChangedHandler(idx)}
-        keyPathChanged={createDbStoreKeyPathChangedHandler(idx)} /> ) }
-    <div className="trmrk-buttons-group">
+      </Box>
+    </Box>
+    { dbStoresArr.map((dbStore, idx) => <IndexedDbEditDbStore
+        model={dbStore} key={idx} idx={idx}
+        validateReqsCount={validateDbStoresReqsCount}
+        dbStoreNameChanged={editDbStoreNameChangedHandler(idx, dbStoresArr)}
+        autoIncrementChanged={editDbStoreAutoIncrementChangedHandler(idx, dbStoresArr)}
+        keyPathChanged={editDbStoreKeyPathChangedHandler(idx, dbStoresArr)}
+        dbStoreNameHasErrorChanged={editDbStoreNameHasErrorChangedHandler(idx)}
+        keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(idx)} /> ) }
+    <Box className="trmrk-flex-row">
+      <Box className="trmrk-cell trmrk-buttons-group">
         <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>
         <Button onClick={onCancelClick}>Cancel</Button>
-    </div>
-    { (error ?? null) !== null ? <FormHelperText error>{error}</FormHelperText> : null }
-    { (warning ?? null) !== null ? <FormHelperText className="trmrk-warning">{warning}</FormHelperText> : null }
+      </Box>
+    </Box>
+    { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText error>{error}</FormHelperText></Box></Box> : null }
+    { (warning ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText className="trmrk-warning">{warning}</FormHelperText></Box></Box> : null }
   </Paper>);
 }

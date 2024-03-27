@@ -45,5 +45,5 @@ export default function IndexedDbDemoEditDb(
     showCreateSuccessMsgValue,
     showCreateSuccessMsg ]);
 
-  return (<IndexedDbEditDb basePath={basePath} showCreateSuccessMsg={showCreateSuccessMsg} />);
+  return (<IndexedDbEditDb basePath={basePath} isNewDb={false} showCreateSuccessMsg={showCreateSuccessMsg} />);
 }

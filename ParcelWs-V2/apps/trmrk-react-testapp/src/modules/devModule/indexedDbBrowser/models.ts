@@ -2,7 +2,8 @@ export interface IndexedDbStore {
   dbStoreName: string;
   keyPath: string;
   autoIncrement: boolean;
-  hasError?: boolean | null | undefined;
+  dbStoreNameHasError?: boolean | null | undefined;
+  dbStoreKeyPathHasError?: boolean | null | undefined;
 }
 
 export interface IndexedDbDatabase {

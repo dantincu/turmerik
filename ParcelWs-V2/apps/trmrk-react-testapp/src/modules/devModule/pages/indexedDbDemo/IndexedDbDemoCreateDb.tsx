@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import IndexedDbCreateDb from "../../indexedDbBrowser/IndexedDbCreateDb";
+import IndexedDbEditDb from "../../indexedDbBrowser/IndexedDbEditDb";
 
 import { appDataReducers } from "../../../../store/appDataSlice";
 
@@ -22,5 +22,5 @@ export default function IndexedDbDemoCreateDb(
     dispatch(appDataReducers.setCurrentUrlPath(props.urlPath));
   }, [ props.urlPath ]);
 
-  return (<IndexedDbCreateDb basePath={basePath} />);
+  return (<IndexedDbEditDb basePath={basePath} isNewDb={true} />);
 }

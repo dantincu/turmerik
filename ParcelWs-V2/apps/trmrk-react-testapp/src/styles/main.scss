@@ -51,33 +51,49 @@ body, #app-root {
 
 .trmrk-page-form {
   display: block;
-  padding-top: 1em;
-  padding-bottom: 1em;
   min-height: 100%;
+  text-align: center;
+  align-items: center;
+  padding-top: 0.25em;
 
-  .trmrk-form-group {
+  .trmrk-flex-row {
+    display: flex;
+    position: relative;
+    padding: 0px 0.25em;
+    @include no-wrap();
+    margin: auto;
+
+    .trmrk-cell {
+      display: inline-flex;
+      position: relative;
+      height: 2.5em;
+      line-height: 2.5em;
+      padding: 0px 0.25em;
+      overflow: hidden;
+
+      &.trmrk-height-x2 {
+        height: 5em;
+      }
+
+      .trmrk-textarea {
+        height: 5em;
+      }
+    }
+  }
+
+  .trmrk-flex-rows-group {
     display: block;
-    margin: 1em;
-    padding: 1em;
+    margin: 0.25em;
+    padding: 0.25em;
     border: 1px solid #888;
     border-radius: 3px;
   }
 
-  .trmrk-form-group:first-child {
+  .trmrk-flex-rows-group:first-child {
     margin-top: 0em;
   }
 
-  .trmrk-form-field {
-    width: 300px;
-    margin-top: 1em;
-    margin-left: 1em;
-  }
-
   .trmrk-buttons-group {
-    display: block;
-    margin: 1em;
-    padding: 1em;
-
     .trmrk-btn.trmrk-btn-text {
       margin-right: 1em;
     }

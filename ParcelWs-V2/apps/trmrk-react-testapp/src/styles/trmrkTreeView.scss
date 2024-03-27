@@ -11,10 +11,6 @@
     margin-left: 1.5em;
   }
 
-  > .trmrk-tree-node-empty {
-    /* height: 5em; */
-  }
-
   > .trmrk-tree-node, > .trmrk-tree-node-leaf {
     position: relative;
     display: grid;
@@ -26,21 +22,11 @@
       display: flex;
       grid-row: 1;
       grid-column: 2;
-      /* flex-wrap: nowrap;
-      text-wrap: nowrap;
-      word-break: keep-all;
-      white-space-collapse: preserve;
-      line-break: auto;
-      overflow: visible; */
       cursor: pointer;
 
       > .trmrk-tree-node-label {
         display: flex;
-        flex-wrap: nowrap;
-        text-wrap: nowrap;
-        word-break: keep-all;
-        white-space-collapse: preserve;
-        line-break: auto;
+        @include no-wrap-anywhere();
         overflow: visible;
         flex-shrink: 0;
         min-width: 2em;
