@@ -309,7 +309,7 @@ export default function IndexedDbEditDb(
         onClose={onCreateSuccessMsgClose}
         severity="success"
         variant="filled"
-        sx={{ width: '100%', color: "white" }}
+        sx={{ width: '100%' }}
       >
         Database saved successfully
       </Alert>
