@@ -214,7 +214,8 @@ export default function IndexedDbEditDb(
         let errMsg: string | null = null;
 
         try {
-          setDb(getDbInfo(req.result));
+          const db = getDbInfo(req.result);
+          setDb(db);
           const dbStores = getObjectStoresInfoAgg(req.result);
 
           const dbStoresArr = dbStores.map(store => ({
@@ -224,6 +225,10 @@ export default function IndexedDbEditDb(
 
           setDbStoresArr(dbStoresArr);
           req.result.close();
+
+          setDbName(db.name ?? "");
+          setDbVersion(db.version ?? null);
+          setDbVersionStr(db.version?.toString() ?? "");
 
           setDbNameErr(null);
           setDbVersionErr(null);
@@ -253,6 +258,7 @@ export default function IndexedDbEditDb(
     setWarning(null);
 
     let hasError: boolean;
+    let migrated = false;
 
     const addedStores = dbStoresArr.map(
       store => store);
@@ -295,6 +301,11 @@ export default function IndexedDbEditDb(
         }
 
         setSaving(false);
+
+        if (!migrated) {
+          setEditSuccessMsg("Database saved successfully");
+          setShowEditSuccessMsg(true);
+        }
       }, errMsg => {
         hasError = true;
         setError(errMsg);
@@ -311,7 +322,8 @@ export default function IndexedDbEditDb(
             });
           }
 
-          setEditSuccessMsg("Database saved successfully");
+          migrated = true;
+          setEditSuccessMsg("Database migrated successfully");
           setShowEditSuccessMsg(true);
         } catch (err) {
           hasError = true;
