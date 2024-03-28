@@ -248,7 +248,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     {
                         if (data.ArgFlagName == null)
                         {
-                            data.Args.IdxesUpdateMappings.Add(
+                            data.Args.IdxesUpdateMappings.AddRange(
                                 ParseIdxesUpdateMapping(data.ArgItem));
                         }
                         else
@@ -285,12 +285,15 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             return args;
         }
 
-        private IdxesUpdateMapping ParseIdxesUpdateMapping(
+        private IdxesUpdateMapping[] ParseIdxesUpdateMapping(
             string rawArg)
         {
             (var srcFilter, var trgFilter) = rawArg.SplitStr(
                 (str, count) => str.IndexOf(
                     ConsoleArgsParser.OPTS_ARG_DELIM_CHAR));
+
+            bool isSymetricalMapping = false;
+            IdxesUpdateMapping symetricalMapping = null;
 
             if (trgFilter == null)
             {
@@ -300,6 +303,12 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             else
             {
                 trgFilter = trgFilter.Substring(1);
+
+                if (trgFilter.FirstOrDefault() == ConsoleArgsParser.OPTS_ARG_DELIM_CHAR)
+                {
+                    isSymetricalMapping = true;
+                    trgFilter = trgFilter.Substring(1);
+                }
             }
 
             var mapping = new IdxesUpdateMapping
@@ -312,7 +321,27 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                         ParseIdxesFilter).ToList()
             };
 
-            return mapping;
+            if (isSymetricalMapping)
+            {
+                symetricalMapping = new IdxesUpdateMapping
+                {
+                    SrcIdxes = mapping.TrgIdxes,
+                    TrgIdxes = mapping.SrcIdxes
+                };
+            }
+
+            IdxesUpdateMapping[] retArr;
+
+            if (symetricalMapping != null)
+            {
+                retArr = [ mapping, symetricalMapping ];
+            }
+            else
+            {
+                retArr = [ mapping ];
+            }
+
+            return retArr;
         }
 
         private IdxesFilter ParseIdxesFilter(
