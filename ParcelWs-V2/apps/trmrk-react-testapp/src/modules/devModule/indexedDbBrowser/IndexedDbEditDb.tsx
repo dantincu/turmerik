@@ -100,7 +100,7 @@ export default function IndexedDbEditDb(
   const [ warning, setWarning ] = React.useState<string | null>(null);
 
   const [ editSuccessMsg, setEditSuccessMsg ] = React.useState(
-    (props.showCreateSuccessMsg ?? false) === true ? "Database created successfully" : "");
+    (props.showCreateSuccessMsg ?? false) === true ? "Database saved successfully" : "");
   
   const [ showEditResultMsg, setShowEditResultMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
   const [ editResultMsgSeverity, setEditResultMsgSeverity ] = React.useState<AlertColor>(props.showCreateSuccessMsg ? "success" : "info");
@@ -292,11 +292,6 @@ export default function IndexedDbEditDb(
           
           setWarning(null);
           setError(errMsg);
-
-          if (props.isNewDb) {
-            const encodedDbName = encodeURIComponent(dbName);
-            navigate(`${props.basePath}/edit-db?${searchQuery.showCreateSuccessMsg}=true&${searchQuery.dbName}=${encodedDbName}`);
-          }
         } else {
           setWarning(null);
         }
@@ -324,16 +319,23 @@ export default function IndexedDbEditDb(
               autoIncrement: store.dbStore.autoIncrement,
             });
           }
-
-          migrated = true;
-          setEditResultMsgSeverity("success");
-          setEditSuccessMsg("Database saved successfully");
-          setShowEditResultMsg(true);
-          load();
         } catch (err) {
           hasError = true;
           const errMsg = (err as Error).message ?? "Could not upgrade the database";
           setError(errMsg);
+        }
+
+        if (!hasError) {
+          if (props.isNewDb) {
+            const encodedDbName = encodeURIComponent(dbName);
+            navigate(`${props.basePath}/edit-db?${searchQuery.showCreateSuccessMsg}=true&${searchQuery.dbName}=${encodedDbName}`);
+          } else {
+            migrated = true;
+            setEditResultMsgSeverity("success");
+            setEditSuccessMsg("Database saved successfully");
+            setShowEditResultMsg(true);
+            load();
+          }
         }
       });
     }
