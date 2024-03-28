@@ -22,17 +22,19 @@
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.UpdFsDirPairsIdxes\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.Utility.WinFormsApp\\/.*",
-              "^\\/Config\\/",
-              "^\\/Content\\/",
-              "^\\/Data\\/"
+              "^\\/Config\\/.*",
+              "^\\/Content\\/.*",
+              "^\\/Data\\/.*"
             ],
             "ExcludedRelPathRegexes": [
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/config\\.json$",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/profiles\\/.+\\.config\\.json$",
               "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.js$",
               "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.json$",
-              "^\\/Bin\\/[^\\/]+\\/app-env-locator\\.json$",
-              "^\\/Bin\\/[^\\/]+\\/trmrk-localdevice-paths\\.json$"
+              "^\\/Bin\\/.+\\/app-env-locator\\.json$",
+              "^\\/Bin\\/.+\\/trmrk-dirpairs-config\\.json$",
+              "^\\/Bin\\/.+\\/trmrk-notes-config\\.json$",
+              "^\\/Bin\\/.+\\/trmrk-localdevice-paths\\.json$"
             ]
           }
         }
