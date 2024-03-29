@@ -51,6 +51,10 @@ export default function FloatingTopBarAppModule(
     }
   }
 
+  React.useEffect(() => {
+    props.appBar.updateHeaderHeight(props.appBar.appBarRowsCount);
+  }, [props.appBar.appBarRefreshReqsCount, props.appBar.appBarRowsCount] );
+
   return (<FloatingTopBarModule
       className={props.className}
       headerClassName={props.headerClassName}

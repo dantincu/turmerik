@@ -229,7 +229,7 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     [headerRef, bodyRef, appHeaderHeight, appBarRowHeightPx]
   );
 
-  useEffect(() => {
+  /* useEffect(() => {
     updateHeaderHeight(appBarRowsCount);
   }, [
     appTheme,
@@ -244,7 +244,7 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     optionsMenuIsOpen,
     appearenceMenuIconBtnEl,
     appBarRowHeightPx,
-  ]);
+  ]); */
 
   return {
     appBarRowsCount,
