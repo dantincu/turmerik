@@ -26,6 +26,7 @@
     "@emotion/react": "../../libs/trmrk-react/node_modules/@emotion/react",
     "@emotion/styled": "../../libs/trmrk-react/node_modules/@emotion/styled",
     "@mui/icons-material": "../../libs/trmrk-react/node_modules/@mui/icons-material",
+    "@mui/base": "../../libs/trmrk-react/node_modules/@mui/base",
     "@mui/material": "../../libs/trmrk-react/node_modules/@mui/material",
     "@mui/x-tree-view": "../../libs/trmrk-react/node_modules/@mui/x-tree-view",
     "@reduxjs/toolkit": "^2.2.1",

@@ -12,7 +12,16 @@
     background-color: #121212;
   }
 
+  .trmrk-textarea-autosize {
+    background-color: inherit;
+    color: white;
+  }
+
   .trmrk-page-form {
+    .trmrk-flex-rows-group {
+      border: 1px solid #444;
+    }
+
     .trmrk-flex-row {
       .trmrk-cell {
         .trmrk-title {
@@ -34,7 +43,16 @@
     background-color: #1976d2;
   }
 
+  .trmrk-textarea-autosize {
+    background-color: inherit;
+    color: inherit;
+  }
+
   .trmrk-page-form {
+    .trmrk-flex-rows-group {
+      border: 1px solid #ccc;
+    }
+
     .trmrk-flex-row {
       .trmrk-cell {
         .trmrk-title {

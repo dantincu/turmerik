@@ -5,6 +5,10 @@ body, #app-root {
   overflow: hidden;
 }
 
+.trmrk-wrap-content {
+  @include wrap-content();
+}
+
 .trmrk-icons-menu-list {
   padding: 0.1em 0.5em;
 }
@@ -71,10 +75,11 @@ body, #app-root {
     .trmrk-cell {
       display: inline-flex;
       position: relative;
-      height: 2.5em;
+      min-height: 2.5em;
       line-height: 2.5em;
       padding: 0px 0.25em;
       overflow: hidden;
+      margin-bottom: 0em;
 
       &.trmrk-height-x2 {
         height: 5em;
@@ -82,6 +87,10 @@ body, #app-root {
 
       .trmrk-textarea {
         height: 5em;
+      }
+
+      .trmrk-textarea-autosize {
+        font: inherit;
       }
 
       .trmrk-input {
@@ -94,7 +103,6 @@ body, #app-root {
     display: block;
     margin: 0.25em;
     padding: 0.25em;
-    border: 1px solid #888;
     border-radius: 3px;
   }
 

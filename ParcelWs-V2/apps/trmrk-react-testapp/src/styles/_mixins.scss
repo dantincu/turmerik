@@ -31,6 +31,14 @@
   }
 }
 
+@mixin wrap-content() {
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: keep-all;
+  white-space-collapse: collapse;
+  line-break: auto;
+}
+
 @mixin no-wrap-anywhere() {
   flex-wrap: nowrap;
   text-wrap: nowrap;

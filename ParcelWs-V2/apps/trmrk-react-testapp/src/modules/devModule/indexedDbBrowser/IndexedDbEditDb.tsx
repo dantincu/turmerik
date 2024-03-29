@@ -259,10 +259,11 @@ export default function IndexedDbEditDb(
     setWarning(null);
 
     let hasError: boolean;
+    let hasMigrationError = false;
     let migrated = false;
 
-    const addedStores = dbStoresArr.map(
-      store => store);
+    const addedStores = dbStoresArr.filter(
+      store => store.canBeEdited);
 
     if (!getFormCanBeSubmitted(dbNameErr, dbVersionErr, dbStoresArr)) {
       hasError = true;
@@ -291,7 +292,10 @@ export default function IndexedDbEditDb(
           }
           
           setWarning(null);
-          setError(errMsg);
+
+          if (!hasMigrationError) {
+            setError(errMsg);
+          }
         } else {
           setWarning(null);
         }
@@ -321,11 +325,12 @@ export default function IndexedDbEditDb(
           }
         } catch (err) {
           hasError = true;
+          hasMigrationError = true;
           const errMsg = (err as Error).message ?? "Could not upgrade the database";
           setError(errMsg);
         }
 
-        if (!hasError) {
+        if (!hasMigrationError) {
           if (props.isNewDb) {
             const encodedDbName = encodeURIComponent(dbName);
             navigate(`${props.basePath}/edit-db?${searchQuery.showCreateSuccessMsg}=true&${searchQuery.dbName}=${encodedDbName}`);
@@ -395,28 +400,30 @@ export default function IndexedDbEditDb(
     props.isNewDb,
     validateDbStoresReqsCount ]);
 
-  return (<Paper className="trmrk-page-form trmrk-indexeddb-create-db">
+  return (<Box className="trmrk-page-form trmrk-indexeddb-create-db">
     { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell"><FormHelperText error>{loadError}</FormHelperText></Box></Box> : (
+      <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">{loadError}</FormHelperText></Box></Box> : (
         loadWarning ?? null) !== null ? <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell"><FormHelperText className="trmrk-warning">{loadWarning}</FormHelperText></Box>
+      <Box className="trmrk-cell"><FormHelperText className="trmrk-warning trmrk-wrap-content">{loadWarning}</FormHelperText></Box>
       </Box> : <React.Fragment>
-        <Box className="trmrk-flex-rows-group">
+        <Paper className="trmrk-flex-rows-group">
           <Box className="trmrk-flex-row">
             <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbName">Database name</label></Box>
             <Box className="trmrk-cell"><Input id="dbName" onChange={dbNameChanged} value={dbName}
               required fullWidth readOnly={!props.isNewDb}
               className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
-              { (dbNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbNameErr}</FormHelperText></Box> : null }
+              { (dbNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
+                {dbNameErr}</FormHelperText></Box> : null }
           </Box>
           <Box className="trmrk-flex-row">
             <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbVersion">Database version number</label></Box>
             <Box className="trmrk-cell"><Input id="dbVersion" type="number" onChange={dbVersionChanged}
               value={dbVersion} required fullWidth inputProps={{ min: 1 }}
               className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
-              { (dbVersionErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbVersionErr}</FormHelperText></Box> : null }
+              { (dbVersionErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
+                {dbVersionErr}</FormHelperText></Box> : null }
           </Box>
-        </Box>
+        </Paper>
         <Box className="trmrk-flex-row">
           <Box className="trmrk-cell">
           <Typography component="h2" variant="h5" className="trmrk-form-group-title">
@@ -437,8 +444,10 @@ export default function IndexedDbEditDb(
               <Button onClick={onCancelClick}>Cancel</Button>
             </Box>
           </Box>
-          { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText error>{error}</FormHelperText></Box></Box> : null }
-          { (warning ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell"><FormHelperText className="trmrk-warning">{warning}</FormHelperText></Box></Box> : null }
+          { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell">
+            <FormHelperText error className="trmrk-wrap-content">{error}</FormHelperText></Box></Box> : null }
+          { (warning ?? null) !== null ? <Box className="trmrk-flex-row">
+            <Box className="trmrk-cell"><FormHelperText className="trmrk-warning trmrk-wrap-content">{warning}</FormHelperText></Box></Box> : null }
         </React.Fragment> }
     <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
       <Alert
@@ -450,5 +459,5 @@ export default function IndexedDbEditDb(
         { editSuccessMsg }
       </Alert>
     </Snackbar>
-  </Paper>);
+  </Box>);
 }

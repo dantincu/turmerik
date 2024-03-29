@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 
 import Checkbox from '@mui/material/Checkbox';
 import Input from '@mui/material/Input';
-import FormControl from '@mui/material/FormControl';
+import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
+import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from "@mui/material/Box";
 
@@ -106,13 +106,14 @@ export default function IndexedDbEditDbStore(
     props.validateReqsCount,
     validateReqsCount ] );
 
-  return (<Box className="trmrk-flex-rows-group">
+  return (<Paper className="trmrk-flex-rows-group">
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreName_${props.idx}`}>DB Store Name</label></Box>
       <Box className="trmrk-cell"><Input id={`dbStoreName_${props.idx}`} onChange={dbStoreNameChanged} value={dbStoreName}
         required fullWidth className={[ "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
         readOnly={!props.model.canBeEdited} /></Box>
-        { (dbStoreNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{dbStoreNameErr}</FormHelperText></Box> : null }
+        { (dbStoreNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
+          {dbStoreNameErr}</FormHelperText></Box> : null }
     </Box>
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreAutoincrement_${props.idx}`}>Auto increment</label></Box>
@@ -121,10 +122,11 @@ export default function IndexedDbEditDbStore(
     </Box>
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreKeyPath_${props.idx}`}>Key Path</label></Box>
-      <Box className="trmrk-cell trmrk-height-x2"><TextField id={`dbStoreKeyPath_${props.idx}`}
-        className={[ "trmrk-textarea", "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
-        onChange={keyPathChanged} value={keyPath} readOnly={!props.model.canBeEdited} required multiline fullWidth /></Box>
-        { (keyPathErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error>{keyPathErr}</FormHelperText></Box> : null }
+      <Box className="trmrk-cell"><TextareaAutosize id={`dbStoreKeyPath_${props.idx}`}
+        className={[ "trmrk-textarea-autosize", "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
+        onChange={keyPathChanged} value={keyPath} readOnly={!props.model.canBeEdited} required /></Box>
+        { (keyPathErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
+          {keyPathErr}</FormHelperText></Box> : null }
     </Box>
-  </Box>);
+  </Paper>);
 }
