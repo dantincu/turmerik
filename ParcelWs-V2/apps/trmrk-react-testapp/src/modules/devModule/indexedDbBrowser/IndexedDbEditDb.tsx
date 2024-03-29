@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -11,12 +11,11 @@ import Button from "@mui/material/Button";
 import Alert, { AlertColor } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
 import Snackbar from '@mui/material/Snackbar';
 
 import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEditDbStore";
 import { devModuleIndexedDbBrowserReducers, devModuleIndexedDbBrowserSelectors } from "../../../store/devModuleIndexedDbBrowserSlice";
-import { appBarReducers } from "../../../store/appBarDataSlice";
+import { appBarReducers, appBarSelectors } from "../../../store/appBarDataSlice";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
@@ -117,21 +116,21 @@ export default function IndexedDbEditDb(
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onCreateSuccessMsgClose = () => {
+  const onCreateSuccessMsgClose = React.useCallback(() => {
     setEditSuccessMsg("");
     setShowEditResultMsg(false);
-  }
+  }, [])
 
-  const dbNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const dbNameChanged = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbName = e.target.value;
     setDbName(newDbName);
 
     const dbNameErr = validateDbName(newDbName);
     setDbNameErr(dbNameErr);
     refreshError(dbNameErr, dbVersionErr, dbStoresArr);
-  }
+  }, [dbVersionErr, dbStoresArr])
 
-  const dbVersionChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const dbVersionChanged = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbVersionStr = e.target.value;
     setDbVersionStr(newDbVersionStr);
 
@@ -140,21 +139,21 @@ export default function IndexedDbEditDb(
     setDbVersion(newDbversion);
     setDbVersionErr(dbVersionErr);
     refreshError(dbNameErr, dbVersionErr, dbStoresArr);
-  }
+  }, [dbNameErr, dbStoresArr]);
 
-  const addDbStoreClicked = () => {
+  const addDbStoreClicked = React.useCallback(() => {
     dispatch(devModuleIndexedDbBrowserReducers.incEditDbAddDatastoreReqsCount());
-  }
+  }, []);
 
-  const getFormCanBeSubmitted = (
+  const getFormCanBeSubmitted = React.useCallback((
     dbNameErr: string | null,
     dbVersionErr: string | null,
     dbStoresArr: IndexedDbStore[]) => (dbNameErr ?? null) === null && (dbVersionErr ?? null) === null && (
       dbStoresArr.find(store => store.dbStoreNameHasError || store.dbStoreKeyPathHasError || validateDbStoreKeyPath(
         store.dbStore.serializedKeyPath
-      ) !== null) ?? null) === null;
+      ) !== null) ?? null) === null, []);
 
-  const editDbStoreNameChangedHandler = (idx: number, dbStoresArr: IndexedDbStore[]) => (newDbStoreName: string, hasError: boolean) => {
+  const editDbStoreNameChangedHandler = React.useCallback((idx: number, dbStoresArr: IndexedDbStore[]) => (newDbStoreName: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
@@ -163,18 +162,18 @@ export default function IndexedDbEditDb(
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }
+  }, [dbNameErr, dbVersionErr]);
 
-  const editDbStoreAutoIncrementChangedHandler = (idx: number, dbStoresArr: IndexedDbStore[]) => (newAutoIncrement: boolean) => {
+  const editDbStoreAutoIncrementChangedHandler = React.useCallback((idx: number, dbStoresArr: IndexedDbStore[]) => (newAutoIncrement: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
     dbStore.dbStore.autoIncrement = newAutoIncrement;
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  };
+  }, [dbNameErr, dbVersionErr]);
 
-  const editDbStoreKeyPathChangedHandler = (idx: number, dbStoresArr: IndexedDbStore[]) => (newKeyPath: string, hasError: boolean) => {
+  const editDbStoreKeyPathChangedHandler = React.useCallback((idx: number, dbStoresArr: IndexedDbStore[]) => (newKeyPath: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
 
@@ -183,27 +182,27 @@ export default function IndexedDbEditDb(
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }
+  }, [dbNameErr, dbVersionErr]);
 
-  const editDbStoreNameHasErrorChangedHandler = (idx: number) => (hasError: boolean) => {
+  const editDbStoreNameHasErrorChangedHandler = React.useCallback((idx: number) => (hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
     dbStore.dbStoreNameHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }
+  }, [dbNameErr, dbVersionErr]);
 
-  const editDbStoreKeyPathHasErrorChangedHandler = (idx: number) => (hasError: boolean) => {
+  const editDbStoreKeyPathHasErrorChangedHandler = React.useCallback((idx: number) => (hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
     const dbStore = newDbStoresArr[idx];
     dbStore.dbStoreKeyPathHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }
+  }, [dbNameErr, dbVersionErr]);
 
-  const refreshError = (
+  const refreshError = React.useCallback((
     dbNameErr: string | null,
     dbVersionErr: string | null,
     dbStoresArr: IndexedDbStore[]) => {
@@ -212,9 +211,9 @@ export default function IndexedDbEditDb(
     if (formCanBeSubmitted) {
       setError(null);
     }
-  }
+  }, []);
 
-  const load = () => {
+  const load = React.useCallback(() => {
     setIsLoading(true);
     var req = indexedDB.open(dbName);
 
@@ -262,9 +261,9 @@ export default function IndexedDbEditDb(
     }, warnMsg => {
       setLoadWarning(warnMsg);
     });
-  }
+  }, []);
 
-  const onSaveClick = () => {
+  const onSaveClick = React.useCallback(() => {
     setError(null);
     setWarning(null);
 
@@ -360,14 +359,13 @@ export default function IndexedDbEditDb(
         }
       });
     }
-  }
+  }, [dbStoresArr]);
 
-  const onCancelClick = () => {
+  const onCancelClick = React.useCallback(() => {
     navigate(props.basePath);
-  }
+  }, []);
 
   React.useEffect(() => {
-    console.log("IndexedDbEditDb useEffect", isFirstRender, scrollToBottom);
     const rootEl = rootElRef.current;
     const actionButtonsGroupEl = actionButtonsGroupElRef.current;
 
@@ -375,18 +373,14 @@ export default function IndexedDbEditDb(
       dispatch(devModuleIndexedDbBrowserReducers.resetEditDbAddDatastoreReqsCount());
       setIsFirstRender(false);
     } else if (scrollToBottom) {
-        setScrollToBottom(false);
-        console.log("setScrollToBottom(false);");
-        
-        if (actionButtonsGroupEl) {
-          actionButtonsGroupEl.scrollIntoView();
-          // dispatch(appBarReducers.incAppBarRefreshReqsCount());
-        }
+      setScrollToBottom(false);
+      
+      if (actionButtonsGroupEl) {
+        actionButtonsGroupEl.scrollIntoView();
+      }
     } else if (editDbAddDatastoreReqsCount !== editDbAddDatastoreReqsCountRef.current) {
-      console.log("editDbAddDatastoreReqsCount scrollToBottom", editDbAddDatastoreReqsCount, editDbAddDatastoreReqsCountRef.current, scrollToBottom);
 
       editDbAddDatastoreReqsCountRef.current = editDbAddDatastoreReqsCount;
-
       const newDbStoresArr = [...dbStoresArr];
 
       newDbStoresArr.push({
@@ -405,9 +399,7 @@ export default function IndexedDbEditDb(
 
       setDbStoresArr(newDbStoresArr);
       setScrollToBottom(true);
-      // console.log("setScrollToBottom(true);");
     } else if (!props.isNewDb && !isLoading && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
-      console.log("IndexedDbEditDb load");
       load();
     }
   }, [ isLoading,

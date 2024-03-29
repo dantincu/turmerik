@@ -46,8 +46,7 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
   const [ showHeader, setShowHeader]  = React.useState(props.showHeader);
   const [ headerHeight, setHeaderHeight ] = React.useState(props.headerHeight);
 
-  const scrollHandler = (data: FloatingTopBarPanelHeaderData) => {
-    console.log("scrollHandler");
+  const scrollHandler = React.useCallback((data: FloatingTopBarPanelHeaderData) => {
     const bodyEl = data.bodyEl;
     const headerEl = data.headerEl;
     const scrollTop = bodyEl.scrollTop;
@@ -93,11 +92,9 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
         });
       }
     }
-  }
+  }, [])
 
   React.useEffect(() => {
-    console.log("FloatingTopBarPanel useEffect");
-
     const onResize = (ev: UIEvent) => {
       const appBarDataValue = appPanelHeaderData.current;
 
@@ -173,11 +170,10 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
     props.showHeader,
     showHeader,
     props.pinHeader,
-    props.topBarRefreshReqsCount,
+    // props.topBarRefreshReqsCount,
     props.headerHeight,
     props.showHeader,
     props.headerContent,
-    props.bodyContent,
     appPanelHeaderData,
     parentRef,
     headerRef,
@@ -191,8 +187,8 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
     { (props.afterHeaderClassName && props.afterHeaderContent) ? 
       <div className={[props.afterHeaderClassName].join(" ")}>{props.afterHeaderContent}</div> : null }
     <div className={["trmrk-ftb-panel-body",
-      typeof props.scrollableX === "boolean" ? props.scrollableX ? "trmrk-scrollableX" : "trmrk-overflowX-hidden" : "",
-      typeof props.scrollableY === "boolean" ? props.scrollableY ? "trmrk-scrollableY" : "trmrk-overflowY-hidden" : "",
+      (props.scrollableX ?? null) !== null ? props.scrollableX ? "trmrk-scrollableX" : "trmrk-overflowX-hidden" : "",
+      (props.scrollableY ?? null) !== null ? props.scrollableY ? "trmrk-scrollableY" : "trmrk-overflowY-hidden" : "",
       (props.scrollableX || props.scrollableY) ? "trmrk-scrollable" : "",
       props.bodyClassName ?? ""].join(" ")} ref={bodyRef}>
       {props.bodyContent}</div>

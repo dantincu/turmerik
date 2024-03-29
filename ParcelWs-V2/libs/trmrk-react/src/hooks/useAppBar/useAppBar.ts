@@ -133,92 +133,109 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   const appThemeClassName = appTheme.cssClassName;
   appModeCssClass.value = getAppModeCssClassName(isCompactMode);
 
-  const handleSettingsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSettingsMenuIconBtnEl(event.currentTarget);
-    dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(true));
-  };
+  const handleSettingsClick = React.useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setSettingsMenuIconBtnEl(event.currentTarget);
+      dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(true));
+    },
+    []
+  );
 
-  const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setOptionsMenuIconBtnEl(event.currentTarget);
-    dispatch(props.appBarReducers.setOptionsMenuIsOpen(true));
-  };
+  const handleOptionsClick = React.useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setOptionsMenuIconBtnEl(event.currentTarget);
+      dispatch(props.appBarReducers.setOptionsMenuIsOpen(true));
+    },
+    []
+  );
 
-  const appearenceMenuBtnRefAvailable = (btnRef: HTMLButtonElement | null) => {
-    setAppearenceMenuIconBtnEl(btnRef);
-  };
+  const appearenceMenuBtnRefAvailable = React.useCallback(
+    (btnRef: HTMLButtonElement | null) => {
+      setAppearenceMenuIconBtnEl(btnRef);
+    },
+    []
+  );
 
-  const handleSettingsMenuClosed = () => {
+  const handleSettingsMenuClosed = React.useCallback(() => {
     dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(false));
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
-  };
+  }, []);
 
-  const handleAppearenceMenuClosed = () => {
+  const handleAppearenceMenuClosed = React.useCallback(() => {
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
-  };
+  }, []);
 
-  const handleOptionsMenuClosed = () => {
+  const handleOptionsMenuClosed = React.useCallback(() => {
     dispatch(props.appBarReducers.setOptionsMenuIsOpen(false));
-  };
+  }, []);
 
-  const appearenceMenuOpen = () => {
+  const appearenceMenuOpen = React.useCallback(() => {
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(true));
-  };
+  }, []);
 
-  const handleCompactModeToggled = (isCompactMode: boolean) => {
-    dispatch(props.appDataReducers.setIsCompactMode(isCompactMode));
-    dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(false));
-    dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
-    setIsCompactModeToLocalStorage(isCompactMode);
-  };
+  const handleCompactModeToggled = React.useCallback(
+    (isCompactMode: boolean) => {
+      dispatch(props.appDataReducers.setIsCompactMode(isCompactMode));
+      dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(false));
+      dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
+      setIsCompactModeToLocalStorage(isCompactMode);
+    },
+    []
+  );
 
-  const handleDarkModeToggled = (isDarkMode: boolean) => {
+  const handleDarkModeToggled = React.useCallback((isDarkMode: boolean) => {
     dispatch(props.appDataReducers.setIsDarkMode(isDarkMode));
     dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(false));
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
     setIsDarkModeToLocalStorage(isDarkMode);
-  };
+  }, []);
 
-  const appBarToggled = (showAppBar: boolean) => {
+  const appBarToggled = React.useCallback((showAppBar: boolean) => {
     dispatch(props.appDataReducers.setShowAppBar(showAppBar));
-  };
+  }, []);
 
-  const appHeaderScrolling = (
-    data: FloatingTopBarPanelHeaderData,
-    offset: FloatingTopBarPanelHeaderOffset
-  ) => {
-    headerRef.current = data.headerEl;
-    bodyRef.current = data.bodyEl;
+  const appHeaderScrolling = React.useCallback(
+    (
+      data: FloatingTopBarPanelHeaderData,
+      offset: FloatingTopBarPanelHeaderOffset
+    ) => {
+      headerRef.current = data.headerEl;
+      bodyRef.current = data.bodyEl;
 
-    if (appHeaderHeight === null) {
-      setAppHeaderHeight(data.headerHeight);
-    }
-  };
-
-  const updateHeaderHeight = (newAppBarRowsCount: number) => {
-    const headerEl = headerRef.current;
-    const bodyEl = bodyRef.current;
-
-    if (headerEl && bodyEl) {
-      const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
-
-      headerEl.style.height = `${newHeaderHeight}px`;
-      bodyEl.style.top = `${newHeaderHeight}px`;
-      headerEl.style.top = "0px";
-
-      if (newHeaderHeight !== appHeaderHeight) {
-        setAppHeaderHeight(newHeaderHeight);
+      if (appHeaderHeight === null) {
+        setAppHeaderHeight(data.headerHeight);
       }
-    }
-  };
+    },
+    [headerRef, bodyRef, appHeaderHeight]
+  );
+
+  const updateHeaderHeight = React.useCallback(
+    (newAppBarRowsCount: number) => {
+      const headerEl = headerRef.current;
+      const bodyEl = bodyRef.current;
+
+      if (headerEl && bodyEl) {
+        const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
+
+        headerEl.style.height = `${newHeaderHeight}px`;
+        bodyEl.style.top = `${newHeaderHeight}px`;
+        headerEl.style.top = "0px";
+
+        if (newHeaderHeight !== appHeaderHeight) {
+          setAppHeaderHeight(newHeaderHeight);
+        }
+      }
+    },
+    [headerRef, bodyRef, appHeaderHeight, appBarRowHeightPx]
+  );
 
   useEffect(() => {
     updateHeaderHeight(appBarRowsCount);
-    console.log("updateHeaderHeight from useEffect", appBarRefreshReqsCount);
   }, [
     appTheme,
     appBarRowsCount,
     appBarRefreshReqsCount,
-    // appHeaderHeight,
+    appHeaderHeight,
     showAppBar,
     showAppBarToggleBtn,
     showOptionsMenuBtn,

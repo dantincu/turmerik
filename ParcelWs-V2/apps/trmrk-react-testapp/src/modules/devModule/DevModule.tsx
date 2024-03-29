@@ -97,7 +97,6 @@ export default function DevModule(
   const [ baseUrlPath, setBaseUrlPath ] = React.useState('');
 
   React.useEffect(() => {
-    console.log("DevModule");
     const relUrlPathVal = getRelUrlPath(urlPath);
 
     if (relUrlPathVal !== baseUrlPath) {

@@ -51,64 +51,6 @@ export default function FloatingTopBarAppModule(
     }
   }
 
-  /* React.useEffect(() => {
-    console.log("FloatingTopBarAppModule useEffect");
-  }, [
-    props.appBar.appBarRowsCount,
-    props.appBar.appHeaderHeight,
-    props.appBar.setAppHeaderHeight,
-    props.appBar.appBarRowHeightPx,
-    // props.appBar.appBarRefreshReqsCount,
-    props.appBar.headerRef,
-    props.appBar.bodyRef,
-    props.appBar.isCompactMode,
-    props.appBar.isDarkMode,
-    props.appBar.showAppBar,
-    props.appBar.showAppBarToggleBtn,
-    props.appBar.showOptionsMenuBtn,
-    props.appBar.appSettingsMenuIsOpen,
-    props.appBar.appearenceMenuIsOpen,
-    props.appBar.optionsMenuIsOpen,
-    props.appBar.settingsMenuIconBtnEl,
-    props.appBar.setSettingsMenuIconBtnEl,
-    props.appBar.appearenceMenuIconBtnEl,
-    props.appBar.setAppearenceMenuIconBtnEl,
-    props.appBar.optionsMenuIconBtnEl,
-    props.appBar.setOptionsMenuIconBtnEl,
-    props.appBar.appBarRefreshReqsCount,
-    props.appBar.appTheme,
-    props.appBar.currentAppTheme,
-    props.appBar.appThemeClassName,
-    props.appBar.handleSettingsClick,
-    props.appBar.appModeCssClass,
-    props.appBar.appearenceMenuBtnRefAvailable,
-    props.appBar.handleSettingsMenuClosed,
-    props.appBar.handleAppearenceMenuClosed,
-    props.appBar.appearenceMenuOpen,
-    props.appBar.handleCompactModeToggled,
-    props.appBar.handleDarkModeToggled,
-    props.appBar.appBarToggled,
-    props.appBar.appHeaderScrolling,
-    props.className,
-    props.headerClassName,
-    props.appBarClassName,
-    props.bodyClassName,
-    props.bodyScrollableX,
-    props.bodyScrollableY,
-    props.basePath,
-    props.settingsMenuClassName,
-    props.settingsMenuListClassName,
-    props.appearenceMenuClassName,
-    props.settingsMenuListClassName,
-    props.optionsMenuClassName,
-    props.optionsMenuListClassName,
-    props.children,
-    props.appBarChildren,
-    props.settingsMenuChildren,
-    props.appearenceMenuChildren,
-    props.optionsMenuChildren,
-    props.refreshBtnClicked, ]); */
-
   return (<FloatingTopBarModule
       className={props.className}
       headerClassName={props.headerClassName}
@@ -155,7 +97,9 @@ export default function FloatingTopBarAppModule(
           refreshBtnClicked={refreshBtnClicked} />
       </AppBar>}
       afterHeaderClassName="trmrk-ftb-module-header-toggle trmrk-icon-btn"
-      afterHeaderContent={ props.appBar.showAppBarToggleBtn ? <ToggleAppBarBtn showAppBar={props.appBar.showAppBar} appBarToggled={props.appBar.appBarToggled} /> : null }
+      afterHeaderContent={ props.appBar.showAppBarToggleBtn ? <ToggleAppBarBtn
+        showAppBar={props.appBar.showAppBar}
+        appBarToggled={props.appBar.appBarToggled} /> : null }
       bodyClassName={props.bodyClassName}
       showHeader={props.appBar.showAppBar}
       headerHeight={props.appBar.appHeaderHeight}
