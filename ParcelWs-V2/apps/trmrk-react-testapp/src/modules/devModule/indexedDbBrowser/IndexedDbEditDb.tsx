@@ -30,10 +30,13 @@ import {
   getDbInfo,
   IDbDatabaseInfo,
   getCreateDbRequestErrMsg,
-  getObjectStoresInfoAgg
+  getObjectStoresInfoAgg,
+  deserializeKeyPath
 } from "../../../services/indexedDb";
 
 import { searchQuery } from "./data";
+
+import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 
 export interface IndexedDbEditDbProps {
   basePath: string;
@@ -142,7 +145,9 @@ export default function IndexedDbEditDb(
     dbNameErr: string | null,
     dbVersionErr: string | null,
     dbStoresArr: IndexedDbStore[]) => (dbNameErr ?? null) === null && (dbVersionErr ?? null) === null && (
-      dbStoresArr.find(store => store.dbStoreNameHasError || store.dbStoreKeyPathHasError) ?? null) === null;
+      dbStoresArr.find(store => store.dbStoreNameHasError || store.dbStoreKeyPathHasError || validateDbStoreKeyPath(
+        store.dbStore.serializedKeyPath
+      ) !== null) ?? null) === null;
 
   const editDbStoreNameChangedHandler = (idx: number, dbStoresArr: IndexedDbStore[]) => (newDbStoreName: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
@@ -263,7 +268,13 @@ export default function IndexedDbEditDb(
     let migrated = false;
 
     const addedStores = dbStoresArr.filter(
-      store => store.canBeEdited);
+      store => store.canBeEdited).map(store => ({
+        ...store,
+        dbStore: {
+          ...store.dbStore,
+          keyPath: deserializeKeyPath(store.dbStore.serializedKeyPath)
+        }
+      }) as IndexedDbStore);
 
     if (!getFormCanBeSubmitted(dbNameErr, dbVersionErr, dbStoresArr)) {
       hasError = true;
@@ -319,7 +330,7 @@ export default function IndexedDbEditDb(
 
           for (let store of addedStores) {
             db.createObjectStore(store.dbStore.storeName, {
-              keyPath: store.dbStore.serializedKeyPath,
+              keyPath: store.dbStore.keyPath,
               autoIncrement: store.dbStore.autoIncrement,
             });
           }

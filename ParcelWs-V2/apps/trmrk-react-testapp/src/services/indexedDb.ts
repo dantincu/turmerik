@@ -101,6 +101,20 @@ export const serializeKeyPath = (
   return keyPath;
 };
 
+export const deserializeKeyPath = (
+  deserializedKeyPath: string,
+  alwaysReturnArray?: boolean | null | undefined,
+  joinStr?: string | null | undefined
+) => {
+  let keyPath: string | string[] = deserializedKeyPath.split(joinStr ?? "\n");
+
+  if (!alwaysReturnArray && keyPath.length === 1) {
+    keyPath = keyPath[0];
+  }
+
+  return keyPath;
+};
+
 export const getObjectStoreNames = (db: IDBDatabase) =>
   domStrListToArr(db.objectStoreNames);
 

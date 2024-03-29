@@ -9,7 +9,11 @@ import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from "@mui/material/Box";
 
+import trmrk from "trmrk";
+
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
+
+import { deserializeKeyPath } from "../../../services/indexedDb";
 
 export interface IndexedDbEditDbStoreProps {
   model: IndexedDbStore;
@@ -22,10 +26,11 @@ export interface IndexedDbEditDbStoreProps {
   keyPathHasErrorChanged: (hasError: boolean) => void;
 }
 
-const dbStoreNameReqErrMsg = "The DB Store name is required";
-const dbStoreKeyPathReqErrMsg = "The Key Path name is required";
+export const dbStoreNameReqErrMsg = "The DB Store name is required";
+export const dbStoreKeyPathReqErrMsg = "The Key Path name is required";
+export const dbStoreKeyPathValidErrMsg = "The Key Path name is invalid";
 
-const validateDbStoreName = (dbStoreName: string) => {
+export const validateDbStoreName = (dbStoreName: string) => {
   let dbStoreNameErr: string | null = null;
 
   if (dbStoreName.length === 0) {
@@ -35,11 +40,17 @@ const validateDbStoreName = (dbStoreName: string) => {
   return dbStoreNameErr;
 }
 
-const validateDbStoreKeyPath = (dbStoreKeyPath: string) => {
+export const validateDbStoreKeyPath = (dbStoreKeyPath: string, fullValidation?: boolean | null | undefined) => {
   let dbStoreKeyPathErr: string | null = null;
 
   if (dbStoreKeyPath.length === 0) {
     dbStoreKeyPathErr = dbStoreKeyPathReqErrMsg;
+  } else if (fullValidation) {
+    const keyPathParts = deserializeKeyPath(dbStoreKeyPath, true) as string[];
+
+    if (keyPathParts.filter(part => !trmrk.isNonEmptyStr(part, true)).length > 0) {
+      dbStoreKeyPathErr = dbStoreKeyPathValidErrMsg;
+    }
   }
 
   return dbStoreKeyPathErr;
@@ -57,6 +68,8 @@ export default function IndexedDbEditDbStore(
   const [ keyPath, setKeyPath ] = React.useState(props.model.dbStore.serializedKeyPath);
   const [ keyPathErr, setKeyPathErr ] = React.useState<string | null>(null);
 
+  const autoIncrementElRef = React.createRef<HTMLButtonElement>();
+
   const dbStoreNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbStoreName = e.target.value;
     setDbStoreName(newDbStoreName);
@@ -68,8 +81,15 @@ export default function IndexedDbEditDbStore(
   }
 
   const autoIncrementChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setAutoIncrement(checked);
-    props.autoIncrementChanged(checked);
+    if (props.model.canBeEdited) {
+      setAutoIncrement(checked);
+      props.autoIncrementChanged(checked);
+    }
+  }
+
+  const autoIncrementClicked = (e: MouseEvent): any => {
+    e.preventDefault();
+    return false;
   }
 
   const keyPathChanged = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -83,17 +103,29 @@ export default function IndexedDbEditDbStore(
   }
 
   React.useEffect(() => {
+    const autoIncrementEl = autoIncrementElRef.current;
+    let autoIncrementCheckBox: HTMLInputElement | null = null;
+
+    if (!props.model.canBeEdited && autoIncrementEl) {
+      autoIncrementCheckBox = autoIncrementEl.querySelector("input[type=checkbox]") as HTMLInputElement;
+      autoIncrementCheckBox.addEventListener("click", autoIncrementClicked);
+    }
+
     if ((props.validateReqsCount ?? 0) !== validateReqsCount) {
       setValidateReqsCount(props.validateReqsCount ?? 0);
 
       const newDbStoreNameErr = validateDbStoreName(dbStoreName);
-      const newkeyPathErr = validateDbStoreKeyPath(keyPath);
+      const newkeyPathErr = validateDbStoreKeyPath(keyPath, true);
 
       setDbStoreNameErr(newDbStoreNameErr);
       setKeyPathErr(newkeyPathErr);
 
       props.dbStoreNameHasErrorChanged((newDbStoreNameErr ?? null) !== null);
       props.keyPathHasErrorChanged((newkeyPathErr ?? null) !== null);
+    }
+
+    if (autoIncrementCheckBox) {
+      autoIncrementCheckBox.removeEventListener("click", autoIncrementClicked);
     }
   }, [ props.model.dbStore.storeName,
     dbStoreName,
@@ -104,7 +136,8 @@ export default function IndexedDbEditDbStore(
     keyPathErr,
     props.idx,
     props.validateReqsCount,
-    validateReqsCount ] );
+    validateReqsCount,
+    autoIncrementElRef ] );
 
   return (<Paper className="trmrk-flex-rows-group">
     <Box className="trmrk-flex-row">
@@ -117,8 +150,9 @@ export default function IndexedDbEditDbStore(
     </Box>
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreAutoincrement_${props.idx}`}>Auto increment</label></Box>
-      <Box className="trmrk-cell"><Checkbox id={`dbStoreAutoincrement_${props.idx}`}
-      className={[ "trmrk-checkbox", "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")} onChange={autoIncrementChanged} value={autoIncrement} readOnly={!props.model.canBeEdited} /></Box>
+      <Box className="trmrk-cell"><Checkbox id={`dbStoreAutoincrement_${props.idx}`} ref={autoIncrementElRef}
+        className={[ "trmrk-checkbox", "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
+        onChange={autoIncrementChanged} readOnly={!props.model.canBeEdited} checked={autoIncrement} value={autoIncrement} /></Box>
     </Box>
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreKeyPath_${props.idx}`}>Key Path</label></Box>
