@@ -15,6 +15,7 @@ export interface OptionsMenuOpts {
 
 export interface AppBarData {
   appBarRowsCount: number;
+  appBarRefreshReqsCount: number;
   appSettingsMenuOpts: AppSettingsMenuOpts;
   showOptionsMenuBtn: boolean;
   optionsMenuOpts: OptionsMenuOpts;
@@ -22,6 +23,15 @@ export interface AppBarData {
 
 export interface AppBarSelectors {
   getAppBarRowsCount: Selector<
+    {
+      appBar: AppBarData;
+    },
+    number,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => number;
+  };
+  getAppBarRefreshReqsCount: Selector<
     {
       appBar: AppBarData;
     },
@@ -99,6 +109,10 @@ export interface AppBarReducers {
   setAppBarRowsCount: ActionCreatorWithPayload<
     number,
     "appBar/setAppBarRowsCount"
+  >;
+  incAppBarRefreshReqsCount: ActionCreatorWithPayload<
+    void,
+    "appBar/incAppBarRefreshReqsCount"
   >;
   setAppSettingsMenuOpts: ActionCreatorWithPayload<
     AppSettingsMenuOpts,

@@ -36,13 +36,11 @@ export default function AppModule(props: AppModuleProps) {
   const dispatch = useDispatch();
 
   const increaseHeaderHeightBtnClicked = () => {
-    // appBar.updateHeaderHeight(appBar.appBarRowsCount + 1);
     dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount + 1));
   }
 
   const decreaseHeaderHeightBtnClicked = () => {
     if (appBar.appBarRowsCount > 1) {
-      // appBar.updateHeaderHeight(appBar.appBarRowsCount - 1);
       dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount - 1));
     }
   }
@@ -60,7 +58,7 @@ export default function AppModule(props: AppModuleProps) {
     refreshBtnRef,
     appBarRowsCount,
     appBar.appBarRowsCount,
-    appBar.lastRefreshTmStmp,
+    appBar.appBarRefreshReqsCount,
     appBar.appHeaderHeight,
     appBar.showAppBar,
     appBar.appSettingsMenuIsOpen,

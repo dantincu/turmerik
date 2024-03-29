@@ -51,12 +51,14 @@ export default function FloatingTopBarAppModule(
     }
   }
 
-  React.useEffect(() => {
+  /* React.useEffect(() => {
+    console.log("FloatingTopBarAppModule useEffect");
   }, [
     props.appBar.appBarRowsCount,
     props.appBar.appHeaderHeight,
     props.appBar.setAppHeaderHeight,
     props.appBar.appBarRowHeightPx,
+    // props.appBar.appBarRefreshReqsCount,
     props.appBar.headerRef,
     props.appBar.bodyRef,
     props.appBar.isCompactMode,
@@ -73,8 +75,7 @@ export default function FloatingTopBarAppModule(
     props.appBar.setAppearenceMenuIconBtnEl,
     props.appBar.optionsMenuIconBtnEl,
     props.appBar.setOptionsMenuIconBtnEl,
-    props.appBar.lastRefreshTmStmp,
-    props.appBar.setLastRefreshTmStmp,
+    props.appBar.appBarRefreshReqsCount,
     props.appBar.appTheme,
     props.appBar.currentAppTheme,
     props.appBar.appThemeClassName,
@@ -106,7 +107,7 @@ export default function FloatingTopBarAppModule(
     props.settingsMenuChildren,
     props.appearenceMenuChildren,
     props.optionsMenuChildren,
-    props.refreshBtnClicked, ]);
+    props.refreshBtnClicked, ]); */
 
   return (<FloatingTopBarModule
       className={props.className}
@@ -161,7 +162,7 @@ export default function FloatingTopBarAppModule(
       pinHeader={!props.appBar.isCompactMode}
       isDarkMode={props.appBar.isDarkMode}
       isCompactMode={props.appBar.isCompactMode}
-      lastRefreshTmStmp={props.appBar.lastRefreshTmStmp}
+      topBarRefreshReqsCount={props.appBar.appBarRefreshReqsCount}
       scrollableX={props.bodyScrollableX ?? props.appBar.isCompactMode}
       scrollableY={props.bodyScrollableY ?? props.appBar.isCompactMode}
       scrolling={props.appBar.appHeaderScrolling}

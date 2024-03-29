@@ -16,7 +16,7 @@ export interface FloatingTopBarPanelProps {
   scrollableY?: boolean | null | undefined;
   scrollableX?: boolean | null | undefined;
   scrolling?: (data: FloatingTopBarPanelHeaderData, offset: FloatingTopBarPanelHeaderOffset) => void;
-  lastRefreshTmStmp?: Date | number | null | undefined;
+  topBarRefreshReqsCount?: number | null | undefined;
   bodyBottomPaddingFactor?: number | null | undefined;
 }
 
@@ -36,7 +36,7 @@ export interface FloatingTopBarPanelHeaderOffset {
   mainElTopOffset: number;
 }
 
-export default function AppPanel(props: FloatingTopBarPanelProps) {
+export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
   const parentRef = React.createRef<HTMLDivElement>();
   const headerRef = React.createRef<HTMLDivElement>();
   const bodyRef = React.createRef<HTMLDivElement>();
@@ -47,6 +47,7 @@ export default function AppPanel(props: FloatingTopBarPanelProps) {
   const [ headerHeight, setHeaderHeight ] = React.useState(props.headerHeight);
 
   const scrollHandler = (data: FloatingTopBarPanelHeaderData) => {
+    console.log("scrollHandler");
     const bodyEl = data.bodyEl;
     const headerEl = data.headerEl;
     const scrollTop = bodyEl.scrollTop;
@@ -95,6 +96,8 @@ export default function AppPanel(props: FloatingTopBarPanelProps) {
   }
 
   React.useEffect(() => {
+    console.log("FloatingTopBarPanel useEffect");
+
     const onResize = (ev: UIEvent) => {
       const appBarDataValue = appPanelHeaderData.current;
 
@@ -170,8 +173,11 @@ export default function AppPanel(props: FloatingTopBarPanelProps) {
     props.showHeader,
     showHeader,
     props.pinHeader,
-    props.lastRefreshTmStmp,
+    props.topBarRefreshReqsCount,
     props.headerHeight,
+    props.showHeader,
+    props.headerContent,
+    props.bodyContent,
     appPanelHeaderData,
     parentRef,
     headerRef,

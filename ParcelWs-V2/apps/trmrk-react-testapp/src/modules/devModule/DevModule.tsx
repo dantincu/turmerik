@@ -97,6 +97,7 @@ export default function DevModule(
   const [ baseUrlPath, setBaseUrlPath ] = React.useState('');
 
   React.useEffect(() => {
+    console.log("DevModule");
     const relUrlPathVal = getRelUrlPath(urlPath);
 
     if (relUrlPathVal !== baseUrlPath) {
@@ -110,7 +111,7 @@ export default function DevModule(
     appBarRowsCount,
     appBar.appTheme,
     appBar.appBarRowsCount,
-    appBar.lastRefreshTmStmp,
+    // appBar.appBarRefreshReqsCount,
     appBar.appHeaderHeight,
     appBar.showAppBar,
     appBar.appSettingsMenuIsOpen,

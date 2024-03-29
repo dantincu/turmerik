@@ -43,8 +43,7 @@ export interface UseAppBarResult {
   setOptionsMenuIconBtnEl: React.Dispatch<
     React.SetStateAction<HTMLButtonElement | null>
   >;
-  lastRefreshTmStmp: Date;
-  setLastRefreshTmStmp: React.Dispatch<React.SetStateAction<Date>>;
+  appBarRefreshReqsCount: number;
   appTheme: AppTheme;
   currentAppTheme: MtblRefValue<AppTheme>;
   appThemeClassName: string;
@@ -85,6 +84,11 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   const bodyRef = React.useRef<HTMLDivElement>();
 
   const appBarRowsCount = useSelector(props.appBarSelectors.getAppBarRowsCount);
+
+  const appBarRefreshReqsCount = useSelector(
+    props.appBarSelectors.getAppBarRefreshReqsCount
+  );
+
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
   const showAppBar = useSelector(props.appDataSelectors.getShowAppBar);
@@ -119,8 +123,6 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
 
   const [optionsMenuIconBtnEl, setOptionsMenuIconBtnEl] =
     React.useState<null | HTMLButtonElement>(null);
-
-  const [lastRefreshTmStmp, setLastRefreshTmStmp] = React.useState(new Date());
 
   const appTheme = getAppTheme({
     isDarkMode: isDarkMode,
@@ -187,13 +189,6 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     headerRef.current = data.headerEl;
     bodyRef.current = data.bodyEl;
 
-    /* if (appBarRowHeightPx.current === 0) {
-      const newAppBarRowHeightPx = Math.round(
-        data.headerHeight / appBarRowsCount
-      );
-      appBarRowHeightPx.current = newAppBarRowHeightPx;
-    } */
-
     if (appHeaderHeight === null) {
       setAppHeaderHeight(data.headerHeight);
     }
@@ -210,18 +205,20 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
       bodyEl.style.top = `${newHeaderHeight}px`;
       headerEl.style.top = "0px";
 
-      // dispatch(props.appBarReducers.setAppBarRowsCount(newAppBarRowsCount));
-      setAppHeaderHeight(newHeaderHeight);
+      if (newHeaderHeight !== appHeaderHeight) {
+        setAppHeaderHeight(newHeaderHeight);
+      }
     }
   };
 
   useEffect(() => {
     updateHeaderHeight(appBarRowsCount);
+    console.log("updateHeaderHeight from useEffect", appBarRefreshReqsCount);
   }, [
     appTheme,
     appBarRowsCount,
-    lastRefreshTmStmp,
-    appHeaderHeight,
+    appBarRefreshReqsCount,
+    // appHeaderHeight,
     showAppBar,
     showAppBarToggleBtn,
     showOptionsMenuBtn,
@@ -253,8 +250,7 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     setAppearenceMenuIconBtnEl,
     optionsMenuIconBtnEl,
     setOptionsMenuIconBtnEl,
-    lastRefreshTmStmp,
-    setLastRefreshTmStmp,
+    appBarRefreshReqsCount,
     appTheme,
     currentAppTheme,
     appThemeClassName,

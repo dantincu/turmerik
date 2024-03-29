@@ -1,6 +1,6 @@
 import React from "react";
 
-import AppPanel, { FloatingTopBarPanelProps } from "../floatingTopBarPanel/FloatingTopBarPanel";
+import FloatingTopBarPanel, { FloatingTopBarPanelProps } from "../floatingTopBarPanel/FloatingTopBarPanel";
 
 import { isIPadOrIphone, isAndroid, isMobile } from "../../constants";
 
@@ -58,5 +58,5 @@ export default function FloatingTopBarModule(
   retProps.bodyClassName = ["trmrk-ftb-module-body", retProps.bodyClassName].join(" ");
   retProps.bodyBottomPaddingFactor ??= bodyBottomPaddingFactor;
 
-  return (<AppPanel {...retProps}></AppPanel>);
+  return (<FloatingTopBarPanel {...retProps}></FloatingTopBarPanel>);
 }

@@ -14,6 +14,7 @@ const appBarDataSlice = createSlice({
   name: "appBar",
   initialState: {
     appBarRowsCount: 1,
+    appBarRefreshReqsCount: 0,
     appSettingsMenuOpts: {
       isOpen: false,
       appearenceMenuOpts: {
@@ -28,6 +29,9 @@ const appBarDataSlice = createSlice({
   reducers: {
     setAppBarRowsCount: (state, action: ReducerAction<number>) => {
       state.appBarRowsCount = action.payload;
+    },
+    incAppBarRefreshReqsCount: (state, action: ReducerAction<void>) => {
+      state.appBarRefreshReqsCount++;
     },
     setAppSettingsMenuOpts: (
       state,
@@ -60,6 +64,7 @@ const appBarDataSlice = createSlice({
   },
   selectors: {
     getAppBarRowsCount: (state) => state.appBarRowsCount,
+    getAppBarRefreshReqsCount: (state) => state.appBarRefreshReqsCount,
     getAppSettingsMenuOpts: (state) => state.appSettingsMenuOpts,
     getAppSettingsMenuIsOpen: (state) => state.appSettingsMenuOpts.isOpen,
     getAppearenceMenuOpts: (state) =>
@@ -74,6 +79,7 @@ const appBarDataSlice = createSlice({
 
 const {
   setAppBarRowsCount,
+  incAppBarRefreshReqsCount,
   setAppSettingsMenuOpts,
   setAppSettingsMenuIsOpen,
   setAppearenceMenuOpts,
@@ -85,6 +91,7 @@ const {
 
 const {
   getAppBarRowsCount,
+  getAppBarRefreshReqsCount,
   getAppSettingsMenuOpts,
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,
@@ -96,6 +103,7 @@ const {
 
 export const appBarReducers: AppBarReducers = {
   setAppBarRowsCount,
+  incAppBarRefreshReqsCount,
   setAppSettingsMenuOpts,
   setAppSettingsMenuIsOpen,
   setAppearenceMenuOpts,
@@ -107,6 +115,7 @@ export const appBarReducers: AppBarReducers = {
 
 export const appBarSelectors: AppBarSelectors = {
   getAppBarRowsCount,
+  getAppBarRefreshReqsCount,
   getAppSettingsMenuOpts,
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,

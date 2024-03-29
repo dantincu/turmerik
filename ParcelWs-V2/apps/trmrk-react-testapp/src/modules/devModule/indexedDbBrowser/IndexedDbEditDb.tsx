@@ -16,6 +16,7 @@ import Snackbar from '@mui/material/Snackbar';
 
 import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEditDbStore";
 import { devModuleIndexedDbBrowserReducers, devModuleIndexedDbBrowserSelectors } from "../../../store/devModuleIndexedDbBrowserSlice";
+import { appBarReducers } from "../../../store/appBarDataSlice";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
@@ -97,6 +98,10 @@ export default function IndexedDbEditDb(
   const editDbAddDatastoreReqsCountRef = React.useRef(0);
 
   const [ isFirstRender, setIsFirstRender ] = React.useState(true);
+  const [ scrollToBottom, setScrollToBottom ] = React.useState(false);
+
+  const rootElRef = React.createRef<HTMLDivElement>();
+  const actionButtonsGroupElRef = React.createRef<HTMLDivElement>();
 
   const [ saving, setSaving ] = React.useState(false);
   const [ error, setError ] = React.useState<string | null>(null);
@@ -362,10 +367,24 @@ export default function IndexedDbEditDb(
   }
 
   React.useEffect(() => {
+    console.log("IndexedDbEditDb useEffect", isFirstRender, scrollToBottom);
+    const rootEl = rootElRef.current;
+    const actionButtonsGroupEl = actionButtonsGroupElRef.current;
+
     if (isFirstRender) {
       dispatch(devModuleIndexedDbBrowserReducers.resetEditDbAddDatastoreReqsCount());
       setIsFirstRender(false);
+    } else if (scrollToBottom) {
+        setScrollToBottom(false);
+        console.log("setScrollToBottom(false);");
+        
+        if (actionButtonsGroupEl) {
+          actionButtonsGroupEl.scrollIntoView();
+          // dispatch(appBarReducers.incAppBarRefreshReqsCount());
+        }
     } else if (editDbAddDatastoreReqsCount !== editDbAddDatastoreReqsCountRef.current) {
+      console.log("editDbAddDatastoreReqsCount scrollToBottom", editDbAddDatastoreReqsCount, editDbAddDatastoreReqsCountRef.current, scrollToBottom);
+
       editDbAddDatastoreReqsCountRef.current = editDbAddDatastoreReqsCount;
 
       const newDbStoresArr = [...dbStoresArr];
@@ -385,10 +404,11 @@ export default function IndexedDbEditDb(
       });
 
       setDbStoresArr(newDbStoresArr);
-    } else {
-      if (!props.isNewDb && !isLoading && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
-        load();
-      }
+      setScrollToBottom(true);
+      // console.log("setScrollToBottom(true);");
+    } else if (!props.isNewDb && !isLoading && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
+      console.log("IndexedDbEditDb load");
+      load();
     }
   }, [ isLoading,
     loadError,
@@ -409,9 +429,12 @@ export default function IndexedDbEditDb(
     props.showCreateSuccessMsg,
     showEditResultMsg,
     props.isNewDb,
-    validateDbStoresReqsCount ]);
+    validateDbStoresReqsCount,
+    scrollToBottom,
+    rootElRef,
+    actionButtonsGroupElRef ]);
 
-  return (<Box className="trmrk-page-form trmrk-indexeddb-create-db">
+  return (<Box className="trmrk-page-form trmrk-indexeddb-create-db" ref={rootElRef}>
     { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">{loadError}</FormHelperText></Box></Box> : (
         loadWarning ?? null) !== null ? <Box className="trmrk-flex-row">
@@ -450,7 +473,7 @@ export default function IndexedDbEditDb(
               dbStoreNameHasErrorChanged={editDbStoreNameHasErrorChangedHandler(idx)}
               keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(idx)} /> ) }
           <Box className="trmrk-flex-row">
-            <Box className="trmrk-cell trmrk-buttons-group">
+            <Box className="trmrk-cell trmrk-buttons-group" ref={actionButtonsGroupElRef}>
               <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>
               <Button onClick={onCancelClick}>Cancel</Button>
             </Box>

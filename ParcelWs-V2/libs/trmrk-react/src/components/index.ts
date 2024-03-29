@@ -1,4 +1,4 @@
-import AppPanel from "./floatingTopBarPanel/FloatingTopBarPanel";
+import FloatingTopBarPanel from "./floatingTopBarPanel/FloatingTopBarPanel";
 import FloatingTopBarModule from "./floatingTopBarModule/FloatingTopBarModule";
 import ResizablePanel from "./resizablePanel/ResizablePanel";
 import ToggleAppBarBtn from "./appBar/ToggleAppBarBtn";
@@ -8,7 +8,7 @@ import ToggleAppModeBtn from "./settingsMenu/ToggleAppModeBtn";
 import ToggleDarkModeBtn from "./settingsMenu/ToggleDarkModeBtn";
 
 export const components = {
-  AppPanel,
+  AppPanel: FloatingTopBarPanel,
   AppModule: FloatingTopBarModule,
   ResizablePanel,
   ToggleAppBarBtn,
