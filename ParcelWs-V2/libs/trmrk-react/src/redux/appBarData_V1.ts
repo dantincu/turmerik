@@ -14,12 +14,42 @@ export interface OptionsMenuOpts {
 }
 
 export interface AppBarData {
+  appBarRowsCount: number;
+  appBarHeightRefreshReqsCount: number;
+  appBarScrollRefreshReqsCount: number;
   appSettingsMenuOpts: AppSettingsMenuOpts;
   showOptionsMenuBtn: boolean;
   optionsMenuOpts: OptionsMenuOpts;
 }
 
 export interface AppBarSelectors {
+  getAppBarRowsCount: Selector<
+    {
+      appBar: AppBarData;
+    },
+    number,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => number;
+  };
+  getAppBarHeightRefreshReqsCount: Selector<
+    {
+      appBar: AppBarData;
+    },
+    number,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => number;
+  };
+  getAppBarScrollRefreshReqsCount: Selector<
+    {
+      appBar: AppBarData;
+    },
+    number,
+    []
+  > & {
+    unwrapped: (appData: AppBarData) => number;
+  };
   getAppSettingsMenuOpts: Selector<
     {
       appBar: AppBarData;
@@ -86,6 +116,26 @@ export interface AppBarSelectors {
 }
 
 export interface AppBarReducers {
+  setAppBarRowsCount: ActionCreatorWithPayload<
+    number,
+    "appBar/setAppBarRowsCount"
+  >;
+  setAppBarHeightRefreshReqsCount: ActionCreatorWithPayload<
+    number,
+    "appBar/setAppBarHeightRefreshReqsCount"
+  >;
+  incAppBarHeightRefreshReqsCount: ActionCreatorWithPayload<
+    void,
+    "appBar/incAppBarHeightRefreshReqsCount"
+  >;
+  setAppBarScrollRefreshReqsCount: ActionCreatorWithPayload<
+    number,
+    "appBar/setAppBarScrollRefreshReqsCount"
+  >;
+  incAppBarScrollRefreshReqsCount: ActionCreatorWithPayload<
+    void,
+    "appBar/incAppBarScrollRefreshReqsCount"
+  >;
   setAppSettingsMenuOpts: ActionCreatorWithPayload<
     AppSettingsMenuOpts,
     "appBar/setAppSettingsMenuOpts"

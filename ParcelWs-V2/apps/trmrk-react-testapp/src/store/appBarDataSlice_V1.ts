@@ -8,11 +8,14 @@ import {
   OptionsMenuOpts,
   AppBarReducers,
   AppBarSelectors,
-} from "trmrk-react/src/redux/appBarData";
+} from "trmrk-react/src/redux/appBarData_V1";
 
 const appBarDataSlice = createSlice({
   name: "appBar",
   initialState: {
+    appBarRowsCount: 1,
+    appBarHeightRefreshReqsCount: 0,
+    appBarScrollRefreshReqsCount: 0,
     appSettingsMenuOpts: {
       isOpen: false,
       appearenceMenuOpts: {
@@ -25,6 +28,21 @@ const appBarDataSlice = createSlice({
     },
   } as AppBarData,
   reducers: {
+    setAppBarRowsCount: (state, action: ReducerAction<number>) => {
+      state.appBarRowsCount = action.payload;
+    },
+    setAppBarHeightRefreshReqsCount: (state, action: ReducerAction<number>) => {
+      state.appBarHeightRefreshReqsCount = action.payload;
+    },
+    incAppBarHeightRefreshReqsCount: (state, action: ReducerAction<void>) => {
+      state.appBarHeightRefreshReqsCount++;
+    },
+    setAppBarScrollRefreshReqsCount: (state, action: ReducerAction<number>) => {
+      state.appBarScrollRefreshReqsCount = action.payload;
+    },
+    incAppBarScrollRefreshReqsCount: (state, action: ReducerAction<void>) => {
+      state.appBarScrollRefreshReqsCount++;
+    },
     setAppSettingsMenuOpts: (
       state,
       action: ReducerAction<AppSettingsMenuOpts>
@@ -55,6 +73,11 @@ const appBarDataSlice = createSlice({
     },
   },
   selectors: {
+    getAppBarRowsCount: (state) => state.appBarRowsCount,
+    getAppBarHeightRefreshReqsCount: (state) =>
+      state.appBarHeightRefreshReqsCount,
+    getAppBarScrollRefreshReqsCount: (state) =>
+      state.appBarScrollRefreshReqsCount,
     getAppSettingsMenuOpts: (state) => state.appSettingsMenuOpts,
     getAppSettingsMenuIsOpen: (state) => state.appSettingsMenuOpts.isOpen,
     getAppearenceMenuOpts: (state) =>
@@ -68,6 +91,11 @@ const appBarDataSlice = createSlice({
 });
 
 const {
+  setAppBarRowsCount,
+  setAppBarHeightRefreshReqsCount,
+  incAppBarHeightRefreshReqsCount,
+  setAppBarScrollRefreshReqsCount,
+  incAppBarScrollRefreshReqsCount,
   setAppSettingsMenuOpts,
   setAppSettingsMenuIsOpen,
   setAppearenceMenuOpts,
@@ -78,6 +106,9 @@ const {
 } = appBarDataSlice.actions;
 
 const {
+  getAppBarRowsCount,
+  getAppBarHeightRefreshReqsCount,
+  getAppBarScrollRefreshReqsCount,
   getAppSettingsMenuOpts,
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,
@@ -88,6 +119,11 @@ const {
 } = appBarDataSlice.selectors;
 
 export const appBarReducers: AppBarReducers = {
+  setAppBarRowsCount,
+  setAppBarHeightRefreshReqsCount,
+  incAppBarHeightRefreshReqsCount,
+  setAppBarScrollRefreshReqsCount,
+  incAppBarScrollRefreshReqsCount,
   setAppSettingsMenuOpts,
   setAppSettingsMenuIsOpen,
   setAppearenceMenuOpts,
@@ -98,6 +134,9 @@ export const appBarReducers: AppBarReducers = {
 };
 
 export const appBarSelectors: AppBarSelectors = {
+  getAppBarRowsCount,
+  getAppBarHeightRefreshReqsCount,
+  getAppBarScrollRefreshReqsCount,
   getAppSettingsMenuOpts,
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,

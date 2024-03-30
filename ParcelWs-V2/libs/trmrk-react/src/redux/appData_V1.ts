@@ -3,6 +3,8 @@ import { Selector, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 export interface AppData {
   baseLocation: string;
   currentUrlPath: string;
+  showAppBar: boolean;
+  showAppBarToggleBtn: boolean;
   isDarkMode: boolean;
   isCompactMode: boolean;
 }
@@ -35,6 +37,24 @@ export interface AppDataSelectors {
   > & {
     unwrapped: (appData: AppData) => boolean;
   };
+  getShowAppBar: Selector<
+    {
+      appData: AppData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appData: AppData) => boolean;
+  };
+  getShowAppBarToggleBtn: Selector<
+    {
+      appData: AppData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appData: AppData) => boolean;
+  };
 }
 
 export interface AppDataReducers {
@@ -47,4 +67,9 @@ export interface AppDataReducers {
     "appData/setIsCompactMode"
   >;
   setIsDarkMode: ActionCreatorWithPayload<boolean, "appData/setIsDarkMode">;
+  setShowAppBar: ActionCreatorWithPayload<boolean, "appData/setShowAppBar">;
+  setShowAppBarToggleBtn: ActionCreatorWithPayload<
+    boolean,
+    "appData/setShowAppBarToggleBtn"
+  >;
 }

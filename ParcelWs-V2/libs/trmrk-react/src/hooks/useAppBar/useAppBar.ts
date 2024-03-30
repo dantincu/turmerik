@@ -15,15 +15,15 @@ import { AppTheme, getAppTheme, currentAppTheme } from "../../app-theme/core";
 import {
   FloatingTopBarPanelHeaderData,
   FloatingTopBarPanelHeaderOffset,
-} from "../../components/floatingTopBarPanel/FloatingTopBarPanel";
+} from "../../components/floatingTopBarPanel/FloatingTopBarPanel_V1";
 
-import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
-import { AppBarReducers, AppBarSelectors } from "../..//redux/appBarData";
+import { AppDataSelectors, AppDataReducers } from "../../redux/appData_V1";
+import { AppBarReducers, AppBarSelectors } from "../../redux/appBarData_V1";
 
 import {
   FloatingVariable,
   updateFloatingVariableValue,
-} from "../../components/floatingTopBarPanel/FloatingTopBarPanel";
+} from "../../components/floatingTopBarPanel/FloatingTopBarPanel_V1";
 
 export interface UseAppBarProps {
   appDataSelectors: AppDataSelectors;

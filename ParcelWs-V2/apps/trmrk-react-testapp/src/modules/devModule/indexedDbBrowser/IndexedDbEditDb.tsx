@@ -15,7 +15,7 @@ import Snackbar from '@mui/material/Snackbar';
 
 import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEditDbStore";
 import { devModuleIndexedDbBrowserReducers, devModuleIndexedDbBrowserSelectors } from "../../../store/devModuleIndexedDbBrowserSlice";
-import { appBarReducers, appBarSelectors } from "../../../store/appBarDataSlice";
+import { appBarReducers, appBarSelectors } from "../../../store/appBarDataSlice_V1";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';

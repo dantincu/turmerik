@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import trmrk_browser from "trmrk-browser";
 const domUtils = trmrk_browser.domUtils.default;
 
-import "./FloatingTopBarPanel.scss";
+import "./FloatingTopBarPanel_V1.scss";
 
 export interface FloatingTopBarPanelProps {
   className: string,

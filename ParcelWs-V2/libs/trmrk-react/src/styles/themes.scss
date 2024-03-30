@@ -11,6 +11,14 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
   }
 }
 
+.trmrk-ftbs-page-header .trmrk-ftbs-page-app-bar {
+  color: white;
+
+  .trmrk-icon-btn {
+    color: white;
+  }
+}
+
 .trmrk-theme-dark {
   color: white;
   
@@ -30,6 +38,10 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
     @include scrollable(#222, #444, #333, #555);
   }
 
+  &.trmrk-scrollable {
+    @include scrollable(#222, #444, #333, #555);
+  }
+
   .trmrk-resizable-panel.trmrk-border-alpha-25 {
     @include resizable-panel-colors(#FFFFFF44);
   }
@@ -41,6 +53,10 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
 .trmrk-theme-light {
   .trmrk-scrollable {
+    @include scrollable(#eee, #ccc, #ddd, #bbb);
+  }
+
+  &.trmrk-scrollable {
     @include scrollable(#eee, #ccc, #ddd, #bbb);
   }
 

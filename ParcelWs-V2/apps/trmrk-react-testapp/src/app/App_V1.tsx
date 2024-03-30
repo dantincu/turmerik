@@ -14,9 +14,9 @@ import { TrmrkError } from "trmrk/src/TrmrkError";
 
 import { appDataSelectors } from "../store/appDataSlice";
 
-// import DevModule from "../modules/devModule/DevModule_V1";
+import DevModule from "../modules/devModule/DevModule_V1";
 
-import AppModule from "../modules/appModule/AppModule";
+import AppModule from "../modules/appModule/AppModule_V1";
 import NotFound from "../pages/notFound/NotFound";
 
 import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
@@ -65,7 +65,7 @@ const App = withErrorBoundary(() => {
 
         <Routes>
           <Route path="/app/*" element={ <AppModule basePath="/app" rootPath="/" /> } />
-          { /* <Route path="/dev/*" element={ <DevModule basePath="/dev" rootPath="/" /> } /> */ }
+          <Route path="/dev/*" element={ <DevModule basePath="/dev" rootPath="/" /> } />
           <Route path="/" element={ <Navigate to="/app" /> } />
           <Route path="*" element={ <NotFound /> } />
         </Routes>

@@ -19,20 +19,12 @@ const appDataSlice = createSlice({
   initialState: {
     baseLocation: trmrk.url.getBaseLocation(),
     currentUrlPath: "/",
-    showAppBar: true,
-    showAppBarToggleBtn: true,
     isDarkMode: trmrk_react_utils.isDarkMode(),
     isCompactMode: trmrk_react_utils.isCompactMode(),
   } as AppData,
   reducers: {
     setCurrentUrlPath: (state, action: ReducerAction<string>) => {
       state.currentUrlPath = action.payload;
-    },
-    setShowAppBar: (state, action: ReducerAction<boolean>) => {
-      state.showAppBar = action.payload;
-    },
-    setShowAppBarToggleBtn: (state, action: ReducerAction<boolean>) => {
-      state.showAppBarToggleBtn = action.payload;
     },
     setIsDarkMode: (state, action: ReducerAction<boolean>) => {
       state.isDarkMode = action.payload;
@@ -43,43 +35,27 @@ const appDataSlice = createSlice({
   },
   selectors: {
     getCurrentUrlPath: (appData) => appData.currentUrlPath,
-    getShowAppBar: (appData) => appData.showAppBar,
-    getShowAppBarToggleBtn: (appData) => appData.showAppBarToggleBtn,
     getIsDarkMode: (appData) => appData.isDarkMode,
     getIsCompactMode: (appData) => appData.isCompactMode,
   },
 });
 
-const {
-  setCurrentUrlPath,
-  setIsCompactMode,
-  setIsDarkMode,
-  setShowAppBar,
-  setShowAppBarToggleBtn,
-} = appDataSlice.actions;
+const { setCurrentUrlPath, setIsCompactMode, setIsDarkMode } =
+  appDataSlice.actions;
 
-const {
-  getCurrentUrlPath,
-  getIsCompactMode,
-  getIsDarkMode,
-  getShowAppBar,
-  getShowAppBarToggleBtn,
-} = appDataSlice.selectors;
+const { getCurrentUrlPath, getIsCompactMode, getIsDarkMode } =
+  appDataSlice.selectors;
 
 export const appDataReducers: AppDataReducers = {
   setCurrentUrlPath,
   setIsCompactMode,
   setIsDarkMode,
-  setShowAppBar,
-  setShowAppBarToggleBtn,
 };
 
 export const appDataSelectors: AppDataSelectors = {
   getCurrentUrlPath,
   getIsCompactMode,
   getIsDarkMode,
-  getShowAppBar,
-  getShowAppBarToggleBtn,
 };
 
 export default appDataSlice.reducer;

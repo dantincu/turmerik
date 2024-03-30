@@ -21,11 +21,11 @@ import IndexedDbCreateDbAppBarContent from "./indexedDbBrowser/IndexedDbCreateDb
 import IndexedDbEditDbAppBarContent from "./indexedDbBrowser/IndexedDbEditDbAppBarContent";
 
 import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
-import FloatingTopBarAppModule from "trmrk-react/src/components/floatingTopBarAppModule/FloatingTopBarAppModule";
+import FloatingTopBarAppModule from "trmrk-react/src/components/floatingTopBarAppModule/FloatingTopBarAppModule_V1";
 import NotFound from "../../pages/notFound/NotFound";;
 
 import { appDataSelectors, appDataReducers } from "../../store/appDataSlice";
-import { appBarReducers, appBarSelectors } from "../../store/appBarDataSlice";
+import { appBarReducers, appBarSelectors } from "../../store/appBarDataSlice_V1";
 
 export interface DevModuleProps {
   className?: string | null | undefined;

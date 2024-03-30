@@ -12,11 +12,8 @@ import { appBarSelectors, appBarReducers } from "../../store/appBarDataSlice";
 import HomePage from "./pages/home/HomePage";
 import ResizablesDemo from "./pages/resizablesDemo/ResizablesDemo";
 
-import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
-import FloatingTopBarAppModule from "trmrk-react/src/components/floatingTopBarAppModule/FloatingTopBarAppModule";
+import FloatingBarsPage from "../../components/floatingBarsPanel/FloatingBarsPage";
 import NotFound from "../../pages/notFound/NotFound";
-
-import { FloatingTopBarPanelHeaderData, FloatingTopBarPanelHeaderOffset } from "trmrk-react/src/components/floatingTopBarPanel/FloatingTopBarPanel";
 
 export interface AppModuleProps {
   basePath: string;
@@ -24,126 +21,54 @@ export interface AppModuleProps {
 }
 
 export default function AppModule(props: AppModuleProps) {
-  const appHeaderBeforeScrolling = React.useRef<((
-    data: FloatingTopBarPanelHeaderData
-  ) => boolean | null | undefined | void) | null>(null);
-
-  const appHeaderScrolling = React.useRef<((
-    data: FloatingTopBarPanelHeaderData,
-    offset: FloatingTopBarPanelHeaderOffset
-  ) => void) | null>(null);
-
-  const appHeaderBeforeScrollingHandler = React.useCallback((data: FloatingTopBarPanelHeaderData) => {
-    if (appHeaderBeforeScrolling.current)  {
-      return appHeaderBeforeScrolling.current(data);
-    }
-  }, [appHeaderBeforeScrolling]);
-
-  const appHeaderScrollingHandler = React.useCallback((data: FloatingTopBarPanelHeaderData,
-    offset: FloatingTopBarPanelHeaderOffset) => {
-    if (appHeaderScrolling.current)  {
-      appHeaderScrolling.current(data, offset);
-    }
-  }, [appHeaderBeforeScrolling]);
-
-  const appBar = useAppBar({
-    appBarReducers: appBarReducers,
-    appBarSelectors: appBarSelectors,
-    appDataReducers: appDataReducers,
-    appDataSelectors: appDataSelectors,
-    appHeaderBeforeScrolling: appHeaderBeforeScrollingHandler,
-    appHeaderScrolling: appHeaderScrollingHandler
-  });
-
-  const [ isFirstRender, setIsFirstRender ] = React.useState(true);
-  const appBarRowsCount = useSelector(appBarSelectors.getAppBarRowsCount);
-
-  const refreshBtnRef = React.createRef<HTMLButtonElement>();
-  const dispatch = useDispatch();
+  const [ appBarRowsCount, setAppBarRowsCount ] = React.useState(1);
 
   const increaseHeaderHeightBtnClicked = () => {
-    dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount + 1));
+    if (appBarRowsCount < 20) {
+      setAppBarRowsCount(appBarRowsCount + 1);
+    }
   }
 
   const decreaseHeaderHeightBtnClicked = () => {
-    if (appBar.appBarRowsCount > 1) {
-      dispatch(appBarReducers.setAppBarRowsCount(appBar.appBarRowsCount - 1));
+    if (appBarRowsCount > 1) {
+      setAppBarRowsCount(appBarRowsCount - 1);
     }
   }
-
-  const onRefreshClick = () => {
-    dispatch(appBarReducers.incAppBarHeightRefreshReqsCount());
-    dispatch(appBarReducers.incAppBarScrollRefreshReqsCount());
-  }
-
-  useEffect(() => {
-    const refreshBtnEl = refreshBtnRef.current;
-
-    if (refreshBtnEl) {
-      refreshBtnEl.addEventListener("click", onRefreshClick);
-    }
-
-    if (isFirstRender) {
-      setIsFirstRender(false);
-      dispatch(appBarReducers.setAppBarRowsCount(1));
-    }
-
-    // console.log("appHeaderBeforeScrolling1", appHeaderBeforeScrolling.current, appHeaderScrolling.current);
-
-    return () => {      
-      if (refreshBtnEl) {
-        refreshBtnEl.removeEventListener("click", onRefreshClick);
-      }
-    }
-  }, [
-    isFirstRender,
-    props.basePath,
-    props.rootPath,
-    appBar.appTheme,
-    refreshBtnRef,
-    appBarRowsCount,
-    appBar.appBarRowsCount,
-    appBar.appBarHeightRefreshReqsCount,
-    appBar.appHeaderHeight,
-    appBar.showAppBar,
-    appBar.appSettingsMenuIsOpen,
-    appBar.appearenceMenuIsOpen,
-    appBar.appearenceMenuIconBtnEl,
-    appBar.appBarRowHeightPx,
-    appHeaderBeforeScrolling,
-    appHeaderScrolling ]);
-
+  
+  const refreshBtnRef = React.createRef<HTMLButtonElement>();
+  
   const basePaths = {
     basePath: props.basePath,
     rootPath: props.rootPath
   }
 
-  return (
-    <FloatingTopBarAppModule
+  return (<FloatingBarsPage
       className="trmrk-app"
       headerClassName="trmrk-app-header"
-      appBar={appBar}
       basePath={props.basePath}
+      panelScrollableY={true}
+      headerRowsCount={appBarRowsCount}
+      footerRowsCount={1}
       appBarClassName="trmrk-app-module-bar"
       appBarChildren={[
         <IconButton key={0} className="trmrk-icon-btn" onClick={increaseHeaderHeightBtnClicked}><KeyboardArrowDownIcon /></IconButton>,
         <IconButton key={1} className="trmrk-icon-btn" onClick={decreaseHeaderHeightBtnClicked}><KeyboardArrowUpIcon /></IconButton>]}
       bodyClassName="trmrk-app-body"
-      bodyScrollableY={true}
-      refreshBtnClicked={() => {}}>
-        <Routes>
-          <Route path="resizables-demo" element={
-            <ResizablesDemo
-              refreshBtnRef={refreshBtnRef}
-              urlPath={`${props.basePath}resizables-demo`}
-              {...basePaths}
-              appHeaderScrolling={appHeaderScrolling}
-              appHeaderBeforeScrolling={appHeaderBeforeScrolling} />}></Route>
-          <Route path="" element={<HomePage
-              urlPath={props.basePath}
-              {...basePaths} />}></Route>
-          <Route path="*" element={ <NotFound /> } />
-        </Routes>
-    </FloatingTopBarAppModule>
-  );
+      appDataSelectors={appDataSelectors}
+      appDataReducers={appDataReducers}
+      appBarSelectors={appBarSelectors}
+      appBarReducers={appBarReducers}
+      footerContent={<React.Fragment>FOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER</React.Fragment>}>
+    <Routes>
+      <Route path="resizables-demo" element={
+        <ResizablesDemo
+          refreshBtnRef={refreshBtnRef}
+          urlPath={`${props.basePath}resizables-demo`}
+          {...basePaths} />}></Route>
+      <Route path="" element={<HomePage
+          urlPath={props.basePath}
+          {...basePaths} />}></Route>
+      <Route path="*" element={ <NotFound /> } />
+    </Routes>
+  </FloatingBarsPage>);
 }

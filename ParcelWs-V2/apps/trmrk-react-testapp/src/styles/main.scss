@@ -45,7 +45,7 @@ body, #app-root {
   }
 }
 
-.trmrk-ftb-module-bar .trmrk-page-title {
+.trmrk-ftbs-page-app-bar .trmrk-page-title {
   display: block;
   text-align: center;
   line-height: 1.5em;
@@ -81,7 +81,7 @@ body, #app-root {
       overflow: hidden;
       margin-bottom: 0em;
 
-      &.trmrk-height-x2 {
+      &.trmrk-height-rows-x2 {
         height: 5em;
       }
 

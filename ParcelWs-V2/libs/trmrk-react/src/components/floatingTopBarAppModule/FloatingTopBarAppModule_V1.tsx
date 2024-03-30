@@ -7,7 +7,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import FloatingTopBarModule from "../floatingTopBarModule/FloatingTopBarModule";
+import FloatingTopBarModule from "../floatingTopBarModule/FloatingTopBarModule_V1";
 
 import ToggleAppBarBtn from "../appBar/ToggleAppBarBtn";
 import SettingsMenu from "../settingsMenu/SettingsMenu";
@@ -15,7 +15,7 @@ import AppearenceSettingsMenu from "../settingsMenu/AppearenceSettingsMenu";
 import OptionsMenu from "../settingsMenu/OptionsMenu";
 import { UseAppBarResult } from "../../hooks/useAppBar/useAppBar";
 
-import { FloatingVariable } from "../floatingTopBarPanel/FloatingTopBarPanel";
+import { FloatingVariable } from "../floatingTopBarPanel/FloatingTopBarPanel_V1";
 
 export interface FloatingTopBarAppModuleProps {
   appBar: UseAppBarResult,

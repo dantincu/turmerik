@@ -19,8 +19,10 @@ import ResizablePanel, {
   ResizeHandlersMap,
   getTouchOrMousePosition } from "trmrk-react/src/components/resizablePanel/ResizablePanel";
 
+import { FloatingTopBarPanelHeaderData, FloatingTopBarPanelHeaderOffset } from "trmrk-react/src/components/floatingTopBarPanel/FloatingTopBarPanel";
+
 import { appDataReducers } from "../../../../store/appDataSlice";
-import { appBarReducers } from "../../../../store/appBarDataSlice";
+import { appBarReducers } from "../../../../store/appBarDataSlice_V1";
 
 import AppBarLogs from "./AppBarLogs";
 
@@ -29,6 +31,13 @@ export interface ResizablesDemoProps {
   basePath: string;
   rootPath: string;
   refreshBtnRef: React.RefObject<HTMLButtonElement>;
+  appHeaderBeforeScrolling: React.MutableRefObject<((
+    data: FloatingTopBarPanelHeaderData
+  ) => boolean | null | undefined | void) | null>;
+  appHeaderScrolling: React.MutableRefObject<((
+    data: FloatingTopBarPanelHeaderData,
+    offset: FloatingTopBarPanelHeaderOffset
+  ) => void) | null>;
 }
 
 export default function ResizablesDemo(
@@ -50,6 +59,12 @@ export default function ResizablesDemo(
 
   const bottomPanelW = React.useRef(0);
   const bottomPanelH = React.useRef(0);
+
+  const [ showAppBarLogs, setshowAppBarLogs ] = React.useState(false);
+
+  const [ beforeScrollDataRef, setBeforeScrollDataRef ] = React.useState<FloatingTopBarPanelHeaderData>();
+  const [ scrollDataRef, setScrollDataRef ] = React.useState<FloatingTopBarPanelHeaderData>();
+  const [ scrollOffsetRef, setScrollOffsetRef ] = React.useState<FloatingTopBarPanelHeaderOffset>();
 
   const prevTouchOrMousePos = React.useRef<TouchOrMousePosition>({
     screenX: 0,
@@ -227,11 +242,44 @@ export default function ResizablesDemo(
     bottomPanelRef.current = bottomPanelEl;
   }
 
+  const appHeaderBeforeScrolling = (
+    data: FloatingTopBarPanelHeaderData
+  ): boolean | null | undefined | void => {
+    setBeforeScrollDataRef(data);
+    // console.log("data.floatingVariable", data.floatingVariable);
+  }
+
+  const appHeaderScrolling = (
+    data: FloatingTopBarPanelHeaderData,
+    offset: FloatingTopBarPanelHeaderOffset
+  ) => {
+    setScrollDataRef(data);
+    setScrollOffsetRef(offset);
+  };
+
   React.useEffect(() => {
-  }, []);
+    props.appHeaderBeforeScrolling.current = appHeaderBeforeScrolling;
+    props.appHeaderScrolling.current = appHeaderScrolling;
+
+    return () => {
+      props.appHeaderBeforeScrolling.current = null;
+      props.appHeaderScrolling.current = null;
+    }
+  }, [beforeScrollDataRef, scrollDataRef, scrollOffsetRef, showAppBarLogs]);
 
   return (
-    <Paper className="trmrk-app-main-content" ref={parentRef} sx={{ width: "100%", height: "100%" }}>
+    <Paper className="trmrk-app-main-content" ref={parentRef}>
+      { !showAppBarLogs ? <Button sx={{ position: "fixed" }} onClick={handleRefreshClick} ref={props.refreshBtnRef}>Refresh</Button> : null }
+      <Box sx={{ position: "fixed", right: "2em", backgroundColor: "#880" }}>
+        <label htmlFor="showAppBarLogs">Show App Bar Logs</label>
+        <Checkbox id="showAppBarLogs" checked={showAppBarLogs} onChange={showAppBarLogsChanged} />
+      </Box>
+
+      { showAppBarLogs ? <Box sx={{ position: "fixed", zIndex: 1000, bottom: "1em" }}>
+        { beforeScrollDataRef ? <AppBarLogs data={beforeScrollDataRef} /> : null }
+        { /*  scrollDataRef ? <AppBarLogs data={scrollDataRef} offset={scrollOffsetRef} /> : null */ }
+      </Box> : null }
+
       <Box sx={{ position: "fixed", right: "2em", top: "500px" }}><Input type="text" /></Box>
 
       <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
