@@ -4,16 +4,46 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setIsDarkModeToLocalStorage,
   setIsCompactModeToLocalStorage,
-} from "../../utils";
+  appModeCssClass,
+  getAppModeCssClassName,
+} from "trmrk-browser/src/domUtils/core";
+
+import { MtblRefValue } from "trmrk/src/core";
+
+import { AppTheme, getAppTheme, currentAppTheme } from "../../app-theme/core";
+
+import {
+  FloatingTopBarPanelHeaderData,
+  FloatingTopBarPanelHeaderOffset,
+} from "../../components/floatingTopBarPanel/FloatingTopBarPanel";
 
 import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 import { AppBarReducers, AppBarSelectors } from "../..//redux/appBarData";
+
+import {
+  FloatingVariable,
+  updateFloatingVariableValue,
+} from "../../components/floatingTopBarPanel/FloatingTopBarPanel";
 
 export interface UseAppBarProps {
   appDataSelectors: AppDataSelectors;
   appDataReducers: AppDataReducers;
   appBarSelectors: AppBarSelectors;
   appBarReducers: AppBarReducers;
+  floatingVariable?: FloatingVariable | null | undefined;
+  appHeaderBeforeScrolling?:
+    | ((
+        data: FloatingTopBarPanelHeaderData
+      ) => boolean | null | undefined | void)
+    | null
+    | undefined;
+  appHeaderScrolling?:
+    | ((
+        data: FloatingTopBarPanelHeaderData,
+        offset: FloatingTopBarPanelHeaderOffset
+      ) => void)
+    | null
+    | undefined;
 }
 
 export interface UseAppBarResult {
@@ -43,11 +73,13 @@ export interface UseAppBarResult {
   setOptionsMenuIconBtnEl: React.Dispatch<
     React.SetStateAction<HTMLButtonElement | null>
   >;
-  appBarRefreshReqsCount: number;
+  appBarHeightRefreshReqsCount: number;
+  appBarScrollRefreshReqsCount: number;
   appTheme: AppTheme;
   currentAppTheme: MtblRefValue<AppTheme>;
   appThemeClassName: string;
   appModeCssClass: MtblRefValue<string>;
+  floatingVariable?: FloatingVariable | null | undefined;
   handleSettingsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   handleOptionsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   appearenceMenuBtnRefAvailable: (btnRef: HTMLButtonElement | null) => void;
@@ -58,21 +90,15 @@ export interface UseAppBarResult {
   handleCompactModeToggled: (isCompactMode: boolean) => void;
   handleDarkModeToggled: (isDarkMode: boolean) => void;
   appBarToggled: (showAppBar: boolean) => void;
+  appHeaderBeforeScrolling: (
+    data: FloatingTopBarPanelHeaderData
+  ) => boolean | null | undefined | void;
   appHeaderScrolling: (
     data: FloatingTopBarPanelHeaderData,
     offset: FloatingTopBarPanelHeaderOffset
   ) => void;
   updateHeaderHeight: (newAppBarRowsCount: number) => void;
 }
-
-import { AppTheme, getAppTheme, currentAppTheme } from "../../app-theme/core";
-import { appModeCssClass, getAppModeCssClassName } from "../..//utils";
-
-import {
-  FloatingTopBarPanelHeaderData,
-  FloatingTopBarPanelHeaderOffset,
-} from "../../components/floatingTopBarPanel/FloatingTopBarPanel";
-import { MtblRefValue } from "trmrk/src/core";
 
 export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
   const [appHeaderHeight, setAppHeaderHeight] = React.useState<number | null>(
@@ -85,8 +111,12 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
 
   const appBarRowsCount = useSelector(props.appBarSelectors.getAppBarRowsCount);
 
-  const appBarRefreshReqsCount = useSelector(
-    props.appBarSelectors.getAppBarRefreshReqsCount
+  const appBarHeightRefreshReqsCount = useSelector(
+    props.appBarSelectors.getAppBarHeightRefreshReqsCount
+  );
+
+  const appBarScrollRefreshReqsCount = useSelector(
+    props.appBarSelectors.getAppBarScrollRefreshReqsCount
   );
 
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
@@ -194,6 +224,19 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     dispatch(props.appDataReducers.setShowAppBar(showAppBar));
   }, []);
 
+  const appHeaderBeforeScrolling = React.useCallback(
+    (data: FloatingTopBarPanelHeaderData) => {
+      let handleScroll: boolean | null | undefined | void = true;
+
+      if (props.appHeaderBeforeScrolling) {
+        handleScroll = props.appHeaderBeforeScrolling(data);
+      }
+
+      return handleScroll;
+    },
+    [props.appHeaderBeforeScrolling]
+  );
+
   const appHeaderScrolling = React.useCallback(
     (
       data: FloatingTopBarPanelHeaderData,
@@ -205,8 +248,12 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
       if (appHeaderHeight === null) {
         setAppHeaderHeight(data.headerHeight);
       }
+
+      if (props.appHeaderScrolling) {
+        props.appHeaderScrolling(data, offset);
+      }
     },
-    [headerRef, bodyRef, appHeaderHeight]
+    [headerRef, bodyRef, appHeaderHeight, props.appHeaderScrolling]
   );
 
   const updateHeaderHeight = React.useCallback(
@@ -218,8 +265,13 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
         const newHeaderHeight = newAppBarRowsCount * appBarRowHeightPx.current;
 
         headerEl.style.height = `${newHeaderHeight}px`;
-        bodyEl.style.top = `${newHeaderHeight}px`;
         headerEl.style.top = "0px";
+
+        updateFloatingVariableValue(
+          bodyEl,
+          newHeaderHeight,
+          props.floatingVariable
+        );
 
         if (newHeaderHeight !== appHeaderHeight) {
           setAppHeaderHeight(newHeaderHeight);
@@ -228,23 +280,6 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     },
     [headerRef, bodyRef, appHeaderHeight, appBarRowHeightPx]
   );
-
-  /* useEffect(() => {
-    updateHeaderHeight(appBarRowsCount);
-  }, [
-    appTheme,
-    appBarRowsCount,
-    appBarRefreshReqsCount,
-    appHeaderHeight,
-    showAppBar,
-    showAppBarToggleBtn,
-    showOptionsMenuBtn,
-    appSettingsMenuIsOpen,
-    appearenceMenuIsOpen,
-    optionsMenuIsOpen,
-    appearenceMenuIconBtnEl,
-    appBarRowHeightPx,
-  ]); */
 
   return {
     appBarRowsCount,
@@ -267,11 +302,13 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     setAppearenceMenuIconBtnEl,
     optionsMenuIconBtnEl,
     setOptionsMenuIconBtnEl,
-    appBarRefreshReqsCount,
+    appBarHeightRefreshReqsCount,
+    appBarScrollRefreshReqsCount,
     appTheme,
     currentAppTheme,
     appThemeClassName,
     appModeCssClass,
+    floatingVariable: props.floatingVariable,
     handleSettingsClick,
     handleOptionsClick,
     appearenceMenuBtnRefAvailable,
@@ -282,6 +319,7 @@ export const useAppBar = (props: UseAppBarProps): UseAppBarResult => {
     handleCompactModeToggled,
     handleDarkModeToggled,
     appBarToggled,
+    appHeaderBeforeScrolling,
     appHeaderScrolling,
     updateHeaderHeight,
   };

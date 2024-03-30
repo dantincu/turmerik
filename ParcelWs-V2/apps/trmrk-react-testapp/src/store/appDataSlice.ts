@@ -2,15 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import trmrk from "trmrk";
 
-import { trmrk_react } from "trmrk-react";
+import trmrk_browser from "trmrk-browser";
+
 import { ReducerAction } from "trmrk-react/src/redux/core";
+
 import {
   AppData,
   AppDataSelectors,
   AppDataReducers,
 } from "trmrk-react/src/redux/appData";
 
-const trmrk_react_utils = trmrk_react.utils;
+const trmrk_react_utils = trmrk_browser.domUtils.default;
 
 const appDataSlice = createSlice({
   name: "appData",

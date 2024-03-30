@@ -1,5 +1,8 @@
 import React, { useRef } from "react";
 
+import trmrk_browser from "trmrk-browser";
+const domUtils = trmrk_browser.domUtils.default;
+
 import "./FloatingTopBarPanel.scss";
 
 export interface FloatingTopBarPanelProps {
@@ -12,28 +15,68 @@ export interface FloatingTopBarPanelProps {
   afterHeaderContent?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   showHeader: boolean;
   pinHeader: boolean;
+  floatingVariable: FloatingVariable;
   headerHeight?: number | null | undefined;
   scrollableY?: boolean | null | undefined;
   scrollableX?: boolean | null | undefined;
+  beforeScrolling?: (data: FloatingTopBarPanelHeaderData) => boolean | null | undefined | void;
   scrolling?: (data: FloatingTopBarPanelHeaderData, offset: FloatingTopBarPanelHeaderOffset) => void;
   topBarRefreshReqsCount?: number | null | undefined;
   bodyBottomPaddingFactor?: number | null | undefined;
+  scrollRefreshReqsCount?: number | null | undefined;
 }
 
 export interface FloatingTopBarPanelHeaderData {
+  parentEl: HTMLDivElement;
   headerEl: HTMLDivElement;
   bodyEl: HTMLDivElement;
   parentHeight: number;
   headerHeight: number;
-  bodyElBeforeLastScrollTop: number;
+  // bodyElBeforeLastScrollTop: number;
   bodyElLastScrollTop: number;
   showHeaderNow: boolean;
   bodyBottomPaddingFactor: number;
+  floatingVariable: FloatingVariable;
+  floatingVariableValue: number;
 }
 
 export interface FloatingTopBarPanelHeaderOffset {
   headerElTopOffset: number;
   mainElTopOffset: number;
+}
+
+export enum FloatingVariable {
+  BodyTop,
+  BodyTopPadding,
+}
+
+export const updateFloatingVariableValue = (
+  bodyEl: HTMLDivElement,
+  bodyTopOffset: number,
+  floatingVariable: FloatingVariable | null | undefined
+) => {
+  switch (floatingVariable) {
+    case FloatingVariable.BodyTop:
+      bodyEl.style.top = `${bodyTopOffset}px`;
+      break;
+    default:
+      // console.log("updateFloatingVariable bodyTopOffset", bodyTopOffset);
+      bodyEl.style.paddingTop = `${bodyTopOffset}px`;
+      break;
+  }
+
+  return bodyTopOffset;
+}
+
+export const getFloatingVariableValue = (
+  bodyEl: HTMLDivElement,
+  floatingVariable: FloatingVariable | null | undefined) => {
+  switch (floatingVariable) {
+    case FloatingVariable.BodyTop:
+      return bodyEl.offsetTop;
+    default:
+      return domUtils.extractFloatNumber(bodyEl.style.paddingTop) as number;
+  }
 }
 
 export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
@@ -43,6 +86,8 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
 
   const appPanelHeaderData = useRef({} as FloatingTopBarPanelHeaderData);
 
+  const [ scrollRefreshReqsCount, setScrollRefreshReqsCount ] = React.useState(props.scrollRefreshReqsCount ?? 0);
+
   const [ showHeader, setShowHeader]  = React.useState(props.showHeader);
   const [ headerHeight, setHeaderHeight ] = React.useState(props.headerHeight);
 
@@ -51,45 +96,58 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
     const headerEl = data.headerEl;
     const scrollTop = bodyEl.scrollTop;
 
-    if (scrollTop <= 0 || data.showHeaderNow) { /* technically, the scrollTop should never be negative, but I've previously seen a negative value for
-      this property on ios when using the document as main element and scrolling top and then dragging the top margin (like in a mobile refresh request) */
-      data.bodyElLastScrollTop = 0;
-      bodyEl.style.top = `${data.headerHeight}px`;
-      headerEl.style.top = `0px`;
-      
-      if (data.bodyBottomPaddingFactor > 0) {
-        bodyEl.style.paddingBottom = "0px";
-      }
+    let handle = true;
 
-      if (props.scrolling) {
-        props.scrolling(data, {
-          headerElTopOffset: 0,
-          mainElTopOffset: data.headerHeight,
-        });
-      }
-    } else if (bodyEl.scrollHeight - bodyEl.scrollTop - bodyEl.clientHeight >= 1) {
-      const prevScrollTop = data.bodyElLastScrollTop;
-      data.bodyElLastScrollTop = scrollTop;
+    if (props.beforeScrolling) {
+      handle = props.beforeScrolling(data) ?? true;
+    }
 
-      const scrollTopDiff = scrollTop - prevScrollTop;
-      let mainElTopOffset = data.bodyEl.offsetTop - scrollTopDiff;
+    if (handle) {
+      if (scrollTop <= 0 || data.showHeaderNow) { /* technically, the scrollTop should never be negative, but I've previously seen a negative value for
+        this property on ios when using the document as main element and scrolling top and then dragging the top margin (like in a mobile refresh request) */
 
-      mainElTopOffset = Math.max(0, mainElTopOffset);
-      mainElTopOffset = Math.min(mainElTopOffset, data.headerHeight);
-      const headerElTopOffset = mainElTopOffset - data.headerHeight;
+        data.bodyElLastScrollTop = scrollTop;
+        headerEl.style.top = `0px`;
 
-      bodyEl.style.top = `${mainElTopOffset}px`;
-      headerEl.style.top = `${headerElTopOffset}px`;
+        data.floatingVariableValue = updateFloatingVariableValue(bodyEl, data.headerHeight, data.floatingVariable);
+        
+        if (data.bodyBottomPaddingFactor > 0) {
+          bodyEl.style.paddingBottom = "0px";
+        }
 
-      if (data.bodyBottomPaddingFactor > 0) {// This is needed to prevent the screen shaking upon scrolling to the bottom of the page on mobile devices
-        bodyEl.style.paddingBottom = `${data.bodyBottomPaddingFactor * data.headerHeight}px`;
-      }
+        if (props.scrolling) {
+          props.scrolling(data, {
+            headerElTopOffset: 0,
+            mainElTopOffset: data.headerHeight,
+          });
+        }
+      } else if (bodyEl.scrollHeight - bodyEl.scrollTop - bodyEl.clientHeight >= 1) {
+        const prevScrollTop = data.bodyElLastScrollTop;
+        data.bodyElLastScrollTop = scrollTop;
 
-      if (props.scrolling) {
-        props.scrolling(data, {
-          headerElTopOffset: headerElTopOffset,
-          mainElTopOffset: mainElTopOffset,
-        });
+        const scrollTopDiff = scrollTop - prevScrollTop;
+        // const floatingVariableValue = getFloatingVariableValue(data.bodyEl, data.floatingVariable);
+        const floatingVariableValue = data.floatingVariableValue;
+        let mainElTopOffset = floatingVariableValue - scrollTopDiff;
+
+        mainElTopOffset = Math.max(0, mainElTopOffset);
+        mainElTopOffset = Math.min(mainElTopOffset, data.headerHeight);
+        const headerElTopOffset = mainElTopOffset - data.headerHeight;
+
+        headerEl.style.top = `${headerElTopOffset}px`;
+        // console.log("headerElTopOffset", headerElTopOffset, mainElTopOffset, data.headerHeight);
+        data.floatingVariableValue = updateFloatingVariableValue(bodyEl, mainElTopOffset, data.floatingVariable);
+        
+        if (data.bodyBottomPaddingFactor > 0) {// This is needed to prevent the screen shaking upon scrolling to the bottom of the page on mobile devices
+          bodyEl.style.paddingBottom = `${data.bodyBottomPaddingFactor * data.headerHeight}px`;
+        }
+
+        if (props.scrolling) {
+          props.scrolling(data, {
+            headerElTopOffset: headerElTopOffset,
+            mainElTopOffset: mainElTopOffset,
+          });
+        }
       }
     }
   }, [])
@@ -126,12 +184,17 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
         headerEl.style.height = `${props.headerHeight}px`;
       }
 
+      // console.log("headerEl.clientHeight", headerEl.clientHeight);
+
       appPanelHeaderData.current = {
+        parentEl: parentEl,
         headerEl: headerEl,
         bodyEl: mainEl,
         headerHeight: headerEl.clientHeight,
         parentHeight: parentEl.clientHeight,
-        bodyElBeforeLastScrollTop: mainEl.scrollTop,
+        floatingVariable: props.floatingVariable,
+        floatingVariableValue: getFloatingVariableValue(mainEl, props.floatingVariable),
+        // bodyElBeforeLastScrollTop: mainEl.scrollTop,
         bodyElLastScrollTop: mainEl.scrollTop,
         showHeaderNow: showHeaderToggled && props.showHeader,
         bodyBottomPaddingFactor: props.bodyBottomPaddingFactor ?? 0
@@ -145,10 +208,10 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
       if (headerEl) {
         if ((showHeaderToggled || headerHeightChanged) && props.headerHeight !== null){
           headerEl.style.height = `${props.headerHeight}px`;
-          mainEl.style.top = `${props.headerHeight}px`;
+          appPanelHeaderData.current.floatingVariableValue = updateFloatingVariableValue(mainEl, props.headerHeight!, props.floatingVariable);
         }
       } else {
-        mainEl.style.top = "0px";
+        appPanelHeaderData.current.floatingVariableValue = updateFloatingVariableValue(mainEl, 0, props.floatingVariable);
       }
     }
 
@@ -158,6 +221,11 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
 
     if (headerHeightChanged) {
       setHeaderHeight(props.headerHeight);
+    }
+
+    if (scrollRefreshReqsCount !== (props.scrollRefreshReqsCount ?? 0)) {
+      setScrollRefreshReqsCount(props.scrollRefreshReqsCount ?? 0);
+      onScroll();
     }
 
     if (addListeners) {
@@ -170,7 +238,6 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
     props.showHeader,
     showHeader,
     props.pinHeader,
-    // props.topBarRefreshReqsCount,
     props.headerHeight,
     props.showHeader,
     props.headerContent,
@@ -178,7 +245,9 @@ export default function FloatingTopBarPanel(props: FloatingTopBarPanelProps) {
     parentRef,
     headerRef,
     bodyRef,
-    props.bodyBottomPaddingFactor ]);
+    props.bodyBottomPaddingFactor,
+    scrollRefreshReqsCount,
+    props.scrollRefreshReqsCount ]);
 
   return (<div className={["trmrk-ftb-panel", props.className].join(" ")} ref={parentRef}>
     { (props.headerContent && props.showHeader) ?

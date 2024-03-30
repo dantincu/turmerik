@@ -394,3 +394,8 @@ export const capitalizeFirstLetter = (str: string) => {
 
   return str;
 };
+
+export const transformStr = (
+  inStr: string,
+  convertor: (chr: string, idx: number) => string | null
+) => [...inStr].map(convertor).join("");

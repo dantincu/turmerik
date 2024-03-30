@@ -16,17 +16,43 @@ import { useAppBar } from "trmrk-react/src/hooks/useAppBar/useAppBar";
 import FloatingTopBarAppModule from "trmrk-react/src/components/floatingTopBarAppModule/FloatingTopBarAppModule";
 import NotFound from "../../pages/notFound/NotFound";
 
+import { FloatingTopBarPanelHeaderData, FloatingTopBarPanelHeaderOffset } from "trmrk-react/src/components/floatingTopBarPanel/FloatingTopBarPanel";
+
 export interface AppModuleProps {
   basePath: string;
   rootPath: string;
 }
 
 export default function AppModule(props: AppModuleProps) {
+  const appHeaderBeforeScrolling = React.useRef<((
+    data: FloatingTopBarPanelHeaderData
+  ) => boolean | null | undefined | void) | null>(null);
+
+  const appHeaderScrolling = React.useRef<((
+    data: FloatingTopBarPanelHeaderData,
+    offset: FloatingTopBarPanelHeaderOffset
+  ) => void) | null>(null);
+
+  const appHeaderBeforeScrollingHandler = React.useCallback((data: FloatingTopBarPanelHeaderData) => {
+    if (appHeaderBeforeScrolling.current)  {
+      return appHeaderBeforeScrolling.current(data);
+    }
+  }, [appHeaderBeforeScrolling]);
+
+  const appHeaderScrollingHandler = React.useCallback((data: FloatingTopBarPanelHeaderData,
+    offset: FloatingTopBarPanelHeaderOffset) => {
+    if (appHeaderScrolling.current)  {
+      appHeaderScrolling.current(data, offset);
+    }
+  }, [appHeaderBeforeScrolling]);
+
   const appBar = useAppBar({
     appBarReducers: appBarReducers,
     appBarSelectors: appBarSelectors,
     appDataReducers: appDataReducers,
     appDataSelectors: appDataSelectors,
+    appHeaderBeforeScrolling: appHeaderBeforeScrollingHandler,
+    appHeaderScrolling: appHeaderScrollingHandler
   });
 
   const [ isFirstRender, setIsFirstRender ] = React.useState(true);
@@ -45,10 +71,29 @@ export default function AppModule(props: AppModuleProps) {
     }
   }
 
+  const onRefreshClick = () => {
+    dispatch(appBarReducers.incAppBarHeightRefreshReqsCount());
+    dispatch(appBarReducers.incAppBarScrollRefreshReqsCount());
+  }
+
   useEffect(() => {
+    const refreshBtnEl = refreshBtnRef.current;
+
+    if (refreshBtnEl) {
+      refreshBtnEl.addEventListener("click", onRefreshClick);
+    }
+
     if (isFirstRender) {
       setIsFirstRender(false);
       dispatch(appBarReducers.setAppBarRowsCount(1));
+    }
+
+    // console.log("appHeaderBeforeScrolling1", appHeaderBeforeScrolling.current, appHeaderScrolling.current);
+
+    return () => {      
+      if (refreshBtnEl) {
+        refreshBtnEl.removeEventListener("click", onRefreshClick);
+      }
     }
   }, [
     isFirstRender,
@@ -58,13 +103,15 @@ export default function AppModule(props: AppModuleProps) {
     refreshBtnRef,
     appBarRowsCount,
     appBar.appBarRowsCount,
-    appBar.appBarRefreshReqsCount,
+    appBar.appBarHeightRefreshReqsCount,
     appBar.appHeaderHeight,
     appBar.showAppBar,
     appBar.appSettingsMenuIsOpen,
     appBar.appearenceMenuIsOpen,
     appBar.appearenceMenuIconBtnEl,
-    appBar.appBarRowHeightPx ]);
+    appBar.appBarRowHeightPx,
+    appHeaderBeforeScrolling,
+    appHeaderScrolling ]);
 
   const basePaths = {
     basePath: props.basePath,
@@ -89,7 +136,9 @@ export default function AppModule(props: AppModuleProps) {
             <ResizablesDemo
               refreshBtnRef={refreshBtnRef}
               urlPath={`${props.basePath}resizables-demo`}
-              {...basePaths} />}></Route>
+              {...basePaths}
+              appHeaderScrolling={appHeaderScrolling}
+              appHeaderBeforeScrolling={appHeaderBeforeScrolling} />}></Route>
           <Route path="" element={<HomePage
               urlPath={props.basePath}
               {...basePaths} />}></Route>

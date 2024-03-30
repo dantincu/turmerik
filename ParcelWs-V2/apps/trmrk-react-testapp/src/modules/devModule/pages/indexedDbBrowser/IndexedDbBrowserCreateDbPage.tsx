@@ -7,6 +7,8 @@ import { appDataReducers } from "../../../../store/appDataSlice";
 
 import trmrk from "trmrk";
 export interface IndexedDbBrowserCreateDbPageProps {
+  headerRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  bodyRef: React.MutableRefObject<HTMLDivElement | undefined>;
   urlPath: string;
 }
 
@@ -22,5 +24,5 @@ export default function IndexedDbBrowserCreateDbPage(
     dispatch(appDataReducers.setCurrentUrlPath(props.urlPath));
   }, [ props.urlPath ]);
 
-  return (<IndexedDbEditDb basePath={basePath} isNewDb={true} />);
+  return (<IndexedDbEditDb basePath={basePath} isNewDb={true} headerRef={props.headerRef} bodyRef={props.bodyRef} />);
 }

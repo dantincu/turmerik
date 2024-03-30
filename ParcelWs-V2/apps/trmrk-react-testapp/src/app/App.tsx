@@ -20,7 +20,7 @@ import AppModule from "../modules/appModule/AppModule";
 import NotFound from "../pages/notFound/NotFound";
 
 import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
-import { appModeCssClass, getAppModeCssClassName } from "trmrk-react/src/utils";
+import { appModeCssClass, getAppModeCssClassName } from "trmrk-browser/src/domUtils/core";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(

@@ -1,7 +1,7 @@
 import {
   isIPadOrIphone as isIPadOrIphoneFunc,
   isAndroid as isAndroidFunc,
-} from "./utils";
+} from "./core";
 
 export const isIPadOrIphone = isIPadOrIphoneFunc();
 export const isAndroid = isAndroidFunc();

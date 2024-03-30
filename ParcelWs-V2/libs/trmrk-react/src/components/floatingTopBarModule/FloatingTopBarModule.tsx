@@ -2,10 +2,10 @@ import React from "react";
 
 import FloatingTopBarPanel, { FloatingTopBarPanelProps } from "../floatingTopBarPanel/FloatingTopBarPanel";
 
-import { isIPadOrIphone, isAndroid, isMobile } from "../../constants";
+import { isIPadOrIphone, isAndroid, isMobile } from "trmrk-browser/src/domUtils/constants";
 
 import { getAppTheme, currentAppTheme } from "../../app-theme/core";
-import { appModeCssClass, getAppModeCssClassName } from "../../utils";
+import { appModeCssClass, getAppModeCssClassName } from "trmrk-browser/src/domUtils/core";
 
 import "./FloatingTopBarModule.scss";
 

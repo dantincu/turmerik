@@ -13,6 +13,8 @@ import IndexedDbEditDb from "../../indexedDbBrowser/IndexedDbEditDb";
 import { appDataReducers } from "../../../../store/appDataSlice";
 
 export interface IndexedDbBrowserEditDbPageProps {
+  headerRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  bodyRef: React.MutableRefObject<HTMLDivElement | undefined>;
   urlPath: string;
 }
 
@@ -47,7 +49,10 @@ export default function IndexedDbBrowserEditDbPage(
     searchParams,
     dbName,
     showCreateSuccessMsgValue,
-    showCreateSuccessMsg ]);
+    showCreateSuccessMsg,
+    props.headerRef,
+    props.bodyRef ]);
 
-  return (<IndexedDbEditDb basePath={basePath} isNewDb={false} dbName={dbName} showCreateSuccessMsg={showCreateSuccessMsg} />);
+  return (<IndexedDbEditDb basePath={basePath} isNewDb={false} dbName={dbName} headerRef={props.headerRef} bodyRef={props.bodyRef}
+    showCreateSuccessMsg={showCreateSuccessMsg} />);
 }

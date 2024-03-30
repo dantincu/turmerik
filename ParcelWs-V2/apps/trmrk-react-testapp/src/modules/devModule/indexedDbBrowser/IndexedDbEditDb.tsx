@@ -38,7 +38,11 @@ import { searchQuery } from "./data";
 
 import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 
+import { isMobile } from "trmrk-browser/src/domUtils/constants";
+
 export interface IndexedDbEditDbProps {
+  headerRef: React.MutableRefObject<HTMLDivElement | undefined>;
+  bodyRef: React.MutableRefObject<HTMLDivElement | undefined>;
   basePath: string;
   dbName?: string | null | undefined;
   isNewDb: boolean | null | undefined;
@@ -95,6 +99,9 @@ export default function IndexedDbEditDb(
   
   const editDbAddDatastoreReqsCount = useSelector(devModuleIndexedDbBrowserSelectors.getEditDbAddDatastoreReqsCount);
   const editDbAddDatastoreReqsCountRef = React.useRef(0);
+
+  const appBarHeightRefreshReqsCount = useSelector(appBarSelectors.getAppBarHeightRefreshReqsCount);
+  const appBarHeightRefreshReqsCountRef = React.useRef(0);
 
   const [ isFirstRender, setIsFirstRender ] = React.useState(true);
   const [ scrollToBottom, setScrollToBottom ] = React.useState(false);
@@ -375,8 +382,33 @@ export default function IndexedDbEditDb(
     } else if (scrollToBottom) {
       setScrollToBottom(false);
       
-      if (actionButtonsGroupEl) {
-        actionButtonsGroupEl.scrollIntoView();
+      if (actionButtonsGroupEl && appBarHeightRefreshReqsCount !== appBarHeightRefreshReqsCountRef.current) {
+        actionButtonsGroupEl.scrollIntoView(false);
+
+        /* if (props.bodyRef.current) {
+          // console.log("props.bodyRef.current", props.bodyRef.current);
+          const contentEl = props.bodyRef.current.querySelector(".trmrk-page-form") as HTMLDivElement;
+
+          if (contentEl) {
+            const viewportHeight = window.innerHeight;
+            const headerHeight = props.headerRef.current?.clientHeight ?? 0;
+            const bodyTop = props.bodyRef.current.offsetTop;
+            const bodyHeight = contentEl.clientHeight;
+
+            // console.log("bodyHeight", bodyHeight);
+            // console.log("viewportHeight", viewportHeight);
+            // console.log("headerHeight", headerHeight);
+            // console.log("bodyTop", bodyTop);
+
+            const newScrollTopPx = bodyHeight - viewportHeight - headerHeight + bodyTop;
+            props.bodyRef.current.scrollTop = newScrollTopPx;
+
+            // console.log("newScrollTopPx", newScrollTopPx, props.bodyRef.current.scrollTop);
+            
+            /* dispatch(appBarReducers.incAppBarHeightRefreshReqsCount());
+            dispatch(appBarReducers.incAppBarScrollRefreshReqsCount()); 
+          }
+        } */
       }
     } else if (editDbAddDatastoreReqsCount !== editDbAddDatastoreReqsCountRef.current) {
 
@@ -399,6 +431,7 @@ export default function IndexedDbEditDb(
 
       setDbStoresArr(newDbStoresArr);
       setScrollToBottom(true);
+      appBarHeightRefreshReqsCountRef.current++;
     } else if (!props.isNewDb && !isLoading && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
       load();
     }
@@ -409,6 +442,8 @@ export default function IndexedDbEditDb(
     isFirstRender,
     editDbAddDatastoreReqsCount,
     editDbAddDatastoreReqsCountRef,
+    appBarHeightRefreshReqsCount,
+    appBarHeightRefreshReqsCountRef,
     props.dbName,
     dbName,
     dbVersion,
@@ -424,7 +459,9 @@ export default function IndexedDbEditDb(
     validateDbStoresReqsCount,
     scrollToBottom,
     rootElRef,
-    actionButtonsGroupElRef ]);
+    actionButtonsGroupElRef,
+    props.headerRef,
+    props.bodyRef ]);
 
   return (<Box className="trmrk-page-form trmrk-indexeddb-create-db" ref={rootElRef}>
     { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">

@@ -15,9 +15,12 @@ import AppearenceSettingsMenu from "../settingsMenu/AppearenceSettingsMenu";
 import OptionsMenu from "../settingsMenu/OptionsMenu";
 import { UseAppBarResult } from "../../hooks/useAppBar/useAppBar";
 
+import { FloatingVariable } from "../floatingTopBarPanel/FloatingTopBarPanel";
+
 export interface FloatingTopBarAppModuleProps {
   appBar: UseAppBarResult,
   className: string;
+  floatingVariable?: FloatingVariable | null | undefined;
   headerClassName?: string | null | undefined;
   appBarClassName?: string | null | undefined;
   bodyClassName?: string | null | undefined;
@@ -52,8 +55,9 @@ export default function FloatingTopBarAppModule(
   }
 
   React.useEffect(() => {
+    // console.log("props.appBar.appBarRowsCount", props.appBar.appBarRowsCount);
     props.appBar.updateHeaderHeight(props.appBar.appBarRowsCount);
-  }, [props.appBar.appBarRefreshReqsCount, props.appBar.appBarRowsCount] );
+  }, [props.appBar.appBarHeightRefreshReqsCount, props.appBar.appBarScrollRefreshReqsCount, props.appBar.appBarRowsCount, props.floatingVariable ] );
 
   return (<FloatingTopBarModule
       className={props.className}
@@ -105,14 +109,17 @@ export default function FloatingTopBarAppModule(
         showAppBar={props.appBar.showAppBar}
         appBarToggled={props.appBar.appBarToggled} /> : null }
       bodyClassName={props.bodyClassName}
+      floatingVariable={props.floatingVariable ?? FloatingVariable.BodyTopPadding}
       showHeader={props.appBar.showAppBar}
       headerHeight={props.appBar.appHeaderHeight}
       pinHeader={!props.appBar.isCompactMode}
       isDarkMode={props.appBar.isDarkMode}
       isCompactMode={props.appBar.isCompactMode}
-      topBarRefreshReqsCount={props.appBar.appBarRefreshReqsCount}
+      topBarRefreshReqsCount={props.appBar.appBarHeightRefreshReqsCount}
       scrollableX={props.bodyScrollableX ?? props.appBar.isCompactMode}
       scrollableY={props.bodyScrollableY ?? props.appBar.isCompactMode}
+      beforeScrolling={props.appBar.appHeaderBeforeScrolling}
       scrolling={props.appBar.appHeaderScrolling}
-      bodyContent={props.children} />);
+      bodyContent={props.children}
+      scrollRefreshReqsCount={props.appBar.appBarScrollRefreshReqsCount} />);
 }

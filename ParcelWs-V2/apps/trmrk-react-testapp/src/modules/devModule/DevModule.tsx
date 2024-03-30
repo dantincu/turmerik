@@ -86,6 +86,10 @@ export default function DevModule(
     appBarSelectors: appBarSelectors,
     appDataReducers: appDataReducers,
     appDataSelectors: appDataSelectors,
+    appHeaderBeforeScrolling(data) {
+    },
+    appHeaderScrolling(data, offset) {
+    }
   });
 
   const appBarRowsCount = useSelector(appBarSelectors.getAppBarRowsCount);
@@ -110,13 +114,14 @@ export default function DevModule(
     appBarRowsCount,
     appBar.appTheme,
     appBar.appBarRowsCount,
-    // appBar.appBarRefreshReqsCount,
     appBar.appHeaderHeight,
     appBar.showAppBar,
     appBar.appSettingsMenuIsOpen,
     appBar.appearenceMenuIsOpen,
     appBar.appearenceMenuIconBtnEl,
     appBar.appBarRowHeightPx,
+    appBar.headerRef,
+    appBar.bodyRef,
     props.basePath,
     props.rootPath,
     urlPath,
@@ -131,10 +136,14 @@ export default function DevModule(
       appBarChildren={getAppBarContents(props.basePath, urlPath, baseUrlPath)}
       refreshBtnClicked={() => {}}>
         <Routes>
-          <Route path={"/indexeddb-browser"} element={<IndexedDbBrowser urlPath={`${props.basePath}/indexeddb-browser`} />} />
-          <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbBrowserCreateDbPage urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
-          <Route path={"/indexeddb-browser/edit-db"} element={<IndexedDbBrowserEditDbPage urlPath={`${props.basePath}/indexeddb-browser/edit-db`} />} />
-          <Route path="/" element={<DevModuleHomePage exitPath={props.rootPath} urlPath={props.basePath} />} />
+          <Route path={"/indexeddb-browser"} element={<IndexedDbBrowser
+            urlPath={`${props.basePath}/indexeddb-browser`} />} />
+          <Route path={"/indexeddb-browser/create-db"} element={<IndexedDbBrowserCreateDbPage
+            urlPath={`${props.basePath}/indexeddb-browser/create-db`} headerRef={appBar.headerRef} bodyRef={appBar.bodyRef} />} />
+          <Route path={"/indexeddb-browser/edit-db"} element={<IndexedDbBrowserEditDbPage
+            urlPath={`${props.basePath}/indexeddb-browser/edit-db`} headerRef={appBar.headerRef} bodyRef={appBar.bodyRef} />} />
+          <Route path="/" element={<DevModuleHomePage
+            exitPath={props.rootPath} urlPath={props.basePath} />} />
           <Route path="*" element={ <NotFound /> } />
         </Routes>
       </FloatingTopBarAppModule>);
