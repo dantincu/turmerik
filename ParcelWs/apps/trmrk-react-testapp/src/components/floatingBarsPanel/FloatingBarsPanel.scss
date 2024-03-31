@@ -1,0 +1,67 @@
+@import "../../styles/_mixins";
+
+.trmrk-ftbs-panel,
+.trmrk-ftbs-panel-view,
+.trmrk-ftbs-panel-body,
+.trmrk-ftbs-panel-header,
+.trmrk-ftbs-panel-footer {
+  display: flex;
+  position: absolute;
+}
+
+.trmrk-ftbs-panel,
+.trmrk-ftbs-panel-view,
+.trmrk-ftbs-panel-body,
+.trmrk-ftbs-panel-header,
+.trmrk-ftbs-panel-footer {
+  width: 100%;
+}
+
+.trmrk-ftbs-panel-header,
+.trmrk-ftbs-panel-footer {
+  overflow: hidden;
+  z-index: 1;
+  
+  @include height-rows();
+}
+
+.trmrk-ftbs-panel,
+.trmrk-ftbs-panel-view {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.trmrk-ftbs-panel-view {
+  margin: 0;
+  inset: 0;
+}
+
+.trmrk-ftbs-panel-body {
+  margin: 0;
+}
+
+.trmrk-ftbs-panel {
+  @include padding-top-rows();
+  @include padding-bottom-rows();
+  
+  transition: padding-top 0.3s,
+              padding-bottom 0.3s;
+}
+
+.trmrk-ftbs-panel-header.trmrk-top-hidden {
+  @include height-negative-top-rows();
+}
+
+.trmrk-ftbs-panel-footer.trmrk-bottom-hidden {
+  @include height-negative-bottom-rows();
+}
+
+.trmrk-ftbs-panel-header {
+  top: 0px;
+  transition: top 0.3s;
+}
+
+.trmrk-ftbs-panel-footer {
+  bottom: 0px;
+  transition: bottom 0.3s;
+}

@@ -20,10 +20,15 @@ namespace Turmerik.Core.LocalDeviceEnv
         TImmtbl LoadData();
     }
 
+    public static class AppConfigCore
+    {
+        public const string JSON_FILE_NAME = "data.json";
+    }
+
     public abstract class AppConfigCoreBase<TImmtbl, TMtblSrlzbl> : IAppConfigCore<TImmtbl, TMtblSrlzbl>
         where TImmtbl : class
     {
-        public const string JSON_FILE_NAME = "data.json";
+        public const string JSON_FILE_NAME = AppConfigCore.JSON_FILE_NAME;
 
         private Action<TImmtbl> dataLoaded;
 

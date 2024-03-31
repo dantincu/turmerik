@@ -1,0 +1,18 @@
+@import "../../styles/_mixins.scss";
+
+.trmrk-resizable-panel {
+  .trmrk-draggable-margin, .trmrk-draggable-corner, .trmrk-resizable-content {
+    position: absolute;
+    display: block;
+  }
+
+  @include resizable-panel-base(0px);
+
+  &.trmrk-regular-border {
+    @include resizable-panel(4px);
+  }
+
+  &.trmrk-thick-border {
+    @include resizable-panel(16px);
+  }
+}

@@ -1,1 +1,5 @@
-export default {};
+import { TrmrkBlazorApp } from "./app";
+
+export default {
+  TrmrkBlazorApp,
+};

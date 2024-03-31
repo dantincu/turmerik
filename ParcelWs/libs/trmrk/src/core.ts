@@ -40,6 +40,60 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   return retVal;
 };
 
+export const errToString = (
+  error: Error | any,
+  nullifyEmptyStr?: boolean | null | undefined
+) => {
+  let errMsg: string | null = null;
+  const errTypeOf = typeof error;
+
+  if (errTypeOf === "string") {
+    errMsg = error;
+  } else if (errTypeOf === "object") {
+    errMsg = error.message ?? error.cause;
+  } else {
+    errMsg = error?.toString();
+  }
+
+  errMsg ??= null;
+  nullifyEmptyStr ??= true;
+
+  if (nullifyEmptyStr && typeof errMsg === "string" && errMsg.length === 0) {
+    errMsg = null;
+  }
+
+  return errMsg;
+};
+
+/**
+ * taken from https://stackoverflow.com/questions/33547583/safe-way-to-extract-property-names
+ **/
+export const proxiedPropsOf = <TObj>(obj?: TObj) => {
+  return new Proxy(
+    {},
+    {
+      get: (_, prop) => prop,
+      set: () => {
+        throw Error("Set not supported");
+      },
+    }
+  ) as {
+    [P in keyof TObj]?: P;
+  };
+};
+
+export const propOf = <TObj>(name: keyof TObj) => {
+  return name;
+};
+
+export const propsOf = <TObj>(_obj: TObj | undefined = undefined) => {
+  const result = <T extends keyof TObj>(name: T) => {
+    return name;
+  };
+
+  return result;
+};
+
 export const findKvp = <TValue>(
   arr: TValue[] | readonly TValue[],
   predicate: (
@@ -261,6 +315,14 @@ export const withVal = <TIn, TOut>(
   convertor: (input: TIn) => TOut
 ) => convertor(inVal);
 
+export const actWithVal = <TVal>(
+  val: TVal,
+  action: (value: TVal) => unknown | any | void
+) => {
+  action(val);
+  return val;
+};
+
 export const subStr = (
   str: string,
   opts: {
@@ -332,3 +394,8 @@ export const capitalizeFirstLetter = (str: string) => {
 
   return str;
 };
+
+export const transformStr = (
+  inStr: string,
+  convertor: (chr: string, idx: number) => string | null
+) => [...inStr].map(convertor).join("");

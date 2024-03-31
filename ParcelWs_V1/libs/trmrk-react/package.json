@@ -1,0 +1,38 @@
+{
+  "name": "trmrk-react",
+  "version": "0.1.0",
+  "description": "React-related js code used across Turmerik Apps",
+  "type": "module",
+  "scripts": {
+    "watch": "parcel watch ./src/targets/any/index.ts --dist-dir ./dist/dev-any",
+    "build": "parcel build ./src/targets/any/index.ts --dist-dir ./dist/prod-any"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.10.3",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.43",
+    "@types/uuid": "^9.0.7",
+    "buffer": "^6.0.3",
+    "parcel": "^2.10.3",
+    "process": "^0.11.10",
+    "react": "^18.0.0",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.15",
+    "@mui/material": "^5.14.15",
+    "@reduxjs/toolkit": "^2.0.1",
+    "axios": "^1.5.1",
+    "react-redux": "^9.0.4",
+    "react-router-dom": "^6.17.0",
+    "trmrk": "../trmrk",
+    "trmrk-axios": "../trmrk-axios",
+    "trmrk-browser": "../trmrk-browser",
+    "uuid": "^9.0.1"
+  }
+}

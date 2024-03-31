@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Utility;
 using Turmerik.NetCore.Utility;
 
 namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 {
-    public class ProgramConfig
+    public class ProgramConfig : ProgramConfigCoreBase<ProgramConfig.Profile>
     {
-        public List<Profile> Profiles { get; set; }
-
         public class File
         {
             public string InputFilePath { get; set; }
@@ -65,11 +64,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
             public List<Script> OnAfterScripts { get; set; }
         }
 
-        public class Profile
+        public class Profile : ProgramConfigProfileCoreBase
         {
-            public string ProfileName { get; set; }
-            public string ProfileRelFilePath { get; set; }
-
             public List<ScriptsGroup> ScriptGroups { get; set; }
             public List<FilesGroup> FileGroups { get; set; }
         }

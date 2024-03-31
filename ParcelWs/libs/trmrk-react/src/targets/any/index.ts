@@ -1,9 +1,15 @@
-import { components } from "../../components";
 import { app_theme } from "../../app-theme";
-import * as store from "../../store";
+import { components } from "../../components";
+import { trmrk_hooks } from "../../hooks";
+import { trmrk_redux } from "../../redux";
+import { trmrk_icons } from "../../components/icons";
+import * as constants from "../../../../trmrk-browser/src/domUtils/constants";
 
 export const trmrk_react = {
+  app_theme,
   components,
-  ...app_theme,
-  store,
+  trmrk_hooks,
+  trmrk_redux,
+  trmrk_icons,
+  constants,
 };

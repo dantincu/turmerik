@@ -1,0 +1,41 @@
+.my-resizable-panel {
+  background-color: chocolate;
+  width: 200px;
+  height: 200px;
+  margin-left: 100px;
+  position: absolute;
+  display: block;
+  border-radius: 2px;
+}
+
+.my-resizable-panel1 {
+  background-color: chocolate;
+  width: 200px;
+  height: 200px;
+  margin-left: 100px;
+  margin-top: 500px;
+  position: absolute;
+  display: block;
+  border-radius: 2px;
+}
+
+.my-resizable-panel .trmrk-resizable-content {
+  background-color: darkslateblue;
+}
+
+.my-resizable-panel1 .trmrk-resizable-content {
+  background-color: darkslateblue;
+}
+
+.trmrk-indexeddb-create-dbstore {
+  display: block;
+}
+
+.trmrk-indexeddb-browser-app-bar-content { 
+  display: block;
+}
+
+.trmrk-indexeddb-create-db-app-bar-content, .trmrk-indexeddb-edit-db-app-bar-content {
+  display: block;
+  margin-top: -2.5em;
+}

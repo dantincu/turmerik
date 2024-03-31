@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextSerialization;
 
 namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 {
-    public interface IProgramConfigRetriever
+    public interface IProgramConfigRetriever : IProgramConfigRetrieverCore<ProgramConfig, ProgramConfig.Profile>
     {
         ProgramConfig LoadProgramConfig(
             string configFilePath = null);
@@ -18,7 +19,7 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
             ProgramConfig.Profile srcProfile);
     }
 
-    public class ProgramConfigRetriever : IProgramConfigRetriever
+    public class ProgramConfigRetriever : ProgramConfigRetrieverCoreBase<ProgramConfig, ProgramConfig.Profile>, IProgramConfigRetriever
     {
         public const string CONFIG_FILE_NAME = "config.json";
         public const string PROGRAM_CONFIG_DIR_NAME = "program-config";
@@ -29,16 +30,31 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         public ProgramConfigRetriever(
             IAppEnv appEnv,
-            IJsonConversion jsonConversion)
+            IJsonConversion jsonConversion) : base(appEnv, jsonConversion)
         {
-            this.appEnv = appEnv ?? throw new ArgumentNullException(
-                nameof(appEnv));
-
-            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
-                nameof(jsonConversion));
         }
 
-        public ProgramConfig LoadProgramConfig(
+        protected override ProgramConfig.Profile MergeProfilesCore(
+            ProgramConfig.Profile destnProfile,
+            ProgramConfig.Profile srcProfile)
+        {
+            destnProfile.ScriptGroups ??= new List<ProgramConfig.ScriptsGroup>();
+            destnProfile.FileGroups ??= new List<ProgramConfig.FilesGroup>();
+
+            if (srcProfile.ScriptGroups != null)
+            {
+                destnProfile.ScriptGroups.AddRange(srcProfile.ScriptGroups);
+            }
+
+            if (srcProfile.FileGroups != null)
+            {
+                destnProfile.FileGroups.AddRange(srcProfile.FileGroups);
+            }
+
+            return destnProfile;
+        }
+
+        /* public ProgramConfig LoadProgramConfig(
             string configFilePath = null)
         {
             configFilePath ??= appEnv.GetTypePath(
@@ -91,6 +107,6 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
             }
 
             return destnProfile;
-        }
+        } */
     }
 }

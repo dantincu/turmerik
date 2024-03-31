@@ -79,6 +79,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Jint", "Turmerik.J
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFilesCloner.ConsoleApp", "Turmerik.LocalFilesCloner.ConsoleApp\Turmerik.LocalFilesCloner.ConsoleApp.csproj", "{A133C317-4727-4D2A-A4E4-47FF7D745A8E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{64F5E958-F7DD-4526-A21F-3C9E7378B455}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.MkScripts.ConsoleApp", "Turmerik.MkScripts.ConsoleApp\Turmerik.MkScripts.ConsoleApp.csproj", "{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -205,6 +209,10 @@ Global
 		{A133C317-4727-4D2A-A4E4-47FF7D745A8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A133C317-4727-4D2A-A4E4-47FF7D745A8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A133C317-4727-4D2A-A4E4-47FF7D745A8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -244,6 +252,8 @@ Global
 		{FE96FFE8-F379-4FE0-BF6C-BB040021E1AA} = {FCA0DE8B-04E5-46F5-9549-654541BC02DC}
 		{62862ADE-ABAF-45C9-8BD6-5B8811C7F4C5} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 		{A133C317-4727-4D2A-A4E4-47FF7D745A8E} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{64F5E958-F7DD-4526-A21F-3C9E7378B455} = {FC13E95F-6405-4DF0-B40C-4D4D077A59AE}
+		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1} = {64F5E958-F7DD-4526-A21F-3C9E7378B455}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
