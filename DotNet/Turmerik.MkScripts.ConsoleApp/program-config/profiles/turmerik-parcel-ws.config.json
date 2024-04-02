@@ -20,17 +20,17 @@
               [ "..\\..\\libs\\trmrk-react" ],
               [ "..\\..\\apps\\trmrk-notes-blazorapp" ],
               [ "..\\..\\apps\\trmrk-react-testapp" ],
-              [ "..\\..\\apps\\trmrk-text-tranform-behavior" ],
-              [ "..\\..\\apps\\trmrk-text-tranform-behavior-testapp" ],
-              [ "..\\..\\apps\\trmrk-text-tranform-defaultbehavior" ],
-              [ "..\\..\\apps\\trmrk-text-tranform-mybehavior" ]
+              [ "..\\..\\apps\\trmrk-text-transform-behavior" ],
+              [ "..\\..\\apps\\trmrk-text-transform-behavior-testapp" ],
+              [ "..\\..\\apps\\trmrk-text-transform-defaultbehavior" ],
+              [ "..\\..\\apps\\trmrk-text-transform-mybehavior" ]
             ],
             "ArgFilters": {
               "libs": {
-                "Regex": "^\\.\\.\\\\\\.\\libs\\.*"
+                "Regexes": [ "^\\.\\.\\\\\\.\\.\\\\libs\\.*" ]
               },
               "apps": {
-                "Regex": "^\\.\\.\\\\\\.\\apps\\.*"
+                "Regexes": [ "^\\.\\.\\\\\\.\\.\\\\apps\\.*" ]
               }
             },
             "ArgsSetTpl": "\"{0}\"",
@@ -39,6 +39,10 @@
           "Files": [
             {
               "FileRelPath": "upd-pcks.bat",
+              "FileRelPathsMap": {
+                "libs": "upd-libs-pcks.bat",
+                "apps": "upd-apps-pcks.bat"
+              },
               "ContentSpecs": [
                 {
                   "TemplateLines": [
@@ -52,6 +56,10 @@
             },
             {
               "FileRelPath": "rm.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs.bat",
+                "apps": "rm-apps.bat"
+              },
               "ContentSpecs": [
                 {
                   "TemplateLines": [
@@ -65,6 +73,10 @@
             },
             {
               "FileRelPath": "rm-pcks.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-pcks.bat",
+                "apps": "rm-apps-pcks.bat"
+              },
               "ContentSpecs": [
                 {
                   "TemplateLines": [
@@ -78,6 +90,10 @@
             },
             {
               "FileRelPath": "rm-ch_dst.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-ch_dst.bat",
+                "apps": "rm-apps-ch_dst.bat"
+              },
               "ContentSpecs": [
                 {
                   "TemplateLines": [
@@ -104,17 +120,17 @@
           "libs\\trmrk-react\\_",
           "apps\\trmrk-notes-blazorapp\\_",
           "apps\\trmrk-react-testapp\\_",
-          "apps\\trmrk-text-tranform-behavior\\_",
-          "apps\\trmrk-text-tranform-behavior-testapp\\_",
-          "apps\\trmrk-text-tranform-defaultbehavior\\_",
-          "apps\\trmrk-text-tranform-mybehavior\\_"
+          "apps\\trmrk-text-transform-behavior\\_",
+          "apps\\trmrk-text-transform-behavior-testapp\\_",
+          "apps\\trmrk-text-transform-defaultbehavior\\_",
+          "apps\\trmrk-text-transform-mybehavior\\_"
         ],
         "Filters": {
           "libs": {
-            "Regex": "^libs\\.*"
+            "Regex": "^libs\\\\.*"
           },
           "apps": {
-            "Regex": "^apps\\.*"
+            "Regex": "^apps\\\\.*"
           }
         }
       },

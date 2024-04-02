@@ -8,7 +8,6 @@ using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
-using static Turmerik.NetCore.ConsoleApps.LocalFilesCloner.ProgramConfig;
 
 namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 {
@@ -19,8 +18,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         void NormalizeDirArgs(
             LocalDevicePathMacrosMapMtbl localDevicePathsMap,
-            FilesGroup filesGroup,
-            Folder dirArgs);
+            ProgramConfig.FilesGroup filesGroup,
+            ProgramConfig.Folder dirArgs);
     }
 
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
@@ -47,7 +46,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
                 DirPath = args.TempDir.DirPath
             };
 
-            localDevicePathMacrosRetriever.Normalize(args.LocalDevicePathsMap);
+            localDevicePathMacrosRetriever.Normalize(
+                args.LocalDevicePathsMap);
 
             if (args.Profile != null)
             {
@@ -66,8 +66,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         public void NormalizeDirArgs(
             LocalDevicePathMacrosMapMtbl localDevicePathsMap,
-            FilesGroup filesGroup,
-            Folder dirArgs)
+            ProgramConfig.FilesGroup filesGroup,
+            ProgramConfig.Folder dirArgs)
         {
             dirArgs.InputDirPath = NormalizePath(
                 localDevicePathsMap,
@@ -90,9 +90,9 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         private void NormalizeArgsProfile(
             ProgramArgs args,
-            Profile profile)
+            ProgramConfig.Profile profile)
         {
-            profile.ScriptGroups ??= new List<ScriptsGroup>();
+            profile.ScriptGroups ??= new List<ProgramConfig.ScriptsGroup>();
 
             foreach (var scriptsGroup in profile.ScriptGroups)
             {
@@ -117,8 +117,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         private void NormalizeScriptsListIfNotNull(
             ProgramArgs args,
-            ScriptsGroup scriptsGroup,
-            List<Script> scriptsList)
+            ProgramConfig.ScriptsGroup scriptsGroup,
+            List<ProgramConfig.Script> scriptsList)
         {
             if (scriptsList != null)
             {
@@ -145,7 +145,7 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         private void NormalizeFilesGroup(
             LocalDevicePathMacrosMapMtbl localDevicePathsMap,
-            FilesGroup filesGroup)
+            ProgramConfig.FilesGroup filesGroup)
         {
             filesGroup.InputDirPath = NormalizePath(
                 localDevicePathsMap,
@@ -210,7 +210,7 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
         private void NormalizeFileArgs(
             LocalDevicePathMacrosMapMtbl localDevicePathsMap,
             ProgramConfig.File fileArgs,
-            FilesGroup? filesGroup)
+            ProgramConfig.FilesGroup? filesGroup)
         {
             fileArgs.CloneTplLines ??= new List<string> { "{0}" };
 

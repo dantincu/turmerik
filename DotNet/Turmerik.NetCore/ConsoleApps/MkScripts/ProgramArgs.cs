@@ -19,8 +19,8 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
         public ProgramConfig Config { get; set; }
         public string ProfileName { get; set; }
         public string SectionName { get; set; }
-        public string RelPathIdxesFilterName { get; set; }
-        public string ContentArgsIdxesFilterName { get; set; }
+        public string RelDirPathsFilterName { get; set; }
+        public string ContentArgsFilterName { get; set; }
         public ProgramConfig.Profile Profile { get; set; }
         public ProgramConfig.ProfileSection Section { get; set; }
 

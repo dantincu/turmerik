@@ -5,10 +5,10 @@ for %arg in ("..\..\libs\trmrk",
 "..\..\libs\trmrk-react",
 "..\..\apps\trmrk-notes-blazorapp",
 "..\..\apps\trmrk-react-testapp",
-"..\..\apps\trmrk-text-tranform-behavior",
-"..\..\apps\trmrk-text-tranform-behavior-testapp",
-"..\..\apps\trmrk-text-tranform-defaultbehavior",
-"..\..\apps\trmrk-text-tranform-mybehavior") do (
+"..\..\apps\trmrk-text-transform-behavior",
+"..\..\apps\trmrk-text-transform-behavior-testapp",
+"..\..\apps\trmrk-text-transform-defaultbehavior",
+"..\..\apps\trmrk-text-transform-mybehavior") do (
   cd %arg
   .\upd-pcks.bat
 )

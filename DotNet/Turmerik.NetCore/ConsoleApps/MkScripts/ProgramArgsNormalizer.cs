@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextParsing.IndexesFilter;
 
@@ -109,6 +111,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                 new ProgramConfig.RelDirPaths
                 {
                     DirPathsArr = [ string.Empty ],
+                    NormDirPathsArr = [string.Empty],
                     Filters = new Dictionary<string, ProgramConfig.RawFilter>()
                 });
 
@@ -202,7 +205,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                         {
                             ItemsArr = contentSpecs.Args,
                             FiltersMap = contentSpecs.ArgFiltersMap,
-                            FilterName = args.ContentArgsIdxesFilterName,
+                            FilterName = args.ContentArgsFilterName,
                             ToStrArrSerializer = item => item
                         });
 
@@ -250,25 +253,26 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                 if (relDirPaths.DirPathsArr != null)
                 {
                     relDirPaths.DirPathsArr = relDirPaths.DirPathsArr.Select(
-                        dirPath => textMacrosReplacer.NormalizePath(
-                        args.LocalDevicePathsMap, dirPath,
-                        relDirPaths.DirPath)).ToArray();
+                        dirPath => textMacrosReplacer.ReplaceMacros(
+                            new TextMacrosReplacerOpts
+                            {
+                                InputText = dirPath,
+                                MacrosMap = args.LocalDevicePathsMap.GetPathsMap(),
+                            })).ToArray();
+
+                    relDirPaths.NormDirPathsArr ??= relDirPaths.DirPathsArr.Select(
+                        dirPath => NormPathH.AssurePathIsRooted(
+                            dirPath, () => relDirPaths.DirPath)).ToArray();
                 }
                 else
                 {
                     relDirPaths.DirPathsArr = baseDirPaths.DirPathsArr;
+                    relDirPaths.NormDirPathsArr ??= baseDirPaths.NormDirPathsArr;
                 }
 
-                if (relDirPaths.FiltersMap != null)
-                {
-                    relDirPaths.FiltersMap = NormalizeFilters(
-                        relDirPaths.Filters,
-                        baseDirPaths.FiltersMap);
-                }
-                else
-                {
-                    relDirPaths.FiltersMap = baseDirPaths.FiltersMap;
-                }
+                relDirPaths.FiltersMap ??= NormalizeFilters(
+                    relDirPaths.Filters,
+                    baseDirPaths.FiltersMap);
             }
             else
             {
@@ -287,16 +291,9 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
             {
                 contentSpecs.Args ??= dfContentSpecs.Args;
 
-                if (contentSpecs.ArgFiltersMap != null)
-                {
-                    contentSpecs.ArgFiltersMap = NormalizeFilters(
-                        contentSpecs.ArgFilters,
-                        dfContentSpecs.ArgFiltersMap);
-                }
-                else
-                {
-                    contentSpecs.ArgFiltersMap = dfContentSpecs.ArgFiltersMap;
-                }
+                contentSpecs.ArgFiltersMap ??= NormalizeFilters(
+                    contentSpecs.ArgFilters,
+                    dfContentSpecs.ArgFiltersMap);
 
                 contentSpecs.ArgsSetTpl ??= JoinLinesIfNotNull(
                     contentSpecs.ArgsSetTplLines) ?? dfContentSpecs.ArgsSetTpl;

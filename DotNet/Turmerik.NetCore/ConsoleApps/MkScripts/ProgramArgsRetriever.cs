@@ -63,9 +63,9 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                                 parser.ArgsFlagOpts(data, ["sc"],
                                     data => data.Args.SectionName = data.ArgFlagValue!.Single()),
                                 parser.ArgsFlagOpts(data, ["arg"],
-                                    data => data.Args.ContentArgsIdxesFilterName = data.ArgFlagValue!.Single()),
+                                    data => data.Args.ContentArgsFilterName = data.ArgFlagValue!.Single()),
                                 parser.ArgsFlagOpts(data, ["pth"],
-                                    data => data.Args.RelPathIdxesFilterName = data.ArgFlagValue!.Single())
+                                    data => data.Args.RelDirPathsFilterName = data.ArgFlagValue!.Single())
                             ]
                         })
                 }).Args;

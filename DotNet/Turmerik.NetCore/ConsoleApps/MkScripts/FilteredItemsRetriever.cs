@@ -36,7 +36,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                 var filter = opts.FiltersMap[opts.FilterName];
 
                 itemsArr = filteredIdxesRetriever.RetrieveItems(
-                    itemsArr, filter.Idxes!).Values.ToArray();
+                    itemsArr, filter.Idxes).Values.ToArray();
 
                 if (filter.Regex != null)
                 {

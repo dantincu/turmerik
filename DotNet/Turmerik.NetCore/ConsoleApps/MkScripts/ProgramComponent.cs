@@ -54,16 +54,23 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                         {
                             ItemsArr = file.RelDirPaths.DirPathsArr,
                             FiltersMap = file.RelDirPaths.FiltersMap,
-                            FilterName = args.RelPathIdxesFilterName,
+                            FilterName = args.RelDirPathsFilterName,
                             ToStringSerializer = item => item
                         });
 
                     foreach (var dirPath in dirPathsArr)
                     {
+                        string fileRelPath = file.FileRelPath;
+
+                        if (args.ContentArgsFilterName != null)
+                        {
+                            fileRelPath = file.FileRelPathsMap[args.ContentArgsFilterName];
+                        }
+
                         string filePath = Path.Combine(
                             file.RelDirPaths.DirPath,
                             dirPath,
-                            file.FileRelPath);
+                            fileRelPath);
 
                         FsH.CreateParentDirPath(filePath);
 

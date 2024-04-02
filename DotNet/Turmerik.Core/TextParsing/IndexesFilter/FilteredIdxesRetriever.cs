@@ -16,7 +16,7 @@ namespace Turmerik.Core.TextParsing.IndexesFilter
 
         Dictionary<int, T> RetrieveItems<T>(
             IList<T> inList,
-            IdxesFilter[] filtersArr);
+            IdxesFilter[]? filtersArr);
     }
 
     public class FilteredIdxesRetriever : IFilteredIdxesRetriever
@@ -37,17 +37,22 @@ namespace Turmerik.Core.TextParsing.IndexesFilter
 
         public Dictionary<int, T> RetrieveItems<T>(
             IList<T> inList,
-            IdxesFilter[] filtersArr)
+            IdxesFilter[]? filtersArr)
         {
             var idxesList = inList.Select(
                 (item, idx) => idx).ToList();
 
-            var filteredIdxes = RetrieveIdxes(new FilteredIdxesRetrieverOpts
+            var filteredIdxes = idxesList.ToList();
+
+            if (filtersArr != null)
             {
-                FiltersArr = filtersArr,
-                IdxesList = idxesList,
-                SortOutputList = true,
-            });
+                filteredIdxes = RetrieveIdxes(new FilteredIdxesRetrieverOpts
+                {
+                    FiltersArr = filtersArr,
+                    IdxesList = idxesList,
+                    SortOutputList = true,
+                });
+            }
 
             var retMap = filteredIdxes.ToDictionary(
                 idx => idx, idx => inList[idx]);

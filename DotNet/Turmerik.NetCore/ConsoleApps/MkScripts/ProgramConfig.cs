@@ -39,6 +39,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
         {
             public RelDirPaths RelDirPaths { get; set; }
             public string FileRelPath { get; set; }
+            public Dictionary<string, string> FileRelPathsMap { get; set; }
             public string TextContent { get; set; }
             public string[] TextContentLines { get; set; }
             public ContentSpecs DefaultContentSpecs { get; set; }
@@ -49,6 +50,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
         {
             public string DirPath { get; set; }
             public string[] DirPathsArr { get; set; }
+            public string[] NormDirPathsArr { get; set; }
             public Dictionary<string, RawFilter> Filters { get; set; }
             public Dictionary<string, Filter> FiltersMap { get; set; }
         }

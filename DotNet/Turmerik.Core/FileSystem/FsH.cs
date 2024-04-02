@@ -74,12 +74,12 @@ namespace Turmerik.Core.FileSystem
             var buff = new byte[buffSize];
 
             var readCount = await stream.ReadBytesAsync(
-bytesList, buff, buffSize);
+                bytesList, buff, buffSize);
 
             while (readCount == buffSize)
             {
                 readCount = await stream.ReadBytesAsync(
-bytesList, buff, buffSize);
+                    bytesList, buff, buffSize);
             }
 
             return bytesList.ToArray();
