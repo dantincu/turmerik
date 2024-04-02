@@ -16,22 +16,12 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
 
     public class ProgramConfigRetriever : ProgramConfigRetrieverCoreBase<ProgramConfig, ProgramConfig.Profile>, IProgramConfigRetriever
     {
-        private readonly ITextMacrosReplacer textMacrosReplacer;
-        private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
-
         public ProgramConfigRetriever(
             IAppEnv appEnv,
-            IJsonConversion jsonConversion,
-            ITextMacrosReplacer textMacrosReplacer,
-            ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever) : base(
+            IJsonConversion jsonConversion) : base(
                 appEnv,
                 jsonConversion)
         {
-            this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
-                nameof(textMacrosReplacer));
-
-            this.localDevicePathMacrosRetriever = localDevicePathMacrosRetriever ?? throw new ArgumentNullException(
-                nameof(localDevicePathMacrosRetriever));
         }
 
         protected override ProgramConfig.Profile MergeProfilesCore(
@@ -46,6 +36,9 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                 destnProfile.Sections.AddRange(
                     srcProfile.Sections);
             }
+
+            destnProfile.RelDirPaths ??= srcProfile.RelDirPaths;
+            destnProfile.DefaultContentSpecs ??= srcProfile.DefaultContentSpecs;
 
             return destnProfile;
         }

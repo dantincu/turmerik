@@ -94,7 +94,9 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
         public void NormalizeArgs(
             ProgramArgs args)
         {
-            localDevicePathMacrosRetriever.Normalize(args.LocalDevicePathsMap);
+            /* localDevicePathMacrosRetriever.Normalize(
+                args.LocalDevicePathsMap); // this should not be needed */
+
             NormalizeArgs(args, args.Profile);
         }
 
@@ -204,32 +206,20 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                             ToStrArrSerializer = item => item
                         });
 
-                    int argsSetIdxMaxValue = contentSpecs.Args.Length - 1;
+                    var renderedContentArgsSetsArr = contentArgsSetsArr.Select(
+                        contentArgsSet => string.Format(
+                            contentSpecs.ArgsSetTpl,
+                            contentArgsSet)).ToArray();
 
-                    for (int argsSetIdx = 0; argsSetIdx <= argsSetIdxMaxValue; argsSetIdx++)
-                    {
-                        var argsSet = contentSpecs.Args[argsSetIdx];
+                    string renderedContentArgsSetsStr = string.Join(
+                        contentSpecs.ArgsSetsJoinTpl,
+                        renderedContentArgsSetsArr);
 
-                        string argsSetTpl;
+                    string sectionContent = string.Format(
+                        contentSpecs.Template,
+                        renderedContentArgsSetsStr);
 
-                        if (argsSetIdx == 0)
-                        {
-                            argsSetTpl = contentSpecs.FirstArgsSetTpl;
-                        }
-                        else if (argsSetIdx == argsSetIdxMaxValue)
-                        {
-                            argsSetTpl = contentSpecs.LastArgsSetTpl;
-                        }
-                        else
-                        {
-                            argsSetTpl = contentSpecs.ArgsSetTpl;
-                        }
-
-                        string renderedArgsSet = string.Format(
-                            argsSetTpl, argsSet);
-
-                        sb.Append(renderedArgsSet);
-                    }
+                    sb.Append(sectionContent);
                 }
 
                 textContent = sb.ToString();
@@ -243,27 +233,46 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
             ProgramConfig.RelDirPaths relDirPaths,
             ProgramConfig.RelDirPaths baseDirPaths)
         {
-            if (relDirPaths.DirPath != null)
+            if (relDirPaths != null)
             {
-                relDirPaths.DirPath = textMacrosReplacer.NormalizePath(
-                    args.LocalDevicePathsMap,
-                    relDirPaths.DirPath,
-                    baseDirPaths.DirPath);
-            }
-            else
-            {
-                relDirPaths.DirPath = baseDirPaths.DirPath;
-            }
+                if (relDirPaths.DirPath != null)
+                {
+                    relDirPaths.DirPath = textMacrosReplacer.NormalizePath(
+                        args.LocalDevicePathsMap,
+                        relDirPaths.DirPath,
+                        baseDirPaths.DirPath);
+                }
+                else
+                {
+                    relDirPaths.DirPath = baseDirPaths.DirPath;
+                }
 
-            if (relDirPaths.FiltersMap != null)
-            {
-                relDirPaths.FiltersMap = NormalizeFilters(
-                    relDirPaths.Filters,
-                    baseDirPaths.FiltersMap);
+                if (relDirPaths.DirPathsArr != null)
+                {
+                    relDirPaths.DirPathsArr = relDirPaths.DirPathsArr.Select(
+                        dirPath => textMacrosReplacer.NormalizePath(
+                        args.LocalDevicePathsMap, dirPath,
+                        relDirPaths.DirPath)).ToArray();
+                }
+                else
+                {
+                    relDirPaths.DirPathsArr = baseDirPaths.DirPathsArr;
+                }
+
+                if (relDirPaths.FiltersMap != null)
+                {
+                    relDirPaths.FiltersMap = NormalizeFilters(
+                        relDirPaths.Filters,
+                        baseDirPaths.FiltersMap);
+                }
+                else
+                {
+                    relDirPaths.FiltersMap = baseDirPaths.FiltersMap;
+                }
             }
             else
             {
-                relDirPaths.FiltersMap = baseDirPaths.FiltersMap;
+                relDirPaths = baseDirPaths;
             }
 
             return relDirPaths;
@@ -274,30 +283,34 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
             ProgramConfig.ContentSpecs contentSpecs,
             ProgramConfig.ContentSpecs dfContentSpecs)
         {
-            contentSpecs.Args ??= dfContentSpecs.Args;
-
-            if (contentSpecs.ArgFiltersMap != null)
+            if (contentSpecs != null)
             {
-                contentSpecs.ArgFiltersMap = NormalizeFilters(
-                    contentSpecs.ArgFilters,
-                    dfContentSpecs.ArgFiltersMap);
+                contentSpecs.Args ??= dfContentSpecs.Args;
+
+                if (contentSpecs.ArgFiltersMap != null)
+                {
+                    contentSpecs.ArgFiltersMap = NormalizeFilters(
+                        contentSpecs.ArgFilters,
+                        dfContentSpecs.ArgFiltersMap);
+                }
+                else
+                {
+                    contentSpecs.ArgFiltersMap = dfContentSpecs.ArgFiltersMap;
+                }
+
+                contentSpecs.ArgsSetTpl ??= JoinLinesIfNotNull(
+                    contentSpecs.ArgsSetTplLines) ?? dfContentSpecs.ArgsSetTpl;
+
+                contentSpecs.ArgsSetsJoinTpl ??= JoinLinesIfNotNull(
+                    contentSpecs.ArgsSetsJoinTplLines) ?? dfContentSpecs.ArgsSetsJoinTpl;
+
+                contentSpecs.Template ??= JoinLinesIfNotNull(
+                    contentSpecs.TemplateLines) ?? dfContentSpecs.Template;
             }
             else
             {
-                contentSpecs.ArgFiltersMap = dfContentSpecs.ArgFiltersMap;
+                contentSpecs = dfContentSpecs;
             }
-
-            contentSpecs.FirstArgsSetTpl ??= JoinLinesIfNotNull(
-                contentSpecs.FirstArgsSetTplLines) ?? dfContentSpecs.FirstArgsSetTpl;
-
-            contentSpecs.ArgsSetTpl ??= JoinLinesIfNotNull(
-                contentSpecs.ArgsSetTplLines) ?? dfContentSpecs.ArgsSetTpl;
-
-            contentSpecs.LastArgsSetTpl ??= JoinLinesIfNotNull(
-                contentSpecs.LastArgsSetTplLines) ?? dfContentSpecs.LastArgsSetTpl;
-
-            contentSpecs.Template ??= JoinLinesIfNotNull(
-                contentSpecs.TemplateLines) ?? dfContentSpecs.Template;
 
             return contentSpecs;
         }

@@ -61,16 +61,16 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                     foreach (var dirPath in dirPathsArr)
                     {
                         string filePath = Path.Combine(
-                            dirPath, file.FileRelPath);
+                            file.RelDirPaths.DirPath,
+                            dirPath,
+                            file.FileRelPath);
 
                         FsH.CreateParentDirPath(filePath);
 
                         Action action = args.Command switch
                         {
                             ProgramCommand.Create => () => File.WriteAllText(
-                                filePath, string.Join(
-                                    Environment.NewLine,
-                                    file.TextContentLines)),
+                                filePath, file.TextContent),
                             ProgramCommand.Remove => () => FsH.DeleteFileIfExists(filePath),
                             _ => throw new ArgumentException(nameof(args.Command))
                         };

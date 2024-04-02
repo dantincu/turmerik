@@ -60,13 +60,11 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
             public Dictionary<string, Filter> ArgFiltersMap { get; set; }
 
             public string ArgsSetTpl { get; set; }
-            public string FirstArgsSetTpl { get; set; }
-            public string LastArgsSetTpl { get; set; }
+            public string ArgsSetsJoinTpl { get; set; }
             public string Template { get; set; }
 
             public string[] ArgsSetTplLines { get; set; }
-            public string[] FirstArgsSetTplLines { get; set; }
-            public string[] LastArgsSetTplLines { get; set; }
+            public string[] ArgsSetsJoinTplLines { get; set; }
             public string[] TemplateLines { get; set; }
         }
 

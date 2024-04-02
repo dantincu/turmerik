@@ -1,10 +1,14 @@
 {
   "ProfileName": "turmerik-parcel-ws",
-  "DirPath": "|$TURMERIK_REPO_DIR|\\ParceWs",
+  "RelDirPaths": {
+    "DirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs"
+  },
   "Sections": [
     {
       "SectionName": "workspace-lvl",
-      "DirPath": "scripts\\all",
+      "RelDirPaths": {
+        "DirPath": "scripts\\all"
+      },
       "FileGroups": [
         {
           "DefaultContentSpecs": {
@@ -29,8 +33,8 @@
                 "Regex": "^\\.\\.\\\\\\.\\apps\\.*"
               }
             },
-            "ArgsSetTpl": "\"{0}\",\n",
-            "LastArgsSetTpl": "\"{0}\""
+            "ArgsSetTpl": "\"{0}\"",
+            "ArgsSetsJoinTpl": ",\n"
           },
           "Files": [
             {
