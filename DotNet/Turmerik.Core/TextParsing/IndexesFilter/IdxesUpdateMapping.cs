@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
+namespace Turmerik.Core.TextParsing.IndexesFilter
 {
     public class IdxesUpdateMapping
     {

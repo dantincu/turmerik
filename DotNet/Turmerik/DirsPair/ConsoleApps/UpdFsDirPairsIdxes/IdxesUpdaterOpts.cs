@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.Core.TextParsing.IndexesFilter;
 
 namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 {

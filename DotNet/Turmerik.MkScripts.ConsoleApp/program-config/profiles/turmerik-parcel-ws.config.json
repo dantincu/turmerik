@@ -1,0 +1,155 @@
+{
+  "ProfileName": "turmerik-parcel-ws",
+  "DirPath": "|$TURMERIK_REPO_DIR|\\ParceWs",
+  "Sections": [
+    {
+      "SectionName": "workspace-lvl",
+      "DirPath": "scripts\\all",
+      "FileGroups": [
+        {
+          "DefaultContentSpecs": {
+            "Args": [
+              [ "..\\..\\libs\\trmrk" ],
+              [ "..\\..\\libs\\trmrk-axios" ],
+              [ "..\\..\\libs\\trmrk-blazor" ],
+              [ "..\\..\\libs\\trmrk-browser" ],
+              [ "..\\..\\libs\\trmrk-react" ],
+              [ "..\\..\\apps\\trmrk-notes-blazorapp" ],
+              [ "..\\..\\apps\\trmrk-react-testapp" ],
+              [ "..\\..\\apps\\trmrk-text-tranform-behavior" ],
+              [ "..\\..\\apps\\trmrk-text-tranform-behavior-testapp" ],
+              [ "..\\..\\apps\\trmrk-text-tranform-defaultbehavior" ],
+              [ "..\\..\\apps\\trmrk-text-tranform-mybehavior" ]
+            ],
+            "ArgFilters": {
+              "libs": {
+                "Regex": "^\\.\\.\\\\\\.\\libs\\.*"
+              },
+              "apps": {
+                "Regex": "^\\.\\.\\\\\\.\\apps\\.*"
+              }
+            },
+            "ArgsSetTpl": "\"{0}\",\n",
+            "LastArgsSetTpl": "\"{0}\""
+          },
+          "Files": [
+            {
+              "FileRelPath": "upd-pcks.bat",
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "for %arg in ({0}) do (",
+                    "  cd %arg",
+                    "  .\\upd-pcks.bat",
+                    ")"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm.bat",
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "for %arg in ({0}) do (",
+                    "  cd %arg",
+                    "  .\\rm.bat",
+                    ")"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-pcks.bat",
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "for %arg in ({0}) do (",
+                    "  cd %arg",
+                    "  .\\rm-pcks.bat",
+                    ")"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-ch_dst.bat",
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "for %arg in ({0}) do (",
+                    "  cd %arg",
+                    "  .\\rm-ch_dst.bat",
+                    ")"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "package-lvl",
+      "RelDirPaths": {
+        "DirPathsArr": [
+          "libs\\trmrk\\_",
+          "libs\\trmrk-axios\\_",
+          "libs\\trmrk-blazor\\_",
+          "libs\\trmrk-browser\\_",
+          "libs\\trmrk-react\\_",
+          "apps\\trmrk-notes-blazorapp\\_",
+          "apps\\trmrk-react-testapp\\_",
+          "apps\\trmrk-text-tranform-behavior\\_",
+          "apps\\trmrk-text-tranform-behavior-testapp\\_",
+          "apps\\trmrk-text-tranform-defaultbehavior\\_",
+          "apps\\trmrk-text-tranform-mybehavior\\_"
+        ],
+        "Filters": {
+          "libs": {
+            "Regex": "^libs\\.*"
+          },
+          "apps": {
+            "Regex": "^apps\\.*"
+          }
+        }
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "upd-pcks.bat",
+              "TextContentLines": [
+                "CALL ncu -u",
+                "CALL npm i"
+              ]
+            },
+            {
+              "FileRelPath": "rm.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\.parcel-cache",
+                "CALL rimraf .\\dist",
+                "CALL rimraf .\\node_modules",
+                "CALL del .\\package-lock.json"
+              ]
+            },
+            {
+              "FileRelPath": "rm-pcks.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\node_modules",
+                "CALL del .\\package-lock.json"
+              ]
+            },
+            {
+              "FileRelPath": "rm-ch_dst.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\.parcel-cache",
+                "CALL rimraf .\\dist"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -11,12 +11,6 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 {
     public interface IProgramConfigRetriever : IProgramConfigRetrieverCore<ProgramConfig, ProgramConfig.Profile>
     {
-        ProgramConfig LoadProgramConfig(
-            string configFilePath = null);
-
-        ProgramConfig.Profile MergeProfiles(
-            ProgramConfig.Profile destnProfile,
-            ProgramConfig.Profile srcProfile);
     }
 
     public class ProgramConfigRetriever : ProgramConfigRetrieverCoreBase<ProgramConfig, ProgramConfig.Profile>, IProgramConfigRetriever
@@ -36,7 +30,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
         protected override ProgramConfig.Profile MergeProfilesCore(
             ProgramConfig.Profile destnProfile,
-            ProgramConfig.Profile srcProfile)
+            ProgramConfig.Profile srcProfile,
+            string configFilePath = null)
         {
             destnProfile.ScriptGroups ??= new List<ProgramConfig.ScriptsGroup>();
             destnProfile.FileGroups ??= new List<ProgramConfig.FilesGroup>();

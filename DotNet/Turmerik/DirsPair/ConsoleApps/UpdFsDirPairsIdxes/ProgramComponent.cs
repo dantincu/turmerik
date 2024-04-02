@@ -10,6 +10,7 @@ using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
+using Turmerik.Core.TextParsing.IndexesFilter;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Notes.Core;
@@ -25,12 +26,10 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
     public class ProgramComponent : IProgramComponent
     {
-        private const char ITEMS_LIST_SEP_CHR = ',';
-        private const string ITEMS_SPREAD_STR = "..";
-
         private readonly IJsonConversion jsonConversion;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IConsoleArgsParser consoleArgsParser;
+        private readonly IIdxesFilterParser idxesFilterParser;
         private readonly IdxesUpdater idxesUpdater;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly DirsPairConfig config;
@@ -42,6 +41,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             IJsonConversion jsonConversion,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IConsoleArgsParser consoleArgsParser,
+            IIdxesFilterParser idxesFilterParser,
             IdxesUpdater idxesUpdater,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory)
         {
@@ -53,6 +53,9 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             this.consoleArgsParser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
+
+            this.idxesFilterParser = idxesFilterParser ?? throw new ArgumentNullException(
+                nameof(idxesFilterParser));
 
             this.idxesUpdater = idxesUpdater ?? throw new ArgumentNullException(
                 nameof(idxesUpdater));
@@ -105,6 +108,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         private int NoteDirNameDfEndIdx { get; set; }
         private int NoteIdxIncVal { get; }
         private Comparison<int> IdxComparison { get; }
+
+        
 
         public async Task RunAsync(string[] rawArgs)
         {
@@ -249,7 +254,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                         if (data.ArgFlagName == null)
                         {
                             data.Args.IdxesUpdateMappings.AddRange(
-                                ParseIdxesUpdateMapping(data.ArgItem));
+                                idxesFilterParser.ParseIdxesUpdateMapping(data.ArgItem));
                         }
                         else
                         {
@@ -283,96 +288,6 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             NormalizeArgs(args);
             return args;
-        }
-
-        private IdxesUpdateMapping[] ParseIdxesUpdateMapping(
-            string rawArg)
-        {
-            (var srcFilter, var trgFilter) = rawArg.SplitStr(
-                (str, count) => str.IndexOf(
-                    ConsoleArgsParser.OPTS_ARG_DELIM_CHAR));
-
-            bool isSymetricalMapping = false;
-            IdxesUpdateMapping symetricalMapping = null;
-
-            if (trgFilter == null)
-            {
-                throw new ArgumentNullException(
-                    $"Invalid idxes filter: {rawArg}");
-            }
-            else
-            {
-                trgFilter = trgFilter.Substring(1);
-
-                if (trgFilter.FirstOrDefault() == ConsoleArgsParser.OPTS_ARG_DELIM_CHAR)
-                {
-                    isSymetricalMapping = true;
-                    trgFilter = trgFilter.Substring(1);
-                }
-            }
-
-            var mapping = new IdxesUpdateMapping
-            {
-                SrcIdxes = srcFilter.Split(
-                    ITEMS_LIST_SEP_CHR).Select(
-                        ParseIdxesFilter).ToList(),
-                TrgIdxes = trgFilter.Split(
-                    ITEMS_LIST_SEP_CHR).Select(
-                        ParseIdxesFilter).ToList()
-            };
-
-            if (isSymetricalMapping)
-            {
-                symetricalMapping = new IdxesUpdateMapping
-                {
-                    SrcIdxes = mapping.TrgIdxes,
-                    TrgIdxes = mapping.SrcIdxes
-                };
-            }
-
-            IdxesUpdateMapping[] retArr;
-
-            if (symetricalMapping != null)
-            {
-                retArr = [ mapping, symetricalMapping ];
-            }
-            else
-            {
-                retArr = [ mapping ];
-            }
-
-            return retArr;
-        }
-
-        private IdxesFilter ParseIdxesFilter(
-            string rawArg)
-        {
-            var idxesFilter = new IdxesFilter();
-
-            (var stIdxStr, var endIdxStr) = rawArg.SplitStr(
-                (str, count) => str.IndexOf(ITEMS_SPREAD_STR));
-
-            if (endIdxStr == null)
-            {
-                idxesFilter.SingleIdx = int.Parse(stIdxStr);
-            }
-            else
-            {
-                endIdxStr = endIdxStr.Substring(
-                    ITEMS_SPREAD_STR.Length);
-
-                if (!string.IsNullOrEmpty(stIdxStr))
-                {
-                    idxesFilter.StartIdx = int.Parse(stIdxStr);
-                }
-
-                if (!string.IsNullOrEmpty(endIdxStr))
-                {
-                    idxesFilter.EndIdx = int.Parse(endIdxStr);
-                }
-            }
-
-            return idxesFilter;
         }
 
         private void NormalizeArgs(ProgramArgs args)

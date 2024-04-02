@@ -12,13 +12,20 @@ namespace Turmerik.Core.ConsoleApps
         where TProgramConfigProfile : ProgramConfigProfileCoreBase, new()
     {
         AppEnvDir AppEnvDir { get; }
+        string DefaultConfigDirPath { get; }
+        string DefaultConfigFilePath { get; }
 
         TProgramConfig LoadProgramConfig(
             string configFilePath = null);
 
         TProgramConfigProfile MergeProfiles(
             TProgramConfigProfile destnProfile,
-            TProgramConfigProfile srcProfile);
+            TProgramConfigProfile srcProfile,
+            string configFilePath = null);
+
+        TProgramConfig NormalizeProgramConfig(
+            TProgramConfig programConfig,
+            string configFilePath = null);
     }
 
     public static class ProgramConfigRetrieverCore
@@ -44,18 +51,25 @@ namespace Turmerik.Core.ConsoleApps
 
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
+
+            DefaultConfigDirPath = appEnv.GetTypePath(
+                AppEnvDir,
+                GetType(),
+                ProgramConfigRetrieverCore.PROGRAM_CONFIG_DIR_NAME);
+
+            DefaultConfigFilePath = Path.Combine(
+                DefaultConfigDirPath,
+                ProgramConfigRetrieverCore.CONFIG_FILE_NAME);
         }
 
         public virtual AppEnvDir AppEnvDir => AppEnvDir.Config;
+        public string DefaultConfigDirPath { get; }
+        public string DefaultConfigFilePath { get; }
 
         public TProgramConfig LoadProgramConfig(
             string configFilePath = null)
         {
-            configFilePath ??= appEnv.GetTypePath(
-                AppEnvDir,
-                GetType(),
-                ProgramConfigRetrieverCore.PROGRAM_CONFIG_DIR_NAME,
-                ProgramConfigRetrieverCore.CONFIG_FILE_NAME);
+            configFilePath ??= DefaultConfigFilePath;
 
             string configDirPath = Path.GetDirectoryName(
                 configFilePath)!;
@@ -75,7 +89,7 @@ namespace Turmerik.Core.ConsoleApps
                     string json = File.ReadAllText(externalProfileFilePath);
                     var srcProfile = jsonConversion.Adapter.Deserialize<TProgramConfigProfile>(json);
 
-                    MergeProfiles(destnProfile, srcProfile);
+                    MergeProfiles(destnProfile, srcProfile, configFilePath);
                 }
             }
 
@@ -84,16 +98,22 @@ namespace Turmerik.Core.ConsoleApps
 
         public TProgramConfigProfile MergeProfiles(
             TProgramConfigProfile destnProfile,
-            TProgramConfigProfile srcProfile)
+            TProgramConfigProfile srcProfile,
+            string configFilePath = null)
         {
             destnProfile.ProfileName = srcProfile.ProfileName ?? destnProfile.ProfileName;
-            destnProfile = MergeProfilesCore(destnProfile, srcProfile);
+            destnProfile = MergeProfilesCore(destnProfile, srcProfile, configFilePath);
 
             return destnProfile;
         }
 
+        public virtual TProgramConfig NormalizeProgramConfig(
+            TProgramConfig programConfig,
+            string configFilePath = null) => programConfig;
+
         protected abstract TProgramConfigProfile MergeProfilesCore(
             TProgramConfigProfile destnProfile,
-            TProgramConfigProfile srcProfile);
+            TProgramConfigProfile srcProfile,
+            string configFilePath);
     }
 }

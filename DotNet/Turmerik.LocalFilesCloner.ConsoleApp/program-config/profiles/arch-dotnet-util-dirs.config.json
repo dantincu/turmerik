@@ -19,6 +19,7 @@
               "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/.*",
+              "^\\/Bin\\/Turmerik\\.MkScripts\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.UpdFsDirPairsIdxes\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.Utility.WinFormsApp\\/.*",
@@ -27,8 +28,8 @@
               "^\\/Data\\/.*"
             ],
             "ExcludedRelPathRegexes": [
-              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/config\\.json$",
-              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\/profiles\\/.+\\.config\\.json$",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\.*",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.MkScripts\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.js$",
               "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.json$",
               "^\\/Bin\\/.+\\/app-env-locator\\.json$",

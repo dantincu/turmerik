@@ -8,6 +8,7 @@ using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
 using Turmerik.Code.Core;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.TextParsing.IndexesFilter;
 
 namespace Turmerik.Dependencies
 {

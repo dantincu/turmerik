@@ -4,7 +4,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.NetCore.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.LocalDeviceEnv;
-using Turmerik.MkScripts.ConsoleApp;
+using Turmerik.NetCore.ConsoleApps.MkScripts;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
@@ -16,15 +16,14 @@ DriveExplorerH.AddFsRetrieverAndExplorer(
 
 services.AddSingleton<IAppEnv, AppEnv>();
 
-TrmrkNetCoreServices.AddFilesClonerServices(services);
-MkScriptsServices.RegisterAll(services);
+TrmrkNetCoreServices.AddMkScriptsServices(services);
 
 var svcProv = services.BuildServiceProvider();
 
-await ConsoleH.TryExecuteAsync(
-    async () =>
+ConsoleH.TryExecute(
+    () =>
     {
         var program = svcProv.GetRequiredService<IProgramComponent>();
-        await program.RunAsync(args);
+        program.Run(args);
     },
     false);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.TextParsing.IndexesFilter;
 
 namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 {

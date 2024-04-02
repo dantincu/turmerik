@@ -11,6 +11,8 @@ using Turmerik.NetCore.Utility;
 using Turmerik.Core.Dependencies;
 
 using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
+using System.Web.Services.Description;
+using Turmerik.NetCore.ConsoleApps.MkScripts;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -48,6 +50,18 @@ namespace Turmerik.NetCore.Dependencies
 
             services.AddSvc<LocalFilesCloner.IFileCloneComponent, LocalFilesCloner.FileCloneComponent>(
                 fileCloneServicesLifetime);
+
+            return services;
+        }
+
+        public static IServiceCollection AddMkScriptsServices(
+            IServiceCollection services)
+        {
+            services.AddSingleton<IProgramConfigRetriever, ProgramConfigRetriever>();
+            services.AddSingleton<IProgramArgsRetriever, ProgramArgsRetriever>();
+            services.AddSingleton<IProgramArgsNormalizer, ProgramArgsNormalizer>();
+            services.AddSingleton<IFilteredItemsRetriever, FilteredItemsRetriever>();
+            services.AddSingleton<IProgramComponent, ProgramComponent>();
 
             return services;
         }

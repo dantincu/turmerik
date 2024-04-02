@@ -16,6 +16,7 @@ using Turmerik.Core.ConsoleApps.TempDir;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.TextParsing;
+using Turmerik.Core.TextParsing.IndexesFilter;
 
 namespace Turmerik.Core.Dependencies
 {
@@ -65,6 +66,8 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IDriveEntriesCloner, DriveEntriesCloner>();
 
             services.AddSingleton<IChecksumCalculator, ChecksumCalculator>();
+            services.AddSingleton<IIdxesFilterParser, IdxesFilterParser>();
+            services.AddSingleton<IFilteredIdxesRetriever, FilteredIdxesRetriever>();
 
             return services;
         }

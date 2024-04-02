@@ -20,8 +20,6 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
     public class ProgramArgsRetriever : IProgramArgsRetriever
     {
-        public const string CFG_FILE_NAME = "trmrk-localfilescloner-config.json";
-
         private readonly IConsoleArgsParser parser;
         private readonly IProgramConfigRetriever programConfigRetriever;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
