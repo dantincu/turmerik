@@ -46,10 +46,14 @@
               "ContentSpecs": [
                 {
                   "TemplateLines": [
-                    "for %arg in ({0}) do (",
-                    "  cd %arg",
-                    "  .\\upd-pcks.bat",
-                    ")"
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\upd-pcks.bat",
+                    ")",
+                    "",
+                    "@echo on"
                   ]
                 }
               ]
@@ -63,10 +67,14 @@
               "ContentSpecs": [
                 {
                   "TemplateLines": [
-                    "for %arg in ({0}) do (",
-                    "  cd %arg",
-                    "  .\\rm.bat",
-                    ")"
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm.bat",
+                    ")",
+                    "",
+                    "@echo on"
                   ]
                 }
               ]
@@ -80,10 +88,14 @@
               "ContentSpecs": [
                 {
                   "TemplateLines": [
-                    "for %arg in ({0}) do (",
-                    "  cd %arg",
-                    "  .\\rm-pcks.bat",
-                    ")"
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-pcks.bat",
+                    ")",
+                    "",
+                    "@echo on"
                   ]
                 }
               ]
@@ -97,10 +109,13 @@
               "ContentSpecs": [
                 {
                   "TemplateLines": [
-                    "for %arg in ({0}) do (",
-                    "  cd %arg",
-                    "  .\\rm-ch_dst.bat",
-                    ")"
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-ch_dst.bat",
+                    ")",
+                    "@echo on"
                   ]
                 }
               ]

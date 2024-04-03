@@ -1,8 +1,12 @@
-for %arg in ("..\..\libs\trmrk",
+@echo off
+
+for %%a in ("..\..\libs\trmrk",
 "..\..\libs\trmrk-axios",
 "..\..\libs\trmrk-blazor",
 "..\..\libs\trmrk-browser",
 "..\..\libs\trmrk-react") do (
-  cd %arg
-  .\rm-pcks.bat
+  cd %%a
+  .\_\rm-pcks.bat
 )
+
+@echo on

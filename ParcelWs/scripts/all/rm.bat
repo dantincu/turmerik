@@ -1,4 +1,6 @@
-for %arg in ("..\..\libs\trmrk",
+@echo off
+
+for %%a in ("..\..\libs\trmrk",
 "..\..\libs\trmrk-axios",
 "..\..\libs\trmrk-blazor",
 "..\..\libs\trmrk-browser",
@@ -9,6 +11,8 @@ for %arg in ("..\..\libs\trmrk",
 "..\..\apps\trmrk-text-transform-behavior-testapp",
 "..\..\apps\trmrk-text-transform-defaultbehavior",
 "..\..\apps\trmrk-text-transform-mybehavior") do (
-  cd %arg
-  .\rm.bat
+  cd %%a
+  .\_\rm.bat
 )
+
+@echo on
