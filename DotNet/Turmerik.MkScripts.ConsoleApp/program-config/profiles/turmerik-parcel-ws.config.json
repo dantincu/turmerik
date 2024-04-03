@@ -101,6 +101,27 @@
               ]
             },
             {
+              "FileRelPath": "rm-nd_mods.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-nd_mods.bat",
+                "apps": "rm-apps-nd_mods.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-nd_mods.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
               "FileRelPath": "rm-ch_dst.bat",
               "FileRelPathsMap": {
                 "libs": "rm-libs-ch_dst.bat",
@@ -114,6 +135,27 @@
                     "for %%a in ({0}) do (",
                     "  cd %%a",
                     "  .\\_\\rm-ch_dst.bat",
+                    ")",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rebuild.bat",
+              "FileRelPathsMap": {
+                "libs": "rebuild-libs.bat",
+                "apps": "rebuild-apps.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-ch_dst.bat",
+                    "  npm run build",
                     ")",
                     "@echo on"
                   ]
@@ -173,6 +215,12 @@
               "TextContentLines": [
                 "CALL rimraf .\\node_modules",
                 "CALL del .\\package-lock.json"
+              ]
+            },
+            {
+              "FileRelPath": "rm-nd_mods.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\node_modules"
               ]
             },
             {
