@@ -1,0 +1,67 @@
+@import "../../styles/_mixins";
+
+.trmrk-bars-panel {
+  position: relative;
+}
+
+.trmrk-panel-view,
+.trmrk-panel-body,
+.trmrk-panel-header,
+.trmrk-panel-footer {
+  display: flex;
+  position: absolute;
+}
+
+.trmrk-app-bars-panel .trmrk-panel-header,
+.trmrk-app-bars-panel .trmrk-panel-footer {
+  position: fixed;
+}
+
+.trmrk-bars-panel,
+.trmrk-panel-view,
+.trmrk-panel-body,
+.trmrk-panel-header,
+.trmrk-panel-footer {
+  width: 100%;
+}
+
+.trmrk-panel-header,
+.trmrk-panel-footer {
+  overflow: hidden;
+  z-index: 1;
+  
+  @include height-rows();
+}
+
+.trmrk-bars-panel,
+.trmrk-panel-view {
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.trmrk-panel-view {
+  margin: 0;
+  inset: 0;
+}
+
+.trmrk-panel-body {
+  margin: 0;
+}
+
+.trmrk-bars-panel {
+  @include padding-top-rows();
+  @include padding-bottom-rows();
+  
+  transition: padding-top 0.3s,
+              padding-bottom 0.3s;
+}
+
+.trmrk-panel-header {
+  top: 0px;
+  transition: height 0.3s;
+}
+
+.trmrk-panel-footer {
+  bottom: 0px;
+  transition: height 0.3s;
+}

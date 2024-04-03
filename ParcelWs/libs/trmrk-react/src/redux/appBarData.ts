@@ -17,6 +17,10 @@ export interface AppBarData {
   appSettingsMenuOpts: AppSettingsMenuOpts;
   showOptionsMenuBtn: boolean;
   optionsMenuOpts: OptionsMenuOpts;
+  showAppHeader: boolean;
+  showAppHeaderToggleBtn: boolean;
+  showAppFooter: boolean;
+  showAppFooterToggleBtn: boolean;
 }
 
 export interface AppBarSelectors {
@@ -27,7 +31,7 @@ export interface AppBarSelectors {
     AppSettingsMenuOpts,
     []
   > & {
-    unwrapped: (appData: AppBarData) => AppSettingsMenuOpts;
+    unwrapped: (appBar: AppBarData) => AppSettingsMenuOpts;
   };
   getAppSettingsMenuIsOpen: Selector<
     {
@@ -36,7 +40,7 @@ export interface AppBarSelectors {
     boolean,
     []
   > & {
-    unwrapped: (appData: AppBarData) => boolean;
+    unwrapped: (appBar: AppBarData) => boolean;
   };
   getAppearenceMenuOpts: Selector<
     {
@@ -45,7 +49,7 @@ export interface AppBarSelectors {
     AppearenceMenuOpts,
     []
   > & {
-    unwrapped: (appData: AppBarData) => AppearenceMenuOpts;
+    unwrapped: (appBar: AppBarData) => AppearenceMenuOpts;
   };
   getAppearenceMenuIsOpen: Selector<
     {
@@ -54,7 +58,7 @@ export interface AppBarSelectors {
     boolean,
     []
   > & {
-    unwrapped: (appData: AppBarData) => boolean;
+    unwrapped: (appBar: AppBarData) => boolean;
   };
   getShowOptionsMenuBtn: Selector<
     {
@@ -63,7 +67,7 @@ export interface AppBarSelectors {
     boolean,
     []
   > & {
-    unwrapped: (appData: AppBarData) => boolean;
+    unwrapped: (appBar: AppBarData) => boolean;
   };
   getOptionsMenuOpts: Selector<
     {
@@ -72,7 +76,7 @@ export interface AppBarSelectors {
     OptionsMenuOpts,
     []
   > & {
-    unwrapped: (appData: AppBarData) => OptionsMenuOpts;
+    unwrapped: (appBar: AppBarData) => OptionsMenuOpts;
   };
   getOptionsMenuIsOpen: Selector<
     {
@@ -81,7 +85,43 @@ export interface AppBarSelectors {
     boolean,
     []
   > & {
-    unwrapped: (appData: AppBarData) => boolean;
+    unwrapped: (appBar: AppBarData) => boolean;
+  };
+  getShowAppHeader: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean;
+  };
+  getShowAppHeaderToggleBtn: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean;
+  };
+  getShowAppFooter: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean;
+  };
+  getShowAppFooterToggleBtn: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean;
   };
 }
 
@@ -113,5 +153,21 @@ export interface AppBarReducers {
   setOptionsMenuIsOpen: ActionCreatorWithPayload<
     boolean,
     "appBar/setOptionsMenuIsOpen"
+  >;
+  setShowAppHeader: ActionCreatorWithPayload<
+    boolean,
+    "appBar/setShowAppHeader"
+  >;
+  setShowAppHeaderToggleBtn: ActionCreatorWithPayload<
+    boolean,
+    "appBar/setShowAppHeaderToggleBtn"
+  >;
+  setShowAppFooter: ActionCreatorWithPayload<
+    boolean,
+    "appBar/setShowAppFooter"
+  >;
+  setShowAppFooterToggleBtn: ActionCreatorWithPayload<
+    boolean,
+    "appBar/setShowAppFooterToggleBtn"
   >;
 }

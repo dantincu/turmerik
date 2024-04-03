@@ -79,54 +79,6 @@
   &.trmrk-height-rows-x20 { height: 50em; }
 }
 
-@mixin height-negative-top-rows() {
-  &.trmrk-height-rows-x0 { top: -0em; }
-  &.trmrk-height-rows-x1 { top: -2.5em; }
-  &.trmrk-height-rows-x2 { top: -5em; }
-  &.trmrk-height-rows-x3 { top: -7.5em; }
-  &.trmrk-height-rows-x4 { top: -10em; }
-  &.trmrk-height-rows-x5 { top: -12.5em; }
-  &.trmrk-height-rows-x6 { top: -15em; }
-  &.trmrk-height-rows-x7 { top: -17.5em; }
-  &.trmrk-height-rows-x8 { top: -20em; }
-  &.trmrk-height-rows-x9 { top: -22.5em; }
-  &.trmrk-height-rows-x10 { top: -25em; }
-  &.trmrk-height-rows-x11 { top: -27.5em; }
-  &.trmrk-height-rows-x12 { top: -30em; }
-  &.trmrk-height-rows-x13 { top: -32.5em; }
-  &.trmrk-height-rows-x14 { top: -35em; }
-  &.trmrk-height-rows-x15 { top: -37.5em; }
-  &.trmrk-height-rows-x16 { top: -40em; }
-  &.trmrk-height-rows-x17 { top: -42.5em; }
-  &.trmrk-height-rows-x18 { top: -45em; }
-  &.trmrk-height-rows-x19 { top: -47.5em; }
-  &.trmrk-height-rows-x20 { top: -50em; }
-}
-
-@mixin height-negative-bottom-rows() {
-  &.trmrk-height-rows-x0 { bottom: -0em; }
-  &.trmrk-height-rows-x1 { bottom: -2.5em; }
-  &.trmrk-height-rows-x2 { bottom: -5em; }
-  &.trmrk-height-rows-x3 { bottom: -7.5em; }
-  &.trmrk-height-rows-x4 { bottom: -10em; }
-  &.trmrk-height-rows-x5 { bottom: -12.5em; }
-  &.trmrk-height-rows-x6 { bottom: -15em; }
-  &.trmrk-height-rows-x7 { bottom: -17.5em; }
-  &.trmrk-height-rows-x8 { bottom: -20em; }
-  &.trmrk-height-rows-x9 { bottom: -22.5em; }
-  &.trmrk-height-rows-x10 { bottom: -25em; }
-  &.trmrk-height-rows-x11 { bottom: -27.5em; }
-  &.trmrk-height-rows-x12 { bottom: -30em; }
-  &.trmrk-height-rows-x13 { bottom: -32.5em; }
-  &.trmrk-height-rows-x14 { bottom: -35em; }
-  &.trmrk-height-rows-x15 { bottom: -37.5em; }
-  &.trmrk-height-rows-x16 { bottom: -40em; }
-  &.trmrk-height-rows-x17 { bottom: -42.5em; }
-  &.trmrk-height-rows-x18 { bottom: -45em; }
-  &.trmrk-height-rows-x19 { bottom: -47.5em; }
-  &.trmrk-height-rows-x20 { bottom: -50em; }
-}
-
 @mixin padding-top-rows() {
   &.trmrk-padding-top-rows-x0 { padding-top: 0em; }
   &.trmrk-padding-top-rows-x1 { padding-top: 2.5em; }

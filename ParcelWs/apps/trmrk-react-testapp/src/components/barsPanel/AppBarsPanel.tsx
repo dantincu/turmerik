@@ -11,50 +11,45 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import SettingsMenu from "trmrk-react/src/components/settingsMenu/SettingsMenu";
 import AppearenceSettingsMenu from "trmrk-react/src/components/settingsMenu/AppearenceSettingsMenu";
 import OptionsMenu from "trmrk-react/src/components/settingsMenu/OptionsMenu";
-import { AppDataSelectors, AppDataReducers } from "trmrk-react/src/redux/appData";
+
 import { AppBarSelectors, AppBarReducers } from "trmrk-react/src/redux/appBarData";
+import { AppDataSelectors, AppDataReducers } from "trmrk-react/src/redux/appData";
+
 import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
 import { appModeCssClass, getAppModeCssClassName,
   setIsCompactModeToLocalStorage,
   setIsDarkModeToLocalStorage } from "trmrk-browser/src/domUtils/core";
 
-import "./FloatingBarsPage.scss";
+import BarsPanel from "./BarsPanel";
+import ToggleAppBarBtn from "./ToggleAppBarBtn";
 
-import FloatingBarsPanel, { FloatingBarsPanelScrollData } from "./FloatingBarsPanel";
-
-export interface FloatingBarsPageProps {
-  appDataSelectors: AppDataSelectors;
-  appDataReducers: AppDataReducers;
+export interface AppBarsPanelProps {
+  basePath: string;
+  panelClassName?: string | null | undefined;
   appBarSelectors: AppBarSelectors;
   appBarReducers: AppBarReducers;
-  basePath: string;
-  className?: string | null | undefined;
-  headerClassName?: string | null | undefined;
+  appDataSelectors: AppDataSelectors;
+  appDataReducers: AppDataReducers;
   appBarClassName?: string | null | undefined;
+  appHeaderChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  appFooterChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  children: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  appBarRefreshBtnClicked?: (() => boolean | null | undefined | void);
   settingsMenuClassName?: string | null | undefined;
   settingsMenuListClassName?: string | null | undefined;
   appearenceMenuClassName?: string | null | undefined;
   appearenceMenuListClassName?: string | null | undefined;
   optionsMenuClassName?: string | null | undefined;
   optionsMenuListClassName?: string | null | undefined;
-  footerClassName?: string | null | undefined;
-  bodyClassName?: string | null | undefined;
-  headerRowsCount?: number | null | undefined;
-  footerRowsCount?: number | null | undefined;
-  panelScrollableY?: boolean | null | undefined;
-  panelBodyScrollableX?: boolean | null | undefined;
-  appBarChildren?: React.ReactNode | Iterable<React.ReactNode> | null;
   settingsMenuChildren?: React.ReactNode | Iterable<React.ReactNode> | null;
   appearenceMenuChildren?: React.ReactNode | Iterable<React.ReactNode> | null;
-  footerContent: React.ReactNode | Iterable<React.ReactNode> | null;
-  children: React.ReactNode | Iterable<React.ReactNode>;
-  appBarRefreshBtnClicked?: (() => boolean | null | undefined | void);
-  resized?: ((data: FloatingBarsPanelScrollData) => void) | null | undefined;
-  scrolled?: ((data: FloatingBarsPanelScrollData) => void) | null | undefined;
 }
 
-export default function FloatingBarsPage(props: FloatingBarsPageProps) {
-  const fwProps = {...props}
+export default function AppBarsPanel(props: AppBarsPanelProps) {
+  const showAppHeader = useSelector(props.appBarSelectors.getShowAppHeader);
+  const showAppFooter = useSelector(props.appBarSelectors.getShowAppFooter);
+  const showAppHeaderToggleBtn = useSelector(props.appBarSelectors.getShowAppHeaderToggleBtn);
+  const showAppFooterToggleBtn = useSelector(props.appBarSelectors.getShowAppFooterToggleBtn);
 
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
@@ -163,35 +158,42 @@ export default function FloatingBarsPage(props: FloatingBarsPageProps) {
     }
   }, []);
 
+  const appHeaderToggled = React.useCallback((showHeader: boolean) => {
+    dispatch(props.appBarReducers.setShowAppHeader(showHeader));
+  }, []);
+
+  const appFooterToggled = React.useCallback((showFooter: boolean) => {
+    dispatch(props.appBarReducers.setShowAppFooter(showFooter));
+  }, []);
+
   React.useEffect(() => {
+  }, [
+    showAppHeader,
+    showAppFooter,
+    showAppFooterToggleBtn,
+    showAppHeaderToggleBtn,
+    isCompactMode,
+    isDarkMode,
+    appSettingsMenuIsOpen,
+    appearenceMenuIsOpen,
+    showOptionsMenuBtn,
+    optionsMenuIsOpen,
+    settingsMenuIconBtnEl,
+    appearenceMenuIconBtnEl,
+    optionsMenuIconBtnEl ]);
 
-  }, [props.headerRowsCount,
-    props.footerRowsCount,
-    props.appBarRefreshBtnClicked,
-    props.resized,
-    props.scrolled,
-    props.panelScrollableY,
-    props.panelBodyScrollableX,
-    props.headerRowsCount,
-    props.footerRowsCount]);
-
-  return (<FloatingBarsPanel
-      {...fwProps}
-      className={["trmrk-ftbs-page", props.className ?? "",
-        appThemeClassName, appModeCssClass.value].join(" ")}
-      headerClassName={["trmrk-ftbs-page-header", props.headerClassName ?? ""].join(" ")}
-      footerClassName={["trmrk-ftbs-page-footer", props.footerClassName ?? ""].join(" ")}
-      bodyClassName={["trmrk-ftbs-page-body", props.bodyClassName ?? ""].join(" ")}
-      headerRowsCount={props.headerRowsCount ?? 1}
-      footerRowsCount={props.footerRowsCount ?? 0}
-      headerContent={<AppBar className={["trmrk-ftbs-page-app-bar", props.appBarClassName ?? ""].join(" ")}>
+  return (<BarsPanel panelClassName={[ appThemeClassName, appModeCssClass.value,
+      props.panelClassName ?? "", "trmrk-app-bars-panel" ].join(" ")}
+      headerRowsCount={ showAppHeader ? 1 : 0 }
+      footerRowsCount={ showAppFooter ? 1 : 0 }
+      headerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
         <IconButton onClick={handleSettingsClick} className="trmrk-icon-btn trmrk-settings-btn"><MenuIcon /></IconButton>
         <Link to={props.basePath}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link>
         { showOptionsMenuBtn ? <IconButton
           onClick={handleOptionsClick}
           className="trmrk-icon-btn trmrk-options-btn">
             <MoreHorizIcon /></IconButton> : null }
-        { props.appBarChildren }
+        { props.appHeaderChildren }
         <SettingsMenu
           className={props.settingsMenuClassName}
           menuListClassName={props.settingsMenuListClassName}
@@ -225,7 +227,20 @@ export default function FloatingBarsPage(props: FloatingBarsPageProps) {
           menuClosed={handleOptionsMenuClosed}
           menuAnchorEl={optionsMenuIconBtnEl!}
           refreshBtnClicked={appBarRefreshBtnClicked} />
+      </AppBar>}
+      viewChildren={<React.Fragment>
+        { showAppHeaderToggleBtn ? <ToggleAppBarBtn
+          appBarToggled={appHeaderToggled}
+          showAppBar={showAppHeader}
+          togglesHeader={true} /> : null }
+        { showAppFooterToggleBtn ? <ToggleAppBarBtn
+          appBarToggled={appFooterToggled}
+          showAppBar={showAppFooter}
+          togglesHeader={false} /> : null }
+      </React.Fragment>}
+      footerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
+        { props.appFooterChildren }
       </AppBar>}>
-        {props.children}
-      </FloatingBarsPanel>);
+    { props.children }
+  </BarsPanel>)
 }

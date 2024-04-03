@@ -12,15 +12,15 @@ import {
   AppDataReducers,
 } from "trmrk-react/src/redux/appData";
 
-const trmrk_react_utils = trmrk_browser.domUtils.default;
+const trmrk_dom_utils = trmrk_browser.domUtils.default;
 
 const appDataSlice = createSlice({
   name: "appData",
   initialState: {
     baseLocation: trmrk.url.getBaseLocation(),
     currentUrlPath: "/",
-    isDarkMode: trmrk_react_utils.isDarkMode(),
-    isCompactMode: trmrk_react_utils.isCompactMode(),
+    isDarkMode: trmrk_dom_utils.isDarkMode(),
+    isCompactMode: trmrk_dom_utils.isCompactMode(),
   } as AppData,
   reducers: {
     setCurrentUrlPath: (state, action: ReducerAction<string>) => {

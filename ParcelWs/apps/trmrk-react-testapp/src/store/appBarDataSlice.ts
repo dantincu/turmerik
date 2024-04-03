@@ -23,6 +23,10 @@ const appBarDataSlice = createSlice({
     optionsMenuOpts: {
       isOpen: false,
     },
+    showAppHeader: true,
+    showAppHeaderToggleBtn: true,
+    showAppFooter: true,
+    showAppFooterToggleBtn: true,
   } as AppBarData,
   reducers: {
     setAppSettingsMenuOpts: (
@@ -53,6 +57,18 @@ const appBarDataSlice = createSlice({
     setOptionsMenuIsOpen: (state, action: ReducerAction<boolean>) => {
       state.optionsMenuOpts.isOpen = action.payload;
     },
+    setShowAppHeader: (state, action: ReducerAction<boolean>) => {
+      state.showAppHeader = action.payload;
+    },
+    setShowAppHeaderToggleBtn: (state, action: ReducerAction<boolean>) => {
+      state.showAppHeaderToggleBtn = action.payload;
+    },
+    setShowAppFooter: (state, action: ReducerAction<boolean>) => {
+      state.showAppFooter = action.payload;
+    },
+    setShowAppFooterToggleBtn: (state, action: ReducerAction<boolean>) => {
+      state.showAppFooterToggleBtn = action.payload;
+    },
   },
   selectors: {
     getAppSettingsMenuOpts: (state) => state.appSettingsMenuOpts,
@@ -64,6 +80,10 @@ const appBarDataSlice = createSlice({
     getShowOptionsMenuBtn: (state) => state.showOptionsMenuBtn,
     getOptionsMenuOpts: (state) => state.optionsMenuOpts,
     getOptionsMenuIsOpen: (state) => state.optionsMenuOpts.isOpen,
+    getShowAppHeader: (state) => state.showAppHeader,
+    getShowAppHeaderToggleBtn: (state) => state.showAppHeaderToggleBtn,
+    getShowAppFooter: (state) => state.showAppFooter,
+    getShowAppFooterToggleBtn: (state) => state.showAppFooterToggleBtn,
   },
 });
 
@@ -75,6 +95,10 @@ const {
   setShowOptionsMenuBtn,
   setOptionsMenuOpts,
   setOptionsMenuIsOpen,
+  setShowAppHeader,
+  setShowAppHeaderToggleBtn,
+  setShowAppFooter,
+  setShowAppFooterToggleBtn,
 } = appBarDataSlice.actions;
 
 const {
@@ -85,6 +109,10 @@ const {
   getShowOptionsMenuBtn,
   getOptionsMenuOpts,
   getOptionsMenuIsOpen,
+  getShowAppHeader,
+  getShowAppHeaderToggleBtn,
+  getShowAppFooter,
+  getShowAppFooterToggleBtn,
 } = appBarDataSlice.selectors;
 
 export const appBarReducers: AppBarReducers = {
@@ -95,6 +123,10 @@ export const appBarReducers: AppBarReducers = {
   setShowOptionsMenuBtn,
   setOptionsMenuOpts,
   setOptionsMenuIsOpen,
+  setShowAppHeader,
+  setShowAppHeaderToggleBtn,
+  setShowAppFooter,
+  setShowAppFooterToggleBtn,
 };
 
 export const appBarSelectors: AppBarSelectors = {
@@ -105,6 +137,10 @@ export const appBarSelectors: AppBarSelectors = {
   getShowOptionsMenuBtn,
   getOptionsMenuOpts,
   getOptionsMenuIsOpen,
+  getShowAppHeader,
+  getShowAppHeaderToggleBtn,
+  getShowAppFooter,
+  getShowAppFooterToggleBtn,
 };
 
 export default appBarDataSlice.reducer;

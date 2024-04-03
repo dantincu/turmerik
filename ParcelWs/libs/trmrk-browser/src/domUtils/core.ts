@@ -83,20 +83,7 @@ export const isCompactMode = (
     localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode
   );
 
-  let isCompactMode: boolean;
-
-  if (localStorageIsCompactMode) {
-    if (trmrk.jsonBool.true === localStorageIsCompactMode) {
-      isCompactMode = true;
-    } else if (trmrk.jsonBool.false === localStorageIsCompactMode) {
-      isCompactMode = false;
-    } else {
-      isCompactMode = true;
-    }
-  } else {
-    isCompactMode = true;
-  }
-
+  let isCompactMode = trmrk.jsonBool.false !== localStorageIsCompactMode;
   return isCompactMode;
 };
 
