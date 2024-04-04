@@ -38,7 +38,7 @@ import { searchQuery } from "./data";
 
 import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 
-import { isMobile, isIPadOrIphone } from "trmrk-browser/src/domUtils/constants";
+import { isMobile, isIPhone } from "trmrk-browser/src/domUtils/constants";
 
 import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
 
@@ -159,7 +159,9 @@ export default function IndexedDbEditDb(
       });
 
       setDbStoresArr(newDbStoresArr);
-      setScrollToBottom(true);
+      if (!isMobile) {
+        setScrollToBottom(true);
+      }
   }, [dbStoresArr]);
 
   const getFormCanBeSubmitted = React.useCallback((

@@ -3,13 +3,10 @@
 .trmrk-bars-panel {
   display: block;
   position: relative;
+  height: 100%;
 
   &.trmrk-has-header {
     padding-top: 2.5em;
-  }
-
-  &.trmrk-has-footer {
-    padding-bottom: 2.5em;
   }
 }
 
@@ -20,12 +17,8 @@
 }
 
 .trmrk-panel-body {
-  display: block;
-  position: absolute;
-}
-
-.trmrk-panel-spacer {
-  display: block;
+  display: flex;
+  min-height: 100%;
   position: relative;
 }
 
@@ -65,4 +58,8 @@
 .trmrk-panel-header,
 .trmrk-panel-footer {
   height: 2.5em;
+}
+
+.trmrk-panel-footer ~ .trmrk-panel-body {
+  padding-bottom: 2.5em;
 }

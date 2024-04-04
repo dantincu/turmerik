@@ -17,16 +17,17 @@ export default function BarsPanel(props: BarsPanelProps) {
   return (<div className={[ props.panelClassName ?? "", "trmrk-bars-panel",
       props.showHeader ? "trmrk-has-header" : "",
       props.showFooter ? "trmrk-has-footer" : "",
+      props.scrollableX ? "trmrk-scrollable trmrk-scrollableX" : "",
       props.scrollableY ? "trmrk-scrollable trmrk-scrollableY" : ""].join(" ")}>
     { props.showHeader ? <div className={["trmrk-panel-header"].join(" ")}>
-        { props.headerChildren }
-      </div> : null }
+      { props.headerChildren }
+    </div> : null }
 
-      { props.showFooter ? <div className={["trmrk-panel-footer"].join(" ")}>
-        { props.footerChildren }
-      </div> : null }
+    { props.showFooter ? <div className={["trmrk-panel-footer"].join(" ")}>
+      { props.footerChildren }
+    </div> : null }
 
-    <div className={["trmrk-panel-body", props.scrollableX ? "trmrk-scrollable trmrk-scrollableX" : ""].join(" ")}>
+    <div className={["trmrk-panel-body"].join(" ")}>
       { props.children }
     </div>
   </div>)
