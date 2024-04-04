@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Turmerik.Core.Dependencies;
 using Turmerik.NetCore.Dependencies;
 
-namespace Turmerik.WinForms.Dependencies
+namespace Turmerik.WpfLibrary.Dependencies
 {
     public class ServiceProviderContainer : ServiceProviderContainerBase
     {
@@ -20,7 +20,7 @@ namespace Turmerik.WinForms.Dependencies
         {
             TrmrkCoreServices.RegisterAll(services);
             TrmrkNetCoreServices.RegisterAll(services);
-            WinFormsServices.RegisterAll(services);
+            WpfLibraryServices.RegisterAll(services);
         }
 
         public static Lazy<ServiceProviderContainer> Instance { get; } = new(() => new());
