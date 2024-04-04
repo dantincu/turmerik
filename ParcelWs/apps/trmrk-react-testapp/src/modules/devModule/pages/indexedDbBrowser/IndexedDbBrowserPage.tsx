@@ -8,6 +8,7 @@ import { appBarReducers } from "../../../../store/appBarDataSlice";
 
 export interface IndexedDbBrowserPageProps {
   urlPath: string
+  rootPath: string;
 }
 
 export default function IndexedDbBrowserPage(
@@ -20,5 +21,5 @@ export default function IndexedDbBrowserPage(
     dispatch(appBarReducers.setShowAppFooter(true));
   });
 
-  return (<IndexedDbBrowser basePath={props.urlPath} />);
+  return (<IndexedDbBrowser basePath={props.urlPath} rootPath={props.rootPath} />);
 }

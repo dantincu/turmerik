@@ -45,12 +45,15 @@ body, #app-root {
   .trmrk-icon-btn {
     width: 1.66em;
     height: 1.66em;
+    position: relative;
+    left: 0em;
   }
 
-  .trmrk-options-btn {
+  .trmrk-icon-btn.trmrk-options-btn {
     right: 1.66em;
     position: absolute;
     top: 0em;
+    left: initial;
   }
 }
 

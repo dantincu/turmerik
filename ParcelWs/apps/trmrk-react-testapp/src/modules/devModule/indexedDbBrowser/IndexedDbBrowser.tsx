@@ -29,6 +29,7 @@ import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
 
 export interface IndexedDbBrowserProps {
   basePath: string;
+  rootPath: string;
 }
 
 export default function IndexedDbBrowser(
@@ -150,7 +151,7 @@ export default function IndexedDbBrowser(
     currentDb,
     currentDb?.isExpanded ]);
 
-  return (<AppBarsPanel basePath={props.basePath}
+  return (<AppBarsPanel basePath={props.rootPath}
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}

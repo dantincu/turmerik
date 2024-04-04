@@ -424,8 +424,8 @@ return (<AppBarsPanel basePath={props.basePath}
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}
       appHeaderChildren={<React.Fragment>
-        <IconButton className="trmrk-icon-btn" sx={{ marginLeft: "5em" }} onClick={addDbStoreClicked}><AddIcon /></IconButton>
-        <Typography variant="h4" component="h1" className="trmrk-page-title">{ props.isNewDb ? "Create" : "Edit" } Database</Typography>
+        <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton>
+        <Typography variant="h4" component="span" className="trmrk-page-title">{ props.isNewDb ? "Create" : "Edit" } Database</Typography>
       </React.Fragment>}>
     <Box className="trmrk-page-form trmrk-indexeddb-create-db" ref={rootElRef}>
       { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">
