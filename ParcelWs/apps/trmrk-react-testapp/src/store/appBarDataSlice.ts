@@ -19,7 +19,7 @@ const appBarDataSlice = createSlice({
         isOpen: false,
       },
     },
-    showOptionsMenuBtn: false,
+    showOptionsMenuBtn: true,
     optionsMenuOpts: {
       isOpen: false,
     },

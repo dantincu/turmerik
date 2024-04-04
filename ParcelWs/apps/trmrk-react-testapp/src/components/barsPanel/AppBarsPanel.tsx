@@ -20,6 +20,8 @@ import { appModeCssClass, getAppModeCssClassName,
   setIsCompactModeToLocalStorage,
   setIsDarkModeToLocalStorage } from "trmrk-browser/src/domUtils/core";
 
+import { isAndroid, isIPad, isIPhone, isIPadOrIphone, isMobile } from "trmrk-browser/src/domUtils/constants";
+
 import BarsPanel from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
 
@@ -170,8 +172,8 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
   }, [
     showAppHeader,
     showAppFooter,
-    showAppFooterToggleBtn,
     showAppHeaderToggleBtn,
+    showAppFooterToggleBtn,
     isCompactMode,
     isDarkMode,
     appSettingsMenuIsOpen,
@@ -182,10 +184,19 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     appearenceMenuIconBtnEl,
     optionsMenuIconBtnEl ]);
 
-  return (<BarsPanel panelClassName={[ appThemeClassName, appModeCssClass.value,
-      props.panelClassName ?? "", "trmrk-app-bars-panel" ].join(" ")}
-      headerRowsCount={ showAppHeader ? 1 : 0 }
-      footerRowsCount={ showAppFooter ? 1 : 0 }
+  return (<BarsPanel panelClassName={[
+      appThemeClassName,
+      appModeCssClass.value,
+      props.panelClassName ?? "",
+      "trmrk-app-bars-panel",
+      isMobile ? "trmrk-device-mobile" : "",
+      isAndroid ? "trmrk-device-android" : "",
+      isIPad ? "trmrk-device-ipad" : "",
+      isIPhone ? "trmrk-device-iphone" : "" ].join(" ")}
+      showHeader={ showAppHeader }
+      showFooter={ showAppFooter }
+      scrollableX={true}
+      scrollableY={isCompactMode}
       headerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
         <IconButton onClick={handleSettingsClick} className="trmrk-icon-btn trmrk-settings-btn"><MenuIcon /></IconButton>
         <Link to={props.basePath}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link>
@@ -228,19 +239,17 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
           menuAnchorEl={optionsMenuIconBtnEl!}
           refreshBtnClicked={appBarRefreshBtnClicked} />
       </AppBar>}
-      viewChildren={<React.Fragment>
-        { showAppHeaderToggleBtn ? <ToggleAppBarBtn
-          appBarToggled={appHeaderToggled}
-          showAppBar={showAppHeader}
-          togglesHeader={true} /> : null }
-        { showAppFooterToggleBtn ? <ToggleAppBarBtn
-          appBarToggled={appFooterToggled}
-          showAppBar={showAppFooter}
-          togglesHeader={false} /> : null }
-      </React.Fragment>}
       footerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
         { props.appFooterChildren }
       </AppBar>}>
+    { showAppHeaderToggleBtn ? <ToggleAppBarBtn
+      appBarToggled={appHeaderToggled}
+      showAppBar={showAppHeader}
+      togglesHeader={true} /> : null }
+    { showAppFooterToggleBtn ? <ToggleAppBarBtn
+      appBarToggled={appFooterToggled}
+      showAppBar={showAppFooter}
+      togglesHeader={false} /> : null }
     { props.children }
   </BarsPanel>)
 }

@@ -105,8 +105,10 @@ export const setIsCompactModeToLocalStorage = (
     isCompactMode ? jsonBool.true : jsonBool.false
   );
 
-export const isIPadOrIphone = () => /iPad|iPhone/.test(navigator.userAgent);
-export const isAndroid = () => /Android/.test(navigator.userAgent);
+export const isIPadFunc = () => /iPad/.test(navigator.userAgent);
+export const isIPhoneFunc = () => /iPhone/.test(navigator.userAgent);
+export const isIPadOrIphoneFunc = () => /iPad|iPhone/.test(navigator.userAgent);
+export const isAndroidFunc = () => /Android/.test(navigator.userAgent);
 
 export const extractDigits = (str: string) =>
   trmrk.transformStr(str, (chr) => (/\d/g.test(chr) ? chr : null));

@@ -1,8 +1,7 @@
-import {
-  isIPadOrIphone as isIPadOrIphoneFunc,
-  isAndroid as isAndroidFunc,
-} from "./core";
+import { isAndroidFunc, isIPhoneFunc, isIPadFunc } from "./core";
 
-export const isIPadOrIphone = isIPadOrIphoneFunc();
+export const isIPad = isIPadFunc();
+export const isIPhone = isIPhoneFunc();
+export const isIPadOrIphone = isIPad || isIPhone;
 export const isAndroid = isAndroidFunc();
 export const isMobile = isIPadOrIphone || isAndroid;
