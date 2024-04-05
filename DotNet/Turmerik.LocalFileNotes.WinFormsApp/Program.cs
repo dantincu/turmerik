@@ -5,14 +5,11 @@ using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Logging.Dependencies;
 using Turmerik.Logging;
 using Turmerik.LocalFileNotes.WinFormsApp.Settings;
-using Turmerik.LocalFileNotes.WinFormsApp.Settings.UI;
-// using Turmerik.LocalFileNotes.WinFormsApp.UserControls;
 using Turmerik.WinForms.Controls;
 using Turmerik.Core.Helpers;
 using Turmerik.WinForms.Actions;
 using Turmerik.Core.Actions;
 using Serilog.Core;
-// using Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms;
 using System.Windows.Forms;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Dependencies;
@@ -78,7 +75,6 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
                         Application.Run(mainForm);
 
                         mainForm.AppRecoveryToolRequested -= appRecoveryToolRequested;
-                        mainForm.UnregisterContainers();
                     }
 
                     return ActionResultH.Create(0);
@@ -163,12 +159,6 @@ namespace Turmerik.LocalFileNotes.WinFormsApp
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
                     services.AddSingleton<IAppSettings, AppSettings>();
-                    services.AddSingleton<IUISettingsRetriever, UISettingsRetriever>();
-                    services.AddSingleton<IUIThemeRetriever, UIThemeRetriever>();
-                    services.AddSingleton<ControlBlinkTimersManagerAdapterFactory>();
-                    services.AddSingleton<ControlBlinkTimersManagerAdapterContainer>();
-                    services.AddSingleton<ControlBlinkTimersManagerAltAdapterContainer>();
-                    services.AddSingleton<ToolTipHintsOrchestratorRetriever>();
                 }));
 
             return svcProv;

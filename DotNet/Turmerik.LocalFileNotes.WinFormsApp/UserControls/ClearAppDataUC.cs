@@ -14,7 +14,6 @@ using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Logging;
 using Turmerik.Core.UIActions;
 using Turmerik.LocalFileNotes.WinFormsApp.Settings;
-using Turmerik.LocalFileNotes.WinFormsApp.Settings.UI;
 using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
@@ -101,8 +100,6 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls
                 foreach (var type in new Type[]
                 {
                     typeof(AppSettings),
-                    typeof(UISettingsRetriever),
-                    typeof(UIThemeRetriever)
                 })
                 {
                     var dirPath = appEnv.GetTypePath(AppEnvDir.Data, type);
