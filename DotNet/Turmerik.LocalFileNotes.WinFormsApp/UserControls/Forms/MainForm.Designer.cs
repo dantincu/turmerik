@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             statusStripMain = new StatusStrip();
-            menuStripMain = new MenuStrip();
             toolStripStatusLabelMain = new ToolStripStatusLabel();
+            contextMenuStripMain = new ContextMenuStrip(components);
+            openToolStripMenuItem1 = new ToolStripMenuItem();
             statusStripMain.SuspendLayout();
+            contextMenuStripMain.SuspendLayout();
             SuspendLayout();
             // 
             // statusStripMain
@@ -44,18 +47,22 @@
             statusStripMain.TabIndex = 0;
             statusStripMain.Text = "asdfsadf";
             // 
-            // menuStripMain
-            // 
-            menuStripMain.Location = new Point(3, 64);
-            menuStripMain.Name = "menuStripMain";
-            menuStripMain.Size = new Size(1794, 24);
-            menuStripMain.TabIndex = 1;
-            menuStripMain.Text = "menuStrip1";
-            // 
             // toolStripStatusLabelMain
             // 
             toolStripStatusLabelMain.Name = "toolStripStatusLabelMain";
             toolStripStatusLabelMain.Size = new Size(0, 17);
+            // 
+            // contextMenuStripMain
+            // 
+            contextMenuStripMain.Items.AddRange(new ToolStripItem[] { openToolStripMenuItem1 });
+            contextMenuStripMain.Name = "contextMenuStripMain";
+            contextMenuStripMain.Size = new Size(181, 48);
+            // 
+            // openToolStripMenuItem1
+            // 
+            openToolStripMenuItem1.Name = "openToolStripMenuItem1";
+            openToolStripMenuItem1.Size = new Size(180, 22);
+            openToolStripMenuItem1.Text = "&Open";
             // 
             // MainForm
             // 
@@ -63,15 +70,15 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1800, 900);
             Controls.Add(statusStripMain);
-            Controls.Add(menuStripMain);
+            DrawerShowIconsWhenHidden = true;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MainMenuStrip = menuStripMain;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Turmerik Local File Notes";
             Load += MainForm_Load;
             statusStripMain.ResumeLayout(false);
             statusStripMain.PerformLayout();
+            contextMenuStripMain.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -79,7 +86,9 @@
         #endregion
 
         private StatusStrip statusStripMain;
-        private MenuStrip menuStripMain;
         private ToolStripStatusLabel toolStripStatusLabelMain;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ContextMenuStrip contextMenuStripMain;
+        private ToolStripMenuItem openToolStripMenuItem1;
     }
 }
