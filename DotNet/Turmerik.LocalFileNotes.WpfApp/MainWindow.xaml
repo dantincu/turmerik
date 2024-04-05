@@ -6,18 +6,28 @@
         xmlns:local="clr-namespace:Turmerik.LocalFileNotes.WpfApp"
         xmlns:vm="clr-namespace:Turmerik.LocalFileNotes.WpfApp.ViewModels"
         mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
+        Background="{DynamicResource MaterialDesign.Brush.Background}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
         Title="Turmerik Local File Notes" Height="900" Width="1800"
         WindowStartupLocation="CenterScreen"
         xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
     <Window.DataContext>
         <vm:MainWindowVM />
-        <!-- Replace 'local' with your namespace -->
     </Window.DataContext>
     <Grid>
+        <materialDesign:Snackbar x:Name="MainSnackbar"
+            Grid.Row="1"
+            MessageQueue="{materialDesign:MessageQueue}" />
         <!--Button HorizontalAlignment="Left" Margin="133,50,0,0" VerticalAlignment="Top"
                 Content="{materialIcons:MaterialIconExt Kind=Abacus}" Width="25" Cursor="Hand" / -->
         <!--materialIcons:MaterialIcon Kind="ArrowLeft" /-->
-        <Button Content="{Binding Path=FirstName, FallbackValue=Fallback Text1, PresentationTraceSources.TraceLevel=High}" Width="100" Height="25" Foreground="Black" Margin="-50, -50,0,0" />
-        <Button Content="{Binding FirstName, FallbackValue=Fallback Text2, PresentationTraceSources.TraceLevel=High}" Width="100" Height="25" Foreground="Black" Margin="-150, -150,0,0" />
+        <!--Frame Name="MainFrame" NavigationUIVisibility="Visible" /-->
+        <!--Button Content="{Binding Path=FirstName, FallbackValue=Fallback Text1, PresentationTraceSources.TraceLevel=High}" Width="100" Height="25" Foreground="Black" Margin="-50, -50,0,0" />
+        <Button Content="{Binding FirstName, FallbackValue=Fallback Text2, PresentationTraceSources.TraceLevel=High}" Width="100" Height="25" Foreground="Black" Margin="-150, -150,0,0" /-->
+        
     </Grid>
 </Window>
