@@ -10,6 +10,7 @@ using Turmerik.WinForms.Actions;
 using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
+using Turmerik.LocalFileNotes.WinFormsApp.Pages;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
 {
@@ -24,10 +25,13 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
+        private readonly Dictionary<MainFormTabPageIcon, Bitmap> tabPageIconsMap;
 
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
 
         private Action appRecoveryToolRequested;
+
+        private List<MainFormHomeTabPageTupleBase> tabPageTuples;
 
         public MainForm()
         {
@@ -46,6 +50,19 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             }
 
             InitializeComponent();
+            tabPageTuples = new List<MainFormHomeTabPageTupleBase>();
+            tabPageIconsMap = MainFormTabPageH.GetMainFormTabPageIconsMap();
+
+            var imageList = new ImageList();
+            imageList.ImageSize = new Size(24, 24);
+
+            foreach (var kvp in tabPageIconsMap)
+            {
+                imageList.Images.Add(
+                    kvp.Value);
+            }
+
+            tabControlMain.ImageList = imageList;
 
             if (svcProvContnr.IsRegistered)
             {
@@ -127,7 +144,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
 
         public void UnregisterContainers()
         {
-            svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RemoveData();
+            /* svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterContainer>().RemoveData(); */
             svcProv.GetRequiredService<ToolTipHintsOrchestratorRetriever>().RemoveData();
         }
 
@@ -139,6 +156,32 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             menuStripMain.Items.Remove(
                 textTransformActionsToolStripMenuItem); */
         }
+
+        private void AddNewTab(MainFormHomeTabPageOpts opts) => actionComponent.Execute(
+            new WinFormsActionOpts<MainFormHomeTabPageTupleBase>
+            {
+                ActionName = nameof(AddNewTab),
+                Action = () =>
+                {
+                    MainFormHomeTabPageTupleBase tabPageTuple;
+
+                    switch (opts.ResourceType)
+                    {
+                        case MainFormTabPageResourceType.HomePage:
+                            tabPageTuple = new MainFormHomeTabPage(
+                                opts.Title).CreateTuple(opts.Title);
+                            break;
+                        default:
+                            throw new ArgumentException(
+                                nameof(opts.ResourceType));
+                    }
+
+                    tabPageTuples.Add(tabPageTuple);
+                    tabControlMain.TabPages.Add(tabPageTuple.TabPageControl);
+
+                    return ActionResultH.Create(tabPageTuple);
+                }
+            });
 
         #region UI Event Handlers
 
@@ -190,6 +233,15 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
                         HideAllActionMenuStripItems();
                         // menuStripMain.Items.Insert(0, textUtilsActionsToolStripMenuItem);
 
+                        if (tabControlMain.TabPages.Count == 0)
+                        {
+                            AddNewTab(new MainFormHomeTabPageOpts
+                            {
+                                ResourceType = MainFormTabPageResourceType.HomePage,
+                                Title = "Home"
+                            });
+                        }
+
                         return ActionResultH.Create(delayIdx);
                     }
                 });
@@ -210,6 +262,11 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
                     }
                 });
             }
+        }
+
+        private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
         #endregion UI Event Handlers

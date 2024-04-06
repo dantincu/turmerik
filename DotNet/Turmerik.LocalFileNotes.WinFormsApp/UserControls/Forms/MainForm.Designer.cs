@@ -36,6 +36,7 @@
             showHintsToolStripMenuItem = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
+            tabControlMain = new TabControl();
             statusStripMain.SuspendLayout();
             menuStripMain.SuspendLayout();
             SuspendLayout();
@@ -90,11 +91,22 @@
             startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
             startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
             // 
+            // tabControlMain
+            // 
+            tabControlMain.Dock = DockStyle.Fill;
+            tabControlMain.Location = new Point(0, 24);
+            tabControlMain.Name = "tabControlMain";
+            tabControlMain.SelectedIndex = 0;
+            tabControlMain.Size = new Size(1800, 854);
+            tabControlMain.TabIndex = 4;
+            tabControlMain.SelectedIndexChanged += TabControlMain_SelectedIndexChanged;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1800, 900);
+            Controls.Add(tabControlMain);
             Controls.Add(statusStripMain);
             Controls.Add(menuStripMain);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -120,5 +132,6 @@
         private ToolStripMenuItem showHintsToolStripMenuItem;
         private ToolStripMenuItem startAppRecoveryToolToolStripMenuItem;
         private ToolStripComboBox toolStripComboBoxShowHints;
+        private TabControl tabControlMain;
     }
 }
