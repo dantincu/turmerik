@@ -12,6 +12,7 @@ namespace Turmerik.Core.ConsoleApps
         }
 
         public string[] RawArgs { get; }
+        public string[] ExpandedRawArgs { get; set; }
         public Func<TArgsMtbl> ArgsFactory { get; set; }
         public char OptsStartChar { get; set; }
         public char OptsArgDelimChar { get; set; }

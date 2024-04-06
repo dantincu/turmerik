@@ -53,7 +53,8 @@ namespace Turmerik.Core.ConsoleApps
         public ConsoleArgsParser(
             IDelimCharsExtractor delimCharsExtractor)
         {
-            this.delimCharsExtractor = delimCharsExtractor ?? throw new ArgumentNullException(nameof(delimCharsExtractor));
+            this.delimCharsExtractor = delimCharsExtractor ?? throw new ArgumentNullException(
+                nameof(delimCharsExtractor));
         }
 
         public ConsoleArgsItemOpts<TArgsMtbl> ArgsItemOpts<TArgsMtbl>(
@@ -211,7 +212,7 @@ namespace Turmerik.Core.ConsoleApps
                 NormalizeOpts(opts);
             }
 
-            var retArgs = opts.RawArgs.SelectMany(
+            opts.ExpandedRawArgs = opts.RawArgs.SelectMany(
                 arg =>
                 {
                     string[] argItemArr = delimCharsExtractor.SplitStr(
@@ -234,7 +235,7 @@ namespace Turmerik.Core.ConsoleApps
                     return argItemArr;
                 }).ToArray();
 
-            return retArgs;
+            return opts.ExpandedRawArgs;
         }
 
         private void SetArgItem<TArgsMtbl>(

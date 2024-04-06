@@ -377,13 +377,16 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                                                 var args = data.Args;
                                                 var parent = args.Current.ParentNode;
 
-                                                args.Current = new ProgramArgs.Node
+                                                if (data.TotalCount + 1 < data.Opts.ExpandedRawArgs.Length)
                                                 {
-                                                    ParentNode = parent,
-                                                    ChildNodes = new List<ProgramArgs.Node>()
-                                                };
+                                                    args.Current = new ProgramArgs.Node
+                                                    {
+                                                        ParentNode = parent,
+                                                        ChildNodes = new List<ProgramArgs.Node>()
+                                                    };
 
-                                                args.CurrentSibblings.Add(args.Current);
+                                                    args.CurrentSibblings.Add(args.Current);
+                                                }
                                             }),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.WorkDir.Arr(),

@@ -8,7 +8,7 @@
     "OpenMdFile": "o",
     "SkipMdFileCreation": "sk",
     "DirNameTpl": "t",
-    "CreateNote": "nn",
+    "CreateNote": "n",
     "CreateNoteBook": "nb",
     "CreateNoteInternalsDir": "ni",
     "CreateNoteFilesDir": "nf",
@@ -18,7 +18,8 @@
     "ShowOtherDirNames": "so",
     "HcyChildNode": "+",
     "HcyParentNode": "-",
-    "HcySibblingNode": "="
+    "HcySibblingNode": "=",
+    "Macro": "m"
   },
   "DirNames": {
     "DefaultJoinStr": "-",
@@ -46,5 +47,15 @@
     "KeepFileContentsTemplate": "{0}",
     "MdFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
     "MdFileContentSectionTemplate": "{0}  \n\n"
+  },
+  "Macros": {
+    "Map": {
+      "lm": [ ":n", "Misc", ":+", ":n", "#list#", ":-", ":=" ],
+      "la": [ ":n", "Articles", ":+", ":n", "#list#", ":-", ":=" ],
+      "lp": [ ":n", "Persons", ":+", ":n", "#list#", ":-", ":=" ],
+      "lpp": [ ":n", "Public Persons", ":+", ":n", "#list#", ":-", ":=" ],
+      "ltc": [ ":n", "Terms & Concepts", ":+", ":n", "#list#", ":-", ":=" ],
+      "lps": [ ":n", "Products & Services", ":+", ":n", "#list#", ":-", ":=" ]
+    }
   }
 }
