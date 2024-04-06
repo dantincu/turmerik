@@ -34,11 +34,17 @@ namespace Turmerik.Core.ConsoleApps
 
         ConsoleArgsParserData<TArgsMtbl> Parse<TArgsMtbl>(
             ConsoleArgsParserOpts<TArgsMtbl> opts);
+
+        string[] ApplyMacros<TArgsMtbl>(
+            ConsoleArgsParserOpts<TArgsMtbl> opts);
+
+        void NormalizeOpts<TArgsMtbl>(
+            ConsoleArgsParserOpts<TArgsMtbl> opts);
     }
 
     public class ConsoleArgsParser : IConsoleArgsParser
     {
-        public const char OPTS_START_CHAR = ':'; // '/';
+        public const char OPTS_START_CHAR = ':';
         public const char OPTS_ARG_DELIM_CHAR = ':';
         public const char OPTS_ARG_SPACE_CHAR = '?';
 
@@ -146,29 +152,46 @@ namespace Turmerik.Core.ConsoleApps
         public ConsoleArgsParserData<TArgsMtbl> Parse<TArgsMtbl>(
             ConsoleArgsParserOpts<TArgsMtbl> opts)
         {
-            opts.OptsStartChar = opts.OptsStartChar.IfDefault(
-                () => OPTS_START_CHAR);
-
-            opts.OptsArgDelimChar = opts.OptsArgDelimChar.IfDefault(
-                () => OPTS_ARG_DELIM_CHAR);
+            NormalizeOpts(opts);
 
             var data = new ConsoleArgsParserData<TArgsMtbl>
             {
                 Opts = opts,
-                Args = opts.ArgsFactory.FirstNotNull(
-                    Activator.CreateInstance<TArgsMtbl>).Invoke(),
+                Args = opts.ArgsFactory.Invoke(),
             };
 
             Parse(opts, data);
             return data;
         }
 
+        public string[] ApplyMacros<TArgsMtbl>(
+            ConsoleArgsParserOpts<TArgsMtbl> opts) => ApplyMacros(
+                opts, true);
+
+        public void NormalizeOpts<TArgsMtbl>(
+            ConsoleArgsParserOpts<TArgsMtbl> opts)
+        {
+            if (opts.RawArgs == null)
+            {
+                throw new ArgumentNullException(
+                    nameof(opts.RawArgs));
+            }
+
+            opts.OptsStartChar = opts.OptsStartChar.IfDefault(
+                () => OPTS_START_CHAR);
+
+            opts.OptsArgDelimChar = opts.OptsArgDelimChar.IfDefault(
+                () => OPTS_ARG_DELIM_CHAR);
+
+            opts.ArgsFactory = opts.ArgsFactory.FirstNotNull(
+                Activator.CreateInstance<TArgsMtbl>);
+        }
+
         private void Parse<TArgsMtbl>(
             ConsoleArgsParserOpts<TArgsMtbl> opts,
             ConsoleArgsParserData<TArgsMtbl> data)
         {
-            var rawArgs = opts.RawArgs ?? throw new ArgumentNullException(
-                nameof(opts.RawArgs));
+            var rawArgs = ApplyMacros(opts, false);
 
             for (int i = 0; i < rawArgs.Length; i++)
             {
@@ -177,6 +200,41 @@ namespace Turmerik.Core.ConsoleApps
                 SetArgItem(opts, data);
                 opts.ArgsBuilder(data);
             }
+        }
+
+        private string[] ApplyMacros<TArgsMtbl>(
+            ConsoleArgsParserOpts<TArgsMtbl> opts,
+            bool normalize)
+        {
+            if (normalize)
+            {
+                NormalizeOpts(opts);
+            }
+
+            var retArgs = opts.RawArgs.SelectMany(
+                arg =>
+                {
+                    string[] argItemArr = delimCharsExtractor.SplitStr(
+                        arg,
+                        opts.OptsArgDelimChar,
+                        opts.OptsStartChar,
+                        opts.OptsArgEmptyChar,
+                        out bool startsWithDelim);
+
+                    if (startsWithDelim && argItemArr[0] == opts.MacroFlagName)
+                    {
+                        argItemArr = argItemArr.Skip(1).SelectMany(
+                            arg => opts.MacrosMap[arg]).ToArray();
+                    }
+                    else
+                    {
+                        argItemArr = [arg];
+                    }
+
+                    return argItemArr;
+                }).ToArray();
+
+            return retArgs;
         }
 
         private void SetArgItem<TArgsMtbl>(

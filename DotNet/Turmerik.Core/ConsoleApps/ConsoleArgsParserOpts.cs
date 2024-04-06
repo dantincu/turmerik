@@ -17,5 +17,7 @@ namespace Turmerik.Core.ConsoleApps
         public char OptsArgDelimChar { get; set; }
         public char OptsArgEmptyChar { get; set; }
         public Action<ConsoleArgsParserData<TArgsMtbl>> ArgsBuilder { get; set; }
+        public string MacroFlagName { get; set; }
+        public Dictionary<string, string[]> MacrosMap { get; set; }
     }
 }

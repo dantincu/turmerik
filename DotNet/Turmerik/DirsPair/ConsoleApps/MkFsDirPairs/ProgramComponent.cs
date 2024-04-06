@@ -299,6 +299,8 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                         args.RootNodes = new List<ProgramArgs.Node> { args.Current };
                         args.CurrentSibblings = args.RootNodes;
                     }),
+                    MacroFlagName = config.ArgOpts.Macro,
+                    MacrosMap = config.Macros.Map,
                     ArgsBuilder = data =>
                     {
                         var args = data.Args;

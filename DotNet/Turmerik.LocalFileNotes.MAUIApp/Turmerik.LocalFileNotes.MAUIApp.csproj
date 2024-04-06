@@ -13,7 +13,9 @@
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
-		<OutputType>Exe</OutputType>
+    <PublishReadyToRun>true</PublishReadyToRun>
+
+    <OutputType>Exe</OutputType>
 		<RootNamespace>Turmerik.LocalFileNotes.MAUIApp</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>

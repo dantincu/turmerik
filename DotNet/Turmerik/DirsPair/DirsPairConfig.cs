@@ -14,6 +14,7 @@ namespace Turmerik.DirsPair
         public DirNamesT DirNames { get; set; }
         public FileNamesT FileNames { get; set; }
         public FileContentsT FileContents { get; set; }
+        public MacrosT Macros { get; set; }
 
         public class ArgOptionsT
         {
@@ -33,6 +34,7 @@ namespace Turmerik.DirsPair
             public string HcyChildNode { get; set; }
             public string HcyParentNode { get; set; }
             public string HcySibblingNode { get; set; }
+            public string Macro { get; set; }
         }
 
         public class DirNamesT
@@ -59,6 +61,11 @@ namespace Turmerik.DirsPair
             public string KeepFileContentsTemplate { get; set; }
             public string MdFileContentsTemplate { get; set; }
             public string MdFileContentSectionTemplate { get; set; }
+        }
+
+        public class MacrosT
+        {
+            public Dictionary<string, string[]> Map { get; set; }
         }
     }
 }
