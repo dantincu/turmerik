@@ -83,6 +83,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{64F5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkScripts.ConsoleApp", "Turmerik.MkScripts.ConsoleApp\Turmerik.MkScripts.ConsoleApp.csproj", "{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.LocalFileNotes.WinFormsApp", "Turmerik.LocalFileNotes.WinFormsApp\Turmerik.LocalFileNotes.WinFormsApp.csproj", "{2C598546-998D-47B5-A0E1-8B14D1FBF2F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +215,10 @@ Global
 		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C598546-998D-47B5-A0E1-8B14D1FBF2F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C598546-998D-47B5-A0E1-8B14D1FBF2F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C598546-998D-47B5-A0E1-8B14D1FBF2F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C598546-998D-47B5-A0E1-8B14D1FBF2F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -254,6 +260,7 @@ Global
 		{A133C317-4727-4D2A-A4E4-47FF7D745A8E} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{64F5E958-F7DD-4526-A21F-3C9E7378B455} = {FC13E95F-6405-4DF0-B40C-4D4D077A59AE}
 		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1} = {64F5E958-F7DD-4526-A21F-3C9E7378B455}
+		{2C598546-998D-47B5-A0E1-8B14D1FBF2F7} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
