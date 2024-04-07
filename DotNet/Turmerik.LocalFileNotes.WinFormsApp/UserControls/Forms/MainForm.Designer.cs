@@ -38,11 +38,18 @@
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
             tabControlMain = new TabControl();
             splitContainerMain = new SplitContainer();
+            splitContainerMainContent = new SplitContainer();
+            tabControlAlt = new TabControl();
+            panelTopControls = new Panel();
             statusStripMain.SuspendLayout();
             menuStripMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).BeginInit();
             splitContainerMain.Panel2.SuspendLayout();
             splitContainerMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainerMainContent).BeginInit();
+            splitContainerMainContent.Panel1.SuspendLayout();
+            splitContainerMainContent.Panel2.SuspendLayout();
+            splitContainerMainContent.SuspendLayout();
             SuspendLayout();
             // 
             // statusStripMain
@@ -114,10 +121,45 @@
             // 
             // splitContainerMain.Panel2
             // 
-            splitContainerMain.Panel2.Controls.Add(tabControlMain);
+            splitContainerMain.Panel2.Controls.Add(splitContainerMainContent);
             splitContainerMain.Size = new Size(1800, 854);
-            splitContainerMain.SplitterDistance = 600;
+            splitContainerMain.SplitterDistance = 400;
             splitContainerMain.TabIndex = 5;
+            // 
+            // splitContainerMainContent
+            // 
+            splitContainerMainContent.Dock = DockStyle.Fill;
+            splitContainerMainContent.Location = new Point(0, 0);
+            splitContainerMainContent.Name = "splitContainerMainContent";
+            // 
+            // splitContainerMainContent.Panel1
+            // 
+            splitContainerMainContent.Panel1.Controls.Add(tabControlMain);
+            // 
+            // splitContainerMainContent.Panel2
+            // 
+            splitContainerMainContent.Panel2.Controls.Add(tabControlAlt);
+            splitContainerMainContent.Panel2Collapsed = true;
+            splitContainerMainContent.Size = new Size(1800, 854);
+            splitContainerMainContent.SplitterDistance = 900;
+            splitContainerMainContent.TabIndex = 6;
+            // 
+            // tabControlAlt
+            // 
+            tabControlAlt.Dock = DockStyle.Fill;
+            tabControlAlt.Location = new Point(0, 0);
+            tabControlAlt.Name = "tabControlAlt";
+            tabControlAlt.SelectedIndex = 0;
+            tabControlAlt.Size = new Size(96, 100);
+            tabControlAlt.TabIndex = 5;
+            // 
+            // panelTopControls
+            // 
+            panelTopControls.Dock = DockStyle.Top;
+            panelTopControls.Location = new Point(0, 24);
+            panelTopControls.Name = "panelTopControls";
+            panelTopControls.Size = new Size(1800, 25);
+            panelTopControls.TabIndex = 6;
             // 
             // MainForm
             // 
@@ -125,6 +167,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1800, 900);
             Controls.Add(splitContainerMain);
+            Controls.Add(panelTopControls);
             Controls.Add(statusStripMain);
             Controls.Add(menuStripMain);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -140,6 +183,10 @@
             splitContainerMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();
             splitContainerMain.ResumeLayout(false);
+            splitContainerMainContent.Panel1.ResumeLayout(false);
+            splitContainerMainContent.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainerMainContent).EndInit();
+            splitContainerMainContent.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -155,5 +202,8 @@
         private ToolStripComboBox toolStripComboBoxShowHints;
         private TabControl tabControlMain;
         private SplitContainer splitContainerMain;
+        private TabControl tabControlAlt;
+        private SplitContainer splitContainerMainContent;
+        private Panel panelTopControls;
     }
 }
