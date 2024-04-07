@@ -11,6 +11,9 @@ using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using Turmerik.LocalFileNotes.WinFormsApp.Pages;
+using Turmerik.LocalFileNotes.WinFormsApp.UserControls.Pages;
+using Turmerik.LocalFileNotes.WinFormsApp.Pages.Impl;
+using Turmerik.LocalFileNotes.WinFormsApp.UserControls.SidePanels;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
 {
@@ -25,13 +28,18 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
         private readonly IWinFormsActionComponentCreator actionComponentCreator;
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
-        private readonly Dictionary<MainFormTabPageIcon, Bitmap> tabPageIconsMap;
+        private readonly Dictionary<AppPageIcon, Bitmap> tabPageIconsMap;
 
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
 
         private Action appRecoveryToolRequested;
 
-        private List<MainFormHomeTabPageTupleBase> tabPageTuples;
+        private List<AppPageTupleBase> appPageTuplesList;
+        private AppPageTupleBase currentAppPageTuple;
+
+        private FileExplorerHcyUC fileExplorerHcyUC;
+        private NoteExplorerHcyUC noteExplorerHcyUC;
+        private NoteFileExplorerHcyUC noteFileExplorerHcyUC;
 
         public MainForm()
         {
@@ -50,8 +58,9 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             }
 
             InitializeComponent();
-            tabPageTuples = new List<MainFormHomeTabPageTupleBase>();
-            tabPageIconsMap = MainFormTabPageH.GetMainFormTabPageIconsMap();
+
+            appPageTuplesList = new List<AppPageTupleBase>();
+            tabPageIconsMap = AppPageH.GetMainFormTabPageIconsMap();
 
             var imageList = new ImageList();
             imageList.ImageSize = new Size(24, 24);
@@ -64,20 +73,26 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
 
             tabControlMain.ImageList = imageList;
 
+            fileExplorerHcyUC = new FileExplorerHcyUC();
+            noteExplorerHcyUC = new NoteExplorerHcyUC();
+            noteFileExplorerHcyUC = new NoteFileExplorerHcyUC();
+
+            fileExplorerHcyUC.Dock = DockStyle.Fill;
+            noteExplorerHcyUC.Dock = DockStyle.Fill;
+            noteFileExplorerHcyUC.Dock = DockStyle.Fill;
+
             if (svcProvContnr.IsRegistered)
             {
                 try
                 {
                     uIThemeRetriever.Data.ActWith(uiTheme =>
                     {
-                        /* uiTheme.ApplyBgColor([
+                        uiTheme.ApplyBgColor([
                             this,
                             this.tabControlMain,
-                            this.tabPageTextUtils,
-                            this.textUtilsUC
                         ]);
 
-                        textUtilsUC.AltRefUxControl.ForeColor = uiTheme.InfoIconColor; */
+                        // textUtilsUC.AltRefUxControl.ForeColor = uiTheme.InfoIconColor;
 
                         actionComponentCreator.DefaultStatusLabelOpts = new WinFormsStatusLabelActionComponentOpts
                         {
@@ -157,31 +172,137 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
                 textTransformActionsToolStripMenuItem); */
         }
 
-        private void AddNewTab(MainFormHomeTabPageOpts opts) => actionComponent.Execute(
-            new WinFormsActionOpts<MainFormHomeTabPageTupleBase>
+        private void OpenHomePage() => OpenInNewTab(new AppPageOpts
+        {
+            ResourceType = AppPageResourceType.Home,
+            Title = "Home"
+        });
+
+        private void OpenInNewTab(AppPageOpts opts) => actionComponent.Execute(
+            new WinFormsActionOpts<AppPageTupleBase>
             {
-                ActionName = nameof(AddNewTab),
+                ActionName = nameof(OpenInNewTab),
                 Action = () =>
                 {
-                    MainFormHomeTabPageTupleBase tabPageTuple;
+                    var appPageTuple = CreateAppPageTuple(opts);
+                    appPageTuplesList.Add(appPageTuple);
 
-                    switch (opts.ResourceType)
-                    {
-                        case MainFormTabPageResourceType.HomePage:
-                            tabPageTuple = new MainFormHomeTabPage(
-                                opts.Title).CreateTuple(opts.Title);
-                            break;
-                        default:
-                            throw new ArgumentException(
-                                nameof(opts.ResourceType));
-                    }
+                    tabControlMain.TabPages.Add(
+                        appPageTuple.TabPageControl);
 
-                    tabPageTuples.Add(tabPageTuple);
-                    tabControlMain.TabPages.Add(tabPageTuple.TabPageControl);
-
-                    return ActionResultH.Create(tabPageTuple);
+                    UpdateCurrentTab(opts, appPageTuple);
+                    return ActionResultH.Create(appPageTuple);
                 }
             });
+
+        private void OpenInCurrentTab(AppPageOpts opts) => actionComponent.Execute(
+            new WinFormsActionOpts<AppPageTupleBase>
+            {
+                ActionName = nameof(OpenInNewTab),
+                Action = () =>
+                {
+                    var currentTabPageIdx = appPageTuplesList.IndexOf(
+                        currentAppPageTuple);
+
+                    var appPageTuple = CreateAppPageTuple(
+                        opts, currentAppPageTuple.TabPageControl);
+
+                    currentAppPageTuple.Dispose();
+                    appPageTuplesList[currentTabPageIdx] = appPageTuple;
+
+                    UpdateCurrentTab(opts, appPageTuple);
+                    return ActionResultH.Create(appPageTuple);
+                }
+            });
+
+        private void UpdateCurrentTab(
+            AppPageOpts opts,
+            AppPageTupleBase appPageTuple)
+        {
+            var sidePanelUC = UpdateSidePanelUC(
+                appPageTuple.GetAppPageData().SidePanel);
+
+            sidePanelUC?.SetIdnf(opts.Idnf);
+            currentAppPageTuple = appPageTuple;
+        }
+
+        private void CloseCurrentTab() => actionComponent.Execute(
+            new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(CloseCurrentTab),
+                Action = () =>
+                {
+                    currentAppPageTuple.TabPageControl.Controls.Clear();
+
+                    tabControlMain.TabPages.Remove(
+                        currentAppPageTuple.TabPageControl);
+
+                    currentAppPageTuple.Dispose();
+                    return ActionResultH.Create(0);
+                }
+            }).ActWith(actionResult => (actionResult.IsSuccess && appPageTuplesList.Count == 0).ActIf(
+                () => OpenHomePage()));
+
+        private AppPageTupleBase CreateAppPageTuple(
+            AppPageOpts opts,
+            TabPage tabPage = null)
+        {
+            AppPageTupleBase appPageTuple = opts.ResourceType switch
+            {
+                AppPageResourceType.Home => new AppHomePage().CreateTuple(
+                    new AppHomePageUC(),
+                    opts.Title,
+                    tabPage),
+                AppPageResourceType.FileExplorer => new AppFileExplorerPage(
+                    opts.Idnf).CreateTuple(
+                        new AppFileExplorerUC(),
+                        opts.Title,
+                        tabPage),
+                _ => throw new ArgumentException(nameof(opts.ResourceType))
+            };
+
+            var appPageUC = appPageTuple.GetAppPageUC();
+            appPageUC.OnCloseCurrentTab += CloseCurrentTab;
+            appPageUC.OnOpenPageInNewTab += OpenInCurrentTab;
+            appPageUC.OnOpenPageInCurrentTab += OpenInCurrentTab;
+
+            return appPageTuple;
+        }
+
+        private void DetachSidePanelUC()
+        {
+            splitContainerMain.Panel1.Controls.Clear();
+            splitContainerMain.Panel1Collapsed = true;
+        }
+
+        private UserControl? GetSidePanelUC(
+            AppPageSidePanel appPageSidePanel) => appPageSidePanel switch
+            {
+                AppPageSidePanel.FileExplorer => fileExplorerHcyUC,
+                AppPageSidePanel.NoteExplorer => noteExplorerHcyUC,
+                AppPageSidePanel.NoteFileExplorer => noteFileExplorerHcyUC,
+                _ => null
+            };
+
+        private ISidePanelUC? UpdateSidePanelUC(
+            AppPageSidePanel appPageSidePanel,
+            bool detachFirst = true)
+        {
+            if (detachFirst)
+            {
+                DetachSidePanelUC();
+            }
+
+            var sidePanelUC = GetSidePanelUC(appPageSidePanel);
+
+            if (sidePanelUC != null)
+            {
+                splitContainerMain.Panel1.Controls.Add(sidePanelUC);
+                splitContainerMain.Panel1Collapsed = false;
+            }
+
+            return sidePanelUC as ISidePanelUC;
+        }
 
         #region UI Event Handlers
 
@@ -235,11 +356,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
 
                         if (tabControlMain.TabPages.Count == 0)
                         {
-                            AddNewTab(new MainFormHomeTabPageOpts
-                            {
-                                ResourceType = MainFormTabPageResourceType.HomePage,
-                                Title = "Home"
-                            });
+                            OpenHomePage();
                         }
 
                         return ActionResultH.Create(delayIdx);
@@ -264,9 +381,9 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             }
         }
 
-        private void TabControlMain_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabControlMain_SelectedIndexChanged(
+            object sender, EventArgs e)
         {
-
         }
 
         #endregion UI Event Handlers

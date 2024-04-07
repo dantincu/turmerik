@@ -37,8 +37,12 @@
             toolStripComboBoxShowHints = new ToolStripComboBox();
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
             tabControlMain = new TabControl();
+            splitContainerMain = new SplitContainer();
             statusStripMain.SuspendLayout();
             menuStripMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainerMain).BeginInit();
+            splitContainerMain.Panel2.SuspendLayout();
+            splitContainerMain.SuspendLayout();
             SuspendLayout();
             // 
             // statusStripMain
@@ -94,19 +98,33 @@
             // tabControlMain
             // 
             tabControlMain.Dock = DockStyle.Fill;
-            tabControlMain.Location = new Point(0, 24);
+            tabControlMain.Location = new Point(0, 0);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
             tabControlMain.Size = new Size(1800, 854);
             tabControlMain.TabIndex = 4;
             tabControlMain.SelectedIndexChanged += TabControlMain_SelectedIndexChanged;
             // 
+            // splitContainerMain
+            // 
+            splitContainerMain.Dock = DockStyle.Fill;
+            splitContainerMain.Location = new Point(0, 24);
+            splitContainerMain.Name = "splitContainerMain";
+            splitContainerMain.Panel1Collapsed = true;
+            // 
+            // splitContainerMain.Panel2
+            // 
+            splitContainerMain.Panel2.Controls.Add(tabControlMain);
+            splitContainerMain.Size = new Size(1800, 854);
+            splitContainerMain.SplitterDistance = 600;
+            splitContainerMain.TabIndex = 5;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1800, 900);
-            Controls.Add(tabControlMain);
+            Controls.Add(splitContainerMain);
             Controls.Add(statusStripMain);
             Controls.Add(menuStripMain);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -119,6 +137,9 @@
             statusStripMain.PerformLayout();
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
+            splitContainerMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainerMain).EndInit();
+            splitContainerMain.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -133,5 +154,6 @@
         private ToolStripMenuItem startAppRecoveryToolToolStripMenuItem;
         private ToolStripComboBox toolStripComboBoxShowHints;
         private TabControl tabControlMain;
+        private SplitContainer splitContainerMain;
     }
 }

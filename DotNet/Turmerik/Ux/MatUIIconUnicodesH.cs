@@ -1659,7 +1659,7 @@
             public const string MENU_BOOK = null;
             public const string GRID_VIEW = null;
             public const string LIST = null;
-            public const string FOLDER = null;
+            public const string FOLDER = "\ue2c7";
             public const string LIST_ALT = null;
             public const string INVENTORY = null;
             public const string FOLDER_OPEN = "\ue2c8";

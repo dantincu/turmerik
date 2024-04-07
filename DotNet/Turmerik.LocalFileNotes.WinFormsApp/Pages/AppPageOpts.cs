@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.Pages
 {
-    public class MainFormHomeTabPageOpts
+    public class AppPageOpts
     {
-        public MainFormTabPageResourceType ResourceType { get; set; }
+        public AppPageResourceType ResourceType { get; set; }
+        public string Idnf { get; set; }
         public string Title { get; set; }
     }
 }

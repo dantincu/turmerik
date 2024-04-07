@@ -6,13 +6,23 @@ using System.Threading.Tasks;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.Pages
 {
-    public enum MainFormTabPageResourceType
+    public enum AppPageResourceType
     {
-        HomePage
+        Home,
+        FileExplorer
     }
 
-    public enum MainFormTabPageIcon
+    public enum AppPageIcon
     {
-        Home
+        Home,
+        FileExplorer
+    }
+
+    public enum AppPageSidePanel
+    {
+        None,
+        FileExplorer,
+        NoteExplorer,
+        NoteFileExplorer
     }
 }

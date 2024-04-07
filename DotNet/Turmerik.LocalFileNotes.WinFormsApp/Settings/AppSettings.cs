@@ -25,13 +25,6 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Settings
         protected override AppSettingsDataMtbl GetDefaultConfigCore(
             ) => new AppSettingsDataMtbl
             {
-                FetchWebResource = new AppSettingsData.FetchWebResourceMtbl
-                {
-                    MdLinkTemplate = "[{0}]({1})"
-                },
-                NameToIdnfConverter = new AppSettingsData.NameToIdnfConverterMtbl(),
-                PathConverter = new AppSettingsData.PathConverterMtbl(),
-                TextToMd = new AppSettingsData.TextToMdMtbl()
             };
 
         protected override AppSettingsDataImmtbl NormalizeConfig(
