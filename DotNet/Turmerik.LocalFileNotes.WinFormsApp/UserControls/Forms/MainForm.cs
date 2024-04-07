@@ -14,6 +14,8 @@ using Turmerik.LocalFileNotes.WinFormsApp.Pages;
 using Turmerik.LocalFileNotes.WinFormsApp.UserControls.Pages;
 using Turmerik.LocalFileNotes.WinFormsApp.Pages.Impl;
 using Turmerik.LocalFileNotes.WinFormsApp.UserControls.SidePanels;
+using Turmerik.WinForms.Helpers;
+using System.Windows.Forms;
 
 namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
 {
@@ -29,6 +31,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
         private readonly IWinFormsStatusLabelActionComponent actionComponent;
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
         private readonly Dictionary<AppPageIcon, Bitmap> tabPageIconsMap;
+
+        private readonly Font tabPageHeadsCloseIconFont;
 
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
 
@@ -80,6 +84,10 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             fileExplorerHcyUC.Dock = DockStyle.Fill;
             noteExplorerHcyUC.Dock = DockStyle.Fill;
             noteFileExplorerHcyUC.Dock = DockStyle.Fill;
+
+            tabPageHeadsCloseIconFont = new Font(
+                tabControlMain.Font.FontFamily,
+                16, FontStyle.Bold);
 
             if (svcProvContnr.IsRegistered)
             {
@@ -172,19 +180,50 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
                 textTransformActionsToolStripMenuItem); */
         }
 
+        private KeyValuePair<int, AppPageTupleBase?> GetAppPageTuple(
+            int idx, bool isOpenInAltTabControl)
+        {
+            int retIdx = -1;
+            AppPageTupleBase retAppPage = null;
+            int tabIdx = -1;
+
+            for (int i = 0; i < appPageTuplesList.Count; i++)
+            {
+                var appPageTuple = appPageTuplesList[i];
+                var appPageData = appPageTuple.GetAppPageData();
+
+                if (appPageData.IsOpenInAltTabControl == isOpenInAltTabControl)
+                {
+                    if (idx == ++tabIdx)
+                    {
+                        retIdx = i;
+                        retAppPage = appPageTuple;
+                        break;
+                    }
+                }
+            }
+
+            return new KeyValuePair<int, AppPageTupleBase?>(
+                retIdx, retAppPage);
+        }
+
         private void OpenHomePage() => OpenInNewTab(new AppPageOpts
         {
             ResourceType = AppPageResourceType.Home,
             Title = "Home"
         });
 
-        private void OpenInNewTab(AppPageOpts opts) => actionComponent.Execute(
+        private void OpenInNewTab(
+            AppPageOpts opts,
+            bool openInAltTabControl = false) => actionComponent.Execute(
             new WinFormsActionOpts<AppPageTupleBase>
             {
                 ActionName = nameof(OpenInNewTab),
                 Action = () =>
                 {
-                    var appPageTuple = CreateAppPageTuple(opts);
+                    var appPageTuple = CreateAppPageTuple(
+                        opts, null, openInAltTabControl);
+
                     appPageTuplesList.Add(appPageTuple);
 
                     tabControlMain.TabPages.Add(
@@ -198,14 +237,15 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
         private void OpenInCurrentTab(AppPageOpts opts) => actionComponent.Execute(
             new WinFormsActionOpts<AppPageTupleBase>
             {
-                ActionName = nameof(OpenInNewTab),
+                ActionName = nameof(OpenInCurrentTab),
                 Action = () =>
                 {
                     var currentTabPageIdx = appPageTuplesList.IndexOf(
                         currentAppPageTuple);
 
                     var appPageTuple = CreateAppPageTuple(
-                        opts, currentAppPageTuple.TabPageControl);
+                        opts, currentAppPageTuple.TabPageControl,
+                        currentAppPageTuple.GetAppPageData().IsOpenInAltTabControl);
 
                     currentAppPageTuple.Dispose();
                     appPageTuplesList[currentTabPageIdx] = appPageTuple;
@@ -226,18 +266,34 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             currentAppPageTuple = appPageTuple;
         }
 
-        private void CloseCurrentTab() => actionComponent.Execute(
+        private void CloseCurrentTab() => CloseTab(
+            currentAppPageTuple);
+
+        private void CloseTab(
+            AppPageTupleBase appPageTuple,
+            int tabPageIdx = -1) => actionComponent.Execute(
             new WinFormsActionOpts<int>
             {
-                ActionName = nameof(CloseCurrentTab),
+                ActionName = nameof(CloseTab),
                 Action = () =>
                 {
-                    currentAppPageTuple.TabPageControl.Controls.Clear();
+                    appPageTuple.TabPageControl.Controls.Clear();
+                    var appPageData = appPageTuple.GetAppPageData();
 
-                    tabControlMain.TabPages.Remove(
-                        currentAppPageTuple.TabPageControl);
+                    if (appPageData.IsOpenInAltTabControl)
+                    {
+                        tabControlAlt.TabPages.Remove(
+                            appPageTuple.TabPageControl);
+                    }
+                    else
+                    {
+                        tabControlMain.TabPages.Remove(
+                            appPageTuple.TabPageControl);
+                    }
 
-                    currentAppPageTuple.Dispose();
+                    appPageTuplesList.Remove(appPageTuple);
+                    appPageTuple.Dispose();
+
                     return ActionResultH.Create(0);
                 }
             }).ActWith(actionResult => (actionResult.IsSuccess && appPageTuplesList.Count == 0).ActIf(
@@ -245,16 +301,18 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
 
         private AppPageTupleBase CreateAppPageTuple(
             AppPageOpts opts,
-            TabPage tabPage = null)
+            TabPage? tabPage = null,
+            bool openInAltTabControl = false)
         {
             AppPageTupleBase appPageTuple = opts.ResourceType switch
             {
-                AppPageResourceType.Home => new AppHomePage().CreateTuple(
+                AppPageResourceType.Home => new AppHomePage(
+                    openInAltTabControl).CreateTuple(
                     new AppHomePageUC(),
                     opts.Title,
                     tabPage),
                 AppPageResourceType.FileExplorer => new AppFileExplorerPage(
-                    opts.Idnf).CreateTuple(
+                    opts.Idnf, openInAltTabControl).CreateTuple(
                         new AppFileExplorerUC(),
                         opts.Title,
                         tabPage),
@@ -276,7 +334,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
         }
 
         private UserControl? GetSidePanelUC(
-            AppPageSidePanel appPageSidePanel) => appPageSidePanel switch
+            AppPageSidePanel? appPageSidePanel) => appPageSidePanel switch
             {
                 AppPageSidePanel.FileExplorer => fileExplorerHcyUC,
                 AppPageSidePanel.NoteExplorer => noteExplorerHcyUC,
@@ -285,7 +343,7 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             };
 
         private ISidePanelUC? UpdateSidePanelUC(
-            AppPageSidePanel appPageSidePanel,
+            AppPageSidePanel? appPageSidePanel,
             bool detachFirst = true)
         {
             if (detachFirst)
@@ -304,9 +362,175 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             return sidePanelUC as ISidePanelUC;
         }
 
+        private IActionResult<int> TabPageHeadClicked(
+            MouseEventArgs e,
+            bool isOpenInAltTabControl) => actionComponent.Execute(new WinFormsActionOpts<int>
+            {
+                ActionName = nameof(TabPageHeadClicked),
+                Action = () =>
+                {
+                    var tabControlKvp = GetTabControl(
+                        isOpenInAltTabControl);
+
+                    var tabControl = tabControlKvp.Value;
+                    var kvp = tabControl.GetTabPageHead(e);
+
+                    if (kvp.Key >= 0)
+                    {
+                        var tupleKvp = GetAppPageTuple(
+                            kvp.Key, isOpenInAltTabControl);
+
+                        if (tupleKvp.Value != null)
+                        {
+                            Rectangle r = tabControl.GetTabRect(kvp.Key);
+
+                            //Getting the position of the "x" mark.
+                            Rectangle closeButton = new Rectangle(
+                                r.Right - 30,
+                                r.Top + 4, 30, 15);
+
+                            switch (e.Button)
+                            {
+                                case MouseButtons.Left:
+                                    if (closeButton.Contains(e.Location))
+                                    {
+                                        CloseTab(tupleKvp.Value, kvp.Key);
+                                    }
+                                    else
+                                    {
+                                        TabPageHeadClicked(
+                                            tabControlKvp,
+                                            tupleKvp,
+                                            isOpenInAltTabControl);
+                                    }
+                                    break;
+                                case MouseButtons.Right:
+                                    TabPageHeadRightClicked(
+                                        tabControlKvp,
+                                        tupleKvp,
+                                        isOpenInAltTabControl);
+                                    break;
+                                case MouseButtons.Middle:
+                                    CloseTab(tupleKvp.Value, kvp.Key);
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            ThrowTabControlMouseClickNoTabHead();
+                        }
+                    }
+                    else
+                    {
+                        ThrowTabControlMouseClickNoTabHead();
+                    }
+
+                    return ActionResultH.Create(0);
+                }
+            });
+
+        private void TabPageHeadClicked(
+            KeyValuePair<int, TabControl> tabControlKvp,
+            KeyValuePair<int, AppPageTupleBase> tupleKvp,
+            bool isOpenInAltTabControl)
+        {
+
+        }
+
+        private void TabPageHeadRightClicked(
+            KeyValuePair<int, TabControl> tabControlKvp,
+            KeyValuePair<int, AppPageTupleBase> tupleKvp,
+            bool isOpenInAltTabControl)
+        {
+
+        }
+
+        private void ThrowTabControlMouseClickNoTabHead()
+        {
+            throw new InvalidOperationException(
+                "Tab control mouse click handler could not detect the clicked tab head");
+        }
+
+        private void DrawTabPageHead(
+            DrawItemEventArgs e)
+        {
+            var tabPage = tabControlMain.TabPages[e.Index];
+
+            e.Graphics.DrawImage(
+                tabControlMain.ImageList.Images[tabPage.ImageIndex],
+                new PointF(
+                    e.Bounds.Left + 4,
+                    e.Bounds.Top + 4));
+
+            e.Graphics.DrawString(
+                "×",
+                tabPageHeadsCloseIconFont,
+                Brushes.Black,
+                e.Bounds.Right - 23,
+                e.Bounds.Top - 3);
+
+            e.Graphics.DrawString(
+                tabPage.Text,
+                e.Font,
+                Brushes.Black,
+                e.Bounds.Left + 28,
+                e.Bounds.Top + 6);
+
+            e.DrawFocusRectangle();
+        }
+
+        private void SelectedTabPageChanged(
+            bool isAltTabControl) => actionComponent.Execute(
+                new WinFormsActionOpts<int>
+                {
+                    ActionName = nameof(SelectedTabPageChanged),
+                    Action = () =>
+                    {
+                        var kvp = GetTabControl(
+                            isAltTabControl);
+
+                        if (kvp.Value != null)
+                        {
+                            var appPageKvp = GetAppPageTuple(
+                                kvp.Value.SelectedIndex,
+                                isAltTabControl);
+
+                            currentAppPageTuple = appPageKvp.Value!;
+
+                            UpdateSidePanelUC(
+                                currentAppPageTuple?.GetAppPageData().SidePanel,
+                                true);
+                        }
+                        else
+                        {
+                            currentAppPageTuple = null;
+                        }
+
+                        return ActionResultH.Create(0);
+                    }
+                });
+
+        private KeyValuePair<int, TabControl> GetTabControl(
+            bool isAltTabControl)
+        {
+            var tabControl = isAltTabControl switch
+            {
+                true => tabControlAlt,
+                false => tabControlMain,
+            };
+
+            int selectedIndex = tabControl.SelectedIndex;
+
+            return new KeyValuePair<int, TabControl>(
+                selectedIndex, tabControl);
+        }
+
         #region UI Event Handlers
 
-        private void ToolStripComboBoxShowHints_SelectedIndexChanged(object sender, EventArgs e)
+        private void ToolStripComboBoxShowHints_SelectedIndexChanged(
+            object sender, EventArgs e)
         {
             var delaysCollctn = uISettingsRetriever.Data.ToolTipDelays;
 
@@ -315,16 +539,17 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
                 {
                     if (selIdx >= 0 && selIdx < delaysCollctn.Count)
                     {
-                        uISettingsRetriever.Update(mtbl => mtbl.ToolTipDelays.ActWith(collctn =>
-                        {
-                            for (int i = 0; i < collctn.Count; i++)
+                        uISettingsRetriever.Update(
+                            mtbl => mtbl.ToolTipDelays.ActWith(collctn =>
                             {
-                                var delay = collctn[i];
+                                for (int i = 0; i < collctn.Count; i++)
+                                {
+                                    var delay = collctn[i];
 
-                                delay.IsSelected = (selIdx == i).If(
-                                    () => (bool?)true, () => null);
-                            }
-                        }));
+                                    delay.IsSelected = (selIdx == i).If(
+                                        () => (bool?)true, () => null);
+                                }
+                            }));
 
                         var delay = delaysCollctn[selIdx];
                         toolTipHintsOrchestrator.ToolTipDelay = delay;
@@ -332,7 +557,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
                 });
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(
+            object sender, EventArgs e)
         {
             if (svcProvContnr.IsRegistered)
             {
@@ -357,6 +583,11 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
                         if (tabControlMain.TabPages.Count == 0)
                         {
                             OpenHomePage();
+                            OpenHomePage();
+                            OpenHomePage();
+                            OpenHomePage();
+                            OpenHomePage();
+                            OpenHomePage();
                         }
 
                         return ActionResultH.Create(delayIdx);
@@ -365,7 +596,8 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
             }
         }
 
-        private void StartAppRecoveryToolToolStripMenuItem_Click(object sender, EventArgs e)
+        private void StartAppRecoveryToolToolStripMenuItem_Click(
+            object sender, EventArgs e)
         {
             if (svcProvContnr.IsRegistered)
             {
@@ -384,6 +616,45 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.UserControls.Forms
         private void TabControlMain_SelectedIndexChanged(
             object sender, EventArgs e)
         {
+            SelectedTabPageChanged(false);
+        }
+
+        private void TabControlAlt_SelectedIndexChanged(
+            object sender, EventArgs e)
+        {
+            SelectedTabPageChanged(true);
+        }
+
+        private void TabControlMain_MouseClick(
+            object sender, MouseEventArgs e)
+        {
+        }
+
+        private void TabControlAlt_MouseClick(
+            object sender, MouseEventArgs e)
+        {
+        }
+
+        private void TabControlMain_MouseDown(object sender, MouseEventArgs e)
+        {
+            TabPageHeadClicked(e, false);
+        }
+
+        private void TabControlAlt_MouseDown(object sender, MouseEventArgs e)
+        {
+            TabPageHeadClicked(e, true);
+        }
+
+        private void TabControlMain_DrawItem(
+            object sender, DrawItemEventArgs e)
+        {
+            DrawTabPageHead(e);
+        }
+
+        private void TabControlAlt_DrawItem(
+            object sender, DrawItemEventArgs e)
+        {
+            DrawTabPageHead(e);
         }
 
         #endregion UI Event Handlers

@@ -8,14 +8,18 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Pages.Impl
 {
     public class AppFileExplorerPage : AppPageBase
     {
-        public AppFileExplorerPage()
+        public AppFileExplorerPage(
+            bool openInAltTabControl) : base(
+                openInAltTabControl)
         {
             Icon = AppPageIcon.FileExplorer;
             SidePanel = AppPageSidePanel.FileExplorer;
         }
 
         public AppFileExplorerPage(
-            string dirPath) : this()
+            string dirPath,
+            bool openInAltTabControl) : this(
+                openInAltTabControl)
         {
             Idnf = dirPath;
             Title = dirPath;

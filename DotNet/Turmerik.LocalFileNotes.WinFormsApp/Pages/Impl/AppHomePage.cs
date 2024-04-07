@@ -8,7 +8,9 @@ namespace Turmerik.LocalFileNotes.WinFormsApp.Pages.Impl
 {
     public class AppHomePage : AppPageBase
     {
-        public AppHomePage()
+        public AppHomePage(
+            bool openInAltTabControl) : base(
+                openInAltTabControl)
         {
             Icon = AppPageIcon.Home;
             Title = "Home";

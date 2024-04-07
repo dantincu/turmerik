@@ -105,24 +105,28 @@
             // tabControlMain
             // 
             tabControlMain.Dock = DockStyle.Fill;
+            tabControlMain.DrawMode = TabDrawMode.OwnerDrawFixed;
             tabControlMain.Location = new Point(0, 0);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
-            tabControlMain.Size = new Size(1800, 854);
+            tabControlMain.Size = new Size(1800, 829);
             tabControlMain.TabIndex = 4;
+            tabControlMain.DrawItem += TabControlMain_DrawItem;
             tabControlMain.SelectedIndexChanged += TabControlMain_SelectedIndexChanged;
+            tabControlMain.MouseClick += TabControlMain_MouseClick;
+            tabControlMain.MouseDown += TabControlMain_MouseDown;
             // 
             // splitContainerMain
             // 
             splitContainerMain.Dock = DockStyle.Fill;
-            splitContainerMain.Location = new Point(0, 24);
+            splitContainerMain.Location = new Point(0, 49);
             splitContainerMain.Name = "splitContainerMain";
             splitContainerMain.Panel1Collapsed = true;
             // 
             // splitContainerMain.Panel2
             // 
             splitContainerMain.Panel2.Controls.Add(splitContainerMainContent);
-            splitContainerMain.Size = new Size(1800, 854);
+            splitContainerMain.Size = new Size(1800, 829);
             splitContainerMain.SplitterDistance = 400;
             splitContainerMain.TabIndex = 5;
             // 
@@ -140,18 +144,23 @@
             // 
             splitContainerMainContent.Panel2.Controls.Add(tabControlAlt);
             splitContainerMainContent.Panel2Collapsed = true;
-            splitContainerMainContent.Size = new Size(1800, 854);
+            splitContainerMainContent.Size = new Size(1800, 829);
             splitContainerMainContent.SplitterDistance = 900;
             splitContainerMainContent.TabIndex = 6;
             // 
             // tabControlAlt
             // 
             tabControlAlt.Dock = DockStyle.Fill;
+            tabControlAlt.DrawMode = TabDrawMode.OwnerDrawFixed;
             tabControlAlt.Location = new Point(0, 0);
             tabControlAlt.Name = "tabControlAlt";
             tabControlAlt.SelectedIndex = 0;
             tabControlAlt.Size = new Size(96, 100);
             tabControlAlt.TabIndex = 5;
+            tabControlAlt.DrawItem += TabControlAlt_DrawItem;
+            tabControlAlt.SelectedIndexChanged += TabControlAlt_SelectedIndexChanged;
+            tabControlAlt.MouseClick += TabControlAlt_MouseClick;
+            tabControlAlt.MouseDown += TabControlAlt_MouseDown;
             // 
             // panelTopControls
             // 
