@@ -96,7 +96,7 @@ export default function IndexedDbEditDb(
   const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
-  
+  const [ nextDbStoreId, setNextDbStoreId ] = React.useState(1);
   const [ scrollToBottom, setScrollToBottom ] = React.useState(false);
 
   const rootElRef = React.createRef<HTMLDivElement>();
@@ -153,6 +153,7 @@ export default function IndexedDbEditDb(
           indexes: [],
           indexNames: []
         },
+        id: nextDbStoreId,
         dbStoreNameHasError: true,
         dbStoreKeyPathHasError: true,
         canBeEdited: true
@@ -160,7 +161,19 @@ export default function IndexedDbEditDb(
 
       setDbStoresArr(newDbStoresArr);
       setScrollToBottom(true);
-  }, [dbStoresArr]);
+      setNextDbStoreId(nextDbStoreId + 1);
+  }, [dbStoresArr, nextDbStoreId]);
+
+  const dbStoreRemoveClicked = (id: number, dbStoresArr: IndexedDbStore[]) => () => {
+    const newDbStoresArr = [...dbStoresArr];
+
+    const idx = newDbStoresArr.findIndex(
+      dbStore => dbStore.id === id
+    );
+
+    newDbStoresArr.splice(idx, 1);
+    setDbStoresArr(newDbStoresArr);
+  };
 
   const getFormCanBeSubmitted = React.useCallback((
     dbNameErr: string | null,
@@ -170,8 +183,13 @@ export default function IndexedDbEditDb(
         store.dbStore.serializedKeyPath
       ) !== null) ?? null) === null, []);
 
-  const editDbStoreNameChangedHandler = React.useCallback((idx: number, dbStoresArr: IndexedDbStore[]) => (newDbStoreName: string, hasError: boolean) => {
+  const editDbStoreNameChangedHandler = (id: number, dbStoresArr: IndexedDbStore[]) => (newDbStoreName: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
+
+    const idx = newDbStoresArr.findIndex(
+      dbStore => dbStore.id === id
+    );
+
     const dbStore = newDbStoresArr[idx];
 
     dbStore.dbStore.storeName = newDbStoreName;
@@ -179,19 +197,29 @@ export default function IndexedDbEditDb(
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }, [dbNameErr, dbVersionErr]);
+  };
 
-  const editDbStoreAutoIncrementChangedHandler = React.useCallback((idx: number, dbStoresArr: IndexedDbStore[]) => (newAutoIncrement: boolean) => {
+  const editDbStoreAutoIncrementChangedHandler = (id: number, dbStoresArr: IndexedDbStore[]) => (newAutoIncrement: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
+
+    const idx = newDbStoresArr.findIndex(
+      dbStore => dbStore.id === id
+    );
+
     const dbStore = newDbStoresArr[idx];
 
     dbStore.dbStore.autoIncrement = newAutoIncrement;
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }, [dbNameErr, dbVersionErr]);
+  };
 
-  const editDbStoreKeyPathChangedHandler = React.useCallback((idx: number, dbStoresArr: IndexedDbStore[]) => (newKeyPath: string, hasError: boolean) => {
+  const editDbStoreKeyPathChangedHandler = (id: number, dbStoresArr: IndexedDbStore[]) => (newKeyPath: string, hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
+
+    const idx = newDbStoresArr.findIndex(
+      dbStore => dbStore.id === id
+    );
+
     const dbStore = newDbStoresArr[idx];
 
     dbStore.dbStore.serializedKeyPath = newKeyPath;
@@ -199,25 +227,35 @@ export default function IndexedDbEditDb(
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }, [dbNameErr, dbVersionErr]);
+  };
 
-  const editDbStoreNameHasErrorChangedHandler = React.useCallback((idx: number) => (hasError: boolean) => {
+  const editDbStoreNameHasErrorChangedHandler = (id: number) => (hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
+
+    const idx = newDbStoresArr.findIndex(
+      dbStore => dbStore.id === id
+    );
+
     const dbStore = newDbStoresArr[idx];
     dbStore.dbStoreNameHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }, [dbNameErr, dbVersionErr]);
+  };
 
-  const editDbStoreKeyPathHasErrorChangedHandler = React.useCallback((idx: number) => (hasError: boolean) => {
+  const editDbStoreKeyPathHasErrorChangedHandler = (id: number) => (hasError: boolean) => {
     const newDbStoresArr = [...dbStoresArr];
+
+    const idx = newDbStoresArr.findIndex(
+      dbStore => dbStore.id === id
+    );
+
     const dbStore = newDbStoresArr[idx];
     dbStore.dbStoreKeyPathHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
     refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
-  }, [dbNameErr, dbVersionErr]);
+  };
 
   const refreshError = React.useCallback((
     dbNameErr: string | null,
@@ -245,7 +283,8 @@ export default function IndexedDbEditDb(
           setDb(db);
           const dbStores = getObjectStoresInfoAgg(req.result);
 
-          const dbStoresArr = dbStores.map(store => ({
+          const dbStoresArr = dbStores.map((store, idx) => ({
+            id: idx,
             dbStore: store,
             canBeEdited: false
           }) as IndexedDbStore);
@@ -456,13 +495,15 @@ return (<AppBarsPanel basePath={props.basePath}
             </Box>
           </Box>
           { dbStoresArr.map((dbStore, idx) => <IndexedDbEditDbStore
-                model={dbStore} key={idx} idx={idx}
+                model={dbStore} key={dbStore.id} idx={idx}
                 validateReqsCount={validateDbStoresReqsCount}
-                dbStoreNameChanged={editDbStoreNameChangedHandler(idx, dbStoresArr)}
-                autoIncrementChanged={editDbStoreAutoIncrementChangedHandler(idx, dbStoresArr)}
-                keyPathChanged={editDbStoreKeyPathChangedHandler(idx, dbStoresArr)}
-                dbStoreNameHasErrorChanged={editDbStoreNameHasErrorChangedHandler(idx)}
-                keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(idx)} /> ) }
+                dbStoreNameChanged={editDbStoreNameChangedHandler(dbStore.id, dbStoresArr)}
+                autoIncrementChanged={editDbStoreAutoIncrementChangedHandler(dbStore.id, dbStoresArr)}
+                keyPathChanged={editDbStoreKeyPathChangedHandler(dbStore.id, dbStoresArr)}
+                dbStoreNameHasErrorChanged={editDbStoreNameHasErrorChangedHandler(dbStore.id)}
+                keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(dbStore.id)}
+                dbStoreDeleteClicked={dbStoreRemoveClicked(dbStore.id, dbStoresArr)}
+                 /> ) }
             <Box className="trmrk-flex-row">
               <Box className="trmrk-cell trmrk-buttons-group" ref={actionButtonsGroupElRef}>
                 <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>

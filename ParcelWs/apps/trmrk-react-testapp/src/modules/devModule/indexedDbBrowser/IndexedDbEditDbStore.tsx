@@ -4,10 +4,11 @@ import { useSelector } from "react-redux";
 import Checkbox from '@mui/material/Checkbox';
 import Input from '@mui/material/Input';
 import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/Input';
+import IconButton from '@mui/material/IconButton';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from "@mui/material/Box";
+import DeleteIcon from "@mui/icons-material/Delete"
 
 import trmrk from "trmrk";
 
@@ -24,6 +25,7 @@ export interface IndexedDbEditDbStoreProps {
   keyPathChanged: (newKeyPath: string, hasError: boolean) => void;
   dbStoreNameHasErrorChanged: (hasError: boolean) => void;
   keyPathHasErrorChanged: (hasError: boolean) => void;
+  dbStoreDeleteClicked: () => void;
 }
 
 export const dbStoreNameReqErrMsg = "The DB Store name is required";
@@ -140,6 +142,7 @@ export default function IndexedDbEditDbStore(
     autoIncrementElRef ] );
 
   return (<Paper className="trmrk-flex-rows-group">
+    <IconButton className="trmrk-icon-btn trmrk-delete-icon-btn" onClick={props.dbStoreDeleteClicked}><DeleteIcon /></IconButton>
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreName_${props.idx}`}>DB Store Name</label></Box>
       <Box className="trmrk-cell"><Input id={`dbStoreName_${props.idx}`} onChange={dbStoreNameChanged} value={dbStoreName}

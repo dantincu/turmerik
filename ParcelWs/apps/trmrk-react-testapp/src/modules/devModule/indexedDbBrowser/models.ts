@@ -4,6 +4,7 @@ import {
 } from "../../../services/indexedDb";
 
 export interface IndexedDbStore {
+  id: number;
   dbStore: IDbObjectStoreInfo;
   canBeEdited: boolean;
   dbStoreNameHasError?: boolean | null | undefined;
