@@ -141,7 +141,7 @@ export default function IndexedDbEditDbStore(
     validateReqsCount,
     autoIncrementElRef ] );
 
-  return (<Paper className="trmrk-flex-rows-group">
+  return (<Paper className={["trmrk-flex-rows-group", props.model.canBeEdited ? "trmrk-editable" : "trmrk-readonly"].join(" ")}>
     <IconButton className="trmrk-icon-btn trmrk-delete-icon-btn" onClick={props.dbStoreDeleteClicked}><DeleteIcon /></IconButton>
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreName_${props.idx}`}>DB Store Name</label></Box>

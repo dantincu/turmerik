@@ -20,6 +20,10 @@
   &.trmrk-page-panel {
     .trmrk-flex-rows-group {
       border: 1px solid #444;
+
+      &.trmrk-editable {
+        border: 1px solid #642;
+      }
     }
 
     .trmrk-flex-row {
@@ -51,6 +55,10 @@
   &.trmrk-page-panel {
     .trmrk-flex-rows-group {
       border: 1px solid #ccc;
+
+      &.trmrk-editable {
+        border: 1px solid #642;
+      }
     }
 
     .trmrk-flex-row {
