@@ -139,6 +139,7 @@ export default function IndexedDbEditDb(
     const [ dbVersionErr, newDbversion ] = validateDbVersionNumber(newDbVersionStr);
 
     setDbVersion(newDbversion);
+    console.log("newDbversion", newDbversion);
     setDbVersionErr(dbVersionErr);
     refreshError(dbNameErr, dbVersionErr, dbStoresArr);
   }, [dbNameErr, dbStoresArr]);
@@ -292,11 +293,12 @@ export default function IndexedDbEditDb(
           const dbStores = getObjectStoresInfoAgg(req.result);
 
           const dbStoresArr = dbStores.map((store, idx) => ({
-            id: idx,
+            id: idx + 1,
             dbStore: store,
             canBeEdited: false
           }) as IndexedDbStore);
 
+          setNextDbStoreId(dbStoresArr.length + 1);
           setDbStoresArr(dbStoresArr);
           req.result.close();
 
@@ -357,6 +359,7 @@ export default function IndexedDbEditDb(
       setValidateDbStoresReqsCount(validateDbStoresReqsCount + 1);
     } else {
       setSaving(true);
+      console.log("dbVersion", dbVersion);
       var req = indexedDB.open(dbName, dbVersion ?? undefined);
 
       attachDefaultHandlersToDbOpenRequest(req, dfDatabaseOpenErrMsg, success => {
@@ -427,7 +430,7 @@ export default function IndexedDbEditDb(
         }
       });
     }
-  }, [dbStoresArr]);
+  }, [ dbStoresArr, deletedDbStoresArr, dbVersion, dbName ]);
 
   const onCancelClick = React.useCallback(() => {
     navigate(props.basePath);
@@ -453,6 +456,7 @@ export default function IndexedDbEditDb(
     dbName,
     dbVersion,
     dbStoresArr,
+    nextDbStoreId,
     deletedDbStoresArr,
     saving,
     error,
