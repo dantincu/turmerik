@@ -22,11 +22,12 @@ import { appModeCssClass, getAppModeCssClassName,
 
 import { isAndroid, isIPad, isIPhone, isIPadOrIphone, isMobile } from "trmrk-browser/src/domUtils/constants";
 
-import BarsPanel from "./BarsPanel";
+import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
 
 export interface AppBarsPanelProps {
   basePath: string;
+  onPanelElems?: ((elems: BarsPanelElems) => void) | null | undefined;
   panelClassName?: string | null | undefined;
   appBarSelectors: AppBarSelectors;
   appBarReducers: AppBarReducers;
@@ -184,7 +185,8 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     appearenceMenuIconBtnEl,
     optionsMenuIconBtnEl ]);
 
-  return (<BarsPanel panelClassName={[
+  return (<BarsPanel onPanelElems={props.onPanelElems}
+      panelClassName={[
       appThemeClassName,
       appModeCssClass.value,
       props.panelClassName ?? "",

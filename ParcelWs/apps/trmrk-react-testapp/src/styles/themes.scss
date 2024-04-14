@@ -17,7 +17,7 @@
     color: white;
   }
 
-  .trmrk-page-form {
+  &.trmrk-page-panel {
     .trmrk-flex-rows-group {
       border: 1px solid #444;
     }
@@ -48,7 +48,7 @@
     color: inherit;
   }
 
-  .trmrk-page-form {
+  &.trmrk-page-panel {
     .trmrk-flex-rows-group {
       border: 1px solid #ccc;
     }

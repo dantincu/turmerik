@@ -9,29 +9,58 @@ export interface BarsPanelProps {
   children: React.ReactNode | Iterable<React.ReactNode>;
   scrollableX?: boolean | null | undefined;
   scrollableY?: boolean | null | undefined;
+  onPanelElems?: ((elems: BarsPanelElems) => void) | null | undefined;
 }
 
-import "./BarsPanel.scss";
+export interface BarsPanelElems {
+  panelEl: HTMLDivElement | null;
+  panelHeaderEl: HTMLDivElement | null;
+  panelFooterEl: HTMLDivElement | null;
+  panelBodyEl: HTMLDivElement | null;
+}
 
-export default function BarsPanel(props: BarsPanelProps) {
-  return (<div className={[ props.panelClassName ?? "", "trmrk-bars-panel",
+export default function BarsPanel(props: BarsPanelProps) {  
+  const panelEl = React.createRef<HTMLDivElement>();
+  const panelHeaderEl = React.createRef<HTMLDivElement>();
+  const panelFooterEl = React.createRef<HTMLDivElement>();
+  const panelBodyEl = React.createRef<HTMLDivElement>();
+
+  React.useEffect(() => {
+    if (props.onPanelElems) {
+      props.onPanelElems({
+        panelEl: panelEl.current,
+        panelHeaderEl: panelHeaderEl.current,
+        panelFooterEl: panelFooterEl.current,
+        panelBodyEl: panelBodyEl.current
+      });
+    }
+  }, [
+    props.onPanelElems,
+    props.panelClassName,
+    props.showHeader,
+    props.showFooter,
+    props.headerChildren,
+    props.footerChildren,
+    props.children,
+    props.scrollableX,
+    props.scrollableY,
+    panelEl,
+    panelHeaderEl,
+    panelFooterEl,
+    panelBodyEl]);
+
+  return (<div ref={panelEl} className={[ props.panelClassName ?? "", "trmrk-bars-panel",
       props.showHeader ? "trmrk-has-header" : "",
       props.showFooter ? "trmrk-has-footer" : "",].join(" ")}>
-    { props.showHeader ? <React.Fragment>
-        <div className={["trmrk-panel-header"].join(" ")}>
+    { props.showHeader ? <div ref={panelHeaderEl} className={["trmrk-panel-header"].join(" ")}>
           { props.headerChildren }
-        </div>
-        { /* <div className="trmrk-panel-body-top-spacing">Turmerik</div> */ }
-      </React.Fragment> : null }
+        </div> : null }
 
-    { props.showFooter ? <React.Fragment>
-        <div className={["trmrk-panel-footer"].join(" ")}>
+    { props.showFooter ? <div ref={panelFooterEl} className={["trmrk-panel-footer"].join(" ")}>
           { props.footerChildren }
-        </div>
-        { /* <div className="trmrk-panel-body-bottom-spacing">Turmerik</div> */ }
-      </React.Fragment> : null }
+        </div> : null }
 
-    <div className={["trmrk-panel-body",
+    <div ref={panelBodyEl} className={["trmrk-panel-body",
       props.scrollableX ? "trmrk-scrollable trmrk-scrollableX" : "",
       props.scrollableY ? "trmrk-scrollable trmrk-scrollableY" : ""].join(" ")}>
       { props.children }

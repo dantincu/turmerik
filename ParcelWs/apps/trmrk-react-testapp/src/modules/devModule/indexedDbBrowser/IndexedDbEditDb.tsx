@@ -11,6 +11,8 @@ import Button from "@mui/material/Button";
 import Alert, { AlertColor } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Cancel";
 import Snackbar from '@mui/material/Snackbar';
 
 import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEditDbStore";
@@ -96,10 +98,10 @@ export default function IndexedDbEditDb(
   const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
+  const [ deletedDbStoresArr, setDeletedDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
   const [ nextDbStoreId, setNextDbStoreId ] = React.useState(1);
   const [ scrollToBottom, setScrollToBottom ] = React.useState(false);
 
-  const rootElRef = React.createRef<HTMLDivElement>();
   const actionButtonsGroupElRef = React.createRef<HTMLDivElement>();
 
   const [ saving, setSaving ] = React.useState(false);
@@ -166,13 +168,19 @@ export default function IndexedDbEditDb(
 
   const dbStoreRemoveClicked = (id: number, dbStoresArr: IndexedDbStore[]) => () => {
     const newDbStoresArr = [...dbStoresArr];
+    const newDeletedDbStoresArr = [...deletedDbStoresArr];
 
     const idx = newDbStoresArr.findIndex(
       dbStore => dbStore.id === id
     );
 
-    newDbStoresArr.splice(idx, 1);
+    const deleted = newDbStoresArr.splice(idx, 1);
+
+    newDeletedDbStoresArr.splice(
+      newDeletedDbStoresArr.length, 0, ...deleted);
+
     setDbStoresArr(newDbStoresArr);
+    setDeletedDbStoresArr(newDeletedDbStoresArr);
   };
 
   const getFormCanBeSubmitted = React.useCallback((
@@ -327,7 +335,7 @@ export default function IndexedDbEditDb(
     let hasMigrationError = false;
     let migrated = false;
 
-    const addedStores = dbStoresArr.filter(
+    const addedStoresArr = dbStoresArr.filter(
       store => store.canBeEdited).map(store => ({
         ...store,
         dbStore: {
@@ -388,7 +396,11 @@ export default function IndexedDbEditDb(
         try {
           const db = req.result;
 
-          for (let store of addedStores) {
+          for (let store of deletedDbStoresArr) {
+            db.deleteObjectStore(store.dbStore.storeName);
+          }
+
+          for (let store of addedStoresArr) {
             db.createObjectStore(store.dbStore.storeName, {
               keyPath: store.dbStore.keyPath,
               autoIncrement: store.dbStore.autoIncrement,
@@ -422,7 +434,6 @@ export default function IndexedDbEditDb(
   }, []);
 
   React.useEffect(() => {
-    const rootEl = rootElRef.current;
     const actionButtonsGroupEl = actionButtonsGroupElRef.current;
 
     if (scrollToBottom) {
@@ -442,6 +453,7 @@ export default function IndexedDbEditDb(
     dbName,
     dbVersion,
     dbStoresArr,
+    deletedDbStoresArr,
     saving,
     error,
     warning,
@@ -452,19 +464,23 @@ export default function IndexedDbEditDb(
     props.isNewDb,
     validateDbStoresReqsCount,
     scrollToBottom,
-    rootElRef,
     actionButtonsGroupElRef ]);
 
 return (<AppBarsPanel basePath={props.basePath}
+      panelClassName="trmrk-page-panel"
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}
       appHeaderChildren={<React.Fragment>
-        <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton>
         <Typography variant="h4" component="span" className="trmrk-page-title">{ props.isNewDb ? "Create" : "Edit" } Database</Typography>
+      </React.Fragment>}
+      appFooterChildren={<React.Fragment>
+        <IconButton className="trmrk-icon-btn" onClick={onCancelClick}><CancelIcon /></IconButton>
+        <IconButton className="trmrk-icon-btn" onClick={onSaveClick}><SaveIcon /></IconButton>
+        <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton>
       </React.Fragment>}>
-    <Box className="trmrk-page-form trmrk-indexeddb-create-db" ref={rootElRef}>
+    <Box className="trmrk-panel-content trmrk-indexeddb-create-db">
       { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">
         <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">{loadError}</FormHelperText></Box></Box> : (
           loadWarning ?? null) !== null ? <Box className="trmrk-flex-row">
@@ -504,12 +520,6 @@ return (<AppBarsPanel basePath={props.basePath}
                 keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(dbStore.id)}
                 dbStoreDeleteClicked={dbStoreRemoveClicked(dbStore.id, dbStoresArr)}
                  /> ) }
-            <Box className="trmrk-flex-row">
-              <Box className="trmrk-cell trmrk-buttons-group" ref={actionButtonsGroupElRef}>
-                <Button className="trmrk-btn trmrk-btn-text trmrk-btn-text-primary" onClick={onSaveClick}>Save</Button>
-                <Button onClick={onCancelClick}>Cancel</Button>
-              </Box>
-            </Box>
             { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell">
               <FormHelperText error className="trmrk-wrap-content">{error}</FormHelperText></Box></Box> : null }
             { (warning ?? null) !== null ? <Box className="trmrk-flex-row">

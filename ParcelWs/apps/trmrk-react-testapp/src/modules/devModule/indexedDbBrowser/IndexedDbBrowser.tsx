@@ -9,7 +9,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import IconButton from '@mui/material/IconButton';
 import SettingsIcon from '@mui/icons-material/Settings';
-import ArrowForwardTwoTone from '@mui/icons-material/ArrowForwardTwoTone';
+import ArrowForward from '@mui/icons-material/ArrowForward';
 import HeightIcon from '@mui/icons-material/Height';
 
 import trmrk from "trmrk";
@@ -189,7 +189,7 @@ export default function IndexedDbBrowser(
           onClose={onDbMenuClose}>
           {currentDb ? <Box className="trmrk-icons-menu-list">
             <IconButton onClick={currentDbNodeExpandToggleClicked}> { currentDb.isExpanded ? <ArrowDropDownIcon /> : <ArrowRightIcon /> } </IconButton>
-            <IconButton onClick={currentDbNodeGoToClicked}><ArrowForwardTwoTone /></IconButton>
+            <IconButton onClick={currentDbNodeGoToClicked}><ArrowForward /></IconButton>
           </Box> : null }
       </Menu>
     </div>
