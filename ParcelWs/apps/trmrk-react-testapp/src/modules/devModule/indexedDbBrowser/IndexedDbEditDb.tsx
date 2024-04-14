@@ -93,16 +93,14 @@ export default function IndexedDbEditDb(
   const [ dbName, setDbName ] = React.useState(props.dbName ?? "");
   const [ dbNameErr, setDbNameErr ] = React.useState<string | null>("");
 
-  const [ dbVersionStr, setDbVersionStr ] = React.useState<string>("1");
-  const [ dbVersion, setDbVersion ] = React.useState<number | null>(1);
-  const [ dbVersionErr, setDbVersionErr ] = React.useState<string | null>(null);
+  const [ nextDbVersionStr, setnextDbVersionStr ] = React.useState<string>("1");
+  const [ nextDbVersion, setnextDbVersion ] = React.useState<number | null>(1);
+  const [ nextDbVersionErr, setnextDbVersionErr ] = React.useState<string | null>(null);
 
   const [ dbStoresArr, setDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
   const [ deletedDbStoresArr, setDeletedDbStoresArr ] = React.useState<IndexedDbStore[]>([]);
   const [ nextDbStoreId, setNextDbStoreId ] = React.useState(1);
   const [ scrollToBottom, setScrollToBottom ] = React.useState(false);
-
-  const actionButtonsGroupElRef = React.createRef<HTMLDivElement>();
 
   const [ saving, setSaving ] = React.useState(false);
   const [ error, setError ] = React.useState<string | null>(null);
@@ -114,6 +112,8 @@ export default function IndexedDbEditDb(
   const [ showEditResultMsg, setShowEditResultMsg ] = React.useState(props.showCreateSuccessMsg ?? false);
   const [ editResultMsgSeverity, setEditResultMsgSeverity ] = React.useState<AlertColor>(props.showCreateSuccessMsg ? "success" : "info");
   const [ validateDbStoresReqsCount, setValidateDbStoresReqsCount ] = React.useState(0);
+
+  const bottomElRef = React.createRef<HTMLDivElement>();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -129,18 +129,17 @@ export default function IndexedDbEditDb(
 
     const dbNameErr = validateDbName(newDbName);
     setDbNameErr(dbNameErr);
-    refreshError(dbNameErr, dbVersionErr, dbStoresArr);
-  }, [dbVersionErr, dbStoresArr])
+    refreshError(dbNameErr, nextDbVersionErr, dbStoresArr);
+  }, [nextDbVersionErr, dbStoresArr])
 
   const dbVersionChanged = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbVersionStr = e.target.value;
-    setDbVersionStr(newDbVersionStr);
+    setnextDbVersionStr(newDbVersionStr);
 
     const [ dbVersionErr, newDbversion ] = validateDbVersionNumber(newDbVersionStr);
 
-    setDbVersion(newDbversion);
-    console.log("newDbversion", newDbversion);
-    setDbVersionErr(dbVersionErr);
+    setnextDbVersion(newDbversion);
+    setnextDbVersionErr(dbVersionErr);
     refreshError(dbNameErr, dbVersionErr, dbStoresArr);
   }, [dbNameErr, dbStoresArr]);
 
@@ -175,13 +174,16 @@ export default function IndexedDbEditDb(
       dbStore => dbStore.id === id
     );
 
-    const deleted = newDbStoresArr.splice(idx, 1);
-
-    newDeletedDbStoresArr.splice(
-      newDeletedDbStoresArr.length, 0, ...deleted);
-
+    const dbStore = newDbStoresArr[idx];
+    newDbStoresArr.splice(idx, 1);
     setDbStoresArr(newDbStoresArr);
-    setDeletedDbStoresArr(newDeletedDbStoresArr);
+
+    if (!dbStore.canBeEdited) {
+      newDeletedDbStoresArr.splice(
+        newDeletedDbStoresArr.length, 0, dbStore);
+    
+      setDeletedDbStoresArr(newDeletedDbStoresArr);      
+    }
   };
 
   const getFormCanBeSubmitted = React.useCallback((
@@ -205,7 +207,7 @@ export default function IndexedDbEditDb(
     dbStore.dbStoreNameHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
-    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+    refreshError(dbNameErr, nextDbVersionErr, newDbStoresArr);
   };
 
   const editDbStoreAutoIncrementChangedHandler = (id: number, dbStoresArr: IndexedDbStore[]) => (newAutoIncrement: boolean) => {
@@ -219,7 +221,7 @@ export default function IndexedDbEditDb(
 
     dbStore.dbStore.autoIncrement = newAutoIncrement;
     setDbStoresArr(newDbStoresArr);
-    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+    refreshError(dbNameErr, nextDbVersionErr, newDbStoresArr);
   };
 
   const editDbStoreKeyPathChangedHandler = (id: number, dbStoresArr: IndexedDbStore[]) => (newKeyPath: string, hasError: boolean) => {
@@ -235,7 +237,7 @@ export default function IndexedDbEditDb(
     dbStore.dbStoreKeyPathHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
-    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+    refreshError(dbNameErr, nextDbVersionErr, newDbStoresArr);
   };
 
   const editDbStoreNameHasErrorChangedHandler = (id: number) => (hasError: boolean) => {
@@ -249,7 +251,7 @@ export default function IndexedDbEditDb(
     dbStore.dbStoreNameHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
-    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+    refreshError(dbNameErr, nextDbVersionErr, newDbStoresArr);
   };
 
   const editDbStoreKeyPathHasErrorChangedHandler = (id: number) => (hasError: boolean) => {
@@ -263,7 +265,7 @@ export default function IndexedDbEditDb(
     dbStore.dbStoreKeyPathHasError = hasError;
 
     setDbStoresArr(newDbStoresArr);
-    refreshError(dbNameErr, dbVersionErr, newDbStoresArr);
+    refreshError(dbNameErr, nextDbVersionErr, newDbStoresArr);
   };
 
   const refreshError = React.useCallback((
@@ -303,11 +305,11 @@ export default function IndexedDbEditDb(
           req.result.close();
 
           setDbName(db.name ?? "");
-          setDbVersion(db.version ?? null);
-          setDbVersionStr(db.version?.toString() ?? "");
+          setnextDbVersion((db.version ?? 1) + 1);
+          setnextDbVersionStr(db.version?.toString() ?? "");
 
           setDbNameErr(null);
-          setDbVersionErr(null);
+          setnextDbVersionErr(null);
         } catch (err) {
           hasError = true;
           errMsg = (err as Error).message ?? "Could not close the database connection";
@@ -333,7 +335,6 @@ export default function IndexedDbEditDb(
     setError(null);
     setWarning(null);
 
-    let hasError: boolean;
     let hasMigrationError = false;
     let migrated = false;
 
@@ -346,21 +347,20 @@ export default function IndexedDbEditDb(
         }
       }) as IndexedDbStore);
 
-    if (!getFormCanBeSubmitted(dbNameErr, dbVersionErr, dbStoresArr)) {
-      hasError = true;
+    if (!getFormCanBeSubmitted(dbNameErr, nextDbVersionErr, dbStoresArr)) {
       setError("Please fix the current errors before submiting the changes");
+      setScrollToBottom(true);
 
       const dbNameErr = validateDbName(dbName);
-      const [ dbVersionErr ] = validateDbVersionNumber(dbVersionStr);
+      const [ dbVersionErr ] = validateDbVersionNumber(nextDbVersionStr);
 
       setDbNameErr(dbNameErr)
-      setDbVersionErr(dbVersionErr);
+      setnextDbVersionErr(dbVersionErr);
 
       setValidateDbStoresReqsCount(validateDbStoresReqsCount + 1);
     } else {
       setSaving(true);
-      console.log("dbVersion", dbVersion);
-      var req = indexedDB.open(dbName, dbVersion ?? undefined);
+      var req = indexedDB.open(dbName, nextDbVersion ?? undefined);
 
       attachDefaultHandlersToDbOpenRequest(req, dfDatabaseOpenErrMsg, success => {
         if (success) {
@@ -369,7 +369,6 @@ export default function IndexedDbEditDb(
           try {
             req.result.close();
           } catch (err) {
-            hasError = true;
             errMsg = (err as Error).message ?? "Could not close the database connection";
           }
           
@@ -377,6 +376,9 @@ export default function IndexedDbEditDb(
 
           if (!hasMigrationError) {
             setError(errMsg);
+            if ((errMsg ?? null) !== null) {
+              setScrollToBottom(true);
+            }
           }
         } else {
           setWarning(null);
@@ -391,10 +393,11 @@ export default function IndexedDbEditDb(
           // load();
         }
       }, errMsg => {
-        hasError = true;
         setError(errMsg);
+        setScrollToBottom(true);
       }, warnMsg => {
         setWarning(warnMsg);
+        setScrollToBottom(true);
       }, e => {
         try {
           const db = req.result;
@@ -410,10 +413,10 @@ export default function IndexedDbEditDb(
             });
           }
         } catch (err) {
-          hasError = true;
           hasMigrationError = true;
           const errMsg = (err as Error).message ?? "Could not upgrade the database";
           setError(errMsg);
+          setScrollToBottom(true);
         }
 
         if (!hasMigrationError) {
@@ -430,20 +433,20 @@ export default function IndexedDbEditDb(
         }
       });
     }
-  }, [ dbStoresArr, deletedDbStoresArr, dbVersion, dbName ]);
+  }, [ dbStoresArr, deletedDbStoresArr, nextDbVersion, dbName ]);
 
   const onCancelClick = React.useCallback(() => {
     navigate(props.basePath);
   }, []);
 
   React.useEffect(() => {
-    const actionButtonsGroupEl = actionButtonsGroupElRef.current;
+    const bottomEl = bottomElRef.current;
 
     if (scrollToBottom) {
       setScrollToBottom(false);
-      
-      if (actionButtonsGroupEl) {
-        actionButtonsGroupEl.scrollIntoView(false);
+
+      if (bottomEl) {
+        bottomEl.scrollIntoView(false);
       }
     } else if (!props.isNewDb && !isLoading && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
       load();
@@ -454,7 +457,7 @@ export default function IndexedDbEditDb(
     db,
     props.dbName,
     dbName,
-    dbVersion,
+    nextDbVersion,
     dbStoresArr,
     nextDbStoreId,
     deletedDbStoresArr,
@@ -462,13 +465,13 @@ export default function IndexedDbEditDb(
     error,
     warning,
     dbNameErr,
-    dbVersionErr,
+    nextDbVersionErr,
     props.showCreateSuccessMsg,
     showEditResultMsg,
     props.isNewDb,
     validateDbStoresReqsCount,
     scrollToBottom,
-    actionButtonsGroupElRef ]);
+    bottomElRef ]);
 
 return (<AppBarsPanel basePath={props.basePath}
       panelClassName="trmrk-page-panel"
@@ -485,28 +488,28 @@ return (<AppBarsPanel basePath={props.basePath}
         <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton>
       </React.Fragment>}>
     <Box className="trmrk-panel-content trmrk-indexeddb-create-db">
-      { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ? <Box className="trmrk-flex-row">
-        <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">{loadError}</FormHelperText></Box></Box> : (
-          loadWarning ?? null) !== null ? <Box className="trmrk-flex-row">
-        <Box className="trmrk-cell"><FormHelperText className="trmrk-warning trmrk-wrap-content">{loadWarning}</FormHelperText></Box>
-        </Box> : <React.Fragment>
+      { isLoading ? <LoadingDotPulse /> : (loadError ?? null) !== null ?
+        <FormHelperText error className="trmrk-form-helper-text-row">{loadError}</FormHelperText> : (
+          loadWarning ?? null) !== null ? 
+        <FormHelperText className="trmrk-warning trmrk-form-helper-text-row">{loadWarning}</FormHelperText>
+         : <React.Fragment>
           <Paper className="trmrk-flex-rows-group">
             <Box className="trmrk-flex-row">
               <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbName">Database name</label></Box>
               <Box className="trmrk-cell"><Input id="dbName" onChange={dbNameChanged} value={dbName}
                 required fullWidth readOnly={!props.isNewDb}
                 className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
-                { (dbNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
-                  {dbNameErr}</FormHelperText></Box> : null }
             </Box>
+            { (dbNameErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
+              {dbNameErr}</FormHelperText> : null }
             <Box className="trmrk-flex-row">
-              <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbVersion">Database version number</label></Box>
+              <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbVersion">Next version number</label></Box>
               <Box className="trmrk-cell"><Input id="dbVersion" type="number" onChange={dbVersionChanged}
-                value={dbVersion} required fullWidth inputProps={{ min: 1 }}
-                className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
-                { (dbVersionErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
-                  {dbVersionErr}</FormHelperText></Box> : null }
+                value={nextDbVersion} required fullWidth inputProps={{ min: 1 }}
+                className={[ "trmrk-input" ].join(" ")} /></Box>
             </Box>
+            { (nextDbVersionErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
+               {nextDbVersionErr}</FormHelperText> : null }
           </Paper>
           <Box className="trmrk-flex-row">
             <Box className="trmrk-cell">
@@ -524,11 +527,12 @@ return (<AppBarsPanel basePath={props.basePath}
                 keyPathHasErrorChanged={editDbStoreKeyPathHasErrorChangedHandler(dbStore.id)}
                 dbStoreDeleteClicked={dbStoreRemoveClicked(dbStore.id, dbStoresArr)}
                  /> ) }
-            { (error ?? null) !== null ? <Box className="trmrk-flex-row"><Box className="trmrk-cell">
-              <FormHelperText error className="trmrk-wrap-content">{error}</FormHelperText></Box></Box> : null }
-            { (warning ?? null) !== null ? <Box className="trmrk-flex-row">
-              <Box className="trmrk-cell"><FormHelperText className="trmrk-warning trmrk-wrap-content">{warning}</FormHelperText></Box></Box> : null }
+            { (error ?? null) !== null ? 
+              <FormHelperText error className="trmrk-form-helper-text-row">{error}</FormHelperText> : null }
+            { (warning ?? null) !== null ? 
+              <FormHelperText className="trmrk-warning trmrk-form-helper-text-row">{warning}</FormHelperText> : null }
           </React.Fragment> }
+      <div ref={bottomElRef}></div>
       <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
         <Alert
           onClose={onCreateSuccessMsgClose}

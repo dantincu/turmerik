@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      .container {
+        display: flex;
+        flex-wrap: wrap; /* Allow children to wrap onto multiple lines */
+        justify-content: space-between; /* Optional: Adjust alignment */
+      }
+
+      .item {
+        width: 100px;
+        height: 100px;
+        background: gold;
+        border: 1px solid black;
+        font-size: 16px;
+        text-align: center;
+        margin: 10px;
+        flex: 0 0 calc(33.33% - 20px); /* Distribute equally and prevent stretching */
+      }
+
+      /* Example: Make every 3rd item silver */
+      .item:nth-child(3n) {
+        background: silver;
+      }
+
+      /* Separate line for the 6th item */
+      .item:nth-child(6) {
+        flex-basis: 100%; /* Force this item to start a new line */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">1</div>
+      <div class="item">2</div>
+      <div class="item">3</div>
+      <div class="item">4</div>
+      <div class="item">5</div>
+      <div class="item">6</div>
+      <!-- This item will be on a separate line -->
+      <div class="item">7</div>
+      <div class="item">8</div>
+      <!-- Add more items as needed -->
+    </div>
+  </body>
+</html>

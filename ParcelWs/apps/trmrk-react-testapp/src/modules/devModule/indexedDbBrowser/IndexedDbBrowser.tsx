@@ -14,6 +14,7 @@ import HeightIcon from '@mui/icons-material/Height';
 
 import trmrk from "trmrk";
 
+import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';
@@ -135,6 +136,10 @@ export default function IndexedDbBrowser(
     setIsDbMenuOpen(false);
   }
 
+  const goToCreateDb = () => {
+    navigate(`${props.basePath}/create-db`);
+  }
+
   React.useEffect(() =>{
     if (!databases && !error) {
       loadDatabases();
@@ -156,8 +161,11 @@ export default function IndexedDbBrowser(
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}
-      appHeaderChildren={<Typography variant="h4" component="h1" className="trmrk-page-title">IndexedDb</Typography>}>
-    <div className="trmrk-panel trmrk-indexeddb-browser">
+      appHeaderChildren={<React.Fragment>
+        <IconButton onClick={goToCreateDb}><MatUIIcon className="trmrk-icon trmrk-icon-database" iconName="database" /></IconButton>
+        <Typography variant="h4" component="h1" className="trmrk-page-title">IndexedDb</Typography>
+        </React.Fragment>}>
+    <div className="trmrk-panel-content trmrk-indexeddb-browser">
       <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
         <IconButton ref={pinnedTopBarRef} onClick={pinnedTopBarOptionsClicked}><SettingsIcon /></IconButton>
       </Paper>

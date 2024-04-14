@@ -12,11 +12,20 @@
     padding-top: 0.25em;
     bottom: 0px;
     height: fit-content;  //height is set to auto
-    box-sizing:border-box;
+    box-sizing: border-box;
 
     > .trmrk-loading {
       margin-top: 0.5em;
       margin-left: 1em;
+    }
+
+    .trmrk-form-helper-text-row {
+      display: flex;
+      position: relative;
+      padding: 0px 0.25em;
+      @include wrap-content();
+      margin: auto;
+      flex-basis: 100%;
     }
 
     .trmrk-flex-row {

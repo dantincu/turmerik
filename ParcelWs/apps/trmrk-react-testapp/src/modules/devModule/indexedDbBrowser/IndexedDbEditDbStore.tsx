@@ -148,9 +148,9 @@ export default function IndexedDbEditDbStore(
       <Box className="trmrk-cell"><Input id={`dbStoreName_${props.idx}`} onChange={dbStoreNameChanged} value={dbStoreName}
         required fullWidth className={[ "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
         readOnly={!props.model.canBeEdited} /></Box>
-        { (dbStoreNameErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
-          {dbStoreNameErr}</FormHelperText></Box> : null }
     </Box>
+    { (dbStoreNameErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
+      {dbStoreNameErr}</FormHelperText> : null }
     <Box className="trmrk-flex-row">
       <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreAutoincrement_${props.idx}`}>Auto increment</label></Box>
       <Box className="trmrk-cell"><Checkbox id={`dbStoreAutoincrement_${props.idx}`} ref={autoIncrementElRef}
@@ -162,8 +162,8 @@ export default function IndexedDbEditDbStore(
       <Box className="trmrk-cell"><TextareaAutosize id={`dbStoreKeyPath_${props.idx}`}
         className={[ "trmrk-textarea-autosize", "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
         onChange={keyPathChanged} value={keyPath} readOnly={!props.model.canBeEdited} required /></Box>
-        { (keyPathErr ?? null) !== null ? <Box className="trmrk-cell"><FormHelperText error className="trmrk-wrap-content">
-          {keyPathErr}</FormHelperText></Box> : null }
     </Box>
+    { (keyPathErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
+      {keyPathErr}</FormHelperText> : null }
   </Paper>);
 }
