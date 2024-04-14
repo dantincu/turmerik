@@ -159,9 +159,7 @@ export default function IndexedDbEditDb(
       });
 
       setDbStoresArr(newDbStoresArr);
-      if (!isMobile) {
-        setScrollToBottom(true);
-      }
+      setScrollToBottom(true);
   }, [dbStoresArr]);
 
   const getFormCanBeSubmitted = React.useCallback((

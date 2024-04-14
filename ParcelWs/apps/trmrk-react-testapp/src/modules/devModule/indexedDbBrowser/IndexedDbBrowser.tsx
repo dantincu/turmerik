@@ -156,7 +156,7 @@ export default function IndexedDbBrowser(
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}
-      appHeaderChildren={<Typography variant="h4" component="h1" className="trmrk-page-title">IndexedDb Databases</Typography>}>
+      appHeaderChildren={<Typography variant="h4" component="h1" className="trmrk-page-title">IndexedDb</Typography>}>
     <div className="trmrk-panel trmrk-indexeddb-browser">
       <Paper className={['trmrk-pinned-top-bar', "trmrk-current-node-hcy", isLoadingRoot ? "trmrk-is-loading" : "" ].join(" ")}>
         <IconButton ref={pinnedTopBarRef} onClick={pinnedTopBarOptionsClicked}><SettingsIcon /></IconButton>
