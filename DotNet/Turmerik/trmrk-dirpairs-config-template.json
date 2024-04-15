@@ -45,7 +45,7 @@
   },
   "FileContents": {
     "KeepFileContentsTemplate": "{0}",
-    "MdFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
+    "MdFileContentsTemplate": "# {0}  \n\n",
     "MdFileContentSectionTemplate": "{0}  \n\n"
   },
   "Macros": {
