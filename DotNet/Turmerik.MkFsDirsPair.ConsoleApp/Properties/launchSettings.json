@@ -5,7 +5,8 @@
       //"commandLineArgs": ":n :url:https://ing.ro/informatii-utile/ING-lanseaza-in-premiera-serviciul-de-geolocalizare := :nn :o :url:asdf|https://github.com/roshaneforde/rawjs/tree/master qwer xzcv \" \" :+ :n asdf :+ :n :ni :- := :n :nf := oiuy iut \"\""
       // "commandLineArgs": ":n :url:https://ing.ro/informatii-utile/ING-lanseaza-in-premiera-serviciul-de-geolocalizare"
       // "commandLineArgs": ":n Articles :+ :n #list# :- := :n \"Terms & Concepts\" :+ :n #list#"
-      "commandLineArgs": ":m:lm:la"
+      // "commandLineArgs": ":m:lm:la"
+      "commandLineArgs": ":n :url:https://www.facebook.com/100057620462546/posts/863839308880077/?rdid=VkQpWXD1jzBJzCRo"
     }
   }
 }

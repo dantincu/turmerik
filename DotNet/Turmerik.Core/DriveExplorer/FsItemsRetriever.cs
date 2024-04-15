@@ -277,9 +277,8 @@ namespace Turmerik.Core.DriveExplorer
             string path, bool allowsRootPath)
         {
             bool canBeValid = path != null && path == path.Trim() && Path.IsPathRooted(
-                path) && !path.Contains(
-                "..") && !path.ContainsAny(
-                    PathH.InvalidPathCharsStr) && !path.EndsWith(":");
+                path) && !path.All(c => c == '.' || char.IsWhiteSpace(c)) && !path.ContainsAny(
+                    PathH.InvalidPathCharsStr);
 
             bool isValid = canBeValid;
 

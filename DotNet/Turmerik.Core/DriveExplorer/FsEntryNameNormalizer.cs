@@ -54,6 +54,11 @@ namespace Turmerik.Core.DriveExplorer
                 }
             }
 
+            if (charsList.LastOrDefault() == '.')
+            {
+                charsList.Add('%');
+            }
+
             return charsList;
         }
 
