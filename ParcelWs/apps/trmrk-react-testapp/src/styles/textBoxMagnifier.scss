@@ -1,0 +1,35 @@
+.trmrk-textbox-magnifier-popover {
+  width: 100%;
+  height: 10em;
+
+  > .MuiPaper-root {
+    width: 100%;
+  }
+}
+
+.trmrk-textbox-magnifier {
+  width: 100%;
+  height: fit-content;
+  position: relative;
+
+  .trmrk-action-controls,
+  .trmrk-main-content {
+    width: 100%;
+    display: flex;
+    position: relative;
+    height: fit-content;
+  }
+
+  .trmrk-main-content {
+    padding: 0 0.5em 0.5em 0.5em;
+
+    .trmrk-text {
+      @include no-wrap-anywhere();
+      height: 1.5em;
+      line-height: 1.5em;
+      text-align: center;
+      border-radius: 3px;
+      width: fit-content;
+    }
+  }
+}

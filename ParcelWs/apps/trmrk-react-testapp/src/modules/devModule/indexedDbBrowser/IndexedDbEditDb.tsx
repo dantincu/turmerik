@@ -7,12 +7,12 @@ import Typography from '@mui/material/Typography';
 import Input from '@mui/material/Input';
 import FormHelperText from '@mui/material/FormHelperText';
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
 import Alert, { AlertColor } from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
+import WidthFullIcon from "@mui/icons-material/WidthFull";
 import Snackbar from '@mui/material/Snackbar';
 
 import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEditDbStore";
@@ -43,6 +43,7 @@ import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 import { isMobile, isIPhone } from "trmrk-browser/src/domUtils/constants";
 
 import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
+import TrmrkTextBoxMagnifierPopover from "./TrmrkTextBoxMagnifierPopover";
 
 export interface IndexedDbEditDbProps {
   basePath: string;
@@ -113,7 +114,14 @@ export default function IndexedDbEditDb(
   const [ editResultMsgSeverity, setEditResultMsgSeverity ] = React.useState<AlertColor>(props.showCreateSuccessMsg ? "success" : "info");
   const [ validateDbStoresReqsCount, setValidateDbStoresReqsCount ] = React.useState(0);
 
+  const [ showDbNameTextBoxMagnifier, setShowDbNameTextBoxMagnifier ] = React.useState(false);
+
+  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
+
   const bottomElRef = React.createRef<HTMLDivElement>();
+  const dbNameTextBoxElRef = React.createRef<HTMLInputElement>();
+
+  const [ dbNameTextBoxEl, setDbNameTextBoxEl ] = React.useState(dbNameTextBoxElRef.current);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -268,6 +276,14 @@ export default function IndexedDbEditDb(
     refreshError(dbNameErr, nextDbVersionErr, newDbStoresArr);
   };
 
+  const onHideDbNameTextBoxMagnifier = () => {
+    setShowDbNameTextBoxMagnifier(false);
+  }
+
+  const onShowDbNameTextBoxMagnifier = () => {
+    setShowDbNameTextBoxMagnifier(true);
+  }
+
   const refreshError = React.useCallback((
     dbNameErr: string | null,
     dbVersionErr: string | null,
@@ -280,9 +296,7 @@ export default function IndexedDbEditDb(
   }, []);
 
   const load = React.useCallback(() => {
-    setIsLoading(true);
     var req = indexedDB.open(dbName);
-
     let hasError: boolean;
     
     attachDefaultHandlersToDbOpenRequest(req, dfDatabaseOpenErrMsg, success => {
@@ -442,14 +456,20 @@ export default function IndexedDbEditDb(
   React.useEffect(() => {
     const bottomEl = bottomElRef.current;
 
-    if (scrollToBottom) {
+    if (dbNameTextBoxEl !== dbNameTextBoxElRef.current) {
+      setDbNameTextBoxEl(dbNameTextBoxElRef.current);
+    } else if (scrollToBottom) {
       setScrollToBottom(false);
 
       if (bottomEl) {
         bottomEl.scrollIntoView(false);
       }
-    } else if (!props.isNewDb && !isLoading && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
-      load();
+    } else if (!props.isNewDb && (loadError ?? null) === null && (loadWarning ?? null) === null && !db) {
+      if (!isLoading) {
+        setIsLoading(true);
+      } else {
+        load();
+      }
     }
   }, [ isLoading,
     loadError,
@@ -471,9 +491,14 @@ export default function IndexedDbEditDb(
     props.isNewDb,
     validateDbStoresReqsCount,
     scrollToBottom,
-    bottomElRef ]);
+    bottomElRef,
+    showDbNameTextBoxMagnifier,
+    dbNameTextBoxElRef,
+    dbNameTextBoxEl,
+    isDarkMode
+  ]);
 
-return (<AppBarsPanel basePath={props.basePath}
+  return (<AppBarsPanel basePath={props.basePath}
       panelClassName="trmrk-page-panel"
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
@@ -495,10 +520,14 @@ return (<AppBarsPanel basePath={props.basePath}
          : <React.Fragment>
           <Paper className="trmrk-flex-rows-group">
             <Box className="trmrk-flex-row">
-              <Box className="trmrk-cell"><label className="trmrk-title" htmlFor="dbName">Database name</label></Box>
-              <Box className="trmrk-cell"><Input id="dbName" onChange={dbNameChanged} value={dbName}
-                required fullWidth readOnly={!props.isNewDb}
-                className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
+              <Box className="trmrk-cell">
+                <label className="trmrk-title" htmlFor="dbName">Database name</label>
+                <IconButton onClick={onShowDbNameTextBoxMagnifier}><WidthFullIcon /></IconButton>
+              </Box>
+              <Box className="trmrk-cell">
+                <Input id="dbName" onChange={dbNameChanged} value={dbName}
+                  required fullWidth readOnly={!props.isNewDb} ref={dbNameTextBoxElRef}
+                  className={[ "trmrk-input", props.isNewDb ? "" : "trmrk-readonly" ].join(" ")} /></Box>
             </Box>
             { (dbNameErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
               {dbNameErr}</FormHelperText> : null }
@@ -533,6 +562,13 @@ return (<AppBarsPanel basePath={props.basePath}
               <FormHelperText className="trmrk-warning trmrk-form-helper-text-row">{warning}</FormHelperText> : null }
           </React.Fragment> }
       <div ref={bottomElRef}></div>
+      { dbNameTextBoxEl ? <TrmrkTextBoxMagnifierPopover
+        isOpen={showDbNameTextBoxMagnifier}
+        isDarkMode={isDarkMode}
+        anchorEl={dbNameTextBoxEl}
+        handleClose={onHideDbNameTextBoxMagnifier}
+        text={dbName}
+            textBoxIsReadonly={props.isNewDb} /> : null }
       <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
         <Alert
           onClose={onCreateSuccessMsgClose}

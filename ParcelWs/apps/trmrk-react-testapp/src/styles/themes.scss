@@ -39,6 +39,12 @@
       }
     }
   }
+
+  &.trmrk-textbox-magnifier {
+    .trmrk-text {
+      border: 1px solid #888;
+    }
+  }
 }
 
 .trmrk-theme-light {
@@ -71,6 +77,12 @@
           background: linear-gradient(#0000, #0001, #0000);
         }
       }
+    }
+  }
+
+  &.trmrk-textbox-magnifier {
+    .trmrk-text {
+      border: 1px solid #888;
     }
   }
 }
