@@ -12,7 +12,6 @@ import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import WidthFullIcon from "@mui/icons-material/WidthFull";
 import Snackbar from '@mui/material/Snackbar';
 
 import IndexedDbEditDbStore, { IndexedDbEditDbStoreProps } from "./IndexedDbEditDbStore";
@@ -43,7 +42,8 @@ import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 import { isMobile, isIPhone } from "trmrk-browser/src/domUtils/constants";
 
 import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
-import TrmrkTextBoxMagnifierPopover from "./TrmrkTextBoxMagnifierPopover";
+import TrmrkTextMagnifierPopover from "./TrmrkTextMagnifierPopover";
+import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbProps {
   basePath: string;
@@ -522,7 +522,7 @@ export default function IndexedDbEditDb(
             <Box className="trmrk-flex-row">
               <Box className="trmrk-cell">
                 <label className="trmrk-title" htmlFor="dbName">Database name</label>
-                <IconButton onClick={onShowDbNameTextBoxMagnifier}><WidthFullIcon /></IconButton>
+                <IconButton onClick={onShowDbNameTextBoxMagnifier}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
               </Box>
               <Box className="trmrk-cell">
                 <Input id="dbName" onChange={dbNameChanged} value={dbName}
@@ -562,13 +562,13 @@ export default function IndexedDbEditDb(
               <FormHelperText className="trmrk-warning trmrk-form-helper-text-row">{warning}</FormHelperText> : null }
           </React.Fragment> }
       <div ref={bottomElRef}></div>
-      { dbNameTextBoxEl ? <TrmrkTextBoxMagnifierPopover
+      { dbNameTextBoxEl ? <TrmrkTextMagnifierPopover
         isOpen={showDbNameTextBoxMagnifier}
         isDarkMode={isDarkMode}
         anchorEl={dbNameTextBoxEl}
         handleClose={onHideDbNameTextBoxMagnifier}
         text={dbName}
-            textBoxIsReadonly={props.isNewDb} /> : null }
+            textIsReadonly={props.isNewDb} /> : null }
       <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
         <Alert
           onClose={onCreateSuccessMsgClose}

@@ -12,14 +12,14 @@ import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrow
 
 import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
 
-export interface TrmrkReadonlyTextBoxMagnifierProps {
+export interface TrmrkReadonlyMultilineTextMagnifierProps {
   text: string;
 }
 
-export default function TrmrkReadonlyTextBoxMagnifier(
-  props: TrmrkReadonlyTextBoxMagnifierProps
+export default function TrmrkReadonlyMultilineTextMagnifier(
+  props: TrmrkReadonlyMultilineTextMagnifierProps
 ) {
-  return (<div className="trmrk-textbox-magnifier trmrk-readonly-textbox-magnifier">
+  return (<div className="trmrk-text-magnifier trmrk-readonly-multiline-text-magnifier">
     <div className="trmrk-action-controls">
       <IconButton className="trmrk-icon-btn"><CancelIcon /></IconButton>
       <IconButton className="trmrk-icon-btn"><MatUIIcon iconName="line_start" /></IconButton>

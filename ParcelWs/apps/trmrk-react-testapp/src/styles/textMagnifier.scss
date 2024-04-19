@@ -1,13 +1,20 @@
-.trmrk-textbox-magnifier-popover {
+.trmrk-text-magnifier-popover {
+  position: absolute;
   width: 100%;
   height: 10em;
 
   > .MuiPaper-root {
     width: 100%;
   }
+
+  .trmrk-toggle-full-view-port-btn {
+    position: absolute;
+    top: 0em;
+    right: 0em;
+  }
 }
 
-.trmrk-textbox-magnifier {
+.trmrk-text-magnifier {
   width: 100%;
   height: fit-content;
   position: relative;

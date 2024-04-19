@@ -24,6 +24,10 @@
       &.trmrk-editable {
         border: 2px solid #642;
       }
+
+      &:hover {
+        background-color: #1a1a1a;
+      }
     }
 
     .trmrk-flex-row {
@@ -64,6 +68,10 @@
 
       &.trmrk-editable {
         border: 2px solid #864;
+      }
+
+      &:hover {
+        background-color: #F4F4F4;
       }
     }
 

@@ -1,4 +1,5 @@
 export const allWsRegex = /^\s+$/g;
+export const digitRegex = /\d/g;
 
 export interface MtblRefValue<T> {
   value: T;
@@ -399,3 +400,16 @@ export const transformStr = (
   inStr: string,
   convertor: (chr: string, idx: number) => string | null
 ) => [...inStr].map(convertor).join("");
+
+export const extractDigits = (
+  inStr: string,
+  allowedNonDigits?: string[] | null | undefined
+) => {
+  allowedNonDigits ??= ["."];
+
+  const outStr = transformStr(inStr, (chr) =>
+    digitRegex.test(chr) || allowedNonDigits.indexOf(chr) >= 0 ? chr : null
+  );
+
+  return outStr;
+};

@@ -53,3 +53,22 @@ body, #app-root {
   top: 0.25em;
   padding-left: 0.25em
 }
+
+.trmrk-block {
+  display: block;
+}
+
+.trmrk-horiz-padded {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.trmrk-vert-padded {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.trmrk-is-full-viewport {
+  width: 100vw;
+  height: 100vh;
+}

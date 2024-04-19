@@ -13,8 +13,11 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import trmrk from "trmrk";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
+import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import { deserializeKeyPath } from "../../../services/indexedDb";
+import TrmrkTextMagnifierPopover from "./TrmrkTextMagnifierPopover";
+import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbStoreProps {
   model: IndexedDbStore;
@@ -70,7 +73,12 @@ export default function IndexedDbEditDbStore(
   const [ keyPath, setKeyPath ] = React.useState(props.model.dbStore.serializedKeyPath);
   const [ keyPathErr, setKeyPathErr ] = React.useState<string | null>(null);
 
+  const [ showDbStoreNameTextBoxMagnifier, setShowDbStoreNameTextBoxMagnifier ] = React.useState(false);
+
+  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
   const autoIncrementElRef = React.createRef<HTMLButtonElement>();
+  const dbStoreNameTextBoxElRef = React.createRef<HTMLInputElement>();
+  const [ dbStoreNameTextBoxEl, setDbStoreNameTextBoxEl ] = React.useState(dbStoreNameTextBoxElRef.current);
 
   const dbStoreNameChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newDbStoreName = e.target.value;
@@ -104,11 +112,21 @@ export default function IndexedDbEditDbStore(
     props.keyPathChanged(newKeyPath, !!newkeyPathErr);
   }
 
+  const onHideDbStoreNameTextBoxMagnifier = () => {
+    setShowDbStoreNameTextBoxMagnifier(false);
+  }
+
+  const onShowDbStoreNameTextBoxMagnifier = () => {
+    setShowDbStoreNameTextBoxMagnifier(true);
+  }
+
   React.useEffect(() => {
     const autoIncrementEl = autoIncrementElRef.current;
     let autoIncrementCheckBox: HTMLInputElement | null = null;
 
-    if (!props.model.canBeEdited && autoIncrementEl) {
+    if (dbStoreNameTextBoxEl !== dbStoreNameTextBoxElRef.current) {
+      setDbStoreNameTextBoxEl(dbStoreNameTextBoxElRef.current);
+    } else if (!props.model.canBeEdited && autoIncrementEl) {
       autoIncrementCheckBox = autoIncrementEl.querySelector("input[type=checkbox]") as HTMLInputElement;
       autoIncrementCheckBox.addEventListener("click", autoIncrementClicked);
     }
@@ -139,15 +157,23 @@ export default function IndexedDbEditDbStore(
     props.idx,
     props.validateReqsCount,
     validateReqsCount,
-    autoIncrementElRef ] );
+    autoIncrementElRef,
+    showDbStoreNameTextBoxMagnifier,
+    isDarkMode,
+    autoIncrementElRef,
+    dbStoreNameTextBoxElRef,
+    dbStoreNameTextBoxEl ] );
 
   return (<Paper className={["trmrk-flex-rows-group", props.model.canBeEdited ? "trmrk-editable" : "trmrk-readonly"].join(" ")}>
     <IconButton className="trmrk-icon-btn trmrk-delete-icon-btn" onClick={props.dbStoreDeleteClicked}><DeleteIcon /></IconButton>
     <Box className="trmrk-flex-row">
-      <Box className="trmrk-cell"><label className="trmrk-title" htmlFor={`dbStoreName_${props.idx}`}>DB Store Name</label></Box>
+      <Box className="trmrk-cell">
+        <label className="trmrk-title" htmlFor={`dbStoreName_${props.idx}`}>DB Store Name</label>
+        <IconButton onClick={onShowDbStoreNameTextBoxMagnifier}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      </Box>
       <Box className="trmrk-cell"><Input id={`dbStoreName_${props.idx}`} onChange={dbStoreNameChanged} value={dbStoreName}
         required fullWidth className={[ "trmrk-input", props.model.canBeEdited ? "" : "trmrk-readonly" ].join(" ")}
-        readOnly={!props.model.canBeEdited} /></Box>
+        readOnly={!props.model.canBeEdited} ref={dbStoreNameTextBoxElRef} /></Box>
     </Box>
     { (dbStoreNameErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
       {dbStoreNameErr}</FormHelperText> : null }
@@ -165,5 +191,11 @@ export default function IndexedDbEditDbStore(
     </Box>
     { (keyPathErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
       {keyPathErr}</FormHelperText> : null }
+    { dbStoreNameTextBoxEl ? <TrmrkTextMagnifierPopover
+      isOpen={showDbStoreNameTextBoxMagnifier}
+      isDarkMode={isDarkMode}
+      anchorEl={dbStoreNameTextBoxEl}
+      handleClose={onHideDbStoreNameTextBoxMagnifier}
+      text={dbStoreName} textIsReadonly={!props.model.canBeEdited} /> : null }
   </Paper>);
 }
