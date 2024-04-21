@@ -571,11 +571,10 @@ export default function IndexedDbEditDb(
             textIsReadonly={props.isNewDb} /> : null }
       <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
         <Alert
+          className="trmrk-full-width"
           onClose={onCreateSuccessMsgClose}
           severity={editResultMsgSeverity}
-          variant="filled"
-          sx={{ width: '100%' }}
-        >
+          variant="filled">
           { editSuccessMsg }
         </Alert>
       </Snackbar>

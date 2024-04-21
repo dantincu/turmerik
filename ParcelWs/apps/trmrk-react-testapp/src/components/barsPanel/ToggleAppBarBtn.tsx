@@ -17,22 +17,10 @@ export default function ToggleAppBarBtn(
     props.appBarToggled(!props.showAppBar);
   }
 
-  let btnProps: { top?: string, bottom?: string } = {};
-
-  switch (props.togglesHeader) {
-    case true:
-      btnProps.top = "0px";
-      break;
-    case false:
-      btnProps.bottom = "0px";
-      break;
-  }
-
-  return (<IconButton onClick={handleClick} sx={{
-      ...btnProps,
-      position: "fixed", right: "0px", color: "white", zIndex: 1101 }}
+  return (<IconButton onClick={handleClick}
       className={ [ "trmrk-icon-btn trmrk-app-bar-toggle-icon", props.showAppBar ?
-        "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon" ].join(" ") }>
+        "trmrk-app-bar-toggle-hide-icon" : "trmrk-app-bar-toggle-show-icon",
+        props.togglesHeader ? "trmrk-toggles-header" : "trmrk-toggles-footer" ].join(" ") }>
       { (props.showAppBar === props.togglesHeader) ? <KeyboardDoubleArrowUpIcon /> : <KeyboardDoubleArrowDownIcon /> }
     </IconButton>);
 }

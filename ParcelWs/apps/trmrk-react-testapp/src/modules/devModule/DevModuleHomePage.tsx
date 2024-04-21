@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 
 import { Link } from "react-router-dom";
 
-import styled from "@emotion/styled";
-
 import Box from "@mui/material/Box";
 
 import { appDataReducers, appDataSelectors } from "../../store/appDataSlice";
@@ -16,12 +14,6 @@ export interface DevModuleHomePageProps {
   urlPath: string;
   exitPath: string;
 }
-
-const Ul = styled.ul({
-  margin: "1em",
-  padding: "1em",
-  marginTop: "0px"
-});
 
 export default function DevModuleHomePage(
   props: DevModuleHomePageProps
@@ -40,11 +32,11 @@ export default function DevModuleHomePage(
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}
       basePath={props.urlPath}>
-    <Box sx={{ height: "100%", width: "100%" }}>
-      <Ul>
+    <Box>
+      <ul className="trmrk-ul">
         <li><Link to={props.exitPath} className="trmrk-nav-link">Exit</Link></li>
         <li><Link to="indexeddb-browser" className="trmrk-nav-link">IndexedDB Browser</Link></li>
-      </Ul>
+      </ul>
     </Box>
   </AppBarsPanel>);
 }

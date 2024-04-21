@@ -13,6 +13,36 @@ body, #app-root {
   padding: 0.1em 0.5em;
 }
 
+.trmrk-full-width {
+  width: 100%;
+}
+
+.trmrk-full-height {
+  height: 100%;
+}
+
+.trmrk-app-bar-toggle-icon {
+  position: "fixed";
+  right: "0px";
+  color: "white";
+  z-index: 1101;
+
+  &.trmrk-toggles-header {
+    top: 0px;
+  }
+
+  &.trmrk-toggles-footer {
+    bottom: 0px;
+  }
+}
+
+.trmrk-dialog-content {
+  padding: 0;
+  display: "block";
+  position: "absolute";
+  inset: 0;
+}
+
 .MuiCheckbox-root.trmrk-checkbox {
   border-radius: 3px;
 }

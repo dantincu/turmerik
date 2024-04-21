@@ -40,7 +40,7 @@ export default function TrmrkTextCaretPositionerModal(
         props.popoverClassName ?? ""].join(" ")}
       open={props.isOpen}
       onClose={props.handleClose}>
-    <DialogContent sx={{ padding: 0, display: "block", position: "absolute", inset: 0 }}>
+    <DialogContent className="trmrk-dialog-content">
       <TrmrkTextCaretPositioner {...props.positioner} />
     </DialogContent>
   </Modal>);
