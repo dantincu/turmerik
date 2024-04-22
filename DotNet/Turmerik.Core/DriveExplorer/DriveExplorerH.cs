@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.DriveExplorer
 {
@@ -89,9 +88,39 @@ namespace Turmerik.Core.DriveExplorer
             }
         }
 
+        public static DriveItem? FindByName(
+            this List<DriveItem> list, string name) => list.SingleOrDefault(
+                item => item.Name == name);
+
+        public static DriveItemCore? FindByName(
+            this List<DriveItemCore> list, string name) => list.SingleOrDefault(
+                item => item.Name == name);
+
+        public static bool HasWithName(
+            this List<DriveItem> list, string name) => list.Any(
+                item => item.Name == name);
+
+        public static bool HasWithName(
+            this List<DriveItemCore> list, string name) => list.Any(
+                item => item.Name == name);
+
         public static DriveItemX ToItemX(
             this DriveItem src,
             int depth = 0) => new DriveItemX(
                 src, depth);
+
+        public static DriveItemCore ToItemCore(
+            this DriveItem src) => new DriveItemCore(src);
+
+        public static List<DriveItemCore> ToItemCoreList(
+            this List<DriveItem> list) => list.Select(
+                ToItemCore).ToList();
+
+        public static DriveItem ToItem(
+            this DriveItemCore item) => new DriveItem(item);
+
+        public static List<DriveItem> ToItemList(
+            this List<DriveItemCore> list) => list.Select(
+                ToItem).ToList();
     }
 }

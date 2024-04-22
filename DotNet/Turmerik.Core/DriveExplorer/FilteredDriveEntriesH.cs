@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.DriveExplorer
@@ -57,5 +60,55 @@ namespace Turmerik.Core.DriveExplorer
                 }
             }
         }
+
+        public static DriveItem ExtractItemsCore<TNode, TChildNodes>(
+            TNode rootNode,
+            bool extractFiltered = true)
+            where TNode : IDataTreeNode<FilteredDriveEntries, TNode, TChildNodes>
+            where TChildNodes : IEnumerable<TNode>
+        {
+            var retNode = new DriveItem
+            {
+                Idnf = rootNode.Data.PrFolderIdnf,
+                Name = rootNode.Data.PrFolderName,
+                FolderFiles = GetFolderFilesList<TNode, TChildNodes>(rootNode, extractFiltered),
+                SubFolders = rootNode.ChildNodes.Select(
+                    childNode => ExtractItemsCore<TNode, TChildNodes>(childNode, extractFiltered)).ToList()
+            };
+
+            return retNode;
+        }
+
+        public static DriveItem ExtractItems(
+            this DataTreeNodeMtbl<FilteredDriveEntries> rootNode,
+            bool extractFiltered = true) => ExtractItemsCore<DataTreeNodeMtbl<FilteredDriveEntries>, List<DataTreeNodeMtbl<FilteredDriveEntries>>>(
+                rootNode, extractFiltered);
+
+        public static DriveItem ExtractItems(
+            this DataTreeNodeImmtbl<FilteredDriveEntries> rootNode,
+            bool extractFiltered = true) => ExtractItemsCore<DataTreeNodeImmtbl<FilteredDriveEntries>, ReadOnlyCollection<DataTreeNodeImmtbl<FilteredDriveEntries>>>(
+                rootNode, extractFiltered);
+
+        public static List<DriveItem> ExtractItems(
+            this List<DataTreeNodeMtbl<FilteredDriveEntries>> rootNodesList,
+            bool extractFiltered = true) => rootNodesList.Select(
+                rootNode => ExtractItems(rootNode, extractFiltered)).ToList();
+
+        public static ReadOnlyCollection<DriveItem> ExtractItems(
+            this ReadOnlyCollection<DataTreeNodeImmtbl<FilteredDriveEntries>> rootNodesList,
+            bool extractFiltered = true) => rootNodesList.Select(
+                rootNode => ExtractItems(rootNode, extractFiltered)).RdnlC();
+
+        public static List<DriveItem> GetFolderFilesList<TNode, TChildNodes>(
+            TNode rootNode,
+            bool extractFiltered = true)
+            where TNode : IDataTreeNode<FilteredDriveEntries, TNode, TChildNodes>
+            where TChildNodes : IEnumerable<TNode> => extractFiltered ? rootNode.Data.FilteredFolderFiles : rootNode.Data.AllFolderFiles;
+
+        public static List<DriveItem> GetSubFoldersList<TNode, TChildNodes>(
+            TNode rootNode,
+            bool extractFiltered = true)
+            where TNode : IDataTreeNode<FilteredDriveEntries, TNode, TChildNodes>
+            where TChildNodes : IEnumerable<TNode> => extractFiltered ? rootNode.Data.FilteredSubFolders : rootNode.Data.AllSubFolders;
     }
 }

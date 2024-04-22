@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.SyncLocalFiles.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    }
+  }
+}

@@ -230,27 +230,6 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
             string? path,
             string? baseDirPath)
         {
-            /* if (!string.IsNullOrWhiteSpace(path))
-            {
-                path = textMacrosReplacer.ReplaceMacros(
-                    new TextMacrosReplacerOpts
-                    {
-                        InputText = path,
-                        MacrosMap = localDevicePathsMap.GetPathsMap(),
-                    });
-
-                if (!Path.IsPathRooted(path))
-                {
-                    path = Path.Combine(
-                        baseDirPath?.Nullify() ?? Environment.CurrentDirectory,
-                        path);
-                }
-            }
-            else
-            {
-                path = baseDirPath?.Nullify() ?? Environment.CurrentDirectory;
-            }*/
-
             path = textMacrosReplacer.NormalizePath(
                 localDevicePathsMap,
                 path, baseDirPath);

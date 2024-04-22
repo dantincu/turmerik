@@ -11,7 +11,7 @@ using Turmerik.NetCore.Utility;
 using Turmerik.Core.Dependencies;
 
 using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
-using System.Web.Services.Description;
+using SyncLocalFiles = Turmerik.NetCore.ConsoleApps.SyncLocalFiles;
 using Turmerik.NetCore.ConsoleApps.MkScripts;
 
 namespace Turmerik.NetCore.Dependencies
@@ -62,6 +62,17 @@ namespace Turmerik.NetCore.Dependencies
             services.AddSingleton<IProgramArgsNormalizer, ProgramArgsNormalizer>();
             services.AddSingleton<IFilteredItemsRetriever, FilteredItemsRetriever>();
             services.AddSingleton<IProgramComponent, ProgramComponent>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddSyncLocalFilesServices(
+            IServiceCollection services)
+        {
+            services.AddSingleton<SyncLocalFiles.IProgramConfigRetriever, SyncLocalFiles.ProgramConfigRetriever>();
+            services.AddSingleton<SyncLocalFiles.IProgramArgsRetriever, SyncLocalFiles.ProgramArgsRetriever>();
+            services.AddSingleton<SyncLocalFiles.IProgramArgsNormalizer, SyncLocalFiles.ProgramArgsNormalizer>();
+            services.AddSingleton<SyncLocalFiles.IProgramComponent, SyncLocalFiles.ProgramComponent>();
 
             return services;
         }

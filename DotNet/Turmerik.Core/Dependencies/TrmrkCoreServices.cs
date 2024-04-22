@@ -63,6 +63,8 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IFilteredDriveEntriesRetriever, FilteredDriveEntriesRetriever>();
             services.AddSingleton<IFilteredDriveEntriesRemover, FilteredDriveEntriesRemover>();
             services.AddSingleton<IFilteredDriveEntriesCloner, FilteredDriveEntriesCloner>();
+            services.AddSingleton<IFilteredDriveEntriesSynchronizer, FilteredDriveEntriesSynchronizer>();
+            services.AddSingleton<IFilteredDriveEntriesNodesRetriever, FilteredDriveEntriesNodesRetriever>();
             services.AddSingleton<IDriveEntriesCloner, DriveEntriesCloner>();
 
             services.AddSingleton<IChecksumCalculator, ChecksumCalculator>();

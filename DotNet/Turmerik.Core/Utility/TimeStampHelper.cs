@@ -114,7 +114,7 @@ namespace Turmerik.Core.Utility
             bool hasTimeZone = false,
             bool isForFileName = false,
             bool startsWithDayOfWeek = false,
-            string cultureCode = null);
+            string? cultureCode = null);
 
         string TmStmp(
             DateTime dateTime,
@@ -136,7 +136,7 @@ namespace Turmerik.Core.Utility
         string TmStmp(
             DateTime? dateTime,
             TmStmp tmStmp,
-            string cultureCode = null);
+            string? cultureCode = null);
 
         string TmStmp(
             DateTime? dateTime,
@@ -215,7 +215,7 @@ namespace Turmerik.Core.Utility
             bool hasTimeZone = false,
             bool isForFileName = false,
             bool startsWithDayOfWeek = false,
-            string cultureCode = null)
+            string? cultureCode = null)
         {
             TmStmp key = GetTmStmpInstn(
                 hasDate,
@@ -276,7 +276,7 @@ namespace Turmerik.Core.Utility
         public string TmStmp(
             DateTime? dateTime,
             TmStmp tmStmp,
-            string cultureCode = null)
+            string? cultureCode = null)
         {
             dateTime = dateTime ?? DateTime.Now;
             string tmStmpTpl = TmStmpsDictnr[tmStmp];
