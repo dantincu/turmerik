@@ -19,7 +19,7 @@ namespace Turmerik.Core.DriveExplorer
         public DataTreeNodeMtbl<RefTrgDriveFolderTuple> DiffResult { get; set; }
         public FileSyncType FileSyncType { get; set; }
         public bool? Interactive { get; set; }
-        public bool? SkipDiff { get; set; }
+        public bool? TreatAllAsDiff { get; set; }
         public bool? SkipDiffPrinting { get; set; }
         public int? RowsToPrint { get; set; }
         public string SrcDirPath { get; set; }

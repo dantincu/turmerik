@@ -9,17 +9,32 @@ namespace Turmerik.Core.DriveExplorer
         public RefTrgDriveItemsTuple(
             DriveItem? refItem,
             DriveItem? trgItem,
-            string? relPath)
+            string? refPrIdnf,
+            string? trgPrIdnf,
+            string relPath,
+            bool hasDiff)
         {
             RefItem = refItem;
             TrgItem = trgItem;
-            Name = refItem?.Name ?? trgItem?.Name;
-            RelPath = relPath;
+
+            RefPrIdnf = refPrIdnf;
+            TrgPrIdnf = trgPrIdnf;
+
+            Name = refItem?.Name ?? trgItem?.Name ?? throw new ArgumentNullException(
+                nameof(refItem.Name));
+
+            RelPath = relPath ?? throw new ArgumentNullException(
+                nameof(relPath));
+
+            HasDiff = hasDiff;
         }
 
         public DriveItem? RefItem { get; }
         public DriveItem? TrgItem { get; }
-        public string? Name { get; set; }
-        public string? RelPath { get; set; }
+        public string? RefPrIdnf { get; }
+        public string? TrgPrIdnf { get; }
+        public string Name { get; }
+        public string RelPath { get; }
+        public bool HasDiff { get; }
     }
 }

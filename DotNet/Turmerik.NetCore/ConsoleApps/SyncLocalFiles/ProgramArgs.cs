@@ -18,7 +18,8 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
         public FileSyncType FileSyncType { get; set; }
         public bool? PropagatePush { get; set; }
         public bool? Interactive { get; set; }
-        public bool? SkipDiff { get; set; }
+        public bool? SkipDiffPrinting { get; set; }
+        public bool? TreatAllAsDiff { get; set; }
         public int? RowsToPrint { get; set; }
     }
 }

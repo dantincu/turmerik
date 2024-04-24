@@ -8,16 +8,27 @@ namespace Turmerik.Core.DriveExplorer
     {
         public RefTrgDriveFolderTuple(
             List<RefTrgDriveItemsTuple> files,
-            string? name,
-            string? relPath)
+            string? refPrIdnf,
+            string? trgPrIdnf,
+            string name,
+            string relPath)
         {
             Files = files ?? throw new ArgumentNullException(nameof(files));
-            Name = name;
-            RelPath = relPath;
+
+            RefPrIdnf = refPrIdnf;
+            TrgPrIdnf = trgPrIdnf;
+
+            Name = name ?? throw new ArgumentNullException(
+                nameof(name));
+
+            RelPath = relPath ?? throw new ArgumentNullException(
+                nameof(relPath));
         }
 
         public List<RefTrgDriveItemsTuple> Files { get; }
-        public string? Name { get; set; }
-        public string? RelPath { get; set; }
+        public string? RefPrIdnf { get; }
+        public string? TrgPrIdnf { get; }
+        public string Name { get; }
+        public string RelPath { get; }
     }
 }

@@ -99,7 +99,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             var srcEntriesObj = await filteredFsEntriesRetriever.FindMatchingAsync(
                 new FilteredDriveRetrieverMatcherOpts
                 {
-                    PrFolderIdnf = Path.GetFullPath(srcFolder.DirPath),
+                    PrFolderIdnf = srcFolder.DirPath,
                     FsEntriesSerializableFilter = destnFolderKvp.Value.SrcFilesFilter
                 });
 
@@ -111,14 +111,24 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             var destnEntriesObj = await filteredFsEntriesRetriever.FindMatchingAsync(
                 new FilteredDriveRetrieverMatcherOpts
                 {
-                    PrFolderIdnf = Path.GetFullPath(destnDirPath),
+                    PrFolderIdnf = destnDirPath,
                     FsEntriesSerializableFilter = destnFolderKvp.Value.DestnFilesFilter
                 });
 
             await filteredDriveEntriesSynchronizer.SyncFilteredItemsAsync(
                 new FilteredDriveEntriesSynchronizerOpts
                 {
-                    FileSyncType = args.FileSyncType
+                    FileSyncType = args.FileSyncType,
+                    TreatAllAsDiff = args.TreatAllAsDiff,
+                    Interactive = args.Interactive,
+                    RowsToPrint = args.RowsToPrint,
+                    SkipDiffPrinting = args.SkipDiffPrinting,
+                    SrcFilteredEntries = srcEntriesObj,
+                    DestnFilteredEntries = destnEntriesObj,
+                    SrcName = srcFolder.Name,
+                    DestnName = destnFolder.Name,
+                    SrcDirPath = srcFolder.DirPath,
+                    DestnDirPath = destnDirPath,
                 });
         }
     }

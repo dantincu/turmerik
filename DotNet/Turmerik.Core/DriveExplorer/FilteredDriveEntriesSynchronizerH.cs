@@ -9,52 +9,30 @@ namespace Turmerik.Core.DriveExplorer
 {
     public static class FilteredDriveEntriesSynchronizerH
     {
-        public static DataTreeNodeMtbl<RefTrgDriveItemsTuple> RefFolderToDriveItemsTupleTreeNode(
-            DriveItem refFolder,
-            string relPath) => new DataTreeNodeMtbl<RefTrgDriveItemsTuple>(
-                new RefTrgDriveItemsTuple(new DriveItem(refFolder, 1), null, relPath), null,
-                    refFolder.SubFolders.Select(
-                        refSubFolder => RefFolderToDriveItemsTupleTreeNode(
-                            refSubFolder, Path.Combine(
-                                relPath, refSubFolder.Name))).ToList());
-
-        public static DataTreeNodeMtbl<RefTrgDriveItemsTuple> TrgFolderToDriveItemsTupleTreeNode(
-            DriveItem trgFolder,
-            string relPath) => new DataTreeNodeMtbl<RefTrgDriveItemsTuple>(
-                new RefTrgDriveItemsTuple(null, new DriveItem(trgFolder, 1), relPath), null,
-                    trgFolder.SubFolders.Select(
-                        trgSubFolder => TrgFolderToDriveItemsTupleTreeNode(
-                            trgSubFolder, Path.Combine(
-                                relPath, trgSubFolder.Name))).ToList());
-
-        public static DataTreeNodeMtbl<RefTrgDriveFolderTuple> RefFolderToDriveFolderTupleTreeNode(
-            DriveItem refFolder,
-            string relPath) => new DataTreeNodeMtbl<RefTrgDriveFolderTuple>(
-                new RefTrgDriveFolderTuple(refFolder.FolderFiles.Select(
-                    refFile => new RefTrgDriveItemsTuple(
-                        refFile, null, Path.Combine(
-                            relPath, refFile.Name))).ToList(),
-                    refFolder.Name, relPath), null, refFolder.SubFolders.Select(
-                        refSubFolder => RefFolderToDriveFolderTupleTreeNode(
-                            refSubFolder, Path.Combine(
-                                relPath, refSubFolder.Name))).ToList());
-
-        public static DataTreeNodeMtbl<RefTrgDriveFolderTuple> TrgFolderToDriveFolderTupleTreeNode(
-            DriveItem trgFolder,
-            string relPath) => new DataTreeNodeMtbl<RefTrgDriveFolderTuple>(
-                new RefTrgDriveFolderTuple(trgFolder.FolderFiles.Select(
-                    trgFile => new RefTrgDriveItemsTuple(
-                        null, trgFile, Path.Combine(
-                            relPath, trgFile.Name))).ToList(),
-                    trgFolder.Name, relPath), null, trgFolder.SubFolders.Select(
-                        refSubFolder => TrgFolderToDriveFolderTupleTreeNode(
-                            refSubFolder, Path.Combine(
-                                relPath, refSubFolder.Name))).ToList());
+        public static DataTreeNodeMtbl<RefTrgDriveFolderTuple> ToRefTrgDriveFolderTuple(
+            this DriveItem folder,
+            string prIdnf,
+            string relPath,
+            bool isTarget = true) => new DataTreeNodeMtbl<RefTrgDriveFolderTuple>(
+                new RefTrgDriveFolderTuple(folder.FolderFiles.Select(
+                    file => new RefTrgDriveItemsTuple(
+                        isTarget ? null : folder,
+                        isTarget ? folder : null,
+                        isTarget ? null : folder.Idnf,
+                        isTarget ? folder.Idnf : null,
+                        Path.Combine(
+                            relPath, folder.Name),
+                        true)).ToList(),
+                    isTarget ? null : prIdnf,
+                    isTarget ? prIdnf : null,
+                    folder.Name,
+                    relPath));
 
         public class PrintDiffOpts
         {
             public FilteredDriveEntriesSynchronizerOpts SyncOpts { get; set; }
             public DataTreeNodeMtbl<RefTrgDriveFolderTuple> DiffResult { get; set; }
+            public bool? TreatAllAsDiff { get; set; }
             public int? RowsToPrint { get; set; }
             public int LeftToPrintFromChunk { get; set; }
         }

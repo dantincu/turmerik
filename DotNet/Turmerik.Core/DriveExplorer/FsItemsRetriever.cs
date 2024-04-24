@@ -206,6 +206,7 @@ namespace Turmerik.Core.DriveExplorer
             }
             else if (fSysInfo is FileInfo fInfo)
             {
+                fsItem.FileSizeBytes = fInfo.Length;
                 string extn = fSysInfo.Extension.ToLower();
 
                 if (!string.IsNullOrEmpty(extn))

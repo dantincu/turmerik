@@ -48,6 +48,7 @@ namespace Turmerik.Core.DriveExplorer
             IsImageFile = src.IsImageFile;
             IsVideoFile = src.IsVideoFile;
             IsAudioFile = src.IsAudioFile;
+            FileSizeBytes = src.FileSizeBytes;
             CreationTime = src.CreationTime;
             LastWriteTime = src.LastWriteTime;
             LastAccessTime = src.LastAccessTime;
@@ -74,6 +75,7 @@ namespace Turmerik.Core.DriveExplorer
         public bool? IsImageFile { get; set; }
         public bool? IsVideoFile { get; set; }
         public bool? IsAudioFile { get; set; }
+        public long? FileSizeBytes { get; set; }
 
         public DateTime? CreationTime { get; set; }
         public DateTime? LastWriteTime { get; set; }
