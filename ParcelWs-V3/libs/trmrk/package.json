@@ -1,0 +1,19 @@
+{
+  "name": "trmrk",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Core js code related used across Turmerik Apps",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/types.d.ts",
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "parcel": "^2.12.0",
+    "typescript": "^5.4.5"
+  }
+}

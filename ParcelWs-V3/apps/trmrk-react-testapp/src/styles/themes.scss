@@ -1,0 +1,96 @@
+@import "./_mixins";
+
+.trmrk-indexeddb-tree-view {
+  > .trmrk-tree-node {
+    @include trmrk-tree-node-color(#880);
+  }
+}
+
+.trmrk-theme-dark {
+  .trmrk-app-bar-toggle-icon {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
+    background-color: #121212;
+  }
+
+  .trmrk-textarea-autosize {
+    background-color: inherit;
+    color: white;
+  }
+
+  &.trmrk-page-panel {
+    .trmrk-flex-rows-group {
+      border: 1px solid #444;
+
+      &.trmrk-editable {
+        border: 2px solid #642;
+      }
+
+      &:hover {
+        background-color: #1a1a1a;
+      }
+    }
+
+    .trmrk-flex-row {
+      .trmrk-cell {
+        .trmrk-title {
+          color: #ccc;
+        }
+
+        .trmrk-readonly {
+          background:
+            linear-gradient(#FFF0, #FFF1, #FFF0);
+        }
+      }
+    }
+  }
+
+  &.trmrk-textbox-magnifier {
+    .trmrk-text {
+      border: 1px solid #888;
+    }
+  }
+}
+
+.trmrk-theme-light {
+  .trmrk-app-bar-toggle-icon, .trmrk-app-bar-toggle-icon:hover {
+    color: #FFF;
+    background-color: #1976d2;
+  }
+
+  .trmrk-textarea-autosize {
+    background-color: inherit;
+    color: inherit;
+  }
+
+  &.trmrk-page-panel {
+    .trmrk-flex-rows-group {
+      border: 1px solid #ccc;
+
+      &.trmrk-editable {
+        border: 2px solid #864;
+      }
+
+      &:hover {
+        background-color: #F4F4F4;
+      }
+    }
+
+    .trmrk-flex-row {
+      .trmrk-cell {
+        .trmrk-title {
+          color: #444;
+        }
+
+        .trmrk-readonly {
+          background: linear-gradient(#0000, #0001, #0000);
+        }
+      }
+    }
+  }
+
+  &.trmrk-textbox-magnifier {
+    .trmrk-text {
+      border: 1px solid #888;
+    }
+  }
+}

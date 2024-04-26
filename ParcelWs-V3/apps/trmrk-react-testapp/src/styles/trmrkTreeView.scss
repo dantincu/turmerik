@@ -1,0 +1,98 @@
+
+.trmrk-tree-nodes-list {
+  position: relative;
+  overflow: visible;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+
+  > .trmrk-loading {
+    margin-top: 0.5em;
+    margin-left: 1.5em;
+  }
+
+  > .trmrk-tree-node, > .trmrk-tree-node-leaf {
+    position: relative;
+    display: grid;
+    grid-template-rows: 2.5em auto;
+    grid-template-columns: 1px auto;
+
+    > .trmrk-tree-node-content {
+      position: relative;
+      display: flex;
+      grid-row: 1;
+      grid-column: 2;
+      cursor: pointer;
+
+      > .trmrk-tree-node-label {
+        display: flex;
+        @include no-wrap-anywhere();
+        overflow: visible;
+        flex-shrink: 0;
+        min-width: 2em;
+        line-height: 1.75em;
+        margin: 0.25em;
+        padding-left: 0.25em;
+        padding-right: 0.25em;
+        border-radius: 2px;
+      }
+
+      > .trmrk-tree-node-icon {
+        position: relative;
+        width: 2.5em;
+        height: 2.5em;
+        padding-top: 0.35em;
+        padding-right: 0.75em;
+
+        > .trmrk-icon {
+          font-size: 1.75em;
+        }
+      }
+    }
+  }
+
+  > .trmrk-tree-node-leaf {
+    padding-left: 2.5em;
+  }
+
+  > .trmrk-tree-node {
+    > .trmrk-tree-node-content {
+      > .trmrk-tree-node-toggle-icon {
+        position: relative;
+        width: 2.5em;
+        height: 2.5em;
+
+        > .trmrk-svg-icon {
+          position: relative;
+          width: 1.75em;
+          height: 1.75em;
+        }
+      }
+    }
+
+    > .trmrk-tree-node-children {
+      display: flex;
+      position: relative;
+      grid-row: 2;
+      grid-column: 2;
+      padding-left: 1.25em;
+    }
+
+    &.trmrk-is-loading {
+
+      > .trmrk-tree-node-children {
+        height: 1.5em;
+      }
+    }
+
+    &.trmrk-tree-node-expanded::before {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 1px;
+      top: 0.5em;
+      bottom: 0.5em;
+      left: 0px;
+    }
+  }
+}
