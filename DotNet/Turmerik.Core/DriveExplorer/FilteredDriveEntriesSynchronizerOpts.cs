@@ -22,6 +22,7 @@ namespace Turmerik.Core.DriveExplorer
         public bool? TreatAllAsDiff { get; set; }
         public bool? SkipDiffPrinting { get; set; }
         public int? RowsToPrint { get; set; }
+        public bool? DeleteEmptyFolders { get; set; }
         public string SrcDirPath { get; set; }
         public string DestnDirPath { get; set; }
         public string SrcName { get; set; }

@@ -106,7 +106,7 @@ namespace Turmerik.Core.DriveExplorer
                         opts.DiffResult.Data.RefPrIdnf,
                         opts.DiffResult.Data.TrgPrIdnf,
                         opts.TreatAllAsDiff,
-                        false);
+                        opts.DeleteEmptyFolders ?? true);
                 }
             }
 
@@ -130,16 +130,16 @@ namespace Turmerik.Core.DriveExplorer
 
             foreach (var tuple in diffResult.Data.Files)
             {
+                var refItem = tuple.RefItem;
+                var trgItem = tuple.TrgItem;
+
+                SwitchItemsIfReq(
+                    ref refItem,
+                    ref trgItem,
+                    fileSyncType);
+
                 if (tuple.HasDiff || treatAllAsDiff == true)
                 {
-                    var refItem = tuple.RefItem;
-                    var trgItem = tuple.TrgItem;
-
-                    SwitchItemsIfReq(
-                        ref refItem,
-                        ref trgItem,
-                        fileSyncType);
-
                     if (trgItem != null)
                     {
                         await driveExplorerService.DeleteFileAsync(trgItem.Idnf);
@@ -157,7 +157,10 @@ namespace Turmerik.Core.DriveExplorer
                 }
                 else
                 {
-                    hasFiles = true;
+                    if (trgItem != null)
+                    {
+                        hasFiles = true;
+                    }
                 }
             }
 
@@ -166,7 +169,7 @@ namespace Turmerik.Core.DriveExplorer
             foreach (var childNode in diffResult.ChildNodes)
             {
                 string? refIdnf = childNode.Data.RefPrIdnf;
-                string? trgIdnf = childNode.Data.RefPrIdnf;
+                string? trgIdnf = childNode.Data.TrgPrIdnf;
 
                 SwitchItemsIfReq(
                     ref refIdnf,
@@ -175,8 +178,10 @@ namespace Turmerik.Core.DriveExplorer
 
                 if (trgIdnf == null)
                 {
-                    var trgPrItem = await driveExplorerService.CreateFolderAsync(
-                        trgPrIdnf, childNode.Data.Name, true);
+                    var trgItem = await driveExplorerService.CreateFolderAsync(
+                        trgPrIdnf, childNode.Data.Name, false);
+
+                    trgIdnf = trgItem.Idnf;
                 }
 
                 SwitchItemsIfReq(
@@ -187,7 +192,8 @@ namespace Turmerik.Core.DriveExplorer
                 if (await SyncFilteredItemsAsync(
                     childNode, fileSyncType,
                     refIdnf, trgIdnf,
-                    treatAllAsDiff))
+                    treatAllAsDiff,
+                    deleteIfEmpty) == false)
                 {
                     hasSubFolders = true;
                 }
@@ -218,12 +224,10 @@ namespace Turmerik.Core.DriveExplorer
                 FileSyncType.Push => filteredDriveEntriesNodesRetriever.Diff(
                     opts.DestnFilteredEntries,
                     opts.SrcFilteredEntries,
-                    opts.SrcFilteredEntries.Data.PrFolderIdnf,
                     string.Empty),
                 _ => filteredDriveEntriesNodesRetriever.Diff(
                     opts.SrcFilteredEntries,
                     opts.DestnFilteredEntries,
-                    opts.DestnFilteredEntries.Data.PrFolderIdnf,
                     string.Empty)
             };
 

@@ -11,7 +11,6 @@ namespace Turmerik.Core.DriveExplorer
     {
         public static DataTreeNodeMtbl<RefTrgDriveFolderTuple> ToRefTrgDriveFolderTupleTreeNode(
             this DriveItem folder,
-            string prIdnf,
             string relPath,
             bool isTarget = true)
         {
@@ -32,13 +31,12 @@ namespace Turmerik.Core.DriveExplorer
 
             var childNodesList = folder.SubFolders.Select(
                 subFolder => subFolder.ToRefTrgDriveFolderTupleTreeNode(
-                    subFolder.Idnf,
-                    Path.Combine(relPath, subFolder.Name))).ToList();
+                    Path.Combine(relPath, subFolder.Name), isTarget)).ToList();
 
             var retTuple = new RefTrgDriveFolderTuple(
                 folderFiles,
-                isTarget ? null : prIdnf,
-                isTarget ? prIdnf : null,
+                isTarget ? null : folder.Idnf,
+                isTarget ? folder.Idnf : null,
                 folder.Name,
                 relPath);
 

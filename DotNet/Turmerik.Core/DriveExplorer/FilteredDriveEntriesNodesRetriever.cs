@@ -31,13 +31,11 @@ namespace Turmerik.Core.DriveExplorer
         DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DataTreeNodeMtbl<FilteredDriveEntries> @ref,
             DataTreeNodeMtbl<FilteredDriveEntries> trg,
-            string trgPrIdnf,
             string relPath);
 
         DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DriveItem refItem,
             DriveItem trgItem,
-            string trgPrIdnf,
             string relPath);
 
         bool HasDiff(
@@ -131,20 +129,18 @@ namespace Turmerik.Core.DriveExplorer
         public DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DataTreeNodeMtbl<FilteredDriveEntries> @ref,
             DataTreeNodeMtbl<FilteredDriveEntries> trg,
-            string trgPrIdnf,
             string relPath)
         {
             var refItem = @ref.ExtractItems();
             var trgItem = trg.ExtractItems();
 
-            var retNode = Diff(refItem, trgItem, trgPrIdnf, relPath);
+            var retNode = Diff(refItem, trgItem, relPath);
             return retNode;
         }
 
         public DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DriveItem refItem,
             DriveItem trgItem,
-            string trgPrIdnf,
             string relPath)
         {
             var filesList = trgItem.FolderFiles.Select(
@@ -155,8 +151,8 @@ namespace Turmerik.Core.DriveExplorer
                 tuple => new RefTrgDriveItemsTuple(
                     tuple.Item1,
                     tuple.Item2,
-                    tuple.Item1?.Idnf,
-                    tuple.Item2.Idnf,
+                    refItem.Idnf,
+                    trgItem.Idnf,
                     Path.Combine(
                         relPath, tuple.Item2.Name),
                     tuple.Item1 != null ? HasDiff(
@@ -184,7 +180,6 @@ namespace Turmerik.Core.DriveExplorer
                         retNode = Diff(
                             tuple.Item1,
                             tuple.Item2,
-                            trgItem.Idnf,
                             Path.Combine(
                                 relPath,
                                 tuple.Item2.Name));
@@ -192,7 +187,6 @@ namespace Turmerik.Core.DriveExplorer
                     else
                     {
                         retNode = tuple.Item2.ToRefTrgDriveFolderTupleTreeNode(
-                            trgPrIdnf,
                             Path.Combine(
                                 relPath,
                                 tuple.Item2.Name));
@@ -205,16 +199,15 @@ namespace Turmerik.Core.DriveExplorer
                 refFolder => trgItem.SubFolders.FindByName(
                     refFolder.Name) == null).Select(
                 refFolder => refFolder.ToRefTrgDriveFolderTupleTreeNode(
-                    refItem.Idnf, Path.Combine(
-                        relPath, refFolder.Name), false)));
+                    Path.Combine(relPath, refFolder.Name), false)));
 
             childNodes.Sort((a, b) => a.Data.Name.CompareTo(b.Data.Name));
 
             var retNode = new DataTreeNodeMtbl<RefTrgDriveFolderTuple>(
                 new RefTrgDriveFolderTuple(filesList,
-                refItem.Idnf,
-                trgItem.Idnf,
-                trgItem.Name, relPath),
+                    refItem.Idnf,
+                    trgItem.Idnf,
+                    trgItem.Name, relPath),
                 null, childNodes);
 
             return retNode;

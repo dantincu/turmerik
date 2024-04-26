@@ -157,6 +157,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                     TreatAllAsDiff = args.TreatAllAsDiff,
                     Interactive = args.Interactive,
                     RowsToPrint = args.RowsToPrint,
+                    DeleteEmptyFolders = true,
                     SkipDiffPrinting = args.SkipDiffPrinting,
                     SrcFilteredEntries = srcEntriesObj,
                     DestnFilteredEntries = destnEntriesObj,
