@@ -27,6 +27,8 @@ namespace Turmerik.Core.LocalDeviceEnv
                         MacrosMap = localDevicePathsMap.GetPathsMap(),
                     });
 
+                path = NormPathH.NormPath(path);
+
                 path = NormPathH.AssurePathIsRooted(
                     path, () => baseDirPath?.Nullify() ?? Environment.CurrentDirectory);
             }

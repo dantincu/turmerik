@@ -1,0 +1,31 @@
+{
+  "ProfileName": "turmerik-parcelws",
+  "DirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs",
+  "DfSrcFilesFilter": {
+    "ExcludedRelPathRegexes": [
+      "^\\/_\\/"
+    ]
+  },
+  "DfDestnFilesFilter": {
+    "ExcludedRelPathRegexes": [
+      "^\\/_\\/"
+    ]
+  },
+  "SrcFolders": [
+    {
+      "Name": "trmrk-react",
+      "DirPath": "libs\\trmrk-react\\src"
+    }
+  ],
+  "DestnLocations": [
+    {
+      "Name": "trmrk-react-testapp",
+      "DirPath": "apps\\trmrk-react-testapp\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk-react": {
+          "DirPath": "trmrk-react"
+        }
+      }
+    }
+  ]
+}

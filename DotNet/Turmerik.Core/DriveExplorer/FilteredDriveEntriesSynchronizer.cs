@@ -18,6 +18,8 @@ namespace Turmerik.Core.DriveExplorer
         Task<bool> SyncFilteredItemsAsync(
             DataTreeNodeMtbl<RefTrgDriveFolderTuple> diffResult,
             FileSyncType fileSyncType,
+            string? refPrIdnf,
+            string? trgPrIdnf,
             bool? treatAllAsDiff = null,
             bool deleteIfEmpty = true);
 
@@ -25,8 +27,18 @@ namespace Turmerik.Core.DriveExplorer
             FilteredDriveEntriesSynchronizerOpts opts);
 
         void SwitchItemsIfReq(
-            ref DriveItem refItem,
-            ref DriveItem trgItem,
+            ref DriveItem? refItem,
+            ref DriveItem? trgItem,
+            FileSyncType fileSyncType);
+
+        void SwitchItemsIfReq(
+            ref string? refItemIdnf,
+            ref string? trgItemIdnf,
+            FileSyncType fileSyncType);
+
+        void SwitchItemsIfReq<TValue>(
+            ref TValue refItem,
+            ref TValue trgItem,
             FileSyncType fileSyncType);
 
         void PrintDiffResult(
@@ -39,7 +51,8 @@ namespace Turmerik.Core.DriveExplorer
 
         void PrintTimeStampIfNotNull(
             DriveItem? driveItem,
-            bool isTarget);
+            bool isTarget,
+            bool hasRealDiff);
 
         void PrintHeader(PrintDiffOpts opts);
 
@@ -90,6 +103,8 @@ namespace Turmerik.Core.DriveExplorer
                     await SyncFilteredItemsAsync(
                         opts.DiffResult,
                         opts.FileSyncType,
+                        opts.DiffResult.Data.RefPrIdnf,
+                        opts.DiffResult.Data.TrgPrIdnf,
                         opts.TreatAllAsDiff,
                         false);
                 }
@@ -101,10 +116,17 @@ namespace Turmerik.Core.DriveExplorer
         public async Task<bool> SyncFilteredItemsAsync(
             DataTreeNodeMtbl<RefTrgDriveFolderTuple> diffResult,
             FileSyncType fileSyncType,
+            string? refPrIdnf,
+            string? trgPrIdnf,
             bool? treatAllAsDiff = null,
             bool deleteIfEmpty = true)
         {
             bool hasFiles = false;
+
+            SwitchItemsIfReq(
+                ref refPrIdnf,
+                ref trgPrIdnf,
+                fileSyncType);
 
             foreach (var tuple in diffResult.Data.Files)
             {
@@ -127,7 +149,7 @@ namespace Turmerik.Core.DriveExplorer
                     {
                         await driveExplorerService.CopyFileAsync(
                             refItem.Idnf,
-                            diffResult.Data.TrgPrIdnf,
+                            trgPrIdnf,
                             refItem.Name);
 
                         hasFiles = true;
@@ -143,8 +165,29 @@ namespace Turmerik.Core.DriveExplorer
 
             foreach (var childNode in diffResult.ChildNodes)
             {
+                string? refIdnf = childNode.Data.RefPrIdnf;
+                string? trgIdnf = childNode.Data.RefPrIdnf;
+
+                SwitchItemsIfReq(
+                    ref refIdnf,
+                    ref trgIdnf,
+                    fileSyncType);
+
+                if (trgIdnf == null)
+                {
+                    var trgPrItem = await driveExplorerService.CreateFolderAsync(
+                        trgPrIdnf, childNode.Data.Name, true);
+                }
+
+                SwitchItemsIfReq(
+                    ref refIdnf,
+                    ref trgIdnf,
+                    fileSyncType);
+
                 if (await SyncFilteredItemsAsync(
-                    childNode, fileSyncType, treatAllAsDiff))
+                    childNode, fileSyncType,
+                    refIdnf, trgIdnf,
+                    treatAllAsDiff))
                 {
                     hasSubFolders = true;
                 }
@@ -191,7 +234,8 @@ namespace Turmerik.Core.DriveExplorer
                     SyncOpts = opts,
                     RowsToPrint = opts.RowsToPrint,
                     DiffResult = diffResult,
-                    TreatAllAsDiff = opts.TreatAllAsDiff
+                    TreatAllAsDiff = opts.TreatAllAsDiff,
+                    Interactive = opts.Interactive
                 });
             }
 
@@ -224,7 +268,7 @@ namespace Turmerik.Core.DriveExplorer
                 if (count - offset >= opts.LeftToPrintFromChunk)
                 {
                     offset = count;
-                    bool printRest = PrintNextChunkQuestion(opts);
+                    bool printRest = opts.Interactive == true ? PrintNextChunkQuestion(opts) : true;
 
                     opts.LeftToPrintFromChunk = printRest switch
                     {
@@ -265,14 +309,19 @@ namespace Turmerik.Core.DriveExplorer
 
             if (hasDiff)
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = tuple.HasDiff switch
+                {
+                    true => ConsoleColor.Blue,
+                    false => ConsoleColor.Gray,
+                };
+
                 Console.WriteLine(tuple.RelPath);
 
                 SwitchItemsIfReq(ref refItem, ref trgItem,
                     opts.SyncOpts.FileSyncType);
 
-                PrintTimeStampIfNotNull(trgItem, true);
-                PrintTimeStampIfNotNull(refItem, false);
+                PrintTimeStampIfNotNull(trgItem, true, tuple.HasDiff);
+                PrintTimeStampIfNotNull(refItem, false, tuple.HasDiff);
 
                 Console.ResetColor();
                 Console.WriteLine();
@@ -283,8 +332,20 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         public void SwitchItemsIfReq(
-            ref DriveItem refItem,
-            ref DriveItem trgItem,
+            ref DriveItem? refItem,
+            ref DriveItem? trgItem,
+            FileSyncType fileSyncType) => SwitchItemsIfReq<DriveItem?>(
+                ref refItem, ref trgItem, fileSyncType);
+
+        public void SwitchItemsIfReq(
+            ref string? refItemIdnf,
+            ref string? trgItemIdnf,
+            FileSyncType fileSyncType) => SwitchItemsIfReq<string?>(
+                ref refItemIdnf, ref trgItemIdnf, fileSyncType);
+
+        public void SwitchItemsIfReq<TValue>(
+            ref TValue refItem,
+            ref TValue trgItem,
             FileSyncType fileSyncType)
         {
             if (fileSyncType == FileSyncType.Push)
@@ -297,17 +358,26 @@ namespace Turmerik.Core.DriveExplorer
 
         public void PrintTimeStampIfNotNull(
             DriveItem? driveItem,
-            bool isTarget)
+            bool isTarget,
+            bool hasRealDiff)
         {
             if (driveItem != null)
             {
                 var timeStampStr = GetDiffTimeStampStr(
                     driveItem);
 
-                Console.ForegroundColor = isTarget switch
+                var sizeStr = string.Format(
+                    "({0} KB)",
+                    driveItem.FileSizeBytes!.Value / 1000F);
+
+                Console.ForegroundColor = hasRealDiff switch
                 {
-                    true => ConsoleColor.Red,
-                    false => ConsoleColor.Green,
+                    true => isTarget switch
+                    {
+                        true => ConsoleColor.Red,
+                        false => ConsoleColor.Green,
+                    },
+                    false => ConsoleColor.DarkGray,
                 };
 
                 Console.Write(string.Join(" ",
@@ -316,7 +386,8 @@ namespace Turmerik.Core.DriveExplorer
                         true => "----",
                         false => "++++"
                     },
-                    timeStampStr));
+                    timeStampStr,
+                    sizeStr));
 
                 Console.Write("    ");
             }
@@ -373,6 +444,19 @@ namespace Turmerik.Core.DriveExplorer
 
             var consoleKey = Console.ReadKey();
             bool @continue = consoleKey.Key == ConsoleKey.Enter;
+            Console.WriteLine();
+
+            if (@continue)
+            {
+                Console.WriteLine("Starting folders sync");
+            }
+            else
+            {
+                Console.WriteLine("No sync will be done");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine();
 
             return @continue;
         }

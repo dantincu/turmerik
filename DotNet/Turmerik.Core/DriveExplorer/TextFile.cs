@@ -13,6 +13,5 @@ namespace Turmerik.Core.DriveExplorer
         public string MoveToPrIdnf { get; set; }
         public string IsRenamedFrom { get; set; }
         public string IsMovedFromPrIdnf { get; set; }
-        public string? TextFileContents { get; set; }
     }
 }

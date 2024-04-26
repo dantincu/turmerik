@@ -1,0 +1,86 @@
+{
+  "ProfileName": "unit-test",
+  "DfSrcFilesFilter": {
+    "ExcludedRelPathRegexes": [
+      "^\\/_\\/"
+    ]
+  },
+  "DfDestnFilesFilter": {
+    "ExcludedRelPathRegexes": [
+      "^\\/_\\/"
+    ]
+  },
+  "SrcFolders": [
+    {
+      "Name": "lib1",
+      "DirPath": "lib1\\src\\lib"
+    },
+    {
+      "Name": "lib2",
+      "DirPath": "lib2\\src\\lib"
+    },
+    {
+      "Name": "lib3",
+      "DirPath": "lib3\\src\\lib"
+    }
+  ],
+  "DestnLocations": [
+    {
+      "Name": "app1",
+      "DirPath": "app1\\src\\synced-libs",
+      "FoldersMap": {
+        "lib1": {
+          "DirPath": "lib1"
+        }
+      }
+    },
+    {
+      "Name": "app2",
+      "DirPath": "app2\\src\\synced-libs",
+      "FoldersMap": {
+        "lib1": {
+          "DirPath": "lib1"
+        },
+        "lib2": {
+          "DirPath": "lib2"
+        }
+      }
+    },
+    {
+      "Name": "app3",
+      "DirPath": "app3\\src\\synced-libs",
+      "FoldersMap": {
+        "lib1": {
+          "DirPath": "lib1"
+        },
+        "lib2": {
+          "DirPath": "lib2"
+        },
+        "lib3": {
+          "DirPath": "lib3"
+        }
+      }
+    },
+    {
+      "Name": "lib2",
+      "DirPath": "lib2\\src\\synced-libs",
+      "FoldersMap": {
+        "lib1": {
+          "DirPath": "lib1"
+        }
+      }
+    },
+    {
+      "Name": "lib3",
+      "DirPath": "lib3\\src\\synced-libs",
+      "FoldersMap": {
+        "lib1": {
+          "DirPath": "lib1"
+        },
+        "lib2": {
+          "DirPath": "lib2"
+        }
+      }
+    }
+  ]
+}

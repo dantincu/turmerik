@@ -23,13 +23,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
         void NormalizeArgs(
             ProgramArgs args,
             ProgramConfig.Profile profile,
-            ProgramConfig.SrcFolder srcFolder,
             ProgramConfig.DestnLocation destnFolder);
-
-        void NormalizeSrcFolders(
-            ProgramArgs args,
-            ProgramConfig.Profile profile,
-            bool negativeFilter = false);
     }
 
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
@@ -65,11 +59,6 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                     throw new ArgumentException(nameof(args.FileSyncType));
             }
 
-            args.WorkDir = textMacrosReplacer.NormalizePath(
-                args.LocalDevicePathsMap,
-                args.WorkDir,
-                null);
-
             NormalizeArgs(args, args.Profile);
         }
 
@@ -77,12 +66,27 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             ProgramArgs args,
             ProgramConfig.Profile profile)
         {
-            args.SrcFolderNamesMap ??= profile.SrcFolders.ToDictionary(
-                srcFolder => srcFolder.Name,
-                srcFolder => srcFolder.DestnLocations.Select(
-                    destnLocation => destnLocation.Name).ToArray());
+            if (args.LocationNamesMap.None())
+            {
+                args.LocationNamesMap = profile.SrcFolders.ToDictionary(
+                    srcFolder => srcFolder.Name,
+                    srcFolder => profile.DestnLocations.Where(
+                        destnLocation => destnLocation.FoldersMap.Keys.Contains(
+                            srcFolder.Name)).Select(
+                        destnLocation => destnLocation.Name).ToList());
+            }
 
-            NormalizeSrcFolders(args, profile);
+            if (args.FileSyncType == FileSyncType.Push)
+            {
+                foreach (var kvp in args.LocationNamesMap)
+                {
+                    if (kvp.Value.Count > 1)
+                    {
+                        throw new InvalidOperationException(
+                            "Cannot push from multiple locations into the same source folder");
+                    }
+                }
+            }
 
             profile.DirPath = textMacrosReplacer.NormalizePath(
                 args.LocalDevicePathsMap,
@@ -95,6 +99,11 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             foreach (var srcFolder in profile.SrcFolders)
             {
                 NormalizeArgs(args, profile, srcFolder);
+            }
+
+            foreach (var destnLocation in profile.DestnLocations)
+            {
+                NormalizeArgs(args, profile, destnLocation);
             }
         }
 
@@ -110,48 +119,20 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
             srcFolder.DfSrcFilesFilter ??= profile.DfSrcFilesFilter;
             srcFolder.DfDestnFilesFilter ??= profile.DfDestnFilesFilter;
-
-            foreach (var destnFolder in srcFolder.DestnLocations)
-            {
-                NormalizeArgs(args, profile, srcFolder, destnFolder);
-            }
         }
 
         public void NormalizeArgs(
             ProgramArgs args,
             ProgramConfig.Profile profile,
-            ProgramConfig.SrcFolder srcFolder,
-            ProgramConfig.DestnLocation destnFolder)
+            ProgramConfig.DestnLocation destnLocation)
         {
-            destnFolder.DirPath = textMacrosReplacer.NormalizePath(
+            destnLocation.DirPath = textMacrosReplacer.NormalizePath(
                 args.LocalDevicePathsMap,
-                destnFolder.DirPath,
-                srcFolder.DirPath);
+                destnLocation.DirPath,
+                profile.DirPath);
 
-            destnFolder.DfSrcFilesFilter ??= srcFolder.DfSrcFilesFilter;
-            destnFolder.DfDestnFilesFilter ??= srcFolder.DfDestnFilesFilter;
-        }
-
-        public void NormalizeSrcFolders(
-            ProgramArgs args,
-            ProgramConfig.Profile profile,
-            bool negativeFilter = false)
-        {
-            args.SrcFolders ??= args.SrcFolderNamesMap.Select(
-                kvp => new ProgramConfig.SrcFolder(
-                    profile.SrcFolders.Single(
-                        folder => folder.Name == kvp.Key)).ActWith(folder =>
-                        {
-                            folder.DestnLocations.RemoveWhere(
-                                destnLocation => negativeFilter == kvp.Value.Contains(
-                                    destnLocation.Name));
-
-                            if (args.FileSyncType == FileSyncType.Push && folder.DestnLocations.Count > 1)
-                            {
-                                throw new InvalidOperationException(
-                                    "Cannot perform push operation from multiple locations to a single source");
-                            }
-                        })).ToArray();
+            destnLocation.DfSrcFilesFilter ??= profile.DfSrcFilesFilter;
+            destnLocation.DfDestnFilesFilter ??= profile.DfDestnFilesFilter;
         }
     }
 }

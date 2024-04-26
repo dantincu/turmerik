@@ -1,6 +1,7 @@
 ﻿using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.Core.TextParsing;
 
 namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 {
@@ -13,16 +14,21 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
     public class ProgramArgsRetriever : IProgramArgsRetriever
     {
         private readonly IConsoleArgsParser parser;
+        private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly IProgramConfigRetriever programConfigRetriever;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
 
         public ProgramArgsRetriever(
             IConsoleArgsParser parser,
+            ITextMacrosReplacer textMacrosReplacer,
             IProgramConfigRetriever programConfigRetriever,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever)
         {
             this.parser = parser ?? throw new ArgumentNullException(
                 nameof(parser));
+
+            this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
+                nameof(textMacrosReplacer));
 
             this.programConfigRetriever = programConfigRetriever ?? throw new ArgumentNullException(
                 nameof(programConfigRetriever));
@@ -37,8 +43,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             var args = new ProgramArgs
             {
                 LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile(),
-                Config = programConfigRetriever.LoadProgramConfig(),
-                SrcFolderNamesMap = new Dictionary<string, string[]>()
+                LocationNamesMap = new Dictionary<string, List<string>>()
             };
 
             args = parser.Parse(
@@ -52,7 +57,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                             var argItemTuple = GetArgItemTuple(
                                 data.ArgItem);
 
-                            data.Args.SrcFolderNamesMap.Add(
+                            data.Args.LocationNamesMap.Add(
                                 argItemTuple.Item1,
                                 argItemTuple.Item2);
                         }
@@ -68,6 +73,8 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                                     FlagHandlersArr = [
                                         parser.ArgsFlagOpts(data, ["wd"],
                                             data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
+                                        parser.ArgsFlagOpts(data, ["cfg"],
+                                            data => data.Args.ConfigFilePath = data.ArgFlagValue!.Single()),
                                         parser.ArgsFlagOpts(data, ["pf"],
                                             data => data.Args.ProfileName = data.ArgFlagValue!.Single()),
                                         parser.ArgsFlagOpts(data, ["fst"],
@@ -88,6 +95,22 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                     }
                 }).Args;
 
+            args.WorkDir = textMacrosReplacer.NormalizePath(
+                args.LocalDevicePathsMap,
+                args.WorkDir,
+                null);
+
+            if (args.ConfigFilePath != null)
+            {
+                args.ConfigFilePath = textMacrosReplacer.NormalizePath(
+                    args.LocalDevicePathsMap,
+                    args.ConfigFilePath,
+                    args.WorkDir);
+            }
+
+            args.Config ??= programConfigRetriever.LoadProgramConfig(
+                args.ConfigFilePath);
+
             args.Profile = args.Config.Profiles.Single(
                 profile => profile.ProfileName == args.ProfileName);
 
@@ -103,14 +126,14 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                 _ => throw new ArgumentException(nameof(argFlagValue))
             };
 
-        private Tuple<string, string[]> GetArgItemTuple(
+        private Tuple<string, List<string>> GetArgItemTuple(
             string argItem)
         {
             var argItems = argItem.Split(':');
 
             var retTuple = Tuple.Create(
                 argItems.First(),
-                argItems.Skip(1).ToArray());
+                argItems.Skip(1).ToList());
 
             return retTuple;
         }

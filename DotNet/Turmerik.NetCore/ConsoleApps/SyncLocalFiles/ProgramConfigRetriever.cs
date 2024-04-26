@@ -23,6 +23,13 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             ProgramConfig.Profile srcProfile,
             string configFilePath = null)
         {
+            destnProfile.DirPath = srcProfile.DirPath ?? destnProfile.DirPath;
+
+            destnProfile.DfSrcFilesFilter = srcProfile.DfSrcFilesFilter;
+            destnProfile.DfDestnFilesFilter = srcProfile.DfDestnFilesFilter;
+            destnProfile.SrcFolders = srcProfile.SrcFolders;
+            destnProfile.DestnLocations = srcProfile.DestnLocations;
+
             return destnProfile;
         }
     }

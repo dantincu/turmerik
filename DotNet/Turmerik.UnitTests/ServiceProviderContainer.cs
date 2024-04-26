@@ -32,6 +32,7 @@ namespace Turmerik.UnitTests
 
             services.AddSingleton<IAppEnv, AppEnv>();
             TrmrkNetCoreServices.AddFilesClonerServices(services);
+            TrmrkNetCoreServices.AddSyncLocalFilesServices(services);
 
             DriveExplorerH.AddFsRetrieverAndExplorer(
                 services, null, true);

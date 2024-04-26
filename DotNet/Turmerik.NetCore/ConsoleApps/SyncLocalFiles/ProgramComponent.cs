@@ -2,6 +2,7 @@
 using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.LocalDeviceEnv;
+using static Turmerik.NetCore.ConsoleApps.SyncLocalFiles.ProgramArgs;
 
 namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 {
@@ -15,8 +16,8 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
         Task RunAsync(ProgramArgs args,
             ProgramConfig.SrcFolder srcFolder,
-            ProgramConfig.DestnLocation destnFolder,
-            KeyValuePair<string, ProgramConfig.DestnFolder> destnFolderKvp);
+            ProgramConfig.DestnLocation destnLocation,
+            ProgramConfig.DestnFolder destnFolder);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -64,8 +65,17 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
             if (args.FileSyncType == FileSyncType.Push && args.PropagatePush == true)
             {
-                args.SrcFolders = null;
-                programArgsNormalizer.NormalizeSrcFolders(args, args.Profile, true);
+                foreach (var kvp in args.LocationNamesMap)
+                {
+                    var list = kvp.Value;
+                    var arr = list.ToArray();
+                    list.Clear();
+
+                    list.AddRange(args.Profile.DestnLocations.Where(
+                        location => location.FoldersMap.Keys.Contains(
+                            kvp.Key) && !arr.Contains(location.Name)).Select(
+                        location => location.Name));
+                }
 
                 args.FileSyncType = FileSyncType.Pull;
                 await RunCoreAsync(args);
@@ -74,18 +84,23 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
         public async Task RunCoreAsync(ProgramArgs args)
         {
-            foreach (var srcFolder in args.SrcFolders)
+            foreach (var locKvp in args.LocationNamesMap)
             {
-                foreach (var destnLocation in srcFolder.DestnLocations)
+                var srcFolder = args.Profile.SrcFolders.Single(
+                    folder => folder.Name == locKvp.Key);
+
+                foreach (var destnLocationName in locKvp.Value)
                 {
-                    foreach (var destnFolderKvp in destnLocation.FoldersMap)
-                    {
-                        await RunAsync(
-                            args,
-                            srcFolder,
-                            destnLocation,
-                            destnFolderKvp);
-                    }
+                    var destnLocation = args.Profile.DestnLocations.Single(
+                        location => location.Name == destnLocationName);
+
+                    var destnFolder = destnLocation.FoldersMap[locKvp.Key];
+
+                    await RunAsync(
+                        args,
+                        srcFolder,
+                        destnLocation,
+                        destnFolder);
                 }
             }
         }
@@ -93,31 +108,51 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
         public async Task RunAsync(
             ProgramArgs args,
             ProgramConfig.SrcFolder srcFolder,
-            ProgramConfig.DestnLocation destnFolder,
-            KeyValuePair<string, ProgramConfig.DestnFolder> destnFolderKvp)
+            ProgramConfig.DestnLocation destnLocation,
+            ProgramConfig.DestnFolder destnFolder)
         {
+            var destnDirPath = textMacrosReplacer.NormalizePath(
+                args.LocalDevicePathsMap,
+                destnFolder.DirPath,
+                destnLocation.DirPath);
+
+            if (args.OnBeforeSync != null)
+            {
+                await args.OnBeforeSync(
+                    args,
+                    srcFolder,
+                    destnLocation,
+                    destnFolder,
+                    destnDirPath);
+            }
+
             var srcEntriesObj = await filteredFsEntriesRetriever.FindMatchingAsync(
                 new FilteredDriveRetrieverMatcherOpts
                 {
                     PrFolderIdnf = srcFolder.DirPath,
-                    FsEntriesSerializableFilter = destnFolderKvp.Value.SrcFilesFilter
+                    FsEntriesSerializableFilter = destnFolder.SrcFilesFilter
                 });
-
-            var destnDirPath = textMacrosReplacer.NormalizePath(
-                args.LocalDevicePathsMap,
-                destnFolderKvp.Value.DirPath,
-                destnFolder.DirPath);
 
             var destnEntriesObj = await filteredFsEntriesRetriever.FindMatchingAsync(
                 new FilteredDriveRetrieverMatcherOpts
                 {
                     PrFolderIdnf = destnDirPath,
-                    FsEntriesSerializableFilter = destnFolderKvp.Value.DestnFilesFilter
+                    FsEntriesSerializableFilter = destnFolder.DestnFilesFilter
                 });
 
-            await filteredDriveEntriesSynchronizer.SyncFilteredItemsAsync(
+            var diffResult = args.DiffResultFactory?.Invoke(
+                args,
+                srcFolder,
+                destnLocation,
+                destnFolder,
+                destnDirPath,
+                srcEntriesObj,
+                destnEntriesObj);
+
+            diffResult = await filteredDriveEntriesSynchronizer.SyncFilteredItemsAsync(
                 new FilteredDriveEntriesSynchronizerOpts
                 {
+                    DiffResult = diffResult,
                     FileSyncType = args.FileSyncType,
                     TreatAllAsDiff = args.TreatAllAsDiff,
                     Interactive = args.Interactive,
@@ -126,10 +161,23 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                     SrcFilteredEntries = srcEntriesObj,
                     DestnFilteredEntries = destnEntriesObj,
                     SrcName = srcFolder.Name,
-                    DestnName = destnFolder.Name,
+                    DestnName = destnLocation.Name,
                     SrcDirPath = srcFolder.DirPath,
                     DestnDirPath = destnDirPath,
                 });
+
+            if (args.OnAfterSync != null)
+            {
+                await args.OnAfterSync(
+                    args,
+                    srcFolder,
+                    destnLocation,
+                    destnFolder,
+                    destnDirPath,
+                    srcEntriesObj,
+                    destnEntriesObj,
+                    diffResult);
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Turmerik.Core.ConsoleApps
         string DefaultConfigFilePath { get; }
 
         TProgramConfig LoadProgramConfig(
-            string configFilePath = null);
+            string? configFilePath = null);
 
         TProgramConfigProfile MergeProfiles(
             TProgramConfigProfile destnProfile,
@@ -67,9 +67,21 @@ namespace Turmerik.Core.ConsoleApps
         public string DefaultConfigFilePath { get; }
 
         public TProgramConfig LoadProgramConfig(
-            string configFilePath = null)
+            string? configFilePath = null)
         {
-            configFilePath ??= DefaultConfigFilePath;
+            if (configFilePath == null)
+            {
+                configFilePath = DefaultConfigFilePath;
+            }
+            else
+            {
+                if (!Path.IsPathRooted(configFilePath))
+                {
+                    configFilePath = Path.Combine(
+                        DefaultConfigDirPath,
+                        configFilePath);
+                }
+            }
 
             string configDirPath = Path.GetDirectoryName(
                 configFilePath)!;

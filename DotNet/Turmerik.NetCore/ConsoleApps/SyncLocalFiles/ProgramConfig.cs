@@ -57,17 +57,12 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                 DirPath = src.DirPath;
                 DfSrcFilesFilter = src.DfSrcFilesFilter;
                 DfDestnFilesFilter = src.DfDestnFilesFilter;
-
-                DestnLocations = src.DestnLocations.Select(
-                    location => new DestnLocation(location)).ToList();
             }
 
             public string Name { get; set; }
             public string DirPath { get; set; }
             public DriveEntriesSerializableFilter DfSrcFilesFilter { get; set; }
             public DriveEntriesSerializableFilter DfDestnFilesFilter { get; set; }
-
-            public List<DestnLocation> DestnLocations { get; set; }
         }
 
         public class Profile : ProgramConfigProfileCoreBase
@@ -84,12 +79,16 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
                 SrcFolders = src.SrcFolders.Select(
                     folder => new SrcFolder(folder)).ToList();
+
+                DestnLocations = src.DestnLocations.Select(
+                    location => new DestnLocation(location)).ToList();
             }
 
             public string DirPath { get; set; }
             public DriveEntriesSerializableFilter DfSrcFilesFilter { get; set; }
             public DriveEntriesSerializableFilter DfDestnFilesFilter { get; set; }
             public List<SrcFolder> SrcFolders { get; set; }
+            public List<DestnLocation> DestnLocations { get; set; }
         }
     }
 }

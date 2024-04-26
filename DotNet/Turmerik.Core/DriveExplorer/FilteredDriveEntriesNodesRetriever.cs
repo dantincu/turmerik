@@ -163,13 +163,52 @@ namespace Turmerik.Core.DriveExplorer
                         tuple.Item1,
                         tuple.Item2) : true)).ToList();
 
+            filesList.AddRange(refItem.FolderFiles.Where(
+                refFile => trgItem.FolderFiles.FindByName(
+                    refFile.Name) == null).Select(
+                refFile => new RefTrgDriveItemsTuple(
+                    refFile, null, refItem.Idnf, null, Path.Combine(
+                        relPath, refFile.Name), true)));
+
+            filesList.Sort((a, b) => a.Name.CompareTo(b.Name));
+
             var childNodes = trgItem.SubFolders.Select(
                 trgFolder => Tuple.Create(refItem.SubFolders.SingleOrDefault(
                     refFolder => refFolder.Name == trgFolder.Name), trgFolder)).Select(
-                tuple => tuple.Item1 != null ? Diff(
-                    tuple.Item1, tuple.Item2, trgItem.Idnf, Path.Combine(
-                        relPath, tuple.Item2.Name)) : tuple.Item2.ToRefTrgDriveFolderTuple(
-                            trgPrIdnf, Path.Combine(relPath, tuple.Item2.Name))).ToList();
+                tuple =>
+                {
+                    DataTreeNodeMtbl<RefTrgDriveFolderTuple> retNode;
+
+                    if (tuple.Item1 != null)
+                    {
+                        retNode = Diff(
+                            tuple.Item1,
+                            tuple.Item2,
+                            trgItem.Idnf,
+                            Path.Combine(
+                                relPath,
+                                tuple.Item2.Name));
+                    }
+                    else
+                    {
+                        retNode = tuple.Item2.ToRefTrgDriveFolderTupleTreeNode(
+                            trgPrIdnf,
+                            Path.Combine(
+                                relPath,
+                                tuple.Item2.Name));
+                    }
+
+                    return retNode;
+                }).ToList();
+
+            childNodes.AddRange(refItem.SubFolders.Where(
+                refFolder => trgItem.SubFolders.FindByName(
+                    refFolder.Name) == null).Select(
+                refFolder => refFolder.ToRefTrgDriveFolderTupleTreeNode(
+                    refItem.Idnf, Path.Combine(
+                        relPath, refFolder.Name), false)));
+
+            childNodes.Sort((a, b) => a.Data.Name.CompareTo(b.Data.Name));
 
             var retNode = new DataTreeNodeMtbl<RefTrgDriveFolderTuple>(
                 new RefTrgDriveFolderTuple(filesList,

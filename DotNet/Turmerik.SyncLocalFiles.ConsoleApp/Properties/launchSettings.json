@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.SyncLocalFiles.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ""
+      "commandLineArgs": "cfg:test-config.json"
     }
   }
 }
