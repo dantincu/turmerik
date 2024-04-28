@@ -222,7 +222,7 @@ namespace Turmerik.Core.DriveExplorer
         public DataTreeNodeMtbl<RefTrgDriveFolderTuple> DiffFilteredItems(
             FilteredDriveEntriesSynchronizerOpts opts)
         {
-            var diffResult = opts.FileSyncType switch
+            /* var diffResult = opts.FileSyncType switch
             {
                 FileSyncType.Push => filteredDriveEntriesNodesRetriever.Diff(
                     opts.DestnFilteredEntries,
@@ -232,7 +232,12 @@ namespace Turmerik.Core.DriveExplorer
                     opts.SrcFilteredEntries,
                     opts.DestnFilteredEntries,
                     string.Empty)
-            };
+            }; */
+
+            var diffResult = filteredDriveEntriesNodesRetriever.Diff(
+                opts.SrcFilteredEntries,
+                opts.DestnFilteredEntries,
+                string.Empty);
 
             if (opts.SkipDiffPrinting != true)
             {
@@ -298,9 +303,11 @@ namespace Turmerik.Core.DriveExplorer
                     new PrintDiffOpts
                     {
                         SyncOpts = opts.SyncOpts,
+                        DiffResult = folderNode,
+                        TreatAllAsDiff = opts.TreatAllAsDiff,
                         RowsToPrint = opts.RowsToPrint,
                         LeftToPrintFromChunk = opts.LeftToPrintFromChunk,
-                        DiffResult = folderNode
+                        Interactive = opts.Interactive
                     }, false);
             }
         }
