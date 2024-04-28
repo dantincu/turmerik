@@ -1,7 +1,7 @@
-import trmrk_lib from "trmrk";
+import trmrk_lib from "../../synced-libs/trmrk";
 
-import { AppConfigData } from "trmrk/src/notes-app-config";
-import { TrmrkBlazorApp } from "trmrk-blazor/src/app";
+import { AppConfigData } from "../../synced-libs/trmrk/notes-app-config";
+import { TrmrkBlazorApp } from "../../synced-libs/trmrk-blazor/src/app";
 
 export const trmrkApp = new TrmrkBlazorApp<AppConfigData>();
 export const trmrk = trmrk_lib;

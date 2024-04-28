@@ -209,8 +209,11 @@ namespace Turmerik.Core.DriveExplorer
                     _ => diffResult.Data.TrgPrIdnf
                 };
 
-                await driveExplorerService.DeleteFolderAsync(
-                    prIdnf!, false);
+                if (prIdnf != null)
+                {
+                    await driveExplorerService.DeleteFolderAsync(
+                        prIdnf!, false);
+                }
             }
 
             return deleteFolder;
@@ -411,6 +414,8 @@ namespace Turmerik.Core.DriveExplorer
 
             Console.Write(strToPrint);
             Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write(" to ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
 
             strToPrint = opts.SyncOpts.FileSyncType switch
             {
@@ -431,7 +436,7 @@ namespace Turmerik.Core.DriveExplorer
 
             Console.WriteLine(string.Join(" ",
                 $"Press the SPACE BAR to print {opts.RowsToPrint}",
-                "more rows or any other key to print the rest for this locatin"));
+                "more rows or any other key to print the rest for this location"));
 
             var consoleKey = Console.ReadKey();
             bool printRest = consoleKey.Key != ConsoleKey.Spacebar;

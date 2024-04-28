@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.SyncLocalFiles.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "cfg:test-config.json"
+      "commandLineArgs": ":fst:push :ppgp :alldff :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
     }
   }
 }

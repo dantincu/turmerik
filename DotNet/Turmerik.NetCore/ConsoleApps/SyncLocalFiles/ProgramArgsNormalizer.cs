@@ -3,6 +3,7 @@ using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing;
+using static Turmerik.NetCore.ConsoleApps.SyncLocalFiles.ProgramConfig;
 
 namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 {
@@ -70,20 +71,29 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             {
                 args.LocationNamesMap = profile.SrcFolders.ToDictionary(
                     srcFolder => srcFolder.Name,
-                    srcFolder => profile.DestnLocations.Where(
-                        destnLocation => destnLocation.FoldersMap.Keys.Contains(
-                            srcFolder.Name)).Select(
-                        destnLocation => destnLocation.Name).ToList());
+                    srcFolder => new List<string>());
             }
 
             if (args.FileSyncType == FileSyncType.Push)
             {
                 foreach (var kvp in args.LocationNamesMap)
                 {
-                    if (kvp.Value.Count > 1)
+                    if (kvp.Value.Count != 1)
                     {
                         throw new InvalidOperationException(
                             "Cannot push from multiple locations into the same source folder");
+                    }
+                }
+            }
+            else
+            {
+                foreach (var kvp in args.LocationNamesMap)
+                {
+                    if (kvp.Value.None())
+                    {
+                        kvp.Value.AddRange(profile.DestnLocations.Where(
+                            destnLocation => destnLocation.FoldersMap.Keys.Contains(
+                                kvp.Key)).Select(destnLocation => destnLocation.Name));
                     }
                 }
             }

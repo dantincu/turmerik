@@ -27,13 +27,15 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
         private readonly IProgramArgsNormalizer programArgsNormalizer;
         private readonly IFilteredDriveEntriesRetriever filteredFsEntriesRetriever;
         private readonly IFilteredDriveEntriesSynchronizer filteredDriveEntriesSynchronizer;
+        private readonly IDriveExplorerService driveExplorerService;
 
         public ProgramComponent(
             ITextMacrosReplacer textMacrosReplacer,
             IProgramArgsRetriever programArgsRetriever,
             IProgramArgsNormalizer programArgsNormalizer,
             IFilteredDriveEntriesRetriever filteredFsEntriesRetriever,
-            IFilteredDriveEntriesSynchronizer filteredDriveEntriesSynchronizer)
+            IFilteredDriveEntriesSynchronizer filteredDriveEntriesSynchronizer,
+            IDriveExplorerService driveExplorerService)
         {
             this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
                 nameof(textMacrosReplacer));
@@ -49,6 +51,9 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
             this.filteredDriveEntriesSynchronizer = filteredDriveEntriesSynchronizer ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesSynchronizer));
+
+            this.driveExplorerService = driveExplorerService ?? throw new ArgumentNullException(
+                nameof(driveExplorerService));
         }
 
         public async Task RunAsync(string[] rawArgs)
@@ -115,6 +120,8 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                 args.LocalDevicePathsMap,
                 destnFolder.DirPath,
                 destnLocation.DirPath);
+
+            Directory.CreateDirectory(destnDirPath);
 
             if (args.OnBeforeSync != null)
             {

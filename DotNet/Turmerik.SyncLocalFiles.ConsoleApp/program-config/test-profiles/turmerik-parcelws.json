@@ -13,17 +13,175 @@
   },
   "SrcFolders": [
     {
+      "Name": "trmrk",
+      "DirPath": "libs\\trmrk\\src\\lib"
+    },
+    {
+      "Name": "trmrk-axios",
+      "DirPath": "libs\\trmrk-axios\\src\\lib"
+    },
+    {
+      "Name": "trmrk-blazor",
+      "DirPath": "libs\\trmrk-blazor\\src\\lib"
+    },
+    {
+      "Name": "trmrk-browser",
+      "DirPath": "libs\\trmrk-browser\\src\\lib"
+    },
+    {
       "Name": "trmrk-react",
-      "DirPath": "libs\\trmrk-react\\src"
+      "DirPath": "libs\\trmrk-react\\src\\lib"
+    },
+    {
+      "Name": "trmrk-trmrk-text-transform-behavior",
+      "DirPath": "libs\\trmrk-trmrk-text-transform-behavior\\src\\lib"
+    },
+    {
+      "Name": "trmrk-trmrk-text-transform-behavior-testapp",
+      "DirPath": "libs\\trmrk-trmrk-text-transform-behavior-testapp\\src\\lib"
+    },
+    {
+      "Name": "trmrk-trmrk-text-transform-defaultbehavior",
+      "DirPath": "libs\\trmrk-trmrk-text-transform-defaultbehavior\\src\\lib"
+    },
+    {
+      "Name": "trmrk-trmrk-text-transform-mybehavior",
+      "DirPath": "libs\\trmrk-trmrk-text-transform-mybehavior\\src\\lib"
     }
   ],
   "DestnLocations": [
     {
+      "Name": "trmrk-axios",
+      "DirPath": "libs\\trmrk-axios\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-browser",
+      "DirPath": "libs\\trmrk-browser\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-blazor",
+      "DirPath": "libs\\trmrk-blazor\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-react",
+      "DirPath": "libs\\trmrk-react\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-text-transform-behavior",
+      "DirPath": "libs\\trmrk-text-transform-behavior\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-text-transform-behavior-testapp",
+      "DirPath": "libs\\trmrk-text-transform-behavior-testapp\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-text-transform-behavior": {
+          "DirPath": "trmrk-text-transform-behavior"
+        },
+        "trmrk-text-transform-mybehavior": {
+          "DirPath": "trmrk-text-transform-mybehavior"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-text-transform-defaultbehavior",
+      "DirPath": "libs\\trmrk-text-transform-defaultbehavior\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-text-transform-behavior": {
+          "DirPath": "trmrk-text-transform-behavior"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-text-transform-mybehavior",
+      "DirPath": "libs\\trmrk-text-transform-mybehavior\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-text-transform-behavior": {
+          "DirPath": "trmrk-text-transform-behavior"
+        }
+      }
+    },
+    {
       "Name": "trmrk-react-testapp",
       "DirPath": "apps\\trmrk-react-testapp\\src\\synced-libs",
       "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
         "trmrk-react": {
           "DirPath": "trmrk-react"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-notes-blazorapp",
+      "DirPath": "apps\\trmrk-notes-blazorapp\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-blazor": {
+          "DirPath": "trmrk-blazor"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
         }
       }
     }

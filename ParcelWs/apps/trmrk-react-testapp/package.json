@@ -4,8 +4,8 @@
   "description": "Test React Web App for testing react component",
   "type": "module",
   "scripts": {
-    "start": "parcel ./src/targets/any/index.html --dist-dir ./dist/dev-any --port=9100 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
-    "build": "parcel build ./src/targets/any/index.html --dist-dir ./dist/prod-any"
+    "start": "parcel ./src/app/targets/any/index.html --dist-dir ./dist/dev-any --port=9100 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "build": "parcel build ./src/app/targets/any/index.html --dist-dir ./dist/prod-any"
   },
   "author": "Daniel Tincu",
   "license": "MIT",
@@ -23,22 +23,18 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@emotion/react": "../../libs/trmrk-react/node_modules/@emotion/react",
-    "@emotion/styled": "../../libs/trmrk-react/node_modules/@emotion/styled",
-    "@mui/base": "../../libs/trmrk-react/node_modules/@mui/base",
-    "@mui/icons-material": "../../libs/trmrk-react/node_modules/@mui/icons-material",
-    "@mui/material": "../../libs/trmrk-react/node_modules/@mui/material",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/base": "^5.0.0-beta.40",
+    "@mui/icons-material": "^5.15.15",
+    "@mui/material": "^5.15.15",
     "@reduxjs/toolkit": "^2.2.3",
-    "axios": "^1.6.8",
-    "react": "../../libs/trmrk-react/node_modules/react",
-    "react-dom": "../../libs/trmrk-react/node_modules/react-dom",
-    "react-router-dom": "../../libs/trmrk-react/node_modules/react-router-dom",
-    "react-redux": "../../libs/trmrk-react/node_modules/react-redux",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^9.1.1",
+    "react-router-dom": "^6.22.3",
     "react-use-error-boundary": "^3.0.0",
-    "trmrk": "../../libs/trmrk",
-    "trmrk-axios": "../../libs/trmrk-axios",
-    "trmrk-browser": "../../libs/trmrk-browser",
-    "trmrk-react": "../../libs/trmrk-react",
+    "axios": "^1.6.8",
     "uuid": "^9.0.1"
   }
 }

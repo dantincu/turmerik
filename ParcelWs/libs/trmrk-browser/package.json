@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Core browser-related js code related used across Turmerik Apps",
-  "source": "src/index.ts",
+  "source": "src/lib/index.ts",
   "main": "dist/index.js",
   "scripts": {
     "watch": "parcel watch",
@@ -13,9 +13,6 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.8",
-    "trmrk": "../trmrk"
-  },
-  "peerDependencies": {
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Axios-related js code used across Turmerik Apps",
-  "source": "src/index.ts",
+  "source": "src/lib/index.ts",
   "main": "dist/index.js",
   "scripts": {
     "watch": "parcel watch",
@@ -12,8 +12,7 @@
   "author": "Daniel Tincu",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.6.8",
-    "trmrk": "../trmrk"
+    "axios": "^1.6.8"
   },
   "devDependencies": {
     "parcel": "^2.12.0",

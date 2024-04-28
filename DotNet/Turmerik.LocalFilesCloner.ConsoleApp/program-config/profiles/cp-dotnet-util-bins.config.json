@@ -39,6 +39,10 @@
           "CloneDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
         },
         {
+          "InputDirPath": "Turmerik.SyncLocalFiles.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.SyncLocalFiles.ConsoleApp\\Release\\net8.0"
+        },
+        {
           "InputDirPath": "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\bin\\Release\\net8.0",
           "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
         },

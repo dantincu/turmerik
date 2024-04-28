@@ -13,10 +13,5 @@
     "buffer": "^6.0.3",
     "parcel": "^2.12.0"
   },
-  "dependencies": {
-    "trmrk": "../../libs/trmrk",
-    "trmrk-axios": "../../libs/trmrk-axios",
-    "trmrk-blazor": "../../libs/trmrk-blazor",
-    "trmrk-browser": "../../libs/trmrk-browser"
-  }
+  "dependencies": {}
 }
