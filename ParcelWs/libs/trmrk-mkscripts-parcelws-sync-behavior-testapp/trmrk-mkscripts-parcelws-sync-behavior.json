@@ -17,7 +17,7 @@
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws"
             },
             {
-              "FileRelPath": "pull_dffo_dffo.bat",
+              "FileRelPath": "pull_all_dffo.bat",
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws"
             }
           ]
@@ -27,7 +27,7 @@
     {
       "SectionName": "sync_src_trmrk",
       "RelDirPaths": {
-        "DirPath": "libs\\trmrk\\_"
+        "DirPath": "libs\\trmrk\\src\\lib\\_"
       },
       "FileGroups": [
         {
@@ -243,7 +243,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -313,7 +313,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -344,7 +344,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-axios\\_"
+            "DirPath": "trmrk-axios\\_"
           },
           "Files": [
             {
@@ -414,7 +414,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -445,7 +445,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-axios\\_"
+            "DirPath": "trmrk-axios\\_"
           },
           "Files": [
             {
@@ -476,7 +476,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-browser\\_"
+            "DirPath": "trmrk-browser\\_"
           },
           "Files": [
             {
@@ -546,7 +546,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -577,7 +577,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-axios\\_"
+            "DirPath": "trmrk-axios\\_"
           },
           "Files": [
             {
@@ -608,7 +608,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-browser\\_"
+            "DirPath": "trmrk-browser\\_"
           },
           "Files": [
             {
@@ -678,7 +678,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -748,7 +748,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -779,7 +779,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-text-transform-behavior\\_"
+            "DirPath": "trmrk-text-transform-behavior\\_"
           },
           "Files": [
             {
@@ -849,7 +849,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -880,7 +880,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-text-transform-behavior\\_"
+            "DirPath": "trmrk-text-transform-behavior\\_"
           },
           "Files": [
             {
@@ -950,7 +950,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -981,7 +981,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-text-transform-behavior\\_"
+            "DirPath": "trmrk-text-transform-behavior\\_"
           },
           "Files": [
             {
@@ -1012,7 +1012,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-text-transform-mybehavior\\_"
+            "DirPath": "trmrk-text-transform-mybehavior\\_"
           },
           "Files": [
             {
@@ -1082,7 +1082,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -1113,7 +1113,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-axios\\_"
+            "DirPath": "trmrk-axios\\_"
           },
           "Files": [
             {
@@ -1144,7 +1144,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-browser\\_"
+            "DirPath": "trmrk-browser\\_"
           },
           "Files": [
             {
@@ -1175,7 +1175,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-blazor\\_"
+            "DirPath": "trmrk-blazor\\_"
           },
           "Files": [
             {
@@ -1209,7 +1209,7 @@
     {
       "SectionName": "sync_destn_trmrk-react-testapp",
       "RelDirPaths": {
-        "DirPath": "apps\\trmrk-react-testapp\\srcs"
+        "DirPath": "apps\\trmrk-react-testapp\\src"
       },
       "FileGroups": [
         {
@@ -1245,7 +1245,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -1276,7 +1276,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-axios\\_"
+            "DirPath": "trmrk-axios\\_"
           },
           "Files": [
             {
@@ -1307,7 +1307,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-browser\\_"
+            "DirPath": "trmrk-browser\\_"
           },
           "Files": [
             {
@@ -1338,7 +1338,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-react\\_"
+            "DirPath": "trmrk-react\\_"
           },
           "Files": [
             {
@@ -1408,7 +1408,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -1478,7 +1478,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk\\_"
+            "DirPath": "trmrk\\_"
           },
           "Files": [
             {
@@ -1509,7 +1509,7 @@
         },
         {
           "RelDirPaths": {
-            "DirPath": "synced-libs\\trmrk-mkscripts-parcelws-sync-behavior\\_"
+            "DirPath": "trmrk-mkscripts-parcelws-sync-behavior\\_"
           },
           "Files": [
             {

@@ -96,9 +96,6 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
         public void NormalizeArgs(
             ProgramArgs args)
         {
-            /* localDevicePathMacrosRetriever.Normalize(
-                args.LocalDevicePathsMap); // this should not be needed */
-
             NormalizeArgs(args, args.Profile);
         }
 
@@ -119,7 +116,10 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                 args, profile.DefaultContentSpecs,
                 new ProgramConfig.ContentSpecs());
 
-            NormalizeArgs(args, profile, args.Section);
+            foreach (var section in args.Sections)
+            {
+                NormalizeArgs(args, profile, section);
+            }
         }
 
         public void NormalizeArgs(

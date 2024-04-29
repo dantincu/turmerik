@@ -18,11 +18,11 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public ProgramConfig Config { get; set; }
         public string ProfileName { get; set; }
-        public string SectionName { get; set; }
+        public string[] SectionNames { get; set; }
         public string RelDirPathsFilterName { get; set; }
         public string ContentArgsFilterName { get; set; }
         public ProgramConfig.Profile Profile { get; set; }
-        public ProgramConfig.ProfileSection Section { get; set; }
+        public ProgramConfig.ProfileSection[] Sections { get; set; }
 
         public ProgramCommand Command { get; set; }
     }

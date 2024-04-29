@@ -34,7 +34,7 @@
             "Commands": [
               {
                 "CommandName": "rmitem",
-                "CommandArguments": [ "trmrk-mkscripts-parcelws-sync-behavior.js", ":fr", ":rc" ]
+                "CommandArguments": [ "trmrk-mkscripts-parcelws-sync.behavior.js", ":fr", ":rc" ]
               }
             ]
           }
@@ -50,7 +50,7 @@
         {
           "InputFilePath": "dist\\prod\\index.js",
           "CloneDirPath": "Config\\Turmerik.NetCore.ConsoleApps.MkScripts.ProgramBehaviorRetriever\\program-behavior\\profiles",
-          "CloneFileNameTpl": "trmrk-mkscripts-parcelws-sync-behavior.js",
+          "CloneFileNameTpl": "trmrk-mkscripts-parcelws-sync.behavior.js",
           "CloneTplLines": [
             "globalThis.turmerikObj = {{}};",
             "{0}",

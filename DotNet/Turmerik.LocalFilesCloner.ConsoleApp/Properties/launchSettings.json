@@ -8,8 +8,8 @@
       // "commandLineArgs": ":p:arch-ng-book-2",
       // "commandLineArgs": ":p:cp-dotnet-bkp-bins",
       // "commandLineArgs": ":p:cp-dotnet-util-bins",
-      "commandLineArgs": ":p:cp-text-transform-behavior"
-      // "commandLineArgs": ":p:cp-mkscripts-parcelws-sync-behavior"
+      // "commandLineArgs": ":p:cp-text-transform-behavior"
+      "commandLineArgs": ":p:cp-mkscripts-parcelws-sync-behavior"
     }
   }
 }

@@ -12,6 +12,9 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
     {
         void Run(string[] rawArgs);
         void Run(ProgramArgs args);
+
+        void Run(ProgramArgs args,
+            ProgramConfig.ProfileSection section);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -45,7 +48,17 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
 
         public void Run(ProgramArgs args)
         {
-            foreach (var filesGroup in args.Section.FileGroups)
+            foreach (var section in args.Sections)
+            {
+                Run(args, section);
+            }
+        }
+
+        public void Run(
+            ProgramArgs args,
+            ProgramConfig.ProfileSection section)
+        {
+            foreach (var filesGroup in section.FileGroups)
             {
                 foreach (var file in filesGroup.Files)
                 {

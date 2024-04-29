@@ -72,7 +72,7 @@ const destnLocationsArr: {
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-blazor"],
   },
   "trmrk-react-testapp": {
-    dirPath: "apps\\trmrk-react-testapp\\srcs",
+    dirPath: "apps\\trmrk-react-testapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
   },
   "trmrk-mkscripts-parcelws-sync-behavior": {
@@ -262,7 +262,7 @@ const getParcelWsSyncDestnSections = () =>
     } as ProfileSection;
   });
 
-const getParcelWsSyncProfile = (): Profile => ({
+export const getParcelWsSyncProfile = (): Profile => ({
   ProfileName: "trmrk-mkscripts-parcelws-sync",
   RelDirPaths: {
     DirPath: "|$TURMERIK_REPO_DIR|\\ParcelWs",
@@ -281,7 +281,7 @@ const getParcelWsSyncProfile = (): Profile => ({
               TextContent: scr.call_fst_pull,
             },
             {
-              FileRelPath: "pull_dffo_dffo.bat",
+              FileRelPath: "pull_all_dffo.bat",
               TextContent: scr.call_fst_pull_dffo,
             },
           ],
@@ -292,8 +292,3 @@ const getParcelWsSyncProfile = (): Profile => ({
     ...getParcelWsSyncDestnSections(),
   ],
 });
-
-export const turmerik = {
-  ParcelWsSync: getParcelWsSyncProfile(),
-  getExportedMembers: () => turmerik.ParcelWsSync,
-};

@@ -61,7 +61,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
                                 parser.ArgsFlagOpts(data, ["pf"],
                                     data => data.Args.ProfileName = data.ArgFlagValue!.Single()),
                                 parser.ArgsFlagOpts(data, ["sc"],
-                                    data => data.Args.SectionName = data.ArgFlagValue!.Single()),
+                                    data => data.Args.SectionNames = data.ArgFlagValue!),
                                 parser.ArgsFlagOpts(data, ["arg"],
                                     data => data.Args.ContentArgsFilterName = data.ArgFlagValue!.Single()),
                                 parser.ArgsFlagOpts(data, ["pth"],
@@ -73,9 +73,17 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
             args.Profile = args.Config.Profiles.Single(
                 profile => profile.ProfileName == args.ProfileName);
 
-            args.Section = args.Profile.Sections.Single(
-                profile => profile.SectionName == args.SectionName);
-
+            if (args.SectionNames != null)
+            {
+                args.Sections = args.SectionNames.Select(
+                    sectionName => args.Profile.Sections.Single(
+                        profile => profile.SectionName == sectionName)).ToArray();
+            }
+            else
+            {
+                args.Sections = args.Profile.Sections.ToArray();
+            }
+            
             return args;
         }
 

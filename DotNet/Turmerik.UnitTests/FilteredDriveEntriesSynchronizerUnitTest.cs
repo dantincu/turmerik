@@ -296,6 +296,7 @@ namespace Turmerik.UnitTests
                 Config = programConfigRetriever.LoadProgramConfig("test-config.json"),
                 LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile(),
                 SrcFolderNamesMap = locationNamesMap,
+                DestnLocationNamesList = new List<string>(),
                 ProfileName = "unit-test",
                 ConfigFilePath = "test-config",
                 FileSyncType = fileSyncType,

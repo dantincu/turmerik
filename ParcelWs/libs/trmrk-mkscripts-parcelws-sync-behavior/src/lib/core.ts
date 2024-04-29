@@ -54,3 +54,8 @@ export interface Profile {
   DefaultContentSpecs?: ContentSpecs | null | undefined;
   Sections: ProfileSection[];
 }
+
+export interface MkScriptsParcelWsSyncBehaviorData {
+  behavior: { Profile: Profile };
+  getExportedMembers: () => Profile;
+}

@@ -80,24 +80,9 @@ namespace Turmerik.Core.ConsoleApps
             string configDirPath = Path.GetDirectoryName(
                 configFilePath)!;
 
-            TProgramConfig programConfig = JsonConversion.Adapter.Deserialize<TProgramConfig>(
-                File.ReadAllText(configFilePath));
-
-            for (int i = 0; i < programConfig.Profiles.Count; i++)
-            {
-                var destnProfile = programConfig.Profiles[i];
-
-                if (destnProfile.ProfileRelFilePath != null)
-                {
-                    string externalProfileFilePath = Path.Combine(
-                        configDirPath, destnProfile.ProfileRelFilePath);
-
-                    string json = File.ReadAllText(externalProfileFilePath);
-                    var srcProfile = JsonConversion.Adapter.Deserialize<TProgramConfigProfile>(json);
-
-                    MergeProfiles(destnProfile, srcProfile, configFilePath);
-                }
-            }
+            var programConfig = LoadProgramConfig(
+                configFilePath,
+                configDirPath);
 
             return programConfig;
         }
@@ -127,5 +112,31 @@ namespace Turmerik.Core.ConsoleApps
 
         protected virtual string GetDefaultConfigFilePath() => Path.Combine(
             DefaultConfigDirPath, ProgramConfigRetrieverCore.CONFIG_FILE_NAME);
+
+        protected virtual TProgramConfig LoadProgramConfig(
+            string configFilePath,
+            string configDirPath)
+        {
+            TProgramConfig programConfig = JsonConversion.Adapter.Deserialize<TProgramConfig>(
+                File.ReadAllText(configFilePath));
+
+            for (int i = 0; i < programConfig.Profiles.Count; i++)
+            {
+                var destnProfile = programConfig.Profiles[i];
+
+                if (destnProfile.ProfileRelFilePath != null)
+                {
+                    string externalProfileFilePath = Path.Combine(
+                        configDirPath, destnProfile.ProfileRelFilePath);
+
+                    string json = File.ReadAllText(externalProfileFilePath);
+                    var srcProfile = JsonConversion.Adapter.Deserialize<TProgramConfigProfile>(json);
+
+                    MergeProfiles(destnProfile, srcProfile, configFilePath);
+                }
+            }
+
+            return programConfig;
+        }
     }
 }

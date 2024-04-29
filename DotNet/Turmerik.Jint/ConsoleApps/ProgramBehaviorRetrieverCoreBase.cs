@@ -40,10 +40,19 @@ namespace Turmerik.Jint.ConsoleApps
                 nameof(trmrkJintAdapterFactory));
         }
 
-        public override TProgramConfig LoadProgramConfig(
-            string? configFilePath = null)
+        protected override string GetDefaultConfigDirPath() => AppEnv.GetTypePath(
+            AppEnvDir, GetType(), ProgramBehaviorRetrieverCore.PROGRAM_BEHAVIOR_DIR_NAME);
+
+        protected override string GetDefaultConfigFilePath() => Path.Combine(
+            DefaultConfigDirPath, ProgramBehaviorRetrieverCore.BEHAVIOR_FILE_NAME);
+
+        protected override TProgramConfig LoadProgramConfig(
+            string configFilePath,
+            string configDirPath)
         {
-            var programConfig = base.LoadProgramConfig();
+            var programConfig = base.LoadProgramConfig(
+                configFilePath,
+                configDirPath);
 
             for (int i = 0; i < programConfig.Profiles.Count; i++)
             {
@@ -51,10 +60,13 @@ namespace Turmerik.Jint.ConsoleApps
 
                 if (destnProfile.ProfileBehaviorRelFilePath != null)
                 {
+                    string externalProfileFilePath = Path.Combine(
+                        configDirPath, destnProfile.ProfileBehaviorRelFilePath);
+
                     var jintAdapter = trmrkJintAdapterFactory.Create(new TrmrkJintAdapterOpts
                     {
                         JsScripts = File.ReadAllText(
-                            destnProfile.ProfileBehaviorRelFilePath).Arr().RdnlC()
+                            externalProfileFilePath).Arr().RdnlC()
                     });
 
                     var srcProfile = jintAdapter.Evaluate<TProgramConfigProfile>(
@@ -66,11 +78,5 @@ namespace Turmerik.Jint.ConsoleApps
 
             return programConfig;
         }
-
-        protected override string GetDefaultConfigDirPath() => AppEnv.GetTypePath(
-            AppEnvDir, GetType(), ProgramBehaviorRetrieverCore.PROGRAM_BEHAVIOR_DIR_NAME);
-
-        protected override string GetDefaultConfigFilePath() => Path.Combine(
-            DefaultConfigDirPath, ProgramBehaviorRetrieverCore.BEHAVIOR_FILE_NAME);
     }
 }
