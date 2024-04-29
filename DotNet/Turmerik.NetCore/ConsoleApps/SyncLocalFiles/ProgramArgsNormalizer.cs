@@ -4,7 +4,6 @@ using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing;
-using static Turmerik.NetCore.ConsoleApps.SyncLocalFiles.ProgramConfig;
 
 namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 {
@@ -26,6 +25,12 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             ProgramArgs args,
             ProgramConfig.Profile profile,
             ProgramConfig.DestnLocation destnFolder);
+
+        void NormalizeArgs(
+            ProgramArgs args,
+            ProgramConfig.Profile profile,
+            ProgramConfig.DestnLocation destnLocation,
+            ProgramConfig.DestnFolder destnFolder);
     }
 
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
@@ -163,6 +168,30 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
             destnLocation.DfSrcFilesFilter ??= profile.DfSrcFilesFilter;
             destnLocation.DfDestnFilesFilter ??= profile.DfDestnFilesFilter;
+
+            foreach (var destnFolderKvp in destnLocation.FoldersMap)
+            {
+                NormalizeArgs(
+                    args,
+                    profile,
+                    destnLocation,
+                    destnFolderKvp.Value);
+            }
+        }
+
+        public void NormalizeArgs(
+            ProgramArgs args,
+            ProgramConfig.Profile profile,
+            ProgramConfig.DestnLocation destnLocation,
+            ProgramConfig.DestnFolder destnFolder)
+        {
+            destnFolder.DirPath = textMacrosReplacer.NormalizePath(
+                args.LocalDevicePathsMap,
+                destnFolder.DirPath,
+                destnLocation.DirPath);
+
+            destnFolder.SrcFilesFilter ??= destnLocation.DfSrcFilesFilter;
+            destnFolder.DestnFilesFilter ??= destnLocation.DfDestnFilesFilter;
         }
     }
 }
