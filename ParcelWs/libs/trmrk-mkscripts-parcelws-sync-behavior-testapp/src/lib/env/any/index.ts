@@ -1,5 +1,6 @@
-import trmrk_lib from "../../../synced-libs/trmrk";
+import fs from "fs";
 
 import { turmerik } from "../../../synced-libs/trmrk-mkscripts-parcelws-sync-behavior/env/any";
 
-console.log(turmerik.getExportedMembers());
+const jsonStr = JSON.stringify(turmerik.getExportedMembers(), null, "  ");
+fs.writeFileSync("./trmrk-mkscripts-parcelws-sync-behavior.json", jsonStr);
