@@ -114,7 +114,7 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
                                         singleFile!.UseChecksum = true;
                                     }, true),
-                                parser.ArgsFlagOpts(data, ["p"],
+                                parser.ArgsFlagOpts(data, ["pf"],
                                     data =>
                                     {
                                         data.Args.Profile = data.Args.Config.Profiles.Single(
