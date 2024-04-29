@@ -12,7 +12,7 @@ export interface AppModuleHomePageProps {
   rootPath: string;
 }
 
-import MatUIIcon from "../../synced-libs/trmrk-react/components/icons/MatUIIcon";
+import MatUIIcon from "../../trmrk-react/components/icons/MatUIIcon";
 
 import AppBarsPanel from "../../components/barsPanel/AppBarsPanel";
 

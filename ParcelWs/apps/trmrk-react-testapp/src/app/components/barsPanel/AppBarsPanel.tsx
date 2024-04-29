@@ -8,19 +8,19 @@ import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-import SettingsMenu from "../../synced-libs/trmrk-react/components/settingsMenu/SettingsMenu";
-import AppearenceSettingsMenu from "../../synced-libs/trmrk-react/components/settingsMenu/AppearenceSettingsMenu";
-import OptionsMenu from "../../synced-libs/trmrk-react/components/settingsMenu/OptionsMenu";
+import SettingsMenu from "../../trmrk-react/components/settingsMenu/SettingsMenu";
+import AppearenceSettingsMenu from "../../trmrk-react/components/settingsMenu/AppearenceSettingsMenu";
+import OptionsMenu from "../../trmrk-react/components/settingsMenu/OptionsMenu";
 
-import { AppBarSelectors, AppBarReducers } from "../../synced-libs/trmrk-react/redux/appBarData";
-import { AppDataSelectors, AppDataReducers } from "../../synced-libs/trmrk-react/redux/appData";
+import { AppBarSelectors, AppBarReducers } from "../../trmrk-react/redux/appBarData";
+import { AppDataSelectors, AppDataReducers } from "../../trmrk-react/redux/appData";
 
-import { getAppTheme, currentAppTheme } from "../../synced-libs/trmrk-react/app-theme/core";
+import { getAppTheme, currentAppTheme } from "../../trmrk-react/app-theme/core";
 import { appModeCssClass, getAppModeCssClassName,
   setIsCompactModeToLocalStorage,
-  setIsDarkModeToLocalStorage } from "../../synced-libs/trmrk-browser/domUtils/core";
+  setIsDarkModeToLocalStorage } from "../../trmrk-browser/domUtils/core";
 
-import { isAndroid, isIPad, isIPhone, isIPadOrIphone, isMobile } from "../../synced-libs/trmrk-browser/domUtils/constants";
+import { isAndroid, isIPad, isIPhone, isIPadOrIphone, isMobile } from "../../trmrk-browser/domUtils/constants";
 
 import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";

@@ -5,6 +5,7 @@ using Turmerik.NetCore.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.NetCore.ConsoleApps.MkScripts;
+using Turmerik.Jint.Dependencies;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
@@ -17,6 +18,7 @@ DriveExplorerH.AddFsRetrieverAndExplorer(
 services.AddSingleton<IAppEnv, AppEnv>();
 
 TrmrkNetCoreServices.AddMkScriptsServices(services);
+TrmrkJintServices.RegisterAll(services);
 
 var svcProv = services.BuildServiceProvider();
 

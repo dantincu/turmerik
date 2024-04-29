@@ -1,9 +1,9 @@
-import trmrk_lib from "../../../synced-libs/trmrk";
+import trmrk_lib from "../../../trmrk";
 
 import {
   TextTransformBehaviorLib,
   getExportedMembers,
-} from "../../../synced-libs/trmrk-text-transform-behavior/core";
+} from "../../../trmrk-text-transform-behavior/core";
 
 import { getAllTextTransformers } from "../../main";
 

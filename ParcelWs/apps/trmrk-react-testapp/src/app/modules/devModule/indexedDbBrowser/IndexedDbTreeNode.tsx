@@ -9,8 +9,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
-import trmrk from "../../synced-libs/trmrk";
-import MatUIIcon from "../../synced-libs/trmrk-react/components/icons/MatUIIcon";
+import trmrk from "../../trmrk";
+import MatUIIcon from "../../trmrk-react/components/icons/MatUIIcon";
 
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';

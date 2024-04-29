@@ -12,9 +12,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import HeightIcon from '@mui/icons-material/Height';
 
-import trmrk from "../../synced-libs/trmrk";
+import trmrk from "../../trmrk";
 
-import MatUIIcon from "../../synced-libs/trmrk-react/components/icons/MatUIIcon";
+import MatUIIcon from "../../trmrk-react/components/icons/MatUIIcon";
 import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from './TrmrkTreeNodesList';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from './TrmrkTreeNodeData';

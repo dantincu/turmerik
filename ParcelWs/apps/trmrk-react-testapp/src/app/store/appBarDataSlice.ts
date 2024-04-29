@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { ReducerAction } from "../../synced-libs/trmrk-react/redux/core";
+import { ReducerAction } from "../../trmrk-react/redux/core";
 import {
   AppBarData,
   AppSettingsMenuOpts,
@@ -8,7 +8,7 @@ import {
   OptionsMenuOpts,
   AppBarReducers,
   AppBarSelectors,
-} from "../../synced-libs/trmrk-react/redux/appBarData";
+} from "../../trmrk-react/redux/appBarData";
 
 const appBarDataSlice = createSlice({
   name: "appBar",

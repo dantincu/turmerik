@@ -5,7 +5,7 @@ import {
   TextTransformBehaviorData,
   TextTransformItem,
   TextTransformNode,
-} from "../synced-libs/trmrk-text-transform-behavior/core";
+} from "../trmrk-text-transform-behavior/core";
 
 import {
   printableWhitespaces,
@@ -14,7 +14,7 @@ import {
   removeUnprintableChars,
   remStartingMatchIfReq,
   transformEachLine,
-} from "../synced-libs/trmrk-text-transform-behavior/main";
+} from "../trmrk-text-transform-behavior/main";
 
 export const getAllTextTransformers = () => {
   const rootNodes: TextTransformNode[] = [

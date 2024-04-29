@@ -7,7 +7,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
 
-import MatUIIcon from "../../synced-libs/trmrk-react/components/icons/MatUIIcon";
+import MatUIIcon from "../../trmrk-react/components/icons/MatUIIcon";
 
 export const DEFAULT_MAX_SPAN_LENGTH = 10;
 export const DEFAULT_TAB_LENGTH_PX = 40;  

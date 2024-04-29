@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import trmrk from "trmrk";
 
-import trmrk_browser from "../../synced-libs/trmrk-browser";
+import trmrk_browser from "../../trmrk-browser";
 
-import { ReducerAction } from "../../synced-libs/trmrk-react/redux/core";
+import { ReducerAction } from "../../trmrk-react/redux/core";
 
 import {
   AppData,
   AppDataSelectors,
   AppDataReducers,
-} from "../../synced-libs/trmrk-react/redux/appData";
+} from "../../trmrk-react/redux/appData";
 
 const trmrk_dom_utils = trmrk_browser.domUtils.default;
 

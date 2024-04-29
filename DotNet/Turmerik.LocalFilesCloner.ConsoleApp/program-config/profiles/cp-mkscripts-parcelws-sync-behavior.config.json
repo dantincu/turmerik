@@ -2,7 +2,7 @@
   "ProfileName": "cp-mkscripts-parcelws-sync-behavior",
   "ScriptGroups": [
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-mkscripts-parcelws-sync-behavior",
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\libs\\trmrk-mkscripts-parcelws-sync-behavior",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
@@ -29,7 +29,7 @@
     {
       "OnBeforeScripts": [
         {
-          "WorkDir": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Config\\Turmerik.NetCore.ConsoleApps.MkScripts.ProgramConfigRetriever\\program-config\\profiles",
+          "WorkDir": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Config\\Turmerik.NetCore.ConsoleApps.MkScripts.ProgramBehaviorRetriever\\program-behavior\\profiles",
           "PowerShellCmd": {
             "Commands": [
               {
@@ -44,12 +44,12 @@
   ],
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-mkscripts-parcelws-sync-behavior",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\libs\\trmrk-mkscripts-parcelws-sync-behavior",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|",
       "Files": [
         {
           "InputFilePath": "dist\\prod\\index.js",
-          "CloneDirPath": "Config\\Turmerik.NetCore.ConsoleApps.MkScripts.ProgramConfigRetriever\\program-config\\profiles",
+          "CloneDirPath": "Config\\Turmerik.NetCore.ConsoleApps.MkScripts.ProgramBehaviorRetriever\\program-behavior\\profiles",
           "CloneFileNameTpl": "trmrk-mkscripts-parcelws-sync-behavior.js",
           "CloneTplLines": [
             "globalThis.turmerikObj = {{}};",

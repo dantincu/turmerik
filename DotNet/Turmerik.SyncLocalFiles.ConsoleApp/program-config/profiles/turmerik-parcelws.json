@@ -52,7 +52,7 @@
   "DestnLocations": [
     {
       "Name": "trmrk-axios",
-      "DirPath": "libs\\trmrk-axios\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-axios\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -61,7 +61,7 @@
     },
     {
       "Name": "trmrk-browser",
-      "DirPath": "libs\\trmrk-browser\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-browser\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -73,7 +73,7 @@
     },
     {
       "Name": "trmrk-blazor",
-      "DirPath": "libs\\trmrk-blazor\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-blazor\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -88,7 +88,7 @@
     },
     {
       "Name": "trmrk-react",
-      "DirPath": "libs\\trmrk-react\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-react\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -103,7 +103,7 @@
     },
     {
       "Name": "trmrk-text-transform-behavior",
-      "DirPath": "libs\\trmrk-text-transform-behavior\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-text-transform-behavior\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -112,7 +112,7 @@
     },
     {
       "Name": "trmrk-text-transform-behavior-testapp",
-      "DirPath": "libs\\trmrk-text-transform-behavior-testapp\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-text-transform-behavior-testapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -127,7 +127,7 @@
     },
     {
       "Name": "trmrk-text-transform-defaultbehavior",
-      "DirPath": "libs\\trmrk-text-transform-defaultbehavior\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-text-transform-defaultbehavior\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -139,7 +139,7 @@
     },
     {
       "Name": "trmrk-text-transform-mybehavior",
-      "DirPath": "libs\\trmrk-text-transform-mybehavior\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-text-transform-mybehavior\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -151,7 +151,7 @@
     },
     {
       "Name": "trmrk-mkscripts-parcelws-sync-behavior",
-      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -160,7 +160,7 @@
     },
     {
       "Name": "trmrk-mkscripts-parcelws-sync-behavior-testapp",
-      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp\\src\\synced-libs",
+      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -172,7 +172,7 @@
     },
     {
       "Name": "trmrk-react-testapp",
-      "DirPath": "apps\\trmrk-react-testapp\\src\\synced-libs",
+      "DirPath": "apps\\trmrk-react-testapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -190,7 +190,7 @@
     },
     {
       "Name": "trmrk-notes-blazorapp",
-      "DirPath": "apps\\trmrk-notes-blazorapp\\src\\synced-libs",
+      "DirPath": "apps\\trmrk-notes-blazorapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"

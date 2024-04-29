@@ -2,9 +2,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
-import trmrk from "../../synced-libs/trmrk";
+import trmrk from "../../trmrk";
 
-import { jsonBool } from "../../synced-libs/trmrk/core";
+import { jsonBool } from "../../trmrk/core";
 
 import { searchQuery } from "../../indexedDbBrowser/data";
 

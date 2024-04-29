@@ -1,10 +1,6 @@
-import trmrk from "../../synced-libs/trmrk";
+import trmrk from "../../trmrk";
 
-import {
-  DriveItem,
-  FileType,
-  OfficeFileType,
-} from "../../synced-libs/trmrk/drive-item";
+import { DriveItem, FileType, OfficeFileType } from "../../trmrk/drive-item";
 
 import {
   RootedPathResolvedArgs,
@@ -12,7 +8,7 @@ import {
   DriveItemNodeCore,
   DriveExplorerApiBase,
   IDriveExplorerApi,
-} from "../../synced-libs/trmrk/DriveExplorerApi/core";
+} from "../../trmrk/DriveExplorerApi/core";
 
 import { FsApiEntry, FsApiFolder, SrcTrgPair } from "../fsApi/core";
 import { getDescendants } from "../fsApi/hcy";

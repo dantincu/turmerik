@@ -19,6 +19,8 @@ namespace Turmerik.Jint.ConsoleApps
 
     public static class ProgramBehaviorRetrieverCore
     {
+        public const string BEHAVIOR_FILE_NAME = "behavior.json";
+        public const string PROGRAM_BEHAVIOR_DIR_NAME = "program-behavior";
     }
 
     public abstract class ProgramBehaviorRetrieverCoreBase<TProgramConfig, TProgramConfigProfile> : ProgramConfigRetrieverCoreBase<TProgramConfig, TProgramConfigProfile>, IProgramBehaviorRetrieverCore<TProgramConfig, TProgramConfigProfile>
@@ -64,5 +66,11 @@ namespace Turmerik.Jint.ConsoleApps
 
             return programConfig;
         }
+
+        protected override string GetDefaultConfigDirPath() => AppEnv.GetTypePath(
+            AppEnvDir, GetType(), ProgramBehaviorRetrieverCore.PROGRAM_BEHAVIOR_DIR_NAME);
+
+        protected override string GetDefaultConfigFilePath() => Path.Combine(
+            DefaultConfigDirPath, ProgramBehaviorRetrieverCore.BEHAVIOR_FILE_NAME);
     }
 }

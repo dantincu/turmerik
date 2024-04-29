@@ -17,6 +17,9 @@
     },
     {
       "ProfileRelFilePath": "profiles\\cp-text-transform-behavior.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-mkscripts-parcelws-sync-behavior.config.json"
     }
   ]
 }

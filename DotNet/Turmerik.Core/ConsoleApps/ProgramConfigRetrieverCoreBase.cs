@@ -52,14 +52,8 @@ namespace Turmerik.Core.ConsoleApps
             this.JsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
-            DefaultConfigDirPath = appEnv.GetTypePath(
-                AppEnvDir,
-                GetType(),
-                ProgramConfigRetrieverCore.PROGRAM_CONFIG_DIR_NAME);
-
-            DefaultConfigFilePath = Path.Combine(
-                DefaultConfigDirPath,
-                ProgramConfigRetrieverCore.CONFIG_FILE_NAME);
+            DefaultConfigDirPath = GetDefaultConfigDirPath();
+            DefaultConfigFilePath = GetDefaultConfigFilePath();
         }
 
         public virtual AppEnvDir AppEnvDir => AppEnvDir.Config;
@@ -127,5 +121,11 @@ namespace Turmerik.Core.ConsoleApps
             TProgramConfigProfile destnProfile,
             TProgramConfigProfile srcProfile,
             string configFilePath);
+
+        protected virtual string GetDefaultConfigDirPath() => AppEnv.GetTypePath(
+            AppEnvDir, GetType(), ProgramConfigRetrieverCore.PROGRAM_CONFIG_DIR_NAME);
+
+        protected virtual string GetDefaultConfigFilePath() => Path.Combine(
+            DefaultConfigDirPath, ProgramConfigRetrieverCore.CONFIG_FILE_NAME);
     }
 }

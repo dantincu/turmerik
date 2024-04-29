@@ -12,7 +12,7 @@ import "../../styles/index-any.scss"
 
 import App from '../../app/App';
 
-import { createAppThemesMap } from "../../synced-libs/trmrk-react/app-theme/core";
+import { createAppThemesMap } from "../../trmrk-react/app-theme/core";
 
 createAppThemesMap({}, {});
 

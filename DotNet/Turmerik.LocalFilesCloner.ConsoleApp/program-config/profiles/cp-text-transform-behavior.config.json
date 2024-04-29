@@ -2,7 +2,7 @@
   "ProfileName": "cp-text-transform-behavior",
   "ScriptGroups": [
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-text-transform-mybehavior",
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\libs\\trmrk-text-transform-mybehavior",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
@@ -27,18 +27,18 @@
       ]
     },
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-text-transform-defaultbehavior",
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\libs\\trmrk-text-transform-defaultbehavior",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
             "Commands": [
               {
                 "CommandName": "rmitem",
-                "CommandArguments": [".parcel-cache", ":fr", ":rc"]
+                "CommandArguments": [ ".parcel-cache", ":fr", ":rc" ]
               },
               {
                 "CommandName": "rmitem",
-                "CommandArguments": ["dist", ":fr", ":rc"]
+                "CommandArguments": [ "dist", ":fr", ":rc" ]
               }
             ]
           }
@@ -46,7 +46,7 @@
         {
           "WinShellCmd": {
             "FileName": "npm",
-            "ArgumentsNmrbl": ["run", "build-prod"]
+            "ArgumentsNmrbl": [ "run", "build-prod" ]
           }
         }
       ]
@@ -80,7 +80,7 @@
   ],
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-text-transform-mybehavior",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\libs\\trmrk-text-transform-mybehavior",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|",
       "Files": [
         {
@@ -96,7 +96,7 @@
       ]
     },
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-text-transform-defaultbehavior",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\libs\\trmrk-text-transform-defaultbehavior",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|",
       "Files": [
         {
