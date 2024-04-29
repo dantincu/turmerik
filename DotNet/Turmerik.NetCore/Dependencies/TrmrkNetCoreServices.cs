@@ -57,7 +57,7 @@ namespace Turmerik.NetCore.Dependencies
         public static IServiceCollection AddMkScriptsServices(
             IServiceCollection services)
         {
-            services.AddSingleton<IProgramConfigRetriever, ProgramConfigRetriever>();
+            services.AddSingleton<IProgramBehaviorRetriever, ProgramBehaviorRetriever>();
             services.AddSingleton<IProgramArgsRetriever, ProgramArgsRetriever>();
             services.AddSingleton<IProgramArgsNormalizer, ProgramArgsNormalizer>();
             services.AddSingleton<IFilteredItemsRetriever, FilteredItemsRetriever>();

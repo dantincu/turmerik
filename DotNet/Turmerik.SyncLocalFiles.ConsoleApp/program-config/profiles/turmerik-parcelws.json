@@ -33,20 +33,20 @@
       "DirPath": "libs\\trmrk-react\\src\\lib"
     },
     {
-      "Name": "trmrk-trmrk-text-transform-behavior",
-      "DirPath": "libs\\trmrk-trmrk-text-transform-behavior\\src\\lib"
+      "Name": "trmrk-text-transform-behavior",
+      "DirPath": "libs\\trmrk-text-transform-behavior\\src\\lib"
     },
     {
-      "Name": "trmrk-trmrk-text-transform-behavior-testapp",
-      "DirPath": "libs\\trmrk-trmrk-text-transform-behavior-testapp\\src\\lib"
+      "Name": "trmrk-text-transform-defaultbehavior",
+      "DirPath": "libs\\trmrk-text-transform-defaultbehavior\\src\\lib"
     },
     {
-      "Name": "trmrk-trmrk-text-transform-defaultbehavior",
-      "DirPath": "libs\\trmrk-trmrk-text-transform-defaultbehavior\\src\\lib"
+      "Name": "trmrk-text-transform-mybehavior",
+      "DirPath": "libs\\trmrk-text-transform-mybehavior\\src\\lib"
     },
     {
-      "Name": "trmrk-trmrk-text-transform-mybehavior",
-      "DirPath": "libs\\trmrk-trmrk-text-transform-mybehavior\\src\\lib"
+      "Name": "trmrk-mkscripts-parcelws-sync-behavior",
+      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib"
     }
   ],
   "DestnLocations": [
@@ -146,6 +146,27 @@
         },
         "trmrk-text-transform-behavior": {
           "DirPath": "trmrk-text-transform-behavior"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-mkscripts-parcelws-sync-behavior",
+      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-mkscripts-parcelws-sync-behavior-testapp",
+      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp\\src\\synced-libs",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-mkscripts-parcelws-sync-behavior": {
+          "DirPath": "trmrk-mkscripts-parcelws-sync-behavior"
         }
       }
     },

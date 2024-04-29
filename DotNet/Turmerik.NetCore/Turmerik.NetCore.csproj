@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik.Core\Turmerik.Core.csproj" />
+    <ProjectReference Include="..\Turmerik.Jint\Turmerik.Jint.csproj" />
   </ItemGroup>
 
 </Project>

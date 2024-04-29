@@ -43,7 +43,8 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             var args = new ProgramArgs
             {
                 LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile(),
-                LocationNamesMap = new Dictionary<string, List<string>>()
+                SrcFolderNamesMap = new Dictionary<string, List<string>>(),
+                DestnLocationNamesList = new List<string>()
             };
 
             args = parser.Parse(
@@ -57,9 +58,17 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                             var argItemTuple = GetArgItemTuple(
                                 data.ArgItem);
 
-                            data.Args.LocationNamesMap.Add(
-                                argItemTuple.Item1,
-                                argItemTuple.Item2);
+                            if (argItemTuple.Item1 == "*")
+                            {
+                                data.Args.DestnLocationNamesList.AddRange(
+                                    argItemTuple.Item2);
+                            }
+                            else
+                            {
+                                data.Args.SrcFolderNamesMap.Add(
+                                    argItemTuple.Item1,
+                                    argItemTuple.Item2);
+                            }
                         }
                         else
                         {

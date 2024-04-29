@@ -17,12 +17,12 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
     public class ProgramArgsRetriever : IProgramArgsRetriever
     {
         private readonly IConsoleArgsParser parser;
-        private readonly IProgramConfigRetriever programConfigRetriever;
+        private readonly IProgramBehaviorRetriever programConfigRetriever;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
 
         public ProgramArgsRetriever(
             IConsoleArgsParser parser,
-            IProgramConfigRetriever programConfigRetriever,
+            IProgramBehaviorRetriever programConfigRetriever,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever)
         {
             this.parser = parser ?? throw new ArgumentNullException(

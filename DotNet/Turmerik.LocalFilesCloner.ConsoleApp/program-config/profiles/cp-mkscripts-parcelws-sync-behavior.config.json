@@ -1,0 +1,63 @@
+{
+  "ProfileName": "cp-mkscripts-parcelws-sync-behavior",
+  "ScriptGroups": [
+    {
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-mkscripts-parcelws-sync-behavior",
+      "OnBeforeScripts": [
+        {
+          "PowerShellCmd": {
+            "Commands": [
+              {
+                "CommandName": "rmitem",
+                "CommandArguments": [ ".parcel-cache", ":fr", ":rc" ]
+              },
+              {
+                "CommandName": "rmitem",
+                "CommandArguments": [ "dist", ":fr", ":rc" ]
+              }
+            ]
+          }
+        },
+        {
+          "WinShellCmd": {
+            "FileName": "npm",
+            "ArgumentsNmrbl": [ "run", "build-prod" ]
+          }
+        }
+      ]
+    },
+    {
+      "OnBeforeScripts": [
+        {
+          "WorkDir": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\Config\\Turmerik.NetCore.ConsoleApps.MkScripts.ProgramConfigRetriever\\program-config\\profiles",
+          "PowerShellCmd": {
+            "Commands": [
+              {
+                "CommandName": "rmitem",
+                "CommandArguments": [ "trmrk-mkscripts-parcelws-sync-behavior.js", ":fr", ":rc" ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "FileGroups": [
+    {
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-mkscripts-parcelws-sync-behavior",
+      "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|",
+      "Files": [
+        {
+          "InputFilePath": "dist\\prod\\index.js",
+          "CloneDirPath": "Config\\Turmerik.NetCore.ConsoleApps.MkScripts.ProgramConfigRetriever\\program-config\\profiles",
+          "CloneFileNameTpl": "trmrk-mkscripts-parcelws-sync-behavior.js",
+          "CloneTplLines": [
+            "globalThis.turmerikObj = {{}};",
+            "{0}",
+            "globalThis.turmerik = turmerikObj.turmerik;"
+          ]
+        }
+      ]
+    }
+  ]
+}

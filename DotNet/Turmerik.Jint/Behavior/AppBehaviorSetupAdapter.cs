@@ -54,7 +54,7 @@ namespace Turmerik.Jint.Behavior
         public AppBehaviorConfigImmtbl NormalizeConfig(
             AppBehaviorConfigMtbl config)
         {
-            config.ExportedMembersRetrieverJsCode ??= "turmerik.getExportedMembers()";
+            config.ExportedMembersRetrieverJsCode ??= TrmrkJintAdapter.EXPORTED_MEMBERS_RETRIEVER_JS_CODE;
             config.JsFilePaths ??= GetDefaultBehaviorJsFilePath().Lst();
 
             var immtbl = new AppBehaviorConfigImmtbl(config);

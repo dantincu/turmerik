@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Core .NET Blazor-related js code related used across Turmerik Apps",
-  "source": "src/lib/index.ts",
+  "source": "src/lib/env/any/index.ts",
   "main": "dist/index.js",
   "scripts": {
     "watch": "parcel watch",

@@ -1,7 +1,7 @@
-import trmrk_lib from "../../synced-libs/trmrk";
+import trmrk_lib from "../../../synced-libs/trmrk";
 
-import { turmerik } from "../../synced-libs/trmrk-text-transform-mybehavior/env/any";
-import { RichTextBoxPseudoMarkup } from "../../synced-libs/trmrk-text-transform-behavior/core";
+import { turmerik } from "../../../synced-libs/trmrk-text-transform-mybehavior/env/any";
+import { RichTextBoxPseudoMarkup } from "../../../synced-libs/trmrk-text-transform-behavior/core";
 
 const pseudoMarkup: RichTextBoxPseudoMarkup = {
   Lines: [

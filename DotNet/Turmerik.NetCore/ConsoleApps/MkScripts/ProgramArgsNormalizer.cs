@@ -64,14 +64,14 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
 
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
     {
-        private readonly IProgramConfigRetriever programConfigRetriever;
+        private readonly IProgramBehaviorRetriever programConfigRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly IIdxesFilterParser idxesFilterParser;
         private readonly IFilteredItemsRetriever filteredItemsRetriever;
 
         public ProgramArgsNormalizer(
-            IProgramConfigRetriever programConfigRetriever,
+            IProgramBehaviorRetriever programConfigRetriever,
             ITextMacrosReplacer textMacrosReplacer,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             IIdxesFilterParser idxesFilterParser,

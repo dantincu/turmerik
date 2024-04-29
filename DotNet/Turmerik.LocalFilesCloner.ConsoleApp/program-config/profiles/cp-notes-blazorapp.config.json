@@ -2,7 +2,7 @@
   "ProfileName": "cp-notes-blazorapp",
   "ScriptGroups": [
     {
-      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-notes-blazorapp",
+      "WorkDir": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-notes-blazorapp",
       "OnBeforeScripts": [
         {
           "PowerShellCmd": {
@@ -81,7 +81,7 @@
       ]
     },
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs-V2\\apps\\trmrk-notes-blazorapp",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs\\apps\\trmrk-notes-blazorapp",
       "CloneDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Notes.BlazorApp",
       "Files": [
         {

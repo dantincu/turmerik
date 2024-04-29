@@ -39,17 +39,17 @@ namespace Turmerik.Core.ConsoleApps
         where TProgramConfig : ProgramConfigCoreBase<TProgramConfigProfile>, new()
         where TProgramConfigProfile : ProgramConfigProfileCoreBase, new()
     {
-        private readonly IAppEnv appEnv;
-        private readonly IJsonConversion jsonConversion;
+        protected readonly IAppEnv AppEnv;
+        protected readonly IJsonConversion JsonConversion;
 
         public ProgramConfigRetrieverCoreBase(
             IAppEnv appEnv,
             IJsonConversion jsonConversion)
         {
-            this.appEnv = appEnv ?? throw new ArgumentNullException(
+            this.AppEnv = appEnv ?? throw new ArgumentNullException(
                 nameof(appEnv));
 
-            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
+            this.JsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
             DefaultConfigDirPath = appEnv.GetTypePath(
@@ -66,7 +66,7 @@ namespace Turmerik.Core.ConsoleApps
         public string DefaultConfigDirPath { get; }
         public string DefaultConfigFilePath { get; }
 
-        public TProgramConfig LoadProgramConfig(
+        public virtual TProgramConfig LoadProgramConfig(
             string? configFilePath = null)
         {
             if (configFilePath == null)
@@ -86,7 +86,7 @@ namespace Turmerik.Core.ConsoleApps
             string configDirPath = Path.GetDirectoryName(
                 configFilePath)!;
 
-            TProgramConfig programConfig = jsonConversion.Adapter.Deserialize<TProgramConfig>(
+            TProgramConfig programConfig = JsonConversion.Adapter.Deserialize<TProgramConfig>(
                 File.ReadAllText(configFilePath));
 
             for (int i = 0; i < programConfig.Profiles.Count; i++)
@@ -99,7 +99,7 @@ namespace Turmerik.Core.ConsoleApps
                         configDirPath, destnProfile.ProfileRelFilePath);
 
                     string json = File.ReadAllText(externalProfileFilePath);
-                    var srcProfile = jsonConversion.Adapter.Deserialize<TProgramConfigProfile>(json);
+                    var srcProfile = JsonConversion.Adapter.Deserialize<TProgramConfigProfile>(json);
 
                     MergeProfiles(destnProfile, srcProfile, configFilePath);
                 }
@@ -111,7 +111,7 @@ namespace Turmerik.Core.ConsoleApps
         public TProgramConfigProfile MergeProfiles(
             TProgramConfigProfile destnProfile,
             TProgramConfigProfile srcProfile,
-            string configFilePath = null)
+            string? configFilePath = null)
         {
             destnProfile.ProfileName = srcProfile.ProfileName ?? destnProfile.ProfileName;
             destnProfile = MergeProfilesCore(destnProfile, srcProfile, configFilePath);

@@ -222,18 +222,6 @@ namespace Turmerik.Core.DriveExplorer
         public DataTreeNodeMtbl<RefTrgDriveFolderTuple> DiffFilteredItems(
             FilteredDriveEntriesSynchronizerOpts opts)
         {
-            /* var diffResult = opts.FileSyncType switch
-            {
-                FileSyncType.Push => filteredDriveEntriesNodesRetriever.Diff(
-                    opts.DestnFilteredEntries,
-                    opts.SrcFilteredEntries,
-                    string.Empty),
-                _ => filteredDriveEntriesNodesRetriever.Diff(
-                    opts.SrcFilteredEntries,
-                    opts.DestnFilteredEntries,
-                    string.Empty)
-            }; */
-
             var diffResult = filteredDriveEntriesNodesRetriever.Diff(
                 opts.SrcFilteredEntries,
                 opts.DestnFilteredEntries,

@@ -2,10 +2,11 @@
   "name": "trmrk-text-transform-behavior",
   "version": "0.1.0",
   "description": "Turmierk Text Transform Behavior",
+  "source": "src/lib/env/any/index.ts",
   "type": "module",
   "scripts": {
-    "build-dev": "parcel build ./src/env/any/index.ts --no-optimize --dist-dir ./dist/dev",
-    "build": "parcel build ./src/env/any/index.ts --dist-dir ./dist/prod"
+    "build-dev": "parcel build ./src/lib/env/any/index.ts --no-optimize --dist-dir ./dist/dev",
+    "build": "parcel build ./src/lib/env/any/index.ts --dist-dir ./dist/prod"
   },
   "author": "Daniel Tincu",
   "license": "MIT",

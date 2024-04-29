@@ -1,9 +1,9 @@
-import trmrk_lib from "../../synced-libs/trmrk";
+import trmrk_lib from "../../../synced-libs/trmrk";
 
 import {
   TextTransformBehaviorLib,
   getExportedMembers,
-} from "../../synced-libs/trmrk-text-transform-behavior/core";
+} from "../../../synced-libs/trmrk-text-transform-behavior/core";
 
 import { getAllTextTransformers } from "../../main";
 
@@ -14,7 +14,7 @@ const turmerikObj: { turmerik: TextTransformBehaviorLib } =
 
 turmerikObj.turmerik = {
   libs: {
-    trmrk,
+    // trmrk,
   },
   behavior: {
     TextTransformers: getAllTextTransformers(),

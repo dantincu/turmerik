@@ -30,6 +30,7 @@ namespace Turmerik.Jint.Behavior
     public class TrmrkJintAdapter : ITrmrkJintAdapter
     {
         public const string METHOD_CALL_FORMAT = "{0}({1})";
+        public const string EXPORTED_MEMBERS_RETRIEVER_JS_CODE = "turmerik.getExportedMembers()";
 
         private readonly IJsonConversion jsonConversion;
 

@@ -1,4 +1,5 @@
-﻿using Turmerik.Core.DriveExplorer;
+﻿using Turmerik.Core.ConsoleApps;
+using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
@@ -67,16 +68,35 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             ProgramArgs args,
             ProgramConfig.Profile profile)
         {
-            if (args.LocationNamesMap.None())
+            args.DestnLocationNamesList = args.DestnLocationNamesList.Distinct().ToList();
+
+            foreach (var destnLocName in args.DestnLocationNamesList)
             {
-                args.LocationNamesMap = profile.SrcFolders.ToDictionary(
+                var destnLoc = profile.DestnLocations.Single(
+                    loc => loc.Name == destnLocName);
+
+                foreach (var destnKvp in destnLoc.FoldersMap)
+                {
+                    var srcFolderNamesList = args.SrcFolderNamesMap.GetOrAdd(
+                        destnKvp.Key, key => new List<string>());
+
+                    if (!srcFolderNamesList.Contains(destnLocName))
+                    {
+                        srcFolderNamesList.Add(destnLocName);
+                    }
+                }
+            }
+
+            if (args.SrcFolderNamesMap.None())
+            {
+                args.SrcFolderNamesMap = profile.SrcFolders.ToDictionary(
                     srcFolder => srcFolder.Name,
                     srcFolder => new List<string>());
             }
 
             if (args.FileSyncType == FileSyncType.Push)
             {
-                foreach (var kvp in args.LocationNamesMap)
+                foreach (var kvp in args.SrcFolderNamesMap)
                 {
                     if (kvp.Value.Count != 1)
                     {
@@ -87,7 +107,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             }
             else
             {
-                foreach (var kvp in args.LocationNamesMap)
+                foreach (var kvp in args.SrcFolderNamesMap)
                 {
                     if (kvp.Value.None())
                     {

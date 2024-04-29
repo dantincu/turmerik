@@ -70,7 +70,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
             if (args.FileSyncType == FileSyncType.Push && args.PropagatePush == true)
             {
-                foreach (var kvp in args.LocationNamesMap)
+                foreach (var kvp in args.SrcFolderNamesMap)
                 {
                     var list = kvp.Value;
                     var arr = list.ToArray();
@@ -89,7 +89,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
 
         public async Task RunCoreAsync(ProgramArgs args)
         {
-            foreach (var locKvp in args.LocationNamesMap)
+            foreach (var locKvp in args.SrcFolderNamesMap)
             {
                 var srcFolder = args.Profile.SrcFolders.Single(
                     folder => folder.Name == locKvp.Key);

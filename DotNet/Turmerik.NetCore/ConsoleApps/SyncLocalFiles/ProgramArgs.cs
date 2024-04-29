@@ -38,7 +38,8 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
         public ProgramConfig Config { get; set; }
         public string ProfileName { get; set; }
         
-        public Dictionary<string, List<string>> LocationNamesMap { get; set; }
+        public Dictionary<string, List<string>> SrcFolderNamesMap { get; set; }
+        public List<string> DestnLocationNamesList { get; set; }
 
         public ProgramConfig.Profile Profile { get; set; }
 

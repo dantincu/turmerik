@@ -6,12 +6,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.TextParsing.IndexesFilter;
+using Turmerik.Jint.ConsoleApps;
 
 namespace Turmerik.NetCore.ConsoleApps.MkScripts
 {
-    public class ProgramConfig : ProgramConfigCoreBase<ProgramConfig.Profile>
+    public class ProgramConfig : ProgramBehaviorCoreBase<ProgramConfig.Profile>
     {
-        public class Profile : ProgramConfigProfileCoreBase
+        public class Profile : ProgramBehaviorProfileCoreBase
         {
             public RelDirPaths RelDirPaths { get; set; }
             public ContentSpecs DefaultContentSpecs { get; set; }

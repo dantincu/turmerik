@@ -1,0 +1,954 @@
+{
+  "ProfileName": "turmerik-parcel-ws",
+  "RelDirPaths": {
+    "DirPath": "|$TURMERIK_REPO_DIR|\\ParcelWs"
+  },
+  "Sections": [
+    {
+      "SectionName": "workspace-lvl",
+      "RelDirPaths": {
+        "DirPath": "scripts\\all"
+      },
+      "FileGroups": [
+        {
+          "DefaultContentSpecs": {
+            "Args": [
+              [ "..\\..\\libs\\trmrk" ],
+              [ "..\\..\\libs\\trmrk-axios" ],
+              [ "..\\..\\libs\\trmrk-blazor" ],
+              [ "..\\..\\libs\\trmrk-browser" ],
+              [ "..\\..\\libs\\trmrk-react" ],
+              [ "..\\..\\libs\\trmrk-text-transform-behavior" ],
+              [ "..\\..\\libs\\trmrk-text-transform-behavior-testapp" ],
+              [ "..\\..\\libs\\trmrk-text-transform-defaultbehavior" ],
+              [ "..\\..\\libs\\trmrk-text-transform-mybehavior" ],
+              [ "..\\..\\apps\\trmrk-notes-blazorapp" ],
+              [ "..\\..\\apps\\trmrk-react-testapp" ]
+            ],
+            "ArgFilters": {
+              "libs": {
+                "Regexes": [ "^\\.\\.\\\\\\.\\.\\\\libs\\.*" ]
+              },
+              "apps": {
+                "Regexes": [ "^\\.\\.\\\\\\.\\.\\\\apps\\.*" ]
+              }
+            },
+            "ArgsSetTpl": "\"{0}\"",
+            "ArgsSetsJoinTpl": ",\n"
+          },
+          "Files": [
+            {
+              "FileRelPath": "upd-pcks.bat",
+              "FileRelPathsMap": {
+                "libs": "upd-libs-pcks.bat",
+                "apps": "upd-apps-pcks.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\upd-pcks.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs.bat",
+                "apps": "rm-apps.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-pcks.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-pcks.bat",
+                "apps": "rm-apps-pcks.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-pcks.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-nd_mods.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-nd_mods.bat",
+                "apps": "rm-apps-nd_mods.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-nd_mods.bat",
+                    ")",
+                    "",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rm-ch_dst.bat",
+              "FileRelPathsMap": {
+                "libs": "rm-libs-ch_dst.bat",
+                "apps": "rm-apps-ch_dst.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-ch_dst.bat",
+                    ")",
+                    "@echo on"
+                  ]
+                }
+              ]
+            },
+            {
+              "FileRelPath": "rebuild.bat",
+              "FileRelPathsMap": {
+                "libs": "rebuild-libs.bat",
+                "apps": "rebuild-apps.bat"
+              },
+              "ContentSpecs": [
+                {
+                  "TemplateLines": [
+                    "@echo off",
+                    "",
+                    "for %%a in ({0}) do (",
+                    "  cd %%a",
+                    "  .\\_\\rm-ch_dst.bat",
+                    "  npm run build",
+                    ")",
+                    "@echo on"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "package-lvl",
+      "RelDirPaths": {
+        "DirPathsArr": [
+          "libs\\trmrk\\_",
+          "libs\\trmrk-axios\\_",
+          "libs\\trmrk-blazor\\_",
+          "libs\\trmrk-browser\\_",
+          "libs\\trmrk-react\\_",
+          "libs\\trmrk-text-transform-behavior\\_",
+          "libs\\trmrk-text-transform-behavior-testapp\\_",
+          "libs\\trmrk-text-transform-defaultbehavior\\_",
+          "libs\\trmrk-text-transform-mybehavior\\_",
+          "apps\\trmrk-notes-blazorapp\\_",
+          "apps\\trmrk-react-testapp\\_"
+        ],
+        "Filters": {
+          "libs": {
+            "Regex": "^libs\\\\.*"
+          },
+          "apps": {
+            "Regex": "^apps\\\\.*"
+          }
+        }
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "upd-pcks.bat",
+              "TextContentLines": [
+                "CALL ncu -u",
+                "CALL npm i"
+              ]
+            },
+            {
+              "FileRelPath": "rm.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\.parcel-cache",
+                "CALL rimraf .\\dist",
+                "CALL rimraf .\\node_modules",
+                "CALL del .\\package-lock.json"
+              ]
+            },
+            {
+              "FileRelPath": "rm-pcks.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\node_modules",
+                "CALL del .\\package-lock.json"
+              ]
+            },
+            {
+              "FileRelPath": "rm-nd_mods.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\node_modules"
+              ]
+            },
+            {
+              "FileRelPath": "rm-ch_dst.bat",
+              "TextContentLines": [
+                "CALL rimraf .\\.parcel-cache",
+                "CALL rimraf .\\dist"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync",
+      "RelDirPaths": {
+        "DirPath": "scripts\\all"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk-axios",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-axios"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-axios"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-axios"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-axios"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-axios"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-axios :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-axios :ppgp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk-browser",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-browser"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pul :pf:turmerik-parcelws trmrk-browser"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-browser :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-browser :ppgp"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk-axios",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk-blazor",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-blazor"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-blazor"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-blazor"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor :ppgp"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk-axios",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk-react",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-react"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-react"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-react"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-react"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-react"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-react"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-react"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-react :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-react :ppgp"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk-axios",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk-text-transform-behavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-behavior"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-behavior"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior :ppgp"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk-axios",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk-text-transform-defaultbehavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-defaultbehavior"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior :ppgp"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk-axios",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser :ppgp"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync-trmrk-text-transform-mybehavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-text-transform-mybehavior"
+      },
+      "FileGroups": [
+        {
+          "DirPath": "_",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
+              ]
+            }
+          ]
+        },
+        {
+          "DirPath": "src\\synced-libs\\trmrk",
+          "Files": [
+            {
+              "FileRelPath": "pull.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
+              ]
+            },
+            {
+              "FileRelPath": "pull_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
+              ]
+            },
+            {
+              "FileRelPath": "push.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
+              ]
+            },
+            {
+              "FileRelPath": "push_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior :ppgp"
+              ]
+            },
+            {
+              "FileRelPath": "push_dff_ppgp.bat",
+              "TextContentLines": [
+                "CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior :ppgp"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -37,7 +37,7 @@ var processStartInfo = new ProcessStartInfo
 {
     FileName = "npm",
     Arguments = "install",
-    WorkingDirectory = @"F:\T\turmerik\ParcelWs-V2\apps\trmrk-notes-blazorapp",
+    WorkingDirectory = @"F:\T\turmerik\ParcelWs\apps\trmrk-notes-blazorapp",
     // RedirectStandardOutput = true,
     // RedirectStandardError = true,
     UseShellExecute = true, // Set this to true
