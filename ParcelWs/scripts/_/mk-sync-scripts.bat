@@ -1,1 +1,1 @@
-CALL _scr :cmd:c :pf:turmerik-parcel-ws :sc:sync
+CALL _scr :cmd:c :pf:trmrk-mkscripts-parcelws-sync
