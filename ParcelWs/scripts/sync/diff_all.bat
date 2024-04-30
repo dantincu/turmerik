@@ -1,1 +1,1 @@
-CALL _sync :fst:diff :alldff :pf:turmerik-parcelws
+CALL _sync :fst:diff :pf:turmerik-parcelws

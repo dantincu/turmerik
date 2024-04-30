@@ -31,16 +31,19 @@ namespace Turmerik.Core.DriveExplorer
         DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DataTreeNodeMtbl<FilteredDriveEntries> @ref,
             DataTreeNodeMtbl<FilteredDriveEntries> trg,
-            string relPath);
+            string relPath,
+            bool? quickDiff = null);
 
         DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DriveItem refItem,
             DriveItem trgItem,
-            string relPath);
+            string relPath,
+            bool? quickDiff = null);
 
         bool HasDiff(
             DriveItem refItem,
-            DriveItem trgItem);
+            DriveItem trgItem,
+            bool? quickDiff = null);
     }
 
     public class FilteredDriveEntriesNodesRetriever : IFilteredDriveEntriesNodesRetriever
@@ -129,19 +132,26 @@ namespace Turmerik.Core.DriveExplorer
         public DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DataTreeNodeMtbl<FilteredDriveEntries> @ref,
             DataTreeNodeMtbl<FilteredDriveEntries> trg,
-            string relPath)
+            string relPath,
+            bool? quickDiff = null)
         {
             var refItem = @ref.ExtractItems();
             var trgItem = trg.ExtractItems();
 
-            var retNode = Diff(refItem, trgItem, relPath);
+            var retNode = Diff(
+                refItem,
+                trgItem,
+                relPath,
+                quickDiff);
+
             return retNode;
         }
 
         public DataTreeNodeMtbl<RefTrgDriveFolderTuple> Diff(
             DriveItem refItem,
             DriveItem trgItem,
-            string relPath)
+            string relPath,
+            bool? quickDiff = null)
         {
             var filesList = trgItem.FolderFiles.Select(
                 trgFile => Tuple.Create(
@@ -157,7 +167,8 @@ namespace Turmerik.Core.DriveExplorer
                         relPath, tuple.Item2.Name),
                     tuple.Item1 != null ? HasDiff(
                         tuple.Item1,
-                        tuple.Item2) : true)).ToList();
+                        tuple.Item2,
+                        quickDiff) : true)).ToList();
 
             filesList.AddRange(refItem.FolderFiles.Where(
                 refFile => trgItem.FolderFiles.FindByName(
@@ -215,10 +226,20 @@ namespace Turmerik.Core.DriveExplorer
 
         public bool HasDiff(
             DriveItem refItem,
-            DriveItem trgItem)
+            DriveItem trgItem,
+            bool? quickDiff = null)
         {
-            bool isDiff = refItem.LastWriteTimeUtcTicks != trgItem.LastWriteTimeUtcTicks;
-            isDiff = isDiff || refItem.FileSizeBytes != trgItem.FileSizeBytes;
+            bool isDiff;
+
+            if (quickDiff == true)
+            {
+                isDiff = refItem.LastWriteTimeUtcTicks != trgItem.LastWriteTimeUtcTicks;
+                isDiff = isDiff || refItem.FileSizeBytes != trgItem.FileSizeBytes;
+            }
+            else
+            {
+                isDiff = refItem.TextFileContents != trgItem.TextFileContents;
+            }
 
             return isDiff;
         }

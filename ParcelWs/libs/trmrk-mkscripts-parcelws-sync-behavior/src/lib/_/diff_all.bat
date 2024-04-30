@@ -1,1 +1,1 @@
-CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior
+CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior

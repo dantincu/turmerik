@@ -1,1 +1,1 @@
-CALL _sync :fst:push :alldff :pf:turmerik-parcelws *:trmrk-react-testapp
+CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-react-testapp

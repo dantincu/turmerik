@@ -48,6 +48,7 @@ namespace Turmerik.Core.DriveExplorer
 
             return retNode;
         }
+
         private async Task FindMatchingAsync(
             FilteredDriveRetrieverMatcherOpts opts,
             DataTreeNodeMtbl<FilteredDriveEntries> node,
@@ -66,6 +67,14 @@ namespace Turmerik.Core.DriveExplorer
                 prFolderPath,
                 node.Data.FilteredFolderFiles,
                 false);
+
+            if (opts.RetrieveFileTextContents == true)
+            {
+                foreach (var file in node.Data.FilteredFolderFiles)
+                {
+                    file.TextFileContents = await driveItemsRetriever.GetFileTextAsync(file.Idnf);
+                }
+            }
 
             await RetrieveSubFolders(
                 node.Data.FilteredSubFolders);

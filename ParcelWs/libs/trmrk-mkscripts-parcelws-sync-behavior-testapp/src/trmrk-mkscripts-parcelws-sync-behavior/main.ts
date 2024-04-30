@@ -94,36 +94,19 @@ const scr = {
   ppgp: ":ppgp",
   pf: ":pf:turmerik-parcelws",
   call_fst_diff: "",
-  call_fst_diff_dffo: "",
   call_fst_pull: "",
-  call_fst_pull_dffo: "",
   call_fst_push: "",
-  call_fst_push_dffo: "",
   call_fst_push_ppgp: "",
-  call_fst_push_ppgp_dffo: "",
 };
 
-scr.call_fst_diff = [scr.call_sync, scr.fst_diff, scr.alldff, scr.pf].join(" ");
-scr.call_fst_diff_dffo = [scr.call_sync, scr.fst_diff, scr.pf].join(" ");
-
-scr.call_fst_pull = [scr.call_sync, scr.fst_pull, scr.alldff, scr.pf].join(" ");
-scr.call_fst_pull_dffo = [scr.call_sync, scr.fst_pull, scr.pf].join(" ");
-
-scr.call_fst_push = [scr.call_sync, scr.fst_push, scr.alldff, scr.pf].join(" ");
+scr.call_fst_diff = [scr.call_sync, scr.fst_diff, scr.pf].join(" ");
+scr.call_fst_pull = [scr.call_sync, scr.fst_pull, scr.pf].join(" ");
+scr.call_fst_push = [scr.call_sync, scr.fst_push, scr.pf].join(" ");
 
 scr.call_fst_push_ppgp = [
   scr.call_sync,
   scr.fst_push,
   scr.alldff,
-  scr.ppgp,
-  scr.pf,
-].join(" ");
-
-scr.call_fst_push_dffo = [scr.call_sync, scr.fst_push, scr.pf].join(" ");
-
-scr.call_fst_push_ppgp_dffo = [
-  scr.call_sync,
-  scr.fst_push,
   scr.ppgp,
   scr.pf,
 ].join(" ");
@@ -145,16 +128,8 @@ const getParcelWsSyncSrcSections = () =>
               TextContent: [scr.call_fst_diff, srcFolderName].join(" "),
             },
             {
-              FileRelPath: "diff_all_dffo.bat",
-              TextContent: [scr.call_fst_diff_dffo, srcFolderName].join(" "),
-            },
-            {
               FileRelPath: "pull_all.bat",
               TextContent: [scr.call_fst_pull, srcFolderName].join(" "),
-            },
-            {
-              FileRelPath: "pull_all_dffo.bat",
-              TextContent: [scr.call_fst_pull_dffo, srcFolderName].join(" "),
             },
           ],
         },
@@ -180,23 +155,9 @@ const getParcelWsSyncDestnSections = () =>
             ].join(" "),
           },
           {
-            FileRelPath: "diff_all_dffo.bat",
-            TextContent: [
-              scr.call_fst_diff_dffo,
-              ["*", destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
             FileRelPath: "pull_all.bat",
             TextContent: [
               scr.call_fst_pull,
-              ["*", destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
-            FileRelPath: "pull_all_dffo.bat",
-            TextContent: [
-              scr.call_fst_pull_dffo,
               ["*", destnLocationName].join(":"),
             ].join(" "),
           },
@@ -208,23 +169,9 @@ const getParcelWsSyncDestnSections = () =>
             ].join(" "),
           },
           {
-            FileRelPath: "push_all_dffo.bat",
-            TextContent: [
-              scr.call_fst_push_dffo,
-              ["*", destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
             FileRelPath: "push_all_ppgp.bat",
             TextContent: [
               scr.call_fst_push_ppgp,
-              ["*", destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
-            FileRelPath: "push_all_ppgp_dffo.bat",
-            TextContent: [
-              scr.call_fst_push_ppgp_dffo,
               ["*", destnLocationName].join(":"),
             ].join(" "),
           },
@@ -243,23 +190,9 @@ const getParcelWsSyncDestnSections = () =>
             ].join(" "),
           },
           {
-            FileRelPath: `diff_from_${syncedLib}_dffo.bat`,
-            TextContent: [
-              scr.call_fst_diff_dffo,
-              [syncedLib, destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
             FileRelPath: `pull_from_${syncedLib}.bat`,
             TextContent: [
               scr.call_fst_pull,
-              [syncedLib, destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
-            FileRelPath: `pull_from_${syncedLib}_dffo.bat`,
-            TextContent: [
-              scr.call_fst_pull_dffo,
               [syncedLib, destnLocationName].join(":"),
             ].join(" "),
           },
@@ -271,23 +204,9 @@ const getParcelWsSyncDestnSections = () =>
             ].join(" "),
           },
           {
-            FileRelPath: `push_to_${syncedLib}_dffo.bat`,
-            TextContent: [
-              scr.call_fst_push_dffo,
-              [syncedLib, destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
             FileRelPath: `push_to_${syncedLib}_ppgp.bat`,
             TextContent: [
               scr.call_fst_push_ppgp,
-              [syncedLib, destnLocationName].join(":"),
-            ].join(" "),
-          },
-          {
-            FileRelPath: `push_to_${syncedLib}_ppgp_dffo.bat`,
-            TextContent: [
-              scr.call_fst_push_ppgp_dffo,
               [syncedLib, destnLocationName].join(":"),
             ].join(" "),
           },
@@ -323,16 +242,8 @@ export const getParcelWsSyncProfile = (): Profile => ({
               TextContent: scr.call_fst_diff,
             },
             {
-              FileRelPath: "diff_all_dffo.bat",
-              TextContent: scr.call_fst_diff_dffo,
-            },
-            {
               FileRelPath: "pull_all.bat",
               TextContent: scr.call_fst_pull,
-            },
-            {
-              FileRelPath: "pull_all_dffo.bat",
-              TextContent: scr.call_fst_pull_dffo,
             },
           ],
         },

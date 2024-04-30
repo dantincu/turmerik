@@ -225,7 +225,8 @@ namespace Turmerik.Core.DriveExplorer
             var diffResult = filteredDriveEntriesNodesRetriever.Diff(
                 opts.SrcFilteredEntries,
                 opts.DestnFilteredEntries,
-                string.Empty);
+                string.Empty,
+                opts.QuickDiff);
 
             if (opts.SkipDiffPrinting != true)
             {

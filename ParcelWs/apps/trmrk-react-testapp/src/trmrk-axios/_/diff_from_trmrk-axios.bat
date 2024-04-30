@@ -1,1 +1,1 @@
-CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp
+CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp

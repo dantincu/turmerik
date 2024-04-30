@@ -1,1 +1,1 @@
-CALL _sync :fst:push :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior-testapp
+CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior-testapp

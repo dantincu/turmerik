@@ -97,7 +97,9 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                                         parser.ArgsFlagOpts(data, ["skdffprnt"],
                                             data => data.Args.SkipDiffPrinting = true, true),
                                         parser.ArgsFlagOpts(data, ["alldff"],
-                                            data => data.Args.TreatAllAsDiff = true, true)
+                                            data => data.Args.TreatAllAsDiff = true, true),
+                                        parser.ArgsFlagOpts(data, ["qdff"],
+                                            data => data.Args.QuickDiff = true, true)
                                     ]
                                 });
                         }

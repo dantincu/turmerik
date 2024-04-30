@@ -137,14 +137,16 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                 new FilteredDriveRetrieverMatcherOpts
                 {
                     PrFolderIdnf = srcFolder.DirPath,
-                    FsEntriesSerializableFilter = destnFolder.SrcFilesFilter
+                    FsEntriesSerializableFilter = destnFolder.SrcFilesFilter,
+                    RetrieveFileTextContents = args.QuickDiff != true
                 });
 
             var destnEntriesObj = await filteredFsEntriesRetriever.FindMatchingAsync(
                 new FilteredDriveRetrieverMatcherOpts
                 {
                     PrFolderIdnf = destnDirPath,
-                    FsEntriesSerializableFilter = destnFolder.DestnFilesFilter
+                    FsEntriesSerializableFilter = destnFolder.DestnFilesFilter,
+                    RetrieveFileTextContents = args.QuickDiff != true
                 });
 
             var diffResult = args.DiffResultFactory?.Invoke(
@@ -162,6 +164,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
                     DiffResult = diffResult,
                     FileSyncType = args.FileSyncType,
                     TreatAllAsDiff = args.TreatAllAsDiff,
+                    QuickDiff = args.QuickDiff,
                     Interactive = args.Interactive,
                     RowsToPrint = args.RowsToPrint,
                     DeleteEmptyFolders = true,

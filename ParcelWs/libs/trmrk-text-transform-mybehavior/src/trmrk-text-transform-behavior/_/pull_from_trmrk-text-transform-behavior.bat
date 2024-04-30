@@ -1,1 +1,1 @@
-CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior
+CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior

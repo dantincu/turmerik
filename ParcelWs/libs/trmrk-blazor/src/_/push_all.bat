@@ -1,1 +1,1 @@
-CALL _sync :fst:push :alldff :pf:turmerik-parcelws *:trmrk-blazor
+CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-blazor

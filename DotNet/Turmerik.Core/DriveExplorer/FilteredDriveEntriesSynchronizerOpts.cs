@@ -20,6 +20,7 @@ namespace Turmerik.Core.DriveExplorer
         public FileSyncType FileSyncType { get; set; }
         public bool? Interactive { get; set; }
         public bool? TreatAllAsDiff { get; set; }
+        public bool? QuickDiff { get; set; }
         public bool? SkipDiffPrinting { get; set; }
         public int? RowsToPrint { get; set; }
         public bool? DeleteEmptyFolders { get; set; }

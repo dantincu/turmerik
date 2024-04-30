@@ -48,6 +48,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
         public bool? Interactive { get; set; }
         public bool? SkipDiffPrinting { get; set; }
         public bool? TreatAllAsDiff { get; set; }
+        public bool? QuickDiff { get; set; }
         public int? RowsToPrint { get; set; }
 
         public BeforeSyncEventHandler OnBeforeSync { get; set; }
