@@ -3,7 +3,7 @@
     "Turmerik.SyncLocalFiles.ConsoleApp": {
       "commandName": "Project",
       // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws"
-      "commandLineArgs": ":fst:pull :alldff :pf:turmerik-parcelws"
+      "commandLineArgs": ":fst:diff :pf:turmerik-parcelws"
       // "commandLineArgs": ":fst:pull :alldff :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
     }
   }

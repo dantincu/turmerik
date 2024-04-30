@@ -87,11 +87,14 @@ const destnLocationsArr: {
 
 const scr = {
   call_sync: "CALL _sync",
+  fst_diff: ":fst:diff",
   fst_pull: ":fst:pull",
   fst_push: ":fst:push",
   alldff: ":alldff",
   ppgp: ":ppgp",
   pf: ":pf:turmerik-parcelws",
+  call_fst_diff: "",
+  call_fst_diff_dffo: "",
   call_fst_pull: "",
   call_fst_pull_dffo: "",
   call_fst_push: "",
@@ -99,6 +102,9 @@ const scr = {
   call_fst_push_ppgp: "",
   call_fst_push_ppgp_dffo: "",
 };
+
+scr.call_fst_diff = [scr.call_sync, scr.fst_diff, scr.alldff, scr.pf].join(" ");
+scr.call_fst_diff_dffo = [scr.call_sync, scr.fst_diff, scr.pf].join(" ");
 
 scr.call_fst_pull = [scr.call_sync, scr.fst_pull, scr.alldff, scr.pf].join(" ");
 scr.call_fst_pull_dffo = [scr.call_sync, scr.fst_pull, scr.pf].join(" ");
@@ -135,6 +141,14 @@ const getParcelWsSyncSrcSections = () =>
         {
           Files: [
             {
+              FileRelPath: "diff_all.bat",
+              TextContent: [scr.call_fst_diff, srcFolderName].join(" "),
+            },
+            {
+              FileRelPath: "diff_all_dffo.bat",
+              TextContent: [scr.call_fst_diff_dffo, srcFolderName].join(" "),
+            },
+            {
               FileRelPath: "pull_all.bat",
               TextContent: [scr.call_fst_pull, srcFolderName].join(" "),
             },
@@ -158,6 +172,20 @@ const getParcelWsSyncDestnSections = () =>
           DirPath: "_",
         },
         Files: [
+          {
+            FileRelPath: "diff_all.bat",
+            TextContent: [
+              scr.call_fst_diff,
+              ["*", destnLocationName].join(":"),
+            ].join(" "),
+          },
+          {
+            FileRelPath: "diff_all_dffo.bat",
+            TextContent: [
+              scr.call_fst_diff_dffo,
+              ["*", destnLocationName].join(":"),
+            ].join(" "),
+          },
           {
             FileRelPath: "pull_all.bat",
             TextContent: [
@@ -207,6 +235,20 @@ const getParcelWsSyncDestnSections = () =>
           DirPath: `${syncedLib}\\_`,
         },
         Files: [
+          {
+            FileRelPath: `diff_from_${syncedLib}.bat`,
+            TextContent: [
+              scr.call_fst_diff,
+              [syncedLib, destnLocationName].join(":"),
+            ].join(" "),
+          },
+          {
+            FileRelPath: `diff_from_${syncedLib}_dffo.bat`,
+            TextContent: [
+              scr.call_fst_diff_dffo,
+              [syncedLib, destnLocationName].join(":"),
+            ].join(" "),
+          },
           {
             FileRelPath: `pull_from_${syncedLib}.bat`,
             TextContent: [
@@ -276,6 +318,14 @@ export const getParcelWsSyncProfile = (): Profile => ({
       FileGroups: [
         {
           Files: [
+            {
+              FileRelPath: "diff_all.bat",
+              TextContent: scr.call_fst_diff,
+            },
+            {
+              FileRelPath: "diff_all_dffo.bat",
+              TextContent: scr.call_fst_diff_dffo,
+            },
             {
               FileRelPath: "pull_all.bat",
               TextContent: scr.call_fst_pull,

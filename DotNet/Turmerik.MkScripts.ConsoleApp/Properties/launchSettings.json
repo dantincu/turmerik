@@ -14,8 +14,8 @@
       // "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws :sc:package-lvl"
       // "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws :sc:package-lvl :pth:libs"
       // "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws :sc:package-lvl :pth:apps",
-      // "commandLineArgs": ":cmd:c :pf:turmerik-parcel-ws"
-      "commandLineArgs": ":cmd:c :pf:trmrk-mkscripts-parcelws-sync"
+      "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws"
+      // "commandLineArgs": ":cmd:c :pf:trmrk-mkscripts-parcelws-sync"
     }
   }
 }

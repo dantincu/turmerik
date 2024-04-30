@@ -13,6 +13,14 @@
         {
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws"
             },
@@ -32,6 +40,14 @@
       "FileGroups": [
         {
           "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk"
+            },
             {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk"
@@ -53,6 +69,14 @@
         {
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-axios"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios"
             },
@@ -72,6 +96,14 @@
       "FileGroups": [
         {
           "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-browser"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser"
+            },
             {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-browser"
@@ -93,6 +125,14 @@
         {
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-blazor"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-blazor"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-blazor"
             },
@@ -112,6 +152,14 @@
       "FileGroups": [
         {
           "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-react"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-react"
+            },
             {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-react"
@@ -133,6 +181,14 @@
         {
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-behavior"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior"
             },
@@ -152,6 +208,14 @@
       "FileGroups": [
         {
           "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
+            },
             {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
@@ -173,6 +237,14 @@
         {
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
             },
@@ -192,6 +264,14 @@
       "FileGroups": [
         {
           "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
+            },
             {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
@@ -215,6 +295,14 @@
             "DirPath": "_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-axios"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-axios"
+            },
             {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-axios"
@@ -246,6 +334,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-axios"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-axios"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-axios"
@@ -286,6 +382,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-browser"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-browser"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-browser"
             },
@@ -317,6 +421,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-browser"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-browser"
+            },
+            {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-browser"
             },
@@ -347,6 +459,14 @@
             "DirPath": "trmrk-axios\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-axios_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+            },
             {
               "FileRelPath": "pull_from_trmrk-axios.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
@@ -387,6 +507,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-blazor"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-blazor"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-blazor"
             },
@@ -417,6 +545,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-blazor"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-blazor"
@@ -449,6 +585,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-blazor"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-axios_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-blazor"
+            },
+            {
               "FileRelPath": "pull_from_trmrk-axios.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-blazor"
             },
@@ -479,6 +623,14 @@
             "DirPath": "trmrk-browser\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-blazor"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-browser_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-blazor"
+            },
             {
               "FileRelPath": "pull_from_trmrk-browser.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-blazor"
@@ -519,6 +671,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-react"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-react"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-react"
             },
@@ -549,6 +709,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-react"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-react"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-react"
@@ -581,6 +749,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-react"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-axios_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-react"
+            },
+            {
               "FileRelPath": "pull_from_trmrk-axios.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-react"
             },
@@ -611,6 +787,14 @@
             "DirPath": "trmrk-browser\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-react"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-browser_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-react"
+            },
             {
               "FileRelPath": "pull_from_trmrk-browser.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-react"
@@ -651,6 +835,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-text-transform-behavior"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-text-transform-behavior"
             },
@@ -681,6 +873,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
@@ -721,6 +921,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-text-transform-defaultbehavior"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-text-transform-defaultbehavior"
             },
@@ -752,6 +960,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
+            },
+            {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
             },
@@ -782,6 +998,14 @@
             "DirPath": "trmrk-text-transform-behavior\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
+            },
             {
               "FileRelPath": "pull_from_trmrk-text-transform-behavior.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
@@ -822,6 +1046,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-text-transform-mybehavior"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-text-transform-mybehavior"
             },
@@ -853,6 +1085,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
+            },
+            {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
             },
@@ -883,6 +1123,14 @@
             "DirPath": "trmrk-text-transform-behavior\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
+            },
             {
               "FileRelPath": "pull_from_trmrk-text-transform-behavior.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
@@ -923,6 +1171,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-text-transform-behavior-testapp"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-text-transform-behavior-testapp"
             },
@@ -953,6 +1209,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior-testapp"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior-testapp"
@@ -985,6 +1249,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-behavior_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
               "FileRelPath": "pull_from_trmrk-text-transform-behavior.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
             },
@@ -1015,6 +1287,14 @@
             "DirPath": "trmrk-text-transform-mybehavior\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-mybehavior.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-text-transform-mybehavior_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
+            },
             {
               "FileRelPath": "pull_from_trmrk-text-transform-mybehavior.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
@@ -1055,6 +1335,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
             },
@@ -1085,6 +1373,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
@@ -1117,6 +1413,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-axios_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
+            },
+            {
               "FileRelPath": "pull_from_trmrk-axios.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
             },
@@ -1148,6 +1452,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-browser_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
+            },
+            {
               "FileRelPath": "pull_from_trmrk-browser.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
             },
@@ -1178,6 +1490,14 @@
             "DirPath": "trmrk-blazor\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-blazor.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-blazor_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
+            },
             {
               "FileRelPath": "pull_from_trmrk-blazor.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
@@ -1218,6 +1538,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-react-testapp"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-react-testapp"
             },
@@ -1248,6 +1576,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
@@ -1280,6 +1616,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-axios_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
+            },
+            {
               "FileRelPath": "pull_from_trmrk-axios.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
             },
@@ -1311,6 +1655,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-browser_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
+            },
+            {
               "FileRelPath": "pull_from_trmrk-browser.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
             },
@@ -1341,6 +1693,14 @@
             "DirPath": "trmrk-react\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-react.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-react_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
+            },
             {
               "FileRelPath": "pull_from_trmrk-react.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
@@ -1381,6 +1741,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior"
             },
@@ -1411,6 +1779,14 @@
             "DirPath": "trmrk\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior"
+            },
             {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior"
@@ -1451,6 +1827,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "diff_all_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+            },
+            {
               "FileRelPath": "pull_all.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior-testapp"
             },
@@ -1482,6 +1866,14 @@
           },
           "Files": [
             {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+            },
+            {
               "FileRelPath": "pull_from_trmrk.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior-testapp"
             },
@@ -1512,6 +1904,14 @@
             "DirPath": "trmrk-mkscripts-parcelws-sync-behavior\\_"
           },
           "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-mkscripts-parcelws-sync-behavior.bat",
+              "TextContent": "CALL _sync :fst:diff :alldff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+            },
+            {
+              "FileRelPath": "diff_from_trmrk-mkscripts-parcelws-sync-behavior_dffo.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+            },
             {
               "FileRelPath": "pull_from_trmrk-mkscripts-parcelws-sync-behavior.bat",
               "TextContent": "CALL _sync :fst:pull :alldff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
