@@ -60,7 +60,7 @@ namespace Turmerik.Notes.Core
 
             IDirNamePfxesT GetNoteInternalsPfxes();
             IDirNamePfxesT GetNoteItemsPfxes();
-            IDirNamePfxesT GetNoteSectionItemsPfxes();
+            IDirNamePfxesT GetNoteSectionsPfxes();
         }
 
         public interface IDirNamePfxesT

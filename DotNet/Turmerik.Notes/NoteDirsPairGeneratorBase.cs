@@ -99,7 +99,9 @@ namespace Turmerik.Notes
         {
             var noteIdx = NextNoteIdxRetriever.GetNextIdx(
                 NoteDirNameIdxesCfg,
-                args.ExistingDirPairs.AllExistingNoteDirIdxes.ToArray());
+                args.ExistingDirPairs.AllExistingNoteDirIdxes.ToArray(),
+                out _,
+                out _);
 
             var noteItemsPfxes = DirNamesCfg.GetNoteItemsPfxes();
             string shortDirName = noteItemsPfxes.MainPfx;
@@ -221,7 +223,9 @@ namespace Turmerik.Notes
             {
                 idx = NextNoteIdxRetriever.GetNextIdx(
                     NoteInternalDirNameIdxesCfg,
-                    idxesList.ToArray());
+                    idxesList.ToArray(),
+                    out _,
+                    out _);
 
                 idxesList.Add(idx);
                 idxesMap.Add(key, idx);

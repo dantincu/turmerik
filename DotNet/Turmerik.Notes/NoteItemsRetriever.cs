@@ -65,6 +65,7 @@ namespace Turmerik.Notes
             ArgOptsCfg = Config.GetArgOpts();
             DirNamesCfg = Config.GetDirNames();
             NoteDirNameIdxesCfg = Config.GetNoteDirNameIdxes();
+            NoteSectionDirNameIdxesCfg = Config.GetNoteSectionDirNameIdxes();
             NoteInternalDirNameIdxesCfg = Config.GetNoteInternalDirNameIdxes();
             FileNamesCfg = Config.GetFileNames();
             FileContentsCfg = Config.GetFileContents();
@@ -76,6 +77,7 @@ namespace Turmerik.Notes
         protected NoteDirsPairConfig.IArgOptionsAggT ArgOptsCfg { get; }
         protected NoteDirsPairConfig.IDirNamesT DirNamesCfg { get; }
         protected NoteDirsPairConfig.IDirNameIdxesT NoteDirNameIdxesCfg { get; }
+        protected NoteDirsPairConfig.IDirNameIdxesT NoteSectionDirNameIdxesCfg { get; }
         protected NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }
         protected NoteDirsPairConfig.IFileNamesT FileNamesCfg { get; }
         protected NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }

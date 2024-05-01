@@ -11,32 +11,43 @@ namespace Turmerik.Notes.Core
     {
         int GetNextIdx(
             NoteDirsPairConfig.IDirNameIdxesT cfg,
-            HashSet<int> idxesSet);
+            HashSet<int> idxesSet,
+            out bool isFillingGap,
+            out bool isOutOfBounds);
 
         int GetNextIdx(
             NoteDirsPairConfig.IDirNameIdxesT cfg,
-            int[] sortedIdxesArr);
+            int[] sortedIdxesArr,
+            out bool isFillingGap,
+            out bool isOutOfBounds);
 
         int GetNextIdx(
             int[] sortedIdxesArr,
             int minVal,
             int maxVal,
+            out bool isFillingGap,
+            out bool isOutOfBounds,
             bool desc = false);
 
         int GetNextIdxAsc(
             int[] sortedIdxesArr,
             int minVal,
-            int maxVal);
+            int maxVal,
+            out bool isFillingGap,
+            out bool isOutOfBounds);
 
         int GetNextIdxDesc(
             int[] sortedIdxesArr,
             int minVal,
-            int maxVal);
+            int maxVal,
+            out bool isFillingGap,
+            out bool isOutOfBounds);
 
         int GetNextFillingGapsIdx(
             int[] sortedIdxesArr,
             int minVal,
             int maxVal,
+            out bool isOutOfBounds,
             bool desc = false);
 
         Tuple<int, bool, int, int> GetFirstGap(
@@ -62,7 +73,9 @@ namespace Turmerik.Notes.Core
 
         public int GetNextIdx(
             NoteDirsPairConfig.IDirNameIdxesT cfg,
-            HashSet<int> idxesSet)
+            HashSet<int> idxesSet,
+            out bool isFillingGap,
+            out bool isOutOfBounds)
         {
             int[] sortedIdxesArr;
             bool desc = cfg.IncIdx == false;
@@ -76,13 +89,19 @@ namespace Turmerik.Notes.Core
                 sortedIdxesArr = idxesSet.OrderBy(x => x).ToArray();
             }
 
-            int nextIdx = GetNextIdx(cfg, sortedIdxesArr);
+            int nextIdx = GetNextIdx(
+                cfg, sortedIdxesArr,
+                out isFillingGap,
+                out isOutOfBounds);
+
             return nextIdx;
         }
 
         public int GetNextIdx(
             NoteDirsPairConfig.IDirNameIdxesT cfg,
-            int[] sortedIdxesArr)
+            int[] sortedIdxesArr,
+            out bool isFillingGap,
+            out bool isOutOfBounds)
         {
             int nextIdx;
 
@@ -91,28 +110,26 @@ namespace Turmerik.Notes.Core
 
             bool desc = cfg.IncIdx == false;
 
-            if (sortedIdxesArr.Any())
+            if (cfg.FillGapsByDefault == true)
             {
-                if (cfg.FillGapsByDefault == true)
-                {
-                    nextIdx = GetNextFillingGapsIdx(
-                        sortedIdxesArr,
-                        minVal,
-                        maxVal,
-                        desc);
-                }
-                else
-                {
-                    nextIdx = GetNextIdx(
-                        sortedIdxesArr,
-                        minVal,
-                        maxVal,
-                        desc);
-                }
+                nextIdx = GetNextFillingGapsIdx(
+                    sortedIdxesArr,
+                    minVal,
+                    maxVal,
+                    out isOutOfBounds,
+                    desc);
+
+                isFillingGap = true;
             }
             else
             {
-                nextIdx = desc ? maxVal : minVal;
+                nextIdx = GetNextIdx(
+                    sortedIdxesArr,
+                    minVal,
+                    maxVal,
+                    out isFillingGap,
+                    out isOutOfBounds,
+                    desc);
             }
 
             return nextIdx;
@@ -122,47 +139,63 @@ namespace Turmerik.Notes.Core
             int[] sortedIdxesArr,
             int minVal,
             int maxVal,
+            out bool isFillingGap,
+            out bool isOutOfBounds,
             bool desc = false) => desc switch
             {
                 false => GetNextIdxAsc(
                     sortedIdxesArr,
                     minVal,
-                    maxVal),
+                    maxVal,
+                    out isFillingGap,
+                    out isOutOfBounds),
                 true => GetNextIdxDesc(
                     sortedIdxesArr,
                     minVal,
-                    maxVal)
+                    maxVal,
+                    out isFillingGap,
+                    out isOutOfBounds)
             };
 
         public int GetNextIdxAsc(
             int[] sortedIdxesArr,
             int minVal,
-            int maxVal)
+            int maxVal,
+            out bool isFillingGap,
+            out bool isOutOfBounds)
         {
-            int nextIdx;
+            int nextIdx = minVal;
+            isOutOfBounds = false;
+            isFillingGap = false;
 
-            var kvp = sortedIdxesArr.LastKvp(
-                (idx, i) => idx <= maxVal);
-
-            if (kvp.Key >= 0)
+            if (sortedIdxesArr.Any())
             {
-                nextIdx = kvp.Value + 1;
+                var kvp = sortedIdxesArr.LastKvp(
+                    (idx, i) => idx <= maxVal);
 
-                if (nextIdx >= maxVal)
+                if (kvp.Key >= 0)
                 {
-                    sortedIdxesArr = sortedIdxesArr.Skip(
-                        kvp.Key).ToArray();
+                    nextIdx = kvp.Value + 1;
 
-                    nextIdx = GetNextFillingGapsIdx(
-                        sortedIdxesArr,
-                        maxVal,
-                        int.MaxValue,
-                        false);
+                    if (nextIdx > maxVal)
+                    {
+                        sortedIdxesArr = sortedIdxesArr.Skip(
+                            kvp.Key).ToArray();
+
+                        nextIdx = GetNextFillingGapsIdx(
+                            sortedIdxesArr,
+                            minVal,
+                            maxVal,
+                            out isOutOfBounds,
+                            false);
+
+                        isFillingGap = true;
+                    }
                 }
-            }
-            else
-            {
-                nextIdx = minVal;
+                else
+                {
+                    isOutOfBounds = true;
+                }
             }
 
             return nextIdx;
@@ -171,32 +204,42 @@ namespace Turmerik.Notes.Core
         public int GetNextIdxDesc(
             int[] sortedIdxesArr,
             int minVal,
-            int maxVal)
+            int maxVal,
+            out bool isFillingGap,
+            out bool isOutOfBounds)
         {
-            int nextIdx;
+            int nextIdx = maxVal;
+            isOutOfBounds = false;
+            isFillingGap = false;
 
-            var kvp = sortedIdxesArr.LastKvp(
-                (idx, i) => idx >= minVal);
-
-            if (kvp.Key >= 0)
+            if (sortedIdxesArr.Any())
             {
-                nextIdx = kvp.Value - 1;
+                var kvp = sortedIdxesArr.LastKvp(
+                    (idx, i) => idx >= minVal);
 
-                if (nextIdx < minVal)
+                if (kvp.Key >= 0)
                 {
-                    sortedIdxesArr = sortedIdxesArr.Skip(
-                        kvp.Key).ToArray();
+                    nextIdx = kvp.Value - 1;
 
-                    nextIdx = GetNextFillingGapsIdx(
-                        sortedIdxesArr,
-                        int.MinValue,
-                        minVal,
-                        true);
+                    if (nextIdx < minVal)
+                    {
+                        sortedIdxesArr = sortedIdxesArr.Skip(
+                            kvp.Key).ToArray();
+
+                        nextIdx = GetNextFillingGapsIdx(
+                            sortedIdxesArr,
+                            minVal,
+                            maxVal,
+                            out isOutOfBounds,
+                            true);
+
+                        isFillingGap = true;
+                    }
                 }
-            }
-            else
-            {
-                nextIdx = maxVal;
+                else
+                {
+                    isOutOfBounds = true;
+                }
             }
 
             return nextIdx;
@@ -206,6 +249,7 @@ namespace Turmerik.Notes.Core
             int[] sortedIdxesArr,
             int minVal,
             int maxVal,
+            out bool isOutOfBounds,
             bool desc = false)
         {
             (int gapStartIdx, bool gapFound, int gapEndIdx, int idx) = GetFirstGap(
@@ -215,6 +259,7 @@ namespace Turmerik.Notes.Core
             int incVal = gapFound && idx == 0 ? 0 : desc ? -1 : 1;
 
             nextIdx += incVal;
+            isOutOfBounds = nextIdx < minVal || nextIdx > maxVal;
             return nextIdx;
         }
 

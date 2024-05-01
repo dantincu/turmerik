@@ -95,33 +95,28 @@ namespace Turmerik.DirsPair
             GetNoteDirPairs(tuple);
 
             int noteDirNameIncIdx = (NoteDirNameIdxesCfg.IncIdx ?? true) ? 1 : -1;
+            int nodeSectionDirNameIncIdx = (NoteSectionDirNameIdxesCfg.IncIdx ?? true) ? 1 : -1;
             int noteInternalDirNameIncIdx = (NoteInternalDirNameIdxesCfg.IncIdx ?? true) ? 1 : -1;
 
             Comparison<DirsPairTuple> comparison = (n1, n2) =>
             {
-                int retVal;
+                int n1DirCat = (int)n1.NoteDirCat;
+                int n2DirCat = (int)n2.NoteDirCat;
 
-                if (n1.NoteDirCat == NoteDirCategory.Item)
+                int retVal = n1DirCat.CompareTo(n2DirCat);
+
+                if (retVal == 0)
                 {
-                    if (n2.NoteDirCat == NoteDirCategory.Item)
+                    int dirNameIncIdx = n1.NoteDirCat switch
                     {
-                        retVal = n1.NoteDirIdx.CompareTo(n2.NoteDirIdx) * noteDirNameIncIdx;
-                    }
-                    else
-                    {
-                        retVal = 1;
-                    }
-                }
-                else
-                {
-                    if (n2.NoteDirCat == NoteDirCategory.Item)
-                    {
-                        retVal = -1;
-                    }
-                    else
-                    {
-                        retVal = n1.NoteDirIdx.CompareTo(n2.NoteDirIdx) * noteInternalDirNameIncIdx;
-                    }
+                        NoteDirCategory.Item => noteDirNameIncIdx,
+                        NoteDirCategory.Section => nodeSectionDirNameIncIdx,
+                        NoteDirCategory.Internals => noteInternalDirNameIncIdx,
+                        _ => throw new InvalidOperationException(
+                            nameof(n1.NoteDirCat))
+                    };
+
+                    retVal = n1.NoteDirIdx.CompareTo(n2.NoteDirIdx) * dirNameIncIdx;
                 }
 
                 return retVal;
@@ -182,7 +177,7 @@ namespace Turmerik.DirsPair
 
             if (noteDirsPairIdxRetriever.TryGetNoteDirsPairIdx(
                 DirNamesRegexMap, dirName,
-                DirNamesCfg, out var match))
+                Config, out var match))
             {
                 dirsPairTuple = HandleDirMatch(
                     tuplesList, match);
@@ -256,16 +251,15 @@ namespace Turmerik.DirsPair
             NoteItemsTupleCore noteItemsTuple,
             DirsPairTuple dirsPairTuple)
         {
-            if (dirsPairTuple.NoteDirCat == NoteDirCategory.Item)
+            var existingDirIdxesList = dirsPairTuple.NoteDirCat switch
             {
-                noteItemsTuple.ExistingNoteDirIdxes.Add(
-                    dirsPairTuple.NoteDirIdx);
-            }
-            else
-            {
-                noteItemsTuple.ExistingInternalDirIdxes.Add(
-                    dirsPairTuple.NoteDirIdx);
-            }
+                NoteDirCategory.Item => noteItemsTuple.ExistingNoteDirIdxes,
+                NoteDirCategory.Section => noteItemsTuple.ExistingNoteSectionDirIdxes,
+                NoteDirCategory.Internals => noteItemsTuple.ExistingInternalDirIdxes,
+                _ => throw new ArgumentException(nameof(dirsPairTuple.NoteDirCat))
+            };
+
+            existingDirIdxesList.Add(dirsPairTuple.NoteDirIdx);
         }
     }
 }

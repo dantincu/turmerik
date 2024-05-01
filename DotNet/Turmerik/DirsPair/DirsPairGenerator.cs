@@ -21,7 +21,6 @@ namespace Turmerik.DirsPair
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IDriveExplorerService dvExplrSvc;
-        private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly INextNoteIdxRetriever nextNoteIdxRetriever;
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
@@ -30,6 +29,7 @@ namespace Turmerik.DirsPair
         private readonly NoteDirsPairConfig.IFileContentsT fileContentsCfg;
         private readonly NoteDirsPairConfig.IDirNamesT dirNamesCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT noteItemDirNameIdxesCfg;
+        private readonly NoteDirsPairConfig.IDirNameIdxesT noteSectionDirNameIdxesCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT internalDirNameIdxesCfg;
         private readonly bool keepFileContainsNoteJson;
         private readonly string defaultKeepFileContents;
@@ -37,7 +37,6 @@ namespace Turmerik.DirsPair
         public DirsPairGenerator(
             IJsonConversion jsonConversion,
             IDriveExplorerService dvExplrSvc,
-            IFsEntryNameNormalizer fsEntryNameNormalizer,
             IExistingDirPairsRetriever existingDirPairsRetriever,
             INextNoteIdxRetriever nextNoteIdxRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever,
@@ -48,9 +47,6 @@ namespace Turmerik.DirsPair
 
             this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
                 nameof(dvExplrSvc));
-
-            this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
-                nameof(fsEntryNameNormalizer));
 
             this.existingDirPairsRetriever = existingDirPairsRetriever ?? throw new ArgumentNullException(
                 nameof(existingDirPairsRetriever));
@@ -68,6 +64,7 @@ namespace Turmerik.DirsPair
             fileContentsCfg = config.GetFileContents();
             dirNamesCfg = config.GetDirNames();
             noteItemDirNameIdxesCfg = config.GetNoteDirNameIdxes();
+            noteSectionDirNameIdxesCfg = config.GetNoteSectionDirNameIdxes();
             internalDirNameIdxesCfg = config.GetNoteInternalDirNameIdxes();
 
             keepFileContainsNoteJson = fileContentsCfg.KeepFileContainsNoteJson ?? false;
@@ -83,12 +80,12 @@ namespace Turmerik.DirsPair
 
             bool createInternaDirs = opts.CreateNoteBook || opts.CreateNoteFilesDir || opts.CreateNoteInternalsDir;
 
-            if (opts.CreateNote || createInternaDirs)
+            if (opts.CreateNote || opts.CreateNoteSection || createInternaDirs)
             {
                 var noteItemsTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(
                     opts.PrIdnf);
 
-                if (opts.CreateNote)
+                if (opts.CreateNote || opts.CreateNoteSection)
                 {
                     dirsList = GenerateNote(
                         opts, noteItemsTuple);
@@ -133,12 +130,42 @@ namespace Turmerik.DirsPair
         }
 
         private List<DriveItemX> GenerateNote(
-            DirsPairOpts opts, NoteItemsTupleCore noteItemsTuple)
+            DirsPairOpts opts,
+            NoteItemsTupleCore noteItemsTuple)
         {
-            int idx = nextNoteIdxRetriever.GetNextIdx(
-                noteItemDirNameIdxesCfg, noteItemsTuple.ExistingNoteDirIdxes);
+            var noteDirNameIdxesCfg = opts.CreateNoteSection switch
+            {
+                true => noteSectionDirNameIdxesCfg,
+                false => noteItemDirNameIdxesCfg
+            };
 
-            var pfxesCfg = dirNamesCfg.GetNoteItemsPfxes();
+            var existingDirIdxes = opts.CreateNoteSection switch
+            {
+                true => noteItemsTuple.ExistingNoteSectionDirIdxes,
+                false => noteItemsTuple.ExistingNoteDirIdxes
+            };
+
+            bool fillGapsByDefault = noteDirNameIdxesCfg.FillGapsByDefault ?? false;
+            bool isFillingGap, isOutOfBounds;
+
+            int idx = nextNoteIdxRetriever.GetNextIdx(
+                noteDirNameIdxesCfg,
+                existingDirIdxes,
+                out isFillingGap,
+                out isOutOfBounds);
+
+            if (isOutOfBounds || (isFillingGap != fillGapsByDefault))
+            {
+                throw new InvalidOperationException(
+                    string.Join(" ", $"Could not retrieve next idx: value {idx} is",
+                    isOutOfBounds ? "out of bounds" : "filling idxes gaps while that not being allowed"));
+            }
+
+            var pfxesCfg = opts.CreateNoteSection switch
+            {
+                true => dirNamesCfg.GetNoteSectionsPfxes(),
+                _ => dirNamesCfg.GetNoteItemsPfxes()
+            };
 
             string pfx = (pfxesCfg.UseAltPfx ?? false) switch
             {
@@ -146,8 +173,9 @@ namespace Turmerik.DirsPair
                 true => pfxesCfg.AltPfx,
             };
 
-            string shortDirName = opts.ShortDirName ?? (pfx + noteCfgValuesRetriever.GetDirIdxStr(
-                config.GetNoteDirNameIdxes(), idx));
+            string shortDirName = opts.ShortDirName ?? (
+                pfx + noteCfgValuesRetriever.GetDirIdxStr(
+                    noteDirNameIdxesCfg, idx));
 
             string fullDirName = string.Join(
                 opts.JoinStr ?? pfxesCfg.JoinStr,
@@ -218,8 +246,21 @@ namespace Turmerik.DirsPair
         private List<DriveItemX> GenerateInternalDirsPair(
             DirsPairOpts opts, NoteItemsTupleCore noteItemsTuple)
         {
+            bool fillGapsByDefault = internalDirNameIdxesCfg.FillGapsByDefault ?? false;
+            bool isFillingGap, isOutOfBounds;
+
             int idx = nextNoteIdxRetriever.GetNextIdx(
-                internalDirNameIdxesCfg, noteItemsTuple.ExistingInternalDirIdxes);
+                internalDirNameIdxesCfg,
+                noteItemsTuple.ExistingInternalDirIdxes,
+                out isFillingGap,
+                out isOutOfBounds);
+
+            if (isOutOfBounds || (isFillingGap != fillGapsByDefault))
+            {
+                throw new InvalidOperationException(
+                    string.Join(" ", $"Could not retrieve next idx: value {idx} is",
+                    isOutOfBounds ? "out of bounds" : "filling idxes gaps while that not being allowed"));
+            }
 
             var dirsList = GenerateInternalDirsPair(
                 opts, ref idx, false);

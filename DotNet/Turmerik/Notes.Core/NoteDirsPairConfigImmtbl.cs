@@ -137,7 +137,7 @@ namespace Turmerik.Notes.Core
                 NoteInternals = src.NoteInternals;
                 NoteInternalsPfxes = src.GetNoteInternalsPfxes()?.ToImmtbl();
                 NoteItemsPfxes = src.GetNoteItemsPfxes()?.ToImmtbl();
-                NoteSectionItemsPfxes = src.GetNoteSectionItemsPfxes()?.ToImmtbl();
+                NoteSectionsPfxes = src.GetNoteSectionsPfxes()?.ToImmtbl();
             }
 
             public string NoteBook { get; }
@@ -146,11 +146,11 @@ namespace Turmerik.Notes.Core
 
             public DirNamePfxesT NoteInternalsPfxes { get; }
             public DirNamePfxesT NoteItemsPfxes { get; }
-            public DirNamePfxesT NoteSectionItemsPfxes { get; }
+            public DirNamePfxesT NoteSectionsPfxes { get; }
 
             public IDirNamePfxesT GetNoteInternalsPfxes() => NoteInternalsPfxes;
             public IDirNamePfxesT GetNoteItemsPfxes() => NoteItemsPfxes;
-            public IDirNamePfxesT GetNoteSectionItemsPfxes() => NoteSectionItemsPfxes;
+            public IDirNamePfxesT GetNoteSectionsPfxes() => NoteSectionsPfxes;
         }
 
         public class DirNamePfxesT : IDirNamePfxesT

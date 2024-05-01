@@ -24,7 +24,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             return wka.OutMap;
         }
 
-        public void NormalizeOpts(
+        public IdxesUpdaterOpts NormalizeOpts(
             IdxesUpdaterOpts opts)
         {
             if (opts.IdxIncVal == 0)
@@ -42,15 +42,14 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                 opts.DfEndIdx = opts.IncIdx ? opts.MaxIdx : opts.MinIdx;
             }
 
-            /* opts.IdxComparison = opts.IdxComparison.IfNull(
-                () => (i1, i2) => i1.CompareTo(i2) * opts.IdxIncVal); */
-
             opts.IdxComparison = opts.IdxComparison.IfNull(
                 () => (i1, i2) =>
                 {
                     var retVal = i1.CompareTo(i2) * opts.IdxIncVal;
                     return retVal;
                 });
+
+            return opts;
         }
 
         private void UpdateIdxes(WorkArgs wka)

@@ -36,6 +36,12 @@ namespace Turmerik.Notes.Core
         string GetMainNoteItemFullDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg);
 
+        string GetMainNoteSectionShortDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        string GetMainNoteSectionFullDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
         string GetMainInternalDirShortDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg);
 
@@ -46,6 +52,12 @@ namespace Turmerik.Notes.Core
             NoteDirsPairConfig.IDirNamesT cfg);
 
         string GetAltNoteItemFullDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        string GetAltNoteSectionShortDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        string GetAltNoteSectionFullDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg);
 
         string GetAltInternalDirShortDirNameRegexStr(
@@ -65,6 +77,12 @@ namespace Turmerik.Notes.Core
         Regex GetMainNoteItemFullDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg);
 
+        Regex GetMainNoteSectionShortDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        Regex GetMainNoteSectionFullDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
         Regex GetMainInternalDirShortDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg);
 
@@ -75,6 +93,12 @@ namespace Turmerik.Notes.Core
             NoteDirsPairConfig.IDirNamesT cfg);
 
         Regex GetAltNoteItemFullDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        Regex GetAltNoteSectionShortDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        Regex GetAltNoteSectionFullDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg);
 
         Regex GetAltInternalDirShortDirNameRegex(
@@ -89,6 +113,12 @@ namespace Turmerik.Notes.Core
         NoteDirRegexTuple GetMainNoteItemFullDirNameRegexTuple(
             NoteDirsPairConfig.IDirNamesT cfg);
 
+        NoteDirRegexTuple GetMainNoteSectionShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetMainNoteSectionFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
         NoteDirRegexTuple GetMainInternalDirShortDirNameRegexTuple(
             NoteDirsPairConfig.IDirNamesT cfg);
 
@@ -99,6 +129,12 @@ namespace Turmerik.Notes.Core
             NoteDirsPairConfig.IDirNamesT cfg);
 
         NoteDirRegexTuple GetAltNoteItemFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetAltNoteSectionShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg);
+
+        NoteDirRegexTuple GetAltNoteSectionFullDirNameRegexTuple(
             NoteDirsPairConfig.IDirNamesT cfg);
 
         NoteDirRegexTuple GetAltInternalDirShortDirNameRegexTuple(
@@ -154,6 +190,15 @@ namespace Turmerik.Notes.Core
                 ).With(pfxes => GetFullDirNameRegexStr(
                     pfxes.MainPfx, pfxes.JoinStr));
 
+        public string GetMainNoteSectionShortDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetShortDirNameRegexStr(
+                cfg.GetNoteSectionsPfxes().MainPfx);
+
+        public string GetMainNoteSectionFullDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg) => cfg.GetNoteSectionsPfxes(
+                ).With(pfxes => GetFullDirNameRegexStr(
+                    pfxes.MainPfx, pfxes.JoinStr));
+
         public string GetMainInternalDirShortDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg) => GetShortDirNameRegexStr(
                 cfg.GetNoteInternalsPfxes().MainPfx);
@@ -169,6 +214,15 @@ namespace Turmerik.Notes.Core
 
         public string GetAltNoteItemFullDirNameRegexStr(
             NoteDirsPairConfig.IDirNamesT cfg) => cfg.GetNoteItemsPfxes(
+                ).With(pfxes => GetFullDirNameRegexStr(
+                    pfxes.AltPfx, pfxes.JoinStr));
+
+        public string GetAltNoteSectionShortDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetShortDirNameRegexStr(
+                cfg.GetNoteSectionsPfxes().AltPfx);
+
+        public string GetAltNoteSectionFullDirNameRegexStr(
+            NoteDirsPairConfig.IDirNamesT cfg) => cfg.GetNoteSectionsPfxes(
                 ).With(pfxes => GetFullDirNameRegexStr(
                     pfxes.AltPfx, pfxes.JoinStr));
 
@@ -203,6 +257,14 @@ namespace Turmerik.Notes.Core
             NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
                 GetMainNoteItemFullDirNameRegexStr(cfg));
 
+        public Regex GetMainNoteSectionShortDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
+                GetMainNoteSectionShortDirNameRegexStr(cfg));
+
+        public Regex GetMainNoteSectionFullDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
+                GetMainNoteSectionFullDirNameRegexStr(cfg));
+
         public Regex GetMainInternalDirShortDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
                 GetMainInternalDirShortDirNameRegexStr(cfg));
@@ -218,6 +280,14 @@ namespace Turmerik.Notes.Core
         public Regex GetAltNoteItemFullDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
                 GetAltNoteItemFullDirNameRegexStr(cfg));
+
+        public Regex GetAltNoteSectionShortDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
+                GetAltNoteSectionShortDirNameRegexStr(cfg));
+
+        public Regex GetAltNoteSectionFullDirNameRegex(
+            NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
+                GetAltNoteSectionFullDirNameRegexStr(cfg));
 
         public Regex GetAltInternalDirShortDirNameRegex(
             NoteDirsPairConfig.IDirNamesT cfg) => new Regex(
@@ -235,6 +305,14 @@ namespace Turmerik.Notes.Core
             NoteDirsPairConfig.IDirNamesT cfg) => GetMainNoteItemFullDirNameRegex(
                 cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().MainPfx);
 
+        public NoteDirRegexTuple GetMainNoteSectionShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetMainNoteSectionShortDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().MainPfx);
+
+        public NoteDirRegexTuple GetMainNoteSectionFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetMainNoteSectionFullDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().MainPfx);
+
         public NoteDirRegexTuple GetMainInternalDirShortDirNameRegexTuple(
             NoteDirsPairConfig.IDirNamesT cfg) => GetMainInternalDirShortDirNameRegex(
                 cfg).NoteDirTuple(cfg.GetNoteInternalsPfxes().MainPfx);
@@ -249,6 +327,14 @@ namespace Turmerik.Notes.Core
 
         public NoteDirRegexTuple GetAltNoteItemFullDirNameRegexTuple(
             NoteDirsPairConfig.IDirNamesT cfg) => GetAltNoteItemFullDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().AltPfx);
+
+        public NoteDirRegexTuple GetAltNoteSectionShortDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetAltNoteSectionShortDirNameRegex(
+                cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().AltPfx);
+
+        public NoteDirRegexTuple GetAltNoteSectionFullDirNameRegexTuple(
+            NoteDirsPairConfig.IDirNamesT cfg) => GetAltNoteSectionFullDirNameRegex(
                 cfg).NoteDirTuple(cfg.GetNoteItemsPfxes().AltPfx);
 
         public NoteDirRegexTuple GetAltInternalDirShortDirNameRegexTuple(
@@ -317,6 +403,34 @@ namespace Turmerik.Notes.Core
                         NoteDirType.FullName,
                         NoteDirPfxType.Alt),
                     GetAltNoteItemFullDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Section,
+                        NoteDirType.ShortName,
+                        NoteDirPfxType.Main),
+                    GetMainNoteSectionShortDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Section,
+                        NoteDirType.ShortName,
+                        NoteDirPfxType.Alt),
+                    GetAltNoteSectionShortDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Section,
+                        NoteDirType.FullName,
+                        NoteDirPfxType.Main),
+                    GetMainNoteSectionFullDirNameRegexTuple(cfg)
+                },
+                {
+                    new NoteDirTypeTuple(
+                        NoteDirCategory.Section,
+                        NoteDirType.FullName,
+                        NoteDirPfxType.Alt),
+                    GetAltNoteSectionFullDirNameRegexTuple(cfg)
                 }
             }.RdnlD();
     }

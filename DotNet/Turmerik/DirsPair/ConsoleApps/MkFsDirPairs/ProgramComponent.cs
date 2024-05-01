@@ -409,11 +409,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                                             data => data.Args.Current.CreateNote = true, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteSection.Arr(),
-                                            data =>
-                                            {
-                                                data.Args.Current.CreateNote = true;
-                                                data.Args.Current.CreateNoteSection = true;
-                                            }, true),
+                                            data => data.Args.Current.CreateNoteSection = true, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteBook.Arr(),
                                             data => data.Args.Current.CreateNoteBook = true, true),

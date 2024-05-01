@@ -10,6 +10,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
     {
         public string WorkDir { get; set; }
         public bool? InteractiveMode { get; set; }
+        public bool? UpdateSections { get; set; }
 
         public List<IdxesUpdateMapping> IdxesUpdateMappings { get; set; }
     }

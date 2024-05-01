@@ -15,6 +15,7 @@ using Turmerik.DirsPair;
 using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.Notes.Core;
 using Turmerik.Core.DriveExplorer;
+using System.Collections.ObjectModel;
 
 namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
 {
@@ -34,8 +35,11 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
         private readonly NoteDirsPairConfig.IDirNamesT noteDirNamesCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT noteDirNameIdxesCfg;
         private readonly NoteDirsPairConfig.IDirNamePfxesT noteDirNamePfxesCfg;
+        private readonly NoteDirsPairConfig.IDirNameIdxesT noteSectionDirNameIdxesCfg;
+        private readonly NoteDirsPairConfig.IDirNamePfxesT noteSectionDirNamePfxesCfg;
         private readonly string joinStr;
         private readonly bool? incIdx;
+        private readonly ReadOnlyCollection<NoteDirCategory> noteDirCats;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -64,8 +68,13 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
             noteDirNamesCfg = notesConfig.GetNoteDirPairs().GetDirNames();
             noteDirNameIdxesCfg = notesConfig.GetNoteDirPairs().GetNoteDirNameIdxes();
             noteDirNamePfxesCfg = noteDirNamesCfg.GetNoteItemsPfxes();
+            noteSectionDirNameIdxesCfg = notesConfig.GetNoteDirPairs().GetNoteSectionDirNameIdxes();
+            noteSectionDirNamePfxesCfg = noteDirNamesCfg.GetNoteSectionsPfxes();
             joinStr = noteDirNamePfxesCfg.JoinStr;
             incIdx = noteDirNameIdxesCfg.IncIdx ?? true;
+
+            noteDirCats = NoteDirCategory.Item.Arr(
+                NoteDirCategory.Section).RdnlC();
         }
 
         public async Task RunAsync(string[] rawArgs)
@@ -102,6 +111,20 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
                 }
             }
 
+            WriteHeadingLineToConsole("Note Section Dir Pairs: ");
+
+            foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
+            {
+                if (dirsPair.NoteDirCat == NoteDirCategory.Section && dirsPair.FullDirNamePart != null)
+                {
+                    WriteWithForegroundsToConsole([
+                        Tuple.Create(ConsoleColor.Magenta, dirsPair.ShortDirName),
+                        Tuple.Create(ConsoleColor.Blue, joinStr),
+                        Tuple.Create(ConsoleColor.Cyan, dirsPair.FullDirNamePart)
+                    ]);
+                }
+            }
+
             if (args.ShowOtherDirNames ?? false)
             {
                 WriteHeadingLineToConsole("Others full dir names: ",
@@ -109,7 +132,7 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
 
                 foreach (var dirsPair in noteItemsTuple.DirsPairTuples)
                 {
-                    if (dirsPair.NoteDirCat != NoteDirCategory.Item || dirsPair.FullDirNamePart == null)
+                    if (!noteDirCats.Contains(dirsPair.NoteDirCat) || dirsPair.FullDirNamePart == null)
                     {
                         foreach (var kvp in dirsPair.DirNamesMap)
                         {
@@ -179,19 +202,6 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
             {
                 args.NoteItemsTuple.DirsPairTuples.Reverse();
             }
-
-            /* if ((args.ShowLastCreatedFirst ?? false) != incIdx)
-            {
-                comparison = (tuple1, tuple2) => tuple1.NoteDirIdx.CompareTo(
-                    tuple2.NoteDirIdx);
-            }
-            else
-            {
-                comparison = (tuple1, tuple2) => tuple2.NoteDirIdx.CompareTo(
-                    tuple1.NoteDirIdx);
-            }
-
-            args.NoteItemsTuple.DirsPairTuples.Sort(comparison); */
         }
 
         private void WriteWithForegroundsToConsole(

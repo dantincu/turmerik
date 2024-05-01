@@ -183,7 +183,9 @@ namespace Turmerik.Notes.UnitTests
             cfgBuilder?.Invoke(cfg);
 
             int actualValue = nextNoteIdxRetriever.GetNextIdx(
-                cfg, sortedIdxesArr);
+                cfg, sortedIdxesArr,
+                out _,
+                out _);
 
             Assert.Equal(expectedValue, actualValue);
         }

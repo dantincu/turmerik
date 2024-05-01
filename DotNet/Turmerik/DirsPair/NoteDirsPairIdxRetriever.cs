@@ -13,7 +13,7 @@ namespace Turmerik.DirsPair
         bool TryGetNoteDirsPairIdx(
            ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexMap,
            string dirName,
-           NoteDirsPairConfig.IDirNamesT config,
+           INoteDirsPairConfig config,
            out NoteDirMatchTuple match);
 
         NoteDirMatchTuple GetNoteDirsPairIdx(
@@ -30,6 +30,10 @@ namespace Turmerik.DirsPair
             NoteDirTypeTuple dirTypeTuple,
             NoteDirsPairConfig.IDirNamesT config);
 
+        NoteDirsPairConfig.IDirNameIdxesT GetDirNameIdxesCfg(
+            NoteDirTypeTuple dirTypeTuple,
+            INoteDirsPairConfig config);
+
         string GetDirNamePfx(
             NoteDirsPairConfig.IDirNamePfxesT cfg);
 
@@ -43,27 +47,36 @@ namespace Turmerik.DirsPair
         public bool TryGetNoteDirsPairIdx(
             ReadOnlyDictionary<NoteDirTypeTuple, NoteDirRegexTuple> dirNamesRegexMap,
             string dirName,
-            NoteDirsPairConfig.IDirNamesT config,
+            INoteDirsPairConfig config,
             out NoteDirMatchTuple match)
         {
             bool foundMatch = false;
             match = default;
+            var dirNamesCfg = config.GetDirNames();
 
             foreach (var kvp in dirNamesRegexMap)
             {
                 if (IsMatchCandidate(
-                    kvp.Key, config))
+                    kvp.Key, dirNamesCfg))
                 {
                     var regexMatch = kvp.Value.Regex.Match(dirName);
 
                     if (regexMatch?.Success ?? false)
                     {
-                        foundMatch = true;
+                        var possibleMatch = GetNoteDirsPairIdx(
+                            kvp, dirName, dirNamesCfg, regexMatch.Value);
 
-                        match = GetNoteDirsPairIdx(
-                            kvp, dirName, config, regexMatch.Value);
+                        var idxesCfg = GetDirNameIdxesCfg(
+                            kvp.Key, config);
 
-                        break;
+                        if (possibleMatch.NoteDirIdx >= 
+                            (idxesCfg.MinIdx ?? NextNoteIdxRetriever.DF_MIN_VALUE) && possibleMatch.NoteDirIdx <= (
+                            idxesCfg.MaxIdx ?? NextNoteIdxRetriever.DF_MAX_VALUE))
+                        {
+                            foundMatch = true;
+                            match = possibleMatch;
+                            break;
+                        }
                     }
                 }
             }
@@ -150,7 +163,19 @@ namespace Turmerik.DirsPair
             NoteDirsPairConfig.IDirNamesT dirNamesCfg) => dirTypeTuple.DirCat switch
             {
                 NoteDirCategory.Item => dirNamesCfg.GetNoteItemsPfxes(),
+                NoteDirCategory.Section => dirNamesCfg.GetNoteSectionsPfxes(),
                 NoteDirCategory.Internals => dirNamesCfg.GetNoteInternalsPfxes(),
+                _ => throw new ArgumentException(nameof(dirTypeTuple.DirCat))
+            };
+
+        public NoteDirsPairConfig.IDirNameIdxesT GetDirNameIdxesCfg(
+            NoteDirTypeTuple dirTypeTuple,
+            INoteDirsPairConfig config) => dirTypeTuple.DirCat switch
+            {
+                NoteDirCategory.Item => config.GetNoteDirNameIdxes(),
+                NoteDirCategory.Section => config.GetNoteSectionDirNameIdxes(),
+                NoteDirCategory.Internals => config.GetNoteInternalDirNameIdxes(),
+                _ => throw new ArgumentException(nameof(dirTypeTuple.DirCat))
             };
 
         public string GetDirNamePfx(
