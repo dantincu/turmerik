@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Notes.Core;
 
@@ -18,6 +19,7 @@ namespace Turmerik.DirsPair
 
     public class DirsPairGenerator : IDirsPairGenerator
     {
+        private readonly IJsonConversion jsonConversion;
         private readonly IDriveExplorerService dvExplrSvc;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
@@ -29,9 +31,11 @@ namespace Turmerik.DirsPair
         private readonly NoteDirsPairConfig.IDirNamesT dirNamesCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT noteItemDirNameIdxesCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT internalDirNameIdxesCfg;
-        private readonly string keepFileContents;
+        private readonly bool keepFileContainsNoteJson;
+        private readonly string defaultKeepFileContents;
 
         public DirsPairGenerator(
+            IJsonConversion jsonConversion,
             IDriveExplorerService dvExplrSvc,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IExistingDirPairsRetriever existingDirPairsRetriever,
@@ -39,6 +43,9 @@ namespace Turmerik.DirsPair
             INoteCfgValuesRetriever noteCfgValuesRetriever,
             INoteDirsPairConfig config)
         {
+            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
+                nameof(jsonConversion));
+
             this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
                 nameof(dvExplrSvc));
 
@@ -63,7 +70,9 @@ namespace Turmerik.DirsPair
             noteItemDirNameIdxesCfg = config.GetNoteDirNameIdxes();
             internalDirNameIdxesCfg = config.GetNoteInternalDirNameIdxes();
 
-            keepFileContents = noteCfgValuesRetriever.GetKeepFileContents(
+            keepFileContainsNoteJson = fileContentsCfg.KeepFileContainsNoteJson ?? false;
+
+            defaultKeepFileContents = noteCfgValuesRetriever.GetKeepFileContents(
                 fileContentsCfg);
         }
 
@@ -156,7 +165,8 @@ namespace Turmerik.DirsPair
                     Data = new DriveItemXData()
                 },
                 GetFullNameDir(
-                    fullDirName)
+                    fullDirName,
+                    opts.Title)
             };
 
             return dirsList;
@@ -313,13 +323,15 @@ namespace Turmerik.DirsPair
             string fullDirName,
             DirsPairOpts opts) => GetFullNameDir(
                 fullDirName,
+                opts.Title,
                 opts.KeepFileName,
                 opts.KeepFileContents);
 
         private DriveItemX GetFullNameDir(
             string fullDirName,
-            string keepFileName = null,
-            string keepFileContents = null) => new DriveItemX
+            string? title = null,
+            string? keepFileName = null,
+            string? keepFileContents = null) => new DriveItemX
             {
                 Name = fullDirName,
                 IsFolder = true,
@@ -328,7 +340,16 @@ namespace Turmerik.DirsPair
                     Name = keepFileName ?? fileNamesCfg.KeepFileName,
                     Data = new DriveItemXData
                     {
-                        TextFileContents = keepFileContents ?? this.keepFileContents
+                        TextFileContents = keepFileContents ?? ((
+                            keepFileContainsNoteJson && title != null) switch
+                            {
+                                true => jsonConversion.Adapter.Serialize(
+                                    new NoteItemCore
+                                    {
+                                        Title = title,
+                                    }),
+                                false => this.defaultKeepFileContents
+                            })
                     }
                 }.Arr().ToList(),
                 Data = new DriveItemXData()

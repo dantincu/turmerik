@@ -12,7 +12,6 @@ using Turmerik.Core.Utility;
 using Turmerik.Core.Helpers;
 using Turmerik.Html;
 using Turmerik.Notes.Core;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Turmerik.Md
 {

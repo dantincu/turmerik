@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.TextSerialization;
 using Turmerik.Notes.Core;
 
 namespace Turmerik.DirsPair
@@ -14,6 +15,7 @@ namespace Turmerik.DirsPair
 
     public class DirsPairGeneratorFactory : IDirsPairGeneratorFactory
     {
+        private readonly IJsonConversion jsonConversion;
         private readonly IDriveExplorerService dvExplrSvc;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory;
@@ -21,12 +23,16 @@ namespace Turmerik.DirsPair
         private readonly INoteCfgValuesRetriever noteCfgValuesRetriever;
 
         public DirsPairGeneratorFactory(
+            IJsonConversion jsonConversion,
             IDriveExplorerService dvExplrSvc,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
             INextNoteIdxRetriever nextNoteIdxRetriever,
             INoteCfgValuesRetriever noteCfgValuesRetriever)
         {
+            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
+                nameof(jsonConversion));
+
             this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
                 nameof(dvExplrSvc));
 
@@ -45,6 +51,7 @@ namespace Turmerik.DirsPair
 
         public DirsPairGenerator Create(
             INoteDirsPairConfig notesConfig) => new DirsPairGenerator(
+                jsonConversion,
                 dvExplrSvc,
                 fsEntryNameNormalizer,
                 existingDirPairsRetrieverFactory.Retriever(

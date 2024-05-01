@@ -6,6 +6,33 @@ namespace Turmerik.DirsPair
 {
     public class DirsPairOpts
     {
+        public DirsPairOpts()
+        {
+        }
+
+        public DirsPairOpts(DirsPairOpts src)
+        {
+            PrIdnf = src.PrIdnf;
+            Title = src.Title;
+            OpenMdFile = src.OpenMdFile;
+            MaxFsEntryNameLength = src.MaxFsEntryNameLength;
+            ShortDirName = src.ShortDirName;
+            FullDirNamePart = src.FullDirNamePart;
+            JoinStr = src.JoinStr;
+            MdFileName = src.MdFileName;
+            MdFileContentsTemplate = src.MdFileContentsTemplate;
+            MdFileFirstContent = src.MdFileFirstContent;
+            KeepFileName = src.KeepFileName;
+            KeepFileContents = src.KeepFileContents;
+            TrmrkGuidInputName = src.TrmrkGuidInputName;
+            ThrowIfAnyItemAlreadyExists = src.ThrowIfAnyItemAlreadyExists;
+            CreateNote = src.CreateNote;
+            CreateNoteSection = src.CreateNoteSection;
+            CreateNoteBook = src.CreateNoteBook;
+            CreateNoteInternalsDir = src.CreateNoteInternalsDir;
+            CreateNoteFilesDir = src.CreateNoteFilesDir;
+        }
+
         public string PrIdnf { get; set; }
         public string Title { get; set; }
         public bool OpenMdFile { get; set; }

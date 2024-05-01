@@ -92,6 +92,7 @@ namespace Turmerik.Notes.Core
         public interface IFileContentsT
         {
             string KeepFileContentsTemplate { get; }
+            bool? KeepFileContainsNoteJson { get; }
             string NoteFileContentsTemplate { get; }
             string NoteFileContentSectionTemplate { get; }
             bool? ExpectTrmrkGuidInNoteJsonFile { get; }

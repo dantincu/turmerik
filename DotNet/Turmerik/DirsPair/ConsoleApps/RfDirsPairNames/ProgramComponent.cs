@@ -92,7 +92,7 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                 TryRenameMdFile(wka, newMdFileName);
             }
 
-            if (newFullDirName != args.FullDirName)
+            // if (newFullDirName != args.FullDirName)
             {
                 TryRenameFullNameDir(wka, newFullDirName);
             }
@@ -178,54 +178,49 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                 args.ParentDirPath,
                 newFullDirName);
 
-            if (!Directory.Exists(newFullDirPath))
+            if (args.FullDirPath != null && Directory.Exists(
+                args.FullDirPath))
             {
-                if (args.FullDirPath != null && Directory.Exists(
-                    args.FullDirPath))
+                if (args.FullDirPath != newFullDirPath)
                 {
                     FsH.MoveDirectory(
                         args.FullDirPath,
                         newFullDirPath);
-
-                    WriteWithForegroundsToConsole([
-                        Tuple.Create(ConsoleColor.Green, "Renamed"),
-                        Tuple.Create(ConsoleColor.Blue, $" {args.FullDirName} "),
-                        Tuple.Create(ConsoleColor.Green, "to"),
-                        Tuple.Create(ConsoleColor.Cyan, $" {newFullDirName} "),
-                    ]);
-                }
-                else
-                {
-                    Directory.CreateDirectory(
-                        newFullDirPath);
-
-                    string keepFilePath = Path.Combine(
-                        newFullDirPath,
-                        config.FileNames.KeepFileName);
-
-                    string keepFileContents = string.Format(
-                        config.FileContents.KeepFileContentsTemplate,
-                        Trmrk.TrmrkGuidStrNoDash,
-                        config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
-
-                    File.WriteAllText(
-                        keepFilePath,
-                        keepFileContents);
-
-                    WriteWithForegroundsToConsole([
-                        Tuple.Create(ConsoleColor.Blue, "File"),
-                        Tuple.Create(ConsoleColor.Cyan, $" {args.FullDirName} ")
-                    ]);
                 }
             }
             else
             {
-                WriteWithForegroundsToConsole([
-                    Tuple.Create(ConsoleColor.DarkRed, "Folder"),
-                    Tuple.Create(ConsoleColor.Red, $" {newFullDirName} "),
-                    Tuple.Create(ConsoleColor.DarkRed, "already exists"),
-                ]);
+                Directory.CreateDirectory(
+                    newFullDirPath);
             }
+
+            WriteWithForegroundsToConsole([
+                Tuple.Create(ConsoleColor.Green, "Renamed"),
+                        Tuple.Create(ConsoleColor.Blue, $" {args.FullDirName} "),
+                        Tuple.Create(ConsoleColor.Green, "to"),
+                        Tuple.Create(ConsoleColor.Cyan, $" {newFullDirName} "),
+                    ]);
+
+            string keepFilePath = Path.Combine(
+                newFullDirPath,
+                config.FileNames.KeepFileName);
+
+            string keepFileContents = (
+                config.FileContents.KeepFileContainsNoteJson == true) switch
+            {
+                true => jsonConversion.Adapter.Serialize(new NoteItemCore
+                {
+                    Title = wka.Args.MdTitle
+                }),
+                _ => string.Format(
+                    config.FileContents.KeepFileContentsTemplate,
+                    Trmrk.TrmrkGuidStrNoDash,
+                    config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME)
+            };
+
+            File.WriteAllText(
+                keepFilePath,
+                keepFileContents);
 
             Console.WriteLine();
         }

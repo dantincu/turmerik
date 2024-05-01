@@ -60,6 +60,7 @@ namespace Turmerik.DirsPair
         public class FileContentsT
         {
             public string KeepFileContentsTemplate { get; set; }
+            public bool? KeepFileContainsNoteJson { get; set; }
             public string MdFileContentsTemplate { get; set; }
             public string MdFileContentSectionTemplate { get; set; }
         }

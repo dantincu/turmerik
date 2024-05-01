@@ -292,34 +292,6 @@ namespace Turmerik.Notes.Core
                 },
                 {
                     new NoteDirTypeTuple(
-                        NoteDirCategory.Section,
-                        NoteDirType.ShortName,
-                        NoteDirPfxType.Main),
-                    GetMainNoteItemShortDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
-                        NoteDirCategory.Section,
-                        NoteDirType.ShortName,
-                        NoteDirPfxType.Alt),
-                    GetAltNoteItemShortDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
-                        NoteDirCategory.Section,
-                        NoteDirType.FullName,
-                        NoteDirPfxType.Main),
-                    GetMainNoteItemFullDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
-                        NoteDirCategory.Section,
-                        NoteDirType.FullName,
-                        NoteDirPfxType.Alt),
-                    GetAltNoteItemFullDirNameRegexTuple(cfg)
-                },
-                {
-                    new NoteDirTypeTuple(
                         NoteDirCategory.Item,
                         NoteDirType.ShortName,
                         NoteDirPfxType.Main),

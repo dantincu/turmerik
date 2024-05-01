@@ -173,9 +173,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                     nodeArgs.FullDirNamePart)) ?? nodeArgs.FullDirNamePart;
 
         private string GetKeepFileContents() => string.Format(
-                config.FileContents.KeepFileContentsTemplate,
-                Trmrk.TrmrkGuidStrNoDash,
-                config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
+            config.FileContents.KeepFileContentsTemplate,
+            Trmrk.TrmrkGuidStrNoDash,
+            config.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
 
         private async Task NormalizeArgsAsync(
             ProgramArgs args)
