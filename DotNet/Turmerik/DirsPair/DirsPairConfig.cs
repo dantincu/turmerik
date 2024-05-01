@@ -24,7 +24,7 @@ namespace Turmerik.DirsPair
             public string SkipMdFileCreation { get; set; }
             public string DirNameTpl { get; set; }
             public string CreateNote { get; set; }
-            public string CreatePinnedNote { get; set; }
+            public string CreateNoteSection { get; set; }
             public string CreateNoteBook { get; set; }
             public string CreateNoteInternalsDir { get; set; }
             public string CreateNoteFilesDir { get; set; }

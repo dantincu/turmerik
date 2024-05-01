@@ -22,7 +22,7 @@ namespace Turmerik.Notes.Core
             ArgOpts = src.GetArgOpts()?.ToMtbl();
             DirNames = src.GetDirNames()?.ToMtbl();
             NoteDirNameIdxes = src.GetNoteDirNameIdxes()?.ToMtbl();
-            PinnedNoteDirNameIdxes = src.GetPinnedNoteDirNameIdxes()?.ToMtbl();
+            NoteSectionDirNameIdxes = src.GetNoteSectionDirNameIdxes()?.ToMtbl();
             NoteInternalDirNameIdxes = src.GetNoteInternalDirNameIdxes()?.ToMtbl();
             FileNames = src.GetFileNames()?.ToMtbl();
             FileContents = src.GetFileContents()?.ToMtbl();
@@ -39,7 +39,7 @@ namespace Turmerik.Notes.Core
         public ArgOptionsAggT ArgOpts { get; set; }
         public DirNamesT DirNames { get; set; }
         public DirNameIdxesT NoteDirNameIdxes { get; set; }
-        public DirNameIdxesT PinnedNoteDirNameIdxes { get; set; }
+        public DirNameIdxesT NoteSectionDirNameIdxes { get; set; }
         public DirNameIdxesT NoteInternalDirNameIdxes { get; set; }
         public FileNamesT FileNames { get; set; }
         public FileContentsT FileContents { get; set; }
@@ -47,7 +47,7 @@ namespace Turmerik.Notes.Core
         public IArgOptionsAggT GetArgOpts() => ArgOpts;
         public IDirNamesT GetDirNames() => DirNames;
         public IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
-        public IDirNameIdxesT GetPinnedNoteDirNameIdxes() => PinnedNoteDirNameIdxes;
+        public IDirNameIdxesT GetNoteSectionDirNameIdxes() => NoteSectionDirNameIdxes;
         public IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
         public IFileNamesT GetFileNames() => FileNames;
         public IFileContentsT GetFileContents() => FileContents;
@@ -90,7 +90,7 @@ namespace Turmerik.Notes.Core
                 DestnNote = src.GetDestnNote()?.ToMtbl();
                 DestnDirIdnf = src.GetDestnDirIdnf()?.ToMtbl();
                 DestnNoteIdx = src.GetDestnNoteIdx()?.ToMtbl();
-                IsPinned = src.GetIsPinned()?.ToMtbl();
+                IsSection = src.GetIsSection()?.ToMtbl();
                 SortIdx = src.GetSortIdx()?.ToMtbl();
                 NoteIdx = src.GetNoteIdx()?.ToMtbl();
                 OpenMdFile = src.GetOpenMdFile()?.ToMtbl();
@@ -110,7 +110,7 @@ namespace Turmerik.Notes.Core
             public ArgOptionT DestnNoteIdx { get; set; }
             public ArgOptionT NotesOrder { get; set; }
             public ArgOptionT NoteIdxesOrder { get; set; }
-            public ArgOptionT IsPinned { get; set; }
+            public ArgOptionT IsSection { get; set; }
             public ArgOptionT SortIdx { get; set; }
             public ArgOptionT NoteIdx { get; set; }
             public ArgOptionT OpenMdFile { get; set; }
@@ -138,7 +138,7 @@ namespace Turmerik.Notes.Core
             public IArgOptionT GetDestnNoteIdx() => DestnNoteIdx;
             public IArgOptionT GetNotesOrder() => NotesOrder;
             public IArgOptionT GetNoteIdxesOrder() => NoteIdxesOrder;
-            public IArgOptionT GetIsPinned() => IsPinned;
+            public IArgOptionT GetIsSection() => IsSection;
             public IArgOptionT GetSortIdx() => SortIdx;
             public IArgOptionT GetNoteIdx() => NoteIdx;
             public IArgOptionT GetOpenMdFile() => OpenMdFile;
@@ -162,6 +162,7 @@ namespace Turmerik.Notes.Core
                 NoteInternals = src.NoteInternals;
                 NoteInternalsPfxes = src.GetNoteInternalsPfxes()?.ToMtbl();
                 NoteItemsPfxes = src.GetNoteItemsPfxes()?.ToMtbl();
+                NoteSectionItemsPfxes = src.GetNoteSectionItemsPfxes()?.ToMtbl();
             }
 
             public string NoteBook { get; set; }
@@ -170,9 +171,11 @@ namespace Turmerik.Notes.Core
 
             public DirNamePfxesT NoteInternalsPfxes { get; set; }
             public DirNamePfxesT NoteItemsPfxes { get; set; }
+            public DirNamePfxesT NoteSectionItemsPfxes { get; }
 
             public IDirNamePfxesT GetNoteInternalsPfxes() => NoteInternalsPfxes;
             public IDirNamePfxesT GetNoteItemsPfxes() => NoteItemsPfxes;
+            public IDirNamePfxesT GetNoteSectionItemsPfxes() => NoteSectionItemsPfxes;
         }
 
         public class DirNamePfxesT : IDirNamePfxesT

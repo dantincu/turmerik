@@ -14,7 +14,7 @@ namespace Turmerik.Notes.Core
         NoteDirsPairConfig.IArgOptionsAggT GetArgOpts();
         NoteDirsPairConfig.IDirNamesT GetDirNames();
         NoteDirsPairConfig.IDirNameIdxesT GetNoteDirNameIdxes();
-        NoteDirsPairConfig.IDirNameIdxesT GetPinnedNoteDirNameIdxes();
+        NoteDirsPairConfig.IDirNameIdxesT GetNoteSectionDirNameIdxes();
         NoteDirsPairConfig.IDirNameIdxesT GetNoteInternalDirNameIdxes();
         NoteDirsPairConfig.IFileNamesT GetFileNames();
         NoteDirsPairConfig.IFileContentsT GetFileContents();
@@ -41,7 +41,7 @@ namespace Turmerik.Notes.Core
             IArgOptionT GetDestnNoteIdx();
             IArgOptionT GetNotesOrder();
             IArgOptionT GetNoteIdxesOrder();
-            IArgOptionT GetIsPinned();
+            IArgOptionT GetIsSection();
             IArgOptionT GetSortIdx();
             IArgOptionT GetNoteIdx();
             IArgOptionT GetOpenMdFile();
@@ -60,6 +60,7 @@ namespace Turmerik.Notes.Core
 
             IDirNamePfxesT GetNoteInternalsPfxes();
             IDirNamePfxesT GetNoteItemsPfxes();
+            IDirNamePfxesT GetNoteSectionItemsPfxes();
         }
 
         public interface IDirNamePfxesT

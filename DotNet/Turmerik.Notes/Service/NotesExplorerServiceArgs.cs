@@ -19,7 +19,7 @@ namespace Turmerik.Notes.Service
         public string[] NotesOrder { get; set; }
         public string[] NoteIdxesOrder { get; set; }
         public string NoteTitle { get; set; }
-        public bool? IsPinned { get; set; }
+        public bool? IsSection { get; set; }
         public int? SortIdx { get; set; }
         public int? NoteIdx { get; set; }
         public bool OpenMdFile { get; set; }

@@ -150,6 +150,12 @@
         "AltPfx": "t_",
         "JoinStr": "-",
         "UseAltPfx": false
+      },
+      "NoteSectionsPfxes": {
+        "MainPfx": "",
+        "AltPfx": "t_",
+        "JoinStr": "-",
+        "UseAltPfx": false
       }
     },
     "NoteDirNameIdxes": {
@@ -159,7 +165,7 @@
       "FillGapsByDefault": false,
       "IdxFmt": "D1"
     },
-    "PinnedNoteDirNameIdxes": {
+    "NoteSectionDirNameIdxes": {
       "MinIdx": 100,
       "MaxIdx": 199,
       "IncIdx": false,

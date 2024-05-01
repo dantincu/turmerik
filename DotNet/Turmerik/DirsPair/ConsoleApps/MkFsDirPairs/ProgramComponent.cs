@@ -152,6 +152,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                 TrmrkGuidInputName = config.TrmrkGuidInputName,
                 ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true,
                 CreateNote = nodeArgs.CreateNote,
+                CreateNoteSection = nodeArgs.CreateNoteSection,
                 CreateNoteBook = nodeArgs.CreateNoteBook,
                 CreateNoteInternalsDir = nodeArgs.CreateNoteInternalsDir,
                 CreateNoteFilesDir = nodeArgs.CreateNoteFilesDir,
@@ -406,6 +407,13 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNote.Arr(),
                                             data => data.Args.Current.CreateNote = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.CreateNoteSection.Arr(),
+                                            data =>
+                                            {
+                                                data.Args.Current.CreateNote = true;
+                                                data.Args.Current.CreateNoteSection = true;
+                                            }, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteBook.Arr(),
                                             data => data.Args.Current.CreateNoteBook = true, true),

@@ -41,7 +41,7 @@ namespace Turmerik.Notes.Service
                 Title = args.NoteTitle,
                 SortIdx = args.SortIdx,
                 NoteIdx = args.NoteIdx,
-                IsPinned = args.IsPinned,
+                IsSection = args.IsSection,
                 OpenMdFile = args.OpenMdFile,
                 CreateNoteFilesDirsPair = args.CreateNoteFilesDirsPair,
                 CreateNoteInternalDirsPair = args.CreateNoteInternalDirsPair,

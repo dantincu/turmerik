@@ -14,6 +14,7 @@ namespace Turmerik.Notes.Core
         public List<string> OtherDirNames { get; set; }
         public List<string> OtherFileNames { get; set; }
         public HashSet<int> ExistingNoteDirIdxes { get; set; }
+        public HashSet<int> ExistingNoteSectionDirIdxes { get; set; }
         public HashSet<int> ExistingInternalDirIdxes { get; set; }
 
         public static NoteItemsTupleCore Create(
@@ -25,7 +26,8 @@ namespace Turmerik.Notes.Core
                 OtherDirNames = new List<string>(),
                 OtherFileNames = new List<string>(),
                 ExistingInternalDirIdxes = new HashSet<int>(),
-                ExistingNoteDirIdxes = new HashSet<int>()
+                ExistingNoteDirIdxes = new HashSet<int>(),
+                ExistingNoteSectionDirIdxes = new HashSet<int>()
             };
     }
 }

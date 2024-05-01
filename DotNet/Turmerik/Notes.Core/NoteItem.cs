@@ -11,7 +11,7 @@ namespace Turmerik.Notes.Core
 
         public Dictionary<NoteInternalDir, int> InternalDirs { get; set; }
         public Dictionary<int, string> ChildItems { get; set; }
-        public List<int> PinnedChildItemsSortOrder { get; set; }
+        public List<int> ChildSectionsSortOrder { get; set; }
         public List<int> ChildItemsSortOrder { get; set; }
     }
 

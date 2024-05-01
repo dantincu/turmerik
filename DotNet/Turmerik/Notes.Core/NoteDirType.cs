@@ -20,6 +20,7 @@ namespace Turmerik.Notes.Core
     public enum NoteDirCategory
     {
         Item,
+        Section,
         Internals
     }
 

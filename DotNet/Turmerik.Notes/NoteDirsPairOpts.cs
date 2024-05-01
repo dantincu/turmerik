@@ -11,7 +11,7 @@ namespace Turmerik.Notes
         public string Title { get; set; }
         public int? SortIdx { get; set; }
         public int? NoteIdx { get; set; }
-        public bool? IsPinned { get; set; }
+        public bool? IsSection { get; set; }
         public bool OpenMdFile { get; set; }
         public bool CreateNoteFilesDirsPair { get; set; }
         public bool CreateNoteInternalDirsPair { get; set; }
