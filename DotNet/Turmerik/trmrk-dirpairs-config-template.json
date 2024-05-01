@@ -9,6 +9,7 @@
     "SkipMdFileCreation": "sk",
     "DirNameTpl": "t",
     "CreateNote": "n",
+    "CreatePinnedNote": "p",
     "CreateNoteBook": "nb",
     "CreateNoteInternalsDir": "ni",
     "CreateNoteFilesDir": "nf",

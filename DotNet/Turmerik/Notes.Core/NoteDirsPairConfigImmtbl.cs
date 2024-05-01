@@ -22,6 +22,7 @@ namespace Turmerik.Notes.Core
             ArgOpts = src.GetArgOpts()?.ToImmtbl();
             DirNames = src.GetDirNames()?.ToImmtbl();
             NoteDirNameIdxes = src.GetNoteDirNameIdxes()?.ToImmtbl();
+            PinnedNoteDirNameIdxes = src.GetPinnedNoteDirNameIdxes()?.ToImmtbl();
             NoteInternalDirNameIdxes = src.GetNoteInternalDirNameIdxes()?.ToImmtbl();
             FileNames = src.GetFileNames()?.ToImmtbl();
             FileContents = src.GetFileContents()?.ToImmtbl();
@@ -34,6 +35,7 @@ namespace Turmerik.Notes.Core
         public ArgOptionsAggT ArgOpts { get; }
         public DirNamesT DirNames { get; }
         public DirNameIdxesT NoteDirNameIdxes { get; }
+        public DirNameIdxesT PinnedNoteDirNameIdxes { get; }
         public DirNameIdxesT NoteInternalDirNameIdxes { get; }
         public FileNamesT FileNames { get; }
         public FileContentsT FileContents { get; }
@@ -41,6 +43,7 @@ namespace Turmerik.Notes.Core
         public IArgOptionsAggT GetArgOpts() => ArgOpts;
         public IDirNamesT GetDirNames() => DirNames;
         public IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
+        public IDirNameIdxesT GetPinnedNoteDirNameIdxes() => PinnedNoteDirNameIdxes;
         public IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
         public IFileNamesT GetFileNames() => FileNames;
         public IFileContentsT GetFileContents() => FileContents;

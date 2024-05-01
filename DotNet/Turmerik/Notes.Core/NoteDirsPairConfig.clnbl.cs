@@ -14,6 +14,7 @@ namespace Turmerik.Notes.Core
         NoteDirsPairConfig.IArgOptionsAggT GetArgOpts();
         NoteDirsPairConfig.IDirNamesT GetDirNames();
         NoteDirsPairConfig.IDirNameIdxesT GetNoteDirNameIdxes();
+        NoteDirsPairConfig.IDirNameIdxesT GetPinnedNoteDirNameIdxes();
         NoteDirsPairConfig.IDirNameIdxesT GetNoteInternalDirNameIdxes();
         NoteDirsPairConfig.IFileNamesT GetFileNames();
         NoteDirsPairConfig.IFileContentsT GetFileContents();

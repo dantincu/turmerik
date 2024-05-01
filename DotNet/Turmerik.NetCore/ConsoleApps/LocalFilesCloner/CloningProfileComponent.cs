@@ -24,6 +24,7 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
         private readonly IFilteredDriveEntriesRemover filteredFsEntriesRemover;
         private readonly IFilteredDriveEntriesCloner filteredDriveEntriesCloner;
         private readonly IFileCloneComponent fileCloneComponent;
+        private readonly IDriveExplorerService driveExplorerService;
 
         public CloningProfileComponent(
             IProcessLauncher processLauncher,
@@ -31,7 +32,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
             IFilteredDriveEntriesRetriever filteredFsEntriesRetriever,
             IFilteredDriveEntriesRemover filteredFsEntriesRemover,
             IFilteredDriveEntriesCloner filteredDriveEntriesCloner,
-            IFileCloneComponent fileCloneComponent)
+            IFileCloneComponent fileCloneComponent,
+            IDriveExplorerService driveExplorerService)
         {
             this.processLauncher = processLauncher ?? throw new ArgumentNullException(
                 nameof(processLauncher));
@@ -50,6 +52,9 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
             this.fileCloneComponent = fileCloneComponent ?? throw new ArgumentNullException(
                 nameof(fileCloneComponent));
+
+            this.driveExplorerService = driveExplorerService ?? throw new ArgumentNullException(
+                nameof(driveExplorerService));
         }
 
         public async Task RunAsync(
@@ -201,6 +206,8 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 
             if (dirArgs.BeforeCloneDestnCleanupFilter != null)
             {
+                Directory.CreateDirectory(dirArgs.CloneDirPath);
+
                 var destnFolder = await filteredFsEntriesRetriever.FindMatchingAsync(
                     new FilteredDriveRetrieverMatcherOpts
                     {

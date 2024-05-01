@@ -1,0 +1,35 @@
+{
+  "ProfileName": "arch-dotnet-util-cfg-files",
+  "FileGroups": [
+    {
+      "CloneArchiveDirPath": "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
+      "CloneArchiveFileNameTpl": "AppCfgFiles[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+      "BeforeArchiveCleanupFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/AppCfgFiles\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
+        ]
+      },
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik",
+      "CloneDirPath": "|$TURMERIK_TEMP_DIR|",
+      "Folders": [
+        {
+          "InputDirFilter": {
+            "IncludedRelPathRegexes": [
+              "^\\/trmrk-dirpairs-config\\.json$",
+              "^\\/trmrk-notes-config\\.json$"
+            ]
+          }
+        },
+        {
+          "InputDirPath": "_ENV\\PROD",
+          "InputDirFilter": {
+            "IncludedRelPathRegexes": [
+              "^\\/app-env-locator\\.json$",
+              "^\\/trmrk-localdevice-paths\\.json$"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

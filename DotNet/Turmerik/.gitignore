@@ -1,4 +1,10 @@
 app-env-locator.json
+app-env-locator.dev.json
+app-env-locator.prod.json
 trmrk-localdevice-paths.json
+trmrk-localdevice-paths.dev.json
+trmrk-localdevice-paths.prod.json
 trmrk-dirpairs-config.json
 trmrk-notes-config.json
+
+_ENV

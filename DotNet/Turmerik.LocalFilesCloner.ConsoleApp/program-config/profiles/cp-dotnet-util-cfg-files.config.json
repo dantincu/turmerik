@@ -1,0 +1,95 @@
+{
+  "ProfileName": "cp-dotnet-util-cfg-files",
+  "FileGroups": [
+    {
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik\\_ENV\\DEV",
+      "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DEV_DIR|",
+      "DfInputDirFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$"
+        ]
+      },
+      "DfBeforeCloneDestnCleanupFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$"
+        ]
+      },
+      "Folders": [
+        {
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.SyncLocalFiles.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+        }
+      ]
+    },
+    {
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik\\_ENV\\PROD",
+      "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|",
+      "DfInputDirFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$"
+        ]
+      },
+      "DfBeforeCloneDestnCleanupFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/app-env-locator\\.json$",
+          "^\\/trmrk-localdevice-paths\\.json$"
+        ]
+      },
+      "Folders": [
+        {
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.SyncLocalFiles.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+        }
+      ]
+    }
+  ]
+}

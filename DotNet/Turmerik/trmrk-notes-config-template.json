@@ -153,8 +153,15 @@
       }
     },
     "NoteDirNameIdxes": {
-      "MinIdx": 101,
+      "MinIdx": 200,
       "MaxIdx": 799,
+      "IncIdx": false,
+      "FillGapsByDefault": false,
+      "IdxFmt": "D1"
+    },
+    "PinnedNoteDirNameIdxes": {
+      "MinIdx": 100,
+      "MaxIdx": 199,
       "IncIdx": false,
       "FillGapsByDefault": false,
       "IdxFmt": "D1"

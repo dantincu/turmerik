@@ -1,6 +1,9 @@
 {
   "Profiles": [
     {
+      "ProfileRelFilePath": "profiles\\arch-dotnet-util-cfg-files.config.json"
+    },
+    {
       "ProfileRelFilePath": "profiles\\arch-dotnet-util-dirs.config.json"
     },
     {
@@ -8,6 +11,9 @@
     },
     {
       "ProfileRelFilePath": "profiles\\cp-dotnet-bkp-bins.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-dotnet-util-cfg-files.config.json"
     },
     {
       "ProfileRelFilePath": "profiles\\cp-dotnet-util-bins.config.json"
