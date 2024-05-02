@@ -132,7 +132,7 @@ namespace Turmerik.Core.Helpers
         public static TVal ActIfNotDefault<TVal>(
             this TVal inVal,
             Action<TVal> callback,
-            Action nullCallback = null,
+            Action dfCallback = null,
             IEqualityComparer<TVal> inValEqCompr = null)
         {
             inValEqCompr ??= EqualityComparer<TVal>.Default;
@@ -141,9 +141,9 @@ namespace Turmerik.Core.Helpers
             {
                 callback(inVal);
             }
-            else if (nullCallback != null)
+            else if (dfCallback != null)
             {
-                nullCallback();
+                dfCallback();
             }
 
             return inVal;
@@ -159,7 +159,10 @@ namespace Turmerik.Core.Helpers
 
             if (inValEqCompr.Equals(val, default))
             {
-                val = defaultValueFactory();
+                if (defaultValueFactory != null)
+                {
+                    val = defaultValueFactory();
+                }
             }
             else if (convertor != null)
             {
@@ -167,6 +170,58 @@ namespace Turmerik.Core.Helpers
             }
 
             return val;
+        }
+
+        public static TOut IfDefault<TIn, TOut>(
+            this TIn inVal,
+            Func<TOut> defaultValueFactory = null,
+            Func<TIn, TOut> convertor = null,
+            IEqualityComparer<TIn> inValEqCompr = null)
+        {
+            inValEqCompr ??= EqualityComparer<TIn>.Default;
+            TOut outVal;
+
+            if (inValEqCompr.Equals(inVal, default))
+            {
+                if (defaultValueFactory != null)
+                {
+                    outVal = defaultValueFactory();
+                }
+                else
+                {
+                    outVal = default;
+                }
+            }
+            else if (convertor != null)
+            {
+                outVal = convertor(inVal);
+            }
+            else
+            {
+                outVal = default;
+            }
+
+            return outVal;
+        }
+
+        public static TVal ActIfDefault<TVal>(
+            this TVal inVal,
+            Action dfCallback,
+            Action<TVal> callback = null,
+            IEqualityComparer<TVal> inValEqCompr = null)
+        {
+            inValEqCompr ??= EqualityComparer<TVal>.Default;
+
+            if (inValEqCompr.Equals(inVal, default))
+            {
+                callback(inVal);
+            }
+            else if (dfCallback != null)
+            {
+                dfCallback();
+            }
+
+            return inVal;
         }
 
         public static TOutVal BothNullOr<TInVal, TOutVal>(
@@ -197,6 +252,10 @@ namespace Turmerik.Core.Helpers
             else if (firstValNullFactory != null)
             {
                 retVal = firstValNullFactory(secondVal);
+            }
+            else if (bothValuesNullFactory != null)
+            {
+                retVal = bothValuesNullFactory();
             }
             else
             {

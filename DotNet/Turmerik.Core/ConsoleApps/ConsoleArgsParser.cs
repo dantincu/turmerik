@@ -178,10 +178,10 @@ namespace Turmerik.Core.ConsoleApps
                     nameof(opts.RawArgs));
             }
 
-            opts.OptsStartChar = opts.OptsStartChar.IfDefault(
+            opts.OptsStartChar = opts.OptsStartChar.IfDefault<char>(
                 () => OPTS_START_CHAR);
 
-            opts.OptsArgDelimChar = opts.OptsArgDelimChar.IfDefault(
+            opts.OptsArgDelimChar = opts.OptsArgDelimChar.IfDefault<char>(
                 () => OPTS_ARG_DELIM_CHAR);
 
             opts.ArgsFactory = opts.ArgsFactory.FirstNotNull(

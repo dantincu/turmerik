@@ -85,7 +85,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkScripts.ConsoleA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFileNotes.WinFormsApp", "Turmerik.LocalFileNotes.WinFormsApp\Turmerik.LocalFileNotes.WinFormsApp.csproj", "{2C598546-998D-47B5-A0E1-8B14D1FBF2F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.SyncLocalFiles.ConsoleApp", "Turmerik.SyncLocalFiles.ConsoleApp\Turmerik.SyncLocalFiles.ConsoleApp.csproj", "{B45B9B65-C1A0-442F-8F8B-03E54C32718D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.SyncLocalFiles.ConsoleApp", "Turmerik.SyncLocalFiles.ConsoleApp\Turmerik.SyncLocalFiles.ConsoleApp.csproj", "{B45B9B65-C1A0-442F-8F8B-03E54C32718D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp", "Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp\Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp.csproj", "{C293B763-4071-402E-A6A7-216194D142DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -225,6 +227,10 @@ Global
 		{B45B9B65-C1A0-442F-8F8B-03E54C32718D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B45B9B65-C1A0-442F-8F8B-03E54C32718D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B45B9B65-C1A0-442F-8F8B-03E54C32718D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C293B763-4071-402E-A6A7-216194D142DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C293B763-4071-402E-A6A7-216194D142DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C293B763-4071-402E-A6A7-216194D142DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C293B763-4071-402E-A6A7-216194D142DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -268,6 +274,7 @@ Global
 		{2EFB0435-0759-47BE-8BEE-4B1FE22661C1} = {64F5E958-F7DD-4526-A21F-3C9E7378B455}
 		{2C598546-998D-47B5-A0E1-8B14D1FBF2F7} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
 		{B45B9B65-C1A0-442F-8F8B-03E54C32718D} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{C293B763-4071-402E-A6A7-216194D142DC} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

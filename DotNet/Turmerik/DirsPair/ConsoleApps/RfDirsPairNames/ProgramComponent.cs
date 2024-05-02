@@ -22,7 +22,15 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
     public interface IProgramComponent
     {
         void Run(string[] rawArgs);
-        void Run(WorkArgs wka);
+
+        void Run(
+            string[] rawArgs,
+            out string title,
+            out string newFullDirNamePart);
+
+        void Run(
+            WorkArgs wka,
+            out string newFullDirNamePart);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -65,21 +73,33 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
 
         public void Run(string[] rawArgs)
         {
+            Run(rawArgs, out _, out _);
+        }
+
+        public void Run(
+            string[] rawArgs,
+            out string title,
+            out string newFullDirNamePart)
+        {
             var args = GetWorkArgs(rawArgs);
+            title = args.MdTitle;
 
             var wka = new WorkArgs
             {
                 Args = args
             };
 
-            Run(wka);
+            Run(wka, out newFullDirNamePart);
         }
 
-        public void Run(WorkArgs wka)
+        public void Run(
+            WorkArgs wka,
+            out string newFullDirNamePart)
         {
             var args = wka.Args;
 
-            string newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(wka.Args.MdTitle,
+            newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(
+                wka.Args.MdTitle,
                 config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
 
             string newMdFileName = GetMdFileName(newFullDirNamePart);
