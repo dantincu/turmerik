@@ -10,13 +10,18 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
     public class IdxesUpdater
     {
         public Dictionary<int, int> UpdateIdxes(
-            IdxesUpdaterOpts opts)
+            IdxesUpdaterOpts srcOpts,
+            IdxesUpdaterOpts trgOpts,
+            IdxesUpdateMapping[] idxesUpdateMappings)
         {
-            NormalizeOpts(opts);
+            NormalizeOpts(srcOpts);
+            NormalizeOpts(trgOpts);
 
             var wka = new WorkArgs
             {
-                Opts = opts,
+                SrcOpts = srcOpts,
+                TrgOpts = trgOpts,
+                IdxesUpdateMappings = idxesUpdateMappings,
                 OutMap = new Dictionary<int, int>()
             };
 
@@ -84,7 +89,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     "Detected multiple pairs being set to the same idx");
             }
 
-            if (wka.Opts.PrevIdxes.Except(wka.OutMap.Keys).Intersect(
+            if (wka.TrgOpts.PrevIdxes.Except(
+                wka.OutMap.Keys).Intersect(
                 wka.OutMap.Values).Any())
             {
                 throw new InvalidOperationException(
@@ -93,7 +99,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         }
 
         private List<MappingArgs> GetMappingArgs(
-            WorkArgs wka) => wka.Opts.IdxesUpdateMappings.Select(
+            WorkArgs wka) => wka.IdxesUpdateMappings.Select(
                 idxesMapping =>
                 {
                     var retObj = new MappingArgs
@@ -167,26 +173,26 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             if (idxesFilter.StartIdx.HasValue)
             {
-                nmrbl = wka.Opts.PrevIdxes.SkipWhile(
-                    idx => wka.Opts.IdxComparison(
+                nmrbl = wka.SrcOpts.PrevIdxes.SkipWhile(
+                    idx => wka.SrcOpts.IdxComparison(
                         idxesFilter.StartIdx.Value, idx) > 0);
 
                 if (idxesFilter.EndIdx.HasValue)
                 {
                     nmrbl = nmrbl.TakeWhile(
-                        idx => wka.Opts.IdxComparison(
+                        idx => wka.SrcOpts.IdxComparison(
                             idxesFilter.EndIdx.Value, idx) >= 0);
                 }
             }
             else if (idxesFilter.EndIdx.HasValue)
             {
-                nmrbl = wka.Opts.PrevIdxes.TakeWhile(
-                    idx => wka.Opts.IdxComparison(
+                nmrbl = wka.SrcOpts.PrevIdxes.TakeWhile(
+                    idx => wka.SrcOpts.IdxComparison(
                         idxesFilter.EndIdx.Value, idx) >= 0);
             }
             else
             {
-                nmrbl = wka.Opts.PrevIdxes;
+                nmrbl = wka.SrcOpts.PrevIdxes;
             }
 
             mappingArgs.SrcIdxes.AddRange(nmrbl);
@@ -197,7 +203,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             MappingArgs mappingArgs,
             IdxesFilter idxesFilter)
         {
-            var opts = wka.Opts;
+            var opts = wka.TrgOpts;
             int count = mappingArgs.SrcIdxes.Count;
 
             IEnumerable<int> nmrbl = mappingArgs.SrcIdxes.Select(
@@ -217,7 +223,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                             $"totals a count of {trgCount} which is different than the source idxes count which is {count}"));
                     }
 
-                    if (wka.Opts.IdxComparison(
+                    if (wka.TrgOpts.IdxComparison(
                         idxesFilter.StartIdx.Value,
                         idxesFilter.EndIdx.Value) > 0)
                     {
@@ -242,7 +248,9 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
         public class WorkArgs
         {
-            public IdxesUpdaterOpts Opts { get; set; }
+            public IdxesUpdaterOpts SrcOpts { get; set; }
+            public IdxesUpdaterOpts TrgOpts { get; set; }
+            public IdxesUpdateMapping[] IdxesUpdateMappings { get; set; }
             public Dictionary<int, int> OutMap { get; set; }
 
             public List<MappingArgs> MappingArgs { get; set; }

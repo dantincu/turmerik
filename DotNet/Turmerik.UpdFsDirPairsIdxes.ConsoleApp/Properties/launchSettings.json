@@ -2,9 +2,14 @@
   "profiles": {
     "Turmerik.UpdFsDirPairsIdxes.ConsoleApp": {
       "commandName": "Project",
-      // "commandLineArgs": ":wd:workDir :i 792:791 791:792"
+      // "commandLineArgs": ":wd:workDir :i 798:797 797:798",
       // "commandLineArgs": ":wd:workDir :i :s 199:198 198:199",
-      "commandLineArgs": ":wd:workDir :i :s"
+      // "commandLineArgs": ":wd:workDir :i :s",
+      // "commandLineArgs": ":wd:workDir 799..:790.."
+      // "commandLineArgs": ":wd:workDir :s 190..:.."
+      // "commandLineArgs": ":wd:workDir :cts 799:197"
+      "commandLineArgs": ":wd:workDir :ctn ..:.."
+      // "commandLineArgs": ":wd:workDir :cts ..:190.."
     }
   }
 }

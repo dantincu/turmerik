@@ -28,6 +28,8 @@ namespace Turmerik.DirsPair
             public string CreateNoteBook { get; set; }
             public string CreateNoteInternalsDir { get; set; }
             public string CreateNoteFilesDir { get; set; }
+            public string ConvertToNoteSections { get; set; }
+            public string ConvertToNoteItems { get; set; }
             public string Url { get; set; }
             public string Uri { get; set; }
             public string ShowLastCreatedFirst { get; set; }

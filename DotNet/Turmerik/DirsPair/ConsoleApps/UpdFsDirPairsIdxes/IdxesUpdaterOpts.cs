@@ -18,6 +18,6 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         public Comparison<int> IdxComparison { get; set; }
 
         public int[] PrevIdxes { get; set; }
-        public IdxesUpdateMapping[] IdxesUpdateMappings { get; set; }
+        // public IdxesUpdateMapping[] IdxesUpdateMappings { get; set; }
     }
 }

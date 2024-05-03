@@ -173,14 +173,17 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             wka.NoteItemsTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(args.WorkDir);
 
-            var noteDirCat = args.UpdateSections switch
+            /* var noteDirCat = args.UpdateSections switch
             {
                 true => NoteDirCategory.Section,
                 _ => NoteDirCategory.Item
-            };
+            }; */
 
-            wka.NoteDirsPairTuplesList = wka.NoteItemsTuple.DirsPairTuples.Where(
-                tuple => tuple.NoteDirCat == noteDirCat).ToList();
+            wka.NoteItemDirsPairTuplesList = wka.NoteItemsTuple.DirsPairTuples.Where(
+                tuple => tuple.NoteDirCat == NoteDirCategory.Item).ToList();
+
+            wka.NoteSectionDirsPairTuplesList = wka.NoteItemsTuple.DirsPairTuples.Where(
+                tuple => tuple.NoteDirCat == NoteDirCategory.Section).ToList();
 
             if (wka.NoteItemsTuple.FileDirsPairTuples.Any())
             {
@@ -188,11 +191,11 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     "Detected file dir pairs in this folder and this would make things too ambigous");
             }
 
-            if (wka.NoteDirsPairTuplesList.None())
+            /* if (wka.NoteItemDirsPairTuplesList.None())
             {
                 throw new InvalidOperationException(
                     "Detected no note dir pairs in this folder");
-            }
+            } */
 
             if (wka.NoteItemsTuple.DirsPairTuples.Any(
                 tuple => tuple.FullDirName == null))
@@ -240,7 +243,13 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                                                             path))))!),
                                         consoleArgsParser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteSection.Arr(),
-                                            data => data.Args.UpdateSections = true, true)
+                                            data => data.Args.UpdateSections = true, true),
+                                        consoleArgsParser.ArgsFlagOpts(data,
+                                            config.ArgOpts.ConvertToNoteSections.Arr(),
+                                            data => data.Args.ConvertToNoteSections = true, true),
+                                        consoleArgsParser.ArgsFlagOpts(data,
+                                            config.ArgOpts.ConvertToNoteItems.Arr(),
+                                            data => data.Args.ConvertToNoteItems = true, true)
                                     ],
                                 });
                         }
@@ -267,21 +276,53 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     TrgIdxes = new IdxesFilter().Lst()
                 });
             }
+
+            if (new bool?[] {args.UpdateSections, args.ConvertToNoteSections, args.ConvertToNoteItems }.Where(
+                value => value == true).Count() > 1)
+            {
+                throw new ArgumentException(
+                    string.Join(" ", $"Only one of the following flags can be provided:",
+                        string.Join(",",
+                            args.UpdateSections,
+                            args.ConvertToNoteSections),
+                        "or", nameof(args.ConvertToNoteItems)));
+            }
+            else
+            {
+                if (args.UpdateSections == true)
+                {
+                    args.SrcFromSections = true;
+                    args.TrgFromSections = true;
+                }
+                else if (args.ConvertToNoteSections == true)
+                {
+                    args.TrgFromSections = true;
+                }
+                else if (args.ConvertToNoteItems == true)
+                {
+                    args.SrcFromSections = true;
+                }
+            }
         }
 
         private void GetResultMap(WorkArgs wka)
         {
-            var idxesUpdaterOpts = GetIdxesUpdaterOpts(
-                wka.Args.UpdateSections);
+            var srcIdxesUpdaterOpts = GetIdxesUpdaterOpts(
+                wka, wka.Args.SrcFromSections);
 
-            idxesUpdaterOpts.PrevIdxes = wka.NoteDirsPairTuplesList.Select(
-                tuple => tuple.NoteDirIdx).ToArray();
+            var trgIdxesUpdaterOpts = GetIdxesUpdaterOpts(
+                wka, wka.Args.TrgFromSections);
 
-            idxesUpdaterOpts.IdxesUpdateMappings = wka.Args.IdxesUpdateMappings.ToArray();
+            var idxesUpdateMappings = wka.Args.IdxesUpdateMappings.ToArray();
+
+            var noteDirsPairTuplesList = GetNoteDirsPairTuplesList(
+                wka, wka.Args.SrcFromSections);
 
             wka.ResultMap = idxesUpdater.UpdateIdxes(
-                idxesUpdaterOpts).ToDictionary(
-                    kvp => kvp.Value, kvp => wka.NoteDirsPairTuplesList.Single(
+                srcIdxesUpdaterOpts,
+                trgIdxesUpdaterOpts,
+                idxesUpdateMappings).ToDictionary(
+                    kvp => kvp.Value, kvp => noteDirsPairTuplesList.Single(
                         tuple => tuple.NoteDirIdx == kvp.Key));
         }
 
@@ -350,7 +391,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         }
 
         private void PrintToConsole(
-            string msg, bool withNl,
+            string msg,
+            bool withNl,
             ConsoleColor foregroundColor)
         {
             Console.ForegroundColor = foregroundColor;
@@ -387,6 +429,37 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             };
 
         private IdxesUpdaterOpts GetIdxesUpdaterOpts(
+            WorkArgs wka,
+            bool? updateSections)
+        {
+            var idxesUpdaterOpts = GetIdxesUpdaterOptsCore(
+                updateSections);
+
+            var noteDirsPairTuplesList = GetNoteDirsPairTuplesList(
+                wka, updateSections);
+
+            idxesUpdaterOpts.PrevIdxes = noteDirsPairTuplesList.Select(
+                tuple => tuple.NoteDirIdx).ToArray();
+
+            return idxesUpdaterOpts;
+        }
+
+        private List<DirsPairTuple> GetNoteDirsPairTuplesList(
+            WorkArgs wka, bool? updateSections) => GetValue(
+                updateSections,
+                wka.NoteSectionDirsPairTuplesList,
+                wka.NoteItemDirsPairTuplesList);
+
+        private TValue GetValue<TValue>(
+            bool? updateSections,
+            TValue sectionsValue,
+            TValue itemsValue) => updateSections switch
+            {
+                true => sectionsValue,
+                _ => itemsValue
+            };
+
+        private IdxesUpdaterOpts GetIdxesUpdaterOptsCore(
             bool? updateSections) => idxesUpdater.NormalizeOpts(updateSections switch
             {
                 true => new IdxesUpdaterOpts
@@ -407,7 +480,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         {
             public ProgramArgs Args { get; set; }
             public NoteItemsTupleCore NoteItemsTuple { get; set; }
-            public List<DirsPairTuple> NoteDirsPairTuplesList { get; set; }
+            public List<DirsPairTuple> NoteItemDirsPairTuplesList { get; set; }
+            public List<DirsPairTuple> NoteSectionDirsPairTuplesList { get; set; }
             public Dictionary<int, DirsPairTuple> ResultMap { get; set; }
             public List<LoopWorkArgsItem> LoopWorkArgsItemsList { get; set; }
         }

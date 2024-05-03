@@ -367,9 +367,16 @@ namespace Turmerik.Notes.UnitTests
                 MinIdx = 1,
                 MaxIdx = 999,
                 IncIdx = incIdx,
-                PrevIdxes = prevIdxes,
-                IdxesUpdateMappings = idxesUpdateMappings
-            });
+                PrevIdxes = prevIdxes
+            },
+            new IdxesUpdaterOpts
+            {
+                MinIdx = 1,
+                MaxIdx = 999,
+                IncIdx = incIdx,
+                PrevIdxes = prevIdxes
+            },
+            idxesUpdateMappings);
 
             this.AssertSequenceEqual(
                 expectedOutput, actualOutput);
