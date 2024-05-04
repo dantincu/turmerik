@@ -13,6 +13,8 @@
     "CreateNoteBook": "nb",
     "CreateNoteInternalsDir": "ni",
     "CreateNoteFilesDir": "nf",
+    "ConvertToNoteSections": "cts",
+    "ConvertToNoteItems": "ctn",
     "Url": "url",
     "Uri": "uri",
     "ShowLastCreatedFirst": "slf",
