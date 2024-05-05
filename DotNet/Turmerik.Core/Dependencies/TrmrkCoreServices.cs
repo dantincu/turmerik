@@ -55,6 +55,7 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IDelimCharsExtractor, DelimCharsExtractor>();
             services.AddSingleton<ITextBufferLinesRetriever, TextBufferLinesRetriever>();
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
+            services.AddSingleton<IExpressionTextParser, ExpressionTextParser>();
             services.AddSingleton<IRegexReplacer, RegexReplacer>();
             services.AddSingleton<ILocalDevicePathMacrosRetriever, LocalDevicePathMacrosRetriever>();
             services.AddSingleton<IStringLiteralTransformer, StringLiteralTransformer>();

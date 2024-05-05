@@ -10,6 +10,51 @@ namespace Turmerik.Core.Text
 {
     public static partial class StringH
     {
+        public static string[] Split(
+            this string input,
+            string splitter,
+            StringComparison comparisonType = StringComparison.InvariantCulture,
+            StringSplitOptions stringSplitOptions = StringSplitOptions.None)
+        {
+            List<string> retList = new ();
+            int idx = input.IndexOf(splitter, comparisonType);
+
+            if (idx >= 0)
+            {
+                string subStr = input.Substring(0, idx);
+                string restOfStr = input.Substring(idx + splitter.Length);
+
+                if (ShouldIncludeSplitString(subStr, stringSplitOptions))
+                {
+                    retList.Add(subStr);
+                }
+
+                while (idx >= 0)
+                {
+                    idx = input.IndexOf(splitter, comparisonType);
+                    subStr = restOfStr.Substring(0, idx);
+                    restOfStr = restOfStr.Substring(idx + splitter.Length);
+
+                    if (ShouldIncludeSplitString(subStr, stringSplitOptions))
+                    {
+                        retList.Add(subStr);
+                    }
+                }
+
+                retList.Add(restOfStr);
+            }
+            else
+            {
+                retList.Add(splitter);
+            }
+
+            return retList.ToArray();
+        }
+
+        public static bool ShouldIncludeSplitString(
+            string subStr,
+            StringSplitOptions opts) => opts != StringSplitOptions.RemoveEmptyEntries || !string.IsNullOrEmpty(subStr);
+
         public static Tuple<string, string> SplitStr(
             this string inputStr,
             IdxRetriever<char, string> splitter)

@@ -27,6 +27,31 @@ namespace Turmerik.Core.Helpers
             return retVal;
         }
 
+        public static T FirstNotDefault<T>(
+            this T first,
+            T[] nextArr,
+            Func<T, T, bool> eqCompr = null)
+        {
+            eqCompr ??= EqualityComparer<T>.Default.Equals;
+
+            T retVal = first;
+
+            if (eqCompr(retVal, default))
+            {
+                foreach (var item in nextArr)
+                {
+                    retVal = item;
+
+                    if (!eqCompr(retVal, default))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return retVal;
+        }
+
         public static List<T> ReverseOrder<T>(
             this IEnumerable<T> nmrbl)
         {
