@@ -22,16 +22,18 @@ body, #app-root {
 }
 
 .trmrk-app-bar-toggle-icon {
-  position: "fixed";
-  right: "0px";
-  color: "white";
+  position: fixed;
+  right: 0px;
+  color: white;
   z-index: 1101;
 
   &.trmrk-toggles-header {
+    position: fixed;
     top: 0px;
   }
 
   &.trmrk-toggles-footer {
+    position: fixed;
     bottom: 0px;
   }
 }
@@ -55,7 +57,7 @@ body, #app-root {
   background-color: #00F;
 }
 
-.trmrk-panel {
+.trmrk-bars-panel {
   width: 100%;
 
   .trmrk-pinned-top-bar-bg-spacer {
