@@ -127,6 +127,10 @@ const getParcelWsSyncSrcSections = () =>
               FileRelPath: "pull_all.bat",
               TextContent: [scr.call_fst_pull, srcFolderName].join(" "),
             },
+            {
+              FileRelPath: "push_this.bat",
+              TextContent: [scr.call_fst_push, srcFolderName].join(" "),
+            },
           ],
         },
       ],

@@ -14,11 +14,11 @@ export interface AppModuleHomePageProps {
 
 import MatUIIcon from "../../../trmrk-react/components/icons/MatUIIcon";
 
-import AppBarsPanel from "../../components/barsPanel/AppBarsPanel";
+import AppBarsPanel from "../../../trmrk-react/components/barsPanel/AppBarsPanel";
 
 import { appBarSelectors, appBarReducers } from "../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../store/appDataSlice";
-import TrmrkTextCaretPositionerModal from "../devModule/indexedDbBrowser/TrmrkTextCaretPositionerModal";
+import TrmrkTextCaretPositionerModal from "../../../trmrk-react/components/textCaretPositioner/TrmrkTextCaretPositionerModal";
 
 const generateText = (): string[] => {
   const txt1 = "This is a ridiculously long text."

@@ -12,12 +12,13 @@ import Button from "@mui/material/Button";
 
 import { TrmrkError } from "../trmrk/TrmrkError";
 
-import { appDataSelectors } from "./store/appDataSlice";
+import { appDataSelectors, appDataReducers } from "./store/appDataSlice";
+import { appBarSelectors, appBarReducers } from "./store/appBarDataSlice";
 
-import DevModule from "./modules/devModule/DevModule";
+import DevModule from "../trmrk-react/modules/devModule/DevModule";
 
 import AppModule from "./modules/appModule/AppModule";
-import NotFound from "./pages/notFound/NotFound";
+import NotFound from "../trmrk-react/pages/notFound/NotFound";
 
 import { getAppTheme, currentAppTheme } from "../trmrk-react/app-theme/core";
 import { appModeCssClass, getAppModeCssClassName } from "../trmrk-browser/domUtils/core";
@@ -65,7 +66,13 @@ const App = withErrorBoundary(() => {
 
         <Routes>
           <Route path="/app/*" element={ <AppModule basePath="/app" rootPath="/" /> } />
-          <Route path="/dev/*" element={ <DevModule basePath="/dev" rootPath="/" /> } />
+          <Route path="/dev/*" element={ <DevModule
+            basePath="/dev"
+            rootPath="/"
+            appDataSelectors={appDataSelectors}
+            appDataReducers={appDataReducers}
+            appBarSelectors={appBarSelectors}
+            appBarReducers={appBarReducers} /> } />
           <Route path="/" element={ <Navigate to="/app" /> } />
           <Route path="*" element={ <NotFound /> } />
         </Routes>

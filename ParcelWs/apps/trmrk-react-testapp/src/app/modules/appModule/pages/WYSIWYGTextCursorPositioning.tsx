@@ -1,6 +1,6 @@
 import React from "react";
 
-import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
+import AppBarsPanel from "../../../../trmrk-react/components/barsPanel/AppBarsPanel";
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 

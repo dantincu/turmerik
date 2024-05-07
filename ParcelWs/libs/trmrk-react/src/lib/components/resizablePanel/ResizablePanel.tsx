@@ -2,7 +2,7 @@ import React from "react";
 
 import "./ResizablePanel.scss";
 
-import { Kvp } from "../../trmrk/core";
+import { Kvp } from "../../../trmrk/core";
 
 export enum ResizablePanelBorderSize {
   Regular,

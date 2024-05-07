@@ -9,7 +9,7 @@ export interface DevModuleProps {
 import CodeTextCursorPositioning from "./pages/CodeTextCursorPositioning";
 import WYSIWYGTextCursorPositioning from "./pages/WYSIWYGTextCursorPositioning";
 import AppModuleHomePage from "./AppModuleHomePage";
-import NotFound from "../../pages/notFound/NotFound";;
+import NotFound from "../../../trmrk-react/pages/notFound/NotFound";;
 
 export default function DevModule(props: DevModuleProps) {
   return (<Routes>
