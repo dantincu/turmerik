@@ -229,7 +229,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-axios"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-axios"
             }
           ]
         },
@@ -252,7 +252,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-axios"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-axios"
             }
           ]
         }
@@ -283,7 +283,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-browser"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-browser"
             }
           ]
         },
@@ -306,7 +306,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-browser"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-browser"
             }
           ]
         },
@@ -329,7 +329,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-browser"
             }
           ]
         }
@@ -360,7 +360,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-blazor"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-blazor"
             }
           ]
         },
@@ -383,7 +383,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-blazor"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-blazor"
             }
           ]
         },
@@ -406,7 +406,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-blazor"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-blazor"
             }
           ]
         },
@@ -429,7 +429,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-blazor"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-blazor"
             }
           ]
         }
@@ -460,7 +460,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-react"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-react"
             }
           ]
         },
@@ -483,7 +483,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-react"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-react"
             }
           ]
         },
@@ -506,7 +506,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-react"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-react"
             }
           ]
         },
@@ -529,7 +529,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-react"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-react"
             }
           ]
         }
@@ -560,7 +560,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-behavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-behavior"
             }
           ]
         },
@@ -583,7 +583,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior"
             }
           ]
         }
@@ -614,7 +614,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-defaultbehavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-defaultbehavior"
             }
           ]
         },
@@ -637,7 +637,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-defaultbehavior"
             }
           ]
         },
@@ -660,7 +660,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-text-transform-behavior_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-defaultbehavior"
             }
           ]
         }
@@ -691,7 +691,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-mybehavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-mybehavior"
             }
           ]
         },
@@ -714,7 +714,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-mybehavior"
             }
           ]
         },
@@ -737,7 +737,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-text-transform-behavior_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-mybehavior"
             }
           ]
         }
@@ -768,7 +768,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-behavior-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-text-transform-behavior-testapp"
             }
           ]
         },
@@ -791,7 +791,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-text-transform-behavior-testapp"
             }
           ]
         },
@@ -814,7 +814,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-text-transform-behavior_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp"
             }
           ]
         },
@@ -837,7 +837,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-text-transform-mybehavior_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-text-transform-mybehavior:trmrk-text-transform-behavior-testapp"
             }
           ]
         }
@@ -868,7 +868,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
             }
           ]
         },
@@ -891,7 +891,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
             }
           ]
         },
@@ -914,7 +914,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
             }
           ]
         },
@@ -937,7 +937,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
             }
           ]
         },
@@ -960,7 +960,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-blazor_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
             }
           ]
         }
@@ -991,7 +991,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-react-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-react-testapp"
             }
           ]
         },
@@ -1014,7 +1014,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
             }
           ]
         },
@@ -1037,7 +1037,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
             }
           ]
         },
@@ -1060,7 +1060,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
             }
           ]
         },
@@ -1083,7 +1083,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-react_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
             }
           ]
         }
@@ -1114,7 +1114,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior"
             }
           ]
         },
@@ -1137,7 +1137,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior"
             }
           ]
         }
@@ -1168,7 +1168,7 @@
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-mkscripts-parcelws-sync-behavior-testapp"
             }
           ]
         },
@@ -1191,7 +1191,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-mkscripts-parcelws-sync-behavior-testapp"
             }
           ]
         },
@@ -1214,7 +1214,7 @@
             },
             {
               "FileRelPath": "push_to_trmrk-mkscripts-parcelws-sync-behavior_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
             }
           ]
         }

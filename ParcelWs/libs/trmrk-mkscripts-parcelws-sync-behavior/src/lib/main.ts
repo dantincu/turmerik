@@ -103,13 +103,9 @@ scr.call_fst_diff = [scr.call_sync, scr.fst_diff, scr.pf].join(" ");
 scr.call_fst_pull = [scr.call_sync, scr.fst_pull, scr.pf].join(" ");
 scr.call_fst_push = [scr.call_sync, scr.fst_push, scr.pf].join(" ");
 
-scr.call_fst_push_ppgp = [
-  scr.call_sync,
-  scr.fst_push,
-  scr.alldff,
-  scr.ppgp,
-  scr.pf,
-].join(" ");
+scr.call_fst_push_ppgp = [scr.call_sync, scr.fst_push, scr.ppgp, scr.pf].join(
+  " "
+);
 
 const getParcelWsSyncSrcSections = () =>
   Object.keys(srcFoldersArr).map((srcFolderName) => {

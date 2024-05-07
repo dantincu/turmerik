@@ -1,1 +1,1 @@
-CALL _sync :fst:push :alldff :ppgp :pf:turmerik-parcelws *:trmrk-browser
+CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-browser
