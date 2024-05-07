@@ -1,4 +1,4 @@
-import trmrk from "../../trmrk";
+import trmrk from "../trmrk";
 
 export const absUriRegex =
   /^[\w\-_]+\:\/\/([\w\-_]+\.?)+(\:[0-9]+)?(\/[\w\-\?\.\+_&=#,]*)*$/g;

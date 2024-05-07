@@ -6,7 +6,7 @@ import IndexedDbEditDb from "../../indexedDbBrowser/IndexedDbEditDb";
 import { appDataReducers } from "../../../../store/appDataSlice";
 import { appBarReducers } from "../../../../store/appBarDataSlice";
 
-import trmrk from "../../trmrk";
+import trmrk from "../../../../../trmrk";
 
 export interface IndexedDbBrowserCreateDbPageProps {
   urlPath: string;

@@ -5,14 +5,14 @@ import { Provider } from 'react-redux';
 
 import appDataStore from "../../store/appDataStore";
 
-import "trmrk-react/src/styles/all.scss";
-import "trmrk-react/src/styles/themes.scss";
+import "../../../trmrk-react/styles/all.scss";
+import "../../../trmrk-react/styles/themes.scss";
 
 import "../../styles/index-any.scss"
 
-import App from '../../app/App';
+import App from '../../App';
 
-import { createAppThemesMap } from "../../trmrk-react/app-theme/core";
+import { createAppThemesMap } from "../../../trmrk-react/app-theme/core";
 
 createAppThemesMap({}, {});
 

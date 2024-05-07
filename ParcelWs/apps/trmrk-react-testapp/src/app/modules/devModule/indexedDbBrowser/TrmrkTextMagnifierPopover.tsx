@@ -10,7 +10,7 @@ import TrmrkEditableMultilineTextMagnifier from "./TrmrkEditableMultilineTextMag
 import TrmrkReadonlyTextLineMagnifier from "./TrmrkReadonlyTextLineMagnifier";
 import TrmrkReadonlyMultilineTextMagnifier from "./TrmrkReadonlyMultilineTextMagnifier";
 
-import { getAppTheme } from "../../trmrk-react/app-theme/core";
+import { getAppTheme } from "../../../../trmrk-react/app-theme/core";
 
 export interface TrmrkBoxMagnifierPopoverProps {
   popoverClassName?: string | null | undefined;

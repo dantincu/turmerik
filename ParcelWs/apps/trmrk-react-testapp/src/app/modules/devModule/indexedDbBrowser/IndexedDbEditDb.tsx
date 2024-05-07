@@ -39,11 +39,11 @@ import { searchQuery } from "./data";
 
 import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 
-import { isMobile, isIPhone } from "trmrk-browser/src/domUtils/constants";
+import { isMobile, isIPhone } from "../../../../trmrk-browser/domUtils/constants";
 
 import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
 import TrmrkTextMagnifierPopover from "./TrmrkTextMagnifierPopover";
-import MatUIIcon from "trmrk-react/src/components/icons/MatUIIcon";
+import MatUIIcon from "../../../../trmrk-react/components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbProps {
   basePath: string;

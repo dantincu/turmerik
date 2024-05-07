@@ -4,8 +4,8 @@
   "description": "Turmierk Notes Blazor client side app",
   "type": "module",
   "scripts": {
-    "build-dev": "parcel build ./src/lib/env/any/index.ts --no-optimize --dist-dir ./dist/dev",
-    "build": "parcel build ./src/lib/env/any/index.ts --dist-dir ./dist/prod"
+    "build-dev": "parcel build ./src/app/env/any/index.ts --no-optimize --dist-dir ./dist/dev",
+    "build": "parcel build ./src/app/env/any/index.ts --dist-dir ./dist/prod"
   },
   "author": "Daniel Tincu",
   "license": "MIT",

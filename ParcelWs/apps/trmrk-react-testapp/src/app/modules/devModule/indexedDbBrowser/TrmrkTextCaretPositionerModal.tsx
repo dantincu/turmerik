@@ -3,8 +3,8 @@ import React from "react";
 import Modal from '@mui/material/Modal';
 import DialogContent from '@mui/material/DialogContent';
 
-import trmrk from "../../trmrk";
-import { getAppTheme } from "../../trmrk-react/app-theme/core";
+import trmrk from "../../../../trmrk";
+import { getAppTheme } from "../../../../trmrk-react/app-theme/core";
 
 import TrmrkTextCaretPositioner, { TrmrkTextCaretPositionerProps } from "./TrmrkTextCaretPositioner";
 

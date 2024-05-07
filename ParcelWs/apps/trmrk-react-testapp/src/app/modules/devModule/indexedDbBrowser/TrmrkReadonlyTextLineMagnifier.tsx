@@ -10,7 +10,7 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 
-import MatUIIcon from "../../trmrk-react/components/icons/MatUIIcon";
+import MatUIIcon from "../../../../trmrk-react/components/icons/MatUIIcon";
 
 export interface TrmrkReadonlyTextLineMagnifierProps {
   text: string;

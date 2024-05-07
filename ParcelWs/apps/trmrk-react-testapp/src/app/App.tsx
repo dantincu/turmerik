@@ -10,17 +10,17 @@ import Paper  from "@mui/material/Paper";
 
 import Button from "@mui/material/Button";
 
-import { TrmrkError } from "trmrk/src/TrmrkError";
+import { TrmrkError } from "../trmrk/TrmrkError";
 
-import { appDataSelectors } from "../store/appDataSlice";
+import { appDataSelectors } from "./store/appDataSlice";
 
-import DevModule from "../modules/devModule/DevModule";
+import DevModule from "./modules/devModule/DevModule";
 
-import AppModule from "../modules/appModule/AppModule";
-import NotFound from "../pages/notFound/NotFound";
+import AppModule from "./modules/appModule/AppModule";
+import NotFound from "./pages/notFound/NotFound";
 
-import { getAppTheme, currentAppTheme } from "trmrk-react/src/app-theme/core";
-import { appModeCssClass, getAppModeCssClassName } from "trmrk-browser/src/domUtils/core";
+import { getAppTheme, currentAppTheme } from "../trmrk-react/app-theme/core";
+import { appModeCssClass, getAppModeCssClassName } from "../trmrk-browser/domUtils/core";
 
 const App = withErrorBoundary(() => {
   const [error, resetError] = useErrorBoundary(

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import trmrk from "trmrk";
+import trmrk from "../../trmrk";
 
 import trmrk_browser from "../../trmrk-browser";
 

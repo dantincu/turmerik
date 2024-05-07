@@ -10,14 +10,14 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Box from "@mui/material/Box";
 import DeleteIcon from "@mui/icons-material/Delete"
 
-import trmrk from "../../trmrk";
+import trmrk from "../../../../trmrk";
 
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import { deserializeKeyPath } from "../../../services/indexedDb";
 import TrmrkTextMagnifierPopover from "./TrmrkTextMagnifierPopover";
-import MatUIIcon from "../../trmrk-react/components/icons/MatUIIcon";
+import MatUIIcon from "../../../../trmrk-react/components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbStoreProps {
   model: IndexedDbStore;
