@@ -184,6 +184,25 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                     $"Prints this help message to the console",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
+                string.Join(" ", $"Here is a list of arguments {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                $"{{{x.DarkBlue}}}1. {{{x.Splitter}}}The {{{x.Blue}}}work dir{{{x.Splitter}}}",
+                $"changes the working directory from where the pairs of folders are listed{{{x.NewLine}}}{{{x.NewLine}}}",
+
+                string.Join(" ", $"{{{x.DarkBlue}}}1. {{{x.Splitter}}}The {{{x.Blue}}}short name dir path{{{x.Splitter}}}",
+                    $"Specifies the path of the short name folder whose corresponding full name folder and",
+                    $"markdown file are to be renamed. If ommited, the current directory will be used instead.",
+                    $"If provided a relative path, the current directory will be used as base path for",
+                    $"getting the short name folder path."),
+
+                string.Join(" ", $"{{{x.DarkBlue}}}2. {{{x.Splitter}}}The {{{x.Blue}}}markdown file name{{{x.Splitter}}}",
+                    $"that will be used to extract the note item title from{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", $"{{{x.DarkBlue}}}3. {{{x.Splitter}}}The {{{x.Blue}}}note item title{{{x.Splitter}}}",
+                    $"that will be used for generating the new markdown file name and the new full dir name part",
+                    $"instead of extracting it from the markdown file{{{x.NewLine}}}{{{x.NewLine}}}"),
+
                 $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
                 string.Concat(
                     $"{{{x.DarkGreen}}}",

@@ -55,12 +55,12 @@
   },
   "Macros": {
     "Map": {
-      "lm": [ ":n", "Misc", ":+", ":n", "#list#", ":-", ":=" ],
-      "la": [ ":n", "Articles", ":+", ":n", "#list#", ":-", ":=" ],
-      "lp": [ ":n", "Persons", ":+", ":n", "#list#", ":-", ":=" ],
-      "lpp": [ ":n", "Public Persons", ":+", ":n", "#list#", ":-", ":=" ],
-      "ltc": [ ":n", "Terms & Concepts", ":+", ":n", "#list#", ":-", ":=" ],
-      "lps": [ ":n", "Products & Services", ":+", ":n", "#list#", ":-", ":=" ]
+      "m": [ ":n", "Misc", ":=" ],
+      "a": [ ":n", "Articles", ":=" ],
+      "p": [ ":n", "Persons", ":=" ],
+      "pp": [ ":n", "Public Persons", ":=" ],
+      "tc": [ ":n", "Terms & Concepts", ":=" ],
+      "ps": [ ":n", "Products & Services", ":=" ]
     }
   }
 }

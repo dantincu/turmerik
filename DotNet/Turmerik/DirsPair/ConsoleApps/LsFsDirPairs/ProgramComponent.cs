@@ -156,6 +156,12 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
                     $"Prints this help message to the console",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
+                string.Join(" ", $"Here is a list of arguments {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                $"{{{x.DarkBlue}}}1. {{{x.Splitter}}}The {{{x.Blue}}}work dir{{{x.Splitter}}}",
+                $"changes the working directory from where the pairs of folders are listed{{{x.NewLine}}}{{{x.NewLine}}}",
+
                 $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
                 string.Concat(
                     $"{{{x.DarkGreen}}}",

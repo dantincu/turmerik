@@ -198,6 +198,14 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     $"Prints this help message to the console",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
+                string.Join(" ", $"Here is a list of arguments {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", $"{{{x.DarkBlue}}}1. {{{x.Splitter}}}The {{{x.Blue}}}indexes update mappings{{{x.Splitter}}}",
+                    $"(supports multiple values) filters down the list of affected folder pair indexes and provides",
+                    $"target indexes for the current indexes to be updated to",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
                 $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
                 string.Concat(
                     $"{{{x.DarkGreen}}}",

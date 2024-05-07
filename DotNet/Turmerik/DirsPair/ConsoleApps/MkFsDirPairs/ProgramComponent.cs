@@ -203,9 +203,34 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                     $"from the provided title.",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
+                string.Join(" ", optsHead($":{argOpts.HcyChildNode}", ""),
+                    $"Creates a child node where the following arguments, options and flags for this command will be",
+                    $"assigned to{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.HcySibblingNode}", ""),
+                    $"Creates a sibbling node where the following arguments, options and flags for this command will be",
+                    $"assigned to{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.HcyParentNode}", ""),
+                    $"Moves up to the parent node to further create sibblings or other children",
+                    $"for the parent node{{{x.NewLine}}}{{{x.NewLine}}}"),
+
                 string.Join(" ", optsHead($":{argOpts.PrintHelpMessage}", ""),
                     $"Prints this help message to the console",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", $"Here is a list of arguments {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", $"{{{x.DarkBlue}}}1. {{{x.DarkRed}}}*{{{x.Splitter}}}The {{{x.Blue}}}note title{{{x.Splitter}}}",
+                    $"(which is required unless you pass one of these flags on:",
+                    $"{{{x.DarkCyan}}}{argOpts.CreateNoteBook}{{{x.Splitter}}},",
+                    $"{{{x.DarkCyan}}}{argOpts.CreateNoteFilesDir}{{{x.Splitter}}} or",
+                    $"{{{x.DarkCyan}}}{argOpts.CreateNoteInternalsDir}{{{x.Splitter}}})",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                $"{{{x.DarkBlue}}}2. {{{x.Splitter}}}The {{{x.Blue}}}short dir name{{{x.Splitter}}}{{{x.NewLine}}}{{{x.NewLine}}}",
+                $"{{{x.DarkBlue}}}3. {{{x.Splitter}}}The {{{x.Blue}}}join string{{{x.Splitter}}}{{{x.NewLine}}}{{{x.NewLine}}}",
 
                 $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
                 string.Concat(
