@@ -9,6 +9,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 {
     public class ProgramArgs
     {
+        public bool? PrintHelpMessage { get; set; }
         public string WorkDir { get; set; }
 
         public Node Current { get; set; }

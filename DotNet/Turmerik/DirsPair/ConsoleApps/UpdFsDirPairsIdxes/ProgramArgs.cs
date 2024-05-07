@@ -8,6 +8,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 {
     public class ProgramArgs
     {
+        public bool? PrintHelpMessage { get; set; }
         public string WorkDir { get; set; }
         public bool? InteractiveMode { get; set; }
         public bool? UpdateSections { get; set; }

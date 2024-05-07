@@ -32,6 +32,7 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
             DataTreeNodeMtbl<FilteredDriveEntries> destnEntriesObj,
             DataTreeNodeMtbl<RefTrgDriveFolderTuple> diffResult);
 
+        public bool? PrintHelpMessage { get; set; }
         public string WorkDir { get; set; }
         public string ConfigFilePath { get; set; }
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }

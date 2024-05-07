@@ -9,6 +9,7 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
 {
     public class ProgramArgs
     {
+        public bool? PrintHelpMessage { get; set; }
         public string WorkDir { get; set; }
         public bool? ShowLastCreatedFirst { get; set; }
         public bool? ShowOtherDirNames { get; set; }

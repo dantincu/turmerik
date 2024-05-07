@@ -29,9 +29,10 @@ namespace Turmerik.Core.Text
                     retList.Add(subStr);
                 }
 
+                idx = restOfStr.IndexOf(splitter, comparisonType);
+
                 while (idx >= 0)
                 {
-                    idx = input.IndexOf(splitter, comparisonType);
                     subStr = restOfStr.Substring(0, idx);
                     restOfStr = restOfStr.Substring(idx + splitter.Length);
 
@@ -41,11 +42,14 @@ namespace Turmerik.Core.Text
                     }
                 }
 
-                retList.Add(restOfStr);
+                if (ShouldIncludeSplitString(restOfStr, stringSplitOptions))
+                {
+                    retList.Add(restOfStr);
+                }
             }
             else
             {
-                retList.Add(splitter);
+                retList.Add(input);
             }
 
             return retList.ToArray();

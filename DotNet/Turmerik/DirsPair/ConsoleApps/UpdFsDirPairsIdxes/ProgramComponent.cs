@@ -27,6 +27,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
     public class ProgramComponent : IProgramComponent
     {
         private readonly IConsoleArgsParser consoleArgsParser;
+        private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IIdxesFilterParser idxesFilterParser;
         private readonly IdxesUpdater idxesUpdater;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
@@ -37,12 +38,16 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         public ProgramComponent(
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
+            IConsoleMsgPrinter consoleMsgPrinter,
             IIdxesFilterParser idxesFilterParser,
             IdxesUpdater idxesUpdater,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory)
         {
             this.consoleArgsParser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
+
+            this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
+                nameof(consoleMsgPrinter));
 
             this.idxesFilterParser = idxesFilterParser ?? throw new ArgumentNullException(
                 nameof(idxesFilterParser));
@@ -69,36 +74,40 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         public async Task RunAsync(string[] rawArgs)
         {
             var args = GetProgArgs(rawArgs);
-            var wka = await GetWorkArgsAsync(args);
 
-            GetResultMap(wka);
-            GetLoopWorkArgsItemsList(wka);
-
-            Console.ResetColor();
-            bool userCancelledExecution = false;
-
-            if (wka.Args.InteractiveMode == true)
+            if (args.PrintHelpMessage != true)
             {
-                Console.WriteLine();
-                Console.WriteLine("Do you want to go on with the renaming of dir pairs? Type Y for yes, or anything else for no.");
-                string answer = Console.ReadLine();
+                var wka = await GetWorkArgsAsync(args);
 
-                if (answer.ToUpper() != "Y")
+                GetResultMap(wka);
+                GetLoopWorkArgsItemsList(wka);
+
+                Console.ResetColor();
+                bool userCancelledExecution = false;
+
+                if (wka.Args.InteractiveMode == true)
                 {
-                    userCancelledExecution = true;
-                    Console.WriteLine("No renaming will be performed. Exiting the program");
+                    Console.WriteLine();
+                    Console.WriteLine("Do you want to go on with the renaming of dir pairs? Type Y for yes, or anything else for no.");
+                    string answer = Console.ReadLine();
+
+                    if (answer.ToUpper() != "Y")
+                    {
+                        userCancelledExecution = true;
+                        Console.WriteLine("No renaming will be performed. Exiting the program");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Proceeding with the renaming of dir pairs");
+                    }
+
+                    Console.WriteLine();
                 }
-                else
+
+                if (!userCancelledExecution)
                 {
-                    Console.WriteLine("Proceeding with the renaming of dir pairs");
+                    Run(wka);
                 }
-
-                Console.WriteLine();
-            }
-
-            if (!userCancelledExecution)
-            {
-                Run(wka);
             }
         }
 
@@ -123,6 +132,79 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             PrintActionName(
                 "Successfully renamed dir pairs to final names",
                 ConsoleColor.Green);
+        }
+
+        private void PrintHelpMessage(
+            ProgramArgs args)
+        {
+            var x = consoleMsgPrinter.GetDefaultExpressionValues();
+            var argOpts = config.ArgOpts;
+
+            var msgTpl = (
+                string text,
+                string prefix = null) => ConsoleStrMsgTuple.New(
+                    prefix ?? $"{{{x.Cyan}}}", text, x.Splitter);
+
+            var optsHead = (string optsStr, string sffxStr, bool? required = null) =>
+            {
+                var retStr = string.Concat(
+                    required == true ? $"{{{x.DarkRed}}}*" : string.Empty,
+                    $"{{{x.DarkCyan}}}{optsStr}",
+                    required == false ? $"{{{x.Cyan}}}?" : string.Empty,
+                    $"{{{x.DarkGray}}}{sffxStr}{{{x.Splitter}}}");
+
+                return retStr;
+            };
+
+            var m = new
+            {
+                ThisTool = msgTpl("this tool"),
+            };
+
+            string[] linesArr = [
+                $"{{{x.Blue}}}Welcome to the Turmerik UpdFsDirPairsIdxes tool{{{x.NewLine}}}",
+
+                string.Join(" ", $"{m.ThisTool.U} helps you update short folder name indexes for",
+                $"note items and sections folder pairs{{{x.NewLine}}}."),
+
+                string.Join(" ", $"Here is a list of argument options {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.WorkDir}", ""),
+                    $"Changes the work directory where the folder pair names will be updated",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.InteractiveMode}", ""),
+                    $"Enables the interactive mode, where after printing the",
+                    $"current and new names for the folders that are to be renamed,",
+                    $"the user is then asked to confirm if they wish to go on with the execution of the program,",
+                    $"or cancel the execution{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.CreateNoteSection}", ""),
+                    $"Indicates that only the names of the note sections folder pairs should be affected by this command",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.ConvertToNoteSections}", ""),
+                    $"Indicates that all the folders that are to be renamed are currently",
+                    $"of type note items, and will be converted to note sections",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.ConvertToNoteItems}", ""),
+                    $"Indicates that all the folders that are to be renamed are currently",
+                    $"of type note sections, and will be converted to note items",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.PrintHelpMessage}", ""),
+                    $"Prints this help message to the console",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
+                string.Concat(
+                    $"{{{x.DarkGreen}}}",
+                    "https://github.com/dantincu/turmerik/tree/main/DotNet/Turmerik.UpdFsDirPairsIdxes.ConsoleApp",
+                    $"{{{x.Splitter}}}{{{x.NewLine}}}{{{x.NewLine}}}")];
+
+            consoleMsgPrinter.Print(linesArr, null, x);
         }
 
         private void RunCore(
@@ -232,6 +314,9 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                                     ItemHandlersArr = [],
                                     FlagHandlersArr = [
                                         consoleArgsParser.ArgsFlagOpts(data,
+                                            config.ArgOpts.PrintHelpMessage.Arr(),
+                                            data => data.Args.PrintHelpMessage = true, true),
+                                        consoleArgsParser.ArgsFlagOpts(data,
                                             config.ArgOpts.InteractiveMode.Arr(),
                                             data => data.Args.InteractiveMode = true, true),
                                         consoleArgsParser.ArgsFlagOpts(data,
@@ -260,7 +345,15 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     }
                 }).Args;
 
-            NormalizeArgs(args);
+            if (args.PrintHelpMessage == true)
+            {
+                PrintHelpMessage(args);
+            }
+            else
+            {
+                NormalizeArgs(args);
+            }
+
             return args;
         }
 

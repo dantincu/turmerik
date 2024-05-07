@@ -27,6 +27,7 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
     public class ProgramComponent : IProgramComponent
     {
         private readonly IJsonConversion jsonConversion;
+        private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IConsoleArgsParser parser;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
@@ -43,11 +44,15 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
+            IConsoleMsgPrinter consoleMsgPrinter,
             IConsoleArgsParser consoleArgsParser,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
+
+            this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
+                nameof(consoleMsgPrinter));
 
             parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
@@ -80,10 +85,84 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
         public async Task RunAsync(string[] rawArgs)
         {
             var args = GetArgs(rawArgs);
-            NormalizeArgs(args);
 
-            args.NoteItemsTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(args.WorkDir);
-            Run(args);
+            if (args.PrintHelpMessage == true)
+            {
+                PrintHelpMessage(args);
+            }
+            else
+            {
+                NormalizeArgs(args);
+
+                args.NoteItemsTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(args.WorkDir);
+                Run(args);
+            }
+        }
+
+        private void PrintHelpMessage(
+            ProgramArgs args)
+        {
+            var x = consoleMsgPrinter.GetDefaultExpressionValues();
+            var argOpts = config.ArgOpts;
+
+            var msgTpl = (
+                string text,
+                string prefix = null) => ConsoleStrMsgTuple.New(
+                    prefix ?? $"{{{x.Cyan}}}", text, x.Splitter);
+
+            var optsHead = (string optsStr, string sffxStr, bool? required = null) =>
+            {
+                var retStr = string.Concat(
+                    required == true ? $"{{{x.DarkRed}}}*" : string.Empty,
+                    $"{{{x.DarkCyan}}}{optsStr}",
+                    required == false ? $"{{{x.Cyan}}}?" : string.Empty,
+                    $"{{{x.DarkGray}}}{sffxStr}{{{x.Splitter}}}");
+
+                return retStr;
+            };
+
+            var m = new
+            {
+                ThisTool = msgTpl("this tool"),
+            };
+
+            string[] linesArr = [
+                $"{{{x.Blue}}}Welcome to the Turmerik LsFsDirPairs tool{{{x.NewLine}}}",
+
+                string.Join(" ", $"{m.ThisTool.U} helps you list and highlight the",
+                    $"note items and note sections folder pairs {{{x.NewLine}}}."),
+
+                string.Join(" ", $"Here is a list of argument options {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.ShowLastCreatedFirst}", ""),
+                    $"Indicates that the list of folder pair names should be printed",
+                    $"in the opposite order from how they would normally be printed",
+                    $"which is in the ascending order of their short name indexes if",
+                    $"the indexes are set to be descending or the descending order of their short name indexes",
+                    $"if the indexes are set to be ascending, which largelly means that the",
+                    $"first create pairs are shown first by default",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.ShowOtherDirNames}", ""),
+                    $"Indicates that all file system entries are to be shown besides",
+                    $"the folder pair names. This means that if there are folder (or file) names",
+                    $"in the working directory that are not part of a valid pair of folders",
+                    $"so normally would not be printed by this command, this flag indicates",
+                    $"that those additional folder (or file) names should also be printed besides the folder pair names",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.PrintHelpMessage}", ""),
+                    $"Prints this help message to the console",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
+                string.Concat(
+                    $"{{{x.DarkGreen}}}",
+                    "https://github.com/dantincu/turmerik/tree/main/DotNet/Turmerik.LsFsDirPairs.ConsoleApp",
+                    $"{{{x.Splitter}}}{{{x.NewLine}}}{{{x.NewLine}}}")];
+
+            consoleMsgPrinter.Print(linesArr, null, x);
         }
 
         private void NormalizeArgs(
@@ -183,6 +262,9 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
                                                 path))))!)
                             ],
                             FlagHandlersArr = [
+                                parser.ArgsFlagOpts(data,
+                                    config.ArgOpts.PrintHelpMessage.Arr(),
+                                    data => data.Args.PrintHelpMessage = true, true),
                                 parser.ArgsFlagOpts(data,
                                     config.ArgOpts.ShowLastCreatedFirst.Arr(),
                                     data => data.Args.ShowLastCreatedFirst = true, true),

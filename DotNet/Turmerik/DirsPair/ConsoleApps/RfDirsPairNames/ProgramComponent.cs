@@ -36,6 +36,7 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
     public class ProgramComponent : IProgramComponent
     {
         private readonly IJsonConversion jsonConversion;
+        private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IConsoleArgsParser consoleArgsParser;
         private readonly DirsPairConfig config;
@@ -45,11 +46,15 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
+            IConsoleMsgPrinter consoleMsgPrinter,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IConsoleArgsParser consoleArgsParser)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
+
+            this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
+                nameof(consoleMsgPrinter));
 
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
                 nameof(fsEntryNameNormalizer));
@@ -84,12 +89,20 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
             var args = GetWorkArgs(rawArgs);
             title = args.MdTitle;
 
-            var wka = new WorkArgs
+            if (args.PrintHelpMessage != true)
             {
-                Args = args
-            };
+                var wka = new WorkArgs
+                {
+                    Args = args
+                };
 
-            Run(wka, out newFullDirNamePart);
+                Run(wka, out newFullDirNamePart);
+            }
+            else
+            {
+                title = null;
+                newFullDirNamePart = null;
+            }
         }
 
         public void Run(
@@ -116,6 +129,68 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
             {
                 TryRenameFullNameDir(wka, newFullDirName);
             }
+        }
+
+        private void PrintHelpMessage(
+            ProgramArgs args)
+        {
+            var x = consoleMsgPrinter.GetDefaultExpressionValues();
+            var argOpts = config.ArgOpts;
+
+            var msgTpl = (
+                string text,
+                string prefix = null) => ConsoleStrMsgTuple.New(
+                    prefix ?? $"{{{x.Cyan}}}", text, x.Splitter);
+
+            var optsHead = (string optsStr, string sffxStr, bool? required = null) =>
+            {
+                var retStr = string.Concat(
+                    required == true ? $"{{{x.DarkRed}}}*" : string.Empty,
+                    $"{{{x.DarkCyan}}}{optsStr}",
+                    required == false ? $"{{{x.Cyan}}}?" : string.Empty,
+                    $"{{{x.DarkGray}}}{sffxStr}{{{x.Splitter}}}");
+
+                return retStr;
+            };
+
+            var m = new
+            {
+                ThisTool = msgTpl("this tool"),
+            };
+
+            string[] linesArr = [
+                $"{{{x.Blue}}}Welcome to the Turmerik RfDirsPairNames tool{{{x.NewLine}}}",
+
+                string.Join(" ", $"{m.ThisTool.U} helps you update the markdown file name and",
+                $"the full folder name for the working directory{{{x.NewLine}}}."),
+
+                string.Join(" ", $"Here is a list of argument options {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.WorkDir}", ""),
+                    $"Changes the work directory for the folder pair whose name is to be updated",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.InteractiveMode}", ""),
+                    $"Enables the interactive mode where, before making any changes to any files or folders",
+                    $"A list of markdown files (if more than 1 is found in the working directory)",
+                    $"is printed to the console and the user is asked to choose which markdown file",
+                    $"should be used for extracting the title that will be used to generate the new names",
+                    $"for the markdown file and full folder name. And if it's only one markdown file",
+                    $"the user still has the option to cancel the execution in the interactive mode",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.PrintHelpMessage}", ""),
+                    $"Prints this help message to the console",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
+                string.Concat(
+                    $"{{{x.DarkGreen}}}",
+                    "https://github.com/dantincu/turmerik/tree/main/DotNet/Turmerik.RfDirsPairNames.ConsoleApp",
+                    $"{{{x.Splitter}}}{{{x.NewLine}}}{{{x.NewLine}}}")];
+
+            consoleMsgPrinter.Print(linesArr, null, x);
         }
 
         private void TryRenameMdFile(
@@ -268,13 +343,24 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                         ],
                         FlagHandlersArr = [
                             consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.PrintHelpMessage.Arr(),
+                                data => data.Args.PrintHelpMessage = true, true),
+                            consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.InteractiveMode.Arr(),
                                 data => data.Args.InteractiveMode = true)
                         ]
                     })
                 }).Args;
 
-            NormalizeArgs(args);
+            if (args.PrintHelpMessage == true)
+            {
+                PrintHelpMessage(args);
+            }
+            else
+            {
+                NormalizeArgs(args);
+            }
+
             return args;
         }
 

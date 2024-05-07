@@ -2,6 +2,7 @@
   "profiles": {
     "Turmerik.MkScripts.ConsoleApp": {
       "commandName": "Project",
+      "commandLineArgs": ":h"
       // "commandLineArgs": ":cmd:c :pf:turmerik-parcel-ws :sc:workspace-lvl"
       // "commandLineArgs": ":cmd:c :pf:turmerik-parcel-ws :sc:workspace-lvl :arg:libs"
       // "commandLineArgs": ":cmd:c :pf:turmerik-parcel-ws :sc:workspace-lvl :arg:apps"
@@ -14,7 +15,7 @@
       // "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws :sc:package-lvl"
       // "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws :sc:package-lvl :pth:libs"
       // "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws :sc:package-lvl :pth:apps",
-      "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws"
+      // "commandLineArgs": ":cmd:r :pf:turmerik-parcel-ws"
       // "commandLineArgs": ":cmd:c :pf:trmrk-mkscripts-parcelws-sync"
     }
   }

@@ -28,6 +28,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
     public class ProgramComponent : IProgramComponent
     {
         private readonly IJsonConversion jsonConversion;
+        private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IConsoleArgsParser parser;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
@@ -37,6 +38,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
+            IConsoleMsgPrinter consoleMsgPrinter,
             IConsoleArgsParser consoleArgsParser,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IDirsPairCreatorFactory dirsPairCreatorFactory,
@@ -44,6 +46,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
+
+            this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
+                nameof(consoleMsgPrinter));
 
             parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
@@ -71,13 +76,144 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
         public async Task RunAsync(string[] rawArgs)
         {
             var args = GetArgs(rawArgs);
-            await NormalizeArgsAsync(args);
 
-            foreach (var nodeArgs in args.RootNodes)
+            if (args.PrintHelpMessage == true)
             {
-                await RunAsync(
-                    args.WorkDir, nodeArgs);
+                PrintHelpMessage(args);
             }
+            else
+            {
+                await NormalizeArgsAsync(args);
+
+                foreach (var nodeArgs in args.RootNodes)
+                {
+                    await RunAsync(
+                        args.WorkDir, nodeArgs);
+                }
+            }
+        }
+
+        private void PrintHelpMessage(
+            ProgramArgs args)
+        {
+            var x = consoleMsgPrinter.GetDefaultExpressionValues();
+            var argOpts = config.ArgOpts;
+
+            var msgTpl = (
+                string text,
+                string prefix = null) => ConsoleStrMsgTuple.New(
+                    prefix ?? $"{{{x.Cyan}}}", text, x.Splitter);
+
+            var optsHead = (string optsStr, string sffxStr, bool? required = null) =>
+            {
+                var retStr = string.Concat(
+                    required == true ? $"{{{x.DarkRed}}}*" : string.Empty,
+                    $"{{{x.DarkCyan}}}{optsStr}",
+                    required == false ? $"{{{x.Cyan}}}?" : string.Empty,
+                    $"{{{x.DarkGray}}}{sffxStr}{{{x.Splitter}}}");
+
+                return retStr;
+            };
+
+            var m = new
+            {
+                ThisTool = msgTpl("this tool"),
+            };
+
+            string[] linesArr = [
+                $"{{{x.Blue}}}Welcome to the Turmerik MkFsDirPairs tool{{{x.NewLine}}}",
+
+                string.Join(" ", $"{m.ThisTool.U} helps you take notes by creating",
+                    $"a pair of folders starting with the same short name that consists of",
+                    $"an autoincremented index (or autodecremented index, depending on the configuration)",
+                    $"optionally preceded by a prefix. The first folder's name will actually be",
+                    $"equal to this short dir name, and the second dir's name will be obtained from this short dir name by",
+                    $"appending a (configurable) join string followed by a normalized full dir name part",
+                    $"which is obtained from the title you pass in as the first argument,",
+                    $"from which the file system entry invalid characters are removed and then,",
+                    $"if the resulted string is longer than the configurable maximum allowed",
+                    $"directory name length, it's replaced by a slice that starts from its first character",
+                    $"and contains the maximum allowed number of characters.{{{x.NewLine}}}"),
+
+                string.Join(" ", $"Here is a list of argument options {m.ThisTool.L} supports",
+                    $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.WorkDir}", ""),
+                    $"Changes to work directory where the pair (or pairs) of folders will be created",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.Url}", ""),
+                    $"Provides an url to fetch an html document from which to parse the title that will be used",
+                    $"for the note title, markdown file name and full dir name part if the first argument is an empty string.",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.Uri}", ""),
+                    $"Similar to the {{{x.DarkCyan}}}{argOpts.Url}{{{x.Splitter}}} option, but",
+                    $"after fetching the html document and parsing the title from it, the user",
+                    $"will be asked to either confirm that the parsed title is to be used for the note title",
+                    $"or provide another title by typing or pasting it to the console",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.OpenMdFile}", ""),
+                    $"Indicates that the newly created markdown file should be open in the OS default",
+                    $"markdown editor program after the pair of folders has been created",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.SkipMdFileCreation}", ""),
+                    $"Indicates that no markdown file should be created",
+                    $"for the pair of folder that will be created by this command",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.CreateNote}", ""),
+                    $"Indicates that the pair of folders that will be created should represent a note item",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.CreateNoteSection}", ""),
+                    $"Indicates that the pair of folders that will be created should represent a note section",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.CreateNoteBook}", ""),
+                    $"Indicates that the pair of folders that will be created should represent a note book",
+                    $"i.e. a pair of folders that sits in the root folder of a group of nested notes",
+                    $"and will not contain nested notes itself (it will be an note internal folders pair)",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.CreateNoteFilesDir}", ""),
+                    $"Indicates that the pair of folders that will be created should represent a note attachment files folder",
+                    $"i.e. a pair of folders that sits in the folder of a note item or note section",
+                    $"and will contain files uploaded or copied there by the user (it will be an note internal folders pair)",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.CreateNoteInternalsDir}", ""),
+                    $"Indicates that the pair of folders that will be created should represent a note internals folder",
+                    $"i.e. a pair of folders that sits in the folder of a note item or note section",
+                    $"and will contain user settings / preferences and various files and folders that a future",
+                    $"note taking app might need to store that are not of direct concern for the user",
+                    $"(it will be an note internal folders pair)",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.DirNameTpl}", ""),
+                    $"Specifies the name of the folder name template to be used. Normally, this arg should not be used",
+                    $"directly, I left it here for \"legacy compatibility\", because the folder name template is",
+                    $"automatically assigned based on which of the {{{x.DarkCyan}}}{argOpts.CreateNoteBook}{{{x.Splitter}}},",
+                    $"{{{x.DarkCyan}}}{argOpts.CreateNoteFilesDir}{{{x.Splitter}}} or",
+                    $"{{{x.DarkCyan}}}{argOpts.CreateNoteInternalsDir}{{{x.Splitter}}} flag has been passed on",
+                    $"in order to generate the corresponding constant value for the full dir name part",
+                    $"or left null if none of these flags has been passed in, in order to generate the full dir name part",
+                    $"from the provided title.",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.PrintHelpMessage}", ""),
+                    $"Prints this help message to the console",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                $"{{{x.Blue}}}You can find the source code for this tool at the following url:",
+                string.Concat(
+                    $"{{{x.DarkGreen}}}",
+                    "https://github.com/dantincu/turmerik/tree/main/DotNet/Turmerik.LsFsDirPairs.ConsoleApp",
+                    $"{{{x.Splitter}}}{{{x.NewLine}}}{{{x.NewLine}}}")];
+
+            consoleMsgPrinter.Print(linesArr, null, x);
         }
 
         private async Task RunAsync(
@@ -389,6 +525,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                                                     args.CurrentSibblings.Add(args.Current);
                                                 }
                                             }),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.PrintHelpMessage.Arr(),
+                                            data => data.Args.PrintHelpMessage = true, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.WorkDir.Arr(),
                                             data => data.Args.WorkDir = data.ArgFlagValue!.Single()),

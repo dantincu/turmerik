@@ -56,8 +56,11 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
                     var args = programArgsRetriever.GetArgs(rawArgs);
                     args.TempDir = tempDir;
 
-                    programArgsNormalizer.NormalizeArgs(args);
-                    await RunAsync(args);
+                    if (args.PrintHelpMessage != true)
+                    {
+                        programArgsNormalizer.NormalizeArgs(args);
+                        await RunAsync(args);
+                    }
                 },
                 RemoveTempDirAfterAction = true,
                 RemoveExistingTempDirsBeforeAction = true,

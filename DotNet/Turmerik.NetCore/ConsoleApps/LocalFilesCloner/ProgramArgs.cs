@@ -9,6 +9,7 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
 {
     public class ProgramArgs
     {
+        public bool? PrintHelpMessage { get; set; }
         public Core.Utility.TrmrkUniqueDir TempDir { get; set; }
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public ProgramConfig Config { get; set; }

@@ -6,6 +6,7 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
 {
     public class ProgramArgs
     {
+        public bool? PrintHelpMessage { get; set; }
         public string ParentDirPath { get; set; }
         public string ShortNameDirPath { get; set; }
         public string ShortDirName { get; set; }

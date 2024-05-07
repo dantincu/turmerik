@@ -3,6 +3,7 @@
   "ThrowIfAnyItemAlreadyExists": true,
   "TrmrkGuidInputName": "trmrk_guid",
   "ArgOpts": {
+    "PrintHelpMessage": "h",
     "WorkDir": "wd",
     "InteractiveMode": "i",
     "OpenMdFile": "o",

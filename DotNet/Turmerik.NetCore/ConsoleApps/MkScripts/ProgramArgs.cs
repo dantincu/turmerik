@@ -15,6 +15,7 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
 
     public class ProgramArgs
     {
+        public bool? PrintHelpMessage { get; set; }
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public ProgramConfig Config { get; set; }
         public string ProfileName { get; set; }

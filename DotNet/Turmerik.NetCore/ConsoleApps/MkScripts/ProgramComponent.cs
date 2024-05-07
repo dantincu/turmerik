@@ -41,9 +41,12 @@ namespace Turmerik.NetCore.ConsoleApps.MkScripts
         public void Run(string[] rawArgs)
         {
             var args = programArgsRetriever.GetArgs(rawArgs);
-            programArgsNormalizer.NormalizeArgs(args);
 
-            Run(args);
+            if (args.PrintHelpMessage != true)
+            {
+                programArgsNormalizer.NormalizeArgs(args);
+                Run(args);
+            }
         }
 
         public void Run(ProgramArgs args)

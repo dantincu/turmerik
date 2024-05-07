@@ -59,9 +59,12 @@ namespace Turmerik.NetCore.ConsoleApps.SyncLocalFiles
         public async Task RunAsync(string[] rawArgs)
         {
             var args = programArgsRetriever.GetArgs(rawArgs);
-            programArgsNormalizer.NormalizeArgs(args);
 
-            await RunAsync(args);
+            if (args.PrintHelpMessage != true)
+            {
+                programArgsNormalizer.NormalizeArgs(args);
+                await RunAsync(args);
+            }
         }
 
         public async Task RunAsync(ProgramArgs args)
