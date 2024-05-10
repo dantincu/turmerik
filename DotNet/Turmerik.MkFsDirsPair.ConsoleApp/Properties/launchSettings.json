@@ -8,7 +8,8 @@
       // "commandLineArgs": ":m:lm:la"
       // "commandLineArgs": ":n :url:https://www.facebook.com/100057620462546/posts/863839308880077/?rdid=VkQpWXD1jzBJzCRo",
       // "commandLineArgs": ":n asdf\\qwerqwe :s"
-      "commandLineArgs": ":h"
+      // "commandLineArgs": ":h"
+      "commandLineArgs": ":n :uri:|asdf||sadf|https://google.com qwerwqer"
     }
   }
 }

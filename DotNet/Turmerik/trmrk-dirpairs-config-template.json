@@ -55,12 +55,13 @@
   },
   "Macros": {
     "Map": {
-      "m": [ ":n", "Misc", ":=" ],
-      "a": [ ":n", "Articles", ":=" ],
-      "p": [ ":n", "Persons", ":=" ],
-      "pp": [ ":n", "Public Persons", ":=" ],
-      "tc": [ ":n", "Terms & Concepts", ":=" ],
-      "ps": [ ":n", "Products & Services", ":=" ]
+      "m": [ ":s", "Misc", ":=" ],
+      "a": [ ":s", "Articles", ":=" ],
+      "p": [ ":s", "Persons", ":=" ],
+      "pp": [ ":s", "Public Persons", ":=" ],
+      "hs": [ ":s", "Historical Figures", ":=" ],
+      "tc": [ ":s", "Terms & Concepts", ":=" ],
+      "ps": [ ":s", "Products & Services", ":=" ]
     }
   }
 }

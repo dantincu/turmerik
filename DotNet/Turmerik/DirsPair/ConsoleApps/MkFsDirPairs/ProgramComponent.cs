@@ -380,12 +380,14 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
         {
             string url = hasUrl ? nodeArgs.Url : nodeArgs.Uri;
             string[] urlParts = url.Split('|');
+            url = urlParts.Last();
 
             string resTitle = null;
 
             if (urlParts.Length > 1)
             {
-                resTitle = urlParts[0].Nullify(true);
+                resTitle = string.Join("|",
+                    urlParts.Take(urlParts.Length - 1)).Nullify(true);
             }
 
             if (resTitle == null)
