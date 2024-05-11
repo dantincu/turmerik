@@ -42,7 +42,7 @@ const generateText = (): string[] => {
   return [singleTextLine, multilineText];
 }
 
-export default function CodeTextCursorPositioning(
+export default function CodeTextCursorPositioningPage(
   props: CodeTextCursorPositioningProps
 ) {const textBoxElRef = React.createRef<HTMLInputElement>();
   const textAreaElRef = React.createRef<HTMLTextAreaElement>();

@@ -1,0 +1,85 @@
+.trmrk-text-caret-positioner {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+
+  .trmrk-cancel-changes-btn {
+    position: absolute;
+    bottom: 0em;
+    left: 0em;
+  }
+
+  .trmrk-submit-changes-btn {
+    position: absolute;
+    bottom: 0em;
+    left: 1.67em;
+  }
+
+  .trmrk-enter-positioning-mode-btn,
+  .trmrk-enter-edit-mode-btn {
+    position: absolute;
+    bottom: 0em;
+    right: 0em;
+  }
+
+  .trmrk-unwrap-text-btn,
+  .trmrk-wrap-text-btn {
+    position: absolute;
+    bottom: 0em;
+    right: 1.67em;
+  }
+
+  .trmrk-textarea-container,
+  .trmrk-textbox-container {
+    display: block;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    right: 1em;
+    bottom: 2.75em;
+    max-height: calc(100% - 3em);
+
+    .trmrk-textarea {
+      display: block;
+      position: absolute;
+      max-height: 100%;
+      top: 0em;
+      bottom: 0em;
+
+      textarea {
+        max-height: 100%;
+      }
+    }
+
+    .trmrk-textbox {
+      display: block;
+      position: absolute;
+      bottom: 0em;
+    }
+  }
+
+  .trmrk-text-caret {
+    position: absolute;
+    display: inline-block;
+    &::after {
+      content: "";
+      vertical-align: bottom;
+      border: 1px solid #080;
+    }
+  }
+
+  /* .trmrk-invisible-text-caret {
+  } */
+
+  .trmrk-pre {
+    display: block;
+    position: absolute;
+    padding-left: 1em;
+    bottom: 2em;
+    right: 0em;
+    left: 0em;
+    top: 0em;
+  }
+}

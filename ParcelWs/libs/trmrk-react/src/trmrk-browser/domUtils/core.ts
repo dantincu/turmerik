@@ -120,3 +120,39 @@ export const extractIntNumber = (str: string) => parseInt(extractDigits(str));
 
 export const extractFloatNumber = (str: string) =>
   parseInt(extractDigitsAndDot(str));
+
+export interface OverflowType {
+  visible?: boolean | null | undefined;
+  hidden?: boolean | null | undefined;
+  clip?: boolean | null | undefined;
+  scroll?: boolean | null | undefined;
+  auto?: boolean | null | undefined;
+  isHidden: boolean;
+}
+
+export const getOverflowType = (overflowCssPropVal: string) => {
+  const retObj = {} as OverflowType;
+
+  switch (overflowCssPropVal) {
+    case "visible":
+      retObj.visible = true;
+      break;
+    case "hidden":
+      retObj.hidden = true;
+      break;
+    case "clip":
+      retObj.clip = true;
+      break;
+    case "scroll":
+      retObj.scroll = true;
+      break;
+    case "auto":
+      retObj.auto = true;
+      break;
+    default:
+      break;
+  }
+
+  retObj.isHidden = !!retObj.hidden || !!retObj.clip;
+  return retObj;
+};

@@ -1,0 +1,80 @@
+
+.trmrk-page-panel {
+  .trmrk-panel-content {
+    display: block;
+    position: relative;
+    text-align: center;
+    align-items: center;
+    padding-top: 0.25em;
+    bottom: 0px;
+    height: fit-content;  //height is set to auto
+    box-sizing: border-box;
+
+    > .trmrk-loading {
+      margin-top: 0.5em;
+      margin-left: 1em;
+    }
+
+    .trmrk-form-helper-text-row {
+      display: flex;
+      position: relative;
+      padding: 0px 0.25em;
+      @include wrap-content();
+      margin: auto;
+      flex-basis: 100%;
+    }
+
+    .trmrk-flex-row {
+      display: flex;
+      position: relative;
+      padding: 0px 0.25em;
+      @include no-wrap();
+      margin: auto;
+
+      .trmrk-cell {
+        display: inline-flex;
+        position: relative;
+        min-height: 2.5em;
+        line-height: 2.5em;
+        padding: 0px 0.25em;
+        overflow: hidden;
+        margin-bottom: 0em;
+
+        &.trmrk-height-rows-x2 {
+          height: 5em;
+        }
+
+        .trmrk-textarea {
+          height: 5em;
+        }
+
+        .trmrk-textarea-autosize {
+          font: inherit;
+        }
+
+        .trmrk-input {
+          padding: 0em 0.5em;
+        }
+      }
+    }
+
+    .trmrk-flex-rows-group {
+      display: block;
+      position: relative;
+      margin: 0.25em;
+      padding: 0.25em;
+      border-radius: 3px;
+
+      > .trmrk-delete-icon-btn {
+        position: absolute;
+        right: 0em;
+        top: 0em;
+        z-index: 1;
+      }
+    }
+
+    .trmrk-flex-rows-group:first-child {
+      margin-top: 0em;
+    }
+  }
+}

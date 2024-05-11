@@ -239,3 +239,58 @@
     }
   }
 }
+
+@mixin trmrk-tree-node-color($color) {
+  > .trmrk-tree-node-content {
+    > .trmrk-tree-node-icon {
+      > .trmrk-icon {
+        color: $color;
+      }
+    }
+
+    > .trmrk-tree-node-toggle-icon {
+      color: $color;
+    }
+
+    > .trmrk-tree-node-label {
+      border: 2px solid $color;
+    }
+  }
+
+  &.trmrk-current-item {
+    > .trmrk-tree-node-content {
+      > .trmrk-tree-node-label {
+        background-color: $color;
+        color: white;
+      }
+    }
+  }
+
+  &.trmrk-tree-node-expanded::before {
+    background-color: $color;
+  }
+}
+
+@mixin wrap-content() {
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: keep-all;
+  white-space-collapse: collapse;
+  line-break: auto;
+}
+
+@mixin no-wrap-anywhere() {
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: auto;
+}
+
+@mixin no-wrap() {
+  flex-wrap: wrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: anywhere;
+}

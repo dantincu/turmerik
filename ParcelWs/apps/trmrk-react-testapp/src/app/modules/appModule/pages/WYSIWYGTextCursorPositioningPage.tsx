@@ -10,7 +10,7 @@ export interface WYSIWYGTextCursorPositioningProps {
   rootPath: string;
 }
 
-export default function WYSIWYGTextCursorPositioning(
+export default function WYSIWYGTextCursorPositioningPage(
   props: WYSIWYGTextCursorPositioningProps
 ) {
   return (<AppBarsPanel basePath={props.basePath}

@@ -6,16 +6,16 @@ export interface DevModuleProps {
   rootPath: string;
 }
 
-import CodeTextCursorPositioning from "./pages/CodeTextCursorPositioning";
-import WYSIWYGTextCursorPositioning from "./pages/WYSIWYGTextCursorPositioning";
+import CodeTextCursorPositioningPage from "./pages/CodeTextCursorPositioningPage";
+import WYSIWYGTextCursorPositioningPage from "./pages/WYSIWYGTextCursorPositioningPage";
 import AppModuleHomePage from "./AppModuleHomePage";
 import NotFound from "../../../trmrk-react/pages/notFound/NotFound";;
 
 export default function DevModule(props: DevModuleProps) {
   return (<Routes>
-      <Route path={"/code-text-cursor-positioning"} element={<CodeTextCursorPositioning
+      <Route path={"/code-text-cursor-positioning"} element={<CodeTextCursorPositioningPage
         basePath={props.basePath} rootPath={props.rootPath} urlPath={`${props.basePath}/indexeddb-browser`} />} />
-      <Route path={"/wysiwyg-text-cursor-positioning"} element={<WYSIWYGTextCursorPositioning
+      <Route path={"/wysiwyg-text-cursor-positioning"} element={<WYSIWYGTextCursorPositioningPage
         basePath={props.basePath} rootPath={props.rootPath} urlPath={`${props.basePath}/indexeddb-browser/create-db`} />} />
       <Route path="/" element={<AppModuleHomePage
         basePath={props.basePath} rootPath={props.rootPath} />} />
