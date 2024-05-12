@@ -11,7 +11,6 @@ import WrapTextIcon from "@mui/icons-material/WrapText";
 import MatUIIcon from "../icons/MatUIIcon";
 
 import { positionTextCaret, TextCaretPositionerOpts } from "../../../trmrk-browser/textCaretPositioner/textCaretPositioner";
-import { isScrolledIntoView } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 
 export const DEFAULT_MAX_SPAN_LENGTH = 10;
 export const DEFAULT_TAB_LENGTH_PX = 40;  
@@ -75,32 +74,26 @@ export default React.forwardRef(function TrmrkTextCaretPositioner(
   const positioningTextElemClicked = React.useCallback((ev: MouseEvent) => {
     const trgEl = ev.target;
 
-    if (positioningTextEl && trgEl !== invisibleTextCaretEl && trgEl !== textCaretEl && trgEl instanceof HTMLElement) {
+    if (trgEl !== invisibleTextCaretEl && trgEl !== textCaretEl && trgEl instanceof HTMLElement) {
       // const trgElComputedStyle = getComputedStyle(trgEl);
       // console.log("textCaretEl", textCaretEl!.offsetHeight);
       
       positionTextCaret({
         rootElem: positioningTextEl,
         trgElem: trgEl,
-        caretElem: invisibleTextCaretEl,
-        trgElemOffsetX: ev.offsetX + positioningTextEl.scrollLeft,
-        trgElemOffsetY: ev.offsetY + positioningTextEl.scrollTop,
-        caretHeight: textCaretEl!.offsetHeight,
-        maxLineLength: positioningTextEl.scrollWidth
+        invisibleCaretElem: invisibleTextCaretEl,
+        visibleCaretElem: textCaretEl,
+        trgElemOffsetX: ev.offsetX + textCaretEl!.scrollLeft,
+        trgElemOffsetY: ev.offsetY + textCaretEl!.scrollTop,
+        // caretHeight: textCaretEl!.offsetHeight,
+        // maxLineLength: trgEl.scrollWidth
       } as unknown as TextCaretPositionerOpts);
-
-      textCaretEl!.style.top = invisibleTextCaretEl!.offsetTop + "px";
-      textCaretEl!.style.left = invisibleTextCaretEl!.offsetLeft + "px";
     }
-  }, [ positioningTextEl ]);
+  }, [ positioningTextEl, invisibleTextCaretEl, textCaretEl ]);
 
   React.useEffect(() => {
     if (wrapTextRef.current != wrapText) {
       wrapTextRef.current = wrapText;
-
-      if (textCaretEl && positioningTextEl && !isScrolledIntoView(positioningTextEl, textCaretEl)) {
-        textCaretEl.scrollIntoView();
-      }
     }
 
     const positioningTextElClick = (ev: MouseEvent) => {
