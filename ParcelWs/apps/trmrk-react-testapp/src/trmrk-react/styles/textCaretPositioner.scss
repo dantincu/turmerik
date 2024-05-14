@@ -31,6 +31,15 @@
     right: 1.67em;
   }
 
+  &.trmrk-text-is-readonly {
+    .trmrk-unwrap-text-btn,
+    .trmrk-wrap-text-btn {
+      position: absolute;
+      bottom: 0em;
+      right: 0em;
+    }
+  }
+
   .trmrk-textarea-container,
   .trmrk-textbox-container {
     display: block;

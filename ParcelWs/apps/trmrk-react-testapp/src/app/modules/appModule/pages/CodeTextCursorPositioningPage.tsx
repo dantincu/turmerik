@@ -44,77 +44,138 @@ const generateText = (): string[] => {
 
 export default function CodeTextCursorPositioningPage(
   props: CodeTextCursorPositioningProps
-) {const textBoxElRef = React.createRef<HTMLInputElement>();
-  const textAreaElRef = React.createRef<HTMLTextAreaElement>();
+) {
+  const textBox1ElRef = React.createRef<HTMLInputElement>();
+  const textArea1ElRef = React.createRef<HTMLTextAreaElement>();
+  const textBox2ElRef = React.createRef<HTMLInputElement>();
+  const textArea2ElRef = React.createRef<HTMLTextAreaElement>();
 
-  const [ textBoxEl, setTextBoxEl ] = React.useState(textBoxElRef.current);
-  const [ textAreaEl, setTextAreaEl ] = React.useState(textAreaElRef.current);
+  const [ textBoxEl1, setTextBox1El ] = React.useState(textBox1ElRef.current);
+  const [ textArea1El, setTextArea1El ] = React.useState(textArea1ElRef.current);
 
-  const [ textBoxIsReadonly, setTextBoxIsReadonly ] = React.useState(false);
-  const [ textAreaIsReadonly, setTextAreaIsReadonly ] = React.useState(false);
+  const [ textBoxEl2, setTextBox2El ] = React.useState(textBox2ElRef.current);
+  const [ textArea2El, setTextArea2El ] = React.useState(textArea2ElRef.current);
 
-  const [ showSinglelineTextCaretPositioner, setShowSinglelineTextCaretPositioner ] = React.useState(false);
-  const [ showMultilineTextCaretPositioner, setShowMultilineTextCaretPositioner ] = React.useState(false);
+  const [ textBox1IsReadonly, setTextBox1IsReadonly ] = React.useState(true);
+  const [ textArea1IsReadonly, setText1AreaIsReadonly ] = React.useState(true);
+
+  const [ textBox2IsReadonly, setTextBox2IsReadonly ] = React.useState(true);
+  const [ textArea2IsReadonly, setText2AreaIsReadonly ] = React.useState(true);
+
+  const [ showSinglelineText1CaretPositioner, setShowSinglelineText1CaretPositioner ] = React.useState(false);
+  const [ showMultilineText1CaretPositioner, setShowMultilineText1CaretPositioner ] = React.useState(false);
+
+  const [ showSinglelineText2CaretPositioner, setShowSinglelineText2CaretPositioner ] = React.useState(false);
+  const [ showMultilineText2CaretPositioner, setShowMultilineText2CaretPositioner ] = React.useState(false);
 
   const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
 
   const textObj = generateText();
 
-  const [ singlelineText, setSinglelineText ] = React.useState(textObj[0]);
-  const [ multilineText, setMultilineText ] = React.useState(textObj[1]);
+  const [ singlelineText1, setSinglelineText1 ] = React.useState(`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`);
 
-  const onSingleLineTextChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSinglelineText(e.target.value);
+  const [ multilineText1, setMultilineText1 ] = React.useState(`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`);
+
+  const [ singlelineText2, setSinglelineText2 ] = React.useState(textObj[0]);
+  const [ multilineText2, setMultilineText2 ] = React.useState(textObj[1]);
+
+  const onSingleLineText1Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSinglelineText1(e.target.value);
   }
 
-  const onMultiLineTextChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMultilineText(e.target.value);
+  const onMultiLineText1Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMultilineText1(e.target.value);
   }
 
-  const onTextBoxIsReadonlyChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setTextBoxIsReadonly(checked);
+  const onTextBox1IsReadonlyChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setTextBox1IsReadonly(checked);
   }
 
-  const onTextAreaIsReadonlyChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setTextAreaIsReadonly(checked);
+  const onTextArea1IsReadonlyChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setText1AreaIsReadonly(checked);
   }
 
-  const onShowSinglelineTextCaretPositioner = () => {
-    setShowSinglelineTextCaretPositioner(true);
+  const onShowSinglelineText1CaretPositioner = () => {
+    setShowSinglelineText1CaretPositioner(true);
   }
 
-  const onHideSinglelineTextBoxCaretPositioner = () => {
-    setShowSinglelineTextCaretPositioner(false);
+  const onHideSinglelineTextBox1CaretPositioner = () => {
+    setShowSinglelineText1CaretPositioner(false);
   }
 
-  const onShowMultilineTextCaretPositioner = () => {
-    setShowMultilineTextCaretPositioner(true);
+  const onShowMultilineText1CaretPositioner = () => {
+    setShowMultilineText1CaretPositioner(true);
   }
 
-  const onHideMultilineTextBoxCaretPositioner = () => {
-    setShowMultilineTextCaretPositioner(false);
+  const onHideMultilineTextBox1CaretPositioner = () => {
+    setShowMultilineText1CaretPositioner(false);
+  }
+
+  const onSingleLineText2Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSinglelineText2(e.target.value);
+  }
+
+  const onMultiLineText2Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMultilineText2(e.target.value);
+  }
+
+  const onTextBox2IsReadonlyChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setTextBox2IsReadonly(checked);
+  }
+
+  const onTextArea2IsReadonlyChanged = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setText2AreaIsReadonly(checked);
+  }
+
+  const onShowSinglelineText2CaretPositioner = () => {
+    setShowSinglelineText2CaretPositioner(true);
+  }
+
+  const onHideSinglelineTextBox2CaretPositioner = () => {
+    setShowSinglelineText2CaretPositioner(false);
+  }
+
+  const onShowMultilineText2CaretPositioner = () => {
+    setShowMultilineText2CaretPositioner(true);
+  }
+
+  const onHideMultilineTextBox2CaretPositioner = () => {
+    setShowMultilineText2CaretPositioner(false);
   }
 
   React.useEffect(() => {
-    if (textBoxElRef.current !== textBoxEl) {
-      setTextBoxEl(textBoxElRef.current);
+    if (textBox1ElRef.current !== textBoxEl1) {
+      setTextBox1El(textBox1ElRef.current);
     }
 
-    if (textAreaElRef.current !== textAreaEl) {
-      setTextAreaEl(textAreaElRef.current);
+    if (textArea1ElRef.current !== textArea1El) {
+      setTextArea1El(textArea1ElRef.current);
+    }
+
+    if (textBox2ElRef.current !== textBoxEl2) {
+      setTextBox2El(textBox2ElRef.current);
+    }
+
+    if (textArea2ElRef.current !== textArea2El) {
+      setTextArea2El(textArea2ElRef.current);
     }
   }, [
-    textBoxElRef,
-    textBoxEl,
-    textAreaElRef,
-    textAreaEl,
-    textBoxIsReadonly,
-    textAreaIsReadonly,
-    showSinglelineTextCaretPositioner,
-    showMultilineTextCaretPositioner,
+    textBox1ElRef,
+    textBoxEl1,
+    textArea1ElRef,
+    textArea1El,
+    textBox2ElRef,
+    textBoxEl2,
+    textArea2ElRef,
+    textArea2El,
+    textBox2IsReadonly,
+    textArea2IsReadonly,
+    showSinglelineText2CaretPositioner,
+    showMultilineText2CaretPositioner,
     isDarkMode,
-    singlelineText,
-    multilineText ]);
+    singlelineText2,
+    multilineText2 ]);
 
   return (<AppBarsPanel basePath={props.basePath}
       appBarSelectors={appBarSelectors}
@@ -122,40 +183,76 @@ export default function CodeTextCursorPositioningPage(
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}>
     <div className="trmrk-block trmrk-horiz-padded">
-      <label>Readonly <Checkbox onChange={onTextBoxIsReadonlyChanged} /></label>
-      <Input ref={textBoxElRef} onChange={onSingleLineTextChanged} value={singlelineText} />
-      <IconButton onClick={onShowSinglelineTextCaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      <label>Readonly <Checkbox onChange={onTextBox1IsReadonlyChanged} checked={textBox1IsReadonly} /></label>
+      <Input ref={textBox1ElRef} onChange={onSingleLineText1Changed} value={singlelineText1} readOnly={textBox1IsReadonly} />
+      <IconButton onClick={onShowSinglelineText1CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
       <Box className="trmrk-full-width trmrk-full-height"></Box>
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
-      <label>Readonly <Checkbox onChange={onTextAreaIsReadonlyChanged} /></label>
-      <Input ref={textAreaElRef} onChange={onMultiLineTextChanged} value={multilineText} multiline rows={4} />
-      <IconButton onClick={onShowMultilineTextCaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      <label>Readonly <Checkbox onChange={onTextArea1IsReadonlyChanged} checked={textArea1IsReadonly} /></label>
+      <Input ref={textArea1ElRef} onChange={onMultiLineText1Changed} value={multilineText1} multiline rows={4} readOnly={textArea1IsReadonly} />
+      <IconButton onClick={onShowMultilineText1CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+    </div>
+    <div className="trmrk-block trmrk-horiz-padded">
+      <label>Readonly <Checkbox onChange={onTextBox2IsReadonlyChanged} checked={textBox2IsReadonly} /></label>
+      <Input ref={textBox2ElRef} onChange={onSingleLineText2Changed} value={singlelineText2} readOnly={textBox2IsReadonly} />
+      <IconButton onClick={onShowSinglelineText2CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+    </div>
+    <div className="trmrk-block trmrk-horiz-padded">
+      <Box className="trmrk-full-width trmrk-full-height"></Box>
+    </div>
+    <div className="trmrk-block trmrk-horiz-padded">
+      <label>Readonly <Checkbox onChange={onTextArea2IsReadonlyChanged} checked={textArea2IsReadonly} /></label>
+      <Input ref={textArea2ElRef} onChange={onMultiLineText2Changed} value={multilineText2} multiline rows={4} readOnly={textArea2IsReadonly} />
+      <IconButton onClick={onShowMultilineText2CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
     </div>
 
-    { textBoxEl ? <TrmrkTextCaretPositionerModal
-      isOpen={showSinglelineTextCaretPositioner}
+    { textBoxEl1 ? <TrmrkTextCaretPositionerModal
+      isOpen={showSinglelineText1CaretPositioner}
       isDarkMode={isDarkMode}
-      handleClose={onHideSinglelineTextBoxCaretPositioner}
+      handleClose={onHideSinglelineTextBox1CaretPositioner}
       positioner={{
-        text: singlelineText,
-        textIsReadonly: textBoxIsReadonly,
-        onCancelChangesClick: onHideSinglelineTextBoxCaretPositioner,
-        onSubmitChangesClick: onHideSinglelineTextBoxCaretPositioner
+        text: singlelineText1,
+        textIsReadonly: textBox1IsReadonly,
+        onCancelChangesClick: onHideSinglelineTextBox1CaretPositioner,
+        onSubmitChangesClick: onHideSinglelineTextBox1CaretPositioner
       }} /> : null }
 
-      { textAreaEl ? <TrmrkTextCaretPositionerModal
-        isOpen={showMultilineTextCaretPositioner}
+      { textArea1El ? <TrmrkTextCaretPositionerModal
+        isOpen={showMultilineText1CaretPositioner}
         isDarkMode={isDarkMode}
-        handleClose={onHideMultilineTextBoxCaretPositioner}
+        handleClose={onHideMultilineTextBox1CaretPositioner}
         positioner={{
-          text: multilineText,
-          textIsReadonly: textAreaIsReadonly,
+          text: multilineText1,
+          textIsReadonly: textArea1IsReadonly,
           textIsMultiline: true,
-          onCancelChangesClick: onHideMultilineTextBoxCaretPositioner,
-          onSubmitChangesClick: onHideMultilineTextBoxCaretPositioner
+          onCancelChangesClick: onHideMultilineTextBox1CaretPositioner,
+          onSubmitChangesClick: onHideMultilineTextBox1CaretPositioner
+        }} /> : null }
+
+    { textBoxEl2 ? <TrmrkTextCaretPositionerModal
+      isOpen={showSinglelineText2CaretPositioner}
+      isDarkMode={isDarkMode}
+      handleClose={onHideSinglelineTextBox2CaretPositioner}
+      positioner={{
+        text: singlelineText2,
+        textIsReadonly: textBox2IsReadonly,
+        onCancelChangesClick: onHideSinglelineTextBox2CaretPositioner,
+        onSubmitChangesClick: onHideSinglelineTextBox2CaretPositioner
+      }} /> : null }
+
+      { textArea2El ? <TrmrkTextCaretPositionerModal
+        isOpen={showMultilineText2CaretPositioner}
+        isDarkMode={isDarkMode}
+        handleClose={onHideMultilineTextBox2CaretPositioner}
+        positioner={{
+          text: multilineText2,
+          textIsReadonly: textArea2IsReadonly,
+          textIsMultiline: true,
+          onCancelChangesClick: onHideMultilineTextBox2CaretPositioner,
+          onSubmitChangesClick: onHideMultilineTextBox2CaretPositioner
         }} /> : null }
   </AppBarsPanel>);
 }

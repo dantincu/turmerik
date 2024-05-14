@@ -1,3 +1,5 @@
+import { filterChildNodes } from "./core";
+
 export interface HtmlElementBounds {
   offsetLeft: number;
   offsetTop: number;
@@ -92,3 +94,24 @@ export const isScrolledIntoView = (
     totalRenderedOffsetTop < rootElem.offsetHeight;
   return isIntoView;
 };
+
+export const getChildNodesUpTo = <TChildNode = ChildNode>(
+  prElem: HTMLElement,
+  refElem: HTMLElement,
+  reverseOrder: boolean = false
+) =>
+  filterChildNodes<TChildNode>(
+    prElem,
+    (prElemChildNode) => {
+      let keep: boolean | null = null;
+
+      if (prElemChildNode instanceof Text) {
+        keep = true;
+      } else if (prElemChildNode === refElem) {
+        keep = false;
+      }
+
+      return keep;
+    },
+    reverseOrder
+  );

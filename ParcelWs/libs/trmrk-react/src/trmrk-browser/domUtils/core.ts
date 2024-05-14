@@ -156,3 +156,53 @@ export const getOverflowType = (overflowCssPropVal: string) => {
   retObj.isHidden = !!retObj.hidden || !!retObj.clip;
   return retObj;
 };
+
+export const forEachChildNode = (
+  prElem: HTMLElement,
+  callback: (
+    elem: ChildNode,
+    idx: number,
+    prElemChildNodesCollctn: NodeListOf<ChildNode>
+  ) => boolean | any | unknown | void,
+  reverseOrder: boolean = false
+) => {
+  const prElemChildNodesCollctn = prElem.childNodes;
+
+  if (reverseOrder) {
+    for (let idx = prElemChildNodesCollctn.length; idx >= 0; idx--) {
+      const prElemChildNode = prElemChildNodesCollctn[idx];
+      if (callback(prElemChildNode, idx, prElemChildNodesCollctn) === false) {
+        break;
+      }
+    }
+  } else {
+    for (let idx = 0; idx < prElemChildNodesCollctn.length; idx++) {
+      const prElemChildNode = prElemChildNodesCollctn[idx];
+      if (callback(prElemChildNode, idx, prElemChildNodesCollctn) === false) {
+        break;
+      }
+    }
+  }
+};
+
+export const filterChildNodes = <TChildNode = ChildNode>(
+  prElem: HTMLElement,
+  callback: (
+    elem: ChildNode,
+    idx: number,
+    prElemChildNodesCollctn: NodeListOf<ChildNode>
+  ) => boolean | any | unknown | void,
+  reverseOrder: boolean = false
+) => {
+  const retArr: TChildNode[] = [];
+
+  forEachChildNode(prElem, (elem, idx, prElemChildNodesCollctn) => {
+    const retVal = callback(elem, idx, prElemChildNodesCollctn);
+
+    if (retVal) {
+      retArr.push(elem as TChildNode);
+    }
+  });
+
+  return retArr;
+};
