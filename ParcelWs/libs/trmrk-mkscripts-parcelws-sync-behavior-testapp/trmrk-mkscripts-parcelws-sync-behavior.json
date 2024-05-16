@@ -41,8 +41,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk"
             }
           ]
         }
@@ -65,8 +65,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios"
             }
           ]
         }
@@ -89,8 +89,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser"
             }
           ]
         }
@@ -113,8 +113,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-blazor"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-blazor"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-blazor"
             }
           ]
         }
@@ -137,8 +137,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-react"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-react"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-react"
             }
           ]
         }
@@ -161,8 +161,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-behavior"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-text-transform-behavior"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-behavior"
             }
           ]
         }
@@ -185,8 +185,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-defaultbehavior"
             }
           ]
         }
@@ -209,8 +209,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
             }
           ]
         }
@@ -233,8 +233,8 @@
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
             },
             {
-              "FileRelPath": "push_this.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
             }
           ]
         }

@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.SyncLocalFiles.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":h",
+      "commandLineArgs": ":fst:pull :pf:turmerik-parcelws trmrk-browser"
       // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws"
       // "commandLineArgs": ":fst:diff :pf:turmerik-parcelws"
       // "commandLineArgs": ":fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
