@@ -372,6 +372,83 @@
       ]
     },
     {
+      "SectionName": "sync_destn_trmrk-browser-testapp",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-browser-testapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-browser-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "SectionName": "sync_destn_trmrk-blazor",
       "RelDirPaths": {
         "DirPath": "libs\\trmrk-blazor\\src"

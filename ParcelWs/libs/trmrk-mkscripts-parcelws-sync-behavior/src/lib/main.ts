@@ -39,6 +39,10 @@ const destnLocationsArr: {
     dirPath: "libs\\trmrk-browser\\src",
     syncedLibs: ["trmrk", "trmrk-axios"],
   },
+  "trmrk-browser-testapp": {
+    dirPath: "libs\\trmrk-browser-testapp\\src",
+    syncedLibs: ["trmrk", "trmrk-browser"],
+  },
   "trmrk-blazor": {
     dirPath: "libs\\trmrk-blazor\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
