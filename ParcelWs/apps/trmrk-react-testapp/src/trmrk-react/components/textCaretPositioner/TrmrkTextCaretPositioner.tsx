@@ -89,7 +89,7 @@ export default React.forwardRef(function TrmrkTextCaretPositioner(
         trgElemBounds,
         trgElemOffsetX: ev.offsetX + trgElemBounds.totalOffsetLeft + trgElemBounds.scrollLeft,
         trgElemOffsetY: ev.offsetY + trgElemBounds.totalOffsetTop + trgElemBounds.scrollTop,
-        caretCharJustify: CaretCharJustify.Left
+        caretCharJustify: CaretCharJustify.Closest
       } as unknown as TextCaretPositionerOpts);
     }
   }, [ positioningTextEl, invisibleTextCaretEl, textCaretEl ]);

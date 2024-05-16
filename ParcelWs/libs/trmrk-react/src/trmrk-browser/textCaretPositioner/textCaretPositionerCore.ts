@@ -63,7 +63,7 @@ export interface CursorPositionOptsCore<
 export interface TextNodeTuple<TText, TTextNode extends TextNodeCore<TText>> {
   currentIdx: number;
   current: TTextNode | null;
-  next: TTextNode | null;
+  nextArr: TTextNode[];
 }
 
 export interface CursorPositionResult {
@@ -75,58 +75,36 @@ export interface CursorPositionResult {
 export const getCursorPosition = <TText, TTextNode extends TextNodeCore<TText>>(
   opts: CursorPositionOptsCore<TText, TTextNode>
 ): CursorPositionResult | null => {
-  const [result, { currentIdx, current, next }] = getCursorPositionCore(opts);
-
-  if (!next) {
-    // debugger;
-  }
+  const [result, { currentIdx, current, nextArr }] =
+    getCursorPositionCore(opts);
 
   let retResult = result;
   let retIdx = currentIdx;
 
-  if (current) {
-    // const nodeText = opts.textRetriever(current);
+  const nextNode = nextArr[0] ?? null;
+
+  if (current && nextNode) {
+    const leftDiff = opts.offsetLeft - current.offsetLeft!;
+    const rightDiff = nextNode.offsetLeft! - opts.offsetLeft;
 
     if (
-      // nodeText.length === 1 &&
       opts.caretCharJustify !== CaretCharJustify.Left &&
-      next &&
-      opts.textRetriever(next).length > 0
+      leftDiff > 0 &&
+      rightDiff >= 0 &&
+      (opts.caretCharJustify === CaretCharJustify.Right || leftDiff > rightDiff)
     ) {
-      if (current.offsetLeft! < opts.offsetLeft) {
-        opts.textSplitter(next, 1);
-        next.textEndCoords = null;
-        opts.caretPositioner(next);
+      opts.caretPositioner(nextNode);
+      retIdx++;
 
-        if (next.offsetLeft! >= opts.offsetLeft) {
-          if (
-            opts.caretCharJustify === CaretCharJustify.Right ||
-            opts.offsetLeft - current.offsetLeft! <
-              next.offsetLeft! - opts.offsetLeft
-          ) {
-            retIdx++;
-            console.log("next", next);
-
-            retResult = {
-              offsetLeft: next.offsetLeft!,
-              offsetTop: next.offsetTop!,
-            } as CursorPositionResult;
-          } else {
-            // debugger;
-          }
-        } else {
-          // debugger;
-        }
-      } else {
-        // debugger;
-      }
-    } else {
-      // debugger;
+      retResult = {
+        offsetLeft: nextNode.offsetLeft!,
+        offsetTop: nextNode.offsetTop!,
+      } as CursorPositionResult;
     }
   }
 
   if (retResult) {
-    retResult.charIdx = getCharIdx(opts, currentIdx, 0);
+    retResult.charIdx = getCharIdx(opts, retIdx, 0);
   }
 
   return retResult;
@@ -139,7 +117,7 @@ export const getCursorPositionCore = <
   opts: CursorPositionOptsCore<TText, TTextNode>
 ): [CursorPositionResult | null, TextNodeTuple<TText, TTextNode>] => {
   const nextNodeTuple = getTrgTextNode(opts);
-  let current = nextNodeTuple.current;
+  let { current, currentIdx } = nextNodeTuple;
 
   let retResult: CursorPositionResult | null = null;
   let retTuple = nextNodeTuple;
@@ -151,6 +129,7 @@ export const getCursorPositionCore = <
       const charIdx = Math.max(1, Math.floor(nodeText.length / 2));
       const splitArr = opts.textSplitter(current, charIdx);
       current.textEndCoords = null;
+      opts.textNodesArr.splice(currentIdx + 1, 0, splitArr[1]);
 
       const [_, tuple] = getCursorPositionCore({
         caretCharJustify: opts.caretCharJustify,
@@ -166,10 +145,10 @@ export const getCursorPositionCore = <
 
       current = tuple.current!;
       retTuple.current = current;
-      retTuple.currentIdx = tuple.currentIdx;
+      retTuple.currentIdx += tuple.currentIdx;
 
-      if (tuple.next) {
-        retTuple.next = tuple.next;
+      if (tuple.nextArr) {
+        retTuple.nextArr = tuple.nextArr;
       }
     }
 
@@ -199,7 +178,7 @@ export const getTrgTextNode = <TText, TTextNode extends TextNodeCore<TText>>(
   const kvp =
     findKvp(opts.textNodesArr, (currentTextNode, idx) => {
       opts.caretPositioner(currentTextNode);
-      const nextTextNode = opts.textNodesArr[idx + 1] ?? null;
+      let nextTextNode = opts.textNodesArr[idx + 1] ?? null;
 
       if (nextTextNode) {
         opts.caretPositioner(nextTextNode);
@@ -235,11 +214,11 @@ export const getTrgTextNode = <TText, TTextNode extends TextNodeCore<TText>>(
   const retObj: TextNodeTuple<TText, TTextNode> = {
     currentIdx: kvp.key,
     current: kvp.value,
-    next: null,
+    nextArr: [],
   };
 
   if (kvp.value) {
-    retObj.next = opts.textNodesArr[kvp.key + 1] ?? null;
+    retObj.nextArr = opts.textNodesArr.slice(kvp.key + 1, kvp.key + 3);
   }
 
   return retObj;
