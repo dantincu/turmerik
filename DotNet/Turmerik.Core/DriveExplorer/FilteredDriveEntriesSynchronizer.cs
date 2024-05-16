@@ -323,8 +323,8 @@ namespace Turmerik.Core.DriveExplorer
                 SwitchItemsIfReq(ref refItem, ref trgItem,
                     opts.SyncOpts.FileSyncType);
 
-                PrintTimeStampIfNotNull(trgItem, true, tuple.HasDiff);
                 PrintTimeStampIfNotNull(refItem, false, tuple.HasDiff);
+                PrintTimeStampIfNotNull(trgItem, true, tuple.HasDiff);
 
                 Console.ResetColor();
                 Console.WriteLine();
@@ -399,24 +399,24 @@ namespace Turmerik.Core.DriveExplorer
         public void PrintHeader(PrintDiffOpts opts)
         {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.Write("Printing diffs to ");
+            Console.Write("Printing diffs from ");
             Console.ForegroundColor = ConsoleColor.Cyan;
 
             string strToPrint = opts.SyncOpts.FileSyncType switch
             {
-                FileSyncType.Push => opts.SyncOpts.SrcName,
-                _ => opts.SyncOpts.DestnName
+                FileSyncType.Push => opts.SyncOpts.DestnName,
+                _ => opts.SyncOpts.SrcName
             };
 
             Console.Write(strToPrint);
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.Write(" from ");
+            Console.Write(" to ");
             Console.ForegroundColor = ConsoleColor.Cyan;
 
             strToPrint = opts.SyncOpts.FileSyncType switch
             {
-                FileSyncType.Push => opts.SyncOpts.DestnName,
-                _ => opts.SyncOpts.SrcName
+                FileSyncType.Push => opts.SyncOpts.SrcName,
+                _ => opts.SyncOpts.DestnName
             };
 
             Console.Write(strToPrint);

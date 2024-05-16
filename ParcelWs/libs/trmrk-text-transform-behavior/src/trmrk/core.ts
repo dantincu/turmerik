@@ -324,6 +324,39 @@ export const actWithVal = <TVal>(
   return val;
 };
 
+export const withValIf = <TIn, TOut>(
+  inVal: TIn,
+  convertor: (input: TIn) => TOut,
+  defaultValueFactory: (input: TIn) => TOut,
+  defaultInputPredicate?: ((input: TIn) => boolean) | null | undefined
+) => {
+  defaultInputPredicate ??= (input) => !input;
+  let retVal: TOut;
+
+  if (defaultInputPredicate(inVal)) {
+    retVal = defaultValueFactory(inVal);
+  } else {
+    retVal = convertor(inVal);
+  }
+
+  return retVal;
+};
+
+export const actWithValIf = <TVal>(
+  inVal: TVal,
+  action: (input: TVal) => unknown | any | void,
+  defaultAction: (input: TVal) => unknown | any | void,
+  defaultInputPredicate?: ((input: TVal) => boolean) | null | undefined
+) => {
+  defaultInputPredicate ??= (input) => !input;
+
+  if (defaultInputPredicate(inVal)) {
+    defaultAction(inVal);
+  } else {
+    action(inVal);
+  }
+};
+
 export const subStr = (
   str: string,
   opts: {

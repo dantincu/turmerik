@@ -1,77 +1,45 @@
-import { withVal } from "../../trmrk/core";
-
 import {
-  HtmlElementBounds,
-  getHcyElemBounds,
   isScrolledIntoView,
+  getChildTextNodes,
 } from "../domUtils/getDomElemBounds";
 
-import { getChildNodesUpTo } from "../domUtils/getDomElemBounds";
-
 import {
-  TextCaretPositionerBase,
+  CursorPositionOptsCore,
   TextCaretPositionerOptsCore,
   TextEndCoords,
-  TextNodeCoordsCore,
   TextNodeCore,
+  getCursorPosition,
+  CaretCharJustify,
 } from "./textCaretPositionerCore";
-
-export interface TextCaretPositionerOpts
-  extends TextCaretPositionerOptsCore<HTMLElement> {}
 
 export interface TextNode extends TextNodeCore<Text> {}
 
-export const positionTextCaret = (opts: TextCaretPositionerOpts) => {
-  const component = new TextCaretPositioner(opts);
-  const caretCharIdx = component.positionCaret();
-  return caretCharIdx;
-};
+export interface CursorPositionOpts
+  extends CursorPositionOptsCore<Text, TextNode> {}
+
+export interface TextCaretPositionerOpts
+  extends TextCaretPositionerOptsCore<HTMLElement> {
+  scrollToCarret?: boolean | null | undefined;
+}
 
 export const getCaretHeight = (opts: TextCaretPositionerOpts) => {
   const { visibleCaretElem } = opts;
-  visibleCaretElem.parentNode?.removeChild(visibleCaretElem);
+
   opts.trgElem.appendChild(visibleCaretElem);
   const caretHeight = visibleCaretElem.clientHeight;
-  opts.trgElem.removeChild(visibleCaretElem);
+
   return caretHeight;
 };
 
-export const getMaxLineLength = (opts: TextCaretPositionerOpts) =>
-  opts.trgElem.scrollWidth;
-
-export const normTextNodeOffset = (
+export const positionCaret = (
   textNode: TextNode,
   opts: TextCaretPositionerOpts
 ) => {
-  const { invisibleCaretElem, caretHeight } = opts;
+  const { invisibleCaretElem, trgElem } = opts;
+  trgElem.insertBefore(invisibleCaretElem, textNode.node);
 
   textNode.offsetTop ??= invisibleCaretElem.offsetTop;
   textNode.offsetLeft ??= invisibleCaretElem.offsetLeft;
-  textNode.offsetSecondLine ??= textNode.offsetTop + caretHeight;
-};
-
-export const getTextNodeEndCoords = (
-  textNode: TextNode,
-  nextTextNode: TextNodeCoordsCore,
-  opts: TextCaretPositionerOpts
-) => {
-  const linesSpan = Math.round(
-    (nextTextNode.offsetTop! - textNode.offsetTop!) / opts.caretHeight
-  );
-
-  const renderedTextLength =
-    (linesSpan - 1) * opts.maxLineLength +
-    nextTextNode.offsetLeft! -
-    textNode.offsetLeft!;
-
-  const textEndCoords = {
-    nextOffsetLeft: nextTextNode.offsetLeft!,
-    nextOffsetTop: nextTextNode.offsetTop!,
-    linesSpan: linesSpan,
-    renderedTextLength: renderedTextLength,
-  };
-
-  return textEndCoords;
 };
 
 export const getAllTextNodes = (trgElem: HTMLElement): TextNode[] => {
@@ -92,145 +60,90 @@ export const getAllTextNodes = (trgElem: HTMLElement): TextNode[] => {
   return textNodeArr;
 };
 
-export const getTextPartsArrUpTo = (
-  prElem: HTMLElement,
-  refElem: HTMLElement
-) => getChildNodesUpTo<Text>(prElem, refElem).map((text) => text.data);
+export const normTextCaretPositionerOpts = (opts: TextCaretPositionerOpts) => {
+  opts.caretHeight ??= getCaretHeight(opts);
+};
 
-export const getTextUpTo = (prElem: HTMLElement, refElem: HTMLElement) =>
-  getTextPartsArrUpTo(prElem, refElem).join("");
+export const positionTextCaret = (opts: TextCaretPositionerOpts) => {
+  normTextCaretPositionerOpts(opts);
+  const { visibleCaretElem, invisibleCaretElem, rootElem, trgElem } = opts;
+  trgElem.appendChild(invisibleCaretElem);
 
-export const getTextCharsCountUpTo = (
-  prElem: HTMLElement,
-  refElem: HTMLElement
-) =>
-  getTextPartsArrUpTo(prElem, refElem)
-    .map((text) => text.length)
-    .reduce((a, b) => a + b);
+  const endCoord: TextEndCoords = {
+    nextOffsetLeft: opts.invisibleCaretElem.offsetLeft,
+    nextOffsetTop: opts.invisibleCaretElem.offsetTop,
+  };
 
-export class TextCaretPositioner extends TextCaretPositionerBase<
-  Text,
-  TextNode,
-  HTMLElement,
-  TextCaretPositionerOpts
-> {
-  constructor(opts: TextCaretPositionerOpts) {
-    super(opts);
-  }
+  const posOpts: CursorPositionOpts = {
+    caretCharJustify: opts.caretCharJustify,
+    lineHeight: opts.caretHeight,
+    offsetLeft: opts.trgElemOffsetX,
+    offsetTop: opts.trgElemOffsetY,
+    caretPositioner: (textNode) => positionCaret(textNode, opts),
+    textNodesArr: getAllTextNodes(opts.trgElem),
+    textRetriever: (textNode) => textNode.node.data,
+    textSplitter: (textNode, charIdx) => {
+      const nextText = textNode.node.splitText(charIdx);
 
-  protected getHcyElemBounds(
-    rootElem: HTMLElement,
-    trgElem: HTMLElement
-  ): HtmlElementBounds[] {
-    const bounds = getHcyElemBounds(rootElem, trgElem);
-    return bounds;
-  }
+      const nextTextNode: TextNode = {
+        node: nextText,
+      };
 
-  protected getMaxLineLength(opts: TextCaretPositionerOpts): number {
-    const maxLineLength = opts.trgElem.scrollWidth;
-    return maxLineLength;
-  }
+      return [textNode, nextTextNode];
+    },
+    textEndCoordsFactory: (_, nextTextNode) => {
+      let coord: TextEndCoords;
 
-  protected getCaretHeight(opts: TextCaretPositionerOpts): number {
-    const caretHeight = getCaretHeight(opts);
-    return caretHeight;
-  }
+      if (nextTextNode) {
+        coord = {
+          nextOffsetLeft: nextTextNode.offsetLeft!,
+          nextOffsetTop: nextTextNode.offsetTop!,
+        };
+      } else {
+        coord = endCoord;
+      }
 
-  protected getAllTextNodes(trgElem: HTMLElement): TextNode[] {
-    const allTextNodes = getAllTextNodes(trgElem);
-    return allTextNodes;
-  }
+      return coord;
+    },
+  };
 
-  protected getOffsetLeft(elem: HTMLElement): number {
-    const offsetLeft = elem.offsetLeft;
-    return offsetLeft;
-  }
+  let result = getCursorPosition(posOpts);
 
-  protected getOffsetTop(elem: HTMLElement): number {
-    const offsetTop = elem.offsetTop;
-    return offsetTop;
-  }
+  if (!result) {
+    const bounds = opts.trgElemBounds;
+    trgElem.insertBefore(invisibleCaretElem, trgElem.firstChild);
 
-  protected normTextNodeOffset(textNode: TextNode): void {
-    normTextNodeOffset(textNode, this.opts);
-  }
-
-  protected getTextNodeEndCoords(
-    currentTextNode: TextNode,
-    nextTextNode: TextNode
-  ): TextEndCoords {
-    const coords = getTextNodeEndCoords(
-      currentTextNode,
-      nextTextNode,
-      this.opts
-    );
-
-    return coords;
-  }
-
-  protected htmlGetText(node: Text): string {
-    const text = node.data;
-    return text;
-  }
-
-  protected htmlInsertBefore(
-    prElem: HTMLElement,
-    newChild: HTMLElement,
-    existingSibbling: Text | HTMLElement | null
-  ): void {
-    prElem.insertBefore(newChild, existingSibbling);
-  }
-
-  protected htmlGetNthChild(
-    prElem: HTMLElement,
-    idx: number
-  ): HTMLElement | Text {
-    const nthChild = prElem.childNodes.item(idx);
-    return nthChild as HTMLElement | Text;
-  }
-
-  protected splitText(textNode: TextNode, splitOffset: number): TextNode {
-    const idx = this.textNodeArr.indexOf(textNode);
-    const newText = textNode.node.splitText(splitOffset);
-    textNode.textEndCoords = null;
-
-    const newTextNode: TextNode = {
-      node: newText,
+    result = {
+      charIdx: 0,
+      offsetTop: invisibleCaretElem.offsetTop + bounds.totalRenderedOffsetTop,
+      offsetLeft:
+        invisibleCaretElem.offsetLeft + bounds.totalRenderedOffsetLeft,
     };
 
-    this.textNodeArr.splice(idx + 1, 0, newTextNode);
-    this.lastIdx++;
+    const topOffsetDiff = opts.trgElemOffsetY - result.offsetTop;
+    const leftOffsetDiff = opts.trgElemOffsetX - result.offsetLeft;
 
-    return newTextNode;
+    if (
+      topOffsetDiff >= opts.caretHeight ||
+      (topOffsetDiff >= 0 && leftOffsetDiff >= 0)
+    ) {
+      trgElem.appendChild(invisibleCaretElem);
+
+      result = {
+        charIdx: getChildTextNodes(trgElem)
+          .map((text) => text.data.length)
+          .reduce((a, b) => a + b, 0),
+        offsetTop: invisibleCaretElem.offsetTop + bounds.totalRenderedOffsetTop,
+        offsetLeft:
+          invisibleCaretElem.offsetLeft + bounds.totalRenderedOffsetLeft,
+      };
+    }
   }
 
-  protected insertBefore(textNode: TextNode | null = null) {
-    const opts = this.opts;
-    const { trgElem, invisibleCaretElem } = opts;
-    textNode ??= this.currentTextNode;
-
-    trgElem.insertBefore(invisibleCaretElem, textNode.node);
-    normTextNodeOffset(textNode, opts);
-  }
-
-  protected insertAfter(textNode: TextNode | null = null) {
-    const opts = this.opts;
-    const { trgElem, invisibleCaretElem } = opts;
-    textNode ??= this.currentTextNode;
-
-    trgElem.insertBefore(invisibleCaretElem, textNode.node.nextSibling);
-    normTextNodeOffset(textNode, opts);
-  }
-
-  override positionCaret() {
-    const opts = this.opts;
-    const { visibleCaretElem, invisibleCaretElem, rootElem } = opts;
-    opts.invisibleCaretElem.parentElement?.removeChild(opts.invisibleCaretElem);
-
-    super.positionCaret();
-
-    visibleCaretElem!.style.top = invisibleCaretElem!.offsetTop + "px";
-    visibleCaretElem!.style.left = invisibleCaretElem!.offsetLeft + "px";
+  if (result) {
+    trgElem.appendChild(visibleCaretElem);
+    visibleCaretElem!.style.top = result.offsetTop + "px";
+    visibleCaretElem!.style.left = result.offsetLeft + "px";
 
     const scrollToCarret =
       opts.scrollToCarret ?? !isScrolledIntoView(rootElem, visibleCaretElem);
@@ -238,7 +151,9 @@ export class TextCaretPositioner extends TextCaretPositionerBase<
     if (scrollToCarret) {
       visibleCaretElem.scrollIntoView();
     }
-
-    return this.caretCharIdx;
+  } else {
+    visibleCaretElem.parentElement?.removeChild(visibleCaretElem);
   }
-}
+
+  return result;
+};

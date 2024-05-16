@@ -1,4 +1,12 @@
+import { findKvp, withVal } from "../../trmrk/core";
+
 import { HtmlElementBounds } from "../domUtils/getDomElemBounds";
+
+export enum CaretCharJustify {
+  Closest = 0,
+  Left,
+  Right,
+}
 
 export interface TextCaretPositionerOptsCore<THTMLElement> {
   rootElem: THTMLElement;
@@ -10,8 +18,7 @@ export interface TextCaretPositionerOptsCore<THTMLElement> {
   invisibleCaretElem: THTMLElement;
   visibleCaretElem: THTMLElement;
   caretHeight: number;
-  maxLineLength: number;
-  scrollToCarret?: boolean | null | undefined;
+  caretCharJustify: CaretCharJustify | null | undefined;
 }
 
 export interface TextNodeCoordsCore {
@@ -28,303 +35,212 @@ export interface TextNodeCore<TText> extends TextNodeCoordsCore {
 export interface TextEndCoords {
   nextOffsetLeft: number;
   nextOffsetTop: number;
-  linesSpan: number;
-  renderedTextLength: number;
 }
 
-export abstract class TextCaretPositionerBase<
+export interface CursorPositionOptsCore<
   TText,
-  TTextNode extends TextNodeCore<TText>,
-  THTMLElement,
-  TOpts extends TextCaretPositionerOptsCore<THTMLElement>
+  TTextNode extends TextNodeCore<TText>
 > {
-  protected readonly opts: Readonly<TOpts>;
-  protected readonly textNodeArr: TTextNode[];
-  protected readonly lineHeightX0p5: number;
-  protected readonly lineHeightX1p5: number;
-  protected lastIdx: number;
-  protected insertAtTheEnd: boolean;
-  protected matchingTextNode: TTextNode | null;
-  protected currentTextNode!: TTextNode;
-  protected currentIdx: number;
-  protected startX: number;
-  protected startY: number;
-  protected endX: number;
-  protected endY: number;
-  protected maxY: number;
-  protected caretCharIdx: number;
-
-  constructor(opts: TOpts) {
-    opts.trgElemHcyBounds ??= this.getHcyElemBounds(
-      opts.rootElem,
-      opts.trgElem
-    );
-    opts.trgElemBounds ??= opts.trgElemHcyBounds.slice(-1)[0];
-
-    opts.maxLineLength ??= this.getMaxLineLength(opts);
-    opts.caretHeight ??= this.getCaretHeight(opts);
-
-    this.opts = Object.freeze(opts);
-    this.textNodeArr = this.getAllTextNodes(opts.trgElem);
-    this.lineHeightX0p5 = opts.caretHeight / 2;
-    this.lineHeightX1p5 = this.lineHeightX0p5 + opts.caretHeight;
-
-    this.lastIdx = this.textNodeArr.length - 1;
-    this.matchingTextNode = null;
-    this.insertAtTheEnd = false;
-
-    this.currentIdx = -1;
-    this.startX = -1;
-    this.startY = -1;
-    this.endX = -1;
-    this.endY = -1;
-    this.maxY = -1;
-    this.caretCharIdx = -1;
-  }
-
-  positionCaret() {
-    const opts = this.opts;
-    const { trgElem, visibleCaretElem, invisibleCaretElem } = opts;
-
-    if (this.lastIdx >= 0) {
-      this.setCurrentIdx(0);
-      this.insertBefore(null);
-
-      this.startX = this.getOffsetLeft(invisibleCaretElem);
-      this.startY = this.getOffsetTop(invisibleCaretElem);
-
-      this.setCurrentIdx(this.lastIdx);
-      this.insertAfter(null);
-
-      this.endX = this.getOffsetLeft(invisibleCaretElem);
-      this.endY = this.getOffsetTop(invisibleCaretElem);
-      this.maxY = this.endY + opts.caretHeight;
-
-      if (opts.trgElemOffsetY <= this.maxY) {
-        if (opts.trgElemOffsetY >= this.startY) {
-          if (this.lastIdx >= 1) {
-            this.matchingTextNode = this.getMatchingTextNode(0, this.lastIdx);
-          } else {
-            this.matchingTextNode = this.textNodeArr[0];
-          }
-        }
-      } else {
-        this.insertAtTheEnd = true;
-      }
-
-      if (this.matchingTextNode) {
-        this.setCurrentIdx(this.textNodeArr.indexOf(this.matchingTextNode));
-        this.positionCaretCore();
-      } else {
-        if (this.insertAtTheEnd) {
-          this.htmlInsertBefore(trgElem, invisibleCaretElem, null);
-          this.currentIdx = this.lastIdx + 1;
-        } else {
-          this.htmlInsertBefore(
-            trgElem,
-            invisibleCaretElem,
-            this.textNodeArr[0].node
-          );
-          this.currentIdx = 0;
-        }
-      }
-    } else {
-      this.htmlInsertBefore(
-        trgElem,
-        invisibleCaretElem,
-        this.htmlGetNthChild(trgElem, 0)
-      );
-      this.currentIdx = 0;
-    }
-
-    this.caretCharIdx = this.getCaretCharIdx();
-    this.htmlInsertBefore(trgElem, visibleCaretElem, null);
-
-    return this.caretCharIdx;
-  }
-
-  getCaretCharIdx() {
-    const caretCharIdx = this.textNodeArr
-      .slice(0, this.currentIdx)
-      .map((text) => this.htmlGetText(text.node).length)
-      .reduce((a, b) => a + b);
-
-    return caretCharIdx;
-  }
-
-  getMatchingTextNode(stIdx: number, endIdx: number): TTextNode {
-    this.insertBefore(null);
-    let matchingTextNode: TTextNode;
-
-    let avgIdx = Math.floor((stIdx + endIdx) / 2);
-    let avgNode = this.textNodeArr[avgIdx];
-
-    if (avgIdx == stIdx || avgIdx == endIdx) {
-      matchingTextNode = avgNode;
-    } else {
-      if (this.canGoUp(avgNode)) {
-        this.setCurrentIdx(avgIdx);
-        matchingTextNode = this.getMatchingTextNode(stIdx, avgIdx);
-      } else if (this.canGoDown(avgNode)) {
-        this.setCurrentIdx(avgIdx);
-        matchingTextNode = this.getMatchingTextNode(avgIdx, endIdx);
-      } else {
-        this.setCurrentIdx(avgIdx);
-        this.insertBefore(null);
-        matchingTextNode = avgNode;
-      }
-    }
-
-    return matchingTextNode;
-  }
-
-  canGoUp(textNode: TTextNode) {
-    const opts = this.opts;
-
-    let canGoUp =
-      textNode.offsetTop! > opts.trgElemOffsetY ||
-      (textNode.offsetTop! <= opts.trgElemOffsetY &&
-        textNode.offsetSecondLine! > opts.trgElemOffsetY &&
-        textNode.offsetLeft! > opts.trgElemOffsetX);
-
-    return canGoUp;
-  }
-
-  canGoDown(textNode: TTextNode) {
-    const opts = this.opts;
-
-    let canGoDown =
-      textNode.offsetSecondLine! < opts.trgElemOffsetY ||
-      (textNode.offsetSecondLine! >= opts.trgElemOffsetY &&
-        textNode.offsetTop! < opts.trgElemOffsetY &&
-        opts.trgElemOffsetX > textNode!.offsetLeft!);
-
-    return canGoDown;
-  }
-
-  positionCaretCore() {
-    const opts = this.opts;
-    let [diffX, diffY, splitPos] = this.getCurrentTextSplitPos();
-
-    while (splitPos > 0) {
-      this.splitText(this.currentTextNode, splitPos);
-      this.addToCurrentIdx(1);
-      this.insertBefore(null);
-
-      [diffX, diffY, splitPos] = this.getCurrentTextSplitPos();
-
-      if (splitPos < 0) {
-        this.addToCurrentIdx(-1);
-        this.insertBefore(null);
-
-        [diffX, diffY, splitPos] = this.getCurrentTextSplitPos();
-      }
-    }
-  }
-
-  getCurrentTextSplitPos(): [number, number, number] {
-    const opts = this.opts;
-    const diffX = opts.trgElemOffsetX - this.currentTextNode.offsetLeft!;
-    const diffY = opts.trgElemOffsetY - this.currentTextNode.offsetTop!;
-
-    const textEndCoords = this.getCurrentTextEndCoords();
-
-    const allowsSplit = diffY > opts.caretHeight || (diffY >= 0 && diffX >= 0);
-    let ratio: number;
-
-    if (allowsSplit) {
-      if (diffY > opts.caretHeight) {
-        ratio = 1 / Math.ceil(diffY / opts.caretHeight);
-      } else {
-        ratio =
-          diffX /
-          (textEndCoords.renderedTextLength - this.currentTextNode.offsetLeft!);
-      }
-    } else {
-      ratio = -1;
-    }
-
-    const splitPos =
-      ratio >= 0
-        ? Math.floor(ratio * this.htmlGetText(this.currentTextNode.node).length)
-        : -1;
-
-    return [diffX, diffY, splitPos];
-  }
-
-  getCurrentTextEndCoords() {
-    const opts = this.opts;
-    let textEndCoords: TextEndCoords | null =
-      this.currentTextNode.textEndCoords ?? null;
-
-    if (!textEndCoords) {
-      if (this.currentIdx < this.lastIdx) {
-        const nextTextNode = this.textNodeArr[this.lastIdx];
-        this.normTextNodeOffset(nextTextNode);
-
-        this.currentTextNode.textEndCoords = textEndCoords =
-          this.getTextNodeEndCoords(this.currentTextNode, nextTextNode);
-      } else {
-        this.currentTextNode.textEndCoords = textEndCoords =
-          this.getTextNodeEndCoords(this.currentTextNode, {
-            offsetLeft: this.endX,
-            offsetTop: this.endY,
-          } as TTextNode);
-      }
-    }
-
-    return textEndCoords;
-  }
-
-  protected abstract getHcyElemBounds(
-    rootElem: THTMLElement,
-    trgElem: THTMLElement
-  ): HtmlElementBounds[];
-
-  protected abstract getMaxLineLength(opts: TOpts): number;
-  protected abstract getCaretHeight(opts: TOpts): number;
-  protected abstract getAllTextNodes(trgElem: THTMLElement): TTextNode[];
-
-  protected abstract getOffsetLeft(elem: THTMLElement): number;
-  protected abstract getOffsetTop(elem: THTMLElement): number;
-
-  protected abstract normTextNodeOffset(textNode: TTextNode): void;
-
-  protected abstract getTextNodeEndCoords(
-    currentTextNode: TTextNode,
-    nextTextNode: TTextNode
-  ): TextEndCoords;
-
-  protected abstract htmlGetText(node: TText): string;
-
-  protected abstract htmlInsertBefore(
-    prElem: THTMLElement,
-    newChild: THTMLElement,
-    existingSibbling: THTMLElement | TText | null
-  ): void;
-
-  protected abstract htmlGetNthChild(
-    prElem: THTMLElement,
-    idx: number
-  ): THTMLElement | TText;
-
-  setCurrentIdx(newCurrentIdx: number) {
-    this.currentIdx = newCurrentIdx;
-    this.currentTextNode = this.textNodeArr[newCurrentIdx];
-
-    return this.currentTextNode;
-  }
-
-  addToCurrentIdx(toAdd: number) {
-    const currentTextNode = this.setCurrentIdx(this.currentIdx + toAdd);
-    return currentTextNode;
-  }
-
-  protected abstract splitText(
+  caretCharJustify: CaretCharJustify | null | undefined;
+  offsetLeft: number;
+  offsetTop: number;
+  lineHeight: number;
+  textNodesArr: TTextNode[];
+  caretPositioner: (textNode: TTextNode) => void;
+  textEndCoordsFactory: (
+    currentNode: TTextNode,
+    nextNode: TTextNode | null,
+    currentIdx: number,
+    textNodesArr: TTextNode[]
+  ) => TextEndCoords;
+  textSplitter: (
     textNode: TTextNode,
-    splitOffset: number
-  ): TTextNode;
-
-  protected abstract insertBefore(textNode: TTextNode | null): void;
-  protected abstract insertAfter(textNode: TTextNode | null): void;
+    charIdx: number
+  ) => [TTextNode, TTextNode];
+  textRetriever: (textNode: TTextNode) => string;
 }
+
+export interface TextNodeTuple<TText, TTextNode extends TextNodeCore<TText>> {
+  currentIdx: number;
+  current: TTextNode | null;
+  next: TTextNode | null;
+}
+
+export interface CursorPositionResult {
+  charIdx: number;
+  offsetTop: number;
+  offsetLeft: number;
+}
+
+export const getCursorPosition = <TText, TTextNode extends TextNodeCore<TText>>(
+  opts: CursorPositionOptsCore<TText, TTextNode>
+): CursorPositionResult | null => {
+  const [result, { currentIdx, current, next }] = getCursorPositionCore(opts);
+
+  if (!next) {
+    // debugger;
+  }
+
+  let retResult = result;
+  let retIdx = currentIdx;
+
+  if (current) {
+    // const nodeText = opts.textRetriever(current);
+
+    if (
+      // nodeText.length === 1 &&
+      opts.caretCharJustify !== CaretCharJustify.Left &&
+      next &&
+      opts.textRetriever(next).length > 0
+    ) {
+      if (current.offsetLeft! < opts.offsetLeft) {
+        opts.textSplitter(next, 1);
+        next.textEndCoords = null;
+        opts.caretPositioner(next);
+
+        if (next.offsetLeft! >= opts.offsetLeft) {
+          if (
+            opts.caretCharJustify === CaretCharJustify.Right ||
+            opts.offsetLeft - current.offsetLeft! <
+              next.offsetLeft! - opts.offsetLeft
+          ) {
+            retIdx++;
+            console.log("next", next);
+
+            retResult = {
+              offsetLeft: next.offsetLeft!,
+              offsetTop: next.offsetTop!,
+            } as CursorPositionResult;
+          } else {
+            // debugger;
+          }
+        } else {
+          // debugger;
+        }
+      } else {
+        // debugger;
+      }
+    } else {
+      // debugger;
+    }
+  }
+
+  if (retResult) {
+    retResult.charIdx = getCharIdx(opts, currentIdx, 0);
+  }
+
+  return retResult;
+};
+
+export const getCursorPositionCore = <
+  TText,
+  TTextNode extends TextNodeCore<TText>
+>(
+  opts: CursorPositionOptsCore<TText, TTextNode>
+): [CursorPositionResult | null, TextNodeTuple<TText, TTextNode>] => {
+  const nextNodeTuple = getTrgTextNode(opts);
+  let current = nextNodeTuple.current;
+
+  let retResult: CursorPositionResult | null = null;
+  let retTuple = nextNodeTuple;
+
+  if (current) {
+    const nodeText = opts.textRetriever(current);
+
+    if (nodeText.length > 1) {
+      const charIdx = Math.max(1, Math.floor(nodeText.length / 2));
+      const splitArr = opts.textSplitter(current, charIdx);
+      current.textEndCoords = null;
+
+      const [_, tuple] = getCursorPositionCore({
+        caretCharJustify: opts.caretCharJustify,
+        offsetLeft: opts.offsetLeft,
+        offsetTop: opts.offsetTop,
+        lineHeight: opts.lineHeight,
+        textNodesArr: splitArr,
+        caretPositioner: opts.caretPositioner,
+        textEndCoordsFactory: opts.textEndCoordsFactory,
+        textSplitter: opts.textSplitter,
+        textRetriever: opts.textRetriever,
+      });
+
+      current = tuple.current!;
+      retTuple.current = current;
+      retTuple.currentIdx = tuple.currentIdx;
+
+      if (tuple.next) {
+        retTuple.next = tuple.next;
+      }
+    }
+
+    retResult = {
+      offsetLeft: current.offsetLeft!,
+      offsetTop: current.offsetTop!,
+    } as CursorPositionResult;
+  }
+
+  return [retResult, retTuple];
+};
+
+export const getCharIdx = <TText, TTextNode extends TextNodeCore<TText>>(
+  opts: CursorPositionOptsCore<TText, TTextNode>,
+  lastIdx: number,
+  charIdx: number
+) =>
+  charIdx +
+  opts.textNodesArr
+    .filter((_, idx) => idx < lastIdx)
+    .map((node) => opts.textRetriever(node).length)
+    .reduce((a, b) => a + b, 0);
+
+export const getTrgTextNode = <TText, TTextNode extends TextNodeCore<TText>>(
+  opts: CursorPositionOptsCore<TText, TTextNode>
+) => {
+  const kvp =
+    findKvp(opts.textNodesArr, (currentTextNode, idx) => {
+      opts.caretPositioner(currentTextNode);
+      const nextTextNode = opts.textNodesArr[idx + 1] ?? null;
+
+      if (nextTextNode) {
+        opts.caretPositioner(nextTextNode);
+      }
+
+      const textEndCoords = (currentTextNode.textEndCoords ??=
+        opts.textEndCoordsFactory(
+          currentTextNode,
+          nextTextNode,
+          idx,
+          opts.textNodesArr
+        ));
+
+      const offsetTopDiff = opts.offsetTop - currentTextNode.offsetTop!;
+      const offsetLeftDiff = opts.offsetLeft - currentTextNode.offsetLeft!;
+
+      const offsetBottomDiff = textEndCoords.nextOffsetTop - opts.offsetTop;
+      const offsetRightDiff = textEndCoords.nextOffsetLeft - opts.offsetLeft;
+
+      let matches =
+        offsetTopDiff >= opts.lineHeight ||
+        (offsetTopDiff >= 0 && offsetLeftDiff >= 0);
+
+      if (matches) {
+        matches =
+          offsetBottomDiff > 0 ||
+          (offsetBottomDiff > -opts.lineHeight && offsetRightDiff >= 0);
+      }
+
+      return matches;
+    }) ?? null;
+
+  const retObj: TextNodeTuple<TText, TTextNode> = {
+    currentIdx: kvp.key,
+    current: kvp.value,
+    next: null,
+  };
+
+  if (kvp.value) {
+    retObj.next = opts.textNodesArr[kvp.key + 1] ?? null;
+  }
+
+  return retObj;
+};

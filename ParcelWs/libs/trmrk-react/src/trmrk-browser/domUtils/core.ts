@@ -196,13 +196,17 @@ export const filterChildNodes = <TChildNode = ChildNode>(
 ) => {
   const retArr: TChildNode[] = [];
 
-  forEachChildNode(prElem, (elem, idx, prElemChildNodesCollctn) => {
-    const retVal = callback(elem, idx, prElemChildNodesCollctn);
+  forEachChildNode(
+    prElem,
+    (elem, idx, prElemChildNodesCollctn) => {
+      const retVal = callback(elem, idx, prElemChildNodesCollctn);
 
-    if (retVal) {
-      retArr.push(elem as TChildNode);
-    }
-  });
+      if (retVal) {
+        retArr.push(elem as TChildNode);
+      }
+    },
+    reverseOrder
+  );
 
   return retArr;
 };

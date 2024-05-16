@@ -9,6 +9,8 @@ export interface HtmlElementBounds {
   totalRenderedOffsetTop: number;
   width: number;
   height: number;
+  scrollWidth: number;
+  scrollHeight: number;
   scrollLeft: number;
   scrollTop: number;
 }
@@ -22,6 +24,8 @@ export const getDomElemBounds = (
     offsetTop: setOffsetToZero ? 0 : elem.offsetTop,
     width: elem.clientWidth,
     height: elem.clientHeight,
+    scrollWidth: elem.scrollWidth,
+    scrollHeight: elem.scrollHeight,
     scrollLeft: elem.scrollLeft,
     scrollTop: elem.scrollTop,
   } as unknown as HtmlElementBounds;
@@ -73,6 +77,8 @@ export const getHcyElemBounds = (
 
     elem.totalRenderedOffsetTop =
       prElem.totalRenderedOffsetTop + elem.offsetTop - prElem.scrollTop;
+
+    prElem = elem;
   }
 
   return retArr;
@@ -95,19 +101,19 @@ export const isScrolledIntoView = (
   return isIntoView;
 };
 
-export const getChildNodesUpTo = <TChildNode = ChildNode>(
+export const getChildTextNodes = (
   prElem: HTMLElement,
-  refElem: HTMLElement,
+  upToElem: HTMLElement | null = null,
   reverseOrder: boolean = false
-) =>
-  filterChildNodes<TChildNode>(
+) => {
+  const retArr = filterChildNodes<Text>(
     prElem,
     (prElemChildNode) => {
       let keep: boolean | null = null;
 
       if (prElemChildNode instanceof Text) {
         keep = true;
-      } else if (prElemChildNode === refElem) {
+      } else if (upToElem !== null && prElemChildNode === upToElem) {
         keep = false;
       }
 
@@ -115,3 +121,10 @@ export const getChildNodesUpTo = <TChildNode = ChildNode>(
     },
     reverseOrder
   );
+
+  if (reverseOrder) {
+    retArr.reverse();
+  }
+
+  return retArr;
+};

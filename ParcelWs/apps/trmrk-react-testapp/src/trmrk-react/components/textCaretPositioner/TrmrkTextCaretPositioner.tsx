@@ -10,7 +10,9 @@ import WrapTextIcon from "@mui/icons-material/WrapText";
 
 import MatUIIcon from "../icons/MatUIIcon";
 
+import { getHcyElemBounds } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 import { positionTextCaret, TextCaretPositionerOpts } from "../../../trmrk-browser/textCaretPositioner/textCaretPositioner";
+import { CaretCharJustify } from "../../../trmrk-browser/textCaretPositioner/textCaretPositionerCore";
 
 export const DEFAULT_MAX_SPAN_LENGTH = 10;
 export const DEFAULT_TAB_LENGTH_PX = 40;  
@@ -75,18 +77,19 @@ export default React.forwardRef(function TrmrkTextCaretPositioner(
     const trgEl = ev.target;
 
     if (trgEl !== invisibleTextCaretEl && trgEl !== textCaretEl && trgEl instanceof HTMLElement) {
-      // const trgElComputedStyle = getComputedStyle(trgEl);
-      // console.log("textCaretEl", textCaretEl!.offsetHeight);
-      
+      const trgElemHcyBounds = getHcyElemBounds(positioningTextEl!, trgEl);
+      const trgElemBounds = trgElemHcyBounds.slice(-1)[0];
+
       positionTextCaret({
         rootElem: positioningTextEl,
         trgElem: trgEl,
         invisibleCaretElem: invisibleTextCaretEl,
         visibleCaretElem: textCaretEl,
-        trgElemOffsetX: ev.offsetX + textCaretEl!.scrollLeft,
-        trgElemOffsetY: ev.offsetY + textCaretEl!.scrollTop,
-        // caretHeight: textCaretEl!.offsetHeight,
-        // maxLineLength: trgEl.scrollWidth
+        trgElemHcyBounds,
+        trgElemBounds,
+        trgElemOffsetX: ev.offsetX + trgElemBounds.totalOffsetLeft + trgElemBounds.scrollLeft,
+        trgElemOffsetY: ev.offsetY + trgElemBounds.totalOffsetTop + trgElemBounds.scrollTop,
+        caretCharJustify: CaretCharJustify.Left
       } as unknown as TextCaretPositionerOpts);
     }
   }, [ positioningTextEl, invisibleTextCaretEl, textCaretEl ]);
