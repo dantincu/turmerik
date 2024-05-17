@@ -252,14 +252,24 @@ namespace Turmerik.Notes.Core
             out bool isOutOfBounds,
             bool desc = false)
         {
-            (int gapStartIdx, bool gapFound, int gapEndIdx, int idx) = GetFirstGap(
+            int nextIdx = desc ? maxVal : minVal;
+
+            if (sortedIdxesArr.Any())
+            {
+                (int gapStartIdx, bool gapFound, int gapEndIdx, int idx) = GetFirstGap(
                 sortedIdxesArr, 1, minVal, maxVal, desc);
 
-            int nextIdx = gapFound ? gapStartIdx : gapEndIdx;
-            int incVal = gapFound && idx == 0 ? 0 : desc ? -1 : 1;
+                nextIdx = gapFound ? gapStartIdx : gapEndIdx;
+                int incVal = gapFound && idx == 0 ? 0 : desc ? -1 : 1;
 
-            nextIdx += incVal;
-            isOutOfBounds = nextIdx < minVal || nextIdx > maxVal;
+                nextIdx += incVal;
+                isOutOfBounds = nextIdx < minVal || nextIdx > maxVal;
+            }
+            else
+            {
+                isOutOfBounds = false;
+            }
+
             return nextIdx;
         }
 
