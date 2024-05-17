@@ -78,17 +78,97 @@
         like Aldus PageMaker including versions of Lorem Ipsum
       </div>
     </pre>
+    <div>
+      <button type="button" id="cursorMoveBackBtn">&lt;</button>
+      <button type="button" id="cursorMoveForwardBtn">&gt;</button>
+      <input type="text" id="textBox" />
+      <textarea id="textArea"></textarea>
+    </div>
     <script>
-      var mainEl = document.querySelector("pre");
+      const mainEl = document.querySelector("pre");
       mainEl.addEventListener(
         "click",
         (ev) => {
-          console.log("target", ev.target);
+          // console.log("target", ev.target);
         },
         {
           capture: true,
         }
       );
+
+      document.addEventListener("selectionchange", (e) => {
+        // console.log("selectionchanged", getSelection());
+      });
+
+      const textBoxEl = document.getElementById("textBox");
+      const textAreaEl = document.getElementById("textArea");
+
+      let textEl = null;
+
+      textBoxEl.addEventListener("focusin", (e) => {
+        textEl = textBoxEl;
+      });
+
+      textAreaEl.addEventListener("focusin", (e) => {
+        textEl = textAreaEl;
+      });
+
+      const cursorMoveBackBtnEl = document.getElementById("cursorMoveBackBtn");
+
+      const cursorMoveForwardBtnEl = document.getElementById(
+        "cursorMoveForwardBtn"
+      );
+
+      const snapToInverval = (value, min, max) =>
+        Math.min(max, Math.max(min, value));
+
+      const moveCursor = (elem, forward) => {
+        const textLength = elem.value.length;
+        const incr = forward ? 1 : -1;
+
+        let selectionStart = snapToInverval(
+          elem.selectionStart + incr,
+          0,
+          textLength
+        );
+
+        let selectionEnd = snapToInverval(
+          elem.selectionEnd + incr,
+          0,
+          textLength
+        );
+
+        elem.focus();
+
+        switch (elem.tagName.toLowerCase()) {
+          case "input":
+            console.log(
+              "input.setSelectionRange",
+              selectionStart,
+              selectionEnd
+            );
+
+            elem.setSelectionRange(selectionStart, selectionEnd);
+            break;
+          case "textarea":
+            console.log(
+              "textarea.setSelectionRange",
+              selectionStart,
+              selectionEnd
+            );
+
+            elem.setSelectionRange(selectionStart, selectionEnd);
+            break;
+        }
+      };
+
+      cursorMoveBackBtnEl.addEventListener("click", (e) => {
+        moveCursor(textEl, false);
+      });
+
+      cursorMoveForwardBtnEl.addEventListener("click", (e) => {
+        moveCursor(textEl, true);
+      });
     </script>
   </body>
 </html>
