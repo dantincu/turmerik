@@ -19,8 +19,8 @@ import SettingsMenuList from "./settingsMenu/SettingsMenuList";
 import ToggleAppModeBtn from "./settingsMenu/ToggleAppModeBtn";
 import ToggleDarkModeBtn from "./settingsMenu/ToggleDarkModeBtn";
 
-import TrmrkTextCaretPositioner from "./textCaretPositioner/TrmrkTextCaretPositioner";
-import TrmrkTextCaretPositionerModal from "./textCaretPositioner/TrmrkTextCaretPositionerModal";
+import TrmrkTextCaretPositioner from "./textMagnifier/TrmrkTextMagnifier";
+import TrmrkTextMagnifierModal from "./textMagnifier/TrmrkTextMagnifierModal";
 
 import TrmrkEditableMultilineTextMagnifier from "./textMagnifier/TrmrkEditableMultilineTextMagnifier";
 import TrmrkEditableTextLineMagnifier from "./textMagnifier/TrmrkEditableTextLineMagnifier";
@@ -50,7 +50,7 @@ export const components = {
   ToggleAppModeBtn,
   ToggleDarkModeBtn,
   TrmrkTextCaretPositioner,
-  TrmrkTextCaretPositionerModal,
+  TrmrkTextCaretPositionerModal: TrmrkTextMagnifierModal,
   TrmrkEditableMultilineTextMagnifier,
   TrmrkEditableTextLineMagnifier,
   TrmrkReadonlyMultilineTextMagnifier,

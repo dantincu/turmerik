@@ -42,7 +42,7 @@ import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 import { isMobile, isIPhone } from "../../../../trmrk-browser/domUtils/constants";
 
 import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
-import TrmrkTextMagnifierPopover from "../../../components/textMagnifier/TrmrkTextMagnifierPopover";
+import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
 import MatUIIcon from "../../../components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbProps {
@@ -286,6 +286,11 @@ export default function IndexedDbEditDb(
 
   const onShowDbNameTextBoxMagnifier = () => {
     setShowDbNameTextBoxMagnifier(true);
+  }
+
+  const onSubmitDbNameTextBoxMagnifier = (text: string) => {
+    setDbName(text);
+    setShowDbNameTextBoxMagnifier(false);
   }
 
   const refreshError = React.useCallback((
@@ -567,13 +572,16 @@ export default function IndexedDbEditDb(
               <FormHelperText className="trmrk-warning trmrk-form-helper-text-row">{warning}</FormHelperText> : null }
           </React.Fragment> }
       <div ref={bottomElRef}></div>
-      { dbNameTextBoxEl ? <TrmrkTextMagnifierPopover
+      { dbNameTextBoxEl ? <TrmrkTextMagnifierModal
         isOpen={showDbNameTextBoxMagnifier}
         isDarkMode={isDarkMode}
-        anchorEl={dbNameTextBoxEl}
         handleClose={onHideDbNameTextBoxMagnifier}
-        text={dbName}
-            textIsReadonly={props.isNewDb} /> : null }
+        positioner={{
+          text: dbName,
+          onCancelChangesClick: onHideDbNameTextBoxMagnifier,
+          onSubmitChangesClick: onSubmitDbNameTextBoxMagnifier,
+          textIsReadonly: props.isNewDb
+        }} /> : null }
       <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
         <Alert
           className="trmrk-full-width"

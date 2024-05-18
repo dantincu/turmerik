@@ -11,7 +11,7 @@ import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice"
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import MatUIIcon from "../../../../trmrk-react/components/icons/MatUIIcon";
-import TrmrkTextCaretPositionerModal from "../../../../trmrk-react/components/textCaretPositioner/TrmrkTextCaretPositionerModal";
+import TrmrkTextMagnifierModal from "../../../../trmrk-react/components/textMagnifier/TrmrkTextMagnifierModal";
 
 export interface CodeTextCursorPositioningProps {
   urlPath: string
@@ -209,7 +209,7 @@ export default function CodeTextCursorPositioningPage(
       <IconButton onClick={onShowMultilineText2CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
     </div>
 
-    { textBoxEl1 ? <TrmrkTextCaretPositionerModal
+    { textBoxEl1 ? <TrmrkTextMagnifierModal
       isOpen={showSinglelineText1CaretPositioner}
       isDarkMode={isDarkMode}
       handleClose={onHideSinglelineTextBox1CaretPositioner}
@@ -220,7 +220,7 @@ export default function CodeTextCursorPositioningPage(
         onSubmitChangesClick: onHideSinglelineTextBox1CaretPositioner
       }} /> : null }
 
-      { textArea1El ? <TrmrkTextCaretPositionerModal
+      { textArea1El ? <TrmrkTextMagnifierModal
         isOpen={showMultilineText1CaretPositioner}
         isDarkMode={isDarkMode}
         handleClose={onHideMultilineTextBox1CaretPositioner}
@@ -232,7 +232,7 @@ export default function CodeTextCursorPositioningPage(
           onSubmitChangesClick: onHideMultilineTextBox1CaretPositioner
         }} /> : null }
 
-    { textBoxEl2 ? <TrmrkTextCaretPositionerModal
+    { textBoxEl2 ? <TrmrkTextMagnifierModal
       isOpen={showSinglelineText2CaretPositioner}
       isDarkMode={isDarkMode}
       handleClose={onHideSinglelineTextBox2CaretPositioner}
@@ -243,7 +243,7 @@ export default function CodeTextCursorPositioningPage(
         onSubmitChangesClick: onHideSinglelineTextBox2CaretPositioner
       }} /> : null }
 
-      { textArea2El ? <TrmrkTextCaretPositionerModal
+      { textArea2El ? <TrmrkTextMagnifierModal
         isOpen={showMultilineText2CaretPositioner}
         isDarkMode={isDarkMode}
         handleClose={onHideMultilineTextBox2CaretPositioner}

@@ -141,7 +141,6 @@ export const positionTextCaret = (opts: TextCaretPositionerOpts) => {
   }
 
   if (result) {
-    console.log("result.charIdx", result.charIdx);
     trgElem.appendChild(visibleCaretElem);
     visibleCaretElem!.style.top = result.offsetTop + "px";
     visibleCaretElem!.style.left = result.offsetLeft + "px";

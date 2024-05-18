@@ -16,7 +16,7 @@ import { IndexedDbDatabase, IndexedDbStore } from "./models";
 import { AppDataSelectors } from "../../../redux/appData";
 
 import { deserializeKeyPath } from "../../../services/indexedDb";
-import TrmrkTextMagnifierPopover from "../../../components/textMagnifier/TrmrkTextMagnifierPopover";
+import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
 import MatUIIcon from "../../../components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbStoreProps {
@@ -121,6 +121,11 @@ export default function IndexedDbEditDbStore(
     setShowDbStoreNameTextBoxMagnifier(true);
   }
 
+  const onSubmitDbStoreNameTextBoxMagnifier = (text: string) => {
+    setDbStoreName(text);
+    setShowDbStoreNameTextBoxMagnifier(false);
+  }
+
   React.useEffect(() => {
     const autoIncrementEl = autoIncrementElRef.current;
     let autoIncrementCheckBox: HTMLInputElement | null = null;
@@ -192,11 +197,15 @@ export default function IndexedDbEditDbStore(
     </Box>
     { (keyPathErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
       {keyPathErr}</FormHelperText> : null }
-    { dbStoreNameTextBoxEl ? <TrmrkTextMagnifierPopover
+    { dbStoreNameTextBoxEl ? <TrmrkTextMagnifierModal
       isOpen={showDbStoreNameTextBoxMagnifier}
       isDarkMode={isDarkMode}
-      anchorEl={dbStoreNameTextBoxEl}
       handleClose={onHideDbStoreNameTextBoxMagnifier}
-      text={dbStoreName} textIsReadonly={!props.model.canBeEdited} /> : null }
+      positioner={{
+        text: dbStoreName,
+        onCancelChangesClick: onHideDbStoreNameTextBoxMagnifier,
+        onSubmitChangesClick: onSubmitDbStoreNameTextBoxMagnifier,
+        textIsReadonly: !props.model.canBeEdited
+      }} /> : null }
   </Paper>);
 }

@@ -6,18 +6,18 @@ import DialogContent from '@mui/material/DialogContent';
 import trmrk from "../../../trmrk";
 import { getAppTheme } from "../../app-theme/core";
 
-import TrmrkTextCaretPositioner, { TrmrkTextCaretPositionerProps } from "./TrmrkTextCaretPositioner";
+import TrmrkTextCaretPositioner, { TrmrkTextMagnifierProps } from "./TrmrkTextMagnifier";
 
-export interface TrmrkTextCaretPositionerModalProps {
-  positioner: TrmrkTextCaretPositionerProps;
+export interface TrmrkTextMagnifierModalProps {
+  positioner: TrmrkTextMagnifierProps;
   popoverClassName?: string | null | undefined;
   isDarkMode: boolean;
   isOpen: boolean;
   handleClose: () => void;
 }
 
-export default function TrmrkTextCaretPositionerModal(
-  props: TrmrkTextCaretPositionerModalProps
+export default function TrmrkTextMagnifierModal(
+  props: TrmrkTextMagnifierModalProps
 ) {
   const appThemeClassName = getAppTheme({
     isDarkMode: props.isDarkMode,

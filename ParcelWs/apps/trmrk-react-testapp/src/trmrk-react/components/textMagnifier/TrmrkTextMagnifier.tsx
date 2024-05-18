@@ -17,7 +17,7 @@ import { CaretCharJustify } from "../../../trmrk-browser/textCaretPositioner/tex
 export const DEFAULT_MAX_SPAN_LENGTH = 10;
 export const DEFAULT_TAB_LENGTH_PX = 40;  
 
-export interface TrmrkTextCaretPositionerProps {
+export interface TrmrkTextMagnifierProps {
   className?: string | number | undefined;
   maxSpanLength?: number | null | undefined;
   tabLengthPx?: number | null | undefined;
@@ -27,11 +27,11 @@ export interface TrmrkTextCaretPositionerProps {
   wrapText?: boolean | null | undefined;
   text: string;
   onCancelChangesClick: () => void;
-  onSubmitChangesClick?: (() => void) | null | undefined;
+  onSubmitChangesClick?: ((text: string) => void) | null | undefined;
 }
 
-export default React.forwardRef(function TrmrkTextCaretPositioner(
-  props: TrmrkTextCaretPositionerProps,
+export default React.forwardRef(function TrmrkTextMagnifier(
+  props: TrmrkTextMagnifierProps,
   ref: ((instance: HTMLDivElement | null) => void) | React.RefObject<HTMLDivElement> | null | undefined
 ) {
   const [ isPositioningMode, setIsPositioningMode ] = React.useState(
@@ -53,7 +53,7 @@ export default React.forwardRef(function TrmrkTextCaretPositioner(
 
   const onSubmitChangesClick = () => {
     if (props.onSubmitChangesClick) {
-      props.onSubmitChangesClick();
+      props.onSubmitChangesClick(text);
     }
   }
 
