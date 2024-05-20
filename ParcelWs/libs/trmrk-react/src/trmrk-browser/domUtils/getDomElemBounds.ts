@@ -49,15 +49,17 @@ export const getHcyElemBounds = (
   rootElem: HTMLElement,
   trgElem: HTMLElement
 ) => {
-  let elem = getDomElemBounds(trgElem, true);
+  let elem = getDomElemBounds(trgElem);
   const retArr: HtmlElementBounds[] = [elem];
+  let reachedRoot = trgElem === rootElem;
 
-  while (trgElem !== rootElem) {
+  while (!reachedRoot) {
     const prElem = trgElem.parentElement;
 
     if (prElem) {
       trgElem = prElem;
-      elem = getDomElemBounds(trgElem);
+      reachedRoot = trgElem === rootElem;
+      elem = getDomElemBounds(trgElem, reachedRoot);
       retArr.splice(0, 0, elem);
     } else {
       break;

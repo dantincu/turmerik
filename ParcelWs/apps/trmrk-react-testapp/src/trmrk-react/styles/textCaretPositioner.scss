@@ -1,3 +1,13 @@
+.trmrk-text-caret {
+  position: absolute;
+  display: inline-block;
+  &::after {
+    content: "";
+    vertical-align: bottom;
+    border: 1px solid #080;
+  }
+}
+
 .trmrk-text-caret-positioner {
   display: block;
   position: absolute;
@@ -68,19 +78,6 @@
       bottom: 0em;
     }
   }
-
-  .trmrk-text-caret {
-    position: absolute;
-    display: inline-block;
-    &::after {
-      content: "";
-      vertical-align: bottom;
-      border: 1px solid #080;
-    }
-  }
-
-  /* .trmrk-invisible-text-caret {
-  } */
 
   .trmrk-pre {
     display: block;

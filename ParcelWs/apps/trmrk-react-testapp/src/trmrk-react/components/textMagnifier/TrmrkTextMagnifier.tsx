@@ -11,7 +11,7 @@ import WrapTextIcon from "@mui/icons-material/WrapText";
 import MatUIIcon from "../icons/MatUIIcon";
 
 import { getHcyElemBounds } from "../../../trmrk-browser/domUtils/getDomElemBounds";
-import { positionTextCaret, TextCaretPositionerOpts } from "../../../trmrk-browser/textCaretPositioner/textCaretPositioner";
+import { positionTextCaret, TextCaretPositionerOpts, getTextCaretPositionerOpts } from "../../../trmrk-browser/textCaretPositioner/textCaretPositioner";
 import { CaretCharJustify } from "../../../trmrk-browser/textCaretPositioner/textCaretPositionerCore";
 
 export const DEFAULT_MAX_SPAN_LENGTH = 10;
@@ -77,7 +77,7 @@ export default React.forwardRef(function TrmrkTextMagnifier(
     const trgEl = ev.target;
 
     if (trgEl !== invisibleTextCaretEl && trgEl !== textCaretEl && trgEl instanceof HTMLElement) {
-      const trgElemHcyBounds = getHcyElemBounds(positioningTextEl!, trgEl);
+      /* const trgElemHcyBounds = getHcyElemBounds(positioningTextEl!, trgEl);
       const trgElemBounds = trgElemHcyBounds.slice(-1)[0];
 
       positionTextCaret({
@@ -90,7 +90,10 @@ export default React.forwardRef(function TrmrkTextMagnifier(
         trgElemOffsetX: ev.offsetX + trgElemBounds.totalOffsetLeft + trgElemBounds.scrollLeft,
         trgElemOffsetY: ev.offsetY + trgElemBounds.totalOffsetTop + trgElemBounds.scrollTop,
         caretCharJustify: CaretCharJustify.Closest
-      } as unknown as TextCaretPositionerOpts);
+      } as unknown as TextCaretPositionerOpts); */
+
+      const opts = getTextCaretPositionerOpts(positioningTextEl!, trgEl, textCaretEl!, invisibleTextCaretEl!, ev);
+      positionTextCaret(opts);
     }
   }, [ positioningTextEl, invisibleTextCaretEl, textCaretEl ]);
 

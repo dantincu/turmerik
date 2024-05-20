@@ -1,6 +1,7 @@
 import {
   isScrolledIntoView,
   getChildTextNodes,
+  getHcyElemBounds,
 } from "../domUtils/getDomElemBounds";
 
 import {
@@ -58,6 +59,34 @@ export const getAllTextNodes = (trgElem: HTMLElement): TextNode[] => {
   }
 
   return textNodeArr;
+};
+
+export const getTextCaretPositionerOpts = (
+  positioningTextEl: HTMLElement,
+  trgEl: HTMLElement,
+  textCaretEl: HTMLElement,
+  invisibleTextCaretEl: HTMLElement,
+  ev: MouseEvent | { offsetX: number; offsetY: number },
+  caretCharJustify: CaretCharJustify = CaretCharJustify.Closest
+) => {
+  const trgElemHcyBounds = getHcyElemBounds(positioningTextEl!, trgEl);
+  const trgElemBounds = trgElemHcyBounds.slice(-1)[0];
+
+  const opts = {
+    rootElem: positioningTextEl,
+    trgElem: trgEl,
+    invisibleCaretElem: invisibleTextCaretEl,
+    visibleCaretElem: textCaretEl,
+    trgElemHcyBounds,
+    trgElemBounds,
+    trgElemOffsetX:
+      ev.offsetX + trgElemBounds.totalOffsetLeft + trgElemBounds.scrollLeft,
+    trgElemOffsetY:
+      ev.offsetY + trgElemBounds.totalOffsetTop + trgElemBounds.scrollTop,
+    caretCharJustify: caretCharJustify,
+  } as unknown as TextCaretPositionerOpts;
+
+  return opts;
 };
 
 export const normTextCaretPositionerOpts = (opts: TextCaretPositionerOpts) => {
