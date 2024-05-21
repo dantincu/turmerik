@@ -164,3 +164,12 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
     background-color: #ddd;
   }
 }
+
+.trmrk-theme-dark.trmrk-text-input-caret-positioner-popover {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
+  background-color: #121212;
+}
+
+.trmrk-theme-light.trmrk-text-input-caret-positioner-popover {
+  background-color: #1976d2;
+}

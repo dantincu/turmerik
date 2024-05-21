@@ -1,0 +1,69 @@
+.trmrk-text-input-caret-positioner-popover {
+  display: block;
+  position: fixed;
+  z-index: 1000000;
+  height: 2.5em;
+  width: 100%;
+  color: white;
+
+  &.trmrk-pinned-to-top {
+    top: 0em;
+  }
+
+  &.trmrk-pinned-to-bottom {
+    bottom: 0em;
+  }
+
+  .trmrk-icon-btn {
+    position: absolute;
+    color: inherit;
+    height: 1.66em;
+    width: 1.66em;
+  }
+
+  .trmrk-main-icon-btn {
+    right: 0em;
+  }
+
+  .trmrk-toggle-pin-to-bottom-btn {
+    right: 1.66em;
+  }
+
+  .trmrk-view {
+    > .trmrk-icon-btn:nth-child(2) {
+      left: 1.67em;
+    }
+
+    > .trmrk-icon-btn:nth-child(3) {
+      left: 3.33em;
+    }
+    
+    > .trmrk-icon-btn:nth-child(4) {
+      left: 5em;
+    }
+    
+    > .trmrk-icon-btn:nth-child(5) {
+      left: 6.67em;
+    }
+    
+    > .trmrk-icon-btn:nth-child(6) {
+      left: 8.33em;
+    }
+    
+    > .trmrk-icon-btn:nth-child(7) {
+      left: 10em;
+    }
+    
+    > .trmrk-icon-btn:nth-child(8) {
+      left: 11.67em;
+    }
+
+    .trmrk-arrow-left-icon,
+    .trmrk-arrow-right-icon,
+    .trmrk-arrow-drop-up-icon,
+    .trmrk-arrow-drop-down-icon {
+      font-size: 1.66em;
+    }
+  }
+}
+

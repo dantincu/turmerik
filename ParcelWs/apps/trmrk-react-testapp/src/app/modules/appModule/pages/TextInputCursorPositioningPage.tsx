@@ -11,41 +11,39 @@ import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice"
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import MatUIIcon from "../../../../trmrk-react/components/icons/MatUIIcon";
-import TrmrkTextMagnifierModal from "../../../../trmrk-react/components/textMagnifier/TrmrkTextMagnifierModal";
-
 import { generateText } from "./generateText";
 
-export interface CodeTextCursorPositioningProps {
+import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretPositioner/TextCaretInputPositioner";
+
+export interface TextInputCursorPositioningPageProps {
   urlPath: string
   basePath: string;
   rootPath: string;
 }
 
-export default function CodeTextCursorPositioningPage(
-  props: CodeTextCursorPositioningProps
-) {
+const KEEP_OPEN = true;
+
+export default function TextInputCursorPositioningPage(
+  props: TextInputCursorPositioningPageProps) {
+
   const textBox1ElRef = React.createRef<HTMLInputElement>();
   const textArea1ElRef = React.createRef<HTMLTextAreaElement>();
   const textBox2ElRef = React.createRef<HTMLInputElement>();
   const textArea2ElRef = React.createRef<HTMLTextAreaElement>();
 
-  const [ textBoxEl1, setTextBox1El ] = React.useState(textBox1ElRef.current);
+  const [ textBox1El, setTextBox1El ] = React.useState(textBox1ElRef.current);
   const [ textArea1El, setTextArea1El ] = React.useState(textArea1ElRef.current);
 
-  const [ textBoxEl2, setTextBox2El ] = React.useState(textBox2ElRef.current);
+  const [ textBox2El, setTextBox2El ] = React.useState(textBox2ElRef.current);
   const [ textArea2El, setTextArea2El ] = React.useState(textArea2ElRef.current);
+
+  const [ currentInputEl, setCurrentInputEl ] = React.useState<HTMLElement | null>(null);
 
   const [ textBox1IsReadonly, setTextBox1IsReadonly ] = React.useState(true);
   const [ textArea1IsReadonly, setText1AreaIsReadonly ] = React.useState(true);
 
   const [ textBox2IsReadonly, setTextBox2IsReadonly ] = React.useState(true);
   const [ textArea2IsReadonly, setText2AreaIsReadonly ] = React.useState(true);
-
-  const [ showSinglelineText1CaretPositioner, setShowSinglelineText1CaretPositioner ] = React.useState(false);
-  const [ showMultilineText1CaretPositioner, setShowMultilineText1CaretPositioner ] = React.useState(false);
-
-  const [ showSinglelineText2CaretPositioner, setShowSinglelineText2CaretPositioner ] = React.useState(false);
-  const [ showMultilineText2CaretPositioner, setShowMultilineText2CaretPositioner ] = React.useState(false);
 
   const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
 
@@ -75,20 +73,24 @@ export default function CodeTextCursorPositioningPage(
     setText1AreaIsReadonly(checked);
   }
 
-  const onShowSinglelineText1CaretPositioner = () => {
-    setShowSinglelineText1CaretPositioner(true);
+  const onShowSinglelineText1CaretPositioner = (e: React.FocusEvent) => {
+    setCurrentInputEl(textBox1El);
   }
 
-  const onHideSinglelineTextBox1CaretPositioner = () => {
-    setShowSinglelineText1CaretPositioner(false);
+  const onHideSinglelineTextBox1CaretPositioner = (e: React.FocusEvent) => {
+    if (!KEEP_OPEN) {
+      setCurrentInputEl(null);
+    }
   }
 
-  const onShowMultilineText1CaretPositioner = () => {
-    setShowMultilineText1CaretPositioner(true);
+  const onShowMultilineText1CaretPositioner = (e: React.FocusEvent) => {
+    setCurrentInputEl(textArea1El);
   }
 
-  const onHideMultilineTextBox1CaretPositioner = () => {
-    setShowMultilineText1CaretPositioner(false);
+  const onHideMultilineTextBox1CaretPositioner = (e: React.FocusEvent) => {
+    if (!KEEP_OPEN) {
+      setCurrentInputEl(null);
+    }
   }
 
   const onSingleLineText2Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,24 +109,28 @@ export default function CodeTextCursorPositioningPage(
     setText2AreaIsReadonly(checked);
   }
 
-  const onShowSinglelineText2CaretPositioner = () => {
-    setShowSinglelineText2CaretPositioner(true);
+  const onShowSinglelineText2CaretPositioner = (e: React.FocusEvent) => {
+    setCurrentInputEl(textBox2El);
   }
 
-  const onHideSinglelineTextBox2CaretPositioner = () => {
-    setShowSinglelineText2CaretPositioner(false);
+  const onHideSinglelineTextBox2CaretPositioner = (e: React.FocusEvent) => {
+    if (!KEEP_OPEN) {
+      setCurrentInputEl(null);
+    }
   }
 
-  const onShowMultilineText2CaretPositioner = () => {
-    setShowMultilineText2CaretPositioner(true);
+  const onShowMultilineText2CaretPositioner = (e: React.FocusEvent) => {
+    setCurrentInputEl(textArea2El);
   }
 
-  const onHideMultilineTextBox2CaretPositioner = () => {
-    setShowMultilineText2CaretPositioner(false);
+  const onHideMultilineTextBox2CaretPositioner = (e: React.FocusEvent) => {
+    if (!KEEP_OPEN) {
+      setCurrentInputEl(null);
+    }
   }
 
   React.useEffect(() => {
-    if (textBox1ElRef.current !== textBoxEl1) {
+    if (textBox1ElRef.current !== textBox1El) {
       setTextBox1El(textBox1ElRef.current);
     }
 
@@ -132,7 +138,7 @@ export default function CodeTextCursorPositioningPage(
       setTextArea1El(textArea1ElRef.current);
     }
 
-    if (textBox2ElRef.current !== textBoxEl2) {
+    if (textBox2ElRef.current !== textBox2El) {
       setTextBox2El(textBox2ElRef.current);
     }
 
@@ -141,97 +147,59 @@ export default function CodeTextCursorPositioningPage(
     }
   }, [
     textBox1ElRef,
-    textBoxEl1,
+    textBox1El,
     textArea1ElRef,
     textArea1El,
     textBox2ElRef,
-    textBoxEl2,
+    textBox2El,
     textArea2ElRef,
     textArea2El,
+    currentInputEl,
     textBox2IsReadonly,
     textArea2IsReadonly,
-    showSinglelineText2CaretPositioner,
-    showMultilineText2CaretPositioner,
     isDarkMode,
     singlelineText2,
     multilineText2 ]);
-
-  return (<AppBarsPanel basePath={props.basePath}
+    
+    return (<AppBarsPanel basePath={props.basePath}
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}>
     <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextBox1IsReadonlyChanged} checked={textBox1IsReadonly} /></label>
-      <Input ref={textBox1ElRef} onChange={onSingleLineText1Changed} value={singlelineText1} readOnly={textBox1IsReadonly} />
-      <IconButton onClick={onShowSinglelineText1CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      <Input ref={textBox1ElRef} onChange={onSingleLineText1Changed} value={singlelineText1} readOnly={textBox1IsReadonly}
+        onFocus={onShowSinglelineText1CaretPositioner}
+        onBlur={onHideSinglelineTextBox1CaretPositioner} />
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
       <Box className="trmrk-full-width trmrk-full-height"></Box>
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextArea1IsReadonlyChanged} checked={textArea1IsReadonly} /></label>
-      <Input ref={textArea1ElRef} onChange={onMultiLineText1Changed} value={multilineText1} multiline rows={4} readOnly={textArea1IsReadonly} />
-      <IconButton onClick={onShowMultilineText1CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      <Input ref={textArea1ElRef} onChange={onMultiLineText1Changed} value={multilineText1} multiline rows={10} readOnly={textArea1IsReadonly}
+        onFocus={onShowMultilineText1CaretPositioner}
+        onBlur={onHideMultilineTextBox1CaretPositioner} />
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextBox2IsReadonlyChanged} checked={textBox2IsReadonly} /></label>
-      <Input ref={textBox2ElRef} onChange={onSingleLineText2Changed} value={singlelineText2} readOnly={textBox2IsReadonly} />
-      <IconButton onClick={onShowSinglelineText2CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      <Input ref={textBox2ElRef} onChange={onSingleLineText2Changed} value={singlelineText2} readOnly={textBox2IsReadonly}
+        onFocus={onShowSinglelineText2CaretPositioner}
+        onBlur={onHideSinglelineTextBox2CaretPositioner} />
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
       <Box className="trmrk-full-width trmrk-full-height"></Box>
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextArea2IsReadonlyChanged} checked={textArea2IsReadonly} /></label>
-      <Input ref={textArea2ElRef} onChange={onMultiLineText2Changed} value={multilineText2} multiline rows={4} readOnly={textArea2IsReadonly} />
-      <IconButton onClick={onShowMultilineText2CaretPositioner}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      <Input ref={textArea2ElRef} onChange={onMultiLineText2Changed} value={multilineText2} multiline rows={20} readOnly={textArea2IsReadonly}
+        onFocus={onShowMultilineText2CaretPositioner}
+        onBlur={onHideMultilineTextBox2CaretPositioner} />
     </div>
 
-    { textBoxEl1 ? <TrmrkTextMagnifierModal
-      isOpen={showSinglelineText1CaretPositioner}
+    { currentInputEl ? <TextInputCaretPositionerPopover
       isDarkMode={isDarkMode}
-      handleClose={onHideSinglelineTextBox1CaretPositioner}
-      positioner={{
-        text: singlelineText1,
-        textIsReadonly: textBox1IsReadonly,
-        onCancelChangesClick: onHideSinglelineTextBox1CaretPositioner,
-        onSubmitChangesClick: onHideSinglelineTextBox1CaretPositioner
-      }} /> : null }
-
-      { textArea1El ? <TrmrkTextMagnifierModal
-        isOpen={showMultilineText1CaretPositioner}
-        isDarkMode={isDarkMode}
-        handleClose={onHideMultilineTextBox1CaretPositioner}
-        positioner={{
-          text: multilineText1,
-          textIsReadonly: textArea1IsReadonly,
-          textIsMultiline: true,
-          onCancelChangesClick: onHideMultilineTextBox1CaretPositioner,
-          onSubmitChangesClick: onHideMultilineTextBox1CaretPositioner
-        }} /> : null }
-
-    { textBoxEl2 ? <TrmrkTextMagnifierModal
-      isOpen={showSinglelineText2CaretPositioner}
-      isDarkMode={isDarkMode}
-      handleClose={onHideSinglelineTextBox2CaretPositioner}
-      positioner={{
-        text: singlelineText2,
-        textIsReadonly: textBox2IsReadonly,
-        onCancelChangesClick: onHideSinglelineTextBox2CaretPositioner,
-        onSubmitChangesClick: onHideSinglelineTextBox2CaretPositioner
-      }} /> : null }
-
-      { textArea2El ? <TrmrkTextMagnifierModal
-        isOpen={showMultilineText2CaretPositioner}
-        isDarkMode={isDarkMode}
-        handleClose={onHideMultilineTextBox2CaretPositioner}
-        positioner={{
-          text: multilineText2,
-          textIsReadonly: textArea2IsReadonly,
-          textIsMultiline: true,
-          onCancelChangesClick: onHideMultilineTextBox2CaretPositioner,
-          onSubmitChangesClick: onHideMultilineTextBox2CaretPositioner
-        }} /> : null }
+      inputEl={currentInputEl}
+      querySelector={currentInputEl.tagName}  /> : null }
   </AppBarsPanel>);
 }
