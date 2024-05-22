@@ -66,7 +66,7 @@ export const normalizeLinesJumpSpeedsArr = (
 export default function TextInputCaretPositionerPopover(
   props: TextInputCaretPositionerPopoverProps
 ) {
-  const isMultilineInput = (inputEl: HTMLElement) => !(inputEl instanceof HTMLInputElement)
+  const isMultilineInput = (inputEl: HTMLElement) => !(inputEl.tagName === "INPUT")
   const mainElRef = React.createRef<HTMLDivElement>();
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);

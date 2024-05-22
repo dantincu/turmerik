@@ -14,11 +14,18 @@ export const extractTextInput = (
     | null
     | undefined = null
 ) => {
-  filterPredicate ??= (elem) =>
-    elem instanceof HTMLInputElement ||
-    (elem instanceof HTMLTextAreaElement &&
-      !elem.getAttribute("aria-hidden")) ||
-    (elem instanceof HTMLDivElement && hasContentEditable(elem));
+  filterPredicate ??= (elem) => {
+    switch (elem.tagName) {
+      case "INPUT":
+        return true;
+      case "TEXTAREA":
+        const isNotHidden = !elem.getAttribute("aria-hidden");
+        return isNotHidden;
+      default:
+        const hasContentEditableVal = hasContentEditable(elem);
+        return hasContentEditableVal;
+    }
+  };
 
   let retElem: HTMLInputElement | HTMLTextAreaElement | HTMLDivElement | null =
     null;
