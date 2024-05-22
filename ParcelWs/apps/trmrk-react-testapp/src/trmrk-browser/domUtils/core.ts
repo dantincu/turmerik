@@ -155,14 +155,11 @@ export const getOverflowType = (overflowCssPropVal: string) => {
 
 export const forEachChildNode = (
   prElem: HTMLElement | NodeListOf<ChildNode>,
-  callback:
-    | ((
-        elem: ChildNode,
-        idx: number,
-        prElemChildNodesCollctn: NodeListOf<ChildNode>
-      ) => boolean | any | unknown | void)
-    | null
-    | undefined = null,
+  callback: (
+    elem: ChildNode,
+    idx: number,
+    prElemChildNodesCollctn: NodeListOf<ChildNode>
+  ) => boolean | any | unknown | void,
   reverseOrder: boolean = false
 ) => {
   callback ??= () => true;
@@ -215,4 +212,65 @@ export const filterChildNodes = <TChildNode = ChildNode>(
   );
 
   return retArr;
+};
+
+export const filterChildElements = <TChildNode = HTMLElement>(
+  prElem: HTMLElement | NodeListOf<ChildNode>,
+  callback:
+    | ((
+        elem: ChildNode,
+        idx: number,
+        prElemChildNodesCollctn: NodeListOf<ChildNode>
+      ) => boolean | any | unknown | void)
+    | null
+    | undefined = null,
+  reverseOrder: boolean = false
+) => {
+  callback ??= () => true;
+
+  const retArr = filterChildNodes<TChildNode>(
+    prElem,
+    (elem, idx, prElemChildNodesCollctn) => {
+      if (elem instanceof HTMLElement) {
+        const retVal = callback(elem, idx, prElemChildNodesCollctn);
+
+        if (retVal) {
+          retArr.push(elem as TChildNode);
+        }
+      }
+    },
+    reverseOrder
+  );
+
+  return retArr;
+};
+
+export const extractNestedElement = <TElement = HTMLElement>(
+  prElem: HTMLElement | NodeListOf<ChildNode>,
+  predicate: (
+    elem: HTMLElement,
+    idx: number,
+    prElemChildNodesCollctn: NodeListOf<ChildNode>
+  ) => boolean | any | unknown | void,
+  reverseOrder: boolean = false
+) => {
+  let retElem: TElement | null = null;
+
+  forEachChildNode(
+    prElem,
+    (elem, idx, collctn) => {
+      if (elem instanceof HTMLElement) {
+        if (predicate(elem, idx, collctn)) {
+          retElem = elem as TElement;
+        } else {
+          retElem = extractNestedElement(elem, predicate);
+        }
+
+        return !retElem;
+      }
+    },
+    reverseOrder
+  );
+
+  return retElem;
 };

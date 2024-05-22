@@ -3,14 +3,13 @@ import { useSelector } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Input from "@mui/material/Input";
-import IconButton from "@mui/material/IconButton";
 import Checkbox from '@mui/material/Checkbox';
 
+import { extractTextInput } from "../../../../trmrk-browser/domUtils/textInput";
 import AppBarsPanel from "../../../../trmrk-react/components/barsPanel/AppBarsPanel";
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
-import MatUIIcon from "../../../../trmrk-react/components/icons/MatUIIcon";
 import { generateText } from "./generateText";
 
 import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretPositioner/TextCaretInputPositioner";
@@ -26,10 +25,10 @@ const KEEP_OPEN = true;
 export default function TextInputCursorPositioningPage(
   props: TextInputCursorPositioningPageProps) {
 
-  const textBox1ElRef = React.createRef<HTMLInputElement>();
-  const textArea1ElRef = React.createRef<HTMLTextAreaElement>();
-  const textBox2ElRef = React.createRef<HTMLInputElement>();
-  const textArea2ElRef = React.createRef<HTMLTextAreaElement>();
+  const textBox1ElRef = React.createRef<HTMLElement>();
+  const textArea1ElRef = React.createRef<HTMLElement>();
+  const textBox2ElRef = React.createRef<HTMLElement>();
+  const textArea2ElRef = React.createRef<HTMLElement>();
 
   const [ textBox1El, setTextBox1El ] = React.useState(textBox1ElRef.current);
   const [ textArea1El, setTextArea1El ] = React.useState(textArea1ElRef.current);
@@ -131,19 +130,19 @@ export default function TextInputCursorPositioningPage(
 
   React.useEffect(() => {
     if (textBox1ElRef.current !== textBox1El) {
-      setTextBox1El(textBox1ElRef.current);
+      setTextBox1El(extractTextInput(textBox1ElRef.current!));
     }
 
     if (textArea1ElRef.current !== textArea1El) {
-      setTextArea1El(textArea1ElRef.current);
+      setTextArea1El(extractTextInput(textArea1ElRef.current!));
     }
 
     if (textBox2ElRef.current !== textBox2El) {
-      setTextBox2El(textBox2ElRef.current);
+      setTextBox2El(extractTextInput(textBox2ElRef.current!));
     }
 
     if (textArea2ElRef.current !== textArea2El) {
-      setTextArea2El(textArea2ElRef.current);
+      setTextArea2El(extractTextInput(textArea2ElRef.current!));
     }
   }, [
     textBox1ElRef,
@@ -199,7 +198,6 @@ export default function TextInputCursorPositioningPage(
 
     { currentInputEl ? <TextInputCaretPositionerPopover
       isDarkMode={isDarkMode}
-      inputEl={currentInputEl}
-      querySelector={currentInputEl.tagName}  /> : null }
+      inputEl={currentInputEl} /> : null }
   </AppBarsPanel>);
 }

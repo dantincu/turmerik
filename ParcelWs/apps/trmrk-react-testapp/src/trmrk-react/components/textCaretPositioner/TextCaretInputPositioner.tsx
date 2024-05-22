@@ -2,7 +2,6 @@ import React from "react";
 
 import IconButton from "@mui/material/IconButton";
 
-import { filterChildNodes } from "../../../trmrk-browser/domUtils/core";
 import MatUIIcon from "../../../trmrk-react/components/icons/MatUIIcon";
 import { getAppTheme } from "../../app-theme/core";
 
@@ -20,8 +19,6 @@ export enum TextCaretInputPositionerState {
 export interface TextInputCaretPositionerPopoverProps {
   isDarkMode: boolean;
   inputEl: HTMLElement;
-  querySelector: string | null;
-  inputIsMultiline?: boolean | null | undefined;
   minimized?: boolean | null | undefined;
   pinnedToBottom?: boolean | null | undefined;
   state?: TextCaretInputPositionerState | null | undefined;
@@ -69,9 +66,11 @@ export const normalizeLinesJumpSpeedsArr = (
 export default function TextInputCaretPositionerPopover(
   props: TextInputCaretPositionerPopoverProps
 ) {
+  const isMultilineInput = (inputEl: HTMLElement) => !(inputEl instanceof HTMLInputElement)
   const mainElRef = React.createRef<HTMLDivElement>();
 
-  const [ inputIsMultiline, setInputIsMultiline ] = React.useState(props.inputIsMultiline ?? props.inputEl instanceof HTMLInputElement);
+  const [ inputEl, setInputEl ] = React.useState(props.inputEl);
+  const [ inputIsMultiline, setInputIsMultiline ] = React.useState(isMultilineInput(inputEl));
   const [ minimized, setMinimized ] = React.useState(props.minimized ?? false);
   const [ pinnedToBottom, setPinnedToBottom ] = React.useState(props.pinnedToBottom ?? false);
   const [ stateType, setStateType ] = React.useState(props.state ?? TextCaretInputPositionerState.Default);
@@ -89,10 +88,19 @@ export default function TextInputCaretPositionerPopover(
 
   const minimizeBtnClicked = React.useCallback(() => {
     const newMinimizedVal = true;
+    const newShowOptionsVal = false;
+
     setMinimized(newMinimizedVal);
+    setShowOptions(newShowOptionsVal);
 
     if (props.minimizedToggled) {
       props.minimizedToggled(newMinimizedVal);
+    }
+
+    if (props.showOptionsToggled) {
+      props.showOptionsToggled(
+        newShowOptionsVal
+      );
     }
   }, [minimized]);
 
@@ -121,7 +129,11 @@ export default function TextInputCaretPositionerPopover(
   }, [stateType]);
 
   const onJumpSymbolsNextViewClick = React.useCallback(() => {
-    setStateType(TextCaretInputPositionerState.JumpLines);
+    if (inputIsMultiline) {
+      setStateType(TextCaretInputPositionerState.JumpLines);
+    } else {
+      setStateType(TextCaretInputPositionerState.Default);
+    }
   }, [stateType]);
 
   const onJumpLinesNextViewClick = React.useCallback(() => {
@@ -130,6 +142,10 @@ export default function TextInputCaretPositionerPopover(
 
   const pinnedToBottomToggled = React.useCallback(() => {
     const newPinnedToBottomVal = !pinnedToBottom;
+    const newShowOptionsVal = false;
+    
+    setPinnedToBottom(newPinnedToBottomVal);
+    setShowOptions(newShowOptionsVal);
 
     if (props.pinnedToBottomToggled) {
       props.pinnedToBottomToggled(
@@ -137,11 +153,21 @@ export default function TextInputCaretPositionerPopover(
       );
     }
 
-    setPinnedToBottom(newPinnedToBottomVal);
+    if (props.showOptionsToggled) {
+      props.showOptionsToggled(
+        newShowOptionsVal
+      );
+    }
   }, [pinnedToBottom]);
 
   React.useEffect(() => {
     const mainEl = mainElRef.current;
+    console.log("inputEl", inputEl, props.inputEl);
+
+    if (inputEl !== props.inputEl) {
+      setInputEl(props.inputEl);
+      setInputIsMultiline(isMultilineInput(props.inputEl));
+    }
 
     const onMainElTouchEnd = (e: TouchEvent | MouseEvent) => {
       e.preventDefault();
@@ -175,7 +201,9 @@ export default function TextInputCaretPositionerPopover(
     props.showOptions,
     props.symbolsJumpSpeedsArr,
     props.linesJumpSpeedsArr,
+    inputEl,
     mainElRef,
+    inputIsMultiline,
     minimized,
     pinnedToBottom,
     showOptions,
@@ -186,7 +214,7 @@ export default function TextInputCaretPositionerPopover(
     if (minimized) {
       return null;
     }
-    
+
     if (showOptions) {
       return <TextCaretInputPositionerOptionsView
           pinnedToBottom={pinnedToBottom}
@@ -198,14 +226,18 @@ export default function TextInputCaretPositionerPopover(
           return <TextCaretInputPositionerJumpSymbolsView
             nextViewClicked={onJumpSymbolsNextViewClick} />;
         case TextCaretInputPositionerState.JumpLines:
-          return <TextCaretInputPositionerJumpLinesView
-            nextViewClicked={onJumpLinesNextViewClick} />;
+          if (inputIsMultiline) {
+            return <TextCaretInputPositionerJumpLinesView
+              nextViewClicked={onJumpLinesNextViewClick} />;
+          }
+          
+          return null;
         default:
           return <TextCaretInputPositionerDefaultView
             nextViewClicked={onDefaultNextViewClick} />;
       }
     }
-  }, [stateType, minimized, showOptions, pinnedToBottom]);
+  }, [inputIsMultiline, stateType, minimized, showOptions, pinnedToBottom]);
 
   return (<div className={["trmrk-text-input-caret-positioner-popover", appThemeClassName,
     minimized ? "trmrk-minimized" : "",
