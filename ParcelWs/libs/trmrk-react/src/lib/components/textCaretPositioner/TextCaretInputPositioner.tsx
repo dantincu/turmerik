@@ -72,7 +72,8 @@ export default function TextInputCaretPositionerPopover(
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(isMultilineInput(inputEl));
   const [ minimized, setMinimized ] = React.useState(props.minimized ?? false);
-  const [ pinnedToBottom, setPinnedToBottom ] = React.useState(props.pinnedToBottom ?? false);
+  const [ initialPinnedToBottom, setInitialPinnedToBottom ] = React.useState(props.pinnedToBottom ?? false);
+  const [ pinnedToBottom, setPinnedToBottom ] = React.useState(initialPinnedToBottom);
   const [ stateType, setStateType ] = React.useState(props.state ?? TextCaretInputPositionerState.Default);
   const [ showOptions, setShowOptions ] = React.useState(props.showOptions ?? false);
 
@@ -162,6 +163,12 @@ export default function TextInputCaretPositionerPopover(
 
   React.useEffect(() => {
     const mainEl = mainElRef.current;
+
+    const propsPinnedToBottom = props.pinnedToBottom ?? false;
+    if (initialPinnedToBottom !== propsPinnedToBottom) {
+      setInitialPinnedToBottom(propsPinnedToBottom);
+      setPinnedToBottom(propsPinnedToBottom);
+    }
 
     if (inputEl !== props.inputEl) {
       const inputIsMultilineNewVal = isMultilineInput(props.inputEl);

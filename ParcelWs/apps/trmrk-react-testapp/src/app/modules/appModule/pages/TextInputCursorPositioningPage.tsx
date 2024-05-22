@@ -6,6 +6,7 @@ import Input from "@mui/material/Input";
 import Checkbox from '@mui/material/Checkbox';
 
 import { extractTextInput } from "../../../../trmrk-browser/domUtils/textInput";
+import { getDomRectDiff } from "../../../../trmrk-browser/domUtils/getDomElemBounds";
 import AppBarsPanel from "../../../../trmrk-react/components/barsPanel/AppBarsPanel";
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
@@ -37,6 +38,7 @@ export default function TextInputCursorPositioningPage(
   const [ textArea2El, setTextArea2El ] = React.useState(textArea2ElRef.current);
 
   const [ currentInputEl, setCurrentInputEl ] = React.useState<HTMLElement | null>(null);
+  const [ pinCaretPositionerToBottom, setPinCaretPositionerToBottom ] = React.useState(false);
 
   const [ textBox1IsReadonly, setTextBox1IsReadonly ] = React.useState(true);
   const [ textArea1IsReadonly, setText1AreaIsReadonly ] = React.useState(true);
@@ -144,6 +146,18 @@ export default function TextInputCursorPositioningPage(
     if (textArea2ElRef.current !== textArea2El) {
       setTextArea2El(extractTextInput(textArea2ElRef.current!));
     }
+
+    if (currentInputEl) {
+      const currentInputRect = currentInputEl.getBoundingClientRect();
+      const domRectDiff = getDomRectDiff(currentInputRect);
+
+      console.log("domRectDiff", domRectDiff, currentInputRect);
+
+      const pinTextCaretPositionerToBottomNewVal = domRectDiff.top < domRectDiff.bottom;
+      setPinCaretPositionerToBottom(pinTextCaretPositionerToBottomNewVal);
+    }
+
+    console.log("pinCaretPositionerToBottom", pinCaretPositionerToBottom);
   }, [
     textBox1ElRef,
     textBox1El,
@@ -158,7 +172,8 @@ export default function TextInputCursorPositioningPage(
     textArea2IsReadonly,
     isDarkMode,
     singlelineText2,
-    multilineText2 ]);
+    multilineText2,
+    pinCaretPositionerToBottom ]);
     
     return (<AppBarsPanel basePath={props.basePath}
       appBarSelectors={appBarSelectors}
@@ -198,6 +213,7 @@ export default function TextInputCursorPositioningPage(
 
     { currentInputEl ? <TextInputCaretPositionerPopover
       isDarkMode={isDarkMode}
-      inputEl={currentInputEl} /> : null }
+      inputEl={currentInputEl}
+      pinnedToBottom={pinCaretPositionerToBottom} /> : null }
   </AppBarsPanel>);
 }

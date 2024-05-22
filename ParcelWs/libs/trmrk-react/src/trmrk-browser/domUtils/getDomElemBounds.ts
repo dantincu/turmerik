@@ -15,6 +15,13 @@ export interface HtmlElementBounds {
   scrollTop: number;
 }
 
+export interface DomRectDiff {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+
 export const getDomElemBounds = (
   elem: HTMLElement,
   setOffsetToZero: boolean = false
@@ -129,4 +136,36 @@ export const getChildTextNodes = (
   }
 
   return retArr;
+};
+
+export const getDomRectDiff = (
+  rect: DOMRect,
+  prRect: DOMRect | null | undefined = null
+) => {
+  prRect ??= {
+    top: 0,
+    left: 0,
+    width: window.innerWidth,
+    height: window.innerHeight,
+  } as DOMRect;
+  const domRectDiff = {
+    left: rect.left - prRect.left,
+    top: rect.top - prRect.top,
+  } as DomRectDiff;
+
+  if ((prRect.right ?? -1) >= 0) {
+    domRectDiff.right = prRect.right - rect.right;
+  } else {
+    domRectDiff.right =
+      prRect.left + prRect.width - domRectDiff.left - rect.width;
+  }
+
+  if ((prRect.bottom ?? -1) >= 0) {
+    domRectDiff.bottom = prRect.bottom - rect.bottom;
+  } else {
+    domRectDiff.bottom =
+      prRect.top + prRect.height - domRectDiff.top - rect.height;
+  }
+
+  return domRectDiff;
 };
