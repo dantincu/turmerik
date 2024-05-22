@@ -2,6 +2,7 @@ import React from "react";
 
 import IconButton from "@mui/material/IconButton";
 
+import { isMultilineInput } from "../../../trmrk-browser/domUtils/textInput";
 import MatUIIcon from "../../components/icons/MatUIIcon";
 import { getAppTheme } from "../../app-theme/core";
 
@@ -66,7 +67,6 @@ export const normalizeLinesJumpSpeedsArr = (
 export default function TextInputCaretPositionerPopover(
   props: TextInputCaretPositionerPopoverProps
 ) {
-  const isMultilineInput = (inputEl: HTMLElement) => inputEl.tagName !== "INPUT";
   const mainElRef = React.createRef<HTMLDivElement>();
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);

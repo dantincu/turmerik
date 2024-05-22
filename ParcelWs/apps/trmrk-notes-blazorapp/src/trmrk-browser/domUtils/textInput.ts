@@ -1,5 +1,8 @@
 import { extractNestedElement } from "./core";
 
+export const isMultilineInput = (inputEl: HTMLElement) =>
+  inputEl.tagName !== "INPUT";
+
 export const hasContentEditable = (elem: HTMLElement) =>
   (elem.getAttribute("contenteditable") ?? "false") !== "false";
 
