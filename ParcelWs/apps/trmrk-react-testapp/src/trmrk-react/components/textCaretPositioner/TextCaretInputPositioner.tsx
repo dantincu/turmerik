@@ -241,6 +241,7 @@ export default function TextInputCaretPositionerPopover(
           return null;
         default:
           return <TextCaretInputPositionerDefaultView
+            inputIsMultiline={inputIsMultiline}
             nextViewClicked={onDefaultNextViewClick} />;
       }
     }
