@@ -2,7 +2,7 @@ import React from "react";
 
 import IconButton from "@mui/material/IconButton";
 
-import MatUIIcon from "../../../trmrk-react/components/icons/MatUIIcon";
+import MatUIIcon from "../../components/icons/MatUIIcon";
 import { getAppTheme } from "../../app-theme/core";
 
 import TextCaretInputPositionerDefaultView from "./TextCaretInputPositionerDefaultView";
@@ -162,11 +162,18 @@ export default function TextInputCaretPositionerPopover(
 
   React.useEffect(() => {
     const mainEl = mainElRef.current;
-    console.log("inputEl", inputEl, props.inputEl);
 
     if (inputEl !== props.inputEl) {
+      const inputIsMultilineNewVal = isMultilineInput(props.inputEl);
+
+      if (!inputIsMultilineNewVal) {
+        if (stateType === TextCaretInputPositionerState.JumpLines) {
+          setStateType(TextCaretInputPositionerState.Default);
+        }
+      }
+
       setInputEl(props.inputEl);
-      setInputIsMultiline(isMultilineInput(props.inputEl));
+      setInputIsMultiline(inputIsMultilineNewVal);
     }
 
     const onMainElTouchEnd = (e: TouchEvent | MouseEvent) => {
