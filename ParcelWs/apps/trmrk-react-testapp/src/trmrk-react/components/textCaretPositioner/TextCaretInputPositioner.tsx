@@ -2,6 +2,7 @@ import React from "react";
 
 import IconButton from "@mui/material/IconButton";
 
+import { filterChildNodes } from "../../../trmrk-browser/domUtils/core";
 import MatUIIcon from "../../../trmrk-react/components/icons/MatUIIcon";
 import { getAppTheme } from "../../app-theme/core";
 
@@ -21,12 +22,14 @@ export interface TextInputCaretPositionerPopoverProps {
   inputEl: HTMLElement;
   querySelector: string | null;
   inputIsMultiline?: boolean | null | undefined;
+  minimized?: boolean | null | undefined;
   pinnedToBottom?: boolean | null | undefined;
   state?: TextCaretInputPositionerState | null | undefined;
   showOptions?: boolean | null | undefined;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
+  minimizedToggled?: ((minimized: boolean) => void) | null | undefined;
   pinnedToBottomToggled?: ((pinnedToBottom: boolean) => void) | null | undefined;
   showOptionsToggled?: ((showOptions: boolean) => void) | null | undefined;
 }
@@ -69,6 +72,7 @@ export default function TextInputCaretPositionerPopover(
   const mainElRef = React.createRef<HTMLDivElement>();
 
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(props.inputIsMultiline ?? props.inputEl instanceof HTMLInputElement);
+  const [ minimized, setMinimized ] = React.useState(props.minimized ?? false);
   const [ pinnedToBottom, setPinnedToBottom ] = React.useState(props.pinnedToBottom ?? false);
   const [ stateType, setStateType ] = React.useState(props.state ?? TextCaretInputPositionerState.Default);
   const [ showOptions, setShowOptions ] = React.useState(props.showOptions ?? false);
@@ -83,17 +87,34 @@ export default function TextInputCaretPositionerPopover(
     isDarkMode: props.isDarkMode,
   }).cssClassName;
 
-  const showOptionsToggled = React.useCallback(() => {
-    const newShowOptionsVal = !showOptions;
+  const minimizeBtnClicked = React.useCallback(() => {
+    const newMinimizedVal = true;
+    setMinimized(newMinimizedVal);
 
-    if (props.showOptionsToggled) {
-      props.showOptionsToggled(
-        newShowOptionsVal
-      );
+    if (props.minimizedToggled) {
+      props.minimizedToggled(newMinimizedVal);
     }
+  }, [minimized]);
 
-    setShowOptions(newShowOptionsVal);
-  }, [showOptions]);
+  const mainBtnClicked = React.useCallback(() => {
+    if (minimized) {
+      const newMinimizedVal = false;
+      setMinimized(newMinimizedVal);
+
+      if (props.minimizedToggled) {
+        props.minimizedToggled(newMinimizedVal);
+      }
+    } else {
+      const newShowOptionsVal = !showOptions;
+      setShowOptions(newShowOptionsVal);
+
+      if (props.showOptionsToggled) {
+        props.showOptionsToggled(
+          newShowOptionsVal
+        );
+      }
+    }
+  }, [minimized, showOptions]);
 
   const onDefaultNextViewClick = React.useCallback(() => {
     setStateType(TextCaretInputPositionerState.JumpSymbols);
@@ -150,19 +171,26 @@ export default function TextInputCaretPositionerPopover(
   }, [props.isDarkMode,
     props.inputEl,
     props.state,
+    props.minimized,
     props.showOptions,
     props.symbolsJumpSpeedsArr,
     props.linesJumpSpeedsArr,
     mainElRef,
+    minimized,
     pinnedToBottom,
     showOptions,
     stateType
   ]);
 
   const viewRetriever = React.useCallback(() => {
+    if (minimized) {
+      return null;
+    }
+    
     if (showOptions) {
       return <TextCaretInputPositionerOptionsView
           pinnedToBottom={pinnedToBottom}
+          minimizeClicked={minimizeBtnClicked}
           pinnedToBottomToggled={pinnedToBottomToggled} />;
     } else {
       switch (stateType) {
@@ -177,15 +205,16 @@ export default function TextInputCaretPositionerPopover(
             nextViewClicked={onDefaultNextViewClick} />;
       }
     }
-  }, [stateType, showOptions, pinnedToBottom]);
+  }, [stateType, minimized, showOptions, pinnedToBottom]);
 
-  return (<div className={["trmrk-text-input-caret-positioner-popover",
-    appThemeClassName, pinnedToBottom ? "trmrk-pinned-to-bottom" : "trmrk-pinned-to-top" ].join(" ")} ref={mainElRef}>
+  return (<div className={["trmrk-text-input-caret-positioner-popover", appThemeClassName,
+    minimized ? "trmrk-minimized" : "",
+    pinnedToBottom ? "trmrk-pinned-to-bottom" : "trmrk-pinned-to-top" ].join(" ")} ref={mainElRef}>
 
     { viewRetriever() }
 
     <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
-      onMouseDown={showOptionsToggled}
-      onTouchEnd={showOptionsToggled}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      onMouseDown={mainBtnClicked}
+      onTouchEnd={mainBtnClicked}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
   </div>);
 }

@@ -11,6 +11,10 @@ body, #app-root {
   position: relative;
 }
 
+.trmrk-hidden {
+  display: none;
+}
+
 .trmrk-wrap-content {
   @include wrap-content();
 }

@@ -16,11 +16,13 @@ export interface TextCaretInputPositionerDefaultViewProps {
 export default function TextCaretInputPositionerDefaultView(
   props: TextCaretInputPositionerDefaultViewProps
 ) {
-  const onNextViewIconBtnClick = () => {
-    props.nextViewClicked();
+  const onNextViewIconBtnClick = (e: React.MouseEvent | React.TouchEvent) => {
+    if (((e as React.MouseEvent).button ?? 0) === 0) {
+      props.nextViewClicked();
+    }
   }
 
-  return (<div className="trmrk-view trmrk-default-view">
+  return (<div className="trmrk-view trmrk-anchor-left trmrk-default-view">
     <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
       onMouseDown={onNextViewIconBtnClick}
       onTouchEnd={onNextViewIconBtnClick}><GridOnIcon /></IconButton>

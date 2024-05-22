@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
-
 import trmrk from "../../trmrk";
 import { MtblRefValue, jsonBool } from "../../trmrk/core";
 
@@ -13,8 +11,6 @@ export const localStorageKeys = Object.freeze({
   appThemeIsDarkMode: "appThemeIsDarkMode",
   appIsCompactMode: "appIsCompactMode",
 });
-
-export const newUUid = () => uuidv4().replaceAll("-", "");
 
 export const appModeCssClasses = {
   compactMode: "trmrk-mode-compact",
@@ -158,15 +154,21 @@ export const getOverflowType = (overflowCssPropVal: string) => {
 };
 
 export const forEachChildNode = (
-  prElem: HTMLElement,
-  callback: (
-    elem: ChildNode,
-    idx: number,
-    prElemChildNodesCollctn: NodeListOf<ChildNode>
-  ) => boolean | any | unknown | void,
+  prElem: HTMLElement | NodeListOf<ChildNode>,
+  callback:
+    | ((
+        elem: ChildNode,
+        idx: number,
+        prElemChildNodesCollctn: NodeListOf<ChildNode>
+      ) => boolean | any | unknown | void)
+    | null
+    | undefined = null,
   reverseOrder: boolean = false
 ) => {
-  const prElemChildNodesCollctn = prElem.childNodes;
+  callback ??= () => true;
+
+  const prElemChildNodesCollctn =
+    (prElem as HTMLElement).childNodes ?? (prElem as NodeListOf<ChildNode>);
 
   if (reverseOrder) {
     for (let idx = prElemChildNodesCollctn.length; idx >= 0; idx--) {
@@ -186,15 +188,19 @@ export const forEachChildNode = (
 };
 
 export const filterChildNodes = <TChildNode = ChildNode>(
-  prElem: HTMLElement,
-  callback: (
-    elem: ChildNode,
-    idx: number,
-    prElemChildNodesCollctn: NodeListOf<ChildNode>
-  ) => boolean | any | unknown | void,
+  prElem: HTMLElement | NodeListOf<ChildNode>,
+  callback:
+    | ((
+        elem: ChildNode,
+        idx: number,
+        prElemChildNodesCollctn: NodeListOf<ChildNode>
+      ) => boolean | any | unknown | void)
+    | null
+    | undefined = null,
   reverseOrder: boolean = false
 ) => {
   const retArr: TChildNode[] = [];
+  callback ??= () => true;
 
   forEachChildNode(
     prElem,

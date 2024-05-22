@@ -6,6 +6,11 @@
   width: 100%;
   color: white;
 
+  &.trmrk-minimized {
+    width: 2.5em;
+    right: 0em;
+  }
+
   &.trmrk-pinned-to-top {
     top: 0em;
   }
@@ -25,44 +30,72 @@
     right: 0em;
   }
 
-  .trmrk-toggle-pin-to-bottom-btn {
-    right: 1.66em;
-  }
-
   .trmrk-view {
-    > .trmrk-icon-btn:nth-child(2) {
-      left: 1.67em;
-    }
-
-    > .trmrk-icon-btn:nth-child(3) {
-      left: 3.33em;
-    }
-    
-    > .trmrk-icon-btn:nth-child(4) {
-      left: 5em;
-    }
-    
-    > .trmrk-icon-btn:nth-child(5) {
-      left: 6.67em;
-    }
-    
-    > .trmrk-icon-btn:nth-child(6) {
-      left: 8.33em;
-    }
-    
-    > .trmrk-icon-btn:nth-child(7) {
-      left: 10em;
-    }
-    
-    > .trmrk-icon-btn:nth-child(8) {
-      left: 11.67em;
-    }
-
     .trmrk-arrow-left-icon,
     .trmrk-arrow-right-icon,
     .trmrk-arrow-drop-up-icon,
     .trmrk-arrow-drop-down-icon {
       font-size: 1.66em;
+    }
+
+    &.trmrk-anchor-left {
+      > .trmrk-icon-btn:nth-child(2) {
+        left: 1.67em;
+      }
+
+      > .trmrk-icon-btn:nth-child(3) {
+        left: 3.33em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(4) {
+        left: 5em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(5) {
+        left: 6.67em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(6) {
+        left: 8.33em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(7) {
+        left: 10em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(8) {
+        left: 11.67em;
+      }
+    }
+
+    &.trmrk-anchor-right {
+      > .trmrk-icon-btn:nth-child(1) {
+        right: 1.67em;
+      }
+
+      > .trmrk-icon-btn:nth-child(2) {
+        right: 3.33em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(3) {
+        right: 5em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(4) {
+        right: 6.67em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(5) {
+        right: 8.33em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(6) {
+        right: 10em;
+      }
+      
+      > .trmrk-icon-btn:nth-child(7) {
+        right: 11.67em;
+      }
     }
   }
 }
