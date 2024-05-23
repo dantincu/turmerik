@@ -6,6 +6,19 @@ export const isMultilineInput = (inputEl: HTMLElement) =>
 export const hasContentEditable = (elem: HTMLElement) =>
   (elem.getAttribute("contenteditable") ?? "false") !== "false";
 
+export const isTextInput = (elem: HTMLElement) => {
+  switch (elem.tagName) {
+    case "INPUT":
+      return true;
+    case "TEXTAREA":
+      const isNotHidden = !elem.getAttribute("aria-hidden");
+      return isNotHidden;
+    default:
+      const hasContentEditableVal = hasContentEditable(elem);
+      return hasContentEditableVal;
+  }
+};
+
 export const extractTextInput = (
   prElem: HTMLElement,
   filterPredicate:
@@ -17,18 +30,7 @@ export const extractTextInput = (
     | null
     | undefined = null
 ) => {
-  filterPredicate ??= (elem) => {
-    switch (elem.tagName) {
-      case "INPUT":
-        return true;
-      case "TEXTAREA":
-        const isNotHidden = !elem.getAttribute("aria-hidden");
-        return isNotHidden;
-      default:
-        const hasContentEditableVal = hasContentEditable(elem);
-        return hasContentEditableVal;
-    }
-  };
+  filterPredicate ??= isTextInput;
 
   let retElem: HTMLInputElement | HTMLTextAreaElement | HTMLDivElement | null =
     null;

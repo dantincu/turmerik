@@ -1,4 +1,4 @@
-import { filterChildNodes } from "./core";
+import { filterChildNodes, filterChildElementsArr } from "./core";
 
 export interface HtmlElementBounds {
   offsetLeft: number;
@@ -13,13 +13,6 @@ export interface HtmlElementBounds {
   scrollHeight: number;
   scrollLeft: number;
   scrollTop: number;
-}
-
-export interface DomRectDiff {
-  left: number;
-  top: number;
-  right: number;
-  bottom: number;
 }
 
 export const getDomElemBounds = (
@@ -138,34 +131,30 @@ export const getChildTextNodes = (
   return retArr;
 };
 
-export const getDomRectDiff = (
-  rect: DOMRect,
-  prRect: DOMRect | null | undefined = null
+export const clearStyleTopAndBottom = (style: CSSStyleDeclaration) => {
+  style.top = "";
+  style.bottom = "";
+};
+
+export const clearElemVertInset = (elemStyle: CSSStyleDeclaration) => {
+  elemStyle.top = "";
+  elemStyle.bottom = "";
+};
+
+export const bringVertPinnedElemIntoView = (
+  pinnedElem: HTMLElement,
+  pinToBottom = false
 ) => {
-  prRect ??= {
-    top: 0,
-    left: 0,
-    width: window.innerWidth,
-    height: window.innerHeight,
-  } as DOMRect;
-  const domRectDiff = {
-    left: rect.left - prRect.left,
-    top: rect.top - prRect.top,
-  } as DomRectDiff;
+  const bodyRect = document.body.getBoundingClientRect();
+  const pinnedElemStyle = pinnedElem.style;
 
-  if ((prRect.right ?? -1) >= 0) {
-    domRectDiff.right = prRect.right - rect.right;
+  if (bodyRect.top < 0) {
+    if (pinToBottom) {
+      pinnedElemStyle.bottom = `0px`;
+    } else {
+      pinnedElemStyle.top = `${-bodyRect.top}px`;
+    }
   } else {
-    domRectDiff.right =
-      prRect.left + prRect.width - domRectDiff.left - rect.width;
+    clearElemVertInset(pinnedElemStyle);
   }
-
-  if ((prRect.bottom ?? -1) >= 0) {
-    domRectDiff.bottom = prRect.bottom - rect.bottom;
-  } else {
-    domRectDiff.bottom =
-      prRect.top + prRect.height - domRectDiff.top - rect.height;
-  }
-
-  return domRectDiff;
 };

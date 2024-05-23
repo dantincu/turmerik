@@ -153,6 +153,16 @@ export const getOverflowType = (overflowCssPropVal: string) => {
   return retObj;
 };
 
+export const getWebStorageKeys = (webStorage: Storage) => {
+  const keysArr: string[] = [];
+
+  for (let i = 0; i < webStorage.length; i++) {
+    keysArr.push(webStorage.key(i)!);
+  }
+
+  return keysArr;
+};
+
 export const forEachChildNode = (
   prElem: HTMLElement | NodeListOf<ChildNode>,
   callback: (
@@ -184,7 +194,7 @@ export const forEachChildNode = (
   }
 };
 
-export const filterChildNodes = <TChildNode = ChildNode>(
+export const filterChildNodes = <TChildNode extends ChildNode = ChildNode>(
   prElem: HTMLElement | NodeListOf<ChildNode>,
   callback:
     | ((
@@ -214,11 +224,13 @@ export const filterChildNodes = <TChildNode = ChildNode>(
   return retArr;
 };
 
-export const filterChildElements = <TChildNode = HTMLElement>(
+export const filterChildElements = <
+  TChildNode extends HTMLElement = HTMLElement
+>(
   prElem: HTMLElement | NodeListOf<ChildNode>,
   callback:
     | ((
-        elem: ChildNode,
+        elem: HTMLElement,
         idx: number,
         prElemChildNodesCollctn: NodeListOf<ChildNode>
       ) => boolean | any | unknown | void)
@@ -240,6 +252,82 @@ export const filterChildElements = <TChildNode = HTMLElement>(
       }
     },
     reverseOrder
+  );
+
+  return retArr;
+};
+
+export const withEachNode = (
+  nodesMx: (ChildNode[] | NodeListOf<ChildNode>)[],
+  callback: (node: ChildNode, idx: number, arr: ChildNode[]) => void
+) => {
+  const nodesMxNorm = nodesMx.map((arr) =>
+    arr instanceof NodeList ? filterChildNodes(arr) : (arr as ChildNode[])
+  );
+
+  const nodesArr = trmrk.flatten(nodesMxNorm);
+  nodesArr.forEach(callback);
+};
+
+export const filterChildNodesArr = <TChildNode extends ChildNode>(
+  nodesMx: (ChildNode[] | NodeListOf<ChildNode>)[],
+  callback:
+    | ((
+        node: ChildNode,
+        idx: number,
+        arr: ChildNode[]
+      ) => boolean | any | unknown | void)
+    | null
+    | undefined = null
+) => {
+  const retArr: TChildNode[] = [];
+  callback ??= () => true;
+
+  withEachNode(nodesMx, (elem, idx, nodesArr) => {
+    const retVal = callback(elem, idx, nodesArr);
+
+    if (retVal) {
+      retArr.push(elem as TChildNode);
+    }
+  });
+
+  return retArr;
+};
+
+export const filterChildElementsArr = <
+  TChildNode extends HTMLElement = HTMLElement
+>(
+  nodesMx: (ChildNode[] | NodeListOf<ChildNode>)[],
+  callback:
+    | ((
+        node: TChildNode,
+        idx: number,
+        arr: ChildNode[]
+      ) => boolean | any | unknown | void)
+    | null
+    | undefined = null,
+  elemTagName: string | null | undefined = null
+) => {
+  callback ??= () => true;
+
+  const retArr = filterChildNodesArr<TChildNode>(
+    nodesMx,
+    (elem, idx, prElemChildNodesCollctn) => {
+      if (
+        elem instanceof HTMLElement &&
+        (!elemTagName || elem.tagName === elemTagName)
+      ) {
+        const retVal = callback(
+          elem as TChildNode,
+          idx,
+          prElemChildNodesCollctn
+        );
+
+        if (retVal) {
+          retArr.push(elem as TChildNode);
+        }
+      }
+    }
   );
 
   return retArr;

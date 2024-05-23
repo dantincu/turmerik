@@ -19,11 +19,22 @@ import { getAppTheme, currentAppTheme } from "../../app-theme/core";
 import { appModeCssClass, getAppModeCssClassName,
   setIsCompactModeToLocalStorage,
   setIsDarkModeToLocalStorage } from "../../../trmrk-browser/domUtils/core";
+// import { bringAllVertFixedElemsIntoView } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 
 import { isAndroid, isIPad, isIPhone, isIPadOrIphone, isMobile } from "../../../trmrk-browser/domUtils/constants";
 
 import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
+
+/* export const bringAllAppBarsIntoView = () => {
+  bringAllVertFixedElemsIntoView(
+    ".trmrk-app-bars-panel > .trmrk-panel-header"
+  );
+  
+  bringAllVertFixedElemsIntoView(
+    ".trmrk-app-bars-panel > .trmrk-panel-footer"
+  );
+} */
 
 export interface AppBarsPanelProps {
   basePath: string;

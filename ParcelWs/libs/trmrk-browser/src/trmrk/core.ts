@@ -5,6 +5,22 @@ export interface MtblRefValue<T> {
   value: T;
 }
 
+export class RefLazyValue<T> {
+  private _value: T | null = null;
+  private _initialized = false;
+
+  constructor(public factory: () => T) {}
+
+  get value() {
+    if (!this._initialized) {
+      this._value = this.factory();
+      this._initialized = true;
+    }
+
+    return this._value as T;
+  }
+}
+
 export interface Kvp<TKey, TValue> {
   key: TKey;
   value: TValue;
@@ -205,6 +221,37 @@ export const containsAnyOfMx = (
   return retVal;
 };
 
+export const distinct = <T>(
+  arr: T[],
+  areEqualPredicate: ((a: T, b: T) => boolean) | null = null
+) => {
+  areEqualPredicate ??= (a, b) => a === b;
+  let i = 0;
+
+  while (i < arr.length) {
+    const item = arr[i];
+    const kvp = findKvp(arr, (v) => areEqualPredicate(item, v));
+
+    if (kvp.key >= 0) {
+      arr.splice(i, 1);
+    } else {
+      i++;
+    }
+  }
+
+  return arr;
+};
+
+export const toMap = <TValue>(arr: Kvp<string, TValue>[]) => {
+  const retMap: { [key: string]: TValue } = {};
+
+  for (let kvp of arr) {
+    retMap[kvp.key] = kvp.value;
+  }
+
+  return retMap;
+};
+
 export const forEachProp = <TObj extends Object>(
   obj: TObj,
   callback: (
@@ -345,13 +392,18 @@ export const withValIf = <TIn, TOut>(
 export const actWithValIf = <TVal>(
   inVal: TVal,
   action: (input: TVal) => unknown | any | void,
-  defaultAction: (input: TVal) => unknown | any | void,
+  defaultAction:
+    | ((input: TVal) => unknown | any | void)
+    | null
+    | undefined = null,
   defaultInputPredicate?: ((input: TVal) => boolean) | null | undefined
 ) => {
   defaultInputPredicate ??= (input) => !input;
 
   if (defaultInputPredicate(inVal)) {
-    defaultAction(inVal);
+    if (defaultAction) {
+      defaultAction(inVal);
+    }
   } else {
     action(inVal);
   }
@@ -445,4 +497,23 @@ export const extractDigits = (
   );
 
   return outStr;
+};
+
+export const flatten = <T>(
+  mx: T[][],
+  removeDupplicates = false,
+  areEqualPredicate: ((a: T, b: T) => boolean) | null = null
+) => {
+  areEqualPredicate ??= (a, b) => a === b;
+
+  const retArr: T[] = mx.reduce((a, b) => {
+    a.splice(a.length, 0, ...b);
+    return a;
+  }, []);
+
+  if (removeDupplicates) {
+    distinct(retArr, areEqualPredicate);
+  }
+
+  return retArr;
 };

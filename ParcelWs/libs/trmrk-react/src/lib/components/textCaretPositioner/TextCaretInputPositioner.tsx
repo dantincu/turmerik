@@ -2,7 +2,9 @@ import React from "react";
 
 import IconButton from "@mui/material/IconButton";
 
+import trmrk from "../../../trmrk";
 import { isMultilineInput } from "../../../trmrk-browser/domUtils/textInput";
+import { bringVertPinnedElemIntoView, clearElemVertInset } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 import MatUIIcon from "../../components/icons/MatUIIcon";
 import { getAppTheme } from "../../app-theme/core";
 
@@ -35,6 +37,26 @@ export interface TextInputCaretPositionerPopoverProps {
 export const defaultJumpSpeedsArr = Object.freeze([3, 10, 30]);
 export const defaultSymbolsJumpSpeedsArr = defaultJumpSpeedsArr;
 export const defaultLinesJumpSpeedsArr = defaultJumpSpeedsArr;
+
+export const INPUT_CARET_POSITIONERS_CSS_CLASS = "trmrk-text-input-caret-positioner-popover";
+
+export const retrieveTextInputCaretPositioner = () => document.querySelector<HTMLElement>(`.${INPUT_CARET_POSITIONERS_CSS_CLASS}`);
+
+export const bringTextInputCaretPositionerIntoView = (
+  textCaretElem: HTMLElement | null | undefined = null) => trmrk.actWithValIf(
+  textCaretElem ?? retrieveTextInputCaretPositioner(),
+  val => bringVertPinnedElemIntoView(val!, val?.classList.contains("trmrk-pinned-to-bottom"))
+);
+
+export const clearTextInputCaretPositionerVertInset = (
+  textCaretElem: HTMLElement | null | undefined = null
+) => trmrk.actWithValIf(
+  textCaretElem ?? retrieveTextInputCaretPositioner(),
+  val => clearElemVertInset(val!.style)
+)
+
+/* export const bringAllTextInputCaretPositionersIntoView = () => bringAllVertFixedElemsIntoView(
+  `.${INPUT_CARET_POSITIONERS_CSS_CLASS}`); */
 
 export const normalizeJumpSpeedsArr = (
   jumpSpeedsArr: number[] | readonly number[] | null | undefined,
@@ -254,7 +276,7 @@ export default function TextInputCaretPositionerPopover(
     }
   }, [inputIsMultiline, stateType, minimized, showOptions, pinnedToBottom]);
 
-  return (<div className={["trmrk-text-input-caret-positioner-popover", appThemeClassName,
+  return (<div className={[INPUT_CARET_POSITIONERS_CSS_CLASS, appThemeClassName,
     minimized ? "trmrk-minimized" : "",
     pinnedToBottom ? "trmrk-pinned-to-bottom" : "trmrk-pinned-to-top" ].join(" ")} ref={mainElRef}>
 
