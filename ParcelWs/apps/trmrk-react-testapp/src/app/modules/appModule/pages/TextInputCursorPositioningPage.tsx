@@ -16,7 +16,7 @@ import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import { generateText } from "./generateText";
 
-import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretPositioner/TextCaretInputPositioner";
+import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretPositionerV1/TextCaretInputPositionerV1";
 
 export interface TextInputCursorPositioningPageProps {
   urlPath: string
@@ -155,6 +155,7 @@ export default function TextInputCursorPositioningPage(
       textArea2ElRef.current!]];
       
     let registerInputFocus = true;
+    let registerInputFocusId = -1;
 
     if (textBox1ElRef.current !== textBox1WrapperEl) {
       registerInputFocus = false;
@@ -182,12 +183,16 @@ export default function TextInputCursorPositioningPage(
     
     if (registerInputFocus) {
       registerInputFocus = true;
-      inputFocusEventsHandler.value.register(inputsMx);
+      registerInputFocusId = inputFocusEventsHandler.value.register(inputsMx, shouldTogglePinToBottom => {
+        if (shouldTogglePinToBottom !== pinCaretPositionerToBottom) {
+          setPinCaretPositionerToBottom(shouldTogglePinToBottom);
+        }
+      });
     }
 
     return () => {
       if (registerInputFocus) {
-        inputFocusEventsHandler.value.unregister(inputsMx);
+        inputFocusEventsHandler.value.unregister(registerInputFocusId);
       }
     }
   }, [

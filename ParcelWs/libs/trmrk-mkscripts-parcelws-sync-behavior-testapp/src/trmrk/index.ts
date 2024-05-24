@@ -7,7 +7,7 @@ import * as url from "./url";
 import * as syncLock from "./sync-lock";
 import * as arrayAdapter from "./array-adapter";
 import * as FactoryRefObj from "./FactoryRef";
-
+import * as indexedCollection from "./indexed-collection";
 import * as driveExplorerApi from "./DriveExplorerApi";
 
 export default {
@@ -21,5 +21,6 @@ export default {
   ...arrayAdapter,
   ...FactoryRefObj,
 
+  ...indexedCollection,
   ...driveExplorerApi,
 };

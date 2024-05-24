@@ -101,6 +101,15 @@ export const setIsCompactModeToLocalStorage = (
     isCompactMode ? jsonBool.true : jsonBool.false
   );
 
+/// According to https://stackoverflow.com/questions/7944460/detect-safari-browser
+/// the following is the best alternative
+export const isSafariFunc = () =>
+  !!/^((?!chrome|android|windows).)*safari/i.test(navigator.userAgent) &&
+  navigator.userAgent.indexOf("CriOS") == -1 &&
+  navigator.userAgent.indexOf("FxiOS") == -1;
+/// also tried the one bellow but did not work (returned false on iphone safari)
+// export const isSafari = !!(window as any).safari;
+
 export const isIPadFunc = () => /iPad/.test(navigator.userAgent);
 export const isIPhoneFunc = () => /iPhone/.test(navigator.userAgent);
 export const isIPadOrIphoneFunc = () => /iPad|iPhone/.test(navigator.userAgent);

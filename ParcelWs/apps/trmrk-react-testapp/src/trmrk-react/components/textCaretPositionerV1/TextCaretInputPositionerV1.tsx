@@ -3,9 +3,14 @@ import React from "react";
 import IconButton from "@mui/material/IconButton";
 
 import trmrk from "../../../trmrk";
+import { isMobile } from "../../../trmrk-browser/domUtils/constants";
+import {
+  getTouchOrMouseCoords,
+  toSingleTouchOrClick,
+} from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
 import { isMultilineInput } from "../../../trmrk-browser/domUtils/textInput";
-import { bringVertPinnedElemIntoView, clearElemVertInset } from "../../../trmrk-browser/domUtils/getDomElemBounds";
-import MatUIIcon from "../../components/icons/MatUIIcon";
+import { clearElemVertInset } from "../../../trmrk-browser/domUtils/getDomElemBounds";
+import MatUIIcon from "../icons/MatUIIcon";
 import { getAppTheme } from "../../app-theme/core";
 
 import TextCaretInputPositionerDefaultView from "./TextCaretInputPositionerDefaultView";
@@ -42,10 +47,61 @@ export const INPUT_CARET_POSITIONERS_CSS_CLASS = "trmrk-text-input-caret-positio
 
 export const retrieveTextInputCaretPositioner = () => document.querySelector<HTMLElement>(`.${INPUT_CARET_POSITIONERS_CSS_CLASS}`);
 
+export const bringTextInputCaretPositionerIntoViewCore = (
+  textCaretElem: HTMLElement,
+  ev: MouseEvent | TouchEvent | null = null,
+  // pinToBottom = false,
+  maxTopOffset: number | null = null
+): boolean | null => {
+  const bodyRect = document.body.getBoundingClientRect();
+  const textCaretElemStyle = textCaretElem.style;
+  let shouldPinToBottom: boolean | null = null;
+
+ /*  if (bodyRect.top < 0) {
+    if (pinToBottom) {
+      textCaretElemStyle.bottom = `0px`;
+    } else {
+      textCaretElemStyle.top = `${-bodyRect.top}px`;
+    }
+  } else */
+  
+   if (bodyRect.top < 0) {
+      textCaretElemStyle.top = `${-bodyRect.top}px`;
+   } else if (ev && isMobile) {
+    const coords = toSingleTouchOrClick(getTouchOrMouseCoords(ev));
+
+    if (coords) {
+      const textCaretElemHeight = textCaretElem.clientHeight;
+      maxTopOffset ??= 4 * textCaretElemHeight;
+
+      if (coords.pageY <= textCaretElemHeight) {
+        const trgElem = ev.target as HTMLElement;
+        const trgElemRect = trgElem.getBoundingClientRect();
+
+        let topOffset = Math.max(
+          trgElemRect.top + trgElemRect.height,
+          maxTopOffset
+        );
+
+        textCaretElemStyle.top = `${topOffset}px`;
+      } else {
+        shouldPinToBottom = true;
+        clearElemVertInset(textCaretElemStyle);
+      }
+    }
+  } else {
+    clearElemVertInset(textCaretElemStyle);
+  }
+
+  return shouldPinToBottom;
+};
+
 export const bringTextInputCaretPositionerIntoView = (
-  textCaretElem: HTMLElement | null | undefined = null) => trmrk.actWithValIf(
+  textCaretElem: HTMLElement | null | undefined = null,
+  ev: MouseEvent | TouchEvent | null = null) => trmrk.withValIf(
   textCaretElem ?? retrieveTextInputCaretPositioner(),
-  val => bringVertPinnedElemIntoView(val!, val?.classList.contains("trmrk-pinned-to-bottom"))
+  val => bringTextInputCaretPositionerIntoViewCore(val!, ev/* , val?.classList.contains("trmrk-pinned-to-bottom") */),
+  () => null
 );
 
 export const clearTextInputCaretPositionerVertInset = (

@@ -1,4 +1,4 @@
-import { filterChildNodes, filterChildElementsArr } from "./core";
+import { filterChildNodes } from "./core";
 
 export interface HtmlElementBounds {
   offsetLeft: number;
@@ -139,22 +139,4 @@ export const clearStyleTopAndBottom = (style: CSSStyleDeclaration) => {
 export const clearElemVertInset = (elemStyle: CSSStyleDeclaration) => {
   elemStyle.top = "";
   elemStyle.bottom = "";
-};
-
-export const bringVertPinnedElemIntoView = (
-  pinnedElem: HTMLElement,
-  pinToBottom = false
-) => {
-  const bodyRect = document.body.getBoundingClientRect();
-  const pinnedElemStyle = pinnedElem.style;
-
-  if (bodyRect.top < 0) {
-    if (pinToBottom) {
-      pinnedElemStyle.bottom = `0px`;
-    } else {
-      pinnedElemStyle.top = `${-bodyRect.top}px`;
-    }
-  } else {
-    clearElemVertInset(pinnedElemStyle);
-  }
 };

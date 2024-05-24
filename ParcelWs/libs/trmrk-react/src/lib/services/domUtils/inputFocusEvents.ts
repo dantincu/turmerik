@@ -1,41 +1,70 @@
 import { RefLazyValue } from "../../../trmrk/core";
+import { IndexedCollection } from "../../../trmrk/indexed-collection";
 
 import { filterChildElementsArr } from "../../../trmrk-browser/domUtils/core";
+import { isSafari, isMobile } from "../../../trmrk-browser/domUtils/constants";
 import { isTextInput } from "../../../trmrk-browser/domUtils/textInput";
+import {
+  getTouchOrMouseCoords,
+  toSingleTouchOrClick,
+} from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
 
 import {
   bringTextInputCaretPositionerIntoView,
   clearTextInputCaretPositionerVertInset,
   retrieveTextInputCaretPositioner,
-} from "../../components/textCaretPositioner/TextCaretInputPositioner";
+} from "../../components/textCaretPositionerV1/TextCaretInputPositionerV1";
 
 export class InputFocusEventsHandler {
-  constructor() {
+  public id = -1;
+
+  constructor(
+    public readonly nodesMx: (HTMLElement[] | NodeListOf<HTMLElement>)[],
+    private readonly onShouldTogglePinnedToBottom: (
+      shouldPinToBottom: boolean
+    ) => void
+  ) {
     this.onFocusIn = this.onFocusIn.bind(this);
     this.onFocusOut = this.onFocusOut.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
     this.onDocumentClick = this.onDocumentClick.bind(this);
   }
 
   onFocusIn(e: FocusEvent) {
+    this.registerClick(e);
     bringTextInputCaretPositionerIntoView();
   }
 
   onFocusOut(e: FocusEvent) {
     this.unregisterDocumentClick();
+    this.unregisterClick(e);
+
     clearTextInputCaretPositionerVertInset();
   }
 
+  onMouseDown(e: MouseEvent) {}
+
+  registerClick(e: Event) {
+    (e.target as HTMLElement).addEventListener("mousedown", this.onMouseDown);
+  }
+
+  unregisterClick(e: Event) {
+    this.unregisterClickCore(e.target as HTMLElement);
+  }
+
+  unregisterClickCore(el: HTMLElement) {
+    el.removeEventListener("mousedown", this.onMouseDown);
+  }
+
   registerDocumentClick() {
-    // document.addEventListener("touchend", this.onDocumentClick);
     document.addEventListener("mouseup", this.onDocumentClick);
   }
 
   unregisterDocumentClick() {
-    // document.removeEventListener("touchend", this.onDocumentClick);
     document.removeEventListener("mouseup", this.onDocumentClick);
   }
 
-  onDocumentClick(e: MouseEvent | TouchEvent) {
+  onDocumentClick(ev: MouseEvent | TouchEvent) {
     let baseTmStmp = localStorage.getItem("baseTmStmp");
     let baseTmStmpVal: number;
 
@@ -55,30 +84,32 @@ export class InputFocusEventsHandler {
       new Date().getTime() - baseTmStmpVal
     );
 
+    const coords = toSingleTouchOrClick(getTouchOrMouseCoords(ev))!;
     const textCaretElem = retrieveTextInputCaretPositioner();
 
     if (textCaretElem) {
       const textCaretElemStyle = textCaretElem.style;
 
       localStorage.setItem(
-        "textCaretElemStyle.top",
+        `${this.id}: textCaretElemStyle.top`,
         textCaretElemStyle.top.toString()
       );
 
       localStorage.setItem(
-        "textCaretElemStyle.bottom",
+        `${this.id}: textCaretElemStyle.bottom`,
         textCaretElemStyle.bottom.toString()
       );
 
       if (
-        e.target instanceof HTMLElement &&
-        !textCaretElem.contains(e.target) &&
-        isTextInput(e.target as HTMLElement)
+        ev.target instanceof HTMLElement &&
+        !textCaretElem.contains(ev.target) &&
+        isTextInput(ev.target as HTMLElement)
       ) {
         const bodyRect = document.body.getBoundingClientRect();
+        // const caretRect = textCaretElem.getBoundingClientRect();
 
         localStorage.setItem(
-          `bodyRect(${tmpStmpStr})`,
+          `${this.id}: bodyRect(${tmpStmpStr})`,
           JSON.stringify(
             [
               {
@@ -91,25 +122,45 @@ export class InputFocusEventsHandler {
                 "document.body.offsetHeight": document.body.offsetHeight,
                 "document.body.clientTop": document.body.clientTop,
                 "document.body.offsetTop": document.body.offsetTop,
+                "window.safari": (window as any).safari ?? null,
+                "navigator.userAgent": navigator.userAgent,
+                coords: coords,
+                isSafari: isSafari,
+                isMobile: isMobile,
               },
             ],
             null,
             "  "
           )
         );
-        bringTextInputCaretPositionerIntoView(textCaretElem);
+
+        const shouldTogglePinToBottom =
+          bringTextInputCaretPositionerIntoView(textCaretElem, ev) ?? null;
+
+        if (shouldTogglePinToBottom !== null) {
+          localStorage.setItem(
+            `${this.id}: ${new Date().getTime()}: shouldTogglePinToBottom`,
+            shouldTogglePinToBottom.toString()
+          );
+          this.onShouldTogglePinnedToBottom(shouldTogglePinToBottom);
+        }
       } else {
         this.unregisterDocumentClick();
         clearTextInputCaretPositionerVertInset(textCaretElem);
-        localStorage.setItem(`targetIsNotInput(${tmpStmpStr})`, tmpStmpStr);
+        localStorage.setItem(
+          `${this.id}: targetIsNotInput(${tmpStmpStr})`,
+          tmpStmpStr
+        );
       }
     }
   }
 
-  register(nodesMx: (HTMLElement[] | NodeListOf<HTMLElement>)[]) {
+  register() {
+    const nodesMx = this.nodesMx;
+
     filterChildElementsArr<HTMLElement>(nodesMx, (node, i) => {
       localStorage.setItem(
-        `${new Date().getTime()}: register input(${i}).offsetTop`,
+        `${this.id}: ${new Date().getTime()}: register input(${i}).offsetTop`,
         node.offsetTop.toString()
       );
       node.addEventListener("focusin", this.onFocusIn);
@@ -119,21 +170,49 @@ export class InputFocusEventsHandler {
     this.registerDocumentClick();
   }
 
-  unregister(nodesMx: (HTMLElement[] | NodeListOf<HTMLElement>)[]) {
+  unregister() {
+    const nodesMx = this.nodesMx;
+
     filterChildElementsArr<HTMLElement>(nodesMx, (node, i) => {
       localStorage.setItem(
-        `${new Date().getTime()}: unregister input(${i}).offsetTop`,
+        `${this.id}: ${new Date().getTime()}: unregister input(${i}).offsetTop`,
         node.offsetTop.toString()
       );
       node.removeEventListener("focusin", this.onFocusIn);
       node.removeEventListener("focusout", this.onFocusOut);
+      this.unregisterClickCore(node);
     });
 
     this.unregisterDocumentClick();
   }
 }
 
+export class InputFocusEventsHandlersAgg {
+  private readonly _handlersCollctn =
+    new IndexedCollection<InputFocusEventsHandler>();
+
+  register(
+    nodesMx: (HTMLElement[] | NodeListOf<HTMLElement>)[],
+    onShouldTogglePinnedToBottom: (shouldPinToBottom: boolean) => void
+  ) {
+    const newHandler = new InputFocusEventsHandler(
+      nodesMx,
+      onShouldTogglePinnedToBottom
+    );
+
+    newHandler.id = this._handlersCollctn.add(newHandler);
+    newHandler.register();
+
+    return newHandler.id;
+  }
+
+  unregister(id: number) {
+    const handler = this._handlersCollctn.get(id).value!;
+    handler.unregister();
+  }
+}
+
 export const inputFocusEventsHandler =
-  new RefLazyValue<InputFocusEventsHandler>(
-    () => new InputFocusEventsHandler()
+  new RefLazyValue<InputFocusEventsHandlersAgg>(
+    () => new InputFocusEventsHandlersAgg()
   );
