@@ -5,3 +5,15 @@
     @include trmrk-tree-node-color(#880);
   }
 }
+
+.trmrk-theme-dark {
+  .trmrk-long-press-demo-btn {
+    border: 1px solid #444;
+  }
+}
+
+.trmrk-theme-light {
+  .trmrk-long-press-demo-btn {
+    border: 1px solid #ccc;
+  }
+}

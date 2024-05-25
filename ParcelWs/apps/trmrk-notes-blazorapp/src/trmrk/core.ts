@@ -32,6 +32,9 @@ export interface ValueOrError<TValue, TError = Error | any> {
   error?: TError | undefined;
 }
 
+export type ValueOrAny<TValue> = TValue | any | unknown | null | undefined;
+export type ValueOrAnyOrVoid<TValue> = ValueOrAny<TValue> | void;
+
 export const jsonBool = Object.freeze({
   false: JSON.stringify(false),
   true: JSON.stringify(true),

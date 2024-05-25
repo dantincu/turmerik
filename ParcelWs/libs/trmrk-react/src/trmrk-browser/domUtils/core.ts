@@ -371,3 +371,23 @@ export const extractNestedElement = <TElement = HTMLElement>(
 
   return retElem;
 };
+
+export const clearTimeouIfReqCore = (
+  timeoutIdRef: React.MutableRefObject<NodeJS.Timeout | null>,
+  clearFunc: (timeoutId: NodeJS.Timeout) => void
+) => {
+  const timeoutId = timeoutIdRef.current;
+
+  if (timeoutId) {
+    clearFunc(timeoutId);
+    timeoutIdRef.current = null;
+  }
+};
+
+export const clearTimeoutIfReq = (
+  timeoutIdRef: React.MutableRefObject<NodeJS.Timeout | null>
+) => clearTimeouIfReqCore(timeoutIdRef, clearTimeout);
+
+export const clearIntervalIfReq = (
+  timeoutIdRef: React.MutableRefObject<NodeJS.Timeout | null>
+) => clearTimeouIfReqCore(timeoutIdRef, clearInterval);
