@@ -1,5 +1,9 @@
 import { filterChildNodes } from "./core";
 
+export const pxRegex = () => /px/i;
+export const emRegex = () => /px/i;
+export const remRegex = () => /px/i;
+
 export interface HtmlElementBounds {
   offsetLeft: number;
   offsetTop: number;
@@ -139,4 +143,11 @@ export const clearStyleTopAndBottom = (style: CSSStyleDeclaration) => {
 export const clearElemVertInset = (elemStyle: CSSStyleDeclaration) => {
   elemStyle.top = "";
   elemStyle.bottom = "";
+};
+
+export const extractPxCount = (cssPropVal: string) => {
+  let pxCount: number | null = null;
+
+  if (cssPropVal.indexOf("px") >= 0) {
+  }
 };

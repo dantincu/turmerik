@@ -5,18 +5,11 @@
   height: 2.5em;
   width: 100%;
   color: white;
+  top: 0px;
 
   &.trmrk-minimized {
     width: 2.5em;
     right: 0em;
-  }
-
-  &.trmrk-pinned-to-top {
-    top: 0em;
-  }
-
-  &.trmrk-pinned-to-bottom {
-    bottom: 0em;
   }
 
   .trmrk-icon-btn {

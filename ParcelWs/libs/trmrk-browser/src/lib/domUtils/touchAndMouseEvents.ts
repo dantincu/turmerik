@@ -1,9 +1,5 @@
-export const isTouchEvent = (e: MouseEvent | TouchEvent) => {
-  const isTouch = !!(e as TouchEvent).touches;
-  return isTouch;
-};
-
 export interface TouchOrMouseCoords {
+  mouseButton?: number | null | undefined;
   clientX: number;
   clientY: number;
   pageX: number;
@@ -13,6 +9,7 @@ export interface TouchOrMouseCoords {
 }
 
 export const getMouseCoords = (ev: MouseEvent): TouchOrMouseCoords => ({
+  mouseButton: ev.button,
   clientX: ev.clientX,
   clientY: ev.clientY,
   pageX: ev.pageX,
@@ -30,6 +27,11 @@ export const getTouchCoords = (tc: Touch): TouchOrMouseCoords => ({
   screenY: tc.screenY,
 });
 
+export const isTouchEvent = (e: MouseEvent | TouchEvent) => {
+  const isTouch = !!(e as TouchEvent).touches;
+  return isTouch;
+};
+
 export const getTouchesCoords = (tcList: TouchList) => {
   const retArr: TouchOrMouseCoords[] = [];
 
@@ -41,37 +43,52 @@ export const getTouchesCoords = (tcList: TouchList) => {
   return retArr;
 };
 
-export const getTouchOrMouseCoords = (ev: MouseEvent | TouchEvent) => {
+export const getTouchOrMouseCoords = (
+  ev: MouseEvent | TouchEvent,
+  requiredButton?: number | null | undefined
+) => {
   const mouseEv = ev as MouseEvent;
   const touchEv = ev as TouchEvent;
 
   const isTouch = !!touchEv.touches;
-  let retObj: TouchOrMouseCoords | TouchOrMouseCoords[];
+  let retObj: TouchOrMouseCoords | TouchOrMouseCoords[] | null;
 
   if (isTouch) {
     retObj = getTouchesCoords(touchEv.touches);
   } else {
+    requiredButton ??= -1;
     retObj = getMouseCoords(mouseEv);
+
+    if (requiredButton >= 0 && retObj.mouseButton !== requiredButton) {
+      retObj = null;
+    }
   }
 
   return retObj;
 };
 
 export const isSingleTouchOrClick = (
-  coords: TouchOrMouseCoords | TouchOrMouseCoords[]
-) => ((coords as TouchOrMouseCoords[]).length ?? 1) === 1;
+  coords: TouchOrMouseCoords | TouchOrMouseCoords[] | null
+) => !!coords && ((coords as TouchOrMouseCoords[]).length ?? 1) === 1;
 
 export const toSingleTouchOrClick = (
-  coords: TouchOrMouseCoords | TouchOrMouseCoords[]
+  coords: TouchOrMouseCoords | TouchOrMouseCoords[] | null
 ) => {
   let retObj: TouchOrMouseCoords | null = null;
   const coordsArr = coords as TouchOrMouseCoords[];
 
-  if (coordsArr.length === 1) {
-    retObj = coordsArr[0];
-  } else {
-    retObj = coords as TouchOrMouseCoords | null;
+  if (coords) {
+    if (coordsArr.length === 1) {
+      retObj = coordsArr[0];
+    } else {
+      retObj = coords as TouchOrMouseCoords | null;
+    }
   }
 
   return retObj;
 };
+
+export const getSingleTouchOrClick = (
+  ev: MouseEvent | TouchEvent,
+  requiredButton?: number | null | undefined
+) => toSingleTouchOrClick(getTouchOrMouseCoords(ev, requiredButton));

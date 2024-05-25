@@ -8,12 +8,15 @@ import Checkbox from '@mui/material/Checkbox';
 import { extractTextInput } from "../../../../trmrk-browser/domUtils/textInput";
 import { getTouchOrMouseCoords, toSingleTouchOrClick } from "../../../../trmrk-browser/domUtils/touchAndMouseEvents";
 import AppBarsPanel from "../../../../trmrk-react/components/barsPanel/AppBarsPanel";
+import { inputFocusEventsHandler } from "../../../../trmrk-react/services/domUtils/inputFocusEvents_$obs$";
+// import { bringAllAppBarsIntoView } from "../../../../trmrk-react/components/barsPanel/AppBarsPanel";
+// import { bringAllTextInputCaretPositionersIntoView } from "../../../../trmrk-react/components/textCaretPositioner/TextCaretInputPositioner";
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import { generateText } from "./generateText";
 
-import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretInputPositioner/TextCaretPositionerPopover";
+import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretPositionerV1/TextCaretInputPositionerV1";
 
 export interface TextInputCursorPositioningPageProps {
   urlPath: string
@@ -44,6 +47,7 @@ export default function TextInputCursorPositioningPage(
   const [ textArea2El, setTextArea2El ] = React.useState<HTMLElement | null>(null);
 
   const [ currentInputEl, setCurrentInputEl ] = React.useState<HTMLElement | null>(null);
+  const [ pinCaretPositionerToBottom, setPinCaretPositionerToBottom ] = React.useState(false);
 
   const [ textBox1IsReadonly, setTextBox1IsReadonly ] = React.useState(true);
   const [ textArea1IsReadonly, setText1AreaIsReadonly ] = React.useState(true);
@@ -62,6 +66,15 @@ export default function TextInputCursorPositioningPage(
 
   const [ singlelineText2, setSinglelineText2 ] = React.useState(textObj[0]);
   const [ multilineText2, setMultilineText2 ] = React.useState(textObj[1]);
+
+  const onTextInputMouseUp = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    const coordsObj = toSingleTouchOrClick(getTouchOrMouseCoords(e as unknown as MouseEvent | TouchEvent));
+
+    if (coordsObj) {
+      const pinCaretPositionerToBottomNewVal = coordsObj.clientY < window.innerHeight / 2;
+      setPinCaretPositionerToBottom(pinCaretPositionerToBottomNewVal);
+    }
+  }, [pinCaretPositionerToBottom]);
 
   const onSingleLineText1Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSinglelineText1(e.target.value);
@@ -136,24 +149,51 @@ export default function TextInputCursorPositioningPage(
   }
 
   React.useEffect(() => {
+    const inputsMx = [[textBox1ElRef.current!,
+      textArea1ElRef.current!,
+      textBox2ElRef.current!,
+      textArea2ElRef.current!]];
+      
+    let registerInputFocus = true;
+    let registerInputFocusId = -1;
+
     if (textBox1ElRef.current !== textBox1WrapperEl) {
+      registerInputFocus = false;
       setTextBox1WrapperEl(textBox1ElRef.current);
       setTextBox1El(extractTextInput(textBox1ElRef.current!));
     }
     
     if (textArea1ElRef.current !== textArea1WrapperEl) {
+      registerInputFocus = false;
       setTextArea1WrapperEl(textArea1ElRef.current);
       setTextArea1El(extractTextInput(textArea1ElRef.current!));
     }
     
     if (textBox2ElRef.current !== textBox2WrapperEl) {
+      registerInputFocus = false;
       setTextBox2WrapperEl(textBox2ElRef.current);
       setTextBox2El(extractTextInput(textBox2ElRef.current!));
     }
     
     if (textArea2ElRef.current !== textArea2WrapperEl) {
+      registerInputFocus = false;
       setTextArea2WrapperEl(textArea2ElRef.current);
       setTextArea2El(extractTextInput(textArea2ElRef.current!));
+    } 
+    
+    if (registerInputFocus) {
+      registerInputFocus = true;
+      registerInputFocusId = inputFocusEventsHandler.value.register(inputsMx, shouldTogglePinToBottom => {
+        if (shouldTogglePinToBottom !== pinCaretPositionerToBottom) {
+          setPinCaretPositionerToBottom(shouldTogglePinToBottom);
+        }
+      });
+    }
+
+    return () => {
+      if (registerInputFocus) {
+        inputFocusEventsHandler.value.unregister(registerInputFocusId);
+      }
     }
   }, [
     textBox1ElRef,
@@ -169,43 +209,56 @@ export default function TextInputCursorPositioningPage(
     textArea2IsReadonly,
     isDarkMode,
     singlelineText2,
-    multilineText2 ]);
+    multilineText2,
+    pinCaretPositionerToBottom ]);
     
     return (<AppBarsPanel basePath={props.basePath}
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}>
-    <div className="trmrk-block trmrk-horiz-padded trmrk-height-fit-content">
+    <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextBox1IsReadonlyChanged} checked={textBox1IsReadonly} /></label>
       <Input ref={textBox1ElRef} onChange={onSingleLineText1Changed} value={singlelineText1} readOnly={textBox1IsReadonly}
         onFocus={onShowSinglelineText1CaretPositioner}
-        onBlur={onHideSinglelineTextBox1CaretPositioner} />
+        onBlur={onHideSinglelineTextBox1CaretPositioner}
+        onMouseDown={onTextInputMouseUp}
+        onTouchEnd={onTextInputMouseUp} />
     </div>
-    <div className="trmrk-block trmrk-horiz-padded trmrk-height-fit-content">
+    <div className="trmrk-block trmrk-horiz-padded">
+      <Box className="trmrk-full-width trmrk-full-height"></Box>
+    </div>
+    <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextArea1IsReadonlyChanged} checked={textArea1IsReadonly} /></label>
       <Input ref={textArea1ElRef} onChange={onMultiLineText1Changed} value={multilineText1} multiline rows={40} readOnly={textArea1IsReadonly}
         onFocus={onShowMultilineText1CaretPositioner}
-        onBlur={onHideMultilineTextBox1CaretPositioner} />
+        onBlur={onHideMultilineTextBox1CaretPositioner}
+        onMouseDown={onTextInputMouseUp}
+        onTouchEnd={onTextInputMouseUp} />
     </div>
-    <div className="trmrk-block trmrk-horiz-padded trmrk-height-fit-content">
+    <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextBox2IsReadonlyChanged} checked={textBox2IsReadonly} /></label>
       <Input ref={textBox2ElRef} onChange={onSingleLineText2Changed} value={singlelineText2} readOnly={textBox2IsReadonly}
         onFocus={onShowSinglelineText2CaretPositioner}
-        onBlur={onHideSinglelineTextBox2CaretPositioner} />
+        onBlur={onHideSinglelineTextBox2CaretPositioner}
+        onMouseDown={onTextInputMouseUp}
+        onTouchEnd={onTextInputMouseUp} />
     </div>
-    <div className="trmrk-block trmrk-horiz-padded trmrk-height-fit-content">
+    <div className="trmrk-block trmrk-horiz-padded">
       <Box className="trmrk-full-width trmrk-full-height"></Box>
     </div>
     <div className="trmrk-block trmrk-horiz-padded">
       <label>Readonly <Checkbox onChange={onTextArea2IsReadonlyChanged} checked={textArea2IsReadonly} /></label>
       <Input ref={textArea2ElRef} onChange={onMultiLineText2Changed} value={multilineText2} multiline rows={40} readOnly={textArea2IsReadonly}
         onFocus={onShowMultilineText2CaretPositioner}
-        onBlur={onHideMultilineTextBox2CaretPositioner} />
+        onBlur={onHideMultilineTextBox2CaretPositioner}
+        onMouseDown={onTextInputMouseUp}
+        onTouchEnd={onTextInputMouseUp} />
     </div>
 
     { currentInputEl ? <TextInputCaretPositionerPopover
       isDarkMode={isDarkMode}
-      inputEl={currentInputEl} /> : null }
+      inputEl={currentInputEl}
+      pinnedToBottom={pinCaretPositionerToBottom} /> : null }
   </AppBarsPanel>);
 }

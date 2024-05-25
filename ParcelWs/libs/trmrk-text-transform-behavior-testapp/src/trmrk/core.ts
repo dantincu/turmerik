@@ -1,5 +1,6 @@
-export const allWsRegex = /^\s+$/g;
-export const digitRegex = /\d/g;
+export const allWsRegex = () => /^\s+$/g;
+export const digitRegex = () => /\d/g;
+export const numberRegex = () => /^(\-\d|\d)?\.?\d+$/g;
 
 export interface MtblRefValue<T> {
   value: T;
@@ -51,9 +52,14 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
   retVal = retVal && arg !== "";
 
   if (retVal && allWsSameAsEmpty) {
-    retVal = !allWsRegex.test(arg);
+    retVal = !allWsRegex().test(arg);
   }
 
+  return retVal;
+};
+
+export const isNumStr = (arg: string) => {
+  const retVal = !!numberRegex().test(arg);
   return retVal;
 };
 
@@ -493,7 +499,7 @@ export const extractDigits = (
   allowedNonDigits ??= ["."];
 
   const outStr = transformStr(inStr, (chr) =>
-    digitRegex.test(chr) || allowedNonDigits.indexOf(chr) >= 0 ? chr : null
+    digitRegex().test(chr) || allowedNonDigits.indexOf(chr) >= 0 ? chr : null
   );
 
   return outStr;
