@@ -3,12 +3,9 @@ import React from "react";
 import IconButton from "@mui/material/IconButton";
 
 import trmrk from "../../../trmrk";
-import { isMobile } from "../../../trmrk-browser/domUtils/constants";
 
 import {
   TouchOrMouseCoords,
-  getTouchOrMouseCoords,
-  toSingleTouchOrClick,
 } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
 
 import { extractElCssStyleTopPx } from "../../../trmrk-browser/domUtils/css";
@@ -88,10 +85,6 @@ export default function TextInputCaretPositionerPopover(
   props: TextInputCaretPositionerPopoverProps
 ) {
   const mainElRef = React.useRef<HTMLDivElement | null>(null);
-  // const debugLogSpanElRef = React.useRef<HTMLSpanElement | null>(null);
-  const moveStartCoordsRef = React.useRef<TouchOrMouseCoords | null>(null);
-  const bfMoveStartTopOffsetPxRef = React.useRef<number>(0);
-  const topOffsetPxNumRef = React.useRef(0);
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(isMultilineInput(inputEl));
@@ -109,26 +102,6 @@ export default function TextInputCaretPositionerPopover(
     isDarkMode: props.isDarkMode,
   }).cssClassName;
 
-  const moveStarted = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
-    moveStartCoordsRef.current = coords;
-    const topOffsetPxNum = extractElCssStyleTopPx(mainElRef.current);
-    bfMoveStartTopOffsetPxRef.current = topOffsetPxNum ?? 0;
-  }, [mainElRef, moveStartCoordsRef, bfMoveStartTopOffsetPxRef]);
-
-  const moveEnded = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
-    moveStartCoordsRef.current = null;
-    bfMoveStartTopOffsetPxRef.current = 0;
-  }, [mainElRef, moveStartCoordsRef, bfMoveStartTopOffsetPxRef]);
-
-  const moving = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
-    const mainEl = mainElRef.current;
-
-    if (moveStartCoordsRef.current && mainEl) {
-      const nextTopOffsetPxNum = getNextTopPx(coords, moveStartCoordsRef.current, bfMoveStartTopOffsetPxRef.current);
-      mainEl.style.top = `${nextTopOffsetPxNum}px`;
-    }
-  }, [mainElRef, moveStartCoordsRef, bfMoveStartTopOffsetPxRef]);
-
   const moveUpOrDown = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, moveDirIsUp: boolean) => {
     const mainEl = mainElRef.current;
 
@@ -138,26 +111,22 @@ export default function TextInputCaretPositionerPopover(
       if ((topOffsetPxNum ?? null) !== null) {
         const sign = moveDirIsUp ? -1 : 1;
         let nextTopOffsetPxNum = topOffsetPxNum! + sign * mainEl.clientHeight;
-        localStorage.setItem(`nextTopOffsetPxNum: ${new Date().getTime()}`, JSON.stringify([nextTopOffsetPxNum, moveDirIsUp, sign], null, "  "));
 
         nextTopOffsetPxNum = Math.max(0, nextTopOffsetPxNum);
         nextTopOffsetPxNum = Math.min(nextTopOffsetPxNum, window.innerHeight - mainEl.clientHeight);
 
         mainEl.style.top = `${nextTopOffsetPxNum}px`;
-        topOffsetPxNumRef.current = nextTopOffsetPxNum;
       }
     }
-  }, [mainElRef, moveStartCoordsRef, bfMoveStartTopOffsetPxRef]);
+  }, [mainElRef]);
 
   const moveUp = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
-    // debugLogSpanElRef.current!.innerText = "log";
     moveUpOrDown(ev, coords, true);
-  }, [mainElRef, moveStartCoordsRef, bfMoveStartTopOffsetPxRef]);
+  }, [mainElRef]);
 
   const moveDown = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
-    // debugLogSpanElRef.current!.innerText = "log";
     moveUpOrDown(ev, coords, false);
-  }, [mainElRef, moveStartCoordsRef, bfMoveStartTopOffsetPxRef]);
+  }, [mainElRef]);
 
   const minimizeBtnClicked = React.useCallback(() => {
     const newMinimizedVal = true;
@@ -267,10 +236,6 @@ export default function TextInputCaretPositionerPopover(
     minimized,
     showOptions,
     stateType,
-    moveStartCoordsRef,
-    bfMoveStartTopOffsetPxRef,
-    topOffsetPxNumRef,
-    // debugLogSpanElRef
   ]);
 
   const viewRetriever = React.useCallback(() => {
@@ -281,9 +246,6 @@ export default function TextInputCaretPositionerPopover(
     if (showOptions) {
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
-          moveStarted={moveStarted}
-          moveEnded={moveEnded}
-          moving={moving}
           moveUp={moveUp}
           moveDown={moveDown} />;
     } else {
@@ -308,7 +270,6 @@ export default function TextInputCaretPositionerPopover(
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS, appThemeClassName,
     minimized ? "trmrk-minimized" : "" ].join(" ")} ref={el => mainElRef.current = el}>
-      { /* <span ref={el => debugLogSpanElRef.current = el}>l</span> */ }
     { viewRetriever() }
 
     <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
