@@ -153,23 +153,127 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
   }
 }
 
-.trmrk-theme-dark .trmrk-text-caret-positioner {
-  .trmrk-unwrap-text-btn {
-    background-color: #333;
+@keyframes trmrk-theme-dark_text-input-caret-positioner-none {
+  from {
+    background: repeating-linear-gradient(to right, #444 0px, #444 100vw);
+  }
+
+  to {
+    background: repeating-linear-gradient(to right, #444 0px, #444 100vw);
   }
 }
 
-.trmrk-theme-light .trmrk-text-caret-positioner {
-  .trmrk-unwrap-text-btn {
-    background-color: #ddd;
+@keyframes trmrk-theme-light_text-input-caret-positioner-none {
+  from {
+    background: repeating-linear-gradient(to right, #8cf 0px, #8cf 100vw);
+  }
+
+  to {
+    background: repeating-linear-gradient(to right, #8cf 0px, #8cf 100vw);
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-once-anchor-left {
+  from {
+    left: -100vw;
+  }
+
+  to {
+    left: -99vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-full-anchor-left {
+  from {
+    left: -100vw;
+  }
+
+  to {
+    left: 0vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-anchor-left {
+  from {
+    left: -100vw;
+  }
+
+  to {
+    left: 0vw;
   }
 }
 
 .trmrk-theme-dark.trmrk-text-input-caret-positioner-popover {
   background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
   background-color: #121212;
+
+  .trmrk-popover-top-border,
+  .trmrk-popover-bottom-border {
+    background-color: #444;
+
+    .trmrk-animator {
+      &.trmrk-anchor-left {
+        background: repeating-linear-gradient(to right, #121212 0px, #121212 1.25em, #444 1.25em, #444 25vw);
+
+        &.trmrk-slide-once {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-anchor-left,
+            trmrk-theme-dark_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+      }
+
+      &.trmrk-slide-speed-x1 {
+        animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
+        animation-duration: 10s;
+        animation-timing-function: steps(500);
+        animation-iteration-count: 1000000;
+      }
+
+      &.trmrk-anchor-right {
+        background: repeating-linear-gradient(to left, #121212 0px, #121212 1.25em, #444 1.25em, #444 25vw);
+      }
+    }
+  }
 }
 
 .trmrk-theme-light.trmrk-text-input-caret-positioner-popover {
   background-color: #1976d2;
+
+  .trmrk-popover-top-border,
+  .trmrk-popover-bottom-border {
+    background-color: #8cf;
+
+    .trmrk-animator {
+      &.trmrk-anchor-left {
+        background: repeating-linear-gradient(to right, #04c 0px, #04c 1.25em, #8cf 1.25em, #8cf 25vw);
+
+        &.trmrk-slide-once {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-anchor-left,
+            trmrk-theme-light_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+      }
+
+      &.trmrk-slide-speed-x1 {
+        animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
+        animation-duration: 10s;
+        animation-timing-function: steps(500);
+        animation-iteration-count: 1000000;
+      }
+
+      &.trmrk-anchor-right {
+        background: repeating-linear-gradient(to left, #04c 0px, #04c 1.25em, #8cf 1.25em, #8cf 25vw);
+      }
+    }
+  }
 }

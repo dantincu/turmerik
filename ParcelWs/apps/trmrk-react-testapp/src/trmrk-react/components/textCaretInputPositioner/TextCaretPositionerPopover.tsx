@@ -46,6 +46,14 @@ export const INPUT_CARET_POSITIONER_QUERY_SELECTOR = `.${INPUT_CARET_POSITIONER_
 
 export const retrieveTextInputCaretPositioner = () => document.querySelector<HTMLElement>(INPUT_CARET_POSITIONER_QUERY_SELECTOR);
 
+export const cssClasses = Object.freeze({
+  anchor: (left: boolean) => left ? "trmrk-anchor-left" : "trmrk-anchor-right",
+  slideOnce: "trmrk-slide-once",
+  slide: (speed: number) => `trmrk-slide-speed-x${speed}`
+});
+
+export const longPressIntervalMs = 500;
+
 export const normalizeJumpSpeedsArr = (
   jumpSpeedsArr: number[] | readonly number[] | null | undefined,
   dfJumpSpeedsArr: number[])  => {
@@ -85,6 +93,8 @@ export default function TextInputCaretPositionerPopover(
   props: TextInputCaretPositionerPopoverProps
 ) {
   const mainElRef = React.useRef<HTMLDivElement | null>(null);
+  const topBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
+  const bottomBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(isMultilineInput(inputEl));
@@ -182,6 +192,69 @@ export default function TextInputCaretPositionerPopover(
     setStateType(TextCaretInputPositionerState.Default);
   }, [stateType]);
 
+  const withTopAndBorderAnimatorElems = React.useCallback((
+    callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => void
+  ) => {
+    const topBorderAnimatorEl = topBorderAnimatorElRef.current;
+    const bottomBorderAnimatorEl = bottomBorderAnimatorElRef.current;
+
+    if (topBorderAnimatorEl && bottomBorderAnimatorEl) {
+      callback(topBorderAnimatorEl, bottomBorderAnimatorEl);
+    }
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const viewBtnTouchStartOrMouseDown = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean) => {
+    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.add(cssClasses.anchor(topBorderAnchorLeft));
+      topBorderAnimatorEl.classList.add(cssClasses.slideOnce);
+      bottomBorderAnimatorEl.classList.add(cssClasses.anchor(bottomBorderAnchorLeft));
+      bottomBorderAnimatorEl.classList.add(cssClasses.slideOnce);
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const viewBtnShortPressed = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean) => {
+    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.remove(cssClasses.anchor(topBorderAnchorLeft));
+      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+      bottomBorderAnimatorEl.classList.remove(cssClasses.anchor(bottomBorderAnchorLeft));
+      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const viewBtnLongPressStarted = React.useCallback((speed: number) => {
+    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+      topBorderAnimatorEl.classList.add(cssClasses.slide(speed));
+      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+      bottomBorderAnimatorEl.classList.add(cssClasses.slide(speed));
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const viewBtnLongPressEnded = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
+    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.remove(cssClasses.anchor(topBorderAnchorLeft));
+      topBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
+      bottomBorderAnimatorEl.classList.remove(cssClasses.anchor(bottomBorderAnchorLeft));
+      bottomBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const defaultViewJumpPrevWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, true);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const defaultViewJumpPrevWordShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, true);
+  }, []);
+
+  const defaultViewJumpPrevWordLongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(1);
+  }, []);
+
+  const jumpPrevWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, true, 1);
+  }, []);
+
   React.useEffect(() => {
     const mainEl = mainElRef.current;
 
@@ -263,17 +336,29 @@ export default function TextInputCaretPositionerPopover(
         default:
           return <TextCaretInputPositionerDefaultView
             inputIsMultiline={inputIsMultiline}
-            nextViewClicked={onDefaultNextViewClick} />;
+            nextViewClicked={onDefaultNextViewClick}
+            jumpPrevWordTouchStartOrMouseDown={defaultViewJumpPrevWordTouchStartOrMouseDown}
+            jumpPrevWordShortPressed={defaultViewJumpPrevWordShortPressed}
+            jumpPrevWordLongPressStarted={defaultViewJumpPrevWordLongPressStarted}
+            jumpPrevWordLongPressEnded={jumpPrevWordLongPressEnded} />;
       }
     }
   }, [inputIsMultiline, stateType, minimized, showOptions]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS, appThemeClassName,
     minimized ? "trmrk-minimized" : "" ].join(" ")} ref={el => mainElRef.current = el}>
-    { viewRetriever() }
+      <div className="trmrk-popover-top-border">
+        <div className="trmrk-animator" ref={el => topBorderAnimatorElRef.current = el}></div>
+      </div>
+      <div className="trmrk-text-input-caret-positioner">
+        { viewRetriever() }
 
-    <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
-      onMouseDown={mainBtnClicked}
-      onTouchEnd={mainBtnClicked}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+        <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
+          onMouseDown={mainBtnClicked}
+          onTouchEnd={mainBtnClicked}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+      </div>
+      <div className="trmrk-popover-bottom-border">
+        <div className="trmrk-animator" ref={el => bottomBorderAnimatorElRef.current = el}></div>
+      </div>
   </div>);
 }
