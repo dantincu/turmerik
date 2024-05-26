@@ -48,7 +48,7 @@ export const retrieveTextInputCaretPositioner = () => document.querySelector<HTM
 
 export const cssClasses = Object.freeze({
   anchor: (left: boolean) => left ? "trmrk-anchor-left" : "trmrk-anchor-right",
-  slideOnce: "trmrk-slide-once",
+  slideOnce: (speed: number) => `trmrk-slide-once-speed-x${speed}`,
   slide: (speed: number) => `trmrk-slide-speed-x${speed}`
 });
 
@@ -203,29 +203,29 @@ export default function TextInputCaretPositionerPopover(
     }
   }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
 
-  const viewBtnTouchStartOrMouseDown = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean) => {
+  const viewBtnTouchStartOrMouseDown = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
     withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.add(cssClasses.anchor(topBorderAnchorLeft));
-      topBorderAnimatorEl.classList.add(cssClasses.slideOnce);
+      topBorderAnimatorEl.classList.add(cssClasses.slideOnce(speed));
       bottomBorderAnimatorEl.classList.add(cssClasses.anchor(bottomBorderAnchorLeft));
-      bottomBorderAnimatorEl.classList.add(cssClasses.slideOnce);
+      bottomBorderAnimatorEl.classList.add(cssClasses.slideOnce(speed));
     });
   }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
 
-  const viewBtnShortPressed = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean) => {
+  const viewBtnShortPressed = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
     withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.remove(cssClasses.anchor(topBorderAnchorLeft));
-      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
       bottomBorderAnimatorEl.classList.remove(cssClasses.anchor(bottomBorderAnchorLeft));
-      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
     });
   }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
 
   const viewBtnLongPressStarted = React.useCallback((speed: number) => {
     withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
       topBorderAnimatorEl.classList.add(cssClasses.slide(speed));
-      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce);
+      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
       bottomBorderAnimatorEl.classList.add(cssClasses.slide(speed));
     });
   }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
@@ -240,19 +240,35 @@ export default function TextInputCaretPositionerPopover(
   }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
 
   const defaultViewJumpPrevWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, true);
+    viewBtnTouchStartOrMouseDown(true, true, 2);
   }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
 
   const defaultViewJumpPrevWordShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, true);
+    viewBtnShortPressed(true, true, 2);
   }, []);
 
   const defaultViewJumpPrevWordLongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(1);
+    viewBtnLongPressStarted(2);
   }, []);
 
   const jumpPrevWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, true, 1);
+    viewBtnLongPressEnded(true, true, 2);
+  }, []);
+
+  const defaultViewJumpNextWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const defaultViewJumpNextWordShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, false, 2);
+  }, []);
+
+  const defaultViewJumpNextWordLongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(2);
+  }, []);
+
+  const jumpNextWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, false, 2);
   }, []);
 
   React.useEffect(() => {
@@ -340,7 +356,11 @@ export default function TextInputCaretPositionerPopover(
             jumpPrevWordTouchStartOrMouseDown={defaultViewJumpPrevWordTouchStartOrMouseDown}
             jumpPrevWordShortPressed={defaultViewJumpPrevWordShortPressed}
             jumpPrevWordLongPressStarted={defaultViewJumpPrevWordLongPressStarted}
-            jumpPrevWordLongPressEnded={jumpPrevWordLongPressEnded} />;
+            jumpPrevWordLongPressEnded={jumpPrevWordLongPressEnded}
+            jumpNextWordTouchStartOrMouseDown={defaultViewJumpNextWordTouchStartOrMouseDown}
+            jumpNextWordShortPressed={defaultViewJumpNextWordShortPressed}
+            jumpNextWordLongPressStarted={defaultViewJumpNextWordLongPressStarted}
+            jumpNextWordLongPressEnded={jumpNextWordLongPressEnded} />;
       }
     }
   }, [inputIsMultiline, stateType, minimized, showOptions]);

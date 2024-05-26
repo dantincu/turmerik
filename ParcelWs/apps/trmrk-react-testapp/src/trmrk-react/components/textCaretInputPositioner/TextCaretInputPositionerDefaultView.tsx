@@ -23,36 +23,39 @@ export interface TextCaretInputPositionerDefaultViewProps {
   jumpPrevWordShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpPrevWordLongPressStarted: () => void;
   jumpPrevWordLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
+  jumpNextWordTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpNextWordShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
+  jumpNextWordLongPressStarted: () => void;
+  jumpNextWordLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
 }
 
 export default function TextCaretInputPositionerDefaultView(
   props: TextCaretInputPositionerDefaultViewProps
 ) {
   const jumpPrevWordBtnElemRef = React.useRef<HTMLButtonElement | null>(null);
+  const jumpNextWordBtnElemRef = React.useRef<HTMLButtonElement | null>(null);
 
   const [ jumpPrevWordBtnElem, setJumpPrevWordBtnElem ] = React.useState<HTMLButtonElement | null>(jumpPrevWordBtnElemRef.current);
+  const [ jumpNextWordBtnElem, setJumpNextWordBtnElem ] = React.useState<HTMLButtonElement | null>(jumpNextWordBtnElemRef.current);
 
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(props.inputIsMultiline);
 
   const jumpPrevWordLongPress = longPress({
     btnElem: jumpPrevWordBtnElem,
     longPressIntervalMs: longPressIntervalMs,
-    touchStartOrMouseDown: (ev, coords) => {
-      // console.log("touchStartOrMouseDown");
-      return props.jumpPrevWordTouchStartOrMouseDown(ev, coords);
-    },
-    shortPressed: (ev, coords) => {
-      // console.log("shortPressed");
-      props.jumpPrevWordShortPressed(ev, coords);
-    },
-    longPressStarted: () => {
-      // console.log("longPressStarted");
-      props.jumpPrevWordLongPressStarted();
-    },
-    longPressEnded: (ev, coords) => {
-      // console.log("longPressEnded");
-      props.jumpPrevWordLongPressEnded(ev, coords);
-    }
+    touchStartOrMouseDown: props.jumpPrevWordTouchStartOrMouseDown,
+    shortPressed: props.jumpPrevWordShortPressed,
+    longPressStarted: props.jumpPrevWordLongPressStarted,
+    longPressEnded: props.jumpPrevWordLongPressEnded
+  });
+
+  const jumpNextWordLongPress = longPress({
+    btnElem: jumpNextWordBtnElem,
+    longPressIntervalMs: longPressIntervalMs,
+    touchStartOrMouseDown: props.jumpNextWordTouchStartOrMouseDown,
+    shortPressed: props.jumpNextWordShortPressed,
+    longPressStarted: props.jumpNextWordLongPressStarted,
+    longPressEnded: props.jumpNextWordLongPressEnded
   });
 
   const onNextViewIconBtnClick = (e: React.MouseEvent | React.TouchEvent) => {
@@ -63,9 +66,14 @@ export default function TextCaretInputPositionerDefaultView(
 
   React.useEffect(() => {
     const jumpPrevWordBtnElemVal = jumpPrevWordBtnElemRef.current;
+    const jumpNextWordBtnElemVal = jumpNextWordBtnElemRef.current;
 
     if (jumpPrevWordBtnElemVal !== jumpPrevWordBtnElem) {
       setJumpPrevWordBtnElem(jumpPrevWordBtnElemVal);
+    }
+
+    if (jumpNextWordBtnElemVal !== jumpNextWordBtnElem) {
+      setJumpNextWordBtnElem(jumpNextWordBtnElemVal);
     }
 
     if (props.inputIsMultiline !== inputIsMultiline) {
@@ -74,11 +82,14 @@ export default function TextCaretInputPositionerDefaultView(
 
     return () => {
       jumpPrevWordLongPress.clearAll();
+      jumpNextWordLongPress.clearAll();
     }
   }, [props.inputIsMultiline,
     inputIsMultiline,
     jumpPrevWordBtnElemRef,
-    jumpPrevWordBtnElem
+    jumpNextWordBtnElemRef,
+    jumpPrevWordBtnElem,
+    jumpNextWordBtnElem
   ]);
 
   return (<div className="trmrk-view trmrk-anchor-left trmrk-default-view">
@@ -98,7 +109,7 @@ export default function TextCaretInputPositionerDefaultView(
     <IconButton className="trmrk-icon-btn trmrk-jump-next-char-btn">
       <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-next-word-btn">
+    <IconButton className="trmrk-icon-btn trmrk-jump-next-word-btn" ref={el => jumpNextWordBtnElemRef.current = el}>
       <SkipNextIcon className="trmrk-skip-next-icon" /></IconButton>
 
     { inputIsMultiline ? <IconButton className="trmrk-icon-btn trmrk-jump-next-line-btn">

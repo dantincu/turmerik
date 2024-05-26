@@ -1,3 +1,83 @@
+@keyframes trmrk_text-input-caret-positioner-slide-once-x1-anchor-left {
+  from {
+    left: -100vw;
+  }
+
+  to {
+    left: -99vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-once-x2-anchor-left {
+  from {
+    left: -100vw;
+  }
+
+  to {
+    left: -98vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-once-x3-anchor-left {
+  from {
+    left: -100vw;
+  }
+
+  to {
+    left: -97vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-full-anchor-left {
+  from {
+    left: -100vw;
+  }
+
+  to {
+    left: 0vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-once-x1-anchor-right {
+  from {
+    left: 100vw;
+  }
+
+  to {
+    left: 99vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-once-x2-anchor-right {
+  from {
+    left: 100vw;
+  }
+
+  to {
+    left: 98vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-once-x3-anchor-right {
+  from {
+    left: 100vw;
+  }
+
+  to {
+    left: 97vw;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-slide-full-anchor-right {
+  from {
+    left: 100vw;
+  }
+
+  to {
+    left: 0vw;
+  }
+}
+
 .trmrk-text-input-caret-positioner-popover {
   display: block;
   position: fixed;
@@ -23,6 +103,52 @@
     .trmrk-animator {
       position: relative;
       height: 3px;
+
+      &.trmrk-anchor-left {
+        &.trmrk-slide-speed-x1 {
+          animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
+          animation-duration: 10s;
+          animation-timing-function: steps(500);
+          animation-iteration-count: 1000000;
+        }
+
+        &.trmrk-slide-speed-x2 {
+          animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
+          animation-duration: 6.7s;
+          animation-timing-function: steps(500);
+          animation-iteration-count: 1000000;
+        }
+
+        &.trmrk-slide-speed-x3 {
+          animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
+          animation-duration: 3.3s;
+          animation-timing-function: steps(500);
+          animation-iteration-count: 1000000;
+        }
+      }
+
+      &.trmrk-anchor-right {
+        &.trmrk-slide-speed-x1 {
+          animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-right;
+          animation-duration: 10s;
+          animation-timing-function: steps(500);
+          animation-iteration-count: 1000000;
+        }
+
+        &.trmrk-slide-speed-x2 {
+          animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-right;
+          animation-duration: 6.7s;
+          animation-timing-function: steps(500);
+          animation-iteration-count: 1000000;
+        }
+
+        &.trmrk-slide-speed-x3 {
+          animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-right;
+          animation-duration: 3.3s;
+          animation-timing-function: steps(500);
+          animation-iteration-count: 1000000;
+        }
+      }
     }
   }
 

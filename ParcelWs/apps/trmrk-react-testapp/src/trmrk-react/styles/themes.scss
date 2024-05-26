@@ -165,41 +165,11 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
 @keyframes trmrk-theme-light_text-input-caret-positioner-none {
   from {
-    background: repeating-linear-gradient(to right, #8cf 0px, #8cf 100vw);
+    background: repeating-linear-gradient(to right, #2288ee 0px, #2288ee 100vw);
   }
 
   to {
-    background: repeating-linear-gradient(to right, #8cf 0px, #8cf 100vw);
-  }
-}
-
-@keyframes trmrk_text-input-caret-positioner-slide-once-anchor-left {
-  from {
-    left: -100vw;
-  }
-
-  to {
-    left: -99vw;
-  }
-}
-
-@keyframes trmrk_text-input-caret-positioner-slide-full-anchor-left {
-  from {
-    left: -100vw;
-  }
-
-  to {
-    left: 0vw;
-  }
-}
-
-@keyframes trmrk_text-input-caret-positioner-slide-anchor-left {
-  from {
-    left: -100vw;
-  }
-
-  to {
-    left: 0vw;
+    background: repeating-linear-gradient(to right, #2288ee 0px, #2288ee 100vw);
   }
 }
 
@@ -213,10 +183,32 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
     .trmrk-animator {
       &.trmrk-anchor-left {
-        background: repeating-linear-gradient(to right, #121212 0px, #121212 1.25em, #444 1.25em, #444 25vw);
+        background: repeating-linear-gradient(to right, #222222 0px, #222222 1.25em, #444 1.25em, #444 25vw);
 
-        &.trmrk-slide-once {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-anchor-left,
+        &.trmrk-slide-once-speed-x1 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
+            trmrk-theme-dark_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x2 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
+            trmrk-theme-dark_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x3 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
             trmrk-theme-dark_text-input-caret-positioner-none;
 
           animation-delay: 0s, 0.1s;
@@ -227,15 +219,41 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
         }
       }
 
-      &.trmrk-slide-speed-x1 {
-        animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
-        animation-duration: 10s;
-        animation-timing-function: steps(500);
-        animation-iteration-count: 1000000;
-      }
-
       &.trmrk-anchor-right {
-        background: repeating-linear-gradient(to left, #121212 0px, #121212 1.25em, #444 1.25em, #444 25vw);
+        background: repeating-linear-gradient(to left, #222222 0px, #222222 1.25em, #444 1.25em, #444 25vw);
+
+        &.trmrk-slide-once-speed-x1 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
+            trmrk-theme-dark_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x2 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
+            trmrk-theme-dark_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x3 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
+            trmrk-theme-dark_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
       }
     }
   }
@@ -246,14 +264,36 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
   .trmrk-popover-top-border,
   .trmrk-popover-bottom-border {
-    background-color: #8cf;
+    background-color: #44aaff;
 
     .trmrk-animator {
       &.trmrk-anchor-left {
-        background: repeating-linear-gradient(to right, #04c 0px, #04c 1.25em, #8cf 1.25em, #8cf 25vw);
+        background: repeating-linear-gradient(to right, #1060c0 0px, #1060c0 1.25em, #44aaff 1.25em, #44aaff 25vw);
 
-        &.trmrk-slide-once {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-anchor-left,
+        &.trmrk-slide-once-speed-x1 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
+            trmrk-theme-light_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x2 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
+            trmrk-theme-light_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x3 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
             trmrk-theme-light_text-input-caret-positioner-none;
 
           animation-delay: 0s, 0.1s;
@@ -264,15 +304,41 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
         }
       }
 
-      &.trmrk-slide-speed-x1 {
-        animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
-        animation-duration: 10s;
-        animation-timing-function: steps(500);
-        animation-iteration-count: 1000000;
-      }
-
       &.trmrk-anchor-right {
-        background: repeating-linear-gradient(to left, #04c 0px, #04c 1.25em, #8cf 1.25em, #8cf 25vw);
+        background: repeating-linear-gradient(to left, #1060c0 0px, #1060c0 1.25em, #44aaff 1.25em, #44aaff 25vw);
+
+        &.trmrk-slide-once-speed-x1 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
+            trmrk-theme-light_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x2 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
+            trmrk-theme-light_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
+
+        &.trmrk-slide-once-speed-x3 {
+          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
+            trmrk-theme-light_text-input-caret-positioner-none;
+
+          animation-delay: 0s, 0.1s;
+          animation-duration: 0.1s, 0.001s;
+
+          animation-timing-function: steps(10), steps(10);
+          animation-fill-mode: forwards, forwards;
+        }
       }
     }
   }
