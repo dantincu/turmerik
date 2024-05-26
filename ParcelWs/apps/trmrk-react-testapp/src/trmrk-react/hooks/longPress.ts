@@ -17,7 +17,7 @@ export const AFTER_LONG_PRESS_LOOP_INTERVAL_MS = 100;
 export const AFTER_LONG_PRESS_LOOP_TIMEOUT_MS = 30 * 1000;
 
 export interface UseLongPressProps {
-  btnElem: HTMLElement | null;
+  // btnElem: HTMLElement | null;
   requiredButton?: number | null | undefined;
   longPressIntervalMs?: number | null | undefined;
   afterLongPressLoopIntervalMs?: number | null | undefined;
@@ -58,7 +58,8 @@ export interface UseLongPressProps {
 }
 
 export interface UseLongPressResult {
-  clearAll: () => void;
+  registerAll: (btnElem: HTMLElement) => void;
+  unregisterAll: (btnElem?: HTMLElement | null | null) => void;
 }
 
 export const normRequiredButton = (requiredButton: number | null | undefined) =>
@@ -121,7 +122,8 @@ export default function useLongPress(props: UseLongPressProps) {
     normRequiredButton(props.requiredButton)
   );
 
-  const [propsBtnElem, setPropsBtnElem] = React.useState(props.btnElem);
+  // const [propsBtnElem, setPropsBtnElem] = React.useState(props.btnElem);
+  const btnElRef = React.useRef<HTMLElement | null>(null);
 
   const [propsLongPressIntervalMs, setPropsLongPressIntervalMs] =
     React.useState(normLongPressIntervalMs(props.longPressIntervalMs));
@@ -143,7 +145,7 @@ export default function useLongPress(props: UseLongPressProps) {
   const [requiredButton, setRequiredButton] =
     React.useState(propsRequiredButton);
 
-  const [btnElem, setBtnElem] = React.useState(props.btnElem);
+  // const [btnElem, setBtnElem] = React.useState(props.btnElem);
 
   const [longPressIntervalMs, setLongPressIntervalMs] = React.useState(
     propsLongPressIntervalMs
@@ -169,8 +171,10 @@ export default function useLongPress(props: UseLongPressProps) {
 
   const onTouchStartOrMouseDown = React.useCallback(
     (ev: TouchEvent | MouseEvent) => {
-      clearAllCore();
+      const btnElem = ev.target as HTMLElement;
+
       if (btnElem) {
+        clearAll(btnElem);
         const coords = getSingleTouchOrClick(ev);
 
         if (coords) {
@@ -196,14 +200,15 @@ export default function useLongPress(props: UseLongPressProps) {
     },
     [
       props.requiredButton,
-      props.btnElem,
+      // props.btnElem,
       propsRequiredButton,
-      propsBtnElem,
+      // propsBtnElem,
       propsLongPressIntervalMs,
       propsAfterLongPressLoopIntervalMs,
       propsAfterLongPressLoopTimeoutMs,
       requiredButton,
-      btnElem,
+      // btnElem,
+      btnElRef,
       longPressIntervalMs,
       afterLongPressLoopIntervalMs,
       afterLongPressLoopTimeoutMs,
@@ -212,6 +217,8 @@ export default function useLongPress(props: UseLongPressProps) {
 
   const onTouchEndOrMouseUpOrTouchOrMouseMove = React.useCallback(
     (ev: TouchEvent | MouseEvent, isMouseMove: boolean) => {
+      const btnElem = ev.target as HTMLElement;
+
       if (btnElem) {
         const coords = getSingleTouchOrClick(ev);
         let $continue: boolean = !isMouseMove || !!coords;
@@ -245,12 +252,13 @@ export default function useLongPress(props: UseLongPressProps) {
             }
           }
 
-          clearAllCore();
+          clearAll(btnElem);
         }
       }
     },
     [
-      btnElem,
+      // btnElem,
+      btnElRef,
       requiredButton,
       longPressIntervalMs,
       afterLongPressLoopIntervalMs,
@@ -263,7 +271,8 @@ export default function useLongPress(props: UseLongPressProps) {
       onTouchEndOrMouseUpOrTouchOrMouseMove(ev, false);
     },
     [
-      btnElem,
+      // btnElem,
+      btnElRef,
       requiredButton,
       longPressIntervalMs,
       afterLongPressLoopIntervalMs,
@@ -276,7 +285,8 @@ export default function useLongPress(props: UseLongPressProps) {
       onTouchEndOrMouseUpOrTouchOrMouseMove(ev, true);
     },
     [
-      btnElem,
+      // btnElem,
+      btnElRef,
       requiredButton,
       longPressIntervalMs,
       afterLongPressLoopIntervalMs,
@@ -320,7 +330,11 @@ export default function useLongPress(props: UseLongPressProps) {
   }, []);
 
   const onAfterLongPressLoopTimeout = React.useCallback(() => {
-    clearAllCore();
+    const btnElem = btnElRef.current;
+
+    if (btnElem) {
+      clearAll(btnElem);
+    }
 
     if (props.afterLongPressLoopTimeout) {
       props.afterLongPressLoopTimeout();
@@ -331,57 +345,93 @@ export default function useLongPress(props: UseLongPressProps) {
     }
   }, [afterLongPressLoopIntervalIdRef, afterLongPressLoopTimeoutIdRef]);
 
-  const clearAll = React.useCallback(() => {
-    if (btnElem) {
-      clearAllCore();
-      btnElem.removeEventListener("mousedown", onTouchStartOrMouseDown);
-      btnElem.removeEventListener("touchstart", onTouchStartOrMouseDown);
-    }
-  }, [
-    props.requiredButton,
-    props.btnElem,
-    propsRequiredButton,
-    propsBtnElem,
-    propsLongPressIntervalMs,
-    propsAfterLongPressLoopIntervalMs,
-    propsAfterLongPressLoopTimeoutMs,
-    requiredButton,
-    btnElem,
-    longPressIntervalMs,
-    afterLongPressLoopIntervalMs,
-    afterLongPressLoopTimeoutMs,
-  ]);
+  const unregisterAll = React.useCallback(
+    (btnElem: HTMLElement | null | undefined) => {
+      // console.log("unregisterAll", btnElem, new Date());
+      btnElem ??= btnElRef.current;
 
-  const clearAllCore = React.useCallback(() => {
-    if (btnElem) {
-      clearTimeoutIfReq(longPressTimeoutIdRef);
-      clearIntervalIfReq(afterLongPressLoopIntervalIdRef);
-      clearTimeoutIfReq(afterLongPressLoopTimeoutIdRef);
-      btnElem.removeEventListener("mouseup", onTouchEndOrMouseUp);
-      btnElem.removeEventListener("touchend", onTouchEndOrMouseUp);
-      btnElem.removeEventListener("mousemove", onTouchOrMouseMove);
-      btnElem.removeEventListener("touchmove", onTouchOrMouseMove);
-      longPressIntervalPassedRef.current = false;
-    }
-  }, [
-    props.requiredButton,
-    props.btnElem,
-    propsRequiredButton,
-    propsBtnElem,
-    propsLongPressIntervalMs,
-    propsAfterLongPressLoopIntervalMs,
-    propsAfterLongPressLoopTimeoutMs,
-    requiredButton,
-    btnElem,
-    longPressIntervalMs,
-    afterLongPressLoopIntervalMs,
-    afterLongPressLoopTimeoutMs,
-  ]);
+      if (btnElem) {
+        clearAll(btnElem);
+        btnElem.removeEventListener("mousedown", onTouchStartOrMouseDown);
+        btnElem.removeEventListener("touchstart", onTouchStartOrMouseDown);
+      }
+    },
+    [
+      props.requiredButton,
+      // props.btnElem,
+      propsRequiredButton,
+      // propsBtnElem,
+      propsLongPressIntervalMs,
+      propsAfterLongPressLoopIntervalMs,
+      propsAfterLongPressLoopTimeoutMs,
+      requiredButton,
+      // btnElem,
+      btnElRef,
+      longPressIntervalMs,
+      afterLongPressLoopIntervalMs,
+      afterLongPressLoopTimeoutMs,
+    ]
+  );
+
+  const clearAll = React.useCallback(
+    (btnElem: HTMLElement) => {
+      if (btnElem) {
+        clearTimeoutIfReq(longPressTimeoutIdRef);
+        clearIntervalIfReq(afterLongPressLoopIntervalIdRef);
+        clearTimeoutIfReq(afterLongPressLoopTimeoutIdRef);
+        btnElem.removeEventListener("mouseup", onTouchEndOrMouseUp);
+        btnElem.removeEventListener("touchend", onTouchEndOrMouseUp);
+        btnElem.removeEventListener("mousemove", onTouchOrMouseMove);
+        btnElem.removeEventListener("touchmove", onTouchOrMouseMove);
+        longPressIntervalPassedRef.current = false;
+      }
+    },
+    [
+      props.requiredButton,
+      // props.btnElem,
+      propsRequiredButton,
+      // propsBtnElem,
+      propsLongPressIntervalMs,
+      propsAfterLongPressLoopIntervalMs,
+      propsAfterLongPressLoopTimeoutMs,
+      requiredButton,
+      // btnElem,
+      btnElRef,
+      longPressIntervalMs,
+      afterLongPressLoopIntervalMs,
+      afterLongPressLoopTimeoutMs,
+    ]
+  );
+
+  const registerAll = React.useCallback(
+    (btnElem: HTMLElement) => {
+      // console.log("registerAll", btnElem, new Date());
+      btnElRef.current = btnElem;
+
+      btnElem.addEventListener("mousedown", onTouchStartOrMouseDown);
+      btnElem.addEventListener("touchstart", onTouchStartOrMouseDown);
+    },
+    [
+      props.requiredButton,
+      // props.btnElem,
+      propsRequiredButton,
+      // propsBtnElem,
+      propsLongPressIntervalMs,
+      propsAfterLongPressLoopIntervalMs,
+      propsAfterLongPressLoopTimeoutMs,
+      requiredButton,
+      // btnElem,
+      btnElRef,
+      longPressIntervalMs,
+      afterLongPressLoopIntervalMs,
+      afterLongPressLoopTimeoutMs,
+    ]
+  );
 
   React.useEffect(() => {
     const newPropsRequiredButtonVal = normRequiredButton(props.requiredButton);
 
-    const newPropsBtnElemVal = props.btnElem;
+    // const newPropsBtnElemVal = props.btnElem;
 
     const newLongPressIntervalMsVal = normLongPressIntervalMs(
       props.longPressIntervalMs
@@ -398,7 +448,7 @@ export default function useLongPress(props: UseLongPressProps) {
     const setNewPropsRequiredButtonVal =
       newPropsRequiredButtonVal !== propsRequiredButton;
 
-    const setNewPropsBtnElemVal = newPropsBtnElemVal !== propsBtnElem;
+    // const setNewPropsBtnElemVal = newPropsBtnElemVal !== propsBtnElem;
 
     const setNewLongPressIntervalMsVal =
       newLongPressIntervalMsVal !== propsLongPressIntervalMs;
@@ -409,70 +459,49 @@ export default function useLongPress(props: UseLongPressProps) {
     const setNewAfterLongPressLoopTimeoutMsVal =
       newAfterLongPressLoopTimeoutMsVal !== propsAfterLongPressLoopTimeoutMs;
 
-    let attachHandlers = !(
-      setNewPropsRequiredButtonVal ||
-      setNewPropsBtnElemVal ||
-      setNewLongPressIntervalMsVal ||
-      setNewAfterLongPressLoopIntervalMsVal ||
-      setNewAfterLongPressLoopTimeoutMsVal
-    );
-
-    if (attachHandlers) {
-      if (btnElem) {
-        btnElem.addEventListener("mousedown", onTouchStartOrMouseDown);
-        btnElem.addEventListener("touchstart", onTouchStartOrMouseDown);
-      }
-    } else {
-      if (setNewPropsBtnElemVal) {
-        setPropsRequiredButton(newPropsRequiredButtonVal);
-        setRequiredButton(newPropsRequiredButtonVal);
-      }
-
-      if (setNewPropsBtnElemVal) {
-        setPropsBtnElem(newPropsBtnElemVal);
-        setBtnElem(newPropsBtnElemVal);
-      }
-
-      if (setNewLongPressIntervalMsVal) {
-        setPropsLongPressIntervalMs(newLongPressIntervalMsVal);
-        setLongPressIntervalMs(newLongPressIntervalMsVal);
-      }
-
-      if (setNewAfterLongPressLoopIntervalMsVal) {
-        setPropsAfterLongPressLoopIntervalMs(
-          newAfterLongPressLoopIntervalMsVal
-        );
-        setAfterLongPressLoopIntervalMs(newAfterLongPressLoopIntervalMsVal);
-      }
-
-      if (setNewAfterLongPressLoopTimeoutMsVal) {
-        setPropsAfterLongPressLoopTimeoutMs(newAfterLongPressLoopTimeoutMsVal);
-        setAfterLongPressLoopTimeoutMs(newAfterLongPressLoopTimeoutMsVal);
-      }
+    if (setNewPropsRequiredButtonVal) {
+      setPropsRequiredButton(newPropsRequiredButtonVal);
+      setRequiredButton(newPropsRequiredButtonVal);
     }
 
-    if (attachHandlers) {
-      return () => {
-        clearAll();
-      };
+    /* if (setNewPropsBtnElemVal) {
+      setPropsBtnElem(newPropsBtnElemVal);
+      setBtnElem(newPropsBtnElemVal);
+    } */
+
+    if (setNewLongPressIntervalMsVal) {
+      setPropsLongPressIntervalMs(newLongPressIntervalMsVal);
+      setLongPressIntervalMs(newLongPressIntervalMsVal);
+    }
+
+    if (setNewAfterLongPressLoopIntervalMsVal) {
+      setPropsAfterLongPressLoopIntervalMs(newAfterLongPressLoopIntervalMsVal);
+      setAfterLongPressLoopIntervalMs(newAfterLongPressLoopIntervalMsVal);
+    }
+
+    if (setNewAfterLongPressLoopTimeoutMsVal) {
+      setPropsAfterLongPressLoopTimeoutMs(newAfterLongPressLoopTimeoutMsVal);
+      setAfterLongPressLoopTimeoutMs(newAfterLongPressLoopTimeoutMsVal);
     }
   }, [
     props.requiredButton,
-    props.btnElem,
+    // props.btnElem,
     propsRequiredButton,
-    propsBtnElem,
+    // propsBtnElem,
     propsLongPressIntervalMs,
     propsAfterLongPressLoopIntervalMs,
     propsAfterLongPressLoopTimeoutMs,
     requiredButton,
-    btnElem,
+    // btnElem,
+    btnElRef,
     longPressIntervalMs,
     afterLongPressLoopIntervalMs,
     afterLongPressLoopTimeoutMs,
   ]);
 
   const retObj: UseLongPressResult = {
-    clearAll,
+    registerAll,
+    unregisterAll,
   };
 
   return retObj;

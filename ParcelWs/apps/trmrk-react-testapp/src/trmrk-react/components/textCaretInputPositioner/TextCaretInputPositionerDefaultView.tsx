@@ -23,6 +23,14 @@ export interface TextCaretInputPositionerDefaultViewProps {
   jumpPrevWordShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpPrevWordLongPressStarted: () => void;
   jumpPrevWordLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
+  jumpPrevCharTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpPrevCharShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
+  jumpPrevCharLongPressStarted: () => void;
+  jumpPrevCharLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
+  jumpNextCharTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpNextCharShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
+  jumpNextCharLongPressStarted: () => void;
+  jumpNextCharLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
   jumpNextWordTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
   jumpNextWordShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpNextWordLongPressStarted: () => void;
@@ -33,15 +41,19 @@ export default function TextCaretInputPositionerDefaultView(
   props: TextCaretInputPositionerDefaultViewProps
 ) {
   const jumpPrevWordBtnElemRef = React.useRef<HTMLButtonElement | null>(null);
+  const jumpPrevCharBtnElemRef = React.useRef<HTMLButtonElement | null>(null);
+  const jumpNextCharBtnElemRef = React.useRef<HTMLButtonElement | null>(null);
   const jumpNextWordBtnElemRef = React.useRef<HTMLButtonElement | null>(null);
 
   const [ jumpPrevWordBtnElem, setJumpPrevWordBtnElem ] = React.useState<HTMLButtonElement | null>(jumpPrevWordBtnElemRef.current);
+  const [ jumpPrevCharBtnElem, setJumpPrevCharBtnElem ] = React.useState<HTMLButtonElement | null>(jumpPrevCharBtnElemRef.current);
+  const [ jumpNextCharBtnElem, setJumpNextCharBtnElem ] = React.useState<HTMLButtonElement | null>(jumpNextCharBtnElemRef.current);
   const [ jumpNextWordBtnElem, setJumpNextWordBtnElem ] = React.useState<HTMLButtonElement | null>(jumpNextWordBtnElemRef.current);
 
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(props.inputIsMultiline);
 
   const jumpPrevWordLongPress = longPress({
-    btnElem: jumpPrevWordBtnElem,
+    // btnElem: jumpPrevWordBtnElem,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevWordTouchStartOrMouseDown,
     shortPressed: props.jumpPrevWordShortPressed,
@@ -49,8 +61,26 @@ export default function TextCaretInputPositionerDefaultView(
     longPressEnded: props.jumpPrevWordLongPressEnded
   });
 
+  const jumpPrevCharLongPress = longPress({
+    // btnElem: jumpPrevCharBtnElem,
+    longPressIntervalMs: longPressIntervalMs,
+    touchStartOrMouseDown: props.jumpPrevCharTouchStartOrMouseDown,
+    shortPressed: props.jumpPrevCharShortPressed,
+    longPressStarted: props.jumpPrevCharLongPressStarted,
+    longPressEnded: props.jumpPrevCharLongPressEnded
+  });
+
+  const jumpNextCharLongPress = longPress({
+    // btnElem: jumpNextCharBtnElem,
+    longPressIntervalMs: longPressIntervalMs,
+    touchStartOrMouseDown: props.jumpNextCharTouchStartOrMouseDown,
+    shortPressed: props.jumpNextCharShortPressed,
+    longPressStarted: props.jumpNextCharLongPressStarted,
+    longPressEnded: props.jumpNextCharLongPressEnded
+  });
+
   const jumpNextWordLongPress = longPress({
-    btnElem: jumpNextWordBtnElem,
+    // btnElem: jumpNextWordBtnElem,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextWordTouchStartOrMouseDown,
     shortPressed: props.jumpNextWordShortPressed,
@@ -66,29 +96,67 @@ export default function TextCaretInputPositionerDefaultView(
 
   React.useEffect(() => {
     const jumpPrevWordBtnElemVal = jumpPrevWordBtnElemRef.current;
+    const jumpPrevCharBtnElemVal = jumpPrevCharBtnElemRef.current;
+    const jumpNextCharBtnElemVal = jumpNextCharBtnElemRef.current;
     const jumpNextWordBtnElemVal = jumpNextWordBtnElemRef.current;
 
+    let registerEvents = true;
+
     if (jumpPrevWordBtnElemVal !== jumpPrevWordBtnElem) {
+      registerEvents = false;
       setJumpPrevWordBtnElem(jumpPrevWordBtnElemVal);
     }
 
+    if (jumpPrevCharBtnElemVal !== jumpPrevCharBtnElem) {
+      registerEvents = false;
+      setJumpPrevCharBtnElem(jumpPrevCharBtnElemVal);
+    }
+
     if (jumpNextWordBtnElemVal !== jumpNextWordBtnElem) {
+      registerEvents = false;
       setJumpNextWordBtnElem(jumpNextWordBtnElemVal);
     }
 
+    if (jumpNextCharBtnElemVal !== jumpNextCharBtnElem) {
+      registerEvents = false;
+      setJumpNextCharBtnElem(jumpNextCharBtnElemVal);
+    }
+
     if (props.inputIsMultiline !== inputIsMultiline) {
+      registerEvents = false;
       setInputIsMultiline(props.inputIsMultiline);
     }
 
+    registerEvents = registerEvents && [jumpPrevWordBtnElem, jumpPrevCharBtnElem, jumpNextWordBtnElem, jumpNextCharBtnElem].map(
+      elem => !!elem
+    ).reduce((a, b) => a && b);
+
+    // console.log("registerEvents", registerEvents, jumpPrevWordBtnElem, jumpPrevCharBtnElem, jumpNextWordBtnElem, jumpNextCharBtnElem);
+
+    if (registerEvents) {
+      jumpPrevWordLongPress.registerAll(jumpPrevWordBtnElem!);
+      jumpPrevCharLongPress.registerAll(jumpPrevCharBtnElem!);
+      jumpNextCharLongPress.registerAll(jumpNextCharBtnElem!);
+      jumpNextWordLongPress.registerAll(jumpNextWordBtnElem!);
+    }
+
     return () => {
-      jumpPrevWordLongPress.clearAll();
-      jumpNextWordLongPress.clearAll();
+      if (registerEvents) {
+        jumpPrevWordLongPress.unregisterAll();
+        jumpPrevCharLongPress.unregisterAll();
+        jumpNextCharLongPress.unregisterAll();
+        jumpNextWordLongPress.unregisterAll();
+    }
     }
   }, [props.inputIsMultiline,
     inputIsMultiline,
     jumpPrevWordBtnElemRef,
+    jumpPrevCharBtnElemRef,
+    jumpNextCharBtnElemRef,
     jumpNextWordBtnElemRef,
     jumpPrevWordBtnElem,
+    jumpPrevCharBtnElem,
+    jumpNextCharBtnElem,
     jumpNextWordBtnElem
   ]);
 
@@ -103,10 +171,10 @@ export default function TextCaretInputPositionerDefaultView(
     <IconButton className="trmrk-icon-btn trmrk-jump-prev-word-btn" ref={el => jumpPrevWordBtnElemRef.current = el}>
       <SkipPreviousIcon className="trmrk-skip-previous-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-btn">
+    <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-btn" ref={el => jumpPrevCharBtnElemRef.current = el}>
       <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-next-char-btn">
+    <IconButton className="trmrk-icon-btn trmrk-jump-next-char-btn" ref={el => jumpNextCharBtnElemRef.current = el}>
       <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
 
     <IconButton className="trmrk-icon-btn trmrk-jump-next-word-btn" ref={el => jumpNextWordBtnElemRef.current = el}>

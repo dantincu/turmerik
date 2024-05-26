@@ -97,7 +97,7 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
     }
 
     return () => {
-      longPressObj1.clearAll();
+      longPressObj1.unregisterAll();
     }
   }, [longPressObj1, longPressObj2, btn1ElemRef, btn2ElemRef]);
 

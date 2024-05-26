@@ -4,7 +4,7 @@
   }
 
   to {
-    left: -99vw;
+    left: -98vw;
   }
 }
 
@@ -14,7 +14,7 @@
   }
 
   to {
-    left: -98vw;
+    left: -96vw;
   }
 }
 
@@ -24,7 +24,7 @@
   }
 
   to {
-    left: -97vw;
+    left: -94vw;
   }
 }
 
@@ -44,7 +44,7 @@
   }
 
   to {
-    left: 99vw;
+    left: 98vw;
   }
 }
 
@@ -54,7 +54,7 @@
   }
 
   to {
-    left: 98vw;
+    left: 96vw;
   }
 }
 
@@ -64,7 +64,7 @@
   }
 
   to {
-    left: 97vw;
+    left: 94vw;
   }
 }
 
@@ -107,21 +107,21 @@
       &.trmrk-anchor-left {
         &.trmrk-slide-speed-x1 {
           animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
-          animation-duration: 10s;
+          animation-duration: 5s;
           animation-timing-function: steps(500);
           animation-iteration-count: 1000000;
         }
 
         &.trmrk-slide-speed-x2 {
           animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
-          animation-duration: 6.7s;
+          animation-duration: 3.3s;
           animation-timing-function: steps(500);
           animation-iteration-count: 1000000;
         }
 
         &.trmrk-slide-speed-x3 {
           animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-left;
-          animation-duration: 3.3s;
+          animation-duration: 1.67s;
           animation-timing-function: steps(500);
           animation-iteration-count: 1000000;
         }
@@ -130,21 +130,21 @@
       &.trmrk-anchor-right {
         &.trmrk-slide-speed-x1 {
           animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-right;
-          animation-duration: 10s;
+          animation-duration: 5s;
           animation-timing-function: steps(500);
           animation-iteration-count: 1000000;
         }
 
         &.trmrk-slide-speed-x2 {
           animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-right;
-          animation-duration: 6.7s;
+          animation-duration: 3.3s;
           animation-timing-function: steps(500);
           animation-iteration-count: 1000000;
         }
 
         &.trmrk-slide-speed-x3 {
           animation-name: trmrk_text-input-caret-positioner-slide-full-anchor-right;
-          animation-duration: 3.3s;
+          animation-duration: 1.67s;
           animation-timing-function: steps(500);
           animation-iteration-count: 1000000;
         }

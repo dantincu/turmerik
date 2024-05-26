@@ -251,8 +251,40 @@ export default function TextInputCaretPositionerPopover(
     viewBtnLongPressStarted(2);
   }, []);
 
-  const jumpPrevWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+  const defaultViewJumpPrevWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
     viewBtnLongPressEnded(true, true, 2);
+  }, []);
+
+  const defaultViewJumpPrevCharTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const defaultViewJumpPrevCharShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, true, 1);
+  }, []);
+
+  const defaultViewJumpPrevCharLongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(1);
+  }, []);
+
+  const defaultViewJumpPrevCharLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, true, 1);
+  }, []);
+
+  const defaultViewJumpNextCharTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const defaultViewJumpNextCharShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, false, 1);
+  }, []);
+
+  const defaultViewJumpNextCharLongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(1);
+  }, []);
+
+  const defaultViewJumpNextCharLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, false, 1);
   }, []);
 
   const defaultViewJumpNextWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
@@ -267,7 +299,7 @@ export default function TextInputCaretPositionerPopover(
     viewBtnLongPressStarted(2);
   }, []);
 
-  const jumpNextWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+  const defaultViewJumpNextWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
     viewBtnLongPressEnded(false, false, 2);
   }, []);
 
@@ -356,11 +388,19 @@ export default function TextInputCaretPositionerPopover(
             jumpPrevWordTouchStartOrMouseDown={defaultViewJumpPrevWordTouchStartOrMouseDown}
             jumpPrevWordShortPressed={defaultViewJumpPrevWordShortPressed}
             jumpPrevWordLongPressStarted={defaultViewJumpPrevWordLongPressStarted}
-            jumpPrevWordLongPressEnded={jumpPrevWordLongPressEnded}
+            jumpPrevWordLongPressEnded={defaultViewJumpPrevWordLongPressEnded}
+            jumpPrevCharTouchStartOrMouseDown={defaultViewJumpPrevCharTouchStartOrMouseDown}
+            jumpPrevCharShortPressed={defaultViewJumpPrevCharShortPressed}
+            jumpPrevCharLongPressStarted={defaultViewJumpPrevCharLongPressStarted}
+            jumpPrevCharLongPressEnded={defaultViewJumpPrevCharLongPressEnded}
+            jumpNextCharTouchStartOrMouseDown={defaultViewJumpNextCharTouchStartOrMouseDown}
+            jumpNextCharShortPressed={defaultViewJumpNextCharShortPressed}
+            jumpNextCharLongPressStarted={defaultViewJumpNextCharLongPressStarted}
+            jumpNextCharLongPressEnded={defaultViewJumpNextCharLongPressEnded}
             jumpNextWordTouchStartOrMouseDown={defaultViewJumpNextWordTouchStartOrMouseDown}
             jumpNextWordShortPressed={defaultViewJumpNextWordShortPressed}
             jumpNextWordLongPressStarted={defaultViewJumpNextWordLongPressStarted}
-            jumpNextWordLongPressEnded={jumpNextWordLongPressEnded} />;
+            jumpNextWordLongPressEnded={defaultViewJumpNextWordLongPressEnded} />;
       }
     }
   }, [inputIsMultiline, stateType, minimized, showOptions]);
