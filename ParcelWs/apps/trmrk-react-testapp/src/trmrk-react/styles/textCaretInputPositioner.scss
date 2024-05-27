@@ -254,7 +254,19 @@
       .trmrk-arrow-left-icon,
       .trmrk-arrow-right-icon {
         position: absolute;
-        top: 0em;
+      }
+    }
+
+    .trmrk-jump-prev-line-x3-btn,
+    .trmrk-jump-prev-line-x2-btn,
+    .trmrk-jump-prev-line-x1-btn,
+    .trmrk-jump-next-line-x1-btn,
+    .trmrk-jump-next-line-x2-btn,
+    .trmrk-jump-next-line-x3-btn {
+      .trmrk-arrow-up-icon,
+      .trmrk-arrow-down-icon {
+        position: absolute;
+        font-size: 2em;
       }
     }
 
@@ -295,6 +307,54 @@
       
       .trmrk-arrow-right-icon:nth-child(3) {
         left: 0.25em;
+      }
+    }
+
+    .trmrk-jump-prev-line-x3-btn {
+      .trmrk-arrow-up-icon:first-child {
+        top: -0.275em;
+      }
+      
+      .trmrk-arrow-up-icon:nth-child(2) {
+        top: -0.055em;
+      }
+      
+      .trmrk-arrow-up-icon:nth-child(3) {
+        top: 0.15em;
+      }
+    }
+
+    .trmrk-jump-prev-line-x2-btn {
+      .trmrk-arrow-up-icon:first-child {
+        top: -0.15em;
+      }
+
+      .trmrk-arrow-up-icon:nth-child(2) {
+        top: 0.05em;
+      }
+    }
+
+    .trmrk-jump-next-line-x2-btn {
+      .trmrk-arrow-down-icon:first-child {
+        top: -0.15em;
+      }
+
+      .trmrk-arrow-down-icon:nth-child(2) {
+        top: 0.05em;
+      }
+    }
+
+    .trmrk-jump-next-line-x3-btn {
+      .trmrk-arrow-down-icon:first-child {
+        top: -0.275em;
+      }
+      
+      .trmrk-arrow-down-icon:nth-child(2) {
+        top: -0.055em;
+      }
+      
+      .trmrk-arrow-down-icon:nth-child(3) {
+        top: 0.15em;
       }
     }
   }

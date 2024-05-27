@@ -495,6 +495,102 @@ export default function TextInputCaretPositionerPopover(
     viewBtnLongPressEnded(false, false, 3);
   }, []);
 
+  const linesViewJumpPrevLineX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const linesViewJumpPrevLineX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, true, 3);
+  }, []);
+
+  const linesViewJumpPrevLineX3LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(3);
+  }, []);
+
+  const linesViewJumpPrevLineX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, true, 3);
+  }, []);
+
+  const linesViewJumpPrevLineX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const linesViewJumpPrevLineX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, true, 2);
+  }, []);
+
+  const linesViewJumpPrevLineX2LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(2);
+  }, []);
+
+  const linesViewJumpPrevLineX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, true, 2);
+  }, []);
+
+  const linesViewJumpPrevLineX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const linesViewJumpPrevLineX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, true, 1);
+  }, []);
+
+  const linesViewJumpPrevLineX1LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(1);
+  }, []);
+
+  const linesViewJumpPrevLineX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, true, 1);
+  }, []);
+
+  const linesViewJumpNextLineX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const linesViewJumpNextLineX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, false, 1);
+  }, []);
+
+  const linesViewJumpNextLineX1LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(1);
+  }, []);
+
+  const linesViewJumpNextLineX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, false, 1);
+  }, []);
+
+  const linesViewJumpNextLineX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const linesViewJumpNextLineX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, false, 2);
+  }, []);
+
+  const linesViewJumpNextLineX2LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(2);
+  }, []);
+
+  const linesViewJumpNextLineX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, false, 2);
+  }, []);
+
+  const linesViewJumpNextLineX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const linesViewJumpNextLineX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, false, 3);
+  }, []);
+
+  const linesViewJumpNextLineX3LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(3);
+  }, []);
+
+  const linesViewJumpNextLineX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, false, 3);
+  }, []);
+
   React.useEffect(() => {
     const inFrontOfAllNewVal = normalizeInFrontOfAll(props.inFrontOfAll);
     const mainEl = mainElRef.current;
@@ -615,7 +711,31 @@ export default function TextInputCaretPositionerPopover(
             return <TextCaretInputPositionerJumpLinesView
               nextViewClicked={onJumpLinesNextViewClick}
               selectionIsEnabled={selectionIsEnabled}
-              selectionIsEnabledToggled={selectionIsEnabledToggled} />;
+              selectionIsEnabledToggled={selectionIsEnabledToggled}
+              jumpPrevLineX3TouchStartOrMouseDown={linesViewJumpPrevLineX3TouchStartOrMouseDown}
+              jumpPrevLineX3ShortPressed={linesViewJumpPrevLineX3ShortPressed}
+              jumpPrevLineX3LongPressStarted={linesViewJumpPrevLineX3LongPressStarted}
+              jumpPrevLineX3LongPressEnded={linesViewJumpPrevLineX3LongPressEnded}
+              jumpPrevLineX2TouchStartOrMouseDown={linesViewJumpPrevLineX2TouchStartOrMouseDown}
+              jumpPrevLineX2ShortPressed={linesViewJumpPrevLineX2ShortPressed}
+              jumpPrevLineX2LongPressStarted={linesViewJumpPrevLineX2LongPressStarted}
+              jumpPrevLineX2LongPressEnded={linesViewJumpPrevLineX2LongPressEnded}
+              jumpPrevLineX1TouchStartOrMouseDown={linesViewJumpPrevLineX1TouchStartOrMouseDown}
+              jumpPrevLineX1ShortPressed={linesViewJumpPrevLineX1ShortPressed}
+              jumpPrevLineX1LongPressStarted={linesViewJumpPrevLineX1LongPressStarted}
+              jumpPrevLineX1LongPressEnded={linesViewJumpPrevLineX1LongPressEnded}
+              jumpNextLineX1TouchStartOrMouseDown={linesViewJumpNextLineX1TouchStartOrMouseDown}
+              jumpNextLineX1ShortPressed={linesViewJumpNextLineX1ShortPressed}
+              jumpNextLineX1LongPressStarted={linesViewJumpNextLineX1LongPressStarted}
+              jumpNextLineX1LongPressEnded={linesViewJumpNextLineX1LongPressEnded}
+              jumpNextLineX2TouchStartOrMouseDown={linesViewJumpNextLineX2TouchStartOrMouseDown}
+              jumpNextLineX2ShortPressed={linesViewJumpNextLineX2ShortPressed}
+              jumpNextLineX2LongPressStarted={linesViewJumpNextLineX2LongPressStarted}
+              jumpNextLineX2LongPressEnded={linesViewJumpNextLineX2LongPressEnded}
+              jumpNextLineX3TouchStartOrMouseDown={linesViewJumpNextLineX3TouchStartOrMouseDown}
+              jumpNextLineX3ShortPressed={linesViewJumpNextLineX3ShortPressed}
+              jumpNextLineX3LongPressStarted={linesViewJumpNextLineX3LongPressStarted}
+              jumpNextLineX3LongPressEnded={linesViewJumpNextLineX3LongPressEnded} />;
           }
           
           return null;
