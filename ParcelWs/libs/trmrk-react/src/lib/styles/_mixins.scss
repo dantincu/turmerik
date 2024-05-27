@@ -1,3 +1,6 @@
+$app-bar-height: calc(2.5em + 6px);
+$app-bar-top-padding: 3px;
+
 @mixin scrollable($track, $thumb, $track-hover, $thumb-hover) {
   &::-webkit-scrollbar-corner {
     background-color: $track;

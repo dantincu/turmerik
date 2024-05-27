@@ -39,12 +39,12 @@ body, #app-root {
 
   &.trmrk-toggles-header {
     position: fixed;
-    top: 0px;
+    top: $app-bar-top-padding;
   }
 
   &.trmrk-toggles-footer {
     position: fixed;
-    bottom: 0px;
+    bottom: $app-bar-top-padding;
   }
 }
 
@@ -155,12 +155,12 @@ body, #app-root {
     height: 1.66em;
     position: relative;
     left: 0em;
+    top: $app-bar-top-padding;
   }
 
   .trmrk-icon-btn.trmrk-options-btn {
     right: 1.66em;
     position: absolute;
-    top: 0em;
     left: initial;
   }
 }
