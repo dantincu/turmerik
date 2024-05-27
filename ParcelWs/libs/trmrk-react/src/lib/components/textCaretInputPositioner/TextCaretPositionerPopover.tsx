@@ -198,7 +198,7 @@ export default function TextInputCaretPositionerPopover(
     } else {
       setStateType(TextCaretInputPositionerState.Default);
     }
-  }, [stateType]);
+  }, [stateType, inputIsMultiline]);
 
   const onJumpLinesNextViewClick = React.useCallback(() => {
     setStateType(TextCaretInputPositionerState.Default);
@@ -440,11 +440,15 @@ export default function TextInputCaretPositionerPopover(
       switch (stateType) {
         case TextCaretInputPositionerState.JumpSymbols:
           return <TextCaretInputPositionerJumpSymbolsView
-            nextViewClicked={onJumpSymbolsNextViewClick} />;
+            nextViewClicked={onJumpSymbolsNextViewClick}
+            selectionIsEnabled={selectionIsEnabled}
+            selectionIsEnabledToggled={selectionIsEnabledToggled} />;
         case TextCaretInputPositionerState.JumpLines:
           if (inputIsMultiline) {
             return <TextCaretInputPositionerJumpLinesView
-              nextViewClicked={onJumpLinesNextViewClick} />;
+              nextViewClicked={onJumpLinesNextViewClick}
+              selectionIsEnabled={selectionIsEnabled}
+              selectionIsEnabledToggled={selectionIsEnabledToggled} />;
           }
           
           return null;
