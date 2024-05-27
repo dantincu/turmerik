@@ -15,6 +15,7 @@ import { getAppTheme } from "../../app-theme/core";
 
 import TextCaretInputPositionerDefaultView from "./TextCaretInputPositionerDefaultView";
 import TextCaretInputPositionerOptionsView from "./TextCaretInputPositionerOptionsView";
+import FullScrollModeView from "./FullScrollModeView";
 import TextCaretInputPositionerJumpSymbolsView from "./TextCaretInputPositionerJumpSymbolsView";
 import TextCaretInputPositionerJumpLinesView from "./TextCaretInputPositionerJumpLinesView";
 
@@ -25,7 +26,6 @@ export enum TextCaretInputPositionerState {
 }
 
 export interface TextInputCaretPositionerPopoverProps {
-  isDarkMode: boolean;
   inputEl: HTMLElement;
   inFrontOfAll?: boolean | null | undefined;
   minimized?: boolean | null | undefined;
@@ -120,10 +120,6 @@ export default function TextInputCaretPositionerPopover(
   const [ linesJumpSpeedsArr, setLinesJumpSpeedsArr ] = React.useState(
     normalizeLinesJumpSpeedsArr(props.linesJumpSpeedsArr));
 
-  const appThemeClassName = getAppTheme({
-    isDarkMode: props.isDarkMode,
-  }).cssClassName;
-
   const moveUpOrDown = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, moveDirIsUp: boolean) => {
     const mainEl = mainElRef.current;
 
@@ -154,9 +150,6 @@ export default function TextInputCaretPositionerPopover(
     const newMinimizedVal = true;
     const newShowOptionsVal = false;
 
-    setMinimized(newMinimizedVal);
-    setShowOptions(newShowOptionsVal);
-
     if (props.minimizedToggled) {
       props.minimizedToggled(newMinimizedVal);
     }
@@ -166,49 +159,100 @@ export default function TextInputCaretPositionerPopover(
         newShowOptionsVal
       );
     }
+
+    setMinimized(newMinimizedVal);
+    setShowOptions(newShowOptionsVal);
   }, [minimized]);
 
   const mainBtnClicked = React.useCallback(() => {
     if (minimized) {
       const newMinimizedVal = false;
-      setMinimized(newMinimizedVal);
 
       if (props.minimizedToggled) {
         props.minimizedToggled(newMinimizedVal);
       }
+      
+      setMinimized(newMinimizedVal);
+    } else if (isFullViewScrollMode) {
+      const newIsFullViewScrollModeVal = false;
+
+      if (props.isFullViewScrollModeToggled) {
+        props.isFullViewScrollModeToggled(newIsFullViewScrollModeVal);
+      }
+
+      setIsFullViewScrollMode(newIsFullViewScrollModeVal); 
     } else {
       const newShowOptionsVal = !showOptions;
-      setShowOptions(newShowOptionsVal);
 
       if (props.showOptionsToggled) {
         props.showOptionsToggled(
           newShowOptionsVal
         );
       }
+      
+      setShowOptions(newShowOptionsVal);
     }
-  }, [minimized, showOptions]);
+  }, [minimized, isFullViewScrollMode, showOptions]);
 
   const onDefaultNextViewClick = React.useCallback(() => {
-    setStateType(TextCaretInputPositionerState.JumpSymbols);
+    const newStateType = TextCaretInputPositionerState.JumpSymbols;
+
+    if (props.stateChanged) {
+      props.stateChanged(stateType, newStateType);
+    }
+
+    setStateType(newStateType);
   }, [stateType]);
 
   const onJumpSymbolsNextViewClick = React.useCallback(() => {
+    let newStateType: TextCaretInputPositionerState;
+
     if (inputIsMultiline) {
-      setStateType(TextCaretInputPositionerState.JumpLines);
+      newStateType = TextCaretInputPositionerState.JumpLines;
     } else {
-      setStateType(TextCaretInputPositionerState.Default);
+      newStateType = TextCaretInputPositionerState.Default;
     }
+
+    if (props.stateChanged) {
+      props.stateChanged(stateType, newStateType);
+    }
+    
+    setStateType(newStateType);
   }, [stateType, inputIsMultiline]);
 
   const onJumpLinesNextViewClick = React.useCallback(() => {
-    setStateType(TextCaretInputPositionerState.Default);
+    const newStateType = TextCaretInputPositionerState.Default;
+
+    if (props.stateChanged) {
+      props.stateChanged(stateType, newStateType);
+    }
+
+    setStateType(newStateType);
   }, [stateType]);
 
-  const isFullViewScrollModeToggled = React.useCallback((isFullViewScrollMode: boolean) => {
-    setIsFullViewScrollMode(isFullViewScrollMode);
+  const isFullViewScrollModeActivated = React.useCallback(() => {
+    const newIsFullViewScrollModeVal = true;
+    const newShowOptionsVal = false;
+
+    if (props.isFullViewScrollModeToggled) {
+      props.isFullViewScrollModeToggled(newIsFullViewScrollModeVal);
+    }
+
+    if (props.showOptionsToggled) {
+      props.showOptionsToggled(
+        newShowOptionsVal
+      );
+    }
+
+    setIsFullViewScrollMode(newIsFullViewScrollModeVal);
+    setShowOptions(newShowOptionsVal);
   }, [isFullViewScrollMode]);
 
   const selectionIsEnabledToggled = React.useCallback((selectionIsEnabled: boolean) => {
+    if (props.selectionIsEnabledToggled) {
+      props.selectionIsEnabledToggled(selectionIsEnabled);
+    }
+
     setSelectionIsEnabled(selectionIsEnabled);
   }, [selectionIsEnabled]);
 
@@ -405,7 +449,6 @@ export default function TextInputCaretPositionerPopover(
       }
     };
   }, [
-    props.isDarkMode,
     props.inputEl,
     props.state,
     props.inFrontOfAll,
@@ -435,7 +478,10 @@ export default function TextInputCaretPositionerPopover(
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
           moveUp={moveUp}
-          moveDown={moveDown} />;
+          moveDown={moveDown}
+          isFullViewScrollModeActivated={isFullViewScrollModeActivated} />;
+    } else if (isFullViewScrollMode) {
+      return <FullScrollModeView />;
     } else {
       switch (stateType) {
         case TextCaretInputPositionerState.JumpSymbols:
@@ -443,6 +489,7 @@ export default function TextInputCaretPositionerPopover(
             nextViewClicked={onJumpSymbolsNextViewClick}
             selectionIsEnabled={selectionIsEnabled}
             selectionIsEnabledToggled={selectionIsEnabledToggled} />;
+
         case TextCaretInputPositionerState.JumpLines:
           if (inputIsMultiline) {
             return <TextCaretInputPositionerJumpLinesView
