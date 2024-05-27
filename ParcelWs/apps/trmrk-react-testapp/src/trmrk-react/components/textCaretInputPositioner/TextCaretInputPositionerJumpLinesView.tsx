@@ -14,8 +14,8 @@ import { ValueOrAnyOrVoid } from "../../../trmrk/core";
 import { longPressIntervalMs } from "./TextCaretPositionerPopover";
 
 export interface TextCaretInputPositionerJumpLinesViewProps {
-  selectionIsEnabled: boolean,
-  selectionIsEnabledToggled: (selectionIsEnabled: boolean) => void;
+  selectionIsActivated: boolean,
+  selectionIsActivatedToggled: (selectionIsActivated: boolean) => void;
   nextViewClicked: () => void;
   jumpPrevLineX3TouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
   jumpPrevLineX3ShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
@@ -60,7 +60,7 @@ export default function TextCaretInputPositionerJumpLinesView(
   const [ jumpNextLineX2BtnElem, setJumpNextLineX2BtnElem ] = React.useState<HTMLButtonElement | null>(jumpNextLineX2BtnElemRef.current);
   const [ jumpNextLineX3BtnElem, setJumpNextLineX3BtnElem ] = React.useState<HTMLButtonElement | null>(jumpNextLineX3BtnElemRef.current);
 
-  const [ selectionIsEnabled, setSelectionIsEnabled ] = React.useState(props.selectionIsEnabled);
+  const [ selectionIsActivated, setSelectionIsActivated ] = React.useState(props.selectionIsActivated);
 
   const jumpPrevLineX3LongPress = longPress({
     longPressIntervalMs: longPressIntervalMs,
@@ -110,9 +110,9 @@ export default function TextCaretInputPositionerJumpLinesView(
     longPressEnded: props.jumpNextLineX3LongPressEnded
   });
 
-  const selectionIsEnabledToggled = React.useCallback(() => {
-    props.selectionIsEnabledToggled(!selectionIsEnabled);
-  }, [selectionIsEnabled]);
+  const selectionIsActivatedToggled = React.useCallback(() => {
+    props.selectionIsActivatedToggled(!selectionIsActivated);
+  }, [selectionIsActivated]);
   
   const onNextViewIconBtnClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
@@ -152,8 +152,8 @@ export default function TextCaretInputPositionerJumpLinesView(
       setJumpNextLineX3BtnElem(jumpNextLineX3BtnElemVal);
     }
     
-    if (props.selectionIsEnabled !== selectionIsEnabled) {
-      setSelectionIsEnabled(props.selectionIsEnabled);
+    if (props.selectionIsActivated !== selectionIsActivated) {
+      setSelectionIsActivated(props.selectionIsActivated);
     }
 
     if (jumpPrevLineX3BtnElem) {
@@ -206,8 +206,8 @@ export default function TextCaretInputPositionerJumpLinesView(
       }
     };
   }, [
-    props.selectionIsEnabled,
-    selectionIsEnabled,
+    props.selectionIsActivated,
+    selectionIsActivated,
     jumpPrevLineX3BtnElem,
     jumpPrevLineX2BtnElem,
     jumpPrevLineX1BtnElem,
@@ -233,10 +233,10 @@ export default function TextCaretInputPositionerJumpLinesView(
       <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
 
     <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
-          selectionIsEnabled ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
-        onMouseDown={selectionIsEnabledToggled}
-        onTouchEnd={selectionIsEnabledToggled}>
-      <MatUIIcon iconName={selectionIsEnabled ? "shift_lock" : "shift"} /></IconButton>
+          selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
+        onMouseDown={selectionIsActivatedToggled}
+        onTouchEnd={selectionIsActivatedToggled}>
+      <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
 
     <IconButton className="trmrk-icon-btn trmrk-jump-next-line-x1-btn" ref={el => jumpNextLineX1BtnElemRef.current = el}>
       <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>

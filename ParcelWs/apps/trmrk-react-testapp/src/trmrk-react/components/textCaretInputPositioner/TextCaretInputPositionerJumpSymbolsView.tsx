@@ -14,8 +14,8 @@ import { ValueOrAnyOrVoid } from "../../../trmrk/core";
 import { longPressIntervalMs } from "./TextCaretPositionerPopover";
 
 export interface TextCaretInputPositionerJumpSymbolsViewProps {
-  selectionIsEnabled: boolean,
-  selectionIsEnabledToggled: (selectionIsEnabled: boolean) => void;
+  selectionIsActivated: boolean,
+  selectionIsActivatedToggled: (selectionIsActivated: boolean) => void;
   nextViewClicked: () => void;
   jumpPrevCharX3TouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
   jumpPrevCharX3ShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
@@ -60,7 +60,7 @@ export default function TextCaretInputPositionerJumpSymbolsView(
   const [ jumpNextCharX2BtnElem, setJumpNextCharX2BtnElem ] = React.useState<HTMLButtonElement | null>(jumpNextCharX2BtnElemRef.current);
   const [ jumpNextCharX3BtnElem, setJumpNextCharX3BtnElem ] = React.useState<HTMLButtonElement | null>(jumpNextCharX3BtnElemRef.current);
 
-  const [ selectionIsEnabled, setSelectionIsEnabled ] = React.useState(props.selectionIsEnabled);
+  const [ selectionIsActivated, setselectionIsActivated ] = React.useState(props.selectionIsActivated);
 
   const jumpPrevCharX3LongPress = longPress({
     longPressIntervalMs: longPressIntervalMs,
@@ -110,9 +110,9 @@ export default function TextCaretInputPositionerJumpSymbolsView(
     longPressEnded: props.jumpNextCharX3LongPressEnded
   });
 
-  const selectionIsEnabledToggled = React.useCallback(() => {
-    props.selectionIsEnabledToggled(!selectionIsEnabled);
-  }, [selectionIsEnabled]);
+  const selectionIsActivatedToggled = React.useCallback(() => {
+    props.selectionIsActivatedToggled(!selectionIsActivated);
+  }, [selectionIsActivated]);
   
   const onNextViewIconBtnClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
@@ -152,8 +152,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
       setJumpNextCharX3BtnElem(jumpNextCharX3BtnElemVal);
     }
     
-    if (props.selectionIsEnabled !== selectionIsEnabled) {
-      setSelectionIsEnabled(props.selectionIsEnabled);
+    if (props.selectionIsActivated !== selectionIsActivated) {
+      setselectionIsActivated(props.selectionIsActivated);
     }
 
     if (jumpPrevCharX3BtnElem) {
@@ -206,8 +206,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
       }
     };
   }, [
-    props.selectionIsEnabled,
-    selectionIsEnabled,
+    props.selectionIsActivated,
+    selectionIsActivated,
     jumpPrevCharX3BtnElem,
     jumpPrevCharX2BtnElem,
     jumpPrevCharX1BtnElem,
@@ -233,10 +233,10 @@ export default function TextCaretInputPositionerJumpSymbolsView(
       <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
 
     <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
-          selectionIsEnabled ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
-        onMouseDown={selectionIsEnabledToggled}
-        onTouchEnd={selectionIsEnabledToggled}>
-      <MatUIIcon iconName={selectionIsEnabled ? "shift_lock" : "shift"} /></IconButton>
+          selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
+        onMouseDown={selectionIsActivatedToggled}
+        onTouchEnd={selectionIsActivatedToggled}>
+      <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
 
     <IconButton className="trmrk-icon-btn trmrk-jump-next-char-x1-btn" ref={el => jumpNextCharX1BtnElemRef.current = el}>
       <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>

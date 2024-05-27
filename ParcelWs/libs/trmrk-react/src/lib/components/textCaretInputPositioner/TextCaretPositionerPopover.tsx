@@ -32,14 +32,14 @@ export interface TextInputCaretPositionerPopoverProps {
   state?: TextCaretInputPositionerState | null | undefined;
   showOptions?: boolean | null | undefined;
   isFullViewScrollMode?: boolean | null | undefined;
-  selectionIsEnabled?: boolean | null | undefined;
+  selectionIsActivated?: boolean | null | undefined;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
   minimizedToggled?: ((minimized: boolean) => void) | null | undefined;
   showOptionsToggled?: ((showOptions: boolean) => void) | null | undefined;
   isFullViewScrollModeToggled?: ((isFullViewScrollMode: boolean) => void) | null | undefined;
-  selectionIsEnabledToggled?: ((selectionIsEnabled: boolean) => void) | null | undefined;
+  selectionIsActivatedToggled?: ((selectionIsActivated: boolean) => void) | null | undefined;
 }
 
 export const defaultJumpSpeedsArr = Object.freeze([5, 25, 125]);
@@ -112,7 +112,7 @@ export default function TextInputCaretPositionerPopover(
   const [ stateType, setStateType ] = React.useState(props.state ?? TextCaretInputPositionerState.Default);
   const [ showOptions, setShowOptions ] = React.useState(props.showOptions ?? false);
   const [ isFullViewScrollMode, setIsFullViewScrollMode ] = React.useState(props.isFullViewScrollMode ?? false);
-  const [ selectionIsEnabled, setSelectionIsEnabled ] = React.useState(props.selectionIsEnabled ?? false);
+  const [ selectionIsActivated, setSelectionIsActivated ] = React.useState(props.selectionIsActivated ?? false);
 
   const [ symbolsJumpSpeedsArr, setSymbolsJumpSpeedsArr ] = React.useState(
     normalizeSymbolsJumpSpeedsArr(props.symbolsJumpSpeedsArr));
@@ -248,13 +248,13 @@ export default function TextInputCaretPositionerPopover(
     setShowOptions(newShowOptionsVal);
   }, [isFullViewScrollMode]);
 
-  const selectionIsEnabledToggled = React.useCallback((selectionIsEnabled: boolean) => {
-    if (props.selectionIsEnabledToggled) {
-      props.selectionIsEnabledToggled(selectionIsEnabled);
+  const selectionIsActivatedToggled = React.useCallback((selectionIsActivated: boolean) => {
+    if (props.selectionIsActivatedToggled) {
+      props.selectionIsActivatedToggled(selectionIsActivated);
     }
 
-    setSelectionIsEnabled(selectionIsEnabled);
-  }, [selectionIsEnabled]);
+    setSelectionIsActivated(selectionIsActivated);
+  }, [selectionIsActivated]);
 
   const withTopAndBorderAnimatorElems = React.useCallback((
     callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => void
@@ -647,7 +647,7 @@ export default function TextInputCaretPositionerPopover(
     props.minimized,
     props.showOptions,
     props.isFullViewScrollMode,
-    props.selectionIsEnabled,
+    props.selectionIsActivated,
     props.symbolsJumpSpeedsArr,
     props.linesJumpSpeedsArr,
     inputEl,
@@ -658,7 +658,7 @@ export default function TextInputCaretPositionerPopover(
     showOptions,
     inputIsMultiline,
     isFullViewScrollMode,
-    selectionIsEnabled,
+    selectionIsActivated,
   ]);
 
   const viewRetriever = React.useCallback(() => {
@@ -679,8 +679,8 @@ export default function TextInputCaretPositionerPopover(
         case TextCaretInputPositionerState.JumpSymbols:
           return <TextCaretInputPositionerJumpSymbolsView
             nextViewClicked={onJumpSymbolsNextViewClick}
-            selectionIsEnabled={selectionIsEnabled}
-            selectionIsEnabledToggled={selectionIsEnabledToggled}
+            selectionIsActivated={selectionIsActivated}
+            selectionIsActivatedToggled={selectionIsActivatedToggled}
             jumpPrevCharX3TouchStartOrMouseDown={symbolsViewJumpPrevCharX3TouchStartOrMouseDown}
             jumpPrevCharX3ShortPressed={symbolsViewJumpPrevCharX3ShortPressed}
             jumpPrevCharX3LongPressStarted={symbolsViewJumpPrevCharX3LongPressStarted}
@@ -710,8 +710,8 @@ export default function TextInputCaretPositionerPopover(
           if (inputIsMultiline) {
             return <TextCaretInputPositionerJumpLinesView
               nextViewClicked={onJumpLinesNextViewClick}
-              selectionIsEnabled={selectionIsEnabled}
-              selectionIsEnabledToggled={selectionIsEnabledToggled}
+              selectionIsActivated={selectionIsActivated}
+              selectionIsActivatedToggled={selectionIsActivatedToggled}
               jumpPrevLineX3TouchStartOrMouseDown={linesViewJumpPrevLineX3TouchStartOrMouseDown}
               jumpPrevLineX3ShortPressed={linesViewJumpPrevLineX3ShortPressed}
               jumpPrevLineX3LongPressStarted={linesViewJumpPrevLineX3LongPressStarted}
@@ -742,8 +742,8 @@ export default function TextInputCaretPositionerPopover(
         default:
           return <TextCaretInputPositionerDefaultView
             inputIsMultiline={inputIsMultiline}
-            selectionIsEnabled={selectionIsEnabled}
-            selectionIsEnabledToggled={selectionIsEnabledToggled}
+            selectionIsActivated={selectionIsActivated}
+            selectionIsActivatedToggled={selectionIsActivatedToggled}
             nextViewClicked={onDefaultNextViewClick}
             jumpPrevLineTouchStartOrMouseDown={defaultViewJumpPrevLineTouchStartOrMouseDown}
             jumpPrevLineShortPressed={defaultViewJumpPrevLineShortPressed}
@@ -771,7 +771,7 @@ export default function TextInputCaretPositionerPopover(
             jumpNextLineLongPressEnded={defaultViewJumpNextLineLongPressEnded} />;
       }
     }
-  }, [inFrontOfAll, inputIsMultiline, isFullViewScrollMode, selectionIsEnabled, stateType, minimized, showOptions]);
+  }, [inFrontOfAll, inputIsMultiline, isFullViewScrollMode, selectionIsActivated, stateType, minimized, showOptions]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
     minimized ? "trmrk-minimized" : "",
