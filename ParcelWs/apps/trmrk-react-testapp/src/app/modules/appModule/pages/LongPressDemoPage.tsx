@@ -7,7 +7,7 @@ import AppBarsPanel from "../../../../trmrk-react/components/barsPanel/AppBarsPa
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
-import longPress from "../../../../trmrk-react/hooks/longPress";
+import longPress from "../../../../trmrk-react/hooks/useLongPress";
 
 export interface LongPressDemoPageProps {
   urlPath: string

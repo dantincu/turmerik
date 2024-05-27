@@ -1,4 +1,4 @@
-import longPress from "./longPress";
+import longPress from "./useLongPress";
 
 export const trmrk_hooks = {
   longPress,
