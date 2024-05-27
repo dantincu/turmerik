@@ -399,6 +399,102 @@ export default function TextInputCaretPositionerPopover(
     viewBtnLongPressEnded(true, false, 1);
   }, []);
 
+  const symbolsViewJumpPrevCharX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const symbolsViewJumpPrevCharX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, true, 3);
+  }, []);
+
+  const symbolsViewJumpPrevCharX3LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(3);
+  }, []);
+
+  const symbolsViewJumpPrevCharX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, true, 3);
+  }, []);
+
+  const symbolsViewJumpPrevCharX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const symbolsViewJumpPrevCharX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, true, 2);
+  }, []);
+
+  const symbolsViewJumpPrevCharX2LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(2);
+  }, []);
+
+  const symbolsViewJumpPrevCharX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, true, 2);
+  }, []);
+
+  const symbolsViewJumpPrevCharX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const symbolsViewJumpPrevCharX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(true, true, 1);
+  }, []);
+
+  const symbolsViewJumpPrevCharX1LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(1);
+  }, []);
+
+  const symbolsViewJumpPrevCharX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(true, true, 1);
+  }, []);
+
+  const symbolsViewJumpNextCharX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const symbolsViewJumpNextCharX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, false, 1);
+  }, []);
+
+  const symbolsViewJumpNextCharX1LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(1);
+  }, []);
+
+  const symbolsViewJumpNextCharX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, false, 1);
+  }, []);
+
+  const symbolsViewJumpNextCharX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const symbolsViewJumpNextCharX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, false, 2);
+  }, []);
+
+  const symbolsViewJumpNextCharX2LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(2);
+  }, []);
+
+  const symbolsViewJumpNextCharX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, false, 2);
+  }, []);
+
+  const symbolsViewJumpNextCharX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    viewBtnTouchStartOrMouseDown(false, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const symbolsViewJumpNextCharX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+    viewBtnShortPressed(false, false, 3);
+  }, []);
+
+  const symbolsViewJumpNextCharX3LongPressStarted = React.useCallback(() => {
+    viewBtnLongPressStarted(3);
+  }, []);
+
+  const symbolsViewJumpNextCharX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+    viewBtnLongPressEnded(false, false, 3);
+  }, []);
+
   React.useEffect(() => {
     const inFrontOfAllNewVal = normalizeInFrontOfAll(props.inFrontOfAll);
     const mainEl = mainElRef.current;
@@ -488,7 +584,31 @@ export default function TextInputCaretPositionerPopover(
           return <TextCaretInputPositionerJumpSymbolsView
             nextViewClicked={onJumpSymbolsNextViewClick}
             selectionIsEnabled={selectionIsEnabled}
-            selectionIsEnabledToggled={selectionIsEnabledToggled} />;
+            selectionIsEnabledToggled={selectionIsEnabledToggled}
+            jumpPrevCharX3TouchStartOrMouseDown={symbolsViewJumpPrevCharX3TouchStartOrMouseDown}
+            jumpPrevCharX3ShortPressed={symbolsViewJumpPrevCharX3ShortPressed}
+            jumpPrevCharX3LongPressStarted={symbolsViewJumpPrevCharX3LongPressStarted}
+            jumpPrevCharX3LongPressEnded={symbolsViewJumpPrevCharX3LongPressEnded}
+            jumpPrevCharX2TouchStartOrMouseDown={symbolsViewJumpPrevCharX2TouchStartOrMouseDown}
+            jumpPrevCharX2ShortPressed={symbolsViewJumpPrevCharX2ShortPressed}
+            jumpPrevCharX2LongPressStarted={symbolsViewJumpPrevCharX2LongPressStarted}
+            jumpPrevCharX2LongPressEnded={symbolsViewJumpPrevCharX2LongPressEnded}
+            jumpPrevCharX1TouchStartOrMouseDown={symbolsViewJumpPrevCharX1TouchStartOrMouseDown}
+            jumpPrevCharX1ShortPressed={symbolsViewJumpPrevCharX1ShortPressed}
+            jumpPrevCharX1LongPressStarted={symbolsViewJumpPrevCharX1LongPressStarted}
+            jumpPrevCharX1LongPressEnded={symbolsViewJumpPrevCharX1LongPressEnded}
+            jumpNextCharX1TouchStartOrMouseDown={symbolsViewJumpNextCharX1TouchStartOrMouseDown}
+            jumpNextCharX1ShortPressed={symbolsViewJumpNextCharX1ShortPressed}
+            jumpNextCharX1LongPressStarted={symbolsViewJumpNextCharX1LongPressStarted}
+            jumpNextCharX1LongPressEnded={symbolsViewJumpNextCharX1LongPressEnded}
+            jumpNextCharX2TouchStartOrMouseDown={symbolsViewJumpNextCharX2TouchStartOrMouseDown}
+            jumpNextCharX2ShortPressed={symbolsViewJumpNextCharX2ShortPressed}
+            jumpNextCharX2LongPressStarted={symbolsViewJumpNextCharX2LongPressStarted}
+            jumpNextCharX2LongPressEnded={symbolsViewJumpNextCharX2LongPressEnded}
+            jumpNextCharX3TouchStartOrMouseDown={symbolsViewJumpNextCharX3TouchStartOrMouseDown}
+            jumpNextCharX3ShortPressed={symbolsViewJumpNextCharX3ShortPressed}
+            jumpNextCharX3LongPressStarted={symbolsViewJumpNextCharX3LongPressStarted}
+            jumpNextCharX3LongPressEnded={symbolsViewJumpNextCharX3LongPressEnded} />;
 
         case TextCaretInputPositionerState.JumpLines:
           if (inputIsMultiline) {

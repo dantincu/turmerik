@@ -207,7 +207,6 @@ export default function TextInputCursorPositioningPage(
     </div>
 
     { currentInputEl ? <TextInputCaretPositionerPopover
-      isDarkMode={isDarkMode}
       inputEl={currentInputEl}
       inFrontOfAll={!isAnyMenuOpen} /> : null }
   </AppBarsPanel>);

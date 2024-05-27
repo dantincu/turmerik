@@ -146,12 +146,12 @@ export default function TextCaretInputPositionerDefaultView(
       setJumpPrevCharBtnElem(jumpPrevCharBtnElemVal);
     }
 
-    if (jumpNextWordBtnElemVal !== jumpNextWordBtnElem) {
-      setJumpNextWordBtnElem(jumpNextWordBtnElemVal);
-    }
-
     if (jumpNextCharBtnElemVal !== jumpNextCharBtnElem) {
       setJumpNextCharBtnElem(jumpNextCharBtnElemVal);
+    }
+
+    if (jumpNextWordBtnElemVal !== jumpNextWordBtnElem) {
+      setJumpNextWordBtnElem(jumpNextWordBtnElemVal);
     }
 
     if (jumpNextLineBtnElemVal !== jumpNextLineBtnElem) {
