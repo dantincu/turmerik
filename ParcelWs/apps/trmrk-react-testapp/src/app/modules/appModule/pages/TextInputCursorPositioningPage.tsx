@@ -52,6 +52,7 @@ export default function TextInputCursorPositioningPage(
   const [ textArea2IsReadonly, setText2AreaIsReadonly ] = React.useState(true);
 
   const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
+  const isAnyMenuOpen = useSelector(appBarSelectors.isAnyMenuOpen);
 
   const textObj = generateText();
 
@@ -168,6 +169,7 @@ export default function TextInputCursorPositioningPage(
     textBox2IsReadonly,
     textArea2IsReadonly,
     isDarkMode,
+    isAnyMenuOpen,
     singlelineText2,
     multilineText2 ]);
     
@@ -206,6 +208,7 @@ export default function TextInputCursorPositioningPage(
 
     { currentInputEl ? <TextInputCaretPositionerPopover
       isDarkMode={isDarkMode}
-      inputEl={currentInputEl} /> : null }
+      inputEl={currentInputEl}
+      inFrontOfAll={!isAnyMenuOpen} /> : null }
   </AppBarsPanel>);
 }

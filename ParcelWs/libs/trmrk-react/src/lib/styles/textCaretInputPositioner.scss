@@ -81,12 +81,16 @@
 .trmrk-text-input-caret-positioner-popover {
   display: block;
   position: fixed;
-  z-index: 1000000;
+  z-index: 1100;
   height: calc(2.5em + 6px);
   width: 100%;
   color: var(--trmrk_foreground-color);
   top: 0px;
   overflow: hidden;
+
+  &.trmrk-in-front-of-all {
+    z-index: 1000000;
+  }
 
   .trmrk-text-input-caret-positioner {
     position: relative;
@@ -155,7 +159,7 @@
   &.trmrk-minimized {
     width: 2.5em;
     right: 0em;
-    border-radius: 3px 0px 0px 3px;
+    /* border-radius: 1px 0px 0px 1px; */
   }
 
   .trmrk-icon-btn {

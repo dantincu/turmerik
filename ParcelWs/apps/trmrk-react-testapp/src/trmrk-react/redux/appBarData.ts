@@ -24,6 +24,15 @@ export interface AppBarData {
 }
 
 export interface AppBarSelectors {
+  isAnyMenuOpen: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean;
+  };
   getAppSettingsMenuOpts: Selector<
     {
       appBar: AppBarData;

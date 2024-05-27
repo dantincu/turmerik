@@ -27,6 +27,7 @@ export enum TextCaretInputPositionerState {
 export interface TextInputCaretPositionerPopoverProps {
   isDarkMode: boolean;
   inputEl: HTMLElement;
+  inFrontOfAll?: boolean | null | undefined;
   minimized?: boolean | null | undefined;
   state?: TextCaretInputPositionerState | null | undefined;
   showOptions?: boolean | null | undefined;
@@ -86,6 +87,10 @@ export const normalizeLinesJumpSpeedsArr = (
     jumpSpeedsArr, [...defaultLinesJumpSpeedsArr]
   );
 
+export const normalizeInFrontOfAll = (
+  inFrontOfAll: boolean | null | undefined
+) => inFrontOfAll ?? true;
+
 export const getNextTopPx = (coords: TouchOrMouseCoords, moveStartCoords: TouchOrMouseCoords, bfMoveStartTopOffsetPx: number) => {
   const diffTop = coords.clientY - moveStartCoords.clientY;
   const topOffsetPxNum = bfMoveStartTopOffsetPx + diffTop;
@@ -102,6 +107,7 @@ export default function TextInputCaretPositionerPopover(
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(isMultilineInput(inputEl));
+  const [ inFrontOfAll, setInFrontOfAll ] = React.useState(normalizeInFrontOfAll(props.inFrontOfAll));
   const [ minimized, setMinimized ] = React.useState(props.minimized ?? false);
   const [ stateType, setStateType ] = React.useState(props.state ?? TextCaretInputPositionerState.Default);
   const [ showOptions, setShowOptions ] = React.useState(props.showOptions ?? false);
@@ -350,7 +356,12 @@ export default function TextInputCaretPositionerPopover(
   }, []);
 
   React.useEffect(() => {
+    const inFrontOfAllNewVal = normalizeInFrontOfAll(props.inFrontOfAll);
     const mainEl = mainElRef.current;
+
+    if (inFrontOfAllNewVal !== inFrontOfAll) {
+      setInFrontOfAll(inFrontOfAllNewVal);
+    }
 
     if (inputEl !== props.inputEl) {
       const inputIsMultilineNewVal = isMultilineInput(props.inputEl);
@@ -362,7 +373,10 @@ export default function TextInputCaretPositionerPopover(
       }
 
       setInputEl(props.inputEl);
-      setInputIsMultiline(inputIsMultilineNewVal);
+
+      if (inputIsMultilineNewVal !== inputIsMultiline) {
+        setInputIsMultiline(inputIsMultilineNewVal);
+      }
     }
 
     const onMainElTouchEnd = (e: TouchEvent | MouseEvent) => {
@@ -394,6 +408,7 @@ export default function TextInputCaretPositionerPopover(
     props.isDarkMode,
     props.inputEl,
     props.state,
+    props.inFrontOfAll,
     props.minimized,
     props.showOptions,
     props.isFullViewScrollMode,
@@ -402,6 +417,7 @@ export default function TextInputCaretPositionerPopover(
     props.linesJumpSpeedsArr,
     inputEl,
     mainElRef,
+    inFrontOfAll,
     minimized,
     stateType,
     showOptions,
@@ -464,10 +480,11 @@ export default function TextInputCaretPositionerPopover(
             jumpNextLineLongPressEnded={defaultViewJumpNextLineLongPressEnded} />;
       }
     }
-  }, [inputIsMultiline, isFullViewScrollMode, selectionIsEnabled, stateType, minimized, showOptions]);
+  }, [inFrontOfAll, inputIsMultiline, isFullViewScrollMode, selectionIsEnabled, stateType, minimized, showOptions]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
-    minimized ? "trmrk-minimized" : "" ].join(" ")} ref={el => mainElRef.current = el}>
+    minimized ? "trmrk-minimized" : "",
+    inFrontOfAll ? "trmrk-in-front-of-all" : "" ].join(" ")} ref={el => mainElRef.current = el}>
       <div className="trmrk-popover-top-border">
         <div className="trmrk-animator" ref={el => topBorderAnimatorElRef.current = el}></div>
       </div>

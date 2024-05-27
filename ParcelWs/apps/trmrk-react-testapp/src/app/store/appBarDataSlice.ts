@@ -71,6 +71,8 @@ const appBarDataSlice = createSlice({
     },
   },
   selectors: {
+    isAnyMenuOpen: (state) =>
+      state.appSettingsMenuOpts.isOpen || state.optionsMenuOpts.isOpen,
     getAppSettingsMenuOpts: (state) => state.appSettingsMenuOpts,
     getAppSettingsMenuIsOpen: (state) => state.appSettingsMenuOpts.isOpen,
     getAppearenceMenuOpts: (state) =>
@@ -102,6 +104,7 @@ const {
 } = appBarDataSlice.actions;
 
 const {
+  isAnyMenuOpen,
   getAppSettingsMenuOpts,
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,
@@ -130,6 +133,7 @@ export const appBarReducers: AppBarReducers = {
 };
 
 export const appBarSelectors: AppBarSelectors = {
+  isAnyMenuOpen,
   getAppSettingsMenuOpts,
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,
