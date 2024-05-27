@@ -30,11 +30,15 @@ export interface TextInputCaretPositionerPopoverProps {
   minimized?: boolean | null | undefined;
   state?: TextCaretInputPositionerState | null | undefined;
   showOptions?: boolean | null | undefined;
+  isFullViewScrollMode?: boolean | null | undefined;
+  selectionIsEnabled?: boolean | null | undefined;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
   minimizedToggled?: ((minimized: boolean) => void) | null | undefined;
   showOptionsToggled?: ((showOptions: boolean) => void) | null | undefined;
+  isFullViewScrollModeToggled?: ((isFullViewScrollMode: boolean) => void) | null | undefined;
+  selectionIsEnabledToggled?: ((selectionIsEnabled: boolean) => void) | null | undefined;
 }
 
 export const defaultJumpSpeedsArr = Object.freeze([5, 25, 125]);
@@ -101,6 +105,8 @@ export default function TextInputCaretPositionerPopover(
   const [ minimized, setMinimized ] = React.useState(props.minimized ?? false);
   const [ stateType, setStateType ] = React.useState(props.state ?? TextCaretInputPositionerState.Default);
   const [ showOptions, setShowOptions ] = React.useState(props.showOptions ?? false);
+  const [ isFullViewScrollMode, setIsFullViewScrollMode ] = React.useState(props.isFullViewScrollMode ?? false);
+  const [ selectionIsEnabled, setSelectionIsEnabled ] = React.useState(props.selectionIsEnabled ?? false);
 
   const [ symbolsJumpSpeedsArr, setSymbolsJumpSpeedsArr ] = React.useState(
     normalizeSymbolsJumpSpeedsArr(props.symbolsJumpSpeedsArr));
@@ -191,6 +197,14 @@ export default function TextInputCaretPositionerPopover(
   const onJumpLinesNextViewClick = React.useCallback(() => {
     setStateType(TextCaretInputPositionerState.Default);
   }, [stateType]);
+
+  const isFullViewScrollModeToggled = React.useCallback((isFullViewScrollMode: boolean) => {
+    setIsFullViewScrollMode(isFullViewScrollMode);
+  }, [isFullViewScrollMode]);
+
+  const selectionIsEnabledToggled = React.useCallback((selectionIsEnabled: boolean) => {
+    setSelectionIsEnabled(selectionIsEnabled);
+  }, [selectionIsEnabled]);
 
   const withTopAndBorderAnimatorElems = React.useCallback((
     callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => void
@@ -376,19 +390,24 @@ export default function TextInputCaretPositionerPopover(
         });
       }
     };
-  }, [props.isDarkMode,
+  }, [
+    props.isDarkMode,
     props.inputEl,
     props.state,
     props.minimized,
     props.showOptions,
+    props.isFullViewScrollMode,
+    props.selectionIsEnabled,
     props.symbolsJumpSpeedsArr,
     props.linesJumpSpeedsArr,
     inputEl,
     mainElRef,
-    inputIsMultiline,
     minimized,
-    showOptions,
     stateType,
+    showOptions,
+    inputIsMultiline,
+    isFullViewScrollMode,
+    selectionIsEnabled,
   ]);
 
   const viewRetriever = React.useCallback(() => {
@@ -416,6 +435,8 @@ export default function TextInputCaretPositionerPopover(
         default:
           return <TextCaretInputPositionerDefaultView
             inputIsMultiline={inputIsMultiline}
+            selectionIsEnabled={selectionIsEnabled}
+            selectionIsEnabledToggled={selectionIsEnabledToggled}
             nextViewClicked={onDefaultNextViewClick}
             jumpPrevLineTouchStartOrMouseDown={defaultViewJumpPrevLineTouchStartOrMouseDown}
             jumpPrevLineShortPressed={defaultViewJumpPrevLineShortPressed}
@@ -443,9 +464,9 @@ export default function TextInputCaretPositionerPopover(
             jumpNextLineLongPressEnded={defaultViewJumpNextLineLongPressEnded} />;
       }
     }
-  }, [inputIsMultiline, stateType, minimized, showOptions]);
+  }, [inputIsMultiline, isFullViewScrollMode, selectionIsEnabled, stateType, minimized, showOptions]);
 
-  return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS, appThemeClassName,
+  return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
     minimized ? "trmrk-minimized" : "" ].join(" ")} ref={el => mainElRef.current = el}>
       <div className="trmrk-popover-top-border">
         <div className="trmrk-animator" ref={el => topBorderAnimatorElRef.current = el}></div>
