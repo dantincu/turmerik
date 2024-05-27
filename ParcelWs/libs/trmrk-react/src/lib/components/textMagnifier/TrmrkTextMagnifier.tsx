@@ -133,7 +133,7 @@ export default React.forwardRef(function TrmrkTextMagnifier(
     positioningTextEl ]);
 
   return (<Paper className={[
-      "trmrk-text-caret-positioner",
+      "trmrk-text-magnifier",
       props.textIsReadonly ? "trmrk-text-is-readonly" : "",
       props.textIsMultiline ? "trmrk-text-is-multiline" : "",
       props.className].join(" ")}

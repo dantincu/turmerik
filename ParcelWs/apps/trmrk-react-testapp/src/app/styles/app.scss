@@ -27,7 +27,7 @@
 
 @keyframes trmrk-long-press-demo-btn-long-pressed-theme-light {
   from {
-    background-color: #fff;
+    background-color: var(--foreground-color);
   }
 
   to {

@@ -4,6 +4,8 @@ import IconButton from "@mui/material/IconButton";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 
 export interface TextCaretInputPositionerJumpLinesViewProps {
+  selectionIsEnabled: boolean,
+  selectionIsEnabledToggled: (selectionIsEnabled: boolean) => void;
   nextViewClicked: () => void;
 }
 

@@ -4,6 +4,8 @@ import IconButton from "@mui/material/IconButton";
 import ViewColumnIcon from "@mui/icons-material/ViewColumn";
 
 export interface TextCaretInputPositionerJumpSymbolsViewProps {
+  selectionIsEnabled: boolean,
+  selectionIsEnabledToggled: (selectionIsEnabled: boolean) => void;
   nextViewClicked: () => void;
 }
 

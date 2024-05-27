@@ -261,7 +261,7 @@
     > .trmrk-tree-node-content {
       > .trmrk-tree-node-label {
         background-color: $color;
-        color: white;
+        color: var(--foreground-color);
       }
     }
   }

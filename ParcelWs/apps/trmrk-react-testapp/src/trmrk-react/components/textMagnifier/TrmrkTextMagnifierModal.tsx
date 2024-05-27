@@ -33,7 +33,7 @@ export default function TrmrkTextMagnifierModal(
 
   return (<Modal
       className={[
-        "trmrk-text-caret-positioner-modal",
+        "trmrk-text-magnifier-modal",
         props.positioner.textIsReadonly ? "trmrk-text-is-readonly" : "",
         props.positioner.textIsMultiline ? "trmrk-text-is-multiline" : "",
         appThemeClassName,
