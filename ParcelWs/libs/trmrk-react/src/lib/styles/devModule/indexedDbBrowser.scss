@@ -2,6 +2,6 @@
 
 .trmrk-indexeddb-tree-view {
   > .trmrk-tree-node {
-    @include trmrk-tree-node-color(#880);
+    @include trmrk-tree-node-color(var(--trmrk-indexeddb-tree-node_color));
   }
 }
