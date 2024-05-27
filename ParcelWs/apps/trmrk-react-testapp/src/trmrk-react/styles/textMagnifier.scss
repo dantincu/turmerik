@@ -4,7 +4,7 @@
   &::after {
     content: "";
     vertical-align: bottom;
-    border: 1px solid #080;
+    border: 1px solid var(--trmrk-text-caret_foreground-color);
   }
 }
 

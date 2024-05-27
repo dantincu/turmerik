@@ -7,6 +7,7 @@ import appDataStore from "../../store/appDataStore";
 
 import "../../../trmrk-react/styles/all.scss";
 import "../../../trmrk-react/styles/themes.scss";
+import "../../../trmrk-react/styles/devModule/all.scss";
 
 import "../../styles/index-any.scss"
 

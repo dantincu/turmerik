@@ -6,8 +6,8 @@
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #9880ff;
-  color: #9880ff;
+  background-color: var(--trmrk-loading-el-dot-pulse_color);
+  color: var(--trmrk-loading-el-dot-pulse_color);
   box-shadow: 9999px 0 0 -5px;
   animation: trmrk-loading-el-dot-pulse 1.5s infinite linear;
   animation-delay: 0.25s;
@@ -21,8 +21,8 @@
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  background-color: #9880ff;
-  color: #9880ff;
+  background-color: var(--trmrk-loading-el-dot-pulse_color);
+  color: var(--trmrk-loading-el-dot-pulse_color);
 }
 
 .trmrk-loading-el-dot-pulse::before {

@@ -1,102 +1,121 @@
 @import "./_mixins.scss";
 
-$resizable-draggable-margin-hover-color-theme-dark: #FFFFFF44;
-$resizable-draggable-margin-hover-color-theme-light: #00000044;
-
 .trmrk-panel-header,
 .trmrk-panel-footer {
   .trmrk-app-bar {
-    color: var(--foreground-color);
+    color: var(--trmrk_foreground-color);
 
     .trmrk-icon-btn {
-      color: var(--foreground-color);
+      color: var(--trmrk_foreground-color);
     }
   }
 }
 
 .trmrk-theme-dark {
-  color: var(--foreground-color);
+  color: var(--trmrk_foreground-color);
   
   .trmrk-icon-btn {
-    color: var(--foreground-color);
+    color: var(--trmrk_foreground-color);
   }
 
   .trmrk-nav-link {
-    color: #bbbbFF;
+    color: var(--trmrk-nav-link_foreground-color);
   }
 
   .trmrk-nav-link:visited {
-    color: #8888FF;
+    color: var(--trmrk-nav-link-visited_foreground-color);
   }
 
   .trmrk-scrollable {
-    @include scrollable(#222, #444, #333, #555);
+    @include scrollable(
+      var(--trmrk-scrollable-track_color_dark),
+      var(--trmrk-scrollable-thumb_color_dark),
+      var(--trmrk-scrollable-track-hover_color_dark),
+      var(--trmrk-scrollable-thumb-hover_color_dark));
   }
 
   &.trmrk-scrollable {
-    @include scrollable(#222, #444, #333, #555);
+    @include scrollable(
+      var(--trmrk-scrollable-track_color_dark),
+      var(--trmrk-scrollable-thumb_color_dark),
+      var(--trmrk-scrollable-track-hover_color_dark),
+      var(--trmrk-scrollable-thumb-hover_color_dark));
   }
 
   .trmrk-resizable-panel.trmrk-border-alpha-25 {
-    @include resizable-panel-colors(#FFFFFF44);
+    @include resizable-panel-colors(var(
+      --trmrk-resizable-panel-border-alpha25_color_dark));
   }
 
   .trmrk-resizable-panel.trmrk-border-alpha-50 {
-    @include resizable-panel-colors(#FFFFFF88);
+    @include resizable-panel-colors(var(
+      --trmrk-resizable-panel-border-alpha50_color_dark));
   }
 }
 
 .trmrk-theme-light {
   .trmrk-scrollable {
-    @include scrollable(#eee, #ccc, #ddd, #bbb);
+    @include scrollable(
+      var(--trmrk-scrollable-track_color_light),
+      var(--trmrk-scrollable-thumb_color_light),
+      var(--trmrk-scrollable-track-hover_color_light),
+      var(--trmrk-scrollable-thumb-hover_color_light));
   }
 
   &.trmrk-scrollable {
-    @include scrollable(#eee, #ccc, #ddd, #bbb);
+    @include scrollable(
+      var(--trmrk-scrollable-track_color_light),
+      var(--trmrk-scrollable-thumb_color_light),
+      var(--trmrk-scrollable-track-hover_color_light),
+      var(--trmrk-scrollable-thumb-hover_color_light));
   }
 
   .trmrk-resizable-panel.trmrk-border-alpha-25 {
-    @include resizable-panel-colors(#00000044);
+    @include resizable-panel-colors(var(
+      --trmrk-resizable-panel-border-alpha25_color_light));
   }
 
   .trmrk-resizable-panel.trmrk-border-alpha-50 {
-    @include resizable-panel-colors(#00000088);
+    @include resizable-panel-colors(var(
+      --trmrk-resizable-panel-border-alpha50_color_light));
   }
 }
 
 .trmrk-theme-dark {
   .trmrk-app-bar-toggle-icon {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
-    background-color: #121212;
+    background-image: linear-gradient(
+      var(--trmrk-app-bar_background-gradient-from_color_dark),
+      var(--trmrk-app-bar_background-gradient-from_color_dark));
+
+    background-color: var(--trmrk-app-bar_background-color_dark);
   }
 
   .trmrk-textarea-autosize {
     background-color: inherit;
-    color: var(--foreground-color);
+    color: var(--trmrk_foreground-color);
   }
 
   &.trmrk-page-panel {
     .trmrk-flex-rows-group {
-      border: 1px solid #444;
+      border: 1px solid var(--trmrk-page-panel-rows-group-border_color_dark);
 
       &.trmrk-editable {
-        border: 2px solid #642;
+        border: 2px solid var(--trmrk-page-panel-rows-group-editable-border_color_dark);
       }
 
       &:hover {
-        background-color: #1a1a1a;
+        background-color: var(--trmrk-page-panel-rows-group-hover_background-color_dark);
       }
     }
 
     .trmrk-flex-row {
       .trmrk-cell {
         .trmrk-title {
-          color: #ccc;
+          color: var(----trmrk-flex-row-cell-title_color_dark);
         }
 
         .trmrk-readonly {
-          background:
-            linear-gradient(#FFF0, #FFF1, #FFF0);
+          background-color: var(--trmrk-flex-row-readonly-textbox_background-color_dark);
         }
       }
     }
@@ -104,15 +123,15 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
   &.trmrk-textbox-magnifier {
     .trmrk-text {
-      border: 1px solid #888;
+      border: 1px solid var(--trmrk-textbox-magnifier-border_color_dark);
     }
   }
 }
 
 .trmrk-theme-light {
   .trmrk-app-bar-toggle-icon, .trmrk-app-bar-toggle-icon:hover {
-    color: var(--foreground-color);
-    background-color: #1976d2;
+    color: var(--trmrk_foreground-color);
+    background-color: var(--trmrk-app-bar_background-color_light);
   }
 
   .trmrk-textarea-autosize {
@@ -122,25 +141,25 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
   &.trmrk-page-panel {
     .trmrk-flex-rows-group {
-      border: 1px solid #ccc;
+      border: 1px solid var(--trmrk-page-panel-rows-group-border_color_light);
 
       &.trmrk-editable {
-        border: 2px solid #864;
+        border: 2px solid var(--trmrk-page-panel-rows-group-editable-border_color_light);
       }
 
       &:hover {
-        background-color: #F4F4F4;
+        background-color: var(--trmrk-page-panel-rows-group-hover_background-color_light);
       }
     }
 
     .trmrk-flex-row {
       .trmrk-cell {
         .trmrk-title {
-          color: #444;
+          color: var(----trmrk-flex-row-cell-title_color_light);
         }
 
         .trmrk-readonly {
-          background: linear-gradient(#0000, #0001, #0000);
+          background-color: var(--trmrk-flex-row-readonly-textbox_background-color_light);
         }
       }
     }
@@ -148,46 +167,61 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
   &.trmrk-textbox-magnifier {
     .trmrk-text {
-      border: 1px solid #888;
+      border: 1px solid var(--trmrk-textbox-magnifier-border_color_light);
     }
   }
 }
 
-@keyframes trmrk-theme-dark_text-input-caret-positioner-none {
+@keyframes trmrk-theme-dark_text-input-caret-positioner-animator-none {
   from {
-    background: repeating-linear-gradient(to right, #444 0px, #444 100vw);
+    background: repeating-linear-gradient(to right,
+      var(--trmrk-text-input-caret-positioner-border_color_dark) 0px,
+      var(--trmrk-text-input-caret-positioner-border_color_dark) 100vw);
   }
 
   to {
-    background: repeating-linear-gradient(to right, #444 0px, #444 100vw);
+    background: repeating-linear-gradient(to right,
+      var(--trmrk-text-input-caret-positioner-border_color_dark) 0px,
+      var(--trmrk-text-input-caret-positioner-border_color_dark) 100vw);
   }
 }
 
-@keyframes trmrk-theme-light_text-input-caret-positioner-none {
+@keyframes trmrk-theme-light_text-input-caret-positioner-animator-none {
   from {
-    background: repeating-linear-gradient(to right, #2288ee 0px, #2288ee 100vw);
+    background: repeating-linear-gradient(to right,
+      var(--trmrk-text-input-caret-positioner-border_color_light) 0px,
+      var(--trmrk-text-input-caret-positioner-border_color_light) 100vw);
   }
 
   to {
-    background: repeating-linear-gradient(to right, #2288ee 0px, #2288ee 100vw);
+    background: repeating-linear-gradient(to right,
+      var(--trmrk-text-input-caret-positioner-border_color_light) 0px,
+      var(--trmrk-text-input-caret-positioner-border_color_light) 100vw);
   }
 }
 
 .trmrk-theme-dark .trmrk-text-input-caret-positioner-popover {
-  background-image: linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09));
-  background-color: #121212;
+  background-image: linear-gradient(
+    var(--trmrk-app-bar_background-gradient-from_color_dark),
+    var(--trmrk-app-bar_background-gradient-from_color_dark));
+
+  background-color: var(--trmrk-app-bar_background-color_dark);
 
   .trmrk-popover-top-border,
   .trmrk-popover-bottom-border {
-    background-color: #444;
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_dark);
 
     .trmrk-animator {
       &.trmrk-anchor-left {
-        background: repeating-linear-gradient(to right, #222222 0px, #222222 1.25em, #444 1.25em, #444 25vw);
+        background: repeating-linear-gradient(to right,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0px,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 25vw);
 
         &.trmrk-slide-once-speed-x1 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
-            trmrk-theme-dark_text-input-caret-positioner-none;
+            trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -198,7 +232,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x2 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
-            trmrk-theme-dark_text-input-caret-positioner-none;
+            trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -209,7 +243,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x3 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
-            trmrk-theme-dark_text-input-caret-positioner-none;
+            trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -220,11 +254,15 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
       }
 
       &.trmrk-anchor-right {
-        background: repeating-linear-gradient(to left, #222222 0px, #222222 1.25em, #444 1.25em, #444 25vw);
+        background: repeating-linear-gradient(to left,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0px,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 25vw);
 
         &.trmrk-slide-once-speed-x1 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
-            trmrk-theme-dark_text-input-caret-positioner-none;
+            trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -235,7 +273,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x2 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
-            trmrk-theme-dark_text-input-caret-positioner-none;
+            trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -246,7 +284,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x3 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
-            trmrk-theme-dark_text-input-caret-positioner-none;
+            trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -259,24 +297,28 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
   }
 
   .trmrk-selection-is-enabled {
-    background-color: #444;
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_dark);
   }
 }
 
 .trmrk-theme-light .trmrk-text-input-caret-positioner-popover {
-  background-color: #1976d2;
+    background-color: var(--trmrk-app-bar_background-color_light);
 
   .trmrk-popover-top-border,
   .trmrk-popover-bottom-border {
-    background-color: #44aaff;
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_light);
 
     .trmrk-animator {
       &.trmrk-anchor-left {
-        background: repeating-linear-gradient(to right, #1060c0 0px, #1060c0 1.25em, #44aaff 1.25em, #44aaff 25vw);
+        background: repeating-linear-gradient(to right,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0px,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 25vw);
 
         &.trmrk-slide-once-speed-x1 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
-            trmrk-theme-light_text-input-caret-positioner-none;
+            trmrk-theme-light_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -287,7 +329,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x2 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
-            trmrk-theme-light_text-input-caret-positioner-none;
+            trmrk-theme-light_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -298,7 +340,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x3 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
-            trmrk-theme-light_text-input-caret-positioner-none;
+            trmrk-theme-light_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -309,11 +351,15 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
       }
 
       &.trmrk-anchor-right {
-        background: repeating-linear-gradient(to left, #1060c0 0px, #1060c0 1.25em, #44aaff 1.25em, #44aaff 25vw);
+        background: repeating-linear-gradient(to left,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0px,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 25vw);
 
         &.trmrk-slide-once-speed-x1 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
-            trmrk-theme-light_text-input-caret-positioner-none;
+            trmrk-theme-light_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -324,7 +370,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x2 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
-            trmrk-theme-light_text-input-caret-positioner-none;
+            trmrk-theme-light_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -335,7 +381,7 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
 
         &.trmrk-slide-once-speed-x3 {
           animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
-            trmrk-theme-light_text-input-caret-positioner-none;
+            trmrk-theme-light_text-input-caret-positioner-animator-none;
 
           animation-delay: 0s, 0.1s;
           animation-duration: 0.1s, 0.001s;
@@ -348,6 +394,6 @@ $resizable-draggable-margin-hover-color-theme-light: #00000044;
   }
 
   .trmrk-selection-is-enabled {
-    background-color: #44aaff;
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_light);
   }
 }

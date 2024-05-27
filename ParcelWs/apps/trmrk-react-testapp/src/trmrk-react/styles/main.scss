@@ -34,7 +34,7 @@ body, #app-root {
 .trmrk-app-bar-toggle-icon {
   position: fixed;
   right: 0px;
-  color: var(--foreground-color);
+  color: var(--trmrk_foreground-color);
   z-index: 1101;
 
   &.trmrk-toggles-header {
@@ -60,11 +60,11 @@ body, #app-root {
 }
 
 .trmrk-btn.trmrk-btn-text {
-  color: var(--foreground-color);
+  color: var(--trmrk_foreground-color);
 }
 
 .trmrk-btn.trmrk-btn-text.trmrk-btn-text-primary {
-  background-color: #00F;
+  background-color: --trmrk-btn-text-primary_background-color;
 }
 
 .trmrk-bars-panel {

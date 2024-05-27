@@ -3,7 +3,7 @@
 
   > h2 {
     margin-top: 0px;
-    color: orangered;
+    color: var(--trmrk-error_color);
     font-size: 1.25em;
   }
 
@@ -14,7 +14,7 @@
 }
 
 .trmrk-error {
-  color: orangered;
+  color: var(--trmrk-error_color);
 }
 
 .trmrk-warning {
