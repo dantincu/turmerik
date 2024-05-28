@@ -48,26 +48,28 @@ export default function TextCaretInputPositionerOptionsView(
   React.useEffect(() => {
   }, []);
 
-  return (<div className="trmrk-view trmrk-anchor-right trmrk-options-view">
-    <IconButton className="trmrk-icon-btn"
-        onMouseDown={minimizeClicked}
-        onTouchEnd={minimizeClicked}>
-      <KeyboardDoubleArrowRightIcon />
-    </IconButton>
-    <IconButton className="trmrk-icon-btn"
-        onMouseDown={isFullViewScrollModeActivated}
-        onTouchEnd={isFullViewScrollModeActivated}>
-      <DragIndicatorIcon />
-    </IconButton>
-    <IconButton className="trmrk-icon-btn"
-        onMouseUp={moveUpClick}
-        onTouchEnd={moveUpClick}>
-      <KeyboardDoubleArrowUpIcon />
-    </IconButton>
-    <IconButton className="trmrk-icon-btn"
-        onMouseUp={moveDownClick}
-        onTouchEnd={moveDownClick}>
-      <KeyboardDoubleArrowDownIcon />
-    </IconButton>
+  return (<div className="trmrk-view trmrk-options-view">
+    <div className="trmrk-anchor-right">
+      <IconButton className="trmrk-icon-btn"
+          onMouseDown={minimizeClicked}
+          onTouchEnd={minimizeClicked}>
+        <KeyboardDoubleArrowRightIcon />
+      </IconButton>
+      <IconButton className="trmrk-icon-btn"
+          onMouseDown={isFullViewScrollModeActivated}
+          onTouchEnd={isFullViewScrollModeActivated}>
+        <DragIndicatorIcon />
+      </IconButton>
+      <IconButton className="trmrk-icon-btn"
+          onMouseUp={moveUpClick}
+          onTouchEnd={moveUpClick}>
+        <KeyboardDoubleArrowUpIcon />
+      </IconButton>
+      <IconButton className="trmrk-icon-btn"
+          onMouseUp={moveDownClick}
+          onTouchEnd={moveDownClick}>
+        <KeyboardDoubleArrowDownIcon />
+      </IconButton>
+    </div>
   </div>);
 }

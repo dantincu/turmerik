@@ -227,33 +227,35 @@ export default function TextCaretInputPositionerDefaultView(
     jumpNextLineBtnElem
   ]);
 
-  return (<div className="trmrk-view trmrk-anchor-left trmrk-default-view">
-    <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
-      onMouseDown={onNextViewIconBtnClick}
-      onTouchEnd={onNextViewIconBtnClick}><GridOnIcon /></IconButton>
-    
-    { inputIsMultiline ? <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-btn" ref={el => jumpPrevLineBtnElemRef.current = el}>
-      <ArrowDropUpIcon className="trmrk-arrow-drop-up-icon" /></IconButton> : null }
+  return (<div className="trmrk-view trmrk-default-view">
+    <div className="trmrk-anchor-left">
+      <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
+        onMouseDown={onNextViewIconBtnClick}
+        onTouchEnd={onNextViewIconBtnClick}><GridOnIcon /></IconButton>
+      
+      { inputIsMultiline ? <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-btn" ref={el => jumpPrevLineBtnElemRef.current = el}>
+        <ArrowDropUpIcon className="trmrk-arrow-drop-up-icon" /></IconButton> : null }
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-prev-word-btn" ref={el => jumpPrevWordBtnElemRef.current = el}>
-      <SkipPreviousIcon className="trmrk-skip-previous-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-prev-word-btn" ref={el => jumpPrevWordBtnElemRef.current = el}>
+        <SkipPreviousIcon className="trmrk-skip-previous-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-btn" ref={el => jumpPrevCharBtnElemRef.current = el}>
-      <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-btn" ref={el => jumpPrevCharBtnElemRef.current = el}>
+        <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
 
-    <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
-          selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
-        onMouseDown={selectionIsActivatedToggled}
-        onTouchEnd={selectionIsActivatedToggled}>
-      <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
+      <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
+            selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
+          onMouseDown={selectionIsActivatedToggled}
+          onTouchEnd={selectionIsActivatedToggled}>
+        <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-next-char-btn" ref={el => jumpNextCharBtnElemRef.current = el}>
-      <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-next-char-btn" ref={el => jumpNextCharBtnElemRef.current = el}>
+        <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-next-word-btn" ref={el => jumpNextWordBtnElemRef.current = el}>
-      <SkipNextIcon className="trmrk-skip-next-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-next-word-btn" ref={el => jumpNextWordBtnElemRef.current = el}>
+        <SkipNextIcon className="trmrk-skip-next-icon" /></IconButton>
 
-    { inputIsMultiline ? <IconButton className="trmrk-icon-btn trmrk-jump-next-line-btn" ref={el => jumpNextLineBtnElemRef.current = el}>
-      <ArrowDropDownIcon className="trmrk-arrow-drop-down-icon" /></IconButton> : null }
+      { inputIsMultiline ? <IconButton className="trmrk-icon-btn trmrk-jump-next-line-btn" ref={el => jumpNextLineBtnElemRef.current = el}>
+        <ArrowDropDownIcon className="trmrk-arrow-drop-down-icon" /></IconButton> : null }
+    </div>
   </div>);
 }

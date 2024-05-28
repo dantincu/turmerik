@@ -215,40 +215,41 @@ export default function TextCaretInputPositionerJumpLinesView(
     jumpNextLineX2BtnElem,
     jumpNextLineX3BtnElem]);
 
-  return (<div className="trmrk-view trmrk-anchor-left trmrk-jump-lines-view">
-    <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
-      onClick={onNextViewIconBtnClick}
-      onTouchEnd={onNextViewIconBtnClick}><TableRowsIcon /></IconButton>
-      
-    <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-x3-btn" ref={el => jumpPrevLineX3BtnElemRef.current = el}>
-      <ArrowLeftIcon className="trmrk-arrow-up-icon" />
-      <ArrowLeftIcon className="trmrk-arrow-up-icon" />
-      <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
+  return (<div className="trmrk-view trmrk-jump-lines-view">
+    <div className="trmrk-anchor-left">
+      <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
+        onClick={onNextViewIconBtnClick}
+        onTouchEnd={onNextViewIconBtnClick}><TableRowsIcon /></IconButton>
+        
+      <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-x3-btn" ref={el => jumpPrevLineX3BtnElemRef.current = el}>
+        <ArrowLeftIcon className="trmrk-arrow-up-icon" />
+        <ArrowLeftIcon className="trmrk-arrow-up-icon" />
+        <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-x2-btn" ref={el => jumpPrevLineX2BtnElemRef.current = el}>
-      <ArrowLeftIcon className="trmrk-arrow-up-icon" />
-      <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-x2-btn" ref={el => jumpPrevLineX2BtnElemRef.current = el}>
+        <ArrowLeftIcon className="trmrk-arrow-up-icon" />
+        <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-x1-btn" ref={el => jumpPrevLineX1BtnElemRef.current = el}>
-      <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-prev-line-x1-btn" ref={el => jumpPrevLineX1BtnElemRef.current = el}>
+        <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
 
-    <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
-          selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
-        onMouseDown={selectionIsActivatedToggled}
-        onTouchEnd={selectionIsActivatedToggled}>
-      <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
+      <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
+            selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
+          onMouseDown={selectionIsActivatedToggled}
+          onTouchEnd={selectionIsActivatedToggled}>
+        <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-next-line-x1-btn" ref={el => jumpNextLineX1BtnElemRef.current = el}>
-      <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-next-line-x1-btn" ref={el => jumpNextLineX1BtnElemRef.current = el}>
+        <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-next-line-x2-btn" ref={el => jumpNextLineX2BtnElemRef.current = el}>
-      <ArrowRightIcon className="trmrk-arrow-down-icon" />
-      <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-jump-next-line-x2-btn" ref={el => jumpNextLineX2BtnElemRef.current = el}>
+        <ArrowRightIcon className="trmrk-arrow-down-icon" />
+        <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>
 
-    <IconButton className="trmrk-icon-btn trmrk-jump-next-line-x3-btn" ref={el => jumpNextLineX3BtnElemRef.current = el}>
-      <ArrowRightIcon className="trmrk-arrow-down-icon" />
-      <ArrowRightIcon className="trmrk-arrow-down-icon" />
-      <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>
-
+      <IconButton className="trmrk-icon-btn trmrk-jump-next-line-x3-btn" ref={el => jumpNextLineX3BtnElemRef.current = el}>
+        <ArrowRightIcon className="trmrk-arrow-down-icon" />
+        <ArrowRightIcon className="trmrk-arrow-down-icon" />
+        <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>
+    </div>
   </div>);
 }
