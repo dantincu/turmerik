@@ -212,6 +212,10 @@ export default function useLongPress(props: UseLongPressProps) {
     propsHeightInnerBoundsRatio
   );
 
+  const shortPressDelayedEndTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(
+    null
+  );
+
   const longPressTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const afterLongPressTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -372,9 +376,12 @@ export default function useLongPress(props: UseLongPressProps) {
       if (props.shortPressed) {
         const afterLongPressEndedIntervalMs = props.shortPressed(ev, coords);
 
-        if (afterLongPressEndedIntervalMs > 0) {
-          afterLongPressEndedTimeoutIdRef.current = setTimeout(
-            longPressDelayedEnd,
+        if (
+          typeof afterLongPressEndedIntervalMs === "number" &&
+          afterLongPressEndedIntervalMs > 0
+        ) {
+          shortPressDelayedEndTimeoutIdRef.current = setTimeout(
+            shortPressDelayedEnd,
             afterLongPressEndedIntervalMs
           );
         }
@@ -420,7 +427,10 @@ export default function useLongPress(props: UseLongPressProps) {
       if (props.longPressEnded) {
         const afterLongPressEndedIntervalMs = props.longPressEnded(ev, coords);
 
-        if (afterLongPressEndedIntervalMs > 0) {
+        if (
+          typeof afterLongPressEndedIntervalMs === "number" &&
+          afterLongPressEndedIntervalMs > 0
+        ) {
           afterLongPressEndedTimeoutIdRef.current = setTimeout(
             longPressDelayedEnd,
             afterLongPressEndedIntervalMs
@@ -452,11 +462,13 @@ export default function useLongPress(props: UseLongPressProps) {
 
   const clearAll = React.useCallback((btnElem: HTMLElement) => {
     if (btnElem) {
+      clearTimeoutIfReq(shortPressDelayedEndTimeoutIdRef);
       clearTimeoutIfReq(longPressTimeoutIdRef);
       clearTimeoutIfReq(afterLongPressTimeoutIdRef);
       clearIntervalIfReq(afterLongPressLoopIntervalIdRef);
       clearTimeoutIfReq(afterLongPressLoopTimeoutIdRef);
       clearTimeoutIfReq(afterLongPressEndedTimeoutIdRef);
+
       document.removeEventListener("mouseup", onTouchEndOrMouseUp, {
         capture: true,
       });
