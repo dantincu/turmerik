@@ -46,20 +46,25 @@ export interface UseLongPressProps {
     | null
     | undefined;
   shortPressed?:
-    | ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void)
+    | ((
+        ev: TouchEvent | MouseEvent,
+        coords: TouchOrMouseCoords | null
+      ) => ValueOrAnyOrVoid<number>)
     | null
     | undefined;
+  shortPressDelayedEnd?: (() => void) | null | undefined;
   longPressStarted?: (() => void) | null | undefined;
   longPressEnded?:
     | ((
         ev: TouchEvent | MouseEvent | null,
         coords: TouchOrMouseCoords | null
-      ) => void)
+      ) => ValueOrAnyOrVoid<number>)
     | null
     | undefined;
-  afterLongPress?: (() => void) | null | undefined;
+  afterLongPressStarted?: (() => void) | null | undefined;
   afterLongPressLoop?: (() => void) | null | undefined;
   afterLongPressLoopBreak?: (() => void) | null | undefined;
+  afterLongPressDelayedEnd?: (() => void) | null | undefined;
 }
 
 export interface UseLongPressResult {
@@ -219,6 +224,10 @@ export default function useLongPress(props: UseLongPressProps) {
     null
   );
 
+  const afterLongPressEndedTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(
+    null
+  );
+
   const longPressIntervalPassedRef = React.useRef(false);
 
   const onTouchStartOrMouseDown = React.useCallback(
@@ -301,13 +310,9 @@ export default function useLongPress(props: UseLongPressProps) {
 
         if ($continue) {
           if (longPressIntervalPassedRef.current) {
-            if (props.longPressEnded) {
-              props.longPressEnded(ev, coords);
-            }
+            longPressEnded(ev, coords);
           } else {
-            if (props.shortPressed) {
-              props.shortPressed(ev, coords);
-            }
+            shortPressed(ev, coords);
           }
 
           clearAll(trgElem);
@@ -362,9 +367,31 @@ export default function useLongPress(props: UseLongPressProps) {
     longPressIntervalPassedRef.current = true;
   }, [afterLongPressLoopIntervalMs, afterLongPressLoopBreakIntervalMs]);
 
+  const shortPressed = React.useCallback(
+    (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
+      if (props.shortPressed) {
+        const afterLongPressEndedIntervalMs = props.shortPressed(ev, coords);
+
+        if (afterLongPressEndedIntervalMs > 0) {
+          afterLongPressEndedTimeoutIdRef.current = setTimeout(
+            longPressDelayedEnd,
+            afterLongPressEndedIntervalMs
+          );
+        }
+      }
+    },
+    []
+  );
+
+  const shortPressDelayedEnd = React.useCallback(() => {
+    if (props.shortPressDelayedEnd) {
+      props.shortPressDelayedEnd();
+    }
+  }, []);
+
   const onAfterLongPressInterval = React.useCallback(() => {
-    if (props.afterLongPress) {
-      props.afterLongPress();
+    if (props.afterLongPressStarted) {
+      props.afterLongPressStarted();
     }
   }, []);
 
@@ -385,10 +412,30 @@ export default function useLongPress(props: UseLongPressProps) {
       props.afterLongPressLoopBreak();
     }
 
-    if (props.longPressEnded) {
-      props.longPressEnded(null, null);
-    }
+    longPressEnded(null, null);
   }, [btnElRef]);
+
+  const longPressEnded = React.useCallback(
+    (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
+      if (props.longPressEnded) {
+        const afterLongPressEndedIntervalMs = props.longPressEnded(ev, coords);
+
+        if (afterLongPressEndedIntervalMs > 0) {
+          afterLongPressEndedTimeoutIdRef.current = setTimeout(
+            longPressDelayedEnd,
+            afterLongPressEndedIntervalMs
+          );
+        }
+      }
+    },
+    []
+  );
+
+  const longPressDelayedEnd = React.useCallback(() => {
+    if (props.afterLongPressDelayedEnd) {
+      props.afterLongPressDelayedEnd();
+    }
+  }, []);
 
   const unregisterAll = React.useCallback(
     (btnElem: HTMLElement | null | undefined) => {
@@ -409,6 +456,7 @@ export default function useLongPress(props: UseLongPressProps) {
       clearTimeoutIfReq(afterLongPressTimeoutIdRef);
       clearIntervalIfReq(afterLongPressLoopIntervalIdRef);
       clearTimeoutIfReq(afterLongPressLoopTimeoutIdRef);
+      clearTimeoutIfReq(afterLongPressEndedTimeoutIdRef);
       document.removeEventListener("mouseup", onTouchEndOrMouseUp, {
         capture: true,
       });
