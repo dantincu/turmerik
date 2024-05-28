@@ -11,7 +11,7 @@ export const localStorageKeys = Object.freeze({
   appThemeIsDarkMode: "appThemeIsDarkMode",
   appIsCompactMode: "appIsCompactMode",
   textCaretPositionerEnabled: "textCaretPositionerEnabled",
-  keepTextCaretPositionerOpen: "keepTextCaretPositionerOpen",
+  textCaretPositionerKeepOpen: "textCaretPositionerKeepOpen",
 });
 
 export const appModeCssClasses = {
@@ -102,10 +102,10 @@ export const getTextCaretPositionerKeepOpenFromLocalStorage = (
 ) => {
   const keepTextCaretPositionerOpen = localStorage.getItem(
     keepTextCaretPositionerOpenKey ??
-      localStorageKeys.keepTextCaretPositionerOpen
+      localStorageKeys.textCaretPositionerKeepOpen
   );
 
-  let isCompactMode = trmrk.jsonBool.false !== keepTextCaretPositionerOpen;
+  let isCompactMode = trmrk.jsonBool.true === keepTextCaretPositionerOpen;
   return isCompactMode;
 };
 
@@ -143,7 +143,7 @@ export const setTextCaretPositionerKeepOpenToLocalStorage = (
 ) =>
   localStorage.setItem(
     teepTextCaretPositionerOpenKey ??
-      localStorageKeys.textCaretPositionerEnabled,
+      localStorageKeys.textCaretPositionerKeepOpen,
     teepTextCaretPositionerOpen ? jsonBool.true : jsonBool.false
   );
 

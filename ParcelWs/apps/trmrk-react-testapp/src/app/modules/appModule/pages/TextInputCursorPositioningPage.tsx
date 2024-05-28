@@ -13,6 +13,9 @@ import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import { generateText } from "./generateText";
 
+import { setTextCaretPositionerEnabledToLocalStorage,
+  setTextCaretPositionerKeepOpenToLocalStorage } from "../../../../trmrk-browser/domUtils/core";
+
 import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretInputPositioner/TextCaretPositionerPopover";
 
 export interface TextInputCursorPositioningPageProps {
@@ -142,10 +145,12 @@ export default function TextInputCursorPositioningPage(
 
   const onTextCaretPositionerKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
     dispatch(appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
+    setTextCaretPositionerKeepOpenToLocalStorage(keepOpen);
   }, []);
 
   const onTextCaretPositionerDisabled = React.useCallback(() => {
     dispatch(appDataReducers.setTextCaretPositionerEnabled(false));
+    setTextCaretPositionerEnabledToLocalStorage(false);
   }, []);
 
   React.useEffect(() => {
