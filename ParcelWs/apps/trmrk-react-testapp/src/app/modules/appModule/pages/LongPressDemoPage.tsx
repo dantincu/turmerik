@@ -23,7 +23,7 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
   const [ btn2Elem, setBtn2Elem ] = React.useState(btn2ElemRef.current ?? null);
 
   const longPressObj1 = longPress({
-    afterLongPressLoopTimeoutMs: 3000,
+    afterLongPressLoopBreakIntervalMs: 3000,
     touchStartOrMouseDown: React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
       // console.log("touchStartOrMouseDown1", ev, coords);
     }, []),
@@ -47,13 +47,13 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
     afterLongPressLoop: () => {
       // console.log("afterLongPressLoop1");
     },
-    afterLongPressLoopTimeout: () => {
+    afterLongPressLoopBreak: () => {
       // console.log("afterLongPressLoopTimeout1");
     },
   });
 
   const longPressObj2 = longPress({
-    afterLongPressLoopTimeoutMs: 3000,
+    afterLongPressLoopBreakIntervalMs: 3000,
     touchStartOrMouseDown: React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
       // console.log("touchStartOrMouseDown2", ev, coords);
     }, []),
@@ -77,7 +77,7 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
     afterLongPressLoop: () => {
       // console.log("afterLongPressLoop2");
     },
-    afterLongPressLoopTimeout: () => {
+    afterLongPressLoopBreak: () => {
       // console.log("afterLongPressLoopTimeout2");
     },
   });

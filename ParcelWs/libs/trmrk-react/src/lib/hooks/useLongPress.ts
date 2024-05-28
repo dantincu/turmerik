@@ -16,14 +16,13 @@ export const LONG_PRESS_INTERVAL_MS = 400;
 export const AFTER_LONG_PRESS_INTERVAL_MS = 200;
 export const AFTER_LONG_PRESS_LOOP_INTERVAL_MS = 100;
 export const AFTER_LONG_PRESS_LOOP_TIMEOUT_MS = 30 * 1000;
-export const INNER_BOUNDS_RATIO = 0.75;
 
 export interface UseLongPressProps {
   requiredButton?: number | null | undefined;
   longPressIntervalMs?: number | null | undefined;
   afterLongPressIntervalMs?: number | null | undefined;
   afterLongPressLoopIntervalMs?: number | null | undefined;
-  afterLongPressLoopTimeoutMs?: number | null | undefined;
+  afterLongPressLoopBreakIntervalMs?: number | null | undefined;
   innerBoundsRatio?: number | null | undefined;
   widthInnerBoundsRatio?: number | null | undefined;
   heightInnerBoundsRatio?: number | null | undefined;
@@ -60,7 +59,7 @@ export interface UseLongPressProps {
     | undefined;
   afterLongPress?: (() => void) | null | undefined;
   afterLongPressLoop?: (() => void) | null | undefined;
-  afterLongPressLoopTimeout?: (() => void) | null | undefined;
+  afterLongPressLoopBreak?: (() => void) | null | undefined;
 }
 
 export interface UseLongPressResult {
@@ -83,9 +82,9 @@ export const normAfterLongPressLoopIntervalMs = (
   afterLongPressLoopIntervalMs: number | null | undefined
 ) => afterLongPressLoopIntervalMs ?? -1;
 
-export const normAfterLongPressLoopTimeoutMs = (
-  afterLongPressLoopTimeoutMs: number | null | undefined
-) => afterLongPressLoopTimeoutMs ?? -1;
+export const normAfterLongPressLoopBreakIntervalMs = (
+  afterLongPressLoopBreakIntervalMs: number | null | undefined
+) => afterLongPressLoopBreakIntervalMs ?? -1;
 
 export const normInnerBoundsRatio = (
   innerBoundsRatio: number | null | undefined,
@@ -130,12 +129,6 @@ export const touchIsOutOfBounds = (
     coords.pageY < innerRectangle.top ||
     coords.pageY - innerRectangle.top > innerRectangle.height;
 
-  /* if (isOutOfBounds) {
-    document.body.style.backgroundColor = "#840";
-  } else {
-    document.body.style.backgroundColor = "";
-  } */
-
   return isOutOfBounds;
 };
 
@@ -162,10 +155,12 @@ export default function useLongPress(props: UseLongPressProps) {
   );
 
   const [
-    propsAfterLongPressLoopTimeoutMs,
-    setPropsAfterLongPressLoopTimeoutMs,
+    propsAfterLongPressLoopBreakIntervalMs,
+    setPropsAfterLongPressLoopBreakIntervalMs,
   ] = React.useState(
-    normAfterLongPressLoopTimeoutMs(props.afterLongPressLoopTimeoutMs)
+    normAfterLongPressLoopBreakIntervalMs(
+      props.afterLongPressLoopBreakIntervalMs
+    )
   );
 
   const [propsInnerBoundsRatio, setPropsInnerBoundsRatio] = React.useState(
@@ -195,8 +190,10 @@ export default function useLongPress(props: UseLongPressProps) {
   const [afterLongPressLoopIntervalMs, setAfterLongPressLoopIntervalMs] =
     React.useState(propsAfterLongPressLoopIntervalMs);
 
-  const [afterLongPressLoopTimeoutMs, setAfterLongPressLoopTimeoutMs] =
-    React.useState(propsAfterLongPressLoopTimeoutMs);
+  const [
+    afterLongPressLoopBreakIntervalMs,
+    setAfterLongPressLoopBreakIntervalMs,
+  ] = React.useState(propsAfterLongPressLoopBreakIntervalMs);
 
   const [innerBoundsRatio, setInnerBoundsRatio] = React.useState(
     propsInnerBoundsRatio
@@ -355,15 +352,15 @@ export default function useLongPress(props: UseLongPressProps) {
       );
     }
 
-    if (afterLongPressLoopTimeoutMs > 0) {
+    if (afterLongPressLoopBreakIntervalMs > 0) {
       afterLongPressLoopTimeoutIdRef.current = setTimeout(
-        onAfterLongPressLoopTimeout,
-        afterLongPressLoopTimeoutMs
+        onAfterLongPressLoopBreak,
+        afterLongPressLoopBreakIntervalMs
       );
     }
 
     longPressIntervalPassedRef.current = true;
-  }, [afterLongPressLoopIntervalMs, afterLongPressLoopTimeoutMs]);
+  }, [afterLongPressLoopIntervalMs, afterLongPressLoopBreakIntervalMs]);
 
   const onAfterLongPressInterval = React.useCallback(() => {
     if (props.afterLongPress) {
@@ -377,15 +374,15 @@ export default function useLongPress(props: UseLongPressProps) {
     }
   }, []);
 
-  const onAfterLongPressLoopTimeout = React.useCallback(() => {
+  const onAfterLongPressLoopBreak = React.useCallback(() => {
     const btnElem = btnElRef.current;
 
     if (btnElem) {
       clearAll(btnElem);
     }
 
-    if (props.afterLongPressLoopTimeout) {
-      props.afterLongPressLoopTimeout();
+    if (props.afterLongPressLoopBreak) {
+      props.afterLongPressLoopBreak();
     }
 
     if (props.longPressEnded) {
@@ -457,9 +454,10 @@ export default function useLongPress(props: UseLongPressProps) {
       props.afterLongPressLoopIntervalMs
     );
 
-    const newAfterLongPressLoopTimeoutMsVal = normAfterLongPressLoopIntervalMs(
-      props.afterLongPressLoopTimeoutMs
-    );
+    const newAfterLongPressLoopBreakIntervalMsVal =
+      normAfterLongPressLoopBreakIntervalMs(
+        props.afterLongPressLoopBreakIntervalMs
+      );
 
     const newInnerBoundsRatioVal = normInnerBoundsRatio(props.innerBoundsRatio);
 
@@ -485,8 +483,9 @@ export default function useLongPress(props: UseLongPressProps) {
     const setNewAfterLongPressLoopIntervalMsVal =
       newAfterLongPressLoopIntervalMsVal !== propsAfterLongPressLoopIntervalMs;
 
-    const setNewAfterLongPressLoopTimeoutMsVal =
-      newAfterLongPressLoopTimeoutMsVal !== propsAfterLongPressLoopTimeoutMs;
+    const setNewAfterLongPressLoopBreakIntervalMsVal =
+      newAfterLongPressLoopBreakIntervalMsVal !==
+      propsAfterLongPressLoopBreakIntervalMs;
 
     const setNewInnerBoundsRatioVal =
       newInnerBoundsRatioVal !== propsInnerBoundsRatio;
@@ -517,9 +516,14 @@ export default function useLongPress(props: UseLongPressProps) {
       setAfterLongPressLoopIntervalMs(newAfterLongPressLoopIntervalMsVal);
     }
 
-    if (setNewAfterLongPressLoopTimeoutMsVal) {
-      setPropsAfterLongPressLoopTimeoutMs(newAfterLongPressLoopTimeoutMsVal);
-      setAfterLongPressLoopTimeoutMs(newAfterLongPressLoopTimeoutMsVal);
+    if (setNewAfterLongPressLoopBreakIntervalMsVal) {
+      setPropsAfterLongPressLoopBreakIntervalMs(
+        newAfterLongPressLoopBreakIntervalMsVal
+      );
+
+      setAfterLongPressLoopBreakIntervalMs(
+        newAfterLongPressLoopBreakIntervalMsVal
+      );
     }
 
     if (setNewInnerBoundsRatioVal) {
@@ -541,7 +545,7 @@ export default function useLongPress(props: UseLongPressProps) {
     propsLongPressIntervalMs,
     propsAfterLongPressIntervalMs,
     propsAfterLongPressLoopIntervalMs,
-    propsAfterLongPressLoopTimeoutMs,
+    propsAfterLongPressLoopBreakIntervalMs,
     propsInnerBoundsRatio,
     propsWidthInnerBoundsRatio,
     propsHeightInnerBoundsRatio,
@@ -549,7 +553,7 @@ export default function useLongPress(props: UseLongPressProps) {
     longPressIntervalMs,
     afterLongPressIntervalMs,
     afterLongPressLoopIntervalMs,
-    afterLongPressLoopTimeoutMs,
+    afterLongPressLoopBreakIntervalMs,
     innerBoundsRatio,
     widthInnerBoundsRatio,
     heightInnerBoundsRatio,
