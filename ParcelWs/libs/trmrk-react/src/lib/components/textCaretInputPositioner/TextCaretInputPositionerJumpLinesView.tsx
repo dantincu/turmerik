@@ -63,6 +63,7 @@ export default function TextCaretInputPositionerJumpLinesView(
   const [ selectionIsActivated, setSelectionIsActivated ] = React.useState(props.selectionIsActivated);
 
   const jumpPrevLineX3LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineX3TouchStartOrMouseDown,
     shortPressed: props.jumpPrevLineX3ShortPressed,
@@ -71,6 +72,7 @@ export default function TextCaretInputPositionerJumpLinesView(
   });
 
   const jumpPrevLineX2LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineX2TouchStartOrMouseDown,
     shortPressed: props.jumpPrevLineX2ShortPressed,
@@ -79,6 +81,7 @@ export default function TextCaretInputPositionerJumpLinesView(
   });
 
   const jumpPrevLineX1LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineX1TouchStartOrMouseDown,
     shortPressed: props.jumpPrevLineX1ShortPressed,
@@ -87,6 +90,7 @@ export default function TextCaretInputPositionerJumpLinesView(
   });
 
   const jumpNextLineX1LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineX1TouchStartOrMouseDown,
     shortPressed: props.jumpNextLineX1ShortPressed,
@@ -95,6 +99,7 @@ export default function TextCaretInputPositionerJumpLinesView(
   });
 
   const jumpNextLineX2LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineX2TouchStartOrMouseDown,
     shortPressed: props.jumpNextLineX2ShortPressed,
@@ -103,6 +108,7 @@ export default function TextCaretInputPositionerJumpLinesView(
   });
 
   const jumpNextLineX3LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineX3TouchStartOrMouseDown,
     shortPressed: props.jumpNextLineX3ShortPressed,

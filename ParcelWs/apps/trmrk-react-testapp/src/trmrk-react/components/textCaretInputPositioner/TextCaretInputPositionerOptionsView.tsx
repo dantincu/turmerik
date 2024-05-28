@@ -4,7 +4,6 @@ import IconButton from "@mui/material/IconButton";
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
@@ -22,11 +21,12 @@ export const positionerMoveBtnLongPressIntervalMs = 300;
 
 export interface TextCaretInputPositionerOptionsViewProps {
   positionerJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
+  showMoreOptions: boolean;
+  showMoreOptionsBtnClicked: (showMoreOptions: boolean) => void;
   moving: (rowsCount: number) => ValueOrAnyOrVoid<boolean>;
   moveBtnLongPressStarted: () => void;
   moveBtnAfterLongPressStarted: () => void;
   minimizeClicked: () => void;
-  isFullViewScrollModeActivated: (() => void);
 }
 
 export const defaultPositionerJumpSpeedsArr = Object.freeze([3, 7, 21]);
@@ -53,6 +53,7 @@ export default function TextCaretInputPositionerOptionsView(
     normalizePositionerJumpSpeedsArr(props.positionerJumpSpeedsArr));
 
   const moveUpX3LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
     afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
@@ -66,6 +67,7 @@ export default function TextCaretInputPositionerOptionsView(
   });
 
   const moveUpX1LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
     afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
@@ -79,6 +81,7 @@ export default function TextCaretInputPositionerOptionsView(
   });
 
   const moveDownX1LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
     afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
@@ -92,6 +95,7 @@ export default function TextCaretInputPositionerOptionsView(
   });
 
   const moveDownX3LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
     afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
@@ -110,9 +114,11 @@ export default function TextCaretInputPositionerOptionsView(
     }
   }, []);
 
-  const isFullViewScrollModeActivated = React.useCallback(() => {
-    props.isFullViewScrollModeActivated();
-  }, []);
+  const showMoreOptionsBtnClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (((e as React.MouseEvent).button ?? 0) === 0) {
+      props.showMoreOptionsBtnClicked(!props.showMoreOptions);
+    }
+  }, [props.showMoreOptions]);
 
   React.useEffect(() => {
     const moveUpX3BtnElemVal = moveUpX3BtnElemRef.current;
@@ -171,6 +177,7 @@ export default function TextCaretInputPositionerOptionsView(
     }
   }, [
     props.positionerJumpSpeedsArr,
+    props.showMoreOptions,
     positionerJumpSpeedsArr,
     moveUpX3BtnElem,
     moveUpX1BtnElem,
@@ -179,31 +186,36 @@ export default function TextCaretInputPositionerOptionsView(
   ]);
 
   return (<div className="trmrk-view trmrk-options-view">
+    <div className="trmrk-anchor-left">
+      <IconButton className="trmrk-icon-btn"
+          onMouseDown={showMoreOptionsBtnClicked}
+          onTouchEnd={showMoreOptionsBtnClicked}>
+        <MoreVertIcon />
+      </IconButton>
+    </div>
     <div className="trmrk-anchor-right">
       <IconButton className="trmrk-icon-btn"
           onMouseDown={minimizeClicked}
           onTouchEnd={minimizeClicked}>
         <KeyboardDoubleArrowRightIcon />
       </IconButton>
-      <IconButton className="trmrk-icon-btn trmrk-move-up-x3-btn" ref={el => moveUpX3BtnElemRef.current = el}>
-        <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
-        <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
-      </IconButton>
-      <IconButton className="trmrk-icon-btn" ref={el => moveUpX1BtnElemRef.current = el}>
-        <KeyboardDoubleArrowUpIcon />
-      </IconButton>
-      <IconButton className="trmrk-icon-btn" ref={el => moveDownX1BtnElemRef.current = el}>
-        <KeyboardDoubleArrowDownIcon />
-      </IconButton>
-      <IconButton className="trmrk-icon-btn trmrk-move-down-x3-btn" ref={el => moveDownX3BtnElemRef.current = el}>
-        <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
-        <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
-      </IconButton>
-      <IconButton className="trmrk-icon-btn"
-          onMouseDown={isFullViewScrollModeActivated}
-          onTouchEnd={isFullViewScrollModeActivated}>
-        <DragIndicatorIcon />
-      </IconButton>
+      { !props.showMoreOptions ? <React.Fragment>
+        <IconButton className="trmrk-icon-btn trmrk-move-up-x3-btn" ref={el => moveUpX3BtnElemRef.current = el}>
+          <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
+          <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
+        </IconButton>
+        <IconButton className="trmrk-icon-btn" ref={el => moveUpX1BtnElemRef.current = el}>
+          <KeyboardDoubleArrowUpIcon />
+        </IconButton>
+        <IconButton className="trmrk-icon-btn" ref={el => moveDownX1BtnElemRef.current = el}>
+          <KeyboardDoubleArrowDownIcon />
+        </IconButton>
+        <IconButton className="trmrk-icon-btn trmrk-move-down-x3-btn" ref={el => moveDownX3BtnElemRef.current = el}>
+          <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
+          <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
+        </IconButton>
+      </React.Fragment> : <React.Fragment>
+      </React.Fragment> }
     </div>
   </div>);
 }

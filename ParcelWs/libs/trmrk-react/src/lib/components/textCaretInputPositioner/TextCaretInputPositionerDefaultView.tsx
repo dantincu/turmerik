@@ -69,6 +69,7 @@ export default function TextCaretInputPositionerDefaultView(
   const [ selectionIsActivated, setSelectionIsActivated ] = React.useState(props.selectionIsActivated);
 
   const jumpPrevLineLongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineTouchStartOrMouseDown,
     shortPressed: props.jumpPrevLineShortPressed,
@@ -77,6 +78,7 @@ export default function TextCaretInputPositionerDefaultView(
   });
 
   const jumpPrevWordLongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevWordTouchStartOrMouseDown,
     shortPressed: props.jumpPrevWordShortPressed,
@@ -85,6 +87,7 @@ export default function TextCaretInputPositionerDefaultView(
   });
 
   const jumpPrevCharLongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharTouchStartOrMouseDown,
     shortPressed: props.jumpPrevCharShortPressed,
@@ -93,6 +96,7 @@ export default function TextCaretInputPositionerDefaultView(
   });
 
   const jumpNextCharLongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharTouchStartOrMouseDown,
     shortPressed: props.jumpNextCharShortPressed,
@@ -101,6 +105,7 @@ export default function TextCaretInputPositionerDefaultView(
   });
 
   const jumpNextWordLongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextWordTouchStartOrMouseDown,
     shortPressed: props.jumpNextWordShortPressed,
@@ -109,6 +114,7 @@ export default function TextCaretInputPositionerDefaultView(
   });
 
   const jumpNextLineLongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineTouchStartOrMouseDown,
     shortPressed: props.jumpNextLineShortPressed,

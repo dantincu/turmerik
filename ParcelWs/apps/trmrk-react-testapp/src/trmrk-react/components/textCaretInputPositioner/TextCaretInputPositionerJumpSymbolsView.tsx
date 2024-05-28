@@ -63,6 +63,7 @@ export default function TextCaretInputPositionerJumpSymbolsView(
   const [ selectionIsActivated, setselectionIsActivated ] = React.useState(props.selectionIsActivated);
 
   const jumpPrevCharX3LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharX3TouchStartOrMouseDown,
     shortPressed: props.jumpPrevCharX3ShortPressed,
@@ -71,6 +72,7 @@ export default function TextCaretInputPositionerJumpSymbolsView(
   });
 
   const jumpPrevCharX2LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharX2TouchStartOrMouseDown,
     shortPressed: props.jumpPrevCharX2ShortPressed,
@@ -79,6 +81,7 @@ export default function TextCaretInputPositionerJumpSymbolsView(
   });
 
   const jumpPrevCharX1LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharX1TouchStartOrMouseDown,
     shortPressed: props.jumpPrevCharX1ShortPressed,
@@ -87,6 +90,7 @@ export default function TextCaretInputPositionerJumpSymbolsView(
   });
 
   const jumpNextCharX1LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharX1TouchStartOrMouseDown,
     shortPressed: props.jumpNextCharX1ShortPressed,
@@ -95,6 +99,7 @@ export default function TextCaretInputPositionerJumpSymbolsView(
   });
 
   const jumpNextCharX2LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharX2TouchStartOrMouseDown,
     shortPressed: props.jumpNextCharX2ShortPressed,
@@ -103,6 +108,7 @@ export default function TextCaretInputPositionerJumpSymbolsView(
   });
 
   const jumpNextCharX3LongPress = longPress({
+    requiredButton: 0,
     longPressIntervalMs: longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharX3TouchStartOrMouseDown,
     shortPressed: props.jumpNextCharX3ShortPressed,
