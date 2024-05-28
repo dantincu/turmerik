@@ -23,7 +23,6 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
   const [ btn2Elem, setBtn2Elem ] = React.useState(btn2ElemRef.current ?? null);
 
   const longPressObj1 = longPress({
-    btnElem: btn1Elem,
     afterLongPressLoopTimeoutMs: 3000,
     touchStartOrMouseDown: React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
       // console.log("touchStartOrMouseDown1", ev, coords);
@@ -54,7 +53,6 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
   });
 
   const longPressObj2 = longPress({
-    btnElem: btn2Elem,
     afterLongPressLoopTimeoutMs: 3000,
     touchStartOrMouseDown: React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
       // console.log("touchStartOrMouseDown2", ev, coords);
@@ -96,8 +94,22 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
       setBtn2Elem(btn2ElemVal);
     }
 
+    if (btn1Elem) {
+      longPressObj1.registerAll(btn1Elem);
+    }
+    
+    if (btn2Elem) {
+      longPressObj2.registerAll(btn2Elem);
+    }
+
     return () => {
-      longPressObj1.unregisterAll();
+      if (btn1Elem) {
+        longPressObj1.unregisterAll();
+      }
+      
+      if (btn2Elem) {
+        longPressObj2.unregisterAll();
+      }
     }
   }, [longPressObj1, longPressObj2, btn1ElemRef, btn2ElemRef]);
 

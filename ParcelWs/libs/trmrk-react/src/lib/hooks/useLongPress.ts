@@ -13,6 +13,7 @@ import {
 } from "../../trmrk-browser/domUtils/core";
 
 export const LONG_PRESS_INTERVAL_MS = 400;
+export const AFTER_LONG_PRESS_INTERVAL_MS = 200;
 export const AFTER_LONG_PRESS_LOOP_INTERVAL_MS = 100;
 export const AFTER_LONG_PRESS_LOOP_TIMEOUT_MS = 30 * 1000;
 export const INNER_BOUNDS_RATIO = 0.75;
@@ -20,6 +21,7 @@ export const INNER_BOUNDS_RATIO = 0.75;
 export interface UseLongPressProps {
   requiredButton?: number | null | undefined;
   longPressIntervalMs?: number | null | undefined;
+  afterLongPressIntervalMs?: number | null | undefined;
   afterLongPressLoopIntervalMs?: number | null | undefined;
   afterLongPressLoopTimeoutMs?: number | null | undefined;
   innerBoundsRatio?: number | null | undefined;
@@ -56,6 +58,7 @@ export interface UseLongPressProps {
       ) => void)
     | null
     | undefined;
+  afterLongPress?: (() => void) | null | undefined;
   afterLongPressLoop?: (() => void) | null | undefined;
   afterLongPressLoopTimeout?: (() => void) | null | undefined;
 }
@@ -72,6 +75,10 @@ export const normLongPressIntervalMs = (
   longPressIntervalMs: number | null | undefined
 ) => longPressIntervalMs ?? LONG_PRESS_INTERVAL_MS;
 
+export const normAfterLongPressIntervalMs = (
+  afterLongPressIntervalMs: number | null | undefined
+) => afterLongPressIntervalMs ?? -1;
+
 export const normAfterLongPressLoopIntervalMs = (
   afterLongPressLoopIntervalMs: number | null | undefined
 ) => afterLongPressLoopIntervalMs ?? -1;
@@ -82,8 +89,8 @@ export const normAfterLongPressLoopTimeoutMs = (
 
 export const normInnerBoundsRatio = (
   innerBoundsRatio: number | null | undefined,
-  defaultInnerBoundsRatio: number = INNER_BOUNDS_RATIO
-) => innerBoundsRatio ?? defaultInnerBoundsRatio ?? INNER_BOUNDS_RATIO;
+  defaultInnerBoundsRatio: number = 1
+) => innerBoundsRatio ?? defaultInnerBoundsRatio ?? 1;
 
 export const touchIsOutOfBounds = (
   elem: HTMLElement,
@@ -123,6 +130,12 @@ export const touchIsOutOfBounds = (
     coords.pageY < innerRectangle.top ||
     coords.pageY - innerRectangle.top > innerRectangle.height;
 
+  /* if (isOutOfBounds) {
+    document.body.style.backgroundColor = "#840";
+  } else {
+    document.body.style.backgroundColor = "";
+  } */
+
   return isOutOfBounds;
 };
 
@@ -135,6 +148,11 @@ export default function useLongPress(props: UseLongPressProps) {
 
   const [propsLongPressIntervalMs, setPropsLongPressIntervalMs] =
     React.useState(normLongPressIntervalMs(props.longPressIntervalMs));
+
+  const [propsAfterLongPressIntervalMs, setPropsAfterLongPressIntervalMs] =
+    React.useState(
+      normAfterLongPressIntervalMs(props.afterLongPressIntervalMs)
+    );
 
   const [
     propsAfterLongPressLoopIntervalMs,
@@ -171,6 +189,9 @@ export default function useLongPress(props: UseLongPressProps) {
     propsLongPressIntervalMs
   );
 
+  const [afterLongPressIntervalMs, setAfterLongPressIntervalMs] =
+    React.useState(propsAfterLongPressIntervalMs);
+
   const [afterLongPressLoopIntervalMs, setAfterLongPressLoopIntervalMs] =
     React.useState(propsAfterLongPressLoopIntervalMs);
 
@@ -190,6 +211,8 @@ export default function useLongPress(props: UseLongPressProps) {
   );
 
   const longPressTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const afterLongPressTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const afterLongPressLoopIntervalIdRef = React.useRef<NodeJS.Timeout | null>(
     null
@@ -217,10 +240,21 @@ export default function useLongPress(props: UseLongPressProps) {
           }
 
           if ($continue !== false) {
-            btnElem.addEventListener("mouseup", onTouchEndOrMouseUp);
-            btnElem.addEventListener("touchend", onTouchEndOrMouseUp);
-            btnElem.addEventListener("mousemove", onTouchOrMouseMove);
-            btnElem.addEventListener("touchmove", onTouchOrMouseMove);
+            document.addEventListener("mouseup", onTouchEndOrMouseUp, {
+              capture: true,
+            });
+
+            document.addEventListener("touchend", onTouchEndOrMouseUp, {
+              capture: true,
+            });
+
+            document.addEventListener("mousemove", onTouchOrMouseMove, {
+              capture: true,
+            });
+
+            document.addEventListener("touchmove", onTouchOrMouseMove, {
+              capture: true,
+            });
 
             longPressTimeoutIdRef.current = setTimeout(
               onLongPressIntervalPassed,
@@ -234,14 +268,17 @@ export default function useLongPress(props: UseLongPressProps) {
   );
 
   const onTouchEndOrMouseUpOrTouchOrMouseMove = React.useCallback(
-    (ev: TouchEvent | MouseEvent, isMouseMove: boolean) => {
-      const btnElem = ev.target as HTMLElement;
+    (ev: TouchEvent | MouseEvent, isTouchOrMouseMove: boolean) => {
+      const trgElem = ev.target as HTMLElement;
 
-      if (btnElem) {
+      if (trgElem && btnElRef.current) {
         const coords = getSingleTouchOrClick(ev, requiredButton);
-        let $continue: boolean = !isMouseMove || !!coords;
+        let $continue: boolean =
+          !isTouchOrMouseMove ||
+          !!coords ||
+          !btnElRef.current.contains(trgElem);
 
-        if (isMouseMove) {
+        if (isTouchOrMouseMove) {
           if (props.touchOrMouseMove) {
             props.touchOrMouseMove(ev, coords);
           }
@@ -251,7 +288,7 @@ export default function useLongPress(props: UseLongPressProps) {
               $continue = !props.touchIsOutOfBoundsPredicate(ev, coords);
             } else {
               $continue = touchIsOutOfBounds(
-                btnElem,
+                btnElRef.current,
                 ev,
                 coords,
                 widthInnerBoundsRatio,
@@ -276,11 +313,11 @@ export default function useLongPress(props: UseLongPressProps) {
             }
           }
 
-          clearAll(btnElem);
+          clearAll(trgElem);
         }
       }
     },
-    [requiredButton, widthInnerBoundsRatio, heightInnerBoundsRatio]
+    [requiredButton, btnElRef, widthInnerBoundsRatio, heightInnerBoundsRatio]
   );
 
   const onTouchEndOrMouseUp = React.useCallback(
@@ -304,6 +341,13 @@ export default function useLongPress(props: UseLongPressProps) {
       props.longPressStarted();
     }
 
+    if (afterLongPressIntervalMs > 0) {
+      afterLongPressTimeoutIdRef.current = setTimeout(
+        onAfterLongPressInterval,
+        afterLongPressIntervalMs
+      );
+    }
+
     if (afterLongPressLoopIntervalMs > 0 && props.afterLongPressLoop) {
       afterLongPressLoopIntervalIdRef.current = setInterval(
         onAfterLongPressLoopInterval,
@@ -320,6 +364,12 @@ export default function useLongPress(props: UseLongPressProps) {
 
     longPressIntervalPassedRef.current = true;
   }, [afterLongPressLoopIntervalMs, afterLongPressLoopTimeoutMs]);
+
+  const onAfterLongPressInterval = React.useCallback(() => {
+    if (props.afterLongPress) {
+      props.afterLongPress();
+    }
+  }, []);
 
   const onAfterLongPressLoopInterval = React.useCallback(() => {
     if (props.afterLongPressLoop) {
@@ -359,12 +409,25 @@ export default function useLongPress(props: UseLongPressProps) {
   const clearAll = React.useCallback((btnElem: HTMLElement) => {
     if (btnElem) {
       clearTimeoutIfReq(longPressTimeoutIdRef);
+      clearTimeoutIfReq(afterLongPressTimeoutIdRef);
       clearIntervalIfReq(afterLongPressLoopIntervalIdRef);
       clearTimeoutIfReq(afterLongPressLoopTimeoutIdRef);
-      btnElem.removeEventListener("mouseup", onTouchEndOrMouseUp);
-      btnElem.removeEventListener("touchend", onTouchEndOrMouseUp);
-      btnElem.removeEventListener("mousemove", onTouchOrMouseMove);
-      btnElem.removeEventListener("touchmove", onTouchOrMouseMove);
+      document.removeEventListener("mouseup", onTouchEndOrMouseUp, {
+        capture: true,
+      });
+
+      document.removeEventListener("touchend", onTouchEndOrMouseUp, {
+        capture: true,
+      });
+
+      document.removeEventListener("mousemove", onTouchOrMouseMove, {
+        capture: true,
+      });
+
+      document.removeEventListener("touchmove", onTouchOrMouseMove, {
+        capture: true,
+      });
+
       longPressIntervalPassedRef.current = false;
     }
   }, []);
@@ -384,6 +447,10 @@ export default function useLongPress(props: UseLongPressProps) {
 
     const newLongPressIntervalMsVal = normLongPressIntervalMs(
       props.longPressIntervalMs
+    );
+
+    const newAfterLongPressIntervalMsVal = normAfterLongPressIntervalMs(
+      props.afterLongPressIntervalMs
     );
 
     const newAfterLongPressLoopIntervalMsVal = normAfterLongPressLoopIntervalMs(
@@ -412,6 +479,9 @@ export default function useLongPress(props: UseLongPressProps) {
     const setNewLongPressIntervalMsVal =
       newLongPressIntervalMsVal !== propsLongPressIntervalMs;
 
+    const setNewAfterLongPressIntervalMsVal =
+      newAfterLongPressIntervalMsVal !== propsAfterLongPressIntervalMs;
+
     const setNewAfterLongPressLoopIntervalMsVal =
       newAfterLongPressLoopIntervalMsVal !== propsAfterLongPressLoopIntervalMs;
 
@@ -435,6 +505,11 @@ export default function useLongPress(props: UseLongPressProps) {
     if (setNewLongPressIntervalMsVal) {
       setPropsLongPressIntervalMs(newLongPressIntervalMsVal);
       setLongPressIntervalMs(newLongPressIntervalMsVal);
+    }
+
+    if (setNewAfterLongPressIntervalMsVal) {
+      setPropsAfterLongPressIntervalMs(newAfterLongPressIntervalMsVal);
+      setAfterLongPressIntervalMs(newAfterLongPressIntervalMsVal);
     }
 
     if (setNewAfterLongPressLoopIntervalMsVal) {
@@ -464,6 +539,7 @@ export default function useLongPress(props: UseLongPressProps) {
   }, [
     propsRequiredButton,
     propsLongPressIntervalMs,
+    propsAfterLongPressIntervalMs,
     propsAfterLongPressLoopIntervalMs,
     propsAfterLongPressLoopTimeoutMs,
     propsInnerBoundsRatio,
@@ -471,6 +547,7 @@ export default function useLongPress(props: UseLongPressProps) {
     propsHeightInnerBoundsRatio,
     requiredButton,
     longPressIntervalMs,
+    afterLongPressIntervalMs,
     afterLongPressLoopIntervalMs,
     afterLongPressLoopTimeoutMs,
     innerBoundsRatio,

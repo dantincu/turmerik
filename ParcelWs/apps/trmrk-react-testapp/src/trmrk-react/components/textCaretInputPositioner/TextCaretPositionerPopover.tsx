@@ -2,7 +2,7 @@ import React from "react";
 
 import IconButton from "@mui/material/IconButton";
 
-import trmrk from "../../../trmrk";
+import { ValueOrAnyOrVoid } from "../../../trmrk/core";
 
 import {
   TouchOrMouseCoords,
@@ -35,6 +35,7 @@ export interface TextInputCaretPositionerPopoverProps {
   selectionIsActivated?: boolean | null | undefined;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
+  moving?: ((e: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, rowsCount: number) => ValueOrAnyOrVoid<boolean>) | null | undefined;
   stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
   minimizedToggled?: ((minimized: boolean) => void) | null | undefined;
   showOptionsToggled?: ((showOptions: boolean) => void) | null | undefined;
@@ -120,15 +121,14 @@ export default function TextInputCaretPositionerPopover(
   const [ linesJumpSpeedsArr, setLinesJumpSpeedsArr ] = React.useState(
     normalizeLinesJumpSpeedsArr(props.linesJumpSpeedsArr));
 
-  const moveUpOrDown = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, moveDirIsUp: boolean) => {
+  const moving = React.useCallback((rowsCount: number) => {
     const mainEl = mainElRef.current;
 
     if (mainEl) {
       const topOffsetPxNum = extractElCssStyleTopPx(mainEl);
 
       if ((topOffsetPxNum ?? null) !== null) {
-        const sign = moveDirIsUp ? -1 : 1;
-        let nextTopOffsetPxNum = topOffsetPxNum! + sign * mainEl.clientHeight;
+        let nextTopOffsetPxNum = topOffsetPxNum! + rowsCount * mainEl.clientHeight;
 
         nextTopOffsetPxNum = Math.max(0, nextTopOffsetPxNum);
         nextTopOffsetPxNum = Math.min(nextTopOffsetPxNum, window.innerHeight - mainEl.clientHeight);
@@ -136,14 +136,6 @@ export default function TextInputCaretPositionerPopover(
         mainEl.style.top = `${nextTopOffsetPxNum}px`;
       }
     }
-  }, [mainElRef]);
-
-  const moveUp = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
-    moveUpOrDown(ev, coords, true);
-  }, [mainElRef]);
-
-  const moveDown = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
-    moveUpOrDown(ev, coords, false);
   }, [mainElRef]);
 
   const minimizeBtnClicked = React.useCallback(() => {
@@ -669,8 +661,7 @@ export default function TextInputCaretPositionerPopover(
     if (showOptions) {
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
-          moveUp={moveUp}
-          moveDown={moveDown}
+          moving={moving}
           isFullViewScrollModeActivated={isFullViewScrollModeActivated} />;
     } else if (isFullViewScrollMode) {
       return <FullScrollModeView />;
