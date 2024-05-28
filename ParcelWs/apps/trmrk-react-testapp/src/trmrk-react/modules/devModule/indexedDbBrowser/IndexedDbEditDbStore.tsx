@@ -16,7 +16,7 @@ import { IndexedDbDatabase, IndexedDbStore } from "./models";
 import { AppDataSelectors } from "../../../redux/appData";
 
 import { deserializeKeyPath } from "../../../services/indexedDb";
-import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
+// import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
 import MatUIIcon from "../../../components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbStoreProps {
@@ -197,7 +197,7 @@ export default function IndexedDbEditDbStore(
     </Box>
     { (keyPathErr ?? null) !== null ? <FormHelperText error className="trmrk-form-helper-text-row">
       {keyPathErr}</FormHelperText> : null }
-    { dbStoreNameTextBoxEl ? <TrmrkTextMagnifierModal
+    { /* dbStoreNameTextBoxEl ? <TrmrkTextMagnifierModal
       isOpen={showDbStoreNameTextBoxMagnifier}
       isDarkMode={isDarkMode}
       handleClose={onHideDbStoreNameTextBoxMagnifier}
@@ -206,6 +206,6 @@ export default function IndexedDbEditDbStore(
         onCancelChangesClick: onHideDbStoreNameTextBoxMagnifier,
         onSubmitChangesClick: onSubmitDbStoreNameTextBoxMagnifier,
         textIsReadonly: !props.model.canBeEdited
-      }} /> : null }
+      }} /> : null */ }
   </Paper>);
 }

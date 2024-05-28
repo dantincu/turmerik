@@ -42,7 +42,7 @@ import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 import { isMobile, isIPhone } from "../../../../trmrk-browser/domUtils/constants";
 
 import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
-import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
+// import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
 import MatUIIcon from "../../../components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbProps {
@@ -572,7 +572,7 @@ export default function IndexedDbEditDb(
               <FormHelperText className="trmrk-warning trmrk-form-helper-text-row">{warning}</FormHelperText> : null }
           </React.Fragment> }
       <div ref={bottomElRef}></div>
-      { dbNameTextBoxEl ? <TrmrkTextMagnifierModal
+      { /* dbNameTextBoxEl ? <TrmrkTextMagnifierModal
         isOpen={showDbNameTextBoxMagnifier}
         isDarkMode={isDarkMode}
         handleClose={onHideDbNameTextBoxMagnifier}
@@ -581,7 +581,7 @@ export default function IndexedDbEditDb(
           onCancelChangesClick: onHideDbNameTextBoxMagnifier,
           onSubmitChangesClick: onSubmitDbNameTextBoxMagnifier,
           textIsReadonly: props.isNewDb
-        }} /> : null }
+        }} /> : null */ }
       <Snackbar open={showEditResultMsg} autoHideDuration={6000} onClose={onCreateSuccessMsgClose}>
         <Alert
           className="trmrk-full-width"
