@@ -8,6 +8,7 @@ import {
   OptionsMenuOpts,
   AppBarReducers,
   AppBarSelectors,
+  TextCaretPositionerMenuOpts,
 } from "../../trmrk-react/redux/appBarData";
 
 const appBarDataSlice = createSlice({
@@ -15,6 +16,9 @@ const appBarDataSlice = createSlice({
   initialState: {
     appSettingsMenuOpts: {
       isOpen: false,
+      textCaretPositionerMenuOpts: {
+        isOpen: false,
+      },
       appearenceMenuOpts: {
         isOpen: false,
       },
@@ -37,6 +41,7 @@ const appBarDataSlice = createSlice({
     },
     setAppSettingsMenuIsOpen: (state, action: ReducerAction<boolean>) => {
       state.appSettingsMenuOpts.appearenceMenuOpts.isOpen = false;
+      state.appSettingsMenuOpts.textCaretPositionerMenuOpts.isOpen = false;
       state.appSettingsMenuOpts.isOpen = action.payload;
     },
     setAppearenceMenuOpts: (
@@ -47,6 +52,19 @@ const appBarDataSlice = createSlice({
     },
     setAppearenceMenuIsOpen: (state, action: ReducerAction<boolean>) => {
       state.appSettingsMenuOpts.appearenceMenuOpts.isOpen = action.payload;
+    },
+    setTextCaretPositionerMenuOpts: (
+      state,
+      action: ReducerAction<TextCaretPositionerMenuOpts>
+    ) => {
+      state.appSettingsMenuOpts.textCaretPositionerMenuOpts = action.payload;
+    },
+    setTextCaretPositionerMenuIsOpen: (
+      state,
+      action: ReducerAction<boolean>
+    ) => {
+      state.appSettingsMenuOpts.textCaretPositionerMenuOpts.isOpen =
+        action.payload;
     },
     setShowOptionsMenuBtn: (state, action: ReducerAction<boolean>) => {
       state.showOptionsMenuBtn = action.payload;
@@ -79,6 +97,10 @@ const appBarDataSlice = createSlice({
       state.appSettingsMenuOpts.appearenceMenuOpts,
     getAppearenceMenuIsOpen: (state) =>
       state.appSettingsMenuOpts.appearenceMenuOpts.isOpen,
+    getTextCaretPositionerMenuOpts: (state) =>
+      state.appSettingsMenuOpts.textCaretPositionerMenuOpts,
+    getTextCaretPositionerMenuIsOpen: (state) =>
+      state.appSettingsMenuOpts.textCaretPositionerMenuOpts.isOpen,
     getShowOptionsMenuBtn: (state) => state.showOptionsMenuBtn,
     getOptionsMenuOpts: (state) => state.optionsMenuOpts,
     getOptionsMenuIsOpen: (state) => state.optionsMenuOpts.isOpen,
@@ -94,6 +116,8 @@ const {
   setAppSettingsMenuIsOpen,
   setAppearenceMenuOpts,
   setAppearenceMenuIsOpen,
+  setTextCaretPositionerMenuOpts,
+  setTextCaretPositionerMenuIsOpen,
   setShowOptionsMenuBtn,
   setOptionsMenuOpts,
   setOptionsMenuIsOpen,
@@ -109,6 +133,8 @@ const {
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,
   getAppearenceMenuIsOpen,
+  getTextCaretPositionerMenuOpts,
+  getTextCaretPositionerMenuIsOpen,
   getShowOptionsMenuBtn,
   getOptionsMenuOpts,
   getOptionsMenuIsOpen,
@@ -123,6 +149,8 @@ export const appBarReducers: AppBarReducers = {
   setAppSettingsMenuIsOpen,
   setAppearenceMenuOpts,
   setAppearenceMenuIsOpen,
+  setTextCaretPositionerMenuOpts,
+  setTextCaretPositionerMenuIsOpen,
   setShowOptionsMenuBtn,
   setOptionsMenuOpts,
   setOptionsMenuIsOpen,
@@ -138,6 +166,8 @@ export const appBarSelectors: AppBarSelectors = {
   getAppSettingsMenuIsOpen,
   getAppearenceMenuOpts,
   getAppearenceMenuIsOpen,
+  getTextCaretPositionerMenuOpts,
+  getTextCaretPositionerMenuIsOpen,
   getShowOptionsMenuBtn,
   getOptionsMenuOpts,
   getOptionsMenuIsOpen,

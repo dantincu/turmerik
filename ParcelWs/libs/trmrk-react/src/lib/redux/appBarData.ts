@@ -1,11 +1,16 @@
 import { Selector, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
+export interface TextCaretPositionerMenuOpts {
+  isOpen: boolean;
+}
+
 export interface AppearenceMenuOpts {
   isOpen: boolean;
 }
 
 export interface AppSettingsMenuOpts {
   isOpen: boolean;
+  textCaretPositionerMenuOpts: TextCaretPositionerMenuOpts;
   appearenceMenuOpts: AppearenceMenuOpts;
 }
 
@@ -43,6 +48,24 @@ export interface AppBarSelectors {
     unwrapped: (appBar: AppBarData) => AppSettingsMenuOpts;
   };
   getAppSettingsMenuIsOpen: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean;
+  };
+  getTextCaretPositionerMenuOpts: Selector<
+    {
+      appBar: AppBarData;
+    },
+    TextCaretPositionerMenuOpts,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => TextCaretPositionerMenuOpts;
+  };
+  getTextCaretPositionerMenuIsOpen: Selector<
     {
       appBar: AppBarData;
     },
@@ -142,6 +165,14 @@ export interface AppBarReducers {
   setAppSettingsMenuIsOpen: ActionCreatorWithPayload<
     boolean,
     "appBar/setAppSettingsMenuIsOpen"
+  >;
+  setTextCaretPositionerMenuOpts: ActionCreatorWithPayload<
+    TextCaretPositionerMenuOpts,
+    "appBar/setTextCaretPositionerMenuOpts"
+  >;
+  setTextCaretPositionerMenuIsOpen: ActionCreatorWithPayload<
+    boolean,
+    "appBar/setTextCaretPositionerMenuIsOpen"
   >;
   setAppearenceMenuOpts: ActionCreatorWithPayload<
     AppearenceMenuOpts,

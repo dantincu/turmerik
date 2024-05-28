@@ -1,13 +1,28 @@
 import { Selector, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
+export interface TextCaretPositionerOpts {
+  enabled: boolean;
+  keepOpen: boolean;
+}
+
 export interface AppData {
   baseLocation: string;
   currentUrlPath: string;
   isDarkMode: boolean;
   isCompactMode: boolean;
+  textCaretPositionerOpts: TextCaretPositionerOpts;
 }
 
 export interface AppDataSelectors {
+  getBaseLocation: Selector<
+    {
+      appData: AppData;
+    },
+    string,
+    []
+  > & {
+    unwrapped: (appData: AppData) => string;
+  };
   getCurrentUrlPath: Selector<
     {
       appData: AppData;
@@ -35,6 +50,33 @@ export interface AppDataSelectors {
   > & {
     unwrapped: (appData: AppData) => boolean;
   };
+  getTextCaretPositionerOpts: Selector<
+    {
+      appData: AppData;
+    },
+    TextCaretPositionerOpts,
+    []
+  > & {
+    unwrapped: (appData: AppData) => TextCaretPositionerOpts;
+  };
+  getTextCaretPositionerEnabled: Selector<
+    {
+      appData: AppData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appData: AppData) => boolean;
+  };
+  getTextCaretPositionerKeepOpen: Selector<
+    {
+      appData: AppData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appData: AppData) => boolean;
+  };
 }
 
 export interface AppDataReducers {
@@ -47,4 +89,16 @@ export interface AppDataReducers {
     "appData/setIsCompactMode"
   >;
   setIsDarkMode: ActionCreatorWithPayload<boolean, "appData/setIsDarkMode">;
+  setTextCaretPositionerEnabled: ActionCreatorWithPayload<
+    boolean,
+    "appData/setTextCaretPositionerEnabled"
+  >;
+  setTextCaretPositionerKeepOpen: ActionCreatorWithPayload<
+    boolean,
+    "appData/setTextCaretPositionerKeepOpen"
+  >;
+  setTextCaretPositionerOpts: ActionCreatorWithPayload<
+    TextCaretPositionerOpts,
+    "appData/setTextCaretPositionerOpts"
+  >;
 }

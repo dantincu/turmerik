@@ -16,6 +16,8 @@ export interface SettingsMenuProps {
   menuClosed: () => void;
   appearenceMenuOpen: () => void;
   appearenceMenuBtnRefAvailable: (btnRef: HTMLButtonElement | null) => void;
+  textCaretPositionerMenuOpen: () => void;
+  textCaretPositionerOptsMenuBtnRefAvailable: (btnRef: HTMLButtonElement | null) => void;
 }
 
 export default function SettingsMenu(
@@ -32,7 +34,9 @@ export default function SettingsMenu(
           <SettingsMenuList
             className={props.menuListClassName}
             appearenceMenuOpen={props.appearenceMenuOpen}
-            appearenceMenuBtnRefAvailable={props.appearenceMenuBtnRefAvailable}>
+            appearenceMenuBtnRefAvailable={props.appearenceMenuBtnRefAvailable}
+            textCaretPositionerMenuOpen={props.textCaretPositionerMenuOpen}
+            textCaretPositionerOptsMenuBtnRefAvailable={props.textCaretPositionerOptsMenuBtnRefAvailable}>
               { props.children }
             </SettingsMenuList>
       </Menu>

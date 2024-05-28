@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
 import Input from "@mui/material/Input";
@@ -52,7 +52,11 @@ export default function TextInputCursorPositioningPage(
   const [ textArea2IsReadonly, setText2AreaIsReadonly ] = React.useState(true);
 
   const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
+  const textCaretPositionerEnabled = useSelector(appDataSelectors.getTextCaretPositionerEnabled);
+  const textCaretPositionerKeepOpen = useSelector(appDataSelectors.getTextCaretPositionerKeepOpen);
   const isAnyMenuOpen = useSelector(appBarSelectors.isAnyMenuOpen);
+
+  const dispatch = useDispatch();
 
   const textObj = generateText();
 
@@ -136,6 +140,14 @@ export default function TextInputCursorPositioningPage(
     }
   }
 
+  const onTextCaretPositionerKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
+    dispatch(appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
+  }, []);
+
+  const onTextCaretPositionerDisabled = React.useCallback(() => {
+    dispatch(appDataReducers.setTextCaretPositionerEnabled(false));
+  }, []);
+
   React.useEffect(() => {
     if (textBox1ElRef.current !== textBox1WrapperEl) {
       setTextBox1WrapperEl(textBox1ElRef.current);
@@ -171,7 +183,9 @@ export default function TextInputCursorPositioningPage(
     isDarkMode,
     isAnyMenuOpen,
     singlelineText2,
-    multilineText2 ]);
+    multilineText2,
+    textCaretPositionerEnabled,
+    textCaretPositionerKeepOpen ]);
     
     return (<AppBarsPanel basePath={props.basePath}
       appBarSelectors={appBarSelectors}
@@ -206,8 +220,11 @@ export default function TextInputCursorPositioningPage(
         onBlur={onHideMultilineTextBox2CaretPositioner} />
     </div>
 
-    { currentInputEl ? <TextInputCaretPositionerPopover
+    { (currentInputEl && textCaretPositionerEnabled) ? <TextInputCaretPositionerPopover
       inputEl={currentInputEl}
-      inFrontOfAll={!isAnyMenuOpen} /> : null }
+      inFrontOfAll={!isAnyMenuOpen}
+      keepOpen={textCaretPositionerKeepOpen}
+      keepOpenToggled={onTextCaretPositionerKeepOpenToggled}
+      closeClicked={onTextCaretPositionerDisabled} /> : null }
   </AppBarsPanel>);
 }
