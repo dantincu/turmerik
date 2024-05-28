@@ -29,18 +29,21 @@ export interface TextInputCaretPositionerPopoverProps {
   inFrontOfAll?: boolean | null | undefined;
   minimized?: boolean | null | undefined;
   state?: TextCaretInputPositionerState | null | undefined;
+  keepOpen?: boolean | null | undefined;
   showOptions?: boolean | null | undefined;
   showMoreOptions?: boolean | null | undefined;
   selectionIsActivated?: boolean | null | undefined;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   moving?: ((e: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, rowsCount: number) => ValueOrAnyOrVoid<boolean>) | null | undefined;
-  stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
   minimizedToggled?: ((minimized: boolean) => void) | null | undefined;
+  stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
+  keepOpenToggled?: ((keepOpen: boolean) => void) | null | undefined;
   showOptionsToggled?: ((showOptions: boolean) => void) | null | undefined;
   showMoreOptionsToggled?: ((showMoreOptions: boolean) => void) | null | undefined;
   isFullViewScrollModeToggled?: ((isFullViewScrollMode: boolean) => void) | null | undefined;
   selectionIsActivatedToggled?: ((selectionIsActivated: boolean) => void) | null | undefined;
+  closeClicked?: (() => void) | null | undefined;
 }
 
 export const defaultJumpSpeedsArr = Object.freeze([5, 25, 125]);
@@ -94,6 +97,7 @@ export const normalizeInFrontOfAll = (
 
 export const normalizeMininized = (minimized: boolean | null | undefined) => minimized ?? false;
 export const normalizeState = (state: TextCaretInputPositionerState | null | undefined) => state ?? TextCaretInputPositionerState.Default;
+export const normalizeKeepOpen = (keepOpen: boolean | null | undefined) => keepOpen ?? false;
 export const normalizeShowOptions = (showOptions: boolean | null | undefined) => showOptions ?? false;
 export const normalizeShowMoreOptions = (showMoreOptions: boolean | null | undefined) => showMoreOptions ?? false;
 
@@ -121,6 +125,7 @@ export default function TextInputCaretPositionerPopover(
   const [ inFrontOfAllPropsVal, setInFrontOfAllPropsVal ] = React.useState(normalizeInFrontOfAll(props.inFrontOfAll));
   const [ minimizedPropsVal, setMinimizedPropsVal ] = React.useState(normalizeMininized(props.minimized));
   const [ stateTypePropsVal, setStateTypePropsVal ] = React.useState(normalizeState(props.state));
+  const [ keepOpenPropsVal, setKeepOpenPropsVal ] = React.useState(normalizeKeepOpen(props.keepOpen));
   const [ showOptionsPropsVal, setShowOptionsPropsVal ] = React.useState(normalizeShowOptions(props.showOptions));
   const [ showMoreOptionsPropsVal, setShowMoreOptionsPropsVal ] = React.useState(normalizeShowMoreOptions(props.showMoreOptions));
 
@@ -131,6 +136,7 @@ export default function TextInputCaretPositionerPopover(
   const [ inFrontOfAll, setInFrontOfAll ] = React.useState(inFrontOfAllPropsVal);
   const [ minimized, setMinimized ] = React.useState(minimizedPropsVal);
   const [ stateType, setStateType ] = React.useState(stateTypePropsVal);
+  const [ keepOpen, setKeepOpen ] = React.useState(keepOpenPropsVal);
   const [ showOptions, setShowOptions ] = React.useState(showOptionsPropsVal);
   const [ showMoreOptions, setShowMoreOptions ] = React.useState(showMoreOptionsPropsVal);
   const [ selectionIsActivated, setSelectionIsActivated ] = React.useState(selectionIsActivatedPropsVal);
@@ -203,39 +209,57 @@ export default function TextInputCaretPositionerPopover(
     setShowMoreOptions(newShowMoreOptionsVal);
   }, [minimized]);
 
-  const mainBtnClicked = React.useCallback(() => {
-    if (minimized) {
-      const newMinimizedVal = false;
+  const mainBtnClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (((e as React.MouseEvent).button ?? 0) === 0) {
+      if (minimized) {
+        const newMinimizedVal = false;
 
-      if (props.minimizedToggled) {
-        props.minimizedToggled(newMinimizedVal);
-      }
-      
-      setMinimized(newMinimizedVal);
-    } else {
-      const newShowOptionsVal = !showOptions;
-      const newShowMoreOptionsVal = newShowOptionsVal && showMoreOptions;
+        if (props.minimizedToggled) {
+          props.minimizedToggled(newMinimizedVal);
+        }
+        
+        setMinimized(newMinimizedVal);
+      } else {
+        const newShowOptionsVal = !showOptions;
+        const newShowMoreOptionsVal = newShowOptionsVal && showMoreOptions;
 
-      if (props.showOptionsToggled) {
-        props.showOptionsToggled(
-          newShowOptionsVal
-        );
+        if (props.showOptionsToggled) {
+          props.showOptionsToggled(
+            newShowOptionsVal
+          );
+        }
+        
+        setShowOptions(newShowOptionsVal);
+        setShowMoreOptions(newShowMoreOptionsVal);
       }
-      
-      setShowOptions(newShowOptionsVal);
-      setShowMoreOptions(newShowMoreOptionsVal);
     }
   }, [minimized, showOptions, showMoreOptions]);
 
-  const showMoreOptionsBtnClicked = React.useCallback(() => {
-    const newShowMoreOptionsVal = !showMoreOptions;
+  const showMoreOptionsBtnClicked = React.useCallback((showMoreOptions: boolean) => {
+    const newShowMoreOptionsVal = showMoreOptions;
 
     if (props.showMoreOptionsToggled) {
       props.showMoreOptionsToggled(newShowMoreOptionsVal);
     }
 
     setShowMoreOptions(newShowMoreOptionsVal);
-  }, [showMoreOptions]);
+  }, []);
+
+  const keepOpenToggled = React.useCallback((keepOpen: boolean) => {
+    const newKeepOpenVal = keepOpen;
+
+    if (props.keepOpenToggled) {
+      props.keepOpenToggled(newKeepOpenVal);
+    }
+
+    setKeepOpen(newKeepOpenVal);
+  }, []);
+
+  const closeClicked = React.useCallback(() => {
+    if (props.closeClicked) {
+      props.closeClicked();
+    }
+  }, []);
 
   const onDefaultNextViewClick = React.useCallback(() => {
     const newStateType = TextCaretInputPositionerState.JumpSymbols;
@@ -610,6 +634,7 @@ export default function TextInputCaretPositionerPopover(
     const inFrontOfAllNewVal = normalizeInFrontOfAll(props.inFrontOfAll);
     const minimizedNewVal = normalizeMininized(props.minimized);
     const stateNewVal = normalizeState(props.state);
+    const keepOpenNewVal = normalizeKeepOpen(props.keepOpen);
     const showOptionsNewVal = normalizeShowOptions(props.showOptions);
     const showMoreOptionsNewVal = normalizeShowMoreOptions(props.showMoreOptions);
     const selectionIsActivatedNewVal = normalizeSelectionIsActivated(props.inputEl, props.selectionIsActivated);
@@ -646,6 +671,11 @@ export default function TextInputCaretPositionerPopover(
       setStateType(stateNewVal);
     }
 
+    if (keepOpenNewVal !== keepOpenPropsVal) {
+      setKeepOpenPropsVal(keepOpenNewVal);
+      setKeepOpen(keepOpenNewVal);
+    }
+
     if (showOptionsNewVal !== showOptionsPropsVal) {
       setShowOptionsPropsVal(showOptionsNewVal);
       setShowOptions(showOptionsNewVal);
@@ -661,27 +691,27 @@ export default function TextInputCaretPositionerPopover(
       setSelectionIsActivated(selectionIsActivatedNewVal);
     }
 
-    const onMainElTouchEnd = (e: TouchEvent | MouseEvent) => {
+    const onMainElMouseDownOrTouchEnd = (e: TouchEvent | MouseEvent) => {
       e.preventDefault();
     }
 
     if (mainEl) {
-      mainEl.addEventListener("touchend", onMainElTouchEnd, {
+      mainEl.addEventListener("touchend", onMainElMouseDownOrTouchEnd, {
         capture: true
       });
 
-      mainEl.addEventListener("mousedown", onMainElTouchEnd, {
+      mainEl.addEventListener("mousedown", onMainElMouseDownOrTouchEnd, {
         capture: true
       });
     }
 
     return () => {
       if (mainEl) {
-        mainEl.removeEventListener("touchend", onMainElTouchEnd, {
+        mainEl.removeEventListener("touchend", onMainElMouseDownOrTouchEnd, {
           capture: true
         });
 
-        mainEl.removeEventListener("mousedown", onMainElTouchEnd, {
+        mainEl.removeEventListener("mousedown", onMainElMouseDownOrTouchEnd, {
           capture: true
         });
       }
@@ -689,6 +719,7 @@ export default function TextInputCaretPositionerPopover(
   }, [
     props.inputEl,
     props.state,
+    props.keepOpen,
     props.inFrontOfAll,
     props.minimized,
     props.showOptions,
@@ -707,6 +738,7 @@ export default function TextInputCaretPositionerPopover(
     inFrontOfAll,
     minimized,
     stateType,
+    keepOpen,
     showOptions,
     showMoreOptions,
     inputIsMultiline,
@@ -726,7 +758,10 @@ export default function TextInputCaretPositionerPopover(
           moveBtnLongPressStarted={moveBtnLongPressStarted}
           moveBtnAfterLongPressStarted={moveBtnAfterLongPressStarted}
           showMoreOptions={showMoreOptions}
-          showMoreOptionsBtnClicked={showMoreOptionsBtnClicked} />;
+          keepOpen={keepOpen}
+          showMoreOptionsBtnClicked={showMoreOptionsBtnClicked}
+          keepOpenToggled={keepOpenToggled}
+          closeClicked={closeClicked} />;
     } else {
       switch (stateType) {
         case TextCaretInputPositionerState.JumpSymbols:
@@ -824,7 +859,7 @@ export default function TextInputCaretPositionerPopover(
             jumpNextLineLongPressEnded={defaultViewJumpNextLineLongPressEnded} />;
       }
     }
-  }, [inFrontOfAll, inputIsMultiline, selectionIsActivated, stateType, minimized, showOptions, showMoreOptions]);
+  }, [inFrontOfAll, inputIsMultiline, selectionIsActivated, stateType, minimized, keepOpen, showOptions, showMoreOptions]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
     minimized ? "trmrk-minimized" : "",

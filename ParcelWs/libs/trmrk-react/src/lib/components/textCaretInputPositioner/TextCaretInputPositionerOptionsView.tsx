@@ -5,6 +5,7 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
 import { getSingleTouchOrClick } from "../../services/domUtils/touchAndMouseEvents";
@@ -22,11 +23,14 @@ export const positionerMoveBtnLongPressIntervalMs = 300;
 export interface TextCaretInputPositionerOptionsViewProps {
   positionerJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   showMoreOptions: boolean;
+  keepOpen: boolean;
+  minimizeClicked: () => void;
   showMoreOptionsBtnClicked: (showMoreOptions: boolean) => void;
+  keepOpenToggled: (keepOpen: boolean) => void;
+  closeClicked: () => void;
   moving: (rowsCount: number) => ValueOrAnyOrVoid<boolean>;
   moveBtnLongPressStarted: () => void;
   moveBtnAfterLongPressStarted: () => void;
-  minimizeClicked: () => void;
 }
 
 export const defaultPositionerJumpSpeedsArr = Object.freeze([3, 7, 21]);
@@ -120,6 +124,18 @@ export default function TextCaretInputPositionerOptionsView(
     }
   }, [props.showMoreOptions]);
 
+  const keepOpenToggled = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (((e as React.MouseEvent).button ?? 0) === 0) {
+      props.keepOpenToggled(!props.keepOpen);
+    }
+  }, [props.keepOpen]);
+
+  const closeClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
+    if (((e as React.MouseEvent).button ?? 0) === 0) {
+      props.closeClicked();
+    }
+  }, []);
+
   React.useEffect(() => {
     const moveUpX3BtnElemVal = moveUpX3BtnElemRef.current;
     const moveUpX1BtnElemVal = moveUpX1BtnElemRef.current;
@@ -178,6 +194,7 @@ export default function TextCaretInputPositionerOptionsView(
   }, [
     props.positionerJumpSpeedsArr,
     props.showMoreOptions,
+    props.keepOpen,
     positionerJumpSpeedsArr,
     moveUpX3BtnElem,
     moveUpX1BtnElem,
@@ -214,7 +231,20 @@ export default function TextCaretInputPositionerOptionsView(
           <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
           <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
         </IconButton>
+        <IconButton className="trmrk-icon-btn">
+          <MatUIIcon iconName="expand_content" />
+        </IconButton>
       </React.Fragment> : <React.Fragment>
+        <IconButton className="trmrk-icon-btn"
+            onMouseDown={keepOpenToggled}
+            onTouchEnd={keepOpenToggled}>
+          { props.keepOpen ? <MatUIIcon iconName="keep" /> : <MatUIIcon iconName="keep_off" /> }
+        </IconButton>
+        <IconButton className="trmrk-icon-btn"
+            onMouseDown={closeClicked}
+            onTouchEnd={closeClicked}>
+          <CloseIcon />
+        </IconButton>
       </React.Fragment> }
     </div>
   </div>);
