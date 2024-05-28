@@ -16,9 +16,9 @@ import MatUIIcon from "../icons/MatUIIcon";
 import longPress from "../../hooks/useLongPress";
 
 import { ValueOrAnyOrVoid } from "../../../trmrk/core";
-import { longPressIntervalMs } from "./TextCaretPositionerPopover";
 
-export const MOVE_LONG_PRESS_DELAY_MS = 200;
+export const POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS = 200;
+export const positionerMoveBtnLongPressIntervalMs = 300;
 
 export interface TextCaretInputPositionerOptionsViewProps {
   positionerJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
@@ -53,8 +53,8 @@ export default function TextCaretInputPositionerOptionsView(
     normalizePositionerJumpSpeedsArr(props.positionerJumpSpeedsArr));
 
   const moveUpX3LongPress = longPress({
-    longPressIntervalMs: longPressIntervalMs,
-    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
+    longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
+    afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(-1 * positionerJumpSpeedsArr[0]);
     },
@@ -66,8 +66,8 @@ export default function TextCaretInputPositionerOptionsView(
   });
 
   const moveUpX1LongPress = longPress({
-    longPressIntervalMs: longPressIntervalMs,
-    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
+    longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
+    afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(-1);
     },
@@ -79,8 +79,8 @@ export default function TextCaretInputPositionerOptionsView(
   });
 
   const moveDownX1LongPress = longPress({
-    longPressIntervalMs: longPressIntervalMs,
-    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
+    longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
+    afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(1);
     },
@@ -92,8 +92,8 @@ export default function TextCaretInputPositionerOptionsView(
   });
 
   const moveDownX3LongPress = longPress({
-    longPressIntervalMs: longPressIntervalMs,
-    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
+    longPressIntervalMs: positionerMoveBtnLongPressIntervalMs,
+    afterLongPressIntervalMs: POSITIONER_MOVE_BTN_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(positionerJumpSpeedsArr[0]);
     },
@@ -185,8 +185,9 @@ export default function TextCaretInputPositionerOptionsView(
           onTouchEnd={minimizeClicked}>
         <KeyboardDoubleArrowRightIcon />
       </IconButton>
-      <IconButton className="trmrk-icon-btn" ref={el => moveUpX3BtnElemRef.current = el}>
-        <KeyboardDoubleArrowUpIcon />
+      <IconButton className="trmrk-icon-btn trmrk-move-up-x3-btn" ref={el => moveUpX3BtnElemRef.current = el}>
+        <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
+        <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
       </IconButton>
       <IconButton className="trmrk-icon-btn" ref={el => moveUpX1BtnElemRef.current = el}>
         <KeyboardDoubleArrowUpIcon />
@@ -194,8 +195,9 @@ export default function TextCaretInputPositionerOptionsView(
       <IconButton className="trmrk-icon-btn" ref={el => moveDownX1BtnElemRef.current = el}>
         <KeyboardDoubleArrowDownIcon />
       </IconButton>
-      <IconButton className="trmrk-icon-btn" ref={el => moveDownX3BtnElemRef.current = el}>
-        <KeyboardDoubleArrowDownIcon />
+      <IconButton className="trmrk-icon-btn trmrk-move-down-x3-btn" ref={el => moveDownX3BtnElemRef.current = el}>
+        <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
+        <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
       </IconButton>
       <IconButton className="trmrk-icon-btn"
           onMouseDown={isFullViewScrollModeActivated}

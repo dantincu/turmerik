@@ -357,6 +357,19 @@
         top: 0.15em;
       }
     }
+
+    .trmrk-move-up-x3-btn .trmrk-keyboard-double-arrow-up-icon,
+    .trmrk-move-down-x3-btn .trmrk-keyboard-double-arrow-down-icon {
+      position: absolute;
+
+      &:first-child {
+        top: 0.1em;
+      }
+
+      &:nth-child(2) {
+        top: 0.67em;
+      }
+    }
   }
 }
 

@@ -233,12 +233,6 @@
 
     .trmrk-animator {
       &.trmrk-long-pressed {
-        /* background-image: linear-gradient(
-          var(--trmrk-app-bar_background-gradient-from_color_dark),
-          var(--trmrk-app-bar_background-gradient-from_color_dark));
-
-        background-color: var(--trmrk-app-bar_background-color_dark); */
-
         animation-name: trmrk-theme-dark_text-input-caret-positioner-animator-pressed;
         animation-duration: 0.2s;
         animation-timing-function: steps(10);
@@ -342,8 +336,6 @@
 
     .trmrk-animator {
       &.trmrk-long-pressed {
-        /* background-color: var(--trmrk-app-bar_background-color_light); */
-        
         animation-name: trmrk-theme-light_text-input-caret-positioner-animator-pressed;
         animation-duration: 0.2s;
         animation-timing-function: steps(10);
