@@ -18,9 +18,13 @@ import longPress from "../../hooks/useLongPress";
 import { ValueOrAnyOrVoid } from "../../../trmrk/core";
 import { longPressIntervalMs } from "./TextCaretPositionerPopover";
 
+export const MOVE_LONG_PRESS_DELAY_MS = 200;
+
 export interface TextCaretInputPositionerOptionsViewProps {
   positionerJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   moving: (rowsCount: number) => ValueOrAnyOrVoid<boolean>;
+  moveBtnLongPressStarted: () => void;
+  moveBtnAfterLongPressStarted: () => void;
   minimizeClicked: () => void;
   isFullViewScrollModeActivated: (() => void);
 }
@@ -50,58 +54,54 @@ export default function TextCaretInputPositionerOptionsView(
 
   const moveUpX3LongPress = longPress({
     longPressIntervalMs: longPressIntervalMs,
-    touchStartOrMouseDown: (ev, coords) => {
-    },
+    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(-1 * positionerJumpSpeedsArr[0]);
     },
-    longPressStarted: () => {
-    },
+    longPressStarted: props.moveBtnLongPressStarted,
+    afterLongPressStarted: props.moveBtnAfterLongPressStarted,
     longPressEnded: (ev, coords) => {
       props.moving(-1 * positionerJumpSpeedsArr[2]);
-    }
+    },
   });
 
   const moveUpX1LongPress = longPress({
     longPressIntervalMs: longPressIntervalMs,
-    touchStartOrMouseDown: (ev, coords) => {
-    },
+    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(-1);
     },
-    longPressStarted: () => {
-    },
+    longPressStarted: props.moveBtnLongPressStarted,
+    afterLongPressStarted: props.moveBtnAfterLongPressStarted,
     longPressEnded: (ev, coords) => {
       props.moving(-1 * positionerJumpSpeedsArr[1]);
-    }
+    },
   });
 
   const moveDownX1LongPress = longPress({
     longPressIntervalMs: longPressIntervalMs,
-    touchStartOrMouseDown: (ev, coords) => {
-    },
+    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(1);
     },
-    longPressStarted: () => {
-    },
+    longPressStarted: props.moveBtnLongPressStarted,
+    afterLongPressStarted: props.moveBtnAfterLongPressStarted,
     longPressEnded: (ev, coords) => {
       props.moving(positionerJumpSpeedsArr[1]);
-    }
+    },
   });
 
   const moveDownX3LongPress = longPress({
     longPressIntervalMs: longPressIntervalMs,
-    touchStartOrMouseDown: (ev, coords) => {
-    },
+    afterLongPressIntervalMs: MOVE_LONG_PRESS_DELAY_MS,
     shortPressed: (ev, coords) => {
       props.moving(positionerJumpSpeedsArr[0]);
     },
-    longPressStarted: () => {
-    },
+    longPressStarted: props.moveBtnLongPressStarted,
+    afterLongPressStarted: props.moveBtnAfterLongPressStarted,
     longPressEnded: (ev, coords) => {
       props.moving(positionerJumpSpeedsArr[2]);
-    }
+    },
   });
 
   const minimizeClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {

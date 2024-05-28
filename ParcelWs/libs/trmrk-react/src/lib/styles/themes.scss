@@ -212,6 +212,14 @@
     background-color: var(--trmrk-text-input-caret-positioner-border_color_dark);
 
     .trmrk-animator {
+      &.trmrk-long-pressed {
+        background-image: linear-gradient(
+          var(--trmrk-app-bar_background-gradient-from_color_dark),
+          var(--trmrk-app-bar_background-gradient-from_color_dark));
+
+        background-color: var(--trmrk-app-bar_background-color_dark);
+      }
+      
       &.trmrk-anchor-left {
         background: repeating-linear-gradient(to right,
           var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0px,
@@ -309,6 +317,10 @@
     background-color: var(--trmrk-text-input-caret-positioner-border_color_light);
 
     .trmrk-animator {
+      &.trmrk-long-pressed {
+        background-color: var(--trmrk-app-bar_background-color_light);
+      }
+      
       &.trmrk-anchor-left {
         background: repeating-linear-gradient(to right,
           var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0px,

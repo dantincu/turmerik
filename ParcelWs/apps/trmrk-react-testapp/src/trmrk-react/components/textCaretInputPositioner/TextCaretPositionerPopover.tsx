@@ -121,6 +121,17 @@ export default function TextInputCaretPositionerPopover(
   const [ linesJumpSpeedsArr, setLinesJumpSpeedsArr ] = React.useState(
     normalizeLinesJumpSpeedsArr(props.linesJumpSpeedsArr));
 
+  const withTopAndBorderAnimatorElems = React.useCallback((
+    callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => void
+  ) => {
+    const topBorderAnimatorEl = topBorderAnimatorElRef.current;
+    const bottomBorderAnimatorEl = bottomBorderAnimatorElRef.current;
+
+    if (topBorderAnimatorEl && bottomBorderAnimatorEl) {
+      callback(topBorderAnimatorEl, bottomBorderAnimatorEl);
+    }
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
   const moving = React.useCallback((rowsCount: number) => {
     const mainEl = mainElRef.current;
 
@@ -137,6 +148,20 @@ export default function TextInputCaretPositionerPopover(
       }
     }
   }, [mainElRef]);
+
+  const moveBtnLongPressStarted = React.useCallback(() => {
+    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.add("trmrk-long-pressed");
+      bottomBorderAnimatorEl.classList.add("trmrk-long-pressed");
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+
+  const moveBtnAfterLongPressStarted = React.useCallback(() => {
+    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.remove("trmrk-long-pressed");
+      bottomBorderAnimatorEl.classList.remove("trmrk-long-pressed");
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
 
   const minimizeBtnClicked = React.useCallback(() => {
     const newMinimizedVal = true;
@@ -247,17 +272,6 @@ export default function TextInputCaretPositionerPopover(
 
     setSelectionIsActivated(selectionIsActivated);
   }, [selectionIsActivated]);
-
-  const withTopAndBorderAnimatorElems = React.useCallback((
-    callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => void
-  ) => {
-    const topBorderAnimatorEl = topBorderAnimatorElRef.current;
-    const bottomBorderAnimatorEl = bottomBorderAnimatorElRef.current;
-
-    if (topBorderAnimatorEl && bottomBorderAnimatorEl) {
-      callback(topBorderAnimatorEl, bottomBorderAnimatorEl);
-    }
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
 
   const viewBtnTouchStartOrMouseDown = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
     withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
@@ -662,6 +676,8 @@ export default function TextInputCaretPositionerPopover(
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
           moving={moving}
+          moveBtnLongPressStarted={moveBtnLongPressStarted}
+          moveBtnAfterLongPressStarted={moveBtnAfterLongPressStarted}
           isFullViewScrollModeActivated={isFullViewScrollModeActivated} />;
     } else if (isFullViewScrollMode) {
       return <FullScrollModeView />;
