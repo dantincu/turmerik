@@ -200,6 +200,26 @@
   }
 }
 
+@keyframes trmrk-theme-dark_text-input-caret-positioner-animator-pressed {
+  from {
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_dark);
+  }
+
+  to {
+    background-color: var(--trmrk-app-bar_background-color_dark);
+  }
+}
+
+@keyframes trmrk-theme-light_text-input-caret-positioner-animator-pressed {
+  from {
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_light);
+  }
+
+  to {
+    background-color: var(--trmrk-app-bar_background-color_light);
+  }
+}
+
 .trmrk-theme-dark .trmrk-text-input-caret-positioner-popover {
   background-image: linear-gradient(
     var(--trmrk-app-bar_background-gradient-from_color_dark),
@@ -213,11 +233,15 @@
 
     .trmrk-animator {
       &.trmrk-long-pressed {
-        background-image: linear-gradient(
+        /* background-image: linear-gradient(
           var(--trmrk-app-bar_background-gradient-from_color_dark),
           var(--trmrk-app-bar_background-gradient-from_color_dark));
 
-        background-color: var(--trmrk-app-bar_background-color_dark);
+        background-color: var(--trmrk-app-bar_background-color_dark); */
+
+        animation-name: trmrk-theme-dark_text-input-caret-positioner-animator-pressed;
+        animation-duration: 0.2s;
+        animation-timing-function: steps(10);
       }
       
       &.trmrk-anchor-left {
@@ -318,7 +342,11 @@
 
     .trmrk-animator {
       &.trmrk-long-pressed {
-        background-color: var(--trmrk-app-bar_background-color_light);
+        /* background-color: var(--trmrk-app-bar_background-color_light); */
+        
+        animation-name: trmrk-theme-light_text-input-caret-positioner-animator-pressed;
+        animation-duration: 0.2s;
+        animation-timing-function: steps(10);
       }
       
       &.trmrk-anchor-left {
