@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-export interface DevModuleProps {
+export interface AppModuleProps {
   basePath: string;
   rootPath: string;
 }
@@ -12,7 +12,7 @@ import ViewLocalStoragePage from "./pages/ViewLocalStorage";
 import AppModuleHomePage from "./AppModuleHomePage";
 import NotFound from "../../../trmrk-react/pages/notFound/NotFound";;
 
-export default function DevModule(props: DevModuleProps) {
+export default function AppModule(props: AppModuleProps) {
   return (<Routes>
       <Route path={"/input-text-cursor-positioning"} element={<TextInputCursorPositioningPage
         basePath={props.basePath} rootPath={props.rootPath} urlPath={`${props.basePath}/input-text-cursor-positioning`} />} />

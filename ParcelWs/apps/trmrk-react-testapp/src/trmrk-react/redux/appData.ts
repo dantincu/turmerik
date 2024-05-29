@@ -3,6 +3,7 @@ import { Selector, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 export interface TextCaretPositionerOpts {
   enabled: boolean;
   keepOpen: boolean;
+  currentInputElLastSetOpIdx: number;
 }
 
 export interface AppData {
@@ -77,6 +78,15 @@ export interface AppDataSelectors {
   > & {
     unwrapped: (appData: AppData) => boolean;
   };
+  getTextCaretPositionerCurrentInputElLastSetOpIdx: Selector<
+    {
+      appData: AppData;
+    },
+    number,
+    []
+  > & {
+    unwrapped: (appData: AppData) => number;
+  };
 }
 
 export interface AppDataReducers {
@@ -100,5 +110,9 @@ export interface AppDataReducers {
   setTextCaretPositionerOpts: ActionCreatorWithPayload<
     TextCaretPositionerOpts,
     "appData/setTextCaretPositionerOpts"
+  >;
+  incTextCaretPositionerCurrentInputElLastSetOpIdx: ActionCreatorWithPayload<
+    void,
+    "appData/incTextCaretPositionerCurrentInputElLastSetOpIdx"
   >;
 }

@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import { extractTextInput } from "../../../../trmrk-browser/domUtils/textInput";
 import { getTouchOrMouseCoords, toSingleTouchOrClick } from "../../../../trmrk-browser/domUtils/touchAndMouseEvents";
-import AppBarsPanel from "../../../../trmrk-react/components/barsPanel/AppBarsPanel";
+import TrmrkAppBarsPanel, { currentInputElMtblRef, updateCurrentInputEl } from "../../../../trmrk-react/components/barsPanel/TrmrkAppBarsPanel";
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
@@ -16,15 +16,11 @@ import { generateText } from "./generateText";
 import { setTextCaretPositionerEnabledToLocalStorage,
   setTextCaretPositionerKeepOpenToLocalStorage } from "../../../../trmrk-browser/domUtils/core";
 
-import TextInputCaretPositionerPopover from "../../../../trmrk-react/components/textCaretInputPositioner/TextCaretPositionerPopover";
-
 export interface TextInputCursorPositioningPageProps {
   urlPath: string
   basePath: string;
   rootPath: string;
 }
-
-const KEEP_OPEN = true;
 
 export default function TextInputCursorPositioningPage(
   props: TextInputCursorPositioningPageProps) {
@@ -46,7 +42,8 @@ export default function TextInputCursorPositioningPage(
   const [ textArea2WrapperEl, setTextArea2WrapperEl ] = React.useState(textArea2ElRef.current);
   const [ textArea2El, setTextArea2El ] = React.useState<HTMLElement | null>(null);
 
-  const [ currentInputEl, setCurrentInputEl ] = React.useState<HTMLElement | null>(null);
+  const textCaretPositionerCurrentInputElLastSetOpIdx = useSelector(
+    appDataSelectors.getTextCaretPositionerCurrentInputElLastSetOpIdx);
 
   const [ textBox1IsReadonly, setTextBox1IsReadonly ] = React.useState(true);
   const [ textArea1IsReadonly, setText1AreaIsReadonly ] = React.useState(true);
@@ -55,9 +52,6 @@ export default function TextInputCursorPositioningPage(
   const [ textArea2IsReadonly, setText2AreaIsReadonly ] = React.useState(true);
 
   const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
-  const textCaretPositionerEnabled = useSelector(appDataSelectors.getTextCaretPositionerEnabled);
-  const textCaretPositionerKeepOpen = useSelector(appDataSelectors.getTextCaretPositionerKeepOpen);
-  const isAnyMenuOpen = useSelector(appBarSelectors.isAnyMenuOpen);
 
   const dispatch = useDispatch();
 
@@ -73,6 +67,7 @@ export default function TextInputCursorPositioningPage(
 
   const onSingleLineText1Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSinglelineText1(e.target.value);
+    dispatch(appDataReducers.incTextCaretPositionerCurrentInputElLastSetOpIdx());
   }
 
   const onMultiLineText1Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,23 +83,19 @@ export default function TextInputCursorPositioningPage(
   }
 
   const onShowSinglelineText1CaretPositioner = (e: React.FocusEvent) => {
-    setCurrentInputEl(textBox1El);
+    updateCurrentInputEl(appDataReducers, dispatch, textBox1El);
   }
 
   const onHideSinglelineTextBox1CaretPositioner = (e: React.FocusEvent) => {
-    if (!KEEP_OPEN) {
-      setCurrentInputEl(null);
-    }
+    updateCurrentInputEl(appDataReducers, dispatch, null);
   }
 
   const onShowMultilineText1CaretPositioner = (e: React.FocusEvent) => {
-    setCurrentInputEl(textArea1El);
+    updateCurrentInputEl(appDataReducers, dispatch, textArea1El);
   }
 
   const onHideMultilineTextBox1CaretPositioner = (e: React.FocusEvent) => {
-    if (!KEEP_OPEN) {
-      setCurrentInputEl(null);
-    }
+    updateCurrentInputEl(appDataReducers, dispatch, null);
   }
 
   const onSingleLineText2Changed = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,34 +115,20 @@ export default function TextInputCursorPositioningPage(
   }
 
   const onShowSinglelineText2CaretPositioner = (e: React.FocusEvent) => {
-    setCurrentInputEl(textBox2El);
+    updateCurrentInputEl(appDataReducers, dispatch, textBox2El);
   }
 
   const onHideSinglelineTextBox2CaretPositioner = (e: React.FocusEvent) => {
-    if (!KEEP_OPEN) {
-      setCurrentInputEl(null);
-    }
+    updateCurrentInputEl(appDataReducers, dispatch, null);
   }
 
   const onShowMultilineText2CaretPositioner = (e: React.FocusEvent) => {
-    setCurrentInputEl(textArea2El);
+    updateCurrentInputEl(appDataReducers, dispatch, textArea2El);
   }
 
   const onHideMultilineTextBox2CaretPositioner = (e: React.FocusEvent) => {
-    if (!KEEP_OPEN) {
-      setCurrentInputEl(null);
-    }
+    updateCurrentInputEl(appDataReducers, dispatch, null);
   }
-
-  const onTextCaretPositionerKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
-    dispatch(appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
-    setTextCaretPositionerKeepOpenToLocalStorage(keepOpen);
-  }, []);
-
-  const onTextCaretPositionerDisabled = React.useCallback(() => {
-    dispatch(appDataReducers.setTextCaretPositionerEnabled(false));
-    setTextCaretPositionerEnabledToLocalStorage(false);
-  }, []);
 
   React.useEffect(() => {
     if (textBox1ElRef.current !== textBox1WrapperEl) {
@@ -182,17 +159,15 @@ export default function TextInputCursorPositioningPage(
     textBox2El,
     textArea2ElRef,
     textArea2El,
-    currentInputEl,
+    currentInputElMtblRef.value,
+    textCaretPositionerCurrentInputElLastSetOpIdx,
     textBox2IsReadonly,
     textArea2IsReadonly,
     isDarkMode,
-    isAnyMenuOpen,
     singlelineText2,
-    multilineText2,
-    textCaretPositionerEnabled,
-    textCaretPositionerKeepOpen ]);
+    multilineText2 ]);
     
-    return (<AppBarsPanel basePath={props.basePath}
+    return (<TrmrkAppBarsPanel basePath={props.basePath}
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
@@ -224,12 +199,5 @@ export default function TextInputCursorPositioningPage(
         onFocus={onShowMultilineText2CaretPositioner}
         onBlur={onHideMultilineTextBox2CaretPositioner} />
     </div>
-
-    { (currentInputEl && textCaretPositionerEnabled) ? <TextInputCaretPositionerPopover
-      inputEl={currentInputEl}
-      inFrontOfAll={!isAnyMenuOpen}
-      keepOpen={textCaretPositionerKeepOpen}
-      keepOpenToggled={onTextCaretPositionerKeepOpenToggled}
-      closeClicked={onTextCaretPositionerDisabled} /> : null }
-  </AppBarsPanel>);
+  </TrmrkAppBarsPanel>);
 }

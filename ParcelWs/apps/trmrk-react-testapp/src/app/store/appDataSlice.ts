@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { ReducerAction } from "../../trmrk-react/redux/core";
 
 import trmrk from "../../trmrk";
 
 import trmrk_browser from "../../trmrk-browser";
-
-import { ReducerAction } from "../../trmrk-react/redux/core";
 
 import {
   AppData,
@@ -26,6 +25,7 @@ const appDataSlice = createSlice({
       enabled: trmrk_dom_utils.getTextCaretPositionerEnabledFromLocalStorage(),
       keepOpen:
         trmrk_dom_utils.getTextCaretPositionerKeepOpenFromLocalStorage(),
+      currentInputElLastSetOpIdx: 0,
     },
   } as AppData,
   reducers: {
@@ -50,6 +50,9 @@ const appDataSlice = createSlice({
     setTextCaretPositionerKeepOpen: (state, action: ReducerAction<boolean>) => {
       state.textCaretPositionerOpts.keepOpen = action.payload;
     },
+    incTextCaretPositionerCurrentInputElLastSetOpIdx: (state) => {
+      state.textCaretPositionerOpts.currentInputElLastSetOpIdx++;
+    },
   },
   selectors: {
     getBaseLocation: (appData) => appData.baseLocation,
@@ -61,6 +64,8 @@ const appDataSlice = createSlice({
       appData.textCaretPositionerOpts.enabled,
     getTextCaretPositionerKeepOpen: (appData) =>
       appData.textCaretPositionerOpts.keepOpen,
+    getTextCaretPositionerCurrentInputElLastSetOpIdx: (appData) =>
+      appData.textCaretPositionerOpts.currentInputElLastSetOpIdx,
   },
 });
 
@@ -71,6 +76,7 @@ const {
   setTextCaretPositionerKeepOpen,
   setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
+  incTextCaretPositionerCurrentInputElLastSetOpIdx,
 } = appDataSlice.actions;
 
 const {
@@ -81,6 +87,7 @@ const {
   getTextCaretPositionerOpts,
   getTextCaretPositionerEnabled,
   getTextCaretPositionerKeepOpen,
+  getTextCaretPositionerCurrentInputElLastSetOpIdx,
 } = appDataSlice.selectors;
 
 export const appDataReducers: AppDataReducers = {
@@ -90,6 +97,7 @@ export const appDataReducers: AppDataReducers = {
   setTextCaretPositionerKeepOpen,
   setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
+  incTextCaretPositionerCurrentInputElLastSetOpIdx,
 };
 
 export const appDataSelectors: AppDataSelectors = {
@@ -100,6 +108,7 @@ export const appDataSelectors: AppDataSelectors = {
   getTextCaretPositionerOpts,
   getTextCaretPositionerEnabled,
   getTextCaretPositionerKeepOpen,
+  getTextCaretPositionerCurrentInputElLastSetOpIdx,
 };
 
 export default appDataSlice.reducer;

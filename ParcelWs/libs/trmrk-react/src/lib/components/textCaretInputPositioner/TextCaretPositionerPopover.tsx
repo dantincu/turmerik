@@ -25,7 +25,7 @@ export enum TextCaretInputPositionerState {
 }
 
 export interface TextInputCaretPositionerPopoverProps {
-  inputEl: HTMLElement;
+  inputEl: HTMLElement | null;
   inFrontOfAll?: boolean | null | undefined;
   minimized?: boolean | null | undefined;
   state?: TextCaretInputPositionerState | null | undefined;
@@ -95,6 +95,7 @@ export const normalizeInFrontOfAll = (
   inFrontOfAll: boolean | null | undefined
 ) => inFrontOfAll ?? true;
 
+export const normalizeInputIsMultiline = (inputEl: HTMLElement | null) => inputEl ? isMultilineInput(inputEl) : null;
 export const normalizeMininized = (minimized: boolean | null | undefined) => minimized ?? false;
 export const normalizeState = (state: TextCaretInputPositionerState | null | undefined) => state ?? TextCaretInputPositionerState.Default;
 export const normalizeKeepOpen = (keepOpen: boolean | null | undefined) => keepOpen ?? false;
@@ -102,8 +103,8 @@ export const normalizeShowOptions = (showOptions: boolean | null | undefined) =>
 export const normalizeShowMoreOptions = (showMoreOptions: boolean | null | undefined) => showMoreOptions ?? false;
 
 export const normalizeSelectionIsActivated = (
-  inputEl: HTMLElement,
-  selectionIsActivated: boolean | null | undefined) => selectionIsActivated ?? document.getSelection()?.containsNode(inputEl) ?? false;
+  inputEl: HTMLElement | null,
+  selectionIsActivated: boolean | null | undefined) => !!inputEl && (selectionIsActivated ?? document.getSelection()?.containsNode(inputEl) ?? false);
 
 export const getNextTopPx = (coords: TouchOrMouseCoords, moveStartCoords: TouchOrMouseCoords, bfMoveStartTopOffsetPx: number) => {
   const diffTop = coords.clientY - moveStartCoords.clientY;
@@ -121,7 +122,7 @@ export default function TextInputCaretPositionerPopover(
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);
   
-  const [ inputIsMultilinePropsVal, setInputIsMultilinePropsVal ] = React.useState(isMultilineInput(props.inputEl));
+  const [ inputIsMultilinePropsVal, setInputIsMultilinePropsVal ] = React.useState(normalizeInputIsMultiline(props.inputEl));
   const [ inFrontOfAllPropsVal, setInFrontOfAllPropsVal ] = React.useState(normalizeInFrontOfAll(props.inFrontOfAll));
   const [ minimizedPropsVal, setMinimizedPropsVal ] = React.useState(normalizeMininized(props.minimized));
   const [ stateTypePropsVal, setStateTypePropsVal ] = React.useState(normalizeState(props.state));
@@ -219,7 +220,7 @@ export default function TextInputCaretPositionerPopover(
         }
         
         setMinimized(newMinimizedVal);
-      } else {
+      } else if (inputEl && inputIsMultiline !== null) {
         const newShowOptionsVal = !showOptions;
         const newShowMoreOptionsVal = newShowOptionsVal && showMoreOptions;
 
@@ -640,7 +641,7 @@ export default function TextInputCaretPositionerPopover(
     const selectionIsActivatedNewVal = normalizeSelectionIsActivated(props.inputEl, props.selectionIsActivated);
 
     if (inputEl !== props.inputEl) {
-      const inputIsMultilineNewVal = isMultilineInput(props.inputEl);
+      const inputIsMultilineNewVal = normalizeInputIsMultiline(props.inputEl);
 
       if (!inputIsMultilineNewVal) {
         if (stateType === TextCaretInputPositionerState.JumpLines) {
@@ -751,7 +752,7 @@ export default function TextInputCaretPositionerPopover(
       return null;
     }
 
-    if (showOptions) {
+    if (showOptions || !inputEl || inputIsMultiline === null) {
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
           moving={moving}
@@ -859,7 +860,7 @@ export default function TextInputCaretPositionerPopover(
             jumpNextLineLongPressEnded={defaultViewJumpNextLineLongPressEnded} />;
       }
     }
-  }, [inFrontOfAll, inputIsMultiline, selectionIsActivated, stateType, minimized, keepOpen, showOptions, showMoreOptions]);
+  }, [inputEl, inFrontOfAll, inputIsMultiline, selectionIsActivated, stateType, minimized, keepOpen, showOptions, showMoreOptions]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
     minimized ? "trmrk-minimized" : "",
