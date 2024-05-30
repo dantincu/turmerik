@@ -19,6 +19,7 @@ export const AFTER_LONG_PRESS_LOOP_TIMEOUT_MS = 30 * 1000;
 
 export interface UseLongPressProps {
   requiredButton?: number | null | undefined;
+  startIntervalMs?: number | null | undefined;
   longPressIntervalMs?: number | null | undefined;
   afterLongPressIntervalMs?: number | null | undefined;
   afterLongPressLoopIntervalMs?: number | null | undefined;
@@ -45,6 +46,7 @@ export interface UseLongPressProps {
     | ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void)
     | null
     | undefined;
+  startIntervalEnded?: (() => void) | null | undefined;
   shortPressed?:
     | ((
         ev: TouchEvent | MouseEvent,
@@ -74,6 +76,10 @@ export interface UseLongPressResult {
 
 export const normRequiredButton = (requiredButton: number | null | undefined) =>
   requiredButton ?? 0;
+
+export const normStartIntervalMs = (
+  startIntervalMs: number | null | undefined
+) => startIntervalMs ?? -1;
 
 export const normLongPressIntervalMs = (
   longPressIntervalMs: number | null | undefined
@@ -144,6 +150,10 @@ export default function useLongPress(props: UseLongPressProps) {
 
   const btnElRef = React.useRef<HTMLElement | null>(null);
 
+  const [propsStartIntervalMs, setPropsStartIntervalMs] = React.useState(
+    normStartIntervalMs(props.startIntervalMs)
+  );
+
   const [propsLongPressIntervalMs, setPropsLongPressIntervalMs] =
     React.useState(normLongPressIntervalMs(props.longPressIntervalMs));
 
@@ -185,6 +195,9 @@ export default function useLongPress(props: UseLongPressProps) {
   const [requiredButton, setRequiredButton] =
     React.useState(propsRequiredButton);
 
+  const [startIntervalMs, setStartIntervalMs] =
+    React.useState(propsStartIntervalMs);
+
   const [longPressIntervalMs, setLongPressIntervalMs] = React.useState(
     propsLongPressIntervalMs
   );
@@ -216,6 +229,7 @@ export default function useLongPress(props: UseLongPressProps) {
     null
   );
 
+  const startIntervalTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(null);
   const longPressTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(null);
 
   const afterLongPressTimeoutIdRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -270,11 +284,18 @@ export default function useLongPress(props: UseLongPressProps) {
               onLongPressIntervalPassed,
               longPressIntervalMs
             );
+
+            if (startIntervalMs > 0) {
+              startIntervalTimeoutIdRef.current = setTimeout(
+                onStartIntervalEnded,
+                startIntervalMs
+              );
+            }
           }
         }
       }
     },
-    [requiredButton, longPressIntervalMs]
+    [requiredButton, startIntervalMs, longPressIntervalMs]
   );
 
   const onTouchEndOrMouseUpOrTouchOrMouseMove = React.useCallback(
@@ -340,6 +361,14 @@ export default function useLongPress(props: UseLongPressProps) {
     [requiredButton]
   );
 
+  const onStartIntervalEnded = React.useCallback(() => {
+    clearTimeoutIfReq(startIntervalTimeoutIdRef);
+
+    if (props.startIntervalEnded) {
+      props.startIntervalEnded();
+    }
+  }, [startIntervalTimeoutIdRef]);
+
   const onLongPressIntervalPassed = React.useCallback(() => {
     clearTimeoutIfReq(longPressTimeoutIdRef);
 
@@ -391,11 +420,11 @@ export default function useLongPress(props: UseLongPressProps) {
   );
 
   const shortPressDelayedEnd = React.useCallback(() => {
+    clearTimeoutIfReq(shortPressDelayedEndTimeoutIdRef);
+
     if (props.shortPressDelayedEnd) {
       props.shortPressDelayedEnd();
     }
-
-    clearTimeoutIfReq(shortPressDelayedEndTimeoutIdRef);
   }, []);
 
   const onAfterLongPressInterval = React.useCallback(() => {
@@ -444,11 +473,11 @@ export default function useLongPress(props: UseLongPressProps) {
   );
 
   const longPressDelayedEnd = React.useCallback(() => {
+    clearTimeoutIfReq(afterLongPressEndedTimeoutIdRef);
+
     if (props.afterLongPressDelayedEnd) {
       props.afterLongPressDelayedEnd();
     }
-
-    clearTimeoutIfReq(afterLongPressEndedTimeoutIdRef);
   }, []);
 
   const unregisterAll = React.useCallback(
@@ -464,35 +493,49 @@ export default function useLongPress(props: UseLongPressProps) {
         btnElem.removeEventListener("touchstart", onTouchStartOrMouseDown);
       }
     },
-    [btnElRef]
+    [
+      btnElRef,
+      shortPressDelayedEndTimeoutIdRef,
+      afterLongPressEndedTimeoutIdRef,
+    ]
   );
 
-  const clearAll = React.useCallback((btnElem: HTMLElement) => {
-    if (btnElem) {
-      clearTimeoutIfReq(longPressTimeoutIdRef);
-      clearTimeoutIfReq(afterLongPressTimeoutIdRef);
-      clearIntervalIfReq(afterLongPressLoopIntervalIdRef);
-      clearTimeoutIfReq(afterLongPressLoopTimeoutIdRef);
+  const clearAll = React.useCallback(
+    (btnElem: HTMLElement) => {
+      if (btnElem) {
+        clearTimeoutIfReq(startIntervalTimeoutIdRef);
+        clearTimeoutIfReq(longPressTimeoutIdRef);
+        clearTimeoutIfReq(afterLongPressTimeoutIdRef);
+        clearIntervalIfReq(afterLongPressLoopIntervalIdRef);
+        clearTimeoutIfReq(afterLongPressLoopTimeoutIdRef);
 
-      document.removeEventListener("mouseup", onTouchEndOrMouseUp, {
-        capture: true,
-      });
+        document.removeEventListener("mouseup", onTouchEndOrMouseUp, {
+          capture: true,
+        });
 
-      document.removeEventListener("touchend", onTouchEndOrMouseUp, {
-        capture: true,
-      });
+        document.removeEventListener("touchend", onTouchEndOrMouseUp, {
+          capture: true,
+        });
 
-      document.removeEventListener("mousemove", onTouchOrMouseMove, {
-        capture: true,
-      });
+        document.removeEventListener("mousemove", onTouchOrMouseMove, {
+          capture: true,
+        });
 
-      document.removeEventListener("touchmove", onTouchOrMouseMove, {
-        capture: true,
-      });
+        document.removeEventListener("touchmove", onTouchOrMouseMove, {
+          capture: true,
+        });
 
-      longPressIntervalPassedRef.current = false;
-    }
-  }, []);
+        longPressIntervalPassedRef.current = false;
+      }
+    },
+    [
+      startIntervalTimeoutIdRef,
+      longPressTimeoutIdRef,
+      afterLongPressTimeoutIdRef,
+      afterLongPressLoopIntervalIdRef,
+      afterLongPressLoopTimeoutIdRef,
+    ]
+  );
 
   const registerAll = React.useCallback(
     (btnElem: HTMLElement) => {
@@ -506,6 +549,7 @@ export default function useLongPress(props: UseLongPressProps) {
 
   React.useEffect(() => {
     const newPropsRequiredButtonVal = normRequiredButton(props.requiredButton);
+    const newStartIntervalMsVal = normStartIntervalMs(props.startIntervalMs);
 
     const newLongPressIntervalMsVal = normLongPressIntervalMs(
       props.longPressIntervalMs
@@ -539,6 +583,9 @@ export default function useLongPress(props: UseLongPressProps) {
     const setNewPropsRequiredButtonVal =
       newPropsRequiredButtonVal !== propsRequiredButton;
 
+    const setNewStartIntervalMsVal =
+      newStartIntervalMsVal !== propsStartIntervalMs;
+
     const setNewLongPressIntervalMsVal =
       newLongPressIntervalMsVal !== propsLongPressIntervalMs;
 
@@ -564,6 +611,11 @@ export default function useLongPress(props: UseLongPressProps) {
     if (setNewPropsRequiredButtonVal) {
       setPropsRequiredButton(newPropsRequiredButtonVal);
       setRequiredButton(newPropsRequiredButtonVal);
+    }
+
+    if (setNewStartIntervalMsVal) {
+      setPropsStartIntervalMs(newStartIntervalMsVal);
+      setStartIntervalMs(newStartIntervalMsVal);
     }
 
     if (setNewLongPressIntervalMsVal) {
@@ -607,6 +659,7 @@ export default function useLongPress(props: UseLongPressProps) {
     }
   }, [
     propsRequiredButton,
+    propsStartIntervalMs,
     propsLongPressIntervalMs,
     propsAfterLongPressIntervalMs,
     propsAfterLongPressLoopIntervalMs,
@@ -615,6 +668,7 @@ export default function useLongPress(props: UseLongPressProps) {
     propsWidthInnerBoundsRatio,
     propsHeightInnerBoundsRatio,
     requiredButton,
+    startIntervalMs,
     longPressIntervalMs,
     afterLongPressIntervalMs,
     afterLongPressLoopIntervalMs,

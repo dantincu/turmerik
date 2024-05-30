@@ -1,7 +1,7 @@
 import React from "react";
 
 import IconButton from "@mui/material/IconButton";
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -203,49 +203,45 @@ export default function TextCaretInputPositionerOptionsView(
   ]);
 
   return (<div className="trmrk-view trmrk-options-view">
-    <div className="trmrk-anchor-left">
-      <IconButton className="trmrk-icon-btn"
-          onMouseDown={showMoreOptionsBtnClicked}
-          onTouchEnd={showMoreOptionsBtnClicked}>
-        <MoreVertIcon />
+    <IconButton className="trmrk-icon-btn"
+        onMouseDown={minimizeClicked}
+        onTouchEnd={minimizeClicked}>
+      <KeyboardDoubleArrowLeftIcon />
+    </IconButton>
+    <IconButton className="trmrk-icon-btn"
+        onMouseDown={showMoreOptionsBtnClicked}
+        onTouchEnd={showMoreOptionsBtnClicked}>
+      <MoreVertIcon />
+    </IconButton>
+    { !props.showMoreOptions ? <React.Fragment>
+      <IconButton className="trmrk-icon-btn trmrk-move-up-x3-btn" ref={el => moveUpX3BtnElemRef.current = el}>
+        <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
+        <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
       </IconButton>
-    </div>
-    <div className="trmrk-anchor-right">
-      <IconButton className="trmrk-icon-btn"
-          onMouseDown={minimizeClicked}
-          onTouchEnd={minimizeClicked}>
-        <KeyboardDoubleArrowRightIcon />
+      <IconButton className="trmrk-icon-btn" ref={el => moveUpX1BtnElemRef.current = el}>
+        <KeyboardDoubleArrowUpIcon />
       </IconButton>
-      { !props.showMoreOptions ? <React.Fragment>
-        <IconButton className="trmrk-icon-btn trmrk-move-up-x3-btn" ref={el => moveUpX3BtnElemRef.current = el}>
-          <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
-          <KeyboardDoubleArrowUpIcon className="trmrk-keyboard-double-arrow-up-icon" />
-        </IconButton>
-        <IconButton className="trmrk-icon-btn" ref={el => moveUpX1BtnElemRef.current = el}>
-          <KeyboardDoubleArrowUpIcon />
-        </IconButton>
-        <IconButton className="trmrk-icon-btn" ref={el => moveDownX1BtnElemRef.current = el}>
-          <KeyboardDoubleArrowDownIcon />
-        </IconButton>
-        <IconButton className="trmrk-icon-btn trmrk-move-down-x3-btn" ref={el => moveDownX3BtnElemRef.current = el}>
-          <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
-          <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
-        </IconButton>
-        <IconButton className="trmrk-icon-btn">
-          <MatUIIcon iconName="expand_content" />
-        </IconButton>
-      </React.Fragment> : <React.Fragment>
-        <IconButton className="trmrk-icon-btn"
-            onMouseDown={keepOpenToggled}
-            onTouchEnd={keepOpenToggled}>
-          { props.keepOpen ? <MatUIIcon iconName="keep" /> : <MatUIIcon iconName="keep_off" /> }
-        </IconButton>
-        <IconButton className="trmrk-icon-btn"
-            onMouseDown={closeClicked}
-            onTouchEnd={closeClicked}>
-          <CloseIcon />
-        </IconButton>
-      </React.Fragment> }
-    </div>
+      <IconButton className="trmrk-icon-btn" ref={el => moveDownX1BtnElemRef.current = el}>
+        <KeyboardDoubleArrowDownIcon />
+      </IconButton>
+      <IconButton className="trmrk-icon-btn trmrk-move-down-x3-btn" ref={el => moveDownX3BtnElemRef.current = el}>
+        <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
+        <KeyboardDoubleArrowDownIcon className="trmrk-keyboard-double-arrow-down-icon" />
+      </IconButton>
+      <IconButton className="trmrk-icon-btn">
+        <MatUIIcon iconName="expand_content" />
+      </IconButton>
+    </React.Fragment> : <React.Fragment>
+      <IconButton className="trmrk-icon-btn"
+          onMouseDown={keepOpenToggled}
+          onTouchEnd={keepOpenToggled}>
+        { props.keepOpen ? <MatUIIcon iconName="keep" /> : <MatUIIcon iconName="keep_off" /> }
+      </IconButton>
+      <IconButton className="trmrk-icon-btn"
+          onMouseDown={closeClicked}
+          onTouchEnd={closeClicked}>
+        <CloseIcon />
+      </IconButton>
+    </React.Fragment> }
   </div>);
 }

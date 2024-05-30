@@ -42,7 +42,6 @@ import { validateDbStoreKeyPath } from "./IndexedDbEditDbStore";
 import { isMobile, isIPhone } from "../../../../trmrk-browser/domUtils/constants";
 
 import AppBarsPanel from "../../../components/barsPanel/AppBarsPanel";
-// import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
 import MatUIIcon from "../../../components/icons/MatUIIcon";
 
 export interface IndexedDbEditDbProps {

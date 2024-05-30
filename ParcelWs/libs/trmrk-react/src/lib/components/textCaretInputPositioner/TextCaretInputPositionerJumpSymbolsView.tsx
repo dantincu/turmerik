@@ -11,7 +11,7 @@ import MatUIIcon from "../icons/MatUIIcon";
 import longPress from "../../hooks/useLongPress";
 
 import { ValueOrAnyOrVoid } from "../../../trmrk/core";
-import { longPressIntervalMs } from "./TextCaretPositionerPopover";
+import { longPressIntervalMs, startIntervalMs } from "./TextCaretPositionerPopover";
 
 export interface TextCaretInputPositionerJumpSymbolsViewProps {
   selectionIsActivated: boolean,
@@ -64,7 +64,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
 
   const jumpPrevCharX3LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharX3TouchStartOrMouseDown,
     shortPressed: props.jumpPrevCharX3ShortPressed,
     longPressStarted: props.jumpPrevCharX3LongPressStarted,
@@ -73,7 +74,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
 
   const jumpPrevCharX2LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharX2TouchStartOrMouseDown,
     shortPressed: props.jumpPrevCharX2ShortPressed,
     longPressStarted: props.jumpPrevCharX2LongPressStarted,
@@ -82,7 +84,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
 
   const jumpPrevCharX1LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharX1TouchStartOrMouseDown,
     shortPressed: props.jumpPrevCharX1ShortPressed,
     longPressStarted: props.jumpPrevCharX1LongPressStarted,
@@ -91,7 +94,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
 
   const jumpNextCharX1LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharX1TouchStartOrMouseDown,
     shortPressed: props.jumpNextCharX1ShortPressed,
     longPressStarted: props.jumpNextCharX1LongPressStarted,
@@ -100,7 +104,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
 
   const jumpNextCharX2LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharX2TouchStartOrMouseDown,
     shortPressed: props.jumpNextCharX2ShortPressed,
     longPressStarted: props.jumpNextCharX2LongPressStarted,
@@ -109,7 +114,8 @@ export default function TextCaretInputPositionerJumpSymbolsView(
 
   const jumpNextCharX3LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharX3TouchStartOrMouseDown,
     shortPressed: props.jumpNextCharX3ShortPressed,
     longPressStarted: props.jumpNextCharX3LongPressStarted,
@@ -222,40 +228,38 @@ export default function TextCaretInputPositionerJumpSymbolsView(
     jumpNextCharX3BtnElem]);
 
   return (<div className="trmrk-view trmrk-jump-symbols-view">
-    <div className="trmrk-anchor-left">
-      <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
-        onClick={onNextViewIconBtnClick}
-        onTouchEnd={onNextViewIconBtnClick}><ViewColumnIcon /></IconButton>
-        
-      <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-x3-btn" ref={el => jumpPrevCharX3BtnElemRef.current = el}>
-        <ArrowLeftIcon className="trmrk-arrow-left-icon" />
-        <ArrowLeftIcon className="trmrk-arrow-left-icon" />
-        <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
+    <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
+      onClick={onNextViewIconBtnClick}
+      onTouchEnd={onNextViewIconBtnClick}><ViewColumnIcon /></IconButton>
+      
+    <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-x3-btn" ref={el => jumpPrevCharX3BtnElemRef.current = el}>
+      <ArrowLeftIcon className="trmrk-arrow-left-icon" />
+      <ArrowLeftIcon className="trmrk-arrow-left-icon" />
+      <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
 
-      <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-x2-btn" ref={el => jumpPrevCharX2BtnElemRef.current = el}>
-        <ArrowLeftIcon className="trmrk-arrow-left-icon" />
-        <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
+    <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-x2-btn" ref={el => jumpPrevCharX2BtnElemRef.current = el}>
+      <ArrowLeftIcon className="trmrk-arrow-left-icon" />
+      <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
 
-      <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-x1-btn" ref={el => jumpPrevCharX1BtnElemRef.current = el}>
-        <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
+    <IconButton className="trmrk-icon-btn trmrk-jump-prev-char-x1-btn" ref={el => jumpPrevCharX1BtnElemRef.current = el}>
+      <ArrowLeftIcon className="trmrk-arrow-left-icon" /></IconButton>
 
-      <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
-            selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
-          onMouseDown={selectionIsActivatedToggled}
-          onTouchEnd={selectionIsActivatedToggled}>
-        <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
+    <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
+          selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
+        onMouseDown={selectionIsActivatedToggled}
+        onTouchEnd={selectionIsActivatedToggled}>
+      <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>
 
-      <IconButton className="trmrk-icon-btn trmrk-jump-next-char-x1-btn" ref={el => jumpNextCharX1BtnElemRef.current = el}>
-        <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
+    <IconButton className="trmrk-icon-btn trmrk-jump-next-char-x1-btn" ref={el => jumpNextCharX1BtnElemRef.current = el}>
+      <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
 
-      <IconButton className="trmrk-icon-btn trmrk-jump-next-char-x2-btn" ref={el => jumpNextCharX2BtnElemRef.current = el}>
-        <ArrowRightIcon className="trmrk-arrow-right-icon" />
-        <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
+    <IconButton className="trmrk-icon-btn trmrk-jump-next-char-x2-btn" ref={el => jumpNextCharX2BtnElemRef.current = el}>
+      <ArrowRightIcon className="trmrk-arrow-right-icon" />
+      <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
 
-      <IconButton className="trmrk-icon-btn trmrk-jump-next-char-x3-btn" ref={el => jumpNextCharX3BtnElemRef.current = el}>
-        <ArrowRightIcon className="trmrk-arrow-right-icon" />
-        <ArrowRightIcon className="trmrk-arrow-right-icon" />
-        <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
-    </div>
+    <IconButton className="trmrk-icon-btn trmrk-jump-next-char-x3-btn" ref={el => jumpNextCharX3BtnElemRef.current = el}>
+      <ArrowRightIcon className="trmrk-arrow-right-icon" />
+      <ArrowRightIcon className="trmrk-arrow-right-icon" />
+      <ArrowRightIcon className="trmrk-arrow-right-icon" /></IconButton>
   </div>);
 }

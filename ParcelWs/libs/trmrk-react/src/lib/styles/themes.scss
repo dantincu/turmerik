@@ -121,11 +121,11 @@
     }
   }
 
-  &.trmrk-textbox-magnifier {
+  /* &.trmrk-textbox-magnifier {
     .trmrk-text {
       border: 1px solid var(--trmrk-textbox-magnifier-border_color_dark);
     }
-  }
+  } */
 }
 
 .trmrk-theme-light {
@@ -165,14 +165,14 @@
     }
   }
 
-  &.trmrk-textbox-magnifier {
+  /* &.trmrk-textbox-magnifier {
     .trmrk-text {
       border: 1px solid var(--trmrk-textbox-magnifier-border_color_light);
     }
-  }
+  } */
 }
 
-@keyframes trmrk-theme-dark_text-input-caret-positioner-animator-none {
+/* @keyframes trmrk-theme-dark_text-input-caret-positioner-animator-none {
   from {
     background: repeating-linear-gradient(to right,
       var(--trmrk-text-input-caret-positioner-border_color_dark) 0px,
@@ -198,7 +198,7 @@
       var(--trmrk-text-input-caret-positioner-border_color_light) 0px,
       var(--trmrk-text-input-caret-positioner-border_color_light) 100vw);
   }
-}
+} */
 
 @keyframes trmrk-theme-dark_text-input-caret-positioner-animator-pressed {
   from {
@@ -221,104 +221,106 @@
 }
 
 .trmrk-theme-dark .trmrk-text-input-caret-positioner-popover {
-  background-image: linear-gradient(
-    var(--trmrk-app-bar_background-gradient-from_color_dark),
-    var(--trmrk-app-bar_background-gradient-from_color_dark));
+  background-color: var(--trmrk-text-input-caret-positioner-border_color_dark);
 
-  background-color: var(--trmrk-app-bar_background-color_dark);
+  .trmrk-text-input-caret-positioner {
+    background-image: linear-gradient(
+      var(--trmrk-app-bar_background-gradient-from_color_dark),
+      var(--trmrk-app-bar_background-gradient-to_color_dark));
+
+    background-color: var(--trmrk-app-bar_background-color_dark);
+  }
 
   .trmrk-popover-top-border,
   .trmrk-popover-bottom-border {
     background-color: var(--trmrk-text-input-caret-positioner-border_color_dark);
 
-    .trmrk-animator {
-      &.trmrk-long-pressed {
-        animation-name: trmrk-theme-dark_text-input-caret-positioner-animator-pressed;
-        animation-duration: 0.2s;
-        animation-timing-function: steps(10);
-      }
-      
-      &.trmrk-anchor-left {
-        background: repeating-linear-gradient(to right,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0px,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_dark) 25vw);
+    &.trmrk-long-pressed {
+      animation-name: trmrk-theme-dark_text-input-caret-positioner-animator-pressed;
+      animation-duration: 0.2s;
+      animation-timing-function: steps(10);
+    }
+    
+    &.trmrk-anchor-left {
+      background: repeating-linear-gradient(to right,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0px,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_dark) 2.5em);
 
-        &.trmrk-slide-once-speed-x1 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
-            trmrk-theme-dark_text-input-caret-positioner-animator-none;
+      /* &.trmrk-slide-once-speed-x1 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
+          trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
 
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x2 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
-            trmrk-theme-dark_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x3 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
-            trmrk-theme-dark_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
       }
 
-      &.trmrk-anchor-right {
-        background: repeating-linear-gradient(to left,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0px,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_dark) 25vw);
+      &.trmrk-slide-once-speed-x2 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
+          trmrk-theme-dark_text-input-caret-positioner-animator-none;
 
-        &.trmrk-slide-once-speed-x1 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
-            trmrk-theme-dark_text-input-caret-positioner-animator-none;
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
 
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x2 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
-            trmrk-theme-dark_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x3 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
-            trmrk-theme-dark_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
       }
+
+      &.trmrk-slide-once-speed-x3 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
+          trmrk-theme-dark_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      } */
+    }
+
+    &.trmrk-anchor-right {
+      background: repeating-linear-gradient(to left,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0px,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_dark) 2.5em);
+
+      /* &.trmrk-slide-once-speed-x1 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
+          trmrk-theme-dark_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      }
+
+      &.trmrk-slide-once-speed-x2 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
+          trmrk-theme-dark_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      }
+
+      &.trmrk-slide-once-speed-x3 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
+          trmrk-theme-dark_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      } */
     }
   }
 
@@ -328,100 +330,102 @@
 }
 
 .trmrk-theme-light .trmrk-text-input-caret-positioner-popover {
+  background-color: var(--trmrk-text-input-caret-positioner-border_color_light);
+
+  .trmrk-text-input-caret-positioner {
     background-color: var(--trmrk-app-bar_background-color_light);
+  }
 
   .trmrk-popover-top-border,
   .trmrk-popover-bottom-border {
     background-color: var(--trmrk-text-input-caret-positioner-border_color_light);
 
-    .trmrk-animator {
-      &.trmrk-long-pressed {
-        animation-name: trmrk-theme-light_text-input-caret-positioner-animator-pressed;
-        animation-duration: 0.2s;
-        animation-timing-function: steps(10);
-      }
-      
-      &.trmrk-anchor-left {
-        background: repeating-linear-gradient(to right,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0px,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_light) 25vw);
+    &.trmrk-long-pressed {
+      animation-name: trmrk-theme-light_text-input-caret-positioner-animator-pressed;
+      animation-duration: 0.2s;
+      animation-timing-function: steps(10);
+    }
+    
+    &.trmrk-anchor-left {
+      background: repeating-linear-gradient(to right,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0px,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_light) 2.5em);
 
-        &.trmrk-slide-once-speed-x1 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
-            trmrk-theme-light_text-input-caret-positioner-animator-none;
+      /* &.trmrk-slide-once-speed-x1 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-left,
+          trmrk-theme-light_text-input-caret-positioner-animator-none;
 
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
 
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x2 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
-            trmrk-theme-light_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x3 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
-            trmrk-theme-light_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
       }
 
-      &.trmrk-anchor-right {
-        background: repeating-linear-gradient(to left,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0px,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
-          var(--trmrk-text-input-caret-positioner-border_color_light) 25vw);
+      &.trmrk-slide-once-speed-x2 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-left,
+          trmrk-theme-light_text-input-caret-positioner-animator-none;
 
-        &.trmrk-slide-once-speed-x1 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
-            trmrk-theme-light_text-input-caret-positioner-animator-none;
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
 
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x2 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
-            trmrk-theme-light_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
-
-        &.trmrk-slide-once-speed-x3 {
-          animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
-            trmrk-theme-light_text-input-caret-positioner-animator-none;
-
-          animation-delay: 0s, 0.1s;
-          animation-duration: 0.1s, 0.001s;
-
-          animation-timing-function: steps(10), steps(10);
-          animation-fill-mode: forwards, forwards;
-        }
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
       }
+
+      &.trmrk-slide-once-speed-x3 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-left,
+          trmrk-theme-light_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      } */
+    }
+
+    &.trmrk-anchor-right {
+      background: repeating-linear-gradient(to left,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0px,
+        var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
+        var(--trmrk-text-input-caret-positioner-border_color_light) 2.5em);
+
+      /* &.trmrk-slide-once-speed-x1 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x1-anchor-right,
+          trmrk-theme-light_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      }
+
+      &.trmrk-slide-once-speed-x2 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x2-anchor-right,
+          trmrk-theme-light_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      }
+
+      &.trmrk-slide-once-speed-x3 {
+        animation-name: trmrk_text-input-caret-positioner-slide-once-x3-anchor-right,
+          trmrk-theme-light_text-input-caret-positioner-animator-none;
+
+        animation-delay: 0s, 0.1s;
+        animation-duration: 0.1s, 0.001s;
+
+        animation-timing-function: steps(10), steps(10);
+        animation-fill-mode: forwards, forwards;
+      } */
     }
   }
 

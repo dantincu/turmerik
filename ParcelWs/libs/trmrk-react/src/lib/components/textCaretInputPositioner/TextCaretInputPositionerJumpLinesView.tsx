@@ -11,7 +11,7 @@ import MatUIIcon from "../icons/MatUIIcon";
 import longPress from "../../hooks/useLongPress";
 
 import { ValueOrAnyOrVoid } from "../../../trmrk/core";
-import { longPressIntervalMs } from "./TextCaretPositionerPopover";
+import { longPressIntervalMs, startIntervalMs } from "./TextCaretPositionerPopover";
 
 export interface TextCaretInputPositionerJumpLinesViewProps {
   selectionIsActivated: boolean,
@@ -64,7 +64,8 @@ export default function TextCaretInputPositionerJumpLinesView(
 
   const jumpPrevLineX3LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineX3TouchStartOrMouseDown,
     shortPressed: props.jumpPrevLineX3ShortPressed,
     longPressStarted: props.jumpPrevLineX3LongPressStarted,
@@ -73,7 +74,8 @@ export default function TextCaretInputPositionerJumpLinesView(
 
   const jumpPrevLineX2LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineX2TouchStartOrMouseDown,
     shortPressed: props.jumpPrevLineX2ShortPressed,
     longPressStarted: props.jumpPrevLineX2LongPressStarted,
@@ -82,7 +84,8 @@ export default function TextCaretInputPositionerJumpLinesView(
 
   const jumpPrevLineX1LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineX1TouchStartOrMouseDown,
     shortPressed: props.jumpPrevLineX1ShortPressed,
     longPressStarted: props.jumpPrevLineX1LongPressStarted,
@@ -91,7 +94,8 @@ export default function TextCaretInputPositionerJumpLinesView(
 
   const jumpNextLineX1LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineX1TouchStartOrMouseDown,
     shortPressed: props.jumpNextLineX1ShortPressed,
     longPressStarted: props.jumpNextLineX1LongPressStarted,
@@ -100,7 +104,8 @@ export default function TextCaretInputPositionerJumpLinesView(
 
   const jumpNextLineX2LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineX2TouchStartOrMouseDown,
     shortPressed: props.jumpNextLineX2ShortPressed,
     longPressStarted: props.jumpNextLineX2LongPressStarted,
@@ -109,7 +114,8 @@ export default function TextCaretInputPositionerJumpLinesView(
 
   const jumpNextLineX3LongPress = longPress({
     requiredButton: 0,
-    longPressIntervalMs: longPressIntervalMs,
+    startIntervalMs,
+    longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineX3TouchStartOrMouseDown,
     shortPressed: props.jumpNextLineX3ShortPressed,
     longPressStarted: props.jumpNextLineX3LongPressStarted,
@@ -222,7 +228,6 @@ export default function TextCaretInputPositionerJumpLinesView(
     jumpNextLineX3BtnElem]);
 
   return (<div className="trmrk-view trmrk-jump-lines-view">
-    <div className="trmrk-anchor-left">
       <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
         onClick={onNextViewIconBtnClick}
         onTouchEnd={onNextViewIconBtnClick}><TableRowsIcon /></IconButton>
@@ -256,6 +261,5 @@ export default function TextCaretInputPositionerJumpLinesView(
         <ArrowRightIcon className="trmrk-arrow-down-icon" />
         <ArrowRightIcon className="trmrk-arrow-down-icon" />
         <ArrowRightIcon className="trmrk-arrow-down-icon" /></IconButton>
-    </div>
   </div>);
 }

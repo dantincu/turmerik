@@ -93,7 +93,6 @@ export const getTextCaretPositionerEnabledFromLocalStorage = (
   );
 
   let isCompactMode = trmrk.jsonBool.false !== textCaretPositionerEnabled;
-  console.log("getTextCaretPositionerEnabledFromLocalStorage", isCompactMode);
   return isCompactMode;
 };
 

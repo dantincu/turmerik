@@ -32,14 +32,14 @@
   --trmrk-page-panel-rows-group-hover_background-color_dark: #1a1a1a;
   --trmrk-flex-row-cell-title_color_dark: #ccc;
   --trmrk-flex-row-readonly-textbox_background-color_dark: #FFF1;
-  --trmrk-textbox-magnifier-border_color_dark: #888;
+  /* --trmrk-textbox-magnifier-border_color_dark: #888; */
 
   --trmrk-page-panel-rows-group-border_color_light: #ccc;
   --trmrk-page-panel-rows-group-editable-border_color_light: #864;
   --trmrk-page-panel-rows-group-hover_background-color_light: #F4F4F4;
   --trmrk-flex-row-cell-title_color_light: #444;
   --trmrk-flex-row-readonly-textbox_background-color_light: #0001;
-  --trmrk-textbox-magnifier-border_color_light: #888;
+  /* --trmrk-textbox-magnifier-border_color_light: #888; */
 
   --trmrk-text-input-caret-positioner-border_color_dark: #444;
   --trmrk-text-input-caret-positioner-border-animator_color_dark: #222222;

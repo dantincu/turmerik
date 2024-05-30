@@ -11,7 +11,6 @@ import {
 import { extractElCssStyleTopPx } from "../../../trmrk-browser/domUtils/css";
 import { isMultilineInput } from "../../../trmrk-browser/domUtils/textInput";
 import MatUIIcon from "../icons/MatUIIcon";
-import { getAppTheme } from "../../app-theme/core";
 
 import TextCaretInputPositionerDefaultView from "./TextCaretInputPositionerDefaultView";
 import TextCaretInputPositionerOptionsView from "./TextCaretInputPositionerOptionsView";
@@ -57,11 +56,11 @@ export const retrieveTextInputCaretPositioner = () => document.querySelector<HTM
 
 export const cssClasses = Object.freeze({
   anchor: (left: boolean) => left ? "trmrk-anchor-left" : "trmrk-anchor-right",
-  slideOnce: (speed: number) => `trmrk-slide-once-speed-x${speed}`,
   slide: (speed: number) => `trmrk-slide-speed-x${speed}`
 });
 
 export const longPressIntervalMs = 500;
+export const startIntervalMs = 200;
 
 export const normalizeJumpSpeedsArr = (
   jumpSpeedsArr: number[] | readonly number[] | null | undefined,
@@ -117,8 +116,8 @@ export default function TextInputCaretPositionerPopover(
   props: TextInputCaretPositionerPopoverProps
 ) {
   const mainElRef = React.useRef<HTMLDivElement | null>(null);
-  const topBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
-  const bottomBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
+  const topBorderElRef = React.useRef<HTMLDivElement | null>(null);
+  const bottomBorderElRef = React.useRef<HTMLDivElement | null>(null);
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);
   
@@ -148,16 +147,16 @@ export default function TextInputCaretPositionerPopover(
   const [ linesJumpSpeedsArr, setLinesJumpSpeedsArr ] = React.useState(
     normalizeLinesJumpSpeedsArr(props.linesJumpSpeedsArr));
 
-  const withTopAndBorderAnimatorElems = React.useCallback((
+  const withBorderElems = React.useCallback((
     callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => void
   ) => {
-    const topBorderAnimatorEl = topBorderAnimatorElRef.current;
-    const bottomBorderAnimatorEl = bottomBorderAnimatorElRef.current;
+    const topBorderAnimatorEl = topBorderElRef.current;
+    const bottomBorderAnimatorEl = bottomBorderElRef.current;
 
     if (topBorderAnimatorEl && bottomBorderAnimatorEl) {
       callback(topBorderAnimatorEl, bottomBorderAnimatorEl);
     }
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const moving = React.useCallback((rowsCount: number) => {
     const mainEl = mainElRef.current;
@@ -177,18 +176,18 @@ export default function TextInputCaretPositionerPopover(
   }, [mainElRef]);
 
   const moveBtnLongPressStarted = React.useCallback(() => {
-    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+    withBorderElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.add("trmrk-long-pressed");
       bottomBorderAnimatorEl.classList.add("trmrk-long-pressed");
     });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const moveBtnAfterLongPressStarted = React.useCallback(() => {
-    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+    withBorderElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.remove("trmrk-long-pressed");
       bottomBorderAnimatorEl.classList.remove("trmrk-long-pressed");
     });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const minimizeBtnClicked = React.useCallback(() => {
     const newMinimizedVal = true;
@@ -234,7 +233,7 @@ export default function TextInputCaretPositionerPopover(
         setShowMoreOptions(newShowMoreOptionsVal);
       }
     }
-  }, [minimized, showOptions, showMoreOptions]);
+  }, [minimized, showOptions, showMoreOptions, inputEl, inputIsMultiline]);
 
   const showMoreOptionsBtnClicked = React.useCallback((showMoreOptions: boolean) => {
     const newShowMoreOptionsVal = showMoreOptions;
@@ -307,44 +306,44 @@ export default function TextInputCaretPositionerPopover(
   }, [selectionIsActivated]);
 
   const viewBtnTouchStartOrMouseDown = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
-    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+    withBorderElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.add(cssClasses.anchor(topBorderAnchorLeft));
-      topBorderAnimatorEl.classList.add(cssClasses.slideOnce(speed));
-      bottomBorderAnimatorEl.classList.add(cssClasses.anchor(bottomBorderAnchorLeft));
-      bottomBorderAnimatorEl.classList.add(cssClasses.slideOnce(speed));
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
-
-  const viewBtnShortPressed = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
-    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      topBorderAnimatorEl.classList.remove(cssClasses.anchor(topBorderAnchorLeft));
-      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
-      bottomBorderAnimatorEl.classList.remove(cssClasses.anchor(bottomBorderAnchorLeft));
-      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
-
-  const viewBtnLongPressStarted = React.useCallback((speed: number) => {
-    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      topBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
       topBorderAnimatorEl.classList.add(cssClasses.slide(speed));
-      bottomBorderAnimatorEl.classList.remove(cssClasses.slideOnce(speed));
+      bottomBorderAnimatorEl.classList.add(cssClasses.anchor(bottomBorderAnchorLeft));
       bottomBorderAnimatorEl.classList.add(cssClasses.slide(speed));
     });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
-  const viewBtnLongPressEnded = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
-    withTopAndBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+  const viewBtnShortPressed = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
+    withBorderElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.remove(cssClasses.anchor(topBorderAnchorLeft));
       topBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
       bottomBorderAnimatorEl.classList.remove(cssClasses.anchor(bottomBorderAnchorLeft));
       bottomBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
     });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
+
+  const viewBtnLongPressStarted = React.useCallback((speed: number) => {
+    withBorderElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
+      topBorderAnimatorEl.classList.add(cssClasses.slide(speed));
+      bottomBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
+      bottomBorderAnimatorEl.classList.add(cssClasses.slide(speed));
+    });
+  }, [topBorderElRef, bottomBorderElRef]);
+
+  const viewBtnLongPressEnded = React.useCallback((topBorderAnchorLeft: boolean, bottomBorderAnchorLeft: boolean, speed: number) => {
+    withBorderElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      topBorderAnimatorEl.classList.remove(cssClasses.anchor(topBorderAnchorLeft));
+      topBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
+      bottomBorderAnimatorEl.classList.remove(cssClasses.anchor(bottomBorderAnchorLeft));
+      bottomBorderAnimatorEl.classList.remove(cssClasses.slide(speed));
+    });
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const defaultViewJumpPrevLineTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const defaultViewJumpPrevLineShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, true, 1);
@@ -360,7 +359,7 @@ export default function TextInputCaretPositionerPopover(
 
   const defaultViewJumpPrevWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const defaultViewJumpPrevWordShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, true, 2);
@@ -376,7 +375,7 @@ export default function TextInputCaretPositionerPopover(
 
   const defaultViewJumpPrevCharTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const defaultViewJumpPrevCharShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, true, 1);
@@ -392,7 +391,7 @@ export default function TextInputCaretPositionerPopover(
 
   const defaultViewJumpNextCharTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const defaultViewJumpNextCharShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, false, 1);
@@ -408,7 +407,7 @@ export default function TextInputCaretPositionerPopover(
 
   const defaultViewJumpNextWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const defaultViewJumpNextWordShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, false, 2);
@@ -424,7 +423,7 @@ export default function TextInputCaretPositionerPopover(
 
   const defaultViewJumpNextLineTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const defaultViewJumpNextLineShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, false, 1);
@@ -440,7 +439,7 @@ export default function TextInputCaretPositionerPopover(
 
   const symbolsViewJumpPrevCharX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const symbolsViewJumpPrevCharX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, true, 3);
@@ -456,7 +455,7 @@ export default function TextInputCaretPositionerPopover(
 
   const symbolsViewJumpPrevCharX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const symbolsViewJumpPrevCharX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, true, 2);
@@ -472,7 +471,7 @@ export default function TextInputCaretPositionerPopover(
 
   const symbolsViewJumpPrevCharX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const symbolsViewJumpPrevCharX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, true, 1);
@@ -488,7 +487,7 @@ export default function TextInputCaretPositionerPopover(
 
   const symbolsViewJumpNextCharX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const symbolsViewJumpNextCharX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, false, 1);
@@ -504,7 +503,7 @@ export default function TextInputCaretPositionerPopover(
 
   const symbolsViewJumpNextCharX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const symbolsViewJumpNextCharX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, false, 2);
@@ -520,7 +519,7 @@ export default function TextInputCaretPositionerPopover(
 
   const symbolsViewJumpNextCharX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const symbolsViewJumpNextCharX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, false, 3);
@@ -536,7 +535,7 @@ export default function TextInputCaretPositionerPopover(
 
   const linesViewJumpPrevLineX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const linesViewJumpPrevLineX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, true, 3);
@@ -552,7 +551,7 @@ export default function TextInputCaretPositionerPopover(
 
   const linesViewJumpPrevLineX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const linesViewJumpPrevLineX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, true, 2);
@@ -568,7 +567,7 @@ export default function TextInputCaretPositionerPopover(
 
   const linesViewJumpPrevLineX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const linesViewJumpPrevLineX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(false, true, 1);
@@ -584,7 +583,7 @@ export default function TextInputCaretPositionerPopover(
 
   const linesViewJumpNextLineX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const linesViewJumpNextLineX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, false, 1);
@@ -600,7 +599,7 @@ export default function TextInputCaretPositionerPopover(
 
   const linesViewJumpNextLineX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const linesViewJumpNextLineX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, false, 2);
@@ -616,7 +615,7 @@ export default function TextInputCaretPositionerPopover(
 
   const linesViewJumpNextLineX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     viewBtnTouchStartOrMouseDown(true, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderElRef, bottomBorderElRef]);
 
   const linesViewJumpNextLineX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
     viewBtnShortPressed(true, false, 3);
@@ -752,7 +751,7 @@ export default function TextInputCaretPositionerPopover(
       return null;
     }
 
-    if (showOptions || !inputEl || inputIsMultiline === null) {
+    if (showOptions/*  || !inputEl || inputIsMultiline === null */) {
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
           moving={moving}
@@ -830,7 +829,7 @@ export default function TextInputCaretPositionerPopover(
           return null;
         default:
           return <TextCaretInputPositionerDefaultView
-            inputIsMultiline={inputIsMultiline}
+            inputIsMultiline={inputIsMultiline ?? false}
             selectionIsActivated={selectionIsActivated}
             selectionIsActivatedToggled={selectionIsActivatedToggled}
             nextViewClicked={onDefaultNextViewClick}
@@ -865,18 +864,17 @@ export default function TextInputCaretPositionerPopover(
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
     minimized ? "trmrk-minimized" : "",
     inFrontOfAll ? "trmrk-in-front-of-all" : "" ].join(" ")} ref={el => mainElRef.current = el}>
-      <div className="trmrk-popover-top-border">
-        <div className="trmrk-animator" ref={el => topBorderAnimatorElRef.current = el}></div>
+      <div className="trmrk-popover-top-border" ref={el => topBorderElRef.current = el}>
+        &nbsp;
+      </div>
+      <div className="trmrk-popover-bottom-border" ref={el => bottomBorderElRef.current = el}>
+        &nbsp;
       </div>
       <div className="trmrk-text-input-caret-positioner">
-        { viewRetriever() }
-
         <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
           onMouseDown={mainBtnClicked}
           onTouchEnd={mainBtnClicked}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
-      </div>
-      <div className="trmrk-popover-bottom-border">
-        <div className="trmrk-animator" ref={el => bottomBorderAnimatorElRef.current = el}></div>
+        { viewRetriever() }
       </div>
   </div>);
 }
