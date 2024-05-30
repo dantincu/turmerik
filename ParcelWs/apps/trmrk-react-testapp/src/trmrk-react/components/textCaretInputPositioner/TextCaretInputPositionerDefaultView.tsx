@@ -22,30 +22,36 @@ export interface TextCaretInputPositionerDefaultViewProps {
   selectionIsActivated: boolean,
   nextViewClicked: () => void;
   selectionIsActivatedToggled: (selectionIsActivated: boolean) => void;
-  jumpPrevLineTouchStartOrMouseDown?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>) | null | undefined;
-  jumpPrevLineShortPressed?: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
-  jumpPrevLineLongPressStarted?: (() => void) | null | undefined;
-  jumpPrevLineLongPressEnded?: ((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void) | null | undefined;
+  jumpPrevLineTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpPrevLineTouchStartOrMouseDownDelayed: () => void; 
+  jumpPrevLineShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
+  jumpPrevLineLongPressStarted: () => void;
+  jumpPrevLineLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
   jumpPrevWordTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpPrevWordTouchStartOrMouseDownDelayed: () => void; 
   jumpPrevWordShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpPrevWordLongPressStarted: () => void;
   jumpPrevWordLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
   jumpPrevCharTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpPrevCharTouchStartOrMouseDownDelayed: () => void; 
   jumpPrevCharShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpPrevCharLongPressStarted: () => void;
   jumpPrevCharLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
   jumpNextCharTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpNextCharTouchStartOrMouseDownDelayed: () => void; 
   jumpNextCharShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpNextCharLongPressStarted: () => void;
   jumpNextCharLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
   jumpNextWordTouchStartOrMouseDown: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>;
+  jumpNextWordTouchStartOrMouseDownDelayed: () => void; 
   jumpNextWordShortPressed: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpNextWordLongPressStarted: () => void;
   jumpNextWordLongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
   jumpNextLineTouchStartOrMouseDown?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => ValueOrAnyOrVoid<boolean>) | null | undefined;
+  jumpNextLineTouchStartOrMouseDownDelayed: () => void; 
   jumpNextLineShortPressed?: (ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => void;
   jumpNextLineLongPressStarted?: (() => void) | null | undefined;
-  jumpNextLineLongPressEnded?: ((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void) | null | undefined;
+  jumpNextLineLongPressEnded?: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
 }
 
 export default function TextCaretInputPositionerDefaultView(
