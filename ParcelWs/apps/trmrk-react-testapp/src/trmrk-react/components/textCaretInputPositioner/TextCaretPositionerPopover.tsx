@@ -830,27 +830,59 @@ export default function TextInputCaretPositionerPopover(
       setSelectionIsActivated(selectionIsActivatedNewVal);
     }
 
-    const onMainElMouseDownOrTouchEnd = (e: TouchEvent | MouseEvent) => {
+    const onMainElMouseOrTouchEvt = (e: TouchEvent | MouseEvent) => {
       e.preventDefault();
     }
 
     if (mainEl) {
-      mainEl.addEventListener("touchend", onMainElMouseDownOrTouchEnd, {
+      mainEl.addEventListener("touchstart", onMainElMouseOrTouchEvt, {
         capture: true
       });
 
-      mainEl.addEventListener("mousedown", onMainElMouseDownOrTouchEnd, {
+      mainEl.addEventListener("mouseup", onMainElMouseOrTouchEvt, {
+        capture: true
+      });
+
+      mainEl.addEventListener("touchmove", onMainElMouseOrTouchEvt, {
+        capture: true
+      });
+
+      mainEl.addEventListener("mousemove", onMainElMouseOrTouchEvt, {
+        capture: true
+      });
+
+      mainEl.addEventListener("touchend", onMainElMouseOrTouchEvt, {
+        capture: true
+      });
+
+      mainEl.addEventListener("mousedown", onMainElMouseOrTouchEvt, {
         capture: true
       });
     }
 
     return () => {
       if (mainEl) {
-        mainEl.removeEventListener("touchend", onMainElMouseDownOrTouchEnd, {
+        mainEl.removeEventListener("touchstart", onMainElMouseOrTouchEvt, {
           capture: true
         });
 
-        mainEl.removeEventListener("mousedown", onMainElMouseDownOrTouchEnd, {
+        mainEl.removeEventListener("mouseup", onMainElMouseOrTouchEvt, {
+          capture: true
+        });
+
+        mainEl.removeEventListener("touchmove", onMainElMouseOrTouchEvt, {
+          capture: true
+        });
+
+        mainEl.removeEventListener("mousemove", onMainElMouseOrTouchEvt, {
+          capture: true
+        });
+
+        mainEl.removeEventListener("touchend", onMainElMouseOrTouchEvt, {
+          capture: true
+        });
+
+        mainEl.removeEventListener("mousedown", onMainElMouseOrTouchEvt, {
           capture: true
         });
       }
