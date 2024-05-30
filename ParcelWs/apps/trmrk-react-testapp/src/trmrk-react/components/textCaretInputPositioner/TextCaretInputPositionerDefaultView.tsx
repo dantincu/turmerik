@@ -79,6 +79,7 @@ export default function TextCaretInputPositionerDefaultView(
     startIntervalMs,
     longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevLineTouchStartOrMouseDown,
+    startIntervalEnded: props.jumpPrevLineTouchStartOrMouseDownDelayed,
     shortPressed: props.jumpPrevLineShortPressed,
     longPressStarted: props.jumpPrevLineLongPressStarted,
     longPressEnded: props.jumpPrevLineLongPressEnded
@@ -89,6 +90,7 @@ export default function TextCaretInputPositionerDefaultView(
     startIntervalMs,
     longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevWordTouchStartOrMouseDown,
+    startIntervalEnded: props.jumpPrevWordTouchStartOrMouseDownDelayed,
     shortPressed: props.jumpPrevWordShortPressed,
     longPressStarted: props.jumpPrevWordLongPressStarted,
     longPressEnded: props.jumpPrevWordLongPressEnded
@@ -99,6 +101,7 @@ export default function TextCaretInputPositionerDefaultView(
     startIntervalMs,
     longPressIntervalMs,
     touchStartOrMouseDown: props.jumpPrevCharTouchStartOrMouseDown,
+    startIntervalEnded: props.jumpPrevCharTouchStartOrMouseDownDelayed,
     shortPressed: props.jumpPrevCharShortPressed,
     longPressStarted: props.jumpPrevCharLongPressStarted,
     longPressEnded: props.jumpPrevCharLongPressEnded
@@ -109,6 +112,7 @@ export default function TextCaretInputPositionerDefaultView(
     startIntervalMs,
     longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextCharTouchStartOrMouseDown,
+    startIntervalEnded: props.jumpNextCharTouchStartOrMouseDownDelayed,
     shortPressed: props.jumpNextCharShortPressed,
     longPressStarted: props.jumpNextCharLongPressStarted,
     longPressEnded: props.jumpNextCharLongPressEnded
@@ -119,6 +123,7 @@ export default function TextCaretInputPositionerDefaultView(
     startIntervalMs,
     longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextWordTouchStartOrMouseDown,
+    startIntervalEnded: props.jumpNextWordTouchStartOrMouseDownDelayed,
     shortPressed: props.jumpNextWordShortPressed,
     longPressStarted: props.jumpNextWordLongPressStarted,
     longPressEnded: props.jumpNextWordLongPressEnded
@@ -129,6 +134,7 @@ export default function TextCaretInputPositionerDefaultView(
     startIntervalMs,
     longPressIntervalMs,
     touchStartOrMouseDown: props.jumpNextLineTouchStartOrMouseDown,
+    startIntervalEnded: props.jumpNextLineTouchStartOrMouseDownDelayed,
     shortPressed: props.jumpNextLineShortPressed,
     longPressStarted: props.jumpNextLineLongPressStarted,
     longPressEnded: props.jumpNextLineLongPressEnded

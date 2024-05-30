@@ -1,10 +1,20 @@
-@keyframes trmrk_text-input-caret-positioner-animator-slide {
+@keyframes trmrk_text-input-caret-positioner-animator-slide-horiz {
   from {
     left: -1.25em;
   }
 
   to {
     left: 1.25em;
+  }
+}
+
+@keyframes trmrk_text-input-caret-positioner-animator-slide-vert {
+  from {
+    top: -1.25em;
+  }
+
+  to {
+    top: 1.25em;
   }
 }
 
@@ -50,7 +60,7 @@
     .trmrk-animator {
       display: flex;
       flex-grow: 1;
-      width: calc(100% + 6px);
+      width: calc(200%);
       position: absolute;
       height: 3px;
 
@@ -59,21 +69,66 @@
       }
 
       &.trmrk-slide-speed-x1 {
-        animation-name: trmrk_text-input-caret-positioner-animator-slide;
+        animation-name: trmrk_text-input-caret-positioner-animator-slide-horiz;
         animation-duration: 1s;
         animation-timing-function: steps(667);
         animation-iteration-count: 333000;
       }
 
       &.trmrk-slide-speed-x2 {
-        animation-name: trmrk_text-input-caret-positioner-animator-slide;
+        animation-name: trmrk_text-input-caret-positioner-animator-slide-horiz;
         animation-duration: 0.67s;
         animation-timing-function: steps(333);
         animation-iteration-count: 667000;
       }
 
       &.trmrk-slide-speed-x3 {
-        animation-name: trmrk_text-input-caret-positioner-animator-slide;
+        animation-name: trmrk_text-input-caret-positioner-animator-slide-horiz;
+        animation-duration: 0.33s;
+        animation-timing-function: steps(100);
+        animation-iteration-count: 1000000;
+      }
+    }
+  }
+
+  .trmrk-popover-left-border,
+  .trmrk-popover-right-border {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    height: calc(100% - 6px);
+    position: absolute;
+    width: 3px;
+    overflow: hidden;
+
+    .trmrk-animator {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      height: calc(200%);
+      position: absolute;
+      width: 3px;
+
+      &.trmrk-animation-reversed {
+        animation-direction: reverse;
+      }
+
+      &.trmrk-slide-speed-x1 {
+        animation-name: trmrk_text-input-caret-positioner-animator-slide-vert;
+        animation-duration: 1s;
+        animation-timing-function: steps(667);
+        animation-iteration-count: 333000;
+      }
+
+      &.trmrk-slide-speed-x2 {
+        animation-name: trmrk_text-input-caret-positioner-animator-slide-vert;
+        animation-duration: 0.67s;
+        animation-timing-function: steps(333);
+        animation-iteration-count: 667000;
+      }
+
+      &.trmrk-slide-speed-x3 {
+        animation-name: trmrk_text-input-caret-positioner-animator-slide-vert;
         animation-duration: 0.33s;
         animation-timing-function: steps(100);
         animation-iteration-count: 1000000;
@@ -87,6 +142,14 @@
 
   .trmrk-popover-bottom-border {
     bottom: 0px;
+  }
+
+  .trmrk-popover-left-border {
+    left: 0px;
+  }
+
+  .trmrk-popover-right-border {
+    right: 0px;
   }
 
   &.trmrk-minimized {

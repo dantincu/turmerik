@@ -215,11 +215,32 @@
       }
       
       &.trmrk-slide {
-        background: repeating-linear-gradient(to left,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0.625em,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.825em,
-          var(--trmrk-text-input-caret-positioner-border_color_dark) 1.825em,
-          var(--trmrk-text-input-caret-positioner-border_color_dark) 3.125em);
+        background: repeating-linear-gradient(to right,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0em,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 2.5em);
+      }
+    }
+  }
+
+  .trmrk-popover-left-border,
+  .trmrk-popover-right-border {
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_dark);
+
+    .trmrk-animator {
+      &.trmrk-long-pressed {
+        animation-name: trmrk-theme-dark_text-input-caret-positioner-animator-pressed;
+        animation-duration: 0.2s;
+        animation-timing-function: steps(10);
+      }
+      
+      &.trmrk-slide {
+        background: repeating-linear-gradient(to bottom,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 0em,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_dark) 2.5em);
       }
     }
   }
@@ -248,11 +269,32 @@
       }
 
       &.trmrk-slide {
-        background: repeating-linear-gradient(to left,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0.625em,
-          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.825em,
-          var(--trmrk-text-input-caret-positioner-border_color_light) 1.825em,
-          var(--trmrk-text-input-caret-positioner-border_color_light) 3.125em);
+        background: repeating-linear-gradient(to right,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0em,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 2.5em);
+        }
+    }
+  }
+
+  .trmrk-popover-left-border,
+  .trmrk-popover-right-border {
+    background-color: var(--trmrk-text-input-caret-positioner-border_color_light);
+
+    .trmrk-animator {
+      &.trmrk-long-pressed {
+        animation-name: trmrk-theme-light_text-input-caret-positioner-animator-pressed;
+        animation-duration: 0.2s;
+        animation-timing-function: steps(10);
+      }
+
+      &.trmrk-slide {
+        background: repeating-linear-gradient(to bottom,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 0em,
+          var(--trmrk-text-input-caret-positioner-border-animator_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 1.25em,
+          var(--trmrk-text-input-caret-positioner-border_color_light) 2.5em);
         }
     }
   }

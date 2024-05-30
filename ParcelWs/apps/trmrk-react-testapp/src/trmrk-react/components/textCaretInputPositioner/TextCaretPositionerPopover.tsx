@@ -120,6 +120,8 @@ export default function TextInputCaretPositionerPopover(
   const mainElRef = React.useRef<HTMLDivElement | null>(null);
   const topBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
   const bottomBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
+  const leftBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
+  const rightBorderAnimatorElRef = React.useRef<HTMLDivElement | null>(null);
 
   const [ inputEl, setInputEl ] = React.useState(props.inputEl);
   
@@ -150,15 +152,18 @@ export default function TextInputCaretPositionerPopover(
     normalizeLinesJumpSpeedsArr(props.linesJumpSpeedsArr));
 
   const withBorderAnimatorElems = React.useCallback((
-    callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => void
+    callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement, leftBorderAnimatorEl: HTMLElement, rightBorderAnimatorEl: HTMLElement) => void
   ) => {
     const topBorderAnimatorEl = topBorderAnimatorElRef.current;
     const bottomBorderAnimatorEl = bottomBorderAnimatorElRef.current;
 
-    if (topBorderAnimatorEl && bottomBorderAnimatorEl) {
-      callback(topBorderAnimatorEl, bottomBorderAnimatorEl);
+    const leftBorderAnimatorEl = leftBorderAnimatorElRef.current;
+    const rightBorderAnimatorEl = rightBorderAnimatorElRef.current;
+
+    if (topBorderAnimatorEl && bottomBorderAnimatorEl && leftBorderAnimatorEl && rightBorderAnimatorEl) {
+      callback(topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl);
     }
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const moving = React.useCallback((rowsCount: number) => {
     const mainEl = mainElRef.current;
@@ -182,14 +187,14 @@ export default function TextInputCaretPositionerPopover(
       topBorderAnimatorEl.classList.add("trmrk-long-pressed");
       bottomBorderAnimatorEl.classList.add("trmrk-long-pressed");
     });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const moveBtnAfterLongPressStarted = React.useCallback(() => {
     withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.remove("trmrk-long-pressed");
       bottomBorderAnimatorEl.classList.remove("trmrk-long-pressed");
     });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const minimizeBtnClicked = React.useCallback(() => {
     const newMinimizedVal = true;
@@ -307,13 +312,18 @@ export default function TextInputCaretPositionerPopover(
     setSelectionIsActivated(selectionIsActivated);
   }, [selectionIsActivated]);
 
-  const clearAnimatorsClasses = React.useCallback((topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement) => {
+  const clearAnimatorsClasses = React.useCallback((
+    topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement,
+    leftBorderAnimatorEl: HTMLElement, rightBorderAnimatorEl: HTMLElement) => {
     topBorderAnimatorEl.setAttribute("class", "trmrk-animator");
     bottomBorderAnimatorEl.setAttribute("class", "trmrk-animator");
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    leftBorderAnimatorEl.setAttribute("class", "trmrk-animator");
+    rightBorderAnimatorEl.setAttribute("class", "trmrk-animator");
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
-  const viewBtnTouchStartOrMouseDown = React.useCallback((topBorderDfDir: boolean, bottomBorderDfDir: boolean, speed: number) => {
-    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+  const viewBtnTouchStartOrMouseDown = React.useCallback((
+    topBorderDfDir: boolean, bottomBorderDfDir: boolean, leftBorderDfDir: boolean, rightBorderDfDir: boolean, speed: number) => {
+    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.add(cssClasses.slide);
       topBorderAnimatorEl.classList.add(cssClasses.slideSpeed(speed));
 
@@ -327,23 +337,40 @@ export default function TextInputCaretPositionerPopover(
       if (!bottomBorderDfDir) {
         bottomBorderAnimatorEl.classList.add(cssClasses.reversed);
       }
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+      
+      leftBorderAnimatorEl.classList.add(cssClasses.slide);
+      leftBorderAnimatorEl.classList.add(cssClasses.slideSpeed(speed));
 
-  const viewBtnTouchStartOrMouseDownDelayed = React.useCallback((topBorderDfDir: boolean, bottomBorderDfDir: boolean, speed: number) => {
-    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      clearAnimatorsClasses(topBorderAnimatorEl, bottomBorderAnimatorEl);
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+      if (!leftBorderDfDir) {
+        leftBorderAnimatorEl.classList.add(cssClasses.reversed);
+      }
 
-  const viewBtnShortPressed = React.useCallback((topBorderDfDir: boolean, bottomBorderDfDir: boolean, speed: number) => {
-    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      clearAnimatorsClasses(topBorderAnimatorEl, bottomBorderAnimatorEl);
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+      rightBorderAnimatorEl.classList.add(cssClasses.slide);
+      rightBorderAnimatorEl.classList.add(cssClasses.slideSpeed(speed));
 
-  const viewBtnLongPressStarted = React.useCallback((topBorderDfDir: boolean, bottomBorderDfDir: boolean, speed: number) => {
-    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
+      if (!rightBorderDfDir) {
+        rightBorderAnimatorEl.classList.add(cssClasses.reversed);
+      }
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
+
+  const viewBtnTouchStartOrMouseDownDelayed = React.useCallback((
+    topBorderDfDir: boolean, bottomBorderDfDir: boolean, leftBorderDfDir: boolean, rightBorderDfDir: boolean, speed: number) => {
+    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl) => {
+      clearAnimatorsClasses(topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl);
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
+
+  const viewBtnShortPressed = React.useCallback((
+    topBorderDfDir: boolean, bottomBorderDfDir: boolean, leftBorderDfDir: boolean, rightBorderDfDir: boolean, speed: number) => {
+    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl) => {
+      clearAnimatorsClasses(topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl);
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
+
+  const viewBtnLongPressStarted = React.useCallback((
+    topBorderDfDir: boolean, bottomBorderDfDir: boolean, leftBorderDfDir: boolean, rightBorderDfDir: boolean, speed: number) => {
+    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl) => {
       topBorderAnimatorEl.classList.add(cssClasses.slideSpeed(speed));
       topBorderAnimatorEl.classList.add(cssClasses.slide);
 
@@ -357,374 +384,389 @@ export default function TextInputCaretPositionerPopover(
       if (!bottomBorderDfDir) {
         bottomBorderAnimatorEl.classList.add(cssClasses.reversed);
       }
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+      
+      leftBorderAnimatorEl.classList.add(cssClasses.slide);
+      leftBorderAnimatorEl.classList.add(cssClasses.slideSpeed(speed));
 
-  const viewBtnLongPressEnded = React.useCallback((topBorderDfDir: boolean, bottomBorderDfDir: boolean, speed: number) => {
-    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      clearAnimatorsClasses(topBorderAnimatorEl, bottomBorderAnimatorEl);
+      if (!leftBorderDfDir) {
+        leftBorderAnimatorEl.classList.add(cssClasses.reversed);
+      }
+
+      rightBorderAnimatorEl.classList.add(cssClasses.slide);
+      rightBorderAnimatorEl.classList.add(cssClasses.slideSpeed(speed));
+
+      if (!rightBorderDfDir) {
+        rightBorderAnimatorEl.classList.add(cssClasses.reversed);
+      }
     });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
+
+  const viewBtnLongPressEnded = React.useCallback((
+    topBorderDfDir: boolean, bottomBorderDfDir: boolean, leftBorderDfDir: boolean, rightBorderDfDir: boolean, speed: number) => {
+    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl) => {
+      clearAnimatorsClasses(topBorderAnimatorEl, bottomBorderAnimatorEl, leftBorderAnimatorEl, rightBorderAnimatorEl);
+    });
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevLineTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevLineTouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevLineShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevLineLongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevLineLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevWordTouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevWordShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevWordLongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, true, true, false,  2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevCharTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevCharTouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevCharShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevCharLongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpPrevCharLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextCharTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextCharTouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextCharShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextCharLongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextCharLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextWordTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextWordTouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextWordShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextWordLongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextWordLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextLineTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextLineTouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextLineShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextLineLongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const defaultViewJumpNextLineLongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, true, true, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX3TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, true, true, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, true, true, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX3LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, true, true, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, true, true, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX2TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX2LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, true, true, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX1TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX1LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpPrevCharX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, true, true, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX1TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX1LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, false, false, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX2TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX2LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, false, false, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, false, false, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX3TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, false, false, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, false, false, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX3LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, false, false, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const symbolsViewJumpNextCharX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, false, false, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, true, true, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX3TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, true, true, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, true, true, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX3LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, true, true, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, true, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, true, true, true, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, true, true, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX2TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, true, true, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, true, true, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX2LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, true, true, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, true, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, true, true, true, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX1TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX1LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpPrevLineX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(false, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(true, true, true, true, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX1TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX1TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, true, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX1ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX1LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX1LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, false, 1);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, false, false, false, 1);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX2TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, false, false, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX2TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, false, false, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX2ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, false, false, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX2LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, false, false, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX2LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, false, 2);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, false, false, false, 2);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX3TouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-    viewBtnTouchStartOrMouseDown(true, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDown(false, false, false, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX3TouchStartOrMouseDownDelayed = React.useCallback(() => {
-    viewBtnTouchStartOrMouseDownDelayed(true, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnTouchStartOrMouseDownDelayed(false, false, false, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX3ShortPressed = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords | null) => {
-    viewBtnShortPressed(true, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnShortPressed(false, false, false, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX3LongPressStarted = React.useCallback(() => {
-    viewBtnLongPressStarted(true, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressStarted(false, false, false, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   const linesViewJumpNextLineX3LongPressEnded = React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-    viewBtnLongPressEnded(true, false, 3);
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef]);
+    viewBtnLongPressEnded(false, false, false, false, 3);
+  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
   React.useEffect(() => {
     const mainEl = mainElRef.current;
@@ -848,7 +890,7 @@ export default function TextInputCaretPositionerPopover(
       return null;
     }
 
-    if (showOptions/*  || !inputEl || inputIsMultiline === null */) {
+    if (showOptions || !inputEl || inputIsMultiline === null) {
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
           moving={moving}
@@ -984,6 +1026,12 @@ export default function TextInputCaretPositionerPopover(
       </div>
       <div className="trmrk-popover-bottom-border">
         <div className="trmrk-animator" ref={el => bottomBorderAnimatorElRef.current = el}>&nbsp;</div>
+      </div>
+      <div className="trmrk-popover-left-border">
+        <div className="trmrk-animator" ref={el => leftBorderAnimatorElRef.current = el}>&nbsp;</div>
+      </div>
+      <div className="trmrk-popover-right-border">
+        <div className="trmrk-animator" ref={el => rightBorderAnimatorElRef.current = el}>&nbsp;</div>
       </div>
       <div className="trmrk-text-input-caret-positioner">
         <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
