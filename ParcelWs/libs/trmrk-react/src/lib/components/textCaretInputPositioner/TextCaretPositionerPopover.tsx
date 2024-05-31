@@ -165,37 +165,6 @@ export default function TextInputCaretPositionerPopover(
     }
   }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
 
-  const moving = React.useCallback((rowsCount: number) => {
-    const mainEl = mainElRef.current;
-
-    if (mainEl) {
-      const topOffsetPxNum = extractElCssStyleTopPx(mainEl);
-
-      if ((topOffsetPxNum ?? null) !== null) {
-        let nextTopOffsetPxNum = topOffsetPxNum! + rowsCount * mainEl.clientHeight;
-
-        nextTopOffsetPxNum = Math.max(0, nextTopOffsetPxNum);
-        nextTopOffsetPxNum = Math.min(nextTopOffsetPxNum, window.innerHeight - mainEl.clientHeight);
-
-        mainEl.style.top = `${nextTopOffsetPxNum}px`;
-      }
-    }
-  }, [mainElRef]);
-
-  const moveBtnLongPressStarted = React.useCallback(() => {
-    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      topBorderAnimatorEl.classList.add("trmrk-long-pressed");
-      bottomBorderAnimatorEl.classList.add("trmrk-long-pressed");
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
-
-  const moveBtnAfterLongPressStarted = React.useCallback(() => {
-    withBorderAnimatorElems((topBorderAnimatorEl, bottomBorderAnimatorEl) => {
-      topBorderAnimatorEl.classList.remove("trmrk-long-pressed");
-      bottomBorderAnimatorEl.classList.remove("trmrk-long-pressed");
-    });
-  }, [topBorderAnimatorElRef, bottomBorderAnimatorElRef, leftBorderAnimatorElRef, rightBorderAnimatorElRef]);
-
   const minimizeBtnClicked = React.useCallback(() => {
     const newMinimizedVal = true;
     const newShowOptionsVal = false;
@@ -925,9 +894,6 @@ export default function TextInputCaretPositionerPopover(
     if (showOptions || !inputEl || inputIsMultiline === null) {
       return <TextCaretInputPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
-          moving={moving}
-          moveBtnLongPressStarted={moveBtnLongPressStarted}
-          moveBtnAfterLongPressStarted={moveBtnAfterLongPressStarted}
           showMoreOptions={showMoreOptions}
           keepOpen={keepOpen}
           showMoreOptionsBtnClicked={showMoreOptionsBtnClicked}

@@ -6,15 +6,11 @@ import Input from "@mui/material/Input";
 import Checkbox from '@mui/material/Checkbox';
 
 import { extractTextInput } from "../../../../trmrk-browser/domUtils/textInput";
-import { getTouchOrMouseCoords, toSingleTouchOrClick } from "../../../../trmrk-browser/domUtils/touchAndMouseEvents";
 import TrmrkAppBarsPanel, { currentInputElMtblRef, updateCurrentInputEl } from "../../../../trmrk-react/components/barsPanel/TrmrkAppBarsPanel";
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 
 import { generateText } from "./generateText";
-
-import { setTextCaretPositionerEnabledToLocalStorage,
-  setTextCaretPositionerKeepOpenToLocalStorage } from "../../../../trmrk-browser/domUtils/core";
 
 export interface TextInputCursorPositioningPageProps {
   urlPath: string
