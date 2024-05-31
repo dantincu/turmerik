@@ -42,16 +42,11 @@ export default function TextInputCursorPositioningPage(
   const [ textArea2WrapperEl, setTextArea2WrapperEl ] = React.useState(textArea2ElRef.current);
   const [ textArea2El, setTextArea2El ] = React.useState<HTMLElement | null>(null);
 
-  const textCaretPositionerCurrentInputElLastSetOpIdx = useSelector(
-    appDataSelectors.getTextCaretPositionerCurrentInputElLastSetOpIdx);
-
   const [ textBox1IsReadonly, setTextBox1IsReadonly ] = React.useState(true);
   const [ textArea1IsReadonly, setText1AreaIsReadonly ] = React.useState(true);
 
   const [ textBox2IsReadonly, setTextBox2IsReadonly ] = React.useState(true);
   const [ textArea2IsReadonly, setText2AreaIsReadonly ] = React.useState(true);
-
-  const isDarkMode = useSelector(appDataSelectors.getIsDarkMode);
 
   const dispatch = useDispatch();
 
@@ -160,10 +155,8 @@ export default function TextInputCursorPositioningPage(
     textArea2ElRef,
     textArea2El,
     currentInputElMtblRef.value,
-    textCaretPositionerCurrentInputElLastSetOpIdx,
     textBox2IsReadonly,
     textArea2IsReadonly,
-    isDarkMode,
     singlelineText2,
     multilineText2 ]);
     

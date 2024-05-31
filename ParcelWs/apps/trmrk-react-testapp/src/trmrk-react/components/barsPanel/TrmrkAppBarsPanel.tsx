@@ -61,6 +61,9 @@ export default function TrmrkAppBarsPanel(props: TrmrkAppBarsPanelProps) {
   const textCaretPositionerKeepOpen = useSelector(props.appDataSelectors.getTextCaretPositionerKeepOpen);
   const isAnyMenuOpen = useSelector(props.appBarSelectors.isAnyMenuOpen);
 
+  const textCaretPositionerCurrentInputElLastSetOpIdx = useSelector(
+    props.appDataSelectors.getTextCaretPositionerCurrentInputElLastSetOpIdx);
+
   const dispatch = useDispatch();
 
   const onTextCaretPositionerKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
@@ -80,6 +83,7 @@ export default function TrmrkAppBarsPanel(props: TrmrkAppBarsPanelProps) {
     textCaretPositionerEnabled,
     textCaretPositionerKeepOpen,
     isAnyMenuOpen,
+    textCaretPositionerCurrentInputElLastSetOpIdx,
   ]);
 
   return (<AppBarsPanel basePath={props.basePath}
