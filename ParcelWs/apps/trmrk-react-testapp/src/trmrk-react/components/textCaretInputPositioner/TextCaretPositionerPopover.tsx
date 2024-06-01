@@ -2,6 +2,7 @@ import React from "react";
 
 import IconButton from "@mui/material/IconButton";
 
+import trmrk from "../../../trmrk";
 import { ValueOrAnyOrVoid } from "../../../trmrk/core";
 
 import {
@@ -16,6 +17,8 @@ import TextCaretInputPositionerDefaultView from "./TextCaretInputPositionerDefau
 import TextCaretInputPositionerOptionsView from "./TextCaretInputPositionerOptionsView";
 import TextCaretInputPositionerJumpSymbolsView from "./TextCaretInputPositionerJumpSymbolsView";
 import TextCaretInputPositionerJumpLinesView from "./TextCaretInputPositionerJumpLinesView";
+
+export const wordSepChars = trmrk.freezeMx([['<', '>'], ['-', ';', ',', '.']]);
 
 export enum TextCaretInputPositionerState {
   Default = 0,
@@ -55,7 +58,6 @@ export const INPUT_CARET_POSITIONER_QUERY_SELECTOR = `.${INPUT_CARET_POSITIONER_
 export const retrieveTextInputCaretPositioner = () => document.querySelector<HTMLElement>(INPUT_CARET_POSITIONER_QUERY_SELECTOR);
 
 export const cssClasses = Object.freeze({
-  // anchor: (left: boolean) => left ? "trmrk-anchor-left" : "trmrk-anchor-right",
   slide: "trmrk-slide",
   slideSpeed: (speed: number) => `trmrk-slide-speed-x${speed}`,
   reversed: "trmrk-animation-reversed"

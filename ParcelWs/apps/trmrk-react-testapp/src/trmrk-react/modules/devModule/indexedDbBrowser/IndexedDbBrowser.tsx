@@ -147,8 +147,6 @@ export default function IndexedDbBrowser(
   React.useEffect(() =>{
     if (!databases && !error) {
       loadDatabases();
-    } else {
-      // console.log("databases", databases!.filter(db => db.isCurrent).map(db => db.key));
     }
   }, [ isLoadingRoot,
     databases,

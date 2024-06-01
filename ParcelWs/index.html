@@ -89,7 +89,7 @@
       mainEl.addEventListener(
         "click",
         (ev) => {
-          // console.log("target", ev.target);
+          // con_sole.log("target", ev.target);
         },
         {
           capture: true,
@@ -97,7 +97,7 @@
       );
 
       document.addEventListener("selectionchange", (e) => {
-        // console.log("selectionchanged", getSelection());
+        // con_sole.log("selectionchanged", getSelection());
       });
 
       const textBoxEl = document.getElementById("textBox");
@@ -142,7 +142,7 @@
 
         switch (elem.tagName.toLowerCase()) {
           case "input":
-            console.log(
+            con_sole.log(
               "input.setSelectionRange",
               selectionStart,
               selectionEnd
@@ -151,7 +151,7 @@
             elem.setSelectionRange(selectionStart, selectionEnd);
             break;
           case "textarea":
-            console.log(
+            con_sole.log(
               "textarea.setSelectionRange",
               selectionStart,
               selectionEnd

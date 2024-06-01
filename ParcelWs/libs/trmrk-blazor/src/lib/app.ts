@@ -10,6 +10,6 @@ export class TrmrkBlazorApp<TInitData> {
   }
 
   public logData(msg?: string | null | undefined) {
-    // console.log(msg ?? "app data", this.data);
+    // con_sole.log(msg ?? "app data", this.data);
   }
 }

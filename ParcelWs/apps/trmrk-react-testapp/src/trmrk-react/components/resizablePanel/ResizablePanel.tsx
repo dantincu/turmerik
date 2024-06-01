@@ -189,10 +189,8 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
     const removeResizeHandlerIfReq = (e: MouseEvent | TouchEvent | null | undefined, remove: boolean | null) => {
       const handler = onResizeHandler.current;
       const parentEl = props.parentRef.current!;
-      // console.log("e.target", e?.target);
       
       if (handler && (!e || remove || e.target === parentEl)){
-        // console.log("removeResizeHandler");
 
         parentEl.removeEventListener("mouseup", removeResizeHandlerOnMouseUpIfReq, {
           capture: true
@@ -270,7 +268,6 @@ export default function ResizablePanel(props: ResizablePanelOpts) {
 
       if (!onResizeHandler.current) {
         const handler: (e: MouseEvent | TouchEvent) => void = (e: MouseEvent | TouchEvent) => {
-          // console.log("rszDir", rszDir, e);
 
           props.resizing(e, getTouchOrMousePosition(e), rszDir);
           e.preventDefault();

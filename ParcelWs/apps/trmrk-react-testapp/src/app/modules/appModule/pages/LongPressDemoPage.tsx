@@ -25,60 +25,60 @@ export default function LongPressDemoPage(props: LongPressDemoPageProps) {
   const longPressObj1 = longPress({
     afterLongPressLoopBreakIntervalMs: 3000,
     touchStartOrMouseDown: React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-      // console.log("touchStartOrMouseDown1", ev, coords);
+      // con_sole.log("touchStartOrMouseDown1", ev, coords);
     }, []),
     touchEndOrMouseUp: (ev, coords) => {
-      // console.log("touchEndOrMouseUp1", ev, coords);
+      // con_sole.log("touchEndOrMouseUp1", ev, coords);
     },
     touchOrMouseMove: (ev, coords) => {
-      // console.log("touchOrMouseMove1", ev, coords);
+      // con_sole.log("touchOrMouseMove1", ev, coords);
     },
     shortPressed: (ev, coords) => {
-      // console.log("shortPressed1", ev, coords);
+      // con_sole.log("shortPressed1", ev, coords);
     },
     longPressStarted: React.useCallback(() => {
-      // console.log("longPressStarted1");
+      // con_sole.log("longPressStarted1");
       btn1ElemRef.current!.classList.add("trmrk-long-pressing");
     }, []),
     longPressEnded: React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-      // console.log("longPressEnded1", ev, coords);
+      // con_sole.log("longPressEnded1", ev, coords);
       btn1ElemRef.current!.classList.remove("trmrk-long-pressing");
     }, []),
     afterLongPressLoop: () => {
-      // console.log("afterLongPressLoop1");
+      // con_sole.log("afterLongPressLoop1");
     },
     afterLongPressLoopBreak: () => {
-      // console.log("afterLongPressLoopTimeout1");
+      // con_sole.log("afterLongPressLoopTimeout1");
     },
   });
 
   const longPressObj2 = longPress({
     afterLongPressLoopBreakIntervalMs: 3000,
     touchStartOrMouseDown: React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
-      // console.log("touchStartOrMouseDown2", ev, coords);
+      // con_sole.log("touchStartOrMouseDown2", ev, coords);
     }, []),
     touchEndOrMouseUp: (ev, coords) => {
-      // console.log("touchEndOrMouseUp2", ev, coords);
+      // con_sole.log("touchEndOrMouseUp2", ev, coords);
     },
     touchOrMouseMove: (ev, coords) => {
-      // console.log("touchOrMouseMove2", ev, coords);
+      // con_sole.log("touchOrMouseMove2", ev, coords);
     },
     shortPressed: (ev, coords) => {
-      // console.log("shortPressed2", ev, coords);
+      // con_sole.log("shortPressed2", ev, coords);
     },
     longPressStarted: React.useCallback(() => {
-      // console.log("longPressStarted2");
+      // con_sole.log("longPressStarted2");
       btn2ElemRef.current!.classList.add("trmrk-long-pressing");
     }, []),
     longPressEnded: React.useCallback((ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => {
-      // console.log("longPressEnded2", ev, coords);
+      // con_sole.log("longPressEnded2", ev, coords);
       btn2ElemRef.current!.classList.remove("trmrk-long-pressing");
     }, []),
     afterLongPressLoop: () => {
-      // console.log("afterLongPressLoop2");
+      // con_sole.log("afterLongPressLoop2");
     },
     afterLongPressLoopBreak: () => {
-      // console.log("afterLongPressLoopTimeout2");
+      // con_sole.log("afterLongPressLoopTimeout2");
     },
   });
 

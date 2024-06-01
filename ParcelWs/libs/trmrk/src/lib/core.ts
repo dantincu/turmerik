@@ -526,3 +526,6 @@ export const flatten = <T>(
 
   return retArr;
 };
+
+export const freezeMx = <T>(mx: T[][]) =>
+  Object.freeze(mx.map((arr) => Object.freeze(arr)));
