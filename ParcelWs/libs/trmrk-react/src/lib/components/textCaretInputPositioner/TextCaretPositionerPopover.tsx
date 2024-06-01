@@ -35,6 +35,9 @@ export interface TextInputCaretPositionerPopoverProps {
   showOptions?: boolean | null | undefined;
   showMoreOptions?: boolean | null | undefined;
   selectionIsActivated?: boolean | null | undefined;
+  isFullViewPortMode: boolean;
+  isMoveMode: boolean;
+  isResizeMode: boolean;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   moving?: ((e: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, rowsCount: number) => ValueOrAnyOrVoid<boolean>) | null | undefined;
@@ -42,9 +45,11 @@ export interface TextInputCaretPositionerPopoverProps {
   stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
   keepOpenToggled?: ((keepOpen: boolean) => void) | null | undefined;
   showOptionsToggled?: ((showOptions: boolean) => void) | null | undefined;
-  showMoreOptionsToggled?: ((showMoreOptions: boolean) => void) | null | undefined;
-  isFullViewScrollModeToggled?: ((isFullViewScrollMode: boolean) => void) | null | undefined;
   selectionIsActivatedToggled?: ((selectionIsActivated: boolean) => void) | null | undefined;
+  showMoreOptionsToggled?: ((showMoreOptions: boolean) => void) | null | undefined;
+  isFullViewPortModeToggled: (isFullViewPortMode: boolean) => void;
+  isMoveModeToggled: (isMoveMode: boolean) => void;
+  isResizeModeToggled: (isResizeMode: boolean) => void;
   closeClicked?: (() => void) | null | undefined;
 }
 
@@ -109,6 +114,12 @@ export const normalizeSelectionIsActivated = (
   inputEl: HTMLElement | null,
   selectionIsActivated: boolean | null | undefined) => !!inputEl && (selectionIsActivated ?? document.getSelection()?.containsNode(inputEl) ?? false);
 
+export const normalizeIsFullViewPortMode = (isFullViewPortMode: boolean | null | undefined) => isFullViewPortMode ?? false;
+export const normalizeIsMoveMode = (isMoveMode: boolean | null | undefined) => isMoveMode ?? false;
+export const normalizeIsResizeMode = (isResizeMode: boolean | null | undefined) => isResizeMode ?? false;
+
+export const getBackDropIsShown = (isMoveModePropsVal: boolean, isResizeModePropsVal: boolean) => isMoveModePropsVal || isResizeModePropsVal;
+
 export const getNextTopPx = (coords: TouchOrMouseCoords, moveStartCoords: TouchOrMouseCoords, bfMoveStartTopOffsetPx: number) => {
   const diffTop = coords.clientY - moveStartCoords.clientY;
   const topOffsetPxNum = bfMoveStartTopOffsetPx + diffTop;
@@ -137,6 +148,10 @@ export default function TextInputCaretPositionerPopover(
 
   const [ selectionIsActivatedPropsVal, setSelectionIsActivatedPropsVal ] = React.useState(normalizeSelectionIsActivated(
     props.inputEl, props.selectionIsActivated));
+
+  const [ isFullViewPortModePropsVal, setIsFullViewPortModePropsVal ] = React.useState(props.isFullViewPortMode);
+  const [ isMoveModePropsVal, setIsMoveModePropsVal ] = React.useState(props.isMoveMode);
+  const [ isResizeModePropsVal, setIsResizeModePropsVal ] = React.useState(props.isResizeMode);
 
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(inputIsMultilinePropsVal);
   const [ inFrontOfAll, setInFrontOfAll ] = React.useState(inFrontOfAllPropsVal);
@@ -232,6 +247,18 @@ export default function TextInputCaretPositionerPopover(
 
     setKeepOpen(newKeepOpenVal);
   }, []);
+
+  const isFullViewPortModeToggled = React.useCallback((isFullViewPortMode: boolean) => {
+    props.isFullViewPortModeToggled(isFullViewPortMode);
+  }, [isFullViewPortModePropsVal]);
+
+  const isMoveModeToggled = React.useCallback((isMoveMode: boolean) => {
+    props.isMoveModeToggled(isMoveMode);
+  }, [isMoveModePropsVal]);
+
+  const isResizeModeToggled = React.useCallback((isResizeMode: boolean) => {
+    props.isResizeModeToggled(isResizeMode);
+  }, [isResizeModePropsVal]);
 
   const closeClicked = React.useCallback(() => {
     if (props.closeClicked) {
@@ -748,6 +775,9 @@ export default function TextInputCaretPositionerPopover(
     const showOptionsNewVal = normalizeShowOptions(props.showOptions);
     const showMoreOptionsNewVal = normalizeShowMoreOptions(props.showMoreOptions);
     const selectionIsActivatedNewVal = normalizeSelectionIsActivated(props.inputEl, props.selectionIsActivated);
+    const isFullViewPortModeNewVal = props.isFullViewPortMode;
+    const isMoveModeNewVal = props.isMoveMode;
+    const isResizeModeNewVal = props.isResizeMode;
 
     if (inputEl !== props.inputEl) {
       const inputIsMultilineNewVal = normalizeInputIsMultiline(props.inputEl);
@@ -799,6 +829,18 @@ export default function TextInputCaretPositionerPopover(
     if (selectionIsActivatedNewVal !== selectionIsActivatedPropsVal) {
       setSelectionIsActivatedPropsVal(selectionIsActivatedNewVal);
       setSelectionIsActivated(selectionIsActivatedNewVal);
+    }
+
+    if (isFullViewPortModeNewVal !== isFullViewPortModePropsVal) {
+      setIsFullViewPortModePropsVal(isFullViewPortModePropsVal);
+    }
+
+    if (isMoveModeNewVal !== isMoveModePropsVal) {
+      setIsMoveModePropsVal(isMoveModeNewVal);
+    }
+
+    if (isResizeModeNewVal !== isResizeModePropsVal) {
+      setIsResizeModePropsVal(isResizeModeNewVal);
     }
 
     const onMainElMouseOrTouchEvt = (e: TouchEvent | MouseEvent) => {
@@ -867,6 +909,9 @@ export default function TextInputCaretPositionerPopover(
     props.showOptions,
     props.showMoreOptions,
     props.selectionIsActivated,
+    props.isFullViewPortMode,
+    props.isMoveMode,
+    props.isResizeMode,
     props.symbolsJumpSpeedsArr,
     props.linesJumpSpeedsArr,
     inputEl,
@@ -877,6 +922,9 @@ export default function TextInputCaretPositionerPopover(
     showMoreOptionsPropsVal,
     inputIsMultilinePropsVal,
     selectionIsActivatedPropsVal,
+    isFullViewPortModePropsVal,
+    isMoveModePropsVal,
+    isResizeModePropsVal,
     inFrontOfAll,
     minimized,
     stateType,
@@ -898,8 +946,14 @@ export default function TextInputCaretPositionerPopover(
           minimizeClicked={minimizeBtnClicked}
           showMoreOptions={showMoreOptions}
           keepOpen={keepOpen}
+          isFullViewPortMode={isFullViewPortModePropsVal}
+          isMoveMode={isMoveModePropsVal}
+          isResizeMode={isResizeModePropsVal}
           showMoreOptionsBtnClicked={showMoreOptionsBtnClicked}
           keepOpenToggled={keepOpenToggled}
+          isFullViewPortModeToggled={isFullViewPortModeToggled}
+          isMoveModeToggled={isMoveModeToggled}
+          isResizeModeToggled={isResizeModeToggled}
           closeClicked={closeClicked} />;
     } else {
       switch (stateType) {
@@ -1016,7 +1070,18 @@ export default function TextInputCaretPositionerPopover(
             jumpNextLineLongPressEnded={defaultViewJumpNextLineLongPressEnded} />;
       }
     }
-  }, [inputEl, inFrontOfAll, inputIsMultiline, selectionIsActivated, stateType, minimized, keepOpen, showOptions, showMoreOptions]);
+  }, [
+    inputEl,
+    inFrontOfAll,
+    inputIsMultiline,
+    selectionIsActivated,
+    isMoveModePropsVal,
+    isResizeModePropsVal,
+    stateType,
+    minimized,
+    keepOpen,
+    showOptions,
+    showMoreOptions]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
     minimized ? "trmrk-minimized" : "",

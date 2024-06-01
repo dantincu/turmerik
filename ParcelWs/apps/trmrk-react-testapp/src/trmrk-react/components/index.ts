@@ -12,12 +12,15 @@ import ResizablePanel from "./resizablePanel/ResizablePanel";
 
 import AppearenceSettingsMenu from "./settingsMenu/AppearenceSettingsMenu";
 import AppearenceSettingsMenuList from "./settingsMenu/AppearenceSettingsMenuList";
+import TextCaretPositionerSettingsMenu from "./settingsMenu/TextCaretPositionerSettingsMenu";
+import TextCaretPositionerSettingsMenuList from "./settingsMenu/TextCaretPositionerSettingsMenuList";
 import OptionsMenu from "./settingsMenu/OptionsMenu";
 import OptionsMenuList from "./settingsMenu/OptionsMenuList";
 import SettingsMenu from "./settingsMenu/SettingsMenu";
 import SettingsMenuList from "./settingsMenu/SettingsMenuList";
 import ToggleAppModeBtn from "./settingsMenu/ToggleAppModeBtn";
 import ToggleDarkModeBtn from "./settingsMenu/ToggleDarkModeBtn";
+import TrmrkBackDrop from "./backDrop/TrmrkBackDrop";
 
 import TrmrkTreeNode from "./treeNodes/TrmrkTreeNode";
 import { TrmrkTreeNodeClickLocation } from "./treeNodes/TrmrkTreeNodeData";
@@ -34,12 +37,15 @@ export const components = {
   ResizablePanel,
   AppearenceSettingsMenu,
   AppearenceSettingsMenuList,
+  TextCaretPositionerSettingsMenu,
+  TextCaretPositionerSettingsMenuList,
   OptionsMenu,
   OptionsMenuList,
   SettingsMenu,
   SettingsMenuList,
   ToggleAppModeBtn,
   ToggleDarkModeBtn,
+  TrmrkBackDrop,
   TrmrkTreeNode,
   TrmrkTreeNodeClickLocation,
   TrmrkTreeNodeLeaf,

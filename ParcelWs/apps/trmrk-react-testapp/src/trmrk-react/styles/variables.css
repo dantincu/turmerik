@@ -2,6 +2,7 @@
   --trmrk_foreground-color: white;
   --trmrk-app-bar_background-color_light: #1976d2;
   --trmrk-app-bar_background-color_dark: #121212;
+  --trmrk-backdrop-background-color: rgba(0, 0, 0, 0.5);
   --trmrk-app-bar_background-gradient-from_color_dark: rgba(255, 255, 255, 0.09);
   --trmrk-app-bar_background-gradient-to_color_dark: rgba(255, 255, 255, 0.09);
 

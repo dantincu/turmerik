@@ -257,7 +257,7 @@ export default function TextCaretInputPositionerJumpLinesView(
         <ArrowLeftIcon className="trmrk-arrow-up-icon" /></IconButton>
 
       <IconButton className={["trmrk-icon-btn", "trmrk-toggle-selection",
-            selectionIsActivated ? "trmrk-selection-is-enabled" : "trmrk-selection-is-disabled"].join(" ")}
+            selectionIsActivated ? "trmrk-is-activated" : "trmrk-is-disactivated"].join(" ")}
           onMouseDown={selectionIsActivatedToggled}
           onTouchEnd={selectionIsActivatedToggled}>
         <MatUIIcon iconName={selectionIsActivated ? "shift_lock" : "shift"} /></IconButton>

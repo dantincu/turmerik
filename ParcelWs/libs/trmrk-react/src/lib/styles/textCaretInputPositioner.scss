@@ -18,6 +18,10 @@
   }
 }
 
+.trmrk-text-input-caret-positioner-popover-backdrop {
+  z-index: 999000;
+}
+
 .trmrk-text-input-caret-positioner-popover {
   display: flex;
   position: fixed;
@@ -44,7 +48,7 @@
     border-radius: 3px;
   }
 
-  .trmrk-selection-is-enabled {
+  .trmrk-is-activated {
     border-radius: 0px;
   }
 
