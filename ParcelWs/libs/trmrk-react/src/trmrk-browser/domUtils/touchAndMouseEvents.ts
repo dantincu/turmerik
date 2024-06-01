@@ -50,11 +50,11 @@ export const getTouchOrMouseCoords = (
   const mouseEv = ev as MouseEvent;
   const touchEv = ev as TouchEvent;
 
-  const isTouch = !!touchEv.touches;
+  const isTouch = !!(touchEv.touches || touchEv.changedTouches);
   let retObj: TouchOrMouseCoords | TouchOrMouseCoords[] | null;
 
   if (isTouch) {
-    retObj = getTouchesCoords(touchEv.touches);
+    retObj = getTouchesCoords(touchEv.changedTouches);
   } else {
     requiredButton ??= -1;
     retObj = getMouseCoords(mouseEv);

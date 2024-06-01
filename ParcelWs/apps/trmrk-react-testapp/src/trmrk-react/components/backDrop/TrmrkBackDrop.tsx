@@ -15,7 +15,7 @@ export interface TrmrkBackDropProps {
   coordsAreSingleTouchOrClickPredicate?: ((coords: TouchOrMouseCoords) => void) | null | undefined;
 }
 
-export const SINGLE_TOUCH_COORDS_MAX_DIFF_PX = 10;
+export const SINGLE_TOUCH_COORDS_MAX_DIFF_PX = 20;
 
 export const coordsAreSingleTouchOrClick = (
   startCoords: TouchOrMouseCoords,
@@ -115,6 +115,8 @@ export default function TrmrkBackDrop(props: TrmrkBackDropProps) {
               props.onTouchOrClick(ev, coords);
             }
           }
+
+          lastTouchStartOrMouseDownCoordsRef.current = null;
         }
       }
     };
