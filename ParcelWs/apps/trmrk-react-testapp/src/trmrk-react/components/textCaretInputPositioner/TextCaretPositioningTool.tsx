@@ -100,7 +100,7 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
       showBackDrop
   ]);
 
-  const onBackDropTouchStartOrMouseDown = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+  const onBackDropTouchOrClick = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     onToggleBackDrop(false);
   }, [
       isFullViewPortMode,
@@ -123,7 +123,7 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
     ]);
   return (<React.Fragment>
     { ((currentInputElMtblRef.value || keepOpen) && isEnabled) ? <React.Fragment>
-    { showBackDrop ? <TrmrkBackDrop onTouchStartOrMouseDown={onBackDropTouchStartOrMouseDown} /> : null }
+    { showBackDrop ? <TrmrkBackDrop onTouchOrClick={onBackDropTouchOrClick} /> : null }
     <TextInputCaretPositionerPopover
         inputEl={currentInputElMtblRef.value}
         inFrontOfAll={!isAnyMenuOpen}

@@ -9,8 +9,22 @@ export interface TrmrkBackDropProps {
   children?: React.ReactNode | null | undefined;
   onElem?: ((elem: HTMLElement | null) => void) | null | undefined;
   onTouchStartOrMouseDown?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
-  onTouchOrMouseMove?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined; 
-  onTouchEndOrMouseUp?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined; 
+  onTouchOrMouseMove?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onTouchEndOrMouseUp?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onTouchOrClick?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  coordsAreSingleTouchOrClickPredicate?: ((coords: TouchOrMouseCoords) => void) | null | undefined;
+}
+
+export const SINGLE_TOUCH_COORDS_MAX_DIFF_PX = 10;
+
+export const coordsAreSingleTouchOrClick = (
+  startCoords: TouchOrMouseCoords,
+  endCoords: TouchOrMouseCoords,
+  maxDiffPx = SINGLE_TOUCH_COORDS_MAX_DIFF_PX) => {
+  let isSingleTouch = Math.abs(startCoords.clientX - endCoords.clientX) <= maxDiffPx;
+  isSingleTouch = isSingleTouch && Math.abs(startCoords.clientY - endCoords.clientY) <= maxDiffPx;
+
+  return isSingleTouch;
 }
 
 export const normalizePreventDefaultOnTouchOrMouseEvts = (
@@ -21,6 +35,7 @@ export const normalizeRequiredButton = (
 
 export default function TrmrkBackDrop(props: TrmrkBackDropProps) {
   const elRef = React.useRef<HTMLElement | null>(null);
+  const lastTouchStartOrMouseDownCoordsRef = React.useRef<TouchOrMouseCoords | null>(null);
 
   const [ className, setClassName ] = React.useState(props.className ?? "");
 
@@ -58,6 +73,7 @@ export default function TrmrkBackDrop(props: TrmrkBackDropProps) {
       }
 
       const coords = getSingleTouchOrClick(ev, requiredButton);
+      lastTouchStartOrMouseDownCoordsRef.current = coords;
 
       if (coords && props.onTouchStartOrMouseDown) {
         props.onTouchStartOrMouseDown(ev, coords);
@@ -83,8 +99,23 @@ export default function TrmrkBackDrop(props: TrmrkBackDropProps) {
 
       const coords = getSingleTouchOrClick(ev, requiredButton);
 
-      if (coords && props.onTouchEndOrMouseUp) {
-        props.onTouchEndOrMouseUp(ev, coords);
+      if (coords) {
+        if (props.onTouchEndOrMouseUp) {
+          props.onTouchEndOrMouseUp(ev, coords);
+        }
+
+        const startCoords = lastTouchStartOrMouseDownCoordsRef.current;
+
+        if (startCoords) {
+          const coordsAreSingleTouchOrClickPredicate = props.coordsAreSingleTouchOrClickPredicate ?? coordsAreSingleTouchOrClick;
+          const isSingleClick = coordsAreSingleTouchOrClickPredicate(startCoords, coords);
+
+          if (isSingleClick) {
+            if (props.onTouchOrClick) {
+              props.onTouchOrClick(ev, coords);
+            }
+          }
+        }
       }
     };
     
@@ -114,7 +145,8 @@ export default function TrmrkBackDrop(props: TrmrkBackDropProps) {
     props.children,
     className,
     preventDefaultOnTouchOrMouseEvts,
-    requiredButton
+    requiredButton,
+    lastTouchStartOrMouseDownCoordsRef
   ]);
 
   return (<div className={["trmrk-backdrop", className ?? ""].join(" ")} ref={el => elRef.current = el}>
