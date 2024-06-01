@@ -123,7 +123,7 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
     ]);
   return (<React.Fragment>
     { ((currentInputElMtblRef.value || keepOpen) && isEnabled) ? <React.Fragment>
-    { showBackDrop ? <TrmrkBackDrop onTouchOrClick={onBackDropTouchOrClick} /> : null }
+    { showBackDrop ? <TrmrkBackDrop onTouchOrClick={onBackDropTouchOrClick} preventDefaultOnTouchOrMouseEvts={true} /> : null }
     <TextInputCaretPositionerPopover
         inputEl={currentInputElMtblRef.value}
         inFrontOfAll={!isAnyMenuOpen}
