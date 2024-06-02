@@ -10,24 +10,14 @@ import {
   AppDataSelectors,
   AppDataReducers,
   TextCaretPositionerOpts,
+  getInitialState,
 } from "../../trmrk-react/redux/appData";
 
 const trmrk_dom_utils = trmrk_browser.domUtils.default;
 
 const appDataSlice = createSlice({
   name: "appData",
-  initialState: {
-    baseLocation: trmrk.url.getBaseLocation(),
-    currentUrlPath: "/",
-    isDarkMode: trmrk_dom_utils.isDarkMode(),
-    isCompactMode: trmrk_dom_utils.isCompactMode(),
-    textCaretPositionerOpts: {
-      enabled: trmrk_dom_utils.getTextCaretPositionerEnabledFromLocalStorage(),
-      keepOpen:
-        trmrk_dom_utils.getTextCaretPositionerKeepOpenFromLocalStorage(),
-      currentInputElLastSetOpIdx: 0,
-    },
-  } as AppData,
+  initialState: getInitialState(),
   reducers: {
     setCurrentUrlPath: (state, action: ReducerAction<string>) => {
       state.currentUrlPath = action.payload;

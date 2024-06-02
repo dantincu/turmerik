@@ -1,8 +1,16 @@
 import { Selector, ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-export interface TextCaretPositionerOpts {
-  enabled: boolean;
-  keepOpen: boolean;
+import trmrk from "../../trmrk";
+import trmrk_dom_utils from "../../trmrk-browser/domUtils";
+
+import {
+  TextCaretPositionerOptsCore,
+  TrmrkTextCaretPositionerOpts,
+  deserializeTextCaretPositionerOptsFromLocalStorage,
+  serializeTextCaretPositionerOptsToLocalStorage,
+} from "../../trmrk-browser/textCaretPositioner/core";
+
+export interface TextCaretPositionerOpts extends TextCaretPositionerOptsCore {
   currentInputElLastSetOpIdx: number;
 }
 
@@ -116,3 +124,48 @@ export interface AppDataReducers {
     "appData/incTextCaretPositionerCurrentInputElLastSetOpIdx"
   >;
 }
+
+export const getTextCaretPositionerOptsFromLocalStorage = (
+  textCaretPositionerOptsKey: string | null | undefined = null
+) => {
+  const textCaretPositionerOptsSrlzbl =
+    deserializeTextCaretPositionerOptsFromLocalStorage(
+      textCaretPositionerOptsKey
+    ) ?? {
+      enabled: false,
+      keepOpen: false,
+    };
+
+  const textCaretPositionerOpts: TextCaretPositionerOpts = {
+    ...textCaretPositionerOptsSrlzbl,
+    currentInputElLastSetOpIdx: 0,
+  };
+
+  return textCaretPositionerOpts;
+};
+
+export const setTextCaretPositionerOptsToLocalStorage = (
+  textCaretPositionerOpts: TextCaretPositionerOpts | null,
+  textCaretPositionerOptsKey: string | null | undefined = null
+) => {
+  let textCaretPositionerOptsSrlzbl: TrmrkTextCaretPositionerOpts | null = null;
+
+  if (textCaretPositionerOpts) {
+    textCaretPositionerOptsSrlzbl = {
+      ...textCaretPositionerOpts,
+    };
+  }
+
+  serializeTextCaretPositionerOptsToLocalStorage(
+    textCaretPositionerOptsSrlzbl,
+    textCaretPositionerOptsKey
+  );
+};
+
+export const getInitialState = (): AppData => ({
+  baseLocation: trmrk.url.getBaseLocation(),
+  currentUrlPath: "/",
+  isDarkMode: trmrk_dom_utils.isDarkMode(),
+  isCompactMode: trmrk_dom_utils.isCompactMode(),
+  textCaretPositionerOpts: getTextCaretPositionerOptsFromLocalStorage(),
+});

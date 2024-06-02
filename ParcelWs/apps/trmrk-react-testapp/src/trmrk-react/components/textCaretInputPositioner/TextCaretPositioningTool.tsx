@@ -13,8 +13,7 @@ import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMous
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
 import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 
-import { setTextCaretPositionerEnabledToLocalStorage,
-  setTextCaretPositionerKeepOpenToLocalStorage } from "../../../trmrk-browser/domUtils/core";
+import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
 
 import TextInputCaretPositionerPopover from "../../../trmrk-react/components/textCaretInputPositioner/TextCaretPositionerPopover";
 import TrmrkBackDrop from "../../../trmrk-react/components/backDrop/TrmrkBackDrop";
@@ -41,6 +40,7 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
   const [ isResizeMode, setIsResizeMode ] = React.useState(false);
   const [ showBackDrop, setShowBackDrop ] = React.useState(false);
 
+  const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
   const isEnabled = useSelector(props.appDataSelectors.getTextCaretPositionerEnabled);
   const keepOpen = useSelector(props.appDataSelectors.getTextCaretPositionerKeepOpen);
   const isAnyMenuOpen = useSelector(props.appBarSelectors.isAnyMenuOpen);
@@ -50,14 +50,23 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
 
   const dispatch = useDispatch();
 
+
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
-    setTextCaretPositionerKeepOpenToLocalStorage(keepOpen);
+
+    serializeTextCaretPositionerOptsToLocalStorage({
+      ...textCaretPositionerOpts,
+      keepOpen: keepOpen
+    });
   }, []);
 
   const onDisabled = React.useCallback(() => {
     dispatch(props.appDataReducers.setTextCaretPositionerEnabled(false));
-    setTextCaretPositionerEnabledToLocalStorage(false);
+    
+    serializeTextCaretPositionerOptsToLocalStorage({
+      ...textCaretPositionerOpts,
+      enabled: false
+    });
   }, []);
 
   const isFullViewPortModeToggled = React.useCallback((isFullViewPortMode: boolean) => {
@@ -116,6 +125,7 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
       isMoveMode,
       isResizeMode,
       showBackDrop,
+      textCaretPositionerOpts,
       isEnabled,
       keepOpen,
       isAnyMenuOpen,
@@ -123,7 +133,10 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
     ]);
   return (<React.Fragment>
     { ((currentInputElMtblRef.value || keepOpen) && isEnabled) ? <React.Fragment>
-    { showBackDrop ? <TrmrkBackDrop onTouchOrClick={onBackDropTouchOrClick} preventDefaultOnTouchOrMouseEvts={true} /> : null }
+    { showBackDrop ? <TrmrkBackDrop
+      onTouchOrClick={onBackDropTouchOrClick}
+      preventDefaultOnTouchOrMouseEvts={true}
+      className="trmrk-text-input-caret-positioner-popover-backdrop" /> : null }
     <TextInputCaretPositionerPopover
         inputEl={currentInputElMtblRef.value}
         inFrontOfAll={!isAnyMenuOpen}

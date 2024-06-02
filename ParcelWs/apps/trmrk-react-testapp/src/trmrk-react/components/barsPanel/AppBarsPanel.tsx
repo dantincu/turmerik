@@ -20,11 +20,11 @@ import { getAppTheme, currentAppTheme } from "../../app-theme/core";
 
 import { appModeCssClass, getAppModeCssClassName,
   setIsCompactModeToLocalStorage,
-  setIsDarkModeToLocalStorage,
-  setTextCaretPositionerEnabledToLocalStorage,
-  setTextCaretPositionerKeepOpenToLocalStorage } from "../../../trmrk-browser/domUtils/core";
+  setIsDarkModeToLocalStorage } from "../../../trmrk-browser/domUtils/core";
 
 import { isAndroid, isIPad, isIPhone, isIPadOrIphone, isMobile } from "../../../trmrk-browser/domUtils/constants";
+
+import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
 
 import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
@@ -63,6 +63,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
 
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
+  const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
   const textCaretPositionerEnabled = useSelector(props.appDataSelectors.getTextCaretPositionerEnabled);
   const textCaretPositionerKeepOpen = useSelector(props.appDataSelectors.getTextCaretPositionerKeepOpen);
 
@@ -183,12 +184,20 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
 
   const handleTextCaretPositionerEnabledToggled = React.useCallback((textCaretPositionerEnabled: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerEnabled(textCaretPositionerEnabled));
-    setTextCaretPositionerEnabledToLocalStorage(textCaretPositionerEnabled);
+    
+    serializeTextCaretPositionerOptsToLocalStorage({
+      ...textCaretPositionerOpts,
+      enabled: textCaretPositionerEnabled
+    });
   }, []);
 
   const handleTextCaretPositionerKeepOpenToggled = React.useCallback((textCaretPositionerKeepOpen: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(textCaretPositionerKeepOpen));
-    setTextCaretPositionerKeepOpenToLocalStorage(textCaretPositionerKeepOpen);
+
+    serializeTextCaretPositionerOptsToLocalStorage({
+      ...textCaretPositionerOpts,
+      keepOpen: textCaretPositionerKeepOpen
+    });
   }, []);
   
   const appBarRefreshBtnClicked = React.useCallback(() => {
@@ -217,6 +226,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     showAppFooterToggleBtn,
     isCompactMode,
     isDarkMode,
+    textCaretPositionerOpts,
     textCaretPositionerEnabled,
     textCaretPositionerKeepOpen,
     appSettingsMenuIsOpen,

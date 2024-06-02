@@ -10,8 +10,7 @@ export const supportedFeatures = {
 export const localStorageKeys = Object.freeze({
   appThemeIsDarkMode: "appThemeIsDarkMode",
   appIsCompactMode: "appIsCompactMode",
-  textCaretPositionerEnabled: "textCaretPositionerEnabled",
-  textCaretPositionerKeepOpen: "textCaretPositionerKeepOpen",
+  textCaretPositionerOpts: "textCaretPositionerOpts",
 });
 
 export const appModeCssClasses = {
@@ -85,29 +84,6 @@ export const isCompactMode = (
   return isCompactMode;
 };
 
-export const getTextCaretPositionerEnabledFromLocalStorage = (
-  textCaretPositionerEnabledKey: string | null | undefined = null
-) => {
-  const textCaretPositionerEnabled = localStorage.getItem(
-    textCaretPositionerEnabledKey ?? localStorageKeys.textCaretPositionerEnabled
-  );
-
-  let isCompactMode = trmrk.jsonBool.true === textCaretPositionerEnabled;
-  return isCompactMode;
-};
-
-export const getTextCaretPositionerKeepOpenFromLocalStorage = (
-  keepTextCaretPositionerOpenKey: string | null | undefined = null
-) => {
-  const keepTextCaretPositionerOpen = localStorage.getItem(
-    keepTextCaretPositionerOpenKey ??
-      localStorageKeys.textCaretPositionerKeepOpen
-  );
-
-  let isCompactMode = trmrk.jsonBool.true === keepTextCaretPositionerOpen;
-  return isCompactMode;
-};
-
 export const setIsDarkModeToLocalStorage = (
   isDarkMode: boolean,
   localStorageIsDarkModeKey: string | null | undefined = null
@@ -124,26 +100,6 @@ export const setIsCompactModeToLocalStorage = (
   localStorage.setItem(
     localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode,
     isCompactMode ? jsonBool.true : jsonBool.false
-  );
-
-export const setTextCaretPositionerEnabledToLocalStorage = (
-  textCaretPositionerEnabled: boolean,
-  textCaretPositionerEnabledKey: string | null | undefined = null
-) =>
-  localStorage.setItem(
-    textCaretPositionerEnabledKey ??
-      localStorageKeys.textCaretPositionerEnabled,
-    textCaretPositionerEnabled ? jsonBool.true : jsonBool.false
-  );
-
-export const setTextCaretPositionerKeepOpenToLocalStorage = (
-  teepTextCaretPositionerOpen: boolean,
-  teepTextCaretPositionerOpenKey: string | null | undefined = null
-) =>
-  localStorage.setItem(
-    teepTextCaretPositionerOpenKey ??
-      localStorageKeys.textCaretPositionerKeepOpen,
-    teepTextCaretPositionerOpen ? jsonBool.true : jsonBool.false
   );
 
 /// According to https://stackoverflow.com/questions/7944460/detect-safari-browser

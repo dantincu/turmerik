@@ -1,12 +1,14 @@
 .trmrk-bars-panel {
   display: block;
   position: relative;
+  z-index: 0;
   height: 100%;
   width: 100%;
   box-sizing: border-box;
 
   .trmrk-panel-body {
     position: absolute;
+    z-index: inherit;
     inset: 0;
     margin: 0px;
     padding: 0px;
@@ -30,7 +32,7 @@
   display: flex;
   position: fixed;
   overflow: hidden;
-  z-index: 100;
+  z-index: inherit;
   height: $app-bar-height;
   width: 100%;
 }
