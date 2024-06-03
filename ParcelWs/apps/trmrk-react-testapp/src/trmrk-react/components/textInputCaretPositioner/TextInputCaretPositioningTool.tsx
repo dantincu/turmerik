@@ -49,6 +49,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   const currentInputElLastSetOpIdx = useSelector(
     props.appDataSelectors.getTextCaretPositionerCurrentInputElLastSetOpIdx);
 
+  const lastMoveOrResizeTouchStartOrMouseDownCoordsRef = React.useRef<TouchOrMouseCoords | null>(null);
+
   const dispatch = useDispatch();
 
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
@@ -93,6 +95,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     setShowBackDrop(showBackDrop);
 
     if (!showBackDrop) {
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
+
       if (isMoveAndResizeMode) {
         setIsMoveAndResizeMode(false);
       }
@@ -130,6 +134,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       keepOpen,
       isAnyMenuOpen,
       currentInputElLastSetOpIdx,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
     ]);
   return (<React.Fragment>
     { ((currentInputElMtblRef.value || keepOpen) && isEnabled) ? <React.Fragment>

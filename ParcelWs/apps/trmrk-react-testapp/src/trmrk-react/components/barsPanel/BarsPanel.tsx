@@ -6,6 +6,7 @@ export interface BarsPanelProps {
   showFooter: boolean;
   headerChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   footerChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  afterBodyChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   children: React.ReactNode | Iterable<React.ReactNode>;
   scrollableX?: boolean | null | undefined;
   scrollableY?: boolean | null | undefined;
@@ -52,6 +53,12 @@ export default function BarsPanel(props: BarsPanelProps) {
   return (<div ref={panelEl} className={[ props.panelClassName ?? "", "trmrk-bars-panel",
       props.showHeader ? "trmrk-has-header" : "",
       props.showFooter ? "trmrk-has-footer" : "",].join(" ")}>
+    <div ref={panelBodyEl} className={["trmrk-panel-body",
+      props.scrollableX ? "trmrk-scrollable trmrk-scrollableX" : "",
+      props.scrollableY ? "trmrk-scrollable trmrk-scrollableY" : ""].join(" ")}>
+      { props.children }
+    </div>
+
     { props.showHeader ? <div ref={panelHeaderEl} className={["trmrk-panel-header"].join(" ")}>
           { props.headerChildren }
         </div> : null }
@@ -60,10 +67,6 @@ export default function BarsPanel(props: BarsPanelProps) {
           { props.footerChildren }
         </div> : null }
 
-    <div ref={panelBodyEl} className={["trmrk-panel-body",
-      props.scrollableX ? "trmrk-scrollable trmrk-scrollableX" : "",
-      props.scrollableY ? "trmrk-scrollable trmrk-scrollableY" : ""].join(" ")}>
-      { props.children }
-    </div>
+    { props.afterBodyChildren }
   </div>)
 }

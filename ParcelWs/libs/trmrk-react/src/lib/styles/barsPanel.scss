@@ -19,12 +19,10 @@
     width: 100%;
     padding-left: 0.2em;
     cursor: pointer;
-    z-index: 1;
   }
   
   .trmrk-panel-body {
     position: absolute;
-    z-index: inherit;
     inset: 0;
     margin: 0px;
     padding: 0px;
@@ -48,7 +46,6 @@
   display: flex;
   position: fixed;
   overflow: hidden;
-  z-index: inherit;
   height: $app-bar-height;
   width: 100%;
   
@@ -89,4 +86,23 @@
 
 .trmrk-panel-footer {
   bottom: 0px;
+}
+
+.trmrk-app-bar-toggle-icon {
+  display: block;
+  position: fixed;
+  left: unset;
+  right: 0px;
+  color: var(--trmrk_dark-background_foreground-color);
+  z-index: 1101;
+
+  &.trmrk-toggles-header {
+    position: fixed;
+    top: $app-bar-top-padding;
+  }
+
+  &.trmrk-toggles-footer {
+    position: fixed;
+    bottom: $app-bar-top-padding;
+  }
 }

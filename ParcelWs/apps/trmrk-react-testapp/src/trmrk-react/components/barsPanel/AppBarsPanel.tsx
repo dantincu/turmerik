@@ -313,15 +313,18 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
       </AppBar>}
       footerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
         { props.appFooterChildren }
-      </AppBar>}>
-    { showAppHeaderToggleBtn ? <ToggleAppBarBtn
-      appBarToggled={appHeaderToggled}
-      showAppBar={showAppHeader}
-      togglesHeader={true} /> : null }
-    { showAppFooterToggleBtn ? <ToggleAppBarBtn
-      appBarToggled={appFooterToggled}
-      showAppBar={showAppFooter}
-      togglesHeader={false} /> : null }
-    { props.children }
+      </AppBar>}
+      afterBodyChildren={<React.Fragment>
+        { showAppHeaderToggleBtn ? <ToggleAppBarBtn
+            appBarToggled={appHeaderToggled}
+            showAppBar={showAppHeader}
+            togglesHeader={true} /> : null }
+
+        { showAppFooterToggleBtn ? <ToggleAppBarBtn
+          appBarToggled={appFooterToggled}
+          showAppBar={showAppFooter}
+          togglesHeader={false} /> : null }
+      </React.Fragment>}>
+        { props.children }
   </BarsPanel>)
 }
