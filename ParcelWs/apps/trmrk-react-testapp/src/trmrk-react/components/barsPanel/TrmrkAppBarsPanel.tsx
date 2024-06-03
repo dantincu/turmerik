@@ -2,7 +2,7 @@ import React from "react";
 
 import AppBarsPanel, { AppBarsPanelProps } from "./AppBarsPanel";
 
-import TextCaretPositioningTool from "../textCaretInputPositioner/TextCaretPositioningTool";
+import TextInputCaretPositioningTool from "../textInputCaretPositioner/TextInputCaretPositioningTool";
 
 export interface TrmrkAppBarsPanelProps extends AppBarsPanelProps {
 }
@@ -11,7 +11,7 @@ export default function TrmrkAppBarsPanel(props: TrmrkAppBarsPanelProps) {
   return (<AppBarsPanel {...props}>
     { props.children }
 
-    <TextCaretPositioningTool
+    <TextInputCaretPositioningTool
         appBarReducers={props.appBarReducers}
         appBarSelectors={props.appBarSelectors}
         appDataReducers={props.appDataReducers}

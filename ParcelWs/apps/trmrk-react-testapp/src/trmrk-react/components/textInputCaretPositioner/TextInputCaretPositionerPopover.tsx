@@ -13,10 +13,10 @@ import { extractElCssStyleTopPx } from "../../../trmrk-browser/domUtils/css";
 import { isMultilineInput } from "../../../trmrk-browser/domUtils/textInput";
 import MatUIIcon from "../icons/MatUIIcon";
 
-import TextCaretInputPositionerDefaultView from "./TextCaretInputPositionerDefaultView";
-import TextCaretInputPositionerOptionsView from "./TextCaretInputPositionerOptionsView";
-import TextCaretInputPositionerJumpSymbolsView from "./TextCaretInputPositionerJumpSymbolsView";
-import TextCaretInputPositionerJumpLinesView from "./TextCaretInputPositionerJumpLinesView";
+import TextInputCaretPositionerDefaultView from "./TextInputCaretPositionerDefaultView";
+import TextInputCaretPositionerOptionsView from "./TextInputCaretPositionerOptionsView";
+import TextInputCaretPositionerJumpSymbolsView from "./TextInputCaretPositionerJumpSymbolsView";
+import TextInputCaretPositionerJumpLinesView from "./TextInputCaretPositionerJumpLinesView";
 
 export const wordSepChars = trmrk.freezeMx([['<', '>'], ['-', ';', ',', '.']]);
 
@@ -36,8 +36,7 @@ export interface TextInputCaretPositionerPopoverProps {
   showMoreOptions?: boolean | null | undefined;
   selectionIsActivated?: boolean | null | undefined;
   isFullViewPortMode: boolean;
-  isMoveMode: boolean;
-  isResizeMode: boolean;
+  isMoveAndResizeMode: boolean;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   moving?: ((e: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, rowsCount: number) => ValueOrAnyOrVoid<boolean>) | null | undefined;
@@ -48,8 +47,7 @@ export interface TextInputCaretPositionerPopoverProps {
   selectionIsActivatedToggled?: ((selectionIsActivated: boolean) => void) | null | undefined;
   showMoreOptionsToggled?: ((showMoreOptions: boolean) => void) | null | undefined;
   isFullViewPortModeToggled: (isFullViewPortMode: boolean) => void;
-  isMoveModeToggled: (isMoveMode: boolean) => void;
-  isResizeModeToggled: (isResizeMode: boolean) => void;
+  isMoveAndResizeModeToggled: (isMoveAndResizeMode: boolean) => void;
   closeClicked?: (() => void) | null | undefined;
 }
 
@@ -115,8 +113,7 @@ export const normalizeSelectionIsActivated = (
   selectionIsActivated: boolean | null | undefined) => !!inputEl && (selectionIsActivated ?? document.getSelection()?.containsNode(inputEl) ?? false);
 
 export const normalizeIsFullViewPortMode = (isFullViewPortMode: boolean | null | undefined) => isFullViewPortMode ?? false;
-export const normalizeIsMoveMode = (isMoveMode: boolean | null | undefined) => isMoveMode ?? false;
-export const normalizeIsResizeMode = (isResizeMode: boolean | null | undefined) => isResizeMode ?? false;
+export const normalizeIsMoveAndResizeMode = (isMoveAndResizeMode: boolean | null | undefined) => isMoveAndResizeMode ?? false;
 
 export const getBackDropIsShown = (isMoveModePropsVal: boolean, isResizeModePropsVal: boolean) => isMoveModePropsVal || isResizeModePropsVal;
 
@@ -150,8 +147,7 @@ export default function TextInputCaretPositionerPopover(
     props.inputEl, props.selectionIsActivated));
 
   const [ isFullViewPortModePropsVal, setIsFullViewPortModePropsVal ] = React.useState(props.isFullViewPortMode);
-  const [ isMoveModePropsVal, setIsMoveModePropsVal ] = React.useState(props.isMoveMode);
-  const [ isResizeModePropsVal, setIsResizeModePropsVal ] = React.useState(props.isResizeMode);
+  const [ isMoveAndResizeModePropsVal, setIsMoveAndResizeModePropsVal ] = React.useState(props.isMoveAndResizeMode);
 
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(inputIsMultilinePropsVal);
   const [ inFrontOfAll, setInFrontOfAll ] = React.useState(inFrontOfAllPropsVal);
@@ -252,13 +248,9 @@ export default function TextInputCaretPositionerPopover(
     props.isFullViewPortModeToggled(isFullViewPortMode);
   }, [isFullViewPortModePropsVal]);
 
-  const isMoveModeToggled = React.useCallback((isMoveMode: boolean) => {
-    props.isMoveModeToggled(isMoveMode);
-  }, [isMoveModePropsVal]);
-
-  const isResizeModeToggled = React.useCallback((isResizeMode: boolean) => {
-    props.isResizeModeToggled(isResizeMode);
-  }, [isResizeModePropsVal]);
+  const isMoveAndResizeModeToggled = React.useCallback((isMoveAndResizeMode: boolean) => {
+    props.isMoveAndResizeModeToggled(isMoveAndResizeMode);
+  }, [isMoveAndResizeModePropsVal]);
 
   const closeClicked = React.useCallback(() => {
     if (props.closeClicked) {
@@ -776,8 +768,7 @@ export default function TextInputCaretPositionerPopover(
     const showMoreOptionsNewVal = normalizeShowMoreOptions(props.showMoreOptions);
     const selectionIsActivatedNewVal = normalizeSelectionIsActivated(props.inputEl, props.selectionIsActivated);
     const isFullViewPortModeNewVal = props.isFullViewPortMode;
-    const isMoveModeNewVal = props.isMoveMode;
-    const isResizeModeNewVal = props.isResizeMode;
+    const isMoveAndResizeModeNewVal = props.isMoveAndResizeMode;
 
     if (inputEl !== props.inputEl) {
       const inputIsMultilineNewVal = normalizeInputIsMultiline(props.inputEl);
@@ -835,12 +826,8 @@ export default function TextInputCaretPositionerPopover(
       setIsFullViewPortModePropsVal(isFullViewPortModePropsVal);
     }
 
-    if (isMoveModeNewVal !== isMoveModePropsVal) {
-      setIsMoveModePropsVal(isMoveModeNewVal);
-    }
-
-    if (isResizeModeNewVal !== isResizeModePropsVal) {
-      setIsResizeModePropsVal(isResizeModeNewVal);
+    if (isMoveAndResizeModeNewVal !== isMoveAndResizeModePropsVal) {
+      setIsMoveAndResizeModePropsVal(isMoveAndResizeModeNewVal);
     }
 
     const onMainElMouseOrTouchEvt = (e: TouchEvent | MouseEvent) => {
@@ -910,8 +897,7 @@ export default function TextInputCaretPositionerPopover(
     props.showMoreOptions,
     props.selectionIsActivated,
     props.isFullViewPortMode,
-    props.isMoveMode,
-    props.isResizeMode,
+    props.isMoveAndResizeMode,
     props.symbolsJumpSpeedsArr,
     props.linesJumpSpeedsArr,
     inputEl,
@@ -923,8 +909,7 @@ export default function TextInputCaretPositionerPopover(
     inputIsMultilinePropsVal,
     selectionIsActivatedPropsVal,
     isFullViewPortModePropsVal,
-    isMoveModePropsVal,
-    isResizeModePropsVal,
+    isMoveAndResizeModePropsVal,
     inFrontOfAll,
     minimized,
     stateType,
@@ -942,23 +927,21 @@ export default function TextInputCaretPositionerPopover(
     }
 
     if (showOptions || !inputEl || inputIsMultiline === null) {
-      return <TextCaretInputPositionerOptionsView
+      return <TextInputCaretPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
           showMoreOptions={showMoreOptions}
           keepOpen={keepOpen}
           isFullViewPortMode={isFullViewPortModePropsVal}
-          isMoveMode={isMoveModePropsVal}
-          isResizeMode={isResizeModePropsVal}
+          isMoveAndResizeMode={isMoveAndResizeModePropsVal}
           showMoreOptionsBtnClicked={showMoreOptionsBtnClicked}
           keepOpenToggled={keepOpenToggled}
           isFullViewPortModeToggled={isFullViewPortModeToggled}
-          isMoveModeToggled={isMoveModeToggled}
-          isResizeModeToggled={isResizeModeToggled}
+          isMoveAndResizeModeToggled={isMoveAndResizeModeToggled}
           closeClicked={closeClicked} />;
     } else {
       switch (stateType) {
         case TextCaretInputPositionerState.JumpSymbols:
-          return <TextCaretInputPositionerJumpSymbolsView
+          return <TextInputCaretPositionerJumpSymbolsView
             nextViewClicked={onJumpSymbolsNextViewClick}
             selectionIsActivated={selectionIsActivated}
             selectionIsActivatedToggled={selectionIsActivatedToggled}
@@ -995,7 +978,7 @@ export default function TextInputCaretPositionerPopover(
 
         case TextCaretInputPositionerState.JumpLines:
           if (inputIsMultiline) {
-            return <TextCaretInputPositionerJumpLinesView
+            return <TextInputCaretPositionerJumpLinesView
               nextViewClicked={onJumpLinesNextViewClick}
               selectionIsActivated={selectionIsActivated}
               selectionIsActivatedToggled={selectionIsActivatedToggled}
@@ -1033,7 +1016,7 @@ export default function TextInputCaretPositionerPopover(
           
           return null;
         default:
-          return <TextCaretInputPositionerDefaultView
+          return <TextInputCaretPositionerDefaultView
             inputIsMultiline={inputIsMultiline ?? false}
             selectionIsActivated={selectionIsActivated}
             selectionIsActivatedToggled={selectionIsActivatedToggled}
@@ -1075,8 +1058,8 @@ export default function TextInputCaretPositionerPopover(
     inFrontOfAll,
     inputIsMultiline,
     selectionIsActivated,
-    isMoveModePropsVal,
-    isResizeModePropsVal,
+    isMoveAndResizeModePropsVal,
+    isMoveAndResizeModePropsVal,
     stateType,
     minimized,
     keepOpen,

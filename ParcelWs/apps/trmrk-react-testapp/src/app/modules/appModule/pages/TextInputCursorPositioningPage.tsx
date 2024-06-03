@@ -7,7 +7,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import { extractTextInput } from "../../../../trmrk-browser/domUtils/textInput";
 import TrmrkAppBarsPanel from "../../../../trmrk-react/components/barsPanel/TrmrkAppBarsPanel";
-import { currentInputElMtblRef, updateCurrentInputEl } from "../../../../trmrk-react/components/textCaretInputPositioner/TextCaretPositioningTool";
+import { currentInputElMtblRef, updateCurrentInputEl } from "../../../../trmrk-react/components/textInputCaretPositioner/TextInputCaretPositioningTool";
 import { appBarSelectors, appBarReducers } from "../../../store/appBarDataSlice";
 import { appDataSelectors, appDataReducers } from "../../../store/appDataSlice";
 

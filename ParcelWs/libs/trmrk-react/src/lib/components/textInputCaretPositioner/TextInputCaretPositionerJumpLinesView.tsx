@@ -11,9 +11,9 @@ import MatUIIcon from "../icons/MatUIIcon";
 import longPress from "../../hooks/useLongPress";
 
 import { ValueOrAnyOrVoid } from "../../../trmrk/core";
-import { longPressIntervalMs, startIntervalMs } from "./TextCaretPositionerPopover";
+import { longPressIntervalMs, startIntervalMs } from "./TextInputCaretPositionerPopover";
 
-export interface TextCaretInputPositionerJumpLinesViewProps {
+export interface TextInputCaretPositionerJumpLinesViewProps {
   selectionIsActivated: boolean,
   selectionIsActivatedToggled: (selectionIsActivated: boolean) => void;
   nextViewClicked: () => void;
@@ -49,8 +49,8 @@ export interface TextCaretInputPositionerJumpLinesViewProps {
   jumpNextLineX3LongPressEnded: (ev: TouchEvent | MouseEvent | null, coords: TouchOrMouseCoords | null) => void;
 }
 
-export default function TextCaretInputPositionerJumpLinesView(
-  props: TextCaretInputPositionerJumpLinesViewProps
+export default function TextInputCaretPositionerJumpLinesView(
+  props: TextInputCaretPositionerJumpLinesViewProps
 ) {
   const jumpPrevLineX3BtnElemRef = React.useRef<HTMLButtonElement | null>(null);
   const jumpPrevLineX2BtnElemRef = React.useRef<HTMLButtonElement | null>(null);

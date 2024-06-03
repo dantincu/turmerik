@@ -15,10 +15,10 @@ import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 
 import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
 
-import TextInputCaretPositionerPopover from "../../../trmrk-react/components/textCaretInputPositioner/TextCaretPositionerPopover";
-import TrmrkBackDrop from "../../../trmrk-react/components/backDrop/TrmrkBackDrop";
+import TextInputCaretPositionerPopover from "./TextInputCaretPositionerPopover";
+import TrmrkBackDrop from "../backDrop/TrmrkBackDrop";
 
-export interface TextCaretPositioningToolProps {
+export interface TextInputCaretPositioningToolProps {
   appBarSelectors: AppBarSelectors;
   appBarReducers: AppBarReducers;
   appDataSelectors: AppDataSelectors;
@@ -34,10 +34,9 @@ export const updateCurrentInputEl = (appDataReducers: AppDataReducers, dispatch:
   dispatch(appDataReducers.incTextCaretPositionerCurrentInputElLastSetOpIdx());
 }
 
-export default function TextCaretPositioningTool(props: TextCaretPositioningToolProps) {
+export default function TextInputCaretPositioningTool(props: TextInputCaretPositioningToolProps) {
   const [ isFullViewPortMode, setIsFullViewPortMode ] = React.useState(false);
-  const [ isMoveMode, setIsMoveMode ] = React.useState(false);
-  const [ isResizeMode, setIsResizeMode ] = React.useState(false);
+  const [ isMoveAndResizeMode, setIsMoveAndResizeMode ] = React.useState(false);
   const [ showBackDrop, setShowBackDrop ] = React.useState(false);
 
   const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
@@ -73,39 +72,30 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
     setIsFullViewPortMode(isFullViewPortMode);
   }, [isFullViewPortMode]);
 
-  const isMoveModeToggled = React.useCallback((isMoveMode: boolean) => {
+  const isMoveAndResizeModeToggled = React.useCallback((isMoveMode: boolean) => {
     if (isMoveMode) {
-      setIsMoveMode(isMoveMode);
+      setIsMoveAndResizeMode(isMoveMode);
     }
     
     onToggleBackDrop(isMoveMode);
-  }, [isMoveMode]);
-
-  const isResizeModeToggled = React.useCallback((isResizeMode: boolean) => {
-
-    if (isResizeMode) {
-      setIsResizeMode(isResizeMode);
-    }
-    
-    onToggleBackDrop(isResizeMode);
-  }, [isResizeMode]);
+  }, [isMoveAndResizeMode]);
 
   const onToggleBackDrop = React.useCallback((showBackDrop: boolean) => {
     setShowBackDrop(showBackDrop);
 
     if (!showBackDrop) {
-      if (isMoveMode) {
-        setIsMoveMode(false);
+      if (isMoveAndResizeMode) {
+        setIsMoveAndResizeMode(false);
       }
       
-      if (isResizeMode) {
-        setIsResizeMode(false);
+      if (isMoveAndResizeMode) {
+        setIsMoveAndResizeMode(false);
       }
     }
   }, [
       isFullViewPortMode,
-      isMoveMode,
-      isResizeMode,
+      isMoveAndResizeMode,
+      isMoveAndResizeMode,
       showBackDrop
   ]);
 
@@ -113,8 +103,8 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
     onToggleBackDrop(false);
   }, [
       isFullViewPortMode,
-      isMoveMode,
-      isResizeMode,
+      isMoveAndResizeMode,
+      isMoveAndResizeMode,
       showBackDrop
   ]);
 
@@ -122,8 +112,8 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
     }, [
       currentInputElMtblRef.value,
       isFullViewPortMode,
-      isMoveMode,
-      isResizeMode,
+      isMoveAndResizeMode,
+      isMoveAndResizeMode,
       showBackDrop,
       textCaretPositionerOpts,
       isEnabled,
@@ -142,11 +132,9 @@ export default function TextCaretPositioningTool(props: TextCaretPositioningTool
         inFrontOfAll={!isAnyMenuOpen}
         keepOpen={keepOpen}
         isFullViewPortMode={isFullViewPortMode}
-        isMoveMode={isMoveMode}
-        isResizeMode={isResizeMode}
+        isMoveAndResizeMode={isMoveAndResizeMode}
         isFullViewPortModeToggled={isFullViewPortModeToggled}
-        isMoveModeToggled={isMoveModeToggled}
-        isResizeModeToggled={isResizeModeToggled}
+        isMoveAndResizeModeToggled={isMoveAndResizeModeToggled}
         keepOpenToggled={onKeepOpenToggled}
         closeClicked={onDisabled} /></React.Fragment> : null }
   </React.Fragment>);
