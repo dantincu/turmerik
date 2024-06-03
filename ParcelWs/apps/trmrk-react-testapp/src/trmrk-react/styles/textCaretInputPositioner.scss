@@ -339,13 +339,13 @@
       }
       
       .trmrk-right-panel {
-        width: calc(2.5em + 4px);
+        width: calc(2.5em + 3px);
       }
 
       .trmrk-top-panel,
       .trmrk-bottom-panel {
         left: -3px;
-        right: -5px;
+        right: -3px;
         height: calc(2.5em + 3px);
       }
 
@@ -358,7 +358,7 @@
       }
 
       .trmrk-right-panel {
-        right: calc(-2.5em - 9px);
+        right: calc(-2.5em - 6px);
       }
 
       .trmrk-bottom-panel {
@@ -379,9 +379,8 @@
 
       .trmrk-bottom-right-panel {
         bottom: calc(-2.5em - 6px);
-        right: calc(-2.5em - 9px);
+        right: calc(-2.5em - 6px);
         border-bottom-right-radius: 3px;
-        width: calc(2.5em + 4px);
       }
 
       .trmrk-bottom-left-panel {

@@ -50,7 +50,10 @@ export interface TextInputCaretPositionerPopoverProps {
   showMoreOptionsToggled?: ((showMoreOptions: boolean) => void) | null | undefined;
   isFullViewPortModeToggled: (isFullViewPortMode: boolean) => void;
   isMoveAndResizeModeToggled: (isMoveAndResizeMode: boolean) => void;
-  moveAndResizeStateChanged: (moveAndResizeState: TextInputCaretPositionerMoveAndResizeState) => void;
+  moveAndResizeStateChanged: (
+    moveAndResizeState: TextInputCaretPositionerMoveAndResizeState,
+    ev: React.TouchEvent | React.MouseEvent,
+    coords: TouchOrMouseCoords) => void;
   closeClicked?: (() => void) | null | undefined;
 }
 
@@ -256,8 +259,11 @@ export default function TextInputCaretPositionerPopover(
     props.isMoveAndResizeModeToggled(isMoveAndResizeMode);
   }, [isMoveAndResizeModePropsVal]);
 
-  const moveAndResizeStateChanged = React.useCallback((moveAndResizeState: TextInputCaretPositionerMoveAndResizeState) => {
-    props.moveAndResizeStateChanged(moveAndResizeState);
+  const moveAndResizeStateChanged = React.useCallback((
+    moveAndResizeState: TextInputCaretPositionerMoveAndResizeState,
+    ev: React.TouchEvent | React.MouseEvent,
+    coords: TouchOrMouseCoords) => {
+    props.moveAndResizeStateChanged(moveAndResizeState, ev, coords);
   }, [moveAndResizeStatePropsVal]);
 
   const closeClicked = React.useCallback(() => {
@@ -943,7 +949,8 @@ export default function TextInputCaretPositionerPopover(
 
     if (isMoveAndResizeModePropsVal) {
       return <TextInputCaretPositionerMoveAndResizeView
-        state={moveAndResizeStatePropsVal!} />;
+        state={moveAndResizeStatePropsVal!}
+        moveAndResizeStateChanged={moveAndResizeStateChanged} />;
     } else if (showOptions || !inputEl || inputIsMultiline === null) {
       return <TextInputCaretPositionerOptionsView
         minimizeClicked={minimizeBtnClicked}

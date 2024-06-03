@@ -82,8 +82,11 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     onToggleBackDrop(isMoveMode);
   }, [isMoveAndResizeMode]);
 
-  const moveAndResizeStatusChanged = React.useCallback((moveAndResizeStatus: TextInputCaretPositionerMoveAndResizeState) => {
-    setMoveAndResizeModeState(moveAndResizeStatus);
+  const moveAndResizeStatusChanged = React.useCallback((
+    moveAndResizeState: TextInputCaretPositionerMoveAndResizeState,
+    ev: React.TouchEvent | React.MouseEvent,
+    coords: TouchOrMouseCoords) => {
+    setMoveAndResizeModeState(moveAndResizeState);
   }, [moveAndResizeModeState]);
 
   const onToggleBackDrop = React.useCallback((showBackDrop: boolean) => {
