@@ -264,7 +264,7 @@ $app-bar-top-padding: 3px;
     > .trmrk-tree-node-content {
       > .trmrk-tree-node-label {
         background-color: $color;
-        color: var(--trmrk_foreground-color);
+        color: var(--trmrk_dark-background_foreground-color);
       }
     }
   }

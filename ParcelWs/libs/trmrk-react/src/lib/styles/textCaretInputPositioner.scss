@@ -30,7 +30,7 @@
   width: calc(22.5em + 6px);
   left: calc(50% - 11.25em - 3px);
   right: calc(50% - 11.25em - 3px);
-  color: var(--trmrk_foreground-color);
+  color: var(--trmrk_dark-background_foreground-color);
   top: 0px;
   padding: 3px;
   border-radius: 3px;
@@ -46,6 +46,14 @@
     height: calc(100% - 6px);
     width: calc(100% - 6px);
     border-radius: 3px;
+  }
+
+  &.trmrk-is-move-and-resize-mode {
+    border-radius: 0px;
+
+    .trmrk-text-input-caret-positioner {
+      border-radius: 0px;
+    }
   }
 
   .trmrk-is-activated {
@@ -301,6 +309,85 @@
 
       &:nth-child(2) {
         top: 0.67em;
+      }
+    }
+
+    &.trmrk-move-and-resize-view {
+      .trmrk-side-panel {
+        overflow: hidden;
+      }
+
+      .trmrk-corner-panel {
+        width: calc(2.5em + 3px);
+        height: calc(2.5em + 3px);
+      }
+
+      .trmrk-side-panel,
+      .trmrk-corner-panel {
+        display: block;
+        position: absolute;
+      }
+
+      .trmrk-left-panel,
+      .trmrk-right-panel {
+        top: -3px;
+        bottom: -3px;
+      }
+
+      .trmrk-left-panel {
+        width: calc(2.5em + 3px);
+      }
+      
+      .trmrk-right-panel {
+        width: calc(2.5em + 4px);
+      }
+
+      .trmrk-top-panel,
+      .trmrk-bottom-panel {
+        left: -3px;
+        right: -5px;
+        height: calc(2.5em + 3px);
+      }
+
+      .trmrk-left-panel {
+        left: calc(-2.5em - 6px);
+      }
+
+      .trmrk-top-panel {
+        top: calc(-2.5em - 6px);
+      }
+
+      .trmrk-right-panel {
+        right: calc(-2.5em - 9px);
+      }
+
+      .trmrk-bottom-panel {
+        bottom: calc(-2.5em - 6px);
+      }
+
+      .trmrk-top-left-panel {
+        top: calc(-2.5em - 6px);
+        left: calc(-2.5em - 6px);
+        border-top-left-radius: 3px;
+      }
+
+      .trmrk-top-right-panel {
+        top: calc(-2.5em - 6px);
+        right: calc(-2.5em - 6px);
+        border-top-right-radius: 3px;
+      }
+
+      .trmrk-bottom-right-panel {
+        bottom: calc(-2.5em - 6px);
+        right: calc(-2.5em - 9px);
+        border-bottom-right-radius: 3px;
+        width: calc(2.5em + 4px);
+      }
+
+      .trmrk-bottom-left-panel {
+        bottom: calc(-2.5em - 6px);
+        left: calc(-2.5em - 6px);
+        border-bottom-left-radius: 3px;
       }
     }
   }

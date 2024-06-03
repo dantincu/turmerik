@@ -16,6 +16,7 @@ import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
 
 import TextInputCaretPositionerPopover from "./TextInputCaretPositionerPopover";
+import { TextInputCaretPositionerMoveAndResizeState } from "./TextInputCaretPositionerMoveAndResizeView";
 import TrmrkBackDrop from "../backDrop/TrmrkBackDrop";
 
 export interface TextInputCaretPositioningToolProps {
@@ -37,6 +38,7 @@ export const updateCurrentInputEl = (appDataReducers: AppDataReducers, dispatch:
 export default function TextInputCaretPositioningTool(props: TextInputCaretPositioningToolProps) {
   const [ isFullViewPortMode, setIsFullViewPortMode ] = React.useState(false);
   const [ isMoveAndResizeMode, setIsMoveAndResizeMode ] = React.useState(false);
+  const [ moveAndResizeModeState, setMoveAndResizeModeState ] = React.useState<TextInputCaretPositionerMoveAndResizeState | null>(null);
   const [ showBackDrop, setShowBackDrop ] = React.useState(false);
 
   const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
@@ -48,7 +50,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     props.appDataSelectors.getTextCaretPositionerCurrentInputElLastSetOpIdx);
 
   const dispatch = useDispatch();
-
 
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
@@ -75,10 +76,15 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   const isMoveAndResizeModeToggled = React.useCallback((isMoveMode: boolean) => {
     if (isMoveMode) {
       setIsMoveAndResizeMode(isMoveMode);
+      setMoveAndResizeModeState(TextInputCaretPositionerMoveAndResizeState.Pending);
     }
     
     onToggleBackDrop(isMoveMode);
   }, [isMoveAndResizeMode]);
+
+  const moveAndResizeStatusChanged = React.useCallback((moveAndResizeStatus: TextInputCaretPositionerMoveAndResizeState) => {
+    setMoveAndResizeModeState(moveAndResizeStatus);
+  }, [moveAndResizeModeState]);
 
   const onToggleBackDrop = React.useCallback((showBackDrop: boolean) => {
     setShowBackDrop(showBackDrop);
@@ -90,6 +96,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       
       if (isMoveAndResizeMode) {
         setIsMoveAndResizeMode(false);
+        setMoveAndResizeModeState(null);
       }
     }
   }, [
@@ -113,7 +120,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       currentInputElMtblRef.value,
       isFullViewPortMode,
       isMoveAndResizeMode,
-      isMoveAndResizeMode,
+      moveAndResizeModeState,
       showBackDrop,
       textCaretPositionerOpts,
       isEnabled,
@@ -133,8 +140,10 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
         keepOpen={keepOpen}
         isFullViewPortMode={isFullViewPortMode}
         isMoveAndResizeMode={isMoveAndResizeMode}
+        moveAndResizeState={moveAndResizeModeState}
         isFullViewPortModeToggled={isFullViewPortModeToggled}
         isMoveAndResizeModeToggled={isMoveAndResizeModeToggled}
+        moveAndResizeStateChanged={moveAndResizeStatusChanged}
         keepOpenToggled={onKeepOpenToggled}
         closeClicked={onDisabled} /></React.Fragment> : null }
   </React.Fragment>);
