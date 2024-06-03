@@ -17,6 +17,7 @@ import TextInputCaretPositionerDefaultView from "./TextInputCaretPositionerDefau
 import TextInputCaretPositionerOptionsView from "./TextInputCaretPositionerOptionsView";
 import TextInputCaretPositionerJumpSymbolsView from "./TextInputCaretPositionerJumpSymbolsView";
 import TextInputCaretPositionerJumpLinesView from "./TextInputCaretPositionerJumpLinesView";
+import TextInputCaretPositionerMoveOrResizeView from "./TextInputCaretPositionerMoveOrResizeView";
 
 export const wordSepChars = trmrk.freezeMx([['<', '>'], ['-', ';', ',', '.']]);
 
@@ -926,7 +927,9 @@ export default function TextInputCaretPositionerPopover(
       return null;
     }
 
-    if (showOptions || !inputEl || inputIsMultiline === null) {
+    if (isMoveAndResizeModePropsVal) {
+      return <TextInputCaretPositionerMoveOrResizeView />;
+    } else if (showOptions || !inputEl || inputIsMultiline === null) {
       return <TextInputCaretPositionerOptionsView
           minimizeClicked={minimizeBtnClicked}
           showMoreOptions={showMoreOptions}
@@ -1059,7 +1062,6 @@ export default function TextInputCaretPositionerPopover(
     inputIsMultiline,
     selectionIsActivated,
     isMoveAndResizeModePropsVal,
-    isMoveAndResizeModePropsVal,
     stateType,
     minimized,
     keepOpen,
@@ -1082,9 +1084,9 @@ export default function TextInputCaretPositionerPopover(
         <div className="trmrk-animator" ref={el => rightBorderAnimatorElRef.current = el}>&nbsp;</div>
       </div>
       <div className="trmrk-text-input-caret-positioner">
-        <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
+        { isMoveAndResizeModePropsVal ? null : <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
           onMouseDown={mainBtnClicked}
-          onTouchEnd={mainBtnClicked}><MatUIIcon iconName="highlight_text_cursor" /></IconButton>
+          onTouchEnd={mainBtnClicked}><MatUIIcon iconName="highlight_text_cursor" /></IconButton> }
         { viewRetriever() }
       </div>
   </div>);
