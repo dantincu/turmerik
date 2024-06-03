@@ -67,35 +67,6 @@ body, #app-root {
   background-color: --trmrk-btn-text-primary_background-color;
 }
 
-.trmrk-bars-panel {
-  width: 100%;
-
-  .trmrk-pinned-top-bar-bg-spacer {
-    display: block;
-    position: relative;
-    height: 2.5em;
-    width: 100%;
-  }
-
-  .trmrk-pinned-top-bar {
-    display: flex;
-    position: fixed;
-    width: 100%;
-    padding-left: 0.2em;
-    cursor: pointer;
-    z-index: 1;
-  }
-}
-
-.trmrk-app-bar .trmrk-page-title {
-  display: inline-flex;
-  text-align: center;
-  font-size: 1.5em;
-  position: relative;
-  top: 0.25em;
-  padding-left: 0.25em
-}
-
 .trmrk-block {
   display: block;
 }
@@ -143,25 +114,6 @@ body, #app-root {
   overflow-y: hidden;
 }
 
-.trmrk-panel-header .trmrk-app-bar,
-.trmrk-panel-footer .trmrk-app-bar {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: relative;
-
-  .trmrk-icon-btn {
-    width: 1.66em;
-    height: 1.66em;
-    position: relative;
-    left: 0em;
-    top: $app-bar-top-padding;
-  }
-
-  .trmrk-icon-btn.trmrk-options-btn {
-    right: 1.66em;
-    position: absolute;
-    left: initial;
-  }
+.trmrk-rot-45deg {
+  transform: rotate(45deg);
 }
-

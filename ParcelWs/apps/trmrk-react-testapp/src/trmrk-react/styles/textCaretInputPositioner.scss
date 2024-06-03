@@ -313,6 +313,14 @@
     }
 
     &.trmrk-move-and-resize-view {
+      .trmrk-move-panel {
+        .trmrk-icon-btn.trmrk-drag-icon-btn {
+          .trmrk-icon {
+            zoom: 1.25;
+          }
+        }
+      }
+
       .trmrk-side-panel {
         overflow: hidden;
       }

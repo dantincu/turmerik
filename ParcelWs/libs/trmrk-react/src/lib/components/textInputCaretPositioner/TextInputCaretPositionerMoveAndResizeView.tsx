@@ -79,10 +79,10 @@ export default function TextInputCaretPositionerMoveAndResizeView(
     <div className={["trmrk-move-panel",
         props.state === TextInputCaretPositionerMoveAndResizeState.Moving ? "trmrk-is-activated" : null].join(" ")}>
       { Array.from(Array(ICON_BUTTONS_COUNT + 1).keys()).map(key => <IconButton key={key}
-          className="trmrk-icon-btn"
+          className="trmrk-icon-btn trmrk-drag-icon-btn"
           onTouchStart={movePanelTouchStartOrMouseDown}
           onMouseDown={movePanelTouchStartOrMouseDown}>
-        <MatUIIcon iconName="drag_pan" /></IconButton>) }
+        <MatUIIcon iconName="drag_pan" className="trmrk-icon trmrk-rot-45deg" /></IconButton>) }
     </div>
     <div className={["trmrk-side-panel", "trmrk-left-panel",
         props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft ? "trmrk-is-activated" : null].join(" ")}>
