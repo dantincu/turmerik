@@ -1,18 +1,23 @@
+import trmrk from "../../trmrk";
+
 import { filterChildNodes } from "./core";
 
 export const pxRegex = () => /px/i;
 export const emRegex = () => /px/i;
 export const remRegex = () => /px/i;
 
-export interface HtmlElementBounds {
+export interface HtmlElementRectangle {
   offsetLeft: number;
   offsetTop: number;
+  width: number;
+  height: number;
+}
+
+export interface HtmlElementBounds extends HtmlElementRectangle {
   totalOffsetLeft: number;
   totalOffsetTop: number;
   totalRenderedOffsetLeft: number;
   totalRenderedOffsetTop: number;
-  width: number;
-  height: number;
   scrollWidth: number;
   scrollHeight: number;
   scrollLeft: number;
@@ -145,9 +150,25 @@ export const clearElemVertInset = (elemStyle: CSSStyleDeclaration) => {
   elemStyle.bottom = "";
 };
 
-export const extractPxCount = (cssPropVal: string) => {
+export const extractNumberFromCssPropVal = (
+  cssPropVal: string,
+  suffix: string | null | undefined = null
+) => {
   let pxCount: number | null = null;
+  suffix ??= "px";
+  const sffxLen = suffix.length;
 
-  if (cssPropVal.indexOf("px") >= 0) {
+  if (sffxLen === 0 || cssPropVal.toLowerCase().endsWith(suffix)) {
+    if (sffxLen !== 0) {
+      cssPropVal = cssPropVal.substring(0, cssPropVal.length - sffxLen);
+    }
+
+    if (cssPropVal.length > 0) {
+      try {
+        pxCount = parseFloat(cssPropVal);
+      } catch (err) {}
+    }
   }
+
+  return pxCount;
 };

@@ -10,6 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { MtblRefValue } from "../../../trmrk/core";
 import { extractTextInput } from "../../../trmrk-browser/domUtils/textInput";
 import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
+import { HtmlElementRectangle, extractNumberFromCssPropVal } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
 import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 
@@ -35,7 +36,13 @@ export const updateCurrentInputEl = (appDataReducers: AppDataReducers, dispatch:
   dispatch(appDataReducers.incTextCaretPositionerCurrentInputElLastSetOpIdx());
 }
 
+export const ICON_BTN_SIZE_PX = 40;
+export const ICON_BTN_PADD_PX = 3;
+export const ICON_BTN_MIN_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX + ICON_BTN_PADD_PX * 2;
+
 export default function TextInputCaretPositioningTool(props: TextInputCaretPositioningToolProps) {
+  const mainElRef = React.useRef<HTMLElement | null>(null);
+
   const [ isFullViewPortMode, setIsFullViewPortMode ] = React.useState(false);
   const [ isMoveAndResizeMode, setIsMoveAndResizeMode ] = React.useState(false);
   const [ moveAndResizeModeState, setMoveAndResizeModeState ] = React.useState<TextInputCaretPositionerMoveAndResizeState | null>(null);
@@ -50,8 +57,13 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     props.appDataSelectors.getTextCaretPositionerCurrentInputElLastSetOpIdx);
 
   const lastMoveOrResizeTouchStartOrMouseDownCoordsRef = React.useRef<TouchOrMouseCoords | null>(null);
+  const lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef = React.useRef<HtmlElementRectangle | null>(null);
 
   const dispatch = useDispatch();
+
+  const onMainEl = React.useCallback((el: HTMLElement | null) => {
+    mainElRef.current = el;
+  }, [mainElRef]);
 
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
@@ -88,18 +100,39 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     moveAndResizeState: TextInputCaretPositionerMoveAndResizeState,
     ev: React.TouchEvent | React.MouseEvent,
     coords: TouchOrMouseCoords) => {
-    setMoveAndResizeModeState(moveAndResizeState);
-  }, [moveAndResizeModeState]);
+    const mainEl = mainElRef.current;
+
+    if (mainEl) {
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = coords;
+      const mainElRectngl = mainEl.getBoundingClientRect();
+
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = {
+        offsetTop: mainElRectngl.top,
+        offsetLeft: mainElRectngl.left,
+        width: mainElRectngl.width,
+        height: mainElRectngl.height
+      };
+
+      console.log("lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current0", lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current);
+      console.log("lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current0", lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current);
+
+      setMoveAndResizeModeState(moveAndResizeState);
+    }
+  }, [
+      mainElRef,
+      isFullViewPortMode,
+      isMoveAndResizeMode,
+      moveAndResizeModeState,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef]);
 
   const onToggleBackDrop = React.useCallback((showBackDrop: boolean) => {
     setShowBackDrop(showBackDrop);
 
     if (!showBackDrop) {
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
-
-      if (isMoveAndResizeMode) {
-        setIsMoveAndResizeMode(false);
-      }
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = null;
       
       if (isMoveAndResizeMode) {
         setIsMoveAndResizeMode(false);
@@ -107,23 +140,99 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       }
     }
   }, [
+      mainElRef,
       isFullViewPortMode,
       isMoveAndResizeMode,
-      isMoveAndResizeMode,
-      showBackDrop
+      moveAndResizeModeState,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
   ]);
 
   const onBackDropTouchOrClick = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     onToggleBackDrop(false);
   }, [
+      mainElRef,
       isFullViewPortMode,
       isMoveAndResizeMode,
+      moveAndResizeModeState,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
+  ]);
+
+  const onBackDropTouchOrMouseMove = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    if (isMoveAndResizeMode) {
+      console.log("isMoveAndResizeMode0", isMoveAndResizeMode);
+
+      const mainEl = mainElRef.current;
+      const lastMoveOrResizeTouchStartOrMouseDownCoords = lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current;
+      const lastMoveOrResizeTouchStartOrMouseDownMainElCoords = lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current;
+
+      if (mainEl && lastMoveOrResizeTouchStartOrMouseDownCoords && lastMoveOrResizeTouchStartOrMouseDownMainElCoords && (moveAndResizeModeState ?? null) !== null) {
+        const mainElStyle = mainEl.style;
+        const diffX = coords.pageX - lastMoveOrResizeTouchStartOrMouseDownCoords.pageX;
+        const diffY = coords.pageY - lastMoveOrResizeTouchStartOrMouseDownCoords.pageY;
+
+        if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.Moving) {
+          const newOffsetLeft = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetLeft + diffX;
+          const newOffsetTop = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetTop + diffY;
+
+          mainElStyle.top = `${newOffsetTop}px`;
+          mainElStyle.left = `${newOffsetLeft}px`;
+        }
+        else {
+          if ([TextInputCaretPositionerMoveAndResizeState.ResizingFromBottom,
+            TextInputCaretPositionerMoveAndResizeState.ResizingFromTop].indexOf(moveAndResizeModeState!) >= 0) {
+            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop) {
+              const newOffsetTop = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetTop + diffY;
+              mainElStyle.top = `${newOffsetTop}px`;
+            }
+            
+            const newHeight = Math.min(ICON_BTN_MIN_TOTAL_SIZE_PX, lastMoveOrResizeTouchStartOrMouseDownMainElCoords.height + diffY);
+            mainElStyle.height = `${newHeight}px`;
+          } else {
+            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromRight) {
+              const newOffsetLeft = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetLeft + diffX;
+              mainElStyle.left = `${newOffsetLeft}px`;
+            }
+            
+            const newWidth = Math.min(ICON_BTN_MIN_TOTAL_SIZE_PX, lastMoveOrResizeTouchStartOrMouseDownMainElCoords.width + diffX);
+            mainElStyle.width = `${newWidth}px`;
+          }
+        }
+      }
+    }
+  }, [
+      mainElRef,
+      isFullViewPortMode,
       isMoveAndResizeMode,
-      showBackDrop
+      moveAndResizeModeState,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
+  ]);
+
+  const onBackDropTouchEndOrMouseUp = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    if (isMoveAndResizeMode) {
+      onBackDropTouchOrMouseMove(ev, coords);
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = null;
+      setMoveAndResizeModeState(null);
+    }
+  }, [
+      mainElRef,
+      isFullViewPortMode,
+      isMoveAndResizeMode,
+      moveAndResizeModeState,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
   ]);
 
   React.useEffect(() => {
     }, [
+      mainElRef,
       currentInputElMtblRef.value,
       isFullViewPortMode,
       isMoveAndResizeMode,
@@ -135,24 +244,30 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       isAnyMenuOpen,
       currentInputElLastSetOpIdx,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
     ]);
   return (<React.Fragment>
     { ((currentInputElMtblRef.value || keepOpen) && isEnabled) ? <React.Fragment>
     { showBackDrop ? <TrmrkBackDrop
-      onTouchOrClick={onBackDropTouchOrClick}
+      className="trmrk-text-input-caret-positioner-popover-backdrop"
       preventDefaultOnTouchOrMouseEvts={true}
-      className="trmrk-text-input-caret-positioner-popover-backdrop" /> : null }
+      onTouchOrClick={onBackDropTouchOrClick}
+      onTouchOrMouseMove={onBackDropTouchOrMouseMove}
+      onTouchEndOrMouseUp={onBackDropTouchEndOrMouseUp} /> : null }
     <TextInputCaretPositionerPopover
-        inputEl={currentInputElMtblRef.value}
-        inFrontOfAll={!isAnyMenuOpen}
-        keepOpen={keepOpen}
-        isFullViewPortMode={isFullViewPortMode}
-        isMoveAndResizeMode={isMoveAndResizeMode}
-        moveAndResizeState={moveAndResizeModeState}
-        isFullViewPortModeToggled={isFullViewPortModeToggled}
-        isMoveAndResizeModeToggled={isMoveAndResizeModeToggled}
-        moveAndResizeStateChanged={moveAndResizeStatusChanged}
-        keepOpenToggled={onKeepOpenToggled}
-        closeClicked={onDisabled} /></React.Fragment> : null }
+      onMainEl={onMainEl}
+      inputEl={currentInputElMtblRef.value}
+      inFrontOfAll={!isAnyMenuOpen}
+      keepOpen={keepOpen}
+      isFullViewPortMode={isFullViewPortMode}
+      isMoveAndResizeMode={isMoveAndResizeMode}
+      moveAndResizeState={moveAndResizeModeState}
+      isFullViewPortModeToggled={isFullViewPortModeToggled}
+      isMoveAndResizeModeToggled={isMoveAndResizeModeToggled}
+      moveAndResizeStateChanged={moveAndResizeStatusChanged}
+      keepOpenToggled={onKeepOpenToggled}
+      onMainElTouchOrMouseMove={onBackDropTouchOrMouseMove}
+      onMainElTouchStartOrMouseUp={onBackDropTouchEndOrMouseUp}
+      closeClicked={onDisabled} /></React.Fragment> : null }
   </React.Fragment>);
 }

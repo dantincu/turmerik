@@ -6,7 +6,7 @@ import trmrk from "../../../trmrk";
 import { ValueOrAnyOrVoid } from "../../../trmrk/core";
 
 import {
-  TouchOrMouseCoords,
+  TouchOrMouseCoords, getSingleTouchOrClick
 } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
 
 import { extractElCssStyleTopPx } from "../../../trmrk-browser/domUtils/css";
@@ -41,7 +41,7 @@ export interface TextInputCaretPositionerPopoverProps {
   moveAndResizeState?: TextInputCaretPositionerMoveAndResizeState | null | undefined;
   symbolsJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
   linesJumpSpeedsArr?: number[] | readonly number[] | null | undefined;
-  moving?: ((e: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords, rowsCount: number) => ValueOrAnyOrVoid<boolean>) | null | undefined;
+  onMainEl: (el: HTMLElement | null) => void;
   minimizedToggled?: ((minimized: boolean) => void) | null | undefined;
   stateChanged?: ((prevState: TextCaretInputPositionerState, currentState: TextCaretInputPositionerState) => void) | null | undefined;
   keepOpenToggled?: ((keepOpen: boolean) => void) | null | undefined;
@@ -54,6 +54,9 @@ export interface TextInputCaretPositionerPopoverProps {
     moveAndResizeState: TextInputCaretPositionerMoveAndResizeState,
     ev: React.TouchEvent | React.MouseEvent,
     coords: TouchOrMouseCoords) => void;
+  onMainElTouchStartOrMouseUp?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onMainElTouchOrMouseMove?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onMainElTouchEndOrMouseDown?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   closeClicked?: (() => void) | null | undefined;
 }
 
@@ -785,6 +788,8 @@ export default function TextInputCaretPositionerPopover(
     const isMoveAndResizeModeNewVal = props.isMoveAndResizeMode;
     const moveAndResizeStateNewVal = props.moveAndResizeState;
 
+    props.onMainEl(mainEl);
+
     if (inputEl !== props.inputEl) {
       const inputIsMultilineNewVal = normalizeInputIsMultiline(props.inputEl);
 
@@ -849,59 +854,91 @@ export default function TextInputCaretPositionerPopover(
       setMoveAndResizeStatePropsVal(moveAndResizeStateNewVal);
     }
 
-    const onMainElMouseOrTouchEvt = (e: TouchEvent | MouseEvent) => {
+    const onMainElTouchStartOrMouseUp = (e: TouchEvent | MouseEvent) => {
       e.preventDefault();
+
+      if (props.onMainElTouchStartOrMouseUp) {
+        const coords = getSingleTouchOrClick(e);
+
+        if (coords) {
+          props.onMainElTouchStartOrMouseUp(e, coords);
+        }
+      }
+    }
+
+    const onMainElTouchOrMouseMove = (e: TouchEvent | MouseEvent) => {
+      e.preventDefault();
+
+      if (props.onMainElTouchOrMouseMove) {
+        const coords = getSingleTouchOrClick(e);
+
+        if (coords) {
+          props.onMainElTouchOrMouseMove(e, coords);
+        }
+      }
+    }
+
+    const onMainElTouchEndOrMouseDown = (e: TouchEvent | MouseEvent) => {
+      e.preventDefault();
+
+      if (props.onMainElTouchEndOrMouseDown) {
+        const coords = getSingleTouchOrClick(e);
+
+        if (coords) {
+          props.onMainElTouchEndOrMouseDown(e, coords);
+        }
+      }
     }
 
     if (mainEl) {
-      mainEl.addEventListener("touchstart", onMainElMouseOrTouchEvt, {
+      mainEl.addEventListener("touchstart", onMainElTouchStartOrMouseUp, {
         capture: true
       });
 
-      mainEl.addEventListener("mouseup", onMainElMouseOrTouchEvt, {
+      mainEl.addEventListener("mouseup", onMainElTouchStartOrMouseUp, {
         capture: true
       });
 
-      mainEl.addEventListener("touchmove", onMainElMouseOrTouchEvt, {
+      mainEl.addEventListener("touchmove", onMainElTouchOrMouseMove, {
         capture: true
       });
 
-      mainEl.addEventListener("mousemove", onMainElMouseOrTouchEvt, {
+      mainEl.addEventListener("mousemove", onMainElTouchOrMouseMove, {
         capture: true
       });
 
-      mainEl.addEventListener("touchend", onMainElMouseOrTouchEvt, {
+      mainEl.addEventListener("touchend", onMainElTouchEndOrMouseDown, {
         capture: true
       });
 
-      mainEl.addEventListener("mousedown", onMainElMouseOrTouchEvt, {
+      mainEl.addEventListener("mousedown", onMainElTouchEndOrMouseDown, {
         capture: true
       });
     }
 
     return () => {
       if (mainEl) {
-        mainEl.removeEventListener("touchstart", onMainElMouseOrTouchEvt, {
+        mainEl.removeEventListener("touchstart", onMainElTouchStartOrMouseUp, {
           capture: true
         });
 
-        mainEl.removeEventListener("mouseup", onMainElMouseOrTouchEvt, {
+        mainEl.removeEventListener("mouseup", onMainElTouchStartOrMouseUp, {
           capture: true
         });
 
-        mainEl.removeEventListener("touchmove", onMainElMouseOrTouchEvt, {
+        mainEl.removeEventListener("touchmove", onMainElTouchOrMouseMove, {
           capture: true
         });
 
-        mainEl.removeEventListener("mousemove", onMainElMouseOrTouchEvt, {
+        mainEl.removeEventListener("mousemove", onMainElTouchOrMouseMove, {
           capture: true
         });
 
-        mainEl.removeEventListener("touchend", onMainElMouseOrTouchEvt, {
+        mainEl.removeEventListener("touchend", onMainElTouchEndOrMouseDown, {
           capture: true
         });
 
-        mainEl.removeEventListener("mousedown", onMainElMouseOrTouchEvt, {
+        mainEl.removeEventListener("mousedown", onMainElTouchEndOrMouseDown, {
           capture: true
         });
       }
