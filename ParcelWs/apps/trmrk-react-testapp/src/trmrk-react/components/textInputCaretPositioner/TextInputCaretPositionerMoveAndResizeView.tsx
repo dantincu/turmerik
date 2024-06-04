@@ -77,46 +77,46 @@ export default function TextInputCaretPositionerMoveAndResizeView(
   
   return (<div className="trmrk-view trmrk-move-and-resize-view">
     <div className={["trmrk-move-panel",
-        props.state === TextInputCaretPositionerMoveAndResizeState.Moving ? "trmrk-is-activated" : null].join(" ")}>
-      { Array.from(Array(ICON_BUTTONS_COUNT + 1).keys()).map(key => <IconButton key={key}
-          className="trmrk-icon-btn trmrk-drag-icon-btn"
+        props.state === TextInputCaretPositionerMoveAndResizeState.Moving ? "trmrk-is-activated" : null].join(" ")}
           onTouchStart={movePanelTouchStartOrMouseDown}
           onMouseDown={movePanelTouchStartOrMouseDown}>
+      { Array.from(Array(ICON_BUTTONS_COUNT + 1).keys()).map(key => <IconButton key={key}
+          className="trmrk-icon-btn trmrk-drag-icon-btn">
         <MatUIIcon iconName="drag_pan" className="trmrk-icon trmrk-rot-45deg" /></IconButton>) }
     </div>
     <div className={["trmrk-side-panel", "trmrk-left-panel",
-        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft ? "trmrk-is-activated" : null].join(" ")}>
-      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
-          className="trmrk-icon-btn"
+        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft ? "trmrk-is-activated" : null].join(" ")}
           onTouchStart={leftPanelTouchStartOrMouseDown}
           onMouseDown={leftPanelTouchStartOrMouseDown}>
+      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
+          className="trmrk-icon-btn">
         <MatUIIcon iconName="width" /></IconButton>) }
     </div>
     <div className={["trmrk-corner-panel", "trmrk-top-left-panel"].join(" ")}></div>
     <div className={["trmrk-side-panel", "trmrk-top-panel",
-        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop ? "trmrk-is-activated" : null].join(" ")}>
-      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
-          className="trmrk-icon-btn"
+        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop ? "trmrk-is-activated" : null].join(" ")}
           onTouchStart={topPanelTouchStartOrMouseDown}
           onMouseDown={topPanelTouchStartOrMouseDown}>
+      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
+          className="trmrk-icon-btn">
         <MatUIIcon iconName="height" /></IconButton>) }
     </div>
     <div className={["trmrk-corner-panel", "trmrk-top-right-panel"].join(" ")}></div>
     <div className={["trmrk-side-panel", "trmrk-right-panel",
-        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromRight ? "trmrk-is-activated" : null].join(" ")}>
-      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
-          className="trmrk-icon-btn"
+        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromRight ? "trmrk-is-activated" : null].join(" ")}
           onTouchStart={rightPanelTouchStartOrMouseDown}
           onMouseDown={rightPanelTouchStartOrMouseDown}>
+      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
+          className="trmrk-icon-btn">
         <MatUIIcon iconName="width" /></IconButton>) }
     </div>
     <div className={["trmrk-corner-panel", "trmrk-bottom-right-panel"].join(" ")}></div>
     <div className={["trmrk-side-panel", "trmrk-bottom-panel",
-        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromBottom ? "trmrk-is-activated" : null].join(" ")}>
-      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
-          className="trmrk-icon-btn"
+        props.state === TextInputCaretPositionerMoveAndResizeState.ResizingFromBottom ? "trmrk-is-activated" : null].join(" ")}
           onTouchStart={bottomPanelTouchStartOrMouseDown}
           onMouseDown={bottomPanelTouchStartOrMouseDown}>
+      { Array.from(Array(ICON_BUTTONS_COUNT).keys()).map(key => <IconButton key={key}
+          className="trmrk-icon-btn">
         <MatUIIcon iconName="height" /></IconButton>) }
     </div>
     <div className={["trmrk-corner-panel", "trmrk-bottom-left-panel"].join(" ")}></div>

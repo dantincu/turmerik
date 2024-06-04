@@ -319,7 +319,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
             appBarToggled={appHeaderToggled}
             showAppBar={showAppHeader}
             togglesHeader={true} /> : null }
-
         { showAppFooterToggleBtn ? <ToggleAppBarBtn
           appBarToggled={appFooterToggled}
           showAppBar={showAppFooter}
