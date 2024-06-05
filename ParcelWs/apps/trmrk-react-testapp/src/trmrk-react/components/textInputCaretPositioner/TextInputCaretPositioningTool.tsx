@@ -113,9 +113,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
         height: mainElRectngl.height
       };
 
-      console.log("lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current0", lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current);
-      console.log("lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current0", lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current);
-
       setMoveAndResizeModeState(moveAndResizeState);
     }
   }, [
@@ -163,7 +160,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
   const onBackDropTouchOrMouseMove = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     if (isMoveAndResizeMode) {
-      console.log("isMoveAndResizeMode0", isMoveAndResizeMode);
 
       const mainEl = mainElRef.current;
       const lastMoveOrResizeTouchStartOrMouseDownCoords = lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current;
@@ -182,23 +178,64 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
           mainElStyle.left = `${newOffsetLeft}px`;
         }
         else {
-          if ([TextInputCaretPositionerMoveAndResizeState.ResizingFromBottom,
-            TextInputCaretPositionerMoveAndResizeState.ResizingFromTop].indexOf(moveAndResizeModeState!) >= 0) {
-            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop) {
-              const newOffsetTop = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetTop + diffY;
+          let newOffsetLeft: number;
+          let newOffsetTop: number;
+          let newWidth: number;
+          let newHeight: number;
+          let newHeightIncr: number;
+          let newWidthIncr: number;
+
+          switch (moveAndResizeModeState) {
+            case TextInputCaretPositionerMoveAndResizeState.ResizingFromTop:
+              newOffsetTop = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetTop + diffY;
+              newHeight = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.height - diffY;
+
+              newHeightIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newHeight;
+
+              if (newHeightIncr > 0) {
+                newHeight += newHeightIncr;
+                newOffsetTop -= newHeightIncr;
+              }
+
               mainElStyle.top = `${newOffsetTop}px`;
-            }
-            
-            const newHeight = Math.min(ICON_BTN_MIN_TOTAL_SIZE_PX, lastMoveOrResizeTouchStartOrMouseDownMainElCoords.height + diffY);
-            mainElStyle.height = `${newHeight}px`;
-          } else {
-            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromRight) {
-              const newOffsetLeft = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetLeft + diffX;
+              mainElStyle.height = `${newHeight}px`;
+              break;
+            case TextInputCaretPositionerMoveAndResizeState.ResizingFromBottom:
+              newHeight = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.height + diffY;
+
+              newHeightIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newHeight;
+
+              if (newHeightIncr > 0) {
+                newHeight += newHeightIncr;
+              }
+
+              mainElStyle.height = `${newHeight}px`;
+              break;
+            case TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft:
+              newOffsetLeft = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetLeft + diffX;
+              newWidth = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.width - diffX;
+
+              newWidthIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newWidth;
+
+              if (newWidthIncr > 0) {
+                newWidth += newWidthIncr;
+                newOffsetLeft = newWidthIncr;
+              }
+
               mainElStyle.left = `${newOffsetLeft}px`;
-            }
-            
-            const newWidth = Math.min(ICON_BTN_MIN_TOTAL_SIZE_PX, lastMoveOrResizeTouchStartOrMouseDownMainElCoords.width + diffX);
-            mainElStyle.width = `${newWidth}px`;
+              mainElStyle.width = `${newWidth}px`;
+              break;
+            case TextInputCaretPositionerMoveAndResizeState.ResizingFromRight:
+              newWidth = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.width + diffX;
+
+              newWidthIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newWidth;
+
+              if (newWidthIncr > 0) {
+                newWidth += newWidthIncr;
+              }
+
+              mainElStyle.width = `${newWidth}px`;
+              break;
           }
         }
       }
