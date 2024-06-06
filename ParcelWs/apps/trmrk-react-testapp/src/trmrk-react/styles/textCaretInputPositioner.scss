@@ -171,13 +171,16 @@
   .trmrk-icon-btn {
     position: relative;
     color: inherit;
-    height: 1.66em;
-    width: 1.66em;
+    height: 1.667em;
+    width: 1.667em;
   }
 
   .trmrk-view {
-    position: relative;
+    position: absolute;
     display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
 
     .trmrk-arrow-left-icon,
     .trmrk-arrow-right-icon,

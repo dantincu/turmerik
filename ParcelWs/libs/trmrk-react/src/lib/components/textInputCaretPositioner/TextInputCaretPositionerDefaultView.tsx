@@ -252,6 +252,7 @@ export default function TextInputCaretPositionerDefaultView(
   ]);
 
   return (<div className="trmrk-view trmrk-default-view">
+    <IconButton className="trmrk-icon-btn" />
     <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
       onMouseDown={onNextViewIconBtnClick}
       onTouchEnd={onNextViewIconBtnClick}><GridOnIcon /></IconButton>

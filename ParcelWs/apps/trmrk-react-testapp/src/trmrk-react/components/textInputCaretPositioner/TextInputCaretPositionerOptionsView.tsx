@@ -79,6 +79,7 @@ export default function TextInputCaretPositionerOptionsView(
   ]);
 
   return (<div className="trmrk-view trmrk-options-view">
+    <IconButton className="trmrk-icon-btn" />
     <IconButton className="trmrk-icon-btn"
         onMouseDown={minimizeClicked}
         onTouchEnd={minimizeClicked}>

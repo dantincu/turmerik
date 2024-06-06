@@ -20,6 +20,8 @@ import TextInputCaretPositionerPopover from "./TextInputCaretPositionerPopover";
 import { TextInputCaretPositionerMoveAndResizeState } from "./TextInputCaretPositionerMoveAndResizeView";
 import TrmrkBackDrop from "../backDrop/TrmrkBackDrop";
 
+import { ICON_BUTTONS_COUNT } from "./TextInputCaretPositionerMoveAndResizeView";
+
 export interface TextInputCaretPositioningToolProps {
   appBarSelectors: AppBarSelectors;
   appBarReducers: AppBarReducers;
@@ -37,8 +39,10 @@ export const updateCurrentInputEl = (appDataReducers: AppDataReducers, dispatch:
 }
 
 export const ICON_BTN_SIZE_PX = 40;
-export const ICON_BTN_PADD_PX = 3;
-export const ICON_BTN_MIN_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX + ICON_BTN_PADD_PX * 2;
+export const ICON_BTN_HALF_SIZE_PX = ICON_BTN_SIZE_PX / 2;
+export const BORDER_WIDTH_PX = 3;
+export const MIN_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX + BORDER_WIDTH_PX * 2;
+export const MAX_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX * ICON_BUTTONS_COUNT + BORDER_WIDTH_PX * 2;
 
 export default function TextInputCaretPositioningTool(props: TextInputCaretPositioningToolProps) {
   const mainElRef = React.useRef<HTMLElement | null>(null);
@@ -58,6 +62,9 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
   const lastMoveOrResizeTouchStartOrMouseDownCoordsRef = React.useRef<TouchOrMouseCoords | null>(null);
   const lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef = React.useRef<HtmlElementRectangle | null>(null);
+
+  const rowsCountRef = React.useRef(0);
+  const colsCountRef = React.useRef(0);
 
   const dispatch = useDispatch();
 
@@ -162,81 +169,98 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     if (isMoveAndResizeMode) {
 
       const mainEl = mainElRef.current;
-      const lastMoveOrResizeTouchStartOrMouseDownCoords = lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current;
-      const lastMoveOrResizeTouchStartOrMouseDownMainElCoords = lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current;
+      const baseEvtCoords = lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current;
+      const mainElCoords = lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current;
 
-      if (mainEl && lastMoveOrResizeTouchStartOrMouseDownCoords && lastMoveOrResizeTouchStartOrMouseDownMainElCoords && (moveAndResizeModeState ?? null) !== null) {
+      if (mainEl && baseEvtCoords && mainElCoords && (moveAndResizeModeState ?? null) !== null) {
         const mainElStyle = mainEl.style;
-        const diffX = coords.pageX - lastMoveOrResizeTouchStartOrMouseDownCoords.pageX;
-        const diffY = coords.pageY - lastMoveOrResizeTouchStartOrMouseDownCoords.pageY;
+        const diffX = coords.pageX - baseEvtCoords.pageX;
+        const diffY = coords.pageY - baseEvtCoords.pageY;
 
         if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.Moving) {
-          const newOffsetLeft = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetLeft + diffX;
-          const newOffsetTop = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetTop + diffY;
+          const newOffsetLeft = mainElCoords.offsetLeft + diffX;
+          const newOffsetTop = mainElCoords.offsetTop + diffY;
 
           mainElStyle.top = `${newOffsetTop}px`;
           mainElStyle.left = `${newOffsetLeft}px`;
         }
         else {
-          let newOffsetLeft: number;
-          let newOffsetTop: number;
           let newWidth: number;
           let newHeight: number;
-          let newHeightIncr: number;
-          let newWidthIncr: number;
+          let newOffsetLeft: number;
+          let newOffsetTop: number;
+          let newRowsCount: number;
+          let newColsCount: number;
 
-          switch (moveAndResizeModeState) {
-            case TextInputCaretPositionerMoveAndResizeState.ResizingFromTop:
-              newOffsetTop = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetTop + diffY;
-              newHeight = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.height - diffY;
+          const isVertResize = [
+            TextInputCaretPositionerMoveAndResizeState.ResizingFromTop,
+            TextInputCaretPositionerMoveAndResizeState.ResizingFromBottom
+          ].indexOf(moveAndResizeModeState!) >= 0;
 
-              newHeightIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newHeight;
+          if (isVertResize) {
+            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop) {
+              newHeight = mainElCoords.height - diffY;
+            } else {
+              newHeight = mainElCoords.height + diffY;
+            }
 
-              if (newHeightIncr > 0) {
-                newHeight += newHeightIncr;
-                newOffsetTop -= newHeightIncr;
-              }
+            newHeight = Math.max(MIN_TOTAL_SIZE_PX, Math.min(MAX_TOTAL_SIZE_PX, newHeight));
+            newColsCount = (newHeight - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX;
+            newRowsCount = ICON_BUTTONS_COUNT / newColsCount;
+            newWidth = newRowsCount * ICON_BTN_SIZE_PX + 2 * BORDER_WIDTH_PX;
+            
+            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop) {
+              const newHeightDiff = newHeight - mainElCoords.height;
+              newOffsetTop = mainElCoords.offsetTop - newHeightDiff;
+            } else {
+              newOffsetTop = mainElCoords.offsetTop;
+            }
+            
+            const offsetLeftShifted = coords.pageX + ICON_BTN_HALF_SIZE_PX;
+            const newOffsetRightShifted = mainElCoords.offsetLeft + newWidth - ICON_BTN_HALF_SIZE_PX;
 
-              mainElStyle.top = `${newOffsetTop}px`;
-              mainElStyle.height = `${newHeight}px`;
-              break;
-            case TextInputCaretPositionerMoveAndResizeState.ResizingFromBottom:
-              newHeight = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.height + diffY;
+            if (offsetLeftShifted < mainElCoords.offsetLeft) {
+              newOffsetLeft = offsetLeftShifted;
+            } else if (offsetLeftShifted > newOffsetRightShifted) {
+              newOffsetLeft = newOffsetRightShifted;
+            } else {
+              newOffsetLeft = mainElCoords.offsetLeft;
+            }
+          } else {
+            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft) {
+              newWidth = mainElCoords.width - diffX;
+            } else {
+              newWidth = mainElCoords.width + diffX;
+            }
 
-              newHeightIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newHeight;
+            newWidth = Math.max(MIN_TOTAL_SIZE_PX, Math.min(MAX_TOTAL_SIZE_PX, newWidth));
+            newRowsCount = (newWidth - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX;
+            newColsCount = ICON_BUTTONS_COUNT / newRowsCount;
+            newHeight = newColsCount * ICON_BTN_SIZE_PX + 2 * BORDER_WIDTH_PX;
+            
+            if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft) {
+              const newWidthDiff = newWidth - mainElCoords.width;
+              newOffsetLeft = mainElCoords.offsetLeft - newWidthDiff;
+            } else {
+              newOffsetLeft = mainElCoords.offsetLeft;
+            }
 
-              if (newHeightIncr > 0) {
-                newHeight += newHeightIncr;
-              }
+            const offsetTopShifted = coords.pageY + ICON_BTN_HALF_SIZE_PX;
+            const newOffsetBottomShifted = mainElCoords.offsetTop + newHeight - ICON_BTN_HALF_SIZE_PX
 
-              mainElStyle.height = `${newHeight}px`;
-              break;
-            case TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft:
-              newOffsetLeft = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.offsetLeft + diffX;
-              newWidth = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.width - diffX;
-
-              newWidthIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newWidth;
-
-              if (newWidthIncr > 0) {
-                newWidth += newWidthIncr;
-                newOffsetLeft = newWidthIncr;
-              }
-
-              mainElStyle.left = `${newOffsetLeft}px`;
-              mainElStyle.width = `${newWidth}px`;
-              break;
-            case TextInputCaretPositionerMoveAndResizeState.ResizingFromRight:
-              newWidth = lastMoveOrResizeTouchStartOrMouseDownMainElCoords.width + diffX;
-
-              newWidthIncr = ICON_BTN_MIN_TOTAL_SIZE_PX - newWidth;
-
-              if (newWidthIncr > 0) {
-                newWidth += newWidthIncr;
-              }
-
-              mainElStyle.width = `${newWidth}px`;
-              break;
+            if (offsetTopShifted < mainElCoords.offsetTop) {
+              newOffsetTop = offsetTopShifted;
+            } else if (offsetTopShifted > newOffsetBottomShifted) {
+              newOffsetTop = newOffsetBottomShifted;
+            } else {
+              newOffsetTop = mainElCoords.offsetTop;
+            }
           }
+
+          mainElStyle.top = `${newOffsetTop}px`;
+          mainElStyle.left = `${newOffsetLeft}px`;
+          mainElStyle.width = `${newWidth}px`;
+          mainElStyle.height = `${newHeight}px`;
         }
       }
     }
@@ -247,7 +271,9 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
-      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      rowsCountRef,
+      colsCountRef,
   ]);
 
   const onBackDropTouchEndOrMouseUp = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {

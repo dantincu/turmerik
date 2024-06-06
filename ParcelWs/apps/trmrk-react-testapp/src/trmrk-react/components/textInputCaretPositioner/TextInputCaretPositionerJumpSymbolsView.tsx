@@ -240,6 +240,7 @@ export default function TextInputCaretPositionerJumpSymbolsView(
     jumpNextCharX3BtnElem]);
 
   return (<div className="trmrk-view trmrk-jump-symbols-view">
+    <IconButton className="trmrk-icon-btn" />
     <IconButton className="trmrk-icon-btn trmrk-next-view-icon-btn"
       onClick={onNextViewIconBtnClick}
       onTouchEnd={onNextViewIconBtnClick}><ViewColumnIcon /></IconButton>
