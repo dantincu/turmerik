@@ -234,8 +234,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
             
             if (coords.pageX < mainElRectngl.left) {
               newOffsetLeft = coords.pageX;
-            } else if (coords.pageX > mainElRectngl.left + mainElRectngl.width) {
-              newOffsetLeft = coords.pageX - mainElRectngl.width;
+            } else if (coords.pageX > mainElRectngl.left + newWidth) {
+              newOffsetLeft = coords.pageX - newWidth;
             } else {
               newOffsetLeft = mainElRectngl.left;
             }
@@ -268,8 +268,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
             if (coords.pageY < mainElRectngl.top) {
               newOffsetTop = coords.pageY;
-            } else if (coords.pageY > mainElRectngl.top + mainElRectngl.height) {
-              newOffsetTop = coords.pageY - mainElRectngl.height;
+            } else if (coords.pageY > mainElRectngl.top + newHeight) {
+              newOffsetTop = coords.pageY - newHeight;
             } else {
               newOffsetTop = mainElRectngl.top;
             }
@@ -302,7 +302,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       onBackDropTouchOrMouseMove(ev, coords);
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = null;
-      setMoveAndResizeModeState(null);
+      setMoveAndResizeModeState(TextInputCaretPositionerMoveAndResizeState.Pending);
     }
   }, [
       mainElRef,
@@ -351,7 +351,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeStateChanged={moveAndResizeStatusChanged}
       keepOpenToggled={onKeepOpenToggled}
       onMainElTouchOrMouseMove={onBackDropTouchOrMouseMove}
-      onMainElTouchStartOrMouseUp={onBackDropTouchEndOrMouseUp}
+      onMainElTouchEndOrMouseUp={onBackDropTouchEndOrMouseUp}
       closeClicked={onDisabled} /></React.Fragment> : null }
   </React.Fragment>);
 }

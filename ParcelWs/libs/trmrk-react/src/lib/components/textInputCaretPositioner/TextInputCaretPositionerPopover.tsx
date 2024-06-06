@@ -54,9 +54,9 @@ export interface TextInputCaretPositionerPopoverProps {
     moveAndResizeState: TextInputCaretPositionerMoveAndResizeState,
     ev: React.TouchEvent | React.MouseEvent,
     coords: TouchOrMouseCoords) => void;
-  onMainElTouchStartOrMouseUp?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onMainElTouchStartOrMouseDown?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onMainElTouchOrMouseMove?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
-  onMainElTouchEndOrMouseDown?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onMainElTouchEndOrMouseUp?: ((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   closeClicked?: (() => void) | null | undefined;
 }
 
@@ -854,14 +854,14 @@ export default function TextInputCaretPositionerPopover(
       setMoveAndResizeStatePropsVal(moveAndResizeStateNewVal);
     }
 
-    const onMainElTouchStartOrMouseUp = (e: TouchEvent | MouseEvent) => {
+    const onMainElTouchStartOrMouseDown = (e: TouchEvent | MouseEvent) => {
       e.preventDefault();
 
-      if (props.onMainElTouchStartOrMouseUp) {
+      if (props.onMainElTouchStartOrMouseDown) {
         const coords = getSingleTouchOrClick(e);
 
         if (coords) {
-          props.onMainElTouchStartOrMouseUp(e, coords);
+          props.onMainElTouchStartOrMouseDown(e, coords);
         }
       }
     }
@@ -878,24 +878,24 @@ export default function TextInputCaretPositionerPopover(
       }
     }
 
-    const onMainElTouchEndOrMouseDown = (e: TouchEvent | MouseEvent) => {
+    const onMainElTouchEndOrMouseUp = (e: TouchEvent | MouseEvent) => {
       e.preventDefault();
 
-      if (props.onMainElTouchEndOrMouseDown) {
+      if (props.onMainElTouchEndOrMouseUp) {
         const coords = getSingleTouchOrClick(e);
 
         if (coords) {
-          props.onMainElTouchEndOrMouseDown(e, coords);
+          props.onMainElTouchEndOrMouseUp(e, coords);
         }
       }
     }
 
     if (mainEl) {
-      mainEl.addEventListener("touchstart", onMainElTouchStartOrMouseUp, {
+      mainEl.addEventListener("touchstart", onMainElTouchStartOrMouseDown, {
         capture: true
       });
 
-      mainEl.addEventListener("mouseup", onMainElTouchStartOrMouseUp, {
+      mainEl.addEventListener("mousedown", onMainElTouchStartOrMouseDown, {
         capture: true
       });
 
@@ -907,22 +907,22 @@ export default function TextInputCaretPositionerPopover(
         capture: true
       });
 
-      mainEl.addEventListener("touchend", onMainElTouchEndOrMouseDown, {
+      mainEl.addEventListener("touchend", onMainElTouchEndOrMouseUp, {
         capture: true
       });
 
-      mainEl.addEventListener("mousedown", onMainElTouchEndOrMouseDown, {
+      mainEl.addEventListener("mouseup", onMainElTouchEndOrMouseUp, {
         capture: true
       });
     }
 
     return () => {
       if (mainEl) {
-        mainEl.removeEventListener("touchstart", onMainElTouchStartOrMouseUp, {
+        mainEl.removeEventListener("touchstart", onMainElTouchStartOrMouseDown, {
           capture: true
         });
 
-        mainEl.removeEventListener("mouseup", onMainElTouchStartOrMouseUp, {
+        mainEl.removeEventListener("mousedown", onMainElTouchStartOrMouseDown, {
           capture: true
         });
 
@@ -934,11 +934,11 @@ export default function TextInputCaretPositionerPopover(
           capture: true
         });
 
-        mainEl.removeEventListener("touchend", onMainElTouchEndOrMouseDown, {
+        mainEl.removeEventListener("touchend", onMainElTouchEndOrMouseUp, {
           capture: true
         });
 
-        mainEl.removeEventListener("mousedown", onMainElTouchEndOrMouseDown, {
+        mainEl.removeEventListener("mouseup", onMainElTouchEndOrMouseUp, {
           capture: true
         });
       }
