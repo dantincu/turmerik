@@ -174,13 +174,18 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       const baseMainElCoords = lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current;
 
       if (mainEl && baseEvtCoords && baseMainElCoords && (moveAndResizeModeState ?? null) !== null) {
+        const viewPortWidth = window.innerWidth;
+        const viewPortHeight = window.innerHeight;
         const mainElStyle = mainEl.style;
         const diffX = coords.pageX - baseEvtCoords.pageX;
         const diffY = coords.pageY - baseEvtCoords.pageY;
 
         if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.Moving) {
-          const newOffsetLeft = baseMainElCoords.offsetLeft + diffX;
-          const newOffsetTop = baseMainElCoords.offsetTop + diffY;
+          let newOffsetLeft = baseMainElCoords.offsetLeft + diffX;
+          let newOffsetTop = baseMainElCoords.offsetTop + diffY;
+
+          newOffsetLeft = Math.max(0, Math.min(newOffsetLeft, viewPortWidth - baseMainElCoords.width));
+          newOffsetTop = Math.max(0, Math.min(newOffsetTop, viewPortHeight - baseMainElCoords.height));
 
           mainElStyle.top = `${newOffsetTop}px`;
           mainElStyle.left = `${newOffsetLeft}px`;
@@ -269,6 +274,9 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
               newOffsetTop = mainElRectngl.top;
             }
           }
+
+          newOffsetLeft = Math.max(0, Math.min(newOffsetLeft, viewPortWidth));
+          newOffsetTop = Math.max(0, Math.min(newOffsetTop, viewPortHeight));
 
           mainElStyle.top = `${newOffsetTop}px`;
           mainElStyle.left = `${newOffsetLeft}px`;
