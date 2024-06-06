@@ -216,8 +216,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
               newHeight = MAX_TOTAL_SIZE_PX;
             }
 
-            newColsCount = (newHeight - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX;
-            newRowsCount = ICON_BUTTONS_COUNT / newColsCount;
+            newColsCount = Math.floor((newHeight - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX);
+            newRowsCount = Math.ceil(ICON_BUTTONS_COUNT / newColsCount);
             newWidth = newRowsCount * ICON_BTN_SIZE_PX + 2 * BORDER_WIDTH_PX;
             
             if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop) {
@@ -250,8 +250,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
               newWidth = MAX_TOTAL_SIZE_PX;
             }
 
-            newRowsCount = (newWidth - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX;
-            newColsCount = ICON_BUTTONS_COUNT / newRowsCount;
+            newRowsCount = Math.floor((newWidth - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX);
+            newColsCount = Math.ceil(ICON_BUTTONS_COUNT / newRowsCount);
             newHeight = newColsCount * ICON_BTN_SIZE_PX + 2 * BORDER_WIDTH_PX;
             
             if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft) {
