@@ -6,14 +6,19 @@ export const pxRegex = () => /px/i;
 export const emRegex = () => /px/i;
 export const remRegex = () => /px/i;
 
-export interface HtmlElementRectangle {
+export interface HtmlElementRectangleCore {
   offsetLeft: number;
   offsetTop: number;
   width: number;
   height: number;
 }
 
-export interface HtmlElementBounds extends HtmlElementRectangle {
+export interface HtmlElementRectangle extends HtmlElementRectangleCore {
+  offsetRight: number;
+  offsetBottom: number;
+}
+
+export interface HtmlElementBounds extends HtmlElementRectangleCore {
   totalOffsetLeft: number;
   totalOffsetTop: number;
   totalRenderedOffsetLeft: number;

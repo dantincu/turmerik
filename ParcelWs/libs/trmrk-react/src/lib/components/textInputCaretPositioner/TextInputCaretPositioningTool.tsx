@@ -39,7 +39,6 @@ export const updateCurrentInputEl = (appDataReducers: AppDataReducers, dispatch:
 }
 
 export const ICON_BTN_SIZE_PX = 40;
-export const ICON_BTN_HALF_SIZE_PX = ICON_BTN_SIZE_PX / 2;
 export const BORDER_WIDTH_PX = 3;
 export const MIN_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX + BORDER_WIDTH_PX * 2;
 export const MAX_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX * ICON_BUTTONS_COUNT + BORDER_WIDTH_PX * 2;
@@ -114,8 +113,10 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       const mainElRectngl = mainEl.getBoundingClientRect();
 
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = {
-        offsetTop: mainElRectngl.top,
         offsetLeft: mainElRectngl.left,
+        offsetTop: mainElRectngl.top,
+        offsetRight: mainElRectngl.left + mainElRectngl.width,
+        offsetBottom: mainElRectngl.top + mainElRectngl.height,
         width: mainElRectngl.width,
         height: mainElRectngl.height
       };
@@ -170,21 +171,23 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
       const mainEl = mainElRef.current;
       const baseEvtCoords = lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current;
-      const mainElCoords = lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current;
+      const baseMainElCoords = lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current;
 
-      if (mainEl && baseEvtCoords && mainElCoords && (moveAndResizeModeState ?? null) !== null) {
+      if (mainEl && baseEvtCoords && baseMainElCoords && (moveAndResizeModeState ?? null) !== null) {
         const mainElStyle = mainEl.style;
         const diffX = coords.pageX - baseEvtCoords.pageX;
         const diffY = coords.pageY - baseEvtCoords.pageY;
 
         if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.Moving) {
-          const newOffsetLeft = mainElCoords.offsetLeft + diffX;
-          const newOffsetTop = mainElCoords.offsetTop + diffY;
+          const newOffsetLeft = baseMainElCoords.offsetLeft + diffX;
+          const newOffsetTop = baseMainElCoords.offsetTop + diffY;
 
           mainElStyle.top = `${newOffsetTop}px`;
           mainElStyle.left = `${newOffsetLeft}px`;
         }
-        else {
+        else if (moveAndResizeModeState! > 0) {
+          const mainElRectngl = mainEl.getBoundingClientRect();
+
           let newWidth: number;
           let newHeight: number;
           let newOffsetLeft: number;
@@ -199,61 +202,71 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
           if (isVertResize) {
             if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop) {
-              newHeight = mainElCoords.height - diffY;
+              newHeight = baseMainElCoords.height - diffY;
             } else {
-              newHeight = mainElCoords.height + diffY;
+              newHeight = baseMainElCoords.height + diffY;
             }
 
-            newHeight = Math.max(MIN_TOTAL_SIZE_PX, Math.min(MAX_TOTAL_SIZE_PX, newHeight));
+            const diffToMinHeight = newHeight - MIN_TOTAL_SIZE_PX;
+            const diffToMaxHeight = MAX_TOTAL_SIZE_PX - newHeight;
+
+            if (diffToMinHeight < 0) {
+              newHeight = MIN_TOTAL_SIZE_PX;
+            } else if (diffToMaxHeight < 0) {
+              newHeight = MAX_TOTAL_SIZE_PX;
+            }
+
             newColsCount = (newHeight - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX;
             newRowsCount = ICON_BUTTONS_COUNT / newColsCount;
             newWidth = newRowsCount * ICON_BTN_SIZE_PX + 2 * BORDER_WIDTH_PX;
             
             if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromTop) {
-              const newHeightDiff = newHeight - mainElCoords.height;
-              newOffsetTop = mainElCoords.offsetTop - newHeightDiff;
+              const newHeightDiff = newHeight - baseMainElCoords.height;
+              newOffsetTop = baseMainElCoords.offsetTop - newHeightDiff;
             } else {
-              newOffsetTop = mainElCoords.offsetTop;
+              newOffsetTop = baseMainElCoords.offsetTop;
             }
             
-            const offsetLeftShifted = coords.pageX + ICON_BTN_HALF_SIZE_PX;
-            const newOffsetRightShifted = mainElCoords.offsetLeft + newWidth - ICON_BTN_HALF_SIZE_PX;
-
-            if (offsetLeftShifted < mainElCoords.offsetLeft) {
-              newOffsetLeft = offsetLeftShifted;
-            } else if (offsetLeftShifted > newOffsetRightShifted) {
-              newOffsetLeft = newOffsetRightShifted;
+            if (coords.pageX < mainElRectngl.left) {
+              newOffsetLeft = coords.pageX;
+            } else if (coords.pageX > mainElRectngl.left + mainElRectngl.width) {
+              newOffsetLeft = coords.pageX - mainElRectngl.width;
             } else {
-              newOffsetLeft = mainElCoords.offsetLeft;
+              newOffsetLeft = mainElRectngl.left;
             }
           } else {
             if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft) {
-              newWidth = mainElCoords.width - diffX;
+              newWidth = baseMainElCoords.width - diffX;
             } else {
-              newWidth = mainElCoords.width + diffX;
+              newWidth = baseMainElCoords.width + diffX;
             }
 
-            newWidth = Math.max(MIN_TOTAL_SIZE_PX, Math.min(MAX_TOTAL_SIZE_PX, newWidth));
+            const diffToMinWidth = newWidth - MIN_TOTAL_SIZE_PX;
+            const diffToMaxWidth = MAX_TOTAL_SIZE_PX - newWidth;
+
+            if (diffToMinWidth < 0) {
+              newWidth = MIN_TOTAL_SIZE_PX;
+            } else if (diffToMaxWidth < 0) {
+              newWidth = MAX_TOTAL_SIZE_PX;
+            }
+
             newRowsCount = (newWidth - 2 * BORDER_WIDTH_PX) / ICON_BTN_SIZE_PX;
             newColsCount = ICON_BUTTONS_COUNT / newRowsCount;
             newHeight = newColsCount * ICON_BTN_SIZE_PX + 2 * BORDER_WIDTH_PX;
             
             if (moveAndResizeModeState === TextInputCaretPositionerMoveAndResizeState.ResizingFromLeft) {
-              const newWidthDiff = newWidth - mainElCoords.width;
-              newOffsetLeft = mainElCoords.offsetLeft - newWidthDiff;
+              const newWidthDiff = newWidth - baseMainElCoords.width;
+              newOffsetLeft = baseMainElCoords.offsetLeft - newWidthDiff;
             } else {
-              newOffsetLeft = mainElCoords.offsetLeft;
+              newOffsetLeft = baseMainElCoords.offsetLeft;
             }
 
-            const offsetTopShifted = coords.pageY + ICON_BTN_HALF_SIZE_PX;
-            const newOffsetBottomShifted = mainElCoords.offsetTop + newHeight - ICON_BTN_HALF_SIZE_PX
-
-            if (offsetTopShifted < mainElCoords.offsetTop) {
-              newOffsetTop = offsetTopShifted;
-            } else if (offsetTopShifted > newOffsetBottomShifted) {
-              newOffsetTop = newOffsetBottomShifted;
+            if (coords.pageY < mainElRectngl.top) {
+              newOffsetTop = coords.pageY;
+            } else if (coords.pageY > mainElRectngl.top + mainElRectngl.height) {
+              newOffsetTop = coords.pageY - mainElRectngl.height;
             } else {
-              newOffsetTop = mainElCoords.offsetTop;
+              newOffsetTop = mainElRectngl.top;
             }
           }
 
