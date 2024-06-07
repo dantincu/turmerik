@@ -6,6 +6,13 @@ export const pxRegex = () => /px/i;
 export const emRegex = () => /px/i;
 export const remRegex = () => /px/i;
 
+export interface HtmlElementStyleRectangleCore {
+  left: number | null | undefined;
+  top: number | null | undefined;
+  width: number | null | undefined;
+  height: number | null | undefined;
+}
+
 export interface HtmlElementRectangleCore {
   offsetLeft: number;
   offsetTop: number;
@@ -13,10 +20,7 @@ export interface HtmlElementRectangleCore {
   height: number;
 }
 
-export interface HtmlElementRectangle extends HtmlElementRectangleCore {
-  offsetRight: number;
-  offsetBottom: number;
-}
+export interface HtmlElementRectangle extends HtmlElementRectangleCore {}
 
 export interface HtmlElementBounds extends HtmlElementRectangleCore {
   totalOffsetLeft: number;
@@ -176,4 +180,29 @@ export const extractNumberFromCssPropVal = (
   }
 
   return pxCount;
+};
+
+export const applyRectnglProps = (
+  elemStyle: CSSStyleDeclaration,
+  rectnglCssProps: HtmlElementStyleRectangleCore
+) => {
+  trmrk.actWithValIf(
+    rectnglCssProps.top,
+    (val) => (elemStyle.top = `${val}px`)
+  );
+
+  trmrk.actWithValIf(
+    rectnglCssProps.left,
+    (val) => (elemStyle.left = `${val}px`)
+  );
+
+  trmrk.actWithValIf(
+    rectnglCssProps.width,
+    (val) => (elemStyle.width = `${val}px`)
+  );
+
+  trmrk.actWithValIf(
+    rectnglCssProps.height,
+    (val) => (elemStyle.height = `${val}px`)
+  );
 };

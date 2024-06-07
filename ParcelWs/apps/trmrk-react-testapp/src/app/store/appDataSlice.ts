@@ -13,7 +13,10 @@ import {
   getInitialState,
 } from "../../trmrk-react/redux/appData";
 
-const trmrk_dom_utils = trmrk_browser.domUtils.default;
+import {
+  TextCaretPositionerSize,
+  TextCaretPositionerViewPortOffset,
+} from "../../trmrk-browser/textCaretPositioner/core";
 
 const appDataSlice = createSlice({
   name: "appData",
@@ -43,6 +46,42 @@ const appDataSlice = createSlice({
     incTextCaretPositionerCurrentInputElLastSetOpIdx: (state) => {
       state.textCaretPositionerOpts.currentInputElLastSetOpIdx++;
     },
+    setTextCaretPositionerSize: (
+      state,
+      action: ReducerAction<TextCaretPositionerSize>
+    ) => {
+      state.textCaretPositionerOpts.size = action.payload;
+    },
+    setTextCaretPositionerWidth: (
+      state,
+      action: ReducerAction<number | null | undefined>
+    ) => {
+      state.textCaretPositionerOpts.size.width = action.payload;
+    },
+    setTextCaretPositionerHeight: (
+      state,
+      action: ReducerAction<number | null | undefined>
+    ) => {
+      state.textCaretPositionerOpts.size.height = action.payload;
+    },
+    setTextCaretPositionerViewPortOffset: (
+      state,
+      action: ReducerAction<TextCaretPositionerViewPortOffset>
+    ) => {
+      state.textCaretPositionerOpts.viewPortOffset = action.payload;
+    },
+    setTextCaretPositionerViewPortOffsetTop: (
+      state,
+      action: ReducerAction<number | null | undefined>
+    ) => {
+      state.textCaretPositionerOpts.viewPortOffset.top = action.payload;
+    },
+    setTextCaretPositionerViewPortOffsetLeft: (
+      state,
+      action: ReducerAction<number | null | undefined>
+    ) => {
+      state.textCaretPositionerOpts.viewPortOffset.left = action.payload;
+    },
   },
   selectors: {
     getBaseLocation: (appData) => appData.baseLocation,
@@ -56,6 +95,18 @@ const appDataSlice = createSlice({
       appData.textCaretPositionerOpts.keepOpen,
     getTextCaretPositionerCurrentInputElLastSetOpIdx: (appData) =>
       appData.textCaretPositionerOpts.currentInputElLastSetOpIdx,
+    getTextCaretPositionerSize: (appData) =>
+      appData.textCaretPositionerOpts.size,
+    getTextCaretPositionerWidth: (appData) =>
+      appData.textCaretPositionerOpts.size.width,
+    getTextCaretPositionerHeight: (appData) =>
+      appData.textCaretPositionerOpts.size.height,
+    getTextCaretPositionerViewPortOffset: (appData) =>
+      appData.textCaretPositionerOpts.viewPortOffset,
+    getTextCaretPositionerViewPortOffsetTop: (appData) =>
+      appData.textCaretPositionerOpts.viewPortOffset.top,
+    getTextCaretPositionerViewPortOffsetLeft: (appData) =>
+      appData.textCaretPositionerOpts.viewPortOffset.left,
   },
 });
 
@@ -67,6 +118,12 @@ const {
   setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
+  setTextCaretPositionerSize,
+  setTextCaretPositionerWidth,
+  setTextCaretPositionerHeight,
+  setTextCaretPositionerViewPortOffset,
+  setTextCaretPositionerViewPortOffsetTop,
+  setTextCaretPositionerViewPortOffsetLeft,
 } = appDataSlice.actions;
 
 const {
@@ -78,6 +135,12 @@ const {
   getTextCaretPositionerEnabled,
   getTextCaretPositionerKeepOpen,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
+  getTextCaretPositionerSize,
+  getTextCaretPositionerWidth,
+  getTextCaretPositionerHeight,
+  getTextCaretPositionerViewPortOffset,
+  getTextCaretPositionerViewPortOffsetTop,
+  getTextCaretPositionerViewPortOffsetLeft,
 } = appDataSlice.selectors;
 
 export const appDataReducers: AppDataReducers = {
@@ -88,6 +151,12 @@ export const appDataReducers: AppDataReducers = {
   setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
+  setTextCaretPositionerSize,
+  setTextCaretPositionerWidth,
+  setTextCaretPositionerHeight,
+  setTextCaretPositionerViewPortOffset,
+  setTextCaretPositionerViewPortOffsetTop,
+  setTextCaretPositionerViewPortOffsetLeft,
 };
 
 export const appDataSelectors: AppDataSelectors = {
@@ -99,6 +168,12 @@ export const appDataSelectors: AppDataSelectors = {
   getTextCaretPositionerEnabled,
   getTextCaretPositionerKeepOpen,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
+  getTextCaretPositionerSize,
+  getTextCaretPositionerWidth,
+  getTextCaretPositionerHeight,
+  getTextCaretPositionerViewPortOffset,
+  getTextCaretPositionerViewPortOffsetTop,
+  getTextCaretPositionerViewPortOffsetLeft,
 };
 
 export default appDataSlice.reducer;

@@ -386,7 +386,7 @@ export const withValIf = <TIn, TOut>(
   defaultValueFactory: (input: TIn) => TOut,
   defaultInputPredicate?: ((input: TIn) => boolean) | null | undefined
 ) => {
-  defaultInputPredicate ??= (input) => !input;
+  defaultInputPredicate ??= (input) => (input ?? null) === null;
   let retVal: TOut;
 
   if (defaultInputPredicate(inVal)) {
@@ -407,7 +407,7 @@ export const actWithValIf = <TVal>(
     | undefined = null,
   defaultInputPredicate?: ((input: TVal) => boolean) | null | undefined
 ) => {
-  defaultInputPredicate ??= (input) => !input;
+  defaultInputPredicate ??= (input) => (input ?? null) === null;
 
   if (defaultInputPredicate(inVal)) {
     if (defaultAction) {

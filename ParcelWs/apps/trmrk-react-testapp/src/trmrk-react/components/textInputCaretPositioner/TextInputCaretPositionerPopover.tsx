@@ -175,7 +175,11 @@ export default function TextInputCaretPositionerPopover(
     normalizeLinesJumpSpeedsArr(props.linesJumpSpeedsArr));
 
   const withBorderAnimatorElems = React.useCallback((
-    callback: (topBorderAnimatorEl: HTMLElement, bottomBorderAnimatorEl: HTMLElement, leftBorderAnimatorEl: HTMLElement, rightBorderAnimatorEl: HTMLElement) => void
+    callback: (
+      topBorderAnimatorEl: HTMLElement,
+      bottomBorderAnimatorEl: HTMLElement,
+      leftBorderAnimatorEl: HTMLElement,
+      rightBorderAnimatorEl: HTMLElement) => void
   ) => {
     const topBorderAnimatorEl = topBorderAnimatorElRef.current;
     const bottomBorderAnimatorEl = bottomBorderAnimatorElRef.current;
@@ -1133,10 +1137,10 @@ export default function TextInputCaretPositionerPopover(
     inFrontOfAll ? "trmrk-in-front-of-all" : "",
     isMoveAndResizeModePropsVal ? "trmrk-is-move-and-resize-mode" : "" ].join(" ")} ref={el => mainElRef.current = el}>
       <div className="trmrk-text-input-caret-positioner">
+        { viewRetriever() }
         { isMoveAndResizeModePropsVal ? null : <IconButton className="trmrk-icon-btn trmrk-main-icon-btn"
           onMouseDown={mainBtnClicked}
           onTouchEnd={mainBtnClicked}><MatUIIcon iconName="highlight_text_cursor" /></IconButton> }
-        { viewRetriever() }
       </div>
       <div className="trmrk-popover-top-border">
         <div className="trmrk-animator" ref={el => topBorderAnimatorElRef.current = el}>&nbsp;</div>

@@ -5,6 +5,8 @@ import trmrk_dom_utils from "../../trmrk-browser/domUtils";
 
 import {
   TextCaretPositionerOptsCore,
+  TextCaretPositionerSize,
+  TextCaretPositionerViewPortOffset,
   TrmrkTextCaretPositionerOpts,
   deserializeTextCaretPositionerOptsFromLocalStorage,
   serializeTextCaretPositionerOptsToLocalStorage,
@@ -95,6 +97,60 @@ export interface AppDataSelectors {
   > & {
     unwrapped: (appData: AppData) => number;
   };
+  getTextCaretPositionerSize: Selector<
+    {
+      appData: AppData;
+    },
+    TextCaretPositionerSize,
+    []
+  > & {
+    unwrapped: (appData: AppData) => TextCaretPositionerSize;
+  };
+  getTextCaretPositionerWidth: Selector<
+    {
+      appData: AppData;
+    },
+    number | null | undefined,
+    []
+  > & {
+    unwrapped: (appData: AppData) => number | null | undefined;
+  };
+  getTextCaretPositionerHeight: Selector<
+    {
+      appData: AppData;
+    },
+    number | null | undefined,
+    []
+  > & {
+    unwrapped: (appData: AppData) => number | null | undefined;
+  };
+  getTextCaretPositionerViewPortOffset: Selector<
+    {
+      appData: AppData;
+    },
+    TextCaretPositionerViewPortOffset,
+    []
+  > & {
+    unwrapped: (appData: AppData) => TextCaretPositionerViewPortOffset;
+  };
+  getTextCaretPositionerViewPortOffsetTop: Selector<
+    {
+      appData: AppData;
+    },
+    number | null | undefined,
+    []
+  > & {
+    unwrapped: (appData: AppData) => number | null | undefined;
+  };
+  getTextCaretPositionerViewPortOffsetLeft: Selector<
+    {
+      appData: AppData;
+    },
+    number | null | undefined,
+    []
+  > & {
+    unwrapped: (appData: AppData) => number | null | undefined;
+  };
 }
 
 export interface AppDataReducers {
@@ -123,6 +179,30 @@ export interface AppDataReducers {
     void,
     "appData/incTextCaretPositionerCurrentInputElLastSetOpIdx"
   >;
+  setTextCaretPositionerSize: ActionCreatorWithPayload<
+    TextCaretPositionerSize,
+    "appData/setTextCaretPositionerSize"
+  >;
+  setTextCaretPositionerWidth: ActionCreatorWithPayload<
+    number | null | undefined,
+    "appData/setTextCaretPositionerWidth"
+  >;
+  setTextCaretPositionerHeight: ActionCreatorWithPayload<
+    number | null | undefined,
+    "appData/setTextCaretPositionerHeight"
+  >;
+  setTextCaretPositionerViewPortOffset: ActionCreatorWithPayload<
+    TextCaretPositionerViewPortOffset,
+    "appData/setTextCaretPositionerViewPortOffset"
+  >;
+  setTextCaretPositionerViewPortOffsetTop: ActionCreatorWithPayload<
+    number | null | undefined,
+    "appData/setTextCaretPositionerViewPortOffsetTop"
+  >;
+  setTextCaretPositionerViewPortOffsetLeft: ActionCreatorWithPayload<
+    number | null | undefined,
+    "appData/setTextCaretPositionerViewPortOffsetLeft"
+  >;
 }
 
 export const getTextCaretPositionerOptsFromLocalStorage = (
@@ -130,10 +210,19 @@ export const getTextCaretPositionerOptsFromLocalStorage = (
 ) => {
   const textCaretPositionerOptsSrlzbl =
     deserializeTextCaretPositionerOptsFromLocalStorage(
-      textCaretPositionerOptsKey
+      textCaretPositionerOptsKey,
+      { value: null }
     ) ?? {
       enabled: false,
       keepOpen: false,
+      viewPortOffset: {
+        top: null,
+        left: null,
+      },
+      size: {
+        width: null,
+        height: null,
+      },
     };
 
   const textCaretPositionerOpts: TextCaretPositionerOpts = {

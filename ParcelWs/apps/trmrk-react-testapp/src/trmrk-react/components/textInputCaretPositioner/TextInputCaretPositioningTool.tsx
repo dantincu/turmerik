@@ -7,12 +7,12 @@ import Box from "@mui/material/Box";
 import Input from "@mui/material/Input";
 import Checkbox from '@mui/material/Checkbox';
 
-import { MtblRefValue } from "../../../trmrk/core";
+import { MtblRefValue, ValueOrAnyOrVoid } from "../../../trmrk/core";
 import { extractTextInput } from "../../../trmrk-browser/domUtils/textInput";
 import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
-import { HtmlElementRectangle, extractNumberFromCssPropVal } from "../../../trmrk-browser/domUtils/getDomElemBounds";
+import { HtmlElementRectangle, applyRectnglProps } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
-import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
+import { AppDataSelectors, AppDataReducers, TextCaretPositionerOpts } from "../../redux/appData";
 
 import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
 
@@ -21,8 +21,10 @@ import { TextInputCaretPositionerMoveAndResizeState } from "./TextInputCaretPosi
 import TrmrkBackDrop from "../backDrop/TrmrkBackDrop";
 
 import { ICON_BUTTONS_COUNT } from "./TextInputCaretPositionerMoveAndResizeView";
+import { appDataReducers } from "../../../app/store/appDataSlice";
 
 export interface TextInputCaretPositioningToolProps {
+  sessionStorageSerializedOptsKey?: string | null | undefined;
   appBarSelectors: AppBarSelectors;
   appBarReducers: AppBarReducers;
   appDataSelectors: AppDataSelectors;
@@ -43,6 +45,69 @@ export const BORDER_WIDTH_PX = 3;
 export const MIN_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX + BORDER_WIDTH_PX * 2;
 export const MAX_TOTAL_SIZE_PX = ICON_BTN_SIZE_PX * ICON_BUTTONS_COUNT + BORDER_WIDTH_PX * 2;
 
+export const disableTextCaretPositioner = (
+  textCaretPositionerOpts: TextCaretPositionerOpts,
+  sessionStorageSerializedOptsKey: string | null | undefined
+) => updateTextCaretPositionerSizeAndOffset({
+  ...textCaretPositionerOpts,
+  enabled: false
+}, sessionStorageSerializedOptsKey, null);
+
+export const enableTextCaretPositioner = (
+  textCaretPositionerOpts: TextCaretPositionerOpts,
+  sessionStorageSerializedOptsKey: string | null | undefined
+) => updateTextCaretPositionerOpts(() => ({
+    ...textCaretPositionerOpts,
+    enabled: true
+  }), sessionStorageSerializedOptsKey);
+
+export const toggleTextCaretPositioner = (
+    textCaretPositionerOpts: TextCaretPositionerOpts,
+    sessionStorageSerializedOptsKey: string | null | undefined,
+    textCaretPositionerEnabled: boolean) => {
+  let newTextCaretPositionerOpts: TextCaretPositionerOpts;
+  if (!textCaretPositionerEnabled) {
+    newTextCaretPositionerOpts = disableTextCaretPositioner(textCaretPositionerOpts, sessionStorageSerializedOptsKey);
+  } else {
+    newTextCaretPositionerOpts = enableTextCaretPositioner(textCaretPositionerOpts, sessionStorageSerializedOptsKey);
+  }
+
+  return newTextCaretPositionerOpts;
+}
+
+export const updateTextCaretPositionerSizeAndOffset = (
+  textCaretPositionerOpts: TextCaretPositionerOpts,
+  sessionStorageSerializedOptsKey: string | null | undefined,
+  currentMainElCoords: HtmlElementRectangle | null) => updateTextCaretPositionerOpts(
+    () => ({
+      ...textCaretPositionerOpts,
+      size: {
+        width: currentMainElCoords?.width,
+        height: currentMainElCoords?.height
+      },
+      viewPortOffset: {
+        top: currentMainElCoords?.offsetTop,
+        left: currentMainElCoords?.offsetLeft
+      }
+    }),
+    sessionStorageSerializedOptsKey,
+  );
+
+export const updateTextCaretPositionerOpts = (
+  newOptsFactory: () => TextCaretPositionerOpts,
+  sessionStorageSerializedOptsKey: string | null | undefined,) => {
+
+  const newTextCaretPositionerOpts = newOptsFactory();
+
+  if (sessionStorageSerializedOptsKey !== "") {
+    serializeTextCaretPositionerOptsToLocalStorage(
+      newTextCaretPositionerOpts,
+      sessionStorageSerializedOptsKey);
+  }
+
+  return newTextCaretPositionerOpts;
+}
+
 export default function TextInputCaretPositioningTool(props: TextInputCaretPositioningToolProps) {
   const mainElRef = React.useRef<HTMLElement | null>(null);
 
@@ -61,6 +126,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
   const lastMoveOrResizeTouchStartOrMouseDownCoordsRef = React.useRef<TouchOrMouseCoords | null>(null);
   const lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef = React.useRef<HtmlElementRectangle | null>(null);
+  const currentMainElCoordsRef = React.useRef<HtmlElementRectangle | null>(null);
 
   const rowsCountRef = React.useRef(0);
   const colsCountRef = React.useRef(0);
@@ -74,20 +140,24 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
 
-    serializeTextCaretPositionerOptsToLocalStorage({
+    updateTextCaretPositionerOpts(() => ({
       ...textCaretPositionerOpts,
-      keepOpen: keepOpen
-    });
-  }, []);
+        keepOpen: keepOpen
+      }),
+      props.sessionStorageSerializedOptsKey);
+  }, [props.sessionStorageSerializedOptsKey, textCaretPositionerOpts]);
 
   const onDisabled = React.useCallback(() => {
     dispatch(props.appDataReducers.setTextCaretPositionerEnabled(false));
-    
-    serializeTextCaretPositionerOptsToLocalStorage({
-      ...textCaretPositionerOpts,
-      enabled: false
-    });
-  }, []);
+
+    const newTextCaretPositionerOpts = disableTextCaretPositioner(
+      textCaretPositionerOpts, props.sessionStorageSerializedOptsKey
+    );
+
+    console.log("newTextCaretPositionerOpts", newTextCaretPositionerOpts);
+
+    dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+  }, [props.sessionStorageSerializedOptsKey, textCaretPositionerOpts]);
 
   const isFullViewPortModeToggled = React.useCallback((isFullViewPortMode: boolean) => {
     setIsFullViewPortMode(isFullViewPortMode);
@@ -112,14 +182,15 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = coords;
       const mainElRectngl = mainEl.getBoundingClientRect();
 
-      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = {
+      const currentMainElCoords = {
         offsetLeft: mainElRectngl.left,
         offsetTop: mainElRectngl.top,
-        offsetRight: mainElRectngl.left + mainElRectngl.width,
-        offsetBottom: mainElRectngl.top + mainElRectngl.height,
         width: mainElRectngl.width,
         height: mainElRectngl.height
       };
+
+      currentMainElCoordsRef.current = currentMainElCoords;
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = currentMainElCoords;
 
       setMoveAndResizeModeState(moveAndResizeState);
     }
@@ -130,12 +201,24 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
-      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef]);
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef]);
 
   const onToggleBackDrop = React.useCallback((showBackDrop: boolean) => {
     setShowBackDrop(showBackDrop);
-
+    
     if (!showBackDrop) {
+      const currentMainElCoords = currentMainElCoordsRef.current;
+
+      if (currentMainElCoords) {
+        updateTextCaretPositionerSizeAndOffset(
+          textCaretPositionerOpts,
+          props.sessionStorageSerializedOptsKey,
+          currentMainElCoordsRef.current!);
+          
+        currentMainElCoordsRef.current = null;
+      }
+
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = null;
       
@@ -151,7 +234,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
-      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
   ]);
 
   const onBackDropTouchOrClick = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
@@ -163,7 +247,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
-      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
   ]);
 
   const onBackDropTouchOrMouseMove = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
@@ -172,8 +257,9 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       const mainEl = mainElRef.current;
       const baseEvtCoords = lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current;
       const baseMainElCoords = lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current;
+      const currentMainElCoords = currentMainElCoordsRef.current;
 
-      if (mainEl && baseEvtCoords && baseMainElCoords && (moveAndResizeModeState ?? null) !== null) {
+      if (mainEl && baseEvtCoords && baseMainElCoords && currentMainElCoords && (moveAndResizeModeState ?? null) !== null) {
         const viewPortWidth = window.innerWidth;
         const viewPortHeight = window.innerHeight;
         const mainElStyle = mainEl.style;
@@ -186,6 +272,12 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
           newOffsetLeft = Math.max(0, Math.min(newOffsetLeft, viewPortWidth - baseMainElCoords.width));
           newOffsetTop = Math.max(0, Math.min(newOffsetTop, viewPortHeight - baseMainElCoords.height));
+
+          currentMainElCoordsRef.current = {
+            ...currentMainElCoords,
+            offsetTop: newOffsetTop,
+            offsetLeft: newOffsetLeft
+          };
 
           mainElStyle.top = `${newOffsetTop}px`;
           mainElStyle.left = `${newOffsetLeft}px`;
@@ -278,6 +370,13 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
           newOffsetLeft = Math.max(0, Math.min(newOffsetLeft, viewPortWidth));
           newOffsetTop = Math.max(0, Math.min(newOffsetTop, viewPortHeight));
 
+          currentMainElCoordsRef.current = {
+            offsetTop: newOffsetTop,
+            offsetLeft: newOffsetLeft,
+            width: newWidth,
+            height: newHeight
+          }
+
           mainElStyle.top = `${newOffsetTop}px`;
           mainElStyle.left = `${newOffsetLeft}px`;
           mainElStyle.width = `${newWidth}px`;
@@ -293,6 +392,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef,
       rowsCountRef,
       colsCountRef,
   ]);
@@ -300,22 +400,50 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   const onBackDropTouchEndOrMouseUp = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     if (isMoveAndResizeMode) {
       onBackDropTouchOrMouseMove(ev, coords);
+      const currentMainElCoords = currentMainElCoordsRef.current;
+
+      if (currentMainElCoords) {
+        const newTextCaretPositionerOpts = updateTextCaretPositionerSizeAndOffset(
+          textCaretPositionerOpts,
+          props.sessionStorageSerializedOptsKey,
+          currentMainElCoords);
+        
+        currentMainElCoordsRef.current = null;
+        dispatch(appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+      }
+
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef.current = null;
       setMoveAndResizeModeState(TextInputCaretPositionerMoveAndResizeState.Pending);
     }
   }, [
+      props.sessionStorageSerializedOptsKey,
       mainElRef,
       isFullViewPortMode,
       isMoveAndResizeMode,
       moveAndResizeModeState,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
-      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
   ]);
 
   React.useEffect(() => {
+    const mainEl = mainElRef.current;
+
+    if (mainEl) {
+      const viewPortOffset = textCaretPositionerOpts.viewPortOffset;
+      const size = textCaretPositionerOpts.size;
+
+      applyRectnglProps(mainEl.style, {
+        width: size.width,
+        height: size.height,
+        top: viewPortOffset.top,
+        left: viewPortOffset.left
+      });
+    }
     }, [
+      props.sessionStorageSerializedOptsKey,
       mainElRef,
       currentInputElMtblRef.value,
       isFullViewPortMode,
@@ -328,7 +456,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       isAnyMenuOpen,
       currentInputElLastSetOpIdx,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
-      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
     ]);
   return (<React.Fragment>
     { ((currentInputElMtblRef.value || keepOpen) && isEnabled) ? <React.Fragment>

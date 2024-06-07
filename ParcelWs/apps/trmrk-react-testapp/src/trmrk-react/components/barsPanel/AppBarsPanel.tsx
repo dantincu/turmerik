@@ -22,15 +22,17 @@ import { appModeCssClass, getAppModeCssClassName,
   setIsCompactModeToLocalStorage,
   setIsDarkModeToLocalStorage } from "../../../trmrk-browser/domUtils/core";
 
-import { isAndroid, isIPad, isIPhone, isIPadOrIphone, isMobile } from "../../../trmrk-browser/domUtils/constants";
+import { isAndroid, isIPad, isIPhone, isMobile } from "../../../trmrk-browser/domUtils/constants";
 
 import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
+import { toggleTextCaretPositioner } from "../textInputCaretPositioner/TextInputCaretPositioningTool";
 
 import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
 
 export interface AppBarsPanelProps {
   basePath: string;
+  sessionStorageSerializedOptsKey?: string | null | undefined;
   onPanelElems?: ((elems: BarsPanelElems) => void) | null | undefined;
   panelClassName?: string | null | undefined;
   appBarSelectors: AppBarSelectors;
@@ -183,13 +185,13 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
   }, []);
 
   const handleTextCaretPositionerEnabledToggled = React.useCallback((textCaretPositionerEnabled: boolean) => {
-    dispatch(props.appDataReducers.setTextCaretPositionerEnabled(textCaretPositionerEnabled));
-    
-    serializeTextCaretPositionerOptsToLocalStorage({
-      ...textCaretPositionerOpts,
-      enabled: textCaretPositionerEnabled
-    });
-  }, []);
+    const newTextCaretPositionerOpts =  toggleTextCaretPositioner(
+      textCaretPositionerOpts,
+      props.sessionStorageSerializedOptsKey,
+      textCaretPositionerEnabled);
+
+    dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+  }, [props.sessionStorageSerializedOptsKey, textCaretPositionerOpts]);
 
   const handleTextCaretPositionerKeepOpenToggled = React.useCallback((textCaretPositionerKeepOpen: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(textCaretPositionerKeepOpen));
@@ -220,6 +222,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
 
   React.useEffect(() => {
   }, [
+    props.sessionStorageSerializedOptsKey,
     showAppHeader,
     showAppFooter,
     showAppHeaderToggleBtn,
