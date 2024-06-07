@@ -15,6 +15,7 @@ export interface TextCaretPositionerViewPortOffset {
 export interface TextCaretPositionerOptsCore {
   enabled: boolean;
   keepOpen: boolean;
+  minimized: boolean;
   size: TextCaretPositionerSize;
   viewPortOffset: TextCaretPositionerViewPortOffset;
 }

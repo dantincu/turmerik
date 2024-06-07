@@ -88,6 +88,15 @@ export interface AppDataSelectors {
   > & {
     unwrapped: (appData: AppData) => boolean;
   };
+  getTextCaretPositionerMinimized: Selector<
+    {
+      appData: AppData;
+    },
+    boolean,
+    []
+  > & {
+    unwrapped: (appData: AppData) => boolean;
+  };
   getTextCaretPositionerCurrentInputElLastSetOpIdx: Selector<
     {
       appData: AppData;
@@ -171,6 +180,10 @@ export interface AppDataReducers {
     boolean,
     "appData/setTextCaretPositionerKeepOpen"
   >;
+  setTextCaretPositionerMinimized: ActionCreatorWithPayload<
+    boolean,
+    "appData/setTextCaretPositionerMinimized"
+  >;
   setTextCaretPositionerOpts: ActionCreatorWithPayload<
     TextCaretPositionerOpts,
     "appData/setTextCaretPositionerOpts"
@@ -215,6 +228,7 @@ export const getTextCaretPositionerOptsFromLocalStorage = (
     ) ?? {
       enabled: false,
       keepOpen: false,
+      minimized: false,
       viewPortOffset: {
         top: null,
         left: null,

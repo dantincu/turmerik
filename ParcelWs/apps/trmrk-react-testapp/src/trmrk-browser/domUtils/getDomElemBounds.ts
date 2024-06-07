@@ -182,27 +182,78 @@ export const extractNumberFromCssPropVal = (
   return pxCount;
 };
 
+export const applyCssPropValIfReq = <TPropVal>(
+  elemStyle: CSSStyleDeclaration,
+  cssPropVal: TPropVal,
+  cssPropValAssigner: (elemStyle: CSSStyleDeclaration, propVal: string) => void,
+  cssPropValSerializer:
+    | ((propVal: TPropVal) => string)
+    | null
+    | undefined = null,
+  defaultCssPropValSerializer:
+    | ((propVal: TPropVal) => string | null)
+    | null
+    | undefined = null
+) => {
+  cssPropValSerializer ??= (propVal) => `${propVal}`;
+  defaultCssPropValSerializer ??= () => null;
+
+  trmrk.actWithValIf(
+    cssPropVal,
+    (val) => cssPropValAssigner(elemStyle, cssPropValSerializer(val)),
+    (val) => {
+      const dfVal = defaultCssPropValSerializer(val);
+      if ((dfVal ?? null) !== null) {
+        cssPropValAssigner(elemStyle, "");
+      }
+    }
+  );
+};
+
 export const applyRectnglProps = (
   elemStyle: CSSStyleDeclaration,
-  rectnglCssProps: HtmlElementStyleRectangleCore
+  rectnglCssProps: HtmlElementStyleRectangleCore,
+  clearPropsWhereNullOrUndef = false
 ) => {
-  trmrk.actWithValIf(
+  const cssPropValSerializer = (val: number | null | undefined) => `${val}px`;
+
+  let defaultCssPropValSerializer: (
+    val: number | null | undefined
+  ) => string | null;
+
+  defaultCssPropValSerializer = clearPropsWhereNullOrUndef
+    ? () => ""
+    : () => null;
+
+  applyCssPropValIfReq(
+    elemStyle,
     rectnglCssProps.top,
-    (val) => (elemStyle.top = `${val}px`)
+    (style, val) => (style.top = val),
+    cssPropValSerializer,
+    defaultCssPropValSerializer
   );
 
-  trmrk.actWithValIf(
+  applyCssPropValIfReq(
+    elemStyle,
     rectnglCssProps.left,
-    (val) => (elemStyle.left = `${val}px`)
+    (style, val) => (style.left = val),
+    cssPropValSerializer,
+    defaultCssPropValSerializer
   );
 
-  trmrk.actWithValIf(
+  applyCssPropValIfReq(
+    elemStyle,
     rectnglCssProps.width,
-    (val) => (elemStyle.width = `${val}px`)
+    (style, val) => (style.width = val),
+    cssPropValSerializer,
+    defaultCssPropValSerializer
   );
 
-  trmrk.actWithValIf(
+  applyCssPropValIfReq(
+    elemStyle,
     rectnglCssProps.height,
-    (val) => (elemStyle.height = `${val}px`)
+    (style, val) => (style.height = val),
+    cssPropValSerializer,
+    defaultCssPropValSerializer
   );
 };

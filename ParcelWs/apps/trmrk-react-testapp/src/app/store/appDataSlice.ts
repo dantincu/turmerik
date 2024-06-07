@@ -43,6 +43,12 @@ const appDataSlice = createSlice({
     setTextCaretPositionerKeepOpen: (state, action: ReducerAction<boolean>) => {
       state.textCaretPositionerOpts.keepOpen = action.payload;
     },
+    setTextCaretPositionerMinimized: (
+      state,
+      action: ReducerAction<boolean>
+    ) => {
+      state.textCaretPositionerOpts.minimized = action.payload;
+    },
     incTextCaretPositionerCurrentInputElLastSetOpIdx: (state) => {
       state.textCaretPositionerOpts.currentInputElLastSetOpIdx++;
     },
@@ -93,6 +99,8 @@ const appDataSlice = createSlice({
       appData.textCaretPositionerOpts.enabled,
     getTextCaretPositionerKeepOpen: (appData) =>
       appData.textCaretPositionerOpts.keepOpen,
+    getTextCaretPositionerMinimized: (appData) =>
+      appData.textCaretPositionerOpts.minimized,
     getTextCaretPositionerCurrentInputElLastSetOpIdx: (appData) =>
       appData.textCaretPositionerOpts.currentInputElLastSetOpIdx,
     getTextCaretPositionerSize: (appData) =>
@@ -117,6 +125,7 @@ const {
   setTextCaretPositionerKeepOpen,
   setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
+  setTextCaretPositionerMinimized,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
   setTextCaretPositionerSize,
   setTextCaretPositionerWidth,
@@ -132,6 +141,7 @@ const {
   getIsCompactMode,
   getIsDarkMode,
   getTextCaretPositionerOpts,
+  getTextCaretPositionerMinimized,
   getTextCaretPositionerEnabled,
   getTextCaretPositionerKeepOpen,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
@@ -150,6 +160,7 @@ export const appDataReducers: AppDataReducers = {
   setTextCaretPositionerKeepOpen,
   setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
+  setTextCaretPositionerMinimized,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
   setTextCaretPositionerSize,
   setTextCaretPositionerWidth,
@@ -167,6 +178,7 @@ export const appDataSelectors: AppDataSelectors = {
   getTextCaretPositionerOpts,
   getTextCaretPositionerEnabled,
   getTextCaretPositionerKeepOpen,
+  getTextCaretPositionerMinimized,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
   getTextCaretPositionerSize,
   getTextCaretPositionerWidth,

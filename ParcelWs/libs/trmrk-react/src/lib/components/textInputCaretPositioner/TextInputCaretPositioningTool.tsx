@@ -10,7 +10,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { MtblRefValue, ValueOrAnyOrVoid } from "../../../trmrk/core";
 import { extractTextInput } from "../../../trmrk-browser/domUtils/textInput";
 import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
-import { HtmlElementRectangle, applyRectnglProps } from "../../../trmrk-browser/domUtils/getDomElemBounds";
+import { HtmlElementRectangle, HtmlElementStyleRectangleCore, applyRectnglProps } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
 import { AppDataSelectors, AppDataReducers, TextCaretPositionerOpts } from "../../redux/appData";
 
@@ -118,6 +118,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
   const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
   const isEnabled = useSelector(props.appDataSelectors.getTextCaretPositionerEnabled);
+  const isMinimized = useSelector(props.appDataSelectors.getTextCaretPositionerMinimized);
   const keepOpen = useSelector(props.appDataSelectors.getTextCaretPositionerKeepOpen);
   const isAnyMenuOpen = useSelector(props.appBarSelectors.isAnyMenuOpen);
 
@@ -137,6 +138,16 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     mainElRef.current = el;
   }, [mainElRef]);
 
+  const minimizedToggled = React.useCallback((minimized: boolean) => {
+    dispatch(props.appDataReducers.setTextCaretPositionerMinimized(minimized));
+
+    updateTextCaretPositionerOpts(() => ({
+      ...textCaretPositionerOpts,
+        minimized: minimized
+      }),
+      props.sessionStorageSerializedOptsKey);
+  }, [isMinimized]);
+
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
     dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
 
@@ -153,8 +164,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     const newTextCaretPositionerOpts = disableTextCaretPositioner(
       textCaretPositionerOpts, props.sessionStorageSerializedOptsKey
     );
-
-    console.log("newTextCaretPositionerOpts", newTextCaretPositionerOpts);
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
   }, [props.sessionStorageSerializedOptsKey, textCaretPositionerOpts]);
@@ -214,7 +223,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
         updateTextCaretPositionerSizeAndOffset(
           textCaretPositionerOpts,
           props.sessionStorageSerializedOptsKey,
-          currentMainElCoordsRef.current!);
+          currentMainElCoords);
           
         currentMainElCoordsRef.current = null;
       }
@@ -435,12 +444,17 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       const viewPortOffset = textCaretPositionerOpts.viewPortOffset;
       const size = textCaretPositionerOpts.size;
 
-      applyRectnglProps(mainEl.style, {
-        width: size.width,
-        height: size.height,
+      const rectngl: HtmlElementStyleRectangleCore = {
         top: viewPortOffset.top,
         left: viewPortOffset.left
-      });
+      } as HtmlElementStyleRectangleCore;
+
+      if (!isMinimized) {
+        rectngl.width = size.width;
+        rectngl.height = size.height;
+      }
+
+      applyRectnglProps(mainEl.style, rectngl, true);
     }
     }, [
       props.sessionStorageSerializedOptsKey,
@@ -451,6 +465,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       showBackDrop,
       textCaretPositionerOpts,
+      isMinimized,
       isEnabled,
       keepOpen,
       isAnyMenuOpen,
@@ -471,10 +486,12 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       onMainEl={onMainEl}
       inputEl={currentInputElMtblRef.value}
       inFrontOfAll={!isAnyMenuOpen}
+      minimized={isMinimized}
       keepOpen={keepOpen}
       isFullViewPortMode={isFullViewPortMode}
       isMoveAndResizeMode={isMoveAndResizeMode}
       moveAndResizeState={moveAndResizeModeState}
+      minimizedToggled={minimizedToggled}
       isFullViewPortModeToggled={isFullViewPortModeToggled}
       isMoveAndResizeModeToggled={isMoveAndResizeModeToggled}
       moveAndResizeStateChanged={moveAndResizeStatusChanged}
