@@ -494,7 +494,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       inFrontOfAll={!isAnyMenuOpen}
       minimized={textCaretPositionerOpts.minimized}
       keepOpen={textCaretPositionerOpts.keepOpen}
-      isFullViewPortMode={isFullViewPortMode}
+      isForFullViewPortMode={isFullViewPortMode}
       isMoveAndResizeMode={isMoveAndResizeMode}
       moveAndResizeState={moveAndResizeModeState}
       minimizedToggled={minimizedToggled}

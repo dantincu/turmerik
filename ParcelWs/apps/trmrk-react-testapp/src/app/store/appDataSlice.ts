@@ -39,7 +39,7 @@ const appDataSlice = createSlice({
     },
     setFullViewPortTextCaretPositionerOpts: (
       state,
-      action: ReducerAction<TextCaretPositionerOptsCore>
+      action: ReducerAction<TextCaretPositionerOpts>
     ) => {
       state.fullViewPortTextCaretPositionerOpts = action.payload;
     },

@@ -21,7 +21,7 @@ export const positionerMoveBtnLongPressIntervalMs = 300;
 export interface TextInputCaretPositionerOptionsViewProps {
   showMoreOptions: boolean;
   keepOpen: boolean;
-  isFullViewPortMode: boolean;
+  isForFullViewPortMode: boolean;
   isMoveAndResizeMode: boolean;
   minimizeClicked: () => void;
   showMoreOptionsBtnClicked: (showMoreOptions: boolean) => void;
@@ -38,65 +38,67 @@ export default function TextInputCaretPositionerOptionsView(
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.minimizeClicked();
     }
-  }, [props.isFullViewPortMode]);
+  }, [props.isForFullViewPortMode]);
 
   const showMoreOptionsBtnClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.showMoreOptionsBtnClicked(!props.showMoreOptions);
     }
-  }, [props.showMoreOptions, props.isFullViewPortMode]);
+  }, [props.showMoreOptions, props.isForFullViewPortMode]);
 
   const keepOpenToggleBtnClick = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.keepOpenToggled(!props.keepOpen);
     }
-  }, [props.keepOpen, props.isFullViewPortMode]);
+  }, [props.keepOpen, props.isForFullViewPortMode]);
 
   const isFullViewPortModeToggleBtnClick = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
-      props.isFullViewPortModeToggled(!props.isFullViewPortMode);
+      props.isFullViewPortModeToggled(!props.isForFullViewPortMode);
     }
-  }, [props.isFullViewPortMode]);
+  }, [props.isForFullViewPortMode]);
 
   const isMoveAndResizeModeToggleBtnClick = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.isMoveAndResizeModeToggled(!props.isMoveAndResizeMode);
     }
-  }, [props.isFullViewPortMode]);
+  }, [props.isForFullViewPortMode]);
 
   const closeClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.closeClicked();
     }
-  }, [props.isFullViewPortMode]);
+  }, [props.isForFullViewPortMode]);
 
   React.useEffect(() => {
   }, [
     props.showMoreOptions,
     props.keepOpen,
-    props.isFullViewPortMode,
+    props.isForFullViewPortMode,
     props.isMoveAndResizeMode,
   ]);
 
   return (<div className="trmrk-view trmrk-options-view">
     <IconButton className="trmrk-icon-btn" />
-    <IconButton className="trmrk-icon-btn"
+    { props.isForFullViewPortMode ? null : <React.Fragment>
+      <IconButton className="trmrk-icon-btn"
         onMouseDown={minimizeClicked}
         onTouchEnd={minimizeClicked}>
-      <KeyboardDoubleArrowLeftIcon />
-    </IconButton>
-    <IconButton className={["trmrk-icon-btn", props.showMoreOptions ? "trmrk-is-activated" : ""].join(" ")}
-        onMouseDown={showMoreOptionsBtnClicked}
-        onTouchEnd={showMoreOptionsBtnClicked}>
-      <MoreVertIcon />
-    </IconButton>
-    { !props.showMoreOptions ? <React.Fragment>
+        <KeyboardDoubleArrowLeftIcon />
+      </IconButton>
+      <IconButton className={["trmrk-icon-btn", props.showMoreOptions ? "trmrk-is-activated" : ""].join(" ")}
+          onMouseDown={showMoreOptionsBtnClicked}
+          onTouchEnd={showMoreOptionsBtnClicked}>
+        <MoreVertIcon />
+      </IconButton>
+    </React.Fragment> }
+    { props.isForFullViewPortMode || !props.showMoreOptions ? <React.Fragment>
       <IconButton className={["trmrk-icon-btn", props.isMoveAndResizeMode ? "trmrk-is-activated" : ""].join(" ")}
           onMouseDown={isMoveAndResizeModeToggleBtnClick}
           onTouchStart={isMoveAndResizeModeToggleBtnClick}>
         <MatUIIcon iconName="drag_pan" />
       </IconButton>
-      <IconButton className={["trmrk-icon-btn", props.isFullViewPortMode ? "trmrk-is-activated" : ""].join(" ")}
+      <IconButton className={["trmrk-icon-btn"].join(" ")}
           onMouseDown={isFullViewPortModeToggleBtnClick}
           onTouchStart={isFullViewPortModeToggleBtnClick}>
         <MatUIIcon iconName="expand_content" />
