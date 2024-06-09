@@ -5,8 +5,6 @@ import trmrk_dom_utils from "../../trmrk-browser/domUtils";
 
 import {
   TextCaretPositionerOptsCore,
-  TextCaretPositionerSize,
-  TextCaretPositionerViewPortOffset,
   TrmrkTextCaretPositionerOpts,
   deserializeTextCaretPositionerOptsFromLocalStorage,
   serializeTextCaretPositionerOptsToLocalStorage,
@@ -22,6 +20,7 @@ export interface AppData {
   isDarkMode: boolean;
   isCompactMode: boolean;
   textCaretPositionerOpts: TextCaretPositionerOpts;
+  fullViewPortTextCaretPositionerOpts: TextCaretPositionerOpts;
 }
 
 export interface AppDataSelectors {
@@ -79,6 +78,15 @@ export interface AppDataSelectors {
   > & {
     unwrapped: (appData: AppData) => number;
   };
+  getFullViewPortTextCaretPositionerOpts: Selector<
+    {
+      appData: AppData;
+    },
+    TextCaretPositionerOpts,
+    []
+  > & {
+    unwrapped: (appData: AppData) => TextCaretPositionerOpts;
+  };
 }
 
 export interface AppDataReducers {
@@ -99,10 +107,14 @@ export interface AppDataReducers {
     void,
     "appData/incTextCaretPositionerCurrentInputElLastSetOpIdx"
   >;
+  setFullViewPortTextCaretPositionerOpts: ActionCreatorWithPayload<
+    TextCaretPositionerOpts,
+    "appData/setFullViewPortTextCaretPositionerOpts"
+  >;
 }
 
 export const getTextCaretPositionerOptsFromLocalStorage = (
-  textCaretPositionerOptsKey: string | null | undefined = null
+  textCaretPositionerOptsKey: boolean | string | null | undefined = null
 ) => {
   const textCaretPositionerOptsSrlzbl =
     deserializeTextCaretPositionerOptsFromLocalStorage(
@@ -132,7 +144,7 @@ export const getTextCaretPositionerOptsFromLocalStorage = (
 
 export const setTextCaretPositionerOptsToLocalStorage = (
   textCaretPositionerOpts: TextCaretPositionerOpts | null,
-  textCaretPositionerOptsKey: string | null | undefined = null
+  textCaretPositionerOptsKey: boolean | string | null | undefined = null
 ) => {
   let textCaretPositionerOptsSrlzbl: TrmrkTextCaretPositionerOpts | null = null;
 
@@ -154,4 +166,6 @@ export const getInitialState = (): AppData => ({
   isDarkMode: trmrk_dom_utils.isDarkMode(),
   isCompactMode: trmrk_dom_utils.isCompactMode(),
   textCaretPositionerOpts: getTextCaretPositionerOptsFromLocalStorage(),
+  fullViewPortTextCaretPositionerOpts:
+    getTextCaretPositionerOptsFromLocalStorage(true),
 });

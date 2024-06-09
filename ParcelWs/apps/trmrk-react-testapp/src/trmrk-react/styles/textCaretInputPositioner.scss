@@ -19,7 +19,7 @@
 }
 
 .trmrk-text-input-caret-positioner-popover-backdrop {
-  z-index: 999000;
+  z-index: 9000;
 }
 
 .trmrk-text-input-caret-positioner-popover {
@@ -36,7 +36,7 @@
   border-radius: 3px;
 
   &.trmrk-in-front-of-all {
-    z-index: 1000000;
+    z-index: 10000;
   }
 
   .trmrk-text-input-caret-positioner {

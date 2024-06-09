@@ -23,12 +23,31 @@ export interface TextCaretPositionerOptsCore {
 export interface TrmrkTextCaretPositionerOpts
   extends TextCaretPositionerOptsCore {}
 
+export const normalizeTextCaretPositionerOptsKey = (
+  textCaretPositionerOptsKey: boolean | string | null | undefined
+) => {
+  if (textCaretPositionerOptsKey === true) {
+    textCaretPositionerOptsKey =
+      localStorageKeys.fullViewPortTextCaretPositionerOpts;
+  } else if (textCaretPositionerOptsKey === false) {
+    textCaretPositionerOptsKey = localStorageKeys.textCaretPositionerOpts;
+  } else {
+    textCaretPositionerOptsKey ??= localStorageKeys.textCaretPositionerOpts;
+  }
+
+  return textCaretPositionerOptsKey;
+};
+
 export const deserializeTextCaretPositionerOptsFromLocalStorage = (
-  textCaretPositionerOptsKey: string | null | undefined = null,
+  textCaretPositionerOptsKey: boolean | string | null | undefined = null,
   parseErrorRef: MtblRefValue<unknown | any | null | undefined> | null = null
 ) => {
+  textCaretPositionerOptsKey = normalizeTextCaretPositionerOptsKey(
+    textCaretPositionerOptsKey
+  );
+
   const textCaretPositionerOptsJson = localStorage.getItem(
-    textCaretPositionerOptsKey ?? localStorageKeys.textCaretPositionerOpts
+    textCaretPositionerOptsKey
   );
 
   let textCaretPositionerOpts: TrmrkTextCaretPositionerOpts | null = null;
@@ -50,9 +69,11 @@ export const deserializeTextCaretPositionerOptsFromLocalStorage = (
 
 export const serializeTextCaretPositionerOptsToLocalStorage = (
   textCaretPositionerOpts: TrmrkTextCaretPositionerOpts | null,
-  textCaretPositionerOptsKey: string | null | undefined = null
+  textCaretPositionerOptsKey: boolean | string | null | undefined = null
 ) => {
-  textCaretPositionerOptsKey ??= localStorageKeys.textCaretPositionerOpts;
+  textCaretPositionerOptsKey = normalizeTextCaretPositionerOptsKey(
+    textCaretPositionerOptsKey
+  );
 
   if (textCaretPositionerOpts) {
     const textCaretPositionerOptsJson = JSON.stringify(

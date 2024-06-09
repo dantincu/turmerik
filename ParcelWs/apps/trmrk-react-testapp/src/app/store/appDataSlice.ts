@@ -13,10 +13,7 @@ import {
   getInitialState,
 } from "../../trmrk-react/redux/appData";
 
-import {
-  TextCaretPositionerSize,
-  TextCaretPositionerViewPortOffset,
-} from "../../trmrk-browser/textCaretPositioner/core";
+import { TextCaretPositionerOptsCore } from "../../trmrk-browser/textCaretPositioner/core";
 
 const appDataSlice = createSlice({
   name: "appData",
@@ -40,6 +37,12 @@ const appDataSlice = createSlice({
     incTextCaretPositionerCurrentInputElLastSetOpIdx: (state) => {
       state.textCaretPositionerOpts.currentInputElLastSetOpIdx++;
     },
+    setFullViewPortTextCaretPositionerOpts: (
+      state,
+      action: ReducerAction<TextCaretPositionerOptsCore>
+    ) => {
+      state.fullViewPortTextCaretPositionerOpts = action.payload;
+    },
   },
   selectors: {
     getBaseLocation: (appData) => appData.baseLocation,
@@ -49,6 +52,8 @@ const appDataSlice = createSlice({
     getTextCaretPositionerOpts: (appData) => appData.textCaretPositionerOpts,
     getTextCaretPositionerCurrentInputElLastSetOpIdx: (appData) =>
       appData.textCaretPositionerOpts.currentInputElLastSetOpIdx,
+    getFullViewPortTextCaretPositionerOpts: (appData) =>
+      appData.fullViewPortTextCaretPositionerOpts,
   },
 });
 
@@ -58,6 +63,7 @@ const {
   setIsDarkMode,
   setTextCaretPositionerOpts,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
+  setFullViewPortTextCaretPositionerOpts,
 } = appDataSlice.actions;
 
 const {
@@ -67,6 +73,7 @@ const {
   getIsDarkMode,
   getTextCaretPositionerOpts,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
+  getFullViewPortTextCaretPositionerOpts,
 } = appDataSlice.selectors;
 
 export const appDataReducers: AppDataReducers = {
@@ -75,6 +82,7 @@ export const appDataReducers: AppDataReducers = {
   setIsDarkMode,
   setTextCaretPositionerOpts,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
+  setFullViewPortTextCaretPositionerOpts,
 };
 
 export const appDataSelectors: AppDataSelectors = {
@@ -84,6 +92,7 @@ export const appDataSelectors: AppDataSelectors = {
   getIsDarkMode,
   getTextCaretPositionerOpts,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
+  getFullViewPortTextCaretPositionerOpts,
 };
 
 export default appDataSlice.reducer;

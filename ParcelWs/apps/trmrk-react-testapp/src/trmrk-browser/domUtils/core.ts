@@ -11,6 +11,7 @@ export const localStorageKeys = Object.freeze({
   appThemeIsDarkMode: "appThemeIsDarkMode",
   appIsCompactMode: "appIsCompactMode",
   textCaretPositionerOpts: "textCaretPositionerOpts",
+  fullViewPortTextCaretPositionerOpts: "fullViewPortTextCaretPositionerOpts",
 });
 
 export const appModeCssClasses = {
