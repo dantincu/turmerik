@@ -21,7 +21,6 @@ import { TextInputCaretPositionerMoveAndResizeState } from "./TextInputCaretPosi
 import TrmrkBackDrop from "../backDrop/TrmrkBackDrop";
 
 import { ICON_BUTTONS_COUNT } from "./TextInputCaretPositionerMoveAndResizeView";
-import { appDataReducers } from "../../../app/store/appDataSlice";
 
 export interface TextInputCaretPositioningToolProps {
   sessionStorageSerializedOptsKey?: string | null | undefined;
@@ -117,9 +116,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   const [ showBackDrop, setShowBackDrop ] = React.useState(false);
 
   const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
-  const isEnabled = useSelector(props.appDataSelectors.getTextCaretPositionerEnabled);
-  const isMinimized = useSelector(props.appDataSelectors.getTextCaretPositionerMinimized);
-  const keepOpen = useSelector(props.appDataSelectors.getTextCaretPositionerKeepOpen);
   const isAnyMenuOpen = useSelector(props.appBarSelectors.isAnyMenuOpen);
 
   const currentInputElLastSetOpIdx = useSelector(
@@ -139,17 +135,23 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   }, [mainElRef]);
 
   const minimizedToggled = React.useCallback((minimized: boolean) => {
-    dispatch(props.appDataReducers.setTextCaretPositionerMinimized(minimized));
+    dispatch(props.appDataReducers.setTextCaretPositionerOpts({
+      ...textCaretPositionerOpts,
+      minimized
+    }));
 
     updateTextCaretPositionerOpts(() => ({
       ...textCaretPositionerOpts,
-        minimized: minimized
+        minimized
       }),
       props.sessionStorageSerializedOptsKey);
-  }, [isMinimized]);
+  }, [textCaretPositionerOpts]);
 
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
-    dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(keepOpen));
+    dispatch(props.appDataReducers.setTextCaretPositionerOpts({
+      ...textCaretPositionerOpts,
+      keepOpen
+    }));
 
     updateTextCaretPositionerOpts(() => ({
       ...textCaretPositionerOpts,
@@ -159,7 +161,10 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   }, [props.sessionStorageSerializedOptsKey, textCaretPositionerOpts]);
 
   const onDisabled = React.useCallback(() => {
-    dispatch(props.appDataReducers.setTextCaretPositionerEnabled(false));
+    dispatch(props.appDataReducers.setTextCaretPositionerOpts({
+      ...textCaretPositionerOpts,
+      enabled: false
+    }));
 
     const newTextCaretPositionerOpts = disableTextCaretPositioner(
       textCaretPositionerOpts, props.sessionStorageSerializedOptsKey
@@ -418,7 +423,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
           currentMainElCoords);
         
         currentMainElCoordsRef.current = null;
-        dispatch(appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+        dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
       }
 
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
@@ -449,7 +454,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
         left: viewPortOffset.left
       } as HtmlElementStyleRectangleCore;
 
-      if (!isMinimized) {
+      if (!textCaretPositionerOpts.minimized) {
         rectngl.width = size.width;
         rectngl.height = size.height;
       }
@@ -465,9 +470,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       showBackDrop,
       textCaretPositionerOpts,
-      isMinimized,
-      isEnabled,
-      keepOpen,
       isAnyMenuOpen,
       currentInputElLastSetOpIdx,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
@@ -475,7 +477,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       currentMainElCoordsRef
     ]);
   return (<React.Fragment>
-    { ((currentInputElMtblRef.value || keepOpen) && isEnabled) ? <React.Fragment>
+    { ((currentInputElMtblRef.value || textCaretPositionerOpts.keepOpen) && textCaretPositionerOpts.enabled) ? <React.Fragment>
     { showBackDrop ? <TrmrkBackDrop
       className="trmrk-text-input-caret-positioner-popover-backdrop"
       preventDefaultOnTouchOrMouseEvts={true}
@@ -486,8 +488,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       onMainEl={onMainEl}
       inputEl={currentInputElMtblRef.value}
       inFrontOfAll={!isAnyMenuOpen}
-      minimized={isMinimized}
-      keepOpen={keepOpen}
+      minimized={textCaretPositionerOpts.minimized}
+      keepOpen={textCaretPositionerOpts.keepOpen}
       isFullViewPortMode={isFullViewPortMode}
       isMoveAndResizeMode={isMoveAndResizeMode}
       moveAndResizeState={moveAndResizeModeState}

@@ -66,8 +66,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
   const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
-  const textCaretPositionerEnabled = useSelector(props.appDataSelectors.getTextCaretPositionerEnabled);
-  const textCaretPositionerKeepOpen = useSelector(props.appDataSelectors.getTextCaretPositionerKeepOpen);
 
   const appSettingsMenuIsOpen = useSelector(
     props.appBarSelectors.getAppSettingsMenuIsOpen
@@ -194,13 +192,16 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
   }, [props.sessionStorageSerializedOptsKey, textCaretPositionerOpts]);
 
   const handleTextCaretPositionerKeepOpenToggled = React.useCallback((textCaretPositionerKeepOpen: boolean) => {
-    dispatch(props.appDataReducers.setTextCaretPositionerKeepOpen(textCaretPositionerKeepOpen));
+    dispatch(props.appDataReducers.setTextCaretPositionerOpts({
+      ...textCaretPositionerOpts,
+      keepOpen: textCaretPositionerKeepOpen
+    }));
 
     serializeTextCaretPositionerOptsToLocalStorage({
       ...textCaretPositionerOpts,
       keepOpen: textCaretPositionerKeepOpen
     });
-  }, []);
+  }, [textCaretPositionerOpts]);
   
   const appBarRefreshBtnClicked = React.useCallback(() => {
     if (props.appBarRefreshBtnClicked) {
@@ -230,8 +231,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     isCompactMode,
     isDarkMode,
     textCaretPositionerOpts,
-    textCaretPositionerEnabled,
-    textCaretPositionerKeepOpen,
     appSettingsMenuIsOpen,
     appearenceMenuIsOpen,
     textCaretPositionerMenuIsOpen,
@@ -296,8 +295,8 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
           menuListClassName={props.textCaretPositionerMenuListClassName}
           appTheme={appTheme}
           showMenu={textCaretPositionerMenuIsOpen}
-          enabled={textCaretPositionerEnabled}
-          keepOpen={textCaretPositionerKeepOpen}
+          enabled={textCaretPositionerOpts.enabled}
+          keepOpen={textCaretPositionerOpts.keepOpen}
           enabledToggled={handleTextCaretPositionerEnabledToggled}
           keepOpenToggled={handleTextCaretPositionerKeepOpenToggled}
           menuClosed={handleSettingsMenuClosed}

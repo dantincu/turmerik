@@ -70,33 +70,6 @@ export interface AppDataSelectors {
   > & {
     unwrapped: (appData: AppData) => TextCaretPositionerOpts;
   };
-  getTextCaretPositionerEnabled: Selector<
-    {
-      appData: AppData;
-    },
-    boolean,
-    []
-  > & {
-    unwrapped: (appData: AppData) => boolean;
-  };
-  getTextCaretPositionerKeepOpen: Selector<
-    {
-      appData: AppData;
-    },
-    boolean,
-    []
-  > & {
-    unwrapped: (appData: AppData) => boolean;
-  };
-  getTextCaretPositionerMinimized: Selector<
-    {
-      appData: AppData;
-    },
-    boolean,
-    []
-  > & {
-    unwrapped: (appData: AppData) => boolean;
-  };
   getTextCaretPositionerCurrentInputElLastSetOpIdx: Selector<
     {
       appData: AppData;
@@ -105,60 +78,6 @@ export interface AppDataSelectors {
     []
   > & {
     unwrapped: (appData: AppData) => number;
-  };
-  getTextCaretPositionerSize: Selector<
-    {
-      appData: AppData;
-    },
-    TextCaretPositionerSize,
-    []
-  > & {
-    unwrapped: (appData: AppData) => TextCaretPositionerSize;
-  };
-  getTextCaretPositionerWidth: Selector<
-    {
-      appData: AppData;
-    },
-    number | null | undefined,
-    []
-  > & {
-    unwrapped: (appData: AppData) => number | null | undefined;
-  };
-  getTextCaretPositionerHeight: Selector<
-    {
-      appData: AppData;
-    },
-    number | null | undefined,
-    []
-  > & {
-    unwrapped: (appData: AppData) => number | null | undefined;
-  };
-  getTextCaretPositionerViewPortOffset: Selector<
-    {
-      appData: AppData;
-    },
-    TextCaretPositionerViewPortOffset,
-    []
-  > & {
-    unwrapped: (appData: AppData) => TextCaretPositionerViewPortOffset;
-  };
-  getTextCaretPositionerViewPortOffsetTop: Selector<
-    {
-      appData: AppData;
-    },
-    number | null | undefined,
-    []
-  > & {
-    unwrapped: (appData: AppData) => number | null | undefined;
-  };
-  getTextCaretPositionerViewPortOffsetLeft: Selector<
-    {
-      appData: AppData;
-    },
-    number | null | undefined,
-    []
-  > & {
-    unwrapped: (appData: AppData) => number | null | undefined;
   };
 }
 
@@ -172,18 +91,6 @@ export interface AppDataReducers {
     "appData/setIsCompactMode"
   >;
   setIsDarkMode: ActionCreatorWithPayload<boolean, "appData/setIsDarkMode">;
-  setTextCaretPositionerEnabled: ActionCreatorWithPayload<
-    boolean,
-    "appData/setTextCaretPositionerEnabled"
-  >;
-  setTextCaretPositionerKeepOpen: ActionCreatorWithPayload<
-    boolean,
-    "appData/setTextCaretPositionerKeepOpen"
-  >;
-  setTextCaretPositionerMinimized: ActionCreatorWithPayload<
-    boolean,
-    "appData/setTextCaretPositionerMinimized"
-  >;
   setTextCaretPositionerOpts: ActionCreatorWithPayload<
     TextCaretPositionerOpts,
     "appData/setTextCaretPositionerOpts"
@@ -191,30 +98,6 @@ export interface AppDataReducers {
   incTextCaretPositionerCurrentInputElLastSetOpIdx: ActionCreatorWithPayload<
     void,
     "appData/incTextCaretPositionerCurrentInputElLastSetOpIdx"
-  >;
-  setTextCaretPositionerSize: ActionCreatorWithPayload<
-    TextCaretPositionerSize,
-    "appData/setTextCaretPositionerSize"
-  >;
-  setTextCaretPositionerWidth: ActionCreatorWithPayload<
-    number | null | undefined,
-    "appData/setTextCaretPositionerWidth"
-  >;
-  setTextCaretPositionerHeight: ActionCreatorWithPayload<
-    number | null | undefined,
-    "appData/setTextCaretPositionerHeight"
-  >;
-  setTextCaretPositionerViewPortOffset: ActionCreatorWithPayload<
-    TextCaretPositionerViewPortOffset,
-    "appData/setTextCaretPositionerViewPortOffset"
-  >;
-  setTextCaretPositionerViewPortOffsetTop: ActionCreatorWithPayload<
-    number | null | undefined,
-    "appData/setTextCaretPositionerViewPortOffsetTop"
-  >;
-  setTextCaretPositionerViewPortOffsetLeft: ActionCreatorWithPayload<
-    number | null | undefined,
-    "appData/setTextCaretPositionerViewPortOffsetLeft"
   >;
 }
 

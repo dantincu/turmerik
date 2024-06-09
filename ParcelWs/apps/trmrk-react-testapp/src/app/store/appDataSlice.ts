@@ -37,56 +37,8 @@ const appDataSlice = createSlice({
     ) => {
       state.textCaretPositionerOpts = action.payload;
     },
-    setTextCaretPositionerEnabled: (state, action: ReducerAction<boolean>) => {
-      state.textCaretPositionerOpts.enabled = action.payload;
-    },
-    setTextCaretPositionerKeepOpen: (state, action: ReducerAction<boolean>) => {
-      state.textCaretPositionerOpts.keepOpen = action.payload;
-    },
-    setTextCaretPositionerMinimized: (
-      state,
-      action: ReducerAction<boolean>
-    ) => {
-      state.textCaretPositionerOpts.minimized = action.payload;
-    },
     incTextCaretPositionerCurrentInputElLastSetOpIdx: (state) => {
       state.textCaretPositionerOpts.currentInputElLastSetOpIdx++;
-    },
-    setTextCaretPositionerSize: (
-      state,
-      action: ReducerAction<TextCaretPositionerSize>
-    ) => {
-      state.textCaretPositionerOpts.size = action.payload;
-    },
-    setTextCaretPositionerWidth: (
-      state,
-      action: ReducerAction<number | null | undefined>
-    ) => {
-      state.textCaretPositionerOpts.size.width = action.payload;
-    },
-    setTextCaretPositionerHeight: (
-      state,
-      action: ReducerAction<number | null | undefined>
-    ) => {
-      state.textCaretPositionerOpts.size.height = action.payload;
-    },
-    setTextCaretPositionerViewPortOffset: (
-      state,
-      action: ReducerAction<TextCaretPositionerViewPortOffset>
-    ) => {
-      state.textCaretPositionerOpts.viewPortOffset = action.payload;
-    },
-    setTextCaretPositionerViewPortOffsetTop: (
-      state,
-      action: ReducerAction<number | null | undefined>
-    ) => {
-      state.textCaretPositionerOpts.viewPortOffset.top = action.payload;
-    },
-    setTextCaretPositionerViewPortOffsetLeft: (
-      state,
-      action: ReducerAction<number | null | undefined>
-    ) => {
-      state.textCaretPositionerOpts.viewPortOffset.left = action.payload;
     },
   },
   selectors: {
@@ -95,26 +47,8 @@ const appDataSlice = createSlice({
     getIsDarkMode: (appData) => appData.isDarkMode,
     getIsCompactMode: (appData) => appData.isCompactMode,
     getTextCaretPositionerOpts: (appData) => appData.textCaretPositionerOpts,
-    getTextCaretPositionerEnabled: (appData) =>
-      appData.textCaretPositionerOpts.enabled,
-    getTextCaretPositionerKeepOpen: (appData) =>
-      appData.textCaretPositionerOpts.keepOpen,
-    getTextCaretPositionerMinimized: (appData) =>
-      appData.textCaretPositionerOpts.minimized,
     getTextCaretPositionerCurrentInputElLastSetOpIdx: (appData) =>
       appData.textCaretPositionerOpts.currentInputElLastSetOpIdx,
-    getTextCaretPositionerSize: (appData) =>
-      appData.textCaretPositionerOpts.size,
-    getTextCaretPositionerWidth: (appData) =>
-      appData.textCaretPositionerOpts.size.width,
-    getTextCaretPositionerHeight: (appData) =>
-      appData.textCaretPositionerOpts.size.height,
-    getTextCaretPositionerViewPortOffset: (appData) =>
-      appData.textCaretPositionerOpts.viewPortOffset,
-    getTextCaretPositionerViewPortOffsetTop: (appData) =>
-      appData.textCaretPositionerOpts.viewPortOffset.top,
-    getTextCaretPositionerViewPortOffsetLeft: (appData) =>
-      appData.textCaretPositionerOpts.viewPortOffset.left,
   },
 });
 
@@ -122,17 +56,8 @@ const {
   setCurrentUrlPath,
   setIsCompactMode,
   setIsDarkMode,
-  setTextCaretPositionerKeepOpen,
-  setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
-  setTextCaretPositionerMinimized,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
-  setTextCaretPositionerSize,
-  setTextCaretPositionerWidth,
-  setTextCaretPositionerHeight,
-  setTextCaretPositionerViewPortOffset,
-  setTextCaretPositionerViewPortOffsetTop,
-  setTextCaretPositionerViewPortOffsetLeft,
 } = appDataSlice.actions;
 
 const {
@@ -141,33 +66,15 @@ const {
   getIsCompactMode,
   getIsDarkMode,
   getTextCaretPositionerOpts,
-  getTextCaretPositionerMinimized,
-  getTextCaretPositionerEnabled,
-  getTextCaretPositionerKeepOpen,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
-  getTextCaretPositionerSize,
-  getTextCaretPositionerWidth,
-  getTextCaretPositionerHeight,
-  getTextCaretPositionerViewPortOffset,
-  getTextCaretPositionerViewPortOffsetTop,
-  getTextCaretPositionerViewPortOffsetLeft,
 } = appDataSlice.selectors;
 
 export const appDataReducers: AppDataReducers = {
   setCurrentUrlPath,
   setIsCompactMode,
   setIsDarkMode,
-  setTextCaretPositionerKeepOpen,
-  setTextCaretPositionerEnabled,
   setTextCaretPositionerOpts,
-  setTextCaretPositionerMinimized,
   incTextCaretPositionerCurrentInputElLastSetOpIdx,
-  setTextCaretPositionerSize,
-  setTextCaretPositionerWidth,
-  setTextCaretPositionerHeight,
-  setTextCaretPositionerViewPortOffset,
-  setTextCaretPositionerViewPortOffsetTop,
-  setTextCaretPositionerViewPortOffsetLeft,
 };
 
 export const appDataSelectors: AppDataSelectors = {
@@ -176,16 +83,7 @@ export const appDataSelectors: AppDataSelectors = {
   getIsCompactMode,
   getIsDarkMode,
   getTextCaretPositionerOpts,
-  getTextCaretPositionerEnabled,
-  getTextCaretPositionerKeepOpen,
-  getTextCaretPositionerMinimized,
   getTextCaretPositionerCurrentInputElLastSetOpIdx,
-  getTextCaretPositionerSize,
-  getTextCaretPositionerWidth,
-  getTextCaretPositionerHeight,
-  getTextCaretPositionerViewPortOffset,
-  getTextCaretPositionerViewPortOffsetTop,
-  getTextCaretPositionerViewPortOffsetLeft,
 };
 
 export default appDataSlice.reducer;
