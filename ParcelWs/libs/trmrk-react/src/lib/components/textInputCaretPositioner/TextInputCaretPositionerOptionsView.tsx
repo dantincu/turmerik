@@ -32,55 +32,55 @@ export interface TextInputCaretPositionerOptionsViewProps {
 }
 
 export default function TextInputCaretPositionerOptionsView(
-  props: TextInputCaretPositionerOptionsViewProps
+  { isForFullViewPortMode, ...props }: TextInputCaretPositionerOptionsViewProps
 ) {
   const minimizeClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.minimizeClicked();
     }
-  }, [props.isForFullViewPortMode]);
+  }, [isForFullViewPortMode]);
 
   const showMoreOptionsBtnClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.showMoreOptionsBtnClicked(!props.showMoreOptions);
     }
-  }, [props.showMoreOptions, props.isForFullViewPortMode]);
+  }, [props.showMoreOptions, isForFullViewPortMode]);
 
   const keepOpenToggleBtnClick = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.keepOpenToggled(!props.keepOpen);
     }
-  }, [props.keepOpen, props.isForFullViewPortMode]);
+  }, [props.keepOpen, isForFullViewPortMode]);
 
   const isFullViewPortModeToggleBtnClick = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
-      props.isFullViewPortModeToggled(!props.isForFullViewPortMode);
+      props.isFullViewPortModeToggled(!isForFullViewPortMode);
     }
-  }, [props.isForFullViewPortMode]);
+  }, [isForFullViewPortMode]);
 
   const isMoveAndResizeModeToggleBtnClick = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.isMoveAndResizeModeToggled(!props.isMoveAndResizeMode);
     }
-  }, [props.isForFullViewPortMode]);
+  }, [isForFullViewPortMode]);
 
   const closeClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.closeClicked();
     }
-  }, [props.isForFullViewPortMode]);
+  }, [isForFullViewPortMode]);
 
   React.useEffect(() => {
   }, [
     props.showMoreOptions,
     props.keepOpen,
-    props.isForFullViewPortMode,
     props.isMoveAndResizeMode,
+    isForFullViewPortMode
   ]);
 
   return (<div className="trmrk-view trmrk-options-view">
     <IconButton className="trmrk-icon-btn" />
-    { props.isForFullViewPortMode ? null : <React.Fragment>
+    { isForFullViewPortMode ? null : <React.Fragment>
       <IconButton className="trmrk-icon-btn"
         onMouseDown={minimizeClicked}
         onTouchEnd={minimizeClicked}>
@@ -92,17 +92,17 @@ export default function TextInputCaretPositionerOptionsView(
         <MoreVertIcon />
       </IconButton>
     </React.Fragment> }
-    { props.isForFullViewPortMode || !props.showMoreOptions ? <React.Fragment>
+    { isForFullViewPortMode || !props.showMoreOptions ? <React.Fragment>
       <IconButton className={["trmrk-icon-btn", props.isMoveAndResizeMode ? "trmrk-is-activated" : ""].join(" ")}
           onMouseDown={isMoveAndResizeModeToggleBtnClick}
           onTouchStart={isMoveAndResizeModeToggleBtnClick}>
         <MatUIIcon iconName="drag_pan" />
       </IconButton>
-      <IconButton className={["trmrk-icon-btn"].join(" ")}
+      { isForFullViewPortMode ? null : <IconButton className={["trmrk-icon-btn"].join(" ")}
           onMouseDown={isFullViewPortModeToggleBtnClick}
           onTouchStart={isFullViewPortModeToggleBtnClick}>
         <MatUIIcon iconName="expand_content" />
-      </IconButton>
+      </IconButton> }
     </React.Fragment> : <React.Fragment>
       <IconButton className={["trmrk-icon-btn", props.keepOpen ? "trmrk-is-activated" : ""].join(" ")}
           onMouseDown={keepOpenToggleBtnClick}

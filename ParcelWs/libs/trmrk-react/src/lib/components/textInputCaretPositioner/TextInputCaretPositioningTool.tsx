@@ -13,7 +13,7 @@ import { HtmlElementRectangle, HtmlElementStyleRectangleCore, applyRectnglProps 
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
 import { AppDataSelectors, AppDataReducers, TextCaretPositionerOpts } from "../../redux/appData";
 
-import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
+import { serializeTextCaretPositionerOptsToLocalStorage, TextCaretPositionerViewPortOffset, TextCaretPositionerSize } from "../../../trmrk-browser/textCaretPositioner/core";
 
 import TextInputCaretPositionerPopover from "./TextInputCaretPositionerPopover";
 import { TextInputCaretPositionerMoveAndResizeState } from "./TextInputCaretPositionerMoveAndResizeView";
@@ -226,6 +226,43 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       currentMainElCoordsRef]);
 
   const onToggleBackDrop = React.useCallback((showBackDrop: boolean) => {
+    onToggleBackDropCore(
+      textCaretPositionerOpts,
+      props.localStorageSerializedOptsKey,
+      showBackDrop);
+  }, [
+      mainElRef,
+      isFullViewPortMode,
+      isMoveAndResizeMode,
+      moveAndResizeModeState,
+      textCaretPositionerOpts,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
+  ]);
+
+  const onToggleFullViewPortBackDrop = React.useCallback((showBackDrop: boolean) => {
+    onToggleBackDropCore(
+      fullViewPortTextCaretPositionerOpts,
+      props.localStorageSerializedFullViewPortOptsKey,
+      showBackDrop);
+  }, [
+      mainElRef,
+      isFullViewPortMode,
+      isMoveAndResizeMode,
+      moveAndResizeModeState,
+      textCaretPositionerOpts,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
+  ]);
+
+  const onToggleBackDropCore = React.useCallback((
+    textCaretPositionerOpts: TextCaretPositionerOpts,
+    localStorageSerializedOptsKey: string | null | undefined,
+    showBackDrop: boolean) => {
     setShowBackDrop(showBackDrop);
     
     if (!showBackDrop) {
@@ -234,7 +271,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       if (currentMainElCoords) {
         updateTextCaretPositionerSizeAndOffset(
           textCaretPositionerOpts,
-          props.localStorageSerializedOptsKey,
+          localStorageSerializedOptsKey,
           currentMainElCoords);
           
         currentMainElCoordsRef.current = null;
@@ -253,6 +290,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       isFullViewPortMode,
       isMoveAndResizeMode,
       moveAndResizeModeState,
+      textCaretPositionerOpts,
+      fullViewPortTextCaretPositionerOpts,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -261,6 +300,19 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
   const onBackDropTouchOrClick = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     onToggleBackDrop(false);
+  }, [
+      mainElRef,
+      isFullViewPortMode,
+      isMoveAndResizeMode,
+      moveAndResizeModeState,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
+  ]);
+
+  const onFullViewPortBackDropTouchOrClick = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    onToggleFullViewPortBackDrop(false);
   }, [
       mainElRef,
       isFullViewPortMode,
@@ -416,18 +468,59 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
   ]);
 
   const onBackDropTouchEndOrMouseUp = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    onBackDropTouchEndOrMouseUpCore(false, ev, coords);
+  }, [
+      props.localStorageSerializedOptsKey,
+      props.localStorageSerializedFullViewPortOptsKey,
+      mainElRef,
+      isFullViewPortMode,
+      isMoveAndResizeMode,
+      moveAndResizeModeState,
+      textCaretPositionerOpts,
+      fullViewPortTextCaretPositionerOpts,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
+  ]);
+
+  const onFullViewPortBackDropTouchEndOrMouseUp = React.useCallback((ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
+    onBackDropTouchEndOrMouseUpCore(true, ev, coords);
+  }, [
+      props.localStorageSerializedOptsKey,
+      props.localStorageSerializedFullViewPortOptsKey,
+      mainElRef,
+      isFullViewPortMode,
+      isMoveAndResizeMode,
+      moveAndResizeModeState,
+      textCaretPositionerOpts,
+      fullViewPortTextCaretPositionerOpts,
+      showBackDrop,
+      lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
+      lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
+      currentMainElCoordsRef
+  ]);
+
+  const onBackDropTouchEndOrMouseUpCore = React.useCallback((
+    isForFullViewPort: boolean,
+    ev: TouchEvent | MouseEvent, coords: TouchOrMouseCoords) => {
     if (isMoveAndResizeMode) {
       onBackDropTouchOrMouseMove(ev, coords);
       const currentMainElCoords = currentMainElCoordsRef.current;
 
       if (currentMainElCoords) {
         const newTextCaretPositionerOpts = updateTextCaretPositionerSizeAndOffset(
-          textCaretPositionerOpts,
-          props.localStorageSerializedOptsKey,
+          isForFullViewPort ? fullViewPortTextCaretPositionerOpts : textCaretPositionerOpts,
+          isForFullViewPort ?  (props.localStorageSerializedFullViewPortOptsKey ?? true) : props.localStorageSerializedOptsKey,
           currentMainElCoords);
         
         currentMainElCoordsRef.current = null;
-        dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+
+        if (isForFullViewPort) {
+          dispatch(props.appDataReducers.setFullViewPortTextCaretPositionerOpts(newTextCaretPositionerOpts));
+        } else {
+          dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+        }
       }
 
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef.current = null;
@@ -436,10 +529,13 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     }
   }, [
       props.localStorageSerializedOptsKey,
+      props.localStorageSerializedFullViewPortOptsKey,
       mainElRef,
       isFullViewPortMode,
       isMoveAndResizeMode,
       moveAndResizeModeState,
+      textCaretPositionerOpts,
+      fullViewPortTextCaretPositionerOpts,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -450,15 +546,26 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     const mainEl = mainElRef.current;
 
     if (mainEl) {
-      const viewPortOffset = textCaretPositionerOpts.viewPortOffset;
-      const size = textCaretPositionerOpts.size;
+      let viewPortOffset: TextCaretPositionerViewPortOffset;
+      let size: TextCaretPositionerSize;
+      let minimized: boolean;
+
+      if (isFullViewPortMode) {
+        viewPortOffset = fullViewPortTextCaretPositionerOpts.viewPortOffset;
+        size = fullViewPortTextCaretPositionerOpts.size;
+        minimized = false;
+      } else {
+        viewPortOffset = textCaretPositionerOpts.viewPortOffset;
+        size = textCaretPositionerOpts.size;
+        minimized = textCaretPositionerOpts.minimized;
+      }
 
       const rectngl: HtmlElementStyleRectangleCore = {
         top: viewPortOffset.top,
         left: viewPortOffset.left
       } as HtmlElementStyleRectangleCore;
 
-      if (!textCaretPositionerOpts.minimized) {
+      if (!minimized) {
         rectngl.width = size.width;
         rectngl.height = size.height;
       }
@@ -467,6 +574,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     }
     }, [
       props.localStorageSerializedOptsKey,
+      props.localStorageSerializedFullViewPortOptsKey,
       mainElRef,
       currentInputElMtblRef.value,
       isFullViewPortMode,
@@ -474,6 +582,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       showBackDrop,
       textCaretPositionerOpts,
+      fullViewPortTextCaretPositionerOpts,
       isAnyMenuOpen,
       currentInputElLastSetOpIdx,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
@@ -481,20 +590,37 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       currentMainElCoordsRef
     ]);
   return (<React.Fragment>
-    { ((currentInputElMtblRef.value || textCaretPositionerOpts.keepOpen) && textCaretPositionerOpts.enabled) ? <React.Fragment>
-    { showBackDrop ? <TrmrkBackDrop
+    { ((currentInputElMtblRef.value || textCaretPositionerOpts.keepOpen || isFullViewPortMode) && textCaretPositionerOpts.enabled) ? <React.Fragment>
+    { showBackDrop ? isFullViewPortMode ? <TrmrkBackDrop
+      className="trmrk-text-input-caret-positioner-popover-backdrop"
+      preventDefaultOnTouchOrMouseEvts={true}
+      onTouchOrClick={onFullViewPortBackDropTouchOrClick}
+      onTouchOrMouseMove={onFullViewPortBackDropTouchEndOrMouseUp}
+      onTouchEndOrMouseUp={onFullViewPortBackDropTouchEndOrMouseUp} /> : <TrmrkBackDrop
       className="trmrk-text-input-caret-positioner-popover-backdrop"
       preventDefaultOnTouchOrMouseEvts={true}
       onTouchOrClick={onBackDropTouchOrClick}
       onTouchOrMouseMove={onBackDropTouchOrMouseMove}
       onTouchEndOrMouseUp={onBackDropTouchEndOrMouseUp} /> : null }
-    <TextInputCaretPositionerPopover
+    { isFullViewPortMode ? <TextInputCaretPositionerPopover
+      onMainEl={onMainEl}
+      inputEl={currentInputElMtblRef.value}
+      inFrontOfAll={!isAnyMenuOpen}
+      minimized={false}
+      keepOpen={true}
+      isForFullViewPortMode={true}
+      isMoveAndResizeMode={isMoveAndResizeMode}
+      moveAndResizeState={moveAndResizeModeState}
+      isMoveAndResizeModeToggled={isMoveAndResizeModeToggled}
+      moveAndResizeStateChanged={moveAndResizeStatusChanged}
+      onMainElTouchOrMouseMove={onBackDropTouchOrMouseMove}
+      onMainElTouchEndOrMouseUp={onFullViewPortBackDropTouchEndOrMouseUp} /> : <TextInputCaretPositionerPopover
       onMainEl={onMainEl}
       inputEl={currentInputElMtblRef.value}
       inFrontOfAll={!isAnyMenuOpen}
       minimized={textCaretPositionerOpts.minimized}
       keepOpen={textCaretPositionerOpts.keepOpen}
-      isForFullViewPortMode={isFullViewPortMode}
+      isForFullViewPortMode={false}
       isMoveAndResizeMode={isMoveAndResizeMode}
       moveAndResizeState={moveAndResizeModeState}
       minimizedToggled={minimizedToggled}
@@ -504,6 +630,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       keepOpenToggled={onKeepOpenToggled}
       onMainElTouchOrMouseMove={onBackDropTouchOrMouseMove}
       onMainElTouchEndOrMouseUp={onBackDropTouchEndOrMouseUp}
-      closeClicked={onDisabled} /></React.Fragment> : null }
+      closeClicked={onDisabled} /> }</React.Fragment> : null }
   </React.Fragment>);
 }

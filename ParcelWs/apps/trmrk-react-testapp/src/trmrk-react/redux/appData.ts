@@ -113,6 +113,27 @@ export interface AppDataReducers {
   >;
 }
 
+export const getDefaultTextCaretPositionerOpts =
+  (): TextCaretPositionerOpts => ({
+    ...getDefaultFullViewPortTextCaretPositionerOpts(),
+    enabled: false,
+    keepOpen: false,
+    minimized: false,
+  });
+
+export const getDefaultFullViewPortTextCaretPositionerOpts =
+  (): TextCaretPositionerOpts =>
+    ({
+      viewPortOffset: {
+        top: null,
+        left: null,
+      },
+      size: {
+        width: null,
+        height: null,
+      },
+    } as TextCaretPositionerOpts);
+
 export const getTextCaretPositionerOptsFromLocalStorage = (
   textCaretPositionerOptsKey: boolean | string | null | undefined = null,
   defaultValue: TextCaretPositionerOpts | null = null,
@@ -123,19 +144,8 @@ export const getTextCaretPositionerOptsFromLocalStorage = (
       textCaretPositionerOptsKey,
       { value: null }
     ) ??
-      defaultValue ?? {
-        enabled: false,
-        keepOpen: false,
-        minimized: false,
-        viewPortOffset: {
-          top: null,
-          left: null,
-        },
-        size: {
-          width: null,
-          height: null,
-        },
-      };
+    defaultValue ??
+    getDefaultTextCaretPositionerOpts();
 
   const textCaretPositionerOpts: TextCaretPositionerOpts = {
     ...textCaretPositionerOptsSrlzbl,
@@ -175,16 +185,7 @@ export const getInitialState = (): AppData => ({
   fullViewPortTextCaretPositionerOpts:
     getTextCaretPositionerOptsFromLocalStorage(
       true,
-      {
-        viewPortOffset: {
-          top: null,
-          left: null,
-        },
-        size: {
-          width: null,
-          height: null,
-        },
-      } as TextCaretPositionerOpts,
+      getDefaultFullViewPortTextCaretPositionerOpts(),
       null
     ),
 });
