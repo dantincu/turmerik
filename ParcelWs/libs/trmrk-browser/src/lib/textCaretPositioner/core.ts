@@ -1,6 +1,7 @@
 import trmrk from "../../trmrk";
 import { MtblRefValue } from "../../trmrk/core";
 import { localStorageKeys } from "../domUtils/core";
+import { ScreenOrientationType } from "../domUtils/deviceOrientation";
 
 export interface TextCaretPositionerSize {
   width: number | null | undefined;
@@ -12,7 +13,7 @@ export interface TextCaretPositionerViewPortOffset {
   left: number | null | undefined;
 }
 
-export interface TextCaretPositionerOptsCore {
+export interface TextCaretPositionerOptsItemCore {
   enabled: boolean;
   keepOpen: boolean;
   minimized: boolean;
@@ -20,37 +21,37 @@ export interface TextCaretPositionerOptsCore {
   viewPortOffset: TextCaretPositionerViewPortOffset;
 }
 
-export interface TrmrkTextCaretPositionerOpts
-  extends TextCaretPositionerOptsCore {}
+export type TextCaretPositionerOptsItemType = "Default" | "FullViewPort";
+export type TextCaretPositionerOptsItemScope = "Default" | "App";
 
-export const normalizeTextCaretPositionerOptsKey = (
-  textCaretPositionerOptsKey: boolean | string | null | undefined
-) => {
-  if (textCaretPositionerOptsKey === true) {
-    textCaretPositionerOptsKey =
-      localStorageKeys.fullViewPortTextCaretPositionerOpts;
-  } else if (textCaretPositionerOptsKey === false) {
-    textCaretPositionerOptsKey = localStorageKeys.textCaretPositionerOpts;
-  } else {
-    textCaretPositionerOptsKey ??= localStorageKeys.textCaretPositionerOpts;
-  }
+export type TextCaretPositionerOptsItemsTypeMap = Record<
+  TextCaretPositionerOptsItemType,
+  TextCaretPositionerOptsItemCore
+>;
 
-  return textCaretPositionerOptsKey;
-};
+export type TextCaretPositionerOptsItemsScreenOrientationTypeMap = Record<
+  ScreenOrientationType,
+  TextCaretPositionerOptsItemsTypeMap
+>;
+
+export type TextCaretPositionerOptsItemsScopeMap = Record<
+  TextCaretPositionerOptsItemScope,
+  TextCaretPositionerOptsItemsScreenOrientationTypeMap
+>;
+
+export interface TextCaretPositionerOptsCore {
+  map: TextCaretPositionerOptsItemsScopeMap;
+}
 
 export const deserializeTextCaretPositionerOptsFromLocalStorage = (
-  textCaretPositionerOptsKey: boolean | string | null | undefined = null,
+  textCaretPositionerOptsKey: string | null | undefined = null,
   parseErrorRef: MtblRefValue<unknown | any | null | undefined> | null = null
 ) => {
-  textCaretPositionerOptsKey = normalizeTextCaretPositionerOptsKey(
-    textCaretPositionerOptsKey
-  );
-
   const textCaretPositionerOptsJson = localStorage.getItem(
-    textCaretPositionerOptsKey
+    textCaretPositionerOptsKey ?? localStorageKeys.textCaretPositionerOpts
   );
 
-  let textCaretPositionerOpts: TrmrkTextCaretPositionerOpts | null = null;
+  let textCaretPositionerOpts: TextCaretPositionerOptsCore | null = null;
 
   if (textCaretPositionerOptsJson) {
     if (parseErrorRef) {
@@ -68,13 +69,9 @@ export const deserializeTextCaretPositionerOptsFromLocalStorage = (
 };
 
 export const serializeTextCaretPositionerOptsToLocalStorage = (
-  textCaretPositionerOpts: TrmrkTextCaretPositionerOpts | null,
-  textCaretPositionerOptsKey: boolean | string | null | undefined = null
+  textCaretPositionerOpts: TextCaretPositionerOptsCore | null,
+  textCaretPositionerOptsKey: string | null | undefined = null
 ) => {
-  textCaretPositionerOptsKey = normalizeTextCaretPositionerOptsKey(
-    textCaretPositionerOptsKey
-  );
-
   if (textCaretPositionerOpts) {
     const textCaretPositionerOptsJson = JSON.stringify(
       textCaretPositionerOpts,
@@ -83,10 +80,12 @@ export const serializeTextCaretPositionerOptsToLocalStorage = (
     );
 
     localStorage.setItem(
-      textCaretPositionerOptsKey,
+      textCaretPositionerOptsKey ?? localStorageKeys.textCaretPositionerOpts,
       textCaretPositionerOptsJson
     );
   } else {
-    localStorage.removeItem(textCaretPositionerOptsKey);
+    localStorage.removeItem(
+      textCaretPositionerOptsKey ?? localStorageKeys.textCaretPositionerOpts
+    );
   }
 };

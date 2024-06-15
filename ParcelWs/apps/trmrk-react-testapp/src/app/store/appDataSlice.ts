@@ -41,7 +41,7 @@ const appDataSlice = createSlice({
       state,
       action: ReducerAction<TextCaretPositionerOpts>
     ) => {
-      state.fullViewPortTextCaretPositionerOpts = action.payload;
+      state.textCaretPositionerOpts = action.payload;
     },
   },
   selectors: {
@@ -53,7 +53,7 @@ const appDataSlice = createSlice({
     getTextCaretPositionerCurrentInputElLastSetOpIdx: (appData) =>
       appData.textCaretPositionerOpts.currentInputElLastSetOpIdx,
     getFullViewPortTextCaretPositionerOpts: (appData) =>
-      appData.fullViewPortTextCaretPositionerOpts,
+      appData.textCaretPositionerOpts,
   },
 });
 

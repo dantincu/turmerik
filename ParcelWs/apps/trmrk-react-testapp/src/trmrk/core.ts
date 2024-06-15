@@ -529,3 +529,41 @@ export const flatten = <T>(
 
 export const freezeMx = <T>(mx: T[][]) =>
   Object.freeze(mx.map((arr) => Object.freeze(arr)));
+
+export const getFromRecord = <K extends string | number | symbol, V, T>(
+  record: Record<K, V>,
+  key: K,
+  selector: (value: V) => T,
+  defaultSelector: (() => T | null) | null | undefined = null
+) => {
+  let retVal: T | null;
+  const matching = record[key];
+
+  if ((matching ?? null) !== null) {
+    retVal = selector(matching);
+  } else {
+    defaultSelector ??= () => null;
+    retVal = defaultSelector();
+  }
+
+  return retVal;
+};
+
+export const getFromMap = <V, T>(
+  map: { [key: string]: V },
+  key: string,
+  selector: (value: V) => T,
+  defaultSelector: (() => T | null) | null | undefined = null
+) => {
+  let retVal: T | null;
+  const matching = map[key];
+
+  if ((matching ?? null) !== null) {
+    retVal = selector(matching);
+  } else {
+    defaultSelector ??= () => null;
+    retVal = defaultSelector();
+  }
+
+  return retVal;
+};

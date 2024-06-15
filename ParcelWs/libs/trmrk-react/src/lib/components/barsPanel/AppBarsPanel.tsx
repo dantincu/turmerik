@@ -24,8 +24,8 @@ import { appModeCssClass, getAppModeCssClassName,
 
 import { isAndroid, isIPad, isIPhone, isMobile } from "../../../trmrk-browser/domUtils/constants";
 
-import { serializeTextCaretPositionerOptsToLocalStorage } from "../../../trmrk-browser/textCaretPositioner/core";
-import { toggleTextCaretPositioner } from "../textInputCaretPositioner/TextInputCaretPositioningTool";
+import { serializeTextCaretPositionerOptsToLocalStorage, TextCaretPositionerOptsItemScope } from "../../../trmrk-browser/textCaretPositioner/core";
+import { getTextCaretPositionerOptsItem, getTextCaretPositionerOptsItemType, updateTextCaretPositionerOpts } from "../textInputCaretPositioner/TextInputCaretPositioningTool";
 
 import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
@@ -33,7 +33,7 @@ import ToggleAppBarBtn from "./ToggleAppBarBtn";
 export interface AppBarsPanelProps {
   basePath: string;
   localStorageSerializedOptsKey?: string | null | undefined;
-  localStorageSerializedFullViewPortOptsKey?: string | null | undefined;
+  textCaretPositionerOptsItemScope?: TextCaretPositionerOptsItemScope;
   onPanelElems?: ((elems: BarsPanelElems) => void) | null | undefined;
   panelClassName?: string | null | undefined;
   appBarSelectors: AppBarSelectors;
@@ -66,8 +66,9 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
 
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
+  const textCaretPositionerOptsItemScope = props.textCaretPositionerOptsItemScope ?? "App";
   const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
-  const fullViewPortTextCaretPositionerOpts = useSelector(props.appDataSelectors.getFullViewPortTextCaretPositionerOpts);
+  // const [ textCaretPositionerOptsVal, setTextCaretPositionerOptsVal ] = React.useState(textCaretPositionerOpts);
 
   const appSettingsMenuIsOpen = useSelector(
     props.appBarSelectors.getAppSettingsMenuIsOpen
@@ -185,35 +186,36 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
   }, []);
 
   const handleTextCaretPositionerEnabledToggled = React.useCallback((textCaretPositionerEnabled: boolean) => {
-    const newTextCaretPositionerOpts =  toggleTextCaretPositioner(
-      textCaretPositionerOpts,
-      props.localStorageSerializedOptsKey,
-      textCaretPositionerEnabled);
+    let newTextCaretPositionerOpts = { ...textCaretPositionerOpts };
+    const textCaretPositionerOptsItemType = getTextCaretPositionerOptsItemType(textCaretPositionerOpts.isFullViewPortMode);
 
-    const newFullViewPortTextCaretPositionerOpts =  toggleTextCaretPositioner(
-      fullViewPortTextCaretPositionerOpts,
-      props.localStorageSerializedFullViewPortOptsKey ?? true,
-      textCaretPositionerEnabled);
+    newTextCaretPositionerOpts = updateTextCaretPositionerOpts(
+      newTextCaretPositionerOpts,
+      textCaretPositionerOptsItemScope,
+      screen.orientation.type,
+      textCaretPositionerOptsItemType,
+      { ...textCaretPositionerOpts.current, enabled: textCaretPositionerEnabled });
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    dispatch(props.appDataReducers.setFullViewPortTextCaretPositionerOpts(newFullViewPortTextCaretPositionerOpts));
+    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
-    props.localStorageSerializedOptsKey,
-    props.localStorageSerializedFullViewPortOptsKey,
-    textCaretPositionerOpts,
-    fullViewPortTextCaretPositionerOpts]);
+    textCaretPositionerOpts]);
 
   const handleTextCaretPositionerKeepOpenToggled = React.useCallback((textCaretPositionerKeepOpen: boolean) => {
-    dispatch(props.appDataReducers.setTextCaretPositionerOpts({
-      ...textCaretPositionerOpts,
-      keepOpen: textCaretPositionerKeepOpen
-    }));
+    let newTextCaretPositionerOpts = { ...textCaretPositionerOpts };
+    const textCaretPositionerOptsItemType = getTextCaretPositionerOptsItemType(textCaretPositionerOpts.isFullViewPortMode);
 
-    serializeTextCaretPositionerOptsToLocalStorage({
-      ...textCaretPositionerOpts,
-      keepOpen: textCaretPositionerKeepOpen
-    });
-  }, [textCaretPositionerOpts]);
+    newTextCaretPositionerOpts = updateTextCaretPositionerOpts(
+      newTextCaretPositionerOpts,
+      textCaretPositionerOptsItemScope,
+      screen.orientation.type,
+      textCaretPositionerOptsItemType,
+      { ...textCaretPositionerOpts.current, keepOpen: textCaretPositionerKeepOpen });
+
+    dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+  }, [
+    textCaretPositionerOpts]);
   
   const appBarRefreshBtnClicked = React.useCallback(() => {
     if (props.appBarRefreshBtnClicked) {
@@ -235,8 +237,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
 
   React.useEffect(() => {
   }, [
-    props.localStorageSerializedOptsKey,
-    props.localStorageSerializedFullViewPortOptsKey,
     showAppHeader,
     showAppFooter,
     showAppHeaderToggleBtn,
@@ -244,7 +244,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     isCompactMode,
     isDarkMode,
     textCaretPositionerOpts,
-    fullViewPortTextCaretPositionerOpts,
     appSettingsMenuIsOpen,
     appearenceMenuIsOpen,
     textCaretPositionerMenuIsOpen,
@@ -309,8 +308,8 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
           menuListClassName={props.textCaretPositionerMenuListClassName}
           appTheme={appTheme}
           showMenu={textCaretPositionerMenuIsOpen}
-          enabled={textCaretPositionerOpts.enabled}
-          keepOpen={textCaretPositionerOpts.keepOpen}
+          enabled={textCaretPositionerOpts.current?.enabled}
+          keepOpen={textCaretPositionerOpts.current?.keepOpen}
           enabledToggled={handleTextCaretPositionerEnabledToggled}
           keepOpenToggled={handleTextCaretPositionerKeepOpenToggled}
           menuClosed={handleSettingsMenuClosed}
