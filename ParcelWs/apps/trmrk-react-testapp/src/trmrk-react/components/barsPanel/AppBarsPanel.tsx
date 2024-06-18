@@ -14,7 +14,7 @@ import TextCaretPositionerSettingsMenu from "../settingsMenu/TextCaretPositioner
 import OptionsMenu from "../settingsMenu/OptionsMenu";
 
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
-import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
+import { AppDataSelectors, AppDataReducers, setTextCaretPositionerOptsToLocalStorage } from "../../redux/appData";
 
 import { getAppTheme, currentAppTheme } from "../../app-theme/core";
 
@@ -24,7 +24,7 @@ import { appModeCssClass, getAppModeCssClassName,
 
 import { isAndroid, isIPad, isIPhone, isMobile } from "../../../trmrk-browser/domUtils/constants";
 
-import { serializeTextCaretPositionerOptsToLocalStorage, TextCaretPositionerOptsItemScope } from "../../../trmrk-browser/textCaretPositioner/core";
+import { TextCaretPositionerOptsItemScope } from "../../../trmrk-browser/textCaretPositioner/core";
 import { getTextCaretPositionerOptsItem, getTextCaretPositionerOptsItemType, updateTextCaretPositionerOpts } from "../textInputCaretPositioner/TextInputCaretPositioningTool";
 
 import BarsPanel, { BarsPanelElems } from "./BarsPanel";
@@ -197,7 +197,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
       { ...textCaretPositionerOpts.current, enabled: textCaretPositionerEnabled });
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     textCaretPositionerOpts]);
 
@@ -213,7 +213,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
       { ...textCaretPositionerOpts.current, keepOpen: textCaretPositionerKeepOpen });
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     textCaretPositionerOpts]);
   

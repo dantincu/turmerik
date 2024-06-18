@@ -160,7 +160,7 @@ export default function TextInputCaretPositionerPopover(
 
   const [ inputIsMultiline, setInputIsMultiline ] = React.useState(inputIsMultilinePropsVal);
   const [ inFrontOfAll, setInFrontOfAll ] = React.useState(inFrontOfAllPropsVal);
-  const [ minimized, setMinimized ] = React.useState(minimizedPropsVal);
+  // const [ minimized, setMinimized ] = React.useState(minimizedPropsVal);
   const [ stateType, setStateType ] = React.useState(stateTypePropsVal);
   const [ keepOpen, setKeepOpen ] = React.useState(keepOpenPropsVal);
   const [ showOptions, setShowOptions ] = React.useState(showOptionsPropsVal);
@@ -206,21 +206,21 @@ export default function TextInputCaretPositionerPopover(
       );
     }
 
-    setMinimized(newMinimizedVal);
+    // setMinimized(newMinimizedVal);
     setShowOptions(newShowOptionsVal);
     setShowMoreOptions(newShowMoreOptionsVal);
-  }, [minimized]);
+  }, []);
 
   const mainBtnClicked = React.useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (((e as React.MouseEvent).button ?? 0) === 0) {
-      if (minimized) {
+      if (minimizedPropsVal) {
         const newMinimizedVal = false;
 
         if (props.minimizedToggled) {
           props.minimizedToggled(newMinimizedVal);
         }
         
-        setMinimized(newMinimizedVal);
+        // setMinimized(newMinimizedVal);
       } else if (inputEl && inputIsMultiline !== null) {
         const newShowOptionsVal = !showOptions;
         const newShowMoreOptionsVal = newShowOptionsVal && showMoreOptions;
@@ -235,7 +235,7 @@ export default function TextInputCaretPositionerPopover(
         setShowMoreOptions(newShowMoreOptionsVal);
       }
     }
-  }, [minimized, showOptions, showMoreOptions, inputEl, inputIsMultiline]);
+  }, [showOptions, showMoreOptions, inputEl, inputIsMultiline]);
 
   const showMoreOptionsBtnClicked = React.useCallback((showMoreOptions: boolean) => {
     const newShowMoreOptionsVal = showMoreOptions;
@@ -816,9 +816,11 @@ export default function TextInputCaretPositionerPopover(
       setInFrontOfAll(inFrontOfAllNewVal);
     }
 
+    console.log("minimizedPropsVal, minimizedNewVal", minimizedPropsVal, minimizedNewVal);
+
     if (minimizedNewVal !== minimizedPropsVal) {
       setMinimizedPropsVal(minimizedNewVal);
-      setMinimized(minimizedNewVal);
+      // setMinimized(minimizedNewVal);
     }
 
     if (stateNewVal !== stateTypePropsVal) {
@@ -968,7 +970,6 @@ export default function TextInputCaretPositionerPopover(
     isMoveAndResizeModePropsVal,
     moveAndResizeStatePropsVal,
     inFrontOfAll,
-    minimized,
     stateType,
     keepOpen,
     showOptions,
@@ -979,7 +980,7 @@ export default function TextInputCaretPositionerPopover(
   ]);
 
   const viewRetriever = React.useCallback(() => {
-    if (minimized) {
+    if (minimizedPropsVal) {
       return null;
     }
 
@@ -1123,13 +1124,12 @@ export default function TextInputCaretPositionerPopover(
     moveAndResizeStatePropsVal,
     isForFullViewPortMode,
     stateType,
-    minimized,
     keepOpen,
     showOptions,
     showMoreOptions]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
-    minimized ? "trmrk-minimized" : "",
+    minimizedPropsVal ? "trmrk-minimized" : "",
     inFrontOfAll ? "trmrk-in-front-of-all" : "",
     isMoveAndResizeModePropsVal ? "trmrk-is-move-and-resize-mode" : "" ].join(" ")} ref={el => mainElRef.current = el}>
       <div className="trmrk-text-input-caret-positioner">

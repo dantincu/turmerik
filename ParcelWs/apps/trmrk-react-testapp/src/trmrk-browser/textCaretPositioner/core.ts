@@ -43,6 +43,12 @@ export interface TextCaretPositionerOptsCore {
   map: TextCaretPositionerOptsItemsScopeMap;
 }
 
+export interface TextCaretPositionerOpts extends TextCaretPositionerOptsCore {
+  isFullViewPortMode: boolean;
+  currentInputElLastSetOpIdx: number;
+  current: TextCaretPositionerOptsItemCore;
+}
+
 export const deserializeTextCaretPositionerOptsFromLocalStorage = (
   textCaretPositionerOptsKey: string | null | undefined = null,
   parseErrorRef: MtblRefValue<unknown | any | null | undefined> | null = null

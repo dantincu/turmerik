@@ -12,10 +12,9 @@ import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMous
 import { HtmlElementRectangle, HtmlElementStyleRectangleCore, applyRectnglProps } from "../../../trmrk-browser/domUtils/getDomElemBounds";
 import { ScreenOrientationType } from "../../../trmrk-browser/domUtils/deviceOrientation";
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
-import { AppDataSelectors, AppDataReducers, TextCaretPositionerOpts } from "../../redux/appData";
+import { AppDataSelectors, AppDataReducers, setTextCaretPositionerOptsToLocalStorage } from "../../redux/appData";
 
-import { serializeTextCaretPositionerOptsToLocalStorage,
-  deserializeTextCaretPositionerOptsFromLocalStorage,
+import { deserializeTextCaretPositionerOptsFromLocalStorage,
   TextCaretPositionerViewPortOffset,
   TextCaretPositionerSize,
   TextCaretPositionerOptsItemScope,
@@ -23,7 +22,8 @@ import { serializeTextCaretPositionerOptsToLocalStorage,
   TextCaretPositionerOptsItemCore,
   TextCaretPositionerOptsItemsScopeMap,
   TextCaretPositionerOptsItemsScreenOrientationTypeMap,
-  TextCaretPositionerOptsItemsTypeMap } from "../../../trmrk-browser/textCaretPositioner/core";
+  TextCaretPositionerOptsItemsTypeMap,
+  TextCaretPositionerOpts } from "../../../trmrk-browser/textCaretPositioner/core";
 
 import TextInputCaretPositionerPopover from "./TextInputCaretPositionerPopover";
 import { TextInputCaretPositionerMoveAndResizeState } from "./TextInputCaretPositionerMoveAndResizeView";
@@ -144,7 +144,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       { ...textCaretPositionerOpts.current, minimized });
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     currentOrientation,
     textCaretPositionerOpts,
@@ -162,7 +162,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       { ...textCaretPositionerOpts.current, keepOpen });
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     currentOrientation,
     textCaretPositionerOpts,
@@ -180,7 +180,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       { ...textCaretPositionerOpts.current, enabled: false });
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     textCaretPositionerOpts,
     /* textCaretPositionerOptsVal */]);
@@ -189,7 +189,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     let newTextCaretPositionerOpts = { ...textCaretPositionerOpts, isFullViewPortMode };
 
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     currentOrientation,
     textCaretPositionerOpts,
@@ -287,7 +287,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
           newCurrentTextCaretPositionerOpts);
 
         dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-        serializeTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+        setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
           
         currentMainElCoordsRef.current = null;
       }
@@ -582,6 +582,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       applyRectnglProps(mainEl.style, rectngl, true);
     }
 
+    console.log("textCaretPositionerOpts.current", textCaretPositionerOpts.current);
+
     if (!textCaretPositionerOpts.current) {
       dispatch(props.appDataReducers.setTextCaretPositionerOpts({
         ...textCaretPositionerOpts,
@@ -595,16 +597,17 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     }
 
     const handleOrientation = (ev: DeviceOrientationEvent) => {
-      setCurrentOrientation(screen.orientation.type);
+      const newOrientationTypeValue = screen.orientation.type;
+      setCurrentOrientation(newOrientationTypeValue);
 
       dispatch(props.appDataReducers.setTextCaretPositionerOpts({
         ...textCaretPositionerOpts,
         current: getTextCaretPositionerOptsItem(
           textCaretPositionerOpts,
           textCaretPositionerOptsItemScope,
-          currentOrientation,
+          newOrientationTypeValue,
           getTextCaretPositionerOptsItemType(textCaretPositionerOpts.isFullViewPortMode)
-        )
+        ) ?? {}
       }));
     };
 
@@ -612,10 +615,10 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       setTextCaretPositionerOptsVal(textCaretPositionerOpts);
     } */
 
-    window.addEventListener("deviceorientation", handleOrientation, true);
+    window.addEventListener("deviceorientation", handleOrientation);
 
     return () => {
-      window.removeEventListener("deviceorientation", handleOrientation, true);
+      window.removeEventListener("deviceorientation", handleOrientation);
     };
   }, [
     currentOrientation,
