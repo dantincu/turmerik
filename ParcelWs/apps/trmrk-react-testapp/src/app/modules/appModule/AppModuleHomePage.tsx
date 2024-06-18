@@ -24,5 +24,10 @@ export default function AppModuleHomePage(props: AppModuleHomePageProps) {
       <li><Link to={`${props.basePath}/long-press-demo`} className="trmrk-nav-link">Long Press Demo</Link></li>
       <li><Link to={`${props.basePath}/view-local-storage`} className="trmrk-nav-link">View Local Storage</Link></li>
     </ul>
+    <pre>
+      { JSON.stringify({
+        "DeviceOrientationEvent.requestPermission": (DeviceOrientationEvent as any).requestPermission?.toString() ?? "null"
+      }, null, "  ") }
+    </pre>
   </AppBarsPanel>);
 }

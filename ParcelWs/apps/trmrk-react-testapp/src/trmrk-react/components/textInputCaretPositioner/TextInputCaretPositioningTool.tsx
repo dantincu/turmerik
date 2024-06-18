@@ -59,7 +59,7 @@ export const getTextCaretPositionerOptsItem = (
   textCaretPositionerOptsItemScope: TextCaretPositionerOptsItemScope,
   currentOrientation: ScreenOrientationType,
   textCaretPositionerOptsItemType: TextCaretPositionerOptsItemType) => getFromMap(
-    textCaretPositionerOpts.map,
+    textCaretPositionerOpts.map ?? {},
     textCaretPositionerOptsItemScope,
     map => getFromMap(map, currentOrientation, map1 => map1[textCaretPositionerOptsItemType])) ?? {
       enabled: true
@@ -76,7 +76,7 @@ export const updateTextCaretPositionerOpts = (
   textCaretPositionerOptsItemType: TextCaretPositionerOptsItemType,
   newTextCaretPositionerOptsItem: TextCaretPositionerOptsItemCore,
   setToCurrent: boolean = true) => {
-    newTextCaretPositionerOpts.map = {...newTextCaretPositionerOpts.map};
+    newTextCaretPositionerOpts.map = {...newTextCaretPositionerOpts.map ?? {}};
 
     const newTextCaretPositionerOptsMapLvl1 = ({ ...(newTextCaretPositionerOpts.map[textCaretPositionerOptsItemScope] ?? {
     })} as TextCaretPositionerOptsItemsScreenOrientationTypeMap);
@@ -112,6 +112,8 @@ export const updateTextCaretPositionerSizeAndOffset = (
 export default function TextInputCaretPositioningTool(props: TextInputCaretPositioningToolProps) {
   const mainElRef = React.useRef<HTMLElement | null>(null);
 
+  const [ orientationPermissionsResolved, setOrientationPermissionsResolved ] = React.useState(!(DeviceOrientationEvent as any).requestPermission);
+
   const [ currentOrientation, setCurrentOrientation ] = React.useState<ScreenOrientationType>(screen.orientation.type);
   const [ isMoveAndResizeMode, setIsMoveAndResizeMode ] = React.useState(false);
   const [ moveAndResizeModeState, setMoveAndResizeModeState ] = React.useState<TextInputCaretPositionerMoveAndResizeState | null>(null);
@@ -119,7 +121,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
   const textCaretPositionerOptsItemScope = props.textCaretPositionerOptsItemScope ?? "App";
   const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
-  // const [ textCaretPositionerOptsVal, setTextCaretPositionerOptsVal ] = React.useState(textCaretPositionerOpts);
 
   const isAnyMenuOpen = useSelector(props.appBarSelectors.isAnyMenuOpen);
 
@@ -600,7 +601,15 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       }));
     }
 
+    if (!orientationPermissionsResolved) {
+      (DeviceOrientationEvent as any).requestPermission().then(() => {
+        setOrientationPermissionsResolved(true);
+      });
+    }
+
     const handleOrientation = (ev: DeviceOrientationEvent) => {
+      console.log("DeviceOrientationEvent", ev);
+
       const newOrientationTypeValue = screen.orientation.type;
       setCurrentOrientation(newOrientationTypeValue);
 
@@ -615,10 +624,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       }));
     };
 
-    /* if (textCaretPositionerOpts !== textCaretPositionerOptsVal) {
-      setTextCaretPositionerOptsVal(textCaretPositionerOpts);
-    } */
-
     window.addEventListener("deviceorientation", handleOrientation);
 
     return () => {
@@ -629,6 +634,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     currentOrientation,
     textCaretPositionerOpts,
     /* textCaretPositionerOptsVal */,
+    orientationPermissionsResolved,
     mainElRef,
     currentInputElMtblRef.value,
     isMoveAndResizeMode,
