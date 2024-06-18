@@ -539,6 +539,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
             textCaretPositionerOpts.current,
             currentMainElCoords));
 
+        setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
+
         dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
         currentMainElCoordsRef.current = null;
       }
@@ -585,8 +587,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
 
       applyRectnglProps(mainEl.style, rectngl, true);
     }
-
-    console.log("textCaretPositionerOpts.current", textCaretPositionerOpts.current);
 
     if (!textCaretPositionerOpts.current) {
       dispatch(props.appDataReducers.setTextCaretPositionerOpts({

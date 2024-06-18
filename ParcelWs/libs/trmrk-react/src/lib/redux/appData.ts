@@ -5,16 +5,10 @@ import trmrk_dom_utils from "../../trmrk-browser/domUtils";
 
 import {
   TextCaretPositionerOptsCore,
-  TextCaretPositionerOptsItemCore,
+  TextCaretPositionerOpts,
   deserializeTextCaretPositionerOptsFromLocalStorage,
   serializeTextCaretPositionerOptsToLocalStorage,
 } from "../../trmrk-browser/textCaretPositioner/core";
-
-export interface TextCaretPositionerOpts extends TextCaretPositionerOptsCore {
-  isFullViewPortMode: boolean;
-  currentInputElLastSetOpIdx: number;
-  current: TextCaretPositionerOptsItemCore;
-}
 
 export interface AppData {
   baseLocation: string;
@@ -135,12 +129,15 @@ export const setTextCaretPositionerOptsToLocalStorage = (
   textCaretPositionerOpts: TextCaretPositionerOpts | null,
   textCaretPositionerOptsKey: string | null | undefined = null
 ) => {
-  let textCaretPositionerOptsSrlzbl: TextCaretPositionerOptsCore | null = null;
+  let textCaretPositionerOptsSrlzbl: TextCaretPositionerOpts | null = null;
 
   if (textCaretPositionerOpts) {
     textCaretPositionerOptsSrlzbl = {
       ...textCaretPositionerOpts,
     };
+
+    // @ts-ignore
+    delete textCaretPositionerOptsSrlzbl.current;
   }
 
   serializeTextCaretPositionerOptsToLocalStorage(

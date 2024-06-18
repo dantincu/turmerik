@@ -235,7 +235,7 @@ export default function TextInputCaretPositionerPopover(
         setShowMoreOptions(newShowMoreOptionsVal);
       }
     }
-  }, [showOptions, showMoreOptions, inputEl, inputIsMultiline]);
+  }, [minimizedPropsVal, showOptions, showMoreOptions, inputEl, inputIsMultiline]);
 
   const showMoreOptionsBtnClicked = React.useCallback((showMoreOptions: boolean) => {
     const newShowMoreOptionsVal = showMoreOptions;
@@ -816,7 +816,7 @@ export default function TextInputCaretPositionerPopover(
       setInFrontOfAll(inFrontOfAllNewVal);
     }
 
-    console.log("minimizedPropsVal, minimizedNewVal, props.minimized", minimizedPropsVal, minimizedNewVal, props.minimized);
+    console.log("minimizedPropsVal, minimizedNewVal", minimizedPropsVal, minimizedNewVal);
 
     if (minimizedNewVal !== minimizedPropsVal) {
       setMinimizedPropsVal(minimizedNewVal);
@@ -1125,6 +1125,7 @@ export default function TextInputCaretPositionerPopover(
     isForFullViewPortMode,
     stateType,
     keepOpen,
+    minimizedPropsVal,
     showOptions,
     showMoreOptions]);
 
