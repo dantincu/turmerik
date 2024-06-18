@@ -278,7 +278,7 @@ export default function TextInputCaretPositionerPopover(
     if (props.closeClicked) {
       props.closeClicked();
     }
-  }, []);
+  }, [props.closeClicked]);
 
   const onDefaultNextViewClick = React.useCallback(() => {
     const newStateType = TextCaretInputPositionerState.JumpSymbols;
@@ -816,8 +816,6 @@ export default function TextInputCaretPositionerPopover(
       setInFrontOfAll(inFrontOfAllNewVal);
     }
 
-    console.log("minimizedPropsVal, minimizedNewVal", minimizedPropsVal, minimizedNewVal);
-
     if (minimizedNewVal !== minimizedPropsVal) {
       setMinimizedPropsVal(minimizedNewVal);
       // setMinimized(minimizedNewVal);
@@ -959,6 +957,7 @@ export default function TextInputCaretPositionerPopover(
     props.moveAndResizeState,
     props.symbolsJumpSpeedsArr,
     props.linesJumpSpeedsArr,
+    props.closeClicked,
     inputEl,
     inFrontOfAllPropsVal,
     minimizedPropsVal,
@@ -1127,7 +1126,8 @@ export default function TextInputCaretPositionerPopover(
     keepOpen,
     minimizedPropsVal,
     showOptions,
-    showMoreOptions]);
+    showMoreOptions,
+    props.closeClicked]);
 
   return (<div className={[INPUT_CARET_POSITIONER_CSS_CLASS,
     minimizedPropsVal ? "trmrk-minimized" : "",

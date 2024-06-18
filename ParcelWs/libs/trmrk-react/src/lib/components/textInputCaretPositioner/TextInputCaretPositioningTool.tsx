@@ -14,13 +14,11 @@ import { ScreenOrientationType } from "../../../trmrk-browser/domUtils/deviceOri
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
 import { AppDataSelectors, AppDataReducers, setTextCaretPositionerOptsToLocalStorage } from "../../redux/appData";
 
-import { deserializeTextCaretPositionerOptsFromLocalStorage,
-  TextCaretPositionerViewPortOffset,
+import { TextCaretPositionerViewPortOffset,
   TextCaretPositionerSize,
   TextCaretPositionerOptsItemScope,
   TextCaretPositionerOptsItemType,
   TextCaretPositionerOptsItemCore,
-  TextCaretPositionerOptsItemsScopeMap,
   TextCaretPositionerOptsItemsScreenOrientationTypeMap,
   TextCaretPositionerOptsItemsTypeMap,
   TextCaretPositionerOpts } from "../../../trmrk-browser/textCaretPositioner/core";
@@ -61,9 +59,15 @@ export const getTextCaretPositionerOptsItem = (
   textCaretPositionerOptsItemType: TextCaretPositionerOptsItemType) => getFromMap(
     textCaretPositionerOpts.map ?? {},
     textCaretPositionerOptsItemScope,
-    map => getFromMap(map, currentOrientation, map1 => map1[textCaretPositionerOptsItemType])) ?? {
-      enabled: true
-    } as |TextCaretPositionerOptsItemCore;
+    map => getFromMap(map, currentOrientation, map1 => map1[textCaretPositionerOptsItemType])) ?? ({
+        enabled: true
+      } as TextCaretPositionerOptsItemCore); /* (() => {
+      alert("returning default");
+
+      return ({
+        enabled: true
+      } as TextCaretPositionerOptsItemCore);
+    })() */
 
 export const getTextCaretPositionerOptsItemType = (
   isFullViewPortMode: boolean
@@ -76,7 +80,7 @@ export const updateTextCaretPositionerOpts = (
   textCaretPositionerOptsItemType: TextCaretPositionerOptsItemType,
   newTextCaretPositionerOptsItem: TextCaretPositionerOptsItemCore,
   setToCurrent: boolean = true) => {
-    newTextCaretPositionerOpts.map = {...newTextCaretPositionerOpts.map ?? {}};
+    newTextCaretPositionerOpts.map = {...(newTextCaretPositionerOpts.map ?? {})};
 
     const newTextCaretPositionerOptsMapLvl1 = ({ ...(newTextCaretPositionerOpts.map[textCaretPositionerOptsItemScope] ?? {
     })} as TextCaretPositionerOptsItemsScreenOrientationTypeMap);
@@ -152,8 +156,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     currentOrientation,
-    textCaretPositionerOpts,
-    /* textCaretPositionerOptsVal */]);
+    textCaretPositionerOpts]);
 
   const onKeepOpenToggled = React.useCallback((keepOpen: boolean) => {
     let newTextCaretPositionerOpts = { ...textCaretPositionerOpts };
@@ -170,8 +173,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     currentOrientation,
-    textCaretPositionerOpts,
-    /* textCaretPositionerOptsVal */]);
+    textCaretPositionerOpts]);
 
   const onDisabled = React.useCallback(() => {
     let newTextCaretPositionerOpts = { ...textCaretPositionerOpts };
@@ -187,8 +189,8 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
     setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
-    textCaretPositionerOpts,
-    /* textCaretPositionerOptsVal */]);
+    currentOrientation,
+    textCaretPositionerOpts]);
 
   const isFullViewPortModeToggled = React.useCallback((isFullViewPortMode: boolean) => {
     let newTextCaretPositionerOpts = { ...textCaretPositionerOpts, isFullViewPortMode };
@@ -197,8 +199,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
   }, [
     currentOrientation,
-    textCaretPositionerOpts,
-    /* textCaretPositionerOptsVal */]);
+    textCaretPositionerOpts]);
 
   const isMoveAndResizeModeToggled = React.useCallback((isMoveMode: boolean) => {
     if (isMoveMode) {
@@ -235,9 +236,9 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       mainElRef,
       isMoveAndResizeMode,
       moveAndResizeModeState,
+      currentOrientation,
       showBackDrop,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
       currentMainElCoordsRef]);
@@ -250,7 +251,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -265,7 +265,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -311,7 +310,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -326,7 +324,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -341,7 +338,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -486,7 +482,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -501,7 +496,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -517,7 +511,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -557,7 +550,6 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
       moveAndResizeModeState,
       currentOrientation,
       textCaretPositionerOpts,
-      /* textCaretPositionerOptsVal */,
       showBackDrop,
       lastMoveOrResizeTouchStartOrMouseDownCoordsRef,
       lastMoveOrResizeTouchStartOrMouseDownMainElCoordsRef,
@@ -608,20 +600,21 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     }
 
     const handleOrientation = (ev: DeviceOrientationEvent) => {
-      console.log("DeviceOrientationEvent", ev);
-
       const newOrientationTypeValue = screen.orientation.type;
-      setCurrentOrientation(newOrientationTypeValue);
 
-      dispatch(props.appDataReducers.setTextCaretPositionerOpts({
-        ...textCaretPositionerOpts,
-        current: getTextCaretPositionerOptsItem(
-          textCaretPositionerOpts,
-          textCaretPositionerOptsItemScope,
-          newOrientationTypeValue,
-          getTextCaretPositionerOptsItemType(textCaretPositionerOpts.isFullViewPortMode)
-        ) ?? {}
-      }));
+      if (newOrientationTypeValue !== currentOrientation) {
+        const textCaretPositionerOptsItemType = getTextCaretPositionerOptsItemType(textCaretPositionerOpts.isFullViewPortMode);
+        const newTextCaretPositionerOpts = { ...textCaretPositionerOpts };
+
+        const newTextCaretPositionerOptsItem = getTextCaretPositionerOptsItem(
+          newTextCaretPositionerOpts, textCaretPositionerOptsItemScope, newOrientationTypeValue, textCaretPositionerOptsItemType
+        );
+
+        newTextCaretPositionerOpts.current = newTextCaretPositionerOptsItem;
+        
+        setCurrentOrientation(newOrientationTypeValue);
+        dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
+      }
     };
 
     window.addEventListener("deviceorientation", handleOrientation);
@@ -631,9 +624,7 @@ export default function TextInputCaretPositioningTool(props: TextInputCaretPosit
     };
   }, [
     currentOrientation,
-    currentOrientation,
     textCaretPositionerOpts,
-    /* textCaretPositionerOptsVal */,
     orientationPermissionsResolved,
     mainElRef,
     currentInputElMtblRef.value,

@@ -68,13 +68,14 @@ export default function TextInputCaretPositionerOptionsView(
     if (((e as React.MouseEvent).button ?? 0) === 0) {
       props.closeClicked();
     }
-  }, [isForFullViewPortMode]);
+  }, [props.closeClicked, isForFullViewPortMode]);
 
   React.useEffect(() => {
   }, [
     props.showMoreOptions,
     props.keepOpen,
     props.isMoveAndResizeMode,
+    props.closeClicked,
     isForFullViewPortMode
   ]);
 
