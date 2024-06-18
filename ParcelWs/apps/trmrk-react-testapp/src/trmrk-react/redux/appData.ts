@@ -138,10 +138,6 @@ export const setTextCaretPositionerOptsToLocalStorage = (
 
     // @ts-ignore
     delete textCaretPositionerOptsSrlzbl.current;
-    console.log(
-      "textCaretPositionerOptsSrlzbl.current",
-      textCaretPositionerOptsSrlzbl.current
-    );
   }
 
   serializeTextCaretPositionerOptsToLocalStorage(

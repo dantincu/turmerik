@@ -816,7 +816,7 @@ export default function TextInputCaretPositionerPopover(
       setInFrontOfAll(inFrontOfAllNewVal);
     }
 
-    console.log("minimizedPropsVal, minimizedNewVal", minimizedPropsVal, minimizedNewVal);
+    console.log("minimizedPropsVal, minimizedNewVal, props.minimized", minimizedPropsVal, minimizedNewVal, props.minimized);
 
     if (minimizedNewVal !== minimizedPropsVal) {
       setMinimizedPropsVal(minimizedNewVal);

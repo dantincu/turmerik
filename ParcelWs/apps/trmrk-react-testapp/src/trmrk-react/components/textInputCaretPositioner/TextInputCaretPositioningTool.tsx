@@ -76,13 +76,17 @@ export const updateTextCaretPositionerOpts = (
   textCaretPositionerOptsItemType: TextCaretPositionerOptsItemType,
   newTextCaretPositionerOptsItem: TextCaretPositionerOptsItemCore,
   setToCurrent: boolean = true) => {
-    const newTextCaretPositionerOptsMapLvl1 = (newTextCaretPositionerOpts.map[textCaretPositionerOptsItemScope] ??= {
-    } as TextCaretPositionerOptsItemsScreenOrientationTypeMap);
+    newTextCaretPositionerOpts.map = {...newTextCaretPositionerOpts.map};
 
-    const newTextCaretPositionerOptsMapLvl2 = (newTextCaretPositionerOptsMapLvl1[currentOrientation] ??= {
-    } as TextCaretPositionerOptsItemsTypeMap);
+    const newTextCaretPositionerOptsMapLvl1 = ({ ...(newTextCaretPositionerOpts.map[textCaretPositionerOptsItemScope] ?? {
+    })} as TextCaretPositionerOptsItemsScreenOrientationTypeMap);
+
+    const newTextCaretPositionerOptsMapLvl2 = ({ ...(newTextCaretPositionerOptsMapLvl1[currentOrientation] ?? {
+    })} as TextCaretPositionerOptsItemsTypeMap);
 
     newTextCaretPositionerOptsMapLvl2[textCaretPositionerOptsItemType] = newTextCaretPositionerOptsItem;
+    newTextCaretPositionerOptsMapLvl1[currentOrientation] = newTextCaretPositionerOptsMapLvl2;
+    newTextCaretPositionerOpts.map[textCaretPositionerOptsItemScope] = newTextCaretPositionerOptsMapLvl1;
 
     if (setToCurrent) {
       newTextCaretPositionerOpts.current = newTextCaretPositionerOptsItem;
