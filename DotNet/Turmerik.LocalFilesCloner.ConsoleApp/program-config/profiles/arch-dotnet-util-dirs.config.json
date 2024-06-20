@@ -30,6 +30,10 @@
               "^\\/Data\\/.*"
             ],
             "ExcludedRelPathRegexes": [
+              "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/Release\\/net8\\.0\\/Chrome",
+              "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/Release\\/net8\\.0\\/ChromeHeadlessShell",
+              "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net8\\.0\\/Chrome",
+              "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net8\\.0\\/ChromeHeadlessShell",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.MkScripts\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.SyncLocalFiles\\.ProgramConfigRetriever\\/program\\-config\\.*",

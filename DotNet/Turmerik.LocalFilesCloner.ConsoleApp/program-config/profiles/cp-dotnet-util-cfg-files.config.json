@@ -75,6 +75,9 @@
           "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net8.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.MdToPdf.ConsoleApp\\Release\\net8.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
         },
         {
