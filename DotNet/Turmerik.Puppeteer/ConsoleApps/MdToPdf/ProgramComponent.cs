@@ -163,19 +163,43 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             {
                 foreach (var file in mdFilesGroup)
                 {
-                    Console.WriteLine(file);
-
                     string htmlFilePath = $"{file}.html";
                     string pdfFilePath = $"{file}.pdf";
 
-                    string mdStr = File.ReadAllText(file);
-                    string htmlStr = Markdown.ToHtml(mdStr, markdownPipeline);
+                    bool @continue = pgArgs.RemoveExisting;
 
-                    File.WriteAllText(htmlFilePath, htmlStr);
+                    if (!@continue)
+                    {
+                        @continue = File.Exists(pdfFilePath);
 
-                    await PuppeteerH.HtmlToPdfFile(
-                        htmlFilePath,
-                        pdfFilePath);
+                        if (@continue)
+                        {
+                            var mdFile = new FileInfo(file);
+                            var pdfFile = new FileInfo(pdfFilePath);
+
+                            @continue = mdFile.LastWriteTimeUtc > pdfFile.CreationTimeUtc;
+                        }
+                    }
+
+                    if (@continue)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine(file);
+                        Console.ResetColor();
+
+                        string mdStr = File.ReadAllText(file);
+                        string htmlStr = Markdown.ToHtml(mdStr, markdownPipeline);
+
+                        File.WriteAllText(htmlFilePath, htmlStr);
+
+                        await PuppeteerH.HtmlToPdfFile(
+                            htmlFilePath,
+                            pdfFilePath);
+                    }
+                    else
+                    {
+                        Console.WriteLine(file);
+                    }
                 }
             }
 
