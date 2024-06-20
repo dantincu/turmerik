@@ -12,15 +12,17 @@ using Turmerik.Core.Utility;
 using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.Core.Text;
 using HtmlAgilityPack;
-using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
 using Turmerik.Html;
 using Turmerik.Core.DriveExplorer;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Markdig;
+using Turmerik.DirsPair;
+using Turmerik.Puppeteer.Helpers;
+using PuppeteerSharp;
 
-namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
+namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 {
     public interface IProgramComponent
     {
@@ -57,7 +59,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             this.processLauncher = processLauncher ?? throw new ArgumentNullException(
                 nameof(processLauncher));
 
-            this.parser = consoleArgsParser ?? throw new ArgumentNullException(
+            parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
 
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
@@ -80,7 +82,8 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                 nameof(htmlDocTitleRetriever));
         }
 
-        public async Task RunAsync(string[] rawArgs)
+        public async Task RunAsync(
+            string[] rawArgs)
         {
             var args = GetArgs(rawArgs);
 
@@ -92,11 +95,15 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             {
                 await NormalizeArgsAsync(args);
 
-                foreach (var nodeArgs in args.RootNodes)
-                {
-                    await RunAsync(
-                        args.WorkDir, nodeArgs);
-                }
+                await PuppeteerH.WithNewPageAsync(
+                    async (page, browser) =>
+                    {
+                        foreach (var nodeArgs in args.RootNodes)
+                        {
+                            await RunAsync(
+                                args.WorkDir, nodeArgs, page, browser);
+                        }
+                    });
             }
         }
 
@@ -250,7 +257,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 
         private async Task RunAsync(
             string workDir,
-            ProgramArgs.Node nodeArgs)
+            ProgramArgs.Node nodeArgs,
+            IPage page,
+            IBrowser browser)
         {
             var opts = GetDirsPairOpts(workDir, nodeArgs);
             var dirsPair = await dirsPairCreator.CreateDirsPairAsync(opts);
@@ -285,7 +294,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                 {
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
                 }
-                else if (!nodeArgs.SkipPdfFileCreation && (config.CreatePdfCmdNameTpl?.Length ?? -1) > 0)
+                else if ((config.CreatePdfFile ?? false) && !nodeArgs.SkipPdfFileCreation)
                 {
                     string md = File.ReadAllText(mdFilePath);
                     string html = Markdown.ToHtml(md);
@@ -303,13 +312,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 
                     File.WriteAllText(htmlFilePath, html);
 
-                    await processLauncher.Launch(new ProcessLauncherOpts
-                    {
-                        UseShellExecute = true,
-                        FileName = config.CreatePdfCmdNameTpl.First(),
-                        ArgumentsNmrbl = config.CreatePdfCmdNameTpl.Skip(1).Select(
-                            arg => string.Format(arg, mdFilePath))
-                    });
+                    await PuppeteerH.HtmlToPdfFile(
+                        htmlFilePath,
+                        pdfFilePath);
                 }
             }
 
@@ -319,7 +324,10 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             foreach (var childNodeArgs in nodeArgs.ChildNodes)
             {
                 await RunAsync(
-                    childNodesWorkDir, childNodeArgs);
+                    childNodesWorkDir,
+                    childNodeArgs,
+                    page,
+                    browser);
             }
         }
 

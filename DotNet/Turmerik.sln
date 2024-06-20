@@ -87,7 +87,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFileNotes.Win
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.SyncLocalFiles.ConsoleApp", "Turmerik.SyncLocalFiles.ConsoleApp\Turmerik.SyncLocalFiles.ConsoleApp.csproj", "{B45B9B65-C1A0-442F-8F8B-03E54C32718D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp", "Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp\Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp.csproj", "{C293B763-4071-402E-A6A7-216194D142DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp", "Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp\Turmerik.FsDirsPairRefactor_AddSections.ConsoleApp.csproj", "{C293B763-4071-402E-A6A7-216194D142DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.MdToPdf.ConsoleApp", "Turmerik.MdToPdf.ConsoleApp\Turmerik.MdToPdf.ConsoleApp.csproj", "{B26EFF9E-031F-41C2-8183-FAF9975E05AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.Puppeteer", "Turmerik.Puppeteer\Turmerik.Puppeteer.csproj", "{BF7B1891-E547-4943-9AD7-E6502E15ACA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -231,6 +235,14 @@ Global
 		{C293B763-4071-402E-A6A7-216194D142DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C293B763-4071-402E-A6A7-216194D142DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C293B763-4071-402E-A6A7-216194D142DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B26EFF9E-031F-41C2-8183-FAF9975E05AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B26EFF9E-031F-41C2-8183-FAF9975E05AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B26EFF9E-031F-41C2-8183-FAF9975E05AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B26EFF9E-031F-41C2-8183-FAF9975E05AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7B1891-E547-4943-9AD7-E6502E15ACA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7B1891-E547-4943-9AD7-E6502E15ACA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7B1891-E547-4943-9AD7-E6502E15ACA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7B1891-E547-4943-9AD7-E6502E15ACA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -275,6 +287,8 @@ Global
 		{2C598546-998D-47B5-A0E1-8B14D1FBF2F7} = {ED70AF8C-C648-40AC-98D6-FF8879FA670E}
 		{B45B9B65-C1A0-442F-8F8B-03E54C32718D} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{C293B763-4071-402E-A6A7-216194D142DC} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
+		{B26EFF9E-031F-41C2-8183-FAF9975E05AA} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{BF7B1891-E547-4943-9AD7-E6502E15ACA4} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

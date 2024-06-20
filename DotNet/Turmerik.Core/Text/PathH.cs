@@ -226,5 +226,14 @@ namespace Turmerik.Core.Text
             string path,
             string defaultBasePath) => AssurePathRooted(
                 path, defaultBasePath, Path.GetFullPath);
+
+        public static Dictionary<string, string[]> MapFileNameExtensions(
+            IEnumerable<string> filesArr) => filesArr.Select(
+                file => Tuple.Create(
+                    Path.GetExtension(file)?.ToLower() ?? string.Empty,
+                    file)).GroupBy(tuple => tuple.Item1).ToDictionary(
+                group => group.Key,
+                group => group.Select(
+                    tuple => tuple.Item2).ToArray());
     }
 }

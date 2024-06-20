@@ -244,31 +244,5 @@ namespace Turmerik.NetCore.ConsoleApps.LocalFilesCloner
             filter.IncludedRelPathRegexes ??= dfFilter?.IncludedRelPathRegexes ?? new List<string> { ".*" };
             filter.ExcludedRelPathRegexes ??= dfFilter?.ExcludedRelPathRegexes ?? new List<string>();
         }
-
-        /* private void NormalizeFsEntriesFilterIfReq(
-            DriveEntriesSerializableFilter filter,
-            DriveEntriesSerializableFilter dfFilter = null)
-        {
-            if (filter != null)
-            {
-                filter.IncludedRelPathRegexes ??= new List<string> { ".*" };
-                filter.ExcludedRelPathRegexes ??= new List<string>();
-
-                if (dfFilter != null)
-                {
-                    if (dfFilter.IncludedRelPathRegexes != null)
-                    {
-                        filter.IncludedRelPathRegexes.InsertRange(
-                            0, dfFilter.IncludedRelPathRegexes.Except([".*"]));
-                    }
-
-                    if (dfFilter.ExcludedRelPathRegexes != null)
-                    {
-                        filter.ExcludedRelPathRegexes.InsertRange(
-                            0, dfFilter.ExcludedRelPathRegexes);
-                    }
-                }
-            }
-        } */
     }
 }

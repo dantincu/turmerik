@@ -12,7 +12,6 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
-using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
 using Turmerik.TextParsing.Md;
 using static Turmerik.DirsPair.ConsoleApps.RfDirsPairNames.ProgramComponent;

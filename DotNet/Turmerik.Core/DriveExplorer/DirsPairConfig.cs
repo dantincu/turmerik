@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.DirsPair
+namespace Turmerik.Core.DriveExplorer
 {
     public class DirsPairConfig
     {
         public int? FileNameMaxLength { get; set; }
         public bool? ThrowIfAnyItemAlreadyExists { get; set; }
         public string TrmrkGuidInputName { get; set; }
-        public string[] CreatePdfCmdNameTpl { get; set; }
+        public bool? CreatePdfFile { get; set; }
 
         public ArgOptionsT ArgOpts { get; set; }
         public DirNamesT DirNames { get; set; }

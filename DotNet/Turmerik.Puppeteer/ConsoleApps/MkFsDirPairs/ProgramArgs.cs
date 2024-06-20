@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.DirsPair;
+using Turmerik.Core.DriveExplorer;
 
-namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
+namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 {
     public class ProgramArgs
     {

@@ -3,7 +3,7 @@ using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
-using Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs;
+using Turmerik.Puppeteer.ConsoleApps.MdToPdf;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());

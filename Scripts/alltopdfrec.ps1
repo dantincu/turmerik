@@ -1,5 +1,10 @@
 Get-ChildItem -Recurse -Filter *.md | ForEach-Object {
-  Write-Output $_.FullName
-  pandoc -o ($_.FullName + '.html') $_.FullName
-  wkhtmltopdf ($_.FullName + '.html') ($_.FullName + '.pdf')
+  $mdFilePath = [regex]::Escape($_.FullName)
+  $htmlFilePath = $mdFilePath + '.html'
+  $pdfFilePath = $mdFilePath + '.pdf'
+
+  Write-Output $mdFilePath
+
+  pandoc $mdFilePath -o $htmlFilePath
+  wkhtmltopdf $htmlFilePath $pdfFilePath --enable-local-file-access
 }
