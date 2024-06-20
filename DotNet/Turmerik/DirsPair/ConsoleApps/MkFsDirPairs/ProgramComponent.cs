@@ -17,6 +17,7 @@ using Turmerik.Notes.Core;
 using Turmerik.Html;
 using Turmerik.Core.DriveExplorer;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 {
@@ -30,6 +31,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IConsoleArgsParser parser;
+        private readonly IProcessLauncherCore processLauncher;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
         private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
@@ -40,6 +42,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             IJsonConversion jsonConversion,
             IConsoleMsgPrinter consoleMsgPrinter,
             IConsoleArgsParser consoleArgsParser,
+            IProcessLauncherCore processLauncher,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IDirsPairCreatorFactory dirsPairCreatorFactory,
             IHtmlDocTitleRetriever htmlDocTitleRetriever)
@@ -50,7 +53,10 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
 
-            parser = consoleArgsParser ?? throw new ArgumentNullException(
+            this.processLauncher = processLauncher ?? throw new ArgumentNullException(
+                nameof(processLauncher));
+
+            this.parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
 
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
@@ -266,17 +272,27 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             Console.WriteLine(shortNameDir.Name);
             Console.ResetColor();
 
-            if (opts.OpenMdFile)
+            var mdFile = shortNameDir.FolderFiles?.SingleOrDefault();
+
+            string mdFilePath = Path.Combine(
+                shortNameDir.Idnf,
+                mdFile.Name);
+
+            if (mdFile != null)
             {
-                var file = shortNameDir.FolderFiles?.SingleOrDefault();
-
-                if (file != null)
+                if (opts.OpenMdFile)
                 {
-                    string filePath = Path.Combine(
-                        shortNameDir.Idnf,
-                        file.Name);
-
-                    ProcessH.OpenWithDefaultProgramIfNotNull(filePath);
+                    ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
+                }
+                else if (!nodeArgs.SkipPdfFileCreation && (config.CreatePdfCmdNameTpl?.Length ?? -1) > 0)
+                {
+                    await processLauncher.Launch(new ProcessLauncherOpts
+                    {
+                        UseShellExecute = true,
+                        FileName = config.CreatePdfCmdNameTpl.First(),
+                        ArgumentsNmrbl = config.CreatePdfCmdNameTpl.Skip(1).Select(
+                            arg => string.Format(arg, mdFilePath))
+                    });
                 }
             }
 
@@ -300,6 +316,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             {
                 PrIdnf = workDir,
                 Title = nodeArgs.Title,
+                SkipMdFileCreation = nodeArgs.SkipMdFileCreation,
                 OpenMdFile = nodeArgs.OpenMdFile,
                 MaxFsEntryNameLength = config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH,
                 ShortDirName = nodeArgs.ShortDirName,
@@ -382,7 +399,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             string[] urlParts = url.Split('|');
             url = urlParts.Last();
 
-            string resTitle = null;
+            string? resTitle = null;
 
             if (urlParts.Length > 1)
             {
@@ -438,7 +455,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                     resTitle, ConsoleColor.Cyan);
             }
 
-            nodeArgs.ResTitle ??= resTitle;
+            nodeArgs.ResTitle ??= resTitle?.Replace("\\", "\\\\");
 
             nodeArgs.MdFirstContent = string.Format(
                 config.FileContents.MdFileContentSectionTemplate,
@@ -570,6 +587,9 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.SkipMdFileCreation.Arr(),
                                             data => data.Args.Current.SkipMdFileCreation = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.SkipPdfFileCreation.Arr(),
+                                            data => data.Args.Current.SkipPdfFileCreation = true, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNote.Arr(),
                                             data => data.Args.Current.CreateNote = true, true),

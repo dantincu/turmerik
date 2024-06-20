@@ -8,6 +8,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Notes.Core;
+using Turmerik.TextParsing.Md;
 
 namespace Turmerik.DirsPair
 {
@@ -335,7 +336,7 @@ namespace Turmerik.DirsPair
         {
             List<DriveItemX> folderFiles = null;
 
-            if (!string.IsNullOrWhiteSpace(
+            if (!opts.SkipMdFileCreation && !string.IsNullOrWhiteSpace(
                 opts.MdFileName))
             {
                 var mdFile = new DriveItemX
@@ -345,7 +346,7 @@ namespace Turmerik.DirsPair
                     {
                         TextFileContents = string.Format(
                             opts.MdFileContentsTemplate,
-                            opts.Title,
+                            MdH.EncodeForMd(opts.Title),
                             Trmrk.TrmrkGuidStrNoDash,
                             opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME) + opts.MdFileFirstContent
                     }

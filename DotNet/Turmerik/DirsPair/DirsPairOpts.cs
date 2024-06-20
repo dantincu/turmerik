@@ -14,6 +14,7 @@ namespace Turmerik.DirsPair
         {
             PrIdnf = src.PrIdnf;
             Title = src.Title;
+            SkipMdFileCreation = src.SkipMdFileCreation;
             OpenMdFile = src.OpenMdFile;
             MaxFsEntryNameLength = src.MaxFsEntryNameLength;
             ShortDirName = src.ShortDirName;
@@ -35,6 +36,7 @@ namespace Turmerik.DirsPair
 
         public string PrIdnf { get; set; }
         public string Title { get; set; }
+        public bool SkipMdFileCreation { get; set; }
         public bool OpenMdFile { get; set; }
         public int MaxFsEntryNameLength { get; set; }
         public string ShortDirName { get; set; }

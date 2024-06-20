@@ -11,6 +11,7 @@ namespace Turmerik.Core.Utility
     {
         public string WorkingDirectory { get; set; }
         public string FileName { get; set; }
+
         public IEnumerable<string> ArgumentsNmrbl { get; set; }
 
         public bool? RedirectStandardError { get; set; }

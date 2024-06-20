@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web;
 using Turmerik.Core.Text;
 
 namespace Turmerik.TextParsing.Md
@@ -74,6 +75,14 @@ namespace Turmerik.TextParsing.Md
             }
 
             return title;
+        }
+
+        public static string EncodeForMd(string str)
+        {
+            str = HttpUtility.HtmlEncode(str);
+            str = str.Replace("\\", "\\\\");
+
+            return str;
         }
     }
 }

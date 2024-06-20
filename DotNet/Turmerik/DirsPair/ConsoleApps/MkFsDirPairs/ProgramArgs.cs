@@ -23,6 +23,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
             public string Uri { get; set; }
             public bool OpenMdFile { get; set; }
             public bool SkipMdFileCreation { get; set; }
+            public bool SkipPdfFileCreation { get; set; }
             public string Title { get; set; }
             public string ResTitle { get; set; }
             public string MdFirstContent { get; set; }

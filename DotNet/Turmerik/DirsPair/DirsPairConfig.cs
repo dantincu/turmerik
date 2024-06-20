@@ -9,6 +9,7 @@ namespace Turmerik.DirsPair
         public int? FileNameMaxLength { get; set; }
         public bool? ThrowIfAnyItemAlreadyExists { get; set; }
         public string TrmrkGuidInputName { get; set; }
+        public string[] CreatePdfCmdNameTpl { get; set; }
 
         public ArgOptionsT ArgOpts { get; set; }
         public DirNamesT DirNames { get; set; }
@@ -23,6 +24,7 @@ namespace Turmerik.DirsPair
             public string InteractiveMode { get; set; }
             public string OpenMdFile { get; set; }
             public string SkipMdFileCreation { get; set; }
+            public string SkipPdfFileCreation { get; set; }
             public string DirNameTpl { get; set; }
             public string CreateNote { get; set; }
             public string CreateNoteSection { get; set; }
