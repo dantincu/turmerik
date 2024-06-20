@@ -1,1 +1,0 @@
-powershell alltopdfrec.ps1

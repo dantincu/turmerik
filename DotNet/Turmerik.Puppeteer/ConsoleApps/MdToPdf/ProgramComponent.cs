@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.DriveExplorer;
@@ -76,6 +77,12 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             pgArgs.WorkDir = textMacrosReplacer.NormalizePath(
                 pgArgs.LocalDevicePathsMap,
                 pgArgs.WorkDir, Environment.CurrentDirectory);
+
+            if (!string.IsNullOrEmpty(pgArgs.RecursiveMatchingDirName))
+            {
+                pgArgs.RecursiveMatchingDirNameRegex = new Regex(
+                    pgArgs.RecursiveMatchingDirName);
+            }
         }
 
         public async Task RunAsync(string[] rawArgs)
@@ -120,7 +127,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                                     parser.ArgsFlagOpts(data,
                                         [H], data => data.Args.PrintHelpMessage = true, true),
                                     parser.ArgsFlagOpts(data,
-                                        [REC], data => data.Args.Recursive = true, true),
+                                        [REC], data => data.Args.RecursiveMatchingDirName = data.ArgFlagValue!.JoinNotNullStr(":")),
                                     parser.ArgsFlagOpts(data,
                                         [RE], data => data.Args.RemoveExisting = true, true)
                             ]
@@ -172,12 +179,14 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                 }
             }
 
-            if (pgArgs.Recursive)
+            if (pgArgs.RecursiveMatchingDirNameRegex != null)
             {
                 var subFoldersArr = Directory.GetDirectories(
                     pgArgs.WorkDir);
 
-                var subFolderPgArgsArr = subFoldersArr.Select(
+                var subFolderPgArgsArr = subFoldersArr.Where(
+                    folder => pgArgs.RecursiveMatchingDirNameRegex.IsMatch(
+                        folder)).Select(
                     folder => new ProgramArgs(pgArgs)
                     {
                         WorkDir = folder

@@ -1,1 +1,0 @@
-powershell alltopdf.ps1

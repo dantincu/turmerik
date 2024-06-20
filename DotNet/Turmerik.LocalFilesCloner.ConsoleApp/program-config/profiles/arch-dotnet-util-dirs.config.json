@@ -18,6 +18,7 @@
               "^\\/Bin\\/TrmrkMkFsDirsPair\\/.*",
               "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",
+              "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MkScripts\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/.*",

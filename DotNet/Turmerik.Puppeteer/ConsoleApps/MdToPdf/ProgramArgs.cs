@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Turmerik.Core.LocalDeviceEnv;
 
 namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
@@ -16,14 +17,16 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             LocalDevicePathsMap = src.LocalDevicePathsMap;
             PrintHelpMessage = src.PrintHelpMessage;
             WorkDir = src.WorkDir;
-            Recursive = src.Recursive;
+            RecursiveMatchingDirName = src.RecursiveMatchingDirName;
+            RecursiveMatchingDirNameRegex = src.RecursiveMatchingDirNameRegex;
             RemoveExisting = src.RemoveExisting;
         }
 
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public bool PrintHelpMessage { get; set; }
         public string WorkDir { get; set; }
-        public bool Recursive { get; set; }
+        public string RecursiveMatchingDirName { get; set; }
+        public Regex RecursiveMatchingDirNameRegex { get; set; }
         public bool RemoveExisting { get; set; }
     }
 }
