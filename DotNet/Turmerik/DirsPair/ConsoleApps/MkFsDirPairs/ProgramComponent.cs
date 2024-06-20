@@ -18,6 +18,7 @@ using Turmerik.Html;
 using Turmerik.Core.DriveExplorer;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Markdig;
 
 namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 {
@@ -274,18 +275,34 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirPairs
 
             var mdFile = shortNameDir.FolderFiles?.SingleOrDefault();
 
-            string mdFilePath = Path.Combine(
-                shortNameDir.Idnf,
-                mdFile.Name);
-
             if (mdFile != null)
             {
+                string mdFilePath = Path.Combine(
+                    shortNameDir.Idnf,
+                    mdFile.Name);
+
                 if (opts.OpenMdFile)
                 {
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
                 }
                 else if (!nodeArgs.SkipPdfFileCreation && (config.CreatePdfCmdNameTpl?.Length ?? -1) > 0)
                 {
+                    string md = File.ReadAllText(mdFilePath);
+                    string html = Markdown.ToHtml(md);
+
+                    string htmlFileName = string.Join(".", mdFile.Name, "html");
+                    string pdfFileName = string.Join(".", mdFile.Name, "pdf");
+
+                    string htmlFilePath = Path.Combine(
+                        shortNameDir.Idnf,
+                        htmlFileName);
+
+                    string pdfFilePath = Path.Combine(
+                        shortNameDir.Idnf,
+                        pdfFileName);
+
+                    File.WriteAllText(htmlFilePath, html);
+
                     await processLauncher.Launch(new ProcessLauncherOpts
                     {
                         UseShellExecute = true,

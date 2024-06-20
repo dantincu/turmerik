@@ -1,1 +1,1 @@
-powershell alltopdfrec.ps1
+powershell alltopdf.ps1
