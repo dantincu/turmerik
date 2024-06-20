@@ -170,9 +170,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
 
                     if (!@continue)
                     {
-                        @continue = File.Exists(pdfFilePath);
+                        @continue = !File.Exists(pdfFilePath);
 
-                        if (@continue)
+                        if (!@continue)
                         {
                             var mdFile = new FileInfo(file);
                             var pdfFile = new FileInfo(pdfFilePath);
