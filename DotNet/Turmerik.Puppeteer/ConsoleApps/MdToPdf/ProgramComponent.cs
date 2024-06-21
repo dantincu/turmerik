@@ -95,13 +95,14 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             }
             else
             {
-                NormalizeArgs(pgArgs);
                 await RunAsync(pgArgs);
             }
         }
 
         public async Task RunAsync(ProgramArgs pgArgs)
         {
+            NormalizeArgs(pgArgs);
+
             await PuppeteerH.WithNewPageAsync(
                 (page, browser) => RunCoreAsync(
                     pgArgs,

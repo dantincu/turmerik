@@ -9,7 +9,6 @@ using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
-using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
 using Turmerik.Core.Text;
 using HtmlAgilityPack;
 using Turmerik.Notes.Core;
@@ -34,7 +33,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IConsoleArgsParser parser;
-        private readonly IProcessLauncherCore processLauncher;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
         private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
@@ -45,7 +43,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             IJsonConversion jsonConversion,
             IConsoleMsgPrinter consoleMsgPrinter,
             IConsoleArgsParser consoleArgsParser,
-            IProcessLauncherCore processLauncher,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IDirsPairCreatorFactory dirsPairCreatorFactory,
             IHtmlDocTitleRetriever htmlDocTitleRetriever)
@@ -55,9 +52,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
-
-            this.processLauncher = processLauncher ?? throw new ArgumentNullException(
-                nameof(processLauncher));
 
             parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));

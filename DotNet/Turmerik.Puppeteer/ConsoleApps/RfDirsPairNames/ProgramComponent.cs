@@ -14,22 +14,17 @@ using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Notes.Core;
 using Turmerik.TextParsing.Md;
-using static Turmerik.DirsPair.ConsoleApps.RfDirsPairNames.ProgramComponent;
+using static Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames.ProgramComponent;
 
-namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
+namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 {
     public interface IProgramComponent
     {
-        void Run(string[] rawArgs);
+        Task<Tuple<string?, string?>> RunAsync(
+            string[] rawArgs);
 
-        void Run(
-            string[] rawArgs,
-            out string title,
-            out string newFullDirNamePart);
-
-        void Run(
-            WorkArgs wka,
-            out string newFullDirNamePart);
+        Task<string> RunAsync(
+            WorkArgs wka);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -38,6 +33,7 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IConsoleArgsParser consoleArgsParser;
+        private readonly MdToPdf.IProgramComponent mdToPdfProgramComponent;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly NoteDirsPairConfigMtbl noteDirsPairCfg;
@@ -47,7 +43,8 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
             IJsonConversion jsonConversion,
             IConsoleMsgPrinter consoleMsgPrinter,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
-            IConsoleArgsParser consoleArgsParser)
+            IConsoleArgsParser consoleArgsParser,
+            MdToPdf.IProgramComponent mdToPdfProgramComponent)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -60,6 +57,9 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
 
             this.consoleArgsParser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
+
+            this.mdToPdfProgramComponent = mdToPdfProgramComponent ?? throw new ArgumentNullException(
+                nameof(mdToPdfProgramComponent));
 
             config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
                 File.ReadAllText(Path.Combine(
@@ -75,18 +75,12 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
             noteFileNamesCfg = noteDirsPairCfg.FileNames;
         }
 
-        public void Run(string[] rawArgs)
-        {
-            Run(rawArgs, out _, out _);
-        }
-
-        public void Run(
-            string[] rawArgs,
-            out string title,
-            out string newFullDirNamePart)
+        public async Task<Tuple<string?, string?>> RunAsync(
+            string[] rawArgs)
         {
             var args = GetWorkArgs(rawArgs);
-            title = args.MdTitle;
+            string? title = args.MdTitle;
+            string? newFullDirNamePart;
 
             if (args.PrintHelpMessage != true)
             {
@@ -95,22 +89,23 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                     Args = args
                 };
 
-                Run(wka, out newFullDirNamePart);
+                newFullDirNamePart = await RunAsync(wka);
             }
             else
             {
                 title = null;
                 newFullDirNamePart = null;
             }
+
+            return Tuple.Create(title, newFullDirNamePart);
         }
 
-        public void Run(
-            WorkArgs wka,
-            out string newFullDirNamePart)
+        public async Task<string> RunAsync(
+            WorkArgs wka)
         {
             var args = wka.Args;
 
-            newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(
+            string newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(
                 wka.Args.MdTitle,
                 config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
 
@@ -124,10 +119,16 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                 TryRenameMdFile(wka, newMdFileName);
             }
 
-            // if (newFullDirName != args.FullDirName)
-            {
-                TryRenameFullNameDir(wka, newFullDirName);
-            }
+            TryRenameFullNameDir(wka, newFullDirName);
+
+            await mdToPdfProgramComponent.RunAsync(
+                new MdToPdf.ProgramArgs
+                {
+                    WorkDir = wka.Args.ShortNameDirPath,
+                    RemoveExisting = true
+                });
+
+            return newFullDirNamePart;
         }
 
         private void PrintHelpMessage(
@@ -161,14 +162,10 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                 $"{{{x.Blue}}}Welcome to the Turmerik RfDirsPairNames tool{{{x.NewLine}}}",
 
                 string.Join(" ", $"{m.ThisTool.U} helps you update the markdown file name and",
-                $"the full folder name for the working directory{{{x.NewLine}}}."),
+                $"the full folder name for the working directory.{{{x.NewLine}}}"),
 
                 string.Join(" ", $"Here is a list of argument options {m.ThisTool.L} supports",
                     $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
-
-                string.Join(" ", optsHead($":{argOpts.WorkDir}", ""),
-                    $"Changes the work directory for the folder pair whose name is to be updated",
-                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
                 string.Join(" ", optsHead($":{argOpts.InteractiveMode}", ""),
                     $"Enables the interactive mode where, before making any changes to any files or folders",
@@ -186,14 +183,11 @@ namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
                 string.Join(" ", $"Here is a list of arguments {m.ThisTool.L} supports",
                     $"(those marked with {{{x.DarkRed}}}*{{{x.Splitter}}} are required):{{{x.NewLine}}}{{{x.NewLine}}}"),
 
-                $"{{{x.DarkBlue}}}1. {{{x.Splitter}}}The {{{x.Blue}}}work dir{{{x.Splitter}}}",
-                $"changes the working directory from where the pairs of folders are listed{{{x.NewLine}}}{{{x.NewLine}}}",
-
                 string.Join(" ", $"{{{x.DarkBlue}}}1. {{{x.Splitter}}}The {{{x.Blue}}}short name dir path{{{x.Splitter}}}",
                     $"Specifies the path of the short name folder whose corresponding full name folder and",
                     $"markdown file are to be renamed. If ommited, the current directory will be used instead.",
                     $"If provided a relative path, the current directory will be used as base path for",
-                    $"getting the short name folder path."),
+                    $"getting the short name folder path.{{{x.NewLine}}}{{{x.NewLine}}}"),
 
                 string.Join(" ", $"{{{x.DarkBlue}}}2. {{{x.Splitter}}}The {{{x.Blue}}}markdown file name{{{x.Splitter}}}",
                     $"that will be used to extract the note item title from{{{x.NewLine}}}{{{x.NewLine}}}"),

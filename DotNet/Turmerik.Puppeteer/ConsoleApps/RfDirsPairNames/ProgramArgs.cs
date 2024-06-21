@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Turmerik.DirsPair.ConsoleApps.RfDirsPairNames
+namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 {
     public class ProgramArgs
     {

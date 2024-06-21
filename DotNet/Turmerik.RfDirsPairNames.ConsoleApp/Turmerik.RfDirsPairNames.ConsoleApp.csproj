@@ -9,7 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
+    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
+    <ProjectReference Include="..\Turmerik.Puppeteer\Turmerik.Puppeteer.csproj" />
   </ItemGroup>
 
 </Project>

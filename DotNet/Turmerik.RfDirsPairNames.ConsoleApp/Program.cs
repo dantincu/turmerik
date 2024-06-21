@@ -3,7 +3,8 @@ using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
-using Turmerik.DirsPair.ConsoleApps.RfDirsPairNames;
+using Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames;
+using MdToPdf = Turmerik.Puppeteer.ConsoleApps.MdToPdf;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
@@ -13,13 +14,14 @@ TrmrkServices.RegisterAll(services);
 DriveExplorerH.AddFsRetrieverAndExplorer(
     services, null, true);
 
+services.AddTransient<MdToPdf.IProgramComponent, MdToPdf.ProgramComponent>();
 services.AddTransient<IProgramComponent, ProgramComponent>();
 var svcProv = services.BuildServiceProvider();
 
-ConsoleH.TryExecute(
-    () =>
+await ConsoleH.TryExecuteAsync(
+    (async () =>
     {
         var program = svcProv.GetRequiredService<IProgramComponent>();
-        program.Run(args);
-    },
+        await program.RunAsync(args);
+    }),
     false);
