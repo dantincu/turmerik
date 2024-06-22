@@ -63,7 +63,10 @@
       "hs": [ ":s", "Historical Figures", ":=" ],
       "tc": [ ":s", "Terms & Concepts", ":=" ],
       "ps": [ ":s", "Products & Services", ":=" ],
-      "egna": [ ":s", "Environment, Geography, Nature & Agriculture", ":=" ]
+      "egna": [ ":s", "\"Environment, Geography, Nature & Agriculture\"", ":=" ],
+      "pl": [ ":s", "Places", ":=" ],
+      "gr": [ ":s", "Geographical Regions", ":=" ],
+      "plgr": [ ":s", "Places & Geographical Regions", ":=" ]
     }
   }
 }
