@@ -17,16 +17,16 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             LocalDevicePathsMap = src.LocalDevicePathsMap;
             PrintHelpMessage = src.PrintHelpMessage;
             WorkDir = src.WorkDir;
-            RecursiveMatchingDirName = src.RecursiveMatchingDirName;
-            RecursiveMatchingDirNameRegex = src.RecursiveMatchingDirNameRegex;
+            RecursiveMatchingDirNamesArr = src.RecursiveMatchingDirNamesArr;
+            RecursiveMatchingDirNameRegexsArr = src.RecursiveMatchingDirNameRegexsArr;
             RemoveExisting = src.RemoveExisting;
         }
 
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public bool PrintHelpMessage { get; set; }
         public string WorkDir { get; set; }
-        public string RecursiveMatchingDirName { get; set; }
-        public Regex RecursiveMatchingDirNameRegex { get; set; }
+        public string[]? RecursiveMatchingDirNamesArr { get; set; }
+        public Regex[]? RecursiveMatchingDirNameRegexsArr { get; set; }
         public bool RemoveExisting { get; set; }
     }
 }

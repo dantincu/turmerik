@@ -78,11 +78,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                 pgArgs.LocalDevicePathsMap,
                 pgArgs.WorkDir, Environment.CurrentDirectory);
 
-            if (!string.IsNullOrEmpty(pgArgs.RecursiveMatchingDirName))
-            {
-                pgArgs.RecursiveMatchingDirNameRegex = new Regex(
-                    pgArgs.RecursiveMatchingDirName);
-            }
+            pgArgs.RecursiveMatchingDirNameRegexsArr = pgArgs.RecursiveMatchingDirNamesArr?.Select(
+                dirName => new Regex(dirName)).ToArray();
         }
 
         public async Task RunAsync(string[] rawArgs)
@@ -128,7 +125,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                                     parser.ArgsFlagOpts(data,
                                         [H], data => data.Args.PrintHelpMessage = true, true),
                                     parser.ArgsFlagOpts(data,
-                                        [REC], data => data.Args.RecursiveMatchingDirName = data.ArgFlagValue!.JoinNotNullStr(":")),
+                                        [REC], data => data.Args.RecursiveMatchingDirNamesArr = data.ArgFlagValue!),
                                     parser.ArgsFlagOpts(data,
                                         [RE], data => data.Args.RemoveExisting = true, true)
                             ]
@@ -178,7 +175,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                             var mdFile = new FileInfo(file);
                             var pdfFile = new FileInfo(pdfFilePath);
 
-                            @continue = mdFile.LastWriteTimeUtc > pdfFile.CreationTimeUtc;
+                            @continue = mdFile.LastWriteTimeUtc > pdfFile.LastWriteTimeUtc;
                         }
                     }
 
@@ -204,14 +201,14 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                 }
             }
 
-            if (pgArgs.RecursiveMatchingDirNameRegex != null)
+            if (pgArgs.RecursiveMatchingDirNameRegexsArr != null)
             {
                 var subFoldersArr = Directory.GetDirectories(
                     pgArgs.WorkDir);
 
                 var subFolderPgArgsArr = subFoldersArr.Where(
-                    folder => pgArgs.RecursiveMatchingDirNameRegex.IsMatch(
-                        folder)).Select(
+                    folder => pgArgs.RecursiveMatchingDirNameRegexsArr?.Any(
+                        regex => regex.IsMatch(folder)) ?? true).Select(
                     folder => new ProgramArgs(pgArgs)
                     {
                         WorkDir = folder
