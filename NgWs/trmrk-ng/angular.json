@@ -1,0 +1,168 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "trmrk-ng-test-app": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/trmrk-ng-test-app",
+      "sourceRoot": "projects/trmrk-ng-test-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": "dist/trmrk-ng-test-app",
+            "index": "projects/trmrk-ng-test-app/src/index.html",
+            "browser": "projects/trmrk-ng-test-app/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/trmrk-ng-test-app/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/trmrk-ng-test-app/public"
+              }
+            ],
+            "styles": [
+              "projects/trmrk-ng-test-app/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kB",
+                  "maximumError": "4kB"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "trmrk-ng-test-app:build:production"
+            },
+            "development": {
+              "buildTarget": "trmrk-ng-test-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/trmrk-ng-test-app/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "projects/trmrk-ng-test-app/public"
+              }
+            ],
+            "styles": [
+              "projects/trmrk-ng-test-app/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    },
+    "trmrk-ng-core": {
+      "projectType": "library",
+      "root": "projects/trmrk-ng-core",
+      "sourceRoot": "projects/trmrk-ng-core/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/trmrk-ng-core/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/trmrk-ng-core/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/trmrk-ng-core/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/trmrk-ng-core/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    },
+    "trmrk-ng-browser": {
+      "projectType": "library",
+      "root": "projects/trmrk-ng-browser",
+      "sourceRoot": "projects/trmrk-ng-browser/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/trmrk-ng-browser/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/trmrk-ng-browser/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/trmrk-ng-browser/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/trmrk-ng-browser/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
