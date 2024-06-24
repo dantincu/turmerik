@@ -17,7 +17,6 @@
               [ "..\\..\\libs\\trmrk-axios" ],
               [ "..\\..\\libs\\trmrk-blazor" ],
               [ "..\\..\\libs\\trmrk-browser" ],
-              [ "..\\..\\libs\\trmrk-browser-testapp" ],
               [ "..\\..\\libs\\trmrk-react" ],
               [ "..\\..\\libs\\trmrk-mkscripts-parcelws-sync-behavior" ],
               [ "..\\..\\libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp" ],
@@ -25,7 +24,6 @@
               [ "..\\..\\libs\\trmrk-text-transform-behavior-testapp" ],
               [ "..\\..\\libs\\trmrk-text-transform-defaultbehavior" ],
               [ "..\\..\\libs\\trmrk-text-transform-mybehavior" ],
-              [ "..\\..\\apps\\trmrk-notes-blazorapp" ],
               [ "..\\..\\apps\\trmrk-react-testapp" ]
             ],
             "ArgFilters": {
@@ -177,13 +175,11 @@
           "libs\\trmrk-axios\\_",
           "libs\\trmrk-blazor\\_",
           "libs\\trmrk-browser\\_",
-          "libs\\trmrk-browser-testapp\\_",
           "libs\\trmrk-react\\_",
           "libs\\trmrk-text-transform-behavior\\_",
           "libs\\trmrk-text-transform-behavior-testapp\\_",
           "libs\\trmrk-text-transform-defaultbehavior\\_",
           "libs\\trmrk-text-transform-mybehavior\\_",
-          "apps\\trmrk-notes-blazorapp\\_",
           "apps\\trmrk-react-testapp\\_"
         ],
         "Filters": {
