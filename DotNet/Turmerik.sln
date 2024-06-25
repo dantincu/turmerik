@@ -73,6 +73,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MdToPdf.ConsoleApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Puppeteer", "Turmerik.Puppeteer\Turmerik.Puppeteer.csproj", "{BF7B1891-E547-4943-9AD7-E6502E15ACA4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LocalFileNotes", "LocalFileNotes", "{0C1E39CA-0DD7-4275-B038-92AE53485381}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.LocalFilesExplorer.WebApi", "Turmerik.LocalFilesExplorer.WebApi\Turmerik.LocalFilesExplorer.WebApi.csproj", "{3E8DBC47-E585-46AA-8879-76B02D4180A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +191,10 @@ Global
 		{BF7B1891-E547-4943-9AD7-E6502E15ACA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF7B1891-E547-4943-9AD7-E6502E15ACA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF7B1891-E547-4943-9AD7-E6502E15ACA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E8DBC47-E585-46AA-8879-76B02D4180A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E8DBC47-E585-46AA-8879-76B02D4180A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E8DBC47-E585-46AA-8879-76B02D4180A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E8DBC47-E585-46AA-8879-76B02D4180A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -223,6 +231,8 @@ Global
 		{B45B9B65-C1A0-442F-8F8B-03E54C32718D} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{B26EFF9E-031F-41C2-8183-FAF9975E05AA} = {52B63410-2581-4146-9484-89D300FAE7B5}
 		{BF7B1891-E547-4943-9AD7-E6502E15ACA4} = {A5B8430F-B64C-4AE7-B315-72686C296100}
+		{0C1E39CA-0DD7-4275-B038-92AE53485381} = {FC13E95F-6405-4DF0-B40C-4D4D077A59AE}
+		{3E8DBC47-E585-46AA-8879-76B02D4180A2} = {0C1E39CA-0DD7-4275-B038-92AE53485381}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

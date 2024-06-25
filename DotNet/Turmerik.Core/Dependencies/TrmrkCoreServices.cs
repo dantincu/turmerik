@@ -23,7 +23,8 @@ namespace Turmerik.Core.Dependencies
     public static class TrmrkCoreServices
     {
         public static IServiceCollection RegisterAll(
-            IServiceCollection services)
+            IServiceCollection services,
+            bool isForLocalDevice = true)
         {
             services.AddSingleton<IAppInstanceStartInfoProvider, AppInstanceStartInfoProvider>();
             services.AddSingleton<IConsoleMsgPrinter, ConsoleMsgPrinter>();
@@ -46,8 +47,13 @@ namespace Turmerik.Core.Dependencies
 
             services.AddSingleton<IConsoleArgsParser, ConsoleArgsParser>();
             services.AddSingleton<ITrmrkUniqueDirRetriever, TrmrkUniqueDirRetriever>();
-            services.AddSingleton<ITrmrkUniqueDirCreator, TrmrkUniqueDirCreator>();
-            services.AddSingleton<ITempDirConsoleApp, TempDirConsoleApp>();
+
+            if (isForLocalDevice)
+            {
+                services.AddSingleton<ITrmrkUniqueDirCreator, TrmrkUniqueDirCreator>();
+                services.AddSingleton<ITempDirConsoleApp, TempDirConsoleApp>();
+                services.AddSingleton<ILocalDevicePathMacrosRetriever, LocalDevicePathMacrosRetriever>();
+            }
 
             services.AddSingleton<IStringTemplateParser, StringTemplateParser>();
             services.AddSingleton<IExceptionSerializer, ExceptionSerializer>();
@@ -57,7 +63,6 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<ITextLinesRetrieverFactory, TextLinesRetrieverFactory>();
             services.AddSingleton<IExpressionTextParser, ExpressionTextParser>();
             services.AddSingleton<IRegexReplacer, RegexReplacer>();
-            services.AddSingleton<ILocalDevicePathMacrosRetriever, LocalDevicePathMacrosRetriever>();
             services.AddSingleton<IStringLiteralTransformer, StringLiteralTransformer>();
             services.AddSingleton<ITextMacrosReplacer, TextMacrosReplacer>();
             services.AddSingleton<ICachedEntriesRetrieverFactory, CachedEntriesRetrieverFactory>();
