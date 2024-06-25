@@ -1,0 +1,42 @@
+:root {
+  --trmrk_dark-background_foreground-color: white;
+  --trmrk-app-bar_background-color_light: #1976d2;
+  --trmrk-app-bar_background-color_dark: #121212;
+  --trmrk-backdrop-background-color: rgba(0, 0, 0, 0.5);
+  --trmrk-app-bar_background-gradient-from_color_dark: rgba(255, 255, 255, 0.09);
+  --trmrk-app-bar_background-gradient-to_color_dark: rgba(255, 255, 255, 0.09);
+
+  --trmrk_error-color: orangered;
+  --trmrk-warning_color: #860;
+  --trmrk-loading-el-dot-pulse_color: #9880ff;
+  --trmrk-btn-text-primary_background-color: #00F;
+  --trmrk-text-caret_foreground-color: #080;
+  --trmrk-nav-link_foreground-color: #bbbbFF;
+  --trmrk-nav-link-visited_foreground-color: #8888FF;
+
+  --trmrk-scrollable-track_color_dark: #222;
+  --trmrk-scrollable-thumb_color_dark: #444;
+  --trmrk-scrollable-track-hover_color_dark: #333;
+  --trmrk-scrollable-thumb-hover_color_dark: #555;
+  --trmrk-resizable-panel-border-alpha25_color_dark: #FFFFFF44;
+  --trmrk-resizable-panel-border-alpha50_color_dark: #FFFFFF88;
+
+  --trmrk-scrollable-track_color_light: #eee;
+  --trmrk-scrollable-thumb_color_light: #ccc;
+  --trmrk-scrollable-track-hover_color_light: #ddd;
+  --trmrk-scrollable-thumb-hover_color_light: #bbb;
+  --trmrk-resizable-panel-border-alpha25_color_light: #00000044;
+  --trmrk-resizable-panel-border-alpha50_color_light: #00000088;
+
+  --trmrk-page-panel-rows-group-border_color_dark: #444;
+  --trmrk-page-panel-rows-group-editable-border_color_dark: #642;
+  --trmrk-page-panel-rows-group-hover_background-color_dark: #1a1a1a;
+  --trmrk-flex-row-cell-title_color_dark: #ccc;
+  --trmrk-flex-row-readonly-textbox_background-color_dark: #FFF1;
+
+  --trmrk-page-panel-rows-group-border_color_light: #ccc;
+  --trmrk-page-panel-rows-group-editable-border_color_light: #864;
+  --trmrk-page-panel-rows-group-hover_background-color_light: #F4F4F4;
+  --trmrk-flex-row-cell-title_color_light: #444;
+  --trmrk-flex-row-readonly-textbox_background-color_light: #0001;
+}

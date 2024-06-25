@@ -16,6 +16,7 @@ const srcFoldersArr: { [key: string]: string } = {
   trmrk: "libs\\trmrk\\src\\lib",
   "trmrk-axios": "libs\\trmrk-axios\\src\\lib",
   "trmrk-browser": "libs\\trmrk-browser\\src\\lib",
+  "trmrk-blazor": "libs\\trmrk-blazor\\src\\lib",
   "trmrk-react": "libs\\trmrk-react\\src\\lib",
   "trmrk-text-transform-behavior":
     "libs\\trmrk-text-transform-behavior\\src\\lib",
@@ -37,6 +38,10 @@ const destnLocationsArr: {
   "trmrk-browser": {
     dirPath: "libs\\trmrk-browser\\src",
     syncedLibs: ["trmrk", "trmrk-axios"],
+  },
+  "trmrk-blazor": {
+    dirPath: "libs\\trmrk-blazor\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
   },
   "trmrk-react": {
     dirPath: "libs\\trmrk-react\\src",
@@ -61,6 +66,10 @@ const destnLocationsArr: {
       "trmrk-text-transform-behavior",
       "trmrk-text-transform-mybehavior",
     ],
+  },
+  "trmrk-notes-reactapp": {
+    dirPath: "apps\\trmrk-notes-reactapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
   },
   "trmrk-react-testapp": {
     dirPath: "apps\\trmrk-react-testapp\\src",

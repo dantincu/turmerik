@@ -24,7 +24,8 @@
               [ "..\\..\\libs\\trmrk-text-transform-behavior-testapp" ],
               [ "..\\..\\libs\\trmrk-text-transform-defaultbehavior" ],
               [ "..\\..\\libs\\trmrk-text-transform-mybehavior" ],
-              [ "..\\..\\apps\\trmrk-react-testapp" ]
+              [ "..\\..\\apps\\trmrk-react-testapp" ],
+              [ "..\\..\\apps\\trmrk-notes-reactapp" ]
             ],
             "ArgFilters": {
               "libs": {
@@ -180,7 +181,8 @@
           "libs\\trmrk-text-transform-behavior-testapp\\_",
           "libs\\trmrk-text-transform-defaultbehavior\\_",
           "libs\\trmrk-text-transform-mybehavior\\_",
-          "apps\\trmrk-react-testapp\\_"
+          "apps\\trmrk-react-testapp\\_",
+          "apps\\trmrk-notes-reactapp\\_"
         ],
         "Filters": {
           "libs": {
