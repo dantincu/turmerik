@@ -10,11 +10,10 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import SettingsMenu from "../settingsMenu/SettingsMenu";
 import AppearenceSettingsMenu from "../settingsMenu/AppearenceSettingsMenu";
-import TextCaretPositionerSettingsMenu from "../settingsMenu/TextCaretPositionerSettingsMenu";
 import OptionsMenu from "../settingsMenu/OptionsMenu";
 
 import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
-import { AppDataSelectors, AppDataReducers, setTextCaretPositionerOptsToLocalStorage } from "../../redux/appData";
+import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 
 import { getAppTheme, currentAppTheme } from "../../app-theme/core";
 
@@ -24,16 +23,11 @@ import { appModeCssClass, getAppModeCssClassName,
 
 import { isAndroid, isIPad, isIPhone, isMobile } from "../../../trmrk-browser/domUtils/constants";
 
-import { TextCaretPositionerOptsItemScope } from "../../../trmrk-browser/textCaretPositioner/core";
-import { getTextCaretPositionerOptsItem, getTextCaretPositionerOptsItemType, updateTextCaretPositionerOpts } from "../textInputCaretPositioner/TextInputCaretPositioningTool";
-
 import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
 
 export interface AppBarsPanelProps {
   basePath: string;
-  localStorageSerializedOptsKey?: string | null | undefined;
-  textCaretPositionerOptsItemScope?: TextCaretPositionerOptsItemScope;
   onPanelElems?: ((elems: BarsPanelElems) => void) | null | undefined;
   panelClassName?: string | null | undefined;
   appBarSelectors: AppBarSelectors;
@@ -49,13 +43,10 @@ export interface AppBarsPanelProps {
   settingsMenuListClassName?: string | null | undefined;
   appearenceMenuClassName?: string | null | undefined;
   appearenceMenuListClassName?: string | null | undefined;
-  textCaretPositionerMenuClassName?: string | null | undefined;
-  textCaretPositionerMenuListClassName?: string | null | undefined;
   optionsMenuClassName?: string | null | undefined;
   optionsMenuListClassName?: string | null | undefined;
   settingsMenuChildren?: React.ReactNode | Iterable<React.ReactNode> | null;
   appearenceMenuChildren?: React.ReactNode | Iterable<React.ReactNode> | null;
-  textCaretPositionerMenuChildren?: React.ReactNode | Iterable<React.ReactNode> | null;
 }
 
 export default function AppBarsPanel(props: AppBarsPanelProps) {
@@ -66,9 +57,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
 
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
-  const textCaretPositionerOptsItemScope = props.textCaretPositionerOptsItemScope ?? "App";
-  const textCaretPositionerOpts = useSelector(props.appDataSelectors.getTextCaretPositionerOpts);
-  // const [ textCaretPositionerOptsVal, setTextCaretPositionerOptsVal ] = React.useState(textCaretPositionerOpts);
 
   const appSettingsMenuIsOpen = useSelector(
     props.appBarSelectors.getAppSettingsMenuIsOpen
@@ -76,10 +64,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
 
   const appearenceMenuIsOpen = useSelector(
     props.appBarSelectors.getAppearenceMenuIsOpen
-  );
-
-  const textCaretPositionerMenuIsOpen = useSelector(
-    props.appBarSelectors.getTextCaretPositionerMenuIsOpen
   );
 
   const showOptionsMenuBtn = useSelector(
@@ -152,20 +136,12 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
   }, []);
 
-  const handleTextCaretPositionerMenuClosed = React.useCallback(() => {
-    dispatch(props.appBarReducers.setTextCaretPositionerMenuIsOpen(false));
-  }, []);
-
   const handleOptionsMenuClosed = React.useCallback(() => {
     dispatch(props.appBarReducers.setOptionsMenuIsOpen(false));
   }, []);
 
   const appearenceMenuOpen = React.useCallback(() => {
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(true));
-  }, []);
-
-  const textCaretPositionerMenuOpen = React.useCallback(() => {
-    dispatch(props.appBarReducers.setTextCaretPositionerMenuIsOpen(true));
   }, []);
 
   const handleCompactModeToggled = React.useCallback(
@@ -184,38 +160,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));
     setIsDarkModeToLocalStorage(isDarkMode);
   }, []);
-
-  const handleTextCaretPositionerEnabledToggled = React.useCallback((textCaretPositionerEnabled: boolean) => {
-    let newTextCaretPositionerOpts = { ...textCaretPositionerOpts };
-    const textCaretPositionerOptsItemType = getTextCaretPositionerOptsItemType(textCaretPositionerOpts.isFullViewPortMode);
-
-    newTextCaretPositionerOpts = updateTextCaretPositionerOpts(
-      newTextCaretPositionerOpts,
-      textCaretPositionerOptsItemScope,
-      screen.orientation.type,
-      textCaretPositionerOptsItemType,
-      { ...textCaretPositionerOpts.current, enabled: textCaretPositionerEnabled });
-
-    dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
-  }, [
-    textCaretPositionerOpts]);
-
-  const handleTextCaretPositionerKeepOpenToggled = React.useCallback((textCaretPositionerKeepOpen: boolean) => {
-    let newTextCaretPositionerOpts = { ...textCaretPositionerOpts };
-    const textCaretPositionerOptsItemType = getTextCaretPositionerOptsItemType(textCaretPositionerOpts.isFullViewPortMode);
-
-    newTextCaretPositionerOpts = updateTextCaretPositionerOpts(
-      newTextCaretPositionerOpts,
-      textCaretPositionerOptsItemScope,
-      screen.orientation.type,
-      textCaretPositionerOptsItemType,
-      { ...textCaretPositionerOpts.current, keepOpen: textCaretPositionerKeepOpen });
-
-    dispatch(props.appDataReducers.setTextCaretPositionerOpts(newTextCaretPositionerOpts));
-    setTextCaretPositionerOptsToLocalStorage(newTextCaretPositionerOpts, props.localStorageSerializedOptsKey);
-  }, [
-    textCaretPositionerOpts]);
   
   const appBarRefreshBtnClicked = React.useCallback(() => {
     if (props.appBarRefreshBtnClicked) {
@@ -243,10 +187,8 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     showAppFooterToggleBtn,
     isCompactMode,
     isDarkMode,
-    textCaretPositionerOpts,
     appSettingsMenuIsOpen,
     appearenceMenuIsOpen,
-    textCaretPositionerMenuIsOpen,
     showOptionsMenuBtn,
     optionsMenuIsOpen,
     settingsMenuIconBtnEl,
@@ -281,12 +223,10 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
           menuListClassName={props.settingsMenuListClassName}
           appTheme={appTheme}
           appearenceMenuBtnRefAvailable={appearenceMenuBtnRefAvailable}
-          textCaretPositionerOptsMenuBtnRefAvailable={textCaretPositionerMenuBtnRefAvailable}
           showMenu={appSettingsMenuIsOpen}
           menuAnchorEl={settingsMenuIconBtnEl!}
           menuClosed={handleSettingsMenuClosed}
-          appearenceMenuOpen={appearenceMenuOpen}
-          textCaretPositionerMenuOpen={textCaretPositionerMenuOpen}>
+          appearenceMenuOpen={appearenceMenuOpen}>
             { props.settingsMenuChildren }
         </SettingsMenu>
         <AppearenceSettingsMenu
@@ -303,20 +243,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
           menuAnchorEl={appearenceMenuIconBtnEl!}>
             { props.appearenceMenuChildren }
         </AppearenceSettingsMenu>
-        <TextCaretPositionerSettingsMenu
-          className={props.textCaretPositionerMenuClassName}
-          menuListClassName={props.textCaretPositionerMenuListClassName}
-          appTheme={appTheme}
-          showMenu={textCaretPositionerMenuIsOpen}
-          enabled={textCaretPositionerOpts.current?.enabled}
-          keepOpen={textCaretPositionerOpts.current?.keepOpen}
-          enabledToggled={handleTextCaretPositionerEnabledToggled}
-          keepOpenToggled={handleTextCaretPositionerKeepOpenToggled}
-          menuClosed={handleSettingsMenuClosed}
-          textCaretPositionerMenuClosed={handleTextCaretPositionerMenuClosed}
-          menuAnchorEl={textCaretPositionerMenuIconBtnEl!}>
-            { props.textCaretPositionerMenuChildren }
-        </TextCaretPositionerSettingsMenu>
         <OptionsMenu
           className={props.optionsMenuClassName}
           menuListClassName={props.optionsMenuListClassName}

@@ -8,8 +8,6 @@ import * as icons from "./icons";
 
 import LoadingDotPulse from "./loading/LoadingDotPulse";
 
-import ResizablePanel from "./resizablePanel/ResizablePanel";
-
 import AppearenceSettingsMenu from "./settingsMenu/AppearenceSettingsMenu";
 import AppearenceSettingsMenuList from "./settingsMenu/AppearenceSettingsMenuList";
 import TextCaretPositionerSettingsMenu from "./settingsMenu/TextCaretPositionerSettingsMenu";
@@ -34,7 +32,6 @@ export const components = {
   ErrorEl,
   ...icons,
   LoadingDotPulse,
-  ResizablePanel,
   AppearenceSettingsMenu,
   AppearenceSettingsMenuList,
   TextCaretPositionerSettingsMenu,

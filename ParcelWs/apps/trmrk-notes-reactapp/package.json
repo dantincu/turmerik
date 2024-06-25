@@ -1,7 +1,7 @@
 {
   "name": "trmrk-notes-reactapp",
   "version": "0.1.0",
-  "description": "Test React Web App for testing react component",
+  "description": "Turmerik Notes React App",
   "type": "module",
   "scripts": {
     "start": "parcel ./src/app/targets/any/index.html --dist-dir ./dist/dev-any --port=9100 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",

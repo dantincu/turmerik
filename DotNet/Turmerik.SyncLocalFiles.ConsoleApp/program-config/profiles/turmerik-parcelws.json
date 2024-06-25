@@ -189,6 +189,24 @@
       }
     },
     {
+      "Name": "trmrk-notes-reactapp",
+      "DirPath": "apps\\trmrk-notes-reactapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-react": {
+          "DirPath": "trmrk-react"
+        }
+      }
+    },
+    {
       "Name": "trmrk-notes-blazorapp",
       "DirPath": "apps\\trmrk-notes-blazorapp\\src",
       "FoldersMap": {
