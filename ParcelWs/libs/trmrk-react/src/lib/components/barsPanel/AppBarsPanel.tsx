@@ -28,6 +28,7 @@ import ToggleAppBarBtn from "./ToggleAppBarBtn";
 
 export interface AppBarsPanelProps {
   basePath: string;
+  showHomeBtn?: boolean | null | undefined;
   onPanelElems?: ((elems: BarsPanelElems) => void) | null | undefined;
   panelClassName?: string | null | undefined;
   appBarSelectors: AppBarSelectors;
@@ -51,7 +52,9 @@ export interface AppBarsPanelProps {
 
 export default function AppBarsPanel(props: AppBarsPanelProps) {
   const showAppHeader = useSelector(props.appBarSelectors.getShowAppHeader);
+  const showAppHeaderOverride = useSelector(props.appBarSelectors.getShowAppHeaderOverride);
   const showAppFooter = useSelector(props.appBarSelectors.getShowAppFooter);
+  const showAppFooterOverride = useSelector(props.appBarSelectors.getShowAppFooterOverride);
   const showAppHeaderToggleBtn = useSelector(props.appBarSelectors.getShowAppHeaderToggleBtn);
   const showAppFooterToggleBtn = useSelector(props.appBarSelectors.getShowAppFooterToggleBtn);
 
@@ -182,7 +185,9 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
   React.useEffect(() => {
   }, [
     showAppHeader,
+    showAppHeaderOverride,
     showAppFooter,
+    showAppFooterOverride,
     showAppHeaderToggleBtn,
     showAppFooterToggleBtn,
     isCompactMode,
@@ -194,7 +199,8 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     settingsMenuIconBtnEl,
     appearenceMenuIconBtnEl,
     textCaretPositionerMenuIconBtnEl,
-    optionsMenuIconBtnEl, ]);
+    optionsMenuIconBtnEl,
+    props.showHomeBtn ]);
 
   return (<BarsPanel onPanelElems={props.onPanelElems}
       panelClassName={[
@@ -206,13 +212,13 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
       isAndroid ? "trmrk-device-android" : "",
       isIPad ? "trmrk-device-ipad" : "",
       isIPhone ? "trmrk-device-iphone" : "" ].join(" ")}
-      showHeader={ showAppHeader }
-      showFooter={ showAppFooter }
+      showHeader={ showAppHeaderOverride ?? showAppHeader }
+      showFooter={ showAppFooterOverride ?? showAppFooter }
       scrollableX={true}
       scrollableY={isCompactMode}
       headerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
         <IconButton onClick={handleSettingsClick} className="trmrk-icon-btn trmrk-settings-btn"><MenuIcon /></IconButton>
-        <Link to={props.basePath}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link>
+        { props.showHomeBtn ? <Link to={props.basePath}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link> : null }
         { showOptionsMenuBtn ? <IconButton
           onClick={handleOptionsClick}
           className="trmrk-icon-btn trmrk-options-btn">
@@ -252,15 +258,15 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
           menuAnchorEl={optionsMenuIconBtnEl!}
           refreshBtnClicked={appBarRefreshBtnClicked} />
       </AppBar>}
-      footerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
+      footerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")} component="footer">
         { props.appFooterChildren }
       </AppBar>}
       afterBodyChildren={<React.Fragment>
-        { showAppHeaderToggleBtn ? <ToggleAppBarBtn
+        { (showAppHeaderToggleBtn && showAppHeaderOverride === null) ? <ToggleAppBarBtn
             appBarToggled={appHeaderToggled}
             showAppBar={showAppHeader}
             togglesHeader={true} /> : null }
-        { showAppFooterToggleBtn ? <ToggleAppBarBtn
+        { (showAppFooterToggleBtn && showAppFooterOverride === null) ? <ToggleAppBarBtn
           appBarToggled={appFooterToggled}
           showAppBar={showAppFooter}
           togglesHeader={false} /> : null }

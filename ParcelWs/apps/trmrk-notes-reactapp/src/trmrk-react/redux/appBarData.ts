@@ -18,9 +18,11 @@ export interface AppBarData {
   showOptionsMenuBtn: boolean;
   optionsMenuOpts: OptionsMenuOpts;
   showAppHeader: boolean;
+  showAppHeaderOverride: boolean | null;
   showAppHeaderToggleBtn: boolean;
   showAppFooter: boolean;
   showAppFooterToggleBtn: boolean;
+  showAppFooterOverride: boolean | null;
 }
 
 export interface AppBarSelectors {
@@ -105,6 +107,15 @@ export interface AppBarSelectors {
   > & {
     unwrapped: (appBar: AppBarData) => boolean;
   };
+  getShowAppHeaderOverride: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean | null,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean | null;
+  };
   getShowAppHeaderToggleBtn: Selector<
     {
       appBar: AppBarData;
@@ -122,6 +133,15 @@ export interface AppBarSelectors {
     []
   > & {
     unwrapped: (appBar: AppBarData) => boolean;
+  };
+  getShowAppFooterOverride: Selector<
+    {
+      appBar: AppBarData;
+    },
+    boolean | null,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => boolean | null;
   };
   getShowAppFooterToggleBtn: Selector<
     {
@@ -167,6 +187,10 @@ export interface AppBarReducers {
     boolean,
     "appBar/setShowAppHeader"
   >;
+  setShowAppHeaderOverride: ActionCreatorWithPayload<
+    boolean | null,
+    "appBar/setShowAppHeaderOverride"
+  >;
   setShowAppHeaderToggleBtn: ActionCreatorWithPayload<
     boolean,
     "appBar/setShowAppHeaderToggleBtn"
@@ -174,6 +198,10 @@ export interface AppBarReducers {
   setShowAppFooter: ActionCreatorWithPayload<
     boolean,
     "appBar/setShowAppFooter"
+  >;
+  setShowAppFooterOverride: ActionCreatorWithPayload<
+    boolean | null,
+    "appBar/setShowAppFooterOverride"
   >;
   setShowAppFooterToggleBtn: ActionCreatorWithPayload<
     boolean,

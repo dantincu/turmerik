@@ -4,7 +4,7 @@
   "description": "Test React Web App for testing react component",
   "type": "module",
   "scripts": {
-    "start": "parcel ./src/app/targets/any/index.html --dist-dir ./dist/dev-any --port=9100 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "start": "parcel ./src/app/targets/any/index.html --dist-dir ./dist/dev-any --port=9101 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
     "build": "parcel build ./src/app/targets/any/index.html --dist-dir ./dist/prod-any"
   },
   "author": "Daniel Tincu",

@@ -104,7 +104,7 @@ export const normInnerBoundsRatio = (
 
 export const touchIsOutOfBounds = (
   elem: HTMLElement,
-  ev: TouchEvent | MouseEvent,
+  ev: React.TouchEvent | TouchEvent | React.MouseEvent | MouseEvent,
   coords: TouchOrMouseCoords,
   widthInnerBoundsRatio: number,
   heightInnerBoundsRatio: number
