@@ -108,6 +108,9 @@ export default function ClickableElement(props: ClickableElementProps) {
               clearAll();
               props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
             }, dblPressIntervalMs);
+          } else {
+            clearAll();
+            props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
           }
 
           if (props.onMouseUpOrTouchEnd) {
