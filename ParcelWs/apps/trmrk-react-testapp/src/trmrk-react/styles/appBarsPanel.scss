@@ -1,7 +1,23 @@
 .trmrk-dialog-title.trmrk-current-tabs-dialog-title {
   height: 86px;
-  padding: 0px 16px;
-  text-align: center;
+  padding: 16px 16px;
+
+  .trmrk-title {
+    position: absolute;
+    display: block;
+    font-size: 1.25em;
+    line-height: 1em;
+    top: 0.5em;
+    left: 16px;
+    right: 0;
+    text-align: left;
+  }
+
+  .trmrk-close-icon-btn {
+    position: absolute;
+    right: 0.25em;
+    top: 0.25em;
+  }
 }
 
 .trmrk-dialog-content.trmrk-current-tabs-dialog-content {

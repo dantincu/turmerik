@@ -57,7 +57,8 @@ function CurrentTabsDialog(props: CurrentTabsDialogProps) {
       className={["trmrk-dialog-title trmrk-current-tabs-dialog-title",
         props.appThemeCssClass,
         props.currentTabsDialogTitleCssClass ?? ""].join(" ")}>
-        Current Tabs <IconButton onClick={handleUserClose} className="trmrk-icon-btn"><CloseIcon /></IconButton></DialogTitle>
+        <span className="trmrk-title">Currently Open Tabs</span>
+        <IconButton onClick={handleUserClose} className="trmrk-icon-btn trmrk-close-icon-btn"><CloseIcon /></IconButton></DialogTitle>
     <DialogContent
       className={["trmrk-dialog-content trmrk-current-tabs-dialog-content trmrk-scrollable trmrk-scrollableY",
       props.appThemeCssClass,
