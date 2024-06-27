@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSXElementConstructor, } from "react";
 
 import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
 
@@ -15,15 +15,15 @@ import { normInnerBoundsRatio, touchIsOutOfBounds } from "../../hooks/useLongPre
 export interface ClickableElementProps {
   children: React.ReactNode;
   component: React.ElementType;
-  componentProps?: React.ComponentProps<any>;
+  componentProps?: React.ComponentProps<keyof JSX.IntrinsicElements | JSXElementConstructor<any>> | null | undefined;
   longPressIntervalMs?: number | null | undefined;
   dblPressIntervalMs?: number | null | undefined;
   pressedCssClass?: string | null | undefined;
   onMouseDownOrTouchStart?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onMouseUpOrTouchEnd?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
-  onSinglePress: (ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void;
-  onDoublePress: (ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void;
-  onLongPress: (ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void;
+  onSinglePress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onDoublePress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onLongPress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
 }
 
 export const LONG_PRESS_INTERVAL_MS = 400;
@@ -31,7 +31,8 @@ export const DBL_PRESS_INTERVAL_MS = 200;
 
 export const isTouchOrLeftMouseBtnClick = (coords: TouchOrMouseCoords) => [0, null].indexOf(coords.mouseButton ?? null) >= 0;
 
-export default function ClickableElement(props: ClickableElementProps) {
+export default function ClickableElement(
+  props: ClickableElementProps) {
   const RetElem = props.component;
   const retElemRef = React.useRef<HTMLElement | null>(null);
 
@@ -68,7 +69,9 @@ export default function ClickableElement(props: ClickableElementProps) {
           clearAll();
 
           if (isTouchOrLeftMouseBtnClickValue) {
-            props.onDoublePress(ev, lastMouseUpOrTouchEndCoords);
+            if (props.onDoublePress) {
+              props.onDoublePress(ev, lastMouseUpOrTouchEndCoords);
+            }
           }
         } else {
           lastMouseDownOrTouchStartCoordsRef.current = coords;
@@ -76,7 +79,10 @@ export default function ClickableElement(props: ClickableElementProps) {
           if (isTouchOrLeftMouseBtnClickValue) {
             lastMouseDownOrTouchStartTimeoutRef.current = setTimeout(() => {
               clearAll();
-              props.onLongPress(ev, coords);
+
+              if (props.onLongPress) {
+                props.onLongPress(ev, coords);
+              }
             }, longPressIntervalMs);
           }
 
@@ -106,11 +112,17 @@ export default function ClickableElement(props: ClickableElementProps) {
 
             lastMouseUpOrTouchEndTimeoutRef.current = setTimeout(() => {
               clearAll();
-              props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
+
+              if (props.onSinglePress) {
+                props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
+              }
             }, dblPressIntervalMs);
           } else {
             clearAll();
-            props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
+
+            if (props.onSinglePress) {
+              props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
+            }
           }
 
           if (props.onMouseUpOrTouchEnd) {
@@ -135,5 +147,7 @@ export default function ClickableElement(props: ClickableElementProps) {
     onMouseDown={onMouseDownOrTouchStart}
     onTouchStart={onMouseDownOrTouchStart}
     onMouseUp={onMouseUpOrTouchEnd}
-    onTouchEnd={onMouseUpOrTouchEnd}>{ props.children }</RetElem>);
+    onTouchEnd={onMouseUpOrTouchEnd}>
+      { props.children }
+    </RetElem>);
 } 

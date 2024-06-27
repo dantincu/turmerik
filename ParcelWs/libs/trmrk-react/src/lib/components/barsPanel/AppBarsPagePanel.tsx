@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import AppBar  from "@mui/material/AppBar";
-import IconButton from "@mui/material/IconButton";
+import IconButton, { IconButtonTypeMap } from "@mui/material/IconButton";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuIcon from "@mui/icons-material/Menu";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -12,6 +12,7 @@ import { AppBarSelectors, AppBarReducers } from "../../redux/appBarData";
 import { AppDataSelectors, AppDataReducers } from "../../redux/appData";
 
 import MatUIIcon from "../icons/MatUIIcon";
+import ClickableElement from "../clickableElement/ClickableElement";
 
 import AppBarsPanel, { AppBarsPanelProps } from "./AppBarsPanel";
 
@@ -30,7 +31,11 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
   return (<AppBarsPanel {...props}
     panelClassName={[props.panelClassName, "trmrk-app-bars-page-panel"].join(" ")}
     appHeaderChildren={<React.Fragment>
-      <IconButton className="trmrk-icon-btn"><MatUIIcon iconName="tabs" /></IconButton>
+      <ClickableElement component={IconButton} componentProps={{
+          className: "trmrk-icon-btn"
+        }} onSinglePress={(ev, coords) => {console.log("onSinglePress");}}
+        onDoublePress={(ev, coords) => {console.log("onDoublePress");}}
+        onLongPress={(ev, coords) => {console.log("onLongPress");}}><MatUIIcon iconName="tabs" /></ClickableElement>
       { props.appHeaderChildren }
     </React.Fragment>} />);
 }
