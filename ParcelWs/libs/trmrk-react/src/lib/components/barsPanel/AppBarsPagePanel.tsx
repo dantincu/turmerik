@@ -26,69 +26,12 @@ import { extractParams, removekeys } from "../../services/reactRouterDom/core";
 import AppBarsPanel, { AppBarsPanelProps } from "./AppBarsPanel";
 import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMouseEvents";
 
+import TrmrkDialog from "../dialog/TrmrkDialog";
+
 export interface AppBarsPagePanelProps extends AppBarsPanelProps {
   showTabsModalUrlQueryKey?: string | null | undefined;
   currentTabsDialogTitleCssClass?: string | null | undefined;
   currentTabsDialogContentCssClass?: string | null | undefined;
-}
-
-interface CurrentTabsDialogProps {
-  isCompactMode: boolean;
-  appThemeCssClass: string;
-  currentTabsDialogTitleCssClass?: string | null | undefined;
-  currentTabsDialogContentCssClass?: string | null | undefined;
-  onClose: (event: {} | React.MouseEvent, reason: "backdropClick" | "escapeKeyDown" | "closedByUser") => void;
-  open: boolean;
-}
-
-function CurrentTabsDialog(props: CurrentTabsDialogProps) {
-  const { onClose, open } = props;
-
-  const handleClose = (event: {}, reason: "backdropClick" | "escapeKeyDown") => {
-    onClose(event, reason);
-  };
-
-  const handleUserClose = (ev: React.MouseEvent) => {
-    onClose(ev, "closedByUser");
-  }
-
-  return (<Dialog onClose={handleClose} open={open} fullWidth maxWidth={false} fullScreen={props.isCompactMode}>
-    <DialogTitle component={"div"}
-      className={["trmrk-dialog-title trmrk-current-tabs-dialog-title",
-        props.appThemeCssClass,
-        props.currentTabsDialogTitleCssClass ?? ""].join(" ")}>
-        <span className="trmrk-title">Currently Open Tabs</span>
-        <IconButton onClick={handleUserClose} className="trmrk-icon-btn trmrk-close-icon-btn"><CloseIcon /></IconButton></DialogTitle>
-    <DialogContent
-      className={["trmrk-dialog-content trmrk-current-tabs-dialog-content trmrk-scrollable trmrk-scrollableY",
-      props.appThemeCssClass,
-      props.currentTabsDialogContentCssClass ?? ""].join(" ")}>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-      <p>asdfasdf</p>
-    </DialogContent>
-  </Dialog>);
 }
 
 export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
@@ -150,8 +93,35 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
           }} onSinglePress={onTabsBtnSingleClick}><MatUIIcon iconName="tabs" /></ClickableElement>
         { props.appHeaderChildren }
       </React.Fragment>}>
-      <CurrentTabsDialog open={showCurrentTabsModal} onClose={onCloseCurrentTabsModal}
+      <TrmrkDialog open={showCurrentTabsModal} onClose={onCloseCurrentTabsModal}
         appThemeCssClass={appTheme.cssClassName} isCompactMode={isCompactMode}
-        currentTabsDialogContentCssClass={props.currentTabsDialogContentCssClass} />
+        dialogTitleCssClass={["trmrk-current-tabs-dialog-title", props.currentTabsDialogTitleCssClass].join(" ")}
+        dialogContentCssClass={["trmrk-current-tabs-dialog-content", props.currentTabsDialogContentCssClass].join(" ")}
+        title="Currently Open Tabs">
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+          <p>asdfasdf</p>
+        </TrmrkDialog>
     </AppBarsPanel>);
 }
