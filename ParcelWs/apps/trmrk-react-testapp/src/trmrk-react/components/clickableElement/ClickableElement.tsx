@@ -146,9 +146,7 @@ export default function ClickableElement(
   return (<RetElem {...props.componentProps}
     ref={(el: HTMLElement) => retElemRef.current = el}
     onMouseDown={onMouseDownOrTouchStart}
-    onTouchStart={onMouseDownOrTouchStart}
-    onMouseUp={onMouseUpOrTouchEnd}
-    onTouchEnd={onMouseUpOrTouchEnd}>
+    onMouseUp={onMouseUpOrTouchEnd}>
       { props.children }
     </RetElem>);
 } 

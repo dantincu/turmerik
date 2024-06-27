@@ -28,11 +28,14 @@ import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMous
 
 export interface AppBarsPagePanelProps extends AppBarsPanelProps {
   showTabsModalUrlQueryKey?: string | null | undefined;
+  currentTabsDialogTitleCssClass?: string | null | undefined;
   currentTabsDialogContentCssClass?: string | null | undefined;
 }
 
 interface CurrentTabsDialogProps {
+  isCompactMode: boolean;
   appThemeCssClass: string;
+  currentTabsDialogTitleCssClass?: string | null | undefined;
   currentTabsDialogContentCssClass?: string | null | undefined;
   onClose: (event: {} | React.MouseEvent, reason: "backdropClick" | "escapeKeyDown" | "closedByUser") => void;
   open: boolean;
@@ -49,8 +52,12 @@ function CurrentTabsDialog(props: CurrentTabsDialogProps) {
     onClose(ev, "closedByUser");
   }
 
-  return (<Dialog onClose={handleClose} open={open} fullWidth maxWidth={false}>
-    <DialogTitle>Current Tabs <IconButton onClick={handleUserClose}><CloseIcon /></IconButton></DialogTitle>
+  return (<Dialog onClose={handleClose} open={open} fullWidth maxWidth={false} fullScreen={props.isCompactMode}>
+    <DialogTitle component={"div"}
+      className={["trmrk-dialog-title trmrk-current-tabs-dialog-title",
+        props.appThemeCssClass,
+        props.currentTabsDialogTitleCssClass ?? ""].join(" ")}>
+        Current Tabs <IconButton onClick={handleUserClose} className="trmrk-icon-btn"><CloseIcon /></IconButton></DialogTitle>
     <DialogContent
       className={["trmrk-dialog-content trmrk-current-tabs-dialog-content trmrk-scrollable trmrk-scrollableY",
       props.appThemeCssClass,
@@ -143,7 +150,7 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
         { props.appHeaderChildren }
       </React.Fragment>}>
       <CurrentTabsDialog open={showCurrentTabsModal} onClose={onCloseCurrentTabsModal}
-        appThemeCssClass={appTheme.cssClassName}
+        appThemeCssClass={appTheme.cssClassName} isCompactMode={isCompactMode}
         currentTabsDialogContentCssClass={props.currentTabsDialogContentCssClass} />
     </AppBarsPanel>);
 }
