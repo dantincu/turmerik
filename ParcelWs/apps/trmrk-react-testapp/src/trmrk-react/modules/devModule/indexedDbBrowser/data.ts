@@ -1,7 +1,7 @@
 import {
   IDbDatabaseInfo,
   IDbObjectStoreInfo,
-} from "../../../services/indexedDb";
+} from "../../../services/indexedDb/core";
 
 export interface IndexedDbTrmrkTreeNodeDataValue {
   dbInfo: IDbDatabaseInfo;

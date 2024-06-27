@@ -1,4 +1,8 @@
 import * as coreObj from "./core";
+import * as obj from "./obj";
+import * as arr from "./arr";
+import * as str from "./str";
+import * as map from "./map";
 import * as driveItem from "./drive-item";
 import * as notesAppConfig from "./notes-app-config";
 import * as notesItem from "./notes-item";
@@ -12,6 +16,10 @@ import * as driveExplorerApi from "./DriveExplorerApi";
 
 export default {
   ...coreObj,
+  ...obj,
+  ...arr,
+  ...str,
+  ...map,
   ...driveItem,
   ...notesItem,
   ...syncLock,

@@ -22,6 +22,7 @@ export interface ClickableElementProps {
   onMouseDownOrTouchStart?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onMouseUpOrTouchEnd?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onSinglePress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onSingleClick?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onDoublePress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onLongPress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
 }
@@ -120,8 +121,8 @@ export default function ClickableElement(
           } else {
             clearAll();
 
-            if (props.onSinglePress) {
-              props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
+            if (props.onSingleClick) {
+              props.onSingleClick(ev, lastMouseDownOrTouchStartCoords);
             }
           }
 

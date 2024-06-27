@@ -33,7 +33,7 @@ import {
   getCreateDbRequestErrMsg,
   getObjectStoresInfoAgg,
   deserializeKeyPath
-} from "../../../services/indexedDb";
+} from "../../../services/indexedDb/core";
 
 import { searchQuery } from "./data";
 

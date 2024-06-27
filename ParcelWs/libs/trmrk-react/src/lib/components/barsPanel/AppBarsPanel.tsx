@@ -123,13 +123,6 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     []
   );
 
-  const textCaretPositionerMenuBtnRefAvailable = React.useCallback(
-    (btnRef: HTMLButtonElement | null) => {
-      setTextCaretPositionerMenuIconBtnEl(btnRef);
-    },
-    []
-  );
-
   const handleSettingsMenuClosed = React.useCallback(() => {
     dispatch(props.appBarReducers.setAppSettingsMenuIsOpen(false));
     dispatch(props.appBarReducers.setAppearenceMenuIsOpen(false));

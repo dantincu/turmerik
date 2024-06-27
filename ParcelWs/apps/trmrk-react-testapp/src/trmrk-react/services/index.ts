@@ -1,7 +1,9 @@
 import { domUtils } from "./domUtils";
-import * as indexedDbObj from "./indexedDb";
+import { reactRouterDom } from "./reactRouterDom";
+import { indexedDb } from "./indexedDb";
 
 export const services = {
   domUtils,
-  indexedDbObj,
+  reactRouterDom,
+  indexedDb,
 };

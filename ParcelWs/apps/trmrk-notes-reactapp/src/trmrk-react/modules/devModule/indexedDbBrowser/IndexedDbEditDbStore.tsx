@@ -15,7 +15,7 @@ import trmrk from "../../../../trmrk";
 import { IndexedDbDatabase, IndexedDbStore } from "./models";
 import { AppDataSelectors } from "../../../redux/appData";
 
-import { deserializeKeyPath } from "../../../services/indexedDb";
+import { deserializeKeyPath } from "../../../services/indexedDb/core";
 // import TrmrkTextMagnifierModal from "../../../components/textMagnifier/TrmrkTextMagnifierModal";
 import MatUIIcon from "../../../components/icons/MatUIIcon";
 

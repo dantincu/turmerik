@@ -19,7 +19,7 @@ import LoadingDotPulse from '../../../components/loading/LoadingDotPulse';
 import TrmrkTreeNodesList from '../../../components/treeNodes/TrmrkTreeNodesList';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from '../../../components/treeNodes/TrmrkTreeNodeData';
 
-import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../../services/indexedDb";
+import { getDbInfo, IDbDatabaseInfo, IDbObjectStoreInfo } from "../../../services/indexedDb/core";
 import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue, searchQuery } from "./data";
 import IndexedDbTreeNode, { IndexedDbTreeNodeProps } from "./IndexedDbTreeNode";
 

@@ -18,7 +18,7 @@ import TrmrkTreeNode, { TrmrkTreeNodeProps } from '../../../components/treeNodes
 import TrmrkTreeNodeLeaf, { TrmrkTreeNodeLeafProps } from '../../../components/treeNodes/TrmrkTreeNodeLeaf';
 import { TrmrkTreeNodeData, TrmrkTreeNodeClickLocation } from '../../../components/treeNodes/TrmrkTreeNodeData';
 import { IndexedDbStoreTrmrkTreeNodeDataValue, IndexedDbTrmrkTreeNodeDataValue } from "./data";
-import { attachDefaultHandlersToDbOpenRequest, getObjectStoresInfoAgg, getErrMsg, dfDatabaseOpenErrMsg } from "../../../services/indexedDb";
+import { attachDefaultHandlersToDbOpenRequest, getObjectStoresInfoAgg, getErrMsg, dfDatabaseOpenErrMsg } from "../../../services/indexedDb/core";
 
 export interface IndexedDbTreeNodeProps {
   data: TrmrkTreeNodeData<IndexedDbTrmrkTreeNodeDataValue>;

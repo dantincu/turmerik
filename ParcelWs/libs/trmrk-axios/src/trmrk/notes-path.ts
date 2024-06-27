@@ -1,11 +1,7 @@
-import {
-  isNonEmptyStr,
-  containsAnyOfMx,
-  containsAnyOfArr,
-  Kvp,
-  findKvp,
-  MtblRefValue,
-} from "./core";
+import { Kvp, MtblRefValue } from "./core";
+import { isNonEmptyStr } from "./str";
+
+import { containsAnyOfMx } from "./arr";
 
 import { AppConfigData } from "./notes-app-config";
 
