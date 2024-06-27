@@ -515,7 +515,7 @@ export default function IndexedDbEditDb(
       appHeaderChildren={<React.Fragment>
         <Typography variant="h4" component="span" className="trmrk-page-title">{ props.isNewDb ? "Create" : "Edit" } Database</Typography>
       </React.Fragment>}
-      appFooterChildren={<React.Fragment>
+      appFooterMainRowChildren={<React.Fragment>
         <IconButton className="trmrk-icon-btn" onClick={onCancelClick}><CancelIcon /></IconButton>
         <IconButton className="trmrk-icon-btn" onClick={onSaveClick}><SaveIcon /></IconButton>
         <IconButton className="trmrk-icon-btn" onClick={addDbStoreClicked}><AddIcon /></IconButton>

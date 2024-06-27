@@ -1,5 +1,8 @@
 :root {
   --trmrk_dark-background_foreground-color: white;
+  --trmrk_dark-background_disabled-foreground-color: #FFF8;
+  --trmrk_light-background_disabled-foreground-color: #0008;
+  --trmrk_light-background_app-bar-disabled-foreground-color: #FFF8;
   --trmrk-app-bar_background-color_light: #1976d2;
   --trmrk-app-bar_background-color_dark: #121212;
   --trmrk-backdrop-background-color: rgba(0, 0, 0, 0.5);

@@ -23,6 +23,7 @@ export interface AppBarData {
   showAppFooter: boolean;
   showAppFooterToggleBtn: boolean;
   showAppFooterOverride: boolean | null;
+  appFooterRowsCount: number;
 }
 
 export interface AppBarSelectors {
@@ -152,6 +153,15 @@ export interface AppBarSelectors {
   > & {
     unwrapped: (appBar: AppBarData) => boolean;
   };
+  getAppFooterRowsCount: Selector<
+    {
+      appBar: AppBarData;
+    },
+    number,
+    []
+  > & {
+    unwrapped: (appBar: AppBarData) => number;
+  };
 }
 
 export interface AppBarReducers {
@@ -206,5 +216,9 @@ export interface AppBarReducers {
   setShowAppFooterToggleBtn: ActionCreatorWithPayload<
     boolean,
     "appBar/setShowAppFooterToggleBtn"
+  >;
+  setAppFooterRowsCount: ActionCreatorWithPayload<
+    number,
+    "appBar/setAppFooterRowsCount"
   >;
 }

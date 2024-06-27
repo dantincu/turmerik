@@ -16,6 +16,10 @@
   
   .trmrk-icon-btn {
     color: var(--trmrk_dark-background_foreground-color);
+
+    &[disabled] {
+      color: var(--trmrk_dark-background_disabled-foreground-color);
+    }
   }
 
   .trmrk-nav-link {
@@ -54,6 +58,21 @@
 }
 
 .trmrk-theme-light {
+  .trmrk-icon-btn {
+    &[disabled] {
+      color: var(--trmrk_light-background_disabled-foreground-color);
+    }
+  }
+
+  .trmrk-panel-header,
+  .trmrk-panel-footer {
+    .trmrk-icon-btn {
+      &[disabled] {
+        color: var(--trmrk_light-background_app-bar-disabled-foreground-color);
+      }
+    }
+  }
+
   .trmrk-scrollable {
     @include scrollable(
       var(--trmrk-scrollable-track_color_light),

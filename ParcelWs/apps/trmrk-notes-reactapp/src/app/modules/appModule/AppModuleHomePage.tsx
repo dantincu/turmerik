@@ -17,7 +17,9 @@ export default function AppModuleHomePage(props: AppModuleHomePageProps) {
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
-      appDataReducers={appDataReducers}>
+      appDataReducers={appDataReducers}
+      showDocEditUndoRedoButtons={true}
+      showDocPositionNavButtons={true}>
     { null }
   </AppBarsPagePanel>);
 }

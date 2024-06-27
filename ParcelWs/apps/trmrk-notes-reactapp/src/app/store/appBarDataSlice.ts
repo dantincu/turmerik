@@ -26,9 +26,10 @@ const appBarDataSlice = createSlice({
     showAppHeader: true,
     showAppHeaderOverride: null,
     showAppHeaderToggleBtn: true,
-    showAppFooter: false,
+    showAppFooter: true,
     showAppFooterOverride: null,
-    showAppFooterToggleBtn: false,
+    showAppFooterToggleBtn: true,
+    appFooterRowsCount: 1,
   } as AppBarData,
   reducers: {
     setAppSettingsMenuOpts: (
@@ -83,6 +84,9 @@ const appBarDataSlice = createSlice({
     setShowAppFooterToggleBtn: (state, action: ReducerAction<boolean>) => {
       state.showAppFooterToggleBtn = action.payload;
     },
+    setAppFooterRowsCount: (state, action: ReducerAction<number>) => {
+      state.appFooterRowsCount = action.payload;
+    },
   },
   selectors: {
     isAnyMenuOpen: (state) =>
@@ -102,6 +106,7 @@ const appBarDataSlice = createSlice({
     getShowAppFooter: (state) => state.showAppFooter,
     getShowAppFooterOverride: (state) => state.showAppFooterOverride,
     getShowAppFooterToggleBtn: (state) => state.showAppFooterToggleBtn,
+    getAppFooterRowsCount: (state) => state.appFooterRowsCount,
   },
 });
 
@@ -119,6 +124,7 @@ const {
   setShowAppFooter,
   setShowAppFooterOverride,
   setShowAppFooterToggleBtn,
+  setAppFooterRowsCount,
 } = appBarDataSlice.actions;
 
 const {
@@ -136,6 +142,7 @@ const {
   getShowAppFooter,
   getShowAppFooterOverride,
   getShowAppFooterToggleBtn,
+  getAppFooterRowsCount,
 } = appBarDataSlice.selectors;
 
 export const appBarReducers: AppBarReducers = {
@@ -152,6 +159,7 @@ export const appBarReducers: AppBarReducers = {
   setShowAppFooter,
   setShowAppFooterOverride,
   setShowAppFooterToggleBtn,
+  setAppFooterRowsCount,
 };
 
 export const appBarSelectors: AppBarSelectors = {
@@ -169,6 +177,7 @@ export const appBarSelectors: AppBarSelectors = {
   getShowAppFooter,
   getShowAppFooterOverride,
   getShowAppFooterToggleBtn,
+  getAppFooterRowsCount,
 };
 
 export default appBarDataSlice.reducer;

@@ -10,8 +10,6 @@ import {
   clearTimeoutIfReq,
 } from "../../../trmrk-browser/domUtils/core";
 
-import { normInnerBoundsRatio, touchIsOutOfBounds } from "../../hooks/useLongPress";
-
 export interface ClickableElementProps {
   children: React.ReactNode;
   component: React.ElementType;
@@ -25,6 +23,7 @@ export interface ClickableElementProps {
   onSingleClick?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onDoublePress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
   onLongPress?: ((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  allowBothSingleAndDoublePress?: boolean | null | undefined;
 }
 
 export const LONG_PRESS_INTERVAL_MS = 400;
@@ -47,6 +46,11 @@ export default function ClickableElement(
 
   const dblPressIntervalMs = React.useMemo(
     () => props.dblPressIntervalMs ?? DBL_PRESS_INTERVAL_MS, [props.dblPressIntervalMs]);
+
+  const allowBothSingleAndDoublePress = React.useMemo(
+    () => props.allowBothSingleAndDoublePress ?? true,
+    [props.allowBothSingleAndDoublePress]
+  );
 
   const clearAll = () => {
     clearTimeoutIfReq(lastMouseDownOrTouchStartTimeoutRef);
@@ -111,13 +115,23 @@ export default function ClickableElement(
           if (isTouchOrLeftMouseBtnClickValue) {
             lastMouseUpOrTouchEndCoordsRef.current = coords;
 
-            lastMouseUpOrTouchEndTimeoutRef.current = setTimeout(() => {
-              clearAll();
-
+            if (allowBothSingleAndDoublePress) {
               if (props.onSinglePress) {
                 props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
               }
-            }, dblPressIntervalMs);
+              
+              lastMouseUpOrTouchEndTimeoutRef.current = setTimeout(() => {
+                clearAll();
+              }, dblPressIntervalMs);
+            } else {
+              lastMouseUpOrTouchEndTimeoutRef.current = setTimeout(() => {
+                clearAll();
+
+                if (props.onSinglePress) {
+                  props.onSinglePress(ev, lastMouseDownOrTouchStartCoords);
+                }
+              }, dblPressIntervalMs);
+            }
           } else {
             clearAll();
 

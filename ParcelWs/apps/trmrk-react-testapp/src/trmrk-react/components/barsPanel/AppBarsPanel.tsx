@@ -37,7 +37,8 @@ export interface AppBarsPanelProps {
   appDataReducers: AppDataReducers;
   appBarClassName?: string | null | undefined;
   appHeaderChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
-  appFooterChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  appFooterMainRowChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  appFooterContextRowChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   children: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   appBarRefreshBtnClicked?: (() => boolean | null | undefined | void);
   settingsMenuClassName?: string | null | undefined;
@@ -57,6 +58,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
   const showAppFooterOverride = useSelector(props.appBarSelectors.getShowAppFooterOverride);
   const showAppHeaderToggleBtn = useSelector(props.appBarSelectors.getShowAppHeaderToggleBtn);
   const showAppFooterToggleBtn = useSelector(props.appBarSelectors.getShowAppFooterToggleBtn);
+  const appFooterRowsCount = useSelector(props.appBarSelectors.getAppFooterRowsCount);
 
   const isCompactMode = useSelector(props.appDataSelectors.getIsCompactMode);
   const isDarkMode = useSelector(props.appDataSelectors.getIsDarkMode);
@@ -183,6 +185,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
     showAppFooterOverride,
     showAppHeaderToggleBtn,
     showAppFooterToggleBtn,
+    appFooterRowsCount,
     isCompactMode,
     isDarkMode,
     appSettingsMenuIsOpen,
@@ -201,6 +204,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
       appModeCssClass.value,
       props.panelClassName ?? "",
       "trmrk-app-bars-panel",
+      `trmrk-app-footer-height-is-x${appFooterRowsCount}`,
       isMobile ? "trmrk-device-mobile" : "",
       isAndroid ? "trmrk-device-android" : "",
       isIPad ? "trmrk-device-ipad" : "",
@@ -252,7 +256,8 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
           refreshBtnClicked={appBarRefreshBtnClicked} />
       </AppBar>}
       footerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")} component="footer">
-        { props.appFooterChildren }
+        { appFooterRowsCount > 1 ? <div className="trmrk-row">{ props.appFooterContextRowChildren }</div> : null }
+        <div className="trmrk-row">{ props.appFooterMainRowChildren }</div>
       </AppBar>}
       afterBodyChildren={<React.Fragment>
         { (showAppHeaderToggleBtn && showAppHeaderOverride === null) ? <ToggleAppBarBtn

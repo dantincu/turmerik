@@ -38,71 +38,84 @@
     .trmrk-panel-body {
       bottom: $app-bar-height;
     }
+
+    &.trmrk-app-footer-height-is-x2 {
+      .trmrk-panel-body {
+        bottom: $app-bar-height-x2;
+      }
+    }
   }
-}
-
-.trmrk-panel-header,
-.trmrk-panel-footer {
-  display: flex;
-  position: fixed;
-  overflow: hidden;
-  height: $app-bar-height;
-  width: 100%;
-  
-  .trmrk-app-bar {
+    
+  .trmrk-panel-header,
+  .trmrk-panel-footer {
+    display: flex;
+    position: fixed;
+    overflow: hidden;
+    height: $app-bar-height;
     width: 100%;
-    height: 100%;
-    display: block;
-    position: relative;
-
-    .trmrk-icon-btn {
-      width: 1.66em;
-      height: 1.66em;
+    
+    .trmrk-app-bar {
+      width: 100%;
+      height: 100%;
+      display: block;
       position: relative;
-      left: 0em;
+
+      .trmrk-row {
+        height: $app-bar-height;
+      }
+
+      .trmrk-icon-btn {
+        width: 1.66em;
+        height: 1.66em;
+        position: relative;
+        left: 0em;
+        top: $app-bar-top-padding;
+      }
+
+      .trmrk-icon-btn.trmrk-options-btn {
+        right: 1.66em;
+        position: absolute;
+        left: initial;
+      }
+
+      .trmrk-page-title {
+        display: inline-flex;
+        text-align: center;
+        font-size: 1.5em;
+        position: relative;
+        top: 0.25em;
+        padding-left: 0.25em
+      }
+    }
+  }
+
+  &.trmrk-app-footer-height-is-x2 {
+    .trmrk-panel-footer {
+      height: $app-bar-height-x2;
+    }
+  }
+
+  .trmrk-panel-header {
+    top: 0px;
+  }
+
+  .trmrk-panel-footer {
+    bottom: 0px;
+  }
+
+  .trmrk-app-bar-toggle-icon {
+    left: unset;
+    right: 0px;
+    z-index: 1101;
+
+    &.trmrk-toggles-header {
+      position: fixed;
       top: $app-bar-top-padding;
     }
 
-    .trmrk-icon-btn.trmrk-options-btn {
-      right: 1.66em;
-      position: absolute;
-      left: initial;
+    &.trmrk-toggles-footer {
+      position: fixed;
+      bottom: $app-bar-top-padding;
     }
-
-    .trmrk-page-title {
-      display: inline-flex;
-      text-align: center;
-      font-size: 1.5em;
-      position: relative;
-      top: 0.25em;
-      padding-left: 0.25em
-    }
-  }
-}
-
-.trmrk-panel-header {
-  top: 0px;
-}
-
-.trmrk-panel-footer {
-  bottom: 0px;
-}
-
-.trmrk-app-bar-toggle-icon {
-  display: block;
-  position: fixed;
-  left: unset;
-  right: 0px;
-  color: var(--trmrk_dark-background_foreground-color);
-  z-index: 1101;
-
-  &.trmrk-toggles-header {
-    position: fixed;
-    top: $app-bar-top-padding;
-  }
-
-  &.trmrk-toggles-footer {
-    position: fixed;
-    bottom: $app-bar-top-padding;
   }
 }

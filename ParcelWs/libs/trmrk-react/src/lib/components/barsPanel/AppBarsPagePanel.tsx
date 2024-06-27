@@ -1,15 +1,14 @@
 import React from "react";
-import { Link, useSearchParams, URLSearchParamsInit, ParamKeyValuePair } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import Dialog from '@mui/material/Dialog';
-
-import AppBar  from "@mui/material/AppBar";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeftOutlined";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRightOutlined";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import UndoIcon from "@mui/icons-material/Undo";
+import RedoIcon from "@mui/icons-material/Redo";
 
 import trmrk from "../../../trmrk";
 
@@ -32,6 +31,16 @@ export interface AppBarsPagePanelProps extends AppBarsPanelProps {
   showTabsModalUrlQueryKey?: string | null | undefined;
   currentTabsDialogTitleCssClass?: string | null | undefined;
   currentTabsDialogContentCssClass?: string | null | undefined;
+  showDocPositionNavButtons?: boolean | null | undefined;
+  showDocEditUndoRedoButtons?: boolean | null | undefined;
+  docPositionBackBtnEnabled?: boolean | null | undefined;
+  docPositionForwardBtnEnabled?: boolean | null | undefined;
+  docEditUndoBtnEnabled?: boolean | null | undefined;
+  docEditRedoBtnEnabled?: boolean | null | undefined;
+  tabsNavBackBtnEnabled?: boolean | null | undefined;
+  tabsNavForwardBtnEnabled?: boolean | null | undefined;
+  appFooterMainRowChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  appFooterContextRowChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
 }
 
 export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
@@ -83,7 +92,11 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
     showCurrentTabsModal,
     isCompactMode,
     isDarkMode,
-    appTheme ]);
+    appTheme,
+    props.showDocPositionNavButtons,
+    props.showDocEditUndoRedoButtons,
+    props.docPositionBackBtnEnabled,
+    props.docPositionForwardBtnEnabled ]);
 
   return (<AppBarsPanel {...props} showHomeBtn={false}
     panelClassName={[props.panelClassName, "trmrk-app-bars-page-panel"].join(" ")}
@@ -91,7 +104,19 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
         <ClickableElement component={IconButton} componentProps={{
             className: "trmrk-icon-btn"
           }} onSinglePress={onTabsBtnSingleClick}><MatUIIcon iconName="tabs" /></ClickableElement>
+        <IconButton className="trmrk-icon-btn" disabled={!props.tabsNavBackBtnEnabled}><ArrowBackIcon /></IconButton>
+        <IconButton className="trmrk-icon-btn" disabled={!props.tabsNavForwardBtnEnabled}><ArrowForwardIcon /></IconButton>
         { props.appHeaderChildren }
+      </React.Fragment>}
+    appFooterMainRowChildren={<React.Fragment>
+      <IconButton className="trmrk-icon-btn" disabled={!props.docPositionBackBtnEnabled}><ArrowCircleLeftIcon /></IconButton>
+      <IconButton className="trmrk-icon-btn" disabled={!props.docPositionForwardBtnEnabled}><ArrowCircleRightIcon /></IconButton>
+      <IconButton className="trmrk-icon-btn" disabled={!props.docEditUndoBtnEnabled}><UndoIcon /></IconButton>
+      <IconButton className="trmrk-icon-btn" disabled={!props.docEditUndoBtnEnabled}><RedoIcon /></IconButton>
+        { props.appFooterMainRowChildren }
+      </React.Fragment>}
+    appFooterContextRowChildren={<React.Fragment>
+        { props.appFooterContextRowChildren }
       </React.Fragment>}>
       <TrmrkDialog open={showCurrentTabsModal} onClose={onCloseCurrentTabsModal}
         appThemeCssClass={appTheme.cssClassName} isCompactMode={isCompactMode}
