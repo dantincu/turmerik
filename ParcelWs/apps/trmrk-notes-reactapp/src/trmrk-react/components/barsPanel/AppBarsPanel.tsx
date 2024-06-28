@@ -27,7 +27,7 @@ import BarsPanel, { BarsPanelElems } from "./BarsPanel";
 import ToggleAppBarBtn from "./ToggleAppBarBtn";
 
 export interface AppBarsPanelProps {
-  basePath: string;
+  basePath?: string | null | undefined;
   showHomeBtn?: boolean | null | undefined;
   onPanelElems?: ((elems: BarsPanelElems) => void) | null | undefined;
   panelClassName?: string | null | undefined;
@@ -215,7 +215,7 @@ export default function AppBarsPanel(props: AppBarsPanelProps) {
       scrollableY={isCompactMode}
       headerChildren={<AppBar className={["trmrk-app-bar", props.appBarClassName ?? ""].join(" ")}>
         <IconButton onClick={handleSettingsClick} className="trmrk-icon-btn trmrk-settings-btn"><MenuIcon /></IconButton>
-        { props.showHomeBtn ? <Link to={props.basePath}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link> : null }
+        { props.showHomeBtn ? <Link to={props.basePath ?? "/"}><IconButton className="trmrk-icon-btn trmrk-home-btn"><HomeIcon /></IconButton></Link> : null }
         { showOptionsMenuBtn ? <IconButton
           onClick={handleOptionsClick}
           className="trmrk-icon-btn trmrk-options-btn">

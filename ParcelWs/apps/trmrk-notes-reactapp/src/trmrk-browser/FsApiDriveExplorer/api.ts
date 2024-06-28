@@ -127,6 +127,11 @@ export class DriveExplorerApi
 
       if (retNode) {
         await deleteFolder(parentFolder.dirHandle!, retNode.dirHandle!);
+
+        trmrk.removeAll(
+          parentFolder.subFolders!,
+          (item) => item.name === retNode?.item.name
+        );
       }
     }
 
@@ -154,6 +159,13 @@ export class DriveExplorerApi
         isFolder: false,
         handle: file,
       });
+
+      let idx = parentFolder.folderFiles!.findIndex(
+        (file) => file.name.localeCompare(newFileName) < 0
+      );
+
+      idx = idx >= 0 ? idx : parentFolder.folderFiles!.length;
+      parentFolder.folderFiles!.splice(idx, 0, retNode);
     }
 
     return retNode?.item ?? null;
@@ -173,6 +185,11 @@ export class DriveExplorerApi
       if (retNode) {
         const parentDirHandle = parentFolder.dirHandle!;
         await parentDirHandle.removeEntry(fileName);
+
+        trmrk.removeAll(
+          parentFolder.folderFiles!,
+          (item) => item.name === retNode?.item.name
+        );
       }
     }
 
@@ -210,7 +227,6 @@ export class DriveExplorerApi
 
     if (parentFolder) {
       newFolderName ??= folderName;
-      this.throwIfFolderAlreadyContainsItemName(parentFolder, newFolderName);
       const folder = this.getSubFolder(parentFolder, folderName);
 
       if (newPrPathSegs) {
@@ -220,6 +236,11 @@ export class DriveExplorerApi
       }
 
       if (newParentFolder && folder) {
+        this.throwIfFolderAlreadyContainsItemName(
+          newParentFolder,
+          newFolderName
+        );
+
         let hcy: SrcTrgPair<FsApiFolder>;
 
         if (isMove) {

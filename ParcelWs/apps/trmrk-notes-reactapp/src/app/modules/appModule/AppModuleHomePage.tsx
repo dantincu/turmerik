@@ -5,8 +5,6 @@ import IconButton from "@mui/material/IconButton";
 import FolderIcon from "@mui/icons-material/Folder";
 
 export interface AppModuleHomePageProps {
-  basePath: string;
-  rootPath: string;
 }
 
 import AppBarsPagePanel from "../../../trmrk-react/components/barsPanel/AppBarsPagePanel";
@@ -16,7 +14,7 @@ import { appDataSelectors, appDataReducers } from "../../store/appDataSlice";
 
 export default function AppModuleHomePage(props: AppModuleHomePageProps) {
   
-  return (<AppBarsPagePanel basePath={props.basePath}
+  return (<AppBarsPagePanel
       appBarSelectors={appBarSelectors}
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}

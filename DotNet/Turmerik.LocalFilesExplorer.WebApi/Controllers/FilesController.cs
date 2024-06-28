@@ -58,7 +58,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
             {
                 if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
                 {
-                    driveItem = await driveExplorerService.GetFolderAsync(driveItem.Idnf, false);
+                    driveItem = await driveExplorerService.GetFolderAsync(driveItem.Idnf, null);
                     actionResult = Ok(driveItem);
                 }
                 else
@@ -90,6 +90,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
                         driveItem.Name,
                         driveItem.TextFileContents ?? string.Empty);
 
+                    driveItem.TextFileContents = null;
                     actionResult = Ok(driveItem);
                 }
                 else
@@ -119,7 +120,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
                     driveItem = await driveExplorerService.CreateFolderAsync(
                         driveItem.PrIdnf,
                         driveItem.Name,
-                        false);
+                        null);
 
                     actionResult = Ok(driveItem);
                 }
@@ -145,7 +146,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 
             try
             {
-                if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
+                if (await driveExplorerService.FileExistsAsync(driveItem.Idnf))
                 {
                     await driveExplorerService.DeleteFileAsync(driveItem.Idnf);
                     actionResult = Ok();
@@ -174,7 +175,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
             {
                 if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
                 {
-                    await driveExplorerService.DeleteFolderAsync(driveItem.Idnf, false);
+                    await driveExplorerService.DeleteFolderAsync(driveItem.Idnf, null);
                     actionResult = Ok();
                 }
                 else
@@ -199,7 +200,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 
             try
             {
-                if (await driveExplorerService.FolderExistsAsync(
+                if (await driveExplorerService.FileExistsAsync(
                     driveItem.Idnf) && await driveExplorerService.FolderExistsAsync(
                     driveItem.PrIdnf))
                 {
@@ -240,7 +241,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
                         driveItem.Idnf,
                         driveItem.PrIdnf,
                         driveItem.Name,
-                        false);
+                        null);
 
                     actionResult = Ok();
                 }
@@ -266,7 +267,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 
             try
             {
-                if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
+                if (await driveExplorerService.FileExistsAsync(driveItem.Idnf))
                 {
                     driveItem = await driveExplorerService.RenameFileAsync(
                         driveItem.Idnf,
@@ -301,7 +302,70 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
                     driveItem = await driveExplorerService.RenameFolderAsync(
                         driveItem.Idnf,
                         driveItem.Name,
-                        false);
+                        null);
+
+                    actionResult = Ok();
+                }
+                else
+                {
+                    actionResult = NotFound();
+                }
+            }
+            catch (Exception exc)
+            {
+                actionResult = GetErrorActionResult(exc);
+            }
+
+            return actionResult;
+        }
+
+        [HttpPatch]
+        [Route("api/[controller]/copy-file")]
+        public async Task<IActionResult> CopyFile(
+            [FromBody] DriveItemCore driveItem)
+        {
+            IActionResult actionResult;
+
+            try
+            {
+                if (await driveExplorerService.FileExistsAsync(driveItem.Idnf))
+                {
+                    driveItem = await driveExplorerService.CopyFileAsync(
+                        driveItem.Idnf,
+                        driveItem.PrIdnf,
+                        driveItem.Name);
+
+                    actionResult = Ok();
+                }
+                else
+                {
+                    actionResult = NotFound();
+                }
+            }
+            catch (Exception exc)
+            {
+                actionResult = GetErrorActionResult(exc);
+            }
+
+            return actionResult;
+        }
+
+        [HttpPatch]
+        [Route("api/[controller]/copy-folder")]
+        public async Task<IActionResult> CopyFolder(
+            [FromBody] DriveItemCore driveItem)
+        {
+            IActionResult actionResult;
+
+            try
+            {
+                if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
+                {
+                    driveItem = await driveExplorerService.CopyFolderAsync(
+                        driveItem.Idnf,
+                        driveItem.PrIdnf,
+                        driveItem.Name,
+                        null);
 
                     actionResult = Ok();
                 }

@@ -8,7 +8,7 @@ import {
 
 export interface ClickableElementProps {
   children: React.ReactNode;
-  component: React.ElementType;
+  component: React.ElementType | React.JSX.ElementType;
   componentProps?: React.ComponentProps<keyof JSX.IntrinsicElements | JSXElementConstructor<any>> | null | undefined;
   longPressIntervalMs?: number | null | undefined;
   dblPressIntervalMs?: number | null | undefined;

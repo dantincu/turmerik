@@ -90,8 +90,10 @@ export interface NoteDirPairsT {
 }
 
 export interface AppConfigData {
+  apiHost: string;
   trmrkPfx: string;
   isDevEnv: string;
+  clientVersion: string;
   requiredClientVersion: string;
   noteDirPairs: NoteDirPairsT;
   invalidFileNameChars: string[];
@@ -113,3 +115,40 @@ export const getCommand = (
 
 export const getCmd = (noteDirPairs: NoteDirPairsT, cmd: CmdCommand) =>
   getCommand(noteDirPairs.argOpts.commandsMap, cmd);
+
+export const loadAppConfig = async <TCfg = AppConfigData>(
+  devEnvCfgFilePath?: string | null | undefined,
+  prodEnvCfgFilePath?: string | null | undefined,
+  devEnvName?: string | null | undefined,
+  prodEnvName?: string | null | undefined
+) => {
+  devEnvName ??= "development";
+  prodEnvName ??= "production";
+
+  devEnvCfgFilePath ??= "../env/dev/app-config.json";
+  prodEnvCfgFilePath ??= "../env/prod/app-config.json";
+
+  const nodeEnv = process.env.NODE_ENV;
+  let appConfigObj: AppConfigData;
+
+  switch (nodeEnv) {
+    case devEnvName:
+      appConfigObj = await import(devEnvCfgFilePath);
+      break;
+    case prodEnvName:
+      appConfigObj = await import(prodEnvCfgFilePath);
+      break;
+    default:
+      if ((nodeEnv ?? null) === null) {
+        throw new Error("Setting a value for process.env.NODE_ENV is required");
+      } else {
+        throw new Error(
+          `Invalid value for process.env.NODE_ENV (${
+            nodeEnv?.length ?? 0
+          }) characters in total: ${nodeEnv}`
+        );
+      }
+  }
+
+  return appConfigObj;
+};

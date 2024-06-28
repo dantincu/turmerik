@@ -34,10 +34,16 @@ export interface DriveItemCore {
   isImageFile?: boolean | null | undefined;
   isVideoFile?: boolean | null | undefined;
   isAudioFile?: boolean | null | undefined;
+  fileSizeBytes?: number | null | undefined;
+  textFileContents?: string | null | undefined;
 
   creationTime?: Date | null | undefined;
   lastWriteTime?: Date | null | undefined;
   lastAccessTime?: Date | null | undefined;
+
+  creationTimeUtcTicks?: number | null | undefined;
+  lastWriteTimeUtcTicks?: number | null | undefined;
+  lastAccessTimeUtcTicks?: number | null | undefined;
 }
 
 export interface DriveItem extends DriveItemCore {

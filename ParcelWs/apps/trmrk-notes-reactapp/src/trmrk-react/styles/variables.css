@@ -9,7 +9,7 @@
   --trmrk-app-bar_background-gradient-from_color_dark: rgba(255, 255, 255, 0.09);
   --trmrk-app-bar_background-gradient-to_color_dark: rgba(255, 255, 255, 0.09);
 
-  --trmrk_error-color: orangered;
+  --trmrk-error-color: orangered;
   --trmrk-warning_color: #860;
   --trmrk-loading-el-dot-pulse_color: #9880ff;
   --trmrk-btn-text-primary_background-color: #00F;

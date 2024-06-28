@@ -64,11 +64,11 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         public override async Task<DriveItem> GetItemAsync(
-            string idnf, bool retMinimalInfo) => GetItem(
+            string idnf, bool? retMinimalInfo) => GetItem(
                 idnf, false, retMinimalInfo);
 
         public override async Task<DriveItem?> GetFolderAsync(
-            string idnf, bool retMinimalInfo) => GetItem(idnf, true, retMinimalInfo);
+            string idnf, bool? retMinimalInfo) => GetItem(idnf, true, retMinimalInfo);
 
         public override string GetItemIdnf<TDriveItem>(
             TDriveItem item,
@@ -101,7 +101,7 @@ namespace Turmerik.Core.DriveExplorer
         protected DriveItem GetItem(
             string idnf,
             bool? requireFolder,
-            bool retMinimalInfo)
+            bool? retMinimalInfo)
         {
             DriveItem? item;
 

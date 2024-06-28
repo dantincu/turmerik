@@ -12,10 +12,8 @@ import NotFound from "../../../trmrk-react/pages/notFound/NotFound";;
 
 export default function AppModule(props: AppModuleProps) {
   return (<Routes>
-      <Route path="/folders" element={<FoldersPage
-        basePath={props.basePath} rootPath={props.rootPath} />} />
-      <Route path="/" element={<AppModuleHomePage
-        basePath={props.basePath} rootPath={props.rootPath} />} />
+      <Route path="/folders" element={<FoldersPage />} />
+      <Route path="/" element={<AppModuleHomePage />} />
       <Route path="*" element={ <NotFound /> } />
     </Routes>);
 }

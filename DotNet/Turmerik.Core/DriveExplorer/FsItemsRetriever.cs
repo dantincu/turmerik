@@ -81,7 +81,7 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         public override async Task<DriveItem> GetItemAsync(
-            string idnf, bool retMinimalInfo)
+            string idnf, bool? retMinimalInfo)
         {
             ThrowIfPathIsNotValidAgainstRootPath(idnf, true);
             DriveItem item;
@@ -104,7 +104,7 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         public override async Task<DriveItem> GetFolderAsync(
-            string idnf, bool retMinimalInfo)
+            string idnf, bool? retMinimalInfo)
         {
             ThrowIfPathIsNotValidAgainstRootPath(idnf, true);
 
@@ -241,13 +241,13 @@ namespace Turmerik.Core.DriveExplorer
         protected override char GetDirSeparator() => Path.DirectorySeparatorChar;
 
         protected override void RemoveAdditionalInfoIfReq(
-            DriveItem item, bool retMinimalInfo)
+            DriveItem item, bool? retMinimalInfo)
         {
             base.RemoveAdditionalInfoIfReq(item, retMinimalInfo);
 
-            if (retMinimalInfo)
+            if (retMinimalInfo != false)
             {
-                item.Idnf = null;
+                item.PrIdnf = null;
             }
         }
 

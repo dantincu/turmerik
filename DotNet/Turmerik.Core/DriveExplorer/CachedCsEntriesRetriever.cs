@@ -57,7 +57,7 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         public override async Task<DriveItem> GetFolderAsync(
-            string idnf, bool retMinimalInfo)
+            string idnf, bool? retMinimalInfo)
         {
             var item = await GetItemAsync(idnf, retMinimalInfo);
             item = NullifyIfReq(item, true);
@@ -66,7 +66,7 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         public override async Task<DriveItem> GetItemAsync(
-            string idnf, bool retMinimalInfo)
+            string idnf, bool? retMinimalInfo)
         {
             var itemsNmrbl = EnumerateItems(RootFolder, null);
 

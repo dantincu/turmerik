@@ -15,13 +15,13 @@ namespace Turmerik.Core.DriveExplorer
     public interface IDriveItemsRetriever
     {
         Task<DriveItem> GetItemAsync(
-            string idnf, bool retMinimalInfo);
+            string idnf, bool? retMinimalInfo);
 
         Task<DriveItem> GetFolderAsync(
-            string idnf, bool retMinimalInfo);
+            string idnf, bool? retMinimalInfo);
 
         Task<DriveItem> GetFolderAsync(
-            string idnf, int depth, bool retMinimalInfo);
+            string idnf, int depth, bool? retMinimalInfo);
 
         Task<bool> ItemExistsAsync(string idnf);
 
@@ -55,16 +55,16 @@ namespace Turmerik.Core.DriveExplorer
         public abstract Task<bool> FolderExistsAsync(string idnf);
 
         public abstract Task<DriveItem> GetItemAsync(
-            string idnf, bool retMinimalInfo);
+            string idnf, bool? retMinimalInfo);
 
         public abstract Task<DriveItem> GetFolderAsync(
-            string idnf, bool retMinimalInfo);
+            string idnf, bool? retMinimalInfo);
 
         public abstract Task<string> GetFileTextAsync(string idnf);
         public abstract Task<byte[]> GetFileBytesAsync(string idnf);
 
         public async Task<DriveItem> GetFolderAsync(
-            string idnf, int depth, bool retMinimalInfo)
+            string idnf, int depth, bool? retMinimalInfo)
         {
             var folder = await GetFolderAsync(idnf, retMinimalInfo);
             string folderPath = idnf;
@@ -96,11 +96,10 @@ namespace Turmerik.Core.DriveExplorer
         protected abstract char GetDirSeparator();
 
         protected virtual void RemoveAdditionalInfoIfReq(
-            DriveItem item, bool retMinimalInfo)
+            DriveItem item, bool? retMinimalInfo)
         {
-            if (retMinimalInfo)
+            if (retMinimalInfo == true)
             {
-                item.PrIdnf = null;
                 item.IsFolder = null;
                 item.IsRootFolder = null;
 
@@ -119,7 +118,10 @@ namespace Turmerik.Core.DriveExplorer
                 item.CreationTimeUtcTicks = null;
                 item.LastWriteTimeUtcTicks = null;
                 item.LastAccessTimeUtcTicks = null;
+            }
 
+            if (retMinimalInfo != false)
+            {
                 if (item.SubFolders != null)
                 {
                     foreach (var folder in item.SubFolders)

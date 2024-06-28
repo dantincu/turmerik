@@ -4,7 +4,7 @@ export namespace ns {
   export interface ApiConfigData {
     apiHost: string;
     apiRelUriBase: string;
-    clientVersion: number;
+    clientVersion: string;
     idxedDbNamePfx: string | null;
   }
 
@@ -45,7 +45,7 @@ export namespace ns {
     public apiHost!: string;
     public apiRelUriBase!: string;
     public apiUriBase!: string;
-    public clientVersion!: number;
+    public clientVersion!: string;
     public clientUserUuid!: string;
 
     public defaultConfigFactory: (
@@ -69,9 +69,7 @@ export namespace ns {
         ((data) => {
           const headers: { [key: string]: string } = {};
 
-          headers[ns.trmrkHeaderNames.clientVersion] =
-            this.clientVersion.toString();
-
+          headers[ns.trmrkHeaderNames.clientVersion] = this.clientVersion;
           headers[ns.trmrkHeaderNames.clientUserUuid] = this.clientUserUuid;
 
           return {

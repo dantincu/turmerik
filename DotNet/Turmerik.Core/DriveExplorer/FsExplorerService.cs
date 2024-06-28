@@ -45,7 +45,7 @@ namespace Turmerik.Core.DriveExplorer
             string idnf,
             string newPrIdnf,
             string newFolderName,
-            bool retMinimalInfo)
+            bool? retMinimalInfo)
         {
             ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
             ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true);
@@ -67,7 +67,7 @@ namespace Turmerik.Core.DriveExplorer
         public async Task<DriveItem> CreateFolderAsync(
             string prIdnf,
             string newFolderName,
-            bool retMinimalInfo)
+            bool? retMinimalInfo)
         {
             ThrowIfPathIsNotValidAgainstRootPath(prIdnf, true);
 
@@ -127,7 +127,7 @@ namespace Turmerik.Core.DriveExplorer
 
         public async Task<DriveItem> DeleteFolderAsync(
             string idnf,
-            bool retMinimalInfo)
+            bool? retMinimalInfo)
         {
             ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
 
@@ -170,7 +170,7 @@ namespace Turmerik.Core.DriveExplorer
             string idnf,
             string newPrIdnf,
             string newFolderName,
-            bool retMinimalInfo)
+            bool? retMinimalInfo)
         {
             ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
             ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true);
@@ -208,7 +208,7 @@ namespace Turmerik.Core.DriveExplorer
         public async Task<DriveItem> RenameFolderAsync(
             string idnf,
             string newFolderName,
-            bool retMinimalInfo)
+            bool? retMinimalInfo)
         {
             string parentIdnf = Path.GetDirectoryName(idnf);
             ThrowIfPathIsNotValidAgainstRootPath(parentIdnf, true);

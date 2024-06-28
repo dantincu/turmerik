@@ -13,27 +13,27 @@ namespace Turmerik.Core.DriveExplorer
         Task<DriveItem> CreateFolderAsync(
             string prIdnf,
             string newFolderName,
-            bool retMinimalInfo);
+            bool? retMinimalInfo);
 
         Task<DriveItem> RenameFolderAsync(
             string idnf,
             string newFolderName,
-            bool retMinimalInfo);
+            bool? retMinimalInfo);
 
         Task<DriveItem> CopyFolderAsync(
             string idnf,
             string newPrIdnf,
             string newFolderName,
-            bool retMinimalInfo);
+            bool? retMinimalInfo);
 
         Task<DriveItem> MoveFolderAsync(
             string idnf,
             string newPrIdnf,
             string newFolderName,
-            bool retMinimalInfo);
+            bool? retMinimalInfo);
 
         Task<DriveItem> DeleteFolderAsync(
-            string idnf, bool retMinimalInfo);
+            string idnf, bool? retMinimalInfo);
 
         Task<DriveItem> CreateTextFileAsync(
             string prIdnf, string newFileName, string text);

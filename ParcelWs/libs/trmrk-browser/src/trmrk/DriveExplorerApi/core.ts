@@ -67,6 +67,7 @@ export class DriveItemNodeCore<
 }
 
 export interface IDriveExplorerApi {
+  Init: (forceRefresh?: boolean | null | undefined) => Promise<void>;
   GetItem: (
     pathArgs: RootedPathResolvedArgs,
     parentRefreshDepth?: number | null | undefined
@@ -132,6 +133,8 @@ export abstract class DriveExplorerApiBase<
   TDriveItemNode extends IDriveItemNodeCore<TDriveItemNode>
 > {
   protected abstract get rootDirNode(): TDriveItemNode;
+
+  public async Init(forceRefresh?: boolean | null | undefined): Promise<void> {}
 
   public async GetItem(
     pathArgs: RootedPathResolvedArgs,
@@ -390,6 +393,7 @@ export abstract class DriveExplorerApiBase<
         }
       }
     } else if (isFolder) {
+      await this.Init();
       retItem = this.rootDirNode;
       await this.assureFolderHasDescendants(retItem);
     }
@@ -403,6 +407,7 @@ export abstract class DriveExplorerApiBase<
     level: number | null = null,
     parentRefreshDepth: number | null = null
   ): Promise<TDriveItemNode | null> {
+    await this.Init();
     let retParent: TDriveItemNode | null = null;
 
     level ??= -1;
