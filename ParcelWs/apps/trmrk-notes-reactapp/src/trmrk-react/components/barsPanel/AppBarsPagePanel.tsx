@@ -168,10 +168,10 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
         { props.appFooterContextRowChildren }
       </React.Fragment>}>
       <TrmrkDialog open={showCurrentlyOpenTabsModal} onClose={onCloseCurrentlyOpenTabsModal}
-        appThemeCssClass={appTheme.cssClassName} isCompactMode={isCompactMode}
+        appThemeCssClass={appTheme.cssClassName}
         dialogTitleCssClass={["trmrk-currently-open-tabs-dialog-title", props.currentTabsDialogTitleCssClass].join(" ")}
         dialogContentCssClass={["trmrk-currently-open-tabs-dialog-content", props.currentTabsDialogContentCssClass].join(" ")}
-        title="Currently Open Tabs">
+        title="Currently Open Tabs" fullWidth={true} maxWidth={false}>
           <p>asdfasdf</p>
           <p>asdfasdf</p>
           <p>asdfasdf</p>
@@ -198,7 +198,7 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
           <p>asdfasdf</p>
         </TrmrkDialog>
       <TrmrkDialog open={showQuickSwitchTabsModal} onClose={onCloseQuickSwitchTabsModal}
-        appThemeCssClass={appTheme.cssClassName} isCompactMode={isCompactMode}
+        appThemeCssClass={appTheme.cssClassName}
         dialogTitleCssClass={["trmrk-quick-switch-tabs-dialog-title", props.currentTabsDialogTitleCssClass].join(" ")}
         dialogContentCssClass={["trmrk-quick-switch-tabs-dialog-content", props.currentTabsDialogContentCssClass].join(" ")}
         title="Quick Switch Tabs">
