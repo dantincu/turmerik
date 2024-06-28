@@ -1,4 +1,37 @@
+/**
+ * From https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
+ *
+ * A number representing a given button:
+ *
+ * 0: Main button pressed, usually the left button or the un-initialized state
+ *
+ * 1: Auxiliary button pressed, usually the wheel button or the middle button (if present)
+ *
+ * 2: Secondary button pressed, usually the right button
+ *
+ * 3: Fourth button, typically the Browser Back button
+ *
+ * 4: Fifth button, typically the Browser Forward button
+ *
+ */
+export enum GenericMouseButton {
+  Main = 0,
+  Auxiliary,
+  Secondary,
+  Fourth,
+  Fifth,
+}
+
+export enum MouseButton {
+  Left = 0,
+  Middle,
+  Right,
+  BrowserBack,
+  BrowserForward,
+}
+
 export interface TouchOrMouseCoords {
+  isMouseEvt?: boolean | null | undefined;
   mouseButton?: number | null | undefined;
   clientX: number;
   clientY: number;
@@ -9,6 +42,7 @@ export interface TouchOrMouseCoords {
 }
 
 export const getMouseCoords = (ev: MouseEvent): TouchOrMouseCoords => ({
+  isMouseEvt: true,
   mouseButton: ev.button,
   clientX: ev.clientX,
   clientY: ev.clientY,
@@ -59,7 +93,10 @@ export const getTouchOrMouseCoords = (
     requiredButton ??= -1;
     retObj = getMouseCoords(mouseEv);
 
-    if (requiredButton >= 0 && retObj.mouseButton !== requiredButton) {
+    if (
+      requiredButton >= MouseButton.Left &&
+      retObj.mouseButton !== requiredButton
+    ) {
       retObj = null;
     }
   }

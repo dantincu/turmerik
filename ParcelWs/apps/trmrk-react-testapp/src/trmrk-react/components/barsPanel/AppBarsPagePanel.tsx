@@ -28,7 +28,8 @@ import { TouchOrMouseCoords } from "../../../trmrk-browser/domUtils/touchAndMous
 import TrmrkDialog from "../dialog/TrmrkDialog";
 
 export interface AppBarsPagePanelProps extends AppBarsPanelProps {
-  showTabsModalUrlQueryKey?: string | null | undefined;
+  showCurrentlyOpenTabsModalUrlQueryKey?: string | null | undefined;
+  showQuickSwitchTabsModalUrlQueryKey?: string | null | undefined;
   currentTabsDialogTitleCssClass?: string | null | undefined;
   currentTabsDialogContentCssClass?: string | null | undefined;
   showDocPositionNavButtons?: boolean | null | undefined;
@@ -55,41 +56,84 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
     }), [isDarkMode]
   );
 
-  const showTabsModalUrlQueryKey = React.useMemo(
-    () => props.showTabsModalUrlQueryKey ?? "show-current-tabs",
-    [ props.showTabsModalUrlQueryKey ]);
+  const showCurrentlyOpenTabsModalUrlQueryKey = React.useMemo(
+    () => props.showCurrentlyOpenTabsModalUrlQueryKey ?? "show-currently-open-tabs",
+    [ props.showCurrentlyOpenTabsModalUrlQueryKey ]);
 
-  const showCurrentTabsModal = React.useMemo(
-    () => urlSearchParams.get(showTabsModalUrlQueryKey) === trmrk.jsonBool.true,
+  const showQuickSwitchTabsModalUrlQueryKey = React.useMemo(
+    () => props.showCurrentlyOpenTabsModalUrlQueryKey ?? "show-quick-switch-tabs",
+    [ props.showCurrentlyOpenTabsModalUrlQueryKey ]);
+
+  const showCurrentlyOpenTabsModal = React.useMemo(
+    () => urlSearchParams.get(showCurrentlyOpenTabsModalUrlQueryKey) === trmrk.jsonBool.true,
     [urlSearchParams]);
 
-  const onCloseCurrentTabsModal = React.useCallback(() => {
+  const onCloseCurrentlyOpenTabsModal = React.useCallback(() => {
     const newUrlSearchParamsInit = extractParams(
       urlSearchParams,
       paramsArr => removekeys(
         paramsArr,
-        [showTabsModalUrlQueryKey]));
+        [showCurrentlyOpenTabsModalUrlQueryKey]));
 
     setUrlSearchParams(newUrlSearchParamsInit);
   }, [urlSearchParams,
-    showCurrentTabsModal]);
+    showCurrentlyOpenTabsModal]);
 
-  const onTabsBtnSingleClick = React.useCallback((ev: React.MouseEvent | React.TouchEvent, coords: TouchOrMouseCoords) => {
+  const showQuickSwitchTabsModal = React.useMemo(
+    () => urlSearchParams.get(showQuickSwitchTabsModalUrlQueryKey) === trmrk.jsonBool.true,
+    [urlSearchParams]);
+
+  const onCloseQuickSwitchTabsModal = React.useCallback(() => {
+    const newUrlSearchParamsInit = extractParams(
+      urlSearchParams,
+      paramsArr => removekeys(
+        paramsArr,
+        [showQuickSwitchTabsModalUrlQueryKey]));
+
+    setUrlSearchParams(newUrlSearchParamsInit);
+  }, [urlSearchParams,
+    showCurrentlyOpenTabsModal]);
+
+  const onTabsBtnSinglePress = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
     const newUrlSearchParamsInit = extractParams(
       urlSearchParams,
       paramsArr => {
-        paramsArr.push([showTabsModalUrlQueryKey, trmrk.jsonBool.true]);
+        paramsArr.push([showCurrentlyOpenTabsModalUrlQueryKey, trmrk.jsonBool.true]);
         return paramsArr;
       });
 
     setUrlSearchParams(newUrlSearchParamsInit);
   }, [urlSearchParams,
-    showCurrentTabsModal]);
+    showCurrentlyOpenTabsModal]);
+
+  const onTabsBtnLongPressOrRightClick = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+    const newUrlSearchParamsInit = extractParams(
+      urlSearchParams,
+      paramsArr => {
+        paramsArr.push([showQuickSwitchTabsModalUrlQueryKey, trmrk.jsonBool.true]);
+        return paramsArr;
+      });
+
+    setUrlSearchParams(newUrlSearchParamsInit);
+  }, [urlSearchParams,
+    showCurrentlyOpenTabsModal]);
+
+  const onTabsGoBackBtnSingleClick = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+  }, []);
+
+  const onTabsGoForwardBtnSingleClick = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+  }, []);
+
+  const onTabsGoBackBtnLongPress = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+  }, []);
+
+  const onTabsGoForwardBtnLongPress = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+  }, []);
 
   React.useEffect(() => {
   }, [
     urlSearchParams,
-    showCurrentTabsModal,
+    showCurrentlyOpenTabsModal,
     isCompactMode,
     isDarkMode,
     appTheme,
@@ -103,9 +147,14 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
     appHeaderChildren={<React.Fragment>
         <ClickableElement component={IconButton} componentProps={{
             className: "trmrk-icon-btn"
-          }} onSinglePress={onTabsBtnSingleClick}><MatUIIcon iconName="tabs" /></ClickableElement>
-        <IconButton className="trmrk-icon-btn" disabled={!props.tabsNavBackBtnEnabled}><ArrowBackIcon /></IconButton>
-        <IconButton className="trmrk-icon-btn" disabled={!props.tabsNavForwardBtnEnabled}><ArrowForwardIcon /></IconButton>
+          }} onSinglePress={onTabsBtnSinglePress}
+            onLongPressOrSingleRightClick={onTabsBtnLongPressOrRightClick}><MatUIIcon iconName="tabs" /></ClickableElement>
+        <ClickableElement component={IconButton} componentProps={{
+            className: "trmrk-icon-btn", disabled: !props.tabsNavBackBtnEnabled
+          }} onSinglePress={onTabsGoBackBtnSingleClick}><ArrowBackIcon /></ClickableElement>
+        <ClickableElement component={IconButton} componentProps={{
+            className: "trmrk-icon-btn", disabled: !props.tabsNavForwardBtnEnabled
+          }} onSinglePress={onTabsGoForwardBtnSingleClick}><ArrowForwardIcon /></ClickableElement>
         { props.appHeaderChildren }
       </React.Fragment>}
     appFooterMainRowChildren={<React.Fragment>
@@ -118,10 +167,10 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
     appFooterContextRowChildren={<React.Fragment>
         { props.appFooterContextRowChildren }
       </React.Fragment>}>
-      <TrmrkDialog open={showCurrentTabsModal} onClose={onCloseCurrentTabsModal}
+      <TrmrkDialog open={showCurrentlyOpenTabsModal} onClose={onCloseCurrentlyOpenTabsModal}
         appThemeCssClass={appTheme.cssClassName} isCompactMode={isCompactMode}
-        dialogTitleCssClass={["trmrk-current-tabs-dialog-title", props.currentTabsDialogTitleCssClass].join(" ")}
-        dialogContentCssClass={["trmrk-current-tabs-dialog-content", props.currentTabsDialogContentCssClass].join(" ")}
+        dialogTitleCssClass={["trmrk-currently-open-tabs-dialog-title", props.currentTabsDialogTitleCssClass].join(" ")}
+        dialogContentCssClass={["trmrk-currently-open-tabs-dialog-content", props.currentTabsDialogContentCssClass].join(" ")}
         title="Currently Open Tabs">
           <p>asdfasdf</p>
           <p>asdfasdf</p>
@@ -147,6 +196,36 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
           <p>asdfasdf</p>
           <p>asdfasdf</p>
           <p>asdfasdf</p>
+        </TrmrkDialog>
+      <TrmrkDialog open={showQuickSwitchTabsModal} onClose={onCloseQuickSwitchTabsModal}
+        appThemeCssClass={appTheme.cssClassName} isCompactMode={isCompactMode}
+        dialogTitleCssClass={["trmrk-quick-switch-tabs-dialog-title", props.currentTabsDialogTitleCssClass].join(" ")}
+        dialogContentCssClass={["trmrk-quick-switch-tabs-dialog-content", props.currentTabsDialogContentCssClass].join(" ")}
+        title="Quick Switch Tabs">
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
+          <p>qwerwqerqw</p>
         </TrmrkDialog>
     </AppBarsPanel>);
 }
