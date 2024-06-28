@@ -42,6 +42,10 @@ export interface AppBarsPagePanelProps extends AppBarsPanelProps {
   tabsNavForwardBtnEnabled?: boolean | null | undefined;
   appFooterMainRowChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
   appFooterContextRowChildren?: React.ReactNode | Iterable<React.ReactNode> | null | undefined;
+  onTabsGoBackBtnSingleClick?: ((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onTabsGoForwardBtnSingleClick?: ((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onTabsGoBackBtnLongPress?: ((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
+  onTabsGoForwardBtnLongPress?: ((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => void) | null | undefined;
 }
 
 export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
@@ -119,15 +123,27 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
     showCurrentlyOpenTabsModal]);
 
   const onTabsGoBackBtnSingleClick = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+    if (props.onTabsGoBackBtnSingleClick) {
+      props.onTabsGoBackBtnSingleClick(ev, coords);
+    }
   }, []);
 
   const onTabsGoForwardBtnSingleClick = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+    if (props.onTabsGoForwardBtnSingleClick) {
+      props.onTabsGoForwardBtnSingleClick(ev, coords);
+    }
   }, []);
 
   const onTabsGoBackBtnLongPress = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+    if (props.onTabsGoBackBtnLongPress) {
+      props.onTabsGoBackBtnLongPress(ev, coords);
+    }
   }, []);
 
   const onTabsGoForwardBtnLongPress = React.useCallback((ev: MouseEvent | TouchEvent, coords: TouchOrMouseCoords) => {
+    if (props.onTabsGoForwardBtnLongPress) {
+      props.onTabsGoForwardBtnLongPress(ev, coords);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -151,22 +167,25 @@ export default function AppBarsPagePanel(props: AppBarsPagePanelProps) {
             onLongPressOrSingleRightClick={onTabsBtnLongPressOrRightClick}><MatUIIcon iconName="tabs" /></ClickableElement>
         <ClickableElement component={IconButton} componentProps={{
             className: "trmrk-icon-btn", disabled: !props.tabsNavBackBtnEnabled
-          }} onSinglePress={onTabsGoBackBtnSingleClick}><ArrowBackIcon /></ClickableElement>
+          }} onSinglePress={onTabsGoBackBtnSingleClick}
+            onLongPress={onTabsGoBackBtnLongPress}><ArrowBackIcon /></ClickableElement>
         <ClickableElement component={IconButton} componentProps={{
             className: "trmrk-icon-btn", disabled: !props.tabsNavForwardBtnEnabled
-          }} onSinglePress={onTabsGoForwardBtnSingleClick}><ArrowForwardIcon /></ClickableElement>
+          }} onSinglePress={onTabsGoForwardBtnSingleClick}
+            onLongPress={onTabsGoForwardBtnLongPress}><ArrowForwardIcon /></ClickableElement>
         { props.appHeaderChildren }
       </React.Fragment>}
     appFooterMainRowChildren={<React.Fragment>
-      <IconButton className="trmrk-icon-btn" disabled={!props.docPositionBackBtnEnabled}><ArrowCircleLeftIcon /></IconButton>
-      <IconButton className="trmrk-icon-btn" disabled={!props.docPositionForwardBtnEnabled}><ArrowCircleRightIcon /></IconButton>
-      <IconButton className="trmrk-icon-btn" disabled={!props.docEditUndoBtnEnabled}><UndoIcon /></IconButton>
-      <IconButton className="trmrk-icon-btn" disabled={!props.docEditUndoBtnEnabled}><RedoIcon /></IconButton>
-        { props.appFooterMainRowChildren }
+      { props.showDocPositionNavButtons ? <IconButton className="trmrk-icon-btn" disabled={!props.docPositionBackBtnEnabled}><ArrowCircleLeftIcon /></IconButton> : null }
+      { props.showDocPositionNavButtons ? <IconButton className="trmrk-icon-btn" disabled={!props.docPositionForwardBtnEnabled}><ArrowCircleRightIcon /></IconButton> : null }
+      { props.showDocEditUndoRedoButtons ? <IconButton className="trmrk-icon-btn" disabled={!props.docEditUndoBtnEnabled}><UndoIcon /></IconButton> : null }
+      { props.showDocEditUndoRedoButtons ? <IconButton className="trmrk-icon-btn" disabled={!props.docEditUndoBtnEnabled}><RedoIcon /></IconButton> : null }
+      { props.appFooterMainRowChildren }
       </React.Fragment>}
     appFooterContextRowChildren={<React.Fragment>
         { props.appFooterContextRowChildren }
       </React.Fragment>}>
+      { props.children }
       <TrmrkDialog open={showCurrentlyOpenTabsModal} onClose={onCloseCurrentlyOpenTabsModal}
         appThemeCssClass={appTheme.cssClassName}
         dialogTitleCssClass={["trmrk-currently-open-tabs-dialog-title", props.currentTabsDialogTitleCssClass].join(" ")}

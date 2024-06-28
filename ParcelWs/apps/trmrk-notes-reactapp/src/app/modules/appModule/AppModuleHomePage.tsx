@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import IconButton from "@mui/material/IconButton";
+import FolderIcon from "@mui/icons-material/Folder";
+
 export interface AppModuleHomePageProps {
   basePath: string;
   rootPath: string;
@@ -18,8 +21,9 @@ export default function AppModuleHomePage(props: AppModuleHomePageProps) {
       appBarReducers={appBarReducers}
       appDataSelectors={appDataSelectors}
       appDataReducers={appDataReducers}
-      showDocEditUndoRedoButtons={true}
-      showDocPositionNavButtons={true}>
+      appFooterMainRowChildren={<React.Fragment>
+        <Link to="folders"><IconButton className="trmrk-icon-btn"><FolderIcon /></IconButton></Link>
+      </React.Fragment>}>
     { null }
   </AppBarsPagePanel>);
 }
