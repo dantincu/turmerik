@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { AppConfigData } from "../trmrk/notes-app-config";
 
 export namespace ns {
   export interface ApiConfigData {
@@ -304,6 +305,20 @@ export namespace ns {
     }
   }
 }
+
+export const initApi = (
+  apiSvc: ns.ApiService,
+  appConfigData: AppConfigData,
+  idxedDbNamePfx?: string | null | undefined,
+  relUrlBase?: string | null | undefined
+) => {
+  apiSvc.init({
+    apiHost: appConfigData.apiHost,
+    apiRelUriBase: relUrlBase ?? "api",
+    clientVersion: appConfigData.clientVersion,
+    idxedDbNamePfx: idxedDbNamePfx ?? null,
+  });
+};
 
 export type ApiConfigData = ns.ApiConfigData;
 export type AxiosResponse<T> = ns.AxiosResponse<T>;

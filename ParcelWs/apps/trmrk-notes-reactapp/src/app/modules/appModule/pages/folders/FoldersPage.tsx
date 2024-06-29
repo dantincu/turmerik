@@ -4,10 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Box from "@mui/material/Box";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FolderIcon from "@mui/icons-material/Folder";
 
 import { DataGrid, GridColDef, GridRowParams, GridActionsCellItem } from '@mui/x-data-grid';
-
-
 
 export interface FoldersPageProps {
 }
@@ -21,6 +20,15 @@ import { getAppTheme } from "../../../../../trmrk-react/app-theme/core";
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
   {
+    type: "actions",
+    headerName: "",
+    width: 40,
+    field: "type",
+    getActions: (params: GridRowParams) => [
+      <GridActionsCellItem icon={<FolderIcon />} label="" />
+    ]
+  },
+  {
     field: 'name',
     headerName: 'Name',
     flex: 1,
@@ -31,7 +39,7 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
     type: "actions",
     headerName: "",
     width: 40,
-    field: "",
+    field: "options",
     getActions: (params: GridRowParams) => [
       <GridActionsCellItem icon={<MoreVertIcon />} label="" />
     ]
@@ -39,16 +47,16 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
 ];
 
 const rows = [
-  { id: 1, name: 'Snow asdfasdfasfd asdfasdfasfd asdfasdfasfd asdfasdfasfd asdfasdfasfd asdfasdfasfd' },
-  { id: 2, name: 'Lannister' },
-  { id: 3, name: 'Lannister' },
-  { id: 4, name: 'Stark' },
-  { id: 5, name: 'Targaryen' },
-  { id: 6, name: 'Melisandre' },
-  { id: 7, name: 'Clifford' },
-  { id: 8, name: 'Frances' },
-  { id: 9, name: 'Roxie' },
-];
+  { name: 'Snow asdfasdfasfd asdfasdfasfd asdfasdfasfd asdfasdfasfd asdfasdfasfd asdfasdfasfd' },
+  { name: 'Lannister' },
+  { name: 'Lannister' },
+  { name: 'Stark' },
+  { name: 'Targaryen' },
+  { name: 'Melisandre' },
+  { name: 'Clifford' },
+  { name: 'Frances' },
+  { name: 'Roxie' },
+].map((item, idx) => ({...item, id: idx}));
 
 export default function FoldersPage(props: FoldersPageProps) {
   const [ urlSearchParams, setUrlSearchParams ] = useSearchParams();

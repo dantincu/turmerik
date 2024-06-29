@@ -1,3 +1,5 @@
+import { withVal, withValIf } from "./core";
+
 export enum CmdCommand {
   Help = 1,
   ListNotes,
@@ -116,39 +118,62 @@ export const getCommand = (
 export const getCmd = (noteDirPairs: NoteDirPairsT, cmd: CmdCommand) =>
   getCommand(noteDirPairs.argOpts.commandsMap, cmd);
 
-export const loadAppConfig = async <TCfg = AppConfigData>(
-  devEnvCfgFilePath?: string | null | undefined,
-  prodEnvCfgFilePath?: string | null | undefined,
-  devEnvName?: string | null | undefined,
-  prodEnvName?: string | null | undefined
-) => {
-  devEnvName ??= "development";
-  prodEnvName ??= "production";
+export interface WithNodeEnvOpts<T> {
+  onDevelopment: (nodeEnv: string, nodeEnvObj: NodeJS.ProcessEnv) => T;
+  onProduction: (nodeEnv: string, nodeEnvObj: NodeJS.ProcessEnv) => T;
+  onInvalidValue?: (
+    nodeEnv: string | undefined,
+    nodeEnvObj: NodeJS.ProcessEnv
+  ) => T;
+  devEnvName?: string | null | undefined;
+  prodEnvName?: string | null | undefined;
+  nodeEnvName?: string | null | undefined;
+}
 
-  devEnvCfgFilePath ??= "../env/dev/app-config.json";
-  prodEnvCfgFilePath ??= "../env/prod/app-config.json";
-
-  const nodeEnv = process.env.NODE_ENV;
-  let appConfigObj: AppConfigData;
-
-  switch (nodeEnv) {
-    case devEnvName:
-      appConfigObj = await import(devEnvCfgFilePath);
-      break;
-    case prodEnvName:
-      appConfigObj = await import(prodEnvCfgFilePath);
-      break;
-    default:
-      if ((nodeEnv ?? null) === null) {
-        throw new Error("Setting a value for process.env.NODE_ENV is required");
+export const withRequiredNodeVar = <T>(
+  varName: string,
+  convertor: (value: string, nodeEnvObj: NodeJS.ProcessEnv) => T,
+  onNotFound?: ((nodeEnvObj: NodeJS.ProcessEnv) => T) | null | undefined
+) =>
+  withValIf(
+    process.env[varName],
+    (val) => convertor(val!, process.env),
+    () => {
+      if (onNotFound) {
+        return onNotFound(process.env);
       } else {
-        throw new Error(
-          `Invalid value for process.env.NODE_ENV (${
-            nodeEnv?.length ?? 0
-          }) characters in total: ${nodeEnv}`
-        );
+        throw new Error(`No value found for process.env.${varName}`);
       }
-  }
+    }
+  );
 
-  return appConfigObj;
-};
+export const withNodeEnv = <T>(opts: WithNodeEnvOpts<T>) =>
+  withRequiredNodeVar(
+    opts.nodeEnvName ?? "NODE_ENV",
+    (value) => {
+      let retVal: T;
+
+      switch (value) {
+        case opts.devEnvName ?? "development":
+          retVal = opts.onDevelopment(value, process.env);
+          break;
+        case opts.prodEnvName ?? "production":
+          retVal = opts.onProduction(value, process.env);
+          break;
+        default:
+          throw new Error(
+            `Invalid value found for process.env.${opts.nodeEnvName} (${
+              value!.length ?? 0
+            } characters lenght): ${value}`
+          );
+      }
+
+      return retVal;
+    },
+    withValIf(
+      opts.onInvalidValue,
+      (onInvalidValue) => (nodeEnvObj: NodeJS.ProcessEnv) =>
+        onInvalidValue!(undefined, nodeEnvObj),
+      () => null
+    )
+  );

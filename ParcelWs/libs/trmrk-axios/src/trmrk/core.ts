@@ -22,6 +22,31 @@ export class RefLazyValue<T> {
   }
 }
 
+export class Singleton<T> {
+  private _value: T | null = null;
+  private _initialized = false;
+
+  get value() {
+    if (!this._initialized) {
+      throw new Error(
+        "Singleton must be registered before its value can be used"
+      );
+    }
+
+    return this._value as T;
+  }
+
+  register(value: T) {
+    if (this._initialized) {
+      throw new Error(
+        "Singleton has already been registered and cannot be registered twice"
+      );
+    }
+
+    this._value = value;
+  }
+}
+
 export interface Kvp<TKey, TValue> {
   key: TKey;
   value: TValue;
