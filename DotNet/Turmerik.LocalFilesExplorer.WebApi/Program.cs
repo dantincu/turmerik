@@ -8,7 +8,7 @@ TrmrkCoreServices.RegisterAll(
     builder.Services, false);
 
 DriveExplorerH.AddFsRetrieverAndExplorer(
-    builder.Services, null, true);
+    builder.Services);
 
 // Add services to the container.
 

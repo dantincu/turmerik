@@ -6,9 +6,9 @@ using Turmerik.Html;
 using Turmerik.Md;
 using Turmerik.DirsPair;
 using Turmerik.Notes.Core;
-using Turmerik.Code.Core;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.TextParsing.IndexesFilter;
+using Turmerik.Core.TextParsing;
 
 namespace Turmerik.Dependencies
 {
@@ -22,6 +22,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IDirsPairCreatorFactory, DirsPairCreatorFactory>();
 
             services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();
+            services.AddSingleton<IPascalOrCamelCaseToWordsConverter, PascalOrCamelCaseToWordsConverter>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
             services.AddSingleton<IHtmlDocTitleRetriever, HtmlDocTitleRetriever>();
 

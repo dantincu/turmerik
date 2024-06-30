@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Turmerik.Code.Core;
 using Turmerik.Core.Actions;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;

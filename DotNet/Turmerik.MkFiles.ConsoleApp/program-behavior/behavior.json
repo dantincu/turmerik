@@ -1,0 +1,8 @@
+{
+  "Profiles": [
+    {
+      "ProfileName": "turmerik-parcel-ws-notes-app",
+      "JsFileRelPath": "profiles\\turmerik-parcel-ws-notes-app\\script.js"
+    }
+  ]
+}

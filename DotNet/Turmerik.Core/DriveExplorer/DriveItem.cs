@@ -69,6 +69,7 @@ namespace Turmerik.Core.DriveExplorer
 
         public bool? IsFolder { get; set; }
         public bool? IsRootFolder { get; set; }
+        public bool? IsSpecialFolder { get; set; }
 
         public FileType? FileType { get; set; }
         public OfficeFileType? OfficeFileType { get; set; }

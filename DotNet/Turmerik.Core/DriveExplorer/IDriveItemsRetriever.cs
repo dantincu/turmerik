@@ -176,7 +176,8 @@ namespace Turmerik.Core.DriveExplorer
         public DriveItemsRetrieverBase(
             ITimeStampHelper timeStampHelper)
         {
-            TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(nameof(timeStampHelper));
+            TimeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
+                nameof(timeStampHelper));
         }
 
         protected ITimeStampHelper TimeStampHelper { get; }

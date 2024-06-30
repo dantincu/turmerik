@@ -7,8 +7,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 
@@ -27,14 +29,17 @@ namespace Turmerik.Jint.Behavior
         public static ReadOnlyCollection<string> JsConsoleMethodNames { get; }
 
         public static Engine CreateEngine(
-            this IEnumerable<string> jsScripts,
+            this IEnumerable<string>? jsScripts,
             Engine engine = null)
         {
             engine ??= new Engine();
 
-            foreach (var script in jsScripts)
+            if (jsScripts != null)
             {
-                engine = engine.Execute(script);
+                foreach (var script in jsScripts)
+                {
+                    engine = engine.Execute(script);
+                }
             }
 
             return engine;
@@ -66,6 +71,62 @@ namespace Turmerik.Jint.Behavior
 
             engine.SetValue("console", consoleActionsMap);
             return consoleActionsMap;
+        }
+
+        public static Dictionary<string, Func<object[], object>> MapDotNetServiceMethods<TService>(
+            this IJsonConversion jsonConversion,
+            TService service,
+            string servicePrefix = null)
+        {
+            var serviceType = typeof(TService);
+            servicePrefix ??= serviceType.Name.ServiceTypeNameToCamelCase();
+
+            var methodsMap = serviceType.GetMethods().ToDictionary(
+                method => string.Join(".", servicePrefix, method.Name),
+                method =>
+                {
+                    var paramsArr = method.GetParameters();
+
+                    Func<object[], object> retFunc = (argsArr) =>
+                    {
+                        argsArr = argsArr.Select((arg, idx) =>
+                        {
+                            if (arg != null)
+                            {
+                                var @param = paramsArr[idx];
+                                var argType = arg.GetType();
+
+                                if (argType != param.ParameterType)
+                                {
+                                    string serializedArg;
+
+                                    if (argType == ReflH.StringType)
+                                    {
+                                        serializedArg = (string)arg;
+                                    }
+                                    else
+                                    {
+                                        serializedArg = jsonConversion.Adapter.Serialize(arg);
+                                    }
+
+                                    arg = jsonConversion.Adapter.Deserialize(
+                                        serializedArg,
+                                        false, true,
+                                        param.ParameterType);
+                                }
+                            }
+
+                            return arg!;
+                        }).ToArray();
+                        
+                        var retVal = method.Invoke(service, argsArr);
+                        return retVal;
+                    };
+
+                    return retFunc;
+                });
+
+            return methodsMap;
         }
     }
 }

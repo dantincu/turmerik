@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.Code.Core;
+using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
 
 namespace Turmerik.ScrapeMatIconPage.ConsoleApp

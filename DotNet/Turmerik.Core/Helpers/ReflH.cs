@@ -14,6 +14,7 @@ namespace Turmerik.Core.Helpers
         public static readonly Type DisposableType = typeof(IDisposable);
         public static readonly Type AsyncDisposableType = typeof(IAsyncDisposable);
         public static readonly Type EnumerableBaseType = typeof(IEnumerable);
+        public static readonly Type StringType = typeof(string);
 
         public static string GetTypeFullDisplayName(
             this Type type,

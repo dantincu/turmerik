@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Utility;
 using Turmerik.Core.Text;
+using Turmerik.Core.TextParsing;
 
 namespace Turmerik.Core.DriveExplorer
 {
@@ -18,7 +19,10 @@ namespace Turmerik.Core.DriveExplorer
     public class FsExplorerService : FsItemsRetriever, IFsExplorerService
     {
         public FsExplorerService(
-            ITimeStampHelper timeStampHelper) : base(timeStampHelper)
+            ITimeStampHelper timeStampHelper,
+            IPascalOrCamelCaseToWordsConverter pascalOrCamelCaseToWordsConverter) : base(
+                timeStampHelper,
+                pascalOrCamelCaseToWordsConverter)
         {
         }
 

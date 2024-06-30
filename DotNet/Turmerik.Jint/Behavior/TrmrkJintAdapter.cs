@@ -19,12 +19,20 @@ namespace Turmerik.Jint.Behavior
         ITrmrkJintAdapter Execute(
             params string[] jsCodeArr);
 
+        ITrmrkJintAdapter ExecuteMethod(
+            string jsMethod,
+            object?[] argsArr);
+
         TValue Evaluate<TValue>(
             string jsCode);
 
+        string GetMethodCallJsCode(
+            string jsMethod,
+            object?[] argsArr);
+
         TValue Invoke<TValue>(
             string jsMethod,
-            object[] args);
+            object?[] args);
     }
 
     public class TrmrkJintAdapter : ITrmrkJintAdapter
@@ -69,6 +77,10 @@ namespace Turmerik.Jint.Behavior
                     Engine = JintH.CreateEngine(jsCodeArr, Engine)
                 });
 
+        public ITrmrkJintAdapter ExecuteMethod(
+            string jsMethod,
+            object?[] argsArr) => Execute(GetMethodCallJsCode(jsMethod, argsArr));
+
         public TValue Evaluate<TValue>(
             string jsCode)
         {
@@ -83,7 +95,7 @@ namespace Turmerik.Jint.Behavior
 
         public string GetMethodCallJsCode(
             string jsMethod,
-            object[] argsArr)
+            object?[] argsArr)
         {
             string[] jsonArgsArr = argsArr.Select(
                 arg => jsonConversion.Adapter.Serialize(
@@ -99,7 +111,7 @@ namespace Turmerik.Jint.Behavior
 
         public TValue Invoke<TValue>(
             string jsMethod,
-            object[] argsArr) => Evaluate<TValue>(
+            object?[] argsArr) => Evaluate<TValue>(
                 GetMethodCallJsCode(jsMethod, argsArr));
     }
 }

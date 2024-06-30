@@ -1,0 +1,6 @@
+{
+  "clientVersion": "{0}",
+  "apiHost": "{1}",
+  "isLocalFileNotesApp": {2},
+  "isWinOS": {3}
+}

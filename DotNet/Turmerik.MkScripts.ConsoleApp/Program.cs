@@ -17,7 +17,7 @@ DriveExplorerH.AddFsRetrieverAndExplorer(
 
 services.AddSingleton<IAppEnv, AppEnv>();
 
-TrmrkNetCoreServices.AddMkScriptsServices(services);
+TrmrkNetCoreServices.AddMkFilesServices(services);
 TrmrkJintServices.RegisterAll(services);
 
 var svcProv = services.BuildServiceProvider();

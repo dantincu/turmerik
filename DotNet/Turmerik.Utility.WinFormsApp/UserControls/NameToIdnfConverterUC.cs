@@ -17,10 +17,9 @@ using Turmerik.WinForms.Controls;
 using Turmerik.WinForms.Dependencies;
 using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Helpers;
-using Turmerik.Code.Core;
 using Turmerik.Core.Actions;
 using Turmerik.Core.UIActions;
-using static Turmerik.WinForms.Controls.UISettingsDataCore;
+using Turmerik.Core.TextParsing;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -57,7 +56,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
             if (svcProvContnr.IsRegistered)
             {
                 svcProv = svcProvContnr.Data;
-                nameToIdnfConverter = svcProv.GetRequiredService<Code.Core.INameToIdnfConverter>();
+                nameToIdnfConverter = svcProv.GetRequiredService<INameToIdnfConverter>();
                 matUIIconsRetriever = svcProv.GetRequiredService<IMatUIIconsRetriever>();
 
                 controlsSynchronizer = svcProv.GetRequiredService<ISynchronizedValueAdapterFactory>().Create(

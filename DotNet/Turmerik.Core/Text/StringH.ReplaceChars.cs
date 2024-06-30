@@ -167,6 +167,20 @@ namespace Turmerik.Core.Text
             return str;
         }
 
+        public static string ServiceTypeNameToCamelCase(
+            this string svcTypeName)
+        {
+            string svcName = svcTypeName;
+
+            if (svcName.StartsWith("I"))
+            {
+                svcName = svcName.Substring(1);
+            }
+
+            svcName = svcName.DecapitalizeFirstLetter();
+            return svcName;
+        }
+
         public static CharType GetCharType(
             this char chr)
         {

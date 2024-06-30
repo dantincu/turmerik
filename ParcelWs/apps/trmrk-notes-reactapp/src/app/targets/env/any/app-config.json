@@ -1,0 +1,6 @@
+{
+  "clientVersion": 1,
+  "apiHost": "https://localhost:7285",
+  "isLocalFileNotesApp": true,
+  "isWinOS": true
+}

@@ -27,12 +27,14 @@ namespace Turmerik.Core.TextSerialization
 
         object Deserialize(
             string json,
-            JsonSerializerOpts opts);
+            JsonSerializerOpts opts,
+            Type? type = null);
 
         object Deserialize(
             string json,
             bool useCamelCase = false,
-            bool useStringEnumConverter = true);
+            bool useStringEnumConverter = true,
+            Type? type = null);
 
         TData Deserialize<TData>(
             string json,
@@ -97,10 +99,11 @@ namespace Turmerik.Core.TextSerialization
 
         public object Deserialize(
             string json,
-            JsonSerializerOpts opts)
+            JsonSerializerOpts opts,
+            Type? type = null)
         {
             var settings = SettingsMap.Get(opts).SerializerSettings;
-            object data = JsonConvert.DeserializeObject(json, settings);
+            object data = JsonConvert.DeserializeObject(json, type, settings);
 
             return data;
         }
@@ -108,7 +111,8 @@ namespace Turmerik.Core.TextSerialization
         public object Deserialize(
             string json,
             bool useCamelCase = false,
-            bool useStringEnumConverter = true)
+            bool useStringEnumConverter = true,
+            Type? type = null)
         {
             var settings = SettingsMap.Get(
                 new JsonSerializerOpts(
@@ -116,7 +120,7 @@ namespace Turmerik.Core.TextSerialization
                     true,
                     useStringEnumConverter)).SerializerSettings;
 
-            object data = JsonConvert.DeserializeObject(json, settings);
+            object data = JsonConvert.DeserializeObject(json, type, settings);
             return data;
         }
 

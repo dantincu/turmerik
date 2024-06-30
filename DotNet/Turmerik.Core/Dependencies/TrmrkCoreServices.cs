@@ -34,6 +34,7 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IBasicComparerFactory, BasicComparerFactory>();
             services.AddSingleton<IBasicEqualityComparerFactory, BasicEqualityComparerFactory>();
             services.AddSingleton<IJsonConversion, JsonConversion>();
+            services.AddSingleton<IGenericTaskAdapter, GenericTaskAdapter>();
 
             services.AddSingleton<ISynchronizedAdapterFactory, SynchronizedAdapterFactory>();
             services.AddSingleton<IIntermitentBackgroundWorkerFactory, IntermitentBackgroundWorkerFactory>();

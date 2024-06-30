@@ -14,6 +14,7 @@ namespace Turmerik.Jint.Dependencies
             services.AddSingleton<ITrmrkJintAdapterFactory, TrmrkJintAdapterFactory>();
             services.AddSingleton<AppBehaviorSetupAdapterFactory>();
             services.AddSingleton<IAppBehaviorFactory, AppBehaviorFactory>();
+            services.AddSingleton<ITrmrkJintOrchestrator, TrmrkJintOrchestrator>();
 
             return services;
         }

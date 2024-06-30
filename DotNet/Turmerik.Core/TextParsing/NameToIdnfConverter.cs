@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Turmerik.Core.Text;
 
-namespace Turmerik.Code.Core
+namespace Turmerik.Core.TextParsing
 {
     public interface INameToIdnfConverter
     {
