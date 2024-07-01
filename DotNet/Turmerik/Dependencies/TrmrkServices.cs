@@ -17,12 +17,9 @@ namespace Turmerik.Dependencies
         public static IServiceCollection RegisterAll(
             IServiceCollection services)
         {
-            services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
             services.AddSingleton<IDirsPairGeneratorFactory, DirsPairGeneratorFactory>();
             services.AddSingleton<IDirsPairCreatorFactory, DirsPairCreatorFactory>();
 
-            services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();
-            services.AddSingleton<IPascalOrCamelCaseToWordsConverter, PascalOrCamelCaseToWordsConverter>();
             services.AddSingleton<INoteMdParser, NoteMdParser>();
             services.AddSingleton<IHtmlDocTitleRetriever, HtmlDocTitleRetriever>();
 

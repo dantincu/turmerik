@@ -86,6 +86,6 @@ namespace Turmerik.Core.DriveExplorer
             return item != null;
         }
 
-        protected override char GetDirSeparator() => '/';
+        public override char GetDirSeparator() => '/';
     }
 }

@@ -96,7 +96,7 @@ namespace Turmerik.Core.DriveExplorer
             return exists;
         }
 
-        protected override char GetDirSeparator() => dirSeparator;
+        public override char GetDirSeparator() => dirSeparator;
 
         protected DriveItem GetItem(
             string idnf,

@@ -38,6 +38,8 @@ namespace Turmerik.Core.DriveExplorer
             string prIdnf)
             where TDriveItem : DriveItem<TDriveItem>;
 
+        char GetDirSeparator();
+
         char DirSeparator { get; }
     }
 
@@ -49,6 +51,8 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         public char DirSeparator { get; }
+
+        public abstract char GetDirSeparator();
 
         public abstract Task<bool> ItemExistsAsync(string idnf);
         public abstract Task<bool> FileExistsAsync(string idnf);
@@ -92,8 +96,6 @@ namespace Turmerik.Core.DriveExplorer
             TDriveItem item,
             string prIdnf)
             where TDriveItem : DriveItem<TDriveItem>;
-
-        protected abstract char GetDirSeparator();
 
         protected virtual void RemoveAdditionalInfoIfReq(
             DriveItem item, bool? retMinimalInfo)

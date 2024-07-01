@@ -9,10 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="program-behavior\profiles\turmerik-parcel-ws-notes-app\" />
+    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 
 </Project>

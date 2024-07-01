@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
-    <ProjectReference Include="..\Turmerik\Turmerik.csproj" />
   </ItemGroup>
 
 </Project>

@@ -328,7 +328,7 @@ namespace Turmerik.Core.DriveExplorer
             return fsItem;
         }
 
-        protected override char GetDirSeparator() => Path.DirectorySeparatorChar;
+        public override char GetDirSeparator() => Path.DirectorySeparatorChar;
 
         protected override void RemoveAdditionalInfoIfReq(
             DriveItem item, bool? retMinimalInfo)
