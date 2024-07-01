@@ -95,6 +95,10 @@ namespace Turmerik.Core.Text
             return retPath;
         }
 
+        public static string CombinePaths(
+            string[] pathParts) => Path.Combine(
+                pathParts.NotNull().ToArray());
+
         public static bool ContainsInvalidPathChars(
             string path,
             bool isFileName = false,

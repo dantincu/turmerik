@@ -13,7 +13,7 @@ using Turmerik.Core.Dependencies;
 using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
 using SyncLocalFiles = Turmerik.NetCore.ConsoleApps.SyncLocalFiles;
 using MkFiles = Turmerik.NetCore.ConsoleApps.MkFiles;
-using Turmerik.NetCore.ConsoleApps.MkScripts;
+using MkScripts = Turmerik.NetCore.ConsoleApps.MkScripts;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -58,11 +58,11 @@ namespace Turmerik.NetCore.Dependencies
         public static IServiceCollection AddMkScriptsServices(
             IServiceCollection services)
         {
-            services.AddSingleton<IProgramBehaviorRetriever, ProgramBehaviorRetriever>();
-            services.AddSingleton<IProgramArgsRetriever, ProgramArgsRetriever>();
-            services.AddSingleton<IProgramArgsNormalizer, ProgramArgsNormalizer>();
-            services.AddSingleton<IFilteredItemsRetriever, FilteredItemsRetriever>();
-            services.AddSingleton<IProgramComponent, ProgramComponent>();
+            services.AddSingleton<MkScripts.IProgramBehaviorRetriever, MkScripts.ProgramBehaviorRetriever>();
+            services.AddSingleton<MkScripts.IProgramArgsRetriever, MkScripts.ProgramArgsRetriever>();
+            services.AddSingleton<MkScripts.IProgramArgsNormalizer, MkScripts.ProgramArgsNormalizer>();
+            services.AddSingleton<MkScripts.IFilteredItemsRetriever, MkScripts.FilteredItemsRetriever>();
+            services.AddSingleton<MkScripts.IProgramComponent, MkScripts.ProgramComponent>();
 
             return services;
         }

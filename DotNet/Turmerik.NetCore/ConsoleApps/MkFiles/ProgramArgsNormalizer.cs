@@ -7,7 +7,6 @@ using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing.IndexesFilter;
 using Turmerik.Core.TextParsing;
 using Turmerik.NetCore.ConsoleApps.MkScripts;
-using static Turmerik.NetCore.ConsoleApps.MkScripts.ProgramConfig;
 
 namespace Turmerik.NetCore.ConsoleApps.MkFiles
 {
