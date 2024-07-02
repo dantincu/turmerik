@@ -13,11 +13,12 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
         public class Profile : ProgramConfigProfileCoreBase
         {
             public Func<Assembly, bool> IsTurmerikAssemblyPredicate { get; set; }
-            public string TsMetadataNsName { get; set; }
-            public string DestnExtraDirName { get; set; }
-            public string DestnCsProjectsDirName { get; set; }
+            public string DestnCsProjectAssembliesDirName { get; set; }
             public string DestnExternalAssemblliesDirName { get; set; }
             public string TypesDirName { get; set; }
+            public string TypesHcyDirName { get; set; }
+            public string TypesInfoDirName { get; set; }
+            public string TypesInfoFileName { get; set; }
             public SrcDestnPaths DirPaths { get; set; }
             public string DfSrcBinsRelDirPath { get; set; }
             public string DfSrcBuildRelDirPath { get; set; }
@@ -44,7 +45,7 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             public SrcDestnPaths DirPaths { get; set; }
             public string SrcBinsRelDirPath { get; set; }
             public string SrcBuildRelDirPath { get; set; }
-            public string ScrBuildDirPath { get; set; }
+            public string SrcBuildDirPath { get; set; }
 
             public DotNetCsProjectAssembly CsProjectAssembly { get; set; }
         }
@@ -52,6 +53,7 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
         public class DotNetAssembly
         {
             public string Name { get; set; }
+            public string TypeNamesPfx { get; set; }
 
             public SrcDestnPaths Paths { get; set; }
             public DotNetType[] TypesArr { get; set; }
@@ -69,9 +71,9 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
 
         public class DotNetType
         {
+            public string FullName { get; set; }
             public string Name { get; set; }
-            public string RelNs { get; set; }
-            public string FullNs { get; set; }
+            public string[] RelNsPartsArr { get; set; }
             public string TsMetadataNsName { get; set; }
             public SrcDestnPaths FilePaths { get; set; }
         }

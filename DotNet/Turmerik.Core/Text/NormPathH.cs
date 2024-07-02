@@ -186,15 +186,15 @@ namespace Turmerik.Core.Text
             Func<string, bool, string>? transformer) => transformer.FirstNotNull((path, isRooted) => path)!;
 
         public static string AssurePathIsRooted(
-            string path,
+            string? path,
             Func<string> basePathFactory)
         {
-            if (!Path.IsPathRooted(path))
+            if (string.IsNullOrWhiteSpace(path) || !Path.IsPathRooted(path))
             {
                 string basePath = basePathFactory();
 
                 path = Path.Combine(
-                    basePath, path);
+                    basePath, path ?? string.Empty);
             }
 
             return path;

@@ -67,12 +67,25 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
         string GetDefaultAssemblyExtension(
             ProgramConfig.DotNetCsProjectAssembly dotNetAssembly);
 
-        string GetDefaultTsFileName(
+        string GetDefaultTsRelFilePath(
+            ProgramArgs args,
             ProgramConfig.DotNetType dotNetType);
     }
 
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
     {
+        public const string DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME = "csproj-asmb";
+        public const string DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME = "extern-asmb";
+        public const string TYPES_DIR_NAME = "tn";
+        public const string TYPES_HCY_DIR_NAME = "hn";
+        public const string TYPES_INFO_DIR_NAME = "i";
+
+        public static readonly string DfSrcBinsRelDirPath = Path.Combine(
+            "bin", "Release");
+
+        public static readonly string DfSrcBuildRelDirPath = Path.Combine(
+            "net8.0");
+
         private readonly IProgramConfigRetriever programConfigRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
@@ -121,9 +134,20 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.Profile profile,
             ProgramConfig.ProfileSection section)
         {
+            profile.DestnCsProjectAssembliesDirName ??= DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME;
+            profile.DestnExternalAssemblliesDirName ??= DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME;
+            profile.TypesDirName ??= TYPES_DIR_NAME;
+            profile.TypesHcyDirName ??= TYPES_HCY_DIR_NAME;
+            profile.TypesInfoDirName ??= TYPES_INFO_DIR_NAME;
+            profile.DfSrcBinsRelDirPath ??= DfSrcBinsRelDirPath;
+            profile.DfSrcBuildRelDirPath ??= DfSrcBuildRelDirPath;
+
             NormalizeSrcDestnDirPaths(args,
-                section.DirPaths ??= new(),
-                profile.DirPaths);
+                section.DirPaths ??= new());
+
+            section.DirPaths.SrcPath = PathH.AssurePathRooted(
+                section.DirPaths.SrcPath,
+                () => profile.DirPaths.SrcPath);
 
             section.DfSrcBinsRelDirPath ??= profile.DfSrcBinsRelDirPath;
             section.DfSrcBuildRelDirPath ??= profile.DfSrcBuildRelDirPath;
@@ -142,7 +166,10 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
         {
             csProject.DirPaths ??= new();
             csProject.DirPaths.SrcPath ??= csProject.Name;
-            csProject.DirPaths.DestnPath ??= csProject.DirPaths.SrcPath;
+
+            csProject.DirPaths.DestnPath ??= Path.Combine(
+                profile.DestnCsProjectAssembliesDirName,
+                csProject.DirPaths.SrcPath);
 
             NormalizeSrcDestnDirPaths(args,
                 csProject.DirPaths,
@@ -151,7 +178,7 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             csProject.SrcBinsRelDirPath ??= section.DfSrcBinsRelDirPath;
             csProject.SrcBuildRelDirPath ??= section.DfSrcBuildRelDirPath;
 
-            csProject.ScrBuildDirPath = PathH.CombinePaths(
+            csProject.SrcBuildDirPath ??= PathH.CombinePaths(
                 [ csProject.DirPaths.SrcPath,
                 csProject.SrcBinsRelDirPath,
                 csProject.SrcBuildRelDirPath ]);
@@ -177,9 +204,11 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.DotNetCsProjectAssembly dotNetAssembly)
         {
             dotNetAssembly.Name ??= csProject.Name;
+            dotNetAssembly.TypeNamesPfx ??= $"{dotNetAssembly.Name}.";
             dotNetAssembly.Paths ??= new();
             dotNetAssembly.Paths.SrcPath ??= GetDefaultAssemblyFileName(dotNetAssembly);
-            dotNetAssembly.Paths.DestnPath ??= dotNetAssembly.Paths.SrcPath;
+
+            dotNetAssembly.Paths.DestnPath ??= dotNetAssembly.Name;
             NormalizeSrcDestnDirPaths(args, dotNetAssembly.Paths, csProject.DirPaths);
 
             if (dotNetAssembly.TypesArr != null)
@@ -205,19 +234,34 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.DotNetCsProjectAssembly dotNetAssembly,
             ProgramConfig.DotNetType dotNetType)
         {
-            dotNetType.Name = dotNetType.Name ?? throw new ArgumentNullException(
-                nameof(dotNetType.Name));
+            dotNetType.FullName = dotNetType.FullName ?? throw new ArgumentNullException(
+                nameof(dotNetType.FullName));
+
+            if (dotNetType.FullName.StartsWith(dotNetAssembly.TypeNamesPfx))
+            {
+                dotNetType.RelNsPartsArr = dotNetType.FullName.Substring(
+                    dotNetAssembly.TypeNamesPfx.Length).Split('.').With(
+                    arr => arr.Take(arr.Length - 1).ToArray());
+            }
+            else
+            {
+                throw new InvalidOperationException(string.Join(" ",
+                    "Fully qualified names of exported types must start with the name of the assembly where they are defined:",
+                    $"Fully qualified name {dotNetType.FullName} should start with {dotNetAssembly.TypeNamesPfx}"));
+            }
 
             dotNetType.FilePaths ??= new();
             dotNetType.FilePaths.SrcPath ??= dotNetAssembly.Paths.SrcPath;
-            dotNetType.FilePaths.DestnPath ??= GetDefaultTsFileName(dotNetType);
+            dotNetType.FilePaths.DestnPath ??= GetDefaultTsRelFilePath(args, dotNetType);
             NormalizeSrcDestnDirPaths(args, dotNetAssembly.Paths);
 
             dotNetType.FilePaths.SrcPath = NormPathH.AssurePathIsRooted(
-                dotNetType.FilePaths.SrcPath, () => dotNetAssembly.Paths.SrcPath);
+                dotNetType.FilePaths.SrcPath,
+                () => dotNetAssembly.Paths.SrcPath);
 
             dotNetType.FilePaths.DestnPath = NormPathH.AssurePathIsRooted(
-                dotNetType.FilePaths.DestnPath, () => dotNetAssembly.Paths.DestnPath);
+                dotNetType.FilePaths.DestnPath,
+                () => dotNetAssembly.Paths.DestnPath);
         }
 
         public void NormalizeSrcDestnDirPaths(
@@ -279,27 +323,30 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
                 _ => "dll"
             };
 
-        public string GetDefaultTsFileName(
-            ProgramConfig.DotNetType dotNetType) => $"{dotNetType.Name}.ts";
-
-        private void ActWithDotNetAssembly(
-            ProgramConfig.DotNetAssembly dotNetAssembly,
-            Action<ProgramConfig.DotNetCsProjectAssembly> dotNetCsProjAction,
-            Action<ProgramConfig.DotNetExternalAssembly> dotNetExternAction)
+        public string GetDefaultTsRelFilePath(
+            ProgramArgs args,
+            ProgramConfig.DotNetType dotNetType)
         {
-            if (dotNetAssembly is ProgramConfig.DotNetCsProjectAssembly dotNetCsProjectAssembly)
-            {
-                dotNetCsProjAction(dotNetCsProjectAssembly);
-            }
-            else if (dotNetAssembly is ProgramConfig.DotNetExternalAssembly dotNetExternalAssembly)
-            {
-                dotNetExternAction(dotNetExternalAssembly);
-            }
-            else
-            {
-                throw new NotSupportedException(
-                    dotNetAssembly.GetType().FullName);
-            }
+            var relNsPartsArr = dotNetType.RelNsPartsArr;
+            var relNsPartsCount = relNsPartsArr.Length;
+
+            Func<string, int, string> tsRelFilePathPartNameFactory = (
+                part, idx) => args.Profile.TypesHcyDirName;
+
+            Func<string, int, IEnumerable<string>> tsRelFilePathPartSelector = (
+                part, idx) => [part, tsRelFilePathPartNameFactory(part, idx)];
+
+            var tsRelFilePathParts = relNsPartsArr.SelectMany(
+                    tsRelFilePathPartSelector);
+
+            tsRelFilePathParts = tsRelFilePathParts.Concat(
+                [ args.Profile.TypesDirName,
+                    $"{dotNetType.Name}.ts" ]);
+
+            var tsRelFilePath = Path.Combine(
+                tsRelFilePathParts.ToArray());
+
+            return tsRelFilePath;
         }
     }
 }
