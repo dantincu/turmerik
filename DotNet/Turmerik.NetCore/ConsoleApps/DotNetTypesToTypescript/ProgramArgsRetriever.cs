@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.LocalDeviceEnv;
 
-namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
+namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public interface IProgramArgsRetriever
     {
@@ -147,6 +147,13 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
 
                 string.Join(" ", optsHead($":{PROFILE_NAME_OPT_NAME}:", "<profile_name>", true),
                     $"Provide the {m.ProfileName.L}{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{SECTION_NAMES_OPT_NAME}:", "[<section_name>]"),
+                    $"Provide the {m.SectionNames.L}{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{INCLUDE_ALL_TYPES}", ""),
+                    $"Indicates that all for each csproj, all types defined in it must be included",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
                 string.Join(" ", optsHead($":{HELP_FLAG_NAME}", ""),
                     $"Prints this help message to the console",

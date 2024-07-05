@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.DotNetTypesToTypescript.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": ":pf:parcel-ws"
+    }
+  }
+}

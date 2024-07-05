@@ -7,7 +7,7 @@ using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextSerialization;
 
-namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
+namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public interface IProgramConfigRetriever : IProgramConfigRetrieverCore<ProgramConfig, ProgramConfig.Profile>
     {
@@ -28,6 +28,16 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.Profile srcProfile,
             string configFilePath = null)
         {
+            destnProfile.IsTurmerikAssemblyPredicate = srcProfile.IsTurmerikAssemblyPredicate ?? destnProfile.IsTurmerikAssemblyPredicate;
+            destnProfile.DestnCsProjectAssembliesDirName = srcProfile.DestnCsProjectAssembliesDirName ?? destnProfile.DestnCsProjectAssembliesDirName;
+            destnProfile.DestnExternalAssemblliesDirName = srcProfile.DestnExternalAssemblliesDirName ?? destnProfile.DestnExternalAssemblliesDirName;
+            destnProfile.TypesDirName = srcProfile.TypesDirName ?? destnProfile.TypesDirName;
+            destnProfile.TypesHcyDirName = srcProfile.TypesHcyDirName ?? destnProfile.TypesHcyDirName;
+            destnProfile.TypesInfoDirName = srcProfile.TypesInfoDirName ?? destnProfile.TypesInfoDirName;
+            destnProfile.TypesInfoFileName = srcProfile.TypesInfoFileName ?? destnProfile.TypesInfoFileName;
+            destnProfile.DirPaths = srcProfile.DirPaths ?? destnProfile.DirPaths;
+            destnProfile.DfSrcBinsRelDirPath = srcProfile.DfSrcBinsRelDirPath ?? destnProfile.DfSrcBinsRelDirPath;
+
             destnProfile.Sections ??= new List<ProgramConfig.ProfileSection>();
 
             if (srcProfile.Sections != null)

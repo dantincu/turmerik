@@ -1,0 +1,10 @@
+{
+  "Profiles": [
+    {
+      "ProfileRelFilePath": "profiles\\parcel-ws.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\test-all.config.json"
+    }
+  ]
+}

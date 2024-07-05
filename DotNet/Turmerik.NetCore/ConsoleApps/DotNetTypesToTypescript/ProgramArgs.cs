@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.LocalDeviceEnv;
 
-namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
+namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public class ProgramArgs
     {

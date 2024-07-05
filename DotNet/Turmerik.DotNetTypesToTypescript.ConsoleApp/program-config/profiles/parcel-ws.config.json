@@ -1,0 +1,25 @@
+{
+  "ProfileName": "parcel-ws",
+  "DirPaths": {
+    "SrcPath": "|$TURMERIK_REPO_DIR|\\DotNet",
+    "DestnPath": "|$TURMERIK_REPO_DIR|\\Parcel-Ws\\libs\\trmrk\\src\\lib\\DotNetTypeDefs"
+  },
+  "Sections": [
+    {
+      "SectionName": "Turmerik.Core",
+      "CsProjectsArr": [
+        {
+          "Name": "Turmerik.Core",
+          "IsDotNetStandard": true,
+          "CsProjectAssembly": {
+            "TypesArr": [
+              {
+                "FullName": "Turmerik.Core.DriveExplorer.IDriveExplorerService"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

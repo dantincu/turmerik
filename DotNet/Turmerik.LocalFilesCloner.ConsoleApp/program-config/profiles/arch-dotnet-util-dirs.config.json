@@ -16,9 +16,11 @@
           "InputDirFilter": {
             "IncludedRelPathRegexes": [
               "^\\/Bin\\/TrmrkMkFsDirsPair\\/.*",
+              "^\\/Bin\\/Turmerik\\.DotNetTypesToTypescript\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/.*",
+              "^\\/Bin\\/Turmerik\\.MkFiles\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MkScripts\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/.*",
@@ -36,6 +38,7 @@
               "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net8\\.0\\/ChromeHeadlessShell",
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net8\\.0\\/Chrome",
               "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net8\\.0\\/ChromeHeadlessShell",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.DotNetTypesToTypescript\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.MkScripts\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.SyncLocalFiles\\.ProgramConfigRetriever\\/program\\-config\\.*",

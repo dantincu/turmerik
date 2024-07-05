@@ -5,16 +5,16 @@ using Turmerik.NetCore.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Jint.Dependencies;
-using Turmerik.Core.ConsoleApps.DotNetTypesToTypescript;
+using Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
 
-TrmrkCoreServices.RegisterAll(services);
+TrmrkNetCoreServices.RegisterAll(services);
 
 services.AddSingleton<IAppEnv, AppEnv>();
 
-TrmrkCoreServices.AddDotNetTypesToTypescriptServices(services);
+TrmrkNetCoreServices.AddDotNetTypesToTypescriptServices(services);
 
 var svcProv = services.BuildServiceProvider();
 

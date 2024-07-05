@@ -11,7 +11,7 @@ using Turmerik.Core.Text;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
 
-namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
+namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public interface IProgramArgsNormalizer
     {
@@ -79,12 +79,16 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
         public const string TYPES_DIR_NAME = "tn";
         public const string TYPES_HCY_DIR_NAME = "hn";
         public const string TYPES_INFO_DIR_NAME = "i";
+        public const string TYPES_INFO_FILE_NAME = "types.json";
+
+        public const decimal DF_NET_STD_VERSION = 2.0M;
+        public const decimal DF_NET_CORE_VERSION = 8.0M;
 
         public static readonly string DfSrcBinsRelDirPath = Path.Combine(
             "bin", "Release");
 
-        public static readonly string DfSrcBuildRelDirPath = Path.Combine(
-            "net8.0");
+        public const string DOTNET_STD_DF_SRC_BUILD_DIR_NAME = "netstandard{0:0.0#}";
+        public const string DOTNET_DF_SRC_BUILD_DIR_NAME_FMT = "net{0:0.0#}";
 
         private readonly IProgramConfigRetriever programConfigRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
@@ -121,7 +125,19 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.Profile profile)
         {
             profile.IsTurmerikAssemblyPredicate ??= Trmrk.IsTurmerikAssembly;
+            profile.DestnCsProjectAssembliesDirName ??= DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME;
+            profile.DestnExternalAssemblliesDirName ??= DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME;
+            profile.TypesDirName ??= TYPES_DIR_NAME;
+            profile.TypesHcyDirName ??= TYPES_HCY_DIR_NAME;
+            profile.TypesInfoDirName ??= TYPES_INFO_DIR_NAME;
+            profile.TypesInfoFileName ??= TYPES_INFO_FILE_NAME;
+            profile.DfSrcBinsRelDirPath ??= DfSrcBinsRelDirPath;
+
             NormalizeSrcDestnDirPaths(args, profile.DirPaths);
+
+            profile.DirPathsToRemoveBefore ??= [
+                profile.DestnCsProjectAssembliesDirName,
+                profile.DestnExternalAssemblliesDirName ];
 
             foreach (var section in args.Sections)
             {
@@ -134,23 +150,26 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.Profile profile,
             ProgramConfig.ProfileSection section)
         {
-            profile.DestnCsProjectAssembliesDirName ??= DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME;
-            profile.DestnExternalAssemblliesDirName ??= DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME;
-            profile.TypesDirName ??= TYPES_DIR_NAME;
-            profile.TypesHcyDirName ??= TYPES_HCY_DIR_NAME;
-            profile.TypesInfoDirName ??= TYPES_INFO_DIR_NAME;
-            profile.DfSrcBinsRelDirPath ??= DfSrcBinsRelDirPath;
-            profile.DfSrcBuildRelDirPath ??= DfSrcBuildRelDirPath;
-
             NormalizeSrcDestnDirPaths(args,
                 section.DirPaths ??= new());
 
             section.DirPaths.SrcPath = PathH.AssurePathRooted(
-                section.DirPaths.SrcPath,
+                section.DirPaths.SrcPath ?? string.Empty,
                 () => profile.DirPaths.SrcPath);
 
+            section.DirPaths.DestnPath = PathH.AssurePathRooted(
+                section.DirPaths.DestnPath ?? string.Empty,
+                () => profile.DirPaths.DestnPath);
+
             section.DfSrcBinsRelDirPath ??= profile.DfSrcBinsRelDirPath;
-            section.DfSrcBuildRelDirPath ??= profile.DfSrcBuildRelDirPath;
+
+            section.DirPathsToRemoveBefore ??= profile.DirPathsToRemoveBefore;
+
+            section.DirPathsToRemoveBefore = section.DirPathsToRemoveBefore.Select(
+                dirPath => textMacrosReplacer.NormalizePath(
+                    args.LocalDevicePathsMap,
+                    dirPath ?? string.Empty,
+                    section.DirPaths.DestnPath)).ToArray();
 
             foreach (var csProj in section.CsProjectsArr)
             {
@@ -176,7 +195,19 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
                 section.DirPaths);
 
             csProject.SrcBinsRelDirPath ??= section.DfSrcBinsRelDirPath;
-            csProject.SrcBuildRelDirPath ??= section.DfSrcBuildRelDirPath;
+            csProject.IsDotNetStandard ??= false;
+
+            csProject.DotNetVersionNumber ??= (csProject.IsDotNetStandard ?? false) switch
+            {
+                true => DF_NET_STD_VERSION,
+                false => DF_NET_CORE_VERSION
+            };
+
+            csProject.SrcBuildRelDirPath ??= string.Concat((csProject.IsDotNetStandard ?? false) switch
+            {
+                true => string.Format(DOTNET_STD_DF_SRC_BUILD_DIR_NAME, csProject.DotNetVersionNumber),
+                false => string.Format(DOTNET_DF_SRC_BUILD_DIR_NAME_FMT, csProject.DotNetVersionNumber),
+            }, csProject.DotNetVersionSffx);
 
             csProject.SrcBuildDirPath ??= PathH.CombinePaths(
                 [ csProject.DirPaths.SrcPath,
@@ -206,10 +237,14 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             dotNetAssembly.Name ??= csProject.Name;
             dotNetAssembly.TypeNamesPfx ??= $"{dotNetAssembly.Name}.";
             dotNetAssembly.Paths ??= new();
-            dotNetAssembly.Paths.SrcPath ??= GetDefaultAssemblyFileName(dotNetAssembly);
 
-            dotNetAssembly.Paths.DestnPath ??= dotNetAssembly.Name;
-            NormalizeSrcDestnDirPaths(args, dotNetAssembly.Paths, csProject.DirPaths);
+            dotNetAssembly.Paths.SrcPath = NormPathH.AssurePathIsRooted(
+                dotNetAssembly.Paths.SrcPath ??= GetDefaultAssemblyFileName(dotNetAssembly),
+                () => csProject.SrcBuildDirPath);
+
+            dotNetAssembly.Paths.DestnPath = NormPathH.AssurePathIsRooted(
+                dotNetAssembly.Paths.DestnPath ??= string.Empty,
+                () => csProject.DirPaths.DestnPath);
 
             if (dotNetAssembly.TypesArr != null)
             {
@@ -234,21 +269,7 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.DotNetCsProjectAssembly dotNetAssembly,
             ProgramConfig.DotNetType dotNetType)
         {
-            dotNetType.FullName = dotNetType.FullName ?? throw new ArgumentNullException(
-                nameof(dotNetType.FullName));
-
-            if (dotNetType.FullName.StartsWith(dotNetAssembly.TypeNamesPfx))
-            {
-                dotNetType.RelNsPartsArr = dotNetType.FullName.Substring(
-                    dotNetAssembly.TypeNamesPfx.Length).Split('.').With(
-                    arr => arr.Take(arr.Length - 1).ToArray());
-            }
-            else
-            {
-                throw new InvalidOperationException(string.Join(" ",
-                    "Fully qualified names of exported types must start with the name of the assembly where they are defined:",
-                    $"Fully qualified name {dotNetType.FullName} should start with {dotNetAssembly.TypeNamesPfx}"));
-            }
+            NormalizeType(dotNetAssembly, dotNetType);
 
             dotNetType.FilePaths ??= new();
             dotNetType.FilePaths.SrcPath ??= dotNetAssembly.Paths.SrcPath;
@@ -262,6 +283,86 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             dotNetType.FilePaths.DestnPath = NormPathH.AssurePathIsRooted(
                 dotNetType.FilePaths.DestnPath,
                 () => dotNetAssembly.Paths.DestnPath);
+        }
+
+        public void NormalizeType(
+            ProgramConfig.DotNetCsProjectAssembly dotNetAssembly,
+            ProgramConfig.DotNetType dotNetType)
+        {
+            bool isNestedType = dotNetType.DeclaringType != null;
+
+            if (isNestedType)
+            {
+                NormalizeType(
+                    dotNetAssembly,
+                    dotNetType.DeclaringType!);
+
+                dotNetType.NestedTypesHcyArr = dotNetType.DeclaringType!.NestedTypesHcyArr?.AppendToArr(
+                    dotNetType.DeclaringType.Name) ?? [dotNetType.DeclaringType.Name];
+            }
+
+            if (dotNetType.FullName != null)
+            {
+                string[] fullNameParts = dotNetType.FullName.Split('.');
+                dotNetType.Name ??= fullNameParts.Last();
+
+                if (dotNetType.Namespace == null)
+                {
+                    if (isNestedType)
+                    {
+                        dotNetType.Namespace = dotNetType.DeclaringType!.Namespace;
+                    }
+                    else
+                    {
+                        dotNetType.Namespace = fullNameParts.Take(
+                            fullNameParts.Length - 1).ToArray().JoinStr(".");
+                    }
+                }
+            }
+            else
+            {
+                dotNetType.Name = dotNetType.Name ?? throw new ArgumentNullException(
+                    nameof(dotNetType.Name));
+
+                dotNetType.Namespace = dotNetType.Namespace ?? throw new ArgumentNullException(
+                    nameof(dotNetType.Namespace));
+
+                if (isNestedType)
+                {
+                    dotNetType.FullName = string.Join(".",
+                        dotNetType.DeclaringType!.FullName,
+                        dotNetType.Name);
+                }
+                else
+                {
+                    dotNetType.FullName = string.Join(".",
+                        dotNetType.Namespace,
+                        dotNetType.Name);
+                }
+            }
+
+            if (dotNetType.RelNsPartsArr == null)
+            {
+                var @namespace = isNestedType switch
+                {
+                    true => dotNetType.DeclaringType!.FullName,
+                    false => dotNetType.Namespace
+                };
+
+                if (@namespace.StartsWith(
+                    dotNetAssembly.TypeNamesPfx))
+                {
+                    dotNetType.RelNsPartsArr = @namespace.Substring(
+                        dotNetAssembly.TypeNamesPfx.Length).Split('.');
+                }
+                else
+                {
+                    throw new InvalidOperationException(
+                        string.Join(" ",
+                            "Fully qualified names of exported types must start with the name of the assembly where they are defined:",
+                            $"Fully qualified name {dotNetType.FullName} should start with {dotNetAssembly.TypeNamesPfx}"));
+                }
+            }
         }
 
         public void NormalizeSrcDestnDirPaths(
@@ -331,7 +432,11 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             var relNsPartsCount = relNsPartsArr.Length;
 
             Func<string, int, string> tsRelFilePathPartNameFactory = (
-                part, idx) => args.Profile.TypesHcyDirName;
+                part, idx) => (relNsPartsCount - idx > 1) switch
+                {
+                    true => args.Profile.TypesHcyDirName,
+                    false => args.Profile.TypesDirName
+                };
 
             Func<string, int, IEnumerable<string>> tsRelFilePathPartSelector = (
                 part, idx) => [part, tsRelFilePathPartNameFactory(part, idx)];
@@ -340,8 +445,7 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
                     tsRelFilePathPartSelector);
 
             tsRelFilePathParts = tsRelFilePathParts.Concat(
-                [ args.Profile.TypesDirName,
-                    $"{dotNetType.Name}.ts" ]);
+                [$"{dotNetType.Name}.ts"]);
 
             var tsRelFilePath = Path.Combine(
                 tsRelFilePathParts.ToArray());

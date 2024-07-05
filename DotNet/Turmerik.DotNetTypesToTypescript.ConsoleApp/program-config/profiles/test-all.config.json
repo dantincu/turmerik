@@ -1,0 +1,21 @@
+{
+  "ProfileName": "test-all",
+  "DirPaths": {
+    "SrcPath": "|$TURMERIK_REPO_DIR|\\DotNet",
+    "DestnPath": "|$TURMERIK_REPO_DIR|\\..\\..\\temp\\local\\DotNetTypesToTypescript\\test-all"
+  },
+  "Sections": [
+    {
+      "SectionName": "Turmerik.Core",
+      "CsProjectsArr": [
+        {
+          "Name": "Turmerik.Core",
+          "IsDotNetStandard": true,
+          "CsProjectAssembly": {
+            "IncludeAllTypes": true
+          }
+        }
+      ]
+    }
+  ]
+}

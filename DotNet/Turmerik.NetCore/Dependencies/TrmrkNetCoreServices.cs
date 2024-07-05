@@ -14,6 +14,7 @@ using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
 using SyncLocalFiles = Turmerik.NetCore.ConsoleApps.SyncLocalFiles;
 using MkFiles = Turmerik.NetCore.ConsoleApps.MkFiles;
 using MkScripts = Turmerik.NetCore.ConsoleApps.MkScripts;
+using DotNetTypesToTypescript = Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -82,6 +83,17 @@ namespace Turmerik.NetCore.Dependencies
             IServiceCollection services)
         {
             services.AddSingleton<MkFiles.IProgramComponent, MkFiles.ProgramComponent>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddDotNetTypesToTypescriptServices(
+            this IServiceCollection services)
+        {
+            services.AddSingleton<DotNetTypesToTypescript.IProgramConfigRetriever, DotNetTypesToTypescript.ProgramConfigRetriever>();
+            services.AddSingleton<DotNetTypesToTypescript.IProgramArgsRetriever, DotNetTypesToTypescript.ProgramArgsRetriever>();
+            services.AddSingleton<DotNetTypesToTypescript.IProgramArgsNormalizer, DotNetTypesToTypescript.ProgramArgsNormalizer>();
+            services.AddSingleton<DotNetTypesToTypescript.IProgramComponent, DotNetTypesToTypescript.ProgramComponent>();
 
             return services;
         }

@@ -10,8 +10,13 @@ using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.LocalDeviceEnv;
 using System.Reflection;
+using System.IO;
+using System.Reflection.PortableExecutable;
+using System.Reflection.Metadata;
+using Turmerik.Core.Utility;
+using Turmerik.NetCore.Utility;
 
-namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
+namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public interface IProgramComponent
     {
@@ -62,7 +67,7 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
         public async Task RunAsync(ProgramArgs args)
         {
             var wka = GetWorkArgs(args);
-            await RunAsync(args);
+            await RunAsync(wka);
         }
 
         private WorkArgs GetWorkArgs(
@@ -71,6 +76,8 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             var wka = new WorkArgs
             {
                 PgArgs = args,
+                CsProjAssemblies = [],
+                ExternalAssemblies = []
             };
 
             return wka;
@@ -82,6 +89,7 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
             {
                 foreach (var csProj in section.CsProjectsArr)
                 {
+                    var csProjAsmb = csProj.CsProjectAssembly;
 
                 }
             }
@@ -90,6 +98,40 @@ namespace Turmerik.Core.ConsoleApps.DotNetTypesToTypescript
         private class WorkArgs
         {
             public ProgramArgs PgArgs { get; set; }
+
+            public List<DotNetCsProjectAssembly> CsProjAssemblies { get; set; }
+            public List<DotNetExternalAssembly> ExternalAssemblies { get; set; }
+
+            public class DotNetAssembly
+            {
+                public Assembly AsmbObj { get; set; }
+                public string Name { get; set; }
+                public string TypeNamesPfx { get; set; }
+                public string DestnDirPath { get; set; }
+
+                public DotNetType[] TypesArr { get; set; }
+            }
+
+            public class DotNetExternalAssembly : DotNetAssembly
+            {
+            }
+
+            public class DotNetCsProjectAssembly : DotNetAssembly
+            {
+                public bool? IsExecutable { get; set; }
+                public bool? IncludeAllTypes { get; set; }
+            }
+
+            public class DotNetType
+            {
+                public Type TypeObj { get; set; }
+                public string Name { get; set; }
+                public string Namespace { get; set; }
+                public string FullName { get; set; }
+                public string[] RelNsPartsArr { get; set; }
+
+                public DotNetType DeclaringType { get; set; }
+            }
         }
     }
 }

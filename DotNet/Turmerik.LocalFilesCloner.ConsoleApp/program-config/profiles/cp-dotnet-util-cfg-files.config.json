@@ -18,6 +18,9 @@
       },
       "Folders": [
         {
+          "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.CmdApp\\Release\\net8.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net8.0"
         },
         {
@@ -65,6 +68,9 @@
         ]
       },
       "Folders": [
+        {
+          "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.CmdApp\\Release\\net8.0"
+        },
         {
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net8.0"
         },
