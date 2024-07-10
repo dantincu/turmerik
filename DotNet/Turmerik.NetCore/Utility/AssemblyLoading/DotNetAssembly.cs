@@ -138,11 +138,12 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public bool? IsGenericType { get; set; }
         public bool? IsGenericTypeDef { get; set; }
 
+        public DotNetAssembly? Assembly { get; set; }
+
         public DotNetType? BaseType { get; set; }
         public List<DotNetType>? Interfaces { get; set; }
         public DotNetType? DeclaringType { get; set; }
         public DotNetType? GenericTypeDef { get; set; }
-        public List<GenericTypeParam>? GenericTypeParams { get; set; }
         public List<GenericTypeArg>? GenericTypeArgs { get; set; }
 
         public List<DotNetProperty>? Properties { get; set; }
@@ -164,13 +165,12 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 IsConstructedGenericType = IsConstructedGenericType,
                 IsGenericType = IsGenericType,
                 IsGenericTypeDef = IsGenericTypeDef,
+                Assembly = Assembly?.Clone(keepBclObjects),
                 BaseType = BaseType?.Clone(keepBclObjects),
                 Interfaces = Interfaces?.Select(@interface => @interface.Clone(
                     keepBclObjects)).ToList(),
                 DeclaringType = DeclaringType?.Clone(keepBclObjects),
                 GenericTypeDef = GenericTypeDef?.Clone(keepBclObjects),
-                GenericTypeParams = GenericTypeParams?.Select(
-                    @param => param.Clone(keepBclObjects)).ToList(),
                 GenericTypeArgs = GenericTypeArgs?.Select(
                     arg => arg.Clone(keepBclObjects)).ToList(),
                 Properties = Properties?.Select(
@@ -288,26 +288,19 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             };
     }
 
-    public class GenericTypeParam
-    {
-        public DotNetType? TypeParam { get; set; }
-
-        public GenericTypeParam Clone(
-            bool keepBclObjects = true) => new GenericTypeParam
-            {
-                TypeParam = TypeParam?.Clone(keepBclObjects),
-            };
-    }
-
     public class GenericTypeArg
     {
         public DotNetType? TypeArg { get; set; }
+
+        public List<DotNetType>? TypeParamConstraints { get; set; }
 
         public GenericTypeArg Clone(
             bool keepBclObjects = true) => new GenericTypeArg
             {
                 TypeArg = TypeArg?.Clone(
                     keepBclObjects),
+                TypeParamConstraints = TypeParamConstraints?.Select(
+                    constraint => constraint.Clone()).ToList()
             };
     }
 }
