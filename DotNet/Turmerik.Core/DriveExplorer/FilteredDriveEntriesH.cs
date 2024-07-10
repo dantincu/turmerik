@@ -110,5 +110,28 @@ namespace Turmerik.Core.DriveExplorer
             bool extractFiltered = true)
             where TNode : IDataTreeNode<FilteredDriveEntries, TNode, TChildNodes>
             where TChildNodes : IEnumerable<TNode> => extractFiltered ? rootNode.Data.FilteredSubFolders : rootNode.Data.AllSubFolders;
+
+        public static List<string> GetAllIdnfsRecursively(
+            this DriveItem prFolder,
+            bool includeFolderIdnfs = false)
+        {
+            var allIndfsList = new List<string>();
+
+            if (includeFolderIdnfs)
+            {
+                allIndfsList.Add(prFolder.Idnf);
+            }
+
+            allIndfsList.AddRange(
+                prFolder.FolderFiles?.Select(
+                    file => file.Idnf).ToList() ?? []);
+
+            allIndfsList.AddRange(
+                prFolder.SubFolders?.SelectMany(
+                    folder => folder.GetAllIdnfsRecursively(
+                        includeFolderIdnfs)) ?? []);
+
+            return allIndfsList;
+        }
     }
 }

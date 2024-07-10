@@ -15,6 +15,7 @@ using System.Reflection.PortableExecutable;
 using System.Reflection.Metadata;
 using Turmerik.Core.Utility;
 using Turmerik.NetCore.Utility;
+using Turmerik.NetCore.Utility.AssemblyLoading;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
@@ -33,12 +34,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         private readonly IProgramArgsNormalizer programArgsNormalizer;
         private readonly IJsonConversion jsonConversion;
         private readonly ITextMacrosReplacer textMacrosReplacer;
+        private readonly IAssemblyLoader assemblyLoader;
 
         public ProgramComponent(
             IProgramArgsRetriever programArgsRetriever,
             IProgramArgsNormalizer programArgsNormalizer,
             IJsonConversion jsonConversion,
-            ITextMacrosReplacer textMacrosReplacer)
+            ITextMacrosReplacer textMacrosReplacer,
+            IAssemblyLoader assemblyLoader)
         {
             this.programArgsRetriever = programArgsRetriever ?? throw new ArgumentNullException(
                 nameof(programArgsRetriever));
@@ -49,8 +52,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
 
-            this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
-                nameof(textMacrosReplacer));
+            this.assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(
+                nameof(assemblyLoader));
+
+            this.assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(
+                nameof(assemblyLoader));
         }
 
         public async Task RunAsync(string[] rawArgs)
@@ -91,6 +97,27 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 {
                     var csProjAsmb = csProj.CsProjectAssembly;
 
+                    await assemblyLoader.LoadAssembliesAsync(new AssemblyLoaderOpts
+                    {
+                        Config = wka.PgArgs.Config.AssemblyLoaderConfig,
+                        LoadAllTypes = csProjAsmb.IncludeAllTypes,
+                        AssembliesBaseDirPath = csProj.SrcBuildDirPath,
+                        AssembliesToLoad = [new AssemblyLoaderOpts.AssemblyOpts
+                        {
+                            AssemblyFilePath = csProjAsmb.Paths.SrcPath
+                        }]
+                    });
+                }
+            }
+
+            if (wka.PgArgs.RemoveExistingFirst == true)
+            {
+                foreach (var section in wka.PgArgs.Sections)
+                {
+                    if (Directory.Exists(section.DirPaths.DestnPath))
+                    {
+                        Directory.Delete(section.DirPaths.DestnPath, true);
+                    }
                 }
             }
         }
@@ -99,39 +126,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             public ProgramArgs PgArgs { get; set; }
 
-            public List<DotNetCsProjectAssembly> CsProjAssemblies { get; set; }
-            public List<DotNetExternalAssembly> ExternalAssemblies { get; set; }
-
-            public class DotNetAssembly
-            {
-                public Assembly AsmbObj { get; set; }
-                public string Name { get; set; }
-                public string TypeNamesPfx { get; set; }
-                public string DestnDirPath { get; set; }
-
-                public DotNetType[] TypesArr { get; set; }
-            }
-
-            public class DotNetExternalAssembly : DotNetAssembly
-            {
-            }
-
-            public class DotNetCsProjectAssembly : DotNetAssembly
-            {
-                public bool? IsExecutable { get; set; }
-                public bool? IncludeAllTypes { get; set; }
-            }
-
-            public class DotNetType
-            {
-                public Type TypeObj { get; set; }
-                public string Name { get; set; }
-                public string Namespace { get; set; }
-                public string FullName { get; set; }
-                public string[] RelNsPartsArr { get; set; }
-
-                public DotNetType DeclaringType { get; set; }
-            }
+            public List<DotNetAssembly> CsProjAssemblies { get; set; }
+            public List<DotNetAssembly> ExternalAssemblies { get; set; }
         }
     }
 }

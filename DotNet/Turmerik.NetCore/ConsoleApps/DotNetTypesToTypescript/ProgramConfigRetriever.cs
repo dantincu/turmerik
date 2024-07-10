@@ -31,8 +31,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             destnProfile.IsTurmerikAssemblyPredicate = srcProfile.IsTurmerikAssemblyPredicate ?? destnProfile.IsTurmerikAssemblyPredicate;
             destnProfile.DestnCsProjectAssembliesDirName = srcProfile.DestnCsProjectAssembliesDirName ?? destnProfile.DestnCsProjectAssembliesDirName;
             destnProfile.DestnExternalAssemblliesDirName = srcProfile.DestnExternalAssemblliesDirName ?? destnProfile.DestnExternalAssemblliesDirName;
-            destnProfile.TypesDirName = srcProfile.TypesDirName ?? destnProfile.TypesDirName;
-            destnProfile.TypesHcyDirName = srcProfile.TypesHcyDirName ?? destnProfile.TypesHcyDirName;
+            destnProfile.TypesNodeDirName = srcProfile.TypesNodeDirName ?? destnProfile.TypesNodeDirName;
+            destnProfile.TypesHcyNodeDirName = srcProfile.TypesHcyNodeDirName ?? destnProfile.TypesHcyNodeDirName;
             destnProfile.TypesInfoDirName = srcProfile.TypesInfoDirName ?? destnProfile.TypesInfoDirName;
             destnProfile.TypesInfoFileName = srcProfile.TypesInfoFileName ?? destnProfile.TypesInfoFileName;
             destnProfile.DirPaths = srcProfile.DirPaths ?? destnProfile.DirPaths;

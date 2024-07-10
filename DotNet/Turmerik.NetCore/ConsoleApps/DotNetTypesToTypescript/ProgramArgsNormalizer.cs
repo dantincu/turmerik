@@ -76,16 +76,20 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     {
         public const string DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME = "csproj-asmb";
         public const string DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME = "extern-asmb";
-        public const string TYPES_DIR_NAME = "tn";
-        public const string TYPES_HCY_DIR_NAME = "hn";
+        public const string TYPES_DIR_NAME = "t";
+        public const string TYPES_NODE_DIR_NAME = "tn";
+        public const string TYPES_HCY_NODE_DIR_NAME = "hn";
         public const string TYPES_INFO_DIR_NAME = "i";
         public const string TYPES_INFO_FILE_NAME = "types.json";
 
         public const decimal DF_NET_STD_VERSION = 2.0M;
         public const decimal DF_NET_CORE_VERSION = 8.0M;
 
-        public static readonly string DfSrcBinsRelDirPath = Path.Combine(
+        public static readonly string DfReleaseSrcBinsRelDirPath = Path.Combine(
             "bin", "Release");
+
+        public static readonly string DfDebugSrcBinsRelDirPath = Path.Combine(
+            "bin", "Debug");
 
         public const string DOTNET_STD_DF_SRC_BUILD_DIR_NAME = "netstandard{0:0.0#}";
         public const string DOTNET_DF_SRC_BUILD_DIR_NAME_FMT = "net{0:0.0#}";
@@ -128,16 +132,18 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             profile.DestnCsProjectAssembliesDirName ??= DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME;
             profile.DestnExternalAssemblliesDirName ??= DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME;
             profile.TypesDirName ??= TYPES_DIR_NAME;
-            profile.TypesHcyDirName ??= TYPES_HCY_DIR_NAME;
+            profile.TypesNodeDirName ??= TYPES_NODE_DIR_NAME;
+            profile.TypesHcyNodeDirName ??= TYPES_HCY_NODE_DIR_NAME;
             profile.TypesInfoDirName ??= TYPES_INFO_DIR_NAME;
             profile.TypesInfoFileName ??= TYPES_INFO_FILE_NAME;
-            profile.DfSrcBinsRelDirPath ??= DfSrcBinsRelDirPath;
+
+            profile.DfSrcBinsRelDirPath ??= args.LoadDebugAssemblies switch
+            {
+                true => DfDebugSrcBinsRelDirPath,
+                _ => DfReleaseSrcBinsRelDirPath
+            };
 
             NormalizeSrcDestnDirPaths(args, profile.DirPaths);
-
-            profile.DirPathsToRemoveBefore ??= [
-                profile.DestnCsProjectAssembliesDirName,
-                profile.DestnExternalAssemblliesDirName ];
 
             foreach (var section in args.Sections)
             {
@@ -162,14 +168,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 () => profile.DirPaths.DestnPath);
 
             section.DfSrcBinsRelDirPath ??= profile.DfSrcBinsRelDirPath;
-
-            section.DirPathsToRemoveBefore ??= profile.DirPathsToRemoveBefore;
-
-            section.DirPathsToRemoveBefore = section.DirPathsToRemoveBefore.Select(
-                dirPath => textMacrosReplacer.NormalizePath(
-                    args.LocalDevicePathsMap,
-                    dirPath ?? string.Empty,
-                    section.DirPaths.DestnPath)).ToArray();
 
             foreach (var csProj in section.CsProjectsArr)
             {
@@ -434,8 +432,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             Func<string, int, string> tsRelFilePathPartNameFactory = (
                 part, idx) => (relNsPartsCount - idx > 1) switch
                 {
-                    true => args.Profile.TypesHcyDirName,
-                    false => args.Profile.TypesDirName
+                    true => args.Profile.TypesHcyNodeDirName,
+                    false => args.Profile.TypesNodeDirName
                 };
 
             Func<string, int, IEnumerable<string>> tsRelFilePathPartSelector = (

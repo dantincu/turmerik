@@ -15,6 +15,7 @@ using SyncLocalFiles = Turmerik.NetCore.ConsoleApps.SyncLocalFiles;
 using MkFiles = Turmerik.NetCore.ConsoleApps.MkFiles;
 using MkScripts = Turmerik.NetCore.ConsoleApps.MkScripts;
 using DotNetTypesToTypescript = Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript;
+using Turmerik.NetCore.Utility.AssemblyLoading;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -27,6 +28,8 @@ namespace Turmerik.NetCore.Dependencies
             services.AddSingleton<IPowerShellAdapter, PowerShellAdapter>();
             services.AddSingleton<INetCoreAppEnvFactoryCore, NetCoreAppEnvFactoryCore>();
             services.AddSingleton<TextToMdService>();
+
+            services.AddSingleton<IAssemblyLoader, AssemblyLoader>();
 
             return services;
         }

@@ -1,4 +1,7 @@
 {
+  "AssemblyLoaderConfig": {
+    "NetStandard2p1LibFileLocation": "C:\\Program Files\\dotnet\\packs\\NETStandard.Library.Ref\\2.1.0\\ref\\netstandard2.1\\netstandard.dll"
+  },
   "Profiles": [
     {
       "ProfileRelFilePath": "profiles\\parcel-ws.config.json"

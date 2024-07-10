@@ -20,6 +20,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         private const string PROFILE_NAME_OPT_NAME = "pf";
         private const string SECTION_NAMES_OPT_NAME = "sc";
         private const string INCLUDE_ALL_TYPES = "alltypes";
+        private const string LOAD_DEBUG_ASSEMBLIES = "debug-asmb";
+        private const string REMOVE_EXISTING_FIRST = "rem";
 
         private readonly IConsoleArgsParser parser;
         private readonly IProgramConfigRetriever programConfigRetriever;
@@ -68,12 +70,16 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                             FlagHandlersArr = [
                                 parser.ArgsFlagOpts(data, [HELP_FLAG_NAME],
                                     data => data.Args.PrintHelpMessage = true, true),
+                                parser.ArgsFlagOpts(data, [LOAD_DEBUG_ASSEMBLIES],
+                                    data => data.Args.LoadDebugAssemblies = true, true),
                                 parser.ArgsFlagOpts(data, [PROFILE_NAME_OPT_NAME],
                                     data => data.Args.ProfileName = data.ArgFlagValue!.Single()),
                                 parser.ArgsFlagOpts(data, [SECTION_NAMES_OPT_NAME],
                                     data => data.Args.SectionNames = data.ArgFlagValue!),
                                 parser.ArgsFlagOpts(data, [INCLUDE_ALL_TYPES],
                                     data => data.Args.IncludeAllTypes = true, true),
+                                parser.ArgsFlagOpts(data, [REMOVE_EXISTING_FIRST],
+                                    data => data.Args.RemoveExistingFirst = true, true),
                             ]
                         })
                 }).Args;

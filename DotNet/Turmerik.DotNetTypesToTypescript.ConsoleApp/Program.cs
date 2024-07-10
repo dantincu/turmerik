@@ -11,11 +11,12 @@ var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());
 
 TrmrkNetCoreServices.RegisterAll(services);
-
 services.AddSingleton<IAppEnv, AppEnv>();
 
-TrmrkNetCoreServices.AddDotNetTypesToTypescriptServices(services);
+DriveExplorerH.AddFsRetrieverAndExplorer(
+    services, null, true);
 
+TrmrkNetCoreServices.AddDotNetTypesToTypescriptServices(services);
 var svcProv = services.BuildServiceProvider();
 
 await ConsoleH.TryExecuteAsync(

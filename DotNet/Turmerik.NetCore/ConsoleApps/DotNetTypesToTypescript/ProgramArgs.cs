@@ -10,6 +10,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     public class ProgramArgs
     {
         public bool? PrintHelpMessage { get; set; }
+        public bool? LoadDebugAssemblies { get; set; }
+        public bool? RemoveExistingFirst { get; set; }
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public ProgramConfig Config { get; set; }
         public string ProfileName { get; set; }

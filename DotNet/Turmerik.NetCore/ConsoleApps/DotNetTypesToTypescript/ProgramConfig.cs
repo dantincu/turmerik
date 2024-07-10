@@ -5,23 +5,26 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
+using Turmerik.NetCore.Utility.AssemblyLoading;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public class ProgramConfig : ProgramConfigCoreBase<ProgramConfig.Profile>
     {
+        public AssemblyLoaderConfig AssemblyLoaderConfig { get; set; }
+
         public class Profile : ProgramConfigProfileCoreBase
         {
             public Func<Assembly, bool> IsTurmerikAssemblyPredicate { get; set; }
             public string DestnCsProjectAssembliesDirName { get; set; }
             public string DestnExternalAssemblliesDirName { get; set; }
             public string TypesDirName { get; set; }
-            public string TypesHcyDirName { get; set; }
+            public string TypesNodeDirName { get; set; }
+            public string TypesHcyNodeDirName { get; set; }
             public string TypesInfoDirName { get; set; }
             public string TypesInfoFileName { get; set; }
             public SrcDestnPaths DirPaths { get; set; }
             public string DfSrcBinsRelDirPath { get; set; }
-            public string[] DirPathsToRemoveBefore { get; set; }
 
             public List<ProfileSection> Sections { get; set; }
         }
@@ -32,7 +35,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             public SrcDestnPaths DirPaths { get; set; }
             public string DfSrcBinsRelDirPath { get; set; }
-            public string[] DirPathsToRemoveBefore { get; set; }
 
             public DotNetCsProject[] CsProjectsArr { get; set; }
         }
@@ -80,26 +82,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public string[] NestedTypesHcyArr { get; set; }
             public SrcDestnPaths FilePaths { get; set; }
             public DotNetType DeclaringType { get; set; }
-            public DotNetType GenericTypeDef { get; set; }
-            public List<GenericTypeParam> GenericTypeParams { get; set; }
-            public List<GenericTypeArg> GenericTypeArgs { get; set; }
-        }
-
-        public class GenericTypeParam
-        {
-            public string Name { get; set; }
-            public DotNetType BaseType { get; set; }
-            public List<DotNetType> Interfaces { get; set; }
-            public bool? HasStructConstraint { get; set; }
-            public bool? HasClassConstraint { get; set; }
-            public bool? HasZeroArgsConstrCallConstraint { get; set; }
-        }
-
-        public class GenericTypeArg
-        {
-            public GenericTypeParam Param { get; set; }
-            public DotNetType TypeArg { get; set; }
-            public GenericTypeParam ParamArg { get; set; }
         }
 
         public class SrcDestnPaths
