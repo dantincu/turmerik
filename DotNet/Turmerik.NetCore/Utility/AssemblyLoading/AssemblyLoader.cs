@@ -1,5 +1,7 @@
 ﻿using Microsoft.PowerShell.Commands;
+using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
@@ -33,7 +35,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         DotNetType ConvertAssemblyType(
             AssemblyLoader.WorkArgs wka,
-            bool isReferencedType = false);
+            Type typeObj);
+
+        DotNetType ConvertAssemblyType(
+            AssemblyLoader.WorkArgs wka,
+            TypeOpts typeOpts);
 
         DotNetProperty ConvertDotNetProperty(
             AssemblyLoader.WorkArgs wka,
@@ -56,10 +62,12 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             Type genericTypeArg);
 
         Type GetTypeObj(
-            AssemblyLoader.WorkArgs wka);
+            AssemblyLoader.WorkArgs wka,
+            TypeOpts typeOpts);
 
         TypeOpts GetTypeOpts(
-            AssemblyLoader.WorkArgs wka);
+            AssemblyLoader.WorkArgs wka,
+            Type typeObj);
 
         string GetAssemblyExtension(
             AssemblyOpts asmbOpts);
@@ -70,6 +78,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         string GetAssemblyFilePath(
             AssemblyLoaderOpts opts,
             AssemblyOpts asmbOpts);
+
+        DotNetType FindMatching(
+            AssemblyLoader.WorkArgs wka,
+            Type typeObj,
+            IEnumerable<DotNetType> typesNmrbl);
     }
 
     public class AssemblyLoader : IAssemblyLoader
@@ -224,7 +237,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             var assembliesList = isReferencedAssembly ? wka.ReferencedAssemblies : wka.LoadedAssemblies;
 
             var asmb = assembliesList.FirstOrDefault(
-                asmbInstn => asmbInstn.FullName == fullName);
+                asmbInstn => asmbInstn.BclItem == wka.AsmbObj);
 
             if (asmb == null)
             {
@@ -247,18 +260,12 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     if (wka.AsmbOpts.LoadAllTypes == true)
                     {
                         asmb.TypesList = wka.AsmbObj.GetExportedTypes(
-                            ).Select(typeObj => ConvertAssemblyType(new WorkArgs(wka)
-                            {
-                                TypeObj = typeObj
-                            })).ToList();
+                            ).Select(typeObj => ConvertAssemblyType(wka, typeObj)).ToList();
                     }
                     else
                     {
                         asmb.TypesList = wka.AsmbOpts.TypesToLoad.Select(
-                            typeOpts => ConvertAssemblyType(new WorkArgs(wka)
-                            {
-                                TypeOpts = typeOpts,
-                            })).ToList();
+                            typeOpts => ConvertAssemblyType(wka, typeOpts)).ToList();
                     }
                 }
 
@@ -300,165 +307,13 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         public DotNetType ConvertAssemblyType(
             WorkArgs wka,
-            bool isReferencedType = false)
-        {
-            var typeObj = wka.TypeObj ?? GetTypeObj(new WorkArgs(wka)
-            {
-                TypeOpts = wka.TypeOpts,
-            });
+            Type typeObj) => ConvertAssemblyType(
+                wka, typeObj, null, true);
 
-            var typeOpts = wka.TypeOpts ?? GetTypeOpts(
-                new WorkArgs(wka)
-                {
-                    TypeObj = typeObj
-                });
-
-            var typesList = isReferencedType ? wka.ReferencedTypes : wka.LoadedTypes;
-
-            string fullName = typeObj.GetTypeFullDisplayName();
-
-            var dotNetType = typesList.FirstOrDefault(
-                type => type.FullName == fullName);
-
-            if (dotNetType == null)
-            {
-                dotNetType = new DotNetType(typeObj)
-                {
-                    FullName = fullName,
-                    Name = typeObj.Name,
-                    Namespace = typeObj.Namespace,
-                    IsGenericParam = typeObj.IsGenericParameter,
-                    IsGenericTypeParam = typeObj.IsGenericTypeParameter,
-                    IsGenericMethodParam = typeObj.IsGenericMethodParameter,
-                    IsNested = typeObj.IsNested && !typeObj.IsGenericParameter,
-                    IsGenericType = typeObj.IsGenericType,
-                    IsGenericTypeDef = typeObj.IsGenericTypeDefinition,
-                    IsConstructedGenericType = typeObj.IsConstructedGenericType,
-                };
-
-                dotNetType.Assembly = typeObj.Assembly.With(asmb => ConvertAssembly(
-                    new WorkArgs(wka)
-                    {
-                        AsmbObj = asmb,
-                        AsmbOpts = new AssemblyOpts()
-                    }, true));
-
-                if (dotNetType.IsGenericType == true)
-                {
-                    if (dotNetType.IsGenericTypeDef != true)
-                    {
-                        dotNetType.GenericTypeDef = typeObj.GetGenericTypeDefinition().With(
-                            genericTypeDef => ConvertAssemblyType(
-                                new WorkArgs(wka)
-                                {
-                                    TypeObj = genericTypeDef
-                                }, true));
-                    }
-
-                    dotNetType.GenericTypeArgs = typeObj.GetGenericArguments().Select(
-                        genericArg => ConvertGenericTypeArg(
-                            new WorkArgs(wka)
-                            {
-                                TypeObj = genericArg,
-                            }, genericArg)).ToList();
-                }
-
-                dotNetType.DeclaringType = dotNetType.IsNested == true ? typeObj.DeclaringType.With(
-                    declaringType => ConvertAssemblyType(
-                        new WorkArgs(wka)
-                        {
-                            TypeObj = declaringType
-                        }, true)) : null;
-
-                dotNetType.DeclaringType?.ActIfNotNull(declaringType =>
-                {
-                    dotNetType.RelNsPartsArr = declaringType.RelNsPartsArr?.PrependToArr(
-                        declaringType.Name);
-                },
-                () =>
-                {
-                    if (dotNetType.Namespace?.StartsWith(
-                        wka.Asmb.TypeNamesPfx) ?? false)
-                    {
-                        dotNetType.RelNsPartsArr = dotNetType.FullName.Substring(
-                            wka.Asmb.TypeNamesPfx.Length).Split('.');
-                    }
-                });
-
-                if (!isReferencedType)
-                {
-                    dotNetType.BaseType = typeObj.BaseType?.With(baseType => ConvertAssemblyType(
-                        new WorkArgs(wka)
-                        {
-                            TypeObj = baseType
-                        }, isReferencedType));
-
-                    dotNetType.Interfaces = typeObj.GetInterfaces().Select(
-                        intfType => ConvertAssemblyType(
-                            new WorkArgs(wka)
-                            {
-                                TypeObj = intfType
-                            }, true)).ToList();
-
-                    if (typeOpts.LoadPubGetProps == true || typeOpts.LoadPubInstnGetProps == true)
-                    {
-                        var properties = typeObj.GetProperties();
-
-                        if (typeOpts.LoadPubInstnGetProps == true)
-                        {
-                            properties = properties.Where(
-                                prop => prop.GetGetMethod()?.IsStatic == false).ToArray();
-                        }
-
-                        dotNetType.Properties = properties.Select(
-                            propInfo => ConvertDotNetProperty(
-                                new WorkArgs(wka)
-                                {
-                                    TypeObj = typeObj
-                                }, propInfo)).ToList();
-                    }
-
-                    if (typeOpts.LoadPubMethods == true || typeOpts.LoadPubInstnMethods == true)
-                    {
-                        var methodInfos = typeObj.GetMethods();
-
-                        if (typeOpts.LoadPubInstnMethods == true)
-                        {
-                            methodInfos = methodInfos.Where(
-                                method => !method.IsStatic).ToArray();
-                        }
-
-                        dotNetType.Methods = methodInfos.Select(
-                            methodInfo => ConvertDotNetMethod(
-                                new WorkArgs(wka)
-                                {
-                                    TypeObj = typeObj
-                                }, methodInfo)).ToList();
-                    }
-
-                    if (typeOpts.LoadPubInstnConstructors == true)
-                    {
-                        var constructorInfos = typeObj.GetConstructors().Where(
-                            constrInfo => !constrInfo.IsStatic);
-
-                        dotNetType.Constructors = constructorInfos.Select(
-                            constrInfo => ConvertDotNetConstructor(
-                                new WorkArgs(wka)
-                                {
-                                    TypeObj = typeObj
-                                }, constrInfo)).ToList();
-                    }
-                }
-
-                typesList.Add(dotNetType);
-            }
-            else
-            {
-
-            }
-
-            return dotNetType;
-        }
+        public DotNetType ConvertAssemblyType(
+            WorkArgs wka,
+            TypeOpts typeOpts) => ConvertAssemblyType(
+                wka, null, typeOpts, false);
 
         public DotNetProperty ConvertDotNetProperty(
             WorkArgs wka,
@@ -470,11 +325,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 CanRead = propInfo.CanRead,
                 CanWrite = propInfo.CanWrite,
                 IsStatic = (propInfo.GetGetMethod() ?? propInfo.GetSetMethod()).IsStatic,
-                PropType = ConvertAssemblyType(
-                    new WorkArgs(wka)
-                    {
-                        TypeObj = propInfo.PropertyType
-                    }, true),
+                PropType = ConvertAssemblyType(wka, propInfo.PropertyType),
             };
 
             return dotNetProp;
@@ -491,18 +342,10 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             {
                 Name = methodInfo.Name,
                 IsVoidMethod = isVoidMethod,
-                ReturnType = ConvertAssemblyType(
-                    new WorkArgs(wka)
-                    {
-                        TypeObj = returnType
-                    }, true),
+                ReturnType = ConvertAssemblyType(wka, returnType),
                 IsStatic = methodInfo.IsStatic,
                 Parameters = methodInfo.GetParameters().Select(
-                    @param => ConvertDotNetParameter(
-                    new WorkArgs(wka)
-                    {
-                        TypeObj = wka.TypeObj
-                    }, param)).ToList(),
+                    @param => ConvertDotNetParameter(wka, param)).ToList(),
             };
 
             return dotNetMethod;
@@ -517,11 +360,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 Name = constructorInfo.Name,
                 IsStatic = constructorInfo.IsStatic,
                 Parameters = constructorInfo.GetParameters().Select(
-                    @param => ConvertDotNetParameter(
-                    new WorkArgs(wka)
-                    {
-                        TypeObj = wka.TypeObj
-                    }, param)).ToList(),
+                    @param => ConvertDotNetParameter(wka, param)).ToList(),
             };
 
             return dotNetConstructor;
@@ -535,11 +374,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             {
                 Name = paramInfo.Name,
                 Position = paramInfo.Position,
-                ParamType = ConvertAssemblyType(
-                    new WorkArgs(wka)
-                    {
-                        TypeObj = paramInfo.ParameterType
-                    }, true)
+                ParamType = ConvertAssemblyType(wka, paramInfo.ParameterType)
             };
 
             return dotNetMethodParameter;
@@ -552,29 +387,24 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             var genericTypeArgObj = new GenericTypeArg
             {
                 TypeArg = ConvertAssemblyType(
-                    new WorkArgs(wka)
-                    {
-                        TypeObj = genericTypeArg,
-                    }, true),
+                    wka, genericTypeArg),
                 TypeParamConstraints = genericTypeArg.IsGenericTypeParameter ? genericTypeArg.GetGenericParameterConstraints(
-                    ).Select(param => ConvertAssemblyType(
-                        new WorkArgs(wka)
-                        {
-                            TypeObj = param,
-                        }, true)).ToList() : null
+                    ).Select(param => ConvertAssemblyType(wka, param)).ToList() : null
             };
 
             return genericTypeArgObj;
         }
 
         public Type GetTypeObj(
-            WorkArgs wka) => wka.AsmbObj.GetType(
-                wka.TypeOpts.FullTypeName)!;
+            WorkArgs wka,
+            TypeOpts? typeOpts) => wka.AsmbObj.GetType(
+                typeOpts.FullTypeName)!;
 
         public TypeOpts GetTypeOpts(
-            WorkArgs wka) => new TypeOpts
+            WorkArgs wka,
+            Type typeObj) => new TypeOpts
             {
-                FullTypeName = wka.TypeObj.GetTypeFullDisplayName(),
+                FullTypeName = typeObj.GetTypeFullDisplayName(),
                 LoadPubGetProps = wka.AsmbOpts.LoadPubGetProps,
                 LoadPubInstnGetProps = wka.AsmbOpts.LoadPubInstnGetProps,
                 LoadPubMethods = wka.AsmbOpts.LoadPubMethods,
@@ -598,6 +428,147 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 opts.AssembliesBaseDirPath,
                 GetAssemblyFileName(asmbOpts));
 
+        public DotNetType FindMatching(
+            WorkArgs wka,
+            Type typeObj,
+            IEnumerable<DotNetType> typesNmrbl)
+        {
+            DotNetType? matchingType = null;
+
+            if (typeObj.FullName == null)
+            {
+                matchingType = typesNmrbl.FirstOrDefault(
+                    type => type.MetadataToken == typeObj.MetadataToken && type.BclItem?.Module == typeObj.Module);
+            }
+            else
+            {
+                matchingType = typesNmrbl.FirstOrDefault(
+                    type => type.BclItem == typeObj);
+            }
+
+            return matchingType;
+        }
+
+        private DotNetType ConvertAssemblyType(
+            WorkArgs wka,
+            Type? typeObj,
+            TypeOpts? typeOpts,
+            bool isReferencedType)
+        {
+            typeObj ??= GetTypeObj(wka, typeOpts);
+            typeOpts ??= GetTypeOpts(wka, typeObj);
+
+            var typesList = isReferencedType ? wka.ReferencedTypes : wka.LoadedTypes;
+            string fullName = typeObj.GetTypeFullDisplayName();
+
+            var dotNetType = FindMatching(wka, typeObj, typesList);
+
+            if (dotNetType == null)
+            {
+                dotNetType = new DotNetType(typeObj)
+                {
+                    MetadataToken = typeObj.MetadataToken,
+                    FullName = fullName,
+                    Name = typeObj.Name,
+                    Namespace = typeObj.Namespace,
+                    IsGenericParam = typeObj.IsGenericParameter,
+                    IsGenericTypeParam = typeObj.IsGenericTypeParameter,
+                    IsGenericMethodParam = typeObj.IsGenericMethodParameter,
+                    IsNested = typeObj.IsNested && !typeObj.IsGenericParameter,
+                    IsGenericType = typeObj.IsGenericType,
+                    IsGenericTypeDef = typeObj.IsGenericTypeDefinition,
+                    IsConstructedGenericType = typeObj.IsConstructedGenericType,
+                };
+
+                dotNetType.Assembly = typeObj.Assembly.With(asmb => ConvertAssembly(
+                    new WorkArgs(wka)
+                    {
+                        AsmbObj = asmb,
+                        AsmbOpts = new AssemblyOpts()
+                    }, true));
+
+                typesList.Add(dotNetType);
+
+                if (dotNetType.IsGenericType == true)
+                {
+                    if (dotNetType.IsGenericTypeDef != true)
+                    {
+                        dotNetType.GenericTypeDef = typeObj.GetGenericTypeDefinition().With(
+                            genericTypeDef => ConvertAssemblyType(wka, genericTypeDef));
+                    }
+
+                    dotNetType.GenericTypeArgs = typeObj.GetGenericArguments().Select(
+                        genericArg => ConvertGenericTypeArg(wka, genericArg)).ToList();
+                }
+
+                dotNetType.DeclaringType = dotNetType.IsNested == true ? typeObj.DeclaringType.With(
+                    declaringType => ConvertAssemblyType(wka, declaringType)) : null;
+
+                dotNetType.DeclaringType?.ActIfNotNull(declaringType =>
+                {
+                    dotNetType.RelNsPartsArr = declaringType.RelNsPartsArr?.PrependToArr(
+                        declaringType.Name);
+                },
+                () =>
+                {
+                    if (dotNetType.Namespace?.StartsWith(
+                        dotNetType.Assembly.TypeNamesPfx) ?? false)
+                    {
+                        dotNetType.RelNsPartsArr = dotNetType.FullName.Substring(
+                            dotNetType.Assembly.TypeNamesPfx.Length).Split('.');
+                    }
+                });
+
+                if (!isReferencedType)
+                {
+                    dotNetType.BaseType = typeObj.BaseType?.With(baseType => ConvertAssemblyType(
+                        wka, baseType, null, isReferencedType));
+
+                    dotNetType.Interfaces = typeObj.GetInterfaces().Select(
+                        intfType => ConvertAssemblyType(wka, intfType)).ToList();
+
+                    if (typeOpts.LoadPubGetProps == true || typeOpts.LoadPubInstnGetProps == true)
+                    {
+                        var properties = typeObj.GetProperties();
+
+                        if (typeOpts.LoadPubInstnGetProps == true)
+                        {
+                            properties = properties.Where(
+                                prop => prop.GetGetMethod()?.IsStatic == false).ToArray();
+                        }
+
+                        dotNetType.Properties = properties.Select(
+                            propInfo => ConvertDotNetProperty(wka, propInfo)).ToList();
+                    }
+
+                    if (typeOpts.LoadPubMethods == true || typeOpts.LoadPubInstnMethods == true)
+                    {
+                        var methodInfos = typeObj.GetMethods();
+
+                        if (typeOpts.LoadPubInstnMethods == true)
+                        {
+                            methodInfos = methodInfos.Where(
+                                method => !method.IsStatic).ToArray();
+                        }
+
+                        dotNetType.Methods = methodInfos.Select(
+                            methodInfo => ConvertDotNetMethod(wka, methodInfo)).ToList();
+                    }
+
+                    if (typeOpts.LoadPubInstnConstructors == true)
+                    {
+                        var constructorInfos = typeObj.GetConstructors().Where(
+                            constrInfo => !constrInfo.IsStatic);
+
+                        dotNetType.Constructors = constructorInfos.Select(
+                            constrInfo => ConvertDotNetConstructor(wka, constrInfo)).ToList();
+                    }
+                }
+            }
+
+            return dotNetType;
+        }
+
         public readonly struct WorkArgs
         {
             public WorkArgs()
@@ -617,7 +588,6 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                 this.Opts = src.Opts;
                 this.AsmbOpts = src.AsmbOpts;
-                this.Asmb = src.Asmb;
                 this.AsmbObj = src.AsmbObj;
             }
 
@@ -629,10 +599,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
             public AssemblyLoaderOpts? Opts { get; init; }
             public AssemblyOpts? AsmbOpts { get; init; }
-            public DotNetAssembly? Asmb { get; init; }
             public Assembly? AsmbObj { get; init; }
-            public Type? TypeObj { get; init; }
-            public TypeOpts? TypeOpts { get; init; }
         }
     }
 }

@@ -126,6 +126,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         {
         }
 
+        public int? MetadataToken { get; set; }
         public string Name { get; set; }
         public string? Namespace { get; set; }
         public string FullName { get; set; }
@@ -154,6 +155,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             bool keepBclObjects = true) => new DotNetType(
                 keepBclObjects ? BclItem : null)
             {
+                MetadataToken = MetadataToken,
                 Name = Name,
                 Namespace = Namespace,
                 FullName = FullName,
