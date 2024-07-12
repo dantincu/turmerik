@@ -39,6 +39,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
+        private readonly INoteMdParser nmdParser;
         private readonly DirsPairConfig config;
 
         public ProgramComponent(
@@ -46,7 +47,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             IConsoleArgsParser parser,
             IConsoleMsgPrinter consoleMsgPrinter,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
-            ITextMacrosReplacer textMacrosReplacer)
+            ITextMacrosReplacer textMacrosReplacer,
+            INoteMdParser nmdParser)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -62,6 +64,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
 
             this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
                 nameof(textMacrosReplacer));
+
+            this.nmdParser = nmdParser ?? throw new ArgumentNullException(
+                nameof(nmdParser));
 
             config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
                 File.ReadAllText(Path.Combine(
@@ -193,9 +198,30 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                         await PuppeteerH.HtmlToPdfFile(
                             htmlFilePath,
                             pdfFilePath);
+
+                        if (nmdParser.IsTrivialDoc(mdStr))
+                        {
+                            File.Delete(htmlFilePath);
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine(htmlFilePath);
+                            Console.ResetColor();
+                        }
                     }
                     else
                     {
+                        string mdStr = File.ReadAllText(file);
+
+                        if (nmdParser.IsTrivialDoc(mdStr))
+                        {
+                            if (File.Exists(htmlFilePath))
+                            {
+                                File.Delete(htmlFilePath);
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine(htmlFilePath);
+                                Console.ResetColor();
+                            }
+                        }
+                        
                         Console.WriteLine(file);
                     }
                 }

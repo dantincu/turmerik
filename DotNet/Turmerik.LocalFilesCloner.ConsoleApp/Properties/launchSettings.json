@@ -2,14 +2,14 @@
   "profiles": {
     "Turmerik.LocalFilesCloner.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":h"
+      // "commandLineArgs": ":h"
       // "commandLineArgs": ":i:dir\\input.txt :o:dir :cksm"
       // "commandLineArgs": ":pf:notes-blazorapp"
       // "commandLineArgs": ":pf:arch-dotnet-util-dirs"
       // "commandLineArgs": ":pf:arch-ng-book-2",
       // "commandLineArgs": ":pf:cp-dotnet-bkp-bins",
       // "commandLineArgs": ":pf:cp-dotnet-util-bins",
-      // "commandLineArgs": ":pf:cp-dotnet-util-cfg-files"
+      "commandLineArgs": ":pf:cp-dotnet-util-cfg-files"
       // "commandLineArgs": ":pf:cp-text-transform-behavior"
       // "commandLineArgs": ":pf:cp-mkscripts-parcelws-sync-behavior"
     }

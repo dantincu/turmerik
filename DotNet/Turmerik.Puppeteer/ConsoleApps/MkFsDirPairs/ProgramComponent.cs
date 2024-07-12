@@ -20,6 +20,7 @@ using Markdig;
 using Turmerik.DirsPair;
 using Turmerik.Puppeteer.Helpers;
 using PuppeteerSharp;
+using Turmerik.Md;
 
 namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 {
@@ -36,6 +37,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
         private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
+        private readonly INoteMdParser nmdParser;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
 
@@ -45,7 +47,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             IConsoleArgsParser consoleArgsParser,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IDirsPairCreatorFactory dirsPairCreatorFactory,
-            IHtmlDocTitleRetriever htmlDocTitleRetriever)
+            IHtmlDocTitleRetriever htmlDocTitleRetriever,
+            INoteMdParser nmdParser)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -58,6 +61,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
                 nameof(fsEntryNameNormalizer));
+
+            this.nmdParser = nmdParser ?? throw new ArgumentNullException(
+                nameof(nmdParser));
 
             config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
                 File.ReadAllText(Path.Combine(
@@ -309,6 +315,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     await PuppeteerH.HtmlToPdfFile(
                         htmlFilePath,
                         pdfFilePath);
+
+                    if (nmdParser.IsTrivialDoc(md))
+                    {
+                        File.Delete(htmlFilePath);
+                    }
                 }
             }
 

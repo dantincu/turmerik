@@ -2,7 +2,7 @@
   "ProfileName": "cp-dotnet-util-cfg-files",
   "FileGroups": [
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik\\_ENV\\DEV",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Core\\_ENV\\DEV",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DEV_DIR|",
       "DfInputDirFilter": {
         "IncludedRelPathRegexes": [
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik\\_ENV\\PROD",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Core\\_ENV\\PROD",
       "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|",
       "DfInputDirFilter": {
         "IncludedRelPathRegexes": [

@@ -12,6 +12,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
+using Turmerik.Md;
 using Turmerik.Notes.Core;
 using Turmerik.TextParsing.Md;
 using static Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames.ProgramComponent;

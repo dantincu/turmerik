@@ -31,6 +31,28 @@ namespace Turmerik.Md
             string mdContent,
             out NoteItemCore item,
             string? trmrkUuidInputName = null);
+
+        /// <summary>
+        /// Checks whether the provided markdown document is trivial or not.
+        /// A markdown document is considered trivial if it contains only 1 descendant with meaningfull
+        /// content (the rest, if any, only containing whitespace characters) and that single descendant
+        /// is the primary heading block.
+        /// </summary>
+        /// <param name="mdContent">The provided markdown content.</param>
+        /// <returns>A boolean value indicating whether the provided markdown document is trivial or not.</returns>
+        bool IsTrivialDoc(
+            string mdContent);
+
+        /// <summary>
+        /// Checks whether the provided markdown document is trivial or not.
+        /// A markdown document is considered trivial if it contains only 1 descendant with meaningfull
+        /// content (the rest, if any, only containing whitespace characters) and that single descendant
+        /// is the primary heading block.
+        /// </summary>
+        /// <param name="doc">The provided markdown document.</param>
+        /// <returns>A boolean value indicating whether the provided markdown document is trivial or not.</returns>
+        bool IsTrivialDoc(
+            MarkdownDocument doc);
     }
 
     public class NoteMdParser : INoteMdParser
@@ -106,6 +128,13 @@ namespace Turmerik.Md
 
             return mdDoc;
         }
+
+        public bool IsTrivialDoc(
+            string mdContent) => IsTrivialDoc(
+                Markdown.Parse(mdContent));
+
+        public bool IsTrivialDoc(
+            MarkdownDocument doc) => doc is ContainerBlock block && block.Count == 1 && block.Single() is HeadingBlock;
 
         private void GetNoteTilteCore(
             IEnumerable<MarkdownObject> descendantsNmrbl,
