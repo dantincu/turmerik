@@ -31,6 +31,7 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<ITimeStampHelper, TimeStampHelper>();
             services.AddSingleton<ILambdaExprHelper, LambdaExprHelper>();
             services.AddSingleton<ILambdaExprHelperFactory, LambdaExprHelperFactory>();
+            services.AddSingleton<IObjectMapper, ObjectMapper>();
             services.AddSingleton<IBasicComparerFactory, BasicComparerFactory>();
             services.AddSingleton<IBasicEqualityComparerFactory, BasicEqualityComparerFactory>();
             services.AddSingleton<IJsonConversion, JsonConversion>();
