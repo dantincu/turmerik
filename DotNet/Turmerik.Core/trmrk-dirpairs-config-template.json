@@ -60,7 +60,7 @@
       "a": [ ":s", "Articles", ":=" ],
       "p": [ ":s", "Persons", ":=" ],
       "pp": [ ":s", "Public Persons", ":=" ],
-      "hs": [ ":s", "Historical Figures", ":=" ],
+      "hf": [ ":s", "Historical Figures", ":=" ],
       "tc": [ ":s", "Terms & Concepts", ":=" ],
       "ps": [ ":s", "Products & Services", ":=" ],
       "egna": [ ":s", "\"Environment, Geography, Nature & Agriculture\"", ":=" ],
