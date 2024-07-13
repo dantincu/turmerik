@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.EqualityComparer;
+using Turmerik.Core.Reflection;
 using Turmerik.Core.Utility;
 
 namespace Turmerik.UnitTests
@@ -24,7 +27,9 @@ namespace Turmerik.UnitTests
         [Fact]
         public void MainTest()
         {
-            PerformTest(
+            Func<B, B, bool> comparer = (a, b) => a.Str == b.Str && a.Int == b.Int && a.BigInt == b.BigInt && a.Dec == b.Dec;
+
+            PerformTestFrom(
                 new B
                 {
                     Str = "asdf",
@@ -46,9 +51,9 @@ namespace Turmerik.UnitTests
                     Int = 2,
                     BigInt = 1000,
                 },
-                (a, b) => a.Str == b.Str && a.Int == b.Int && a.BigInt == b.BigInt && a.Dec == b.Dec);
+                comparer);
 
-            PerformTestCore(
+            PerformTestWith(
                 new B
                 {
                     Str = "asdf",
@@ -74,10 +79,31 @@ namespace Turmerik.UnitTests
                     BigInt = 1000,
                     Dec = 12.5M
                 },
-                (a, b) => a.Str == b.Str && a.Int == b.Int && a.BigInt == b.BigInt && a.Dec == b.Dec);
+                comparer);
+
+            PerformTest(
+                () => new B(),
+                (props, lmHp) => new()
+                {
+                    { lmHp.Prop(o => o.Str), "qwer" },
+                    { lmHp.Prop(o => o.Int), 2 },
+                    { lmHp.Prop(o => o.BigInt), 1000L }
+                },
+                (propValuesMap, lmHp) =>
+                {
+                    propValuesMap.Add(lmHp.Prop(o => o.Dec), 12.5M);
+                },
+                new B
+                {
+                    Str = "qwer",
+                    Int = 2,
+                    BigInt = 1000,
+                    Dec = 12.5M
+                },
+                comparer);
         }
 
-        private void PerformTestCore<T, TObj>(
+        private void PerformTestWith<T, TObj>(
             T src,
             Expression<Func<TObj>> constructorCallFunc,
             Expression<Func<TObj>>[] initializersArr,
@@ -93,7 +119,7 @@ namespace Turmerik.UnitTests
                     comparer));
         }
 
-        private void PerformTest<TObj>(
+        private void PerformTestFrom<TObj>(
             TObj src,
             Expression<Func<TObj>> constructorCallFunc,
             Expression<Func<TObj>>[] initializersArr,
@@ -103,6 +129,23 @@ namespace Turmerik.UnitTests
             this.AssertEqual(
                 () => objectMapper.CreateFrom(
                     src, constructorCallFunc, initializersArr),
+                expectedResult,
+                basicEqualityComparerFactory.GetEqualityComparer(
+                    comparer));
+        }
+
+        private void PerformTest<TObj>(
+            Expression<Func<TObj>> constructorCallFunc,
+            Func<ReadOnlyCollection<PropertyInfo>, ILambdaExprHelper<TObj>, Dictionary<PropertyInfo, object>>? propValuesMapFactory,
+            Action<Dictionary<PropertyInfo, object>, ILambdaExprHelper<TObj>>? propValuesMapBuilder,
+            TObj expectedResult,
+            Func<TObj, TObj, bool> comparer)
+        {
+            this.AssertEqual(
+                () => objectMapper.Create(
+                    constructorCallFunc,
+                    propValuesMapFactory,
+                    propValuesMapBuilder),
                 expectedResult,
                 basicEqualityComparerFactory.GetEqualityComparer(
                     comparer));

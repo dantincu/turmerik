@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Collections.ObjectModel;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.Reflection;
 
 namespace Turmerik.Core.Utility
 {
@@ -21,15 +22,30 @@ namespace Turmerik.Core.Utility
             TObj src,
             Expression<Func<TObj>> constructorCallFunc,
             params Expression<Func<TObj>>[] initializersArr);
+
+        TObj Create<TObj>(
+            Expression<Func<TObj>> constructorCallFunc,
+            Func<ReadOnlyCollection<PropertyInfo>, ILambdaExprHelper<TObj>, Dictionary<PropertyInfo, object>>? propValuesMapFactory = null,
+            Action<Dictionary<PropertyInfo, object>, ILambdaExprHelper<TObj>>? propValuesMapBuilder = null);
+
+        Dictionary<PropertyInfo, object> AddPropValMappings<TObj>(
+            Action<Dictionary<PropertyInfo, object>, ILambdaExprHelper<TObj>> builder,
+            Dictionary<PropertyInfo, object>? propValMap = null);
     }
 
     public class ObjectMapper : IObjectMapper
     {
+        private readonly ILambdaExprHelperFactory lambdaExprHelperFactory;
+
         private readonly StaticDataCache<Type, ReadOnlyCollection<PropertyInfo>> typePropsMap;
         private readonly StaticDataCache<Type, ReadOnlyCollection<PropertyInfo>> writtableTypePropsMap;
 
-        public ObjectMapper()
+        public ObjectMapper(
+            ILambdaExprHelperFactory lambdaExprHelperFactory)
         {
+            this.lambdaExprHelperFactory = lambdaExprHelperFactory ?? throw new ArgumentNullException(
+                nameof(lambdaExprHelperFactory));
+
             typePropsMap = new StaticDataCache<Type, ReadOnlyCollection<PropertyInfo>>(
                 type => type.GetProperties(
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy).RdnlC());
@@ -78,10 +94,7 @@ namespace Turmerik.Core.Utility
                         tuple.BaseProp.GetValue(src)))));
 
             var memberInit = Expression.MemberInit(
-                constructorCall, initializersArr.Select(
-                    init => ((MemberInitExpression)init.Body).Bindings).Aggregate(
-                    (a, b) => new ReadOnlyCollection<MemberBinding>(
-                        memberBindingsList.ToArray())));
+                constructorCall, memberBindingsList.ToArray());
 
             var lambda = Expression.Lambda<Func<TObj>>(memberInit);
             var lambdaFunc = lambda.Compile();
@@ -93,8 +106,53 @@ namespace Turmerik.Core.Utility
         public TObj CreateFrom<TObj>(
             TObj src,
             Expression<Func<TObj>> constructorCallFunc,
-            params Expression<Func<TObj>>[] initializersArr) => CreateWith<TObj, TObj>(
+            params Expression<Func<TObj>>[] initializersArr) => CreateWith(
                 src, constructorCallFunc, initializersArr);
+
+        public TObj Create<TObj>(
+            Expression<Func<TObj>> constructorCallFunc,
+            Func<ReadOnlyCollection<PropertyInfo>, ILambdaExprHelper<TObj>, Dictionary<PropertyInfo, object>>? propValuesMapFactory = null,
+            Action<Dictionary<PropertyInfo, object>, ILambdaExprHelper<TObj>>? propValuesMapBuilder = null)
+        {
+            var lambdaHelper = lambdaExprHelperFactory.GetHelper<TObj>();
+            var pubPropInfos = writtableTypePropsMap.Get(typeof(TObj));
+            var propValuesMap = propValuesMapFactory?.Invoke(pubPropInfos, lambdaHelper) ?? new ();
+            propValuesMapBuilder?.Invoke(propValuesMap, lambdaHelper);
+
+            var inputLambda = (LambdaExpression)constructorCallFunc;
+            var firstInitializer = inputLambda.Body as MemberInitExpression;
+            var constructorCall = firstInitializer?.NewExpression ?? (NewExpression)inputLambda.Body;
+
+            var memberBindingsList = new List<MemberBinding>();
+
+            if (firstInitializer != null)
+            {
+                memberBindingsList.AddRange(firstInitializer.Bindings);
+            }
+
+            memberBindingsList.AddRange(propValuesMap.Select(
+                kvp => Expression.Bind(
+                    kvp.Key, Expression.Constant(
+                        kvp.Value))));
+
+            var memberInit = Expression.MemberInit(
+                constructorCall, memberBindingsList.ToArray());
+
+            var lambda = Expression.Lambda<Func<TObj>>(memberInit);
+            var lambdaFunc = lambda.Compile();
+
+            var instance = lambdaFunc();
+            return instance;
+        }
+
+        public Dictionary<PropertyInfo, object> AddPropValMappings<TObj>(
+            Action<Dictionary<PropertyInfo, object>, ILambdaExprHelper<TObj>> builder,
+            Dictionary<PropertyInfo, object>? propValMap = null)
+        {
+            propValMap ??= new();
+            builder(propValMap, lambdaExprHelperFactory.GetHelper<TObj>());
+            return propValMap;
+        }
 
         private readonly struct PropInfosTuple
         {
