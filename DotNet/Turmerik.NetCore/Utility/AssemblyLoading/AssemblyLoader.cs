@@ -211,7 +211,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 opts.AllAssembliesFilePaths);
 
             MetadataLoadContext context = null;
-            bool disposeContext = true;
+            bool keepContext = true;
 
             try
             {
@@ -233,9 +233,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                         return dotNetAsmb;
                     }).ToList();
 
-                wka = this.WtObjMppr(
-                    wka, () => new WorkArgs(wka), (src, constrExpr, mppr) => mppr.OptsWt(
-                        src, constrExpr, mppr.OptsTp(() => () => new()
+                wka = MapprFactry.MapObj(
+                    wka, () => new (wka), (src, cnXpr, mppr) => mppr.OptsFm(
+                        src, cnXpr, mppr.OptsTp(() => () => new()
                         {
                             Opts = wka.Opts,
                             AsmbOpts = null,
@@ -245,13 +245,13 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                         {
                             PathAssemblyResolver = resolver,
                             MetadataLoadContext = context
-                        }, disposeContext = opts.AssembliesCallback?.Invoke(wka) ?? true)));
+                        }, keepContext = opts.AssembliesCallback?.Invoke(wka) ?? false)));
             }
             catch(Exception exc)
             {
             }
 
-            if (disposeContext)
+            if (!keepContext)
             {
                 context?.Dispose();
             }

@@ -6,7 +6,7 @@ namespace Turmerik.Core.Utility
 {
     public interface IComponentCore
     {
-        IObjectMapperFactory ObjMapperFactory { get; }
+        IObjectMapperFactory MapprFactry { get; }
     }
 
     public abstract class ComponentCoreBase : IComponentCore
@@ -14,10 +14,10 @@ namespace Turmerik.Core.Utility
         protected ComponentCoreBase(
             IObjectMapperFactory objMapperFactory)
         {
-            ObjMapperFactory = objMapperFactory ?? throw new ArgumentNullException(
+            MapprFactry = objMapperFactory ?? throw new ArgumentNullException(
                 nameof(objMapperFactory));
         }
 
-        public IObjectMapperFactory ObjMapperFactory { get; }
+        public IObjectMapperFactory MapprFactry { get; }
     }
 }

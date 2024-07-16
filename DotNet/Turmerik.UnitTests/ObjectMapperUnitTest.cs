@@ -112,7 +112,7 @@ namespace Turmerik.UnitTests
             where TObj : T
         {
             this.AssertEqual(
-                () => objectMapperFactory.Mapper<T, TObj>().CreateWith(
+                () => objectMapperFactory.Mapper<T, TObj>().CreateWt(
                     src, constructorCallFunc, initializersArr),
                 expectedResult,
                 basicEqualityComparerFactory.GetEqualityComparer(
@@ -127,7 +127,7 @@ namespace Turmerik.UnitTests
             Func<TObj, TObj, bool> comparer)
         {
             this.AssertEqual(
-                () => objectMapperFactory.Mapper<TObj>().CreateWith(
+                () => objectMapperFactory.Mapper<TObj>().CreateWt(
                     src, constructorCallFunc, initializersArr),
                 expectedResult,
                 basicEqualityComparerFactory.GetEqualityComparer(
@@ -142,7 +142,7 @@ namespace Turmerik.UnitTests
             Func<TObj, TObj, bool> comparer)
         {
             this.AssertEqual(
-                () => objectMapperFactory.Mapper<TObj>().Create(
+                () => objectMapperFactory.Mapper<TObj>().CreateWith(
                     constructorCallFunc,
                     propValuesMapFactory,
                     propValuesMapBuilder),

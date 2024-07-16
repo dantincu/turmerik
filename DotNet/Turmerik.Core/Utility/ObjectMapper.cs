@@ -24,7 +24,7 @@ namespace Turmerik.Core.Utility
             Expression<Func<TObj>> constructorCallFunc,
             params Expression<Func<TObj>>[] initializersArr);
 
-        ObjectMapperOpts<T, TObj> OptsWt(
+        ObjectMapperOpts<T, TObj> OptsFm(
             T src,
             Expression<Func<TObj>> constructorCallFunc,
             params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr);
@@ -33,20 +33,20 @@ namespace Turmerik.Core.Utility
             NllblObjExprFactory<TObj> exprFactory,
             bool includeExpr);
 
-        TObj CreateWith(
+        TObj Create(
             ObjectMapperOpts<T, TObj> opts);
-
-        TObj CreateWith(
-            T src,
-            Expression<Func<TObj>> constructorCallFunc,
-            params Expression<Func<TObj>>[] initializersArr);
 
         TObj CreateWt(
             T src,
             Expression<Func<TObj>> constructorCallFunc,
+            params Expression<Func<TObj>>[] initializersArr);
+
+        TObj CreateFm(
+            T src,
+            Expression<Func<TObj>> constructorCallFunc,
             params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr);
 
-        TObj Create(
+        TObj CreateWith(
             Expression<Func<TObj>> constructorCallFunc,
             Func<ReadOnlyCollection<PropertyInfo>, ILambdaExprHelper<TObj>, Dictionary<PropertyInfo, object>>? propValuesMapFactory = null,
             Action<Dictionary<PropertyInfo, object>, ILambdaExprHelper<TObj>>? propValuesMapBuilder = null);
@@ -126,7 +126,7 @@ namespace Turmerik.Core.Utility
             params Expression<Func<TObj>>[] initializersArr) => new ObjectMapperOpts<T, TObj>(
                 src, constructorCallFunc, initializersArr);
 
-        public ObjectMapperOpts<T, TObj> OptsWt(
+        public ObjectMapperOpts<T, TObj> OptsFm(
             T src,
             Expression<Func<TObj>> constructorCallFunc,
             params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr) => Opts(
@@ -138,7 +138,7 @@ namespace Turmerik.Core.Utility
             NllblObjExprFactory<TObj> exprFactory,
             bool includeExpr) => Tuple.Create(exprFactory, includeExpr);
 
-        public TObj CreateWith(
+        public TObj Create(
             ObjectMapperOpts<T, TObj> opts)
         {
             var src = opts.Src;
@@ -193,19 +193,19 @@ namespace Turmerik.Core.Utility
             return instance;
         }
 
-        public TObj CreateWith(
-            T src,
-            Expression<Func<TObj>> constructorCallFunc,
-            params Expression<Func<TObj>>[] initializersArr) => CreateWith(new ObjectMapperOpts<T, TObj>(
-                src, constructorCallFunc, initializersArr));
-
         public TObj CreateWt(
             T src,
             Expression<Func<TObj>> constructorCallFunc,
-            params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr) => CreateWith(
-                OptsWt(src, constructorCallFunc, initializersArr));
+            params Expression<Func<TObj>>[] initializersArr) => Create(new ObjectMapperOpts<T, TObj>(
+                src, constructorCallFunc, initializersArr));
 
-        public TObj Create(
+        public TObj CreateFm(
+            T src,
+            Expression<Func<TObj>> constructorCallFunc,
+            params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr) => Create(
+                OptsFm(src, constructorCallFunc, initializersArr));
+
+        public TObj CreateWith(
             Expression<Func<TObj>> constructorCallFunc,
             Func<ReadOnlyCollection<PropertyInfo>, ILambdaExprHelper<TObj>, Dictionary<PropertyInfo, object>>? propValuesMapFactory = null,
             Action<Dictionary<PropertyInfo, object>, ILambdaExprHelper<TObj>>? propValuesMapBuilder = null)
