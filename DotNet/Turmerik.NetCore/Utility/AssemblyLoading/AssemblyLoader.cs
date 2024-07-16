@@ -94,17 +94,20 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         private readonly string coreLibName = typeof(object).Assembly.GetName().Name;
 
         private readonly IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever;
-        private readonly IObjectMapper objectMapper;
+        private readonly IObjectMapperFactory objectMapperFactory;
+        private readonly IObjectMapper<WorkArgs> objectMapper;
 
         public AssemblyLoader(
             IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever,
-            IObjectMapper objectMapper)
+            IObjectMapperFactory objectMapperFactory)
         {
             this.filteredDriveEntriesRetriever = filteredDriveEntriesRetriever ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesRetriever));
 
-            this.objectMapper = objectMapper ?? throw new ArgumentNullException(
-                nameof(objectMapper));
+            this.objectMapperFactory = objectMapperFactory ?? throw new ArgumentNullException(
+                nameof(objectMapperFactory));
+
+            this.objectMapper = objectMapperFactory.Mapper<WorkArgs>();
         }
 
         public AssemblyLoaderConfig NormalizeConfig(
@@ -236,16 +239,16 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                         return dotNetAsmb;
                     }).ToList();
 
-                wka = objectMapper.CreateFrom(
-                    objectMapper.OptsF(
+                wka = objectMapper.CreateWith(
+                    objectMapper.OptsW(
                         wka, () => new(wka),
-                        objectMapper.OptsTp<WorkArgs>(() => () => new ()
+                        objectMapper.OptsTp(() => () => new ()
                         {
                             Opts = wka.Opts,
                             AsmbOpts = null,
                             AsmbObj = null,
                         }, true),
-                        objectMapper.OptsTp<WorkArgs>(() => () => new ()
+                        objectMapper.OptsTp(() => () => new ()
                         {
                             PathAssemblyResolver = resolver,
                             MetadataLoadContext = context

@@ -15,12 +15,12 @@ namespace Turmerik.UnitTests
 {
     public class ObjectMapperUnitTest : UnitTestBase
     {
-        private readonly IObjectMapper objectMapper;
+        private readonly IObjectMapperFactory objectMapperFactory;
         private readonly IBasicEqualityComparerFactory basicEqualityComparerFactory;
 
         public ObjectMapperUnitTest()
         {
-            objectMapper = SvcProv.GetRequiredService<IObjectMapper>();
+            objectMapperFactory = SvcProv.GetRequiredService<IObjectMapperFactory>();
             basicEqualityComparerFactory = SvcProv.GetRequiredService<IBasicEqualityComparerFactory>();
         }
 
@@ -112,7 +112,7 @@ namespace Turmerik.UnitTests
             where TObj : T
         {
             this.AssertEqual(
-                () => objectMapper.CreateWith(
+                () => objectMapperFactory.Mapper<T, TObj>().CreateWith(
                     src, constructorCallFunc, initializersArr),
                 expectedResult,
                 basicEqualityComparerFactory.GetEqualityComparer(
@@ -127,7 +127,7 @@ namespace Turmerik.UnitTests
             Func<TObj, TObj, bool> comparer)
         {
             this.AssertEqual(
-                () => objectMapper.CreateFrom(
+                () => objectMapperFactory.Mapper<TObj>().CreateWith(
                     src, constructorCallFunc, initializersArr),
                 expectedResult,
                 basicEqualityComparerFactory.GetEqualityComparer(
@@ -142,7 +142,7 @@ namespace Turmerik.UnitTests
             Func<TObj, TObj, bool> comparer)
         {
             this.AssertEqual(
-                () => objectMapper.Create(
+                () => objectMapperFactory.Mapper<TObj>().Create(
                     constructorCallFunc,
                     propValuesMapFactory,
                     propValuesMapBuilder),
