@@ -5,6 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
+using Turmerik.Core.Utility;
 using static Turmerik.NetCore.Utility.AssemblyLoading.AssemblyLoaderOpts;
 
 namespace Turmerik.NetCore.Utility.AssemblyLoading
@@ -93,12 +94,17 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         private readonly string coreLibName = typeof(object).Assembly.GetName().Name;
 
         private readonly IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever;
+        private readonly IObjectMapper objectMapper;
 
         public AssemblyLoader(
-            IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever)
+            IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever,
+            IObjectMapper objectMapper)
         {
             this.filteredDriveEntriesRetriever = filteredDriveEntriesRetriever ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesRetriever));
+
+            this.objectMapper = objectMapper ?? throw new ArgumentNullException(
+                nameof(objectMapper));
         }
 
         public AssemblyLoaderConfig NormalizeConfig(
@@ -207,25 +213,53 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             var resolver = new PathAssemblyResolver(
                 opts.AllAssembliesFilePaths);
 
-            using var context = new MetadataLoadContext(
-                resolver, coreAssemblyName: coreLibName);
+            MetadataLoadContext context = null;
+            bool disposeContext = true;
 
-            var retAssembliesList = opts.AssembliesToLoad.Select(
-                asmb =>
-                {
-                    var asmbObj = context.LoadFromAssemblyPath(
-                        asmb.AssemblyFilePath);
+            try
+            {
+                context = new MetadataLoadContext(
+                    resolver, coreAssemblyName: coreLibName);
 
-                    var dotNetAsmb = ConvertAssembly(new WorkArgs(wka)
+                var retAssembliesList = opts.AssembliesToLoad.Select(
+                    asmb =>
                     {
-                        AsmbOpts = asmb,
-                        AsmbObj = asmbObj,
-                    });
+                        var asmbObj = context.LoadFromAssemblyPath(
+                            asmb.AssemblyFilePath);
 
-                    return dotNetAsmb;
-                }).ToList();
+                        var dotNetAsmb = ConvertAssembly(new WorkArgs(wka)
+                        {
+                            AsmbOpts = asmb,
+                            AsmbObj = asmbObj,
+                        });
 
-            opts.AssembliesCallback?.Invoke(wka);
+                        return dotNetAsmb;
+                    }).ToList();
+
+                wka = objectMapper.CreateFrom(
+                    objectMapper.OptsF(
+                        wka, () => new(wka),
+                        objectMapper.OptsTp<WorkArgs>(() => () => new ()
+                        {
+                            Opts = wka.Opts,
+                            AsmbOpts = null,
+                            AsmbObj = null,
+                        }, true),
+                        objectMapper.OptsTp<WorkArgs>(() => () => new ()
+                        {
+                            PathAssemblyResolver = resolver,
+                            MetadataLoadContext = context
+                        }, disposeContext = (opts.AssembliesCallback?.Invoke(wka) ?? true))));
+            }
+            catch(Exception exc)
+            {
+            }
+
+            if (disposeContext)
+            {
+                context?.Dispose();
+            }
+
             return wka;
         }
 
@@ -602,6 +636,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             public AssemblyLoaderOpts? Opts { get; init; }
             public AssemblyOpts? AsmbOpts { get; init; }
             public Assembly? AsmbObj { get; init; }
+
+            public PathAssemblyResolver? PathAssemblyResolver { get; init; }
+            public MetadataLoadContext? MetadataLoadContext { get; init; }
         }
     }
 }

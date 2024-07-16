@@ -26,6 +26,17 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         Task RunAsync(
             ProgramArgs args);
+
+        ProgramComponent.WorkArgs GetWorkArgs(
+            ProgramArgs args);
+
+        Task RunAsync(
+            ProgramComponent.WorkArgs wka);
+
+        void AddAssembly(
+            List<DotNetAssembly> assembliesList,
+            DotNetAssembly assembly,
+            bool isTurmerikAssembly);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -76,7 +87,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             await RunAsync(wka);
         }
 
-        private WorkArgs GetWorkArgs(
+        public WorkArgs GetWorkArgs(
             ProgramArgs args)
         {
             var wka = new WorkArgs
@@ -89,7 +100,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             return wka;
         }
 
-        private async Task RunAsync(WorkArgs wka)
+        public async Task RunAsync(WorkArgs wka)
         {
             foreach (var section in wka.PgArgs.Sections)
             {
@@ -125,6 +136,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                                     asmb,
                                     isTurmerikAssembly);
                             }
+
+                            return false;
                         }
                     });
                 }
@@ -142,7 +155,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             }
         }
 
-        private void AddAssembly(
+        public void AddAssembly(
             List<DotNetAssembly> assembliesList,
             DotNetAssembly assembly,
             bool isTurmerikAssembly)
@@ -168,7 +181,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             }
         }
 
-        private class WorkArgs
+        public class WorkArgs
         {
             public ProgramArgs PgArgs { get; set; }
 
