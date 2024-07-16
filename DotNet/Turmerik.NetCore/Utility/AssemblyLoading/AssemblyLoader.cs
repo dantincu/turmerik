@@ -1,4 +1,5 @@
-﻿using Microsoft.PowerShell.Commands;
+﻿using Jint.Runtime.Interop;
+using Microsoft.PowerShell.Commands;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
@@ -10,7 +11,7 @@ using static Turmerik.NetCore.Utility.AssemblyLoading.AssemblyLoaderOpts;
 
 namespace Turmerik.NetCore.Utility.AssemblyLoading
 {
-    public interface IAssemblyLoader
+    public interface IAssemblyLoader : IComponentCore
     {
         AssemblyLoaderConfig NormalizeConfig(
             AssemblyLoaderConfig config);
@@ -86,7 +87,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             IEnumerable<DotNetType> typesNmrbl);
     }
 
-    public class AssemblyLoader : IAssemblyLoader
+    public class AssemblyLoader : ComponentCoreBase, IAssemblyLoader
     {
         public const string NET_STD_ASMB_FILE_NAME = "netstandard.dll";
 
@@ -94,20 +95,13 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         private readonly string coreLibName = typeof(object).Assembly.GetName().Name;
 
         private readonly IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever;
-        private readonly IObjectMapperFactory objectMapperFactory;
-        private readonly IObjectMapper<WorkArgs> objectMapper;
 
         public AssemblyLoader(
-            IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever,
-            IObjectMapperFactory objectMapperFactory)
+            IObjectMapperFactory objMapperFactory,
+            IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever) : base(objMapperFactory)
         {
             this.filteredDriveEntriesRetriever = filteredDriveEntriesRetriever ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesRetriever));
-
-            this.objectMapperFactory = objectMapperFactory ?? throw new ArgumentNullException(
-                nameof(objectMapperFactory));
-
-            this.objectMapper = objectMapperFactory.Mapper<WorkArgs>();
         }
 
         public AssemblyLoaderConfig NormalizeConfig(
@@ -239,20 +233,19 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                         return dotNetAsmb;
                     }).ToList();
 
-                wka = objectMapper.CreateWith(
-                    objectMapper.OptsW(
-                        wka, () => new(wka),
-                        objectMapper.OptsTp(() => () => new ()
+                wka = this.WtObjMppr(
+                    wka, () => new WorkArgs(wka), (src, constrExpr, mppr) => mppr.OptsWt(
+                        src, constrExpr, mppr.OptsTp(() => () => new()
                         {
                             Opts = wka.Opts,
                             AsmbOpts = null,
                             AsmbObj = null,
                         }, true),
-                        objectMapper.OptsTp(() => () => new ()
+                        mppr.OptsTp(() => () => new()
                         {
                             PathAssemblyResolver = resolver,
                             MetadataLoadContext = context
-                        }, disposeContext = (opts.AssembliesCallback?.Invoke(wka) ?? true))));
+                        }, disposeContext = opts.AssembliesCallback?.Invoke(wka) ?? true)));
             }
             catch(Exception exc)
             {

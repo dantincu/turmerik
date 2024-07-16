@@ -137,7 +137,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                                     isTurmerikAssembly);
                             }
 
-                            return false;
+                            return true;
                         }
                     });
                 }

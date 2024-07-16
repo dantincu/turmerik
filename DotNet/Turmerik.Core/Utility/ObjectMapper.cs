@@ -24,7 +24,7 @@ namespace Turmerik.Core.Utility
             Expression<Func<TObj>> constructorCallFunc,
             params Expression<Func<TObj>>[] initializersArr);
 
-        ObjectMapperOpts<T, TObj> OptsW(
+        ObjectMapperOpts<T, TObj> OptsWt(
             T src,
             Expression<Func<TObj>> constructorCallFunc,
             params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr);
@@ -40,6 +40,11 @@ namespace Turmerik.Core.Utility
             T src,
             Expression<Func<TObj>> constructorCallFunc,
             params Expression<Func<TObj>>[] initializersArr);
+
+        TObj CreateWt(
+            T src,
+            Expression<Func<TObj>> constructorCallFunc,
+            params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr);
 
         TObj Create(
             Expression<Func<TObj>> constructorCallFunc,
@@ -121,7 +126,7 @@ namespace Turmerik.Core.Utility
             params Expression<Func<TObj>>[] initializersArr) => new ObjectMapperOpts<T, TObj>(
                 src, constructorCallFunc, initializersArr);
 
-        public ObjectMapperOpts<T, TObj> OptsW(
+        public ObjectMapperOpts<T, TObj> OptsWt(
             T src,
             Expression<Func<TObj>> constructorCallFunc,
             params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr) => Opts(
@@ -193,6 +198,12 @@ namespace Turmerik.Core.Utility
             Expression<Func<TObj>> constructorCallFunc,
             params Expression<Func<TObj>>[] initializersArr) => CreateWith(new ObjectMapperOpts<T, TObj>(
                 src, constructorCallFunc, initializersArr));
+
+        public TObj CreateWt(
+            T src,
+            Expression<Func<TObj>> constructorCallFunc,
+            params Tuple<NllblObjExprFactory<TObj>, bool>[] initializersArr) => CreateWith(
+                OptsWt(src, constructorCallFunc, initializersArr));
 
         public TObj Create(
             Expression<Func<TObj>> constructorCallFunc,
