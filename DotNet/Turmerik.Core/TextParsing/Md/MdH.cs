@@ -72,6 +72,8 @@ namespace Turmerik.TextParsing.Md
             {
                 title = mdLine.Substring(
                     mdTitleLinePfx.Length).Trim();
+
+                title = DecodeForMd(title);
             }
 
             return title;
@@ -81,6 +83,14 @@ namespace Turmerik.TextParsing.Md
         {
             str = HttpUtility.HtmlEncode(str);
             str = str.Replace("\\", "\\\\");
+
+            return str;
+        }
+
+        public static string DecodeForMd(string str)
+        {
+            str = HttpUtility.HtmlDecode(str);
+            str = str.Replace("\\\\", "\\");
 
             return str;
         }

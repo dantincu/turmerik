@@ -485,7 +485,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     resTitle, ConsoleColor.Cyan);
             }
 
-            nodeArgs.ResTitle ??= resTitle?.Replace("\\", "\\\\");
+            nodeArgs.ResTitle ??= resTitle;//?.Replace("\\", "\\\\");
 
             nodeArgs.MdFirstContent = string.Format(
                 config.FileContents.MdFileContentSectionTemplate,

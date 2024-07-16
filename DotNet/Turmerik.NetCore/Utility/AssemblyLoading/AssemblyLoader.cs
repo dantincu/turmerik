@@ -137,6 +137,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 LoadPubInstnGetProps = opts.LoadPubInstnGetProps,
                 LoadPubMethods = opts.LoadPubMethods,
                 LoadPubInstnMethods = opts.LoadPubInstnMethods,
+                AssembliesCallback = opts.AssembliesCallback
             };
 
             if (!opts.AllAssembliesFilePaths.Contains(coreLibLocation))
@@ -224,6 +225,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     return dotNetAsmb;
                 }).ToList();
 
+            opts.AssembliesCallback?.Invoke(wka);
             return wka;
         }
 

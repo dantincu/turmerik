@@ -105,7 +105,27 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         AssembliesToLoad = [new AssemblyLoaderOpts.AssemblyOpts
                         {
                             AssemblyFilePath = csProjAsmb.Paths.SrcPath
-                        }]
+                        }],
+                        AssembliesCallback = loadedAssembliesResult =>
+                        {
+                            foreach (var asmb in loadedAssembliesResult.LoadedAssemblies.Concat(
+                                loadedAssembliesResult.ReferencedAssemblies))
+                            {
+                                bool isTurmerikAssembly = wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
+                                    asmb.BclItem!);
+
+                                var assembliesList = isTurmerikAssembly switch
+                                {
+                                    true => wka.CsProjAssemblies,
+                                    _ => wka.ExternalAssemblies
+                                };
+
+                                AddAssembly(
+                                    assembliesList,
+                                    asmb,
+                                    isTurmerikAssembly);
+                            }
+                        }
                     });
                 }
             }
@@ -118,6 +138,32 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     {
                         Directory.Delete(section.DirPaths.DestnPath, true);
                     }
+                }
+            }
+        }
+
+        private void AddAssembly(
+            List<DotNetAssembly> assembliesList,
+            DotNetAssembly assembly,
+            bool isTurmerikAssembly)
+        {
+            if (assembly.TypesList != null)
+            {
+                var existingAssembly = assembliesList.FirstOrDefault(
+                    asmb => asmb.BclItem == assembly.BclItem);
+
+                if (existingAssembly == null)
+                {
+                    assembliesList.Add(assembly);
+                }
+                else
+                {
+                    var typesToAdd = assembly.TypesList!.Where(
+                        type => assemblyLoader.FindMatching(
+                            default, type.BclItem!,
+                            existingAssembly.TypesList!) == null).ToArray();
+
+                    existingAssembly.TypesList!.AddRange(typesToAdd);
                 }
             }
         }

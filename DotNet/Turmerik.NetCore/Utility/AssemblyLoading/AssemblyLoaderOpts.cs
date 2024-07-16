@@ -22,6 +22,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         public List<AssemblyOpts> AssembliesToLoad { get; set; }
 
+        public Action<AssemblyLoader.WorkArgs>? AssembliesCallback { get; set; }
+
         public class AssemblyOpts
         {
             public string AssemblyName { get; set; }
