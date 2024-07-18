@@ -1,6 +1,7 @@
 import trmrk from "../../trmrk";
 
-import { DriveItem, FileType, OfficeFileType } from "../../trmrk/drive-item";
+import { DriveItem } from "../../trmrk/drive-item";
+import { FileType, OfficeFileType } from "../../trmrk/drive-item-core";
 
 import {
   RootedPathResolvedArgs,
@@ -32,14 +33,14 @@ class DriveItemNode
   constructor(handle: FileSystemHandle, item?: DriveItem | null | undefined) {
     super(
       (item ??= {
-        name: handle.name,
-        isFolder: handle.kind === "directory",
+        Name: handle.name,
+        IsFolder: handle.kind === "directory",
       } as DriveItem)
     );
 
     this._handle = handle;
 
-    if (this.item.isFolder) {
+    if (this.item.IsFolder) {
       this._dirHandle = this._handle as FileSystemDirectoryHandle;
     } else {
       this._fileHandle = this._handle as FileSystemFileHandle;
@@ -68,7 +69,7 @@ export class DriveExplorerApi
   constructor(rootDirHandle: FileSystemDirectoryHandle) {
     super();
     this._rootDirNode = new DriveItemNode(rootDirHandle);
-    this._rootDirNode.item.isRootFolder = true;
+    this._rootDirNode.item.IsRootFolder = true;
   }
 
   protected override get rootDirNode(): IDriveItemNode {
@@ -309,9 +310,9 @@ export class DriveExplorerApi
 
   private toItem(node: FsApiEntry<FileSystemHandle>) {
     const item = {
-      name: node.name,
-      isFolder: node.isFolder,
-      lastWriteTime: new Date(),
+      Name: node.name,
+      IsFolder: node.isFolder,
+      LastWriteTime: new Date().toString(),
     } as DriveItem;
 
     return item;
@@ -326,16 +327,16 @@ export class DriveExplorerApi
 
   private async createItem(handle: FileSystemHandle) {
     const item = {
-      name: handle.name,
-      isFolder: handle.kind === "directory",
+      Name: handle.name,
+      IsFolder: handle.kind === "directory",
     } as DriveItem;
 
-    if (!item.isFolder) {
+    if (!item.IsFolder) {
       const fileHandle = handle as FileSystemFileHandle;
       const file = await fileHandle.getFile();
 
       if (file.lastModified) {
-        item.lastWriteTime = new Date(file.lastModified);
+        item.LastWriteTime = new Date(file.lastModified).toString();
       }
     }
 

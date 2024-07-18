@@ -1,6 +1,7 @@
 import trmrk from "../../trmrk";
 
-import { DriveItem, FileType, OfficeFileType } from "../../trmrk/drive-item";
+import { DriveItem } from "../../trmrk/drive-item";
+import { FileType, OfficeFileType } from "../../trmrk/drive-item-core";
 
 import {
   RootedPathResolvedArgs,
@@ -78,9 +79,9 @@ export class DriveExplorerApi
         this._rootDirNode = {
           item: data,
           isFolder: true,
-          name: data.name,
-          folderFiles: data.folderFiles.map((item) => new DriveItemNode(item)),
-          subFolders: data.subFolders.map((item) => new DriveItemNode(item)),
+          name: data.Name,
+          folderFiles: data.FolderFiles!.map((item) => new DriveItemNode(item)),
+          subFolders: data.SubFolders!.map((item) => new DriveItemNode(item)),
         };
       });
     }
@@ -97,7 +98,7 @@ export class DriveExplorerApi
       const resp = await this.svc.get<string>(
         this.getRelUrl("file-text-contents"),
         {
-          idnf: file.item.idnf,
+          Idnf: file.item.Idnf,
         } as DriveItem
       );
 
@@ -123,8 +124,8 @@ export class DriveExplorerApi
       const resp = await this.svc.post<DriveItem>(
         this.getRelUrl("create-folder"),
         {
-          prIdnf: prFolder.item.idnf,
-          name: newFolderName,
+          PrIdnf: prFolder.item.Idnf,
+          Name: newFolderName,
         } as DriveItem
       );
 
@@ -132,9 +133,9 @@ export class DriveExplorerApi
         retNode = {
           item: data,
           isFolder: true,
-          name: data.name,
-          folderFiles: data.folderFiles.map((item) => new DriveItemNode(item)),
-          subFolders: data.subFolders.map((item) => new DriveItemNode(item)),
+          name: data.Name,
+          folderFiles: data.FolderFiles!.map((item) => new DriveItemNode(item)),
+          subFolders: data.SubFolders!.map((item) => new DriveItemNode(item)),
         };
       });
 
@@ -158,14 +159,14 @@ export class DriveExplorerApi
         const resp = await this.svc.delete(
           this.getRelUrl("delete-folder"),
           () => ({
-            data: { idnf: retNode!.item.idnf } as DriveItem,
+            data: { Idnf: retNode!.item.Idnf } as DriveItem,
           })
         );
 
         this.handleApiResp(resp, () => {
           trmrk.removeAll(
             parentFolder.subFolders!,
-            (item) => item.name === retNode?.item.name
+            (item) => item.name === retNode?.item.Name
           );
         });
       }
@@ -187,17 +188,17 @@ export class DriveExplorerApi
       const resp = await this.svc.post<DriveItem>(
         this.getRelUrl("create-text-file"),
         {
-          prIdnf: parentFolder.item.idnf,
-          name: newFileName,
-          textFileContents: text,
+          PrIdnf: parentFolder.item.Idnf,
+          Name: newFileName,
+          TextFileContents: text,
         } as DriveItem
       );
 
       this.handleApiResp(resp, (data) => {
         retNode = {
-          item: { ...data, textFileContents: text },
+          item: { ...data, TextFileContents: text },
           isFolder: false,
-          name: data.name,
+          name: data.Name,
         };
 
         this.addItem(parentFolder.subFolders!, retNode!);
@@ -221,14 +222,14 @@ export class DriveExplorerApi
         const resp = await this.svc.delete(
           this.getRelUrl("delete-file"),
           () => ({
-            data: { idnf: retNode!.item.idnf } as DriveItem,
+            data: { Idnf: retNode!.item.Idnf } as DriveItem,
           })
         );
 
         this.handleApiResp(resp, () => {
           trmrk.removeAll(
             parentFolder.folderFiles!,
-            (item) => item.name === retNode?.item.name
+            (item) => item.name === retNode?.item.Name
           );
         });
       }
@@ -272,17 +273,17 @@ export class DriveExplorerApi
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("move-folder"),
                 {
-                  idnf: folder.item.idnf,
-                  prIdnf: newParentFolder.item.idnf,
-                  name: newFolderName,
+                  Idnf: folder.item.Idnf,
+                  PrIdnf: newParentFolder.item.Idnf,
+                  Name: newFolderName,
                 } as DriveItem
               );
             } else {
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("rename-folder"),
                 {
-                  idnf: folder.item.idnf,
-                  name: newFolderName,
+                  Idnf: folder.item.Idnf,
+                  Name: newFolderName,
                 } as DriveItem
               );
             }
@@ -290,9 +291,9 @@ export class DriveExplorerApi
             resp = await this.svc.patch<DriveItem>(
               this.getRelUrl("copy-folder"),
               {
-                idnf: folder.item.idnf,
-                prIdnf: newParentFolder.item.idnf,
-                name: newFolderName,
+                Idnf: folder.item.Idnf,
+                PrIdnf: newParentFolder.item.Idnf,
+                Name: newFolderName,
               } as DriveItem
             );
           }
@@ -302,17 +303,17 @@ export class DriveExplorerApi
           retNode = {
             item: data,
             isFolder: true,
-            name: data.name,
-            folderFiles: data.folderFiles.map(
+            name: data.Name,
+            folderFiles: data.FolderFiles!.map(
               (item) => new DriveItemNode(item)
             ),
-            subFolders: data.subFolders.map((item) => new DriveItemNode(item)),
+            subFolders: data.SubFolders!.map((item) => new DriveItemNode(item)),
           };
 
           if (isMove) {
             trmrk.removeAll(
               parentFolder.subFolders!,
-              (item) => item.name === retNode?.item.name
+              (item) => item.name === retNode?.item.Name
             );
           }
 
@@ -356,17 +357,17 @@ export class DriveExplorerApi
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("move-file"),
                 {
-                  idnf: file.item.idnf,
-                  prIdnf: newParentFolder.item.idnf,
-                  name: newFileName,
+                  Idnf: file.item.Idnf,
+                  PrIdnf: newParentFolder.item.Idnf,
+                  Name: newFileName,
                 } as DriveItem
               );
             } else {
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("rename-file"),
                 {
-                  idnf: file.item.idnf,
-                  name: newFileName,
+                  Idnf: file.item.Idnf,
+                  Name: newFileName,
                 } as DriveItem
               );
             }
@@ -374,9 +375,9 @@ export class DriveExplorerApi
             resp = await this.svc.patch<DriveItem>(
               this.getRelUrl("copy-file"),
               {
-                idnf: file.item.idnf,
-                prIdnf: newParentFolder.item.idnf,
-                name: newFileName,
+                Idnf: file.item.Idnf,
+                PrIdnf: newParentFolder.item.Idnf,
+                Name: newFileName,
               } as DriveItem
             );
           }
@@ -386,13 +387,13 @@ export class DriveExplorerApi
           retNode = {
             item: data,
             isFolder: false,
-            name: data.name,
+            name: data.Name,
           };
 
           if (isMove) {
             trmrk.removeAll(
               parentFolder.folderFiles!,
-              (item) => item.name === retNode?.item.name
+              (item) => item.name === retNode?.item.Name
             );
           }
 
@@ -410,18 +411,18 @@ export class DriveExplorerApi
     const resp = await this.svc.get<DriveItem>(
       this.getRelUrl("folder-entries"),
       {
-        idnf: folder.item.idnf,
+        idnf: folder.item.Idnf,
       }
     );
 
     await this.handleApiRespAsync(resp, async (data) => {
       folder.subFolders = await trmrk.mapAsync(
-        data.subFolders,
+        data.SubFolders!,
         async (folderNode) => new DriveItemNode(folderNode)
       );
 
       folder.folderFiles = await trmrk.mapAsync(
-        data.folderFiles,
+        data.FolderFiles!,
         async (fileNode) => new DriveItemNode(fileNode)
       );
 

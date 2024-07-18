@@ -1,6 +1,7 @@
 import trmrk from "../index";
 
-import { DriveItem, FileType, OfficeFileType } from "../drive-item";
+import { DriveItem } from "../drive-item";
+import { FileType, OfficeFileType } from "../../trmrk/drive-item-core";
 
 export interface RootedPathResolvedArgs {
   path: string;
@@ -33,8 +34,8 @@ export class DriveItemNodeCore<
   constructor(item: DriveItem) {
     this._item = item;
 
-    this._name = this._item.name;
-    this._isFolder = this._item.isFolder ?? false;
+    this._name = this._item.Name;
+    this._isFolder = this._item.IsFolder ?? false;
   }
 
   public get item(): DriveItem {
@@ -199,7 +200,7 @@ export abstract class DriveExplorerApiBase<
 
   public async FileExists(pathArgs: RootedPathResolvedArgs): Promise<boolean> {
     let retItem = await this.GetItem(pathArgs);
-    const retVal = !!retItem && retItem.isFolder !== true;
+    const retVal = !!retItem && retItem.IsFolder !== true;
 
     return retVal;
   }
@@ -471,8 +472,8 @@ export abstract class DriveExplorerApiBase<
     if (refresh || !folder.subFolders || !folder.folderFiles) {
       await this.fillFolderDescendants(folder);
 
-      folder.item.subFolders = folder.subFolders!.map((node) => node.item);
-      folder.item.folderFiles = folder.folderFiles!.map((node) => node.item);
+      folder.item.SubFolders = folder.subFolders!.map((node) => node.item);
+      folder.item.FolderFiles = folder.folderFiles!.map((node) => node.item);
     }
   }
 
