@@ -15,6 +15,12 @@ export enum FileType {
   ZippedFolder,
 }
 
+export interface DriveItemsRetriever {
+  DirSeparator: string;
+}
+
+export interface DriveExplorerService extends DriveItemsRetriever {}
+
 export interface DriveItemCore {
   Idnf: string;
   PrIdnf: string;

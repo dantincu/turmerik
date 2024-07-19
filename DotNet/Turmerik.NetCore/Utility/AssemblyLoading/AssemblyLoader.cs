@@ -1,6 +1,7 @@
 ﻿using Jint.Runtime.Interop;
 using Microsoft.PowerShell.Commands;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using Turmerik.Core.DriveExplorer;
@@ -170,7 +171,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     TypesToLoad = asmb.TypesToLoad?.Select(
                         type => new TypeOpts
                         {
+                            TypeName = type.TypeName,
                             FullTypeName = type.FullTypeName,
+                            DeclaringTypeOpts = type.DeclaringTypeOpts,
+                            GenericTypeParamsCount = type.GenericTypeParamsCount,
+                            LoadPubInstnConstructors = type.LoadPubInstnConstructors,
                             LoadPubGetProps = type.LoadPubGetProps ?? asmb.LoadPubGetProps,
                             LoadPubInstnGetProps = type.LoadPubInstnGetProps ?? asmb.LoadPubInstnGetProps,
                             LoadPubMethods = type.LoadPubMethods ?? asmb.LoadPubMethods,
@@ -228,6 +233,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                         {
                             AsmbOpts = asmb,
                             AsmbObj = asmbObj,
+                            AsmbTypes = asmbObj.GetTypes().ToList()
                         });
 
                         return dotNetAsmb;
@@ -249,6 +255,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             }
             catch(Exception exc)
             {
+                keepContext = false;
+                context?.Dispose();
+                throw;
             }
 
             if (!keepContext)
@@ -429,8 +438,15 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         public Type GetTypeObj(
             WorkArgs wka,
-            TypeOpts? typeOpts) => wka.AsmbObj.GetType(
-                typeOpts.FullTypeName)!;
+            TypeOpts? typeOpts)
+        {
+            Type typeObj = GetTypeObjCore(
+                wka, typeOpts, typeOpts.DeclaringTypeOpts?.With(
+                    declaringTypeOpts => GetTypeObj(
+                        wka, declaringTypeOpts)));
+
+            return typeObj;
+        }
 
         public TypeOpts GetTypeOpts(
             WorkArgs wka,
@@ -601,6 +617,32 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             return dotNetType;
         }
 
+        private Type GetTypeObjCore(
+            WorkArgs wka,
+            TypeOpts? typeOpts,
+            Type? declaringType)
+        {
+            var typePredicate = typeOpts!.GenericTypeParamsCount.WithNllbl<Func<Type, bool>, int>(
+                genericTypeParamsCount => type => type.IsGenericType && type.GetGenericArguments(
+                    ).Length == genericTypeParamsCount,
+                () => type => true);
+
+            var typeObj = declaringType.IfNotNull(
+                dclringType => dclringType!.GetNestedTypes(
+                    ReflH.MatchAllFlatHcyBindingFlags).First(
+                        nestedType => nestedType.Name == typeOpts.TypeName && typePredicate(nestedType)),
+                () => typeOpts!.GenericTypeParamsCount.HasValue switch
+                {
+                    true => wka.AsmbTypes.First(
+                        type => ReflH.GetTypeDisplayName(
+                            type.Name, '`') == typeOpts.TypeName && typePredicate(type)),
+                    _ => wka.AsmbObj!.GetType(
+                        typeOpts.FullTypeName)
+                });
+
+            return typeObj;
+        }
+
         public readonly struct WorkArgs
         {
             public WorkArgs()
@@ -621,6 +663,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 this.Opts = src.Opts;
                 this.AsmbOpts = src.AsmbOpts;
                 this.AsmbObj = src.AsmbObj;
+                this.AsmbTypes = src.AsmbTypes;
             }
 
             public List<DotNetAssembly> LoadedAssemblies { get; }
@@ -632,6 +675,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             public AssemblyLoaderOpts? Opts { get; init; }
             public AssemblyOpts? AsmbOpts { get; init; }
             public Assembly? AsmbObj { get; init; }
+            public List<Type> AsmbTypes { get; init; }
 
             public PathAssemblyResolver? PathAssemblyResolver { get; init; }
             public MetadataLoadContext? MetadataLoadContext { get; init; }

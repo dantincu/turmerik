@@ -19,13 +19,19 @@ namespace Turmerik.Core.Helpers
         public static readonly Type EnumerableBaseType = typeof(IEnumerable);
         public static readonly Type StringType = typeof(string);
 
+        public static readonly BindingFlags MatchAllBindingFlags = GetMatchAllBindingFlags();
+        public static readonly BindingFlags MatchAllFlatHcyBindingFlags = MatchAllBindingFlags | BindingFlags.FlattenHierarchy;
+
+        public static BindingFlags GetMatchAllBindingFlags(
+            ) => BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
         public static string GetTypeFullDisplayName(
             this Type type,
-            char stopDelim = '[') => GetTypeFullDisplayName(
+            char stopDelim = '[') => GetTypeDisplayName(
                 type.FullName,
                 stopDelim);
 
-        public static string GetTypeFullDisplayName(
+        public static string GetTypeDisplayName(
             string typeFullName,
             char stopDelim = '[') => typeFullName?.SplitStr(
                 (str, len) => str.FirstKvp((c, i) => c == stopDelim).Key).Item1;

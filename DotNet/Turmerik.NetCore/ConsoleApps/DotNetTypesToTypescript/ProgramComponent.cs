@@ -114,12 +114,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         wka.AsmbLoaderWkasList.Add(await assemblyLoader.LoadAssembliesAsync(new AssemblyLoaderOpts
                         {
                             Config = wka.PgArgs.Config.AssemblyLoaderConfig,
-                            LoadAllTypes = csProjAsmb.IncludeAllTypes,
                             AssembliesBaseDirPath = csProj.SrcBuildDirPath,
                             AssembliesToLoad = [new AssemblyLoaderOpts.AssemblyOpts
-                        {
-                            AssemblyFilePath = csProjAsmb.Paths.SrcPath
-                        }],
+                            {
+                                AssemblyFilePath = csProjAsmb.Paths.SrcPath,
+                                LoadAllTypes = csProjAsmb.IncludeAllTypes,
+                                TypesToLoad = csProjAsmb.TypesArr?.Select(
+                                    type => GetTypeOpts(type)).ToList()!
+                            }],
                             AssembliesCallback = loadedAssembliesResult =>
                             {
                                 foreach (var asmb in loadedAssembliesResult.LoadedAssemblies.Concat(
@@ -190,6 +192,24 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     existingAssembly.TypesList!.AddRange(typesToAdd);
                 }
             }
+        }
+
+        private AssemblyLoaderOpts.TypeOpts GetTypeOpts(
+            ProgramConfig.DotNetType type)
+        {
+            var typeOpts = new AssemblyLoaderOpts.TypeOpts
+            {
+                TypeName = type.Name,
+                FullTypeName = type.FullName,
+                GenericTypeParamsCount = type.GenericTypeParamsCount,
+                LoadPubInstnGetProps = true,
+                LoadPubInstnMethods = true,
+                DeclaringTypeOpts = type.DeclaringType?.With(
+                    declaringType => GetTypeOpts(
+                        declaringType))
+            };
+
+            return typeOpts;
         }
 
         public class WorkArgs

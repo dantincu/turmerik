@@ -44,6 +44,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public class TypeOpts
         {
             public string FullTypeName { get; set; }
+            public string TypeName { get; set; }
+            public int? GenericTypeParamsCount { get; set; }
+            public TypeOpts? DeclaringTypeOpts { get; set; }
 
             public bool? LoadPubGetProps { get; set; }
             public bool? LoadPubInstnGetProps { get; set; }

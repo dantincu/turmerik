@@ -6,13 +6,37 @@
   },
   "Sections": [
     {
-      "SectionName": "Turmerik.Core",
+      "SectionName": "Turmerik",
       "CsProjectsArr": [
+        {
+          "Name": "Turmerik",
+          "IsDotNetStandard": true,
+          "CsProjectAssembly": {
+            "IncludeAllTypes": null,
+            "TypesArr": [
+              {
+                "FullName": "Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes.IProgramComponent"
+              }
+            ]
+          }
+        },
         {
           "Name": "Turmerik.Core",
           "IsDotNetStandard": true,
           "CsProjectAssembly": {
-            "IncludeAllTypes": true
+            "IncludeAllTypes": null,
+            "TypesArr": [
+              {
+                "FullName": "Turmerik.Core.DriveExplorer.IDriveExplorerService"
+              },
+              {
+                "FullName": "Turmerik.Core.Utility.IObjectMapperFactory"
+              },
+              {
+                "FullName": "Turmerik.Core.Actions.ActionResult",
+                "GenericTypeParamsCount": 1
+              }
+            ]
           }
         }
       ]

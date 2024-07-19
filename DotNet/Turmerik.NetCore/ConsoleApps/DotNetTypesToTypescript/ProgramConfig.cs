@@ -76,6 +76,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         public class DotNetType
         {
             public string FullName { get; set; }
+            public int? GenericTypeParamsCount { get; set; }
             public string Namespace { get; set; }
             public string Name { get; set; }
             public string[] RelNsPartsArr { get; set; }

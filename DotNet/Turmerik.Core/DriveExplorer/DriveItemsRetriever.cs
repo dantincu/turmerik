@@ -12,37 +12,6 @@ using Turmerik.Core.Text;
 
 namespace Turmerik.Core.DriveExplorer
 {
-    public interface IDriveItemsRetriever
-    {
-        Task<DriveItem> GetItemAsync(
-            string idnf, bool? retMinimalInfo);
-
-        Task<DriveItem> GetFolderAsync(
-            string idnf, bool? retMinimalInfo);
-
-        Task<DriveItem> GetFolderAsync(
-            string idnf, int depth, bool? retMinimalInfo);
-
-        Task<bool> ItemExistsAsync(string idnf);
-
-        Task<bool> FolderExistsAsync(string idnf);
-
-        Task<bool> FileExistsAsync(string idnf);
-
-        Task<string> GetFileTextAsync(string idnf);
-
-        Task<byte[]> GetFileBytesAsync(string idnf);
-
-        string GetItemIdnf<TDriveItem>(
-            TDriveItem item,
-            string prIdnf)
-            where TDriveItem : DriveItem<TDriveItem>;
-
-        char GetDirSeparator();
-
-        char DirSeparator { get; }
-    }
-
     public abstract class DriveItemsRetrieverCoreBase : IDriveItemsRetriever
     {
         protected DriveItemsRetrieverCoreBase()
