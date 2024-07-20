@@ -3,7 +3,7 @@
     "Turmerik.DotNetTypesToTypescript.ConsoleApp": {
       "commandName": "Project",
       // "commandLineArgs": ":pf:parcel-ws"
-      "commandLineArgs": ":pf:test-all"
+      "commandLineArgs": ":pf:test-all :rem"
     }
   }
 }

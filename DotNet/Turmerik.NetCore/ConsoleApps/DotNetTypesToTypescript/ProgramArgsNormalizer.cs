@@ -70,6 +70,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         string GetDefaultTsRelFilePath(
             ProgramArgs args,
             ProgramConfig.DotNetType dotNetType);
+
+        string GetDefaultTsRelFilePath(
+            ProgramArgs args,
+            string[] relNsPartsArr,
+            string typeName);
     }
 
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
@@ -424,9 +429,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         public string GetDefaultTsRelFilePath(
             ProgramArgs args,
-            ProgramConfig.DotNetType dotNetType)
+            ProgramConfig.DotNetType dotNetType) => GetDefaultTsRelFilePath(
+                args, dotNetType.RelNsPartsArr, dotNetType.Name);
+
+        public string GetDefaultTsRelFilePath(
+            ProgramArgs args,
+            string[] relNsPartsArr,
+            string typeName)
         {
-            var relNsPartsArr = dotNetType.RelNsPartsArr;
             var relNsPartsCount = relNsPartsArr.Length;
 
             Func<string, int, string> tsRelFilePathPartNameFactory = (
@@ -443,7 +453,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     tsRelFilePathPartSelector);
 
             tsRelFilePathParts = tsRelFilePathParts.Concat(
-                [$"{dotNetType.Name}.ts"]);
+                [$"{typeName}.ts"]);
 
             var tsRelFilePath = Path.Combine(
                 tsRelFilePathParts.ToArray());

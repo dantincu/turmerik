@@ -27,14 +27,32 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         Task RunAsync(
             ProgramArgs args);
 
-        ProgramComponent.WorkArgs GetWorkArgs(
-            ProgramArgs args);
-
         Task RunAsync(
             ProgramComponent.WorkArgs wka);
 
+        Task RunAsync(
+            ProgramComponent.WorkArgs wka,
+            ProgramComponent.WorkArgs.Section section);
+
+        Task RunAsync(
+            ProgramComponent.WorkArgs wka,
+            ProgramComponent.WorkArgs.Section section,
+            ProgramComponent.WorkArgs.DotNetAssemblyObj asmb);
+
+        Task RunAsync(
+            ProgramComponent.WorkArgs wka,
+            ProgramComponent.WorkArgs.Section section,
+            ProgramComponent.WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType);
+
+        ProgramComponent.WorkArgs GetWorkArgs(
+            ProgramArgs args);
+
         void AddAssembly(
-            List<DotNetAssembly> assembliesList,
+            ProgramComponent.WorkArgs wka,
+            ProgramComponent.WorkArgs.Section section,
+            List<ProgramComponent.WorkArgs.DotNetAssemblyObj> assembliesList,
+            ProgramConfig.DotNetAssembly pfAsmb,
             DotNetAssembly assembly,
             bool isTurmerikAssembly);
     }
@@ -93,9 +111,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             var wka = new WorkArgs
             {
                 PgArgs = args,
-                CsProjAssemblies = [],
-                ExternalAssemblies = [],
-                AsmbLoaderWkasList = []
+                Sections = []
             };
 
             return wka;
@@ -105,13 +121,23 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             try
             {
-                foreach (var section in wka.PgArgs.Sections)
+                foreach (var pfSection in wka.PgArgs.Sections)
                 {
-                    foreach (var csProj in section.CsProjectsArr)
+                    var section = new WorkArgs.Section
+                    {
+                        PfSection = pfSection,
+                        CsProjAssemblies = [],
+                        ExternalAssemblies = [],
+                        AsmbLoaderWkasList = []
+                    };
+
+                    wka.Sections.Add(section);
+
+                    foreach (var csProj in pfSection.CsProjectsArr)
                     {
                         var csProjAsmb = csProj.CsProjectAssembly;
 
-                        wka.AsmbLoaderWkasList.Add(await assemblyLoader.LoadAssembliesAsync(new AssemblyLoaderOpts
+                        section.AsmbLoaderWkasList.Add(await assemblyLoader.LoadAssembliesAsync(new AssemblyLoaderOpts
                         {
                             Config = wka.PgArgs.Config.AssemblyLoaderConfig,
                             AssembliesBaseDirPath = csProj.SrcBuildDirPath,
@@ -132,12 +158,15 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
                                     var assembliesList = isTurmerikAssembly switch
                                     {
-                                        true => wka.CsProjAssemblies,
-                                        _ => wka.ExternalAssemblies
+                                        true => section.CsProjAssemblies,
+                                        _ => section.ExternalAssemblies
                                     };
 
                                     AddAssembly(
+                                        wka,
+                                        section,
                                         assembliesList,
+                                        csProjAsmb,
                                         asmb,
                                         isTurmerikAssembly);
                                 }
@@ -152,46 +181,113 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 {
                     foreach (var section in wka.PgArgs.Sections)
                     {
-                        if (Directory.Exists(section.DirPaths.DestnPath))
+                        if (Directory.Exists(
+                            section.DirPaths.DestnPath))
                         {
-                            Directory.Delete(section.DirPaths.DestnPath, true);
+                            Directory.Delete(
+                                section.DirPaths.DestnPath, true);
                         }
                     }
+                }
+
+                foreach (var section in wka.Sections)
+                {
+                    Directory.CreateDirectory(
+                        section.PfSection.DirPaths.DestnPath);
+
+                    await RunAsync(wka, section);
                 }
             }
             finally
             {
-                foreach (var asmbLoaderWka in wka.AsmbLoaderWkasList)
+                foreach (var section in wka.Sections)
                 {
-                    asmbLoaderWka.MetadataLoadContext!.Dispose();
+                    foreach (var asmbLoaderWka in section.AsmbLoaderWkasList)
+                    {
+                        asmbLoaderWka.MetadataLoadContext!.Dispose();
+                    }
                 }
             }
         }
 
         public void AddAssembly(
-            List<DotNetAssembly> assembliesList,
+            WorkArgs wka,
+            WorkArgs.Section section,
+            List<WorkArgs.DotNetAssemblyObj> assembliesList,
+            ProgramConfig.DotNetAssembly pfAsmb,
             DotNetAssembly assembly,
             bool isTurmerikAssembly)
         {
             if (assembly.TypesList != null)
             {
                 var existingAssembly = assembliesList.FirstOrDefault(
-                    asmb => asmb.BclItem == assembly.BclItem);
+                    asmb => asmb.Asmb.BclItem == assembly.BclItem);
 
                 if (existingAssembly == null)
                 {
-                    assembliesList.Add(assembly);
+                    var assemblyObj = new WorkArgs.DotNetAssemblyObj
+                    {
+                        IsTurmerikAssembly = isTurmerikAssembly,
+                        Asmb = assembly,
+                    };
+
+                    assembliesList.Add(assemblyObj);
+
+                    assemblyObj.TypesList = assembly.TypesList.Select(
+                        type => GetDotNetTypeObj(
+                            wka, section, assemblyObj, type)).ToList();
                 }
                 else
                 {
                     var typesToAdd = assembly.TypesList!.Where(
                         type => assemblyLoader.FindMatching(
                             default, type.BclItem!,
-                            existingAssembly.TypesList!) == null).ToArray();
+                            existingAssembly.Asmb.TypesList!) == null).ToArray();
 
-                    existingAssembly.TypesList!.AddRange(typesToAdd);
+                    existingAssembly.Asmb.TypesList!.AddRange(typesToAdd);
+
+                    existingAssembly.TypesList.AddRange(typesToAdd.Select(
+                        type => GetDotNetTypeObj(
+                            wka, section, existingAssembly, type)));
                 }
             }
+        }
+
+        public async Task RunAsync(
+            WorkArgs wka,
+            WorkArgs.Section section)
+        {
+            foreach (var asmb in section.ExternalAssemblies)
+            {
+                await RunAsync(wka, section, asmb);
+            }
+
+            foreach (var asmb in section.CsProjAssemblies)
+            {
+                await RunAsync(wka, section, asmb);
+            }
+        }
+
+        public async Task RunAsync(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb)
+        {
+            // Directory.CreateDirectory();
+
+            foreach (var type in asmb.Asmb.TypesList)
+            {
+                await RunAsync(wka, section, asmb, type);
+            }
+        }
+
+        public Task RunAsync(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType)
+        {
+            throw new NotImplementedException();
         }
 
         private AssemblyLoaderOpts.TypeOpts GetTypeOpts(
@@ -212,14 +308,71 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             return typeOpts;
         }
 
+        private WorkArgs.DotNetTypeObj GetDotNetTypeObj(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType) => new WorkArgs.DotNetTypeObj
+            {
+                Type = dotNetType,
+                DestnFilePath = GetDestnFilePath(
+                    wka, section, asmb, dotNetType)
+            };
+
+        private string GetDestnFilePath(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType)
+        {
+            var profile = wka.PgArgs.Profile;
+
+            var destnPath = programArgsNormalizer.GetDefaultTsRelFilePath(
+                wka.PgArgs, dotNetType.RelNsPartsArr, dotNetType.Name);
+
+            var assembliesDirName = asmb.IsTurmerikAssembly switch
+            {
+                true => profile.DestnCsProjectAssembliesDirName,
+                false => profile.DestnExternalAssemblliesDirName,
+            };
+
+            destnPath = Path.Combine(
+                section.PfSection.DirPaths.DestnPath,
+                assembliesDirName,
+                asmb.Asmb.Name ?? throw new InvalidOperationException(
+                    $"Assembly name should not be null"),
+                destnPath);
+
+            return destnPath;
+        }
+
         public class WorkArgs
         {
             public ProgramArgs PgArgs { get; set; }
+            public List<Section> Sections { get; set; }
 
-            public List<DotNetAssembly> CsProjAssemblies { get; set; }
-            public List<DotNetAssembly> ExternalAssemblies { get; set; }
+            public class Section
+            {
+                public ProgramConfig.ProfileSection PfSection { get; set; }
+                public List<DotNetAssemblyObj> CsProjAssemblies { get; set; }
+                public List<DotNetAssemblyObj> ExternalAssemblies { get; set; }
 
-            public List<AssemblyLoader.WorkArgs> AsmbLoaderWkasList { get; set; }
+                public List<AssemblyLoader.WorkArgs> AsmbLoaderWkasList { get; set; }
+            }
+
+            public class DotNetAssemblyObj
+            {
+                public bool IsTurmerikAssembly { get; set; }
+                public DotNetAssembly Asmb { get; set; }
+                public List<DotNetTypeObj> TypesList { get; set; }
+            }
+
+            public class DotNetTypeObj
+            {
+                public DotNetType Type { get; set; }
+                
+                public string DestnFilePath { get; set; }
+            }
         }
     }
 }

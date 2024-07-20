@@ -99,7 +99,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         public DotNetAssemblyName? BclAsmbName { get; set; }
         public List<DotNetAssemblyName>? ReferencedBclAsmbNames { get; set; }
-        public string? FullName { get; set; }
+        public string? Name { get; set; }
         public string TypeNamesPfx { get; set; }
         public string AssemblyFilePath { get; set; }
         public bool? IsExecutable { get; set; }
@@ -111,7 +111,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 keepBclObjects ? BclItem : null)
             {
                 BclAsmbName = BclAsmbName?.Clone(keepBclObjects),
-                FullName = FullName,
+                Name = Name,
                 TypeNamesPfx = TypeNamesPfx,
                 AssemblyFilePath = AssemblyFilePath,
                 IsExecutable = IsExecutable,

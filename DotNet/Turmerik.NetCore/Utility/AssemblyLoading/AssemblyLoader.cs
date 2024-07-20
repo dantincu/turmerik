@@ -273,7 +273,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             bool isReferencedAssembly = false)
         {
             string assemblyFilePath = wka.AsmbObj.Location;
-            string fullName = wka.AsmbObj.FullName;
+            string fullName = wka.AsmbObj.GetName().Name;
 
             var assembliesList = isReferencedAssembly ? wka.ReferencedAssemblies : wka.LoadedAssemblies;
 
@@ -286,7 +286,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 {
                     BclAsmbName = ConvertAssemblyName(
                         wka.AsmbObj.GetName()),
-                    FullName = fullName,
+                    Name = fullName,
                     TypeNamesPfx = $"{fullName}.",
                     AssemblyFilePath = assemblyFilePath,
                     IsExecutable = Path.GetExtension(
@@ -552,9 +552,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 dotNetType.DeclaringType = dotNetType.IsNested == true ? typeObj.DeclaringType.With(
                     declaringType => ConvertAssemblyType(wka, declaringType)) : null;
 
-                dotNetType.DeclaringType?.ActIfNotNull(declaringType =>
+                dotNetType.DeclaringType.ActIfNotNull(declaringType =>
                 {
-                    dotNetType.RelNsPartsArr = declaringType.RelNsPartsArr?.PrependToArr(
+                    dotNetType.RelNsPartsArr = (declaringType.RelNsPartsArr ?? []).PrependToArr(
                         declaringType.Name);
                 },
                 () =>
