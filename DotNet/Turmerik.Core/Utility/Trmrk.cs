@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 
 namespace Turmerik.Core.Utility
@@ -39,6 +40,12 @@ namespace Turmerik.Core.Utility
             this Type type) => type.FullName.StartsWith(TurmerikNsPfx);
 
         public static bool IsTurmerikAssembly(
-            this Assembly assembly) => assembly.FullName.StartsWith(TurmerikNsPfx);
+            this Assembly assembly) => assembly.GetName().Name.With(name =>
+            {
+                bool isTrmrkAsmb = name == TurmerikPfx;
+                isTrmrkAsmb = isTrmrkAsmb || name.StartsWith(TurmerikNsPfx);
+
+                return isTrmrkAsmb;
+            });
     }
 }

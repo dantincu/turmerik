@@ -66,15 +66,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         string GetDefaultAssemblyExtension(
             ProgramConfig.DotNetCsProjectAssembly dotNetAssembly);
-
-        string GetDefaultTsRelFilePath(
-            ProgramArgs args,
-            ProgramConfig.DotNetType dotNetType);
-
-        string GetDefaultTsRelFilePath(
-            ProgramArgs args,
-            string[] relNsPartsArr,
-            string typeName);
     }
 
     public class ProgramArgsNormalizer : IProgramArgsNormalizer
@@ -414,39 +405,5 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 true => "exe",
                 _ => "dll"
             };
-
-        public string GetDefaultTsRelFilePath(
-            ProgramArgs args,
-            ProgramConfig.DotNetType dotNetType) => GetDefaultTsRelFilePath(
-                args, dotNetType.RelNsPartsArr, dotNetType.Name);
-
-        public string GetDefaultTsRelFilePath(
-            ProgramArgs args,
-            string[] relNsPartsArr,
-            string typeName)
-        {
-            var relNsPartsCount = relNsPartsArr.Length;
-
-            Func<string, int, string> tsRelFilePathPartNameFactory = (
-                part, idx) => (relNsPartsCount - idx > 1) switch
-                {
-                    true => args.Profile.TypesHcyNodeDirName,
-                    false => args.Profile.TypesNodeDirName
-                };
-
-            Func<string, int, IEnumerable<string>> tsRelFilePathPartSelector = (
-                part, idx) => [part, tsRelFilePathPartNameFactory(part, idx)];
-
-            var tsRelFilePathParts = relNsPartsArr.SelectMany(
-                    tsRelFilePathPartSelector);
-
-            tsRelFilePathParts = tsRelFilePathParts.Concat(
-                [$"{typeName}.ts"]);
-
-            var tsRelFilePath = Path.Combine(
-                tsRelFilePathParts.ToArray());
-
-            return tsRelFilePath;
-        }
     }
 }
