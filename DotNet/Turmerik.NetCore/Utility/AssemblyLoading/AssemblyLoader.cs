@@ -562,7 +562,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     if (dotNetType.Namespace?.StartsWith(
                         dotNetType.Assembly.TypeNamesPfx) ?? false)
                     {
-                        dotNetType.RelNsPartsArr = dotNetType.FullName.Substring(
+                        dotNetType.RelNsPartsArr = dotNetType.FullName?.Substring(
                             dotNetType.Assembly.TypeNamesPfx.Length).Split('.');
                     }
                 });

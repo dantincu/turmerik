@@ -281,7 +281,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             }
         }
 
-        public Task RunAsync(
+        public async Task RunAsync(
             WorkArgs wka,
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,

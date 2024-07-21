@@ -81,7 +81,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public string Name { get; set; }
             public string[] RelNsPartsArr { get; set; }
             public string[] NestedTypesHcyArr { get; set; }
-            public SrcDestnPaths FilePaths { get; set; }
+            // public SrcDestnPaths FilePaths { get; set; }
             public DotNetType DeclaringType { get; set; }
         }
 

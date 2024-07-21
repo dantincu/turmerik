@@ -273,19 +273,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.DotNetType dotNetType)
         {
             NormalizeType(dotNetAssembly, dotNetType);
-
-            dotNetType.FilePaths ??= new();
-            dotNetType.FilePaths.SrcPath ??= dotNetAssembly.Paths.SrcPath;
-            dotNetType.FilePaths.DestnPath ??= GetDefaultTsRelFilePath(args, dotNetType);
             NormalizeSrcDestnDirPaths(args, dotNetAssembly.Paths);
-
-            dotNetType.FilePaths.SrcPath = NormPathH.AssurePathIsRooted(
-                dotNetType.FilePaths.SrcPath,
-                () => dotNetAssembly.Paths.SrcPath);
-
-            dotNetType.FilePaths.DestnPath = NormPathH.AssurePathIsRooted(
-                dotNetType.FilePaths.DestnPath,
-                () => dotNetAssembly.Paths.DestnPath);
         }
 
         public void NormalizeType(
