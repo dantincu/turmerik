@@ -150,8 +150,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                                 }],
                                 AssembliesCallback = loadedAssembliesResult =>
                                 {
-                                    foreach (var asmb in loadedAssembliesResult.LoadedAssemblies.Concat(
-                                        loadedAssembliesResult.LoadedAssemblies))
+                                    foreach (var asmb in loadedAssembliesResult.LoadedAssemblies)
                                     {
                                         bool isTurmerikAssembly = wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
                                             asmb.BclItem!);
@@ -215,7 +214,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             bool isTurmerikAssembly)
         {
             var existingAssembly = assembliesList.FirstOrDefault(
-                asmb => asmb.Asmb.BclItem == assembly.BclItem);
+                asmb => assemblyLoader.AssembliesAreEqual(assembly.BclItem, asmb.Asmb.BclItem));
 
             if (existingAssembly == null)
             {

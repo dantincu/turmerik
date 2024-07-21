@@ -3,6 +3,7 @@ using Microsoft.PowerShell.Commands;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
@@ -85,6 +86,10 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             AssemblyLoader.WorkArgs wka,
             Type typeObj,
             IEnumerable<DotNetType> typesNmrbl);
+
+        bool AssembliesAreEqual(
+            Assembly trgAsmb,
+            Assembly refAsmb);
     }
 
     public class AssemblyLoader : ComponentCoreBase, IAssemblyLoader
@@ -208,7 +213,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
             var wka = new WorkArgs
             {
-                Opts = opts
+                Opts = opts,
             };
 
             var resolver = new PathAssemblyResolver(
@@ -492,6 +497,10 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
             return matchingType;
         }
+
+        public bool AssembliesAreEqual(
+            Assembly trgAsmb,
+            Assembly refAsmb) => trgAsmb.FullName == refAsmb.FullName;
 
         private DotNetType ConvertAssemblyType(
             WorkArgs wka,
