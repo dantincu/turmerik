@@ -439,17 +439,17 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             if (resTitle == null)
             {
-                WriteSectionToConsole(
-                    "Fetching resource from the following url: ",
-                    url, ConsoleColor.Blue);
-
-                resTitle = (await GetResouceTitleAsync(
-                    url)).Nullify(true);
-
-                if (resTitle != null)
+                if (nodeArgs.GetTitleFromUrl == true)
                 {
+                    var uriObj = new Uri(url);
+                    string host = uriObj.Host;
+                    string path = uriObj.AbsolutePath;
+
+                    resTitle = path.Split('/').Reverse(
+                        ).ToArray().JoinStr(" - ");
+
                     WriteSectionToConsole(
-                        "The resource at the provided url has the following title: ",
+                        "The following title has been extracted from the url: ",
                         resTitle, ConsoleColor.Cyan);
 
                     if (hasUri)
@@ -465,17 +465,49 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                             resTitle = newResTitle;
                         }
                     }
+
+                    resTitle = string.Join(" - ", resTitle, host);
                 }
                 else
                 {
-                    Console.WriteLine(
-                        "The resource at the provided url doesn't have a title; please type a title yourself: ");
+                    WriteSectionToConsole(
+                        "Fetching resource from the following url: ",
+                        url, ConsoleColor.Blue);
 
-                    resTitle = Console.ReadLine().Nullify(
-                        true) ?? nodeArgs.Title ?? throw new ArgumentNullException(
-                            nameof(resTitle));
+                    resTitle = (await GetResouceTitleAsync(
+                        url)).Nullify(true);
 
-                    Console.WriteLine();
+                    if (resTitle != null)
+                    {
+                        WriteSectionToConsole(
+                            "The resource at the provided url has the following title: ",
+                            resTitle, ConsoleColor.Cyan);
+
+                        if (hasUri)
+                        {
+                            Console.WriteLine(string.Join(" ",
+                                "Are you want to use this title? If you do, then just",
+                                "press enter next; otherwise, type a title yourself: "));
+
+                            string newResTitle = Console.ReadLine().Nullify(true);
+
+                            if (newResTitle != null)
+                            {
+                                resTitle = newResTitle;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            "The resource at the provided url doesn't have a title; please type a title yourself: ");
+
+                        resTitle = Console.ReadLine().Nullify(
+                            true) ?? nodeArgs.Title ?? throw new ArgumentNullException(
+                                nameof(resTitle));
+
+                        Console.WriteLine();
+                    }
                 }
             }
             else
@@ -607,10 +639,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                             data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.Url.Arr(),
-                                            data => data.Args.Current.Url = data.ArgFlagValue!.JoinStr(":")),
+                                            data => data.Args.Current.Url = OnUrlProvided(data)),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.Uri.Arr(),
-                                            data => data.Args.Current.Uri = data.ArgFlagValue!.JoinStr(":")),
+                                            data => data.Args.Current.Uri = OnUrlProvided(data)),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.OpenMdFile.Arr(),
                                             data => data.Args.Current.OpenMdFile = true, true),
@@ -644,6 +676,51 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                         }
                     }
                 }).Args;
+
+        private string GetUrl(
+            string[] argFlagValue,
+            out string? urlOption)
+        {
+            switch (argFlagValue.Length)
+            {
+                case 2:
+                    urlOption = null;
+                    break;
+                case 3:
+                    urlOption = argFlagValue.First();
+                    argFlagValue = argFlagValue.Skip(1).ToArray();
+                    break;
+                default:
+                    throw new ArgumentException(
+                        nameof(ProgramArgs.Node.Url));
+            }
+
+            string url = argFlagValue.JoinStr(":");
+            return url;
+        }
+
+        private string OnUrlProvided(
+            ConsoleArgsParserData<ProgramArgs> data)
+        {
+            string url = GetUrl(
+                data.ArgFlagValue!,
+                out string? urlOption);
+
+            if (urlOption != null)
+            {
+                switch (urlOption)
+                {
+                    case "x":
+                        data.Args.Current.GetTitleFromUrl = true;
+                        break;
+                    default:
+                        throw new ArgumentException(
+                            nameof(urlOption));
+                }
+            }
+
+            return url;
+        }
 
         private void WriteSectionToConsole(
             string caption,
