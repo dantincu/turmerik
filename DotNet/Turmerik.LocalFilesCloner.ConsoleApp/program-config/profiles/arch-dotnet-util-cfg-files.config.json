@@ -9,7 +9,7 @@
           "^\\/AppCfgFiles\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
         ]
       },
-      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik",
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\DotNet\\Turmerik.Core",
       "CloneDirPath": "|$TURMERIK_TEMP_DIR|",
       "Folders": [
         {
