@@ -710,7 +710,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             {
                 switch (urlOption)
                 {
-                    case "x":
+                    case "-":
                         data.Args.Current.GetTitleFromUrl = true;
                         break;
                     default:
