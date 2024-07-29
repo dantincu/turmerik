@@ -84,13 +84,18 @@ namespace Turmerik.TextParsing.Md
             str = HttpUtility.HtmlEncode(str);
             str = str.Replace("\\", "\\\\");
 
+            str = str.Replace("_", "\\_");
             return str;
         }
 
         public static string DecodeForMd(string str)
         {
             str = HttpUtility.HtmlDecode(str);
-            str = str.Replace("\\\\", "\\");
+
+            str = str.Split("\\\\").Select(
+                part => new string(part.Where(
+                    c => c != '\\').ToArray(
+                        ))).ToArray().JoinStr("\\");
 
             return str;
         }

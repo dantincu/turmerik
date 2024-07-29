@@ -445,7 +445,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     string host = uriObj.Host;
                     string path = uriObj.AbsolutePath;
 
-                    resTitle = path.Split('/').Reverse(
+                    resTitle = path.Trim().Trim('/').Trim().Split('/').Reverse(
                         ).ToArray().JoinStr(" - ");
 
                     WriteSectionToConsole(
