@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextParsing.IndexesFilter;
 using Turmerik.Notes.Core;
 
@@ -10,6 +11,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
     {
         public bool? PrintHelpMessage { get; set; }
         public string WorkDir { get; set; }
+        public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public bool? InteractiveMode { get; set; }
         public bool? UpdateSections { get; set; }
         public bool? ConvertToNoteSections { get; set; }

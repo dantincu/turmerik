@@ -9,7 +9,9 @@ using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Text;
+using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextParsing.IndexesFilter;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
@@ -28,6 +30,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
     {
         private readonly IConsoleArgsParser consoleArgsParser;
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
+        private readonly ITextMacrosReplacer textMacrosReplacer;
+        private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly IIdxesFilterParser idxesFilterParser;
         private readonly IdxesUpdater idxesUpdater;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
@@ -38,6 +42,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         public ProgramComponent(
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
+            ITextMacrosReplacer textMacrosReplacer,
+            ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             IConsoleMsgPrinter consoleMsgPrinter,
             IIdxesFilterParser idxesFilterParser,
             IdxesUpdater idxesUpdater,
@@ -48,6 +54,12 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
+
+            this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
+                nameof(textMacrosReplacer));
+
+            this.localDevicePathMacrosRetriever = localDevicePathMacrosRetriever ?? throw new ArgumentNullException(
+                nameof(localDevicePathMacrosRetriever));
 
             this.idxesFilterParser = idxesFilterParser ?? throw new ArgumentNullException(
                 nameof(idxesFilterParser));
@@ -263,12 +275,6 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
             wka.NoteItemsTuple = await existingDirPairsRetriever.GetNoteDirPairsAsync(args.WorkDir);
 
-            /* var noteDirCat = args.UpdateSections switch
-            {
-                true => NoteDirCategory.Section,
-                _ => NoteDirCategory.Item
-            }; */
-
             wka.NoteItemDirsPairTuplesList = wka.NoteItemsTuple.DirsPairTuples.Where(
                 tuple => tuple.NoteDirCat == NoteDirCategory.Item).ToList();
 
@@ -280,12 +286,6 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                 throw new InvalidOperationException(
                     "Detected file dir pairs in this folder and this would make things too ambigous");
             }
-
-            /* if (wka.NoteItemDirsPairTuplesList.None())
-            {
-                throw new InvalidOperationException(
-                    "Detected no note dir pairs in this folder");
-            } */
 
             if (wka.NoteItemsTuple.DirsPairTuples.Any(
                 tuple => tuple.FullDirName == null))
@@ -329,11 +329,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                                             data => data.Args.InteractiveMode = true, true),
                                         consoleArgsParser.ArgsFlagOpts(data,
                                             config.ArgOpts.WorkDir.Arr(),
-                                            data => data.Args.WorkDir = data.ArgFlagValue.Single().Nullify(
-                                                true)?.With(path => NormPathH.NormPath(
-                                                    path, (path, isRooted) => isRooted.If(
-                                                        () => path, () => Path.GetFullPath(
-                                                            path))))!),
+                                            data => data.Args.WorkDir = data.ArgFlagValue.Single().Nullify(true)),
                                         consoleArgsParser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteSection.Arr(),
                                             data => data.Args.UpdateSections = true, true),
@@ -349,7 +345,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     },
                     ArgsFactory = () => new ProgramArgs
                     {
-                        IdxesUpdateMappings = new List<IdxesUpdateMapping>()
+                        IdxesUpdateMappings = new List<IdxesUpdateMapping>(),
+                        LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile()
                     }
                 }).Args;
 
@@ -367,7 +364,10 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
         private void NormalizeArgs(ProgramArgs args)
         {
-            args.WorkDir ??= Environment.CurrentDirectory;
+            args.WorkDir = textMacrosReplacer.NormalizePath(
+                args.LocalDevicePathsMap,
+                args.WorkDir,
+                Directory.GetCurrentDirectory());
 
             if (args.IdxesUpdateMappings.None())
             {
