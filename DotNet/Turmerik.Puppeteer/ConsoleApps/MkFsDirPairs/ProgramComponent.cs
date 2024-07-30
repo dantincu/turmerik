@@ -294,7 +294,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 {
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
                 }
-                else if ((config.CreatePdfFile ?? false) && !nodeArgs.SkipPdfFileCreation)
+                
+                if ((config.CreatePdfFile ?? false) && !nodeArgs.SkipPdfFileCreation)
                 {
                     string md = File.ReadAllText(mdFilePath);
                     string html = Markdown.ToHtml(md);

@@ -60,11 +60,12 @@
       "m": [ ":s", "$misc$", ":=" ],
       "a": [ ":s", "$articles$", ":=" ],
       "p": [ ":s", "$persons$", ":=" ],
+      "nf": [ ":s", "$infamous$", ":=" ],
       "pp": [ ":s", "$public-persons$", ":=" ],
       "hf": [ ":s", "$historical-figures$", ":=" ],
       "tc": [ ":s", "$terms-and-concepts$", ":=" ],
       "ps": [ ":s", "$products-and services$", ":=" ],
-      "egna": [ ":s", "$environment-geography-nature-agriculture$", ":=" ],
+      "egna": [ ":s", "$environment-geography-nature-and-agriculture$", ":=" ],
       "pl": [ ":s", "$places$", ":=" ],
       "gr": [ ":s", "$geographical-regions$", ":=" ],
       "plgr": [ ":s", "$places-and-geographical-regions$", ":=" ]
