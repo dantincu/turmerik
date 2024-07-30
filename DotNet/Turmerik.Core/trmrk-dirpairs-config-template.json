@@ -24,7 +24,8 @@
     "HcyChildNode": "+",
     "HcyParentNode": "-",
     "HcySibblingNode": "=",
-    "Macro": "m"
+    "Macro": "m",
+    "Title": "t"
   },
   "DirNames": {
     "DefaultJoinStr": "-",

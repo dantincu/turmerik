@@ -41,6 +41,7 @@ namespace Turmerik.Core.DriveExplorer
             public string HcyParentNode { get; set; }
             public string HcySibblingNode { get; set; }
             public string Macro { get; set; }
+            public string Title { get; set; }
         }
 
         public class DirNamesT

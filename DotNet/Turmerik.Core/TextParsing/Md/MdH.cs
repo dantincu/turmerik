@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Turmerik.Core.FileSystem;
 using Turmerik.Core.Text;
 
 namespace Turmerik.TextParsing.Md
@@ -11,6 +12,41 @@ namespace Turmerik.TextParsing.Md
     public static class MdH
     {
         public const string MD_TITLE_PREFIX = "# ";
+
+        public static bool UpdateMdTitleFromFile(
+            string filePath,
+            Func<string, string, int, string[], string> newTitleFactory,
+            string mdTitleLinePfx = null,
+            bool trimStart = true)
+        {
+            string[] linesArr = File.ReadAllLines(filePath);
+            bool updated = false;
+
+            for (int i = 0; i < linesArr.Length; i++)
+            {
+                var line = linesArr[i];
+                var title = TryGetMdTitleFromLine(
+                    line, mdTitleLinePfx, trimStart);
+
+                if (title != null)
+                {
+                    var newTitle = newTitleFactory(
+                        title, line, i, linesArr);
+
+                    var newLine = string.Concat(
+                        MD_TITLE_PREFIX,
+                        EncodeForMd(newTitle));
+
+                    linesArr[i] = newLine;
+                    updated = true;
+
+                    break;
+                }
+            }
+
+            File.WriteAllLines(filePath, linesArr);
+            return updated;
+        }
 
         public static string TryGetMdTitleFromFile(
             string filePath,

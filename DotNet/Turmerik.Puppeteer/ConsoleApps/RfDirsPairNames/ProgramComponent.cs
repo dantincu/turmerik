@@ -122,6 +122,24 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                 TryRenameMdFile(wka, newMdFileName);
             }
 
+            if (args.UpdateMdFile == true)
+            {
+                if (!string.IsNullOrWhiteSpace(wka.Args.MdTitle))
+                {
+                    string newMdFilePath = Path.Combine(
+                        args.ShortNameDirPath,
+                        newMdFileName);
+
+                    MdH.UpdateMdTitleFromFile(
+                        newMdFilePath,
+                        (title, line, idx, linesArr) => wka.Args.MdTitle);
+                }
+                else
+                {
+                    throw new Exception("Trying to update the md file but no title found");
+                }
+            }
+
             TryRenameFullNameDir(wka, newFullDirName);
 
             await mdToPdfProgramComponent.RunAsync(
@@ -362,7 +380,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 data => data.Args.PrintHelpMessage = true, true),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.InteractiveMode.Arr(),
-                                data => data.Args.InteractiveMode = true)
+                                data => data.Args.InteractiveMode = true),
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.Title.Arr(),
+                                data => data.Args.MdTitle = data.ArgFlagValue.Single())
                         ]
                     })
                 }).Args;
@@ -383,6 +404,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         {
             bool autoChoose = args.InteractiveMode != true;
             args.ShortNameDirPath ??= Environment.CurrentDirectory;
+
+            if (args.MdTitle != null)
+            {
+                args.UpdateMdFile = true;
+            }
 
             if (Directory.Exists(args.ShortNameDirPath))
             {

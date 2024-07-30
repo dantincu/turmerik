@@ -23,6 +23,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
     {
         private const string W = "w";
         private const string REC = "rec";
+        private const string STEP = "step";
 
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleArgsParser parser;
@@ -34,7 +35,6 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
         private readonly RfDirsPairNames.IProgramComponent rfDirPairNamesComponent;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
-        private readonly ReadOnlyDictionary<string, string> macroDirsMap;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -79,22 +79,6 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
 
             this.rfDirPairNamesComponent = rfDirPairNamesComponent ?? throw new ArgumentNullException(
                 nameof(rfDirPairNamesComponent));
-
-            macroDirsMap = config.Macros.Map.ToDictionary(
-                kvp => kvp.Value[1].ToLowerInvariant().Trim('\"'),
-                kvp => kvp.Value[1].ToLowerInvariant().Trim('\"').With(
-                    fullDirNamePart =>
-                    {
-                        string[] fullDirNamePartsArr = fullDirNamePart.Split(
-                            ' ', StringSplitOptions.RemoveEmptyEntries).Select(
-                            fullDirNamePart => fullDirNamePart.Replace(
-                                "&", "and").Replace(",", "")).ToArray();
-
-                        fullDirNamePart = string.Join("-", fullDirNamePartsArr);
-                        fullDirNamePart = $"${fullDirNamePart}$";
-
-                        return fullDirNamePart;
-                    })).RdnlD();
         }
 
         public async Task RunAsync(
@@ -105,6 +89,25 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
             var existingPairs = await existingDirPairsRetriever.GetNoteDirPairsAsync(
                 pgArgs.WorkDir);
 
+            ReadOnlyDictionary<string, string> macroDirsMap = config.Macros.Map.ToDictionary(
+                kvp => kvp.Value[1].ToLowerInvariant().Trim('\"'),
+                kvp => kvp.Value[1].ToLowerInvariant().Trim('\"').With(
+                    fullDirNamePart =>
+                    {
+                        if (pgArgs.Step == 1)
+                        {
+                            string[] fullDirNamePartsArr = fullDirNamePart.Split(
+                                ' ', StringSplitOptions.RemoveEmptyEntries).Select(
+                                fullDirNamePart => fullDirNamePart.Replace(
+                                    "&", "and").Replace(",", "")).ToArray();
+
+                            fullDirNamePart = string.Join("-", fullDirNamePartsArr);
+                            fullDirNamePart = $"${fullDirNamePart}$";
+                        }
+
+                        return fullDirNamePart;
+                    })).RdnlD();
+
             foreach (var dirsPairTuple in existingPairs.DirsPairTuples)
             {
                 string fullDirNamePart = dirsPairTuple.FullDirNamePart.ToLowerInvariant();
@@ -114,7 +117,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
 
                 if (dirsPairTuple.NoteDirCat != NoteDirCategory.Internals)
                 {
-                    await RunAsync(pgArgs, pgArgs.WorkDir, dirsPairTuple, matchingKvp);
+                    await RunAsync(pgArgs, pgArgs.WorkDir, dirsPairTuple, matchingKvp, macroDirsMap);
                 }
             }
         }
@@ -123,7 +126,8 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
             ProgramArgs pgArgs,
             string prIdnf,
             DirsPairTuple dirsPairTuple,
-            KeyValuePair<string, string> matchingKvp)
+            KeyValuePair<string, string> matchingKvp,
+            ReadOnlyDictionary<string, string> macroDirsMap)
         {
             string newPrPath = Path.Combine(
                 prIdnf, dirsPairTuple.ShortDirName);
@@ -186,7 +190,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
 
                 if (childDirsPairTuple.NoteDirCat != NoteDirCategory.Internals)
                 {
-                    await RunAsync(pgArgs, newPrPath, childDirsPairTuple, childMatchingKvp);
+                    await RunAsync(pgArgs, newPrPath, childDirsPairTuple, childMatchingKvp, macroDirsMap);
                 }
             }
         }
@@ -206,9 +210,11 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
                             ItemHandlersArr = [],
                             FlagHandlersArr = [
                                 parser.ArgsFlagOpts(data,
-                                        [W], data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
-                                    parser.ArgsFlagOpts(data,
-                                        [REC], data => data.Args.RecursiveMatchingDirNamesArr = data.ArgFlagValue!),
+                                    [W], data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
+                                parser.ArgsFlagOpts(data,
+                                    [REC], data => data.Args.RecursiveMatchingDirNamesArr = data.ArgFlagValue!),
+                                parser.ArgsFlagOpts(data,
+                                    [STEP], data => data.Args.Step = int.Parse(data.ArgFlagValue!.Single())),
                             ]
                         })
                 }).Args;
@@ -223,6 +229,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
             pgArgs.RecursiveMatchingDirNameRegexsArr = pgArgs.RecursiveMatchingDirNamesArr?.Select(
                 dirName => new Regex(dirName)).ToArray();
 
+            pgArgs.Step ??= 1;
             return pgArgs;
         }
     }

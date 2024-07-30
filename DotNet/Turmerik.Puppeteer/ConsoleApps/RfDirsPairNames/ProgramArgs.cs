@@ -17,5 +17,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         public string MdFileName { get; set; }
         public string MdTitle { get; set; }
         public bool? InteractiveMode { get; set; }
+        public bool? UpdateMdFile { get; set; }
     }
 }

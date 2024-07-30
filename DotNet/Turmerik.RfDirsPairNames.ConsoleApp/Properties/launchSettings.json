@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.RfDirsPairNames.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "992"
+      "commandLineArgs": "999 :t:qwerqwer"
     }
   }
 }

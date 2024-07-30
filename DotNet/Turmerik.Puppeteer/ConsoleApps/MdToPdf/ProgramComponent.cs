@@ -193,6 +193,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                         string mdStr = File.ReadAllText(file);
                         string htmlStr = Markdown.ToHtml(mdStr, markdownPipeline);
 
+                        htmlFilePath = htmlFilePath.Replace("%", " ");
                         File.WriteAllText(htmlFilePath, htmlStr);
 
                         await PuppeteerH.HtmlToPdfFile(

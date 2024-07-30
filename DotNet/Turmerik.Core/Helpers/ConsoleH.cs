@@ -95,6 +95,7 @@ namespace Turmerik.Core.Helpers
             catch (Exception exc)
             {
                 WithExcp(exc, msgFactory);
+                Environment.ExitCode = 1;
 
                 if (rethrow)
                 {
@@ -119,6 +120,7 @@ namespace Turmerik.Core.Helpers
             catch (Exception exc)
             {
                 WithExcp(exc, msgFactory);
+                Environment.ExitCode = 1;
 
                 if (rethrow)
                 {

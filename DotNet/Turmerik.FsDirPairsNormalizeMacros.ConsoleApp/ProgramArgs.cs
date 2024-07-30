@@ -11,6 +11,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
     public class ProgramArgs
     {
         public string WorkDir { get; set; }
+        public int? Step { get; set; }
         public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public string[]? RecursiveMatchingDirNamesArr { get; set; }
         public Regex[]? RecursiveMatchingDirNameRegexsArr { get; set; }
