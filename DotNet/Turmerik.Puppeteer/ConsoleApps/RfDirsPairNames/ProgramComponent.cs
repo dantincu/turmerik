@@ -26,6 +26,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
         Task<string> RunAsync(
             WorkArgs wka);
+
+        void NormalizeArgs(ProgramArgs args);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -377,7 +379,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             return args;
         }
 
-        private void NormalizeArgs(ProgramArgs args)
+        public void NormalizeArgs(ProgramArgs args)
         {
             bool autoChoose = args.InteractiveMode != true;
             args.ShortNameDirPath ??= Environment.CurrentDirectory;

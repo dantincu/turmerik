@@ -56,17 +56,17 @@
   },
   "Macros": {
     "Map": {
-      "m": [ ":s", "Misc", ":=" ],
-      "a": [ ":s", "Articles", ":=" ],
-      "p": [ ":s", "Persons", ":=" ],
-      "pp": [ ":s", "Public Persons", ":=" ],
-      "hf": [ ":s", "Historical Figures", ":=" ],
-      "tc": [ ":s", "Terms & Concepts", ":=" ],
-      "ps": [ ":s", "Products & Services", ":=" ],
-      "egna": [ ":s", "\"Environment, Geography, Nature & Agriculture\"", ":=" ],
-      "pl": [ ":s", "Places", ":=" ],
-      "gr": [ ":s", "Geographical Regions", ":=" ],
-      "plgr": [ ":s", "Places & Geographical Regions", ":=" ]
+      "m": [ ":s", "$misc$", ":=" ],
+      "a": [ ":s", "$articles$", ":=" ],
+      "p": [ ":s", "$persons$", ":=" ],
+      "pp": [ ":s", "$public-persons$", ":=" ],
+      "hf": [ ":s", "$historical-figures$", ":=" ],
+      "tc": [ ":s", "$terms-and-concepts$", ":=" ],
+      "ps": [ ":s", "$products-and services$", ":=" ],
+      "egna": [ ":s", "$environment-geography-nature-agriculture$", ":=" ],
+      "pl": [ ":s", "$places$", ":=" ],
+      "gr": [ ":s", "$geographical-regions$", ":=" ],
+      "plgr": [ ":s", "$places-and-geographical-regions$", ":=" ]
     }
   }
 }
