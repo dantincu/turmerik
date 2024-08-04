@@ -142,12 +142,15 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
             TryRenameFullNameDir(wka, newFullDirName);
 
-            await mdToPdfProgramComponent.RunAsync(
-                new MdToPdf.ProgramArgs
-                {
-                    WorkDir = wka.Args.ShortNameDirPath,
-                    RemoveExisting = true
-                });
+            if ((config.CreatePdfFile ?? false) && args.SkipPdfFileCreation != true)
+            {
+                await mdToPdfProgramComponent.RunAsync(
+                    new MdToPdf.ProgramArgs
+                    {
+                        WorkDir = wka.Args.ShortNameDirPath,
+                        RemoveExisting = true
+                    });
+            }
 
             return newFullDirNamePart;
         }
@@ -383,7 +386,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 data => data.Args.InteractiveMode = true),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.Title.Arr(),
-                                data => data.Args.MdTitle = data.ArgFlagValue.Single())
+                                data => data.Args.MdTitle = data.ArgFlagValue.Single()),
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.SkipPdfFileCreation.Arr(),
+                                data => data.Args.SkipPdfFileCreation = true, true),
                         ]
                     })
                 }).Args;
