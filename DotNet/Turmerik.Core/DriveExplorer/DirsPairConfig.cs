@@ -25,6 +25,7 @@ namespace Turmerik.Core.DriveExplorer
             public string OpenMdFile { get; set; }
             public string SkipMdFileCreation { get; set; }
             public string SkipPdfFileCreation { get; set; }
+            public string CreatePdfFile { get; set; }
             public string DirNameTpl { get; set; }
             public string CreateNote { get; set; }
             public string CreateNoteSection { get; set; }

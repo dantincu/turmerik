@@ -25,6 +25,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public bool OpenMdFile { get; set; }
             public bool SkipMdFileCreation { get; set; }
             public bool SkipPdfFileCreation { get; set; }
+            public bool CreatePdfFile { get; set; }
             public string Title { get; set; }
             public string ResTitle { get; set; }
             public string MdFirstContent { get; set; }

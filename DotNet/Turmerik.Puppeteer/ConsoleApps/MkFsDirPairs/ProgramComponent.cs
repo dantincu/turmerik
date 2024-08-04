@@ -178,6 +178,16 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     $"for the pair of folder that will be created by this command",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
+                string.Join(" ", optsHead($":{argOpts.SkipPdfFileCreation}", ""),
+                    $"Indicates that no pdf file should be created",
+                    $"for the pair of folder that will be created by this command",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.CreatePdfFile}", ""),
+                    $"Indicates that a pdf file should be created",
+                    $"for the pair of folder that will be created by this command",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
                 string.Join(" ", optsHead($":{argOpts.CreateNote}", ""),
                     $"Indicates that the pair of folders that will be created should represent a note item",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
@@ -295,7 +305,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
                 }
                 
-                if ((config.CreatePdfFile ?? false) && !nodeArgs.SkipPdfFileCreation)
+                if (nodeArgs.CreatePdfFile || (config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation))
                 {
                     string md = File.ReadAllText(mdFilePath);
                     string html = Markdown.ToHtml(md);
@@ -681,6 +691,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.SkipPdfFileCreation.Arr(),
                                             data => data.Args.Current.SkipPdfFileCreation = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.CreatePdfFile.Arr(),
+                                            data => data.Args.Current.CreatePdfFile = true, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNote.Arr(),
                                             data => data.Args.Current.CreateNote = true, true),
