@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Turmerik.Core.Helpers;
 
@@ -142,6 +143,25 @@ namespace Turmerik.Core.Dependencies
             }
 
             return services;
+        }
+
+        public static IServiceProvider InjectAllSvcs(
+            this IServiceProvider svcProv,
+            object component,
+            Type componentType,
+            Action<object, PropertyInfo, object> propSetter,
+            IPropertyInjector propInjector = null)
+        {
+            propInjector ??= svcProv.GetRequiredService<IPropertyInjector>();
+
+            propInjector.InjectAllSvcs(
+                new PropertyInjectorAggArgs(
+                    svcProv,
+                    component,
+                    componentType,
+                    propSetter));
+
+            return svcProv;
         }
     }
 }

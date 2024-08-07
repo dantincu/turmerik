@@ -39,6 +39,7 @@ namespace Turmerik.Core.Dependencies
             services.AddSingleton<IFsEntryNameNormalizer, FsEntryNameNormalizer>();
             services.AddSingleton<INameToIdnfConverter, NameToIdnfConverter>();
             services.AddSingleton<IPascalOrCamelCaseToWordsConverter, PascalOrCamelCaseToWordsConverter>();
+            services.AddSingleton<IPropertyInjector, PropertyInjector>();
 
             services.AddSingleton<ISynchronizedAdapterFactory, SynchronizedAdapterFactory>();
             services.AddSingleton<IIntermitentBackgroundWorkerFactory, IntermitentBackgroundWorkerFactory>();

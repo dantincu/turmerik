@@ -17,7 +17,13 @@ namespace Turmerik.UnitTests
         static UnitTestBase()
         {
             ServiceProviderContainer.Instance.Value.RegisterData(
-                new ServiceCollection().AsOpts());
+                new ServiceCollection().AsOpts(services =>
+                {
+                    services.AddScoped<PropertyInjectorUnitTest.IService1, PropertyInjectorUnitTest.Service1>();
+                    services.AddScoped<PropertyInjectorUnitTest.IService2, PropertyInjectorUnitTest.Service2>();
+                    services.AddScoped<PropertyInjectorUnitTest.IService3, PropertyInjectorUnitTest.Service3>();
+                    services.AddScoped<PropertyInjectorUnitTest.IService4, PropertyInjectorUnitTest.Service4>();
+                }));
         }
 
         public UnitTestBase()
