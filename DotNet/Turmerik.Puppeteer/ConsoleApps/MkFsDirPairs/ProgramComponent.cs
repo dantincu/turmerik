@@ -382,7 +382,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 mdFileNameTemplate => string.Format(
                     mdFileNameTemplate,
                     nodeArgs.FullDirNamePart)) ?? config.FileNames.With(
-                        fileNames => (fileNames.PrependTitleToNoteMdFileName ?? false).If(
+                        fileNames => fileNames.MdFileNamePfx + (fileNames.PrependTitleToNoteMdFileName ?? false).If(
                             () => nodeArgs.FullDirNamePart) + fileNames.MdFileName);
 
         private string GetFullDirNamePart(

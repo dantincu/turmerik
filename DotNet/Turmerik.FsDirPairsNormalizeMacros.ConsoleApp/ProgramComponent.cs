@@ -176,7 +176,8 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
                         break;
                 }
 
-                await rfDirPairNamesComponent.RunAsync(rfDirPairNamesArgs);
+                await rfDirPairNamesComponent.RunAsync(
+                    rfDirPairNamesArgs, false);
             }
 
             var existingPairs = await existingDirPairsRetriever.GetNoteDirPairsAsync(newPrPath);

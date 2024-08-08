@@ -25,6 +25,8 @@ namespace Turmerik.Core.DriveExplorer
             public string OpenMdFile { get; set; }
             public string SkipMdFileCreation { get; set; }
             public string SkipPdfFileCreation { get; set; }
+            public string SkipCurrentNode { get; set; }
+            public string SkipUntilPath { get; set; }
             public string CreatePdfFile { get; set; }
             public string DirNameTpl { get; set; }
             public string CreateNote { get; set; }
@@ -43,6 +45,7 @@ namespace Turmerik.Core.DriveExplorer
             public string HcySibblingNode { get; set; }
             public string Macro { get; set; }
             public string Title { get; set; }
+            public string RecursiveMatchingDirNames { get; set; }
         }
 
         public class DirNamesT
@@ -60,6 +63,7 @@ namespace Turmerik.Core.DriveExplorer
         public class FileNamesT
         {
             public string MdFileName { get; set; }
+            public string MdFileNamePfx { get; set; }
             public bool? PrependTitleToNoteMdFileName { get; set; }
             public string KeepFileName { get; set; }
         }

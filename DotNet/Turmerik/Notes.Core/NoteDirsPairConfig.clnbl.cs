@@ -85,6 +85,7 @@ namespace Turmerik.Notes.Core
             string NoteBookJsonFileName { get; }
             string NoteItemJsonFileName { get; }
             string NoteItemMdFileName { get; }
+            string NoteItemMdFileNamePfx { get; }
             bool? PrependTitleToNoteMdFileName { get; }
             string KeepFileName { get; }
         }

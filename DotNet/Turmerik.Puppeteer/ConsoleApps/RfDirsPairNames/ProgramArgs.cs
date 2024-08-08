@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
+using Turmerik.Core.LocalDeviceEnv;
 
 namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 {
     public class ProgramArgs
     {
         public bool? PrintHelpMessage { get; set; }
+        public LocalDevicePathMacrosMapMtbl LocalDevicePathsMap { get; set; }
         public string ParentDirPath { get; set; }
         public string ShortNameDirPath { get; set; }
         public string ShortDirName { get; set; }
@@ -19,5 +22,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         public bool? InteractiveMode { get; set; }
         public bool? UpdateMdFile { get; set; }
         public bool? SkipPdfFileCreation { get; set; }
+        public bool? SkipShortNameDirPath { get; set; }
+        public string? SkipUntilPath { get; set; }
+        public string[]? RecursiveMatchingDirNamesArr { get; set; }
+        public Regex[]? RecursiveMatchingDirNameRegexsArr { get; set; }
     }
 }

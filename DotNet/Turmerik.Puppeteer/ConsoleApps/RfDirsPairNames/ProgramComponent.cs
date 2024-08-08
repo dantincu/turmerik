@@ -1,15 +1,20 @@
-﻿using System;
+﻿using Markdig;
+using PuppeteerSharp;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Text;
+using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Md;
@@ -24,8 +29,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         Task<Tuple<string?, string?>> RunAsync(
             string[] rawArgs);
 
-        Task<string> RunAsync(
-            WorkArgs wka);
+        Task<string?> RunAsync(
+            WorkArgs wka,
+            bool normalizeArgs = true);
 
         void NormalizeArgs(ProgramArgs args);
     }
@@ -37,6 +43,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IConsoleArgsParser consoleArgsParser;
         private readonly MdToPdf.IProgramComponent mdToPdfProgramComponent;
+        private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
+        private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly DirsPairConfig config;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly NoteDirsPairConfigMtbl noteDirsPairCfg;
@@ -47,7 +55,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             IConsoleMsgPrinter consoleMsgPrinter,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IConsoleArgsParser consoleArgsParser,
-            MdToPdf.IProgramComponent mdToPdfProgramComponent)
+            MdToPdf.IProgramComponent mdToPdfProgramComponent,
+            ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
+            ITextMacrosReplacer textMacrosReplacer)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -63,6 +73,12 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
             this.mdToPdfProgramComponent = mdToPdfProgramComponent ?? throw new ArgumentNullException(
                 nameof(mdToPdfProgramComponent));
+
+            this.localDevicePathMacrosRetriever = localDevicePathMacrosRetriever ?? throw new ArgumentNullException(
+                nameof(localDevicePathMacrosRetriever));
+
+            this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
+                nameof(textMacrosReplacer));
 
             config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
                 File.ReadAllText(Path.Combine(
@@ -92,7 +108,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                     Args = args
                 };
 
-                newFullDirNamePart = await RunAsync(wka);
+                newFullDirNamePart = await RunAsync(
+                    wka, false);
             }
             else
             {
@@ -103,56 +120,110 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             return Tuple.Create(title, newFullDirNamePart);
         }
 
-        public async Task<string> RunAsync(
-            WorkArgs wka)
+        public async Task<string?> RunAsync(
+            WorkArgs wka,
+            bool normalizeArgs = true)
+        {
+            (var stopSkipping, var newFullDirNamePart) = await RunCoreAsync(wka, normalizeArgs);
+            return newFullDirNamePart;
+        }
+
+        private async Task<Tuple<bool, string>> RunCoreAsync(
+            WorkArgs wka,
+            bool normalizeArgs)
         {
             var args = wka.Args;
 
-            string newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(
-                wka.Args.MdTitle,
-                config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
-
-            string newMdFileName = GetMdFileName(newFullDirNamePart);
-
-            string newFullDirName = GetFullDirNamePart(
-                args, newFullDirNamePart);
-
-            if (newMdFileName != args.MdFileName)
+            if (normalizeArgs)
             {
-                TryRenameMdFile(wka, newMdFileName);
+                NormalizeArgs(args);
             }
 
-            if (args.UpdateMdFile == true)
+            string? newFullDirNamePart = null;
+
+            bool stopSkipping = args.SkipUntilPath == null || (
+                args.SkipUntilPath == args.ShortNameDirPath);
+
+            if (args.SkipShortNameDirPath != true && stopSkipping)
             {
-                if (!string.IsNullOrWhiteSpace(wka.Args.MdTitle))
+                newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(
+                    wka.Args.MdTitle,
+                    config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
+
+                string newMdFileName = GetMdFileName(newFullDirNamePart);
+
+                string newFullDirName = GetFullDirNamePart(
+                    args, newFullDirNamePart);
+
+                if (newMdFileName != args.MdFileName)
                 {
-                    string newMdFilePath = Path.Combine(
-                        args.ShortNameDirPath,
-                        newMdFileName);
-
-                    MdH.UpdateMdTitleFromFile(
-                        newMdFilePath,
-                        (title, line, idx, linesArr) => wka.Args.MdTitle);
+                    TryRenameMdFile(wka, newMdFileName);
                 }
-                else
+
+                if (args.UpdateMdFile == true)
                 {
-                    throw new Exception("Trying to update the md file but no title found");
-                }
-            }
-
-            TryRenameFullNameDir(wka, newFullDirName);
-
-            if ((config.CreatePdfFile ?? false) && args.SkipPdfFileCreation != true)
-            {
-                await mdToPdfProgramComponent.RunAsync(
-                    new MdToPdf.ProgramArgs
+                    if (!string.IsNullOrWhiteSpace(wka.Args.MdTitle))
                     {
-                        WorkDir = wka.Args.ShortNameDirPath,
-                        RemoveExisting = true
-                    });
+                        string newMdFilePath = Path.Combine(
+                            args.ShortNameDirPath,
+                            newMdFileName);
+
+                        MdH.UpdateMdTitleFromFile(
+                            newMdFilePath,
+                            (title, line, idx, linesArr) => wka.Args.MdTitle);
+                    }
+                    else
+                    {
+                        throw new Exception("Trying to update the md file but no title found");
+                    }
+                }
+
+                TryRenameFullNameDir(wka, newFullDirName);
+
+                if ((config.CreatePdfFile ?? false) && args.SkipPdfFileCreation != true)
+                {
+                    await mdToPdfProgramComponent.RunAsync(
+                        new MdToPdf.ProgramArgs
+                        {
+                            WorkDir = wka.Args.ShortNameDirPath,
+                            RemoveExisting = true
+                        });
+                }
             }
 
-            return newFullDirNamePart;
+            if (args.RecursiveMatchingDirNameRegexsArr != null)
+            {
+                var subFoldersArr = Directory.GetDirectories(
+                    args.ShortNameDirPath);
+
+                var subFolderPgArgsArr = subFoldersArr.Where(
+                    folder => args.RecursiveMatchingDirNameRegexsArr?.Any(
+                        regex => regex.IsMatch(folder)) ?? true).Select(
+                    folder => new ProgramArgs
+                    {
+                        LocalDevicePathsMap = args.LocalDevicePathsMap,
+                        ShortNameDirPath = folder,
+                        SkipPdfFileCreation = args.SkipPdfFileCreation,
+                        SkipUntilPath = args.SkipUntilPath,
+                        RecursiveMatchingDirNameRegexsArr = args.RecursiveMatchingDirNameRegexsArr,
+                        RecursiveMatchingDirNamesArr = args.RecursiveMatchingDirNamesArr
+                    }).ToArray();
+
+                foreach (var subFolderPgArgs in subFolderPgArgsArr)
+                {
+                    if (stopSkipping)
+                    {
+                        subFolderPgArgs.SkipUntilPath = null;
+                    }
+
+                    (stopSkipping, _) = await RunCoreAsync(new WorkArgs
+                    {
+                        Args = subFolderPgArgs
+                    }, true);
+                }
+            }
+
+            return Tuple.Create(stopSkipping, newFullDirNamePart);
         }
 
         private void PrintHelpMessage(
@@ -202,6 +273,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
                 string.Join(" ", optsHead($":{argOpts.PrintHelpMessage}", ""),
                     $"Prints this help message to the console",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
+                string.Join(" ", optsHead($":{argOpts.SkipCurrentNode}", ""),
+                    $"Skips the current dir path",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
 
                 string.Join(" ", $"Here is a list of arguments {m.ThisTool.L} supports",
@@ -368,10 +443,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                         ThrowOnUnknownFlag = true,
                         ItemHandlersArr = [
                             consoleArgsParser.ArgsItemOpts(data,
-                                data => data.Args.ShortNameDirPath = data.ArgItem.Nullify(true)?.With(
-                                    path => NormPathH.NormPath(
-                                        path, (path, isRooted) => isRooted.If(
-                                            () => path, () => Path.GetFullPath(path))))!),
+                                data => data.Args.ShortNameDirPath = data.ArgItem.Nullify(true)),
                             consoleArgsParser.ArgsItemOpts(data,
                                 data => data.Args.MdFileName = data.ArgItem.Nullify(true)),
                             consoleArgsParser.ArgsItemOpts(data,
@@ -381,6 +453,15 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.PrintHelpMessage.Arr(),
                                 data => data.Args.PrintHelpMessage = true, true),
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.SkipCurrentNode.Arr(),
+                                data => data.Args.SkipShortNameDirPath = true, true),
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.SkipUntilPath.Arr(),
+                                data => data.Args.SkipUntilPath = data.ArgFlagValue.Single()),
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.RecursiveMatchingDirNames.Arr(),
+                                data => data.Args.RecursiveMatchingDirNamesArr = data.ArgFlagValue),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.InteractiveMode.Arr(),
                                 data => data.Args.InteractiveMode = true),
@@ -409,63 +490,78 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         public void NormalizeArgs(ProgramArgs args)
         {
             bool autoChoose = args.InteractiveMode != true;
-            args.ShortNameDirPath ??= Environment.CurrentDirectory;
+            args.LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile();
 
-            if (args.MdTitle != null)
+            args.ShortNameDirPath = textMacrosReplacer.NormalizePath(
+                args.LocalDevicePathsMap,
+                args.ShortNameDirPath,
+                null);
+
+            args.SkipUntilPath = args.SkipUntilPath?.With(
+                path => textMacrosReplacer.NormalizePath(
+                    args.LocalDevicePathsMap, path, args.ShortNameDirPath));
+
+            args.RecursiveMatchingDirNameRegexsArr = args.RecursiveMatchingDirNamesArr?.Select(
+                dirName => new Regex(dirName)).ToArray();
+
+            if (args.SkipShortNameDirPath != true && (args.SkipUntilPath == null || args.SkipUntilPath == args.ShortNameDirPath))
             {
-                args.UpdateMdFile = true;
-            }
-
-            if (Directory.Exists(args.ShortNameDirPath))
-            {
-                string mdTitle = null;
-
-                args.MdFileName ??= GetMdFile(
-                    args.ShortNameDirPath,
-                    out mdTitle,
-                    autoChoose);
-
-                args.MdTitle ??= mdTitle;
-
-                if (args.MdFileName != null)
+                if (args.MdTitle != null)
                 {
-                    args.MdFilePath = Path.Combine(
-                        args.ShortNameDirPath,
-                        args.MdFileName);
+                    args.UpdateMdFile = true;
                 }
-            }
-            else if (File.Exists(args.ShortNameDirPath))
-            {
-                args.MdFilePath = args.ShortNameDirPath;
 
-                args.MdFileName = Path.GetFileName(
-                    args.MdFilePath);
+                if (Directory.Exists(args.ShortNameDirPath))
+                {
+                    string mdTitle = null;
 
-                args.ShortNameDirPath = Path.GetDirectoryName(
-                    args.MdFilePath);
-            }
+                    args.MdFileName ??= GetMdFile(
+                        args.ShortNameDirPath,
+                        out mdTitle,
+                        autoChoose);
 
-            args.ParentDirPath = Path.GetDirectoryName(
-                args.ShortNameDirPath);
+                    args.MdTitle ??= mdTitle;
 
-            args.ShortDirName = Path.GetFileName(
-                args.ShortNameDirPath);
+                    if (args.MdFileName != null)
+                    {
+                        args.MdFilePath = Path.Combine(
+                            args.ShortNameDirPath,
+                            args.MdFileName);
+                    }
+                }
+                else if (File.Exists(args.ShortNameDirPath))
+                {
+                    args.MdFilePath = args.ShortNameDirPath;
 
-            if ((args.FullDirName = GetFullDirName(
-                args, autoChoose,
-                out string fullDirNamePartStr)) != null)
-            {
-                args.FullDirPath = Path.Combine(
-                    args.ParentDirPath,
-                    args.FullDirName);
+                    args.MdFileName = Path.GetFileName(
+                        args.MdFilePath);
 
-                args.FullDirNamePart = fullDirNamePartStr;
+                    args.ShortNameDirPath = Path.GetDirectoryName(
+                        args.MdFilePath);
+                }
+
+                args.ParentDirPath = Path.GetDirectoryName(
+                    args.ShortNameDirPath);
+
+                args.ShortDirName = Path.GetFileName(
+                    args.ShortNameDirPath);
+
+                if ((args.FullDirName = GetFullDirName(
+                    args, autoChoose,
+                    out string fullDirNamePartStr)) != null)
+                {
+                    args.FullDirPath = Path.Combine(
+                        args.ParentDirPath,
+                        args.FullDirName);
+
+                    args.FullDirNamePart = fullDirNamePartStr;
+                }
             }
         }
 
         private string GetMdFileName(
             string fullDirNamePart) => config.FileNames.With(
-                fileNames => (fileNames.PrependTitleToNoteMdFileName ?? false).If(
+                fileNames => fileNames.MdFileNamePfx + (fileNames.PrependTitleToNoteMdFileName ?? false).If(
                     () => fullDirNamePart) + fileNames.MdFileName);
 
         private string GetFullDirNamePart(

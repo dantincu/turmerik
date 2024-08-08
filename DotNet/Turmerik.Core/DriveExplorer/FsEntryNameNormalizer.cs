@@ -30,6 +30,11 @@ namespace Turmerik.Core.DriveExplorer
                 charsList,
                 maxLength);
 
+            if (charsList.LastOrDefault() == '.')
+            {
+                charsList.Add('%');
+            }
+
             return new string(
                 charsList.ToArray()).Trim();
         }
@@ -52,11 +57,6 @@ namespace Turmerik.Core.DriveExplorer
                 {
                     charsList.Add(chrToAdd);
                 }
-            }
-
-            if (charsList.LastOrDefault() == '.')
-            {
-                charsList.Add('%');
             }
 
             return charsList;

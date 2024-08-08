@@ -9,6 +9,9 @@
     "OpenMdFile": "o",
     "SkipMdFileCreation": "skmd",
     "SkipPdfFileCreation": "skpdf",
+    "SkipCurrentNode": "skcrnt",
+    "SkipUntilPath": "skup",
+    "CreatePdfFile": "pdf",
     "DirNameTpl": "t",
     "CreateNote": "n",
     "CreateNoteSection": "s",
@@ -25,7 +28,8 @@
     "HcyParentNode": "-",
     "HcySibblingNode": "=",
     "Macro": "m",
-    "Title": "t"
+    "Title": "t",
+    "RecursiveMatchingDirNames": "rec"
   },
   "DirNames": {
     "DefaultJoinStr": "-",
@@ -46,6 +50,7 @@
   },
   "FileNames": {
     "MdFileName": "[note].md",
+    "MdFileNamePfx": "0-",
     "PrependTitleToNoteMdFileName": true,
     "KeepFileName": ".keep"
   },

@@ -194,6 +194,7 @@ namespace Turmerik.Notes.Core
                 NoteBookJsonFileName = src.NoteBookJsonFileName;
                 NoteItemJsonFileName = src.NoteItemJsonFileName;
                 NoteItemMdFileName = src.NoteItemMdFileName;
+                NoteItemMdFileNamePfx = src.NoteItemMdFileNamePfx;
                 PrependTitleToNoteMdFileName = src.PrependTitleToNoteMdFileName;
                 KeepFileName = src.KeepFileName;
             }
@@ -201,6 +202,7 @@ namespace Turmerik.Notes.Core
             public string NoteBookJsonFileName { get; }
             public string NoteItemJsonFileName { get; }
             public string NoteItemMdFileName { get; }
+            public string NoteItemMdFileNamePfx { get; }
             public bool? PrependTitleToNoteMdFileName { get; }
             public string KeepFileName { get; }
         }
