@@ -420,6 +420,14 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             }
 
             nodeArgs.Title ??= nodeArgs.ResTitle;
+
+            if (nodeArgs.Title != null)
+            {
+                nodeArgs.Title = TextMacrosH.ReplaceMacros(
+                    nodeArgs.Title,
+                    config.DirNames.MacrosMap);
+            }
+
             nodeArgs.FullDirNameJoinStr ??= config.DirNames.DefaultJoinStr;
 
             nodeArgs.FullDirNamePart = GetFullDirNamePart(

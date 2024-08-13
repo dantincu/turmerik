@@ -183,6 +183,7 @@
       "NoteBookJsonFileName": "[note-book].json",
       "NoteItemJsonFileName": "[note].json",
       "NoteItemMdFileName": "[note].md",
+      "NoteItemMdFileNamePfx": "0-",
       "PrependTitleToNoteMdFileName": true,
       "KeepFileName": ".keep"
     },

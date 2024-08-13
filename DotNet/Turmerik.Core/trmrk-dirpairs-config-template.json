@@ -46,6 +46,24 @@
         "DirNameTpl": "[note-book]",
         "MdFileNameTemplate": ""
       }
+    },
+    "MacrosMap": {
+      "|m|": "$misc$",
+      "|a|": "$articles$",
+      "|p|": "$persons$",
+      "|nf|": "$infamous$",
+      "|pp|": "$public-persons$",
+      "|hf|": "$historical-figures$",
+      "|tc|": "$terms-and-concepts$",
+      "|ps|": "$products-and-services$",
+      "|egna|": "$environment-geography-nature-and-agriculture$",
+      "|pl|": "$places$",
+      "|gr|": "$geographical-regions$",
+      "|plgr|": "$places-and-geographical-regions$",
+      "|plyr|": "$players$",
+      "|athl|": "$athletes$",
+      "|fplyr|": "$former-players$",
+      "|fathl|": "$former-athletes$"
     }
   },
   "FileNames": {
@@ -73,7 +91,11 @@
       "egna": [ ":s", "$environment-geography-nature-and-agriculture$", ":=" ],
       "pl": [ ":s", "$places$", ":=" ],
       "gr": [ ":s", "$geographical-regions$", ":=" ],
-      "plgr": [ ":s", "$places-and-geographical-regions$", ":=" ]
+      "plgr": [ ":s", "$places-and-geographical-regions$", ":=" ],
+      "plyr": [ ":s", "$players$", ":=" ],
+      "athl": [ ":s", "$athletes$", ":=" ],
+      "fplyr": [ ":s", "$former-players$", ":=" ],
+      "fathl": [ ":s", "$former-athletes$", ":=" ]
     }
   }
 }

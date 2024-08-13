@@ -118,9 +118,10 @@ namespace Turmerik.TextParsing.Md
         public static string EncodeForMd(string str)
         {
             str = HttpUtility.HtmlEncode(str);
-            str = str.Replace("\\", "\\\\");
 
-            str = str.Replace("_", "\\_");
+            /* str = str.Replace("\\", "\\\\");
+            str = str.Replace("_", "\\_"); */
+
             return str;
         }
 

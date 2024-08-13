@@ -101,7 +101,7 @@ namespace Turmerik.Core.DriveExplorer
             char chr) => chr switch
             {
                 '/' => '%',
-                _ => default
+                _ => ' '
             };
 
         private char HandleConsecutiveSpacesIfReq(

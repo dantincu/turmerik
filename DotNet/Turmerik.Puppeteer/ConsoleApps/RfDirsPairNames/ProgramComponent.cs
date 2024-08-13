@@ -509,6 +509,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                 if (args.MdTitle != null)
                 {
                     args.UpdateMdFile = true;
+
+                    args.MdTitle = TextMacrosH.ReplaceMacros(
+                        args.MdTitle,
+                        config.DirNames.MacrosMap);
                 }
 
                 if (Directory.Exists(args.ShortNameDirPath))
