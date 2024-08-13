@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 
 namespace Turmerik.Html
@@ -55,7 +57,10 @@ namespace Turmerik.Html
             var titleNode = headNode?.ChildNodes.FirstOrDefault(
                 node => node.Name == "title");
 
-            string title = titleNode?.InnerText;
+            // string title = titleNode?.InnerText;
+            string title = titleNode?.InnerHtml.With(
+                str => HttpUtility.HtmlDecode(str));
+
             return title;
         }
 

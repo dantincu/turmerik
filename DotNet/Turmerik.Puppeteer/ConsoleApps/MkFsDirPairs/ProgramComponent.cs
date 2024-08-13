@@ -347,9 +347,17 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             }
         }
 
-        private Task<string> GetResouceTitleCoreAsync(
-            string resUrl) => htmlDocTitleRetriever.GetResouceTitleAsync(
-                resUrl);
+        private async Task<string> GetResouceTitleCoreAsync(
+            string resUrl)
+        {
+            string title = await htmlDocTitleRetriever.GetResouceTitleAsync(resUrl);
+
+            title = title.Trim().ReplaceChars(
+                c => ' ', char.IsWhiteSpace).Split(
+                [ ' ' ], StringSplitOptions.RemoveEmptyEntries).JoinStr(" ");
+
+            return title;
+        }
 
         private DirsPairOpts GetDirsPairOpts(
             string workDir,
@@ -733,16 +741,26 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         {
             switch (argFlagValue.Length)
             {
+                case 0:
+                case 1:
+                    throw new ArgumentException(
+                        nameof(ProgramArgs.Node.Url));
                 case 2:
                     urlOption = null;
                     break;
-                case 3:
-                    urlOption = argFlagValue.First();
-                    argFlagValue = argFlagValue.Skip(1).ToArray();
-                    break;
                 default:
-                    throw new ArgumentException(
-                        nameof(ProgramArgs.Node.Url));
+                    urlOption = argFlagValue.First();
+
+                    if ("-".Arr().Contains(urlOption))
+                    {
+                        argFlagValue = argFlagValue.Skip(1).ToArray();
+                    }
+                    else
+                    {
+                        urlOption = null;
+                    }
+
+                    break;
             }
 
             string url = argFlagValue.JoinStr(":");
