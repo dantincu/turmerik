@@ -50,6 +50,7 @@
     "MacrosMap": {
       "|m|": "$misc$",
       "|a|": "$articles$",
+      "|art|": "$artists$",
       "|p|": "$persons$",
       "|nf|": "$infamous$",
       "|pp|": "$public-persons$",
@@ -82,6 +83,7 @@
     "Map": {
       "m": [ ":s", "$misc$", ":=" ],
       "a": [ ":s", "$articles$", ":=" ],
+      "art": [ ":s", "$artists$", ":=" ],
       "p": [ ":s", "$persons$", ":=" ],
       "nf": [ ":s", "$infamous$", ":=" ],
       "pp": [ ":s", "$public-persons$", ":=" ],

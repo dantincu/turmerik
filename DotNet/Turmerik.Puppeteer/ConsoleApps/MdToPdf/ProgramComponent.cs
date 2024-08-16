@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Timers;
 using Turmerik.Core.ConsoleApps;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
@@ -105,12 +106,24 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
         {
             NormalizeArgs(pgArgs);
 
+            var startTime = DateTime.UtcNow;
+
             await PuppeteerH.WithNewPageAsync(
                 (page, browser) => RunCoreAsync(
                     pgArgs,
                     page,
                     browser,
                     MarkdigH.GetMarkdownPipeline()));
+
+            var endTime = DateTime.UtcNow;
+            var elapsed = endTime - startTime;
+            var elapsedSeconds = elapsed.TotalSeconds;
+
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("Total elapsed seconds: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(elapsedSeconds);
+            Console.ResetColor();
         }
 
         private ProgramArgs GetArgs(
