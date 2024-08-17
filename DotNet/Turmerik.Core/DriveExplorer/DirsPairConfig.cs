@@ -20,6 +20,7 @@ namespace Turmerik.Core.DriveExplorer
         public class ArgOptionsT
         {
             public string PrintHelpMessage { get; set; }
+            public string PrintConfigSection { get; set; }
             public string WorkDir { get; set; }
             public string InteractiveMode { get; set; }
             public string OpenMdFile { get; set; }

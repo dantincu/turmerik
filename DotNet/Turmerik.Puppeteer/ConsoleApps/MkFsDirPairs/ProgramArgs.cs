@@ -10,6 +10,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
     public class ProgramArgs
     {
         public bool? PrintHelpMessage { get; set; }
+        public PrintConfigSectionType? PrintConfigSection { get; set; }
         public string WorkDir { get; set; }
 
         public Node Current { get; set; }
@@ -42,6 +43,14 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public int ArgsCount { get; set; }
             public Node ParentNode { get; set; }
             public List<Node> ChildNodes { get; set; }
+        }
+
+        public enum PrintConfigSectionType
+        {
+            AllowedValues = 0,
+            ArgOpts,
+            DirNamesMacrosMap,
+            MacrosMap
         }
     }
 }

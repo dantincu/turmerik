@@ -91,6 +91,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             {
                 PrintHelpMessage(args);
             }
+            else if (args.PrintConfigSection.HasValue)
+            {
+                PrintConfigSection(args,
+                    args.PrintConfigSection.Value);
+            }
             else
             {
                 await NormalizeArgsAsync(args);
@@ -239,6 +244,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     $"Moves up to the parent node to further create sibblings or other children",
                     $"for the parent node{{{x.NewLine}}}{{{x.NewLine}}}"),
 
+                string.Join(" ", optsHead($":{argOpts.PrintConfigSection}", ""),
+                    $"Prints the specified config section to console",
+                    $"{{{x.NewLine}}}{{{x.NewLine}}}"),
+
                 string.Join(" ", optsHead($":{argOpts.PrintHelpMessage}", ""),
                     $"Prints this help message to the console",
                     $"{{{x.NewLine}}}{{{x.NewLine}}}"),
@@ -263,6 +272,49 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     $"{{{x.Splitter}}}{{{x.NewLine}}}{{{x.NewLine}}}")];
 
             consoleMsgPrinter.Print(linesArr, null, x);
+        }
+
+        private void PrintConfigSection(
+            ProgramArgs args,
+            ProgramArgs.PrintConfigSectionType printConfigSectionType)
+        {
+            object configSection = null;
+
+            switch (printConfigSectionType)
+            {
+                case ProgramArgs.PrintConfigSectionType.AllowedValues:
+                    break;
+                case ProgramArgs.PrintConfigSectionType.ArgOpts:
+                    configSection = config.ArgOpts;
+                    break;
+                case ProgramArgs.PrintConfigSectionType.DirNamesMacrosMap:
+                    configSection = config.DirNames.MacrosMap;
+                    break;
+                case ProgramArgs.PrintConfigSectionType.MacrosMap:
+                    configSection = config.Macros.Map;
+                    break;
+                default:
+                    throw new NotSupportedException(
+                        $"{nameof(printConfigSectionType)}: {printConfigSectionType}");
+            }
+
+            configSection ??= EnumsH.GetValues<ProgramArgs.PrintConfigSectionType>().ToDictionary(
+                value => (int)value,
+                value => value.ToString());
+
+            string configSectionJson = jsonConversion.Adapter.Serialize(configSection);
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+
+            Console.WriteLine("Printing config section: ");
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+
+            Console.WriteLine(configSectionJson);
+            Console.WriteLine();
+
+            Console.ResetColor();
         }
 
         private async Task RunAsync(
@@ -689,6 +741,33 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.PrintHelpMessage.Arr(),
                                             data => data.Args.PrintHelpMessage = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.PrintConfigSection.Arr(),
+                                            data =>
+                                            {
+                                                string? argFlagValue = data.ArgFlagValue!.SingleOrDefault();
+
+                                                if (argFlagValue != null)
+                                                {
+                                                    if (int.TryParse(
+                                                    argFlagValue,
+                                                    out int value))
+                                                    {
+                                                        data.Args.PrintConfigSection = (
+                                                            ProgramArgs.PrintConfigSectionType)value;
+                                                    }
+                                                    else if (Enum.TryParse<ProgramArgs.PrintConfigSectionType>(
+                                                        argFlagValue,
+                                                        out var enumValue))
+                                                    {
+                                                        data.Args.PrintConfigSection = enumValue;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    data.Args.PrintConfigSection = ProgramArgs.PrintConfigSectionType.AllowedValues;
+                                                }
+                                            }),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.WorkDir.Arr(),
                                             data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
