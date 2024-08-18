@@ -102,15 +102,25 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             {
                 await NormalizeArgsAsync(args);
 
-                await PuppeteerH.WithNewPageAsync(
-                    async (page, browser) =>
-                    {
-                        foreach (var nodeArgs in args.RootNodes)
+                if (args.HasNodeRequiringPdf)
+                {
+                    await PuppeteerH.WithNewPageAsync(
+                        async (page, browser) =>
                         {
-                            await RunAsync(
-                                args.WorkDir, nodeArgs, page, browser);
-                        }
-                    });
+                            foreach (var nodeArgs in args.RootNodes)
+                            {
+                                await RunAsync(
+                                    args.WorkDir, nodeArgs, page, browser);
+                            }
+                        });
+                }
+                else
+                {
+                    foreach (var nodeArgs in args.RootNodes)
+                    {
+                        await RunAsync(args.WorkDir, nodeArgs);
+                    }
+                }
             }
         }
 
@@ -321,9 +331,86 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
         private async Task RunAsync(
             string workDir,
+            ProgramArgs.Node nodeArgs)
+        {
+            (var shortNameDir,
+                var mdFilePath,
+                var mdFile) = await RunAsyncCore(
+                workDir,
+                nodeArgs);
+
+            string childNodesWorkDir = Path.Combine(
+                workDir, shortNameDir.Name);
+
+            foreach (var childNodeArgs in nodeArgs.ChildNodes)
+            {
+                await RunAsync(
+                    childNodesWorkDir,
+                    childNodeArgs);
+            }
+        }
+
+        private async Task RunAsync(
+            string workDir,
             ProgramArgs.Node nodeArgs,
             IPage page,
             IBrowser browser)
+        {
+            (var shortNameDir, 
+               var mdFilePath,
+               var mdFile) = await RunAsyncCore(
+                workDir,
+                nodeArgs);
+
+            if (mdFile != null)
+            {
+                if (nodeArgs.CreatePdfFile || (config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation))
+                {
+                    string md = File.ReadAllText(mdFilePath);
+                    string html = Markdown.ToHtml(md);
+
+                    string htmlFileName = string.Join(".", mdFile.Name, "html");
+                    string pdfFileName = string.Join(".", mdFile.Name, "pdf");
+
+                    string htmlFilePath = Path.Combine(
+                        shortNameDir.Idnf,
+                        htmlFileName);
+
+                    string pdfFilePath = Path.Combine(
+                        shortNameDir.Idnf,
+                        pdfFileName);
+
+                    File.WriteAllText(htmlFilePath, html);
+
+                    await PuppeteerH.HtmlToPdfFile(
+                        htmlFilePath,
+                        pdfFilePath,
+                        browser,
+                        page);
+
+                    if (nmdParser.IsTrivialDoc(md))
+                    {
+                        File.Delete(htmlFilePath);
+                    }
+                }
+            }
+
+            string childNodesWorkDir = Path.Combine(
+                workDir, shortNameDir.Name);
+
+            foreach (var childNodeArgs in nodeArgs.ChildNodes)
+            {
+                await RunAsync(
+                    childNodesWorkDir,
+                    childNodeArgs,
+                    page,
+                    browser);
+            }
+        }
+
+        private async Task<Tuple<DriveItemX, string?, DriveItemX?>> RunAsyncCore(
+            string workDir,
+            ProgramArgs.Node nodeArgs)
         {
             var opts = GetDirsPairOpts(workDir, nodeArgs);
             var dirsPair = await dirsPairCreator.CreateDirsPairAsync(opts);
@@ -347,10 +434,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             Console.ResetColor();
 
             var mdFile = shortNameDir.FolderFiles?.SingleOrDefault();
+            string? mdFilePath = null;
 
             if (mdFile != null)
             {
-                string mdFilePath = Path.Combine(
+                mdFilePath = Path.Combine(
                     shortNameDir.Idnf,
                     mdFile.Name);
 
@@ -358,47 +446,12 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 {
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
                 }
-                
-                if (nodeArgs.CreatePdfFile || (config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation))
-                {
-                    string md = File.ReadAllText(mdFilePath);
-                    string html = Markdown.ToHtml(md);
-
-                    string htmlFileName = string.Join(".", mdFile.Name, "html");
-                    string pdfFileName = string.Join(".", mdFile.Name, "pdf");
-
-                    string htmlFilePath = Path.Combine(
-                        shortNameDir.Idnf,
-                        htmlFileName);
-
-                    string pdfFilePath = Path.Combine(
-                        shortNameDir.Idnf,
-                        pdfFileName);
-
-                    File.WriteAllText(htmlFilePath, html);
-
-                    await PuppeteerH.HtmlToPdfFile(
-                        htmlFilePath,
-                        pdfFilePath);
-
-                    if (nmdParser.IsTrivialDoc(md))
-                    {
-                        File.Delete(htmlFilePath);
-                    }
-                }
             }
 
-            string childNodesWorkDir = Path.Combine(
-                workDir, shortNameDir.Name);
-
-            foreach (var childNodeArgs in nodeArgs.ChildNodes)
-            {
-                await RunAsync(
-                    childNodesWorkDir,
-                    childNodeArgs,
-                    page,
-                    browser);
-            }
+            return Tuple.Create(
+                shortNameDir,
+                mdFilePath,
+                mdFile);
         }
 
         private async Task<string> GetResouceTitleCoreAsync(
@@ -644,7 +697,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             string[] rawArgs) => parser.Parse(
                 new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
                 {
-                    ArgsFactory = () => new ProgramArgs().ActWith(args =>
+                    ArgsFactory = () => new ProgramArgs
+                    {
+                        HasNodeRequiringPdf = config.CreatePdfFile ?? false
+                    }.ActWith(args =>
                     {
                         args.Current = new ProgramArgs.Node
                         {
@@ -796,7 +852,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                             data => data.Args.Current.SkipPdfFileCreation = true, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreatePdfFile.Arr(),
-                                            data => data.Args.Current.CreatePdfFile = true, true),
+                                            data =>
+                                            {
+                                                data.Args.Current.CreatePdfFile = true;
+                                                data.Args.HasNodeRequiringPdf = true;
+                                            }, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNote.Arr(),
                                             data => data.Args.Current.CreateNote = true, true),

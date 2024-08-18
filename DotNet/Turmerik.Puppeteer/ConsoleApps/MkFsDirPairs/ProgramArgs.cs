@@ -12,6 +12,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         public bool? PrintHelpMessage { get; set; }
         public PrintConfigSectionType? PrintConfigSection { get; set; }
         public string WorkDir { get; set; }
+        public bool HasNodeRequiringPdf { get; set; }
 
         public Node Current { get; set; }
 
@@ -39,8 +40,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public bool CreateNoteBook { get; set; }
             public bool CreateNoteInternalsDir { get; set; }
             public bool CreateNoteFilesDir { get; set; }
-
             public int ArgsCount { get; set; }
+
             public Node ParentNode { get; set; }
             public List<Node> ChildNodes { get; set; }
         }

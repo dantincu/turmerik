@@ -49,6 +49,7 @@
               "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.json$",
               "^\\/Bin\\/.+\\/app-env-locator\\.json$",
               "^\\/Bin\\/.+\\/trmrk-dirpairs-config\\.json$",
+              "^\\/Bin\\/.+\\/trmrk-dirpairs-config\\..+\\.json$",
               "^\\/Bin\\/.+\\/trmrk-notes-config\\.json$",
               "^\\/Bin\\/.+\\/trmrk-localdevice-paths\\.json$"
             ]

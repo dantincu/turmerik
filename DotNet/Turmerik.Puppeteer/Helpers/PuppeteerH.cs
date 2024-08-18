@@ -47,12 +47,24 @@ namespace Turmerik.Puppeteer.Helpers
             string pdfFilePath,
             LaunchOptions? launchOptions = null,
             Func<IBrowser, Task> browserCallback = null) => WithNewPageAsync(
-                async(page, browser) =>
-                {
-                    var htmlUri = new Uri(htmlFilePath).AbsoluteUri;
-                    await page.GoToAsync(htmlUri);
-                    await page.EvaluateExpressionHandleAsync("document.fonts.ready"); // Wait for fonts to be loaded. Omitting this might result in no text rendered in pdf.
-                    await page.PdfAsync(pdfFilePath);
-                }, launchOptions, browserCallback);
+                (page, browser) => HtmlToPdfFile(
+                    htmlFilePath,
+                    pdfFilePath,
+                    browser,
+                    page),
+                launchOptions,
+                browserCallback);
+
+        public static async Task HtmlToPdfFile(
+            string htmlFilePath,
+            string pdfFilePath,
+            IBrowser browser,
+            IPage page)
+        {
+            var htmlUri = new Uri(htmlFilePath).AbsoluteUri;
+            await page.GoToAsync(htmlUri);
+            await page.EvaluateExpressionHandleAsync("document.fonts.ready"); // Wait for fonts to be loaded. Omitting this might result in no text rendered in pdf.
+            await page.PdfAsync(pdfFilePath);
+        }
     }
 }

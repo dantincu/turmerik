@@ -6,6 +6,8 @@ namespace Turmerik.Core.DriveExplorer
 {
     public class DirsPairConfig
     {
+        public string[]? NestedConfigFilePathsArr { get; set; }
+
         public int? FileNameMaxLength { get; set; }
         public bool? ThrowIfAnyItemAlreadyExists { get; set; }
         public string TrmrkGuidInputName { get; set; }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.DriveExplorer
 {
@@ -16,6 +19,30 @@ namespace Turmerik.Core.DriveExplorer
         DirsPairConfig NormalizeConfig(
             DirsPairConfig config,
             string configFilePath);
+
+        DirsPairConfig NormalizeConfig(
+            DirsPairConfig config,
+            DirsPairConfig nestedConfig);
+
+        DirsPairConfig.ArgOptionsT NormalizeConfig(
+            DirsPairConfig.ArgOptionsT config,
+            DirsPairConfig.ArgOptionsT nestedConfig);
+
+        DirsPairConfig.DirNamesT NormalizeConfig(
+            DirsPairConfig.DirNamesT config,
+            DirsPairConfig.DirNamesT nestedConfig);
+
+        DirsPairConfig.FileNamesT NormalizeConfig(
+            DirsPairConfig.FileNamesT config,
+            DirsPairConfig.FileNamesT nestedConfig);
+
+        DirsPairConfig.FileContentsT NormalizeConfig(
+            DirsPairConfig.FileContentsT config,
+            DirsPairConfig.FileContentsT nestedConfig);
+
+        DirsPairConfig.MacrosT NormalizeConfig(
+            DirsPairConfig.MacrosT config,
+            DirsPairConfig.MacrosT nestedConfig);
 
         DirsPairConfig.DirNamesT NormalizeConfig(
             DirsPairConfig.DirNamesT config,
@@ -29,6 +56,21 @@ namespace Turmerik.Core.DriveExplorer
     public class DirsPairConfigLoader : IDirsPairConfigLoader
     {
         private readonly IJsonConversion jsonConversion;
+
+        private static readonly StaticDataCache<Type, ReadOnlyCollection<PropertyInfo>> propsMap;
+
+        static DirsPairConfigLoader()
+        {
+            propsMap = new StaticDataCache<Type, ReadOnlyCollection<PropertyInfo>>(
+                type => type.GetProperties().Where(
+                    prop =>
+                    {
+                        var propType = prop.PropertyType;
+                        bool include = propType == typeof(string) || propType.IsValueType;
+
+                        return include;
+                    }).ToArray().RdnlC());
+        }
 
         public DirsPairConfigLoader(
             IJsonConversion jsonConversion)
@@ -56,6 +98,277 @@ namespace Turmerik.Core.DriveExplorer
                 config,
                 configFilePath);
 
+            if (config.NestedConfigFilePathsArr != null)
+            {
+                foreach (var nestedConfigFilePath in config.NestedConfigFilePathsArr)
+                {
+                    var nestedConfig = LoadConfig(
+                        nestedConfigFilePath);
+
+                    config = NormalizeConfig(
+                        config,
+                        nestedConfig);
+                }
+            }
+
+            return config;
+        }
+
+        public DirsPairConfig NormalizeConfig(
+            DirsPairConfig config,
+            DirsPairConfig nestedConfig)
+        {
+            /* config.FileNameMaxLength = NormNllblValue(
+                config.FileNameMaxLength,
+                nestedConfig.FileNameMaxLength);
+
+            config.ThrowIfAnyItemAlreadyExists = NormNllblValue(
+                config.ThrowIfAnyItemAlreadyExists,
+                nestedConfig.ThrowIfAnyItemAlreadyExists);
+
+            config.TrmrkGuidInputName = NormRefValue(
+                config.TrmrkGuidInputName,
+                nestedConfig.TrmrkGuidInputName);
+
+            config.CreatePdfFile = NormNllblValue(
+                config.CreatePdfFile,
+                nestedConfig.CreatePdfFile); */
+
+            NormalizeConfigCore(
+                config,
+                nestedConfig);
+
+            config.ArgOpts = NormalizeConfig(
+                config.ArgOpts ??= new(),
+                nestedConfig.ArgOpts ??= new());
+
+            config.DirNames = NormalizeConfig(
+                config.DirNames ??= new(),
+                nestedConfig.DirNames ??= new());
+
+            config.FileNames = NormalizeConfig(
+                config.FileNames ??= new(),
+                nestedConfig.FileNames ??= new());
+
+            config.FileContents = NormalizeConfig(
+                config.FileContents ??= new(),
+                nestedConfig.FileContents ??= new());
+
+            config.Macros = NormalizeConfig(
+                config.Macros ??= new(),
+                nestedConfig.Macros ??= new());
+
+            return config;
+        }
+
+        public DirsPairConfig.ArgOptionsT NormalizeConfig(
+            DirsPairConfig.ArgOptionsT config,
+            DirsPairConfig.ArgOptionsT nestedConfig)
+        {
+            /* config.PrintHelpMessage = NormRefValue(
+                config.PrintHelpMessage,
+                nestedConfig.PrintHelpMessage);
+
+            config.PrintConfigSection = NormRefValue(
+                config.PrintConfigSection,
+                nestedConfig.PrintConfigSection);
+
+            config.WorkDir = NormRefValue(
+                config.WorkDir,
+                nestedConfig.WorkDir);
+
+            config.InteractiveMode = NormRefValue(
+                config.InteractiveMode,
+                nestedConfig.InteractiveMode);
+
+            config.OpenMdFile = NormRefValue(
+                config.OpenMdFile,
+                nestedConfig.OpenMdFile);
+
+            config.SkipMdFileCreation = NormRefValue(
+                config.SkipMdFileCreation,
+                nestedConfig.SkipMdFileCreation);
+
+            config.SkipPdfFileCreation = NormRefValue(
+                config.SkipPdfFileCreation,
+                nestedConfig.SkipPdfFileCreation);
+
+            config.SkipCurrentNode = NormRefValue(
+                config.SkipCurrentNode,
+                nestedConfig.SkipCurrentNode);
+
+            config.SkipUntilPath = NormRefValue(
+                config.SkipUntilPath,
+                nestedConfig.SkipUntilPath);
+
+            config.CreatePdfFile = NormRefValue(
+                config.CreatePdfFile,
+                nestedConfig.CreatePdfFile);
+
+            config.DirNameTpl = NormRefValue(
+                config.DirNameTpl,
+                nestedConfig.DirNameTpl);
+
+            config.CreateNote = NormRefValue(
+                config.CreateNote,
+                nestedConfig.CreateNote);
+
+            config.CreateNoteSection = NormRefValue(
+                config.CreateNoteSection,
+                nestedConfig.CreateNoteSection);
+
+            config.CreateNoteBook = NormRefValue(
+                config.CreateNoteBook,
+                nestedConfig.CreateNoteBook);
+
+            config.CreateNoteInternalsDir = NormRefValue(
+                config.CreateNoteInternalsDir,
+                nestedConfig.CreateNoteInternalsDir);
+
+            config.CreateNoteFilesDir = NormRefValue(
+                config.CreateNoteFilesDir,
+                nestedConfig.CreateNoteFilesDir);
+
+            config.ConvertToNoteSections = NormRefValue(
+                config.ConvertToNoteSections,
+                nestedConfig.ConvertToNoteSections);
+
+            config.ConvertToNoteItems = NormRefValue(
+                config.ConvertToNoteItems,
+                nestedConfig.ConvertToNoteItems);
+
+            config.Url = NormRefValue(
+                config.Url,
+                nestedConfig.Url);
+
+            config.Uri = NormRefValue(
+                config.Uri,
+                nestedConfig.Uri);
+
+            config.ShowLastCreatedFirst = NormRefValue(
+                config.ShowLastCreatedFirst,
+                nestedConfig.ShowLastCreatedFirst);
+
+            config.ShowOtherDirNames = NormRefValue(
+                config.ShowOtherDirNames,
+                nestedConfig.ShowOtherDirNames);
+
+            config.HcyChildNode = NormRefValue(
+                config.HcyChildNode,
+                nestedConfig.HcyChildNode);
+
+            config.HcyParentNode = NormRefValue(
+                config.HcyParentNode,
+                nestedConfig.HcyParentNode);
+
+            config.HcySibblingNode = NormRefValue(
+                config.HcySibblingNode,
+                nestedConfig.HcySibblingNode);
+
+            config.Macro = NormRefValue(
+                config.Macro,
+                nestedConfig.Macro);
+
+            config.Title = NormRefValue(
+                config.Title,
+                nestedConfig.Title);
+
+            config.RecursiveMatchingDirNames = NormRefValue(
+                config.RecursiveMatchingDirNames,
+                nestedConfig.RecursiveMatchingDirNames); */
+
+            NormalizeConfigCore(
+                config,
+                nestedConfig);
+
+            return config;
+        }
+
+        public DirsPairConfig.DirNamesT NormalizeConfig(
+            DirsPairConfig.DirNamesT config,
+            DirsPairConfig.DirNamesT nestedConfig)
+        {
+            /* config.DefaultJoinStr = NormRefValue(
+                config.DefaultJoinStr,
+                nestedConfig.DefaultJoinStr); */
+
+            NormalizeConfigCore(
+                config,
+                nestedConfig);
+
+            config.DirNamesTplMap = NormMaps(
+                config.DirNamesTplMap ??= new (),
+                nestedConfig.DirNamesTplMap ??= new());
+
+            config.MacrosMap = NormMaps(
+                config.MacrosMap ??= new(),
+                nestedConfig.MacrosMap ??= new());
+
+            return config;
+        }
+
+        public DirsPairConfig.FileNamesT NormalizeConfig(
+            DirsPairConfig.FileNamesT config,
+            DirsPairConfig.FileNamesT nestedConfig)
+        {
+            /* config.MdFileName = NormRefValue(
+                config.MdFileName,
+                nestedConfig.MdFileName);
+
+            config.MdFileNamePfx = NormRefValue(
+                config.MdFileNamePfx,
+                nestedConfig.MdFileNamePfx);
+
+            config.PrependTitleToNoteMdFileName = NormNllblValue(
+                config.PrependTitleToNoteMdFileName,
+                nestedConfig.PrependTitleToNoteMdFileName);
+
+            config.KeepFileName = NormRefValue(
+                config.KeepFileName,
+                nestedConfig.KeepFileName); */
+
+            NormalizeConfigCore(
+                config,
+                nestedConfig);
+
+            return config;
+        }
+
+        public DirsPairConfig.FileContentsT NormalizeConfig(
+            DirsPairConfig.FileContentsT config,
+            DirsPairConfig.FileContentsT nestedConfig)
+        {
+            /* config.KeepFileContentsTemplate = NormRefValue(
+                config.KeepFileContentsTemplate,
+                nestedConfig.KeepFileContentsTemplate);
+
+            config.KeepFileContainsNoteJson = NormNllblValue(
+                config.KeepFileContainsNoteJson,
+                nestedConfig.KeepFileContainsNoteJson);
+
+            config.MdFileContentsTemplate = NormRefValue(
+                config.MdFileContentsTemplate,
+                nestedConfig.MdFileContentsTemplate);
+
+            config.MdFileContentSectionTemplate = NormRefValue(
+                config.MdFileContentSectionTemplate,
+                nestedConfig.MdFileContentSectionTemplate); */
+
+            NormalizeConfigCore(
+                config,
+                nestedConfig);
+
+            return config;
+        }
+
+        public DirsPairConfig.MacrosT NormalizeConfig(
+            DirsPairConfig.MacrosT config,
+            DirsPairConfig.MacrosT nestedConfig)
+        {
+            config.Map = NormMaps(
+                config.Map,
+                nestedConfig.Map);
+
             return config;
         }
 
@@ -64,11 +377,11 @@ namespace Turmerik.Core.DriveExplorer
             string configFilePath)
         {
             config.DirNames = NormalizeConfig(
-                config.DirNames,
+                config.DirNames ??= new (),
                 configFilePath);
 
             config.Macros = NormalizeConfig(
-                config.Macros,
+                config.Macros ??= new(),
                 configFilePath);
 
             return config;
@@ -141,6 +454,67 @@ namespace Turmerik.Core.DriveExplorer
             }
 
             return mapFilePathsArr;
+        }
+
+        private TObj NormalizeConfigCore<TObj>(
+            TObj config,
+            TObj nestedConfig)
+        {
+            var propsCllctn = propsMap.Get(typeof(TObj));
+
+            foreach (var prop in propsCllctn)
+            {
+                var propType = prop.PropertyType;
+                var propVal = prop.GetValue(nestedConfig, null);
+
+                if (propVal != null && (!propType.IsValueType || !propVal.Equals(
+                    Activator.CreateInstance(prop.PropertyType))))
+                {
+                    prop.SetValue(config, propVal);
+                }
+            }
+
+            return config;
+        }
+
+        /* private T NormRefValue<T>(
+            T value,
+            T nestedValue)
+            where T : class => (nestedValue != null) switch
+            {
+                true => nestedValue,
+                false => value,
+            };
+
+        private T NormValue<T>(
+            T value,
+            T nestedValue)
+            where T : struct => EqualityComparer<T>.Default.Equals(
+                nestedValue, default) switch
+            {
+                true => value,
+                false => nestedValue,
+            };
+
+        private T? NormNllblValue<T>(
+            T? value,
+            T? nestedValue)
+            where T : struct => nestedValue.HasValue switch
+            {
+                true => nestedValue,
+                false => value,
+            }; */
+
+        private Dictionary<string, TValue> NormMaps<TValue>(
+            Dictionary<string, TValue> map,
+            Dictionary<string, TValue> nestedMap)
+        {
+            foreach (var kvp in nestedMap)
+            {
+                map[kvp.Key] = kvp.Value;
+            }
+
+            return map;
         }
     }
 }
