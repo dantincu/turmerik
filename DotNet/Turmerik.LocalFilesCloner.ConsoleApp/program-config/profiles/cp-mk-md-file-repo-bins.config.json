@@ -1,0 +1,20 @@
+{
+  "ProfileName": "cp-mk-md-file-repo-bins",
+  "FileGroups": [
+    {
+      "InputDirPath": "|$TURMERIK_REPO_DIR|\\..\\trmrk-mk-md-file\\DotNet",
+      "CloneDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|",
+      "DfBeforeCloneDestnCleanupFilter": {
+        "ExcludedRelPathRegexes": [
+          "^\\/_.+\\.exe"
+        ]
+      },
+      "Folders": [
+        {
+          "InputDirPath": "TrmrkMkMdFile\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\TrmrkMkMdFile\\Release\\net8.0"
+        }
+      ]
+    }
+  ]
+}

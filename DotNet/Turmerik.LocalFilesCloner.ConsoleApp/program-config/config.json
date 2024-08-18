@@ -25,6 +25,12 @@
       "ProfileRelFilePath": "profiles\\cp-text-transform-behavior.config.json"
     },
     {
+      "ProfileRelFilePath": "profiles\\cp-mk-fs-dirs-pair-repo-bins.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-mk-md-file-repo-bins.config.json"
+    },
+    {
       "ProfileRelFilePath": "profiles\\cp-mkscripts-parcelws-sync-behavior.config.json"
     }
   ]

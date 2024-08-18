@@ -16,6 +16,7 @@
           "InputDirFilter": {
             "IncludedRelPathRegexes": [
               "^\\/Bin\\/TrmrkMkFsDirsPair\\/.*",
+              "^\\/Bin\\/TrmrkMkMdFile\\/.*",
               "^\\/Bin\\/Turmerik\\.DotNetTypesToTypescript\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",
