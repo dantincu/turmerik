@@ -34,6 +34,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly RfDirsPairNames.IProgramComponent rfDirPairNamesComponent;
         private readonly DirsPairConfig config;
+        private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
 
         public ProgramComponent(
@@ -44,7 +45,8 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
             ITextMacrosReplacer textMacrosReplacer,
             INoteMdParser nmdParser,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
-            RfDirsPairNames.IProgramComponent rfDirPairNamesComponent)
+            RfDirsPairNames.IProgramComponent rfDirPairNamesComponent,
+            IDirsPairConfigLoader dirsPairConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -64,10 +66,10 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
             this.nmdParser = nmdParser ?? throw new ArgumentNullException(
                 nameof(nmdParser));
 
-            config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
-                File.ReadAllText(Path.Combine(
-                ProgramH.ExecutingAssemmblyPath,
-                DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
+            this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
+                nameof(dirsPairConfigLoader));
+
+            config = dirsPairConfigLoader.LoadConfig();
 
             notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
                 File.ReadAllText(Path.Combine(

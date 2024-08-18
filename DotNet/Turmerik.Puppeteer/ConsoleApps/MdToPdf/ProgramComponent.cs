@@ -42,6 +42,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
         private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly INoteMdParser nmdParser;
         private readonly DirsPairConfig config;
+        private readonly IDirsPairConfigLoader dirsPairConfigLoader;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -49,7 +50,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             IConsoleMsgPrinter consoleMsgPrinter,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             ITextMacrosReplacer textMacrosReplacer,
-            INoteMdParser nmdParser)
+            INoteMdParser nmdParser,
+            IDirsPairConfigLoader dirsPairConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -69,10 +71,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             this.nmdParser = nmdParser ?? throw new ArgumentNullException(
                 nameof(nmdParser));
 
-            config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
-                File.ReadAllText(Path.Combine(
-                ProgramH.ExecutingAssemmblyPath,
-                DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
+            this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
+                nameof(dirsPairConfigLoader));
+
+            config = dirsPairConfigLoader.LoadConfig();
         }
 
         public void NormalizeArgs(ProgramArgs pgArgs)

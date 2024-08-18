@@ -39,6 +39,10 @@
           "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
         },
         {
+          "InputDirPath": "Turmerik.MkFsDirsPairCfg.ConsoleApp\\bin\\Release\\net8.0",
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net8.0"
+        },
+        {
           "InputDirPath": "Turmerik.MkScripts.ConsoleApp\\bin\\Release\\net8.0",
           "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"
         },

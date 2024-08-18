@@ -1,0 +1,11 @@
+{
+  "|art|": "$artists$",
+  "|athl|": "$athletes$",
+  "|egna|": "$environment-geography-nature-and-agriculture$",
+  "|fplyr|": "$former-players$",
+  "|fathl|": "$former-athletes$",
+  "|hf|": "$historical-figures$",
+  "|nf|": "$infamous$",
+  "|mf|": "$mythological-figures$",
+  "|plyr|": "$players$"
+}

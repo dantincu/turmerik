@@ -54,6 +54,7 @@ namespace Turmerik.Core.DriveExplorer
             public string DefaultJoinStr { get; set; }
             public Dictionary<string, DirNameTplT> DirNamesTplMap { get; set; }
             public Dictionary<string, string> MacrosMap { get; set; }
+            public string[]? MacrosMapFilePathsArr { get; set; }
         }
 
         public class DirNameTplT
@@ -81,6 +82,7 @@ namespace Turmerik.Core.DriveExplorer
         public class MacrosT
         {
             public Dictionary<string, string[]> Map { get; set; }
+            public string[]? MapFilePathsArr { get; set; }
         }
     }
 }

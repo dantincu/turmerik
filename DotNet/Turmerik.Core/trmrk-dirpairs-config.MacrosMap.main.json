@@ -1,0 +1,47 @@
+{
+  "art": [
+    ":s",
+    "$artists$",
+    ":="
+  ],
+  "athl": [
+    ":s",
+    "$athletes$",
+    ":="
+  ],
+  "egna": [
+    ":s",
+    "$environment-geography-nature-and-agriculture$",
+    ":="
+  ],
+  "fplyr": [
+    ":s",
+    "$former-players$",
+    ":="
+  ],
+  "fathl": [
+    ":s",
+    "$former-athletes$",
+    ":="
+  ],
+  "hf": [
+    ":s",
+    "$historical-figures$",
+    ":="
+  ],
+  "nf": [
+    ":s",
+    "$infamous$",
+    ":="
+  ],
+  "mf": [
+    ":s",
+    "$mythological-figures$",
+    ":="
+  ],
+  "plyr": [
+    ":s",
+    "$players$",
+    ":="
+  ]
+}

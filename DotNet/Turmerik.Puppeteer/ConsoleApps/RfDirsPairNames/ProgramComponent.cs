@@ -46,6 +46,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly DirsPairConfig config;
+        private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly NoteDirsPairConfigMtbl noteDirsPairCfg;
         private readonly NoteDirsPairConfigMtbl.FileNamesT noteFileNamesCfg;
@@ -57,7 +58,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             IConsoleArgsParser consoleArgsParser,
             MdToPdf.IProgramComponent mdToPdfProgramComponent,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
-            ITextMacrosReplacer textMacrosReplacer)
+            ITextMacrosReplacer textMacrosReplacer,
+            IDirsPairConfigLoader dirsPairConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -80,10 +82,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
                 nameof(textMacrosReplacer));
 
-            config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
-                File.ReadAllText(Path.Combine(
-                    ProgramH.ExecutingAssemmblyPath,
-                    DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
+            this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
+                nameof(dirsPairConfigLoader));
+
+            config = dirsPairConfigLoader.LoadConfig();
 
             notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
                 File.ReadAllText(Path.Combine(

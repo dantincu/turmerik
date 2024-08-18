@@ -1,0 +1,62 @@
+{
+  "a": [
+    ":s",
+    "$articles$",
+    ":="
+  ],
+  "gr": [
+    ":s",
+    "$geographical-regions$",
+    ":="
+  ],
+  "m": [
+    ":s",
+    "$misc$",
+    ":="
+  ],
+  "org": [
+    ":s",
+    "$organizations$",
+    ":="
+  ],
+  "p": [
+    ":s",
+    "$persons$",
+    ":="
+  ],
+  "pl": [
+    ":s",
+    "$places$",
+    ":="
+  ],
+  "plgr": [
+    ":s",
+    "$places-and-geographical-regions$",
+    ":="
+  ],
+  "plrg": [
+    ":s",
+    "$places-and-regions$",
+    ":="
+  ],
+  "ps": [
+    ":s",
+    "$products-and-services$",
+    ":="
+  ],
+  "pp": [
+    ":s",
+    "$public-persons$",
+    ":="
+  ],
+  "rg": [
+    ":s",
+    "$regions$",
+    ":="
+  ],
+  "tc": [
+    ":s",
+    "$terms-and-concepts$",
+    ":="
+  ]
+}

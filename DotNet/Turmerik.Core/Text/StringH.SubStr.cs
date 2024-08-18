@@ -40,6 +40,8 @@ namespace Turmerik.Core.Text
                     {
                         retList.Add(subStr);
                     }
+
+                    idx = restOfStr.IndexOf(splitter, comparisonType);
                 }
 
                 if (ShouldIncludeSplitString(restOfStr, stringSplitOptions))

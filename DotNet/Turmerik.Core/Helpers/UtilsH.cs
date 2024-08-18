@@ -39,5 +39,17 @@ namespace Turmerik.Core.Helpers
 
             return isDefault;
         }
+
+        public static T ThrowIfNull<T>(
+            this T value,
+            string argName)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(argName);
+            }
+
+            return value;
+        }
     }
 }

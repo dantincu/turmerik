@@ -7,12 +7,14 @@
       "DfInputDirFilter": {
         "IncludedRelPathRegexes": [
           "^\\/trmrk-dirpairs-config\\.json$",
+          "^\\/trmrk-dirpairs-config\\..+\\.json$",
           "^\\/trmrk-notes-config\\.json$"
         ]
       },
       "DfBeforeCloneDestnCleanupFilter": {
         "IncludedRelPathRegexes": [
           "^\\/trmrk-dirpairs-config\\.json$",
+          "^\\/trmrk-dirpairs-config\\..+\\.json$",
           "^\\/trmrk-notes-config\\.json$"
         ]
       },
@@ -34,6 +36,9 @@
         },
         {
           "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net8.0"
         },
         {
           "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"
@@ -58,12 +63,14 @@
       "DfInputDirFilter": {
         "IncludedRelPathRegexes": [
           "^\\/trmrk-dirpairs-config\\.json$",
+          "^\\/trmrk-dirpairs-config\\..+\\.json$",
           "^\\/trmrk-notes-config\\.json$"
         ]
       },
       "DfBeforeCloneDestnCleanupFilter": {
         "IncludedRelPathRegexes": [
           "^\\/trmrk-dirpairs-config\\.json$",
+          "^\\/trmrk-dirpairs-config\\..+\\.json$",
           "^\\/trmrk-notes-config\\.json$"
         ]
       },
@@ -85,6 +92,9 @@
         },
         {
           "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net8.0"
         },
         {
           "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"
@@ -138,6 +148,9 @@
           "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net8.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"
         },
         {
@@ -187,6 +200,9 @@
         },
         {
           "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net8.0"
         },
         {
           "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"

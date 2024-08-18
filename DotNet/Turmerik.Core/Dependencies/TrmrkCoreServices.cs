@@ -59,6 +59,7 @@ namespace Turmerik.Core.Dependencies
                 services.AddSingleton<ITrmrkUniqueDirCreator, TrmrkUniqueDirCreator>();
                 services.AddSingleton<ITempDirConsoleApp, TempDirConsoleApp>();
                 services.AddSingleton<ILocalDevicePathMacrosRetriever, LocalDevicePathMacrosRetriever>();
+                services.AddSingleton<IDirsPairConfigLoader, DirsPairConfigLoader>();
             }
 
             services.AddSingleton<IStringTemplateParser, StringTemplateParser>();

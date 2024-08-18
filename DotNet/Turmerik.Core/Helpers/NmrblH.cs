@@ -75,6 +75,11 @@ namespace Turmerik.Core.Helpers
             this IEnumerable<KeyValuePair<TKey, TValue>> kvpNmrbl) => kvpNmrbl.ToDictionary(
                 kvp => kvp.Key, kvp => kvp.Value);
 
+        public static KeyValuePair<TKey, TOutVal> ToKvp<TKey, TInVal, TOutVal>(
+            this KeyValuePair<TKey, TInVal> kvp,
+            Func<TInVal, TOutVal> outValFactory) => new KeyValuePair<TKey, TOutVal>(
+                kvp.Key, outValFactory(kvp.Value));
+
         public static void AddRange<T>(
             this ICollection<T> collection,
             IEnumerable<T> itemsNmrbl)

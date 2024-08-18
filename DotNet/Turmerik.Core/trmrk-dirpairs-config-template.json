@@ -4,6 +4,7 @@
   "CreatePdfFile": true,
   "ArgOpts": {
     "PrintHelpMessage": "h",
+    "PrintConfigSection": "cfg",
     "WorkDir": "wd",
     "InteractiveMode": "i",
     "OpenMdFile": "o",
@@ -47,25 +48,10 @@
         "MdFileNameTemplate": ""
       }
     },
-    "MacrosMap": {
-      "|m|": "$misc$",
-      "|a|": "$articles$",
-      "|art|": "$artists$",
-      "|p|": "$persons$",
-      "|nf|": "$infamous$",
-      "|pp|": "$public-persons$",
-      "|hf|": "$historical-figures$",
-      "|tc|": "$terms-and-concepts$",
-      "|ps|": "$products-and-services$",
-      "|egna|": "$environment-geography-nature-and-agriculture$",
-      "|pl|": "$places$",
-      "|gr|": "$geographical-regions$",
-      "|plgr|": "$places-and-geographical-regions$",
-      "|plyr|": "$players$",
-      "|athl|": "$athletes$",
-      "|fplyr|": "$former-players$",
-      "|fathl|": "$former-athletes$"
-    }
+    "MacrosMapFilePathsArr": [
+      "trmrk-dirpairs-config.DirPairsMacrosMap.base.json",
+      "trmrk-dirpairs-config.DirPairsMacrosMap.main.json"
+    ]
   },
   "FileNames": {
     "MdFileName": "[note].md",
@@ -80,24 +66,9 @@
     "MdFileContentSectionTemplate": "{0}  \n\n"
   },
   "Macros": {
-    "Map": {
-      "m": [ ":s", "$misc$", ":=" ],
-      "a": [ ":s", "$articles$", ":=" ],
-      "art": [ ":s", "$artists$", ":=" ],
-      "p": [ ":s", "$persons$", ":=" ],
-      "nf": [ ":s", "$infamous$", ":=" ],
-      "pp": [ ":s", "$public-persons$", ":=" ],
-      "hf": [ ":s", "$historical-figures$", ":=" ],
-      "tc": [ ":s", "$terms-and-concepts$", ":=" ],
-      "ps": [ ":s", "$products-and services$", ":=" ],
-      "egna": [ ":s", "$environment-geography-nature-and-agriculture$", ":=" ],
-      "pl": [ ":s", "$places$", ":=" ],
-      "gr": [ ":s", "$geographical-regions$", ":=" ],
-      "plgr": [ ":s", "$places-and-geographical-regions$", ":=" ],
-      "plyr": [ ":s", "$players$", ":=" ],
-      "athl": [ ":s", "$athletes$", ":=" ],
-      "fplyr": [ ":s", "$former-players$", ":=" ],
-      "fathl": [ ":s", "$former-athletes$", ":=" ]
-    }
+    "MapFilePathsArr": [
+      "trmrk-dirpairs-config.MacrosMap.base.json",
+      "trmrk-dirpairs-config.MacrosMap.main.json"
+    ]
   }
 }

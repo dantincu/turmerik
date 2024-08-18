@@ -39,6 +39,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
         private readonly INoteMdParser nmdParser;
         private readonly DirsPairConfig config;
+        private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
 
         public ProgramComponent(
@@ -48,7 +49,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IDirsPairCreatorFactory dirsPairCreatorFactory,
             IHtmlDocTitleRetriever htmlDocTitleRetriever,
-            INoteMdParser nmdParser)
+            INoteMdParser nmdParser,
+            IDirsPairConfigLoader dirsPairConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -65,10 +67,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             this.nmdParser = nmdParser ?? throw new ArgumentNullException(
                 nameof(nmdParser));
 
-            config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
-                File.ReadAllText(Path.Combine(
-                ProgramH.ExecutingAssemmblyPath,
-                DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
+            this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
+                nameof(dirsPairConfigLoader));
+
+            config = dirsPairConfigLoader.LoadConfig();
 
             notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
                 File.ReadAllText(Path.Combine(
@@ -506,37 +508,40 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         {
             string url = hasUrl ? nodeArgs.Url : nodeArgs.Uri;
             string[] urlParts = url.Split('|');
-            url = urlParts.Last();
+            url = urlParts.First();
 
-            string? resTitle = null;
-
-            if (urlParts.Length > 1)
+            if (nodeArgs.ResTitle == null)
             {
-                resTitle = string.Join("|",
-                    urlParts.Take(urlParts.Length - 1)).Nullify(true);
-            }
+                string? resTitle = null;
 
-            if (resTitle == null)
-            {
-                if (nodeArgs.GetTitleFromUrl == true)
+                if (urlParts.Length > 1)
                 {
-                    resTitle = GetTitleFromUri(
-                        url, resTitle, hasUri);
+                    resTitle = string.Join("|",
+                        urlParts.Skip(1)).Nullify(true);
+                }
+
+                if (resTitle == null)
+                {
+                    if (nodeArgs.GetTitleFromUrl == true)
+                    {
+                        resTitle = GetTitleFromUri(
+                            url, resTitle, hasUri);
+                    }
+                    else
+                    {
+                        resTitle = await GetResouceTitleAsync(
+                            nodeArgs, url, resTitle, hasUri);
+                    }
                 }
                 else
                 {
-                    resTitle = await GetResouceTitleAsync(
-                        nodeArgs, url, resTitle, hasUri);
+                    WriteSectionToConsole(
+                        "Using the following resource title: ",
+                        resTitle, ConsoleColor.Cyan);
                 }
-            }
-            else
-            {
-                WriteSectionToConsole(
-                    "Using the following resource title: ",
-                    resTitle, ConsoleColor.Cyan);
-            }
 
-            nodeArgs.ResTitle ??= resTitle;
+                nodeArgs.ResTitle = resTitle;
+            }
 
             nodeArgs.MdFirstContent = string.Format(
                 config.FileContents.MdFileContentSectionTemplate,
@@ -771,6 +776,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.WorkDir.Arr(),
                                             data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.Title.Arr(),
+                                            data => data.Args.Current.ResTitle = data.ArgFlagValue!.Single()),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.Url.Arr(),
                                             data => data.Args.Current.Url = OnUrlProvided(data)),

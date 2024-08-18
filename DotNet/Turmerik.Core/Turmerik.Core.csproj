@@ -35,7 +35,19 @@
     <None Update="app-env-locator.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="trmrk-dirpairs-config.DirPairsMacrosMap.base.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="trmrk-dirpairs-config.DirPairsMacrosMap.main.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="trmrk-dirpairs-config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="trmrk-dirpairs-config.MacrosMap.base.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="trmrk-dirpairs-config.MacrosMap.main.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="trmrk-localdevice-paths.json">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using Turmerik.Core.Helpers;
@@ -14,16 +15,27 @@ namespace Turmerik.Core.Utility
         public static readonly string TrmrkGuidStrNoDash;
         public static readonly Guid TrmrkGuid;
 
-        public static string TurmerikPfx;
-        public static string TurmerikNsPfx;
+        public static readonly string TurmerikPfx;
+        public static readonly string TurmerikNsPfx;
+
+        public static readonly string TurmerikCorePfx;
+        public static readonly string TurmerikCoreNsPfx;
 
         static Trmrk()
         {
+            var trmrkType = typeof(Trmrk);
+            var trmrkNsParts = trmrkType.Namespace.Split('.');
+
             TrmrkGuidStr = "f1131f3d-a28f-444e-b816-82a2fd94b1a6";
             TrmrkGuidStrNoDash = TrmrkGuidStr.Split('-').JoinNotNullStr(null, false);
             TrmrkGuid = Guid.Parse(TrmrkGuidStr);
-            TurmerikPfx = typeof(Trmrk).FullName.Split('.')[0];
+            TurmerikPfx = trmrkNsParts[0];
             TurmerikNsPfx = $"{TurmerikPfx}.";
+
+            TurmerikCorePfx = trmrkNsParts.Take(
+                2).ToArray().JoinStr(".");
+
+            TurmerikCoreNsPfx = $"{TurmerikCorePfx}.";
         }
 
         public static TTrmrkObj Obj<TTrmrkObj>(
@@ -47,5 +59,13 @@ namespace Turmerik.Core.Utility
 
                 return isTrmrkAsmb;
             });
+
+        public static class Repo
+        {
+            public static class DotNet
+            {
+                public static readonly string DirName = nameof(DotNet);
+            }
+        }
     }
 }

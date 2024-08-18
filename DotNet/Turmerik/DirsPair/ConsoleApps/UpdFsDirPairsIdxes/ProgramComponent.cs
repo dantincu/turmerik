@@ -36,6 +36,7 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         private readonly IdxesUpdater idxesUpdater;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly DirsPairConfig config;
+        private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly NoteDirsPairConfigMtbl noteDirsPairCfg;
 
@@ -47,7 +48,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             IConsoleMsgPrinter consoleMsgPrinter,
             IIdxesFilterParser idxesFilterParser,
             IdxesUpdater idxesUpdater,
-            IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory)
+            IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
+            IDirsPairConfigLoader dirsPairConfigLoader)
         {
             this.consoleArgsParser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
@@ -67,10 +69,10 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             this.idxesUpdater = idxesUpdater ?? throw new ArgumentNullException(
                 nameof(idxesUpdater));
 
-            config = jsonConversion.Adapter.Deserialize<DirsPairConfig>(
-                File.ReadAllText(Path.Combine(
-                    ProgramH.ExecutingAssemmblyPath,
-                    DriveExplorerH.DIR_PAIRS_CFG_FILE_NAME)));
+            this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
+                nameof(dirsPairConfigLoader));
+
+            config = dirsPairConfigLoader.LoadConfig();
 
             notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
                 File.ReadAllText(Path.Combine(
