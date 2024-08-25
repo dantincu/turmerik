@@ -21,6 +21,7 @@ using Turmerik.WinForms.MatUIIcons;
 using Turmerik.Core.Utility;
 using Turmerik.Core.Text;
 using Turmerik.Html;
+using System.Security.Policy;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -128,12 +129,8 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     if (url != null)
                     {
                         title = await htmlDocTitleRetriever.GetResouceTitleAsync(url);
-
                         textBoxResourceTitle.Text = title;
-
-                        textBoxResourceMdLink.Text = string.Format(
-                            appSettings.Data.FetchWebResource.MdLinkTemplate,
-                            title, url);
+                        RefreshMdLink(url, title);
                     }
                     else
                     {
@@ -164,6 +161,21 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     return null;
                 }
             });
+        }
+
+        private string RefreshMdLink(
+            string url = null,
+            string title = null)
+        {
+            url ??= textBoxResourceUrl.Text;
+            title ??= textBoxResourceTitle.Text;
+
+            string mdLink = string.Format(
+                appSettings.Data.FetchWebResource.MdLinkTemplate,
+                title, url);
+
+            textBoxResourceMdLink.Text = mdLink;
+            return mdLink;
         }
 
         private void CopyResourceTitleToClipboard(
@@ -248,24 +260,27 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                         true => "Press the CTRL + SHIFT + ENTER keys to disactivate the automatic copying",
                         false => "Press the CTRL + ENTER keys to activate the automatic copying",
                     },
-                    "of the resource markdown link to clipboard and then fetch the resource title")),
+                    "of the resource markdown link to clipboard and then fetch the resource title",
+                    "Press the SHIFT + ENTER keys to refresh the markdown link making a network request")),
                 textBoxResourceTitle.HintOpts(() => string.Join("\n",
                     "The resource's title will show up here after it has been fetched.",
                     this.checkBoxResxTitleFetchToCB.Checked switch
                     {
-                        true => "Press the CTRL + ENTER keys to disactivate the automatic copying",
-                        false => "Press the ENTER key to activate the automatic copying"
+                        true => "Press the CTRL + SHIFT + ENTER keys to disactivate the automatic copying",
+                        false => "Press the CTRL + ENTER key to activate the automatic copying"
                     },
-                    "of the resource's title after it has been fetched"
+                    "of the resource's title after it has been fetched",
+                    "Press the ENTER key to refresh the markdown link"
                     )),
                 textBoxResourceMdLink.HintOpts(() => string.Join("\n",
                     "The resource's markdown link will show up here after it has been fetched.",
                     this.checkBoxResxMdLinkFetchToCB.Checked switch
                     {
-                        true => "Press the CTRL + ENTER keys to disactivate the automatic copying",
-                        false => "Press the ENTER key to activate the automatic copying"
+                        true => "Press the CTRL + SHIFT + ENTER keys to disactivate the automatic copying",
+                        false => "Press the CTRL + ENTER key to activate the automatic copying"
                     },
-                    "of the resource's markdown link after it has been fetched"
+                    "of the resource's markdown link after it has been fetched",
+                    "Press the ENTER key to refresh the markdown link"
                     ))));
 
             return new ToolTipHintsGroupOpts
@@ -338,7 +353,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                     checkBoxResxMdLinkFetchToCB.Checked = !e.Shift;
                 }
 
-                FetchResourceAsync();
+                if (!e.Control && e.Shift)
+                {
+                    RefreshMdLink();
+                }
+                else
+                {
+                    FetchResourceAsync();
+                }
             }
         }
 
@@ -346,7 +368,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                checkBoxResxTitleFetchToCB.Checked = !e.Control;
+                if (e.Control)
+                {
+                    checkBoxResxTitleFetchToCB.Checked = !e.Shift;
+                }
+                else
+                {
+                    RefreshMdLink();
+                }
             }
         }
 
@@ -354,7 +383,14 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                checkBoxResxMdLinkFetchToCB.Checked = !e.Control;
+                if (e.Control)
+                {
+                    checkBoxResxMdLinkFetchToCB.Checked = !e.Shift;
+                }
+                else
+                {
+                    RefreshMdLink();
+                }
             }
         }
 

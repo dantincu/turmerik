@@ -1,7 +1,10 @@
 {
+  "NestedConfigFilePathsArr": [
+    "trmrk-dirpairs-config.main.json"
+  ],
   "FileNameMaxLength": 100,
   "ThrowIfAnyItemAlreadyExists": true,
-  "CreatePdfFile": true,
+  "CreatePdfFile": null,
   "ArgOpts": {
     "PrintHelpMessage": "h",
     "PrintConfigSection": "cfg",
