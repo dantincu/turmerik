@@ -14,6 +14,11 @@
     "$misc$",
     ":="
   ],
+  "mps": [
+    ":s",
+    "$my-products-and-services$",
+    ":="
+  ],
   "org": [
     ":s",
     "$organizations$",
