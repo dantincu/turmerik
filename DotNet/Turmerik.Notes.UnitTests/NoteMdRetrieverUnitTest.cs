@@ -14,21 +14,27 @@ namespace Turmerik.Notes.UnitTests
         private static readonly IJsonConversion jsonConversion;
         private static readonly INoteMdRetriever noteMdRetriever;
         private static readonly IDriveItemsRetriever driveItemsRetriever;
-        private static readonly NotesAppConfigMtbl appConfig;
-        private static readonly NoteDirsPairConfigMtbl config;
+
+        private readonly NotesAppConfigMtbl appConfig;
+        private readonly INotesAppConfigLoader notesAppConfigLoader;
+        private readonly NoteDirsPairConfigMtbl config;
 
         static NoteMdRetrieverUnitTest()
         {
             jsonConversion = SvcProv.GetRequiredService<IJsonConversion>();
             noteMdRetriever = SvcProv.GetRequiredService<INoteMdRetriever>();
             driveItemsRetriever = SvcProv.GetRequiredService<IDriveItemsRetriever>();
+        }
+
+        public NoteMdRetrieverUnitTest()
+        {
+            notesAppConfigLoader = SvcProv.GetRequiredService<INotesAppConfigLoader>();
 
             string configFilePath = Path.Combine(
                 Environment.CurrentDirectory,
                 TrmrkNotesH.NOTES_CFG_FILE_NAME);
 
-            appConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
-                File.ReadAllText(configFilePath));
+            appConfig = notesAppConfigLoader.LoadConfig(configFilePath);
 
             config = appConfig.NoteDirPairs;
             config.FileContents.ExpectTrmrkGuidInNoteJsonFile = false;

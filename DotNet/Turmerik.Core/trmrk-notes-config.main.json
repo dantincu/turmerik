@@ -1,0 +1,14 @@
+{
+  "NoteDirPairs": {
+    "DirNames": {
+      "NoteBook": "[note-book]",
+      "NoteFiles": "[note-files]",
+      "NoteInternals": "[note-internals]"
+    },
+    "FileNames": {
+      "NoteBookJsonFileName": "[note-book].json",
+      "NoteItemJsonFileName": "[note].json",
+      "NoteItemMdFileName": "[note].md"
+    }
+  }
+}

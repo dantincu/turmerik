@@ -17,12 +17,14 @@ namespace Turmerik.Notes.ConsoleApps
         private readonly IConsoleArgsParser parser;
         private readonly INotesExplorerService notesExplorerService;
         private readonly INotesAppConfig appConfig;
+        private readonly INotesAppConfigLoader notesAppConfigLoader;
         private readonly INoteDirsPairConfig config;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
             IConsoleArgsParser consoleArgsParser,
-            INotesExplorerServiceFactory notesExplorerServiceFactory)
+            INotesExplorerServiceFactory notesExplorerServiceFactory,
+            INotesAppConfigLoader notesAppConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -30,14 +32,12 @@ namespace Turmerik.Notes.ConsoleApps
             parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
 
-            string configFilePath = Path.Combine(
-                ProgramH.ExecutingAssemmblyPath,
-                TrmrkNotesH.NOTES_CFG_FILE_NAME);
+            this.notesAppConfigLoader = notesAppConfigLoader ?? throw new ArgumentNullException(
+                nameof(notesAppConfigLoader));
 
-            appConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
-                File.ReadAllText(configFilePath));
-
+            appConfig = notesAppConfigLoader.LoadConfig();
             config = appConfig.GetNoteDirPairs();
+
             notesExplorerService = notesExplorerServiceFactory.Create(appConfig);
         }
 

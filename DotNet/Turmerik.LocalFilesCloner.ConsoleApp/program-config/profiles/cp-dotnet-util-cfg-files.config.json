@@ -8,14 +8,16 @@
         "IncludedRelPathRegexes": [
           "^\\/trmrk-dirpairs-config\\.json$",
           "^\\/trmrk-dirpairs-config\\..+\\.json$",
-          "^\\/trmrk-notes-config\\.json$"
+          "^\\/trmrk-notes-config\\.json$",
+          "^\\/trmrk-notes-config\\..+\\.json$"
         ]
       },
       "DfBeforeCloneDestnCleanupFilter": {
         "IncludedRelPathRegexes": [
           "^\\/trmrk-dirpairs-config\\.json$",
           "^\\/trmrk-dirpairs-config\\..+\\.json$",
-          "^\\/trmrk-notes-config\\.json$"
+          "^\\/trmrk-notes-config\\.json$",
+          "^\\/trmrk-notes-config\\..+\\.json$"
         ]
       },
       "Folders": [

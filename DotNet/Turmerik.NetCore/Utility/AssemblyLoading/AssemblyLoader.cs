@@ -87,6 +87,14 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             Type typeObj,
             IEnumerable<DotNetType> typesNmrbl);
 
+        bool GenericArgsAreEqual(
+            GenericTypeArg trgArg,
+            GenericTypeArg refArg);
+
+        bool TypesAreEqual(
+            DotNetType trgType,
+            DotNetType refType);
+
         bool AssembliesAreEqual(
             Assembly trgAsmb,
             Assembly refAsmb);
@@ -297,6 +305,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     TypesList = []
                 };
 
+                asmb.IsCoreLib = fullName == ReflH.BaseObjectType.Namespace;
+
                 assembliesList.Add(asmb);
 
                 asmb.ReferencedBclAsmbNames = wka.AsmbObj.GetReferencedAssemblies(
@@ -502,6 +512,79 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             Assembly trgAsmb,
             Assembly refAsmb) => trgAsmb.FullName == refAsmb.FullName;
 
+        public bool TypesAreEqual(
+            DotNetType trgType,
+            DotNetType refType)
+        {
+            bool areEqual = trgType.FullName == refType.FullName;
+            areEqual = areEqual && trgType.Namespace == refType.Namespace;
+            areEqual = areEqual && trgType.MetadataToken == refType.MetadataToken;
+
+            bool trgTypeHasAssembly = trgType.Assembly?.BclItem != null;
+            bool refTypeHasAssembly = refType.Assembly?.BclItem != null;
+
+            areEqual = areEqual && trgTypeHasAssembly == refTypeHasAssembly;
+
+            if (areEqual && trgTypeHasAssembly)
+            {
+                areEqual = AssembliesAreEqual(
+                    trgType.Assembly.BclItem,
+                    refType.Assembly.BclItem);
+            }
+
+            areEqual = areEqual && (trgType.IsValueType ?? false) == (refType.IsValueType ?? false);
+            areEqual = areEqual && (trgType.IsNested ?? false) == (refType.IsNested ?? false);
+            areEqual = areEqual && (trgType.IsGenericType ?? false) == (refType.IsGenericType ?? false);
+            areEqual = areEqual && (trgType.IsGenericTypeDef ?? false) == (refType.IsGenericTypeDef ?? false);
+            areEqual = areEqual && (trgType.IsConstructedGenericType ?? false) == (refType.IsConstructedGenericType ?? false);
+            areEqual = areEqual && (trgType.IsGenericParam ?? false) == (refType.IsGenericParam ?? false);
+            areEqual = areEqual && (trgType.IsGenericTypeParam ?? false) == (refType.IsGenericTypeParam ?? false);
+            areEqual = areEqual && (trgType.IsGenericMethodParam ?? false) == (refType.IsGenericMethodParam ?? false);
+            areEqual = areEqual && (trgType.IsGenericTypeDef ?? false) == (refType.IsGenericTypeDef ?? false);
+
+            if (areEqual && trgType.IsNested == true)
+            {
+                areEqual = TypesAreEqual(
+                    trgType.DeclaringType,
+                    refType.DeclaringType);
+            }
+
+            if (areEqual && trgType.IsGenericType == true)
+            {
+                areEqual = trgType.GenericTypeArgs != null && refType.GenericTypeArgs != null;
+                areEqual = areEqual && trgType.GenericTypeArgs.Count == refType.GenericTypeArgs.Count;
+
+                areEqual = areEqual && trgType.GenericTypeArgs.All(
+                    (trgGenericType, i) => GenericArgsAreEqual(
+                        trgGenericType,
+                        refType.GenericTypeArgs[i]));
+            }
+
+            return areEqual;
+        }
+
+        public bool GenericArgsAreEqual(
+            GenericTypeArg trgArg,
+            GenericTypeArg refArg)
+        {
+            bool areEqual = (trgArg.TypeArg != null) == (refArg != null);
+
+            areEqual = areEqual && TypesAreEqual(
+                trgArg.TypeArg,
+                refArg.TypeArg);
+
+            areEqual = areEqual && (trgArg.TypeParamConstraints != null) == (
+                refArg.TypeParamConstraints != null);
+
+            areEqual = areEqual && trgArg.TypeParamConstraints.Count == refArg.TypeParamConstraints.Count;
+
+            areEqual = areEqual && trgArg.TypeParamConstraints.All(
+                (trgConstraint, i) => TypesAreEqual(
+                    trgConstraint, refArg.TypeParamConstraints[i]));
+
+            return areEqual;
+        }
+
         private DotNetType ConvertAssemblyType(
             WorkArgs wka,
             Type? typeObj,
@@ -523,6 +606,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     FullName = fullName,
                     Name = typeObj.Name,
                     Namespace = typeObj.Namespace,
+                    IsValueType = typeObj.IsValueType,
                     IsGenericParam = typeObj.IsGenericParameter,
                     IsGenericTypeParam = typeObj.IsGenericTypeParameter,
                     IsGenericMethodParam = typeObj.IsGenericMethodParameter,
@@ -530,6 +614,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     IsGenericType = typeObj.IsGenericType,
                     IsGenericTypeDef = typeObj.IsGenericTypeDefinition,
                     IsConstructedGenericType = typeObj.IsConstructedGenericType,
+                    IsArrayType = typeObj.IsArray
                 };
 
                 dotNetType.Assembly = typeObj.Assembly.With(asmb => ConvertAssembly(
@@ -541,6 +626,16 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     {
                         asmbObj.TypesList.Add(dotNetType);
                     });
+
+                if (dotNetType.Assembly.IsCoreLib == true)
+                {
+                    if (!typeObj.IsArray)
+                    {
+                        dotNetType.IsNullableType = HasGenericTypeDef(
+                            dotNetType.BclItem,
+                            typeof(int?));
+                    }
+                }
 
                 typesList.Add(dotNetType);
 
@@ -554,6 +649,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                     dotNetType.GenericTypeArgs = typeObj.GetGenericArguments().Select(
                         genericArg => ConvertGenericTypeArg(wka, genericArg)).ToList();
+                }
+                else if (dotNetType.IsArrayType == true)
+                {
+                    dotNetType.ArrayElementType = ConvertAssemblyType(
+                        wka, typeObj.GetElementType());
                 }
 
                 dotNetType.DeclaringType = dotNetType.IsNested == true ? typeObj.DeclaringType.With(
@@ -624,6 +724,17 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             }
 
             return dotNetType;
+        }
+
+        private bool HasGenericTypeDef(
+            Type trgType,
+            Type genericTypeDef)
+        {
+            bool areEqual = trgType.IsGenericType == true && trgType.GetGenericTypeDefinition(
+                ).FullName == genericTypeDef.GetGenericTypeDefinition(
+                    ).FullName;
+
+            return areEqual;
         }
 
         private Type GetTypeObjCore(

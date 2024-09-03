@@ -148,14 +148,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
                     if (result.IsSuccess)
                     {
-                        if (checkBoxResxTitleFetchToCB.Checked)
-                        {
-                            CopyResourceTitleToClipboard();
-                        }
-                        else if (checkBoxResxMdLinkFetchToCB.Checked)
-                        {
-                            CopyResourceMdLinkToClipboard();
-                        }
+                        CopyResourceTitleOrMdLinkToClipboard();
                     }
 
                     return null;
@@ -176,6 +169,18 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             textBoxResourceMdLink.Text = mdLink;
             return mdLink;
+        }
+
+        private void CopyResourceTitleOrMdLinkToClipboard()
+        {
+            if (checkBoxResxTitleFetchToCB.Checked)
+            {
+                CopyResourceTitleToClipboard();
+            }
+            else if (checkBoxResxMdLinkFetchToCB.Checked)
+            {
+                CopyResourceMdLinkToClipboard();
+            }
         }
 
         private void CopyResourceTitleToClipboard(
@@ -304,8 +309,6 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                             this.textBoxResourceUrl,
                             this.textBoxResourceTitle,
                             this.textBoxResourceMdLink,
-                            // this.checkBoxResxMdLinkFetchToCB,
-                            // this.checkBoxResxTitleFetchToCB
                         ], uiTheme.InputBackColor);
 
                         iconLabelResxTitleFetchToCB.ForeColor = uiTheme.InfoIconColor;
@@ -375,6 +378,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 else
                 {
                     RefreshMdLink();
+                    CopyResourceTitleOrMdLinkToClipboard();
                 }
             }
         }
@@ -390,6 +394,7 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
                 else
                 {
                     RefreshMdLink();
+                    CopyResourceTitleOrMdLinkToClipboard();
                 }
             }
         }

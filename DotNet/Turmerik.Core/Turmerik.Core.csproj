@@ -59,6 +59,9 @@
     <None Update="trmrk-notes-config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="trmrk-notes-config.main.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="_ENV\DEV\app-env-locator.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

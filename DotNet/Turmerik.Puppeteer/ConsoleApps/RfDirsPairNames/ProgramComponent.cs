@@ -48,6 +48,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         private readonly DirsPairConfig config;
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
+        private readonly INotesAppConfigLoader notesAppConfigLoader;
         private readonly NoteDirsPairConfigMtbl noteDirsPairCfg;
         private readonly NoteDirsPairConfigMtbl.FileNamesT noteFileNamesCfg;
 
@@ -59,7 +60,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             MdToPdf.IProgramComponent mdToPdfProgramComponent,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             ITextMacrosReplacer textMacrosReplacer,
-            IDirsPairConfigLoader dirsPairConfigLoader)
+            IDirsPairConfigLoader dirsPairConfigLoader,
+            INotesAppConfigLoader notesAppConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -85,12 +87,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
                 nameof(dirsPairConfigLoader));
 
-            config = dirsPairConfigLoader.LoadConfig();
+            this.notesAppConfigLoader = notesAppConfigLoader ?? throw new ArgumentNullException(
+                nameof(notesAppConfigLoader));
 
-            notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
-                File.ReadAllText(Path.Combine(
-                    ProgramH.ExecutingAssemmblyPath,
-                    TrmrkNotesH.NOTES_CFG_FILE_NAME)));
+            config = dirsPairConfigLoader.LoadConfig();
+            notesConfig = notesAppConfigLoader.LoadConfig();
 
             noteDirsPairCfg = notesConfig.NoteDirPairs;
             noteFileNamesCfg = noteDirsPairCfg.FileNames;

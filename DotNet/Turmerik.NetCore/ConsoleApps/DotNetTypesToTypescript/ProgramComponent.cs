@@ -16,6 +16,7 @@ using System.Reflection.Metadata;
 using Turmerik.Core.Utility;
 using Turmerik.NetCore.Utility;
 using Turmerik.NetCore.Utility.AssemblyLoading;
+using Json.Schema;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
@@ -214,7 +215,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             bool isTurmerikAssembly)
         {
             var existingAssembly = assembliesList.FirstOrDefault(
-                asmb => assemblyLoader.AssembliesAreEqual(assembly.BclItem, asmb.Asmb.BclItem));
+                asmb => assemblyLoader.AssembliesAreEqual(
+                    assembly.BclItem,
+                    asmb.Asmb.BclItem));
 
             if (existingAssembly == null)
             {
@@ -278,8 +281,181 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
                 string destnDirPath = Path.GetDirectoryName(destnFilePath);
                 Directory.CreateDirectory(destnDirPath);
+
+                var dependentTypesList = GetDependenciesList(
+                    wka, section, asmb, dotNetTypeObj);
+
+                var dependenciesMap = MapDependencyNames(
+                    dependentTypesList);
+
+                var importLines = dependenciesMap.Select(
+                    kvp =>
+                    {
+                        string importedDep = kvp.Key;
+
+                        if (kvp.Key != kvp.Value.Type.Name)
+                        {
+                            importedDep = $"{kvp.Value.Type.Name} as {importedDep}";
+                        }
+
+                        string relFilePath = GetRelFilePath(
+                            dotNetTypeObj,
+                            kvp.Value);
+
+                        string importLine = $"import {{ {importedDep} }} from \"{relFilePath}\";";
+                        return importLine;
+                    }).ToList();
             }
         }
+
+        private List<WorkArgs.DotNetTypeObj> GetDependenciesList(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            WorkArgs.DotNetTypeObj dotNetTypeObj)
+        {
+            var allDependentTypesArr = (dotNetTypeObj.Type.GenericTypeArgs?.Where(
+                arg => arg.TypeArg != null).Select(
+                arg => arg.TypeArg) ?? []).Concat(
+                    dotNetTypeObj.Type.Properties.Select(
+                        prop => prop.PropType).Concat(
+                        dotNetTypeObj.Type.Methods.SelectMany(
+                            method => method.ReturnType.Arr(
+                                method.Parameters.Select(
+                                    @param => @param.ParamType).ToArray(
+                                    ))))).SelectMany(ExpandDependency).ToArray();
+
+            var dependentTypesList = new List<DotNetType>();
+
+            foreach (var refType in allDependentTypesArr.NotNull())
+            {
+                if (dependentTypesList.None(
+                    type => assemblyLoader.TypesAreEqual(
+                        type, refType)))
+                {
+                    dependentTypesList.Add(refType);
+                }
+            }
+
+            dependentTypesList.Sort(
+                (@ref, trg) => @ref.FullName?.CompareTo(
+                    trg.FullName) ?? (trg.FullName is null ? 0 : -1));
+
+            var retTypesList = dependentTypesList.Select(
+                type => new WorkArgs.DotNetTypeObj
+                {
+                    Type = type,
+                    DestnFilePath = GetDestnFilePath(
+                        wka, section, asmb, type)
+                }).ToList();
+
+            return retTypesList;
+        }
+
+        private DotNetType[] ExpandDependency(
+            DotNetType type)
+        {
+            DotNetType[] retArr;
+
+            if (type.IsGenericType == true)
+            {
+                if (type.IsNullableType == true)
+                {
+                    retArr = ExpandDependency(
+                        type.GenericTypeArgs.Single().TypeArg);
+                }
+                else
+                {
+                    retArr = type.GenericTypeArgs.Where(
+                        type => type.TypeArg != null).SelectMany(
+                        type => ExpandDependency(type.TypeArg)).ToArray();
+                }
+            }
+            else if (type.IsArrayType == true)
+            {
+                retArr = ExpandDependency(
+                    type.ArrayElementType);
+            }
+            else
+            {
+                retArr = [type];
+            }
+
+            return retArr;
+        }
+
+        private Dictionary<string, WorkArgs.DotNetTypeObj> MapDependencyNames(
+            List<WorkArgs.DotNetTypeObj> typesList)
+        {
+            var typesMap = new Dictionary<string, WorkArgs.DotNetTypeObj>();
+
+            foreach (var type in typesList)
+            {
+                if (typesMap.Keys.Contains(type.Type.Name))
+                {
+                    int idx = 1;
+
+                    string typeName = GetUniquifiedTypeName(
+                        type, idx);
+
+                    while (typesMap.Keys.Contains(typeName))
+                    {
+                        idx++;
+
+                        typeName = GetUniquifiedTypeName(
+                            type, idx);
+                    }
+
+                    typesMap.Add(typeName, type);
+                }
+                else
+                {
+                    typesMap.Add(type.Type.Name, type);
+                }
+            }
+
+            return typesMap;
+        }
+
+        private string GetRelFilePath(
+            WorkArgs.DotNetTypeObj dotNetTypeObj,
+            WorkArgs.DotNetTypeObj dependantTypeObj)
+        {
+            var typePathParts = dotNetTypeObj.DestnFilePath.Split(['/', '\\']).ToList();
+            var dependantTypePathParts = dependantTypeObj.DestnFilePath.Split(['/', '\\']).ToList();
+
+            int typePathPartsLen = typePathParts.Count;
+            int dependantTypePathPartsLen = dependantTypePathParts.Count;
+
+            int maxCount = Math.Min(typePathPartsLen, dependantTypePathPartsLen);
+
+            for (int i = 0; i < maxCount; i++)
+            {
+                if (typePathParts.First() == dependantTypePathParts.First())
+                {
+                    typePathParts.RemoveAt(0);
+                    dependantTypePathParts.RemoveAt(0);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            string typePath = Path.Combine(
+                typePathParts.Select(
+                    part => "..").Concat(
+                    dependantTypePathParts).ToArray());
+
+            return typePath;
+        }
+
+        private string GetUniquifiedTypeName(
+            WorkArgs.DotNetTypeObj type,
+            int uniqueIdx) => string.Format(
+                "{0}_{1}",
+                type.Type.Name,
+                uniqueIdx);
 
         private AssemblyLoaderOpts.TypeOpts GetTypeOpts(
             ProgramConfig.DotNetType type)
@@ -320,7 +496,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 wka, section, asmb);
 
             var destnPath = GetDefaultTsRelFilePath(
-                wka.PgArgs, dotNetType.RelNsPartsArr, dotNetType.Name);
+                wka.PgArgs, dotNetType.RelNsPartsArr?.Reverse(
+                    ).Skip(1).Reverse().ToArray(), dotNetType.Name);
 
             destnPath = Path.Combine(
                 destnDirPath,

@@ -28,6 +28,8 @@ namespace Turmerik.Dependencies
             services.AddSingleton<INoteDirsPairIdxRetriever, NoteDirsPairIdxRetriever>();
             services.AddSingleton<IExistingDirPairsRetrieverFactory, ExistingDirPairsRetrieverFactory>();
 
+            services.AddSingleton<INotesAppConfigLoader, NotesAppConfigLoader>();
+
             return services;
         }
     }

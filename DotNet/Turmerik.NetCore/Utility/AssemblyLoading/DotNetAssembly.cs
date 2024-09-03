@@ -103,6 +103,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public string TypeNamesPfx { get; set; }
         public string AssemblyFilePath { get; set; }
         public bool? IsExecutable { get; set; }
+        public bool? IsCoreLib { get; set; }
 
         public List<DotNetType>? TypesList { get; set; }
 
@@ -131,6 +132,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public string? Namespace { get; set; }
         public string FullName { get; set; }
         public string[]? RelNsPartsArr { get; set; }
+        public bool? IsValueType { get; set; }
+        public bool? IsNullableType { get; set; }
+        public bool? IsArrayType { get; set; }
         public bool? IsNested { get; set; }
         public bool? IsGenericParam { get; set; }
         public bool? IsGenericTypeParam { get; set; }
@@ -140,6 +144,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public bool? IsGenericTypeDef { get; set; }
 
         public DotNetAssembly? Assembly { get; set; }
+
+        public DotNetType? ArrayElementType { get; set; }
 
         public DotNetType? BaseType { get; set; }
         public List<DotNetType>? Interfaces { get; set; }
@@ -160,6 +166,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 Namespace = Namespace,
                 FullName = FullName,
                 RelNsPartsArr = RelNsPartsArr,
+                IsValueType = IsValueType,
+                IsNullableType = IsNullableType,
+                IsArrayType = IsArrayType,
                 IsNested = IsNested,
                 IsGenericParam = IsGenericParam,
                 IsGenericTypeParam = IsGenericTypeParam,

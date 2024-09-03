@@ -18,7 +18,7 @@ namespace Turmerik.Notes.Core
             RequiredClientVersion = src.RequiredClientVersion;
             ClientRedirectUrl = src.ClientRedirectUrl;
             NoteDirPairs = src.GetNoteDirPairs()?.ToImmtbl();
-            StorageOption = src.GetStorageOptions()?.ToImmtblRdnlC();
+            StorageOptions = src.GetStorageOptions()?.ToImmtblRdnlC();
             SingleStorageOption = src.GetSingleStorageOption()?.ToImmtbl();
         }
 
@@ -28,13 +28,17 @@ namespace Turmerik.Notes.Core
         public int RequiredClientVersion { get; }
         public string ClientRedirectUrl { get; }
         public NoteDirsPairConfigImmtbl NoteDirPairs { get; }
-        public ReadOnlyCollection<TrmrkNotesStorageOptionImmtbl> StorageOption { get; }
+        public ReadOnlyCollection<TrmrkNotesStorageOptionImmtbl> StorageOptions { get; }
         public TrmrkNotesStorageOptionImmtbl SingleStorageOption { get; }
+
+        public ReadOnlyCollection<string>? NestedConfigFilePaths { get; }
 
         public INoteDirsPairConfig GetNoteDirPairs() => NoteDirPairs;
 
-        public IEnumerable<ITrmrkNotesStorageOption> GetStorageOptions() => StorageOption;
+        public IEnumerable<ITrmrkNotesStorageOption> GetStorageOptions() => StorageOptions;
         public ITrmrkNotesStorageOption GetSingleStorageOption() => SingleStorageOption;
+
+        public IEnumerable<string> GetNestedConfigFilePaths() => NestedConfigFilePaths;
 
         public class TrmrkNotesStorageOptionImmtbl : ITrmrkNotesStorageOption
         {

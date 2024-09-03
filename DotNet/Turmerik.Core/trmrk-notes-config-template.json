@@ -1,4 +1,7 @@
 {
+  "NestedConfigFilePaths": [
+    "trmrk-notes-config.main.json"
+  ],
   "FsExplorerServiceReqRootPath": null,
   "AppEnvLocatorFilePath": null,
   "IsDevEnv": true,
@@ -136,9 +139,9 @@
       }
     },
     "DirNames": {
-      "NoteBook": "[note-book]",
-      "NoteFiles": "[note-files]",
-      "NoteInternals": "[note-internals]",
+      "NoteBook": "NB",
+      "NoteFiles": "NF",
+      "NoteInternals": "NI",
       "NoteInternalsPfxes": {
         "MainPfx": "0",
         "AltPfx": "t_0",
@@ -180,9 +183,9 @@
       "IdxFmt": "D1"
     },
     "FileNames": {
-      "NoteBookJsonFileName": "[note-book].json",
-      "NoteItemJsonFileName": "[note].json",
-      "NoteItemMdFileName": "[note].md",
+      "NoteBookJsonFileName": ".json",
+      "NoteItemJsonFileName": ".json",
+      "NoteItemMdFileName": ".md",
       "NoteItemMdFileNamePfx": "0-",
       "PrependTitleToNoteMdFileName": true,
       "KeepFileName": ".keep"

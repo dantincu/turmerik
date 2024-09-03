@@ -30,6 +30,7 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
         private readonly DirsPairConfig config;
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
+        private readonly INotesAppConfigLoader notesAppConfigLoader;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
 
         private readonly NoteDirsPairConfig.IDirNamesT noteDirNamesCfg;
@@ -46,7 +47,8 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
             IConsoleMsgPrinter consoleMsgPrinter,
             IConsoleArgsParser consoleArgsParser,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
-            IDirsPairConfigLoader dirsPairConfigLoader)
+            IDirsPairConfigLoader dirsPairConfigLoader,
+            INotesAppConfigLoader notesAppConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -60,12 +62,11 @@ namespace Turmerik.DirsPair.ConsoleApps.LsFsDirPairs
             this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
                 nameof(dirsPairConfigLoader));
 
-            config = dirsPairConfigLoader.LoadConfig();
+            this.notesAppConfigLoader = notesAppConfigLoader ?? throw new ArgumentNullException(
+                nameof(notesAppConfigLoader));
 
-            notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
-                File.ReadAllText(Path.Combine(
-                    ProgramH.ExecutingAssemmblyPath,
-                    TrmrkNotesH.NOTES_CFG_FILE_NAME)));
+            config = dirsPairConfigLoader.LoadConfig();
+            notesConfig = notesAppConfigLoader.LoadConfig();
 
             existingDirPairsRetriever = existingDirPairsRetrieverFactory.Retriever(
                 notesConfig.GetNoteDirPairs());

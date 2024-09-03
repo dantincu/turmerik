@@ -51,6 +51,7 @@
               "^\\/Bin\\/.+\\/trmrk-dirpairs-config\\.json$",
               "^\\/Bin\\/.+\\/trmrk-dirpairs-config\\..+\\.json$",
               "^\\/Bin\\/.+\\/trmrk-notes-config\\.json$",
+              "^\\/Bin\\/.+\\/trmrk-notes-config\\..+\\.json$",
               "^\\/Bin\\/.+\\/trmrk-localdevice-paths\\.json$"
             ]
           }

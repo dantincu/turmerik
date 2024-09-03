@@ -36,6 +36,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
         private readonly DirsPairConfig config;
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
+        private readonly INotesAppConfigLoader notesAppConfigLoader;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -46,7 +47,8 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
             INoteMdParser nmdParser,
             IExistingDirPairsRetrieverFactory existingDirPairsRetrieverFactory,
             RfDirsPairNames.IProgramComponent rfDirPairNamesComponent,
-            IDirsPairConfigLoader dirsPairConfigLoader)
+            IDirsPairConfigLoader dirsPairConfigLoader,
+            INotesAppConfigLoader notesAppConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -69,12 +71,11 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
             this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
                 nameof(dirsPairConfigLoader));
 
-            config = dirsPairConfigLoader.LoadConfig();
+            this.notesAppConfigLoader = notesAppConfigLoader ?? throw new ArgumentNullException(
+                nameof(notesAppConfigLoader));
 
-            notesConfig = jsonConversion.Adapter.Deserialize<NotesAppConfigMtbl>(
-                File.ReadAllText(Path.Combine(
-                    ProgramH.ExecutingAssemmblyPath,
-                    TrmrkNotesH.NOTES_CFG_FILE_NAME)));
+            config = dirsPairConfigLoader.LoadConfig();
+            notesConfig = notesAppConfigLoader.LoadConfig();
 
             existingDirPairsRetriever = existingDirPairsRetrieverFactory.Retriever(
                 notesConfig.GetNoteDirPairs());

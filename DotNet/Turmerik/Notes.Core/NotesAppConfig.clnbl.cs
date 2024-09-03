@@ -16,6 +16,8 @@ namespace Turmerik.Notes.Core
         string ClientRedirectUrl { get; }
         INoteDirsPairConfig GetNoteDirPairs();
 
+        IEnumerable<string> GetNestedConfigFilePaths();
+
         IEnumerable<NotesAppConfig.ITrmrkNotesStorageOption> GetStorageOptions();
         NotesAppConfig.ITrmrkNotesStorageOption GetSingleStorageOption();
     }

@@ -1,3 +1,19 @@
 {
-  "CreatePdfFile": true
+  "CreatePdfFile": true,
+  "DirNames": {
+    "DirNamesTplMap": {
+      "f": {
+        "DirNameTpl": "[note-files]"
+      },
+      "i": {
+        "DirNameTpl": "[note-internals]"
+      },
+      "b": {
+        "DirNameTpl": "[note-book]"
+      }
+    }
+  },
+  "FileNames": {
+    "MdFileName": "[note].md"
+  }
 }
