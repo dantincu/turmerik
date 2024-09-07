@@ -9,6 +9,11 @@
     "$geographical-regions$",
     ":="
   ],
+  "isl": [
+    ":s",
+    "$islands$",
+    ":="
+  ],
   "m": [
     ":s",
     "$misc$",

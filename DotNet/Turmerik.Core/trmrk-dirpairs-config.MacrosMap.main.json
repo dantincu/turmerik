@@ -9,6 +9,16 @@
     "$athletes$",
     ":="
   ],
+  "cps": [
+    ":s",
+    "$composers$",
+    ":="
+  ],
+  "cpz": [
+    ":s",
+    "$compozitions$",
+    ":="
+  ],
   "egna": [
     ":s",
     "$environment-geography-nature-and-agriculture$",
@@ -32,6 +42,11 @@
   "nf": [
     ":s",
     "$infamous$",
+    ":="
+  ],
+  "msc": [
+    ":s",
+    "$musicians$",
     ":="
   ],
   "mf": [

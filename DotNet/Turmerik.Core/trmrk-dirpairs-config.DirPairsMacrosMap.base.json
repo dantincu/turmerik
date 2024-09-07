@@ -1,6 +1,7 @@
 {
   "|a|": "$articles$",
   "|gr|": "$geographical-regions$",
+  "|isl|": "$islands$",
   "|m|": "$misc$",
   "|mps|": "$my-products-and-services$",
   "|org|": "$organizations$",

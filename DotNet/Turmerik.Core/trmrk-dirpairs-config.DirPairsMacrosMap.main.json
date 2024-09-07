@@ -1,11 +1,14 @@
 {
   "|art|": "$artists$",
   "|athl|": "$athletes$",
+  "|cps|": "$composers$",
+  "|cpz|": "$compozitions$",
   "|egna|": "$environment-geography-nature-and-agriculture$",
   "|fplyr|": "$former-players$",
   "|fathl|": "$former-athletes$",
   "|hf|": "$historical-figures$",
   "|nf|": "$infamous$",
+  "|msc|": "$musicians$",
   "|mf|": "$mythological-figures$",
   "|plyr|": "$players$"
 }
