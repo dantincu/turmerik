@@ -142,6 +142,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public bool? IsConstructedGenericType { get; set; }
         public bool? IsGenericType { get; set; }
         public bool? IsGenericTypeDef { get; set; }
+        public bool? ContainsGenericParameters { get; set; }
 
         public DotNetAssembly? Assembly { get; set; }
 
@@ -176,6 +177,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 IsConstructedGenericType = IsConstructedGenericType,
                 IsGenericType = IsGenericType,
                 IsGenericTypeDef = IsGenericTypeDef,
+                ContainsGenericParameters = ContainsGenericParameters,
                 Assembly = Assembly?.Clone(keepBclObjects),
                 BaseType = BaseType?.Clone(keepBclObjects),
                 Interfaces = Interfaces?.Select(@interface => @interface.Clone(

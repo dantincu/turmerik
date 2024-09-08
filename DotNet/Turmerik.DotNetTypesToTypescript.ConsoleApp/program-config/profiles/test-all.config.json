@@ -7,6 +7,10 @@
   "Sections": [
     {
       "SectionName": "Turmerik",
+      "DirPaths": {
+        "SrcPath": "",
+        "DestnPath": "some"
+      },
       "CsProjectsArr": [
         {
           "Name": "Turmerik",
@@ -37,6 +41,22 @@
                 "GenericTypeParamsCount": 1
               }
             ]
+          }
+        }
+      ]
+    },
+    {
+      "SectionName": "Turmerik-All",
+      "DirPaths": {
+        "SrcPath": "",
+        "DestnPath": "all"
+      },
+      "CsProjectsArr": [
+        {
+          "Name": "Turmerik.Core",
+          "IsDotNetStandard": true,
+          "CsProjectAssembly": {
+            "IncludeAllTypes": true
           }
         }
       ]

@@ -39,15 +39,15 @@
     "DefaultJoinStr": "-",
     "DirNamesTplMap": {
       "f": {
-        "DirNameTpl": "[note-files]",
+        "DirNameTpl": "NF",
         "MdFileNameTemplate": ""
       },
       "i": {
-        "DirNameTpl": "[note-internals]",
+        "DirNameTpl": "NI",
         "MdFileNameTemplate": ""
       },
       "b": {
-        "DirNameTpl": "[note-book]",
+        "DirNameTpl": "NB",
         "MdFileNameTemplate": ""
       }
     },
@@ -57,7 +57,7 @@
     ]
   },
   "FileNames": {
-    "MdFileName": "[note].md",
+    "MdFileName": ".md",
     "MdFileNamePfx": "0-",
     "PrependTitleToNoteMdFileName": true,
     "KeepFileName": ".keep"

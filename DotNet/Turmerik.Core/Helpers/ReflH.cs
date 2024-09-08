@@ -8,11 +8,13 @@ using System.Reflection;
 using System.Text;
 using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
+using System.Linq;
 
 namespace Turmerik.Core.Helpers
 {
     public static class ReflH
     {
+        public static readonly Type VoidType = typeof(void);
         public static readonly Type BaseObjectType = typeof(object);
         public static readonly Type DisposableType = typeof(IDisposable);
         public static readonly Type AsyncDisposableType = typeof(IAsyncDisposable);
@@ -90,5 +92,9 @@ namespace Turmerik.Core.Helpers
 
             return isDisposable;
         }
+
+        public static bool IsSpecialTypeName(
+            string typeName) => typeName.Any(
+                c => !(char.IsLetterOrDigit(c) || "@$".Contains(c)));
     }
 }

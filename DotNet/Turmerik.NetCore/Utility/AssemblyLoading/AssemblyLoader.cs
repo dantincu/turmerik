@@ -388,13 +388,13 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             MethodInfo methodInfo)
         {
             var returnType = methodInfo.ReturnType;
-            var isVoidMethod = returnType == typeof(void);
+            var isVoidMethod = returnType.FullName?.TrimEnd('*') == ReflH.VoidType.FullName;
 
             var dotNetMethod = new DotNetMethod(methodInfo)
             {
                 Name = methodInfo.Name,
                 IsVoidMethod = isVoidMethod,
-                ReturnType = ConvertAssemblyType(wka, returnType),
+                ReturnType = isVoidMethod ? null : ConvertAssemblyType(wka, returnType),
                 IsStatic = methodInfo.IsStatic,
                 Parameters = methodInfo.GetParameters().Select(
                     @param => ConvertDotNetParameter(wka, param)).ToList(),
@@ -614,6 +614,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     IsGenericType = typeObj.IsGenericType,
                     IsGenericTypeDef = typeObj.IsGenericTypeDefinition,
                     IsConstructedGenericType = typeObj.IsConstructedGenericType,
+                    ContainsGenericParameters = typeObj.ContainsGenericParameters,
                     IsArrayType = typeObj.IsArray
                 };
 
@@ -661,7 +662,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                 dotNetType.DeclaringType.ActIfNotNull(declaringType =>
                 {
-                    dotNetType.RelNsPartsArr = (declaringType.RelNsPartsArr ?? []).PrependToArr(
+                    dotNetType.RelNsPartsArr = (declaringType.RelNsPartsArr ?? []).AppendToArr(
                         declaringType.Name);
                 },
                 () =>
@@ -676,6 +677,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     {
                         dotNetType.RelNsPartsArr = dotNetType.FullName?.Split('.');
                     }
+
+                    dotNetType.RelNsPartsArr = dotNetType.RelNsPartsArr?.Reverse().Skip(1).Reverse().ToArray();
                 });
 
                 dotNetType.BaseType = typeObj.BaseType?.With(
@@ -685,11 +688,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 dotNetType.Interfaces = typeObj.GetInterfaces().Select(
                     intfType => ConvertAssemblyType(wka, intfType)).ToList();
 
-                if (typeOpts.LoadPubGetProps == true || typeOpts.LoadPubInstnGetProps == true)
+                if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadPubGetProps == true || typeOpts.LoadPubInstnGetProps == true)
                 {
                     var properties = typeObj.GetProperties();
 
-                    if (typeOpts.LoadPubInstnGetProps == true)
+                    if (typeOpts.LoadPubGetProps != true)
                     {
                         properties = properties.Where(
                             prop => prop.GetGetMethod()?.IsStatic == false).ToArray();
@@ -699,11 +702,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                         propInfo => ConvertDotNetProperty(wka, propInfo)).ToList();
                 }
 
-                if (typeOpts.LoadPubMethods == true || typeOpts.LoadPubInstnMethods == true)
+                if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadPubMethods == true || typeOpts.LoadPubInstnMethods == true)
                 {
                     var methodInfos = typeObj.GetMethods();
 
-                    if (typeOpts.LoadPubInstnMethods == true)
+                    if (typeOpts.LoadPubMethods != true)
                     {
                         methodInfos = methodInfos.Where(
                             method => !method.IsStatic).ToArray();
@@ -721,6 +724,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     dotNetType.Constructors = constructorInfos.Select(
                         constrInfo => ConvertDotNetConstructor(wka, constrInfo)).ToList();
                 }
+            }
+
+            if (dotNetType.Name.Contains("*"))
+            {
+
             }
 
             return dotNetType;

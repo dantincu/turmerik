@@ -72,9 +72,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     {
         public const string DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME = "csproj-asmb";
         public const string DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME = "extern-asmb";
-        public const string TYPES_DIR_NAME = "t";
-        public const string TYPES_NODE_DIR_NAME = "tn";
-        public const string TYPES_HCY_NODE_DIR_NAME = "hn";
+        public const string TYPES_NODE_DIR_NAME = "t";
+        public const string TYPES_HCY_NODE_DIR_NAME = "h";
         public const string TYPES_INFO_DIR_NAME = "i";
         public const string TYPES_INFO_FILE_NAME = "types.json";
 
@@ -127,7 +126,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             profile.IsTurmerikAssemblyPredicate ??= Trmrk.IsTurmerikAssembly;
             profile.DestnCsProjectAssembliesDirName ??= DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME;
             profile.DestnExternalAssemblliesDirName ??= DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME;
-            profile.TypesDirName ??= TYPES_DIR_NAME;
             profile.TypesNodeDirName ??= TYPES_NODE_DIR_NAME;
             profile.TypesHcyNodeDirName ??= TYPES_HCY_NODE_DIR_NAME;
             profile.TypesInfoDirName ??= TYPES_INFO_DIR_NAME;

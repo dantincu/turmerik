@@ -314,22 +314,29 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.DotNetAssemblyObj asmb,
             WorkArgs.DotNetTypeObj dotNetTypeObj)
         {
-            var allDependentTypesArr = (dotNetTypeObj.Type.GenericTypeArgs?.Where(
+            var allDependentTypesArr = dotNetTypeObj.Type.GenericTypeArgs?.Where(
                 arg => arg.TypeArg != null).Select(
-                arg => arg.TypeArg) ?? []).Concat(
-                    dotNetTypeObj.Type.Properties.Select(
-                        prop => prop.PropType).Concat(
-                        dotNetTypeObj.Type.Methods.SelectMany(
-                            method => method.ReturnType.Arr(
-                                method.Parameters.Select(
-                                    @param => @param.ParamType).ToArray(
-                                    ))))).SelectMany(ExpandDependency).ToArray();
+                arg => arg.TypeArg).ToArray() ?? [];
+
+            allDependentTypesArr = allDependentTypesArr.Concat(
+                dotNetTypeObj.Type.Properties.Select(
+                    prop => prop.PropType)).ToArray();
+
+            allDependentTypesArr = allDependentTypesArr.Concat(
+                dotNetTypeObj.Type.Methods.SelectMany(
+                    method => method.ReturnType.Arr(
+                        method.Parameters.Select(
+                            @param => @param.ParamType).ToArray()))).ToArray();
+
+            allDependentTypesArr = allDependentTypesArr.NotNull().Where(
+                type => ReflH.IsSpecialTypeName(type.Name)).SelectMany(
+                ExpandDependency).ToArray();
 
             var dependentTypesList = new List<DotNetType>();
 
             foreach (var refType in allDependentTypesArr.NotNull())
             {
-                if (dependentTypesList.None(
+                if (refType.FullName != null && dependentTypesList.None(
                     type => assemblyLoader.TypesAreEqual(
                         type, refType)))
                 {
@@ -338,8 +345,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             }
 
             dependentTypesList.Sort(
-                (@ref, trg) => @ref.FullName?.CompareTo(
-                    trg.FullName) ?? (trg.FullName is null ? 0 : -1));
+                (@ref, trg) => @ref.FullName.CompareTo(
+                    trg.FullName));
 
             var retTypesList = dependentTypesList.Select(
                 type => new WorkArgs.DotNetTypeObj
@@ -482,7 +489,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             DotNetType dotNetType) => new WorkArgs.DotNetTypeObj
             {
                 Type = dotNetType,
-                DestnFilePath = dotNetType.FullName != null ? GetDestnFilePath(
+                DestnFilePath = dotNetType.FullName != null && !ReflH.IsSpecialTypeName(
+                    dotNetType.Name) ? GetDestnFilePath(
                     wka, section, asmb, dotNetType) : null
             };
 
@@ -496,8 +504,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 wka, section, asmb);
 
             var destnPath = GetDefaultTsRelFilePath(
-                wka.PgArgs, dotNetType.RelNsPartsArr?.Reverse(
-                    ).Skip(1).Reverse().ToArray(), dotNetType.Name);
+                wka.PgArgs, dotNetType.RelNsPartsArr, dotNetType.Name);
 
             destnPath = Path.Combine(
                 destnDirPath,

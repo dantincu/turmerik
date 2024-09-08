@@ -2,7 +2,8 @@
   "profiles": {
     "Turmerik.MdToPdf.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":w:|$ONEDRIVE_DIR|\\0002 :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
+      // "commandLineArgs": ":w:|$ONEDRIVE_DIR|\\0002 :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
+      "commandLineArgs": ":w:|$ONEDRIVE_DIR|\\0002\\194\\193\\198\\199\\199\\995"
     }
   }
 }
