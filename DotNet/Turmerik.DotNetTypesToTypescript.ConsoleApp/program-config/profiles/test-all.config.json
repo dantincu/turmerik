@@ -9,7 +9,7 @@
       "SectionName": "Turmerik",
       "DirPaths": {
         "SrcPath": "",
-        "DestnPath": "some"
+        "DestnPath": "some\\src"
       },
       "CsProjectsArr": [
         {
@@ -49,7 +49,7 @@
       "SectionName": "Turmerik-All",
       "DirPaths": {
         "SrcPath": "",
-        "DestnPath": "all"
+        "DestnPath": "all\\src"
       },
       "CsProjectsArr": [
         {

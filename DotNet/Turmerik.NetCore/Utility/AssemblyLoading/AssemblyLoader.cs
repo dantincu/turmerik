@@ -1,7 +1,9 @@
 ﻿using Jint.Runtime.Interop;
 using Microsoft.PowerShell.Commands;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Management.Automation;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
@@ -9,98 +11,100 @@ using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
-using static Turmerik.NetCore.Utility.AssemblyLoading.AssemblyLoaderOpts;
 
 namespace Turmerik.NetCore.Utility.AssemblyLoading
 {
-    public interface IAssemblyLoader : IComponentCore
+    public interface IAssemblyLoader<TData> : IComponentCore
     {
         AssemblyLoaderConfig NormalizeConfig(
             AssemblyLoaderConfig config);
 
-        Task<AssemblyLoaderOpts> NormalizeOptsAsync(
-            AssemblyLoaderOpts opts);
+        Task<AssemblyLoaderOpts<TData>> NormalizeOptsAsync(
+            AssemblyLoaderOpts<TData> opts);
 
         Task<List<string>> GetAllAssembliesFilePathsAsync(
             string assembliesBaseDirPath);
 
-        Task<AssemblyLoader.WorkArgs> LoadAssembliesAsync(
-            AssemblyLoaderOpts opts);
+        Task<AssemblyLoader<TData>.WorkArgs> LoadAssembliesAsync(
+            AssemblyLoaderOpts<TData> opts);
 
-        DotNetAssembly ConvertAssembly(
-            AssemblyLoader.WorkArgs wka);
+        DotNetAssembly<TData> ConvertAssembly(
+            AssemblyLoader<TData>.WorkArgs wka,
+            Assembly asmbObj);
 
-        DotNetAssemblyName ConvertAssemblyName(
+        DotNetAssemblyName<TData> ConvertAssemblyName(
+            AssemblyLoader<TData>.WorkArgs wka,
             AssemblyName asmbObjName);
 
-        DotNetAssemblyVersion ConvertAssemblyVersion(
+        DotNetAssemblyVersion<TData> ConvertAssemblyVersion(
+            AssemblyLoader<TData>.WorkArgs wka,
             Version asmbObjVersion);
 
-        DotNetType ConvertAssemblyType(
-            AssemblyLoader.WorkArgs wka,
+        DotNetType<TData> ConvertAssemblyType(
+            AssemblyLoader<TData>.WorkArgs wka,
             Type typeObj);
 
-        DotNetType ConvertAssemblyType(
-            AssemblyLoader.WorkArgs wka,
-            TypeOpts typeOpts);
+        DotNetType<TData> ConvertAssemblyType(
+            AssemblyLoader<TData>.WorkArgs wka,
+            AssemblyLoaderOpts<TData>.TypeOpts typeOpts);
 
-        DotNetProperty ConvertDotNetProperty(
-            AssemblyLoader.WorkArgs wka,
+        DotNetProperty<TData> ConvertDotNetProperty(
+            AssemblyLoader<TData>.WorkArgs wka,
             PropertyInfo propInfo);
 
-        DotNetMethod ConvertDotNetMethod(
-            AssemblyLoader.WorkArgs wka,
+        DotNetMethod<TData> ConvertDotNetMethod(
+            AssemblyLoader<TData>.WorkArgs wka,
             MethodInfo methodInfo);
 
-        DotNetConstructor ConvertDotNetConstructor(
-            AssemblyLoader.WorkArgs wka,
+        DotNetConstructor<TData> ConvertDotNetConstructor(
+            AssemblyLoader<TData>.WorkArgs wka,
             ConstructorInfo constructorInfo);
 
-        DotNetMethodParameter ConvertDotNetParameter(
-            AssemblyLoader.WorkArgs wka,
+        DotNetMethodParameter<TData> ConvertDotNetParameter(
+            AssemblyLoader<TData>.WorkArgs wka,
             ParameterInfo paramInfo);
 
-        GenericTypeArg ConvertGenericTypeArg(
-            AssemblyLoader.WorkArgs wka,
+        GenericTypeArg<TData> ConvertGenericTypeArg(
+            AssemblyLoader<TData>.WorkArgs wka,
             Type genericTypeArg);
 
         Type GetTypeObj(
-            AssemblyLoader.WorkArgs wka,
-            TypeOpts typeOpts);
+            AssemblyLoader<TData>.WorkArgs wka,
+            AssemblyLoaderOpts<TData>.TypeOpts typeOpts);
 
-        TypeOpts GetTypeOpts(
-            AssemblyLoader.WorkArgs wka,
+        AssemblyLoaderOpts<TData>.TypeOpts GetTypeOpts(
+            AssemblyLoader<TData>.WorkArgs wka,
             Type typeObj);
 
         string GetAssemblyExtension(
-            AssemblyOpts asmbOpts);
+            AssemblyLoaderOpts<TData>.AssemblyOpts asmbOpts);
 
         string GetAssemblyFileName(
-            AssemblyOpts asmbOpts);
+            AssemblyLoaderOpts<TData>.AssemblyOpts asmbOpts);
 
         string GetAssemblyFilePath(
-            AssemblyLoaderOpts opts,
-            AssemblyOpts asmbOpts);
+            AssemblyLoaderOpts<TData> opts,
+            AssemblyLoaderOpts<TData>.AssemblyOpts asmbOpts);
 
-        DotNetType FindMatching(
-            AssemblyLoader.WorkArgs wka,
+        DotNetType<TData> FindMatching(
+            AssemblyLoader<TData>.WorkArgs wka,
             Type typeObj,
-            IEnumerable<DotNetType> typesNmrbl);
+            IEnumerable<DotNetType<TData>> typesNmrbl);
 
         bool GenericArgsAreEqual(
-            GenericTypeArg trgArg,
-            GenericTypeArg refArg);
+            GenericTypeArg<TData> trgArg,
+            GenericTypeArg<TData> refArg);
 
         bool TypesAreEqual(
-            DotNetType trgType,
-            DotNetType refType);
+            DotNetType<TData> trgType,
+            DotNetType<TData> refType);
 
         bool AssembliesAreEqual(
             Assembly trgAsmb,
             Assembly refAsmb);
     }
 
-    public class AssemblyLoader : ComponentCoreBase, IAssemblyLoader
+    public class AssemblyLoader<TData> : ComponentCoreBase, IAssemblyLoader<TData>
     {
         public const string NET_STD_ASMB_NAME = "netstandard";
         public const string NET_STD_ASMB_FILE_NAME = "netstandard.dll";
@@ -110,12 +114,27 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         private readonly IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever;
 
+        private readonly AssemblyLoaderInstnOpts<TData> opts;
+
         public AssemblyLoader(
             IObjectMapperFactory objMapperFactory,
-            IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever) : base(objMapperFactory)
+            IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever,
+            AssemblyLoaderInstnOpts<TData> opts) : base(objMapperFactory)
         {
             this.filteredDriveEntriesRetriever = filteredDriveEntriesRetriever ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesRetriever));
+
+            this.opts = new AssemblyLoaderInstnOpts<TData>
+            {
+                AssemblyDataFactory = opts.AssemblyDataFactory.FirstNotNull((wka, obj, item) => default),
+                AssemblyNameDataFactory = opts.AssemblyNameDataFactory.FirstNotNull((wka, obj, item) => default),
+                AssemblyVersionDataFactory = opts.AssemblyVersionDataFactory.FirstNotNull((wka, obj, item) => default),
+                ConstructorDataFactory = opts.ConstructorDataFactory.FirstNotNull((wka, obj, item) => default),
+                MethodDataFactory = opts.MethodDataFactory.FirstNotNull((wka, obj, item) => default),
+                MethodParameterDataFactory = opts.MethodParameterDataFactory.FirstNotNull((wka, obj, item) => default),
+                PropertyDataFactory = opts.PropertyDataFactory.FirstNotNull((wka, obj, item) => default),
+                TypeDataFactory = opts.TypeDataFactory.FirstNotNull((wka, opts, obj, item) => default)
+            };
         }
 
         public AssemblyLoaderConfig NormalizeConfig(
@@ -139,10 +158,10 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             return cfg;
         }
 
-        public async Task<AssemblyLoaderOpts> NormalizeOptsAsync(
-            AssemblyLoaderOpts opts)
+        public async Task<AssemblyLoaderOpts<TData>> NormalizeOptsAsync(
+            AssemblyLoaderOpts<TData> opts)
         {
-            opts = new AssemblyLoaderOpts
+            opts = new AssemblyLoaderOpts<TData>
             {
                 Config = opts.Config.With(NormalizeConfig),
                 AssembliesBaseDirPath = opts.AssembliesBaseDirPath,
@@ -170,7 +189,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             }
 
             opts.AssembliesToLoad = opts.AssembliesToLoad.Select(
-                asmb => new AssemblyOpts
+                asmb => new AssemblyLoaderOpts<TData>.AssemblyOpts
                 {
                     IsExecutable = asmb.IsExecutable,
                     AssemblyName = asmb.AssemblyName,
@@ -182,7 +201,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     LoadPubMethods = asmb.LoadPubMethods ?? opts.LoadPubMethods,
                     LoadPubInstnMethods = asmb.LoadPubInstnMethods ?? opts.LoadPubInstnMethods,
                     TypesToLoad = asmb.TypesToLoad?.Select(
-                        type => new TypeOpts
+                        type => new AssemblyLoaderOpts<TData>.TypeOpts
                         {
                             TypeName = type.TypeName,
                             FullTypeName = type.FullTypeName,
@@ -216,7 +235,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         }
 
         public async Task<WorkArgs> LoadAssembliesAsync(
-            AssemblyLoaderOpts opts)
+            AssemblyLoaderOpts<TData> opts)
         {
             opts = await NormalizeOptsAsync(opts);
 
@@ -247,7 +266,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                             AsmbOpts = asmb,
                             AsmbObj = asmbObj,
                             AsmbTypes = asmbObj.GetTypes().ToList()
-                        });
+                        }, asmbObj);
 
                         return dotNetAsmb;
                     }).ToList();
@@ -281,11 +300,12 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             return wka;
         }
 
-        public DotNetAssembly ConvertAssembly(
-            WorkArgs wka)
+        public DotNetAssembly<TData> ConvertAssembly(
+            WorkArgs wka,
+            Assembly asmbObj)
         {
-            string assemblyFilePath = wka.AsmbObj.Location;
-            string fullName = wka.AsmbObj.GetName().Name;
+            string assemblyFilePath = asmbObj.Location;
+            string fullName = asmbObj.GetName().Name;
 
             bool isCoreLib = fullName == coreLibName;
             bool isNetStandardLib = fullName == NET_STD_ASMB_NAME;
@@ -295,14 +315,14 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             var assembliesList = wka.LoadedAssemblies;
 
             var asmb = assembliesList.FirstOrDefault(
-                asmbInstn => asmbInstn.BclItem == wka.AsmbObj);
+                asmbInstn => asmbInstn.BclItem == asmbObj);
 
             if (asmb == null)
             {
-                asmb = new DotNetAssembly(wka.AsmbObj)
+                asmb = new DotNetAssembly<TData>(asmbObj)
                 {
                     BclAsmbName = ConvertAssemblyName(
-                        wka.AsmbObj.GetName()),
+                        wka, asmbObj.GetName()),
                     Name = fullName,
                     TypeNamesPfx = isSysLib ? ReflH.BaseObjectType.Namespace! : $"{fullName}.",
                     AssemblyFilePath = assemblyFilePath,
@@ -316,12 +336,12 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                 assembliesList.Add(asmb);
 
-                asmb.ReferencedBclAsmbNames = wka.AsmbObj.GetReferencedAssemblies(
-                    ).Select(ConvertAssemblyName).ToList();
+                asmb.ReferencedBclAsmbNames = asmbObj.GetReferencedAssemblies(
+                    ).Select(asmbName => ConvertAssemblyName(wka, asmbName)).ToList();
 
                 if (wka.AsmbOpts.LoadAllTypes == true)
                 {
-                    wka.AsmbObj.GetExportedTypes(
+                    asmbObj.GetExportedTypes(
                         ).Select(typeObj => ConvertAssemblyType(wka, typeObj)).ToList();
                 }
                 else
@@ -331,29 +351,37 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 }
             }
 
+            asmb.Data = opts.AssemblyDataFactory(
+                wka, asmbObj, asmb);
+
             return asmb;
         }
 
-        public DotNetAssemblyName ConvertAssemblyName(
+        public DotNetAssemblyName<TData> ConvertAssemblyName(
+            WorkArgs wka,
             AssemblyName asmbObjName)
         {
             var asmbVersion = asmbObjName.Version;
 
-            var retObj = new DotNetAssemblyName(
+            var retObj = new DotNetAssemblyName<TData>(
                 asmbObjName)
             {
                 Name = asmbObjName.Name,
-                BclVersion = ConvertAssemblyVersion(asmbVersion),
+                BclVersion = ConvertAssemblyVersion(wka, asmbVersion),
                 CultureInfo = asmbObjName.CultureInfo,
                 CultureName = asmbObjName.CultureName,
                 ContentType = asmbObjName.ContentType,
             };
 
+            retObj.Data = opts.AssemblyNameDataFactory(
+                wka, asmbObjName, retObj);
+
             return retObj;
         }
 
-        public DotNetAssemblyVersion ConvertAssemblyVersion(
-            Version asmbObjVersion) => new DotNetAssemblyVersion(
+        public DotNetAssemblyVersion<TData> ConvertAssemblyVersion(
+            WorkArgs wka,
+            Version asmbObjVersion) => new DotNetAssemblyVersion<TData>(
                 asmbObjVersion)
             {
                 Major = asmbObjVersion.Major,
@@ -362,23 +390,24 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 Revision = asmbObjVersion.Revision,
                 MajorRevision = asmbObjVersion.MajorRevision,
                 MinorRevision = asmbObjVersion.MinorRevision,
-            };
+            }.ActWith(item => item.Data = opts.AssemblyVersionDataFactory(
+                wka, asmbObjVersion, item));
 
-        public DotNetType ConvertAssemblyType(
+        public DotNetType<TData> ConvertAssemblyType(
             WorkArgs wka,
             Type typeObj) => ConvertAssemblyType(
                 wka, typeObj, null);
 
-        public DotNetType ConvertAssemblyType(
+        public DotNetType<TData> ConvertAssemblyType(
             WorkArgs wka,
-            TypeOpts typeOpts) => ConvertAssemblyType(
+            AssemblyLoaderOpts<TData>.TypeOpts typeOpts) => ConvertAssemblyType(
                 wka, null, typeOpts);
 
-        public DotNetProperty ConvertDotNetProperty(
+        public DotNetProperty<TData> ConvertDotNetProperty(
             WorkArgs wka,
             PropertyInfo propInfo)
         {
-            var dotNetProp = new DotNetProperty(propInfo)
+            var dotNetProp = new DotNetProperty<TData>(propInfo)
             {
                 Name = propInfo.Name,
                 CanRead = propInfo.CanRead,
@@ -387,17 +416,20 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 PropType = ConvertAssemblyType(wka, propInfo.PropertyType),
             };
 
+            dotNetProp.Data = opts.PropertyDataFactory(
+                wka, propInfo, dotNetProp);
+
             return dotNetProp;
         }
 
-        public DotNetMethod ConvertDotNetMethod(
+        public DotNetMethod<TData> ConvertDotNetMethod(
             WorkArgs wka,
             MethodInfo methodInfo)
         {
             var returnType = methodInfo.ReturnType;
             var isVoidMethod = returnType.FullName?.TrimEnd('*') == ReflH.VoidType.FullName;
 
-            var dotNetMethod = new DotNetMethod(methodInfo)
+            var dotNetMethod = new DotNetMethod<TData>(methodInfo)
             {
                 Name = methodInfo.Name,
                 IsVoidMethod = isVoidMethod,
@@ -407,14 +439,17 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     @param => ConvertDotNetParameter(wka, param)).ToList(),
             };
 
+            dotNetMethod.Data = opts.MethodDataFactory(
+                wka, methodInfo, dotNetMethod);
+
             return dotNetMethod;
         }
 
-        public DotNetConstructor ConvertDotNetConstructor(
+        public DotNetConstructor<TData> ConvertDotNetConstructor(
             WorkArgs wka,
             ConstructorInfo constructorInfo)
         {
-            var dotNetConstructor = new DotNetConstructor(constructorInfo)
+            var dotNetConstructor = new DotNetConstructor<TData>(constructorInfo)
             {
                 Name = constructorInfo.Name,
                 IsStatic = constructorInfo.IsStatic,
@@ -422,28 +457,34 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     @param => ConvertDotNetParameter(wka, param)).ToList(),
             };
 
+            dotNetConstructor.Data = opts.ConstructorDataFactory(
+                wka, constructorInfo, dotNetConstructor);
+
             return dotNetConstructor;
         }
 
-        public DotNetMethodParameter ConvertDotNetParameter(
+        public DotNetMethodParameter<TData> ConvertDotNetParameter(
             WorkArgs wka,
             ParameterInfo paramInfo)
         {
-            var dotNetMethodParameter = new DotNetMethodParameter(paramInfo)
+            var dotNetMethodParameter = new DotNetMethodParameter<TData>(paramInfo)
             {
                 Name = paramInfo.Name,
                 Position = paramInfo.Position,
                 ParamType = ConvertAssemblyType(wka, paramInfo.ParameterType)
             };
 
+            dotNetMethodParameter.Data = opts.MethodParameterDataFactory(
+                wka, paramInfo, dotNetMethodParameter);
+
             return dotNetMethodParameter;
         }
 
-        public GenericTypeArg ConvertGenericTypeArg(
+        public GenericTypeArg<TData> ConvertGenericTypeArg(
             WorkArgs wka,
             Type genericTypeArg)
         {
-            var genericTypeArgObj = new GenericTypeArg
+            var genericTypeArgObj = new GenericTypeArg<TData>
             {
                 TypeArg = ConvertAssemblyType(
                     wka, genericTypeArg),
@@ -456,7 +497,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         public Type GetTypeObj(
             WorkArgs wka,
-            TypeOpts? typeOpts)
+            AssemblyLoaderOpts<TData>.TypeOpts? typeOpts)
         {
             Type typeObj = GetTypeObjCore(
                 wka, typeOpts, typeOpts.DeclaringTypeOpts?.With(
@@ -466,9 +507,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             return typeObj;
         }
 
-        public TypeOpts GetTypeOpts(
+        public AssemblyLoaderOpts<TData>.TypeOpts GetTypeOpts(
             WorkArgs wka,
-            Type typeObj) => new TypeOpts
+            Type typeObj) => new AssemblyLoaderOpts<TData>.TypeOpts
             {
                 FullTypeName = typeObj.GetTypeFullDisplayName(),
                 LoadAllPubGetProps = wka.AsmbOpts.LoadPubGetProps,
@@ -478,28 +519,28 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             };
 
         public string GetAssemblyExtension(
-            AssemblyOpts asmbOpts) => asmbOpts.IsExecutable switch
+            AssemblyLoaderOpts<TData>.AssemblyOpts asmbOpts) => asmbOpts.IsExecutable switch
             {
                 true => "exe",
                 _ => "dll"
             };
 
         public string GetAssemblyFileName(
-            AssemblyOpts asmbOpts) => string.Join(
+            AssemblyLoaderOpts<TData>.AssemblyOpts asmbOpts) => string.Join(
                 ".", asmbOpts.AssemblyName, GetAssemblyExtension(asmbOpts));
 
         public string GetAssemblyFilePath(
-            AssemblyLoaderOpts opts,
-            AssemblyOpts asmbOpts) => Path.Combine(
+            AssemblyLoaderOpts<TData> opts,
+            AssemblyLoaderOpts<TData>.AssemblyOpts asmbOpts) => Path.Combine(
                 opts.AssembliesBaseDirPath,
                 GetAssemblyFileName(asmbOpts));
 
-        public DotNetType FindMatching(
+        public DotNetType<TData> FindMatching(
             WorkArgs wka,
             Type typeObj,
-            IEnumerable<DotNetType> typesNmrbl)
+            IEnumerable<DotNetType<TData>> typesNmrbl)
         {
-            DotNetType? matchingType = null;
+            DotNetType<TData>? matchingType = null;
 
             if (typeObj.FullName == null)
             {
@@ -520,8 +561,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             Assembly refAsmb) => trgAsmb.FullName == refAsmb.FullName;
 
         public bool TypesAreEqual(
-            DotNetType trgType,
-            DotNetType refType)
+            DotNetType<TData> trgType,
+            DotNetType<TData> refType)
         {
             bool areEqual = trgType.FullName == refType.FullName;
             areEqual = areEqual && trgType.Namespace == refType.Namespace;
@@ -571,8 +612,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         }
 
         public bool GenericArgsAreEqual(
-            GenericTypeArg trgArg,
-            GenericTypeArg refArg)
+            GenericTypeArg<TData> trgArg,
+            GenericTypeArg<TData> refArg)
         {
             bool areEqual = (trgArg.TypeArg != null) == (refArg != null);
 
@@ -583,19 +624,22 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             areEqual = areEqual && (trgArg.TypeParamConstraints != null) == (
                 refArg.TypeParamConstraints != null);
 
-            areEqual = areEqual && trgArg.TypeParamConstraints.Count == refArg.TypeParamConstraints.Count;
+            if (areEqual && trgArg.TypeParamConstraints != null)
+            {
+                areEqual = trgArg.TypeParamConstraints.Count == refArg.TypeParamConstraints.Count;
 
-            areEqual = areEqual && trgArg.TypeParamConstraints.All(
-                (trgConstraint, i) => TypesAreEqual(
-                    trgConstraint, refArg.TypeParamConstraints[i]));
+                areEqual = trgArg.TypeParamConstraints.All(
+                    (trgConstraint, i) => TypesAreEqual(
+                        trgConstraint, refArg.TypeParamConstraints[i]));
+            }
 
             return areEqual;
         }
 
-        private DotNetType ConvertAssemblyType(
+        private DotNetType<TData> ConvertAssemblyType(
             WorkArgs wka,
             Type? typeObj,
-            TypeOpts? typeOpts)
+            AssemblyLoaderOpts<TData>.TypeOpts? typeOpts)
         {
             typeObj ??= GetTypeObj(wka, typeOpts);
             typeOpts ??= GetTypeOpts(wka, typeObj);
@@ -607,7 +651,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
             if (dotNetType == null)
             {
-                dotNetType = new DotNetType(typeObj)
+                dotNetType = new DotNetType<TData>(typeObj)
                 {
                     MetadataToken = typeObj.MetadataToken,
                     FullName = fullName,
@@ -629,8 +673,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     new WorkArgs(wka)
                     {
                         AsmbObj = asmb,
-                        AsmbOpts = new AssemblyOpts(),
-                    })).ActWith(asmbObj =>
+                        AsmbOpts = new AssemblyLoaderOpts<TData>.AssemblyOpts(),
+                    }, asmb)).ActWith(asmbObj =>
                     {
                         asmbObj.TypesList.Add(dotNetType);
                     });
@@ -699,7 +743,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                 if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadAllPubGetProps == true || typeOpts.LoadPubInstnGetProps == true)
                 {
-                    var properties = typeObj.GetProperties();
+                    var properties = typeObj.GetProperties().Where(
+                        prop => prop.GetIndexParameters().None() && (prop.GetGetMethod()?.With(
+                            getter => getter.IsPublic == true && prop.DeclaringType == typeObj) ?? false));
 
                     if (typeOpts.LoadAllPubGetProps != true)
                     {
@@ -713,7 +759,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                 if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadAllPubMethods == true || typeOpts.LoadPubInstnMethods == true)
                 {
-                    var methodInfos = typeObj.GetMethods();
+                    var methodInfos = typeObj.GetMethods().Where(
+                            method => method.IsPublic == true && method.DeclaringType == typeObj && !method.IsSpecialName);
 
                     if (typeOpts.LoadAllPubMethods != true)
                     {
@@ -735,10 +782,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 }
             }
 
-            if (dotNetType.Name.Contains("*"))
-            {
-
-            }
+            dotNetType.Data = opts.TypeDataFactory(
+                wka, typeObj, typeOpts, dotNetType);
 
             return dotNetType;
         }
@@ -756,7 +801,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         private Type GetTypeObjCore(
             WorkArgs wka,
-            TypeOpts? typeOpts,
+            AssemblyLoaderOpts<TData>.TypeOpts? typeOpts,
             Type? declaringType)
         {
             var typePredicate = typeOpts!.GenericTypeParamsCount.WithNllbl<Func<Type, bool>, int>(
@@ -799,11 +844,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 this.AsmbTypes = src.AsmbTypes;
             }
 
-            public List<DotNetAssembly> LoadedAssemblies { get; }
-            public List<DotNetType> LoadedTypes { get; }
+            public List<DotNetAssembly<TData>> LoadedAssemblies { get; }
+            public List<DotNetType<TData>> LoadedTypes { get; }
 
-            public AssemblyLoaderOpts? Opts { get; init; }
-            public AssemblyOpts? AsmbOpts { get; init; }
+            public AssemblyLoaderOpts<TData>? Opts { get; init; }
+            public AssemblyLoaderOpts<TData>.AssemblyOpts? AsmbOpts { get; init; }
             public Assembly? AsmbObj { get; init; }
             public List<Type> AsmbTypes { get; init; }
 

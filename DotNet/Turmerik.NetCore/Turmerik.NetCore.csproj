@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Turmerik.Jint\Turmerik.Jint.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utility\AsmbLoading\" />
-  </ItemGroup>
-
 </Project>

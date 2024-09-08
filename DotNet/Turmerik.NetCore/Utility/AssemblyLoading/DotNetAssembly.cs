@@ -11,69 +11,78 @@ using Turmerik.Core.Helpers;
 
 namespace Turmerik.NetCore.Utility.AssemblyLoading
 {
-    public interface IIDotNetItem
+    public interface IIDotNetItem<TData>
     {
+        TData Data { get; set; }
     }
 
-    public interface IDotNetItem<TBCLItem> : IIDotNetItem
+    public interface IDotNetItem<TBCLItem, TData> : IIDotNetItem<TData>
     {
         TBCLItem? BclItem { get; }
     }
 
-    public interface IDotNetItem<TDotNetItem, TBCLItem> : IDotNetItem<TBCLItem>
-        where TDotNetItem : IDotNetItem<TDotNetItem, TBCLItem>
+    public interface IDotNetItem<TDotNetItem, TBCLItem, TData> : IDotNetItem<TBCLItem, TData>
+        where TDotNetItem : IDotNetItem<TDotNetItem, TBCLItem, TData>
     {
-        TDotNetItem Clone(
-            bool keepBclObjects = true);
+        TDotNetItem Clone();
     }
 
-    public abstract class DotNetItemBase<TDotNetItem, TBCLItem> : IDotNetItem<TDotNetItem, TBCLItem>
-        where TDotNetItem : IDotNetItem<TDotNetItem, TBCLItem>
+    public abstract class DotNetItemBase<TDotNetItem, TBCLItem, TData> : IDotNetItem<TDotNetItem, TBCLItem, TData>
+        where TDotNetItem : IDotNetItem<TDotNetItem, TBCLItem, TData>
     {
         protected DotNetItemBase(
-            TBCLItem? bclItem)
+            TBCLItem? bclItem,
+            TData data)
         {
             BclItem = bclItem;
+            Data = data;
         }
 
         public TBCLItem? BclItem { get; }
+        public TData Data { get; set; }
 
-        public abstract TDotNetItem Clone(bool keepBclObjects = true);
+        public abstract TDotNetItem Clone();
     }
 
-    public class DotNetAssemblyName : DotNetItemBase<DotNetAssemblyName, AssemblyName>
+    public class DotNetAssemblyName<TData> : DotNetItemBase<DotNetAssemblyName<TData>, AssemblyName, TData>
     {
-        public DotNetAssemblyName(AssemblyName? bclitem) : base(bclitem)
+        public DotNetAssemblyName(
+            AssemblyName? bclitem,
+            TData data = default) : base(
+                bclitem,
+                data)
         {
         }
 
         public string Name { get; set; }
-        public DotNetAssemblyVersion? BclVersion { get; set; }
+        public DotNetAssemblyVersion<TData>? BclVersion { get; set; }
         public CultureInfo CultureInfo { get; set; }
         public string CultureName { get; set; }
         public AssemblyContentType ContentType { get; set; }
 
-        public override DotNetAssemblyName Clone(
-            bool keepBclObjects = true) => new DotNetAssemblyName(
-                keepBclObjects ? BclItem : null)
+        public override DotNetAssemblyName<TData> Clone() => new DotNetAssemblyName<TData>(
+                BclItem, Data)
             {
                 Name = Name,
-                BclVersion = BclVersion?.Clone(keepBclObjects),
+                BclVersion = BclVersion,
                 CultureInfo = CultureInfo,
                 CultureName = CultureName,
                 ContentType = ContentType,
             };
     }
 
-    public class DotNetAssemblyVersion : DotNetItemBase<DotNetAssemblyVersion, Version>
+    public class DotNetAssemblyVersion<TData> : DotNetItemBase<DotNetAssemblyVersion<TData>, Version, TData>
     {
-        public DotNetAssemblyVersion(Version? bclItem) : base(bclItem)
+        public DotNetAssemblyVersion(
+            Version? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
-        public override DotNetAssemblyVersion Clone(
-            bool keepBclObjects = true) => new DotNetAssemblyVersion(
-                keepBclObjects ? BclItem : null)
+        public override DotNetAssemblyVersion<TData> Clone() => new DotNetAssemblyVersion<TData>(
+                BclItem, Data)
             {
                 Major = Major,
                 Minor = Minor,
@@ -91,14 +100,18 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public short MinorRevision { get; set; }
     }
 
-    public class DotNetAssembly : DotNetItemBase<DotNetAssembly, Assembly>
+    public class DotNetAssembly<TData> : DotNetItemBase<DotNetAssembly<TData>, Assembly, TData>
     {
-        public DotNetAssembly(Assembly? bclItem) : base(bclItem)
+        public DotNetAssembly(
+            Assembly? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
-        public DotNetAssemblyName? BclAsmbName { get; set; }
-        public List<DotNetAssemblyName>? ReferencedBclAsmbNames { get; set; }
+        public DotNetAssemblyName<TData>? BclAsmbName { get; set; }
+        public List<DotNetAssemblyName<TData>>? ReferencedBclAsmbNames { get; set; }
         public string? Name { get; set; }
         public string TypeNamesPfx { get; set; }
         public string AssemblyFilePath { get; set; }
@@ -107,25 +120,27 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public bool? IsNetStandardLib { get; set; }
         public bool? IsSysLib { get; set; }
 
-        public List<DotNetType>? TypesList { get; set; }
+        public List<DotNetType<TData>>? TypesList { get; set; }
 
-        public override DotNetAssembly Clone(
-            bool keepBclObjects = true) => new DotNetAssembly(
-                keepBclObjects ? BclItem : null)
+        public override DotNetAssembly<TData> Clone() => new DotNetAssembly<TData>(
+                BclItem, Data)
             {
-                BclAsmbName = BclAsmbName?.Clone(keepBclObjects),
+                BclAsmbName = BclAsmbName,
                 Name = Name,
                 TypeNamesPfx = TypeNamesPfx,
                 AssemblyFilePath = AssemblyFilePath,
                 IsExecutable = IsExecutable,
-                TypesList = TypesList?.With(typesList => typesList.Select(
-                    type => type.Clone(keepBclObjects)).ToList()),
+                TypesList = TypesList,
             };
     }
 
-    public class DotNetType : DotNetItemBase<DotNetType, Type>
+    public class DotNetType<TData> : DotNetItemBase<DotNetType<TData>, Type, TData>
     {
-        public DotNetType(Type? bclItem) : base(bclItem)
+        public DotNetType(
+            Type? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
@@ -147,23 +162,22 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public bool? IsGenericTypeDef { get; set; }
         public bool? ContainsGenericParameters { get; set; }
 
-        public DotNetAssembly? Assembly { get; set; }
+        public DotNetAssembly<TData>? Assembly { get; set; }
 
-        public DotNetType? ArrayElementType { get; set; }
+        public DotNetType<TData>? ArrayElementType { get; set; }
 
-        public DotNetType? BaseType { get; set; }
-        public List<DotNetType>? Interfaces { get; set; }
-        public DotNetType? DeclaringType { get; set; }
-        public DotNetType? GenericTypeDef { get; set; }
-        public List<GenericTypeArg>? GenericTypeArgs { get; set; }
+        public DotNetType<TData>? BaseType { get; set; }
+        public List<DotNetType<TData>>? Interfaces { get; set; }
+        public DotNetType<TData>? DeclaringType { get; set; }
+        public DotNetType<TData>? GenericTypeDef { get; set; }
+        public List<GenericTypeArg<TData>>? GenericTypeArgs { get; set; }
 
-        public List<DotNetProperty>? Properties { get; set; }
-        public List<DotNetMethod>? Methods { get; set; }
-        public List<DotNetConstructor>? Constructors { get; set; }
+        public List<DotNetProperty<TData>>? Properties { get; set; }
+        public List<DotNetMethod<TData>>? Methods { get; set; }
+        public List<DotNetConstructor<TData>>? Constructors { get; set; }
 
-        public override DotNetType Clone(
-            bool keepBclObjects = true) => new DotNetType(
-                keepBclObjects ? BclItem : null)
+        public override DotNetType<TData> Clone() => new DotNetType<TData>(
+                BclItem, Data)
             {
                 MetadataToken = MetadataToken,
                 Name = Name,
@@ -182,26 +196,29 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 IsGenericType = IsGenericType,
                 IsGenericTypeDef = IsGenericTypeDef,
                 ContainsGenericParameters = ContainsGenericParameters,
-                Assembly = Assembly?.Clone(keepBclObjects),
-                BaseType = BaseType?.Clone(keepBclObjects),
-                Interfaces = Interfaces?.Select(@interface => @interface.Clone(
-                    keepBclObjects)).ToList(),
-                DeclaringType = DeclaringType?.Clone(keepBclObjects),
-                GenericTypeDef = GenericTypeDef?.Clone(keepBclObjects),
+                Assembly = Assembly,
+                BaseType = BaseType,
+                Interfaces = Interfaces,
+                DeclaringType = DeclaringType,
+                GenericTypeDef = GenericTypeDef,
                 GenericTypeArgs = GenericTypeArgs?.Select(
-                    arg => arg.Clone(keepBclObjects)).ToList(),
+                    arg => arg).ToList(),
                 Properties = Properties?.Select(
-                    prop => prop.Clone(keepBclObjects)).ToList(),
+                    prop => prop).ToList(),
                 Methods = Methods?.Select(
-                    prop => prop.Clone(keepBclObjects)).ToList(),
+                    prop => prop).ToList(),
                 Constructors = Constructors?.Select(
-                    prop => prop.Clone(keepBclObjects)).ToList()
+                    prop => prop).ToList()
             };
     }
 
-    public class DotNetProperty : DotNetItemBase<DotNetProperty, PropertyInfo>
+    public class DotNetProperty<TData> : DotNetItemBase<DotNetProperty<TData>, PropertyInfo, TData>
     {
-        public DotNetProperty(PropertyInfo? bclItem) : base(bclItem)
+        public DotNetProperty(
+            PropertyInfo? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
@@ -210,25 +227,28 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public bool? CanWrite { get; set; }
         public bool? IsStatic { get; set; }
 
-        public DotNetType? PropType { get; set; }
+        public DotNetType<TData>? PropType { get; set; }
 
-        public override DotNetProperty Clone(
-            bool keepBclObjects = true) => new DotNetProperty(
-                keepBclObjects ? BclItem : null)
+        public override DotNetProperty<TData> Clone() => new DotNetProperty<TData>(
+                BclItem, Data)
             {
                 Name = Name,
                 CanRead = CanRead,
                 CanWrite = CanWrite,
                 IsStatic = IsStatic,
-                PropType = PropType?.Clone(keepBclObjects),
+                PropType = PropType,
             };
     }
 
-    public abstract class DotNetMethodBase<TDotNetMethod, TMethodInfo> : DotNetItemBase<TDotNetMethod, TMethodInfo>
-        where TDotNetMethod : DotNetMethodBase<TDotNetMethod, TMethodInfo>
+    public abstract class DotNetMethodBase<TDotNetMethod, TMethodInfo, TData> : DotNetItemBase<TDotNetMethod, TMethodInfo, TData>
+        where TDotNetMethod : DotNetMethodBase<TDotNetMethod, TMethodInfo, TData>
         where TMethodInfo : MethodBase
     {
-        public DotNetMethodBase(TMethodInfo? bclItem) : base(bclItem)
+        public DotNetMethodBase(
+            TMethodInfo? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
@@ -237,12 +257,16 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public string Name { get; set; }
         public bool? IsStatic { get; set; }
 
-        public List<DotNetMethodParameter>? Parameters { get; set; }
+        public List<DotNetMethodParameter<TData>>? Parameters { get; set; }
     }
 
-    public class DotNetMethod : DotNetMethodBase<DotNetMethod, MethodInfo>
+    public class DotNetMethod<TData> : DotNetMethodBase<DotNetMethod<TData>, MethodInfo, TData>
     {
-        public DotNetMethod(MethodInfo? bclItem) : base(bclItem)
+        public DotNetMethod(
+            MethodInfo? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
@@ -250,74 +274,75 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         public bool? IsVoidMethod { get; set; }
 
-        public DotNetType? ReturnType { get; set; }
+        public DotNetType<TData>? ReturnType { get; set; }
 
-        public override DotNetMethod Clone(
-            bool keepBclObjects = true) => new DotNetMethod(
-                keepBclObjects ? BclItem : null)
+        public override DotNetMethod<TData> Clone() => new DotNetMethod<TData>(
+                BclItem, Data)
             {
                 Name = Name,
                 IsStatic = IsStatic,
                 IsVoidMethod = IsVoidMethod,
-                ReturnType = ReturnType?.Clone(keepBclObjects),
-                Parameters = Parameters?.Select(
-                    @param => param.Clone(keepBclObjects)).ToList(),
+                ReturnType = ReturnType,
+                Parameters = Parameters,
             };
     }
 
-    public class DotNetConstructor : DotNetMethodBase<DotNetConstructor, ConstructorInfo>
+    public class DotNetConstructor<TData> : DotNetMethodBase<DotNetConstructor<TData>, ConstructorInfo, TData>
     {
-        public DotNetConstructor(ConstructorInfo? bclItem) : base(bclItem)
+        public DotNetConstructor(
+            ConstructorInfo? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
         public override bool IsConstructor => true;
 
-        public override DotNetConstructor Clone(
-            bool keepBclObjects = true) => new DotNetConstructor(
-                keepBclObjects ? BclItem : null)
+        public override DotNetConstructor<TData> Clone() => new DotNetConstructor<TData>(
+                BclItem, Data)
             {
                 Name = Name,
                 IsStatic = IsStatic,
-                Parameters = Parameters?.Select(
-                    @param => param.Clone(keepBclObjects)).ToList(),
+                Parameters = Parameters,
             };
     }
 
-    public class DotNetMethodParameter : DotNetItemBase<DotNetMethodParameter, ParameterInfo>
+    public class DotNetMethodParameter<TData> : DotNetItemBase<DotNetMethodParameter<TData>, ParameterInfo, TData>
     {
-        public DotNetMethodParameter(ParameterInfo? bclItem) : base(bclItem)
+        public DotNetMethodParameter(
+            ParameterInfo? bclItem,
+            TData data = default) : base(
+                bclItem,
+                data)
         {
         }
 
         public string Name { get; set; }
         public int? Position { get; set; }
 
-        public DotNetType? ParamType { get; set; }
+        public DotNetType<TData>? ParamType { get; set; }
 
-        public override DotNetMethodParameter Clone(
-            bool keepBclObjects = true) => new DotNetMethodParameter(
-                keepBclObjects ? BclItem : null)
+        public override DotNetMethodParameter<TData> Clone() => new DotNetMethodParameter<TData>(
+                BclItem, Data)
             {
                 Name = Name,
                 Position = Position,
-                ParamType = ParamType?.Clone(keepBclObjects)
+                ParamType = ParamType
             };
     }
 
-    public class GenericTypeArg
+    public class GenericTypeArg<TData>
     {
-        public DotNetType? TypeArg { get; set; }
+        public DotNetType<TData>? TypeArg { get; set; }
 
-        public List<DotNetType>? TypeParamConstraints { get; set; }
+        public List<DotNetType<TData>>? TypeParamConstraints { get; set; }
 
-        public GenericTypeArg Clone(
-            bool keepBclObjects = true) => new GenericTypeArg
+        public GenericTypeArg<TData> Clone(
+            bool keepBclObjects = true) => new GenericTypeArg<TData>
             {
-                TypeArg = TypeArg?.Clone(
-                    keepBclObjects),
-                TypeParamConstraints = TypeParamConstraints?.Select(
-                    constraint => constraint.Clone()).ToList()
+                TypeArg = TypeArg,
+                TypeParamConstraints = TypeParamConstraints
             };
     }
 }

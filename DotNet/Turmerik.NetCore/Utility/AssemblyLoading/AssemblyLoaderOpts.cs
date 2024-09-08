@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Turmerik.NetCore.Utility.AssemblyLoading
 {
-    public class AssemblyLoaderOpts
+    public class AssemblyLoaderOpts<TData>
     {
         public AssemblyLoaderConfig Config { get; set; }
         public string AssembliesBaseDirPath { get; set; }
@@ -22,7 +22,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
         public List<AssemblyOpts> AssembliesToLoad { get; set; }
 
-        public Func<AssemblyLoader.WorkArgs, bool?>? AssembliesCallback { get; set; }
+        public Func<AssemblyLoader<TData>.WorkArgs, bool?>? AssembliesCallback { get; set; }
 
         public class AssemblyOpts
         {

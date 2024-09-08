@@ -29,7 +29,7 @@ namespace Turmerik.NetCore.Dependencies
             services.AddSingleton<INetCoreAppEnvFactoryCore, NetCoreAppEnvFactoryCore>();
             services.AddSingleton<TextToMdService>();
 
-            services.AddSingleton<IAssemblyLoader, AssemblyLoader>();
+            services.AddSingleton<IAssemblyLoaderFactory, AssemblyLoaderFactory>();
 
             return services;
         }
