@@ -12,12 +12,15 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     public class ProgramConfig : ProgramConfigCoreBase<ProgramConfig.Profile>
     {
         public AssemblyLoaderConfig AssemblyLoaderConfig { get; set; }
+        public string TsTabStr { get; set; }
 
         public class Profile : ProgramConfigProfileCoreBase
         {
             public Func<Assembly, bool> IsTurmerikAssemblyPredicate { get; set; }
             public string DestnCsProjectAssembliesDirName { get; set; }
             public string DestnExternalAssemblliesDirName { get; set; }
+            public string AssemblyDfNsTypesDirName { get; set; }
+            public string AssemblyNonDfNsTypesDirName { get; set; }
             public string TypesDirName { get; set; }
             public string TypesNodeDirName { get; set; }
             public string TypesHcyNodeDirName { get; set; }
@@ -25,6 +28,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public string TypesInfoFileName { get; set; }
             public SrcDestnPaths DirPaths { get; set; }
             public string DfSrcBinsRelDirPath { get; set; }
+
+            public string TsTabStr { get; set; }
 
             public List<ProfileSection> Sections { get; set; }
         }

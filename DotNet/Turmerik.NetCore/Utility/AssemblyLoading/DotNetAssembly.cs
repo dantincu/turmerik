@@ -104,6 +104,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public string AssemblyFilePath { get; set; }
         public bool? IsExecutable { get; set; }
         public bool? IsCoreLib { get; set; }
+        public bool? IsNetStandardLib { get; set; }
+        public bool? IsSysLib { get; set; }
 
         public List<DotNetType>? TypesList { get; set; }
 
@@ -132,6 +134,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public string? Namespace { get; set; }
         public string FullName { get; set; }
         public string[]? RelNsPartsArr { get; set; }
+        public bool? NsStartsWithAsmbPfx { get; set; }
         public bool? IsValueType { get; set; }
         public bool? IsNullableType { get; set; }
         public bool? IsArrayType { get; set; }
@@ -167,6 +170,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 Namespace = Namespace,
                 FullName = FullName,
                 RelNsPartsArr = RelNsPartsArr,
+                NsStartsWithAsmbPfx = NsStartsWithAsmbPfx,
                 IsValueType = IsValueType,
                 IsNullableType = IsNullableType,
                 IsArrayType = IsArrayType,

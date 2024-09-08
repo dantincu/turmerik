@@ -93,8 +93,15 @@ namespace Turmerik.Core.Helpers
             return isDisposable;
         }
 
+        public static bool IsValidTypeNameChar(
+            char chr) => char.IsLetterOrDigit(chr) || "@$".Contains(chr);
+
         public static bool IsSpecialTypeName(
             string typeName) => typeName.Any(
-                c => !(char.IsLetterOrDigit(c) || "@$".Contains(c)));
+                c => !IsValidTypeNameChar(c));
+
+        public static string RemoveInvalidCharsFromTypeName(
+            string typeName) => new string(
+                typeName.Where(c => IsValidTypeNameChar(c)).ToArray());
     }
 }

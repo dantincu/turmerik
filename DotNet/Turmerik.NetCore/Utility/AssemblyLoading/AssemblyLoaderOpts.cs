@@ -48,10 +48,10 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             public int? GenericTypeParamsCount { get; set; }
             public TypeOpts? DeclaringTypeOpts { get; set; }
 
-            public bool? LoadPubGetProps { get; set; }
+            public bool? LoadAllPubGetProps { get; set; }
             public bool? LoadPubInstnGetProps { get; set; }
 
-            public bool? LoadPubMethods { get; set; }
+            public bool? LoadAllPubMethods { get; set; }
             public bool? LoadPubInstnMethods { get; set; }
 
             public bool? LoadPubInstnConstructors { get; set; }

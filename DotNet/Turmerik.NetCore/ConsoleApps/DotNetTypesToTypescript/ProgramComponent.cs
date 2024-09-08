@@ -17,11 +17,15 @@ using Turmerik.Core.Utility;
 using Turmerik.NetCore.Utility;
 using Turmerik.NetCore.Utility.AssemblyLoading;
 using Json.Schema;
+using System.Collections.ObjectModel;
+using System.Management.Automation.Language;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public interface IProgramComponent
     {
+        ReadOnlyDictionary<string, string> DotNetPrimitiveTypesMap { get; }
+
         Task RunAsync(
             string[] rawArgs);
 
@@ -56,6 +60,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.DotNetAssembly pfAsmb,
             DotNetAssembly assembly,
             bool isTurmerikAssembly);
+
+        bool ShouldExportType(DotNetType dotNetType);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -73,6 +79,26 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ITextMacrosReplacer textMacrosReplacer,
             IAssemblyLoader assemblyLoader)
         {
+            DotNetPrimitiveTypesMap = new Dictionary<string, string>
+            {
+                { typeof(object).FullName!, "" },
+                { typeof(string).FullName!, "string" },
+                { typeof(byte).FullName!, "number" },
+                { typeof(sbyte).FullName!, "number" },
+                { typeof(short).FullName!, "number" },
+                { typeof(ushort).FullName!, "number" },
+                { typeof(int).FullName!, "number" },
+                { typeof(uint).FullName!, "number" },
+                { typeof(long).FullName!, "number" },
+                { typeof(ulong).FullName!, "number" },
+                { typeof(decimal).FullName!, "number" },
+                { typeof(float).FullName!, "number" },
+                { typeof(double).FullName!, "number" },
+                { typeof(bool).FullName!, "boolean" },
+                { typeof(DateTime).FullName!, "Date" },
+                { typeof(DateTimeOffset).FullName!, "Date" }
+            }.RdnlD();
+
             this.programArgsRetriever = programArgsRetriever ?? throw new ArgumentNullException(
                 nameof(programArgsRetriever));
 
@@ -87,6 +113,20 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             this.assemblyLoader = assemblyLoader ?? throw new ArgumentNullException(
                 nameof(assemblyLoader));
+        }
+
+        public ReadOnlyDictionary<string, string> DotNetPrimitiveTypesMap { get; }
+
+        public string? GetTsPrimitiveName(
+            string dotNetFullName)
+        {
+            if (!DotNetPrimitiveTypesMap.TryGetValue(
+                dotNetFullName, out var tsPrimitiveName))
+            {
+                tsPrimitiveName = null;
+            }
+
+            return tsPrimitiveName;
         }
 
         public async Task RunAsync(string[] rawArgs)
@@ -147,7 +187,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                                     AssemblyFilePath = csProjAsmb.Paths.SrcPath,
                                     LoadAllTypes = csProjAsmb.IncludeAllTypes,
                                     TypesToLoad = csProjAsmb.TypesArr?.Select(
-                                        type => GetTypeOpts(type)).ToList()!
+                                        GetTypeOpts).ToList()!
                                 }],
                                 AssembliesCallback = loadedAssembliesResult =>
                                 {
@@ -277,60 +317,255 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             if (dotNetTypeObj.DestnFilePath != null)
             {
+                var dotNetType = dotNetTypeObj.Type;
                 string destnFilePath = dotNetTypeObj.DestnFilePath;
 
                 string destnDirPath = Path.GetDirectoryName(destnFilePath);
                 Directory.CreateDirectory(destnDirPath);
 
                 var dependentTypesList = GetDependenciesList(
-                    wka, section, asmb, dotNetTypeObj);
+                    wka, section, asmb, dotNetType);
 
                 var dependenciesMap = MapDependencyNames(
                     dependentTypesList);
 
-                var importLines = dependenciesMap.Select(
-                    kvp =>
-                    {
-                        string importedDep = kvp.Key;
+                var tsLinesAgg = new WorkArgs.TsLinesAgg
+                {
+                    TsImportLines = GetTsImportLines(
+                        dotNetTypeObj,
+                        dependenciesMap),
+                    TsIntfDeclrStartLine = GetTsIntfDeclarationLine(
+                        wka, section, asmb, dotNetTypeObj),
+                    TsPropDeclrLines = GetTsPropDeclarationLines(
+                        wka, section, asmb, dotNetType),
+                    TsMethodDeclrLines = GetTsMethodDeclarationLines(
+                        wka, section, asmb, dotNetType),
+                };
 
-                        if (kvp.Key != kvp.Value.Type.Name)
-                        {
-                            importedDep = $"{kvp.Value.Type.Name} as {importedDep}";
-                        }
+                var tsCodeLines = GetTsCodeLines(tsLinesAgg);
 
-                        string relFilePath = GetRelFilePath(
-                            dotNetTypeObj,
-                            kvp.Value);
-
-                        string importLine = $"import {{ {importedDep} }} from \"{relFilePath}\";";
-                        return importLine;
-                    }).ToList();
+                File.WriteAllLines(
+                    dotNetTypeObj.DestnFilePath,
+                    tsCodeLines.ToArray());
             }
+        }
+
+        public bool ShouldExportType(
+            DotNetType dotNetType) => ReflH.IsSpecialTypeName(
+                dotNetType.Name) && dotNetType.FullName != null && GetTsPrimitiveName(
+                    dotNetType.FullName) == null;
+
+        private List<string> GetTsCodeLines(
+            WorkArgs.TsLinesAgg tsLinesAgg)
+        {
+            var tsLines = tsLinesAgg.TsImportLines.ToList();
+
+            tsLines.Add("");
+            tsLines.Add(tsLinesAgg.TsIntfDeclrStartLine);
+            tsLines.AddRange(tsLinesAgg.TsPropDeclrLines);
+            tsLines.AddRange(tsLinesAgg.TsMethodDeclrLines);
+            tsLines.Add("}");
+
+            return tsLines;
+        }
+
+        private List<string> GetTsImportLines(
+            WorkArgs.DotNetTypeObj dotNetTypeObj,
+            Dictionary<string, WorkArgs.DotNetTypeObj> dependenciesMap) => dependenciesMap.Select(
+            kvp =>
+            {
+                string importedDep = kvp.Key;
+
+                if (kvp.Key != kvp.Value.Type.Name)
+                {
+                    importedDep = $"{kvp.Value.Type.Name} as {importedDep}";
+                }
+
+                string relFilePath = GetRelFilePath(
+                    dotNetTypeObj,
+                    kvp.Value).Replace("\\", "\\\\");
+
+                string importLine = $"import {{ {importedDep} }} from \"{relFilePath}\";";
+                return importLine;
+            }).ToList();
+
+        private string GetTsIntfDeclarationLine(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            WorkArgs.DotNetTypeObj dotNetTypeObj)
+        {
+            string tsIntfName = GetTsIntfName(
+                wka, section, asmb, dotNetTypeObj.Type, true);
+
+            string intfDeclrLine = $"export interface {tsIntfName} {{";
+            return intfDeclrLine;
+        }
+
+        private string GetTsIntfName(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType,
+            bool includeTypeParamConstraints)
+        {
+            var genericTypeArgsPart = GetTsIntfGenericTypeArgsPart(
+                wka, section, asmb, dotNetType,
+            includeTypeParamConstraints);
+
+            string typeName = dotNetType.Name;
+
+            if (typeName.Contains('`'))
+            {
+                typeName = typeName.Split('`')[0];
+            }
+
+            string tsIntfName = string.Concat(
+                typeName,
+                genericTypeArgsPart);
+
+            return tsIntfName;
+        }
+
+        private string? GetTsIntfGenericTypeArgsPart(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType,
+            bool includeTypeParamConstraints)
+        {
+            string? retStr = null;
+
+            var genericTypeArgs = dotNetType.GenericTypeArgs?.Select(
+                genericTypeArg => GetTsIntfGenericTypeArgValue(
+                    wka, section, asmb, dotNetType, genericTypeArg,
+                includeTypeParamConstraints)).ToList();
+
+            if ((genericTypeArgs?.Count ?? -1) > 0)
+            {
+                retStr = genericTypeArgs!.Aggregate(
+                    (arg1, arg2) => $"{arg1}, {arg2}");
+
+                retStr = $"<{retStr}>";
+            }
+
+            return retStr;
+        }
+
+        private string GetTsIntfGenericTypeArgValue(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType,
+            GenericTypeArg genericTypeArg,
+            bool includeTypeParamConstraints)
+        {
+            var typeArg = genericTypeArg.TypeArg;
+            string retStr = typeArg.Name;
+
+            if (ReflH.IsSpecialTypeName(retStr))
+            {
+                retStr = ReflH.RemoveInvalidCharsFromTypeName(retStr);
+            }
+
+            if (includeTypeParamConstraints)
+            {
+                if ((genericTypeArg.TypeParamConstraints?.Count ?? -1) > 0)
+                {
+                    var typeParamConstraintsArr = genericTypeArg.TypeParamConstraints.Select(
+                        typeParam => GetTsIntfName(wka, section, asmb, typeParam, false)).ToArray();
+
+                    var typeParamConstraintsStr = typeParamConstraintsArr.Aggregate(
+                        (arg1, arg2) => $"{arg1} | {arg2}");
+
+                    retStr = $"{retStr} extends {typeParamConstraintsStr}";
+                }
+            }
+            else
+            {
+                var genericTypeArgsPart = GetTsIntfGenericTypeArgsPart(
+                    wka, section, asmb, typeArg, false);
+
+                retStr += genericTypeArgsPart;
+            }
+
+            return retStr;
+        }
+
+        private List<string> GetTsPropDeclarationLines(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType) => dotNetType.Properties.Select(
+                prop => GetTsPropDeclarationLine(
+                    wka, section, asmb, dotNetType, prop)).ToList();
+
+        private List<string> GetTsMethodDeclarationLines(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType) => dotNetType.Methods.Select(
+                method => GetTsMethodDeclarationLine(
+                    wka, section, asmb, dotNetType, method)).ToList();
+
+        private string GetTsPropDeclarationLine(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType,
+            DotNetProperty dotNetProp)
+        {
+            string propTypeStr = GetTsIntfName(
+                wka, section, asmb, dotNetProp.PropType!, false);
+
+            string tsPropStr = $"{wka.PgArgs.Profile.TsTabStr}{dotNetProp.Name}: {propTypeStr}";
+            return tsPropStr;
+        }
+
+        private string GetTsMethodDeclarationLine(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            DotNetType dotNetType,
+            DotNetMethod dotNetMethod)
+        {
+            string retTypeStr = dotNetMethod.ReturnType?.With(
+                type => GetTsIntfName(
+                    wka, section, asmb, type, false)) ?? "void";
+
+            var paramsArr = dotNetMethod.Parameters.Select(
+                param => string.Join(": ", param.Name, GetTsIntfName(
+                    wka, section, asmb, param.ParamType, false)));
+
+            var paramsStr = paramsArr.Any() ? paramsArr.Aggregate(
+                (arg1, arg2) => $"{arg1}, {arg2}") : "";
+
+            string tsMethodStr = $"{wka.PgArgs.Profile.TsTabStr}{dotNetMethod.Name}: ({paramsStr}) => {retTypeStr}";
+            return tsMethodStr;
         }
 
         private List<WorkArgs.DotNetTypeObj> GetDependenciesList(
             WorkArgs wka,
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
-            WorkArgs.DotNetTypeObj dotNetTypeObj)
+            DotNetType dotNetType)
         {
-            var allDependentTypesArr = dotNetTypeObj.Type.GenericTypeArgs?.Where(
+            var allDependentTypesArr = dotNetType.GenericTypeArgs?.Where(
                 arg => arg.TypeArg != null).Select(
                 arg => arg.TypeArg).ToArray() ?? [];
 
             allDependentTypesArr = allDependentTypesArr.Concat(
-                dotNetTypeObj.Type.Properties.Select(
+                dotNetType.Properties.Select(
                     prop => prop.PropType)).ToArray();
 
             allDependentTypesArr = allDependentTypesArr.Concat(
-                dotNetTypeObj.Type.Methods.SelectMany(
+                dotNetType.Methods.SelectMany(
                     method => method.ReturnType.Arr(
                         method.Parameters.Select(
                             @param => @param.ParamType).ToArray()))).ToArray();
 
             allDependentTypesArr = allDependentTypesArr.NotNull().Where(
-                type => ReflH.IsSpecialTypeName(type.Name)).SelectMany(
-                ExpandDependency).ToArray();
+                ShouldExportType).SelectMany(ExpandDependency).ToArray();
 
             var dependentTypesList = new List<DotNetType>();
 
@@ -474,9 +709,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 GenericTypeParamsCount = type.GenericTypeParamsCount,
                 LoadPubInstnGetProps = true,
                 LoadPubInstnMethods = true,
-                DeclaringTypeOpts = type.DeclaringType?.With(
-                    declaringType => GetTypeOpts(
-                        declaringType))
+                DeclaringTypeOpts = type.DeclaringType?.With(GetTypeOpts)
             };
 
             return typeOpts;
@@ -489,8 +722,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             DotNetType dotNetType) => new WorkArgs.DotNetTypeObj
             {
                 Type = dotNetType,
-                DestnFilePath = dotNetType.FullName != null && !ReflH.IsSpecialTypeName(
-                    dotNetType.Name) ? GetDestnFilePath(
+                DestnFilePath = ShouldExportType(dotNetType) ? GetDestnFilePath(
                     wka, section, asmb, dotNetType) : null
             };
 
@@ -508,6 +740,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             destnPath = Path.Combine(
                 destnDirPath,
+                dotNetType.NsStartsWithAsmbPfx switch
+                {
+                    true => wka.PgArgs.Profile.AssemblyDfNsTypesDirName,
+                    _ => wka.PgArgs.Profile.AssemblyNonDfNsTypesDirName
+                },
                 destnPath);
 
             return destnPath;
@@ -549,6 +786,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             var tsRelFilePathParts = relNsPartsArr.SelectMany(
                     tsRelFilePathPartSelector);
 
+            if (typeName.Contains('`'))
+            {
+                typeName = typeName.Split('`')[0];
+            }
+
             tsRelFilePathParts = tsRelFilePathParts.Concat(
                 [$"{typeName}.ts"]);
 
@@ -589,8 +831,16 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public class DotNetTypeObj
             {
                 public DotNetType Type { get; set; }
-                
+
                 public string DestnFilePath { get; set; }
+            }
+
+            public class TsLinesAgg
+            {
+                public List<string> TsImportLines { get; set; }
+                public string TsIntfDeclrStartLine { get; set; }
+                public List<string> TsPropDeclrLines { get; set; }
+                public List<string> TsMethodDeclrLines { get; set; }
             }
         }
     }

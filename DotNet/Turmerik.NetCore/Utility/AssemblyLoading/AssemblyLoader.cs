@@ -102,6 +102,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
     public class AssemblyLoader : ComponentCoreBase, IAssemblyLoader
     {
+        public const string NET_STD_ASMB_NAME = "netstandard";
         public const string NET_STD_ASMB_FILE_NAME = "netstandard.dll";
 
         private readonly string coreLibLocation = typeof(object).Assembly.Location;
@@ -188,9 +189,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                             DeclaringTypeOpts = type.DeclaringTypeOpts,
                             GenericTypeParamsCount = type.GenericTypeParamsCount,
                             LoadPubInstnConstructors = type.LoadPubInstnConstructors,
-                            LoadPubGetProps = type.LoadPubGetProps ?? asmb.LoadPubGetProps,
+                            LoadAllPubGetProps = type.LoadAllPubGetProps ?? asmb.LoadPubGetProps,
                             LoadPubInstnGetProps = type.LoadPubInstnGetProps ?? asmb.LoadPubInstnGetProps,
-                            LoadPubMethods = type.LoadPubMethods ?? asmb.LoadPubMethods,
+                            LoadAllPubMethods = type.LoadAllPubMethods ?? asmb.LoadPubMethods,
                             LoadPubInstnMethods = type.LoadPubInstnMethods ?? asmb.LoadPubInstnMethods,
                         }).ToList()!,
                 }).ToList();
@@ -286,6 +287,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             string assemblyFilePath = wka.AsmbObj.Location;
             string fullName = wka.AsmbObj.GetName().Name;
 
+            bool isCoreLib = fullName == coreLibName;
+            bool isNetStandardLib = fullName == NET_STD_ASMB_NAME;
+
+            bool isSysLib = isCoreLib || isNetStandardLib;
+
             var assembliesList = wka.LoadedAssemblies;
 
             var asmb = assembliesList.FirstOrDefault(
@@ -298,14 +304,15 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     BclAsmbName = ConvertAssemblyName(
                         wka.AsmbObj.GetName()),
                     Name = fullName,
-                    TypeNamesPfx = $"{fullName}.",
+                    TypeNamesPfx = isSysLib ? ReflH.BaseObjectType.Namespace! : $"{fullName}.",
                     AssemblyFilePath = assemblyFilePath,
                     IsExecutable = Path.GetExtension(
                         assemblyFilePath).ToLower() != ".dll",
-                    TypesList = []
+                    TypesList = [],
+                    IsCoreLib = isCoreLib,
+                    IsNetStandardLib = isNetStandardLib,
+                    IsSysLib = isSysLib
                 };
-
-                asmb.IsCoreLib = fullName == ReflH.BaseObjectType.Namespace;
 
                 assembliesList.Add(asmb);
 
@@ -464,9 +471,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             Type typeObj) => new TypeOpts
             {
                 FullTypeName = typeObj.GetTypeFullDisplayName(),
-                LoadPubGetProps = wka.AsmbOpts.LoadPubGetProps,
+                LoadAllPubGetProps = wka.AsmbOpts.LoadPubGetProps,
                 LoadPubInstnGetProps = wka.AsmbOpts.LoadPubInstnGetProps,
-                LoadPubMethods = wka.AsmbOpts.LoadPubMethods,
+                LoadAllPubMethods = wka.AsmbOpts.LoadPubMethods,
                 LoadPubInstnMethods = wka.AsmbOpts.LoadPubInstnMethods,
             };
 
@@ -664,11 +671,13 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 {
                     dotNetType.RelNsPartsArr = (declaringType.RelNsPartsArr ?? []).AppendToArr(
                         declaringType.Name);
+
+                    dotNetType.NsStartsWithAsmbPfx = declaringType.NsStartsWithAsmbPfx;
                 },
                 () =>
                 {
-                    if (dotNetType.Namespace?.StartsWith(
-                        dotNetType.Assembly.TypeNamesPfx) ?? false)
+                    if ((dotNetType.NsStartsWithAsmbPfx = dotNetType.Namespace?.StartsWith(
+                        dotNetType.Assembly.TypeNamesPfx)) ?? false)
                     {
                         dotNetType.RelNsPartsArr = dotNetType.FullName?.Substring(
                             dotNetType.Assembly.TypeNamesPfx.Length).Split('.');
@@ -688,11 +697,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 dotNetType.Interfaces = typeObj.GetInterfaces().Select(
                     intfType => ConvertAssemblyType(wka, intfType)).ToList();
 
-                if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadPubGetProps == true || typeOpts.LoadPubInstnGetProps == true)
+                if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadAllPubGetProps == true || typeOpts.LoadPubInstnGetProps == true)
                 {
                     var properties = typeObj.GetProperties();
 
-                    if (typeOpts.LoadPubGetProps != true)
+                    if (typeOpts.LoadAllPubGetProps != true)
                     {
                         properties = properties.Where(
                             prop => prop.GetGetMethod()?.IsStatic == false).ToArray();
@@ -702,11 +711,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                         propInfo => ConvertDotNetProperty(wka, propInfo)).ToList();
                 }
 
-                if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadPubMethods == true || typeOpts.LoadPubInstnMethods == true)
+                if (wka.Opts.LoadAllTypes == true || wka.AsmbOpts.LoadAllTypes == true || typeOpts.LoadAllPubMethods == true || typeOpts.LoadPubInstnMethods == true)
                 {
                     var methodInfos = typeObj.GetMethods();
 
-                    if (typeOpts.LoadPubMethods != true)
+                    if (typeOpts.LoadAllPubMethods != true)
                     {
                         methodInfos = methodInfos.Where(
                             method => !method.IsStatic).ToArray();

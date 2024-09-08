@@ -72,10 +72,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     {
         public const string DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME = "csproj-asmb";
         public const string DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME = "extern-asmb";
+        public const string ASMB_DF_NS_TYPES_DIR_NAME = "df";
+        public const string ASMB_NON_DF_NS_TYPES_DIR_NAME = "nd";
         public const string TYPES_NODE_DIR_NAME = "t";
         public const string TYPES_HCY_NODE_DIR_NAME = "h";
         public const string TYPES_INFO_DIR_NAME = "i";
         public const string TYPES_INFO_FILE_NAME = "types.json";
+
+        public const string TS_TAB_STR = "  ";
 
         public const decimal DF_NET_STD_VERSION = 2.0M;
         public const decimal DF_NET_CORE_VERSION = 8.0M;
@@ -123,13 +127,19 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ProgramArgs args,
             ProgramConfig.Profile profile)
         {
+            args.Config.TsTabStr ??= TS_TAB_STR;
+
             profile.IsTurmerikAssemblyPredicate ??= Trmrk.IsTurmerikAssembly;
             profile.DestnCsProjectAssembliesDirName ??= DESTN_CS_PROJECT_ASSEMBLIES_DIR_NAME;
             profile.DestnExternalAssemblliesDirName ??= DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME;
+            profile.AssemblyDfNsTypesDirName ??= ASMB_DF_NS_TYPES_DIR_NAME;
+            profile.AssemblyNonDfNsTypesDirName ??= ASMB_NON_DF_NS_TYPES_DIR_NAME;
             profile.TypesNodeDirName ??= TYPES_NODE_DIR_NAME;
             profile.TypesHcyNodeDirName ??= TYPES_HCY_NODE_DIR_NAME;
             profile.TypesInfoDirName ??= TYPES_INFO_DIR_NAME;
             profile.TypesInfoFileName ??= TYPES_INFO_FILE_NAME;
+
+            profile.TsTabStr ??= args.Config.TsTabStr;
 
             profile.DfSrcBinsRelDirPath ??= args.LoadDebugAssemblies switch
             {
