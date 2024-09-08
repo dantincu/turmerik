@@ -89,7 +89,8 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         DotNetType<TData> FindMatching(
             AssemblyLoader<TData>.WorkArgs wka,
             Type typeObj,
-            IEnumerable<DotNetType<TData>> typesNmrbl);
+            IEnumerable<DotNetType<TData>> typesNmrbl,
+            string? fullName);
 
         bool GenericArgsAreEqual(
             GenericTypeArg<TData> trgArg,
@@ -544,9 +545,11 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public DotNetType<TData> FindMatching(
             WorkArgs wka,
             Type typeObj,
-            IEnumerable<DotNetType<TData>> typesNmrbl)
+            IEnumerable<DotNetType<TData>> typesNmrbl,
+            string? fullName)
         {
             DotNetType<TData>? matchingType = null;
+            fullName ??= typeObj.FullName;
 
             if (typeObj.FullName == null)
             {
@@ -660,7 +663,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                     typeObj.Name);
             }
 
-            var dotNetType = FindMatching(wka, typeObj, typesList);
+            var dotNetType = FindMatching(wka, typeObj, typesList, fullName);
 
             if (dotNetType == null)
             {

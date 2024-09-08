@@ -293,7 +293,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 var typesToAdd = assembly.TypesList!.Where(
                     type => assemblyLoader.FindMatching(
                         default, type.BclItem!,
-                        existingAssembly.Asmb.TypesList!) == null).ToArray();
+                        existingAssembly.Asmb.TypesList!, null) == null).ToArray();
 
                 existingAssembly.Asmb.TypesList!.AddRange(typesToAdd);
 
@@ -570,6 +570,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 }
             }
 
+            if (tsIntfName.Contains("Task1"))
+            {
+
+            }
+
             return tsIntfName;
         }
 
@@ -758,11 +763,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.DotNetAssemblyObj asmb,
             DotNetType<DotNetItemData> dotNetType)
         {
-            if (dotNetType.FullName == "Turmerik.Core.Actions.ActionErrorCatcher")
-            {
-
-            }
-
             var allDependentTypesList = dotNetType.Interfaces!.SelectMany(
                 ExpandDependency).ToList();
 
