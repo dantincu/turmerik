@@ -113,6 +113,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public DotNetAssemblyName<TData>? BclAsmbName { get; set; }
         public List<DotNetAssemblyName<TData>>? ReferencedBclAsmbNames { get; set; }
         public string? Name { get; set; }
+        public string DefaultNamespace { get; set; }
         public string TypeNamesPfx { get; set; }
         public string AssemblyFilePath { get; set; }
         public bool? IsExecutable { get; set; }
@@ -273,6 +274,10 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
         public override bool IsConstructor => false;
 
         public bool? IsVoidMethod { get; set; }
+
+        public bool? ContainsGenericParameters { get; set; }
+
+        public List<GenericTypeArg<TData>>? GenericParameters { get; set; }
 
         public DotNetType<TData>? ReturnType { get; set; }
 

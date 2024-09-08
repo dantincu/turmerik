@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
+using Turmerik.Core.TextParsing.Md;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Notes.Core;
-using Turmerik.TextParsing.Md;
 
 namespace Turmerik.DirsPair
 {

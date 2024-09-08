@@ -15,11 +15,11 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
+using Turmerik.Core.TextParsing.Md;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
-using Turmerik.TextParsing.Md;
 using static Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames.ProgramComponent;
 
 namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames

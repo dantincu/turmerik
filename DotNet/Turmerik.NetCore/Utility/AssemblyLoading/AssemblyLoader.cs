@@ -319,12 +319,15 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
             if (asmb == null)
             {
+                string dfNamespace = isSysLib ? ReflH.BaseObjectType.Namespace! : fullName;
+
                 asmb = new DotNetAssembly<TData>(asmbObj)
                 {
                     BclAsmbName = ConvertAssemblyName(
                         wka, asmbObj.GetName()),
                     Name = fullName,
-                    TypeNamesPfx = isSysLib ? ReflH.BaseObjectType.Namespace! : $"{fullName}.",
+                    DefaultNamespace = dfNamespace,
+                    TypeNamesPfx = $"{dfNamespace}.",
                     AssemblyFilePath = assemblyFilePath,
                     IsExecutable = Path.GetExtension(
                         assemblyFilePath).ToLower() != ".dll",
@@ -427,7 +430,7 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             MethodInfo methodInfo)
         {
             var returnType = methodInfo.ReturnType;
-            var isVoidMethod = returnType.FullName?.TrimEnd('*') == ReflH.VoidType.FullName;
+            var isVoidMethod = returnType.FullName?.TrimEnd('*', '&') == ReflH.VoidType.FullName;
 
             var dotNetMethod = new DotNetMethod<TData>(methodInfo)
             {
@@ -437,6 +440,9 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 IsStatic = methodInfo.IsStatic,
                 Parameters = methodInfo.GetParameters().Select(
                     @param => ConvertDotNetParameter(wka, param)).ToList(),
+                ContainsGenericParameters = methodInfo.ContainsGenericParameters,
+                GenericParameters = methodInfo.ContainsGenericParameters ? methodInfo.GetGenericArguments().Select(
+                    param => ConvertGenericTypeArg(wka, param)).ToList() : null
             };
 
             dotNetMethod.Data = opts.MethodDataFactory(
@@ -647,6 +653,13 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
             var typesList = wka.LoadedTypes;
             string fullName = typeObj.GetTypeFullDisplayName();
 
+            if (fullName == null && typeObj.Namespace != null && !typeObj.IsGenericParameter)
+            {
+                fullName = string.Join(".",
+                    typeObj.Namespace,
+                    typeObj.Name);
+            }
+
             var dotNetType = FindMatching(wka, typeObj, typesList);
 
             if (dotNetType == null)
@@ -691,7 +704,12 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                 typesList.Add(dotNetType);
 
-                if (dotNetType.IsGenericType == true)
+                if (dotNetType.IsArrayType == true)
+                {
+                    dotNetType.ArrayElementType = ConvertAssemblyType(
+                        wka, typeObj.GetElementType());
+                }
+                else if (dotNetType.IsGenericType == true)
                 {
                     if (dotNetType.IsGenericTypeDef != true)
                     {
@@ -701,11 +719,6 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
 
                     dotNetType.GenericTypeArgs = typeObj.GetGenericArguments().Select(
                         genericArg => ConvertGenericTypeArg(wka, genericArg)).ToList();
-                }
-                else if (dotNetType.IsArrayType == true)
-                {
-                    dotNetType.ArrayElementType = ConvertAssemblyType(
-                        wka, typeObj.GetElementType());
                 }
 
                 dotNetType.DeclaringType = dotNetType.IsNested == true ? typeObj.DeclaringType.With(
@@ -720,8 +733,15 @@ namespace Turmerik.NetCore.Utility.AssemblyLoading
                 },
                 () =>
                 {
-                    if ((dotNetType.NsStartsWithAsmbPfx = dotNetType.Namespace?.StartsWith(
-                        dotNetType.Assembly.TypeNamesPfx)) ?? false)
+                    if ((dotNetType.NsStartsWithAsmbPfx = dotNetType.Namespace?.With(@namespace =>
+                    {
+                        bool retVal = @namespace == dotNetType.Assembly.DefaultNamespace;
+
+                        retVal = retVal || @namespace.StartsWith(
+                            dotNetType.Assembly.TypeNamesPfx);
+
+                        return retVal;
+                    })) ?? false)
                     {
                         dotNetType.RelNsPartsArr = dotNetType.FullName?.Substring(
                             dotNetType.Assembly.TypeNamesPfx.Length).Split('.');

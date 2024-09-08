@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.LocalDeviceEnv;
-using Turmerik.TextParsing.Md;
+using Turmerik.Core.TextParsing.Md;
 
 namespace Turmerik.UnitTests
 {

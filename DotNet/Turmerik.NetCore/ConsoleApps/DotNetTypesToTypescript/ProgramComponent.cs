@@ -353,10 +353,15 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         }
 
         public bool ShouldExportType(
-            DotNetType<DotNetItemData> dotNetType) => !ReflH.IsSpecialTypeName(
+            DotNetType<DotNetItemData> dotNetType)
+        {
+            bool retVal = !ReflH.IsSpecialTypeName(
                 dotNetType.Name) && dotNetType.FullName != null && (
-            dotNetType.Data as DotNetTypeData).With(
-                    data => data.IsPrimitive == false && data.IsRootBaseType == false);
+                dotNetType.Data as DotNetTypeData).With(
+                        data => data.IsPrimitive != true && data.IsRootBaseType != true);
+
+            return retVal;
+        }
 
         private WorkArgs.TsLinesAgg[] GetTsLinesAggArr(
             WorkArgs wka,
@@ -558,18 +563,26 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
             DotNetType<DotNetItemData> dotNetType,
+            bool includeTypeParamConstraints) => GetTsIntfGenericTypeArgsPart(
+                wka, section, asmb, dotNetType.GenericTypeArgs, includeTypeParamConstraints);
+
+        private string? GetTsIntfGenericTypeArgsPart(
+            WorkArgs wka,
+            WorkArgs.Section section,
+            WorkArgs.DotNetAssemblyObj asmb,
+            List<GenericTypeArg<DotNetItemData>>? genericTypeArgs,
             bool includeTypeParamConstraints)
         {
             string? retStr = null;
 
-            var genericTypeArgs = dotNetType.GenericTypeArgs?.Select(
+            var genericTypeArgsArr = genericTypeArgs?.Select(
                 genericTypeArg => GetTsIntfGenericTypeArgValue(
-                    wka, section, asmb, dotNetType, genericTypeArg,
+                    wka, section, asmb, genericTypeArg,
                 includeTypeParamConstraints)).ToList();
 
-            if ((genericTypeArgs?.Count ?? -1) > 0)
+            if ((genericTypeArgsArr?.Count ?? -1) > 0)
             {
-                retStr = genericTypeArgs!.Aggregate(
+                retStr = genericTypeArgsArr!.Aggregate(
                     (arg1, arg2) => $"{arg1}, {arg2}");
 
                 retStr = $"<{retStr}>";
@@ -582,7 +595,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs wka,
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
-            DotNetType<DotNetItemData> dotNetType,
             GenericTypeArg<DotNetItemData> genericTypeArg,
             bool includeTypeParamConstraints)
         {
@@ -681,7 +693,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             string propTypeStr = GetTsIntfName(
                 wka, section, asmb, dotNetProp.PropType!, false);
 
-            string tsPropStr = $"{wka.PgArgs.Profile.TsTabStr}{dotNetProp.Name}: {propTypeStr};";
+            string propName = string.Concat(
+                wka.PgArgs.Profile.TsTabStr,
+                dotNetProp.Name);
+
+            string tsPropStr = $"{propName}: {propTypeStr};";
             return tsPropStr;
         }
 
@@ -703,7 +719,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             var paramsStr = paramsArr.Any() ? paramsArr.Aggregate(
                 (arg1, arg2) => $"{arg1}, {arg2}") : "";
 
-            string tsMethodStr = $"{wka.PgArgs.Profile.TsTabStr}{dotNetMethod.Name}: ({paramsStr}) => {retTypeStr};";
+            var genericArgsStr = GetTsIntfGenericTypeArgsPart(
+                wka, section, asmb, dotNetMethod.GenericParameters, true);
+
+            string methodName = string.Concat(
+                wka.PgArgs.Profile.TsTabStr,
+                dotNetMethod.Name);
+
+            string tsMethodStr = $"{methodName}: {genericArgsStr}({paramsStr}) => {retTypeStr};";
             return tsMethodStr;
         }
 
@@ -783,7 +806,12 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
                 if (typeData.IsRootBaseType != true && typeData.IsPrimitive != true)
                 {
-                    if (type.IsGenericType == true)
+                    if (type.IsArrayType == true)
+                    {
+                        retArr = ExpandDependency(
+                            type.ArrayElementType);
+                    }
+                    else if (type.IsGenericType == true)
                     {
                         if (type.IsNullableType == true)
                         {
@@ -796,11 +824,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                                 type => type.TypeArg != null).SelectMany(
                                 type => ExpandDependency(type.TypeArg)).ToArray());
                         }
-                    }
-                    else if (type.IsArrayType == true)
-                    {
-                        retArr = ExpandDependency(
-                            type.ArrayElementType);
                     }
                     else
                     {
@@ -1001,11 +1024,16 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 part, idx) => [part, tsRelFilePathPartNameFactory(part, idx)];
 
             var tsRelFilePathParts = relNsPartsArr.SelectMany(
-                    tsRelFilePathPartSelector);
+                tsRelFilePathPartSelector);
 
-            if (typeName.Contains('`'))
+            if (tsRelFilePathParts.Any())
             {
-                typeName = typeName.Split('`')[0];
+                tsRelFilePathParts = tsRelFilePathParts.Prepend(
+                    args.Profile.TypesHcyNodeDirName);
+            }
+            else
+            {
+                tsRelFilePathParts = [args.Profile.TypesNodeDirName];
             }
 
             tsRelFilePathParts = tsRelFilePathParts.Concat(

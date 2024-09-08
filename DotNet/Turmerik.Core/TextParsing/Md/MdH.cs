@@ -7,7 +7,7 @@ using System.Web;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Text;
 
-namespace Turmerik.TextParsing.Md
+namespace Turmerik.Core.TextParsing.Md
 {
     public static class MdH
     {
