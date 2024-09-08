@@ -96,9 +96,19 @@ namespace Turmerik.Core.Helpers
         public static bool IsValidTypeNameChar(
             char chr) => char.IsLetterOrDigit(chr) || "@$".Contains(chr);
 
+        public static bool IsValidTypeNameChar(
+            char chr,
+            char[] allowedExtraChars) => IsValidTypeNameChar(
+                chr) || allowedExtraChars.Contains(chr);
+
         public static bool IsSpecialTypeName(
             string typeName) => typeName.Any(
                 c => !IsValidTypeNameChar(c));
+
+        public static bool IsSpecialTypeName(
+            string typeName,
+            char[] allowedExtraChars) => typeName.Any(
+                c => !IsValidTypeNameChar(c, allowedExtraChars));
 
         public static string RemoveInvalidCharsFromTypeName(
             string typeName) => new string(

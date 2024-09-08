@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Turmerik.Core.Helpers;
@@ -101,6 +102,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             this.assemblyLoader = assemblyLoaderFactory.Loader(
                 new AssemblyLoaderInstnOpts<DotNetItemData>
                 {
+                    AssemblyDataFactory = (wka, asmb, item) => new DotNetAssemblyData(),
                     TypeDataFactory = (wka, type, opts, item) =>
                     {
                         string? tsPrimitiveName = (item.FullName != null) switch
@@ -115,7 +117,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         string typeName = isRootBaseType switch
                         {
                             true => "any",
-                            _ => tsPrimitiveName ?? item.Name
+                            _ => tsPrimitiveName ?? item.Name.Split('`')[0]
                         };
 
                         return new DotNetTypeData
@@ -209,6 +211,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                                         bool isTurmerikAssembly = wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
                                             asmb.BclItem!);
 
+                                        (asmb.Data as DotNetAssemblyData).IsTurmerikAssembly = isTurmerikAssembly;
                                         var assembliesList = section.Assemblies;
 
                                         AddAssembly(
@@ -356,7 +359,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             DotNetType<DotNetItemData> dotNetType)
         {
             bool retVal = !ReflH.IsSpecialTypeName(
-                dotNetType.Name) && dotNetType.FullName != null && (
+                dotNetType.Name, [ '`' ]) && dotNetType.FullName != null && (
                 dotNetType.Data as DotNetTypeData).With(
                         data => data.IsPrimitive != true && data.IsRootBaseType != true);
 
@@ -388,7 +391,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         {
                             IsPrimitive = false,
                             TypeName = GetUniquifiedTypeName(
-                                dependenciesMap, dotNetType, ref idx),
+                                dependenciesMap, dotNetType.Data as DotNetTypeData, ref idx),
                         };
 
                         newType.Properties = [];
@@ -407,18 +410,18 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 TsImportLines = GetTsImportLines(
                     dotNetTypeObj, dependenciesMap),
                 TsIntfDeclrStartLine = GetTsIntfDeclarationLine(
-                    wka, section, asmb, dotNetType),
+                    wka, section, asmb, dotNetType, dependenciesMap),
                 TsPropDeclrLines = GetTsPropDeclarationLines(
-                    wka, section, asmb, dotNetType)
+                    wka, section, asmb, dotNetType, dependenciesMap)
             };
 
             var overloadedTypeTsLinesMx = overloadedTypesArr.Select(
                 overloadedType => new WorkArgs.TsLinesAgg
                 {
                     TsIntfDeclrStartLine = GetTsIntfDeclarationLine(
-                        wka, section, asmb, overloadedType),
+                        wka, section, asmb, overloadedType, dependenciesMap),
                     TsMethodDeclrLines = GetTsMethodDeclarationLines(
-                        wka, section, asmb, overloadedType)
+                        wka, section, asmb, overloadedType, dependenciesMap)
                 }).ToArray();
 
             var allTsLinesAggList = firstTsLinesAgg.Lst();
@@ -457,10 +460,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             kvp =>
             {
                 string importedDep = kvp.Key;
+                var dotNettypeData = kvp.Value.Type.Data as DotNetTypeData;
 
-                if (kvp.Key != kvp.Value.Type.Name)
+                if (kvp.Key != dotNettypeData.TypeName)
                 {
-                    importedDep = $"{kvp.Value.Type.Name} as {importedDep}";
+                    importedDep = $"{dotNettypeData.TypeName} as {importedDep}";
                 }
 
                 string relFilePath = GetRelFilePath(
@@ -475,13 +479,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs wka,
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
-            DotNetType<DotNetItemData> dotNetType)
+            DotNetType<DotNetItemData> dotNetType,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap)
         {
             string tsIntfName = GetTsIntfName(
-                wka, section, asmb, dotNetType, true);
+                wka, section, asmb, dotNetType, true, typesMap);
 
             var baseTypesList = dotNetType.Interfaces.Select(
-                intf => GetTsIntfName(wka, section, asmb, intf, false)).ToList();
+                intf => GetTsIntfName(wka, section, asmb, intf, false, typesMap)).ToList();
 
             dotNetType.BaseType?.ActWith(baseType =>
             {
@@ -489,7 +494,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 {
                     if (baseTypeData.IsPrimitive != true && baseTypeData.IsRootBaseType != true)
                     {
-                        var baseTypeTsName = GetTsIntfName(wka, section, asmb, baseType, false);
+                        var baseTypeTsName = GetTsIntfName(
+                            wka, section, asmb, baseType, false, typesMap);
+
                         baseTypesList.Insert(0, baseTypeTsName);
                     }
                 });
@@ -512,17 +519,25 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
             DotNetType<DotNetItemData> dotNetType,
-            bool includeTypeParamConstraints)
+            bool includeTypeParamConstraints,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap)
         {
             var dotNetTypeData = dotNetType.Data as DotNetTypeData;
             string tsIntfName = dotNetTypeData!.TypeName;
+
+            if (!includeTypeParamConstraints)
+            {
+                tsIntfName = GetMappedType(typesMap, dotNetType).Key ?? tsIntfName;
+            }
 
             if (dotNetTypeData.IsPrimitive != true)
             {
                 if (dotNetType.IsArrayType == true)
                 {
                     tsIntfName = GetTsIntfName(
-                        wka, section, asmb, dotNetType.ArrayElementType, false);
+                        wka, section, asmb,
+                        dotNetType.ArrayElementType,
+                        false, typesMap);
 
                     tsIntfName += "[]";
                 }
@@ -533,7 +548,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         tsIntfName = GetTsIntfName(
                             wka, section, asmb,
                             dotNetType.GenericTypeArgs.Single().TypeArg,
-                            false);
+                            false, typesMap);
 
                         tsIntfName += "?";
                     }
@@ -541,7 +556,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     {
                         var genericTypeArgsPart = GetTsIntfGenericTypeArgsPart(
                             wka, section, asmb, dotNetType,
-                            includeTypeParamConstraints);
+                            includeTypeParamConstraints, typesMap);
 
                         if (tsIntfName.Contains('`'))
                         {
@@ -563,22 +578,24 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
             DotNetType<DotNetItemData> dotNetType,
-            bool includeTypeParamConstraints) => GetTsIntfGenericTypeArgsPart(
-                wka, section, asmb, dotNetType.GenericTypeArgs, includeTypeParamConstraints);
+            bool includeTypeParamConstraints,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap) => GetTsIntfGenericTypeArgsPart(
+                wka, section, asmb, dotNetType.GenericTypeArgs, includeTypeParamConstraints, typesMap);
 
         private string? GetTsIntfGenericTypeArgsPart(
             WorkArgs wka,
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
             List<GenericTypeArg<DotNetItemData>>? genericTypeArgs,
-            bool includeTypeParamConstraints)
+            bool includeTypeParamConstraints,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap)
         {
             string? retStr = null;
 
             var genericTypeArgsArr = genericTypeArgs?.Select(
                 genericTypeArg => GetTsIntfGenericTypeArgValue(
                     wka, section, asmb, genericTypeArg,
-                includeTypeParamConstraints)).ToList();
+                includeTypeParamConstraints, typesMap)).ToList();
 
             if ((genericTypeArgsArr?.Count ?? -1) > 0)
             {
@@ -596,7 +613,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
             GenericTypeArg<DotNetItemData> genericTypeArg,
-            bool includeTypeParamConstraints)
+            bool includeTypeParamConstraints,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap)
         {
             var typeArg = genericTypeArg.TypeArg;
             string retStr = typeArg.Name;
@@ -611,7 +629,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 if ((genericTypeArg.TypeParamConstraints?.Count ?? -1) > 0)
                 {
                     var typeParamConstraintsArr = genericTypeArg.TypeParamConstraints.Select(
-                        typeParam => GetTsIntfName(wka, section, asmb, typeParam, false)).ToArray();
+                        typeParam => GetTsIntfName(wka, section, asmb, typeParam, false, typesMap)).ToArray();
 
                     var typeParamConstraintsStr = typeParamConstraintsArr.Aggregate(
                         (arg1, arg2) => $"{arg1} | {arg2}");
@@ -622,7 +640,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             else
             {
                 var genericTypeArgsPart = GetTsIntfGenericTypeArgsPart(
-                    wka, section, asmb, typeArg, false);
+                    wka, section, asmb, typeArg, false, typesMap);
 
                 retStr += genericTypeArgsPart;
             }
@@ -634,17 +652,19 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs wka,
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
-            DotNetType<DotNetItemData> dotNetType) => dotNetType.Properties.Select(
+            DotNetType<DotNetItemData> dotNetType,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap) => dotNetType.Properties.Select(
                 prop => GetTsPropDeclarationLine(
-                    wka, section, asmb, dotNetType, prop)).ToList();
+                    wka, section, asmb, dotNetType, prop, typesMap)).ToList();
 
         private List<string> GetTsMethodDeclarationLines(
             WorkArgs wka,
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
-            DotNetType<DotNetItemData> dotNetType) => dotNetType.Methods.Select(
+            DotNetType<DotNetItemData> dotNetType,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap) => dotNetType.Methods.Select(
                 method => GetTsMethodDeclarationLine(
-                    wka, section, asmb, dotNetType, method)).ToList();
+                    wka, section, asmb, dotNetType, method, typesMap)).ToList();
 
         private List<List<DotNetMethod<DotNetItemData>>> GroupMethods(
             WorkArgs wka,
@@ -688,10 +708,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
             DotNetType<DotNetItemData> dotNetType,
-            DotNetProperty<DotNetItemData> dotNetProp)
+            DotNetProperty<DotNetItemData> dotNetProp,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap)
         {
             string propTypeStr = GetTsIntfName(
-                wka, section, asmb, dotNetProp.PropType!, false);
+                wka, section, asmb, dotNetProp.PropType!, false, typesMap);
 
             string propName = string.Concat(
                 wka.PgArgs.Profile.TsTabStr,
@@ -706,21 +727,22 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.Section section,
             WorkArgs.DotNetAssemblyObj asmb,
             DotNetType<DotNetItemData> dotNetType,
-            DotNetMethod<DotNetItemData> dotNetMethod)
+            DotNetMethod<DotNetItemData> dotNetMethod,
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap)
         {
             string retTypeStr = dotNetMethod.ReturnType?.With(
                 type => GetTsIntfName(
-                    wka, section, asmb, type, false)) ?? "void";
+                    wka, section, asmb, type, false, typesMap)) ?? "void";
 
             var paramsArr = dotNetMethod.Parameters.Select(
                 param => string.Join(": ", param.Name, GetTsIntfName(
-                    wka, section, asmb, param.ParamType, false)));
+                    wka, section, asmb, param.ParamType, false, typesMap)));
 
             var paramsStr = paramsArr.Any() ? paramsArr.Aggregate(
                 (arg1, arg2) => $"{arg1}, {arg2}") : "";
 
             var genericArgsStr = GetTsIntfGenericTypeArgsPart(
-                wka, section, asmb, dotNetMethod.GenericParameters, true);
+                wka, section, asmb, dotNetMethod.GenericParameters, true, typesMap);
 
             string methodName = string.Concat(
                 wka.PgArgs.Profile.TsTabStr,
@@ -736,6 +758,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             WorkArgs.DotNetAssemblyObj asmb,
             DotNetType<DotNetItemData> dotNetType)
         {
+            if (dotNetType.FullName == "Turmerik.Core.Actions.ActionErrorCatcher")
+            {
+
+            }
+
             var allDependentTypesList = dotNetType.Interfaces!.SelectMany(
                 ExpandDependency).ToList();
 
@@ -773,10 +800,10 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             foreach (var refType in allDependentTypesList.NotNull())
             {
-                if (refType.FullName != null && !assemblyLoader.TypesAreEqual(
-                        dotNetType, refType) && dependentTypesList.None(
-                    type => assemblyLoader.TypesAreEqual(
-                        type, refType)))
+                if (refType.FullName != null && !TypesAreEqual(
+                    dotNetType, refType) && dependentTypesList.None(
+                        type => TypesAreEqual(
+                            type, refType)))
                 {
                     dependentTypesList.Add(refType);
                 }
@@ -846,48 +873,75 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             DotNetType<DotNetItemData> dotNetType)
         {
             var typesMap = new Dictionary<string, WorkArgs.DotNetTypeObj>();
+            var dotNetTypeData = dotNetType.Data as DotNetTypeData;
 
             foreach (var type in typesList)
             {
-                if (type.Type.Name == dotNetType.Name || typesMap.Keys.Contains(type.Type.Name))
+                var typeData = type.Type.Data as DotNetTypeData;
+
+                if (typeData.TypeName == dotNetTypeData.TypeName || typesMap.Keys.Contains(
+                    typeData.TypeName))
                 {
                     int idx = 1;
 
                     string typeName = GetUniquifiedTypeName(
-                        typesMap, type.Type, ref idx);
+                        typesMap, typeData, ref idx);
 
                     typesMap.Add(typeName, type);
                 }
                 else
                 {
-                    typesMap.Add(type.Type.Name, type);
+                    typesMap.Add(typeData.TypeName, type);
                 }
             }
 
             return typesMap;
         }
 
+        private KeyValuePair<string, WorkArgs.DotNetTypeObj> GetMappedType(
+            Dictionary<string, WorkArgs.DotNetTypeObj> typesMap,
+            DotNetType<DotNetItemData> dotNetType) => typesMap.FirstOrDefault(
+                kvp => kvp.Value.Type.With(type =>
+                {
+                    bool retVal = TypesAreEqual(
+                        dotNetType, type);
+
+                    return retVal;
+                }));
+
+        private bool TypesAreEqual(
+            DotNetType<DotNetItemData> trgType,
+            DotNetType<DotNetItemData> refType)
+        {
+            bool retVal = trgType.Name == refType.Name;
+
+            retVal = retVal && trgType.FullName == refType.FullName;
+            retVal = retVal && trgType.Namespace == refType.Namespace;
+
+            return retVal;
+        }
+
         private string GetUniquifiedTypeName(
             Dictionary<string, WorkArgs.DotNetTypeObj> typesMap,
-            DotNetType<DotNetItemData> dotNetType,
+            DotNetTypeData dotNetTypeData,
             ref int idx) => GetUniquifiedTypeName(
-                typesMap, dotNetType,
+                typesMap, dotNetTypeData,
                 (map, name) => map.Keys.Contains(name),
                 ref idx);
 
         private string GetUniquifiedTypeName<TTypesMap>(
             TTypesMap typesMap,
-            DotNetType<DotNetItemData> dotNetType,
+            DotNetTypeData dotNetTypeData,
             Func<TTypesMap, string, bool> containsNamePredicate,
             ref int idx)
         {
             string typeName = GetUniquifiedTypeName(
-                dotNetType.Name, ref idx);
+                dotNetTypeData.TypeName, ref idx);
 
-            while (typeName == dotNetType.Name || containsNamePredicate(typesMap, typeName))
+            while (typeName == dotNetTypeData.TypeName || containsNamePredicate(typesMap, typeName))
             {
                 typeName = GetUniquifiedTypeName(
-                    dotNetType.Name, ref idx);
+                    dotNetTypeData.TypeName, ref idx);
             }
 
             return typeName;
@@ -895,22 +949,22 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         private string GetRelFilePath(
             WorkArgs.DotNetTypeObj dotNetTypeObj,
-            WorkArgs.DotNetTypeObj dependantTypeObj)
+            WorkArgs.DotNetTypeObj dependencyTypeObj)
         {
             var typePathParts = dotNetTypeObj.DestnFilePath.Split(['/', '\\']).ToList();
-            var dependantTypePathParts = dependantTypeObj.DestnFilePath.Split(['/', '\\']).ToList();
+            var dependencyTypePathParts = dependencyTypeObj.DestnFilePath.Split(['/', '\\']).ToList();
 
             int typePathPartsLen = typePathParts.Count;
-            int dependantTypePathPartsLen = dependantTypePathParts.Count;
+            int dependantTypePathPartsLen = dependencyTypePathParts.Count;
 
             int maxCount = Math.Min(typePathPartsLen, dependantTypePathPartsLen);
 
             for (int i = 0; i < maxCount; i++)
             {
-                if (typePathParts.First() == dependantTypePathParts.First())
+                if (typePathParts.First() == dependencyTypePathParts.First())
                 {
                     typePathParts.RemoveAt(0);
-                    dependantTypePathParts.RemoveAt(0);
+                    dependencyTypePathParts.RemoveAt(0);
                 }
                 else
                 {
@@ -921,7 +975,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             string typePath = Path.Combine(
                 typePathParts.Select(
                     (part, i) => i == 0 ? "." : "..").Concat(
-                    dependantTypePathParts).ToArray());
+                    dependencyTypePathParts).ToArray());
 
             return typePath;
         }
@@ -973,7 +1027,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             DotNetType<DotNetItemData> dotNetType)
         {
             string destnDirPath = GetDestnAsmbDirPath(
-                wka, section, asmb);
+                wka, section, dotNetType.Assembly);
 
             var destnPath = GetDefaultTsRelFilePath(
                 wka.PgArgs, dotNetType.RelNsPartsArr, dotNetType.Name);
@@ -993,14 +1047,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         private string GetDestnAsmbDirPath(
             WorkArgs wka,
             WorkArgs.Section section,
-            WorkArgs.DotNetAssemblyObj asmb)
+            DotNetAssembly<DotNetItemData> asmb)
         {
             var assembliesDirName = GetAssembliesDirName(wka, asmb);
 
             string destnDirPath = Path.Combine(
                 section.PfSection.DirPaths.DestnPath,
                 assembliesDirName,
-                asmb.Asmb.Name ?? throw new InvalidOperationException(
+                asmb.Name ?? throw new InvalidOperationException(
                     $"Assembly name should not be null"));
 
             return destnDirPath;
@@ -1047,7 +1101,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         private string GetAssembliesDirName(
             WorkArgs wka,
-            WorkArgs.DotNetAssemblyObj asmb) => asmb.IsTurmerikAssembly switch
+            DotNetAssembly<DotNetItemData> asmb) => (asmb.Data as DotNetAssemblyData).IsTurmerikAssembly switch
             {
                 true => wka.PgArgs.Profile.DestnCsProjectAssembliesDirName,
                 false => wka.PgArgs.Profile.DestnExternalAssemblliesDirName,

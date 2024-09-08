@@ -16,4 +16,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         public bool? IsPrimitive { get; set; }
         public string TypeName { get; set; }
     }
+
+    public class DotNetAssemblyData : DotNetItemData
+    {
+        public bool? IsTurmerikAssembly { get; set; }
+    }
 }
