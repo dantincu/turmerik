@@ -5,13 +5,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.ConsoleApps;
-using Turmerik.NetCore.Utility.AssemblyLoading;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
     public class ProgramConfig : ProgramConfigCoreBase<ProgramConfig.Profile>
     {
-        public AssemblyLoaderConfig AssemblyLoaderConfig { get; set; }
+        // public AssemblyLoaderConfig AssemblyLoaderConfig { get; set; }
         public string TsTabStr { get; set; }
 
         public class Profile : ProgramConfigProfileCoreBase
