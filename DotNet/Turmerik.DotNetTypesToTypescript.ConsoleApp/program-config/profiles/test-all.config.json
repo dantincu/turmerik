@@ -4,6 +4,7 @@
     "SrcPath": "|$TURMERIK_REPO_DIR|\\DotNet",
     "DestnPath": "|$TURMERIK_REPO_DIR|\\..\\..\\temp\\local\\DotNetTypesToTypescript\\test-all"
   },
+  "TreatAllEnumerablesAsArraysOrMaps": true,
   "Sections": [
     {
       "SectionName": "Turmerik",

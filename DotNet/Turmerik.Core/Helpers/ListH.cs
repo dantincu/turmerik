@@ -257,5 +257,58 @@ namespace Turmerik.Core.Helpers
             updateFunc(list, idx, newItem);
             return item;
         }
+
+        public static int DistinctOnly<T, TList>(
+            this TList list,
+            Func<TList, int, T> getFunc,
+            Action<TList, int> removeFunc,
+            Func<TList, int> countFunc,
+            Func<T, T, bool> equalsPredicate)
+        {
+            int removedCount = 0;
+            int remainingCount = countFunc(list);
+
+            int idx = 0;
+
+            while (idx < remainingCount)
+            {
+                var trgItem = getFunc(list, idx);
+                int i = idx + 1;
+
+                while (i < remainingCount)
+                {
+                    var refItem = getFunc(list, i);
+
+                    if (equalsPredicate(refItem, trgItem))
+                    {
+                        removeFunc(list, i);
+                        removedCount++;
+                        remainingCount--;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
+            }
+
+            return removedCount;
+        }
+
+        public static int DistinctOnly<T>(
+            this IList<T> list,
+            Func<T, T, bool> equalsPredicate) => DistinctOnly(
+                list, (lst, i) => lst[i],
+                (lst, i) => lst.RemoveAt(i),
+                lst => lst.Count,
+                equalsPredicate);
+
+        public static int DistinctOnly<T>(
+            this List<T> list,
+            Func<T, T, bool> equalsPredicate) => DistinctOnly(
+                list, (lst, i) => lst[i],
+                (lst, i) => lst.RemoveAt(i),
+                lst => lst.Count,
+                equalsPredicate);
     }
 }

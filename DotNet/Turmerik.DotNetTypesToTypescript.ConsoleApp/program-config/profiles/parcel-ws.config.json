@@ -4,6 +4,7 @@
     "SrcPath": "|$TURMERIK_REPO_DIR|\\DotNet",
     "DestnPath": "|$TURMERIK_REPO_DIR|\\Parcel-Ws\\libs\\trmrk\\src\\lib\\DotNetTypeDefs"
   },
+  "TreatAllEnumerablesAsArraysOrMaps": true,
   "Sections": [
     {
       "SectionName": "Turmerik.Core",

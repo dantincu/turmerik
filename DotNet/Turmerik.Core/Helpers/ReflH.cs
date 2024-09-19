@@ -19,13 +19,47 @@ namespace Turmerik.Core.Helpers
         public static readonly Type DisposableType = typeof(IDisposable);
         public static readonly Type AsyncDisposableType = typeof(IAsyncDisposable);
         public static readonly Type EnumerableBaseType = typeof(IEnumerable);
+        public static readonly Type EnumerableGenericTypeDef = typeof(IEnumerable<object>).GetGenericTypeDefinition();
+        public static readonly Type DictionaryBaseType = typeof(IDictionary);
+        public static readonly Type DictionaryGenericTypeDef = typeof(IDictionary<object, object>).GetGenericTypeDefinition();
+        public static readonly Type ReadOnlyDictionaryGenericTypeDef = typeof(IReadOnlyDictionary<object, object>).GetGenericTypeDefinition();
         public static readonly Type StringType = typeof(string);
+
+        public static readonly string EnumerableGenericTypeDefName = EnumerableGenericTypeDef.GetTypeFullName();
+        public static readonly string DictionaryGenericTypeDefName = DictionaryGenericTypeDef.GetTypeFullName();
+        public static readonly string ReadOnlyDictionaryGenericTypeDefName = ReadOnlyDictionaryGenericTypeDef.GetTypeFullName();
+
+        public static readonly ReadOnlyCollection<Type> NumberTypes = typeof(byte).Arr(
+            typeof(sbyte),
+            typeof(short),
+            typeof(ushort),
+            typeof(int),
+            typeof(uint),
+            typeof(long),
+            typeof(ulong)).RdnlC();
+
+        public static readonly ReadOnlyCollection<string> NumberTypeNames = NumberTypes.Select(
+            type => type.FullName).RdnlC();
+
+        public static readonly string NullableGenericTypeName = typeof(int).GetTypeFullName();
 
         public static readonly BindingFlags MatchAllBindingFlags = GetMatchAllBindingFlags();
         public static readonly BindingFlags MatchAllFlatHcyBindingFlags = MatchAllBindingFlags | BindingFlags.FlattenHierarchy;
 
         public static BindingFlags GetMatchAllBindingFlags(
             ) => BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
+        /// <summary>
+        /// This can be usefull for generic types, as in their cases the <see cref="Type.FullName" /> property
+        /// returns a string containing the list of generic parameter constraints containing the names of
+        /// type parameters and their types, enclosed in square brackets and separated by comma: <br /> <br />
+        /// <c>System.Collections.Generic.KeyValuePair`2[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]</c>
+        /// </summary>
+        /// <param name="type">The type whose full name is to be retrieved.</param>
+        /// <returns>An instance of type <see cref="string" /> containing the full name of the provided type.</returns>
+        public static string GetTypeFullName(
+            this Type type) => string.Join(".",
+                type.Namespace, type.Name);
 
         public static string GetTypeFullDisplayName(
             this Type type,
@@ -113,5 +147,75 @@ namespace Turmerik.Core.Helpers
         public static string RemoveInvalidCharsFromTypeName(
             string typeName) => new string(
                 typeName.Where(c => IsValidTypeNameChar(c)).ToArray());
+
+        public static string GetIdnfName(
+            this Type type) => type.IsNested switch
+        {
+            true => string.Join(".", GetIdnfName(
+                type.DeclaringType), type.Name),
+            false => string.Join(".",
+                type.Namespace, type.Name)
+        };
+
+        public static List<Tuple<string, Type>> GetDistinctInterfaces(
+            this Type type) => ReduceInterfaces(
+                SelectInterfaceTuples(
+                    type.GetInterfaces()));
+
+        public static List<Tuple<string, Type>> ReduceInterfaces(
+            List<Tuple<string, Type>> intfTuplesList)
+        {
+            var implIntfTuplesList = SelectImplInterfaces(
+                intfTuplesList);
+
+            ReduceInterfaces(
+                intfTuplesList,
+                implIntfTuplesList);
+
+            return implIntfTuplesList;
+        }
+
+        public static List<Tuple<string, Type>> ReduceInterfaces(
+            List<Tuple<string, Type>> intfList,
+            List<Tuple<string, Type>> implIntfList)
+        {
+            if (implIntfList.Any())
+            {
+                int idx = 0;
+
+                while (idx < intfList.Count)
+                {
+                    var intf = intfList[idx];
+
+                    var kvp = implIntfList.FirstKvp(
+                        candidate => candidate.Item1 == intf.Item1);
+
+                    if (kvp.Key >= 0)
+                    {
+                        intfList.RemoveAt(idx);
+                        implIntfList.RemoveAt(kvp.Key);
+                    }
+                }
+
+                implIntfList = SelectImplInterfaces(
+                    implIntfList);
+
+                ReduceInterfaces(
+                    intfList,
+                    implIntfList);
+            }
+
+            return intfList;
+        }
+
+        public static List<Tuple<string, Type>> SelectInterfaceTuples(
+            IEnumerable<Type> intfList) => intfList.Select(
+                intf => Tuple.Create(GetIdnfName(intf), intf)).ToList();
+
+        public static List<Tuple<string, Type>> SelectImplInterfaces(
+            List<Tuple<string, Type>> intfList) => intfList.SelectMany(
+                tuple => tuple.Item2.GetInterfaces().Select(
+                    intf => Tuple.Create(GetIdnfName(intf), intf))).ToList().ActWith(
+                list => list.DistinctOnly((t1, t2) => t1.Item1 == t2.Item1));
     }
 }
