@@ -10,20 +10,20 @@ using Turmerik.Core.Text;
 
 namespace Turmerik.NetCore.Reflection.AssemblyLoading
 {
-    public abstract class AssemblyLoader
+    public abstract class AssemblyLoaderBase
     {
         public const string NET_STD_ASMB_NAME = "netstandard";
         public const string NET_STD_ASMB_FILE_NAME = "netstandard.dll";
 
-        private readonly string coreLibLocation = typeof(object).Assembly.Location;
-        private readonly string coreLibName = typeof(object).Assembly.GetName().Name;
+        public readonly string coreLibLocation = typeof(object).Assembly.Location;
+        public readonly string coreLibName = typeof(object).Assembly.GetName().Name;
 
-        private readonly IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever;
+        protected readonly IFilteredDriveEntriesRetriever FilteredDriveEntriesRetriever;
 
-        public AssemblyLoader(
+        public AssemblyLoaderBase(
             IFilteredDriveEntriesRetriever filteredDriveEntriesRetriever)
         {
-            this.filteredDriveEntriesRetriever = filteredDriveEntriesRetriever ?? throw new ArgumentNullException(
+            FilteredDriveEntriesRetriever = filteredDriveEntriesRetriever ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesRetriever));
         }
 
@@ -118,7 +118,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public async Task<List<string>> GetAllAssembliesFilePathsAsync(
             string assembliesBaseDirPath)
         {
-            var allAssembliesFilePathsList = (await filteredDriveEntriesRetriever.FindMatchingAsync(
+            var allAssembliesFilePathsList = (await FilteredDriveEntriesRetriever.FindMatchingAsync(
                 new FilteredDriveRetrieverMatcherOpts
                 {
                     PrFolderIdnf = assembliesBaseDirPath,
@@ -316,18 +316,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 AsmbMap = asmbMap ?? new();
                 AllTypesMap = allTypesMap ?? new();
 
-                RootObject = rootObject ?? new TypeItemCore
-                {
-                    Kind = TypeItemKind.RootObject
-                };
+                RootObject = rootObject ?? new TypeItemCore(
+                    TypeItemKind.RootObject,
+                    typeof(object).FullName!);
 
-                RootValueType = rootValueType ?? new TypeItemCore
-                {
-                    Kind = TypeItemKind.RootValueType
-                };
+                RootValueType = rootValueType ?? new TypeItemCore(
+                    TypeItemKind.RootValueType,
+                    typeof(ValueType).FullName!);
 
-                AllTypesMap.Add(typeof(object).FullName, RootObject);
-                AllTypesMap.Add(typeof(ValueType).FullName, RootValueType);
+                AllTypesMap.Add(RootObject.IdnfName, RootObject);
+                AllTypesMap.Add(RootValueType.IdnfName, RootValueType);
             }
 
             public AssemblyLoaderOpts Opts { get; init; }

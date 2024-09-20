@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -88,6 +89,62 @@ namespace Turmerik.Core.Helpers
             {
                 collection.Add(item);
             }
+        }
+
+        public static bool NmrblsAreEqual<T>(
+            this IEnumerable<T> trgNmrbl,
+            IEnumerable<T> refNmrbl,
+            bool countAllFirst = false) => NmrblsAreEqual(
+                trgNmrbl,
+                refNmrbl,
+                EqualityComparer<T>.Default,
+                countAllFirst);
+
+        public static bool NmrblsAreEqual<T>(
+            this IEnumerable<T> trgNmrbl,
+            IEnumerable<T> refNmrbl,
+            IEqualityComparer<T> comparer,
+            bool countAllFirst = false) => NmrblsAreEqual(
+                trgNmrbl,
+                refNmrbl,
+                comparer.Equals,
+                countAllFirst);
+
+        public static bool NmrblsAreEqual<T>(
+            this IEnumerable<T> trgNmrbl,
+            IEnumerable<T> refNrmbl,
+            Func<T, T, bool> comparer,
+            bool countAllFirst = false)
+        {
+            bool areEqual = !countAllFirst || trgNmrbl.Count() == refNrmbl.Count();
+
+            if (areEqual)
+            {
+                var trgNmrtr = trgNmrbl.GetEnumerator();
+                var refNmrtr = refNrmbl.GetEnumerator();
+
+                bool trgHasNext = trgNmrtr.MoveNext();
+                bool refHasNext = refNmrtr.MoveNext();
+
+                areEqual = trgHasNext == refHasNext;
+
+                while (areEqual && trgHasNext)
+                {
+                    areEqual = comparer(
+                        trgNmrtr.Current,
+                        refNmrtr.Current);
+
+                    if (areEqual)
+                    {
+                        trgHasNext = trgNmrtr.MoveNext();
+                        refHasNext = refNmrtr.MoveNext();
+
+                        areEqual = trgHasNext == refHasNext;
+                    }
+                }
+            }
+
+            return areEqual;
         }
     }
 }
