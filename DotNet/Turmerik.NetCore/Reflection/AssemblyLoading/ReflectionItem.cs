@@ -26,16 +26,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         Nullable,
         Array,
         Enumerable,
-        Dictionary
-    }
-
-    public enum GenericTypeParamConstraintKind
-    {
-        BaseType,
-        Interface,
-        Class,
-        Struct,
-        HasZeroArgsConstructor
+        Dictionary,
+        GenericParam
     }
 
     public static class ReflectionItem
@@ -86,7 +78,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool IsNetStandardLib { get; init; }
         public bool IsSysLib { get; init; }
 
-        public Dictionary<string, TypeItemCore> TypesMap { get; init; }
+        public Dictionary<string, TypeItemCoreBase> TypesMap { get; init; }
 
         public bool Equals(AssemblyItem? other) => other?.Name == Name;
     }
@@ -139,75 +131,99 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool IsGenericTypeDefinition { get; init; }
         public bool IsInterface { get; init; }
 
-        public Lazy<TypeItemCore>? BaseType { get; init; }
-        public ReadOnlyCollection<Lazy<TypeItemCore>> InterfaceTypes { get; init; }
-        public TypeItemCore? GenericTypeDefinition { get; init; }
+        public Lazy<TypeItemCoreBase>? BaseType { get; init; }
+        public ReadOnlyCollection<Lazy<TypeItemCoreBase>> InterfaceTypes { get; init; }
+        public TypeItemCoreBase? GenericTypeDefinition { get; init; }
 
         public ReadOnlyCollection<PropertyItem> PubInstnProps { get; init; }
         public ReadOnlyCollection<MethodItem> PubInstnMethods { get; init; }
 
-        public Lazy<ReadOnlyCollection<Lazy<TypeItemCore>>> AllTypeDependencies { get; init; }
+        public Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> AllTypeDependencies { get; init; }
     }
 
-    public class TypeItemCore : IEquatable<TypeItemCore>
+    public abstract class TypeItemCoreBase : IEquatable<TypeItemCoreBase>
     {
-        private readonly Lazy<string> idnfName;
-
-        public TypeItemCore(
-            TypeItemKind kind,
-            Func<string> idnfNameFactory)
+        protected TypeItemCoreBase(
+            TypeItemKind kind)
         {
             Kind = kind;
-            idnfName = new Lazy<string>(idnfNameFactory);
-        }
-
-        public TypeItemCore(
-            TypeItemKind kind,
-            string idnfName) : this(
-                kind,
-                () => idnfName)
-        {
         }
 
         public TypeItemKind Kind { get; }
-        public string IdnfName => idnfName.Value;
+        public abstract string IdnfName { get; }
 
-        public bool Equals(TypeItemCore? other) => other?.IdnfName == IdnfName;
+        public bool Equals(TypeItemCoreBase? other) => other?.IdnfName == IdnfName;
     }
 
-    public class GenericInteropTypeItem : TypeItemCore
+    public abstract class TypeItemCore<TTypeItem> : TypeItemCoreBase
+        where TTypeItem : TypeItemCore<TTypeItem>
+    {
+        private readonly Func<TTypeItem, string> nameFactory;
+        private readonly Lazy<string> idnfName;
+
+        protected TypeItemCore(
+            TypeItemKind kind,
+            Func<TTypeItem, string> nameFactory) : base(kind)
+        {
+            this.nameFactory = nameFactory ?? throw new ArgumentNullException(
+                nameof(nameFactory));
+
+            idnfName = new Lazy<string>(
+                () => this.nameFactory((TTypeItem)this));
+        }
+
+        public override string IdnfName => idnfName.Value;
+
+        public Lazy<TypeItemCoreBase>? DeclaringType { get; init; }
+    }
+
+    public class TypeItemCore : TypeItemCoreBase
+    {
+        public TypeItemCore(
+            TypeItemKind kind,
+            string idnfName) : base(kind)
+        {
+            IdnfName = idnfName ?? throw new ArgumentNullException(
+                nameof(idnfName));
+        }
+
+        public override string IdnfName { get; }
+    }
+
+    public class GenericInteropTypeItem : TypeItemCore<GenericInteropTypeItem>
     {
         public GenericInteropTypeItem(
             TypeItemKind kind,
-            Func<string> idnfNameFactory) : base(
+            Func<GenericInteropTypeItem, string> nameFactory) : base(
                 kind,
-                idnfNameFactory)
+                nameFactory)
         {
         }
 
         public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
     }
 
-    public class EnumTypeItem : TypeItemCore
+    public class EnumTypeItem : TypeItemCore<EnumTypeItem>
     {
         public EnumTypeItem(
             TypeItemKind kind,
-            Func<string> idnfNameFactory) : base(
+            Func<EnumTypeItem, string> nameFactory) : base(
                 kind,
-                idnfNameFactory)
+                nameFactory)
         {
         }
 
-        public ReadOnlyDictionary<string, int> DefinedValuesMap { get; init; }
+        public ReadOnlyDictionary<string, object> DefinedValuesMap { get; init; }
     }
 
-    public class TypeItem : TypeItemCore
+    public class TypeItem<TTypeItem> : TypeItemCore<TTypeItem>
+        where TTypeItem : TypeItem<TTypeItem>
     {
         public TypeItem(
             TypeItemKind kind,
-            Func<string> idnfNameFactory) : base(
+            Func<TTypeItem, string> nameFactory) : base(
                 kind,
-                idnfNameFactory)
+                nameFactory)
         {
         }
 
@@ -215,17 +231,26 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public TypeIdnf Idnf { get; init; }
         public TypeData Data { get; init; }
-
-        public TypeItemCore? DeclaringType { get; init; }
     }
 
-    public class GenericTypeItem : TypeItem, IGenericReflectionItem
+    public class TypeItem : TypeItem<TypeItem>
+    {
+        public TypeItem(
+            TypeItemKind kind,
+            Func<TypeItem, string> nameFactory) : base(
+                kind,
+                nameFactory)
+        {
+        }
+    }
+
+    public class GenericTypeItem : TypeItem<GenericTypeItem>, IGenericReflectionItem
     {
         public GenericTypeItem(
             TypeItemKind kind,
-            Func<string> idnfNameFactory) : base(
+            Func<GenericTypeItem, string> nameFactory) : base(
                 kind,
-                idnfNameFactory)
+                nameFactory)
         {
         }
 
@@ -233,23 +258,37 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public Lazy<ReadOnlyCollection<Lazy<GenericTypeArg>>>? AllGenericTypeArgs { get; init; }
     }
 
-    public class GenericTypeParamConstraint
+    public class GenericTypeArg
     {
-        public TypeItemCore? Type { get; init; }
-        public GenericTypeParamConstraintKind Kind { get; init; }
+        public GenericTypeParameter? Param { get; init; }
+        public TypeItemCoreBase? TypeArg { get; init; }
+
+        public string IdnfName => TypeArg?.IdnfName ?? Param!.Name;
     }
 
-    public class GenericTypeArg : ReflectionItemBase
+    public class GenericTypeParameter : TypeItemCoreBase
     {
-        public GenericTypeArg(
-            string name) : base(
-                name)
+        public GenericTypeParameter(
+            TypeItemKind kind) : base(kind)
         {
         }
 
-        public TypeItemCore? TypeArg { get; init; }
+        public string Name { get; init; }
         public int? GenericParamPosition { get; init; }
-        public ReadOnlyCollection<Lazy<GenericTypeParamConstraint>>? ParamConstraints { get; init; }
+        public GenericTypeParamConstraints ParamConstraints { get; init; }
+
+        public override string IdnfName => Name;
+    }
+
+    public class GenericTypeParamConstraints
+    {
+        public GenericParameterAttributes GenericParameterAttributes { get; init; }
+        public bool IsStruct { get; init; }
+        public bool IsClass { get; init; }
+        public bool HasDefaultConstructor { get; init; }
+        public bool IsNotNullableValueType { get; init; }
+        public Lazy<TypeItemCoreBase>? BaseClass { get; init; }
+        public ReadOnlyCollection<Lazy<TypeItemCoreBase>> RestOfTypes { get; init; }
     }
 
     public class PropertyItem : ReflectionItemBase<PropertyInfo>
@@ -266,7 +305,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool CanWrite { get; init; }
         public bool IsStatic { get; init; }
 
-        public Lazy<TypeItemCore> PropertyType { get; init; }
+        public Lazy<TypeItemCoreBase> PropertyType { get; init; }
     }
 
     public abstract class MethodItemBase<TMethod> : ReflectionItemBase<TMethod>
@@ -283,7 +322,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool IsStatic { get; init; }
         public abstract bool IsConstructor { get; }
 
-        public ReadOnlyDictionary<string, Lazy<TypeItemCore>> Params { get; init; }
+        public ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>> Params { get; init; }
     }
 
     public class ConstructorItem : MethodItemBase<ConstructorInfo>
@@ -313,7 +352,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public bool IsVoidMethod { get; init; }
 
-        public Lazy<TypeItemCore> ReturnType { get; init; }
+        public Lazy<TypeItemCoreBase> ReturnType { get; init; }
     }
 
     public class GenericMethodItem : MethodItem

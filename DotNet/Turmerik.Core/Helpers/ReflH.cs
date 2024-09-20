@@ -9,6 +9,7 @@ using System.Text;
 using Turmerik.Core.Text;
 using Turmerik.Core.Utility;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace Turmerik.Core.Helpers
 {
@@ -16,32 +17,14 @@ namespace Turmerik.Core.Helpers
     {
         public static readonly Type VoidType = typeof(void);
         public static readonly Type BaseObjectType = typeof(object);
-        public static readonly Type DisposableType = typeof(IDisposable);
-        public static readonly Type AsyncDisposableType = typeof(IAsyncDisposable);
-        public static readonly Type EnumerableBaseType = typeof(IEnumerable);
-        public static readonly Type EnumerableGenericTypeDef = typeof(IEnumerable<object>).GetGenericTypeDefinition();
-        public static readonly Type DictionaryBaseType = typeof(IDictionary);
-        public static readonly Type DictionaryGenericTypeDef = typeof(IDictionary<object, object>).GetGenericTypeDefinition();
-        public static readonly Type ReadOnlyDictionaryGenericTypeDef = typeof(IReadOnlyDictionary<object, object>).GetGenericTypeDefinition();
+        public static readonly Type BaseValueType = typeof(ValueType);
+        public static readonly Type DisposableIntfType = typeof(IDisposable);
+        public static readonly Type AsyncDisposableIntfType = typeof(IAsyncDisposable);
+
         public static readonly Type StringType = typeof(string);
+        public static readonly Type BoolType = typeof(bool);
 
-        public static readonly string EnumerableGenericTypeDefName = EnumerableGenericTypeDef.GetTypeFullName();
-        public static readonly string DictionaryGenericTypeDefName = DictionaryGenericTypeDef.GetTypeFullName();
-        public static readonly string ReadOnlyDictionaryGenericTypeDefName = ReadOnlyDictionaryGenericTypeDef.GetTypeFullName();
-
-        public static readonly ReadOnlyCollection<Type> NumberTypes = typeof(byte).Arr(
-            typeof(sbyte),
-            typeof(short),
-            typeof(ushort),
-            typeof(int),
-            typeof(uint),
-            typeof(long),
-            typeof(ulong)).RdnlC();
-
-        public static readonly ReadOnlyCollection<string> NumberTypeNames = NumberTypes.Select(
-            type => type.FullName).RdnlC();
-
-        public static readonly string NullableGenericTypeName = typeof(int).GetTypeFullName();
+        public static readonly GenericTypeDefTupleCore NullableGenericTypeDef = new(typeof(Nullable<>));
 
         public static readonly BindingFlags MatchAllBindingFlags = GetMatchAllBindingFlags();
         public static readonly BindingFlags MatchAllFlatHcyBindingFlags = MatchAllBindingFlags | BindingFlags.FlattenHierarchy;
@@ -117,11 +100,11 @@ namespace Turmerik.Core.Helpers
             this Type type,
             bool alsoCheckForAsyncDisposable = false)
         {
-            bool isDisposable = DisposableType.IsAssignableFrom(type);
+            bool isDisposable = DisposableIntfType.IsAssignableFrom(type);
 
             if (!isDisposable && alsoCheckForAsyncDisposable)
             {
-                isDisposable = AsyncDisposableType.IsAssignableFrom(type);
+                isDisposable = AsyncDisposableIntfType.IsAssignableFrom(type);
             }
 
             return isDisposable;

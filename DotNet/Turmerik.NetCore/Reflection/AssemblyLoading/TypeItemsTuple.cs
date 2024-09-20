@@ -9,14 +9,14 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     public class TypeItemsTuple
     {
         public TypeItemsTuple(
-            TypeItemCore type,
-            TypeItemCore? genericTypeDef)
+            TypeItemCoreBase type,
+            TypeItemCoreBase? genericTypeDef)
         {
             Type = type ?? throw new ArgumentNullException(nameof(type));
             GenericTypeDef = genericTypeDef;
         }
 
-        public TypeItemCore Type { get; init; }
-        public TypeItemCore? GenericTypeDef { get; init; }
+        public TypeItemCoreBase Type { get; init; }
+        public TypeItemCoreBase? GenericTypeDef { get; init; }
     }
 }

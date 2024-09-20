@@ -276,21 +276,32 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 TypesMap = new()
             };
 
+            if (isSysLib)
+            {
+                retAsmb.TypesMap.Add(
+                    wka.RootObject.IdnfName,
+                    wka.RootObject);
+
+                retAsmb.TypesMap.Add(
+                    wka.RootValueType.IdnfName,
+                    wka.RootValueType);
+            }
+
             return retAsmb;
         }
 
-        protected abstract TypeItemCore LoadType(
+        protected abstract TypeItemCoreBase LoadType(
             WorkArgs wka,
             Type type);
 
-        protected abstract TypeItemCore LoadType(
+        protected abstract TypeItemCoreBase LoadType(
             WorkArgs wka,
             AssemblyLoaderOpts.AssemblyOpts asmbOpts,
             AssemblyLoaderOpts.TypeOpts typeOpts);
 
         private void ForEachType(
             WorkArgs wka,
-            Action<AssemblyItem, TypeItemCore> callback)
+            Action<AssemblyItem, TypeItemCoreBase> callback)
         {
             foreach (var asmbKvp in wka.AsmbMap)
             {
@@ -307,31 +318,25 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 AssemblyLoaderOpts opts,
                 MetadataLoadContext context,
                 Dictionary<string, AssemblyItem>? asmbMap = null,
-                Dictionary<string, TypeItemCore>? allTypesMap = null,
                 TypeItemCore rootObject = null,
                 TypeItemCore rootValueType = null)
             {
                 Opts = opts;
                 Context = context;
                 AsmbMap = asmbMap ?? new();
-                AllTypesMap = allTypesMap ?? new();
 
                 RootObject = rootObject ?? new TypeItemCore(
                     TypeItemKind.RootObject,
-                    typeof(object).FullName!);
+                    ReflH.BaseObjectType.FullName);
 
                 RootValueType = rootValueType ?? new TypeItemCore(
                     TypeItemKind.RootValueType,
-                    typeof(ValueType).FullName!);
-
-                AllTypesMap.Add(RootObject.IdnfName, RootObject);
-                AllTypesMap.Add(RootValueType.IdnfName, RootValueType);
+                    ReflH.BaseValueType.FullName!);
             }
 
             public AssemblyLoaderOpts Opts { get; init; }
             public MetadataLoadContext Context { get; init; }
             public Dictionary<string, AssemblyItem> AsmbMap { get; init; }
-            public Dictionary<string, TypeItemCore> AllTypesMap { get; init; }
             public TypeItemCore RootObject { get; init; }
             public TypeItemCore RootValueType { get; init; }
         }
