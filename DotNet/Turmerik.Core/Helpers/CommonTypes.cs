@@ -11,52 +11,56 @@ namespace Turmerik.Core.Helpers
 {
     public class CommonTypes
     {
-        public readonly GenericTypeDefTuple EnumerableIntfType = new(typeof(IEnumerable<>), typeof(IEnumerable));
-        public readonly GenericTypeDefTuple CollectionIntfType = new(typeof(ICollection<>), typeof(ICollection));
-        public readonly GenericTypeDefTupleCore ReadOnlyCollectionIntfType = new(typeof(IReadOnlyCollection<>));
-        public readonly GenericTypeDefTupleCore ProducerConsumerCollectionIntfType = new(typeof(IProducerConsumerCollection<>));
-        public readonly GenericTypeDefTuple ListIntfType = new(typeof(IList<>), typeof(IList));
-        public readonly GenericTypeDefTupleCore ReadOnlyListIntfType = new(typeof(IReadOnlyList<>));
-        public readonly GenericTypeDefTuple DictionaryIntfType = new(typeof(IDictionary<,>), typeof(IDictionary));
-        public readonly GenericTypeDefTupleCore ReadOnlyDictionaryIntfType = new(typeof(IReadOnlyDictionary<,>));
+        public readonly TypeTuple EnumerableIntf = new(typeof(IEnumerable<>), typeof(IEnumerable));
+        public readonly TypeTuple CollectionIntf = new(typeof(ICollection<>), typeof(ICollection));
+        public readonly TypeTupleCore ReadOnlyCollectionIntf = new(typeof(IReadOnlyCollection<>));
+        public readonly TypeTupleCore ProducerConsumerCollectionIntf = new(typeof(IProducerConsumerCollection<>));
+        public readonly TypeTuple ListIntf = new(typeof(IList<>), typeof(IList));
+        public readonly TypeTupleCore ReadOnlyListIntf = new(typeof(IReadOnlyList<>));
+        public readonly TypeTuple DictionaryIntf = new(typeof(IDictionary<,>), typeof(IDictionary));
+        public readonly TypeTupleCore ReadOnlyDictionaryIntf = new(typeof(IReadOnlyDictionary<,>));
+        public readonly TypeTupleCore SetIntf = new(typeof(ISet<>));
 
-        public readonly GenericTypeDefTupleCore CollectionType = new(typeof(Collection<>));
-        public readonly GenericTypeDefTupleCore ReadOnlyCollectionType = new(typeof(ReadOnlyCollection<>));
-        public readonly GenericTypeDefTupleCore ListType = new(typeof(List<>));
-        public readonly GenericTypeDefTupleCore DictionaryType = new(typeof(Dictionary<,>));
-        public readonly GenericTypeDefTupleCore ReadOnlyDictionaryType = new(typeof(ReadOnlyDictionary<,>));
+        public readonly TypeTupleCore Collection = new(typeof(Collection<>));
+        public readonly TypeTupleCore ReadOnlyCollection = new(typeof(ReadOnlyCollection<>));
+        public readonly TypeTupleCore List = new(typeof(List<>));
+        public readonly TypeTupleCore Dictionary = new(typeof(Dictionary<,>));
+        public readonly TypeTupleCore ReadOnlyDictionary = new(typeof(ReadOnlyDictionary<,>));
 
-        public readonly GenericTypeDefTupleCore StackType = new(typeof(Stack<>));
-        public readonly GenericTypeDefTupleCore QueueType = new(typeof(Queue<>));
+        public readonly TypeTupleCore Stack = new(typeof(Stack<>));
+        public readonly TypeTupleCore Queue = new(typeof(Queue<>));
+        public readonly TypeTupleCore HashSet = new(typeof(HashSet<>));
+        public readonly TypeTupleCore HashTable = new(typeof(Hashtable));
 
-        public readonly GenericTypeDefTupleCore ConcurrentDictionaryType = new(typeof(ConcurrentDictionary<,>));
-        public readonly GenericTypeDefTupleCore ConcurrentStackType = new(typeof(ConcurrentStack<>));
-        public readonly GenericTypeDefTupleCore ConcurrentQueueType = new(typeof(ConcurrentQueue<>));
+        public readonly TypeTupleCore ConcurrentDictionary = new(typeof(ConcurrentDictionary<,>));
+        public readonly TypeTupleCore ConcurrentStack = new(typeof(ConcurrentStack<>));
+        public readonly TypeTupleCore ConcurrentQueue = new(typeof(ConcurrentQueue<>));
+        public readonly TypeTupleCore ConcurrentBag = new(typeof(ConcurrentBag<>));
 
-        public readonly GenericTypeDefTupleCore DateTimeType = new(typeof(DateTime));
-        public readonly GenericTypeDefTupleCore DateTimeOffsetType = new(typeof(DateTimeOffset));
-        public readonly GenericTypeDefTupleCore TimeSpanType = new(typeof(TimeSpan));
-        public readonly GenericTypeDefTupleCore BigIntegerType = new(typeof(BigInteger));
+        public readonly TypeTupleCore Span = new(typeof(Span<>));
+        public readonly TypeTupleCore ReadOnlySpan = new(typeof(ReadOnlySpan<>));
 
-        public readonly ReadOnlyCollection<Type> NumberTypes;
-        public readonly ReadOnlyCollection<string> NumberTypeNames;
+        public readonly TypeTupleCore DateTime = new(typeof(DateTime));
+        public readonly TypeTupleCore DateTimeOffset = new(typeof(DateTimeOffset));
+        public readonly TypeTupleCore TimeSpan = new(typeof(TimeSpan));
+        public readonly TypeTupleCore BigInteger = new(typeof(BigInteger));
 
-        public readonly GenericTypeDefTupleCore Tuple1 = new(typeof(Tuple<>));
-        public readonly GenericTypeDefTupleCore Tuple2 = new(typeof(Tuple<,>));
-        public readonly GenericTypeDefTupleCore Tuple3 = new(typeof(Tuple<,,>));
-        public readonly GenericTypeDefTupleCore Tuple4 = new(typeof(Tuple<,,,>));
-        public readonly GenericTypeDefTupleCore Tuple5 = new(typeof(Tuple<,,,,>));
-        public readonly GenericTypeDefTupleCore Tuple6 = new(typeof(Tuple<,,,,,>));
-        public readonly GenericTypeDefTupleCore Tuple7 = new(typeof(Tuple<,,,,,,>));
-        public readonly GenericTypeDefTupleCore Tuple8 = new(typeof(Tuple<,,,,,,,>));
+        public readonly TypeTuplesAgg NumberTypes;
 
-        public readonly ReadOnlyCollection<GenericTypeDefTupleCore> AllTuples;
-        public readonly ReadOnlyCollection<Type> AllTupleTypes;
+        public readonly TypeTupleCore Tuple1 = new(typeof(Tuple<>));
+        public readonly TypeTupleCore Tuple2 = new(typeof(Tuple<,>));
+        public readonly TypeTupleCore Tuple3 = new(typeof(Tuple<,,>));
+        public readonly TypeTupleCore Tuple4 = new(typeof(Tuple<,,,>));
+        public readonly TypeTupleCore Tuple5 = new(typeof(Tuple<,,,,>));
+        public readonly TypeTupleCore Tuple6 = new(typeof(Tuple<,,,,,>));
+        public readonly TypeTupleCore Tuple7 = new(typeof(Tuple<,,,,,,>));
+        public readonly TypeTupleCore Tuple8 = new(typeof(Tuple<,,,,,,,>));
+
+        public readonly TypeTuplesAgg TupleTypes;
 
         private CommonTypes()
         {
-            NumberTypes = new Type[]
-            {
+            NumberTypes = new ([
                 typeof(byte),
                 typeof(sbyte),
                 typeof(short),
@@ -68,15 +72,18 @@ namespace Turmerik.Core.Helpers
                 typeof(decimal),
                 typeof(float),
                 typeof(double),
-            }.RdnlC();
+            ]);
 
-            NumberTypeNames = NumberTypes.Select(
-                type => type.GetTypeFullName()).RdnlC();
-
-            AllTuples = Tuple1.Arr().RdnlC();
-
-            AllTupleTypes = AllTuples.Select(
-                tuple => tuple.Type).RdnlC();
+            TupleTypes = new(
+                Tuple1.Arr(
+                    Tuple1,
+                    Tuple2,
+                    Tuple3,
+                    Tuple4,
+                    Tuple5,
+                    Tuple6,
+                    Tuple7,
+                    Tuple8));
         }
 
         public static Lazy<CommonTypes> Instn { get; } = new Lazy<CommonTypes>(() => new CommonTypes());

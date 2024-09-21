@@ -15,16 +15,16 @@ namespace Turmerik.Core.Helpers
 {
     public static class ReflH
     {
-        public static readonly Type VoidType = typeof(void);
-        public static readonly Type BaseObjectType = typeof(object);
-        public static readonly Type BaseValueType = typeof(ValueType);
-        public static readonly Type DisposableIntfType = typeof(IDisposable);
-        public static readonly Type AsyncDisposableIntfType = typeof(IAsyncDisposable);
+        public static readonly TypeTupleCore VoidType = new (typeof(void));
+        public static readonly TypeTupleCore BaseObjectType = new(typeof(object));
+        public static readonly TypeTupleCore BaseValueType = new(typeof(ValueType));
+        public static readonly TypeTupleCore DisposableIntfType = new(typeof(IDisposable));
+        public static readonly TypeTupleCore AsyncDisposableIntfType = new(typeof(IAsyncDisposable));
 
-        public static readonly Type StringType = typeof(string);
-        public static readonly Type BoolType = typeof(bool);
+        public static readonly TypeTupleCore StringType = new(typeof(string));
+        public static readonly TypeTupleCore BoolType = new(typeof(bool));
 
-        public static readonly GenericTypeDefTupleCore NullableGenericTypeDef = new(typeof(Nullable<>));
+        public static readonly TypeTupleCore NullableGenericTypeDef = new(typeof(Nullable<>));
 
         public static readonly BindingFlags MatchAllBindingFlags = GetMatchAllBindingFlags();
         public static readonly BindingFlags MatchAllFlatHcyBindingFlags = MatchAllBindingFlags | BindingFlags.FlattenHierarchy;
@@ -58,7 +58,7 @@ namespace Turmerik.Core.Helpers
         public static Type GetBaseType(
             Type type)
         {
-            if (type == BaseObjectType)
+            if (type == BaseObjectType.Type)
             {
                 return type;
             }
@@ -100,11 +100,11 @@ namespace Turmerik.Core.Helpers
             this Type type,
             bool alsoCheckForAsyncDisposable = false)
         {
-            bool isDisposable = DisposableIntfType.IsAssignableFrom(type);
+            bool isDisposable = DisposableIntfType.Type.IsAssignableFrom(type);
 
             if (!isDisposable && alsoCheckForAsyncDisposable)
             {
-                isDisposable = AsyncDisposableIntfType.IsAssignableFrom(type);
+                isDisposable = AsyncDisposableIntfType.Type.IsAssignableFrom(type);
             }
 
             return isDisposable;
@@ -200,5 +200,23 @@ namespace Turmerik.Core.Helpers
                 tuple => tuple.Item2.GetInterfaces().Select(
                     intf => Tuple.Create(GetIdnfName(intf), intf))).ToList().ActWith(
                 list => list.DistinctOnly((t1, t2) => t1.Item1 == t2.Item1));
+
+        public static IEnumerable<Type> SelectTypes(
+            this IEnumerable<TypeTupleCore> nmrbl,
+            bool selectBaseTypesAlso = false) => selectBaseTypesAlso switch
+            {
+                true => nmrbl.SelectMany(tupleCore => (
+                    tupleCore is TypeTuple tuple) ? tuple.Type.Arr(
+                        tuple.BaseType!) : tupleCore.Type.Arr()),
+                false => nmrbl.Select(tuple => tuple.Type)
+            };
+
+        public static IEnumerable<string> SelectTypeFullNames(
+            this IEnumerable<Type> nmrbl) => nmrbl.Select(
+                type => type.GetTypeFullName());
+
+        public static IEnumerable<TypeTupleCore> SelectTuples(
+            IEnumerable<Type> nmrbl) => nmrbl.Select(
+                type => new TypeTupleCore(type));
     }
 }

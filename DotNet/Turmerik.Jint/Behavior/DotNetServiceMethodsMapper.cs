@@ -99,7 +99,7 @@ namespace Turmerik.Jint.Behavior
                                 {
                                     string serializedArg;
 
-                                    if (argType == ReflH.StringType)
+                                    if (argType == ReflH.StringType.Type)
                                     {
                                         serializedArg = (string)arg;
                                     }

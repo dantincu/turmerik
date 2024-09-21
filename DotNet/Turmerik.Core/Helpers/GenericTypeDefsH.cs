@@ -20,19 +20,19 @@ namespace Turmerik.Core.Helpers
             this Type type,
             out Type genericType,
             Dictionary<Type, Type> genericInterfaces = null) => TryGetGenericInterfaceType(
-                type, CommonTypes.Instn.Value.EnumerableIntfType.Type, out genericType, genericInterfaces);
+                type, CommonTypes.Instn.Value.EnumerableIntf.Type, out genericType, genericInterfaces);
 
         public static bool TryGetDictnrGenericType(
             this Type type,
             out Type genericType,
             Dictionary<Type, Type> genericInterfaces = null) => TryGetGenericInterfaceType(
-                type, CommonTypes.Instn.Value.DictionaryIntfType.Type, out genericType, genericInterfaces);
+                type, CommonTypes.Instn.Value.DictionaryIntf.Type, out genericType, genericInterfaces);
 
         public static bool TryGetRdnlDictnrGenericType(
             this Type type,
             out Type genericType,
             Dictionary<Type, Type> genericInterfaces = null) => TryGetGenericInterfaceType(
-                type, CommonTypes.Instn.Value.ReadOnlyDictionaryIntfType.Type, out genericType, genericInterfaces);
+                type, CommonTypes.Instn.Value.ReadOnlyDictionaryIntf.Type, out genericType, genericInterfaces);
 
         public static bool TryGetNllblGenericTypeArg(
             this Type type,
@@ -82,7 +82,7 @@ namespace Turmerik.Core.Helpers
             {
                 var typeGenericTypeDef = type.GetGenericTypeDefinition();
 
-                var kvp = CommonTypes.Instn.Value.AllTupleTypes.FirstKvp(
+                var kvp = CommonTypes.Instn.Value.TupleTypes.Types.FirstKvp(
                     tupleGenericTypeDef => typeGenericTypeDef == tupleGenericTypeDef);
 
                 isTupleType = kvp.Key >= 0;

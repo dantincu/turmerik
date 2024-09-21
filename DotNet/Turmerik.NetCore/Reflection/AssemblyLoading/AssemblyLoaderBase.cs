@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -18,6 +19,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public readonly string coreLibLocation = typeof(object).Assembly.Location;
         public readonly string coreLibName = typeof(object).Assembly.GetName().Name;
 
+        public readonly ReadOnlyDictionary<TypeItemKind, TypeTuplesAgg> PrimitiveTypeNamesMap;
+
         protected readonly IFilteredDriveEntriesRetriever FilteredDriveEntriesRetriever;
 
         public AssemblyLoaderBase(
@@ -25,6 +28,15 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
             FilteredDriveEntriesRetriever = filteredDriveEntriesRetriever ?? throw new ArgumentNullException(
                 nameof(filteredDriveEntriesRetriever));
+
+            PrimitiveTypeNamesMap = new Dictionary<TypeItemKind, TypeTuplesAgg>
+            {
+                { TypeItemKind.String, new (ReflH.StringType.Arr()) },
+                { TypeItemKind.Boolean, new (ReflH.BoolType.Arr()) },
+                { TypeItemKind.Number, CommonTypes.Instn.Value.NumberTypes },
+                { TypeItemKind.Date, NetCoreCommonTypes.Instn.Value.DateTypes },
+                { TypeItemKind.OtherPrimitive, new ([]) },
+            }.RdnlD();
         }
 
         public AssemblyLoaderConfig NormalizeConfig(
@@ -261,7 +273,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             bool isCoreLib = asmbName == coreLibName;
             bool isNetStandardLib = asmbName == NET_STD_ASMB_NAME;
             bool isSysLib = isCoreLib || isNetStandardLib;
-            string dfNamespace = isSysLib ? ReflH.BaseObjectType.Namespace! : asmbName;
+            string dfNamespace = isSysLib ? ReflH.BaseObjectType.Type.Namespace! : asmbName;
 
             var retAsmb = new AssemblyItem(asmbObj, asmbName)
             {

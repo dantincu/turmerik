@@ -26,11 +26,15 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             if (!type.IsGenericParameter && type.IsGenericType && !type.IsGenericTypeDefinition)
             {
-                var genericTypeDef = LoadType(
-                    wka, type.GetGenericTypeDefinition());
+                if (!TryLoadGenericInteropType(
+                    wka, type, out retItem))
+                {
+                    var genericTypeDef = LoadType(
+                        wka, type.GetGenericTypeDefinition());
 
-                retItem = LoadTypeCore(wka, type,
-                    genericTypeDef as GenericTypeItem);
+                    retItem = LoadTypeCore(wka, type,
+                        genericTypeDef as GenericTypeItem);
+                }
             }
             else
             {
@@ -75,12 +79,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             {
                 bool loaded = false;
 
-                if (type.IsGenericType)
-                {
-                    loaded = TryLoadGenericInteropType(
-                        wka, type, out retItem, genericTypeDef);
-                }
-                else
+                if (!type.IsGenericType && (type.Namespace?.StartsWith(
+                    ReflH.BaseObjectType.Type.Namespace!) ?? false))
                 {
                     loaded = TryLoadPrimitiveType(
                         wka, type, out retItem);
@@ -206,18 +206,89 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         private bool TryLoadGenericInteropType(
             WorkArgs wka,
             Type type,
-            out TypeItemCoreBase retItem,
-            GenericTypeItem? genericTypeDef = null)
+            out TypeItemCoreBase retItem)
         {
-            throw new NotImplementedException();
+            bool retVal = TryLoadNullableType(
+                wka, type, out retItem);
+
+            retVal = retVal || TryLoadDictionaryType(
+                wka, type, out retItem);
+
+            retVal = retVal || TryLoadEnumerableType(
+                wka, type, out retItem);
+
+            return retVal;
         }
+
+        private bool TryLoadNullableType(
+            WorkArgs wka,
+            Type type,
+            out TypeItemCoreBase retItem) => TryLoadGenericInteropTypeCore(
+                wka, type, out retItem,
+                [ReflH.NullableGenericTypeDef.FullName],
+                TypeItemKind.Nullable);
+
+        private bool TryLoadDictionaryType(
+            WorkArgs wka,
+            Type type,
+            out TypeItemCoreBase retItem) => TryLoadGenericInteropTypeCore(
+                wka, type, out retItem,
+                NetCoreCommonTypes.Instn.Value.DictionaryTypes.TypeNames,
+                TypeItemKind.Dictionary);
+
+        private bool TryLoadEnumerableType(
+            WorkArgs wka,
+            Type type,
+            out TypeItemCoreBase retItem) => TryLoadGenericInteropTypeCore(
+                wka, type, out retItem,
+                NetCoreCommonTypes.Instn.Value.EnumerableTypes.TypeNames,
+                TypeItemKind.Enumerable);
 
         private bool TryLoadPrimitiveType(
             WorkArgs wka,
             Type type,
-            out TypeItemCoreBase retItem)
+            out TypeItemCoreBase retItem) => TryLoadKnownType(
+                wka, type, out retItem,
+                fullName => PrimitiveTypeNamesMap.FirstKvp(
+                    kvp => kvp.Value.TypeNames.Contains(fullName)),
+                match => match.Key >= 0,
+                match => match.Value.Key);
+
+        private bool TryLoadGenericInteropTypeCore(
+            WorkArgs wka,
+            Type type,
+            out TypeItemCoreBase retItem,
+            IEnumerable<string> typeNamesNmrbl,
+            TypeItemKind kind) => TryLoadKnownType(
+                wka, type, out retItem,
+                fullName => fullName,
+                fullName => typeNamesNmrbl.Contains(fullName),
+                fullName => kind);
+
+        private bool TryLoadKnownType<TTempData>(
+            WorkArgs wka,
+            Type type,
+            out TypeItemCoreBase retItem,
+            Func<string, TTempData> tempDataFactory,
+            Func<TTempData, bool> isMatchPredicate,
+            Func<TTempData, TypeItemKind> typeItemKindFactory)
         {
-            throw new NotImplementedException();
+            retItem = null;
+            string fullName = type.FullName!;
+
+            var tempData = tempDataFactory(fullName);
+            bool foundMatch = isMatchPredicate(tempData);
+
+            if (foundMatch)
+            {
+                var typeItemKind = typeItemKindFactory(
+                    tempData);
+
+                retItem = new TypeItemCore(
+                    typeItemKind, fullName);
+            }
+
+            return foundMatch;
         }
 
         private TypeItemCoreBase LoadRegularType(
