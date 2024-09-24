@@ -1,16 +1,20 @@
 {
   "|art|": "$artists$",
   "|athl|": "$athletes$",
+  "|cl|": "$clubs$",
   "|cps|": "$composers$",
   "|cpz|": "$compozitions$",
+  "|cdip|": "$conductors & interpreters$",
   "|f|": "$funny$",
   "|egna|": "$environment-geography-nature-and-agriculture$",
   "|fplyr|": "$former-players$",
   "|fathl|": "$former-athletes$",
   "|hf|": "$historical-figures$",
   "|nf|": "$infamous$",
+  "|incd|": "$incidents$",
   "|md|": "$models$",
   "|mf|": "$mythological-figures$",
   "|msc|": "$musicians$",
+  "|ot|": "$others$",
   "|plyr|": "$players$"
 }

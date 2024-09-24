@@ -9,6 +9,11 @@
     "$athletes$",
     ":="
   ],
+  "cl": [
+    ":s",
+    "$clubs$",
+    ":="
+  ],
   "cps": [
     ":s",
     "$composers$",
@@ -17,6 +22,11 @@
   "cpz": [
     ":s",
     "$compozitions$",
+    ":="
+  ],
+  "cdip": [
+    ":s",
+    "$conductors & interpreters$",
     ":="
   ],
   "f": [
@@ -49,6 +59,11 @@
     "$infamous$",
     ":="
   ],
+  "incd": [
+    ":s",
+    "$incidents$",
+    ":="
+  ],
   "md": [
     ":s",
     "$models$",
@@ -62,6 +77,11 @@
   "msc": [
     ":s",
     "$musicians$",
+    ":="
+  ],
+  "ot": [
+    ":s",
+    "$others$",
     ":="
   ],
   "plyr": [

@@ -4,6 +4,11 @@
     "$articles$",
     ":="
   ],
+  "dstr": [
+    ":s",
+    "$distros$",
+    ":="
+  ],
   "gr": [
     ":s",
     "$geographical-regions$",

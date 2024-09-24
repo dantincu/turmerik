@@ -1,5 +1,6 @@
 {
   "|a|": "$articles$",
+  "|dstr|": "$distros$",
   "|gr|": "$geographical-regions$",
   "|isl|": "$islands$",
   "|m|": "$misc$",
