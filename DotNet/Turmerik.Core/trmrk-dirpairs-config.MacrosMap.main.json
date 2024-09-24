@@ -19,6 +19,11 @@
     "$compozitions$",
     ":="
   ],
+  "f": [
+    ":s",
+    "$funny$",
+    ":="
+  ],
   "egna": [
     ":s",
     "$environment-geography-nature-and-agriculture$",
@@ -44,14 +49,19 @@
     "$infamous$",
     ":="
   ],
-  "msc": [
+  "md": [
     ":s",
-    "$musicians$",
+    "$models$",
     ":="
   ],
   "mf": [
     ":s",
     "$mythological-figures$",
+    ":="
+  ],
+  "msc": [
+    ":s",
+    "$musicians$",
     ":="
   ],
   "plyr": [
