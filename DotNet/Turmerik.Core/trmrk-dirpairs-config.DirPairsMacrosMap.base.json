@@ -1,7 +1,8 @@
 {
   "|a|": "$articles$",
   "|dstr|": "$distros$",
-  "|fk|": "$frameworks$",
+  "|fx|": "$frameworks$",
+  "|fxlbr|": "$frameworks-&-libraries$",
   "|gr|": "$geographical-regions$",
   "|isl|": "$islands$",
   "|lbr|": "$libraries$",
