@@ -17,5 +17,6 @@
   "|mf|": "$mythological-figures$",
   "|msc|": "$musicians$",
   "|ot|": "$others$",
-  "|plyr|": "$players$"
+  "|plyr|": "$players$",
+  "|trgd|": "$tragedies$"
 }
