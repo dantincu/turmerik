@@ -9,6 +9,11 @@
     "$distros$",
     ":="
   ],
+  "fk": [
+    ":s",
+    "$frameworks$",
+    ":="
+  ],
   "gr": [
     ":s",
     "$geographical-regions$",
@@ -17,6 +22,11 @@
   "isl": [
     ":s",
     "$islands$",
+    ":="
+  ],
+  "lbr": [
+    ":s",
+    "$libraries$",
     ":="
   ],
   "m": [

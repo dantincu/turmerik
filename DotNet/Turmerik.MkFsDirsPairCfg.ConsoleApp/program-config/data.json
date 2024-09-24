@@ -4,8 +4,10 @@
       "Map": {
         "a": "articles",
         "dstr": "distros",
+        "fk": "frameworks",
         "gr": "geographical-regions",
         "isl": "islands",
+        "lbr": "libraries",
         "m": "misc",
         "mps": "my-products-and-services",
         "org": "organizations",
