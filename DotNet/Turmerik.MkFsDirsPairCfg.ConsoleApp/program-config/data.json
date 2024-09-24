@@ -21,6 +21,7 @@
     },
     "main": {
       "Map": {
+        "albm": "albums",
         "art": "artists",
         "athl": "athletes",
         "cl": "clubs",

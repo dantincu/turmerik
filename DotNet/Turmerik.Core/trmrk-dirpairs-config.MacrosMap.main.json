@@ -1,4 +1,9 @@
 {
+  "albm": [
+    ":s",
+    "$albums$",
+    ":="
+  ],
   "art": [
     ":s",
     "$artists$",
