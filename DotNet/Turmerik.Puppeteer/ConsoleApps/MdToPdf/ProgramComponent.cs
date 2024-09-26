@@ -140,14 +140,26 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                             ThrowOnUnknownFlag = true,
                             ItemHandlersArr = [],
                             FlagHandlersArr = [
-                                parser.ArgsFlagOpts(data,
-                                        [W], data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
-                                    parser.ArgsFlagOpts(data,
-                                        [H], data => data.Args.PrintHelpMessage = true, true),
-                                    parser.ArgsFlagOpts(data,
-                                        [REC], data => data.Args.RecursiveMatchingDirNamesArr = data.ArgFlagValue!),
-                                    parser.ArgsFlagOpts(data,
-                                        [RE], data => data.Args.RemoveExisting = true, true)
+                                parser.ArgsFlagOpts(data, [W],
+                                        data =>
+                                        {
+                                            data.Args.WorkDir = data.ArgFlagValue!.Single();
+                                        }),
+                                    parser.ArgsFlagOpts(data, [H],
+                                        data =>
+                                        {
+                                            data.Args.PrintHelpMessage = true;
+                                        }, true),
+                                    parser.ArgsFlagOpts(data, [REC],
+                                        data =>
+                                        {
+                                            data.Args.RecursiveMatchingDirNamesArr = data.ArgFlagValue!;
+                                        }),
+                                    parser.ArgsFlagOpts(data, [RE],
+                                        data =>
+                                        {
+                                            data.Args.RemoveExisting = true;
+                                        }, true)
                             ]
                         })
                 }).Args;

@@ -46,7 +46,7 @@ namespace Turmerik.Core.ConsoleApps
     {
         public const char OPTS_START_CHAR = ':';
         public const char OPTS_ARG_DELIM_CHAR = ':';
-        public const char OPTS_ARG_SPACE_CHAR = '?';
+        public const char OPTS_ARG_ALT_EMPTY_CHAR = '?';
 
         private readonly IDelimCharsExtractor delimCharsExtractor;
 
@@ -72,7 +72,7 @@ namespace Turmerik.Core.ConsoleApps
             {
                 Handler = handler,
                 MatchingArgs = matchingArgs,
-                ShouldNotHaveValue = shouldNotHaveValue
+                ShouldNotHaveValue = shouldNotHaveValue,
             };
 
         public void HandleArgs<TArgsMtbl>(
@@ -184,6 +184,9 @@ namespace Turmerik.Core.ConsoleApps
             opts.OptsArgDelimChar = opts.OptsArgDelimChar.IfDefault<char>(
                 () => OPTS_ARG_DELIM_CHAR);
 
+            opts.OptsArgAltEmptyChar = opts.OptsArgAltEmptyChar.IfDefault<char>(
+                () => OPTS_ARG_ALT_EMPTY_CHAR);
+
             opts.ArgsFactory = opts.ArgsFactory.FirstNotNull(
                 Activator.CreateInstance<TArgsMtbl>);
         }
@@ -219,7 +222,7 @@ namespace Turmerik.Core.ConsoleApps
                         arg,
                         opts.OptsArgDelimChar,
                         opts.OptsStartChar,
-                        opts.OptsArgEmptyChar,
+                        opts.OptsArgAltEmptyChar,
                         out bool startsWithDelim);
 
                     if (startsWithDelim && argItemArr[0] == opts.MacroFlagName)
@@ -246,7 +249,7 @@ namespace Turmerik.Core.ConsoleApps
                 data.ArgItem,
                 opts.OptsArgDelimChar,
                 opts.OptsStartChar,
-                opts.OptsArgEmptyChar,
+                opts.OptsArgAltEmptyChar,
                 out bool startsWithDelim);
 
             if (startsWithDelim)

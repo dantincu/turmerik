@@ -10,13 +10,13 @@ namespace Turmerik.Core.TextStream
         string[] SplitStr(
             string inStr,
             char delim,
-            char emptyChar);
+            char altEmptyChar);
 
         string[] SplitStr(
             string str,
             char delim,
             char startDelim,
-            char emptyChar,
+            char altEmptyChar,
             out bool startsWithDelim,
             bool onlySplitIfStartsWithDelim = true);
 
@@ -31,7 +31,7 @@ namespace Turmerik.Core.TextStream
         public string[] SplitStr(
             string inStr,
             char delim,
-            char emptyChar)
+            char altEmptyChar)
         {
             var strList = new List<string>();
             var chrList = new List<char>();
@@ -41,9 +41,42 @@ namespace Turmerik.Core.TextStream
             {
                 char chr = inStr[i];
 
-                if (chr == delim || chr == emptyChar)
+                if (chr == delim)
                 {
-                    if (chr == delim && prevChar != default && prevChar != chr)
+                    if (prevChar == delim)
+                    {
+                        chrList.Add(chr);
+                        prevChar = default;
+                    }
+                    else
+                    {
+                        prevChar = chr;
+                    }
+                }
+                else if (chr == altEmptyChar)
+                {
+                    if (prevChar == altEmptyChar)
+                    {
+                        chrList.Add(chr);
+                        prevChar = default;
+                    }
+                    else
+                    {
+                        if (prevChar == delim)
+                        {
+                            strList.Add(
+                                new string(
+                                    chrList.ToArray()));
+
+                            chrList.Clear();
+                        }
+
+                        prevChar = chr;
+                    }
+                }
+                else
+                {
+                    if (prevChar == delim)
                     {
                         strList.Add(
                             new string(
@@ -51,23 +84,20 @@ namespace Turmerik.Core.TextStream
 
                         chrList.Clear();
                     }
-                    else if (prevChar == chr)
-                    {
-                        chrList.Add(chr);
-                        prevChar = default;
-                    }
-                }
-                else
-                {
-                    chrList.Add(chr);
-                }
 
-                prevChar = chr;
+                    chrList.Add(chr);
+                    prevChar = chr;
+                }
             }
 
             strList.Add(
                 new string(
                     chrList.ToArray()));
+
+            if (prevChar == delim)
+            {
+                strList.Add("");
+            }
 
             return strList.ToArray();
         }
@@ -76,7 +106,7 @@ namespace Turmerik.Core.TextStream
             string str,
             char delim,
             char startDelim,
-            char emptyChar,
+            char altSpaceChar,
             out bool startsWithDelim,
             bool onlySplitIfStartsWithDelim = true)
         {
@@ -90,7 +120,7 @@ namespace Turmerik.Core.TextStream
             {
                 strArr = SplitStr(
                     str, delim,
-                    emptyChar);
+                    altSpaceChar);
             }
             else
             {
