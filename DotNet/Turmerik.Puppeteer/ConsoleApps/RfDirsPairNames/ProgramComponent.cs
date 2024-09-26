@@ -417,9 +417,42 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             string keepFileContents = (
                 config.FileContents.KeepFileContainsNoteJson == true) switch
             {
-                true => jsonConversion.Adapter.Serialize(new NoteItemCore
+                true => wka.Args.MdTitle.With(mdTitle =>
                 {
-                    Title = wka.Args.MdTitle
+                    string json = null;
+
+                    if (File.Exists(keepFilePath))
+                    {
+                        string existingJson = File.ReadAllText(
+                            keepFilePath);
+
+                        if (!string.IsNullOrWhiteSpace(existingJson))
+                        {
+                            try
+                            {
+                                var decorator = jsonConversion.Decorator<NoteItemCore>(
+                                    existingJson);
+
+                                decorator.ShallowMergeWith(new NoteItemCore
+                                {
+                                    Title = wka.Args.MdTitle
+                                });
+
+                                json = decorator.Serialize();
+                            }
+                            catch (Exception exc)
+                            {
+                                json = null;
+                            }
+                        }
+                    }
+
+                    json ??= jsonConversion.Adapter.Serialize(new NoteItemCore
+                    {
+                        Title = wka.Args.MdTitle
+                    });
+
+                    return json;
                 }),
                 _ => string.Format(
                     config.FileContents.KeepFileContentsTemplate,
