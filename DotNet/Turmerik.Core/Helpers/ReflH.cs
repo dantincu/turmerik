@@ -50,10 +50,28 @@ namespace Turmerik.Core.Helpers
                 type.FullName,
                 stopDelim);
 
+        public static string GetTypeFullDisplayName(
+            this Type type,
+            char[]? stopDelimsArr) => GetTypeDisplayName(
+                type.FullName,
+                stopDelimsArr);
+
         public static string GetTypeDisplayName(
             string typeFullName,
             char stopDelim = '[') => typeFullName?.SplitStr(
                 (str, len) => str.FirstKvp((c, i) => c == stopDelim).Key).Item1;
+
+        public static string GetTypeDisplayName(
+            string typeFullName,
+            char[]? stopDelimsArr)
+        {
+            stopDelimsArr ??= ['&', '*'];
+
+            string retVal = typeFullName?.SplitStr(
+                (str, len) => str.FirstKvp((c, i) => stopDelimsArr.Contains(c)).Key).Item1;
+
+            return retVal;
+        }
 
         public static Type GetBaseType(
             Type type)
@@ -210,6 +228,10 @@ namespace Turmerik.Core.Helpers
                         tuple.BaseType!) : tupleCore.Type.Arr()),
                 false => nmrbl.Select(tuple => tuple.Type)
             };
+
+        public static IEnumerable<Type> SelectTypes(
+            this IEnumerable<Tuple<string, Type>> nmrbl) => nmrbl.Select(
+                tuple => tuple.Item2);
 
         public static IEnumerable<string> SelectTypeFullNames(
             this IEnumerable<Type> nmrbl) => nmrbl.Select(

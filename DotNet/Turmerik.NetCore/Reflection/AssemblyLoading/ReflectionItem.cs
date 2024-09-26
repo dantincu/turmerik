@@ -10,12 +10,6 @@ using Turmerik.Core.Helpers;
 
 namespace Turmerik.NetCore.Reflection.AssemblyLoading
 {
-    public interface IGenericReflectionItem
-    {
-        ReadOnlyCollection<Lazy<GenericTypeArg>>? GenericTypeArgs { get; }
-        Lazy<ReadOnlyCollection<Lazy<GenericTypeArg>>>? AllGenericTypeArgs { get; }
-    }
-
     public enum TypeItemKind
     {
         RootObject = 0,
@@ -36,8 +30,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
     public static class ReflectionItem
     {
-        public static IEnumerable<Lazy<GenericTypeArg>>? GetAllGenericTypeArgs(
-            this IGenericReflectionItem genericReflectionItem) => genericReflectionItem.AllGenericTypeArgs?.Value ?? genericReflectionItem.GenericTypeArgs;
     }
 
     public abstract class ReflectionItemBase
@@ -131,7 +123,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool IsGenericParameter { get; init; }
         public bool IsGenericTypeParameter { get; init; }
         public bool IsGenericMethodParameter { get; init; }
-        public bool IsFullyConstructedGenericType { get; init; }
+        public bool IsConstructedGenericType { get; init; }
         public bool IsGenericTypeDefinition { get; init; }
         public bool IsInterface { get; init; }
 
@@ -231,10 +223,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
         }
 
-        public bool IsValueType { get; init; }
-
-        public TypeIdnf Idnf { get; init; }
-        public TypeData Data { get; init; }
+        public Lazy<TypeIdnf> Idnf { get; init; }
+        public Lazy<TypeData> Data { get; init; }
     }
 
     public class TypeItem : TypeItem<TypeItem>
@@ -248,7 +238,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
     }
 
-    public class GenericTypeItem : TypeItem<GenericTypeItem>, IGenericReflectionItem
+    public class GenericTypeItem : TypeItem<GenericTypeItem>
     {
         public GenericTypeItem(
             TypeItemKind kind,
@@ -259,7 +249,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public ReadOnlyCollection<Lazy<GenericTypeArg>>? GenericTypeArgs { get; init; }
-        public Lazy<ReadOnlyCollection<Lazy<GenericTypeArg>>>? AllGenericTypeArgs { get; init; }
     }
 
     public class GenericTypeArg

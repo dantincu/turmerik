@@ -188,7 +188,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 {
                     (type as TypeItem)?.ActWith(typeItem =>
                     {
-                        typeItem?.Data.AllTypeDependencies.Value.ActWith(allDepTypes =>
+                        _ = typeItem.Idnf;
+                        _ = typeItem.Data;
+
+                        typeItem.Data.Value.AllTypeDependencies.Value.ActWith(allDepTypes =>
                         {
                             foreach (var depType in allDepTypes)
                             {

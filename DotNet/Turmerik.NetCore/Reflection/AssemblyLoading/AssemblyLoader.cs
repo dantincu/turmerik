@@ -155,49 +155,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         private TypeItemCoreBase LoadGenericParamType(
             WorkArgs wka,
-            Type type)
+            Type typeParam)
         {
             var retItem = new GenericTypeParameter(
                     TypeItemKind.GenericParam)
             {
-                Name = type.Name,
-                GenericParamPosition = type.GenericParameterPosition,
-                ParamConstraints = type.GetGenericParameterConstraints().With(
-                        constraints =>
-                        {
-                            bool isStruct = type.IsValueType;
-                            Lazy<TypeItemCoreBase>? baseClass = null;
-                            var genericParameterAttributes = type.GenericParameterAttributes;
-
-                            if (!isStruct)
-                            {
-                                if (type.BaseType?.IsValueType == false &&
-                                type.BaseType.FullName != wka.RootObject.IdnfName)
-                                {
-                                    baseClass = new Lazy<TypeItemCoreBase>(
-                                        () => LoadType(wka, type.BaseType));
-                                }
-                            }
-
-                            var retObj = new GenericTypeParamConstraints
-                            {
-                                GenericParameterAttributes = genericParameterAttributes,
-                                IsStruct = isStruct,
-                                IsClass = genericParameterAttributes.HasFlag(
-                                    GenericParameterAttributes.ReferenceTypeConstraint),
-                                HasDefaultConstructor = genericParameterAttributes.HasFlag(
-                                    GenericParameterAttributes.DefaultConstructorConstraint),
-                                IsNotNullableValueType = genericParameterAttributes.HasFlag(
-                                    GenericParameterAttributes.NotNullableValueTypeConstraint),
-                                BaseClass = baseClass,
-                                RestOfTypes = constraints.Where(
-                                    intf => !intf.IsValueType).Select(
-                                    intf => new Lazy<TypeItemCoreBase>(
-                                        () => LoadType(wka, intf))).RdnlC()
-                            };
-
-                            return retObj;
-                        })
+                Name = typeParam.Name,
+                GenericParamPosition = typeParam.GenericParameterPosition,
+                ParamConstraints = typeParam.GetGenericParameterConstraints().With(
+                    constraintsArr => GetGenericTypeParamConstraints(
+                        wka, typeParam, constraintsArr))
             };
 
             return retItem;
@@ -296,7 +263,212 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             Type type,
             GenericTypeItem? genericTypeDef = null)
         {
-            throw new NotImplementedException();
+            var declaringTypeItem = type.DeclaringType?.With(
+                declaringType => new Lazy<TypeItemCoreBase> (() => LoadType(
+                    wka, declaringType)));
+
+            TypeItemCoreBase retItem = null;
+
+            var idnfFactory = new Lazy<TypeIdnf>(() =>
+            {
+                string idnfName = declaringTypeItem.IfNotNull(
+                    declTypeItem => string.Join("+",
+                        declTypeItem!.Value.IdnfName,
+                        type.Name),
+                    () => string.Join(".",
+                        type.Namespace,
+                        type.Name));
+
+                var asmbItem = GetAssemblyItem(wka, type.Assembly);
+
+                bool nsStartsWithAsmbPfx = idnfName.StartsWith(
+                    asmbItem.TypeNamesPfx);
+
+                var relNsParts = (nsStartsWithAsmbPfx switch
+                {
+                    true => idnfName.Substring(
+                        asmbItem.TypeNamesPfx.Length),
+                    false => idnfName
+                }).Split(".").Reverse().Skip(1).Reverse().RdnlC();
+
+                return new TypeIdnf(type, asmbItem, type.Name,
+                    ReflH.GetTypeDisplayName(type.Name), idnfName)
+                {
+                    Namespace = type.Namespace,
+                    NsStartsWithAsmbPfx = idnfName.StartsWith(
+                        asmbItem.DefaultNamespace),
+                    RelNsParts = relNsParts
+                };
+            });
+
+            var dataFactory = new Lazy<TypeData>(() =>
+            {
+                TypeData typeData = null;
+
+                typeData = new TypeData
+                {
+                    BaseType = type.BaseType?.With(baseType => new Lazy<TypeItemCoreBase>(() => LoadType(wka, baseType))),
+                    GenericTypeDefinition = genericTypeDef,
+                    InterfaceTypes = type.GetDistinctInterfaces().SelectTypes().Select(
+                        intf => new Lazy<TypeItemCoreBase>(
+                            () => LoadType(wka, intf))).RdnlC(),
+                    IsConstructedGenericType = type.IsConstructedGenericType,
+                    IsGenericMethodParameter = type.IsGenericMethodParameter,
+                    IsGenericParameter = type.IsGenericParameter,
+                    IsGenericTypeDefinition = type.IsGenericTypeDefinition,
+                    IsGenericTypeParameter = type.IsGenericTypeParameter,
+                    IsInterface = type.IsInterface,
+                    IsValueType = type.IsValueType,
+                    PubInstnProps = wka.Opts.LoadPubInstnGetProps switch
+                    {
+                        true => type.GetProperties(
+                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Select(
+                            prop => new PropertyItem(prop, prop.Name)
+                            {
+                                CanRead = prop.CanRead,
+                                CanWrite = prop.CanWrite,
+                                IsStatic = false,
+                                PropertyType = new Lazy<TypeItemCoreBase>(
+                                    () => LoadType(wka, prop.PropertyType))
+                            }).RdnlC()
+                    },
+                    PubInstnMethods = wka.Opts.LoadPubInstnMethods switch
+                    {
+                        true => type.GetMethods(
+                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Select(
+                            method => new MethodItem(method, method.Name)
+                            {
+                                IsStatic = false,
+                                IsVoidMethod = type.GetTypeFullDisplayName(
+                                    null) == ReflH.VoidType.FullName,
+                                ReturnType = new Lazy<TypeItemCoreBase>(
+                                    () => LoadType(wka, method.ReturnType)),
+                                Params = method.GetParameters().ToDictionary(
+                                    param => param.Name, param => new Lazy<TypeItemCoreBase>(
+                                        () => LoadType(wka, param.ParameterType))).RdnlD()
+                            }).RdnlC()
+                    },
+                    AllTypeDependencies = new Lazy<System.Collections.ObjectModel.ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(
+                        () =>
+                        {
+                            var retList = typeData!.InterfaceTypes.ToList();
+                            AddDependencies(retList, [ typeData.BaseType ]);
+                            AddDependencies(retList, [ genericTypeDef ]);
+
+                            AddDependencies(retList, typeData.PubInstnProps.Select(
+                                prop => prop.PropertyType));
+
+                            AddDependencies(retList, typeData.PubInstnMethods.SelectMany(
+                                method => method.ReturnType.Arr(
+                                    method.Params.Select(
+                                        param => param.Value).ToArray())));
+
+                            if (retItem is GenericTypeItem genericTypeItem)
+                            {
+                                AddDependencies(retList, genericTypeItem.GenericTypeArgs!);
+                            }
+                            else if (retItem is GenericInteropTypeItem genericInteropTypeItem)
+                            {
+                                AddDependencies(retList, genericInteropTypeItem.GenericTypeArgs);
+                            }
+
+                            return retList.RdnlC();
+                        })
+                };
+
+                return typeData;
+            });
+
+            if (type.IsGenericType)
+            {
+                GenericTypeItem genericTypeItem = null;
+
+                genericTypeItem = new GenericTypeItem(
+                    TypeItemKind.Regular,
+                    item => item.Idnf.Value.IdnfName)
+                {
+                    Idnf = idnfFactory,
+                    Data = dataFactory,
+                    DeclaringType = declaringTypeItem,
+                    GenericTypeArgs = type.GetGenericArguments().Select(
+                        arg => new Lazy<GenericTypeArg>(() => arg.IsGenericTypeParameter switch
+                        {
+                            true => new GenericTypeArg
+                            {
+                                Param = new GenericTypeParameter(
+                                    TypeItemKind.GenericParam)
+                                {
+                                    GenericParamPosition = arg.GenericParameterPosition,
+                                    Name = arg.Name,
+                                    ParamConstraints = arg.GetGenericParameterConstraints().With(
+                                        constraintsArr => GetGenericTypeParamConstraints(
+                                            wka, arg, constraintsArr))
+                                }
+                            },
+                            false => new GenericTypeArg
+                            {
+                                TypeArg = arg.IsGenericTypeParameter switch
+                                {
+                                    false => LoadType(wka, arg)
+                                }
+                            }
+                        })).RdnlC()
+                };
+
+                retItem = genericTypeItem;
+            }
+            else
+            {
+                retItem = new TypeItem(
+                    TypeItemKind.Regular,
+                    item => item.Idnf.Value.IdnfName)
+                    {
+                        Idnf = idnfFactory,
+                        Data = dataFactory,
+                        DeclaringType = declaringTypeItem
+                };
+            }
+
+            return retItem;
+        }
+
+        private GenericTypeParamConstraints GetGenericTypeParamConstraints(
+            WorkArgs wka,
+            Type typeParam,
+            Type[] constraintsArr)
+        {
+            bool isStruct = typeParam.IsValueType;
+            Lazy<TypeItemCoreBase>? baseClass = null;
+            var genericParameterAttributes = typeParam.GenericParameterAttributes;
+
+            if (!isStruct)
+            {
+                if (typeParam.BaseType?.IsValueType == false &&
+                typeParam.BaseType.FullName != wka.RootObject.IdnfName)
+                {
+                    baseClass = new Lazy<TypeItemCoreBase>(
+                        () => LoadType(wka, typeParam.BaseType));
+                }
+            }
+
+            var retObj = new GenericTypeParamConstraints
+            {
+                GenericParameterAttributes = genericParameterAttributes,
+                IsStruct = isStruct,
+                IsClass = genericParameterAttributes.HasFlag(
+                    GenericParameterAttributes.ReferenceTypeConstraint),
+                HasDefaultConstructor = genericParameterAttributes.HasFlag(
+                    GenericParameterAttributes.DefaultConstructorConstraint),
+                IsNotNullableValueType = genericParameterAttributes.HasFlag(
+                    GenericParameterAttributes.NotNullableValueTypeConstraint),
+                BaseClass = baseClass,
+                RestOfTypes = constraintsArr.Where(
+                    intf => !intf.IsValueType).Select(
+                    intf => new Lazy<TypeItemCoreBase>(
+                        () => LoadType(wka, intf))).RdnlC()
+            };
+
+            return retObj;
         }
 
         private string GetTypeIdnfName(
@@ -322,5 +494,34 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             return idnfName;
         }
+
+        private void AddDependencies(
+            List<Lazy<TypeItemCoreBase?>> list,
+            IEnumerable<Lazy<GenericTypeArg>?> itemsToAdd) => AddDependencies(
+                list, itemsToAdd.SelectMany(arg => new Lazy<TypeItemCoreBase>(
+                    arg.Value.TypeArg!).Arr(arg.Value.Param?.ParamConstraints?.With(
+                        paramConstraints => paramConstraints.BaseClass.Arr(
+                            paramConstraints.RestOfTypes.ToArray())) ?? [])));
+
+        private void AddDependencies(
+            List<Lazy<TypeItemCoreBase?>> list,
+            IEnumerable<TypeItemCoreBase?> itemsToAdd) => AddDependencies(
+                list, itemsToAdd.Select(item => new Lazy<TypeItemCoreBase>(item)));
+
+        private void AddDependencies(
+            List<Lazy<TypeItemCoreBase?>> list,
+            IEnumerable<Lazy<TypeItemCoreBase>?> itemsToAdd)
+        {
+            foreach (var lazy in itemsToAdd)
+            {
+                if (IsDependency(lazy?.Value))
+                {
+                    list.Add(lazy);
+                }
+            }
+        }
+
+        private bool IsDependency(
+            TypeItemCoreBase? typeItem) => typeItem?.Kind == TypeItemKind.Regular;
     }
 }
