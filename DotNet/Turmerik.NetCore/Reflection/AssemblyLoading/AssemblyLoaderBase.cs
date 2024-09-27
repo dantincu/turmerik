@@ -66,9 +66,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             opts = new AssemblyLoaderOpts
             {
                 Config = opts.Config.With(NormalizeConfig),
-                AssembliesBaseDirPath = opts.AssembliesBaseDirPath,
+                AssemblyDirPaths = opts.AssemblyDirPaths,
                 AllAssembliesFilePaths = opts.AllAssembliesFilePaths ?? await GetAllAssembliesFilePathsAsync(
-                    opts.AssembliesBaseDirPath),
+                    opts.AssemblyDirPaths),
                 AssembliesToLoad = opts.AssembliesToLoad,
                 LoadAllTypes = opts.LoadAllTypes,
                 LoadPubInstnGetProps = opts.LoadPubInstnGetProps,
@@ -85,7 +85,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             {
                 opts.AllAssembliesFilePaths.AddRange(
                     await GetAllAssembliesFilePathsAsync(
-                        opts.Config.NetStandard2p1LibDirLocation));
+                        [ opts.Config.NetStandard2p1LibDirLocation ]));
             }
 
             opts.AssembliesToLoad = opts.AssembliesToLoad.Select(
@@ -93,8 +93,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 {
                     IsExecutable = asmb.IsExecutable,
                     AssemblyName = asmb.AssemblyName,
-                    AssemblyFilePath = asmb.AssemblyFilePath ?? GetAssemblyFilePath(
-                        opts, asmb),
+                    AssemblyFilePath = asmb.AssemblyFilePath ?? opts.AllAssembliesFilePaths.First(
+                        filePath => Path.GetFileName(filePath) == asmb.AssemblyName),
                     LoadAllTypes = asmb.LoadAllTypes ?? opts.LoadAllTypes,
                     LoadPubInstnGetProps = asmb.LoadPubInstnGetProps ?? opts.LoadPubInstnGetProps,
                     LoadPubInstnMethods = asmb.LoadPubInstnMethods ?? opts.LoadPubInstnMethods,
@@ -128,17 +128,25 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public async Task<List<string>> GetAllAssembliesFilePathsAsync(
-            string assembliesBaseDirPath)
+            string[] assemblyDirPathsArr)
         {
-            var allAssembliesFilePathsList = (await FilteredDriveEntriesRetriever.FindMatchingAsync(
-                new FilteredDriveRetrieverMatcherOpts
-                {
-                    PrFolderIdnf = assembliesBaseDirPath,
-                    FsEntriesSerializableFilter = new Core.FileSystem.DriveEntriesSerializableFilter
+            var allAssembliesFilePathsList = new List<string>();
+
+            foreach (var assemblyDirPath in assemblyDirPathsArr)
+            {
+                var assembliesFilePathsList = (await FilteredDriveEntriesRetriever.FindMatchingAsync(
+                    new FilteredDriveRetrieverMatcherOpts
                     {
-                        IncludedRelPathRegexes = ["\\/[^\\/]+\\.dll$"]
-                    }
-                })).ExtractItems().GetAllIdnfsRecursively();
+                        PrFolderIdnf = assemblyDirPath,
+                        FsEntriesSerializableFilter = new Core.FileSystem.DriveEntriesSerializableFilter
+                        {
+                            IncludedRelPathRegexes = ["\\/[^\\/]+\\.dll$"]
+                        }
+                    })).ExtractItems().GetAllIdnfsRecursively();
+
+                allAssembliesFilePathsList.AddRange(
+                    assembliesFilePathsList);
+            }
 
             return allAssembliesFilePathsList;
         }
@@ -153,12 +161,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public string GetAssemblyFileName(
             AssemblyLoaderOpts.AssemblyOpts asmbOpts) => string.Join(
                 ".", asmbOpts.AssemblyName, GetAssemblyExtension(asmbOpts));
-
-        public string GetAssemblyFilePath(
-            AssemblyLoaderOpts opts,
-            AssemblyLoaderOpts.AssemblyOpts asmbOpts) => Path.Combine(
-                opts.AssembliesBaseDirPath,
-                GetAssemblyFileName(asmbOpts));
 
         public async Task<Dictionary<string, AssemblyItem>> LoadAssembliesAsync(
             AssemblyLoaderOpts opts)

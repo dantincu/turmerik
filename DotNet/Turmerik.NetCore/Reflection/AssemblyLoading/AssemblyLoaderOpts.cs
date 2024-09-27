@@ -9,7 +9,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     public class AssemblyLoaderOpts
     {
         public AssemblyLoaderConfig Config { get; set; }
-        public string AssembliesBaseDirPath { get; set; }
+        public string[] AssemblyDirPaths { get; set; }
         public List<string> AllAssembliesFilePaths { get; set; }
 
         public bool? LoadAllTypes { get; set; }

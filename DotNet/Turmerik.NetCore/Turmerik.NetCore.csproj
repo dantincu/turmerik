@@ -8,36 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Reflection\AssemblyLoading\AssemblyLoader%24not-compiled%24.cs" />
-    <Compile Remove="Reflection\AssemblyLoading\ReflectionItem%24not-compiled%24.cs" />
-    <Compile Remove="Utility\Assemblies\AssemblyLoaderConfig.cs" />
-    <Compile Remove="Utility\Assemblies\AssemblyLoaderCore.cs" />
-    <Compile Remove="Utility\Assemblies\AssemblyLoaderOpts.cs" />
-    <Compile Remove="Utility\Assemblies\DotNetTypeIdnf.cs" />
-    <Compile Remove="Utility\AssemblyLoading%24not-compiled%24\AssemblyLoader.cs" />
-    <Compile Remove="Utility\AssemblyLoading%24not-compiled%24\AssemblyLoaderConfig.cs" />
-    <Compile Remove="Utility\AssemblyLoading%24not-compiled%24\AssemblyLoaderFactory.cs" />
-    <Compile Remove="Utility\AssemblyLoading%24not-compiled%24\AssemblyLoaderInstnOpts.cs" />
-    <Compile Remove="Utility\AssemblyLoading%24not-compiled%24\AssemblyLoaderOpts.cs" />
-    <Compile Remove="Utility\AssemblyLoading%24not-compiled%24\DotNetAssembly.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Reflection\AssemblyLoading\AssemblyLoader$not-compiled$.cs" />
-    <None Include="Reflection\AssemblyLoading\ReflectionItem$not-compiled$.cs" />
-    <None Include="Utility\Assemblies\AssemblyLoaderConfig.cs" />
-    <None Include="Utility\Assemblies\AssemblyLoaderCore.cs" />
-    <None Include="Utility\Assemblies\AssemblyLoaderOpts.cs" />
-    <None Include="Utility\Assemblies\DotNetTypeIdnf.cs" />
-    <None Include="Utility\AssemblyLoading$not-compiled$\AssemblyLoader.cs" />
-    <None Include="Utility\AssemblyLoading$not-compiled$\AssemblyLoaderConfig.cs" />
-    <None Include="Utility\AssemblyLoading$not-compiled$\AssemblyLoaderFactory.cs" />
-    <None Include="Utility\AssemblyLoading$not-compiled$\AssemblyLoaderInstnOpts.cs" />
-    <None Include="Utility\AssemblyLoading$not-compiled$\AssemblyLoaderOpts.cs" />
-    <None Include="Utility\AssemblyLoading$not-compiled$\DotNetAssembly.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.3" />

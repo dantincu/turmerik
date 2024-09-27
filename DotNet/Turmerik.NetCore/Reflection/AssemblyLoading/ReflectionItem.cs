@@ -86,7 +86,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             AssemblyItem assemblyItem,
             string name,
             string shortName,
-            string idnfName) : base(
+            string idnfName,
+            string fullIdnfName) : base(
                 bclItem,
                 name)
         {
@@ -99,6 +100,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             IdnfName = idnfName ?? throw new ArgumentNullException(
                 nameof(idnfName));
 
+            FullIdnfName = fullIdnfName ?? throw new ArgumentNullException(
+                nameof(fullIdnfName));
+
             TypeInfo = new Lazy<TypeInfo>(
                 BclItem.GetTypeInfo);
         }
@@ -106,6 +110,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public AssemblyItem AssemblyItem { get; }
         public string ShortName { get; }
         public string IdnfName { get; }
+        public string FullIdnfName { get; }
         public Lazy<TypeInfo> TypeInfo { get; }
         public string? Namespace { get; init; }
         public bool NsStartsWithAsmbPfx { get; init; }
@@ -129,7 +134,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public Lazy<TypeItemCoreBase>? BaseType { get; init; }
         public ReadOnlyCollection<Lazy<TypeItemCoreBase>> InterfaceTypes { get; init; }
-        public TypeItemCoreBase? GenericTypeDefinition { get; init; }
+        public Lazy<TypeItemCoreBase>? GenericTypeDefinition { get; init; }
 
         public ReadOnlyCollection<PropertyItem> PubInstnProps { get; init; }
         public ReadOnlyCollection<MethodItem> PubInstnMethods { get; init; }
@@ -147,28 +152,39 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public TypeItemKind Kind { get; }
         public abstract string IdnfName { get; }
+        public abstract string FullIdnfName { get; }
 
-        public bool Equals(TypeItemCoreBase? other) => other?.IdnfName == IdnfName;
+        public bool Equals(TypeItemCoreBase? other) => other?.FullIdnfName == FullIdnfName;
     }
 
     public abstract class TypeItemCore<TTypeItem> : TypeItemCoreBase
         where TTypeItem : TypeItemCore<TTypeItem>
     {
         private readonly Func<TTypeItem, string> nameFactory;
+        private readonly Func<TTypeItem, string> fullNameFactory;
         private readonly Lazy<string> idnfName;
+        private readonly Lazy<string> fullIdnfName;
 
         protected TypeItemCore(
             TypeItemKind kind,
-            Func<TTypeItem, string> nameFactory) : base(kind)
+            Func<TTypeItem, string> nameFactory,
+            Func<TTypeItem, string> fullNameFactory) : base(kind)
         {
             this.nameFactory = nameFactory ?? throw new ArgumentNullException(
                 nameof(nameFactory));
 
+            this.fullNameFactory = fullNameFactory ?? throw new ArgumentNullException(
+                nameof(fullNameFactory));
+
             idnfName = new Lazy<string>(
                 () => this.nameFactory((TTypeItem)this));
+
+            fullIdnfName = new Lazy<string>(
+                () => this.fullNameFactory((TTypeItem)this));
         }
 
         public override string IdnfName => idnfName.Value;
+        public override string FullIdnfName => idnfName.Value;
 
         public Lazy<TypeItemCoreBase>? DeclaringType { get; init; }
     }
@@ -184,15 +200,18 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public override string IdnfName { get; }
+        public override string FullIdnfName => IdnfName;
     }
 
     public class GenericInteropTypeItem : TypeItemCore<GenericInteropTypeItem>
     {
         public GenericInteropTypeItem(
             TypeItemKind kind,
-            Func<GenericInteropTypeItem, string> nameFactory) : base(
+            Func<GenericInteropTypeItem, string> nameFactory,
+            Func<GenericInteropTypeItem, string> fullNameFactory) : base(
                 kind,
-                nameFactory)
+                nameFactory,
+                fullNameFactory)
         {
         }
 
@@ -203,9 +222,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     {
         public EnumTypeItem(
             TypeItemKind kind,
-            Func<EnumTypeItem, string> nameFactory) : base(
+            Func<EnumTypeItem, string> nameFactory,
+            Func<EnumTypeItem, string> fullNameFactory) : base(
                 kind,
-                nameFactory)
+                nameFactory,
+                fullNameFactory)
         {
         }
 
@@ -217,8 +238,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     {
         public TypeItem(
             TypeItemKind kind,
-            Func<TTypeItem, string> nameFactory) : base(
+            Func<TTypeItem, string> nameFactory,
+            Func<TTypeItem, string> fullNameFactory) : base(
                 kind,
+                fullNameFactory,
                 nameFactory)
         {
         }
@@ -231,9 +254,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     {
         public TypeItem(
             TypeItemKind kind,
-            Func<TypeItem, string> nameFactory) : base(
+            Func<TypeItem, string> nameFactory,
+            Func<TypeItem, string> fullNameFactory) : base(
                 kind,
-                nameFactory)
+                nameFactory,
+                fullNameFactory)
         {
         }
     }
@@ -242,9 +267,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     {
         public GenericTypeItem(
             TypeItemKind kind,
-            Func<GenericTypeItem, string> nameFactory) : base(
+            Func<GenericTypeItem, string> nameFactory,
+            Func<GenericTypeItem, string> fullNameFactory) : base(
                 kind,
-                nameFactory)
+                nameFactory,
+                fullNameFactory)
         {
         }
 
@@ -255,8 +282,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     {
         public GenericTypeParameter? Param { get; init; }
         public TypeItemCoreBase? TypeArg { get; init; }
+        public TypeItemCoreBase DeclaringType { get; init; }
+        public bool BelongsToDeclaringType { get; init; }
 
         public string IdnfName => TypeArg?.IdnfName ?? Param!.Name;
+        public string FullIdnfName => TypeArg?.FullIdnfName ?? Param!.Name;
     }
 
     public class GenericTypeParameter : TypeItemCoreBase
@@ -271,6 +301,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public GenericTypeParamConstraints ParamConstraints { get; init; }
 
         public override string IdnfName => Name;
+        public override string FullIdnfName => Name;
     }
 
     public class GenericTypeParamConstraints
