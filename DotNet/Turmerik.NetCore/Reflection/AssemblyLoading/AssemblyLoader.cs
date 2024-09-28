@@ -131,6 +131,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
             var retItem = new GenericInteropTypeItem(
                     TypeItemKind.Array,
+                    item => item.GenericTypeArgs.Single().Value.ShortName + "[]",
                     item => item.GenericTypeArgs.Single().Value.IdnfName + "[]",
                     item => item.GenericTypeArgs.Single().Value.FullIdnfName + "[]")
                 {
@@ -158,6 +159,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
             var retItem = new EnumTypeItem(
                     TypeItemKind.Enum,
+                    item => type.Name,
                     item => (item.DeclaringType != null) switch
                     {
                         true => string.Join("+",
@@ -266,7 +268,14 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind) => TryLoadKnownType(
                 wka, type, out retItem,
                 fullName => fullName,
-                fullName => typeNamesNmrbl.Contains(fullName),
+                fullName => typeNamesNmrbl.Contains(fullName) && type.GetGenericArguments().With(
+                    genericArgs => genericArgs.Count() switch
+                    {
+                        2 => genericArgs[0].FullName?.With(
+                            firstArgFullName => PrimitiveTypeNamesMap.Any(
+                                kvp => kvp.Value.TypeNames.Contains(firstArgFullName))) ?? false,
+                        _ => true
+                    }),
                 fullName => kind);
 
         private bool TryLoadKnownType<TTempData>(
@@ -289,7 +298,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     tempData);
 
                 retItem = new TypeItemCore(
-                    typeItemKind, idnfName);
+                    typeItemKind,
+                    idnfName.Split('.').Last(),
+                    idnfName);
             }
 
             return foundMatch;
@@ -307,23 +318,39 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             var idnfFactory = new Lazy<TypeIdnf>(() =>
             {
-                string idnfName = declaringTypeItem.IfNotNull(
-                    declTypeItem => string.Join(".",
-                        declTypeItem!.Value.IdnfName,
-                        type.Name),
-                    () => string.Join(".",
-                        type.Namespace,
-                        type.Name));
+                string fullIdnfName, idnfName = type.Name;
 
-                string fullIdnfName = declaringTypeItem.IfNotNull(
-                    declTypeItem => string.Join("+",
-                        declTypeItem!.Value.FullIdnfName,
-                        type.Name),
-                    () => string.Join(".", type.Namespace,
-                        string.Concat(ReflH.GetTypeDisplayName(type.Name, '`'),
-                            (retItem as GenericTypeItem)?.With(
-                                genericItem => string.Join(", ", genericItem.GenericTypeArgs.Select(
-                                arg => arg.Value.FullIdnfName).ToArray())) ?? "")));
+                if (retItem is GenericTypeItem genericItem)
+                {
+                    fullIdnfName = string.Join("`",
+                        ReflH.GetTypeDisplayName(type.Name, '`'),
+                        string.Join(",", genericItem.GenericTypeArgs.Where(arg => arg.Value.With(
+                            argVal => argVal.TypeArg != null || argVal.BelongsToDeclaringType)).Select(
+                                arg => arg.Value.FullIdnfName)));
+                }
+                else
+                {
+                    fullIdnfName = type.Name;
+                }
+
+                if (declaringTypeItem != null)
+                {
+                    fullIdnfName = string.Join("+",
+                        declaringTypeItem.Value.FullIdnfName,
+                        fullIdnfName);
+
+                    idnfName = string.Join(".",
+                        declaringTypeItem.Value.IdnfName,
+                        idnfName);
+                }
+                else
+                {
+                    fullIdnfName = string.Join(".",
+                        type.Namespace, fullIdnfName);
+
+                    idnfName = string.Join(".",
+                        type.Namespace, idnfName);
+                }
 
                 var asmbItem = GetAssemblyItem(wka, type.Assembly);
 
@@ -415,7 +442,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
                             if (retItem is GenericTypeItem genericTypeItem)
                             {
-                                AddDependencies(retList, genericTypeItem.GenericTypeArgs!);
+                                AddDependencies(retList, genericTypeItem.GenericTypeArgs);
                             }
                             else if (retItem is GenericInteropTypeItem genericInteropTypeItem)
                             {
@@ -435,6 +462,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
                 genericTypeItem = new GenericTypeItem(
                     TypeItemKind.Regular,
+                    item => item.Idnf.Value.ShortName,
                     item => item.Idnf.Value.IdnfName,
                     item => item.Idnf.Value.FullIdnfName)
                 {
@@ -474,6 +502,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             {
                 retItem = new TypeItem(
                     TypeItemKind.Regular,
+                    item => item.Idnf.Value.ShortName,
                     item => item.Idnf.Value.IdnfName,
                     item => item.Idnf.Value.FullIdnfName)
                     {

@@ -344,10 +344,12 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
                 RootObject = rootObject ?? new TypeItemCore(
                     TypeItemKind.RootObject,
+                    ReflH.BaseObjectType.Type.Name,
                     ReflH.BaseObjectType.FullName);
 
                 RootValueType = rootValueType ?? new TypeItemCore(
                     TypeItemKind.RootValueType,
+                    ReflH.BaseValueType.Type.Name,
                     ReflH.BaseValueType.FullName!);
             }
 

@@ -146,5 +146,41 @@ namespace Turmerik.Core.Helpers
 
             return areEqual;
         }
+
+        public static int CompareNmrbls<T>(
+            this IEnumerable<T> trgNmrbl,
+            IEnumerable<T> refNrmbl,
+            Func<T, T, int> comparer,
+            out int lengthsComparisonResult)
+        {
+            lengthsComparisonResult = trgNmrbl.Count(
+                ).CompareTo(refNrmbl.Count());
+
+            int result = lengthsComparisonResult;
+
+            if (result == 0)
+            {
+                var trgNmrtr = trgNmrbl.GetEnumerator();
+                var refNmrtr = refNrmbl.GetEnumerator();
+
+                bool hasMore = trgNmrtr.MoveNext(
+                    ) && refNmrtr.MoveNext();
+
+                while (hasMore && result == 0)
+                {
+                    result = comparer(
+                        trgNmrtr.Current,
+                        refNmrtr.Current);
+
+                    if (result == 0)
+                    {
+                        hasMore = trgNmrtr.MoveNext(
+                            ) && refNmrtr.MoveNext();
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

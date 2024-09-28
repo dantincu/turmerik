@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
-using Turmerik.Core.Utility;
 using Turmerik.NetCore.Reflection.AssemblyLoading;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
@@ -16,8 +17,10 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             string[] rawArgs);
     }
 
-    public class ProgramComponent : IProgramComponent
+    public partial class ProgramComponent : IProgramComponent
     {
+        public readonly ReadOnlyDictionary<bool, ReadOnlyDictionary<TypeItemKind, string>> PrimitiveNamesMap;
+
         private readonly IProgramArgsRetriever programArgsRetriever;
         private readonly IProgramArgsNormalizer programArgsNormalizer;
         private readonly IJsonConversion jsonConversion;
@@ -31,6 +34,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ITextMacrosReplacer textMacrosReplacer,
             AssemblyLoader assemblyLoader)
         {
+            PrimitiveNamesMap = GetRdnlPrimitiveNamesMap();
+
             this.programArgsRetriever = programArgsRetriever ?? throw new ArgumentNullException(
                 nameof(programArgsRetriever));
 
@@ -65,169 +70,99 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         }
 
         public WorkArgs GetWorkArgs(
-            ProgramArgs args)
-        {
-            var wka = new WorkArgs
-            {
-                PgArgs = args,
-            };
-
-            return wka;
-        }
+            ProgramArgs args) => new WorkArgs(args);
 
         public async Task RunAsync(WorkArgs wka)
         {
-            try
+            foreach (var pfSection in wka.PgArgs.Sections)
             {
-                foreach (var pfSection in wka.PgArgs.Sections)
-                {
-                    var asmbMap = await assemblyLoader.LoadAssembliesAsync(
-                        new AssemblyLoaderOpts
-                        {
-                            Config = wka.PgArgs.Config.AssemblyLoaderConfig,
-                            AssemblyDirPaths = pfSection.CsProjectsArr.Select(
-                                csProj => csProj.SrcBuildDirPath).ToArray(),
-                            AssembliesToLoad = pfSection.CsProjectsArr.Select(
-                                csProj => new AssemblyLoaderOpts.AssemblyOpts
-                                {
-                                    AssemblyFilePath = csProj.CsProjectAssembly.Paths.SrcPath,
-                                    LoadAllTypes = csProj.CsProjectAssembly.IncludeAllTypes,
-                                    TypesToLoad = csProj.CsProjectAssembly.TypesArr?.Select(
-                                        GetTypeOpts).ToList()!
-                                }).ToList()
-                        });
-
-                    if (wka.PgArgs.RemoveExistingFirst == true)
+                var asmbMap = await assemblyLoader.LoadAssembliesAsync(
+                    new AssemblyLoaderOpts
                     {
-                        foreach (var section in wka.PgArgs.Sections)
-                        {
-                            if (Directory.Exists(
-                                section.DirPaths.DestnPath))
+                        Config = wka.PgArgs.Config.AssemblyLoaderConfig,
+                        AssemblyDirPaths = pfSection.CsProjectsArr.Select(
+                            csProj => csProj.SrcBuildDirPath).ToArray(),
+                        AssembliesToLoad = pfSection.CsProjectsArr.Select(
+                            csProj => new AssemblyLoaderOpts.AssemblyOpts
                             {
-                                Directory.Delete(
-                                    section.DirPaths.DestnPath, true);
-                            }
+                                AssemblyFilePath = csProj.CsProjectAssembly.Paths.SrcPath,
+                                LoadAllTypes = csProj.CsProjectAssembly.IncludeAllTypes,
+                                TypesToLoad = csProj.CsProjectAssembly.TypesArr?.Select(
+                                    GetTypeOpts).ToList()!
+                            }).ToList()
+                    });
+
+                if (wka.PgArgs.RemoveExistingFirst == true)
+                {
+                    foreach (var section in wka.PgArgs.Sections)
+                    {
+                        if (Directory.Exists(
+                            section.DirPaths.DestnPath))
+                        {
+                            Directory.Delete(
+                                section.DirPaths.DestnPath, true);
                         }
                     }
-
-                    Directory.CreateDirectory(
-                        pfSection.DirPaths.DestnPath);
-
-                    await RunAsync(wka, pfSection, asmbMap);
                 }
-            }
-            finally
-            {
+
+                Directory.CreateDirectory(
+                    pfSection.DirPaths.DestnPath);
+
+                Run(new SectionWorkArgs(wka, pfSection, asmbMap));
             }
         }
 
-        public async Task RunAsync(
-            WorkArgs wka,
-            ProgramConfig.ProfileSection section,
-            Dictionary<string, AssemblyItem> asmbMap)
+        public void Run(
+            SectionWorkArgs wka)
         {
-            foreach (var asmb in section.CsProjectsArr)
+            foreach (var asmb in wka.Section.CsProjectsArr)
             {
-                await RunAsync(wka, section, asmbMap, asmb);
+                Run(new CsProjWorkArgs(wka, asmb));
             }
         }
 
-        public async Task RunAsync(
-            WorkArgs wka,
-            ProgramConfig.ProfileSection section,
-            Dictionary<string, AssemblyItem> asmbMap,
-            ProgramConfig.DotNetCsProject asmb)
+        public void Run(
+            CsProjWorkArgs wka)
         {
-            foreach (var kvp in asmbMap)
+            foreach (var kvp in wka.AsmbMap)
             {
-                await RunAsync(wka, section, asmbMap, asmb, kvp);
+                Run(new CsProjAsmbWorkArgs(wka, kvp));
             }
         }
 
-        public async Task RunAsync(
-            WorkArgs wka,
-            ProgramConfig.ProfileSection section,
-            Dictionary<string, AssemblyItem> asmbMap,
-            ProgramConfig.DotNetCsProject asmb,
-            KeyValuePair<string, AssemblyItem> asmbKvp)
+        public void Run(
+            CsProjAsmbWorkArgs wka)
         {
-            string asmbDirPath = GetAsmbDestnDirPath(wka, asmbKvp);
+            string asmbDirPath = GetAsmbDestnDirPath(wka);
 
-            foreach (var typeKvp in asmbKvp.Value.TypesMap)
+            foreach (var typeKvp in wka.AsmbKvp.Value.TypesMap)
             {
-                await RunAsync(wka, section,
-                    asmbMap, asmb, asmbKvp,
-                    typeKvp, asmbDirPath);
+                Run(new TypeWorkArgs(wka, typeKvp, asmbDirPath));
             }
         }
 
-        public async Task RunAsync(
-            WorkArgs wka,
-            ProgramConfig.ProfileSection section,
-            Dictionary<string, AssemblyItem> asmbMap,
-            ProgramConfig.DotNetCsProject asmb,
-            KeyValuePair<string, AssemblyItem> asmbKvp,
-            KeyValuePair<string, TypeItemCoreBase> typeKvp,
-            string asmbDirPath)
+        public void Run(
+            TypeWorkArgs wka)
         {
             string relDirPath = GetTypeDestnRelDirPath(
-                wka, typeKvp, out var shortTypeName);
-        }
+                wka, out var shortTypeName);
 
-        private string GetAsmbDestnDirPath(
-            WorkArgs wka,
-            KeyValuePair<string, AssemblyItem> asmbKvp) => Path.Combine(
-                wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(asmbKvp.Value.BclItem) switch
-                {
-                    true => wka.PgArgs.Profile.DestnCsProjectAssembliesDirName,
-                    false => wka.PgArgs.Profile.DestnExternalAssemblliesDirName,
-                }, asmbKvp.Key);
+            string dirPath = Path.Combine(
+                wka.AsmbDirPath, relDirPath);
 
-        private string GetTypeDestnRelDirPath(
-            WorkArgs wka,
-            KeyValuePair<string, TypeItemCoreBase> typeKvp,
-            out string shortTypeName)
-        {
-            var relNsPartsList = typeKvp.Key.Split('.').ToList();
-            shortTypeName = relNsPartsList.Last();
-            relNsPartsList.RemoveAt(relNsPartsList.Count - 1);
+            Directory.CreateDirectory(dirPath);
 
-            var pathPartsList = relNsPartsList.Select(
-                part => Path.Combine(
-                    wka.PgArgs.Profile.TypesHcyNodeDirName,
-                    part)).ToList();
+            string filePath = Path.Combine(
+                dirPath,
+                $"{shortTypeName}.ts");
 
-            pathPartsList.Add(Path.Combine(
-                shortTypeName,
-                wka.PgArgs.Profile.TypesNodeDirName));
+            var tsCodeLinesList = GetTsCodeLines(
+                new TsCodeWorkArgs(wka, shortTypeName,
+                    GetTypeDepNames(wka), []));
 
-            shortTypeName = ReflH.GetTypeDisplayName(shortTypeName, '`');
-
-            string relDirPath = Path.Combine(
-                pathPartsList.ToArray());
-
-            return relDirPath;
-        }
-
-        private AssemblyLoaderOpts.TypeOpts GetTypeOpts(
-            ProgramConfig.DotNetType type)
-        {
-            var typeOpts = new AssemblyLoaderOpts.TypeOpts
-            {
-                TypeName = type.Name,
-                FullTypeName = type.FullName,
-                GenericTypeParamsCount = type.GenericTypeParamsCount,
-                LoadPubInstnGetProps = true,
-                LoadPubInstnMethods = true,
-                DeclaringTypeOpts = type.DeclaringType?.With(GetTypeOpts)
-            };
-
-            return typeOpts;
-        }
-
-        public class WorkArgs
-        {
-            public ProgramArgs PgArgs { get; set; }
+            File.WriteAllLines(
+                filePath,
+                tsCodeLinesList.ToArray());
         }
     }
 }

@@ -1,0 +1,329 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Turmerik.Core.Helpers;
+using Turmerik.Core.Text;
+using Turmerik.NetCore.Reflection.AssemblyLoading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
+{
+    public partial class ProgramComponent
+    {
+        private List<string> GetTsCodeLines(
+            TsCodeWorkArgs wka)
+        {
+            List<string> retList = [];
+
+            if (wka.TypeKvp.Value is EnumTypeItem enumTypeItem)
+            {
+                AddEnumTypeTsCodeLines(retList, wka, enumTypeItem);
+            }
+            else if (wka.TypeKvp.Value is TypeItem typeItem)
+            {
+                AddRegularTypeTsCodeLines(retList, wka, typeItem);
+            }
+            else if (wka.TypeKvp.Value is GenericTypeItem genericTypeItem)
+            {
+                AddGenericTypeTsCodeLines(
+                    retList, wka, genericTypeItem,
+                    GetGenericTsTypeNamePart(wka, genericTypeItem, false),
+                    GetGenericTsTypeNamePart(wka, genericTypeItem, true));
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+
+            return retList;
+        }
+
+        private void AddEnumTypeTsCodeLines(
+            List<string> retList,
+            TsCodeWorkArgs wka,
+            EnumTypeItem enumTypeItem)
+        {
+            retList.Add($"export enum {enumTypeItem.ShortName} {{");
+
+            foreach (var kvp in enumTypeItem.DefinedValuesMap)
+            {
+                retList.Add(string.Concat(
+                    wka.PgArgs.Config.TsTabStr,
+                    kvp.Key, " = ", kvp.Value, ","));
+            }
+
+            retList.Add("}");
+        }
+
+        private void AddRegularTypeTsCodeLines(
+            List<string> retList,
+            TsCodeWorkArgs wka,
+            TypeItem typeItem)
+        {
+            AddTsIntfCodeLines(
+                retList, wka, typeItem);
+        }
+
+        private void AddGenericTypeTsCodeLines(
+            List<string> retList,
+            TsCodeWorkArgs wka,
+            GenericTypeItem genericTypeItem,
+            string genericTypeNamePart,
+            string genericTypeDeclrNamePart)
+        {
+            AddTsIntfCodeLines(
+                retList, wka, genericTypeItem,
+                genericTypeNamePart,
+                genericTypeDeclrNamePart);
+        }
+
+        private void AddTsIntfCodeLines<TTypeItem>(
+            List<string> codeLines,
+            TsCodeWorkArgs wka,
+            TTypeItem typeItem,
+            string? genericTypeIdnfNamePart = null,
+            string? genericTypeDeclrNamePart = null)
+            where TTypeItem : TypeItem<TTypeItem>
+        {
+            var data = typeItem.Data.Value;
+
+            var propsMap = data.PubInstnProps.GroupBy(
+                prop => prop.Name).ToDictionary(
+                g => g.Key, g => g.ToList().ActWith(
+                    propsList => propsList.Sort(CompareProps))).ToArray();
+
+            var methodsMap = data.PubInstnMethods.GroupBy(
+                prop => prop.Name).ToDictionary(
+                g => g.Key, g => g.ToList().ActWith(
+                    propsList => propsList.Sort(CompareMethods))).ToArray();
+
+            var propsMapLen = propsMap.Length;
+            var methodsLen = methodsMap.Length;
+
+            var intfNamesArr = Enumerable.Range(
+                1, Math.Max(
+                    propsMapLen,
+                    methodsLen)).Select(
+                idx => GetUniqueTypeShortName(
+                    wka.TypeNamesMap!,
+                    wka.ShortTypeName,
+                    null)).ToArray();
+
+            var intfDeclrNamesArr = (genericTypeIdnfNamePart != null) switch
+            {
+                true => intfNamesArr.Select(name => string.Concat(name, genericTypeDeclrNamePart)).ToArray(),
+                false => intfNamesArr
+            };
+
+            var intfIdnfNamesArr = (genericTypeIdnfNamePart != null) switch
+            {
+                true => intfNamesArr.Select(name => string.Concat(name, genericTypeIdnfNamePart)).ToArray(),
+                false => intfNamesArr
+            };
+
+            for (int i = 0; i < intfNamesArr.Length; i++)
+            {
+                var propsList = (i < propsMapLen) switch
+                {
+                    true => propsMap[i].Value
+                };
+
+                var methodsList = (i < methodsLen) switch
+                {
+                    true => methodsMap[i].Value
+                };
+
+                string intfName = intfDeclrNamesArr[i];
+
+                codeLines.Add($"export interface {intfName} {{");
+
+                AddTsIntfCodeLines(
+                    new TsIntfCodeWorkArgs(
+                        wka,
+                        codeLines,
+                        propsList,
+                        methodsList),
+                        typeItem);
+
+                codeLines.Add("}");
+                codeLines.Add("");
+            }
+
+            codeLines.Add(GetMainTsIntfDeclrLine(
+                wka, genericTypeDeclrNamePart,
+                intfIdnfNamesArr));
+        }
+
+        private void AddTsIntfCodeLines<TTypeItem>(
+            TsIntfCodeWorkArgs wka,
+            TTypeItem typeItem)
+            where TTypeItem : TypeItem<TTypeItem>
+        {
+            wka.Props?.ActWith(
+                propsList => wka.CodeLines.AddRange(
+                    propsList.Select(prop => GetPropTsCodeLine(
+                        wka, prop))));
+
+            wka.Methods?.ActWith(
+                methodsList => wka.CodeLines.AddRange(
+                    methodsList.Select(method => GetMethodTsCodeLine(
+                        wka, method))));
+        }
+
+        private string GetPropTsCodeLine(
+            TsCodeWorkArgs wka,
+            PropertyItem prop)
+        {
+            string retStr = string.Concat(
+                wka.PgArgs.Config.TsTabStr,
+                prop.Name, ": ", GetTypeItemFromMap(
+                    wka, prop.PropertyType.Value).Key);
+
+            throw new NotImplementedException();
+        }
+
+        private string GetMethodTsCodeLine(
+            TsCodeWorkArgs wka,
+            MethodItem method)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string GetMainTsIntfDeclrLine(
+            TsCodeWorkArgs wka,
+            string? genericTypeDeclrNamePart,
+            string[] intfIdnfNamesArr) => string.Join(" ",
+                "export interface",
+                string.Join(
+                    " extends ",
+                    string.Concat(
+                        wka.TypeNamesMap!.First().Key,
+                        genericTypeDeclrNamePart),
+                    string.Join(
+                        ", ",
+                        intfIdnfNamesArr)), "{ }");
+
+        private string GetGenericTsTypeNamePart(
+            TsCodeWorkArgs wka,
+            GenericTypeItem genericTypeItem,
+            bool isForDeclr) => string.Concat(
+                "<", string.Join(",", genericTypeItem.GenericTypeArgs.Select(
+                    arg => GetGenericTsTypeArgNamePart(
+                        wka, arg.Value, isForDeclr))), ">");
+
+        private string GetGenericTsTypeArgNamePart(
+            TsCodeWorkArgs wka,
+            GenericTypeArg genericTypeArg,
+            bool isForDeclr) => genericTypeArg.TypeArg?.With(
+                typeArg => GetTypeItemFromMap(wka, typeArg).Key) ?? isForDeclr switch
+                    {
+                        true => GetGenericTsTypeParamNamePart(wka, genericTypeArg.Param!),
+                        false => genericTypeArg.Param!.Name
+                    };
+
+        private string GetGenericTsTypeParamNamePart(
+            TsCodeWorkArgs wka,
+            GenericTypeParameter genericParam) => GetGenericTsTypeParamConstrTypes(
+                wka, genericParam.ParamConstraints).With(
+                    typesList => typesList.Any() switch
+                    {
+                        true => string.Join(
+                            " extends ",
+                            genericParam.Name,
+                            string.Join(
+                                ", ",
+                                typesList.Select(
+                                    type => GetGenericTsTypeName(wka, type)))),
+                        false => genericParam.Name
+                    });
+
+        private List<TypeItemCoreBase> GetGenericTsTypeParamConstrTypes(
+            TsCodeWorkArgs wka,
+            GenericTypeParamConstraints constr) => (
+            constr.BaseClass?.Value.Lst() ?? []).ActWith(
+                typesList => typesList.AddRange(
+                    constr.RestOfTypes.Select(
+                        lazy => lazy.Value))).With(list => list.Where(
+                            type => type.Kind >= TypeItemKind.Regular).ToList());
+
+        private string GetGenericTsTypeName(
+            TsCodeWorkArgs wka,
+            TypeItemCoreBase typeItem,
+            bool isForNullable = false)
+        {
+            string retStr;
+
+            if (typeItem is TypeItemCore typeItemCore)
+            {
+                retStr = PrimitiveNamesMap[isForNullable][typeItemCore.Kind];
+            }
+            else if (typeItem is EnumTypeItem enumTypeItem)
+            {
+                retStr = GetTypeItemFromMap(wka, enumTypeItem).Key;
+            }
+            else if (typeItem is GenericInteropTypeItem genericInteropTypeItem)
+            {
+                var genericArgsArr = GetGenericTypeArgsArr(
+                    wka, genericInteropTypeItem,
+                    item => item.GenericTypeArgs,
+                    genericInteropTypeItem.Kind == TypeItemKind.Nullable);
+
+                switch (genericInteropTypeItem.Kind)
+                {
+                    case TypeItemKind.Nullable:
+                        retStr = genericArgsArr.Single();
+                        break;
+                    case TypeItemKind.Array:
+                    case TypeItemKind.Enumerable:
+                        retStr = genericArgsArr.Single() + "[]";
+                        break;
+                    case TypeItemKind.Dictionary:
+                        string keyIdnfName = GetUniqueIdentifier(wka, "key");
+                        retStr = $"{{ [{keyIdnfName}: {genericArgsArr[0]}]: {genericArgsArr[1]} }}";
+                        break;
+                    default:
+                        throw new InvalidOperationException(
+                            $"Type {typeItem.FullIdnfName} should not be of kind {genericInteropTypeItem.Kind}");
+                }
+            }
+            else if (typeItem is TypeItem regularTypeItem)
+            {
+                retStr = GetTypeItemFromMap(wka, regularTypeItem).Key;
+            }
+            else if (typeItem is GenericTypeItem genericTypeItem)
+            {
+                var genericTypeArgsStr = GetGenericTsTypeNamePart(
+                    wka, genericTypeItem, false);
+
+                retStr = GetTypeItemFromMap(wka, genericTypeItem).Key;
+                retStr += genericTypeArgsStr;
+            }
+            else
+            {
+                throw new NotSupportedException(
+                    typeItem.GetType().FullName);
+            }
+
+            return retStr;
+        }
+
+        private string[] GetGenericTypeArgsArr<TTypeItem>(
+            TsCodeWorkArgs wka,
+            TTypeItem typeItem,
+            Func<TTypeItem, ReadOnlyCollection<Lazy<GenericTypeArg>>> genericTypeArgsFactory,
+            bool isNullable)
+            where TTypeItem : TypeItemCoreBase => genericTypeArgsFactory(typeItem).With(
+                genericTypeArgs => genericTypeArgs.Select(arg => arg.Value.TypeArg?.With(
+                    typeArg => GetGenericTsTypeName(
+                        wka, typeArg, isNullable)) ?? arg.Value.Param!.Name)).ToArray();
+
+        private KeyValuePair<string, TypeItemCoreBase?> GetTypeItemFromMap(
+            TsCodeWorkArgs wka,
+            TypeItemCoreBase typeItem) => wka.TypeNamesMap!.Skip(1).First(
+                kvp => kvp.Value?.IdnfName == typeItem.IdnfName);
+    }
+}
