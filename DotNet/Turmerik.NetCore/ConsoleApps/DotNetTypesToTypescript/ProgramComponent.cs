@@ -160,8 +160,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 new TsCodeWorkArgs(wka, shortTypeName,
                     GetTypeDepNames(wka), []));
 
-            File.WriteAllLines(
-                filePath,
+            File.WriteAllLines(filePath,
                 tsCodeLinesList.ToArray());
         }
     }

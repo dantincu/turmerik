@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Text;
 using Turmerik.NetCore.Reflection.AssemblyLoading;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
@@ -282,7 +281,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         retStr = genericArgsArr.Single() + "[]";
                         break;
                     case TypeItemKind.Dictionary:
+                        wka.PushIdentifierNames();
                         string keyIdnfName = GetUniqueIdentifier(wka, "key");
+                        wka.PopIdentifierNames();
                         retStr = $"{{ [{keyIdnfName}: {genericArgsArr[0]}]: {genericArgsArr[1]} }}";
                         break;
                     default:

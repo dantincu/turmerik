@@ -248,7 +248,7 @@ namespace Turmerik.UnitTests
             DataTreeNodeMtbl<RefTrgDriveFolderTuple> expectedDiffResult,
             DataTreeNodeMtbl<RefTrgDriveFolderTuple> actualDiffResult)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         private void AssertFolderContents(

@@ -85,19 +85,31 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 TypeWorkArgs src,
                 string shortTypeName,
                 Dictionary<string, TypeItemCoreBase?>? typeNamesMap,
-                List<string>? identifierNames) : base(
+                Stack<List<string>>? identifierNames) : base(
                     src,
                     src.TypeKvp,
                     src.AsmbDirPath)
             {
                 ShortTypeName = shortTypeName ?? throw new ArgumentNullException(nameof(shortTypeName));
                 TypeNamesMap = typeNamesMap;
-                IdentifierNames = identifierNames;
+                IdentifierNamesStack = identifierNames;
             }
 
             public string ShortTypeName { get; init; }
             public Dictionary<string, TypeItemCoreBase?>? TypeNamesMap { get; init; }
-            public List<string>? IdentifierNames { get; init; }
+            public Stack<List<string>>? IdentifierNamesStack { get; init; }
+
+            public List<string> IdentifierNames => IdentifierNamesStack.Peek();
+
+            public List<string> PushIdentifierNames()
+            {
+                var retList = new List<string>();
+                IdentifierNamesStack!.Push(retList);
+                return retList;
+            }
+
+            public List<string> PopIdentifierNames(
+                ) => IdentifierNamesStack!.Pop();
         }
 
         public class TsIntfCodeWorkArgs : TsCodeWorkArgs
@@ -110,7 +122,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     src,
                     src.ShortTypeName,
                     src.TypeNamesMap,
-                    src.IdentifierNames)
+                    src.IdentifierNamesStack)
             {
                 CodeLines = codeLines ?? throw new ArgumentNullException(
                     nameof(codeLines));

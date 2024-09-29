@@ -141,12 +141,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             int idx = 1;
 
             while (wka.TypeNamesMap!.Keys.Contains(
-                retIdnf) || wka.IdentifierNames!.Contains(retIdnf))
+                retIdnf) || wka.IdentifierNamesStack.Any(
+                    list => list.Contains(retIdnf)))
             {
                 retIdnf = idnf + idx++;
             }
 
-            wka.IdentifierNames.Add(retIdnf);
+            List<string> currentList = wka.IdentifierNamesStack.Peek();
+            currentList.Add(retIdnf);
             return retIdnf;
         }
 
