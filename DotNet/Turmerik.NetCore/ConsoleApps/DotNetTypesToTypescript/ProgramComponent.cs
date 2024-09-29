@@ -154,7 +154,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             string filePath = Path.Combine(
                 dirPath,
-                $"{shortTypeName}.ts");
+                wka.PgArgs.Profile.TypeDefFileName);
 
             var tsCodeLinesList = GetTsCodeLines(
                 new TsCodeWorkArgs(wka, shortTypeName,

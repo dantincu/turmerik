@@ -21,11 +21,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public string DestnExternalAssemblliesDirName { get; set; }
             public string AssemblyDfNsTypesDirName { get; set; }
             public string AssemblyNonDfNsTypesDirName { get; set; }
-            public string TypesDirName { get; set; }
-            public string TypesNodeDirName { get; set; }
             public string TypesHcyNodeDirName { get; set; }
-            public string TypesInfoDirName { get; set; }
-            public string TypesInfoFileName { get; set; }
+            public string TypeDefFileName { get; set; }
+            public string TypeInfoFileName { get; set; }
             public SrcDestnPaths DirPaths { get; set; }
             public string DfSrcBinsRelDirPath { get; set; }
 

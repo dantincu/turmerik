@@ -50,23 +50,18 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             TypeWorkArgs wka,
             out string shortTypeName)
         {
-            var relNsPartsList = wka.TypeKvp.Key.Split('.').ToList();
-            shortTypeName = relNsPartsList.Last();
-            relNsPartsList.RemoveAt(relNsPartsList.Count - 1);
+            var relNsPartsArr = wka.TypeKvp.Key.Split('.');
+            shortTypeName = relNsPartsArr.Last();
 
-            var pathPartsList = relNsPartsList.Select(
+            var pathPartsArr = relNsPartsArr.Select(
                 part => Path.Combine(
                     wka.PgArgs.Profile.TypesHcyNodeDirName,
-                    part)).ToList();
-
-            pathPartsList.Add(Path.Combine(
-                shortTypeName,
-                wka.PgArgs.Profile.TypesNodeDirName));
+                    part)).ToArray();
 
             shortTypeName = ReflH.GetTypeDisplayName(shortTypeName, '`');
 
             string relDirPath = Path.Combine(
-                pathPartsList.ToArray());
+                pathPartsArr);
 
             return relDirPath;
         }

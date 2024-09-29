@@ -7,7 +7,7 @@ namespace Turmerik.Core.Helpers
 {
     public static class ArrH
     {
-        public static TItem[] ToArray<TItem>(
+        public static TItem[] ToArr<TItem>(
             this Array array,
             Func<object, int, TItem> itemFactory)
         {
@@ -22,13 +22,13 @@ namespace Turmerik.Core.Helpers
             return retArr;
         }
 
-        public static TItem[] ToArray<TItem>(
+        public static TItem[] ToArr<TItem>(
             this Array array,
-            Func<object, TItem> itemFactory) => ToArray(
+            Func<object, TItem> itemFactory) => ToArr(
                 array, (value, idx) => itemFactory(value));
 
-        public static object[] ToArray(
-            this Array array) => ToArray(
+        public static object[] ToArr(
+            this Array array) => ToArr(
                 array, (value, idx) => value);
 
         public static T[] AppendToArr<T>(
