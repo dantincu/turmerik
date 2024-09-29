@@ -9,18 +9,6 @@ namespace Turmerik.Core.Helpers
 {
     public static partial class FuncH
     {
-        public static TOut With<TIn, TOut>(
-            this TIn inVal,
-            Func<TIn, TOut> convertor) => convertor(inVal);
-
-        public static TVal ActWith<TVal>(
-            this TVal val,
-            Action<TVal> callback)
-        {
-            callback?.Invoke(val);
-            return val;
-        }
-
         public static T If<T>(
             this bool condition,
             Func<T> ifTrueAction = null,

@@ -14,6 +14,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
     {
         RootObject = 0,
         RootValueType,
+        VoidType,
         Regular,
         String,
         Boolean,

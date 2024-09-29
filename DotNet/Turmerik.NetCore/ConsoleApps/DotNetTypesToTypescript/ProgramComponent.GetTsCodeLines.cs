@@ -46,16 +46,10 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             TsCodeWorkArgs wka,
             EnumTypeItem enumTypeItem)
         {
-            retList.Add($"export enum {enumTypeItem.ShortName} {{");
-
-            foreach (var kvp in enumTypeItem.DefinedValuesMap)
-            {
-                retList.Add(string.Concat(
-                    wka.PgArgs.Config.TsTabStr,
-                    kvp.Key, " = ", kvp.Value, ","));
-            }
-
-            retList.Add("}");
+            retList.AddRange([
+                $"export enum {enumTypeItem.ShortName} {{",
+                    ..AllEnumMembers(wka, enumTypeItem),
+                "}"]);
         }
 
         private void AddRegularTypeTsCodeLines(
@@ -114,13 +108,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             var intfDeclrNamesArr = (genericTypeIdnfNamePart != null) switch
             {
-                true => intfNamesArr.Select(name => string.Concat(name, genericTypeDeclrNamePart)).ToArray(),
-                false => intfNamesArr
-            };
-
-            var intfIdnfNamesArr = (genericTypeIdnfNamePart != null) switch
-            {
-                true => intfNamesArr.Select(name => string.Concat(name, genericTypeIdnfNamePart)).ToArray(),
+                true => intfNamesArr.Select(name => string.Concat(
+                    name, genericTypeDeclrNamePart)).ToArray(),
                 false => intfNamesArr
             };
 
@@ -152,9 +141,25 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 codeLines.Add("");
             }
 
+            var intfIdnfNamesList = (genericTypeIdnfNamePart != null) switch
+            {
+                true => intfNamesArr.Select(name => string.Concat(
+                    name, genericTypeIdnfNamePart)).ToList(),
+                false => intfNamesArr.ToList()
+            };
+
+            typeItem.Data.Value.BaseType?.Value.IfNotNull(baseType => (
+                baseType.Kind >= TypeItemKind.Regular).ActIf(
+                    () => intfIdnfNamesList.Add(
+                        GetTsTypeName(wka, baseType))));
+
+            intfIdnfNamesList.AddRange(
+                typeItem.Data.Value.InterfaceTypes.Select(
+                    type => GetTsTypeName(wka, type.Value)));
+
             codeLines.Add(GetMainTsIntfDeclrLine(
                 wka, genericTypeDeclrNamePart,
-                intfIdnfNamesArr));
+                intfIdnfNamesList));
         }
 
         private void AddTsIntfCodeLines<TTypeItem>(
@@ -175,27 +180,50 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         private string GetPropTsCodeLine(
             TsCodeWorkArgs wka,
-            PropertyItem prop)
-        {
-            string retStr = string.Concat(
-                wka.PgArgs.Config.TsTabStr,
-                prop.Name, ": ", GetTypeItemFromMap(
-                    wka, prop.PropertyType.Value).Key);
-
-            throw new NotImplementedException();
-        }
+            PropertyItem prop) => GetTypeItemFromMap(
+                wka, prop.PropertyType.Value).Key.With(
+                    propTypeStr => IntfMember(wka, prop.Name, propTypeStr));
 
         private string GetMethodTsCodeLine(
             TsCodeWorkArgs wka,
             MethodItem method)
         {
-            throw new NotImplementedException();
+            var retStrPartsList = new List<string>
+            {
+                wka.PgArgs.Config.TsTabStr,
+                method.Name,
+                ": ("
+            };
+
+            wka.PushIdentifierNames();
+
+            var paramsStr = string.Join(",",
+                method.Params.Select(
+                    param => GetUniqueIdentifier(
+                    wka, param.Key).With(paramName => string.Join(
+                        ": ", paramName, GetTypeItemFromMap(
+                            wka, param.Value.Value).Key))));
+
+            wka.PopIdentifierNames();
+            paramsStr = $"({paramsStr})";
+
+            var returnTypeStr = method.ReturnType.Value.With(
+                returnType => returnType.Kind switch
+                {
+                    TypeItemKind.VoidType => "void",
+                    _ => GetTypeItemFromMap(wka, returnType).Key
+                });
+
+            string retStr = IntfMember(wka, method.Name,
+                $"({paramsStr}) => {returnTypeStr}");
+
+            return retStr;
         }
 
         private string GetMainTsIntfDeclrLine(
             TsCodeWorkArgs wka,
             string? genericTypeDeclrNamePart,
-            string[] intfIdnfNamesArr) => string.Join(" ",
+            List<string> intfIdnfNamesList) => string.Join(" ",
                 "export interface",
                 string.Join(
                     " extends ",
@@ -204,7 +232,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         genericTypeDeclrNamePart),
                     string.Join(
                         ", ",
-                        intfIdnfNamesArr)), "{ }");
+                        intfIdnfNamesList)), "{ }");
 
         private string GetGenericTsTypeNamePart(
             TsCodeWorkArgs wka,
@@ -236,7 +264,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                             string.Join(
                                 ", ",
                                 typesList.Select(
-                                    type => GetGenericTsTypeName(wka, type)))),
+                                    type => GetTsTypeName(wka, type)))),
                         false => genericParam.Name
                     });
 
@@ -249,7 +277,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         lazy => lazy.Value))).With(list => list.Where(
                             type => type.Kind >= TypeItemKind.Regular).ToList());
 
-        private string GetGenericTsTypeName(
+        private string GetTsTypeName(
             TsCodeWorkArgs wka,
             TypeItemCoreBase typeItem,
             bool isForNullable = false)
@@ -319,12 +347,37 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             bool isNullable)
             where TTypeItem : TypeItemCoreBase => genericTypeArgsFactory(typeItem).With(
                 genericTypeArgs => genericTypeArgs.Select(arg => arg.Value.TypeArg?.With(
-                    typeArg => GetGenericTsTypeName(
+                    typeArg => GetTsTypeName(
                         wka, typeArg, isNullable)) ?? arg.Value.Param!.Name)).ToArray();
 
         private KeyValuePair<string, TypeItemCoreBase?> GetTypeItemFromMap(
             TsCodeWorkArgs wka,
-            TypeItemCoreBase typeItem) => wka.TypeNamesMap!.Skip(1).First(
-                kvp => kvp.Value?.IdnfName == typeItem.IdnfName);
+            TypeItemCoreBase typeItem) => wka.TypeNamesMap!.Skip(1).FirstOrDefault(
+                kvp => kvp.Value?.IdnfName == typeItem.IdnfName).With(
+                kvp => kvp.Key.IfNotNull(str => kvp,
+                    () => new KeyValuePair<string, TypeItemCoreBase?>("any", null)));
+
+        private string IntfMember(
+            TsCodeWorkArgs wka,
+            string memberName,
+            string memberValue) => MemberCore(wka,
+                $"{memberName}: {memberValue};");
+
+        private IEnumerable<string> AllEnumMembers(
+            TsCodeWorkArgs wka,
+            EnumTypeItem enumTypeItem) => enumTypeItem.DefinedValuesMap.Select(
+                kvp => EnumMember(wka, kvp.Key, kvp.Value));
+
+        private string EnumMember(
+            TsCodeWorkArgs wka,
+            string memberName,
+            object memberValue) => MemberCore(wka,
+                $"{memberName} = {memberValue},");
+
+        private string MemberCore(
+            TsCodeWorkArgs wka,
+            string memberStr) => string.Concat(
+                wka.PgArgs.Config.TsTabStr,
+                memberStr);
     }
 }

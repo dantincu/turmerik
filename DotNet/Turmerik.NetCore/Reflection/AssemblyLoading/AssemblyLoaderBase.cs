@@ -302,6 +302,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 retAsmb.TypesMap.Add(
                     wka.RootValueType.IdnfName,
                     wka.RootValueType);
+
+                retAsmb.TypesMap.Add(
+                    wka.VoidType.IdnfName,
+                    wka.VoidType);
             }
 
             return retAsmb;
@@ -335,8 +339,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 AssemblyLoaderOpts opts,
                 MetadataLoadContext context,
                 Dictionary<string, AssemblyItem>? asmbMap = null,
-                TypeItemCore rootObject = null,
-                TypeItemCore rootValueType = null)
+                TypeItemCore? rootObject = null,
+                TypeItemCore? rootValueType = null,
+                TypeItemCore? voidType = null)
             {
                 Opts = opts;
                 Context = context;
@@ -351,6 +356,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     TypeItemKind.RootValueType,
                     ReflH.BaseValueType.Type.Name,
                     ReflH.BaseValueType.FullName!);
+
+                VoidType = voidType ?? new TypeItemCore(
+                    TypeItemKind.VoidType,
+                    ReflH.BaseValueType.Type.Name,
+                    ReflH.BaseValueType.FullName!);
             }
 
             public AssemblyLoaderOpts Opts { get; init; }
@@ -358,6 +368,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             public Dictionary<string, AssemblyItem> AsmbMap { get; init; }
             public TypeItemCore RootObject { get; init; }
             public TypeItemCore RootValueType { get; init; }
+            public TypeItemCore VoidType { get; init; }
         }
 
         public class TypeIdnfParts

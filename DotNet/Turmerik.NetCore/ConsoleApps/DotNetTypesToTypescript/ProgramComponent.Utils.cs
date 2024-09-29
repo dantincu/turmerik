@@ -88,13 +88,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             Dictionary<string, TypeItemCoreBase?>? retMap = null;
 
             var allDeps = wka.TypeKvp.Value.GetData(
-                )?.Value.AllTypeDependencies.Value;
+                )?.Value.AllTypeDependencies.Value.Where(
+                    type => type.Value.Kind >= TypeItemKind.Regular);
 
-            var typeNamesList = allDeps.Select(
+            var typeNamesList = allDeps?.Select(
                 depType => depType.Value.IdnfName).ToList().Distinct().ToList();
 
             var typeNamesMap = typeNamesList?.ToDictionary(
-                name => name, name => allDeps.First(
+                name => name, name => allDeps!.First(
                     dep => dep.Value.IdnfName == name).Value);
 
             if (typeNamesMap != null)
@@ -156,6 +157,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             { TypeItemKind.RootObject, "any" },
             { TypeItemKind.RootValueType, "any" },
+            { TypeItemKind.VoidType, "void" },
             { TypeItemKind.String, "string" },
             { TypeItemKind.Boolean, "boolean" },
             { TypeItemKind.Number, "number" },
