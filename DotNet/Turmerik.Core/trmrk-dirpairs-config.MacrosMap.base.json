@@ -4,6 +4,11 @@
     "$articles$",
     ":="
   ],
+  "ctr": [
+    ":s",
+    "$countries$",
+    ":="
+  ],
   "dstr": [
     ":s",
     "$distros$",
@@ -16,7 +21,7 @@
   ],
   "fxlbr": [
     ":s",
-    "$frameworks-&-libraries$",
+    "$frameworks-and-libraries$",
     ":="
   ],
   "gr": [

@@ -31,7 +31,12 @@
   ],
   "cdip": [
     ":s",
-    "$conductors & interpreters$",
+    "$conductors-and-interpreters$",
+    ":="
+  ],
+  "eth": [
+    ":s",
+    "$ethnic-groups$",
     ":="
   ],
   "f": [

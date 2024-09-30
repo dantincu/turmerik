@@ -1,8 +1,9 @@
 {
   "|a|": "$articles$",
+  "|ctr|": "$countries$",
   "|dstr|": "$distros$",
   "|fx|": "$frameworks$",
-  "|fxlbr|": "$frameworks-&-libraries$",
+  "|fxlbr|": "$frameworks-and-libraries$",
   "|gr|": "$geographical-regions$",
   "|isl|": "$islands$",
   "|lbr|": "$libraries$",

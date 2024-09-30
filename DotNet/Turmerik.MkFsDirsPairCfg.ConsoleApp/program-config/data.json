@@ -3,9 +3,10 @@
     "base": {
       "Map": {
         "a": "articles",
+        "ctr": "countries",
         "dstr": "distros",
         "fx": "frameworks",
-        "fxlbr": "frameworks-&-libraries",
+        "fxlbr": "frameworks-and-libraries",
         "gr": "geographical-regions",
         "isl": "islands",
         "lbr": "libraries",
@@ -30,7 +31,8 @@
         "cl": "clubs",
         "cps": "composers",
         "cpz": "compozitions",
-        "cdip": "conductors & interpreters",
+        "cdip": "conductors-and-interpreters",
+        "eth": "ethnic-groups",
         "f": "funny",
         "egna": "environment-geography-nature-and-agriculture",
         "fplyr": "former-players",
