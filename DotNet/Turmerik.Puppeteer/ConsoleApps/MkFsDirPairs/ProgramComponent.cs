@@ -561,40 +561,19 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             bool hasUri)
         {
             string url = hasUrl ? nodeArgs.Url : nodeArgs.Uri;
-            string[] urlParts = url.Split('|');
-            url = urlParts.First();
 
             if (nodeArgs.ResTitle == null)
             {
-                string? resTitle = null;
-
-                if (urlParts.Length > 1)
+                if (nodeArgs.GetTitleFromUrl == true)
                 {
-                    resTitle = string.Join("|",
-                        urlParts.Skip(1)).Nullify(true);
-                }
-
-                if (resTitle == null)
-                {
-                    if (nodeArgs.GetTitleFromUrl == true)
-                    {
-                        resTitle = GetTitleFromUri(
-                            url, resTitle, hasUri);
-                    }
-                    else
-                    {
-                        resTitle = await GetResouceTitleAsync(
-                            nodeArgs, url, resTitle, hasUri);
-                    }
+                    nodeArgs.ResTitle = GetTitleFromUri(
+                        url, hasUri);
                 }
                 else
                 {
-                    WriteSectionToConsole(
-                        "Using the following resource title: ",
-                        resTitle, ConsoleColor.Cyan);
+                    nodeArgs.ResTitle = await GetResouceTitleAsync(
+                        nodeArgs, url, hasUri);
                 }
-
-                nodeArgs.ResTitle = resTitle;
             }
 
             nodeArgs.MdFirstContent = string.Format(
@@ -605,14 +584,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         private async Task<string> GetResouceTitleAsync(
             ProgramArgs.Node nodeArgs,
             string url,
-            string resTitle,
             bool hasUri)
         {
             WriteSectionToConsole(
                 "Fetching resource from the following url: ",
                 url, ConsoleColor.Blue);
 
-            resTitle = (await GetResouceTitleCoreAsync(
+            string resTitle = (await GetResouceTitleCoreAsync(
                 url)).Nullify(true);
 
             if (resTitle != null)
@@ -637,7 +615,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     else if (userAnswer?.Length > 0)
                     {
                         resTitle = GetTitleFromUri(
-                            url, resTitle, hasUri);
+                            url, hasUri);
                     }
                 }
             }
@@ -658,14 +636,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
         private string GetTitleFromUri(
             string url,
-            string resTitle,
             bool hasUri)
         {
             var uriObj = new Uri(url);
             string host = uriObj.Host;
             string path = uriObj.AbsolutePath;
 
-            resTitle = path.Trim().Trim('/').Trim().Split('/').Reverse(
+            string resTitle = path.Trim().Trim('/').Trim().Split('/').Reverse(
                 ).ToArray().JoinStr(" - ");
 
             WriteSectionToConsole(
@@ -698,6 +675,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             string[] rawArgs) => parser.Parse(
                 new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
                 {
+                    OptsArgAltEmptyChar = '|',
                     ArgsFactory = () => new ProgramArgs
                     {
                         HasNodeRequiringPdf = config.CreatePdfFile ?? false
