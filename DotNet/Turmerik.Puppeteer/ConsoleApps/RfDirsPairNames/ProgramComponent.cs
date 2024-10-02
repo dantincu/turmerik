@@ -503,7 +503,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 data => data.Args.InteractiveMode = true),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.Title.Arr(),
-                                data => data.Args.MdTitle = data.ArgFlagValue.Single()),
+                                data => data.Args.MdTitle = string.Join(":", data.ArgFlagValue)),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.SkipPdfFileCreation.Arr(),
                                 data => data.Args.SkipPdfFileCreation = true, true),

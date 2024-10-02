@@ -813,7 +813,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                             data => data.Args.WorkDir = data.ArgFlagValue!.Single()),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.Title.Arr(),
-                                            data => data.Args.Current.ResTitle = data.ArgFlagValue!.Single()),
+                                            data => data.Args.Current.ResTitle = string.Join(":", data.ArgFlagValue)),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.Url.Arr(),
                                             data => data.Args.Current.Url = OnUrlProvided(data)),
