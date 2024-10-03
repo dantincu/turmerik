@@ -86,7 +86,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                             csProj => new AssemblyLoaderOpts.AssemblyOpts
                             {
                                 AssemblyName = csProj.Name,
-                                AssemblyFilePath = csProj.CsProjectAssembly.Paths.SrcPath,
+                                AssemblyFilePath = csProj.CsProjectAssembly.SrcFilePath,
                                 LoadAllTypes = csProj.CsProjectAssembly.IncludeAllTypes,
                                 TypesToLoad = csProj.CsProjectAssembly.TypesArr?.Select(
                                     GetTypeOpts).ToList()!,
@@ -136,11 +136,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         public void Run(
             CsProjAsmbWorkArgs wka)
         {
-            string asmbDirPath = GetAsmbDestnDirPath(wka);
-
             foreach (var typeKvp in wka.AsmbKvp.Value.TypesMap.ToArray())
             {
-                Run(new TypeWorkArgs(wka, typeKvp, asmbDirPath));
+                Run(new TypeWorkArgs(wka, typeKvp));
             }
         }
 

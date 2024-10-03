@@ -46,7 +46,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             public string Name { get; set; }
 
-            public SrcDestnPaths DirPaths { get; set; }
+            public string SrcDirName { get; set; }
             public string SrcBinsRelDirPath { get; set; }
             public string SrcBuildRelDirPath { get; set; }
             public string SrcBuildDirPath { get; set; }
@@ -62,7 +62,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public string Name { get; set; }
             public string TypeNamesPfx { get; set; }
 
-            public SrcDestnPaths Paths { get; set; }
+            public string SrcFileName { get; set; }
+            public string SrcFilePath { get; set; }
             public DotNetType[] TypesArr { get; set; }
         }
 

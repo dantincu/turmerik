@@ -15,48 +15,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     public partial class ProgramComponent
     {
         private string GetAsmbDestnDirPath(
-            CsProjAsmbWorkArgs wka)
-        {
-            string retPath;
-
-            bool isTurmerikAssembly = wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
-                wka.AsmbKvp.Value.BclItem);
-
-            ProgramConfig.DotNetCsProject? csProj = isTurmerikAssembly switch
-            {
-                true => wka.Section.CsProjectsArr.SingleOrDefault(
-                    csProj => csProj.Name == wka.AsmbKvp.Key),
-                _ => null
-            };
-
-            if (csProj != null)
-            {
-                retPath = csProj.CsProjectAssembly.Paths.DestnPath;
-            }
-            else
-            {
-                string dirName = isTurmerikAssembly switch
-                {
-                    true => wka.PgArgs.Profile.DestnCsProjectAssembliesDirName,
-                    false => wka.PgArgs.Profile.DestnExternalAssemblliesDirName
-                };
-
-                retPath = GetAsmbDestnDirBasePath(
-                    wka, isTurmerikAssembly);
-            }
-
-            return retPath;
-        }
-
-        private string GetAsmbDestnDirPath(
-            CsProjAsmbWorkArgs wka,
+            TypeWorkArgs wka,
             AssemblyItem asmbItem) => GetAsmbDestnDirBasePath(
                 wka,
                 wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
                     asmbItem.BclItem));
 
         private string GetAsmbDestnDirBasePath(
-            CsProjAsmbWorkArgs wka,
+            TypeWorkArgs wka,
             bool isTurmerikAssembly)
         {
             string dirName = isTurmerikAssembly switch
@@ -65,7 +31,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 false => wka.PgArgs.Profile.DestnExternalAssemblliesDirName
             };
 
-            string retPath = Path.Combine(wka.PgArgs.Profile.DirPaths.DestnPath, dirName);
+            string retPath = Path.Combine(
+                wka.Section.DirPaths.DestnPath, dirName);
+
             return retPath;
         }
 

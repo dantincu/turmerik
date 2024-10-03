@@ -182,19 +182,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.ProfileSection section,
             ProgramConfig.DotNetCsProject csProject)
         {
-            csProject.DirPaths ??= new();
-            csProject.DirPaths.SrcPath ??= csProject.Name;
-
-            csProject.DirPaths.DestnPath ??= Path.Combine(
-                profile.DestnCsProjectAssembliesDirName,
-                csProject.DirPaths.SrcPath);
-
-            NormalizeSrcDestnDirPaths(args,
-                csProject.DirPaths,
-                section.DirPaths);
-
             csProject.SrcBinsRelDirPath ??= section.DfSrcBinsRelDirPath;
             csProject.IsDotNetStandard ??= false;
+            csProject.SrcDirName ??= csProject.Name;
 
             csProject.DotNetVersionNumber ??= (csProject.IsDotNetStandard ?? false) switch
             {
@@ -209,7 +199,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             }, csProject.DotNetVersionSffx);
 
             csProject.SrcBuildDirPath ??= PathH.CombinePaths(
-                [ csProject.DirPaths.SrcPath,
+                [ section.DirPaths.SrcPath,
+                csProject.SrcDirName,
                 csProject.SrcBinsRelDirPath,
                 csProject.SrcBuildRelDirPath ]);
 
@@ -235,15 +226,13 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             dotNetAssembly.Name ??= csProject.Name;
             dotNetAssembly.TypeNamesPfx ??= $"{dotNetAssembly.Name}.";
-            dotNetAssembly.Paths ??= new();
 
-            dotNetAssembly.Paths.SrcPath = NormPathH.AssurePathIsRooted(
-                dotNetAssembly.Paths.SrcPath ??= GetDefaultAssemblyFileName(dotNetAssembly),
+            dotNetAssembly.SrcFileName ??= GetDefaultAssemblyFileName(
+                dotNetAssembly);
+
+            dotNetAssembly.SrcFilePath = NormPathH.AssurePathIsRooted(
+                dotNetAssembly.SrcFilePath ??= dotNetAssembly.SrcFileName,
                 () => csProject.SrcBuildDirPath);
-
-            dotNetAssembly.Paths.DestnPath = NormPathH.AssurePathIsRooted(
-                dotNetAssembly.Paths.DestnPath ??= string.Empty,
-                () => csProject.DirPaths.DestnPath);
 
             if (dotNetAssembly.TypesArr != null)
             {
@@ -269,7 +258,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.DotNetType dotNetType)
         {
             NormalizeType(dotNetAssembly, dotNetType);
-            NormalizeSrcDestnDirPaths(args, dotNetAssembly.Paths);
         }
 
         public void NormalizeType(

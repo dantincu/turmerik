@@ -68,15 +68,12 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             public TypeWorkArgs(
                 CsProjAsmbWorkArgs src,
-                KeyValuePair<string, TypeItemCoreBase> typeKvp,
-                string asmbDirPath) : base(src, src.AsmbKvp)
+                KeyValuePair<string, TypeItemCoreBase> typeKvp) : base(src, src.AsmbKvp)
             {
                 TypeKvp = typeKvp;
-                AsmbDirPath = asmbDirPath ?? throw new ArgumentNullException(nameof(asmbDirPath));
             }
 
             public KeyValuePair<string, TypeItemCoreBase> TypeKvp { get; init; }
-            public string AsmbDirPath { get; init; }
         }
 
         public class TsCodeWorkArgs : TypeWorkArgs
@@ -87,8 +84,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 Dictionary<string, TypeItemCoreBase?>? typeNamesMap,
                 Stack<List<string>>? identifierNames) : base(
                     src,
-                    src.TypeKvp,
-                    src.AsmbDirPath)
+                    src.TypeKvp)
             {
                 ShortTypeName = shortTypeName ?? throw new ArgumentNullException(nameof(shortTypeName));
                 TypeNamesMap = typeNamesMap;
