@@ -9,6 +9,7 @@
         "fx": "frameworks",
         "fxlbr": "frameworks-and-libraries",
         "g": "groups",
+        "hs": "history",
         "gr": "geographical-regions",
         "isl": "islands",
         "lbr": "libraries",
@@ -22,6 +23,7 @@
         "plrg": "places-and-regions",
         "ps": "products-and-services",
         "pp": "public-persons",
+        "rchs": "recent-history",
         "rg": "regions",
         "tc": "terms-and-concepts"
       }

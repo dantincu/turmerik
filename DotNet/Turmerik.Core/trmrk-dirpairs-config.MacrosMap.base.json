@@ -27,6 +27,10 @@
     ":s",
     "$groups$"
   ],
+  "hs": [
+    ":s",
+    "$history$"
+  ],
   "gr": [
     ":s",
     "$geographical-regions$"
@@ -78,6 +82,10 @@
   "pp": [
     ":s",
     "$public-persons$"
+  ],
+  "rchs": [
+    ":s",
+    "$recent-history$"
   ],
   "rg": [
     ":s",
