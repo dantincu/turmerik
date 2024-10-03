@@ -61,7 +61,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             {
                 foreach (var kvp in wka.TypeNamesMap!.Skip(1))
                 {
-                    if (kvp.Value?.Kind >= TypeItemKind.Regular)
+                    if (kvp.Value?.Kind >= TypeItemKind.Regular && kvp.Value.IdnfName != wka.TypeKvp.Value.IdnfName)
                     {
                         string idnf = kvp.Key;
                         string shortName = kvp.Value.ShortName;
@@ -74,7 +74,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         string filePath = GetTypeDestnRelFilePath(
                             wka, trgTypeFilePath, kvp.Value);
 
-                        string tsCodeLine = $"import {{{idnf}}} from {filePath};";
+                        filePath = filePath.Replace("\\", "\\\\");
+
+                        string tsCodeLine = $"import {{ {idnf} }} from \"{filePath}\";";
                         retList.Add(tsCodeLine);
                     }
                 }
@@ -308,7 +310,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 string.Join(
                     " extends ",
                     string.Concat(
-                        wka.TypeNamesMap!.First().Key,
+                        wka.TypeNamesMap!.First().Value!.ShortName,
                         genericTypeDeclrNamePart),
                     string.Join(
                         ", ",

@@ -58,11 +58,17 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             var trgPathPartsArr = trgFilePath.Split(
                 ['/', '\\']);
 
-            var depPathPartsArr = trgFilePath.Split(
+            var depPathPartsArr = depFilePath.Split(
                 ['/', '\\']);
 
             var firstDiffKvp = trgPathPartsArr.FirstKvp(
                 (str, idx) => str != depPathPartsArr[idx]);
+
+            if (firstDiffKvp.Key < 0)
+            {
+                throw new InvalidOperationException(
+                    $"File paths should not be identical: {trgFilePath}");
+            }
 
             var retPathPartsList = Enumerable.Range(0,
                 trgPathPartsArr.Length - firstDiffKvp.Key - 1).Select(
