@@ -196,6 +196,10 @@ namespace Turmerik.Core.Helpers
                         intfList.RemoveAt(idx);
                         implIntfList.RemoveAt(kvp.Key);
                     }
+                    else
+                    {
+                        idx++;
+                    }
                 }
 
                 implIntfList = SelectImplInterfaces(

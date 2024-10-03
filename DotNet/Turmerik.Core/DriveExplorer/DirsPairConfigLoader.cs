@@ -477,34 +477,6 @@ namespace Turmerik.Core.DriveExplorer
             return config;
         }
 
-        /* private T NormRefValue<T>(
-            T value,
-            T nestedValue)
-            where T : class => (nestedValue != null) switch
-            {
-                true => nestedValue,
-                false => value,
-            };
-
-        private T NormValue<T>(
-            T value,
-            T nestedValue)
-            where T : struct => EqualityComparer<T>.Default.Equals(
-                nestedValue, default) switch
-            {
-                true => value,
-                false => nestedValue,
-            };
-
-        private T? NormNllblValue<T>(
-            T? value,
-            T? nestedValue)
-            where T : struct => nestedValue.HasValue switch
-            {
-                true => nestedValue,
-                false => value,
-            }; */
-
         private Dictionary<string, TValue> NormMaps<TValue>(
             Dictionary<string, TValue> map,
             Dictionary<string, TValue> nestedMap)

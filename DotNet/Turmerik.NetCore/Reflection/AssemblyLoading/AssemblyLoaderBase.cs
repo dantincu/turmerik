@@ -96,8 +96,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     AssemblyFilePath = asmb.AssemblyFilePath ?? opts.AllAssembliesFilePaths.First(
                         filePath => Path.GetFileName(filePath) == asmb.AssemblyName),
                     LoadAllTypes = asmb.LoadAllTypes ?? opts.LoadAllTypes,
-                    LoadPubInstnGetProps = asmb.LoadPubInstnGetProps ?? opts.LoadPubInstnGetProps,
-                    LoadPubInstnMethods = asmb.LoadPubInstnMethods ?? opts.LoadPubInstnMethods,
                 }.ActWith(asmb => asmb.TypesToLoad = asmb.TypesToLoad?.Select(
                     type =>
                     {
@@ -107,8 +105,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                             FullTypeName = type.FullTypeName,
                             DeclaringTypeOpts = type.DeclaringTypeOpts,
                             GenericTypeParamsCount = type.GenericTypeParamsCount,
-                            LoadPubInstnGetProps = type.LoadPubInstnGetProps ?? asmb.LoadPubInstnGetProps,
-                            LoadPubInstnMethods = type.LoadPubInstnMethods ?? asmb.LoadPubInstnMethods
                         };
 
                         retObj.GenericTypeParamsCount ??= ((retObj.DeclaringTypeOpts != null) switch
@@ -263,7 +259,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             Assembly asmbObj,
             string? asmbName = null,
             string? asmbFilPath = null) => wka.AsmbMap.GetOrAdd(
-                asmbName, asmbName => GetAssemblyItemCore(
+                asmbName ??= asmbObj.GetName().Name,
+                asmbName => GetAssemblyItemCore(
                     wka, asmbObj, asmbName, asmbFilPath));
 
         public AssemblyItem GetAssemblyItemCore(
@@ -324,9 +321,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             WorkArgs wka,
             Action<AssemblyItem, TypeItemCoreBase> callback)
         {
-            foreach (var asmbKvp in wka.AsmbMap)
+            foreach (var asmbKvp in wka.AsmbMap.ToList())
             {
-                foreach (var typeKvp in asmbKvp.Value.TypesMap)
+                foreach (var typeKvp in asmbKvp.Value.TypesMap.ToList())
                 {
                     callback(asmbKvp.Value, typeKvp.Value);
                 }
@@ -359,8 +356,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
                 VoidType = voidType ?? new TypeItemCore(
                     TypeItemKind.VoidType,
-                    ReflH.BaseValueType.Type.Name,
-                    ReflH.BaseValueType.FullName!);
+                    ReflH.VoidType.Type.Name,
+                    ReflH.VoidType.FullName!);
             }
 
             public AssemblyLoaderOpts Opts { get; init; }

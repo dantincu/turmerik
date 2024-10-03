@@ -406,7 +406,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                                 IsStatic = false,
                                 PropertyType = new Lazy<TypeItemCoreBase>(
                                     () => LoadType(wka, prop.PropertyType))
-                            }).RdnlC()
+                            }).RdnlC(),
+                        _ => null
                     },
                     PubInstnMethods = wka.Opts.LoadPubInstnMethods switch
                     {
@@ -423,7 +424,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                                     param => param.Name != null).ToDictionary(
                                     param => param.Name!, param => new Lazy<TypeItemCoreBase>(
                                         () => LoadType(wka, param.ParameterType))).RdnlD()
-                            }).RdnlC()
+                            }).RdnlC(),
+                        _ => null
                     },
                     AllTypeDependencies = new Lazy<System.Collections.ObjectModel.ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(
                         () =>
@@ -432,13 +434,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                             AddDependencies(retList, [ typeData.BaseType ]);
                             AddDependencies(retList, [ typeData.GenericTypeDefinition ]);
 
-                            AddDependencies(retList, typeData.PubInstnProps.Select(
-                                prop => prop.PropertyType));
+                            AddDependencies(retList, typeData.PubInstnProps?.Select(
+                                prop => prop.PropertyType) ?? []);
 
-                            AddDependencies(retList, typeData.PubInstnMethods.SelectMany(
+                            AddDependencies(retList, typeData.PubInstnMethods?.SelectMany(
                                 method => method.ReturnType.Arr(
                                     method.Params.Select(
-                                        param => param.Value).ToArray())));
+                                        param => param.Value).ToArray())) ?? []);
 
                             if (retItem is GenericTypeItem genericTypeItem)
                             {
@@ -490,7 +492,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                             {
                                 TypeArg = arg.IsGenericTypeParameter switch
                                 {
-                                    false => LoadType(wka, arg)
+                                    false => LoadType(wka, arg),
+                                    _ => null
                                 }
                             }
                         })).RdnlC()

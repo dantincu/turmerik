@@ -84,12 +84,12 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             var data = typeItem.Data.Value;
 
-            var propsMap = data.PubInstnProps.GroupBy(
+            var propsMap = data.PubInstnProps!.GroupBy(
                 prop => prop.Name).ToDictionary(
                 g => g.Key, g => g.ToList().ActWith(
                     propsList => propsList.Sort(CompareProps))).ToArray();
 
-            var methodsMap = data.PubInstnMethods.GroupBy(
+            var methodsMap = data.PubInstnMethods!.GroupBy(
                 prop => prop.Name).ToDictionary(
                 g => g.Key, g => g.ToList().ActWith(
                     propsList => propsList.Sort(CompareMethods))).ToArray();
@@ -117,12 +117,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             {
                 var propsList = (i < propsMapLen) switch
                 {
-                    true => propsMap[i].Value
+                    true => propsMap[i].Value,
+                    _ => null
                 };
 
                 var methodsList = (i < methodsLen) switch
                 {
-                    true => methodsMap[i].Value
+                    true => methodsMap[i].Value,
+                    _ => null
                 };
 
                 string intfName = intfDeclrNamesArr[i];

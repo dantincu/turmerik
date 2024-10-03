@@ -137,8 +137,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public ReadOnlyCollection<Lazy<TypeItemCoreBase>> InterfaceTypes { get; init; }
         public Lazy<TypeItemCoreBase>? GenericTypeDefinition { get; init; }
 
-        public ReadOnlyCollection<PropertyItem> PubInstnProps { get; init; }
-        public ReadOnlyCollection<MethodItem> PubInstnMethods { get; init; }
+        public ReadOnlyCollection<PropertyItem>? PubInstnProps { get; init; }
+        public ReadOnlyCollection<MethodItem>? PubInstnMethods { get; init; }
 
         public Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> AllTypeDependencies { get; init; }
     }

@@ -290,6 +290,8 @@ namespace Turmerik.Core.Helpers
                         i++;
                     }
                 }
+
+                idx++;
             }
 
             return removedCount;

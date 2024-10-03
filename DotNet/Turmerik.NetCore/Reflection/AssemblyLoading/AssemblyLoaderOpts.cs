@@ -29,9 +29,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             public bool? LoadAllTypes { get; set; }
 
-            public bool? LoadPubInstnGetProps { get; set; }
-            public bool? LoadPubInstnMethods { get; set; }
-
             public List<TypeOpts> TypesToLoad { get; set; }
         }
 
@@ -41,9 +38,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             public string TypeName { get; set; }
             public int? GenericTypeParamsCount { get; set; }
             public TypeOpts? DeclaringTypeOpts { get; set; }
-
-            public bool? LoadPubInstnGetProps { get; set; }
-            public bool? LoadPubInstnMethods { get; set; }
         }
     }
 }

@@ -85,11 +85,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                         AssembliesToLoad = pfSection.CsProjectsArr.Select(
                             csProj => new AssemblyLoaderOpts.AssemblyOpts
                             {
+                                AssemblyName = csProj.Name,
                                 AssemblyFilePath = csProj.CsProjectAssembly.Paths.SrcPath,
                                 LoadAllTypes = csProj.CsProjectAssembly.IncludeAllTypes,
                                 TypesToLoad = csProj.CsProjectAssembly.TypesArr?.Select(
-                                    GetTypeOpts).ToList()!
-                            }).ToList()
+                                    GetTypeOpts).ToList()!,
+                            }).ToList(),
+                        LoadPubInstnGetProps = true,
+                        LoadPubInstnMethods = true,
                     });
 
                 if (wka.PgArgs.RemoveExistingFirst == true)

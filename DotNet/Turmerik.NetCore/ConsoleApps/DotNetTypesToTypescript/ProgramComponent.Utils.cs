@@ -25,7 +25,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ProgramConfig.DotNetCsProject? csProj = isTurmerikAssembly switch
             {
                 true => wka.Section.CsProjectsArr.SingleOrDefault(
-                    csProj => csProj.Name == wka.AsmbKvp.Key)
+                    csProj => csProj.Name == wka.AsmbKvp.Key),
+                _ => null
             };
 
             if (csProj != null)
@@ -74,8 +75,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 TypeName = type.Name,
                 FullTypeName = type.FullName,
                 GenericTypeParamsCount = type.GenericTypeParamsCount,
-                LoadPubInstnGetProps = true,
-                LoadPubInstnMethods = true,
                 DeclaringTypeOpts = type.DeclaringType?.With(GetTypeOpts)
             };
 
