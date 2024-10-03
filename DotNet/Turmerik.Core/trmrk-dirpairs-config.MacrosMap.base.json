@@ -15,6 +15,10 @@
     ":s",
     "$distros$"
   ],
+  "fny": [
+    ":s",
+    "$funny$"
+  ],
   "fx": [
     ":s",
     "$frameworks$"
@@ -54,6 +58,10 @@
   "org": [
     ":s",
     "$organizations$"
+  ],
+  "opf": [
+    ":s",
+    "$online-platforms$"
   ],
   "p": [
     ":s",
