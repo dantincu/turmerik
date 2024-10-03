@@ -20,5 +20,6 @@ namespace Turmerik.Core.ConsoleApps
         public Action<ConsoleArgsParserData<TArgsMtbl>> ArgsBuilder { get; set; }
         public string MacroFlagName { get; set; }
         public Dictionary<string, string[]> MacrosMap { get; set; }
+        public Dictionary<string, Dictionary<int, Tuple<string[], string[]>>> MacroModifiersMap { get; set; }
     }
 }

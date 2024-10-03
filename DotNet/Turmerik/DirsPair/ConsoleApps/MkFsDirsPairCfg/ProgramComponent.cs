@@ -89,8 +89,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirsPairCfg
                 "MacrosMap",
                 key => key,
                 value => ":s".Arr(
-                    $"${value}$",
-                    ":="));
+                    $"${value}$"));
         }
 
         private void Run<TNewValue>(

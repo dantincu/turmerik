@@ -225,10 +225,53 @@ namespace Turmerik.Core.ConsoleApps
                         opts.OptsArgAltEmptyChar,
                         out bool startsWithDelim);
 
-                    if (startsWithDelim && argItemArr[0] == opts.MacroFlagName)
+                    if (startsWithDelim)
                     {
-                        argItemArr = argItemArr.Skip(1).SelectMany(
-                            arg => opts.MacrosMap[arg]).ToArray();
+                        if (argItemArr[0] == opts.MacroFlagName)
+                        {
+                            argItemArr = argItemArr.Skip(1).SelectMany(
+                                arg => opts.MacrosMap[arg]).ToArray();
+                        }
+                        else if (opts.MacroModifiersMap != null)
+                        {
+                            var modifKvp = opts.MacroModifiersMap.FirstOrDefault(
+                                kvp => argItemArr[0] == kvp.Key + opts.MacroFlagName);
+
+                            if (modifKvp.Key != null)
+                            {
+                                argItemArr = argItemArr.Skip(1).SelectMany(
+                                    (arg, idx) =>
+                                    {
+                                        var retList = opts.MacrosMap[arg].ToList();
+                                        var modifMap = modifKvp.Value;
+
+                                        if (!modifMap.TryGetValue(idx, out var tuple))
+                                        {
+                                            if (idx == argItemArr.Length - 2 && modifMap.ContainsKey(int.MaxValue))
+                                            {
+                                                tuple = modifMap[int.MaxValue];
+                                            }
+                                            else
+                                            {
+                                                tuple = modifMap[-1];
+                                            }
+                                        }
+
+                                        retList.InsertRange(0, tuple.Item1);
+                                        retList.AddRange(tuple.Item2);
+
+                                        return retList;
+                                    }).ToArray();
+                            }
+                            else
+                            {
+                                argItemArr = [arg];
+                            }
+                        }
+                        else
+                        {
+                            argItemArr = [arg];
+                        }
                     }
                     else
                     {

@@ -1,112 +1,90 @@
 {
   "a": [
     ":s",
-    "$articles$",
-    ":="
+    "$articles$"
   ],
   "chnl": [
     ":s",
-    "$channels$",
-    ":="
+    "$channels$"
   ],
   "ctr": [
     ":s",
-    "$countries$",
-    ":="
+    "$countries$"
   ],
   "dstr": [
     ":s",
-    "$distros$",
-    ":="
+    "$distros$"
   ],
   "fx": [
     ":s",
-    "$frameworks$",
-    ":="
+    "$frameworks$"
   ],
   "fxlbr": [
     ":s",
-    "$frameworks-and-libraries$",
-    ":="
+    "$frameworks-and-libraries$"
   ],
   "g": [
     ":s",
-    "$groups$",
-    ":="
+    "$groups$"
   ],
   "gr": [
     ":s",
-    "$geographical-regions$",
-    ":="
+    "$geographical-regions$"
   ],
   "isl": [
     ":s",
-    "$islands$",
-    ":="
+    "$islands$"
   ],
   "lbr": [
     ":s",
-    "$libraries$",
-    ":="
+    "$libraries$"
   ],
   "m": [
     ":s",
-    "$misc$",
-    ":="
+    "$misc$"
   ],
   "mps": [
     ":s",
-    "$my-products-and-services$",
-    ":="
+    "$my-products-and-services$"
   ],
   "org": [
     ":s",
-    "$organizations$",
-    ":="
+    "$organizations$"
   ],
   "p": [
     ":s",
-    "$persons$",
-    ":="
+    "$persons$"
   ],
   "pg": [
     ":s",
-    "$pages$",
-    ":="
+    "$pages$"
   ],
   "pl": [
     ":s",
-    "$places$",
-    ":="
+    "$places$"
   ],
   "plgr": [
     ":s",
-    "$places-and-geographical-regions$",
-    ":="
+    "$places-and-geographical-regions$"
   ],
   "plrg": [
     ":s",
-    "$places-and-regions$",
-    ":="
+    "$places-and-regions$"
   ],
   "ps": [
     ":s",
-    "$products-and-services$",
-    ":="
+    "$products-and-services$"
   ],
   "pp": [
     ":s",
-    "$public-persons$",
-    ":="
+    "$public-persons$"
   ],
   "rg": [
     ":s",
-    "$regions$",
-    ":="
+    "$regions$"
   ],
   "tc": [
     ":s",
-    "$terms-and-concepts$",
-    ":="
+    "$terms-and-concepts$"
   ]
 }

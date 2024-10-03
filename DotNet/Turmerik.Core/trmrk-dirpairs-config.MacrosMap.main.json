@@ -1,112 +1,90 @@
 {
   "albm": [
     ":s",
-    "$albums$",
-    ":="
+    "$albums$"
   ],
   "art": [
     ":s",
-    "$artists$",
-    ":="
+    "$artists$"
   ],
   "athl": [
     ":s",
-    "$athletes$",
-    ":="
+    "$athletes$"
   ],
   "cl": [
     ":s",
-    "$clubs$",
-    ":="
+    "$clubs$"
   ],
   "crmn": [
     ":s",
-    "$criminality$",
-    ":="
+    "$criminality$"
   ],
   "cps": [
     ":s",
-    "$composers$",
-    ":="
+    "$composers$"
   ],
   "cpz": [
     ":s",
-    "$compozitions$",
-    ":="
+    "$compozitions$"
   ],
   "cdip": [
     ":s",
-    "$conductors-and-interpreters$",
-    ":="
+    "$conductors-and-interpreters$"
   ],
   "eth": [
     ":s",
-    "$ethnic-groups$",
-    ":="
+    "$ethnic-groups$"
   ],
   "f": [
     ":s",
-    "$funny$",
-    ":="
+    "$funny$"
   ],
   "egna": [
     ":s",
-    "$environment-geography-nature-and-agriculture$",
-    ":="
+    "$environment-geography-nature-and-agriculture$"
   ],
   "fplyr": [
     ":s",
-    "$former-players$",
-    ":="
+    "$former-players$"
   ],
   "fathl": [
     ":s",
-    "$former-athletes$",
-    ":="
+    "$former-athletes$"
   ],
   "hf": [
     ":s",
-    "$historical-figures$",
-    ":="
+    "$historical-figures$"
   ],
   "nf": [
     ":s",
-    "$infamous$",
-    ":="
+    "$infamous$"
   ],
   "incd": [
     ":s",
-    "$incidents$",
-    ":="
+    "$incidents$"
   ],
   "md": [
     ":s",
-    "$models$",
-    ":="
+    "$models$"
   ],
   "mf": [
     ":s",
-    "$mythological-figures$",
-    ":="
+    "$mythological-figures$"
   ],
   "msc": [
     ":s",
-    "$musicians$",
-    ":="
+    "$musicians$"
   ],
   "ot": [
     ":s",
-    "$others$",
-    ":="
+    "$others$"
   ],
   "plyr": [
     ":s",
-    "$players$",
-    ":="
+    "$players$"
   ],
   "trgd": [
     ":s",
-    "$tragedies$",
-    ":="
+    "$tragedies$"
   ]
 }

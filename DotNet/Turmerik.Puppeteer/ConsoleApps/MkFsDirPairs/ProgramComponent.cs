@@ -691,6 +691,26 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     }),
                     MacroFlagName = config.ArgOpts.Macro,
                     MacrosMap = config.Macros.Map,
+                    MacroModifiersMap = new()
+                    {
+                        {
+                            "s",
+                            new ()
+                            {
+                                { -1, Tuple.Create<string[], string[]>([], [":="]) },
+                                { int.MaxValue, Tuple.Create<string[], string[]>([], []) }
+                            }
+                        },
+                        {
+                            "c",
+                            new ()
+                            {
+                                { -1, Tuple.Create<string[], string[]>([], [":+"]) },
+                                { int.MaxValue, Tuple.Create<string[], string[]>([], [])
+                                }
+                            }
+                        }
+                    },
                     ArgsBuilder = data =>
                     {
                         var args = data.Args;
@@ -767,16 +787,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                                 var args = data.Args;
                                                 var parent = args.Current.ParentNode;
 
-                                                if (data.TotalCount + 1 < data.Opts.ExpandedRawArgs.Length)
+                                                args.Current = new ProgramArgs.Node
                                                 {
-                                                    args.Current = new ProgramArgs.Node
-                                                    {
-                                                        ParentNode = parent,
-                                                        ChildNodes = new List<ProgramArgs.Node>()
-                                                    };
+                                                    ParentNode = parent,
+                                                    ChildNodes = new List<ProgramArgs.Node>()
+                                                };
 
-                                                    args.CurrentSibblings.Add(args.Current);
-                                                }
+                                                args.CurrentSibblings.Add(args.Current);
                                             }),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.PrintHelpMessage.Arr(),
