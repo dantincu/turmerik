@@ -298,7 +298,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     _ => GetTypeItemFromMap(wka, returnType).Key
                 });
 
-            string retStr = $"({paramsStr}) => {returnTypeStr}";
+            string retStr = $"{paramsStr} => {returnTypeStr}";
             return retStr;
         }
 
