@@ -58,20 +58,28 @@ namespace Turmerik.Core.Helpers
 
         public static string GetTypeDisplayName(
             string typeFullName,
-            char stopDelim = '[') => typeFullName?.SplitStr(
+            char stopDelim = '[') => typeFullName.SplitStr(
                 (str, len) => str.FirstKvp((c, i) => c == stopDelim).Key).Item1;
 
         public static string GetTypeDisplayName(
             string typeFullName,
             char[]? stopDelimsArr)
         {
-            stopDelimsArr ??= ['&', '*'];
+            stopDelimsArr ??= ['&', '*', '`', '['];
 
             string retVal = typeFullName?.SplitStr(
                 (str, len) => str.FirstKvp((c, i) => stopDelimsArr.Contains(c)).Key).Item1;
 
             return retVal;
         }
+
+        public static string GetTypeShortDisplayName(
+            this Type type) => GetTypeDisplayName(
+                type.FullName, '`');
+
+        public static string GetTypeShortDisplayName(
+            string typeFullName) => GetTypeDisplayName(
+                typeFullName, '`');
 
         public static Type GetBaseType(
             Type type)

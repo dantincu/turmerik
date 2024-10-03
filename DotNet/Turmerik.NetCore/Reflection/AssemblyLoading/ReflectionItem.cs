@@ -16,6 +16,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         RootValueType,
         VoidType,
         Regular,
+        GenericRegular,
         String,
         Boolean,
         Number,
@@ -26,6 +27,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         Array,
         Enumerable,
         Dictionary,
+        Delegate,
+        GenericDelegate,
         GenericParam
     }
 
@@ -258,6 +261,57 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public ReadOnlyDictionary<string, object> DefinedValuesMap { get; init; }
+    }
+
+    public class DelegateTypeItem<TTypeItem> : TypeItemCore<TTypeItem>
+        where TTypeItem : DelegateTypeItem<TTypeItem>
+    {
+        public DelegateTypeItem(
+            TypeItemKind kind,
+            Func<TTypeItem, string> shortNameFactory,
+            Func<TTypeItem, string> nameFactory,
+            Func<TTypeItem, string> fullNameFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory)
+        {
+        }
+
+        public ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>> Params { get; init; }
+        public Lazy<TypeItemCoreBase> ReturnType { get; init; }
+    }
+
+    public class DelegateTypeItem : DelegateTypeItem<DelegateTypeItem>
+    {
+        public DelegateTypeItem(
+            TypeItemKind kind,
+            Func<DelegateTypeItem, string> shortNameFactory,
+            Func<DelegateTypeItem, string> nameFactory,
+            Func<DelegateTypeItem, string> fullNameFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory)
+        {
+        }
+    }
+
+    public class GenericDelegateTypeItem : DelegateTypeItem<GenericDelegateTypeItem>
+    {
+        public GenericDelegateTypeItem(
+            TypeItemKind kind,
+            Func<GenericDelegateTypeItem, string> shortNameFactory,
+            Func<GenericDelegateTypeItem, string> nameFactory,
+            Func<GenericDelegateTypeItem, string> fullNameFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory)
+        {
+        }
+
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
     }
 
     public class TypeItem<TTypeItem> : TypeItemCore<TTypeItem>

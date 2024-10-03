@@ -59,7 +59,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     wka.PgArgs.Profile.TypesHcyNodeDirName,
                     part)).ToArray();
 
-            shortTypeName = ReflH.GetTypeDisplayName(shortTypeName, '`');
+            shortTypeName = ReflH.GetTypeShortDisplayName(shortTypeName);
 
             string relDirPath = Path.Combine(
                 pathPartsArr);

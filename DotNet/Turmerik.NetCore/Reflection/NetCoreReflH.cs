@@ -13,5 +13,9 @@ namespace Turmerik.NetCore.Reflection
     public static class NetCoreReflH
     {
         public static readonly TypeTupleCore DateOnlyType = new(typeof(DateOnly));
+
+        public static readonly TypeTupleCore DelegateType = new(typeof(Delegate));
+
+        public static readonly TypeTupleCore MulticastDelegateType = new(typeof(MulticastDelegate));
     }
 }

@@ -303,6 +303,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 retAsmb.TypesMap.Add(
                     wka.VoidType.IdnfName,
                     wka.VoidType);
+
+                retAsmb.TypesMap.Add(
+                    wka.DelegateType.IdnfName,
+                    wka.DelegateType);
             }
 
             return retAsmb;
@@ -338,7 +342,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 Dictionary<string, AssemblyItem>? asmbMap = null,
                 TypeItemCore? rootObject = null,
                 TypeItemCore? rootValueType = null,
-                TypeItemCore? voidType = null)
+                TypeItemCore? voidType = null,
+                TypeItemCore? delegateType = null,
+                TypeItemCore? multicastDelegateType = null)
             {
                 Opts = opts;
                 Context = context;
@@ -358,6 +364,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     TypeItemKind.VoidType,
                     ReflH.VoidType.Type.Name,
                     ReflH.VoidType.FullName!);
+
+                DelegateType = delegateType ?? new TypeItemCore(
+                    TypeItemKind.Delegate,
+                    NetCoreReflH.DelegateType.Type.Name,
+                    NetCoreReflH.DelegateType.FullName!);
+
+                MulticastDelegateType = multicastDelegateType ?? new TypeItemCore(
+                    TypeItemKind.Delegate,
+                    NetCoreReflH.MulticastDelegateType.Type.Name,
+                    NetCoreReflH.MulticastDelegateType.FullName!);
             }
 
             public AssemblyLoaderOpts Opts { get; init; }
@@ -366,6 +382,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             public TypeItemCore RootObject { get; init; }
             public TypeItemCore RootValueType { get; init; }
             public TypeItemCore VoidType { get; init; }
+            public TypeItemCore DelegateType { get; init; }
+            public TypeItemCore MulticastDelegateType { get; init; }
         }
 
         public class TypeIdnfParts

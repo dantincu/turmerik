@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -43,7 +44,14 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 if (!TryLoadGenericInteropType(
                     wka, type, out retItem))
                 {
-                    retItem = LoadTypeCore(wka, type);
+                    if (IsDelegateType(wka, type))
+                    {
+                        retItem = LoadGenericDelegateType(wka, type);
+                    }
+                    else
+                    {
+                        retItem = LoadRegularType(wka, type);
+                    }
                 }
             }
             else
@@ -59,6 +67,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 else if (type.IsGenericParameter)
                 {
                     retItem = LoadGenericParamType(wka, type);
+                }
+                else if (IsDelegateType(wka, type))
+                {
+                    retItem = LoadDelegateType(wka, type);
                 }
                 else
                 {
@@ -81,45 +93,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     }
                 }
 
-            }
-
-            return retItem;
-        }
-
-        private TypeItemCoreBase LoadTypeCore(
-            WorkArgs wka,
-            Type type)
-        {
-            TypeItemCoreBase retItem = null;
-
-            if (type.IsArray)
-            {
-                retItem = LoadArrayType(wka, type);
-            }
-            else if (type.IsEnum)
-            {
-                retItem = LoadEnumType(wka, type);
-            }
-            else if (type.IsGenericParameter)
-            {
-                retItem = LoadGenericParamType(wka, type);
-            }
-            else
-            {
-                bool loaded = false;
-
-                if (!type.IsGenericType && (type.Namespace?.StartsWith(
-                    ReflH.BaseObjectType.Type.Namespace!) ?? false))
-                {
-                    loaded = TryLoadPrimitiveType(
-                        wka, type, out retItem);
-                }
-
-                if (!loaded)
-                {
-                    retItem = LoadRegularType(
-                        wka, type);
-                }
             }
 
             return retItem;
@@ -157,23 +130,17 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             WorkArgs wka,
             Type type)
         {
-            var retItem = new EnumTypeItem(
+            var retItem = GetIdnfNameFactories(
+                null as EnumTypeItem,
+                type,
+                out var idnfNameFactory,
+                out var fullIdnfNamefactory);
+
+            retItem = new (
                     TypeItemKind.Enum,
                     item => type.Name,
-                    item => (item.DeclaringType != null) switch
-                    {
-                        true => string.Join("+",
-                            item.DeclaringType.Value.IdnfName,
-                            type.Name),
-                        false => type.FullName!
-                    },
-                    item => (item.DeclaringType != null) switch
-                    {
-                        true => string.Join(".",
-                            item.DeclaringType.Value.FullIdnfName,
-                            type.Name),
-                        false => type.FullName!
-                    })
+                    idnfNameFactory,
+                    fullIdnfNamefactory)
             {
                 DeclaringType = type.DeclaringType?.With(
                         declaringType => new Lazy<TypeItemCoreBase>(
@@ -190,6 +157,108 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             };
 
             return retItem;
+        }
+
+        private DelegateTypeItem LoadDelegateType(
+            WorkArgs wka,
+            Type type)
+        {
+            (var retType, var @params) = LoadDelegateTypeCore(
+                wka, type, out var declaringType);
+
+            var retItem = GetIdnfNameFactories(
+                null as DelegateTypeItem,
+                type,
+                out var idnfNameFactory,
+                out var fullIdnfNamefactory);
+
+            retItem = new (
+                TypeItemKind.Delegate,
+                item => type.Name,
+                idnfNameFactory,
+                fullIdnfNamefactory)
+            {
+                DeclaringType = declaringType
+            };
+
+            return retItem;
+        }
+
+        private GenericDelegateTypeItem LoadGenericDelegateType(
+            WorkArgs wka,
+            Type type)
+        {
+            (var retType, var @params) = LoadDelegateTypeCore(
+                wka, type, out var declaringType);
+
+            var retItem = GetIdnfNameFactories(
+                null as GenericDelegateTypeItem,
+                type,
+                out var idnfNameFactory,
+                out var fullIdnfNamefactory);
+
+            retItem = new (
+                TypeItemKind.GenericDelegate,
+                item => type.Name,
+                idnfNameFactory,
+                fullIdnfNamefactory)
+            {
+                DeclaringType = declaringType,
+                GenericTypeArgs = type.GetGenericArguments().Select(
+                    arg => new Lazy<GenericTypeArg>(() => arg.IsGenericTypeParameter switch
+                    {
+                        true => new GenericTypeArg
+                        {
+                            Param = new GenericTypeParameter(
+                                TypeItemKind.GenericParam)
+                            {
+                                GenericParamPosition = arg.GenericParameterPosition,
+                                Name = arg.Name,
+                                ParamConstraints = arg.GetGenericParameterConstraints().With(
+                                    constraintsArr => GetGenericTypeParamConstraints(
+                                        wka, arg, constraintsArr)),
+                            },
+                            DeclaringType = retItem,
+                            BelongsToDeclaringType = type.DeclaringType == type
+                        },
+                        false => new GenericTypeArg
+                        {
+                            TypeArg = arg.IsGenericTypeParameter switch
+                            {
+                                false => LoadType(wka, arg),
+                                _ => null
+                            }
+                        }
+                    })).RdnlC()
+            };
+
+            return retItem;
+        }
+
+        private Tuple<Lazy<TypeItemCoreBase>, ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>>> LoadDelegateTypeCore(
+            WorkArgs wka,
+            Type type,
+            out Lazy<TypeItemCoreBase>? declaringType)
+        {
+            declaringType = null;
+
+            if (type.IsNested)
+            {
+                declaringType = new (() => LoadType(wka, type.DeclaringType!));
+            }
+
+            var invokeMethod = type.GetMethod("Invoke") ?? throw new InvalidOperationException(
+                $"If type {type} were a delegate type, it would contain a method called 'Invoke'");
+
+            var retTypeItem = new Lazy<TypeItemCoreBase>(() => LoadType(wka,
+                invokeMethod!.ReturnType));
+
+            var @params = invokeMethod.GetParameters().ToDictionary(
+                param => param.Name,
+                param => new Lazy<TypeItemCoreBase>(
+                    () => LoadType(wka, param.ParameterType))).RdnlD();
+
+            return Tuple.Create(retTypeItem, @params)!;
         }
 
         private TypeItemCoreBase LoadGenericParamType(
@@ -323,7 +392,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 if (retItem is GenericTypeItem genericItem)
                 {
                     fullIdnfName = string.Join("`",
-                        ReflH.GetTypeDisplayName(type.Name, '`'),
+                        type.GetTypeShortDisplayName(),
                         string.Join(",", genericItem.GenericTypeArgs.Where(arg => arg.Value.With(
                             argVal => argVal.TypeArg != null || argVal.BelongsToDeclaringType)).Select(
                                 arg => arg.Value.FullIdnfName)));
@@ -365,7 +434,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 }).Split(".").RdnlC();
 
                 return new TypeIdnf(type, asmbItem, type.Name,
-                    ReflH.GetTypeDisplayName(type.Name, '`'),
+                    type.GetTypeShortDisplayName(),
                     idnfName, fullIdnfName)
                 {
                     Namespace = type.Namespace,
@@ -464,7 +533,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 GenericTypeItem genericTypeItem = null;
 
                 genericTypeItem = new GenericTypeItem(
-                    TypeItemKind.Regular,
+                    TypeItemKind.GenericRegular,
                     item => item.Idnf.Value.ShortName,
                     item => item.Idnf.Value.IdnfName,
                     item => item.Idnf.Value.FullIdnfName)
@@ -616,6 +685,32 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             return idnfName;
         }
 
+        private TTypeItem? GetIdnfNameFactories<TTypeItem>(
+            TTypeItem? typeItem,
+            Type type,
+            out Func<TTypeItem, string> idnfNameFactory,
+            out Func<TTypeItem, string> fullIdnfNameFactory)
+            where TTypeItem : TypeItemCore<TTypeItem>
+        {
+            idnfNameFactory = item => (item.DeclaringType != null) switch
+            {
+                true => string.Join("+",
+                    item.DeclaringType.Value.IdnfName,
+                    type.Name),
+                false => type.FullName!
+            };
+
+            fullIdnfNameFactory = item => (item.DeclaringType != null) switch
+            {
+                true => string.Join(".",
+                    item.DeclaringType.Value.FullIdnfName,
+                    type.Name),
+                false => type.FullName!
+            };
+
+            return typeItem;
+        }
+
         private void AddDependencies(
             List<Lazy<TypeItemCoreBase?>> list,
             IEnumerable<Lazy<GenericTypeArg>?> itemsToAdd) => AddDependencies(
@@ -644,5 +739,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         private bool IsDependency(
             TypeItemCoreBase? typeItem) => typeItem?.Kind == TypeItemKind.Regular;
+
+        private bool IsDelegateType(
+            WorkArgs wka,
+            Type type)
+        {
+            bool retVal = type.BaseType?.FullName == wka.MulticastDelegateType.FullIdnfName;
+            return retVal;
+        }
     }
 }
