@@ -365,7 +365,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 }).Split(".").RdnlC();
 
                 return new TypeIdnf(type, asmbItem, type.Name,
-                    ReflH.GetTypeDisplayName(type.Name),
+                    ReflH.GetTypeDisplayName(type.Name, '`'),
                     idnfName, fullIdnfName)
                 {
                     Namespace = type.Namespace,
@@ -412,19 +412,20 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     PubInstnMethods = wka.Opts.LoadPubInstnMethods switch
                     {
                         true => type.GetMethods(
-                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Select(
-                            method => new MethodItem(method, method.Name)
-                            {
-                                IsStatic = false,
-                                IsVoidMethod = type.GetTypeFullDisplayName(
-                                    null) == ReflH.VoidType.FullName,
-                                ReturnType = new Lazy<TypeItemCoreBase>(
-                                    () => LoadType(wka, method.ReturnType)),
-                                Params = method.GetParameters().Where(
-                                    param => param.Name != null).ToDictionary(
-                                    param => param.Name!, param => new Lazy<TypeItemCoreBase>(
-                                        () => LoadType(wka, param.ParameterType))).RdnlD()
-                            }).RdnlC(),
+                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Where(
+                                method => !method.IsSpecialName).Select(
+                                method => new MethodItem(method, method.Name)
+                                {
+                                    IsStatic = false,
+                                    IsVoidMethod = type.GetTypeFullDisplayName(
+                                        null) == ReflH.VoidType.FullName,
+                                    ReturnType = new Lazy<TypeItemCoreBase>(
+                                        () => LoadType(wka, method.ReturnType)),
+                                    Params = method.GetParameters().Where(
+                                        param => param.Name != null).ToDictionary(
+                                        param => param.Name!, param => new Lazy<TypeItemCoreBase>(
+                                            () => LoadType(wka, param.ParameterType))).RdnlD()
+                                }).RdnlC(),
                         _ => null
                     },
                     AllTypeDependencies = new Lazy<System.Collections.ObjectModel.ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(
