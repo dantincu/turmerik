@@ -204,32 +204,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 fullIdnfNamefactory)
             {
                 DeclaringType = declaringType,
-                GenericTypeArgs = type.GetGenericArguments().Select(
-                    arg => new Lazy<GenericTypeArg>(() => arg.IsGenericTypeParameter switch
-                    {
-                        true => new GenericTypeArg
-                        {
-                            Param = new GenericTypeParameter(
-                                TypeItemKind.GenericParam)
-                            {
-                                GenericParamPosition = arg.GenericParameterPosition,
-                                Name = arg.Name,
-                                ParamConstraints = arg.GetGenericParameterConstraints().With(
-                                    constraintsArr => GetGenericTypeParamConstraints(
-                                        wka, arg, constraintsArr)),
-                            },
-                            DeclaringType = retItem,
-                            BelongsToDeclaringType = type.DeclaringType == type
-                        },
-                        false => new GenericTypeArg
-                        {
-                            TypeArg = arg.IsGenericTypeParameter switch
-                            {
-                                false => LoadType(wka, arg),
-                                _ => null
-                            }
-                        }
-                    })).RdnlC()
+                GenericTypeArgs = GetGenericTypeArgs(
+                    wka, type.GetGenericArguments(),
+                    type, t => t, null)
             };
 
             return retItem;
@@ -483,21 +460,45 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                         true => type.GetMethods(
                             BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Where(
                                 method => !method.IsSpecialName).Select(
-                                method => new MethodItem(method, method.Name)
+                                method =>
                                 {
-                                    IsStatic = false,
-                                    IsVoidMethod = type.GetTypeFullDisplayName(
-                                        null) == ReflH.VoidType.FullName,
-                                    ReturnType = new Lazy<TypeItemCoreBase>(
-                                        () => LoadType(wka, method.ReturnType)),
-                                    Params = method.GetParameters().Where(
+                                    var isVoidMethod = type.GetTypeFullDisplayName(
+                                        null) == ReflH.VoidType.FullName;
+
+                                    var returnType = new Lazy<TypeItemCoreBase>(
+                                        () => LoadType(wka, method.ReturnType));
+
+                                    var @params = method.GetParameters().Where(
                                         param => param.Name != null).ToDictionary(
                                         param => param.Name!, param => new Lazy<TypeItemCoreBase>(
-                                            () => LoadType(wka, param.ParameterType))).RdnlD()
+                                            () => LoadType(wka, param.ParameterType))).RdnlD();
+
+                                    var retObj = method.IsGenericMethod switch
+                                    {
+                                        true => new GenericMethodItem(method, method.Name)
+                                        {
+                                            IsStatic = false,
+                                            IsVoidMethod = isVoidMethod,
+                                            ReturnType = returnType,
+                                            Params = @params,
+                                            GenericMethodArgs = GetGenericTypeArgs(
+                                                wka, method.GetGenericArguments(),
+                                                method, m => m.DeclaringType, null)
+                                        },
+                                        false => new MethodItem(method, method.Name)
+                                        {
+                                            IsStatic = false,
+                                            IsVoidMethod = isVoidMethod,
+                                            ReturnType = returnType,
+                                            Params = @params
+                                        }
+                                    };
+
+                                    return retObj;
                                 }).RdnlC(),
                         _ => null
                     },
-                    AllTypeDependencies = new Lazy<System.Collections.ObjectModel.ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(
+                    AllTypeDependencies = new Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(
                         () =>
                         {
                             var retList = typeData!.InterfaceTypes.ToList();
@@ -520,6 +521,20 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                             {
                                 AddDependencies(retList, genericInteropTypeItem.GenericTypeArgs);
                             }
+                            else if (retItem is DelegateTypeItem delegateTypeItem)
+                            {
+                                AddDependencies(retList, delegateTypeItem.ReturnType.Arr(
+                                    delegateTypeItem.Params.Select(
+                                        param => param.Value).ToArray()));
+                            }
+                            else if (retItem is GenericDelegateTypeItem genericDelegateTypeItem)
+                            {
+                                AddDependencies(retList, genericDelegateTypeItem.ReturnType.Arr(
+                                    genericDelegateTypeItem.Params.Select(
+                                        param => param.Value).ToArray()));
+
+                                AddDependencies(retList, genericDelegateTypeItem.GenericTypeArgs);
+                            }
 
                             return retList.RdnlC();
                         })
@@ -541,32 +556,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     Idnf = idnfFactory,
                     Data = dataFactory,
                     DeclaringType = declaringTypeItem,
-                    GenericTypeArgs = type.GetGenericArguments().Select(
-                        arg => new Lazy<GenericTypeArg>(() => arg.IsGenericTypeParameter switch
-                        {
-                            true => new GenericTypeArg
-                            {
-                                Param = new GenericTypeParameter(
-                                    TypeItemKind.GenericParam)
-                                {
-                                    GenericParamPosition = arg.GenericParameterPosition,
-                                    Name = arg.Name,
-                                    ParamConstraints = arg.GetGenericParameterConstraints().With(
-                                        constraintsArr => GetGenericTypeParamConstraints(
-                                            wka, arg, constraintsArr)),
-                                },
-                                DeclaringType = genericTypeItem,
-                                BelongsToDeclaringType = type.DeclaringType == type
-                            },
-                            false => new GenericTypeArg
-                            {
-                                TypeArg = arg.IsGenericTypeParameter switch
-                                {
-                                    false => LoadType(wka, arg),
-                                    _ => null
-                                }
-                            }
-                        })).RdnlC()
+                    GenericTypeArgs = GetGenericTypeArgs(
+                        wka,  type.GetGenericArguments(),
+                        type, t => t,
+                        genericTypeItem)
                 };
 
                 retItem = genericTypeItem;
@@ -587,6 +580,38 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             return retItem;
         }
+
+        private ReadOnlyCollection<Lazy<GenericTypeArg>> GetGenericTypeArgs<TItemInfo>(
+            WorkArgs wka,
+            Type[] genericArgs,
+            TItemInfo itemInfo,
+            Func<TItemInfo, Type> declaringTypeFactory,
+            TypeItemCoreBase? declaringType) => genericArgs.Select(
+                arg => new Lazy<GenericTypeArg>(() => arg.IsGenericTypeParameter switch
+                {
+                    true => new GenericTypeArg
+                    {
+                        Param = new GenericTypeParameter(
+                            TypeItemKind.GenericParam)
+                        {
+                            GenericParamPosition = arg.GenericParameterPosition,
+                            Name = arg.Name,
+                            ParamConstraints = arg.GetGenericParameterConstraints().With(
+                                constraintsArr => GetGenericTypeParamConstraints(
+                                    wka, arg, constraintsArr)),
+                        },
+                        DeclaringType = declaringType ?? LoadType(wka, arg.DeclaringType!),
+                        BelongsToDeclaringType = declaringTypeFactory(itemInfo) == arg.DeclaringType
+                    },
+                    false => new GenericTypeArg
+                    {
+                        TypeArg = arg.IsGenericTypeParameter switch
+                        {
+                            false => LoadType(wka, arg),
+                            _ => null
+                        }
+                    }
+                })).RdnlC();
 
         private GenericTypeParamConstraints GetGenericTypeParamConstraints(
             WorkArgs wka,

@@ -481,6 +481,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
         }
 
-        public ReadOnlyCollection<Lazy<GenericTypeArg>>? GenericTypeArgs { get; init; }
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericMethodArgs { get; init; }
     }
 }

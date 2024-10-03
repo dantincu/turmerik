@@ -26,6 +26,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             {
                 AddRegularTypeTsCodeLines(retList, wka, typeItem);
             }
+            else if (wka.TypeKvp.Value is DelegateTypeItem delegateTypeItem)
+            {
+                AddDelegateTypeTsCodeLines(retList, wka, delegateTypeItem);
+            }
+            else if (wka.TypeKvp.Value is GenericDelegateTypeItem genericDelegateTypeItem)
+            {
+                AddGenericDelegateTypeTsCodeLines(retList, wka, genericDelegateTypeItem);
+            }
             else if (wka.TypeKvp.Value is GenericTypeItem genericTypeItem)
             {
                 AddGenericTypeTsCodeLines(
@@ -72,6 +80,34 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 retList, wka, genericTypeItem,
                 genericTypeNamePart,
                 genericTypeDeclrNamePart);
+        }
+
+        private void AddGenericDelegateTypeTsCodeLines(
+            List<string> retList,
+            TsCodeWorkArgs wka,
+            GenericDelegateTypeItem typeItem) => AddDelegateTypeTsCodeLinesCore(
+                retList, wka, typeItem, typeItem.GenericTypeArgs);
+
+        private void AddDelegateTypeTsCodeLines(
+            List<string> retList,
+            TsCodeWorkArgs wka,
+            DelegateTypeItem typeItem) => AddDelegateTypeTsCodeLinesCore(
+                retList, wka, typeItem, null);
+
+        private void AddDelegateTypeTsCodeLinesCore<TDelegateTypeItem>(
+            List<string> retList,
+            TsCodeWorkArgs wka,
+            TDelegateTypeItem typeItem,
+            ReadOnlyCollection<Lazy<GenericTypeArg>>? genericMethodArgs)
+            where TDelegateTypeItem : DelegateTypeItem<TDelegateTypeItem>
+        {
+            var methodTsCode = GetMethodDefTsCode(
+                wka, typeItem.ReturnType,
+                typeItem.Params,
+                genericMethodArgs);
+
+            methodTsCode = $"export type {typeItem.ShortName} = {methodTsCode};";
+            retList.Add(methodTsCode);
         }
 
         private void AddTsIntfCodeLines<TTypeItem>(
@@ -188,37 +224,40 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         private string GetMethodTsCodeLine(
             TsCodeWorkArgs wka,
-            MethodItem method)
+            MethodItem method) => IntfMember(
+                wka, method.Name, GetMethodDefTsCode(
+                wka, method.ReturnType, method.Params,
+                (method as GenericMethodItem)?.GenericMethodArgs));
+
+        private string GetMethodDefTsCode(
+            TsCodeWorkArgs wka,
+            Lazy<TypeItemCoreBase> returnType,
+            ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>> @params,
+            ReadOnlyCollection<Lazy<GenericTypeArg>>? genericMethodArgs)
         {
-            var retStrPartsList = new List<string>
-            {
-                wka.PgArgs.Config.TsTabStr,
-                method.Name,
-                ": ("
-            };
+            var genericMethodArgsStr = genericMethodArgs?.With(
+                args => GetGenericArgsTsNamePart(wka, args, true));
 
             wka.PushIdentifierNames();
 
             var paramsStr = string.Join(",",
-                method.Params.Select(
+                @params.Select(
                     param => GetUniqueIdentifier(
                     wka, param.Key).With(paramName => string.Join(
                         ": ", paramName, GetTypeItemFromMap(
                             wka, param.Value.Value).Key))));
 
             wka.PopIdentifierNames();
-            paramsStr = $"({paramsStr})";
+            paramsStr = $"{genericMethodArgsStr}({paramsStr})";
 
-            var returnTypeStr = method.ReturnType.Value.With(
+            var returnTypeStr = returnType.Value.With(
                 returnType => returnType.Kind switch
                 {
                     TypeItemKind.VoidType => "void",
                     _ => GetTypeItemFromMap(wka, returnType).Key
                 });
 
-            string retStr = IntfMember(wka, method.Name,
-                $"({paramsStr}) => {returnTypeStr}");
-
+            string retStr = $"({paramsStr}) => {returnTypeStr}";
             return retStr;
         }
 
@@ -239,8 +278,26 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         private string GetGenericTsTypeNamePart(
             TsCodeWorkArgs wka,
             GenericTypeItem genericTypeItem,
+            bool isForDeclr) => GetGenericArgsTsNamePart(
+                wka, genericTypeItem.GenericTypeArgs, isForDeclr);
+
+        private string GetGenericTsTypeNamePart(
+            TsCodeWorkArgs wka,
+            GenericDelegateTypeItem genericDelegateTypeItem,
+            bool isForDeclr) => GetGenericArgsTsNamePart(
+                wka, genericDelegateTypeItem.GenericTypeArgs, isForDeclr);
+
+        private string GetGenericTsTypeNamePart(
+            TsCodeWorkArgs wka,
+            GenericMethodItem genericMethodItem,
+            bool isForDeclr) => GetGenericArgsTsNamePart(
+                wka, genericMethodItem.GenericMethodArgs, isForDeclr);
+
+        private string GetGenericArgsTsNamePart(
+            TsCodeWorkArgs wka,
+            ReadOnlyCollection<Lazy<GenericTypeArg>> genericArgs,
             bool isForDeclr) => string.Concat(
-                "<", string.Join(",", genericTypeItem.GenericTypeArgs.Select(
+                "<", string.Join(",", genericArgs.Select(
                     arg => GetGenericTsTypeArgNamePart(
                         wka, arg.Value, isForDeclr))), ">");
 
@@ -325,12 +382,24 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             {
                 retStr = GetTypeItemFromMap(wka, regularTypeItem).Key;
             }
+            else if (typeItem is DelegateTypeItem delegateTypeItem)
+            {
+                retStr = GetTypeItemFromMap(wka, delegateTypeItem).Key;
+            }
             else if (typeItem is GenericTypeItem genericTypeItem)
             {
                 var genericTypeArgsStr = GetGenericTsTypeNamePart(
                     wka, genericTypeItem, false);
 
                 retStr = GetTypeItemFromMap(wka, genericTypeItem).Key;
+                retStr += genericTypeArgsStr;
+            }
+            else if (typeItem is GenericDelegateTypeItem genericDelegateTypeItem)
+            {
+                var genericTypeArgsStr = GetGenericTsTypeNamePart(
+                    wka, genericDelegateTypeItem, false);
+
+                retStr = GetTypeItemFromMap(wka, genericDelegateTypeItem).Key;
                 retStr += genericTypeArgsStr;
             }
             else

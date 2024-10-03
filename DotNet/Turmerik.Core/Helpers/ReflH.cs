@@ -75,11 +75,11 @@ namespace Turmerik.Core.Helpers
 
         public static string GetTypeShortDisplayName(
             this Type type) => GetTypeDisplayName(
-                type.FullName, '`');
+                type.Name, '`');
 
         public static string GetTypeShortDisplayName(
-            string typeFullName) => GetTypeDisplayName(
-                typeFullName, '`');
+            string typeName) => GetTypeDisplayName(
+                typeName, '`');
 
         public static Type GetBaseType(
             Type type)
