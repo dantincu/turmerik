@@ -3,10 +3,12 @@
     "base": {
       "Map": {
         "a": "articles",
+        "chnl": "channels",
         "ctr": "countries",
         "dstr": "distros",
         "fx": "frameworks",
         "fxlbr": "frameworks-and-libraries",
+        "g": "groups",
         "gr": "geographical-regions",
         "isl": "islands",
         "lbr": "libraries",
@@ -14,6 +16,7 @@
         "mps": "my-products-and-services",
         "org": "organizations",
         "p": "persons",
+        "pg": "pages",
         "pl": "places",
         "plgr": "places-and-geographical-regions",
         "plrg": "places-and-regions",
@@ -29,6 +32,7 @@
         "art": "artists",
         "athl": "athletes",
         "cl": "clubs",
+        "crmn": "criminality",
         "cps": "composers",
         "cpz": "compozitions",
         "cdip": "conductors-and-interpreters",

@@ -4,6 +4,11 @@
     "$articles$",
     ":="
   ],
+  "chnl": [
+    ":s",
+    "$channels$",
+    ":="
+  ],
   "ctr": [
     ":s",
     "$countries$",
@@ -22,6 +27,11 @@
   "fxlbr": [
     ":s",
     "$frameworks-and-libraries$",
+    ":="
+  ],
+  "g": [
+    ":s",
+    "$groups$",
     ":="
   ],
   "gr": [
@@ -57,6 +67,11 @@
   "p": [
     ":s",
     "$persons$",
+    ":="
+  ],
+  "pg": [
+    ":s",
+    "$pages$",
     ":="
   ],
   "pl": [

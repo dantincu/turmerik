@@ -19,6 +19,11 @@
     "$clubs$",
     ":="
   ],
+  "crmn": [
+    ":s",
+    "$criminality$",
+    ":="
+  ],
   "cps": [
     ":s",
     "$composers$",
