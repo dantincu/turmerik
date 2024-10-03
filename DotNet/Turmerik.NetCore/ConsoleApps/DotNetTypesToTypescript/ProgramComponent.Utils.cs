@@ -41,17 +41,108 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     false => wka.PgArgs.Profile.DestnExternalAssemblliesDirName
                 };
 
-                retPath = Path.Combine(wka.PgArgs.Profile.DirPaths.DestnPath, dirName);
+                retPath = GetAsmbDestnDirBasePath(
+                    wka, isTurmerikAssembly);
             }
 
             return retPath;
         }
 
-        private string GetTypeDestnRelDirPath(
+        private string GetAsmbDestnDirPath(
+            CsProjAsmbWorkArgs wka,
+            AssemblyItem asmbItem) => GetAsmbDestnDirBasePath(
+                wka,
+                wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
+                    asmbItem.BclItem));
+
+        private string GetAsmbDestnDirBasePath(
+            CsProjAsmbWorkArgs wka,
+            bool isTurmerikAssembly)
+        {
+            string dirName = isTurmerikAssembly switch
+            {
+                true => wka.PgArgs.Profile.DestnCsProjectAssembliesDirName,
+                false => wka.PgArgs.Profile.DestnExternalAssemblliesDirName
+            };
+
+            string retPath = Path.Combine(wka.PgArgs.Profile.DirPaths.DestnPath, dirName);
+            return retPath;
+        }
+
+        private string GetTypeDestnRelFilePath(
             TypeWorkArgs wka,
+            string trgFilePath,
+            TypeItemCoreBase depTypeItem)
+        {
+            string depFilePath = GetTypeDestnFilePath(
+                wka, depTypeItem, out _);
+
+            string typeDestnRelFilePath = GetTypeDestnRelFilePath(
+                trgFilePath, depFilePath);
+
+            return typeDestnRelFilePath;
+        }
+
+        private string GetTypeDestnRelFilePath(
+            string trgFilePath,
+            string depFilePath)
+        {
+            var trgPathPartsArr = trgFilePath.Split(
+                ['/', '\\']);
+
+            var depPathPartsArr = trgFilePath.Split(
+                ['/', '\\']);
+
+            var firstDiffKvp = trgPathPartsArr.FirstKvp(
+                (str, idx) => str != depPathPartsArr[idx]);
+
+            var retPathPartsList = Enumerable.Range(0,
+                trgPathPartsArr.Length - firstDiffKvp.Key - 1).Select(
+                idx => "..").ToList();
+
+            retPathPartsList.AddRange(
+                depPathPartsArr.Skip(
+                    firstDiffKvp.Key + 1));
+
+            string retPath = Path.Combine(
+                retPathPartsList.ToArray());
+
+            return retPath;
+        }
+
+        private string GetTypeDestnFilePath(
+            TypeWorkArgs wka,
+            TypeItemCoreBase typeItem,
             out string shortTypeName)
         {
-            var relNsPartsArr = wka.TypeKvp.Key.Split('.');
+            var idnfItem = typeItem.GetIdnf().Value;
+            var asmbItem = idnfItem.AssemblyItem;
+
+            string asmbDirPath = GetAsmbDestnDirPath(
+                wka, asmbItem);
+
+            string relDirPath = GetTypeDestnRelDirPath(
+                wka, idnfItem.IdnfName,
+                out shortTypeName);
+
+            string dirPath = Path.Combine(
+                asmbDirPath, relDirPath);
+
+            Directory.CreateDirectory(dirPath);
+
+            string filePath = Path.Combine(
+                dirPath,
+                wka.PgArgs.Profile.TypeDefFileName);
+
+            return filePath;
+        }
+
+        private string GetTypeDestnRelDirPath(
+            TypeWorkArgs wka,
+            string fullTypeName,
+            out string shortTypeName)
+        {
+            var relNsPartsArr = fullTypeName.Split('.');
             shortTypeName = relNsPartsArr.Last();
 
             var pathPartsArr = relNsPartsArr.Select(
@@ -59,7 +150,8 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     wka.PgArgs.Profile.TypesHcyNodeDirName,
                     part)).ToArray();
 
-            shortTypeName = ReflH.GetTypeShortDisplayName(shortTypeName);
+            shortTypeName = ReflH.GetTypeShortDisplayName(
+                shortTypeName);
 
             string relDirPath = Path.Combine(
                 pathPartsArr);

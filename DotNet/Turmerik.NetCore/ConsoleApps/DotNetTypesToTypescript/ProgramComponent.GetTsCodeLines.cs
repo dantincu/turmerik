@@ -14,9 +14,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     public partial class ProgramComponent
     {
         private List<string> GetTsCodeLines(
-            TsCodeWorkArgs wka)
+            TsCodeWorkArgs wka,
+            string trgTypeFilePath)
         {
-            List<string> retList = [];
+            List<string> retList = GetDependencyImportTsCodeList(
+                wka, trgTypeFilePath);
 
             if (wka.TypeKvp.Value is EnumTypeItem enumTypeItem)
             {
@@ -44,6 +46,43 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             else
             {
                 throw new NotSupportedException();
+            }
+
+            return retList;
+        }
+
+        private List<string> GetDependencyImportTsCodeList(
+            TsCodeWorkArgs wka,
+            string trgTypeFilePath)
+        {
+            var retList = new List<string>();
+
+            if (wka.TypeNamesMap != null)
+            {
+                foreach (var kvp in wka.TypeNamesMap!.Skip(1))
+                {
+                    if (kvp.Value?.Kind >= TypeItemKind.Regular)
+                    {
+                        string idnf = kvp.Key;
+                        string shortName = kvp.Value.ShortName;
+
+                        if (idnf != shortName)
+                        {
+                            idnf = $"{shortName} as {idnf}";
+                        }
+
+                        string filePath = GetTypeDestnRelFilePath(
+                            wka, trgTypeFilePath, kvp.Value);
+
+                        string tsCodeLine = $"import {{{idnf}}} from {filePath};";
+                        retList.Add(tsCodeLine);
+                    }
+                }
+
+                if (retList.Any())
+                {
+                    retList.Add("");
+                }
             }
 
             return retList;
@@ -401,6 +440,10 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
                 retStr = GetTypeItemFromMap(wka, genericDelegateTypeItem).Key;
                 retStr += genericTypeArgsStr;
+            }
+            else if (typeItem is GenericTypeParameter)
+            {
+                retStr = typeItem.IdnfName;
             }
             else
             {

@@ -363,15 +363,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 VoidType = voidType ?? new TypeItemCore(
                     TypeItemKind.VoidType,
                     ReflH.VoidType.Type.Name,
-                    ReflH.VoidType.FullName!);
+                    ReflH.GetTypeShortDisplayName(
+                        ReflH.VoidType.FullName));
 
                 DelegateType = delegateType ?? new TypeItemCore(
-                    TypeItemKind.Delegate,
+                    TypeItemKind.DelegateRoot,
                     NetCoreReflH.DelegateType.Type.Name,
                     NetCoreReflH.DelegateType.FullName!);
 
                 MulticastDelegateType = multicastDelegateType ?? new TypeItemCore(
-                    TypeItemKind.Delegate,
+                    TypeItemKind.DelegateRoot,
                     NetCoreReflH.MulticastDelegateType.Type.Name,
                     NetCoreReflH.MulticastDelegateType.FullName!);
             }

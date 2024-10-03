@@ -15,6 +15,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         RootObject = 0,
         RootValueType,
         VoidType,
+        DelegateRoot,
         Regular,
         GenericRegular,
         String,
@@ -278,8 +279,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
         }
 
+        public Lazy<TypeIdnf> Idnf { get; init; }
         public ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>> Params { get; init; }
         public Lazy<TypeItemCoreBase> ReturnType { get; init; }
+
+        public override Lazy<TypeIdnf>? GetIdnf() => Idnf;
     }
 
     public class DelegateTypeItem : DelegateTypeItem<DelegateTypeItem>
@@ -377,7 +381,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public string ShortName => TypeArg?.ShortName ?? Param!.Name;
         public string IdnfName => TypeArg?.IdnfName ?? Param!.Name;
-        public string FullIdnfName => TypeArg?.FullIdnfName ?? Param!.Name;
+
+        public string FullIdnfName => TypeArg.IfNotNull(
+            typeArg => typeArg?.FullIdnfName, () => Param!.Name);
     }
 
     public class GenericTypeParameter : TypeItemCoreBase

@@ -137,10 +137,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 out var fullIdnfNamefactory);
 
             retItem = new (
-                    TypeItemKind.Enum,
-                    item => type.Name,
-                    idnfNameFactory,
-                    fullIdnfNamefactory)
+                TypeItemKind.Enum,
+                item => ReflH.GetTypeDisplayName(type.Name, ['*', '&']),
+                idnfNameFactory,
+                fullIdnfNamefactory)
             {
                 DeclaringType = type.DeclaringType?.With(
                         declaringType => new Lazy<TypeItemCoreBase>(
@@ -174,11 +174,12 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             retItem = new (
                 TypeItemKind.Delegate,
-                item => type.Name,
+                item => ReflH.GetTypeDisplayName(type.Name, ['*', '&']),
                 idnfNameFactory,
                 fullIdnfNamefactory)
             {
-                DeclaringType = declaringType
+                DeclaringType = declaringType,
+                Idnf = GetTypeIdnfLazy(wka, () => retItem, declaringType, type),
             };
 
             return retItem;
@@ -204,6 +205,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 fullIdnfNamefactory)
             {
                 DeclaringType = declaringType,
+                Idnf = GetTypeIdnfLazy(wka, () => retItem, declaringType, type),
                 GenericTypeArgs = GetGenericTypeArgs(
                     wka, type.GetGenericArguments(),
                     type, t => t, null)
@@ -362,186 +364,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             TypeItemCoreBase retItem = null;
 
-            var idnfFactory = new Lazy<TypeIdnf>(() =>
-            {
-                string fullIdnfName, idnfName = type.Name;
+            var idnfLazy = GetTypeIdnfLazy(
+                wka, () => retItem,
+                declaringTypeItem, type);
 
-                if (retItem is GenericTypeItem genericItem)
-                {
-                    fullIdnfName = string.Join("`",
-                        type.GetTypeShortDisplayName(),
-                        string.Join(",", genericItem.GenericTypeArgs.Where(arg => arg.Value.With(
-                            argVal => argVal.TypeArg != null || argVal.BelongsToDeclaringType)).Select(
-                                arg => arg.Value.FullIdnfName)));
-                }
-                else
-                {
-                    fullIdnfName = type.Name;
-                }
-
-                if (declaringTypeItem != null)
-                {
-                    fullIdnfName = string.Join("+",
-                        declaringTypeItem.Value.FullIdnfName,
-                        fullIdnfName);
-
-                    idnfName = string.Join(".",
-                        declaringTypeItem.Value.IdnfName,
-                        idnfName);
-                }
-                else
-                {
-                    fullIdnfName = string.Join(".",
-                        type.Namespace, fullIdnfName);
-
-                    idnfName = string.Join(".",
-                        type.Namespace, idnfName);
-                }
-
-                var asmbItem = GetAssemblyItem(wka, type.Assembly);
-
-                bool nsStartsWithAsmbPfx = idnfName.StartsWith(
-                    asmbItem.TypeNamesPfx);
-
-                var relNsParts = (nsStartsWithAsmbPfx switch
-                {
-                    true => idnfName.Substring(
-                        asmbItem.TypeNamesPfx.Length),
-                    false => idnfName
-                }).Split(".").RdnlC();
-
-                return new TypeIdnf(type, asmbItem, type.Name,
-                    type.GetTypeShortDisplayName(),
-                    idnfName, fullIdnfName)
-                {
-                    Namespace = type.Namespace,
-                    NsStartsWithAsmbPfx = idnfName.StartsWith(
-                        asmbItem.DefaultNamespace),
-                    RelNsParts = relNsParts
-                };
-            });
-
-            var dataFactory = new Lazy<TypeData>(() =>
-            {
-                TypeData typeData = null;
-
-                typeData = new TypeData
-                {
-                    BaseType = type.BaseType?.With(baseType => new Lazy<TypeItemCoreBase>(
-                        () => LoadType(wka, baseType))),
-                    GenericTypeDefinition = type.IsGenericType ? new Lazy<TypeItemCoreBase>(
-                        () => LoadType(wka, type.GetGenericTypeDefinition())) : null,
-                    InterfaceTypes = type.GetDistinctInterfaces().SelectTypes().Select(
-                        intf => new Lazy<TypeItemCoreBase>(
-                            () => LoadType(wka, intf))).RdnlC(),
-                    IsConstructedGenericType = type.IsConstructedGenericType,
-                    IsGenericMethodParameter = type.IsGenericMethodParameter,
-                    IsGenericParameter = type.IsGenericParameter,
-                    IsGenericTypeDefinition = type.IsGenericTypeDefinition,
-                    IsGenericTypeParameter = type.IsGenericTypeParameter,
-                    IsInterface = type.IsInterface,
-                    IsValueType = type.IsValueType,
-                    PubInstnProps = wka.Opts.LoadPubInstnGetProps switch
-                    {
-                        true => type.GetProperties(
-                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Select(
-                            prop => new PropertyItem(prop, prop.Name)
-                            {
-                                CanRead = prop.CanRead,
-                                CanWrite = prop.CanWrite,
-                                IsStatic = false,
-                                PropertyType = new Lazy<TypeItemCoreBase>(
-                                    () => LoadType(wka, prop.PropertyType))
-                            }).RdnlC(),
-                        _ => null
-                    },
-                    PubInstnMethods = wka.Opts.LoadPubInstnMethods switch
-                    {
-                        true => type.GetMethods(
-                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Where(
-                                method => !method.IsSpecialName).Select(
-                                method =>
-                                {
-                                    var isVoidMethod = type.GetTypeFullDisplayName(
-                                        null) == ReflH.VoidType.FullName;
-
-                                    var returnType = new Lazy<TypeItemCoreBase>(
-                                        () => LoadType(wka, method.ReturnType));
-
-                                    var @params = method.GetParameters().Where(
-                                        param => param.Name != null).ToDictionary(
-                                        param => param.Name!, param => new Lazy<TypeItemCoreBase>(
-                                            () => LoadType(wka, param.ParameterType))).RdnlD();
-
-                                    var retObj = method.IsGenericMethod switch
-                                    {
-                                        true => new GenericMethodItem(method, method.Name)
-                                        {
-                                            IsStatic = false,
-                                            IsVoidMethod = isVoidMethod,
-                                            ReturnType = returnType,
-                                            Params = @params,
-                                            GenericMethodArgs = GetGenericTypeArgs(
-                                                wka, method.GetGenericArguments(),
-                                                method, m => m.DeclaringType, null)
-                                        },
-                                        false => new MethodItem(method, method.Name)
-                                        {
-                                            IsStatic = false,
-                                            IsVoidMethod = isVoidMethod,
-                                            ReturnType = returnType,
-                                            Params = @params
-                                        }
-                                    };
-
-                                    return retObj;
-                                }).RdnlC(),
-                        _ => null
-                    },
-                    AllTypeDependencies = new Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(
-                        () =>
-                        {
-                            var retList = typeData!.InterfaceTypes.ToList();
-                            AddDependencies(retList, [ typeData.BaseType ]);
-                            AddDependencies(retList, [ typeData.GenericTypeDefinition ]);
-
-                            AddDependencies(retList, typeData.PubInstnProps?.Select(
-                                prop => prop.PropertyType) ?? []);
-
-                            AddDependencies(retList, typeData.PubInstnMethods?.SelectMany(
-                                method => method.ReturnType.Arr(
-                                    method.Params.Select(
-                                        param => param.Value).ToArray())) ?? []);
-
-                            if (retItem is GenericTypeItem genericTypeItem)
-                            {
-                                AddDependencies(retList, genericTypeItem.GenericTypeArgs);
-                            }
-                            else if (retItem is GenericInteropTypeItem genericInteropTypeItem)
-                            {
-                                AddDependencies(retList, genericInteropTypeItem.GenericTypeArgs);
-                            }
-                            else if (retItem is DelegateTypeItem delegateTypeItem)
-                            {
-                                AddDependencies(retList, delegateTypeItem.ReturnType.Arr(
-                                    delegateTypeItem.Params.Select(
-                                        param => param.Value).ToArray()));
-                            }
-                            else if (retItem is GenericDelegateTypeItem genericDelegateTypeItem)
-                            {
-                                AddDependencies(retList, genericDelegateTypeItem.ReturnType.Arr(
-                                    genericDelegateTypeItem.Params.Select(
-                                        param => param.Value).ToArray()));
-
-                                AddDependencies(retList, genericDelegateTypeItem.GenericTypeArgs);
-                            }
-
-                            return retList.RdnlC();
-                        })
-                };
-
-                return typeData;
-            });
+            var dataLazy = GetTypeDataLazy(
+                wka, () => retItem,
+                declaringTypeItem, type);
 
             if (type.IsGenericType)
             {
@@ -553,8 +382,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     item => item.Idnf.Value.IdnfName,
                     item => item.Idnf.Value.FullIdnfName)
                 {
-                    Idnf = idnfFactory,
-                    Data = dataFactory,
+                    Idnf = idnfLazy,
+                    Data = dataLazy,
                     DeclaringType = declaringTypeItem,
                     GenericTypeArgs = GetGenericTypeArgs(
                         wka,  type.GetGenericArguments(),
@@ -572,8 +401,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     item => item.Idnf.Value.IdnfName,
                     item => item.Idnf.Value.FullIdnfName)
                     {
-                        Idnf = idnfFactory,
-                        Data = dataFactory,
+                        Idnf = idnfLazy,
+                        Data = dataLazy,
                         DeclaringType = declaringTypeItem
                 };
             }
@@ -686,6 +515,211 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             return typeObj;
         }
 
+        private Lazy<TypeIdnf> GetTypeIdnfLazy(
+            WorkArgs wka,
+            Func<TypeItemCoreBase> retItemFactory,
+            Lazy<TypeItemCoreBase>? declaringTypeItem,
+            Type type)
+        {
+            var idnfLazy = new Lazy<TypeIdnf>(() =>
+            {
+                string fullIdnfName, idnfName = type.Name;
+
+                if (retItemFactory() is GenericTypeItem genericItem)
+                {
+                    fullIdnfName = string.Join("`",
+                        type.GetTypeShortDisplayName(),
+                        string.Join(",", genericItem.GenericTypeArgs.Where(arg => arg.Value.With(
+                            argVal => argVal.TypeArg != null || argVal.BelongsToDeclaringType)).Select(
+                                arg => arg.Value.FullIdnfName)));
+                }
+                else
+                {
+                    fullIdnfName = type.Name;
+                }
+
+                if (declaringTypeItem != null)
+                {
+                    fullIdnfName = string.Join("+",
+                        declaringTypeItem.Value.FullIdnfName,
+                        fullIdnfName);
+
+                    idnfName = string.Join(".",
+                        declaringTypeItem.Value.IdnfName,
+                        idnfName);
+                }
+                else
+                {
+                    fullIdnfName = string.Join(".",
+                        type.Namespace, fullIdnfName);
+
+                    idnfName = string.Join(".",
+                        type.Namespace, idnfName);
+                }
+
+                var asmbItem = GetAssemblyItem(wka, type.Assembly);
+
+                bool nsStartsWithAsmbPfx = idnfName.StartsWith(
+                    asmbItem.TypeNamesPfx);
+
+                var relNsParts = (nsStartsWithAsmbPfx switch
+                {
+                    true => idnfName.Substring(
+                        asmbItem.TypeNamesPfx.Length),
+                    false => idnfName
+                }).Split(".").RdnlC();
+
+                if (fullIdnfName == null)
+                {
+
+                }
+
+                return new TypeIdnf(type, asmbItem, type.Name,
+                    type.GetTypeShortDisplayName(),
+                    idnfName, fullIdnfName)
+                {
+                    Namespace = type.Namespace,
+                    NsStartsWithAsmbPfx = idnfName.StartsWith(
+                        asmbItem.DefaultNamespace),
+                    RelNsParts = relNsParts
+                };
+            });
+
+            return idnfLazy;
+        }
+
+        private Lazy<TypeData> GetTypeDataLazy(
+            WorkArgs wka,
+            Func<TypeItemCoreBase> retItemFactory,
+            Lazy<TypeItemCoreBase>? declaringTypeItem,
+            Type type)
+        {
+            var dataLazy = new Lazy<TypeData>(() =>
+            {
+                TypeData typeData = null;
+
+                typeData = new TypeData
+                {
+                    BaseType = type.BaseType?.With(baseType => new Lazy<TypeItemCoreBase>(
+                        () => LoadType(wka, baseType))),
+                    GenericTypeDefinition = type.IsGenericType ? new Lazy<TypeItemCoreBase>(
+                        () => LoadType(wka, type.GetGenericTypeDefinition())) : null,
+                    InterfaceTypes = type.GetDistinctInterfaces().SelectTypes().Select(
+                        intf => new Lazy<TypeItemCoreBase>(
+                            () => LoadType(wka, intf))).RdnlC(),
+                    IsConstructedGenericType = type.IsConstructedGenericType,
+                    IsGenericMethodParameter = type.IsGenericMethodParameter,
+                    IsGenericParameter = type.IsGenericParameter,
+                    IsGenericTypeDefinition = type.IsGenericTypeDefinition,
+                    IsGenericTypeParameter = type.IsGenericTypeParameter,
+                    IsInterface = type.IsInterface,
+                    IsValueType = type.IsValueType,
+                    PubInstnProps = wka.Opts.LoadPubInstnGetProps switch
+                    {
+                        true => type.GetProperties(
+                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Select(
+                            prop => new PropertyItem(prop, prop.Name)
+                            {
+                                CanRead = prop.CanRead,
+                                CanWrite = prop.CanWrite,
+                                IsStatic = false,
+                                PropertyType = new Lazy<TypeItemCoreBase>(
+                                    () => LoadType(wka, prop.PropertyType))
+                            }).RdnlC(),
+                        _ => null
+                    },
+                    PubInstnMethods = wka.Opts.LoadPubInstnMethods switch
+                    {
+                        true => type.GetMethods(
+                            BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Where(
+                                method => !method.IsSpecialName).Select(
+                                method =>
+                                {
+                                    var isVoidMethod = type.GetTypeFullDisplayName(
+                                        null) == ReflH.VoidType.FullName;
+
+                                    var returnType = new Lazy<TypeItemCoreBase>(
+                                        () => LoadType(wka, method.ReturnType));
+
+                                    var @params = method.GetParameters().Where(
+                                        param => param.Name != null).ToDictionary(
+                                        param => param.Name!, param => new Lazy<TypeItemCoreBase>(
+                                            () => LoadType(wka, param.ParameterType))).RdnlD();
+
+                                    var retObj = method.IsGenericMethod switch
+                                    {
+                                        true => new GenericMethodItem(method, method.Name)
+                                        {
+                                            IsStatic = false,
+                                            IsVoidMethod = isVoidMethod,
+                                            ReturnType = returnType,
+                                            Params = @params,
+                                            GenericMethodArgs = GetGenericTypeArgs(
+                                                wka, method.GetGenericArguments(),
+                                                method, m => m.DeclaringType, null)
+                                        },
+                                        false => new MethodItem(method, method.Name)
+                                        {
+                                            IsStatic = false,
+                                            IsVoidMethod = isVoidMethod,
+                                            ReturnType = returnType,
+                                            Params = @params
+                                        }
+                                    };
+
+                                    return retObj;
+                                }).RdnlC(),
+                        _ => null
+                    },
+                    AllTypeDependencies = new Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(
+                        () =>
+                        {
+                            var retItem = retItemFactory();
+                            var retList = typeData!.InterfaceTypes.ToList();
+                            AddDependencies(retList, [typeData.BaseType]);
+                            AddDependencies(retList, [typeData.GenericTypeDefinition]);
+
+                            AddDependencies(retList, typeData.PubInstnProps?.Select(
+                                prop => prop.PropertyType) ?? []);
+
+                            AddDependencies(retList, typeData.PubInstnMethods?.SelectMany(
+                                method => method.ReturnType.Arr(
+                                    method.Params.Select(
+                                        param => param.Value).ToArray())) ?? []);
+
+                            if (retItem is GenericTypeItem genericTypeItem)
+                            {
+                                AddDependencies(retList, genericTypeItem.GenericTypeArgs);
+                            }
+                            else if (retItem is GenericInteropTypeItem genericInteropTypeItem)
+                            {
+                                AddDependencies(retList, genericInteropTypeItem.GenericTypeArgs);
+                            }
+                            else if (retItem is DelegateTypeItem delegateTypeItem)
+                            {
+                                AddDependencies(retList, delegateTypeItem.ReturnType.Arr(
+                                    delegateTypeItem.Params.Select(
+                                        param => param.Value).ToArray()));
+                            }
+                            else if (retItem is GenericDelegateTypeItem genericDelegateTypeItem)
+                            {
+                                AddDependencies(retList, genericDelegateTypeItem.ReturnType.Arr(
+                                    genericDelegateTypeItem.Params.Select(
+                                        param => param.Value).ToArray()));
+
+                                AddDependencies(retList, genericDelegateTypeItem.GenericTypeArgs);
+                            }
+
+                            return retList.RdnlC();
+                        })
+                };
+
+                return typeData;
+            });
+
+            return dataLazy;
+        }
+
         private string GetTypeIdnfName(
             Type type)
         {
@@ -698,13 +732,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
                 idnfName = string.Join(".",
                     nestedIdnfName,
-                    type.Name);
+                    ReflH.GetTypeDisplayName(type.Name, ['*', '&']));
             }
             else
             {
                 idnfName = string.Join(".",
                     type.Namespace,
-                    type.Name);
+                    ReflH.GetTypeDisplayName(type.Name, ['*', '&']));
             }
 
             return idnfName;
@@ -721,7 +755,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             {
                 true => string.Join("+",
                     item.DeclaringType.Value.IdnfName,
-                    type.Name),
+                    ReflH.GetTypeDisplayName(type.Name, ['*', '&'])),
                 false => type.FullName!
             };
 
@@ -729,7 +763,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             {
                 true => string.Join(".",
                     item.DeclaringType.Value.FullIdnfName,
-                    type.Name),
+                    ReflH.GetTypeDisplayName(type.Name, ['*', '&'])),
                 false => type.FullName!
             };
 

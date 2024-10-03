@@ -127,7 +127,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         public void Run(
             CsProjWorkArgs wka)
         {
-            foreach (var kvp in wka.AsmbMap)
+            foreach (var kvp in wka.AsmbMap.ToArray())
             {
                 Run(new CsProjAsmbWorkArgs(wka, kvp));
             }
@@ -138,7 +138,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             string asmbDirPath = GetAsmbDestnDirPath(wka);
 
-            foreach (var typeKvp in wka.AsmbKvp.Value.TypesMap)
+            foreach (var typeKvp in wka.AsmbKvp.Value.TypesMap.ToArray())
             {
                 Run(new TypeWorkArgs(wka, typeKvp, asmbDirPath));
             }
@@ -147,24 +147,19 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         public void Run(
             TypeWorkArgs wka)
         {
-            string relDirPath = GetTypeDestnRelDirPath(
-                wka, out var shortTypeName);
+            if (wka.TypeKvp.Value.Kind >= TypeItemKind.Regular)
+            {
+                string filePath = GetTypeDestnFilePath(
+                    wka, wka.TypeKvp.Value, out var shortTypeName);
 
-            string dirPath = Path.Combine(
-                wka.AsmbDirPath, relDirPath);
+                var tsCodeLinesList = GetTsCodeLines(
+                    new TsCodeWorkArgs(wka, shortTypeName,
+                        GetTypeDepNames(wka), []),
+                    filePath);
 
-            Directory.CreateDirectory(dirPath);
-
-            string filePath = Path.Combine(
-                dirPath,
-                wka.PgArgs.Profile.TypeDefFileName);
-
-            var tsCodeLinesList = GetTsCodeLines(
-                new TsCodeWorkArgs(wka, shortTypeName,
-                    GetTypeDepNames(wka), []));
-
-            File.WriteAllLines(filePath,
-                tsCodeLinesList.ToArray());
+                File.WriteAllLines(filePath,
+                    tsCodeLinesList.ToArray());
+            }
         }
     }
 }

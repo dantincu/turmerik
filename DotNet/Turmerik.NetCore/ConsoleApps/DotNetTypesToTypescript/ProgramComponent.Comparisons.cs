@@ -95,7 +95,10 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         private int CompareTypes(
             TypeItemCoreBase t1,
-            TypeItemCoreBase t2) => t1.FullIdnfName.CompareTo(
-                t2.FullIdnfName);
+            TypeItemCoreBase t2) => t1.FullIdnfName?.CompareTo(
+                t2.FullIdnfName) ?? (t2.FullIdnfName is null) switch
+                {
+                    true => 0, false => -1
+                };
     }
 }
