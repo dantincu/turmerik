@@ -279,6 +279,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>> @params,
             ReadOnlyCollection<Lazy<GenericTypeArg>>? genericMethodArgs)
         {
+            if (@params == null)
+            {
+
+            }
+
             var genericMethodArgsStr = genericMethodArgs?.With(
                 args => GetGenericArgsTsNamePart(wka, args, true));
 

@@ -167,6 +167,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public virtual Lazy<TypeItemCoreBase>? GetDeclaringType() => null;
         public virtual Lazy<TypeIdnf>? GetIdnf() => null;
         public virtual Lazy<TypeData>? GetData() => null;
+        public virtual Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> GetAllTypeDependencies(
+            ) => new(() => new Lazy<TypeItemCoreBase>[0].RdnlC());
     }
 
     public abstract class TypeItemCore<TTypeItem> : TypeItemCoreBase
@@ -175,6 +177,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         private readonly Func<TTypeItem, string> shortNameFactory;
         private readonly Func<TTypeItem, string> nameFactory;
         private readonly Func<TTypeItem, string> fullNameFactory;
+        private readonly Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory;
         private readonly Lazy<string> shortName;
         private readonly Lazy<string> idnfName;
         private readonly Lazy<string> fullIdnfName;
@@ -183,7 +186,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<TTypeItem, string> shortNameFactory,
             Func<TTypeItem, string> nameFactory,
-            Func<TTypeItem, string> fullNameFactory) : base(kind)
+            Func<TTypeItem, string> fullNameFactory,
+            Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(kind)
         {
             this.shortNameFactory = shortNameFactory ?? throw new ArgumentNullException(
                 nameof(shortNameFactory));
@@ -194,6 +198,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             this.fullNameFactory = fullNameFactory ?? throw new ArgumentNullException(
                 nameof(fullNameFactory));
 
+            this.allDependenciesFactory = allDependenciesFactory ?? throw new ArgumentNullException(
+                nameof(allDependenciesFactory));
+
             shortName = new Lazy<string>(
                 () => this.shortNameFactory((TTypeItem)this));
 
@@ -202,6 +209,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             fullIdnfName = new Lazy<string>(
                 () => this.fullNameFactory((TTypeItem)this));
+
+            AllTypeDependencies = new(
+                () => this.allDependenciesFactory((TTypeItem)this));
         }
 
         public override string ShortName => shortName.Value;
@@ -209,8 +219,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override string FullIdnfName => fullIdnfName.Value;
 
         public Lazy<TypeItemCoreBase>? DeclaringType { get; init; }
+        public Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> AllTypeDependencies { get; init; }
 
         public override Lazy<TypeItemCoreBase>? GetDeclaringType() => DeclaringType;
+        public override Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> GetAllTypeDependencies(
+            ) => AllTypeDependencies;
     }
 
     public class TypeItemCore : TypeItemCoreBase
@@ -238,11 +251,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<GenericInteropTypeItem, string> shortNameFactory,
             Func<GenericInteropTypeItem, string> nameFactory,
-            Func<GenericInteropTypeItem, string> fullNameFactory) : base(
+            Func<GenericInteropTypeItem, string> fullNameFactory,
+            Func<GenericInteropTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                allDependenciesFactory)
         {
         }
 
@@ -259,7 +274,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                item => new Lazy<TypeItemCoreBase>[0].RdnlC())
         {
         }
 
@@ -273,17 +289,20 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<TTypeItem, string> shortNameFactory,
             Func<TTypeItem, string> nameFactory,
-            Func<TTypeItem, string> fullNameFactory) : base(
+            Func<TTypeItem, string> fullNameFactory,
+            Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                allDependenciesFactory)
         {
         }
 
         public Lazy<TypeIdnf> Idnf { get; init; }
         public ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>> Params { get; init; }
         public Lazy<TypeItemCoreBase> ReturnType { get; init; }
+        public bool IsVoidDelegate { get; init; }
 
         public override Lazy<TypeIdnf>? GetIdnf() => Idnf;
     }
@@ -294,11 +313,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<DelegateTypeItem, string> shortNameFactory,
             Func<DelegateTypeItem, string> nameFactory,
-            Func<DelegateTypeItem, string> fullNameFactory) : base(
+            Func<DelegateTypeItem, string> fullNameFactory,
+            Func<DelegateTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                allDependenciesFactory)
         {
         }
     }
@@ -309,11 +330,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<GenericDelegateTypeItem, string> shortNameFactory,
             Func<GenericDelegateTypeItem, string> nameFactory,
-            Func<GenericDelegateTypeItem, string> fullNameFactory) : base(
+            Func<GenericDelegateTypeItem, string> fullNameFactory,
+            Func<GenericDelegateTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                allDependenciesFactory)
         {
         }
 
@@ -327,11 +350,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<TTypeItem, string> shortNameFactory,
             Func<TTypeItem, string> nameFactory,
-            Func<TTypeItem, string> fullNameFactory) : base(
+            Func<TTypeItem, string> fullNameFactory,
+            Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                allDependenciesFactory)
         {
         }
 
@@ -348,11 +373,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<TypeItem, string> shortNameFactory,
             Func<TypeItem, string> nameFactory,
-            Func<TypeItem, string> fullNameFactory) : base(
+            Func<TypeItem, string> fullNameFactory,
+            Func<TypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                allDependenciesFactory)
         {
         }
     }
@@ -363,11 +390,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             TypeItemKind kind,
             Func<GenericTypeItem, string> shortNameFactory,
             Func<GenericTypeItem, string> nameFactory,
-            Func<GenericTypeItem, string> fullNameFactory) : base(
+            Func<GenericTypeItem, string> fullNameFactory,
+            Func<GenericTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
                 kind,
                 shortNameFactory,
                 nameFactory,
-                fullNameFactory)
+                fullNameFactory,
+                allDependenciesFactory)
         {
         }
 

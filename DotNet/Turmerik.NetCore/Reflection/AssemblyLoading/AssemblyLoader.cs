@@ -64,22 +64,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             }
             else if (type.IsGenericType && !type.IsGenericTypeDefinition)
             {
-                if (IsDelegateType(wka, type))
+                if (!TryLoadGenericInteropType(
+                    wka, type, out retItem))
                 {
-                    retItem = LoadGenericDelegateType(wka, type);
+                    retItem = LoadRegularType(wka, type);
                 }
-                else
-                {
-                    if (!TryLoadGenericInteropType(
-                        wka, type, out retItem))
-                    {
-                        retItem = LoadRegularType(wka, type);
-                    }
-                }
-            }
-            else if (IsDelegateType(wka, type))
-            {
-                retItem = LoadDelegateType(wka, type);
             }
             else
             {
@@ -161,7 +150,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             Type type)
         {
             (var retType, var @params) = LoadDelegateTypeCore(
-                wka, type, out var declaringType);
+                wka, type, out var declaringType, out var isVoid);
 
             var retItem = GetIdnfNameFactories(
                 null as DelegateTypeItem,
@@ -169,14 +158,19 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 out var idnfNameFactory,
                 out var fullIdnfNamefactory);
 
-            retItem = new (
+            retItem = new(
                 TypeItemKind.Delegate,
                 item => type.GetTypeDisplayName(),
                 idnfNameFactory,
                 fullIdnfNamefactory)
             {
+                Params = @params,
+                ReturnType = retType,
+                IsVoidDelegate = isVoid,
                 DeclaringType = declaringType,
                 Idnf = GetTypeIdnfLazy(wka, () => retItem, declaringType, type),
+                AllTypeDependencies = new Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(() =>
+                    GetAllDependencies(retItem).RdnlC())
             };
 
             return retItem;
@@ -187,7 +181,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             Type type)
         {
             (var retType, var @params) = LoadDelegateTypeCore(
-                wka, type, out var declaringType);
+                wka, type, out var declaringType, out var isVoid);
 
             GenericDelegateTypeItem? retItem = null;
 
@@ -206,11 +200,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 idnfNameFactory,
                 fullIdnfNamefactory)
             {
+                Params = @params,
+                ReturnType = retType,
+                IsVoidDelegate = isVoid,
                 DeclaringType = declaringType,
                 Idnf = GetTypeIdnfLazy(wka, () => retItem, declaringType, type),
                 GenericTypeArgs = GetGenericTypeArgs(
                     wka, type.GetGenericArguments(),
-                    type, t => t, null)
+                    type, t => t, null),
+                AllTypeDependencies = new Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>>(() =>
+                    GetAllDependencies(retItem).RdnlC())
             };
 
             return retItem;
@@ -219,7 +218,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         private Tuple<Lazy<TypeItemCoreBase>, ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>>> LoadDelegateTypeCore(
             WorkArgs wka,
             Type type,
-            out Lazy<TypeItemCoreBase>? declaringType)
+            out Lazy<TypeItemCoreBase>? declaringType,
+            out bool isVoidMethod)
         {
             declaringType = null;
 
@@ -233,6 +233,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             var retTypeItem = new Lazy<TypeItemCoreBase>(() => LoadType(wka,
                 invokeMethod!.ReturnType));
+
+            isVoidMethod = type.GetTypeFullDisplayName(
+                null) == ReflH.VoidType.FullName;
 
             var @params = invokeMethod.GetParameters().ToDictionary(
                 param => param.Name,
@@ -360,53 +363,67 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             WorkArgs wka,
             Type type)
         {
-            var declaringTypeItem = type.DeclaringType?.With(
-                declaringType => new Lazy<TypeItemCoreBase> (() => LoadType(
-                    wka, declaringType)));
-
             TypeItemCoreBase retItem = null;
 
-            var idnfLazy = GetTypeIdnfLazy(
-                wka, () => retItem,
-                declaringTypeItem, type);
-
-            var dataLazy = GetTypeDataLazy(
-                wka, () => retItem,
-                declaringTypeItem, type);
-
-            if (type.IsGenericType)
+            if (IsDelegateType(wka, type))
             {
-                GenericTypeItem genericTypeItem = null;
-
-                genericTypeItem = new GenericTypeItem(
-                    TypeItemKind.GenericRegular,
-                    item => item.Idnf.Value.ShortName,
-                    item => item.Idnf.Value.IdnfName,
-                    item => item.Idnf.Value.FullIdnfName)
+                if (type.IsGenericType)
                 {
-                    Idnf = idnfLazy,
-                    Data = dataLazy,
-                    DeclaringType = declaringTypeItem,
-                    GenericTypeArgs = GetGenericTypeArgs(
-                        wka,  type.GetGenericArguments(),
-                        type, t => t,
-                        genericTypeItem)
-                };
-
-                retItem = genericTypeItem;
+                    retItem = LoadDelegateType(wka, type);
+                }
+                else
+                {
+                    retItem = LoadGenericDelegateType(wka, type);
+                }
             }
             else
             {
-                retItem = new TypeItem(
-                    TypeItemKind.Regular,
-                    item => item.Idnf.Value.ShortName,
-                    item => item.Idnf.Value.IdnfName,
-                    item => item.Idnf.Value.FullIdnfName)
+                var declaringTypeItem = type.DeclaringType?.With(
+                    declaringType => new Lazy<TypeItemCoreBase>(() => LoadType(
+                        wka, declaringType)));
+
+                var idnfLazy = GetTypeIdnfLazy(
+                wka, () => retItem,
+                declaringTypeItem, type);
+
+                var dataLazy = GetTypeDataLazy(
+                    wka, () => retItem,
+                    declaringTypeItem, type);
+
+                if (type.IsGenericType)
+                {
+                    GenericTypeItem genericTypeItem = null;
+
+                    genericTypeItem = new GenericTypeItem(
+                        TypeItemKind.GenericRegular,
+                        item => item.Idnf.Value.ShortName,
+                        item => item.Idnf.Value.IdnfName,
+                        item => item.Idnf.Value.FullIdnfName)
+                    {
+                        Idnf = idnfLazy,
+                        Data = dataLazy,
+                        DeclaringType = declaringTypeItem,
+                        GenericTypeArgs = GetGenericTypeArgs(
+                            wka, type.GetGenericArguments(),
+                            type, t => t,
+                            genericTypeItem)
+                    };
+
+                    retItem = genericTypeItem;
+                }
+                else
+                {
+                    retItem = new TypeItem(
+                        TypeItemKind.Regular,
+                        item => item.Idnf.Value.ShortName,
+                        item => item.Idnf.Value.IdnfName,
+                        item => item.Idnf.Value.FullIdnfName)
                     {
                         Idnf = idnfLazy,
                         Data = dataLazy,
                         DeclaringType = declaringTypeItem
-                };
+                    };
+                }
             }
 
             return retItem;
@@ -694,15 +711,15 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                             }
                             else if (retItem is DelegateTypeItem delegateTypeItem)
                             {
-                                AddDependencies(retList, delegateTypeItem.ReturnType.Arr(
+                                AddDependencies(retList, delegateTypeItem.ReturnType?.Arr(
                                     delegateTypeItem.Params.Select(
-                                        param => param.Value).ToArray()));
+                                        param => param.Value).ToArray()) ?? []);
                             }
                             else if (retItem is GenericDelegateTypeItem genericDelegateTypeItem)
                             {
-                                AddDependencies(retList, genericDelegateTypeItem.ReturnType.Arr(
+                                AddDependencies(retList, genericDelegateTypeItem.ReturnType?.Arr(
                                     genericDelegateTypeItem.Params.Select(
-                                        param => param.Value).ToArray()));
+                                        param => param.Value).ToArray()) ?? []);
 
                                 AddDependencies(retList, genericDelegateTypeItem.GenericTypeArgs);
                             }
@@ -770,6 +787,48 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             return typeItem;
         }
 
+        private List<Lazy<TypeItemCoreBase>>? GetAllDependencies(
+            TypeItemCoreBase? typeItem)
+        {
+            var retList = new List<Lazy<TypeItemCoreBase>>();
+
+            typeItem.GetData()?.Value.ActIfNotNull(data =>
+            {
+                retList.AddRange(data.AllTypeDependencies.Value);
+            },
+            () =>
+            {
+                if (typeItem is GenericInteropTypeItem genericInteropTypeItem)
+                {
+                    AddDependencies(retList, genericInteropTypeItem.GenericTypeArgs.Select(
+                        arg => arg.Value.TypeArg).NotNull());
+                }
+                else if (typeItem is ElementTypeItem elementTypeItem)
+                {
+                    AddDependencies(retList, [ elementTypeItem.ElementType ]);
+                }
+                else if (typeItem is DelegateTypeItem delegateTypeItem)
+                {
+                    AddDependencies(retList, [delegateTypeItem.ReturnType]);
+
+                    AddDependencies(retList, delegateTypeItem.Params.Select(
+                        param => param.Value.Value));
+                }
+                else if (typeItem is GenericDelegateTypeItem genericDelegateTypeItem)
+                {
+                    AddDependencies(retList, [genericDelegateTypeItem.ReturnType]);
+
+                    AddDependencies(retList, genericDelegateTypeItem.Params.Select(
+                        param => param.Value.Value));
+
+                    AddDependencies(retList, genericDelegateTypeItem.GenericTypeArgs.Select(
+                        arg => arg.Value.TypeArg).NotNull());
+                }
+            });
+
+            return retList;
+        }
+
         private void AddDependencies(
             List<Lazy<TypeItemCoreBase?>> list,
             IEnumerable<Lazy<GenericTypeArg>?> itemsToAdd) => AddDependencies(
@@ -781,17 +840,20 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         private void AddDependencies(
             List<Lazy<TypeItemCoreBase?>> list,
             IEnumerable<TypeItemCoreBase?> itemsToAdd) => AddDependencies(
-                list, itemsToAdd.Select(item => new Lazy<TypeItemCoreBase>(item)));
+                list, itemsToAdd?.Select(item => new Lazy<TypeItemCoreBase>(item)));
 
         private void AddDependencies(
             List<Lazy<TypeItemCoreBase?>> list,
-            IEnumerable<Lazy<TypeItemCoreBase>?> itemsToAdd)
+            IEnumerable<Lazy<TypeItemCoreBase>?>? itemsToAdd)
         {
-            foreach (var lazy in itemsToAdd)
+            if (itemsToAdd != null)
             {
-                if (IsDependency(lazy?.Value))
+                foreach (var lazy in itemsToAdd)
                 {
-                    list.Add(lazy);
+                    if (IsDependency(lazy?.Value))
+                    {
+                        list.Add(lazy);
+                    }
                 }
             }
         }
