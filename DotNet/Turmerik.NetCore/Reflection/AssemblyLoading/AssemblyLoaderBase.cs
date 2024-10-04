@@ -184,18 +184,15 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
                 ForEachType(wka, (asmb, type) =>
                 {
-                    (type as TypeItem)?.ActWith(typeItem =>
-                    {
-                        _ = typeItem.Idnf;
-                        _ = typeItem.Data;
+                    _ = type.GetIdnf().Value;
+                    var data = type.GetData().Value;
 
-                        typeItem.Data.Value.AllTypeDependencies.Value.ActWith(allDepTypes =>
+                    type.GetAllTypeDependencies().Value.ActWith(allDepTypes =>
+                    {
+                        foreach (var depType in allDepTypes)
                         {
-                            foreach (var depType in allDepTypes)
-                            {
-                                _ = depType.Value;
-                            }
-                        });
+                            _ = depType.Value;
+                        }
                     });
                 });
             }
@@ -340,38 +337,38 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 AssemblyLoaderOpts opts,
                 MetadataLoadContext context,
                 Dictionary<string, AssemblyItem>? asmbMap = null,
-                TypeItemCore? rootObject = null,
-                TypeItemCore? rootValueType = null,
-                TypeItemCore? voidType = null,
-                TypeItemCore? delegateType = null,
-                TypeItemCore? multicastDelegateType = null)
+                CommonTypeItem? rootObject = null,
+                CommonTypeItem? rootValueType = null,
+                CommonTypeItem? voidType = null,
+                CommonTypeItem? delegateType = null,
+                CommonTypeItem? multicastDelegateType = null)
             {
                 Opts = opts;
                 Context = context;
                 AsmbMap = asmbMap ?? new();
 
-                RootObject = rootObject ?? new TypeItemCore(
+                RootObject = rootObject ?? new CommonTypeItem(
                     TypeItemKind.RootObject,
                     ReflH.BaseObjectType.Type.Name,
                     ReflH.BaseObjectType.FullName);
 
-                RootValueType = rootValueType ?? new TypeItemCore(
+                RootValueType = rootValueType ?? new CommonTypeItem(
                     TypeItemKind.RootValueType,
                     ReflH.BaseValueType.Type.Name,
                     ReflH.BaseValueType.FullName!);
 
-                VoidType = voidType ?? new TypeItemCore(
+                VoidType = voidType ?? new CommonTypeItem(
                     TypeItemKind.VoidType,
                     ReflH.VoidType.Type.Name,
                     ReflH.GetTypeShortDisplayName(
                         ReflH.VoidType.FullName));
 
-                DelegateType = delegateType ?? new TypeItemCore(
+                DelegateType = delegateType ?? new CommonTypeItem(
                     TypeItemKind.DelegateRoot,
                     NetCoreReflH.DelegateType.Type.Name,
                     NetCoreReflH.DelegateType.FullName!);
 
-                MulticastDelegateType = multicastDelegateType ?? new TypeItemCore(
+                MulticastDelegateType = multicastDelegateType ?? new CommonTypeItem(
                     TypeItemKind.DelegateRoot,
                     NetCoreReflH.MulticastDelegateType.Type.Name,
                     NetCoreReflH.MulticastDelegateType.FullName!);
@@ -380,11 +377,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             public AssemblyLoaderOpts Opts { get; init; }
             public MetadataLoadContext Context { get; init; }
             public Dictionary<string, AssemblyItem> AsmbMap { get; init; }
-            public TypeItemCore RootObject { get; init; }
-            public TypeItemCore RootValueType { get; init; }
-            public TypeItemCore VoidType { get; init; }
-            public TypeItemCore DelegateType { get; init; }
-            public TypeItemCore MulticastDelegateType { get; init; }
+            public CommonTypeItem RootObject { get; init; }
+            public CommonTypeItem RootValueType { get; init; }
+            public CommonTypeItem VoidType { get; init; }
+            public CommonTypeItem DelegateType { get; init; }
+            public CommonTypeItem MulticastDelegateType { get; init; }
         }
 
         public class TypeIdnfParts

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Management.Automation.Runspaces;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,28 +37,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
     public static class ReflectionItem
     {
-        public static string GetGenericTypeArgsStr(
-            this ReadOnlyCollection<Lazy<GenericTypeArg>> genericTypeArgs) => string.Concat(
-                "<", string.Join(", ", genericTypeArgs.Select(
-                arg => arg.Value.TypeArg.IfNotNull(
-                    type => type.FullIdnfName,
-                    () => arg.Value.Param.Name))), ">");
-
-        public static void AddDependencies(
-            this List<Lazy<TypeItemCoreBase?>> list,
-            IEnumerable<Lazy<TypeItemCoreBase>?>? itemsToAdd)
-        {
-            if (itemsToAdd != null)
-            {
-                foreach (var lazy in itemsToAdd)
-                {
-                    if (lazy?.Value.IsDependency() ?? false)
-                    {
-                        list.Add(lazy);
-                    }
-                }
-            }
-        }
     }
 
     public abstract class ReflectionItemBase
@@ -174,7 +151,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
     public abstract class TypeItemCoreBase : IEquatable<TypeItemCoreBase>
     {
-        public abstract TypeItemKind Kind { get; }
+        protected TypeItemCoreBase(
+            TypeItemKind kind)
+        {
+            Kind = kind;
+        }
+
+        public TypeItemKind Kind { get; }
         public abstract string ShortName { get; }
         public abstract string IdnfName { get; }
         public abstract string FullIdnfName { get; }
@@ -186,33 +169,49 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public virtual Lazy<TypeData>? GetData() => null;
         public virtual Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> GetAllTypeDependencies(
             ) => new(() => new Lazy<TypeItemCoreBase>[0].RdnlC());
-
-        public bool IsDependency() => Kind == TypeItemKind.Regular;
-
-        public bool IsDelegateType(
-            Type type) => type.BaseType?.FullName == NetCoreReflH.MulticastDelegateType.FullName;
     }
 
-    public abstract class TypeItemCore : TypeItemCoreBase
+    public abstract class TypeItemCore<TTypeItem> : TypeItemCoreBase
+        where TTypeItem : TypeItemCore<TTypeItem>
     {
+        private readonly Func<TTypeItem, string> shortNameFactory;
+        private readonly Func<TTypeItem, string> nameFactory;
+        private readonly Func<TTypeItem, string> fullNameFactory;
+        private readonly Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory;
         private readonly Lazy<string> shortName;
         private readonly Lazy<string> idnfName;
         private readonly Lazy<string> fullIdnfName;
 
-        protected TypeItemCore()
+        protected TypeItemCore(
+            TypeItemKind kind,
+            Func<TTypeItem, string> shortNameFactory,
+            Func<TTypeItem, string> nameFactory,
+            Func<TTypeItem, string> fullNameFactory,
+            Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(kind)
         {
+            this.shortNameFactory = shortNameFactory ?? throw new ArgumentNullException(
+                nameof(shortNameFactory));
+
+            this.nameFactory = nameFactory ?? throw new ArgumentNullException(
+                nameof(nameFactory));
+
+            this.fullNameFactory = fullNameFactory ?? throw new ArgumentNullException(
+                nameof(fullNameFactory));
+
+            this.allDependenciesFactory = allDependenciesFactory ?? throw new ArgumentNullException(
+                nameof(allDependenciesFactory));
+
             shortName = new Lazy<string>(
-                () => GetShortName());
+                () => this.shortNameFactory((TTypeItem)this));
 
             idnfName = new Lazy<string>(
-                () => GetIdnfName());
+                () => this.nameFactory((TTypeItem)this));
 
             fullIdnfName = new Lazy<string>(
-                () => GetFullIdnfName());
+                () => this.fullNameFactory((TTypeItem)this));
 
             AllTypeDependencies = new(
-                () => new List<Lazy<TypeItemCoreBase>>().ActWith(
-                    AddAllTypeDependencies).RdnlC());
+                () => this.allDependenciesFactory((TTypeItem)this));
         }
 
         public override string ShortName => shortName.Value;
@@ -225,24 +224,15 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override Lazy<TypeItemCoreBase>? GetDeclaringType() => DeclaringType;
         public override Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> GetAllTypeDependencies(
             ) => AllTypeDependencies;
-
-        protected abstract string GetShortName();
-        protected abstract string GetIdnfName();
-        protected abstract string GetFullIdnfName();
-
-        protected abstract void AddAllTypeDependencies(
-            List<Lazy<TypeItemCoreBase>> depsList);
     }
 
-    public class CommonTypeItem : TypeItemCoreBase
+    public class TypeItemCore : TypeItemCoreBase
     {
-        public CommonTypeItem(
+        public TypeItemCore(
             TypeItemKind kind,
             string shortName,
-            string idnfName)
+            string idnfName) : base(kind)
         {
-            this.Kind = kind;
-
             ShortName = shortName ?? throw new ArgumentNullException(
                 nameof(shortName));
 
@@ -250,13 +240,170 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 nameof(idnfName));
         }
 
-        public override TypeItemKind Kind { get; }
         public override string ShortName { get; }
         public override string IdnfName { get; }
         public override string FullIdnfName => IdnfName;
     }
 
-    public class ElementTypeItem : CommonTypeItem
+    public class GenericInteropTypeItem : TypeItemCore<GenericInteropTypeItem>
+    {
+        public GenericInteropTypeItem(
+            TypeItemKind kind,
+            Func<GenericInteropTypeItem, string> shortNameFactory,
+            Func<GenericInteropTypeItem, string> nameFactory,
+            Func<GenericInteropTypeItem, string> fullNameFactory,
+            Func<GenericInteropTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                allDependenciesFactory)
+        {
+        }
+
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
+    }
+
+    public class EnumTypeItem : TypeItemCore<EnumTypeItem>
+    {
+        public EnumTypeItem(
+            TypeItemKind kind,
+            Func<EnumTypeItem, string> shortNameFactory,
+            Func<EnumTypeItem, string> nameFactory,
+            Func<EnumTypeItem, string> fullNameFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                item => new Lazy<TypeItemCoreBase>[0].RdnlC())
+        {
+        }
+
+        public ReadOnlyDictionary<string, object> DefinedValuesMap { get; init; }
+    }
+
+    public class DelegateTypeItem<TTypeItem> : TypeItemCore<TTypeItem>
+        where TTypeItem : DelegateTypeItem<TTypeItem>
+    {
+        public DelegateTypeItem(
+            TypeItemKind kind,
+            Func<TTypeItem, string> shortNameFactory,
+            Func<TTypeItem, string> nameFactory,
+            Func<TTypeItem, string> fullNameFactory,
+            Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                allDependenciesFactory)
+        {
+        }
+
+        public Lazy<TypeIdnf> Idnf { get; init; }
+        public ReadOnlyDictionary<string, Lazy<TypeItemCoreBase>> Params { get; init; }
+        public Lazy<TypeItemCoreBase> ReturnType { get; init; }
+        public bool IsVoidDelegate { get; init; }
+
+        public override Lazy<TypeIdnf>? GetIdnf() => Idnf;
+    }
+
+    public class DelegateTypeItem : DelegateTypeItem<DelegateTypeItem>
+    {
+        public DelegateTypeItem(
+            TypeItemKind kind,
+            Func<DelegateTypeItem, string> shortNameFactory,
+            Func<DelegateTypeItem, string> nameFactory,
+            Func<DelegateTypeItem, string> fullNameFactory,
+            Func<DelegateTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                allDependenciesFactory)
+        {
+        }
+    }
+
+    public class GenericDelegateTypeItem : DelegateTypeItem<GenericDelegateTypeItem>
+    {
+        public GenericDelegateTypeItem(
+            TypeItemKind kind,
+            Func<GenericDelegateTypeItem, string> shortNameFactory,
+            Func<GenericDelegateTypeItem, string> nameFactory,
+            Func<GenericDelegateTypeItem, string> fullNameFactory,
+            Func<GenericDelegateTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                allDependenciesFactory)
+        {
+        }
+
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
+    }
+
+    public class TypeItem<TTypeItem> : TypeItemCore<TTypeItem>
+        where TTypeItem : TypeItem<TTypeItem>
+    {
+        public TypeItem(
+            TypeItemKind kind,
+            Func<TTypeItem, string> shortNameFactory,
+            Func<TTypeItem, string> nameFactory,
+            Func<TTypeItem, string> fullNameFactory,
+            Func<TTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                allDependenciesFactory)
+        {
+        }
+
+        public Lazy<TypeIdnf> Idnf { get; init; }
+        public Lazy<TypeData> Data { get; init; }
+
+        public override Lazy<TypeIdnf>? GetIdnf() => Idnf;
+        public override Lazy<TypeData>? GetData() => Data;
+    }
+
+    public class TypeItem : TypeItem<TypeItem>
+    {
+        public TypeItem(
+            TypeItemKind kind,
+            Func<TypeItem, string> shortNameFactory,
+            Func<TypeItem, string> nameFactory,
+            Func<TypeItem, string> fullNameFactory,
+            Func<TypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                allDependenciesFactory)
+        {
+        }
+    }
+
+    public class GenericTypeItem : TypeItem<GenericTypeItem>
+    {
+        public GenericTypeItem(
+            TypeItemKind kind,
+            Func<GenericTypeItem, string> shortNameFactory,
+            Func<GenericTypeItem, string> nameFactory,
+            Func<GenericTypeItem, string> fullNameFactory,
+            Func<GenericTypeItem, ReadOnlyCollection<Lazy<TypeItemCoreBase>>> allDependenciesFactory) : base(
+                kind,
+                shortNameFactory,
+                nameFactory,
+                fullNameFactory,
+                allDependenciesFactory)
+        {
+        }
+
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
+    }
+
+    public class ElementTypeItem : TypeItemCore
     {
         public ElementTypeItem(
             TypeItemKind kind,
@@ -269,203 +416,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public TypeItemCoreBase ElementType { get; init; }
-
-        public override Lazy<ReadOnlyCollection<Lazy<TypeItemCoreBase>>> GetAllTypeDependencies(
-            ) => ElementType.GetAllTypeDependencies();
-    }
-
-    public class GenericInteropTypeItem : TypeItemCore
-    {
-        public GenericInteropTypeItem(
-            TypeItemKind kind,
-            string shortNameCore,
-            string idnfNameCore)
-        {
-            this.Kind = kind;
-
-            ShortNameCore = shortNameCore ?? throw new ArgumentNullException(
-                nameof(shortNameCore));
-
-            IdnfNameCore = idnfNameCore ?? throw new ArgumentNullException(
-                nameof(idnfNameCore));
-        }
-
-        public override TypeItemKind Kind { get; }
-        protected string ShortNameCore { get; }
-        protected string IdnfNameCore { get; }
-
-        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
-
-        protected override void AddAllTypeDependencies(
-            List<Lazy<TypeItemCoreBase>> depsList)
-        {
-            depsList.AddDependencies([DeclaringType]);
-
-            depsList.AddRange(
-                GenericTypeArgs.Select(
-                    arg => arg.Value.TypeArg.IfNotNull(
-                        typeArg => typeArg,
-                        () => arg.Value.Param)).Select(
-                    type => new Lazy<TypeItemCoreBase>(type)));
-        }
-
-        protected override string GetFullIdnfName(
-            ) => string.Concat(IdnfNameCore,
-            GenericTypeArgs.GetGenericTypeArgsStr());
-
-        protected override string GetIdnfName(
-            ) => string.Concat(
-                IdnfNameCore, "`",
-                GenericTypeArgs.Count);
-
-        protected override string GetShortName(
-            ) => ShortNameCore;
-    }
-
-    public class EnumTypeItem : TypeItemCore
-    {
-        public EnumTypeItem(
-            string shortNameCore,
-            string idnfNameCore)
-        {
-            ShortNameCore = shortNameCore ?? throw new ArgumentNullException(
-                nameof(shortNameCore));
-
-            IdnfNameCore = idnfNameCore ?? throw new ArgumentNullException(
-                nameof(idnfNameCore));
-        }
-
-        protected string ShortNameCore { get; }
-        protected string IdnfNameCore { get; }
-
-        public ReadOnlyDictionary<string, object> DefinedValuesMap { get; init; }
-
-        public override TypeItemKind Kind => TypeItemKind.Enum;
-
-        protected override string GetFullIdnfName(
-            ) => string.Concat(
-                DeclaringType?.Value.FullIdnfName,
-                IdnfNameCore);
-
-        protected override string GetIdnfName(
-            ) => string.Concat(
-                DeclaringType?.Value.IdnfName,
-                IdnfNameCore);
-
-        protected override string GetShortName() => ShortName;
-
-        protected override void AddAllTypeDependencies(
-            List<Lazy<TypeItemCoreBase>> depsList)
-        {
-        }
-    }
-
-    public abstract class RegularTypeItemBase : TypeItemCore
-    {
-        public RegularTypeItemBase(
-            string shortNameCore,
-            string idnfNameCore)
-        {
-            ShortNameCore = shortNameCore ?? throw new ArgumentNullException(
-                nameof(shortNameCore));
-
-            IdnfNameCore = idnfNameCore ?? throw new ArgumentNullException(
-                nameof(idnfNameCore));
-        }
-
-        protected string ShortNameCore { get; }
-        protected string IdnfNameCore { get; }
-
-        public Lazy<TypeIdnf> Idnf { get; init; }
-        public Lazy<TypeData> Data { get; init; }
-
-        public override Lazy<TypeIdnf>? GetIdnf() => Idnf;
-        public override Lazy<TypeData>? GetData() => Data;
-
-        protected override void AddAllTypeDependencies(
-            List<Lazy<TypeItemCoreBase>> depsList)
-        {
-            depsList.AddDependencies([DeclaringType]);
-            var typeData = Data.Value;
-
-            depsList.AddDependencies(
-                [typeData.BaseType]);
-
-            depsList.AddDependencies(
-                typeData.PubInstnProps?.Select(
-                    prop => prop.PropertyType) ?? []);
-
-            depsList.AddDependencies(
-                typeData.PubInstnMethods?.SelectMany(
-                    method => method.ReturnType.Arr(
-                        method.Params.Select(
-                            param => param.Value).ToArray())) ?? []);
-        }
-    }
-
-    public class RegularTypeItem : RegularTypeItemBase
-    {
-        public RegularTypeItem(
-            string shortNameCore,
-            string idnfNameCore) : base(
-                shortNameCore,
-                idnfNameCore)
-        {
-        }
-
-        public override TypeItemKind Kind => TypeItemKind.Regular;
-
-        protected override string GetFullIdnfName(
-            ) => IdnfNameCore;
-
-        protected override string GetIdnfName(
-            ) => IdnfNameCore;
-
-        protected override string GetShortName(
-            ) => ShortNameCore;
-    }
-
-    public class GenericTypeItem : RegularTypeItemBase
-    {
-        public GenericTypeItem(
-            string shortNameCore,
-            string idnfNameCore) : base(
-                shortNameCore,
-                idnfNameCore)
-        {
-        }
-
-        public override TypeItemKind Kind => TypeItemKind.GenericRegular;
-        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
-
-        protected override void AddAllTypeDependencies(
-            List<Lazy<TypeItemCoreBase>> depsList)
-        {
-            base.AddAllTypeDependencies(depsList);
-            var typeData = Data.Value;
-
-            depsList.AddDependencies(
-                [typeData.GenericTypeDefinition]);
-
-            depsList.AddRange(
-                GenericTypeArgs.Select(
-                    arg => arg.Value.TypeArg.IfNotNull(
-                        typeArg => typeArg,
-                        () => arg.Value.Param)).Select(
-                    type => new Lazy<TypeItemCoreBase>(type)));
-        }
-
-        protected override string GetFullIdnfName(
-            ) => string.Concat(IdnfNameCore,
-            GenericTypeArgs.GetGenericTypeArgsStr());
-
-        protected override string GetIdnfName(
-            ) => string.Concat(
-                IdnfNameCore, "`",
-                GenericTypeArgs.Count);
-
-        protected override string GetShortName(
-            ) => ShortNameCore;
     }
 
     public class GenericTypeArg
@@ -484,6 +434,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
     public class GenericTypeParameter : TypeItemCoreBase
     {
+        public GenericTypeParameter(
+            TypeItemKind kind) : base(kind)
+        {
+        }
+
         public string Name { get; init; }
         public int? GenericParamPosition { get; init; }
         public GenericTypeParamConstraints ParamConstraints { get; init; }
@@ -491,8 +446,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override string ShortName => Name;
         public override string IdnfName => Name;
         public override string FullIdnfName => Name;
-
-        public override TypeItemKind Kind => TypeItemKind.GenericParam;
     }
 
     public class GenericTypeParamConstraints

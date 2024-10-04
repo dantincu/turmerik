@@ -14,6 +14,7 @@
     <Compile Remove="ConsoleApps\DotNetTypesToTypescript\ProgramComponent.Utils%24not-compiled%24.cs" />
     <Compile Remove="ConsoleApps\DotNetTypesToTypescript\ProgramComponent.WorkArgs%24not-compiled%24.cs" />
     <Compile Remove="Reflection\AssemblyLoading\AssemblyLoader%24not-compiled%24.cs" />
+    <Compile Remove="Reflection\AssemblyLoading\ReflectionItem%24not-compiled%24.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
     <None Include="ConsoleApps\DotNetTypesToTypescript\ProgramComponent.Utils$not-compiled$.cs" />
     <None Include="ConsoleApps\DotNetTypesToTypescript\ProgramComponent.WorkArgs$not-compiled$.cs" />
     <None Include="Reflection\AssemblyLoading\AssemblyLoader$not-compiled$.cs" />
+    <None Include="Reflection\AssemblyLoading\ReflectionItem$not-compiled$.cs" />
   </ItemGroup>
 
   <ItemGroup>
