@@ -121,7 +121,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             var pathPartsArr = relNsPartsArr.Select(
                 part => Path.Combine(
-                    wka.PgArgs.Profile.TypesHcyNodeDirName,
+                    wka.PgArgs.Profile.TypesNodeDirName,
                     part)).ToArray();
 
             shortTypeName = ReflH.GetTypeShortDisplayName(

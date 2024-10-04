@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,23 +21,25 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             List<string> retList = GetDependencyImportTsCodeList(
                 wka, trgTypeFilePath);
 
-            if (wka.TypeKvp.Value is EnumTypeItem enumTypeItem)
+            var typeItemValue = wka.TypeKvp.Value;
+
+            if (typeItemValue is EnumTypeItem enumTypeItem)
             {
                 AddEnumTypeTsCodeLines(retList, wka, enumTypeItem);
             }
-            else if (wka.TypeKvp.Value is TypeItem typeItem)
+            else if (typeItemValue is TypeItem typeItem)
             {
                 AddRegularTypeTsCodeLines(retList, wka, typeItem);
             }
-            else if (wka.TypeKvp.Value is DelegateTypeItem delegateTypeItem)
+            else if (typeItemValue is DelegateTypeItem delegateTypeItem)
             {
                 AddDelegateTypeTsCodeLines(retList, wka, delegateTypeItem);
             }
-            else if (wka.TypeKvp.Value is GenericDelegateTypeItem genericDelegateTypeItem)
+            else if (typeItemValue is GenericDelegateTypeItem genericDelegateTypeItem)
             {
                 AddGenericDelegateTypeTsCodeLines(retList, wka, genericDelegateTypeItem);
             }
-            else if (wka.TypeKvp.Value is GenericTypeItem genericTypeItem)
+            else if (typeItemValue is GenericTypeItem genericTypeItem)
             {
                 AddGenericTypeTsCodeLines(
                     retList, wka, genericTypeItem,
@@ -259,9 +262,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
         private string GetPropTsCodeLine(
             TsCodeWorkArgs wka,
-            PropertyItem prop) => GetTypeItemFromMap(
-                wka, prop.PropertyType.Value).Key.With(
-                    propTypeStr => IntfMember(wka, prop.Name, propTypeStr));
+            PropertyItem prop) => GetTsTypeName(
+                wka, prop.PropertyType.Value).With(
+                    propTypeName => IntfMember(wka, prop.Name, propTypeName));
 
         private string GetMethodTsCodeLine(
             TsCodeWorkArgs wka,
@@ -281,12 +284,12 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             wka.PushIdentifierNames();
 
-            var paramsStr = string.Join(",",
+            var paramsStr = string.Join(", ",
                 @params.Select(
                     param => GetUniqueIdentifier(
                     wka, param.Key).With(paramName => string.Join(
-                        ": ", paramName, GetTypeItemFromMap(
-                            wka, param.Value.Value).Key))));
+                        ": ", paramName, GetTsTypeName(
+                    wka, param.Value.Value)))));
 
             wka.PopIdentifierNames();
             paramsStr = $"{genericMethodArgsStr}({paramsStr})";
@@ -295,7 +298,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 returnType => returnType.Kind switch
                 {
                     TypeItemKind.VoidType => "void",
-                    _ => GetTypeItemFromMap(wka, returnType).Key
+                    TypeItemKind.DelegateRoot => "Function",
+                    _ => GetTsTypeName(
+                        wka, returnType)
                 });
 
             string retStr = $"{paramsStr} => {returnTypeStr}";
@@ -338,7 +343,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             TsCodeWorkArgs wka,
             ReadOnlyCollection<Lazy<GenericTypeArg>> genericArgs,
             bool isForDeclr) => string.Concat(
-                "<", string.Join(",", genericArgs.Select(
+                "<", string.Join(", ", genericArgs.Select(
                     arg => GetGenericTsTypeArgNamePart(
                         wka, arg.Value, isForDeclr))), ">");
 
@@ -346,7 +351,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             TsCodeWorkArgs wka,
             GenericTypeArg genericTypeArg,
             bool isForDeclr) => genericTypeArg.TypeArg?.With(
-                typeArg => GetTypeItemFromMap(wka, typeArg).Key) ?? isForDeclr switch
+                typeArg => GetTsTypeName(wka, typeArg)) ?? isForDeclr switch
                     {
                         true => GetGenericTsTypeParamNamePart(wka, genericTypeArg.Param!),
                         false => genericTypeArg.Param!.Name
@@ -384,13 +389,32 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             string retStr;
 
-            if (typeItem is TypeItemCore typeItemCore)
-            {
-                retStr = PrimitiveNamesMap[isForNullable][typeItemCore.Kind];
-            }
-            else if (typeItem is EnumTypeItem enumTypeItem)
+            if (typeItem is EnumTypeItem enumTypeItem)
             {
                 retStr = GetTypeItemFromMap(wka, enumTypeItem).Key;
+            }
+            else if (typeItem is ElementTypeItem elementTypeItem)
+            {
+                var elementTypeStr = GetTsTypeName(
+                    wka, elementTypeItem.ElementType,
+                    elementTypeItem.Kind == TypeItemKind.Nullable);
+
+                switch (elementTypeItem.Kind)
+                {
+                    case TypeItemKind.Array:
+                        retStr = elementTypeStr + "[]";
+                        break;
+                    default:
+                        var elemType = wka.PgArgs.Profile.TsElementTypesMap[
+                            elementTypeItem.Kind];
+
+                        retStr = $"{elemType.TypeName}<{elementTypeStr}>";
+                        break;
+                }
+            }
+            else if (typeItem is TypeItemCore typeItemCore)
+            {
+                retStr = PrimitiveNamesMap[isForNullable][typeItemCore.Kind];
             }
             else if (typeItem is GenericInteropTypeItem genericInteropTypeItem)
             {
@@ -404,7 +428,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     case TypeItemKind.Nullable:
                         retStr = genericArgsArr.Single();
                         break;
-                    case TypeItemKind.Array:
                     case TypeItemKind.Enumerable:
                         retStr = genericArgsArr.Single() + "[]";
                         break;
@@ -451,6 +474,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             {
                 throw new NotSupportedException(
                     typeItem.GetType().FullName);
+            }
+
+            if (retStr == "any<any>")
+            {
+
             }
 
             return retStr;

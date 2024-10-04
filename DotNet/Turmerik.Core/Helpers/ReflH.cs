@@ -57,6 +57,12 @@ namespace Turmerik.Core.Helpers
                 stopDelimsArr);
 
         public static string GetTypeDisplayName(
+            this Type type,
+            char[]? stopDelimsArr = null) => GetTypeDisplayName(
+                type.Name,
+                stopDelimsArr ?? ['&', '*']);
+
+        public static string GetTypeDisplayName(
             string typeFullName,
             char stopDelim = '[') => typeFullName.SplitStr(
                 (str, len) => str.FirstKvp((c, i) => c == stopDelim).Key).Item1;

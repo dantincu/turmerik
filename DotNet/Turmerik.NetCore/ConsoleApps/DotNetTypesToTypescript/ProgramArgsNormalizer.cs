@@ -10,6 +10,7 @@ using System.IO;
 using Turmerik.Core.Text;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
+using Turmerik.NetCore.Reflection.AssemblyLoading;
 
 namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 {
@@ -76,6 +77,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         public const string ASMB_NON_DF_NS_TYPES_DIR_NAME = "nd";
         public const string TYPES_HCY_NODE_DIR_NAME = "h";
         public const string TYPE_DEF_FILE_NAME = "Type.d.ts";
+        public const string TYPES_DEF_FILE_NAME = "Types.d.ts";
         public const string TYPE_INFO_FILE_NAME = "type.json";
 
         public const string TS_TAB_STR = "  ";
@@ -133,10 +135,33 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             profile.DestnExternalAssemblliesDirName ??= DESTN_EXTERNAL_ASSEMBLIES_DIR_NAME;
             profile.AssemblyDfNsTypesDirName ??= ASMB_DF_NS_TYPES_DIR_NAME;
             profile.AssemblyNonDfNsTypesDirName ??= ASMB_NON_DF_NS_TYPES_DIR_NAME;
-            profile.TypesHcyNodeDirName ??= TYPES_HCY_NODE_DIR_NAME;
+            profile.TypesNodeDirName ??= TYPES_HCY_NODE_DIR_NAME;
             profile.TypeInfoFileName ??= TYPE_INFO_FILE_NAME;
             profile.TypeDefFileName ??= TYPE_DEF_FILE_NAME;
+            profile.TypesDefFileName ??= TYPES_DEF_FILE_NAME;
             profile.TsTabStr ??= args.Config.TsTabStr;
+
+            profile.TsElementTypesMap ??= new()
+            {
+                {
+                    TypeItemKind.ByRefValue,
+                    new ProgramConfig.TsElementType
+                    {
+                        TypeName = "ByRef",
+                        ElementTypeArgName = "T",
+                        ElementPropName = "Item"
+                    }
+                },
+                {
+                    TypeItemKind.PointerValue,
+                    new ProgramConfig.TsElementType
+                    {
+                        TypeName = "Pointer",
+                        ElementTypeArgName = "T",
+                        ElementPropName = "Item"
+                    }
+                }
+            };
 
             profile.DfSrcBinsRelDirPath ??= args.LoadDebugAssemblies switch
             {

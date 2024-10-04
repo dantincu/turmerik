@@ -30,7 +30,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         Dictionary,
         Delegate,
         GenericDelegate,
-        GenericParam
+        GenericParam,
+        ByRefValue,
+        PointerValue
     }
 
     public static class ReflectionItem
@@ -204,7 +206,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override string ShortName => shortName.Value;
         public override string IdnfName => idnfName.Value;
-        public override string FullIdnfName => idnfName.Value;
+        public override string FullIdnfName => fullIdnfName.Value;
 
         public Lazy<TypeItemCoreBase>? DeclaringType { get; init; }
 
@@ -370,6 +372,21 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
+    }
+
+    public class ElementTypeItem : TypeItemCore
+    {
+        public ElementTypeItem(
+            TypeItemKind kind,
+            string shortName,
+            string idnfName) : base(
+                kind,
+                shortName,
+                idnfName)
+        {
+        }
+
+        public TypeItemCoreBase ElementType { get; init; }
     }
 
     public class GenericTypeArg

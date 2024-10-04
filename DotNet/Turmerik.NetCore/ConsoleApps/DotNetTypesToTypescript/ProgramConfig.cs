@@ -21,11 +21,13 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public string DestnExternalAssemblliesDirName { get; set; }
             public string AssemblyDfNsTypesDirName { get; set; }
             public string AssemblyNonDfNsTypesDirName { get; set; }
-            public string TypesHcyNodeDirName { get; set; }
+            public string TypesNodeDirName { get; set; }
             public string TypeDefFileName { get; set; }
+            public string TypesDefFileName { get; set; }
             public string TypeInfoFileName { get; set; }
             public SrcDestnPaths DirPaths { get; set; }
             public string DfSrcBinsRelDirPath { get; set; }
+            public Dictionary<TypeItemKind, TsElementType> TsElementTypesMap { get; set; }
 
             public string TsTabStr { get; set; }
 
@@ -92,6 +94,13 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             public string SrcPath { get; set; }
             public string DestnPath { get; set; }
+        }
+
+        public class TsElementType
+        {
+            public string TypeName { get; set; }
+            public string ElementTypeArgName { get; set; }
+            public string ElementPropName { get; set; }
         }
     }
 }
