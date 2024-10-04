@@ -762,9 +762,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             {
                 true => string.Join("+",
                     item.DeclaringType.Value.FullIdnfName,
-                    type.GetTypeShortDisplayName() + genericTypeParamsStrFactory()),
+                    type.GetTypeShortDisplayName() + genericTypeParamsStrFactory?.Invoke()),
                 false => string.Join(".", type.Namespace,
-                    type.GetTypeShortDisplayName() + genericTypeParamsStrFactory())
+                    type.GetTypeShortDisplayName() + genericTypeParamsStrFactory?.Invoke())
             };
 
             return typeItem;

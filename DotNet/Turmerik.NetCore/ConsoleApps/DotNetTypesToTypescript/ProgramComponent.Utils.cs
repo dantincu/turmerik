@@ -16,10 +16,12 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     {
         private string GetAsmbDestnDirPath(
             TypeWorkArgs wka,
-            AssemblyItem asmbItem) => GetAsmbDestnDirBasePath(
-                wka,
-                wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
-                    asmbItem.BclItem));
+            AssemblyItem asmbItem) => Path.Combine(
+                GetAsmbDestnDirBasePath(
+                    wka,
+                    wka.PgArgs.Profile.IsTurmerikAssemblyPredicate(
+                        asmbItem.BclItem)),
+                asmbItem.Name);
 
         private string GetAsmbDestnDirBasePath(
             TypeWorkArgs wka,
@@ -71,12 +73,12 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             }
 
             var retPathPartsList = Enumerable.Range(0,
-                trgPathPartsArr.Length - firstDiffKvp.Key - 1).Select(
+                trgPathPartsArr.Length - firstDiffKvp.Key).Select(
                 idx => "..").ToList();
 
             retPathPartsList.AddRange(
                 depPathPartsArr.Skip(
-                    firstDiffKvp.Key + 1));
+                    firstDiffKvp.Key));
 
             string retPath = Path.Combine(
                 retPathPartsList.ToArray());
@@ -92,12 +94,28 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             var idnfItem = typeItem.GetIdnf().Value;
             var asmbItem = idnfItem.AssemblyItem;
 
+            var asmbDirName = idnfItem.NsStartsWithAsmbPfx switch
+            {
+                true => wka.PgArgs.Profile.AssemblyDfNsTypesDirName,
+                false => wka.PgArgs.Profile.AssemblyNonDfNsTypesDirName
+            };
+
             string asmbDirPath = GetAsmbDestnDirPath(
                 wka, asmbItem);
 
+            asmbDirPath = Path.Combine(
+                asmbDirPath, asmbDirName);
+
+            string idnfName = idnfItem.IdnfName;
+
+            if (idnfItem.NsStartsWithAsmbPfx)
+            {
+                idnfName = idnfName.Substring(
+                    asmbItem.TypeNamesPfx.Length);
+            }
+
             string relDirPath = GetTypeDestnRelDirPath(
-                wka, idnfItem.IdnfName,
-                out shortTypeName);
+                wka, idnfName, out shortTypeName);
 
             string dirPath = Path.Combine(
                 asmbDirPath, relDirPath);
