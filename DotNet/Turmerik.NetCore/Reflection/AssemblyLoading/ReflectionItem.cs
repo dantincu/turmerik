@@ -274,7 +274,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             if (opts.TypeCustomDataFactory != null && type is TypeItemBase typeItem)
             {
-                typeItem.CustomData = opts.TypeCustomDataFactory(new()
+                typeItem.CustomData ??= opts.TypeCustomDataFactory(new()
                 {
                     TypeItem = typeItem,
                     TypeName = typeItem.Name,
@@ -347,8 +347,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             Type bclItem) : base(
                 bclItem,
                 ReflH.GetTypeDisplayName(
-                    bclItem.Name,
-                    null))
+                    bclItem.Name))
         {
         }
 

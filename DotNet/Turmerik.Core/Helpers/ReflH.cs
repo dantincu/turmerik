@@ -32,60 +32,79 @@ namespace Turmerik.Core.Helpers
         public static BindingFlags GetMatchAllBindingFlags(
             ) => BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
-        /// <summary>
-        /// This can be usefull for generic types, as in their cases the <see cref="Type.FullName" /> property
-        /// returns a string containing the list of generic parameter constraints containing the names of
-        /// type parameters and their types, enclosed in square brackets and separated by comma: <br /> <br />
-        /// <c>System.Collections.Generic.KeyValuePair`2[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]</c>
-        /// </summary>
-        /// <param name="type">The type whose full name is to be retrieved.</param>
-        /// <returns>An instance of type <see cref="string" /> containing the full name of the provided type.</returns>
-        public static string GetTypeFullName(
-            this Type type) => string.Join(".",
-                type.Namespace, type.Name);
-
         public static string GetTypeFullDisplayName(
             this Type type,
-            char stopDelim = '[') => GetTypeDisplayName(
-                type.FullName,
-                stopDelim);
+            char[]? stopDelimsArr = null,
+            bool addGenericTypeArgsCount = true,
+            string nestedTypeJoinStr = ".")
+        {
+            string idnfName;
 
-        public static string GetTypeFullDisplayName(
+            if (type.IsNested)
+            {
+                var nestedIdnfName = GetTypeFullDisplayName(
+                    type.DeclaringType!,
+                    stopDelimsArr,
+                    addGenericTypeArgsCount,
+                    nestedTypeJoinStr);
+
+                idnfName = GetTypeFullDisplayNameCore(
+                    type, nestedIdnfName, stopDelimsArr,
+                    addGenericTypeArgsCount,
+                    nestedTypeJoinStr);
+            }
+            else
+            {
+                idnfName = GetTypeFullDisplayNameCore(
+                    type, type.Namespace, stopDelimsArr,
+                    addGenericTypeArgsCount,
+                    nestedTypeJoinStr);
+            }
+
+            return idnfName;
+        }
+
+        public static string GetTypeFullDisplayNameCore(
             this Type type,
-            char[]? stopDelimsArr) => GetTypeDisplayName(
-                type.FullName,
-                stopDelimsArr);
+            string prefixName,
+            char[]? stopDelimsArr,
+            bool addGenericTypeArgsCount = true,
+            string joinStr = ".") => string.Join(
+                joinStr,
+                prefixName,
+                GetTypeDisplayName(
+                    type.Name,
+                    stopDelimsArr,
+                    addGenericTypeArgsCount switch
+                    {
+                        true => type.GetGenericArgs()?.Length,
+                        false => null
+                    }));
+
+        public static Type[]? GetGenericArgs(
+            this Type type) => type.IsGenericType switch
+            {
+                true => type.GetGenericArguments(),
+                false => null
+            };
 
         public static string GetTypeDisplayName(
-            this Type type,
-            char[]? stopDelimsArr = null) => GetTypeDisplayName(
-                type.Name,
-                stopDelimsArr ?? ['&', '*']);
-
-        public static string GetTypeDisplayName(
-            string typeFullName,
-            char stopDelim = '[') => typeFullName.SplitStr(
-                (str, len) => str.FirstKvp((c, i) => c == stopDelim).Key).Item1;
-
-        public static string GetTypeDisplayName(
-            string typeFullName,
-            char[]? stopDelimsArr)
+            this string typeFullName,
+            char[]? stopDelimsArr = null,
+            int? genericTypeArgsCount = null)
         {
             stopDelimsArr ??= ['&', '*', '`', '['];
 
-            string retVal = typeFullName?.SplitStr(
-                (str, len) => str.FirstKvp((c, i) => stopDelimsArr.Contains(c)).Key).Item1;
+            string retStr = typeFullName?.SplitStr(
+                (str, len) => str.FirstKvp((c, i) => stopDelimsArr.Contains(c)).Key).Item1!;
 
-            return retVal;
+            if (retStr != null && genericTypeArgsCount.HasValue && !retStr.Contains('`'))
+            {
+                retStr += $"`{genericTypeArgsCount}";
+            }
+
+            return retStr!;
         }
-
-        public static string GetTypeShortDisplayName(
-            this Type type) => GetTypeDisplayName(
-                type.Name, '`');
-
-        public static string GetTypeShortDisplayName(
-            string typeName) => GetTypeDisplayName(
-                typeName, '`');
 
         public static Type GetBaseType(
             Type type)
@@ -253,7 +272,7 @@ namespace Turmerik.Core.Helpers
 
         public static IEnumerable<string> SelectTypeFullNames(
             this IEnumerable<Type> nmrbl) => nmrbl.Select(
-                type => type.GetTypeFullName());
+                type => type.GetTypeFullDisplayName());
 
         public static IEnumerable<TypeTupleCore> SelectTuples(
             IEnumerable<Type> nmrbl) => nmrbl.Select(

@@ -11,7 +11,7 @@ namespace Turmerik.Core.Helpers
             Type type)
         {
             Type = type;
-            FullName = type.GetTypeFullName();
+            FullName = type.GetTypeFullDisplayName();
         }
 
         public Type Type { get; }

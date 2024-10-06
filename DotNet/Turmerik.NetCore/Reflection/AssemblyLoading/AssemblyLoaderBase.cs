@@ -191,7 +191,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     {
                         foreach (var depType in allDepTypes)
                         {
-                            depType.Value.TrySetCustomData(opts);
+                            depType.TrySetCustomData(opts);
                         }
                     });
                 });
