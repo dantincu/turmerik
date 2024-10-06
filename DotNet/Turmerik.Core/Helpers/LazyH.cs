@@ -57,5 +57,9 @@ namespace Turmerik.Core.Helpers
             where T : IDisposable => new DisposableMutableLazy<T>(
                 factory,
                 LazyThreadSafetyMode.ExecutionAndPublication);
+
+        public static IEnumerable<T> SelectEager<T>(
+            this IEnumerable<Lazy<T>> lazyNmrbl) => lazyNmrbl.Select(
+                lazy => lazy.Value);
     }
 }

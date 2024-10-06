@@ -74,6 +74,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 LoadPubInstnGetProps = opts.LoadPubInstnGetProps,
                 LoadPubInstnMethods = opts.LoadPubInstnMethods,
                 TreatPrimitivesAsRegularObjects = opts.TreatPrimitivesAsRegularObjects,
+                TypeCustomDataFactory = opts.TypeCustomDataFactory ?? (opts => null)
             };
 
             if (!opts.AllAssembliesFilePaths.Contains(coreLibLocation))
@@ -184,14 +185,13 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
                 ForEachType(wka, (asmb, type) =>
                 {
-                    _ = type.GetIdnf().Value;
-                    var data = type.GetData().Value;
+                    type.TrySetCustomData(opts);
 
-                    type.GetAllTypeDependencies().Value.ActWith(allDepTypes =>
+                    type.GetAllTypeDependencies().ActWith(allDepTypes =>
                     {
                         foreach (var depType in allDepTypes)
                         {
-                            _ = depType.Value;
+                            depType.Value.TrySetCustomData(opts);
                         }
                     });
                 });
@@ -348,30 +348,24 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 AsmbMap = asmbMap ?? new();
 
                 RootObject = rootObject ?? new CommonTypeItem(
-                    TypeItemKind.RootObject,
-                    ReflH.BaseObjectType.Type.Name,
-                    ReflH.BaseObjectType.FullName);
+                    ReflH.BaseObjectType.Type,
+                    TypeItemKind.RootObject);
 
                 RootValueType = rootValueType ?? new CommonTypeItem(
-                    TypeItemKind.RootValueType,
-                    ReflH.BaseValueType.Type.Name,
-                    ReflH.BaseValueType.FullName!);
+                    ReflH.BaseValueType.Type,
+                    TypeItemKind.RootValueType);
 
                 VoidType = voidType ?? new CommonTypeItem(
-                    TypeItemKind.VoidType,
-                    ReflH.VoidType.Type.Name,
-                    ReflH.GetTypeShortDisplayName(
-                        ReflH.VoidType.FullName));
+                    ReflH.VoidType.Type,
+                    TypeItemKind.VoidType);
 
                 DelegateType = delegateType ?? new CommonTypeItem(
-                    TypeItemKind.DelegateRoot,
-                    NetCoreReflH.DelegateType.Type.Name,
-                    NetCoreReflH.DelegateType.FullName!);
+                    NetCoreReflH.DelegateType.Type,
+                    TypeItemKind.DelegateRoot);
 
                 MulticastDelegateType = multicastDelegateType ?? new CommonTypeItem(
-                    TypeItemKind.DelegateRoot,
-                    NetCoreReflH.MulticastDelegateType.Type.Name,
-                    NetCoreReflH.MulticastDelegateType.FullName!);
+                    NetCoreReflH.MulticastDelegateType.Type,
+                    TypeItemKind.DelegateRoot);
             }
 
             public AssemblyLoaderOpts Opts { get; init; }

@@ -21,6 +21,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public List<AssemblyOpts> AssembliesToLoad { get; set; }
 
+        public Func<TypeCustomDataArgs, object> TypeCustomDataFactory { get; set; }
+
         public class AssemblyOpts
         {
             public string AssemblyName { get; set; }
@@ -38,6 +40,14 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             public string TypeName { get; set; }
             public int? GenericTypeParamsCount { get; set; }
             public TypeOpts? DeclaringTypeOpts { get; set; }
+        }
+
+        public class TypeCustomDataArgs
+        {
+            public TypeItemBase TypeItem { get; init; }
+            public string TypeName { get; init; }
+            public string TypeIdnfName { get; init; }
+            public string TypeFullIdnfName { get; init; }
         }
     }
 }
