@@ -377,12 +377,5 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             public CommonTypeItem DelegateType { get; init; }
             public CommonTypeItem MulticastDelegateType { get; init; }
         }
-
-        public class TypeIdnfParts
-        {
-            public string IdnfName { get; init; }
-            public int LastDotIdx { get; init; }
-            public string ShortName { get; init; }
-        }
     }
 }

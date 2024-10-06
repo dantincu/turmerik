@@ -40,16 +40,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
     public interface IGenericTypeCore
     {
-        ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
+        ReadOnlyCollection<Lazy<GenericTypeArg>> GenericArgs { get; init; }
         bool IsGenericDefinition { get; }
 
-        ReflectionItemBase? GetGenericDefinition();
+        ReflectionItemBase? GetGenericDef();
     }
 
     public interface IGenericType<TGenericType> : IGenericTypeCore
         where TGenericType : ReflectionItemBase, IGenericType<TGenericType>
     {
-        Lazy<TGenericType>? GenericDefinition { get; init; }
+        TGenericType? GenericDef { get; init; }
     }
 
     public interface IMethodItemCore
@@ -153,14 +153,14 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
             if (!genericTypeItem.IsGenericDefinition)
             {
-                genericTypeItem = genericTypeItem.GenericDefinition!.Value;
+                genericTypeItem = genericTypeItem.GenericDef!;
             }
 
             AddDependencyIfReqCore(
                 genericTypeItem, list);
 
             AddDependencies(list,
-                genericTypeItem.GenericTypeArgs);
+                genericTypeItem.GenericArgs);
         }
 
         public static void AddGenericDeps(
@@ -169,14 +169,14 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         {
             if (!genericMethod.IsGenericDefinition)
             {
-                genericMethod = genericMethod.GenericDefinition!.Value;
+                genericMethod = genericMethod.GenericDef!;
             }
 
             AddMethodDeps(list, genericMethod);
 
             AddDependencies(
                 list,
-                genericMethod.GenericTypeArgs);
+                genericMethod.GenericArgs);
         }
 
         public static void AddPropDeps(
@@ -369,9 +369,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public virtual ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => null;
 
         public bool IsDependency() => Kind >= TypeItemKind.Regular;
-
-        public bool IsDelegateType(
-            Type type) => type.BaseType?.FullName == NetCoreReflH.MulticastDelegateType.FullName;
     }
 
     public abstract class TypeItemBase : TypeItemCoreBase
@@ -415,7 +412,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public Lazy<bool> NsStartsWithAsmbPfx { get; }
 
         public Lazy<TypeItemCoreBase>? DeclaringType { get; init; }
-        public Lazy<ReadOnlyCollection<TypeItemCoreBase>> AllTypeDependencies { get; init; }
+        public Lazy<ReadOnlyCollection<TypeItemCoreBase>> AllTypeDependencies { get; }
 
         public object? CustomData { get; set; }
 
@@ -544,16 +541,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override TypeItemKind Kind { get; }
 
-        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericArgs { get; init; }
 
         public bool IsGenericDefinition => false;
 
-        public ReflectionItemBase? GetGenericDefinition() => null;
-        public override ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => GenericTypeArgs;
+        public ReflectionItemBase? GetGenericDef() => null;
+        public override ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => GenericArgs;
 
         public override void AddDependencies(
             List<TypeItemCoreBase> list) => ReflectionItem.AddDependencies(
-                list, GenericTypeArgs);
+                list, GenericArgs);
     }
 
     public class EnumTypeItem : TypeItemBase
@@ -622,12 +619,12 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override TypeItemKind Kind => TypeItemKind.GenericRegular;
         public bool IsGenericDefinition { get; }
-        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
-        public Lazy<GenericTypeItem>? GenericDefinition { get; init; }
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericArgs { get; init; }
+        public GenericTypeItem? GenericDef { get; init; }
 
-        public ReflectionItemBase? GetGenericDefinition() => GenericDefinition?.Value;
+        public ReflectionItemBase? GetGenericDef() => GenericDef;
 
-        public override ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => GenericTypeArgs;
+        public override ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => GenericArgs;
 
         public override void AddDependencies(
             List<TypeItemCoreBase> list)
@@ -674,12 +671,12 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override TypeItemKind Kind => TypeItemKind.GenericDelegate;
 
-        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
-        public Lazy<GenericDelegateTypeItem>? GenericDefinition { get; init; }
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericArgs { get; init; }
+        public GenericDelegateTypeItem? GenericDef { get; init; }
 
         public bool IsGenericDefinition { get; }
 
-        public ReflectionItemBase? GetGenericDefinition() => GenericDefinition?.Value;
+        public ReflectionItemBase? GetGenericDef() => GenericDef;
 
         public override void AddDependencies(
             List<TypeItemCoreBase> list)
@@ -832,10 +829,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public bool IsGenericDefinition { get; }
-        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericTypeArgs { get; init; }
-        public Lazy<GenericMethodItem>? GenericDefinition { get; init; }
+        public ReadOnlyCollection<Lazy<GenericTypeArg>> GenericArgs { get; init; }
+        public GenericMethodItem? GenericDef { get; init; }
 
-        public ReflectionItemBase? GetGenericDefinition() => GenericDefinition?.Value;
+        public ReflectionItemBase? GetGenericDef() => GenericDef;
 
         public override void AddDependencies(List<TypeItemCoreBase> depsList)
         {
