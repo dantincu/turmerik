@@ -81,21 +81,14 @@ namespace Turmerik.Core.Helpers
                         false => null
                     }));
 
-        public static Type[]? GetGenericArgs(
-            this Type type) => type.IsGenericType switch
-            {
-                true => type.GetGenericArguments(),
-                false => null
-            };
-
         public static string GetTypeDisplayName(
-            this string typeFullName,
+            this string typeName,
             char[]? stopDelimsArr = null,
             int? genericTypeArgsCount = null)
         {
             stopDelimsArr ??= ['&', '*', '`', '['];
 
-            string retStr = typeFullName?.SplitStr(
+            string retStr = typeName?.SplitStr(
                 (str, len) => str.FirstKvp((c, i) => stopDelimsArr.Contains(c)).Key).Item1!;
 
             if (retStr != null && genericTypeArgsCount.HasValue && !retStr.Contains('`'))
@@ -105,6 +98,13 @@ namespace Turmerik.Core.Helpers
 
             return retStr!;
         }
+
+        public static Type[]? GetGenericArgs(
+            this Type type) => type.IsGenericType switch
+            {
+                true => type.GetGenericArguments(),
+                false => null
+            };
 
         public static Type GetBaseType(
             Type type)

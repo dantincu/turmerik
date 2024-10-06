@@ -73,10 +73,10 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool IsInterface { get; init; }
 
         public Lazy<TypeItemCoreBase>? BaseType { get; init; }
-        public ReadOnlyCollection<Lazy<TypeItemCoreBase>> InterfaceTypes { get; init; }
+        public List<Lazy<TypeItemCoreBase>> InterfaceTypes { get; init; }
 
-        public ReadOnlyCollection<PropertyItem>? PubInstnProps { get; init; }
-        public ReadOnlyCollection<MethodItem>? PubInstnMethods { get; init; }
+        public List<PropertyItem>? PubInstnProps { get; init; }
+        public List<MethodItem>? PubInstnMethods { get; init; }
     }
 
     public static class ReflectionItem
@@ -92,30 +92,30 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     type => type!.FullIdnfName,
                     () => arg.Value.Param!.Name))), ">");
 
-        public static TypeItemCoreBase[] GetDependenciesArr(
+        public static TypeItemBase[] GetDependenciesArr(
             GenericTypeArg arg) => arg.TypeArg.IfNotNull(
-                typeArg => [typeArg!],
+                typeArg => (typeArg as TypeItemBase).Arr().NotNull().ToArray(),
                 () => arg.Param!.ParamConstraints.With(
-                    constraints => constraints.BaseClass?.Value.Arr(
-                        constraints.RestOfTypes.SelectEager().ToArray())))!;
+                    constraints => (constraints.BaseClass?.Value as TypeItemBase).Arr(
+                        constraints.RestOfTypes.SelectEager().OfType<TypeItemBase>().ToArray()).NotNull().ToArray()))!;
 
-        public static IEnumerable<TypeItemCoreBase> SelectDependencies(
+        public static IEnumerable<TypeItemBase> SelectDependencies(
             this IEnumerable<Lazy<GenericTypeArg>?> genericTypeArgs) => genericTypeArgs.Where(
                 item => item?.Value.BelongsToDeclaringType ?? false).SelectMany(
                     item => GetDependenciesArr(item!.Value));
 
         public static void AddDependencies(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             IEnumerable<Lazy<GenericTypeArg>?>? itemsToAdd) => AddDependencies(
                 list, itemsToAdd?.SelectDependencies());
 
         public static void AddDependencies(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             IEnumerable<Lazy<TypeItemCoreBase>?>? itemsToAdd) => AddDependencies(
-                list, itemsToAdd?.SelectEager());
+                list, itemsToAdd?.SelectEager().OfType<TypeItemBase>());
 
         public static void AddDependencies(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             IEnumerable<TypeItemCoreBase?>? itemsToAdd)
         {
             if (itemsToAdd != null)
@@ -128,7 +128,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static void AddDependenciesIfReq(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             TypeData typeData)
         {
             typeData.BaseType?.Value.AddDependencies(list);
@@ -147,7 +147,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static void AddGenericDeps<TGenericType>(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             TGenericType genericTypeItem)
             where TGenericType : TypeItemBase, IGenericType<TGenericType>
         {
@@ -164,7 +164,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static void AddGenericDeps(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             GenericMethodItem genericMethod)
         {
             if (!genericMethod.IsGenericDefinition)
@@ -180,7 +180,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static void AddPropDeps(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             IEnumerable<PropertyItem>? propsNmrbl)
         {
             if (propsNmrbl != null)
@@ -193,7 +193,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static void AddMethodDeps(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             IEnumerable<IMethodItem>? methodsNmrbl)
         {
             if (methodsNmrbl != null)
@@ -206,7 +206,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static void AddMethodDeps(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             IMethodItem method)
         {
             AddMethodDepsCore(list, method);
@@ -214,7 +214,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static void AddMethodDepsCore(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             IMethodItemCore method)
         {
             foreach (var kvp in method.Params)
@@ -224,20 +224,22 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         }
 
         public static bool HasAlreadyBeenAdded(
-            List<TypeItemCoreBase> list,
+            List<TypeItemBase> list,
             TypeItemCoreBase item) => list.Any(
                 refItem => refItem.AreEqual(item));
 
         public static bool AddDependencyIfReqCore(
             this TypeItemCoreBase item,
-            List<TypeItemCoreBase> list)
+            List<TypeItemBase> list)
         {
-            bool added = item.IsDependency(
+            var typeItem = item as TypeItemBase;
+
+            bool added = typeItem != null && item.IsDependency(
                 ) && !HasAlreadyBeenAdded(list, item);
 
             if (added)
             {
-                list.Add(item!);
+                list.Add(typeItem!);
             }
 
             return added;
@@ -300,7 +302,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public string Name { get; }
 
         public virtual void AddDependencies(
-            List<TypeItemCoreBase> depsList)
+            List<TypeItemBase> depsList)
         {
         }
     }
@@ -336,7 +338,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool IsNetStandardLib { get; init; }
         public bool IsSysLib { get; init; }
 
-        public Dictionary<string, TypeItemCoreBase> TypesMap { get; init; }
+        public Dictionary<string, TypeItemBase> TypesMap { get; init; }
 
         public bool Equals(AssemblyItem? other) => other?.Name == Name;
     }
@@ -363,8 +365,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public virtual AssemblyItem? GetAssemblyItem() => null;
 
-        public virtual ReadOnlyCollection<TypeItemCoreBase> GetAllTypeDependencies(
-            ) => new TypeItemCoreBase[0].RdnlC();
+        public virtual List<TypeItemBase> GetAllTypeDependencies(
+            ) => new TypeItemBase[0].ToList();
 
         public virtual ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => null;
 
@@ -391,9 +393,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 "+");
 
             AllTypeDependencies = new(
-                () => new List<TypeItemCoreBase>().ActWith(
+                () => new List<TypeItemBase>().ActWith(
                     depsList => AddDependencies(
-                        depsList)).RdnlC());
+                        depsList)));
 
             this.AssemblyItem = assemblyItem ?? throw new ArgumentNullException(
                 nameof(assemblyItem));
@@ -412,7 +414,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public Lazy<bool> NsStartsWithAsmbPfx { get; }
 
         public Lazy<TypeItemCoreBase>? DeclaringType { get; init; }
-        public Lazy<ReadOnlyCollection<TypeItemCoreBase>> AllTypeDependencies { get; }
+        public Lazy<List<TypeItemBase>> AllTypeDependencies { get; }
 
         public object? CustomData { get; set; }
 
@@ -432,7 +434,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override TypeItemCoreBase? GetDeclaringType() => DeclaringType?.Value;
         public override AssemblyItem? GetAssemblyItem() => AssemblyItem;
-        public override ReadOnlyCollection<TypeItemCoreBase> GetAllTypeDependencies(
+        public override List<TypeItemBase> GetAllTypeDependencies(
             ) => AllTypeDependencies.Value;
 
         private Lazy<string> GetIdnfNameLazy(
@@ -502,11 +504,11 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override string IdnfName { get; }
         public override string FullIdnfName => IdnfName;
 
-        public override ReadOnlyCollection<TypeItemCoreBase> GetAllTypeDependencies(
+        public override List<TypeItemBase> GetAllTypeDependencies(
             ) => ElementType.GetAllTypeDependencies();
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> list) => ElementType.AddDependencies(list);
+            List<TypeItemBase> list) => ElementType.AddDependencies(list);
 
         protected virtual string GetIdnfName(
             TypeItemCoreBase elementType) => elementType.IdnfName;
@@ -549,7 +551,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => GenericArgs;
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> list) => ReflectionItem.AddDependencies(
+            List<TypeItemBase> list) => ReflectionItem.AddDependencies(
                 list, GenericArgs);
     }
 
@@ -568,7 +570,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override TypeItemKind Kind => TypeItemKind.Enum;
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> list) => this.AddDependencyIfReqCore(list);
+            List<TypeItemBase> list) => this.AddDependencyIfReqCore(list);
     }
 
     public abstract class RegularTypeItemBase : TypeItemBase
@@ -584,7 +586,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public Lazy<TypeData> TypeData { get; init; }
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> list)
+            List<TypeItemBase> list)
         {
             this.AddDependencyIfReqCore(list);
 
@@ -627,7 +629,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => GenericArgs;
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> list)
+            List<TypeItemBase> list)
         {
             base.AddDependencies(list);
             ReflectionItem.AddGenericDeps(list, this);
@@ -651,7 +653,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override TypeItemKind Kind => TypeItemKind.Delegate;
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> list)
+            List<TypeItemBase> list)
         {
             this.AddDependencyIfReqCore(list);
             ReflectionItem.AddMethodDeps(list, [this]);
@@ -679,7 +681,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public ReflectionItemBase? GetGenericDef() => GenericDef;
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> list)
+            List<TypeItemBase> list)
         {
             ReflectionItem.AddGenericDeps(list, this);
             ReflectionItem.AddMethodDeps(list, [this]);
@@ -715,7 +717,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override TypeItemKind Kind => TypeItemKind.GenericParam;
 
-        public override void AddDependencies(List<TypeItemCoreBase> depsList)
+        public override void AddDependencies(List<TypeItemBase> depsList)
         {
             ReflectionItem.AddDependencies(
                 depsList,
@@ -755,7 +757,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public Lazy<TypeItemCoreBase> PropertyType { get; init; }
 
         public override void AddDependencies(
-            List<TypeItemCoreBase> depsList)
+            List<TypeItemBase> depsList)
         {
             PropertyType.Value.AddDependencies(depsList);
         }
@@ -790,7 +792,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override bool IsConstructor => true;
 
-        public override void AddDependencies(List<TypeItemCoreBase> depsList)
+        public override void AddDependencies(List<TypeItemBase> depsList)
         {
             ReflectionItem.AddMethodDepsCore(depsList, this);
         }
@@ -811,7 +813,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public bool IsVoidMethod { get; init; }
         public Lazy<TypeItemCoreBase> ReturnType { get; init; }
 
-        public override void AddDependencies(List<TypeItemCoreBase> depsList)
+        public override void AddDependencies(List<TypeItemBase> depsList)
         {
             ReflectionItem.AddMethodDeps(depsList, this);
         }
@@ -834,7 +836,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public ReflectionItemBase? GetGenericDef() => GenericDef;
 
-        public override void AddDependencies(List<TypeItemCoreBase> depsList)
+        public override void AddDependencies(List<TypeItemBase> depsList)
         {
             ReflectionItem.AddGenericDeps(depsList, this);
         }

@@ -36,64 +36,46 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             public Dictionary<string, AssemblyItem> AsmbMap { get; init; }
         }
 
-        public class CsProjWorkArgs : SectionWorkArgs
+        public class AsmbWorkArgs : SectionWorkArgs
         {
-            public CsProjWorkArgs(
+            public AsmbWorkArgs(
                 SectionWorkArgs src,
-                ProgramConfig.DotNetCsProject asmb) : base(
-                    src,
-                    src.Section,
-                    src.AsmbMap)
-            {
-                Asmb = asmb ?? throw new ArgumentNullException(nameof(asmb));
-            }
-
-            public ProgramConfig.DotNetCsProject Asmb { get; init; }
-        }
-
-        public class CsProjAsmbWorkArgs : CsProjWorkArgs
-        {
-            public CsProjAsmbWorkArgs(
-                CsProjWorkArgs src,
                 KeyValuePair<string, AssemblyItem> asmbKvp) : base(
-                src, src.Asmb)
+                src, src.Section, src.AsmbMap)
             {
                 AsmbKvp = asmbKvp;
             }
 
             public KeyValuePair<string, AssemblyItem> AsmbKvp { get; init; }
+
+            public Dictionary<string, DotNetTypeData> TypesMap { get; init; }
         }
 
-        public class TypeWorkArgs : CsProjAsmbWorkArgs
+        public class TypeWorkArgs : AsmbWorkArgs
         {
             public TypeWorkArgs(
-                CsProjAsmbWorkArgs src,
-                KeyValuePair<string, TypeItemCoreBase> typeKvp) : base(src, src.AsmbKvp)
+                AsmbWorkArgs src,
+                KeyValuePair<string, DotNetTypeData> typeKvp) : base(src, src.AsmbKvp)
             {
                 TypeKvp = typeKvp;
             }
 
-            public KeyValuePair<string, TypeItemCoreBase> TypeKvp { get; init; }
+            public KeyValuePair<string, DotNetTypeData> TypeKvp { get; init; }
         }
 
         public class TsCodeWorkArgs : TypeWorkArgs
         {
             public TsCodeWorkArgs(
                 TypeWorkArgs src,
-                string shortTypeName,
-                Dictionary<string, TypeItemCoreBase?>? typeNamesMap,
-                Stack<List<string>>? identifierNames) : base(
+                Stack<List<string>> identifierNames) : base(
                     src,
                     src.TypeKvp)
             {
-                ShortTypeName = shortTypeName ?? throw new ArgumentNullException(nameof(shortTypeName));
-                TypeNamesMap = typeNamesMap;
-                IdentifierNamesStack = identifierNames;
+                IdentifierNamesStack = identifierNames ?? throw new ArgumentNullException(
+                    nameof(identifierNames));
             }
 
-            public string ShortTypeName { get; init; }
-            public Dictionary<string, TypeItemCoreBase?>? TypeNamesMap { get; init; }
-            public Stack<List<string>>? IdentifierNamesStack { get; init; }
+            public Stack<List<string>> IdentifierNamesStack { get; init; }
 
             public List<string> IdentifierNames => IdentifierNamesStack.Peek();
 
@@ -116,8 +98,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 List<PropertyItem>? props,
                 List<MethodItem>? methods) : base(
                     src,
-                    src.ShortTypeName,
-                    src.TypeNamesMap,
                     src.IdentifierNamesStack)
             {
                 CodeLines = codeLines ?? throw new ArgumentNullException(

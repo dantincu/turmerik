@@ -15,7 +15,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
     public partial class ProgramComponent
     {
         private string GetAsmbDestnDirPath(
-            TypeWorkArgs wka,
+            SectionWorkArgs wka,
             AssemblyItem asmbItem) => Path.Combine(
                 GetAsmbDestnDirBasePath(
                     wka,
@@ -24,7 +24,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                 asmbItem.Name);
 
         private string GetAsmbDestnDirBasePath(
-            TypeWorkArgs wka,
+            SectionWorkArgs wka,
             bool isTurmerikAssembly)
         {
             string dirName = isTurmerikAssembly switch
@@ -40,9 +40,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         }
 
         private string GetTypeDestnRelFilePath(
-            TypeWorkArgs wka,
+            SectionWorkArgs wka,
             string trgFilePath,
-            TypeItemCoreBase depTypeItem)
+            TypeItemBase depTypeItem)
         {
             string depFilePath = GetTypeDestnFilePath(
                 wka, depTypeItem, out _);
@@ -87,14 +87,15 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         }
 
         private string GetTypeDestnFilePath(
-            TypeWorkArgs wka,
-            TypeItemCoreBase typeItem,
+            SectionWorkArgs wka,
+            TypeItemBase typeItem,
             out string shortTypeName)
         {
-            var idnfItem = typeItem.GetIdnf().Value;
-            var asmbItem = idnfItem.AssemblyItem;
+            var asmbItem = typeItem.GetAssemblyItem(
+                ) ?? throw new InvalidOperationException(
+                    $"Need to receive a type with an assembly but received {typeItem.FullIdnfName} that has no assembly attached");
 
-            var asmbDirName = idnfItem.NsStartsWithAsmbPfx switch
+            var asmbDirName = typeItem.NsStartsWithAsmbPfx.Value switch
             {
                 true => wka.PgArgs.Profile.AssemblyDfNsTypesDirName,
                 false => wka.PgArgs.Profile.AssemblyNonDfNsTypesDirName
@@ -106,9 +107,9 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             asmbDirPath = Path.Combine(
                 asmbDirPath, asmbDirName);
 
-            string idnfName = idnfItem.IdnfName;
+            string idnfName = typeItem.IdnfName;
 
-            if (idnfItem.NsStartsWithAsmbPfx)
+            if (typeItem.NsStartsWithAsmbPfx.Value)
             {
                 idnfName = idnfName.Substring(
                     asmbItem.TypeNamesPfx.Length);
@@ -130,7 +131,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         }
 
         private string GetTypeDestnRelDirPath(
-            TypeWorkArgs wka,
+            SectionWorkArgs wka,
             string fullTypeName,
             out string shortTypeName)
         {
@@ -142,7 +143,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
                     wka.PgArgs.Profile.TypesNodeDirName,
                     part)).ToArray();
 
-            shortTypeName = ReflH.GetTypeShortDisplayName(
+            shortTypeName = ReflH.GetTypeDisplayName(
                 shortTypeName);
 
             string relDirPath = Path.Combine(
@@ -165,42 +166,12 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             return typeOpts;
         }
 
-        private Dictionary<string, TypeItemCoreBase?>? GetTypeDepNames(
-            TypeWorkArgs wka)
-        {
-            Dictionary<string, TypeItemCoreBase?>? retMap = null;
-
-            var allDeps = wka.TypeKvp.Value.GetData(
-                )?.Value.AllTypeDependencies.Value.Where(
-                    type => type.Value.Kind >= TypeItemKind.Regular);
-
-            var typeNamesList = allDeps?.Select(
-                depType => depType.Value.IdnfName).ToList().Distinct().ToList();
-
-            var typeNamesMap = typeNamesList?.ToDictionary(
-                name => name, name => allDeps!.First(
-                    dep => dep.Value.IdnfName == name).Value);
-
-            if (typeNamesMap != null)
-            {
-                retMap = new() { { wka.TypeKvp.Key, wka.TypeKvp.Value } };
-
-                foreach (var kvp in typeNamesMap)
-                {
-                    string shortName = kvp.Value.ShortName;
-
-                    string uniqueShortName = GetUniqueTypeShortName(
-                        retMap, shortName, kvp.Value);
-                }
-            }
-
-            return retMap;
-        }
-
         private string GetUniqueTypeShortName(
-            Dictionary<string, TypeItemCoreBase?> typeNamesMap,
+            SectionWorkArgs wka,
+            Dictionary<string, DotNetTypeDepData> typeNamesMap,
             string shortTypeName,
-            TypeItemCoreBase? typeItem)
+            TypeItemBase typeItem,
+            string tsFileRelPath)
         {
             string retShortName = shortTypeName;
             int idx = 1;
@@ -212,7 +183,11 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
 
             typeNamesMap.Add(
                 retShortName,
-                typeItem);
+                new DotNetTypeDepData
+                {
+                    TypeItem = typeItem,
+                    TsFileRelPath = tsFileRelPath,
+                });
 
             return retShortName;
         }
@@ -224,14 +199,14 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             string retIdnf = idnf;
             int idx = 1;
 
-            while (wka.TypeNamesMap!.Keys.Contains(
-                retIdnf) || wka.IdentifierNamesStack.Any(
+            while (wka.TypeKvp.Value.DepTypesMap!.Keys.Contains(
+                retIdnf) || wka.IdentifierNamesStack!.Any(
                     list => list.Contains(retIdnf)))
             {
                 retIdnf = idnf + idx++;
             }
 
-            List<string> currentList = wka.IdentifierNamesStack.Peek();
+            List<string> currentList = wka.IdentifierNamesStack!.Peek();
             currentList.Add(retIdnf);
             return retIdnf;
         }

@@ -235,7 +235,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             out TGenericType genericDef,
             GenericTypeItemFactory<TGenericType> genericTypeItemFactory,
             GenericTypeItemCoreFactory<TGenericType> genericTypeItemCoreFactory)
-            where TGenericType : TypeItemCoreBase, IGenericType<TGenericType>
+            where TGenericType : TypeItemBase, IGenericType<TGenericType>
         {
             TGenericType retItem = null;
 
@@ -376,7 +376,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             return retItem;
         }
 
-        private TypeItemCoreBase LoadRegularType(
+        private TypeItemBase LoadRegularType(
             WorkArgs wka,
             Type type)
         {
@@ -391,7 +391,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             return retItem;
         }
 
-        private TypeItemCoreBase LoadRegularTypeCore(
+        private TypeItemBase LoadRegularTypeCore(
             WorkArgs wka,
             Type type)
         {

@@ -20,7 +20,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     () => LoadType(wka, baseType))),
                 InterfaceTypes = type.GetDistinctInterfaces().SelectTypes().Select(
                         intf => new Lazy<TypeItemCoreBase>(
-                            () => LoadType(wka, intf))).RdnlC(),
+                            () => LoadType(wka, intf))).ToList(),
                 IsConstructedGenericType = type.IsConstructedGenericType,
                 IsGenericMethodParameter = type.IsGenericMethodParameter,
                 IsGenericParameter = type.IsGenericParameter,
@@ -39,7 +39,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                             IsStatic = false,
                             PropertyType = new Lazy<TypeItemCoreBase>(
                                 () => LoadType(wka, prop.PropertyType))
-                        }).RdnlC(),
+                        }).ToList(),
                     _ => null
                 },
                 PubInstnMethods = wka.Opts.LoadPubInstnMethods switch
@@ -82,7 +82,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                                 };
 
                                 return retObj;
-                            }).RdnlC(),
+                            }).ToList(),
                     _ => null
                 }
             });
