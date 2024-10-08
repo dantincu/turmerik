@@ -33,6 +33,10 @@
       "DirPath": "libs\\trmrk-react\\src\\lib"
     },
     {
+      "Name": "trmrk-lithtml",
+      "DirPath": "libs\\trmrk-lithtml\\src\\lib"
+    },
+    {
       "Name": "trmrk-text-transform-behavior",
       "DirPath": "libs\\trmrk-text-transform-behavior\\src\\lib"
     },
@@ -74,6 +78,21 @@
     {
       "Name": "trmrk-blazor",
       "DirPath": "libs\\trmrk-blazor\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-lithtml",
+      "DirPath": "libs\\trmrk-lithtml\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
@@ -185,6 +204,24 @@
         },
         "trmrk-react": {
           "DirPath": "trmrk-react"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-notes-lithtmlapp",
+      "DirPath": "apps\\trmrk-notes-lithtmlapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-react": {
+          "DirPath": "trmrk-lithtml"
         }
       }
     },

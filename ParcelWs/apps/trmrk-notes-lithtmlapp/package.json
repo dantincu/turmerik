@@ -1,0 +1,28 @@
+{
+  "name": "trmrk-lithtml",
+  "version": "0.1.0",
+  "description": "lit.dev (aka lit-html) related js code used across Turmerik Apps",
+  "source": "src/lib/targets/any/index.ts",
+  "type": "module",
+  "types": "dist/types.d.ts",
+  "scripts": {
+    "watch": "parcel watch ./src/lib/targets/any/index.ts --dist-dir ./dist/dev-any",
+    "build": "parcel build ./src/lib/targets/any/index.ts --dist-dir ./dist/prod-any"
+  },
+  "author": "Daniel Tincu",
+  "license": "MIT",
+  "devDependencies": {
+    "@parcel/packager-ts": "^2.12.0",
+    "@parcel/transformer-sass": "^2.12.0",
+    "@parcel/transformer-typescript-types": "^2.12.0",
+    "@types/node": "^20.14.8",
+    "@types/uuid": "^10.0.0",
+    "buffer": "^6.0.3",
+    "parcel": "^2.12.0",
+    "process": "^0.11.10",
+    "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "lit": "^3.2.1"
+  }
+}
