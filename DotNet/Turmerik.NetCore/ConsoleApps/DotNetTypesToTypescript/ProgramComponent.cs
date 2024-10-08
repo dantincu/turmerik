@@ -186,7 +186,7 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             var typeItem = typeData.TypeItem;
 
             var tsCodeLinesList = GetTsCodeLines(
-                new TsCodeWorkArgs(wka, []));
+                new TsCodeWorkArgs(wka, [], []));
 
             File.WriteAllLines(
                 typeData.TsFilePath,

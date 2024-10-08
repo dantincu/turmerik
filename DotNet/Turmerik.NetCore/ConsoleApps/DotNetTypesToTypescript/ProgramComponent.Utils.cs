@@ -192,6 +192,28 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             return retShortName;
         }
 
+        private string GetUniqueTypeShortName(
+            SectionWorkArgs wka,
+            Dictionary<string, DotNetTypeDepData> typeNamesMap,
+            string shortTypeName,
+            List<string> tempTypeNames)
+        {
+            string retShortName = shortTypeName;
+            int idx = 1;
+
+            while (typeNamesMap.Keys.Contains(
+                retShortName) || tempTypeNames.Contains(
+                    retShortName))
+            {
+                retShortName = shortTypeName + idx++;
+            }
+
+            tempTypeNames.Add(
+                retShortName);
+
+            return retShortName;
+        }
+
         private string GetUniqueIdentifier(
             TsCodeWorkArgs wka,
             string idnf)

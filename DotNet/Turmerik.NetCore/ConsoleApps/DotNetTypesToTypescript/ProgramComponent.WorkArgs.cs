@@ -47,7 +47,6 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
             }
 
             public KeyValuePair<string, AssemblyItem> AsmbKvp { get; init; }
-
             public Dictionary<string, DotNetTypeData> TypesMap { get; init; }
         }
 
@@ -67,14 +66,19 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             public TsCodeWorkArgs(
                 TypeWorkArgs src,
+                List<string> tempTypeNames,
                 Stack<List<string>> identifierNames) : base(
                     src,
                     src.TypeKvp)
             {
+                TempTypeNames = tempTypeNames ?? throw new ArgumentNullException(
+                    nameof(tempTypeNames));
+
                 IdentifierNamesStack = identifierNames ?? throw new ArgumentNullException(
                     nameof(identifierNames));
             }
 
+            public List<string> TempTypeNames { get; init; }
             public Stack<List<string>> IdentifierNamesStack { get; init; }
 
             public List<string> IdentifierNames => IdentifierNamesStack.Peek();
@@ -94,22 +98,16 @@ namespace Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript
         {
             public TsIntfCodeWorkArgs(
                 TsCodeWorkArgs src,
-                List<string> codeLines,
-                List<PropertyItem>? props,
-                List<MethodItem>? methods) : base(
+                List<string> codeLines) : base(
                     src,
+                    src.TempTypeNames,
                     src.IdentifierNamesStack)
             {
                 CodeLines = codeLines ?? throw new ArgumentNullException(
                     nameof(codeLines));
-
-                Props = props;
-                Methods = methods;
             }
 
             public List<string> CodeLines { get; }
-            public List<PropertyItem>? Props { get; }
-            public List<MethodItem>? Methods { get; }
         }
     }
 }

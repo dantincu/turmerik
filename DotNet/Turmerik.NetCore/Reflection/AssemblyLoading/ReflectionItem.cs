@@ -10,7 +10,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Turmerik.NetCore.Reflection.AssemblyLoading
 {
@@ -20,6 +19,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         RootValueType,
         VoidType,
         DelegateRoot,
+        EnumRoot,
         String,
         Boolean,
         Number,
@@ -103,6 +103,16 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 arg => arg.Value.TypeArg.IfNotNull(
                     type => type!.FullIdnfName,
                     () => arg.Value.Param!.Name))), ">");
+
+        public static IEnumerable<string> SelectGenericTypeArgs(
+            this TypeItemCoreBase typeItem) => typeItem.GetGenericTypeArgs(
+                )?.Where(arg => arg.Value.BelongsToDeclaringType).SelectGenericTypeArgs();
+
+        public static IEnumerable<string> SelectGenericTypeArgs(
+            this IEnumerable<Lazy<GenericTypeArg>> genericTypeArgs) => genericTypeArgs.Select(
+                arg => arg.Value.TypeArg.IfNotNull(
+                    type => type!.FullIdnfName,
+                    () => arg.Value.Param!.Name));
 
         public static TypeItemBase[] GetDependenciesArr(
             GenericTypeArg arg) => arg.TypeArg.IfNotNull(

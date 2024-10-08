@@ -414,7 +414,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                 CommonTypeItem? rootValueType = null,
                 CommonTypeItem? voidType = null,
                 CommonTypeItem? delegateType = null,
-                CommonTypeItem? multicastDelegateType = null)
+                CommonTypeItem? multicastDelegateType = null,
+                CommonTypeItem? enumRootType = null)
             {
                 Opts = opts;
                 Context = context;
@@ -432,13 +433,17 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                     ReflH.VoidType.Type,
                     TypeItemKind.VoidType);
 
-                DelegateType = delegateType ?? new CommonTypeItem(
+                DelegateRootType = delegateType ?? new CommonTypeItem(
                     NetCoreReflH.DelegateType.Type,
                     TypeItemKind.DelegateRoot);
 
-                MulticastDelegateType = multicastDelegateType ?? new CommonTypeItem(
+                MulticastDelegateRootType = multicastDelegateType ?? new CommonTypeItem(
                     NetCoreReflH.MulticastDelegateType.Type,
                     TypeItemKind.DelegateRoot);
+
+                EnumRootType = enumRootType ?? new CommonTypeItem(
+                    NetCoreReflH.EnumType.Type,
+                    TypeItemKind.EnumRoot);
             }
 
             public AssemblyLoaderOpts Opts { get; init; }
@@ -447,8 +452,9 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
             public CommonTypeItem RootObject { get; init; }
             public CommonTypeItem RootValueType { get; init; }
             public CommonTypeItem VoidType { get; init; }
-            public CommonTypeItem DelegateType { get; init; }
-            public CommonTypeItem MulticastDelegateType { get; init; }
+            public CommonTypeItem DelegateRootType { get; init; }
+            public CommonTypeItem MulticastDelegateRootType { get; init; }
+            public CommonTypeItem EnumRootType { get; init; }
         }
     }
 }

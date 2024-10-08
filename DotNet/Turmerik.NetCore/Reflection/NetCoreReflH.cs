@@ -18,6 +18,8 @@ namespace Turmerik.NetCore.Reflection
 
         public static readonly TypeTupleCore MulticastDelegateType = new(typeof(MulticastDelegate));
 
+        public static readonly TypeTupleCore EnumType = new(typeof(Enum));
+
         public static bool IsDelegateType(
             this Type type) => type.BaseType?.FullName == MulticastDelegateType.FullName;
     }
