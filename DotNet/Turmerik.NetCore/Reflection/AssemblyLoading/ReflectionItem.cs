@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Helpers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Turmerik.NetCore.Reflection.AssemblyLoading
 {
@@ -64,6 +65,17 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
     public class TypeData
     {
+        public TypeData(
+            List<PropertyItem>? pubInstnProps,
+            List<MethodItem>? pubInstnMethods)
+        {
+            pubInstnProps.Sort(ReflectionItem.CompareProps);
+            pubInstnMethods.Sort(ReflectionItem.CompareMethods);
+
+            PubInstnProps = pubInstnProps.RdnlC();
+            PubInstnMethods = pubInstnMethods.RdnlC();
+        }
+
         public bool IsValueType { get; init; }
         public bool IsGenericParameter { get; init; }
         public bool IsGenericTypeParameter { get; init; }
@@ -75,8 +87,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public Lazy<TypeItemCoreBase>? BaseType { get; init; }
         public List<Lazy<TypeItemCoreBase>> InterfaceTypes { get; init; }
 
-        public List<PropertyItem>? PubInstnProps { get; init; }
-        public List<MethodItem>? PubInstnMethods { get; init; }
+        public ReadOnlyCollection<PropertyItem>? PubInstnProps { get; init; }
+        public ReadOnlyCollection<MethodItem>? PubInstnMethods { get; init; }
     }
 
     public static class ReflectionItem
@@ -289,6 +301,98 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             return customDataHasBeenSet;
         }
+
+        public static int CompareMethods(
+            MethodItem m1,
+            MethodItem m2)
+        {
+            int result = m1.Name.CompareTo(m2.Name);
+
+            if (result == 0)
+            {
+                result = CompareTypes(
+                    m1.ReturnType.Value,
+                    m2.ReturnType.Value);
+            }
+
+            if (result == 0)
+            {
+                result = CompareMethodParams(
+                    m1.Params, m2.Params);
+            }
+
+            return result;
+        }
+
+        public static int CompareProps(
+            PropertyItem p1,
+            PropertyItem p2)
+        {
+            int result = p1.Name.CompareTo(p2.Name);
+
+            if (result == 0)
+            {
+                result = CompareTypes(
+                    p1.PropertyType.Value,
+                    p2.PropertyType.Value);
+            }
+
+            return result;
+        }
+
+        public static int CompareMethodParams(
+            IEnumerable<KeyValuePair<string, TypeItemCoreBase>> nmrbl1,
+            IEnumerable<KeyValuePair<string, TypeItemCoreBase>> nmrbl2) => CompareMethodParamsCollctn(
+                nmrbl1, nmrbl2, value => value);
+
+        public static int CompareMethodParams(
+            IEnumerable<KeyValuePair<string, Lazy<TypeItemCoreBase>>> nmrbl1,
+            IEnumerable<KeyValuePair<string, Lazy<TypeItemCoreBase>>> nmrbl2) => CompareMethodParamsCollctn(
+                nmrbl1, nmrbl2, lazy => lazy.Value);
+
+        public static int CompareMethodParamsCollctn<TParam>(
+            IEnumerable<KeyValuePair<string, TParam>> nmrbl1,
+            IEnumerable<KeyValuePair<string, TParam>> nmrbl2,
+            Func<TParam, TypeItemCoreBase> paramFactory) => nmrbl1.CompareNmrbls(
+                nmrbl2, (kvp1, kvp2) => CompareMethodParams(
+                    kvp1, kvp2,
+                    paramFactory), out _);
+
+        public static int CompareMethodParams(
+            KeyValuePair<string, TypeItemCoreBase> kvp1,
+            KeyValuePair<string, TypeItemCoreBase> kvp2) => CompareMethodParams(
+                kvp1, kvp2, value => value);
+
+        public static int CompareMethodParams(
+            KeyValuePair<string, Lazy<TypeItemCoreBase>> kvp1,
+            KeyValuePair<string, Lazy<TypeItemCoreBase>> kvp2) => CompareMethodParams(
+                kvp1, kvp2, lazy => lazy.Value);
+
+        public static int CompareMethodParams<TParam>(
+            KeyValuePair<string, TParam> kvp1,
+            KeyValuePair<string, TParam> kvp2,
+            Func<TParam, TypeItemCoreBase> paramFactory)
+        {
+            int result = kvp1.Key.CompareTo(kvp2.Key);
+
+            if (result == 0)
+            {
+                result = CompareTypes(
+                    paramFactory(kvp1.Value),
+                    paramFactory(kvp2.Value));
+            }
+
+            return result;
+        }
+
+        public static int CompareTypes(
+            TypeItemCoreBase t1,
+            TypeItemCoreBase t2) => t1.FullIdnfName?.CompareTo(
+                t2.FullIdnfName) ?? (t2.FullIdnfName is null) switch
+                {
+                    true => 0,
+                    false => -1
+                };
     }
 
     public abstract class ReflectionItemBase
@@ -365,8 +469,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public virtual AssemblyItem? GetAssemblyItem() => null;
 
-        public virtual List<TypeItemBase> GetAllTypeDependencies(
-            ) => new TypeItemBase[0].ToList();
+        public virtual ReadOnlyCollection<TypeItemBase> GetAllTypeDependencies(
+            ) => new TypeItemBase[0].RdnlC();
 
         public virtual ReadOnlyCollection<Lazy<GenericTypeArg>>? GetGenericTypeArgs() => null;
 
@@ -394,8 +498,14 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
             AllTypeDependencies = new(
                 () => new List<TypeItemBase>().ActWith(
-                    depsList => AddDependencies(
-                        depsList)));
+                    depsList =>
+                    {
+                        AddDependencies(
+                            depsList);
+
+                        depsList.Sort((dep1, dep2) => ReflectionItem.CompareTypes(
+                            dep1, dep2));
+                    }).RdnlC());
 
             this.AssemblyItem = assemblyItem ?? throw new ArgumentNullException(
                 nameof(assemblyItem));
@@ -414,7 +524,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public Lazy<bool> NsStartsWithAsmbPfx { get; }
 
         public Lazy<TypeItemCoreBase>? DeclaringType { get; init; }
-        public Lazy<List<TypeItemBase>> AllTypeDependencies { get; }
+        public Lazy<ReadOnlyCollection<TypeItemBase>> AllTypeDependencies { get; }
 
         public object? CustomData { get; set; }
 
@@ -434,7 +544,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
 
         public override TypeItemCoreBase? GetDeclaringType() => DeclaringType?.Value;
         public override AssemblyItem? GetAssemblyItem() => AssemblyItem;
-        public override List<TypeItemBase> GetAllTypeDependencies(
+        public override ReadOnlyCollection<TypeItemBase> GetAllTypeDependencies(
             ) => AllTypeDependencies.Value;
 
         private Lazy<string> GetIdnfNameLazy(
@@ -504,7 +614,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         public override string IdnfName { get; }
         public override string FullIdnfName => IdnfName;
 
-        public override List<TypeItemBase> GetAllTypeDependencies(
+        public override ReadOnlyCollection<TypeItemBase> GetAllTypeDependencies(
             ) => ElementType.GetAllTypeDependencies();
 
         public override void AddDependencies(

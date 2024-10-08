@@ -193,17 +193,6 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                         {
                             depType.TrySetCustomData(opts);
                         }
-
-                        allDepTypes.Sort((dep1, dep2) => CompareTypes(dep1, dep2));
-                    });
-
-                    (type as RegularTypeItemBase)?.TypeData.Value.ActWith(data =>
-                    {
-                        data.PubInstnProps?.ActWith(props => props.Sort(
-                            (prop1, prop2) => CompareProps(prop1, prop2)));
-
-                        data.PubInstnMethods?.ActWith(methods => methods.Sort(
-                            (met1, met2) => CompareMethods(met1, met2)));
                     });
                 });
             }

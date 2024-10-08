@@ -14,21 +14,8 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
         private Lazy<TypeData> GetTypeDataLazy(
             WorkArgs wka,
             Func<TypeItemCoreBase> retItemFactory,
-            Type type) => new Lazy<TypeData>(() => new TypeData
-            {
-                BaseType = type.BaseType?.With(baseType => new Lazy<TypeItemCoreBase>(
-                    () => LoadType(wka, baseType))),
-                InterfaceTypes = type.GetDistinctInterfaces().SelectTypes().Select(
-                        intf => new Lazy<TypeItemCoreBase>(
-                            () => LoadType(wka, intf))).ToList(),
-                IsConstructedGenericType = type.IsConstructedGenericType,
-                IsGenericMethodParameter = type.IsGenericMethodParameter,
-                IsGenericParameter = type.IsGenericParameter,
-                IsGenericTypeDefinition = type.IsGenericTypeDefinition,
-                IsGenericTypeParameter = type.IsGenericTypeParameter,
-                IsInterface = type.IsInterface,
-                IsValueType = type.IsValueType,
-                PubInstnProps = wka.Opts.LoadPubInstnGetProps switch
+            Type type) => new Lazy<TypeData>(() => new TypeData(
+                wka.Opts.LoadPubInstnGetProps switch
                 {
                     true => type.GetProperties(
                         BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Select(
@@ -42,7 +29,7 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                         }).ToList(),
                     _ => null
                 },
-                PubInstnMethods = wka.Opts.LoadPubInstnMethods switch
+                wka.Opts.LoadPubInstnMethods switch
                 {
                     true => type.GetMethods(
                         BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public).Where(
@@ -84,7 +71,20 @@ namespace Turmerik.NetCore.Reflection.AssemblyLoading
                                 return retObj;
                             }).ToList(),
                     _ => null
-                }
+                })
+            {
+                BaseType = type.BaseType?.With(baseType => new Lazy<TypeItemCoreBase>(
+                    () => LoadType(wka, baseType))),
+                InterfaceTypes = type.GetDistinctInterfaces().SelectTypes().Select(
+                        intf => new Lazy<TypeItemCoreBase>(
+                            () => LoadType(wka, intf))).ToList(),
+                IsConstructedGenericType = type.IsConstructedGenericType,
+                IsGenericMethodParameter = type.IsGenericMethodParameter,
+                IsGenericParameter = type.IsGenericParameter,
+                IsGenericTypeDefinition = type.IsGenericTypeDefinition,
+                IsGenericTypeParameter = type.IsGenericTypeParameter,
+                IsInterface = type.IsInterface,
+                IsValueType = type.IsValueType,
             });
 
         private ReadOnlyCollection<Lazy<GenericTypeArg>> GetGenericTypeArgs<TItemInfo>(
