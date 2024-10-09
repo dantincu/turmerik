@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Turmerik.Core.DriveExplorer
 {
@@ -22,88 +21,6 @@ namespace Turmerik.Core.DriveExplorer
     Code,
     Binary,
     ZippedFolder
-  }
-
-  public interface IDriveItemsRetriever
-  {
-    Task<DriveItem> GetItemAsync(
-        string idnf, bool? retMinimalInfo);
-
-    Task<DriveItem> GetFolderAsync(
-        string idnf, bool? retMinimalInfo);
-
-    Task<DriveItem> GetFolderAsync(
-        string idnf, int depth, bool? retMinimalInfo);
-
-    Task<bool> ItemExistsAsync(string idnf);
-
-    Task<bool> FolderExistsAsync(string idnf);
-
-    Task<bool> FileExistsAsync(string idnf);
-
-    Task<string> GetFileTextAsync(string idnf);
-
-    Task<byte[]> GetFileBytesAsync(string idnf);
-
-    string GetItemIdnf<TDriveItem>(
-        TDriveItem item,
-        string prIdnf)
-        where TDriveItem : DriveItem<TDriveItem>;
-
-    char GetDirSeparator();
-
-    char DirSeparator { get; }
-  }
-
-  public interface IDriveExplorerService : IDriveItemsRetriever
-  {
-    Task<string> GetDriveFolderWebUrlAsync(string idnf);
-    Task<string> GetDriveFileWebUrlAsync(string idnf);
-
-    Task<DriveItem> CreateFolderAsync(
-        string prIdnf,
-        string newFolderName,
-        bool? retMinimalInfo);
-
-    Task<DriveItem> RenameFolderAsync(
-        string idnf,
-        string newFolderName,
-        bool? retMinimalInfo);
-
-    Task<DriveItem> CopyFolderAsync(
-        string idnf,
-        string newPrIdnf,
-        string newFolderName,
-        bool? retMinimalInfo);
-
-    Task<DriveItem> MoveFolderAsync(
-        string idnf,
-        string newPrIdnf,
-        string newFolderName,
-        bool? retMinimalInfo);
-
-    Task<DriveItem> DeleteFolderAsync(
-        string idnf, bool? retMinimalInfo);
-
-    Task<DriveItem> CreateTextFileAsync(
-        string prIdnf, string newFileName, string text);
-
-    Task<DriveItem> CreateOfficeLikeFileAsync(
-        string prIdnf,
-        string newFileName,
-        OfficeFileType officeLikeFileType);
-
-    Task<DriveItem> RenameFileAsync(
-        string idnf, string newFileName);
-
-    Task<DriveItem> CopyFileAsync(
-        string idnf, string newPrIdnf, string newFileName);
-
-    Task<DriveItem> MoveFileAsync(
-        string idnf, string newPrIdnf, string newFileName);
-
-    Task<DriveItem> DeleteFileAsync(
-        string idnf);
   }
 
   public class DriveItemCore

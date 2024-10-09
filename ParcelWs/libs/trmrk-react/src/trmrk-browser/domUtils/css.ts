@@ -25,3 +25,20 @@ export const extractNum = (cssPropVal: string, unitStr: string = "px") => {
 export const extractElCssStyleTopPx = (
   elem: HTMLDivElement | null | undefined
 ) => extractNum(elem?.style.top ?? "");
+
+export const getGlobalSheetCssStrings = (
+  styleSheetsArr?: CSSStyleSheet[] | null | undefined,
+  predicate?:
+    | ((styleSheet: CSSStyleSheet, idx?: number) => boolean | any | void)
+    | null
+    | undefined
+) =>
+  (styleSheetsArr ?? Array.from(document.styleSheets))
+    .filter(predicate ?? (() => true))
+    .map((x) => {
+      const css = Array.from(x.cssRules)
+        .map((rule) => rule.cssText)
+        .join("\n");
+
+      return css;
+    });
