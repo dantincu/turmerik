@@ -12,6 +12,7 @@
     "strict": true,
     "sourceMap": true,
     "target": "esnext",
+    "experimentalDecorators": true,
   },
   "exclude": [
     "node_modules"
