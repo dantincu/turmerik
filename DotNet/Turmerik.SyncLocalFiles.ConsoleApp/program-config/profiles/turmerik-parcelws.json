@@ -220,7 +220,7 @@
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
         },
-        "trmrk-react": {
+        "trmrk-lithtml": {
           "DirPath": "trmrk-lithtml"
         }
       }

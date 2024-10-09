@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.SyncLocalFiles.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":fst:pull :pf:turmerik-parcelws *:trmrk-lithtml",
+      "commandLineArgs": ":wd:F::\\T\\turmerik\\ParcelWs\\apps\\trmrk-notes-lithtmlapp\\src\\_ :fst:pull :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
       // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws trmrk-browser"
       // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws"
       // "commandLineArgs": ":fst:diff :pf:turmerik-parcelws"
