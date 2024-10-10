@@ -372,21 +372,21 @@ export const extractNestedElement = <TElement = HTMLElement>(
 };
 
 export const clearTimeouIfReqCore = (
-  timeoutIdRef: React.MutableRefObject<NodeJS.Timeout | null>,
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null>,
   clearFunc: (timeoutId: NodeJS.Timeout) => void
 ) => {
-  const timeoutId = timeoutIdRef.current;
+  const timeoutId = timeoutIdRef.value;
 
   if (timeoutId) {
     clearFunc(timeoutId);
-    timeoutIdRef.current = null;
+    timeoutIdRef.value = null;
   }
 };
 
 export const clearTimeoutIfReq = (
-  timeoutIdRef: React.MutableRefObject<NodeJS.Timeout | null>
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null>
 ) => clearTimeouIfReqCore(timeoutIdRef, clearTimeout);
 
 export const clearIntervalIfReq = (
-  timeoutIdRef: React.MutableRefObject<NodeJS.Timeout | null>
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null>
 ) => clearTimeouIfReqCore(timeoutIdRef, clearInterval);
