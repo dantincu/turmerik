@@ -3,11 +3,11 @@ import { ObservableValueSingletonControllerFactory } from "../../controlers/Obse
 export const enableAppHeaderPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
-export const showAppHeaderPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+export const showAppTabsBarPropFactory =
+  new ObservableValueSingletonControllerFactory(null, false);
 
 export const enableAppFooterPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
-export const showAppFooterPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+export const enableExplorerPanelPropFactory =
+  new ObservableValueSingletonControllerFactory(null, false);

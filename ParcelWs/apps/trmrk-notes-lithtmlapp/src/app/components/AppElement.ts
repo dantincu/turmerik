@@ -17,6 +17,8 @@ export class AppElement extends LitElement {
   static styles = [...globalStyles];
 
   render() {
-    return html` <trmrk-app-layout></trmrk-app-layout> `;
+    return html`
+      <trmrk-app-layout appTitle="Turmerik Notes"></trmrk-app-layout>
+    `;
   }
 }

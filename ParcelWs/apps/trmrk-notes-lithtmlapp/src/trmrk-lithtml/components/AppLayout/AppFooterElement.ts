@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
-@customElement("trmrk-app-footer-bar")
-export class AppFooterBarElement extends LitElement {
+@customElement("trmrk-app-footer")
+export class AppFooterElement extends LitElement {
   static styles = [
     ...globalStyles.value,
     css`

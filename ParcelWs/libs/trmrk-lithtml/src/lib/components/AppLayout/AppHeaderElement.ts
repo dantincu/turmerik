@@ -8,8 +8,8 @@ import {
   LongPressEventDataTuple,
 } from "../../controlers/LongPressController";
 
-@customElement("trmrk-app-header-bar")
-export class AppHeaderBarElement extends LitElement {
+@customElement("trmrk-app-header")
+export class AppHeaderElement extends LitElement {
   static styles = [
     ...globalStyles.value,
     css`
@@ -23,9 +23,6 @@ export class AppHeaderBarElement extends LitElement {
       }
     `,
   ];
-
-  @property()
-  cssClass?: string;
 
   onTouchStart(evt: CustomEvent<LongPressEventDataTuple>) {
     this.addMsg("onTouchStart", evt.detail);
@@ -67,7 +64,7 @@ export class AppHeaderBarElement extends LitElement {
   }
 
   render() {
-    return html`<header class="trmrk-app-header ${this.cssClass}">
+    return html`<header class="trmrk-app-header">
       <trmrk-bs-icon-btn
         iconCssClass="bi bi-diagram-3"
         iconWrapperCssClass="trmrk-rotate-270deg"

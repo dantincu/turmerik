@@ -1,3 +1,5 @@
+import trmrk from "../../trmrk";
+
 import { getGlobalSheetCssStrings } from "./css";
 
 export const isBootstrapIconsStyleSheet = (styleSheet: CSSStyleSheet) =>
@@ -14,7 +16,14 @@ export const getGlobalStyleStrArr = (
     styleSheetsArr,
     predicate ??
       ((styleSheet) =>
-        ["bootstrap-css", "trmrk-css"].indexOf(styleSheet.title ?? "") >= 0 ||
-        isBootstrapIconsStyleSheet(styleSheet))
+        trmrk.withVal(
+          ["bootstrap-css", "bootstrap-icons-css", "trmrk-css"],
+          (arr) =>
+            arr.indexOf(styleSheet.title ?? "") >= 0 ||
+            arr.indexOf(
+              (styleSheet.ownerNode as Element)?.getAttribute("data-title") ??
+                ""
+            ) >= 0
+        ))
   ),
 ];
