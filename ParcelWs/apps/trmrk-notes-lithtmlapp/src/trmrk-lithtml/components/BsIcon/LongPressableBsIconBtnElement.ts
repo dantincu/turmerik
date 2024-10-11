@@ -15,6 +15,7 @@ import {
   BsIconBtnElementMixin,
   BsIconBtnElement,
   IBsIconBtnElementMixin,
+  BsIconBtnElementMixinType,
 } from "./BsIconBtnElement";
 
 import {
@@ -23,9 +24,9 @@ import {
   LongPressControllerEventDataTuple,
 } from "../../controlers/LongPressController";
 
-export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin(
-  LitElement
-) {
+export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
+  Constructor<LitElement> & IBsIconBtnElementMixin
+>(BsIconBtnElementMixinType) {
   static styles = [...BsIconBtnElement.styles];
 
   @property()
@@ -37,41 +38,40 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin(
   @property()
   public touchOrMouseMoveMinPx?: string;
 
-  private __longPressController: LongPressController | null;
+  private __hostHtmlElement: HTMLElement | null;
+  private __mainHtmlElement: HTMLButtonElement | null;
+
+  private longPressController: LongPressController;
+
+  private get mainHtmlElement() {
+    this.__mainHtmlElement ??= this.renderRoot.children[0] as HTMLButtonElement;
+    return this.__mainHtmlElement;
+  }
 
   constructor(...args: any[]) {
     super();
-    this.__longPressController = null;
-  }
+    this.__hostHtmlElement = null;
+    this.__mainHtmlElement = null;
 
-  protected get longPressController() {
-    const longPressController = (this.__longPressController ??=
-      this.createLongPressController());
-
-    return longPressController;
-  }
-
-  protected createLongPressController() {
-    const rootNode = this.getRootNode() as HTMLElement;
-
-    const longPressController = new LongPressController(this, {
-      hostHtmlElement: rootNode,
-      mainHtmlElement: rootNode.children[0] as HTMLButtonElement,
+    this.longPressController = new LongPressController(this, {
+      hostHtmlElementFactory: () => this,
+      mainHtmlElementFactory: () => this.mainHtmlElement,
       treatRightClickAsLongPress: this.treatRightClickAsLongPress === "true",
       longPressIntervalMillis: parseInt(this.longPressIntervalMillis ?? ""),
       touchOrMouseMoveMinPx: parseInt(this.touchOrMouseMoveMinPx ?? ""),
     });
-
-    return longPressController;
   }
 
   protected getButtonCssClassesArr() {
+    // @ts-ignore
     const buttonCssClassesArr = super.getButtonCssClassesArr();
     buttonCssClassesArr.push("trmrk-btn-long-press-enabled");
     return buttonCssClassesArr;
   }
 
-  /* connectedCallback(): void {
+  connectedCallback(): void {
+    super.connectedCallback();
+
     this.longPressController.longPressEventListeners.subscribe(
       this.onLongPress
     );
@@ -82,6 +82,8 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin(
   }
 
   disconnectedCallback(): void {
+    super.connectedCallback();
+
     this.longPressController.longPressEventListeners.unsubscribe(
       this.onLongPress
     );
@@ -89,19 +91,17 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin(
     this.longPressController.shortPressEventListeners.unsubscribe(
       this.onShortPress
     );
-  } */
+  }
+
+  updated() {
+    this.longPressController.registerEventListeners();
+  }
 
   onLongPress(evt: LongPressControllerEventData) {
     console.log("onLongPress");
   }
   onShortPress(evt: LongPressControllerEventDataTuple) {
     console.log("onShortPress");
-  }
-
-  render() {
-    console.log("LongPressableBsIconBtnElement");
-    return super.render();
-    // return html`asdfasdf`;
   }
 }
 

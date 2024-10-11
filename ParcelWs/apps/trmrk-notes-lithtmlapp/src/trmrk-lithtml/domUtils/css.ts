@@ -17,7 +17,6 @@ export const getGlobalStylesArr = (
     | undefined
 ) => [
   ...getGlobalStyleStrArr(styleSheetsArr, predicate).map((str) => {
-    // console.log("str", str);
     return unsafeCSS(str);
   }),
 ];

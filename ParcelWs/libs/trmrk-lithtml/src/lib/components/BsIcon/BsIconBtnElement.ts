@@ -12,7 +12,7 @@ import { globalStyles } from "../../domUtils/css";
 
 import { updateDisableAttr } from "../../../trmrk-browser/domUtils/core";
 
-const btnDisabledPropName = "btnDisabled";
+const btnDisabledPropName = propOf<IBsIconBtnElementMixin>("btnDisabled");
 
 export interface IBsIconBtnElementMixin extends LitElement {
   isDarkModeProp: ObservableValueController<boolean>;
@@ -28,8 +28,7 @@ export interface IBsIconBtnElementMixin extends LitElement {
 }
 
 export const BsIconBtnElementMixin = <
-  T extends Constructor<LitElement>,
-  IBsIconBtnElementMixin
+  T extends Constructor<LitElement> & IBsIconBtnElementMixin
 >(
   superClass: T
 ) => {
@@ -69,7 +68,6 @@ export const BsIconBtnElementMixin = <
     }
 
     render() {
-      console.log("BsIconBtnElementBase");
       const buttonCssClass = trmrk
         .removeNullOrUndef(this.getButtonCssClassesArr())
         .join(" ");
@@ -121,10 +119,13 @@ export const BsIconBtnElementMixin = <
   return MyMixinClass as T;
 };
 
-// const btnDisabledPropName = propOf<typeof BsIconBtnElementMixin>("btnDisabled");
+export const BsIconBtnElementMixinType =
+  LitElement as any as Constructor<LitElement> & IBsIconBtnElementMixin;
 
 @customElement("trmrk-bs-icon-btn")
-export class BsIconBtnElement extends BsIconBtnElementMixin(LitElement) {
+export class BsIconBtnElement extends BsIconBtnElementMixin(
+  BsIconBtnElementMixinType
+) {
   static styles = [
     ...globalStyles.value,
     css`

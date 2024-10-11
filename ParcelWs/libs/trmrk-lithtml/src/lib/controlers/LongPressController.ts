@@ -38,14 +38,14 @@ export interface LongPressControllerOptsCore {
 }
 
 export interface LongPressControllerOpts<
-  THTMLButtonElement extends HTMLElement = HTMLButtonElement
+  THTMLMainElement extends HTMLElement = HTMLButtonElement
 > extends LongPressControllerOptsCore {
-  mainHtmlElement: THTMLButtonElement;
-  hostHtmlElement: HTMLElement;
+  mainHtmlElementFactory: () => THTMLMainElement;
+  hostHtmlElementFactory: () => HTMLElement;
 }
 
 export class LongPressController<
-  THTMLButtonElement extends HTMLElement = HTMLButtonElement
+  THTMLMainElement extends HTMLElement = HTMLButtonElement
 > implements ReactiveController
 {
   public readonly touchStartEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
@@ -57,9 +57,6 @@ export class LongPressController<
   public readonly shortPressEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
   public readonly longPressEventListeners: EventListenersCollection<LongPressControllerEventData>;
 
-  public readonly mainHtmlElement: THTMLButtonElement;
-  public readonly hostHtmlElement: HTMLElement;
-
   public readonly treatRightClickAsLongPress: boolean;
   public readonly longPressIntervalMillis: number;
   public readonly touchOrMouseMoveMinPx: number;
@@ -67,6 +64,17 @@ export class LongPressController<
   public resetPredicate:
     | ((event: LongPressControllerEventDataTuple) => boolean)
     | null;
+
+  protected readonly mainHtmlElementFactory: () => THTMLMainElement;
+  protected readonly hostHtmlElementFactory: () => HTMLElement;
+
+  protected get mainHtmlElement() {
+    return this.mainHtmlElementFactory();
+  }
+
+  protected get hostHtmlElement() {
+    return this.hostHtmlElementFactory;
+  }
 
   protected readonly defaultResetPredicate: (
     event: LongPressControllerEventDataTuple
@@ -78,11 +86,9 @@ export class LongPressController<
 
   constructor(
     host: ReactiveControllerHost,
-    opts: LongPressControllerOpts<THTMLButtonElement>
+    opts: LongPressControllerOpts<THTMLMainElement>
   ) {
     (this.host = host).addController(this);
-    this.mainHtmlElement = opts.mainHtmlElement;
-    this.hostHtmlElement = opts.hostHtmlElement;
     this.treatRightClickAsLongPress = opts.treatRightClickAsLongPress ?? true;
 
     this.longPressIntervalMillis = trmrk.asNumber(
@@ -90,7 +96,14 @@ export class LongPressController<
       400
     );
 
-    this.touchOrMouseMoveMinPx = trmrk.asNumber(opts.touchOrMouseMoveMinPx, 20);
+    this.touchOrMouseMoveMinPx = trmrk.asNumber(
+      opts.touchOrMouseMoveMinPx,
+      200
+    );
+
+    this.mainHtmlElementFactory = opts.mainHtmlElementFactory;
+    this.hostHtmlElementFactory = opts.hostHtmlElementFactory;
+
     this.resetPredicate = null;
 
     this.defaultResetPredicate = (event) => {
@@ -108,6 +121,18 @@ export class LongPressController<
           reset ||
           Math.abs(coords.screenY - startCoords!.screenY) >
             this.touchOrMouseMoveMinPx;
+      }
+
+      if (!reset) {
+        var evt = (event.evt.mouseEvt ?? event.evt.touchEvt)!;
+        var composedPathResult = evt.composedPath();
+        var target = evt.target;
+
+        if (target) {
+          reset = composedPathResult.indexOf(target) < 0;
+        } else {
+          reset = true;
+        }
       }
 
       return reset;
@@ -149,18 +174,20 @@ export class LongPressController<
     this.onTouchEnd = this.onTouchEnd.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseMove = this.onMouseMove.bind(this);
-    this.onMouseEnd = this.onMouseEnd.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
   }
 
   get isIdle() {
-    const isIdle = !!this.startEvt;
+    const isIdle = !this.startEvt;
     return isIdle;
   }
 
-  hostConnected() {
+  registerEventListeners() {
     this.mainHtmlElement.addEventListener("touchstart", this.onTouchStart);
     this.mainHtmlElement.addEventListener("mousedown", this.onMouseDown);
   }
+
+  hostConnected() {}
 
   hostDisconnected() {
     this.touchMoveEventListeners.unsubscribeAll();
@@ -179,6 +206,7 @@ export class LongPressController<
   reset() {
     clearTimeoutIfReq(this.startEvt?.longPressInterval);
     this.startEvt = null;
+    this.resetPredicate = null;
 
     document.removeEventListener("touchmove", this.onTouchMove, {
       capture: true,
@@ -192,7 +220,7 @@ export class LongPressController<
       capture: true,
     });
 
-    document.removeEventListener("mouseup", this.onMouseEnd, {
+    document.removeEventListener("mouseup", this.onMouseUp, {
       capture: true,
     });
   }
@@ -200,9 +228,9 @@ export class LongPressController<
   onLongPressIntervalElapsed() {
     if (this.startEvt) {
       this.longPressEventListeners.fireAll(this.startEvt);
-    } else {
-      this.reset();
     }
+
+    this.reset();
   }
 
   onTouchStart(e: TouchEvent) {
@@ -211,6 +239,14 @@ export class LongPressController<
 
     if (this.isIdle) {
       this.setStartEvtData(evt);
+
+      document.addEventListener("touchmove", this.onTouchMove, {
+        capture: true,
+      });
+
+      document.addEventListener("touchend", this.onTouchEnd, {
+        capture: true,
+      });
     } else {
       this.reset();
     }
@@ -248,6 +284,14 @@ export class LongPressController<
 
     if (this.isIdle) {
       this.setStartEvtData(evt);
+
+      document.addEventListener("mousemove", this.onMouseMove, {
+        capture: true,
+      });
+
+      document.addEventListener("mouseup", this.onMouseUp, {
+        capture: true,
+      });
     } else {
       this.reset();
     }
@@ -266,7 +310,7 @@ export class LongPressController<
     }
   }
 
-  onMouseEnd(e: MouseEvent) {
+  onMouseUp(e: MouseEvent) {
     const evt = this.getMouseEventDataTuple(e);
     this.mouseUpEventListeners.fireAll(evt);
 
@@ -301,7 +345,7 @@ export class LongPressController<
       startEvt: this.startEvt,
       evt: {
         mouseEvt: e,
-        touchCoords: coords,
+        mouseCoords: coords,
         coords,
       },
     };
