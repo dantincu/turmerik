@@ -2,6 +2,7 @@ import { ObservableValueSingletonControllerFactory } from "../controlers/Observa
 
 import {
   isDarkMode,
+  isCompactMode,
   setIsDarkModeToLocalStorage,
 } from "../../trmrk-browser/domUtils/core";
 
@@ -28,5 +29,8 @@ export const initDomAppTheme = () => {
   return isDarkModeValue;
 };
 
-export const isDarkModePropValFactory =
+export const isDarkModePropFactory =
   new ObservableValueSingletonControllerFactory(null, initDomAppTheme());
+
+export const isCompactModePropFactory =
+  new ObservableValueSingletonControllerFactory(null, isCompactMode());

@@ -1,7 +1,9 @@
 import { AppLayoutElement } from "./AppLayoutElement";
-import { AppTabsBarElement } from "./AppTabsBarElement";
+import { AppHeaderBarElement } from "./AppHeaderBarElement";
+import { AppFooterBarElement } from "./AppFooterBarElement";
 
 export const AppLayout = {
   AppLayoutElement,
-  AppTabsBarElement,
+  AppHeaderBarElement,
+  AppFooterBarElement,
 };

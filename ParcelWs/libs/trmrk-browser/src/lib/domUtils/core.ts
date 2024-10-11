@@ -372,10 +372,10 @@ export const extractNestedElement = <TElement = HTMLElement>(
 };
 
 export const clearTimeouIfReqCore = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null>,
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined,
   clearFunc: (timeoutId: NodeJS.Timeout) => void
 ) => {
-  const timeoutId = timeoutIdRef.value;
+  const timeoutId = timeoutIdRef?.value;
 
   if (timeoutId) {
     clearFunc(timeoutId);
@@ -384,9 +384,20 @@ export const clearTimeouIfReqCore = (
 };
 
 export const clearTimeoutIfReq = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null>
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined
 ) => clearTimeouIfReqCore(timeoutIdRef, clearTimeout);
 
 export const clearIntervalIfReq = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null>
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined
 ) => clearTimeouIfReqCore(timeoutIdRef, clearInterval);
+
+export const updateDisableAttr = (
+  elem: HTMLElement,
+  disabledValue: boolean | null | undefined
+) => {
+  if (disabledValue) {
+    elem.setAttribute("disabled", "");
+  } else {
+    elem.removeAttribute("disabled");
+  }
+};

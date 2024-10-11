@@ -1,5 +1,15 @@
 import { Kvp, MtblRefValue, ValueOrAny } from "./core";
 
+export const toArray = <T>(itrbl: Iterable<T>) => {
+  const retArr: T[] = [];
+
+  for (let val of itrbl) {
+    retArr.push(val);
+  }
+
+  return retArr;
+};
+
 export const findKvp = <TValue>(
   arr: TValue[] | readonly TValue[],
   predicate: (
@@ -283,3 +293,6 @@ export const removeAll = <T>(
 
   return inputArr;
 };
+
+export const removeNullOrUndef = <T>(arr: T[]) =>
+  arr.filter((val) => (val ?? false) !== false);

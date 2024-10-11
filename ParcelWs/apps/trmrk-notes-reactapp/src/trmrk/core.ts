@@ -2,6 +2,8 @@ export const allWsRegex = () => /^\s+$/g;
 export const digitRegex = () => /\d/g;
 export const numberRegex = () => /^(\-\d|\d)?\.?\d+$/g;
 
+export type Constructor<T = {}> = new (...args: any[]) => T;
+
 export interface MtblRefValue<T> {
   value: T;
 }
@@ -123,3 +125,8 @@ export const actWithValIf = <TVal>(
     action(inVal);
   }
 };
+
+export const asNumber = (
+  val: number | null | undefined,
+  dfVal: number
+): number => (isNaN(val ?? NaN) ? dfVal : val) as number;

@@ -117,7 +117,7 @@ export const toSingleTouchOrClick = (
   if (coords) {
     if (coordsArr.length === 1) {
       retObj = coordsArr[0];
-    } else {
+    } else if ((coordsArr.length ?? -1) === -1) {
       retObj = coords as TouchOrMouseCoords | null;
     }
   }

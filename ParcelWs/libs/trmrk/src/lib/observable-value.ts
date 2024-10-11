@@ -1,10 +1,11 @@
-export class ObservableValue<T> implements Disposable {
-  private __value: T;
-  private listeners: ((newValue: T) => void)[];
+import { EventListenersCollection } from "./EventListenersCollection";
 
-  constructor(initialValue: T) {
+export class ObservableValue<T> extends EventListenersCollection<T> {
+  private __value: T;
+
+  constructor(initialValue: T, listenersArr?: ((event: T) => void)[]) {
+    super(listenersArr);
     this.__value = initialValue;
-    this.listeners = [];
   }
 
   public get value() {
@@ -13,25 +14,11 @@ export class ObservableValue<T> implements Disposable {
 
   public set value(newValue: T) {
     this.__value = newValue;
-
-    for (let listener of this.listeners) {
-      listener(newValue);
-    }
+    this.fireAll(newValue);
   }
 
-  public subscribe(listener: (newValue: T) => void) {
-    this.listeners.push(listener);
-  }
-
-  public unsubscribe(listener: (newValue: T) => void) {
-    const idx = this.listeners.indexOf(listener);
-
-    if (idx >= 0) {
-      this.listeners.splice(idx, 1);
-    }
-
-    return idx;
-  }
-
-  [Symbol.dispose] = () => {};
+  [Symbol.dispose] = () => {
+    super[Symbol.dispose]();
+    this.value = null!;
+  };
 }
