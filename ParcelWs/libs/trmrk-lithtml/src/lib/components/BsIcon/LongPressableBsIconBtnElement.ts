@@ -32,6 +32,8 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
   @property()
   public touchOrMouseMoveMinPx?: string;
 
+  private intfInstn: IBsIconBtnElementMixin;
+
   private __mainHtmlElement: HTMLButtonElement | null;
 
   private longPressController: LongPressController;
@@ -43,6 +45,7 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
 
   constructor(...args: any[]) {
     super();
+    this.intfInstn = this as any as IBsIconBtnElementMixin;
     this.__mainHtmlElement = null;
 
     this.longPressController = new LongPressController(this, {
@@ -66,7 +69,11 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
   protected getButtonCssClassesArr() {
     // @ts-ignore
     const buttonCssClassesArr = super.getButtonCssClassesArr();
-    buttonCssClassesArr.push("trmrk-btn-long-press-enabled");
+
+    if (this.intfInstn.btnHasNoBorder !== "true") {
+      buttonCssClassesArr.push("trmrk-btn-long-press-enabled");
+    }
+
     return buttonCssClassesArr;
   }
 
