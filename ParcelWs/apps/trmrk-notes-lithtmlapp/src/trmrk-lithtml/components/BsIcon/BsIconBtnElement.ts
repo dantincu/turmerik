@@ -1,5 +1,5 @@
 import { LitElement, html, css, PropertyValues } from "lit";
-import { customElement, property, query } from "lit/decorators";
+import { customElement, property } from "lit/decorators";
 
 import trmrk from "../../../trmrk";
 import { Constructor } from "../../../trmrk/core";

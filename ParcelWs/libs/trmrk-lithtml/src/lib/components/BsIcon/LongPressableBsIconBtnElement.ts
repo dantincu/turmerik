@@ -1,15 +1,9 @@
-import { LitElement, html, css, PropertyValues } from "lit";
-import { customElement, property, query } from "lit/decorators";
+import { LitElement } from "lit";
+import { property } from "lit/decorators";
 
-import trmrk from "../../../trmrk";
 import { Constructor } from "../../../trmrk/core";
-import { propOf } from "../../../trmrk/obj";
 
-import { isDarkModePropFactory } from "../../domUtils/core";
-
-import { globalStyles } from "../../domUtils/css";
-
-import { updateDisableAttr } from "../../../trmrk-browser/domUtils/core";
+import { customEvent } from "../../../trmrk-browser/domUtils/core";
 
 import {
   BsIconBtnElementMixin,
@@ -20,8 +14,8 @@ import {
 
 import {
   LongPressController,
-  LongPressControllerEventData,
-  LongPressControllerEventDataTuple,
+  LongPressEventData,
+  LongPressEventDataTuple,
 } from "../../controlers/LongPressController";
 
 export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
@@ -38,7 +32,6 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
   @property()
   public touchOrMouseMoveMinPx?: string;
 
-  private __hostHtmlElement: HTMLElement | null;
   private __mainHtmlElement: HTMLButtonElement | null;
 
   private longPressController: LongPressController;
@@ -50,7 +43,6 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
 
   constructor(...args: any[]) {
     super();
-    this.__hostHtmlElement = null;
     this.__mainHtmlElement = null;
 
     this.longPressController = new LongPressController(this, {
@@ -60,6 +52,15 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
       longPressIntervalMillis: parseInt(this.longPressIntervalMillis ?? ""),
       touchOrMouseMoveMinPx: parseInt(this.touchOrMouseMoveMinPx ?? ""),
     });
+
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onTouchMove = this.onTouchMove.bind(this);
+    this.onTouchEnd = this.onTouchEnd.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
+    this.onLongPress = this.onLongPress.bind(this);
+    this.onShortPress = this.onShortPress.bind(this);
   }
 
   protected getButtonCssClassesArr() {
@@ -72,6 +73,26 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
   connectedCallback(): void {
     super.connectedCallback();
 
+    this.longPressController.touchStartEventListeners.subscribe(
+      this.onTouchStart
+    );
+
+    this.longPressController.touchMoveEventListeners.subscribe(
+      this.onTouchMove
+    );
+
+    this.longPressController.touchEndEventListeners.subscribe(this.onTouchEnd);
+
+    this.longPressController.mouseDownEventListeners.subscribe(
+      this.onMouseDown
+    );
+
+    this.longPressController.mouseMoveEventListeners.subscribe(
+      this.onMouseMove
+    );
+
+    this.longPressController.mouseUpEventListeners.subscribe(this.onMouseUp);
+
     this.longPressController.longPressEventListeners.subscribe(
       this.onLongPress
     );
@@ -83,6 +104,28 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
 
   disconnectedCallback(): void {
     super.connectedCallback();
+
+    this.longPressController.touchStartEventListeners.unsubscribe(
+      this.onTouchStart
+    );
+
+    this.longPressController.touchMoveEventListeners.unsubscribe(
+      this.onTouchMove
+    );
+
+    this.longPressController.touchEndEventListeners.unsubscribe(
+      this.onTouchEnd
+    );
+
+    this.longPressController.mouseDownEventListeners.unsubscribe(
+      this.onMouseDown
+    );
+
+    this.longPressController.mouseMoveEventListeners.unsubscribe(
+      this.onMouseMove
+    );
+
+    this.longPressController.mouseUpEventListeners.unsubscribe(this.onMouseUp);
 
     this.longPressController.longPressEventListeners.unsubscribe(
       this.onLongPress
@@ -97,11 +140,36 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
     this.longPressController.registerEventListeners();
   }
 
-  onLongPress(evt: LongPressControllerEventData) {
-    console.log("onLongPress");
+  onTouchStart(evt: LongPressEventDataTuple) {
+    this.dispatchEvent(customEvent("ontouchstart", evt));
   }
-  onShortPress(evt: LongPressControllerEventDataTuple) {
-    console.log("onShortPress");
+
+  onTouchMove(evt: LongPressEventDataTuple) {
+    this.dispatchEvent(customEvent("ontouchmove", evt));
+  }
+
+  onTouchEnd(evt: LongPressEventDataTuple) {
+    this.dispatchEvent(customEvent("ontouchend", evt));
+  }
+
+  onMouseDown(evt: LongPressEventDataTuple) {
+    this.dispatchEvent(customEvent("onmousedown", evt));
+  }
+
+  onMouseMove(evt: LongPressEventDataTuple) {
+    this.dispatchEvent(customEvent("onmousemove", evt));
+  }
+
+  onMouseUp(evt: LongPressEventDataTuple) {
+    this.dispatchEvent(customEvent("onmouseup", evt));
+  }
+
+  onLongPress(evt: LongPressEventData) {
+    this.dispatchEvent(customEvent("onlongpress", evt));
+  }
+
+  onShortPress(evt: LongPressEventDataTuple) {
+    this.dispatchEvent(customEvent("onshortpress", evt));
   }
 }
 

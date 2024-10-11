@@ -13,7 +13,7 @@ import {
   toSingleTouchOrClick,
 } from "../../trmrk-browser/domUtils/touchAndMouseEvents";
 
-export interface LongPressControllerEventDataCore {
+export interface LongPressEventDataCore {
   touchEvt?: TouchEvent | null | undefined;
   mouseEvt?: MouseEvent | null | undefined;
   touchCoords?: TouchOrMouseCoords | null | undefined;
@@ -21,14 +21,13 @@ export interface LongPressControllerEventDataCore {
   coords: TouchOrMouseCoords;
 }
 
-export interface LongPressControllerEventData
-  extends LongPressControllerEventDataCore {
+export interface LongPressEventData extends LongPressEventDataCore {
   longPressInterval: MtblRefValue<NodeJS.Timeout | null>;
 }
 
-export interface LongPressControllerEventDataTuple {
-  startEvt: LongPressControllerEventData | null;
-  evt: LongPressControllerEventDataCore;
+export interface LongPressEventDataTuple {
+  startEvt: LongPressEventData | null;
+  evt: LongPressEventDataCore;
 }
 
 export interface LongPressControllerOptsCore {
@@ -48,22 +47,20 @@ export class LongPressController<
   THTMLMainElement extends HTMLElement = HTMLButtonElement
 > implements ReactiveController
 {
-  public readonly touchStartEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
-  public readonly touchMoveEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
-  public readonly touchEndEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
-  public readonly mouseDownEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
-  public readonly mouseMoveEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
-  public readonly mouseUpEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
-  public readonly shortPressEventListeners: EventListenersCollection<LongPressControllerEventDataTuple>;
-  public readonly longPressEventListeners: EventListenersCollection<LongPressControllerEventData>;
+  public readonly touchStartEventListeners: EventListenersCollection<LongPressEventDataTuple>;
+  public readonly touchMoveEventListeners: EventListenersCollection<LongPressEventDataTuple>;
+  public readonly touchEndEventListeners: EventListenersCollection<LongPressEventDataTuple>;
+  public readonly mouseDownEventListeners: EventListenersCollection<LongPressEventDataTuple>;
+  public readonly mouseMoveEventListeners: EventListenersCollection<LongPressEventDataTuple>;
+  public readonly mouseUpEventListeners: EventListenersCollection<LongPressEventDataTuple>;
+  public readonly shortPressEventListeners: EventListenersCollection<LongPressEventDataTuple>;
+  public readonly longPressEventListeners: EventListenersCollection<LongPressEventData>;
 
   public readonly treatRightClickAsLongPress: boolean;
   public readonly longPressIntervalMillis: number;
   public readonly touchOrMouseMoveMinPx: number;
 
-  public resetPredicate:
-    | ((event: LongPressControllerEventDataTuple) => boolean)
-    | null;
+  public resetPredicate: ((event: LongPressEventDataTuple) => boolean) | null;
 
   protected readonly mainHtmlElementFactory: () => THTMLMainElement;
   protected readonly hostHtmlElementFactory: () => HTMLElement;
@@ -77,12 +74,12 @@ export class LongPressController<
   }
 
   protected readonly defaultResetPredicate: (
-    event: LongPressControllerEventDataTuple
+    event: LongPressEventDataTuple
   ) => boolean;
 
   host: ReactiveControllerHost;
 
-  startEvt: LongPressControllerEventData | null;
+  startEvt: LongPressEventData | null;
 
   constructor(
     host: ReactiveControllerHost,
@@ -141,28 +138,28 @@ export class LongPressController<
     this.defaultResetPredicate = this.defaultResetPredicate.bind(this);
 
     this.touchStartEventListeners =
-      new EventListenersCollection<LongPressControllerEventDataTuple>();
+      new EventListenersCollection<LongPressEventDataTuple>();
 
     this.touchMoveEventListeners =
-      new EventListenersCollection<LongPressControllerEventDataTuple>();
+      new EventListenersCollection<LongPressEventDataTuple>();
 
     this.touchEndEventListeners =
-      new EventListenersCollection<LongPressControllerEventDataTuple>();
+      new EventListenersCollection<LongPressEventDataTuple>();
 
     this.mouseDownEventListeners =
-      new EventListenersCollection<LongPressControllerEventDataTuple>();
+      new EventListenersCollection<LongPressEventDataTuple>();
 
     this.mouseMoveEventListeners =
-      new EventListenersCollection<LongPressControllerEventDataTuple>();
+      new EventListenersCollection<LongPressEventDataTuple>();
 
     this.mouseUpEventListeners =
-      new EventListenersCollection<LongPressControllerEventDataTuple>();
+      new EventListenersCollection<LongPressEventDataTuple>();
 
     this.shortPressEventListeners =
-      new EventListenersCollection<LongPressControllerEventDataTuple>();
+      new EventListenersCollection<LongPressEventDataTuple>();
 
     this.longPressEventListeners =
-      new EventListenersCollection<LongPressControllerEventData>();
+      new EventListenersCollection<LongPressEventData>();
 
     this.startEvt = null;
 
@@ -326,7 +323,7 @@ export class LongPressController<
   getTouchEventDataTuple(e: TouchEvent) {
     const coords = toSingleTouchOrClick(getTouchOrMouseCoords(e))!;
 
-    const evt: LongPressControllerEventDataTuple = {
+    const evt: LongPressEventDataTuple = {
       startEvt: this.startEvt,
       evt: {
         touchEvt: e,
@@ -341,7 +338,7 @@ export class LongPressController<
   getMouseEventDataTuple(e: MouseEvent) {
     const coords = toSingleTouchOrClick(getTouchOrMouseCoords(e))!;
 
-    const evt: LongPressControllerEventDataTuple = {
+    const evt: LongPressEventDataTuple = {
       startEvt: this.startEvt,
       evt: {
         mouseEvt: e,
@@ -353,7 +350,7 @@ export class LongPressController<
     return evt;
   }
 
-  setStartEvtData(evt: LongPressControllerEventDataTuple) {
+  setStartEvtData(evt: LongPressEventDataTuple) {
     this.startEvt = {
       ...evt.evt,
       longPressInterval: {
@@ -365,7 +362,7 @@ export class LongPressController<
     };
   }
 
-  shouldReset(event: LongPressControllerEventDataTuple) {
+  shouldReset(event: LongPressEventDataTuple) {
     const resetPredicate = this.resetPredicate ?? this.defaultResetPredicate;
     const shouldReset = resetPredicate(event);
 

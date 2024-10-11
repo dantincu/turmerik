@@ -401,3 +401,15 @@ export const updateDisableAttr = (
     elem.removeAttribute("disabled");
   }
 };
+
+export const customEvent = <T>(
+  eventName: string,
+  detail: T,
+  bubbles: boolean = true,
+  composed: boolean = true
+) =>
+  new CustomEvent<T>(eventName, {
+    detail,
+    bubbles,
+    composed,
+  });
