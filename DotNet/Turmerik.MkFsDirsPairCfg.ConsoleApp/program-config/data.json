@@ -18,6 +18,8 @@
         "lbr": "libraries",
         "m": "misc",
         "mps": "my-products-and-services",
+        "opl": "online-platforms",
+        "oplwww": "online-platforms-and-websites",
         "org": "organizations",
         "opf": "online-platforms",
         "p": "persons",
@@ -29,7 +31,8 @@
         "pp": "public-persons",
         "rchs": "recent-history",
         "rg": "regions",
-        "tc": "terms-and-concepts"
+        "tc": "terms-and-concepts",
+        "www": "websites"
       }
     },
     "main": {

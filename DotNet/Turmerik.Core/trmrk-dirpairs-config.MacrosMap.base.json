@@ -63,6 +63,14 @@
     ":s",
     "$my-products-and-services$"
   ],
+  "opl": [
+    ":s",
+    "$online-platforms$"
+  ],
+  "oplwww": [
+    ":s",
+    "$online-platforms-and-websites$"
+  ],
   "org": [
     ":s",
     "$organizations$"
@@ -110,5 +118,9 @@
   "tc": [
     ":s",
     "$terms-and-concepts$"
+  ],
+  "www": [
+    ":s",
+    "$websites$"
   ]
 }
