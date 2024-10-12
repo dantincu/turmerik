@@ -3,6 +3,10 @@
     ":s",
     "$articles$"
   ],
+  "arch": [
+    ":s",
+    "$archive$"
+  ],
   "appopf": [
     ":s",
     "$apps-and-online-platforms$"

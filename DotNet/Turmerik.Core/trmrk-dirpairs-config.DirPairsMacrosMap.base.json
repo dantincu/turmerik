@@ -1,5 +1,6 @@
 {
   "|a|": "$articles$",
+  "|arch|": "$archive$",
   "|appopf|": "$apps-and-online-platforms$",
   "|chnl|": "$channels$",
   "|ctr|": "$countries$",
