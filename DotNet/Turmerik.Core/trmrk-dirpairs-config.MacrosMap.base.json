@@ -3,6 +3,10 @@
     ":s",
     "$articles$"
   ],
+  "appopf": [
+    ":s",
+    "$apps-and-online-platforms$"
+  ],
   "chnl": [
     ":s",
     "$channels$"
