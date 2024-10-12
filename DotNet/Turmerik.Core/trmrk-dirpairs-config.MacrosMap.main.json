@@ -55,6 +55,10 @@
     ":s",
     "$former-athletes$"
   ],
+  "gnr": [
+    ":s",
+    "$genres$"
+  ],
   "hf": [
     ":s",
     "$historical-figures$"
