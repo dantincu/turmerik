@@ -134,5 +134,13 @@
   "www": [
     ":s",
     "$websites$"
+  ],
+  "_hcy": [
+    ":s",
+    "$HCY-NODES$"
+  ],
+  "_lfn": [
+    ":s",
+    "$LEAF-NODES$"
   ]
 }

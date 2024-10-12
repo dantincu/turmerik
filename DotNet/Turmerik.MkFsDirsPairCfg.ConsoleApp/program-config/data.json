@@ -35,7 +35,9 @@
         "strpf": "streaming-platforms",
         "smstrpf": "social-media-and-streaming-platforms",
         "tc": "terms-and-concepts",
-        "www": "websites"
+        "www": "websites",
+        "_hcy": "HCY-NODES",
+        "_lfn": "LEAF-NODES"
       }
     },
     "main": {
