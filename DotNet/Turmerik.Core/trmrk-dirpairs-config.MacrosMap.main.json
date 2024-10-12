@@ -102,5 +102,13 @@
   "trv": [
     ":s",
     "$trivial$"
+  ],
+  "vrsath": [
+    ":s",
+    "$various-athletes$"
+  ],
+  "vrsart": [
+    ":s",
+    "$various-artists$"
   ]
 }

@@ -24,5 +24,7 @@
   "|ot|": "$others$",
   "|plyr|": "$players$",
   "|trgd|": "$tragedies$",
-  "|trv|": "$trivial$"
+  "|trv|": "$trivial$",
+  "|vrsath|": "$various-athletes$",
+  "|vrsart|": "$various-artists$"
 }
