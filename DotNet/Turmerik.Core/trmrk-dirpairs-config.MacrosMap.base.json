@@ -111,9 +111,17 @@
     ":s",
     "$regions$"
   ],
+  "smpf": [
+    ":s",
+    "$social-media-platforms$"
+  ],
   "strpf": [
     ":s",
     "$streaming-platforms$"
+  ],
+  "smstrpf": [
+    ":s",
+    "$social-media-and-streaming-platforms$"
   ],
   "tc": [
     ":s",

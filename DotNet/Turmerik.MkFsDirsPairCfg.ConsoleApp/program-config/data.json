@@ -30,7 +30,9 @@
         "pp": "public-persons",
         "rchs": "recent-history",
         "rg": "regions",
+        "smpf": "social-media-platforms",
         "strpf": "streaming-platforms",
+        "smstrpf": "social-media-and-streaming-platforms",
         "tc": "terms-and-concepts",
         "www": "websites"
       }
