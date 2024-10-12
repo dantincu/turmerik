@@ -35,6 +35,14 @@
     ":s",
     "$history$"
   ],
+  "ins": [
+    ":s",
+    "$institutions$"
+  ],
+  "insorg": [
+    ":s",
+    "$institutions-and-organizations$"
+  ],
   "gr": [
     ":s",
     "$geographical-regions$"

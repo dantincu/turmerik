@@ -8,6 +8,8 @@
   "|fxlbr|": "$frameworks-and-libraries$",
   "|g|": "$groups$",
   "|hs|": "$history$",
+  "|ins|": "$institutions$",
+  "|insorg|": "$institutions-and-organizations$",
   "|gr|": "$geographical-regions$",
   "|isl|": "$islands$",
   "|lbr|": "$libraries$",
