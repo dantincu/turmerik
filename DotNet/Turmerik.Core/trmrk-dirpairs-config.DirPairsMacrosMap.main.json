@@ -20,5 +20,6 @@
   "|msc|": "$musicians$",
   "|ot|": "$others$",
   "|plyr|": "$players$",
-  "|trgd|": "$tragedies$"
+  "|trgd|": "$tragedies$",
+  "|trv|": "$trivial$"
 }

@@ -86,5 +86,9 @@
   "trgd": [
     ":s",
     "$tragedies$"
+  ],
+  "trv": [
+    ":s",
+    "$trivial$"
   ]
 }
