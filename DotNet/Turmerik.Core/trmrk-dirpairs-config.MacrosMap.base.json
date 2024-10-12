@@ -63,14 +63,6 @@
     ":s",
     "$my-products-and-services$"
   ],
-  "opl": [
-    ":s",
-    "$online-platforms$"
-  ],
-  "oplwww": [
-    ":s",
-    "$online-platforms-and-websites$"
-  ],
   "org": [
     ":s",
     "$organizations$"
@@ -78,6 +70,10 @@
   "opf": [
     ":s",
     "$online-platforms$"
+  ],
+  "opfwww": [
+    ":s",
+    "$online-platforms-and-websites$"
   ],
   "p": [
     ":s",
@@ -114,6 +110,10 @@
   "rg": [
     ":s",
     "$regions$"
+  ],
+  "strpf": [
+    ":s",
+    "$streaming-platforms$"
   ],
   "tc": [
     ":s",

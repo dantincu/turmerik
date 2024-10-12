@@ -15,10 +15,9 @@
   "|lbr|": "$libraries$",
   "|m|": "$misc$",
   "|mps|": "$my-products-and-services$",
-  "|opl|": "$online-platforms$",
-  "|oplwww|": "$online-platforms-and-websites$",
   "|org|": "$organizations$",
   "|opf|": "$online-platforms$",
+  "|opfwww|": "$online-platforms-and-websites$",
   "|p|": "$persons$",
   "|pg|": "$pages$",
   "|pl|": "$places$",
@@ -28,6 +27,7 @@
   "|pp|": "$public-persons$",
   "|rchs|": "$recent-history$",
   "|rg|": "$regions$",
+  "|strpf|": "$streaming-platforms$",
   "|tc|": "$terms-and-concepts$",
   "|www|": "$websites$"
 }
