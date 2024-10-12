@@ -15,6 +15,10 @@
     ":s",
     "$clubs$"
   ],
+  "cvart": [
+    ":s",
+    "$cover-artists$"
+  ],
   "crmn": [
     ":s",
     "$criminality$"
@@ -62,6 +66,10 @@
   "incd": [
     ":s",
     "$incidents$"
+  ],
+  "indart": [
+    ":s",
+    "$independent-artists$"
   ],
   "md": [
     ":s",
