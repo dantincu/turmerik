@@ -42,9 +42,7 @@ export const BsIconBtnElementMixin = <
     constructor(...args: any[]) {
       super();
       this.rippleTimeoutId = null;
-      this.onTouchEndOrMouseUp = this.onTouchEndOrMouseUp.bind(this);
       this.onTouchStartOrMouseDown = this.onTouchStartOrMouseDown.bind(this);
-      this.onTouchOrMouseEvent = this.onTouchOrMouseEvent.bind(this);
     }
 
     @property()
@@ -129,8 +127,6 @@ export const BsIconBtnElementMixin = <
 
       btnElem.addEventListener("touchstart", this.onTouchStartOrMouseDown);
       btnElem.addEventListener("mousedown", this.onTouchStartOrMouseDown);
-      btnElem.addEventListener("touchend", this.onTouchEndOrMouseUp);
-      btnElem.addEventListener("mouseup", this.onTouchEndOrMouseUp);
     }
 
     firstUpdated(changedProperties: PropertyValues) {
@@ -148,37 +144,23 @@ export const BsIconBtnElementMixin = <
 
       btnElem.removeEventListener("touchstart", this.onTouchStartOrMouseDown);
       btnElem.removeEventListener("mousedown", this.onTouchStartOrMouseDown);
-      btnElem.removeEventListener("touchend", this.onTouchEndOrMouseUp);
-      btnElem.removeEventListener("mouseup", this.onTouchEndOrMouseUp);
     }
 
     onTouchStartOrMouseDown(e: TouchEvent | MouseEvent) {
-      this.onTouchOrMouseEvent(e);
-    }
-
-    onTouchEndOrMouseUp(e: TouchEvent | MouseEvent) {
-      this.onTouchOrMouseEvent(e);
-    }
-
-    onTouchOrMouseEvent(e: TouchEvent | MouseEvent) {
       const callbackFactory = (add: boolean) => () => {
         const iconWrapperElem = this.getIconWrapperElem();
         if (add) {
-          iconWrapperElem.classList.add("trmrk-ripple");
+          iconWrapperElem?.classList.add("trmrk-ripple");
         } else {
-          iconWrapperElem.classList.remove("trmrk-ripple");
+          iconWrapperElem?.classList.remove("trmrk-ripple");
         }
       };
 
-      if (this.rippleTimeoutId) {
-        clearTimeout(this.rippleTimeoutId);
-        callbackFactory(false)();
-
-        setTimeout(callbackFactory(true));
-      } else {
+      if (!this.rippleTimeoutId) {
         callbackFactory(true)();
 
         this.rippleTimeoutId = setTimeout(() => {
+          this.rippleTimeoutId = null;
           callbackFactory(false)();
         }, 400);
       }

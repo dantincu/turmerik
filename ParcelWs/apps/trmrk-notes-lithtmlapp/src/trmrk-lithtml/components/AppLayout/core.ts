@@ -2,6 +2,8 @@ import { css, CSSResult } from "lit";
 
 import { MtblRefValue } from "../../../trmrk/core";
 
+import { isMobile } from "../../../trmrk-browser/domUtils/constants";
+
 import { ObservableValueSingletonControllerFactory } from "../../controlers/ObservableValueController";
 
 export const showAppHeaderPropFactory =
@@ -11,7 +13,7 @@ export const showAppTabsBarPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
 export const showAppFooterPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 export const showExplorerPanelPropFactory =
   new ObservableValueSingletonControllerFactory(null, false);
@@ -23,7 +25,7 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
         display: block;
         position: relative;
         z-index: 0;
-        height: 100vh;
+        height: 100%;
         width: 100vw;
         box-sizing: border-box;
       }
@@ -31,11 +33,12 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
       .trmrk-app-header,
       .trmrk-app-footer {
         display: flex;
-        position: fixed;
+        position: absolute;
         width: 100%;
         height: 48px;
         padding: 3px;
         cursor: pointer;
+        z-index: 500;
       }
 
       .trmrk-app-header {
@@ -53,6 +56,7 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
       }
 
       .trmrk-app-body {
+        display: flex;
         position: absolute;
         inset: 0;
         margin: 0px;
@@ -60,11 +64,17 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
       }
 
       .trmrk-app-body.trmrk-after-header {
-        top: 48px;
+        ${isMobile
+          ? css`
+              top: 48px;
+            `
+          : css`
+              top: 48px;
+            `}
       }
 
       .trmrk-app-body.trmrk-before-footer {
-        top: 48px;
+        bottom: 48px;
       }
     `,
   ],
