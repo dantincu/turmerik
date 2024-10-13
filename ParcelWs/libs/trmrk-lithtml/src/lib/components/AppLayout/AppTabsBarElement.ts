@@ -32,13 +32,18 @@ export class AppTabsBarElement extends LitElement {
     `,
   ];
 
+  @property()
+  public homePageUrl!: string;
+
   render() {
     return html`<header class="trmrk-app-header trmrk-app-tabs-bar">
       <div class="trmrk-left-part">
-        <trmrk-bs-icon-btn
-          btnHasNoBorder
-          iconCssClass="bi-house-door-fill"
-        ></trmrk-bs-icon-btn>
+        <a href="${this.homePageUrl}"
+          ><trmrk-bs-icon-btn
+            btnHasNoBorder
+            iconCssClass="bi-house-door-fill"
+          ></trmrk-bs-icon-btn
+        ></a>
       </div>
       <div class="trmrk-main-part"></div>
       <div class="trmrk-right-part">
