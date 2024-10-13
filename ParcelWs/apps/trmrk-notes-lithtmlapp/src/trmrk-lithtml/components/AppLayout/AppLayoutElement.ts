@@ -9,42 +9,16 @@ import {
 import { globalStyles } from "../../domUtils/css";
 
 import {
-  enableAppHeaderPropFactory,
+  showAppHeaderPropFactory,
   showAppTabsBarPropFactory,
-  enableAppFooterPropFactory,
-  enableExplorerPanelPropFactory,
+  showAppFooterPropFactory,
+  showExplorerPanelPropFactory,
+  AppLayoutStyles,
 } from "./core";
 
 @customElement("trmrk-app-layout")
 export class AppLayoutElement extends LitElement {
-  static styles = [
-    ...globalStyles.value,
-    css`
-      .trmrk-app-layout {
-        display: block;
-        position: relative;
-        z-index: 0;
-        height: 100vh;
-        width: 100vw;
-        box-sizing: border-box;
-      }
-
-      .trmrk-app-header h1 {
-        text-align: center;
-      }
-
-      .trmrk-app-body {
-        position: absolute;
-        inset: 0;
-        margin: 0px;
-        padding: 0px;
-      }
-
-      .trmrk-app-body.trmrk-after-header {
-        top: 48px;
-      }
-    `,
-  ];
+  static styles = [...globalStyles.value, ...AppLayoutStyles.value];
 
   constructor() {
     super();
@@ -68,55 +42,59 @@ export class AppLayoutElement extends LitElement {
   protected readonly showAppTabsBarProp =
     showAppTabsBarPropFactory.createController(this);
 
-  protected readonly enableAppHeaderProp =
-    enableAppHeaderPropFactory.createController(this);
+  protected readonly showAppHeaderProp =
+    showAppHeaderPropFactory.createController(this);
 
-  protected readonly enableAppFooterProp =
-    enableAppFooterPropFactory.createController(this);
+  protected readonly showAppFooterProp =
+    showAppFooterPropFactory.createController(this);
 
-  protected readonly enableExplorerPanelProp =
-    enableExplorerPanelPropFactory.createController(this);
+  protected readonly showExplorerPanelProp =
+    showExplorerPanelPropFactory.createController(this);
 
-  protected get enableAppHeader() {
-    return this.enableAppHeaderProp.observable.value;
+  protected get showAppHeader() {
+    return this.showAppHeaderProp.observable.value;
   }
 
   protected get showAppTabsBar() {
     return this.showAppTabsBarProp.observable.value;
   }
 
-  protected get enableAppFooter() {
-    return this.enableAppFooterProp.observable.value;
+  protected get showAppFooter() {
+    return this.showAppFooterProp.observable.value;
   }
 
-  protected get enableExplorerPanel() {
-    return this.enableExplorerPanelProp.observable.value;
+  protected get showExplorerPanel() {
+    return this.showExplorerPanelProp.observable.value;
   }
 
   render() {
     return [
       html`<div class="trmrk-app-layout ${this.cssClass}">
-        ${this.enableAppHeader
-          ? this.showAppTabsBar
-            ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
-            : html`<header class="trmrk-app-header">
-                ${(this.appTitle ?? false) !== false
-                  ? html`<h1>${this.appTitle}</h1>`
-                  : html`<slot name="header"></slot>`}
-              </header>`
-          : null}
+        ${
+          this.showAppHeader
+            ? this.showAppTabsBar
+              ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
+              : html`<header class="trmrk-app-header">
+                  ${(this.appTitle ?? false) !== false
+                    ? html`<h1>${this.appTitle}</h1>`
+                    : html`<slot name="header"></slot>`}
+                </header>`
+            : null
+        }
         <div
-          class="trmrk-app-body ${this.enableAppHeader
-            ? "trmrk-after-header"
-            : ""}"
+          class="trmrk-app-body ${
+            this.showAppHeader ? "trmrk-after-header" : ""
+          } ${this.showAppFooter ? "trmrk-before-footer" : ""}""
         >
           <slot name="body"></slot>
         </div>
-        ${this.enableAppFooter
-          ? html`<trmrk-app-footer
-              ><slot name="footer"></slot
-            ></trmrk-app-footer>`
-          : null}
+        ${
+          this.showAppFooter
+            ? html`<footer class="trmrk-app-footer ${this.cssClass}">
+                <slot name="footer"></slot>
+              </footer>`
+            : null
+        }
       </div>`,
     ];
   }

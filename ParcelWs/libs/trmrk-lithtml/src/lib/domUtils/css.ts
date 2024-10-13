@@ -4,8 +4,6 @@ import { MtblRefValue } from "../../trmrk/core";
 
 import { getGlobalStyleStrArr } from "../../trmrk-browser/domUtils/bootstrap";
 
-import { ObservableValueController } from "../controlers/ObservableValueController";
-
 export const isBootstrapIconsStyleSheet = (styleSheet: CSSStyleSheet) =>
   styleSheet.cssRules[0].cssText.indexOf("bootstrap-icons") >= 0;
 

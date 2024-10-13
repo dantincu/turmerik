@@ -22,7 +22,8 @@ export interface IBsIconBtnElementMixin extends LitElement {
   btnIsOutlinedAppTheme?: boolean;
   iconWrapperCssClass?: string;
   btnDisabled?: boolean;
-  btnElem: HTMLButtonElement;
+  getBtnElem: () => HTMLButtonElement;
+  getIconWrapperElem: () => HTMLSpanElement;
   shouldSetBtnOutlinedCssClass: () => boolean;
   getButtonCssClassesArr: () => string[];
 }
@@ -36,11 +37,24 @@ export const BsIconBtnElementMixin = <
     public readonly isDarkModeProp =
       isDarkModePropFactory.createController(this);
 
+    private rippleTimeoutId: NodeJS.Timeout | null;
+
+    constructor(...args: any[]) {
+      super();
+      this.rippleTimeoutId = null;
+      this.onTouchEndOrMouseUp = this.onTouchEndOrMouseUp.bind(this);
+      this.onTouchStartOrMouseDown = this.onTouchStartOrMouseDown.bind(this);
+      this.onTouchOrMouseEvent = this.onTouchOrMouseEvent.bind(this);
+    }
+
     @property()
     public iconCssClass!: string;
 
     @property()
     public btnCssClass?: string;
+
+    @property({ type: Boolean })
+    public btnHasNoRipple?: boolean;
 
     @property({ type: Boolean })
     public btnHasNoBorder?: boolean;
@@ -54,11 +68,41 @@ export const BsIconBtnElementMixin = <
     @property({ type: Boolean })
     public btnDisabled?: boolean;
 
-    public btnElem!: HTMLButtonElement;
+    public getBtnElem() {
+      const btnElem = this.renderRoot.children[0] as HTMLButtonElement;
+      return btnElem;
+    }
+
+    public getIconWrapperElem(btnElem?: HTMLButtonElement | null | undefined) {
+      btnElem ??= this.getBtnElem();
+      const iconWrapperElem = btnElem?.children[0] as HTMLSpanElement;
+      return iconWrapperElem;
+    }
 
     public get shouldSetBtnOutlinedCssClass() {
-      console.log("this.btnIsOutlinedAppTheme", this.btnIsOutlinedAppTheme);
       return this.btnIsOutlinedAppTheme!;
+    }
+
+    public getButtonCssClassesArr() {
+      const btnCssClassSfx = this.isDarkModeProp.observable.value
+        ? "light"
+        : "dark";
+
+      const btnCssClassThemeName = this.isDarkModeProp.observable.value
+        ? "dark"
+        : "light";
+
+      const buttonCssClassesArr = [
+        "btn trmrk-bs-icon-btn trmrk-overflow-hidden",
+        "trmrk-btn-theme-" + btnCssClassThemeName,
+        this.shouldSetBtnOutlinedCssClass
+          ? "btn-outline-" + btnCssClassSfx
+          : null,
+        this.btnHasNoBorder ? "trmrk-btn-no-border" : null,
+        this.btnCssClass,
+      ];
+
+      return buttonCssClassesArr;
     }
 
     render() {
@@ -74,39 +118,70 @@ export const BsIconBtnElementMixin = <
     }
 
     updated(changedProperties: PropertyValues) {
+      const btnElem = this.getBtnElem();
+
       for (let propName in changedProperties) {
         if (propName === btnDisabledPropName) {
-          updateDisableAttr(this.btnElem, this.btnDisabled!);
+          updateDisableAttr(btnElem, this.btnDisabled!);
           break;
         }
       }
+
+      btnElem.addEventListener("touchstart", this.onTouchStartOrMouseDown);
+      btnElem.addEventListener("mousedown", this.onTouchStartOrMouseDown);
+      btnElem.addEventListener("touchend", this.onTouchEndOrMouseUp);
+      btnElem.addEventListener("mouseup", this.onTouchEndOrMouseUp);
     }
 
     firstUpdated(changedProperties: PropertyValues) {
-      this.btnElem = this.renderRoot.children[0] as HTMLButtonElement;
-      updateDisableAttr(this.btnElem, this.btnDisabled!);
+      const btnElem = this.getBtnElem();
+      updateDisableAttr(btnElem, this.btnDisabled!);
     }
 
-    public getButtonCssClassesArr() {
-      const btnCssClassSfx = this.isDarkModeProp.observable.value
-        ? "light"
-        : "dark";
+    connectedCallback() {
+      super.connectedCallback();
+    }
 
-      const btnCssClassThemeName = this.isDarkModeProp.observable.value
-        ? "dark"
-        : "light";
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      const btnElem = this.getBtnElem();
 
-      const buttonCssClassesArr = [
-        "btn trmrk-bs-icon-btn",
-        "trmrk-btn-theme-" + btnCssClassThemeName,
-        this.shouldSetBtnOutlinedCssClass
-          ? "btn-outline-" + btnCssClassSfx
-          : null,
-        this.btnHasNoBorder ? "trmrk-btn-no-border" : null,
-        this.btnCssClass,
-      ];
+      btnElem.removeEventListener("touchstart", this.onTouchStartOrMouseDown);
+      btnElem.removeEventListener("mousedown", this.onTouchStartOrMouseDown);
+      btnElem.removeEventListener("touchend", this.onTouchEndOrMouseUp);
+      btnElem.removeEventListener("mouseup", this.onTouchEndOrMouseUp);
+    }
 
-      return buttonCssClassesArr;
+    onTouchStartOrMouseDown(e: TouchEvent | MouseEvent) {
+      this.onTouchOrMouseEvent(e);
+    }
+
+    onTouchEndOrMouseUp(e: TouchEvent | MouseEvent) {
+      this.onTouchOrMouseEvent(e);
+    }
+
+    onTouchOrMouseEvent(e: TouchEvent | MouseEvent) {
+      const callbackFactory = (add: boolean) => () => {
+        const iconWrapperElem = this.getIconWrapperElem();
+        if (add) {
+          iconWrapperElem.classList.add("trmrk-ripple");
+        } else {
+          iconWrapperElem.classList.remove("trmrk-ripple");
+        }
+      };
+
+      if (this.rippleTimeoutId) {
+        clearTimeout(this.rippleTimeoutId);
+        callbackFactory(false)();
+
+        setTimeout(callbackFactory(true));
+      } else {
+        callbackFactory(true)();
+
+        this.rippleTimeoutId = setTimeout(() => {
+          callbackFactory(false)();
+        }, 400);
+      }
     }
   }
 
@@ -124,11 +199,18 @@ export class BsIconBtnElement extends BsIconBtnElementMixin(
     ...globalStyles.value,
     css`
       .trmrk-icon-wrapper {
-        display: inline-block;
+        display: inline-flex;
+        position: absolute;
+        inset: 0px;
+        justify-content: center;
+        align-items: center;
       }
 
       .trmrk-bs-icon-btn {
-        margin: 2px;
+        display: inline-flex;
+        position: relative;
+        width: 40px;
+        height: 40px;
       }
 
       .trmrk-bs-icon-btn.trmrk-btn-no-border {

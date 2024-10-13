@@ -37,23 +37,15 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
 
   private thisInstn: IBsIconBtnElementMixin;
 
-  private __mainHtmlElement: HTMLButtonElement | null;
-
   private longPressController: LongPressController;
-
-  private get mainHtmlElement() {
-    this.__mainHtmlElement ??= this.renderRoot.children[0] as HTMLButtonElement;
-    return this.__mainHtmlElement;
-  }
 
   constructor(...args: any[]) {
     super();
     this.thisInstn = this as any as IBsIconBtnElementMixin;
-    this.__mainHtmlElement = null;
 
     this.longPressController = new LongPressController(this, {
       hostHtmlElementFactory: () => this,
-      mainHtmlElementFactory: () => this.mainHtmlElement,
+      mainHtmlElementFactory: () => this.thisInstn.getBtnElem(),
       treatRightClickAsLongPress: this.treatRightClickAsLongPress,
       longPressIntervalMillis: this.longPressIntervalMillis,
       touchOrMouseMoveMinPx: this.touchOrMouseMoveMinPx,

@@ -1,0 +1,27 @@
+@keyframes ripple-in {
+    from {
+      background-color: #8880;
+    }
+
+    to {
+      background-color: #888F;
+    }
+}
+
+@keyframes ripple-out {
+    from {
+      background-color: #888F;
+    }
+
+    to {
+      background-color: #8880;
+    }
+}
+
+.trmrk-ripple {
+  animation-name: ripple-in, ripple-out;
+  animation-duration: 200ms, 200ms;
+  animation-delay: 0ms, 200ms;
+  animation-timing-function: ease-in, ease-out;
+  animation-iteration-count: 1, 1;
+}

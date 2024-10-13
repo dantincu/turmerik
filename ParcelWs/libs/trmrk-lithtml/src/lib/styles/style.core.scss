@@ -13,6 +13,22 @@ body {
   display: none;
 }
 
+.trmrk-overflow-hidden {
+  overflow: hidden;
+}
+
+.trmrk-display-flex {
+  display: flex;
+}
+
+.trmrk-display-inline-flex {
+  display: inline-flex;
+}
+
+.trmrk-align-self-flex-end {
+  align-self: flex-end;
+}
+
 .trmrk-wrap-content {
   flex-wrap: wrap;
   text-wrap: wrap;

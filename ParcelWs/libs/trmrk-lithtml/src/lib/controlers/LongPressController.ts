@@ -180,8 +180,9 @@ export class LongPressController<
   }
 
   registerEventListeners() {
-    this.mainHtmlElement.addEventListener("touchstart", this.onTouchStart);
-    this.mainHtmlElement.addEventListener("mousedown", this.onMouseDown);
+    const mainHtmlElement = this.mainHtmlElement;
+    mainHtmlElement.addEventListener("touchstart", this.onTouchStart);
+    mainHtmlElement.addEventListener("mousedown", this.onMouseDown);
   }
 
   hostConnected() {}
@@ -195,8 +196,9 @@ export class LongPressController<
     this.shortPressEventListeners.unsubscribeAll();
     this.longPressEventListeners.unsubscribeAll();
 
-    this.mainHtmlElement.removeEventListener("touchstart", this.onTouchStart);
-    this.mainHtmlElement.removeEventListener("mousedown", this.onMouseDown);
+    const mainHtmlElement = this.mainHtmlElement;
+    mainHtmlElement.removeEventListener("touchstart", this.onTouchStart);
+    mainHtmlElement.removeEventListener("mousedown", this.onMouseDown);
     this.reset();
   }
 
