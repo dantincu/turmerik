@@ -12,7 +12,7 @@ import {
   showAppHeaderPropFactory,
   showAppTabsBarPropFactory,
   showAppFooterPropFactory,
-  showExplorerPanelPropFactory,
+  enableExplorerPanelPropFactory,
   AppLayoutStyles,
 } from "./core";
 
@@ -49,7 +49,7 @@ export class AppLayoutElement extends LitElement {
     showAppFooterPropFactory.createController(this);
 
   protected readonly showExplorerPanelProp =
-    showExplorerPanelPropFactory.createController(this);
+    enableExplorerPanelPropFactory.createController(this);
 
   protected get showAppHeader() {
     return this.showAppHeaderProp.observable.value;
@@ -90,9 +90,9 @@ export class AppLayoutElement extends LitElement {
         </div>
         ${
           this.showAppFooter
-            ? html`<footer class="trmrk-app-footer ${this.cssClass}">
+            ? html`<trmrk-app-footer>
                 <slot name="footer"></slot>
-              </footer>`
+              </trmrk-app-footer>`
             : null
         }
       </div>`,

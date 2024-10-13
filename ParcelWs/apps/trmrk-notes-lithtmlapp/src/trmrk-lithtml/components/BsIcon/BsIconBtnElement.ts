@@ -180,6 +180,14 @@ export class BsIconBtnElement extends BsIconBtnElementMixin(
   static styles = [
     ...globalStyles.value,
     css`
+      :host {
+        display: inline-flex;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        margin: 2px;
+      }
+
       .trmrk-icon-wrapper {
         display: inline-flex;
         position: absolute;

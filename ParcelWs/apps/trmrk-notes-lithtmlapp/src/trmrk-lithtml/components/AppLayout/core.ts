@@ -6,17 +6,29 @@ import { isMobile } from "../../../trmrk-browser/domUtils/constants";
 
 import { ObservableValueSingletonControllerFactory } from "../../controlers/ObservableValueController";
 
+export const homePageUrlPropFactory =
+  new ObservableValueSingletonControllerFactory(null, "/");
+
 export const showAppHeaderPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
 export const showAppTabsBarPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
+export const showAppTabsBarHistoryNavButtonsPropFactory =
+  new ObservableValueSingletonControllerFactory(null, true);
+
 export const showAppFooterPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
-export const showExplorerPanelPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+export const showAppFooterHomeButtonPropFactory =
+  new ObservableValueSingletonControllerFactory(null, true);
+
+export const showAppFooterUndoRedoButtonsPropFactory =
+  new ObservableValueSingletonControllerFactory(null, true);
+
+export const enableExplorerPanelPropFactory =
+  new ObservableValueSingletonControllerFactory(null, true);
 
 export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
   value: [
@@ -36,13 +48,15 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
         position: absolute;
         width: 100%;
         height: 48px;
-        padding: 3px;
+        padding: 1px;
         cursor: pointer;
         z-index: 500;
+        overflow: hidden;
       }
 
       .trmrk-app-header {
         border-bottom: 1px solid #888;
+        padding-top: 2px;
       }
 
       .trmrk-app-header h1 {

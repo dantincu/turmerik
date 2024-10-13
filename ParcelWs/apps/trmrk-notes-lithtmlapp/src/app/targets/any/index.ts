@@ -3,6 +3,10 @@ import { Router } from "@vaadin/router";
 
 runAppSetup();
 
+import { AppElement as AppElem } from "../../components/AppElement";
+
+export const AppElement = AppElem;
+
 const initRouter = () => {
   var appElem = document.querySelector("#app") as HTMLDivElement;
   appElem.innerText = "";
@@ -20,10 +24,10 @@ const initRouter = () => {
     {
       path: "/app/home",
       component: "trmrk-app",
-      action: () =>
+      /* action: () =>
         import(
           "../../components/AppElement"
-        ) as unknown as Promise<HTMLElement>,
+        ) as unknown as Promise<HTMLElement>, */
     },
   ]);
 };
