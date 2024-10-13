@@ -110,7 +110,11 @@ export class AppLayoutElement extends LitElement {
             ? "trmrk-after-header"
             : ""}"
         >
-          <trmrk-loading></trmrk-loading><slot name="body"></slot>
+          <trmrk-bs-icon-btn
+            iconCssClass="bi-alarm"
+            btnIsOutlinedAppTheme="${true}"
+          ></trmrk-bs-icon-btn
+          ><slot name="body"></slot>
         </div>
         ${this.enableAppFooter
           ? html`<trmrk-app-footer

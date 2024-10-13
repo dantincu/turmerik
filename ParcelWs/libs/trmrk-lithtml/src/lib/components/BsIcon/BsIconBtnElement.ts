@@ -40,27 +40,27 @@ export const BsIconBtnElementMixin = <
     public iconCssClass!: string;
 
     @property()
-    public btnCssClass?: string;
+    public btnCssClass?: string | null | undefined;
+
+    @property({ type: Boolean })
+    public btnHasNoBorder?: boolean | null | undefined;
+
+    @property({ type: Boolean })
+    public btnIsOutlinedAppTheme?: boolean | null | undefined;
 
     @property()
-    public btnHasNoBorder?: "true" | "false" | "";
+    public iconWrapperCssClass?: string | null | undefined;
 
-    @property()
-    public btnIsOutlinedAppTheme?: "true" | "false" | "";
-
-    @property()
-    public iconWrapperCssClass?: string;
-
-    @property()
-    public btnDisabled?: "true" | "false" | "";
+    @property({ type: Boolean })
+    public btnDisabled?: boolean | null | undefined;
 
     public btnElem!: HTMLButtonElement;
 
     public get shouldSetBtnOutlinedCssClass() {
       let btnIsOutlinedAppTheme = this.btnIsOutlinedAppTheme;
-      let retVal = btnIsOutlinedAppTheme === "true";
+      let retVal = btnIsOutlinedAppTheme === true;
 
-      if ((btnIsOutlinedAppTheme ?? "") === "") {
+      if ((btnIsOutlinedAppTheme ?? null) === null) {
         retVal = (this.btnCssClass ?? "") === "";
       }
 
@@ -82,7 +82,7 @@ export const BsIconBtnElementMixin = <
     updated(changedProperties: PropertyValues) {
       for (let propName in changedProperties) {
         if (propName === btnDisabledPropName) {
-          updateDisableAttr(this.btnElem, this.btnDisabled === "true");
+          updateDisableAttr(this.btnElem, this.btnDisabled === true);
           break;
         }
       }
@@ -90,7 +90,7 @@ export const BsIconBtnElementMixin = <
 
     firstUpdated(changedProperties: PropertyValues) {
       this.btnElem = this.renderRoot.children[0] as HTMLButtonElement;
-      updateDisableAttr(this.btnElem, this.btnDisabled === "true");
+      updateDisableAttr(this.btnElem, this.btnDisabled === true);
     }
 
     public getButtonCssClassesArr() {
@@ -108,7 +108,7 @@ export const BsIconBtnElementMixin = <
         this.shouldSetBtnOutlinedCssClass
           ? "btn-outline-" + btnCssClassSfx
           : null,
-        this.btnHasNoBorder === "true" ? "trmrk-btn-no-border" : null,
+        this.btnHasNoBorder === true ? "trmrk-btn-no-border" : null,
         this.btnCssClass,
       ];
 

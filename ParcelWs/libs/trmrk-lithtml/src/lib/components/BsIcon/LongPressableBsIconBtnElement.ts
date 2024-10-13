@@ -23,14 +23,14 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
 >(BsIconBtnElementMixinType) {
   static styles = [...BsIconBtnElement.styles];
 
-  @property()
-  public treatRightClickAsLongPress?: "true" | "false" | "";
+  @property({ type: Boolean })
+  public treatRightClickAsLongPress?: boolean | null | undefined;
 
   @property()
-  public longPressIntervalMillis?: string;
+  public longPressIntervalMillis?: number | null | undefined;
 
   @property()
-  public touchOrMouseMoveMinPx?: string;
+  public touchOrMouseMoveMinPx?: number | null | undefined;
 
   private thisInstn: IBsIconBtnElementMixin;
 
@@ -51,9 +51,9 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
     this.longPressController = new LongPressController(this, {
       hostHtmlElementFactory: () => this,
       mainHtmlElementFactory: () => this.mainHtmlElement,
-      treatRightClickAsLongPress: this.treatRightClickAsLongPress === "true",
-      longPressIntervalMillis: parseInt(this.longPressIntervalMillis ?? ""),
-      touchOrMouseMoveMinPx: parseInt(this.touchOrMouseMoveMinPx ?? ""),
+      treatRightClickAsLongPress: this.treatRightClickAsLongPress === true,
+      longPressIntervalMillis: this.longPressIntervalMillis,
+      touchOrMouseMoveMinPx: this.touchOrMouseMoveMinPx,
     });
 
     this.onTouchStart = this.onTouchStart.bind(this);
