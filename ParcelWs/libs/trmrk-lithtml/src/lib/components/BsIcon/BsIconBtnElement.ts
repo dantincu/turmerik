@@ -18,10 +18,10 @@ export interface IBsIconBtnElementMixin extends LitElement {
   isDarkModeProp: ObservableValueController<boolean>;
   iconCssClass: string;
   btnCssClass?: string;
-  btnHasNoBorder?: "true" | "false" | "";
-  btnIsOutlinedAppTheme?: "true" | "false" | "";
+  btnHasNoBorder?: boolean;
+  btnIsOutlinedAppTheme?: boolean;
   iconWrapperCssClass?: string;
-  btnDisabled?: "true" | "false" | "";
+  btnDisabled?: boolean;
   btnElem: HTMLButtonElement;
   shouldSetBtnOutlinedCssClass: () => boolean;
   getButtonCssClassesArr: () => string[];
@@ -40,31 +40,25 @@ export const BsIconBtnElementMixin = <
     public iconCssClass!: string;
 
     @property()
-    public btnCssClass?: string | null | undefined;
+    public btnCssClass?: string;
 
     @property({ type: Boolean })
-    public btnHasNoBorder?: boolean | null | undefined;
+    public btnHasNoBorder?: boolean;
 
     @property({ type: Boolean })
-    public btnIsOutlinedAppTheme?: boolean | null | undefined;
+    public btnIsOutlinedAppTheme?: boolean;
 
     @property()
-    public iconWrapperCssClass?: string | null | undefined;
+    public iconWrapperCssClass?: string;
 
     @property({ type: Boolean })
-    public btnDisabled?: boolean | null | undefined;
+    public btnDisabled?: boolean;
 
     public btnElem!: HTMLButtonElement;
 
     public get shouldSetBtnOutlinedCssClass() {
-      let btnIsOutlinedAppTheme = this.btnIsOutlinedAppTheme;
-      let retVal = btnIsOutlinedAppTheme === true;
-
-      if ((btnIsOutlinedAppTheme ?? null) === null) {
-        retVal = (this.btnCssClass ?? "") === "";
-      }
-
-      return retVal;
+      console.log("this.btnIsOutlinedAppTheme", this.btnIsOutlinedAppTheme);
+      return this.btnIsOutlinedAppTheme!;
     }
 
     render() {
@@ -82,7 +76,7 @@ export const BsIconBtnElementMixin = <
     updated(changedProperties: PropertyValues) {
       for (let propName in changedProperties) {
         if (propName === btnDisabledPropName) {
-          updateDisableAttr(this.btnElem, this.btnDisabled === true);
+          updateDisableAttr(this.btnElem, this.btnDisabled!);
           break;
         }
       }
@@ -90,7 +84,7 @@ export const BsIconBtnElementMixin = <
 
     firstUpdated(changedProperties: PropertyValues) {
       this.btnElem = this.renderRoot.children[0] as HTMLButtonElement;
-      updateDisableAttr(this.btnElem, this.btnDisabled === true);
+      updateDisableAttr(this.btnElem, this.btnDisabled!);
     }
 
     public getButtonCssClassesArr() {
@@ -108,7 +102,7 @@ export const BsIconBtnElementMixin = <
         this.shouldSetBtnOutlinedCssClass
           ? "btn-outline-" + btnCssClassSfx
           : null,
-        this.btnHasNoBorder === true ? "trmrk-btn-no-border" : null,
+        this.btnHasNoBorder ? "trmrk-btn-no-border" : null,
         this.btnCssClass,
       ];
 

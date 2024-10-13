@@ -24,13 +24,16 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
   static styles = [...BsIconBtnElement.styles];
 
   @property({ type: Boolean })
-  public treatRightClickAsLongPress?: boolean | null | undefined;
+  public treatRightClickAsLongPress?: boolean;
+
+  @property({ type: Number })
+  public longPressIntervalMillis?: number;
+
+  @property({ type: Number })
+  public touchOrMouseMoveMinPx?: number;
 
   @property()
-  public longPressIntervalMillis?: number | null | undefined;
-
-  @property()
-  public touchOrMouseMoveMinPx?: number | null | undefined;
+  public longPressableCssClass?: string;
 
   private thisInstn: IBsIconBtnElementMixin;
 
@@ -51,7 +54,7 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
     this.longPressController = new LongPressController(this, {
       hostHtmlElementFactory: () => this,
       mainHtmlElementFactory: () => this.mainHtmlElement,
-      treatRightClickAsLongPress: this.treatRightClickAsLongPress === true,
+      treatRightClickAsLongPress: this.treatRightClickAsLongPress,
       longPressIntervalMillis: this.longPressIntervalMillis,
       touchOrMouseMoveMinPx: this.touchOrMouseMoveMinPx,
     });
@@ -70,7 +73,9 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
     // @ts-ignore
     const buttonCssClassesArr = super.getButtonCssClassesArr();
 
-    if (this.thisInstn.btnHasNoBorder !== "true") {
+    if ((this.longPressableCssClass ?? "") !== "") {
+      buttonCssClassesArr.push(this.longPressableCssClass);
+    } else if (!this.thisInstn.btnHasNoBorder) {
       buttonCssClassesArr.push("trmrk-btn-long-press-enabled");
     }
 
