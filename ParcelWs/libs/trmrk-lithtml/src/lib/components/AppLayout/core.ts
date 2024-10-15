@@ -53,17 +53,6 @@ export const showAppHeaderPropFactory =
 export const showAppTabsBarPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
-/* ---------- = ------------- -> EXPLORER BUTTON
- */
-
-/** Indicates whether to show the ***app tabs bar explorer button*** or not */
-export const showAppTabsBarExplorerButtonPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
-
-/** Indicates whether the ***app tabs bar explorer button*** is enabled or not */
-export const appTabsBarExplorerButtonEnabledPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
-
 /* ----------- = ------------ -> HISTORY NAV BUTTONS
  */
 

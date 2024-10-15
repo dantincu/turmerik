@@ -20,6 +20,10 @@ export class AppFooterElement extends LitElement {
         display: grid;
         grid-template-columns: 43px 43px 43px auto 44px;
       }
+
+      .trmrk-footer-content {
+        display: flex;
+      }
     `,
   ];
 
@@ -33,6 +37,11 @@ export class AppFooterElement extends LitElement {
     showAppFooterUndoRedoButtonsPropFactory.createController(this);
 
   render() {
+    let buttonsCount = [
+      this.showAppFooterHomeButtonProp.value ? 1 : 0,
+      this.showAppTabsBarUndoRedoButtonsProp.value ? 2 : 0,
+    ].reduce((a, b) => a + b);
+
     return html`<footer class="trmrk-app-footer">
       ${this.showAppFooterHomeButtonProp
         ? html`<a class="trmrk-btn-link" href="${this.homePageUrlProp.value}"
@@ -49,8 +58,9 @@ export class AppFooterElement extends LitElement {
               iconCssClass="bi-arrow-clockwise"
             ></trmrk-bs-icon-btn>`
         : null}
-
-      <slot name="footer"></slot>
+      <div class="trmrk-footer-content col-start-${buttonsCount + 1} col-end-5">
+        <slot name="footer"></slot>
+      </div>
     </footer>`;
   }
 }

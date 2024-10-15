@@ -403,7 +403,6 @@ export const updateDisableAttr = (
 };
 
 export const updateHtmlDocTitle = (title: string) => {
-  console.log("updateHtmlDocTitle", title);
   document.title = title;
 };
 

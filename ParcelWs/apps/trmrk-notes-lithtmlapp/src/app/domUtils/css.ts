@@ -1,4 +1,5 @@
 import * as bootstrapObj from "bootstrap";
+
 import {
   getGlobalStylesArr,
   globalStyles as globalStylesObj,

@@ -6,8 +6,6 @@ import {
   isCompactModePropFactory,
 } from "../../domUtils/core";
 
-import { propOf } from "../../../trmrk/obj";
-
 import { updateHtmlDocTitle } from "../../../trmrk-browser/domUtils/core";
 
 import { globalStyles } from "../../domUtils/css";
