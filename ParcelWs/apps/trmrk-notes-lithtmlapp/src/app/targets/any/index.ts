@@ -1,5 +1,5 @@
 import { runAppSetup } from "../../appSetup";
-import { Router } from "@vaadin/router";
+import { Router, Route } from "@vaadin/router";
 
 runAppSetup();
 
@@ -11,6 +11,11 @@ const initRouter = () => {
   var appElem = document.querySelector("#app") as HTMLDivElement;
   appElem.innerText = "";
   const router = new Router(appElem);
+
+  const catchAllNotFound = () => ({
+    path: "/:any?",
+    component: "trmrk-not-found-page",
+  });
 
   router.setRoutes([
     {
@@ -28,12 +33,10 @@ const initRouter = () => {
           path: "/home",
           component: "trmrk-app-home-page",
         },
+        catchAllNotFound(),
       ],
     },
-    {
-      path: "/:any?",
-      component: "trmrk-not-found-page",
-    },
+    catchAllNotFound(),
   ]);
 };
 
