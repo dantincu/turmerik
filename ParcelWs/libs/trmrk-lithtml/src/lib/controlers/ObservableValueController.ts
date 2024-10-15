@@ -45,12 +45,22 @@ export class ObservableValueController<
     this.__observable = observableValue;
   }
 
-  get observable() {
+  public get observable() {
     return this.__observable;
+  }
+
+  public get value() {
+    return this.observable.value;
+  }
+
+  public set value(value: T) {
+    this.observable.value = value;
   }
 }
 
-export class ObservableValueSingletonControllerFactory<T> {
+export class ObservableValueSingletonControllerFactory<T>
+  implements Disposable
+{
   __observable: ObservableValue<T>;
 
   constructor(
@@ -67,5 +77,9 @@ export class ObservableValueSingletonControllerFactory<T> {
 
   public createController(host: ReactiveControllerHost) {
     return new ObservableValueController<T>(host, this.__observable);
+  }
+
+  [Symbol.dispose]() {
+    this.__observable = null!;
   }
 }

@@ -8,23 +8,29 @@ import {
   LongPressEventDataTuple,
 } from "../../controlers/LongPressController";
 
+import {
+  showAppHeaderPropFactory,
+  showAppTabsBarPropFactory,
+  appTitlePropFactory,
+  enableExplorerPanelPropFactory,
+  AppLayoutStyles,
+} from "./core";
+
 @customElement("trmrk-app-header")
 export class AppHeaderElement extends LitElement {
   static styles = [
     ...globalStyles.value,
     css`
-      .trmrk-app-header {
-        display: flex;
-        position: fixed;
-        width: 100%;
-        height: 48px;
-        padding: 3px;
-        cursor: pointer;
+      .trmrk-app-footer {
+        display: grid;
+        grid-template-columns: 43px 43px 43px auto 44px;
       }
     `,
   ];
 
-  onTouchStart(evt: CustomEvent<LongPressEventDataTuple>) {
+  protected readonly appTitleProp = appTitlePropFactory.createController(this);
+
+  /* onTouchStart(evt: CustomEvent<LongPressEventDataTuple>) {
     this.addMsg("onTouchStart", evt.detail);
   }
 
@@ -57,14 +63,25 @@ export class AppHeaderElement extends LitElement {
   }
 
   addMsg(evtName: string, evt: any) {
-    /* console.log(evtName, evt);
+    console.log(evtName, evt);
     const elem = document.createElement("p");
     elem.innerText = `${evtName}: ${JSON.stringify(evt, null, "  ")}`;
-    document.querySelector("trmrk-app")!.after(elem); */
-  }
+    document.querySelector("trmrk-app")!.after(elem);
+  } */
+
+  protected readonly showAppTabsBarProp =
+    showAppTabsBarPropFactory.createController(this);
 
   render() {
-    return html`<header class="trmrk-app-header">
+    return this.showAppTabsBarProp.value
+      ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
+      : html`<header class="trmrk-app-header">
+          ${(this.appTitleProp.value ?? null) !== null
+            ? html`<h1>${this.appTitleProp.value}</h1>`
+            : html`<slot name="header"></slot>`}
+        </header>`;
+
+    /* return html`<header class="trmrk-app-header">
       <trmrk-bs-icon-btn
         iconCssClass="bi bi-diagram-3"
         iconWrapperCssClass="trmrk-rotate-270deg"
@@ -86,6 +103,6 @@ export class AppHeaderElement extends LitElement {
         iconCssClass="bi-alarm"
         btnDisabled="true"
       ></trmrk-bs-icon-btn>
-    </header>`;
+    </header>` */
   }
 }

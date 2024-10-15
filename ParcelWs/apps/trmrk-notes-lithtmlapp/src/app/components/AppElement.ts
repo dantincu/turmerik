@@ -25,7 +25,7 @@ export class AppElement extends LitElement {
 
   render() {
     return html`
-      <trmrk-app-layout appTitle="Turmerik Notes">
+      <trmrk-app-layout>
         <main slot="body">
           <p>document body height: ${this.docBodyHeight}</p>
           <p>document body height: ${this.docBodyHeight}</p>

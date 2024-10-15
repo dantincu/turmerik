@@ -402,6 +402,11 @@ export const updateDisableAttr = (
   }
 };
 
+export const updateHtmlDocTitle = (title: string) => {
+  console.log("updateHtmlDocTitle", title);
+  document.title = title;
+};
+
 export const customEvent = <T>(
   eventName: string,
   detail: T,

@@ -18,7 +18,7 @@ export class AppFooterElement extends LitElement {
     css`
       .trmrk-app-footer {
         display: grid;
-        grid-template-columns: 43px 43px 43px 43px 43px auto 44px;
+        grid-template-columns: 43px 43px 43px auto 44px;
       }
     `,
   ];

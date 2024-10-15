@@ -1,14 +1,23 @@
-import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators";
+import { LitElement, html, css, PropertyValues } from "lit";
+import { customElement, property, state } from "lit/decorators";
 
 import {
   isDarkModePropFactory,
   isCompactModePropFactory,
 } from "../../domUtils/core";
 
+import { propOf } from "../../../trmrk/obj";
+
+import { updateHtmlDocTitle } from "../../../trmrk-browser/domUtils/core";
+
 import { globalStyles } from "../../domUtils/css";
 
 import {
+  appLayoutCssClassPropFactory,
+  docTitlePropFactory,
+  defaultDocTitlePropFactory,
+  appTitlePropFactory,
+  defaultAppTitlePropFactory,
   showAppHeaderPropFactory,
   showAppTabsBarPropFactory,
   showAppFooterPropFactory,
@@ -22,16 +31,24 @@ export class AppLayoutElement extends LitElement {
 
   constructor() {
     super();
+    this.docTitleHasChanged = false;
+    this.appTitleHasChanged = false;
+    this.docTitleUpdated = this.docTitleUpdated.bind(this);
+    this.appTitleUpdated = this.appTitleUpdated.bind(this);
   }
 
-  @property()
-  public cssClass?: string;
+  protected readonly appLayoutCssClassProp =
+    appLayoutCssClassPropFactory.createController(this);
 
-  @property()
-  public docTitle?: string;
+  protected readonly docTitleProp = docTitlePropFactory.createController(this);
 
-  @property()
-  public appTitle?: string;
+  protected readonly defaultDocTitleProp =
+    defaultDocTitlePropFactory.createController(this);
+
+  protected readonly appTitleProp = appTitlePropFactory.createController(this);
+
+  protected readonly defaultAppTitleProp =
+    defaultAppTitlePropFactory.createController(this);
 
   protected readonly isDarkModeProp =
     isDarkModePropFactory.createController(this);
@@ -51,45 +68,26 @@ export class AppLayoutElement extends LitElement {
   protected readonly showExplorerPanelProp =
     enableExplorerPanelPropFactory.createController(this);
 
-  protected get showAppHeader() {
-    return this.showAppHeaderProp.observable.value;
-  }
-
-  protected get showAppTabsBar() {
-    return this.showAppTabsBarProp.observable.value;
-  }
-
-  protected get showAppFooter() {
-    return this.showAppFooterProp.observable.value;
-  }
-
-  protected get showExplorerPanel() {
-    return this.showExplorerPanelProp.observable.value;
-  }
+  docTitleHasChanged: boolean;
+  appTitleHasChanged: boolean;
 
   render() {
     return [
-      html`<div class="trmrk-app-layout ${this.cssClass}">
+      html`<div class="trmrk-app-layout ${this.appLayoutCssClassProp.value}">
         ${
-          this.showAppHeader
-            ? this.showAppTabsBar
-              ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
-              : html`<header class="trmrk-app-header">
-                  ${(this.appTitle ?? false) !== false
-                    ? html`<h1>${this.appTitle}</h1>`
-                    : html`<slot name="header"></slot>`}
-                </header>`
+          this.showAppHeaderProp.value
+            ? html`<trmrk-app-header></trmrk-app-header>`
             : null
         }
         <div
           class="trmrk-app-body ${
-            this.showAppHeader ? "trmrk-after-header" : ""
-          } ${this.showAppFooter ? "trmrk-before-footer" : ""}""
+            this.showAppHeaderProp.value ? "trmrk-after-header" : ""
+          } ${this.showAppFooterProp.value ? "trmrk-before-footer" : ""}""
         >
           <slot name="body"></slot>
         </div>
         ${
-          this.showAppFooter
+          this.showAppFooterProp.value
             ? html`<trmrk-app-footer>
                 <slot name="footer"></slot>
               </trmrk-app-footer>`
@@ -97,5 +95,48 @@ export class AppLayoutElement extends LitElement {
         }
       </div>`,
     ];
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.docTitleProp.observable.subscribe(this.docTitleUpdated);
+    this.appTitleProp.observable.subscribe(this.appTitleUpdated);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.docTitleProp.observable.unsubscribe(this.docTitleUpdated);
+    this.appTitleProp.observable.unsubscribe(this.appTitleUpdated);
+  }
+
+  updated(changedProperties: PropertyValues) {
+    if (this.docTitleHasChanged || this.appTitleHasChanged) {
+      this.updateHtmlDocTitleCore();
+      this.docTitleHasChanged = false;
+      this.appTitleHasChanged = false;
+    }
+  }
+
+  firstUpdated(changedProperties: PropertyValues) {
+    this.updateHtmlDocTitleCore();
+  }
+
+  updateHtmlDocTitleCore() {
+    updateHtmlDocTitle(
+      [
+        this.docTitleProp.value,
+        this.defaultDocTitleProp.value,
+        this.appTitleProp.value,
+        this.defaultAppTitleProp.value,
+      ].find((str) => str) ?? ""
+    );
+  }
+
+  docTitleUpdated() {
+    this.docTitleHasChanged = true;
+  }
+
+  appTitleUpdated() {
+    this.appTitleHasChanged = true;
   }
 }
