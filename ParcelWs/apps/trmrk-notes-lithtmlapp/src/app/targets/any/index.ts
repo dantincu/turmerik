@@ -17,7 +17,7 @@ const initRouter = () => {
     // component: "trmrk-not-found-page",
     action: () => {
       const retElem = document.createElement("trmrk-not-found-page");
-      retElem.setAttribute("showHomePageBtn", "true");
+      retElem.setAttribute("showHomePageBtn", "");
 
       return retElem;
     },
