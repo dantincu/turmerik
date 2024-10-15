@@ -8,6 +8,7 @@ import {
   homePageUrlPropFactory,
   showAppFooterUndoRedoButtonsPropFactory,
   showAppFooterHomeButtonPropFactory,
+  showAppFooterCloseSelectionButtonPropFactory,
 } from "./core";
 
 @customElement("trmrk-app-footer")
@@ -36,6 +37,9 @@ export class AppFooterElement extends LitElement {
   protected readonly showAppTabsBarUndoRedoButtonsProp =
     showAppFooterUndoRedoButtonsPropFactory.createController(this);
 
+  protected readonly showAppFooterCloseSelectionButtonProp =
+    showAppFooterCloseSelectionButtonPropFactory.createController(this);
+
   render() {
     let buttonsCount = [
       this.showAppFooterHomeButtonProp.value ? 1 : 0,
@@ -46,21 +50,31 @@ export class AppFooterElement extends LitElement {
       ${this.showAppFooterHomeButtonProp
         ? html`<a class="trmrk-btn-link" href="${this.homePageUrlProp.value}"
             ><trmrk-bs-icon-btn
+              btnHasNoBorder
               iconCssClass="bi-house-door-fill"
             ></trmrk-bs-icon-btn
           ></a>`
         : null}
       ${this.showAppTabsBarUndoRedoButtonsProp.value
         ? html` <trmrk-bs-icon-btn
+              btnHasNoBorder
               iconCssClass="bi-arrow-counterclockwise"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
+              btnHasNoBorder
               iconCssClass="bi-arrow-clockwise"
             ></trmrk-bs-icon-btn>`
         : null}
       <div class="trmrk-footer-content col-start-${buttonsCount + 1} col-end-5">
         <slot name="footer"></slot>
       </div>
+      ${this.showAppFooterCloseSelectionButtonProp.value
+        ? html`<trmrk-bs-icon-btn
+            btnHasNoBorder
+            class="trmrk-display-flex col-start-5 col-end-5"
+            iconCssClass="bi-x-lg"
+          ></trmrk-bs-icon-btn>`
+        : null}
     </footer>`;
   }
 }

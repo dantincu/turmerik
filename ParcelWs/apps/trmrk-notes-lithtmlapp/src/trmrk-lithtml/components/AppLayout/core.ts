@@ -53,7 +53,7 @@ export const showAppHeaderPropFactory =
 export const showAppTabsBarPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
-/* ----------- = ------------ -> HISTORY NAV BUTTONS
+/* ----------- => HISTORY NAV BUTTONS
  */
 
 /** Indicates whether to show the ***app tabs bar history nav buttons*** or not */
@@ -67,6 +67,13 @@ export const appTabsBarHistoryBackButtonEnabledPropFactory =
 /** Indicates whether the ***app tabs bar history forward button*** is enabled or not */
 export const appTabsBarHistoryForwardButtonEnabledPropFactory =
   new ObservableValueSingletonControllerFactory(null, false);
+
+/* ----------- => OPTIONS BUTTON
+ */
+
+/** Indicates whether to show the ***app header options button*** or not */
+export const showAppHeaderOptiosButtonPropFactory =
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /* APP FOOTER
  */
@@ -100,6 +107,13 @@ export const appFooterUndoButtonEnabledPropFactory =
 /** Indicates whether the ***app footer redo button*** is enabled or not */
 export const appFooterRedoButtonEnabledPropFactory =
   new ObservableValueSingletonControllerFactory(null, false);
+
+/* ----------- => CLOSE SELECTION BUTTON
+ */
+
+/** Indicates whether to show the ***app header options button*** or not */
+export const showAppFooterCloseSelectionButtonPropFactory =
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /* EXPLORER PANEL
  */

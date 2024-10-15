@@ -4,31 +4,41 @@ import { customElement, property } from "lit/decorators";
 import { globalStyles } from "../../domUtils/css";
 
 import {
-  LongPressEventData,
-  LongPressEventDataTuple,
-} from "../../controlers/LongPressController";
-
-import {
-  showAppHeaderPropFactory,
+  AppLayoutStyles,
   showAppTabsBarPropFactory,
   appTitlePropFactory,
   enableExplorerPanelPropFactory,
-  AppLayoutStyles,
+  showAppTabsBarHistoryNavButtonsPropFactory,
+  showAppHeaderOptiosButtonPropFactory,
 } from "./core";
 
 @customElement("trmrk-app-header")
 export class AppHeaderElement extends LitElement {
   static styles = [
     ...globalStyles.value,
+    ...AppLayoutStyles.value,
     css`
-      .trmrk-app-footer {
+      .trmrk-app-header {
         display: grid;
         grid-template-columns: 43px 43px 43px auto 44px;
+      }
+
+      .trmrk-header-content {
+        display: flex;
       }
     `,
   ];
 
   protected readonly appTitleProp = appTitlePropFactory.createController(this);
+
+  protected readonly showAppTabsBarHistoryNavButtonsProp =
+    showAppTabsBarHistoryNavButtonsPropFactory.createController(this);
+
+  protected readonly enableExplorerPanelPropProp =
+    enableExplorerPanelPropFactory.createController(this);
+
+  protected readonly showAppHeaderOptiosButtonProp =
+    showAppHeaderOptiosButtonPropFactory.createController(this);
 
   /* onTouchStart(evt: CustomEvent<LongPressEventDataTuple>) {
     this.addMsg("onTouchStart", evt.detail);
@@ -73,13 +83,47 @@ export class AppHeaderElement extends LitElement {
     showAppTabsBarPropFactory.createController(this);
 
   render() {
-    return this.showAppTabsBarProp.value
-      ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
-      : html`<header class="trmrk-app-header">
-          ${(this.appTitleProp.value ?? null) !== null
-            ? html`<h1>${this.appTitleProp.value}</h1>`
-            : html`<slot name="header"></slot>`}
-        </header>`;
+    let buttonsCount = [
+      this.enableExplorerPanelPropProp.value ? 1 : 0,
+      this.showAppTabsBarHistoryNavButtonsProp.value ? 2 : 0,
+    ].reduce((a, b) => a + b);
+
+    return html`<header class="trmrk-app-header">
+      ${this.enableExplorerPanelPropProp.value
+        ? html`<trmrk-bs-icon-btn
+            btnHasNoBorder
+            iconCssClass="bi-diagram-3-fill"
+            iconWrapperCssClass="-rotate-90"
+          ></trmrk-bs-icon-btn>`
+        : null}
+      ${this.showAppTabsBarHistoryNavButtonsProp.value
+        ? html` <trmrk-bs-icon-btn
+              btnHasNoBorder
+              iconCssClass="bi-arrow-left"
+            ></trmrk-bs-icon-btn
+            ><trmrk-bs-icon-btn
+              btnHasNoBorder
+              iconCssClass="bi-arrow-right"
+            ></trmrk-bs-icon-btn>`
+        : null}
+      ${this.showAppTabsBarHistoryNavButtonsProp.value
+        ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
+        : html`<div
+            class="trmrk-header-content col-start-${buttonsCount + 1} col-end-5"
+          >
+            ${(this.appTitleProp.value ?? null) !== null
+              ? html`<h1>${this.appTitleProp.value}</h1>`
+              : null}
+            <slot name="header"></slot>
+          </div>`}
+      ${this.showAppHeaderOptiosButtonProp.value
+        ? html`<trmrk-bs-icon-btn
+            btnHasNoBorder
+            class="trmrk-display-flex col-start-5 col-end-5"
+            iconCssClass="bi-three-dots-vertical"
+          ></trmrk-bs-icon-btn>`
+        : null}
+    </header>`;
 
     /* return html`<header class="trmrk-app-header">
       <trmrk-bs-icon-btn

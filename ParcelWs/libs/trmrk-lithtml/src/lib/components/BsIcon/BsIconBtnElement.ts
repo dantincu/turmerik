@@ -189,6 +189,7 @@ export class BsIconBtnElement extends BsIconBtnElementMixin(
       }
 
       .trmrk-icon-wrapper {
+        font-size: 20px;
         display: inline-flex;
         position: absolute;
         inset: 0px;

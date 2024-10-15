@@ -74,7 +74,9 @@ export class AppLayoutElement extends LitElement {
       html`<div class="trmrk-app-layout ${this.appLayoutCssClassProp.value}">
         ${
           this.showAppHeaderProp.value
-            ? html`<trmrk-app-header></trmrk-app-header>`
+            ? html`<trmrk-app-header
+                ><slot name="header" slot="header"></slot
+              ></trmrk-app-header>`
             : null
         }
         <div
@@ -87,7 +89,8 @@ export class AppLayoutElement extends LitElement {
         ${
           this.showAppFooterProp.value
             ? html`<trmrk-app-footer>
-                <slot name="footer"></slot>
+                <slot name="footer" slot="footer"></slot
+              ></slot>
               </trmrk-app-footer>`
             : null
         }
