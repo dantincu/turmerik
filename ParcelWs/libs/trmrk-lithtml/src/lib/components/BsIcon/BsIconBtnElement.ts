@@ -108,7 +108,11 @@ export const BsIconBtnElementMixin = <
         .removeNullOrUndef(this.getButtonCssClassesArr())
         .join(" ");
 
-      return html`<button type="button" class="${buttonCssClass}">
+      return html`<button
+        type="button"
+        class="${buttonCssClass}"
+        ?disabled="${this.btnDisabled}"
+      >
         <span class="trmrk-icon-wrapper ${this.iconWrapperCssClass}"
           ><i class="${this.iconCssClass}"></i
         ></span>
@@ -118,20 +122,8 @@ export const BsIconBtnElementMixin = <
     updated(changedProperties: PropertyValues) {
       const btnElem = this.getBtnElem();
 
-      for (let propName in changedProperties) {
-        if (propName === btnDisabledPropName) {
-          updateDisableAttr(btnElem, this.btnDisabled!);
-          break;
-        }
-      }
-
       btnElem.addEventListener("touchstart", this.onTouchStartOrMouseDown);
       btnElem.addEventListener("mousedown", this.onTouchStartOrMouseDown);
-    }
-
-    firstUpdated(changedProperties: PropertyValues) {
-      const btnElem = this.getBtnElem();
-      updateDisableAttr(btnElem, this.btnDisabled!);
     }
 
     connectedCallback() {

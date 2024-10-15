@@ -10,6 +10,8 @@ import {
   enableExplorerPanelPropFactory,
   showAppTabsBarHistoryNavButtonsPropFactory,
   showAppHeaderOptiosButtonPropFactory,
+  appTabsBarHistoryBackButtonEnabledPropFactory,
+  appTabsBarHistoryForwardButtonEnabledPropFactory,
 } from "./core";
 
 @customElement("trmrk-app-header")
@@ -33,6 +35,12 @@ export class AppHeaderElement extends LitElement {
 
   protected readonly showAppTabsBarHistoryNavButtonsProp =
     showAppTabsBarHistoryNavButtonsPropFactory.createController(this);
+
+  protected readonly appTabsBarHistoryBackButtonEnabledProp =
+    appTabsBarHistoryBackButtonEnabledPropFactory.createController(this);
+
+  protected readonly appTabsBarHistoryForwardButtonEnabledProp =
+    appTabsBarHistoryForwardButtonEnabledPropFactory.createController(this);
 
   protected readonly enableExplorerPanelPropProp =
     enableExplorerPanelPropFactory.createController(this);
@@ -99,10 +107,14 @@ export class AppHeaderElement extends LitElement {
       ${this.showAppTabsBarHistoryNavButtonsProp.value
         ? html` <trmrk-bs-icon-btn
               btnHasNoBorder
+              ?btnDisabled="${!this.appTabsBarHistoryBackButtonEnabledProp
+                .value}"
               iconCssClass="bi-arrow-left"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
+              ?btnDisabled="${!this.appTabsBarHistoryForwardButtonEnabledProp
+                .value}"
               iconCssClass="bi-arrow-right"
             ></trmrk-bs-icon-btn>`
         : null}

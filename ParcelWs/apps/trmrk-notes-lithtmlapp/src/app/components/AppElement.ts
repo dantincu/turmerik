@@ -26,7 +26,7 @@ export class AppElement extends LitElement {
   render() {
     return html`
       <trmrk-app-layout>
-        <div slot="header">asdfasdf</div>
+        <div slot="header"></div>
         <main slot="body">
           <p>document body height: ${this.docBodyHeight}</p>
           <p>document body height: ${this.docBodyHeight}</p>
@@ -36,7 +36,7 @@ export class AppElement extends LitElement {
             qwrqwer
           </p>
         </main>
-        <div slot="footer">werqwer</div>
+        <div slot="footer"></div>
       </trmrk-app-layout>
     `;
   }

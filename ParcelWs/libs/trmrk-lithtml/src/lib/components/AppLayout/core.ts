@@ -113,7 +113,7 @@ export const appFooterRedoButtonEnabledPropFactory =
 
 /** Indicates whether to show the ***app header options button*** or not */
 export const showAppFooterCloseSelectionButtonPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /* EXPLORER PANEL
  */

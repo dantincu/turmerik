@@ -9,6 +9,8 @@ import {
   showAppFooterUndoRedoButtonsPropFactory,
   showAppFooterHomeButtonPropFactory,
   showAppFooterCloseSelectionButtonPropFactory,
+  appFooterUndoButtonEnabledPropFactory,
+  appFooterRedoButtonEnabledPropFactory,
 } from "./core";
 
 @customElement("trmrk-app-footer")
@@ -37,6 +39,12 @@ export class AppFooterElement extends LitElement {
   protected readonly showAppTabsBarUndoRedoButtonsProp =
     showAppFooterUndoRedoButtonsPropFactory.createController(this);
 
+  protected readonly appFooterUndoButtonEnabledProp =
+    appFooterUndoButtonEnabledPropFactory.createController(this);
+
+  protected readonly appFooterRedoButtonEnabledProp =
+    appFooterRedoButtonEnabledPropFactory.createController(this);
+
   protected readonly showAppFooterCloseSelectionButtonProp =
     showAppFooterCloseSelectionButtonPropFactory.createController(this);
 
@@ -58,10 +66,12 @@ export class AppFooterElement extends LitElement {
       ${this.showAppTabsBarUndoRedoButtonsProp.value
         ? html` <trmrk-bs-icon-btn
               btnHasNoBorder
+              ?btnDisabled="${!this.appFooterUndoButtonEnabledProp.value}"
               iconCssClass="bi-arrow-counterclockwise"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
+              ?btnDisabled="${!this.appFooterRedoButtonEnabledProp.value}"
               iconCssClass="bi-arrow-clockwise"
             ></trmrk-bs-icon-btn>`
         : null}
