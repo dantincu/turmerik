@@ -14,7 +14,13 @@ const initRouter = () => {
 
   const catchAllNotFound = () => ({
     path: "/:any?",
-    component: "trmrk-not-found-page",
+    // component: "trmrk-not-found-page",
+    action: () => {
+      const retElem = document.createElement("trmrk-not-found-page");
+      retElem.setAttribute("showHomePageBtn", "true");
+
+      return retElem;
+    },
   });
 
   router.setRoutes([
