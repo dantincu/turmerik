@@ -3,9 +3,9 @@ import { Router } from "@vaadin/router";
 
 runAppSetup();
 
-import { AppElement as AppElem } from "../../components/AppElement";
+import { AppHomePageElement as AppHomePageElem } from "../../components/AppHomePageElement";
 
-export const AppElement = AppElem;
+export const AppHomePageElement = AppHomePageElem;
 
 const initRouter = () => {
   var appElem = document.querySelector("#app") as HTMLDivElement;
@@ -19,15 +19,20 @@ const initRouter = () => {
     },
     {
       path: "/app",
-      redirect: "/app/home",
+      children: [
+        {
+          path: "/",
+          redirect: "/app/home",
+        },
+        {
+          path: "/home",
+          component: "trmrk-app-home-page",
+        },
+      ],
     },
     {
-      path: "/app/home",
-      component: "trmrk-app",
-      /* action: () =>
-        import(
-          "../../components/AppElement"
-        ) as unknown as Promise<HTMLElement>, */
+      path: "/:any?",
+      component: "trmrk-not-found-page",
     },
   ]);
 };

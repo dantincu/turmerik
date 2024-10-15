@@ -1,11 +1,6 @@
 import { LitElement, html, css, PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators";
 
-import {
-  isDarkModePropFactory,
-  isCompactModePropFactory,
-} from "../../domUtils/core";
-
 import { updateHtmlDocTitle } from "../../../trmrk-browser/domUtils/core";
 
 import { globalStyles } from "../../domUtils/css";
@@ -47,12 +42,6 @@ export class AppLayoutElement extends LitElement {
 
   protected readonly defaultAppTitleProp =
     defaultAppTitlePropFactory.createController(this);
-
-  protected readonly isDarkModeProp =
-    isDarkModePropFactory.createController(this);
-
-  protected readonly isCompactModeProp =
-    isCompactModePropFactory.createController(this);
 
   protected readonly showAppTabsBarProp =
     showAppTabsBarPropFactory.createController(this);

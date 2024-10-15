@@ -10,8 +10,6 @@ import { isDarkModePropFactory } from "../../domUtils/core";
 
 import { globalStyles } from "../../domUtils/css";
 
-import { updateDisableAttr } from "../../../trmrk-browser/domUtils/core";
-
 const btnDisabledPropName = propOf<IBsIconBtnElementMixin>("btnDisabled");
 
 export interface IBsIconBtnElementMixin extends LitElement {

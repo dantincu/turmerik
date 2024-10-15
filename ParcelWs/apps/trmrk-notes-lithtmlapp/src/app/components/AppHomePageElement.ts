@@ -12,8 +12,8 @@ export const AppComponents = {
 
 initDomAppTheme();
 
-@customElement("trmrk-app")
-export class AppElement extends LitElement {
+@customElement("trmrk-app-home-page")
+export class AppHomePageElement extends LitElement {
   static styles = [...globalStyles];
 
   docBodyHeight: number;

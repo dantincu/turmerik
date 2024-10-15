@@ -9,14 +9,18 @@ body {
   position: relative;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  display: block;
+  font-size: unset;
+  font-weight: unset;
+}
+
 #app {
   height: 100%;
 }
 
-.trmrk-btn-link {
-  width: 40px;
-  height: 40px;
-  padding: 0px;
+.trmrk-error {
+  color: #a20;
 }
 
 .trmrk-hidden {
@@ -61,4 +65,10 @@ body {
   word-break: keep-all;
   white-space-collapse: preserve;
   line-break: anywhere;
+}
+
+.trmrk-btn-link {
+  width: 40px;
+  height: 40px;
+  padding: 0px;
 }

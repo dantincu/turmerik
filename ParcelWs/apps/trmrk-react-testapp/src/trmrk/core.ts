@@ -130,3 +130,5 @@ export const asNumber = (
   val: number | null | undefined,
   dfVal: number
 ): number => (isNaN(val ?? NaN) ? dfVal : val) as number;
+
+export const nullify = <T>(val: T | null | undefined) => (val ? val : null);

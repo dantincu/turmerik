@@ -151,7 +151,16 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
         padding-top: 2px;
       }
 
-      .trmrk-app-header h1 {
+      .trmrk-app-header.h-24 {
+        height: 6rem;
+      }
+
+      .trmrk-app-header.trmrk-bottom-border-none {
+        border-bottom: none;
+      }
+
+      h1 {
+        font-size: 2.5em;
         text-align: center;
         width: 100%;
       }
@@ -175,6 +184,10 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
 
       .trmrk-app-body.trmrk-before-footer {
         bottom: 48px;
+      }
+
+      .trmrk-app-body.top-24 {
+        top: 6rem;
       }
     `,
   ],
