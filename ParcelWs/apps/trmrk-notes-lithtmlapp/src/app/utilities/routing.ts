@@ -1,5 +1,10 @@
 import { appPagePropFactory } from "./data";
 
+import {
+  showAppHeaderPropFactory,
+  showAppFooterPropFactory,
+} from "../../trmrk-lithtml/components/AppLayout/core";
+
 export const catchAllNotFound = (
   catchAllPseudoParamName: string,
   levels?: number | null | undefined
@@ -19,7 +24,8 @@ export const catchAllNotFound = (
   return {
     path,
     action: () => {
-      appPagePropFactory.observable.value = null;
+      showAppHeaderPropFactory.observable.value = false;
+      showAppFooterPropFactory.observable.value = false;
       const retElem = document.createElement("trmrk-not-found-page");
       retElem.setAttribute("showHomePageBtn", "");
       return retElem;

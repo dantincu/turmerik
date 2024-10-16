@@ -29,6 +29,12 @@ export class AppPageElement extends LitElement {
   public appHeaderCssClass?: string;
 
   @property()
+  public homePageBtnClass?: string;
+
+  @property()
+  public homePageBtnHostClass?: string;
+
+  @property()
   public appBodyCssClass?: string;
 
   @property()
@@ -40,10 +46,12 @@ export class AppPageElement extends LitElement {
         <header class="trmrk-app-header ${this.appHeaderCssClass}">
           ${(this.showHomePageBtn ?? null) !== null
             ? html`<a
-                class="trmrk-btn-link"
+                class="trmrk-btn-link-xl"
                 href="${trmrk.nullify(this.homePageUrl?.trim()) ?? "/"}"
                 ><trmrk-bs-icon-btn
+                  class="${this.homePageBtnHostClass}"
                   btnHasNoBorder
+                  btnCssClass="${this.homePageBtnClass}"
                   iconCssClass="bi-house-door-fill"
                 ></trmrk-bs-icon-btn
               ></a>`

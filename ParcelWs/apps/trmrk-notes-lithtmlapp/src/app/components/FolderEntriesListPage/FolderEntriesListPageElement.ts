@@ -5,15 +5,23 @@ import { globalStyles } from "../../domUtils/css";
 
 import { Components } from "../../../trmrk-lithtml/components";
 
+import {
+  AppLayoutStyles,
+  showAppHeaderPropFactory,
+  showAppFooterPropFactory,
+} from "../../../trmrk-lithtml/components/AppLayout/core";
+
 export const AppComponents = {
   Components,
 };
 
 @customElement("trmrk-folder-entries-list-page")
 export class FolderEntriesListPageElement extends LitElement {
-  static styles = [...globalStyles];
+  static styles = [...globalStyles, ...AppLayoutStyles.value];
 
   connectedCallback() {
+    showAppHeaderPropFactory.observable.value = true;
+    showAppFooterPropFactory.observable.value = false;
     super.connectedCallback();
   }
 

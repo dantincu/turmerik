@@ -194,6 +194,15 @@ export class BsIconBtnElement extends BsIconBtnElementMixin(
         height: 40px;
       }
 
+      .trmrk-bs-icon-btn-xl {
+        width: 80px;
+        height: 80px;
+      }
+
+      .trmrk-bs-icon-btn-xl .trmrk-icon-wrapper {
+        font-size: 40px;
+      }
+
       .trmrk-bs-icon-btn.trmrk-btn-no-border {
         border: 0;
       }

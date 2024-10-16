@@ -159,6 +159,10 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
         height: 6rem;
       }
 
+      .trmrk-app-header.h-48 {
+        height: 12rem;
+      }
+
       .trmrk-app-header.trmrk-bottom-border-none {
         border-bottom: none;
       }
@@ -174,6 +178,14 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
         text-align: center;
         width: 100%;
         margin-top: 2px;
+      }
+
+      .trmrk-bs-icon-btn-host-xl {
+        width: 80px;
+        height: 80px;
+      }
+
+      .app-error-page {
       }
 
       .trmrk-app-footer {
@@ -199,6 +211,10 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
 
       .trmrk-app-body.top-24 {
         top: 6rem;
+      }
+
+      .trmrk-app-body.top-48 {
+        top: 12rem;
       }
     `,
   ],

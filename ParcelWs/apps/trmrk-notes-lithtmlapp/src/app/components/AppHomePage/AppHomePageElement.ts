@@ -10,8 +10,6 @@ import {
   appTitlePropFactory,
 } from "../../../trmrk-lithtml/components/AppLayout/core";
 
-import { icons } from "../../assets/icons";
-
 @customElement("trmrk-app-home-page")
 export class AppHomePageElement extends LitElement {
   static styles = [...globalStyles, ...AppLayoutStyles.value];

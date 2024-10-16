@@ -3,11 +3,13 @@ import { customElement, property } from "lit/decorators";
 
 import trmrk from "../../../trmrk";
 
+import { AppLayoutStyles } from "../AppLayout/core";
+
 import { globalStyles } from "../../domUtils/css";
 
 @customElement("trmrk-error-page")
 export class ErrorElement extends LitElement {
-  static styles = [...globalStyles.value];
+  static styles = [...globalStyles.value, ...AppLayoutStyles.value];
 
   @property()
   public homePageUrl?: string;
@@ -25,12 +27,15 @@ export class ErrorElement extends LitElement {
     return html` <trmrk-app-page
       ?homePageUrl="${this.homePageUrl}"
       ?showHomePageBtn="${(this.showHomePageBtn ?? null) !== null}"
-      appHeaderCssClass="trmrk-bottom-border-none h-24"
-      appBodyCssClass="top-24"
+      appLayoutCssClass="app-error-page"
+      appHeaderCssClass="trmrk-bottom-border-none h-48"
+      homePageBtnClass="trmrk-bs-icon-btn-xl"
+      homePageBtnHostClass="trmrk-bs-icon-btn-host-xl"
+      appBodyCssClass="top-48"
     >
       <div slot="header" class="w-full">
         <label
-          class="btn btn-danger display-inline-flex text-4xl mt-4 ml-[calc(50%-60px)]"
+          class="btn btn-danger display-inline-flex text-6xl mt-20 ml-[calc(50%-100px)]"
         >
           ${this.statusCode}
         </label>
