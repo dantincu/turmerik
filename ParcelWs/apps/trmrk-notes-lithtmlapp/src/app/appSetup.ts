@@ -7,22 +7,15 @@ import {
 
 import { globalStyles as globalStylesArr } from "./domUtils/css";
 import { Components } from "../trmrk-lithtml/components";
-import { AppHomePageElement as AppHomePageElem } from "./components/AppHomePage/AppHomePageElement";
+import { AppElement } from "./components/AppElement";
+import { AppHomePageElement } from "./components/AppHomePage/AppHomePageElement";
+import { icons as iconsObj } from "./assets/icons";
+import { catchAllNotFound } from "./utilities/routing";
 
 const initRouter = () => {
   var appElem = document.querySelector("#app") as HTMLDivElement;
   appElem.innerText = "";
   const router = new Router(appElem);
-
-  const catchAllNotFound = () => ({
-    path: "/:any?",
-    action: () => {
-      const retElem = document.createElement("trmrk-not-found-page");
-      retElem.setAttribute("showHomePageBtn", "");
-
-      return retElem;
-    },
-  });
 
   router.setRoutes([
     {
@@ -30,20 +23,10 @@ const initRouter = () => {
       redirect: "/app",
     },
     {
-      path: "/app",
-      children: [
-        {
-          path: "/",
-          redirect: "/app/home",
-        },
-        {
-          path: "/home",
-          component: "trmrk-app-home-page",
-        },
-        catchAllNotFound(),
-      ],
+      path: "/app/:app*",
+      component: "trmrk-app",
     },
-    catchAllNotFound(),
+    catchAllNotFound("any"),
   ]);
 };
 
@@ -51,12 +34,12 @@ export const globalStyles = globalStylesArr;
 
 export const AppComponents = {
   Components,
+  AppElement,
+  AppHomePageElement,
 };
 
-export const AppHomePageElement = AppHomePageElem;
-
 export const runAppSetup = () => {
-  homePageUrlPropFactory.observable.value = "/app";
+  homePageUrlPropFactory.observable.value = "/app/home";
   defaultAppTitlePropFactory.observable.value = "Turmerik Notes";
 
   window.addEventListener("load", () => {
@@ -65,3 +48,5 @@ export const runAppSetup = () => {
 
   console.log("Setup complete", new Date());
 };
+
+export const icons = iconsObj;

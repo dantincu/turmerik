@@ -35,8 +35,6 @@ export class AppPageElement extends LitElement {
   public showAppFooter?: boolean;
 
   render() {
-    console.log("this.showHomePageBtn", this.showHomePageBtn);
-
     return [
       html`<div class="trmrk-app-layout ${this.appLayoutCssClass}">
         <header class="trmrk-app-header ${this.appHeaderCssClass}">

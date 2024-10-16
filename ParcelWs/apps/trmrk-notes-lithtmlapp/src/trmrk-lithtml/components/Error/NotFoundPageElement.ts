@@ -14,8 +14,6 @@ export class NotFoundPageElement extends LitElement {
   public showHomePageBtn?: boolean;
 
   render() {
-    console.log("this.showHomePageBtn", this.showHomePageBtn);
-
     return html`<trmrk-error-page
       statusCode="404"
       statusText="Page Not Found"

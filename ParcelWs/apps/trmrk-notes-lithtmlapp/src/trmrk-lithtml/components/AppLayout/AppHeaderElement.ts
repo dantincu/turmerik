@@ -12,6 +12,7 @@ import {
   showAppHeaderOptiosButtonPropFactory,
   appTabsBarHistoryBackButtonEnabledPropFactory,
   appTabsBarHistoryForwardButtonEnabledPropFactory,
+  appHeaderCustomContentStartingColumnsCountPropFactory,
 } from "./core";
 
 @customElement("trmrk-app-header")
@@ -32,6 +33,11 @@ export class AppHeaderElement extends LitElement {
   ];
 
   protected readonly appTitleProp = appTitlePropFactory.createController(this);
+
+  protected readonly appHeaderCustomContentStartingColumnsCountProp =
+    appHeaderCustomContentStartingColumnsCountPropFactory.createController(
+      this
+    );
 
   protected readonly showAppTabsBarHistoryNavButtonsProp =
     showAppTabsBarHistoryNavButtonsPropFactory.createController(this);
@@ -91,10 +97,21 @@ export class AppHeaderElement extends LitElement {
     showAppTabsBarPropFactory.createController(this);
 
   render() {
-    let buttonsCount = [
+    const buttonsCount = [
       this.enableExplorerPanelPropProp.value ? 1 : 0,
       this.showAppTabsBarHistoryNavButtonsProp.value ? 2 : 0,
     ].reduce((a, b) => a + b);
+
+    const headerContentCssClassesArr = [
+      "trmrk-header-content",
+      `col-start-${
+        buttonsCount +
+        (this.appHeaderCustomContentStartingColumnsCountProp.value + 1)
+      }`,
+      this.showAppHeaderOptiosButtonProp.value ? "col-end-5" : "-col-end-1",
+    ];
+
+    const headerContentCssClass = headerContentCssClassesArr.join(" ");
 
     return html`<header class="trmrk-app-header">
       ${this.enableExplorerPanelPropProp.value
@@ -102,6 +119,8 @@ export class AppHeaderElement extends LitElement {
             btnHasNoBorder
             iconCssClass="bi-diagram-3-fill"
             iconWrapperCssClass="-rotate-90"
+            class="col-start-${this
+              .appHeaderCustomContentStartingColumnsCountProp.value + 1}"
           ></trmrk-bs-icon-btn>`
         : null}
       ${this.showAppTabsBarHistoryNavButtonsProp.value
@@ -110,26 +129,25 @@ export class AppHeaderElement extends LitElement {
               ?btnDisabled="${!this.appTabsBarHistoryBackButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-left"
+              class="col-start-${this
+                .appHeaderCustomContentStartingColumnsCountProp.value + 2}"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
               ?btnDisabled="${!this.appTabsBarHistoryForwardButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-right"
+              class="col-start-${this
+                .appHeaderCustomContentStartingColumnsCountProp.value + 3}"
             ></trmrk-bs-icon-btn>`
         : null}
       ${this.showAppTabsBarHistoryNavButtonsProp.value
         ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
-        : html`<div
-            class="trmrk-header-content col-start-${buttonsCount + 1} ${this
-              .showAppHeaderOptiosButtonProp.value
-              ? "col-end-5"
-              : "-col-end-1"}"
-          >
+        : html`<div class="${headerContentCssClass}">
+            <slot name="header"></slot>
             ${(this.appTitleProp.value ?? null) !== null
               ? html`<h1>${this.appTitleProp.value}</h1>`
               : null}
-            <slot name="header"></slot>
           </div>`}
       ${this.showAppHeaderOptiosButtonProp.value
         ? html`<trmrk-bs-icon-btn

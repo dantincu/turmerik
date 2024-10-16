@@ -46,6 +46,10 @@ export const defaultAppTitlePropFactory =
 export const showAppHeaderPropFactory =
   new ObservableValueSingletonControllerFactory(null, false);
 
+/** Indicates the number of starting columns of the app header to leave for custom content (default 0) */
+export const appHeaderCustomContentStartingColumnsCountPropFactory =
+  new ObservableValueSingletonControllerFactory(null, 0);
+
 /* ---------- => APP TABS BAR
  */
 
@@ -159,10 +163,17 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
         border-bottom: none;
       }
 
-      h1 {
-        font-size: 2.15em;
+      .trmrk-app-header-icon {
+        width: 40px;
+        height: 40px;
+        margin: 2px;
+      }
+
+      .trmrk-app-header h1 {
+        font-size: 2em;
         text-align: center;
         width: 100%;
+        margin-top: 2px;
       }
 
       .trmrk-app-footer {

@@ -22,8 +22,6 @@ export class ErrorElement extends LitElement {
   public statusText?: string;
 
   render() {
-    console.log("this.showHomePageBtn", this.showHomePageBtn);
-
     return html` <trmrk-app-page
       ?homePageUrl="${this.homePageUrl}"
       ?showHomePageBtn="${(this.showHomePageBtn ?? null) !== null}"
