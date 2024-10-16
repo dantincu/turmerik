@@ -590,6 +590,18 @@ video {
   grid-column-end: 5;
 }
 
+.-col-end-4 {
+  grid-column-end: -4;
+}
+
+.-col-end-5 {
+  grid-column-end: -5;
+}
+
+.-col-end-1 {
+  grid-column-end: -1;
+}
+
 .m-auto {
   margin: auto;
 }

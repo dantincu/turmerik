@@ -121,7 +121,10 @@ export class AppHeaderElement extends LitElement {
       ${this.showAppTabsBarHistoryNavButtonsProp.value
         ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
         : html`<div
-            class="trmrk-header-content col-start-${buttonsCount + 1} col-end-5"
+            class="trmrk-header-content col-start-${buttonsCount + 1} ${this
+              .showAppHeaderOptiosButtonProp.value
+              ? "col-end-5"
+              : "-col-end-1"}"
           >
             ${(this.appTitleProp.value ?? null) !== null
               ? html`<h1>${this.appTitleProp.value}</h1>`

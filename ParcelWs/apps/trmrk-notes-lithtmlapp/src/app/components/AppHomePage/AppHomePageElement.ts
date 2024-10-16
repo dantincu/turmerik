@@ -1,16 +1,12 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators";
 
-import { globalStyles } from "../domUtils/css";
-import { initDomAppTheme } from "../../trmrk-lithtml/domUtils/core";
+import { globalStyles } from "../../domUtils/css";
 
-import { Components } from "../../trmrk-lithtml/components";
-
-export const AppComponents = {
-  Components,
-};
-
-initDomAppTheme();
+import {
+  showAppHeaderPropFactory,
+  appTitlePropFactory,
+} from "../../../trmrk-lithtml/components/AppLayout/core";
 
 @customElement("trmrk-app-home-page")
 export class AppHomePageElement extends LitElement {
@@ -23,18 +19,29 @@ export class AppHomePageElement extends LitElement {
     this.docBodyHeight = window.innerHeight;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+
+    showAppHeaderPropFactory.observable.value = true;
+    appTitlePropFactory.observable.value = "Turmerik Notes";
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+  }
+
   render() {
     return html`
       <trmrk-app-layout>
         <div slot="header"></div>
         <main slot="body">
-          <p>document body height: ${this.docBodyHeight}</p>
+          <!--p>document body height: ${this.docBodyHeight}</p>
           <p>document body height: ${this.docBodyHeight}</p>
           <p>document body height: ${this.docBodyHeight}</p>
           <p>document body height: ${this.docBodyHeight}</p>
           <p style="display: block; position: absolute; bottom: 0px;">
             qwrqwer
-          </p>
+          </p-->
         </main>
         <div slot="footer"></div>
       </trmrk-app-layout>

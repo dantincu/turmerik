@@ -44,21 +44,21 @@ export const defaultAppTitlePropFactory =
 
 /** Indicates whether to show the ***app header*** or not */
 export const showAppHeaderPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /* ---------- => APP TABS BAR
  */
 
 /** Indicates whether to show the ***app tabs bar*** or not */
 export const showAppTabsBarPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /* ----------- => HISTORY NAV BUTTONS
  */
 
 /** Indicates whether to show the ***app tabs bar history nav buttons*** or not */
 export const showAppTabsBarHistoryNavButtonsPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /** Indicates whether the ***app tabs bar history back button*** is enabled or not */
 export const appTabsBarHistoryBackButtonEnabledPropFactory =
@@ -73,21 +73,21 @@ export const appTabsBarHistoryForwardButtonEnabledPropFactory =
 
 /** Indicates whether to show the ***app header options button*** or not */
 export const showAppHeaderOptiosButtonPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /* APP FOOTER
  */
 
 /** Indicates whether to show the ***app footer*** or not */
 export const showAppFooterPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /* ---------- => HOME BUTTON
  */
 
 /** Indicates whether to show the ***app footer home button*** or not */
 export const showAppFooterHomeButtonPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /** Gets or sets the ***home page url*** */
 export const homePageUrlPropFactory =
@@ -98,7 +98,7 @@ export const homePageUrlPropFactory =
 
 /** Indicates whether to show the ***app footer undo redo buttons*** or not */
 export const showAppFooterUndoRedoButtonsPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 /** Indicates whether the ***app footer undo button*** is enabled or not */
 export const appFooterUndoButtonEnabledPropFactory =
@@ -120,7 +120,7 @@ export const showAppFooterCloseSelectionButtonPropFactory =
 
 /** Indicates whether to ***enable the explorer panel*** */
 export const enableExplorerPanelPropFactory =
-  new ObservableValueSingletonControllerFactory(null, true);
+  new ObservableValueSingletonControllerFactory(null, false);
 
 export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
   value: [
@@ -160,7 +160,7 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
       }
 
       h1 {
-        font-size: 2.5em;
+        font-size: 2.15em;
         text-align: center;
         width: 100%;
       }
