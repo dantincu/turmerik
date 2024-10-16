@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using System.Text.Json.Serialization;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
 
@@ -8,11 +9,14 @@ TrmrkCoreServices.RegisterAll(
     builder.Services, false);
 
 DriveExplorerH.AddFsRetrieverAndExplorer(
-    builder.Services);
+    builder.Services, null, false, true);
 
 // Add services to the container.
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+    });
 
 builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
    .AddNegotiate();

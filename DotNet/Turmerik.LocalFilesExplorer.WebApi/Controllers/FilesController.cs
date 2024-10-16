@@ -21,6 +21,12 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpGet]
+        public object Get()
+        {
+            return new { Prop = "asdfasdf" };
+        }
+
+        [HttpGet]
         [Route("api/[controller]/file-text-contents")]
         public async Task<IActionResult> GetFileTextContents(
             [FromQuery] DriveItemCore driveItem)
@@ -38,6 +44,25 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
                 {
                     actionResult = NotFound();
                 }
+            }
+            catch (Exception exc)
+            {
+                actionResult = GetErrorActionResult(exc);
+            }
+
+            return actionResult;
+        }
+
+        [HttpGet]
+        [Route("root-folder-entries")]
+        public async Task<IActionResult> GetRootFolderEntries()
+        {
+            IActionResult actionResult;
+
+            try
+            {
+                var driveItem = await driveExplorerService.GetFolderAsync(string.Empty, false);
+                actionResult = Ok(driveItem);
             }
             catch (Exception exc)
             {

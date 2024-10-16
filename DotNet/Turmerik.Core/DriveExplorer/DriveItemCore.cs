@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Turmerik.Core.DriveExplorer
@@ -150,7 +149,7 @@ namespace Turmerik.Core.DriveExplorer
 
         public bool? IsFolder { get; set; }
         public bool? IsRootFolder { get; set; }
-        public bool? IsSpecialFolder { get; set; }
+        public Environment.SpecialFolder? SpecialFolderType { get; set; }
 
         public FileType? FileType { get; set; }
         public OfficeFileType? OfficeFileType { get; set; }

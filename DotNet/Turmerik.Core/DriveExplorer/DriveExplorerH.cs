@@ -17,15 +17,16 @@ namespace Turmerik.Core.DriveExplorer
             IServiceCollection services,
             ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
             FsExplorerH.AddRetriever(
                 services, dependencyLifetime,
-                allowSysFolders, rootDirPath);
+                allowSysFolders, allowNonSysDrives, rootDirPath);
 
             services.AddSvc<IDriveItemsRetriever>(
                 svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Retriever(
-                    allowSysFolders, rootDirPath), dependencyLifetime);
+                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
 
             return services;
         }
@@ -34,15 +35,16 @@ namespace Turmerik.Core.DriveExplorer
             IServiceCollection services,
             ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
             FsExplorerH.AddExplorer(
                 services, dependencyLifetime,
-                allowSysFolders, rootDirPath);
+                allowSysFolders, allowNonSysDrives, rootDirPath);
 
             services.AddSvc<IDriveExplorerService>(
                 svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Explorer(
-                    allowSysFolders, rootDirPath), dependencyLifetime);
+                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
 
             return services;
         }
@@ -51,15 +53,16 @@ namespace Turmerik.Core.DriveExplorer
             IServiceCollection services,
             ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
             AddFsRetriever(
                 services, dependencyLifetime,
-                allowSysFolders, rootDirPath);
+                allowSysFolders, allowNonSysDrives, rootDirPath);
 
             AddFsExplorer(
                 services, dependencyLifetime,
-                allowSysFolders, rootDirPath);
+                allowSysFolders, allowNonSysDrives, rootDirPath);
 
             return services;
         }

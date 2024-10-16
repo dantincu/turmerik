@@ -10,10 +10,12 @@ namespace Turmerik.Core.DriveExplorer
     {
         IFsItemsRetriever Retriever(
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null);
 
         IFsExplorerService Explorer(
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null);
     }
 
@@ -35,21 +37,25 @@ namespace Turmerik.Core.DriveExplorer
 
         public IFsItemsRetriever Retriever(
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null) => new FsItemsRetriever(
                 timeStampHelper,
                 pascalOrCamelCaseToWordsConverter)
             {
                 AllowSysFolders = allowSysFolders,
+                AllowNonSysDrives = allowNonSysDrives,
                 RootDirPath = rootDirPath
             };
 
         public IFsExplorerService Explorer(
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null) => new FsExplorerService(
                 timeStampHelper,
                 pascalOrCamelCaseToWordsConverter)
             {
                 AllowSysFolders = allowSysFolders,
+                AllowNonSysDrives = allowNonSysDrives,
                 RootDirPath = rootDirPath
             };
     }

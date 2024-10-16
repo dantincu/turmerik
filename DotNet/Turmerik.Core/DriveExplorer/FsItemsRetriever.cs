@@ -22,11 +22,13 @@ namespace Turmerik.Core.DriveExplorer
     {
         private readonly static string systemDrivePathRoot;
         private readonly static string userProfilePath;
+        private readonly static string userProfilePathRoot;
         private readonly static string appDataDirName;
         private readonly static string appDataPath;
         private readonly static string appDataChildRelPathStartStr;
 
         private readonly bool allowSysFolders;
+        private readonly bool allowNonSysDrives;
         private readonly string rootDirPath;
         private readonly bool hasRootDirPath;
 
@@ -40,6 +42,9 @@ namespace Turmerik.Core.DriveExplorer
 
             userProfilePath = Environment.GetFolderPath(
                 Environment.SpecialFolder.UserProfile);
+
+            userProfilePathRoot = Path.GetPathRoot(
+                userProfilePath);
 
             appDataDirName = Environment.GetFolderPath(
                 Environment.SpecialFolder.ApplicationData).Substring(
@@ -72,6 +77,16 @@ namespace Turmerik.Core.DriveExplorer
             init
             {
                 allowSysFolders = value;
+            }
+        }
+
+        public bool AllowNonSysDrives
+        {
+            get => allowNonSysDrives;
+
+            init
+            {
+                allowNonSysDrives = value;
             }
         }
 
@@ -124,8 +139,16 @@ namespace Turmerik.Core.DriveExplorer
 
                 if (!AllowSysFolders)
                 {
-                    drivesList.RemoveWhere(
-                        drive => drive.DriveType == DriveType.Fixed);
+                    if (AllowNonSysDrives)
+                    {
+                        drivesList.RemoveWhere(
+                            drive => drive.DriveType == DriveType.Fixed && drive.Name == userProfilePathRoot);
+                    }
+                    else
+                    {
+                        drivesList.RemoveWhere(
+                            drive => drive.DriveType == DriveType.Fixed);
+                    }
                 }
 
                 folder = new DriveItem
@@ -151,15 +174,15 @@ namespace Turmerik.Core.DriveExplorer
                     {
                         rootDir = GetDriveItem(
                             new DirectoryInfo(userProfilePath));
+
+                        rootDir.SpecialFolderType = Environment.SpecialFolder.UserProfile;
                     }
 
-                    rootDir.IsSpecialFolder = false;
                     folder.SubFolders.Add(rootDir);
                 }
                 else
                 {
                     var specialFolderTypesArr = Environment.SpecialFolder.Favorites.Arr(
-                        Environment.SpecialFolder.MyComputer,
                         Environment.SpecialFolder.Desktop,
                         Environment.SpecialFolder.UserProfile,
                         Environment.SpecialFolder.MyDocuments,
@@ -168,12 +191,21 @@ namespace Turmerik.Core.DriveExplorer
                         Environment.SpecialFolder.MyVideos);
 
                     var specialFoldersArr = specialFolderTypesArr.Select(
-                        specialFolder => Tuple.Create(specialFolder, GetDriveItem(
-                            new DirectoryInfo(Environment.GetFolderPath(specialFolder))))).Select(
+                        specialFolder => Tuple.Create(specialFolder, Environment.GetFolderPath(
+                            specialFolder))).Where(
+                        tuple =>
+                        {
+                            bool retVal = !string.IsNullOrEmpty(
+                                tuple.Item2);
+
+                            return retVal;
+                        }).Select(
+                        tuple => Tuple.Create(tuple.Item1, GetDriveItem(
+                            new DirectoryInfo(tuple.Item2)))).Select(
                             tuple =>
                             {
                                 (var folderType, var folder) = tuple;
-                                folder.IsSpecialFolder = true;
+                                folder.SpecialFolderType = tuple.Item1;
 
                                 folder.DisplayName = folderType switch
                                 {
@@ -339,7 +371,7 @@ namespace Turmerik.Core.DriveExplorer
             {
                 item.PrIdnf = null;
 
-                if (item.IsSpecialFolder != true)
+                if (!item.SpecialFolderType.HasValue)
                 {
                     item.Idnf = null;
                 }

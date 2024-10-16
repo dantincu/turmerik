@@ -13,13 +13,14 @@ namespace Turmerik.Core.DriveExplorer
             IServiceCollection services,
             ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
             services.AddSvcIfReq<IFsExplorerServiceFactory, FsExplorerServiceFactory>();
 
             services.AddSvc(
                 svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Retriever(
-                    allowSysFolders, rootDirPath), dependencyLifetime);
+                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
 
             return services;
         }
@@ -28,13 +29,14 @@ namespace Turmerik.Core.DriveExplorer
             IServiceCollection services,
             ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
             services.AddSvcIfReq<IFsExplorerServiceFactory, FsExplorerServiceFactory>();
 
             services.AddSvc(
                 svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Explorer(
-                    allowSysFolders, rootDirPath), dependencyLifetime);
+                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
 
             return services;
         }
@@ -43,15 +45,16 @@ namespace Turmerik.Core.DriveExplorer
             IServiceCollection services,
             ServiceLifetime? dependencyLifetime = null,
             bool allowSysFolders = false,
+            bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
             AddRetriever(
                 services, dependencyLifetime,
-                allowSysFolders, rootDirPath);
+                allowSysFolders, allowNonSysDrives, rootDirPath);
 
             AddExplorer(
                 services, dependencyLifetime,
-                allowSysFolders, rootDirPath);
+                allowSysFolders, allowNonSysDrives, rootDirPath);
 
             return services;
         }
