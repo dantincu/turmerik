@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.Text.Json.Serialization;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.LocalFilesExplorer.WebApi.ModelBinders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ TrmrkCoreServices.RegisterAll(
 
 DriveExplorerH.AddFsRetrieverAndExplorer(
     builder.Services, null, false, true);
+
+builder.Services.AddSingleton<IObjectModelValidator, NullValidator>();
 
 // Add services to the container.
 builder.Services.AddControllers()

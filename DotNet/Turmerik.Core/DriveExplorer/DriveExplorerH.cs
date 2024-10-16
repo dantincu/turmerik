@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
@@ -12,6 +15,13 @@ namespace Turmerik.Core.DriveExplorer
         public const int DEFAULT_ENTRY_NAME_MAX_LENGTH = 100;
 
         public const string DIR_PAIRS_CFG_FILE_NAME = "trmrk-dirpairs-config.json";
+
+        public static Lazy<ReadOnlyCollection<PropertyInfo>> DriveItemCoreTypeProps { get; }
+
+        static DriveExplorerH()
+        {
+            DriveItemCoreTypeProps = new(() => typeof(DriveItemCore).GetProperties().RdnlC());
+        }
 
         public static IServiceCollection AddFsRetriever(
             IServiceCollection services,

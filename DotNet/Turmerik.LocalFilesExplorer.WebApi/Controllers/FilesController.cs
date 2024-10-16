@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.LocalFilesExplorer.WebApi.ModelBinders;
 
 namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 {
@@ -21,15 +22,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpGet]
-        public object Get()
-        {
-            return new { Prop = "asdfasdf" };
-        }
-
-        [HttpGet]
-        [Route("api/[controller]/file-text-contents")]
+        [Route("file-text-contents")]
         public async Task<IActionResult> GetFileTextContents(
-            [FromQuery] DriveItemCore driveItem)
+            [FromQuery][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -73,9 +68,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/[controller]/folder-entries")]
+        [Route("folder-entries")]
         public async Task<IActionResult> GetFolderEntries(
-            [FromQuery] DriveItemCore driveItem)
+            [FromQuery][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -100,9 +95,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/create-text-file")]
+        [Route("create-text-file")]
         public async Task<IActionResult> CreateTextFile(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -132,9 +127,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPost]
-        [Route("api/[controller]/create-folder")]
+        [Route("create-folder")]
         public async Task<IActionResult> CreateFolder(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -163,9 +158,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("api/[controller]/delete-file")]
+        [Route("delete-file")]
         public async Task<IActionResult> DeleteFile(
-            [FromQuery] DriveItemCore driveItem)
+            [FromQuery][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -190,9 +185,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("api/[controller]/delete-folder")]
+        [Route("delete-folder")]
         public async Task<IActionResult> DeleteFolder(
-            [FromQuery] DriveItemCore driveItem)
+            [FromQuery][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -217,9 +212,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPatch]
-        [Route("api/[controller]/move-file")]
+        [Route("move-file")]
         public async Task<IActionResult> MoveFile(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -250,9 +245,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPatch]
-        [Route("api/[controller]/move-folder")]
+        [Route("move-folder")]
         public async Task<IActionResult> MoveFolder(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -284,9 +279,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPatch]
-        [Route("api/[controller]/rename-file")]
+        [Route("rename-file")]
         public async Task<IActionResult> RenameFile(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -314,9 +309,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPatch]
-        [Route("api/[controller]/rename-folder")]
+        [Route("rename-folder")]
         public async Task<IActionResult> RenameFolder(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -345,9 +340,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPatch]
-        [Route("api/[controller]/copy-file")]
+        [Route("copy-file")]
         public async Task<IActionResult> CopyFile(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 
@@ -376,9 +371,9 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
         }
 
         [HttpPatch]
-        [Route("api/[controller]/copy-folder")]
+        [Route("copy-folder")]
         public async Task<IActionResult> CopyFolder(
-            [FromBody] DriveItemCore driveItem)
+            [FromBody][ModelBinder(BinderType = typeof(AcceptMissingPropsModelBinder<DriveItemCore>))] DriveItemCore driveItem)
         {
             IActionResult actionResult;
 

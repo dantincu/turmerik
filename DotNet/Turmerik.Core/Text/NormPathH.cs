@@ -64,7 +64,7 @@ namespace Turmerik.Core.Text
 
         public static string NormRootedPath(
             string path,
-            Func<string, string>? transformer = null) => LocalDeviceH.IsWinOS switch
+            Func<string, string>? transformer = null) => LocalDeviceH.IsWindows.Value switch
             {
                 false => Path.GetFullPath(path).With(NormalizeTransformer(transformer)),
                 true => NormRootedPathWinStyle(path, transformer)

@@ -21,6 +21,20 @@ namespace Turmerik.UnitTests
         }
 
         [Fact]
+        public void BasicTest()
+        {
+            if (LocalDeviceH.IsWindows.Value)
+            {
+                string sysDriveRootPath = Path.GetPathRoot(
+                    Environment.GetFolderPath(
+                        Environment.SpecialFolder.UserProfile))!;
+
+                bool shouldExist = Directory.Exists(
+                    sysDriveRootPath);
+            }
+        }
+
+        [Fact]
         public void NormPathTest()
         {
             foreach (var tuple in allPathTuplesArr)
@@ -64,7 +78,7 @@ namespace Turmerik.UnitTests
                 Path.AltDirectorySeparatorChar,
                 Path.DirectorySeparatorChar);
 
-            if (Path.IsPathRooted(expectedOutputPath) && LocalDeviceH.IsWinOS)
+            if (Path.IsPathRooted(expectedOutputPath) && LocalDeviceH.IsWindows.Value)
             {
                 expectedOutputPath = expectedOutputPath.With(
                     path => (path.Length >= 2 && path[0] == '\\' && char.IsLetter(path[1])) switch
