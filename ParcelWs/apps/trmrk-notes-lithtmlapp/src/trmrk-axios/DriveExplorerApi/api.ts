@@ -1,7 +1,11 @@
 import trmrk from "../../trmrk";
 
 import { DriveItem } from "../../trmrk/drive-item";
-import { FileType, OfficeFileType } from "../../trmrk/drive-item-core";
+
+import {
+  FileType,
+  OfficeFileType,
+} from "../../trmrk/DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore";
 
 import {
   RootedPathResolvedArgs,
@@ -17,6 +21,7 @@ import {
   ApiService,
   ApiServiceType,
   AxiosResponse,
+  AxiosConfig,
 } from "../core";
 
 export interface DriveExplorerApiOpts {
@@ -72,7 +77,7 @@ export class DriveExplorerApi
   public override async Init(forceRefresh?: boolean | null | undefined) {
     if (forceRefresh || !this._rootDirNode) {
       const resp = await this.svc.get<DriveItem>(
-        this.getRelUrl("folder-entries")
+        this.getRelUrl("root-folder-entries")
       );
 
       this.handleApiResp(resp, (data) => {
@@ -156,11 +161,12 @@ export class DriveExplorerApi
       retNode = this.getSubFolder(parentFolder, pathSegs.slice(-1)[0]) ?? null;
 
       if (retNode) {
-        const resp = await this.svc.delete(
+        const resp = await this.svc.delete<DriveItem>(
           this.getRelUrl("delete-folder"),
-          () => ({
-            data: { Idnf: retNode!.item.Idnf } as DriveItem,
-          })
+          () =>
+            ({
+              data: { Idnf: retNode!.item.Idnf },
+            } as AxiosConfig<DriveItem>)
         );
 
         this.handleApiResp(resp, () => {
@@ -221,9 +227,10 @@ export class DriveExplorerApi
       if (retNode) {
         const resp = await this.svc.delete(
           this.getRelUrl("delete-file"),
-          () => ({
-            data: { Idnf: retNode!.item.Idnf } as DriveItem,
-          })
+          () =>
+            ({
+              data: { Idnf: retNode!.item.Idnf } as DriveItem,
+            } as AxiosConfig<DriveItem>)
         );
 
         this.handleApiResp(resp, () => {

@@ -47,7 +47,7 @@ export class AppHomePageFooterElement extends LitElement {
       <a class="trmrk-btn-link" href="/app/folder-entries"
         ><trmrk-bs-icon-btn
           btnHasNoBorder
-          iconCssClass="bi-folder-fill"
+          iconCssClass="bi-folder-fill text-folder"
         ></trmrk-bs-icon-btn
       ></a>
     </div>`;

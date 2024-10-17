@@ -2,6 +2,8 @@ import { LitElement, html, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators";
 import { Router } from "@vaadin/router";
 
+import { vaadinRouteGoEventControllerFactory } from "../../trmrk-lithtml/controlers/VaadinRouteGoEventControllerFactory";
+
 import { globalStyles } from "../domUtils/css";
 import { catchAllNotFound } from "../utilities/routing";
 
@@ -10,11 +12,7 @@ import { appPagePropFactory, AppPage } from "../utilities/data";
 import {
   AppLayoutStyles,
   showAppHeaderPropFactory,
-  appHeaderCustomContentStartingColumnsCountPropFactory,
   showAppHeaderHistoryNavButtonsPropFactory,
-  showAppFooterPropFactory,
-  enableExplorerPanelPropFactory,
-  showAppTabsBarPropFactory,
   showAppHeaderOptiosButtonPropFactory,
 } from "../../trmrk-lithtml/components/AppLayout/core";
 
@@ -66,12 +64,14 @@ export class AppElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    vaadinRouteGoEventControllerFactory.subscribe();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.router?.unsubscribe();
     this.router = null;
+    vaadinRouteGoEventControllerFactory.unsubscribe();
   }
 
   updated() {

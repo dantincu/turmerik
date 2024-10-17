@@ -1,7 +1,10 @@
 import trmrk from "../../trmrk";
 
 import { DriveItem } from "../../trmrk/drive-item";
-import { FileType, OfficeFileType } from "../../trmrk/drive-item-core";
+import {
+  FileType,
+  OfficeFileType,
+} from "../../trmrk/DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore";
 
 import {
   RootedPathResolvedArgs,

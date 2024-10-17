@@ -1,5 +1,7 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { AppConfigData } from "../trmrk/notes-app-config";
+
+import { Axios } from "./axios-type-defs";
 
 export namespace ns {
   export interface ApiConfigData {
@@ -9,13 +11,9 @@ export namespace ns {
     idxedDbNamePfx: string | null;
   }
 
-  export interface AxiosResponse<T> {
-    data: T;
-    status: number;
-    statusText: string;
-    request?: any;
-    headers: { [key: string]: string };
-  }
+  export type AxiosConfigBase<T> = Axios.AxiosXHRConfigBase<T>;
+  export type AxiosConfig<T> = Axios.AxiosXHRConfig<T>;
+  export type AxiosResponse<T> = Axios.AxiosXHR<T>;
 
   export interface ApiResponse<T> extends AxiosResponse<T> {
     error?: any | null | undefined;
@@ -51,12 +49,12 @@ export namespace ns {
 
     public defaultConfigFactory: (
       data: any
-    ) => AxiosRequestConfig<any> | undefined = () => undefined;
+    ) => AxiosConfigBase<any> | undefined = () => undefined;
 
     public init(
       data: ns.ApiConfigData,
       defaultConfigFactory?:
-        | ((data: any) => AxiosRequestConfig<any> | undefined)
+        | ((data: any) => AxiosConfigBase<any> | undefined)
         | null
         | undefined
     ) {
@@ -96,7 +94,7 @@ export namespace ns {
     }
 
     public resolvePromise<T>(
-      prom: Promise<ns.AxiosResponse<T>>,
+      prom: Axios.IPromise<ns.AxiosResponse<T>>,
       resolve: (
         value: ns.ApiResponse<T> | PromiseLike<ns.ApiResponse<T>>
       ) => void
@@ -185,17 +183,17 @@ export namespace ns {
       return resp;
     }
 
-    public get<T, D = any>(
+    public get<T>(
       relUri: string,
-      data?: D | undefined,
+      data?: any | undefined,
       configFactory?: (
-        d: D,
-        cfg: AxiosRequestConfig<D> | undefined
-      ) => AxiosRequestConfig<D> | undefined
+        d: any,
+        cfg: AxiosConfigBase<T> | undefined
+      ) => AxiosConfigBase<T> | undefined
     ) {
       return new Promise<ns.ApiResponse<T>>((resolve) => {
         this.resolvePromise(
-          axios.get<T, ns.AxiosResponse<T>, D>(
+          axios.get<T>(
             this.getUri(relUri),
             this.getConfig(configFactory, data)
           ),
@@ -204,17 +202,17 @@ export namespace ns {
       });
     }
 
-    public post<T, D = any>(
+    public post<T>(
       relUri: string,
-      data: D,
+      data: T,
       configFactory?: (
-        d: D,
-        cfg: AxiosRequestConfig<D> | undefined
-      ) => AxiosRequestConfig<D> | undefined
+        d: T,
+        cfg: AxiosConfigBase<T> | undefined
+      ) => AxiosConfigBase<T> | undefined
     ) {
       return new Promise<ns.ApiResponse<T>>((resolve) => {
         this.resolvePromise(
-          axios.post<T, ns.AxiosResponse<T>, D>(
+          axios.post<T>(
             this.getUri(relUri),
             data,
             this.getConfig(configFactory, data)
@@ -224,17 +222,17 @@ export namespace ns {
       });
     }
 
-    public put<T, D = any>(
+    public put<T>(
       relUri: string,
-      data: D,
+      data: T,
       configFactory?: (
-        d: D,
-        cfg: AxiosRequestConfig<D> | undefined
-      ) => AxiosRequestConfig<D> | undefined
+        d: T,
+        cfg: AxiosConfigBase<T> | undefined
+      ) => AxiosConfigBase<T> | undefined
     ) {
       return new Promise<ns.ApiResponse<T>>((resolve) => {
         this.resolvePromise(
-          axios.put<T, ns.AxiosResponse<T>, D>(
+          axios.put<T>(
             this.getUri(relUri),
             data,
             this.getConfig(configFactory, data)
@@ -244,17 +242,17 @@ export namespace ns {
       });
     }
 
-    public patch<T, D = any>(
+    public patch<T>(
       relUri: string,
-      data: D,
+      data: T,
       configFactory?: (
-        d: D,
-        cfg: AxiosRequestConfig<D> | undefined
-      ) => AxiosRequestConfig<D> | undefined
+        d: T,
+        cfg: AxiosConfigBase<T> | undefined
+      ) => AxiosConfigBase<T> | undefined
     ) {
       return new Promise<ns.ApiResponse<T>>((resolve) => {
         this.resolvePromise(
-          axios.patch<T, ns.AxiosResponse<T>, D>(
+          axios.patch<T>(
             this.getUri(relUri),
             data,
             this.getConfig(configFactory, data)
@@ -264,37 +262,34 @@ export namespace ns {
       });
     }
 
-    public delete<T, D = any>(
+    public delete<T>(
       relUri: string,
       configFactory?: (
-        d: D,
-        cfg: AxiosRequestConfig<D> | undefined
-      ) => AxiosRequestConfig<D> | undefined
+        d: T,
+        cfg: AxiosConfigBase<T> | undefined
+      ) => AxiosConfigBase<T> | undefined
     ) {
       return new Promise<ns.ApiResponse<T>>((resolve) => {
         this.resolvePromise(
-          axios.delete<T, ns.AxiosResponse<T>, D>(
-            this.getUri(relUri),
-            this.getConfig(configFactory)
-          ),
+          axios.delete<T>(this.getUri(relUri), this.getConfig(configFactory)),
           resolve
         );
       });
     }
 
-    private getConfig<D>(
+    private getConfig<T>(
       configFactory?: (
-        d: D,
-        cfg: AxiosRequestConfig<D> | undefined
-      ) => AxiosRequestConfig<D> | undefined,
-      data?: D
+        d: T,
+        cfg: AxiosConfigBase<T> | undefined
+      ) => AxiosConfigBase<T> | undefined,
+      data?: T
     ) {
-      let config: AxiosRequestConfig<D> | undefined =
+      let config: AxiosConfigBase<T> | undefined =
         this.defaultConfigFactory(data);
 
       configFactory ??= (dt, cfg) => {
         if (cfg && (dt ?? false)) {
-          cfg.data ??= dt;
+          (cfg as AxiosConfig<T>).data ??= dt;
         }
 
         return cfg;
@@ -321,6 +316,7 @@ export const initApi = (
 };
 
 export type ApiConfigData = ns.ApiConfigData;
+export type AxiosConfig<T> = ns.AxiosConfig<T>;
 export type AxiosResponse<T> = ns.AxiosResponse<T>;
 export type ApiResponse<T> = ns.ApiResponse<T>;
 export const ApiService = ns.ApiService;
