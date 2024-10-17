@@ -180,6 +180,8 @@
           "libs\\trmrk-browser\\_",
           "libs\\trmrk-react\\_",
           "libs\\trmrk-lithtml\\_",
+          "libs\\trmrk-mkscripts-parcelws-sync-behavior\\_",
+          "libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp\\_",
           "libs\\trmrk-text-transform-behavior\\_",
           "libs\\trmrk-text-transform-behavior-testapp\\_",
           "libs\\trmrk-text-transform-defaultbehavior\\_",
