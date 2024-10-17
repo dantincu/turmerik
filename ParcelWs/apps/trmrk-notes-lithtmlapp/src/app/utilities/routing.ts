@@ -1,5 +1,3 @@
-import { appPagePropFactory } from "./data";
-
 import {
   showAppHeaderPropFactory,
   showAppFooterPropFactory,

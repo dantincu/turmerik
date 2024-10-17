@@ -54,8 +54,18 @@ export class AppFooterElement extends LitElement {
       this.showAppTabsBarUndoRedoButtonsProp.value ? 2 : 0,
     ].reduce((a, b) => a + b);
 
+    const footerContentCssClassesArr = [
+      "trmrk-footer-content",
+      `col-start-${buttonsCount + 1}`,
+      this.showAppFooterCloseSelectionButtonProp.value
+        ? "col-end-5"
+        : "-col-end-1",
+    ];
+
+    const footerContentCssClass = footerContentCssClassesArr.join(" ");
+
     return html`<footer class="trmrk-app-footer">
-      ${this.showAppFooterHomeButtonProp
+      ${this.showAppFooterHomeButtonProp.value
         ? html`<a class="trmrk-btn-link" href="${this.homePageUrlProp.value}"
             ><trmrk-bs-icon-btn
               btnHasNoBorder
@@ -75,7 +85,7 @@ export class AppFooterElement extends LitElement {
               iconCssClass="bi-arrow-clockwise"
             ></trmrk-bs-icon-btn>`
         : null}
-      <div class="trmrk-footer-content col-start-${buttonsCount + 1} col-end-5">
+      <div class="${footerContentCssClass}">
         <slot name="footer"></slot>
       </div>
       ${this.showAppFooterCloseSelectionButtonProp.value

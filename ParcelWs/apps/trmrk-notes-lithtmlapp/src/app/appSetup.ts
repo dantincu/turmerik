@@ -9,6 +9,7 @@ import { globalStyles as globalStylesArr } from "./domUtils/css";
 import { Components } from "../trmrk-lithtml/components";
 import { AppElement } from "./components/AppElement";
 import { AppHomePageElement } from "./components/AppHomePage/AppHomePageElement";
+import { FolderEntriesListPageElement } from "./components/FolderEntriesListPage/FolderEntriesListPageElement";
 import { icons as iconsObj } from "./assets/icons";
 import { catchAllNotFound } from "./utilities/routing";
 
@@ -36,6 +37,7 @@ export const AppComponents = {
   Components,
   AppElement,
   AppHomePageElement,
+  FolderEntriesListPageElement,
 };
 
 export const runAppSetup = () => {

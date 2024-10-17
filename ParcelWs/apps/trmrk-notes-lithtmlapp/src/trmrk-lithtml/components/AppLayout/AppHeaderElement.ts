@@ -7,6 +7,7 @@ import {
   AppLayoutStyles,
   showAppTabsBarPropFactory,
   appTitlePropFactory,
+  defaultAppTitlePropFactory,
   enableExplorerPanelPropFactory,
   showAppTabsBarHistoryNavButtonsPropFactory,
   showAppHeaderOptiosButtonPropFactory,
@@ -34,6 +35,9 @@ export class AppHeaderElement extends LitElement {
 
   protected readonly appTitleProp = appTitlePropFactory.createController(this);
 
+  protected readonly defaultAppTitleProp =
+    defaultAppTitlePropFactory.createController(this);
+
   protected readonly appHeaderCustomContentStartingColumnsCountProp =
     appHeaderCustomContentStartingColumnsCountPropFactory.createController(
       this
@@ -48,7 +52,7 @@ export class AppHeaderElement extends LitElement {
   protected readonly appTabsBarHistoryForwardButtonEnabledProp =
     appTabsBarHistoryForwardButtonEnabledPropFactory.createController(this);
 
-  protected readonly enableExplorerPanelPropProp =
+  protected readonly enableExplorerPanelProp =
     enableExplorerPanelPropFactory.createController(this);
 
   protected readonly showAppHeaderOptiosButtonProp =
@@ -97,8 +101,13 @@ export class AppHeaderElement extends LitElement {
     showAppTabsBarPropFactory.createController(this);
 
   render() {
+    const enableExplorerPanelButtonsCountIncVal = this.enableExplorerPanelProp
+      .value
+      ? 1
+      : 0;
+
     const buttonsCount = [
-      this.enableExplorerPanelPropProp.value ? 1 : 0,
+      enableExplorerPanelButtonsCountIncVal,
       this.showAppTabsBarHistoryNavButtonsProp.value ? 2 : 0,
     ].reduce((a, b) => a + b);
 
@@ -111,10 +120,17 @@ export class AppHeaderElement extends LitElement {
       this.showAppHeaderOptiosButtonProp.value ? "col-end-5" : "-col-end-1",
     ];
 
+    console.log(
+      "buttonsCount",
+      buttonsCount,
+      this.appHeaderCustomContentStartingColumnsCountProp.value,
+      headerContentCssClassesArr
+    );
+
     const headerContentCssClass = headerContentCssClassesArr.join(" ");
 
     return html`<header class="trmrk-app-header">
-      ${this.enableExplorerPanelPropProp.value
+      ${this.enableExplorerPanelProp.value
         ? html`<trmrk-bs-icon-btn
             btnHasNoBorder
             iconCssClass="bi-diagram-3-fill"
@@ -130,7 +146,9 @@ export class AppHeaderElement extends LitElement {
                 .value}"
               iconCssClass="bi-arrow-left"
               class="col-start-${this
-                .appHeaderCustomContentStartingColumnsCountProp.value + 2}"
+                .appHeaderCustomContentStartingColumnsCountProp.value +
+              1 +
+              enableExplorerPanelButtonsCountIncVal}"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
@@ -138,15 +156,20 @@ export class AppHeaderElement extends LitElement {
                 .value}"
               iconCssClass="bi-arrow-right"
               class="col-start-${this
-                .appHeaderCustomContentStartingColumnsCountProp.value + 3}"
+                .appHeaderCustomContentStartingColumnsCountProp.value +
+              2 +
+              enableExplorerPanelButtonsCountIncVal}"
             ></trmrk-bs-icon-btn>`
         : null}
       ${this.showAppTabsBarHistoryNavButtonsProp.value
         ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
         : html`<div class="${headerContentCssClass}">
             <slot name="header"></slot>
-            ${(this.appTitleProp.value ?? null) !== null
-              ? html`<h1>${this.appTitleProp.value}</h1>`
+            ${(this.appTitleProp.value ?? this.defaultAppTitleProp.value) !==
+            null
+              ? html`<h1>
+                  ${this.appTitleProp.value ?? this.defaultAppTitleProp.value}
+                </h1>`
               : null}
           </div>`}
       ${this.showAppHeaderOptiosButtonProp.value

@@ -3,11 +3,12 @@ import { customElement } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
+import { appPagePropFactory, AppPage } from "../../utilities/data";
+
 import {
   AppLayoutStyles,
   showAppHeaderPropFactory,
   showAppFooterPropFactory,
-  appTitlePropFactory,
 } from "../../../trmrk-lithtml/components/AppLayout/core";
 
 @customElement("trmrk-app-home-page")
@@ -26,7 +27,7 @@ export class AppHomePageElement extends LitElement {
 
     showAppHeaderPropFactory.observable.value = true;
     showAppFooterPropFactory.observable.value = true;
-    appTitlePropFactory.observable.value = "Turmerik Notes";
+    appPagePropFactory.observable.value = AppPage.Home;
   }
 
   disconnectedCallback() {
@@ -41,5 +42,21 @@ export class AppHomePageElement extends LitElement {
       <p>document body height: ${this.docBodyHeight}</p>
       <p style="display: block; position: absolute; bottom: 0px;">qwrqwer</p>
     `;
+  }
+}
+
+@customElement("trmrk-app-home-page-footer")
+export class AppHomePageFooterElement extends LitElement {
+  static styles = [...globalStyles, ...AppLayoutStyles.value];
+
+  render() {
+    return html`<div class="trmrk-app-home-page-footer-content">
+      <a class="trmrk-btn-link" href="/app/folder-entries"
+        ><trmrk-bs-icon-btn
+          btnHasNoBorder
+          iconCssClass="bi-folder-fill"
+        ></trmrk-bs-icon-btn
+      ></a>
+    </div>`;
   }
 }

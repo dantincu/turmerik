@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, TemplateResult } from "lit";
 import { customElement, query } from "lit/decorators";
 import { Router } from "@vaadin/router";
 
@@ -33,12 +33,30 @@ export class AppElement extends LitElement {
   }
 
   render() {
+    let footer: TemplateResult<1> | null = null;
+
+    switch (this.appPageProp.value) {
+      case AppPage.Home:
+        footer = html`<trmrk-app-home-page-footer></trmrk-app-home-page-footer>`;
+        break;
+      case AppPage.FolderEntriesList:
+        footer = html`<trmrk-folder-entries-list-footer-page></trmrk-folder-entries-list-footer-page>`;
+        break;
+      default:
+        break;
+    }
+
     return html`<trmrk-app-layout>
-      ${this.appPageProp.value === AppPage.Home ? html`<div slot="header" class="col-start-1">
-        <img class="trmrk-app-header-icon" src="${icons.appHeaderIconUrl}" />
-      </div>` : null}
+      ${this.appPageProp.value === AppPage.Home
+        ? html`<div slot="header" class="col-start-1">
+            <img
+              class="trmrk-app-header-icon"
+              src="${icons.appHeaderIconUrl}"
+            />
+          </div>`
+        : null}
       <main slot="body"></main>
-      <div slot="footer"></div>
+      <div slot="footer">${footer}</div>
     </trmrk-app-layout>`;
   }
 
@@ -77,6 +95,10 @@ export class AppElement extends LitElement {
             {
               path: "/home",
               component: "trmrk-app-home-page",
+            },
+            {
+              path: "/folder-entries",
+              component: "trmrk-folder-entries-list-page",
             },
             catchAllNotFound("any", 1),
           ],

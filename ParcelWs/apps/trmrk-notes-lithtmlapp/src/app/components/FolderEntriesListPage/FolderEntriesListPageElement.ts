@@ -5,9 +5,15 @@ import { globalStyles } from "../../domUtils/css";
 
 import { Components } from "../../../trmrk-lithtml/components";
 
+import { appPagePropFactory, AppPage } from "../../utilities/data";
+
 import {
   AppLayoutStyles,
   showAppHeaderPropFactory,
+  showAppTabsBarHistoryNavButtonsPropFactory,
+  showAppTabsBarPropFactory,
+  showAppHeaderOptiosButtonPropFactory,
+  enableExplorerPanelPropFactory,
   showAppFooterPropFactory,
 } from "../../../trmrk-lithtml/components/AppLayout/core";
 
@@ -20,9 +26,14 @@ export class FolderEntriesListPageElement extends LitElement {
   static styles = [...globalStyles, ...AppLayoutStyles.value];
 
   connectedCallback() {
-    showAppHeaderPropFactory.observable.value = true;
-    showAppFooterPropFactory.observable.value = false;
     super.connectedCallback();
+    showAppHeaderPropFactory.observable.value = true;
+    enableExplorerPanelPropFactory.observable.value = true;
+    showAppTabsBarPropFactory.observable.value = true;
+    showAppTabsBarHistoryNavButtonsPropFactory.observable.value = true;
+    showAppHeaderOptiosButtonPropFactory.observable.value = true;
+    showAppFooterPropFactory.observable.value = false;
+    appPagePropFactory.observable.value = AppPage.FolderEntriesList;
   }
 
   disconnectedCallback() {
@@ -30,12 +41,11 @@ export class FolderEntriesListPageElement extends LitElement {
   }
 
   render() {
-    return html`
-      <trmrk-app-layout>
-        <div slot="header"></div>
-        <main slot="body"></main>
-        <div slot="footer"></div>
-      </trmrk-app-layout>
-    `;
+    return html`<div>asdfasdf</div>`;
   }
+}
+
+@customElement("trmrk-folder-entries-list-footer-page")
+export class FolderEntriesListPageFooterElement extends LitElement {
+  static styles = [...globalStyles, ...AppLayoutStyles.value];
 }

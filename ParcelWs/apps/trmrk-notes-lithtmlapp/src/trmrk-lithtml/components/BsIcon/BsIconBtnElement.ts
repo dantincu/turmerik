@@ -3,14 +3,11 @@ import { customElement, property } from "lit/decorators";
 
 import trmrk from "../../../trmrk";
 import { Constructor } from "../../../trmrk/core";
-import { propOf } from "../../../trmrk/obj";
 
 import { ObservableValueController } from "../../controlers/ObservableValueController";
 import { isDarkModePropFactory } from "../../domUtils/core";
 
 import { globalStyles } from "../../domUtils/css";
-
-const btnDisabledPropName = propOf<IBsIconBtnElementMixin>("btnDisabled");
 
 export interface IBsIconBtnElementMixin extends LitElement {
   isDarkModeProp: ObservableValueController<boolean>;
