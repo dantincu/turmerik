@@ -64,7 +64,11 @@ export class AppLayoutElement extends LitElement {
         ${
           this.showAppHeaderProp.value
             ? html`<trmrk-app-header
-                ><slot name="header" slot="header"></slot
+                ><slot
+                  name="header-first-content"
+                  slot="header-first-content"
+                ></slot
+                ><slot name="header-content" slot="header-content"></slot
               ></trmrk-app-header>`
             : null
         }
@@ -73,12 +77,12 @@ export class AppLayoutElement extends LitElement {
             this.showAppHeaderProp.value ? "trmrk-after-header" : ""
           } ${this.showAppFooterProp.value ? "trmrk-before-footer" : ""}""
         >
-          <slot name="body"></slot>
+          <slot name="body-content"></slot>
         </div>
         ${
           this.showAppFooterProp.value
             ? html`<trmrk-app-footer>
-                <slot name="footer" slot="footer"></slot
+                <slot name="footer-content" slot="footer-content"></slot
               ></slot>
               </trmrk-app-footer>`
             : null

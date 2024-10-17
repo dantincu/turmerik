@@ -33,14 +33,14 @@ export class ErrorElement extends LitElement {
       homePageBtnHostClass="trmrk-bs-icon-btn-host-xl"
       appBodyCssClass="top-48"
     >
-      <div slot="header" class="w-full">
+      <div slot="header-content" class="w-full">
         <label
           class="btn btn-danger display-inline-flex text-6xl mt-20 ml-[calc(50%-100px)]"
         >
           ${this.statusCode}
         </label>
       </div>
-      <p slot="body" class="w-full text-center text-xl">
+      <p slot="body-content" class="w-full text-center text-xl">
         ${trmrk.nullify(this.statusText?.trim()) ??
         "Ooops... something went wrong"}
       </p>

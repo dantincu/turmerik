@@ -44,6 +44,9 @@ export class AppHeaderElement extends LitElement {
       this
     );
 
+  protected readonly showAppTabsBarProp =
+    showAppTabsBarPropFactory.createController(this);
+
   protected readonly showAppHeaderHistoryNavButtonsProp =
     showAppHeaderHistoryNavButtonsPropFactory.createController(this);
 
@@ -63,9 +66,6 @@ export class AppHeaderElement extends LitElement {
 
   protected readonly showAppHeaderOptiosButtonProp =
     showAppHeaderOptiosButtonPropFactory.createController(this);
-
-  protected readonly showAppTabsBarProp =
-    showAppTabsBarPropFactory.createController(this);
 
   historyNavButtonsClickEventsAdded: boolean;
 
@@ -145,20 +145,8 @@ export class AppHeaderElement extends LitElement {
 
     const headerContentCssClass = headerContentCssClassesArr.join(" ");
 
-    let appTabsBarHistoryBackButtonClickHandler:
-      | ((e: MouseEvent) => void)
-      | null = null;
-    let appTabsBarHistoryForwardButtonClickHandler:
-      | ((e: MouseEvent) => void)
-      | null = null;
-
-    if (
-      this.showAppHeaderHistoryNavButtonsProp.value &&
-      this.enableAppHeaderHistoryNavButtonsDefaultBehaviorProp.value
-    ) {
-    }
-
     return html`<header class="trmrk-app-header">
+      <slot name="header-first-content"></slot>
       ${this.enableExplorerPanelProp.value
         ? html`<trmrk-bs-icon-btn
             btnHasNoBorder
@@ -178,7 +166,6 @@ export class AppHeaderElement extends LitElement {
                 .appHeaderCustomContentStartingColumnsCountProp.value +
               1 +
               enableExplorerPanelButtonsCountIncVal}"
-              @click="${appTabsBarHistoryBackButtonClickHandler}"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
@@ -189,13 +176,12 @@ export class AppHeaderElement extends LitElement {
                 .appHeaderCustomContentStartingColumnsCountProp.value +
               2 +
               enableExplorerPanelButtonsCountIncVal}"
-              @click="${appTabsBarHistoryForwardButtonClickHandler}"
             ></trmrk-bs-icon-btn>`
         : null}
-      ${this.showAppHeaderHistoryNavButtonsProp.value
+      ${this.showAppTabsBarProp.value
         ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
         : html`<div class="${headerContentCssClass}">
-            <slot name="header"></slot>
+            <slot name="header-content"></slot>
             ${(this.appTitleProp.value ?? this.defaultAppTitleProp.value) !==
             null
               ? html`<h1>

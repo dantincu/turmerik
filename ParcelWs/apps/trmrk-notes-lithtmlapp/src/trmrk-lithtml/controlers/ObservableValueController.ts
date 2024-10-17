@@ -75,6 +75,14 @@ export class ObservableValueSingletonControllerFactory<T>
     return this.__observable;
   }
 
+  public get value() {
+    return this.observable.value;
+  }
+
+  public set value(value: T) {
+    this.observable.value = value;
+  }
+
   public createController(host: ReactiveControllerHost) {
     return new ObservableValueController<T>(host, this.__observable);
   }

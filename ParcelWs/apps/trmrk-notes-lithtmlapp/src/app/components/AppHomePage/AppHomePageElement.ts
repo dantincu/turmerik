@@ -3,13 +3,9 @@ import { customElement } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
-import { appPagePropFactory, AppPage } from "../../utilities/data";
+import { AppPage, updateAppPageProps } from "../../utilities/data";
 
-import {
-  AppLayoutStyles,
-  showAppHeaderPropFactory,
-  showAppFooterPropFactory,
-} from "../../../trmrk-lithtml/components/AppLayout/core";
+import { AppLayoutStyles } from "../../../trmrk-lithtml/components/AppLayout/core";
 
 @customElement("trmrk-app-home-page")
 export class AppHomePageElement extends LitElement {
@@ -24,10 +20,7 @@ export class AppHomePageElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-
-    showAppHeaderPropFactory.observable.value = true;
-    showAppFooterPropFactory.observable.value = true;
-    appPagePropFactory.observable.value = AppPage.Home;
+    updateAppPageProps(AppPage.Home);
   }
 
   disconnectedCallback() {

@@ -10,8 +10,12 @@ import { appPagePropFactory, AppPage } from "../utilities/data";
 import {
   AppLayoutStyles,
   showAppHeaderPropFactory,
+  appHeaderCustomContentStartingColumnsCountPropFactory,
+  showAppHeaderHistoryNavButtonsPropFactory,
   showAppFooterPropFactory,
-  appTitlePropFactory,
+  enableExplorerPanelPropFactory,
+  showAppTabsBarPropFactory,
+  showAppHeaderOptiosButtonPropFactory,
 } from "../../trmrk-lithtml/components/AppLayout/core";
 
 import { icons } from "../assets/icons";
@@ -48,15 +52,15 @@ export class AppElement extends LitElement {
 
     return html`<trmrk-app-layout>
       ${this.appPageProp.value === AppPage.Home
-        ? html`<div slot="header" class="col-start-1">
+        ? html`<div slot="header-first-content" class="col-start-1 col-end-1">
             <img
               class="trmrk-app-header-icon"
               src="${icons.appHeaderIconUrl}"
             />
           </div>`
         : null}
-      <main slot="body"></main>
-      <div slot="footer">${footer}</div>
+      <main slot="body-content"></main>
+      <div slot="footer-content">${footer}</div>
     </trmrk-app-layout>`;
   }
 
@@ -75,6 +79,9 @@ export class AppElement extends LitElement {
   }
 
   firstUpdated() {
+    showAppHeaderPropFactory.observable.value = true;
+    showAppHeaderHistoryNavButtonsPropFactory.observable.value = true;
+    showAppHeaderOptiosButtonPropFactory.value = true;
     this.subscribeRouterIfReq();
   }
 

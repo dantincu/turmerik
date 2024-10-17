@@ -43,6 +43,7 @@ export class AppPageElement extends LitElement {
   render() {
     return [
       html`<div class="trmrk-app-layout ${this.appLayoutCssClass}">
+        <slot name="header-first-content"></slot>
         <header class="trmrk-app-header ${this.appHeaderCssClass}">
           ${(this.showHomePageBtn ?? null) !== null
             ? html`<a
@@ -56,14 +57,14 @@ export class AppPageElement extends LitElement {
                 ></trmrk-bs-icon-btn
               ></a>`
             : null}
-          <slot name="header"></slot>
+          <slot name="header-content"></slot>
         </header>
         <div class="trmrk-app-body trmrk-after-header ${this.appBodyCssClass}">
-          <slot name="body"></slot>
+          <slot name="body-content"></slot>
         </div>
         ${this.showAppFooter
           ? html`<footer class="trmrk-app-footer">
-              <slot name="footer"></slot>
+              <slot name="footer-content"></slot>
             </footer>`
           : null}
       </div>`,

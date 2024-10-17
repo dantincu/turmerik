@@ -86,7 +86,7 @@ export class AppFooterElement extends LitElement {
             ></trmrk-bs-icon-btn>`
         : null}
       <div class="${footerContentCssClass}">
-        <slot name="footer"></slot>
+        <slot name="footer-content"></slot>
       </div>
       ${this.showAppFooterCloseSelectionButtonProp.value
         ? html`<trmrk-bs-icon-btn

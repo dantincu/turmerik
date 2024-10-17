@@ -5,17 +5,9 @@ import { globalStyles } from "../../domUtils/css";
 
 import { Components } from "../../../trmrk-lithtml/components";
 
-import { appPagePropFactory, AppPage } from "../../utilities/data";
+import { updateAppPageProps, AppPage } from "../../utilities/data";
 
-import {
-  AppLayoutStyles,
-  showAppHeaderPropFactory,
-  showAppHeaderHistoryNavButtonsPropFactory,
-  showAppTabsBarPropFactory,
-  showAppHeaderOptiosButtonPropFactory,
-  enableExplorerPanelPropFactory,
-  showAppFooterPropFactory,
-} from "../../../trmrk-lithtml/components/AppLayout/core";
+import { AppLayoutStyles } from "../../../trmrk-lithtml/components/AppLayout/core";
 
 export const AppComponents = {
   Components,
@@ -27,13 +19,7 @@ export class FolderEntriesListPageElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    showAppHeaderPropFactory.observable.value = true;
-    enableExplorerPanelPropFactory.observable.value = true;
-    showAppTabsBarPropFactory.observable.value = true;
-    showAppHeaderHistoryNavButtonsPropFactory.observable.value = true;
-    showAppHeaderOptiosButtonPropFactory.observable.value = true;
-    showAppFooterPropFactory.observable.value = false;
-    appPagePropFactory.observable.value = AppPage.FolderEntriesList;
+    updateAppPageProps(AppPage.FolderEntriesList);
   }
 
   disconnectedCallback() {
