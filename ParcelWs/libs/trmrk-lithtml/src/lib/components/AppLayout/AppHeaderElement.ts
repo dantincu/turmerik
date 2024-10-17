@@ -10,6 +10,7 @@ import {
   defaultAppTitlePropFactory,
   enableExplorerPanelPropFactory,
   showAppTabsBarHistoryNavButtonsPropFactory,
+  enableAppTabsBarHistoryNavButtonsDefaultBehaviorPropFactory,
   showAppHeaderOptiosButtonPropFactory,
   appTabsBarHistoryBackButtonEnabledPropFactory,
   appTabsBarHistoryForwardButtonEnabledPropFactory,
@@ -46,6 +47,11 @@ export class AppHeaderElement extends LitElement {
   protected readonly showAppTabsBarHistoryNavButtonsProp =
     showAppTabsBarHistoryNavButtonsPropFactory.createController(this);
 
+  protected readonly enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp =
+    enableAppTabsBarHistoryNavButtonsDefaultBehaviorPropFactory.createController(
+      this
+    );
+
   protected readonly appTabsBarHistoryBackButtonEnabledProp =
     appTabsBarHistoryBackButtonEnabledPropFactory.createController(this);
 
@@ -57,6 +63,26 @@ export class AppHeaderElement extends LitElement {
 
   protected readonly showAppHeaderOptiosButtonProp =
     showAppHeaderOptiosButtonPropFactory.createController(this);
+
+  protected readonly showAppTabsBarProp =
+    showAppTabsBarPropFactory.createController(this);
+
+  historyNavButtonsClickEventsAdded: boolean;
+
+  historyBackBtnElem: HTMLElement | null;
+  historyForwardBtnElem: HTMLElement | null;
+
+  constructor() {
+    super();
+    this.historyNavButtonsClickEventsAdded = false;
+    this.historyBackBtnElem = null;
+    this.historyForwardBtnElem = null;
+
+    this.navHistoryBackBtnClicked = this.navHistoryBackBtnClicked.bind(this);
+
+    this.navHistoryForwardBtnClicked =
+      this.navHistoryForwardBtnClicked.bind(this);
+  }
 
   /* onTouchStart(evt: CustomEvent<LongPressEventDataTuple>) {
     this.addMsg("onTouchStart", evt.detail);
@@ -97,9 +123,6 @@ export class AppHeaderElement extends LitElement {
     document.querySelector("trmrk-app")!.after(elem);
   } */
 
-  protected readonly showAppTabsBarProp =
-    showAppTabsBarPropFactory.createController(this);
-
   render() {
     const enableExplorerPanelButtonsCountIncVal = this.enableExplorerPanelProp
       .value
@@ -129,6 +152,19 @@ export class AppHeaderElement extends LitElement {
 
     const headerContentCssClass = headerContentCssClassesArr.join(" ");
 
+    let appTabsBarHistoryBackButtonClickHandler:
+      | ((e: MouseEvent) => void)
+      | null = null;
+    let appTabsBarHistoryForwardButtonClickHandler:
+      | ((e: MouseEvent) => void)
+      | null = null;
+
+    if (
+      this.showAppTabsBarHistoryNavButtonsProp.value &&
+      this.enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp.value
+    ) {
+    }
+
     return html`<header class="trmrk-app-header">
       ${this.enableExplorerPanelProp.value
         ? html`<trmrk-bs-icon-btn
@@ -145,20 +181,22 @@ export class AppHeaderElement extends LitElement {
               ?btnDisabled="${!this.appTabsBarHistoryBackButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-left"
-              class="col-start-${this
+              class="trmrk-histroy-back-btn col-start-${this
                 .appHeaderCustomContentStartingColumnsCountProp.value +
               1 +
               enableExplorerPanelButtonsCountIncVal}"
+              @click="${appTabsBarHistoryBackButtonClickHandler}"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
               ?btnDisabled="${!this.appTabsBarHistoryForwardButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-right"
-              class="col-start-${this
+              class="trmrk-histroy-forward-btn col-start-${this
                 .appHeaderCustomContentStartingColumnsCountProp.value +
               2 +
               enableExplorerPanelButtonsCountIncVal}"
+              @click="${appTabsBarHistoryForwardButtonClickHandler}"
             ></trmrk-bs-icon-btn>`
         : null}
       ${this.showAppTabsBarHistoryNavButtonsProp.value
@@ -204,5 +242,76 @@ export class AppHeaderElement extends LitElement {
         btnDisabled="true"
       ></trmrk-bs-icon-btn>
     </header>` */
+  }
+
+  updated() {
+    this.addNavButtonsClickEventListenersIfReq();
+  }
+
+  firstUpdated() {
+    this.addNavButtonsClickEventListenersIfReq();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeNavButtonsClickEventListenersIfReq();
+  }
+
+  addNavButtonsClickEventListenersIfReq() {
+    if (
+      this.enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp.value &&
+      !this.historyNavButtonsClickEventsAdded
+    ) {
+      this.historyBackBtnElem = this.renderRoot.querySelector(
+        ".trmrk-histroy-back-btn"
+      )!;
+
+      this.historyForwardBtnElem = this.renderRoot.querySelector(
+        ".trmrk-histroy-forward-btn"
+      )!;
+
+      this.historyBackBtnElem.addEventListener(
+        "click",
+        this.navHistoryBackBtnClicked
+      );
+
+      this.historyForwardBtnElem.addEventListener(
+        "click",
+        this.navHistoryForwardBtnClicked
+      );
+
+      this.historyNavButtonsClickEventsAdded = true;
+    }
+  }
+
+  removeNavButtonsClickEventListenersIfReq() {
+    if (
+      this.enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp.value &&
+      !this.historyNavButtonsClickEventsAdded
+    ) {
+      this.historyBackBtnElem?.removeEventListener(
+        "click",
+        this.navHistoryBackBtnClicked
+      );
+
+      this.historyForwardBtnElem?.removeEventListener(
+        "click",
+        this.navHistoryForwardBtnClicked
+      );
+
+      this.historyNavButtonsClickEventsAdded = true;
+    }
+  }
+
+  navHistoryBackBtnClicked(e: MouseEvent) {
+    window.history.back();
+  }
+
+  navHistoryForwardBtnClicked(e: MouseEvent) {
+    window.history.forward();
   }
 }

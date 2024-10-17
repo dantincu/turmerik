@@ -64,13 +64,17 @@ export const showAppTabsBarPropFactory =
 export const showAppTabsBarHistoryNavButtonsPropFactory =
   new ObservableValueSingletonControllerFactory(null, false);
 
+/** Indicates whether to show the ***app tabs bar history nav buttons*** or not */
+export const enableAppTabsBarHistoryNavButtonsDefaultBehaviorPropFactory =
+  new ObservableValueSingletonControllerFactory(null, true);
+
 /** Indicates whether the ***app tabs bar history back button*** is enabled or not */
 export const appTabsBarHistoryBackButtonEnabledPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /** Indicates whether the ***app tabs bar history forward button*** is enabled or not */
 export const appTabsBarHistoryForwardButtonEnabledPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /* ----------- => OPTIONS BUTTON
  */
