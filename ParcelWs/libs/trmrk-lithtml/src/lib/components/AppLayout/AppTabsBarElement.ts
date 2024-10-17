@@ -5,7 +5,7 @@ import { globalStyles } from "../../domUtils/css";
 
 import {
   AppLayoutStyles,
-  showAppTabsBarHistoryNavButtonsPropFactory,
+  showAppHeaderHistoryNavButtonsPropFactory,
   enableExplorerPanelPropFactory,
 } from "./core";
 

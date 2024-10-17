@@ -9,11 +9,11 @@ import {
   appTitlePropFactory,
   defaultAppTitlePropFactory,
   enableExplorerPanelPropFactory,
-  showAppTabsBarHistoryNavButtonsPropFactory,
-  enableAppTabsBarHistoryNavButtonsDefaultBehaviorPropFactory,
+  showAppHeaderHistoryNavButtonsPropFactory,
+  enableAppHeaderHistoryNavButtonsDefaultBehaviorPropFactory,
   showAppHeaderOptiosButtonPropFactory,
-  appTabsBarHistoryBackButtonEnabledPropFactory,
-  appTabsBarHistoryForwardButtonEnabledPropFactory,
+  appHeaderHistoryBackButtonEnabledPropFactory,
+  appHeaderHistoryForwardButtonEnabledPropFactory,
   appHeaderCustomContentStartingColumnsCountPropFactory,
 } from "./core";
 
@@ -44,19 +44,19 @@ export class AppHeaderElement extends LitElement {
       this
     );
 
-  protected readonly showAppTabsBarHistoryNavButtonsProp =
-    showAppTabsBarHistoryNavButtonsPropFactory.createController(this);
+  protected readonly showAppHeaderHistoryNavButtonsProp =
+    showAppHeaderHistoryNavButtonsPropFactory.createController(this);
 
-  protected readonly enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp =
-    enableAppTabsBarHistoryNavButtonsDefaultBehaviorPropFactory.createController(
+  protected readonly enableAppHeaderHistoryNavButtonsDefaultBehaviorProp =
+    enableAppHeaderHistoryNavButtonsDefaultBehaviorPropFactory.createController(
       this
     );
 
-  protected readonly appTabsBarHistoryBackButtonEnabledProp =
-    appTabsBarHistoryBackButtonEnabledPropFactory.createController(this);
+  protected readonly appHeaderHistoryBackButtonEnabledProp =
+    appHeaderHistoryBackButtonEnabledPropFactory.createController(this);
 
-  protected readonly appTabsBarHistoryForwardButtonEnabledProp =
-    appTabsBarHistoryForwardButtonEnabledPropFactory.createController(this);
+  protected readonly appHeaderHistoryForwardButtonEnabledProp =
+    appHeaderHistoryForwardButtonEnabledPropFactory.createController(this);
 
   protected readonly enableExplorerPanelProp =
     enableExplorerPanelPropFactory.createController(this);
@@ -131,7 +131,7 @@ export class AppHeaderElement extends LitElement {
 
     const buttonsCount = [
       enableExplorerPanelButtonsCountIncVal,
-      this.showAppTabsBarHistoryNavButtonsProp.value ? 2 : 0,
+      this.showAppHeaderHistoryNavButtonsProp.value ? 2 : 0,
     ].reduce((a, b) => a + b);
 
     const headerContentCssClassesArr = [
@@ -143,13 +143,6 @@ export class AppHeaderElement extends LitElement {
       this.showAppHeaderOptiosButtonProp.value ? "col-end-5" : "-col-end-1",
     ];
 
-    console.log(
-      "buttonsCount",
-      buttonsCount,
-      this.appHeaderCustomContentStartingColumnsCountProp.value,
-      headerContentCssClassesArr
-    );
-
     const headerContentCssClass = headerContentCssClassesArr.join(" ");
 
     let appTabsBarHistoryBackButtonClickHandler:
@@ -160,8 +153,8 @@ export class AppHeaderElement extends LitElement {
       | null = null;
 
     if (
-      this.showAppTabsBarHistoryNavButtonsProp.value &&
-      this.enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp.value
+      this.showAppHeaderHistoryNavButtonsProp.value &&
+      this.enableAppHeaderHistoryNavButtonsDefaultBehaviorProp.value
     ) {
     }
 
@@ -175,10 +168,10 @@ export class AppHeaderElement extends LitElement {
               .appHeaderCustomContentStartingColumnsCountProp.value + 1}"
           ></trmrk-bs-icon-btn>`
         : null}
-      ${this.showAppTabsBarHistoryNavButtonsProp.value
+      ${this.showAppHeaderHistoryNavButtonsProp.value
         ? html` <trmrk-bs-icon-btn
               btnHasNoBorder
-              ?btnDisabled="${!this.appTabsBarHistoryBackButtonEnabledProp
+              ?btnDisabled="${!this.appHeaderHistoryBackButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-left"
               class="trmrk-histroy-back-btn col-start-${this
@@ -189,7 +182,7 @@ export class AppHeaderElement extends LitElement {
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
-              ?btnDisabled="${!this.appTabsBarHistoryForwardButtonEnabledProp
+              ?btnDisabled="${!this.appHeaderHistoryForwardButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-right"
               class="trmrk-histroy-forward-btn col-start-${this
@@ -199,7 +192,7 @@ export class AppHeaderElement extends LitElement {
               @click="${appTabsBarHistoryForwardButtonClickHandler}"
             ></trmrk-bs-icon-btn>`
         : null}
-      ${this.showAppTabsBarHistoryNavButtonsProp.value
+      ${this.showAppHeaderHistoryNavButtonsProp.value
         ? html`<trmrk-app-tabs-bar></trmrk-app-tabs-bar>`
         : html`<div class="${headerContentCssClass}">
             <slot name="header"></slot>
@@ -261,11 +254,17 @@ export class AppHeaderElement extends LitElement {
     this.removeNavButtonsClickEventListenersIfReq();
   }
 
+  shouldAddNavButtonsClickEventListeners() {
+    const retVal =
+      this.enableAppHeaderHistoryNavButtonsDefaultBehaviorProp.value &&
+      this.showAppHeaderHistoryNavButtonsProp.value &&
+      !this.historyNavButtonsClickEventsAdded;
+
+    return retVal;
+  }
+
   addNavButtonsClickEventListenersIfReq() {
-    if (
-      this.enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp.value &&
-      !this.historyNavButtonsClickEventsAdded
-    ) {
+    if (this.shouldAddNavButtonsClickEventListeners()) {
       this.historyBackBtnElem = this.renderRoot.querySelector(
         ".trmrk-histroy-back-btn"
       )!;
@@ -289,10 +288,7 @@ export class AppHeaderElement extends LitElement {
   }
 
   removeNavButtonsClickEventListenersIfReq() {
-    if (
-      this.enableAppTabsBarHistoryNavButtonsDefaultBehaviorProp.value &&
-      !this.historyNavButtonsClickEventsAdded
-    ) {
+    if (this.shouldAddNavButtonsClickEventListeners()) {
       this.historyBackBtnElem?.removeEventListener(
         "click",
         this.navHistoryBackBtnClicked

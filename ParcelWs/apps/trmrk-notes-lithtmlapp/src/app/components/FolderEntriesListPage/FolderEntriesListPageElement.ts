@@ -10,7 +10,7 @@ import { appPagePropFactory, AppPage } from "../../utilities/data";
 import {
   AppLayoutStyles,
   showAppHeaderPropFactory,
-  showAppTabsBarHistoryNavButtonsPropFactory,
+  showAppHeaderHistoryNavButtonsPropFactory,
   showAppTabsBarPropFactory,
   showAppHeaderOptiosButtonPropFactory,
   enableExplorerPanelPropFactory,
@@ -30,7 +30,7 @@ export class FolderEntriesListPageElement extends LitElement {
     showAppHeaderPropFactory.observable.value = true;
     enableExplorerPanelPropFactory.observable.value = true;
     showAppTabsBarPropFactory.observable.value = true;
-    showAppTabsBarHistoryNavButtonsPropFactory.observable.value = true;
+    showAppHeaderHistoryNavButtonsPropFactory.observable.value = true;
     showAppHeaderOptiosButtonPropFactory.observable.value = true;
     showAppFooterPropFactory.observable.value = false;
     appPagePropFactory.observable.value = AppPage.FolderEntriesList;

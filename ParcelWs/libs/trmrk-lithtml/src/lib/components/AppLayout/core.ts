@@ -60,20 +60,20 @@ export const showAppTabsBarPropFactory =
 /* ----------- => HISTORY NAV BUTTONS
  */
 
-/** Indicates whether to show the ***app tabs bar history nav buttons*** or not */
-export const showAppTabsBarHistoryNavButtonsPropFactory =
+/** Indicates whether to show the ***app header history nav buttons*** or not */
+export const showAppHeaderHistoryNavButtonsPropFactory =
   new ObservableValueSingletonControllerFactory(null, false);
 
-/** Indicates whether to show the ***app tabs bar history nav buttons*** or not */
-export const enableAppTabsBarHistoryNavButtonsDefaultBehaviorPropFactory =
+/** Indicates whether to show the ***app header history nav buttons*** or not */
+export const enableAppHeaderHistoryNavButtonsDefaultBehaviorPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
-/** Indicates whether the ***app tabs bar history back button*** is enabled or not */
-export const appTabsBarHistoryBackButtonEnabledPropFactory =
+/** Indicates whether the ***app header history back button*** is enabled or not */
+export const appHeaderHistoryBackButtonEnabledPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
-/** Indicates whether the ***app tabs bar history forward button*** is enabled or not */
-export const appTabsBarHistoryForwardButtonEnabledPropFactory =
+/** Indicates whether the ***app header history forward button*** is enabled or not */
+export const appHeaderHistoryForwardButtonEnabledPropFactory =
   new ObservableValueSingletonControllerFactory(null, true);
 
 /* ----------- => OPTIONS BUTTON
