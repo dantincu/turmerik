@@ -1,5 +1,7 @@
 import { Router } from "@vaadin/router";
 
+import { AppConfigData } from "../trmrk/notes-app-config";
+
 import {
   defaultAppTitlePropFactory,
   homePageUrlPropFactory,
@@ -40,7 +42,8 @@ export const AppComponents = {
   FolderEntriesListPageElement,
 };
 
-export const runAppSetup = () => {
+export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
+  console.log("appConfig.isDevEnv", appConfig.isDevEnv);
   homePageUrlPropFactory.observable.value = "/app/home";
   defaultAppTitlePropFactory.observable.value = "Turmerik Notes";
 

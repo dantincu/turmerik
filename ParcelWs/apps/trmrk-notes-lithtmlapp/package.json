@@ -5,8 +5,8 @@
   "source": "src/app/targets/any/index.html",
   "type": "module",
   "scripts": {
-    "start": "parcel ./src/app/targets/any/index.html --dist-dir ./dist/dev-any --port=9102 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
-    "build": "parcel build ./src/app/targets/any/index.html --dist-dir ./dist/prod-any"
+    "start": "SET NODE_ENV=dev& parcel ./src/app/targets/any/index.html --dist-dir ./dist/dev-any --port=9102 --open \"C:\\Program Files\\Google\\Chrome Dev\\Application\\chrome.exe\" --https",
+    "build": "SET NODE_ENV=prod& parcel build ./src/app/targets/any/index.html --dist-dir ./dist/prod-any"
   },
   "author": "Daniel Tincu",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "@types/uuid": "^10.0.0",
     "buffer": "^6.0.3",
     "parcel": "^2.12.0",
+    "parcel-reporter-static-files-copy": "^1.5.3",
     "process": "^0.11.10",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
@@ -32,5 +33,19 @@
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "lit": "^3.2.1"
-  }
+  },
+  "staticFiles": [
+    {
+      "staticPath": "src/app/targets/any/env/prod",
+      "env": {
+        "NODE_ENV": "prod"
+      }
+    },
+    {
+      "staticPath": "src/app/targets/any/env/dev",
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    }
+  ]
 }

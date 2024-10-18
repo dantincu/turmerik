@@ -1,27 +1,7 @@
-export enum DirType {
-  shortName,
-  fullName,
-}
+import * as Notes from "./DotNetTypes/Turmerik.Notes.Core.NoteItem";
+import * as NoteEnums from "./DotNetTypes/Turmerik.Notes.Core.NoteDirType";
 
-export enum DirCategory {
-  item,
-  internals,
-}
-
-export enum InternalDir {
-  root = 1,
-  internals,
-  files,
-}
-
-export interface NoteItem {
-  title?: string | null | undefined;
-  itemIdx?: number | null | undefined;
-  mdFileName?: string | null | undefined;
-  internalDirs?: { [key: number | string]: number } | null | undefined;
-  childItems?: { [key: number]: string } | null | undefined;
-  pinnedChildItemsSortOrder?: number[] | null | undefined;
-  childItemsSortOrder?: number[] | null | undefined;
-
-  childNodes: { [itemIdx: number]: NoteItem };
-}
+export type DirType = NoteEnums.NoteDirType;
+export type DirCategory = NoteEnums.NoteDirCategory;
+export type InternalDir = NoteEnums.NoteInternalDir;
+export type NoteItem = Notes.NoteItem;
