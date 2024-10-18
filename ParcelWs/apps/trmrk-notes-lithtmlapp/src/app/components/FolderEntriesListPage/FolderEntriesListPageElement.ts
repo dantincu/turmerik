@@ -1,5 +1,14 @@
 import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators";
+import { customElement, state } from "lit/decorators";
+import { Task } from "@lit/task";
+
+import { DriveItem } from "../../../trmrk/drive-item";
+
+import {
+  AxiosResponse,
+  AxiosConfig,
+  ApiResponse,
+} from "../../../trmrk-axios/core";
 
 import { vaadinRouteGoEventControllerFactory } from "../../../trmrk-lithtml/controlers/VaadinRouteGoEventControllerFactory";
 
@@ -22,13 +31,30 @@ export class FolderEntriesListPageElement extends LitElement {
   protected readonly vaadinRouteGoEvent =
     vaadinRouteGoEventControllerFactory.createController(this);
 
-  initializedFirstTime: boolean;
-  loading: boolean;
+  @state()
+  dataResp: AxiosResponse<DriveItem> | null;
+
+  private _loadDataTask: Task<any, DriveItem>;
 
   constructor() {
     super();
-    this.initializedFirstTime = false;
-    this.loading = false;
+    this.dataResp = null;
+
+    this._loadDataTask = new Task(this, {
+      task: async ([folderIdnf], { signal }) => {
+        const response = await fetch(
+          `http://example.com/product/${productId}`,
+          {
+            signal,
+          }
+        );
+        if (!response.ok) {
+          throw new Error(response.status);
+        }
+        return response.json() as DriveItem;
+      },
+      args: () => [this.productId],
+    });
   }
 
   connectedCallback() {
@@ -38,27 +64,19 @@ export class FolderEntriesListPageElement extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.dataResp = null;
   }
 
   render() {
-    return html`<div>asdfasdf</div>`;
+    return this._loadDataTask.render({
+      pending: () => html`<p>Loading product...</p>`,
+      complete: (product) => html`
+        <h1>${product.name}</h1>
+        <p>${product.price}</p>
+      `,
+      error: (e) => html`<p>Error: ${e}</p>`,
+    });
   }
-
-  updated() {
-    console.log("vaadinRouteGoEvent", this.vaadinRouteGoEvent.value);
-  }
-
-  firstUpdated() {
-    console.log("vaadinRouteGoEvent", this.vaadinRouteGoEvent.value);
-  }
-
-  async initDataAsync() {
-    if (!this.initializedFirstTime) {
-      await this.reloadAsync();
-    }
-  }
-
-  async reloadAsync() {}
 }
 
 @customElement("trmrk-folder-entries-list-footer-page")
