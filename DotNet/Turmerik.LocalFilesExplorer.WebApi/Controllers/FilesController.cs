@@ -76,6 +76,11 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 
             try
             {
+                if (string.IsNullOrWhiteSpace(driveItem.Idnf))
+                {
+                    driveItem.Idnf = ".";
+                }
+
                 if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
                 {
                     driveItem = await driveExplorerService.GetFolderAsync(driveItem.Idnf, null);
