@@ -59,6 +59,7 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
   driveExplorerApi.value = new DriveExplorerApi(apiSvc, {
     isLocalFileNotes: appConfig.isLocalFileNotesApp,
     isLocalFilesWinOS: appConfig.isWinOS,
+    relPath: "files",
   });
 
   window.addEventListener("load", () => {

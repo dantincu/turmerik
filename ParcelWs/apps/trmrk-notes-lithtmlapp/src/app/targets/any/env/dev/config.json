@@ -51,7 +51,7 @@
   "altPathSep": "/",
   "isWinOS": true,
   "isLocalFileNotesApp": true,
-  "clientUserUuid": null,
+  "clientUserUuid": "34751DEB-A8EB-48C3-83E8-CBB468AF0E92",
   "noteDirPairs": {
     "FileNameMaxLength": 100,
     "SerializeToJson": true,
