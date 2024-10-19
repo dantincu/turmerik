@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { customElement } from "lit/decorators";
+import { customElement, property } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
@@ -7,9 +7,12 @@ import { globalStyles } from "../../domUtils/css";
 export class LoadingElement extends LitElement {
   static styles = [...globalStyles.value];
 
+  @property()
+  public cssClass?: string;
+
   render() {
     return html`<div
-      class="trmrk-loading-el trmrk-loading-el-dot-pulse"
+      class="trmrk-loading-el trmrk-loading-el-dot-pulse ${this.cssClass}"
     ></div>`;
   }
 }

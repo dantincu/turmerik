@@ -2,6 +2,8 @@ import trmrk from "../../trmrk";
 
 import { DriveItem } from "../../trmrk/drive-item";
 
+import { TrmrkError } from "../../trmrk/TrmrkError";
+
 import {
   FileType,
   OfficeFileType,
@@ -438,7 +440,7 @@ export class DriveExplorerApi
     });
   }
 
-  private async handleApiResp<T>(
+  private handleApiResp<T>(
     resp: ApiResponse<T> | null,
     onSuccess: (data: T) => void,
     onError?: (resp: ApiResponse<T> | null) => void
@@ -466,21 +468,43 @@ export class DriveExplorerApi
 
   private handleApiError<T>(resp: ApiResponse<T> | null) {
     const err =
-      resp?.error ?? new Error(resp?.errMessage ?? "An error has occurred");
+      resp?.error ??
+      new TrmrkError(
+        resp?.errMessage ?? "An error has occurred",
+        null,
+        resp
+          ? {
+              statusCode: resp.status,
+              statusText: resp.statusText,
+              data: resp,
+            }
+          : null
+      );
 
     throw err;
   }
 
   private async handleApiErrorAsync<T>(resp: ApiResponse<T> | null) {
     const err =
-      resp?.error ?? new Error(resp?.errMessage ?? "An error has occurred");
+      resp?.error ??
+      new TrmrkError(
+        resp?.errMessage ?? "An error has occurred",
+        null,
+        resp
+          ? {
+              statusCode: resp.status,
+              statusText: resp.statusText,
+              data: resp,
+            }
+          : null
+      );
 
     throw err;
   }
 
   private getRelUrl(relUrl: string) {
     if (this.hasRelPath) {
-      relUrl = [this.relPath, relUrl].join(this.dirSep);
+      relUrl = [this.relPath, relUrl].join("/");
     }
 
     return relUrl;

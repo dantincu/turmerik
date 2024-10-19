@@ -19,6 +19,7 @@ using Turmerik.NetCore.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Dependencies;
 using Turmerik.Jint.Dependencies;
+using Turmerik.NetCore.Utility;
 
 namespace Turmerik.Utility.WinFormsApp
 {
