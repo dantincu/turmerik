@@ -161,7 +161,7 @@ namespace Turmerik.Utility.WinFormsApp
                     TrmrkJintServices.RegisterAll(services);
 
                     services.AddSingleton<IAppDataFactory, AppDataFactory>();
-                    services.AddSingleton<IAppSettings, AppSettings>();
+                    services.AddSingleton<IAppSettings, Settings.AppSettings>();
                     services.AddSingleton<IUISettingsRetriever, UISettingsRetriever>();
                     services.AddSingleton<IUIThemeRetriever, UIThemeRetriever>();
                     services.AddSingleton<ControlBlinkTimersManagerAdapterFactory>();
