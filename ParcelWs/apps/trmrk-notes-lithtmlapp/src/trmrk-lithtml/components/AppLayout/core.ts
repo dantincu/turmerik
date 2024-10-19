@@ -205,6 +205,14 @@ export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
         padding: 0px;
       }
 
+      .trmrk-app-panel {
+        display: flex;
+        position: absolute;
+        inset: 0;
+        margin: 0px;
+        padding: 0px;
+      }
+
       .trmrk-app-body.trmrk-after-header {
         top: 48px;
       }

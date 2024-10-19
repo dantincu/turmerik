@@ -72,3 +72,47 @@ body {
   height: 80px;
   padding: 0px;
 }
+
+.trmrk-scrollable::-webkit-scrollbar {
+  width: 15px;
+}
+
+.trmrk-scrollable::-webkit-scrollbar-thumb {
+  cursor: grabbing;
+}
+
+.trmrk-scrollableY {
+  overflow-y: scroll;
+}
+
+.trmrk-scrollableX {
+  overflow-x: scroll;
+}
+
+.trmrk-overflowX-hidden {
+  overflow-x: hidden;
+}
+
+.trmrk-overflowY-hidden {
+  overflow-y: hidden;
+}
+
+[data-bs-theme-dark] .trmrk-scrollable,
+.trmrk-app-theme-dark .trmrk-scrollable,
+.trmrk-app-theme-dark.trmrk-scrollable {
+  @include scrollable(
+    var(--trmrk-scrollable-track_color_dark),
+    var(--trmrk-scrollable-thumb_color_dark),
+    var(--trmrk-scrollable-track-hover_color_dark),
+    var(--trmrk-scrollable-thumb-hover_color_dark));
+}
+
+[data-bs-theme-light] .trmrk-scrollable,
+.trmrk-app-theme-light .trmrk-scrollable,
+.trmrk-app-theme-light.trmrk-scrollable {
+  @include scrollable(
+    var(--trmrk-scrollable-track_color_light),
+    var(--trmrk-scrollable-thumb_color_light),
+    var(--trmrk-scrollable-track-hover_color_light),
+    var(--trmrk-scrollable-thumb-hover_color_light));
+}

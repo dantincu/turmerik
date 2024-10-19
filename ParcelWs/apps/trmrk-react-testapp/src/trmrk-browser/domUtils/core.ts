@@ -12,8 +12,13 @@ export const localStorageKeys = Object.freeze({
 });
 
 export const appModeCssClasses = {
-  compactMode: "trmrk-mode-compact",
-  fullMode: "trmrk-mode-full",
+  compactMode: "trmrk-app-mode-compact",
+  fullMode: "trmrk-app-mode-full",
+};
+
+export const appThemeCssClasses = {
+  dark: "trmrk-app-theme-dark",
+  light: "trmrk-app-theme-light",
 };
 
 export const getAppModeCssClassName = (isCompactMode: boolean) => {
@@ -22,6 +27,14 @@ export const getAppModeCssClassName = (isCompactMode: boolean) => {
     : appModeCssClasses.fullMode;
 
   return appModeClassName;
+};
+
+export const getAppThemeCssClassName = (isDarkMode: boolean) => {
+  const appThemeClassName = isDarkMode
+    ? appThemeCssClasses.dark
+    : appThemeCssClasses.light;
+
+  return appThemeClassName;
 };
 
 export const getRoute = (
@@ -40,6 +53,10 @@ export const getRoute = (
 };
 
 export const appModeCssClass = {
+  value: "",
+} as MtblRefValue<string>;
+
+export const appThemeCssClass = {
   value: "",
 } as MtblRefValue<string>;
 

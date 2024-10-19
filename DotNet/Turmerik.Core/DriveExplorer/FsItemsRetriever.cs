@@ -107,17 +107,17 @@ namespace Turmerik.Core.DriveExplorer
         public override async Task<DriveItem> GetItemAsync(
             string idnf, bool? retMinimalInfo)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, true);
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var filePath);
             DriveItem item;
 
-            if (Directory.Exists(idnf))
+            if (Directory.Exists(filePath))
             {
                 item = await GetFolderAsync(
-                    idnf, retMinimalInfo);
+                    filePath, retMinimalInfo);
             }
-            else if (File.Exists(idnf))
+            else if (File.Exists(filePath))
             {
-                item = await GetFileAsync(idnf);
+                item = await GetFileAsync(filePath);
             }
             else
             {
@@ -226,9 +226,8 @@ namespace Turmerik.Core.DriveExplorer
             }
             else
             {
-                ThrowIfPathIsNotValidAgainstRootPath(idnf, true);
+                ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var folderPath);
 
-                var folderPath = idnf;
                 var entry = new DirectoryInfo(folderPath);
                 folder = GetDriveItem(entry);
 
@@ -256,16 +255,18 @@ namespace Turmerik.Core.DriveExplorer
                 idnf) || await FolderExistsAsync(idnf);
 
         public override async Task<bool> FolderExistsAsync(
-            string idnf) => ThrowIfPathIsNotValidAgainstRootPath(idnf, true) && Directory.Exists(idnf);
+            string idnf) => ThrowIfPathIsNotValidAgainstRootPath(
+                idnf, true, out var folderPath) && Directory.Exists(folderPath);
 
         public override async Task<bool> FileExistsAsync(
-            string idnf) => ThrowIfPathIsNotValidAgainstRootPath(idnf, false) && File.Exists(idnf);
+            string idnf) => ThrowIfPathIsNotValidAgainstRootPath(
+                idnf, false, out var filePath) && File.Exists(filePath);
 
         public override string GetItemIdnf<TDriveItem>(
             TDriveItem item,
             string prIdnf)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(prIdnf, true);
+            ThrowIfPathIsNotValidAgainstRootPath(prIdnf, true, out _);
 
             string idnf = item.Idnf;
             prIdnf ??= item.PrIdnf;
@@ -282,9 +283,9 @@ namespace Turmerik.Core.DriveExplorer
 
         public override async Task<string> GetFileTextAsync(string idnf)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
 
-            using var reader = new StreamReader(idnf);
+            using var reader = new StreamReader(filePath);
             var text = await reader.ReadToEndAsync();
 
             return text;
@@ -293,18 +294,18 @@ namespace Turmerik.Core.DriveExplorer
         public override Task<byte[]> GetFileBytesAsync(
             string idnf)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
 
-            var bytesArr = FsH.ReadAllBytesAsync(idnf);
+            var bytesArr = FsH.ReadAllBytesAsync(filePath);
             return bytesArr;
         }
 
         protected async Task<DriveItem> GetFileAsync(
             string idnf)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false);
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
 
-            var fSysInfo = new FileInfo(idnf);
+            var fSysInfo = new FileInfo(filePath);
             var item = GetDriveItem(fSysInfo);
 
             return item;
@@ -379,9 +380,11 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         protected bool ThrowIfPathIsNotValidAgainstRootPath(
-            string path, bool allowsRootPath)
+            string path, bool allowsRootPath,
+            out string rootedPath)
         {
-            bool isValid = PathIsValidAgainstRootPath(path, allowsRootPath);
+            bool isValid = PathIsValidAgainstRootPath(
+                path, allowsRootPath, out rootedPath);
 
             if (!isValid)
             {
@@ -402,37 +405,54 @@ namespace Turmerik.Core.DriveExplorer
         }
 
         protected bool PathIsValidAgainstRootPath(
-            string path, bool allowsRootPath)
+            string path, bool allowsRootPath,
+            out string rootedPath)
         {
-            bool canBeValid = path != null && path == path.Trim() && Path.IsPathRooted(
-                path) && !path.All(c => c == '.' || char.IsWhiteSpace(c)) && !path.ContainsAny(
-                    PathH.InvalidPathCharsStr);
+            bool canBeValid = path != null && path == path.Trim();
+
+            if (AllowSysFolders)
+            {
+                canBeValid = canBeValid && Path.IsPathRooted(
+                    path) && !path.All(
+                        c => c == '.' || char.IsWhiteSpace(c)) && !path.ContainsAny(
+                            PathH.InvalidPathCharsStr);
+            }
 
             bool isValid = canBeValid;
+            rootedPath = path;
 
             if (isValid)
             {
-                isValid = !hasRootDirPath;
-            }
-
-            if (canBeValid && !isValid)
-            {
-                isValid = IsChildPathOf(
-                    rootDirPath, path,
-                    allowsRootPath, out _);
-            }
-
-            if (isValid && !AllowSysFolders)
-            {
-                if (Path.GetPathRoot(path) == systemDrivePathRoot)
+                if (Path.IsPathRooted(path))
                 {
-                    isValid = IsChildPathOf(
-                        userProfilePath, path, false,
-                        out string? restOfPath);
+                    isValid = !hasRootDirPath;
 
-                    isValid = isValid && restOfPath.First() != '.' &&
-                        restOfPath != appDataDirName && !restOfPath.StartsWith(
-                            appDataChildRelPathStartStr);
+                    if (canBeValid && !isValid)
+                    {
+                        isValid = IsChildPathOf(
+                            rootDirPath, path,
+                            allowsRootPath, out _);
+                    }
+
+                    if (isValid && !AllowSysFolders)
+                    {
+                        if (Path.GetPathRoot(path) == systemDrivePathRoot)
+                        {
+                            isValid = IsChildPathOf(
+                                userProfilePath, path, false,
+                                out string? restOfPath);
+
+                            isValid = isValid && restOfPath.First() != '.' &&
+                                restOfPath != appDataDirName && !restOfPath.StartsWith(
+                                    appDataChildRelPathStartStr);
+                        }
+                    }
+                }
+                else
+                {
+                    rootedPath = Path.Combine(
+                        hasRootDirPath ? rootDirPath : userProfilePath,
+                        path);
                 }
             }
 

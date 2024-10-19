@@ -56,20 +56,29 @@ export const forEachProp = <TObj extends Object>(
 export const merge = <TTrgObj extends Object>(
   trgObj: TTrgObj,
   srcObjsArr: Object[],
-  depth: number = 0
+  depth: number | null | undefined = 0,
+  mergeOverwrite = false
 ) => {
+  depth ??= Number.MAX_VALUE;
   const trgObjMap = trgObj as { [key: string]: any };
 
   for (let srcObj of srcObjsArr) {
     const srcObjMap = srcObj as { [key: string]: any };
     for (let propName of Object.getOwnPropertyNames(srcObj)) {
       const srcPropVal = srcObjMap[propName];
+      const trgPropVal = trgObjMap[propName];
 
-      if (srcPropVal ?? false) {
-        if (!(trgObjMap[propName] ?? false) ?? false) {
+      if ((srcPropVal ?? null) !== null) {
+        if ((trgPropVal ?? null) === null) {
           trgObjMap[propName] = srcPropVal;
-        } else if (depth > 0) {
-          merge(trgObj, [srcObj], depth - 1);
+        } else if (
+          depth > 0 &&
+          typeof trgObjMap[propName] === "object" &&
+          typeof srcPropVal === "object"
+        ) {
+          merge(trgObj, [srcObj], depth - 1, mergeOverwrite);
+        } else if (mergeOverwrite) {
+          trgObjMap[propName] = srcPropVal;
         }
       }
     }

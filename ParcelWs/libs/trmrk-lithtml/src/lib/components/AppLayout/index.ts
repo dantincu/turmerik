@@ -3,6 +3,7 @@ import { AppLayoutElement } from "./AppLayoutElement";
 import { AppHeaderElement } from "./AppHeaderElement";
 import { AppTabsBarElement } from "./AppTabsBarElement";
 import { AppFooterElement } from "./AppFooterElement";
+import { AppPanelElement } from "./AppPanelElement";
 
 export const AppLayout = {
   AppPageElement,
@@ -10,4 +11,5 @@ export const AppLayout = {
   AppHeaderElement,
   AppTabsBarElement,
   AppFooterElement,
+  AppPanelElement,
 };

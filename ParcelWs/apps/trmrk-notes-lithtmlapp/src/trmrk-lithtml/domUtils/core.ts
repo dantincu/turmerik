@@ -4,6 +4,11 @@ import {
   isDarkMode,
   isCompactMode,
   setIsDarkModeToLocalStorage,
+  setIsCompactModeToLocalStorage,
+  appModeCssClass,
+  appThemeCssClass,
+  getAppModeCssClassName,
+  getAppThemeCssClassName,
 } from "../../trmrk-browser/domUtils/core";
 
 export const setDomBsAppTheme = (isDarkModeValue: boolean) => {
@@ -14,12 +19,17 @@ export const setDomBsAppTheme = (isDarkModeValue: boolean) => {
     .setAttribute("data-bs-theme", domAppThemeName);
 };
 
-export const setBsAppTheme = (
+export const setAppTheme = (
   isDarkModeValue: boolean,
-  localStorageIsDarkModeKey: string | null | undefined = null
+  localStorageIsDarkModeKey: string | null | undefined = null,
+  useBootstrapLib: boolean | null | undefined = null
 ) => {
   setIsDarkModeToLocalStorage(isDarkModeValue, localStorageIsDarkModeKey);
-  setDomBsAppTheme(isDarkModeValue);
+  appThemeCssClass.value = getAppThemeCssClassName(isDarkModeValue);
+
+  if (useBootstrapLib ?? true) {
+    setDomBsAppTheme(isDarkModeValue);
+  }
 };
 
 export const initDomAppTheme = () => {
@@ -27,6 +37,18 @@ export const initDomAppTheme = () => {
   setDomBsAppTheme(isDarkModeValue);
 
   return isDarkModeValue;
+};
+
+export const setAppMode = (
+  isCompactModeValue: boolean,
+  localStorageIsCompactModeKey: string | null | undefined = null
+) => {
+  setIsCompactModeToLocalStorage(
+    isCompactModeValue,
+    localStorageIsCompactModeKey
+  );
+
+  appModeCssClass.value = getAppModeCssClassName(isCompactModeValue);
 };
 
 export const isDarkModePropFactory =

@@ -17,17 +17,26 @@ allowedClientHosts = allowedClientHosts ?? throw new InvalidOperationException(
     string.Join(" ", "Invalid configuration file: the appsettings.{environment}.json file should contain",
     "section Turmerik with property AllowedClientHosts containing an array of allowed client hosts"));
 
+string? allowAnonymousAuthenticationEnvVar = Environment.GetEnvironmentVariable(
+    "TURMERIK_ALLOW_ANONYMOUS_AUTH");
+
+bool allowAnonymousAuthentication = allowAnonymousAuthenticationEnvVar == "true";
+
 TrmrkCoreServices.RegisterAll(
     builder.Services, false);
 
 DriveExplorerH.AddFsRetrieverAndExplorer(
-    builder.Services, null, false, true);
+    builder.Services, null, false, false, Path.Combine(
+        Path.Combine(
+            Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData),
+                "Turmerik", "Temp")));
 
 builder.Services.AddSingleton<IObjectModelValidator, NullValidator>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(// name: MyAllowSpecificOrigins,
+    options.AddDefaultPolicy(
         policy =>
         {
             policy.WithOrigins(

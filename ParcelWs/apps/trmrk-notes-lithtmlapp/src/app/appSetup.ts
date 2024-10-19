@@ -38,6 +38,8 @@ const initRouter = () => {
     },
     catchAllNotFound("any"),
   ]);
+
+  // console.log("Setup complete", new Date());
 };
 
 export const globalStyles = globalStylesArr;
@@ -62,11 +64,9 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
     relPath: "files",
   });
 
-  window.addEventListener("load", () => {
+  (function () {
     initRouter();
-  });
-
-  console.log("Setup complete", new Date());
+  })();
 };
 
 export const icons = iconsObj;

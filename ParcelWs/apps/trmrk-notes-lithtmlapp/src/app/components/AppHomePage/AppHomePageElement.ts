@@ -11,11 +11,8 @@ import { AppLayoutStyles } from "../../../trmrk-lithtml/components/AppLayout/cor
 export class AppHomePageElement extends LitElement {
   static styles = [...globalStyles, ...AppLayoutStyles.value];
 
-  docBodyHeight: number;
-
   constructor() {
     super();
-    this.docBodyHeight = window.innerHeight;
   }
 
   connectedCallback() {
@@ -28,13 +25,9 @@ export class AppHomePageElement extends LitElement {
   }
 
   render() {
-    return html`
-      <p>document body height: ${this.docBodyHeight}</p>
-      <p>document body height: ${this.docBodyHeight}</p>
-      <p>document body height: ${this.docBodyHeight}</p>
-      <p>document body height: ${this.docBodyHeight}</p>
-      <p style="display: block; position: absolute; bottom: 0px;">qwrqwer</p>
-    `;
+    return html`<trmrk-app-panel
+      cssClass="trmrk-app-home-page-content"
+    ></trmrk-app-panel>`;
   }
 }
 

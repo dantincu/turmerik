@@ -69,7 +69,10 @@ export namespace ns {
           const headers: { [key: string]: string } = {};
 
           headers[ns.trmrkHeaderNames.clientVersion] = this.clientVersion;
-          headers[ns.trmrkHeaderNames.clientUserUuid] = this.clientUserUuid;
+
+          /* if (this.clientUserUuid) {
+            headers[ns.trmrkHeaderNames.clientUserUuid] = this.clientUserUuid;
+          } */
 
           return {
             withCredentials: true,

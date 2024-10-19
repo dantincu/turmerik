@@ -1,7 +1,11 @@
 import { LitElement, html, css, PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators";
 
-import { updateHtmlDocTitle } from "../../../trmrk-browser/domUtils/core";
+import {
+  updateHtmlDocTitle,
+  getAppThemeCssClassName,
+  getAppModeCssClassName,
+} from "../../../trmrk-browser/domUtils/core";
 
 import { globalStyles } from "../../domUtils/css";
 
@@ -18,6 +22,11 @@ import {
   AppLayoutStyles,
 } from "./core";
 
+import {
+  isCompactModePropFactory,
+  isDarkModePropFactory,
+} from "../../domUtils/core";
+
 @customElement("trmrk-app-layout")
 export class AppLayoutElement extends LitElement {
   static styles = [...globalStyles.value, ...AppLayoutStyles.value];
@@ -29,6 +38,12 @@ export class AppLayoutElement extends LitElement {
     this.docTitleUpdated = this.docTitleUpdated.bind(this);
     this.appTitleUpdated = this.appTitleUpdated.bind(this);
   }
+
+  protected readonly isCompactModeProp =
+    isCompactModePropFactory.createController(this);
+
+  protected readonly isDarkModeProp =
+    isDarkModePropFactory.createController(this);
 
   protected readonly appLayoutCssClassProp =
     appLayoutCssClassPropFactory.createController(this);
@@ -52,7 +67,7 @@ export class AppLayoutElement extends LitElement {
   protected readonly showAppFooterProp =
     showAppFooterPropFactory.createController(this);
 
-  protected readonly showExplorerPanelProp =
+  protected readonly enableExplorerPanelProp =
     enableExplorerPanelPropFactory.createController(this);
 
   docTitleHasChanged: boolean;
@@ -60,7 +75,11 @@ export class AppLayoutElement extends LitElement {
 
   render() {
     return [
-      html`<div class="trmrk-app-layout ${this.appLayoutCssClassProp.value}">
+      html`<div class="trmrk-app-layout ${getAppThemeCssClassName(
+        this.isDarkModeProp.value
+      )} ${getAppModeCssClassName(this.isCompactModeProp.value)} ${
+        this.appLayoutCssClassProp.value
+      }">
         ${
           this.showAppHeaderProp.value
             ? html`<trmrk-app-header
@@ -77,6 +96,11 @@ export class AppLayoutElement extends LitElement {
             this.showAppHeaderProp.value ? "trmrk-after-header" : ""
           } ${this.showAppFooterProp.value ? "trmrk-before-footer" : ""}""
         >
+          ${
+            this.enableExplorerPanelProp
+              ? html`<slot name="explorer-content"></slot>`
+              : null
+          }
           <slot name="body-content"></slot>
         </div>
         ${
