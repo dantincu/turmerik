@@ -2,6 +2,7 @@ import fs from "fs";
 import https from "https";
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import cors, { CorsOptions } from "cors";
 
 import { AppConfigData } from "../trmrk/notes-app-config";
 
@@ -13,8 +14,21 @@ const options = {
   cert: fs.readFileSync("sllCert/cert.pem"),
 };
 
+// Set CORS headers
+const corsOptions: CorsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || appConfigObj.allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
 const app = express();
 
+app.use(cors(corsOptions));
 // Proxy to ASP.NET Core app
 app.use(
   "/",
