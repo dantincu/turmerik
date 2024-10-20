@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

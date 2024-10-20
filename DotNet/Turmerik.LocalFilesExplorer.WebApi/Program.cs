@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.Text.Json.Serialization;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.LocalFilesExplorer.WebApi.ControllerConventions;
+using Turmerik.LocalFilesExplorer.WebApi.Helpers;
 using Turmerik.LocalFilesExplorer.WebApi.ModelBinders;
 using Turmerik.NetCore.Utility;
 
@@ -11,16 +13,7 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
 
-var allowedClientHosts = configuration.GetCfgValue<string[]>(["Turmerik", "AllowedClientHosts"]);
-
-allowedClientHosts = allowedClientHosts ?? throw new InvalidOperationException(
-    string.Join(" ", "Invalid configuration file: the appsettings.{environment}.json file should contain",
-    "section Turmerik with property AllowedClientHosts containing an array of allowed client hosts"));
-
-string? allowAnonymousAuthenticationEnvVar = Environment.GetEnvironmentVariable(
-    "TURMERIK_ALLOW_ANONYMOUS_AUTH");
-
-bool allowAnonymousAuthentication = allowAnonymousAuthenticationEnvVar == "true";
+AppH.InitSingleton(configuration);
 
 TrmrkCoreServices.RegisterAll(
     builder.Services, false);
@@ -30,7 +23,7 @@ DriveExplorerH.AddFsRetrieverAndExplorer(
         Path.Combine(
             Environment.GetFolderPath(
                 Environment.SpecialFolder.ApplicationData),
-                "Turmerik", "Temp")));
+                "Turmerik", "FsExplorerRoot")));
 
 builder.Services.AddSingleton<IObjectModelValidator, NullValidator>();
 
@@ -40,7 +33,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
-                allowedClientHosts).AllowAnyHeader(
+                AppH.Instance.AllowedClientHosts).AllowAnyHeader(
                 ).AllowAnyMethod(
                 ).AllowCredentials();
         });
@@ -49,27 +42,32 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
-                allowedClientHosts).AllowAnyHeader(
+                AppH.Instance.AllowedClientHosts).AllowAnyHeader(
                 ).AllowAnyMethod(
                 ).AllowCredentials();
         });
 });
 
 // Add services to the container.
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+builder.Services.AddControllers(options =>
+    {
+        options.Conventions.Add(new TrmrkControllerConvention());
+    }).AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
     });
 
-builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate();
-
-builder.Services.AddAuthorization(options =>
+if (!AppH.Instance.AllowAnonymousAuthentication)
 {
-    // By default, all incoming requests will be authorized according to the default policy.
-    options.FallbackPolicy = options.DefaultPolicy;
-});
+    builder.Services.AddAuthentication(
+        NegotiateDefaults.AuthenticationScheme).AddNegotiate();
+
+    builder.Services.AddAuthorization(options =>
+    {
+        // By default, all incoming requests will be authorized according to the default policy.
+        options.FallbackPolicy = options.DefaultPolicy;
+    });
+}
 
 var app = builder.Build();
 
@@ -79,7 +77,10 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+if (!AppH.Instance.AllowAnonymousAuthentication)
+{
+    app.UseAuthorization();
+}
 
 app.MapControllers();
 

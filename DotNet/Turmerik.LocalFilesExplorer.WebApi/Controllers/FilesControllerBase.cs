@@ -7,14 +7,13 @@ using Turmerik.LocalFilesExplorer.WebApi.ModelBinders;
 
 namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class FilesController : ControllerBase
+    public abstract class FilesControllerBase : ControllerBase
     {
         private readonly IDriveExplorerService driveExplorerService;
 
-        public FilesController(
+        public FilesControllerBase(
             IDriveExplorerService driveExplorerService)
         {
             this.driveExplorerService = driveExplorerService ?? throw new ArgumentNullException(
