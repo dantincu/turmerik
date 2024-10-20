@@ -14,7 +14,8 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\libs\trmrk-text-transform-mybehavior",
 "..\..\apps\trmrk-react-testapp",
 "..\..\apps\trmrk-notes-reactapp",
-"..\..\apps\trmrk-notes-lithtmlapp") do (
+"..\..\apps\trmrk-notes-lithtmlapp",
+"..\..\apps\trmrk-http-proxy-nodejsapp") do (
   cd %%a
   .\_\rm-ch_dst.bat
   npm run build

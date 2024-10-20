@@ -6,7 +6,6 @@ using Turmerik.Core.DriveExplorer;
 using Turmerik.LocalFilesExplorer.WebApi.ControllerConventions;
 using Turmerik.LocalFilesExplorer.WebApi.Helpers;
 using Turmerik.LocalFilesExplorer.WebApi.ModelBinders;
-using Turmerik.NetCore.Utility;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -77,10 +76,7 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
-if (!AppH.Instance.AllowAnonymousAuthentication)
-{
-    app.UseAuthorization();
-}
+app.UseAuthorization();
 
 app.MapControllers();
 

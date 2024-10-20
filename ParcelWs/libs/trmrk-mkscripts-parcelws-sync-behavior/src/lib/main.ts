@@ -84,6 +84,10 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-react-testapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
   },
+  "trmrk-http-proxy-nodejsapp": {
+    dirPath: "apps\\trmrk-http-proxy-nodejsapp\\src",
+    syncedLibs: ["trmrk"],
+  },
   "trmrk-mkscripts-parcelws-sync-behavior": {
     dirPath: "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src",
     syncedLibs: ["trmrk"],

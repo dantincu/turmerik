@@ -242,6 +242,15 @@
           "DirPath": "trmrk-react"
         }
       }
+    },
+    {
+      "Name": "trmrk-http-proxy-nodejsapp",
+      "DirPath": "apps\\trmrk-http-proxy-nodejsapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        }
+      }
     }
   ]
 }

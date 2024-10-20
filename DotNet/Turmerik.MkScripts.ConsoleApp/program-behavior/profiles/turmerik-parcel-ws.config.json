@@ -27,7 +27,8 @@
               [ "..\\..\\libs\\trmrk-text-transform-mybehavior" ],
               [ "..\\..\\apps\\trmrk-react-testapp" ],
               [ "..\\..\\apps\\trmrk-notes-reactapp" ],
-              [ "..\\..\\apps\\trmrk-notes-lithtmlapp" ]
+              [ "..\\..\\apps\\trmrk-notes-lithtmlapp" ],
+              [ "..\\..\\apps\\trmrk-http-proxy-nodejsapp" ]
             ],
             "ArgFilters": {
               "libs": {
@@ -188,7 +189,8 @@
           "libs\\trmrk-text-transform-mybehavior\\_",
           "apps\\trmrk-react-testapp\\_",
           "apps\\trmrk-notes-reactapp\\_",
-          "apps\\trmrk-notes-lithtmlapp\\_"
+          "apps\\trmrk-notes-lithtmlapp\\_",
+          "apps\\trmrk-http-proxy-nodejsapp\\_"
         ],
         "Filters": {
           "libs": {

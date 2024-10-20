@@ -1,7 +1,6 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
+namespace Turmerik.LocalFilesExplorerAnonymous.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -23,18 +23,9 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "IIS Express Anonymous Auth": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
       "launchUrl": "api/files/root-folder-entries",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "TURMERIK_ALLOW_ANONYMOUS_AUTH": "true"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS": {

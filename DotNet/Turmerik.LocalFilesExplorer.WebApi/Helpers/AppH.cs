@@ -14,7 +14,8 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Helpers
             string? allowAnonymousAuthenticationEnvVar = Environment.GetEnvironmentVariable(
                 "TURMERIK_ALLOW_ANONYMOUS_AUTH");
 
-            AllowAnonymousAuthentication = allowAnonymousAuthenticationEnvVar == "true";
+            // AllowAnonymousAuthentication = allowAnonymousAuthenticationEnvVar == "true";
+            AllowAnonymousAuthentication = true;
         }
 
         public static AppH Instance { get; private set; }
