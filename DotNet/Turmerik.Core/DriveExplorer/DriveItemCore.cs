@@ -28,6 +28,12 @@ namespace Turmerik.Core.DriveExplorer
         Task<DriveItem> GetItemAsync(
             string idnf, bool? retMinimalInfo);
 
+        Task<DriveItem> GetRootFolderAsync(
+            bool? retMinimalInfo);
+
+        Task<DriveItem> GetRootFolderAsync(
+            int depth, bool? retMinimalInfo);
+
         Task<DriveItem> GetFolderAsync(
             string idnf, bool? retMinimalInfo);
 

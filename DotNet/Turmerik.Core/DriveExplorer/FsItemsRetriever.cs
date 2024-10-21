@@ -127,124 +127,128 @@ namespace Turmerik.Core.DriveExplorer
             return item;
         }
 
+        public override async Task<DriveItem> GetRootFolderAsync(
+            bool? retMinimalInfo)
+        {
+            DriveItem folder;
+
+            var drivesList = DriveInfo.GetDrives().Where(
+                drive => drive.IsReady).ToList();
+
+            if (!AllowSysFolders)
+            {
+                if (AllowNonSysDrives)
+                {
+                    drivesList.RemoveWhere(
+                        drive => drive.DriveType == DriveType.Fixed && drive.Name == userProfilePathRoot);
+                }
+                else
+                {
+                    drivesList.RemoveWhere(
+                        drive => drive.DriveType == DriveType.Fixed);
+                }
+            }
+
+            folder = new DriveItem
+            {
+                SubFolders = drivesList.Select(
+                    drive => new DriveItem
+                    {
+                        Name = drive.Name,
+                        Idnf = Path.GetFullPath(drive.Name),
+                    }).ToList()
+            };
+
+            if (!AllowSysFolders)
+            {
+                DriveItem rootDir;
+
+                if (hasRootDirPath)
+                {
+                    rootDir = GetDriveItem(
+                        new DirectoryInfo(rootDirPath));
+                }
+                else
+                {
+                    rootDir = GetDriveItem(
+                        new DirectoryInfo(userProfilePath));
+
+                    rootDir.SpecialFolderType = Environment.SpecialFolder.UserProfile;
+                }
+
+                folder.SubFolders.Add(rootDir);
+            }
+            else
+            {
+                var specialFolderTypesArr = Environment.SpecialFolder.Favorites.Arr(
+                    Environment.SpecialFolder.Desktop,
+                    Environment.SpecialFolder.UserProfile,
+                    Environment.SpecialFolder.MyDocuments,
+                    Environment.SpecialFolder.MyMusic,
+                    Environment.SpecialFolder.MyPictures,
+                    Environment.SpecialFolder.MyVideos);
+
+                var specialFoldersArr = specialFolderTypesArr.Select(
+                    specialFolder => Tuple.Create(specialFolder, Environment.GetFolderPath(
+                        specialFolder))).Where(
+                    tuple =>
+                    {
+                        bool retVal = !string.IsNullOrEmpty(
+                            tuple.Item2);
+
+                        return retVal;
+                    }).Select(
+                    tuple => Tuple.Create(tuple.Item1, GetDriveItem(
+                        new DirectoryInfo(tuple.Item2)))).Select(
+                        tuple =>
+                        {
+                            (var folderType, var folder) = tuple;
+                            folder.SpecialFolderType = tuple.Item1;
+
+                            folder.DisplayName = folderType switch
+                            {
+                                Environment.SpecialFolder.UserProfile => Environment.UserName,
+                                _ => pascalOrCamelCaseToWordsConverter.SplitIntoWords(
+                                    new PascalOrCamelCaseToWordsConverterOpts
+                                    {
+                                        InputStr = folderType.ToString(),
+                                        CapitalizeFirst = true,
+                                    }).With(wordsArr => string.Join(" ", wordsArr))
+                            };
+                            return folder;
+                        }).ToArray();
+
+                folder.SubFolders.AddRange(specialFoldersArr);
+            }
+
+            SortChildItems(folder);
+            RemoveAdditionalInfoIfReq(folder, retMinimalInfo);
+
+            return folder;
+        }
+
         public override async Task<DriveItem> GetFolderAsync(
             string idnf, bool? retMinimalInfo)
         {
             DriveItem folder;
 
-            if (string.IsNullOrEmpty(idnf))
-            {
-                var drivesList = DriveInfo.GetDrives().Where(
-                    drive => drive.IsReady).ToList();
+            ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var folderPath);
 
-                if (!AllowSysFolders)
-                {
-                    if (AllowNonSysDrives)
-                    {
-                        drivesList.RemoveWhere(
-                            drive => drive.DriveType == DriveType.Fixed && drive.Name == userProfilePathRoot);
-                    }
-                    else
-                    {
-                        drivesList.RemoveWhere(
-                            drive => drive.DriveType == DriveType.Fixed);
-                    }
-                }
+            var entry = new DirectoryInfo(folderPath);
+            folder = GetDriveItem(entry);
 
-                folder = new DriveItem
-                {
-                    SubFolders = drivesList.Select(
-                        drive => new DriveItem
-                        {
-                            Name = drive.Name,
-                            Idnf = Path.GetFullPath(drive.Name),
-                        }).ToList()
-                };
+            var driveItemsList = entry.EnumerateFileSystemInfos(
+                ).Select(fi => GetDriveItem(fi)).ToList();
 
-                if (!AllowSysFolders)
-                {
-                    DriveItem rootDir;
+            folder.SubFolders = new List<DriveItem>(
+                driveItemsList.Where(
+                    item => item.IsFolder == true));
 
-                    if (hasRootDirPath)
-                    {
-                        rootDir = GetDriveItem(
-                            new DirectoryInfo(rootDirPath));
-                    }
-                    else
-                    {
-                        rootDir = GetDriveItem(
-                            new DirectoryInfo(userProfilePath));
+            folder.FolderFiles = new List<DriveItem>(
+                driveItemsList.Where(
+                    item => item.IsFolder != true).ToList());
 
-                        rootDir.SpecialFolderType = Environment.SpecialFolder.UserProfile;
-                    }
-
-                    folder.SubFolders.Add(rootDir);
-                }
-                else
-                {
-                    var specialFolderTypesArr = Environment.SpecialFolder.Favorites.Arr(
-                        Environment.SpecialFolder.Desktop,
-                        Environment.SpecialFolder.UserProfile,
-                        Environment.SpecialFolder.MyDocuments,
-                        Environment.SpecialFolder.MyMusic,
-                        Environment.SpecialFolder.MyPictures,
-                        Environment.SpecialFolder.MyVideos);
-
-                    var specialFoldersArr = specialFolderTypesArr.Select(
-                        specialFolder => Tuple.Create(specialFolder, Environment.GetFolderPath(
-                            specialFolder))).Where(
-                        tuple =>
-                        {
-                            bool retVal = !string.IsNullOrEmpty(
-                                tuple.Item2);
-
-                            return retVal;
-                        }).Select(
-                        tuple => Tuple.Create(tuple.Item1, GetDriveItem(
-                            new DirectoryInfo(tuple.Item2)))).Select(
-                            tuple =>
-                            {
-                                (var folderType, var folder) = tuple;
-                                folder.SpecialFolderType = tuple.Item1;
-
-                                folder.DisplayName = folderType switch
-                                {
-                                    Environment.SpecialFolder.UserProfile => Environment.UserName,
-                                    _ => pascalOrCamelCaseToWordsConverter.SplitIntoWords(
-                                        new PascalOrCamelCaseToWordsConverterOpts
-                                        {
-                                            InputStr = folderType.ToString(),
-                                            CapitalizeFirst = true,
-                                        }).With(wordsArr => string.Join(" ", wordsArr))
-                                };
-
-                                return folder;
-                            }).ToArray();
-
-                    folder.SubFolders.AddRange(specialFoldersArr);
-                }
-            }
-            else
-            {
-                ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var folderPath);
-
-                var entry = new DirectoryInfo(folderPath);
-                folder = GetDriveItem(entry);
-
-                var driveItemsList = entry.EnumerateFileSystemInfos(
-                    ).Select(fi => GetDriveItem(fi)).ToList();
-
-                folder.SubFolders = new List<DriveItem>(
-                    driveItemsList.Where(
-                        item => item.IsFolder == true));
-
-                folder.FolderFiles = new List<DriveItem>(
-                    driveItemsList.Where(
-                        item => item.IsFolder != true).ToList());
-
-                SortChildItems(folder);
-            }
-
+            SortChildItems(folder);
             RemoveAdditionalInfoIfReq(folder, retMinimalInfo);
 
             return folder;

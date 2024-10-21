@@ -30,33 +30,35 @@ namespace Turmerik.Core.DriveExplorer
         public abstract Task<DriveItem> GetItemAsync(
             string idnf, bool? retMinimalInfo);
 
-        public abstract Task<DriveItem> GetFolderAsync(
-            string idnf, bool? retMinimalInfo);
-
         public abstract Task<string> GetFileTextAsync(string idnf);
         public abstract Task<byte[]> GetFileBytesAsync(string idnf);
+
+        public abstract Task<DriveItem> GetFolderAsync(
+            string idnf, bool? retMinimalInfo);
 
         public async Task<DriveItem> GetFolderAsync(
             string idnf, int depth, bool? retMinimalInfo)
         {
-            var folder = await GetFolderAsync(idnf, retMinimalInfo);
-            string folderPath = idnf;
-            var subFolders = folder.SubFolders;
+            var folder = await GetFolderAsync(
+                idnf, retMinimalInfo);
 
-            if (subFolders != null && depth > 0)
-            {
-                int count = subFolders.Count;
+            await GetSubFoldersAsync(
+                folder, depth, retMinimalInfo);
 
-                for (int i = 0; i < count; i++)
-                {
-                    string childIdnf = Path.Combine(
-                        folderPath,
-                        subFolders[i].Name);
+            return folder;
+        }
 
-                    subFolders[i] = await GetFolderAsync(
-                        childIdnf, depth - 1, retMinimalInfo);
-                }
-            }
+        public abstract Task<DriveItem> GetRootFolderAsync(
+            bool? retMinimalInfo);
+
+        public async Task<DriveItem> GetRootFolderAsync(
+            int depth, bool? retMinimalInfo)
+        {
+            var folder = await GetRootFolderAsync(
+                retMinimalInfo);
+
+            await GetSubFoldersAsync(
+                folder, depth, retMinimalInfo);
 
             return folder;
         }
@@ -109,6 +111,30 @@ namespace Turmerik.Core.DriveExplorer
                         RemoveAdditionalInfoIfReq(
                             file, retMinimalInfo);
                     }
+                }
+            }
+        }
+
+        private async Task GetSubFoldersAsync(
+            DriveItem folder,
+            int depth,
+            bool? retMinimalInfo)
+        {
+            var subFolderList = folder.SubFolders;
+
+            if (subFolderList != null && depth > 0)
+            {
+                int count = subFolderList.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var subFolder = subFolderList[i];
+
+                    string childIdnf = GetItemIdnf(
+                        subFolder, string.Empty);
+
+                    subFolderList[i] = await GetFolderAsync(
+                        childIdnf, depth - 1, retMinimalInfo);
                 }
             }
         }
