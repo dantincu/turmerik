@@ -630,6 +630,14 @@ video {
   margin-top: 6rem;
 }
 
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .h-24 {
   height: 6rem;
 }

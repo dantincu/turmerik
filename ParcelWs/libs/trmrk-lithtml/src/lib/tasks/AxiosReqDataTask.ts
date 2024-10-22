@@ -11,6 +11,8 @@ export interface AxiosReqDataTask<
   host: ReactiveControllerHost;
   apiSvcCallAction: (args: T, options: TaskFunctionOptions) => Promise<R>;
   argsFunc: () => T;
+  noDataCallback?: (() => void) | null | undefined;
+  noDataErrMsg?: string | null | undefined;
   successCallback: (data: R) => void;
   errorCallback: (resp: ApiResponse<R>) => void;
 }
@@ -26,19 +28,32 @@ export const createAxiosReqDataTask = <
       let data = await opts.apiSvcCallAction(args, options);
 
       if ((data ?? null) === null) {
-        throw new Error("Something went wrong and data could not be loaded...");
+        if (opts.noDataCallback) {
+          opts.noDataCallback();
+        } else {
+          throw new TrmrkError(
+            opts.noDataErrMsg ??
+              "The resource at this location does not exist or has been moved",
+            null,
+            {
+              statusCode: 404,
+            }
+          );
+        }
       }
 
       return data;
     },
     onComplete: opts.successCallback,
     onError: (err: any) => {
+      const trmrkError = err as TrmrkError<ApiResponse<R>>;
+
       opts.errorCallback(
-        (err as TrmrkError<ApiResponse<R>>).data ??
+        trmrkError.data ??
           ({
             error: err,
-            errTitle: "Error",
-            errMessage: (err as Error).message,
+            errTitle: trmrkError.statusCode?.toString() ?? "Error",
+            errMessage: trmrkError.statusText ?? trmrkError.message,
           } as ApiResponse<R>)
       );
     },

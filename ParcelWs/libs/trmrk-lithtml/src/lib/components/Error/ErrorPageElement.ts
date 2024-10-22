@@ -8,7 +8,7 @@ import { AppLayoutStyles } from "../AppLayout/core";
 import { globalStyles } from "../../domUtils/css";
 
 @customElement("trmrk-error-page")
-export class ErrorElement extends LitElement {
+export class ErrorPageElement extends LitElement {
   static styles = [...globalStyles.value, ...AppLayoutStyles.value];
 
   @property()

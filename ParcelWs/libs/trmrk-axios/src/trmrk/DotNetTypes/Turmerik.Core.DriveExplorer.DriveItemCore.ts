@@ -17,6 +17,17 @@ export enum FileType {
   ZippedFolder,
 }
 
+export enum FolderType {
+  Regular = 0,
+  DriveRoot,
+}
+
+export interface DriveItemsRetriever {
+  DirSeparator: string;
+}
+
+export interface DriveExplorerService extends DriveItemsRetriever {}
+
 export interface DriveItemCore {
   Idnf: string;
   PrIdnf: string;
@@ -30,6 +41,7 @@ export interface DriveItemCore {
   SpecialFolderType: SpecialFolder | null;
   FileType: FileType | null;
   OfficeFileType: OfficeFileType | null;
+  FolderType: FolderType | null;
   IsTextFile: boolean | null;
   IsImageFile: boolean | null;
   IsVideoFile: boolean | null;

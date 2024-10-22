@@ -55,7 +55,8 @@ namespace Turmerik.LocalFilesExplorerAnonymous.WebApi.Controllers
 
             try
             {
-                var driveItem = await driveExplorerService.GetRootFolderAsync(false);
+                // var driveItem = await driveExplorerService.GetRootFolderAsync(false);
+                var driveItem = await driveExplorerService.GetFolderAsync(string.Empty, null);
                 actionResult = Ok(driveItem);
             }
             catch (Exception exc)
@@ -75,7 +76,7 @@ namespace Turmerik.LocalFilesExplorerAnonymous.WebApi.Controllers
 
             try
             {
-                driveItem.Idnf ??= string.Empty;
+                driveItem.Idnf ??= ".";
 
                 if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
                 {

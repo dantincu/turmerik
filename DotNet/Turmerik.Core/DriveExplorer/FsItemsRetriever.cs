@@ -156,6 +156,7 @@ namespace Turmerik.Core.DriveExplorer
                     {
                         Name = drive.Name,
                         Idnf = Path.GetFullPath(drive.Name),
+                        FolderType = FolderType.DriveRoot
                     }).ToList()
             };
 

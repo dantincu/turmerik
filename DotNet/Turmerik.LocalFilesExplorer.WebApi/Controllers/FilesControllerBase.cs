@@ -75,7 +75,7 @@ namespace Turmerik.LocalFilesExplorer.WebApi.Controllers
 
             try
             {
-                driveItem.Idnf ??= string.Empty;
+                driveItem.Idnf ??= ".";
 
                 if (await driveExplorerService.FolderExistsAsync(driveItem.Idnf))
                 {

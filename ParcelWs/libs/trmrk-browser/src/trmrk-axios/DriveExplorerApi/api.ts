@@ -415,12 +415,13 @@ export class DriveExplorerApi
   }
 
   protected override async fillFolderDescendants(
+    prFolderId: string,
     folder: IDriveItemNode
   ): Promise<void> {
     const resp = await this.svc.get<DriveItem>(
       this.getRelUrl("folder-entries"),
       {
-        idnf: folder.item.Idnf,
+        idnf: folder.item.Idnf ?? [].join(this.dirSep),
       }
     );
 

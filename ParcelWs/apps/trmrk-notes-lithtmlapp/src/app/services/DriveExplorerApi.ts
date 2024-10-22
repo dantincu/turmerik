@@ -1,5 +1,5 @@
 import { MtblRefValue } from "../../trmrk/core";
 
-import { DriveExplorerApi } from "../../trmrk-axios/DriveExplorerApi/api";
+import { FsExplorerApi } from "../../trmrk-axios/FsExplorerApi/api";
 
-export const driveExplorerApi = {} as MtblRefValue<DriveExplorerApi>;
+export const driveExplorerApi = {} as MtblRefValue<FsExplorerApi>;

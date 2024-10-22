@@ -364,6 +364,7 @@ export abstract class DriveExplorerApiBase<
   ): Promise<DriveItem | null>;
 
   protected abstract fillFolderDescendants(
+    prFolderId: string,
     folder: TDriveItemNode
   ): Promise<void>;
 
@@ -395,11 +396,18 @@ export abstract class DriveExplorerApiBase<
             this.getFolderFile(parentFolder, name) ??
             null;
         }
+
+        if (retItem?.isFolder) {
+          await this.assureFolderHasDescendants(
+            parentFolder.item.Idnf,
+            retItem
+          );
+        }
       }
     } else if (isFolder) {
       await this.Init();
       retItem = this.rootDirNode;
-      await this.assureFolderHasDescendants(retItem);
+      await this.assureFolderHasDescendants("", retItem);
     }
 
     return retItem ?? null;
@@ -430,7 +438,7 @@ export abstract class DriveExplorerApiBase<
         retParent = this.rootDirNode;
       }
     } else {
-      await this.assureFolderHasDescendants(parent);
+      await this.assureFolderHasDescendants("", parent);
 
       if (pathSegs.length - level > 1) {
         const dirName = pathSegs[level];
@@ -452,6 +460,7 @@ export abstract class DriveExplorerApiBase<
 
     if (retParent) {
       await this.assureFolderHasDescendants(
+        parent?.item.Idnf ?? "",
         retParent,
         level + parentRefreshDepth - pathSegs.length >= 0
       );
@@ -469,11 +478,12 @@ export abstract class DriveExplorerApiBase<
   }
 
   protected async assureFolderHasDescendants(
+    prFolderId: string,
     folder: TDriveItemNode,
     refresh: boolean | null = null
   ) {
     if (refresh || !folder.subFolders || !folder.folderFiles) {
-      await this.fillFolderDescendants(folder);
+      await this.fillFolderDescendants(prFolderId, folder);
 
       folder.item.SubFolders = folder.subFolders!.map((node) => node.item);
       folder.item.FolderFiles = folder.folderFiles!.map((node) => node.item);
@@ -605,7 +615,10 @@ export const getRootedPathSegments = (args: RootedPathResolvedArgs) => {
     } else {
       const chars = [...seg];
 
-      if (chars.filter((ch) => /\s/.test(ch) && ch != " ")) {
+      if (
+        (chars.find((ch) => trmrk.allWsRegex().test(ch) && ch != " ") ??
+          null) !== null
+      ) {
         throw new Error(
           "Paths are not allowed to contain any other type of whitespace than the space char"
         );

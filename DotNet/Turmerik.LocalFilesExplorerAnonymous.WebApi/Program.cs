@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json.Serialization;
 using System.Text.Json.Serialization;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
@@ -51,6 +52,9 @@ builder.Services.AddControllers(options =>
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+}).AddJsonOptions(jsonOptions =>
+{
+    jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
 });
 
 var app = builder.Build();

@@ -2,8 +2,9 @@ import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators";
 import { Task } from "@lit/task";
 
+import { getFileNameExtnWithoutLeadingDot } from "../../../trmrk/notes-path";
 import { DriveItem } from "../../../trmrk/drive-item";
-import { TrmrkError } from "../../../trmrk/TrmrkError";
+import { getBootstrapFileIcon } from "../../../trmrk-browser/bootstrapLib/file-icons";
 import { driveExplorerApi } from "../../services/DriveExplorerApi";
 import { AxiosResponse, ApiResponse, ns } from "../../../trmrk-axios/core";
 import { vaadinRouteGoEventControllerFactory } from "../../../trmrk-lithtml/controlers/VaadinRouteGoEventControllerFactory";
@@ -45,9 +46,11 @@ export class FolderEntriesListPageElement extends LitElement {
     this._loadDataTask = createAxiosReqDataTask({
       host: this,
       apiSvcCallAction: async ([itemPath], { signal }) => {
-        return (await driveExplorerApi.value.GetFolder({
+        const retItem = (await driveExplorerApi.value.GetFolder({
           path: itemPath,
         })) as DriveItem;
+
+        return retItem;
       },
       successCallback: (value) => {
         this.data = value;
@@ -70,14 +73,33 @@ export class FolderEntriesListPageElement extends LitElement {
   }
 
   render() {
-    console.log("this.dataResp", this.dataResp);
     if (this.data) {
-      return html``;
+      if (this.data.SubFolders!.length || this.data.FolderFiles!.length) {
+        return html`${this.data.SubFolders!.map(
+          (folder) =>
+            html`<trmrk-grid-item
+              iconCssClass="bi-folder-fill text-folder"
+              itemLabel="${folder.Name}"
+            ></trmrk-grid-item>`
+        )}${this.data.FolderFiles!.map(
+          (file) => html`<trmrk-grid-item
+            iconCssClass="${getBootstrapFileIcon(
+              getFileNameExtnWithoutLeadingDot(file.Name) ?? ""
+            )}"
+            itemLabel="${file.Name}"
+          ></trmrk-grid-item>`
+        )}`;
+      } else {
+        return html`<trmrk-ui-message
+          message="This folder is empty"
+        ></trmrk-caption>`;
+      }
     } else if (this.dataResp) {
-      return html`<h2 class="text-2xl text-danger">
-          ${this.dataResp.errTitle}
-        </h2>
-        <p>${this.dataResp.errMessage}</p>`;
+      return html`<trmrk-error
+        errTitle=${this.dataResp.errTitle}
+        errMessage=${this.dataResp.errMessage}
+      >
+      </trmrk-error>`;
     } else {
       return html`<trmrk-loading
         class="relative left-4 top-1"

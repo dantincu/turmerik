@@ -129,6 +129,7 @@ export namespace ns {
           resp.isInfoStatus = true;
         } else if (status < 300) {
           resp.isSuccessStatus = true;
+          resp.isSuccess = true;
         } else if (status < 400) {
           resp.isRedirectStatus = false;
         } else {

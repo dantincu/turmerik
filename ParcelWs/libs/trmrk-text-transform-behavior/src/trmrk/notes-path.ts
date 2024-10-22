@@ -221,3 +221,30 @@ export const isValidFsPath = (
   result.isValid = isValidRootedFsPath(cfg, path, result, allowNetworkPath);
   return result.isValid;
 };
+
+export const getFileNameExtension = (fileName: string) => {
+  let extension: string;
+  const fileNameParts = fileName.split(".");
+
+  if (fileNameParts.length > 1) {
+    extension = fileNameParts.pop()!;
+    extension = `.${extension}`;
+  } else {
+    extension = "";
+  }
+
+  return extension;
+};
+
+export const getFileNameExtnWithoutLeadingDot = (fileName: string) => {
+  let fileNameExtn: string | null = getFileNameExtension(fileName);
+
+  if (fileNameExtn !== "") {
+    fileNameExtn = fileNameExtn.substring(1);
+  } else {
+    fileNameExtn = null;
+  }
+
+  console.log("fileNameExtn", fileNameExtn);
+  return fileNameExtn;
+};

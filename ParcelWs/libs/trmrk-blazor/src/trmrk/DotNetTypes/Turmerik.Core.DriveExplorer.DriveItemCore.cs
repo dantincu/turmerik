@@ -23,10 +23,22 @@ namespace Turmerik.Core.DriveExplorer
         ZippedFolder
     }
 
+    public enum FolderType
+    {
+        Regular = 0,
+        DriveRoot
+    }
+
     public interface IDriveItemsRetriever
     {
         Task<DriveItem> GetItemAsync(
             string idnf, bool? retMinimalInfo);
+
+        Task<DriveItem> GetRootFolderAsync(
+            bool? retMinimalInfo);
+
+        Task<DriveItem> GetRootFolderAsync(
+            int depth, bool? retMinimalInfo);
 
         Task<DriveItem> GetFolderAsync(
             string idnf, bool? retMinimalInfo);
@@ -153,6 +165,7 @@ namespace Turmerik.Core.DriveExplorer
 
         public FileType? FileType { get; set; }
         public OfficeFileType? OfficeFileType { get; set; }
+        public FolderType? FolderType { get; set; }
         public bool? IsTextFile { get; set; }
         public bool? IsImageFile { get; set; }
         public bool? IsVideoFile { get; set; }

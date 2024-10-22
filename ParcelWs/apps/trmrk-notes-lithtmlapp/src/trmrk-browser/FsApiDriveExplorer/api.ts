@@ -200,7 +200,10 @@ export class DriveExplorerApi
     return retNode?.item ?? null;
   }
 
-  protected override async fillFolderDescendants(folder: IDriveItemNode) {
+  protected override async fillFolderDescendants(
+    prFolderId: string,
+    folder: IDriveItemNode
+  ) {
     const dirHandle = folder.dirHandle!;
     const descendants = await getDescendants(dirHandle);
 
