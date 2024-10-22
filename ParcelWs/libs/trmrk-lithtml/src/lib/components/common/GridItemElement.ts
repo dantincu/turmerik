@@ -13,16 +13,27 @@ export class GridItemElement extends LitElement {
     css`
       .trmrk-grid-item {
         display: grid;
-        grid-template-columns: 43px auto 43px;
+        grid-template-columns: 43px auto 10px;
         width: 100%;
         align-items: center; /* Ensure items are centered vertically */
         white-space: nowrap;
+        border-bottom: 1px solid #888;
       }
 
-      .trmrk-grid-item > .trmrk-label {
+      .trmrk-grid-item > .trmrk-main-part {
+        display: grid;
+        grid-template-rows: 20px 20px;
+      }
+
+      .trmrk-grid-item > .trmrk-main-part > .trmrk-label {
         cursor: pointer;
         overflow: hidden; /* Hide overflowed text */
         text-overflow: ellipsis; /* Show ellipsis for overflowed text */
+      }
+
+      .trmrk-grid-item > .trmrk-main-part > .trmrk-details-label {
+        font-size: 12px;
+        color: #888;
       }
 
       .trmrk-grid-item > .trmrk-icon {
@@ -45,23 +56,27 @@ export class GridItemElement extends LitElement {
   @property()
   public itemLabel!: string;
 
+  @property()
+  public itemDetails!: string;
+
   render() {
     return html`<div class="trmrk-grid-item ${this.cssClass}">
       <trmrk-bs-icon-btn
         @click=${this.iconClick}
-        class="trmrk-icon col-start-1 col-end-2"
+        class="trmrk-icon m-0 col-start-1 col-end-2"
         ?btnHasNoBorder=${this.iconBtnHasNoBorder ?? true}
         iconCssClass="${this.iconCssClass}"
       ></trmrk-bs-icon-btn>
-      <span @click=${this.labelClick} class="trmrk-label col-start-2 col-end-3"
-        >${this.itemLabel}</span
+      <div
+        class="trmrk-main-part col-start-2 col-end-3"
+        @click=${this.labelClick}
       >
-      <trmrk-bs-icon-btn
-        @click=${this.iconClick}
-        class="trmrk-icon col-start-3 -col-end-1"
-        ?btnHasNoBorder=${this.iconBtnHasNoBorder ?? true}
-        iconCssClass="${this.iconCssClass}"
-      ></trmrk-bs-icon-btn>
+        <span class="trmrk-label row-start-1 row-end-2">${this.itemLabel}</span>
+        <span class="trmrk-details-label row-start-2 -row-end-1"
+          >${this.itemDetails}</span
+        >
+      </div>
+      <span></span>
     </div>`;
   }
 

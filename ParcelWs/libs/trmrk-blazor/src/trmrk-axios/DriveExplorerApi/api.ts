@@ -1,13 +1,7 @@
 import trmrk from "../../trmrk";
 
-import { DriveItem } from "../../trmrk/drive-item";
-
+import { DriveItem, fillDriveItemTimeStamps } from "../../trmrk/drive-item";
 import { TrmrkError } from "../../trmrk/TrmrkError";
-
-import {
-  FileType,
-  OfficeFileType,
-} from "../../trmrk/DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore";
 
 import {
   RootedPathResolvedArgs,
@@ -40,6 +34,7 @@ class DriveItemNode
 {
   constructor(item: DriveItem) {
     super(item);
+    fillDriveItemTimeStamps(item);
   }
 }
 

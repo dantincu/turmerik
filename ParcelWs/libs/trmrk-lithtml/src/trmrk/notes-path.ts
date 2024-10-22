@@ -245,6 +245,5 @@ export const getFileNameExtnWithoutLeadingDot = (fileName: string) => {
     fileNameExtn = null;
   }
 
-  console.log("fileNameExtn", fileNameExtn);
   return fileNameExtn;
 };

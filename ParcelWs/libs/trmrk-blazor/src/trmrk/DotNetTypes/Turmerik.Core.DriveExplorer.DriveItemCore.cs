@@ -134,8 +134,10 @@ namespace Turmerik.Core.DriveExplorer
             DisplayName = src.DisplayName;
             IsFolder = src.IsFolder;
             IsRootFolder = src.IsRootFolder;
+            SpecialFolderType = src.SpecialFolderType;
             FileType = src.FileType;
             OfficeFileType = src.OfficeFileType;
+            FolderType = src.FolderType;
             IsTextFile = src.IsTextFile;
             IsImageFile = src.IsImageFile;
             IsVideoFile = src.IsVideoFile;
@@ -145,9 +147,15 @@ namespace Turmerik.Core.DriveExplorer
             CreationTime = src.CreationTime;
             LastWriteTime = src.LastWriteTime;
             LastAccessTime = src.LastAccessTime;
+            CreationTimeStr = src.CreationTimeStr;
+            LastWriteTimeStr = src.LastWriteTimeStr;
+            LastAccessTimeStr = src.LastAccessTimeStr;
             CreationTimeUtcTicks = src.CreationTimeUtcTicks;
             LastWriteTimeUtcTicks = src.LastWriteTimeUtcTicks;
             LastAccessTimeUtcTicks = src.LastAccessTimeUtcTicks;
+            CreationTimeUtcMillis = src.CreationTimeUtcMillis;
+            LastWriteTimeUtcMillis = src.LastWriteTimeUtcMillis;
+            LastAccessTimeUtcMillis = src.LastAccessTimeUtcMillis;
         }
 
         public string Idnf { get; set; }
@@ -177,9 +185,17 @@ namespace Turmerik.Core.DriveExplorer
         public DateTime? LastWriteTime { get; set; }
         public DateTime? LastAccessTime { get; set; }
 
+        public string? CreationTimeStr { get; set; }
+        public string? LastWriteTimeStr { get; set; }
+        public string? LastAccessTimeStr { get; set; }
+
         public long? CreationTimeUtcTicks { get; set; }
         public long? LastWriteTimeUtcTicks { get; set; }
         public long? LastAccessTimeUtcTicks { get; set; }
+
+        public long? CreationTimeUtcMillis { get; set; }
+        public long? LastWriteTimeUtcMillis { get; set; }
+        public long? LastAccessTimeUtcMillis { get; set; }
     }
 
     public class DriveItem<TDriveItem> : DriveItemCore

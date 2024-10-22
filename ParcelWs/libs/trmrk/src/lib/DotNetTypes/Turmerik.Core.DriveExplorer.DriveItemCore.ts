@@ -48,12 +48,18 @@ export interface DriveItemCore {
   IsAudioFile: boolean | null;
   FileSizeBytes: number | null;
   TextFileContents: string | null;
-  CreationTime: string | null;
-  LastWriteTime: string | null;
-  LastAccessTime: string | null;
+  CreationTime: Date | null;
+  LastWriteTime: Date | null;
+  LastAccessTime: Date | null;
+  CreationTimeStr: string | null;
+  LastWriteTimeStr: string | null;
+  LastAccessTimeStr: string | null;
   CreationTimeUtcTicks: number | null;
   LastWriteTimeUtcTicks: number | null;
   LastAccessTimeUtcTicks: number | null;
+  CreationTimeUtcMillis: number | null;
+  LastWriteTimeUtcMillis: number | null;
+  LastAccessTimeUtcMillis: number | null;
 }
 
 export interface DriveItem<TDriveItem> extends DriveItemCore {

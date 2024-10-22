@@ -80,6 +80,7 @@ export class FolderEntriesListPageElement extends LitElement {
             html`<trmrk-grid-item
               iconCssClass="bi-folder-fill text-folder"
               itemLabel="${folder.Name}"
+              itemDetails="Last accessed: ${folder.LastAccessTimeStr}"
             ></trmrk-grid-item>`
         )}${this.data.FolderFiles!.map(
           (file) => html`<trmrk-grid-item
@@ -87,6 +88,7 @@ export class FolderEntriesListPageElement extends LitElement {
               getFileNameExtnWithoutLeadingDot(file.Name) ?? ""
             )}"
             itemLabel="${file.Name}"
+            itemDetails="Last accessed: ${file.LastAccessTimeStr}"
           ></trmrk-grid-item>`
         )}`;
       } else {
