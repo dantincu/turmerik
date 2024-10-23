@@ -293,7 +293,7 @@ export class AppHeaderElement extends LitElement {
   }
 
   documentClickedWhenPopoverShown(e: MouseEvent) {
-    const currentTarget = e.currentTarget as Node;
+    const currentTarget = e.target as Node;
 
     if (this.optionsPopover && this.optionsPopoverShown) {
       if (currentTarget && this.optionsPopoverContentElem) {
