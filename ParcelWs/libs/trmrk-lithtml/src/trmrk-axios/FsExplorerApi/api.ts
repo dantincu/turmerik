@@ -11,7 +11,7 @@ import {
   dirPointers,
 } from "../../trmrk/DriveExplorerApi/core";
 
-import { DriveItem } from "../../trmrk/drive-item";
+import { DriveItem, fillDriveItemTimeStamps } from "../../trmrk/drive-item";
 
 import {
   FileType,
@@ -41,6 +41,7 @@ class DriveItemNode
 {
   constructor(item: DriveItem) {
     super(item);
+    fillDriveItemTimeStamps(item);
   }
 }
 
@@ -287,10 +288,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
       if (retNode) {
         const resp = await this.svc.delete<DriveItem>(
           this.getRelUrl("delete-folder"),
-          () =>
-            ({
-              data: { Idnf: retNode!.item.Idnf },
-            } as AxiosConfig<DriveItem>)
+          { Idnf: retNode!.item.Idnf }
         );
 
         this.handleApiResp(resp, () => {
@@ -410,13 +408,9 @@ export class FsExplorerApi implements IDriveExplorerApi {
       retNode = this.getFolderFile(parentFolder, pathSegs.slice(-1)[0]) ?? null;
 
       if (retNode) {
-        const resp = await this.svc.delete(
-          this.getRelUrl("delete-file"),
-          () =>
-            ({
-              data: { Idnf: retNode!.item.Idnf } as DriveItem,
-            } as AxiosConfig<DriveItem>)
-        );
+        const resp = await this.svc.delete(this.getRelUrl("delete-file"), {
+          Idnf: retNode!.item.Idnf,
+        });
 
         this.handleApiResp(resp, () => {
           trmrk.removeAll(
@@ -638,7 +632,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
     const resp = await this.svc.get<DriveItem>(
       this.getRelUrl("folder-entries"),
       {
-        idnf: [prFolderId, folder.item.Name]
+        Idnf: [prFolderId, folder.item.Name]
           .filter((s) => (s?.length ?? -1) > 0)
           .join(this.dirSep),
       }

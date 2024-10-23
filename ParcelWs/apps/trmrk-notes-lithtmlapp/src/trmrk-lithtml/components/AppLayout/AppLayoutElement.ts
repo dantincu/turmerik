@@ -75,42 +75,37 @@ export class AppLayoutElement extends LitElement {
 
   render() {
     return [
-      html`<div class="trmrk-app-layout ${getAppThemeCssClassName(
-        this.isDarkModeProp.value
-      )} ${getAppModeCssClassName(this.isCompactModeProp.value)} ${
-        this.appLayoutCssClassProp.value
-      }">
-        ${
-          this.showAppHeaderProp.value
-            ? html`<trmrk-app-header
-                ><slot
-                  name="header-first-content"
-                  slot="header-first-content"
-                ></slot
-                ><slot name="header-content" slot="header-content"></slot
-              ></trmrk-app-header>`
-            : null
-        }
+      html`<div
+        class="trmrk-app-layout ${getAppThemeCssClassName(
+          this.isDarkModeProp.value
+        )} ${getAppModeCssClassName(this.isCompactModeProp.value)} ${this
+          .appLayoutCssClassProp.value}"
+      >
+        ${this.showAppHeaderProp.value
+          ? html`<trmrk-app-header
+              ><slot
+                name="header-first-content"
+                slot="header-first-content"
+              ></slot
+              ><slot name="header-content" slot="header-content"></slot
+            ></trmrk-app-header>`
+          : null}
         <div
-          class="trmrk-app-body ${
-            this.showAppHeaderProp.value ? "trmrk-after-header" : ""
-          } ${this.showAppFooterProp.value ? "trmrk-before-footer" : ""}""
+          class="trmrk-app-body ${this.showAppHeaderProp.value
+            ? "trmrk-after-header"
+            : ""} ${this.showAppFooterProp.value ? "trmrk-before-footer" : ""}"
         >
-          ${
-            this.enableExplorerPanelProp
-              ? html`<slot name="explorer-content"></slot>`
-              : null
-          }
+          ${this.enableExplorerPanelProp
+            ? html`<slot name="explorer-content"></slot>`
+            : null}
           <slot name="body-content"></slot>
         </div>
-        ${
-          this.showAppFooterProp.value
-            ? html`<trmrk-app-footer>
+        ${this.showAppFooterProp.value
+          ? html`<trmrk-app-footer>
                 <slot name="footer-content" slot="footer-content"></slot
               ></slot>
               </trmrk-app-footer>`
-            : null
-        }
+          : null}
       </div>`,
     ];
   }

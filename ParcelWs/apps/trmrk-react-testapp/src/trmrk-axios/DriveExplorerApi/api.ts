@@ -160,10 +160,7 @@ export class DriveExplorerApi
       if (retNode) {
         const resp = await this.svc.delete<DriveItem>(
           this.getRelUrl("delete-folder"),
-          () =>
-            ({
-              data: { Idnf: retNode!.item.Idnf },
-            } as AxiosConfig<DriveItem>)
+          { Idnf: retNode!.item.Idnf }
         );
 
         this.handleApiResp(resp, () => {
@@ -222,13 +219,9 @@ export class DriveExplorerApi
       retNode = this.getFolderFile(parentFolder, pathSegs.slice(-1)[0]) ?? null;
 
       if (retNode) {
-        const resp = await this.svc.delete(
-          this.getRelUrl("delete-file"),
-          () =>
-            ({
-              data: { Idnf: retNode!.item.Idnf } as DriveItem,
-            } as AxiosConfig<DriveItem>)
-        );
+        const resp = await this.svc.delete(this.getRelUrl("delete-file"), {
+          Idnf: retNode!.item.Idnf,
+        });
 
         this.handleApiResp(resp, () => {
           trmrk.removeAll(

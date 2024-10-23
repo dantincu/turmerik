@@ -23,10 +23,11 @@ export class GridItemElement extends LitElement {
       .trmrk-grid-item > .trmrk-main-part {
         display: grid;
         grid-template-rows: 20px 20px;
+        cursor: pointer;
       }
 
-      .trmrk-grid-item > .trmrk-main-part > .trmrk-label {
-        cursor: pointer;
+      .trmrk-grid-item > .trmrk-main-part > .trmrk-label,
+      .trmrk-grid-item > .trmrk-label {
         overflow: hidden; /* Hide overflowed text */
         text-overflow: ellipsis; /* Show ellipsis for overflowed text */
       }
@@ -67,15 +68,22 @@ export class GridItemElement extends LitElement {
         ?btnHasNoBorder=${this.iconBtnHasNoBorder ?? true}
         iconCssClass="${this.iconCssClass}"
       ></trmrk-bs-icon-btn>
-      <div
-        class="trmrk-main-part col-start-2 col-end-3"
-        @click=${this.labelClick}
-      >
-        <span class="trmrk-label row-start-1 row-end-2">${this.itemLabel}</span>
-        <span class="trmrk-details-label row-start-2 -row-end-1"
-          >${this.itemDetails}</span
-        >
-      </div>
+      ${(this.itemDetails ?? "") !== ""
+        ? html`<div
+            class="trmrk-main-part col-start-2 col-end-3"
+            @click=${this.labelClick}
+          >
+            <span class="trmrk-label row-start-1 row-end-2"
+              >${this.itemLabel}</span
+            >
+            <span class="trmrk-details-label row-start-2 -row-end-1"
+              >${this.itemDetails}</span
+            >
+          </div>`
+        : html`<span
+            class="trmrk-label row-start-1 -row-end-1 col-start-2 col-end-3"
+            >${this.itemLabel}</span
+          >`}
       <span></span>
     </div>`;
   }

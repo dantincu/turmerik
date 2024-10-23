@@ -148,13 +148,12 @@ export class AppHeaderElement extends LitElement {
     return html`<header class="trmrk-app-header">
       <slot name="header-first-content"></slot>
       ${this.enableExplorerPanelProp.value
-        ? html`<trmrk-bs-icon-btn
+        ? html`<trmrk-long-pressable-bs-icon-btn
             btnHasNoBorder
-            iconCssClass="bi-diagram-3-fill"
-            iconWrapperCssClass="-rotate-90"
+            iconCssClass="bi-arrow-up"
             class="col-start-${this
               .appHeaderCustomContentStartingColumnsCountProp.value + 1}"
-          ></trmrk-bs-icon-btn>`
+          ></trmrk-long-pressable-bs-icon-btn>`
         : null}
       ${this.showAppHeaderHistoryNavButtonsProp.value
         ? html` <trmrk-bs-icon-btn

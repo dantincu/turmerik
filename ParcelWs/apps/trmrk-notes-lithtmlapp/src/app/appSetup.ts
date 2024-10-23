@@ -4,7 +4,7 @@ import { AppConfigData } from "../trmrk/notes-app-config";
 import { isDevEnv } from "../trmrk/dev";
 
 import { initApi } from "../trmrk-axios/core";
-import { DriveExplorerApi } from "../trmrk-axios/DriveExplorerApi/api";
+import { FsExplorerApi } from "../trmrk-axios/FsExplorerApi/api";
 
 import {
   defaultAppTitlePropFactory,
@@ -58,7 +58,7 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
 
   initApi(apiSvc, appConfig);
 
-  driveExplorerApi.value = new DriveExplorerApi(apiSvc, {
+  driveExplorerApi.value = new FsExplorerApi(apiSvc, {
     isLocalFileNotes: appConfig.isLocalFileNotesApp,
     isLocalFilesWinOS: appConfig.isWinOS,
     relPath: "files",

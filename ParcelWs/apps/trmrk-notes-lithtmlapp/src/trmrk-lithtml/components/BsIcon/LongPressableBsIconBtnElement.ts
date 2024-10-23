@@ -1,4 +1,4 @@
-import { LitElement } from "lit";
+import { LitElement, PropertyValues } from "lit";
 import { property } from "lit/decorators";
 
 import { Constructor } from "../../../trmrk/core";
@@ -140,7 +140,8 @@ export class LongPressableBsIconBtnElement extends BsIconBtnElementMixin<
     );
   }
 
-  updated() {
+  updated(changedProperties: PropertyValues) {
+    super.updated(changedProperties);
     this.longPressController.registerEventListeners();
   }
 

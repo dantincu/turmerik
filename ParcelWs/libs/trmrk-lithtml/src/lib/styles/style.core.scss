@@ -97,7 +97,7 @@ body {
   overflow-y: hidden;
 }
 
-[data-bs-theme-dark] .trmrk-scrollable,
+[data-bs-theme=dark] .trmrk-scrollable,
 .trmrk-app-theme-dark .trmrk-scrollable,
 .trmrk-app-theme-dark.trmrk-scrollable {
   @include scrollable(
@@ -107,7 +107,7 @@ body {
     var(--trmrk-scrollable-thumb-hover_color_dark));
 }
 
-[data-bs-theme-light] .trmrk-scrollable,
+[data-bs-theme=light] .trmrk-scrollable,
 .trmrk-app-theme-light .trmrk-scrollable,
 .trmrk-app-theme-light.trmrk-scrollable {
   @include scrollable(

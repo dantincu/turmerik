@@ -81,8 +81,25 @@ export namespace ns {
         });
     }
 
-    public getUri(relUri: string) {
-      const uri = [this.apiUriBase, relUri].join("/");
+    public getUri(relUri: string, data?: any | null | undefined) {
+      let uri = [this.apiUriBase, relUri].join("/");
+
+      if (data) {
+        const urlParams = new URLSearchParams();
+
+        for (let key of Object.keys(data)) {
+          const value = data[key];
+
+          if ((value ?? null) !== null) {
+            urlParams.set(key, value);
+          }
+        }
+
+        const query = urlParams.toString();
+
+        uri = [uri, query].join("?");
+      }
+
       return uri;
     }
 
@@ -198,7 +215,7 @@ export namespace ns {
       return new Promise<ns.ApiResponse<T>>((resolve) => {
         this.resolvePromise(
           axios.get<T>(
-            this.getUri(relUri),
+            this.getUri(relUri, data),
             this.getConfig(configFactory, data)
           ),
           resolve
@@ -268,6 +285,7 @@ export namespace ns {
 
     public delete<T>(
       relUri: string,
+      data?: any | undefined,
       configFactory?: (
         d: T,
         cfg: AxiosConfigBase<T> | undefined
@@ -275,7 +293,10 @@ export namespace ns {
     ) {
       return new Promise<ns.ApiResponse<T>>((resolve) => {
         this.resolvePromise(
-          axios.delete<T>(this.getUri(relUri), this.getConfig(configFactory)),
+          axios.delete<T>(
+            this.getUri(relUri, data),
+            this.getConfig(configFactory)
+          ),
           resolve
         );
       });
@@ -292,9 +313,9 @@ export namespace ns {
         this.defaultConfigFactory(data);
 
       configFactory ??= (dt, cfg) => {
-        if (cfg && (dt ?? false)) {
+        /* if (cfg && (dt ?? false)) {
           (cfg as AxiosConfig<T>).data ??= dt;
-        }
+        } */
 
         return cfg;
       };
