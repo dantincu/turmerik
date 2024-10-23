@@ -121,6 +121,8 @@ export class AppHeaderElement extends LitElement {
 
   optionsButton: HTMLButtonElement | null;
   optionsPopover: bootstrap.Popover | null;
+  optionsPopoverShown: boolean;
+  optionsPopoverContentElem: HTMLElement | null;
 
   constructor() {
     super();
@@ -129,6 +131,8 @@ export class AppHeaderElement extends LitElement {
     this.historyForwardBtnElem = null;
     this.optionsButton = null;
     this.optionsPopover = null;
+    this.optionsPopoverShown = false;
+    this.optionsPopoverContentElem = null;
 
     this.navHistoryBackBtnClicked = this.navHistoryBackBtnClicked.bind(this);
 
@@ -136,6 +140,13 @@ export class AppHeaderElement extends LitElement {
       this.navHistoryForwardBtnClicked.bind(this);
 
     this.optionsBtnClicked = this.optionsBtnClicked.bind(this);
+    this.tryCreateOptionsPopover = this.tryCreateOptionsPopover.bind(this);
+
+    this.documentClickedWhenPopoverShown =
+      this.documentClickedWhenPopoverShown.bind(this);
+
+    this.removeDocumentClickedWhenPopoverShown =
+      this.removeDocumentClickedWhenPopoverShown.bind(this);
   }
 
   render() {
@@ -242,6 +253,8 @@ export class AppHeaderElement extends LitElement {
 
   optionsButtonUnavaillable() {
     this.optionsButton = null;
+    this.optionsPopoverShown = false;
+    this.optionsPopoverContentElem = null;
 
     if (this.optionsPopover) {
       this.optionsPopover.dispose();
@@ -250,9 +263,13 @@ export class AppHeaderElement extends LitElement {
   }
 
   optionsBtnClicked(e: MouseEvent) {
-    console.log("this.optionsPopover", this.optionsPopover);
-    if (this.optionsPopover) {
-      this.optionsPopover.toggle();
+    if (this.optionsPopover && !this.optionsPopoverShown) {
+      this.optionsPopoverShown = true;
+      this.optionsPopover.show();
+
+      document.addEventListener("click", this.documentClickedWhenPopoverShown, {
+        capture: true,
+      });
     }
   }
 
@@ -267,16 +284,41 @@ export class AppHeaderElement extends LitElement {
     ) {
       this.optionsPopover = new bootstrap.Popover(this.optionsButton, {
         html: true,
-        content: document.createElement(popoverElemTagName),
+        content: (this.optionsPopoverContentElem =
+          document.createElement(popoverElemTagName)),
         trigger: "manual",
-        placement: "auto",
-        /* offset: () => [
-          0,
-          this.appLayoutRootDomElemProp.value!.clientWidth / 2,
-          // 100,
-        ], */
-        // container: document.body,
+        placement: "left",
       });
     }
+  }
+
+  documentClickedWhenPopoverShown(e: MouseEvent) {
+    const currentTarget = e.currentTarget as Node;
+
+    if (this.optionsPopover && this.optionsPopoverShown) {
+      if (currentTarget && this.optionsPopoverContentElem) {
+        if (!this.optionsPopoverContentElem.contains(currentTarget)) {
+          this.optionsPopover.hide();
+          this.removeDocumentClickedWhenPopoverShown();
+          setTimeout(() => {
+            this.optionsPopoverShown = false;
+          });
+        }
+      } else {
+        this.removeDocumentClickedWhenPopoverShown();
+      }
+    } else {
+      this.removeDocumentClickedWhenPopoverShown();
+    }
+  }
+
+  removeDocumentClickedWhenPopoverShown() {
+    document.removeEventListener(
+      "click",
+      this.documentClickedWhenPopoverShown,
+      {
+        capture: true,
+      }
+    );
   }
 }

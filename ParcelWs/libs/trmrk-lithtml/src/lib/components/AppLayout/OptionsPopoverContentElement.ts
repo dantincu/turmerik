@@ -12,7 +12,6 @@ export class OptionsPopoverContentElement extends LitElement {
     ...AppLayoutStyles.value,
     css`
       .trmrk-options-popover-content {
-        /* width: calc(100vw - 100px); */
       }
     `,
   ];
