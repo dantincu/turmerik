@@ -3,9 +3,15 @@ import { customElement, property } from "lit/decorators";
 
 import trmrk from "../../../trmrk";
 import { Constructor } from "../../../trmrk/core";
+import { customEvent } from "../../../trmrk-browser/domUtils/core";
 
 import { ObservableValueController } from "../../controlers/ObservableValueController";
-import { isDarkModePropFactory } from "../../domUtils/core";
+import {
+  isDarkModePropFactory,
+  rootElemAvaillableEvent,
+  rootElemUnavaillableEvent,
+  eventNames,
+} from "../../domUtils/core";
 
 import { globalStyles } from "../../domUtils/css";
 
@@ -114,15 +120,26 @@ export const BsIconBtnElementMixin = <
       </button>`;
     }
 
+    firstUpdated(changedProperties: PropertyValues) {
+      this.rootElemAvaillable(this.getBtnElem());
+    }
+
     updated(changedProperties: PropertyValues) {
       const btnElem = this.getBtnElem();
 
       btnElem.addEventListener("touchstart", this.onTouchStartOrMouseDown);
       btnElem.addEventListener("mousedown", this.onTouchStartOrMouseDown);
+
+      this.rootElemAvaillable(btnElem);
     }
 
     connectedCallback() {
       super.connectedCallback();
+      const btnElem = this.getBtnElem();
+
+      if (btnElem) {
+        this.rootElemAvaillable(btnElem);
+      }
     }
 
     disconnectedCallback() {
@@ -131,6 +148,16 @@ export const BsIconBtnElementMixin = <
 
       btnElem.removeEventListener("touchstart", this.onTouchStartOrMouseDown);
       btnElem.removeEventListener("mousedown", this.onTouchStartOrMouseDown);
+
+      this.rootElemUnavaillable();
+    }
+
+    rootElemAvaillable(rootElem: HTMLButtonElement) {
+      this.dispatchEvent(rootElemAvaillableEvent(rootElem));
+    }
+
+    rootElemUnavaillable() {
+      this.dispatchEvent(rootElemUnavaillableEvent());
     }
 
     onTouchStartOrMouseDown(e: TouchEvent | MouseEvent) {

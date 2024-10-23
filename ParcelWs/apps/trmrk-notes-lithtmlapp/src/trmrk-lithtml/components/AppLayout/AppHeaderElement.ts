@@ -1,21 +1,42 @@
 import { LitElement, html, css } from "lit";
-import { customElement, property } from "lit/decorators";
+import { customElement } from "lit/decorators";
+
+import * as bootstrap from "bootstrap";
 
 import { globalStyles } from "../../domUtils/css";
 
 import {
   AppLayoutStyles,
+  appLayoutRootDomElemPropFactory,
+  appLayoutOptionsPopoverDomElemTagNamePropFactory,
   showAppTabsBarPropFactory,
   appTitlePropFactory,
   defaultAppTitlePropFactory,
   enableExplorerPanelPropFactory,
   showAppHeaderHistoryNavButtonsPropFactory,
+  showAppHeaderGoToParentButtonPropFactory,
+  appHeaderGoToParentButtonEnabledPropFactory,
   enableAppHeaderHistoryNavButtonsDefaultBehaviorPropFactory,
   showAppHeaderOptiosButtonPropFactory,
   appHeaderHistoryBackButtonEnabledPropFactory,
   appHeaderHistoryForwardButtonEnabledPropFactory,
   appHeaderCustomContentStartingColumnsCountPropFactory,
 } from "./core";
+
+import { RootElemAvaillableEventData } from "../../domUtils/core";
+
+/* class MyCustomElement extends HTMLElement {
+  constructor() {
+    super();
+    // Initialization code here
+  }
+
+  connectedCallback() {
+    this.innerHTML = `<p>Custom content inside the element</p>`;
+  }
+}
+
+customElements.define("my-custom-element", MyCustomElement); */
 
 @customElement("trmrk-app-header")
 export class AppHeaderElement extends LitElement {
@@ -31,6 +52,20 @@ export class AppHeaderElement extends LitElement {
       .trmrk-header-content {
         display: flex;
       }
+
+      .trmrk-options-popover-root {
+        /* display: block;
+        width: 0px;
+        height: opx;
+        overflow: hidden; */
+      }
+
+      .trmrk-options-popover-root.trmrk-show {
+        /* width: 100vw;
+        height: 100vh;
+        overflow-y: scroll;
+        z-index: 100; */
+      }
     `,
   ];
 
@@ -44,8 +79,20 @@ export class AppHeaderElement extends LitElement {
       this
     );
 
+  protected readonly appLayoutRootDomElemProp =
+    appLayoutRootDomElemPropFactory.createController(this);
+
+  protected readonly appLayoutOptionsPopoverDomElemTagNameProp =
+    appLayoutOptionsPopoverDomElemTagNamePropFactory.createController(this);
+
   protected readonly showAppTabsBarProp =
     showAppTabsBarPropFactory.createController(this);
+
+  protected readonly showAppHeaderGoToParentButtonProp =
+    showAppHeaderGoToParentButtonPropFactory.createController(this);
+
+  protected readonly appHeaderGoToParentButtonEnabledProp =
+    appHeaderGoToParentButtonEnabledPropFactory.createController(this);
 
   protected readonly showAppHeaderHistoryNavButtonsProp =
     showAppHeaderHistoryNavButtonsPropFactory.createController(this);
@@ -72,65 +119,33 @@ export class AppHeaderElement extends LitElement {
   historyBackBtnElem: HTMLElement | null;
   historyForwardBtnElem: HTMLElement | null;
 
+  optionsButton: HTMLButtonElement | null;
+  optionsPopover: bootstrap.Popover | null;
+
   constructor() {
     super();
     this.historyNavButtonsClickEventsAdded = false;
     this.historyBackBtnElem = null;
     this.historyForwardBtnElem = null;
+    this.optionsButton = null;
+    this.optionsPopover = null;
 
     this.navHistoryBackBtnClicked = this.navHistoryBackBtnClicked.bind(this);
 
     this.navHistoryForwardBtnClicked =
       this.navHistoryForwardBtnClicked.bind(this);
-  }
 
-  /* onTouchStart(evt: CustomEvent<LongPressEventDataTuple>) {
-    this.addMsg("onTouchStart", evt.detail);
+    this.optionsBtnClicked = this.optionsBtnClicked.bind(this);
   }
-
-  onTouchMove(evt: CustomEvent<LongPressEventDataTuple>) {
-    this.addMsg("onTouchMove", evt.detail);
-  }
-
-  onTouchEnd(evt: CustomEvent<LongPressEventDataTuple>) {
-    this.addMsg("onTouchEnd", evt.detail);
-  }
-
-  onMouseDown(evt: CustomEvent<LongPressEventDataTuple>) {
-    this.addMsg("onMouseDown", evt.detail);
-  }
-
-  onMouseMove(evt: CustomEvent<LongPressEventDataTuple>) {
-    this.addMsg("onMouseMove", evt.detail);
-  }
-
-  onMouseUp(evt: CustomEvent<LongPressEventDataTuple>) {
-    this.addMsg("onMouseUp", evt.detail);
-  }
-
-  onLongPress(evt: CustomEvent<LongPressEventData>) {
-    this.addMsg("onLongPress", evt.detail);
-  }
-
-  onShortPress(evt: CustomEvent<LongPressEventDataTuple>) {
-    this.addMsg("onShortPress", evt.detail);
-  }
-
-  addMsg(evtName: string, evt: any) {
-    console.log(evtName, evt);
-    const elem = document.createElement("p");
-    elem.innerText = `${evtName}: ${JSON.stringify(evt, null, "  ")}`;
-    document.querySelector("trmrk-app")!.after(elem);
-  } */
 
   render() {
-    const enableExplorerPanelButtonsCountIncVal = this.enableExplorerPanelProp
-      .value
+    const showAppHeaderGoToParentButtonsCountIncVal = this
+      .showAppHeaderGoToParentButtonProp.value
       ? 1
       : 0;
 
     const buttonsCount = [
-      enableExplorerPanelButtonsCountIncVal,
+      showAppHeaderGoToParentButtonsCountIncVal,
       this.showAppHeaderHistoryNavButtonsProp.value ? 2 : 0,
     ].reduce((a, b) => a + b);
 
@@ -147,13 +162,14 @@ export class AppHeaderElement extends LitElement {
 
     return html`<header class="trmrk-app-header">
       <slot name="header-first-content"></slot>
-      ${this.enableExplorerPanelProp.value
-        ? html`<trmrk-long-pressable-bs-icon-btn
+      ${this.showAppHeaderGoToParentButtonProp.value
+        ? html`<trmrk-bs-icon-btn
             btnHasNoBorder
+            ?btnDisabled="${!this.appHeaderGoToParentButtonEnabledProp.value}"
             iconCssClass="bi-arrow-up"
             class="col-start-${this
               .appHeaderCustomContentStartingColumnsCountProp.value + 1}"
-          ></trmrk-long-pressable-bs-icon-btn>`
+          ></trmrk-bs-icon-btn>`
         : null}
       ${this.showAppHeaderHistoryNavButtonsProp.value
         ? html` <trmrk-bs-icon-btn
@@ -161,20 +177,22 @@ export class AppHeaderElement extends LitElement {
               ?btnDisabled="${!this.appHeaderHistoryBackButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-left"
+              @click=${this.navHistoryBackBtnClicked}
               class="trmrk-histroy-back-btn col-start-${this
                 .appHeaderCustomContentStartingColumnsCountProp.value +
               1 +
-              enableExplorerPanelButtonsCountIncVal}"
+              showAppHeaderGoToParentButtonsCountIncVal}"
             ></trmrk-bs-icon-btn
             ><trmrk-bs-icon-btn
               btnHasNoBorder
               ?btnDisabled="${!this.appHeaderHistoryForwardButtonEnabledProp
                 .value}"
               iconCssClass="bi-arrow-right"
+              @click=${this.navHistoryForwardBtnClicked}
               class="trmrk-histroy-forward-btn col-start-${this
                 .appHeaderCustomContentStartingColumnsCountProp.value +
               2 +
-              enableExplorerPanelButtonsCountIncVal}"
+              showAppHeaderGoToParentButtonsCountIncVal}"
             ></trmrk-bs-icon-btn>`
         : null}
       ${this.showAppTabsBarProp.value
@@ -190,102 +208,17 @@ export class AppHeaderElement extends LitElement {
           </div>`}
       ${this.showAppHeaderOptiosButtonProp.value
         ? html`<trmrk-bs-icon-btn
+            data-bs-toggle="popover"
+            data-bs-content="Top popover"
             btnHasNoBorder
-            class="trmrk-display-flex col-start-5 col-end-5"
+            class="col-start-5 col-end-5 trmrk-options-btn"
             iconCssClass="bi-three-dots-vertical"
+            @click=${this.optionsBtnClicked}
+            @rootelemavaillable=${this.optionsButtonAvaillable}
+            @rootelemunavaillable=${this.optionsButtonUnavaillable}
           ></trmrk-bs-icon-btn>`
         : null}
     </header>`;
-
-    /* return html`<header class="trmrk-app-header">
-      <trmrk-bs-icon-btn
-        iconCssClass="bi bi-diagram-3"
-        iconWrapperCssClass="trmrk-rotate-270deg"
-        btnHasNoBorder="true"
-      ></trmrk-bs-icon-btn>
-      <trmrk-long-pressable-bs-icon-btn
-        iconCssClass="bi-alarm"
-        @ontouchstart="${this.onTouchStart}"
-        @ontouchend="${this.onTouchMove}"
-        @ontouchmove="${this.onTouchEnd}"
-        @onmousedown="${this.onMouseDown}"
-        @onmousemove="${this.onMouseMove}"
-        @onmouseup="${this.onMouseUp}"
-        @onlongpress="${this.onLongPress}"
-        @onshortpress="${this.onShortPress}"
-      ></trmrk-long-pressable-bs-icon-btn>
-      <trmrk-bs-icon-btn iconCssClass="bi-alarm"></trmrk-bs-icon-btn>
-      <trmrk-bs-icon-btn
-        iconCssClass="bi-alarm"
-        btnDisabled="true"
-      ></trmrk-bs-icon-btn>
-    </header>` */
-  }
-
-  updated() {
-    this.addNavButtonsClickEventListenersIfReq();
-  }
-
-  firstUpdated() {
-    this.addNavButtonsClickEventListenersIfReq();
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.removeNavButtonsClickEventListenersIfReq();
-  }
-
-  shouldAddNavButtonsClickEventListeners() {
-    const retVal =
-      this.enableAppHeaderHistoryNavButtonsDefaultBehaviorProp.value &&
-      this.showAppHeaderHistoryNavButtonsProp.value &&
-      !this.historyNavButtonsClickEventsAdded;
-
-    return retVal;
-  }
-
-  addNavButtonsClickEventListenersIfReq() {
-    if (this.shouldAddNavButtonsClickEventListeners()) {
-      this.historyBackBtnElem = this.renderRoot.querySelector(
-        ".trmrk-histroy-back-btn"
-      )!;
-
-      this.historyForwardBtnElem = this.renderRoot.querySelector(
-        ".trmrk-histroy-forward-btn"
-      )!;
-
-      this.historyBackBtnElem.addEventListener(
-        "click",
-        this.navHistoryBackBtnClicked
-      );
-
-      this.historyForwardBtnElem.addEventListener(
-        "click",
-        this.navHistoryForwardBtnClicked
-      );
-
-      this.historyNavButtonsClickEventsAdded = true;
-    }
-  }
-
-  removeNavButtonsClickEventListenersIfReq() {
-    if (this.shouldAddNavButtonsClickEventListeners()) {
-      this.historyBackBtnElem?.removeEventListener(
-        "click",
-        this.navHistoryBackBtnClicked
-      );
-
-      this.historyForwardBtnElem?.removeEventListener(
-        "click",
-        this.navHistoryForwardBtnClicked
-      );
-
-      this.historyNavButtonsClickEventsAdded = true;
-    }
   }
 
   navHistoryBackBtnClicked(e: MouseEvent) {
@@ -294,5 +227,56 @@ export class AppHeaderElement extends LitElement {
 
   navHistoryForwardBtnClicked(e: MouseEvent) {
     window.history.forward();
+  }
+
+  updated() {
+    this.tryCreateOptionsPopover();
+  }
+
+  optionsButtonAvaillable(
+    e: CustomEvent<RootElemAvaillableEventData<HTMLButtonElement>>
+  ) {
+    this.optionsButton = e.detail.rootElem;
+    this.tryCreateOptionsPopover();
+  }
+
+  optionsButtonUnavaillable() {
+    this.optionsButton = null;
+
+    if (this.optionsPopover) {
+      this.optionsPopover.dispose();
+      this.optionsPopover = null;
+    }
+  }
+
+  optionsBtnClicked(e: MouseEvent) {
+    console.log("this.optionsPopover", this.optionsPopover);
+    if (this.optionsPopover) {
+      this.optionsPopover.toggle();
+    }
+  }
+
+  tryCreateOptionsPopover() {
+    const popoverElemTagName =
+      this.appLayoutOptionsPopoverDomElemTagNameProp.value;
+
+    if (
+      popoverElemTagName &&
+      this.optionsButton &&
+      this.appLayoutRootDomElemProp.value
+    ) {
+      this.optionsPopover = new bootstrap.Popover(this.optionsButton, {
+        html: true,
+        content: document.createElement(popoverElemTagName),
+        trigger: "manual",
+        placement: "auto",
+        /* offset: () => [
+          0,
+          this.appLayoutRootDomElemProp.value!.clientWidth / 2,
+          // 100,
+        ], */
+        // container: document.body,
+      });
+    }
   }
 }

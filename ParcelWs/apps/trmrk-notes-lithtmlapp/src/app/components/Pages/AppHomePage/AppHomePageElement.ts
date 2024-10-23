@@ -1,11 +1,11 @@
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators";
 
-import { globalStyles } from "../../domUtils/css";
+import { globalStyles } from "../../../domUtils/css";
 
-import { AppPage, updateAppPageProps } from "../../utilities/data";
+import { AppPage, updateAppPageProps } from "../../../utilities/data";
 
-import { AppLayoutStyles } from "../../../trmrk-lithtml/components/AppLayout/core";
+import { AppLayoutStyles } from "../../../../trmrk-lithtml/components/AppLayout/core";
 
 @customElement("trmrk-app-home-page")
 export class AppHomePageElement extends LitElement {
@@ -25,8 +25,8 @@ export class AppHomePageElement extends LitElement {
   }
 
   render() {
-    return html`<trmrk-app-panel
-      cssClass="trmrk-app-home-page-content"
+    return html`<trmrk-app-panel cssClass="trmrk-app-home-page-content"
+      ><div slot="panel-content"></div
     ></trmrk-app-panel>`;
   }
 }

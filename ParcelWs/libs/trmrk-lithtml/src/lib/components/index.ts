@@ -5,7 +5,7 @@ import { Error } from "./Error";
 import { Loading } from "./Loading";
 import { Redirect } from "./Redirect";
 
-export const Components = {
+export const CoreComponents = {
   AppLayout,
   Common,
   BsIconBtn,

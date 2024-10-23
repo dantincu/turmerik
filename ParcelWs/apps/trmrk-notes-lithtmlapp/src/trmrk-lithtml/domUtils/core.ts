@@ -9,6 +9,7 @@ import {
   appThemeCssClass,
   getAppModeCssClassName,
   getAppThemeCssClassName,
+  customEvent,
 } from "../../trmrk-browser/domUtils/core";
 
 export const setDomBsAppTheme = (isDarkModeValue: boolean) => {
@@ -56,3 +57,25 @@ export const isDarkModePropFactory =
 
 export const isCompactModePropFactory =
   new ObservableValueSingletonControllerFactory(null, isCompactMode());
+
+export const eventNames = Object.freeze({
+  rootElemAvaillable: "rootelemavaillable",
+  rootElemUnavaillable: "rootelemunavaillable",
+});
+
+export interface RootElemAvaillableEventData<THTMLElement extends HTMLElement> {
+  rootElem: THTMLElement;
+}
+
+export const rootElemAvaillableEvent = <THTMLElement extends HTMLElement>(
+  rootElem: THTMLElement
+) =>
+  customEvent<RootElemAvaillableEventData<THTMLElement>>(
+    eventNames.rootElemAvaillable,
+    {
+      rootElem,
+    }
+  );
+
+export const rootElemUnavaillableEvent = () =>
+  customEvent(eventNames.rootElemUnavaillable, {});

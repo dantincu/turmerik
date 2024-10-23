@@ -10,6 +10,8 @@ import {
 import { globalStyles } from "../../domUtils/css";
 
 import {
+  appLayoutRootDomElemPropFactory,
+  appLayoutPopoversContainerDomElemPropFactory,
   appLayoutCssClassPropFactory,
   docTitlePropFactory,
   defaultDocTitlePropFactory,
@@ -29,7 +31,18 @@ import {
 
 @customElement("trmrk-app-layout")
 export class AppLayoutElement extends LitElement {
-  static styles = [...globalStyles.value, ...AppLayoutStyles.value];
+  static styles = [
+    ...globalStyles.value,
+    ...AppLayoutStyles.value,
+    css`
+      .trmrk-app-layout .trmrk-popovers-container {
+        display: block;
+        width: 0px;
+        height: 0px;
+        overflow: hidden;
+      }
+    `,
+  ];
 
   constructor() {
     super();
@@ -106,6 +119,7 @@ export class AppLayoutElement extends LitElement {
               ></slot>
               </trmrk-app-footer>`
           : null}
+        <div class="trmrk-popovers-container"></div>
       </div>`,
     ];
   }
@@ -114,12 +128,16 @@ export class AppLayoutElement extends LitElement {
     super.connectedCallback();
     this.docTitleProp.observable.subscribe(this.docTitleUpdated);
     this.appTitleProp.observable.subscribe(this.appTitleUpdated);
+    this.setAppLayoutDomElems();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this.docTitleProp.observable.unsubscribe(this.docTitleUpdated);
     this.appTitleProp.observable.unsubscribe(this.appTitleUpdated);
+
+    appLayoutRootDomElemPropFactory.value = null;
+    appLayoutPopoversContainerDomElemPropFactory.value = null;
   }
 
   updated(changedProperties: PropertyValues) {
@@ -128,10 +146,13 @@ export class AppLayoutElement extends LitElement {
       this.docTitleHasChanged = false;
       this.appTitleHasChanged = false;
     }
+
+    this.setAppLayoutDomElems();
   }
 
   firstUpdated(changedProperties: PropertyValues) {
     this.updateHtmlDocTitleCore();
+    this.setAppLayoutDomElems();
   }
 
   updateHtmlDocTitleCore() {
@@ -151,5 +172,15 @@ export class AppLayoutElement extends LitElement {
 
   appTitleUpdated() {
     this.appTitleHasChanged = true;
+  }
+
+  setAppLayoutDomElems() {
+    const rootElem = this.renderRoot;
+    appLayoutRootDomElemPropFactory.value =
+      rootElem.querySelector(".trmrk-app-layout");
+
+    appLayoutPopoversContainerDomElemPropFactory.value = rootElem.querySelector(
+      ".trmrk-app-layout > .trmrk-popovers-container"
+    );
   }
 }

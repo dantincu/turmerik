@@ -57,7 +57,7 @@ export class AppElement extends LitElement {
             />
           </div>`
         : null}
-      <main slot="body-content" class="w-full"></main>
+      <main slot="body-content" class="w-full h-full"></main>
       <div slot="footer-content">${footer}</div>
     </trmrk-app-layout>`;
   }

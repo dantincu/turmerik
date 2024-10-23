@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
@@ -18,7 +18,14 @@ import {
 
 @customElement("trmrk-app-panel")
 export class AppPanelElement extends LitElement {
-  static styles = [...globalStyles.value, ...AppLayoutStyles.value];
+  static styles = [
+    ...globalStyles.value,
+    ...AppLayoutStyles.value,
+    css`
+      .trmrk-app-panel {
+      }
+    `,
+  ];
 
   protected readonly isCompactModeProp =
     isCompactModePropFactory.createController(this);
@@ -36,6 +43,8 @@ export class AppPanelElement extends LitElement {
       )} ${getAppModeCssClassName(
         this.isCompactModeProp.value
       )} trmrk-scrollable trmrk-scrollableX trmrk-scrollableY ${this.cssClass}"
-    ></div>`;
+    >
+      <slot name="panel-content"></slot>
+    </div>`;
   }
 }

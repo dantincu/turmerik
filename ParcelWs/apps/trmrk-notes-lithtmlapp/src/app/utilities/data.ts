@@ -2,6 +2,7 @@ import { ObservableValueSingletonControllerFactory } from "../../trmrk-lithtml/c
 
 import {
   appHeaderCustomContentStartingColumnsCountPropFactory,
+  showAppHeaderGoToParentButtonPropFactory,
   enableExplorerPanelPropFactory,
   showAppTabsBarPropFactory,
   showAppFooterPropFactory,
@@ -23,6 +24,7 @@ export const updateAppPageProps = (appPage: AppPage | null) => {
   appPagePropFactory.value = appPage;
 
   if ((appPage ?? null) !== null) {
+    showAppHeaderGoToParentButtonPropFactory.value = false;
     enableExplorerPanelPropFactory.value = false;
     if (appPage! <= AppPage.Settings) {
       if (appPage == AppPage.Home) {
@@ -41,6 +43,7 @@ export const updateAppPageProps = (appPage: AppPage | null) => {
         showAppFooterCloseSelectionButtonPropFactory.value = false;
       }
     } else {
+      showAppHeaderGoToParentButtonPropFactory.value = true;
       enableExplorerPanelPropFactory.value = true;
       appHeaderCustomContentStartingColumnsCountPropFactory.value = 0;
       showAppTabsBarPropFactory.value = true;

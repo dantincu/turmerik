@@ -4,6 +4,7 @@ import { AppHeaderElement } from "./AppHeaderElement";
 import { AppTabsBarElement } from "./AppTabsBarElement";
 import { AppFooterElement } from "./AppFooterElement";
 import { AppPanelElement } from "./AppPanelElement";
+import { OptionsPopoverContentElement } from "./OptionsPopoverContentElement";
 
 export const AppLayout = {
   AppPageElement,
@@ -12,4 +13,5 @@ export const AppLayout = {
   AppTabsBarElement,
   AppFooterElement,
   AppPanelElement,
+  OptionsPopoverContentElement,
 };
