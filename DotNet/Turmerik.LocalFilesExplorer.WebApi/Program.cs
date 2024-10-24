@@ -5,6 +5,7 @@ using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.LocalFilesExplorer.WebApi.ControllerConventions;
 using Turmerik.LocalFilesExplorer.WebApi.Helpers;
+using Turmerik.LocalFilesExplorer.WebApi.Middlewares;
 using Turmerik.LocalFilesExplorer.WebApi.ModelBinders;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -71,6 +72,8 @@ if (!AppH.Instance.AllowAnonymousAuthentication)
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+// app.UseMiddleware<CustomStatusTextMiddleware>();
 
 app.UseCors(MyAllowSpecificOrigins);
 

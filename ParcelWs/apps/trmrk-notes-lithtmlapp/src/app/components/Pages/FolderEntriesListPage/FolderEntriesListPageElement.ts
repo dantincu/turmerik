@@ -82,6 +82,8 @@ export class FolderEntriesListPageElement extends LitElement {
   }
 
   render() {
+    console.log("this.data", this.data);
+
     if (this.data) {
       if (this.data.SubFolders!.length || this.data.FolderFiles!.length) {
         return html`<trmrk-app-panel

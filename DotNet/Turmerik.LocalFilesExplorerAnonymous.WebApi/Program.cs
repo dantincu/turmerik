@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.LocalFilesExplorerAnonymous.WebApi.Helpers;
+using Turmerik.LocalFilesExplorerAnonymous.WebApi.Middlewares;
 using Turmerik.LocalFilesExplorerAnonymous.WebApi.ModelBinders;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -60,6 +61,8 @@ builder.Services.AddControllers(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseMiddleware<ExposeHeadersMiddleware>();
 
 app.UseCors(MyAllowSpecificOrigins);
 

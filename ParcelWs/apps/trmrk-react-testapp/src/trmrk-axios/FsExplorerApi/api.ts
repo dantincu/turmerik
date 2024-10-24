@@ -168,7 +168,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
       const resp = await this.svc.get<string>(
         this.getRelUrl("file-text-contents"),
         {
-          Idnf: file.item.Idnf,
+          Idnf: this.getDriveItemIdnf(file.item, pathSegs),
         } as DriveItem
       );
 
@@ -288,7 +288,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
       if (retNode) {
         const resp = await this.svc.delete<DriveItem>(
           this.getRelUrl("delete-folder"),
-          { Idnf: retNode!.item.Idnf }
+          { Idnf: this.getDriveItemIdnf(retNode!.item, pathSegs) }
         );
 
         this.handleApiResp(resp, () => {
@@ -409,7 +409,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
 
       if (retNode) {
         const resp = await this.svc.delete(this.getRelUrl("delete-file"), {
-          Idnf: retNode!.item.Idnf,
+          Idnf: this.getDriveItemIdnf(retNode!.item, pathSegs),
         });
 
         this.handleApiResp(resp, () => {
@@ -459,7 +459,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("move-folder"),
                 {
-                  Idnf: folder.item.Idnf,
+                  Idnf: this.getDriveItemIdnf(folder.item, pathSegs),
                   PrIdnf: newParentFolder.item.Idnf,
                   Name: newFolderName,
                 } as DriveItem
@@ -468,7 +468,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("rename-folder"),
                 {
-                  Idnf: folder.item.Idnf,
+                  Idnf: this.getDriveItemIdnf(folder.item, pathSegs),
                   Name: newFolderName,
                 } as DriveItem
               );
@@ -477,7 +477,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
             resp = await this.svc.patch<DriveItem>(
               this.getRelUrl("copy-folder"),
               {
-                Idnf: folder.item.Idnf,
+                Idnf: this.getDriveItemIdnf(folder.item, pathSegs),
                 PrIdnf: newParentFolder.item.Idnf,
                 Name: newFolderName,
               } as DriveItem
@@ -543,7 +543,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("move-file"),
                 {
-                  Idnf: file.item.Idnf,
+                  Idnf: this.getDriveItemIdnf(file.item, pathSegs),
                   PrIdnf: newParentFolder.item.Idnf,
                   Name: newFileName,
                 } as DriveItem
@@ -552,7 +552,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
               resp = await this.svc.patch<DriveItem>(
                 this.getRelUrl("rename-file"),
                 {
-                  Idnf: file.item.Idnf,
+                  Idnf: this.getDriveItemIdnf(file.item, pathSegs),
                   Name: newFileName,
                 } as DriveItem
               );
@@ -561,7 +561,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
             resp = await this.svc.patch<DriveItem>(
               this.getRelUrl("copy-file"),
               {
-                Idnf: file.item.Idnf,
+                Idnf: this.getDriveItemIdnf(file.item, pathSegs),
                 PrIdnf: newParentFolder.item.Idnf,
                 Name: newFileName,
               } as DriveItem
@@ -614,7 +614,9 @@ export class FsExplorerApi implements IDriveExplorerApi {
 
         if (retFolder) {
           await this.assureFolderHasDescendants(
-            pathSegs.join(this.dirSep),
+            pathSegs.length
+              ? pathSegs.join(this.dirSep)
+              : this.rootDirNode.item.Idnf,
             retFolder,
             parentRefreshDepth >= 0
           );
@@ -626,15 +628,18 @@ export class FsExplorerApi implements IDriveExplorerApi {
   }
 
   protected async fillFolderDescendants(
-    prFolderId: string,
+    prFolderId: string | null,
     folder: IDriveItemNode
   ): Promise<void> {
     const resp = await this.svc.get<DriveItem>(
       this.getRelUrl("folder-entries"),
       {
-        Idnf: [prFolderId, folder.item.Name]
-          .filter((s) => (s?.length ?? -1) > 0)
-          .join(this.dirSep),
+        Idnf: this.getDriveItemIdnf(
+          folder.item,
+          [prFolderId, folder.item.Name].filter(
+            (s) => (s ?? null) !== null
+          ) as string[]
+        ),
       }
     );
 
@@ -655,7 +660,7 @@ export class FsExplorerApi implements IDriveExplorerApi {
   }
 
   protected async assureFolderHasDescendants(
-    prFolderId: string,
+    prFolderId: string | null,
     folder: IDriveItemNode,
     refresh: boolean | null = null
   ) {
@@ -805,5 +810,10 @@ export class FsExplorerApi implements IDriveExplorerApi {
     }
 
     return relUrl;
+  }
+
+  private getDriveItemIdnf(driveItem: DriveItem, pathSegs: string[]) {
+    const idnf = driveItem.Idnf ?? pathSegs.join(this.dirSep);
+    return idnf;
   }
 }

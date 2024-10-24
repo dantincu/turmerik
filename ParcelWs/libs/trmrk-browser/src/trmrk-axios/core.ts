@@ -34,11 +34,12 @@ export namespace ns {
     isPreconditionRequiredStatus?: boolean | null | undefined;
   }
 
-  export const trmrkHeaderNames = {
+  export const trmrkHeaderNames = Object.freeze({
     clientVersion: "trmrk-client-version",
     clientUserUuid: "trmrk-client-user-uuid",
     requiredClientVersion: "trmrk-required-client-version",
-  };
+    statusReason: "trmrk-status-reason",
+  });
 
   export class ApiService {
     public apiHost!: string;
@@ -69,10 +70,6 @@ export namespace ns {
           const headers: { [key: string]: string } = {};
 
           headers[ns.trmrkHeaderNames.clientVersion] = this.clientVersion;
-
-          /* if (this.clientUserUuid) {
-            headers[ns.trmrkHeaderNames.clientUserUuid] = this.clientUserUuid;
-          } */
 
           return {
             withCredentials: true,
@@ -148,33 +145,35 @@ export namespace ns {
           resp.isSuccessStatus = true;
           resp.isSuccess = true;
         } else if (status < 400) {
-          resp.isRedirectStatus = false;
+          resp.isRedirectStatus = true;
         } else {
-          resp.isErrorStatus = false;
+          resp.isErrorStatus = true;
+          resp.errMessage = resp.headers.get(ns.trmrkHeaderNames.statusReason);
 
           if (status < 500) {
             resp.isClientErrorStatus = true;
 
             switch (status) {
               case 400:
-                resp.errMessage = "A validation error has occurred";
+                resp.errMessage ??= "A validation error has occurred";
                 resp.isBadRequestStatus = true;
                 break;
               case 401:
-                resp.errMessage = "You are not authenticated";
+                resp.errMessage ??= "You are not authenticated";
                 resp.isNotAuthenticatedStatus = true;
                 break;
               case 403:
-                resp.errMessage = "You are not authorized to access this page";
+                resp.errMessage ??=
+                  "You are not authorized to access this page";
                 resp.isForbiddenStatus = true;
                 break;
               case 404:
-                resp.errMessage =
+                resp.errMessage ??=
                   "The page you are looking for doesn't exist or has been moved";
                 resp.isNotFoundStatus = true;
                 break;
               case 408:
-                resp.errMessage = "The request took too long to respond";
+                resp.errMessage ??= "The request took too long to respond";
                 resp.isTimeoutStatus = true;
                 break;
               case 428:
@@ -187,6 +186,7 @@ export namespace ns {
             }
           } else {
             resp.isServerErrorStatus = true;
+            resp.errMessage ??= "An internal server error has occurred";
           }
         }
       }

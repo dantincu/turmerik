@@ -405,8 +405,24 @@ namespace Turmerik.LocalFilesExplorerAnonymous.WebApi.Controllers
         }
 
         private IActionResult GetErrorActionResult(
-            Exception exc) => StatusCode(
-                (int)HttpStatusCode.InternalServerError,
-                exc.Message);
+            Exception exc)
+        {
+            ObjectResult result;
+            
+            if (exc is DriveExplorerException dvExplrExc)
+            {
+                result = StatusCode(
+                    (int)(dvExplrExc.HttpStatusCode ?? HttpStatusCode.InternalServerError), null);
+
+                HttpContext.Response.Headers["Trmrk-Status-Reason"] = dvExplrExc.HttpStatusText ?? exc.Message;
+            }
+            else
+            {
+                result = StatusCode(
+                    (int)HttpStatusCode.InternalServerError, null);
+            }
+
+            return result;
+        }
     }
 }
