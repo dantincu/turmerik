@@ -1,5 +1,5 @@
 {
-  "a": [
+  "as": [
     ":s",
     "$articles$"
   ],
@@ -7,19 +7,19 @@
     ":s",
     "$archive$"
   ],
-  "appopf": [
+  "appopfs": [
     ":s",
     "$apps-and-online-platforms$"
   ],
-  "chnl": [
+  "chnls": [
     ":s",
     "$channels$"
   ],
-  "ctr": [
+  "ctrs": [
     ":s",
     "$countries$"
   ],
-  "dstr": [
+  "dstrs": [
     ":s",
     "$distros$"
   ],
@@ -27,19 +27,19 @@
     ":s",
     "$funny$"
   ],
-  "fx": [
+  "fxs": [
     ":s",
     "$frameworks$"
   ],
-  "fxlbr": [
+  "fxlbrs": [
     ":s",
     "$frameworks-and-libraries$"
   ],
-  "g": [
+  "gs": [
     ":s",
     "$groups$"
   ],
-  "hs": [
+  "hstry": [
     ":s",
     "$history$"
   ],
@@ -51,19 +51,19 @@
     ":s",
     "$institutions$"
   ],
-  "insorg": [
+  "insorgs": [
     ":s",
     "$institutions-and-organizations$"
   ],
-  "gr": [
+  "grs": [
     ":s",
     "$geographical-regions$"
   ],
-  "isl": [
+  "isls": [
     ":s",
     "$islands$"
   ],
-  "lbr": [
+  "lbrs": [
     ":s",
     "$libraries$"
   ],
@@ -71,75 +71,75 @@
     ":s",
     "$misc$"
   ],
-  "mps": [
+  "mpssvcs": [
     ":s",
     "$my-products-and-services$"
   ],
-  "org": [
+  "orgs": [
     ":s",
     "$organizations$"
   ],
-  "opf": [
+  "opfs": [
     ":s",
     "$online-platforms$"
   ],
-  "opfwww": [
+  "opfswwws": [
     ":s",
     "$online-platforms-and-websites$"
   ],
-  "p": [
+  "ps": [
     ":s",
     "$persons$"
   ],
-  "pg": [
+  "pgs": [
     ":s",
     "$pages$"
   ],
-  "pl": [
+  "pls": [
     ":s",
     "$places$"
   ],
-  "plgr": [
+  "plsgrs": [
     ":s",
     "$places-and-geographical-regions$"
   ],
-  "plrg": [
+  "plsrgs": [
     ":s",
     "$places-and-regions$"
   ],
-  "ps": [
+  "pssvcs": [
     ":s",
     "$products-and-services$"
   ],
-  "pp": [
+  "pps": [
     ":s",
     "$public-persons$"
   ],
-  "rchs": [
+  "rchstry": [
     ":s",
     "$recent-history$"
   ],
-  "rg": [
+  "rgs": [
     ":s",
     "$regions$"
   ],
-  "smpf": [
+  "smpfs": [
     ":s",
     "$social-media-platforms$"
   ],
-  "strpf": [
+  "strpfs": [
     ":s",
     "$streaming-platforms$"
   ],
-  "smstrpf": [
+  "smstrpfs": [
     ":s",
     "$social-media-and-streaming-platforms$"
   ],
-  "tc": [
+  "tscs": [
     ":s",
     "$terms-and-concepts$"
   ],
-  "www": [
+  "wwws": [
     ":s",
     "$websites$"
   ],

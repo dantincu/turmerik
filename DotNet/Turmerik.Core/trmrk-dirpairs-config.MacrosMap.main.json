@@ -3,15 +3,15 @@
     ":s",
     "$about-infamous$"
   ],
-  "albm": [
+  "albms": [
     ":s",
     "$albums$"
   ],
-  "art": [
+  "arts": [
     ":s",
     "$artists$"
   ],
-  "athl": [
+  "athls": [
     ":s",
     "$athletes$"
   ],
@@ -19,15 +19,15 @@
     ":s",
     "$coaches$"
   ],
-  "cl": [
+  "clbs": [
     ":s",
     "$clubs$"
   ],
-  "cltm": [
+  "cltms": [
     ":s",
     "$club-teams$"
   ],
-  "cvart": [
+  "cvarts": [
     ":s",
     "$cover-artists$"
   ],
@@ -43,11 +43,11 @@
     ":s",
     "$composers$"
   ],
-  "cpz": [
+  "cpzs": [
     ":s",
     "$compozitions$"
   ],
-  "cdip": [
+  "cdsips": [
     ":s",
     "$conductors-and-interpreters$"
   ],
@@ -55,7 +55,7 @@
     ":s",
     "$documentaries$"
   ],
-  "eth": [
+  "ethgrps": [
     ":s",
     "$ethnic-groups$"
   ],
@@ -71,11 +71,31 @@
     ":s",
     "$environment-geography-nature-and-agriculture$"
   ],
-  "fathl": [
+  "frgnathls": [
+    ":s",
+    "$foreign-athletes$"
+  ],
+  "frgncchhs": [
+    ":s",
+    "$foreign-coaches$"
+  ],
+  "frgnmgrs": [
+    ":s",
+    "$foreign-managers$"
+  ],
+  "frgncchsmgrs": [
+    ":s",
+    "$foreign-managers-and-coaches$"
+  ],
+  "frgnplyr": [
+    ":s",
+    "$foreign-players$"
+  ],
+  "fathls": [
     ":s",
     "$former-athletes$"
   ],
-  "fplyr": [
+  "fplyrs": [
     ":s",
     "$former-players$"
   ],
@@ -83,11 +103,11 @@
     ":s",
     "$former-referees$"
   ],
-  "gnr": [
+  "gnrs": [
     ":s",
     "$genres$"
   ],
-  "hf": [
+  "hfs": [
     ":s",
     "$historical-figures$"
   ],
@@ -95,11 +115,11 @@
     ":s",
     "$infamous$"
   ],
-  "incd": [
+  "incds": [
     ":s",
     "$incidents$"
   ],
-  "indart": [
+  "indarts": [
     ":s",
     "$independent-artists$"
   ],
@@ -115,27 +135,27 @@
     ":s",
     "$masculine$"
   ],
-  "mart": [
+  "marts": [
     ":s",
     "$misc-artists$"
   ],
-  "mds": [
+  "mdls": [
     ":s",
     "$models$"
   ],
-  "mvs": [
+  "movs": [
     ":s",
     "$movies$"
   ],
-  "mvsdcmntrs": [
+  "movsdcmntrs": [
     ":s",
     "$movies-and-documentaries$"
   ],
-  "mf": [
+  "mfs": [
     ":s",
     "$mythological-figures$"
   ],
-  "msc": [
+  "mscs": [
     ":s",
     "$musicians$"
   ],
@@ -147,11 +167,15 @@
     ":s",
     "$national-team$"
   ],
-  "ot": [
+  "natms": [
+    ":s",
+    "$national-teams$"
+  ],
+  "others": [
     ":s",
     "$others$"
   ],
-  "plyr": [
+  "plyrs": [
     ":s",
     "$players$"
   ],
@@ -167,7 +191,7 @@
     ":s",
     "$teams$"
   ],
-  "trgd": [
+  "trgds": [
     ":s",
     "$tragedies$"
   ],
@@ -175,11 +199,11 @@
     ":s",
     "$trivial$"
   ],
-  "vrsath": [
+  "vrusaths": [
     ":s",
     "$various-athletes$"
   ],
-  "vrsart": [
+  "vrusarts": [
     ":s",
     "$various-artists$"
   ]
