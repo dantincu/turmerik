@@ -19,6 +19,10 @@
     ":s",
     "$clubs$"
   ],
+  "cltm": [
+    ":s",
+    "$club-teams$"
+  ],
   "cvart": [
     ":s",
     "$cover-artists$"
