@@ -35,6 +35,10 @@
     ":s",
     "$criminality$"
   ],
+  "cmpttns": [
+    ":s",
+    "$competitions$"
+  ],
   "cps": [
     ":s",
     "$composers$"
