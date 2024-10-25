@@ -47,6 +47,10 @@
     ":s",
     "$conductors-and-interpreters$"
   ],
+  "dcmntrs": [
+    ":s",
+    "$documentaries$"
+  ],
   "eth": [
     ":s",
     "$ethnic-groups$"
@@ -107,9 +111,17 @@
     ":s",
     "$misc-artists$"
   ],
-  "md": [
+  "mds": [
     ":s",
     "$models$"
+  ],
+  "mvs": [
+    ":s",
+    "$movies$"
+  ],
+  "mvsdcmntrs": [
+    ":s",
+    "$movies-and-documentaries$"
   ],
   "mf": [
     ":s",
