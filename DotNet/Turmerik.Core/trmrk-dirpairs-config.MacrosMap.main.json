@@ -95,6 +95,10 @@
     ":s",
     "$players$"
   ],
+  "ro": [
+    ":s",
+    "$$romanian$$"
+  ],
   "trgd": [
     ":s",
     "$tragedies$"

@@ -23,6 +23,7 @@
   "|msc|": "$musicians$",
   "|ot|": "$others$",
   "|plyr|": "$players$",
+  "|ro|": "$$romanian$$",
   "|trgd|": "$tragedies$",
   "|trv|": "$trivial$",
   "|vrsath|": "$various-athletes$",
