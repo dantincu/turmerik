@@ -103,6 +103,10 @@
     ":s",
     "$places-and-regions$"
   ],
+  "plgns": [
+    ":s",
+    "$plugins$"
+  ],
   "pps": [
     ":s",
     "$public-persons$"
