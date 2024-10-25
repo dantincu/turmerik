@@ -187,6 +187,10 @@
     ":s",
     "$romanian$"
   ],
+  "sbgnrs": [
+    ":s",
+    "$sub-genres$"
+  ],
   "tms": [
     ":s",
     "$teams$"

@@ -46,6 +46,7 @@
   "|plyrs|": "$players$",
   "|rfrs|": "$referees$",
   "|ro|": "$romanian$",
+  "|sbgnrs|": "$sub-genres$",
   "|tms|": "$teams$",
   "|trgds|": "$tragedies$",
   "|trv|": "$trivial$",
