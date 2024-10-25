@@ -103,6 +103,14 @@
     ":s",
     "$musicians$"
   ],
+  "nat": [
+    ":s",
+    "$national$"
+  ],
+  "natm": [
+    ":s",
+    "$national-team$"
+  ],
   "ot": [
     ":s",
     "$others$"
@@ -114,6 +122,10 @@
   "ro": [
     ":s",
     "$romanian$"
+  ],
+  "tms": [
+    ":s",
+    "$teams$"
   ],
   "trgd": [
     ":s",
