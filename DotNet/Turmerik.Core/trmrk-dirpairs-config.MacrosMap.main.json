@@ -87,7 +87,7 @@
     ":s",
     "$foreign-managers-and-coaches$"
   ],
-  "frgnplyr": [
+  "frgnplyrs": [
     ":s",
     "$foreign-players$"
   ],
