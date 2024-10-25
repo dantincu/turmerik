@@ -97,7 +97,7 @@
   ],
   "ro": [
     ":s",
-    "$$romanian$$"
+    "$romanian$"
   ],
   "trgd": [
     ":s",
