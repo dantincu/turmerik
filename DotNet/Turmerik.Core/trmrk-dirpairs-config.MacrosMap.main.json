@@ -71,13 +71,17 @@
     ":s",
     "$environment-geography-nature-and-agriculture$"
   ],
+  "fathl": [
+    ":s",
+    "$former-athletes$"
+  ],
   "fplyr": [
     ":s",
     "$former-players$"
   ],
-  "fathl": [
+  "frfre": [
     ":s",
-    "$former-athletes$"
+    "$former-referees$"
   ],
   "gnr": [
     ":s",
@@ -150,6 +154,10 @@
   "plyr": [
     ":s",
     "$players$"
+  ],
+  "rfre": [
+    ":s",
+    "$referee$"
   ],
   "ro": [
     ":s",
