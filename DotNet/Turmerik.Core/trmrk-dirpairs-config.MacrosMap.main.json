@@ -1,4 +1,8 @@
 {
+  "btnf": [
+    ":s",
+    "$about-infamous$"
+  ],
   "albm": [
     ":s",
     "$albums$"
@@ -98,10 +102,6 @@
   "plyr": [
     ":s",
     "$players$"
-  ],
-  "rgrtbl": [
-    ":s",
-    "$regretable$"
   ],
   "ro": [
     ":s",

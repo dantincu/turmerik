@@ -44,6 +44,7 @@
     },
     "main": {
       "Map": {
+        "btnf": "about-infamous",
         "albm": "albums",
         "art": "artists",
         "athl": "athletes",
@@ -69,7 +70,6 @@
         "msc": "musicians",
         "ot": "others",
         "plyr": "players",
-        "rgrtbl": "regretable",
         "ro": "romanian",
         "trgd": "tragedies",
         "trv": "trivial",
