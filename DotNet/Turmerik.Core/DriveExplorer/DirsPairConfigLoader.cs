@@ -118,22 +118,6 @@ namespace Turmerik.Core.DriveExplorer
             DirsPairConfig config,
             DirsPairConfig nestedConfig)
         {
-            /* config.FileNameMaxLength = NormNllblValue(
-                config.FileNameMaxLength,
-                nestedConfig.FileNameMaxLength);
-
-            config.ThrowIfAnyItemAlreadyExists = NormNllblValue(
-                config.ThrowIfAnyItemAlreadyExists,
-                nestedConfig.ThrowIfAnyItemAlreadyExists);
-
-            config.TrmrkGuidInputName = NormRefValue(
-                config.TrmrkGuidInputName,
-                nestedConfig.TrmrkGuidInputName);
-
-            config.CreatePdfFile = NormNllblValue(
-                config.CreatePdfFile,
-                nestedConfig.CreatePdfFile); */
-
             NormalizeConfigCore(
                 config,
                 nestedConfig);

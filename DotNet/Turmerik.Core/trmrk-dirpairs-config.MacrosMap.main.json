@@ -1,8 +1,4 @@
 {
-  "btnf": [
-    ":s",
-    "$about-infamous$"
-  ],
   "albms": [
     ":s",
     "$albums$"
@@ -15,9 +11,17 @@
     ":s",
     "$athletes$"
   ],
+  "btnf": [
+    ":s",
+    "$about-infamous$"
+  ],
   "cchs": [
     ":s",
     "$coaches$"
+  ],
+  "cdsips": [
+    ":s",
+    "$conductors-and-interpreters$"
   ],
   "clbs": [
     ":s",
@@ -47,15 +51,15 @@
     ":s",
     "$compozitions$"
   ],
-  "cdsips": [
-    ":s",
-    "$conductors-and-interpreters$"
-  ],
   "dcmntrs": [
     ":s",
     "$documentaries$"
   ],
-  "ethgrps": [
+  "egna": [
+    ":s",
+    "$environment-geography-nature-and-agriculture$"
+  ],
+  "ethgs": [
     ":s",
     "$ethnic-groups$"
   ],
@@ -63,13 +67,21 @@
     ":s",
     "$funny$"
   ],
+  "fathls": [
+    ":s",
+    "$former-athletes$"
+  ],
   "fem": [
     ":s",
     "$feminine$"
   ],
-  "egna": [
+  "fplyrs": [
     ":s",
-    "$environment-geography-nature-and-agriculture$"
+    "$former-players$"
+  ],
+  "frfrs": [
+    ":s",
+    "$former-referees$"
   ],
   "frgnathls": [
     ":s",
@@ -83,7 +95,7 @@
     ":s",
     "$foreign-managers$"
   ],
-  "frgncchsmgrs": [
+  "frgnmgrscchs": [
     ":s",
     "$foreign-managers-and-coaches$"
   ],
@@ -91,29 +103,17 @@
     ":s",
     "$foreign-players$"
   ],
-  "fathls": [
-    ":s",
-    "$former-athletes$"
-  ],
-  "fplyrs": [
-    ":s",
-    "$former-players$"
-  ],
-  "frfrs": [
-    ":s",
-    "$former-referees$"
-  ],
   "gnrs": [
     ":s",
     "$genres$"
   ],
-  "hfs": [
-    ":s",
-    "$historical-figures$"
-  ],
   "nf": [
     ":s",
     "$infamous$"
+  ],
+  "hfs": [
+    ":s",
+    "$historical-figures$"
   ],
   "incds": [
     ":s",
@@ -123,6 +123,22 @@
     ":s",
     "$independent-artists$"
   ],
+  "marts": [
+    ":s",
+    "$misc-artists$"
+  ],
+  "masc": [
+    ":s",
+    "$masculine$"
+  ],
+  "mdls": [
+    ":s",
+    "$models$"
+  ],
+  "mfs": [
+    ":s",
+    "$mythological-figures$"
+  ],
   "mgrs": [
     ":s",
     "$managers$"
@@ -131,18 +147,6 @@
     ":s",
     "$managers-and-coaches$"
   ],
-  "masc": [
-    ":s",
-    "$masculine$"
-  ],
-  "marts": [
-    ":s",
-    "$misc-artists$"
-  ],
-  "mdls": [
-    ":s",
-    "$models$"
-  ],
   "movs": [
     ":s",
     "$movies$"
@@ -150,10 +154,6 @@
   "movsdcmntrs": [
     ":s",
     "$movies-and-documentaries$"
-  ],
-  "mfs": [
-    ":s",
-    "$mythological-figures$"
   ],
   "mscs": [
     ":s",

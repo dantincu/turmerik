@@ -27,13 +27,13 @@
     ":s",
     "$funny$"
   ],
-  "fxs": [
-    ":s",
-    "$frameworks$"
-  ],
   "fxlbrs": [
     ":s",
     "$frameworks-and-libraries$"
+  ],
+  "fxs": [
+    ":s",
+    "$frameworks$"
   ],
   "gs": [
     ":s",
@@ -75,10 +75,6 @@
     ":s",
     "$my-products-and-services$"
   ],
-  "orgs": [
-    ":s",
-    "$organizations$"
-  ],
   "opfs": [
     ":s",
     "$online-platforms$"
@@ -87,9 +83,9 @@
     ":s",
     "$online-platforms-and-websites$"
   ],
-  "ps": [
+  "orgs": [
     ":s",
-    "$persons$"
+    "$organizations$"
   ],
   "pgs": [
     ":s",
@@ -107,13 +103,17 @@
     ":s",
     "$places-and-regions$"
   ],
-  "pssvcs": [
-    ":s",
-    "$products-and-services$"
-  ],
   "pps": [
     ":s",
     "$public-persons$"
+  ],
+  "ps": [
+    ":s",
+    "$persons$"
+  ],
+  "pssvcs": [
+    ":s",
+    "$products-and-services$"
   ],
   "rchstry": [
     ":s",
@@ -127,13 +127,13 @@
     ":s",
     "$social-media-platforms$"
   ],
-  "strpfs": [
-    ":s",
-    "$streaming-platforms$"
-  ],
   "smstrpfs": [
     ":s",
     "$social-media-and-streaming-platforms$"
+  ],
+  "strpfs": [
+    ":s",
+    "$streaming-platforms$"
   ],
   "tscs": [
     ":s",
@@ -142,6 +142,10 @@
   "wwws": [
     ":s",
     "$websites$"
+  ],
+  "_inf": [
+    ":s",
+    "$INF-NODES$"
   ],
   "_hcy": [
     ":s",

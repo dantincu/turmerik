@@ -33,6 +33,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
     {
         private readonly IJsonConversion jsonConversion;
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
+        private readonly IConsoleObjectPropsPrinter consoleObjectPropsPrinter;
         private readonly IConsoleArgsParser parser;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
@@ -46,6 +47,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         public ProgramComponent(
             IJsonConversion jsonConversion,
             IConsoleMsgPrinter consoleMsgPrinter,
+            IConsoleObjectPropsPrinter consoleObjectPropsPrinter,
             IConsoleArgsParser consoleArgsParser,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IDirsPairCreatorFactory dirsPairCreatorFactory,
@@ -59,6 +61,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
+
+            this.consoleObjectPropsPrinter = consoleObjectPropsPrinter ?? throw new ArgumentNullException(
+                nameof(consoleObjectPropsPrinter));
 
             parser = consoleArgsParser ?? throw new ArgumentNullException(
                 nameof(consoleArgsParser));
@@ -315,7 +320,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 value => (int)value,
                 value => value.ToString());
 
-            string configSectionJson = jsonConversion.Adapter.Serialize(configSection);
+            // string configSectionJson = jsonConversion.Adapter.Serialize(configSection);
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
 
@@ -324,7 +329,26 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             Console.ForegroundColor = ConsoleColor.Cyan;
 
-            Console.WriteLine(configSectionJson);
+            int tokensCount = 0;
+
+            consoleObjectPropsPrinter.Print(new ()
+            {
+                SrcObject = configSection,
+                OnPropPrinted = () =>
+                {
+                    if ((++tokensCount) % 10 == 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+                        Console.WriteLine("/*");
+                        Console.WriteLine("***********************************************");
+                        Console.WriteLine("*/");
+                        Console.ResetColor();
+                    }
+                }
+            });
+
+            // Console.WriteLine(configSectionJson);
             Console.WriteLine();
 
             Console.ResetColor();

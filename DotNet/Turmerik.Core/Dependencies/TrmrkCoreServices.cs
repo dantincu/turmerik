@@ -28,6 +28,7 @@ namespace Turmerik.Core.Dependencies
         {
             services.AddSingleton<IAppInstanceStartInfoProvider, AppInstanceStartInfoProvider>();
             services.AddSingleton<IConsoleMsgPrinter, ConsoleMsgPrinter>();
+            services.AddSingleton<IConsoleObjectPropsPrinter, ConsoleObjectPropsPrinter>();
             services.AddSingleton<ITimeStampHelper, TimeStampHelper>();
             services.AddSingleton<ILambdaExprHelper, LambdaExprHelper>();
             services.AddSingleton<ILambdaExprHelperFactory, LambdaExprHelperFactory>();
