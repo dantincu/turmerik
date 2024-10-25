@@ -55,6 +55,10 @@
     ":s",
     "$documentaries$"
   ],
+  "dmstclgs": [
+    ":s",
+    "$domestic-leagues$"
+  ],
   "egna": [
     ":s",
     "$environment-geography-nature-and-agriculture$"
