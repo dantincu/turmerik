@@ -43,6 +43,10 @@
     ":s",
     "$history$"
   ],
+  "inf": [
+    ":s",
+    "$info$"
+  ],
   "ins": [
     ":s",
     "$institutions$"

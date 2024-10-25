@@ -10,6 +10,7 @@
   "|fxlbr|": "$frameworks-and-libraries$",
   "|g|": "$groups$",
   "|hs|": "$history$",
+  "|inf|": "$info$",
   "|ins|": "$institutions$",
   "|insorg|": "$institutions-and-organizations$",
   "|gr|": "$geographical-regions$",
