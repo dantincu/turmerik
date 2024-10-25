@@ -75,6 +75,10 @@
     ":s",
     "$independent-artists$"
   ],
+  "mart": [
+    ":s",
+    "$misc-artists$"
+  ],
   "md": [
     ":s",
     "$models$"
