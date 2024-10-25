@@ -99,6 +99,10 @@
     ":s",
     "$players$"
   ],
+  "rgrtbl": [
+    ":s",
+    "$regretable$"
+  ],
   "ro": [
     ":s",
     "$romanian$"
