@@ -15,6 +15,10 @@
     ":s",
     "$athletes$"
   ],
+  "cchs": [
+    ":s",
+    "$coaches$"
+  ],
   "cl": [
     ":s",
     "$clubs$"
@@ -86,6 +90,14 @@
   "indart": [
     ":s",
     "$independent-artists$"
+  ],
+  "mgrs": [
+    ":s",
+    "$managers$"
+  ],
+  "mgrscchs": [
+    ":s",
+    "$managers-and-coaches$"
   ],
   "masc": [
     ":s",
