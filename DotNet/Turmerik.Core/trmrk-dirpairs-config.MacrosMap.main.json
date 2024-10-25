@@ -79,7 +79,7 @@
     ":s",
     "$former-players$"
   ],
-  "frfre": [
+  "frfrs": [
     ":s",
     "$former-referees$"
   ],
@@ -155,9 +155,9 @@
     ":s",
     "$players$"
   ],
-  "rfre": [
+  "rfrs": [
     ":s",
-    "$referee$"
+    "$referees$"
   ],
   "ro": [
     ":s",
