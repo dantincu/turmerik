@@ -47,6 +47,10 @@
     ":s",
     "$funny$"
   ],
+  "fem": [
+    ":s",
+    "$feminine$"
+  ],
   "egna": [
     ":s",
     "$environment-geography-nature-and-agriculture$"
@@ -78,6 +82,10 @@
   "indart": [
     ":s",
     "$independent-artists$"
+  ],
+  "masc": [
+    ":s",
+    "$masculine$"
   ],
   "mart": [
     ":s",
