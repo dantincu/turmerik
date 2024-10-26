@@ -17,7 +17,7 @@ export class AppSettingsPageElement extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    updateAppPageProps(AppPage.Home);
+    updateAppPageProps(AppPage.Settings);
   }
 
   disconnectedCallback() {
@@ -25,6 +25,13 @@ export class AppSettingsPageElement extends LitElement {
   }
 
   render() {
-    return html``;
+    return html`<trmrk-app-panel cssClass="trmrk-app-settings-page-content"
+      ><div slot="panel-content"></div
+    ></trmrk-app-panel>`;
   }
+}
+
+@customElement("trmrk-app-settings-footer-page")
+export class AppSettingsPageFooterElement extends LitElement {
+  static styles = [...globalStyles, ...AppLayoutStyles.value];
 }

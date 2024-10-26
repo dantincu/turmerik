@@ -42,6 +42,9 @@ export class AppElement extends LitElement {
       case AppPage.Home:
         footer = html`<trmrk-app-home-page-footer></trmrk-app-home-page-footer>`;
         break;
+      case AppPage.Settings:
+        footer = html`<trmrk-app-settings-page-footer></trmrk-app-settings-page-footer>`;
+        break;
       case AppPage.FolderEntriesList:
         footer = html`<trmrk-folder-entries-list-footer-page></trmrk-folder-entries-list-footer-page>`;
         break;
@@ -103,6 +106,10 @@ export class AppElement extends LitElement {
             {
               path: "/home",
               component: "trmrk-app-home-page",
+            },
+            {
+              path: "/settings",
+              component: "trmrk-app-settings-page",
             },
             {
               path: "/folder-entries",

@@ -1,8 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators";
 
-import * as bootstrap from "bootstrap";
-
 import { globalStyles } from "../../domUtils/css";
 
 import {
@@ -14,21 +12,28 @@ import {
   appHeaderHistoryBackButtonEnabledPropFactory,
   appHeaderHistoryForwardButtonEnabledPropFactory,
   appHeaderCustomContentStartingColumnsCountPropFactory,
+  appHeaderOptiosButtonDomElemPropFactory,
 } from "../../dataStore/appHeader";
 
 import { enableExplorerPanelPropFactory } from "../../dataStore/appBody";
 
 import {
-  appLayoutRootDomElemPropFactory,
   appTitlePropFactory,
   defaultAppTitlePropFactory,
 } from "../../dataStore/appLayout";
 
 import { appLayoutOptionsPopoverDomElemTagNamePropFactory } from "../../dataStore/appOptionsPopoversContainer";
 
+import {
+  showAppOptionsPopoverPropFactory,
+  optionsPopoverManagerPropFactory,
+} from "../../dataStore/common";
+
 import { AppLayoutStyles } from "./styles";
 
 import { RootElemAvaillableEventData } from "../../domUtils/core";
+
+import { BsPopoverManager } from "../../services/BsPopoverManager";
 
 @customElement("trmrk-app-header")
 export class AppHeaderElement extends LitElement {
@@ -71,12 +76,6 @@ export class AppHeaderElement extends LitElement {
       this
     );
 
-  protected readonly appLayoutRootDomElemProp =
-    appLayoutRootDomElemPropFactory.createController(this);
-
-  protected readonly appLayoutOptionsPopoverDomElemTagNameProp =
-    appLayoutOptionsPopoverDomElemTagNamePropFactory.createController(this);
-
   protected readonly showAppTabsBarProp =
     showAppTabsBarPropFactory.createController(this);
 
@@ -103,25 +102,19 @@ export class AppHeaderElement extends LitElement {
   protected readonly showAppHeaderOptiosButtonProp =
     showAppHeaderOptiosButtonPropFactory.createController(this);
 
+  protected readonly bsPopoverManager =
+    optionsPopoverManagerPropFactory.createController(this);
+
   historyNavButtonsClickEventsAdded: boolean;
 
   historyBackBtnElem: HTMLElement | null;
   historyForwardBtnElem: HTMLElement | null;
-
-  optionsButton: HTMLButtonElement | null;
-  optionsPopover: bootstrap.Popover | null;
-  optionsPopoverShown: boolean;
-  optionsPopoverContentElem: HTMLElement | null;
 
   constructor() {
     super();
     this.historyNavButtonsClickEventsAdded = false;
     this.historyBackBtnElem = null;
     this.historyForwardBtnElem = null;
-    this.optionsButton = null;
-    this.optionsPopover = null;
-    this.optionsPopoverShown = false;
-    this.optionsPopoverContentElem = null;
 
     this.navHistoryBackBtnClicked = this.navHistoryBackBtnClicked.bind(this);
 
@@ -129,13 +122,6 @@ export class AppHeaderElement extends LitElement {
       this.navHistoryForwardBtnClicked.bind(this);
 
     this.optionsBtnClicked = this.optionsBtnClicked.bind(this);
-    this.tryCreateOptionsPopover = this.tryCreateOptionsPopover.bind(this);
-
-    this.documentClickedWhenPopoverShown =
-      this.documentClickedWhenPopoverShown.bind(this);
-
-    this.removeDocumentClickedWhenPopoverShown =
-      this.removeDocumentClickedWhenPopoverShown.bind(this);
   }
 
   render() {
@@ -230,85 +216,46 @@ export class AppHeaderElement extends LitElement {
     window.history.forward();
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.setupOptionsPopoverManager();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.bsPopoverManager.value!.reset();
+  }
+
   updated() {
-    this.tryCreateOptionsPopover();
+    this.setupOptionsPopoverManager();
+  }
+
+  firstUpdated() {
+    this.setupOptionsPopoverManager();
   }
 
   optionsButtonAvaillable(
     e: CustomEvent<RootElemAvaillableEventData<HTMLButtonElement>>
   ) {
-    this.optionsButton = e.detail.rootElem;
-    this.tryCreateOptionsPopover();
+    appHeaderOptiosButtonDomElemPropFactory.value = e.detail.rootElem;
   }
 
   optionsButtonUnavaillable() {
-    this.optionsButton = null;
-    this.optionsPopoverShown = false;
-    this.optionsPopoverContentElem = null;
-
-    if (this.optionsPopover) {
-      this.optionsPopover.dispose();
-      this.optionsPopover = null;
-    }
+    appHeaderOptiosButtonDomElemPropFactory.value = null;
   }
 
   optionsBtnClicked(e: MouseEvent) {
-    if (this.optionsPopover && !this.optionsPopoverShown) {
-      this.optionsPopoverShown = true;
-      this.optionsPopover.show();
-
-      document.addEventListener("click", this.documentClickedWhenPopoverShown, {
-        capture: true,
-      });
-    }
+    this.bsPopoverManager.value!.triggerButtonClicked(e);
   }
 
-  tryCreateOptionsPopover() {
-    const popoverElemTagName =
-      this.appLayoutOptionsPopoverDomElemTagNameProp.value;
-
-    if (
-      popoverElemTagName &&
-      this.optionsButton &&
-      this.appLayoutRootDomElemProp.value
-    ) {
-      this.optionsPopover = new bootstrap.Popover(this.optionsButton, {
-        html: true,
-        content: (this.optionsPopoverContentElem =
-          document.createElement(popoverElemTagName)),
-        trigger: "manual",
-        placement: "left",
-      });
-    }
-  }
-
-  documentClickedWhenPopoverShown(e: MouseEvent) {
-    const currentTarget = e.target as Node;
-
-    if (this.optionsPopover && this.optionsPopoverShown) {
-      if (currentTarget && this.optionsPopoverContentElem) {
-        if (!this.optionsPopoverContentElem.contains(currentTarget)) {
-          this.optionsPopover.hide();
-          this.removeDocumentClickedWhenPopoverShown();
-          setTimeout(() => {
-            this.optionsPopoverShown = false;
-          });
-        }
-      } else {
-        this.removeDocumentClickedWhenPopoverShown();
-      }
-    } else {
-      this.removeDocumentClickedWhenPopoverShown();
-    }
-  }
-
-  removeDocumentClickedWhenPopoverShown() {
-    document.removeEventListener(
-      "click",
-      this.documentClickedWhenPopoverShown,
-      {
-        capture: true,
-      }
-    );
+  setupOptionsPopoverManager() {
+    this.bsPopoverManager.value!.setup({
+      triggerBtnAvaillableControllerFactory:
+        appHeaderOptiosButtonDomElemPropFactory,
+      showPopoverControllerFactory: showAppOptionsPopoverPropFactory,
+      popoverDomElTagNameControllerFactory:
+        appLayoutOptionsPopoverDomElemTagNamePropFactory,
+      placement: "left",
+    });
   }
 }

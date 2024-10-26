@@ -21,10 +21,10 @@ export const showAppTabsBarPropFactory =
   new ObservableValueSingletonControllerFactory(null, false);
 
 export const appHeaderGoToParentButtonPropFactory =
-  new ObservableValueSingletonControllerFactory(null, {
+  new ObservableValueSingletonControllerFactory<ComponentFlags>(null, {
     isVisible: false,
     isEnabled: true,
-  } as ComponentFlags);
+  });
 
 /** Indicates whether to show the ***app header history nav buttons*** or not */
 export const showAppHeaderHistoryNavButtonsPropFactory =
@@ -44,6 +44,10 @@ export const appHeaderHistoryForwardButtonEnabledPropFactory =
 
 /* ----------- => OPTIONS BUTTON
  */
+
+/** Gets or sets the ***app header options button dom element*** */
+export const appHeaderOptiosButtonDomElemPropFactory =
+  new ObservableValueSingletonControllerFactory<HTMLElement | null>(null, null);
 
 /** Indicates whether to show the ***app header options button*** or not */
 export const showAppHeaderOptiosButtonPropFactory =

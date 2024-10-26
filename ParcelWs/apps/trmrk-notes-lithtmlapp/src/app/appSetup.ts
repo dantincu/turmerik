@@ -6,9 +6,15 @@ import { isDevEnv } from "../trmrk/dev";
 import { initApi } from "../trmrk-axios/core";
 import { FsExplorerApi } from "../trmrk-axios/FsExplorerApi/api";
 
-import { homePageUrlPropFactory } from "../trmrk-lithtml/dataStore/common";
+import {
+  homePageUrlPropFactory,
+  settingsPageUrlPropFactory,
+  optionsPopoverManagerPropFactory,
+} from "../trmrk-lithtml/dataStore/common";
 
 import { defaultAppTitlePropFactory } from "../trmrk-lithtml/dataStore/appLayout";
+
+import { BsPopoverManager } from "../trmrk-lithtml/services/BsPopoverManager";
 
 import { globalStyles as globalStylesArr } from "./domUtils/css";
 import { CoreComponents } from "../trmrk-lithtml/components";
@@ -49,6 +55,7 @@ export const AppComponents = {
 export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
   isDevEnv.value = isDev ?? null;
   homePageUrlPropFactory.observable.value = "/app/home";
+  settingsPageUrlPropFactory.observable.value = "/app/settings";
   defaultAppTitlePropFactory.observable.value = "Turmerik Notes";
 
   initApi(apiSvc, appConfig);
@@ -58,6 +65,8 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
     isLocalFilesWinOS: appConfig.isWinOS,
     relPath: "files",
   });
+
+  optionsPopoverManagerPropFactory.value = new BsPopoverManager();
 
   (function () {
     initRouter();

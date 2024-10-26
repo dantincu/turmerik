@@ -57,7 +57,7 @@ export const removeAppLayoutPopover = <THTMLElement extends HTMLElement>(
 
 /** Gets or sets the ***app layout options popover element tag name*** */
 export const appLayoutOptionsPopoverDomElemTagNamePropFactory =
-  new ObservableValueSingletonControllerFactory<string | null>(
+  new ObservableValueSingletonControllerFactory<string>(
     null,
     "trmrk-app-options-popover-content"
   );

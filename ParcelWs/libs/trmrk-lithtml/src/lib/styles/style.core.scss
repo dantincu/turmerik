@@ -116,3 +116,15 @@ body {
     var(--trmrk-scrollable-track-hover_color_light),
     var(--trmrk-scrollable-thumb-hover_color_light));
 }
+
+.trmrk-form-group {
+  line-height: 40px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.trmrk-form-label {
+  line-height: 40px;
+  vertical-align: middle;
+  cursor: pointer;
+}
