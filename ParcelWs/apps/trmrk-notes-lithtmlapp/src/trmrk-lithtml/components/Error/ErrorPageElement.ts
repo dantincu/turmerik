@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators";
 
 import trmrk from "../../../trmrk";
 
-import { AppLayoutStyles } from "../AppLayout/core";
+import { AppLayoutStyles } from "../AppLayout/styles";
 
 import { globalStyles } from "../../domUtils/css";
 

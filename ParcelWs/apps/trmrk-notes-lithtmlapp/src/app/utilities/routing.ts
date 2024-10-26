@@ -1,7 +1,5 @@
-import {
-  showAppHeaderPropFactory,
-  showAppFooterPropFactory,
-} from "../../trmrk-lithtml/components/AppLayout/core";
+import { showAppHeaderPropFactory } from "../../trmrk-lithtml/dataStore/appHeader";
+import { showAppFooterPropFactory } from "../../trmrk-lithtml/dataStore/appFooter";
 
 export const catchAllNotFound = (
   catchAllPseudoParamName: string,

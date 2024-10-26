@@ -6,37 +6,29 @@ import * as bootstrap from "bootstrap";
 import { globalStyles } from "../../domUtils/css";
 
 import {
-  AppLayoutStyles,
-  appLayoutRootDomElemPropFactory,
-  appLayoutOptionsPopoverDomElemTagNamePropFactory,
   showAppTabsBarPropFactory,
-  appTitlePropFactory,
-  defaultAppTitlePropFactory,
-  enableExplorerPanelPropFactory,
   showAppHeaderHistoryNavButtonsPropFactory,
-  showAppHeaderGoToParentButtonPropFactory,
-  appHeaderGoToParentButtonEnabledPropFactory,
+  appHeaderGoToParentButtonPropFactory,
   enableAppHeaderHistoryNavButtonsDefaultBehaviorPropFactory,
   showAppHeaderOptiosButtonPropFactory,
   appHeaderHistoryBackButtonEnabledPropFactory,
   appHeaderHistoryForwardButtonEnabledPropFactory,
   appHeaderCustomContentStartingColumnsCountPropFactory,
-} from "./core";
+} from "../../dataStore/appHeader";
+
+import { enableExplorerPanelPropFactory } from "../../dataStore/appBody";
+
+import {
+  appLayoutRootDomElemPropFactory,
+  appTitlePropFactory,
+  defaultAppTitlePropFactory,
+} from "../../dataStore/appLayout";
+
+import { appLayoutOptionsPopoverDomElemTagNamePropFactory } from "../../dataStore/appOptionsPopoversContainer";
+
+import { AppLayoutStyles } from "./styles";
 
 import { RootElemAvaillableEventData } from "../../domUtils/core";
-
-/* class MyCustomElement extends HTMLElement {
-  constructor() {
-    super();
-    // Initialization code here
-  }
-
-  connectedCallback() {
-    this.innerHTML = `<p>Custom content inside the element</p>`;
-  }
-}
-
-customElements.define("my-custom-element", MyCustomElement); */
 
 @customElement("trmrk-app-header")
 export class AppHeaderElement extends LitElement {
@@ -88,11 +80,8 @@ export class AppHeaderElement extends LitElement {
   protected readonly showAppTabsBarProp =
     showAppTabsBarPropFactory.createController(this);
 
-  protected readonly showAppHeaderGoToParentButtonProp =
-    showAppHeaderGoToParentButtonPropFactory.createController(this);
-
-  protected readonly appHeaderGoToParentButtonEnabledProp =
-    appHeaderGoToParentButtonEnabledPropFactory.createController(this);
+  protected readonly appHeaderGoToParentButtonProp =
+    appHeaderGoToParentButtonPropFactory.createController(this);
 
   protected readonly showAppHeaderHistoryNavButtonsProp =
     showAppHeaderHistoryNavButtonsPropFactory.createController(this);
@@ -151,7 +140,7 @@ export class AppHeaderElement extends LitElement {
 
   render() {
     const showAppHeaderGoToParentButtonsCountIncVal = this
-      .showAppHeaderGoToParentButtonProp.value
+      .appHeaderGoToParentButtonProp.value.isVisible
       ? 1
       : 0;
 
@@ -173,10 +162,11 @@ export class AppHeaderElement extends LitElement {
 
     return html`<header class="trmrk-app-header">
       <slot name="header-first-content"></slot>
-      ${this.showAppHeaderGoToParentButtonProp.value
+      ${this.appHeaderGoToParentButtonProp.value.isVisible
         ? html`<trmrk-bs-icon-btn
             btnHasNoBorder
-            ?btnDisabled="${!this.appHeaderGoToParentButtonEnabledProp.value}"
+            ?btnDisabled="${!this.appHeaderGoToParentButtonProp.value
+              .isEnabled}"
             iconCssClass="bi-arrow-up"
             class="col-start-${this
               .appHeaderCustomContentStartingColumnsCountProp.value + 1}"

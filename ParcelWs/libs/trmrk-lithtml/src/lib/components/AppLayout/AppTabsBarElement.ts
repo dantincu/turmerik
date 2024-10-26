@@ -3,11 +3,7 @@ import { customElement, property } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
-import {
-  AppLayoutStyles,
-  showAppHeaderHistoryNavButtonsPropFactory,
-  enableExplorerPanelPropFactory,
-} from "./core";
+import { AppLayoutStyles } from "./styles";
 
 @customElement("trmrk-app-tabs-bar")
 export class AppTabsBarElement extends LitElement {

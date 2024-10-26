@@ -10,8 +10,8 @@ import { AxiosResponse, ApiResponse, ns } from "../../../../trmrk-axios/core";
 import { vaadinRouteGoEventControllerFactory } from "../../../../trmrk-lithtml/controlers/VaadinRouteGoEventControllerFactory";
 import { globalStyles } from "../../../domUtils/css";
 import { CoreComponents } from "../../../../trmrk-lithtml/components";
-import { updateAppPageProps, AppPage } from "../../../utilities/data";
-import { AppLayoutStyles } from "../../../../trmrk-lithtml/components/AppLayout/core";
+import { updateAppPageProps, AppPage } from "../../../dataStore/core";
+import { AppLayoutStyles } from "../../../../trmrk-lithtml/components/AppLayout/styles";
 
 import { createAxiosReqDataTask } from "../../../../trmrk-lithtml/tasks/AxiosReqDataTask";
 
@@ -82,7 +82,7 @@ export class FolderEntriesListPageElement extends LitElement {
   }
 
   render() {
-    console.log("this.data", this.data);
+    // console.log("this.data", this.data);
 
     if (this.data) {
       if (this.data.SubFolders!.length || this.data.FolderFiles!.length) {

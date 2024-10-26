@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
-import { AppLayoutStyles } from "./core";
+import { AppLayoutStyles } from "./styles";
 
 import {
   updateHtmlDocTitle,

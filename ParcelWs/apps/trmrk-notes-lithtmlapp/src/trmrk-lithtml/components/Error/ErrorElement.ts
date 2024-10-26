@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators";
 
-import { AppLayoutStyles } from "../AppLayout/core";
+import { AppLayoutStyles } from "../AppLayout/styles";
 
 import { globalStyles } from "../../domUtils/css";
 

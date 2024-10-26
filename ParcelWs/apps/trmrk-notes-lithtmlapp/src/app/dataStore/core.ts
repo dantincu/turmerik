@@ -2,14 +2,18 @@ import { ObservableValueSingletonControllerFactory } from "../../trmrk-lithtml/c
 
 import {
   appHeaderCustomContentStartingColumnsCountPropFactory,
-  showAppHeaderGoToParentButtonPropFactory,
-  enableExplorerPanelPropFactory,
+  appHeaderGoToParentButtonPropFactory,
   showAppTabsBarPropFactory,
+} from "../../trmrk-lithtml/dataStore/appHeader";
+
+import {
   showAppFooterPropFactory,
   showAppFooterHomeButtonPropFactory,
   showAppFooterUndoRedoButtonsPropFactory,
   showAppFooterCloseSelectionButtonPropFactory,
-} from "../../trmrk-lithtml/components/AppLayout/core";
+} from "../../trmrk-lithtml/dataStore/appFooter";
+
+import { enableExplorerPanelPropFactory } from "../../trmrk-lithtml/dataStore/appBody";
 
 export enum AppPage {
   Home = 0,
@@ -24,7 +28,11 @@ export const updateAppPageProps = (appPage: AppPage | null) => {
   appPagePropFactory.value = appPage;
 
   if ((appPage ?? null) !== null) {
-    showAppHeaderGoToParentButtonPropFactory.value = false;
+    appHeaderGoToParentButtonPropFactory.value = {
+      isVisible: false,
+      isEnabled: true,
+    };
+
     enableExplorerPanelPropFactory.value = false;
     if (appPage! <= AppPage.Settings) {
       if (appPage == AppPage.Home) {
@@ -43,7 +51,11 @@ export const updateAppPageProps = (appPage: AppPage | null) => {
         showAppFooterCloseSelectionButtonPropFactory.value = false;
       }
     } else {
-      showAppHeaderGoToParentButtonPropFactory.value = true;
+      appHeaderGoToParentButtonPropFactory.value = {
+        isVisible: true,
+        isEnabled: true,
+      };
+
       enableExplorerPanelPropFactory.value = true;
       appHeaderCustomContentStartingColumnsCountPropFactory.value = 0;
       showAppTabsBarPropFactory.value = true;

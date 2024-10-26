@@ -7,7 +7,7 @@ import { updateHtmlDocTitle } from "../../../trmrk-browser/domUtils/core";
 
 import { globalStyles } from "../../domUtils/css";
 
-import { AppLayoutStyles } from "./core";
+import { AppLayoutStyles } from "./styles";
 
 @customElement("trmrk-app-page")
 export class AppPageElement extends LitElement {

@@ -7,14 +7,15 @@ import { vaadinRouteGoEventControllerFactory } from "../../trmrk-lithtml/control
 import { globalStyles } from "../domUtils/css";
 import { catchAllNotFound } from "../utilities/routing";
 
-import { appPagePropFactory, AppPage } from "../utilities/data";
+import { appPagePropFactory, AppPage } from "../dataStore/core";
 
 import {
-  AppLayoutStyles,
   showAppHeaderPropFactory,
   showAppHeaderHistoryNavButtonsPropFactory,
   showAppHeaderOptiosButtonPropFactory,
-} from "../../trmrk-lithtml/components/AppLayout/core";
+} from "../../trmrk-lithtml/dataStore/appHeader";
+
+import { AppLayoutStyles } from "../../trmrk-lithtml/components/AppLayout/styles";
 
 import { icons } from "../assets/icons";
 

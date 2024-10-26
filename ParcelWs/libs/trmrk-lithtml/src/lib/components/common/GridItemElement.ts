@@ -1,7 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators";
 
-import { AppLayoutStyles } from "../AppLayout/core";
+import { AppLayoutStyles } from "../AppLayout/styles";
+
 import { globalStyles } from "../../domUtils/css";
 import { customEvent } from "../../../trmrk-browser/domUtils/core";
 

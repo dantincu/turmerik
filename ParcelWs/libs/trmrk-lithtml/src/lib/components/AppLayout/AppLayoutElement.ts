@@ -10,19 +10,26 @@ import {
 import { globalStyles } from "../../domUtils/css";
 
 import {
+  showAppHeaderPropFactory,
+  showAppTabsBarPropFactory,
+} from "../../dataStore/appHeader";
+
+import { showAppFooterPropFactory } from "../../dataStore/appFooter";
+
+import { enableExplorerPanelPropFactory } from "../../dataStore/appBody";
+
+import {
   appLayoutRootDomElemPropFactory,
-  appLayoutPopoversContainerDomElemPropFactory,
   appLayoutCssClassPropFactory,
   docTitlePropFactory,
   defaultDocTitlePropFactory,
   appTitlePropFactory,
   defaultAppTitlePropFactory,
-  showAppHeaderPropFactory,
-  showAppTabsBarPropFactory,
-  showAppFooterPropFactory,
-  enableExplorerPanelPropFactory,
-  AppLayoutStyles,
-} from "./core";
+} from "../../dataStore/appLayout";
+
+import { appLayoutPopoversContainerDomElemPropFactory } from "../../dataStore/appOptionsPopoversContainer";
+
+import { AppLayoutStyles } from "./styles";
 
 import {
   isCompactModePropFactory,

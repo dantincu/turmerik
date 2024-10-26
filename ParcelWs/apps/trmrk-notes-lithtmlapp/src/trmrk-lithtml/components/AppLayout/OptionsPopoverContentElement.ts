@@ -3,7 +3,7 @@ import { customElement } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
-import { AppLayoutStyles } from "./core";
+import { AppLayoutStyles } from "./styles";
 
 @customElement("trmrk-options-popover-content")
 export class OptionsPopoverContentElement extends LitElement {
@@ -17,6 +17,8 @@ export class OptionsPopoverContentElement extends LitElement {
   ];
 
   render() {
-    return html`<div class="trmrk-options-popover-content">asdfasdfsdaf</div>`;
+    return html`<div class="trmrk-options-popover-content">
+      <trmrk-bs-icon-btn btnHasNoBorder></trmrk-bs-icon-btn>
+    </div>`;
   }
 }

@@ -3,9 +3,7 @@ import { customElement, property } from "lit/decorators";
 
 import { globalStyles } from "../../domUtils/css";
 
-import { AppPage, updateAppPageProps } from "../../utilities/data";
-
-import { AppLayoutStyles } from "../../../trmrk-lithtml/components/AppLayout/core";
+import { AppLayoutStyles } from "../../../trmrk-lithtml/components/AppLayout/styles";
 
 @customElement("trmrk-app-options-popover-content")
 export class AppOptionsPopoverContentElement extends LitElement {

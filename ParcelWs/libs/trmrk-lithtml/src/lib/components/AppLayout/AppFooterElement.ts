@@ -4,14 +4,16 @@ import { customElement, property } from "lit/decorators";
 import { globalStyles } from "../../domUtils/css";
 
 import {
-  AppLayoutStyles,
-  homePageUrlPropFactory,
   showAppFooterUndoRedoButtonsPropFactory,
   showAppFooterHomeButtonPropFactory,
   showAppFooterCloseSelectionButtonPropFactory,
   appFooterUndoButtonEnabledPropFactory,
   appFooterRedoButtonEnabledPropFactory,
-} from "./core";
+} from "../../dataStore/appFooter";
+
+import { homePageUrlPropFactory } from "../../dataStore/common";
+
+import { AppLayoutStyles } from "./styles";
 
 @customElement("trmrk-app-footer")
 export class AppFooterElement extends LitElement {

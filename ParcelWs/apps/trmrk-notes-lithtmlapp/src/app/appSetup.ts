@@ -6,10 +6,9 @@ import { isDevEnv } from "../trmrk/dev";
 import { initApi } from "../trmrk-axios/core";
 import { FsExplorerApi } from "../trmrk-axios/FsExplorerApi/api";
 
-import {
-  defaultAppTitlePropFactory,
-  homePageUrlPropFactory,
-} from "../trmrk-lithtml/components/AppLayout/core";
+import { homePageUrlPropFactory } from "../trmrk-lithtml/dataStore/common";
+
+import { defaultAppTitlePropFactory } from "../trmrk-lithtml/dataStore/appLayout";
 
 import { globalStyles as globalStylesArr } from "./domUtils/css";
 import { CoreComponents } from "../trmrk-lithtml/components";
