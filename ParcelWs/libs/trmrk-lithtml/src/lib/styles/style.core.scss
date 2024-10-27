@@ -67,6 +67,11 @@ body {
   line-break: anywhere;
 }
 
+.trmrk-label-link {
+  height: 40px;
+  padding: 0px;
+}
+
 .trmrk-btn-link {
   width: 40px;
   height: 40px;
@@ -77,6 +82,26 @@ body {
   width: 80px;
   height: 80px;
   padding: 0px;
+}
+
+.trmrk-form-group {
+  display: flex;
+  line-height: 40px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.trmrk-form-label {
+  line-height: 40px;
+  vertical-align: middle;
+  cursor: pointer;
+  padding-top: 0.25em;
+}
+
+.trmrk-label-link .trmrk-form-label {
+  position: relative;
+  top: -1em;
+  padding-top: 0em;
 }
 
 .trmrk-scrollable::-webkit-scrollbar {
@@ -121,16 +146,4 @@ body {
     var(--trmrk-scrollable-thumb_color_light),
     var(--trmrk-scrollable-track-hover_color_light),
     var(--trmrk-scrollable-thumb-hover_color_light));
-}
-
-.trmrk-form-group {
-  line-height: 40px;
-  text-align: left;
-  vertical-align: middle;
-}
-
-.trmrk-form-label {
-  line-height: 40px;
-  vertical-align: middle;
-  cursor: pointer;
 }

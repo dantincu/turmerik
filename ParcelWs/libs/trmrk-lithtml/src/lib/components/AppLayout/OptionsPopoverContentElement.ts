@@ -21,7 +21,14 @@ export class OptionsPopoverContentElement extends LitElement {
     ...globalStyles.value,
     ...AppLayoutStyles.value,
     css`
+      :host {
+        display: flex;
+      }
+
       .trmrk-options-popover-content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
       }
     `,
   ];
@@ -42,7 +49,7 @@ export class OptionsPopoverContentElement extends LitElement {
   protected settingsPageUrl = settingsPageUrlPropFactory.createController(this);
 
   render() {
-    return html`<div class="trmrk-options-popover-content w-[200px]">
+    return html` <div class="trmrk-options-popover-content">
       ${this.refreshAppPageButton.value.isVisible
         ? html`<div class="trmrk-form-group">
             <label
@@ -52,7 +59,6 @@ export class OptionsPopoverContentElement extends LitElement {
             >
             <trmrk-bs-icon-btn
               @click=${this.refreshAppPageBtnClicked}
-              class="absolute"
               btnHasNoBorder
               ?btnDisabled=${!this.refreshAppPageButton.value.isEnabled}
               iconCssClass="bi-arrow-clockwise"
@@ -68,7 +74,6 @@ export class OptionsPopoverContentElement extends LitElement {
             >
             <trmrk-bs-icon-btn
               @click=${this.viewCurrentlyOpenTabsBtnClicked}
-              class="absolute"
               btnHasNoBorder
               ?btnDisabled=${!this.refreshAppPageButton.value.isEnabled}
               iconCssClass="bi-segmented-nav"
@@ -77,12 +82,11 @@ export class OptionsPopoverContentElement extends LitElement {
         : null}
       ${this.refreshAppPageButton.value.isVisible
         ? html`<div class="trmrk-form-group">
-            <a href="${this.settingsPageUrl.value}"
+            <a class="trmrk-label-link" href="${this.settingsPageUrl.value}"
               @click=${
                 this.goToSettingsPageBtnClicked
               }><label class="trmrk-form-label">Settings</label>
             <trmrk-bs-icon-btn
-              class="absolute"
               btnHasNoBorder
               ?btnDisabled=${!this.refreshAppPageButton.value.isEnabled}
               iconCssClass="bi-gear"

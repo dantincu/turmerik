@@ -674,6 +674,14 @@ video {
   margin-top: 6rem;
 }
 
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
 .h-24 {
   height: 6rem;
 }
