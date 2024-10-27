@@ -1,9 +1,8 @@
 import * as bootstrap from "bootstrap";
 
-import {
-  PopoverPlacement,
-  PopoverTrigger,
-} from "../../trmrk-browser/bootstrapLib/core";
+import { PopoverNs } from "../../trmrk-browser/ext-libs/bootstrap/typeDefs/popover";
+
+import { Tooltip } from "../../trmrk-browser/ext-libs/bootstrap/typeDefs/tooltip";
 
 import { ObservableValueSingletonControllerFactory } from "../controlers/ObservableValueController";
 
@@ -15,7 +14,15 @@ export interface BsPopoverManagerOpts<THTMLElement extends HTMLElement> {
     | null
     | undefined;
   popoverDomElFactory?: (() => HTMLElement) | null | undefined;
-  placement?: (PopoverPlacement | (() => PopoverPlacement)) | null | undefined;
+  placement?:
+    | (Tooltip.PopoverPlacement | (() => Tooltip.PopoverPlacement))
+    | null
+    | undefined;
+
+  offset?:
+    | (Tooltip.Offset | string | Tooltip.OffsetFunction)
+    | null
+    | undefined;
 }
 
 export class BsPopoverManager<THTMLElement extends HTMLElement>
@@ -25,12 +32,18 @@ export class BsPopoverManager<THTMLElement extends HTMLElement>
   triggerBtn!: THTMLElement | null;
 
   showPopoverControllerFactory!: ObservableValueSingletonControllerFactory<boolean>;
+
   popoverDomElTagNameControllerFactory?:
     | ObservableValueSingletonControllerFactory<string>
     | null
     | undefined;
   popoverDomElFactory!: () => HTMLElement;
-  placement: (PopoverPlacement | (() => PopoverPlacement)) | undefined;
+
+  placement:
+    | (Tooltip.PopoverPlacement | (() => Tooltip.PopoverPlacement))
+    | undefined;
+
+  offset: (Tooltip.Offset | string | Tooltip.OffsetFunction) | undefined;
 
   popover: bootstrap.Popover | null = null;
   popoverContentElem: HTMLElement | null = null;
@@ -78,6 +91,7 @@ export class BsPopoverManager<THTMLElement extends HTMLElement>
         ));
 
     this.placement = opts.placement ?? undefined;
+    this.offset = opts.offset ?? undefined;
   }
 
   public reset() {
@@ -143,15 +157,18 @@ export class BsPopoverManager<THTMLElement extends HTMLElement>
 
   createOptionsPopoverIfReq() {
     if (!this.popover && this.triggerBtn) {
-      const opts = {
+      const opts: Partial<PopoverNs.Options> = {
         html: true,
         content: (this.popoverContentElem = this.popoverDomElFactory()),
-        trigger: "manual" as PopoverTrigger,
-        placement: this.placement,
+        trigger: "manual",
       };
 
-      if (!this.placement) {
-        delete opts.placement;
+      if (this.placement) {
+        opts.placement = this.placement;
+      }
+
+      if (this.offset) {
+        opts.offset = this.offset;
       }
 
       this.popover = new bootstrap.Popover(this.triggerBtn, opts);
@@ -167,7 +184,6 @@ export class BsPopoverManager<THTMLElement extends HTMLElement>
 
   onDocumentClickedWhenPopoverShown(e: MouseEvent) {
     var composedPathResult = e.composedPath();
-
     let hidePopup: boolean = true;
 
     if (this.popover && this.showPopoverControllerFactory.value) {

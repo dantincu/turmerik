@@ -5,6 +5,10 @@ import { MtblRefValue } from "../../../trmrk/core";
 export const AppLayoutStyles: MtblRefValue<CSSResult[]> = {
   value: [
     css`
+      :host {
+        font-family: "Roboto", "Arial";
+      }
+
       .trmrk-app-layout {
         display: block;
         position: relative;

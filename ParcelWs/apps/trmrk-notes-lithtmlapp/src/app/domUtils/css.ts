@@ -1,3 +1,5 @@
+import { css } from "lit";
+
 import * as bootstrapObj from "bootstrap";
 
 import {
@@ -5,7 +7,9 @@ import {
   globalStyles as globalStylesObj,
 } from "../../trmrk-lithtml/domUtils/css";
 
-export const globalStyles = [...getGlobalStylesArr()];
+export const appStyle = css``;
+
+export const globalStyles = [...getGlobalStylesArr(), appStyle];
 
 export const bootstrap = bootstrapObj;
 

@@ -1,8 +1,19 @@
+@font-face {
+    font-family: 'Roboto Black';
+    src: url('/src/trmrk-browser/TypeFaces/Roboto/Roboto-Black.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('/src/trmrk-browser/TypeFaces/Roboto/Roboto-Regular.ttf');
+}
+
 html {
   height: 100%;
 }
 
 body {
+  font-family: "Roboto Black", "Arial";
   height: 100%;
   margin: 0;
   padding: 0;

@@ -4,7 +4,7 @@ import { Task } from "@lit/task";
 
 import { getFileNameExtnWithoutLeadingDot } from "../../../../trmrk/notes-path";
 import { DriveItem } from "../../../../trmrk/drive-item";
-import { getBootstrapFileIcon } from "../../../../trmrk-browser/bootstrapLib/file-icons";
+import { getBootstrapFileIcon } from "../../../../trmrk-browser/ext-libs/bootstrap/file-icons";
 import { driveExplorerApi } from "../../../services/DriveExplorerApi";
 import { AxiosResponse, ApiResponse, ns } from "../../../../trmrk-axios/core";
 import { vaadinRouteGoEventControllerFactory } from "../../../../trmrk-lithtml/controlers/VaadinRouteGoEventControllerFactory";
