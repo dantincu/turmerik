@@ -11,7 +11,7 @@ import {
   refreshAppPageButtonPropFactory,
   viewOpenTabsButtonPropFactory,
   goToSettingsPageButtonPropFactory,
-} from "../../dataStore/appOptionsPopoverContent";
+} from "../../dataStore/appOptionsPopover";
 
 import { optionsPopoverManagerPropFactory } from "../../dataStore/common";
 

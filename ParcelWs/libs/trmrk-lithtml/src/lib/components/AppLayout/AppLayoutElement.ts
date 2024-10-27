@@ -27,14 +27,12 @@ import {
   defaultAppTitlePropFactory,
 } from "../../dataStore/appLayout";
 
-import { appLayoutPopoversContainerDomElemPropFactory } from "../../dataStore/appOptionsPopoversContainer";
-
 import { AppLayoutStyles } from "./styles";
 
 import {
   isCompactModePropFactory,
   isDarkModePropFactory,
-} from "../../domUtils/core";
+} from "../../dataStore/common";
 
 @customElement("trmrk-app-layout")
 export class AppLayoutElement extends LitElement {
@@ -126,7 +124,6 @@ export class AppLayoutElement extends LitElement {
               ></slot>
               </trmrk-app-footer>`
           : null}
-        <div class="trmrk-popovers-container"></div>
       </div>`,
     ];
   }
@@ -144,7 +141,6 @@ export class AppLayoutElement extends LitElement {
     this.appTitleProp.observable.unsubscribe(this.appTitleUpdated);
 
     appLayoutRootDomElemPropFactory.value = null;
-    appLayoutPopoversContainerDomElemPropFactory.value = null;
   }
 
   updated(changedProperties: PropertyValues) {
@@ -185,9 +181,5 @@ export class AppLayoutElement extends LitElement {
     const rootElem = this.renderRoot;
     appLayoutRootDomElemPropFactory.value =
       rootElem.querySelector(".trmrk-app-layout");
-
-    appLayoutPopoversContainerDomElemPropFactory.value = rootElem.querySelector(
-      ".trmrk-app-layout > .trmrk-popovers-container"
-    );
   }
 }

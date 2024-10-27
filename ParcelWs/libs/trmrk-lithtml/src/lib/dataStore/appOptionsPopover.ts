@@ -2,6 +2,12 @@ import { ObservableValueSingletonControllerFactory } from "../controlers/Observa
 
 import { ComponentFlags } from "./core";
 
+export const appLayoutOptionsPopoverDomElemTagNamePropFactory =
+  new ObservableValueSingletonControllerFactory<string>(
+    null,
+    "trmrk-app-options-popover-content"
+  );
+
 export const refreshAppPageButtonPropFactory =
   new ObservableValueSingletonControllerFactory<ComponentFlags>(null, {
     isVisible: true,

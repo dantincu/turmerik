@@ -6,7 +6,6 @@ import { globalStyles } from "../../domUtils/css";
 import { AppLayoutStyles } from "./styles";
 
 import {
-  updateHtmlDocTitle,
   getAppThemeCssClassName,
   getAppModeCssClassName,
 } from "../../../trmrk-browser/domUtils/core";
@@ -14,7 +13,7 @@ import {
 import {
   isCompactModePropFactory,
   isDarkModePropFactory,
-} from "../../domUtils/core";
+} from "../../dataStore/common";
 
 @customElement("trmrk-app-panel")
 export class AppPanelElement extends LitElement {

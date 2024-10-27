@@ -7,7 +7,7 @@ import { ComponentFlags } from "./core";
 
 /** Indicates whether to show the ***app header*** or not */
 export const showAppHeaderPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /** Indicates the number of starting columns of the app header to leave for custom content (default 0) */
 export const appHeaderCustomContentStartingColumnsCountPropFactory =
@@ -18,7 +18,7 @@ export const appHeaderCustomContentStartingColumnsCountPropFactory =
 
 /** Indicates whether to show the ***app tabs bar*** or not */
 export const showAppTabsBarPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 export const appHeaderGoToParentButtonPropFactory =
   new ObservableValueSingletonControllerFactory<ComponentFlags>(null, {
@@ -28,7 +28,7 @@ export const appHeaderGoToParentButtonPropFactory =
 
 /** Indicates whether to show the ***app header history nav buttons*** or not */
 export const showAppHeaderHistoryNavButtonsPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /** Indicates whether to show the ***app header history nav buttons*** or not */
 export const enableAppHeaderHistoryNavButtonsDefaultBehaviorPropFactory =
@@ -51,4 +51,4 @@ export const appHeaderOptiosButtonDomElemPropFactory =
 
 /** Indicates whether to show the ***app header options button*** or not */
 export const showAppHeaderOptiosButtonPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);

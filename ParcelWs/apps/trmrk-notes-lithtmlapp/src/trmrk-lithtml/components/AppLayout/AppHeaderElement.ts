@@ -22,7 +22,7 @@ import {
   defaultAppTitlePropFactory,
 } from "../../dataStore/appLayout";
 
-import { appLayoutOptionsPopoverDomElemTagNamePropFactory } from "../../dataStore/appOptionsPopoversContainer";
+import { appLayoutOptionsPopoverDomElemTagNamePropFactory } from "../../dataStore/appOptionsPopover";
 
 import {
   showAppOptionsPopoverPropFactory,

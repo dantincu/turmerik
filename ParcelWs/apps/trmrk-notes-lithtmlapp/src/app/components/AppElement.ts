@@ -9,12 +9,6 @@ import { catchAllNotFound } from "../utilities/routing";
 
 import { appPagePropFactory, AppPage } from "../dataStore/core";
 
-import {
-  showAppHeaderPropFactory,
-  showAppHeaderHistoryNavButtonsPropFactory,
-  showAppHeaderOptiosButtonPropFactory,
-} from "../../trmrk-lithtml/dataStore/appHeader";
-
 import { AppLayoutStyles } from "../../trmrk-lithtml/components/AppLayout/styles";
 
 import { icons } from "../assets/icons";
@@ -53,6 +47,11 @@ export class AppElement extends LitElement {
     }
 
     return html`<trmrk-app-layout>
+      <main slot="body-content" class="w-full h-full"></main>
+      <div slot="footer-content">${footer}</div>
+    </trmrk-app-layout>`;
+
+    /* html`<trmrk-app-layout>
       ${this.appPageProp.value === AppPage.Home
         ? html`<div slot="header-first-content" class="col-start-1 col-end-1">
             <img
@@ -63,7 +62,7 @@ export class AppElement extends LitElement {
         : null}
       <main slot="body-content" class="w-full h-full"></main>
       <div slot="footer-content">${footer}</div>
-    </trmrk-app-layout>`;
+    </trmrk-app-layout>` */
   }
 
   connectedCallback() {
@@ -83,9 +82,6 @@ export class AppElement extends LitElement {
   }
 
   firstUpdated() {
-    showAppHeaderPropFactory.observable.value = true;
-    showAppHeaderHistoryNavButtonsPropFactory.observable.value = true;
-    showAppHeaderOptiosButtonPropFactory.value = true;
     this.subscribeRouterIfReq();
   }
 

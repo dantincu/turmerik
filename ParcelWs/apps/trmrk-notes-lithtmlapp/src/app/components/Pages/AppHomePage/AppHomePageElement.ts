@@ -26,7 +26,7 @@ export class AppHomePageElement extends LitElement {
 
   render() {
     return html`<trmrk-app-panel cssClass="trmrk-app-home-page-content"
-      ><div slot="panel-content"></div
+      ><div class="trmrk-panel-content" slot="panel-content"></div
     ></trmrk-app-panel>`;
   }
 }

@@ -1,8 +1,5 @@
-import { ObservableValueSingletonControllerFactory } from "../controlers/ObservableValueController";
-
 import {
   isDarkMode,
-  isCompactMode,
   setIsDarkModeToLocalStorage,
   setIsCompactModeToLocalStorage,
   appModeCssClass,
@@ -51,12 +48,6 @@ export const setAppMode = (
 
   appModeCssClass.value = getAppModeCssClassName(isCompactModeValue);
 };
-
-export const isDarkModePropFactory =
-  new ObservableValueSingletonControllerFactory(null, initDomAppTheme());
-
-export const isCompactModePropFactory =
-  new ObservableValueSingletonControllerFactory(null, isCompactMode());
 
 export const eventNames = Object.freeze({
   rootElemAvaillable: "rootelemavaillable",

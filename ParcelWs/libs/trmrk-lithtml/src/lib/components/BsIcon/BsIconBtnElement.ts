@@ -3,15 +3,15 @@ import { customElement, property } from "lit/decorators";
 
 import trmrk from "../../../trmrk";
 import { Constructor } from "../../../trmrk/core";
-import { customEvent } from "../../../trmrk-browser/domUtils/core";
 
 import { ObservableValueController } from "../../controlers/ObservableValueController";
+
 import {
-  isDarkModePropFactory,
   rootElemAvaillableEvent,
   rootElemUnavaillableEvent,
-  eventNames,
 } from "../../domUtils/core";
+
+import { isDarkModePropFactory } from "../../dataStore/common";
 
 import { globalStyles } from "../../domUtils/css";
 

@@ -3,11 +3,9 @@ import { ObservableValueSingletonControllerFactory } from "../../trmrk-lithtml/c
 import {
   appHeaderCustomContentStartingColumnsCountPropFactory,
   appHeaderGoToParentButtonPropFactory,
-  showAppTabsBarPropFactory,
 } from "../../trmrk-lithtml/dataStore/appHeader";
 
 import {
-  showAppFooterPropFactory,
   showAppFooterHomeButtonPropFactory,
   showAppFooterUndoRedoButtonsPropFactory,
   showAppFooterCloseSelectionButtonPropFactory,
@@ -28,41 +26,18 @@ export const updateAppPageProps = (appPage: AppPage | null) => {
   appPagePropFactory.value = appPage;
 
   if ((appPage ?? null) !== null) {
+    const isHomeOrSettingsPage = appPage! <= AppPage.Settings;
+    const isHomePage = appPage === AppPage.Home;
+
     appHeaderGoToParentButtonPropFactory.value = {
-      isVisible: false,
+      isVisible: !isHomeOrSettingsPage,
       isEnabled: true,
     };
 
-    enableExplorerPanelPropFactory.value = false;
-    if (appPage! <= AppPage.Settings) {
-      if (appPage == AppPage.Home) {
-        appHeaderCustomContentStartingColumnsCountPropFactory.value = 1;
-        showAppTabsBarPropFactory.value = false;
-        showAppFooterPropFactory.value = true;
-        showAppFooterHomeButtonPropFactory.value = false;
-        showAppFooterUndoRedoButtonsPropFactory.value = false;
-        showAppFooterCloseSelectionButtonPropFactory.value = false;
-      } else if (appPage == AppPage.Settings) {
-        appHeaderCustomContentStartingColumnsCountPropFactory.value = 0;
-        showAppTabsBarPropFactory.value = true;
-        showAppFooterPropFactory.value = false;
-        showAppFooterHomeButtonPropFactory.value = true;
-        showAppFooterUndoRedoButtonsPropFactory.value = false;
-        showAppFooterCloseSelectionButtonPropFactory.value = false;
-      }
-    } else {
-      appHeaderGoToParentButtonPropFactory.value = {
-        isVisible: true,
-        isEnabled: true,
-      };
+    showAppFooterHomeButtonPropFactory.value = !isHomePage;
+    showAppFooterUndoRedoButtonsPropFactory.value = false;
+    showAppFooterCloseSelectionButtonPropFactory.value = false;
 
-      enableExplorerPanelPropFactory.value = true;
-      appHeaderCustomContentStartingColumnsCountPropFactory.value = 0;
-      showAppTabsBarPropFactory.value = true;
-      showAppFooterPropFactory.value = false;
-      showAppFooterHomeButtonPropFactory.value = true;
-      showAppFooterUndoRedoButtonsPropFactory.value = false;
-      showAppFooterCloseSelectionButtonPropFactory.value = false;
-    }
+    enableExplorerPanelPropFactory.value = !isHomeOrSettingsPage;
   }
 };

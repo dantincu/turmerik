@@ -7,14 +7,14 @@ import { ComponentFlags } from "./core";
 
 /** Indicates whether to show the ***app footer*** or not */
 export const showAppFooterPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /* ---------- => HOME BUTTON
  */
 
 /** Indicates whether to show the ***app footer home button*** or not */
 export const showAppFooterHomeButtonPropFactory =
-  new ObservableValueSingletonControllerFactory(null, false);
+  new ObservableValueSingletonControllerFactory(null, true);
 
 /* ---------- => UNDO REDO BUTTONS
  */
