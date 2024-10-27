@@ -22,6 +22,7 @@ export class GridItemElement extends LitElement {
       }
 
       .trmrk-grid-item > .trmrk-main-part {
+        margin-top: 2px;
         display: grid;
         grid-template-rows: 20px 20px;
         cursor: pointer;
