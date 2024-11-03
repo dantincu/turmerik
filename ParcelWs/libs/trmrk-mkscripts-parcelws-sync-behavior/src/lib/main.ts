@@ -19,14 +19,15 @@ const srcFoldersArr: { [key: string]: string } = {
   "trmrk-blazor": "libs\\trmrk-blazor\\src\\lib",
   "trmrk-lithtml": "libs\\trmrk-lithtml\\src\\lib",
   "trmrk-react": "libs\\trmrk-react\\src\\lib",
+  "trmrk-solidjs": "libs\\trmrk-solidjs\\src\\lib",
+  "trmrk-mkscripts-parcelws-sync-behavior":
+    "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib",
   "trmrk-text-transform-behavior":
     "libs\\trmrk-text-transform-behavior\\src\\lib",
   "trmrk-text-transform-defaultbehavior":
     "libs\\trmrk-text-transform-defaultbehavior\\src\\lib",
   "trmrk-text-transform-mybehavior":
     "libs\\trmrk-text-transform-mybehavior\\src\\lib",
-  "trmrk-mkscripts-parcelws-sync-behavior":
-    "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib",
 };
 
 const destnLocationsArr: {
@@ -46,6 +47,10 @@ const destnLocationsArr: {
   },
   "trmrk-lithtml": {
     dirPath: "libs\\trmrk-lithtml\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
+  },
+  "trmrk-solidjs": {
+    dirPath: "libs\\trmrk-solidjs\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
   },
   "trmrk-react": {
@@ -76,18 +81,6 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-notes-lithtmlapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-lithtml"],
   },
-  "trmrk-notes-reactapp": {
-    dirPath: "apps\\trmrk-notes-reactapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
-  },
-  "trmrk-react-testapp": {
-    dirPath: "apps\\trmrk-react-testapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
-  },
-  "trmrk-http-proxy-nodejsapp": {
-    dirPath: "apps\\trmrk-http-proxy-nodejsapp\\src",
-    syncedLibs: ["trmrk"],
-  },
   "trmrk-mkscripts-parcelws-sync-behavior": {
     dirPath: "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src",
     syncedLibs: ["trmrk"],
@@ -95,6 +88,22 @@ const destnLocationsArr: {
   "trmrk-mkscripts-parcelws-sync-behavior-testapp": {
     dirPath: "libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp\\src",
     syncedLibs: ["trmrk", "trmrk-mkscripts-parcelws-sync-behavior"],
+  },
+  "trmrk-http-proxy-nodejsapp": {
+    dirPath: "apps\\trmrk-http-proxy-nodejsapp\\src",
+    syncedLibs: ["trmrk"],
+  },
+  "trmrk-notes-reactapp": {
+    dirPath: "apps\\trmrk-notes-reactapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
+  },
+  "trmrk-notes-solidjsapp": {
+    dirPath: "apps\\trmrk-notes-solidjsapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
+  },
+  "trmrk-react-testapp": {
+    dirPath: "apps\\trmrk-react-testapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
   },
 };
 

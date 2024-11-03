@@ -121,6 +121,30 @@
       ]
     },
     {
+      "SectionName": "sync_src_trmrk-lithtml",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-lithtml\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-lithtml"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "SectionName": "sync_src_trmrk-react",
       "RelDirPaths": {
         "DirPath": "libs\\trmrk-react\\src\\lib\\_"
@@ -139,6 +163,54 @@
             {
               "FileRelPath": "pull_from_this.bat",
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-react"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-solidjs",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-solidjs\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-solidjs"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_src_trmrk-mkscripts-parcelws-sync-behavior",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib\\_"
+      },
+      "FileGroups": [
+        {
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
+            },
+            {
+              "FileRelPath": "pull_from_this.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
             }
           ]
         }
@@ -211,30 +283,6 @@
             {
               "FileRelPath": "pull_from_this.bat",
               "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-text-transform-mybehavior"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "SectionName": "sync_src_trmrk-mkscripts-parcelws-sync-behavior",
-      "RelDirPaths": {
-        "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib\\_"
-      },
-      "FileGroups": [
-        {
-          "Files": [
-            {
-              "FileRelPath": "diff_all.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
-            },
-            {
-              "FileRelPath": "pull_all.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
-            },
-            {
-              "FileRelPath": "pull_from_this.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior"
             }
           ]
         }
@@ -372,83 +420,6 @@
       ]
     },
     {
-      "SectionName": "sync_destn_trmrk-browser-testapp",
-      "RelDirPaths": {
-        "DirPath": "libs\\trmrk-browser-testapp\\src"
-      },
-      "FileGroups": [
-        {
-          "RelDirPaths": {
-            "DirPath": "_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_all.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "pull_all.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "push_all.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-browser-testapp"
-            }
-          ]
-        },
-        {
-          "RelDirPaths": {
-            "DirPath": "trmrk\\_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_from_trmrk.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "pull_from_trmrk.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-browser-testapp"
-            }
-          ]
-        },
-        {
-          "RelDirPaths": {
-            "DirPath": "trmrk-browser\\_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_from_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "pull_from_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-browser-testapp"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "SectionName": "sync_destn_trmrk-blazor",
       "RelDirPaths": {
         "DirPath": "libs\\trmrk-blazor\\src"
@@ -543,6 +514,206 @@
             {
               "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
               "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-blazor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-lithtml",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-lithtml\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-lithtml"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-lithtml"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-lithtml"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-lithtml"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-lithtml"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-solidjs",
+      "RelDirPaths": {
+        "DirPath": "libs\\trmrk-solidjs\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-solidjs"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-solidjs"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-solidjs"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-solidjs"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-solidjs"
             }
           ]
         }
@@ -957,9 +1128,9 @@
       ]
     },
     {
-      "SectionName": "sync_destn_trmrk-notes-blazorapp",
+      "SectionName": "sync_destn_trmrk-notes-lithtmlapp",
       "RelDirPaths": {
-        "DirPath": "apps\\trmrk-notes-blazorapp\\src"
+        "DirPath": "apps\\trmrk-notes-lithtmlapp\\src"
       },
       "FileGroups": [
         {
@@ -969,19 +1140,19 @@
           "Files": [
             {
               "FileRelPath": "diff_all.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "pull_all.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_all.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
             }
           ]
         },
@@ -992,19 +1163,19 @@
           "Files": [
             {
               "FileRelPath": "diff_from_trmrk.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "pull_from_trmrk.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_to_trmrk.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-notes-lithtmlapp"
             }
           ]
         },
@@ -1015,19 +1186,19 @@
           "Files": [
             {
               "FileRelPath": "diff_from_trmrk-axios.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "pull_from_trmrk-axios.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_to_trmrk-axios.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-notes-lithtmlapp"
             }
           ]
         },
@@ -1038,165 +1209,42 @@
           "Files": [
             {
               "FileRelPath": "diff_from_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "pull_from_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_to_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-notes-lithtmlapp"
             },
             {
               "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-notes-blazorapp"
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-notes-lithtmlapp"
             }
           ]
         },
         {
           "RelDirPaths": {
-            "DirPath": "trmrk-blazor\\_"
+            "DirPath": "trmrk-lithtml\\_"
           },
           "Files": [
             {
-              "FileRelPath": "diff_from_trmrk-blazor.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
+              "FileRelPath": "diff_from_trmrk-lithtml.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-lithtml:trmrk-notes-lithtmlapp"
             },
             {
-              "FileRelPath": "pull_from_trmrk-blazor.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
+              "FileRelPath": "pull_from_trmrk-lithtml.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-lithtml:trmrk-notes-lithtmlapp"
             },
             {
-              "FileRelPath": "push_to_trmrk-blazor.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
+              "FileRelPath": "push_to_trmrk-lithtml.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-lithtml:trmrk-notes-lithtmlapp"
             },
             {
-              "FileRelPath": "push_to_trmrk-blazor_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-blazor:trmrk-notes-blazorapp"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "SectionName": "sync_destn_trmrk-react-testapp",
-      "RelDirPaths": {
-        "DirPath": "apps\\trmrk-react-testapp\\src"
-      },
-      "FileGroups": [
-        {
-          "RelDirPaths": {
-            "DirPath": "_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_all.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "pull_all.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_all.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_all_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-react-testapp"
-            }
-          ]
-        },
-        {
-          "RelDirPaths": {
-            "DirPath": "trmrk\\_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_from_trmrk.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "pull_from_trmrk.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
-            }
-          ]
-        },
-        {
-          "RelDirPaths": {
-            "DirPath": "trmrk-axios\\_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_from_trmrk-axios.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "pull_from_trmrk-axios.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-axios.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
-            }
-          ]
-        },
-        {
-          "RelDirPaths": {
-            "DirPath": "trmrk-browser\\_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_from_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "pull_from_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-browser.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
-            }
-          ]
-        },
-        {
-          "RelDirPaths": {
-            "DirPath": "trmrk-react\\_"
-          },
-          "Files": [
-            {
-              "FileRelPath": "diff_from_trmrk-react.bat",
-              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "pull_from_trmrk-react.bat",
-              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-react.bat",
-              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
-            },
-            {
-              "FileRelPath": "push_to_trmrk-react_ppgp.bat",
-              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
+              "FileRelPath": "push_to_trmrk-lithtml_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-lithtml:trmrk-notes-lithtmlapp"
             }
           ]
         }
@@ -1328,6 +1376,429 @@
             {
               "FileRelPath": "push_to_trmrk-mkscripts-parcelws-sync-behavior_ppgp.bat",
               "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-http-proxy-nodejsapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-http-proxy-nodejsapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-http-proxy-nodejsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-http-proxy-nodejsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-http-proxy-nodejsapp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-notes-reactapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-notes-reactapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-notes-reactapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-notes-reactapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-notes-reactapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-notes-reactapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-react\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-react.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-react:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-react.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-react:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-react.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-react:trmrk-notes-reactapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-react_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-react:trmrk-notes-reactapp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-notes-solidjsapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-notes-solidjsapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-notes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-notes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-notes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-notes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-solidjs\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-solidjs:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-solidjs:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-solidjs:trmrk-notes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-solidjs_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-solidjs:trmrk-notes-solidjsapp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-react-testapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-react-testapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-react-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-react-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-react-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-react-testapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-react\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-react.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-react.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-react.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-react_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-react:trmrk-react-testapp"
             }
           ]
         }

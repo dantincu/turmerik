@@ -85,7 +85,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.UpdateMdTitle.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsPairCfg.ConsoleApp", "Turmerik.MkFsDirsPairCfg.ConsoleApp\Turmerik.MkFsDirsPairCfg.ConsoleApp.csproj", "{E08A9E7F-48D3-413A-8646-8D4FAA794732}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.LocalFilesExplorerAnonymous.WebApi", "Turmerik.LocalFilesExplorerAnonymous.WebApi\Turmerik.LocalFilesExplorerAnonymous.WebApi.csproj", "{6A2E1307-EB9A-4074-B06C-E3543F0DAB28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFilesExplorerAnonymous.WebApi", "Turmerik.LocalFilesExplorerAnonymous.WebApi\Turmerik.LocalFilesExplorerAnonymous.WebApi.csproj", "{6A2E1307-EB9A-4074-B06C-E3543F0DAB28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

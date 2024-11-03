@@ -1,0 +1,36 @@
+.trmrk-dialog {
+  > .MuiDialog-container[role=presentation] > .MuiPaper-root {
+    &.MuiDialog-paperFullScreen {
+      > .trmrk-dialog-content {
+        width: 100%;
+      }
+    }
+  }
+
+  .trmrk-dialog-title {
+    height: 86px;
+    padding: 16px 16px;
+    user-select: none;
+
+    .trmrk-title {
+      position: absolute;
+      display: block;
+      font-size: 1.25em;
+      line-height: 1em;
+      top: 0.5em;
+      left: 16px;
+      right: 0;
+      text-align: left;
+    }
+
+    .trmrk-close-icon-btn {
+      position: absolute;
+      right: 0.25em;
+      top: 0.25em;
+    }
+  }
+
+  .trmrk-dialog-content {
+    user-select: none;
+  }
+}

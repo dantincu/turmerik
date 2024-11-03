@@ -1,9 +1,10 @@
 @echo off
 
-for %%a in ("..\..\apps\trmrk-react-testapp",
-"..\..\apps\trmrk-notes-reactapp",
+for %%a in ("..\..\apps\trmrk-http-proxy-nodejsapp",
 "..\..\apps\trmrk-notes-lithtmlapp",
-"..\..\apps\trmrk-http-proxy-nodejsapp") do (
+"..\..\apps\trmrk-notes-reactapp",
+"..\..\apps\trmrk-notes-solidjsapp",
+"..\..\apps\trmrk-react-testapp") do (
   cd %%a
   .\_\rm-ch_dst.bat
   npm run build

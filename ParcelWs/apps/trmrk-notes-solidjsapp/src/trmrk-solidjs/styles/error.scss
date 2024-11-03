@@ -1,0 +1,22 @@
+.trmrk-app-error {
+  text-align: center;
+
+  > h2 {
+    margin-top: 0px;
+    color: var(--trmrk-error-color);
+    font-size: 1.25em;
+  }
+
+  > pre {
+    word-wrap: break-word;
+    text-wrap: wrap;
+  }
+}
+
+.trmrk-error {
+  color: var(--trmrk-error_color);
+}
+
+.trmrk-warning {
+  color: var(--warning_color);
+}
