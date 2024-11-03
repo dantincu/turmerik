@@ -2,10 +2,10 @@
   "profiles": {
     "Turmerik.SyncLocalFiles.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":wd:F::\\T\\turmerik\\ParcelWs\\apps\\trmrk-notes-lithtmlapp\\src\\_ :fst:pull :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
+      // "commandLineArgs": ":wd:F::\\T\\turmerik\\ParcelWs\\apps\\trmrk-notes-lithtmlapp\\src\\_ :fst:pull :pf:turmerik-parcelws *:trmrk-notes-lithtmlapp"
       // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws trmrk-browser"
       // "commandLineArgs": ":fst:pull :pf:turmerik-parcelws"
-      // "commandLineArgs": ":fst:diff :pf:turmerik-parcelws"
+      "commandLineArgs": ":fst:pull :pf:turmerik-parcelws trmrk-solidjs:trmrk-notes-solidjsapp"
       // "commandLineArgs": ":fst:diff :pf:turmerik-parcelws trmrk-mkscripts-parcelws-sync-behavior:trmrk-mkscripts-parcelws-sync-behavior-testapp"
     }
   }
