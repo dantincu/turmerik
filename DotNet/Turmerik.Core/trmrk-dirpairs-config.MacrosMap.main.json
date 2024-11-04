@@ -179,6 +179,10 @@
     ":s",
     "$others$"
   ],
+  "othtrs": [
+    ":s",
+    "$others-tiers$"
+  ],
   "plyrs": [
     ":s",
     "$players$"
