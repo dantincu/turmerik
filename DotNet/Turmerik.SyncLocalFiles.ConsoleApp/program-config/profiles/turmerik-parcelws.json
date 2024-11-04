@@ -33,16 +33,24 @@
       "DirPath": "libs\\trmrk-lithtml\\src\\lib"
     },
     {
-      "Name": "trmrk-mkscripts-parcelws-sync-behavior",
-      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib"
-    },
-    {
       "Name": "trmrk-react",
       "DirPath": "libs\\trmrk-react\\src\\lib"
     },
     {
       "Name": "trmrk-solidjs",
       "DirPath": "libs\\trmrk-solidjs\\src\\lib"
+    },
+    {
+      "Name": "trmrk-svelte",
+      "DirPath": "libs\\trmrk-svelte\\src\\lib"
+    },
+    {
+      "Name": "trmrk-vue",
+      "DirPath": "libs\\trmrk-vue\\src\\lib"
+    },
+    {
+      "Name": "trmrk-mkscripts-parcelws-sync-behavior",
+      "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib"
     },
     {
       "Name": "trmrk-text-transform-behavior",
@@ -140,6 +148,36 @@
       }
     },
     {
+      "Name": "trmrk-svelte",
+      "DirPath": "libs\\trmrk-svelte\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-vue",
+      "DirPath": "libs\\trmrk-vue\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        }
+      }
+    },
+    {
       "Name": "trmrk-mkscripts-parcelws-sync-behavior",
       "DirPath": "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src",
       "FoldersMap": {
@@ -209,6 +247,15 @@
       }
     },
     {
+      "Name": "trmrk-http-proxy-nodejsapp",
+      "DirPath": "apps\\trmrk-http-proxy-nodejsapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        }
+      }
+    },
+    {
       "Name": "trmrk-notes-lithtmlapp",
       "DirPath": "apps\\trmrk-notes-lithtmlapp\\src",
       "FoldersMap": {
@@ -263,11 +310,38 @@
       }
     },
     {
-      "Name": "trmrk-http-proxy-nodejsapp",
-      "DirPath": "apps\\trmrk-http-proxy-nodejsapp\\src",
+      "Name": "trmrk-notes-svelteapp",
+      "DirPath": "apps\\trmrk-notes-svelteapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-solidjs": {
+          "DirPath": "trmrk-svelte"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-notes-vueapp",
+      "DirPath": "apps\\trmrk-notes-vueapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-solidjs": {
+          "DirPath": "trmrk-vue"
         }
       }
     },

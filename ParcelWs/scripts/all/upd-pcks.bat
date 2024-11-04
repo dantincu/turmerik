@@ -7,6 +7,8 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\libs\trmrk-lithtml",
 "..\..\libs\trmrk-react",
 "..\..\libs\trmrk-solidjs",
+"..\..\libs\trmrk-svelte",
+"..\..\libs\trmrk-vue",
 "..\..\libs\trmrk-mkscripts-parcelws-sync-behavior",
 "..\..\libs\trmrk-mkscripts-parcelws-sync-behavior-testapp",
 "..\..\libs\trmrk-text-transform-behavior",
@@ -17,6 +19,8 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\apps\trmrk-notes-lithtmlapp",
 "..\..\apps\trmrk-notes-reactapp",
 "..\..\apps\trmrk-notes-solidjsapp",
+"..\..\apps\trmrk-notes-svelteapp",
+"..\..\apps\trmrk-notes-vueapp",
 "..\..\apps\trmrk-react-testapp") do (
   cd %%a
   .\_\upd-pcks.bat

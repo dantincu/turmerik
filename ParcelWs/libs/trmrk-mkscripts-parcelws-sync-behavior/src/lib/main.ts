@@ -20,6 +20,8 @@ const srcFoldersArr: { [key: string]: string } = {
   "trmrk-lithtml": "libs\\trmrk-lithtml\\src\\lib",
   "trmrk-react": "libs\\trmrk-react\\src\\lib",
   "trmrk-solidjs": "libs\\trmrk-solidjs\\src\\lib",
+  "trmrk-svelte": "libs\\trmrk-svelte\\src\\lib",
+  "trmrk-vue": "libs\\trmrk-vue\\src\\lib",
   "trmrk-mkscripts-parcelws-sync-behavior":
     "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src\\lib",
   "trmrk-text-transform-behavior":
@@ -53,8 +55,16 @@ const destnLocationsArr: {
     dirPath: "libs\\trmrk-solidjs\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
   },
+  "trmrk-svelte": {
+    dirPath: "libs\\trmrk-svelte\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
+  },
   "trmrk-react": {
     dirPath: "libs\\trmrk-react\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
+  },
+  "trmrk-vue": {
+    dirPath: "libs\\trmrk-vue\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser"],
   },
   "trmrk-text-transform-behavior": {
@@ -77,10 +87,6 @@ const destnLocationsArr: {
       "trmrk-text-transform-mybehavior",
     ],
   },
-  "trmrk-notes-lithtmlapp": {
-    dirPath: "apps\\trmrk-notes-lithtmlapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-lithtml"],
-  },
   "trmrk-mkscripts-parcelws-sync-behavior": {
     dirPath: "libs\\trmrk-mkscripts-parcelws-sync-behavior\\src",
     syncedLibs: ["trmrk"],
@@ -93,6 +99,10 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-http-proxy-nodejsapp\\src",
     syncedLibs: ["trmrk"],
   },
+  "trmrk-notes-lithtmlapp": {
+    dirPath: "apps\\trmrk-notes-lithtmlapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-lithtml"],
+  },
   "trmrk-notes-reactapp": {
     dirPath: "apps\\trmrk-notes-reactapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
@@ -101,9 +111,17 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-notes-solidjsapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
   },
+  "trmrk-notes-svelteapp": {
+    dirPath: "apps\\trmrk-notes-svelteapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-svelte"],
+  },
   "trmrk-react-testapp": {
     dirPath: "apps\\trmrk-react-testapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
+  },
+  "trmrk-notes-vueapp": {
+    dirPath: "apps\\trmrk-notes-vueapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-vue"],
   },
 };
 
