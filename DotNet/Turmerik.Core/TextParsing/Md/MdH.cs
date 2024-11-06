@@ -119,8 +119,8 @@ namespace Turmerik.Core.TextParsing.Md
         {
             str = HttpUtility.HtmlEncode(str);
 
-            /* str = str.Replace("\\", "\\\\");
-            str = str.Replace("_", "\\_"); */
+            str = str.Replace("\\", "\\\\");
+            str = str.Replace("_", "\\_");
 
             return str;
         }

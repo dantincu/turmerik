@@ -1,0 +1,156 @@
+@use "./variables";
+@use "./mixins.scss" as mixins;
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('/src/trmrk-browser/TypeFaces/Roboto/Roboto-Regular.ttf');
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "Roboto Black", "Arial";
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+#app {
+  height: 100%;
+}
+
+.trmrk-error {
+  color: #a20;
+}
+
+.trmrk-hidden {
+  display: none;
+}
+
+.trmrk-overflow-hidden {
+  overflow: hidden;
+}
+
+.trmrk-display-flex {
+  display: flex;
+}
+
+.trmrk-display-inline-flex {
+  display: inline-flex;
+}
+
+.trmrk-align-self-flex-end {
+  align-self: flex-end;
+}
+
+.trmrk-wrap-content {
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: keep-all;
+  white-space-collapse: collapse;
+  line-break: auto;
+}
+
+.trmrk-no-wrap-anywhere {
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: auto;
+}
+
+.trmrk-no-wrap {
+  flex-wrap: wrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: anywhere;
+}
+
+.trmrk-label-link {
+  height: 40px;
+  padding: 0px;
+}
+
+.trmrk-btn-link {
+  width: 40px;
+  height: 40px;
+  padding: 0px;
+}
+
+.trmrk-btn-link-xl {
+  width: 80px;
+  height: 80px;
+  padding: 0px;
+}
+
+.trmrk-form {
+  padding: 0px 10px;
+}
+
+.trmrk-form-group {
+  display: flex;
+  line-height: 40px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.trmrk-form-label {
+  line-height: 40px;
+  vertical-align: middle;
+  cursor: pointer;
+  padding-top: 0.25em;
+}
+
+.trmrk-label-link .trmrk-form-label {
+  position: relative;
+  top: -1em;
+  padding-top: 0em;
+}
+
+.trmrk-scrollable::-webkit-scrollbar {
+  width: 15px;
+}
+
+.trmrk-scrollable::-webkit-scrollbar-thumb {
+  cursor: grabbing;
+}
+
+.trmrk-scrollableY {
+  overflow-y: scroll;
+}
+
+.trmrk-scrollableX {
+  overflow-x: scroll;
+}
+
+.trmrk-overflowX-hidden {
+  overflow-x: hidden;
+}
+
+.trmrk-overflowY-hidden {
+  overflow-y: hidden;
+}
+
+[data-bs-theme=dark] .trmrk-scrollable,
+.trmrk-app-theme-dark .trmrk-scrollable,
+.trmrk-app-theme-dark.trmrk-scrollable {
+  @include mixins.scrollable(
+    var(--trmrk-scrollable-track_color_dark),
+    var(--trmrk-scrollable-thumb_color_dark),
+    var(--trmrk-scrollable-track-hover_color_dark),
+    var(--trmrk-scrollable-thumb-hover_color_dark));
+}
+
+[data-bs-theme=light] .trmrk-scrollable,
+.trmrk-app-theme-light .trmrk-scrollable,
+.trmrk-app-theme-light.trmrk-scrollable {
+  @include mixins.scrollable(
+    var(--trmrk-scrollable-track_color_light),
+    var(--trmrk-scrollable-thumb_color_light),
+    var(--trmrk-scrollable-track-hover_color_light),
+    var(--trmrk-scrollable-thumb-hover_color_light));
+}

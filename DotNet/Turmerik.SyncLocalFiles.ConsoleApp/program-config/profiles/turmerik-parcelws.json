@@ -322,7 +322,7 @@
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
         },
-        "trmrk-solidjs": {
+        "trmrk-svelte": {
           "DirPath": "trmrk-svelte"
         }
       }
@@ -340,7 +340,7 @@
         "trmrk-browser": {
           "DirPath": "trmrk-browser"
         },
-        "trmrk-solidjs": {
+        "trmrk-vue": {
           "DirPath": "trmrk-vue"
         }
       }
