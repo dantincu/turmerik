@@ -1,5 +1,5 @@
 import trmrk from "../../../trmrk";
-import { runAppSetup } from "../../appSetup";
+import { runAppSetup } from "../../appSetup.tsx";
 import { AppConfigData } from "../../../trmrk/notes-app-config";
 
 const viteMode = process.env.NODE_ENV!.trim();
