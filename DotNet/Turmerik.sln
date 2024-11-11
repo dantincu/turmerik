@@ -71,7 +71,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MdToPdf.ConsoleApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.Puppeteer", "Turmerik.Puppeteer\Turmerik.Puppeteer.csproj", "{BF7B1891-E547-4943-9AD7-E6502E15ACA4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LocalFileNotes", "LocalFileNotes", "{0C1E39CA-0DD7-4275-B038-92AE53485381}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{0C1E39CA-0DD7-4275-B038-92AE53485381}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFilesExplorer.WebApi", "Turmerik.LocalFilesExplorer.WebApi\Turmerik.LocalFilesExplorer.WebApi.csproj", "{3E8DBC47-E585-46AA-8879-76B02D4180A2}"
 EndProject

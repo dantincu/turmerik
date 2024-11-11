@@ -51,6 +51,10 @@
     ":s",
     "$institutions$"
   ],
+  "intrntl": [
+    ":s",
+    "$international$"
+  ],
   "insorgs": [
     ":s",
     "$institutions-and-organizations$"

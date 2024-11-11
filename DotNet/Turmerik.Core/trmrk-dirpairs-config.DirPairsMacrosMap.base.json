@@ -12,6 +12,7 @@
   "|hstry|": "$history$",
   "|inf|": "$info$",
   "|ins|": "$institutions$",
+  "|intrntl|": "$international$",
   "|insorgs|": "$institutions-and-organizations$",
   "|grs|": "$geographical-regions$",
   "|isls|": "$islands$",
