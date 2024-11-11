@@ -59,6 +59,10 @@
     ":s",
     "$domestic-leagues$"
   ],
+  "elctns": [
+    ":s",
+    "$elections$"
+  ],
   "egna": [
     ":s",
     "$environment-geography-nature-and-agriculture$"
@@ -186,6 +190,10 @@
   "plyrs": [
     ":s",
     "$players$"
+  ],
+  "pub-elctns": [
+    ":s",
+    "$public-elections$"
   ],
   "rfrs": [
     ":s",
