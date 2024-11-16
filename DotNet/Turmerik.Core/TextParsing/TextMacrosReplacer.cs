@@ -55,7 +55,7 @@ namespace Turmerik.Core.TextParsing
                         true => replStr,
                         false => opts.DefaultReplacer(rslt, match, inputText)
                     },
-                ReplaceRecursively = true
+                ReplaceRecursively = true,
             });
 
             return result.ReplacedText;

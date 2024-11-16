@@ -23,6 +23,10 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
     public interface IProgramComponent
     {
         Task RunAsync(string[] rawArgs);
+
+        Task RunAsync(
+            ProgramArgs args);
+
         void Run(WorkArgs wka);
     }
 
@@ -86,10 +90,16 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                 notesConfig.GetNoteDirPairs());
         }
 
-        public async Task RunAsync(string[] rawArgs)
+        public async Task RunAsync(
+            string[] rawArgs)
         {
             var args = GetProgArgs(rawArgs);
+            await RunAsync(args);
+        }
 
+        public async Task RunAsync(
+            ProgramArgs args)
+        {
             if (args.PrintHelpMessage != true)
             {
                 var wka = await GetWorkArgsAsync(args);
@@ -126,7 +136,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             }
         }
 
-        public void Run(WorkArgs wka)
+        public void Run(
+            WorkArgs wka)
         {
             Console.ForegroundColor = ConsoleColor.Black;
 

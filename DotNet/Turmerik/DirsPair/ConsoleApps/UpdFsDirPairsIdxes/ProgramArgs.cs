@@ -15,7 +15,6 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         public bool? InteractiveMode { get; set; }
         public bool? UpdateNotes { get; set; }
         public bool? UpdateSections { get; set; }
-        public string? UpdateSectionRank { get; set; }
         public bool? ConvertToNoteSections { get; set; }
         public bool? ConvertToNoteItems { get; set; }
         public bool? SrcFromSections { get; set; }
