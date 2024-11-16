@@ -173,6 +173,19 @@ namespace Turmerik.Notes.Core
                 config.NoteSectionDirNameIdxes ??= new(),
                 nestedConfig.NoteSectionDirNameIdxes ??= new());
 
+            config.NoteSectionDirNameIdxesMap ??= new();
+
+            if (nestedConfig.NoteSectionDirNameIdxesMap != null)
+            {
+                foreach (var kvp in nestedConfig.NoteSectionDirNameIdxesMap)
+                {
+                    config.NoteSectionDirNameIdxesMap.AddOrUpdate(
+                        kvp.Key, key => new(),
+                        (key, value) => NormalizeConfig(
+                            value, kvp.Value));
+                }
+            }
+
             NormalizeConfig(
                 config.NoteInternalDirNameIdxes ??= new(),
                 nestedConfig.NoteInternalDirNameIdxes ??= new());

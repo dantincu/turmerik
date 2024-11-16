@@ -17,7 +17,8 @@ namespace Turmerik.Core.ConsoleApps
             ConsoleArgsParserData<TArgsMtbl> data,
             string[] matchingArgs,
             Action<ConsoleArgsParserData<TArgsMtbl>> handler,
-            bool shouldNotHaveValue = false);
+            bool shouldNotHaveValue = false,
+            int? maxArrayValueLength = null);
 
         void HandleArgs<TArgsMtbl>(
             ConsoleArgsParseHandlerOpts<TArgsMtbl> opts);
@@ -46,7 +47,7 @@ namespace Turmerik.Core.ConsoleApps
     {
         public const char OPTS_START_CHAR = ':';
         public const char OPTS_ARG_DELIM_CHAR = ':';
-        public const char OPTS_ARG_ALT_EMPTY_CHAR = '?';
+        public const char OPTS_ARG_ALT_EMPTY_CHAR = '|';
 
         private readonly IDelimCharsExtractor delimCharsExtractor;
 
@@ -68,11 +69,13 @@ namespace Turmerik.Core.ConsoleApps
             ConsoleArgsParserData<TArgsMtbl> data,
             string[] matchingArgs,
             Action<ConsoleArgsParserData<TArgsMtbl>> handler,
-            bool shouldNotHaveValue = false) => new ConsoleArgsFlagOpts<TArgsMtbl>
+            bool shouldNotHaveValue = false,
+            int? maxArrayValueLength = null) => new ConsoleArgsFlagOpts<TArgsMtbl>
             {
                 Handler = handler,
                 MatchingArgs = matchingArgs,
                 ShouldNotHaveValue = shouldNotHaveValue,
+                MaxArrayValueLength = maxArrayValueLength
             };
 
         public void HandleArgs<TArgsMtbl>(
@@ -129,6 +132,11 @@ namespace Turmerik.Core.ConsoleApps
                     ThrowIfArgOptHasValues(
                         data, argFlagName);
                 }
+                else if (handler.MaxArrayValueLength.HasValue)
+                {
+                    ThrowIfArgOptHasTooManyValues(
+                        data, argFlagName, handler.MaxArrayValueLength.Value);
+                }
 
                 handler.Handler(data);
             }
@@ -147,6 +155,18 @@ namespace Turmerik.Core.ConsoleApps
             {
                 throw new ArgumentException(
                     $"The flag {flag} should not be given an explicit value");
+            }
+        }
+
+        public void ThrowIfArgOptHasTooManyValues<TArgsMtbl>(
+            ConsoleArgsParserData<TArgsMtbl> data,
+            string flag,
+            int arrayValueMaxCount)
+        {
+            if (data.ArgFlagValue.Length > arrayValueMaxCount)
+            {
+                throw new ArgumentException(
+                    $"The flag {flag} should not be given more than {arrayValueMaxCount} values");
             }
         }
 

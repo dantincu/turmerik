@@ -335,13 +335,44 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                                             data => data.Args.WorkDir = data.ArgFlagValue.Single().Nullify(true)),
                                         consoleArgsParser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteSection.Arr(),
-                                            data => data.Args.UpdateSections = true, true),
+                                            data =>
+                                            {
+                                                data.Args.UpdateSections = true;
+                                                data.Args.TrgFromSections = true;
+                                                data.Args.SrcFromSections = true;
+
+                                                if (data.ArgFlagValue.Any())
+                                                {
+                                                    data.Args.TrgSectionRank = data.ArgFlagValue.First().Nullify();
+                                                    data.Args.SrcSectionRank = data.ArgFlagValue.Last().Nullify();
+                                                }
+                                            }, false, 2),
+                                        consoleArgsParser.ArgsFlagOpts(data,
+                                            config.ArgOpts.CreateNote.Arr(),
+                                            data =>
+                                            {
+                                                data.Args.UpdateNotes = true;
+                                                data.Args.SrcFromSections = false;
+                                                data.Args.TrgFromSections = false;
+                                            }, true),
                                         consoleArgsParser.ArgsFlagOpts(data,
                                             config.ArgOpts.ConvertToNoteSections.Arr(),
-                                            data => data.Args.ConvertToNoteSections = true, true),
+                                            data =>
+                                            {
+                                                data.Args.ConvertToNoteSections = true;
+                                                data.Args.TrgSectionRank = data.ArgFlagValue.FirstOrDefault().Nullify();
+                                                data.Args.SrcFromSections = false;
+                                                data.Args.TrgFromSections = true;
+                                            }, false, 1),
                                         consoleArgsParser.ArgsFlagOpts(data,
                                             config.ArgOpts.ConvertToNoteItems.Arr(),
-                                            data => data.Args.ConvertToNoteItems = true, true)
+                                            data =>
+                                            {
+                                                data.Args.ConvertToNoteItems = true;
+                                                data.Args.SrcSectionRank = data.ArgFlagValue.FirstOrDefault().Nullify();
+                                                data.Args.SrcFromSections = true;
+                                                data.Args.TrgFromSections = false;
+                                            }, false, 1)
                                     ],
                                 });
                         }
@@ -380,47 +411,24 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     TrgIdxes = new IdxesFilter().Lst()
                 });
             }
-
-            if (new bool?[] {args.UpdateSections, args.ConvertToNoteSections, args.ConvertToNoteItems }.Where(
-                value => value == true).Count() > 1)
-            {
-                throw new ArgumentException(
-                    string.Join(" ", $"Only one of the following flags can be provided:",
-                        string.Join(",",
-                            args.UpdateSections,
-                            args.ConvertToNoteSections),
-                        "or", nameof(args.ConvertToNoteItems)));
-            }
-            else
-            {
-                if (args.UpdateSections == true)
-                {
-                    args.SrcFromSections = true;
-                    args.TrgFromSections = true;
-                }
-                else if (args.ConvertToNoteSections == true)
-                {
-                    args.TrgFromSections = true;
-                }
-                else if (args.ConvertToNoteItems == true)
-                {
-                    args.SrcFromSections = true;
-                }
-            }
         }
 
         private void GetResultMap(WorkArgs wka)
         {
             var srcIdxesUpdaterOpts = GetIdxesUpdaterOpts(
-                wka, wka.Args.SrcFromSections);
+                wka, wka.Args.SrcFromSections,
+                wka.Args.SrcSectionRank,
+                out var srcDirNameIdxes);
 
             var trgIdxesUpdaterOpts = GetIdxesUpdaterOpts(
-                wka, wka.Args.TrgFromSections);
+                wka, wka.Args.TrgFromSections,
+                wka.Args.TrgSectionRank,
+                out var trgDirNameIdxes);
 
             var idxesUpdateMappings = wka.Args.IdxesUpdateMappings.ToArray();
 
             var noteDirsPairTuplesList = GetNoteDirsPairTuplesList(
-                wka, wka.Args.SrcFromSections);
+                wka, wka.Args.SrcFromSections, srcDirNameIdxes);
 
             wka.ResultMap = idxesUpdater.UpdateIdxes(
                 srcIdxesUpdaterOpts,
@@ -441,7 +449,9 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
                     if (kvp.Key != dirsPairTuple.NoteDirIdx)
                     {
                         loopWka = CreateLoopWorkArgsItem(
-                            dirsPairTuple, kvp.Key, wka.Args.UpdateSections);
+                            dirsPairTuple, kvp.Key,
+                            wka.Args.SrcFromSections,
+                            wka.Args.TrgFromSections);
 
                         PrintGetLoopWorkArgsItem(loopWka);
                     }
@@ -453,7 +463,8 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         private LoopWorkArgsItem CreateLoopWorkArgsItem(
             DirsPairTuple dirsPairTuple,
             int newIdx,
-            bool? updateSections)
+            bool? srcFromSections,
+            bool? trgFromSections)
         {
             var loopWka = new LoopWorkArgsItem
             {
@@ -464,19 +475,19 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
             };
 
             loopWka.TempShortDirName = loopWka.ShortDirName.Substring(
-                GetNoteDirNameMainPfx(updateSections).Length);
+                GetNoteDirNameMainPfx(srcFromSections).Length);
 
             loopWka.TempFullDirName = loopWka.FullDirName.Substring(
-                GetNoteDirNameMainPfx(updateSections).Length);
+                GetNoteDirNameMainPfx(srcFromSections).Length);
 
-            loopWka.TempShortDirName = GetNoteDirNameAltPfx(updateSections) + loopWka.TempShortDirName;
-            loopWka.TempFullDirName = GetNoteDirNameAltPfx(updateSections) + loopWka.TempFullDirName;
+            loopWka.TempShortDirName = GetNoteDirNameAltPfx(srcFromSections) + loopWka.TempShortDirName;
+            loopWka.TempFullDirName = GetNoteDirNameAltPfx(srcFromSections) + loopWka.TempFullDirName;
 
-            loopWka.NewShortDirName = GetNoteDirNameMainPfx(updateSections) + loopWka.NewIdx;
+            loopWka.NewShortDirName = GetNoteDirNameMainPfx(trgFromSections) + loopWka.NewIdx;
 
             loopWka.NewFullDirName = string.Join(
-                GetNoteDirNameMainPfx(updateSections), loopWka.NewIdx,
-                GetNoteDirNameJoinStr(updateSections),
+                GetNoteDirNameMainPfx(trgFromSections), loopWka.NewIdx,
+                GetNoteDirNameJoinStr(trgFromSections),
                 loopWka.FullDirNamePart);
 
             return loopWka;
@@ -534,13 +545,28 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
 
         private IdxesUpdaterOpts GetIdxesUpdaterOpts(
             WorkArgs wka,
-            bool? updateSections)
+            bool? updateSections,
+            string? sectionRank,
+            out NoteDirsPairConfig.IDirNameIdxesT dirNameIdxes)
         {
-            var idxesUpdaterOpts = GetIdxesUpdaterOptsCore(
-                updateSections);
+            dirNameIdxes = updateSections switch
+            {
+                true => sectionRank.IfNotNull(
+                    sectionRankStr => noteDirsPairCfg.GetNoteSectionDirNameIdxesMap()[sectionRankStr!],
+                    () => noteDirsPairCfg.GetNoteSectionDirNameIdxes()),
+                _ => noteDirsPairCfg.GetNoteDirNameIdxes()
+            };
+
+            var idxesUpdaterOpts = idxesUpdater.NormalizeOpts(
+                new IdxesUpdaterOpts
+                {
+                    IncIdx = dirNameIdxes.IncIdx ?? true,
+                    MinIdx = dirNameIdxes.MinIdx ?? NextNoteIdxRetriever.DF_MIN_VALUE,
+                    MaxIdx = dirNameIdxes.MaxIdx ?? NextNoteIdxRetriever.DF_MAX_VALUE,
+                });
 
             var noteDirsPairTuplesList = GetNoteDirsPairTuplesList(
-                wka, updateSections);
+                wka, updateSections, dirNameIdxes);
 
             idxesUpdaterOpts.PrevIdxes = noteDirsPairTuplesList.Select(
                 tuple => tuple.NoteDirIdx).ToArray();
@@ -549,36 +575,16 @@ namespace Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes
         }
 
         private List<DirsPairTuple> GetNoteDirsPairTuplesList(
-            WorkArgs wka, bool? updateSections) => GetValue(
-                updateSections,
-                wka.NoteSectionDirsPairTuplesList,
-                wka.NoteItemDirsPairTuplesList);
-
-        private TValue GetValue<TValue>(
+            WorkArgs wka,
             bool? updateSections,
-            TValue sectionsValue,
-            TValue itemsValue) => updateSections switch
-            {
-                true => sectionsValue,
-                _ => itemsValue
-            };
-
-        private IdxesUpdaterOpts GetIdxesUpdaterOptsCore(
-            bool? updateSections) => idxesUpdater.NormalizeOpts(updateSections switch
-            {
-                true => new IdxesUpdaterOpts
-                {
-                    IncIdx = noteDirsPairCfg.NoteSectionDirNameIdxes.IncIdx ?? true,
-                    MinIdx = noteDirsPairCfg.NoteSectionDirNameIdxes.MinIdx ?? NextNoteIdxRetriever.DF_MIN_VALUE,
-                    MaxIdx = noteDirsPairCfg.NoteSectionDirNameIdxes.MaxIdx ?? NextNoteIdxRetriever.DF_MAX_VALUE,
-                },
-                _ => new IdxesUpdaterOpts
-                {
-                    IncIdx = noteDirsPairCfg.NoteDirNameIdxes.IncIdx ?? true,
-                    MinIdx = noteDirsPairCfg.NoteDirNameIdxes.MinIdx ?? NextNoteIdxRetriever.DF_MIN_VALUE,
-                    MaxIdx = noteDirsPairCfg.NoteDirNameIdxes.MaxIdx ?? NextNoteIdxRetriever.DF_MAX_VALUE,
-                }
-            });
+            NoteDirsPairConfig.IDirNameIdxesT dirNameIdxes) => updateSections switch
+        {
+            true => wka.NoteSectionDirsPairTuplesList.Where(
+                tuple => tuple.NoteDirIdx >= (
+                dirNameIdxes.MinIdx ?? NextNoteIdxRetriever.DF_MIN_VALUE) && (
+                tuple.NoteDirIdx <= (dirNameIdxes.MaxIdx ?? NextNoteIdxRetriever.DF_MAX_VALUE))).ToList(),
+            _ => wka.NoteItemDirsPairTuplesList
+        };
 
         public class WorkArgs
         {

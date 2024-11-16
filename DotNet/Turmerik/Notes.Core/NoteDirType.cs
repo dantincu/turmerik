@@ -72,7 +72,8 @@ namespace Turmerik.Notes.Core
             int noteDirIdx,
             NoteDirTypeTuple dirTypeTuple,
             NoteDirRegexTuple dirRegexTuple,
-            NoteInternalDir? noteInternalDir)
+            NoteInternalDir? noteInternalDir,
+            string? noteSectionRank)
         {
             DirName = dirName ?? throw new ArgumentNullException(nameof(dirName));
             ShortDirName = shortDirName ?? throw new ArgumentNullException(nameof(shortDirName));
@@ -82,6 +83,7 @@ namespace Turmerik.Notes.Core
             DirTypeTuple = dirTypeTuple;
             DirRegexTuple = dirRegexTuple;
             NoteInternalDir = noteInternalDir;
+            NoteSectionRank = noteSectionRank;
         }
 
         public string DirName { get; }
@@ -92,5 +94,6 @@ namespace Turmerik.Notes.Core
         public NoteDirTypeTuple DirTypeTuple { get; }
         public NoteDirRegexTuple DirRegexTuple { get; }
         public NoteInternalDir? NoteInternalDir { get; }
+        public string? NoteSectionRank { get; }
     }
 }

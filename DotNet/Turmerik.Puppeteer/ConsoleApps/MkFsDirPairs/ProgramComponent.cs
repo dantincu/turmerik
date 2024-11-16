@@ -512,6 +512,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true,
                 CreateNote = nodeArgs.CreateNote,
                 CreateNoteSection = nodeArgs.CreateNoteSection,
+                NoteSectionRank = nodeArgs.NoteSectionRank,
                 CreateNoteBook = nodeArgs.CreateNoteBook,
                 CreateNoteInternalsDir = nodeArgs.CreateNoteInternalsDir,
                 CreateNoteFilesDir = nodeArgs.CreateNoteFilesDir,
@@ -699,7 +700,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             string[] rawArgs) => parser.Parse(
                 new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
                 {
-                    OptsArgAltEmptyChar = '|',
                     ArgsFactory = () => new ProgramArgs
                     {
                         HasNodeRequiringPdf = config.CreatePdfFile ?? false
@@ -882,7 +882,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                             data => data.Args.Current.CreateNote = true, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteSection.Arr(),
-                                            data => data.Args.Current.CreateNoteSection = true, true),
+                                            data =>
+                                            {
+                                                data.Args.Current.CreateNoteSection = true;
+                                                data.Args.Current.NoteSectionRank = data.ArgFlagValue.FirstOrDefault();
+                                            }),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.CreateNoteBook.Arr(),
                                             data => data.Args.Current.CreateNoteBook = true, true),

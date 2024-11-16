@@ -29,6 +29,7 @@ namespace Turmerik.DirsPair
             ThrowIfAnyItemAlreadyExists = src.ThrowIfAnyItemAlreadyExists;
             CreateNote = src.CreateNote;
             CreateNoteSection = src.CreateNoteSection;
+            NoteSectionRank = src.NoteSectionRank;
             CreateNoteBook = src.CreateNoteBook;
             CreateNoteInternalsDir = src.CreateNoteInternalsDir;
             CreateNoteFilesDir = src.CreateNoteFilesDir;
@@ -51,6 +52,7 @@ namespace Turmerik.DirsPair
         public bool ThrowIfAnyItemAlreadyExists { get; set; }
         public bool CreateNote { get; set; }
         public bool CreateNoteSection { get; set; }
+        public string? NoteSectionRank { get; set; }
         public bool CreateNoteBook { get; set; }
         public bool CreateNoteInternalsDir { get; set; }
         public bool CreateNoteFilesDir { get; set; }

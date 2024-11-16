@@ -11,6 +11,8 @@ namespace Turmerik.Notes.Core
 {
     public class NoteDirsPairConfigImmtbl : INoteDirsPairConfig
     {
+        private ClnblDictionary<string, IDirNameIdxesT, DirNameIdxesT, NoteDirsPairConfigMtbl.DirNameIdxesT> noteSectionDirNameIdxesClnblMap;
+
         public NoteDirsPairConfigImmtbl(
             INoteDirsPairConfig src)
         {
@@ -26,6 +28,9 @@ namespace Turmerik.Notes.Core
             NoteInternalDirNameIdxes = src.GetNoteInternalDirNameIdxes()?.ToImmtbl();
             FileNames = src.GetFileNames()?.ToImmtbl();
             FileContents = src.GetFileContents()?.ToImmtbl();
+
+            noteSectionDirNameIdxesClnblMap = src.GetNoteSectionDirNameIdxesMap()?.Clone();
+            NoteSectionDirNameIdxesMap = noteSectionDirNameIdxesClnblMap?.AsImmtblDictnr();
         }
 
         public int? FileNameMaxLength { get; }
@@ -40,6 +45,8 @@ namespace Turmerik.Notes.Core
         public FileNamesT FileNames { get; }
         public FileContentsT FileContents { get; }
 
+        public ReadOnlyDictionary<string, DirNameIdxesT> NoteSectionDirNameIdxesMap { get; }
+
         public IArgOptionsAggT GetArgOpts() => ArgOpts;
         public IDirNamesT GetDirNames() => DirNames;
         public IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
@@ -47,6 +54,8 @@ namespace Turmerik.Notes.Core
         public IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
         public IFileNamesT GetFileNames() => FileNames;
         public IFileContentsT GetFileContents() => FileContents;
+
+        public ClnblDictionary<string, IDirNameIdxesT, DirNameIdxesT, NoteDirsPairConfigMtbl.DirNameIdxesT> GetNoteSectionDirNameIdxesMap() => noteSectionDirNameIdxesClnblMap;
 
         public class ArgOptionT : IArgOptionT
         {

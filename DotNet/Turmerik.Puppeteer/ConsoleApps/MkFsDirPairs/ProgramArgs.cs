@@ -37,6 +37,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public DirsPairConfig.DirNameTplT DirNameTpl { get; set; }
             public bool CreateNote { get; set; }
             public bool CreateNoteSection { get; set; }
+            public string? NoteSectionRank { get; set; }
             public bool CreateNoteBook { get; set; }
             public bool CreateNoteInternalsDir { get; set; }
             public bool CreateNoteFilesDir { get; set; }

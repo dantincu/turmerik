@@ -18,6 +18,8 @@ namespace Turmerik.Notes.Core
         NoteDirsPairConfig.IDirNameIdxesT GetNoteInternalDirNameIdxes();
         NoteDirsPairConfig.IFileNamesT GetFileNames();
         NoteDirsPairConfig.IFileContentsT GetFileContents();
+
+        ClnblDictionary<string, NoteDirsPairConfig.IDirNameIdxesT, NoteDirsPairConfigImmtbl.DirNameIdxesT, NoteDirsPairConfigMtbl.DirNameIdxesT> GetNoteSectionDirNameIdxesMap();
     }
 
     public static class NoteDirsPairConfig

@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.Helpers;
 using Turmerik.Notes.Core;
 
 namespace Turmerik.DirsPair
@@ -70,6 +71,7 @@ namespace Turmerik.DirsPair
             DirNamesCfg = Config.GetDirNames();
             NoteDirNameIdxesCfg = Config.GetNoteDirNameIdxes();
             NoteSectionDirNameIdxesCfg = Config.GetNoteSectionDirNameIdxes();
+            NoteSectionDirNameIdxesMapCfg = Config.GetNoteSectionDirNameIdxesMap();
             NoteInternalDirNameIdxesCfg = Config.GetNoteInternalDirNameIdxes();
             FileNamesCfg = Config.GetFileNames();
             FileContentsCfg = Config.GetFileContents();
@@ -82,6 +84,7 @@ namespace Turmerik.DirsPair
         protected NoteDirsPairConfig.IDirNamesT DirNamesCfg { get; }
         protected NoteDirsPairConfig.IDirNameIdxesT NoteDirNameIdxesCfg { get; }
         protected NoteDirsPairConfig.IDirNameIdxesT NoteSectionDirNameIdxesCfg { get; }
+        protected IReadOnlyDictionary<string, NoteDirsPairConfig.IDirNameIdxesT> NoteSectionDirNameIdxesMapCfg { get; }
         protected NoteDirsPairConfig.IDirNameIdxesT NoteInternalDirNameIdxesCfg { get; }
         protected NoteDirsPairConfig.IFileNamesT FileNamesCfg { get; }
         protected NoteDirsPairConfig.IFileContentsT FileContentsCfg { get; }
@@ -227,7 +230,8 @@ namespace Turmerik.DirsPair
                 {
                     { match.DirName, match.FullDirNamePart },
                 },
-                ShortDirName = match.ShortDirName
+                ShortDirName = match.ShortDirName,
+                NoteSectionRank = match.NoteSectionRank
             };
 
             return dirsPairTuple;
@@ -254,7 +258,10 @@ namespace Turmerik.DirsPair
             var existingDirIdxesList = dirsPairTuple.NoteDirCat switch
             {
                 NoteDirCategory.Item => noteItemsTuple.ExistingNoteDirIdxes,
-                NoteDirCategory.Section => noteItemsTuple.ExistingNoteSectionDirIdxes,
+                NoteDirCategory.Section => dirsPairTuple.NoteSectionRank.IfNotNull(
+                    noteSectionRank => noteItemsTuple.ExistingNoteSectionDirIdxesMap!.GetOrAdd(
+                        noteSectionRank, rank => new ()),
+                    () => noteItemsTuple.ExistingNoteSectionDirIdxes),
                 NoteDirCategory.Internals => noteItemsTuple.ExistingInternalDirIdxes,
                 _ => throw new ArgumentException(nameof(dirsPairTuple.NoteDirCat))
             };

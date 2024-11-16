@@ -14,6 +14,7 @@ namespace Turmerik.DirsPair
         public string ShortDirName { get; set; }
         public string FullDirName { get; set; }
         public string FullDirNamePart { get; set; }
+        public string? NoteSectionRank { get; set; }
         public Dictionary<string, string> DirNamesMap { get; set; }
     }
 }

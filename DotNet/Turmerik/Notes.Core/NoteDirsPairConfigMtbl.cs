@@ -11,6 +11,9 @@ namespace Turmerik.Notes.Core
 {
     public class NoteDirsPairConfigMtbl : INoteDirsPairConfig
     {
+        private ClnblDictionary<string, IDirNameIdxesT, NoteDirsPairConfigImmtbl.DirNameIdxesT, DirNameIdxesT> noteSectionDirNameIdxesClnblMap;
+        private Dictionary<string, DirNameIdxesT> noteSectionDirNameIdxesMap;
+
         public NoteDirsPairConfigMtbl(
             INoteDirsPairConfig src)
         {
@@ -26,6 +29,8 @@ namespace Turmerik.Notes.Core
             NoteInternalDirNameIdxes = src.GetNoteInternalDirNameIdxes()?.ToMtbl();
             FileNames = src.GetFileNames()?.ToMtbl();
             FileContents = src.GetFileContents()?.ToMtbl();
+
+            NoteSectionDirNameIdxesMap = src.GetNoteSectionDirNameIdxesMap()?.AsMtblDictnr();
         }
 
         public NoteDirsPairConfigMtbl()
@@ -44,6 +49,17 @@ namespace Turmerik.Notes.Core
         public FileNamesT FileNames { get; set; }
         public FileContentsT FileContents { get; set; }
 
+        public Dictionary<string, DirNameIdxesT> NoteSectionDirNameIdxesMap
+        {
+            get => noteSectionDirNameIdxesMap;
+
+            set
+            {
+                noteSectionDirNameIdxesMap = value;
+                noteSectionDirNameIdxesClnblMap = new ClnblDictionary<string, IDirNameIdxesT, NoteDirsPairConfigImmtbl.DirNameIdxesT, DirNameIdxesT>(value);
+            }
+        }
+
         public IArgOptionsAggT GetArgOpts() => ArgOpts;
         public IDirNamesT GetDirNames() => DirNames;
         public IDirNameIdxesT GetNoteDirNameIdxes() => NoteDirNameIdxes;
@@ -51,6 +67,8 @@ namespace Turmerik.Notes.Core
         public IDirNameIdxesT GetNoteInternalDirNameIdxes() => NoteInternalDirNameIdxes;
         public IFileNamesT GetFileNames() => FileNames;
         public IFileContentsT GetFileContents() => FileContents;
+
+        public ClnblDictionary<string, IDirNameIdxesT, NoteDirsPairConfigImmtbl.DirNameIdxesT, DirNameIdxesT> GetNoteSectionDirNameIdxesMap() => noteSectionDirNameIdxesClnblMap;
 
         public class ArgOptionT : IArgOptionT
         {

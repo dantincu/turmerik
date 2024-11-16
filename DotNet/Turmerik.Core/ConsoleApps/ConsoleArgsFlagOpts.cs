@@ -9,5 +9,6 @@ namespace Turmerik.Core.ConsoleApps
         public Action<ConsoleArgsParserData<TArgsMtbl>> Handler { get; set; }
         public string[] MatchingArgs { get; set; }
         public bool ShouldNotHaveValue { get; set; }
+        public int? MaxArrayValueLength { get; set; }
     }
 }

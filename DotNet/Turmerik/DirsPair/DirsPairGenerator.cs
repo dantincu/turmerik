@@ -31,6 +31,7 @@ namespace Turmerik.DirsPair
         private readonly NoteDirsPairConfig.IDirNamesT dirNamesCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT noteItemDirNameIdxesCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT noteSectionDirNameIdxesCfg;
+        private readonly IReadOnlyDictionary<string, NoteDirsPairConfig.IDirNameIdxesT> noteSectionDirNameIdxesMapCfg;
         private readonly NoteDirsPairConfig.IDirNameIdxesT internalDirNameIdxesCfg;
         private readonly bool keepFileContainsNoteJson;
         private readonly string defaultKeepFileContents;
@@ -66,6 +67,7 @@ namespace Turmerik.DirsPair
             dirNamesCfg = config.GetDirNames();
             noteItemDirNameIdxesCfg = config.GetNoteDirNameIdxes();
             noteSectionDirNameIdxesCfg = config.GetNoteSectionDirNameIdxes();
+            noteSectionDirNameIdxesMapCfg = config.GetNoteSectionDirNameIdxesMap();
             internalDirNameIdxesCfg = config.GetNoteInternalDirNameIdxes();
 
             keepFileContainsNoteJson = fileContentsCfg.KeepFileContainsNoteJson ?? false;
@@ -136,13 +138,18 @@ namespace Turmerik.DirsPair
         {
             var noteDirNameIdxesCfg = opts.CreateNoteSection switch
             {
-                true => noteSectionDirNameIdxesCfg,
+                true => opts.NoteSectionRank.IfNotNull(
+                    noteSectionRank => noteSectionDirNameIdxesMapCfg[noteSectionRank!],
+                    () => noteSectionDirNameIdxesCfg),
                 false => noteItemDirNameIdxesCfg
             };
 
             var existingDirIdxes = opts.CreateNoteSection switch
             {
-                true => noteItemsTuple.ExistingNoteSectionDirIdxes,
+                true => opts.NoteSectionRank.IfNotNull(
+                    noteSectionRank => noteItemsTuple.ExistingNoteSectionDirIdxesMap!.GetOrAdd(
+                        noteSectionRank, rank => new ()),
+                    () => noteItemsTuple.ExistingNoteSectionDirIdxes),
                 false => noteItemsTuple.ExistingNoteDirIdxes
             };
 

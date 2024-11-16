@@ -161,8 +161,17 @@
         "UseAltPfx": false
       }
     },
+    "NoteSectionDirNameIdxesMap": {
+      "2": {
+        "MinIdx": 200,
+        "MaxIdx": 299,
+        "IncIdx": false,
+        "FillGapsByDefault": false,
+        "IdxFmt": "D1"
+      }
+    },
     "NoteDirNameIdxes": {
-      "MinIdx": 200,
+      "MinIdx": 300,
       "MaxIdx": 999,
       "IncIdx": false,
       "FillGapsByDefault": false,
