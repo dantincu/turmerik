@@ -1,234 +1,234 @@
 {
   "albms": [
-    ":s",
+    ":s:1",
     "$albums$"
   ],
   "arts": [
-    ":s",
+    ":s:1",
     "$artists$"
   ],
   "athls": [
-    ":s",
+    ":s:1",
     "$athletes$"
   ],
   "btnf": [
-    ":s",
+    ":s:1",
     "$about-infamous$"
   ],
   "cchs": [
-    ":s",
+    ":s:1",
     "$coaches$"
   ],
   "cdsips": [
-    ":s",
+    ":s:1",
     "$conductors-and-interpreters$"
   ],
   "clbs": [
-    ":s",
+    ":s:1",
     "$clubs$"
   ],
   "cltms": [
-    ":s",
+    ":s:1",
     "$club-teams$"
   ],
   "cvarts": [
-    ":s",
+    ":s:1",
     "$cover-artists$"
   ],
   "crmn": [
-    ":s",
+    ":s:1",
     "$criminality$"
   ],
   "cmpttns": [
-    ":s",
+    ":s:1",
     "$competitions$"
   ],
   "cps": [
-    ":s",
+    ":s:1",
     "$composers$"
   ],
   "cpzs": [
-    ":s",
+    ":s:1",
     "$compozitions$"
   ],
   "dcmntrs": [
-    ":s",
+    ":s:1",
     "$documentaries$"
   ],
   "dmstclgs": [
-    ":s",
+    ":s:1",
     "$domestic-leagues$"
   ],
   "elctns": [
-    ":s",
+    ":s:1",
     "$elections$"
   ],
   "egna": [
-    ":s",
+    ":s:1",
     "$environment-geography-nature-and-agriculture$"
   ],
   "ethgs": [
-    ":s",
+    ":s:1",
     "$ethnic-groups$"
   ],
   "f": [
-    ":s",
+    ":s:1",
     "$funny$"
   ],
   "fathls": [
-    ":s",
+    ":s:1",
     "$former-athletes$"
   ],
   "fem": [
-    ":s",
+    ":s:1",
     "$feminine$"
   ],
   "fplyrs": [
-    ":s",
+    ":s:1",
     "$former-players$"
   ],
   "frfrs": [
-    ":s",
+    ":s:1",
     "$former-referees$"
   ],
   "frgnathls": [
-    ":s",
+    ":s:1",
     "$foreign-athletes$"
   ],
   "frgncchhs": [
-    ":s",
+    ":s:1",
     "$foreign-coaches$"
   ],
   "frgnmgrs": [
-    ":s",
+    ":s:1",
     "$foreign-managers$"
   ],
   "frgnmgrscchs": [
-    ":s",
+    ":s:1",
     "$foreign-managers-and-coaches$"
   ],
   "frgnplyrs": [
-    ":s",
+    ":s:1",
     "$foreign-players$"
   ],
   "gnrs": [
-    ":s",
+    ":s:1",
     "$genres$"
   ],
   "nf": [
-    ":s",
+    ":s:1",
     "$infamous$"
   ],
   "hfs": [
-    ":s",
+    ":s:1",
     "$historical-figures$"
   ],
   "incds": [
-    ":s",
+    ":s:1",
     "$incidents$"
   ],
   "indarts": [
-    ":s",
+    ":s:1",
     "$independent-artists$"
   ],
   "marts": [
-    ":s",
+    ":s:1",
     "$misc-artists$"
   ],
   "masc": [
-    ":s",
+    ":s:1",
     "$masculine$"
   ],
   "mdls": [
-    ":s",
+    ":s:1",
     "$models$"
   ],
   "mfs": [
-    ":s",
+    ":s:1",
     "$mythological-figures$"
   ],
   "mgrs": [
-    ":s",
+    ":s:1",
     "$managers$"
   ],
   "mgrscchs": [
-    ":s",
+    ":s:1",
     "$managers-and-coaches$"
   ],
   "movs": [
-    ":s",
+    ":s:1",
     "$movies$"
   ],
   "movsdcmntrs": [
-    ":s",
+    ":s:1",
     "$movies-and-documentaries$"
   ],
   "mscs": [
-    ":s",
+    ":s:1",
     "$musicians$"
   ],
   "nat": [
-    ":s",
+    ":s:1",
     "$national$"
   ],
   "natm": [
-    ":s",
+    ":s:1",
     "$national-team$"
   ],
   "natms": [
-    ":s",
+    ":s:1",
     "$national-teams$"
   ],
   "others": [
-    ":s",
+    ":s:1",
     "$others$"
   ],
   "othtrs": [
-    ":s",
+    ":s:1",
     "$others-tiers$"
   ],
   "plyrs": [
-    ":s",
+    ":s:1",
     "$players$"
   ],
   "pub-elctns": [
-    ":s",
+    ":s:1",
     "$public-elections$"
   ],
   "rfrs": [
-    ":s",
+    ":s:1",
     "$referees$"
   ],
   "rfrndms": [
-    ":s",
+    ":s:1",
     "$referendums$"
   ],
   "ro": [
-    ":s",
+    ":s:1",
     "$romanian$"
   ],
   "sbgnrs": [
-    ":s",
+    ":s:1",
     "$sub-genres$"
   ],
   "tms": [
-    ":s",
+    ":s:1",
     "$teams$"
   ],
   "trgds": [
-    ":s",
+    ":s:1",
     "$tragedies$"
   ],
   "trv": [
-    ":s",
+    ":s:1",
     "$trivial$"
   ],
   "vrusaths": [
-    ":s",
+    ":s:1",
     "$various-athletes$"
   ],
   "vrusarts": [
-    ":s",
+    ":s:1",
     "$various-artists$"
   ]
 }

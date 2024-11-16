@@ -1,166 +1,166 @@
 {
   "as": [
-    ":s",
+    ":s:1",
     "$articles$"
   ],
   "arch": [
-    ":s",
+    ":s:1",
     "$archive$"
   ],
   "appopfs": [
-    ":s",
+    ":s:1",
     "$apps-and-online-platforms$"
   ],
   "chnls": [
-    ":s",
+    ":s:1",
     "$channels$"
   ],
   "ctrs": [
-    ":s",
+    ":s:1",
     "$countries$"
   ],
   "dstrs": [
-    ":s",
+    ":s:1",
     "$distros$"
   ],
   "fny": [
-    ":s",
+    ":s:1",
     "$funny$"
   ],
   "fxlbrs": [
-    ":s",
+    ":s:1",
     "$frameworks-and-libraries$"
   ],
   "fxs": [
-    ":s",
+    ":s:1",
     "$frameworks$"
   ],
   "gs": [
-    ":s",
+    ":s:1",
     "$groups$"
   ],
   "hstry": [
-    ":s",
+    ":s:1",
     "$history$"
   ],
   "inf": [
-    ":s",
+    ":s:1",
     "$info$"
   ],
   "ins": [
-    ":s",
+    ":s:1",
     "$institutions$"
   ],
   "intrntl": [
-    ":s",
+    ":s:1",
     "$international$"
   ],
   "insorgs": [
-    ":s",
+    ":s:1",
     "$institutions-and-organizations$"
   ],
   "grs": [
-    ":s",
+    ":s:1",
     "$geographical-regions$"
   ],
   "isls": [
-    ":s",
+    ":s:1",
     "$islands$"
   ],
   "lbrs": [
-    ":s",
+    ":s:1",
     "$libraries$"
   ],
   "m": [
-    ":s",
+    ":s:1",
     "$misc$"
   ],
   "mpssvcs": [
-    ":s",
+    ":s:1",
     "$my-products-and-services$"
   ],
   "opfs": [
-    ":s",
+    ":s:1",
     "$online-platforms$"
   ],
   "opfswwws": [
-    ":s",
+    ":s:1",
     "$online-platforms-and-websites$"
   ],
   "orgs": [
-    ":s",
+    ":s:1",
     "$organizations$"
   ],
   "pgs": [
-    ":s",
+    ":s:1",
     "$pages$"
   ],
   "pls": [
-    ":s",
+    ":s:1",
     "$places$"
   ],
   "plsgrs": [
-    ":s",
+    ":s:1",
     "$places-and-geographical-regions$"
   ],
   "plsrgs": [
-    ":s",
+    ":s:1",
     "$places-and-regions$"
   ],
   "plgns": [
-    ":s",
+    ":s:1",
     "$plugins$"
   ],
   "pps": [
-    ":s",
+    ":s:1",
     "$public-persons$"
   ],
   "ps": [
-    ":s",
+    ":s:1",
     "$persons$"
   ],
   "pssvcs": [
-    ":s",
+    ":s:1",
     "$products-and-services$"
   ],
   "rchstry": [
-    ":s",
+    ":s:1",
     "$recent-history$"
   ],
   "rgs": [
-    ":s",
+    ":s:1",
     "$regions$"
   ],
   "smpfs": [
-    ":s",
+    ":s:1",
     "$social-media-platforms$"
   ],
   "smstrpfs": [
-    ":s",
+    ":s:1",
     "$social-media-and-streaming-platforms$"
   ],
   "strpfs": [
-    ":s",
+    ":s:1",
     "$streaming-platforms$"
   ],
   "tscs": [
-    ":s",
+    ":s:1",
     "$terms-and-concepts$"
   ],
   "wwws": [
-    ":s",
+    ":s:1",
     "$websites$"
   ],
   "_inf": [
-    ":s",
+    ":s:1",
     "$INF-NODES$"
   ],
   "_hcy": [
-    ":s",
+    ":s:1",
     "$HCY-NODES$"
   ],
   "_lfn": [
-    ":s",
+    ":s:1",
     "$LEAF-NODES$"
   ]
 }

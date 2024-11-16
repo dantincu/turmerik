@@ -88,7 +88,7 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirsPairCfg
             Run(pgArgs, chunkName, chunkMap,
                 "MacrosMap",
                 key => key,
-                value => ":s".Arr(
+                value => ":s:1".Arr(
                     $"${value}$"));
         }
 
