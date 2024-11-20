@@ -127,6 +127,10 @@
     ":s:1",
     "$historical-figures$"
   ],
+  "hllywd": [
+    ":s:1",
+    "$hollywoodian$"
+  ],
   "incds": [
     ":s:1",
     "$incidents$"
