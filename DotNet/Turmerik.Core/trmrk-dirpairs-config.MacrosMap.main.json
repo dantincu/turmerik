@@ -3,6 +3,10 @@
     ":s:1",
     "$albums$"
   ],
+  "alltrs": [
+    ":s:1",
+    "$all-tiers$"
+  ],
   "arts": [
     ":s:1",
     "$artists$"
@@ -185,7 +189,7 @@
   ],
   "othtrs": [
     ":s:1",
-    "$others-tiers$"
+    "$other-tiers$"
   ],
   "plyrs": [
     ":s:1",

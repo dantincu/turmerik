@@ -48,6 +48,7 @@
     "main": {
       "Map": {
         "albms": "albums",
+        "alltrs": "all-tiers",
         "arts": "artists",
         "athls": "athletes",
         "btnf": "about-infamous",
@@ -93,7 +94,7 @@
         "natm": "national-team",
         "natms": "national-teams",
         "others": "others",
-        "othtrs": "others-tiers",
+        "othtrs": "other-tiers",
         "plyrs": "players",
         "pub-elctns": "public-elections",
         "rfrs": "referees",
