@@ -203,6 +203,10 @@
     ":s:1",
     "$players$"
   ],
+  "pltclprts": [
+    ":s:1",
+    "$political-parties$"
+  ],
   "pub-elctns": [
     ":s:1",
     "$public-elections$"
