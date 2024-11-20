@@ -143,6 +143,10 @@
     ":s:1",
     "$masculine$"
   ],
+  "md": [
+    ":s:1",
+    "$moldavian$"
+  ],
   "mdls": [
     ":s:1",
     "$models$"
