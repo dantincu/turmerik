@@ -30,6 +30,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public bool CreatePdfFile { get; set; }
             public string Title { get; set; }
             public string ResTitle { get; set; }
+            public string EncodedResTitle { get; set; }
             public string MdFirstContent { get; set; }
             public string ShortDirName { get; set; }
             public string FullDirNamePart { get; set; }

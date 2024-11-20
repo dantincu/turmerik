@@ -21,6 +21,7 @@ using Turmerik.DirsPair;
 using Turmerik.Puppeteer.Helpers;
 using PuppeteerSharp;
 using Turmerik.Md;
+using Turmerik.Core.TextParsing.Md;
 
 namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 {
@@ -601,9 +602,12 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 }
             }
 
+            nodeArgs.EncodedResTitle = MdH.EncodeForMd(
+                nodeArgs.ResTitle);
+
             nodeArgs.MdFirstContent = string.Format(
                 config.FileContents.MdFileContentSectionTemplate,
-                $"[{nodeArgs.ResTitle}]({url})");
+                $"[{nodeArgs.EncodedResTitle}]({url})");
         }
 
         private async Task<string> GetResouceTitleAsync(
