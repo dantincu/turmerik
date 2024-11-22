@@ -15,4 +15,8 @@
     <Folder Include="program-behavior\profiles\turmerik-parcel-ws-notes-app\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
+  </ItemGroup>
+
 </Project>

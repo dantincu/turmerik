@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Turmerik.Logging\Turmerik.Logging.csproj" />
     <ProjectReference Include="..\Turmerik.WinForms\Turmerik.WinForms.csproj" />
     <ProjectReference Include="..\Turmerik\Turmerik.csproj" />

@@ -87,7 +87,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.MkFsDirsPairCfg.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.LocalFilesExplorerAnonymous.WebApi", "Turmerik.LocalFilesExplorerAnonymous.WebApi\Turmerik.LocalFilesExplorerAnonymous.WebApi.csproj", "{6A2E1307-EB9A-4074-B06C-E3543F0DAB28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.AddSectionRanks.ConsoleApp", "Turmerik.AddSectionRanks.ConsoleApp\Turmerik.AddSectionRanks.ConsoleApp.csproj", "{825729AB-8009-4A2C-8497-4945232FC7BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turmerik.AddSectionRanks.ConsoleApp", "Turmerik.AddSectionRanks.ConsoleApp\Turmerik.AddSectionRanks.ConsoleApp.csproj", "{825729AB-8009-4A2C-8497-4945232FC7BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0006B46B-D503-4988-905B-B66977E37C8D}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.Props = Directory.Build.Props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
