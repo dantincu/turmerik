@@ -12,8 +12,8 @@
   "author": "Daniel Tincu",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^20.12.10",
+    "@types/node": "^22.9.3",
     "buffer": "^6.0.3",
-    "parcel": "^2.12.0"
+    "parcel": "^2.13.0"
   }
 }
