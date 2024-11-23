@@ -59,6 +59,7 @@
   "|ro|": "$romanian$",
   "|sbgnrs|": "$sub-genres$",
   "|sngs|": "$songs$",
+  "|spcs|": "$species$",
   "|tms|": "$teams$",
   "|trgds|": "$tragedies$",
   "|trv|": "$trivial$",
