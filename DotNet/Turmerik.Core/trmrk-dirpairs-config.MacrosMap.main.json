@@ -23,6 +23,10 @@
     ":s:1",
     "$coaches$"
   ],
+  "cchsmgrs": [
+    ":s:1",
+    "$coaches-and-managers$"
+  ],
   "cdsips": [
     ":s:1",
     "$conductors-and-interpreters$"
