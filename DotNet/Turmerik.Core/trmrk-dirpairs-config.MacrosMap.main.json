@@ -35,14 +35,6 @@
     ":s:1",
     "$club-teams$"
   ],
-  "cvarts": [
-    ":s:1",
-    "$cover-artists$"
-  ],
-  "crmn": [
-    ":s:1",
-    "$criminality$"
-  ],
   "cmpttns": [
     ":s:1",
     "$competitions$"
@@ -54,6 +46,18 @@
   "cpzs": [
     ":s:1",
     "$compozitions$"
+  ],
+  "cntmpry": [
+    ":s:1",
+    "$contemporary$"
+  ],
+  "cvarts": [
+    ":s:1",
+    "$cover-artists$"
+  ],
+  "crmn": [
+    ":s:1",
+    "$criminality$"
   ],
   "dcmntrs": [
     ":s:1",
