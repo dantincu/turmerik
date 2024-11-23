@@ -231,6 +231,10 @@
     ":s:1",
     "$sub-genres$"
   ],
+  "sngs": [
+    ":s:1",
+    "$songs$"
+  ],
   "tms": [
     ":s:1",
     "$teams$"
