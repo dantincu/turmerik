@@ -19,6 +19,10 @@
     ":s:1",
     "$channels$"
   ],
+  "ctnts": [
+    ":s:1",
+    "$continents$"
+  ],
   "cts": [
     ":s:1",
     "$counties$"
