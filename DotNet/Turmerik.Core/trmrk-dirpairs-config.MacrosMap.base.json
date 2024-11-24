@@ -1,4 +1,8 @@
 {
+  "admrgs": [
+    ":s:1",
+    "$administrative-regions$"
+  ],
   "as": [
     ":s:1",
     "$articles$"
@@ -15,9 +19,25 @@
     ":s:1",
     "$channels$"
   ],
+  "cts": [
+    ":s:1",
+    "$counties$"
+  ],
+  "ctys": [
+    ":s:1",
+    "$cities$"
+  ],
+  "ctystwns": [
+    ":s:1",
+    "$cities-and-towns$"
+  ],
   "ctrs": [
     ":s:1",
     "$countries$"
+  ],
+  "dstrcts": [
+    ":s:1",
+    "$districts$"
   ],
   "dstrs": [
     ":s:1",
@@ -143,9 +163,21 @@
     ":s:1",
     "$streaming-platforms$"
   ],
+  "stts": [
+    ":s:1",
+    "$states$"
+  ],
   "tscs": [
     ":s:1",
     "$terms-and-concepts$"
+  ],
+  "twns": [
+    ":s:1",
+    "$towns$"
+  ],
+  "vlgs": [
+    ":s:1",
+    "$villages$"
   ],
   "wwws": [
     ":s:1",
