@@ -251,6 +251,10 @@
     ":s:1",
     "$tragedies$"
   ],
+  "trps": [
+    ":s:1",
+    "$trips$"
+  ],
   "trv": [
     ":s:1",
     "$trivial$"

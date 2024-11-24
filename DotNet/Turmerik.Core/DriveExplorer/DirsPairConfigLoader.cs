@@ -288,6 +288,14 @@ namespace Turmerik.Core.DriveExplorer
                 config.MacrosMap ??= new(),
                 nestedConfig.MacrosMap ??= new());
 
+            config.MacrosMap = config.MacrosMap.ToList().With(list =>
+            {
+                list.Sort((kvp1, kvp2) => kvp1.Key.CompareTo(kvp2.Key));
+                var retMap = list.Dictnr();
+
+                return retMap;
+            });
+
             return config;
         }
 
@@ -352,6 +360,14 @@ namespace Turmerik.Core.DriveExplorer
             config.Map = NormMaps(
                 config.Map,
                 nestedConfig.Map);
+
+            config.Map = config.Map.ToList().With(list =>
+            {
+                list.Sort((kvp1, kvp2) => kvp1.Key.CompareTo(kvp2.Key));
+                var retMap = list.Dictnr();
+
+                return retMap;
+            });
 
             return config;
         }
