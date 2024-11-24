@@ -162,16 +162,30 @@
       }
     },
     "NoteSectionDirNameIdxesMap": {
+      "1": {
+        "MinIdx": 110,
+        "MaxIdx": 199,
+        "IncIdx": false,
+        "FillGapsByDefault": false,
+        "IdxFmt": "D1"
+      },
       "2": {
         "MinIdx": 200,
         "MaxIdx": 299,
         "IncIdx": false,
         "FillGapsByDefault": false,
         "IdxFmt": "D1"
+      },
+      "3": {
+        "MinIdx": 300,
+        "MaxIdx": 399,
+        "IncIdx": false,
+        "FillGapsByDefault": false,
+        "IdxFmt": "D1"
       }
     },
     "NoteDirNameIdxes": {
-      "MinIdx": 300,
+      "MinIdx": 400,
       "MaxIdx": 999,
       "IncIdx": false,
       "FillGapsByDefault": false,
@@ -179,14 +193,14 @@
     },
     "NoteSectionDirNameIdxes": {
       "MinIdx": 100,
-      "MaxIdx": 199,
+      "MaxIdx": 109,
       "IncIdx": false,
       "FillGapsByDefault": false,
       "IdxFmt": "D1"
     },
     "NoteInternalDirNameIdxes": {
       "MinIdx": 1,
-      "MaxIdx": 99,
+      "MaxIdx": 9,
       "IncIdx": true,
       "FillGapsByDefault": true,
       "IdxFmt": "D1"
