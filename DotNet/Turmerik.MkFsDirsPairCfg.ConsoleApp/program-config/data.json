@@ -14,6 +14,7 @@
         "ctrs": "countries",
         "dstrcts": "districts",
         "dstrs": "distros",
+        "evts": "events",
         "fny": "funny",
         "fxlbrs": "frameworks-and-libraries",
         "fxs": "frameworks",

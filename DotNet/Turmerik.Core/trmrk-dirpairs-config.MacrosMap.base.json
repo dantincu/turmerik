@@ -47,6 +47,10 @@
     ":s:1",
     "$distros$"
   ],
+  "evts": [
+    ":s:1",
+    "$events$"
+  ],
   "fny": [
     ":s:1",
     "$funny$"
