@@ -67,6 +67,10 @@
     ":s:1",
     "$groups$"
   ],
+  "hstrcl": [
+    ":s:1",
+    "$historical$"
+  ],
   "hstry": [
     ":s:1",
     "$history$"
