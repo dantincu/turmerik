@@ -18,12 +18,10 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "./tailwindcss/output.css";
 import "./styles/global/style.scss";
 
-const root = document.getElementById("root");
-render(() => <App />, root!);
+import * as bootstrapObj from "bootstrap";
 
 export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
   isDevEnv.value = isDev ?? null;
-
   initApi(apiSvc, appConfig);
 
   driveExplorerApi.value = new FsExplorerApi(apiSvc, {
@@ -31,6 +29,11 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
     isLocalFilesWinOS: appConfig.isWinOS,
     relPath: "files",
   });
+    
+  const root = document.getElementById("root");
+  root!.innerHTML = "";
+  render(() => <App />, root!);
 };
 
 export const icons = iconsObj;
+export const bootstrap = bootstrapObj;

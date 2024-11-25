@@ -15,6 +15,6 @@ promArr = promArr.map((prom) => prom.then((response) => response.json()));
 
 Promise.all(promArr).then((responsesArr) => {
   const appConfig = trmrk.merge({}, responsesArr, null, true);
-  console.log("appConfig", appConfig);
+  // console.log("appConfig", appConfig);
   runAppSetup(appConfig as any as AppConfigData, isDev);
 });
