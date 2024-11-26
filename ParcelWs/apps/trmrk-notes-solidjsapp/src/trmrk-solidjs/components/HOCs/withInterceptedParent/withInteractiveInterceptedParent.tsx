@@ -2,17 +2,17 @@ import { createEffect, ParentComponent } from "solid-js";
 
 import { MtblRefValue } from "../../../../trmrk/core";
 
-import { withOverlay, WithOverlayProps } from "../withOverlay/withOverlay";
+import { withInterceptedParent, WithInterceptedParentProps } from "./withInterceptedParent";
 
-export interface WithInteractiveOverlayProps extends WithOverlayProps {
+export interface WithInteractiveInterceptedParentProps extends WithInterceptedParentProps {
   activeClass?: string | null | undefined;
   activeIntervalMillis?: number | null | undefined;
 }
 
-export function withInteractiveOverlay<T extends ParentComponent<P>, P extends Record<string, any> = {}>(
+export function withInteractiveInterceptedParent<T extends ParentComponent<P>, P extends Record<string, any> = {}>(
   InputComponent: T,
-  hcoProps: WithInteractiveOverlayProps
-): ParentComponent {
+  hcoProps: WithInteractiveInterceptedParentProps
+): ParentComponent<P> {
   return (props) => {
     const overlayElemRef: MtblRefValue<HTMLElement | null> = {
       value: null
@@ -24,9 +24,9 @@ export function withInteractiveOverlay<T extends ParentComponent<P>, P extends R
 
     const assignRef = (el: HTMLElement) => {
       overlayElemRef.value = el;
-
-      if (hcoProps.overlayElRef) {
-        hcoProps.overlayElRef(el);
+      
+      if (hcoProps.interceptorInsertedElRef) {
+        hcoProps.interceptorInsertedElRef(el);
       }
     }
 
@@ -38,7 +38,7 @@ export function withInteractiveOverlay<T extends ParentComponent<P>, P extends R
         const elem = overlayElemRef.value;
         console.log("callback", add);
 
-        if (add) {  
+        if (add) {
           elem?.classList.add(activeClass);
         } else {
           elem?.classList.remove(activeClass);
@@ -56,7 +56,7 @@ export function withInteractiveOverlay<T extends ParentComponent<P>, P extends R
     }
 
     createEffect(() => {
-      const elem = overlayElemRef.value;
+      const elem = overlayElemRef.value?.parentElement?.parentElement;
 
       if (elem) {
         elem.addEventListener("mousedown", onMouseDownOrTouchStart, {
@@ -69,7 +69,7 @@ export function withInteractiveOverlay<T extends ParentComponent<P>, P extends R
       }
 
       return () => {
-        const elem = overlayElemRef.value;
+        const elem = overlayElemRef.value?.parentElement?.parentElement;
       
         if (elem) {
           elem.removeEventListener("mousedown", onMouseDownOrTouchStart, {
@@ -83,9 +83,9 @@ export function withInteractiveOverlay<T extends ParentComponent<P>, P extends R
       }
     }, [overlayElemRef.value]);
 
-    const EnhancedComponent = withOverlay<T, P>(InputComponent, {
-      overlayClass: hcoProps.overlayClass,
-      overlayElRef: assignRef
+    const EnhancedComponent = withInterceptedParent<T, P>(InputComponent, {
+      interceptorClass: hcoProps.interceptorClass,
+      interceptorInsertedElRef: assignRef
     });
 
     return (

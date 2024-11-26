@@ -1,6 +1,6 @@
 import { ParentComponent, createEffect } from 'solid-js';
 
-import { JSX } from "../../htmlElementWrappers/typeDefs";
+import { JSX } from "../withHtmlElement/typeDefs";
 
 import { MtblRefValue } from "../../../../trmrk/core";
 
@@ -23,7 +23,7 @@ export interface WithLongPressComponentProps {
 
 export const withLongPress = <TComponent extends ParentComponent<P>, P extends Record<string, any> & WithLongPressComponentProps>(
   InputComponent: TComponent | ((props: P) => JSX.Element),
-  hcoProps: WithLongPressProps): ParentComponent => {
+  hcoProps: WithLongPressProps): ParentComponent<P> => {
   return (props) => {
     const elemRef: MtblRefValue<HTMLElement | null> = {
       value: null
@@ -82,12 +82,12 @@ export const withLongPress = <TComponent extends ParentComponent<P>, P extends R
     const assignRef = (el: HTMLElement | null) => {
       elemRef.value = el;
 
-      if (hcoProps.ref) {
-        hcoProps.ref(el); // Forward the ref
-      }
-
       if (pps.ref) {
         pps.ref(el); // Forward the ref
+      }
+
+      if (hcoProps.ref) {
+        hcoProps.ref(el); // Forward the ref
       }
     };
 
