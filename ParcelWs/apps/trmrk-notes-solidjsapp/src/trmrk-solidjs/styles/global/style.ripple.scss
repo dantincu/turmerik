@@ -2,27 +2,83 @@
 @use "./mixins.scss";
 
 @keyframes ripple-in {
-    from {
-      background-color: #FFF0;
-    }
+  from {
+    background-color: #FFF0;
+  }
 
-    to {
-      background-color: #FFFF;
-    }
+  to {
+    background-color: #FFFF;
+  }
 }
 
 @keyframes ripple-out {
-    from {
-      background-color: #FFFF;
-    }
+  from {
+    background-color: #FFFF;
+  }
 
-    to {
-      background-color: #FFF0;
-    }
+  to {
+    background-color: #FFF0;
+  }
+}
+
+@keyframes ripple-dark-bg-in {
+  from {
+    background-color: #0000;
+  }
+
+  to {
+    background-color: #000F;
+  }
+}
+
+@keyframes ripple-dark-bg-out {
+  from {
+    background-color: #000F;
+  }
+
+  to {
+    background-color: #0000;
+  }
+}
+
+@keyframes ripple-gray-bg-in {
+  from {
+    background-color: #8880;
+  }
+
+  to {
+    background-color: #888F;
+  }
+}
+
+@keyframes ripple-gray-bg-out {
+  from {
+    background-color: #888F;
+  }
+
+  to {
+    background-color: #8880;
+  }
 }
 
 .trmrk-ripple {
   animation-name: ripple-in, ripple-out;
+  animation-duration: 200ms, 200ms;
+  animation-delay: 0ms, 200ms;
+  animation-timing-function: ease-in, ease-out;
+  animation-iteration-count: 1, 1;
+}
+
+.trmrk-ripple-dark-bg {
+  animation-name: ripple-dark-bg-in, ripple-dark-bg-out;
+  animation-duration: 200ms, 200ms;
+  animation-delay: 0ms, 200ms;
+  animation-timing-function: ease-in, ease-out;
+  animation-iteration-count: 1, 1;
+}
+
+.trmrk-ripple-gray-bg {
+  animation-name: ripple-gray-bg-in, ripple-gray-bg-out;
   animation-duration: 200ms, 200ms;
   animation-delay: 0ms, 200ms;
   animation-timing-function: ease-in, ease-out;

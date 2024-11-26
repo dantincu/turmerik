@@ -5,7 +5,7 @@ import { JSX } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/typeDef
 import { BasicHTMLAttributes } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/extendedTypeDefs";
 import { withHtmlElement } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/withHtmlElement";
 
-import { withRipple } from "../../trmrk-solidjs/components/HOCs/withInterceptedParent/withRipple";
+import { RippleBackColor, withRipple } from "../../trmrk-solidjs/components/HOCs/withInterceptedParent/withRipple";
 import { withLongPress, WithLongPressComponentProps } from "../../trmrk-solidjs/components/HOCs/withLongPress/withLongPress";
 
 import { LongPressEventDataTuple, LongPressEventData } from "../../trmrk-solidjs/hooks/useLongPress/useLongPress";
@@ -33,6 +33,14 @@ const App: Component = () => {
 
   // @ts-ignore
   const RippleButton = withRipple<typeof Button, JSX.HTMLAttributes<HTMLButtonElement> & BasicHTMLAttributes>(Button, {});
+  // @ts-ignore
+  const GrayBgRippleButton = withRipple<typeof Button, JSX.HTMLAttributes<HTMLButtonElement> & BasicHTMLAttributes>(Button, {
+    rippleBackColor: RippleBackColor.Gray
+  });
+  // @ts-ignore
+  const BlackBgRippleButton = withRipple<typeof Button, JSX.HTMLAttributes<HTMLButtonElement> & BasicHTMLAttributes>(Button, {
+    rippleBackColor: RippleBackColor.Dark
+  });
 
   const LongPressableRippleButton = withLongPress<typeof RippleButton, JSX.HTMLAttributes<HTMLButtonElement> & BasicHTMLAttributes & WithLongPressComponentProps>(RippleButton, { });
 
@@ -47,6 +55,8 @@ const App: Component = () => {
         longPress={onLongPress}
         class="btn btn-primary">a
       </LongPressableRippleButton>
+      <GrayBgRippleButton class="btn btn-secondary" >qwer</GrayBgRippleButton>
+      <BlackBgRippleButton class="btn btn-secondary">qwer</BlackBgRippleButton>
     </div>);
 };
 

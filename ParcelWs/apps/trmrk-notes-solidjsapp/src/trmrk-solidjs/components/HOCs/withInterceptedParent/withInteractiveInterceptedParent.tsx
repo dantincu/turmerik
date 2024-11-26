@@ -36,7 +36,6 @@ export function withInteractiveInterceptedParent<T extends ParentComponent<P>, P
     const onMouseDownOrTouchStart = (evt: MouseEvent | TouchEvent) => {
       const callback = (add: boolean) => {
         const elem = overlayElemRef.value;
-        console.log("callback", add);
 
         if (add) {
           elem?.classList.add(activeClass);
