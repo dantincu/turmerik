@@ -1,10 +1,16 @@
-import { type Component, createEffect } from 'solid-js';
+import { ParentComponent, createEffect } from 'solid-js';
+
+import { JSX } from "../../htmlElementWrappers/typeDefs";
 
 import { MtblRefValue } from "../../../../trmrk/core";
 
 import { useLongPress, LongPressEventDataTuple, LongPressEventData, UseLongPressPropsCore } from "../../../hooks/useLongPress/useLongPress";
 
 export interface WithLongPressProps extends UseLongPressPropsCore {
+  ref?: (el: HTMLElement | null) => void;
+}
+
+export interface WithLongPressComponentProps {
   touchStart?: ((evt: LongPressEventDataTuple) => void) | null | undefined;
   touchMove?: ((evt: LongPressEventDataTuple) => void) | null | undefined;
   touchEnd?: ((evt: LongPressEventDataTuple) => void) | null | undefined;
@@ -15,65 +21,81 @@ export interface WithLongPressProps extends UseLongPressPropsCore {
   longPress?: ((evt: LongPressEventData) => void) | null | undefined;
 }
 
-export const withLongPress = <TComponent extends Component<P>, P extends Record<string, any> | WithLongPressProps>(InputComponent: TComponent) => {
-  return (props: P) => {
+export const withLongPress = <TComponent extends ParentComponent<P>, P extends Record<string, any> & WithLongPressComponentProps>(
+  InputComponent: TComponent | ((props: P) => JSX.Element),
+  hcoProps: WithLongPressProps): ParentComponent => {
+  return (props) => {
     const elemRef: MtblRefValue<HTMLElement | null> = {
       value: null
     };
 
+    const pps = props as P;
+
     const onTouchStart = (evt: LongPressEventDataTuple) => {
-      if (props.touchStart) {
-        props.touchStart(evt);
+      if (pps.touchStart) {
+        pps.touchStart(evt);
       }
     }
 
     const onTouchMove = (evt: LongPressEventDataTuple) => {
-      if (props.touchMove) {
-        props.touchMove(evt);
+      if (pps.touchMove) {
+        pps.touchMove(evt);
       }
     }
 
     const onTouchEnd = (evt: LongPressEventDataTuple) => {
-      if (props.touchEnd) {
-        props.touchEnd(evt);
+      if (pps.touchEnd) {
+        pps.touchEnd(evt);
       }
     }
 
     const onMouseDown = (evt: LongPressEventDataTuple) => {
-      if (props.mouseDown) {
-        props.mouseDown(evt);
+      if (pps.mouseDown) {
+        pps.mouseDown(evt);
       }
     }
 
     const onMouseMove = (evt: LongPressEventDataTuple) => {
-      if (props.mouseMove) {
-        props.mouseMove(evt);
+      if (pps.mouseMove) {
+        pps.mouseMove(evt);
       }
     }
 
     const onMouseUp = (evt: LongPressEventDataTuple) => {
-      if (props.mouseUp) {
-        props.mouseUp(evt);
+      if (pps.mouseUp) {
+        pps.mouseUp(evt);
       }
     }
 
     const onShortPress = (evt: LongPressEventDataTuple) => {
-      if (props.shortPress) {
-        props.shortPress(evt);
+      if (pps.shortPress) {
+        pps.shortPress(evt);
       }
     }
 
     const onLongPress = (evt: LongPressEventData) => {
-      if (props.longPress) {
-        props.longPress(evt);
+      if (pps.longPress) {
+        pps.longPress(evt);
       }
     }
 
+    const assignRef = (el: HTMLElement | null) => {
+      elemRef.value = el;
+
+      if (hcoProps.ref) {
+        hcoProps.ref(el); // Forward the ref
+      }
+
+      if (pps.ref) {
+        pps.ref(el); // Forward the ref
+      }
+    };
+
     const elemLongPress = useLongPress({
       domElemFactory: () => elemRef.value!,
-      treatRightClickAsLongPress: props.treatRightClickAsLongPress,
-      longPressIntervalMillis: props.longPressIntervalMillis,
-      touchOrMouseMoveMinPx: props.touchOrMouseMoveMinPx
+      treatRightClickAsLongPress: hcoProps.treatRightClickAsLongPress,
+      longPressIntervalMillis: hcoProps.longPressIntervalMillis,
+      touchOrMouseMoveMinPx: hcoProps.touchOrMouseMoveMinPx
     });
 
     createEffect(() => {
@@ -93,6 +115,8 @@ export const withLongPress = <TComponent extends Component<P>, P extends Record<
       }
     }, [elemRef.value]);
 
-    return <InputComponent ref={(el: HTMLElement) => elemRef.value = el} {...props} />
+    return (<InputComponent {...pps} ref={assignRef}>
+      {props.children}
+    </InputComponent>);
   };
 }

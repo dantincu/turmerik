@@ -31,8 +31,9 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
   });
     
   const root = document.getElementById("root");
-  root!.innerHTML = "";
+  const rootLoading = document.getElementById("rootLoading");
   render(() => <App />, root!);
+  rootLoading!.remove();
 };
 
 export const icons = iconsObj;

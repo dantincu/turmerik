@@ -13,7 +13,7 @@ import * as csstype from "csstype";
 export type DOMElement = Element;
 
 export namespace JSX {
-  type Element =
+  export type Element =
     | Node
     | ArrayElement
     | (string & {})
