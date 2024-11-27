@@ -1,0 +1,22 @@
+.trmrk-parent-interceptor {
+  position: relative;
+  display: inline-block;
+  background-color: #0000;
+  width: 100%;
+  height: 0px;
+  overflow: show;
+
+  > .trmrk-interceptor-inserted {
+    display: block;
+    position: absolute;
+    width: 100%;
+  }
+}
+
+.btn > .trmrk-parent-interceptor > .trmrk-interceptor-inserted {
+  top: -9px;
+  left: -13px;
+  height: 40px;
+  width: calc(100% + 26px);
+  border-radius: 5px;
+}

@@ -107,10 +107,6 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-notes-reactapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-react"],
   },
-  "trmrk-notes-solidjsapp": {
-    dirPath: "apps\\trmrk-notes-solidjsapp\\src",
-    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
-  },
   "trmrk-notes-svelteapp": {
     dirPath: "apps\\trmrk-notes-svelteapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-svelte"],
@@ -122,6 +118,14 @@ const destnLocationsArr: {
   "trmrk-notes-vueapp": {
     dirPath: "apps\\trmrk-notes-vueapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-vue"],
+  },
+  "trmrk-notes-solidjsapp": {
+    dirPath: "apps\\trmrk-notes-solidjsapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
+  },
+  "trmrk-localfs-notes-solidjsapp": {
+    dirPath: "apps\\trmrk-localfs-notes-solidjsapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
   },
 };
 

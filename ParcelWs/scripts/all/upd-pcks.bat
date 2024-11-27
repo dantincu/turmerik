@@ -18,10 +18,11 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\apps\trmrk-http-proxy-nodejsapp",
 "..\..\apps\trmrk-notes-lithtmlapp",
 "..\..\apps\trmrk-notes-reactapp",
-"..\..\apps\trmrk-notes-solidjsapp",
 "..\..\apps\trmrk-notes-svelteapp",
 "..\..\apps\trmrk-notes-vueapp",
-"..\..\apps\trmrk-react-testapp") do (
+"..\..\apps\trmrk-react-testapp",
+"..\..\apps\trmrk-notes-solidjsapp",
+"..\..\apps\trmrk-localfs-notes-solidjsapp") do (
   cd %%a
   .\_\upd-pcks.bat
 )

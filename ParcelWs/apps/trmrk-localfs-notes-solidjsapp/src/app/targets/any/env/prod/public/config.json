@@ -1,0 +1,121 @@
+{
+  "apiHost": "https://localhost:7285",
+  "trmrkPfx": "trmrk",
+  "isDevEnv": false,
+  "clientVersion": "1",
+  "requiredClientVersion": "1",
+  "invalidFileNameChars": [
+    "\u0022",
+    "\u003C",
+    "\u003E",
+    "|",
+    "\u0000",
+    "\u0001",
+    "\u0002",
+    "\u0003",
+    "\u0004",
+    "\u0005",
+    "\u0006",
+    "\u0007",
+    "\b",
+    "\t",
+    "\n",
+    "\u000B",
+    "\f",
+    "\r",
+    "\u000E",
+    "\u000F",
+    "\u0010",
+    "\u0011",
+    "\u0012",
+    "\u0013",
+    "\u0014",
+    "\u0015",
+    "\u0016",
+    "\u0017",
+    "\u0018",
+    "\u0019",
+    "\u001A",
+    "\u001B",
+    "\u001C",
+    "\u001D",
+    "\u001E",
+    "\u001F",
+    ":",
+    "*",
+    "?",
+    "\\",
+    "/"
+  ],
+  "pathSep": "\\",
+  "altPathSep": "/",
+  "isWinOS": true,
+  "isLocalFileNotesApp": true,
+  "clientUserUuid": "34751DEB-A8EB-48C3-83E8-CBB468AF0E92",
+  "noteDirPairs": {
+    "FileNameMaxLength": 100,
+    "SerializeToJson": true,
+    "AllowGetRequestsToPersistChanges": true,
+    "TrmrkGuidInputName": "trmrk_guid",
+    "DirNames": {
+      "NoteBook": "[note-book]",
+      "NoteFiles": "[note-files]",
+      "NoteInternals": "[note-internals]",
+      "NoteInternalsPfxes": {
+        "MainPfx": "0",
+        "AltPfx": "t_0",
+        "JoinStr": "-",
+        "UseAltPfx": false
+      },
+      "NoteItemsPfxes": {
+        "MainPfx": "",
+        "AltPfx": "t_",
+        "JoinStr": "-",
+        "UseAltPfx": false
+      },
+      "NoteSectionsPfxes": {
+        "MainPfx": "",
+        "AltPfx": "t_",
+        "JoinStr": "-",
+        "UseAltPfx": false
+      }
+    },
+    "NoteDirNameIdxes": {
+      "MinIdx": 200,
+      "MaxIdx": 999,
+      "IncIdx": false,
+      "FillGapsByDefault": false,
+      "IdxFmt": "D1"
+    },
+    "NoteSectionDirNameIdxes": {
+      "MinIdx": 100,
+      "MaxIdx": 199,
+      "IncIdx": false,
+      "FillGapsByDefault": false,
+      "IdxFmt": "D1"
+    },
+    "NoteInternalDirNameIdxes": {
+      "MinIdx": 1,
+      "MaxIdx": 99,
+      "IncIdx": true,
+      "FillGapsByDefault": true,
+      "IdxFmt": "D1"
+    },
+    "FileNames": {
+      "NoteBookJsonFileName": "[note-book].json",
+      "NoteItemJsonFileName": "[note].json",
+      "NoteItemMdFileName": "[note].md",
+      "NoteItemMdFileNamePfx": "0-",
+      "PrependTitleToNoteMdFileName": true,
+      "KeepFileName": ".keep"
+    },
+    "FileContents": {
+      "KeepFileContentsTemplate": "{0}",
+      "KeepFileContainsNoteJson": true,
+      "NoteFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
+      "NoteFileContentSectionTemplate": "{0}  \n\n",
+      "ExpectTrmrkGuidInNoteJsonFile": true,
+      "ExpectTrmrkGuidInNoteMdFile": false
+    }
+  }
+}

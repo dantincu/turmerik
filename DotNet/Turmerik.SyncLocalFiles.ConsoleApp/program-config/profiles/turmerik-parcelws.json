@@ -292,24 +292,6 @@
       }
     },
     {
-      "Name": "trmrk-notes-solidjsapp",
-      "DirPath": "apps\\trmrk-notes-solidjsapp\\src",
-      "FoldersMap": {
-        "trmrk": {
-          "DirPath": "trmrk"
-        },
-        "trmrk-axios": {
-          "DirPath": "trmrk-axios"
-        },
-        "trmrk-browser": {
-          "DirPath": "trmrk-browser"
-        },
-        "trmrk-solidjs": {
-          "DirPath": "trmrk-solidjs"
-        }
-      }
-    },
-    {
       "Name": "trmrk-notes-svelteapp",
       "DirPath": "apps\\trmrk-notes-svelteapp\\src",
       "FoldersMap": {
@@ -360,6 +342,42 @@
         },
         "trmrk-react": {
           "DirPath": "trmrk-react"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-notes-solidjsapp",
+      "DirPath": "apps\\trmrk-notes-solidjsapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-solidjs": {
+          "DirPath": "trmrk-solidjs"
+        }
+      }
+    },
+    {
+      "Name": "trmrk-localfs-notes-solidjsapp",
+      "DirPath": "apps\\trmrk-localfs-notes-solidjsapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-solidjs": {
+          "DirPath": "trmrk-solidjs"
         }
       }
     }
