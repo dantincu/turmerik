@@ -103,6 +103,10 @@
     ":s:1",
     "$libraries$"
   ],
+  "lsswllknwn": [
+    ":s:1",
+    "$less-well-known$"
+  ],
   "m": [
     ":s:1",
     "$misc$"
@@ -190,6 +194,10 @@
   "vlgs": [
     ":s:1",
     "$villages$"
+  ],
+  "wllknwn": [
+    ":s:1",
+    "$well-known$"
   ],
   "wwws": [
     ":s:1",
