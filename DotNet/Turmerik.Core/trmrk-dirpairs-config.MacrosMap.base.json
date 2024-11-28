@@ -7,7 +7,11 @@
     ":s:1",
     "$articles$"
   ],
-  "arch": [
+  "archc": [
+    ":s:1",
+    "$archaic$"
+  ],
+  "archv": [
     ":s:1",
     "$archive$"
   ],

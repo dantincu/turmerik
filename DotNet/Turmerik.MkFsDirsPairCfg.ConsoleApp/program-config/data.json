@@ -4,7 +4,8 @@
       "Map": {
         "admrgs": "administrative-regions",
         "as": "articles",
-        "arch": "archive",
+        "archc": "archaic",
+        "archv": "archive",
         "appopfs": "apps-and-online-platforms",
         "chnls": "channels",
         "ctnts": "continents",
