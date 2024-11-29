@@ -10,6 +10,8 @@ import { withLongPress, WithLongPressComponentProps } from "../../trmrk-solidjs/
 
 import { LongPressEventDataTuple, LongPressEventData } from "../../trmrk-solidjs/hooks/useLongPress/useLongPress";
 
+import Loading from "../../trmrk-solidjs/components/Loading/Loading";
+
 const App: Component = () => {
   const onTouchStartOrMouseDown = (evt: LongPressEventDataTuple) => {
     // console.log("onTouchStartOrMouseDown", evt);
@@ -57,6 +59,7 @@ const App: Component = () => {
       </LongPressableRippleButton>
       <GrayBgRippleButton class="btn btn-secondary" >qwer</GrayBgRippleButton>
       <BlackBgRippleButton class="btn btn-secondary">qwer</BlackBgRippleButton>
+      <Loading />
     </div>);
 };
 

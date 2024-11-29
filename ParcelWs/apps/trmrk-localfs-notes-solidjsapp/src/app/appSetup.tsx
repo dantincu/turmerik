@@ -1,4 +1,7 @@
 import { render } from "solid-js/web";
+import { Router, Route } from "@solidjs/router";
+
+import { AppContext, createAppData } from "./dataStore/core";
 
 import { AppConfigData } from "../trmrk/notes-app-config";
 import { isDevEnv } from "../trmrk/dev";
@@ -12,6 +15,7 @@ import { apiSvc } from "./services/apiService";
 import { driveExplorerApi } from "./services/DriveExplorerApi";
 
 import App from "./components/App";
+import NotFoundPage from "../trmrk-solidjs/components/Error/NotFoundPage";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -32,7 +36,14 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
     
   const root = document.getElementById("root");
   const rootLoading = document.getElementById("rootLoading");
-  render(() => <App />, root!);
+
+  const appData = createAppData();
+
+  render(() => <AppContext.Provider value={appData}>
+    <Router root={App}>
+      <Route path="*paramName" component={NotFoundPage} />
+    </Router>
+  </AppContext.Provider>, root!);
   rootLoading!.remove();
 };
 

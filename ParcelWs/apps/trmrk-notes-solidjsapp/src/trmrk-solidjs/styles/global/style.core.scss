@@ -34,18 +34,6 @@ body {
   overflow: hidden;
 }
 
-.trmrk-display-flex {
-  display: flex;
-}
-
-.trmrk-display-inline-flex {
-  display: inline-flex;
-}
-
-.trmrk-align-self-flex-end {
-  align-self: flex-end;
-}
-
 .trmrk-wrap-content {
   flex-wrap: wrap;
   text-wrap: wrap;
@@ -68,47 +56,6 @@ body {
   word-break: keep-all;
   white-space-collapse: preserve;
   line-break: anywhere;
-}
-
-.trmrk-label-link {
-  height: 40px;
-  padding: 0px;
-}
-
-.trmrk-btn-link {
-  width: 40px;
-  height: 40px;
-  padding: 0px;
-}
-
-.trmrk-btn-link-xl {
-  width: 80px;
-  height: 80px;
-  padding: 0px;
-}
-
-.trmrk-form {
-  padding: 0px 10px;
-}
-
-.trmrk-form-group {
-  display: flex;
-  line-height: 40px;
-  text-align: left;
-  vertical-align: middle;
-}
-
-.trmrk-form-label {
-  line-height: 40px;
-  vertical-align: middle;
-  cursor: pointer;
-  padding-top: 0.25em;
-}
-
-.trmrk-label-link .trmrk-form-label {
-  position: relative;
-  top: -1em;
-  padding-top: 0em;
 }
 
 .trmrk-scrollable::-webkit-scrollbar {

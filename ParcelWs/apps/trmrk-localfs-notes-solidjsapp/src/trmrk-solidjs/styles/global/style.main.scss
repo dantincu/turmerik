@@ -1,3 +1,61 @@
+.trmrk-display-flex {
+  display: flex;
+}
+
+.trmrk-display-inline-flex {
+  display: inline-flex;
+}
+
+.trmrk-align-self-flex-end {
+  align-self: flex-end;
+}
+
+.trmrk-loading-el {
+  position: relative;
+  padding: 5px 20px;
+}
+
+.trmrk-label-link {
+  height: 40px;
+  padding: 0px;
+}
+
+.trmrk-btn-link {
+  width: 40px;
+  height: 40px;
+  padding: 0px;
+}
+
+.trmrk-btn-link-xl {
+  width: 80px;
+  height: 80px;
+  padding: 0px;
+}
+
+.trmrk-form {
+  padding: 0px 10px;
+}
+
+.trmrk-form-group {
+  display: flex;
+  line-height: 40px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.trmrk-form-label {
+  line-height: 40px;
+  vertical-align: middle;
+  cursor: pointer;
+  padding-top: 0.25em;
+}
+
+.trmrk-label-link .trmrk-form-label {
+  position: relative;
+  top: -1em;
+  padding-top: 0em;
+}
+
 .trmrk-parent-interceptor {
   position: relative;
   display: inline-block;
