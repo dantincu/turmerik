@@ -78,7 +78,7 @@ export class UseLongPress<
 
     this.touchOrMouseMoveMinPx = trmrk.asNumber(
       props.touchOrMouseMoveMinPx,
-      200
+      20
     );
 
     this.domElemFactory = props.domElemFactory;

@@ -1,4 +1,5 @@
 import trmrk from "../../../trmrk";
+
 import { runAppSetup } from "../../appSetup.tsx";
 import { AppConfigData } from "../../../trmrk/notes-app-config";
 
@@ -15,6 +16,5 @@ promArr = promArr.map((prom) => prom.then((response) => response.json()));
 
 Promise.all(promArr).then((responsesArr) => {
   const appConfig = trmrk.merge({}, responsesArr, null, true);
-  // console.log("appConfig", appConfig);
   runAppSetup(appConfig as any as AppConfigData, isDev);
 });

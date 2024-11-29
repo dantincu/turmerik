@@ -3,7 +3,7 @@ import { createContext, Context } from "solid-js";
 import {
   AppDataCore,
   createAppDataCore,
-  appContextRef,
+  AppContext as AppContextCore,
 } from "../../trmrk-solidjs/dataStore/core";
 
 export interface AppData extends AppDataCore {}
@@ -13,5 +13,4 @@ export const createAppData = () => {
   return appData;
 };
 
-export const AppContext = createContext<AppData>();
-appContextRef.register(AppContext as Context<AppData>);
+export const AppContext = AppContextCore as Context<AppData>;

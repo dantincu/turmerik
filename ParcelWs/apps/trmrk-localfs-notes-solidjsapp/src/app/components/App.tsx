@@ -1,8 +1,6 @@
-import { type Component } from 'solid-js';
+import { Component, JSX } from 'solid-js';
 
-import { JSX } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/typeDefs";
-
-import { BasicHTMLAttributes } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/extendedTypeDefs";
+import { BasicHTMLAttributes } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/typeDefs";
 import { withHtmlElement } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/withHtmlElement";
 
 import { RippleBackColor, withRipple } from "../../trmrk-solidjs/components/HOCs/withInterceptedParent/withRipple";
@@ -11,6 +9,9 @@ import { withLongPress, WithLongPressComponentProps } from "../../trmrk-solidjs/
 import { LongPressEventDataTuple, LongPressEventData } from "../../trmrk-solidjs/hooks/useLongPress/useLongPress";
 
 import Loading from "../../trmrk-solidjs/components/Loading/Loading";
+
+import BsBtn from "../../trmrk-solidjs/components/BsBtn/BsBtn";
+import BsIconBtn from "../../trmrk-solidjs/components/BsBtn/BsIconBtn";
 
 const App: Component = () => {
   const onTouchStartOrMouseDown = (evt: LongPressEventDataTuple) => {
@@ -47,7 +48,9 @@ const App: Component = () => {
   const LongPressableRippleButton = withLongPress<typeof RippleButton, JSX.HTMLAttributes<HTMLButtonElement> & BasicHTMLAttributes & WithLongPressComponentProps>(RippleButton, { });
 
   return (
-    <div><RippleButton class="btn btn-secondary">asdfasdf</RippleButton>
+    <div>
+      <button class="btn btn-outline-light"><i class="bi bi-house"></i></button>
+      <RippleButton class="btn btn-secondary">asdfasdf</RippleButton>
       <LongPressableRippleButton
         touchStart={onTouchStartOrMouseDown}
         mouseDown={onTouchStartOrMouseDown}
@@ -59,7 +62,13 @@ const App: Component = () => {
       </LongPressableRippleButton>
       <GrayBgRippleButton class="btn btn-secondary" >qwer</GrayBgRippleButton>
       <BlackBgRippleButton class="btn btn-secondary">qwer</BlackBgRippleButton>
+      <BsBtn>asdfasdf</BsBtn>
+      <BsIconBtn iconClassName="bi bi-house" />
       <Loading />
+      <BsBtn>asdfasdf</BsBtn>
+      <BsIconBtn iconClassName="bi bi-arrow-90deg-left" />
+      <BsBtn>asdfasdf</BsBtn>
+      <BsIconBtn iconClassName="bi bi-arrow-90deg-right" />
     </div>);
 };
 

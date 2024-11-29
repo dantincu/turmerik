@@ -1,6 +1,4 @@
-import { Component } from "solid-js";
-
-import { JSX } from "./typeDefs";
+import { Component, JSX } from "solid-js";
 
 export type SupportedLeafTagName = "input";
 

@@ -1,6 +1,4 @@
-import { ParentComponent } from "solid-js";
-
-import { JSX } from "../withHtmlElement/typeDefs";
+import { ParentComponent, JSX } from "solid-js";
 
 export type SupportedTagName = "button" | "div" | "span";
 

@@ -1,4 +1,4 @@
-import { Context } from "solid-js";
+import { Context, createContext } from "solid-js";
 
 import { Singleton } from "../../trmrk/core";
 import { isCompactMode as isCompactModeFunc } from "../../trmrk-browser/domUtils/core";
@@ -118,4 +118,6 @@ export const createAppDataCore = () => {
   return appData;
 };
 
-export const appContextRef = new Singleton<Context<AppDataCore>>();
+export const AppContext = createContext<AppDataCore>(
+  createAppDataCore()
+) as Context<AppDataCore>;

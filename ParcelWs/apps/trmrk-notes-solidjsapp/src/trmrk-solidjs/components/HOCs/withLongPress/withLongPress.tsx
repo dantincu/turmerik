@@ -1,6 +1,4 @@
-import { ParentComponent, createEffect } from 'solid-js';
-
-import { JSX } from "../withHtmlElement/typeDefs";
+import { ParentComponent, createEffect, JSX } from 'solid-js';
 
 import { MtblRefValue } from "../../../../trmrk/core";
 
