@@ -65,8 +65,9 @@ const App: Component = () => {
       <BsBtn>asdfasdf</BsBtn>
       <BsIconBtn iconClassName="bi bi-house" />
       <Loading />
-      <BsBtn>asdfasdf</BsBtn>
-      <BsIconBtn iconClassName="bi bi-arrow-90deg-left" />
+      <BsBtn btnHasNoBorder={true}>asdfasdf</BsBtn>
+      <BsIconBtn iconClassName="bi bi-house" />
+      <BsIconBtn btnHasNoBorder={true} iconClassName="bi bi-arrow-90deg-left" />
       <BsBtn>asdfasdf</BsBtn>
       <BsIconBtn iconClassName="bi bi-arrow-90deg-right" />
     </div>);

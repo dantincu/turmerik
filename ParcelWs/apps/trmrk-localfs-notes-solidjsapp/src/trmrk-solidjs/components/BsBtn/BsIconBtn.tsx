@@ -7,7 +7,7 @@ export interface BsIconBtnProps extends BsBtnProps {
 }
 
 const BsIconBtn: ParentComponent<BsIconBtnProps> = (props: BsIconBtnProps) => {
-  return <BsBtn btnClassName="trmrk-bs-icon-btn">
+  return <BsBtn {...props} btnClassName={["trmrk-bs-icon-btn", props.btnClassName ?? ""].join(" ")}>
     <i class={props.iconClassName}></i>
   </BsBtn>
 }
