@@ -1,8 +1,14 @@
-import { Context, createContext } from "solid-js";
+import { useContext, createContext } from "solid-js";
+import { SetStoreFunction } from "solid-js/store";
 
-import { Singleton } from "../../trmrk/core";
 import { isCompactMode as isCompactModeFunc } from "../../trmrk-browser/domUtils/core";
 import { initDomAppTheme } from "../domUtils/core";
+
+export enum SplitPanelOrientation {
+  None = 0,
+  Vertical,
+  Horizontal,
+}
 
 export interface ComponentFlags {
   isVisible?: boolean | null | undefined;
@@ -21,7 +27,6 @@ export interface AppTabsBarData {
 
 export interface AppHeaderData {
   show: boolean;
-  customContentStartingColumnIdx: number;
   goToParentBtn: ComponentFlags;
   showHistoryNavBtns: boolean;
   showHistoryNavBtnsDefaultBehaviorEnabled: boolean;
@@ -41,6 +46,14 @@ export interface AppFooterData {
   showCloseSelectionBtn: boolean;
 }
 
+export interface AppBodyData {
+  splitOrientation: SplitPanelOrientation;
+  firstContainerIsFurtherSplit: boolean;
+  secondContainerIsFurtherSplit: boolean;
+  secondContainerIsFocused: boolean;
+  secondPanelIsFocused: boolean;
+}
+
 export interface AppLayout {
   appLayoutCssClass?: string | null | undefined;
   isDarkMode: boolean;
@@ -50,10 +63,12 @@ export interface AppLayout {
   appHeader: AppHeaderData;
   appFooter: AppFooterData;
   explorerPanel: ExplorerPanel;
+  appBody: AppBodyData;
 }
 
 export interface ExplorerPanel {
   enabled: boolean;
+  show: boolean;
 }
 
 export interface AppDataCore {
@@ -73,7 +88,6 @@ export const createAppDataCore = () => {
       settingsPageUrl: "/settings",
       appHeader: {
         show: true,
-        customContentStartingColumnIdx: 0,
         goToParentBtn: {
           isVisible: false,
           isEnabled: true,
@@ -111,6 +125,14 @@ export const createAppDataCore = () => {
       },
       explorerPanel: {
         enabled: false,
+        show: false,
+      },
+      appBody: {
+        splitOrientation: SplitPanelOrientation.None,
+        firstContainerIsFurtherSplit: false,
+        secondContainerIsFurtherSplit: false,
+        secondContainerIsFocused: false,
+        secondPanelIsFocused: false,
       },
     },
   };
@@ -118,6 +140,22 @@ export const createAppDataCore = () => {
   return appData;
 };
 
-export const AppContext = createContext<AppDataCore>(
-  createAppDataCore()
-) as Context<AppDataCore>;
+export type NestedPaths<T> = {
+  [K in keyof T & (string | number)]: T[K] extends (infer U)[] // Array case
+    ? `${K}` | `${K}[${string | number}]` | `${K}[${NestedPaths<U>}]`
+    : T[K] extends object // Regular object case
+    ? `${K}` | `${K}.${NestedPaths<T[K]>}`
+    : `${K}`; // Base case for primitive types
+}[keyof T & (string | number)];
+
+export type AppDataPaths = NestedPaths<AppDataCore>;
+
+export type AppContextType = {
+  appData: AppDataCore;
+  setAppDataFull: SetStoreFunction<AppDataCore>;
+  setAppData: <T>(path: AppDataPaths, value: T) => void;
+};
+
+export const AppContext = createContext<AppContextType | undefined>(undefined);
+
+export const useAppContext = () => useContext(AppContext)!;

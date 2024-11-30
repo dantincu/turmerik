@@ -6,7 +6,6 @@ import {
   appThemeCssClass,
   getAppModeCssClassName,
   getAppThemeCssClassName,
-  customEvent,
 } from "../../trmrk-browser/domUtils/core";
 
 export const setDomBsAppTheme = (isDarkModeValue: boolean) => {

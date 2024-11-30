@@ -1,4 +1,4 @@
-import { Component, useContext, createEffect } from 'solid-js';
+import { ParentComponent, createEffect } from 'solid-js';
 
 import {
   updateHtmlDocTitle,
@@ -6,14 +6,21 @@ import {
   getAppModeCssClassName,
 } from "../../../trmrk-browser/domUtils/core";
 
-import { AppContext } from "../../dataStore/core";
+import { useAppContext } from "../../dataStore/core";
+
+import AppBody from "./AppBody";
+import AppFooter from "./AppFooter";
+import AppHeader from "./AppHeader";
 
 export interface AppLayoutProps {
-  appLayoutClassName?: string | null | undefined;
 }
 
-const AppLayout: Component<AppLayoutProps> = (props: AppLayoutProps) => {
-  const appData = useContext(AppContext);
+const AppLayout: ParentComponent<AppLayoutProps> = (props: AppLayoutProps) => {
+  const { appData } = useAppContext();
+
+  const appLayout = appData.appLayout;
+  const appHeader = appLayout.appHeader;
+  const appFooter = appLayout.appFooter;
 
   createEffect(() => {
     updateHtmlDocTitle([
@@ -25,9 +32,11 @@ const AppLayout: Component<AppLayoutProps> = (props: AppLayoutProps) => {
   });
 
   return (<div class={["trmrk-app-layout", getAppThemeCssClassName(
-    appData.appLayout.isDarkMode), getAppModeCssClassName(
-      appData.appLayout.isCompactMode), props.appLayoutClassName ?? ""].join(" ")}>
-    
+    appLayout.isDarkMode), getAppModeCssClassName(
+      appLayout.isCompactMode), appLayout.appLayoutCssClass ?? ""].join(" ")}>
+    { appHeader.show ? <AppHeader /> : null }
+    <AppBody />
+    { appFooter.show ? <AppFooter /> : null }
   </div>);
 }
 

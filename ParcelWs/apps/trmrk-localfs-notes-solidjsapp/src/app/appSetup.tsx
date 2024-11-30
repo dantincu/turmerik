@@ -1,7 +1,8 @@
 import { render } from "solid-js/web";
 import { Router, Route } from "@solidjs/router";
 
-import { AppContext, createAppData } from "./dataStore/core";
+import { createAppData } from "./dataStore/core";
+import { AppProvider } from "./dataStore/AppContext";
 
 import { AppConfigData } from "../trmrk/notes-app-config";
 import { isDevEnv } from "../trmrk/dev";
@@ -37,13 +38,11 @@ export const runAppSetup = (appConfig: AppConfigData, isDev: boolean) => {
   const root = document.getElementById("root");
   const rootLoading = document.getElementById("rootLoading");
 
-  const appData = createAppData();
-
-  render(() => <AppContext.Provider value={appData}>
+  render(() => <AppProvider>
     <Router root={App}>
       <Route path="*paramName" component={NotFoundPage} />
     </Router>
-  </AppContext.Provider>, root!);
+  </AppProvider>, root!);
   rootLoading!.remove();
 };
 

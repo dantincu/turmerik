@@ -3,12 +3,12 @@ import { ParentComponent } from "solid-js";
 import BsBtn, { BsBtnProps } from "./BsBtn";
 
 export interface BsIconBtnProps extends BsBtnProps {
-  iconClassName: string;
+  iconCssClass: string;
 }
 
 const BsIconBtn: ParentComponent<BsIconBtnProps> = (props: BsIconBtnProps) => {
-  return <BsBtn btnClassName="trmrk-bs-icon-btn">
-    <i class={props.iconClassName}></i>
+  return <BsBtn {...props} btnCssClass={["trmrk-bs-icon-btn", props.btnCssClass ?? ""].join(" ")}>
+    <i class={props.iconCssClass}></i>
   </BsBtn>
 }
 

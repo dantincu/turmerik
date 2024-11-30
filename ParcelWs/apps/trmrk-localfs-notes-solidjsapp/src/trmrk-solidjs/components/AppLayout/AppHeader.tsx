@@ -7,7 +7,7 @@ export interface AppHeaderProps {
 const AppHeader: Component<AppHeaderProps> = (props: AppHeaderProps) => {
   return (<header class="trmrk-app-header">
 
-  </header>)
+  </header>);
 }
 
 export default AppHeader;

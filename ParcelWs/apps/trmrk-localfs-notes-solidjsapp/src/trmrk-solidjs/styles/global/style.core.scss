@@ -58,22 +58,6 @@ body {
   cursor: grabbing;
 }
 
-.trmrk-scrollableY {
-  overflow-y: scroll;
-}
-
-.trmrk-scrollableX {
-  overflow-x: scroll;
-}
-
-.trmrk-overflowX-hidden {
-  overflow-x: hidden;
-}
-
-.trmrk-overflowY-hidden {
-  overflow-y: hidden;
-}
-
 [data-bs-theme=dark] .trmrk-scrollable,
 .trmrk-app-theme-dark .trmrk-scrollable,
 .trmrk-app-theme-dark.trmrk-scrollable {

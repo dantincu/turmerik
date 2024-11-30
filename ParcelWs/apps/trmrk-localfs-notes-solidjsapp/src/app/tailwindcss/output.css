@@ -554,10 +554,54 @@ video {
   display: none;
 }
 
+.collapse {
+  visibility: collapse;
+}
+
+.absolute {
+  position: absolute;
+}
+
 .relative {
   position: relative;
 }
 
+.block {
+  display: block;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.overflow-y-hidden {
+  overflow-y: hidden;
+}
+
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+.text-wrap {
+  text-wrap: wrap;
+}
+
+.border {
+  border-width: 1px;
 }

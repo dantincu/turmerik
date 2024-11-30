@@ -1,6 +1,7 @@
-import { Component, JSX } from 'solid-js';
+import { Component, JSX, useContext } from 'solid-js';
+import { produce } from "solid-js/store";
 
-import { BasicHTMLAttributes } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/typeDefs";
+/* import { BasicHTMLAttributes } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/typeDefs";
 import { withHtmlElement } from "../../trmrk-solidjs/components/HOCs/withHtmlElement/withHtmlElement";
 
 import { RippleBackColor, withRipple } from "../../trmrk-solidjs/components/HOCs/withInterceptedParent/withRipple";
@@ -11,10 +12,19 @@ import { LongPressEventDataTuple, LongPressEventData } from "../../trmrk-solidjs
 import Loading from "../../trmrk-solidjs/components/Loading/Loading";
 
 import BsBtn from "../../trmrk-solidjs/components/BsBtn/BsBtn";
-import BsIconBtn from "../../trmrk-solidjs/components/BsBtn/BsIconBtn";
+import BsIconBtn from "../../trmrk-solidjs/components/BsBtn/BsIconBtn"; */
+
+import AppLayout from "../../trmrk-solidjs/components/AppLayout/AppLayout";
+
+import { AppData } from "../dataStore/core";
+
+import { useAppContext } from "../dataStore/AppContext";
+
+import { setAppBodyPanel1Content, setAppBodyPanel2Content, setAppBodyPanel3Content, setAppBodyPanel4Content } from "../../trmrk-solidjs/signals/core";
+import { SplitPanelOrientation } from '../../trmrk-solidjs/dataStore/core';
 
 const App: Component = () => {
-  const onTouchStartOrMouseDown = (evt: LongPressEventDataTuple) => {
+  /* const onTouchStartOrMouseDown = (evt: LongPressEventDataTuple) => {
     // console.log("onTouchStartOrMouseDown", evt);
   };
 
@@ -63,14 +73,32 @@ const App: Component = () => {
       <GrayBgRippleButton class="btn btn-secondary" >qwer</GrayBgRippleButton>
       <BlackBgRippleButton class="btn btn-secondary">qwer</BlackBgRippleButton>
       <BsBtn>asdfasdf</BsBtn>
-      <BsIconBtn iconClassName="bi bi-house" />
+      <BsIconBtn iconCssClass="bi bi-house" />
       <Loading />
       <BsBtn btnHasNoBorder={true}>asdfasdf</BsBtn>
-      <BsIconBtn iconClassName="bi bi-house" />
-      <BsIconBtn btnHasNoBorder={true} iconClassName="bi bi-arrow-90deg-left" />
+      <BsIconBtn iconCssClass="bi bi-house" />
+      <BsIconBtn btnHasNoBorder={true} iconCssClass="bi bi-arrow-90deg-left" />
       <BsBtn>asdfasdf</BsBtn>
-      <BsIconBtn iconClassName="bi bi-arrow-90deg-right" />
-    </div>);
+      <BsIconBtn iconCssClass="bi bi-arrow-90deg-right" />
+    </div>); */
+
+  setAppBodyPanel1Content(<p>asdfasdf</p>);
+  setAppBodyPanel2Content(<p>qwerqwer</p>);
+  setAppBodyPanel3Content(<p>zxczxvcz</p>);
+  setAppBodyPanel4Content(<p>tyuityui</p>);
+
+  const { appData, setAppDataFull, setAppData } = useAppContext();
+
+  const updateDraft = produce((draft: AppData) => {
+    const appBody = draft.appLayout.appBody;
+    appBody.splitOrientation = SplitPanelOrientation.Vertical;
+    appBody.firstContainerIsFurtherSplit = true;
+    appBody.secondContainerIsFurtherSplit = true;
+  });
+
+  setAppDataFull(updateDraft);
+
+  return (<AppLayout />);
 };
 
 export default App;
