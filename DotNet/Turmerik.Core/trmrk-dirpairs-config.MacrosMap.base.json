@@ -163,6 +163,10 @@
     ":s:1",
     "$products-and-services$"
   ],
+  "psts": [
+    ":s:1",
+    "$posts$"
+  ],
   "rchstry": [
     ":s:1",
     "$recent-history$"
