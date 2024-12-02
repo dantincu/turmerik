@@ -267,9 +267,13 @@
     ":s:1",
     "$well-known$"
   ],
-  "words": [
+  "wrds": [
     ":s:1",
     "$words$"
+  ],
+  "wrdssntgms": [
+    ":s:1",
+    "$words-and-syntagms$"
   ],
   "wwws": [
     ":s:1",
