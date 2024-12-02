@@ -83,7 +83,7 @@
     ":s:1",
     "$ethnic-groups$"
   ],
-  "f": [
+  "fnny": [
     ":s:1",
     "$funny$"
   ],
@@ -126,6 +126,10 @@
   "gnrs": [
     ":s:1",
     "$genres$"
+  ],
+  "lvly": [
+    ":s:1",
+    "$lovely$"
   ],
   "nf": [
     ":s:1",
