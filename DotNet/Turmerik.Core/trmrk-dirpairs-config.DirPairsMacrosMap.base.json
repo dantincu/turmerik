@@ -15,6 +15,8 @@
   "|dcs|": "$docs$",
   "|dnry|": "$denary$",
   "|evts|": "$events$",
+  "|extnct|": "$extinct$",
+  "|extnt|": "$extant$",
   "|fny|": "$funny$",
   "|fxlbrs|": "$frameworks-and-libraries$",
   "|fxs|": "$frameworks$",

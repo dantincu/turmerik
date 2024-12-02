@@ -63,6 +63,14 @@
     ":s:1",
     "$events$"
   ],
+  "extnct": [
+    ":s:1",
+    "$extinct$"
+  ],
+  "extnt": [
+    ":s:1",
+    "$extant$"
+  ],
   "fny": [
     ":s:1",
     "$funny$"
