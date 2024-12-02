@@ -3,6 +3,10 @@
     ":s:1",
     "$administrative-regions$"
   ],
+  "abrvs": [
+    ":s:1",
+    "$abreviations$"
+  ],
   "as": [
     ":s:1",
     "$articles$"
