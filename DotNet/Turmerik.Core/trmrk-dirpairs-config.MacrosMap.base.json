@@ -267,6 +267,10 @@
     ":s:1",
     "$well-known$"
   ],
+  "words": [
+    ":s:1",
+    "$words$"
+  ],
   "wwws": [
     ":s:1",
     "$websites$"
