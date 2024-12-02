@@ -87,7 +87,7 @@
     ":s:1",
     "$groups$"
   ],
-  "clblevts": [
+  "glblevts": [
     ":s:1",
     "$global-events$"
   ],
