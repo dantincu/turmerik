@@ -55,6 +55,10 @@
     ":s:1",
     "$docs$"
   ],
+  "dnry": [
+    ":s:1",
+    "$denary$"
+  ],
   "evts": [
     ":s:1",
     "$events$"
@@ -115,13 +119,25 @@
     ":s:1",
     "$less-well-known$"
   ],
-  "m": [
+  "mn": [
     ":s:1",
-    "$misc$"
+    "$main$"
   ],
   "mpssvcs": [
     ":s:1",
     "$my-products-and-services$"
+  ],
+  "msc": [
+    ":s:1",
+    "$misc$"
+  ],
+  "nnry": [
+    ":s:1",
+    "$nonary$"
+  ],
+  "octnry": [
+    ":s:1",
+    "$octonary$"
   ],
   "opfs": [
     ":s:1",
@@ -163,6 +179,10 @@
     ":s:1",
     "$persons$"
   ],
+  "prmry": [
+    ":s:1",
+    "$primary$"
+  ],
   "pssvcs": [
     ":s:1",
     "$products-and-services$"
@@ -170,6 +190,14 @@
   "psts": [
     ":s:1",
     "$posts$"
+  ],
+  "qtrnry": [
+    ":s:1",
+    "$quaternary$"
+  ],
+  "qnry": [
+    ":s:1",
+    "$quinary$"
   ],
   "rchstry": [
     ":s:1",
@@ -179,6 +207,10 @@
     ":s:1",
     "$regions$"
   ],
+  "scndry": [
+    ":s:1",
+    "$secondary$"
+  ],
   "smpfs": [
     ":s:1",
     "$social-media-platforms$"
@@ -186,6 +218,14 @@
   "smstrpfs": [
     ":s:1",
     "$social-media-and-streaming-platforms$"
+  ],
+  "snry": [
+    ":s:1",
+    "$senary$"
+  ],
+  "sptnry": [
+    ":s:1",
+    "$septenary$"
   ],
   "strpfs": [
     ":s:1",
@@ -198,6 +238,10 @@
   "tscs": [
     ":s:1",
     "$terms-and-concepts$"
+  ],
+  "trnry": [
+    ":s:1",
+    "$ternary$"
   ],
   "twns": [
     ":s:1",

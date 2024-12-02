@@ -9,6 +9,7 @@
       // "commandLineArgs": ":n :url:https://www.facebook.com/100057620462546/posts/863839308880077/?rdid=VkQpWXD1jzBJzCRo",
       // "commandLineArgs": ":n \":uri:https://www.youtube.com/channel/UCMXJUNnd4iSXVjBxl0laHWw\""
       // "commandLineArgs": ":h"
+      "commandLineArgs": ":n asdf::qwer"
       // "commandLineArgs": ":n :uri:|asdf||sadf|https://google.com qwerwqer"
       // "commandLineArgs": ":nf"
       // "commandLineArgs": ":n \"2024-08-09_17-53\\_+0300 asdfasdf \\\\\\\\\""
@@ -17,7 +18,7 @@
       // "commandLineArgs": ":n :url:https://www.kittyspout.com/products/metalbundles?nbt=nb%3Afb%3Afb%3A120211237885990275%3A120211245762560275%3A120211245762570275&nb_placement=Facebook_Mobile_Feed&fbclid=IwY2xjawEb_YVleHRuA2FlbQEwAAEdz9MylbpRWw6XuxC5R4TxL8QJIF4luJ_n4V9qIJVzG0miLwVaK8GrsDAW_aem_fACREO481FQOdIdXPZ2FfQ&utm_source=facebook&utm_medium=paid&campaign_id=120211245762560275&ad_id=120211246259790275"
       // "commandLineArgs": ":n :url:https://www.mayoclinic.org/diseases-conditions/cerebral-palsy/symptoms-causes/syc-20353999#:~:text=Cerebral%20palsy%20is%20a%20group,palsy%20may%20have%20exaggerated%20reflexes"
       // "commandLineArgs": ":n :url:https://specialarad.ro/in-2005-nicu-covaci-si-phoenix-mi-au-luat-vocea-azi/"
-      "commandLineArgs": ":cfg:2"
+      // "commandLineArgs": ":cfg:2"
       // "commandLineArgs": ":n :uri:https://google.com \"qwerqwer||asdfasdf|asdfasdf|qweqwer\""
     }
   }
