@@ -123,6 +123,10 @@
     ":s:1",
     "$libraries$"
   ],
+  "lnggs": [
+    ":s:1",
+    "$languages$"
+  ],
   "lsswllknwn": [
     ":s:1",
     "$less-well-known$"
