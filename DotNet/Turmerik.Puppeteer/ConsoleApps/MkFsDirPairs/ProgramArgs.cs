@@ -11,6 +11,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
     {
         public bool? PrintHelpMessage { get; set; }
         public PrintConfigSectionType? PrintConfigSection { get; set; }
+        public string? PrintConfigSectionFilter { get; set; }
         public string WorkDir { get; set; }
         public bool HasNodeRequiringPdf { get; set; }
 

@@ -87,6 +87,10 @@
     ":s:1",
     "$groups$"
   ],
+  "clblevts": [
+    ":s:1",
+    "$global-events$"
+  ],
   "hstrcl": [
     ":s:1",
     "$historical$"

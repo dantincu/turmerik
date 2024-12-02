@@ -307,10 +307,28 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     configSection = config.ArgOpts;
                     break;
                 case ProgramArgs.PrintConfigSectionType.DirNamesMacrosMap:
-                    configSection = config.DirNames.MacrosMap;
+                    if (args.PrintConfigSectionFilter != null)
+                    {
+                        configSection = config.DirNames.MacrosMap.Where(
+                            kvp => kvp.Value.Contains(
+                                args.PrintConfigSectionFilter)).Dictnr();
+                    }
+                    else
+                    {
+                        configSection = config.DirNames.MacrosMap;
+                    }
                     break;
                 case ProgramArgs.PrintConfigSectionType.MacrosMap:
-                    configSection = config.Macros.Map;
+                    if (args.PrintConfigSectionFilter != null)
+                    {
+                        configSection = config.Macros.Map.Where(
+                            kvp => kvp.Value[1].Contains(
+                                args.PrintConfigSectionFilter)).Dictnr();
+                    }
+                    else
+                    {
+                        configSection = config.Macros.Map;
+                    }
                     break;
                 default:
                     throw new NotSupportedException(
@@ -830,13 +848,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                             config.ArgOpts.PrintConfigSection.Arr(),
                                             data =>
                                             {
-                                                string? argFlagValue = data.ArgFlagValue!.SingleOrDefault();
+                                                string? argFlagValue = data.ArgFlagValue!.FirstOrDefault();
 
                                                 if (argFlagValue != null)
                                                 {
                                                     if (int.TryParse(
-                                                    argFlagValue,
-                                                    out int value))
+                                                        argFlagValue,
+                                                        out int value))
                                                     {
                                                         data.Args.PrintConfigSection = (
                                                             ProgramArgs.PrintConfigSectionType)value;
@@ -846,6 +864,12 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                                         out var enumValue))
                                                     {
                                                         data.Args.PrintConfigSection = enumValue;
+                                                    }
+
+                                                    if (data.ArgFlagValue.Length > 1)
+                                                    {
+                                                        data.Args.PrintConfigSectionFilter = data.ArgFlagValue.Skip(
+                                                            1).ToArray().JoinStr(":");
                                                     }
                                                 }
                                                 else

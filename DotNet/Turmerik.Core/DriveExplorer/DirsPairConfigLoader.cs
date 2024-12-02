@@ -290,7 +290,7 @@ namespace Turmerik.Core.DriveExplorer
 
             config.MacrosMap = config.MacrosMap.ToList().With(list =>
             {
-                list.Sort((kvp1, kvp2) => kvp1.Key.CompareTo(kvp2.Key));
+                list.Sort((kvp1, kvp2) => kvp1.Value.CompareTo(kvp2.Value));
                 var retMap = list.Dictnr();
 
                 return retMap;
