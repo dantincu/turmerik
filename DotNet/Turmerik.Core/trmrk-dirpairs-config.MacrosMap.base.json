@@ -23,6 +23,14 @@
     ":s:1",
     "$apps-and-online-platforms$"
   ],
+  "blckd": [
+    ":s:1",
+    "$blocked$"
+  ],
+  "blckbl": [
+    ":s:1",
+    "$blockable$"
+  ],
   "chnls": [
     ":s:1",
     "$channels$"
@@ -226,6 +234,14 @@
   "rgs": [
     ":s:1",
     "$regions$"
+  ],
+  "rprtd": [
+    ":s:1",
+    "$reported$"
+  ],
+  "rprtbl": [
+    ":s:1",
+    "$reportable$"
   ],
   "scndry": [
     ":s:1",
