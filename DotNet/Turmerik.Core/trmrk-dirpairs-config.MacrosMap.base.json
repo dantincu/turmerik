@@ -51,6 +51,10 @@
     ":s:1",
     "$distros$"
   ],
+  "dcs": [
+    ":s:1",
+    "$docs$"
+  ],
   "evts": [
     ":s:1",
     "$events$"
