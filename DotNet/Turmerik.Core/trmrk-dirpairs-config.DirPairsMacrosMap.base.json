@@ -69,6 +69,7 @@
   "|wrds|": "$words$",
   "|wrdssntgms|": "$words-and-syntagms$",
   "|wwws|": "$websites$",
+  "|wrgs|": "$world-regions$",
   "|_inf|": "$INF-NODES$",
   "|_hcy|": "$HCY-NODES$",
   "|_lfn|": "$LEAF-NODES$"

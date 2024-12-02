@@ -279,6 +279,10 @@
     ":s:1",
     "$websites$"
   ],
+  "wrgs": [
+    ":s:1",
+    "$world-regions$"
+  ],
   "_inf": [
     ":s:1",
     "$INF-NODES$"
