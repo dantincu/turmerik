@@ -227,6 +227,14 @@
     ":s:1",
     "$secondary$"
   ],
+  "slng": [
+    ":s:1",
+    "$slang$"
+  ],
+  "slngts": [
+    ":s:1",
+    "$slang-terms$"
+  ],
   "smpfs": [
     ":s:1",
     "$social-media-platforms$"

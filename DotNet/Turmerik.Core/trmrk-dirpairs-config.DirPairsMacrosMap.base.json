@@ -56,6 +56,8 @@
   "|rchstry|": "$recent-history$",
   "|rgs|": "$regions$",
   "|scndry|": "$secondary$",
+  "|slng|": "$slang$",
+  "|slngts|": "$slang-terms$",
   "|smpfs|": "$social-media-platforms$",
   "|smstrpfs|": "$social-media-and-streaming-platforms$",
   "|snry|": "$senary$",
