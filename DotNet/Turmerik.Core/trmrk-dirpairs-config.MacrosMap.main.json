@@ -215,6 +215,10 @@
     ":s:1",
     "$other-tiers$"
   ],
+  "phtgrphy": [
+    ":s:1",
+    "$photography$"
+  ],
   "plyrs": [
     ":s:1",
     "$players$"
