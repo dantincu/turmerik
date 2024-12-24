@@ -167,6 +167,10 @@
     ":s:1",
     "$models$"
   ],
+  "mdrn": [
+    ":s:1",
+    "$modern$"
+  ],
   "mfs": [
     ":s:1",
     "$mythological-figures$"
