@@ -227,6 +227,10 @@
     ":s:1",
     "$public-elections$"
   ],
+  "qlfrs": [
+    ":s:1",
+    "$qualifiers$"
+  ],
   "rfrs": [
     ":s:1",
     "$referees$"
@@ -258,6 +262,14 @@
   "trgds": [
     ":s:1",
     "$tragedies$"
+  ],
+  "trnmnt": [
+    ":s:1",
+    "$tournament$"
+  ],
+  "trnmnts": [
+    ":s:1",
+    "$tournaments$"
   ],
   "trps": [
     ":s:1",
