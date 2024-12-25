@@ -502,6 +502,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 config.ArgOpts.InteractiveMode.Arr(),
                                 data => data.Args.InteractiveMode = true),
                             consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.OpenMdFileAndDeferUpdate.Arr(),
+                                data => data.Args.OpenMdFileAndDeferUpdate = true),
+                            consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.Title.Arr(),
                                 data => data.Args.MdTitle = string.Join(":", data.ArgFlagValue)),
                             consoleArgsParser.ArgsFlagOpts(data,
@@ -567,6 +570,21 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                         args.MdFilePath = Path.Combine(
                             args.ShortNameDirPath,
                             args.MdFileName);
+
+                        if (args.OpenMdFileAndDeferUpdate == true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Opening md file {args.MdFilePath}; press any key to go on with the update");
+                            Console.ResetColor();
+
+                            ProcessH.OpenWithDefaultProgramIfNotNull(
+                                args.MdFilePath);
+
+                            Console.ReadKey();
+
+                            args.MdTitle = mdTitle = MdH.TryGetMdTitleFromFile(
+                                args.MdFilePath);
+                        }
                     }
                 }
                 else if (File.Exists(args.ShortNameDirPath))

@@ -11,8 +11,8 @@
       },
       "Folders": [
         {
-          "InputDirPath": "TrmrkMkFsDirsPair\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\TrmrkMkFsDirsPair\\Release\\net8.0"
+          "InputDirPath": "TrmrkMkFsDirsPair\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\TrmrkMkFsDirsPair\\Release\\net9.0"
         }
       ]
     }

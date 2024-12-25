@@ -19,48 +19,48 @@
       },
       "Folders": [
         {
-          "InputDirPath": "Turmerik.DotNetTypesToTypescript.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.DotNetTypesToTypescript.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.LocalFilesCloner.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.LsFsDirPairs.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.LsFsDirPairs.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.LsFsDirPairs.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.MdToPdf.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.MdToPdf.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.MdToPdf.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.MdToPdf.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.MkFsDirsPair.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.MkFsDirsPair.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPair.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.MkFsDirsPairCfg.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.MkFsDirsPairCfg.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.MkFsDirsPairCfg.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.MkScripts.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.MkScripts.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.MkScripts.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.RfDirsPairNames.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.RfDirsPairNames.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.RfDirsPairNames.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.SyncLocalFiles.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.SyncLocalFiles.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.SyncLocalFiles.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.SyncLocalFiles.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\bin\\Release\\net8.0",
-          "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net8.0"
+          "InputDirPath": "Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\bin\\Release\\net9.0",
+          "CloneDirPath": "Bin\\Turmerik.UpdFsDirPairsIdxes.ConsoleApp\\Release\\net9.0"
         },
         {
-          "InputDirPath": "Turmerik.Utility.WinFormsApp\\bin\\Release\\net8.0-windows",
-          "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net8.0-windows"
+          "InputDirPath": "Turmerik.Utility.WinFormsApp\\bin\\Release\\net9.0-windows",
+          "CloneDirPath": "Bin\\Turmerik.Utility.WinFormsApp\\Release\\net9.0-windows"
         }
       ]
     }
