@@ -22,6 +22,7 @@ using Turmerik.Puppeteer.Helpers;
 using PuppeteerSharp;
 using Turmerik.Md;
 using Turmerik.Core.TextParsing.Md;
+using System.Threading;
 
 namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 {
@@ -44,6 +45,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly INotesAppConfigLoader notesAppConfigLoader;
+        private readonly PdfCreatorFactory pdfCreatorFactory;
+        private readonly ITimeStampHelper timeStampHelper;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -55,7 +58,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             IHtmlDocTitleRetriever htmlDocTitleRetriever,
             INoteMdParser nmdParser,
             IDirsPairConfigLoader dirsPairConfigLoader,
-            INotesAppConfigLoader notesAppConfigLoader)
+            INotesAppConfigLoader notesAppConfigLoader,
+            PdfCreatorFactory pdfCreatorFactory,
+            ITimeStampHelper timeStampHelper)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -72,6 +77,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             this.fsEntryNameNormalizer = fsEntryNameNormalizer ?? throw new ArgumentNullException(
                 nameof(fsEntryNameNormalizer));
 
+            this.htmlDocTitleRetriever = htmlDocTitleRetriever ?? throw new ArgumentNullException(
+                nameof(htmlDocTitleRetriever));
+
             this.nmdParser = nmdParser ?? throw new ArgumentNullException(
                 nameof(nmdParser));
 
@@ -87,8 +95,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             dirsPairCreator = dirsPairCreatorFactory.Creator(
                 notesConfig.GetNoteDirPairs());
 
-            this.htmlDocTitleRetriever = htmlDocTitleRetriever ?? throw new ArgumentNullException(
-                nameof(htmlDocTitleRetriever));
+            this.pdfCreatorFactory = pdfCreatorFactory ?? throw new ArgumentNullException(
+                nameof(pdfCreatorFactory));
+
+            this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
+                nameof(timeStampHelper));
         }
 
         public async Task RunAsync(
@@ -125,7 +136,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 {
                     foreach (var nodeArgs in args.RootNodes)
                     {
-                        await RunAsync(args.WorkDir, nodeArgs);
+                        await RunAsync(
+                            args.WorkDir, nodeArgs);
                     }
                 }
             }
@@ -404,38 +416,25 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                var mdFilePath,
                var mdFile) = await RunAsyncCore(
                 workDir,
-                nodeArgs);
+                nodeArgs,
+                page,
+                browser);
 
             if (mdFile != null)
             {
-                if (nodeArgs.CreatePdfFile || (config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation))
+                if (ShouldCreatePdfFile(nodeArgs))
                 {
-                    string md = File.ReadAllText(mdFilePath);
-                    string html = Markdown.ToHtml(md);
+                    var pdfCreator = pdfCreatorFactory.Creator(
+                        new()
+                        {
+                            MdFile = mdFile,
+                            MdFilePath = mdFilePath,
+                            ShortNameDir = shortNameDir,
+                            Browser = browser,
+                            Page = page
+                        });
 
-                    string htmlFileName = string.Join(".", mdFile.Name, "html");
-                    string pdfFileName = string.Join(".", mdFile.Name, "pdf");
-
-                    string htmlFilePath = Path.Combine(
-                        shortNameDir.Idnf,
-                        htmlFileName);
-
-                    string pdfFilePath = Path.Combine(
-                        shortNameDir.Idnf,
-                        pdfFileName);
-
-                    File.WriteAllText(htmlFilePath, html);
-
-                    await PuppeteerH.HtmlToPdfFile(
-                        htmlFilePath,
-                        pdfFilePath,
-                        browser,
-                        page);
-
-                    if (nmdParser.IsTrivialDoc(md))
-                    {
-                        File.Delete(htmlFilePath);
-                    }
+                    await pdfCreator.TryCreatePdf();
                 }
             }
 
@@ -452,9 +451,15 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             }
         }
 
+        private bool ShouldCreatePdfFile(
+            ProgramArgs.Node nodeArgs) => nodeArgs.CreatePdfFile || (
+                config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation);
+
         private async Task<Tuple<DriveItemX, string?, DriveItemX?>> RunAsyncCore(
             string workDir,
-            ProgramArgs.Node nodeArgs)
+            ProgramArgs.Node nodeArgs,
+            IPage? page = null,
+            IBrowser? browser = null)
         {
             var opts = GetDirsPairOpts(workDir, nodeArgs);
             var dirsPair = await dirsPairCreator.CreateDirsPairAsync(opts);
@@ -489,6 +494,48 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 if (opts.OpenMdFile)
                 {
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
+
+                    if (opts.OpenMdFileInteractively && page != null && browser != null)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"Listening for changes to file {mdFilePath}; press any key to stop listening");
+                        Console.ResetColor();
+
+                        using (FileSystemWatcher watcher = new FileSystemWatcher())
+                        {
+                            watcher.Path = Path.GetDirectoryName(mdFilePath);
+                            watcher.Filter = Path.GetFileName(mdFilePath);
+                            watcher.NotifyFilter = NotifyFilters.LastWrite;
+
+                            var pdfCreator = pdfCreatorFactory.Creator(
+                                new()
+                                {
+                                    MdFile = mdFile,
+                                    MdFilePath = mdFilePath,
+                                    ShortNameDir = shortNameDir,
+                                    Browser = browser,
+                                    Page = page
+                                });
+
+                            watcher.Changed += (sender, evt) =>
+                            {
+                                Console.ForegroundColor = ConsoleColor.Blue;
+
+                                Console.WriteLine($"Change detected {timeStampHelper.TmStmp(
+                                    null, true, TimeStamp.Ticks, false, false, true)}");
+
+                                Console.ResetColor();
+                                pdfCreator.TryCreatePdfIfNotBusy();
+                            };
+
+                            watcher.EnableRaisingEvents = true;
+
+                            Console.ReadKey();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Stopped listening for changes to file {mdFilePath}");
+                            Console.ResetColor();
+                        }
+                    }
                 }
             }
 
@@ -518,6 +565,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 Title = nodeArgs.Title,
                 SkipMdFileCreation = nodeArgs.SkipMdFileCreation,
                 OpenMdFile = nodeArgs.OpenMdFile,
+                OpenMdFileInteractively = nodeArgs.OpenMdFileInteractively,
                 MaxFsEntryNameLength = config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH,
                 ShortDirName = nodeArgs.ShortDirName,
                 FullDirNamePart = GetFullDirNamePart(nodeArgs),
@@ -893,6 +941,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                             config.ArgOpts.OpenMdFile.Arr(),
                                             data => data.Args.Current.OpenMdFile = true, true),
                                         parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.OpenMdFileInteractively.Arr(),
+                                            data =>
+                                            {
+                                                data.Args.Current.OpenMdFile = true;
+                                                data.Args.Current.OpenMdFileInteractively = true;
+                                            }, true),
+                                        parser.ArgsFlagOpts(data,
                                             config.ArgOpts.SkipMdFileCreation.Arr(),
                                             data => data.Args.Current.SkipMdFileCreation = true, true),
                                         parser.ArgsFlagOpts(data,
@@ -999,6 +1054,15 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             Console.WriteLine(content);
             Console.ResetColor();
             Console.WriteLine();
+        }
+
+        private class CreatePdfFileArgs
+        {
+            public DriveItemX? ShortNameDir { get; init; }
+            public string MdFilePath { get; init; }
+            public DriveItemX? MdFile { get; init; }
+            public IPage Page { get; init; }
+            public IBrowser Browser { get; init; }
         }
     }
 }

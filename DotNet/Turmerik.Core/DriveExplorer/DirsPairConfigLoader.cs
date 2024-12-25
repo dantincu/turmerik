@@ -149,118 +149,6 @@ namespace Turmerik.Core.DriveExplorer
             DirsPairConfig.ArgOptionsT config,
             DirsPairConfig.ArgOptionsT nestedConfig)
         {
-            /* config.PrintHelpMessage = NormRefValue(
-                config.PrintHelpMessage,
-                nestedConfig.PrintHelpMessage);
-
-            config.PrintConfigSection = NormRefValue(
-                config.PrintConfigSection,
-                nestedConfig.PrintConfigSection);
-
-            config.WorkDir = NormRefValue(
-                config.WorkDir,
-                nestedConfig.WorkDir);
-
-            config.InteractiveMode = NormRefValue(
-                config.InteractiveMode,
-                nestedConfig.InteractiveMode);
-
-            config.OpenMdFile = NormRefValue(
-                config.OpenMdFile,
-                nestedConfig.OpenMdFile);
-
-            config.SkipMdFileCreation = NormRefValue(
-                config.SkipMdFileCreation,
-                nestedConfig.SkipMdFileCreation);
-
-            config.SkipPdfFileCreation = NormRefValue(
-                config.SkipPdfFileCreation,
-                nestedConfig.SkipPdfFileCreation);
-
-            config.SkipCurrentNode = NormRefValue(
-                config.SkipCurrentNode,
-                nestedConfig.SkipCurrentNode);
-
-            config.SkipUntilPath = NormRefValue(
-                config.SkipUntilPath,
-                nestedConfig.SkipUntilPath);
-
-            config.CreatePdfFile = NormRefValue(
-                config.CreatePdfFile,
-                nestedConfig.CreatePdfFile);
-
-            config.DirNameTpl = NormRefValue(
-                config.DirNameTpl,
-                nestedConfig.DirNameTpl);
-
-            config.CreateNote = NormRefValue(
-                config.CreateNote,
-                nestedConfig.CreateNote);
-
-            config.CreateNoteSection = NormRefValue(
-                config.CreateNoteSection,
-                nestedConfig.CreateNoteSection);
-
-            config.CreateNoteBook = NormRefValue(
-                config.CreateNoteBook,
-                nestedConfig.CreateNoteBook);
-
-            config.CreateNoteInternalsDir = NormRefValue(
-                config.CreateNoteInternalsDir,
-                nestedConfig.CreateNoteInternalsDir);
-
-            config.CreateNoteFilesDir = NormRefValue(
-                config.CreateNoteFilesDir,
-                nestedConfig.CreateNoteFilesDir);
-
-            config.ConvertToNoteSections = NormRefValue(
-                config.ConvertToNoteSections,
-                nestedConfig.ConvertToNoteSections);
-
-            config.ConvertToNoteItems = NormRefValue(
-                config.ConvertToNoteItems,
-                nestedConfig.ConvertToNoteItems);
-
-            config.Url = NormRefValue(
-                config.Url,
-                nestedConfig.Url);
-
-            config.Uri = NormRefValue(
-                config.Uri,
-                nestedConfig.Uri);
-
-            config.ShowLastCreatedFirst = NormRefValue(
-                config.ShowLastCreatedFirst,
-                nestedConfig.ShowLastCreatedFirst);
-
-            config.ShowOtherDirNames = NormRefValue(
-                config.ShowOtherDirNames,
-                nestedConfig.ShowOtherDirNames);
-
-            config.HcyChildNode = NormRefValue(
-                config.HcyChildNode,
-                nestedConfig.HcyChildNode);
-
-            config.HcyParentNode = NormRefValue(
-                config.HcyParentNode,
-                nestedConfig.HcyParentNode);
-
-            config.HcySibblingNode = NormRefValue(
-                config.HcySibblingNode,
-                nestedConfig.HcySibblingNode);
-
-            config.Macro = NormRefValue(
-                config.Macro,
-                nestedConfig.Macro);
-
-            config.Title = NormRefValue(
-                config.Title,
-                nestedConfig.Title);
-
-            config.RecursiveMatchingDirNames = NormRefValue(
-                config.RecursiveMatchingDirNames,
-                nestedConfig.RecursiveMatchingDirNames); */
-
             NormalizeConfigCore(
                 config,
                 nestedConfig);
@@ -272,10 +160,6 @@ namespace Turmerik.Core.DriveExplorer
             DirsPairConfig.DirNamesT config,
             DirsPairConfig.DirNamesT nestedConfig)
         {
-            /* config.DefaultJoinStr = NormRefValue(
-                config.DefaultJoinStr,
-                nestedConfig.DefaultJoinStr); */
-
             NormalizeConfigCore(
                 config,
                 nestedConfig);
@@ -303,22 +187,6 @@ namespace Turmerik.Core.DriveExplorer
             DirsPairConfig.FileNamesT config,
             DirsPairConfig.FileNamesT nestedConfig)
         {
-            /* config.MdFileName = NormRefValue(
-                config.MdFileName,
-                nestedConfig.MdFileName);
-
-            config.MdFileNamePfx = NormRefValue(
-                config.MdFileNamePfx,
-                nestedConfig.MdFileNamePfx);
-
-            config.PrependTitleToNoteMdFileName = NormNllblValue(
-                config.PrependTitleToNoteMdFileName,
-                nestedConfig.PrependTitleToNoteMdFileName);
-
-            config.KeepFileName = NormRefValue(
-                config.KeepFileName,
-                nestedConfig.KeepFileName); */
-
             NormalizeConfigCore(
                 config,
                 nestedConfig);
@@ -330,22 +198,6 @@ namespace Turmerik.Core.DriveExplorer
             DirsPairConfig.FileContentsT config,
             DirsPairConfig.FileContentsT nestedConfig)
         {
-            /* config.KeepFileContentsTemplate = NormRefValue(
-                config.KeepFileContentsTemplate,
-                nestedConfig.KeepFileContentsTemplate);
-
-            config.KeepFileContainsNoteJson = NormNllblValue(
-                config.KeepFileContainsNoteJson,
-                nestedConfig.KeepFileContainsNoteJson);
-
-            config.MdFileContentsTemplate = NormRefValue(
-                config.MdFileContentsTemplate,
-                nestedConfig.MdFileContentsTemplate);
-
-            config.MdFileContentSectionTemplate = NormRefValue(
-                config.MdFileContentSectionTemplate,
-                nestedConfig.MdFileContentSectionTemplate); */
-
             NormalizeConfigCore(
                 config,
                 nestedConfig);

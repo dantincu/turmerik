@@ -39,6 +39,7 @@ namespace Turmerik.DirsPair
         public string Title { get; set; }
         public bool SkipMdFileCreation { get; set; }
         public bool OpenMdFile { get; set; }
+        public bool OpenMdFileInteractively { get; set; }
         public int MaxFsEntryNameLength { get; set; }
         public string ShortDirName { get; set; }
         public string FullDirNamePart { get; set; }

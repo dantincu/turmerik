@@ -26,6 +26,7 @@ namespace Turmerik.Core.DriveExplorer
             public string WorkDir { get; set; }
             public string InteractiveMode { get; set; }
             public string OpenMdFile { get; set; }
+            public string OpenMdFileInteractively { get; set; }
             public string SkipMdFileCreation { get; set; }
             public string SkipPdfFileCreation { get; set; }
             public string SkipCurrentNode { get; set; }

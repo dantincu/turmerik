@@ -11,6 +11,7 @@
     "WorkDir": "wd",
     "InteractiveMode": "i",
     "OpenMdFile": "o",
+    "OpenMdFileInteractively": "oi",
     "SkipMdFileCreation": "skmd",
     "SkipPdfFileCreation": "skpdf",
     "SkipCurrentNode": "skcrnt",

@@ -14,6 +14,7 @@ DriveExplorerH.AddFsRetrieverAndExplorer(
     services, null, true);
 
 services.AddTransient<IProgramComponent, ProgramComponent>();
+services.AddTransient<PdfCreatorFactory>();
 var svcProv = services.BuildServiceProvider();
 
 await ConsoleH.TryExecuteAsync(
