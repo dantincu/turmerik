@@ -251,6 +251,10 @@
     ":s:1",
     "$sub-genres$"
   ],
+  "smovs": [
+    ":s:1",
+    "$short-movies$"
+  ],
   "sngs": [
     ":s:1",
     "$songs$"
