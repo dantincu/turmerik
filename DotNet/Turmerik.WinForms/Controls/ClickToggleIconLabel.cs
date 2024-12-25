@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Turmerik.WinForms.Controls
             Click += ClickToggleIconLabel_Click;
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool ToggledValue
         {
             get => toggledValue;
@@ -35,6 +37,7 @@ namespace Turmerik.WinForms.Controls
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ToggledFalseText
         {
             get => toggledFalseText;
@@ -51,6 +54,7 @@ namespace Turmerik.WinForms.Controls
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string ToggledTrueText
         {
             get => toggledTrueText;
