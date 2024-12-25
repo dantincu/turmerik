@@ -33,18 +33,14 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
     public class ProgramComponent : IProgramComponent
     {
-        private readonly IJsonConversion jsonConversion;
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IConsoleObjectPropsPrinter consoleObjectPropsPrinter;
         private readonly IConsoleArgsParser parser;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IDirsPairCreator dirsPairCreator;
         private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
-        private readonly INoteMdParser nmdParser;
         private readonly DirsPairConfig config;
-        private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
-        private readonly INotesAppConfigLoader notesAppConfigLoader;
         private readonly PdfCreatorFactory pdfCreatorFactory;
         private readonly ITimeStampHelper timeStampHelper;
 
@@ -56,15 +52,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IDirsPairCreatorFactory dirsPairCreatorFactory,
             IHtmlDocTitleRetriever htmlDocTitleRetriever,
-            INoteMdParser nmdParser,
             IDirsPairConfigLoader dirsPairConfigLoader,
             INotesAppConfigLoader notesAppConfigLoader,
             PdfCreatorFactory pdfCreatorFactory,
             ITimeStampHelper timeStampHelper)
         {
-            this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
-                nameof(jsonConversion));
-
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
 
@@ -79,15 +71,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             this.htmlDocTitleRetriever = htmlDocTitleRetriever ?? throw new ArgumentNullException(
                 nameof(htmlDocTitleRetriever));
-
-            this.nmdParser = nmdParser ?? throw new ArgumentNullException(
-                nameof(nmdParser));
-
-            this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
-                nameof(dirsPairConfigLoader));
-
-            this.notesAppConfigLoader = notesAppConfigLoader ?? throw new ArgumentNullException(
-                nameof(notesAppConfigLoader));
 
             config = dirsPairConfigLoader.LoadConfig();
             notesConfig = notesAppConfigLoader.LoadConfig();
@@ -351,8 +334,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 value => (int)value,
                 value => value.ToString());
 
-            // string configSectionJson = jsonConversion.Adapter.Serialize(configSection);
-
             Console.ForegroundColor = ConsoleColor.DarkCyan;
 
             Console.WriteLine("Printing config section: ");
@@ -379,7 +360,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 }
             });
 
-            // Console.WriteLine(configSectionJson);
             Console.WriteLine();
 
             Console.ResetColor();
@@ -495,45 +475,72 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 {
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
 
-                    if (opts.OpenMdFileInteractively && page != null && browser != null)
+                    if (page != null && browser != null)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"Listening for changes to file {mdFilePath}; press any key to stop listening");
-                        Console.ResetColor();
-
-                        using (FileSystemWatcher watcher = new FileSystemWatcher())
+                        if (opts.OpenMdFileAndWatch)
                         {
-                            watcher.Path = Path.GetDirectoryName(mdFilePath);
-                            watcher.Filter = Path.GetFileName(mdFilePath);
-                            watcher.NotifyFilter = NotifyFilters.LastWrite;
-
-                            var pdfCreator = pdfCreatorFactory.Creator(
-                                new()
-                                {
-                                    MdFile = mdFile,
-                                    MdFilePath = mdFilePath,
-                                    ShortNameDir = shortNameDir,
-                                    Browser = browser,
-                                    Page = page
-                                });
-
-                            watcher.Changed += (sender, evt) =>
-                            {
-                                Console.ForegroundColor = ConsoleColor.Blue;
-
-                                Console.WriteLine($"Change detected {timeStampHelper.TmStmp(
-                                    null, true, TimeStamp.Ticks, false, false, true)}");
-
-                                Console.ResetColor();
-                                pdfCreator.TryCreatePdfIfNotBusy();
-                            };
-
-                            watcher.EnableRaisingEvents = true;
-
-                            Console.ReadKey();
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"Stopped listening for changes to file {mdFilePath}");
+                            Console.WriteLine($"Listening for changes to file {mdFilePath}; press any key to stop listening");
                             Console.ResetColor();
+
+                            using (FileSystemWatcher watcher = new FileSystemWatcher())
+                            {
+                                watcher.Path = Path.GetDirectoryName(mdFilePath);
+                                watcher.Filter = Path.GetFileName(mdFilePath);
+                                watcher.NotifyFilter = NotifyFilters.LastWrite;
+
+                                var pdfCreator = pdfCreatorFactory.Creator(
+                                    new()
+                                    {
+                                        MdFile = mdFile,
+                                        MdFilePath = mdFilePath,
+                                        ShortNameDir = shortNameDir,
+                                        Browser = browser,
+                                        Page = page
+                                    });
+
+                                watcher.Changed += (sender, evt) =>
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Blue;
+
+                                    Console.WriteLine($"Change detected {timeStampHelper.TmStmp(
+                                        null, true, TimeStamp.Ticks, false, false, true)}");
+
+                                    Console.ResetColor();
+                                    pdfCreator.TryCreatePdfIfNotBusy();
+                                };
+
+                                watcher.EnableRaisingEvents = true;
+
+                                Console.ReadKey();
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine($"Stopped listening for changes to file {mdFilePath}");
+                                Console.ResetColor();
+                            }
+                        }
+                        else if (opts.OpenMdFileInteractively)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Press any key to update the pdf file or the ENTER key to move on");
+                            Console.ResetColor();
+
+                            var key = Console.ReadKey();
+
+                            while (key.Key != ConsoleKey.Enter)
+                            {
+                                var pdfCreator = pdfCreatorFactory.Creator(
+                                    new()
+                                    {
+                                        MdFile = mdFile,
+                                        MdFilePath = mdFilePath,
+                                        ShortNameDir = shortNameDir,
+                                        Browser = browser,
+                                        Page = page
+                                    });
+
+                                await pdfCreator.TryCreatePdf();
+                                key = Console.ReadKey();
+                            }
                         }
                     }
                 }
@@ -565,6 +572,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 Title = nodeArgs.Title,
                 SkipMdFileCreation = nodeArgs.SkipMdFileCreation,
                 OpenMdFile = nodeArgs.OpenMdFile,
+                OpenMdFileAndWatch = nodeArgs.OpenMdFileAndWatch,
                 OpenMdFileInteractively = nodeArgs.OpenMdFileInteractively,
                 MaxFsEntryNameLength = config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH,
                 ShortDirName = nodeArgs.ShortDirName,
@@ -940,6 +948,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.OpenMdFile.Arr(),
                                             data => data.Args.Current.OpenMdFile = true, true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.OpenMdFileAndWatch.Arr(),
+                                            data =>
+                                            {
+                                                data.Args.Current.OpenMdFile = true;
+                                                data.Args.Current.OpenMdFileAndWatch = true;
+                                            }, true),
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.OpenMdFileInteractively.Arr(),
                                             data =>
