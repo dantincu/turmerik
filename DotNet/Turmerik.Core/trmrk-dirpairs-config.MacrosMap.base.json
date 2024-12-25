@@ -7,9 +7,9 @@
     ":s:1",
     "$abreviations$"
   ],
-  "as": [
+  "api": [
     ":s:1",
-    "$articles$"
+    "$api$"
   ],
   "archc": [
     ":s:1",
@@ -18,6 +18,10 @@
   "archv": [
     ":s:1",
     "$archive$"
+  ],
+  "as": [
+    ":s:1",
+    "$articles$"
   ],
   "appopfs": [
     ":s:1",

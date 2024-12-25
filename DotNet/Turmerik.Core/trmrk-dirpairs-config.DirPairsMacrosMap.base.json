@@ -1,9 +1,10 @@
 {
   "|admrgs|": "$administrative-regions$",
   "|abrvs|": "$abreviations$",
-  "|as|": "$articles$",
+  "|api|": "$api$",
   "|archc|": "$archaic$",
   "|archv|": "$archive$",
+  "|as|": "$articles$",
   "|appopfs|": "$apps-and-online-platforms$",
   "|blckd|": "$blocked$",
   "|blckbl|": "$blockable$",
