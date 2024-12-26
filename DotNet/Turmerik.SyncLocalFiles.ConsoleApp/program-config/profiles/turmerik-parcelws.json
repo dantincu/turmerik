@@ -380,6 +380,24 @@
           "DirPath": "trmrk-solidjs"
         }
       }
+    },
+    {
+      "Name": "trmrk-localfs-notes-solidjs-tauriapp",
+      "DirPath": "apps\\trmrk-localfs-notes-solidjs-tauriapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-axios": {
+          "DirPath": "trmrk-axios"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-solidjs": {
+          "DirPath": "trmrk-solidjs"
+        }
+      }
     }
   ]
 }

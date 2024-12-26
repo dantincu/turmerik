@@ -22,7 +22,8 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\apps\trmrk-notes-vueapp",
 "..\..\apps\trmrk-react-testapp",
 "..\..\apps\trmrk-notes-solidjsapp",
-"..\..\apps\trmrk-localfs-notes-solidjsapp") do (
+"..\..\apps\trmrk-localfs-notes-solidjsapp",
+"..\..\apps\trmrk-localfs-notes-solidjs-tauriapp") do (
   cd %%a
   .\_\upd-pcks.bat
 )

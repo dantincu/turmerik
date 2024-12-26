@@ -9,9 +9,9 @@
       // "commandLineArgs": ":pf:arch-ng-book-2",
       // "commandLineArgs": ":pf:cp-dotnet-bkp-bins",
       // "commandLineArgs": ":pf:cp-dotnet-util-bins",
-      "commandLineArgs": ":pf:arch-dotnet-util-cfg-files"
+      // "commandLineArgs": ":pf:arch-dotnet-util-cfg-files"
       // "commandLineArgs": ":pf:cp-text-transform-behavior"
-      // "commandLineArgs": ":pf:cp-mkscripts-parcelws-sync-behavior"
+      "commandLineArgs": ":pf:cp-mkscripts-parcelws-sync-behavior"
       // "commandLineArgs": ":pf:cp-mk-md-file-repo-bins"
     }
   }

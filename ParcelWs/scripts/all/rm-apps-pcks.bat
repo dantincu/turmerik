@@ -7,7 +7,8 @@ for %%a in ("..\..\apps\trmrk-http-proxy-nodejsapp",
 "..\..\apps\trmrk-notes-vueapp",
 "..\..\apps\trmrk-react-testapp",
 "..\..\apps\trmrk-notes-solidjsapp",
-"..\..\apps\trmrk-localfs-notes-solidjsapp") do (
+"..\..\apps\trmrk-localfs-notes-solidjsapp",
+"..\..\apps\trmrk-localfs-notes-solidjs-tauriapp") do (
   cd %%a
   .\_\rm-pcks.bat
 )
