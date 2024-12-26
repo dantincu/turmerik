@@ -630,7 +630,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine(string.Join(" ", $"Opening md file {args.MdFilePath};",
-                                "paste as many urls as you like and then type the SPACE char to go on with the update"));
+                                "paste a url to add as md link"));
                             Console.ResetColor();
 
                             ProcessH.OpenWithDefaultProgramIfNotNull(
@@ -705,15 +705,18 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                             newLinkTitle = mkFsDirPairsProgramComponent.GetTitleFromUri(
                                                 url, true);
                                         }
-
-                                        mdLinksToAddList.Add(new()
-                                        {
-                                            Title = newLinkTitle,
-                                            Url = url
-                                        });
                                     }
+
+                                    mdLinksToAddList.Add(new()
+                                    {
+                                        Title = newLinkTitle,
+                                        Url = url
+                                    });
                                 }
 
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("Paste another url or type the SPACE char to go on with the update");
+                                Console.ResetColor();
                                 refreshLine();
                             }
 
