@@ -91,6 +91,10 @@
     ":s:1",
     "$funny$"
   ],
+  "frsn": [
+    ":s:1",
+    "$foreseen$"
+  ],
   "fxlbrs": [
     ":s:1",
     "$frameworks-and-libraries$"
