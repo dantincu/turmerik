@@ -239,6 +239,10 @@
     ":s:1",
     "$regions$"
   ],
+  "rls": [
+    ":s:1",
+    "$reels$"
+  ],
   "rprtd": [
     ":s:1",
     "$reported$"

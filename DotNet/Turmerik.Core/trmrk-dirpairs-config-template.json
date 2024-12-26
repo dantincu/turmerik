@@ -10,6 +10,7 @@
     "PrintConfigSection": "cfg",
     "WorkDir": "wd",
     "InteractiveMode": "i",
+    "OpenMdFileAndDeferUpdate": "od",
     "OpenMdFile": "o",
     "OpenMdFileAndWatch": "ow",
     "OpenMdFileInteractively": "oi",
