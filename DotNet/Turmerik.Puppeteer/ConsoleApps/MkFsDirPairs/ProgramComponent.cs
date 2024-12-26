@@ -29,6 +29,15 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
     public interface IProgramComponent
     {
         Task RunAsync(string[] rawArgs);
+
+        Task<string> GetResouceTitleAsync(
+            string? title,
+            string url,
+            bool hasUri);
+
+        string GetTitleFromUri(
+            string url,
+            bool hasUri);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -124,6 +133,92 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     }
                 }
             }
+        }
+
+        public async Task<string> GetResouceTitleAsync(
+            string? title,
+            string url,
+            bool hasUri)
+        {
+            WriteSectionToConsole(
+                "Fetching resource from the following url: ",
+                url, ConsoleColor.Blue);
+
+            string resTitle = (await GetResouceTitleCoreAsync(
+                url)).Nullify(true);
+
+            if (resTitle != null)
+            {
+                WriteSectionToConsole(
+                    "The resource at the provided url has the following title: ",
+                    resTitle, ConsoleColor.Cyan);
+
+                if (hasUri)
+                {
+                    Console.WriteLine(string.Join(" ",
+                        "Are you want to use this title? If you do, then just",
+                        "press enter next; otherwise, type a title yourself: "));
+
+                    string userAnswer = Console.ReadLine();
+                    string newResTitle = userAnswer.Nullify(true);
+
+                    if (newResTitle != null)
+                    {
+                        resTitle = newResTitle;
+                    }
+                    else if (userAnswer?.Length > 0)
+                    {
+                        resTitle = GetTitleFromUri(
+                            url, hasUri);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine(
+                    "The resource at the provided url doesn't have a title; please type a title yourself: ");
+
+                resTitle = Console.ReadLine().Nullify(
+                    true) ?? title ?? throw new ArgumentNullException(
+                        nameof(resTitle));
+
+                Console.WriteLine();
+            }
+
+            return resTitle;
+        }
+
+        public string GetTitleFromUri(
+            string url,
+            bool hasUri)
+        {
+            var uriObj = new Uri(url);
+            string host = uriObj.Host;
+            string path = uriObj.AbsolutePath;
+
+            string resTitle = path.Trim().Trim('/').Trim().Split('/').Reverse(
+                ).ToArray().JoinStr(" - ");
+
+            WriteSectionToConsole(
+                "The following title has been extracted from the url: ",
+                resTitle, ConsoleColor.Cyan);
+
+            if (hasUri)
+            {
+                Console.WriteLine(string.Join(" ",
+                    "Are you want to use this title? If you do, then just",
+                    "press enter next; otherwise, type a title yourself: "));
+
+                string newResTitle = Console.ReadLine().Nullify(true);
+
+                if (newResTitle != null)
+                {
+                    resTitle = newResTitle;
+                }
+            }
+
+            resTitle = string.Join(" - ", resTitle, host);
+            return resTitle;
         }
 
         private void PrintHelpMessage(
@@ -684,91 +779,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 $"[{nodeArgs.EncodedResTitle}]({url})");
         }
 
-        private async Task<string> GetResouceTitleAsync(
+        private Task<string> GetResouceTitleAsync(
             ProgramArgs.Node nodeArgs,
             string url,
-            bool hasUri)
-        {
-            WriteSectionToConsole(
-                "Fetching resource from the following url: ",
-                url, ConsoleColor.Blue);
-
-            string resTitle = (await GetResouceTitleCoreAsync(
-                url)).Nullify(true);
-
-            if (resTitle != null)
-            {
-                WriteSectionToConsole(
-                    "The resource at the provided url has the following title: ",
-                    resTitle, ConsoleColor.Cyan);
-
-                if (hasUri)
-                {
-                    Console.WriteLine(string.Join(" ",
-                        "Are you want to use this title? If you do, then just",
-                        "press enter next; otherwise, type a title yourself: "));
-
-                    string userAnswer = Console.ReadLine();
-                    string newResTitle = userAnswer.Nullify(true);
-
-                    if (newResTitle != null)
-                    {
-                        resTitle = newResTitle;
-                    }
-                    else if (userAnswer?.Length > 0)
-                    {
-                        resTitle = GetTitleFromUri(
-                            url, hasUri);
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine(
-                    "The resource at the provided url doesn't have a title; please type a title yourself: ");
-
-                resTitle = Console.ReadLine().Nullify(
-                    true) ?? nodeArgs.Title ?? throw new ArgumentNullException(
-                        nameof(resTitle));
-
-                Console.WriteLine();
-            }
-
-            return resTitle;
-        }
-
-        private string GetTitleFromUri(
-            string url,
-            bool hasUri)
-        {
-            var uriObj = new Uri(url);
-            string host = uriObj.Host;
-            string path = uriObj.AbsolutePath;
-
-            string resTitle = path.Trim().Trim('/').Trim().Split('/').Reverse(
-                ).ToArray().JoinStr(" - ");
-
-            WriteSectionToConsole(
-                "The following title has been extracted from the url: ",
-                resTitle, ConsoleColor.Cyan);
-
-            if (hasUri)
-            {
-                Console.WriteLine(string.Join(" ",
-                    "Are you want to use this title? If you do, then just",
-                    "press enter next; otherwise, type a title yourself: "));
-
-                string newResTitle = Console.ReadLine().Nullify(true);
-
-                if (newResTitle != null)
-                {
-                    resTitle = newResTitle;
-                }
-            }
-
-            resTitle = string.Join(" - ", resTitle, host);
-            return resTitle;
-        }
+            bool hasUri) => GetResouceTitleAsync(
+                nodeArgs.Title, url, hasUri);
 
         private string GetFullDirNamePart(
             string title) => fsEntryNameNormalizer.NormalizeFsEntryName(

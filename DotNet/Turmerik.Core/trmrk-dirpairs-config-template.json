@@ -11,6 +11,7 @@
     "WorkDir": "wd",
     "InteractiveMode": "i",
     "OpenMdFileAndDeferUpdate": "od",
+    "OpenMdFileAndAddLinks": "ol",
     "OpenMdFile": "o",
     "OpenMdFileAndWatch": "ow",
     "OpenMdFileInteractively": "oi",

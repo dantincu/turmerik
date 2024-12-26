@@ -102,7 +102,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 {
                     File.Delete(htmlFilePath);
                 }
-            });
+            }, false);
 
             Console.ForegroundColor = ConsoleColor.Cyan;
 

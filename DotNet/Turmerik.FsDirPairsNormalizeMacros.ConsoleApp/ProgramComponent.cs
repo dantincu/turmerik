@@ -148,7 +148,7 @@ namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
                     }
                 };
 
-                rfDirPairNamesComponent.NormalizeArgs(
+                await rfDirPairNamesComponent.NormalizeArgs(
                     rfDirPairNamesArgs.Args);
 
                 switch (matchingKvp.Value)

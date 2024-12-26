@@ -18,6 +18,7 @@ using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextParsing.Md;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
+using Turmerik.Html;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
 using static Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames.ProgramComponent;
@@ -33,7 +34,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             WorkArgs wka,
             bool normalizeArgs = true);
 
-        void NormalizeArgs(ProgramArgs args);
+        Task NormalizeArgs(ProgramArgs args);
     }
 
     public class ProgramComponent : IProgramComponent
@@ -43,8 +44,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IConsoleArgsParser consoleArgsParser;
         private readonly MdToPdf.IProgramComponent mdToPdfProgramComponent;
+        private readonly MkFsDirPairs.IProgramComponent mkFsDirPairsProgramComponent;
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
+        private readonly IHtmlDocTitleRetriever htmlDocTitleRetriever;
         private readonly DirsPairConfig config;
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
         private readonly NotesAppConfigMtbl notesConfig;
@@ -58,8 +61,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IConsoleArgsParser consoleArgsParser,
             MdToPdf.IProgramComponent mdToPdfProgramComponent,
+            MkFsDirPairs.IProgramComponent mkFsDirPairsProgramComponent,
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             ITextMacrosReplacer textMacrosReplacer,
+            IHtmlDocTitleRetriever htmlDocTitleRetriever,
             IDirsPairConfigLoader dirsPairConfigLoader,
             INotesAppConfigLoader notesAppConfigLoader)
         {
@@ -78,11 +83,17 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             this.mdToPdfProgramComponent = mdToPdfProgramComponent ?? throw new ArgumentNullException(
                 nameof(mdToPdfProgramComponent));
 
+            this.mkFsDirPairsProgramComponent = mkFsDirPairsProgramComponent ?? throw new ArgumentNullException(
+                nameof(mkFsDirPairsProgramComponent));
+
             this.localDevicePathMacrosRetriever = localDevicePathMacrosRetriever ?? throw new ArgumentNullException(
                 nameof(localDevicePathMacrosRetriever));
 
             this.textMacrosReplacer = textMacrosReplacer ?? throw new ArgumentNullException(
                 nameof(textMacrosReplacer));
+
+            this.htmlDocTitleRetriever = htmlDocTitleRetriever ?? throw new ArgumentNullException(
+                nameof(htmlDocTitleRetriever));
 
             this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
                 nameof(dirsPairConfigLoader));
@@ -100,7 +111,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         public async Task<Tuple<string?, string?>> RunAsync(
             string[] rawArgs)
         {
-            var args = GetWorkArgs(rawArgs);
+            var args = await GetWorkArgsAsync(rawArgs);
             string? title = args.MdTitle;
             string? newFullDirNamePart;
 
@@ -139,7 +150,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
             if (normalizeArgs)
             {
-                NormalizeArgs(args);
+                await NormalizeArgs(args);
             }
 
             string? newFullDirNamePart = null;
@@ -182,6 +193,32 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                 }
 
                 TryRenameFullNameDir(wka, newFullDirName);
+
+                if (args.MdLinksToAddArr != null)
+                {
+                    string newMdFilePath = Path.Combine(
+                        args.ShortNameDirPath,
+                        newMdFileName);
+
+                    var mdLinesList = File.ReadAllLines(
+                        newMdFilePath).ToList();
+
+                    if (mdLinesList.Any() && !string.IsNullOrWhiteSpace(mdLinesList.Last()))
+                    {
+                        mdLinesList.Add(string.Empty);
+                    }
+
+                    foreach (var mdLink in args.MdLinksToAddArr)
+                    {
+                        string mdLinkStr = $"[{mdLink.Title}]({mdLink.Url})";
+                        mdLinesList.Add(mdLinkStr);
+                        mdLinesList.Add(string.Empty);
+                    }
+
+                    File.WriteAllLines(
+                        newMdFilePath,
+                        mdLinesList);
+                }
 
                 if ((config.CreatePdfFile ?? false) && args.SkipPdfFileCreation != true)
                 {
@@ -307,7 +344,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             consoleMsgPrinter.Print(linesArr, null, x);
         }
 
-        private void TryRenameMdFile(
+        private string TryRenameMdFile(
             WorkArgs wka,
             string newMdFileName)
         {
@@ -375,6 +412,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             }
 
             Console.WriteLine();
+            return newMdFilePath;
         }
 
         private void TryRenameFullNameDir(
@@ -467,7 +505,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             Console.WriteLine();
         }
 
-        private ProgramArgs GetWorkArgs(string[] rawArgs)
+        private async Task<ProgramArgs> GetWorkArgsAsync(string[] rawArgs)
         {
             var args = consoleArgsParser.Parse(
                 new ConsoleArgsParserOpts<ProgramArgs>(rawArgs)
@@ -505,6 +543,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 config.ArgOpts.OpenMdFileAndDeferUpdate.Arr(),
                                 data => data.Args.OpenMdFileAndDeferUpdate = true),
                             consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.OpenMdFileAndAddLinks.Arr(),
+                                data => data.Args.OpenMdFileAndAddLinks = true),
+                            consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.Title.Arr(),
                                 data => data.Args.MdTitle = string.Join(":", data.ArgFlagValue)),
                             consoleArgsParser.ArgsFlagOpts(data,
@@ -520,13 +561,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             }
             else
             {
-                NormalizeArgs(args);
+                await NormalizeArgs(args);
             }
 
             return args;
         }
 
-        public void NormalizeArgs(ProgramArgs args)
+        public async Task NormalizeArgs(ProgramArgs args)
         {
             bool autoChoose = args.InteractiveMode != true;
             args.LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile();
@@ -585,6 +626,99 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                             args.MdTitle = mdTitle = MdH.TryGetMdTitleFromFile(
                                 args.MdFilePath);
                         }
+                        else if (args.OpenMdFileAndAddLinks == true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(string.Join(" ", $"Opening md file {args.MdFilePath};",
+                                "paste as many urls as you like and then type the SPACE char to go on with the update"));
+                            Console.ResetColor();
+
+                            ProcessH.OpenWithDefaultProgramIfNotNull(
+                                args.MdFilePath);
+
+                            List<ProgramArgs.MdLink> mdLinksToAddList = new();
+
+                            string line = string.Empty;
+                            bool isNullOrEmpty = false;
+                            bool isAllWhitespace = false;
+
+                            Action refreshLine = () =>
+                            {
+                                line = Console.ReadLine();
+                                isNullOrEmpty = string.IsNullOrEmpty(line);
+                                isAllWhitespace = !isNullOrEmpty && string.IsNullOrWhiteSpace(line);
+                            };
+
+                            refreshLine();
+
+                            while (!isAllWhitespace)
+                            {
+                                string newLinkTitle = null;
+
+                                if (!isNullOrEmpty && line.StartsWith(":"))
+                                {
+                                    newLinkTitle = line.Substring(1);
+                                    refreshLine();
+                                }
+
+                                if (!isNullOrEmpty)
+                                {
+                                    string url = line.Trim();
+                                    bool crashed = true;
+
+                                    if (newLinkTitle == null)
+                                    {
+                                        WriteSectionToConsole(
+                                            "Fetching resource from the following url: ",
+                                            url, ConsoleColor.Blue);
+
+                                        await ConsoleH.TryExecuteAsync(async () =>
+                                        {
+                                            newLinkTitle = (await GetResouceTitleCoreAsync(
+                                                url)).Nullify(true);
+
+                                            WriteSectionToConsole(
+                                                "The resource at the provided url has the following title: ",
+                                                newLinkTitle, ConsoleColor.Cyan);
+
+                                            Console.WriteLine(string.Join(" ",
+                                                "Are you want to use this title? If you do, then just",
+                                                "press enter next; otherwise, type a title yourself: "));
+
+                                            crashed = false;
+                                        }, false);
+
+                                        if (crashed)
+                                        {
+                                            Console.WriteLine("Type a title yourself: ");
+                                        }
+
+                                        string userAnswer = Console.ReadLine();
+                                        string newResTitle = userAnswer.Nullify(true);
+
+                                        if (newResTitle != null)
+                                        {
+                                            newLinkTitle = newResTitle;
+                                        }
+                                        else if (userAnswer?.Length > 0)
+                                        {
+                                            newLinkTitle = mkFsDirPairsProgramComponent.GetTitleFromUri(
+                                                url, true);
+                                        }
+
+                                        mdLinksToAddList.Add(new()
+                                        {
+                                            Title = newLinkTitle,
+                                            Url = url
+                                        });
+                                    }
+                                }
+
+                                refreshLine();
+                            }
+
+                            args.MdLinksToAddArr = mdLinksToAddList.ToArray();
+                        }
                     }
                 }
                 else if (File.Exists(args.ShortNameDirPath))
@@ -615,6 +749,18 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                     args.FullDirNamePart = fullDirNamePartStr;
                 }
             }
+        }
+
+        private async Task<string> GetResouceTitleCoreAsync(
+            string resUrl)
+        {
+            string title = await htmlDocTitleRetriever.GetResouceTitleAsync(resUrl);
+
+            title = title.Trim().ReplaceChars(
+                c => ' ', char.IsWhiteSpace).Split(
+                [' '], StringSplitOptions.RemoveEmptyEntries).JoinStr(" ");
+
+            return title;
         }
 
         private string GetMdFileName(
@@ -863,6 +1009,18 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                 () => Console.WriteLine(headingCaption),
                 (foregroundColor ?? ConsoleColor.White).Tuple());
 
+            Console.WriteLine();
+        }
+
+        private void WriteSectionToConsole(
+            string caption,
+            string content,
+            ConsoleColor foregroundColor)
+        {
+            Console.WriteLine(caption);
+            Console.ForegroundColor = foregroundColor;
+            Console.WriteLine(content);
+            Console.ResetColor();
             Console.WriteLine();
         }
 
