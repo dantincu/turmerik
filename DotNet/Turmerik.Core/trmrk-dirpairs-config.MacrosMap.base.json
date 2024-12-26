@@ -299,6 +299,10 @@
     ":s:1",
     "$towns$"
   ],
+  "vids": [
+    ":s:1",
+    "$videos$"
+  ],
   "vlgs": [
     ":s:1",
     "$villages$"
