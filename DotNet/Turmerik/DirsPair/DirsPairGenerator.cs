@@ -359,9 +359,23 @@ namespace Turmerik.DirsPair
                     }
                 };
 
+                var jsonFile = new DriveItemX
+                {
+                    Name = opts.JsonFileName,
+                    Data = new DriveItemXData
+                    {
+                        TextFileContents = jsonConversion.Adapter.Serialize(
+                            new NoteItemCore
+                            {
+                                CreatedAt = DateTime.UtcNow,
+                            })
+                    }
+                };
+
                 folderFiles = new List<DriveItemX>
                 {
-                    mdFile
+                    mdFile,
+                    jsonFile
                 };
             }
 

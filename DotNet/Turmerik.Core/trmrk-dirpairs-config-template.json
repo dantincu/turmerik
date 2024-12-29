@@ -15,6 +15,7 @@
     "OpenMdFile": "o",
     "OpenMdFileAndWatch": "ow",
     "OpenMdFileInteractively": "oi",
+    "UpdateTimeStamp": "ut",
     "SkipMdFileCreation": "skmd",
     "SkipPdfFileCreation": "skpdf",
     "SkipCurrentNode": "skcrnt",

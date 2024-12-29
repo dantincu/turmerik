@@ -21,6 +21,7 @@ namespace Turmerik.DirsPair
             FullDirNamePart = src.FullDirNamePart;
             JoinStr = src.JoinStr;
             MdFileName = src.MdFileName;
+            JsonFileName = src.JsonFileName;
             MdFileContentsTemplate = src.MdFileContentsTemplate;
             MdFileFirstContent = src.MdFileFirstContent;
             KeepFileName = src.KeepFileName;
@@ -46,6 +47,7 @@ namespace Turmerik.DirsPair
         public string FullDirNamePart { get; set; }
         public string JoinStr { get; set; }
         public string MdFileName { get; set; }
+        public string JsonFileName { get; set; }
         public string MdFileContentsTemplate { get; set; }
         public string MdFileFirstContent { get; set; }
         public string KeepFileName { get; set; }

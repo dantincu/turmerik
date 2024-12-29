@@ -160,6 +160,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
             if (args.SkipShortNameDirPath != true && stopSkipping)
             {
+                if (wka.Args.UpdateTimeStamp == true)
+                {
+                    UpdateTimeStamp(wka.Args.ShortNameDirPath);
+                }
+
                 newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(
                     wka.Args.MdTitle,
                     config.FileNameMaxLength ?? DriveExplorerH.DEFAULT_ENTRY_NAME_MAX_LENGTH);
@@ -546,6 +551,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 config.ArgOpts.OpenMdFileAndAddLinks.Arr(),
                                 data => data.Args.OpenMdFileAndAddLinks = true),
                             consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.UpdateTimeStamp.Arr(),
+                                data => data.Args.UpdateTimeStamp = true),
+                            consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.Title.Arr(),
                                 data => data.Args.MdTitle = string.Join(":", data.ArgFlagValue)),
                             consoleArgsParser.ArgsFlagOpts(data,
@@ -625,6 +633,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
                             args.MdTitle = mdTitle = MdH.TryGetMdTitleFromFile(
                                 args.MdFilePath);
+
+                            UpdateTimeStamp(args.ShortNameDirPath);
                         }
                         else if (args.OpenMdFileAndAddLinks == true)
                         {
@@ -721,6 +731,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                             }
 
                             args.MdLinksToAddArr = mdLinksToAddList.ToArray();
+                            UpdateTimeStamp(args.ShortNameDirPath);
                         }
                     }
                 }
@@ -1025,6 +1036,33 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             Console.WriteLine(content);
             Console.ResetColor();
             Console.WriteLine();
+        }
+
+        private void UpdateTimeStamp(
+            string shortNameDirPath)
+        {
+            string jsonFilePath = Path.Combine(
+                shortNameDirPath,
+                config.FileNames.JsonFileName);
+
+            NoteItemCore noteItem;
+
+            if (File.Exists(jsonFilePath))
+            {
+                string json = File.ReadAllText(jsonFilePath);
+                noteItem = jsonConversion.Adapter.Deserialize<NoteItemCore>(json);
+                noteItem.UpdatedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                noteItem = new()
+                {
+                    UpdatedAt = DateTime.UtcNow,
+                };
+            }
+
+            string newJson = jsonConversion.Adapter.Serialize(noteItem);
+            File.WriteAllText(jsonFilePath, newJson);
         }
 
         public class WorkArgs

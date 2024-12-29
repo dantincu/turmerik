@@ -9,6 +9,9 @@ namespace Turmerik.Notes.Core
     {
         public string Title { get; set; }
 
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
         public Dictionary<NoteInternalDir, int> InternalDirs { get; set; }
         public Dictionary<int, string> ChildItems { get; set; }
         public List<int> ChildSectionsSortOrder { get; set; }
@@ -24,7 +27,5 @@ namespace Turmerik.Notes.Core
     public class NoteItem : NoteItemCore
     {
         public Dictionary<int, NoteItem> ChildNotes { get; set; }
-        public bool? Created { get; set; }
-        public bool? Removed { get; set; }
     }
 }

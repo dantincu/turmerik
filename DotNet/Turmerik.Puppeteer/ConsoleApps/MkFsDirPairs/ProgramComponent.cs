@@ -557,7 +557,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             Console.WriteLine(shortNameDir.Name);
             Console.ResetColor();
 
-            var mdFile = shortNameDir.FolderFiles?.SingleOrDefault();
+            var mdFile = shortNameDir.FolderFiles?.FirstOrDefault();
             string? mdFilePath = null;
 
             if (mdFile != null)
@@ -674,6 +674,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 FullDirNamePart = GetFullDirNamePart(nodeArgs),
                 JoinStr = nodeArgs.FullDirNameJoinStr,
                 MdFileName = GetMdFileName(nodeArgs),
+                JsonFileName = config.FileNames.JsonFileName,
                 MdFileContentsTemplate = config.FileContents.MdFileContentsTemplate,
                 KeepFileName = config.FileNames.KeepFileName,
                 KeepFileContents = GetKeepFileContents(),

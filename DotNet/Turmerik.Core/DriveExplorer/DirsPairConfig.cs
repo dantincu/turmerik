@@ -30,6 +30,7 @@ namespace Turmerik.Core.DriveExplorer
             public string OpenMdFile { get; set; }
             public string OpenMdFileAndWatch { get; set; }
             public string OpenMdFileInteractively { get; set; }
+            public string UpdateTimeStamp { get; set; }
             public string SkipMdFileCreation { get; set; }
             public string SkipPdfFileCreation { get; set; }
             public string SkipCurrentNode { get; set; }
@@ -72,6 +73,7 @@ namespace Turmerik.Core.DriveExplorer
         public class FileNamesT
         {
             public string MdFileName { get; set; }
+            public string JsonFileName { get; set; }
             public string MdFileNamePfx { get; set; }
             public bool? PrependTitleToNoteMdFileName { get; set; }
             public string KeepFileName { get; set; }
