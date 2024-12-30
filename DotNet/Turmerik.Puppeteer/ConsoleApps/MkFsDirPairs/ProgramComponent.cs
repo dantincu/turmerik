@@ -144,8 +144,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 "Fetching resource from the following url: ",
                 url, ConsoleColor.Blue);
 
-            string resTitle = (await GetResouceTitleCoreAsync(
-                url)).Nullify(true);
+            string resTitle = null;
+
+            await ConsoleH.TryExecuteAsync(async () =>
+            {
+                resTitle = (await GetResouceTitleCoreAsync(
+                    url)).Nullify(true);
+            }, false);
 
             if (resTitle != null)
             {

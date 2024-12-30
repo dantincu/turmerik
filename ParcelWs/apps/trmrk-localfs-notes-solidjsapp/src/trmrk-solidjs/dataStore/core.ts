@@ -52,6 +52,10 @@ export interface AppBodyData {
   secondContainerIsFurtherSplit: boolean;
   secondContainerIsFocused: boolean;
   secondPanelIsFocused: boolean;
+  appBodyPanel1Scrollable: boolean;
+  appBodyPanel2Scrollable: boolean;
+  appBodyPanel3Scrollable: boolean;
+  appBodyPanel4Scrollable: boolean;
 }
 
 export interface AppLayout {
@@ -133,6 +137,10 @@ export const createAppDataCore = () => {
         secondContainerIsFurtherSplit: false,
         secondContainerIsFocused: false,
         secondPanelIsFocused: false,
+        appBodyPanel1Scrollable: true,
+        appBodyPanel2Scrollable: true,
+        appBodyPanel3Scrollable: true,
+        appBodyPanel4Scrollable: true,
       },
     },
   };

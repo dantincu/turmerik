@@ -1,7 +1,6 @@
 import { render } from "solid-js/web";
 import { Router, Route } from "@solidjs/router";
 
-import { createAppData } from "./dataStore/core";
 import { AppProvider } from "./dataStore/AppContext";
 
 import { AppConfigData } from "../trmrk/notes-app-config";

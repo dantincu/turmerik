@@ -9,7 +9,7 @@
       // "commandLineArgs": ":n :url:https://www.facebook.com/100057620462546/posts/863839308880077/?rdid=VkQpWXD1jzBJzCRo",
       // "commandLineArgs": ":n \":uri:https://www.youtube.com/channel/UCMXJUNnd4iSXVjBxl0laHWw\""
       // "commandLineArgs": ":h"
-      "commandLineArgs": ":n asdf:qwer :oi"
+      // "commandLineArgs": ":n asdf:qwer :oi"
       // "commandLineArgs": ":n :uri:|asdf||sadf|https://google.com qwerwqer"
       // "commandLineArgs": ":nf"
       // "commandLineArgs": ":n \"2024-08-09_17-53\\_+0300 asdfasdf \\\\\\\\\""
@@ -19,7 +19,7 @@
       // "commandLineArgs": ":n :url:https://www.mayoclinic.org/diseases-conditions/cerebral-palsy/symptoms-causes/syc-20353999#:~:text=Cerebral%20palsy%20is%20a%20group,palsy%20may%20have%20exaggerated%20reflexes"
       // "commandLineArgs": ":n :url:https://specialarad.ro/in-2005-nicu-covaci-si-phoenix-mi-au-luat-vocea-azi/"
       // "commandLineArgs": ":cfg:3:article"
-      // "commandLineArgs": ":n :uri:https://google.com \"qwerqwer||asdfasdf|asdfasdf|qweqwer\""
+      "commandLineArgs": ":n :uri:https://www.linkedin.com/in/evangelinevictoria/?originalSubdomain=au"
     }
   }
 }

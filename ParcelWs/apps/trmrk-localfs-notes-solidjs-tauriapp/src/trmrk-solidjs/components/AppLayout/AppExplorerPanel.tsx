@@ -1,15 +1,15 @@
 import { Component } from "solid-js";
 
-import ScrollablePanel from "./ScrollablePanel";
+import Panel from "./Panel";
 
 export interface AppExplorerPanelProps {
 
 }
 
-const AppExplorerPanel: Component<AppExplorerPanelProps> = (props: AppExplorerPanelProps) => {
-  return (<ScrollablePanel cssClass="trmrk-app-explorer-panel">
+const AppExplorerPanel: Component<AppExplorerPanelProps> = () => {
+  return (<Panel cssClass="trmrk-app-explorer-panel" isScrollable={true}>
 
-  </ScrollablePanel>);
+  </Panel>);
 }
 
 export default AppExplorerPanel;

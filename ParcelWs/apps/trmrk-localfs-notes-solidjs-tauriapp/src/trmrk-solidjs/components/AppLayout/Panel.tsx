@@ -1,11 +1,12 @@
-import { ParentComponent, JSX } from "solid-js";
+import { ParentComponent } from "solid-js";
 
 export interface PanelProps {
   cssClass?: string | null | undefined;
+  isScrollable?: boolean | null | undefined;
 }
 
 const Panel: ParentComponent<PanelProps> = (props) => {
-  return (<div class={["trmrk-panel", props.cssClass ?? ""].join(" ")}>
+  return (<div class={["trmrk-panel", props.isScrollable ? "trmrk-scrollable overflow-scrollable" : "", props.cssClass ?? ""].join(" ")}>
     {props.children}
   </div>);
 }

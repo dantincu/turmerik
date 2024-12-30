@@ -15,7 +15,7 @@ import AppHeader from "./AppHeader";
 export interface AppLayoutProps {
 }
 
-const AppLayout: ParentComponent<AppLayoutProps> = (props: AppLayoutProps) => {
+const AppLayout: ParentComponent<AppLayoutProps> = () => {
   const { appData } = useAppContext();
 
   const appLayout = appData.appLayout;

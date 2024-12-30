@@ -3,7 +3,6 @@ import { Component } from "solid-js";
 import { useAppContext } from "../../dataStore/core";
 
 import AppBodyContent from "./AppBodyContent";
-import AppBodyCompactContent from "./AppBodyCompactContent";
 
 import AppExplorerPanel from "./AppExplorerPanel";
 
@@ -11,7 +10,7 @@ export interface AppBodyProps {
 
 }
 
-const AppBody: Component<AppBodyProps> = (props: AppBodyProps) => {
+const AppBody: Component<AppBodyProps> = () => {
   const { appData } = useAppContext();
 
   const appLayout = appData.appLayout;
@@ -22,12 +21,8 @@ const AppBody: Component<AppBodyProps> = (props: AppBodyProps) => {
   return (<main class={["trmrk-app-body",
     appHeader.show ? "trmrk-after-header" : "",
     appFooter.show ? "trmrk-before-footer" : ""].join(" ")}>
-      { appLayout.isCompactMode ? 
-        <>
-          { explorerPanel.enabled ? <AppExplorerPanel /> : null }
-          <AppBodyContent />
-        </> :
-        <AppBodyCompactContent /> }
+      { explorerPanel.enabled ? <AppExplorerPanel></AppExplorerPanel> : null }
+      <AppBodyContent></AppBodyContent>
     </main>);
 }
 
