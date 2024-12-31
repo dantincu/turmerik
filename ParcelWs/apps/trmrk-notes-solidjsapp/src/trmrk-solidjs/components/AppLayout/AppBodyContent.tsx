@@ -29,8 +29,6 @@ const AppBodyContent: Component<AppBodyContentProps> = () => {
         appBody.secondPanelIsFocused ? appBodyPanel4Content() : appBodyPanel3Content() :
         appBody.secondPanelIsFocused ? appBodyPanel2Content() : appBodyPanel1Content() }
     </Panel> : <PanelsContainer splitOrientation={ appBody.splitOrientation }
-    panel1Srollable={ appBody.firstContainerIsFurtherSplit ? false : appBody.appBodyPanel1Scrollable }
-    panel2Srollable={ appBody.secondContainerIsFurtherSplit ? false : appBody.appBodyPanel3Scrollable }
     altPanelChildren={
       () => <PanelsContainer
           splitOrientation={ appBody.secondContainerIsFurtherSplit ? oppositeSplitOrientation() : SplitPanelOrientation.None }

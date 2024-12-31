@@ -20,9 +20,12 @@ const AppBody: Component<AppBodyProps> = () => {
 
   return (<main class={["trmrk-app-body",
     appHeader.show ? "trmrk-after-header" : "",
-    appFooter.show ? "trmrk-before-footer" : ""].join(" ")}>
-      { explorerPanel.enabled ? <AppExplorerPanel></AppExplorerPanel> : null }
-      <AppBodyContent></AppBodyContent>
+    appFooter.show ? "trmrk-before-footer" : "",
+    (explorerPanel.isEnabled && !appLayout.isCompactMode) ? "trmrk-is-split" : ""].join(" ")}>
+      { appLayout.isCompactMode ? (explorerPanel.isEnabled && explorerPanel.isFocused) ? <AppExplorerPanel /> : <AppBodyContent /> : <>
+        { explorerPanel.isEnabled ? <AppExplorerPanel /> : null }
+        <AppBodyContent />
+      </> }
     </main>);
 }
 

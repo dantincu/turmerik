@@ -71,8 +71,8 @@ export interface AppLayout {
 }
 
 export interface ExplorerPanel {
-  enabled: boolean;
-  show: boolean;
+  isEnabled: boolean;
+  isFocused: boolean;
 }
 
 export interface AppDataCore {
@@ -128,8 +128,8 @@ export const createAppDataCore = () => {
         showCloseSelectionBtn: false,
       },
       explorerPanel: {
-        enabled: false,
-        show: false,
+        isEnabled: false,
+        isFocused: false,
       },
       appBody: {
         splitOrientation: SplitPanelOrientation.None,

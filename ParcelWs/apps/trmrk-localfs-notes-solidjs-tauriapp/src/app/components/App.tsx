@@ -11,15 +11,17 @@ import { setAppBodyPanel1Content, setAppBodyPanel2Content, setAppBodyPanel3Conte
 import { SplitPanelOrientation } from '../../trmrk-solidjs/dataStore/core';
 
 const App: Component = () => {
-  setAppBodyPanel1Content(<p>asdfasdf</p>);
-  setAppBodyPanel2Content(<p>qwerqwer</p>);
-  setAppBodyPanel3Content(<p>zxczxvcz</p>);
-  setAppBodyPanel4Content(<p>tyuityui</p>);
+  setAppBodyPanel1Content(<p>panel 1</p>);
+  setAppBodyPanel2Content(<p>panel 2</p>);
+  setAppBodyPanel3Content(<p>panel 3</p>);
+  setAppBodyPanel4Content(<p>panel 4</p>);
 
   const { appData, setAppDataFull, setAppData } = useAppContext();
 
   const updateDraft = produce((draft: AppData) => {
     draft.appLayout.isCompactMode = false;
+    const explorer = draft.appLayout.explorerPanel;
+    explorer.isEnabled = true;
     const appBody = draft.appLayout.appBody;
     appBody.splitOrientation = SplitPanelOrientation.Horizontal;
     appBody.firstContainerIsFurtherSplit = true;

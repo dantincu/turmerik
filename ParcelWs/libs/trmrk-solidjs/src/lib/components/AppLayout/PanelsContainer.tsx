@@ -13,6 +13,10 @@ export interface PanelsContainerProps {
 }
 
 const PanelsContainer: ParentComponent<PanelsContainerProps> = (props) => {
+  // console.log("props.panel1Srollable", props.panel1Srollable);
+  // console.log("props.panel2Srollable", props.panel2Srollable);
+  // console.log("props.splitOrientation", props.splitOrientation);
+
   return (<div class="trmrk-panels-container">
     { props.splitOrientation ? <SplitContainer
       splitVertically={props.splitOrientation == SplitPanelOrientation.Vertical }
