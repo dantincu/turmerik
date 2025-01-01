@@ -9,6 +9,7 @@ using Turmerik.Core.TextParsing.Md;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
 using Turmerik.Notes.Core;
+using Turmerik.Core.Text;
 
 namespace Turmerik.DirsPair
 {
@@ -351,11 +352,15 @@ namespace Turmerik.DirsPair
                     Name = opts.MdFileName,
                     Data = new DriveItemXData
                     {
-                        TextFileContents = string.Format(
-                            opts.MdFileContentsTemplate,
-                            MdH.EncodeForMd(opts.Title),
-                            Trmrk.TrmrkGuidStrNoDash,
-                            opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME) + opts.MdFileFirstContent
+                        TextFileContents = string.Concat(
+                            string.Format(
+                                opts.MdFileContentsTemplate,
+                                MdH.EncodeForMd(opts.Title),
+                                Trmrk.TrmrkGuidStrNoDash,
+                                opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME),
+                            opts.MdFileFirstContent,
+                            opts.MdLinksToAddArr?.Select(link => $"[{link.Title}]({link.Url}){Environment.NewLine}").ToArray(
+                                ).JoinStr(Environment.NewLine))
                     }
                 };
 

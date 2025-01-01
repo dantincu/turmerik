@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.DriveExplorer;
+using Turmerik.DirsPair;
 
 namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 {
@@ -30,6 +31,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public bool OpenMdFileInteractively { get; set; }
             public bool SkipMdFileCreation { get; set; }
             public bool SkipPdfFileCreation { get; set; }
+            public bool OpenMdFileAndAddLinks { get; set; }
             public bool CreatePdfFile { get; set; }
             public string Title { get; set; }
             public string ResTitle { get; set; }
@@ -46,6 +48,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public bool CreateNoteInternalsDir { get; set; }
             public bool CreateNoteFilesDir { get; set; }
             public int ArgsCount { get; set; }
+
+            public MdLink[]? MdLinksToAddArr { get; set; }
 
             public Node ParentNode { get; set; }
             public List<Node> ChildNodes { get; set; }

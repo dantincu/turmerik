@@ -50,6 +50,7 @@ namespace Turmerik.DirsPair
         public string JsonFileName { get; set; }
         public string MdFileContentsTemplate { get; set; }
         public string MdFileFirstContent { get; set; }
+        public MdLink[]? MdLinksToAddArr { get; set; }
         public string KeepFileName { get; set; }
         public string KeepFileContents { get; set; }
         public string TrmrkGuidInputName { get; set; }

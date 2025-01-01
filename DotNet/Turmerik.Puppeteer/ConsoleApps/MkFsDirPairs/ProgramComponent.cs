@@ -38,6 +38,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         string GetTitleFromUri(
             string url,
             bool hasUri);
+
+        Task<MdLink[]> OpenMdFileAndAddLinks();
     }
 
     public class ProgramComponent : IProgramComponent
@@ -224,6 +226,95 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             resTitle = string.Join(" - ", resTitle, host);
             return resTitle;
+        }
+
+        public async Task<MdLink[]> OpenMdFileAndAddLinks()
+        {
+            List<MdLink> mdLinksToAddList = new();
+
+            string line = string.Empty;
+            bool isNullOrEmpty = false;
+            bool isAllWhitespace = false;
+
+            Action refreshLine = () =>
+            {
+                line = Console.ReadLine();
+                isNullOrEmpty = string.IsNullOrEmpty(line);
+                isAllWhitespace = !isNullOrEmpty && string.IsNullOrWhiteSpace(line);
+            };
+
+            refreshLine();
+
+            while (!isAllWhitespace)
+            {
+                string newLinkTitle = null;
+
+                if (!isNullOrEmpty && line.StartsWith(":"))
+                {
+                    newLinkTitle = line.Substring(1);
+                    refreshLine();
+                }
+
+                if (!isNullOrEmpty)
+                {
+                    string url = line.Trim();
+                    bool crashed = true;
+
+                    if (newLinkTitle == null)
+                    {
+                        WriteSectionToConsole(
+                            "Fetching resource from the following url: ",
+                            url, ConsoleColor.Blue);
+
+                        await ConsoleH.TryExecuteAsync(async () =>
+                        {
+                            newLinkTitle = (await GetResouceTitleCoreAsync(
+                                url)).Nullify(true);
+
+                            WriteSectionToConsole(
+                                "The resource at the provided url has the following title: ",
+                                newLinkTitle, ConsoleColor.Cyan);
+
+                            Console.WriteLine(string.Join(" ",
+                                "Are you want to use this title? If you do, then just",
+                                "press enter next; otherwise, type a title yourself: "));
+
+                            crashed = false;
+                        }, false);
+
+                        if (crashed)
+                        {
+                            Console.WriteLine("Type a title yourself: ");
+                        }
+
+                        string userAnswer = Console.ReadLine();
+                        string newResTitle = userAnswer.Nullify(true);
+
+                        if (newResTitle != null)
+                        {
+                            newLinkTitle = newResTitle;
+                        }
+                        else if (userAnswer?.Length > 0)
+                        {
+                            newLinkTitle = GetTitleFromUri(
+                                url, true);
+                        }
+                    }
+
+                    mdLinksToAddList.Add(new()
+                    {
+                        Title = newLinkTitle,
+                        Url = url
+                    });
+                }
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Paste another url or type the SPACE char to go on with the update");
+                Console.ResetColor();
+                refreshLine();
+            }
+
+            return mdLinksToAddList.ToArray();
         }
 
         private void PrintHelpMessage(
@@ -541,6 +632,15 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             IPage? page = null,
             IBrowser? browser = null)
         {
+            if (nodeArgs.OpenMdFileAndAddLinks)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Paste a url to add as md link");
+                Console.ResetColor();
+
+                nodeArgs.MdLinksToAddArr = await OpenMdFileAndAddLinks();
+            }
+
             var opts = GetDirsPairOpts(workDir, nodeArgs);
             var dirsPair = await dirsPairCreator.CreateDirsPairAsync(opts);
 
@@ -684,6 +784,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 KeepFileName = config.FileNames.KeepFileName,
                 KeepFileContents = GetKeepFileContents(),
                 MdFileFirstContent = nodeArgs.MdFirstContent,
+                MdLinksToAddArr = nodeArgs.MdLinksToAddArr,
                 TrmrkGuidInputName = config.TrmrkGuidInputName,
                 ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true,
                 CreateNote = nodeArgs.CreateNote,
@@ -1018,7 +1119,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.DirNameTpl.Arr(),
                                             data => data.Args.Current.DirNameTpl = config.DirNames.DirNamesTplMap[
-                                                data.ArgFlagValue!.Single()])
+                                                data.ArgFlagValue!.Single()]),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.OpenMdFileAndAddLinks.Arr(),
+                                            data => data.Args.Current.OpenMdFileAndAddLinks = true),
                                     ]
                                 });
                         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Turmerik.Core.LocalDeviceEnv;
+using Turmerik.DirsPair;
 
 namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 {
@@ -31,11 +32,5 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         public bool? UpdateTimeStamp { get; set; }
 
         public MdLink[]? MdLinksToAddArr { get; set; }
-
-        public class MdLink
-        {
-            public string Title { get; init; }
-            public string Url { get; init; }
-        }
     }
 }

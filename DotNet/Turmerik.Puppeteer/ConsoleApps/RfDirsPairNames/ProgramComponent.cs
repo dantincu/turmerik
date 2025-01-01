@@ -18,6 +18,7 @@ using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextParsing.Md;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
+using Turmerik.DirsPair;
 using Turmerik.Html;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
@@ -140,6 +141,112 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         {
             (var stopSkipping, var newFullDirNamePart) = await RunCoreAsync(wka, normalizeArgs);
             return newFullDirNamePart;
+        }
+
+        public async Task NormalizeArgs(ProgramArgs args)
+        {
+            bool autoChoose = args.InteractiveMode != true;
+            args.LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile();
+
+            args.ShortNameDirPath = textMacrosReplacer.NormalizePath(
+                args.LocalDevicePathsMap,
+                args.ShortNameDirPath,
+                null);
+
+            args.SkipUntilPath = args.SkipUntilPath?.With(
+                path => textMacrosReplacer.NormalizePath(
+                    args.LocalDevicePathsMap, path, args.ShortNameDirPath));
+
+            args.RecursiveMatchingDirNameRegexsArr = args.RecursiveMatchingDirNamesArr?.Select(
+                dirName => new Regex(dirName)).ToArray();
+
+            if (args.SkipShortNameDirPath != true && (args.SkipUntilPath == null || args.SkipUntilPath == args.ShortNameDirPath))
+            {
+                if (args.MdTitle != null)
+                {
+                    args.UpdateMdFile = true;
+
+                    args.MdTitle = TextMacrosH.ReplaceMacros(
+                        args.MdTitle,
+                        config.DirNames.MacrosMap);
+                }
+
+                if (Directory.Exists(args.ShortNameDirPath))
+                {
+                    string mdTitle = null;
+
+                    args.MdFileName ??= GetMdFile(
+                        args.ShortNameDirPath,
+                        out mdTitle,
+                        autoChoose);
+
+                    args.MdTitle ??= mdTitle;
+
+                    if (args.MdFileName != null)
+                    {
+                        args.MdFilePath = Path.Combine(
+                            args.ShortNameDirPath,
+                            args.MdFileName);
+
+                        if (args.OpenMdFileAndDeferUpdate == true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Opening md file {args.MdFilePath}; press any key to go on with the update");
+                            Console.ResetColor();
+
+                            ProcessH.OpenWithDefaultProgramIfNotNull(
+                                args.MdFilePath);
+
+                            Console.ReadKey();
+
+                            args.MdTitle = mdTitle = MdH.TryGetMdTitleFromFile(
+                                args.MdFilePath);
+
+                            UpdateTimeStamp(args.ShortNameDirPath);
+                        }
+                        else if (args.OpenMdFileAndAddLinks == true)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine(string.Join(" ", $"Opening md file {args.MdFilePath};",
+                                "paste a url to add as md link"));
+                            Console.ResetColor();
+
+                            ProcessH.OpenWithDefaultProgramIfNotNull(
+                                args.MdFilePath);
+
+                            args.MdLinksToAddArr = await mkFsDirPairsProgramComponent.OpenMdFileAndAddLinks();
+                            UpdateTimeStamp(args.ShortNameDirPath);
+                        }
+                    }
+                }
+                else if (File.Exists(args.ShortNameDirPath))
+                {
+                    args.MdFilePath = args.ShortNameDirPath;
+
+                    args.MdFileName = Path.GetFileName(
+                        args.MdFilePath);
+
+                    args.ShortNameDirPath = Path.GetDirectoryName(
+                        args.MdFilePath);
+                }
+
+                args.ParentDirPath = Path.GetDirectoryName(
+                    args.ShortNameDirPath);
+
+                args.ShortDirName = Path.GetFileName(
+                    args.ShortNameDirPath);
+
+                if ((args.FullDirName = GetFullDirName(
+                    args, autoChoose,
+                    out string fullDirNamePartStr)) != null)
+                {
+                    args.FullDirPath = Path.Combine(
+                        args.ParentDirPath,
+                        args.FullDirName);
+
+                    args.FullDirNamePart = fullDirNamePartStr;
+                }
+            }
         }
 
         private async Task<Tuple<bool, string>> RunCoreAsync(
@@ -573,196 +680,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             }
 
             return args;
-        }
-
-        public async Task NormalizeArgs(ProgramArgs args)
-        {
-            bool autoChoose = args.InteractiveMode != true;
-            args.LocalDevicePathsMap = localDevicePathMacrosRetriever.LoadFromConfigFile();
-
-            args.ShortNameDirPath = textMacrosReplacer.NormalizePath(
-                args.LocalDevicePathsMap,
-                args.ShortNameDirPath,
-                null);
-
-            args.SkipUntilPath = args.SkipUntilPath?.With(
-                path => textMacrosReplacer.NormalizePath(
-                    args.LocalDevicePathsMap, path, args.ShortNameDirPath));
-
-            args.RecursiveMatchingDirNameRegexsArr = args.RecursiveMatchingDirNamesArr?.Select(
-                dirName => new Regex(dirName)).ToArray();
-
-            if (args.SkipShortNameDirPath != true && (args.SkipUntilPath == null || args.SkipUntilPath == args.ShortNameDirPath))
-            {
-                if (args.MdTitle != null)
-                {
-                    args.UpdateMdFile = true;
-
-                    args.MdTitle = TextMacrosH.ReplaceMacros(
-                        args.MdTitle,
-                        config.DirNames.MacrosMap);
-                }
-
-                if (Directory.Exists(args.ShortNameDirPath))
-                {
-                    string mdTitle = null;
-
-                    args.MdFileName ??= GetMdFile(
-                        args.ShortNameDirPath,
-                        out mdTitle,
-                        autoChoose);
-
-                    args.MdTitle ??= mdTitle;
-
-                    if (args.MdFileName != null)
-                    {
-                        args.MdFilePath = Path.Combine(
-                            args.ShortNameDirPath,
-                            args.MdFileName);
-
-                        if (args.OpenMdFileAndDeferUpdate == true)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"Opening md file {args.MdFilePath}; press any key to go on with the update");
-                            Console.ResetColor();
-
-                            ProcessH.OpenWithDefaultProgramIfNotNull(
-                                args.MdFilePath);
-
-                            Console.ReadKey();
-
-                            args.MdTitle = mdTitle = MdH.TryGetMdTitleFromFile(
-                                args.MdFilePath);
-
-                            UpdateTimeStamp(args.ShortNameDirPath);
-                        }
-                        else if (args.OpenMdFileAndAddLinks == true)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(string.Join(" ", $"Opening md file {args.MdFilePath};",
-                                "paste a url to add as md link"));
-                            Console.ResetColor();
-
-                            ProcessH.OpenWithDefaultProgramIfNotNull(
-                                args.MdFilePath);
-
-                            List<ProgramArgs.MdLink> mdLinksToAddList = new();
-
-                            string line = string.Empty;
-                            bool isNullOrEmpty = false;
-                            bool isAllWhitespace = false;
-
-                            Action refreshLine = () =>
-                            {
-                                line = Console.ReadLine();
-                                isNullOrEmpty = string.IsNullOrEmpty(line);
-                                isAllWhitespace = !isNullOrEmpty && string.IsNullOrWhiteSpace(line);
-                            };
-
-                            refreshLine();
-
-                            while (!isAllWhitespace)
-                            {
-                                string newLinkTitle = null;
-
-                                if (!isNullOrEmpty && line.StartsWith(":"))
-                                {
-                                    newLinkTitle = line.Substring(1);
-                                    refreshLine();
-                                }
-
-                                if (!isNullOrEmpty)
-                                {
-                                    string url = line.Trim();
-                                    bool crashed = true;
-
-                                    if (newLinkTitle == null)
-                                    {
-                                        WriteSectionToConsole(
-                                            "Fetching resource from the following url: ",
-                                            url, ConsoleColor.Blue);
-
-                                        await ConsoleH.TryExecuteAsync(async () =>
-                                        {
-                                            newLinkTitle = (await GetResouceTitleCoreAsync(
-                                                url)).Nullify(true);
-
-                                            WriteSectionToConsole(
-                                                "The resource at the provided url has the following title: ",
-                                                newLinkTitle, ConsoleColor.Cyan);
-
-                                            Console.WriteLine(string.Join(" ",
-                                                "Are you want to use this title? If you do, then just",
-                                                "press enter next; otherwise, type a title yourself: "));
-
-                                            crashed = false;
-                                        }, false);
-
-                                        if (crashed)
-                                        {
-                                            Console.WriteLine("Type a title yourself: ");
-                                        }
-
-                                        string userAnswer = Console.ReadLine();
-                                        string newResTitle = userAnswer.Nullify(true);
-
-                                        if (newResTitle != null)
-                                        {
-                                            newLinkTitle = newResTitle;
-                                        }
-                                        else if (userAnswer?.Length > 0)
-                                        {
-                                            newLinkTitle = mkFsDirPairsProgramComponent.GetTitleFromUri(
-                                                url, true);
-                                        }
-                                    }
-
-                                    mdLinksToAddList.Add(new()
-                                    {
-                                        Title = newLinkTitle,
-                                        Url = url
-                                    });
-                                }
-
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine("Paste another url or type the SPACE char to go on with the update");
-                                Console.ResetColor();
-                                refreshLine();
-                            }
-
-                            args.MdLinksToAddArr = mdLinksToAddList.ToArray();
-                            UpdateTimeStamp(args.ShortNameDirPath);
-                        }
-                    }
-                }
-                else if (File.Exists(args.ShortNameDirPath))
-                {
-                    args.MdFilePath = args.ShortNameDirPath;
-
-                    args.MdFileName = Path.GetFileName(
-                        args.MdFilePath);
-
-                    args.ShortNameDirPath = Path.GetDirectoryName(
-                        args.MdFilePath);
-                }
-
-                args.ParentDirPath = Path.GetDirectoryName(
-                    args.ShortNameDirPath);
-
-                args.ShortDirName = Path.GetFileName(
-                    args.ShortNameDirPath);
-
-                if ((args.FullDirName = GetFullDirName(
-                    args, autoChoose,
-                    out string fullDirNamePartStr)) != null)
-                {
-                    args.FullDirPath = Path.Combine(
-                        args.ParentDirPath,
-                        args.FullDirName);
-
-                    args.FullDirNamePart = fullDirNamePartStr;
-                }
-            }
         }
 
         private async Task<string> GetResouceTitleCoreAsync(
