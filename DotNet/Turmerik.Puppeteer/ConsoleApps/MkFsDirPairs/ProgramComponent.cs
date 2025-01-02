@@ -623,8 +623,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         }
 
         private bool ShouldCreatePdfFile(
-            ProgramArgs.Node nodeArgs) => nodeArgs.CreatePdfFile || (
-                config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation);
+            ProgramArgs.Node nodeArgs) => (nodeArgs.CreatePdfFile || (
+                config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation));
 
         private async Task<Tuple<DriveItemX, string?, DriveItemX?>> RunAsyncCore(
             string workDir,

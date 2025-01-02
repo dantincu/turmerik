@@ -87,22 +87,20 @@ namespace Turmerik.AddSectionRanks.ConsoleApp
             string[] rawArgs)
         {
             var pgArgs = ParseArgs(rawArgs);
-
-            var existingPairs = await existingDirPairsRetriever.GetNoteDirPairsAsync(
-                pgArgs.WorkDir);
-
-            await RunAsync(pgArgs, pgArgs.WorkDir, existingPairs);
+            await RunAsync(pgArgs, pgArgs.WorkDir);
         }
 
         public async Task RunAsync(
             ProgramArgs pgArgs,
-            string prIdnf,
-            NoteItemsTupleCore existingPairs)
+            string prIdnf)
         {
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine($"PR_IDNF: {prIdnf}");
             Console.WriteLine();
+
+            var existingPairs = await existingDirPairsRetriever.GetNoteDirPairsAsync(
+                pgArgs.WorkDir);
 
             var allSectionTuples = existingPairs.DirsPairTuples.Where(
                 tuple => tuple.NoteDirCat == NoteDirCategory.Section).ToList();
@@ -251,12 +249,11 @@ namespace Turmerik.AddSectionRanks.ConsoleApp
             {
                 if (childDirsPairTuple.NoteDirCat != NoteDirCategory.Internals)
                 {
-                    var childIdnf = Path.Combine(prIdnf, childDirsPairTuple.ShortDirName);
+                    var childIdnf = Path.Combine(
+                        prIdnf,
+                        childDirsPairTuple.ShortDirName);
 
-                    var childExistingEntries = await existingDirPairsRetriever.GetNoteDirPairsAsync(
-                        childIdnf);
-
-                    await RunAsync(pgArgs, childIdnf, childExistingEntries);
+                    await RunAsync(pgArgs, childIdnf);
                 }
             }
         }
