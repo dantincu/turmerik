@@ -53,6 +53,7 @@
   "|nat|": "$national$",
   "|natm|": "$national-team$",
   "|natms|": "$national-teams$",
+  "|oprs|": "$operas$",
   "|others|": "$others$",
   "|othtrs|": "$other-tiers$",
   "|pcs|": "$pieces$",

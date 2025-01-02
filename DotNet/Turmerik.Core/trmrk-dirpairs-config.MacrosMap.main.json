@@ -215,6 +215,10 @@
     ":s:1",
     "$national-teams$"
   ],
+  "oprs": [
+    ":s:1",
+    "$operas$"
+  ],
   "others": [
     ":s:1",
     "$others$"
