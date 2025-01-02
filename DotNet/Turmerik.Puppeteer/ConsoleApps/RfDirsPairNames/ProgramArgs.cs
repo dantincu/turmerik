@@ -29,6 +29,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         public Regex[]? RecursiveMatchingDirNameRegexsArr { get; set; }
         public bool? OpenMdFileAndDeferUpdate { get; set; }
         public bool? OpenMdFileAndAddLinks { get; set; }
+        public bool OpenMdFileAndInsertLinks { get; set; }
         public bool? UpdateTimeStamp { get; set; }
 
         public MdLink[]? MdLinksToAddArr { get; set; }

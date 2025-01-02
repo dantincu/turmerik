@@ -347,20 +347,41 @@ namespace Turmerik.DirsPair
             if (!opts.SkipMdFileCreation && !string.IsNullOrWhiteSpace(
                 opts.MdFileName))
             {
+                string mainContent = string.Format(
+                    opts.MdFileContentsTemplate,
+                    MdH.EncodeForMd(opts.Title),
+                    Trmrk.TrmrkGuidStrNoDash,
+                    opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME);
+
+                var mdFileTextParts = new List<string>
+                {
+                    mainContent,
+                    opts.MdFileFirstContent,
+                };
+
+                if (opts.MdLinksToAddArr != null)
+                {
+                    var mdLinksToAddStr = opts.MdLinksToAddArr.Select(
+                        link => $"[{link.Title}]({link.Url}){Environment.NewLine}").ToArray(
+                            ).JoinStr(Environment.NewLine) + Environment.NewLine;
+
+                    if (opts.InsertLinksToAdd)
+                    {
+                        mdFileTextParts.Insert(1, mdLinksToAddStr);
+                    }
+                    else
+                    {
+                        mdFileTextParts.Add(mdLinksToAddStr);
+                    }
+                }
+
                 var mdFile = new DriveItemX
                 {
                     Name = opts.MdFileName,
                     Data = new DriveItemXData
                     {
                         TextFileContents = string.Concat(
-                            string.Format(
-                                opts.MdFileContentsTemplate,
-                                MdH.EncodeForMd(opts.Title),
-                                Trmrk.TrmrkGuidStrNoDash,
-                                opts.TrmrkGuidInputName ?? TrmrkNotesH.TRMRK_GUID_INPUT_NAME),
-                            opts.MdFileFirstContent,
-                            opts.MdLinksToAddArr?.Select(link => $"[{link.Title}]({link.Url}){Environment.NewLine}").ToArray(
-                                ).JoinStr(Environment.NewLine))
+                            mdFileTextParts)
                     }
                 };
 

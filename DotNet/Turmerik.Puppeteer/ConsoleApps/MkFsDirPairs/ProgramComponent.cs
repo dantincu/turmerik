@@ -785,6 +785,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 KeepFileContents = GetKeepFileContents(),
                 MdFileFirstContent = nodeArgs.MdFirstContent,
                 MdLinksToAddArr = nodeArgs.MdLinksToAddArr,
+                InsertLinksToAdd = nodeArgs.OpenMdFileAndInsertLinks,
                 TrmrkGuidInputName = config.TrmrkGuidInputName,
                 ThrowIfAnyItemAlreadyExists = config.ThrowIfAnyItemAlreadyExists ?? true,
                 CreateNote = nodeArgs.CreateNote,
@@ -1123,6 +1124,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                                         parser.ArgsFlagOpts(data,
                                             config.ArgOpts.OpenMdFileAndAddLinks.Arr(),
                                             data => data.Args.Current.OpenMdFileAndAddLinks = true),
+                                        parser.ArgsFlagOpts(data,
+                                            config.ArgOpts.OpenMdFileAndInsertLinks.Arr(),
+                                            data =>
+                                            {
+                                                data.Args.Current.OpenMdFileAndAddLinks = true;
+                                                data.Args.Current.OpenMdFileAndInsertLinks = true;
+                                            }),
                                     ]
                                 });
                         }

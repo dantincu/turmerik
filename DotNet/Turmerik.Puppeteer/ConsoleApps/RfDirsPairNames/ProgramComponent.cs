@@ -1,10 +1,12 @@
 ﻿using Markdig;
+using Markdig.Helpers;
 using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -315,16 +317,41 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                     var mdLinesList = File.ReadAllLines(
                         newMdFilePath).ToList();
 
-                    if (mdLinesList.Any() && !string.IsNullOrWhiteSpace(mdLinesList.Last()))
+                    var kvp = args.OpenMdFileAndInsertLinks switch
                     {
-                        mdLinesList.Add(string.Empty);
+                        true => mdLinesList.FirstKvp(line => line.Trim().StartsWith("# ")),
+                        false => new KeyValuePair<int, string>(-1, string.Empty)
+                    };
+
+                    if (mdLinesList.Any())
+                    {
+                        if (!string.IsNullOrWhiteSpace(mdLinesList.Last()))
+                        {
+                            mdLinesList.Add(string.Empty);
+                        }
+                    }
+                    else
+                    {
+                        kvp = new(-2, string.Empty);
                     }
 
-                    foreach (var mdLink in args.MdLinksToAddArr)
+                    if (kvp.Key < 0)
                     {
-                        string mdLinkStr = $"[{mdLink.Title}]({mdLink.Url})";
-                        mdLinesList.Add(mdLinkStr);
-                        mdLinesList.Add(string.Empty);
+                        foreach (var mdLink in args.MdLinksToAddArr)
+                        {
+                            string mdLinkStr = $"[{mdLink.Title}]({mdLink.Url})";
+                            mdLinesList.Add(mdLinkStr);
+                            mdLinesList.Add(string.Empty);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var mdLink in args.MdLinksToAddArr)
+                        {
+                            string mdLinkStr = $"[{mdLink.Title}]({mdLink.Url})";
+                            mdLinesList.Insert(kvp.Key + 2, mdLinkStr);
+                            mdLinesList.Insert(kvp.Key + 3, string.Empty);
+                        }
                     }
 
                     File.WriteAllLines(
@@ -658,6 +685,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 config.ArgOpts.OpenMdFileAndAddLinks.Arr(),
                                 data => data.Args.OpenMdFileAndAddLinks = true),
                             consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.OpenMdFileAndInsertLinks.Arr(),
+                                data =>
+                                {
+                                    data.Args.OpenMdFileAndAddLinks = true;
+                                    data.Args.OpenMdFileAndInsertLinks = true;
+                                }),
+                            consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.UpdateTimeStamp.Arr(),
                                 data => data.Args.UpdateTimeStamp = true),
                             consoleArgsParser.ArgsFlagOpts(data,
@@ -680,18 +714,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             }
 
             return args;
-        }
-
-        private async Task<string> GetResouceTitleCoreAsync(
-            string resUrl)
-        {
-            string title = await htmlDocTitleRetriever.GetResouceTitleAsync(resUrl);
-
-            title = title.Trim().ReplaceChars(
-                c => ' ', char.IsWhiteSpace).Split(
-                [' '], StringSplitOptions.RemoveEmptyEntries).JoinStr(" ");
-
-            return title;
         }
 
         private string GetMdFileName(
@@ -940,18 +962,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                 () => Console.WriteLine(headingCaption),
                 (foregroundColor ?? ConsoleColor.White).Tuple());
 
-            Console.WriteLine();
-        }
-
-        private void WriteSectionToConsole(
-            string caption,
-            string content,
-            ConsoleColor foregroundColor)
-        {
-            Console.WriteLine(caption);
-            Console.ForegroundColor = foregroundColor;
-            Console.WriteLine(content);
-            Console.ResetColor();
             Console.WriteLine();
         }
 
