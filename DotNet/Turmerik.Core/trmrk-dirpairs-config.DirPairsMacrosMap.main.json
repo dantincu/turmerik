@@ -1,6 +1,7 @@
 {
   "|albms|": "$albums$",
   "|alltrs|": "$all-tiers$",
+  "|arias|": "$arias$",
   "|arts|": "$artists$",
   "|athls|": "$athletes$",
   "|btnf|": "$about-infamous$",
@@ -23,6 +24,7 @@
   "|fnny|": "$funny$",
   "|fathls|": "$former-athletes$",
   "|fem|": "$feminine$",
+  "|flklr|": "$folklore$",
   "|fplyrs|": "$former-players$",
   "|frfrs|": "$former-referees$",
   "|frgnathls|": "$foreign-athletes$",
@@ -53,6 +55,7 @@
   "|natms|": "$national-teams$",
   "|others|": "$others$",
   "|othtrs|": "$other-tiers$",
+  "|pcs|": "$pieces$",
   "|phtgrphy|": "$photography$",
   "|plyrs|": "$players$",
   "|pltclprts|": "$political-parties$",

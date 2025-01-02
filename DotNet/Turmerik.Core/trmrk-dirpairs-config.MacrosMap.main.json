@@ -7,6 +7,10 @@
     ":s:1",
     "$all-tiers$"
   ],
+  "arias": [
+    ":s:1",
+    "$arias$"
+  ],
   "arts": [
     ":s:1",
     "$artists$"
@@ -94,6 +98,10 @@
   "fem": [
     ":s:1",
     "$feminine$"
+  ],
+  "flklr": [
+    ":s:1",
+    "$folklore$"
   ],
   "fplyrs": [
     ":s:1",
@@ -214,6 +222,10 @@
   "othtrs": [
     ":s:1",
     "$other-tiers$"
+  ],
+  "pcs": [
+    ":s:1",
+    "$pieces$"
   ],
   "phtgrphy": [
     ":s:1",
