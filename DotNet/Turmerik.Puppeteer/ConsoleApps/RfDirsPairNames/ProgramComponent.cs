@@ -43,6 +43,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
     public class ProgramComponent : IProgramComponent
     {
         private readonly IJsonConversion jsonConversion;
+        private readonly ITimeStampHelper timeStampHelper;
         private readonly IConsoleMsgPrinter consoleMsgPrinter;
         private readonly IFsEntryNameNormalizer fsEntryNameNormalizer;
         private readonly IConsoleArgsParser consoleArgsParser;
@@ -60,6 +61,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
+            ITimeStampHelper timeStampHelper,
             IConsoleMsgPrinter consoleMsgPrinter,
             IFsEntryNameNormalizer fsEntryNameNormalizer,
             IConsoleArgsParser consoleArgsParser,
@@ -73,6 +75,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
+
+            this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
+                nameof(timeStampHelper));
 
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
@@ -335,11 +340,14 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                         kvp = new(-2, string.Empty);
                     }
 
+                    var timeStamp = timeStampHelper.TmStmp(
+                        true, TimeStamp.Seconds, true, false, false, null);
+
                     if (kvp.Key < 0)
                     {
                         foreach (var mdLink in args.MdLinksToAddArr)
                         {
-                            string mdLinkStr = $"[{mdLink.Title}]({mdLink.Url})";
+                            string mdLinkStr = $"<u>{timeStamp}</u>: [{mdLink.Title}]({mdLink.Url})";
                             mdLinesList.Add(mdLinkStr);
                             mdLinesList.Add(string.Empty);
                         }
@@ -348,7 +356,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                     {
                         foreach (var mdLink in args.MdLinksToAddArr)
                         {
-                            string mdLinkStr = $"[{mdLink.Title}]({mdLink.Url})";
+                            string mdLinkStr = $"<u>{timeStamp}</u>[{mdLink.Title}]({mdLink.Url})";
                             mdLinesList.Insert(kvp.Key + 2, mdLinkStr);
                             mdLinesList.Insert(kvp.Key + 3, string.Empty);
                         }

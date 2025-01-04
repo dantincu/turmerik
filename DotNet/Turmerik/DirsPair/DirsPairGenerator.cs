@@ -22,6 +22,7 @@ namespace Turmerik.DirsPair
     public class DirsPairGenerator : IDirsPairGenerator
     {
         private readonly IJsonConversion jsonConversion;
+        private readonly ITimeStampHelper timeStampHelper;
         private readonly IDriveExplorerService dvExplrSvc;
         private readonly IExistingDirPairsRetriever existingDirPairsRetriever;
         private readonly INextNoteIdxRetriever nextNoteIdxRetriever;
@@ -39,6 +40,7 @@ namespace Turmerik.DirsPair
 
         public DirsPairGenerator(
             IJsonConversion jsonConversion,
+            ITimeStampHelper timeStampHelper,
             IDriveExplorerService dvExplrSvc,
             IExistingDirPairsRetriever existingDirPairsRetriever,
             INextNoteIdxRetriever nextNoteIdxRetriever,
@@ -47,6 +49,9 @@ namespace Turmerik.DirsPair
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
+
+            this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
+                nameof(timeStampHelper));
 
             this.dvExplrSvc = dvExplrSvc ?? throw new ArgumentNullException(
                 nameof(dvExplrSvc));
@@ -361,8 +366,11 @@ namespace Turmerik.DirsPair
 
                 if (opts.MdLinksToAddArr != null)
                 {
+                    var timeStamp = timeStampHelper.TmStmp(
+                        true, TimeStamp.Seconds, true, false, false, null);
+
                     var mdLinksToAddStr = opts.MdLinksToAddArr.Select(
-                        link => $"[{link.Title}]({link.Url}){Environment.NewLine}").ToArray(
+                        link => $"<u>{timeStamp}</u>: [{link.Title}]({link.Url}){Environment.NewLine}").ToArray(
                             ).JoinStr(Environment.NewLine) + Environment.NewLine;
 
                     if (opts.InsertLinksToAdd)
