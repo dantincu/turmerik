@@ -59,6 +59,7 @@
   "|psts|": "$posts$",
   "|qtrnry|": "$quaternary$",
   "|qnry|": "$quinary$",
+  "|rc|": "$recent$",
   "|rchstry|": "$recent-history$",
   "|rgs|": "$regions$",
   "|rls|": "$reels$",
