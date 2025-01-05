@@ -356,7 +356,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                     {
                         foreach (var mdLink in args.MdLinksToAddArr)
                         {
-                            string mdLinkStr = $"<u>{timeStamp}</u>[{mdLink.Title}]({mdLink.Url})";
+                            string mdLinkStr = $"<u>{timeStamp}</u>: [{mdLink.Title}]({mdLink.Url})";
                             mdLinesList.Insert(kvp.Key + 2, mdLinkStr);
                             mdLinesList.Insert(kvp.Key + 3, string.Empty);
                         }
