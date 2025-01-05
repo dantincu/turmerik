@@ -3,7 +3,7 @@
     "base": {
       "Map": {
         "admrgs": "administrative-regions",
-        "abrvs": "abreviations",
+        "abrvs": "abbreviations",
         "api": "api",
         "archc": "archaic",
         "archv": "archive",

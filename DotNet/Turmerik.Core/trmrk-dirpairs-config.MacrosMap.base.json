@@ -5,7 +5,7 @@
   ],
   "abrvs": [
     ":s:1",
-    "$abreviations$"
+    "$abbreviations$"
   ],
   "api": [
     ":s:1",
