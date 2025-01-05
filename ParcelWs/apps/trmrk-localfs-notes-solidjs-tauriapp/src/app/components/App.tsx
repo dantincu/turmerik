@@ -11,7 +11,7 @@ import { setAppBodyPanel1Content, setAppBodyPanel2Content, setAppBodyPanel3Conte
 import { SplitPanelOrientation } from '../../trmrk-solidjs/dataStore/core';
 
 const App: Component = () => {
-  setAppBodyPanel1Content(<p>panel 1</p>);
+  setAppBodyPanel1Content(<p>panel 1 <a href="https://google.com" target="_new">google</a></p>);
   setAppBodyPanel2Content(<p>panel 2</p>);
   setAppBodyPanel3Content(<p>panel 3</p>);
   setAppBodyPanel4Content(<p>panel 4</p>);

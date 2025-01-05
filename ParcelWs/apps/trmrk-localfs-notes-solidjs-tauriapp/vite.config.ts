@@ -43,12 +43,14 @@ export default defineConfig(({ mode }) => {
       outDir: ["..", "..", "..", "..", "dist", envDirName].join("/"),
     },
     server: {
-      https: {
+      /* https: {
         key: fs.readFileSync(path.resolve(sslCertDirPath, "key.pem")),
         cert: fs.readFileSync(path.resolve(sslCertDirPath, "cert.pem")),
-      },
-      host: "0.0.0.0", // Bind to all network interfaces
+      }, */
+      host: "0.0.0.0",
       port: 9102,
+      strictPort: true,
+      cors: true,
     },
   };
 });

@@ -5,7 +5,7 @@
   "identifier": "com.trmrk-localfs-notes-solidjs-tauriapp.app",
   "build": {
     "beforeDevCommand": "npm run dev",
-    "devUrl": "https://localhost:9102",
+    "devUrl": "http://localhost:9102",
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist"
   },
