@@ -303,7 +303,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
                     mdLinksToAddList.Add(new()
                     {
-                        Title = newLinkTitle,
+                        Title = MdH.EncodeForMd(
+                            newLinkTitle),
                         Url = url
                     });
                 }
