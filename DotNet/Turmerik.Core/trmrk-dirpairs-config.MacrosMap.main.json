@@ -155,6 +155,10 @@
     ":s:1",
     "$hollywoodian$"
   ],
+  "ilgl": [
+    ":s:1",
+    "$illegal$"
+  ],
   "incds": [
     ":s:1",
     "$incidents$"
