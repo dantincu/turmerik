@@ -47,6 +47,10 @@
     ":s:1",
     "$competitions$"
   ],
+  "cncrts": [
+    ":s:1",
+    "$concerts$"
+  ],
   "cps": [
     ":s:1",
     "$composers$"
