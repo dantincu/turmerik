@@ -27,6 +27,7 @@ export type AppContextType = {
 
 export const createAppData = () => {
   const appData = createAppDataCore() as AppData;
+  appData.appLayout.homePageUrl = "/app";
   return appData;
 };
 

@@ -15,7 +15,7 @@ import AppHeader from "./AppHeader";
 export interface AppLayoutProps {
 }
 
-const AppLayout: ParentComponent<AppLayoutProps> = () => {
+const AppLayout: ParentComponent<AppLayoutProps> = (props) => {
   const { appData } = useAppContext();
 
   const appLayout = appData.appLayout;
@@ -35,7 +35,7 @@ const AppLayout: ParentComponent<AppLayoutProps> = () => {
     appLayout.isDarkMode), getAppModeCssClassName(
       appLayout.isCompactMode), appLayout.appLayoutCssClass ?? ""].join(" ")}>
     { appHeader.show ? <AppHeader /> : null }
-    <AppBody />
+    <AppBody>{props.children}</AppBody>
     { appFooter.show ? <AppFooter /> : null }
   </div>);
 }

@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { ParentComponent } from "solid-js";
 
 import { useAppContext } from "../../dataStore/core";
 
@@ -10,7 +10,7 @@ export interface AppBodyProps {
 
 }
 
-const AppBody: Component<AppBodyProps> = () => {
+const AppBody: ParentComponent<AppBodyProps> = (props) => {
   const { appData } = useAppContext();
 
   const appLayout = appData.appLayout;
@@ -22,9 +22,9 @@ const AppBody: Component<AppBodyProps> = () => {
     appHeader.show ? "trmrk-after-header" : "",
     appFooter.show ? "trmrk-before-footer" : "",
     (explorerPanel.isEnabled && !appLayout.isCompactMode) ? "trmrk-is-split" : ""].join(" ")}>
-      { appLayout.isCompactMode ? (explorerPanel.isEnabled && explorerPanel.isFocused) ? <AppExplorerPanel /> : <AppBodyContent /> : <>
+      { appLayout.isCompactMode ? (explorerPanel.isEnabled && explorerPanel.isFocused) ? <AppExplorerPanel /> : props.children : <>
         { explorerPanel.isEnabled ? <AppExplorerPanel /> : null }
-        <AppBodyContent />
+        {props.children}
       </> }
     </main>);
 }
