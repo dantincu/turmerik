@@ -47,6 +47,10 @@
     ":s:1",
     "$characters$"
   ],
+  "clss": [
+    ":s:1",
+    "$classes$"
+  ],
   "clbs": [
     ":s:1",
     "$clubs$"
@@ -106,6 +110,10 @@
   "ethgs": [
     ":s:1",
     "$ethnic-groups$"
+  ],
+  "famls": [
+    ":s:1",
+    "$families$"
   ],
   "fnny": [
     ":s:1",
