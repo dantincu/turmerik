@@ -59,10 +59,6 @@
     ":s:1",
     "$composers$"
   ],
-  "cpzs": [
-    ":s:1",
-    "$compozitions$"
-  ],
   "cntmpry": [
     ":s:1",
     "$contemporary$"
