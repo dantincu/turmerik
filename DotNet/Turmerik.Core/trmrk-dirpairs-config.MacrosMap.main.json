@@ -67,6 +67,10 @@
     ":s:1",
     "$cover-artists$"
   ],
+  "crtrs": [
+    ":s:1",
+    "$creatures$"
+  ],
   "crmn": [
     ":s:1",
     "$criminality$"
