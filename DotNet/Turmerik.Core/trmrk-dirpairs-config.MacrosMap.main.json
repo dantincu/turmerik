@@ -307,6 +307,10 @@
     ":s:1",
     "$trivial$"
   ],
+  "vctms": [
+    ":s:1",
+    "$victims$"
+  ],
   "vrusaths": [
     ":s:1",
     "$various-athletes$"
