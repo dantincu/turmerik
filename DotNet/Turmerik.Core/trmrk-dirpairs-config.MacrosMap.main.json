@@ -327,6 +327,10 @@
     ":s:1",
     "$trivial$"
   ],
+  "txns": [
+    ":s:1",
+    "$taxons$"
+  ],
   "vctms": [
     ":s:1",
     "$victims$"

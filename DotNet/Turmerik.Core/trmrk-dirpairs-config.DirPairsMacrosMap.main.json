@@ -81,6 +81,7 @@
   "|trnmnts|": "$tournaments$",
   "|trps|": "$trips$",
   "|trv|": "$trivial$",
+  "|txns|": "$taxons$",
   "|vctms|": "$victims$",
   "|vrusaths|": "$various-athletes$",
   "|vrusarts|": "$various-artists$"
