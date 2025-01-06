@@ -291,6 +291,10 @@
     ":s:1",
     "$septenary$"
   ],
+  "srs": [
+    ":s:1",
+    "$series$"
+  ],
   "strpfs": [
     ":s:1",
     "$streaming-platforms$"
