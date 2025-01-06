@@ -47,6 +47,10 @@
     ":s:1",
     "$competitions$"
   ],
+  "cmpstns": [
+    ":s:1",
+    "$compositions$"
+  ],
   "cncrts": [
     ":s:1",
     "$concerts$"
