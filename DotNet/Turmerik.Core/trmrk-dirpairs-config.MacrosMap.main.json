@@ -43,6 +43,10 @@
     ":s:1",
     "$conductors-and-interpreters$"
   ],
+  "chrctrs": [
+    ":s:1",
+    "$characters$"
+  ],
   "clbs": [
     ":s:1",
     "$clubs$"
