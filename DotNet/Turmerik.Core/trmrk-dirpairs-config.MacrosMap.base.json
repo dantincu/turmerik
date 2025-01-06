@@ -75,6 +75,10 @@
     ":s:1",
     "$denary$"
   ],
+  "epsds": [
+    ":s:1",
+    "$episodes$"
+  ],
   "evts": [
     ":s:1",
     "$events$"
@@ -282,6 +286,10 @@
   "smstrpfs": [
     ":s:1",
     "$social-media-and-streaming-platforms$"
+  ],
+  "ssns": [
+    ":s:1",
+    "$seasons$"
   ],
   "snry": [
     ":s:1",
