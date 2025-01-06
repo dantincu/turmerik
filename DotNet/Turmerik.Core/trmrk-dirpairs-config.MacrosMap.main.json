@@ -1,4 +1,8 @@
 {
+  "actors": [
+    ":s:1",
+    "$actors$"
+  ],
   "albms": [
     ":s:1",
     "$albums$"
@@ -22,6 +26,10 @@
   "btnf": [
     ":s:1",
     "$about-infamous$"
+  ],
+  "cast": [
+    ":s:1",
+    "$cast$"
   ],
   "cchs": [
     ":s:1",

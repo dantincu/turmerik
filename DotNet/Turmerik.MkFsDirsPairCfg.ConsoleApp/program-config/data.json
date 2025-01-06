@@ -97,12 +97,14 @@
     },
     "main": {
       "Map": {
+        "actors": "actors",
         "albms": "albums",
         "alltrs": "all-tiers",
         "arias": "arias",
         "arts": "artists",
         "athls": "athletes",
         "btnf": "about-infamous",
+        "cast": "cast",
         "cchs": "coaches",
         "cchsmgrs": "coaches-and-managers",
         "cdsips": "conductors-and-interpreters",
