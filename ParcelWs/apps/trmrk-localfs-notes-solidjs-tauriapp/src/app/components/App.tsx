@@ -1,4 +1,6 @@
-import { ParentComponent, lazy } from 'solid-js';
+import { ParentComponent } from 'solid-js';
+import { ErrorBoundary } from "solid-js"
+
 import { produce } from "solid-js/store";
 
 import { Router, Route } from "@solidjs/router";
@@ -11,9 +13,6 @@ import { AppData } from "../dataStore/core";
 
 import { useAppContext } from "../dataStore/AppContext";
 
-import { setAppBodyPanel1Content, setAppBodyPanel2Content, setAppBodyPanel3Content, setAppBodyPanel4Content } from "../../trmrk-solidjs/signals/core";
-import { SplitPanelOrientation } from '../../trmrk-solidjs/dataStore/core';
-
 import { icons as iconsObj } from "../assets/icons";
 
 import { apiSvc } from "../services/apiService";
@@ -25,7 +24,8 @@ import { isDevEnv } from "../../trmrk/dev";
 import { initApi } from "../../trmrk-axios/core";
 import { FsExplorerApi } from "../../trmrk-axios/FsExplorerApi/api";
 
-const NotFoundPage = lazy(() => import("../../trmrk-solidjs/components/Error/NotFoundPage"));
+import NotFoundPage from "../../trmrk-solidjs/components/Error/NotFoundPage";
+import ErrorPage from "../../trmrk-solidjs/components/Error/ErrorPage";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -33,6 +33,8 @@ import "../tailwindcss/output.css";
 import "../styles/global/style.scss";
 
 import * as bootstrapObj from "bootstrap";
+
+import HomePage from "./Pages/HomePage";
 
 export interface AppProps {
   appConfig: AppConfigData;
@@ -48,8 +50,6 @@ const App: ParentComponent<AppProps> = (props) => {
     isLocalFilesWinOS: props.appConfig.isWinOS,
     relPath: "files",
   });
-
-  setAppBodyPanel1Content(<p>panel 1 <a href="https://google.com" target="_new">google</a></p>);
 
   /* setAppBodyPanel2Content(<p>panel 2</p>);
   setAppBodyPanel3Content(<p>panel 3</p>);
@@ -70,12 +70,16 @@ const App: ParentComponent<AppProps> = (props) => {
   setAppDataFull(updateDraft); */
 
   return (<AppProvider>
-    <Router>
-      <Route path="/app" component={AppLayout}>
-        <Route path="*paramName" component={NotFoundPage}>
+    <ErrorBoundary fallback={(err, reset) => <ErrorPage errTitle="Error" errMessage={err.toString()} navBarChildren={
+        <button onClick={reset} class="btn btn-primary">Reset</button>
+      } />}>
+      <Router>
+        <Route path="/app" component={AppLayout}>
+          <Route path="" component={HomePage} />
+          <Route path="*paramName" component={NotFoundPage} />
         </Route>
-      </Route>
-    </Router>
+      </Router>
+    </ErrorBoundary>
   </AppProvider>);
 };
 

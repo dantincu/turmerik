@@ -6,7 +6,7 @@ export interface CaptionProps {
 }
 
 const Caption: Component<CaptionProps> = (props: CaptionProps) => {
-  return (<h2 class={["text-2xl", props.headerCssClass, "mt-1 ml-1"].join(" ")}>
+  return (<h2 class={["trmrk-caption text-2xl", props.headerCssClass, "mt-1 ml-1"].join(" ")}>
       {props.caption}
     </h2>);
 }
