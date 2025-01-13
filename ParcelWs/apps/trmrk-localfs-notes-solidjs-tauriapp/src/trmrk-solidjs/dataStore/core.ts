@@ -32,7 +32,7 @@ export interface AppHeaderData {
   showHistoryNavBtnsDefaultBehaviorEnabled: boolean;
   historyBackBtnEnabled: boolean;
   historyForwardBtnEnabled: boolean;
-  optionsBtnEnabled: boolean;
+  showOptionsBtn: boolean;
   options: AppOptionsData;
   appTabsBar: AppTabsBarData;
 }
@@ -100,7 +100,7 @@ export const createAppDataCore = () => {
         showHistoryNavBtnsDefaultBehaviorEnabled: true,
         historyBackBtnEnabled: true,
         historyForwardBtnEnabled: true,
-        optionsBtnEnabled: true,
+        showOptionsBtn: true,
         options: {
           refreshAppPageBtn: {
             isVisible: true,

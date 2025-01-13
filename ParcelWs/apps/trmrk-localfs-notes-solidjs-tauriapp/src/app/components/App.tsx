@@ -1,17 +1,11 @@
 import { ParentComponent } from 'solid-js';
 import { ErrorBoundary } from "solid-js"
 
-import { produce } from "solid-js/store";
-
 import { Router, Route } from "@solidjs/router";
 
 import { AppProvider } from "../dataStore/AppContext";
 
 import AppLayout from "../../trmrk-solidjs/components/AppLayout/AppLayout";
-
-import { AppData } from "../dataStore/core";
-
-import { useAppContext } from "../dataStore/AppContext";
 
 import { icons as iconsObj } from "../assets/icons";
 
@@ -50,24 +44,6 @@ const App: ParentComponent<AppProps> = (props) => {
     isLocalFilesWinOS: props.appConfig.isWinOS,
     relPath: "files",
   });
-
-  /* setAppBodyPanel2Content(<p>panel 2</p>);
-  setAppBodyPanel3Content(<p>panel 3</p>);
-  setAppBodyPanel4Content(<p>panel 4</p>);
-
-  const { appData, setAppDataFull, setAppData } = useAppContext();
-
-  const updateDraft = produce((draft: AppData) => {
-    draft.appLayout.isCompactMode = false;
-    const explorer = draft.appLayout.explorerPanel;
-    explorer.isEnabled = true;
-    const appBody = draft.appLayout.appBody;
-    appBody.splitOrientation = SplitPanelOrientation.Horizontal;
-    appBody.firstContainerIsFurtherSplit = true;
-    appBody.secondContainerIsFurtherSplit = true;
-  });
-
-  setAppDataFull(updateDraft); */
 
   return (<AppProvider>
     <ErrorBoundary fallback={(err, reset) => <ErrorPage errTitle="Error" errMessage={err.toString()} navBarChildren={

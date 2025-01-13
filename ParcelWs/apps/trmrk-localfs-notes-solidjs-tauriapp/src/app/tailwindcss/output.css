@@ -581,3 +581,19 @@ video {
 .overflow-y-scroll {
   overflow-y: scroll;
 }
+
+.col-grid-1 {
+  grid-column: 1;
+}
+
+.col-grid-2 {
+  grid-column: 2;
+}
+
+.col-grid-3 {
+  grid-column: 3;
+}
+
+.col-grid-4 {
+  grid-column: 4;
+}

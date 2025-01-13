@@ -2,7 +2,14 @@
 export default {
   content: ["./src/app/tailwindcss/templates/*.{html,js}", "./src/trmrk-solidjs/tailwindcss/templates/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      /* gridColumn: {
+        1: "grid-1",
+        2: "grid-2",
+        3: "grid-3",
+        4: "grid-4",
+      } */
+    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
@@ -19,6 +26,25 @@ export default {
       "note-section": "#A60"
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }) {
+      const newGridColumnUtilities = {
+        '.col-grid-1': {
+          'grid-column': '1',
+        },
+        '.col-grid-2': {
+          'grid-column': '2',
+        },
+        '.col-grid-3': {
+          'grid-column': '3',
+        },
+        '.col-grid-4': {
+          'grid-column': '4',
+        },
+      };
+
+      addUtilities(newGridColumnUtilities);
+    },
+  ],
 }
 
