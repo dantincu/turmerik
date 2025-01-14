@@ -7,6 +7,7 @@ export interface BsBtnProps {
   btnHasNoBorder?: boolean | null | undefined;
   addBtnOutlinedAppTheme?: boolean | null | undefined;
   isDisabled?: boolean | null | undefined;
+  onClick?: ((e: MouseEvent | TouchEvent) => void) | null | undefined;
 }
 
 const BsBtn: ParentComponent<BsBtnProps> = (props) => {
@@ -19,7 +20,8 @@ const BsBtn: ParentComponent<BsBtnProps> = (props) => {
     props.btnHasNoBorder ? "trmrk-btn-no-border" : ""
   ];
 
-  return <button class={btnClassNamesArr.join(" ")} {...(props.isDisabled ? { disabled: true } : {})}>
+  return <button class={btnClassNamesArr.join(" ")} {...(props.isDisabled ? { disabled: true } : {})}
+    {...(props.onClick ? { onClick: props.onClick } : {})}>
     {props.children}
   </button>
 }

@@ -3,6 +3,11 @@ import { Component, Show, createMemo } from "solid-js";
 import { useAppContext } from "../../dataStore/core";
 
 import BsIconBtn from "../BsBtn/BsIconBtn";
+import AppOptionsModal from "./AppOptionsModal";
+
+import { appHeaderOptionsModal } from "../../signals/core";
+
+import * as bootstrap from "bootstrap";
 
 const AppHeader: Component = () => {
   const { appData } = useAppContext();
@@ -17,6 +22,17 @@ const AppHeader: Component = () => {
     return count;
   });
 
+  const onAppOptionsBtnClick = () => {
+    const modal = appHeaderOptionsModal();
+
+    if (modal) {
+      var modalObj = new bootstrap.Modal(modal, {
+      });
+
+      modalObj.show();
+    }
+  }
+
   return (<header class="trmrk-app-header">
     <nav class={["navbar", "trmrk-navbar", appLayout.isDarkMode ? "navbar-dark bg-dark" : "navbar-light bg-light", `trmrk-app-header-has-${btnsCount()}-btns`].join(" ")}>
       <Show when={appHeader.goToParentBtn.isVisible}>
@@ -27,10 +43,11 @@ const AppHeader: Component = () => {
         <BsIconBtn iconCssClass="bi bi-arrow-right" isDisabled={!appHeader.historyForwardBtnEnabled} />
       </Show>
       <Show when={appHeader.showOptionsBtn}>
-        <BsIconBtn iconCssClass="bi bi-three-dots-vertical" />
+        <BsIconBtn iconCssClass="bi bi-three-dots-vertical" onClick={onAppOptionsBtnClick} />
       </Show>
       <div></div>
     </nav>
+    <AppOptionsModal />
   </header>);
 }
 

@@ -3,6 +3,9 @@ import { createSignal, JSX } from "solid-js";
 export const [appHeaderOptionsContent, setAppHeaderOptionsContent] =
   createSignal<JSX.Element | JSX.Element[] | null>(null);
 
+export const [appHeaderOptionsModal, setAppHeaderOptionsModal] =
+  createSignal<HTMLDivElement | null>(null);
+
 export const [appFooterContent, setAppFooterContent] = createSignal<
   JSX.Element | JSX.Element[] | null
 >(null);
