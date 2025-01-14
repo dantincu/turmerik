@@ -20,6 +20,7 @@ const HomePage: Component = () => {
       draft.appLayout.appHeader.show = true;
       draft.appLayout.appHeader.goToParentBtn.isVisible = true;
       draft.appLayout.appFooter.show = true;
+      draft.appLayout.appFooter.showUndoRedoBtns = true;
     }));
   });
 

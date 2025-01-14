@@ -24,11 +24,12 @@
 .trmrk-bs-btn {
   display: inline-flex;
   position: relative;
-  height: 38px;
 
   &.trmrk-btn-no-border {
     border: 0;
   }
+
+  padding-top: 0.5rem;
 }
 
 .trmrk-bs-icon-btn {
@@ -169,6 +170,32 @@
     }
     
     > .trmrk-app-header-has-4-btns {
+      grid-template-columns: repeat(4, 42px) auto;
+    }
+  }
+
+  .trmrk-app-footer {
+    > .trmrk-navbar {
+      display: grid;
+    }
+
+    > .trmrk-app-footer-has-0-btns {
+      grid-template-columns: auto;
+    }
+    
+    > .trmrk-app-footer-has-1-btns {
+      grid-template-columns: 42px auto;
+    }
+    
+    > .trmrk-app-footer-has-2-btns {
+      grid-template-columns: repeat(2, 42px) auto;
+    }
+    
+    > .trmrk-app-footer-has-3-btns {
+      grid-template-columns: repeat(3, 42px) auto;
+    }
+    
+    > .trmrk-app-footer-has-4-btns {
       grid-template-columns: repeat(4, 42px) auto;
     }
   }

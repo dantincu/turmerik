@@ -24,11 +24,12 @@
 .trmrk-bs-btn {
   display: inline-flex;
   position: relative;
-  height: 38px;
 
   &.trmrk-btn-no-border {
     border: 0;
   }
+
+  padding-top: 0.5rem;
 }
 
 .trmrk-bs-icon-btn {
@@ -57,6 +58,7 @@
 
 .trmrk-navbar {
   padding: 0px;
+  justify-content: unset;
 }
 
 .trmrk-navbar-large {
@@ -77,6 +79,19 @@
 
 .trmrk-app-layout {
   height: 100%;
+  display: grid;
+
+  &.trmrk-has-header {
+    grid-template-rows: 40px auto;
+  }
+
+  &.trmrk-has-footer {
+    grid-template-rows: auto 40px;
+  }
+
+  &.trmrk-has-header.trmrk-has-footer {
+    grid-template-rows: 40px auto 40px;
+  }
 
   .trmrk-app-body {
     height: 100%;
@@ -130,6 +145,58 @@
     .trmrk-single-panel {
       width: 100%;
       height: 100%;
+    }
+  }
+
+  .trmrk-app-header {
+    > .trmrk-navbar {
+      display: grid;
+    }
+
+    > .trmrk-app-header-has-0-btns {
+      grid-template-columns: auto;
+    }
+    
+    > .trmrk-app-header-has-1-btns {
+      grid-template-columns: 42px auto;
+    }
+    
+    > .trmrk-app-header-has-2-btns {
+      grid-template-columns: repeat(2, 42px) auto;
+    }
+    
+    > .trmrk-app-header-has-3-btns {
+      grid-template-columns: repeat(3, 42px) auto;
+    }
+    
+    > .trmrk-app-header-has-4-btns {
+      grid-template-columns: repeat(4, 42px) auto;
+    }
+  }
+
+  .trmrk-app-footer {
+    > .trmrk-navbar {
+      display: grid;
+    }
+
+    > .trmrk-app-footer-has-0-btns {
+      grid-template-columns: auto;
+    }
+    
+    > .trmrk-app-footer-has-1-btns {
+      grid-template-columns: 42px auto;
+    }
+    
+    > .trmrk-app-footer-has-2-btns {
+      grid-template-columns: repeat(2, 42px) auto;
+    }
+    
+    > .trmrk-app-footer-has-3-btns {
+      grid-template-columns: repeat(3, 42px) auto;
+    }
+    
+    > .trmrk-app-footer-has-4-btns {
+      grid-template-columns: repeat(4, 42px) auto;
     }
   }
 }

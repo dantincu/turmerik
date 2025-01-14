@@ -43,7 +43,6 @@ export interface AppFooterData {
   showUndoRedoBtns: boolean;
   undoBtnEnabled: boolean;
   redoBtnEnabled: boolean;
-  showCloseSelectionBtn: boolean;
 }
 
 export interface AppBodyData {
@@ -125,7 +124,6 @@ export const createAppDataCore = () => {
         showUndoRedoBtns: false,
         undoBtnEnabled: false,
         redoBtnEnabled: false,
-        showCloseSelectionBtn: false,
       },
       explorerPanel: {
         isEnabled: false,

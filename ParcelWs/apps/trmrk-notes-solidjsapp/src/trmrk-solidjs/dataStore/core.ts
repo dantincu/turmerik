@@ -32,7 +32,7 @@ export interface AppHeaderData {
   showHistoryNavBtnsDefaultBehaviorEnabled: boolean;
   historyBackBtnEnabled: boolean;
   historyForwardBtnEnabled: boolean;
-  optionsBtnEnabled: boolean;
+  showOptionsBtn: boolean;
   options: AppOptionsData;
   appTabsBar: AppTabsBarData;
 }
@@ -43,7 +43,6 @@ export interface AppFooterData {
   showUndoRedoBtns: boolean;
   undoBtnEnabled: boolean;
   redoBtnEnabled: boolean;
-  showCloseSelectionBtn: boolean;
 }
 
 export interface AppBodyData {
@@ -100,7 +99,7 @@ export const createAppDataCore = () => {
         showHistoryNavBtnsDefaultBehaviorEnabled: true,
         historyBackBtnEnabled: true,
         historyForwardBtnEnabled: true,
-        optionsBtnEnabled: true,
+        showOptionsBtn: true,
         options: {
           refreshAppPageBtn: {
             isVisible: true,
@@ -125,7 +124,6 @@ export const createAppDataCore = () => {
         showUndoRedoBtns: false,
         undoBtnEnabled: false,
         redoBtnEnabled: false,
-        showCloseSelectionBtn: false,
       },
       explorerPanel: {
         isEnabled: false,

@@ -33,7 +33,10 @@ const AppLayout: ParentComponent<AppLayoutProps> = (props) => {
 
   return (<div class={["trmrk-app-layout", getAppThemeCssClassName(
     appLayout.isDarkMode), getAppModeCssClassName(
-      appLayout.isCompactMode), appLayout.appLayoutCssClass ?? ""].join(" ")}>
+      appLayout.isCompactMode),
+      appHeader.show ? "trmrk-has-header" : "",
+      appFooter.show ? "trmrk-has-footer" : "",
+      appLayout.appLayoutCssClass ?? ""].join(" ")}>
     { appHeader.show ? <AppHeader /> : null }
     <AppBody>{props.children}</AppBody>
     { appFooter.show ? <AppFooter /> : null }
