@@ -200,3 +200,18 @@
     }
   }
 }
+
+.trmrk-action-list-group-item {
+  padding: 0px;
+  cursor: pointer;
+
+  .trmrk-label {
+    padding: 0.6em 0em 0em 1em;
+    display: inline-flex;
+  }
+
+  .trmrk-bs-icon-btn {
+    position: relative;
+    top: -1px;
+  }
+}

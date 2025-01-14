@@ -36,14 +36,14 @@ const AppHeader: Component = () => {
   return (<header class="trmrk-app-header">
     <nav class={["navbar", "trmrk-navbar", appLayout.isDarkMode ? "navbar-dark bg-dark" : "navbar-light bg-light", `trmrk-app-header-has-${btnsCount()}-btns`].join(" ")}>
       <Show when={appHeader.goToParentBtn.isVisible}>
-        <BsIconBtn iconCssClass="bi bi-arrow-up" isDisabled={!appHeader.goToParentBtn.isEnabled} />
+        <BsIconBtn iconCssClass="bi bi-arrow-up" btnHasNoBorder={true} isDisabled={!appHeader.goToParentBtn.isEnabled} />
       </Show>
       <Show when={appHeader.showHistoryNavBtns}>
-        <BsIconBtn iconCssClass="bi bi-arrow-left" isDisabled={!appHeader.historyBackBtnEnabled} />
-        <BsIconBtn iconCssClass="bi bi-arrow-right" isDisabled={!appHeader.historyForwardBtnEnabled} />
+        <BsIconBtn iconCssClass="bi bi-arrow-left" btnHasNoBorder={true} isDisabled={!appHeader.historyBackBtnEnabled} />
+        <BsIconBtn iconCssClass="bi bi-arrow-right" btnHasNoBorder={true} isDisabled={!appHeader.historyForwardBtnEnabled} />
       </Show>
       <Show when={appHeader.showOptionsBtn}>
-        <BsIconBtn iconCssClass="bi bi-three-dots-vertical" onClick={onAppOptionsBtnClick} />
+        <BsIconBtn iconCssClass="bi bi-three-dots-vertical" btnHasNoBorder={true} onClick={onAppOptionsBtnClick} />
       </Show>
       <div></div>
     </nav>
