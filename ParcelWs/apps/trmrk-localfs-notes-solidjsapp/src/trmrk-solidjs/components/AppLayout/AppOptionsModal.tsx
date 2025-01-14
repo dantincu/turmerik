@@ -1,6 +1,8 @@
 import { Component, Show, createMemo } from "solid-js";
 
-import { setAppHeaderOptionsModal, appHeaderOptionsContent } from "../../signals/core";
+import * as bootstrap from "bootstrap";
+
+import { appHeaderOptionsModal, setAppHeaderOptionsModal, appHeaderOptionsContent } from "../../signals/core";
 import { useAppContext } from "../../dataStore/core";
 import BsIconBtn from "../BsBtn/BsIconBtn";
 
@@ -9,6 +11,15 @@ const AppOptionsModal: Component = () => {
   const appLayout = appData.appLayout;
   const appBody = appLayout.appBody;
   const options = appLayout.appHeader.options;
+
+  const settingsClick = () => {
+    const modal = appHeaderOptionsModal();
+
+    if (modal) {
+      var modalObj = bootstrap.Modal.getInstance(modal);
+      modalObj?.dispose();
+    }
+  }
 
   return (<div class="modal trmrk-modal trmrk-app-options-modal" tabindex="-1" ref={el => setAppHeaderOptionsModal(el)}>
     <div class="modal-dialog">
@@ -32,8 +43,11 @@ const AppOptionsModal: Component = () => {
             </Show>
             {appHeaderOptionsContent()}
             <Show when={options.goToSettingsPageBtn.isVisible}>
-              <li class="list-group-item trmrk-action-list-group-item">
-                <span class="trmrk-label">Settings</span><BsIconBtn iconCssClass="bi bi-gear" btnHasNoBorder={true} /></li>
+              <li class="list-group-item trmrk-action-list-group-item" onClick={settingsClick}>
+                <a class="trmrk-icon-link" href={appLayout.settingsPageUrl}>
+                  <span class="trmrk-label">Settings</span><BsIconBtn iconCssClass="bi bi-gear" btnHasNoBorder={true} />
+                </a>
+              </li>
             </Show>
           </ul>
         </div>
