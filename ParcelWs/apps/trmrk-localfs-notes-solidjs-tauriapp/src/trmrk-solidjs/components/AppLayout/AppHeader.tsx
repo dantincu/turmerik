@@ -3,9 +3,9 @@ import { Component, Show, createMemo } from "solid-js";
 import { useAppContext } from "../../dataStore/core";
 
 import BsIconBtn from "../BsBtn/BsIconBtn";
-import AppOptionsModal from "./AppOptionsModal";
+import { appOptionsPopoverContentRef } from "./AppOptionsPopoverContent";
 
-import { appHeaderOptionsModal } from "../../signals/core";
+import { appHeaderOptionsPopoverEl, setAppHeaderOptionsPopoverEl } from "../../signals/core";
 
 import * as bootstrap from "bootstrap";
 
@@ -22,14 +22,50 @@ const AppHeader: Component = () => {
     return count;
   });
 
-  const onAppOptionsBtnClick = () => {
-    const modal = appHeaderOptionsModal();
+  const goToSettingsPageClick = () => {
+    const popoverEl = appHeaderOptionsPopoverEl();
 
-    if (modal) {
-      var modalObj = new bootstrap.Modal(modal, {
+    if (popoverEl) {
+      const popoverObj = bootstrap.Popover.getInstance(popoverEl);
+      popoverObj?.hide();
+    }
+  }
+
+  const popoverShown = () => {
+    const popoverEl = appHeaderOptionsPopoverEl();
+    
+    if (popoverEl) {
+      const popoverObj = bootstrap.Popover.getInstance(popoverEl);
+
+      if (popoverObj) {
+        const rootDomElem = (popoverObj as any).tip;
+        const optionElem = rootDomElem.querySelector(".trmrk-goto-settings-page-option");
+
+        if (optionElem) {
+          optionElem.addEventListener("click", goToSettingsPageClick);
+        }
+      }
+    }
+  }
+
+  const onAppOptionsBtnAvaillable = (popoverEl: HTMLButtonElement | null) => {
+    setAppHeaderOptionsPopoverEl(popoverEl);
+    if (!popoverEl) return;
+    
+    const popover = appHeaderOptionsPopoverEl();
+    let appOptionsPopoverContent = appOptionsPopoverContentRef();
+
+    if (popover && appOptionsPopoverContent) {
+      appOptionsPopoverContent = appOptionsPopoverContent.cloneNode(true) as HTMLUListElement;
+
+      const popoverObj = new bootstrap.Popover(popover, {
+        content: appOptionsPopoverContent,
+        trigger: "click",
+        placement: "bottom",
+        html: true
       });
 
-      modalObj.show();
+      popoverEl.addEventListener("inserted.bs.popover", popoverShown);
     }
   }
 
@@ -43,11 +79,10 @@ const AppHeader: Component = () => {
         <BsIconBtn iconCssClass="bi bi-arrow-right" btnHasNoBorder={true} isDisabled={!appHeader.historyForwardBtnEnabled} />
       </Show>
       <Show when={appHeader.showOptionsBtn}>
-        <BsIconBtn iconCssClass="bi bi-three-dots-vertical" btnHasNoBorder={true} onClick={onAppOptionsBtnClick} />
+        <BsIconBtn iconCssClass="bi bi-three-dots-vertical" btnHasNoBorder={true}
+          ref={onAppOptionsBtnAvaillable} />
       </Show>
-      <div></div>
     </nav>
-    <AppOptionsModal />
   </header>);
 }
 

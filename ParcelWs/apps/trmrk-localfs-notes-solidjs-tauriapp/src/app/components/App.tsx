@@ -5,7 +5,7 @@ import { Router, Route } from "@solidjs/router";
 
 import { AppProvider } from "../dataStore/AppContext";
 
-import AppLayout from "../../trmrk-solidjs/components/AppLayout/AppLayout";
+import AppLayout from "./AppLayout";
 
 import { icons as iconsObj } from "../assets/icons";
 
@@ -29,6 +29,7 @@ import "../styles/global/style.scss";
 import * as bootstrapObj from "bootstrap";
 
 import HomePage from "./Pages/HomePage";
+import SettingsPage from "./Pages/SettingsPage";
 
 export interface AppProps {
   appConfig: AppConfigData;
@@ -52,6 +53,7 @@ const App: ParentComponent<AppProps> = (props) => {
       <Router>
         <Route path="/app" component={AppLayout}>
           <Route path="" component={HomePage} />
+          <Route path="settings" component={SettingsPage} />
           <Route path="*paramName" component={NotFoundPage} />
         </Route>
       </Router>

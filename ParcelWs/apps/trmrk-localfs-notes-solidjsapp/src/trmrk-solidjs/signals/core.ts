@@ -6,7 +6,14 @@ export const [appHeaderOptionsContent, setAppHeaderOptionsContent] =
 export const [appHeaderOptionsModal, setAppHeaderOptionsModal] =
   createSignal<HTMLDivElement | null>(null);
 
+export const [appHeaderOptionsPopoverEl, setAppHeaderOptionsPopoverEl] =
+  createSignal<HTMLButtonElement | null>(null);
+
 export const [appFooterContent, setAppFooterContent] = createSignal<
+  JSX.Element | JSX.Element[] | null
+>(null);
+
+export const [appHiddenContent, setAppHiddenContent] = createSignal<
   JSX.Element | JSX.Element[] | null
 >(null);
 

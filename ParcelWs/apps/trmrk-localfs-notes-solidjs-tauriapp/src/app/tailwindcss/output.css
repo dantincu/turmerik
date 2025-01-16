@@ -554,8 +554,20 @@ video {
   display: none;
 }
 
+.absolute {
+  position: absolute;
+}
+
 .relative {
   position: relative;
+}
+
+.block {
+  display: block;
+}
+
+.hidden {
+  display: none;
 }
 
 .overflow-hidden {

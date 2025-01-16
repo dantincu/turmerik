@@ -1,7 +1,7 @@
 import { JSX } from "solid-js";
 
-export interface BasicComponentProps {
-  children?: JSX.Element | JSX.Element[];
+export interface ForwardRef<THTMLElement extends HTMLElement = HTMLElement> {
+  ref?: (el: THTMLElement | null) => void;
 }
 
 export interface BasicHTMLAttributes {

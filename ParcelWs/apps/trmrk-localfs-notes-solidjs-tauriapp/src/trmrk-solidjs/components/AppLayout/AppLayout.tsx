@@ -8,6 +8,8 @@ import {
 
 import { useAppContext } from "../../dataStore/core";
 
+import { appHiddenContent } from "../../signals/core";
+
 import AppBody from "./AppBody";
 import AppFooter from "./AppFooter";
 import AppHeader from "./AppHeader";
@@ -40,6 +42,7 @@ const AppLayout: ParentComponent<AppLayoutProps> = (props) => {
     { appHeader.show ? <AppHeader /> : null }
     <AppBody>{props.children}</AppBody>
     { appFooter.show ? <AppFooter /> : null }
+    <div class="absolute hidden block">{appHiddenContent()}</div>
   </div>);
 }
 

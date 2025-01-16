@@ -2,7 +2,9 @@ import { ParentComponent, useContext } from "solid-js";
 
 import { useAppContext } from "../../dataStore/core";
 
-export interface BsBtnProps {
+import { ForwardRef } from "../HOCs/withHtmlElement/typeDefs";
+
+export interface BsBtnProps extends ForwardRef<HTMLButtonElement> {
   btnCssClass?: string | null | undefined;
   btnHasNoBorder?: boolean | null | undefined;
   addBtnOutlinedAppTheme?: boolean | null | undefined;
@@ -21,7 +23,8 @@ const BsBtn: ParentComponent<BsBtnProps> = (props) => {
   ];
 
   return <button class={btnClassNamesArr.join(" ")} {...(props.isDisabled ? { disabled: true } : {})}
-    {...(props.onClick ? { onClick: props.onClick } : {})}>
+    {...(props.onClick ? { onClick: props.onClick } : {})}
+    ref={props.ref}>
     {props.children}
   </button>
 }
