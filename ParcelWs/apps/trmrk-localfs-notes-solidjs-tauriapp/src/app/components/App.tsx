@@ -18,7 +18,6 @@ import { isDevEnv } from "../../trmrk/dev";
 import { initApi } from "../../trmrk-axios/core";
 import { FsExplorerApi } from "../../trmrk-axios/FsExplorerApi/api";
 
-import NotFoundPage from "../../trmrk-solidjs/components/Error/NotFoundPage";
 import ErrorPage from "../../trmrk-solidjs/components/Error/ErrorPage";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -27,9 +26,6 @@ import "../tailwindcss/output.css";
 import "../styles/global/style.scss";
 
 import * as bootstrapObj from "bootstrap";
-
-import HomePage from "./Pages/HomePage";
-import SettingsPage from "./Pages/SettingsPage";
 
 export interface AppProps {
   appConfig: AppConfigData;
@@ -52,9 +48,8 @@ const App: ParentComponent<AppProps> = (props) => {
       } />}>
       <Router>
         <Route path="/app" component={AppLayout}>
-          <Route path="" component={HomePage} />
-          <Route path="settings" component={SettingsPage} />
-          <Route path="*paramName" component={NotFoundPage} />
+        </Route>
+        <Route path="/app/*paramName" component={AppLayout}>
         </Route>
       </Router>
     </ErrorBoundary>
