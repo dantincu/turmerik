@@ -1,8 +1,6 @@
 import { Component, Show, createSignal } from "solid-js";
 
-import * as bootstrap from "bootstrap";
-
-import { appHeaderOptionsPopoverEl, appHeaderOptionsContent } from "../../signals/core";
+import { appHeaderOptionsContent } from "../../signals/core";
 import { useAppContext } from "../../dataStore/core";
 import BsIconBtn from "../BsBtn/BsIconBtn";
 

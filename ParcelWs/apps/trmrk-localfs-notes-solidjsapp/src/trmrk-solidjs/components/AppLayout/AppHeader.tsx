@@ -1,4 +1,4 @@
-import { Component, Show, createMemo } from "solid-js";
+import { Component, Show, createMemo, createSignal, createEffect } from "solid-js";
 
 import { useAppContext } from "../../dataStore/core";
 
@@ -14,6 +14,9 @@ const AppHeader: Component = () => {
   const appLayout = appData.appLayout;
   const appHeader = appLayout.appHeader;
 
+  let appOptionsPopoverEl: HTMLDivElement | null = null;
+  let appOptionsPopoverObj: bootstrap.Popover | null = null;
+
   const btnsCount = createMemo(() => {
     let count = 0;
     if (appHeader.goToParentBtn.isVisible) count++;
@@ -22,23 +25,41 @@ const AppHeader: Component = () => {
     return count;
   });
 
-  const goToSettingsPageClick = () => {
+  const hidePopover = () => {
+    if (appOptionsPopoverObj) {
+      appOptionsPopoverObj.hide();
+      // appOptionsPopoverObj.dispose();
+      appOptionsPopoverObj = null;
+    }
+  }
+
+  const documentClick = (evt: MouseEvent | TouchEvent) => {
     const popoverEl = appHeaderOptionsPopoverEl();
 
-    if (popoverEl) {
-      const popoverObj = bootstrap.Popover.getInstance(popoverEl);
-      popoverObj?.hide();
+    if (popoverEl && appOptionsPopoverEl && !appOptionsPopoverEl.contains(evt.target as Node) && !popoverEl.contains(evt.target as Node)) {
+      hidePopover();
+
+      document.removeEventListener("mousedown", documentClick);
+      document.removeEventListener("touchstart", documentClick);
     }
+  }
+
+  const goToSettingsPageClick = () => {
+    hidePopover();
   }
 
   const popoverShown = () => {
     const popoverEl = appHeaderOptionsPopoverEl();
     
     if (popoverEl) {
+      document.addEventListener("mousedown", documentClick);
+      document.addEventListener("touchstart", documentClick);
+
       const popoverObj = bootstrap.Popover.getInstance(popoverEl);
 
       if (popoverObj) {
         const rootDomElem = (popoverObj as any).tip;
+        appOptionsPopoverEl = rootDomElem;
         const optionElem = rootDomElem.querySelector(".trmrk-goto-settings-page-option");
 
         if (optionElem) {
@@ -48,24 +69,28 @@ const AppHeader: Component = () => {
     }
   }
 
-  const onAppOptionsBtnAvaillable = (popoverEl: HTMLButtonElement | null) => {
-    setAppHeaderOptionsPopoverEl(popoverEl);
-    if (!popoverEl) return;
-    
-    const popover = appHeaderOptionsPopoverEl();
-    let appOptionsPopoverContent = appOptionsPopoverContentRef();
+  const appOptionsBtnClick = (ev: MouseEvent | TouchEvent) => {
+    if (appOptionsPopoverObj) {
+      hidePopover();
+    } else {
+      const appOptionsPopoverContent = appOptionsPopoverContentRef();
+      const popoverEl = appHeaderOptionsPopoverEl();
 
-    if (popover && appOptionsPopoverContent) {
-      appOptionsPopoverContent = appOptionsPopoverContent.cloneNode(true) as HTMLUListElement;
+      if (popoverEl && appOptionsPopoverContent) {
+        const appOptionsPopoverContentClone = appOptionsPopoverContent.cloneNode(true) as HTMLUListElement;
 
-      const popoverObj = new bootstrap.Popover(popover, {
-        content: appOptionsPopoverContent,
-        trigger: "click",
-        placement: "bottom",
-        html: true
-      });
+        const popoverObj = new bootstrap.Popover(popoverEl, {
+          content: appOptionsPopoverContentClone,
+          trigger: "manual",
+          placement: "bottom",
+          html: true
+        });
 
-      popoverEl.addEventListener("inserted.bs.popover", popoverShown);
+        appOptionsPopoverObj = popoverObj;
+
+        popoverEl.addEventListener("shown.bs.popover", popoverShown);
+        popoverObj.show();
+      }
     }
   }
 
@@ -80,7 +105,7 @@ const AppHeader: Component = () => {
       </Show>
       <Show when={appHeader.showOptionsBtn}>
         <BsIconBtn iconCssClass="bi bi-three-dots-vertical" btnHasNoBorder={true}
-          ref={onAppOptionsBtnAvaillable} />
+          onClick={appOptionsBtnClick} ref={el => setAppHeaderOptionsPopoverEl(el)} />
       </Show>
     </nav>
   </header>);

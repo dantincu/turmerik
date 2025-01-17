@@ -131,6 +131,10 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-localfs-notes-solidjs-tauriapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
   },
+  "trmrk-localfs-quicknotes-solidjs-tauriapp": {
+    dirPath: "apps\\trmrk-localfs-quicknotes-solidjs-tauriapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
+  },
 };
 
 const scr = {

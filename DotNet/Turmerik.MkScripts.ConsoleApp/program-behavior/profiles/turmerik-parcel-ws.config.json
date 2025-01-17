@@ -36,7 +36,8 @@
               [ "..\\..\\apps\\trmrk-react-testapp" ],
               [ "..\\..\\apps\\trmrk-notes-solidjsapp" ],
               [ "..\\..\\apps\\trmrk-localfs-notes-solidjsapp" ],
-              [ "..\\..\\apps\\trmrk-localfs-notes-solidjs-tauriapp" ]
+              [ "..\\..\\apps\\trmrk-localfs-notes-solidjs-tauriapp" ],
+              [ "..\\..\\apps\\trmrk-localfs-quicknotes-solidjs-tauriapp" ]
             ],
             "ArgFilters": {
               "libs": {
@@ -206,7 +207,8 @@
           "apps\\trmrk-react-testapp\\_",
           "apps\\trmrk-notes-solidjsapp\\_",
           "apps\\trmrk-localfs-notes-solidjsapp\\_",
-          "apps\\trmrk-localfs-notes-solidjs-tauriapp\\_"
+          "apps\\trmrk-localfs-notes-solidjs-tauriapp\\_",
+          "apps\\trmrk-localfs-quicknotes-solidjs-tauriapp\\_"
         ],
         "Filters": {
           "libs": {
