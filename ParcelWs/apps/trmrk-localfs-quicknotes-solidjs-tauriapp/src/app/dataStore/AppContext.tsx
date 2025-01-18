@@ -6,8 +6,6 @@ import { AppContext, createAppData, AppContextType, NestedPaths, AppData } from 
 export const AppProvider = (props: any) => {
   const [appData, setAppData] = createStore(createAppData());
 
-  // console.log("appData", appData);
-
   const appContextType: AppContextType = {
     appData,
     setAppDataFull: setAppData,

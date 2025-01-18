@@ -8,10 +8,11 @@ import { AppData } from "../dataStore/core";
 import { useAppContext } from "../dataStore/AppContext";
 
 import AppLayoutCore from "../../trmrk-solidjs/components/AppLayout/AppLayout";
+import AppBodyContent from "../../trmrk-solidjs/components/AppLayout/AppBodyContent";
 import Panel from "../../trmrk-solidjs/components/AppLayout/Panel";
 import AppHiddenContent from "../../trmrk-solidjs/components/AppLayout/AppHiddenContent";
 
-import { setAppHiddenContent } from "../../trmrk-solidjs/signals/core";
+import { setAppHiddenContent, setAppBodyPanel1Content } from "../../trmrk-solidjs/signals/core";
 
 const AppLayout: ParentComponent = (props) => {
   const { appData, setAppDataFull, setAppData } = useAppContext();
@@ -19,6 +20,7 @@ const AppLayout: ParentComponent = (props) => {
 
   onMount(() => {
     setAppHiddenContent(<AppHiddenContent />);
+    setAppBodyPanel1Content(props.children);
   });
 
   createEffect(() => {
@@ -51,9 +53,7 @@ const AppLayout: ParentComponent = (props) => {
   });
 
   return (<AppLayoutCore>
-      <Panel isScrollable={true}>
-        {props.children}
-      </Panel>
+      <AppBodyContent />
     </AppLayoutCore>);
 }
 

@@ -28,7 +28,6 @@ const AppHeader: Component = () => {
   const hidePopover = () => {
     if (appOptionsPopoverObj) {
       appOptionsPopoverObj.hide();
-      // appOptionsPopoverObj.dispose();
       appOptionsPopoverObj = null;
     }
   }

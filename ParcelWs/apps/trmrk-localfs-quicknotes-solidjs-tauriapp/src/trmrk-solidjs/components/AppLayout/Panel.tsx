@@ -6,8 +6,6 @@ export interface PanelProps {
 }
 
 const Panel: ParentComponent<PanelProps> = (props) => {
-  // console.log("props.isScrollable", props.isScrollable);
-
   return (<div class={["trmrk-panel", props.isScrollable ? "trmrk-scrollable overflow-scroll" : "", props.cssClass ?? ""].join(" ")}>
     {props.children}
   </div>);

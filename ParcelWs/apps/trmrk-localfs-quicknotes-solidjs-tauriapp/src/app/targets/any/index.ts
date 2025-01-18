@@ -4,7 +4,6 @@ import { runAppSetup } from "../../appSetup.tsx";
 import { AppConfigData } from "../../../trmrk/notes-app-config";
 
 const viteMode = process.env.NODE_ENV!.trim();
-// console.log("viteMode", viteMode);
 const isDev = viteMode!.trim() === "development";
 
 let promArr = [fetch("/config.json")];
@@ -17,6 +16,5 @@ promArr = promArr.map((prom) => prom.then((response) => response.json()));
 
 Promise.all(promArr).then((responsesArr) => {
   const appConfig = trmrk.merge({}, responsesArr, null, true);
-  // console.log("appConfig", isDev, appConfig);
   runAppSetup(appConfig as any as AppConfigData, isDev);
 });
