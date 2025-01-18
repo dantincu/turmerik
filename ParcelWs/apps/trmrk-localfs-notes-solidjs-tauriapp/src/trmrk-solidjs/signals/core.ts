@@ -9,6 +9,8 @@ export const [appHeaderOptionsModal, setAppHeaderOptionsModal] =
 export const [appHeaderOptionsPopoverEl, setAppHeaderOptionsPopoverEl] =
   createSignal<HTMLButtonElement | null>(null);
 
+export const [appBodyEl, setAppBodyEl] = createSignal<HTMLElement | null>(null);
+
 export const [appFooterContent, setAppFooterContent] = createSignal<
   JSX.Element | JSX.Element[] | null
 >(null);

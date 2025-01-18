@@ -18,6 +18,7 @@ export interface ComponentFlags {
 export interface AppOptionsData {
   refreshAppPageBtn: ComponentFlags;
   viewOpenTabsBtnBtn: ComponentFlags;
+  goToHomePageBtn: ComponentFlags;
   goToSettingsPageBtn: ComponentFlags;
 }
 
@@ -39,7 +40,7 @@ export interface AppHeaderData {
 
 export interface AppFooterData {
   show: boolean;
-  showHomeBtn: boolean;
+  showSaveBtn: boolean;
   showUndoRedoBtns: boolean;
   undoBtnEnabled: boolean;
   redoBtnEnabled: boolean;
@@ -109,6 +110,10 @@ export const createAppDataCore = () => {
             isVisible: true,
             isEnabled: true,
           },
+          goToHomePageBtn: {
+            isVisible: true,
+            isEnabled: true,
+          },
           goToSettingsPageBtn: {
             isVisible: true,
             isEnabled: true,
@@ -120,7 +125,7 @@ export const createAppDataCore = () => {
       },
       appFooter: {
         show: true,
-        showHomeBtn: true,
+        showSaveBtn: true,
         showUndoRedoBtns: false,
         undoBtnEnabled: false,
         redoBtnEnabled: false,

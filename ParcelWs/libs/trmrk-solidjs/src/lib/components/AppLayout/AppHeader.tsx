@@ -47,6 +47,10 @@ const AppHeader: Component = () => {
     hidePopover();
   }
 
+  const goToHomePageClick = () => {
+    hidePopover();
+  }
+
   const popoverShown = () => {
     const popoverEl = appHeaderOptionsPopoverEl();
     
@@ -59,10 +63,16 @@ const AppHeader: Component = () => {
       if (popoverObj) {
         const rootDomElem = (popoverObj as any).tip;
         appOptionsPopoverEl = rootDomElem;
-        const optionElem = rootDomElem.querySelector(".trmrk-goto-settings-page-option");
 
-        if (optionElem) {
-          optionElem.addEventListener("click", goToSettingsPageClick);
+        const goToSettingsElem = rootDomElem.querySelector(".trmrk-goto-settings-page-option");
+        const goToHomeElem = rootDomElem.querySelector(".trmrk-goto-home-page-option");
+
+        if (goToSettingsElem) {
+          goToSettingsElem.addEventListener("click", goToSettingsPageClick);
+        }
+        
+        if (goToHomeElem) {
+          goToHomeElem.addEventListener("click", goToHomePageClick);
         }
       }
     }

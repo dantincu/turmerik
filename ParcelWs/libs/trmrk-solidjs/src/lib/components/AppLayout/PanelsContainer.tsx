@@ -6,6 +6,7 @@ import SplitContainer from "./SplitContainer";
 import Panel from "./Panel";
 
 export interface PanelsContainerProps {
+  cssClass?: string | null | undefined;
   splitOrientation?: SplitPanelOrientation | null | undefined;
   altPanelChildren?: (() => JSX.Element | JSX.Element[] | null | undefined) | null | undefined;
   panel1Srollable?: boolean | null | undefined;
@@ -13,7 +14,7 @@ export interface PanelsContainerProps {
 }
 
 const PanelsContainer: ParentComponent<PanelsContainerProps> = (props) => {
-  return (<div class="trmrk-panels-container">
+  return (<div class={["trmrk-panels-container", props.cssClass ?? ""].join(" ")}>
     { props.splitOrientation ? <SplitContainer
       splitVertically={props.splitOrientation == SplitPanelOrientation.Vertical }
       panel1Children={props.children}

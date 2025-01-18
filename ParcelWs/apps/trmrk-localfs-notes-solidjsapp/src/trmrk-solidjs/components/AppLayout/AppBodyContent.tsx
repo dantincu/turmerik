@@ -24,7 +24,7 @@ const AppBodyContent: Component<AppBodyContentProps> = () => {
     appBody.secondContainerIsFocused ?
     appBody.secondPanelIsFocused ? appBody.appBodyPanel4Scrollable : appBody.appBodyPanel3Scrollable : 
     appBody.secondPanelIsFocused ? appBody.appBodyPanel2Scrollable : appBody.appBodyPanel1Scrollable
-  }>
+  } cssClass="trmrk-app-body-content">
       { appBody.secondContainerIsFocused ?
         appBody.secondPanelIsFocused ? appBodyPanel4Content() : appBodyPanel3Content() :
         appBody.secondPanelIsFocused ? appBodyPanel2Content() : appBodyPanel1Content() }
@@ -36,7 +36,7 @@ const AppBodyContent: Component<AppBodyContentProps> = () => {
           panel1Srollable={ appBody.appBodyPanel3Scrollable }
           panel2Srollable={ appBody.appBodyPanel4Scrollable }>
         { appBodyPanel3Content() }</PanelsContainer>
-    }>
+    } cssClass="trmrk-app-body-content">
       <PanelsContainer
         splitOrientation={ appBody.firstContainerIsFurtherSplit ? oppositeSplitOrientation() : SplitPanelOrientation.None }
         altPanelChildren={ () => appBodyPanel2Content() }

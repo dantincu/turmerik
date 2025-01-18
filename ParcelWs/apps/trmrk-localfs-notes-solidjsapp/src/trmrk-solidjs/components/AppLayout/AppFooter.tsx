@@ -11,17 +11,15 @@ const AppFooter: Component = () => {
 
   const btnsCount = createMemo(() => {
     let count = 0;
-    if (appFooter.showHomeBtn) count++;
+    if (appFooter.showSaveBtn) count++;
     if (appLayout.appFooter.showUndoRedoBtns) count += 2;
     return count;
   });
 
   return (<footer class="trmrk-app-footer">
     <nav class={["navbar", "trmrk-navbar", appLayout.isDarkMode ? "navbar-dark bg-dark" : "navbar-light bg-light", `trmrk-app-footer-has-${btnsCount()}-btns`].join(" ")}>
-      <Show when={appLayout.appFooter.showHomeBtn}>
-        <a class="trmrk-icon-link" href={appLayout.homePageUrl}>
-          <BsIconBtn iconCssClass='bi bi-house' btnHasNoBorder={true} />
-        </a>
+      <Show when={appLayout.appFooter.showSaveBtn}>
+        <BsIconBtn iconCssClass='bi bi-save' btnHasNoBorder={true} />
       </Show>
       <Show when={appLayout.appFooter.showUndoRedoBtns}>
         <BsIconBtn iconCssClass='bi bi-arrow-counterclockwise' btnHasNoBorder={true} />

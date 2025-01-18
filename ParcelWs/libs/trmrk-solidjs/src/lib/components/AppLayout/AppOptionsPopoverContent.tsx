@@ -1,6 +1,9 @@
 import { Component, Show, createSignal } from "solid-js";
 
+import { A } from "@solidjs/router";
+
 import { appHeaderOptionsContent } from "../../signals/core";
+
 import { useAppContext } from "../../dataStore/core";
 import BsIconBtn from "../BsBtn/BsIconBtn";
 
@@ -27,9 +30,16 @@ const AppOptionsPopoverContent: Component = () => {
       {appHeaderOptionsContent()}
       <Show when={options.goToSettingsPageBtn.isVisible}>
         <li class="list-group-item trmrk-action-list-group-item trmrk-goto-settings-page-option">
-          <a class="trmrk-icon-link" href={appLayout.settingsPageUrl}>
+          <A class="trmrk-icon-link" href={appLayout.settingsPageUrl}>
             <span class="trmrk-label">Settings</span><BsIconBtn iconCssClass="bi bi-gear" btnHasNoBorder={true} />
-          </a>
+          </A>
+        </li>
+      </Show>
+      <Show when={options.goToHomePageBtn.isVisible}>
+        <li class="list-group-item trmrk-action-list-group-item trmrk-goto-home-page-option">
+          <A class="trmrk-icon-link" href={appLayout.homePageUrl}>
+            <span class="trmrk-label">Home</span><BsIconBtn iconCssClass="bi bi-house" btnHasNoBorder={true} />
+          </A>
         </li>
       </Show>
     </ul>);
