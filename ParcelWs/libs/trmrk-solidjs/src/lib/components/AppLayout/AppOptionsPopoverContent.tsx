@@ -17,7 +17,7 @@ const AppOptionsPopoverContent: Component = () => {
   return (<ul class="list-group" ref={el => setAppOptionsPopoverContentRef(el)}>
       <Show when={options.refreshAppPageBtn.isVisible}>
         <li class="list-group-item trmrk-action-list-group-item trmrk-refresh-option">
-          <span class="trmrk-label">Refresh</span><BsIconBtn iconCssClass="bi bi-arrow-clockwise" btnHasNoBorder={true} /></li>
+          <span class="trmrk-label">Refresh</span><BsIconBtn iconCssClass="ri ri-refresh-line" btnHasNoBorder={true} /></li>
       </Show>
       <Show when={options.viewOpenTabsBtnBtn.isVisible}>
         <li class="list-group-item trmrk-action-list-group-item trmrk-view-open-tabs-option">

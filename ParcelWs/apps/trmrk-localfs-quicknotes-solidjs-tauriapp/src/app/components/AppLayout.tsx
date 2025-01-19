@@ -9,7 +9,6 @@ import { useAppContext } from "../dataStore/AppContext";
 
 import AppLayoutCore from "../../trmrk-solidjs/components/AppLayout/AppLayout";
 import AppBodyContent from "../../trmrk-solidjs/components/AppLayout/AppBodyContent";
-import Panel from "../../trmrk-solidjs/components/AppLayout/Panel";
 import AppHiddenContent from "../../trmrk-solidjs/components/AppLayout/AppHiddenContent";
 
 import { setAppHiddenContent, setAppBodyPanel1Content } from "../../trmrk-solidjs/signals/core";

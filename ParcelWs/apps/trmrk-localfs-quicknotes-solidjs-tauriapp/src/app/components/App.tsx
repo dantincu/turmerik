@@ -5,6 +5,8 @@ import { Router, Route } from "@solidjs/router";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import 'remixicon/fonts/remixicon.css';
+
 import "../tailwindcss/output.css";
 import "../styles/global/style.scss";
 

@@ -19,11 +19,11 @@ const AppFooter: Component = () => {
   return (<footer class="trmrk-app-footer">
     <nav class={["navbar", "trmrk-navbar", appLayout.isDarkMode ? "navbar-dark bg-dark" : "navbar-light bg-light", `trmrk-app-footer-has-${btnsCount()}-btns`].join(" ")}>
       <Show when={appLayout.appFooter.showSaveBtn}>
-        <BsIconBtn iconCssClass='bi bi-save' btnHasNoBorder={true} />
+        <BsIconBtn iconCssClass='ri ri-save-line' btnHasNoBorder={true} />
       </Show>
       <Show when={appLayout.appFooter.showUndoRedoBtns}>
-        <BsIconBtn iconCssClass='bi bi-arrow-counterclockwise' btnHasNoBorder={true} />
-        <BsIconBtn iconCssClass='bi bi-arrow-clockwise' btnHasNoBorder={true} />
+        <BsIconBtn iconCssClass='ri ri-arrow-go-back-line' btnHasNoBorder={true} />
+        <BsIconBtn iconCssClass='ri ri-arrow-go-forward-line' btnHasNoBorder={true} />
       </Show>
     </nav>
   </footer>);
