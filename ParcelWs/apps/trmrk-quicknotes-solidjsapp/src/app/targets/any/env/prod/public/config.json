@@ -1,4 +1,5 @@
 {
+  "apiHost": "https://localhost:9301",
   "trmrkPfx": "trmrk",
   "isDevEnv": false,
   "clientVersion": "1",
