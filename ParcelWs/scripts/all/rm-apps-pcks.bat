@@ -7,6 +7,7 @@ for %%a in ("..\..\apps\trmrk-http-proxy-nodejsapp",
 "..\..\apps\trmrk-notes-vueapp",
 "..\..\apps\trmrk-react-testapp",
 "..\..\apps\trmrk-notes-solidjsapp",
+"..\..\apps\trmrk-quicknotes-solidjsapp",
 "..\..\apps\trmrk-localfs-notes-solidjsapp",
 "..\..\apps\trmrk-localfs-notes-solidjs-tauriapp",
 "..\..\apps\trmrk-localfs-quicknotes-solidjs-tauriapp") do (

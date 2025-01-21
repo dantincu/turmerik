@@ -123,12 +123,20 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-notes-solidjsapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
   },
+  "trmrk-quicknotes-solidjsapp": {
+    dirPath: "apps\\trmrk-quicknotes-solidjsapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
+  },
   "trmrk-localfs-notes-solidjsapp": {
     dirPath: "apps\\trmrk-localfs-notes-solidjsapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
   },
   "trmrk-localfs-notes-solidjs-tauriapp": {
     dirPath: "apps\\trmrk-localfs-notes-solidjs-tauriapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
+  },
+  "trmrk-localfs-quicknotes-solidjs-tauriapp": {
+    dirPath: "apps\\trmrk-localfs-quicknotes-solidjs-tauriapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
   },
 };

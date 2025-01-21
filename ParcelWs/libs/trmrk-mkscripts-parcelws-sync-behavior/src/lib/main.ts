@@ -123,6 +123,10 @@ const destnLocationsArr: {
     dirPath: "apps\\trmrk-notes-solidjsapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
   },
+  "trmrk-quicknotes-solidjsapp": {
+    dirPath: "apps\\trmrk-quicknotes-solidjsapp\\src",
+    syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],
+  },
   "trmrk-localfs-notes-solidjsapp": {
     dirPath: "apps\\trmrk-localfs-notes-solidjsapp\\src",
     syncedLibs: ["trmrk", "trmrk-axios", "trmrk-browser", "trmrk-solidjs"],

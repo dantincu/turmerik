@@ -22,6 +22,7 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\apps\trmrk-notes-vueapp",
 "..\..\apps\trmrk-react-testapp",
 "..\..\apps\trmrk-notes-solidjsapp",
+"..\..\apps\trmrk-quicknotes-solidjsapp",
 "..\..\apps\trmrk-localfs-notes-solidjsapp",
 "..\..\apps\trmrk-localfs-notes-solidjs-tauriapp",
 "..\..\apps\trmrk-localfs-quicknotes-solidjs-tauriapp") do (

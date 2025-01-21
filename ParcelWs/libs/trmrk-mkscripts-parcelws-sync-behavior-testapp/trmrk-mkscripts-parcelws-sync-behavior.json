@@ -2299,6 +2299,129 @@
       ]
     },
     {
+      "SectionName": "sync_destn_trmrk-quicknotes-solidjsapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-quicknotes-solidjsapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-quicknotes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-quicknotes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-quicknotes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-quicknotes-solidjsapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-solidjs\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-solidjs:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-solidjs:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-solidjs:trmrk-quicknotes-solidjsapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-solidjs_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-solidjs:trmrk-quicknotes-solidjsapp"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "SectionName": "sync_destn_trmrk-localfs-notes-solidjsapp",
       "RelDirPaths": {
         "DirPath": "apps\\trmrk-localfs-notes-solidjsapp\\src"
@@ -2539,6 +2662,129 @@
             {
               "FileRelPath": "push_to_trmrk-solidjs_ppgp.bat",
               "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-solidjs:trmrk-localfs-notes-solidjs-tauriapp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "SectionName": "sync_destn_trmrk-localfs-quicknotes-solidjs-tauriapp",
+      "RelDirPaths": {
+        "DirPath": "apps\\trmrk-localfs-quicknotes-solidjs-tauriapp\\src"
+      },
+      "FileGroups": [
+        {
+          "RelDirPaths": {
+            "DirPath": "_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_all.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "pull_all.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws *:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_all.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws *:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_all_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws *:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-axios\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-axios:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-axios:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-axios:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-axios_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-axios:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-browser\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-browser:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-browser:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-browser:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-browser_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-browser:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            }
+          ]
+        },
+        {
+          "RelDirPaths": {
+            "DirPath": "trmrk-solidjs\\_"
+          },
+          "Files": [
+            {
+              "FileRelPath": "diff_from_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-solidjs:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "pull_from_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-solidjs:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-solidjs.bat",
+              "TextContent": "CALL _sync :fst:push :pf:turmerik-parcelws trmrk-solidjs:trmrk-localfs-quicknotes-solidjs-tauriapp"
+            },
+            {
+              "FileRelPath": "push_to_trmrk-solidjs_ppgp.bat",
+              "TextContent": "CALL _sync :fst:push :ppgp :pf:turmerik-parcelws trmrk-solidjs:trmrk-localfs-quicknotes-solidjs-tauriapp"
             }
           ]
         }

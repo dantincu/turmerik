@@ -35,6 +35,7 @@
               [ "..\\..\\apps\\trmrk-notes-vueapp" ],
               [ "..\\..\\apps\\trmrk-react-testapp" ],
               [ "..\\..\\apps\\trmrk-notes-solidjsapp" ],
+              [ "..\\..\\apps\\trmrk-quicknotes-solidjsapp" ],
               [ "..\\..\\apps\\trmrk-localfs-notes-solidjsapp" ],
               [ "..\\..\\apps\\trmrk-localfs-notes-solidjs-tauriapp" ],
               [ "..\\..\\apps\\trmrk-localfs-quicknotes-solidjs-tauriapp" ]
@@ -206,6 +207,7 @@
           "apps\\trmrk-notes-vueapp\\_",
           "apps\\trmrk-react-testapp\\_",
           "apps\\trmrk-notes-solidjsapp\\_",
+          "apps\\trmrk-quicknotes-solidjsapp\\_",
           "apps\\trmrk-localfs-notes-solidjsapp\\_",
           "apps\\trmrk-localfs-notes-solidjs-tauriapp\\_",
           "apps\\trmrk-localfs-quicknotes-solidjs-tauriapp\\_"
