@@ -1,8 +1,8 @@
 import { ParentComponent, createEffect, onMount } from 'solid-js';
-
 import { useLocation } from "@solidjs/router";
-
 import { produce } from "solid-js/store";
+import { exists, BaseDirectory, stat, create } from '@tauri-apps/plugin-fs';
+import * as path from '@tauri-apps/api/path';
 
 import { AppData } from "../dataStore/core";
 import { useAppContext } from "../dataStore/AppContext";
@@ -17,9 +17,27 @@ const AppLayout: ParentComponent = (props) => {
   const { appData, setAppDataFull, setAppData } = useAppContext();
   const location = useLocation();
 
-  onMount(() => {
+  onMount(async () => {
     setAppHiddenContent(<AppHiddenContent />);
     setAppBodyPanel1Content(props.children);
+
+    /* const home = await path.homeDir();
+    console.log("home", home);
+
+    const existsResult = await exists("asdfasdf.txt", {
+      baseDir: BaseDirectory.AppData
+    });
+
+    console.log("exists", existsResult);
+
+    const file = await create('bar.txt', { baseDir: BaseDirectory.AppData });
+
+    try {
+      await file.write(new TextEncoder().encode('Hello world'));
+    }
+    finally {
+      await file.close();
+    } */
   });
 
   createEffect(() => {
