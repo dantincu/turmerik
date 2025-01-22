@@ -221,3 +221,17 @@
     height: 100%;
   }
 }
+
+.trmrk-form-label,
+.trmrk-form-check-label {
+  cursor: pointer;
+
+  .trmrk-form-check-input {
+    cursor: pointer;
+  }
+
+  .trmrk-label {
+    padding: 0em 0em 0em 0.6em;
+    display: inline-flex;
+  }
+}

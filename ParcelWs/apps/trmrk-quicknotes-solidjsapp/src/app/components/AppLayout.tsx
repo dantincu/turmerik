@@ -17,7 +17,6 @@ const AppLayout: ParentComponent = (props) => {
 
   onMount(async () => {
     setAppHiddenContent(<AppHiddenContent />);
-    setAppBodyPanel1Content(props.children);
   });
 
   createEffect(() => {
@@ -47,6 +46,8 @@ const AppLayout: ParentComponent = (props) => {
         }));
         break;
     }
+    
+    setAppBodyPanel1Content(props.children);
   });
 
   return (<AppLayoutCore>
