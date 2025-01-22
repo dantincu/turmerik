@@ -16,4 +16,10 @@
     <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
+    <ProjectReference Include="..\Turmerik.Notes\Turmerik.Notes.csproj" />
+    <ProjectReference Include="..\Turmerik.Puppeteer\Turmerik.Puppeteer.csproj" />
+  </ItemGroup>
+
 </Project>
