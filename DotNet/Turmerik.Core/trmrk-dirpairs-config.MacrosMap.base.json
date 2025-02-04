@@ -75,6 +75,10 @@
     ":s:1",
     "$denary$"
   ],
+  "emails": [
+    ":s:1",
+    "$emails$"
+  ],
   "epsds": [
     ":s:1",
     "$episodes$"
@@ -174,6 +178,10 @@
   "mpssvcs": [
     ":s:1",
     "$my-products-and-services$"
+  ],
+  "msgs": [
+    ":s:1",
+    "$messages$"
   ],
   "msc": [
     ":s:1",
