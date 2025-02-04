@@ -139,6 +139,10 @@
     ":s:1",
     "$institutions-and-organizations$"
   ],
+  "isss": [
+    ":s:1",
+    "$issues$"
+  ],
   "grs": [
     ":s:1",
     "$geographical-regions$"
@@ -310,6 +314,10 @@
   "stts": [
     ":s:1",
     "$states$"
+  ],
+  "tckts": [
+    ":s:1",
+    "$tickets$"
   ],
   "tscs": [
     ":s:1",
