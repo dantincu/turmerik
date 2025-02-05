@@ -207,6 +207,10 @@
     ":s:1",
     "$organizations$"
   ],
+  "pfs": [
+    ":s:1",
+    "$profiles$"
+  ],
   "pgs": [
     ":s:1",
     "$pages$"
