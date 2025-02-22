@@ -27,6 +27,10 @@
     ":s:1",
     "$apps-and-online-platforms$"
   ],
+  "bks": [
+    ":s:1",
+    "$books$"
+  ],
   "blckd": [
     ":s:1",
     "$blocked$"
