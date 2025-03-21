@@ -821,6 +821,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         {
             args.WorkDir ??= Environment.CurrentDirectory;
 
+            if (!Path.IsPathRooted(args.WorkDir))
+            {
+                args.WorkDir = Path.Combine(
+                    Environment.CurrentDirectory,
+                    args.WorkDir);
+            }
+
             foreach (var nodeArgs in args.RootNodes)
             {
                 await NormalizeArgsAsync(nodeArgs);

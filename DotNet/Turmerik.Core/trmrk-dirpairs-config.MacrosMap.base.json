@@ -27,6 +27,10 @@
     ":s:1",
     "$apps-and-online-platforms$"
   ],
+  "auds": [
+    ":s:1",
+    "$audios$"
+  ],
   "bks": [
     ":s:1",
     "$books$"
