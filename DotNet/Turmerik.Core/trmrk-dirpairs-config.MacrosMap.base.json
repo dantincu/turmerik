@@ -31,6 +31,10 @@
     ":s:1",
     "$audios$"
   ],
+  "audsvids": [
+    ":s:1",
+    "$audios-and-videos$"
+  ],
   "bks": [
     ":s:1",
     "$books$"
