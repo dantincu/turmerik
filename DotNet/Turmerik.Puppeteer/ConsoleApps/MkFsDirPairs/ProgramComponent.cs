@@ -54,6 +54,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly PdfCreatorFactory pdfCreatorFactory;
         private readonly ITimeStampHelper timeStampHelper;
+        private readonly IClipboardService clipboardService;
 
         public ProgramComponent(
             IJsonConversion jsonConversion,
@@ -66,7 +67,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             IDirsPairConfigLoader dirsPairConfigLoader,
             INotesAppConfigLoader notesAppConfigLoader,
             PdfCreatorFactory pdfCreatorFactory,
-            ITimeStampHelper timeStampHelper)
+            ITimeStampHelper timeStampHelper,
+            IClipboardService clipboardService)
         {
             this.consoleMsgPrinter = consoleMsgPrinter ?? throw new ArgumentNullException(
                 nameof(consoleMsgPrinter));
@@ -94,6 +96,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
                 nameof(timeStampHelper));
+
+            this.clipboardService = clipboardService ?? throw new ArgumentNullException(
+                nameof(clipboardService));
         }
 
         public async Task RunAsync(
@@ -175,8 +180,17 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     }
                     else if (userAnswer?.Length > 0)
                     {
-                        resTitle = GetTitleFromUri(
-                            url, hasUri);
+                        if (userAnswer == " ")
+                        {
+                            resTitle = GetTitleFromUri(
+                                url, true);
+                        }
+                        else
+                        {
+                            resTitle = await clipboardService.GetTextAsync(
+                                ) ?? throw new InvalidOperationException(
+                                    "Found no text in the clipboard!");
+                        }
                     }
                 }
             }
@@ -296,8 +310,17 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                         }
                         else if (userAnswer?.Length > 0)
                         {
-                            newLinkTitle = GetTitleFromUri(
-                                url, true);
+                            if (userAnswer == " ")
+                            {
+                                newLinkTitle = GetTitleFromUri(
+                                    url, true);
+                            }
+                            else
+                            {
+                                newLinkTitle = await clipboardService.GetTextAsync(
+                                    ) ?? throw new InvalidOperationException(
+                                        "Found no text in the clipboard!");
+                            }
                         }
                     }
 
@@ -880,6 +903,12 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                     nodeArgs.ResTitle = GetTitleFromUri(
                         url, hasUri);
                 }
+                else if (nodeArgs.GetTitleFromClipboard == true)
+                {
+                    nodeArgs.ResTitle = await clipboardService.GetTextAsync(
+                        ) ?? throw new InvalidOperationException(
+                            "Found no text in the clipboard!");
+                }
                 else
                 {
                     nodeArgs.ResTitle = await GetResouceTitleAsync(
@@ -1161,7 +1190,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 default:
                     urlOption = argFlagValue.First();
 
-                    if ("-".Arr().Contains(urlOption))
+                    if ("-".Arr("_").Contains(urlOption))
                     {
                         argFlagValue = argFlagValue.Skip(1).ToArray();
                     }
@@ -1190,6 +1219,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 {
                     case "-":
                         data.Args.Current.GetTitleFromUrl = true;
+                        break;
+                    case "_":
+                        data.Args.Current.GetTitleFromClipboard = true;
                         break;
                     default:
                         throw new ArgumentException(

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
     <ProjectReference Include="..\Turmerik.Puppeteer\Turmerik.Puppeteer.csproj" />
   </ItemGroup>
 

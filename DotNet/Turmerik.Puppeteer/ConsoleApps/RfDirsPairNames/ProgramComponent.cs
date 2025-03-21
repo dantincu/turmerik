@@ -209,7 +209,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                             args.MdTitle = mdTitle = MdH.TryGetMdTitleFromFile(
                                 args.MdFilePath);
 
-                            UpdateTimeStamp(args.ShortNameDirPath);
+                            UpdateNoteJsonFile(args.ShortNameDirPath, mdTitle);
                         }
                         else if (args.OpenMdFileAndAddLinks == true)
                         {
@@ -222,7 +222,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                                 args.MdFilePath);
 
                             args.MdLinksToAddArr = await mkFsDirPairsProgramComponent.OpenMdFileAndAddLinks();
-                            UpdateTimeStamp(args.ShortNameDirPath);
+                            UpdateNoteJsonFile(args.ShortNameDirPath, args.MdTitle);
                         }
                     }
                 }
@@ -274,9 +274,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
             if (args.SkipShortNameDirPath != true && stopSkipping)
             {
-                if (wka.Args.UpdateTimeStamp == true)
+                // if (wka.Args.UpdateTimeStamp == true)
                 {
-                    UpdateTimeStamp(wka.Args.ShortNameDirPath);
+                    UpdateNoteJsonFile(wka.Args.ShortNameDirPath, wka.Args.MdTitle);
                 }
 
                 newFullDirNamePart = fsEntryNameNormalizer.NormalizeFsEntryName(
@@ -973,8 +973,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
             Console.WriteLine();
         }
 
-        private void UpdateTimeStamp(
-            string shortNameDirPath)
+        private void UpdateNoteJsonFile(
+            string shortNameDirPath,
+            string? title)
         {
             string jsonFilePath = Path.Combine(
                 shortNameDirPath,
@@ -987,11 +988,13 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                 string json = File.ReadAllText(jsonFilePath);
                 noteItem = jsonConversion.Adapter.Deserialize<NoteItemCore>(json);
                 noteItem.UpdatedAt = DateTime.UtcNow;
+                noteItem.Title = title ?? noteItem.Title;
             }
             else
             {
                 noteItem = new()
                 {
+                    Title = title,
                     UpdatedAt = DateTime.UtcNow,
                 };
             }

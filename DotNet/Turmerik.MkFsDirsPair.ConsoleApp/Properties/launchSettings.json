@@ -6,10 +6,12 @@
       // "commandLineArgs": ":n :url:https://ing.ro/informatii-utile/ING-lanseaza-in-premiera-serviciul-de-geolocalizare"
       // "commandLineArgs": ":n Articles :+ :n #list# :- := :n \"Terms & Concepts\" :+ :n #list#"
       // "commandLineArgs": ":cm:m:a"
+      "commandLineArgs": ":n qwerqwer"
+      // "commandLineArgs": ":n :uri:_:https://google.com"
       // "commandLineArgs": ":n :url:https://www.facebook.com/100057620462546/posts/863839308880077/?rdid=VkQpWXD1jzBJzCRo",
       // "commandLineArgs": ":n \":uri:https://www.youtube.com/channel/UCMXJUNnd4iSXVjBxl0laHWw\""
       // "commandLineArgs": ":h"
-      "commandLineArgs": ":wd:asdf :n asdf :oal"
+      // "commandLineArgs": ":wd:asdf :n asdf :oal"
       // "commandLineArgs": ":n :uri:|asdf||sadf|https://google.com qwerwqer"
       // "commandLineArgs": ":nf"
       // "commandLineArgs": ":n \"2024-08-09_17-53\\_+0300 asdfasdf \\\\\\\\\""

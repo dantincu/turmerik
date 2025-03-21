@@ -401,6 +401,7 @@ namespace Turmerik.DirsPair
                         TextFileContents = jsonConversion.Adapter.Serialize(
                             new NoteItemCore
                             {
+                                Title = opts.Title,
                                 CreatedAt = DateTime.UtcNow,
                             })
                     }

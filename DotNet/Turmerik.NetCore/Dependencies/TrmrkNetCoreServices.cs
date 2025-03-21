@@ -30,6 +30,7 @@ namespace Turmerik.NetCore.Dependencies
             services.AddSingleton<TextToMdService>();
 
             services.AddSingleton<AssemblyLoader>();
+            services.AddSingleton<IClipboardService, TrmrkClipboardService>();
 
             return services;
         }

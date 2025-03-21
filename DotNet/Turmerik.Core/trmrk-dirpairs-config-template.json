@@ -69,8 +69,8 @@
     "KeepFileName": ".keep"
   },
   "FileContents": {
-    "KeepFileContentsTemplate": "{0}",
-    "KeepFileContainsNoteJson": true,
+    "KeepFileContentsTemplate": "",
+    "KeepFileContainsNoteJson": false,
     "MdFileContentsTemplate": "# {0}\n\n",
     "MdFileContentSectionTemplate": "{0}\n\n"
   },
