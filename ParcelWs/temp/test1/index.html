@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple HTML Page</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        width: calc(100% - 20px);
+        height: calc(100vh - 20px);
+        overflow: scroll;
+        display: block;
+        margin: 10px;
+        padding: 0;
+      }
+
+      .item {
+        display: block;
+        width: calc(100% - 4px);
+        height: 100px;
+        background-color: #ff8800;
+        border: 2px solid #884400;
+        border-radius: 10px;
+        margin: 10px 0;
+      }
+
+      .parent1 {
+        padding-left: 100px;
+        width: 100%;
+      }
+
+      .parent2 {
+        padding-left: 100px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div class="item item1"></div>
+      <div class="parent1">
+        <div class="item item2"></div>
+        <div class="parent2">
+          <div class="item item3"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

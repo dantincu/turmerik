@@ -83,13 +83,13 @@ namespace Turmerik.DirsPair.ConsoleApps.MkFsDirsPairCfg
             Run(pgArgs, chunkName, chunkMap,
                 "DirPairsMacrosMap",
                 key => $"|{key}|",
-                value => $"${value}$");
+                value => value);
 
             Run(pgArgs, chunkName, chunkMap,
                 "MacrosMap",
                 key => key,
                 value => ":s:1".Arr(
-                    $"${value}$"));
+                    value));
         }
 
         private void Run<TNewValue>(

@@ -3,7 +3,7 @@
   "|abrvs|": "$abbreviations$",
   "|api|": "$api$",
   "|archc|": "$archaic$",
-  "|archv|": "$archive$",
+  "|archv|": "@archive@",
   "|as|": "$articles$",
   "|appopfs|": "$apps-and-online-platforms$",
   "|auds|": "$audios$",

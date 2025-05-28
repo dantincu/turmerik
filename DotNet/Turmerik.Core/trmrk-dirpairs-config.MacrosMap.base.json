@@ -17,7 +17,7 @@
   ],
   "archv": [
     ":s:1",
-    "$archive$"
+    "@archive@"
   ],
   "as": [
     ":s:1",
