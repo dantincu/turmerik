@@ -399,4 +399,5 @@ FodyWeavers.xsd
 
 .parcel-cache
 
-DotNet/Turmerik.ConvertFsDirPairsToNotes.ConsoleApp/programSettings.json
+/DotNet/Turmerik.Core/trmrk-dirpairs-config.DirPairsMacrosMap.*
+/DotNet/Turmerik.Core/trmrk-dirpairs-config.MacrosMap.*
