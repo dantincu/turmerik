@@ -102,6 +102,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.PrintDupplicateTex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.OneDriveExplorer.AspNetCoreApp", "Turmerik.OneDriveExplorer.AspNetCoreApp\Turmerik.OneDriveExplorer.AspNetCoreApp.csproj", "{95F6EEBD-AE5C-4B47-89CF-7A73A0247EA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.NormalizeNoteTitles.ConsoleApp", "Turmerik.NormalizeNoteTitles.ConsoleApp\Turmerik.NormalizeNoteTitles.ConsoleApp.csproj", "{C2258D58-F1BD-4FCA-9476-DE3F297F7E2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -264,6 +266,10 @@ Global
 		{95F6EEBD-AE5C-4B47-89CF-7A73A0247EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95F6EEBD-AE5C-4B47-89CF-7A73A0247EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95F6EEBD-AE5C-4B47-89CF-7A73A0247EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2258D58-F1BD-4FCA-9476-DE3F297F7E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2258D58-F1BD-4FCA-9476-DE3F297F7E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2258D58-F1BD-4FCA-9476-DE3F297F7E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2258D58-F1BD-4FCA-9476-DE3F297F7E2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -312,6 +318,7 @@ Global
 		{9797C8E5-CB6B-4C32-A714-2689B1BDA9B6} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
 		{024AE5F2-CB73-40B3-AB7B-A785F3969049} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
 		{95F6EEBD-AE5C-4B47-89CF-7A73A0247EA0} = {0C1E39CA-0DD7-4275-B038-92AE53485381}
+		{C2258D58-F1BD-4FCA-9476-DE3F297F7E2C} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}
