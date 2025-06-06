@@ -14,6 +14,7 @@
           "DefaultContentSpecs": {
             "Args": [
               [ "..\\..\\libs\\trmrk" ],
+              [ "..\\..\\libs\\trmrk-angular\\projects\\trmrk-angular" ],
               [ "..\\..\\libs\\trmrk-axios" ],
               [ "..\\..\\libs\\trmrk-blazor" ],
               [ "..\\..\\libs\\trmrk-browser" ],
@@ -28,6 +29,9 @@
               [ "..\\..\\libs\\trmrk-text-transform-behavior-testapp" ],
               [ "..\\..\\libs\\trmrk-text-transform-defaultbehavior" ],
               [ "..\\..\\libs\\trmrk-text-transform-mybehavior" ],
+
+              [ "..\\..\\libs\\trmrk-angular\\projects\\trmrk-angular-testapp" ],
+              [ "..\\..\\apps\\trmrk-onedrive-notes-ngapp" ],
               [ "..\\..\\apps\\trmrk-http-proxy-nodejsapp" ],
               [ "..\\..\\apps\\trmrk-notes-lithtmlapp" ],
               [ "..\\..\\apps\\trmrk-notes-reactapp" ],
@@ -186,6 +190,7 @@
       "RelDirPaths": {
         "DirPathsArr": [
           "libs\\trmrk\\_",
+          "libs\\trmrk-angular\\projects\\trmrk-angular\\_",
           "libs\\trmrk-axios\\_",
           "libs\\trmrk-blazor\\_",
           "libs\\trmrk-browser\\_",
@@ -200,6 +205,9 @@
           "libs\\trmrk-text-transform-behavior-testapp\\_",
           "libs\\trmrk-text-transform-defaultbehavior\\_",
           "libs\\trmrk-text-transform-mybehavior\\_",
+
+          "libs\\trmrk-angular\\projects\\trmrk-angular-testapp",
+          "apps\\trmrk-onedrive-notes-ngapp",
           "apps\\trmrk-http-proxy-nodejsapp\\_",
           "apps\\trmrk-notes-lithtmlapp\\_",
           "apps\\trmrk-notes-reactapp\\_",

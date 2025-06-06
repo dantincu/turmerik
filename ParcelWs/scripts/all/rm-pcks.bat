@@ -1,6 +1,7 @@
 @echo off
 
 for %%a in ("..\..\libs\trmrk",
+"..\..\libs\trmrk-angular\projects\trmrk-angular",
 "..\..\libs\trmrk-axios",
 "..\..\libs\trmrk-blazor",
 "..\..\libs\trmrk-browser",
@@ -15,6 +16,8 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\libs\trmrk-text-transform-behavior-testapp",
 "..\..\libs\trmrk-text-transform-defaultbehavior",
 "..\..\libs\trmrk-text-transform-mybehavior",
+"..\..\libs\trmrk-angular\projects\trmrk-angular-testapp",
+"..\..\apps\trmrk-onedrive-notes-ngapp",
 "..\..\apps\trmrk-http-proxy-nodejsapp",
 "..\..\apps\trmrk-notes-lithtmlapp",
 "..\..\apps\trmrk-notes-reactapp",

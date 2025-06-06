@@ -13,6 +13,5 @@
   "devDependencies": {
     "buffer": "^6.0.3",
     "parcel": "^2.13.0"
-  },
-  "dependencies": {}
+  }
 }

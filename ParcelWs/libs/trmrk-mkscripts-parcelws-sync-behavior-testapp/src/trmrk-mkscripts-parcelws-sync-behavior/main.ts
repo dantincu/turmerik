@@ -14,6 +14,7 @@ import {
 
 const srcFoldersArr: { [key: string]: string } = {
   trmrk: "libs\\trmrk\\src\\lib",
+  "trmrk-angular": "libs\\trmrk-angular\\projects\\trmrk-angular\\src\\lib",
   "trmrk-axios": "libs\\trmrk-axios\\src\\lib",
   "trmrk-browser": "libs\\trmrk-browser\\src\\lib",
   "trmrk-blazor": "libs\\trmrk-blazor\\src\\lib",
@@ -35,6 +36,14 @@ const srcFoldersArr: { [key: string]: string } = {
 const destnLocationsArr: {
   [key: string]: { dirPath: string; syncedLibs: string[] };
 } = {
+  "trmrk-angular": {
+    dirPath: "libs\\trmrk-angular\\projects\\trmrk-angular\\src",
+    syncedLibs: ["trmrk", "trmrk-browser"],
+  },
+  "trmrk-angular-testapp": {
+    dirPath: "libs\\trmrk-angular\\projects\\trmrk-angular-testapp\\src",
+    syncedLibs: ["trmrk", "trmrk-browser"],
+  },
   "trmrk-axios": {
     dirPath: "libs\\trmrk-axios\\src",
     syncedLibs: ["trmrk"],
@@ -94,6 +103,10 @@ const destnLocationsArr: {
   "trmrk-mkscripts-parcelws-sync-behavior-testapp": {
     dirPath: "libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp\\src",
     syncedLibs: ["trmrk", "trmrk-mkscripts-parcelws-sync-behavior"],
+  },
+  "trmrk-onedrive-notes-ngapp": {
+    dirPath: "apps\\trmrk-onedrive-notes-ngapp\\src",
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
   },
   "trmrk-http-proxy-nodejsapp": {
     dirPath: "apps\\trmrk-http-proxy-nodejsapp\\src",

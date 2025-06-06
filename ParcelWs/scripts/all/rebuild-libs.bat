@@ -1,6 +1,7 @@
 @echo off
 
 for %%a in ("..\..\libs\trmrk",
+"..\..\libs\trmrk-angular\projects\trmrk-angular",
 "..\..\libs\trmrk-axios",
 "..\..\libs\trmrk-blazor",
 "..\..\libs\trmrk-browser",
@@ -14,7 +15,8 @@ for %%a in ("..\..\libs\trmrk",
 "..\..\libs\trmrk-text-transform-behavior",
 "..\..\libs\trmrk-text-transform-behavior-testapp",
 "..\..\libs\trmrk-text-transform-defaultbehavior",
-"..\..\libs\trmrk-text-transform-mybehavior") do (
+"..\..\libs\trmrk-text-transform-mybehavior",
+"..\..\libs\trmrk-angular\projects\trmrk-angular-testapp") do (
   cd %%a
   .\_\rm-ch_dst.bat
   npm run build

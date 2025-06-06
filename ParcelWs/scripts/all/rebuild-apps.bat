@@ -1,6 +1,7 @@
 @echo off
 
-for %%a in ("..\..\apps\trmrk-http-proxy-nodejsapp",
+for %%a in ("..\..\apps\trmrk-onedrive-notes-ngapp",
+"..\..\apps\trmrk-http-proxy-nodejsapp",
 "..\..\apps\trmrk-notes-lithtmlapp",
 "..\..\apps\trmrk-notes-reactapp",
 "..\..\apps\trmrk-notes-svelteapp",
