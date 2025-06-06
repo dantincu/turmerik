@@ -206,8 +206,8 @@
           "libs\\trmrk-text-transform-defaultbehavior\\_",
           "libs\\trmrk-text-transform-mybehavior\\_",
 
-          "libs\\trmrk-angular\\projects\\trmrk-angular-testapp",
-          "apps\\trmrk-onedrive-notes-ngapp",
+          "libs\\trmrk-angular\\projects\\trmrk-angular-testapp\\_",
+          "apps\\trmrk-onedrive-notes-ngapp\\_",
           "apps\\trmrk-http-proxy-nodejsapp\\_",
           "apps\\trmrk-notes-lithtmlapp\\_",
           "apps\\trmrk-notes-reactapp\\_",
