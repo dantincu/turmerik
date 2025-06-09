@@ -1,1 +1,16 @@
-<p>trmrk-settings works!</p>
+<div class="trmrk-app-bar">
+  <a
+    mat-icon-button
+    class="trmrk-icon-btn"
+    [routerLink]="['/']"
+    aria-label="Home"
+  >
+    <mat-icon class="trmrk-icon trmrk-home-icon">home</mat-icon>
+  </a>
+  <h1 class="trmrk-page-title">App Settings</h1>
+</div>
+<div class="trmrk-field">
+  <mat-checkbox (change)="onDarkModeBtnClick($event)" [checked]="isDarkMode"
+    >Dark Mode</mat-checkbox
+  >
+</div>

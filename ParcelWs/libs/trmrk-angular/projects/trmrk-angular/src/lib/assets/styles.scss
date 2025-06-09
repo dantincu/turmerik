@@ -25,7 +25,22 @@
     height: 32px;
     font-size: 32px;
     padding: 2px;
+
+    &.trmrk-home-icon {
+      padding: 5px;
+    }
   }
+}
+
+a[mat-icon-button].trmrk-icon-btn:visited,
+a[mat-icon-button].trmrk-icon-btn:hover,
+a[mat-icon-button].trmrk-icon-btn:active
+a[mat-icon-button].trmrk-icon-btn:link {
+  text-decoration: none !important;           /* removes underline */
+  text-decoration-line: none !important;      /* explicitly disables line */
+  text-decoration-color: transparent !important; /* hides any invisible line */
+  border-bottom: none !important;             /* just in case */
+  box-shadow: none !important;
 }
 
 .trmrk-menu {
@@ -42,12 +57,32 @@
 * ------------ Colors ------------
 */
 
-.trmrk-app-bar {
-  background-color: #e0e0e0;
+.trmrk-app-theme-light {
+  background-color: #fff;
+  color: #000;
+
+  .trmrk-app-bar {
+    background-color: #d0f0ff;
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #000;
+    }
+  }
 }
 
-[mat-icon-button].trmrk-icon-btn {
-  mat-icon.trmrk-icon {
-    color: #000;
+.trmrk-app-theme-dark {
+  background-color: #000;
+  color: #fff;
+
+  .trmrk-app-bar {
+    background-color: #001020;
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #fff;
+    }
   }
 }
