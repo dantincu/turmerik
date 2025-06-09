@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Web Page</title>
+    <style>
+      .container {
+        width: 400px;
+        height: 400px;
+        outline: 1px solid #888;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 
+      
+    -->
+    <div class="container">
+      <svg height="100%" width="100%" id="svg1">
+        <path stroke-width="1" stroke="#F80" fill="#F80" />
+      </svg>
+    </div>
+    <script>
+      const degreesToRadians = (deg) => deg * (Math.PI / 180);
+
+      class Path {
+        constructor(x, y, ang) {
+          this.prevX = 0;
+          this.prevY = 0;
+          this.x = x;
+          this.y = y;
+          this.ang = ang;
+          this.rad = degreesToRadians(ang);
+          this.path = "";
+        }
+
+        rot(ang) {
+          this.ang += ang;
+          this.rad = degreesToRadians(this.ang);
+          console.log("angle", this.ang);
+          return this;
+        }
+
+        dx(dx) {
+          const tan = Math.tan(this.rad);
+
+          if (tan === Infinity) {
+            console.error("dx doesn't work for vertical lines.");
+            return this;
+          } else if (tan === -Infinity) {
+            console.error("dx doesn't work for vertical lines.");
+            return this;
+          }
+
+          const dy = Math.round(tan * dx);
+          this.prevX = this.x;
+          this.prevY = this.y;
+          this.x += dx;
+          this.y += dy;
+          console.log("dx", "x", this.x, "y", this.y);
+          return this;
+        }
+
+        dy(dy) {
+          const tan = Math.tan(this.rad);
+
+          if (tan === 0) {
+            console.error("dy doesn't work for horizontal lines.");
+            return this;
+          }
+
+          const dx = Math.round(dy / tan);
+          this.prevX = this.x;
+          this.prevY = this.y;
+          this.x += dx;
+          this.y += dy;
+          console.log("dy", "x", this.x, "y", this.y);
+          return this;
+        }
+
+        toX(newX) {
+          this.prevX = this.x;
+          this.prevY = this.y;
+
+          const dx = newX - this.x;
+          const tan = Math.tan(this.rad);
+
+          if (tan !== Infinity && tan !== -Infinity) {
+            const dy = Math.round(tan * dx);
+            this.y += dy;
+          }
+
+          this.x = newX;
+          return this;
+        }
+
+        toY(newY) {
+          this.prevX = this.x;
+          this.prevY = this.y;
+
+          const dy = newY - this.y;
+          const tan = Math.tan(this.rad);
+
+          if (tan !== 0) {
+            const dx = Math.round(dy / tan);
+            this.x += dx;
+          }
+
+          this.y = newY;
+          return this;
+        }
+
+        move() {
+          this.path += `M ${this.x} ${this.y} `;
+          return this;
+        }
+
+        line() {
+          this.path += `L ${this.x} ${this.y} `;
+          return this;
+        }
+
+        horiz(dx) {
+          this.prevX = this.x;
+          this.x += dx;
+
+          this.ang = dx > 0 ? 0 : 180;
+          this.rad = degreesToRadians(this.ang);
+
+          this.path += `H ${this.x} `;
+          console.log("horiz", "x", this.x, "y", this.y);
+          return this;
+        }
+
+        vert(dy) {
+          this.prevY = this.y;
+          this.y += dy;
+
+          this.ang = dy > 0 ? 90 : 270;
+          this.rad = degreesToRadians(this.ang);
+
+          this.path += `V ${this.y} `;
+          console.log("vert", "x", this.x, "y", this.y);
+          return this;
+        }
+
+        curve(r, ang) {
+          // debugger;
+
+          const newAng = this.ang + 90 * Math.sign(ang);
+          const newRad = degreesToRadians(newAng);
+
+          const cx = this.x + Math.round(r * Math.cos(newRad));
+          const cy = this.y + Math.round(r * Math.sin(newRad));
+
+          const angThird = ang / 3;
+          const newRad1 = degreesToRadians(newAng + 180 + angThird);
+          const newRad2 = degreesToRadians(newAng + 180 + angThird * 2);
+          const newRad3 = degreesToRadians(newAng + 180 + ang);
+
+          const x1 = cx + Math.round(r * Math.cos(newRad1));
+          const y1 = cy + Math.round(r * Math.sin(newRad1));
+
+          const x2 = cx + Math.round(r * Math.cos(newRad2));
+          const y2 = cy + Math.round(r * Math.sin(newRad2));
+
+          const x3 = cx + Math.round(r * Math.cos(newRad3));
+          const y3 = cy + Math.round(r * Math.sin(newRad3));
+
+          this.prevX = this.x;
+          this.prevY = this.y;
+          this.x = x3;
+          this.y = y3;
+
+          this.path += `C ${x1} ${y1}, ${x2} ${y2}, ${x3} ${y3} `;
+          console.log("curve", "x", this.x, "y", this.y);
+          return this;
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const p = new Path(0, 0, 0.0);
+
+        p.dx(243)
+          .rot(90)
+          .dy(60)
+          .move()
+          .rot(-165)
+          .curve(30, -180)
+          .rot(180)
+          .dx(-15)
+          .line()
+          .rot(-15)
+          .curve(20, 90)
+          .horiz(-10)
+          .curve(30, 60)
+          .rot(60)
+          .dx(-30)
+          .line()
+          .curve(30, -180)
+          .rot(-180)
+          .dx(100)
+          .line()
+          .curve(30, -45)
+          .rot(-30)
+          .dx(140)
+          .line()
+          .curve(30, -180)
+          .rot(180)
+          .dx(-60)
+          .line()
+          .curve(20, 130)
+          .rot(120)
+          .dx(110)
+          .line()
+          .curve(30, -180)
+          .rot(180)
+          .dx(-100)
+          .line()
+          .curve(20, 160);
+
+        const myPath = document.querySelector("path");
+        myPath.setAttribute("d", p.path);
+        console.log("SVG and container are ready.");
+      });
+    </script>
+  </body>
+</html>

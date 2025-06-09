@@ -1,13 +1,36 @@
 <div class="trmrk-app-bar">
-  <a
+  <!-- a
     mat-icon-button
     class="trmrk-icon-btn"
     [routerLink]="['/']"
     aria-label="Home"
   >
     <mat-icon class="trmrk-icon">home</mat-icon>
-  </a>
-  <button mat-icon-button>
+  </a -->
+  <a
+    mat-icon-button
+    class="trmrk-icon-btn"
+    [routerLink]="['/']"
+    aria-label="Home"
+  >
     <app-trmrk-app-icon />
+  </a>
+  <h1 class="trmrk-page-title">Turmerik Test App</h1>
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn trmrk-options-btn"
+    [matMenuTriggerFor]="null"
+    #optionsMenuTrigger="matMenuTrigger"
+    (click)="onOptionsMenuBtnClick($event)"
+  >
+    <mat-icon class="trmrk-icon"
+      ><mat-icon class="trmrk-icon">more_vert</mat-icon></mat-icon
+    >
   </button>
+  <mat-menu class="trmrk-options-menu" #optionsMenu>
+    <button mat-menu-item [routerLink]="['/settings']">
+      <mat-icon class="trmrk-icon">settings</mat-icon>
+      Settings
+    </button>
+  </mat-menu>
 </div>

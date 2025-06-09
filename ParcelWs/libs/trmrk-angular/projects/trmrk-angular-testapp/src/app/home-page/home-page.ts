@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
@@ -13,8 +14,24 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
     MatIconButton,
     RouterLink,
     TrmrkAppIcon,
+    MatMenuModule,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
 })
-export class HomePage {}
+export class HomePage {
+  @ViewChild(MatMenu) optionsMenu!: MatMenu;
+
+  @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
+  optionsMenuTrigger!: MatMenuTrigger;
+
+  constructor() {
+    setTimeout(() => {
+      this.optionsMenuTrigger.menu = this.optionsMenu;
+    }, 0);
+  }
+
+  onOptionsMenuBtnClick(event: MouseEvent): void {
+    this.optionsMenuTrigger.openMenu();
+  }
+}
