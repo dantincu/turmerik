@@ -27,10 +27,10 @@
       ><mat-icon class="trmrk-icon">more_vert</mat-icon></mat-icon
     >
   </button>
-  <mat-menu class="trmrk-options-menu" #optionsMenu>
-    <button mat-menu-item [routerLink]="['/settings']">
+  <mat-menu class="trmrk-menu" dense #optionsMenu>
+    <a mat-menu-item class="trmrk-menu-item" [routerLink]="['/settings']">
       <mat-icon class="trmrk-icon">settings</mat-icon>
       Settings
-    </button>
+    </a>
   </mat-menu>
 </div>
