@@ -1,3 +1,38 @@
+@use "./styles.loading.scss";
+@use "./mixins.scss" as mixins;
+
+.trmrk-wrap-content {
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: keep-all;
+  white-space-collapse: collapse;
+  line-break: auto;
+}
+
+.trmrk-no-wrap-anywhere {
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: auto;
+}
+
+.trmrk-no-wrap {
+  flex-wrap: wrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: anywhere;
+}
+
+.trmrk-scrollable::-webkit-scrollbar {
+  width: 15px;
+}
+
+.trmrk-scrollable::-webkit-scrollbar-thumb {
+  cursor: grabbing;
+}
+
 .trmrk-app-bar {
   height: 40px;
   display: flex;
@@ -57,6 +92,23 @@ a[mat-icon-button].trmrk-icon-btn:link {
 /*
 * ------------ Colors ------------
 */
+
+.trmrk-app-theme-dark .trmrk-scrollable {
+  @include mixins.scrollable(
+    var(--trmrk-scrollable-track_color_dark),
+    var(--trmrk-scrollable-thumb_color_dark),
+    var(--trmrk-scrollable-track-hover_color_dark),
+    var(--trmrk-scrollable-thumb-hover_color_dark));
+}
+
+.trmrk-app-theme-light .trmrk-scrollable {
+  @include mixins.scrollable(
+    var(--trmrk-scrollable-track_color_light),
+    var(--trmrk-scrollable-thumb_color_light),
+    var(--trmrk-scrollable-track-hover_color_light),
+    var(--trmrk-scrollable-thumb-hover_color_light));
+}
+
 
 .trmrk-app-theme-light {
   background-color: #fff;

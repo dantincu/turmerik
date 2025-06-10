@@ -5,6 +5,11 @@
   "projects": {
     "trmrk-angular": {
       "projectType": "library",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "projects/trmrk-angular",
       "sourceRoot": "projects/trmrk-angular/src",
       "prefix": "lib",

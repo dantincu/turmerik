@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 
 import { setIsDarkModeToLocalStorage } from '../../trmrk-browser/domUtils/core';
@@ -10,7 +11,7 @@ import { AppStateService } from '../services/appStateService';
 
 @Component({
   selector: 'app-trmrk-settings',
-  imports: [MatCheckbox, RouterLink, MatIconModule],
+  imports: [MatCheckbox, RouterLink, MatIconModule, MatButtonModule],
   templateUrl: './trmrk-settings.html',
   styleUrl: './trmrk-settings.scss',
 })
@@ -37,6 +38,8 @@ export class TrmrkSettings implements OnDestroy {
   darkModeStateChange(isDarkModeValue: boolean) {
     this.isDarkMode = isDarkModeValue;
   }
+
+  onResetAppBtnClick(event: MouseEvent): void {}
 
   ngOnDestroy(): void {
     this.darkModeStateChangeSubscription.unsubscribe();
