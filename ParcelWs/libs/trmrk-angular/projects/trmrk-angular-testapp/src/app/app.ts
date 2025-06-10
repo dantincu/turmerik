@@ -32,22 +32,25 @@ export class App implements OnDestroy {
     this.darkModeStateChangeSubscription =
       appStateService.isDarkMode.$obs.subscribe(this.darkModeStateChange);
 
-    window.addEventListener('storage', (event) => {
-      if (
-        (event.key ?? null) === null ||
-        event.key === localStorageKeys.appThemeIsDarkMode
-      ) {
-        let isDarkModeValue = false;
+    this.storageEvent = this.storageEvent.bind(this);
+    window.addEventListener('storage', this.storageEvent);
+  }
 
-        if ((event.key ?? null) === null) {
-          isDarkModeValue = isDarkMode();
-        } else {
-          isDarkModeValue = event.newValue === jsonBool.true;
-        }
+  storageEvent(event: StorageEvent) {
+    if (
+      (event.key ?? null) === null ||
+      event.key === localStorageKeys.appThemeIsDarkMode
+    ) {
+      let isDarkModeValue = false;
 
-        this.darkModeLocalStorageValueChanged(isDarkModeValue);
+      if ((event.key ?? null) === null) {
+        isDarkModeValue = isDarkMode();
+      } else {
+        isDarkModeValue = event.newValue === jsonBool.true;
       }
-    });
+
+      this.darkModeLocalStorageValueChanged(isDarkModeValue);
+    }
   }
 
   darkModeLocalStorageValueChanged(isDarkModeValue: boolean) {
@@ -67,5 +70,6 @@ export class App implements OnDestroy {
 
   ngOnDestroy(): void {
     this.darkModeStateChangeSubscription.unsubscribe();
+    window.removeEventListener('storage', this.storageEvent);
   }
 }

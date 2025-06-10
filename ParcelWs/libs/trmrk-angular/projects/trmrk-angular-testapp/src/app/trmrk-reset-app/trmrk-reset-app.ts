@@ -27,6 +27,7 @@ export class TrmrkResetApp implements OnInit, OnDestroy {
   showSuccessMessage = false;
   successMessageFadeOut = false;
   private routeSub: Subscription;
+  private timeouts: NodeJS.Timeout[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.routeSub = this.route.queryParamMap.subscribe((params) => {
@@ -58,13 +59,17 @@ export class TrmrkResetApp implements OnInit, OnDestroy {
       } else if (this.isResetting === false) {
         this.showSuccessMessage = true;
 
-        setTimeout(() => {
-          this.successMessageFadeOut = true;
+        this.timeouts.push(
           setTimeout(() => {
-            this.successMessageFadeOut = false;
-            this.router.navigate(['/reset-app']);
-          }, 1000);
-        }, 3000);
+            this.successMessageFadeOut = true;
+            this.timeouts.push(
+              setTimeout(() => {
+                this.successMessageFadeOut = false;
+                this.router.navigate(['/reset-app']);
+              }, 1000)
+            );
+          }, 3000)
+        );
       } else {
         this.showSuccessMessage = false;
       }
@@ -77,9 +82,19 @@ export class TrmrkResetApp implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSub.unsubscribe();
+    this.clearTimeouts();
   }
 
   onSuccessUserMessageClick() {
+    this.clearTimeouts();
     this.router.navigate(['/reset-app']);
+  }
+
+  clearTimeouts() {
+    for (let tmt of this.timeouts) {
+      clearTimeout(tmt);
+    }
+
+    this.timeouts.splice(0, this.timeouts.length);
   }
 }
