@@ -1,0 +1,141 @@
+@use "./styles.loading.scss";
+@use "./mixins.scss" as mixins;
+
+.trmrk-wrap-content {
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: keep-all;
+  white-space-collapse: collapse;
+  line-break: auto;
+}
+
+.trmrk-no-wrap-anywhere {
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: auto;
+}
+
+.trmrk-no-wrap {
+  flex-wrap: wrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: anywhere;
+}
+
+.trmrk-scrollable::-webkit-scrollbar {
+  width: 15px;
+}
+
+.trmrk-scrollable::-webkit-scrollbar-thumb {
+  cursor: grabbing;
+}
+
+.trmrk-app-bar {
+  height: 40px;
+  display: flex;
+
+  .trmrk-page-title {
+    font-size: 20px;
+    margin: 7.5px 0;
+    cursor: pointer;
+    flex-grow: 1;
+    text-align: center;
+  }
+}
+
+[mat-icon-button].trmrk-icon-btn {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  padding: 2px;
+  overflow: hidden;
+
+  mat-icon.trmrk-icon {
+    display: inline-flex;
+    width: 40px;
+    height: 32px;
+    font-size: 32px;
+    padding: 2px;
+
+    &.trmrk-home-icon {
+      padding: 4px;
+    }
+  }
+}
+
+a[mat-icon-button].trmrk-icon-btn,
+a[mat-icon-button].trmrk-icon-btn:visited,
+a[mat-icon-button].trmrk-icon-btn:hover,
+a[mat-icon-button].trmrk-icon-btn:active
+a[mat-icon-button].trmrk-icon-btn:link {
+  text-decoration: none !important;           /* removes underline */
+  text-decoration-line: none !important;      /* explicitly disables line */
+  text-decoration-color: #0000 !important; /* hides any invisible line */
+  border-bottom: none !important;             /* just in case */
+  box-shadow: none !important;
+}
+
+.trmrk-menu {
+  .trmrk-menu-item {
+    min-height: 40px;
+  }
+}
+
+.trmrk-btn {
+  cursor: pointer;
+}
+
+/*
+* ------------ Colors ------------
+*/
+
+.trmrk-app-theme-dark .trmrk-scrollable {
+  @include mixins.scrollable(
+    var(--trmrk-scrollable-track_color_dark),
+    var(--trmrk-scrollable-thumb_color_dark),
+    var(--trmrk-scrollable-track-hover_color_dark),
+    var(--trmrk-scrollable-thumb-hover_color_dark));
+}
+
+.trmrk-app-theme-light .trmrk-scrollable {
+  @include mixins.scrollable(
+    var(--trmrk-scrollable-track_color_light),
+    var(--trmrk-scrollable-thumb_color_light),
+    var(--trmrk-scrollable-track-hover_color_light),
+    var(--trmrk-scrollable-thumb-hover_color_light));
+}
+
+
+.trmrk-app-theme-light {
+  background-color: #fff;
+  color: #000;
+
+  .trmrk-app-bar {
+    background-color: #d0f0ff;
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #000;
+    }
+  }
+}
+
+.trmrk-app-theme-dark {
+  background-color: #000;
+  color: #fff;
+
+  .trmrk-app-bar {
+    background-color: #001020;
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #fff;
+    }
+  }
+}

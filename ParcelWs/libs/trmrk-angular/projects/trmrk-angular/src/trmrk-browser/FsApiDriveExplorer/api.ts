@@ -1,10 +1,10 @@
-import trmrk from "../../trmrk";
+import trmrk from '../../trmrk';
 
-import { DriveItem } from "../../trmrk/drive-item";
+import { DriveItem } from '../../trmrk/drive-item';
 import {
   FileType,
   OfficeFileType,
-} from "../../trmrk/DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore";
+} from '../../trmrk/DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore';
 
 import {
   RootedPathResolvedArgs,
@@ -12,12 +12,12 @@ import {
   DriveItemNodeCore,
   DriveExplorerApiBase,
   IDriveExplorerApi,
-} from "../../trmrk/DriveExplorerApi/core";
+} from '../../trmrk/DriveExplorerApi/core';
 
-import { FsApiEntry, FsApiFolder, SrcTrgPair } from "../fsApi/core";
-import { getDescendants } from "../fsApi/hcy";
-import { copyFile, moveFile, writeToFile } from "../fsApi/file";
-import { copyFolder, deleteFolder, moveFolder } from "../fsApi/folder";
+import { FsApiEntry, FsApiFolder, SrcTrgPair } from '../fsApi/core';
+import { getDescendants } from '../fsApi/hcy';
+import { copyFile, moveFile, writeToFile } from '../fsApi/file';
+import { copyFolder, deleteFolder, moveFolder } from '../fsApi/folder';
 
 interface IDriveItemNode extends IDriveItemNodeCore<IDriveItemNode> {
   handle: FileSystemHandle;
@@ -37,7 +37,7 @@ class DriveItemNode
     super(
       (item ??= {
         Name: handle.name,
-        IsFolder: handle.kind === "directory",
+        IsFolder: handle.kind === 'directory',
       } as DriveItem)
     );
 
@@ -340,7 +340,7 @@ export class DriveExplorerApi
       Name: node.name,
       IsFolder: node.isFolder,
       LastWriteTime: new Date().toString(),
-    } as DriveItem;
+    } as unknown as DriveItem;
 
     return item;
   }
@@ -355,7 +355,7 @@ export class DriveExplorerApi
   private async createItem(handle: FileSystemHandle) {
     const item = {
       Name: handle.name,
-      IsFolder: handle.kind === "directory",
+      IsFolder: handle.kind === 'directory',
     } as DriveItem;
 
     if (!item.IsFolder) {
@@ -363,7 +363,7 @@ export class DriveExplorerApi
       const file = await fileHandle.getFile();
 
       if (file.lastModified) {
-        item.LastWriteTime = new Date(file.lastModified).toString();
+        item.LastWriteTimeStr = new Date(file.lastModified).toString();
       }
     }
 

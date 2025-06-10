@@ -389,11 +389,8 @@ export const extractNestedElement = <TElement = HTMLElement>(
 };
 
 export const clearTimeouIfReqCore = (
-  timeoutIdRef:
-    | MtblRefValue<ReturnType<typeof setTimeout> | null>
-    | null
-    | undefined,
-  clearFunc: (timeoutId: ReturnType<typeof setTimeout>) => void
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined,
+  clearFunc: (timeoutId: NodeJS.Timeout) => void
 ) => {
   const timeoutId = timeoutIdRef?.value;
 
@@ -404,17 +401,11 @@ export const clearTimeouIfReqCore = (
 };
 
 export const clearTimeoutIfReq = (
-  timeoutIdRef:
-    | MtblRefValue<ReturnType<typeof setTimeout> | null>
-    | null
-    | undefined
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined
 ) => clearTimeouIfReqCore(timeoutIdRef, clearTimeout);
 
 export const clearIntervalIfReq = (
-  timeoutIdRef:
-    | MtblRefValue<ReturnType<typeof setTimeout> | null>
-    | null
-    | undefined
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined
 ) => clearTimeouIfReqCore(timeoutIdRef, clearInterval);
 
 export const updateDisableAttr = (

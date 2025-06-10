@@ -1,24 +1,24 @@
-import trmrk from "../../trmrk";
-import { MtblRefValue, jsonBool } from "../../trmrk/core";
+import trmrk from '../../trmrk';
+import { MtblRefValue, jsonBool } from '../../trmrk/core';
 
 export const supportedFeatures = {
   fileSystemApi: !!(window as any).showDirectoryPicker,
 };
 
 export const localStorageKeys = Object.freeze({
-  appThemeIsDarkMode: "appThemeIsDarkMode",
-  appIsCompactMode: "appIsCompactMode",
-  textCaretPositionerOpts: "textCaretPositionerOpts",
+  appThemeIsDarkMode: 'appThemeIsDarkMode',
+  appIsCompactMode: 'appIsCompactMode',
+  textCaretPositionerOpts: 'textCaretPositionerOpts',
 });
 
 export const appModeCssClasses = {
-  compactMode: "trmrk-app-mode-compact",
-  fullMode: "trmrk-app-mode-full",
+  compactMode: 'trmrk-app-mode-compact',
+  fullMode: 'trmrk-app-mode-full',
 };
 
 export const appThemeCssClasses = {
-  dark: "trmrk-app-theme-dark",
-  light: "trmrk-app-theme-light",
+  dark: 'trmrk-app-theme-dark',
+  light: 'trmrk-app-theme-light',
 };
 
 export const getAppModeCssClassName = (isCompactMode: boolean) => {
@@ -47,22 +47,22 @@ export const getRoute = (
     .map((value) => encodeURIComponent(value!));
 
   partsArr.splice(0, 0, routeBase);
-  const route = partsArr.join("/");
+  const route = partsArr.join('/');
 
   return route;
 };
 
 export const appModeCssClass = {
-  value: "",
+  value: '',
 } as MtblRefValue<string>;
 
 export const appThemeCssClass = {
-  value: "",
+  value: '',
 } as MtblRefValue<string>;
 
 export const prefersDarkMode = () =>
   window.matchMedia &&
-  window.matchMedia("(prefers-color-scheme: dark)").matches;
+  window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 export const isDarkMode = (
   localStorageIsDarkModeKey: string | null | undefined = null
@@ -121,8 +121,8 @@ export const setIsCompactModeToLocalStorage = (
 /// the following is the best alternative
 export const isSafariFunc = () =>
   !!/^((?!chrome|android|windows).)*safari/i.test(navigator.userAgent) &&
-  navigator.userAgent.indexOf("CriOS") == -1 &&
-  navigator.userAgent.indexOf("FxiOS") == -1;
+  navigator.userAgent.indexOf('CriOS') == -1 &&
+  navigator.userAgent.indexOf('FxiOS') == -1;
 /// also tried the one bellow but did not work (returned false on iphone safari)
 // export const isSafari = !!(window as any).safari;
 
@@ -155,19 +155,19 @@ export const getOverflowType = (overflowCssPropVal: string) => {
   const retObj = {} as OverflowType;
 
   switch (overflowCssPropVal) {
-    case "visible":
+    case 'visible':
       retObj.visible = true;
       break;
-    case "hidden":
+    case 'hidden':
       retObj.hidden = true;
       break;
-    case "clip":
+    case 'clip':
       retObj.clip = true;
       break;
-    case "scroll":
+    case 'scroll':
       retObj.scroll = true;
       break;
-    case "auto":
+    case 'auto':
       retObj.auto = true;
       break;
     default:
@@ -378,9 +378,9 @@ export const extractNestedElement = <TElement = HTMLElement>(
         } else {
           retElem = extractNestedElement(elem, predicate);
         }
-
-        return !retElem;
       }
+
+      return !retElem;
     },
     reverseOrder
   );
@@ -413,9 +413,9 @@ export const updateDisableAttr = (
   disabledValue: boolean | null | undefined
 ) => {
   if (disabledValue) {
-    elem.setAttribute("disabled", "");
+    elem.setAttribute('disabled', '');
   } else {
-    elem.removeAttribute("disabled");
+    elem.removeAttribute('disabled');
   }
 };
 

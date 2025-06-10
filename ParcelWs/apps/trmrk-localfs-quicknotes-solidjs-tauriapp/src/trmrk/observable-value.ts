@@ -1,4 +1,4 @@
-import { EventListenersCollection } from "./EventListenersCollection";
+import { EventListenersCollection } from './EventListenersCollection';
 
 export class ObservableValue<T> extends EventListenersCollection<T> {
   private __value: T;
@@ -17,7 +17,7 @@ export class ObservableValue<T> extends EventListenersCollection<T> {
     this.fireAll(newValue);
   }
 
-  [Symbol.dispose] = () => {
+  override [Symbol.dispose] = () => {
     super[Symbol.dispose]();
     this.value = null!;
   };
