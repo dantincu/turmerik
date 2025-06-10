@@ -16,6 +16,16 @@
   class="trmrk-loading"
   *ngIf="isResetting"
 ></lib-trmrk-loading>
-<div class="trmrk-app-message" *ngIf="!isResetting">
-  <p class="trmrk-app-message-text">The app has been reset</p>
+<div
+  *ngIf="showSuccessMessage"
+  [ngClass]="['trmrk-user-message', 'trmrk-success-user-message', successMessageFadeOut ? 'trmrk-fade' : '']"
+>
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn"
+    (click)="onSuccessUserMessageClick()"
+  >
+    <mat-icon class="trmrk-icon">close</mat-icon>
+  </button>
+  The app has been reset
 </div>

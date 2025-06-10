@@ -40,27 +40,68 @@ body {
   @include mat.all-component-colors($light-theme);
 }
 
-.trmrk-app-message {
-  display: flex;
-  justify-content: center;
+/*
+* ------------ App Styles ------------
+*/
+
+@keyframes opacFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
-.trmrk-app-message-text {
-  height: 20px;
+.trmrk-user-message {
+  position: fixed;
   padding: 5px;
   display: inline-flex;
-  border: 1px solid #40f040;
+  flex-direction: row;
   border-radius: 2px;
+  padding-top: 10px;
+
+  &.trmrk-fade {
+    animation: opacFadeOut 1s forwards;
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+    display: inline-flex;
+    order: 2;
+    margin-top: -5px;
+    margin-left: 5px;
+
+    mat-icon.trmrk-icon {
+      font-size: 16px;
+    }
+  }
 }
 
+/*
+* ------------ Colors ------------
+*/
+
 .trmrk-app-theme-light {
-  .trmrk-app-message-text {
+  .trmrk-user-message {
     background-color: #80ff80;
+    border: 1px solid #40f040;
+
+    [mat-icon-button].trmrk-icon-btn {
+      background-color: #0002;
+    }
   }
 }
 
 .trmrk-app-theme-dark {
-  .trmrk-app-message-text {
+  .trmrk-user-message {
     background-color: #002000;
+    border: 1px solid #004000;
+
+    [mat-icon-button].trmrk-icon-btn {
+      background-color: #FFF2;
+    }
   }
 }
