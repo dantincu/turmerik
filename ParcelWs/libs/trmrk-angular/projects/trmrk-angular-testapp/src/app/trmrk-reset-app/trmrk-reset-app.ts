@@ -42,7 +42,7 @@ export class TrmrkResetApp implements OnInit, OnDestroy {
 
       if (this.isResetting) {
         setTimeout(() => {
-          // localStorage.clear();
+          localStorage.clear();
           sessionStorage.clear();
 
           indexedDB.databases().then((databases) => {
