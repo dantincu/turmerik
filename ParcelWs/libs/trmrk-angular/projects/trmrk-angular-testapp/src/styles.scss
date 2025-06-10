@@ -39,3 +39,28 @@ body {
 .trmrk-app-theme-light {
   @include mat.all-component-colors($light-theme);
 }
+
+.trmrk-app-message {
+  display: flex;
+  justify-content: center;
+}
+
+.trmrk-app-message-text {
+  height: 20px;
+  padding: 5px;
+  display: inline-flex;
+  border: 1px solid #40f040;
+  border-radius: 2px;
+}
+
+.trmrk-app-theme-light {
+  .trmrk-app-message-text {
+    background-color: #80ff80;
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-app-message-text {
+    background-color: #002000;
+  }
+}

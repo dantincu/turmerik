@@ -33,9 +33,19 @@ export class App implements OnDestroy {
       appStateService.isDarkMode.$obs.subscribe(this.darkModeStateChange);
 
     window.addEventListener('storage', (event) => {
-      console.log('Storage event:', event);
-      if (event.key === localStorageKeys.appThemeIsDarkMode) {
-        this.darkModeLocalStorageValueChanged(event.newValue === jsonBool.true);
+      if (
+        (event.key ?? null) === null ||
+        event.key === localStorageKeys.appThemeIsDarkMode
+      ) {
+        let isDarkModeValue = false;
+
+        if ((event.key ?? null) === null) {
+          isDarkModeValue = isDarkMode();
+        } else {
+          isDarkModeValue = event.newValue === jsonBool.true;
+        }
+
+        this.darkModeLocalStorageValueChanged(isDarkModeValue);
       }
     });
   }

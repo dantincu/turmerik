@@ -7,7 +7,15 @@
   >
     <mat-icon class="trmrk-icon trmrk-home-icon">home</mat-icon>
   </a>
-  <h1 class="trmrk-page-title">Resetting the app</h1>
+  <h1 class="trmrk-page-title">
+    {{ isResetting ? 'Resetting the app...' : 'App Reset' }}
+  </h1>
 </div>
 
-<lib-trmrk-loading class="trmrk-loading"></lib-trmrk-loading>
+<lib-trmrk-loading
+  class="trmrk-loading"
+  *ngIf="isResetting"
+></lib-trmrk-loading>
+<div class="trmrk-app-message" *ngIf="!isResetting">
+  <p class="trmrk-app-message-text">The app has been reset</p>
+</div>

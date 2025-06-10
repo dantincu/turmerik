@@ -19,6 +19,7 @@
     mat-button
     class="trmrk-btn"
     [routerLink]="['/reset-app']"
+    [queryParams]="{ reset: 'true' }"
     (click)="onResetAppBtnClick($event)"
   >
     Reset App
