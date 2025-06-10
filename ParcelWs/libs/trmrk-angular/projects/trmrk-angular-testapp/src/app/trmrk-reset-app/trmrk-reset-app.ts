@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { TrmrkLoading } from 'trmrk-angular';
 
 import { jsonBool } from '../../trmrk/core';
+import { TrmrkDBResp } from '../../trmrk-browser/indexedDB/core';
 
 @Component({
   selector: 'app-trmrk-reset-app',
@@ -25,9 +26,18 @@ export class TrmrkResetApp implements OnInit, OnDestroy {
 
       if (this.isResetting) {
         setTimeout(() => {
-          localStorage.clear(); // Clear local storage
+          localStorage.clear();
+          sessionStorage.clear();
 
-          window.location.href = '/reset-app';
+          indexedDB.databases().then((databases) => {
+            for (let db of databases) {
+              if (db.name) {
+                indexedDB.deleteDatabase(db.name);
+              }
+            }
+
+            window.location.href = '/reset-app';
+          });
         }, 0);
       }
     });
