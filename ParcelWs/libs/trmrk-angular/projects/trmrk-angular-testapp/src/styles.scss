@@ -85,6 +85,10 @@ body {
 */
 
 .trmrk-app-theme-light {
+  .trmrk-app-bar {
+    background-color: #d0f0ff;
+  }
+
   .trmrk-user-message {
     background-color: #80ff80;
     border: 1px solid #40f040;
@@ -96,6 +100,10 @@ body {
 }
 
 .trmrk-app-theme-dark {
+  .trmrk-app-bar {
+    background-color: #001020;
+  }
+
   .trmrk-user-message {
     background-color: #002000;
     border: 1px solid #004000;
