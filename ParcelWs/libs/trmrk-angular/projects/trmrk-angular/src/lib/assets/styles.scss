@@ -115,7 +115,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
   .trmrk-page-title {
     font-size: 20px;
-    margin: 15px 0;
+    margin: 14px 0;
     cursor: pointer;
     flex-grow: 1;
     text-align: center;
@@ -143,35 +143,44 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
+.trmrk-vert-resize-strip {
+  width: 40px;
+  height: 100%;
+  position: absolute;
+  right: 0px;
+  cursor: pointer;
+}
+
 /*
 * ------------ Colors ------------
 */
-
-.trmrk-app-theme-dark .trmrk-scrollable {
-  @include mixins.scrollable(
-    var(--trmrk-scrollable-track_color_dark),
-    var(--trmrk-scrollable-thumb_color_dark),
-    var(--trmrk-scrollable-track-hover_color_dark),
-    var(--trmrk-scrollable-thumb-hover_color_dark));
-}
-
-.trmrk-app-theme-light .trmrk-scrollable {
-  @include mixins.scrollable(
-    var(--trmrk-scrollable-track_color_light),
-    var(--trmrk-scrollable-thumb_color_light),
-    var(--trmrk-scrollable-track-hover_color_light),
-    var(--trmrk-scrollable-thumb-hover_color_light));
-}
-
 
 .trmrk-app-theme-light {
   background-color: #fff;
   color: #000;
 
+  .trmrk-scrollable {
+    @include mixins.scrollable(
+      var(--trmrk-scrollable-track_color_light),
+      var(--trmrk-scrollable-thumb_color_light),
+      var(--trmrk-scrollable-track-hover_color_light),
+      var(--trmrk-scrollable-thumb-hover_color_light));
+  }
+
   [mat-icon-button].trmrk-icon-btn {
     mat-icon.trmrk-icon {
       color: #000;
     }
+  }
+
+  .trmrk-vert-resize-strip {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.2), /* Transparent stripe */
+      rgba(0, 0, 0, 0.2) 10px,
+      rgba(255, 255, 255, 0) 10px, /* Fully transparent stripe */
+      rgba(255, 255, 255, 0) 20px
+    );
   }
 }
 
@@ -179,9 +188,27 @@ a[mat-icon-button].trmrk-icon-btn:link {
   background-color: #000;
   color: #fff;
 
+  .trmrk-scrollable {
+    @include mixins.scrollable(
+      var(--trmrk-scrollable-track_color_dark),
+      var(--trmrk-scrollable-thumb_color_dark),
+      var(--trmrk-scrollable-track-hover_color_dark),
+      var(--trmrk-scrollable-thumb-hover_color_dark));
+  }
+
   [mat-icon-button].trmrk-icon-btn {
     mat-icon.trmrk-icon {
       color: #fff;
     }
+  }
+
+  .trmrk-vert-resize-strip {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.2), /* Transparent stripe */
+      rgba(255, 255, 255, 0.2) 10px,
+      rgba(0, 0, 0, 0) 10px, /* Fully transparent stripe */
+      rgba(0, 0, 0, 0) 20px
+    );
   }
 }
