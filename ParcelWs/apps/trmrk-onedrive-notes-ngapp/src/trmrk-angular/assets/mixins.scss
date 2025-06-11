@@ -19,3 +19,27 @@
     background-color: $thumb-hover;
   }
 }
+
+@mixin trmrk-wrap-content {
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: keep-all;
+  white-space-collapse: collapse;
+  line-break: auto;
+}
+
+@mixin trmrk-no-wrap-anywhere {
+  flex-wrap: nowrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: auto;
+}
+
+@mixin trmrk-no-wrap {
+  flex-wrap: wrap;
+  text-wrap: nowrap;
+  word-break: keep-all;
+  white-space-collapse: preserve;
+  line-break: anywhere;
+}

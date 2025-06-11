@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
@@ -15,6 +16,7 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
     RouterLink,
     TrmrkAppIcon,
     MatMenuModule,
+    CommonModule,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',

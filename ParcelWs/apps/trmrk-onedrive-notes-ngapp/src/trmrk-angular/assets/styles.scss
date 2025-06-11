@@ -2,27 +2,15 @@
 @use "./mixins.scss" as mixins;
 
 .trmrk-wrap-content {
-  flex-wrap: wrap;
-  text-wrap: wrap;
-  word-break: keep-all;
-  white-space-collapse: collapse;
-  line-break: auto;
+  @include mixins.trmrk-wrap-content();
 }
 
 .trmrk-no-wrap-anywhere {
-  flex-wrap: nowrap;
-  text-wrap: nowrap;
-  word-break: keep-all;
-  white-space-collapse: preserve;
-  line-break: auto;
+  @include mixins.trmrk-no-wrap-anywhere();
 }
 
 .trmrk-no-wrap {
-  flex-wrap: wrap;
-  text-wrap: nowrap;
-  word-break: keep-all;
-  white-space-collapse: preserve;
-  line-break: anywhere;
+  @include mixins.trmrk-no-wrap();
 }
 
 .trmrk-scrollable::-webkit-scrollbar {
@@ -31,19 +19,6 @@
 
 .trmrk-scrollable::-webkit-scrollbar-thumb {
   cursor: grabbing;
-}
-
-.trmrk-app-bar {
-  height: 40px;
-  display: flex;
-
-  .trmrk-page-title {
-    font-size: 20px;
-    margin: 7.5px 0;
-    cursor: pointer;
-    flex-grow: 1;
-    text-align: center;
-  }
 }
 
 [mat-icon-button].trmrk-icon-btn {
@@ -87,6 +62,85 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-btn {
   cursor: pointer;
+}
+
+.trmrk-app-panel {
+  &.trmrk-height-diff-x0 {
+    height: calc(100vh - 50px);
+  }
+
+  &.trmrk-height-diff-x1 {
+    height: calc(100vh - 90px);
+  }
+
+  &.trmrk-height-diff-x2 {
+    height: calc(100vh - 130px);
+  }
+
+  &.trmrk-height-diff-x3 {
+    height: calc(100vh - 170px);
+  }
+}
+
+.trmrk-app-bar, .trmrk-horiz-strip {
+  display: flex;
+  box-sizing: border-box;
+
+  > .trmrk-text-col, > .trmrk-text-row {
+    display: flex;
+    margin-right: 5px;
+    overflow: hidden;
+
+    > .trmrk-label, > .trmrk-details {
+      @include mixins.trmrk-no-wrap-anywhere();
+    }
+
+    > .trmrk-details {
+      font-size: 12px;
+      font-style: italic;
+    }
+  }
+
+  > .trmrk-text-col {
+    flex-direction: column;
+  }
+}
+
+.trmrk-app-bar {
+  height: 50px;
+
+  [mat-icon-button].trmrk-icon-btn {
+    margin-top: 5px;
+  }
+
+  .trmrk-page-title {
+    font-size: 20px;
+    margin: 15px 0;
+    cursor: pointer;
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  > .trmrk-text-col, > .trmrk-text-row {
+    padding: 7px;
+    margin-right: 10px;
+  }
+
+  > .trmrk-text-row {
+    padding-top: 15px;
+  }
+}
+
+.trmrk-horiz-strip {
+  height: 40px;
+
+  > .trmrk-text-col, > .trmrk-text-row {
+    padding: 2px;
+  }
+
+  > .trmrk-text-row {
+    padding-top: 9px;
+  }
 }
 
 /*
