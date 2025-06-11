@@ -7,6 +7,8 @@ import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
+import { encodeHtml } from '../../trmrk/text';
+
 @Component({
   selector: 'app-home-page',
   imports: [
@@ -22,6 +24,11 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
   styleUrl: './home-page.scss',
 })
 export class HomePage {
+  nonBreakingText = encodeHtml(
+    'This is a    non-breaking &space example.<h5>asdfasdfasdf</h5>',
+    true
+  );
+
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })

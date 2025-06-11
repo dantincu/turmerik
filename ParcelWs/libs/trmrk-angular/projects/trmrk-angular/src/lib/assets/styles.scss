@@ -86,22 +86,22 @@ a[mat-icon-button].trmrk-icon-btn:link {
   display: flex;
   box-sizing: border-box;
 
-  > .trmrk-text-col, > .trmrk-text-row {
+  .trmrk-text-col, .trmrk-text-row {
     display: flex;
     margin-right: 5px;
     overflow: hidden;
 
-    > .trmrk-label, > .trmrk-details {
+    .trmrk-label, .trmrk-details {
       @include mixins.trmrk-no-wrap-anywhere();
     }
 
-    > .trmrk-details {
+    .trmrk-details {
       font-size: 12px;
       font-style: italic;
     }
   }
 
-  > .trmrk-text-col {
+  .trmrk-text-col {
     flex-direction: column;
   }
 }
@@ -121,12 +121,12 @@ a[mat-icon-button].trmrk-icon-btn:link {
     text-align: center;
   }
 
-  > .trmrk-text-col, > .trmrk-text-row {
+  .trmrk-text-col, .trmrk-text-row {
     padding: 7px;
     margin-right: 10px;
   }
 
-  > .trmrk-text-row {
+  .trmrk-text-row {
     padding-top: 15px;
   }
 }
@@ -134,11 +134,11 @@ a[mat-icon-button].trmrk-icon-btn:link {
 .trmrk-horiz-strip {
   height: 40px;
 
-  > .trmrk-text-col, > .trmrk-text-row {
+  .trmrk-text-col, .trmrk-text-row {
     padding: 2px;
   }
 
-  > .trmrk-text-row {
+  .trmrk-text-row {
     padding-top: 9px;
   }
 }
