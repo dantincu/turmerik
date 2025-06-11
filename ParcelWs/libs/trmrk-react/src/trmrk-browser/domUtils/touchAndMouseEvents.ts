@@ -129,3 +129,7 @@ export const getSingleTouchOrClick = (
   ev: MouseEvent | TouchEvent,
   requiredButton?: number | null | undefined
 ) => toSingleTouchOrClick(getTouchOrMouseCoords(ev, requiredButton));
+
+export const isTouchOrLeftMouseBtnClick = (coords: TouchOrMouseCoords) =>
+  [MouseButton.Left, null].indexOf(coords.mouseButton ?? null) >=
+  MouseButton.Left;
