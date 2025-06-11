@@ -21,6 +21,14 @@
   cursor: grabbing;
 }
 
+.trmrk-scrollable-x {
+  overflow-x: scroll;
+}
+
+.trmrk-scrollable-y {
+  overflow-y: scroll;
+}
+
 [mat-icon-button].trmrk-icon-btn {
   display: inline-flex;
   width: 40px;
@@ -133,29 +141,25 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
   height: 40px;
+  margin: 1px;
 
   .trmrk-text-col, .trmrk-text-row {
-    padding: 2px;
+    padding: 3px 5px;
   }
 
   .trmrk-text-row {
-    padding-top: 9px;
+    padding-top: 10px;
   }
 }
 
 .trmrk-horiz-scrollable-strip {
   overflow-x: scroll;
+  scrollbar-width: thin;
 
-  @include mixins.scrollable(
-    var(--trmrk-scrollable-track_color_light),
-    var(--trmrk-scrollable-thumb_color_light),
-    var(--trmrk-scrollable-track-hover_color_light),
-    var(--trmrk-scrollable-thumb-hover_color_light));
-
-    .trmrk-text-col {
-      overflow: visible;
-      padding-top: 5px;
-    }
+  .trmrk-text-col {
+    overflow: visible;
+    padding-top: 5px;
+  }
 }
 
 .trmrk-vert-resize-strip {
@@ -174,12 +178,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
   background-color: #fff;
   color: #000;
 
-  .trmrk-scrollable {
-    @include mixins.scrollable(
-      var(--trmrk-scrollable-track_color_light),
-      var(--trmrk-scrollable-thumb_color_light),
-      var(--trmrk-scrollable-track-hover_color_light),
-      var(--trmrk-scrollable-thumb-hover_color_light));
+  .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableLight();
   }
 
   [mat-icon-button].trmrk-icon-btn {
@@ -203,12 +203,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
   background-color: #000;
   color: #fff;
 
-  .trmrk-scrollable {
-    @include mixins.scrollable(
-      var(--trmrk-scrollable-track_color_dark),
-      var(--trmrk-scrollable-thumb_color_dark),
-      var(--trmrk-scrollable-track-hover_color_dark),
-      var(--trmrk-scrollable-thumb-hover_color_dark));
+  .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableDark();
   }
 
   [mat-icon-button].trmrk-icon-btn {
