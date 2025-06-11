@@ -41,6 +41,11 @@ export interface TouchOrMouseCoords {
   screenY: number;
 }
 
+export interface TouchOrMouseMoveCoords {
+  touchStartOrMouseDownCoords: TouchOrMouseCoords;
+  touchOrMouseMoveCoords: TouchOrMouseCoords;
+}
+
 export const getMouseCoords = (ev: MouseEvent): TouchOrMouseCoords => ({
   isMouseEvt: true,
   mouseButton: ev.button,

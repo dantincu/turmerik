@@ -1,6 +1,5 @@
 import {
   Directive,
-  HostListener,
   EventEmitter,
   Output,
   Input,
@@ -14,18 +13,23 @@ import {
   getSingleTouchOrClick,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkLongPressOrRightClickEventData } from './interfaces';
+import {
+  TrmrkLongPressOrRightClickEventData,
+  TrmrkDragEvent,
+  TrmrkDragEventData,
+  TrmrkDragStartPosition,
+} from './interfaces';
 
 @Directive({
-  selector: '[trmrkMultiClick]',
+  selector: '[trmrkDrag]',
 })
-export class TrmrkMultiClick implements OnDestroy {
-  private clicksCount = 0;
-  private lastClickMillis = 0;
+export class TrmrkDrag implements OnDestroy {
+  @Output() trmrkDrag = new EventEmitter<TrmrkDragEvent>();
+  @Output() trmrkDragStart = new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkDragEnd = new EventEmitter<TrmrkDragEvent>();
 
-  @Output() trmrkMultiClick = new EventEmitter<TouchOrMouseCoords>();
-  @Input() trmrkMultiClickMillis = 200;
-  @Input() trmrkMultiClicksCount = 5;
+  private mouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
+  private dragStartPosition: TrmrkDragStartPosition | null = null;
 
   constructor(private el: ElementRef<HTMLElement>) {
     const elem = el.nativeElement;
@@ -48,18 +52,12 @@ export class TrmrkMultiClick implements OnDestroy {
   }
 
   private touchStartOrMouseDown(event: TouchEvent | MouseEvent) {
-    this.removeEventListeners();
+    this.reset();
     const data = this.getEventData(event);
 
     if (data.isValid) {
-      if (this.lastClickMillis > 0) {
-        const now = new Date();
-        const millis = now.getTime();
-
-        if (millis - this.lastClickMillis > this.trmrkMultiClickMillis) {
-          this.resetState();
-        }
-      }
+      this.mouseDownOrTouchStartCoords = data.mouseOrTouchCoords;
+      this.dragStartPosition = data.dragStartPosition;
 
       document.addEventListener('mousemove', this.touchOrMouseMove, {
         capture: true,
@@ -76,8 +74,8 @@ export class TrmrkMultiClick implements OnDestroy {
       document.addEventListener('touchend', this.touchEndOrMouseUp, {
         capture: true,
       });
-    } else {
-      this.resetState();
+
+      this.trmrkDragStart.emit(data.mouseOrTouchCoords!);
     }
   }
 
@@ -86,33 +84,34 @@ export class TrmrkMultiClick implements OnDestroy {
 
     if (!data.isValid) {
       this.reset();
+    } else {
+      this.trmrkDrag.emit(this.getTrmrkDragEvent(data));
     }
   }
 
   private touchEndOrMouseUp(event: TouchEvent | MouseEvent) {
     const data = this.getEventData(event);
 
-    if (data.isValid) {
-      this.clicksCount++;
+    this.trmrkDragEnd.emit(this.getTrmrkDragEvent(data));
 
-      if (this.clicksCount >= this.trmrkMultiClicksCount) {
-        this.resetState();
-        this.trmrkMultiClick.emit(data.mouseOrTouchCoords!);
-      }
-
-      this.removeEventListeners();
-    } else {
-      this.reset();
-    }
+    this.reset();
   }
 
   private getEventData(event: TouchEvent | MouseEvent) {
-    const data: TrmrkLongPressOrRightClickEventData = {
-      elem: this.el.nativeElement,
+    const elem = this.el.nativeElement;
+
+    const data: TrmrkDragEventData = {
+      elem,
       event,
       mouseOrTouchCoords: getSingleTouchOrClick(event),
       composedPath: null,
       isValid: false,
+      dragStartPosition: {
+        clientTop: elem.clientTop,
+        clientLeft: elem.clientLeft,
+        offsetTop: elem.offsetTop,
+        offsetLeft: elem.offsetLeft,
+      },
     };
 
     data.isValid = !!(data.elem && data.mouseOrTouchCoords);
@@ -122,26 +121,23 @@ export class TrmrkMultiClick implements OnDestroy {
       data.isValid = (mouseButton ?? -1) <= MouseButton.Left;
     }
 
-    if (data.isValid) {
-      data.composedPath = event.composedPath();
-      const target = event.target;
-      data.isValid = !!(target && data.composedPath.indexOf(data.elem) >= 0);
-    }
-
     return data;
   }
 
+  private getTrmrkDragEvent(data: TrmrkLongPressOrRightClickEventData) {
+    const event: TrmrkDragEvent = {
+      touchStartOrMouseDownCoords: this.mouseDownOrTouchStartCoords!,
+      touchOrMouseMoveCoords: data.mouseOrTouchCoords!,
+      dragStartPosition: this.dragStartPosition!,
+    };
+
+    return event;
+  }
+
   private reset() {
-    this.resetState();
-    this.removeEventListeners();
-  }
+    this.mouseDownOrTouchStartCoords = null;
+    this.dragStartPosition = null;
 
-  private resetState() {
-    this.lastClickMillis = 0;
-    this.clicksCount = 0;
-  }
-
-  private removeEventListeners() {
     document.removeEventListener('mousemove', this.touchOrMouseMove, {
       capture: true,
     });

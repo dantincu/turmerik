@@ -97,5 +97,9 @@
 
 <div [innerHTML]="nonBreakingText"></div>
 <div [ngStyle]="{height: '100px', position: 'relative'}">
-  <div class="trmrk-vert-resize-strip"></div>
+  <div
+    class="trmrk-vert-resize-strip"
+    #draggableStrip
+    (trmrkDrag)="onDrag($event)"
+  ></div>
 </div>
