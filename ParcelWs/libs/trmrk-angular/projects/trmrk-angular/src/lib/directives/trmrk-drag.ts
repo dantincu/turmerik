@@ -13,26 +13,29 @@ import {
   getSingleTouchOrClick,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkLongPressOrRightClickEventData } from './interfaces';
+import {
+  TrmrkLongPressOrRightClickEventData,
+  TrmrkDragEvent,
+  TrmrkDragEventData,
+  TrmrkDragStartPosition,
+} from './interfaces';
 
 @Directive({
-  selector: '[trmrkLongPressOrRightClick]',
+  selector: '[trmrkDrag]',
 })
-export class TrmrkLongPressOrRightClick implements OnDestroy {
-  @Input() trmrkLongPressMillis: number = 400;
-  @Input() trmrkValidMouseOrTouchMoveMaxPx: number = 40;
-  @Output() trmrkLongPressOrRightClick = new EventEmitter<TouchOrMouseCoords>();
-  @Output() trmrkShortPressOrLeftClick = new EventEmitter<TouchOrMouseCoords>();
+export class TrmrkDrag implements OnDestroy {
+  @Output() trmrkDrag = new EventEmitter<TrmrkDragEvent>();
+  @Output() trmrkDragStart = new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkDragEnd = new EventEmitter<TrmrkDragEvent>();
 
   private mouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
-  private longPressTimeout: NodeJS.Timeout | null = null;
+  private dragStartPosition: TrmrkDragStartPosition | null = null;
 
   constructor(private el: ElementRef<HTMLElement>) {
     const elem = el.nativeElement;
     this.touchStartOrMouseDown = this.touchStartOrMouseDown.bind(this);
     this.touchOrMouseMove = this.touchOrMouseMove.bind(this);
     this.touchEndOrMouseUp = this.touchEndOrMouseUp.bind(this);
-    this.longPressTimeoutElapsed = this.longPressTimeoutElapsed.bind(this);
     elem.addEventListener('mousedown', this.touchStartOrMouseDown);
     elem.addEventListener('touchstart', this.touchStartOrMouseDown);
   }
@@ -58,6 +61,8 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
         evt: null,
       };
 
+      this.dragStartPosition = data.dragStartPosition;
+
       document.addEventListener('mousemove', this.touchOrMouseMove, {
         capture: true,
       });
@@ -74,94 +79,68 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
         capture: true,
       });
 
-      if ((data.mouseOrTouchCoords!.mouseButton ?? -1) <= MouseButton.Left) {
-        this.longPressTimeout = setTimeout(
-          this.longPressTimeoutElapsed,
-          this.trmrkLongPressMillis
-        );
-      }
+      this.trmrkDragStart.emit(data.mouseOrTouchCoords!);
     }
   }
 
   private touchOrMouseMove(event: TouchEvent | MouseEvent) {
-    const data = this.getEventData(event, this.mouseDownOrTouchStartCoords);
+    const data = this.getEventData(event);
 
     if (!data.isValid) {
       this.reset();
+    } else {
+      this.trmrkDrag.emit(this.getTrmrkDragEvent(data));
     }
   }
 
   private touchEndOrMouseUp(event: TouchEvent | MouseEvent) {
-    const data = this.getEventData(event, this.mouseDownOrTouchStartCoords);
+    const data = this.getEventData(event);
 
-    if (data.isValid) {
-      const mouseButton = data.mouseOrTouchCoords!.mouseButton;
-      if ((mouseButton ?? -1) <= MouseButton.Left) {
-        this.trmrkShortPressOrLeftClick.emit(data.mouseOrTouchCoords!);
-      } else if (mouseButton === MouseButton.Right) {
-        this.trmrkLongPressOrRightClick.emit(data.mouseOrTouchCoords!);
-      }
-    }
+    this.trmrkDragEnd.emit(this.getTrmrkDragEvent(data));
 
     this.reset();
   }
 
-  private longPressTimeoutElapsed() {
-    this.trmrkLongPressOrRightClick.emit(this.mouseDownOrTouchStartCoords!);
-    this.reset();
-  }
+  private getEventData(event: TouchEvent | MouseEvent) {
+    const elem = this.el.nativeElement;
 
-  private getEventData(
-    event: TouchEvent | MouseEvent,
-    mouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null
-  ) {
-    const data: TrmrkLongPressOrRightClickEventData = {
-      elem: this.el.nativeElement,
+    const data: TrmrkDragEventData = {
+      elem,
       event,
       mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
       composedPath: null,
       isValid: false,
+      dragStartPosition: {
+        clientTop: elem.clientTop,
+        clientLeft: elem.clientLeft,
+        offsetTop: elem.offsetTop,
+        offsetLeft: elem.offsetLeft,
+      },
     };
 
     data.isValid = !!(data.elem && data.mouseOrTouchCoords);
 
     if (data.isValid) {
       const mouseButton = data.mouseOrTouchCoords!.mouseButton;
-
-      data.isValid =
-        (mouseButton ?? -1) <= MouseButton.Left ||
-        mouseButton === MouseButton.Right;
-    }
-
-    if (data.isValid) {
-      data.composedPath = event.composedPath();
-      const target = event.target;
-      data.isValid = !!(
-        target && data.composedPath.indexOf(data.elem) >= MouseButton.Left
-      );
-    }
-
-    if (data.isValid && mouseDownOrTouchStartCoords) {
-      const diffX = Math.abs(
-        data.mouseOrTouchCoords!.screenX - mouseDownOrTouchStartCoords!.screenX
-      );
-
-      const diffY = Math.abs(
-        data.mouseOrTouchCoords!.screenY - mouseDownOrTouchStartCoords!.screenY
-      );
-
-      data.isValid =
-        Math.max(diffX, diffY) <= this.trmrkValidMouseOrTouchMoveMaxPx;
+      data.isValid = (mouseButton ?? -1) <= MouseButton.Left;
     }
 
     return data;
   }
 
+  private getTrmrkDragEvent(data: TrmrkLongPressOrRightClickEventData) {
+    const event: TrmrkDragEvent = {
+      touchStartOrMouseDownCoords: this.mouseDownOrTouchStartCoords!,
+      touchOrMouseMoveCoords: data.mouseOrTouchCoords!,
+      dragStartPosition: this.dragStartPosition!,
+    };
+
+    return event;
+  }
+
   private reset() {
-    if (this.longPressTimeout) {
-      clearTimeout(this.longPressTimeout);
-      this.longPressTimeout = null;
-    }
+    this.mouseDownOrTouchStartCoords = null;
+    this.dragStartPosition = null;
 
     document.removeEventListener('mousemove', this.touchOrMouseMove, {
       capture: true,

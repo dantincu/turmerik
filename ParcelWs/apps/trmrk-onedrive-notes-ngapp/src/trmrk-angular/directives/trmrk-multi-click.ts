@@ -24,7 +24,7 @@ export class TrmrkMultiClick implements OnDestroy {
   private lastClickMillis = 0;
 
   @Output() trmrkMultiClick = new EventEmitter<TouchOrMouseCoords>();
-  @Input() trmrkMultiClickMillis = 200;
+  @Input() trmrkMultiClickMillis = 400;
   @Input() trmrkMultiClicksCount = 5;
 
   constructor(private el: ElementRef<HTMLElement>) {
@@ -93,7 +93,11 @@ export class TrmrkMultiClick implements OnDestroy {
     const data = this.getEventData(event);
 
     if (data.isValid) {
+      const now = new Date();
+      const millis = now.getTime();
+
       this.clicksCount++;
+      this.lastClickMillis = millis;
 
       if (this.clicksCount >= this.trmrkMultiClicksCount) {
         this.resetState();

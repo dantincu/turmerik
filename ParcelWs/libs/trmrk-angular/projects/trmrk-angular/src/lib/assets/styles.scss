@@ -167,7 +167,9 @@ a[mat-icon-button].trmrk-icon-btn:link {
   height: 100%;
   position: absolute;
   right: 0px;
+  top: 0px;
   cursor: pointer;
+  user-select: none;
 }
 
 /*
@@ -191,8 +193,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
   .trmrk-vert-resize-strip {
     background: repeating-linear-gradient(
       45deg,
-      rgba(0, 0, 0, 0.2), /* Transparent stripe */
-      rgba(0, 0, 0, 0.2) 10px,
+      rgba(0, 0, 0, 0.3), /* Transparent stripe */
+      rgba(0, 0, 0, 0.3) 10px,
       rgba(255, 255, 255, 0) 10px, /* Fully transparent stripe */
       rgba(255, 255, 255, 0) 20px
     );
@@ -216,8 +218,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
   .trmrk-vert-resize-strip {
     background: repeating-linear-gradient(
       45deg,
-      rgba(255, 255, 255, 0.2), /* Transparent stripe */
-      rgba(255, 255, 255, 0.2) 10px,
+      rgba(255, 255, 255, 0.3), /* Transparent stripe */
+      rgba(255, 255, 255, 0.3) 10px,
       rgba(0, 0, 0, 0) 10px, /* Fully transparent stripe */
       rgba(0, 0, 0, 0) 20px
     );

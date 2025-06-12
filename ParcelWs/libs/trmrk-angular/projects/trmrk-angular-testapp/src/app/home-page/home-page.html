@@ -96,10 +96,50 @@
 </div>
 
 <div [innerHTML]="nonBreakingText"></div>
-<div [ngStyle]="{height: '100px', position: 'relative'}">
+<div [ngStyle]="{height: '150px', position: 'relative'}">
+  <div>
+    <label
+      (mousedown)="onLongPressMouseDownOrTouchStart1($event)"
+      (touchstart)="onLongPressMouseDownOrTouchStart1($event)"
+      (trmrkLongPressOrRightClick)="onLongPress1($event)"
+      (trmrkShortPressOrLeftClick)="onShortPress1($event)"
+      [trmrkLongPressPreventDefault]="false"
+      [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer'}"
+    >
+      Long Press</label
+    ><span>{{longPressUserMsg1}}</span>
+  </div>
+  <div>
+    <label
+      (mousedown)="onLongPressMouseDownOrTouchStart2($event)"
+      (touchstart)="onLongPressMouseDownOrTouchStart2($event)"
+      (trmrkLongPressOrRightClick)="onLongPress2($event)"
+      (trmrkShortPressOrLeftClick)="onShortPress2($event)"
+      [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer'}"
+    >
+      Long Press</label
+    ><span>{{longPressUserMsg2}}</span>
+  </div>
+  <div>
+    <button
+      mat-button
+      (mousedown)="onMultiClickMouseDownOrTouchStart($event)"
+      (touchstart)="onMultiClickMouseDownOrTouchStart($event)"
+      (trmrkMultiClick)="onMultiClick($event)"
+    >
+      Multi Press
+    </button>
+    <span>{{multiClickUserMsg}}</span>
+  </div>
+  <!--div
+    [ngStyle]="{backgroundColor: '#080', position: 'absolute', width: '40px', height: '40px', top: '0px', zIndex: 100000}"
+  >
+    a
+  </div-->
   <div
     class="trmrk-vert-resize-strip"
     #draggableStrip
     (trmrkDrag)="onDrag($event)"
+    [ngStyle]="{zIndex: 1000000}"
   ></div>
 </div>

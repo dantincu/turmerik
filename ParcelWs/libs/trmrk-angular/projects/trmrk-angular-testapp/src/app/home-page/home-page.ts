@@ -6,13 +6,13 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { encodeHtml } from '../../trmrk/text';
-import { TouchOrMouseMoveCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
-import { TrmrkDragEvent } from '../directives/interfaces';
-import { TrmrkDrag } from '../directives/trmrk-drag';
-import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
-import { TrmrkMultiClick } from '../directives/trmrk-multi-click';
+import { TrmrkDragEvent } from 'trmrk-angular';
+import { TrmrkDrag } from 'trmrk-angular';
+import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
+import { TrmrkMultiClick } from 'trmrk-angular';
 
 @Component({
   selector: 'app-home-page',
@@ -32,11 +32,6 @@ import { TrmrkMultiClick } from '../directives/trmrk-multi-click';
   styleUrl: './home-page.scss',
 })
 export class HomePage implements AfterViewInit {
-  nonBreakingText = encodeHtml(
-    'This is a    non-breaking &space example.<h5>asdfasdfasdf</h5>',
-    true
-  );
-
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
@@ -44,6 +39,15 @@ export class HomePage implements AfterViewInit {
 
   @ViewChild('draggableStrip', { read: ElementRef })
   draggableStrip!: ElementRef;
+
+  nonBreakingText = encodeHtml(
+    'This is a    non-breaking &space example.<h5>asdfasdfasdf</h5>',
+    true
+  );
+
+  longPressUserMsg1: string = '';
+  longPressUserMsg2: string = '';
+  multiClickUserMsg: string = '';
 
   constructor() {
     setTimeout(() => {
@@ -76,5 +80,45 @@ export class HomePage implements AfterViewInit {
         Math.min(newRightOffset, documentElWidth - draggableStripWidth),
         0
       ) + 'px';
+  }
+
+  onLongPressMouseDownOrTouchStart1(event: Event) {
+    console.log('onLongPressMouseDownOrTouchStart1', event);
+    this.longPressUserMsg1 = 'Mouse Down or Touch Start';
+  }
+
+  onLongPress1(event: TouchOrMouseCoords) {
+    console.log('onLongPress1', event);
+    this.longPressUserMsg1 = 'Long Press or right click';
+  }
+
+  onShortPress1(event: TouchOrMouseCoords) {
+    console.log('onShortPress1', event);
+    this.longPressUserMsg1 = 'Short Press';
+  }
+
+  onLongPressMouseDownOrTouchStart2(event: Event) {
+    console.log('onLongPressMouseDownOrTouchStart2', event);
+    this.longPressUserMsg2 = 'Mouse Down or Touch Start';
+  }
+
+  onLongPress2(event: TouchOrMouseCoords) {
+    console.log('onLongPress2', event);
+    this.longPressUserMsg2 = 'Long Press or right click';
+  }
+
+  onShortPress2(event: TouchOrMouseCoords) {
+    console.log('onShortPress2', event);
+    this.longPressUserMsg2 = 'Short Press';
+  }
+
+  onMultiClickMouseDownOrTouchStart(event: MouseEvent | TouchEvent) {
+    console.log('onMultiClick', event);
+    this.multiClickUserMsg = 'Mouse Down or Touch Start';
+  }
+
+  onMultiClick(event: TouchOrMouseCoords) {
+    console.log('onMultiClick', event);
+    this.multiClickUserMsg = 'Clicked 5 times';
   }
 }
