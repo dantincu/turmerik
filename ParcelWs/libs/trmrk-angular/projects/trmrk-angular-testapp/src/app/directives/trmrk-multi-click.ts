@@ -110,7 +110,7 @@ export class TrmrkMultiClick implements OnDestroy {
     const data: TrmrkLongPressOrRightClickEventData = {
       elem: this.el.nativeElement,
       event,
-      mouseOrTouchCoords: getSingleTouchOrClick(event),
+      mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
       composedPath: null,
       isValid: false,
     };

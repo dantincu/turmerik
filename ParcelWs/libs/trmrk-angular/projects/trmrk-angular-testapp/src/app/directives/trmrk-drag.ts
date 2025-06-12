@@ -56,7 +56,11 @@ export class TrmrkDrag implements OnDestroy {
     const data = this.getEventData(event);
 
     if (data.isValid) {
-      this.mouseDownOrTouchStartCoords = data.mouseOrTouchCoords;
+      this.mouseDownOrTouchStartCoords = {
+        ...data.mouseOrTouchCoords!,
+        evt: null,
+      };
+
       this.dragStartPosition = data.dragStartPosition;
 
       document.addEventListener('mousemove', this.touchOrMouseMove, {
@@ -103,7 +107,7 @@ export class TrmrkDrag implements OnDestroy {
     const data: TrmrkDragEventData = {
       elem,
       event,
-      mouseOrTouchCoords: getSingleTouchOrClick(event),
+      mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
       composedPath: null,
       isValid: false,
       dragStartPosition: {

@@ -53,7 +53,10 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
     const data = this.getEventData(event);
 
     if (data.isValid) {
-      this.mouseDownOrTouchStartCoords = data.mouseOrTouchCoords;
+      this.mouseDownOrTouchStartCoords = {
+        ...data.mouseOrTouchCoords!,
+        evt: null,
+      };
 
       document.addEventListener('mousemove', this.touchOrMouseMove, {
         capture: true,
@@ -115,7 +118,7 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
     const data: TrmrkLongPressOrRightClickEventData = {
       elem: this.el.nativeElement,
       event,
-      mouseOrTouchCoords: getSingleTouchOrClick(event),
+      mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
       composedPath: null,
       isValid: false,
     };

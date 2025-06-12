@@ -31,6 +31,7 @@ export enum MouseButton {
 }
 
 export interface TouchOrMouseCoords {
+  evt?: MouseEvent | TouchEvent | null | undefined;
   isMouseEvt?: boolean | null | undefined;
   mouseButton?: number | null | undefined;
   clientX: number;
@@ -114,7 +115,9 @@ export const isSingleTouchOrClick = (
 ) => !!coords && ((coords as TouchOrMouseCoords[]).length ?? 1) === 1;
 
 export const toSingleTouchOrClick = (
-  coords: TouchOrMouseCoords | TouchOrMouseCoords[] | null
+  coords: TouchOrMouseCoords | TouchOrMouseCoords[] | null,
+  ev: MouseEvent | TouchEvent,
+  skipEvtAssign: boolean = true
 ) => {
   let retObj: TouchOrMouseCoords | null = null;
   const coordsArr = coords as TouchOrMouseCoords[];
@@ -127,13 +130,23 @@ export const toSingleTouchOrClick = (
     }
   }
 
+  if (retObj && !skipEvtAssign) {
+    retObj.evt = ev;
+  }
+
   return retObj;
 };
 
 export const getSingleTouchOrClick = (
   ev: MouseEvent | TouchEvent,
-  requiredButton?: number | null | undefined
-) => toSingleTouchOrClick(getTouchOrMouseCoords(ev, requiredButton));
+  requiredButton?: number | null | undefined,
+  skipEvtAssign: boolean = true
+) =>
+  toSingleTouchOrClick(
+    getTouchOrMouseCoords(ev, requiredButton),
+    ev,
+    skipEvtAssign
+  );
 
 export const isTouchOrLeftMouseBtnClick = (coords: TouchOrMouseCoords) =>
   [MouseButton.Left, null].indexOf(coords.mouseButton ?? null) >=
