@@ -144,6 +144,14 @@
   ></div>
 </div>
 <trmrk-user-message
+  [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+  [trmrkShow]="showUserMsg2"
+  [trmrkLevel]="1"
+  (trmrkClose)="userMessageClose(2)"
+  [trmrkAutoCloseMillis]="0"
+></trmrk-user-message>
+
+<trmrk-user-message
   [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqweqrweqwe rqwerwqerqwerfqwerqwerqwerqwerqwerqwerqwerqwerqweqrwe qwerqwerwqerqwerfqwerqwerqwerqwerqwerqwerqwerqwerq weqrweqwerqwerwqerqwerfqwerqwerqwerqwerqwerqw erqwerqwerqweqrweqwerqwerwqerqwer'"
   [trmrkShow]="showUserMsg1"
   [trmrkLevel]="0"
@@ -151,13 +159,22 @@
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
-<trmrk-user-message
-  [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
-  [trmrkShow]="showUserMsg1"
-  [trmrkLevel]="0"
-  (trmrkClose)="userMessageClose(1)"
-  [trmrkAutoCloseMillis]="0"
-></trmrk-user-message>
+<div [ngStyle]="{display: 'flex'}">
+  <trmrk-user-message
+    [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+    [trmrkShow]="showUserMsg2"
+    [trmrkLevel]="1"
+    (trmrkClose)="userMessageClose(2)"
+    [trmrkAutoCloseMillis]="0"
+  ></trmrk-user-message>
+  <trmrk-user-message
+    [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
+    [trmrkShow]="showUserMsg1"
+    [trmrkLevel]="0"
+    (trmrkClose)="userMessageClose(1)"
+    [trmrkAutoCloseMillis]="0"
+  ></trmrk-user-message>
+</div>
 
 <trmrk-user-message
   [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
