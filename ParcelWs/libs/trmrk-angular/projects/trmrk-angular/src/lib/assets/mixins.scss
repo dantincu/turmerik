@@ -28,6 +28,8 @@
       var(--trmrk-scrollable-thumb_color_light),
       var(--trmrk-scrollable-track-hover_color_light),
       var(--trmrk-scrollable-thumb-hover_color_light));
+
+      scrollbar-color: var(--trmrk-scrollable-thumb_color_light) var(--trmrk-scrollable-track_color_light);
 }
 
 @mixin scrollableDark() {
@@ -43,9 +45,9 @@
 @mixin trmrk-wrap-content {
   flex-wrap: wrap;
   text-wrap: wrap;
-  word-break: keep-all;
+  word-break: break-all;
   white-space-collapse: collapse;
-  line-break: auto;
+  line-break: anywhere;
 }
 
 @mixin trmrk-no-wrap-anywhere {

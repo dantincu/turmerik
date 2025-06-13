@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wrap content</title>
+    <style>
+      .flex-container {
+        display: flex;
+        flex-direction: row;
+        max-width: 100vw;
+      }
+
+      .flex-item {
+        display: inline-flex;
+        flex-wrap: wrap;
+        text-wrap: wrap;
+        word-break: break-all;
+        white-space-collapse: collapse;
+        line-break: anywhere;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex-container">
+      <button class="flex-item" style="width: 200px; height: 30px">
+        asdfasdf</button
+      ><span class="flex-item">asdoiufyasdoi</span>
+      <span class="flex-item"
+        >asdoiufyasdoi
+        ufyasdioufyasoidufyaosidufyoiasudfyoiausdfyoiasudfyoiasudfyoiuasdfyoiasudfyoiuasdfyasoidufyasdoifuyasioudfyasdf</span
+      >
+    </div>
+  </body>
+</html>

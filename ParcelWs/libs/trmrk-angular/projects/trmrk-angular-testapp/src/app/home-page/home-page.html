@@ -143,3 +143,30 @@
     [ngStyle]="{zIndex: 1000000}"
   ></div>
 </div>
+<trmrk-user-message
+  [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqweqrweqwerqwerwqerqwer'"
+  [trmrkShow]="showUserMsg1"
+  [trmrkLevel]="0"
+  (trmrkClose)="userMessageClose(1)"
+></trmrk-user-message>
+
+<trmrk-user-message
+  [trmrkMessage]="'asdfasdfasdf'"
+  [trmrkShow]="showUserMsg2"
+  [trmrkLevel]="1"
+  (trmrkClose)="userMessageClose(2)"
+></trmrk-user-message>
+
+<trmrk-user-message
+  [trmrkMessage]="'asdfasdfasdf'"
+  [trmrkShow]="showUserMsg3"
+  [trmrkLevel]="2"
+  (trmrkClose)="userMessageClose(3)"
+></trmrk-user-message>
+
+<trmrk-user-message
+  [trmrkMessage]="'asdfasdfasdf'"
+  [trmrkShow]="showUserMsg4"
+  [trmrkLevel]="3"
+  (trmrkClose)="userMessageClose(4)"
+></trmrk-user-message>

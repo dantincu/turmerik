@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { TrmrkLoading } from 'trmrk-angular';
+import { TrmrkUserMessage } from 'trmrk-angular';
 
 import { jsonBool } from '../../trmrk/core';
 
@@ -18,16 +19,15 @@ import { jsonBool } from '../../trmrk/core';
     MatIconModule,
     CommonModule,
     MatButtonModule,
+    TrmrkUserMessage,
   ],
   templateUrl: './trmrk-reset-app.html',
   styleUrl: './trmrk-reset-app.scss',
 })
-export class TrmrkResetApp implements OnInit, OnDestroy {
+export class TrmrkResetApp implements OnDestroy {
   isResetting: boolean | null = null;
-  showSuccessMessage = false;
-  successMessageFadeOut = false;
+  showSuccessMessage = 0;
   private routeSub: Subscription;
-  private timeouts: NodeJS.Timeout[] = [];
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.routeSub = this.route.queryParamMap.subscribe((params) => {
@@ -57,44 +57,18 @@ export class TrmrkResetApp implements OnInit, OnDestroy {
           });
         }, 0);
       } else if (this.isResetting === false) {
-        this.showSuccessMessage = true;
-
-        this.timeouts.push(
-          setTimeout(() => {
-            this.successMessageFadeOut = true;
-            this.timeouts.push(
-              setTimeout(() => {
-                this.successMessageFadeOut = false;
-                this.router.navigate(['/reset-app']);
-              }, 1000)
-            );
-          }, 3000)
-        );
+        this.showSuccessMessage++;
       } else {
-        this.showSuccessMessage = false;
+        this.showSuccessMessage = 0;
       }
     });
   }
 
-  ngOnInit() {
-    this.successMessageFadeOut = false;
-  }
-
   ngOnDestroy() {
     this.routeSub.unsubscribe();
-    this.clearTimeouts();
   }
 
-  onSuccessUserMessageClick() {
-    this.clearTimeouts();
+  successMessageClose() {
     this.router.navigate(['/reset-app']);
-  }
-
-  clearTimeouts() {
-    for (let tmt of this.timeouts) {
-      clearTimeout(tmt);
-    }
-
-    this.timeouts.splice(0, this.timeouts.length);
   }
 }

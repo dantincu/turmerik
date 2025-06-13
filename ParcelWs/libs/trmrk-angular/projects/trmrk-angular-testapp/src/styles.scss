@@ -53,33 +53,6 @@ body {
   }
 }
 
-.trmrk-user-message {
-  position: fixed;
-  padding: 5px;
-  display: inline-flex;
-  flex-direction: row;
-  border-radius: 2px;
-  padding-top: 10px;
-
-  &.trmrk-fade {
-    animation: opacFadeOut 1s forwards;
-  }
-
-  [mat-icon-button].trmrk-icon-btn {
-    height: 30px;
-    width: 30px;
-    padding: 5px;
-    display: inline-flex;
-    order: 2;
-    margin-top: -5px;
-    margin-left: 5px;
-
-    mat-icon.trmrk-icon {
-      font-size: 16px;
-    }
-  }
-}
-
 /*
 * ------------ Colors ------------
 */
@@ -89,29 +62,11 @@ body {
     background-color: #d0e8ff;
     border-bottom: 1px solid #a0d0ff;
   }
-
-  .trmrk-user-message {
-    background-color: #80ff80;
-    border: 1px solid #40f040;
-
-    [mat-icon-button].trmrk-icon-btn {
-      background-color: #0002;
-    }
-  }
 }
 
 .trmrk-app-theme-dark {
   .trmrk-app-bar {
     background-color: #000820;
     border-bottom: 1px solid #001040;
-  }
-
-  .trmrk-user-message {
-    background-color: #002000;
-    border: 1px solid #004000;
-
-    [mat-icon-button].trmrk-icon-btn {
-      background-color: #FFF2;
-    }
   }
 }

@@ -4,9 +4,13 @@
 
 export * from './lib/trmrk-loading/trmrk-loading';
 export * from './lib/trmrk-dev-page/trmrk-dev-page';
-export * from './lib/trmrk-dev-page/routes';
 export * from './lib/trmrk-dev-page/indexed-db-browser/indexed-db-browser';
+export * from './lib/trmrk-user-message/trmrk-user-message';
+
+export * from './lib/trmrk-dev-page/routes';
+
 export * from './lib/services/TrmrkObservable';
+
 export * from './lib/directives/interfaces';
 export * from './lib/directives/trmrk-drag';
 export * from './lib/directives/trmrk-long-press-or-right-click';

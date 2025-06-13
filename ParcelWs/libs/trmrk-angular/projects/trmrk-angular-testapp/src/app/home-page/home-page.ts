@@ -5,14 +5,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
-import { encodeHtml } from '../../trmrk/text';
-import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
-
-import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 import { TrmrkDragEvent } from 'trmrk-angular';
 import { TrmrkDrag } from 'trmrk-angular';
 import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
 import { TrmrkMultiClick } from 'trmrk-angular';
+import { TrmrkUserMessage } from 'trmrk-angular';
+
+import { encodeHtml } from '../../trmrk/text';
+import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+
+import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
 @Component({
   selector: 'app-home-page',
@@ -27,6 +29,7 @@ import { TrmrkMultiClick } from 'trmrk-angular';
     TrmrkDrag,
     TrmrkLongPressOrRightClick,
     TrmrkMultiClick,
+    TrmrkUserMessage,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
@@ -48,6 +51,11 @@ export class HomePage implements AfterViewInit {
   longPressUserMsg1: string = '';
   longPressUserMsg2: string = '';
   multiClickUserMsg: string = '';
+
+  showUserMsg1 = 1;
+  showUserMsg2 = 1;
+  showUserMsg3 = 1;
+  showUserMsg4 = 1;
 
   constructor() {
     setTimeout(() => {
@@ -120,5 +128,24 @@ export class HomePage implements AfterViewInit {
   onMultiClick(event: TouchOrMouseCoords) {
     console.log('onMultiClick', event);
     this.multiClickUserMsg = 'Clicked 5 times';
+  }
+
+  userMessageClose(idx: number) {
+    setTimeout(() => {
+      switch (idx) {
+        case 1:
+          this.showUserMsg1++;
+          break;
+        case 2:
+          this.showUserMsg2++;
+          break;
+        case 3:
+          this.showUserMsg3++;
+          break;
+        case 4:
+          this.showUserMsg4++;
+          break;
+      }
+    }, 1000);
   }
 }
