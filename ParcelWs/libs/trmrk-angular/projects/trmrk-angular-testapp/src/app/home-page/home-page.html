@@ -145,15 +145,15 @@
 </div>
 <trmrk-user-message
   [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
-  [trmrkShow]="showUserMsg2"
+  [trmrkShow]="showUserMsg[0]"
   [trmrkLevel]="1"
-  (trmrkClose)="userMessageClose(2)"
+  (trmrkClose)="userMessageClose(0)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
 <trmrk-user-message
   [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqweqrweqwe rqwerwqerqwerfqwerqwerqwerqwerqwerqwerqwerqwerqweqrwe qwerqwerwqerqwerfqwerqwerqwerqwerqwerqwerqwerqwerq weqrweqwerqwerwqerqwerfqwerqwerqwerqwerqwerqw erqwerqwerqweqrweqwerqwerwqerqwer'"
-  [trmrkShow]="showUserMsg1"
+  [trmrkShow]="showUserMsg[1]"
   [trmrkLevel]="0"
   (trmrkClose)="userMessageClose(1)"
   [trmrkAutoCloseMillis]="0"
@@ -162,73 +162,73 @@
 <div [ngStyle]="{display: 'flex'}">
   <trmrk-user-message
     [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
-    [trmrkShow]="showUserMsg2"
+    [trmrkShow]="showUserMsg[2]"
     [trmrkLevel]="1"
     (trmrkClose)="userMessageClose(2)"
     [trmrkAutoCloseMillis]="0"
   ></trmrk-user-message>
   <trmrk-user-message
     [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
-    [trmrkShow]="showUserMsg1"
+    [trmrkShow]="showUserMsg[3]"
     [trmrkLevel]="0"
-    (trmrkClose)="userMessageClose(1)"
+    (trmrkClose)="userMessageClose(3)"
     [trmrkAutoCloseMillis]="0"
   ></trmrk-user-message>
 </div>
 
 <trmrk-user-message
   [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
-  [trmrkShow]="showUserMsg2"
+  [trmrkShow]="showUserMsg[4]"
   [trmrkLevel]="1"
-  (trmrkClose)="userMessageClose(2)"
+  (trmrkClose)="userMessageClose(4)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
 <trmrk-user-message
   [trmrkMessage]="'asdfasdfasdf qwerwqerqwer qwerwqerqwer'"
-  [trmrkShow]="showUserMsg3"
+  [trmrkShow]="showUserMsg[5]"
   [trmrkLevel]="2"
-  (trmrkClose)="userMessageClose(3)"
+  (trmrkClose)="userMessageClose(5)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
 <trmrk-user-message
   [trmrkMessage]="'failure'"
-  [trmrkShow]="showUserMsg4"
+  [trmrkShow]="showUserMsg[6]"
   [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(4)"
+  (trmrkClose)="userMessageClose(6)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
 <trmrk-user-message
   [trmrkMessage]="'fail'"
-  [trmrkShow]="showUserMsg4"
+  [trmrkShow]="showUserMsg[7]"
   [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(4)"
+  (trmrkClose)="userMessageClose(7)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
 <trmrk-user-message
   [trmrkMessage]="'fail more'"
-  [trmrkShow]="showUserMsg4"
+  [trmrkShow]="showUserMsg[8]"
   [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(4)"
+  (trmrkClose)="userMessageClose(8)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
 <trmrk-user-message
   [trmrkMessage]="'fail even more'"
-  [trmrkShow]="showUserMsg4"
+  [trmrkShow]="showUserMsg[9]"
   [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(4)"
+  (trmrkClose)="userMessageClose(9)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 
 <trmrk-user-message
   [trmrkMessage]="'fail even more than'"
-  [trmrkShow]="showUserMsg4"
+  [trmrkShow]="showUserMsg[10]"
   [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(4)"
+  (trmrkClose)="userMessageClose(10)"
   [trmrkAutoCloseMillis]="0"
 ></trmrk-user-message>
 

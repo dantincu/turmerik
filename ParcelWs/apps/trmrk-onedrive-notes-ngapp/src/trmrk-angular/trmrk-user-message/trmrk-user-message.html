@@ -2,8 +2,14 @@
   *ngIf="show"
   [ngClass]="['trmrk-user-message', msgLevelCssClass, messageFadeOut ? 'trmrk-fade' : '']"
 >
-  <button mat-icon-button class="trmrk-icon-btn" (click)="closeButtonClick()">
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn trmrk-close-icon-btn"
+    (click)="closeButtonClick()"
+  >
     <mat-icon class="trmrk-icon">close</mat-icon>
   </button>
-  <span class="trmrk-wrap-content">{{trmrkMessage}}</span>
+  <div class="trmrk-content">
+    <div class="trmrk-content-text trmrk-wrap-content">{{trmrkMessage}}</div>
+  </div>
 </div>

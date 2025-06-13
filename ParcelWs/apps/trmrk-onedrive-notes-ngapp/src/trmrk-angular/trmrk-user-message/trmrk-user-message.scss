@@ -1,5 +1,9 @@
 :host {
-  display: inline-flex;
+  display: inline-block;
   width: fit-content;
   height: fit-content;
+}
+
+.trmrk-close-icon-btn {
+  float: right;
 }

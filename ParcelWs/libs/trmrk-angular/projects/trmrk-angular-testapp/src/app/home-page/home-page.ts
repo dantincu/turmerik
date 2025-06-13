@@ -53,10 +53,7 @@ export class HomePage implements AfterViewInit {
   longPressUserMsg2: string = '';
   multiClickUserMsg: string = '';
 
-  showUserMsg1 = 1;
-  showUserMsg2 = 1;
-  showUserMsg3 = 1;
-  showUserMsg4 = 1;
+  showUserMsg = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
   constructor() {
     setTimeout(() => {
@@ -133,20 +130,7 @@ export class HomePage implements AfterViewInit {
 
   userMessageClose(idx: number) {
     setTimeout(() => {
-      switch (idx) {
-        case 1:
-          this.showUserMsg1++;
-          break;
-        case 2:
-          this.showUserMsg2++;
-          break;
-        case 3:
-          this.showUserMsg3++;
-          break;
-        case 4:
-          this.showUserMsg4++;
-          break;
-      }
+      this.showUserMsg[idx]++;
     }, 1000);
   }
 }
