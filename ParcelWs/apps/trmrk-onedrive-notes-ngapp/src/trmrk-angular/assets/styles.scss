@@ -13,13 +13,13 @@
   @include mixins.trmrk-no-wrap();
 }
 
-.trmrk-scrollable::-webkit-scrollbar {
+/* .trmrk-scrollable::-webkit-scrollbar {
   width: 15px;
 }
 
 .trmrk-scrollable::-webkit-scrollbar-thumb {
   cursor: grabbing;
-}
+} */
 
 .trmrk-scrollable-x {
   overflow-x: scroll;
@@ -291,7 +291,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
     }
   }
 
-  .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
     @include mixins.scrollableLight();
   }
 
@@ -342,7 +342,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
     }
   }
 
-  .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
     @include mixins.scrollableDark();
   }
 

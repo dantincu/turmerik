@@ -5,14 +5,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
-import { TrmrkDragEvent } from 'trmrk-angular';
-import { TrmrkDrag } from 'trmrk-angular';
+import { TrmrkDrag, TrmrkDragEvent } from 'trmrk-angular';
 import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
 import { TrmrkMultiClick } from 'trmrk-angular';
 import { TrmrkUserMessage } from 'trmrk-angular';
 /* import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message'; */
 
 import { encodeHtml } from '../../trmrk/text';
+import { UserMessageLevel } from '../../trmrk/core';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
@@ -54,6 +54,10 @@ export class HomePage implements AfterViewInit {
   multiClickUserMsg: string = '';
 
   showUserMsg = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+  mainUserMessageStr = '';
+  showMainUserMessage = 0;
+  mainUserMessageLevel = UserMessageLevel.Info;
 
   constructor() {
     setTimeout(() => {
@@ -129,6 +133,18 @@ export class HomePage implements AfterViewInit {
   }
 
   userMessageClose(idx: number) {
+    setTimeout(() => {
+      const msgElCollection =
+        document.getElementsByTagName('trmrk-user-message');
+      const msgEl = msgElCollection[idx];
+
+      this.mainUserMessageStr = `Message box with index ${idx} closed and now it has
+        clientHeight ${msgEl.clientHeight} and clientWidth ${msgEl.clientWidth}`;
+
+      this.showMainUserMessage++;
+      this.mainUserMessageLevel = UserMessageLevel.Info;
+    }, 0);
+
     setTimeout(() => {
       this.showUserMsg[idx]++;
     }, 1000);

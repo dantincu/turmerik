@@ -23,21 +23,21 @@
 }
 
 @mixin scrollableLight() {
-  @include scrollable(
+  /* @include scrollable(
       var(--trmrk-scrollable-track_color_light),
       var(--trmrk-scrollable-thumb_color_light),
       var(--trmrk-scrollable-track-hover_color_light),
-      var(--trmrk-scrollable-thumb-hover_color_light));
+      var(--trmrk-scrollable-thumb-hover_color_light)); */
 
-      scrollbar-color: var(--trmrk-scrollable-thumb_color_light) var(--trmrk-scrollable-track_color_light);
+  scrollbar-color: var(--trmrk-scrollable-thumb_color_light) var(--trmrk-scrollable-track_color_light);
 }
 
 @mixin scrollableDark() {
-  @include scrollable(
+  /* @include scrollable(
       var(--trmrk-scrollable-track_color_dark),
       var(--trmrk-scrollable-thumb_color_dark),
       var(--trmrk-scrollable-track-hover_color_dark),
-      var(--trmrk-scrollable-thumb-hover_color_dark));
+      var(--trmrk-scrollable-thumb-hover_color_dark)); */
 
   scrollbar-color: var(--trmrk-scrollable-thumb_color_dark) var(--trmrk-scrollable-track_color_dark);
 }
