@@ -179,25 +179,30 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-user-message {
   padding: 5px;
-  display: inline-flex;
+  display: inline-block;
   flex-direction: row;
   border-radius: 2px;
-  padding: 5px;
   max-width: 100vw;
 
   &.trmrk-fade {
     animation: opacFadeOut 1s forwards;
   }
 
+  .trmrk-content-text {
+  }
+
   [mat-icon-button].trmrk-icon-btn {
     height: 30px;
     width: 30px;
     padding: 5px;
-    display: inline-flex;
-    margin-right: 5px;
+    display: inline-block;
+    margin-left: 5px;
+    z-index: 1;
 
     mat-icon.trmrk-icon {
       font-size: 16px;
+      position: relative;
+      top: -4px;
     }
   }
 }

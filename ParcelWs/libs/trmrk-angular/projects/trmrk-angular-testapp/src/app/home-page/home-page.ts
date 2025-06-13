@@ -10,6 +10,7 @@ import { TrmrkDrag } from 'trmrk-angular';
 import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
 import { TrmrkMultiClick } from 'trmrk-angular';
 import { TrmrkUserMessage } from 'trmrk-angular';
+/* import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message'; */
 
 import { encodeHtml } from '../../trmrk/text';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
