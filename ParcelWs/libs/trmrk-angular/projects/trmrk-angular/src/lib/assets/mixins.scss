@@ -45,7 +45,7 @@
 @mixin trmrk-wrap-content {
   flex-wrap: wrap;
   text-wrap: wrap;
-  word-break: keep-all;
+  word-break: normal;
   white-space-collapse: collapse;
   line-break: loose;
 }
