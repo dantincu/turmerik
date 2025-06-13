@@ -31,7 +31,7 @@ export class Singleton<T> {
   get value() {
     if (!this._initialized) {
       throw new Error(
-        "Singleton must be registered before its value can be used"
+        'Singleton must be registered before its value can be used'
       );
     }
 
@@ -41,7 +41,7 @@ export class Singleton<T> {
   register(value: T) {
     if (this._initialized) {
       throw new Error(
-        "Singleton has already been registered and cannot be registered twice"
+        'Singleton has already been registered and cannot be registered twice'
       );
     }
 
@@ -132,3 +132,10 @@ export const asNumber = (
 ): number => (isNaN(val ?? NaN) ? dfVal : val) as number;
 
 export const nullify = <T>(val: T | null | undefined) => (val ? val : null);
+
+export enum UserMessageLevel {
+  Success = 0,
+  Info,
+  Warn,
+  Error,
+}

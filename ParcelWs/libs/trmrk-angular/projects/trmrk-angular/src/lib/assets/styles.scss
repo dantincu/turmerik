@@ -68,10 +68,6 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
-.trmrk-btn {
-  cursor: pointer;
-}
-
 .trmrk-app-panel {
   &.trmrk-height-diff-x0 {
     height: calc(100vh - 50px);
@@ -206,12 +202,62 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
+.trmrk-btn-filled-primary,
+.trmrk-btn-filled-secondary,
+.trmrk-btn-filled-accept,
+.trmrk-btn-filled-reject {
+  height: 40px;
+}
 /*
 * ------------ Colors ------------
 */
 
 .trmrk-error-text {
   color: #F20;
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-btn.trmrk-btn-filled-primary,
+  .trmrk-btn.trmrk-btn-filled-secondary,
+  .trmrk-btn.trmrk-btn-filled-accept,
+  .trmrk-btn.trmrk-btn-filled-reject) {
+  color: #FFF;
+}
+
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-icon-btn-filled-primary,
+    .trmrk-icon-btn-filled-secondary,
+    .trmrk-icon-btn-filled-accept,
+    .trmrk-icon-btn-filled-reject) {
+  color: #FFF;
+
+  &[mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #FFF;
+    }
+  }
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark) {
+  .trmrk-icon-btn-filled-primary, .trmrk-btn-filled-primary {
+    background-color: #00F;
+  }
+
+  .trmrk-icon-btn-filled-secondary, .trmrk-btn-filled-secondary {
+    background-color: #444;
+  }
+
+  .trmrk-icon-btn-filled-accept, .trmrk-btn-filled-accept {
+    background-color: #090;
+  }
+
+  .trmrk-icon-btn-filled-reject, .trmrk-btn-filled-reject {
+    background-color: #F20;
+  }
 }
 
 .trmrk-app-theme-light {
