@@ -95,7 +95,7 @@
   </div>
 </div>
 
-<div [innerHTML]="nonBreakingText"></div>
+<div [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote"></div>
 <div [ngStyle]="{height: '150px', position: 'relative'}">
   <div>
     <label
@@ -159,6 +159,7 @@
   (trmrkClose)="userMessageClose(1)"
   [trmrkAutoCloseMillis]="0"
   [trmrkArrowPlacement]="1"
+  [trmrkBreakWords]="true"
 ></trmrk-user-message>
 
 <div [ngStyle]="{display: 'flex'}">
@@ -177,7 +178,6 @@
     (trmrkClose)="userMessageClose(3)"
     [trmrkAutoCloseMillis]="0"
     [trmrkArrowPlacement]="3"
-    [trmrkBreakWords]="false"
   ></trmrk-user-message>
 </div>
 
@@ -286,17 +286,20 @@
   [trmrkShow]="showMainUserMessage"
   [trmrkLevel]="mainUserMessageLevel"
   [ngStyle]="{position: 'fixed', bottom: '0px', zIndex: '2', maxWidth: '100vw'}"
-  [trmrkBreakWords]="false"
   class="trmrk-main-user-message"
 ></trmrk-user-message>
 
 <button matButton="filled">asdfasdf</button>
 <button
   matButton="filled"
-  [ngStyle]="{minWidth: '40px', width: '40px', padding: '0 0 0 15px'}"
+  [ngStyle]="{minWidth: '40px', width: '40px', padding: '0 0 0 12px'}"
 >
-  <mat-icon class="trmrk-icon">open_with</mat-icon>
+  <mat-icon
+    class="trmrk-icon"
+    [ngStyle]="{width: '40px', height: '32px', fontSize: '32px'}"
+    >open_with</mat-icon
+  >
 </button>
-<button mat-icon-button>
+<button mat-icon-button class="trmrk-icon-btn">
   <mat-icon class="trmrk-icon">open_with</mat-icon>
 </button>

@@ -45,6 +45,7 @@ export class HomePage implements AfterViewInit {
   @ViewChild('draggableStrip', { read: ElementRef })
   draggableStrip!: ElementRef;
 
+  quote = '"';
   nonBreakingText = encodeHtml(
     'This is a    non-breaking &space example.<h5>asdfasdfasdf</h5>',
     true

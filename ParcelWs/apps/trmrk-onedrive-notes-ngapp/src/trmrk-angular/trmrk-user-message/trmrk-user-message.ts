@@ -30,7 +30,7 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   @Input() trmrkLevel!: UserMessageLevel;
   @Input() trmrkArrowPlacement = Placement.None;
   @Input() trmrkMsgWordBreakCharsCount = 30;
-  @Input() trmrkBreakWords = true;
+  @Input() trmrkBreakWords = false;
 
   messageFadeOut = false;
   show = false;
