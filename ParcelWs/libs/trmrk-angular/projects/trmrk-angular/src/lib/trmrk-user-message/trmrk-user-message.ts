@@ -28,10 +28,15 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   @Input() trmrkShow = 0;
   @Input() trmrkMessage!: string;
   @Input() trmrkLevel!: UserMessageLevel;
-  @Input() trmrkArrowPlacement = Placement.None;
   @Input() trmrkMsgWordBreakCharsCount = 30;
   @Input() trmrkBreakWords = false;
-
+  @Input() trmrkArrowPlacement = Placement.None;
+  @Input() trmrkArrowStyle:
+    | {
+        [klass: string]: any;
+      }
+    | null
+    | undefined = null;
   messageFadeOut = false;
   show = false;
 

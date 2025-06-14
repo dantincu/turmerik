@@ -36,24 +36,24 @@
 
   &.trmrk-placement-top {
     top: -10px;
-    left: calc(50% - 10px);
+    left: calc(50% - 5px);
   }
 
   &.trmrk-placement-right {
     right: -15px;
-    top: calc(50% - 10px);
+    top: calc(50% - 5px);
     transform: rotate(90deg);
   }
 
   &.trmrk-placement-bottom {
     bottom: -10px;
-    left: calc(50% - 10px);
+    left: calc(50% - 5px);
     transform: rotate(180deg);
   }
 
   &.trmrk-placement-left {
     left: -15px;
-    top: calc(50% - 10px);
+    top: calc(50% - 5px);
     transform: rotate(270deg);
   }
 }
