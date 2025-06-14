@@ -12,10 +12,9 @@
   </h1>
 </div>
 
-<lib-trmrk-loading
-  class="trmrk-loading"
-  *ngIf="isResetting"
-></lib-trmrk-loading>
+@if (isResetting) {
+<lib-trmrk-loading class="trmrk-loading"></lib-trmrk-loading>
+}
 <trmrk-user-message
   class="trmrk-app-reset-success-message"
   [trmrkMessage]="'The app has been reset'"

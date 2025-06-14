@@ -13,7 +13,7 @@ import {
   getSingleTouchOrClick,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkLongPressOrRightClickEventData } from './interfaces';
+import { TrmrkLongPressOrRightClickEventData } from './types';
 
 @Directive({
   selector: '[trmrkLongPressOrRightClick]',

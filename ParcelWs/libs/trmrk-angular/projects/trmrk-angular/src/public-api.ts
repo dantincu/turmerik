@@ -10,8 +10,9 @@ export * from './lib/trmrk-user-message/trmrk-user-message';
 export * from './lib/trmrk-dev-page/routes';
 
 export * from './lib/services/TrmrkObservable';
+export * from './lib/services/types';
 
-export * from './lib/directives/interfaces';
+export * from './lib/directives/types';
 export * from './lib/directives/trmrk-drag';
 export * from './lib/directives/trmrk-long-press-or-right-click';
 export * from './lib/directives/trmrk-multi-click';

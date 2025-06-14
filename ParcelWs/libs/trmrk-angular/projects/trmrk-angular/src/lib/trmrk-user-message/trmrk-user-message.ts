@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { UserMessageLevel } from '../../trmrk/core';
 
+import { Placement } from '../services/types';
+
 @Component({
   selector: 'trmrk-user-message',
   imports: [CommonModule, MatIconModule, MatButtonModule],
@@ -26,6 +28,7 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   @Input() trmrkShow = 0;
   @Input() trmrkMessage!: string;
   @Input() trmrkLevel!: UserMessageLevel;
+  @Input() trmrkArrowPlacement = Placement.None;
 
   messageFadeOut = false;
   show = false;
@@ -52,6 +55,33 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
         break;
       default:
         throw new Error(`Invalid user message level: ${this.trmrkLevel}`);
+    }
+
+    return cssClass;
+  }
+
+  get arrowCssClass() {
+    let cssClass: string;
+
+    switch (this.trmrkArrowPlacement) {
+      case Placement.None:
+        cssClass = '';
+        break;
+      case Placement.Top:
+        cssClass = 'trmrk-placement-top';
+        break;
+      case Placement.Right:
+        cssClass = 'trmrk-placement-right';
+        break;
+      case Placement.Bottom:
+        cssClass = 'trmrk-placement-bottom';
+        break;
+      case Placement.Left:
+        cssClass = 'trmrk-placement-left';
+        break;
+      default:
+        cssClass = '';
+        break;
     }
 
     return cssClass;

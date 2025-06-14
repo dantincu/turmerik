@@ -271,23 +271,67 @@ a[mat-icon-button].trmrk-icon-btn:link {
     }
 
     &.trmrk-success {
-      background-color: #40f040;
-      border: 1px solid #10d010;
+      background-color: var(--trmrk-user-message-success_back-color_light);
+      border: 1px solid var(--trmrk-user-message-success_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-success_back-color_light);
+          fill: var(--trmrk-user-message-success_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-success_border-color_light);
+        }
+      }
     }
 
     &.trmrk-info {
-      background-color: #a0c0f0;
-      border: 1px solid #80a0e0;
+      background-color: var(--trmrk-user-message-info_back-color_light);
+      border: 1px solid var(--trmrk-user-message-info_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-info_back-color_light);
+          fill: var(--trmrk-user-message-info_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-info_border-color_light);
+        }
+      }
     }
 
     &.trmrk-warn {
-      background-color: #f0f080;
-      border: 1px solid #d0d060;
+      background-color: var(--trmrk-user-message-warn_back-color_light);
+      border: 1px solid var(--trmrk-user-message-warn_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-warn_back-color_light);
+          fill: var(--trmrk-user-message-warn_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-warn_border-color_light);
+        }
+      }
     }
 
     &.trmrk-error {
-      background-color: #f0a0a0;
-      border: 1px solid #d07070;
+      background-color: var(--trmrk-user-message-error_back-color_light);
+      border: 1px solid var(--trmrk-user-message-error_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-error_back-color_light);
+          fill: var(--trmrk-user-message-error_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-error_border-color_light);
+        }
+      }
     }
   }
 
@@ -322,23 +366,67 @@ a[mat-icon-button].trmrk-icon-btn:link {
     }
 
     &.trmrk-success {
-      background-color: #002000;
-      border: 1px solid #004000;
+      background-color: var(--trmrk-user-message-success_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-success_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-success_back-color_dark);
+          fill: var(--trmrk-user-message-success_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-success_border-color_dark);
+        }
+      }
     }
 
     &.trmrk-info {
-      background-color: #000030;
-      border: 1px solid #000060;
+      background-color: var(--trmrk-user-message-info_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-info_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-info_back-color_dark);
+          fill: var(--trmrk-user-message-info_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-info_border-color_dark);
+        }
+      }
     }
 
     &.trmrk-warn {
-      background-color: #808000;
-      border: 1px solid #a0a000;
+      background-color: var(--trmrk-user-message-warn_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-warn_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-warn_back-color_dark);
+          fill: var(--trmrk-user-message-warn_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-warn_border-color_dark);
+        }
+      }
     }
 
     &.trmrk-error {
-      background-color: #600000;
-      border: 1px solid #a00000;
+      background-color: var(--trmrk-user-message-error_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-error_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-error_back-color_dark);
+          fill: var(--trmrk-user-message-error_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-error_border-color_dark);
+        }
+      }
     }
   }
 

@@ -1,5 +1,5 @@
+@if (show) {
 <div
-  *ngIf="show"
   [ngClass]="['trmrk-user-message', msgLevelCssClass, messageFadeOut ? 'trmrk-fade' : '']"
 >
   <button
@@ -12,4 +12,16 @@
   <div class="trmrk-content">
     <div class="trmrk-content-text trmrk-wrap-content">{{trmrkMessage}}</div>
   </div>
+  @if (arrowCssClass) {
+  <svg [ngClass]="['trmrk-arrow', arrowCssClass]" viewBox="0 0 20 10">
+    <path class="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />
+    <path
+      class="trmrk-arrow-border"
+      strokeWidth="1"
+      d="M 0 10 L 10 0 L 20 10"
+      fill="none"
+    />
+  </svg>
+  }
 </div>
+}

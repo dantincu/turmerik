@@ -1,0 +1,18 @@
+:root {
+  --trmrk-user-message-success_back-color_light: #880;
+  --trmrk-user-message-success_border-color_light: #f00;
+}
+
+.trmrk-container {
+  width: 12px;
+  height: 6px;
+}
+
+.trmrk-arrow-body {
+  stroke: var(--trmrk-user-message-success_back-color_light);
+  fill: var(--trmrk-user-message-success_back-color_light);
+}
+
+.trmrk-arrow-border {
+  stroke: var(--trmrk-user-message-success_border-color_light);
+}

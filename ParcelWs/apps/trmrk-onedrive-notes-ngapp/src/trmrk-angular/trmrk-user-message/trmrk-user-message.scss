@@ -4,6 +4,40 @@
   height: fit-content;
 }
 
+.trmrk-user-message {
+  position: relative;
+}
+
 .trmrk-close-icon-btn {
   float: right;
+}
+
+.trmrk-arrow {
+  z-index: 1;
+  position: absolute;
+  width: 20px;
+  height: 10px;
+
+  &.trmrk-placement-top {
+    top: -10px;
+    left: calc(50% - 10px);
+  }
+
+  &.trmrk-placement-right {
+    right: -15px;
+    top: calc(50% - 10px);
+    transform: rotate(90deg);
+  }
+
+  &.trmrk-placement-bottom {
+    bottom: -10px;
+    left: calc(50% - 10px);
+    transform: rotate(180deg);
+  }
+
+  &.trmrk-placement-left {
+    left: -15px;
+    top: calc(50% - 10px);
+    transform: rotate(270deg);
+  }
 }

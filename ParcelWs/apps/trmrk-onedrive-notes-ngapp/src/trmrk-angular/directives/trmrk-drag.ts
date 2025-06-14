@@ -18,7 +18,7 @@ import {
   TrmrkDragEvent,
   TrmrkDragEventData,
   TrmrkDragStartPosition,
-} from './interfaces';
+} from './types';
 
 @Directive({
   selector: '[trmrkDrag]',
