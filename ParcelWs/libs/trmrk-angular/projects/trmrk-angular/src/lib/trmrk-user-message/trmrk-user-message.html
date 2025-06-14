@@ -13,8 +13,10 @@
     <div
       [ngClass]="['trmrk-content-text trmrk-wrap-content', trmrkBreakWords ? 'trmrk-break-words' : '']"
     >
-      @for (msgPart of messageParts; track $index) {
+      @if (trmrkBreakWords) { @for (msgPart of messageParts; track $index) {
       <span class="trmrk-text-part">{{msgPart}}</span>
+      } } @else {
+      <span class="trmrk-text-part">{{trmrkMessage}}</span>
       }
     </div>
   </div>
