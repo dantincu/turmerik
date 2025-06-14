@@ -10,7 +10,13 @@
     <mat-icon class="trmrk-icon">close</mat-icon>
   </button>
   <div class="trmrk-content">
-    <div class="trmrk-content-text trmrk-wrap-content">{{trmrkMessage}}</div>
+    <div
+      [ngClass]="['trmrk-content-text trmrk-wrap-content', trmrkBreakWords ? 'trmrk-break-words' : '']"
+    >
+      @for (msgPart of messageParts; track $index) {
+      <span class="trmrk-text-part">{{msgPart}}</span>
+      }
+    </div>
   </div>
   @if (arrowCssClass) {
   <svg [ngClass]="['trmrk-arrow', arrowCssClass]" viewBox="0 0 20 10">

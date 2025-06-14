@@ -153,7 +153,7 @@
 ></trmrk-user-message>
 
 <trmrk-user-message
-  [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqweqrweqwe rqwerwqerqwerfqwerqwerqwerqwerqwerqwerqwerqwerqweqrwe qwerqwerwqerqwerfqwerqwerqwerqwerqwerqwerqwerqwerq weqrweqwerqwerwqerqwerfqwerqwerqwerqwerqwerqw erqwerqwerqweqrweqwerqwerwqerqwer'"
+  [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqwrqwerwqerqwerfqwerqwerqwerqwerqwer qwerqwerwqerqwerfqwerqwerqwerqwer weqrweqwerqwerwqerqwerfqwerqwerq erqwerqwerqweqrweqwerqwerwqerqwer'"
   [trmrkShow]="showUserMsg[1]"
   [trmrkLevel]="0"
   (trmrkClose)="userMessageClose(1)"
@@ -177,6 +177,7 @@
     (trmrkClose)="userMessageClose(3)"
     [trmrkAutoCloseMillis]="0"
     [trmrkArrowPlacement]="3"
+    [trmrkBreakWords]="false"
   ></trmrk-user-message>
 </div>
 
@@ -284,5 +285,17 @@
   [trmrkMessage]="mainUserMessageStr"
   [trmrkShow]="showMainUserMessage"
   [trmrkLevel]="mainUserMessageLevel"
-  [ngStyle]="{position: 'fixed', bottom: '0px', zIndex: '1', maxWidth: '100vw'}"
+  [ngStyle]="{position: 'fixed', bottom: '0px', zIndex: '2', maxWidth: '100vw'}"
+  class="trmrk-main-user-message"
 ></trmrk-user-message>
+
+<button matButton="filled">asdfasdf</button>
+<button
+  matButton="filled"
+  [ngStyle]="{minWidth: '40px', width: '40px', padding: '0 0 0 15px'}"
+>
+  <mat-icon class="trmrk-icon">open_with</mat-icon>
+</button>
+<button mat-icon-button>
+  <mat-icon class="trmrk-icon">open_with</mat-icon>
+</button>

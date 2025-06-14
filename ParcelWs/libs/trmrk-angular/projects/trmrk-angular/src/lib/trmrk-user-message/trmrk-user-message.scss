@@ -8,6 +8,22 @@
   position: relative;
 }
 
+.trmrk-content-text {
+  display: flex;
+  margin: 5px;
+  margin-right: 40px;
+}
+
+.trmrk-text-part {
+  line-break: loose;
+}
+
+.trmrk-break-words {
+  .trmrk-text-part {
+    line-break: anywhere;
+  }
+}
+
 .trmrk-close-icon-btn {
   float: right;
 }

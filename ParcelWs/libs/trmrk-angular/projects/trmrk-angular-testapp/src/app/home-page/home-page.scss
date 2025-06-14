@@ -2,3 +2,11 @@ trmrk-user-message {
   margin: 10px;
   max-width: calc(100vw - 40px);
 }
+
+.trmrk-main-user-message {
+  max-width: calc(100vw - 40px);
+  position: fixed;
+  bottom: 0px;
+  z-index: 1;
+  margin: 0px;
+}

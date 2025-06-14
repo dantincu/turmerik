@@ -47,7 +47,7 @@
   text-wrap: wrap;
   word-break: normal;
   white-space-collapse: collapse;
-  line-break: loose;
+  line-break: anywhere;
 }
 
 @mixin trmrk-no-wrap-anywhere {

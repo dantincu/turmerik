@@ -29,6 +29,8 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   @Input() trmrkMessage!: string;
   @Input() trmrkLevel!: UserMessageLevel;
   @Input() trmrkArrowPlacement = Placement.None;
+  @Input() trmrkMsgWordBreakCharsCount = 30;
+  @Input() trmrkBreakWords = true;
 
   messageFadeOut = false;
   show = false;
@@ -36,6 +38,24 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   private timeouts: NodeJS.Timeout[] = [];
 
   constructor() {}
+
+  get messageParts() {
+    const msgPartsCount = Math.ceil(
+      this.trmrkMessage.length / this.trmrkMsgWordBreakCharsCount
+    );
+
+    const msgPartsIterable = Array.from({ length: msgPartsCount }, (_, i) => {
+      const part = this.trmrkMessage.substring(
+        i * this.trmrkMsgWordBreakCharsCount,
+        i * this.trmrkMsgWordBreakCharsCount + this.trmrkMsgWordBreakCharsCount
+      );
+
+      return part;
+    });
+
+    const msgParts = [...msgPartsIterable];
+    return msgParts;
+  }
 
   get msgLevelCssClass() {
     let cssClass: string;

@@ -182,6 +182,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   display: inline-block;
   flex-direction: row;
   border-radius: 2px;
+  max-width: 100vw;
 
   &.trmrk-fade {
     animation: opacFadeOut 1s forwards;
