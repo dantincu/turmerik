@@ -37,30 +37,14 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
       }
     | null
     | undefined = null;
+
   messageFadeOut = false;
   show = false;
+  messageParts: string[] = [];
 
   private timeouts: NodeJS.Timeout[] = [];
 
   constructor() {}
-
-  get messageParts() {
-    const msgPartsCount = Math.ceil(
-      this.trmrkMessage.length / this.trmrkMsgWordBreakCharsCount
-    );
-
-    const msgPartsIterable = Array.from({ length: msgPartsCount }, (_, i) => {
-      const part = this.trmrkMessage.substring(
-        i * this.trmrkMsgWordBreakCharsCount,
-        i * this.trmrkMsgWordBreakCharsCount + this.trmrkMsgWordBreakCharsCount
-      );
-
-      return part;
-    });
-
-    const msgParts = [...msgPartsIterable];
-    return msgParts;
-  }
 
   get msgLevelCssClass() {
     let cssClass: string;
@@ -113,6 +97,7 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    const messageChange = changes['trmrkMessage'];
     const showChange = changes['trmrkShow'];
     this.show = showChange.currentValue > 0;
 
@@ -121,6 +106,8 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
     } else {
       this.clearTimeouts();
     }
+
+    this.messageParts = this.getMessageParts(messageChange.currentValue);
   }
 
   ngOnDestroy(): void {
@@ -154,5 +141,23 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
     }
 
     this.timeouts.splice(0, this.timeouts.length);
+  }
+
+  getMessageParts(message: string) {
+    const msgPartsCount = Math.ceil(
+      message.length / this.trmrkMsgWordBreakCharsCount
+    );
+
+    const msgPartsIterable = Array.from({ length: msgPartsCount }, (_, i) => {
+      const part = message.substring(
+        i * this.trmrkMsgWordBreakCharsCount,
+        i * this.trmrkMsgWordBreakCharsCount + this.trmrkMsgWordBreakCharsCount
+      );
+
+      return part;
+    });
+
+    const msgParts = [...msgPartsIterable];
+    return msgParts;
   }
 }

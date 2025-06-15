@@ -137,7 +137,13 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
   height: 40px;
-  margin: 1px;
+  margin: 3px;
+  border-radius: 3px;
+
+  &.trmrk-minimal {
+    margin: 0;
+    border-radius: 0;
+  }
 
   .trmrk-text-col, .trmrk-text-row {
     padding: 3px 5px;
@@ -181,7 +187,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   padding: 5px;
   display: inline-block;
   flex-direction: row;
-  border-radius: 2px;
+  border-radius: 10px;
   max-width: 100vw;
 
   &.trmrk-fade {
