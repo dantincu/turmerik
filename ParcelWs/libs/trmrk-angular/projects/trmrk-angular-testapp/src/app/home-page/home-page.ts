@@ -17,6 +17,10 @@ import { UserMessageLevel } from '../../trmrk/core';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
+import {
+  TrmrkHorizStrip,
+  TrmrkHorizStripType,
+} from '../trmrk-horiz-strip/trmrk-horiz-strip';
 
 @Component({
   selector: 'app-home-page',
@@ -32,6 +36,7 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
     TrmrkLongPressOrRightClick,
     TrmrkMultiClick,
     TrmrkUserMessage,
+    TrmrkHorizStrip,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
@@ -60,6 +65,8 @@ export class HomePage implements AfterViewInit {
   mainUserMessageStr = '';
   showMainUserMessage = 0;
   mainUserMessageLevel = UserMessageLevel.Info;
+
+  TrmrkHorizStripType = TrmrkHorizStripType;
 
   constructor() {
     setTimeout(() => {

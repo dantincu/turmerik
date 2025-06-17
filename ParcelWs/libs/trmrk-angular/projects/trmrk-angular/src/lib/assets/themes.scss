@@ -1,0 +1,239 @@
+@use "./mixins.scss" as mixins;
+
+.trmrk-error-text {
+  color: #F20;
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-btn.trmrk-btn-filled-primary,
+  .trmrk-btn.trmrk-btn-filled-secondary,
+  .trmrk-btn.trmrk-btn-filled-accept,
+  .trmrk-btn.trmrk-btn-filled-reject) {
+  color: #FFF;
+}
+
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-icon-btn-filled-primary,
+    .trmrk-icon-btn-filled-secondary,
+    .trmrk-icon-btn-filled-accept,
+    .trmrk-icon-btn-filled-reject) {
+  color: #FFF;
+
+  &[mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #FFF;
+    }
+  }
+}
+
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark) {
+  .trmrk-icon-btn-filled-primary, .trmrk-btn-filled-primary {
+    background-color: #00F;
+  }
+
+  .trmrk-icon-btn-filled-secondary, .trmrk-btn-filled-secondary {
+    background-color: #444;
+  }
+
+  .trmrk-icon-btn-filled-accept, .trmrk-btn-filled-accept {
+    background-color: #090;
+  }
+
+  .trmrk-icon-btn-filled-reject, .trmrk-btn-filled-reject {
+    background-color: #F20;
+  }
+}
+
+.trmrk-app-theme-light {
+  background-color: #fff;
+  color: #000;
+
+  .trmrk-user-message {
+    [mat-icon-button].trmrk-icon-btn {
+      background-color: #0002;
+    }
+
+    &.trmrk-success {
+      background-color: var(--trmrk-user-message-success_back-color_light);
+      border: 1px solid var(--trmrk-user-message-success_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-success_back-color_light);
+          fill: var(--trmrk-user-message-success_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-success_border-color_light);
+        }
+      }
+    }
+
+    &.trmrk-info {
+      background-color: var(--trmrk-user-message-info_back-color_light);
+      border: 1px solid var(--trmrk-user-message-info_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-info_back-color_light);
+          fill: var(--trmrk-user-message-info_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-info_border-color_light);
+        }
+      }
+    }
+
+    &.trmrk-warn {
+      background-color: var(--trmrk-user-message-warn_back-color_light);
+      border: 1px solid var(--trmrk-user-message-warn_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-warn_back-color_light);
+          fill: var(--trmrk-user-message-warn_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-warn_border-color_light);
+        }
+      }
+    }
+
+    &.trmrk-error {
+      background-color: var(--trmrk-user-message-error_back-color_light);
+      border: 1px solid var(--trmrk-user-message-error_border-color_light);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-error_back-color_light);
+          fill: var(--trmrk-user-message-error_back-color_light);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-error_border-color_light);
+        }
+      }
+    }
+  }
+
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableLight();
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #000;
+    }
+  }
+
+  .trmrk-vert-resize-strip {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.3), /* Transparent stripe */
+      rgba(0, 0, 0, 0.3) 10px,
+      rgba(255, 255, 255, 0) 10px, /* Fully transparent stripe */
+      rgba(255, 255, 255, 0) 20px
+    );
+  }
+}
+
+.trmrk-app-theme-dark {
+  background-color: #000;
+  color: #fff;
+
+  .trmrk-user-message {
+    [mat-icon-button].trmrk-icon-btn {
+      background-color: #FFF2;
+    }
+
+    &.trmrk-success {
+      background-color: var(--trmrk-user-message-success_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-success_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-success_back-color_dark);
+          fill: var(--trmrk-user-message-success_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-success_border-color_dark);
+        }
+      }
+    }
+
+    &.trmrk-info {
+      background-color: var(--trmrk-user-message-info_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-info_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-info_back-color_dark);
+          fill: var(--trmrk-user-message-info_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-info_border-color_dark);
+        }
+      }
+    }
+
+    &.trmrk-warn {
+      background-color: var(--trmrk-user-message-warn_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-warn_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-warn_back-color_dark);
+          fill: var(--trmrk-user-message-warn_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-warn_border-color_dark);
+        }
+      }
+    }
+
+    &.trmrk-error {
+      background-color: var(--trmrk-user-message-error_back-color_dark);
+      border: 1px solid var(--trmrk-user-message-error_border-color_dark);
+
+      .trmrk-arrow {
+        .trmrk-arrow-body {
+          stroke: var(--trmrk-user-message-error_back-color_dark);
+          fill: var(--trmrk-user-message-error_back-color_dark);
+        }
+
+        .trmrk-arrow-border {
+          stroke: var(--trmrk-user-message-error_border-color_dark);
+        }
+      }
+    }
+  }
+
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableDark();
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #fff;
+    }
+  }
+
+  .trmrk-vert-resize-strip {
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.3), /* Transparent stripe */
+      rgba(255, 255, 255, 0.3) 10px,
+      rgba(0, 0, 0, 0) 10px, /* Fully transparent stripe */
+      rgba(0, 0, 0, 0) 20px
+    );
+  }
+}

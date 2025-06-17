@@ -10,6 +10,21 @@
   <h1 class="trmrk-page-title">
     {{ isResetting ? 'Resetting the app...' : 'App Reset' }}
   </h1>
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn trmrk-options-btn"
+    [matMenuTriggerFor]="null"
+    #optionsMenuTrigger="matMenuTrigger"
+    (click)="onOptionsMenuBtnClick($event)"
+  >
+    <mat-icon class="trmrk-icon">more_vert</mat-icon>
+  </button>
+  <mat-menu class="trmrk-menu" dense #optionsMenu>
+    <a mat-menu-item class="trmrk-menu-item" [routerLink]="['/settings']">
+      <mat-icon class="trmrk-icon">settings</mat-icon>
+      Settings
+    </a>
+  </mat-menu>
 </div>
 
 @if (isResetting) {

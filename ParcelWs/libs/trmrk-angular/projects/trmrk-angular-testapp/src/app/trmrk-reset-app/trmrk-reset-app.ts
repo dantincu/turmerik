@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -20,16 +21,28 @@ import { jsonBool } from '../../trmrk/core';
     CommonModule,
     MatButtonModule,
     TrmrkUserMessage,
+    MatMenuModule,
+    MatMenu,
+    MatMenuTrigger,
   ],
   templateUrl: './trmrk-reset-app.html',
   styleUrl: './trmrk-reset-app.scss',
 })
 export class TrmrkResetApp implements OnDestroy {
+  @ViewChild(MatMenu) optionsMenu!: MatMenu;
+
+  @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
+  optionsMenuTrigger!: MatMenuTrigger;
+
   isResetting: boolean | null = null;
   showSuccessMessage = 0;
   private routeSub: Subscription;
 
   constructor(private route: ActivatedRoute, private router: Router) {
+    setTimeout(() => {
+      this.optionsMenuTrigger.menu = this.optionsMenu;
+    }, 0);
+
     this.routeSub = this.route.queryParamMap.subscribe((params) => {
       const resetParam = params.get('reset');
 
@@ -66,6 +79,10 @@ export class TrmrkResetApp implements OnDestroy {
 
   ngOnDestroy() {
     this.routeSub.unsubscribe();
+  }
+
+  onOptionsMenuBtnClick(event: MouseEvent): void {
+    this.optionsMenuTrigger.openMenu();
   }
 
   successMessageClose() {

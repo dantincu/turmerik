@@ -24,106 +24,49 @@
     </a>
   </mat-menu>
 </div>
-<div
-  class="trmrk-horiz-strip"
-  [ngStyle]="{
-  backgroundColor: '#040',
-  border: '1px solid #080',
-}"
->
-  <div class="trmrk-text-col">
-    <span class="trmrk-label"
-      >asdfasdfsadsafd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd</span
-    >
-    <span class="trmrk-details">12kB &bull; 2025-05-09 13:00</span>
-  </div>
-</div>
-<div
-  class="trmrk-horiz-strip"
-  [ngStyle]="{
-  backgroundColor: '#040',
-  border: '1px solid #080',
-}"
->
-  <div class="trmrk-text-row">
-    <span class="trmrk-label"
-      >asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd</span
-    >
-  </div>
-</div>
-<div
-  class="trmrk-horiz-strip trmrk-minimal"
-  [ngStyle]="{
-  backgroundColor: '#040',
-  border: '1px solid #080',
-}"
->
-  <div class="trmrk-text-col">
-    <span class="trmrk-label"
-      >asdfasdfsadsafd&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd</span
-    >
-    <span class="trmrk-details">12kB &bull; 2025-05-09 13:00</span>
-  </div>
-</div>
-<div
-  class="trmrk-horiz-strip trmrk-minimal"
-  [ngStyle]="{
-  backgroundColor: '#040',
-  border: '1px solid #080',
-}"
->
-  <div class="trmrk-text-row">
-    <span class="trmrk-label"
-      >asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd</span
-    >
-  </div>
-</div>
-<div
-  class="trmrk-app-bar"
-  [ngStyle]="{
-  border: '1px solid #888',
-}"
->
-  <div class="trmrk-text-col">
-    <span class="trmrk-label"
-      >asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd</span
-    >
-    <span class="trmrk-details">12kB &bull; 2025-05-09 13:00</span>
-  </div>
-</div>
-<div
-  class="trmrk-app-bar"
-  [ngStyle]="{
-  border: '1px solid #888',
-}"
->
-  <div class="trmrk-text-row">
-    <span class="trmrk-label"
-      >asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd</span
-    >
-  </div>
-</div>
-<div class="trmrk-horiz-scrollable-strip">
-  <div class="trmrk-text-col">
-    <span class="trmrk-label"
-      >asdfasdfsagdsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd
-      asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd</span
-    >
-  </div>
-</div>
-<div class="trmrk-horiz-scrollable-strip">
-  <div class="trmrk-text-col">
-    <span class="trmrk-label">asdfasdfsadsafd</span>
-  </div>
-</div>
+
+@for (str of [['asdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
+'asdfasdfsadsafdasdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
+'asdfasdfsadsafd'].join(''), 'asdfasdfsadsafdasdfasdfsadsafd']; track $index) {
+<trmrk-horiz-strip
+  [trmrkMainText]="str"
+  [trmrkDetailsTextParts]="['12kB', '2025-05-09 13:00']"
+  [cssStyle]="{
+    backgroundColor: '#040',
+    border: '1px solid #080',
+  }"
+  [capCssStyle]="{backgroundColor: '#888'}"
+></trmrk-horiz-strip>
+<trmrk-horiz-strip
+  [trmrkMainText]="str"
+  [trmrkDetailsTextParts]="['12kB', '2025-05-09 13:00']"
+  [cssStyle]="{
+    backgroundColor: '#040',
+    border: '1px solid #080',
+  }"
+  [capCssStyle]="{backgroundColor: '#888'}"
+  [trmrkMinimal]="true"
+></trmrk-horiz-strip>
+<trmrk-horiz-strip
+  [trmrkType]="TrmrkHorizStripType.Scrollable"
+  [trmrkMainText]="str"
+  [capCssStyle]="{backgroundColor: '#888'}"
+></trmrk-horiz-strip>
+<trmrk-horiz-strip
+  [trmrkType]="TrmrkHorizStripType.AppBar"
+  [trmrkMainText]="str"
+  [trmrkDetailsTextParts]="['12kB', '2025-05-09 13:00']"
+  [cssStyle]="{border: '2px solid #888'}"
+  [capCssStyle]="{backgroundColor: '#888'}"
+></trmrk-horiz-strip>
+<trmrk-horiz-strip
+  [trmrkType]="TrmrkHorizStripType.AppBar"
+  [trmrkMainText]="str"
+  [cssStyle]="{border: '2px solid #888'}"
+  [capCssStyle]="{backgroundColor: '#888'}"
+  [trmrkMinimal]="true"
+></trmrk-horiz-strip>
+}
 
 <div [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote"></div>
 <div [ngStyle]="{height: '150px', position: 'relative'}">

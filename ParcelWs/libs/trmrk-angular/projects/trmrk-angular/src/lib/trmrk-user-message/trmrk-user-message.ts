@@ -99,15 +99,20 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     const messageChange = changes['trmrkMessage'];
     const showChange = changes['trmrkShow'];
-    this.show = showChange.currentValue > 0;
 
-    if (this.show && this.trmrkAutoCloseMillis > 0) {
-      this.setFadeTimeouts();
-    } else {
-      this.clearTimeouts();
+    if (showChange) {
+      this.show = showChange.currentValue > 0;
+
+      if (this.show && this.trmrkAutoCloseMillis > 0) {
+        this.setFadeTimeouts();
+      } else {
+        this.clearTimeouts();
+      }
     }
 
-    this.messageParts = this.getMessageParts(messageChange.currentValue);
+    if (messageChange) {
+      this.messageParts = this.getMessageParts(messageChange.currentValue);
+    }
   }
 
   ngOnDestroy(): void {
