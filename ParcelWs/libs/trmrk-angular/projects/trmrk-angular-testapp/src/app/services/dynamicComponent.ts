@@ -3,12 +3,19 @@ import { SimpleChange, ViewContainerRef, ComponentRef } from '@angular/core';
 export const refreshProps = (
   componentChange: SimpleChange | null,
   componentArgsChange: SimpleChange | null,
-  container: ViewContainerRef,
-  componentRef: ComponentRef<any> | null | undefined
+  container: ViewContainerRef | null | undefined
 ) => {
-  if (componentChange?.currentValue && componentArgsChange?.currentValue) {
+  let componentRef: ComponentRef<any> | null = null;
+
+  if (
+    container &&
+    componentChange?.currentValue &&
+    componentArgsChange?.currentValue
+  ) {
     container.clear();
-    componentRef = container.createComponent(componentChange.currentValue);
+    componentRef = container.createComponent(
+      componentChange.currentValue
+    ) as ComponentRef<any>;
 
     if (componentArgsChange.currentValue && componentRef) {
       Object.keys(componentArgsChange.currentValue).forEach((key) => {
@@ -16,4 +23,6 @@ export const refreshProps = (
       });
     }
   }
+
+  return componentRef;
 };

@@ -16,7 +16,9 @@ import { encodeHtml } from '../../trmrk/text';
 import { UserMessageLevel } from '../../trmrk/core';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
+import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
+
 import {
   TrmrkHorizStrip,
   TrmrkHorizStripType,
@@ -37,6 +39,7 @@ import {
     TrmrkMultiClick,
     TrmrkUserMessage,
     TrmrkHorizStrip,
+    TrmrkAppBar,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',

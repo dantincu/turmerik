@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { TrmrkLoading } from 'trmrk-angular';
 import { TrmrkUserMessage } from 'trmrk-angular';
 
+import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { jsonBool } from '../../trmrk/core';
 
 @Component({
@@ -24,6 +25,7 @@ import { jsonBool } from '../../trmrk/core';
     MatMenuModule,
     MatMenu,
     MatMenuTrigger,
+    TrmrkAppBar,
   ],
   templateUrl: './trmrk-reset-app.html',
   styleUrl: './trmrk-reset-app.scss',

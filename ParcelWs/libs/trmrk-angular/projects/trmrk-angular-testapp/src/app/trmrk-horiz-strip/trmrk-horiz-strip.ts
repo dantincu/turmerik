@@ -42,12 +42,12 @@ export class TrmrkHorizStrip implements OnChanges {
   @Input() trailingComponentArgs: { [key: string]: any } | null = null;
 
   @ViewChild('leadingContainer', { read: ViewContainerRef, static: true })
-  leadingContainer!: ViewContainerRef;
-  leadingComponentRef?: ComponentRef<any>;
+  leadingContainer?: ViewContainerRef | null | undefined;
+  leadingComponentRef?: ComponentRef<any> | null | undefined;
 
   @ViewChild('trailingContainer', { read: ViewContainerRef, static: true })
-  trailingContainer!: ViewContainerRef;
-  trailingComponentRef?: ComponentRef<any>;
+  trailingContainer?: ViewContainerRef | null | undefined;
+  trailingComponentRef?: ComponentRef<any> | null | undefined;
 
   mainText = '';
 
@@ -85,18 +85,16 @@ export class TrmrkHorizStrip implements OnChanges {
       );
     }
 
-    refreshProps(
+    this.leadingComponentRef = refreshProps(
       changes['leadingComponent'],
       changes['leadingComponentArgs'],
-      this.leadingContainer,
-      this.leadingComponentRef
+      this.leadingContainer
     );
 
-    refreshProps(
+    this.trailingComponentRef = refreshProps(
       changes['trailingComponent'],
       changes['trailingComponentArgs'],
-      this.trailingContainer,
-      this.trailingComponentRef
+      this.trailingContainer
     );
   }
 }

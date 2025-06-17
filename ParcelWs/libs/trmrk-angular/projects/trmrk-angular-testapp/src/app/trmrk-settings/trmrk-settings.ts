@@ -7,11 +7,18 @@ import { Subscription } from 'rxjs';
 
 import { setIsDarkModeToLocalStorage } from '../../trmrk-browser/domUtils/core';
 
+import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { AppStateService } from '../services/appStateService';
 
 @Component({
   selector: 'app-trmrk-settings',
-  imports: [MatCheckbox, RouterLink, MatIconModule, MatButtonModule],
+  imports: [
+    MatCheckbox,
+    RouterLink,
+    MatIconModule,
+    MatButtonModule,
+    TrmrkAppBar,
+  ],
   templateUrl: './trmrk-settings.html',
   styleUrl: './trmrk-settings.scss',
 })
