@@ -11,7 +11,7 @@
     <mat-icon class="trmrk-icon trmrk-home-icon">home</mat-icon>}
   </a>
 
-  <h1 class="trmrk-page-title">{{trmrkTitle}}</h1>
+  <h1 class="trmrk-page-title" #pageTitle>{{trmrkTitle}}</h1>
 
   @if (trmrkTrailingIconTemplate) {
   <ng-container *ngTemplateOutlet="trmrkTrailingIconTemplate"></ng-container>

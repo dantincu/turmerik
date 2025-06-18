@@ -7,7 +7,7 @@ import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 
 @Component({
   selector: 'app-not-found',
-  imports: [RouterLink, MatIconModule, MatButtonModule, TrmrkAppBar],
+  imports: [MatIconModule, MatButtonModule, TrmrkAppBar],
   templateUrl: './not-found.html',
   styleUrl: './not-found.scss',
 })

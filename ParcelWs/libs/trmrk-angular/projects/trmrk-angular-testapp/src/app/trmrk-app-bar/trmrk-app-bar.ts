@@ -1,4 +1,13 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  TemplateRef,
+  ViewChild,
+  AfterViewInit,
+  EventEmitter,
+  Output,
+  ElementRef,
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink, UrlTree } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +27,8 @@ import { MatMenuModule } from '@angular/material/menu';
   templateUrl: './trmrk-app-bar.html',
   styleUrl: './trmrk-app-bar.scss',
 })
-export class TrmrkAppBar {
+export class TrmrkAppBar implements AfterViewInit {
+  @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
   @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | null | undefined;
   @Input() trmrkTrailingIconTemplate?: TemplateRef<any> | null | undefined;
   @Input() trmrkHomeRouterLink:
@@ -28,4 +38,11 @@ export class TrmrkAppBar {
     | null
     | undefined = ['/'];
   @Input() trmrkTitle!: string;
+
+  @ViewChild('pageTitle', { read: ElementRef })
+  pageTitle!: ElementRef;
+
+  ngAfterViewInit(): void {
+    this.trmrkPageTitleElem.emit(this.pageTitle.nativeElement);
+  }
 }

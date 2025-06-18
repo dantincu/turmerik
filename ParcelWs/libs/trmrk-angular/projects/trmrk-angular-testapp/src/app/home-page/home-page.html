@@ -25,256 +25,253 @@
     </a>
   </mat-menu>
 </ng-template>
+<div
+  class="trmrk-app-panel trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-x"
+>
+  @for (str of [['asdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
+  'asdfasdfsadsafdasdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
+  'asdfasdfsadsafd'].join(''), 'asdfasdfsadsafdasdfasdfsadsafd']; track $index)
+  { @for (dStr of [['12kB', '2025-05-09 13:00'], null]; track $index) { @for
+  (cssClassSffx of ['', '1']; track $index) { @for (isMinimal of [false, true];
+  track $index) {
+  <trmrk-horiz-strip
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [trmrkMinimal]="isMinimal"
+    [ngClass]="['my-horiz-strip' + cssClassSffx]"
+    [cssClass]="[cssClassSffx ? '' : 'trmrk-has-border']"
+  ></trmrk-horiz-strip>
+  }
 
-@for (str of [['asdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
-'asdfasdfsadsafdasdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
-'asdfasdfsadsafd'].join(''), 'asdfasdfsadsafdasdfasdfsadsafd']; track $index) {
-<trmrk-horiz-strip
-  [trmrkMainText]="str"
-  [trmrkDetailsTextParts]="['12kB', '2025-05-09 13:00']"
-  [cssStyle]="{
-    backgroundColor: '#040',
-    border: '1px solid #080',
-  }"
-  [capCssStyle]="{backgroundColor: '#888'}"
-></trmrk-horiz-strip>
-<trmrk-horiz-strip
-  [trmrkMainText]="str"
-  [trmrkDetailsTextParts]="['12kB', '2025-05-09 13:00']"
-  [cssStyle]="{
-    backgroundColor: '#040',
-    border: '1px solid #080',
-  }"
-  [capCssStyle]="{backgroundColor: '#888'}"
-  [trmrkMinimal]="true"
-></trmrk-horiz-strip>
-<trmrk-horiz-strip
-  [trmrkType]="TrmrkHorizStripType.Scrollable"
-  [trmrkMainText]="str"
-  [capCssStyle]="{backgroundColor: '#888'}"
-></trmrk-horiz-strip>
-<trmrk-horiz-strip
-  [trmrkType]="TrmrkHorizStripType.AppBar"
-  [trmrkMainText]="str"
-  [trmrkDetailsTextParts]="['12kB', '2025-05-09 13:00']"
-  [cssStyle]="{border: '2px solid #888'}"
-  [capCssStyle]="{backgroundColor: '#888'}"
-></trmrk-horiz-strip>
-<trmrk-horiz-strip
-  [trmrkType]="TrmrkHorizStripType.AppBar"
-  [trmrkMainText]="str"
-  [cssStyle]="{border: '2px solid #888'}"
-  [capCssStyle]="{backgroundColor: '#888'}"
-  [trmrkMinimal]="true"
-></trmrk-horiz-strip>
-}
+  <trmrk-horiz-strip
+    [trmrkType]="TrmrkHorizStripType.AppBar"
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['my-app-bar' + cssClassSffx]"
+    [cssClass]="[cssClassSffx ? '' : 'trmrk-has-border']"
+  ></trmrk-horiz-strip
+  >} }
+  <trmrk-horiz-strip
+    [trmrkType]="TrmrkHorizStripType.Scrollable"
+    [trmrkMainText]="str"
+    class="my-horiz-scrollable-strip"
+  ></trmrk-horiz-strip>
+  }
 
-<div [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote"></div>
-<div [ngStyle]="{height: '150px', position: 'relative'}">
-  <div>
-    <label
-      (mousedown)="onLongPressMouseDownOrTouchStart1($event)"
-      (touchstart)="onLongPressMouseDownOrTouchStart1($event)"
-      (trmrkLongPressOrRightClick)="onLongPress1($event)"
-      (trmrkShortPressOrLeftClick)="onShortPress1($event)"
-      [trmrkLongPressPreventDefault]="false"
-      [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer'}"
-    >
-      Long Press</label
-    ><span>{{longPressUserMsg1}}</span>
-  </div>
-  <div>
-    <label
-      (mousedown)="onLongPressMouseDownOrTouchStart2($event)"
-      (touchstart)="onLongPressMouseDownOrTouchStart2($event)"
-      (trmrkLongPressOrRightClick)="onLongPress2($event)"
-      (trmrkShortPressOrLeftClick)="onShortPress2($event)"
-      [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer'}"
-    >
-      Long Press</label
-    ><span>{{longPressUserMsg2}}</span>
-  </div>
-  <div>
-    <button
-      mat-button
-      (mousedown)="onMultiClickMouseDownOrTouchStart($event)"
-      (touchstart)="onMultiClickMouseDownOrTouchStart($event)"
-      (trmrkMultiClick)="onMultiClick($event)"
-    >
-      Multi Press
-    </button>
-    <span>{{multiClickUserMsg}}</span>
-  </div>
-  <!--div
+  <div [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote"></div>
+
+  <div [ngStyle]="{height: '150px', position: 'relative'}">
+    <div>
+      <label
+        (mousedown)="onLongPressMouseDownOrTouchStart1($event)"
+        (touchstart)="onLongPressMouseDownOrTouchStart1($event)"
+        (trmrkLongPressOrRightClick)="onLongPress1($event)"
+        (trmrkShortPressOrLeftClick)="onShortPress1($event)"
+        [trmrkLongPressPreventDefault]="false"
+        [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer'}"
+      >
+        Long Press</label
+      ><span>{{longPressUserMsg1}}</span>
+    </div>
+    <div>
+      <label
+        (mousedown)="onLongPressMouseDownOrTouchStart2($event)"
+        (touchstart)="onLongPressMouseDownOrTouchStart2($event)"
+        (trmrkLongPressOrRightClick)="onLongPress2($event)"
+        (trmrkShortPressOrLeftClick)="onShortPress2($event)"
+        [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer', userSelect: 'none', webkitUserSelect: 'none'}"
+      >
+        Long Press</label
+      ><span>{{longPressUserMsg2}}</span>
+    </div>
+    <div>
+      <button
+        mat-button
+        (mousedown)="onMultiClickMouseDownOrTouchStart($event)"
+        (touchstart)="onMultiClickMouseDownOrTouchStart($event)"
+        (trmrkMultiClick)="onMultiClick($event)"
+      >
+        Multi Press
+      </button>
+      <span>{{multiClickUserMsg}}</span>
+    </div>
+    <!--div
     [ngStyle]="{backgroundColor: '#080', position: 'absolute', width: '40px', height: '40px', top: '0px', zIndex: 100000}"
   >
     a
   </div-->
-  <div
-    class="trmrk-vert-resize-strip"
-    #draggableStrip
-    (trmrkDrag)="onDrag($event)"
-    [ngStyle]="{zIndex: 1000000}"
-  ></div>
-</div>
-<trmrk-user-message
-  [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
-  [trmrkShow]="showUserMsg[0]"
-  [trmrkLevel]="1"
-  (trmrkClose)="userMessageClose(0)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="0"
-></trmrk-user-message>
-
-<trmrk-user-message
-  [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqwrqwerwqerqwerfqwerqwerqwerqwerqwer qwerqwerwqerqwerfqwerqwerqwerqwer weqrweqwerqwerwqerqwerfqwerqwerq erqwerqwerqweqrweqwerqwerwqerqwer'"
-  [trmrkShow]="showUserMsg[1]"
-  [trmrkLevel]="0"
-  (trmrkClose)="userMessageClose(1)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="1"
-  [trmrkBreakWords]="true"
-  [trmrkArrowStyle]="{left: 'calc(25%)'}"
-></trmrk-user-message>
-
-<div [ngStyle]="{display: 'flex'}">
+    <div
+      class="trmrk-vert-resize-strip"
+      #draggableStrip
+      (trmrkDrag)="onDrag($event)"
+      [ngStyle]="{zIndex: 1000000}"
+    ></div>
+  </div>
   <trmrk-user-message
-    [trmrkMessage]="'asdfasdfa qwerwqerq'"
-    [trmrkShow]="showUserMsg[2]"
+    [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+    [trmrkShow]="showUserMsg[0]"
     [trmrkLevel]="1"
-    (trmrkClose)="userMessageClose(2)"
+    (trmrkClose)="userMessageClose(0)"
+    [trmrkAutoCloseMillis]="0"
+    [trmrkArrowPlacement]="0"
+  ></trmrk-user-message>
+
+  <trmrk-user-message
+    [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqwrqwerwqerqwerfqwerqwerqwerqwerqwer qwerqwerwqerqwerfqwerqwerqwerqwer weqrweqwerqwerwqerqwerfqwerqwerq erqwerqwerqweqrweqwerqwerwqerqwer'"
+    [trmrkShow]="showUserMsg[1]"
+    [trmrkLevel]="0"
+    (trmrkClose)="userMessageClose(1)"
+    [trmrkAutoCloseMillis]="0"
+    [trmrkArrowPlacement]="1"
+    [trmrkBreakWords]="true"
+    [trmrkArrowStyle]="{left: 'calc(25%)'}"
+  ></trmrk-user-message>
+
+  <div [ngStyle]="{display: 'flex'}">
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfa qwerwqerq'"
+      [trmrkShow]="showUserMsg[2]"
+      [trmrkLevel]="1"
+      (trmrkClose)="userMessageClose(2)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="2"
+    ></trmrk-user-message>
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
+      [trmrkShow]="showUserMsg[3]"
+      [trmrkLevel]="0"
+      (trmrkClose)="userMessageClose(3)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="3"
+    ></trmrk-user-message>
+  </div>
+
+  <trmrk-user-message
+    [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+    [trmrkShow]="showUserMsg[4]"
+    [trmrkLevel]="1"
+    (trmrkClose)="userMessageClose(4)"
+    [trmrkAutoCloseMillis]="0"
+    [trmrkArrowPlacement]="4"
+  ></trmrk-user-message>
+
+  <trmrk-user-message
+    [trmrkMessage]="'asdfasdfasdf qwerwqerqwer qwerwqerqwer'"
+    [trmrkShow]="showUserMsg[5]"
+    [trmrkLevel]="2"
+    (trmrkClose)="userMessageClose(5)"
+    [trmrkAutoCloseMillis]="0"
+    [trmrkArrowPlacement]="1"
+  ></trmrk-user-message>
+
+  <trmrk-user-message
+    [trmrkMessage]="'failure'"
+    [trmrkShow]="showUserMsg[6]"
+    [trmrkLevel]="3"
+    (trmrkClose)="userMessageClose(6)"
     [trmrkAutoCloseMillis]="0"
     [trmrkArrowPlacement]="2"
   ></trmrk-user-message>
+
   <trmrk-user-message
-    [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
-    [trmrkShow]="showUserMsg[3]"
-    [trmrkLevel]="0"
-    (trmrkClose)="userMessageClose(3)"
+    [trmrkMessage]="'fail'"
+    [trmrkShow]="showUserMsg[7]"
+    [trmrkLevel]="3"
+    (trmrkClose)="userMessageClose(7)"
     [trmrkAutoCloseMillis]="0"
     [trmrkArrowPlacement]="3"
   ></trmrk-user-message>
-</div>
 
-<trmrk-user-message
-  [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
-  [trmrkShow]="showUserMsg[4]"
-  [trmrkLevel]="1"
-  (trmrkClose)="userMessageClose(4)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="4"
-></trmrk-user-message>
+  <trmrk-user-message
+    [trmrkMessage]="'fail more'"
+    [trmrkShow]="showUserMsg[8]"
+    [trmrkLevel]="3"
+    (trmrkClose)="userMessageClose(8)"
+    [trmrkAutoCloseMillis]="0"
+    [trmrkArrowPlacement]="4"
+  ></trmrk-user-message>
 
-<trmrk-user-message
-  [trmrkMessage]="'asdfasdfasdf qwerwqerqwer qwerwqerqwer'"
-  [trmrkShow]="showUserMsg[5]"
-  [trmrkLevel]="2"
-  (trmrkClose)="userMessageClose(5)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="1"
-></trmrk-user-message>
+  <trmrk-user-message
+    [trmrkMessage]="'fail even more'"
+    [trmrkShow]="showUserMsg[9]"
+    [trmrkLevel]="3"
+    (trmrkClose)="userMessageClose(9)"
+    [trmrkAutoCloseMillis]="0"
+    [trmrkArrowPlacement]="1"
+  ></trmrk-user-message>
 
-<trmrk-user-message
-  [trmrkMessage]="'failure'"
-  [trmrkShow]="showUserMsg[6]"
-  [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(6)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="2"
-></trmrk-user-message>
+  <trmrk-user-message
+    [trmrkMessage]="'fail even more than'"
+    [trmrkShow]="showUserMsg[10]"
+    [trmrkLevel]="3"
+    (trmrkClose)="userMessageClose(10)"
+    [trmrkAutoCloseMillis]="0"
+    [trmrkArrowPlacement]="2"
+  ></trmrk-user-message>
 
-<trmrk-user-message
-  [trmrkMessage]="'fail'"
-  [trmrkShow]="showUserMsg[7]"
-  [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(7)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="3"
-></trmrk-user-message>
+  <div>
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn trmrk-icon-btn-filled-primary"
+    >
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
 
-<trmrk-user-message
-  [trmrkMessage]="'fail more'"
-  [trmrkShow]="showUserMsg[8]"
-  [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(8)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="4"
-></trmrk-user-message>
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn trmrk-icon-btn-filled-secondary"
+    >
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
 
-<trmrk-user-message
-  [trmrkMessage]="'fail even more'"
-  [trmrkShow]="showUserMsg[9]"
-  [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(9)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="1"
-></trmrk-user-message>
+    <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-accept">
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
 
-<trmrk-user-message
-  [trmrkMessage]="'fail even more than'"
-  [trmrkShow]="showUserMsg[10]"
-  [trmrkLevel]="3"
-  (trmrkClose)="userMessageClose(10)"
-  [trmrkAutoCloseMillis]="0"
-  [trmrkArrowPlacement]="2"
-></trmrk-user-message>
+    <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-reject">
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
 
-<div>
-  <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-primary">
-    <mat-icon class="trmrk-icon">open_with</mat-icon>
-  </button>
+    <button mat-button class="trmrk-btn trmrk-btn-filled-primary">
+      asdfasdfasdfafsd
+    </button>
 
+    <button mat-button class="trmrk-btn trmrk-btn-filled-secondary">
+      asdfasdfasdfafsd
+    </button>
+
+    <button mat-button class="trmrk-btn trmrk-btn-filled-accept">
+      asdfasdfasdfafsd
+    </button>
+
+    <button mat-button class="trmrk-btn trmrk-btn-filled-reject">
+      asdfasdfasdfafsd
+    </button>
+  </div>
+
+  <trmrk-user-message
+    [trmrkMessage]="mainUserMessageStr"
+    [trmrkShow]="showMainUserMessage"
+    [trmrkLevel]="mainUserMessageLevel"
+    [ngStyle]="{position: 'fixed', bottom: '0px', zIndex: '2', maxWidth: '100vw'}"
+    class="trmrk-main-user-message"
+  ></trmrk-user-message>
+
+  <button matButton="filled">asdfasdf</button>
   <button
-    mat-icon-button
-    class="trmrk-icon-btn trmrk-icon-btn-filled-secondary"
+    matButton="filled"
+    [ngStyle]="{minWidth: '40px', width: '40px', padding: '0 0 0 12px'}"
   >
+    <mat-icon
+      class="trmrk-icon"
+      [ngStyle]="{width: '40px', height: '32px', fontSize: '32px'}"
+      >open_with</mat-icon
+    >
+  </button>
+  <button mat-icon-button class="trmrk-icon-btn">
     <mat-icon class="trmrk-icon">open_with</mat-icon>
   </button>
-
-  <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-accept">
-    <mat-icon class="trmrk-icon">open_with</mat-icon>
-  </button>
-
-  <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-reject">
-    <mat-icon class="trmrk-icon">open_with</mat-icon>
-  </button>
-
-  <button mat-button class="trmrk-btn trmrk-btn-filled-primary">
-    asdfasdfasdfafsd
-  </button>
-
-  <button mat-button class="trmrk-btn trmrk-btn-filled-secondary">
-    asdfasdfasdfafsd
-  </button>
-
-  <button mat-button class="trmrk-btn trmrk-btn-filled-accept">
-    asdfasdfasdfafsd
-  </button>
-
-  <button mat-button class="trmrk-btn trmrk-btn-filled-reject">
-    asdfasdfasdfafsd
-  </button>
+  <div>
+    <input type="text" />
+  </div>
 </div>
-
-<trmrk-user-message
-  [trmrkMessage]="mainUserMessageStr"
-  [trmrkShow]="showMainUserMessage"
-  [trmrkLevel]="mainUserMessageLevel"
-  [ngStyle]="{position: 'fixed', bottom: '0px', zIndex: '2', maxWidth: '100vw'}"
-  class="trmrk-main-user-message"
-></trmrk-user-message>
-
-<button matButton="filled">asdfasdf</button>
-<button
-  matButton="filled"
-  [ngStyle]="{minWidth: '40px', width: '40px', padding: '0 0 0 12px'}"
->
-  <mat-icon
-    class="trmrk-icon"
-    [ngStyle]="{width: '40px', height: '32px', fontSize: '32px'}"
-    >open_with</mat-icon
-  >
-</button>
-<button mat-icon-button class="trmrk-icon-btn">
-  <mat-icon class="trmrk-icon">open_with</mat-icon>
-</button>

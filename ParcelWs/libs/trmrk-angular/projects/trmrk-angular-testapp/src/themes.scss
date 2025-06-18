@@ -2,10 +2,84 @@
   .trmrk-app-bar {
     background-color: #d0e8ff;
   }
+
+  .my-horiz-strip .trmrk-horiz-strip {
+    background-color: #0c0;
+    border: 1px solid #080;
+
+    .trmrk-strip-cap {
+      background-color: #080;
+    }
+  }
+
+  .my-horiz-strip1 .trmrk-horiz-strip {
+    background-color: #0c0;
+
+    .trmrk-strip-cap {
+      background-color: #080;
+    }
+  }
+
+  .my-app-bar .trmrk-app-bar {
+    border: 2px solid #a0b0d0;
+
+    .trmrk-strip-cap {
+      background-color: #a0b0d0;
+    }
+  }
+
+  .my-app-bar1 .trmrk-app-bar {
+    .trmrk-strip-cap {
+      background-color: #a0b0d0;
+    }
+  }
+
+  .my-horiz-scrollable-strip .trmrk-horiz-scrollable-strip {
+    .trmrk-strip-cap {
+      background-color: #bbb;
+    }
+  }
 }
 
 .trmrk-app-theme-dark {
   .trmrk-app-bar {
     background-color: #000820;
+  }
+
+  .my-horiz-strip .trmrk-horiz-strip {
+    background-color: #040;
+    border: 1px solid #080;
+
+    .trmrk-strip-cap {
+      background-color: #080;
+    }
+  }
+
+  .my-horiz-strip1 .trmrk-horiz-strip {
+    background-color: #040;
+
+    .trmrk-strip-cap {
+      background-color: #080;
+    }
+  }
+
+  .my-app-bar .trmrk-app-bar {
+    border: 2px solid #204080;
+
+    .trmrk-strip-cap {
+      background-color: #204080;
+    }
+  }
+
+  .my-app-bar1 .trmrk-app-bar {
+    .trmrk-strip-cap {
+      background-color: #204080;
+    }
+  }
+
+  .my-horiz-scrollable-strip .trmrk-horiz-scrollable-strip {
+    .trmrk-strip-cap {
+      background-color: #444;
+    }
   }
 }

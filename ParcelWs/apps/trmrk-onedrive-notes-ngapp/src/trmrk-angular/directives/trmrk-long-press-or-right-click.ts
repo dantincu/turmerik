@@ -21,7 +21,7 @@ import { TrmrkLongPressOrRightClickEventData } from './types';
 export class TrmrkLongPressOrRightClick implements OnDestroy {
   @Input() trmrkLongPressMillis: number = 400;
   @Input() trmrkValidMouseOrTouchMoveMaxPx: number = 40;
-  @Input() trmrkLongPressPreventDefault: boolean = true;
+  @Input() trmrkLongPressPreventDefault = true;
   @Output() trmrkLongPressOrRightClick = new EventEmitter<TouchOrMouseCoords>();
   @Output() trmrkShortPressOrLeftClick = new EventEmitter<TouchOrMouseCoords>();
 

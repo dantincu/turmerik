@@ -1,4 +1,10 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +23,8 @@ import { UserMessageLevel } from '../../trmrk/core';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
+import { TrmrkAppStrip } from '../trmrk-app-strip/trmrk-app-strip';
+import { TrmrkItemStrip } from '../trmrk-item-strip/trmrk-item-strip';
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
 import {

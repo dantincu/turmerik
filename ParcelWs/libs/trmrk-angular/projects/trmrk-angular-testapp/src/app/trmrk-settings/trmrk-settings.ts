@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,6 +21,7 @@ import { AppStateService } from '../services/appStateService';
   ],
   templateUrl: './trmrk-settings.html',
   styleUrl: './trmrk-settings.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkSettings implements OnDestroy {
   private darkModeStateChangeSubscription: Subscription;
@@ -30,11 +31,16 @@ export class TrmrkSettings implements OnDestroy {
   constructor(private appStateService: AppStateService) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
+    this.titleContextMenu = this.titleContextMenu.bind(this);
 
     this.darkModeStateChangeSubscription =
       appStateService.isDarkMode.$obs.subscribe(this.darkModeStateChange);
 
     this.isDarkMode = this.appStateService.isDarkMode.value;
+  }
+
+  ngOnDestroy(): void {
+    this.darkModeStateChangeSubscription.unsubscribe();
   }
 
   onDarkModeBtnClick(event: MatCheckboxChange): void {
@@ -46,9 +52,7 @@ export class TrmrkSettings implements OnDestroy {
     this.isDarkMode = isDarkModeValue;
   }
 
-  onResetAppBtnClick(event: MouseEvent): void {}
-
-  ngOnDestroy(): void {
-    this.darkModeStateChangeSubscription.unsubscribe();
+  titleContextMenu(event: MouseEvent) {
+    event.preventDefault();
   }
 }
