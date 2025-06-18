@@ -52,3 +52,12 @@ body {
     opacity: 0;
   }
 }
+
+.my-horiz-strip .trmrk-horiz-strip,
+.my-horiz-strip1 .trmrk-horiz-strip {
+  margin: 3px;
+
+  &.trmrk-minimal {
+    margin: 0;
+  }
+}

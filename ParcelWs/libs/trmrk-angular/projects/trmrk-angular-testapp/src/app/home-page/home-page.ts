@@ -24,7 +24,6 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { TrmrkAppStrip } from '../trmrk-app-strip/trmrk-app-strip';
-import { TrmrkItemStrip } from '../trmrk-item-strip/trmrk-item-strip';
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
 import {

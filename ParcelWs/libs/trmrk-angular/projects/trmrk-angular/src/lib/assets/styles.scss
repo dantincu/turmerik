@@ -90,6 +90,9 @@ a[mat-icon-button].trmrk-icon-btn:link {
   display: flex;
   box-sizing: border-box;
   padding: 3px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 
   .trmrk-text-row, .trmrk-text-row-padded {
     overflow: hidden;
@@ -186,16 +189,16 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
   height: 40px;
-  margin: 3px;
   border-radius: 3px;
 
   &.trmrk-minimal {
-    margin: 0;
     border-radius: 0;
   }
 }
 
 .trmrk-horiz-scrollable-strip {
+  user-select: all;
+  -webkit-user-select: all;
   overflow-x: scroll;
   scrollbar-width: thin;
 

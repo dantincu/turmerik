@@ -7,11 +7,15 @@ import {
   ViewChild,
   ViewContainerRef,
   ComponentRef,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { encodeHtml } from '../../trmrk/text';
+import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
+import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
 import { refreshProps } from '../services/dynamicComponent';
 
 export enum TrmrkHorizStripType {
@@ -22,11 +26,14 @@ export enum TrmrkHorizStripType {
 
 @Component({
   selector: 'trmrk-horiz-strip',
-  imports: [CommonModule],
+  imports: [CommonModule, TrmrkLongPressOrRightClick],
   templateUrl: './trmrk-horiz-strip.html',
   styleUrl: './trmrk-horiz-strip.scss',
 })
 export class TrmrkHorizStrip implements OnChanges {
+  @Output() trmrkTextLongPressOrRightClick =
+    new EventEmitter<TouchOrMouseCoords>();
+
   @Input() trmrkType = TrmrkHorizStripType.Regular;
   @Input() trmrkMinimal = false;
   @Input() trmrkMainText!: string;
@@ -96,5 +103,9 @@ export class TrmrkHorizStrip implements OnChanges {
       changes['trailingComponentArgs'],
       this.trailingContainer
     );
+  }
+
+  textLongPressOrRightClick(event: TouchOrMouseCoords) {
+    this.trmrkTextLongPressOrRightClick.emit(event);
   }
 }

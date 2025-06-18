@@ -2,7 +2,7 @@
   @if (leadingComponent) {
   <ng-container #leadingContainer></ng-container>
   }
-  <div class="trmrk-text-row">
+  <div class="trmrk-text-row" (trmrkLongPressOrRightClick)="textLongPressOrRightClick($event)">
     <div
       [ngClass]="['trmrk-text-col', trmrkDetailsTextParts ? 'trmrk-has-details' : '']"
     >
