@@ -1,4 +1,4 @@
-import { Kvp, MtblRefValue, ValueOrAny } from "./core";
+import { Kvp, MtblRefValue, ValueOrAny } from './core';
 
 export const toArray = <T>(itrbl: Iterable<T>) => {
   const retArr: T[] = [];
@@ -253,7 +253,7 @@ export const removeAll = <T>(
   predicate: T[] | ((item: T, idx: number, inArr: T[]) => ValueOrAny<boolean>),
   eqCompr: ((val1: T, val2: T) => number) | null | undefined = null
 ) => {
-  if (typeof predicate === "object") {
+  if (typeof predicate === 'object') {
     const arr = predicate as T[];
 
     for (let i = 0; i < arr.length; i++) {
@@ -296,3 +296,47 @@ export const removeAll = <T>(
 
 export const removeNullOrUndef = <T>(arr: T[]) =>
   arr.filter((val) => (val ?? false) !== false);
+
+export interface Iterator<T = any> {
+  [Symbol.iterator]: () => { next: () => { value: T; done: boolean } };
+}
+
+export interface PseudoArray {
+  length: number;
+}
+
+export const queryMx = <T>(
+  mx: Iterator<T> | PseudoArray,
+  childNodesPropName: string,
+  path: number[]
+): T | undefined => {
+  const idx = path[0];
+  let i = 0;
+  let found = false;
+  const mxAsArr = mx as PseudoArray;
+  let retVal: T | undefined = undefined;
+
+  if (typeof mxAsArr.length === 'number') {
+    if (mxAsArr.length > idx) {
+      found = true;
+      retVal = (mxAsArr as T[])[idx];
+    }
+  } else {
+    for (let value of mx as Iterable<T>) {
+      if (i === idx) {
+        found = true;
+        retVal = value;
+      }
+    }
+  }
+
+  if (found && path.length > 1) {
+    const childMx = (retVal as { [prop: string]: Iterator<T> | PseudoArray })[
+      childNodesPropName
+    ];
+
+    retVal = queryMx(childMx, childNodesPropName, path.slice(1));
+  }
+
+  return retVal;
+};

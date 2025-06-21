@@ -1,0 +1,73 @@
+@if (trmrkIsExpandable) {
+<button
+  mat-icon-button
+  class="trmrk-icon-btn"
+  (click)="trmrkExpandedToggled.emit(!trmrkIsExpanded)"
+>
+  <mat-icon class="trmrk-icon"
+    >{{ trmrkIsExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}
+  </mat-icon>
+</button>
+} @if (trmrkIsExpandable === false) {
+<div class="trmrk-icon-btn"></div>
+}
+<trmrk-horiz-strip
+  [trmrkType]="trmrkIsAppBar ? TrmrkHorizStripType.AppBar : TrmrkHorizStripType.Regular"
+  [trmrkMainText]="trmrkMainText"
+  [trmrkDetailsTextParts]="trmrkDetailsTextParts"
+  [trmrkCssClass]="trmrkCssClass"
+  (trmrkTextLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
+  (trmrkTextShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
+  [trmrkLeadingTemplate]="leadingTemplate"
+  [trmrkTrailingTemplate]="trailingTemplate"
+></trmrk-horiz-strip>
+
+<ng-template #leadingTemplate>
+  @if (trmrkIsSelectable) {
+  <button mat-icon-button class="trmrk-icon-btn">
+    <mat-checkbox
+      class="trmrk-checkbox"
+      (change)="onSelectedToggled($event)"
+      [checked]="trmrkIsSelected"
+    ></mat-checkbox>
+  </button>
+  }
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn"
+    (trmrkLongPressOrRightClick)="trmrkLeadingBtnLongPressOrRightClick.emit($event)"
+    (trmrkShortPressOrLeftClick)="trmrkLeadingBtnShortPressOrLeftClick.emit($event)"
+  >
+    <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container>
+  </button>
+
+  @if (trmrkShowGoToParentBtn ?? trmrkIsAppBar) {
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn"
+    [disabled]="!trmrkGoToParentBtnIsEnabled"
+    (trmrkLongPressOrRightClick)="trmrkGoToParentBtnLongPressOrRightClick.emit($event)"
+    (trmrkShortPressOrLeftClick)="trmrkGoToParentBtnShortPressOrLeftClick.emit($event)"
+  >
+    <mat-icon class="trmrk-icon"
+      >{{ trmrkGoToParentMatIconName ?? 'arrow_upward' }}</mat-icon
+    >
+  </button>
+  } @if (trmrkColorLabelColor) {
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn"
+    (trmrkLongPressOrRightClick)="trmrkColorLabelBtnLongPressOrRightClick.emit($event)"
+    (trmrkShortPressOrLeftClick)="trmrkColorLabelBtnShortPressOrLeftClick.emit($event)"
+  >
+    <mat-icon class="trmrk-icon" [ngStyle]="{color: trmrkColorLabelColor}"
+      >label</mat-icon
+    >
+  </button>
+  }
+</ng-template>
+<ng-template #trailingTemplate>
+  @if (trmrkTrailingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
+  }
+</ng-template>

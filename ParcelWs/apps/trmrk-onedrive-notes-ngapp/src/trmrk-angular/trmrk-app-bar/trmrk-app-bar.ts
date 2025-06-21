@@ -30,7 +30,7 @@ import { MatMenuModule } from '@angular/material/menu';
 export class TrmrkAppBar implements AfterViewInit {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
   @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | null | undefined;
-  @Input() trmrkTrailingIconTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkTrailingTemplate?: TemplateRef<any> | null | undefined;
   @Input() trmrkHomeRouterLink:
     | string
     | readonly any[]

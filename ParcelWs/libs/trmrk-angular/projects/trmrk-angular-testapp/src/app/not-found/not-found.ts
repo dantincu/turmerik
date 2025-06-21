@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
+import { TrmrkAppBar } from '../../../../trmrk-angular/src/lib/trmrk-app-bar/trmrk-app-bar';
 
 @Component({
   selector: 'app-not-found',

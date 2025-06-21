@@ -1,6 +1,6 @@
 <trmrk-app-bar
   [trmrkLeadingIconTemplate]="appIcon"
-  [trmrkTrailingIconTemplate]="optionsMenu"
+  [trmrkTrailingTemplate]="optionsMenu"
   [trmrkTitle]="'Turmerik Test App'"
 ></trmrk-app-bar>
 
@@ -28,18 +28,16 @@
 <div
   class="trmrk-app-panel trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-x"
 >
-  @for (str of [['asdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
-  'asdfasdfsadsafdasdfasdfsadsafd asdfasdfsadsafdasdfasdfsadsafd',
-  'asdfasdfsadsafd'].join(''), 'asdfasdfsadsafdasdfasdfsadsafd']; track $index)
-  { @for (dStr of [['12kB', '2025-05-09 13:00'], null]; track $index) { @for
-  (cssClassSffx of ['', '1']; track $index) { @for (isMinimal of [false, true];
-  track $index) {
+  @for (str of horizStripTextArr; track $index) { @for (dStr of [['12kB',
+  '2025-05-09 13:00', { text: horizStripText }], ['12kB', '2025-05-0913:00'],
+  null]; track $index) { @for (cssClassSffx of ['', '1', '2']; track $index) {
+  @for (isMinimal of [false, true]; track $index) {
   <trmrk-horiz-strip
     [trmrkMainText]="str"
     [trmrkDetailsTextParts]="dStr"
     [trmrkMinimal]="isMinimal"
     [ngClass]="['my-horiz-strip' + cssClassSffx]"
-    [cssClass]="[cssClassSffx ? '' : 'trmrk-has-border']"
+    [trmrkCssClass]="[cssClassSffx === '2' ? '' : cssClassSffx === '1' ? 'trmrk-has-border' : 'trmrk-has-border-x2']"
   ></trmrk-horiz-strip>
   }
 
@@ -48,15 +46,102 @@
     [trmrkMainText]="str"
     [trmrkDetailsTextParts]="dStr"
     [ngClass]="['my-app-bar' + cssClassSffx]"
-    [cssClass]="[cssClassSffx ? '' : 'trmrk-has-border']"
+    [trmrkCssClass]="[cssClassSffx === '2' ? '' : 'trmrk-has-border']"
   ></trmrk-horiz-strip
-  >} }
+  >}
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+    [trmrkColorLabelColor]="'#F80'"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item trmrk-is-focused']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+    [trmrkIsAppBar]="true"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item trmrk-is-selected']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+    [trmrkIsSelectable]="true"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item trmrk-is-selected trmrk-is-focused']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+    [trmrkIsSelectable]="true"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item trmrk-is-current']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-selected']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+    [trmrkIsSelectable]="true"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+  ></trmrk-panel-list-item>
+
+  <trmrk-panel-list-item
+    [trmrkMainText]="str"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused trmrk-is-selected']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingIconTemplate]="fileItemIcon"
+    [trmrkIsSelectable]="true"
+  ></trmrk-panel-list-item>
+
+  }
   <trmrk-horiz-strip
     [trmrkType]="TrmrkHorizStripType.Scrollable"
     [trmrkMainText]="str"
     class="my-horiz-scrollable-strip"
   ></trmrk-horiz-strip>
   }
+
+  <ng-template #fileItemIcon>
+    <mat-icon class="trmrk-icon trmrk-leading-icon">description</mat-icon>
+  </ng-template>
 
   <div [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote"></div>
 
@@ -95,11 +180,7 @@
       </button>
       <span>{{multiClickUserMsg}}</span>
     </div>
-    <!--div
-    [ngStyle]="{backgroundColor: '#080', position: 'absolute', width: '40px', height: '40px', top: '0px', zIndex: 100000}"
-  >
-    a
-  </div-->
+
     <div
       class="trmrk-vert-resize-strip"
       #draggableStrip
@@ -107,108 +188,109 @@
       [ngStyle]="{zIndex: 1000000}"
     ></div>
   </div>
-  <trmrk-user-message
-    [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
-    [trmrkShow]="showUserMsg[0]"
-    [trmrkLevel]="1"
-    (trmrkClose)="userMessageClose(0)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="0"
-  ></trmrk-user-message>
-
-  <trmrk-user-message
-    [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqwrqwerwqerqwerfqwerqwerqwerqwerqwer qwerqwerwqerqwerfqwerqwerqwerqwer weqrweqwerqwerwqerqwerfqwerqwerq erqwerqwerqweqrweqwerqwerwqerqwer'"
-    [trmrkShow]="showUserMsg[1]"
-    [trmrkLevel]="0"
-    (trmrkClose)="userMessageClose(1)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="1"
-    [trmrkBreakWords]="true"
-    [trmrkArrowStyle]="{left: 'calc(25%)'}"
-  ></trmrk-user-message>
-
-  <div [ngStyle]="{display: 'flex'}">
+  <div>
     <trmrk-user-message
-      [trmrkMessage]="'asdfasdfa qwerwqerq'"
-      [trmrkShow]="showUserMsg[2]"
+      [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+      [trmrkShow]="showUserMsg[0]"
       [trmrkLevel]="1"
-      (trmrkClose)="userMessageClose(2)"
+      (trmrkClose)="userMessageClose(0)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="0"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasd fqwerqwerqwerqwerqwerqwerqwerqwerqwrqwerwqerqwerfqwerqwerqwerqwerqwer qwerqwerwqerqwerfqwerqwerqwerqwer weqrweqwerqwerwqerqwerfqwerqwerq erqwerqwerqweqrweqwerqwerwqerqwer'"
+      [trmrkShow]="showUserMsg[1]"
+      [trmrkLevel]="0"
+      (trmrkClose)="userMessageClose(1)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="1"
+      [trmrkBreakWords]="true"
+      [trmrkArrowStyle]="{left: 'calc(25%)'}"
+    ></trmrk-user-message>
+
+    <div [ngStyle]="{display: 'flex'}">
+      <trmrk-user-message
+        [trmrkMessage]="'asdfasdfa qwerwqerq'"
+        [trmrkShow]="showUserMsg[2]"
+        [trmrkLevel]="1"
+        (trmrkClose)="userMessageClose(2)"
+        [trmrkAutoCloseMillis]="0"
+        [trmrkArrowPlacement]="2"
+      ></trmrk-user-message>
+      <trmrk-user-message
+        [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
+        [trmrkShow]="showUserMsg[3]"
+        [trmrkLevel]="0"
+        (trmrkClose)="userMessageClose(3)"
+        [trmrkAutoCloseMillis]="0"
+        [trmrkArrowPlacement]="3"
+      ></trmrk-user-message>
+    </div>
+
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+      [trmrkShow]="showUserMsg[4]"
+      [trmrkLevel]="1"
+      (trmrkClose)="userMessageClose(4)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="4"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasdf qwerwqerqwer qwerwqerqwer'"
+      [trmrkShow]="showUserMsg[5]"
+      [trmrkLevel]="2"
+      (trmrkClose)="userMessageClose(5)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="1"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'failure'"
+      [trmrkShow]="showUserMsg[6]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(6)"
       [trmrkAutoCloseMillis]="0"
       [trmrkArrowPlacement]="2"
     ></trmrk-user-message>
+
     <trmrk-user-message
-      [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
-      [trmrkShow]="showUserMsg[3]"
-      [trmrkLevel]="0"
-      (trmrkClose)="userMessageClose(3)"
+      [trmrkMessage]="'fail'"
+      [trmrkShow]="showUserMsg[7]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(7)"
       [trmrkAutoCloseMillis]="0"
       [trmrkArrowPlacement]="3"
     ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'fail more'"
+      [trmrkShow]="showUserMsg[8]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(8)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="4"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'fail even more'"
+      [trmrkShow]="showUserMsg[9]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(9)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="1"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'fail even more than'"
+      [trmrkShow]="showUserMsg[10]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(10)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="2"
+    ></trmrk-user-message>
   </div>
-
-  <trmrk-user-message
-    [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
-    [trmrkShow]="showUserMsg[4]"
-    [trmrkLevel]="1"
-    (trmrkClose)="userMessageClose(4)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="4"
-  ></trmrk-user-message>
-
-  <trmrk-user-message
-    [trmrkMessage]="'asdfasdfasdf qwerwqerqwer qwerwqerqwer'"
-    [trmrkShow]="showUserMsg[5]"
-    [trmrkLevel]="2"
-    (trmrkClose)="userMessageClose(5)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="1"
-  ></trmrk-user-message>
-
-  <trmrk-user-message
-    [trmrkMessage]="'failure'"
-    [trmrkShow]="showUserMsg[6]"
-    [trmrkLevel]="3"
-    (trmrkClose)="userMessageClose(6)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="2"
-  ></trmrk-user-message>
-
-  <trmrk-user-message
-    [trmrkMessage]="'fail'"
-    [trmrkShow]="showUserMsg[7]"
-    [trmrkLevel]="3"
-    (trmrkClose)="userMessageClose(7)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="3"
-  ></trmrk-user-message>
-
-  <trmrk-user-message
-    [trmrkMessage]="'fail more'"
-    [trmrkShow]="showUserMsg[8]"
-    [trmrkLevel]="3"
-    (trmrkClose)="userMessageClose(8)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="4"
-  ></trmrk-user-message>
-
-  <trmrk-user-message
-    [trmrkMessage]="'fail even more'"
-    [trmrkShow]="showUserMsg[9]"
-    [trmrkLevel]="3"
-    (trmrkClose)="userMessageClose(9)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="1"
-  ></trmrk-user-message>
-
-  <trmrk-user-message
-    [trmrkMessage]="'fail even more than'"
-    [trmrkShow]="showUserMsg[10]"
-    [trmrkLevel]="3"
-    (trmrkClose)="userMessageClose(10)"
-    [trmrkAutoCloseMillis]="0"
-    [trmrkArrowPlacement]="2"
-  ></trmrk-user-message>
-
   <div>
     <button
       mat-icon-button
@@ -272,6 +354,10 @@
     <mat-icon class="trmrk-icon">open_with</mat-icon>
   </button>
   <div>
-    <input type="text" />
+    <mat-form-field appearance="fill">
+      <mat-label>Enter your age</mat-label>
+      <input matInput type="number" placeholder="Age" class="trmrk-input" />
+    </mat-form-field>
   </div>
+  <trmrk-tree-view [trmrkData]="treeViewData"></trmrk-tree-view>
 </div>

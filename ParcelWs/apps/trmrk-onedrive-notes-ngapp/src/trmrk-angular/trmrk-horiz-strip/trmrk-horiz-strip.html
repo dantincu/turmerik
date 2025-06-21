@@ -1,0 +1,31 @@
+<div [ngClass]="cssClasses" [ngStyle]="trmrkCssStyle">
+  @if (trmrkLeadingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
+  }
+  <div
+    class="trmrk-text-row"
+    (trmrkLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
+    (trmrkShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
+    [trmrkLongPressPreventDefault]="trmrkType !== TrmrkHorizStripType.Scrollable"
+  >
+    <div
+      [ngClass]="['trmrk-text-col', trmrkDetailsTextParts ? 'trmrk-has-details' : '']"
+    >
+      <span class="trmrk-label" [innerHTML]="mainText"></span>
+      @if (trmrkDetailsTextParts) {
+      <span class="trmrk-details"
+        >@for (textPart of detailsTextParts; track $index) { @if (!$first) {
+        &bull; }<span
+          [ngClass]="['trmrk-text-part', textPart.italic ? 'trmrk-italic' : '']"
+          >{{ textPart.text }}</span
+        >}
+      </span>
+      }
+    </div>
+    @if (trmrkHasCap) {
+    <div class="trmrk-strip-cap" [ngStyle]="trmrkCapCssStyle"></div>
+    } @if (trmrkTrailingTemplate) {
+    <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
+    }
+  </div>
+</div>

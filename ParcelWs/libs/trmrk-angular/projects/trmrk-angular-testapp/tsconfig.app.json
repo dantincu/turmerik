@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "../trmrk-angular/src/lib/services/dynamicComponent.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

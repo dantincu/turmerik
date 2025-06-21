@@ -5,7 +5,7 @@
 
   .my-horiz-strip .trmrk-horiz-strip {
     background-color: #0c0;
-    border: 1px solid #080;
+    border: 2px solid #080;
 
     .trmrk-strip-cap {
       background-color: #080;
@@ -14,13 +14,23 @@
 
   .my-horiz-strip1 .trmrk-horiz-strip {
     background-color: #0c0;
+    border: 1px solid #080;
 
     .trmrk-strip-cap {
       background-color: #080;
     }
   }
 
-  .my-app-bar .trmrk-app-bar {
+  .my-horiz-strip2 .trmrk-horiz-strip {
+    background-color: #0c0;
+
+    .trmrk-strip-cap {
+      background-color: #080;
+    }
+  }
+
+  .my-app-bar .trmrk-app-bar,
+  .my-app-bar1 .trmrk-app-bar {
     border: 2px solid #a0b0d0;
 
     .trmrk-strip-cap {
@@ -28,7 +38,7 @@
     }
   }
 
-  .my-app-bar1 .trmrk-app-bar {
+  .my-app-bar2 .trmrk-app-bar {
     .trmrk-strip-cap {
       background-color: #a0b0d0;
     }
@@ -37,6 +47,79 @@
   .my-horiz-scrollable-strip .trmrk-horiz-scrollable-strip {
     .trmrk-strip-cap {
       background-color: #bbb;
+    }
+  }
+
+  .trmrk-file-item {
+    .trmrk-horiz-strip,
+    .trmrk-app-bar {
+      background-color: #f0f0f0;
+
+      [mat-icon-button].trmrk-icon-btn mat-icon.trmrk-icon.trmrk-leading-icon {
+        color: #202020;
+      }
+    }
+
+    &.trmrk-is-selected {
+      .trmrk-horiz-strip {
+        background-color: #d0d0d0;
+
+        [mat-icon-button].trmrk-icon-btn mat-icon.trmrk-icon.trmrk-leading-icon {
+          color: #000;
+        }
+      }
+    }
+
+    &.trmrk-is-focused {
+      .trmrk-horiz-strip {
+        border: 2px solid #c0c0c0;
+      }
+
+      &.trmrk-is-selected {
+        .trmrk-horiz-strip {
+          border: 2px solid #a0a0a0;
+        }
+      }
+    }
+
+    &.trmrk-is-current {
+      .trmrk-horiz-strip {
+        border: 2px solid #60a0FF;
+      }
+
+      &.trmrk-is-selected {
+        .trmrk-horiz-strip {
+          border: 2px solid #60a0FF;
+        }
+      }
+
+      &.trmrk-is-focused {
+        .trmrk-horiz-strip {
+          border: 2px solid #0040C0;
+        }
+
+        &.trmrk-is-selected {
+          .trmrk-horiz-strip {
+            border: 2px solid #0040C0;
+          }
+        }
+      }
+    }
+  }
+
+  .trmrk-tree-view {
+    .trmrk-tree-node {
+      .trmrk-horiz-strip {
+        background-color: #FAF8E8;
+
+        .trmrk-strip-cap {
+          background-color: #F0E8C0;
+        }
+
+        [mat-icon-button].trmrk-icon-btn mat-icon.trmrk-icon.trmrk-leading-icon {
+          color: #FFF080;
+        }
+      }
     }
   }
 }
@@ -48,7 +131,7 @@
 
   .my-horiz-strip .trmrk-horiz-strip {
     background-color: #040;
-    border: 1px solid #080;
+    border: 2px solid #080;
 
     .trmrk-strip-cap {
       background-color: #080;
@@ -57,13 +140,23 @@
 
   .my-horiz-strip1 .trmrk-horiz-strip {
     background-color: #040;
+    border: 1px solid #080;
 
     .trmrk-strip-cap {
       background-color: #080;
     }
   }
 
-  .my-app-bar .trmrk-app-bar {
+  .my-horiz-strip2 .trmrk-horiz-strip {
+    background-color: #040;
+
+    .trmrk-strip-cap {
+      background-color: #080;
+    }
+  }
+
+  .my-app-bar .trmrk-app-bar,
+  .my-app-bar1 .trmrk-app-bar {
     border: 2px solid #204080;
 
     .trmrk-strip-cap {
@@ -71,7 +164,7 @@
     }
   }
 
-  .my-app-bar1 .trmrk-app-bar {
+  .my-app-bar2 .trmrk-app-bar {
     .trmrk-strip-cap {
       background-color: #204080;
     }
@@ -80,6 +173,63 @@
   .my-horiz-scrollable-strip .trmrk-horiz-scrollable-strip {
     .trmrk-strip-cap {
       background-color: #444;
+    }
+  }
+
+  .trmrk-file-item {
+    .trmrk-horiz-strip,
+    .trmrk-app-bar {
+      background-color: #101010;
+
+      [mat-icon-button].trmrk-icon-btn mat-icon.trmrk-icon.trmrk-leading-icon {
+        color: #e0e0e0;
+      }
+    }
+
+    &.trmrk-is-selected {
+      .trmrk-horiz-strip {
+        background-color: #303030;
+
+        [mat-icon-button].trmrk-icon-btn mat-icon.trmrk-icon.trmrk-leading-icon {
+          color: #fff;
+        }
+      }
+    }
+
+    &.trmrk-is-focused {
+      .trmrk-horiz-strip {
+        border: 2px solid #404040;
+      }
+
+      &.trmrk-is-selected {
+        .trmrk-horiz-strip {
+          border: 2px solid #606060;
+        }
+      }
+    }
+
+    &.trmrk-is-current {
+      .trmrk-horiz-strip {
+        border: 2px solid #2040A0;
+      }
+
+      &.trmrk-is-selected {
+        .trmrk-horiz-strip {
+          border: 2px solid #2040A0;
+        }
+      }
+
+      &.trmrk-is-focused {
+        .trmrk-horiz-strip {
+          border: 2px solid #80A0FF;
+        }
+
+        &.trmrk-is-selected {
+          .trmrk-horiz-strip {
+            border: 2px solid #80A0FF;
+          }
+        }
+      }
     }
   }
 }

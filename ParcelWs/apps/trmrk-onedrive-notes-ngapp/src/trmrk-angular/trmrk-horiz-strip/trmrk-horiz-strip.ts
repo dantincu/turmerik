@@ -3,25 +3,26 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
-  Type,
-  ViewChild,
-  ViewContainerRef,
-  ComponentRef,
   EventEmitter,
   Output,
+  TemplateRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { encodeHtml } from '../../trmrk/text';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
-import { refreshProps } from '../services/dynamicComponent';
+import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
 
 export enum TrmrkHorizStripType {
   Regular,
   Scrollable,
   AppBar,
+}
+
+export interface TrmrkHorizStripDetailsTextPart {
+  text: string;
+  italic?: boolean | null | undefined;
 }
 
 @Component({
@@ -34,34 +35,30 @@ export class TrmrkHorizStrip implements OnChanges {
   @Output() trmrkTextLongPressOrRightClick =
     new EventEmitter<TouchOrMouseCoords>();
 
+  @Output() trmrkTextShortPressOrLeftClick =
+    new EventEmitter<TouchOrMouseCoords>();
+
   @Input() trmrkType = TrmrkHorizStripType.Regular;
   @Input() trmrkMinimal = false;
   @Input() trmrkMainText!: string;
-  @Input() trmrkDetailsTextParts: string[] | null = null;
+  @Input() trmrkDetailsTextParts:
+    | (string | TrmrkHorizStripDetailsTextPart)[]
+    | null = null;
   @Input() trmrkUseNonBreakingSpaceTokens = true;
   @Input() trmrkHasCap = true;
-  @Input() cssClass: string[] = [];
-  @Input() cssStyle: { [key: string]: any } | null = null;
-  @Input() capCssStyle: { [key: string]: any } | null = null;
-  @Input() leadingComponent: Type<any> | null = null;
-  @Input() leadingComponentArgs: { [key: string]: any } | null = null;
-  @Input() trailingComponent: Type<any> | null = null;
-  @Input() trailingComponentArgs: { [key: string]: any } | null = null;
-
-  @ViewChild('leadingContainer', { read: ViewContainerRef, static: true })
-  leadingContainer?: ViewContainerRef | null | undefined;
-  leadingComponentRef?: ComponentRef<any> | null | undefined;
-
-  @ViewChild('trailingContainer', { read: ViewContainerRef, static: true })
-  trailingContainer?: ViewContainerRef | null | undefined;
-  trailingComponentRef?: ComponentRef<any> | null | undefined;
+  @Input() trmrkCssClass: string[] = [];
+  @Input() trmrkCssStyle: { [key: string]: any } | null = null;
+  @Input() trmrkCapCssStyle: { [key: string]: any } | null = null;
+  @Input() trmrkLeadingTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkTrailingTemplate?: TemplateRef<any> | null | undefined;
 
   mainText = '';
+  TrmrkHorizStripType = TrmrkHorizStripType;
 
   constructor() {}
 
   get cssClasses() {
-    let cssClasses = [...this.cssClass];
+    let cssClasses = [...this.trmrkCssClass];
 
     switch (this.trmrkType) {
       case TrmrkHorizStripType.Scrollable:
@@ -82,30 +79,33 @@ export class TrmrkHorizStrip implements OnChanges {
     return cssClasses;
   }
 
+  get detailsTextParts() {
+    const detailsTextParts = this.trmrkDetailsTextParts?.map((part) => {
+      let retPart: TrmrkHorizStripDetailsTextPart;
+
+      if (typeof part === 'object') {
+        retPart = part;
+      } else {
+        retPart = {
+          text: part,
+          italic: true,
+        };
+      }
+
+      return retPart;
+    });
+
+    return detailsTextParts;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     const mainTextChange = changes['trmrkMainText'];
 
     if (mainTextChange) {
       this.mainText = encodeHtml(
-        mainTextChange.currentValue,
+        mainTextChange.currentValue ?? '',
         this.trmrkUseNonBreakingSpaceTokens
-      );
+      ).replaceAll('\n', '&nbsp;');
     }
-
-    this.leadingComponentRef = refreshProps(
-      changes['leadingComponent'],
-      changes['leadingComponentArgs'],
-      this.leadingContainer
-    );
-
-    this.trailingComponentRef = refreshProps(
-      changes['trailingComponent'],
-      changes['trailingComponentArgs'],
-      this.trailingContainer
-    );
-  }
-
-  textLongPressOrRightClick(event: TouchOrMouseCoords) {
-    this.trmrkTextLongPressOrRightClick.emit(event);
   }
 }

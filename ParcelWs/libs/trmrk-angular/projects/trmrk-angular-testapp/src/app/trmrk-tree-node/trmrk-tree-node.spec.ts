@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrmrkAppHorizStrip } from './trmrk-app-horiz-strip';
+import { TrmrkTreeNode } from './trmrk-tree-node';
 
-describe('TrmrkAppHorizStrip', () => {
-  let component: TrmrkAppHorizStrip;
-  let fixture: ComponentFixture<TrmrkAppHorizStrip>;
+describe('TrmrkTreeNode', () => {
+  let component: TrmrkTreeNode;
+  let fixture: ComponentFixture<TrmrkTreeNode>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrmrkAppHorizStrip]
+      imports: [TrmrkTreeNode]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TrmrkAppHorizStrip);
+    fixture = TestBed.createComponent(TrmrkTreeNode);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

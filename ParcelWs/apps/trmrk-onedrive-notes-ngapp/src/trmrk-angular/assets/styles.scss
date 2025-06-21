@@ -29,7 +29,7 @@
   overflow-y: scroll;
 }
 
-[mat-icon-button].trmrk-icon-btn {
+.trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn {
   display: inline-flex;
   width: 40px;
   height: 40px;
@@ -69,6 +69,10 @@ a[mat-icon-button].trmrk-icon-btn:link {
 }
 
 .trmrk-app-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
   &.trmrk-height-diff-x0 {
     height: calc(100vh - 50px);
   }
@@ -88,17 +92,30 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-app-bar, .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
   display: flex;
+  width: 100%;
   box-sizing: border-box;
   padding: 3px;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
 
-  .trmrk-text-row, .trmrk-text-row-padded {
-    overflow: hidden;
+  .trmrk-icon-btn {
+    margin-top: -3px;
+
+    .trmrk-checkbox {
+      .mdc-checkbox__checkmark {
+        top: -5px;
+        left: -5px;
+      }
+    }
   }
 
-  .trmrk-text-col, .trmrk-text-row, .trmrk-text-row-padded {
+  .trmrk-text-row {
+    overflow: hidden;
+    min-width: 40px;
+  }
+
+  .trmrk-text-col, .trmrk-text-row {
     display: flex;
 
     .trmrk-label, .trmrk-details {
@@ -108,16 +125,21 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
     .trmrk-details {
       font-size: 12px;
-      font-style: italic;
+
+      &.trmrk-text-part.trmrk-italic {
+        font-style: italic;
+      }
     }
   }
 
   .trmrk-text-col {
     flex-direction: column;
     padding-top: 8px;
+    padding-left: 5px;
 
     &.trmrk-has-details {
       padding-top: 0;
+      padding-left: 0;
     }
   }
 
@@ -131,18 +153,21 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
   &.trmrk-has-border {
     padding: 2px;
-
-    .trmrk-text-col {
-      padding-top: 8px;
-
-      &.trmrk-has-details {
-        padding-top: 0;
-      }
-    }
+    padding-left: 3px;
 
     .trmrk-strip-cap {
       height: 28px;
       margin-top: 3px;
+    }
+  }
+
+  &.trmrk-has-border-x2 {
+    padding: 1px;
+    padding-left: 3px;
+
+    .trmrk-strip-cap {
+      height: 26px;
+      margin-top: 4px;
     }
   }
 }
@@ -150,6 +175,10 @@ a[mat-icon-button].trmrk-icon-btn:link {
 .trmrk-app-bar {
   height: 50px;
   padding: 6px;
+
+  .trmrk-icon-btn {
+    margin-top: 0px;
+  }
 
   .trmrk-page-title {
     font-size: 20px;
@@ -160,7 +189,6 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 
   .trmrk-text-col {
-    flex-direction: column;
     padding-top: 9px;
 
     &.trmrk-has-details {
@@ -178,6 +206,10 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
     .trmrk-text-col {
       padding-top: 9px;
+
+      &.trmrk-has-details {
+        padding-top: 0;
+      }
     }
 
     .trmrk-strip-cap {
@@ -211,8 +243,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 
   .trmrk-strip-cap {
-    height: 22px;
-    margin-top: 1px;
+    height: 20px;
+    margin-top: 2px;
   }
 }
 
