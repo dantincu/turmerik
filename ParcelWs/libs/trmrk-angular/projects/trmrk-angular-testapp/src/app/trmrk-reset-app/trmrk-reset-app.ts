@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 import { TrmrkLoading } from 'trmrk-angular';
 import { TrmrkUserMessage } from 'trmrk-angular';
 
-import { TrmrkAppBar } from '../../../../trmrk-angular/src/lib/trmrk-app-bar/trmrk-app-bar';
+import { TrmrkAppBar } from 'trmrk-angular';
 import { jsonBool } from '../../trmrk/core';
 
 @Component({

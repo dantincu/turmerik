@@ -4,7 +4,6 @@ import {
   Output,
   EventEmitter,
   TemplateRef,
-  OnInit,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -40,12 +39,7 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 })
 export class TrmrkPanelListItem {
   @Output() trmrkExpandedToggled = new EventEmitter<boolean>();
-
-  @Output() trmrkTextLongPressOrRightClick =
-    new EventEmitter<TouchOrMouseCoords>();
-
-  @Output() trmrkTextShortPressOrLeftClick =
-    new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkCheckBoxToggled = new EventEmitter<MatCheckboxChange>();
 
   @Output() trmrkLeadingBtnLongPressOrRightClick =
     new EventEmitter<TouchOrMouseCoords>();
@@ -65,6 +59,12 @@ export class TrmrkPanelListItem {
   @Output() trmrkColorLabelBtnShortPressOrLeftClick =
     new EventEmitter<TouchOrMouseCoords>();
 
+  @Output() trmrkTextLongPressOrRightClick =
+    new EventEmitter<TouchOrMouseCoords>();
+
+  @Output() trmrkTextShortPressOrLeftClick =
+    new EventEmitter<TouchOrMouseCoords>();
+
   @Input() trmrkIsAppBar = false;
   @Input() trmrkMainText!: string;
   @Input() trmrkDetailsTextParts:
@@ -75,7 +75,8 @@ export class TrmrkPanelListItem {
   @Input() trmrkIsExpanded = false;
   @Input() trmrkIsSelectable = false;
   @Input() trmrkIsSelected = false;
-  @Input() trmrkLeadingIconTemplate!: TemplateRef<any>;
+  @Input() trmrkLeadingMatIconName?: string | null | undefined;
+  @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | null | undefined;
   @Input() trmrkShowGoToParentBtn?: boolean | null | undefined;
   @Input() trmrkGoToParentMatIconName?: string | null | undefined;
   @Input() trmrkGoToParentBtnIsEnabled = true;
@@ -83,6 +84,4 @@ export class TrmrkPanelListItem {
   @Input() trmrkTrailingTemplate!: TemplateRef<any>;
 
   TrmrkHorizStripType = TrmrkHorizStripType;
-
-  onSelectedToggled(event: MatCheckboxChange): void {}
 }

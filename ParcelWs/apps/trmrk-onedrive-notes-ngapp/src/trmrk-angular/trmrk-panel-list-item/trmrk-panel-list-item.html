@@ -27,21 +27,25 @@
   <button mat-icon-button class="trmrk-icon-btn">
     <mat-checkbox
       class="trmrk-checkbox"
-      (change)="onSelectedToggled($event)"
+      (change)="trmrkCheckBoxToggled.emit($event)"
       [checked]="trmrkIsSelected"
     ></mat-checkbox>
   </button>
-  }
+  } @if (trmrkLeadingMatIconName || trmrkLeadingIconTemplate) {
   <button
     mat-icon-button
     class="trmrk-icon-btn"
     (trmrkLongPressOrRightClick)="trmrkLeadingBtnLongPressOrRightClick.emit($event)"
     (trmrkShortPressOrLeftClick)="trmrkLeadingBtnShortPressOrLeftClick.emit($event)"
   >
-    <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container>
+    @if (trmrkLeadingMatIconName) {
+    <mat-icon class="trmrk-icon trmrk-leading-icon"
+      >{{trmrkLeadingMatIconName}}</mat-icon
+    >
+    } @if (!trmrkLeadingMatIconName && trmrkLeadingIconTemplate){
+    <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container> }
   </button>
-
-  @if (trmrkShowGoToParentBtn ?? trmrkIsAppBar) {
+  } @if (trmrkShowGoToParentBtn ?? trmrkIsAppBar) {
   <button
     mat-icon-button
     class="trmrk-icon-btn"

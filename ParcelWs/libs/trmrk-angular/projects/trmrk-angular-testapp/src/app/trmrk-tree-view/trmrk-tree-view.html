@@ -1,8 +1,8 @@
 <div class="trmrk-tree-view trmrk-scrollable trmrk-scrollable-x">
   @for (node of rootNodes; track node.nodeValue.id) {
   <trmrk-tree-node
+    [trmrkTreeData]="trmrkData"
     [trmrkData]="trmrkData.rootNodes[$index]"
-    [trmrkNodeExpandedToggled]="trmrkData.nodeExpandedToggled"
   ></trmrk-tree-node>
   }
 </div>

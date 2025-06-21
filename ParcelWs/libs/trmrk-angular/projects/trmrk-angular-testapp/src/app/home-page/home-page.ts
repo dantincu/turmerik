@@ -17,6 +17,8 @@ import {
   TrmrkTreeNode,
   TrmrkTreeNodeData,
   TrmrkTreeNodeExpandedToggledEvent,
+  TrmrkTreeNodeEvent,
+  TrmrkTreeNodeEventCore,
 } from 'trmrk-angular';
 
 /* import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message'; */
@@ -30,10 +32,7 @@ import { TrmrkAppBar } from 'trmrk-angular';
 import { TrmrkPanelListItem } from 'trmrk-angular';
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
-import {
-  TrmrkHorizStrip,
-  TrmrkHorizStripType,
-} from '../../../../trmrk-angular/src/lib/trmrk-horiz-strip/trmrk-horiz-strip';
+import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
@@ -196,20 +195,66 @@ export class HomePage implements AfterViewInit {
     const dim = 4;
     const retArr: TrmrkTreeNodeData<TreeNode>[] = [];
 
+    const createFakeTreeNodeData = () =>
+      ({
+        nodeValue: {
+          id: -1,
+          text: '',
+        },
+        path: [],
+      } as TrmrkTreeNodeData<TreeNode>);
+
     const retData: TrmrkTree<TreeNode> = {
       rootNodes: [],
       rootNodesData: new TrmrkObservable<TrmrkTreeNodeData<TreeNode>[]>(retArr),
       nodeExpandedToggled: new TrmrkObservable<
         TrmrkTreeNodeExpandedToggledEvent<TreeNode>
       >({
-        data: {
-          nodeValue: {
-            id: -1,
-            text: '',
-          },
-          path: [],
-        },
+        data: createFakeTreeNodeData(),
         isExpandedNow: false,
+      }),
+      nodeCheckBoxToggled: new TrmrkObservable<
+        TrmrkTreeNodeEvent<TreeNode, boolean, any>
+      >({
+        data: createFakeTreeNodeData(),
+        event: null,
+        value: false,
+      }),
+      nodeIconShortPressOrLeftClick: new TrmrkObservable<
+        TrmrkTreeNodeEventCore<TreeNode>
+      >({
+        data: createFakeTreeNodeData(),
+        event: null,
+      }),
+      nodeIconLongPressOrRightClick: new TrmrkObservable<
+        TrmrkTreeNodeEventCore<TreeNode>
+      >({
+        data: createFakeTreeNodeData(),
+        event: null,
+      }),
+      nodeColorLabelShortPressOrLeftClick: new TrmrkObservable<
+        TrmrkTreeNodeEventCore<TreeNode>
+      >({
+        data: createFakeTreeNodeData(),
+        event: null,
+      }),
+      nodeColorLabelLongPressOrRightClick: new TrmrkObservable<
+        TrmrkTreeNodeEventCore<TreeNode>
+      >({
+        data: createFakeTreeNodeData(),
+        event: null,
+      }),
+      nodeTextShortPressOrLeftClick: new TrmrkObservable<
+        TrmrkTreeNodeEventCore<TreeNode>
+      >({
+        data: createFakeTreeNodeData(),
+        event: null,
+      }),
+      nodeTextLongPressOrRightClick: new TrmrkObservable<
+        TrmrkTreeNodeEventCore<TreeNode>
+      >({
+        data: createFakeTreeNodeData(),
+        event: null,
       }),
     };
 
@@ -227,6 +272,27 @@ export class HomePage implements AfterViewInit {
       }
 
       node.data.next({ ...event.data, isExpanded: event.isExpandedNow });
+    });
+
+    retData.nodeTextLongPressOrRightClick.subscribe((event) => {
+      const lastIdx = event.data.path.at(-1)!;
+      const prPath = event.data.path.slice(0, -1);
+
+      let childNodes: TrmrkTreeNode<TreeNode>[];
+      let childNodesObs: TrmrkObservable<TrmrkTreeNodeData<TreeNode>[]>;
+
+      if (prPath.length > 0) {
+        const prNode = queryMx(retData.rootNodes, 'childNodes', prPath)!;
+        childNodes = prNode.childNodes!;
+        childNodesObs = prNode.childNodesData!;
+      } else {
+        childNodes = retData.rootNodes;
+        childNodesObs = retData.rootNodesData;
+      }
+
+      childNodes.splice(lastIdx, 1);
+      const childNodesData = [...childNodesObs.value];
+      childNodesObs.next(childNodesData);
     });
 
     const createItem = (
