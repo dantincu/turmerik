@@ -1,3 +1,4 @@
+@if (data && trmrkData) {
 <div
   [ngClass]="['trmrk-tree-node', trmrkData.data.value.isHcyNode ? 'trmrk-is-hcy-node' : '', trmrkData.data.value.isExpanded ? 'trmrk-is-expanded' : '']"
 >
@@ -21,12 +22,13 @@
     <trmrk-tree-node
       [trmrkTreeData]="trmrkTreeData"
       [trmrkData]="trmrkData.childNodes![$index]"
+      [trmrkPath]="getChildNodePath($index)"
     ></trmrk-tree-node>
     }
   </div>
   }
 </div>
-
+}
 <ng-template #treeNodeIcon>
   <mat-icon class="trmrk-icon trmrk-leading-icon">folder</mat-icon>
 </ng-template>

@@ -9,7 +9,6 @@ import {
   TrmrkObservable,
   TrmrkTree,
   TrmrkTreeNode as TrmrkTreeNodeT,
-  TrmrkTreeNodeExpandedToggledEvent,
   TrmrkTreeNodeData,
 } from 'trmrk-angular';
 
@@ -31,6 +30,7 @@ export interface TreeNode {
 export class TrmrkTreeNode implements OnInit, OnDestroy {
   @Input() trmrkTreeData!: TrmrkTree<TreeNode>;
   @Input() trmrkData!: TrmrkTreeNodeT<TreeNode>;
+  @Input() trmrkPath!: number[];
 
   get showChildNodes() {
     const showChildNodes = !!(
@@ -70,58 +70,72 @@ export class TrmrkTreeNode implements OnInit, OnDestroy {
 
   expandedToggled(isExpandedNewValue: boolean) {
     this.trmrkTreeData.nodeExpandedToggled.next({
-      data: this.trmrkData.data.value,
-      isExpandedNow: isExpandedNewValue,
+      data: this.data,
+      event: null,
+      value: isExpandedNewValue,
+      path: this.trmrkPath,
     });
   }
 
   checkBoxToggled(event: MatCheckboxChange) {
     this.trmrkTreeData.nodeCheckBoxToggled.next({
-      data: this.trmrkData.data.value,
+      data: this.data,
       event: event,
       value: event.checked,
+      path: this.trmrkPath,
     });
   }
 
   nodeIconShortPressOrLeftClick(event: TouchOrMouseCoords) {
     this.trmrkTreeData.nodeIconShortPressOrLeftClick.next({
-      data: this.trmrkData.data.value,
+      data: this.data,
       event: event,
+      path: this.trmrkPath,
     });
   }
 
   nodeIconLongPressOrRightClick(event: TouchOrMouseCoords) {
     this.trmrkTreeData.nodeIconLongPressOrRightClick.next({
-      data: this.trmrkData.data.value,
+      data: this.data,
       event: event,
+      path: this.trmrkPath,
     });
   }
 
   nodeColorLabelShortPressOrLeftClick(event: TouchOrMouseCoords) {
     this.trmrkTreeData.nodeColorLabelShortPressOrLeftClick.next({
-      data: this.trmrkData.data.value,
+      data: this.data,
       event: event,
+      path: this.trmrkPath,
     });
   }
 
   nodeColorLabelLongPressOrRightClick(event: TouchOrMouseCoords) {
     this.trmrkTreeData.nodeColorLabelLongPressOrRightClick.next({
-      data: this.trmrkData.data.value,
+      data: this.data,
       event: event,
+      path: this.trmrkPath,
     });
   }
 
   nodeTextShortPressOrLeftClick(event: TouchOrMouseCoords) {
     this.trmrkTreeData.nodeTextShortPressOrLeftClick.next({
-      data: this.trmrkData.data.value,
+      data: this.data,
       event: event,
+      path: this.trmrkPath,
     });
   }
 
   nodeTextLongPressOrRightClick(event: TouchOrMouseCoords) {
     this.trmrkTreeData.nodeTextLongPressOrRightClick.next({
-      data: this.trmrkData.data.value,
+      data: this.data,
       event: event,
+      path: this.trmrkPath,
     });
+  }
+
+  getChildNodePath(index: number) {
+    const childNodePath = [...this.trmrkPath, index];
+    return childNodePath;
   }
 }

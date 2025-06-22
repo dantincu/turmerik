@@ -24,8 +24,9 @@
     </div>
     @if (trmrkHasCap) {
     <div class="trmrk-strip-cap" [ngStyle]="trmrkCapCssStyle"></div>
-    } @if (trmrkTrailingTemplate) {
-    <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
     }
   </div>
+  @if (trmrkTrailingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
+  }
 </div>

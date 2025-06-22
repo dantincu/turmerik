@@ -47,6 +47,7 @@
     [trmrkDetailsTextParts]="dStr"
     [ngClass]="['my-app-bar' + cssClassSffx]"
     [trmrkCssClass]="[cssClassSffx === '2' ? '' : 'trmrk-has-border']"
+    [trmrkTrailingTemplate]="appHeaderOptionsIcon"
   ></trmrk-horiz-strip
   >}
   <trmrk-panel-list-item
@@ -138,6 +139,12 @@
     class="my-horiz-scrollable-strip"
   ></trmrk-horiz-strip>
   }
+
+  <ng-template #appHeaderOptionsIcon>
+    <button mat-icon-button class="trmrk-icon-btn">
+      <mat-icon class="trmrk-icon">more_vert</mat-icon>
+    </button>
+  </ng-template>
 
   <ng-template #fileItemIcon>
     <mat-icon class="trmrk-icon trmrk-leading-icon">description</mat-icon>

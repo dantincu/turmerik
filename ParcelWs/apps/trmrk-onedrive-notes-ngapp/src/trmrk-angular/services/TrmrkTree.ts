@@ -4,7 +4,7 @@ import { TrmrkObservable } from './TrmrkObservable';
 
 export interface TrmrkTreeNodeData<T> {
   nodeValue: T;
-  path: number[];
+  // path: number[];
   isHcyNode?: boolean | null | undefined;
   isExpanded?: boolean | null | undefined;
   isSelectable?: boolean | null | undefined;
@@ -20,13 +20,9 @@ export interface TrmrkTreeNode<T> {
   childNodes?: TrmrkTreeNode<T>[] | null | undefined;
 }
 
-export interface TrmrkTreeNodeExpandedToggledEvent<T> {
-  data: TrmrkTreeNodeData<T>;
-  isExpandedNow: boolean;
-}
-
 export interface TrmrkTreeNodeEventCore<T, TEvent = any> {
   data: TrmrkTreeNodeData<T>;
+  path: number[];
   event: TEvent;
 }
 
@@ -38,7 +34,7 @@ export interface TrmrkTreeNodeEvent<T, TValue, TEvent = any>
 export interface TrmrkTree<T> {
   rootNodesData: TrmrkObservable<TrmrkTreeNodeData<T>[]>;
   rootNodes: TrmrkTreeNode<T>[];
-  nodeExpandedToggled: TrmrkObservable<TrmrkTreeNodeExpandedToggledEvent<T>>;
+  nodeExpandedToggled: TrmrkObservable<TrmrkTreeNodeEvent<T, boolean>>;
   nodeCheckBoxToggled: TrmrkObservable<TrmrkTreeNodeEvent<T, boolean>>;
 
   nodeIconShortPressOrLeftClick: TrmrkObservable<

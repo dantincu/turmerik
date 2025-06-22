@@ -16,7 +16,6 @@ import {
   TrmrkTree,
   TrmrkTreeNode,
   TrmrkTreeNodeData,
-  TrmrkTreeNodeExpandedToggledEvent,
   TrmrkTreeNodeEvent,
   TrmrkTreeNodeEventCore,
 } from 'trmrk-angular';
@@ -94,7 +93,11 @@ export class HomePage implements AfterViewInit {
     'asdfasdfsadsafd',
   ].join('  ');
 
-  horizStripTextArr = [this.horizStripText, 'asdfasdfsadsafd asdfasdfsadsafd'];
+  horizStripTextArr = [
+    this.horizStripText,
+    'asdfasdfsadsafd asdfasdfsadsafd',
+    'asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd fsad.',
+  ];
 
   treeViewData: TrmrkTree<TreeNode>;
 
@@ -208,15 +211,18 @@ export class HomePage implements AfterViewInit {
       rootNodes: [],
       rootNodesData: new TrmrkObservable<TrmrkTreeNodeData<TreeNode>[]>(retArr),
       nodeExpandedToggled: new TrmrkObservable<
-        TrmrkTreeNodeExpandedToggledEvent<TreeNode>
+        TrmrkTreeNodeEvent<TreeNode, boolean, any>
       >({
         data: createFakeTreeNodeData(),
-        isExpandedNow: false,
+        path: [],
+        event: null,
+        value: false,
       }),
       nodeCheckBoxToggled: new TrmrkObservable<
         TrmrkTreeNodeEvent<TreeNode, boolean, any>
       >({
         data: createFakeTreeNodeData(),
+        path: [],
         event: null,
         value: false,
       }),
@@ -224,43 +230,49 @@ export class HomePage implements AfterViewInit {
         TrmrkTreeNodeEventCore<TreeNode>
       >({
         data: createFakeTreeNodeData(),
+        path: [],
         event: null,
       }),
       nodeIconLongPressOrRightClick: new TrmrkObservable<
         TrmrkTreeNodeEventCore<TreeNode>
       >({
         data: createFakeTreeNodeData(),
+        path: [],
         event: null,
       }),
       nodeColorLabelShortPressOrLeftClick: new TrmrkObservable<
         TrmrkTreeNodeEventCore<TreeNode>
       >({
         data: createFakeTreeNodeData(),
+        path: [],
         event: null,
       }),
       nodeColorLabelLongPressOrRightClick: new TrmrkObservable<
         TrmrkTreeNodeEventCore<TreeNode>
       >({
         data: createFakeTreeNodeData(),
+        path: [],
         event: null,
       }),
       nodeTextShortPressOrLeftClick: new TrmrkObservable<
         TrmrkTreeNodeEventCore<TreeNode>
       >({
         data: createFakeTreeNodeData(),
+        path: [],
         event: null,
       }),
       nodeTextLongPressOrRightClick: new TrmrkObservable<
         TrmrkTreeNodeEventCore<TreeNode>
       >({
         data: createFakeTreeNodeData(),
+        path: [],
         event: null,
       }),
     };
 
     retData.nodeExpandedToggled.subscribe((event) => {
-      const lastIdx = event.data.path.at(-1)!;
-      const prPath = event.data.path.slice(0, -1);
+      const lastIdx = event.path.at(-1)!;
+      const prPath = event.path.slice(0, -1);
 
       let node: TrmrkTreeNode<TreeNode>;
 
@@ -271,12 +283,12 @@ export class HomePage implements AfterViewInit {
         node = retData.rootNodes[lastIdx];
       }
 
-      node.data.next({ ...event.data, isExpanded: event.isExpandedNow });
+      node.data.next({ ...event.data, isExpanded: event.value });
     });
 
     retData.nodeTextLongPressOrRightClick.subscribe((event) => {
-      const lastIdx = event.data.path.at(-1)!;
-      const prPath = event.data.path.slice(0, -1);
+      const lastIdx = event.path.at(-1)!;
+      const prPath = event.path.slice(0, -1);
 
       let childNodes: TrmrkTreeNode<TreeNode>[];
       let childNodesObs: TrmrkObservable<TrmrkTreeNodeData<TreeNode>[]>;
@@ -292,6 +304,7 @@ export class HomePage implements AfterViewInit {
 
       childNodes.splice(lastIdx, 1);
       const childNodesData = [...childNodesObs.value];
+      childNodesData.splice(lastIdx, 1);
       childNodesObs.next(childNodesData);
     });
 
@@ -300,14 +313,13 @@ export class HomePage implements AfterViewInit {
       isExpanded: boolean,
       isHcyNode = true
     ) => {
-      const idx = path[path.length - 1];
+      const idx = path.at(-1)!;
 
       const nodeItem: TrmrkTreeNodeData<TreeNode> = {
         nodeValue: {
           id: idx,
           text: idx.toString(),
         },
-        path,
         isHcyNode,
         isExpanded,
       };

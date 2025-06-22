@@ -102,6 +102,11 @@ a[mat-icon-button].trmrk-icon-btn:link {
     margin-top: -3px;
 
     .trmrk-checkbox {
+      .mdc-checkbox {
+        margin-top: -1px;
+        margin-left: -1px;
+      }
+
       .mdc-checkbox__checkmark {
         top: -5px;
         left: -5px;
@@ -112,6 +117,9 @@ a[mat-icon-button].trmrk-icon-btn:link {
   .trmrk-text-row {
     overflow: hidden;
     min-width: 40px;
+    width: 100%;
+    margin-left: 3px;
+    margin-right: 5px;
   }
 
   .trmrk-text-col, .trmrk-text-row {
@@ -123,7 +131,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
     }
 
     .trmrk-details {
-      font-size: 12px;
+      font-size: 13px;
 
       &.trmrk-text-part.trmrk-italic {
         font-style: italic;
@@ -188,7 +196,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 
   .trmrk-text-col {
-    padding-top: 9px;
+    padding-top: 10px;
 
     &.trmrk-has-details {
       padding-top: 2px;

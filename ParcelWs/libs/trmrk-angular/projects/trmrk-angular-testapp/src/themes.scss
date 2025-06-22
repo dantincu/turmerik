@@ -110,14 +110,14 @@
   .trmrk-tree-view {
     .trmrk-tree-node {
       .trmrk-horiz-strip {
-        background-color: #FAF8E8;
+        background-color: #F8F8E0;
 
         .trmrk-strip-cap {
-          background-color: #F0E8C0;
+          background-color: #E0D0A0;
         }
 
         [mat-icon-button].trmrk-icon-btn mat-icon.trmrk-icon.trmrk-leading-icon {
-          color: #FFF080;
+          color: #F8E040;
         }
       }
     }
@@ -228,6 +228,22 @@
           .trmrk-horiz-strip {
             border: 2px solid #80A0FF;
           }
+        }
+      }
+    }
+  }
+
+  .trmrk-tree-view {
+    .trmrk-tree-node {
+      .trmrk-horiz-strip {
+        background-color: #201808; /* #FAF8E8; */
+
+        .trmrk-strip-cap {
+          background-color: #504020 /* #F0E8C0; */
+        }
+
+        [mat-icon-button].trmrk-icon-btn mat-icon.trmrk-icon.trmrk-leading-icon {
+          color: #A08000 /* #FFF080; */
         }
       }
     }
