@@ -1,3 +1,4 @@
+import { queryMx } from '../../trmrk/arr';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkObservable } from './TrmrkObservable';
@@ -61,3 +62,49 @@ export interface TrmrkTree<T> {
     TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>
   >;
 }
+
+export const trmrkTreeEventHandlers = {
+  nodeExpandedToggled: <TTreeNode>(
+    treeData: TrmrkTree<TTreeNode>,
+    event: TrmrkTreeNodeEvent<TTreeNode, boolean, any>
+  ) => {
+    const lastIdx = event.path.at(-1)!;
+    const prPath = event.path.slice(0, -1);
+
+    let node: TrmrkTreeNode<TTreeNode>;
+
+    if (prPath.length > 0) {
+      const prNode = queryMx(treeData.rootNodes, 'childNodes', prPath)!;
+      node = prNode.childNodes![lastIdx];
+    } else {
+      node = treeData.rootNodes[lastIdx];
+    }
+
+    node.data.next({ ...event.data, isExpanded: event.value });
+  },
+
+  nodeTextLongPressOrRightClick: <TTreeNode>(
+    treeData: TrmrkTree<TTreeNode>,
+    event: TrmrkTreeNodeEventCore<TTreeNode, TouchOrMouseCoords>
+  ) => {
+    const lastIdx = event.path.at(-1)!;
+    const prPath = event.path.slice(0, -1);
+
+    let childNodes: TrmrkTreeNode<TTreeNode>[];
+    let childNodesObs: TrmrkObservable<TrmrkTreeNodeData<TTreeNode>[]>;
+
+    if (prPath.length > 0) {
+      const prNode = queryMx(treeData.rootNodes, 'childNodes', prPath)!;
+      childNodes = prNode.childNodes!;
+      childNodesObs = prNode.childNodesData!;
+    } else {
+      childNodes = treeData.rootNodes;
+      childNodesObs = treeData.rootNodesData;
+    }
+
+    childNodes.splice(lastIdx, 1);
+    const childNodesData = [...childNodesObs.value];
+    childNodesData.splice(lastIdx, 1);
+    childNodesObs.next(childNodesData);
+  },
+};

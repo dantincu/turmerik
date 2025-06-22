@@ -28,7 +28,7 @@ import { queryMx } from '../../trmrk/arr';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAppBar } from 'trmrk-angular';
-import { TrmrkPanelListItem } from 'trmrk-angular';
+import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
 import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
@@ -270,43 +270,13 @@ export class HomePage implements AfterViewInit {
       }),
     };
 
-    retData.nodeExpandedToggled.subscribe((event) => {
-      const lastIdx = event.path.at(-1)!;
-      const prPath = event.path.slice(0, -1);
+    retData.nodeExpandedToggled.subscribe((event) =>
+      trmrkTreeEventHandlers.nodeExpandedToggled(retData, event)
+    );
 
-      let node: TrmrkTreeNode<TreeNode>;
-
-      if (prPath.length > 0) {
-        const prNode = queryMx(retData.rootNodes, 'childNodes', prPath)!;
-        node = prNode.childNodes![lastIdx];
-      } else {
-        node = retData.rootNodes[lastIdx];
-      }
-
-      node.data.next({ ...event.data, isExpanded: event.value });
-    });
-
-    retData.nodeTextLongPressOrRightClick.subscribe((event) => {
-      const lastIdx = event.path.at(-1)!;
-      const prPath = event.path.slice(0, -1);
-
-      let childNodes: TrmrkTreeNode<TreeNode>[];
-      let childNodesObs: TrmrkObservable<TrmrkTreeNodeData<TreeNode>[]>;
-
-      if (prPath.length > 0) {
-        const prNode = queryMx(retData.rootNodes, 'childNodes', prPath)!;
-        childNodes = prNode.childNodes!;
-        childNodesObs = prNode.childNodesData!;
-      } else {
-        childNodes = retData.rootNodes;
-        childNodesObs = retData.rootNodesData;
-      }
-
-      childNodes.splice(lastIdx, 1);
-      const childNodesData = [...childNodesObs.value];
-      childNodesData.splice(lastIdx, 1);
-      childNodesObs.next(childNodesData);
-    });
+    retData.nodeTextLongPressOrRightClick.subscribe((event) =>
+      trmrkTreeEventHandlers.nodeTextLongPressOrRightClick(retData, event)
+    );
 
     const createItem = (
       path: number[],
