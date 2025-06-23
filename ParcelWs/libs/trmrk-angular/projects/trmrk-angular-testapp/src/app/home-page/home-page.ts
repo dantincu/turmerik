@@ -35,6 +35,7 @@ import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
+import { TrmrkThinHorizStrip } from 'trmrk-angular';
 
 @Component({
   selector: 'app-home-page',
@@ -56,6 +57,7 @@ import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
     MatFormFieldModule,
     TrmrkPanelListItem,
     TrmrkTreeView,
+    TrmrkThinHorizStrip,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
@@ -100,6 +102,8 @@ export class HomePage implements AfterViewInit {
   ];
 
   treeViewData: TrmrkTree<TreeNode>;
+
+  popupClosedMessage = '';
 
   constructor() {
     this.treeViewData = this.getTreeViewData();
@@ -192,6 +196,29 @@ export class HomePage implements AfterViewInit {
     setTimeout(() => {
       this.showUserMsg[idx]++;
     }, 1000);
+  }
+
+  openPopupWindowClick() {
+    if (this.popupClosedMessage) {
+      this.popupClosedMessage = '';
+    } else {
+      this.popupClosedMessage = '';
+      const popup = window.open(
+        'login-redirect',
+        'popupWindow',
+        'resizable=yes,scrollbars=yes'
+      );
+
+      if (popup) {
+        const intvId = setInterval(() => {
+          console.log('popup.closed', popup.closed, typeof popup.closed);
+          if (popup.closed) {
+            clearInterval(intvId);
+            this.popupClosedMessage = 'Popup closed';
+          }
+        }, 500);
+      }
+    }
   }
 
   private getTreeViewData() {

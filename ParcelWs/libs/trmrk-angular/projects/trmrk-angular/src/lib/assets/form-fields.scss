@@ -1,0 +1,39 @@
+.trmrk-form-field {
+  height: 40px;
+  margin-top: 3px;
+
+  .mat-mdc-text-field-wrapper {
+    height: 40px;
+  }
+
+  .trmrk-input {
+    position: relative;
+    top: -8px;
+  }
+
+  &[appearance="fill"] {
+    .trmrk-input {
+      top: -10px;
+    }
+  }
+
+  &.trmrk-has-label {
+    height: 60px;
+
+    &[appearance="outline"] {
+      margin-top: 7px;
+    }
+
+    &[appearance="fill"] {
+      margin-top: 7px;
+    }
+
+  .trmrk-input {
+    top: 0;
+  }
+}
+
+  .mat-mdc-form-field-subscript-wrapper {
+    height: 3px;
+  }
+}

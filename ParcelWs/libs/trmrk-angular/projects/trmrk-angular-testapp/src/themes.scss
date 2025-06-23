@@ -3,6 +3,18 @@
     background-color: #d0e8ff;
   }
 
+  .my-thin-horiz-strip .trmrk-thin-horiz-strip {
+    background-color: #f0f0f0;
+
+    &.trmrk-has-border-x2 {
+      border: 2px solid #d0d0d0;
+    }
+
+    .trmrk-strip-cap {
+      background-color: #d0d0d0;
+    }
+  }
+
   .my-horiz-strip .trmrk-horiz-strip {
     background-color: #0c0;
     border: 2px solid #080;
@@ -127,6 +139,14 @@
 .trmrk-app-theme-dark {
   .trmrk-app-bar {
     background-color: #000820;
+  }
+
+  .my-thin-horiz-strip .trmrk-thin-horiz-strip {
+    background-color: #101010;
+
+    &.trmrk-has-border-x2 {
+      border: 2px solid #303030;
+    }
   }
 
   .my-horiz-strip .trmrk-horiz-strip {

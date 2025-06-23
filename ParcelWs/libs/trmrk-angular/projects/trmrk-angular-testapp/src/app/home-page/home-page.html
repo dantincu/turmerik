@@ -25,9 +25,60 @@
     </a>
   </mat-menu>
 </ng-template>
+
 <div
   class="trmrk-app-panel trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-x"
 >
+  <div>
+    <mat-form-field
+      appearance="outline"
+      class="trmrk-form-field trmrk-has-label"
+    >
+      <mat-label>Enter your age</mat-label>
+      <input matInput type="number" placeholder="Age" class="trmrk-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="outline" class="trmrk-form-field">
+      <input matInput type="number" placeholder="Age" class="trmrk-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill" class="trmrk-form-field trmrk-has-label">
+      <mat-label>Enter your age</mat-label>
+      <input matInput type="number" placeholder="Age" class="trmrk-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill" class="trmrk-form-field">
+      <input matInput type="number" placeholder="Age" class="trmrk-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <button mat-button (click)="openPopupWindowClick()">
+      Open popup window</button
+    >{{popupClosedMessage}}
+  </div>
+
+  <div class="trmrk-panel-list">
+    @for (str of horizStripTextArr; track $index) {
+    <trmrk-thin-horiz-strip
+      [trmrkText]="str"
+      class="my-thin-horiz-strip"
+      [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+    ></trmrk-thin-horiz-strip>
+    <trmrk-thin-horiz-strip
+      [trmrkText]="str"
+      class="my-thin-horiz-strip"
+      [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+    ></trmrk-thin-horiz-strip>
+    <trmrk-thin-horiz-strip
+      [trmrkText]="str"
+      class="my-thin-horiz-strip"
+      [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+    ></trmrk-thin-horiz-strip>
+    }
+  </div>
   @for (str of horizStripTextArr; track $index) { @for (dStr of [['12kB',
   '2025-05-09 13:00', { text: horizStripText }], ['12kB', '2025-05-0913:00'],
   null]; track $index) { @for (cssClassSffx of ['', '1', '2']; track $index) {
@@ -50,88 +101,90 @@
     [trmrkTrailingTemplate]="appHeaderOptionsIcon"
   ></trmrk-horiz-strip
   >}
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-  ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-    [trmrkColorLabelColor]="'#F80'"
-  ></trmrk-panel-list-item>
+  <div class="trmrk-panel-list">
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item trmrk-is-focused']"
-    [trmrkCssClass]="['trmrk-has-border-x2']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+      [trmrkColorLabelColor]="'#F80'"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-    [trmrkIsAppBar]="true"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item trmrk-is-focused']"
+      [trmrkCssClass]="['trmrk-has-border-x2']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item trmrk-is-selected']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-    [trmrkIsSelectable]="true"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+      [trmrkIsAppBar]="true"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item trmrk-is-selected trmrk-is-focused']"
-    [trmrkCssClass]="['trmrk-has-border-x2']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-    [trmrkIsSelectable]="true"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item trmrk-is-selected']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+      [trmrkIsSelectable]="true"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item trmrk-is-current']"
-    [trmrkCssClass]="['trmrk-has-border-x2']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item trmrk-is-selected trmrk-is-focused']"
+      [trmrkCssClass]="['trmrk-has-border-x2']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+      [trmrkIsSelectable]="true"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-selected']"
-    [trmrkCssClass]="['trmrk-has-border-x2']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-    [trmrkIsSelectable]="true"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item trmrk-is-current']"
+      [trmrkCssClass]="['trmrk-has-border-x2']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused']"
-    [trmrkCssClass]="['trmrk-has-border-x2']"
-    [trmrkLeadingIconTemplate]="fileItemIcon"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-selected']"
+      [trmrkCssClass]="['trmrk-has-border-x2']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+      [trmrkIsSelectable]="true"
+    ></trmrk-panel-list-item>
 
-  <trmrk-panel-list-item
-    [trmrkMainText]="str"
-    [trmrkDetailsTextParts]="dStr"
-    [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused trmrk-is-selected']"
-    [trmrkCssClass]="['trmrk-has-border-x2']"
-    [trmrkLeadingMatIconName]="'description'"
-    [trmrkIsSelectable]="true"
-  ></trmrk-panel-list-item>
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused']"
+      [trmrkCssClass]="['trmrk-has-border-x2']"
+      [trmrkLeadingIconTemplate]="fileItemIcon"
+    ></trmrk-panel-list-item>
 
+    <trmrk-panel-list-item
+      [trmrkMainText]="str"
+      [trmrkDetailsTextParts]="dStr"
+      [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused trmrk-is-selected']"
+      [trmrkCssClass]="['trmrk-has-border-x2']"
+      [trmrkLeadingMatIconName]="'description'"
+      [trmrkIsSelectable]="true"
+    ></trmrk-panel-list-item>
+  </div>
   }
   <trmrk-horiz-strip
     [trmrkType]="TrmrkHorizStripType.Scrollable"
@@ -364,11 +417,5 @@
   <button mat-icon-button class="trmrk-icon-btn">
     <mat-icon class="trmrk-icon">open_with</mat-icon>
   </button>
-  <div>
-    <mat-form-field appearance="fill">
-      <mat-label>Enter your age</mat-label>
-      <input matInput type="number" placeholder="Age" class="trmrk-input" />
-    </mat-form-field>
-  </div>
   <trmrk-tree-view [trmrkData]="treeViewData"></trmrk-tree-view>
 </div>

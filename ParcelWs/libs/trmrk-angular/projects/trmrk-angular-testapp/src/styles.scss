@@ -55,13 +55,7 @@ body {
 
 .my-horiz-strip .trmrk-horiz-strip,
 .my-horiz-strip1 .trmrk-horiz-strip,
-.my-horiz-strip2 .trmrk-horiz-strip,
-.trmrk-file-item .trmrk-horiz-strip {
+.my-horiz-strip2 .trmrk-horiz-strip {
   margin: 3px;
   width: calc(100% - 6px);
-
-  &.trmrk-minimal {
-    margin: 0;
-    width: 100%;
-  }
 }

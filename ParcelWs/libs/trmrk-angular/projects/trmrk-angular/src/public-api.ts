@@ -7,6 +7,7 @@ export * from './lib/trmrk-dev-page/trmrk-dev-page';
 export * from './lib/trmrk-dev-page/indexed-db-browser/indexed-db-browser';
 export * from './lib/trmrk-user-message/trmrk-user-message';
 export * from './lib/trmrk-horiz-strip/trmrk-horiz-strip';
+export * from './lib/trmrk-thin-horiz-strip/trmrk-thin-horiz-strip';
 export * from './lib/trmrk-panel-list-item/trmrk-panel-list-item';
 export * from './lib/trmrk-app-bar/trmrk-app-bar';
 

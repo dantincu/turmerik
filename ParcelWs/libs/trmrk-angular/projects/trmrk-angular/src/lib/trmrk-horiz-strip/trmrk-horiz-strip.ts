@@ -23,6 +23,7 @@ export enum TrmrkHorizStripType {
 export interface TrmrkHorizStripDetailsTextPart {
   text: string;
   italic?: boolean | null | undefined;
+  style?: { [key: string]: any } | null | undefined;
 }
 
 @Component({

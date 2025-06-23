@@ -1,0 +1,18 @@
+<div [ngClass]="cssClasses" [ngStyle]="trmrkCssStyle">
+  @if (trmrkLeadingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
+  }
+  <div
+    class="trmrk-text-row"
+    (trmrkLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
+    (trmrkShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
+  >
+    <span class="trmrk-text" [innerHTML]="text"></span>
+    @if (trmrkHasCap) {
+    <div class="trmrk-strip-cap" [ngStyle]="trmrkCapCssStyle"></div>
+    }
+  </div>
+  @if (trmrkTrailingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
+  }
+</div>

@@ -11,12 +11,13 @@
     <div
       [ngClass]="['trmrk-text-col', trmrkDetailsTextParts ? 'trmrk-has-details' : '']"
     >
-      <span class="trmrk-label" [innerHTML]="mainText"></span>
+      <span class="trmrk-text" [innerHTML]="mainText"></span>
       @if (trmrkDetailsTextParts) {
       <span class="trmrk-details"
         >@for (textPart of detailsTextParts; track $index) { @if (!$first) {
         &bull; }<span
           [ngClass]="['trmrk-text-part', textPart.italic ? 'trmrk-italic' : '']"
+          [ngStyle]="textPart.style"
           >{{ textPart.text }}</span
         >}
       </span>
