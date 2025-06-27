@@ -92,6 +92,10 @@ namespace Turmerik.ScrapeWebPages.ConsoleApp
                         SectionsArr = sectionsArr
                     } ]);
 
+            Directory.CreateDirectory(
+                Path.GetDirectoryName(
+                    outputFilePath)!);
+
             File.WriteAllText(outputFilePath, retJson);
         }
 
@@ -121,7 +125,10 @@ namespace Turmerik.ScrapeWebPages.ConsoleApp
             ProgramConfig.Profile profile)
         {
             profile.HtmlDirRelPath ??= profile.ProfileName;
-            profile.OutputFileRelPath ??= $"{profile.ProfileName}.json";
+            profile.OutputFileExtn ??= "json";
+
+            profile.OutputFileRelPath ??= string.Join(
+                ".", profile.ProfileName, profile.OutputFileExtn);
 
             foreach (var section in profile.Sections)
             {

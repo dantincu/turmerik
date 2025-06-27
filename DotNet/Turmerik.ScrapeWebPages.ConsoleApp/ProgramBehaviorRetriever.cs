@@ -32,6 +32,7 @@ namespace Turmerik.ScrapeWebPages.ConsoleApp
         {
             destnProfile.HtmlDirRelPath ??= srcProfile.HtmlDirRelPath;
             destnProfile.OutputFileRelPath ??= srcProfile.OutputFileRelPath;
+            destnProfile.OutputFileExtn ??= srcProfile.OutputFileExtn;
             destnProfile.BaseUrl ??= srcProfile.BaseUrl;
             destnProfile.DfSelectorsFactoryFuncPath ??= srcProfile.DfSelectorsFactoryFuncPath;
             destnProfile.DfAggregateFuncPath ??= srcProfile.DfAggregateFuncPath;

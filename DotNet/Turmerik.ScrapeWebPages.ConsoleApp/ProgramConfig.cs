@@ -13,6 +13,7 @@ namespace Turmerik.ScrapeWebPages.ConsoleApp
         {
             public string? HtmlDirRelPath { get; set; }
             public string? OutputFileRelPath { get; set; }
+            public string? OutputFileExtn { get; set; }
             public string? BaseUrl { get; set; }
             public string[]? DfSelectorsFactoryFuncPath { get; set; }
             public string[]? DfAggregateFuncPath { get; set; }
