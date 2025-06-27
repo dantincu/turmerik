@@ -17,7 +17,6 @@
             "IncludedRelPathRegexes": [
               "^\\/Bin\\/TrmrkMkFsDirsPair\\/.*",
               "^\\/Bin\\/TrmrkMkMdFile\\/.*",
-              "^\\/Bin\\/Turmerik\\.DotNetTypesToTypescript\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/.*",
@@ -34,13 +33,12 @@
               "^\\/Data\\/.*"
             ],
             "ExcludedRelPathRegexes": [
-              "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/Release\\/net8\\.0\\/Chrome",
-              "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/Release\\/net8\\.0\\/ChromeHeadlessShell",
-              "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net8\\.0\\/Chrome",
-              "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net8\\.0\\/ChromeHeadlessShell",
-              "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net8\\.0\\/Chrome",
-              "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net8\\.0\\/ChromeHeadlessShell",
-              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.DotNetTypesToTypescript\\/program\\-config\\.*",
+              "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/Chrome",
+              "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/Release\\/net[0-9\\.]\\/ChromeHeadlessShell",
+              "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/Chrome",
+              "^\\/Bin\\/Turmerik\\.MkFsDirsPair\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/ChromeHeadlessShell",
+              "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/Chrome",
+              "^\\/Bin\\/Turmerik\\.RfDirsPairNames\\.ConsoleApp\\/Release\\/net[0-9\\.]+\\/ChromeHeadlessShell",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\.*",
               "^\\/Config\\/Turmerik\\.DirsPair\\.ConsoleApps\\.MkFsDirsPairCfg\\.ProgramConfig\\/.*",
               "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.MkScripts\\.ProgramConfigRetriever\\/program\\-config\\.*",

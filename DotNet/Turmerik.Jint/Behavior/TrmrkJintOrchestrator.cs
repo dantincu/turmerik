@@ -59,7 +59,7 @@ namespace Turmerik.Jint.Behavior
                     retObj)).Value;
                 
                 jintAdapter = jintAdapter.ExecuteMethod(
-                    nextDotNetMethodCallArgs.JsCallbackCode,
+                    nextDotNetMethodCallArgs.JsCallbackMethodName,
                     [retObj]);
             }
 

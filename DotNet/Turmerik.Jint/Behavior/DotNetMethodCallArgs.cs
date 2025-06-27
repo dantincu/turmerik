@@ -8,6 +8,6 @@ namespace Turmerik.Jint.Behavior
     {
         public string DotNetMethodName { get; set; }
         public object[] DotNetMethodCallArgsArr { get; set; }
-        public string JsCallbackCode { get; set; }
+        public string JsCallbackMethodName { get; set; }
     }
 }

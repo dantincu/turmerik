@@ -162,26 +162,6 @@ namespace Turmerik.Core.LocalDeviceEnv
             return srlzblData;
         }
 
-        protected void SaveJsonCore(
-            object obj,
-            string jsonFilePath)
-        {
-            string json = JsonConversion.Adapter.Serialize(
-                obj, false);
-
-            Mutex.WaitOne();
-
-            try
-            {
-                Directory.CreateDirectory(JsonDirPath);
-                File.WriteAllText(jsonFilePath, json);
-            }
-            finally
-            {
-                Mutex.ReleaseMutex();
-            }
-        }
-
         protected virtual string ReadJsonFromFile(
             ) => File.ReadAllText(
                 JsonFilePath);

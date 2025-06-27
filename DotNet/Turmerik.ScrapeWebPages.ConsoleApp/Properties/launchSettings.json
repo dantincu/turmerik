@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Turmerik.ScrabeWebPages.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": ":pf:companiesmarketcap.com"
+    }
+  }
+}

@@ -53,7 +53,7 @@ namespace Turmerik.Core.LocalDeviceEnv
             remove => dataSaved -= value;
         }
 
-        public TImmtbl Update(
+        public virtual TImmtbl Update(
             RefAction<TMtblSrlzbl> updateAction)
         {
             var srlzblData = SerializeConfig(Data);
@@ -127,6 +127,26 @@ namespace Turmerik.Core.LocalDeviceEnv
             StartFileWatcherIfReq();
 
             return json;
+        }
+
+        protected void SaveJsonCore(
+            object obj,
+            string jsonFilePath)
+        {
+            string json = JsonConversion.Adapter.Serialize(
+                obj, false);
+
+            Mutex.WaitOne();
+
+            try
+            {
+                Directory.CreateDirectory(JsonDirPath);
+                File.WriteAllText(jsonFilePath, json);
+            }
+            finally
+            {
+                Mutex.ReleaseMutex();
+            }
         }
 
         private bool StartFileWatcherIfReq()

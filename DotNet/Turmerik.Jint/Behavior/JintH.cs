@@ -20,6 +20,7 @@ namespace Turmerik.Jint.Behavior
     {
         public const string BEHAVIOR_JS_FILE_NAME = "behavior.js";
         public const string BEHAVIOR_JSON_FILE_NAME = "behavior.json";
+        public const string GLOBAL_THIS = "globalThis";
 
         static JintH()
         {

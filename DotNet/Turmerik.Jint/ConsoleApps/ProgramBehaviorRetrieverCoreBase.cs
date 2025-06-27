@@ -15,6 +15,8 @@ namespace Turmerik.Jint.ConsoleApps
         where TProgramConfig : ProgramBehaviorCoreBase<TProgramConfigProfile>, new()
         where TProgramConfigProfile : ProgramBehaviorProfileCoreBase, new()
     {
+        ProgramConfigWrapper<TProgramConfig> LoadProgramConfigWrapper(
+            string? configFilePath = null);
     }
 
     public static class ProgramBehaviorRetrieverCore
@@ -40,11 +42,80 @@ namespace Turmerik.Jint.ConsoleApps
                 nameof(trmrkJintAdapterFactory));
         }
 
+        public virtual ProgramConfigWrapper<TProgramConfig> LoadProgramConfigWrapper(
+            string? configFilePath = null)
+        {
+            if (configFilePath == null)
+            {
+                configFilePath = DefaultConfigFilePath;
+            }
+            else
+            {
+                if (!Path.IsPathRooted(configFilePath))
+                {
+                    configFilePath = Path.Combine(
+                        DefaultConfigDirPath,
+                        configFilePath);
+                }
+            }
+
+            string configDirPath = Path.GetDirectoryName(
+                configFilePath)!;
+
+            var retWrapper = this.LoadProgramConfigWrapper(
+                configFilePath,
+                configDirPath);
+
+            return retWrapper;
+        }
+
         protected override string GetDefaultConfigDirPath() => AppEnv.GetTypePath(
             AppEnvDir, GetType(), ProgramBehaviorRetrieverCore.PROGRAM_BEHAVIOR_DIR_NAME);
 
         protected override string GetDefaultConfigFilePath() => Path.Combine(
             DefaultConfigDirPath, ProgramBehaviorRetrieverCore.BEHAVIOR_FILE_NAME);
+
+        protected virtual ProgramConfigWrapper<TProgramConfig> LoadProgramConfigWrapper(
+            string configFilePath,
+            string configDirPath)
+        {
+            var programConfig = base.LoadProgramConfig(
+                configFilePath,
+                configDirPath);
+
+            var jintAdaptersMap = new Dictionary<string, ITrmrkJintAdapter>();
+
+            for (int i = 0; i < programConfig.Profiles.Count; i++)
+            {
+                var destnProfile = programConfig.Profiles[i];
+
+                if (destnProfile.ProfileBehaviorRelFilePath != null)
+                {
+                    string externalProfileFilePath = Path.Combine(
+                        configDirPath, destnProfile.ProfileBehaviorRelFilePath);
+
+                    var jintAdapter = trmrkJintAdapterFactory.Create(new TrmrkJintAdapterOpts
+                    {
+                        JsScripts = File.ReadAllText(
+                            externalProfileFilePath).Arr().RdnlC()
+                    });
+
+                    var srcProfile = jintAdapter.Evaluate<TProgramConfigProfile>(
+                        destnProfile.ProfileBehaviorExportedMembersJsCode ?? TrmrkJintAdapter.EXPORTED_MEMBERS_RETRIEVER_JS_CODE);
+
+                    MergeProfiles(destnProfile, srcProfile, configFilePath);
+
+                    jintAdaptersMap.Add(
+                        destnProfile.ProfileName,
+                        jintAdapter);
+                }
+            }
+
+            var retWrapper = new ProgramConfigWrapper<TProgramConfig>(
+                programConfig, new(jintAdaptersMap));
+
+            return retWrapper;
+        }
 
         protected override TProgramConfig LoadProgramConfig(
             string configFilePath,

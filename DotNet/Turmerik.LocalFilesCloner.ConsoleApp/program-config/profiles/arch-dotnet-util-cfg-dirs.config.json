@@ -1,0 +1,36 @@
+{
+  "ProfileName": "arch-dotnet-util-cfg-dirs",
+  "FileGroups": [
+    {
+      "CloneArchiveDirPath": "|$ONEDRIVE_DIR|\\|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
+      "CloneArchiveFileNameTpl": "AppsCfgDirs[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+      "BeforeArchiveCleanupFilter": {
+        "IncludedRelPathRegexes": [
+          "^\\/AppsCfgDirs\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
+        ]
+      },
+      "Folders": [
+        {
+          "InputDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|",
+          "CloneDirPath": "|$TURMERIK_TEMP_DIR|",
+          "InputDirFilter": {
+            "IncludedRelPathRegexes": [
+              "^\\/Config\\/.*",
+              "^\\/Content\\/.*",
+              "^\\/Data\\/.*"
+            ],
+            "ExcludedRelPathRegexes": [
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.DotNetTypesToTypescript\\/program\\-config\\.*",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.LocalFilesCloner\\.ProgramConfigRetriever\\/program\\-config\\.*",
+              "^\\/Config\\/Turmerik\\.DirsPair\\.ConsoleApps\\.MkFsDirsPairCfg\\.ProgramConfig\\/.*",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.MkScripts\\.ProgramConfigRetriever\\/program\\-config\\.*",
+              "^\\/Config\\/Turmerik\\.NetCore\\.ConsoleApps\\.SyncLocalFiles\\.ProgramConfigRetriever\\/program\\-config\\.*",
+              "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.js$",
+              "^\\/Data\\/Turmerik\\.Utility\\.WinFormsApp\\.UserControls\\.TextTransformBehavior\\/behavior\\.json$"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

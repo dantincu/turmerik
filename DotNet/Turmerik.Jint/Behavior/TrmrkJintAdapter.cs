@@ -23,12 +23,26 @@ namespace Turmerik.Jint.Behavior
             string jsMethod,
             object?[] argsArr);
 
+        ITrmrkJintAdapter ExecuteMethod(
+            string[] jsMethodPath,
+            object?[] argsArr);
+
         TValue Evaluate<TValue>(
             string jsCode);
+
+        TValue Evaluate<TValue>(
+            string[] propertyPath);
+
+        TValue Evaluate<TValue>(
+            string[] methodPath,
+            object?[] argsArr);
 
         string GetMethodCallJsCode(
             string jsMethod,
             object?[] argsArr);
+
+        string SerializeMemberPath(
+            string[] pathPartsArr);
 
         TValue Invoke<TValue>(
             string jsMethod,
@@ -81,6 +95,10 @@ namespace Turmerik.Jint.Behavior
             string jsMethod,
             object?[] argsArr) => Execute(GetMethodCallJsCode(jsMethod, argsArr));
 
+        public ITrmrkJintAdapter ExecuteMethod(
+            string[] jsMethodPath,
+            object?[] argsArr) => ExecuteMethod(SerializeMemberPath(jsMethodPath), argsArr);
+
         public TValue Evaluate<TValue>(
             string jsCode)
         {
@@ -91,6 +109,24 @@ namespace Turmerik.Jint.Behavior
             var retVal = jsonConversion.Adapter.Deserialize<TValue>(json);
 
             return retVal;
+        }
+
+        public TValue Evaluate<TValue>(
+            string[] propertyPath)
+        {
+            string propPathStr = SerializeMemberPath(propertyPath);
+            var value = this.Evaluate<TValue>(propPathStr);
+            return value;
+        }
+
+        public TValue Evaluate<TValue>(
+            string[] methodPath,
+            object?[] argsArr)
+        {
+            string jsMethod = SerializeMemberPath(methodPath);
+            string jsCode = GetMethodCallJsCode(jsMethod, argsArr);
+            var value = this.Evaluate<TValue>(jsCode);
+            return value;
         }
 
         public string GetMethodCallJsCode(
@@ -107,6 +143,18 @@ namespace Turmerik.Jint.Behavior
                 METHOD_CALL_FORMAT, jsMethod, argsJson);
 
             return jsCode;
+        }
+
+        public string SerializeMemberPath(
+            string[] pathPartsArr)
+        {
+            pathPartsArr = pathPartsArr.Select(
+                part => jsonConversion.Adapter.Serialize(part)).ToArray();
+
+            string retStr = string.Join("][", pathPartsArr);
+            retStr = string.Concat(JintH.GLOBAL_THIS, "[", retStr, "]");
+
+            return retStr;
         }
 
         public TValue Invoke<TValue>(

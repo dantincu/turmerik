@@ -2,6 +2,7 @@
 using System.IO;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.Core.TextSerialization;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Jint.Behavior
 {
@@ -26,6 +27,13 @@ namespace Turmerik.Jint.Behavior
 
         protected AppBehaviorSetupAdapter<TExportedMembersImmtbl, TExportedMembersSrlzbl> AppBehaviorSetupAdapter { get; }
 
+        public override AppBehaviorConfigImmtbl Update(RefAction<AppBehaviorConfigMtbl> updateAction)
+        {
+            var data = base.Update(updateAction);
+            this.LoadDataObjCore(data);
+            return data;
+        }
+
         protected abstract TExportedMembersImmtbl NormalizeExportedMembers(
             TExportedMembersSrlzbl members);
 
@@ -41,15 +49,7 @@ namespace Turmerik.Jint.Behavior
         protected override AppBehaviorConfigImmtbl LoadDataObjCore()
         {
             var retObj = base.LoadDataObjCore();
-
-            (var behavior, var exportedMembers) = AppBehaviorSetupAdapter.LoadDataObj(
-                retObj, JsonDirPath);
-
-            BehaviorCore = behavior;
-
-            ExportedMembersCore = NormalizeExportedMembers(
-                exportedMembers);
-
+            this.LoadDataObjCore(retObj);
             return retObj;
         }
 
@@ -72,6 +72,17 @@ namespace Turmerik.Jint.Behavior
         {
             _ = Data;
             return ExportedMembers;
+        }
+
+        private void LoadDataObjCore(AppBehaviorConfigImmtbl retObj)
+        {
+            (var behavior, var exportedMembers) = AppBehaviorSetupAdapter.LoadDataObj(
+                retObj, JsonDirPath);
+
+            BehaviorCore = behavior;
+
+            ExportedMembersCore = NormalizeExportedMembers(
+                exportedMembers);
         }
     }
 }

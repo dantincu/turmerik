@@ -402,3 +402,4 @@ FodyWeavers.xsd
 /DotNet/Turmerik.Core/trmrk-dirpairs-config.DirPairsMacrosMap.*
 /DotNet/Turmerik.Core/trmrk-dirpairs-config.MacrosMap.*
 /DotNet/Turmerik.MkFsDirsPairCfg.ConsoleApp/program-config/data.json
+/DotNet/Turmerik.ScrapeWebPages.ConsoleApp/program-behavior
