@@ -30,6 +30,37 @@
   class="trmrk-app-panel trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-x"
 >
   <div>
+    <div class="companies-trmrk-list-view-container">
+      <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
+        <button mat-icon-button class="trmrk-icon-btn">
+          <mat-checkbox
+            class="trmrk-checkbox"
+            (change)="companiesMasterCheckBoxToggled($event)"
+            [checked]="companiesMasterCheckBoxIsChecked"
+          ></mat-checkbox>
+        </button>
+        <trmrk-accelerating-scroll-control
+          [trmrkScrollable]="companiesListView"
+        ></trmrk-accelerating-scroll-control>
+      </div>
+      <div
+        #companiesListView
+        class="companies-trmrk-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y"
+      >
+        @for (row of companyRows; track row.data.id) {
+        <trmrk-panel-list-item
+          [trmrkMainText]="row.data.name"
+          [ngClass]="['trmrk-list-item']"
+          [trmrkIsSelectable]="true"
+          [trmrkIsSelected]="row.isSelected"
+          (trmrkCheckBoxToggled)="companyCheckBoxToggled($event, row.data.id)"
+        ></trmrk-panel-list-item>
+        }
+      </div>
+      <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
+    </div>
+  </div>
+  <div>
     <mat-form-field
       appearance="outline"
       class="trmrk-form-field trmrk-has-label"
@@ -61,30 +92,31 @@
   </div>
 
   <div class="trmrk-panel-list">
-    @for (str of horizStripTextArr; track $index) {
+    @for (i of [0, 1, 2]; track $index;) {
     <trmrk-thin-horiz-strip
-      [trmrkText]="str"
+      [trmrkText]="getCompaniesText(20 * i, 20 * i + 10)"
       class="my-thin-horiz-strip"
       [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
     ></trmrk-thin-horiz-strip>
     <trmrk-thin-horiz-strip
-      [trmrkText]="str"
+      [trmrkText]="getCompaniesText(20 * i + 10, 20 * i + 15)"
       class="my-thin-horiz-strip"
       [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
     ></trmrk-thin-horiz-strip>
     <trmrk-thin-horiz-strip
-      [trmrkText]="str"
+      [trmrkText]="getCompaniesText(20 * i + 15, 20 * i + 18)"
       class="my-thin-horiz-strip"
       [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
     ></trmrk-thin-horiz-strip>
     }
   </div>
-  @for (str of horizStripTextArr; track $index) { @for (dStr of [['12kB',
-  '2025-05-09 13:00', { text: horizStripText }], ['12kB', '2025-05-0913:00'],
-  null]; track $index) { @for (cssClassSffx of ['', '1', '2']; track $index) {
-  @for (isMinimal of [false, true]; track $index) {
+  @for (i of [0, 1, 2]; track $index; let idx1 = $index;) { @for (dStr of
+  [['12kB', '2025-06-09 13:00', { text: 'I love american V8 muscle cars' }],
+  ['12kB', '2025-06-09 13:00'], null]; track $index; let idx2 = $index;) { @for
+  (cssClassSffx of ['', '1', '2']; track $index; let idx3 = $index;) { @for
+  (isMinimal of [false, true]; track $index; let idx4 = $index;) {
   <trmrk-horiz-strip
-    [trmrkMainText]="str"
+    [trmrkMainText]="getCompaniesTextFromCoords([3, 2, 3, 2], [idx1, idx2, idx3, idx4], idx1 * 3 + 1)"
     [trmrkDetailsTextParts]="dStr"
     [trmrkMinimal]="isMinimal"
     [ngClass]="['my-horiz-strip' + cssClassSffx]"
@@ -94,7 +126,7 @@
 
   <trmrk-horiz-strip
     [trmrkType]="TrmrkHorizStripType.AppBar"
-    [trmrkMainText]="str"
+    [trmrkMainText]="getCompaniesTextFromCoords([3, 2, 3], [idx1, idx2, idx3], idx1 * 3 + 1)"
     [trmrkDetailsTextParts]="dStr"
     [ngClass]="['my-app-bar' + cssClassSffx]"
     [trmrkCssClass]="[cssClassSffx === '2' ? '' : 'trmrk-has-border']"
@@ -104,14 +136,14 @@
 
   <div class="trmrk-panel-list">
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item']"
       [trmrkLeadingIconTemplate]="fileItemIcon"
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item']"
       [trmrkLeadingIconTemplate]="fileItemIcon"
@@ -119,7 +151,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item trmrk-is-focused']"
       [trmrkCssClass]="['trmrk-has-border-x2']"
@@ -127,7 +159,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item']"
       [trmrkLeadingIconTemplate]="fileItemIcon"
@@ -135,7 +167,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item trmrk-is-selected']"
       [trmrkLeadingIconTemplate]="fileItemIcon"
@@ -143,7 +175,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item trmrk-is-selected trmrk-is-focused']"
       [trmrkCssClass]="['trmrk-has-border-x2']"
@@ -152,7 +184,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item trmrk-is-current']"
       [trmrkCssClass]="['trmrk-has-border-x2']"
@@ -160,7 +192,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-selected']"
       [trmrkCssClass]="['trmrk-has-border-x2']"
@@ -169,7 +201,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused']"
       [trmrkCssClass]="['trmrk-has-border-x2']"
@@ -177,7 +209,7 @@
     ></trmrk-panel-list-item>
 
     <trmrk-panel-list-item
-      [trmrkMainText]="str"
+      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
       [trmrkDetailsTextParts]="dStr"
       [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused trmrk-is-selected']"
       [trmrkCssClass]="['trmrk-has-border-x2']"
@@ -188,7 +220,7 @@
   }
   <trmrk-horiz-strip
     [trmrkType]="TrmrkHorizStripType.Scrollable"
-    [trmrkMainText]="str"
+    [trmrkMainText]="getCompaniesTextFromCoords([3], [idx1], idx1 * 3 + 1)"
     class="my-horiz-scrollable-strip"
   ></trmrk-horiz-strip>
   }

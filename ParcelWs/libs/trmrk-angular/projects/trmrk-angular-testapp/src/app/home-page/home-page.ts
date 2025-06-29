@@ -6,10 +6,12 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
 import { TrmrkDrag, TrmrkDragEvent } from 'trmrk-angular';
 import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
 import { TrmrkMultiClick } from 'trmrk-angular';
+
 import {
   TrmrkUserMessage,
   TrmrkObservable,
@@ -20,22 +22,25 @@ import {
   TrmrkTreeNodeEventCore,
 } from 'trmrk-angular';
 
+import { TrmrkAppBar } from 'trmrk-angular';
+import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
+import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
+import { TrmrkThinHorizStrip } from 'trmrk-angular';
+
 /* import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message'; */
 
 import { encodeHtml } from '../../trmrk/text';
 import { UserMessageLevel } from '../../trmrk/core';
-import { queryMx } from '../../trmrk/arr';
+import { getNextIdx } from '../../trmrk/math';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkAppBar } from 'trmrk-angular';
-import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
-
-import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
-import { TrmrkThinHorizStrip } from 'trmrk-angular';
+import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
+
+import { companies } from '../services/companies';
 
 @Component({
   selector: 'app-home-page',
@@ -43,6 +48,7 @@ import { TrmrkThinHorizStrip } from 'trmrk-angular';
     MatIconModule,
     MatButtonModule,
     MatIconButton,
+    MatCheckbox,
     RouterLink,
     TrmrkAppIcon,
     MatMenuModule,
@@ -58,6 +64,7 @@ import { TrmrkThinHorizStrip } from 'trmrk-angular';
     TrmrkPanelListItem,
     TrmrkTreeView,
     TrmrkThinHorizStrip,
+    TrmrkAcceleratingScrollControl,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
@@ -70,6 +77,9 @@ export class HomePage implements AfterViewInit {
 
   @ViewChild('draggableStrip', { read: ElementRef })
   draggableStrip!: ElementRef;
+
+  @ViewChild('companiesListView')
+  companiesListView!: ElementRef<HTMLDivElement>;
 
   quote = '"';
   nonBreakingText = encodeHtml(
@@ -100,6 +110,20 @@ export class HomePage implements AfterViewInit {
     'asdfasdfsadsafd asdfasdfsadsafd',
     'asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd fsad.',
   ];
+
+  companies = [...Array(1).keys()]
+    .map(() => companies.slice(0, 1000))
+    .reduce((acc, arr) => [...acc, ...arr]);
+
+  companyRows = this.companies.map((comp, idx) => ({
+    data: {
+      id: idx + 1,
+      name: comp,
+    },
+    isSelected: false,
+  }));
+
+  companiesMasterCheckBoxIsChecked = false;
 
   treeViewData: TrmrkTree<TreeNode>;
 
@@ -211,7 +235,6 @@ export class HomePage implements AfterViewInit {
 
       if (popup) {
         const intvId = setInterval(() => {
-          console.log('popup.closed', popup.closed, typeof popup.closed);
           if (popup.closed) {
             clearInterval(intvId);
             this.popupClosedMessage = 'Popup closed';
@@ -219,6 +242,38 @@ export class HomePage implements AfterViewInit {
         }, 500);
       }
     }
+  }
+
+  companyCheckBoxToggled(event: MatCheckboxChange, id: number) {
+    const company = this.companyRows.find((comp) => comp.data.id === id)!;
+    company.isSelected = event.checked;
+  }
+
+  companiesMasterCheckBoxToggled(event: MatCheckboxChange) {
+    for (let companyRow of this.companyRows) {
+      companyRow.isSelected = event.checked;
+    }
+  }
+
+  companiesAcceleratingScrollDown(count: number) {}
+
+  companiesAcceleratingScrollUp(count: number) {}
+
+  getCompaniesTextFromCoords(
+    loopSizes: number[],
+    loopIdxes: number[],
+    wordsCount: number
+  ) {
+    const nextIdx = getNextIdx(loopSizes, loopIdxes);
+    const wordsArr = this.companies.slice(nextIdx, nextIdx + wordsCount);
+    const retText = wordsArr.join(' | ');
+    return retText;
+  }
+
+  getCompaniesText(nextIdx: number, wordsCount: number) {
+    const wordsArr = this.companies.slice(nextIdx, wordsCount);
+    const retText = wordsArr.join(' | ');
+    return retText;
   }
 
   private getTreeViewData() {
@@ -315,7 +370,7 @@ export class HomePage implements AfterViewInit {
       const nodeItem: TrmrkTreeNodeData<TreeNode> = {
         nodeValue: {
           id: idx,
-          text: idx.toString(),
+          text: this.companies[getNextIdx([4, 4, 4, 4], path)],
         },
         isHcyNode,
         isExpanded,

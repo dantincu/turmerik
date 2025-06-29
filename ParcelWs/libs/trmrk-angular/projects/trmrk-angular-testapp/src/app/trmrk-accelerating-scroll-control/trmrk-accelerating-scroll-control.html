@@ -1,0 +1,16 @@
+<div
+  class="trmrk-accelerating-scroll-control"
+  [trmrkIntervalMillis]="trmrkIntervalMillis"
+  (trmrkContinuousPress)="scroll($event)"
+  (trmrkTouchOrMouseMove)="touchOrMouseMove($event)"
+  (trmrkStart)="start($event)"
+  (trmrkReset)="reset($event)"
+>
+  <button mat-icon-button class="trmrk-icon-btn" #scrollUpBtn>
+    <mat-icon class="trmrk-icon">fast_forward</mat-icon>
+  </button>
+  <div class="trmrk-icon-btn trmrk-fake-icon-btn" #fakeBtn></div>
+  <button mat-icon-button class="trmrk-icon-btn" #scrollDownBtn>
+    <mat-icon class="trmrk-icon">fast_forward</mat-icon>
+  </button>
+</div>

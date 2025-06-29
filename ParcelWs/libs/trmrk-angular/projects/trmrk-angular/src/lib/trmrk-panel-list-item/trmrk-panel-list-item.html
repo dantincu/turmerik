@@ -1,77 +1,82 @@
-@if (trmrkIsExpandable) {
-<button
-  mat-icon-button
-  class="trmrk-icon-btn"
-  (click)="trmrkExpandedToggled.emit(!trmrkIsExpanded)"
+<div
+  [ngClass]="['trmrk-panel-list-item', trmrkIsExpanded ? 'trmrk-is-expanded' : '', trmrkIsSelected ? 'trmrk-is-selected' : '']"
 >
-  <mat-icon class="trmrk-icon"
-    >{{ trmrkIsExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}
-  </mat-icon>
-</button>
-} @if (trmrkIsExpandable === false) {
-<div class="trmrk-icon-btn"></div>
-}
-<trmrk-horiz-strip
-  [trmrkType]="trmrkIsAppBar ? TrmrkHorizStripType.AppBar : TrmrkHorizStripType.Regular"
-  [trmrkMainText]="trmrkMainText"
-  [trmrkDetailsTextParts]="trmrkDetailsTextParts"
-  [trmrkCssClass]="trmrkCssClass"
-  (trmrkTextLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
-  (trmrkTextShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
-  [trmrkLeadingTemplate]="leadingTemplate"
-  [trmrkTrailingTemplate]="trailingTemplate"
-></trmrk-horiz-strip>
-
-<ng-template #leadingTemplate>
-  @if (trmrkIsSelectable) {
-  <button mat-icon-button class="trmrk-icon-btn">
-    <mat-checkbox
-      class="trmrk-checkbox"
-      (change)="trmrkCheckBoxToggled.emit($event)"
-      [checked]="trmrkIsSelected"
-    ></mat-checkbox>
-  </button>
-  } @if (trmrkLeadingMatIconName || trmrkLeadingIconTemplate) {
+  @if (trmrkIsExpandable) {
   <button
     mat-icon-button
     class="trmrk-icon-btn"
-    (trmrkLongPressOrRightClick)="trmrkLeadingBtnLongPressOrRightClick.emit($event)"
-    (trmrkShortPressOrLeftClick)="trmrkLeadingBtnShortPressOrLeftClick.emit($event)"
-  >
-    @if (trmrkLeadingMatIconName) {
-    <mat-icon class="trmrk-icon trmrk-leading-icon"
-      >{{trmrkLeadingMatIconName}}</mat-icon
-    >
-    } @if (!trmrkLeadingMatIconName && trmrkLeadingIconTemplate){
-    <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container> }
-  </button>
-  } @if (trmrkShowGoToParentBtn ?? trmrkIsAppBar) {
-  <button
-    mat-icon-button
-    class="trmrk-icon-btn"
-    [disabled]="!trmrkGoToParentBtnIsEnabled"
-    (trmrkLongPressOrRightClick)="trmrkGoToParentBtnLongPressOrRightClick.emit($event)"
-    (trmrkShortPressOrLeftClick)="trmrkGoToParentBtnShortPressOrLeftClick.emit($event)"
+    (click)="trmrkExpandedToggled.emit(!trmrkIsExpanded)"
   >
     <mat-icon class="trmrk-icon"
-      >{{ trmrkGoToParentMatIconName ?? 'arrow_upward' }}</mat-icon
-    >
+      >{{ trmrkIsExpanded ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}
+    </mat-icon>
   </button>
-  } @if (trmrkColorLabelColor) {
-  <button
-    mat-icon-button
-    class="trmrk-icon-btn"
-    (trmrkLongPressOrRightClick)="trmrkColorLabelBtnLongPressOrRightClick.emit($event)"
-    (trmrkShortPressOrLeftClick)="trmrkColorLabelBtnShortPressOrLeftClick.emit($event)"
-  >
-    <mat-icon class="trmrk-icon" [ngStyle]="{color: trmrkColorLabelColor}"
-      >label</mat-icon
+  } @if (trmrkIsExpandable === false) {
+  <div class="trmrk-icon-btn"></div>
+  }
+  <trmrk-horiz-strip
+    [trmrkType]="trmrkIsAppBar ? TrmrkHorizStripType.AppBar : TrmrkHorizStripType.Regular"
+    [trmrkMainText]="trmrkMainText"
+    [trmrkDetailsTextParts]="trmrkDetailsTextParts"
+    [trmrkCssClass]="trmrkCssClass"
+    (trmrkTextLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
+    (trmrkTextShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
+    [trmrkLeadingTemplate]="leadingTemplate"
+    [trmrkTrailingTemplate]="trailingTemplate"
+  ></trmrk-horiz-strip>
+
+  <ng-template #leadingTemplate>
+    @if (trmrkIsSelectable) {
+    <button mat-icon-button class="trmrk-icon-btn">
+      <mat-checkbox
+        class="trmrk-checkbox"
+        (change)="trmrkCheckBoxToggled.emit($event)"
+        [checked]="trmrkIsSelected"
+      ></mat-checkbox>
+    </button>
+    } @if (trmrkLeadingMatIconName || trmrkLeadingIconTemplate) {
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="trmrkLeadingBtnLongPressOrRightClick.emit($event)"
+      (trmrkShortPressOrLeftClick)="trmrkLeadingBtnShortPressOrLeftClick.emit($event)"
     >
-  </button>
-  }
-</ng-template>
-<ng-template #trailingTemplate>
-  @if (trmrkTrailingTemplate) {
-  <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
-  }
-</ng-template>
+      @if (trmrkLeadingMatIconName) {
+      <mat-icon class="trmrk-icon trmrk-leading-icon"
+        >{{trmrkLeadingMatIconName}}</mat-icon
+      >
+      } @if (!trmrkLeadingMatIconName && trmrkLeadingIconTemplate){
+      <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container>
+      }
+    </button>
+    } @if (trmrkShowGoToParentBtn ?? trmrkIsAppBar) {
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      [disabled]="!trmrkGoToParentBtnIsEnabled"
+      (trmrkLongPressOrRightClick)="trmrkGoToParentBtnLongPressOrRightClick.emit($event)"
+      (trmrkShortPressOrLeftClick)="trmrkGoToParentBtnShortPressOrLeftClick.emit($event)"
+    >
+      <mat-icon class="trmrk-icon"
+        >{{ trmrkGoToParentMatIconName ?? 'arrow_upward' }}</mat-icon
+      >
+    </button>
+    } @if (trmrkColorLabelColor) {
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (trmrkLongPressOrRightClick)="trmrkColorLabelBtnLongPressOrRightClick.emit($event)"
+      (trmrkShortPressOrLeftClick)="trmrkColorLabelBtnShortPressOrLeftClick.emit($event)"
+    >
+      <mat-icon class="trmrk-icon" [ngStyle]="{color: trmrkColorLabelColor}"
+        >label</mat-icon
+      >
+    </button>
+    }
+  </ng-template>
+  <ng-template #trailingTemplate>
+    @if (trmrkTrailingTemplate) {
+    <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
+    }
+  </ng-template>
+</div>

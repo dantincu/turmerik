@@ -146,9 +146,7 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
     if (data.isValid) {
       data.composedPath = event.composedPath();
       const target = event.target;
-      data.isValid = !!(
-        target && data.composedPath.indexOf(data.elem) >= MouseButton.Left
-      );
+      data.isValid = !!(target && data.composedPath.indexOf(data.elem) >= 0);
     }
 
     if (data.isValid && mouseDownOrTouchStartCoords) {

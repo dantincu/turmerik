@@ -1,0 +1,23 @@
+:host {
+  margin-top: -3px;
+}
+
+:host, .trmrk-accelerating-scroll-control {
+  width: 120px;
+  height: 40px;
+}
+
+.trmrk-accelerating-scroll-control {
+  > :first-child .trmrk-icon {
+    transform: rotate(-90deg);
+  }
+
+  > :nth-child(3) .trmrk-icon {
+    transform: rotate(90deg);
+  }
+}
+
+.trmrk-fake-icon-btn {
+  display: inline-flex;
+  box-sizing: border-box;
+}
