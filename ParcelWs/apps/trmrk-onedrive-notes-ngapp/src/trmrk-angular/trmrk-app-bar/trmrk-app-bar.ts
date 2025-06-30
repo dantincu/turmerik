@@ -7,6 +7,7 @@ import {
   EventEmitter,
   Output,
   ElementRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink, UrlTree } from '@angular/router';
@@ -26,6 +27,7 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
   templateUrl: './trmrk-app-bar.html',
   styleUrl: './trmrk-app-bar.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkAppBar implements AfterViewInit {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();

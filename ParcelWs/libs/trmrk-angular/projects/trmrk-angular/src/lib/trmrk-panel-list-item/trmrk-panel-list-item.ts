@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -36,6 +37,7 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
   ],
   templateUrl: './trmrk-panel-list-item.html',
   styleUrl: './trmrk-panel-list-item.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkPanelListItem {
   @Output() trmrkExpandedToggled = new EventEmitter<boolean>();

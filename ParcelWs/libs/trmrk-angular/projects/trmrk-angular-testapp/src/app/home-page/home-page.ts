@@ -112,7 +112,7 @@ export class HomePage implements AfterViewInit {
   ];
 
   companies = [...Array(1).keys()]
-    .map(() => companies.slice(0, 1000))
+    .map(() => companies.slice(0, 100))
     .reduce((acc, arr) => [...acc, ...arr]);
 
   companyRows = this.companies.map((comp, idx) => ({

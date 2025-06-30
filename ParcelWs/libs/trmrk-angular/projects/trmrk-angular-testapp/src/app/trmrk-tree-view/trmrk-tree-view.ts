@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TreeNode, TrmrkTreeNode } from '../trmrk-tree-node/trmrk-tree-node';
@@ -10,6 +16,7 @@ import { TrmrkTree, TrmrkTreeNodeData } from 'trmrk-angular';
   imports: [TrmrkTreeNode],
   templateUrl: './trmrk-tree-view.html',
   styleUrl: './trmrk-tree-view.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkTreeView implements OnInit, OnDestroy {
   @Input() trmrkData!: TrmrkTree<TreeNode>;

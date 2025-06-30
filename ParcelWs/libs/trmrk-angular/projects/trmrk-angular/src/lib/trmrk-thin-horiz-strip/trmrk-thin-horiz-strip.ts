@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Output,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -19,6 +20,7 @@ import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-ri
   imports: [CommonModule, TrmrkLongPressOrRightClick],
   templateUrl: './trmrk-thin-horiz-strip.html',
   styleUrl: './trmrk-thin-horiz-strip.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkThinHorizStrip {
   @Output() trmrkTextLongPressOrRightClick =

@@ -6,11 +6,19 @@
   (trmrkStart)="start($event)"
   (trmrkReset)="reset($event)"
 >
-  <button mat-icon-button class="trmrk-icon-btn" #scrollUpBtn>
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn trmrk-scroll-up-icon-btn"
+    #scrollUpBtn
+  >
     <mat-icon class="trmrk-icon">fast_forward</mat-icon>
   </button>
   <div class="trmrk-icon-btn trmrk-fake-icon-btn" #fakeBtn></div>
-  <button mat-icon-button class="trmrk-icon-btn" #scrollDownBtn>
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn trmrk-scroll-down-icon-btn"
+    #scrollDownBtn
+  >
     <mat-icon class="trmrk-icon">fast_forward</mat-icon>
   </button>
 </div>

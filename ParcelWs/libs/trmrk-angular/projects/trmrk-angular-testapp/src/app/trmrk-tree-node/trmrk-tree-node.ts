@@ -1,4 +1,10 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Subscription } from 'rxjs';
@@ -26,6 +32,7 @@ export interface TreeNode {
   imports: [MatIconModule, TrmrkPanelListItem, CommonModule],
   templateUrl: './trmrk-tree-node.html',
   styleUrl: './trmrk-tree-node.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkTreeNode implements OnInit, OnDestroy {
   @Input() trmrkTreeData!: TrmrkTree<TreeNode>;

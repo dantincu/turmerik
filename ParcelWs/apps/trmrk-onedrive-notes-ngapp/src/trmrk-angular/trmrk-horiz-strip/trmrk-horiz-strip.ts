@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Output,
   TemplateRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -31,6 +32,7 @@ export interface TrmrkHorizStripDetailsTextPart {
   imports: [CommonModule, TrmrkLongPressOrRightClick],
   templateUrl: './trmrk-horiz-strip.html',
   styleUrl: './trmrk-horiz-strip.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkHorizStrip implements OnChanges {
   @Output() trmrkTextLongPressOrRightClick =

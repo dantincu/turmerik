@@ -6,6 +6,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  AfterViewInit,
 } from '@angular/core';
 
 export interface TrmrkContinuousPressTouchOrMouseMoveEvent {
@@ -16,7 +17,7 @@ export interface TrmrkContinuousPressTouchOrMouseMoveEvent {
 @Directive({
   selector: '[trmrkContinuousPress]',
 })
-export class TrmrkContinuousPress implements OnDestroy {
+export class TrmrkContinuousPress implements OnDestroy, AfterViewInit {
   @Output() trmrkContinuousPress = new EventEmitter<number>();
   @Output() trmrkStart = new EventEmitter<MouseEvent | TouchEvent>();
   @Output() trmrkReset = new EventEmitter<number>();
@@ -31,32 +32,47 @@ export class TrmrkContinuousPress implements OnDestroy {
   private elapsedCount = 0;
 
   constructor(private host: ElementRef<HTMLElement>) {
+    this.hostTouchStartOrMouseDown = this.hostTouchStartOrMouseDown.bind(this);
+
     this.docMouseOrTouchMove = this.docMouseOrTouchMove.bind(this);
     this.docMouseUpOrTouchEnd = this.docMouseUpOrTouchEnd.bind(this);
   }
 
+  ngAfterViewInit(): void {
+    this.host.nativeElement.addEventListener(
+      'touchstart',
+      this.hostTouchStartOrMouseDown
+    );
+
+    this.host.nativeElement.addEventListener(
+      'mousedown',
+      this.hostTouchStartOrMouseDown
+    );
+  }
+
   ngOnDestroy(): void {
+    document.removeEventListener('touchstart', this.hostTouchStartOrMouseDown);
+    document.removeEventListener('mousedown', this.hostTouchStartOrMouseDown);
     this.reset();
   }
 
-  @HostListener('mousedown', ['$event']) hostMouseDown(event: MouseEvent) {
+  hostTouchStartOrMouseDown(event: MouseEvent | TouchEvent) {
     this.reset();
-    document.addEventListener('mousemove', this.docMouseOrTouchMove);
-    document.addEventListener('mouseup', this.docMouseUpOrTouchEnd);
-    this.initContinuousInterval();
-    this.trmrkStart.emit(event);
-  }
-
-  @HostListener('touchstart', ['$event']) hostTouchStart(event: TouchEvent) {
-    this.reset();
-    document.addEventListener('touchmove', this.docMouseOrTouchMove);
+    document.addEventListener('touchmove', this.docMouseOrTouchMove, {
+      capture: true,
+    });
+    document.addEventListener('mousemove', this.docMouseOrTouchMove, {
+      capture: true,
+    });
     document.addEventListener('touchend', this.docMouseUpOrTouchEnd);
+    document.addEventListener('mouseup', this.docMouseUpOrTouchEnd);
     this.initContinuousInterval();
     this.trmrkStart.emit(event);
   }
 
   private docMouseOrTouchMove(event: MouseEvent | TouchEvent) {
     const composedPath = event.composedPath();
+    console.log('composedPath', composedPath);
 
     if (composedPath.indexOf(this.host.nativeElement) < 0) {
       this.reset();
