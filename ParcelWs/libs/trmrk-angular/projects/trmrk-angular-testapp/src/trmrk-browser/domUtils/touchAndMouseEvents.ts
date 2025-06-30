@@ -30,12 +30,15 @@ export enum MouseButton {
   BrowserForward,
 }
 
-export interface TouchOrMouseCoords {
+export interface Coords {
+  clientX: number;
+  clientY: number;
+}
+
+export interface TouchOrMouseCoords extends Coords {
   evt?: MouseEvent | TouchEvent | null | undefined;
   isMouseEvt?: boolean | null | undefined;
   mouseButton?: number | null | undefined;
-  clientX: number;
-  clientY: number;
   pageX: number;
   pageY: number;
   screenX: number;
@@ -151,3 +154,46 @@ export const getSingleTouchOrClick = (
 export const isTouchOrLeftMouseBtnClick = (coords: TouchOrMouseCoords) =>
   [MouseButton.Left, null].indexOf(coords.mouseButton ?? null) >=
   MouseButton.Left;
+
+export const getCoords = (e: MouseEvent | TouchEvent | TouchOrMouseCoords) => {
+  let retObj: Coords;
+  const mouseEvent = e as MouseEvent;
+
+  if (
+    'number' === typeof mouseEvent.clientX &&
+    'number' === typeof mouseEvent.clientY
+  ) {
+    retObj = {
+      clientX: mouseEvent.clientX,
+      clientY: mouseEvent.clientY,
+    };
+  } else {
+    const touch = (e as TouchEvent).touches[0];
+
+    retObj = {
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+    };
+  }
+
+  return retObj;
+};
+
+export const isContainedBy = (
+  e: MouseEvent | TouchEvent | TouchOrMouseCoords,
+  parent: HTMLElement,
+  useComposedPath = false
+) => {
+  let retVal: boolean;
+
+  if (useComposedPath) {
+    const composedPath = (e as TouchEvent).composedPath();
+    retVal = composedPath.indexOf(parent) >= 0;
+  } else {
+    const coords = getCoords(e);
+    const elem = document.elementFromPoint(coords.clientX, coords.clientY);
+    retVal = !!elem && parent.contains(elem);
+  }
+
+  return retVal;
+};

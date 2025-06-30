@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple HTML Page</title>
+    <style>
+      body {
+        background-color: #000;
+        color: #fff;
+      }
+
+      .container {
+        display: grid;
+        grid-gap: 1vw;
+        grid-template-columns:
+          32vw 32vw 32vw
+          32vw 32vw 32vw
+          32vw 32vw 32vw;
+        grid-template-rows: 44vh 1vh 44vh;
+      }
+
+      .cell {
+        font-size: 50px;
+        padding: 20vh 15vw 20vh 15vw;
+        background-color: #420;
+        border-radius: 10px;
+      }
+
+      .focused {
+        background-color: #f80;
+      }
+
+      .cell1 {
+        grid-row-start: 1;
+        grid-row-end: 1;
+        grid-column-start: 1;
+      }
+
+      .cell2 {
+        grid-row-start: 1;
+        grid-row-end: 1;
+        grid-column-start: 2;
+      }
+
+      .cell3 {
+        grid-row-start: 1;
+        grid-row-end: 1;
+        grid-column-start: 3;
+      }
+
+      .cell4 {
+        grid-row-start: 3;
+        grid-row-end: 3;
+        grid-column-start: 1;
+      }
+
+      .cell5 {
+        grid-row-start: 3;
+        grid-row-end: 3;
+        grid-column-start: 2;
+      }
+
+      .cell6 {
+        grid-row-start: 3;
+        grid-row-end: 3;
+        grid-column-start: 3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="cell cell1">1</div>
+      <div class="cell cell2">2</div>
+      <div class="cell cell3">3</div>
+      <div class="cell cell4">1</div>
+      <div class="cell cell5">2</div>
+      <div class="cell cell6">3</div>
+    </div>
+    <script>
+      let container = null,
+        focused = null,
+        mirrored = null;
+
+      const cells = [];
+
+      const clearFocused = () => {
+        focused?.classList.remove("focused");
+        mirrored?.classList.remove("focused");
+
+        focused = null;
+        mirrored = null;
+      };
+
+      const updateFocused = (e) => {
+        const composedPath = e.composedPath();
+        // const idx = cells.findIndex((cell) => composedPath.indexOf(cell) >= 0);
+
+        if (e.touches) {
+          const touch = e.touches[0];
+          target = document.elementFromPoint(touch.clientX, touch.clientY);
+        } else {
+          target = e.target;
+        }
+
+        const idx = cells.findIndex((cell) => cell === target);
+
+        if (idx >= 0) {
+          const newFocused = cells[idx];
+
+          if (newFocused !== focused) {
+            clearFocused();
+            focused = newFocused;
+            mirrored = cells[(idx + 3) % 6];
+
+            focused.classList.add("focused");
+            mirrored.classList.add("focused");
+          }
+        } else {
+          clearFocused();
+        }
+      };
+
+      const touchStartOrMouseDown = (e) => {
+        updateFocused(e);
+        document.addEventListener("mousemove", touchOrMouseMove);
+        document.addEventListener("touchmove", touchOrMouseMove, {
+          passive: false,
+        });
+      };
+
+      const touchEndOrMouseUp = (e) => {
+        clearFocused();
+        document.removeEventListener("mousemove", touchOrMouseMove);
+        document.removeEventListener("touchmove", touchOrMouseMove, {
+          passive: false,
+        });
+      };
+
+      const touchOrMouseMove = (e) => {
+        console.log(e.target.className, e);
+
+        if (e.cancelable) {
+          e.preventDefault(); // 👈 Prevent scrolling
+        }
+
+        updateFocused(e);
+      };
+
+      const init = () => {
+        container = document.querySelector(".container");
+
+        for (let i = 0; i < 6; i++) {
+          cells[i] = document.querySelector(`.cell${i + 1}`);
+        }
+
+        container.addEventListener("mousedown", touchStartOrMouseDown);
+        container.addEventListener("touchstart", touchStartOrMouseDown);
+        container.addEventListener("mouseup", touchEndOrMouseUp);
+        container.addEventListener("touchend", touchEndOrMouseUp);
+
+        console.log("Initialized");
+      };
+
+      document.addEventListener("DOMContentLoaded", init);
+    </script>
+  </body>
+</html>

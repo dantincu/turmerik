@@ -2,10 +2,9 @@ import { Component, ViewChild, ElementRef, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 
-import {
-  TrmrkContinuousPress,
-  TrmrkContinuousPressTouchOrMouseMoveEvent,
-} from '../directives/trmrk-continuous-press';
+import { getCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+
+import { TrmrkContinuousPress } from '../directives/trmrk-continuous-press';
 
 @Component({
   selector: 'trmrk-accelerating-scroll-control',
@@ -41,13 +40,14 @@ export class TrmrkAcceleratingScrollControl {
 
   start(event: TouchEvent | MouseEvent) {
     this.resetCore();
-    const composedPath = event.composedPath();
+    const coords = getCoords(event);
+    const elem = document.elementFromPoint(coords.clientX, coords.clientY);
 
-    if (composedPath.indexOf(this.fakeBtn.nativeElement) >= 0) {
+    if (this.fakeBtn.nativeElement.contains(elem)) {
       this.accelerate = 0;
-    } else if (composedPath.indexOf(this.scrollUpBtn.nativeElement) >= 0) {
+    } else if (this.scrollUpBtn.nativeElement.contains(elem)) {
       this.accelerate = -1;
-    } else if (composedPath.indexOf(this.scrollDownBtn.nativeElement) >= 0) {
+    } else if (this.scrollDownBtn.nativeElement.contains(elem)) {
       this.accelerate = 1;
     } else {
       this.accelerate = 0;
@@ -86,7 +86,7 @@ export class TrmrkAcceleratingScrollControl {
     this.lastCount = count;
   }
 
-  touchOrMouseMove(event: TrmrkContinuousPressTouchOrMouseMoveEvent) {
+  touchOrMouseMove(event: MouseEvent | TouchEvent) {
     const ifFakeBtn = () => {
       switch (this.accelerate) {
         case 0:
@@ -132,18 +132,19 @@ export class TrmrkAcceleratingScrollControl {
       this.accelerate = 1;
     };
 
-    if (event.composedPath.indexOf(this.fakeBtn.nativeElement) >= 0) {
-      ifFakeBtn();
-    } else if (
-      event.composedPath.indexOf(this.scrollUpBtn.nativeElement) >= 0
-    ) {
-      ifUpBtn();
-    } else if (
-      event.composedPath.indexOf(this.scrollDownBtn.nativeElement) >= 0
-    ) {
-      ifDownBtn();
-    } else {
-      ifFakeBtn();
+    const coords = getCoords(event);
+    const elem = document.elementFromPoint(coords.clientX, coords.clientY);
+
+    if (elem) {
+      if (this.fakeBtn.nativeElement.contains(elem)) {
+        ifFakeBtn();
+      } else if (this.scrollUpBtn.nativeElement.contains(elem)) {
+        ifUpBtn();
+      } else if (this.scrollDownBtn.nativeElement.contains(elem)) {
+        ifDownBtn();
+      } else {
+        ifFakeBtn();
+      }
     }
   }
 

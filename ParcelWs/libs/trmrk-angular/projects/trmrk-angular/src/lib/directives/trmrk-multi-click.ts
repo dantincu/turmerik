@@ -12,6 +12,7 @@ import {
   MouseButton,
   TouchOrMouseCoords,
   getSingleTouchOrClick,
+  isContainedBy,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkLongPressOrRightClickEventData } from './types';
@@ -127,9 +128,7 @@ export class TrmrkMultiClick implements OnDestroy {
     }
 
     if (data.isValid) {
-      data.composedPath = event.composedPath();
-      const target = event.target;
-      data.isValid = !!(target && data.composedPath.indexOf(data.elem) >= 0);
+      data.isValid = isContainedBy(event, data.elem);
     }
 
     return data;

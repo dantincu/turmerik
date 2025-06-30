@@ -2,17 +2,13 @@ import {
   Directive,
   ElementRef,
   OnDestroy,
-  HostListener,
   Input,
   Output,
   EventEmitter,
   AfterViewInit,
 } from '@angular/core';
 
-export interface TrmrkContinuousPressTouchOrMouseMoveEvent {
-  event: TouchEvent | MouseEvent;
-  composedPath: EventTarget[];
-}
+import { isContainedBy } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 @Directive({
   selector: '[trmrkContinuousPress]',
@@ -22,8 +18,7 @@ export class TrmrkContinuousPress implements OnDestroy, AfterViewInit {
   @Output() trmrkStart = new EventEmitter<MouseEvent | TouchEvent>();
   @Output() trmrkReset = new EventEmitter<number>();
 
-  @Output() trmrkTouchOrMouseMove =
-    new EventEmitter<TrmrkContinuousPressTouchOrMouseMoveEvent>();
+  @Output() trmrkTouchOrMouseMove = new EventEmitter<TouchEvent | MouseEvent>();
 
   @Input() trmrkIntervalMillis = 100;
   @Input() autoResetElapsedCount = Number.MAX_SAFE_INTEGER;
@@ -71,16 +66,10 @@ export class TrmrkContinuousPress implements OnDestroy, AfterViewInit {
   }
 
   private docMouseOrTouchMove(event: MouseEvent | TouchEvent) {
-    const composedPath = event.composedPath();
-    console.log('composedPath', composedPath);
-
-    if (composedPath.indexOf(this.host.nativeElement) < 0) {
+    if (!isContainedBy(event, this.host.nativeElement)) {
       this.reset();
     } else {
-      this.trmrkTouchOrMouseMove.emit({
-        event,
-        composedPath,
-      });
+      this.trmrkTouchOrMouseMove.emit(event);
     }
   }
 
