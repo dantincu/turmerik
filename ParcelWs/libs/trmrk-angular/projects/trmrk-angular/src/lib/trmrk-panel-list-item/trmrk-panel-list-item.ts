@@ -97,13 +97,13 @@ export class TrmrkPanelListItem implements AfterViewInit, OnDestroy {
 
   private leadingIconBtn: HTMLElement | null = null;
 
-  constructor(private host: ElementRef) {
+  constructor(public hostEl: ElementRef) {
     this.leadingIconMouseDownOrTouchStart =
       this.leadingIconMouseDownOrTouchStart.bind(this);
   }
 
   ngAfterViewInit(): void {
-    const hostEl = this.host.nativeElement as HTMLElement;
+    const hostEl = this.hostEl.nativeElement as HTMLElement;
     this.leadingIconBtn = hostEl.querySelector('.trmrk-leading-icon-btn');
 
     if (this.leadingIconBtn) {

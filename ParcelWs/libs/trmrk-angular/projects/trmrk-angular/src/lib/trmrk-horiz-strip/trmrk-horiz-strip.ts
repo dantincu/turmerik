@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Output,
   TemplateRef,
+  ElementRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -58,7 +59,7 @@ export class TrmrkHorizStrip implements OnChanges {
   mainText = '';
   TrmrkHorizStripType = TrmrkHorizStripType;
 
-  constructor() {}
+  constructor(public hostEl: ElementRef) {}
 
   get cssClasses() {
     let cssClasses = [...this.trmrkCssClass];

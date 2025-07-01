@@ -52,6 +52,7 @@
       >
         @for (row of companyRows; track row.data.id) {
         <trmrk-panel-list-item
+          #companyListItems
           [trmrkMainText]="row.data.name"
           [ngClass]="['trmrk-list-item']"
           [trmrkLeadingMatIconName]="'description'"

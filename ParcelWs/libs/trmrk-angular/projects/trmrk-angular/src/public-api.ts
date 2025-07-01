@@ -13,6 +13,8 @@ export * from './lib/trmrk-app-bar/trmrk-app-bar';
 
 export * from './lib/trmrk-dev-page/routes';
 
+export * from './lib/services/dragService';
+export * from './lib/services/dynamicComponent';
 export * from './lib/services/TrmrkObservable';
 export * from './lib/services/TrmrkTree';
 export * from './lib/services/types';

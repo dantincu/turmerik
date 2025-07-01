@@ -20,14 +20,14 @@ export class DragService {
 
   private mouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
   private dragStartPosition: TrmrkDragStartPosition | null = null;
-  private hostEl!: ElementRef;
+  private hostEl: ElementRef | null = null;
 
   constructor() {
     this.touchOrMouseMove = this.touchOrMouseMove.bind(this);
     this.touchEndOrMouseUp = this.touchEndOrMouseUp.bind(this);
   }
 
-  public init(hostEl: ElementRef) {
+  public init(hostEl: ElementRef | null = null) {
     this.hostEl = hostEl;
   }
 
@@ -91,7 +91,7 @@ export class DragService {
   }
 
   private getEventData(event: TouchEvent | MouseEvent) {
-    const elem = this.hostEl.nativeElement;
+    const elem = this.hostEl?.nativeElement;
 
     const data: TrmrkDragEventData = {
       elem,
@@ -99,12 +99,14 @@ export class DragService {
       mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
       composedPath: null,
       isValid: false,
-      dragStartPosition: {
-        clientTop: elem.clientTop,
-        clientLeft: elem.clientLeft,
-        offsetTop: elem.offsetTop,
-        offsetLeft: elem.offsetLeft,
-      },
+      dragStartPosition: elem
+        ? {
+            clientTop: elem.clientTop,
+            clientLeft: elem.clientLeft,
+            offsetTop: elem.offsetTop,
+            offsetLeft: elem.offsetLeft,
+          }
+        : null,
     };
 
     data.isValid = !!(data.elem && data.mouseOrTouchCoords);
@@ -121,7 +123,7 @@ export class DragService {
     const event: TrmrkDragEvent = {
       touchStartOrMouseDownCoords: this.mouseDownOrTouchStartCoords!,
       touchOrMouseMoveCoords: data.mouseOrTouchCoords!,
-      dragStartPosition: this.dragStartPosition!,
+      dragStartPosition: this.dragStartPosition,
     };
 
     return event;

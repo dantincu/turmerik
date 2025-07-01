@@ -1,4 +1,13 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ViewChildren,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
+  Injector,
+  QueryList,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,6 +35,7 @@ import { TrmrkAppBar } from 'trmrk-angular';
 import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
 import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 import { TrmrkThinHorizStrip } from 'trmrk-angular';
+import { DragService } from 'trmrk-angular';
 
 /* import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message'; */
 
@@ -71,7 +81,7 @@ import { companies } from '../services/companies';
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
 })
-export class HomePage implements AfterViewInit {
+export class HomePage implements AfterViewInit, OnDestroy {
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
@@ -82,6 +92,8 @@ export class HomePage implements AfterViewInit {
 
   @ViewChild('companiesListView')
   companiesListView!: ElementRef<HTMLDivElement>;
+
+  @ViewChildren('companyListItems') companyListItems!: QueryList<ElementRef>;
 
   quote = '"';
   nonBreakingText = encodeHtml(
@@ -132,6 +144,8 @@ export class HomePage implements AfterViewInit {
 
   popupClosedMessage = '';
 
+  private companyIconDragServices: DragService[] | null = null;
+
   constructor() {
     this.treeViewData = this.getTreeViewData();
 
@@ -140,7 +154,21 @@ export class HomePage implements AfterViewInit {
     }, 0);
   }
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    this.companyIconDragServices = this.companyRows.map((compRow, idx) => {
+      const dragService = Injector.create({
+        providers: [{ provide: DragService, useClass: DragService }],
+      }).get(DragService);
+
+      return dragService;
+    });
+  }
+
+  ngOnDestroy(): void {
+    for (let dragService of this.companyIconDragServices ?? []) {
+      dragService.Dispose();
+    }
+  }
 
   onOptionsMenuBtnClick(event: MouseEvent): void {
     this.optionsMenuTrigger.openMenu();
@@ -153,7 +181,7 @@ export class HomePage implements AfterViewInit {
     const containerElWidth = draggableStripEl.parentElement!.scrollWidth;
 
     const newLeftOffset =
-      dragStartPosition.offsetLeft +
+      dragStartPosition!.offsetLeft +
       event.touchOrMouseMoveCoords.clientX -
       event.touchStartOrMouseDownCoords.clientX;
 
@@ -274,14 +302,10 @@ export class HomePage implements AfterViewInit {
     }
   }
 
-  companyIconMouseDownOrTouchStart(
-    event: MouseEvent | TouchEvent,
-    id: number
-  ) {}
-
-  companiesAcceleratingScrollDown(count: number) {}
-
-  companiesAcceleratingScrollUp(count: number) {}
+  companyIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
+    const idx = this.companyRows.findIndex((comp) => comp.data.id === id);
+    this.companyIconDragServices![idx].onTouchStartOrMouseDown(event);
+  }
 
   getCompaniesTextFromCoords(
     loopSizes: number[],

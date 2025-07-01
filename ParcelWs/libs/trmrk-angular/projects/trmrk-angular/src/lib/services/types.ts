@@ -27,10 +27,10 @@ export interface TrmrkDragStartPosition {
 }
 
 export interface TrmrkDragEvent extends TouchOrMouseMoveCoords {
-  dragStartPosition: TrmrkDragStartPosition;
+  dragStartPosition: TrmrkDragStartPosition | null;
 }
 
 export interface TrmrkDragEventData
   extends TrmrkLongPressOrRightClickEventData {
-  dragStartPosition: TrmrkDragStartPosition;
+  dragStartPosition: TrmrkDragStartPosition | null;
 }
