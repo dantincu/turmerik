@@ -14,7 +14,7 @@ import {
   isContainedBy,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkLongPressOrRightClickEventData } from './types';
+import { TrmrkLongPressOrRightClickEventData } from '../services/types';
 
 @Directive({
   selector: '[trmrkLongPressOrRightClick]',

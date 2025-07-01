@@ -32,6 +32,7 @@
   <div>
     <div class="companies-trmrk-list-view-container">
       <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
+        @if (companiesAreSelectable) {
         <button mat-icon-button class="trmrk-icon-btn">
           <mat-checkbox
             class="trmrk-checkbox"
@@ -39,10 +40,12 @@
             [checked]="companiesMasterCheckBoxIsChecked"
           ></mat-checkbox>
         </button>
+        }
         <trmrk-accelerating-scroll-control
           [trmrkScrollable]="companiesListView"
         ></trmrk-accelerating-scroll-control>
       </div>
+      <!--trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover-->
       <div
         #companiesListView
         class="companies-trmrk-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y"
@@ -51,9 +54,12 @@
         <trmrk-panel-list-item
           [trmrkMainText]="row.data.name"
           [ngClass]="['trmrk-list-item']"
-          [trmrkIsSelectable]="true"
+          [trmrkLeadingMatIconName]="'description'"
+          [trmrkIsSelectable]="companiesAreSelectable"
           [trmrkIsSelected]="row.isSelected"
           (trmrkCheckBoxToggled)="companyCheckBoxToggled($event, row.data.id)"
+          (trmrkLeadingBtnLongPressOrRightClick)="companyIconLongPressOrRightClick($event, row.data.id)"
+          (trmrkLeadingIconBtnMouseDownOrTouchStart)="companyIconMouseDownOrTouchStart($event, row.data.id)"
         ></trmrk-panel-list-item>
         }
       </div>
@@ -307,7 +313,7 @@
 
     <div [ngStyle]="{display: 'flex'}">
       <trmrk-user-message
-        [trmrkMessage]="'asdfasdfa qwerwqerq'"
+        [trmrkMessage]="'asdfa qwerw'"
         [trmrkShow]="showUserMsg[2]"
         [trmrkLevel]="1"
         (trmrkClose)="userMessageClose(2)"

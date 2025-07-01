@@ -39,6 +39,7 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
 import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
+import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 
 import { companies } from '../services/companies';
 
@@ -65,6 +66,7 @@ import { companies } from '../services/companies';
     TrmrkTreeView,
     TrmrkThinHorizStrip,
     TrmrkAcceleratingScrollControl,
+    TrmrkAcceleratingScrollPopover,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
@@ -123,6 +125,7 @@ export class HomePage implements AfterViewInit {
     isSelected: false,
   }));
 
+  companiesAreSelectable = false;
   companiesMasterCheckBoxIsChecked = false;
 
   treeViewData: TrmrkTree<TreeNode>;
@@ -144,24 +147,24 @@ export class HomePage implements AfterViewInit {
   }
 
   onDrag(event: TrmrkDragEvent) {
-    const draggableStripEl = this.draggableStrip.nativeElement;
+    const draggableStripEl = this.draggableStrip.nativeElement as HTMLElement;
     const draggableStripWidth = draggableStripEl.offsetWidth;
     const dragStartPosition = event.dragStartPosition;
-    const documentElWidth = document.documentElement.scrollWidth;
+    const containerElWidth = draggableStripEl.parentElement!.scrollWidth;
 
     const newLeftOffset =
       dragStartPosition.offsetLeft +
       event.touchOrMouseMoveCoords.clientX -
       event.touchStartOrMouseDownCoords.clientX;
 
-    const newRightOffset =
-      documentElWidth - newLeftOffset - draggableStripWidth;
+    let newRightOffset = containerElWidth - newLeftOffset - draggableStripWidth;
 
-    draggableStripEl.style.right =
-      Math.max(
-        Math.min(newRightOffset, documentElWidth - draggableStripWidth),
-        0
-      ) + 'px';
+    newRightOffset = Math.max(
+      Math.min(newRightOffset, containerElWidth - draggableStripWidth),
+      0
+    );
+
+    draggableStripEl.style.right = newRightOffset + 'px';
   }
 
   onLongPressMouseDownOrTouchStart1(event: Event) {
@@ -247,13 +250,34 @@ export class HomePage implements AfterViewInit {
   companyCheckBoxToggled(event: MatCheckboxChange, id: number) {
     const company = this.companyRows.find((comp) => comp.data.id === id)!;
     company.isSelected = event.checked;
+
+    if (!event.checked && !this.companyRows.find((comp) => comp.isSelected)) {
+      this.companiesAreSelectable = false;
+    }
   }
 
   companiesMasterCheckBoxToggled(event: MatCheckboxChange) {
     for (let companyRow of this.companyRows) {
       companyRow.isSelected = event.checked;
     }
+
+    if (!event.checked) {
+      this.companiesAreSelectable = false;
+    }
   }
+
+  companyIconLongPressOrRightClick(event: TouchOrMouseCoords, id: number) {
+    if (!this.companiesAreSelectable) {
+      this.companiesAreSelectable = true;
+      const company = this.companyRows.find((comp) => comp.data.id === id)!;
+      company.isSelected = true;
+    }
+  }
+
+  companyIconMouseDownOrTouchStart(
+    event: MouseEvent | TouchEvent,
+    id: number
+  ) {}
 
   companiesAcceleratingScrollDown(count: number) {}
 

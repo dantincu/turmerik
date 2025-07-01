@@ -5,6 +5,9 @@ import {
   EventEmitter,
   TemplateRef,
   ChangeDetectionStrategy,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -39,7 +42,7 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
   styleUrl: './trmrk-panel-list-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkPanelListItem {
+export class TrmrkPanelListItem implements AfterViewInit, OnDestroy {
   @Output() trmrkExpandedToggled = new EventEmitter<boolean>();
   @Output() trmrkCheckBoxToggled = new EventEmitter<MatCheckboxChange>();
 
@@ -49,7 +52,12 @@ export class TrmrkPanelListItem {
   @Output() trmrkLeadingBtnShortPressOrLeftClick =
     new EventEmitter<TouchOrMouseCoords>();
 
-  @Output() trmrkGoToParentBtnLongPressOrRightClick =
+  @Output() trmrkLeadingIconBtnMouseDownOrTouchStart = new EventEmitter<
+    MouseEvent | TouchEvent
+  >();
+
+  @Output()
+  trmrkGoToParentBtnLongPressOrRightClick =
     new EventEmitter<TouchOrMouseCoords>();
 
   @Output() trmrkGoToParentBtnShortPressOrLeftClick =
@@ -86,4 +94,48 @@ export class TrmrkPanelListItem {
   @Input() trmrkTrailingTemplate!: TemplateRef<any>;
 
   TrmrkHorizStripType = TrmrkHorizStripType;
+
+  private leadingIconBtn: HTMLElement | null = null;
+
+  constructor(private host: ElementRef) {
+    this.leadingIconMouseDownOrTouchStart =
+      this.leadingIconMouseDownOrTouchStart.bind(this);
+  }
+
+  ngAfterViewInit(): void {
+    const hostEl = this.host.nativeElement as HTMLElement;
+    this.leadingIconBtn = hostEl.querySelector('.trmrk-leading-icon-btn');
+
+    if (this.leadingIconBtn) {
+      this.leadingIconBtn.addEventListener(
+        'mousedown',
+        this.leadingIconMouseDownOrTouchStart
+      );
+
+      this.leadingIconBtn.addEventListener(
+        'touchstart',
+        this.leadingIconMouseDownOrTouchStart
+      );
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.leadingIconBtn) {
+      this.leadingIconBtn.removeEventListener(
+        'mousedown',
+        this.leadingIconMouseDownOrTouchStart
+      );
+
+      this.leadingIconBtn.removeEventListener(
+        'touchstart',
+        this.leadingIconMouseDownOrTouchStart
+      );
+
+      this.leadingIconBtn = null;
+    }
+  }
+
+  private leadingIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent) {
+    this.trmrkLeadingIconBtnMouseDownOrTouchStart.emit(event);
+  }
 }

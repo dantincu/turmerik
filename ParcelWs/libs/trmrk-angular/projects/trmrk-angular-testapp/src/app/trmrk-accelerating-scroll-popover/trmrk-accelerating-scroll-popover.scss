@@ -1,0 +1,29 @@
+:host, .trmrk-accelerating-scroll-popover {
+  width: 100%;
+  height: 50px;
+  z-index: 1;
+  display: flex;
+}
+
+.trmrk-scroll-pad {
+  margin: 3px;
+  border-radius: 3px;
+  width: calc(33.3% - 4px);
+  height: calc(100% - 6px);
+}
+
+.trmrk-close-icon-btn {
+  position: absolute;
+  left: calc(100% - 20px);
+}
+
+.trmrk-close-icon-btn-highlighter {
+  &.trmrk-show {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    position: absolute;
+    top: -5px;
+    left: calc(100% - 30px);
+  }
+}

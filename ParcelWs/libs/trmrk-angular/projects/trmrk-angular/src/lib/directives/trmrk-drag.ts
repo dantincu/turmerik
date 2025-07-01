@@ -7,37 +7,44 @@ import {
   ElementRef,
 } from '@angular/core';
 
-import {
-  MouseButton,
-  TouchOrMouseCoords,
-  getSingleTouchOrClick,
-} from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { Subscription } from 'rxjs';
 
-import {
-  TrmrkLongPressOrRightClickEventData,
-  TrmrkDragEvent,
-  TrmrkDragEventData,
-  TrmrkDragStartPosition,
-} from './types';
+import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+
+import { TrmrkDragEvent } from '../services/types';
+
+import { DragService } from '../services/dragService';
 
 @Directive({
   selector: '[trmrkDrag]',
+  providers: [DragService],
 })
 export class TrmrkDrag implements OnDestroy {
   @Output() trmrkDrag = new EventEmitter<TrmrkDragEvent>();
   @Output() trmrkDragStart = new EventEmitter<TouchOrMouseCoords>();
   @Output() trmrkDragEnd = new EventEmitter<TrmrkDragEvent>();
 
-  private mouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
-  private dragStartPosition: TrmrkDragStartPosition | null = null;
+  private dragSubscription!: Subscription;
+  private dragEndSubscription!: Subscription;
 
-  constructor(private el: ElementRef<HTMLElement>) {
+  constructor(
+    private el: ElementRef<HTMLElement>,
+    private dragService: DragService
+  ) {
+    this.dragService.init(el);
     const elem = el.nativeElement;
     this.touchStartOrMouseDown = this.touchStartOrMouseDown.bind(this);
-    this.touchOrMouseMove = this.touchOrMouseMove.bind(this);
-    this.touchEndOrMouseUp = this.touchEndOrMouseUp.bind(this);
+
     elem.addEventListener('mousedown', this.touchStartOrMouseDown);
     elem.addEventListener('touchstart', this.touchStartOrMouseDown);
+
+    this.dragSubscription = this.dragService.drag.subscribe((value) =>
+      this.trmrkDrag.emit(value)
+    );
+
+    this.dragEndSubscription = this.dragService.dragEnd.subscribe((value) =>
+      this.trmrkDragEnd.emit(value)
+    );
   }
 
   ngOnDestroy(): void {
@@ -48,114 +55,16 @@ export class TrmrkDrag implements OnDestroy {
       elem.removeEventListener('touchstart', this.touchStartOrMouseDown);
     }
 
-    this.reset();
+    this.dragSubscription.unsubscribe();
+    this.dragEndSubscription.unsubscribe();
+    this.dragService.Dispose();
   }
 
   private touchStartOrMouseDown(event: TouchEvent | MouseEvent) {
-    this.reset();
-    const data = this.getEventData(event);
+    const mouseOrTouchCoords = this.dragService.onTouchStartOrMouseDown(event);
 
-    if (data.isValid) {
-      this.mouseDownOrTouchStartCoords = {
-        ...data.mouseOrTouchCoords!,
-        evt: null,
-      };
-
-      this.dragStartPosition = data.dragStartPosition;
-
-      document.addEventListener('mousemove', this.touchOrMouseMove, {
-        capture: true,
-      });
-
-      document.addEventListener('touchmove', this.touchOrMouseMove, {
-        capture: true,
-      });
-
-      document.addEventListener('mouseup', this.touchEndOrMouseUp, {
-        capture: true,
-      });
-
-      document.addEventListener('touchend', this.touchEndOrMouseUp, {
-        capture: true,
-      });
-
-      this.trmrkDragStart.emit(data.mouseOrTouchCoords!);
+    if (mouseOrTouchCoords) {
+      this.trmrkDragStart.emit(mouseOrTouchCoords);
     }
-  }
-
-  private touchOrMouseMove(event: TouchEvent | MouseEvent) {
-    const data = this.getEventData(event);
-
-    if (!data.isValid) {
-      this.reset();
-    } else {
-      this.trmrkDrag.emit(this.getTrmrkDragEvent(data));
-    }
-  }
-
-  private touchEndOrMouseUp(event: TouchEvent | MouseEvent) {
-    const data = this.getEventData(event);
-
-    this.trmrkDragEnd.emit(this.getTrmrkDragEvent(data));
-
-    this.reset();
-  }
-
-  private getEventData(event: TouchEvent | MouseEvent) {
-    const elem = this.el.nativeElement;
-
-    const data: TrmrkDragEventData = {
-      elem,
-      event,
-      mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
-      composedPath: null,
-      isValid: false,
-      dragStartPosition: {
-        clientTop: elem.clientTop,
-        clientLeft: elem.clientLeft,
-        offsetTop: elem.offsetTop,
-        offsetLeft: elem.offsetLeft,
-      },
-    };
-
-    data.isValid = !!(data.elem && data.mouseOrTouchCoords);
-
-    if (data.isValid) {
-      const mouseButton = data.mouseOrTouchCoords!.mouseButton;
-      data.isValid = (mouseButton ?? -1) <= MouseButton.Left;
-    }
-
-    return data;
-  }
-
-  private getTrmrkDragEvent(data: TrmrkLongPressOrRightClickEventData) {
-    const event: TrmrkDragEvent = {
-      touchStartOrMouseDownCoords: this.mouseDownOrTouchStartCoords!,
-      touchOrMouseMoveCoords: data.mouseOrTouchCoords!,
-      dragStartPosition: this.dragStartPosition!,
-    };
-
-    return event;
-  }
-
-  private reset() {
-    this.mouseDownOrTouchStartCoords = null;
-    this.dragStartPosition = null;
-
-    document.removeEventListener('mousemove', this.touchOrMouseMove, {
-      capture: true,
-    });
-
-    document.removeEventListener('touchmove', this.touchOrMouseMove, {
-      capture: true,
-    });
-
-    document.removeEventListener('mouseup', this.touchEndOrMouseUp, {
-      capture: true,
-    });
-
-    document.removeEventListener('touchend', this.touchEndOrMouseUp, {
-      capture: true,
-    });
   }
 }

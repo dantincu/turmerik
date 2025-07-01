@@ -17,7 +17,6 @@ export * from './lib/services/TrmrkObservable';
 export * from './lib/services/TrmrkTree';
 export * from './lib/services/types';
 
-export * from './lib/directives/types';
 export * from './lib/directives/trmrk-drag';
 export * from './lib/directives/trmrk-long-press-or-right-click';
 export * from './lib/directives/trmrk-multi-click';
