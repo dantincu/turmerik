@@ -1,7 +1,7 @@
 <trmrk-app-bar
   [trmrkLeadingIconTemplate]="appIcon"
   [trmrkTrailingTemplate]="optionsMenu"
-  [trmrkTitle]="'Turmerik Test App'"
+  [trmrkTitle]="'Turmerik OneDrive Notes'"
 ></trmrk-app-bar>
 
 <ng-template #appIcon>
@@ -31,6 +31,7 @@
 >
   <div>
     <div class="companies-trmrk-list-view-container">
+      @if (!isMovingSelectedCompanies) {
       <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
         @if (companiesAreSelectable) {
         <button mat-icon-button class="trmrk-icon-btn">
@@ -45,10 +46,12 @@
           [trmrkScrollable]="companiesListView"
         ></trmrk-accelerating-scroll-control>
       </div>
-      <!--trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover-->
+      } @if (isMovingSelectedCompanies) {
+      <trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover>
+      }
       <div
         #companiesListView
-        class="companies-trmrk-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y"
+        [ngClass]="['companies-trmrk-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', isMovingSelectedCompanies ? 'trmrk-is-moving-selected' : '']"
       >
         @for (row of companyRows; track row.data.id) {
         <trmrk-panel-list-item
@@ -64,7 +67,13 @@
         ></trmrk-panel-list-item>
         }
       </div>
+      @if (!isMovingSelectedCompanies) {
       <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
+      } @if (isMovingSelectedCompanies) {
+      <trmrk-accelerating-scroll-popover
+        [trmrkHasCancelBtn]="true"
+      ></trmrk-accelerating-scroll-popover>
+      }
     </div>
   </div>
   <div>

@@ -20,14 +20,14 @@ export class DragService {
 
   private mouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
   private dragStartPosition: TrmrkDragStartPosition | null = null;
-  private hostEl: ElementRef | null = null;
+  private hostEl: HTMLElement | null = null;
 
   constructor() {
     this.touchOrMouseMove = this.touchOrMouseMove.bind(this);
     this.touchEndOrMouseUp = this.touchEndOrMouseUp.bind(this);
   }
 
-  public init(hostEl: ElementRef | null = null) {
+  public init(hostEl: HTMLElement | null = null) {
     this.hostEl = hostEl;
   }
 
@@ -91,10 +91,10 @@ export class DragService {
   }
 
   private getEventData(event: TouchEvent | MouseEvent) {
-    const elem = this.hostEl?.nativeElement;
+    const elem = this.hostEl;
 
     const data: TrmrkDragEventData = {
-      elem,
+      elem: elem!,
       event,
       mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
       composedPath: null,

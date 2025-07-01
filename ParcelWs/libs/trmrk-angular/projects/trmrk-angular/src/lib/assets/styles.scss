@@ -42,7 +42,6 @@
     width: 40px;
     height: 32px;
     font-size: 32px;
-    padding: 2px;
 
     &.trmrk-home-icon {
       padding: 4px;
@@ -119,6 +118,12 @@ a[mat-icon-button].trmrk-icon-btn:link {
   .trmrk-text, .trmrk-details {
     display: flex;
     @include mixins.trmrk-no-wrap-anywhere();
+  }
+
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      padding: 2px;
+    }
   }
 }
 
@@ -322,7 +327,6 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
-
 .trmrk-vert-resize-strip {
   width: 40px;
   height: 100%;
@@ -348,4 +352,21 @@ a[mat-icon-button].trmrk-icon-btn:link {
 .trmrk-btn-filled-accept,
 .trmrk-btn-filled-reject {
   height: 40px;
+}
+
+[mat-icon-button].trmrk-options-btn {
+  mat-icon.trmrk-icon {
+    padding: 2px;
+  }
+}
+
+.trmrk-user-message {
+  [mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      font-size: 16px;
+      position: relative;
+      top: -4px;
+      padding: 2px;
+    }
+  }
 }

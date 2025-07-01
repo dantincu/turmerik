@@ -16,6 +16,7 @@ import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { Subscription } from 'rxjs';
 
 import { TrmrkDrag, TrmrkDragEvent } from 'trmrk-angular';
 import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
@@ -93,7 +94,8 @@ export class HomePage implements AfterViewInit, OnDestroy {
   @ViewChild('companiesListView')
   companiesListView!: ElementRef<HTMLDivElement>;
 
-  @ViewChildren('companyListItems') companyListItems!: QueryList<ElementRef>;
+  @ViewChildren('companyListItems')
+  companyListItems!: QueryList<TrmrkPanelListItem>;
 
   quote = '"';
   nonBreakingText = encodeHtml(
@@ -139,6 +141,10 @@ export class HomePage implements AfterViewInit, OnDestroy {
 
   companiesAreSelectable = false;
   companiesMasterCheckBoxIsChecked = false;
+  isMovingSelectedCompanies = false;
+
+  companyRowLeadingIconDragSubscriptions: Subscription[] = [];
+  companyRowLeadingIconDragEndSubscriptions: Subscription[] = [];
 
   treeViewData: TrmrkTree<TreeNode>;
 
@@ -160,6 +166,20 @@ export class HomePage implements AfterViewInit, OnDestroy {
         providers: [{ provide: DragService, useClass: DragService }],
       }).get(DragService);
 
+      const listItemComponent = this.companyListItems.get(idx);
+      const listItem = listItemComponent!.hostEl.nativeElement;
+      dragService.init(listItem);
+
+      this.companyRowLeadingIconDragEndSubscriptions[idx] =
+        dragService.drag.subscribe((value) => {
+          this.isMovingSelectedCompanies = true;
+        });
+
+      this.companyRowLeadingIconDragSubscriptions[idx] =
+        dragService.dragEnd.subscribe((value) => {
+          // this.isMovingSelectedCompanies = false;
+        });
+
       return dragService;
     });
   }
@@ -167,6 +187,14 @@ export class HomePage implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     for (let dragService of this.companyIconDragServices ?? []) {
       dragService.Dispose();
+    }
+
+    for (let subscription of this.companyRowLeadingIconDragSubscriptions) {
+      subscription.unsubscribe();
+    }
+
+    for (let subscription of this.companyRowLeadingIconDragEndSubscriptions) {
+      subscription.unsubscribe();
     }
   }
 
@@ -303,8 +331,14 @@ export class HomePage implements AfterViewInit, OnDestroy {
   }
 
   companyIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
-    const idx = this.companyRows.findIndex((comp) => comp.data.id === id);
-    this.companyIconDragServices![idx].onTouchStartOrMouseDown(event);
+    if (this.companiesAreSelectable) {
+      const idx = this.companyRows.findIndex((comp) => comp.data.id === id);
+      const companyRow = this.companyRows[idx];
+
+      if (companyRow.isSelected) {
+        this.companyIconDragServices![idx].onTouchStartOrMouseDown(event);
+      }
+    }
   }
 
   getCompaniesTextFromCoords(

@@ -31,7 +31,7 @@ export class TrmrkDrag implements OnDestroy {
     private el: ElementRef<HTMLElement>,
     private dragService: DragService
   ) {
-    this.dragService.init(el);
+    this.dragService.init(el.nativeElement);
     const elem = el.nativeElement;
     this.touchStartOrMouseDown = this.touchStartOrMouseDown.bind(this);
 

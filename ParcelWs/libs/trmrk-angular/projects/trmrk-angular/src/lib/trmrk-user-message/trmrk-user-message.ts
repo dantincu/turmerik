@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnChanges,
   SimpleChanges,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -21,6 +22,7 @@ import { Placement } from '../services/types';
   imports: [CommonModule, MatIconModule, MatButtonModule],
   templateUrl: './trmrk-user-message.html',
   styleUrl: './trmrk-user-message.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkUserMessage implements OnDestroy, OnChanges {
   @Output() trmrkClose = new EventEmitter<boolean>();
