@@ -29,6 +29,8 @@ export interface TrmrkPanelListServiceInitArgs<TEntity, TItem> {
   rows?: TrmrkPanelListServiceRow<TEntity>[] | null | undefined;
   idPropName?: string | null | undefined;
   hostElPropName?: string | null | undefined;
+  rowsSelectionIsEnabled?: boolean | null | undefined;
+  selectedRowsReorderIsEnabled?: boolean | null | undefined;
 }
 
 @Injectable()
@@ -40,12 +42,14 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   idPropName!: string;
   hostElPropName!: string;
 
-  rowsAreSelectable = false;
-  rowsMasterCheckBoxIsChecked = false;
-  isMovingSelectedRows = false;
+  rowsAreSelectable!: boolean;
+  rowsMasterCheckBoxIsChecked!: boolean;
+  isMovingSelectedRows!: boolean;
+  rowsSelectionIsEnabled!: boolean;
+  selectedRowsReorderIsEnabled!: boolean;
 
-  rowLeadingIconDragSubscriptions: Subscription[] = [];
-  rowLeadingIconDragEndSubscriptions: Subscription[] = [];
+  rowLeadingIconDragSubscriptions: Subscription[] | null = null;
+  rowLeadingIconDragEndSubscriptions: Subscription[] | null = null;
 
   private leadingIconDragServices: DragService[] | null = null;
 
@@ -54,60 +58,70 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       dragService.Dispose();
     }
 
-    for (let subscription of this.rowLeadingIconDragSubscriptions) {
+    for (let subscription of this.rowLeadingIconDragSubscriptions ?? []) {
       subscription.unsubscribe();
     }
 
-    for (let subscription of this.rowLeadingIconDragEndSubscriptions) {
+    for (let subscription of this.rowLeadingIconDragEndSubscriptions ?? []) {
       subscription.unsubscribe();
     }
   }
 
   init(args: TrmrkPanelListServiceInitArgs<TEntity, TItem>) {
-    this.listView = args.listView;
-    this.listItems = args.listItems;
-    this.entities = args.entities;
-    this.idPropName = args.idPropName ?? 'id';
-    this.hostElPropName = args.hostElPropName ?? 'hostEl';
-
-    this.rows =
-      args.rows ??
-      args.entities.map((ent) => ({
-        item: {
-          data: ent,
-          isSelected: false,
-        },
-        id: (ent as any)[this.idPropName],
-      }));
-
     setTimeout(() => {
-      this.leadingIconDragServices = this.rows.map((row, idx) => {
-        const dragService = Injector.create({
-          providers: [{ provide: DragService, useClass: DragService }],
-        }).get(DragService);
+      this.listView = args.listView;
+      this.listItems = args.listItems;
+      this.entities = args.entities;
+      this.idPropName = args.idPropName ?? 'id';
+      this.hostElPropName = args.hostElPropName ?? 'hostEl';
+      this.rowsSelectionIsEnabled = args.rowsSelectionIsEnabled ?? false;
 
-        const listItemComponent = this.listItems.get(idx);
-        const listItem = (listItemComponent as any)[this.hostElPropName]
-          .nativeElement;
+      this.selectedRowsReorderIsEnabled =
+        args.selectedRowsReorderIsEnabled ?? false;
 
-        dragService.init(listItem);
+      this.rows =
+        args.rows ??
+        args.entities.map((ent) => ({
+          item: {
+            data: ent,
+            isSelected: false,
+          },
+          id: (ent as any)[this.idPropName],
+        }));
 
-        this.rowLeadingIconDragEndSubscriptions[idx] =
-          dragService.drag.subscribe((value) => {
-            this.isMovingSelectedRows = true;
-          });
+      setTimeout(() => {
+        this.leadingIconDragServices = this.rows.map((row, idx) => {
+          const dragService = Injector.create({
+            providers: [{ provide: DragService, useClass: DragService }],
+          }).get(DragService);
 
-        this.rowLeadingIconDragSubscriptions[idx] =
-          dragService.dragEnd.subscribe((value) => {
-            // this.isMovingSelectedRows = false;
-          });
+          const listItemComponent = this.listItems.get(idx);
+          const listItem = (listItemComponent as any)[this.hostElPropName]
+            .nativeElement;
 
-        return dragService;
-      });
+          dragService.init(listItem);
+
+          if (this.selectedRowsReorderIsEnabled) {
+            this.rowLeadingIconDragSubscriptions = this.listItems.map(() =>
+              dragService.drag.subscribe((_) => {
+                this.isMovingSelectedRows = true;
+              })
+            );
+
+            this.rowLeadingIconDragEndSubscriptions = this.listItems.map(() =>
+              dragService.dragEnd.subscribe((_) => {
+                // this.isMovingSelectedRows = false;
+              })
+            );
+          }
+
+          return dragService;
+        });
+      }, 0);
     }, 0);
   }
 
-  companyCheckBoxToggled(event: MatCheckboxChange, id: number) {
+  rowCheckBoxToggled(event: MatCheckboxChange, id: number) {
     const row = this.rows.find(
       (row) => (row.item!.data as any)[this.idPropName] === id
     )!;
@@ -119,7 +133,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     }
   }
 
-  companiesMasterCheckBoxToggled(event: MatCheckboxChange) {
+  rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
     for (let row of this.rows) {
       row.item!.isSelected = event.checked;
     }
@@ -129,8 +143,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     }
   }
 
-  companyIconLongPressOrRightClick(event: TouchOrMouseCoords, id: number) {
-    if (!this.rowsAreSelectable) {
+  rowIconLongPressOrRightClick(event: TouchOrMouseCoords, id: number) {
+    if (this.rowsSelectionIsEnabled && !this.rowsAreSelectable) {
       this.rowsAreSelectable = true;
 
       const row = this.rows.find(
@@ -141,7 +155,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     }
   }
 
-  companyIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
+  rowIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
     if (this.rowsAreSelectable) {
       const idx = this.rows.findIndex(
         (row) => (row.item!.data as any)[this.idPropName] === id

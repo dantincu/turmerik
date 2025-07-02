@@ -83,22 +83,24 @@ export class CompaniesListViewContainer implements AfterViewInit {
         id: idx + 1,
         name: compName,
       })),
+      rowsSelectionIsEnabled: true,
+      selectedRowsReorderIsEnabled: true,
     });
   }
 
-  companyCheckBoxToggled(event: MatCheckboxChange, id: number) {
-    this.panelListService.companyCheckBoxToggled(event, id);
+  rowCheckBoxToggled(event: MatCheckboxChange, id: number) {
+    this.panelListService.rowCheckBoxToggled(event, id);
   }
 
-  companiesMasterCheckBoxToggled(event: MatCheckboxChange) {
-    this.panelListService.companiesMasterCheckBoxToggled(event);
+  rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
+    this.panelListService.rowsMasterCheckBoxToggled(event);
   }
 
-  companyIconLongPressOrRightClick(event: TouchOrMouseCoords, id: number) {
-    this.panelListService.companyIconLongPressOrRightClick(event, id);
+  rowIconLongPressOrRightClick(event: TouchOrMouseCoords, id: number) {
+    this.panelListService.rowIconLongPressOrRightClick(event, id);
   }
 
-  companyIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
-    this.panelListService.companyIconMouseDownOrTouchStart(event, id);
+  rowIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
+    this.panelListService.rowIconMouseDownOrTouchStart(event, id);
   }
 }

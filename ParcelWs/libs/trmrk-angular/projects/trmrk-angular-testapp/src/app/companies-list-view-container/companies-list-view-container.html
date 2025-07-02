@@ -5,7 +5,7 @@
     <button mat-icon-button class="trmrk-icon-btn">
       <mat-checkbox
         class="trmrk-checkbox"
-        (change)="companiesMasterCheckBoxToggled($event)"
+        (change)="rowsMasterCheckBoxToggled($event)"
         [checked]="rowsMasterCheckBoxIsChecked"
       ></mat-checkbox>
     </button>
@@ -29,9 +29,9 @@
       [trmrkLeadingMatIconName]="'description'"
       [trmrkIsSelectable]="rowsAreSelectable"
       [trmrkIsSelected]="row.item.isSelected"
-      (trmrkCheckBoxToggled)="companyCheckBoxToggled($event, row.item.data.id)"
-      (trmrkLeadingBtnLongPressOrRightClick)="companyIconLongPressOrRightClick($event, row.item.data.id)"
-      (trmrkLeadingIconBtnMouseDownOrTouchStart)="companyIconMouseDownOrTouchStart($event, row.item.data.id)"
+      (trmrkCheckBoxToggled)="rowCheckBoxToggled($event, row.item.data.id)"
+      (trmrkLeadingBtnLongPressOrRightClick)="rowIconLongPressOrRightClick($event, row.item.data.id)"
+      (trmrkLeadingIconBtnMouseDownOrTouchStart)="rowIconMouseDownOrTouchStart($event, row.item.data.id)"
     ></trmrk-panel-list-item>
     } }
   </div>
