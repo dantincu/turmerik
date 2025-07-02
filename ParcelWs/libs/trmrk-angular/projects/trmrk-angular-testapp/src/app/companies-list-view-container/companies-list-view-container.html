@@ -1,12 +1,12 @@
 <div class="trmrk-companies-list-view-container">
-  @if (!isMovingSelectedCompanies) {
+  @if (!isMovingSelectedRows) {
   <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
-    @if (companiesAreSelectable) {
+    @if (rowsAreSelectable) {
     <button mat-icon-button class="trmrk-icon-btn">
       <mat-checkbox
         class="trmrk-checkbox"
         (change)="companiesMasterCheckBoxToggled($event)"
-        [checked]="companiesMasterCheckBoxIsChecked"
+        [checked]="rowsMasterCheckBoxIsChecked"
       ></mat-checkbox>
     </button>
     }
@@ -14,20 +14,20 @@
       [trmrkScrollable]="companiesListView"
     ></trmrk-accelerating-scroll-control>
   </div>
-  } @if (isMovingSelectedCompanies) {
+  } @if (isMovingSelectedRows) {
   <trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover>
   }
   <div
     #companiesListView
-    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', isMovingSelectedCompanies ? 'trmrk-is-moving-selected' : '']"
+    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', isMovingSelectedRows ? 'trmrk-is-moving-selected' : '']"
   >
-    @for (row of companyRows; track row.id) { @if (row.item) {
+    @for (row of rows; track row.id) { @if (row.item) {
     <trmrk-panel-list-item
       #companyListItems
       [trmrkMainText]="row.item.data.name"
       [ngClass]="['trmrk-list-item']"
       [trmrkLeadingMatIconName]="'description'"
-      [trmrkIsSelectable]="companiesAreSelectable"
+      [trmrkIsSelectable]="rowsAreSelectable"
       [trmrkIsSelected]="row.item.isSelected"
       (trmrkCheckBoxToggled)="companyCheckBoxToggled($event, row.item.data.id)"
       (trmrkLeadingBtnLongPressOrRightClick)="companyIconLongPressOrRightClick($event, row.item.data.id)"
@@ -35,9 +35,9 @@
     ></trmrk-panel-list-item>
     } }
   </div>
-  @if (!isMovingSelectedCompanies) {
+  @if (!isMovingSelectedRows) {
   <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
-  } @if (isMovingSelectedCompanies) {
+  } @if (isMovingSelectedRows) {
   <trmrk-accelerating-scroll-popover
     [trmrkHasCancelBtn]="true"
   ></trmrk-accelerating-scroll-popover>

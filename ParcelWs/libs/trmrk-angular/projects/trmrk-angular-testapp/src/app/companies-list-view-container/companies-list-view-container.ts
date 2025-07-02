@@ -4,19 +4,15 @@ import {
   ViewChildren,
   ElementRef,
   QueryList,
-  Injector,
   AfterViewInit,
-  OnDestroy,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
-import { Subscription } from 'rxjs';
 
-import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
-import { DragService } from 'trmrk-angular';
+import { TrmrkPanelListItem } from 'trmrk-angular';
 
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
@@ -44,32 +40,30 @@ import { TrmrkPanelListService } from '../services/trmrkPanelListService';
 })
 export class CompaniesListViewContainer implements AfterViewInit {
   @ViewChild('companiesListView')
-  companiesListView!: ElementRef<HTMLDivElement>;
+  listView!: ElementRef<HTMLDivElement>;
 
   @ViewChildren('companyListItems')
-  companyListItems!: QueryList<TrmrkPanelListItem>;
+  listItems!: QueryList<TrmrkPanelListItem>;
 
-  companies = [...Array(1).keys()]
+  entities = [...Array(1).keys()]
     .map(() => companies.slice(0, 200))
     .reduce((acc, arr) => [...acc, ...arr]);
 
-  get companyRows() {
+  get rows() {
     return this.panelListService.rows;
   }
 
-  get companiesAreSelectable() {
+  get rowsAreSelectable() {
     return this.panelListService.rowsAreSelectable;
   }
 
-  get companiesMasterCheckBoxIsChecked() {
+  get rowsMasterCheckBoxIsChecked() {
     return this.panelListService.rowsMasterCheckBoxIsChecked;
   }
 
-  get isMovingSelectedCompanies() {
+  get isMovingSelectedRows() {
     return this.panelListService.isMovingSelectedRows;
   }
-
-  private companyIconDragServices: DragService[] | null = null;
 
   constructor(
     private panelListService: TrmrkPanelListService<
@@ -83,9 +77,9 @@ export class CompaniesListViewContainer implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.panelListService.init({
-      listView: this.companiesListView,
-      listItems: this.companyListItems,
-      entities: this.companies.map((compName, idx) => ({
+      listView: this.listView,
+      listItems: this.listItems,
+      entities: this.entities.map((compName, idx) => ({
         id: idx + 1,
         name: compName,
       })),
