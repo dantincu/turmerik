@@ -1,0 +1,45 @@
+<div class="trmrk-companies-list-view-container">
+  @if (!isMovingSelectedCompanies) {
+  <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
+    @if (companiesAreSelectable) {
+    <button mat-icon-button class="trmrk-icon-btn">
+      <mat-checkbox
+        class="trmrk-checkbox"
+        (change)="companiesMasterCheckBoxToggled($event)"
+        [checked]="companiesMasterCheckBoxIsChecked"
+      ></mat-checkbox>
+    </button>
+    }
+    <trmrk-accelerating-scroll-control
+      [trmrkScrollable]="companiesListView"
+    ></trmrk-accelerating-scroll-control>
+  </div>
+  } @if (isMovingSelectedCompanies) {
+  <trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover>
+  }
+  <div
+    #companiesListView
+    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', isMovingSelectedCompanies ? 'trmrk-is-moving-selected' : '']"
+  >
+    @for (row of companyRows; track row.id) { @if (row.item) {
+    <trmrk-panel-list-item
+      #companyListItems
+      [trmrkMainText]="row.item.data.name"
+      [ngClass]="['trmrk-list-item']"
+      [trmrkLeadingMatIconName]="'description'"
+      [trmrkIsSelectable]="companiesAreSelectable"
+      [trmrkIsSelected]="row.item.isSelected"
+      (trmrkCheckBoxToggled)="companyCheckBoxToggled($event, row.item.data.id)"
+      (trmrkLeadingBtnLongPressOrRightClick)="companyIconLongPressOrRightClick($event, row.item.data.id)"
+      (trmrkLeadingIconBtnMouseDownOrTouchStart)="companyIconMouseDownOrTouchStart($event, row.item.data.id)"
+    ></trmrk-panel-list-item>
+    } }
+  </div>
+  @if (!isMovingSelectedCompanies) {
+  <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
+  } @if (isMovingSelectedCompanies) {
+  <trmrk-accelerating-scroll-popover
+    [trmrkHasCancelBtn]="true"
+  ></trmrk-accelerating-scroll-popover>
+  }
+</div>

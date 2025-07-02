@@ -29,53 +29,7 @@
 <div
   class="trmrk-app-panel trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-x"
 >
-  <div>
-    <div class="companies-trmrk-list-view-container">
-      @if (!isMovingSelectedCompanies) {
-      <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
-        @if (companiesAreSelectable) {
-        <button mat-icon-button class="trmrk-icon-btn">
-          <mat-checkbox
-            class="trmrk-checkbox"
-            (change)="companiesMasterCheckBoxToggled($event)"
-            [checked]="companiesMasterCheckBoxIsChecked"
-          ></mat-checkbox>
-        </button>
-        }
-        <trmrk-accelerating-scroll-control
-          [trmrkScrollable]="companiesListView"
-        ></trmrk-accelerating-scroll-control>
-      </div>
-      } @if (isMovingSelectedCompanies) {
-      <trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover>
-      }
-      <div
-        #companiesListView
-        [ngClass]="['companies-trmrk-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', isMovingSelectedCompanies ? 'trmrk-is-moving-selected' : '']"
-      >
-        @for (row of companyRows; track row.data.id) {
-        <trmrk-panel-list-item
-          #companyListItems
-          [trmrkMainText]="row.data.name"
-          [ngClass]="['trmrk-list-item']"
-          [trmrkLeadingMatIconName]="'description'"
-          [trmrkIsSelectable]="companiesAreSelectable"
-          [trmrkIsSelected]="row.isSelected"
-          (trmrkCheckBoxToggled)="companyCheckBoxToggled($event, row.data.id)"
-          (trmrkLeadingBtnLongPressOrRightClick)="companyIconLongPressOrRightClick($event, row.data.id)"
-          (trmrkLeadingIconBtnMouseDownOrTouchStart)="companyIconMouseDownOrTouchStart($event, row.data.id)"
-        ></trmrk-panel-list-item>
-        }
-      </div>
-      @if (!isMovingSelectedCompanies) {
-      <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
-      } @if (isMovingSelectedCompanies) {
-      <trmrk-accelerating-scroll-popover
-        [trmrkHasCancelBtn]="true"
-      ></trmrk-accelerating-scroll-popover>
-      }
-    </div>
-  </div>
+  <trmrk-companies-list-view-container></trmrk-companies-list-view-container>
   <div>
     <mat-form-field
       appearance="outline"

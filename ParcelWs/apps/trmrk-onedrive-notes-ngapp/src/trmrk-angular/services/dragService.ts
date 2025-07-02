@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 
 import {
   MouseButton,

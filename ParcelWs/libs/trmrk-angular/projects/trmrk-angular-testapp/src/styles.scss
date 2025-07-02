@@ -51,7 +51,7 @@ body {
   width: calc(100% - 6px);
 }
 
-.companies-trmrk-list-view-container {
+.trmrk-companies-list-view-container {
   height: calc(100vh - 100px);
   position: relative;
 
@@ -61,7 +61,7 @@ body {
     border-radius: 0;
   }
 
-  .companies-trmrk-list-view {
+  .trmrk-companies-list-view {
     width: 100%;
     height: calc(100vh - 180px);
     box-sizing: border-box;

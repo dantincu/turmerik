@@ -1,13 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  ViewChildren,
-  ElementRef,
-  AfterViewInit,
-  OnDestroy,
-  Injector,
-  QueryList,
-} from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,8 +6,6 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
-import { Subscription } from 'rxjs';
 
 import { TrmrkDrag, TrmrkDragEvent } from 'trmrk-angular';
 import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
@@ -36,7 +25,6 @@ import { TrmrkAppBar } from 'trmrk-angular';
 import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
 import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 import { TrmrkThinHorizStrip } from 'trmrk-angular';
-import { DragService } from 'trmrk-angular';
 
 /* import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message'; */
 
@@ -49,8 +37,7 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
-import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
-import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+import { CompaniesListViewContainer } from '../companies-list-view-container/companies-list-view-container';
 
 import { companies } from '../services/companies';
 
@@ -60,7 +47,6 @@ import { companies } from '../services/companies';
     MatIconModule,
     MatButtonModule,
     MatIconButton,
-    MatCheckbox,
     RouterLink,
     TrmrkAppIcon,
     MatMenuModule,
@@ -76,13 +62,12 @@ import { companies } from '../services/companies';
     TrmrkPanelListItem,
     TrmrkTreeView,
     TrmrkThinHorizStrip,
-    TrmrkAcceleratingScrollControl,
-    TrmrkAcceleratingScrollPopover,
+    CompaniesListViewContainer,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
 })
-export class HomePage implements AfterViewInit, OnDestroy {
+export class HomePage {
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
@@ -90,12 +75,6 @@ export class HomePage implements AfterViewInit, OnDestroy {
 
   @ViewChild('draggableStrip', { read: ElementRef })
   draggableStrip!: ElementRef;
-
-  @ViewChild('companiesListView')
-  companiesListView!: ElementRef<HTMLDivElement>;
-
-  @ViewChildren('companyListItems')
-  companyListItems!: QueryList<TrmrkPanelListItem>;
 
   quote = '"';
   nonBreakingText = encodeHtml(
@@ -127,30 +106,11 @@ export class HomePage implements AfterViewInit, OnDestroy {
     'asdfasdfsadsafd asdfasdfsadsafd asdfasdfsadsafd fsad.',
   ];
 
-  companies = [...Array(1).keys()]
-    .map(() => companies.slice(0, 200))
-    .reduce((acc, arr) => [...acc, ...arr]);
-
-  companyRows = this.companies.map((comp, idx) => ({
-    data: {
-      id: idx + 1,
-      name: comp,
-    },
-    isSelected: false,
-  }));
-
-  companiesAreSelectable = false;
-  companiesMasterCheckBoxIsChecked = false;
-  isMovingSelectedCompanies = false;
-
-  companyRowLeadingIconDragSubscriptions: Subscription[] = [];
-  companyRowLeadingIconDragEndSubscriptions: Subscription[] = [];
+  companies = [...companies];
 
   treeViewData: TrmrkTree<TreeNode>;
 
   popupClosedMessage = '';
-
-  private companyIconDragServices: DragService[] | null = null;
 
   constructor() {
     this.treeViewData = this.getTreeViewData();
@@ -158,44 +118,6 @@ export class HomePage implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.optionsMenuTrigger.menu = this.optionsMenu;
     }, 0);
-  }
-
-  ngAfterViewInit(): void {
-    this.companyIconDragServices = this.companyRows.map((compRow, idx) => {
-      const dragService = Injector.create({
-        providers: [{ provide: DragService, useClass: DragService }],
-      }).get(DragService);
-
-      const listItemComponent = this.companyListItems.get(idx);
-      const listItem = listItemComponent!.hostEl.nativeElement;
-      dragService.init(listItem);
-
-      this.companyRowLeadingIconDragEndSubscriptions[idx] =
-        dragService.drag.subscribe((value) => {
-          this.isMovingSelectedCompanies = true;
-        });
-
-      this.companyRowLeadingIconDragSubscriptions[idx] =
-        dragService.dragEnd.subscribe((value) => {
-          // this.isMovingSelectedCompanies = false;
-        });
-
-      return dragService;
-    });
-  }
-
-  ngOnDestroy(): void {
-    for (let dragService of this.companyIconDragServices ?? []) {
-      dragService.Dispose();
-    }
-
-    for (let subscription of this.companyRowLeadingIconDragSubscriptions) {
-      subscription.unsubscribe();
-    }
-
-    for (let subscription of this.companyRowLeadingIconDragEndSubscriptions) {
-      subscription.unsubscribe();
-    }
   }
 
   onOptionsMenuBtnClick(event: MouseEvent): void {
@@ -299,44 +221,6 @@ export class HomePage implements AfterViewInit, OnDestroy {
             this.popupClosedMessage = 'Popup closed';
           }
         }, 500);
-      }
-    }
-  }
-
-  companyCheckBoxToggled(event: MatCheckboxChange, id: number) {
-    const company = this.companyRows.find((comp) => comp.data.id === id)!;
-    company.isSelected = event.checked;
-
-    if (!event.checked && !this.companyRows.find((comp) => comp.isSelected)) {
-      this.companiesAreSelectable = false;
-    }
-  }
-
-  companiesMasterCheckBoxToggled(event: MatCheckboxChange) {
-    for (let companyRow of this.companyRows) {
-      companyRow.isSelected = event.checked;
-    }
-
-    if (!event.checked) {
-      this.companiesAreSelectable = false;
-    }
-  }
-
-  companyIconLongPressOrRightClick(event: TouchOrMouseCoords, id: number) {
-    if (!this.companiesAreSelectable) {
-      this.companiesAreSelectable = true;
-      const company = this.companyRows.find((comp) => comp.data.id === id)!;
-      company.isSelected = true;
-    }
-  }
-
-  companyIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
-    if (this.companiesAreSelectable) {
-      const idx = this.companyRows.findIndex((comp) => comp.data.id === id);
-      const companyRow = this.companyRows[idx];
-
-      if (companyRow.isSelected) {
-        this.companyIconDragServices![idx].onTouchStartOrMouseDown(event);
       }
     }
   }
