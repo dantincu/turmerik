@@ -66,7 +66,7 @@ body {
     height: calc(100vh - 180px);
     box-sizing: border-box;
 
-    &.trmrk-is-moving-selected {
+    &.trmrk-has-accelerating-popovers {
       height: calc(100vh - 200px);
     }
   }

@@ -104,6 +104,7 @@ export const getTouchOrMouseCoords = (
 
     if (
       requiredButton >= MouseButton.Left &&
+      (retObj.mouseButton ?? -1) !== -1 &&
       retObj.mouseButton !== requiredButton
     ) {
       retObj = null;

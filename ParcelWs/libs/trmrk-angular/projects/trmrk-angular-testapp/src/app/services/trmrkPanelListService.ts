@@ -14,7 +14,11 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 
 export interface TrmrkPanelListServiceRow<TEntity> {
   item: TrmrkPanelListServiceItemData<TEntity> | null;
+  hideItem?: boolean | null | undefined;
   id: any;
+  isBlankPlaceholder?: boolean | null | undefined;
+  isMultipleSelectedPlaceholder?: boolean | null | undefined;
+  multipleSelectedPlaceholderText?: string | null | undefined;
 }
 
 export interface TrmrkPanelListServiceItemData<TEntity> {
@@ -23,8 +27,8 @@ export interface TrmrkPanelListServiceItemData<TEntity> {
 }
 
 export interface TrmrkPanelListServiceInitArgs<TEntity, TItem> {
-  listView: ElementRef;
   listItems: QueryList<TItem>;
+  currentlyMovingRowEl: HTMLElement;
   entities: TEntity[];
   rows?: TrmrkPanelListServiceRow<TEntity>[] | null | undefined;
   idPropName?: string | null | undefined;
@@ -35,8 +39,8 @@ export interface TrmrkPanelListServiceInitArgs<TEntity, TItem> {
 
 @Injectable()
 export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
-  listView!: ElementRef;
   listItems!: QueryList<TItem>;
+  currentlyMovingRowEl!: HTMLElement;
   entities!: TEntity[];
   rows!: TrmrkPanelListServiceRow<TEntity>[];
   idPropName!: string;
@@ -44,9 +48,12 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
   rowsAreSelectable!: boolean;
   rowsMasterCheckBoxIsChecked!: boolean;
-  isMovingSelectedRows!: boolean;
   rowsSelectionIsEnabled!: boolean;
   selectedRowsReorderIsEnabled!: boolean;
+  showAcceleratingScrollPopovers = false;
+  isMovingSelectedRows = false;
+
+  currentlyMovingRow: TrmrkPanelListServiceRow<TEntity> | null = null;
 
   rowLeadingIconDragSubscriptions: Subscription[] | null = null;
   rowLeadingIconDragEndSubscriptions: Subscription[] | null = null;
@@ -69,8 +76,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
   init(args: TrmrkPanelListServiceInitArgs<TEntity, TItem>) {
     setTimeout(() => {
-      this.listView = args.listView;
       this.listItems = args.listItems;
+      this.currentlyMovingRowEl = args.currentlyMovingRowEl;
       this.entities = args.entities;
       this.idPropName = args.idPropName ?? 'id';
       this.hostElPropName = args.hostElPropName ?? 'hostEl';
@@ -89,8 +96,10 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           id: (ent as any)[this.idPropName],
         }));
 
+      this.rows = this.rows.map((row) => ({ ...row }));
+
       setTimeout(() => {
-        this.leadingIconDragServices = this.rows.map((row, idx) => {
+        this.leadingIconDragServices = this.rows.map((_, idx) => {
           const dragService = Injector.create({
             providers: [{ provide: DragService, useClass: DragService }],
           }).get(DragService);
@@ -104,13 +113,17 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           if (this.selectedRowsReorderIsEnabled) {
             this.rowLeadingIconDragSubscriptions = this.listItems.map(() =>
               dragService.drag.subscribe((_) => {
-                this.isMovingSelectedRows = true;
+                this.showAcceleratingScrollPopovers = true;
               })
             );
 
             this.rowLeadingIconDragEndSubscriptions = this.listItems.map(() =>
               dragService.dragEnd.subscribe((_) => {
-                // this.isMovingSelectedRows = false;
+                const row = this.rows[idx];
+                row.hideItem = null;
+                row.isBlankPlaceholder = null;
+                this.showAcceleratingScrollPopovers = false;
+                this.isMovingSelectedRows = false;
               })
             );
           }
@@ -123,19 +136,21 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
   rowCheckBoxToggled(event: MatCheckboxChange, id: number) {
     const row = this.rows.find(
-      (row) => (row.item!.data as any)[this.idPropName] === id
+      (row) => row.item && (row.item.data as any)[this.idPropName] === id
     )!;
 
     row.item!.isSelected = event.checked;
 
-    if (!event.checked && !this.rows.find((row) => row.item!.isSelected)) {
+    if (!event.checked && !this.rows.find((row) => row.item?.isSelected)) {
       this.rowsAreSelectable = false;
     }
   }
 
   rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
     for (let row of this.rows) {
-      row.item!.isSelected = event.checked;
+      if (row.item) {
+        row.item!.isSelected = event.checked;
+      }
     }
 
     if (!event.checked) {
@@ -148,7 +163,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       this.rowsAreSelectable = true;
 
       const row = this.rows.find(
-        (row) => (row.item!.data as any)[this.idPropName] === id
+        (row) => row.item && (row.item.data as any)[this.idPropName] === id
       )!;
 
       row.item!.isSelected = true;
@@ -158,13 +173,28 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   rowIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: number) {
     if (this.rowsAreSelectable) {
       const idx = this.rows.findIndex(
-        (row) => (row.item!.data as any)[this.idPropName] === id
+        (row) => row.item && (row.item.data as any)[this.idPropName] === id
       );
 
       const row = this.rows[idx];
 
       if (row.item!.isSelected) {
-        this.leadingIconDragServices![idx].onTouchStartOrMouseDown(event);
+        const coords =
+          this.leadingIconDragServices![idx].onTouchStartOrMouseDown(event);
+
+        if (coords) {
+          row.hideItem = true;
+          row.isBlankPlaceholder = true;
+          this.isMovingSelectedRows = true;
+          this.currentlyMovingRow = row;
+          const item = this.listItems.get(idx)!;
+
+          const itemEl = ((item as any)[this.hostElPropName] as ElementRef)
+            .nativeElement as HTMLElement;
+
+          const offsetTop = itemEl.offsetTop;
+          this.currentlyMovingRowEl.style.top = `${offsetTop}px`;
+        }
       }
     }
   }

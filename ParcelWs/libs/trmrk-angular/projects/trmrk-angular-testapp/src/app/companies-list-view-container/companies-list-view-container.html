@@ -1,5 +1,5 @@
 <div class="trmrk-companies-list-view-container">
-  @if (!isMovingSelectedRows) {
+  @if (!showAcceleratingScrollPopovers) {
   <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
     @if (rowsAreSelectable) {
     <button mat-icon-button class="trmrk-icon-btn">
@@ -14,14 +14,22 @@
       [trmrkScrollable]="companiesListView"
     ></trmrk-accelerating-scroll-control>
   </div>
-  } @if (isMovingSelectedRows) {
+  } @if (showAcceleratingScrollPopovers) {
   <trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover>
   }
   <div
     #companiesListView
-    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', isMovingSelectedRows ? 'trmrk-is-moving-selected' : '']"
+    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
   >
-    @for (row of rows; track row.id) { @if (row.item) {
+    <trmrk-panel-list-item
+      #currentlyMovingRowEl
+      [trmrkMainText]="currentlyMovingRow?.item!.data.name"
+      [ngClass]="['trmrk-list-item trmrk-floating-list-item', isMovingSelectedRows ? '' : 'trmrk-hidden']"
+      [trmrkLeadingMatIconName]="'description'"
+      [trmrkIsSelectable]="rowsAreSelectable"
+      [trmrkIsSelected]="currentlyMovingRow?.item!.isSelected"
+    ></trmrk-panel-list-item>
+    @for (row of rows; track row.id) { @if (row.item && !row.hideItem) {
     <trmrk-panel-list-item
       #companyListItems
       [trmrkMainText]="row.item.data.name"
@@ -33,11 +41,20 @@
       (trmrkLeadingBtnLongPressOrRightClick)="rowIconLongPressOrRightClick($event, row.item.data.id)"
       (trmrkLeadingIconBtnMouseDownOrTouchStart)="rowIconMouseDownOrTouchStart($event, row.item.data.id)"
     ></trmrk-panel-list-item>
+    } @if (row.isBlankPlaceholder) {
+    <trmrk-cancel-context-menu
+      class="trmrk-horiz-strip trmrk-blank-placeholder"
+    ></trmrk-cancel-context-menu>
+    } @if (row.isMultipleSelectedPlaceholder) {
+    <trmrk-cancel-context-menu
+      class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
+      >{{row.multipleSelectedPlaceholderText}}</trmrk-cancel-context-menu
+    >
     } }
   </div>
-  @if (!isMovingSelectedRows) {
+  @if (!showAcceleratingScrollPopovers) {
   <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
-  } @if (isMovingSelectedRows) {
+  } @if (showAcceleratingScrollPopovers) {
   <trmrk-accelerating-scroll-popover
     [trmrkHasCancelBtn]="true"
   ></trmrk-accelerating-scroll-popover>

@@ -18,6 +18,7 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 
 import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cancel-context-menu';
 
 import { companies } from '../services/companies';
 import { TrmrkPanelListService } from '../services/trmrkPanelListService';
@@ -33,6 +34,7 @@ import { TrmrkPanelListService } from '../services/trmrkPanelListService';
     TrmrkPanelListItem,
     TrmrkAcceleratingScrollControl,
     TrmrkAcceleratingScrollPopover,
+    TrmrkCancelContextMenu,
   ],
   templateUrl: './companies-list-view-container.html',
   styleUrl: './companies-list-view-container.scss',
@@ -44,6 +46,9 @@ export class CompaniesListViewContainer implements AfterViewInit {
 
   @ViewChildren('companyListItems')
   listItems!: QueryList<TrmrkPanelListItem>;
+
+  @ViewChild('currentlyMovingRowEl')
+  currentlyMovingRowEl!: TrmrkPanelListItem;
 
   entities = [...Array(1).keys()]
     .map(() => companies.slice(0, 200))
@@ -61,8 +66,16 @@ export class CompaniesListViewContainer implements AfterViewInit {
     return this.panelListService.rowsMasterCheckBoxIsChecked;
   }
 
+  get showAcceleratingScrollPopovers() {
+    return this.panelListService.showAcceleratingScrollPopovers;
+  }
+
   get isMovingSelectedRows() {
     return this.panelListService.isMovingSelectedRows;
+  }
+
+  get currentlyMovingRow() {
+    return this.panelListService.currentlyMovingRow;
   }
 
   constructor(
@@ -77,8 +90,8 @@ export class CompaniesListViewContainer implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.panelListService.init({
-      listView: this.listView,
       listItems: this.listItems,
+      currentlyMovingRowEl: this.currentlyMovingRowEl.hostEl.nativeElement,
       entities: this.entities.map((compName, idx) => ({
         id: idx + 1,
         name: compName,

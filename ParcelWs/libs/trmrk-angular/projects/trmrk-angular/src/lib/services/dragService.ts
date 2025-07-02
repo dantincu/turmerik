@@ -96,7 +96,7 @@ export class DragService {
     const data: TrmrkDragEventData = {
       elem: elem!,
       event,
-      mouseOrTouchCoords: getSingleTouchOrClick(event, null, false),
+      mouseOrTouchCoords: getSingleTouchOrClick(event, MouseButton.Left, false),
       composedPath: null,
       isValid: false,
       dragStartPosition: elem

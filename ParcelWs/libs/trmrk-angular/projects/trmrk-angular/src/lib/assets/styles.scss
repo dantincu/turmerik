@@ -1,6 +1,10 @@
 @use "./styles.loading.scss";
 @use "./mixins.scss" as mixins;
 
+.trmrk-hidden {
+  display: none;
+}
+
 .trmrk-wrap-content {
   @include mixins.trmrk-wrap-content();
 }
@@ -299,6 +303,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
 }
 
 .trmrk-panel-list {
+  position: relative;
+
   .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip, .trmrk-thin-horiz-strip {
     margin: 3px 3px 0 3px;
   }
