@@ -3,7 +3,7 @@
     [ngClass]="['trmrk-left-scroll-pad trmrk-scroll-pad', focusedPadIdx === 0 ? 'trmrk-is-focused' : '']"
   ></div>
   <div
-    [ngClass]="['trmrk-middle-scroll-pad trmrk-scroll-pad', focusedPadIdx === 0 ? 'trmrk-is-focused' : '']"
+    [ngClass]="['trmrk-middle-scroll-pad trmrk-scroll-pad', focusedPadIdx === 1 ? 'trmrk-is-focused' : '']"
   >
     @if (trmrkHasCancelBtn) { @if (cancelBtnIsFocused) {
     <div class="trmrk-cancel-icon-btn-highlighter"></div>
@@ -14,6 +14,6 @@
     }
   </div>
   <div
-    [ngClass]="['trmrk-right-scroll-pad trmrk-scroll-pad', focusedPadIdx === 0 ? 'trmrk-is-focused' : '']"
+    [ngClass]="['trmrk-right-scroll-pad trmrk-scroll-pad', focusedPadIdx === 2 ? 'trmrk-is-focused' : '']"
   ></div>
 </div>

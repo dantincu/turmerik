@@ -1,5 +1,31 @@
 import { Kvp, MtblRefValue, ValueOrAny } from './core';
 
+export interface CollectionFilterArgs<TColl, TIn, TOut = TIn> {
+  collection: TColl;
+  predicate: (
+    args: CollectionFilterPredicateArgs<TIn, TOut>
+  ) => boolean | any | null | undefined;
+  selector?: (input: TIn, i: number) => TOut;
+  startIdx?: number | null | undefined;
+  incrementIdx?: number | null | undefined;
+  endIdx?: number | null | undefined;
+  collectionItemRetriever?:
+    | ((coll: TColl, i: number) => TIn)
+    | null
+    | undefined;
+  collectionLengthRetriever?: ((coll: TColl) => number) | null | undefined;
+}
+
+export interface CollectionFilterPredicateArgs<TIn, TOut = TIn> {
+  value: TOut;
+  idx: number;
+  loopHandler: FilterLoopHandler;
+}
+
+export interface FilterLoopHandler {
+  break: boolean;
+}
+
 export const toArray = <T>(itrbl: Iterable<T>) => {
   const retArr: T[] = [];
 
@@ -339,4 +365,55 @@ export const queryMx = <T>(
   }
 
   return retVal;
+};
+
+export const filterKvp = <TColl, TIn, TOut = TIn>(
+  args: CollectionFilterArgs<TColl, TIn, TOut>
+) => {
+  const retArr: Kvp<number, TOut>[] = [];
+  const incIdx = args.incrementIdx ?? 1;
+
+  const collectionItemRetriever =
+    args.collectionItemRetriever ?? ((coll, i) => (coll as any)[i]);
+
+  const selector = args.selector ?? ((value, i) => value as unknown as TOut);
+
+  let endIdx = args.endIdx ?? -1;
+
+  if (endIdx < 0) {
+    const length = args.collectionLengthRetriever!(args.collection);
+    endIdx = endIdx + length;
+  }
+
+  const loopHandler: FilterLoopHandler = {
+    break: false,
+  };
+
+  for (
+    let i = args.startIdx ?? 0;
+    incIdx > 0 ? i <= endIdx : i >= endIdx;
+    i += incIdx
+  ) {
+    const inVal = collectionItemRetriever(args.collection, i);
+    const value = selector(inVal, i);
+
+    if (
+      args.predicate({
+        idx: i,
+        loopHandler,
+        value,
+      })
+    ) {
+      retArr.push({
+        key: i,
+        value,
+      });
+    }
+
+    if (loopHandler.break) {
+      break;
+    }
+  }
+
+  return retArr;
 };

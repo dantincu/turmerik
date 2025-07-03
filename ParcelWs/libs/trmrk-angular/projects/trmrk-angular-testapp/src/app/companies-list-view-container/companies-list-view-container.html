@@ -15,21 +15,24 @@
     ></trmrk-accelerating-scroll-control>
   </div>
   } @if (showAcceleratingScrollPopovers) {
-  <trmrk-accelerating-scroll-popover></trmrk-accelerating-scroll-popover>
+  <trmrk-accelerating-scroll-popover
+    #upAcceleratingScrollPopover
+  ></trmrk-accelerating-scroll-popover>
   }
   <div
     #companiesListView
     [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
   >
+    @if (visuallyMovingRows) { @for (row of visuallyMovingRows; track row.id) {
     <trmrk-panel-list-item
-      #currentlyMovingRowEl
-      [trmrkMainText]="currentlyMovingRow?.item!.data.name"
-      [ngClass]="['trmrk-list-item trmrk-floating-list-item', isMovingSelectedRows ? '' : 'trmrk-hidden']"
+      #currentlyMovingRowElems
+      [trmrkMainText]="row.item!.data.name"
+      [ngClass]="['trmrk-list-item trmrk-floating-list-item', showVisuallyMovingRows ? '' : 'trmrk-hidden']"
       [trmrkLeadingMatIconName]="'description'"
-      [trmrkIsSelectable]="rowsAreSelectable"
-      [trmrkIsSelected]="currentlyMovingRow?.item!.isSelected"
+      [trmrkIsSelectable]="true"
+      [trmrkIsSelected]="true"
     ></trmrk-panel-list-item>
-    @for (row of rows; track row.id) { @if (row.item && !row.hideItem) {
+    } } @for (row of rows; track row.id) { @if (row.item && !row.hideItem) {
     <trmrk-panel-list-item
       #companyListItems
       [trmrkMainText]="row.item.data.name"
@@ -48,7 +51,7 @@
     } @if (row.isMultipleSelectedPlaceholder) {
     <trmrk-cancel-context-menu
       class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
-      >{{row.multipleSelectedPlaceholderText}}</trmrk-cancel-context-menu
+      >Moving {{row.multipleSelectedCount}} items</trmrk-cancel-context-menu
     >
     } }
   </div>
@@ -56,6 +59,7 @@
   <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
   } @if (showAcceleratingScrollPopovers) {
   <trmrk-accelerating-scroll-popover
+    #downAcceleratingScrollPopover
     [trmrkHasCancelBtn]="true"
   ></trmrk-accelerating-scroll-popover>
   }

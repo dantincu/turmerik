@@ -47,8 +47,14 @@ export class CompaniesListViewContainer implements AfterViewInit {
   @ViewChildren('companyListItems')
   listItems!: QueryList<TrmrkPanelListItem>;
 
-  @ViewChild('currentlyMovingRowEl')
-  currentlyMovingRowEl!: TrmrkPanelListItem;
+  @ViewChildren('currentlyMovingRowElems')
+  currentlyMovingRowElems!: QueryList<TrmrkPanelListItem>;
+
+  @ViewChild('upAcceleratingScrollPopover')
+  upAcceleratingScrollPopover!: ElementRef;
+
+  @ViewChild('downAcceleratingScrollPopover')
+  downAcceleratingScrollPopover!: ElementRef;
 
   entities = [...Array(1).keys()]
     .map(() => companies.slice(0, 200))
@@ -74,8 +80,12 @@ export class CompaniesListViewContainer implements AfterViewInit {
     return this.panelListService.isMovingSelectedRows;
   }
 
-  get currentlyMovingRow() {
-    return this.panelListService.currentlyMovingRow;
+  get visuallyMovingRows() {
+    return this.panelListService.visuallyMovingRows;
+  }
+
+  get showVisuallyMovingRows() {
+    return this.panelListService.showVisuallyMovingRows;
   }
 
   constructor(
@@ -91,13 +101,19 @@ export class CompaniesListViewContainer implements AfterViewInit {
   ngAfterViewInit(): void {
     this.panelListService.init({
       listItems: this.listItems,
-      currentlyMovingRowEl: this.currentlyMovingRowEl.hostEl.nativeElement,
+      getVisuallyMovingListItems: () => this.currentlyMovingRowElems,
+      listView: this.listView.nativeElement,
+      getUpAcceleratingScrollPopover: () =>
+        this.upAcceleratingScrollPopover.nativeElement,
+      getDownAcceleratingScrollPopover: () =>
+        this.downAcceleratingScrollPopover.nativeElement,
       entities: this.entities.map((compName, idx) => ({
         id: idx + 1,
         name: compName,
       })),
-      rowsSelectionIsEnabled: true,
-      selectedRowsReorderIsEnabled: true,
+      rowsSelectionIsAllowed: true,
+      selectedRowsReorderIsAllowed: true,
+      selectedRowsReorderAggRowVertIsOriented: true,
     });
   }
 
