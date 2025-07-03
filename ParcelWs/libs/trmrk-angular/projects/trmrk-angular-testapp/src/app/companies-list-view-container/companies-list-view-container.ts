@@ -84,6 +84,10 @@ export class CompaniesListViewContainer implements AfterViewInit {
     return this.panelListService.visuallyMovingRows;
   }
 
+  get visuallyMovingMainRowIdx() {
+    return this.panelListService.visuallyMovingMainRowIdx;
+  }
+
   get showVisuallyMovingRows() {
     return this.panelListService.showVisuallyMovingRows;
   }
@@ -100,13 +104,14 @@ export class CompaniesListViewContainer implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.panelListService.init({
+      listView: this.listView.nativeElement,
       listItems: this.listItems,
       getVisuallyMovingListItems: () => this.currentlyMovingRowElems,
-      listView: this.listView.nativeElement,
       getUpAcceleratingScrollPopover: () =>
         this.upAcceleratingScrollPopover.nativeElement,
       getDownAcceleratingScrollPopover: () =>
         this.downAcceleratingScrollPopover.nativeElement,
+      getSelectedRowsReorderAggRowEl: () => null!,
       entities: this.entities.map((compName, idx) => ({
         id: idx + 1,
         name: compName,
