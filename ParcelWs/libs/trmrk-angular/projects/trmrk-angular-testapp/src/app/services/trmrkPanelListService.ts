@@ -85,6 +85,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   showAcceleratingScrollPopovers = false;
   selectedRowsReorderAggRowAnimationStartTime: number | null = null;
   selectedRowsReorderAggRowAnimationIntervalId: NodeJS.Timeout | null = null;
+  beforeMovingSelectedRowsListViewScrollTop: number | null = null;
 
   visuallyMovingRows: TrmrkPanelListServiceRowX<TEntity>[] | null = null;
   visuallyMovingMainRowIdx: number | null = null;
@@ -170,62 +171,63 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
                   event.touchStartOrMouseDownCoords.clientY;
 
                 if (
-                  !this.showAcceleratingScrollPopovers &&
-                  Math.abs(diffY) >=
-                    this.selectedRowsReorderShowAggRowDiffYpxThreshold
+                  !this.selectedRowsReorderAggRowAnimationStartTime &&
+                  !this.showAcceleratingScrollPopovers
                 ) {
-                  this.showAcceleratingScrollPopovers = true;
+                  if (
+                    Math.abs(diffY) >=
+                    this.selectedRowsReorderShowAggRowDiffYpxThreshold
+                  ) {
+                    this.selectedRowsReorderAggRowAnimationStartTime =
+                      new Date().getTime();
 
-                  this.selectedRowsReorderAggRowAnimationStartTime =
-                    new Date().getTime();
+                    this.selectedRowsReorderAggRowAnimationIntervalId =
+                      setInterval(() => {
+                        const now = new Date().getTime();
 
-                  this.selectedRowsReorderAggRowAnimationIntervalId =
-                    setInterval(() => {
-                      const now = new Date().getTime();
+                        const diffMillis =
+                          now -
+                          this.selectedRowsReorderAggRowAnimationStartTime!;
 
-                      const diffMillis =
-                        now - this.selectedRowsReorderAggRowAnimationStartTime!;
+                        const diffFraction =
+                          diffMillis /
+                          this.selectedRowsReorderAggRowAnimationDurationMillis;
 
-                      const diffFraction =
-                        diffMillis /
-                        this.selectedRowsReorderAggRowAnimationDurationMillis;
+                        const visuallyMovingMainRow = (
+                          this.visuallyMovingRows ?? []
+                        ).find(
+                          (row) => row.idx === this.visuallyMovingMainRowIdx
+                        )!;
 
-                      const visuallyMovingMainRow = (
-                        this.visuallyMovingRows ?? []
-                      ).find(
-                        (row) => row.idx === this.visuallyMovingMainRowIdx
-                      )!;
+                        this.iterateVisuallyMovingItems(
+                          (item, itemHostEl, visuallyMovingRow, i) => {
+                            this.updateItemTopPx(
+                              itemHostEl,
+                              visuallyMovingRow,
+                              diffY -
+                                Math.min(1, diffFraction) *
+                                  (visuallyMovingRow.offsetTop -
+                                    visuallyMovingMainRow.offsetTop)
+                            );
+                          }
+                        );
 
-                      this.iterateVisuallyMovingItems(
-                        (item, itemHostEl, visuallyMovingRow, i) => {
-                          this.updateItemTopPx(
-                            itemHostEl,
-                            visuallyMovingRow,
-                            diffY -
-                              Math.min(1, diffFraction) *
-                                (visuallyMovingRow.offsetTop -
-                                  visuallyMovingMainRow.offsetTop)
-                          );
+                        if (diffFraction >= 1) {
+                          this.clearSelectedRowsReorderAggRowAnimationIntervalId();
+                          this.showAcceleratingScrollPopovers = true;
                         }
-                      );
-
-                      if (diffFraction >= 1) {
-                        this.clearSelectedRowsReorderAggRowAnimationIntervalId();
+                      }, this.selectedRowsReorderAggRowAnimationStepMillis);
+                  } else {
+                    this.iterateVisuallyMovingItems(
+                      (item, itemHostEl, visuallyMovingRow, i) => {
+                        this.updateItemTopPx(
+                          itemHostEl,
+                          visuallyMovingRow,
+                          diffY
+                        );
                       }
-                    }, this.selectedRowsReorderAggRowAnimationStepMillis);
-                }
-
-                if (this.showAcceleratingScrollPopovers) {
-                } else {
-                  this.iterateVisuallyMovingItems(
-                    (item, itemHostEl, visuallyMovingRow, i) => {
-                      this.updateItemTopPx(
-                        itemHostEl,
-                        visuallyMovingRow,
-                        diffY
-                      );
-                    }
-                  );
+                    );
+                  }
                 }
               })
             );
@@ -238,6 +240,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
                   const row = this.rows[mvRow.idx];
                   row.hideItem = null;
                   row.isBlankPlaceholder = null;
+                  row.isMultipleSelectedPlaceholder = null;
+                  row.multipleSelectedCount = null;
                 }
 
                 this.showAcceleratingScrollPopovers = false;
@@ -325,12 +329,32 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           this.visuallyMovingMainRowIdx = idx;
 
           setTimeout(() => {
+            // let sliceStIdx = 0;
+
             this.iterateVisuallyMovingItems(
               (item, itemHostEl, visuallyMovingRow, i) => {
                 this.updateItemTopPx(itemHostEl, visuallyMovingRow);
                 const row = this.rows[visuallyMovingRow.idx];
                 row.hideItem = true;
-                row.isBlankPlaceholder = true;
+                this.beforeMovingSelectedRowsListViewScrollTop =
+                  this.listView.scrollTop;
+
+                setTimeout(() => {
+                  this.updateItemTopPx(itemHostEl, visuallyMovingRow);
+                }, 0);
+                /* row.isBlankPlaceholder = true;
+                const nextIdx = visuallyMovingRow.idx + 1;
+
+                if (
+                  nextIdx < this.rows.length &&
+                  this.rows[nextIdx].item?.isSelected
+                ) {
+                  row.isBlankPlaceholder = true;
+                } else {
+                  row.isMultipleSelectedPlaceholder = true;
+                  row.multipleSelectedCount = i - sliceStIdx + 1;
+                  sliceStIdx = i + 1;
+                } */
               }
             );
 
@@ -398,6 +422,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     if (this.selectedRowsReorderAggRowAnimationIntervalId) {
       clearInterval(this.selectedRowsReorderAggRowAnimationIntervalId);
       this.selectedRowsReorderAggRowAnimationIntervalId = null;
+      this.selectedRowsReorderAggRowAnimationStartTime = null;
     }
   }
 
@@ -414,7 +439,10 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     diffY: number = 0
   ) {
     itemHostEl.style.top = `${
-      visuallyMovingRow.offsetTop + Math.round(diffY)
+      visuallyMovingRow.offsetTop +
+      Math.round(diffY) +
+      this.listView.scrollTop -
+      this.beforeMovingSelectedRowsListViewScrollTop!
     }px`;
   }
 
@@ -427,7 +455,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     ) => void
   ) {
     const visuallyMovingListItems = this.getVisuallyMovingListItems();
-    const visuallyMovingRows = this.visuallyMovingRows ?? [];
+    const visuallyMovingRows = this.visuallyMovingRows!;
 
     for (let i = 0; i < visuallyMovingRows.length; i++) {
       const item = visuallyMovingListItems.get(i)!;

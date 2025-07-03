@@ -1,4 +1,4 @@
-<div class="trmrk-companies-list-view-container">
+<div class="trmrk-companies-list-view-container trmrk-list-view-container">
   @if (!showAcceleratingScrollPopovers) {
   <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
     @if (rowsAreSelectable) {
@@ -51,8 +51,10 @@
     } @if (row.isMultipleSelectedPlaceholder) {
     <trmrk-cancel-context-menu
       class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
-      >Moving {{row.multipleSelectedCount}} items</trmrk-cancel-context-menu
-    >
+      ><div class="trmrk-user-text">
+        {{row.multipleSelectedCount}} items displaced
+      </div>
+    </trmrk-cancel-context-menu>
     } }
   </div>
   @if (!showAcceleratingScrollPopovers) {
