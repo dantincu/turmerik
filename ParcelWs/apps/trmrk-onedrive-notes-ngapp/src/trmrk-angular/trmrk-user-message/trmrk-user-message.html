@@ -1,39 +1,39 @@
 @if (show) {
-<div
-  [ngClass]="['trmrk-user-message', msgLevelCssClass, messageFadeOut ? 'trmrk-fade' : '']"
->
-  <button
-    mat-icon-button
-    class="trmrk-icon-btn trmrk-close-icon-btn"
-    (click)="closeButtonClick()"
+<div class="trmrk-user-message-container">
+  <div
+    [ngClass]="['trmrk-user-message', msgLevelCssClass, messageFadeOut ? 'trmrk-fade' : '']"
   >
-    <mat-icon class="trmrk-icon">close</mat-icon>
-  </button>
-  <div class="trmrk-content">
-    <div
-      [ngClass]="['trmrk-content-text trmrk-wrap-content', trmrkBreakWords ? 'trmrk-break-words' : '']"
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn trmrk-close-icon-btn"
+      (click)="closeButtonClick()"
     >
-      @if (trmrkBreakWords) { @for (msgPart of messageParts; track $index) {
-      <span class="trmrk-text-part">{{msgPart}}</span>
-      } } @else {
-      <span class="trmrk-text-part">{{trmrkMessage}}</span>
-      }
+      <mat-icon class="trmrk-icon">close</mat-icon>
+    </button>
+    <div class="trmrk-content">
+      <div [ngClass]="['trmrk-content-text trmrk-wrap-content']">
+        <span class="trmrk-text-part">{{trmrkMessage}}</span>
+      </div>
     </div>
+    @if (arrowCssClass) {
+    <svg
+      [ngClass]="['trmrk-arrow', arrowCssClass]"
+      viewBox="0 0 20 10"
+      [ngStyle]="trmrkArrowStyle"
+    >
+      <path
+        class="trmrk-arrow-body"
+        strokeWidth="1"
+        d="M 0 10 L 10 0 L 20 10"
+      />
+      <path
+        class="trmrk-arrow-border"
+        strokeWidth="1"
+        d="M 0 10 L 10 0 L 20 10"
+        fill="none"
+      />
+    </svg>
+    }
   </div>
-  @if (arrowCssClass) {
-  <svg
-    [ngClass]="['trmrk-arrow', arrowCssClass]"
-    viewBox="0 0 20 10"
-    [ngStyle]="trmrkArrowStyle"
-  >
-    <path class="trmrk-arrow-body" strokeWidth="1" d="M 0 10 L 10 0 L 20 10" />
-    <path
-      class="trmrk-arrow-border"
-      strokeWidth="1"
-      d="M 0 10 L 10 0 L 20 10"
-      fill="none"
-    />
-  </svg>
-  }
 </div>
 }

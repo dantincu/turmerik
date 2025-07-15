@@ -162,6 +162,12 @@
       }
     }
   }
+
+  .trmrk-list-view-container .trmrk-multiple-selected-placeholder {
+    .trmrk-user-text {
+      color: #606060;
+    }
+  }
 }
 
 .trmrk-app-theme-dark {
@@ -279,6 +285,12 @@
           border: 2px solid #00F;
         }
       }
+    }
+  }
+
+  .trmrk-list-view-container .trmrk-multiple-selected-placeholder {
+    .trmrk-user-text {
+      color: #A0A0A0;
     }
   }
 }

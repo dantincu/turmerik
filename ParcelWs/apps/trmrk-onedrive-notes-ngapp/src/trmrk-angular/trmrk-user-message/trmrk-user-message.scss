@@ -1,5 +1,5 @@
-:host {
-  display: inline-block;
+.trmrk-user-message-container {
+  display: flex;
   width: fit-content;
   height: fit-content;
 }
@@ -33,12 +33,6 @@
 
   .trmrk-text-part {
     line-break: loose;
-  }
-
-  .trmrk-break-words {
-    .trmrk-text-part {
-      line-break: anywhere;
-    }
   }
 
   .trmrk-close-icon-btn {

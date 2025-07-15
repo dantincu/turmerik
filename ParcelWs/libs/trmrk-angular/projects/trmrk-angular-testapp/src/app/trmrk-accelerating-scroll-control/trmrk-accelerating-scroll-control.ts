@@ -18,7 +18,7 @@ import { TrmrkContinuousPress } from '../directives/trmrk-continuous-press';
   styleUrl: './trmrk-accelerating-scroll-control.scss',
 })
 export class TrmrkAcceleratingScrollControl {
-  @Input() trmrkIntervalMillis = 500;
+  @Input() trmrkIntervalMillis = 300;
   @Input() trmrkIncSpeedStepsCount = 1;
   @Input() trmrkIncSpeedFactor = 2;
   @Input() trmrkMinScrollStep = 500;

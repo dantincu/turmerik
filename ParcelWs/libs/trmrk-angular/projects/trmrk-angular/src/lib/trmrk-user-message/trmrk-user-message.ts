@@ -30,8 +30,6 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   @Input() trmrkShow = 0;
   @Input() trmrkMessage!: string;
   @Input() trmrkLevel!: UserMessageLevel;
-  @Input() trmrkMsgWordBreakCharsCount = 30;
-  @Input() trmrkBreakWords = false;
   @Input() trmrkArrowPlacement = Placement.None;
   @Input() trmrkArrowStyle:
     | {
@@ -42,7 +40,6 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
 
   messageFadeOut = false;
   show = false;
-  messageParts: string[] = [];
 
   private timeouts: NodeJS.Timeout[] = [];
 
@@ -99,7 +96,6 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const messageChange = changes['trmrkMessage'];
     const showChange = changes['trmrkShow'];
 
     if (showChange) {
@@ -110,10 +106,6 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
       } else {
         this.clearTimeouts();
       }
-    }
-
-    if (messageChange) {
-      this.messageParts = this.getMessageParts(messageChange.currentValue);
     }
   }
 
@@ -148,23 +140,5 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
     }
 
     this.timeouts.splice(0, this.timeouts.length);
-  }
-
-  getMessageParts(message: string) {
-    const msgPartsCount = Math.ceil(
-      message.length / this.trmrkMsgWordBreakCharsCount
-    );
-
-    const msgPartsIterable = Array.from({ length: msgPartsCount }, (_, i) => {
-      const part = message.substring(
-        i * this.trmrkMsgWordBreakCharsCount,
-        i * this.trmrkMsgWordBreakCharsCount + this.trmrkMsgWordBreakCharsCount
-      );
-
-      return part;
-    });
-
-    const msgParts = [...msgPartsIterable];
-    return msgParts;
   }
 }
