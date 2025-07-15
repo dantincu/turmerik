@@ -18,7 +18,7 @@ import { TrmrkContinuousPress } from '../directives/trmrk-continuous-press';
   styleUrl: './trmrk-accelerating-scroll-control.scss',
 })
 export class TrmrkAcceleratingScrollControl {
-  @Input() trmrkIntervalMillis = 300;
+  @Input() trmrkIntervalMillis = 500;
   @Input() trmrkIncSpeedStepsCount = 1;
   @Input() trmrkIncSpeedFactor = 2;
   @Input() trmrkMinScrollStep = 500;
@@ -159,8 +159,15 @@ export class TrmrkAcceleratingScrollControl {
   }
 
   scrollCore() {
+    const scrollStep = Math.min(
+      this.scrollStep,
+      this.trmrkScrollable.scrollHeight -
+        this.trmrkScrollable.scrollTop -
+        this.trmrkScrollable.clientHeight
+    );
+
     this.trmrkScrollable.scrollBy({
-      top: this.scrollStep,
+      top: scrollStep,
       behavior: this.trmrkScrollBehavior,
     });
   }
