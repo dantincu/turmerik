@@ -45,10 +45,12 @@ export class DragService {
 
       document.addEventListener('mousemove', this.touchOrMouseMove, {
         capture: true,
+        passive: false,
       });
 
       document.addEventListener('touchmove', this.touchOrMouseMove, {
         capture: true,
+        passive: false,
       });
 
       document.addEventListener('mouseup', this.touchEndOrMouseUp, {

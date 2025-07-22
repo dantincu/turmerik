@@ -8,7 +8,7 @@ import {
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 
-import { DragService } from 'trmrk-angular';
+import { DragService, TrmrkHorizStrip } from 'trmrk-angular';
 
 import { filterKvp } from '../../trmrk/arr';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
@@ -33,9 +33,9 @@ export interface TrmrkPanelListServiceInitArgs<TEntity, TItem> {
   listView: HTMLElement;
   listItems: QueryList<TItem>;
   getVisuallyMovingListItems: () => QueryList<TItem>;
-  getUpAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover;
-  getDownAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover;
-  getSelectedRowsReorderAggRowEl: () => HTMLElement;
+  getUpAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
+  getDownAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
+  getMovingAggregateRowEl: () => TrmrkHorizStrip | null;
   entities: TEntity[];
   rows?: TrmrkPanelListServiceRow<TEntity>[] | null | undefined;
   idPropName?: string | null | undefined;
@@ -64,9 +64,9 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   listView!: HTMLElement;
   listItems!: QueryList<TItem>;
   getVisuallyMovingListItems!: () => QueryList<TItem>;
-  getUpAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover;
-  getDownAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover;
-  getSelectedRowsReorderAggRowEl!: () => HTMLElement;
+  getUpAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover | null;
+  getDownAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover | null;
+  getMovingAggregateRowEl!: () => TrmrkHorizStrip | null;
   entities!: TEntity[];
   rows!: TrmrkPanelListServiceRow<TEntity>[];
   idPropName!: string;
@@ -90,6 +90,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   visuallyMovingRows: TrmrkPanelListServiceRowX<TEntity>[] | null = null;
   visuallyMovingMainRowIdx: number | null = null;
   showVisuallyMovingRows = false;
+  showMovingAggregateRow = false;
   slideOutVisuallyMovingRowPlaceholders = false;
 
   rowLeadingIconDragSubscriptions: Subscription[] | null = null;
@@ -121,6 +122,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       this.getUpAcceleratingScrollPopover = args.getUpAcceleratingScrollPopover;
       this.getDownAcceleratingScrollPopover =
         args.getDownAcceleratingScrollPopover;
+      this.getMovingAggregateRowEl = args.getMovingAggregateRowEl;
       this.entities = args.entities;
       this.idPropName = args.idPropName ?? 'id';
       this.hostElPropName = args.hostElPropName ?? 'hostEl';
@@ -167,6 +169,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           if (this.selectedRowsReorderIsAllowed) {
             this.rowLeadingIconDragSubscriptions = this.listItems.map(() =>
               dragService.drag.subscribe((event) => {
+                event.touchOrMouseMoveCoords.evt!.preventDefault();
+
                 const diffY =
                   event.touchOrMouseMoveCoords.clientY -
                   event.touchStartOrMouseDownCoords.clientY;
@@ -218,6 +222,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
                           this.clearSelectedRowsReorderAggRowAnimationIntervalId();
                           this.showAcceleratingScrollPopovers = true;
                           this.slideOutVisuallyMovingRowPlaceholders = true;
+                          this.showVisuallyMovingRows = false;
+                          this.showMovingAggregateRow = true;
                         }
                       }, this.selectedRowsReorderAggRowAnimationStepMillis);
                   } else {
@@ -232,46 +238,24 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
                     );
                   }
                 } else if (this.showAcceleratingScrollPopovers) {
-                  let visuallyMovingMainRow: TrmrkPanelListServiceRowX<TEntity>;
+                  const movingAggregateRowEl = this.getMovingAggregateRowEl();
 
-                  this.iterateVisuallyMovingItems(
-                    (item, itemHostEl, visuallyMovingRow, i) => {
-                      this.updateItemTopPx(
-                        itemHostEl,
-                        visuallyMovingRow,
-                        diffY -
-                          10 -
-                          (visuallyMovingRow.offsetTop -
-                            visuallyMovingMainRow.offsetTop)
-                      );
-                    },
-                    (visuallyMovingListItems, visuallyMovingRows) => {
-                      visuallyMovingMainRow = visuallyMovingRows.find(
+                  if (movingAggregateRowEl && this.visuallyMovingRows) {
+                    this.updateItemTopPx(
+                      movingAggregateRowEl.hostEl.nativeElement,
+                      this.visuallyMovingRows.find(
                         (row) => row.idx === this.visuallyMovingMainRowIdx
-                      )!;
-                    }
-                  );
+                      )!,
+                      diffY - 10
+                    );
+                  }
                 }
               })
             );
 
             this.rowLeadingIconDragEndSubscriptions = this.listItems.map(() =>
               dragService.dragEnd.subscribe((_) => {
-                this.clearSelectedRowsReorderAggRowAnimationIntervalId();
-
-                for (let row of this.rows) {
-                  row.hideItem = null;
-                  row.isBlankPlaceholder = null;
-                  row.isMultipleSelectedPlaceholder = null;
-                  row.multipleSelectedCount = null;
-                }
-
-                this.showAcceleratingScrollPopovers = false;
-                this.isMovingSelectedRows = false;
-                this.visuallyMovingRows = null;
-                this.showVisuallyMovingRows = false;
-                this.slideOutVisuallyMovingRowPlaceholders = false;
-                this.visuallyMovingMainRowIdx = null;
+                this.resetVisuallyMovingRows();
               })
             );
           }
@@ -350,60 +334,59 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           this.visuallyMovingRows = this.getVisuallyMovingRows(coords, idx);
           this.isMovingSelectedRows = true;
           this.visuallyMovingMainRowIdx = idx;
+          this.listView.classList.add('trmrk-no-touch-scroll');
 
           setTimeout(() => {
-            this.beforeMovingSelectedRowsListViewScrollTop =
-              this.listView.scrollTop;
+            if (this.isMovingSelectedRows) {
+              this.beforeMovingSelectedRowsListViewScrollTop =
+                this.listView.scrollTop;
 
-            this.iterateVisuallyMovingItems(
-              (item, itemHostEl, visuallyMovingRow, i) => {
-                this.updateItemTopPx(itemHostEl, visuallyMovingRow);
-              }
-            );
-
-            this.showVisuallyMovingRows = true;
-
-            setTimeout(() => {
-              /* this.iterateVisuallyMovingItems(
+              this.iterateVisuallyMovingItems(
                 (item, itemHostEl, visuallyMovingRow, i) => {
                   this.updateItemTopPx(itemHostEl, visuallyMovingRow);
                 }
-              ); */
+              );
 
-              const maxIdx = this.rows.length - 1;
-              let sliceStIdx = 0;
-              let secondPrevRow: TrmrkPanelListServiceRow<TEntity> | null =
-                null;
-              let prevRow: TrmrkPanelListServiceRow<TEntity> | null = null;
-              let row: TrmrkPanelListServiceRow<TEntity> | null = null;
+              this.showVisuallyMovingRows = true;
 
-              for (let i = 0; i <= maxIdx; i++) {
-                secondPrevRow = prevRow;
-                prevRow = row;
-                row = this.rows[i];
+              setTimeout(() => {
+                if (this.isMovingSelectedRows) {
+                  const maxIdx = this.rows.length - 1;
+                  let sliceStIdx = 0;
+                  let secondPrevRow: TrmrkPanelListServiceRow<TEntity> | null =
+                    null;
+                  let prevRow: TrmrkPanelListServiceRow<TEntity> | null = null;
+                  let row: TrmrkPanelListServiceRow<TEntity> | null = null;
 
-                if (row.item!.isSelected) {
-                  row.hideItem = true;
+                  for (let i = 0; i <= maxIdx; i++) {
+                    secondPrevRow = prevRow;
+                    prevRow = row;
+                    row = this.rows[i];
 
-                  if (prevRow && !prevRow.item!.isSelected) {
-                    sliceStIdx = i;
-                  }
-                } else {
-                  if (prevRow && prevRow.item!.isSelected) {
-                    prevRow.isMultipleSelectedPlaceholder = true;
-                    prevRow.multipleSelectedCount = i - sliceStIdx;
+                    if (row.item!.isSelected) {
+                      row.hideItem = true;
+
+                      if (prevRow && !prevRow.item!.isSelected) {
+                        sliceStIdx = i;
+                      }
+                    } else {
+                      if (prevRow && prevRow.item!.isSelected) {
+                        prevRow.isMultipleSelectedPlaceholder = true;
+                        prevRow.multipleSelectedCount = i - sliceStIdx;
+                      }
+                    }
+
+                    if (
+                      secondPrevRow &&
+                      !secondPrevRow.isMultipleSelectedPlaceholder &&
+                      secondPrevRow.item!.isSelected
+                    ) {
+                      secondPrevRow.isBlankPlaceholder = true;
+                    }
                   }
                 }
-
-                if (
-                  secondPrevRow &&
-                  !secondPrevRow.isMultipleSelectedPlaceholder &&
-                  secondPrevRow.item!.isSelected
-                ) {
-                  secondPrevRow.isBlankPlaceholder = true;
-                }
-              }
-            }, 0);
+              }, 0);
+            }
           }, 0);
         }
       }
@@ -413,8 +396,6 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   private getVisuallyMovingRows(coords: TouchOrMouseCoords, idx: number) {
     const scrollTop = this.listView.scrollTop;
     const height = this.listView.offsetHeight;
-    /* const startY = scrollTop - height;
-    const endY = scrollTop + height * 2; */
 
     const startY = scrollTop;
     const endY = scrollTop + height;
@@ -474,6 +455,27 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     }
   }
 
+  private resetVisuallyMovingRows() {
+    this.clearSelectedRowsReorderAggRowAnimationIntervalId();
+
+    for (let row of this.rows) {
+      row.hideItem = null;
+      row.isBlankPlaceholder = null;
+      row.isMultipleSelectedPlaceholder = null;
+      row.multipleSelectedCount = null;
+    }
+
+    this.showAcceleratingScrollPopovers = false;
+    this.isMovingSelectedRows = false;
+    this.visuallyMovingRows = null;
+    this.showVisuallyMovingRows = false;
+    this.showMovingAggregateRow = false;
+    this.slideOutVisuallyMovingRowPlaceholders = false;
+    this.visuallyMovingMainRowIdx = null;
+
+    this.listView.classList.remove('trmrk-no-touch-scroll');
+  }
+
   private getItemHostEl(item: TItem) {
     const hostEl = ((item as any)[this.hostElPropName] as ElementRef)
       .nativeElement as HTMLElement;
@@ -486,12 +488,22 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     visuallyMovingRow: TrmrkPanelListServiceRowX<TEntity>,
     diffY: number = 0
   ) {
-    itemHostEl.style.top = `${
+    const topPx =
       visuallyMovingRow.offsetTop +
       Math.round(diffY) +
       this.listView.scrollTop -
-      this.beforeMovingSelectedRowsListViewScrollTop!
-    }px`;
+      this.beforeMovingSelectedRowsListViewScrollTop!;
+
+    /* console.log(
+      'topPx',
+      topPx,
+      diffY,
+      visuallyMovingRow?.offsetTop ?? 'null',
+      this.listView.scrollTop,
+      this.beforeMovingSelectedRowsListViewScrollTop
+    ); */
+
+    itemHostEl.style.top = `${topPx}px`;
   }
 
   private iterateVisuallyMovingItems(

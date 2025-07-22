@@ -32,7 +32,20 @@
       [trmrkIsSelectable]="true"
       [trmrkIsSelected]="true"
     ></trmrk-panel-list-item>
-    } } @for (row of rows; track row.id) { @if (row.item && !row.hideItem) {
+    }
+    <ng-template #movingAggregateRowLeadingTemplate>
+      <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+      <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+    </ng-template>
+    <trmrk-horiz-strip
+      #movingAggregateRowEl
+      [trmrkMainText]="'Moving ' + selectedRowsCount + ' item' + (selectedRowsCount > 1 ? 's' : '')"
+      [ngClass]="['trmrk-moving-aggregate-row', showMovingAggregateRow ? '' : 'trmrk-hidden']"
+      [trmrkLeadingTemplate]="movingAggregateRowLeadingTemplate"
+    >
+      Moving {{selectedRowsCount}} item{{selectedRowsCount > 1 ? 's' : ''}}
+    </trmrk-horiz-strip>
+    } @for (row of rows; track row.id) { @if (row.item && !row.hideItem) {
     <trmrk-panel-list-item
       #companyListItems
       [trmrkMainText]="row.item.data.name"
@@ -53,7 +66,8 @@
       class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
       ><div class="trmrk-user-text">
         {{slideOutVisuallyMovingRowPlaceholders ? '' + row.multipleSelectedCount
-        + 'items displaced' : ''}}
+        + ' item' + (row.multipleSelectedCount! > 1 ? 's' : '') + ' displaced' :
+        ''}}
       </div>
     </trmrk-cancel-context-menu>
     } }

@@ -33,6 +33,10 @@
   overflow-y: scroll;
 }
 
+.trmrk-no-touch-scroll {
+  touch-action: none;
+}
+
 .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn {
   display: inline-flex;
   width: 40px;
@@ -413,6 +417,15 @@ a[mat-icon-button].trmrk-icon-btn:link {
       }
 
       animation: trmrk-slide-out 0.2s ease-in-out forwards;
+    }
+  }
+
+  .trmrk-moving-aggregate-row {
+    position: absolute;
+    z-index: 1;
+
+    &.trmrk-hidden {
+      display: none;
     }
   }
 }

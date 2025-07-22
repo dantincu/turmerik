@@ -163,9 +163,17 @@
     }
   }
 
-  .trmrk-list-view-container .trmrk-multiple-selected-placeholder {
-    .trmrk-user-text {
-      color: #606060;
+  .trmrk-list-view-container {
+    .trmrk-multiple-selected-placeholder {
+      .trmrk-user-text {
+        color: #606060;
+      }
+    }
+
+    .trmrk-moving-aggregate-row {
+      .trmrk-horiz-strip {
+        background-color: #FFF;
+      }
     }
   }
 }
@@ -173,6 +181,11 @@
 .trmrk-app-theme-dark {
   background-color: #000;
   color: #fff;
+
+  input {
+    background-color: #000;
+    color: #fff;
+  }
 
   .trmrk-user-message {
     [mat-icon-button].trmrk-icon-btn {
@@ -288,9 +301,17 @@
     }
   }
 
-  .trmrk-list-view-container .trmrk-multiple-selected-placeholder {
-    .trmrk-user-text {
-      color: #A0A0A0;
+  .trmrk-list-view-container {
+    .trmrk-multiple-selected-placeholder {
+      .trmrk-user-text {
+        color: #A0A0A0;
+      }
+    }
+
+    .trmrk-moving-aggregate-row {
+      .trmrk-horiz-strip {
+        background-color: #000;
+      }
     }
   }
 }

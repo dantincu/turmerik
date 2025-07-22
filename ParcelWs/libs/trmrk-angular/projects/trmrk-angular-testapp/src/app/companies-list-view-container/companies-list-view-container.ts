@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
-import { TrmrkPanelListItem } from 'trmrk-angular';
+import { TrmrkPanelListItem, TrmrkHorizStrip } from 'trmrk-angular';
 
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
@@ -32,6 +32,7 @@ import { TrmrkPanelListService } from '../services/trmrkPanelListService';
     MatCheckbox,
     CommonModule,
     TrmrkPanelListItem,
+    TrmrkHorizStrip,
     TrmrkAcceleratingScrollControl,
     TrmrkAcceleratingScrollPopover,
     TrmrkCancelContextMenu,
@@ -50,11 +51,14 @@ export class CompaniesListViewContainer implements AfterViewInit {
   @ViewChildren('currentlyMovingRowElems')
   currentlyMovingRowElems!: QueryList<TrmrkPanelListItem>;
 
+  @ViewChild('movingAggregateRowEl')
+  movingAggregateRowEl!: TrmrkHorizStrip;
+
   @ViewChild('upAcceleratingScrollPopover')
-  upAcceleratingScrollPopover!: ElementRef;
+  upAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
 
   @ViewChild('downAcceleratingScrollPopover')
-  downAcceleratingScrollPopover!: ElementRef;
+  downAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
 
   entities = [...Array(1).keys()]
     .map(() => companies.slice(0, 200))
@@ -70,6 +74,10 @@ export class CompaniesListViewContainer implements AfterViewInit {
 
   get rowsMasterCheckBoxIsChecked() {
     return this.panelListService.rowsMasterCheckBoxIsChecked;
+  }
+
+  get selectedRowsCount() {
+    return this.panelListService.selectedRowsCount;
   }
 
   get showAcceleratingScrollPopovers() {
@@ -92,6 +100,10 @@ export class CompaniesListViewContainer implements AfterViewInit {
     return this.panelListService.showVisuallyMovingRows;
   }
 
+  get showMovingAggregateRow() {
+    return this.panelListService.showMovingAggregateRow;
+  }
+
   get slideOutVisuallyMovingRowPlaceholders() {
     return this.panelListService.slideOutVisuallyMovingRowPlaceholders;
   }
@@ -111,11 +123,10 @@ export class CompaniesListViewContainer implements AfterViewInit {
       listView: this.listView.nativeElement,
       listItems: this.listItems,
       getVisuallyMovingListItems: () => this.currentlyMovingRowElems,
-      getUpAcceleratingScrollPopover: () =>
-        this.upAcceleratingScrollPopover.nativeElement,
+      getUpAcceleratingScrollPopover: () => this.upAcceleratingScrollPopover,
       getDownAcceleratingScrollPopover: () =>
-        this.downAcceleratingScrollPopover.nativeElement,
-      getSelectedRowsReorderAggRowEl: () => null!,
+        this.downAcceleratingScrollPopover,
+      getMovingAggregateRowEl: () => this.movingAggregateRowEl,
       entities: this.entities.map((compName, idx) => ({
         id: idx + 1,
         name: compName,
