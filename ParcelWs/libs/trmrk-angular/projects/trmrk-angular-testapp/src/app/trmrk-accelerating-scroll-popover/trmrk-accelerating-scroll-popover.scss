@@ -1,6 +1,17 @@
+@keyframes trmrk-accelerating-scroll-popover-animation {
+  0% {
+    height: 40px;
+  }
+
+  100% {
+    height: 50px;
+  }
+}
+
 :host, .trmrk-accelerating-scroll-popover {
   width: 100%;
   height: 50px;
+  animation: trmrk-accelerating-scroll-popover-animation 0.2s ease-in-out forwards;
   z-index: 1;
   display: flex;
 }

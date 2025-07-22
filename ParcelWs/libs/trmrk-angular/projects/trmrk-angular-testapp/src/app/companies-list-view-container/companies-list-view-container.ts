@@ -92,6 +92,10 @@ export class CompaniesListViewContainer implements AfterViewInit {
     return this.panelListService.showVisuallyMovingRows;
   }
 
+  get slideOutVisuallyMovingRowPlaceholders() {
+    return this.panelListService.slideOutVisuallyMovingRowPlaceholders;
+  }
+
   constructor(
     private panelListService: TrmrkPanelListService<
       {

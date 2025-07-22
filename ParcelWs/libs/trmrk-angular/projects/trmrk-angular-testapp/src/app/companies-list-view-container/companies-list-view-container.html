@@ -46,13 +46,14 @@
     ></trmrk-panel-list-item>
     } @if (row.isBlankPlaceholder) {
     <trmrk-cancel-context-menu
-      class="trmrk-horiz-strip trmrk-blank-placeholder"
+      [ngClass]="['trmrk-horiz-strip trmrk-blank-placeholder', slideOutVisuallyMovingRowPlaceholders ? 'trmrk-slide-out' : '']"
     ></trmrk-cancel-context-menu>
     } @if (row.isMultipleSelectedPlaceholder) {
     <trmrk-cancel-context-menu
       class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
       ><div class="trmrk-user-text">
-        {{row.multipleSelectedCount}} items displaced
+        {{slideOutVisuallyMovingRowPlaceholders ? '' + row.multipleSelectedCount
+        + 'items displaced' : ''}}
       </div>
     </trmrk-cancel-context-menu>
     } }
