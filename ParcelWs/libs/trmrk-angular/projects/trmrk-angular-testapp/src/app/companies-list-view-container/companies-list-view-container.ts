@@ -6,13 +6,18 @@ import {
   QueryList,
   AfterViewInit,
 } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
-import { TrmrkPanelListItem, TrmrkHorizStrip } from 'trmrk-angular';
+import {
+  TrmrkPanelListItem,
+  TrmrkHorizStrip,
+  materialIcons,
+} from 'trmrk-angular';
 
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
@@ -22,6 +27,8 @@ import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cance
 
 import { companies } from '../services/companies';
 import { TrmrkPanelListService } from '../services/trmrkPanelListService';
+
+import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../directives/trmrk-cancel-context-menu';
 
 @Component({
   selector: 'trmrk-companies-list-view-container',
@@ -36,6 +43,7 @@ import { TrmrkPanelListService } from '../services/trmrkPanelListService';
     TrmrkAcceleratingScrollControl,
     TrmrkAcceleratingScrollPopover,
     TrmrkCancelContextMenu,
+    TrmrkCancelContextMenuDirective,
   ],
   templateUrl: './companies-list-view-container.html',
   styleUrl: './companies-list-view-container.scss',
@@ -59,6 +67,8 @@ export class CompaniesListViewContainer implements AfterViewInit {
 
   @ViewChild('downAcceleratingScrollPopover')
   downAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
+
+  dragPanIcon: SafeHtml;
 
   entities = [...Array(1).keys()]
     .map(() => companies.slice(0, 200))
@@ -115,8 +125,13 @@ export class CompaniesListViewContainer implements AfterViewInit {
         name: string;
       },
       TrmrkPanelListItem
-    >
-  ) {}
+    >,
+    private sanitizer: DomSanitizer
+  ) {
+    this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(
+      materialIcons.drag_pan
+    );
+  }
 
   ngAfterViewInit(): void {
     this.panelListService.init({

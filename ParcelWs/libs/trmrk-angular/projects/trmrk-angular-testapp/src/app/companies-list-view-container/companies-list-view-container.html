@@ -34,10 +34,11 @@
     ></trmrk-panel-list-item>
     }
     <ng-template #movingAggregateRowLeadingTemplate>
-      <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+      <div class="trmrk-custom-svg-icon-btn" [innerHtml]="dragPanIcon"></div>
       <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
     </ng-template>
     <trmrk-horiz-strip
+      trmrkCancelContextMenu
       #movingAggregateRowEl
       [trmrkMainText]="'Moving ' + selectedRowsCount + ' item' + (selectedRowsCount > 1 ? 's' : '')"
       [ngClass]="['trmrk-moving-aggregate-row', showMovingAggregateRow ? '' : 'trmrk-hidden']"

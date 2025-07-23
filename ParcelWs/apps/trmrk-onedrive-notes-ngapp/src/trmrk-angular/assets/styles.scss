@@ -37,7 +37,7 @@
   touch-action: none;
 }
 
-.trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn {
+.trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
   display: inline-flex;
   width: 40px;
   height: 40px;
@@ -45,7 +45,7 @@
   padding: 2px;
   overflow: hidden;
 
-  mat-icon.trmrk-icon {
+  mat-icon.trmrk-icon, .trmrk-icon, svg[trmrk-custom-svg-icon] {
     display: inline-flex;
     width: 40px;
     height: 32px;

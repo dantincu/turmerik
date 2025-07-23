@@ -255,7 +255,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
             this.rowLeadingIconDragEndSubscriptions = this.listItems.map(() =>
               dragService.dragEnd.subscribe((_) => {
-                this.resetVisuallyMovingRows();
+                // this.resetVisuallyMovingRows();
               })
             );
           }
