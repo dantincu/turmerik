@@ -37,7 +37,7 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
-import { CompaniesListViewContainer } from '../companies-list-view-container/companies-list-view-container';
+import { CompaniesListView } from '../companies-list-view/companies-list-view';
 
 import { companies } from '../services/companies';
 
@@ -62,7 +62,7 @@ import { companies } from '../services/companies';
     TrmrkPanelListItem,
     TrmrkTreeView,
     TrmrkThinHorizStrip,
-    CompaniesListViewContainer,
+    CompaniesListView,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',

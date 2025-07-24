@@ -6,13 +6,13 @@
     height: 40px;
   }
 
-  .trmrk-input {
+  .trmrk-mat-input {
     position: relative;
     top: -8px;
   }
 
   &[appearance="fill"] {
-    .trmrk-input {
+    .trmrk-mat-input {
       top: -10px;
     }
   }
@@ -28,7 +28,7 @@
       margin-top: 7px;
     }
 
-  .trmrk-input {
+  .trmrk-mat-input {
     top: 0;
   }
 }

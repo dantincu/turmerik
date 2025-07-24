@@ -134,9 +134,9 @@ export class CompaniesListViewContainer implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.panelListService.init({
-      listView: this.listView.nativeElement,
-      listItems: this.listItems,
+    this.panelListService.setup({
+      getListView: () => this.listView.nativeElement,
+      getListItems: () => this.listItems,
       getVisuallyMovingListItems: () => this.currentlyMovingRowElems,
       getUpAcceleratingScrollPopover: () => this.upAcceleratingScrollPopover,
       getDownAcceleratingScrollPopover: () =>
@@ -152,12 +152,12 @@ export class CompaniesListViewContainer implements AfterViewInit {
     });
   }
 
-  rowCheckBoxToggled(event: MatCheckboxChange, id: number) {
-    this.panelListService.rowCheckBoxToggled(event, id);
-  }
-
   rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
     this.panelListService.rowsMasterCheckBoxToggled(event);
+  }
+
+  rowCheckBoxToggled(event: MatCheckboxChange, id: number) {
+    this.panelListService.rowCheckBoxToggled(event, id);
   }
 
   rowIconLongPressOrRightClick(event: TouchOrMouseCoords, id: number) {

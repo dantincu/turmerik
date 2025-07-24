@@ -1,0 +1,26 @@
+<trmrk-list-view
+  [trmrkEntities]="entities"
+  [trmrkRowsSelectionIsAllowed]="true"
+  [trmrkSelectedRowsReorderIsAllowed]="true"
+  [trmrkSelectedRowsReorderAggRowVertIsOriented]="true"
+  [trmrkListItems]="getListItems"
+  (trmrkRowsUpdated)="rowsUpdated($event)"
+  (trmrkPanelListService)="onPanelListService($event)"
+  [trmrkRowTemplate]="rowTemplate"
+></trmrk-list-view>
+
+<ng-template #rowTemplate let-row="row">
+  @if (panelListService) {
+  <trmrk-panel-list-item
+    #companyListItems
+    [trmrkMainText]="row.item.data.name"
+    [ngClass]="['trmrk-list-item']"
+    [trmrkLeadingMatIconName]="'description'"
+    [trmrkIsSelectable]="panelListService.rowsAreSelectable"
+    [trmrkIsSelected]="row.item.isSelected"
+    (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, row.item.data.id)"
+    (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, row.item.data.id)"
+    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowIconMouseDownOrTouchStart($event, row.item.data.id)"
+  ></trmrk-panel-list-item>
+  }
+</ng-template>

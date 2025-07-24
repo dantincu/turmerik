@@ -1,34 +1,34 @@
 <div class="trmrk-companies-list-view-container trmrk-list-view-container">
-  @if (!showAcceleratingScrollPopovers) {
+  @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-horiz-strip trmrk-top-horiz-strip">
-    @if (rowsAreSelectable) {
+    @if (panelListService.rowsAreSelectable) {
     <button mat-icon-button class="trmrk-icon-btn">
       <mat-checkbox
         class="trmrk-checkbox"
         (change)="rowsMasterCheckBoxToggled($event)"
-        [checked]="rowsMasterCheckBoxIsChecked"
+        [checked]="panelListService.rowsMasterCheckBoxIsChecked"
       ></mat-checkbox>
     </button>
     }
     <trmrk-accelerating-scroll-control
-      [trmrkScrollable]="companiesListView"
+      [trmrkScrollable]="listView"
     ></trmrk-accelerating-scroll-control>
   </div>
-  } @if (showAcceleratingScrollPopovers) {
+  } @if (panelListService.showAcceleratingScrollPopovers) {
   <trmrk-accelerating-scroll-popover
     #upAcceleratingScrollPopover
   ></trmrk-accelerating-scroll-popover>
   }
   <div
-    #companiesListView
-    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
+    #listView
+    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
   >
-    @if (visuallyMovingRows) { @for (row of visuallyMovingRows; track row['id'])
-    {
+    @if (panelListService.visuallyMovingRows) { @for (row of
+    panelListService.visuallyMovingRows; track row.id) {
     <trmrk-panel-list-item
       #currentlyMovingRowElems
       [trmrkMainText]="row.item!.data.name"
-      [ngClass]="['trmrk-list-item trmrk-floating-list-item', showVisuallyMovingRows ? '' : 'trmrk-hidden']"
+      [ngClass]="['trmrk-list-item trmrk-floating-list-item', panelListService.showVisuallyMovingRows ? '' : 'trmrk-hidden']"
       [trmrkLeadingMatIconName]="'description'"
       [trmrkIsSelectable]="true"
       [trmrkIsSelected]="true"
@@ -44,42 +44,36 @@
     <trmrk-horiz-strip
       trmrkCancelContextMenu
       #movingAggregateRowEl
-      [trmrkMainText]="'Moving ' + selectedRowsCount + ' item' + (selectedRowsCount > 1 ? 's' : '')"
-      [ngClass]="['trmrk-moving-aggregate-row', showMovingAggregateRow ? '' : 'trmrk-hidden']"
+      [trmrkMainText]="'Moving ' + panelListService.selectedRowsCount + ' item' + (panelListService.selectedRowsCount > 1 ? 's' : '')"
+      [ngClass]="['trmrk-moving-aggregate-row', panelListService.showMovingAggregateRow ? '' : 'trmrk-hidden']"
       [trmrkLeadingTemplate]="movingAggregateRowLeadingTemplate"
     >
-      Moving {{selectedRowsCount}} item{{selectedRowsCount > 1 ? 's' : ''}}
+      Moving {{panelListService.selectedRowsCount}}
+      item{{panelListService.selectedRowsCount > 1 ? 's' : ''}}
     </trmrk-horiz-strip>
-    } @for (row of rows; track row.id) { @if (row.item && !row.hideItem) {
-    <trmrk-panel-list-item
-      #companyListItems
-      [trmrkMainText]="row.item.data.name"
-      [ngClass]="['trmrk-list-item']"
-      [trmrkLeadingMatIconName]="'description'"
-      [trmrkIsSelectable]="rowsAreSelectable"
-      [trmrkIsSelected]="row.item.isSelected"
-      (trmrkCheckBoxToggled)="rowCheckBoxToggled($event, row.item.data.id)"
-      (trmrkLeadingBtnLongPressOrRightClick)="rowIconLongPressOrRightClick($event, row.item.data.id)"
-      (trmrkLeadingIconBtnMouseDownOrTouchStart)="rowIconMouseDownOrTouchStart($event, row.item.data.id)"
-    ></trmrk-panel-list-item>
+    } @for (row of panelListService.rows; track row.id) { @if (row.item &&
+    !row.hideItem) {
+    <ng-container
+      *ngTemplateOutlet="trmrkRowTemplate; context: { row: row }"
+    ></ng-container>
     } @if (row.isBlankPlaceholder) {
     <trmrk-cancel-context-menu
-      [ngClass]="['trmrk-horiz-strip trmrk-blank-placeholder', slideOutVisuallyMovingRowPlaceholders ? 'trmrk-slide-out' : '']"
+      [ngClass]="['trmrk-horiz-strip trmrk-blank-placeholder', panelListService.slideOutVisuallyMovingRowPlaceholders ? 'trmrk-slide-out' : '']"
     ></trmrk-cancel-context-menu>
     } @if (row.isMultipleSelectedPlaceholder) {
     <trmrk-cancel-context-menu
       class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
       ><div class="trmrk-user-text">
-        {{slideOutVisuallyMovingRowPlaceholders ? '' + row.multipleSelectedCount
-        + ' item' + (row.multipleSelectedCount! > 1 ? 's' : '') + ' displaced' :
-        ''}}
+        {{panelListService.slideOutVisuallyMovingRowPlaceholders ? '' +
+        row.multipleSelectedCount + ' item' + (row.multipleSelectedCount! > 1 ?
+        's' : '') + ' displaced' : ''}}
       </div>
     </trmrk-cancel-context-menu>
     } }
   </div>
-  @if (!showAcceleratingScrollPopovers) {
+  @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>
-  } @if (showAcceleratingScrollPopovers) {
+  } @if (panelListService.showAcceleratingScrollPopovers) {
   <trmrk-accelerating-scroll-popover
     #downAcceleratingScrollPopover
     [trmrkHasCancelBtn]="true"
