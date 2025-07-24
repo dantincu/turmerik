@@ -50,6 +50,9 @@
     width: 40px;
     height: 32px;
     font-size: 32px;
+  }
+
+  mat-icon.trmrk-icon, .trmrk-icon {
     padding: 2px;
 
     &.trmrk-home-icon {
@@ -58,6 +61,11 @@
   }
 }
 
+a.trmrk-icon-btn,
+a.trmrk-icon-btn:visited,
+a.trmrk-icon-btn:hover,
+a.trmrk-icon-btn:active
+a.trmrk-icon-btn:link,
 a[mat-icon-button].trmrk-icon-btn,
 a[mat-icon-button].trmrk-icon-btn:visited,
 a[mat-icon-button].trmrk-icon-btn:hover,
@@ -127,12 +135,6 @@ a[mat-icon-button].trmrk-icon-btn:link {
   .trmrk-text, .trmrk-details {
     display: flex;
     @include mixins.trmrk-no-wrap-anywhere();
-  }
-
-  [mat-icon-button].trmrk-icon-btn {
-    mat-icon.trmrk-icon {
-      padding: 2px;
-    }
   }
 }
 
@@ -372,8 +374,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
 }
 
 .trmrk-user-message {
-  [mat-icon-button].trmrk-icon-btn {
-    mat-icon.trmrk-icon {
+  .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+    mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
       font-size: 16px;
       position: relative;
       top: -4px;
@@ -417,7 +419,9 @@ a[mat-icon-button].trmrk-icon-btn:link {
         }
       }
 
-      animation: trmrk-slide-out 0.2s ease-in-out forwards;
+      & {
+        animation: trmrk-slide-out 0.2s ease-in-out forwards;
+      }
     }
   }
 
