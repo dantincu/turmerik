@@ -22,10 +22,14 @@ import {
   styleUrl: './companies-list-view.scss',
 })
 export class CompaniesListView {
-  @ViewChildren('companyListItems')
+  @ViewChildren('listItems')
   listItems!: QueryList<TrmrkPanelListItem>;
 
+  @ViewChildren('currentlyMovingListItems')
+  currentlyMovingListItems!: QueryList<TrmrkPanelListItem>;
+
   getListItems = () => this.listItems;
+  getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
 
   entities = companies.slice(0, 200).map((name, idx) => ({
     id: idx + 1,

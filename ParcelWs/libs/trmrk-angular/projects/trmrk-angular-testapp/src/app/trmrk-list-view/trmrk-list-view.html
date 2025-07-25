@@ -23,16 +23,29 @@
     #listView
     [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
   >
-    @if (panelListService.visuallyMovingRows) { @for (row of
+    @for (row of panelListService.rows; track row.id) { @if (row.item &&
+    !row.hideItem) {
+    <ng-container
+      *ngTemplateOutlet="trmrkRowTemplate; context: { row: row }"
+    ></ng-container>
+    } @if (row.isBlankPlaceholder) {
+    <trmrk-cancel-context-menu
+      [ngClass]="['trmrk-horiz-strip trmrk-blank-placeholder', panelListService.slideOutVisuallyMovingRowPlaceholders ? 'trmrk-slide-out' : '']"
+    ></trmrk-cancel-context-menu>
+    } @if (row.isMultipleSelectedPlaceholder) {
+    <trmrk-cancel-context-menu
+      class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
+      ><div class="trmrk-user-text">
+        {{panelListService.slideOutVisuallyMovingRowPlaceholders ? '' +
+        row.multipleSelectedCount + ' item' + (row.multipleSelectedCount! > 1 ?
+        's' : '') + ' displaced' : ''}}
+      </div>
+    </trmrk-cancel-context-menu>
+    } } @if (panelListService.visuallyMovingRows) { @for (row of
     panelListService.visuallyMovingRows; track row.id) {
-    <trmrk-panel-list-item
-      #currentlyMovingRowElems
-      [trmrkMainText]="row.item!.data.name"
-      [ngClass]="['trmrk-list-item trmrk-floating-list-item', panelListService.showVisuallyMovingRows ? '' : 'trmrk-hidden']"
-      [trmrkLeadingMatIconName]="'description'"
-      [trmrkIsSelectable]="true"
-      [trmrkIsSelected]="true"
-    ></trmrk-panel-list-item>
+    <ng-container
+      *ngTemplateOutlet="trmrkVisuallyMovingRowTemplate; context: { row: row }"
+    ></ng-container>
     }
     <ng-template #movingAggregateRowLeadingTemplate>
       <div class="trmrk-custom-svg-icon-btn" [innerHtml]="dragPanIcon"></div>
@@ -51,25 +64,7 @@
       Moving {{panelListService.selectedRowsCount}}
       item{{panelListService.selectedRowsCount > 1 ? 's' : ''}}
     </trmrk-horiz-strip>
-    } @for (row of panelListService.rows; track row.id) { @if (row.item &&
-    !row.hideItem) {
-    <ng-container
-      *ngTemplateOutlet="trmrkRowTemplate; context: { row: row }"
-    ></ng-container>
-    } @if (row.isBlankPlaceholder) {
-    <trmrk-cancel-context-menu
-      [ngClass]="['trmrk-horiz-strip trmrk-blank-placeholder', panelListService.slideOutVisuallyMovingRowPlaceholders ? 'trmrk-slide-out' : '']"
-    ></trmrk-cancel-context-menu>
-    } @if (row.isMultipleSelectedPlaceholder) {
-    <trmrk-cancel-context-menu
-      class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
-      ><div class="trmrk-user-text">
-        {{panelListService.slideOutVisuallyMovingRowPlaceholders ? '' +
-        row.multipleSelectedCount + ' item' + (row.multipleSelectedCount! > 1 ?
-        's' : '') + ' displaced' : ''}}
-      </div>
-    </trmrk-cancel-context-menu>
-    } }
+    }
   </div>
   @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div>

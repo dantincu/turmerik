@@ -334,6 +334,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
         if (coords) {
           this.visuallyMovingRows = this.getVisuallyMovingRows(coords, idx);
+
           this.isMovingSelectedRows = true;
           this.visuallyMovingMainRowIdx = idx;
           const listView = this.getListView();

@@ -45,7 +45,6 @@ import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../di
     MatIconButton,
     MatCheckbox,
     CommonModule,
-    TrmrkPanelListItem,
     TrmrkHorizStrip,
     TrmrkAcceleratingScrollControl,
     TrmrkAcceleratingScrollPopover,
@@ -63,7 +62,9 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   @Input() trmrkSelectedRowsReorderIsAllowed = false;
   @Input() trmrkSelectedRowsReorderAggRowVertIsOriented = false;
   @Input() trmrkRowTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkVisuallyMovingRowTemplate?: TemplateRef<any> | null | undefined;
   @Input() trmrkListItems!: () => QueryList<TrmrkPanelListItem>;
+  @Input() trmrkVisuallyMovingListItems!: () => QueryList<TrmrkPanelListItem>;
 
   @Output() trmrkRowsUpdated = new EventEmitter<
     TrmrkPanelListServiceRow<any>[]
@@ -75,9 +76,6 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
 
   @ViewChild('listView')
   listView!: ElementRef<HTMLDivElement>;
-
-  @ViewChildren('currentlyMovingRowElems')
-  currentlyMovingRowElems!: QueryList<TrmrkPanelListItem>;
 
   @ViewChild('movingAggregateRowEl')
   movingAggregateRowEl!: TrmrkHorizStrip;
@@ -91,6 +89,7 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   dragPanIcon: SafeHtml;
 
   private listItems!: () => QueryList<TrmrkPanelListItem>;
+  private currentlyMovingListItems!: () => QueryList<TrmrkPanelListItem>;
 
   constructor(
     public panelListService: TrmrkPanelListService<any, TrmrkPanelListItem>,
@@ -111,9 +110,20 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
     const entitiesChange = changes['trmrkEntities'];
     const listItemsChange = changes['trmrkListItems'];
 
+    const visuallyMovingListItemsChange =
+      changes['trmrkVisuallyMovingListItems'];
+
     setTimeout(() => {
       if (listItemsChange && listItemsChange.currentValue) {
         this.listItems = listItemsChange.currentValue;
+      }
+
+      if (
+        visuallyMovingListItemsChange &&
+        visuallyMovingListItemsChange.currentValue
+      ) {
+        this.currentlyMovingListItems =
+          visuallyMovingListItemsChange.currentValue;
       }
 
       if (entitiesChange && entitiesChange.currentValue) {
@@ -122,7 +132,7 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
         this.panelListService.setup({
           getListView: () => this.listView.nativeElement,
           getListItems: this.listItems,
-          getVisuallyMovingListItems: () => this.currentlyMovingRowElems,
+          getVisuallyMovingListItems: this.currentlyMovingListItems,
           getUpAcceleratingScrollPopover: () =>
             this.upAcceleratingScrollPopover,
           getDownAcceleratingScrollPopover: () =>
