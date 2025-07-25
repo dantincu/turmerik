@@ -39,6 +39,8 @@ export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   entities: TEntity[];
   rows?: TrmrkPanelListServiceRow<TEntity>[] | null | undefined;
   idPropName?: string | null | undefined;
+  componentInputDataPropName?: string | null | undefined;
+  componentIdPropName?: string | null | undefined;
   hostElPropName?: string | null | undefined;
   rowsSelectionIsAllowed?: boolean | null | undefined;
   selectedRowsReorderIsAllowed?: boolean | null | undefined;
@@ -70,6 +72,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   entities!: TEntity[];
   rows!: TrmrkPanelListServiceRow<TEntity>[];
   idPropName!: string;
+  componentInputDataPropName!: string;
+  componentIdPropName!: string;
   hostElPropName!: string;
 
   rowsAreSelectable!: boolean;
@@ -112,6 +116,9 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.getMovingAggregateRowEl = args.getMovingAggregateRowEl;
     this.entities = args.entities;
     this.idPropName = args.idPropName ?? 'id';
+    this.componentInputDataPropName =
+      args.componentInputDataPropName ?? 'trmrkInputData';
+    this.componentIdPropName = args.componentIdPropName ?? this.idPropName;
     this.hostElPropName = args.hostElPropName ?? 'hostEl';
     this.rowsSelectionIsAllowed = args.rowsSelectionIsAllowed ?? false;
 
@@ -405,9 +412,29 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     const startY = scrollTop;
     const endY = scrollTop + height;
 
+    const listItems = this.getListItems().toArray();
+
+    listItems.sort(
+      (a, b) =>
+        this.rows.findIndex(
+          (row) =>
+            row.id ===
+            (a as any)[this.componentInputDataPropName][
+              this.componentIdPropName
+            ]
+        ) -
+        this.rows.findIndex(
+          (row) =>
+            row.id ===
+            (b as any)[this.componentInputDataPropName][
+              this.componentIdPropName
+            ]
+        )
+    );
+
     const sliceArrFactory = (incIdx: boolean) =>
-      filterKvp<QueryList<TItem>, TItem, TrmrkMovingPanelListItem<TItem>>({
-        collection: this.getListItems(),
+      filterKvp<TItem[], TItem, TrmrkMovingPanelListItem<TItem>>({
+        collection: listItems,
         predicate: (args) => {
           let retVal = this.rows[args.idx].item?.isSelected ?? false;
 
@@ -426,7 +453,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           item,
           offsetTop: this.getItemHostEl(item).offsetTop,
         }),
-        collectionItemRetriever: (coll, i) => coll.get(i)!,
+        collectionItemRetriever: (coll, i) => coll[i],
         collectionLengthRetriever: (coll) => coll.length,
         endIdx: incIdx ? -1 : 0,
         startIdx: incIdx ? idx + 1 : idx,

@@ -42,7 +42,9 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
   styleUrl: './trmrk-panel-list-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkPanelListItem implements AfterViewInit, OnDestroy {
+export class TrmrkPanelListItem<TInputData = any>
+  implements AfterViewInit, OnDestroy
+{
   @Output() trmrkExpandedToggled = new EventEmitter<boolean>();
   @Output() trmrkCheckBoxToggled = new EventEmitter<MatCheckboxChange>();
 
@@ -92,6 +94,7 @@ export class TrmrkPanelListItem implements AfterViewInit, OnDestroy {
   @Input() trmrkGoToParentBtnIsEnabled = true;
   @Input() trmrkColorLabelColor?: string | null | undefined;
   @Input() trmrkTrailingTemplate!: TemplateRef<any>;
+  @Input() trmrkInputData: TInputData | null | undefined;
 
   TrmrkHorizStripType = TrmrkHorizStripType;
 

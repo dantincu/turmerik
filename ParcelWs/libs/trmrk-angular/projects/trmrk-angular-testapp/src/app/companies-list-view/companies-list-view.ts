@@ -1,8 +1,12 @@
-import { Component, ViewChildren, QueryList } from '@angular/core';
+import {
+  Component,
+  ViewChildren,
+  QueryList,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-
-import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { Subscription } from 'rxjs';
 
 import { companies } from '../services/companies';
 
@@ -21,15 +25,18 @@ import {
   templateUrl: './companies-list-view.html',
   styleUrl: './companies-list-view.scss',
 })
-export class CompaniesListView {
+export class CompaniesListView implements AfterViewInit, OnDestroy {
   @ViewChildren('listItems')
   listItems!: QueryList<TrmrkPanelListItem>;
 
   @ViewChildren('currentlyMovingListItems')
   currentlyMovingListItems!: QueryList<TrmrkPanelListItem>;
 
-  getListItems = () => this.listItems;
-  getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
+  listItemsColl!: QueryList<TrmrkPanelListItem>;
+  currentlyMovingListItemsColl!: QueryList<TrmrkPanelListItem>;
+
+  getListItems = () => this.listItemsColl;
+  getCurrentlyMovingListItems = () => this.currentlyMovingListItemsColl;
 
   entities = companies.slice(0, 200).map((name, idx) => ({
     id: idx + 1,
@@ -42,6 +49,51 @@ export class CompaniesListView {
   }>[] = [];
 
   panelListService!: TrmrkPanelListService<any, TrmrkPanelListItem>;
+
+  private listItemsSubscription: Subscription | null = null;
+  private currentlyMovingListItemsSubscription: Subscription | null = null;
+
+  ngAfterViewInit() {
+    this.listItemsSubscription = this.listItems.changes.subscribe(
+      (collection) => {
+        this.listItemsColl = collection;
+
+        /* console.log(
+          'listItemsColl.get(0)',
+          collection.get(0).hostEl.nativeElement,
+          collection.length
+        );
+
+        console.log(
+          'listItemsColl.last',
+          collection.last.hostEl.nativeElement,
+          collection.length
+        ); */
+      }
+    );
+
+    this.currentlyMovingListItemsSubscription =
+      this.currentlyMovingListItems.changes.subscribe((collection) => {
+        this.currentlyMovingListItemsColl = collection;
+
+        /* console.log(
+          'currentlyMovingListItemsColl.get(0)',
+          collection.get(0)?.hostEl.nativeElement,
+          collection.length
+        );
+
+        console.log(
+          'currentlyMovingListItemsColl.last',
+          collection.last?.hostEl.nativeElement,
+          collection.length
+        ); */
+      });
+  }
+
+  ngOnDestroy() {
+    this.listItemsSubscription?.unsubscribe();
+    this.currentlyMovingListItemsSubscription?.unsubscribe();
+  }
 
   rowsUpdated(rows: TrmrkPanelListServiceRow<any>[]) {
     this.rows = rows;

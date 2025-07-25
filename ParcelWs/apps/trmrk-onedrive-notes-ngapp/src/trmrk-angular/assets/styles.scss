@@ -54,10 +54,6 @@
 
   mat-icon.trmrk-icon, .trmrk-icon {
     padding: 2px;
-
-    &.trmrk-home-icon {
-      padding: 4px;
-    }
   }
 }
 
@@ -212,7 +208,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 
   .trmrk-page-title {
-    font-size: 20px;
+    font-size: 18px;
     margin: 10px 0;
     cursor: pointer;
     flex-grow: 1;

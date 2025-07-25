@@ -23,6 +23,7 @@
     (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, row.item.data.id)"
     (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, row.item.data.id)"
     (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowIconMouseDownOrTouchStart($event, row.item.data.id)"
+    [trmrkInputData]="{id: row.item.data.id}"
   ></trmrk-panel-list-item>
   }
 </ng-template>
@@ -36,6 +37,7 @@
     [trmrkLeadingMatIconName]="'description'"
     [trmrkIsSelectable]="true"
     [trmrkIsSelected]="true"
+    [trmrkInputData]="{id: row.item.data.id}"
   ></trmrk-panel-list-item>
   }
 </ng-template>
