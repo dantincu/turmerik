@@ -26,6 +26,8 @@ import {
   materialIcons,
 } from 'trmrk-angular';
 
+import { propName } from '../../trmrk/Reflection/core';
+
 import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cancel-context-menu';
@@ -107,11 +109,11 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const entitiesChange = changes['trmrkEntities'];
-    const listItemsChange = changes['trmrkListItems'];
+    const entitiesChange = changes[propName(this, (o) => o.trmrkEntities)];
+    const listItemsChange = changes[propName(this, (o) => o.trmrkListItems)];
 
     const visuallyMovingListItemsChange =
-      changes['trmrkVisuallyMovingListItems'];
+      changes[propName(this, (o) => o.trmrkVisuallyMovingListItems)];
 
     setTimeout(() => {
       if (listItemsChange && listItemsChange.currentValue) {

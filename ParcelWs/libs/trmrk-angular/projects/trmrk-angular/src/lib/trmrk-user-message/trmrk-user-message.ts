@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
+import { propName } from '../../trmrk/Reflection/core';
 import { UserMessageLevel } from '../../trmrk/core';
 
 import { Placement } from '../services/types';
@@ -96,7 +97,7 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const showChange = changes['trmrkShow'];
+    const showChange = changes[propName(this, (o) => o.trmrkShow)];
 
     if (showChange) {
       this.show = showChange.currentValue > 0;

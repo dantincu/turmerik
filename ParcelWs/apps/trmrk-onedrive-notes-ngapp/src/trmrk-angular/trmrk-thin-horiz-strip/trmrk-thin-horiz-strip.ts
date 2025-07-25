@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 
 import { encodeHtml } from '../../trmrk/text';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { propName } from '../../trmrk/Reflection/core';
 
 import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
 
@@ -52,7 +53,7 @@ export class TrmrkThinHorizStrip {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const textChange = changes['trmrkText'];
+    const textChange = changes[propName(this, (o) => o.trmrkText)];
 
     if (textChange) {
       this.text = encodeHtml(
