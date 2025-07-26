@@ -1,10 +1,9 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { companies } from '../services/companies';
-
 import { TrmrkPanelListItem } from 'trmrk-angular';
 
+import { companies } from '../services/companies';
 import { TrmrkListView } from '../trmrk-list-view/trmrk-list-view';
 
 import {

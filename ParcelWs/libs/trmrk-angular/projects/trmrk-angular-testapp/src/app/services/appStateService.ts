@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { TrmrkObservable } from 'trmrk-angular';
+import { AppStateServiceBase } from 'trmrk-angular';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AppStateService {
-  isDarkMode = new TrmrkObservable<boolean>(false);
-}
+export class AppStateService extends AppStateServiceBase {}

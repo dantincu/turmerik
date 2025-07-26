@@ -11,8 +11,8 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 })
 export class TrmrkAcceleratingScrollPopover {
   @Input() trmrkHasCancelBtn = false;
-  @Input() focusedPadIdx = -1;
-  @Input() cancelBtnIsFocused = false;
+  @Input() trmrkFocusedPadIdx = -1;
+  @Input() trmrkCancelBtnIsFocused = true;
 
   constructor(public hostEl: ElementRef) {}
 }

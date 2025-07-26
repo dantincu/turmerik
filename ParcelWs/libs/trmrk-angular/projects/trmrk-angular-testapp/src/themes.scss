@@ -24,6 +24,19 @@
           }
         }
       }
+
+      .trmrk-multiple-selected-placeholder {
+        .trmrk-user-text {
+          color: #606060;
+        }
+      }
+
+      .trmrk-moving-aggregate-row {
+        .trmrk-horiz-strip {
+          background-color: #e0e0e0;
+          border: 2px solid #FFF;
+        }
+      }
     }
   }
 
@@ -184,6 +197,19 @@
           .trmrk-horiz-strip {
             background-color: #202020;
           }
+        }
+      }
+
+      .trmrk-multiple-selected-placeholder {
+        .trmrk-user-text {
+          color: #A0A0A0;
+        }
+      }
+
+      .trmrk-moving-aggregate-row {
+        .trmrk-horiz-strip {
+          background-color: #202020;
+          border: 2px solid #000;
         }
       }
     }

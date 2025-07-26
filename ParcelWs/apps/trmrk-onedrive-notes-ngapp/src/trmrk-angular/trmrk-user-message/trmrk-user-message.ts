@@ -7,6 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
   ViewEncapsulation,
+  ElementRef,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -44,7 +45,7 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
 
   private timeouts: NodeJS.Timeout[] = [];
 
-  constructor() {}
+  constructor(public hostEl: ElementRef) {}
 
   get msgLevelCssClass() {
     let cssClass: string;

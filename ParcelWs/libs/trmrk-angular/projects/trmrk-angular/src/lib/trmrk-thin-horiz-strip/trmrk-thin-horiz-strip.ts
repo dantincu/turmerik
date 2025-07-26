@@ -1,7 +1,7 @@
 import {
   Component,
   Input,
-  OnChanges,
+  ElementRef,
   SimpleChanges,
   EventEmitter,
   Output,
@@ -41,6 +41,8 @@ export class TrmrkThinHorizStrip {
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | null | undefined;
 
   text = '';
+
+  constructor(public hostEl: ElementRef) {}
 
   get cssClasses() {
     let cssClasses = [...this.trmrkCssClass, 'trmrk-thin-horiz-strip'];

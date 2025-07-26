@@ -18,6 +18,11 @@ export * from './lib/services/dynamicComponent';
 export * from './lib/services/TrmrkObservable';
 export * from './lib/services/TrmrkTree';
 export * from './lib/services/types';
+export * from './lib/services/appStateServiceBase';
+export * from './lib/services/toggleAppBarServiceBase';
+export * from './lib/services/componentIdService';
+export * from './lib/services/componentDataMap';
+export * from './lib/services/appBarMapService';
 
 export * from './lib/directives/trmrk-drag';
 export * from './lib/directives/trmrk-long-press-or-right-click';

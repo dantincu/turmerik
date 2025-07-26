@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,6 +19,8 @@ import {
   TrmrkTreeNodeData,
   TrmrkTreeNodeEvent,
   TrmrkTreeNodeEventCore,
+  ComponentIdService,
+  AppBarMapService,
 } from 'trmrk-angular';
 
 import { TrmrkAppBar } from 'trmrk-angular';
@@ -26,18 +28,16 @@ import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
 import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 import { TrmrkThinHorizStrip } from 'trmrk-angular';
 
-/* import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message'; */
-
 import { encodeHtml } from '../../trmrk/text';
 import { UserMessageLevel } from '../../trmrk/core';
 import { getNextIdx } from '../../trmrk/math';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
-
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
 import { CompaniesListView } from '../companies-list-view/companies-list-view';
+import { ToggleAppBarService } from '../services/toggleAppBarService';
 
 import { companies } from '../services/companies';
 
@@ -66,8 +66,13 @@ import { companies } from '../services/companies';
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
+  providers: [ToggleAppBarService],
 })
-export class HomePage {
+export class HomePage implements OnDestroy {
+  @ViewChild('appBar') appBar!: TrmrkAppBar;
+
+  @ViewChild('appPanel') appPanel!: ElementRef<HTMLDivElement>;
+
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
@@ -112,7 +117,24 @@ export class HomePage {
 
   popupClosedMessage = '';
 
-  constructor() {
+  private id: number;
+
+  constructor(
+    private appBarMapService: AppBarMapService,
+    private toggleAppBarService: ToggleAppBarService,
+    componentIdService: ComponentIdService
+  ) {
+    this.id = componentIdService.getNextId();
+
+    appBarMapService.setCurrent(
+      this.id,
+      () => this.appBar.hostEl.nativeElement
+    );
+
+    this.toggleAppBarService.init({
+      getAppPanelElem: () => this.appPanel.nativeElement,
+    });
+
     this.treeViewData = this.getTreeViewData();
 
     setTimeout(() => {
@@ -122,6 +144,10 @@ export class HomePage {
 
   onOptionsMenuBtnClick(event: MouseEvent): void {
     this.optionsMenuTrigger.openMenu();
+  }
+
+  ngOnDestroy(): void {
+    this.appBarMapService.clear(this.id);
   }
 
   onDrag(event: TrmrkDragEvent) {

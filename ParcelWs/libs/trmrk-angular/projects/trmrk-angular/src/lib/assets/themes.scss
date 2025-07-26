@@ -144,10 +144,10 @@
     background-color: rgba(0, 0, 0, 0.125);
 
     .trmrk-scroll-pad {
-      background-color: rgba(0, 0, 0, 0.25);
+      background-color: rgba(0, 0, 0, 0.125);
 
-      &.trmrk-focused {
-        background-color: rgba(0, 0, 0, 0.5);
+      &.trmrk-is-focused {
+        background-color: rgba(0, 0, 0, 0.25);
       }
 
       [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
@@ -155,25 +155,7 @@
       }
 
       .trmrk-cancel-icon-btn-highlighter {
-        border: 2px solid #00F;
-
-        &.trmrk-focused {
-          border: 2px solid #00F;
-        }
-      }
-    }
-  }
-
-  .trmrk-list-view-container {
-    .trmrk-multiple-selected-placeholder {
-      .trmrk-user-text {
-        color: #606060;
-      }
-    }
-
-    .trmrk-moving-aggregate-row {
-      .trmrk-horiz-strip {
-        background-color: #FFF;
+        border-color: #00F;
       }
     }
   }
@@ -283,10 +265,10 @@
     background-color: rgba(255, 255, 255, 0.125);
 
     .trmrk-scroll-pad {
-      background-color: rgba(255, 255, 255, 0.25);
+      background-color: rgba(255, 255, 255, 0.125);
 
-      &.trmrk-focused {
-        background-color: rgba(255, 255, 255, 0.5);
+      &.trmrk-is-focused {
+        background-color: rgba(255, 255, 255, 0.25);
       }
 
       [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
@@ -294,25 +276,7 @@
       }
 
       .trmrk-cancel-icon-btn-highlighter {
-        border: 2px solid #00F;
-
-        &.trmrk-focused {
-          border: 2px solid #00F;
-        }
-      }
-    }
-  }
-
-  .trmrk-list-view-container {
-    .trmrk-multiple-selected-placeholder {
-      .trmrk-user-text {
-        color: #A0A0A0;
-      }
-    }
-
-    .trmrk-moving-aggregate-row {
-      .trmrk-horiz-strip {
-        background-color: #000;
+        border-color: #00F;
       }
     }
   }

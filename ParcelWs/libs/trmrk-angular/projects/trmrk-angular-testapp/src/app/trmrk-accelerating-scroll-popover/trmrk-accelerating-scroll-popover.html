@@ -1,11 +1,11 @@
 <div class="trmrk-accelerating-scroll-popover">
   <div
-    [ngClass]="['trmrk-left-scroll-pad trmrk-scroll-pad', focusedPadIdx === 0 ? 'trmrk-is-focused' : '']"
+    [ngClass]="['trmrk-left-scroll-pad trmrk-scroll-pad', trmrkFocusedPadIdx === 0 ? 'trmrk-is-focused' : '']"
   ></div>
   <div
-    [ngClass]="['trmrk-middle-scroll-pad trmrk-scroll-pad', focusedPadIdx === 1 ? 'trmrk-is-focused' : '']"
+    [ngClass]="['trmrk-middle-scroll-pad trmrk-scroll-pad', trmrkFocusedPadIdx === 1 ? 'trmrk-is-focused' : '']"
   >
-    @if (trmrkHasCancelBtn) { @if (cancelBtnIsFocused) {
+    @if (trmrkHasCancelBtn) { @if (trmrkCancelBtnIsFocused) {
     <div class="trmrk-cancel-icon-btn-highlighter"></div>
     }
     <button mat-icon-button class="trmrk-icon-btn trmrk-cancel-icon-btn">
@@ -14,6 +14,6 @@
     }
   </div>
   <div
-    [ngClass]="['trmrk-right-scroll-pad trmrk-scroll-pad', focusedPadIdx === 2 ? 'trmrk-is-focused' : '']"
+    [ngClass]="['trmrk-right-scroll-pad trmrk-scroll-pad', trmrkFocusedPadIdx === 2 ? 'trmrk-is-focused' : '']"
   ></div>
 </div>

@@ -79,6 +79,9 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   @ViewChild('listView')
   listView!: ElementRef<HTMLDivElement>;
 
+  @ViewChild('topHorizStrip')
+  topHorizStrip!: ElementRef<HTMLDivElement>;
+
   @ViewChild('movingAggregateRowEl')
   movingAggregateRowEl!: TrmrkHorizStrip;
 
@@ -135,6 +138,7 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
           getListView: () => this.listView.nativeElement,
           getListItems: this.listItems,
           getVisuallyMovingListItems: this.currentlyMovingListItems,
+          getTopHorizStrip: () => this.topHorizStrip.nativeElement,
           getUpAcceleratingScrollPopover: () =>
             this.upAcceleratingScrollPopover,
           getDownAcceleratingScrollPopover: () =>

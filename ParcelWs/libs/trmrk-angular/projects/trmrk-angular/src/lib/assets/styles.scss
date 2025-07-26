@@ -80,13 +80,43 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
+@keyframes trmrk-has-app-bar {
+  from {
+    height: 100%;
+  }
+
+  to {
+    height: calc(100% - 50px);
+  }
+}
+
+@keyframes trmrk-has-app-bar-not {
+  from {
+    height: calc(100% - 50px);
+  }
+
+  to {
+    height: 100%;
+  }
+}
+
 .trmrk-app-panel {
   display: flex;
   flex-direction: column;
   width: 100%;
+  position: relative;
 
   &.trmrk-height-diff-x0 {
-    height: calc(100vh - 50px);
+    height: calc(100% - 50px);
+
+    &.trmrk-has-app-bar {
+      animation: trmrk-has-app-bar 0.1s ease-in-out;
+    }
+
+    &.trmrk-has-app-bar-not {
+      height: 100%;
+      animation: trmrk-has-app-bar-not 0.1s ease-in-out;
+    }
   }
 
   &.trmrk-height-diff-x1 {
@@ -199,9 +229,42 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
+@keyframes trmrk-app-bar-shown {
+  from {
+    height: 0;
+    padding: 0;
+  }
+
+  to {
+    height: 50px;
+  }
+}
+
+@keyframes trmrk-app-bar-hidden {
+  from {
+    height: 50px;
+  }
+
+  to {
+    height: 0;
+    padding: 0;
+  }
+}
+
 .trmrk-app-bar {
   height: 50px;
   padding: 6px;
+  overflow-y: hidden;
+
+  &.trmrk-shown {
+    animation: trmrk-app-bar-shown 0.1s ease-in-out;
+  }
+
+  &.trmrk-hidden {
+    height: 0;
+    padding: 0;
+    animation: trmrk-app-bar-hidden 0.1s ease-in-out;
+  }
 
   .trmrk-icon-btn {
     margin-top: 0px;
@@ -380,6 +443,19 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
+@keyframes trmrk-trmrk-blank-placeholder-slide-out {
+  from {
+    margin: 3px 3px 0 3px;
+    padding: 3px;
+    height: 40px;
+  }
+  to {
+    margin: 0;
+    padding: 0;
+    height: 0px;
+  }
+}
+
 .trmrk-list-view-container {
   .trmrk-list-item {
     &.trmrk-floating-list-item {
@@ -402,22 +478,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
     overflow: hidden;
 
     &.trmrk-slide-out {
-      @keyframes trmrk-slide-out {
-        from {
-          margin: 3px 3px 0 3px;
-          padding: 3px;
-          height: 40px;
-        }
-        to {
-          margin: 0;
-          padding: 0;
-          height: 0px;
-        }
-      }
-
-      & {
-        animation: trmrk-slide-out 0.2s ease-in-out forwards;
-      }
+      animation: trmrk-trmrk-blank-placeholder-slide-out 0.1s ease-in-out forwards;
     }
   }
 

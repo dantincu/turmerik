@@ -56,9 +56,19 @@ app-trmrk-app-icon {
   width: calc(100% - 6px);
 }
 
-.trmrk-companies-list-view-container {
-  height: calc(100vh - 100px);
+app-companies-list-view {
   position: relative;
+  height: 100%;
+
+  trmrk-list-view {
+    position: relative;
+    height: 100%;
+  }
+}
+
+.trmrk-companies-list-view-container {
+  position: relative;
+  height: 100%;
 
   .trmrk-top-horiz-strip,
   .trmrk-bottom-horiz-strip {
@@ -68,11 +78,11 @@ app-trmrk-app-icon {
 
   .trmrk-companies-list-view {
     width: 100%;
-    height: calc(100vh - 180px);
+    height: calc(100% - 80px);
     box-sizing: border-box;
 
     &.trmrk-has-accelerating-popovers {
-      height: calc(100vh - 200px);
+      height: calc(100% - 140px);
     }
   }
 }

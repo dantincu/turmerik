@@ -8,12 +8,19 @@ import {
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 
-import { DragService, TrmrkHorizStrip } from 'trmrk-angular';
+import {
+  DragService,
+  TrmrkHorizStrip,
+  AppBarMapService,
+  TrmrkDragEvent,
+} from 'trmrk-angular';
 
 import { filterKvp } from '../../trmrk/arr';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+
+import { AppStateService } from '../services/appStateService';
 
 export interface TrmrkPanelListServiceRow<TEntity> {
   item: TrmrkPanelListServiceItemData<TEntity> | null;
@@ -33,6 +40,7 @@ export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   getListView: () => HTMLElement;
   getListItems: () => QueryList<TItem>;
   getVisuallyMovingListItems: () => QueryList<TItem>;
+  getTopHorizStrip: () => HTMLElement;
   getUpAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getDownAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getMovingAggregateRowEl: () => TrmrkHorizStrip | null;
@@ -66,6 +74,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   getListView!: () => HTMLElement;
   getListItems!: () => QueryList<TItem>;
   getVisuallyMovingListItems!: () => QueryList<TItem>;
+  getTopHorizStrip!: () => HTMLElement;
   getUpAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover | null;
   getDownAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover | null;
   getMovingAggregateRowEl!: () => TrmrkHorizStrip | null;
@@ -75,6 +84,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   componentInputDataPropName!: string;
   componentIdPropName!: string;
   hostElPropName!: string;
+  appBarHeight!: number;
+  topHorizStripHeight!: number;
 
   rowsAreSelectable!: boolean;
   rowsMasterCheckBoxIsChecked!: boolean;
@@ -100,7 +111,15 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   rowLeadingIconDragSubscriptions: Subscription[] | null = null;
   rowLeadingIconDragEndSubscriptions: Subscription[] | null = null;
 
+  acceleratingPopoverPads: HTMLElement[] | null = null;
+  acceleratingScrollPadIdx = -1;
+
   private leadingIconDragServices: DragService[] | null = null;
+
+  constructor(
+    private appStateService: AppStateService,
+    private appBarMapService: AppBarMapService
+  ) {}
 
   ngOnDestroy(): void {
     this.reset();
@@ -109,6 +128,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   setup(args: TrmrkPanelListServiceSetupArgs<TEntity, TItem>) {
     this.getListItems = args.getListItems;
     this.getVisuallyMovingListItems = args.getVisuallyMovingListItems;
+    this.getTopHorizStrip = args.getTopHorizStrip;
     this.getListView = args.getListView;
     this.getUpAcceleratingScrollPopover = args.getUpAcceleratingScrollPopover;
     this.getDownAcceleratingScrollPopover =
@@ -120,6 +140,10 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       args.componentInputDataPropName ?? 'trmrkInputData';
     this.componentIdPropName = args.componentIdPropName ?? this.idPropName;
     this.hostElPropName = args.hostElPropName ?? 'hostEl';
+
+    const topHorizStrip = this.getTopHorizStrip();
+    this.topHorizStripHeight = topHorizStrip.offsetHeight;
+
     this.rowsSelectionIsAllowed = args.rowsSelectionIsAllowed ?? false;
 
     this.selectedRowsReorderIsAllowed =
@@ -164,86 +188,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
         if (this.selectedRowsReorderIsAllowed) {
           this.rowLeadingIconDragSubscriptions = listItems.map(() =>
             dragService.drag.subscribe((event) => {
-              event.touchOrMouseMoveCoords.evt!.preventDefault();
-
-              const diffY =
-                event.touchOrMouseMoveCoords.clientY -
-                event.touchStartOrMouseDownCoords.clientY;
-
-              if (
-                !this.selectedRowsReorderAggRowAnimationStartTime &&
-                !this.showAcceleratingScrollPopovers
-              ) {
-                if (
-                  Math.abs(diffY) >=
-                  this.selectedRowsReorderShowAggRowDiffYpxThreshold
-                ) {
-                  this.selectedRowsReorderAggRowAnimationStartTime =
-                    new Date().getTime();
-
-                  this.selectedRowsReorderAggRowAnimationIntervalId =
-                    setInterval(() => {
-                      const now = new Date().getTime();
-
-                      const diffMillis =
-                        now - this.selectedRowsReorderAggRowAnimationStartTime!;
-
-                      const diffFraction =
-                        diffMillis /
-                        this.selectedRowsReorderAggRowAnimationDurationMillis;
-
-                      let visuallyMovingMainRow: TrmrkPanelListServiceRowX<TEntity>;
-
-                      this.iterateVisuallyMovingItems(
-                        (item, itemHostEl, visuallyMovingRow, i) => {
-                          this.updateItemTopPx(
-                            itemHostEl,
-                            visuallyMovingRow,
-                            diffY -
-                              Math.min(1, diffFraction) *
-                                (visuallyMovingRow.offsetTop -
-                                  visuallyMovingMainRow.offsetTop)
-                          );
-                        },
-                        (visuallyMovingListItems, visuallyMovingRows) => {
-                          visuallyMovingMainRow = visuallyMovingRows.find(
-                            (row) => row.idx === this.visuallyMovingMainRowIdx
-                          )!;
-                        }
-                      );
-
-                      if (diffFraction >= 1) {
-                        this.clearSelectedRowsReorderAggRowAnimationIntervalId();
-                        this.showAcceleratingScrollPopovers = true;
-                        this.slideOutVisuallyMovingRowPlaceholders = true;
-                        this.showVisuallyMovingRows = false;
-                        this.showMovingAggregateRow = true;
-                      }
-                    }, this.selectedRowsReorderAggRowAnimationStepMillis);
-                } else {
-                  this.iterateVisuallyMovingItems(
-                    (item, itemHostEl, visuallyMovingRow, i) => {
-                      this.updateItemTopPx(
-                        itemHostEl,
-                        visuallyMovingRow,
-                        diffY
-                      );
-                    }
-                  );
-                }
-              } else if (this.showAcceleratingScrollPopovers) {
-                const movingAggregateRowEl = this.getMovingAggregateRowEl();
-
-                if (movingAggregateRowEl && this.visuallyMovingRows) {
-                  this.updateItemTopPx(
-                    movingAggregateRowEl.hostEl.nativeElement,
-                    this.visuallyMovingRows.find(
-                      (row) => row.idx === this.visuallyMovingMainRowIdx
-                    )!,
-                    diffY - 10
-                  );
-                }
-              }
+              this.onDrag(event);
             })
           );
 
@@ -272,6 +217,185 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
     for (let subscription of this.rowLeadingIconDragEndSubscriptions ?? []) {
       subscription.unsubscribe();
+    }
+  }
+
+  onDrag(event: TrmrkDragEvent) {
+    const { touchOrMouseMoveCoords, touchStartOrMouseDownCoords } = event;
+    touchOrMouseMoveCoords.evt!.preventDefault();
+
+    const diffY =
+      touchOrMouseMoveCoords.clientY - touchStartOrMouseDownCoords.clientY;
+
+    if (
+      !this.selectedRowsReorderAggRowAnimationStartTime &&
+      !this.showAcceleratingScrollPopovers
+    ) {
+      this.onDragStart(diffY);
+    } else if (this.showAcceleratingScrollPopovers) {
+      this.onDragCore(touchOrMouseMoveCoords, diffY);
+    }
+  }
+
+  onDragStart(diffY: number) {
+    if (Math.abs(diffY) >= this.selectedRowsReorderShowAggRowDiffYpxThreshold) {
+      this.selectedRowsReorderAggRowAnimationStartTime = new Date().getTime();
+
+      this.selectedRowsReorderAggRowAnimationIntervalId = setInterval(() => {
+        const now = new Date().getTime();
+
+        const diffMillis =
+          now - this.selectedRowsReorderAggRowAnimationStartTime!;
+
+        const diffFraction =
+          diffMillis / this.selectedRowsReorderAggRowAnimationDurationMillis;
+
+        let visuallyMovingMainRow: TrmrkPanelListServiceRowX<TEntity>;
+
+        this.iterateVisuallyMovingItems(
+          (item, itemHostEl, visuallyMovingRow, i) => {
+            this.updateItemTopPx(
+              itemHostEl,
+              visuallyMovingRow,
+              diffY -
+                Math.min(1, diffFraction) *
+                  (visuallyMovingRow.offsetTop -
+                    visuallyMovingMainRow.offsetTop)
+            );
+          },
+          (visuallyMovingListItems, visuallyMovingRows) => {
+            visuallyMovingMainRow = visuallyMovingRows.find(
+              (row) => row.idx === this.visuallyMovingMainRowIdx
+            )!;
+          }
+        );
+
+        if (diffFraction >= 1) {
+          this.clearSelectedRowsReorderAggRowAnimationIntervalId();
+          this.showAcceleratingScrollPopovers = true;
+          this.slideOutVisuallyMovingRowPlaceholders = true;
+          this.showVisuallyMovingRows = false;
+          this.showMovingAggregateRow = true;
+          this.appStateService.showAppBar.next(false);
+        }
+      }, this.selectedRowsReorderAggRowAnimationStepMillis);
+    } else {
+      this.iterateVisuallyMovingItems(
+        (item, itemHostEl, visuallyMovingRow, i) => {
+          this.updateItemTopPx(itemHostEl, visuallyMovingRow, diffY);
+        }
+      );
+    }
+  }
+
+  onDragCore(touchOrMouseMoveCoords: TouchOrMouseCoords, diffY: number) {
+    const movingAggregateRowEl = this.getMovingAggregateRowEl();
+
+    const upAcceleratingScrollPopover = this.getUpAcceleratingScrollPopover()
+      ?.hostEl.nativeElement as HTMLElement | undefined;
+
+    const downAcceleratingScrollPopover =
+      this.getDownAcceleratingScrollPopover()?.hostEl.nativeElement as
+        | HTMLElement
+        | undefined;
+
+    if (
+      movingAggregateRowEl &&
+      this.visuallyMovingRows &&
+      upAcceleratingScrollPopover &&
+      downAcceleratingScrollPopover
+    ) {
+      this.updateItemTopPx(
+        movingAggregateRowEl.hostEl.nativeElement,
+        this.visuallyMovingRows.find(
+          (row) => row.idx === this.visuallyMovingMainRowIdx
+        )!,
+        diffY -
+          upAcceleratingScrollPopover.offsetHeight +
+          this.topHorizStripHeight
+      );
+
+      const acceleratingScrollPopovers = [
+        upAcceleratingScrollPopover,
+        downAcceleratingScrollPopover,
+      ];
+
+      this.acceleratingPopoverPads ??= acceleratingScrollPopovers
+        .map((popover) =>
+          ['left', 'middle', 'right'].map(
+            (pfx) =>
+              popover.querySelector(`.trmrk-${pfx}-scroll-pad`) as HTMLElement
+          )
+        )
+        .reduce((map1, map2) => [...map1, ...map2]);
+
+      let acceleratingScrollPadIdx = -1;
+      const coordsClientX = touchOrMouseMoveCoords.clientX;
+      const coordsClientY = touchOrMouseMoveCoords.clientY;
+
+      const downRightPadRect =
+        this.acceleratingPopoverPads[5].getBoundingClientRect();
+
+      if (coordsClientY >= downRightPadRect.top) {
+        if (coordsClientY <= downRightPadRect.bottom) {
+          if (coordsClientX >= downRightPadRect.left) {
+            if (coordsClientX <= downRightPadRect.right) {
+              acceleratingScrollPadIdx = 5;
+            }
+          } else {
+            const downMiddlePadRect =
+              this.acceleratingPopoverPads[4].getBoundingClientRect();
+
+            if (coordsClientX >= downMiddlePadRect.left) {
+              if (coordsClientX <= downMiddlePadRect.right) {
+                acceleratingScrollPadIdx = 4;
+              }
+            } else {
+              const downLeftPadRect =
+                this.acceleratingPopoverPads[3].getBoundingClientRect();
+
+              if (coordsClientX >= downLeftPadRect.left) {
+                if (coordsClientX <= downLeftPadRect.right) {
+                  acceleratingScrollPadIdx = 3;
+                }
+              }
+            }
+          }
+        }
+      } else {
+        const upRightPadRect =
+          this.acceleratingPopoverPads[2].getBoundingClientRect();
+
+        if (coordsClientY >= upRightPadRect.top) {
+          if (coordsClientY <= upRightPadRect.bottom) {
+            if (coordsClientX >= upRightPadRect.left) {
+              if (coordsClientX <= upRightPadRect.right) {
+                acceleratingScrollPadIdx = 2;
+              }
+            } else {
+              const upMiddlePadRect =
+                this.acceleratingPopoverPads[1].getBoundingClientRect();
+
+              if (coordsClientX >= upMiddlePadRect.left) {
+                if (coordsClientX <= upMiddlePadRect.right) {
+                  acceleratingScrollPadIdx = 1;
+                }
+              } else {
+                const upLeftPadRect =
+                  this.acceleratingPopoverPads[0].getBoundingClientRect();
+
+                if (coordsClientX >= upLeftPadRect.left) {
+                  if (coordsClientX <= upLeftPadRect.right) {
+                    acceleratingScrollPadIdx = 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      this.acceleratingScrollPadIdx = acceleratingScrollPadIdx;
     }
   }
 
@@ -340,8 +464,10 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           this.leadingIconDragServices![idx].onTouchStartOrMouseDown(event);
 
         if (coords) {
-          this.visuallyMovingRows = this.getVisuallyMovingRows(coords, idx);
+          this.appBarHeight =
+            this.appBarMapService.getCurrent()?.offsetHeight ?? 0;
 
+          this.visuallyMovingRows = this.getVisuallyMovingRows(coords, idx);
           this.isMovingSelectedRows = true;
           this.visuallyMovingMainRowIdx = idx;
           const listView = this.getListView();
@@ -504,9 +630,13 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.showMovingAggregateRow = false;
     this.slideOutVisuallyMovingRowPlaceholders = false;
     this.visuallyMovingMainRowIdx = null;
+    this.appStateService.showAppBar.next(true);
 
     const listView = this.getListView();
     listView.classList.remove('trmrk-no-touch-scroll');
+
+    this.acceleratingPopoverPads = null;
+    this.acceleratingScrollPadIdx = -1;
   }
 
   private getItemHostEl(item: TItem) {
@@ -527,7 +657,9 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       visuallyMovingRow.offsetTop +
       Math.round(diffY) +
       listView.scrollTop -
-      this.beforeMovingSelectedRowsListViewScrollTop!;
+      this.beforeMovingSelectedRowsListViewScrollTop! +
+      this.appBarHeight -
+      (this.appBarMapService.getCurrent()?.offsetHeight ?? 0);
 
     itemHostEl.style.top = `${topPx}px`;
   }
