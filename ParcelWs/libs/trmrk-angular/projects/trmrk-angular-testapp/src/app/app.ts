@@ -10,7 +10,7 @@ import {
 
 import { jsonBool } from '../trmrk/core';
 
-import { AppStateService } from './services/appStateService';
+import { AppStateService } from './services/app-state-service';
 
 @Component({
   selector: 'app-root',

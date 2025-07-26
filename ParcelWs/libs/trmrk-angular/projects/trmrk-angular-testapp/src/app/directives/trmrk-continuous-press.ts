@@ -96,7 +96,13 @@ export class TrmrkContinuousPress implements OnDestroy, AfterViewInit {
       this.continuousIntervalId = null;
     }
 
-    document.removeEventListener('mousemove', this.docMouseOrTouchMove);
+    document.removeEventListener('touchmove', this.docMouseOrTouchMove, {
+      capture: true,
+    });
+    document.removeEventListener('mousemove', this.docMouseOrTouchMove, {
+      capture: true,
+    });
+    document.removeEventListener('touchend', this.docMouseUpOrTouchEnd);
     document.removeEventListener('mouseup', this.docMouseUpOrTouchEnd);
   }
 }

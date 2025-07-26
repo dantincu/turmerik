@@ -1,6 +1,8 @@
-import trmrk from "../../trmrk";
+import trmrk from '../../trmrk';
 
-import { filterChildNodes } from "./core";
+import { filterChildNodes } from './core';
+
+import { Coords } from './types';
 
 export const pxRegex = () => /px/i;
 export const emRegex = () => /px/i;
@@ -150,13 +152,13 @@ export const getChildTextNodes = (
 };
 
 export const clearStyleTopAndBottom = (style: CSSStyleDeclaration) => {
-  style.top = "";
-  style.bottom = "";
+  style.top = '';
+  style.bottom = '';
 };
 
 export const clearElemVertInset = (elemStyle: CSSStyleDeclaration) => {
-  elemStyle.top = "";
-  elemStyle.bottom = "";
+  elemStyle.top = '';
+  elemStyle.bottom = '';
 };
 
 export const extractNumberFromCssPropVal = (
@@ -164,7 +166,7 @@ export const extractNumberFromCssPropVal = (
   suffix: string | null | undefined = null
 ) => {
   let pxCount: number | null = null;
-  suffix ??= "px";
+  suffix ??= 'px';
   const sffxLen = suffix.length;
 
   if (sffxLen === 0 || cssPropVal.toLowerCase().endsWith(suffix)) {
@@ -204,7 +206,7 @@ export const applyCssPropValIfReq = <TPropVal>(
     (val) => {
       const dfVal = defaultCssPropValSerializer(val);
       if ((dfVal ?? null) !== null) {
-        cssPropValAssigner(elemStyle, "");
+        cssPropValAssigner(elemStyle, '');
       }
     }
   );
@@ -222,7 +224,7 @@ export const applyRectnglProps = (
   ) => string | null;
 
   defaultCssPropValSerializer = clearPropsWhereNullOrUndef
-    ? () => ""
+    ? () => ''
     : () => null;
 
   applyCssPropValIfReq(
@@ -257,3 +259,11 @@ export const applyRectnglProps = (
     defaultCssPropValSerializer
   );
 };
+
+export const getElemIdx = (elems: HTMLElement[], coords: Coords) =>
+  elems.findIndex((elem) =>
+    trmrk.withVal(
+      elem.getBoundingClientRect(),
+      (rect) => coords.clientX >= rect.left && coords.clientX <= rect.right
+    )
+  );

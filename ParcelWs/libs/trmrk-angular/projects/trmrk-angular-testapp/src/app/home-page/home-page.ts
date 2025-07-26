@@ -37,7 +37,7 @@ import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
 import { CompaniesListView } from '../companies-list-view/companies-list-view';
-import { ToggleAppBarService } from '../services/toggleAppBarService';
+import { ToggleAppBarService } from '../services/toggle-app-bar-service';
 
 import { companies } from '../services/companies';
 

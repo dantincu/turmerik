@@ -10,5 +10,5 @@
   },
   "include": [
     "src/**/*.ts"
-, "../trmrk-angular/src/lib/services/dynamicComponent.ts"  ]
+, "../trmrk-angular/src/lib/services/simpleChanges.ts"  ]
 }

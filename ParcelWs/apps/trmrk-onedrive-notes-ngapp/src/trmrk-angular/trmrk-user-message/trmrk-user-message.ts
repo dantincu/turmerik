@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { propName } from '../../trmrk/Reflection/core';
+import { whenChanged } from '../services/simpleChanges';
 import { UserMessageLevel } from '../../trmrk/core';
 
 import { Placement } from '../services/types';
@@ -98,17 +98,19 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const showChange = changes[propName(this, (o) => o.trmrkShow)];
+    whenChanged(
+      changes,
+      () => this.trmrkShow,
+      (value) => {
+        this.show = value > 0;
 
-    if (showChange) {
-      this.show = showChange.currentValue > 0;
-
-      if (this.show && this.trmrkAutoCloseMillis > 0) {
-        this.setFadeTimeouts();
-      } else {
-        this.clearTimeouts();
+        if (this.show && this.trmrkAutoCloseMillis > 0) {
+          this.setFadeTimeouts();
+        } else {
+          this.clearTimeouts();
+        }
       }
-    }
+    );
   }
 
   ngOnDestroy(): void {

@@ -1,8 +1,8 @@
 import { Injectable, Inject, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { AppStateServiceBase } from './appStateServiceBase';
-import { AppBarMapService } from './appBarMapService';
+import { AppStateServiceBase } from './app-state-service-base';
+import { AppBarMapService } from './app-bar-map-service';
 
 export interface ToggleAppBarServiceInitArgsCore {
   getAppPanelElem: () => HTMLElement;

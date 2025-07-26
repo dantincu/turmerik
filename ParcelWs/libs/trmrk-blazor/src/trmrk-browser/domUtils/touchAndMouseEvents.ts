@@ -1,3 +1,5 @@
+import { Coords } from './types';
+
 /**
  * From https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
  *
@@ -28,11 +30,6 @@ export enum MouseButton {
   Right,
   BrowserBack,
   BrowserForward,
-}
-
-export interface Coords {
-  clientX: number;
-  clientY: number;
 }
 
 export interface TouchOrMouseCoords extends Coords {

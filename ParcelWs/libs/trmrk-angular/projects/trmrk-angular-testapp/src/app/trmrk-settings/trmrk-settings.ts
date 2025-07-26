@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { setIsDarkModeToLocalStorage } from '../../trmrk-browser/domUtils/core';
 
 import { TrmrkAppBar } from 'trmrk-angular';
-import { AppStateService } from '../services/appStateService';
+import { AppStateService } from '../services/app-state-service';
 
 @Component({
   selector: 'app-trmrk-settings',

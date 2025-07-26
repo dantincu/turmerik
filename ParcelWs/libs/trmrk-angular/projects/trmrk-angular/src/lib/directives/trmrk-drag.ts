@@ -13,7 +13,7 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 
 import { TrmrkDragEvent } from '../services/types';
 
-import { DragService } from '../services/dragService';
+import { DragService } from '../services/drag-service';
 
 @Directive({
   selector: '[trmrkDrag]',

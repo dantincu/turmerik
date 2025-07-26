@@ -1,4 +1,4 @@
-export const getPropName = <T>(propNameFunc: (obj: T) => any) =>
+export const getPropName = (propNameFunc: ((obj: any) => any) | (() => any)) =>
   propNameFunc
     .toString()
     .split('>')[1]

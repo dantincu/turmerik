@@ -13,16 +13,16 @@ export * from './lib/trmrk-app-bar/trmrk-app-bar';
 
 export * from './lib/trmrk-dev-page/routes';
 
-export * from './lib/services/dragService';
-export * from './lib/services/dynamicComponent';
+export * from './lib/services/drag-service';
+export * from './lib/services/simpleChanges';
 export * from './lib/services/TrmrkObservable';
 export * from './lib/services/TrmrkTree';
 export * from './lib/services/types';
-export * from './lib/services/appStateServiceBase';
-export * from './lib/services/toggleAppBarServiceBase';
-export * from './lib/services/componentIdService';
+export * from './lib/services/app-state-service-base';
+export * from './lib/services/toggle-app-bar-service-base';
+export * from './lib/services/component-id-service';
 export * from './lib/services/componentDataMap';
-export * from './lib/services/appBarMapService';
+export * from './lib/services/app-bar-map-service';
 
 export * from './lib/directives/trmrk-drag';
 export * from './lib/directives/trmrk-long-press-or-right-click';

@@ -9,7 +9,7 @@ import { TrmrkListView } from '../trmrk-list-view/trmrk-list-view';
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../services/trmrkPanelListService';
+} from '../services/trmrk-panel-list-service';
 
 @Component({
   selector: 'app-companies-list-view',

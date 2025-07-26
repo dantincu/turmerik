@@ -13,9 +13,9 @@ import { CommonModule } from '@angular/common';
 
 import { encodeHtml } from '../../trmrk/text';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { propName } from '../../trmrk/Reflection/core';
 
 import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
+import { whenChanged } from '../services/simpleChanges';
 
 export enum TrmrkHorizStripType {
   Regular,
@@ -104,13 +104,15 @@ export class TrmrkHorizStrip implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const mainTextChange = changes[propName(this, (o) => o.trmrkMainText)];
-
-    if (mainTextChange) {
-      this.mainText = encodeHtml(
-        mainTextChange.currentValue ?? '',
-        this.trmrkUseNonBreakingSpaceTokens
-      ).replaceAll('\n', '&nbsp;');
-    }
+    whenChanged(
+      changes,
+      () => this.trmrkMainText,
+      (value) => {
+        this.mainText = encodeHtml(
+          value ?? '',
+          this.trmrkUseNonBreakingSpaceTokens
+        ).replaceAll('\n', '&nbsp;');
+      }
+    );
   }
 }

@@ -1,10 +1,21 @@
-import { Component, ViewChild, ElementRef, Input } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 
+import { whenChanged } from 'trmrk-angular';
+import { withVal } from '../../trmrk/core';
 import { getCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { getElemIdx } from '../../trmrk-browser/domUtils/getDomElemBounds';
 
 import { TrmrkContinuousPress } from '../directives/trmrk-continuous-press';
+import { TrmrkAcceleratingScrollService } from '../services/trmrk-accelerating-scroll-service';
 
 @Component({
   selector: 'trmrk-accelerating-scroll-control',
@@ -16,10 +27,10 @@ import { TrmrkContinuousPress } from '../directives/trmrk-continuous-press';
   ],
   templateUrl: './trmrk-accelerating-scroll-control.html',
   styleUrl: './trmrk-accelerating-scroll-control.scss',
+  providers: [TrmrkAcceleratingScrollService],
 })
-export class TrmrkAcceleratingScrollControl {
+export class TrmrkAcceleratingScrollControl implements OnChanges {
   @Input() trmrkIntervalMillis = 500;
-  @Input() trmrkIncSpeedStepsCount = 1;
   @Input() trmrkIncSpeedFactor = 2;
   @Input() trmrkMinScrollStep = 500;
   @Input() trmrkScrollable!: HTMLElement;
@@ -33,142 +44,74 @@ export class TrmrkAcceleratingScrollControl {
   @ViewChild('scrollDownBtn', { read: ElementRef<HTMLButtonElement> })
   scrollDownBtn!: ElementRef<HTMLButtonElement>;
 
-  private accelerate = 0;
-  private scrollStep = 0;
-  private refCount = 0;
-  private lastCount = 0;
+  constructor(
+    private acceleratingScrollService: TrmrkAcceleratingScrollService
+  ) {
+    this.acceleratingScrollService.scrollAccElems = () => [
+      this.scrollUpBtn.nativeElement,
+      this.fakeBtn.nativeElement,
+      this.scrollDownBtn.nativeElement,
+    ];
 
-  start(event: TouchEvent | MouseEvent) {
-    this.resetCore();
-    const coords = getCoords(event);
-    const elem = document.elementFromPoint(coords.clientX, coords.clientY);
-
-    if (this.fakeBtn.nativeElement.contains(elem)) {
-      this.accelerate = 0;
-    } else if (this.scrollUpBtn.nativeElement.contains(elem)) {
-      this.accelerate = -1;
-    } else if (this.scrollDownBtn.nativeElement.contains(elem)) {
-      this.accelerate = 1;
-    } else {
-      this.accelerate = 0;
-    }
-
-    this.scrollStep = this.trmrkMinScrollStep * this.accelerate;
-    this.scrollCore();
+    this.acceleratingScrollService.scrollableElem = () => this.trmrkScrollable;
   }
 
-  scroll(count: number) {
-    if (
-      this.accelerate !== 0 &&
-      count - this.refCount >= this.trmrkIncSpeedStepsCount
-    ) {
-      if (this.accelerate * this.scrollStep >= 0) {
-        this.scrollStep *= this.trmrkIncSpeedFactor;
-      } else {
-        this.scrollStep = Math.round(
-          this.scrollStep / this.trmrkIncSpeedFactor
-        );
+  ngOnChanges(changes: SimpleChanges): void {
+    whenChanged(
+      changes,
+      () => this.trmrkIncSpeedFactor,
+      (value) => (this.acceleratingScrollService.incSpeedFactor = value)
+    );
 
-        if (this.scrollStep < 0) {
-          this.scrollStep = Math.min(
-            this.scrollStep,
-            -1 * this.trmrkMinScrollStep
-          );
-        } else {
-          this.scrollStep = Math.max(this.scrollStep, this.trmrkMinScrollStep);
+    whenChanged(
+      changes,
+      () => this.trmrkMinScrollStep,
+      (value) => (this.acceleratingScrollService.minScrollStep = value)
+    );
+
+    whenChanged(
+      changes,
+      () => this.trmrkScrollBehavior,
+      (value) => (this.acceleratingScrollService.scrollBehavior = value)
+    );
+  }
+
+  start(event: TouchEvent | MouseEvent) {
+    const coords = getCoords(event);
+
+    const scrollElems = [
+      this.scrollUpBtn.nativeElement,
+      this.fakeBtn.nativeElement,
+      this.scrollDownBtn.nativeElement,
+    ];
+
+    const scrollDirIsDown = withVal(
+      getElemIdx(scrollElems, coords),
+      (scrollElemIdx) => {
+        switch (scrollElemIdx) {
+          case 0:
+            return false;
+          case 2:
+            return true;
+          default:
+            return null;
         }
       }
+    );
 
-      this.refCount = count;
-    }
+    this.acceleratingScrollService.reset();
+    this.acceleratingScrollService.start(scrollDirIsDown);
+  }
 
-    this.scrollCore();
-    this.lastCount = count;
+  scroll() {
+    this.acceleratingScrollService.scroll();
   }
 
   touchOrMouseMove(event: MouseEvent | TouchEvent) {
-    const ifFakeBtn = () => {
-      switch (this.accelerate) {
-        case 0:
-          break;
-        case -1:
-          this.refCount = this.lastCount;
-          break;
-        default:
-          this.refCount = this.lastCount;
-          break;
-      }
-
-      this.accelerate = 0;
-    };
-
-    const ifUpBtn = () => {
-      switch (this.accelerate) {
-        case -1:
-          break;
-        case 1:
-          this.refCount = this.lastCount;
-          break;
-        default:
-          this.refCount = this.lastCount;
-          break;
-      }
-
-      this.accelerate = -1;
-    };
-
-    const ifDownBtn = () => {
-      switch (this.accelerate) {
-        case 1:
-          break;
-        case -1:
-          this.refCount = this.lastCount;
-          break;
-        default:
-          this.refCount = this.lastCount;
-          break;
-      }
-
-      this.accelerate = 1;
-    };
-
-    const coords = getCoords(event);
-    const elem = document.elementFromPoint(coords.clientX, coords.clientY);
-
-    if (elem) {
-      if (this.fakeBtn.nativeElement.contains(elem)) {
-        ifFakeBtn();
-      } else if (this.scrollUpBtn.nativeElement.contains(elem)) {
-        ifUpBtn();
-      } else if (this.scrollDownBtn.nativeElement.contains(elem)) {
-        ifDownBtn();
-      } else {
-        ifFakeBtn();
-      }
-    }
+    this.acceleratingScrollService.touchOrMouseMove(event);
   }
 
-  reset(count: number) {
-    this.resetCore();
-  }
-
-  resetCore() {
-    this.lastCount = 0;
-    this.refCount = 0;
-    this.scrollStep = 0;
-  }
-
-  scrollCore() {
-    const scrollStep = Math.min(
-      this.scrollStep,
-      this.trmrkScrollable.scrollHeight -
-        this.trmrkScrollable.scrollTop -
-        this.trmrkScrollable.clientHeight
-    );
-
-    this.trmrkScrollable.scrollBy({
-      top: scrollStep,
-      behavior: this.trmrkScrollBehavior,
-    });
+  reset() {
+    this.acceleratingScrollService.reset();
   }
 }

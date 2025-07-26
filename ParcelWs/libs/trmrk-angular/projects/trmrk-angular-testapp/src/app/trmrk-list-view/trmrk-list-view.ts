@@ -26,7 +26,7 @@ import {
   materialIcons,
 } from 'trmrk-angular';
 
-import { propName } from '../../trmrk/Reflection/core';
+import { whenChanged } from 'trmrk-angular';
 
 import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
@@ -35,7 +35,7 @@ import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cance
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../services/trmrkPanelListService';
+} from '../services/trmrk-panel-list-service';
 
 import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../directives/trmrk-cancel-context-menu';
 
@@ -112,48 +112,47 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const entitiesChange = changes[propName(this, (o) => o.trmrkEntities)];
-    const listItemsChange = changes[propName(this, (o) => o.trmrkListItems)];
-
-    const visuallyMovingListItemsChange =
-      changes[propName(this, (o) => o.trmrkVisuallyMovingListItems)];
-
     setTimeout(() => {
-      if (listItemsChange && listItemsChange.currentValue) {
-        this.listItems = listItemsChange.currentValue;
-      }
+      whenChanged(
+        changes,
+        () => this.trmrkListItems,
+        (value) => (this.listItems = value)
+      );
 
-      if (
-        visuallyMovingListItemsChange &&
-        visuallyMovingListItemsChange.currentValue
-      ) {
-        this.currentlyMovingListItems =
-          visuallyMovingListItemsChange.currentValue;
-      }
+      whenChanged(
+        changes,
+        () => this.trmrkVisuallyMovingListItems,
+        (value) => (this.currentlyMovingListItems = value)
+      );
 
-      if (entitiesChange && entitiesChange.currentValue) {
-        this.panelListService.reset();
+      whenChanged(
+        changes,
+        () => this.trmrkEntities,
+        (entities) => {
+          this.panelListService.reset();
 
-        this.panelListService.setup({
-          getListView: () => this.listView.nativeElement,
-          getListItems: this.listItems,
-          getVisuallyMovingListItems: this.currentlyMovingListItems,
-          getTopHorizStrip: () => this.topHorizStrip.nativeElement,
-          getUpAcceleratingScrollPopover: () =>
-            this.upAcceleratingScrollPopover,
-          getDownAcceleratingScrollPopover: () =>
-            this.downAcceleratingScrollPopover,
-          getMovingAggregateRowEl: () => this.movingAggregateRowEl,
-          entities: entitiesChange.currentValue,
-          idPropName: this.trmrkEntityKeyPropName,
-          rowsSelectionIsAllowed: this.trmrkRowsSelectionIsAllowed,
-          selectedRowsReorderIsAllowed: this.trmrkSelectedRowsReorderIsAllowed,
-          selectedRowsReorderAggRowVertIsOriented:
-            this.trmrkSelectedRowsReorderAggRowVertIsOriented,
-        });
+          this.panelListService.setup({
+            getListView: () => this.listView.nativeElement,
+            getListItems: this.listItems,
+            getVisuallyMovingListItems: this.currentlyMovingListItems,
+            getTopHorizStrip: () => this.topHorizStrip.nativeElement,
+            getUpAcceleratingScrollPopover: () =>
+              this.upAcceleratingScrollPopover,
+            getDownAcceleratingScrollPopover: () =>
+              this.downAcceleratingScrollPopover,
+            getMovingAggregateRowEl: () => this.movingAggregateRowEl,
+            entities,
+            idPropName: this.trmrkEntityKeyPropName,
+            rowsSelectionIsAllowed: this.trmrkRowsSelectionIsAllowed,
+            selectedRowsReorderIsAllowed:
+              this.trmrkSelectedRowsReorderIsAllowed,
+            selectedRowsReorderAggRowVertIsOriented:
+              this.trmrkSelectedRowsReorderAggRowVertIsOriented,
+          });
 
-        this.trmrkRowsUpdated.emit(this.panelListService.rows);
-      }
+          this.trmrkRowsUpdated.emit(this.panelListService.rows);
+        }
+      );
     }, 0);
   }
 
