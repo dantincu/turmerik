@@ -15,6 +15,7 @@ import {
   TrmrkDragEvent,
 } from 'trmrk-angular';
 
+import { withVal } from '../../trmrk/core';
 import { filterKvp } from '../../trmrk/arr';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
@@ -112,7 +113,9 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   rowLeadingIconDragEndSubscriptions: Subscription[] | null = null;
 
   acceleratingPopoverPads: HTMLElement[] | null = null;
+  downAcceleratingPopoverCancelBtn: HTMLElement | null = null;
   acceleratingScrollPadIdx = -1;
+  downAcceleratingPopoverCancelBtnIsFocused = false;
 
   private leadingIconDragServices: DragService[] | null = null;
 
@@ -329,73 +332,50 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
         )
         .reduce((map1, map2) => [...map1, ...map2]);
 
+      this.downAcceleratingPopoverCancelBtn ??=
+        acceleratingScrollPopovers[1].querySelector('.trmrk-cancel-icon-btn');
+
       let acceleratingScrollPadIdx = -1;
       const coordsClientX = touchOrMouseMoveCoords.clientX;
       const coordsClientY = touchOrMouseMoveCoords.clientY;
 
-      const downRightPadRect =
-        this.acceleratingPopoverPads[5].getBoundingClientRect();
+      const acceleratingPopoverIdx = acceleratingScrollPopovers.findIndex(
+        (_, idx) =>
+          withVal(
+            this.acceleratingPopoverPads![idx * 3].getBoundingClientRect(),
+            (rect) => coordsClientY >= rect.top && coordsClientY <= rect.bottom
+          )
+      );
 
-      if (coordsClientY >= downRightPadRect.top) {
-        if (coordsClientY <= downRightPadRect.bottom) {
-          if (coordsClientX >= downRightPadRect.left) {
-            if (coordsClientX <= downRightPadRect.right) {
-              acceleratingScrollPadIdx = 5;
-            }
-          } else {
-            const downMiddlePadRect =
-              this.acceleratingPopoverPads[4].getBoundingClientRect();
+      if (acceleratingPopoverIdx >= 0) {
+        const aceleratingPadIdx = this.acceleratingPopoverPads
+          .slice(acceleratingPopoverIdx * 3, (acceleratingPopoverIdx + 1) * 3)
+          .findIndex((pad) =>
+            withVal(
+              pad.getBoundingClientRect(),
+              (rect) =>
+                coordsClientX >= rect.left && coordsClientX <= rect.right
+            )
+          );
 
-            if (coordsClientX >= downMiddlePadRect.left) {
-              if (coordsClientX <= downMiddlePadRect.right) {
-                acceleratingScrollPadIdx = 4;
-              }
-            } else {
-              const downLeftPadRect =
-                this.acceleratingPopoverPads[3].getBoundingClientRect();
-
-              if (coordsClientX >= downLeftPadRect.left) {
-                if (coordsClientX <= downLeftPadRect.right) {
-                  acceleratingScrollPadIdx = 3;
-                }
-              }
-            }
-          }
-        }
-      } else {
-        const upRightPadRect =
-          this.acceleratingPopoverPads[2].getBoundingClientRect();
-
-        if (coordsClientY >= upRightPadRect.top) {
-          if (coordsClientY <= upRightPadRect.bottom) {
-            if (coordsClientX >= upRightPadRect.left) {
-              if (coordsClientX <= upRightPadRect.right) {
-                acceleratingScrollPadIdx = 2;
-              }
-            } else {
-              const upMiddlePadRect =
-                this.acceleratingPopoverPads[1].getBoundingClientRect();
-
-              if (coordsClientX >= upMiddlePadRect.left) {
-                if (coordsClientX <= upMiddlePadRect.right) {
-                  acceleratingScrollPadIdx = 1;
-                }
-              } else {
-                const upLeftPadRect =
-                  this.acceleratingPopoverPads[0].getBoundingClientRect();
-
-                if (coordsClientX >= upLeftPadRect.left) {
-                  if (coordsClientX <= upLeftPadRect.right) {
-                    acceleratingScrollPadIdx = 0;
-                  }
-                }
-              }
-            }
-          }
+        if (aceleratingPadIdx >= 0) {
+          acceleratingScrollPadIdx =
+            acceleratingPopoverIdx * 3 + aceleratingPadIdx;
         }
       }
 
       this.acceleratingScrollPadIdx = acceleratingScrollPadIdx;
+
+      this.downAcceleratingPopoverCancelBtnIsFocused =
+        acceleratingScrollPadIdx === 4 &&
+        withVal(
+          this.downAcceleratingPopoverCancelBtn!.getBoundingClientRect(),
+          (rect) =>
+            coordsClientX >= rect.left &&
+            coordsClientX <= rect.right &&
+            coordsClientY >= rect.top &&
+            coordsClientY <= rect.bottom
+        );
     }
   }
 
@@ -637,6 +617,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
     this.acceleratingPopoverPads = null;
     this.acceleratingScrollPadIdx = -1;
+    this.downAcceleratingPopoverCancelBtn = null;
+    this.downAcceleratingPopoverCancelBtnIsFocused = false;
   }
 
   private getItemHostEl(item: TItem) {
