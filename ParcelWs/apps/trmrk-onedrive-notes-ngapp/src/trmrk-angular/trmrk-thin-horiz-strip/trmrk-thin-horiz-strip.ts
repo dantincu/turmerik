@@ -15,10 +15,15 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 import { whenChanged } from '../services/simpleChanges';
 
 import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
+import { TrmrkTouchStartOrMouseDown } from '../directives/trmrk-touch-start-or-mouse-down';
 
 @Component({
   selector: 'trmrk-thin-horiz-strip',
-  imports: [CommonModule, TrmrkLongPressOrRightClick],
+  imports: [
+    CommonModule,
+    TrmrkLongPressOrRightClick,
+    TrmrkTouchStartOrMouseDown,
+  ],
   templateUrl: './trmrk-thin-horiz-strip.html',
   styleUrl: './trmrk-thin-horiz-strip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,6 +34,12 @@ export class TrmrkThinHorizStrip {
 
   @Output() trmrkTextShortPressOrLeftClick =
     new EventEmitter<TouchOrMouseCoords>();
+
+  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<
+    MouseEvent | TouchEvent
+  >();
+
+  @Input() trmrkTextLongPressAltHost: (() => HTMLElement[]) | null = null;
 
   @Input() trmrkMinimal = false;
   @Input() trmrkText!: string;

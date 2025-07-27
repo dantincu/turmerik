@@ -7,22 +7,22 @@ import {
 } from './trmrk-touch-or-mouse-event-base';
 
 @Directive({
-  selector: '[trmrkTouchStartOrMouseDownD]',
+  selector: '[trmrkTouchEndOrMouseUp]',
 })
-export class TrmrkTouchStartOrMouseDown extends TrmrkTouchOrMouseEventBase {
-  @Output() trmrkTouchStartOrMouseDown = new EventEmitter<
+export class TrmrkTouchEndOrMouseUp extends TrmrkTouchOrMouseEventBase {
+  @Output() trmrkTouchEndOrMouseUp = new EventEmitter<
     MouseEvent | TouchEvent
   >();
 
   override get event(): EventEmitter<MouseEvent | TouchEvent> {
-    return this.trmrkTouchStartOrMouseDown;
+    return this.trmrkTouchEndOrMouseUp;
   }
 
   override get mouseEvent(): MouseEventName {
-    return 'mousedown';
+    return 'mouseup';
   }
 
   override get touchEvent(): TouchEventName {
-    return 'touchstart';
+    return 'touchend';
   }
 }

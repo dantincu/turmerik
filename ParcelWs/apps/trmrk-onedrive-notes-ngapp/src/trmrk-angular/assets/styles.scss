@@ -77,6 +77,10 @@ a[mat-icon-button].trmrk-icon-btn:link {
 .trmrk-menu {
   .trmrk-menu-item {
     min-height: 40px;
+
+    &.trmrk-text-menu-item {
+      padding-left: 10px;
+    }
   }
 }
 
@@ -456,7 +460,11 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
-.trmrk-list-view-container {
+.trmrk-list-view {
+  .trmrk-rows-menu-trigger {
+    position: absolute;
+  }
+
   .trmrk-list-item {
     &.trmrk-floating-list-item {
       position: absolute;

@@ -25,7 +25,12 @@ export * from './lib/services/componentDataMap';
 export * from './lib/services/app-bar-map-service';
 
 export * from './lib/directives/trmrk-drag';
+export * from './lib/directives/trmrk-event-base';
 export * from './lib/directives/trmrk-long-press-or-right-click';
 export * from './lib/directives/trmrk-multi-click';
+export * from './lib/directives/trmrk-touch-end-or-mouse-up';
+export * from './lib/directives/trmrk-touch-or-mouse-event-base';
+export * from './lib/directives/trmrk-touch-or-mouse-move';
+export * from './lib/directives/trmrk-touch-start-or-mouse-down';
 
 export * from './lib/assets/icons/material/index';

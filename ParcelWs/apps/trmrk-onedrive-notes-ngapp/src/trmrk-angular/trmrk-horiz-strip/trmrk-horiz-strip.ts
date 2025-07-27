@@ -15,6 +15,7 @@ import { encodeHtml } from '../../trmrk/text';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
+import { TrmrkTouchStartOrMouseDown } from '../directives/trmrk-touch-start-or-mouse-down';
 import { whenChanged } from '../services/simpleChanges';
 
 export enum TrmrkHorizStripType {
@@ -31,7 +32,11 @@ export interface TrmrkHorizStripDetailsTextPart {
 
 @Component({
   selector: 'trmrk-horiz-strip',
-  imports: [CommonModule, TrmrkLongPressOrRightClick],
+  imports: [
+    CommonModule,
+    TrmrkLongPressOrRightClick,
+    TrmrkTouchStartOrMouseDown,
+  ],
   templateUrl: './trmrk-horiz-strip.html',
   styleUrl: './trmrk-horiz-strip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +47,12 @@ export class TrmrkHorizStrip implements OnChanges {
 
   @Output() trmrkTextShortPressOrLeftClick =
     new EventEmitter<TouchOrMouseCoords>();
+
+  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<
+    MouseEvent | TouchEvent
+  >();
+
+  @Input() trmrkTextLongPressAltHost: (() => HTMLElement[]) | null = null;
 
   @Input() trmrkType = TrmrkHorizStripType.Regular;
   @Input() trmrkMinimal = false;

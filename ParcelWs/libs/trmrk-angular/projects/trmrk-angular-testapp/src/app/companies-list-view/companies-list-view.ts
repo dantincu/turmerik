@@ -1,11 +1,11 @@
 import { Component, ViewChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TrmrkPanelListItem } from 'trmrk-angular';
+import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 
 import { companies } from '../services/companies';
 import { TrmrkListView } from '../trmrk-list-view/trmrk-list-view';
-import { TrmrkTouchStartOrMouseDown } from '../directives/trmrk-touch-start-or-mouse-down';
+import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import {
   TrmrkPanelListService,
@@ -57,4 +57,8 @@ export class CompaniesListView {
   ) {
     this.panelListService = panelListService;
   }
+
+  rowIconShortPressOrLeftClick(event: TouchOrMouseCoords, idx: number) {}
+
+  rowTextShortPressOrLeftClick(event: TouchOrMouseCoords, idx: number) {}
 }

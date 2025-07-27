@@ -66,7 +66,7 @@ export class TrmrkContinuousPress implements OnDestroy, AfterViewInit {
   }
 
   private docMouseOrTouchMove(event: MouseEvent | TouchEvent) {
-    if (!isContainedBy(event, this.host.nativeElement)) {
+    if (!isContainedBy({ event, parent: this.host.nativeElement })) {
       this.reset();
     } else {
       this.trmrkTouchOrMouseMove.emit(event);

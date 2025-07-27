@@ -177,20 +177,47 @@ export const getCoords = (e: MouseEvent | TouchEvent | TouchOrMouseCoords) => {
   return retObj;
 };
 
-export const isContainedBy = (
-  e: MouseEvent | TouchEvent | TouchOrMouseCoords,
-  parent: HTMLElement,
-  useComposedPath = false
+export interface IsContainedByArgs<TParent> {
+  event: MouseEvent | TouchEvent | TouchOrMouseCoords;
+  parent: TParent;
+  useComposedPath?: boolean | null | undefined;
+  coords?: Coords | null | undefined;
+  elemAtPoint?: Element | null | undefined;
+  composedPath?: EventTarget[] | null | undefined;
+}
+
+const normalizeIsContainedByArgs = <TParent>(
+  args: IsContainedByArgs<TParent>
 ) => {
+  if (args.useComposedPath) {
+    args.composedPath ??= (args.event as TouchEvent).composedPath();
+  } else {
+    args.coords ??= getCoords(args.event);
+    args.elemAtPoint ??= document.elementFromPoint(
+      args.coords.clientX,
+      args.coords.clientY
+    );
+  }
+};
+
+export const isAnyContainedBy = (args: IsContainedByArgs<HTMLElement[]>) => {
+  normalizeIsContainedByArgs(args);
+
+  const retVal = !!args.parent.find((parent) =>
+    isContainedBy({ ...args, parent })
+  );
+
+  return retVal;
+};
+
+export const isContainedBy = (args: IsContainedByArgs<HTMLElement>) => {
+  normalizeIsContainedByArgs(args);
   let retVal: boolean;
 
-  if (useComposedPath) {
-    const composedPath = (e as TouchEvent).composedPath();
-    retVal = composedPath.indexOf(parent) >= 0;
+  if (args.useComposedPath) {
+    retVal = args.composedPath!.indexOf(parent) >= 0;
   } else {
-    const coords = getCoords(e);
-    const elem = document.elementFromPoint(coords.clientX, coords.clientY);
-    retVal = !!elem && parent.contains(elem);
+    retVal = !!args.elemAtPoint && args.parent.contains(args.elemAtPoint);
   }
 
   return retVal;

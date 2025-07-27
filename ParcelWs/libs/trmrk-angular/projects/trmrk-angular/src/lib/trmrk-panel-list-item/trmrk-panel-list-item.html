@@ -24,6 +24,8 @@
     [trmrkCssClass]="trmrkCssClass"
     (trmrkTextLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
     (trmrkTextShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
+    (trmrkTextTouchStartOrMouseDown)="trmrkTextMouseDownOrTouchStart.emit($event)"
+    [trmrkTextLongPressAltHost]="trmrkTextLongPressAltHost"
     [trmrkLeadingTemplate]="leadingTemplate"
     [trmrkTrailingTemplate]="trailingTemplate"
   ></trmrk-horiz-strip>
@@ -43,6 +45,8 @@
       class="trmrk-icon-btn trmrk-leading-icon-btn"
       (trmrkLongPressOrRightClick)="trmrkLeadingBtnLongPressOrRightClick.emit($event)"
       (trmrkShortPressOrLeftClick)="trmrkLeadingBtnShortPressOrLeftClick.emit($event)"
+      (trmrkTouchStartOrMouseDown)="trmrkLeadingIconBtnMouseDownOrTouchStart.emit($event)"
+      [trmrkAltHostElems]="trmrkLeadingBtnLongPressAltHost"
     >
       @if (trmrkLeadingMatIconName) {
       <mat-icon class="trmrk-icon trmrk-leading-icon"
@@ -59,6 +63,8 @@
       [disabled]="!trmrkGoToParentBtnIsEnabled"
       (trmrkLongPressOrRightClick)="trmrkGoToParentBtnLongPressOrRightClick.emit($event)"
       (trmrkShortPressOrLeftClick)="trmrkGoToParentBtnShortPressOrLeftClick.emit($event)"
+      (trmrkTouchStartOrMouseDown)="trmrkGoToParentBtnMouseDownOrTouchStart.emit($event)"
+      [trmrkAltHostElems]="trmrkGoToParentBtnLongPressAltHost"
     >
       <mat-icon class="trmrk-icon"
         >{{ trmrkGoToParentMatIconName ?? 'arrow_upward' }}</mat-icon
@@ -70,6 +76,8 @@
       class="trmrk-icon-btn"
       (trmrkLongPressOrRightClick)="trmrkColorLabelBtnLongPressOrRightClick.emit($event)"
       (trmrkShortPressOrLeftClick)="trmrkColorLabelBtnShortPressOrLeftClick.emit($event)"
+      (trmrkTouchStartOrMouseDown)="trmrkColorLabelBtnMouseDownOrTouchStart.emit($event)"
+      [trmrkAltHostElems]="trmrkColorLabelBtnLongPressAltHost"
     >
       <mat-icon class="trmrk-icon" [ngStyle]="{color: trmrkColorLabelColor}"
         >label</mat-icon

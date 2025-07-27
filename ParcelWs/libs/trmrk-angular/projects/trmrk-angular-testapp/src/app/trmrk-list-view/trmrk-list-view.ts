@@ -60,6 +60,7 @@ import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../di
   providers: [TrmrkPanelListService],
 })
 export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
+  @Input() trmrkCssClass: string | null = null;
   @Input() trmrkEntities!: any[];
   @Input() trmrkEntityKeyPropName = 'id';
   @Input() trmrkRowMenuTemplate!: TemplateRef<any>;
@@ -97,7 +98,7 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   @ViewChild('rowsMenuTrigger', { read: MatMenuTrigger })
   rowsMenuTrigger!: MatMenuTrigger;
 
-  @ViewChild('rowsMenuTrigger')
+  @ViewChild('rowsMenuTriggerEl')
   rowsMenuTriggerEl!: ElementRef<HTMLDivElement>;
 
   @ViewChild('rowsMenu')
@@ -148,6 +149,7 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
             getListView: () => this.listView.nativeElement,
             getListItems: this.listItems,
             rowsMenuTriggerEl: () => this.rowsMenuTriggerEl.nativeElement,
+            rowsMenuTrigger: () => this.rowsMenuTrigger,
             rowsMenu: () => this.rowsMenu,
             getVisuallyMovingListItems: this.currentlyMovingListItems,
             getTopHorizStrip: () => this.topHorizStrip.nativeElement,

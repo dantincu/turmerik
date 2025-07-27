@@ -17,6 +17,7 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
 import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
+import { TrmrkTouchStartOrMouseDown } from '../directives/trmrk-touch-start-or-mouse-down';
 
 import {
   TrmrkHorizStrip,
@@ -37,14 +38,13 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
     MatIconButton,
     TrmrkLongPressOrRightClick,
     MatCheckbox,
+    TrmrkTouchStartOrMouseDown,
   ],
   templateUrl: './trmrk-panel-list-item.html',
   styleUrl: './trmrk-panel-list-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkPanelListItem<TInputData = any>
-  implements AfterViewInit, OnDestroy
-{
+export class TrmrkPanelListItem<TInputData = any> {
   @Output() trmrkExpandedToggled = new EventEmitter<boolean>();
   @Output() trmrkCheckBoxToggled = new EventEmitter<MatCheckboxChange>();
 
@@ -65,17 +65,38 @@ export class TrmrkPanelListItem<TInputData = any>
   @Output() trmrkGoToParentBtnShortPressOrLeftClick =
     new EventEmitter<TouchOrMouseCoords>();
 
+  @Output() trmrkGoToParentBtnMouseDownOrTouchStart = new EventEmitter<
+    MouseEvent | TouchEvent
+  >();
+
   @Output() trmrkColorLabelBtnLongPressOrRightClick =
     new EventEmitter<TouchOrMouseCoords>();
 
   @Output() trmrkColorLabelBtnShortPressOrLeftClick =
     new EventEmitter<TouchOrMouseCoords>();
 
+  @Output() trmrkColorLabelBtnMouseDownOrTouchStart = new EventEmitter<
+    MouseEvent | TouchEvent
+  >();
+
   @Output() trmrkTextLongPressOrRightClick =
     new EventEmitter<TouchOrMouseCoords>();
 
   @Output() trmrkTextShortPressOrLeftClick =
     new EventEmitter<TouchOrMouseCoords>();
+
+  @Output() trmrkTextMouseDownOrTouchStart = new EventEmitter<
+    MouseEvent | TouchEvent
+  >();
+
+  @Input() trmrkLeadingBtnLongPressAltHost: (() => HTMLElement[]) | null = null;
+  @Input() trmrkGoToParentBtnLongPressAltHost: (() => HTMLElement[]) | null =
+    null;
+
+  @Input() trmrkColorLabelBtnLongPressAltHost: (() => HTMLElement[]) | null =
+    null;
+
+  @Input() trmrkTextLongPressAltHost: (() => HTMLElement[]) | null = null;
 
   @Input() trmrkIsAppBar = false;
   @Input() trmrkMainText!: string;
@@ -99,47 +120,5 @@ export class TrmrkPanelListItem<TInputData = any>
 
   TrmrkHorizStripType = TrmrkHorizStripType;
 
-  private leadingIconBtn: HTMLElement | null = null;
-
-  constructor(public hostEl: ElementRef) {
-    this.leadingIconMouseDownOrTouchStart =
-      this.leadingIconMouseDownOrTouchStart.bind(this);
-  }
-
-  ngAfterViewInit(): void {
-    const hostEl = this.hostEl.nativeElement as HTMLElement;
-    this.leadingIconBtn = hostEl.querySelector('.trmrk-leading-icon-btn');
-
-    if (this.leadingIconBtn) {
-      this.leadingIconBtn.addEventListener(
-        'mousedown',
-        this.leadingIconMouseDownOrTouchStart
-      );
-
-      this.leadingIconBtn.addEventListener(
-        'touchstart',
-        this.leadingIconMouseDownOrTouchStart
-      );
-    }
-  }
-
-  ngOnDestroy(): void {
-    if (this.leadingIconBtn) {
-      this.leadingIconBtn.removeEventListener(
-        'mousedown',
-        this.leadingIconMouseDownOrTouchStart
-      );
-
-      this.leadingIconBtn.removeEventListener(
-        'touchstart',
-        this.leadingIconMouseDownOrTouchStart
-      );
-
-      this.leadingIconBtn = null;
-    }
-  }
-
-  private leadingIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent) {
-    this.trmrkLeadingIconBtnMouseDownOrTouchStart.emit(event);
-  }
+  constructor(public hostEl: ElementRef) {}
 }

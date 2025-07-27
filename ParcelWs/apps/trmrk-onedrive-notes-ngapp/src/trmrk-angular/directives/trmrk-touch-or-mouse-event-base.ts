@@ -5,6 +5,7 @@ import { TrmrkEventCoreBase } from './trmrk-event-base';
 export type MouseEventName = 'mousedown' | 'mousemove' | 'mouseup';
 export type TouchEventName = 'touchstart' | 'touchmove' | 'touchend';
 export type TouchOrMouseEventName = MouseEventName | TouchEventName;
+export type TouchStartOrMouseDownEventName = 'touchstart' | 'mousedown';
 
 @Directive()
 export abstract class TrmrkTouchOrMouseEventBase

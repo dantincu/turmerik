@@ -1,4 +1,4 @@
-<div class="trmrk-companies-list-view-container trmrk-list-view-container">
+<div [ngClass]="['trmrk-list-view', trmrkCssClass ?? '']">
   @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-horiz-strip trmrk-top-horiz-strip" #topHorizStrip>
     @if (panelListService.rowsAreSelectable) {
@@ -22,11 +22,12 @@
   }
   <div
     #listView
-    [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
+    [ngClass]="['trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
   >
     <div
-      class="rowsMenuTrigger"
+      class="trmrk-rows-menu-trigger"
       #rowsMenuTrigger="matMenuTrigger"
+      #rowsMenuTriggerEl
       [matMenuTriggerFor]="null"
     ></div>
     <mat-menu class="trmrk-menu" dense #rowsMenu>

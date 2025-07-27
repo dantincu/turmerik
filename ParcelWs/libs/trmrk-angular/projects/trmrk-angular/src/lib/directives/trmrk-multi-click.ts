@@ -128,7 +128,7 @@ export class TrmrkMultiClick implements OnDestroy {
     }
 
     if (data.isValid) {
-      data.isValid = isContainedBy(event, data.elem);
+      data.isValid = isContainedBy({ event, parent: data.elem });
     }
 
     return data;

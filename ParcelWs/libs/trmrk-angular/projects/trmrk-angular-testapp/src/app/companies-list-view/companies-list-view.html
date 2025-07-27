@@ -1,4 +1,5 @@
 <trmrk-list-view
+  [trmrkCssClass]="'trmrk-companies-list-view-container'"
   [trmrkEntities]="entities"
   [trmrkRowsSelectionIsAllowed]="true"
   [trmrkSelectedRowsReorderIsAllowed]="true"
@@ -13,7 +14,7 @@
 ></trmrk-list-view>
 
 <ng-template #rowMenuTemplate>
-  <span class="trmrk-menu-item">Some action</span>
+  <span class="trmrk-menu-item trmrk-text-menu-item">Some action</span>
 </ng-template>
 
 <ng-template #rowTemplate let-row="row" let-idx="idx">
@@ -29,8 +30,12 @@
     [trmrkIsFocused]="row.item.isFocused"
     (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, idx)"
     (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, idx)"
-    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowIconMouseDownOrTouchStart($event, idx)"
-    trmrkTouchStartOrMouseDownD
+    (trmrkLeadingBtnShortPressOrLeftClick)="rowIconShortPressOrLeftClick($event, idx)"
+    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowContentMouseDownOrTouchStart($event, idx)"
+    (trmrkTextLongPressOrRightClick)="panelListService.rowTextLongPresOrRightClick($event, idx)"
+    (trmrkTextShortPressOrLeftClick)="rowTextShortPressOrLeftClick($event, idx)"
+    (trmrkTextMouseDownOrTouchStart)="panelListService.rowContentMouseDownOrTouchStart($event, idx)"
+    [trmrkTextLongPressAltHost]="row.longPressAltHost"
     (trmrkTouchStartOrMouseDown)="panelListService.rowMouseDownOrTouchStart($event, idx)"
     [trmrkInputData]="{id: row.item.data.id}"
   ></trmrk-panel-list-item>
@@ -43,9 +48,11 @@
     #currentlyMovingListItems
     [trmrkMainText]="row.item!.data.name"
     [ngClass]="['trmrk-list-item trmrk-floating-list-item', panelListService.showVisuallyMovingRows ? '' : 'trmrk-hidden']"
+    [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
     [trmrkLeadingMatIconName]="'description'"
     [trmrkIsSelectable]="true"
     [trmrkIsSelected]="true"
+    [trmrkIsFocused]="row.item.isFocused"
     [trmrkInputData]="{id: row.item.data.id}"
   ></trmrk-panel-list-item>
   }

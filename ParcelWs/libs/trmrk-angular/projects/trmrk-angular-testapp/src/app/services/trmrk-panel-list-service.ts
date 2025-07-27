@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
-import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import {
   DragService,
@@ -16,7 +16,7 @@ import {
   TrmrkDragEvent,
 } from 'trmrk-angular';
 
-import { withVal } from '../../trmrk/core';
+import { withVal, actWithVal } from '../../trmrk/core';
 import { filterKvp } from '../../trmrk/arr';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
@@ -31,6 +31,7 @@ export interface TrmrkPanelListServiceRow<TEntity> {
   isBlankPlaceholder?: boolean | null | undefined;
   isMultipleSelectedPlaceholder?: boolean | null | undefined;
   multipleSelectedCount?: number | null | undefined;
+  longPressAltHost: () => HTMLElement[];
 }
 
 export interface TrmrkPanelListServiceItemData<TEntity> {
@@ -43,6 +44,7 @@ export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   getListView: () => HTMLElement;
   getListItems: () => QueryList<TItem>;
   rowsMenuTriggerEl: () => HTMLElement;
+  rowsMenuTrigger: () => MatMenuTrigger;
   rowsMenu: () => MatMenu;
   getVisuallyMovingListItems: () => QueryList<TItem>;
   getTopHorizStrip: () => HTMLElement;
@@ -78,7 +80,8 @@ interface TrmrkPanelListServiceRowX<TEntity>
 export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   getListView!: () => HTMLElement;
   getListItems!: () => QueryList<TItem>;
-  rowsMenuTriggerEl!: () => ElementRef<HTMLDivElement>;
+  rowsMenuTriggerEl!: () => HTMLElement;
+  rowsMenuTrigger!: () => MatMenuTrigger;
   rowsMenu!: () => MatMenu;
   getVisuallyMovingListItems!: () => QueryList<TItem>;
   getTopHorizStrip!: () => HTMLElement;
@@ -111,6 +114,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   beforeMovingSelectedRowsListViewScrollTop: number | null = null;
 
   visuallyMovingRows: TrmrkPanelListServiceRowX<TEntity>[] | null = null;
+  visuallyMovingListItems: TItem[] | null = null;
   visuallyMovingMainRowIdx: number | null = null;
   showVisuallyMovingRows = false;
   showMovingAggregateRow = false;
@@ -136,10 +140,13 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   }
 
   setup(args: TrmrkPanelListServiceSetupArgs<TEntity, TItem>) {
+    this.getListView = args.getListView;
     this.getListItems = args.getListItems;
+    this.rowsMenuTriggerEl = args.rowsMenuTriggerEl;
+    this.rowsMenuTrigger = args.rowsMenuTrigger;
+    this.rowsMenu = args.rowsMenu;
     this.getVisuallyMovingListItems = args.getVisuallyMovingListItems;
     this.getTopHorizStrip = args.getTopHorizStrip;
-    this.getListView = args.getListView;
     this.getUpAcceleratingScrollPopover = args.getUpAcceleratingScrollPopover;
     this.getDownAcceleratingScrollPopover =
       args.getDownAcceleratingScrollPopover;
@@ -173,13 +180,30 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
     this.rows =
       args.rows ??
-      args.entities.map((ent) => ({
+      args.entities.map((ent, i) => ({
         item: {
           data: ent,
           isSelected: false,
           isFocused: false,
         },
         id: (ent as any)[this.idPropName],
+        longPressAltHost: () => {
+          const retArr: HTMLElement[] = [];
+
+          if (this.visuallyMovingListItems && this.visuallyMovingRows) {
+            retArr.push(
+              this.getItemHostEl(
+                this.visuallyMovingListItems![
+                  this.visuallyMovingRows!.findIndex(
+                    (visuallyMovingRow) => visuallyMovingRow.idx === i
+                  )
+                ]
+              )
+            );
+          }
+
+          return retArr;
+        },
       }));
 
     this.rows = this.rows.map((row) => ({ ...row }));
@@ -447,7 +471,23 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     }
   }
 
-  rowIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, idx: number) {
+  rowTextLongPresOrRightClick(event: TouchOrMouseCoords, idx: number) {
+    const menuTriggerEl = this.rowsMenuTriggerEl();
+
+    const elementsFromPoint = document.elementsFromPoint(
+      event.clientX,
+      event.clientY
+    );
+
+    const targetEl = elementsFromPoint.find((el) =>
+      el.parentElement!.classList.contains('trmrk-panel-list')
+    ) as HTMLElement;
+
+    menuTriggerEl.style.top = `${targetEl.offsetTop}px`;
+    this.rowsMenuTrigger().openMenu();
+  }
+
+  rowContentMouseDownOrTouchStart(event: MouseEvent | TouchEvent, idx: number) {
     if (this.rowsAreSelectable && this.selectedRowsReorderIsAllowed) {
       const row = this.rows[idx];
 
@@ -477,6 +517,28 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
               );
 
               this.showVisuallyMovingRows = true;
+
+              this.visuallyMovingListItems = actWithVal(
+                this.getVisuallyMovingListItems().toArray(),
+                (visuallyMovingListItems) =>
+                  visuallyMovingListItems.sort(
+                    (a, b) =>
+                      this.visuallyMovingRows!.findIndex(
+                        (row) =>
+                          row.id ===
+                          (a as any)[this.componentInputDataPropName][
+                            this.componentIdPropName
+                          ]
+                      ) -
+                      this.visuallyMovingRows!.findIndex(
+                        (row) =>
+                          row.id ===
+                          (b as any)[this.componentInputDataPropName][
+                            this.componentIdPropName
+                          ]
+                      )
+                  )
+              );
 
               setTimeout(() => {
                 if (this.isMovingSelectedRows) {
@@ -618,6 +680,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.showAcceleratingScrollPopovers = false;
     this.isMovingSelectedRows = false;
     this.visuallyMovingRows = null;
+    this.visuallyMovingListItems = null;
     this.showVisuallyMovingRows = false;
     this.showMovingAggregateRow = false;
     this.slideOutVisuallyMovingRowPlaceholders = false;

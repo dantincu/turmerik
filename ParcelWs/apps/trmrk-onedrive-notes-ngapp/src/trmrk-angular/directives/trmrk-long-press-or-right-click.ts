@@ -11,7 +11,7 @@ import {
   MouseButton,
   TouchOrMouseCoords,
   getSingleTouchOrClick,
-  isContainedBy,
+  isAnyContainedBy,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkLongPressOrRightClickEventData } from '../services/types';
@@ -20,9 +20,10 @@ import { TrmrkLongPressOrRightClickEventData } from '../services/types';
   selector: '[trmrkLongPressOrRightClick]',
 })
 export class TrmrkLongPressOrRightClick implements OnDestroy {
-  @Input() trmrkLongPressMillis: number = 200;
+  @Input() trmrkLongPressMillis: number = 400;
   @Input() trmrkValidMouseOrTouchMoveMaxPx: number = 40;
   @Input() trmrkLongPressPreventDefault = true;
+  @Input() trmrkAltHostElems: (() => HTMLElement[]) | null = null;
   @Output() trmrkLongPressOrRightClick = new EventEmitter<TouchOrMouseCoords>();
   @Output() trmrkShortPressOrLeftClick = new EventEmitter<TouchOrMouseCoords>();
 
@@ -145,7 +146,10 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
     }
 
     if (data.isValid) {
-      data.isValid = isContainedBy(data.mouseOrTouchCoords!, data.elem);
+      data.isValid = isAnyContainedBy({
+        event: data.mouseOrTouchCoords!,
+        parent: [...(this.trmrkAltHostElems?.call(this) ?? []), data.elem],
+      });
     }
 
     if (data.isValid && mouseDownOrTouchStartCoords) {
