@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 
 import { isContainedBy } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { defaultFastAnimationDurationMillis } from '../../trmrk-browser/core';
 
 @Directive({
   selector: '[trmrkContinuousPress]',
@@ -20,7 +21,7 @@ export class TrmrkContinuousPress implements OnDestroy, AfterViewInit {
 
   @Output() trmrkTouchOrMouseMove = new EventEmitter<TouchEvent | MouseEvent>();
 
-  @Input() trmrkIntervalMillis = 100;
+  @Input() trmrkIntervalMillis = defaultFastAnimationDurationMillis;
   @Input() autoResetElapsedCount = Number.MAX_SAFE_INTEGER;
 
   private continuousIntervalId: NodeJS.Timeout | null = null;

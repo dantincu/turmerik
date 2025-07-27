@@ -91,8 +91,11 @@ export const actWithVal = <TVal>(
 export const withValIf = <TIn, TOut>(
   inVal: TIn,
   convertor: (input: TIn) => TOut,
-  defaultValueFactory: (input: TIn) => TOut,
-  defaultInputPredicate?: ((input: TIn) => boolean) | null | undefined
+  defaultValueFactory: (input: TIn | null | undefined) => TOut,
+  defaultInputPredicate?:
+    | ((input: TIn | null | undefined) => boolean)
+    | null
+    | undefined
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
   let retVal: TOut;
@@ -107,13 +110,16 @@ export const withValIf = <TIn, TOut>(
 };
 
 export const actWithValIf = <TVal>(
-  inVal: TVal,
+  inVal: TVal | null | undefined,
   action: (input: TVal) => unknown | any | void,
   defaultAction:
-    | ((input: TVal) => unknown | any | void)
+    | ((input: TVal | null | undefined) => unknown | any | void)
     | null
     | undefined = null,
-  defaultInputPredicate?: ((input: TVal) => boolean) | null | undefined
+  defaultInputPredicate?:
+    | ((input: TVal | null | undefined) => boolean)
+    | null
+    | undefined
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
 
@@ -122,10 +128,36 @@ export const actWithValIf = <TVal>(
       defaultAction(inVal);
     }
   } else {
-    action(inVal);
+    action(inVal!);
   }
 
   return inVal;
+};
+
+export const actWithIf = <TVal>(
+  inVal: TVal | null | undefined,
+  action: (input: TVal) => unknown | any | void,
+  defaultAction:
+    | ((input: TVal | null | undefined) => unknown | any | void)
+    | null
+    | undefined = null,
+  defaultInputPredicate?:
+    | ((input: TVal | null | undefined) => boolean)
+    | null
+    | undefined
+) => {
+  defaultInputPredicate ??= (input) => (input ?? null) === null;
+  const retVal = defaultInputPredicate(inVal);
+
+  if (retVal) {
+    if (defaultAction) {
+      defaultAction(inVal);
+    }
+  } else {
+    action(inVal!);
+  }
+
+  return retVal;
 };
 
 export const asNumber = (

@@ -1,4 +1,9 @@
-import trmrk from "../trmrk";
+import trmrk from '../trmrk';
+
+export const defaultLongPressTimeoutMills = 400;
+export const defaultFastAnimationDurationMillis = 100;
+export const defaultAnimationDurationMillis = 500;
+export const defaultSlowAnimationDurationMillis = 1000;
 
 export const absUriRegex = () => () =>
   /^[\w\-_]+\:\/\/([\w\-_]+\.?)+(\:[0-9]+)?(\/[\w\-\?\.\+_&=#,]*)*$/g;
@@ -16,10 +21,10 @@ export const getNewUri = (
     trmrk.isNonEmptyStr(part, true)
   );
 
-  let newUri = partsArr.join("/");
+  let newUri = partsArr.join('/');
 
   if (preserveQueryDelim || trmrk.isNonEmptyStr(queryStr, true)) {
-    newUri = [newUri, queryStr].join("?");
+    newUri = [newUri, queryStr].join('?');
   }
 
   if (trmrk.isNonEmptyStr(hash)) {
@@ -46,12 +51,12 @@ export const getRelUri = (
   hashTransformer ??= (hash) => hash;
 
   pathTransformer ??= (path) => {
-    if (typeof path === "string") {
-      if (path.startsWith("/")) {
+    if (typeof path === 'string') {
+      if (path.startsWith('/')) {
         path = path.substring(1);
       }
 
-      if (path.endsWith("/")) {
+      if (path.endsWith('/')) {
         path = path.substring(0, path.length - 1);
       }
     }

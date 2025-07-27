@@ -16,6 +16,7 @@ import {
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkLongPressOrRightClickEventData } from '../services/types';
+import { defaultLongPressTimeoutMills } from '../../trmrk-browser/core';
 
 @Directive({
   selector: '[trmrkMultiClick]',
@@ -25,7 +26,7 @@ export class TrmrkMultiClick implements OnDestroy {
   private lastClickMillis = 0;
 
   @Output() trmrkMultiClick = new EventEmitter<TouchOrMouseCoords>();
-  @Input() trmrkMultiClickMillis = 400;
+  @Input() trmrkMultiClickMillis = defaultLongPressTimeoutMills;
   @Input() trmrkMultiClicksCount = 5;
 
   constructor(private el: ElementRef<HTMLElement>) {

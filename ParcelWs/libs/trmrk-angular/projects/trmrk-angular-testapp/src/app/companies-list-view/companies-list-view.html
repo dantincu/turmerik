@@ -31,11 +31,9 @@
     (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, idx)"
     (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, idx)"
     (trmrkLeadingBtnShortPressOrLeftClick)="rowIconShortPressOrLeftClick($event, idx)"
-    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowContentMouseDownOrTouchStart($event, idx)"
+    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowLeadingIconMouseDownOrTouchStart($event, idx)"
     (trmrkTextLongPressOrRightClick)="panelListService.rowTextLongPresOrRightClick($event, idx)"
     (trmrkTextShortPressOrLeftClick)="rowTextShortPressOrLeftClick($event, idx)"
-    (trmrkTextMouseDownOrTouchStart)="panelListService.rowContentMouseDownOrTouchStart($event, idx)"
-    [trmrkTextLongPressAltHost]="row.longPressAltHost"
     (trmrkTouchStartOrMouseDown)="panelListService.rowMouseDownOrTouchStart($event, idx)"
     [trmrkInputData]="{id: row.item.data.id}"
   ></trmrk-panel-list-item>

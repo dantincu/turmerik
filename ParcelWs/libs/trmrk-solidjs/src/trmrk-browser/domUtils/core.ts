@@ -1,5 +1,5 @@
 import trmrk from '../../trmrk';
-import { MtblRefValue, jsonBool } from '../../trmrk/core';
+import { MtblRefValue, jsonBool, actWithIf } from '../../trmrk/core';
 
 export const supportedFeatures = {
   fileSystemApi: !!(window as any).showDirectoryPicker,
@@ -407,6 +407,12 @@ export const clearTimeoutIfReq = (
 export const clearIntervalIfReq = (
   timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined
 ) => clearTimeouIfReqCore(timeoutIdRef, clearInterval);
+
+export const clearTmOutIfReq = (timeoutId: NodeJS.Timeout | null | undefined) =>
+  actWithIf(timeoutId, (id) => clearTimeout(id));
+
+export const clearIntvIfReq = (timeoutId: NodeJS.Timeout | null | undefined) =>
+  actWithIf(timeoutId, (id) => clearInterval(id));
 
 export const updateDisableAttr = (
   elem: HTMLElement,

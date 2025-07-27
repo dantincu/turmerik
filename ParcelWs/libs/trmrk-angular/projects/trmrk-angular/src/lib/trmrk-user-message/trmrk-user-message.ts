@@ -14,6 +14,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
+import { defaultSlowAnimationDurationMillis } from '../../trmrk-browser/core';
+
 import { whenChanged } from '../services/simpleChanges';
 import { UserMessageLevel } from '../../trmrk/core';
 
@@ -132,7 +134,7 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
             this.messageFadeOut = false;
             this.show = false;
             this.trmrkClose.emit(false);
-          }, 1000)
+          }, defaultSlowAnimationDurationMillis)
         );
       }, this.trmrkAutoCloseMillis)
     );

@@ -193,7 +193,7 @@ export const applyCssPropValIfReq = <TPropVal>(
     | null
     | undefined = null,
   defaultCssPropValSerializer:
-    | ((propVal: TPropVal) => string | null)
+    | ((propVal: TPropVal | null | undefined) => string | null)
     | null
     | undefined = null
 ) => {

@@ -18,7 +18,18 @@ import {
 
 import { withVal, actWithVal } from '../../trmrk/core';
 import { filterKvp } from '../../trmrk/arr';
-import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+
+import {
+  TouchOrMouseCoords,
+  getSingleTouchOrClick,
+} from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+
+import { clearIntvIfReq } from '../../trmrk-browser/domUtils/core';
+
+import {
+  defaultLongPressTimeoutMills,
+  defaultFastAnimationDurationMillis,
+} from '../../trmrk-browser/core';
 
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 
@@ -31,7 +42,6 @@ export interface TrmrkPanelListServiceRow<TEntity> {
   isBlankPlaceholder?: boolean | null | undefined;
   isMultipleSelectedPlaceholder?: boolean | null | undefined;
   multipleSelectedCount?: number | null | undefined;
-  longPressAltHost: () => HTMLElement[];
 }
 
 export interface TrmrkPanelListServiceItemData<TEntity> {
@@ -107,6 +117,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   selectedRowsReorderShowAggRowDiffYpxThreshold!: number;
   selectedRowsReorderAggRowAnimationStepMillis!: number;
   selectedRowsReorderAggRowAnimationDurationMillis!: number;
+
   isMovingSelectedRows = false;
   showAcceleratingScrollPopovers = false;
   selectedRowsReorderAggRowAnimationStartTime: number | null = null;
@@ -125,8 +136,10 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
   acceleratingPopoverPads: HTMLElement[] | null = null;
   downAcceleratingPopoverCancelBtn: HTMLElement | null = null;
+  acceleratingScrollPopoverIdx = -1;
   acceleratingScrollPadIdx = -1;
   downAcceleratingPopoverCancelBtnIsFocused = false;
+  rowContentMouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
 
   private leadingIconDragServices: DragService[] | null = null;
 
@@ -176,7 +189,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       args.selectedRowsReorderAggRowAnimationStepMillis ?? 1;
 
     this.selectedRowsReorderAggRowAnimationDurationMillis =
-      args.selectedRowsReorderAggRowAnimationDurationMillis ?? 100;
+      args.selectedRowsReorderAggRowAnimationDurationMillis ??
+      defaultFastAnimationDurationMillis;
 
     this.rows =
       args.rows ??
@@ -187,23 +201,6 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           isFocused: false,
         },
         id: (ent as any)[this.idPropName],
-        longPressAltHost: () => {
-          const retArr: HTMLElement[] = [];
-
-          if (this.visuallyMovingListItems && this.visuallyMovingRows) {
-            retArr.push(
-              this.getItemHostEl(
-                this.visuallyMovingListItems![
-                  this.visuallyMovingRows!.findIndex(
-                    (visuallyMovingRow) => visuallyMovingRow.idx === i
-                  )
-                ]
-              )
-            );
-          }
-
-          return retArr;
-        },
       }));
 
     this.rows = this.rows.map((row) => ({ ...row }));
@@ -240,7 +237,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   }
 
   reset() {
-    this.clearSelectedRowsReorderAggRowAnimationIntervalId();
+    this.resetVisuallyMovingRows();
 
     for (let dragService of this.leadingIconDragServices ?? []) {
       dragService.Dispose();
@@ -371,7 +368,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       const coordsClientX = touchOrMouseMoveCoords.clientX;
       const coordsClientY = touchOrMouseMoveCoords.clientY;
 
-      const acceleratingPopoverIdx = acceleratingScrollPopovers.findIndex(
+      this.acceleratingScrollPopoverIdx = acceleratingScrollPopovers.findIndex(
         (_, idx) =>
           withVal(
             this.acceleratingPopoverPads![idx * 3].getBoundingClientRect(),
@@ -379,9 +376,12 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           )
       );
 
-      if (acceleratingPopoverIdx >= 0) {
+      if (this.acceleratingScrollPopoverIdx >= 0) {
         const aceleratingPadIdx = this.acceleratingPopoverPads
-          .slice(acceleratingPopoverIdx * 3, (acceleratingPopoverIdx + 1) * 3)
+          .slice(
+            this.acceleratingScrollPopoverIdx * 3,
+            (this.acceleratingScrollPopoverIdx + 1) * 3
+          )
           .findIndex((pad) =>
             withVal(
               pad.getBoundingClientRect(),
@@ -392,7 +392,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
         if (aceleratingPadIdx >= 0) {
           acceleratingScrollPadIdx =
-            acceleratingPopoverIdx * 3 + aceleratingPadIdx;
+            this.acceleratingScrollPopoverIdx * 3 + aceleratingPadIdx;
         }
       }
 
@@ -472,34 +472,28 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   }
 
   rowTextLongPresOrRightClick(event: TouchOrMouseCoords, idx: number) {
-    const menuTriggerEl = this.rowsMenuTriggerEl();
-
-    const elementsFromPoint = document.elementsFromPoint(
-      event.clientX,
-      event.clientY
-    );
-
-    const targetEl = elementsFromPoint.find((el) =>
-      el.parentElement!.classList.contains('trmrk-panel-list')
-    ) as HTMLElement;
-
-    menuTriggerEl.style.top = `${targetEl.offsetTop}px`;
-    this.rowsMenuTrigger().openMenu();
+    this.openRowContextMenu(event);
   }
 
-  rowContentMouseDownOrTouchStart(event: MouseEvent | TouchEvent, idx: number) {
+  rowLeadingIconMouseDownOrTouchStart(
+    event: MouseEvent | TouchEvent,
+    idx: number
+  ) {
     if (this.rowsAreSelectable && this.selectedRowsReorderIsAllowed) {
       const row = this.rows[idx];
 
       if (row.item!.isSelected) {
-        const coords =
+        this.rowContentMouseDownOrTouchStartCoords =
           this.leadingIconDragServices![idx].onTouchStartOrMouseDown(event);
 
-        if (coords) {
+        if (this.rowContentMouseDownOrTouchStartCoords) {
           this.appBarHeight =
             this.appBarMapService.getCurrent()?.offsetHeight ?? 0;
 
-          this.visuallyMovingRows = this.getVisuallyMovingRows(coords, idx);
+          this.visuallyMovingRows = this.getVisuallyMovingRows(
+            this.rowContentMouseDownOrTouchStartCoords,
+            idx
+          );
           this.isMovingSelectedRows = true;
           this.visuallyMovingMainRowIdx = idx;
           const listView = this.getListView();
@@ -659,18 +653,33 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     return visuallyMovingRows;
   }
 
+  private openRowContextMenu(coords: TouchOrMouseCoords) {
+    const menuTriggerEl = this.rowsMenuTriggerEl();
+
+    const elementsFromPoint = document.elementsFromPoint(
+      coords.clientX,
+      coords.clientY
+    );
+
+    const targetEl = elementsFromPoint.find((el) =>
+      el.parentElement!.classList.contains('trmrk-panel-list')
+    ) as HTMLElement;
+
+    menuTriggerEl.style.top = `${targetEl.offsetTop}px`;
+    menuTriggerEl.style.left = `${targetEl.offsetLeft}px`;
+    this.rowsMenuTrigger().openMenu();
+  }
+
   private clearSelectedRowsReorderAggRowAnimationIntervalId() {
-    if (this.selectedRowsReorderAggRowAnimationIntervalId) {
-      clearInterval(this.selectedRowsReorderAggRowAnimationIntervalId);
-      this.selectedRowsReorderAggRowAnimationIntervalId = null;
-      this.selectedRowsReorderAggRowAnimationStartTime = null;
-    }
+    clearIntvIfReq(this.selectedRowsReorderAggRowAnimationIntervalId);
+    this.selectedRowsReorderAggRowAnimationIntervalId = null;
+    this.selectedRowsReorderAggRowAnimationStartTime = null;
   }
 
   private resetVisuallyMovingRows() {
     this.clearSelectedRowsReorderAggRowAnimationIntervalId();
 
-    for (let row of this.rows) {
+    for (let row of this.rows ?? []) {
       row.hideItem = null;
       row.isBlankPlaceholder = null;
       row.isMultipleSelectedPlaceholder = null;
@@ -687,13 +696,14 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.visuallyMovingMainRowIdx = null;
     this.appStateService.showAppBar.next(true);
 
-    const listView = this.getListView();
-    listView.classList.remove('trmrk-no-touch-scroll');
+    const listView = this.getListView?.call(this);
+    listView?.classList.remove('trmrk-no-touch-scroll');
 
     this.acceleratingPopoverPads = null;
     this.acceleratingScrollPadIdx = -1;
     this.downAcceleratingPopoverCancelBtn = null;
     this.downAcceleratingPopoverCancelBtnIsFocused = false;
+    this.rowContentMouseDownOrTouchStartCoords = null;
   }
 
   private getItemHostEl(item: TItem) {

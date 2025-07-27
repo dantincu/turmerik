@@ -15,12 +15,13 @@ import {
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkLongPressOrRightClickEventData } from '../services/types';
+import { defaultLongPressTimeoutMills } from '../../trmrk-browser/core';
 
 @Directive({
   selector: '[trmrkLongPressOrRightClick]',
 })
 export class TrmrkLongPressOrRightClick implements OnDestroy {
-  @Input() trmrkLongPressMillis: number = 400;
+  @Input() trmrkLongPressMillis: number = defaultLongPressTimeoutMills;
   @Input() trmrkValidMouseOrTouchMoveMaxPx: number = 40;
   @Input() trmrkLongPressPreventDefault = true;
   @Input() trmrkAltHostElems: (() => HTMLElement[]) | null = null;
