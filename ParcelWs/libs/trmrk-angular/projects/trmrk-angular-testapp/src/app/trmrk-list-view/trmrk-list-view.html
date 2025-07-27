@@ -24,10 +24,19 @@
     #listView
     [ngClass]="['trmrk-companies-list-view trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
   >
-    @for (row of panelListService.rows; track row.id) { @if (row.item &&
-    !row.hideItem) {
+    <div
+      class="rowsMenuTrigger"
+      #rowsMenuTrigger="matMenuTrigger"
+      [matMenuTriggerFor]="null"
+    ></div>
+    <mat-menu class="trmrk-menu" dense #rowsMenu>
+      <ng-container *ngTemplateOutlet="trmrkRowMenuTemplate"></ng-container>
+    </mat-menu>
+
+    @for (row of panelListService.rows; track row.id; let idx = $index) { @if
+    (row.item && !row.hideItem) {
     <ng-container
-      *ngTemplateOutlet="trmrkRowTemplate; context: { row: row }"
+      *ngTemplateOutlet="trmrkRowTemplate; context: { row, idx }"
     ></ng-container>
     } @if (row.isBlankPlaceholder) {
     <trmrk-cancel-context-menu
@@ -43,9 +52,9 @@
       </div>
     </trmrk-cancel-context-menu>
     } } @if (panelListService.visuallyMovingRows) { @for (row of
-    panelListService.visuallyMovingRows; track row.id) {
+    panelListService.visuallyMovingRows; track row.id; let idx = $index) {
     <ng-container
-      *ngTemplateOutlet="trmrkVisuallyMovingRowTemplate; context: { row: row }"
+      *ngTemplateOutlet="trmrkVisuallyMovingRowTemplate; context: { row, idx }"
     ></ng-container>
     }
     <ng-template #movingAggregateRowLeadingTemplate>

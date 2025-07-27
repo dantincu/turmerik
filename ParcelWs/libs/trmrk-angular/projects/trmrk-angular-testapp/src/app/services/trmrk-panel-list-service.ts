@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
+import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import {
   DragService,
@@ -35,11 +36,14 @@ export interface TrmrkPanelListServiceRow<TEntity> {
 export interface TrmrkPanelListServiceItemData<TEntity> {
   data: TEntity;
   isSelected: boolean;
+  isFocused: boolean;
 }
 
 export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   getListView: () => HTMLElement;
   getListItems: () => QueryList<TItem>;
+  rowsMenuTriggerEl: () => HTMLElement;
+  rowsMenu: () => MatMenu;
   getVisuallyMovingListItems: () => QueryList<TItem>;
   getTopHorizStrip: () => HTMLElement;
   getUpAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
@@ -74,6 +78,8 @@ interface TrmrkPanelListServiceRowX<TEntity>
 export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   getListView!: () => HTMLElement;
   getListItems!: () => QueryList<TItem>;
+  rowsMenuTriggerEl!: () => ElementRef<HTMLDivElement>;
+  rowsMenu!: () => MatMenu;
   getVisuallyMovingListItems!: () => QueryList<TItem>;
   getTopHorizStrip!: () => HTMLElement;
   getUpAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover | null;
@@ -90,6 +96,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
   rowsAreSelectable!: boolean;
   rowsMasterCheckBoxIsChecked!: boolean;
+  selectedRowsCount = 0;
+  focusedRowIdx: number | null = null;
   rowsSelectionIsAllowed!: boolean;
   selectedRowsReorderIsAllowed!: boolean;
   selectedRowsReorderAggRowVertIsOriented!: boolean;
@@ -97,7 +105,6 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   selectedRowsReorderAggRowAnimationStepMillis!: number;
   selectedRowsReorderAggRowAnimationDurationMillis!: number;
   isMovingSelectedRows = false;
-  selectedRowsCount = 0;
   showAcceleratingScrollPopovers = false;
   selectedRowsReorderAggRowAnimationStartTime: number | null = null;
   selectedRowsReorderAggRowAnimationIntervalId: NodeJS.Timeout | null = null;
@@ -170,6 +177,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
         item: {
           data: ent,
           isSelected: false,
+          isFocused: false,
         },
         id: (ent as any)[this.idPropName],
       }));
@@ -379,11 +387,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     }
   }
 
-  rowCheckBoxToggled(event: MatCheckboxChange, id: any) {
-    const row = this.rows.find(
-      (row) => row.item && (row.item.data as any)[this.idPropName] === id
-    )!;
-
+  rowCheckBoxToggled(event: MatCheckboxChange, idx: number) {
+    const row = this.rows[idx];
     row.item!.isSelected = event.checked;
 
     if (event.checked) {
@@ -418,25 +423,32 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     }
   }
 
-  rowIconLongPressOrRightClick(event: TouchOrMouseCoords, id: any) {
+  rowIconLongPressOrRightClick(event: TouchOrMouseCoords, idx: number) {
     if (this.rowsSelectionIsAllowed && !this.rowsAreSelectable) {
       this.rowsAreSelectable = true;
-
-      const row = this.rows.find(
-        (row) => row.item && (row.item.data as any)[this.idPropName] === id
-      )!;
-
+      const row = this.rows[idx];
       row.item!.isSelected = true;
       this.selectedRowsCount = 1;
     }
   }
 
-  rowIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, id: any) {
-    if (this.rowsAreSelectable && this.selectedRowsReorderIsAllowed) {
-      const idx = this.rows.findIndex(
-        (row) => row.item && (row.item.data as any)[this.idPropName] === id
-      );
+  rowMouseDownOrTouchStart(event: MouseEvent | TouchEvent, idx: number) {
+    for (let row of this.rows) {
+      if (row.item) {
+        row.item!.isFocused = false;
+      }
+    }
 
+    this.focusedRowIdx = idx;
+    const row = this.rows[idx];
+
+    if (row.item) {
+      row.item!.isFocused = true;
+    }
+  }
+
+  rowIconMouseDownOrTouchStart(event: MouseEvent | TouchEvent, idx: number) {
+    if (this.rowsAreSelectable && this.selectedRowsReorderIsAllowed) {
       const row = this.rows[idx];
 
       if (row.item!.isSelected) {

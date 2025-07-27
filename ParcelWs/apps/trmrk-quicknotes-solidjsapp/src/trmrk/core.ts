@@ -124,6 +124,8 @@ export const actWithValIf = <TVal>(
   } else {
     action(inVal);
   }
+
+  return inVal;
 };
 
 export const asNumber = (

@@ -5,6 +5,7 @@ import { TrmrkPanelListItem } from 'trmrk-angular';
 
 import { companies } from '../services/companies';
 import { TrmrkListView } from '../trmrk-list-view/trmrk-list-view';
+import { TrmrkTouchStartOrMouseDown } from '../directives/trmrk-touch-start-or-mouse-down';
 
 import {
   TrmrkPanelListService,
@@ -13,7 +14,12 @@ import {
 
 @Component({
   selector: 'app-companies-list-view',
-  imports: [CommonModule, TrmrkListView, TrmrkPanelListItem],
+  imports: [
+    CommonModule,
+    TrmrkListView,
+    TrmrkPanelListItem,
+    TrmrkTouchStartOrMouseDown,
+  ],
   templateUrl: './companies-list-view.html',
   styleUrl: './companies-list-view.scss',
 })

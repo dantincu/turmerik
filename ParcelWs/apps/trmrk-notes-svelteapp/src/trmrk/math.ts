@@ -18,14 +18,3 @@ export const getNextIdx = (dimSizes: number[], dimIdxes: number[]) => {
 
   return retVal;
 };
-
-/* for (let data of [
-  [0, 0, 2],
-  [0, 2, 1],
-  [1, 3, 2],
-].map((arr) => ({
-  dimSizes: [2, 4, 3],
-  dimIdxes: arr,
-}))) {
-  console.log('getNextIdx', getNextIdx(data.dimSizes, data.dimIdxes));
-} */

@@ -87,6 +87,7 @@ export class TrmrkPanelListItem<TInputData = any>
   @Input() trmrkIsExpanded = false;
   @Input() trmrkIsSelectable = false;
   @Input() trmrkIsSelected = false;
+  @Input() trmrkIsFocused = false;
   @Input() trmrkLeadingMatIconName?: string | null | undefined;
   @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | null | undefined;
   @Input() trmrkShowGoToParentBtn?: boolean | null | undefined;

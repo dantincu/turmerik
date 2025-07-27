@@ -1,5 +1,8 @@
 <div
-  [ngClass]="['trmrk-panel-list-item', trmrkIsExpanded ? 'trmrk-is-expanded' : '', trmrkIsSelected ? 'trmrk-is-selected' : '']"
+  [ngClass]="['trmrk-panel-list-item',
+    trmrkIsExpanded ? 'trmrk-is-expanded' : '',
+    trmrkIsSelected ? 'trmrk-is-selected' : '',
+    trmrkIsFocused ? 'trmrk-is-focused' : '']"
 >
   @if (trmrkIsExpandable) {
   <button

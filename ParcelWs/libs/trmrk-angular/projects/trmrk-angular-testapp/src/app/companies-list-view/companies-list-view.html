@@ -7,28 +7,37 @@
   [trmrkVisuallyMovingListItems]="getCurrentlyMovingListItems"
   (trmrkRowsUpdated)="rowsUpdated($event)"
   (trmrkPanelListService)="onPanelListService($event)"
+  [trmrkRowMenuTemplate]="rowMenuTemplate"
   [trmrkRowTemplate]="rowTemplate"
   [trmrkVisuallyMovingRowTemplate]="visuallyMovingRowTemplate"
 ></trmrk-list-view>
 
-<ng-template #rowTemplate let-row="row">
+<ng-template #rowMenuTemplate>
+  <span class="trmrk-menu-item">Some action</span>
+</ng-template>
+
+<ng-template #rowTemplate let-row="row" let-idx="idx">
   @if (panelListService) {
   <trmrk-panel-list-item
     #listItems
     [trmrkMainText]="row.item.data.name"
     [ngClass]="['trmrk-list-item']"
+    [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
     [trmrkLeadingMatIconName]="'description'"
     [trmrkIsSelectable]="panelListService.rowsAreSelectable"
     [trmrkIsSelected]="row.item.isSelected"
-    (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, row.item.data.id)"
-    (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, row.item.data.id)"
-    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowIconMouseDownOrTouchStart($event, row.item.data.id)"
+    [trmrkIsFocused]="row.item.isFocused"
+    (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, idx)"
+    (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, idx)"
+    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowIconMouseDownOrTouchStart($event, idx)"
+    trmrkTouchStartOrMouseDownD
+    (trmrkTouchStartOrMouseDown)="panelListService.rowMouseDownOrTouchStart($event, idx)"
     [trmrkInputData]="{id: row.item.data.id}"
   ></trmrk-panel-list-item>
   }
 </ng-template>
 
-<ng-template #visuallyMovingRowTemplate let-row="row">
+<ng-template #visuallyMovingRowTemplate let-row="row" let-idx="idx">
   @if (panelListService) {
   <trmrk-panel-list-item
     #currentlyMovingListItems
