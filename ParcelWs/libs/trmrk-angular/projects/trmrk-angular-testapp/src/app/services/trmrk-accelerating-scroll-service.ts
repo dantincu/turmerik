@@ -24,7 +24,9 @@ export class TrmrkAcceleratingScrollService {
 
   scroll() {
     if (this.accelerate !== 0) {
-      if (this.accelerate * this.scrollStep >= 0) {
+      if (this.scrollStep === 0) {
+        this.scrollStep = this.accelerate * this.minScrollStep;
+      } else if (this.accelerate * this.scrollStep > 0) {
         this.scrollStep *= this.incSpeedFactor;
       } else {
         this.scrollStep = Math.round(this.scrollStep / this.incSpeedFactor);
