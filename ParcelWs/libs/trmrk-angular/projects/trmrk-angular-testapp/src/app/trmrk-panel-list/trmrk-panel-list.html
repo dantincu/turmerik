@@ -1,0 +1,58 @@
+<div
+  #panelList
+  [ngClass]="['trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', trmrkCssClass ?? '', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
+>
+  <div
+    class="trmrk-rows-menu-trigger"
+    #rowsMenuTrigger="matMenuTrigger"
+    #rowsMenuTriggerEl
+    [matMenuTriggerFor]="null"
+  ></div>
+  <mat-menu class="trmrk-menu" dense #rowsMenu>
+    <ng-container *ngTemplateOutlet="trmrkRowMenuTemplate"></ng-container>
+  </mat-menu>
+
+  @for (row of panelListService.rows; track row.id; let idx = $index) { @if
+  (row.item && !row.hideItem) {
+  <ng-container
+    *ngTemplateOutlet="trmrkRowTemplate; context: { row, idx }"
+  ></ng-container>
+  } @if (row.isBlankPlaceholder) {
+  <trmrk-cancel-context-menu
+    [ngClass]="['trmrk-horiz-strip trmrk-blank-placeholder', panelListService.slideOutVisuallyMovingRowPlaceholders ? 'trmrk-slide-out' : '']"
+  ></trmrk-cancel-context-menu>
+  } @if (row.isMultipleSelectedPlaceholder) {
+  <trmrk-cancel-context-menu
+    class="trmrk-horiz-strip trmrk-multiple-selected-placeholder"
+    ><div class="trmrk-user-text">
+      {{panelListService.slideOutVisuallyMovingRowPlaceholders ? '' +
+      row.multipleSelectedCount + ' item' + (row.multipleSelectedCount! > 1 ?
+      's' : '') + ' displaced' : ''}}
+    </div>
+  </trmrk-cancel-context-menu>
+  } } @if (panelListService.visuallyMovingRows) { @for (row of
+  panelListService.visuallyMovingRows; track row.id; let idx = $index) {
+  <ng-container
+    *ngTemplateOutlet="trmrkVisuallyMovingRowTemplate; context: { row, idx }"
+  ></ng-container>
+  }
+  <ng-template #movingAggregateRowLeadingTemplate>
+    <div class="trmrk-custom-svg-icon-btn" [innerHtml]="dragPanIcon"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+  </ng-template>
+  <trmrk-horiz-strip
+    trmrkCancelContextMenu
+    #movingAggregateRowEl
+    [trmrkMainText]="'Moving ' + panelListService.selectedRowsCount + ' item' + (panelListService.selectedRowsCount > 1 ? 's' : '')"
+    [ngClass]="['trmrk-moving-aggregate-row', panelListService.showMovingAggregateRow ? '' : 'trmrk-hidden']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingTemplate]="movingAggregateRowLeadingTemplate"
+  >
+    Moving {{panelListService.selectedRowsCount}}
+    item{{panelListService.selectedRowsCount > 1 ? 's' : ''}}
+  </trmrk-horiz-strip>
+  }
+</div>

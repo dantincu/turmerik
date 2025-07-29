@@ -33,7 +33,7 @@ export class TrmrkAcceleratingScrollControl implements OnChanges {
   @Input() trmrkIntervalMillis = 500;
   @Input() trmrkIncSpeedFactor = 2;
   @Input() trmrkMinScrollStep = 500;
-  @Input() trmrkScrollable!: HTMLElement;
+  @Input() trmrkScrollable!: () => HTMLElement;
   @Input() trmrkScrollBehavior: 'auto' | 'instant' | 'smooth' = 'smooth';
 
   @ViewChild('scrollUpBtn', { read: ElementRef<HTMLButtonElement> })
@@ -53,7 +53,7 @@ export class TrmrkAcceleratingScrollControl implements OnChanges {
       this.scrollDownBtn.nativeElement,
     ];
 
-    this.acceleratingScrollService.scrollableElem = () => this.trmrkScrollable;
+    this.acceleratingScrollService.scrollableElem = this.trmrkScrollable;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

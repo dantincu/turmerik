@@ -18,8 +18,7 @@ import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule, MatIconButton } from '@angular/material/button';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
 
 import {
   TrmrkPanelListItem,
@@ -29,7 +28,6 @@ import {
 
 import { whenChanged } from 'trmrk-angular';
 
-import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cancel-context-menu';
 
@@ -41,25 +39,20 @@ import {
 import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../directives/trmrk-cancel-context-menu';
 
 @Component({
-  selector: 'trmrk-list-view',
+  selector: 'trmrk-panel-list',
   imports: [
     MatIconModule,
     MatButtonModule,
-    MatIconButton,
-    MatCheckbox,
     MatMenuModule,
     CommonModule,
     TrmrkHorizStrip,
-    TrmrkAcceleratingScrollControl,
-    TrmrkAcceleratingScrollPopover,
     TrmrkCancelContextMenu,
     TrmrkCancelContextMenuDirective,
   ],
-  templateUrl: './trmrk-list-view.html',
-  styleUrl: './trmrk-list-view.scss',
-  providers: [TrmrkPanelListService],
+  templateUrl: './trmrk-panel-list.html',
+  styleUrl: './trmrk-panel-list.scss',
 })
-export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
+export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
   @Input() trmrkCssClass: string | null = null;
   @Input() trmrkEntities!: any[];
   @Input() trmrkEntityKeyPropName = 'id';
@@ -70,30 +63,24 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   @Input() trmrkRowTemplate!: TemplateRef<any>;
   @Input() trmrkVisuallyMovingRowTemplate!: TemplateRef<any>;
   @Input() trmrkListItems!: () => QueryList<TrmrkPanelListItem>;
+  @Input() topHorizStrip!: () => HTMLElement;
   @Input() trmrkVisuallyMovingListItems!: () => QueryList<TrmrkPanelListItem>;
+
+  @Input()
+  trmrkUpAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover;
+
+  @Input()
+  trmrkDownAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover;
 
   @Output() trmrkRowsUpdated = new EventEmitter<
     TrmrkPanelListServiceRow<any>[]
   >();
 
-  @Output() trmrkPanelListService = new EventEmitter<
-    TrmrkPanelListService<any, TrmrkPanelListItem>
-  >();
-
-  @ViewChild('listView')
-  listView!: ElementRef<HTMLDivElement>;
-
-  @ViewChild('topHorizStrip')
-  topHorizStrip!: ElementRef<HTMLDivElement>;
+  @ViewChild('panelList')
+  panelList!: ElementRef<HTMLDivElement>;
 
   @ViewChild('movingAggregateRowEl')
   movingAggregateRowEl!: TrmrkHorizStrip;
-
-  @ViewChild('upAcceleratingScrollPopover')
-  upAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
-
-  @ViewChild('downAcceleratingScrollPopover')
-  downAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
 
   @ViewChild('rowsMenuTrigger', { read: MatMenuTrigger })
   rowsMenuTrigger!: MatMenuTrigger;
@@ -106,10 +93,8 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
 
   dragPanIcon: SafeHtml;
 
-  private listItems!: () => QueryList<TrmrkPanelListItem>;
-  private currentlyMovingListItems!: () => QueryList<TrmrkPanelListItem>;
-
   constructor(
+    public hostEl: ElementRef<HTMLElement>,
     public panelListService: TrmrkPanelListService<any, TrmrkPanelListItem>,
     private sanitizer: DomSanitizer
   ) {
@@ -121,7 +106,6 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.rowsMenuTrigger.menu = this.rowsMenu;
-      this.trmrkPanelListService.emit(this.panelListService);
     }, 0);
   }
 
@@ -129,34 +113,22 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
     setTimeout(() => {
       whenChanged(
         changes,
-        () => this.trmrkListItems,
-        (value) => (this.listItems = value)
-      );
-
-      whenChanged(
-        changes,
-        () => this.trmrkVisuallyMovingListItems,
-        (value) => (this.currentlyMovingListItems = value)
-      );
-
-      whenChanged(
-        changes,
         () => this.trmrkEntities,
         (entities) => {
           this.panelListService.reset();
 
           this.panelListService.setup({
-            getListView: () => this.listView.nativeElement,
-            getListItems: this.listItems,
+            getPanelList: () => this.panelList.nativeElement,
+            getListItems: this.trmrkListItems,
             rowsMenuTriggerEl: () => this.rowsMenuTriggerEl.nativeElement,
             rowsMenuTrigger: () => this.rowsMenuTrigger,
             rowsMenu: () => this.rowsMenu,
-            getVisuallyMovingListItems: this.currentlyMovingListItems,
-            getTopHorizStrip: () => this.topHorizStrip.nativeElement,
-            getUpAcceleratingScrollPopover: () =>
-              this.upAcceleratingScrollPopover,
-            getDownAcceleratingScrollPopover: () =>
-              this.downAcceleratingScrollPopover,
+            getVisuallyMovingListItems: this.trmrkVisuallyMovingListItems,
+            getTopHorizStrip: this.topHorizStrip,
+            getUpAcceleratingScrollPopover:
+              this.trmrkUpAcceleratingScrollPopover,
+            getDownAcceleratingScrollPopover:
+              this.trmrkDownAcceleratingScrollPopover,
             getMovingAggregateRowEl: () => this.movingAggregateRowEl,
             entities,
             idPropName: this.trmrkEntityKeyPropName,
@@ -174,8 +146,4 @@ export class TrmrkListView implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {}
-
-  rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
-    this.panelListService.rowsMasterCheckBoxToggled(event);
-  }
 }

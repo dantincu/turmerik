@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrmrkListView } from './trmrk-list-view';
+import { TrmrkPanelList } from './trmrk-panel-list';
 
 describe('TrmrkListView', () => {
-  let component: TrmrkListView;
-  let fixture: ComponentFixture<TrmrkListView>;
+  let component: TrmrkPanelList;
+  let fixture: ComponentFixture<TrmrkPanelList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrmrkListView]
-    })
-    .compileComponents();
+      imports: [TrmrkPanelList],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(TrmrkListView);
+    fixture = TestBed.createComponent(TrmrkPanelList);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

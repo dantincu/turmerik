@@ -36,7 +36,7 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
-import { CompaniesListView } from '../companies-list-view/companies-list-view';
+import { CompaniesAppPanel } from '../companies-app-panel/companies-app-panel';
 import { ToggleAppBarService } from '../services/toggle-app-bar-service';
 
 import { companies } from '../services/companies';
@@ -62,7 +62,7 @@ import { companies } from '../services/companies';
     TrmrkPanelListItem,
     TrmrkTreeView,
     TrmrkThinHorizStrip,
-    CompaniesListView,
+    CompaniesAppPanel,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
@@ -71,7 +71,7 @@ import { companies } from '../services/companies';
 export class HomePage implements OnDestroy {
   @ViewChild('appBar') appBar!: TrmrkAppBar;
 
-  @ViewChild('appPanel') appPanel!: ElementRef<HTMLDivElement>;
+  @ViewChild('appPageContent') appPageContent!: ElementRef<HTMLDivElement>;
 
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 
@@ -132,7 +132,7 @@ export class HomePage implements OnDestroy {
     );
 
     this.toggleAppBarService.init({
-      getAppPanelElem: () => this.appPanel.nativeElement,
+      getAppPanelElem: () => this.appPageContent.nativeElement,
     });
 
     this.treeViewData = this.getTreeViewData();

@@ -51,7 +51,7 @@ export interface TrmrkPanelListServiceItemData<TEntity> {
 }
 
 export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
-  getListView: () => HTMLElement;
+  getPanelList: () => HTMLElement;
   getListItems: () => QueryList<TItem>;
   rowsMenuTriggerEl: () => HTMLElement;
   rowsMenuTrigger: () => MatMenuTrigger;
@@ -88,7 +88,7 @@ interface TrmrkPanelListServiceRowX<TEntity>
 
 @Injectable()
 export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
-  getListView!: () => HTMLElement;
+  getPanelList!: () => HTMLElement;
   getListItems!: () => QueryList<TItem>;
   rowsMenuTriggerEl!: () => HTMLElement;
   rowsMenuTrigger!: () => MatMenuTrigger;
@@ -146,14 +146,16 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   constructor(
     private appStateService: AppStateService,
     private appBarMapService: AppBarMapService
-  ) {}
+  ) {
+    console.log('TrmrkPanelListService', new Date());
+  }
 
   ngOnDestroy(): void {
     this.reset();
   }
 
   setup(args: TrmrkPanelListServiceSetupArgs<TEntity, TItem>) {
-    this.getListView = args.getListView;
+    this.getPanelList = args.getPanelList;
     this.getListItems = args.getListItems;
     this.rowsMenuTriggerEl = args.rowsMenuTriggerEl;
     this.rowsMenuTrigger = args.rowsMenuTrigger;
@@ -496,13 +498,13 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           );
           this.isMovingSelectedRows = true;
           this.visuallyMovingMainRowIdx = idx;
-          const listView = this.getListView();
-          listView.classList.add('trmrk-no-touch-scroll');
+          const panelList = this.getPanelList();
+          panelList.classList.add('trmrk-no-touch-scroll');
 
           setTimeout(() => {
             if (this.isMovingSelectedRows) {
               this.beforeMovingSelectedRowsListViewScrollTop =
-                listView.scrollTop;
+                panelList.scrollTop;
 
               this.iterateVisuallyMovingItems(
                 (item, itemHostEl, visuallyMovingRow, i) => {
@@ -579,9 +581,9 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   }
 
   private getVisuallyMovingRows(coords: TouchOrMouseCoords, idx: any) {
-    const listView = this.getListView();
-    const scrollTop = listView.scrollTop;
-    const height = listView.offsetHeight;
+    const panelList = this.getPanelList();
+    const scrollTop = panelList.scrollTop;
+    const height = panelList.offsetHeight;
 
     const startY = scrollTop;
     const endY = scrollTop + height;
@@ -696,8 +698,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.visuallyMovingMainRowIdx = null;
     this.appStateService.showAppBar.next(true);
 
-    const listView = this.getListView?.call(this);
-    listView?.classList.remove('trmrk-no-touch-scroll');
+    const panelList = this.getPanelList?.call(this);
+    panelList?.classList.remove('trmrk-no-touch-scroll');
 
     this.acceleratingPopoverPads = null;
     this.acceleratingScrollPadIdx = -1;
@@ -718,12 +720,12 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     visuallyMovingRow: TrmrkPanelListServiceRowX<TEntity>,
     diffY: number = 0
   ) {
-    const listView = this.getListView();
+    const panelList = this.getPanelList();
 
     const topPx =
       visuallyMovingRow.offsetTop +
       Math.round(diffY) +
-      listView.scrollTop -
+      panelList.scrollTop -
       this.beforeMovingSelectedRowsListViewScrollTop! +
       this.appBarHeight -
       (this.appBarMapService.getCurrent()?.offsetHeight ?? 0);
