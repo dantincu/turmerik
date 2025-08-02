@@ -76,9 +76,8 @@ companies-app-panel {
 
     .trmrk-panel-list {
       position: relative;
-      height: 100%;
       width: 100%;
-      height: calc(100% - 80px);
+      height: calc(100% - 40px);
       box-sizing: border-box;
 
       &.trmrk-has-accelerating-popovers {
