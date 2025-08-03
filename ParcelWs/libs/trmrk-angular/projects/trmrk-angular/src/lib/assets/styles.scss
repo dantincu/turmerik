@@ -275,7 +275,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
-@keyframes trmrk-app-bar-shown {
+@keyframes trmrk-app-bar-show {
   from {
     height: 0;
     padding: 0;
@@ -286,7 +286,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 }
 
-@keyframes trmrk-app-bar-hidden {
+@keyframes trmrk-app-bar-hide {
   from {
     height: 50px;
   }
@@ -302,14 +302,14 @@ a[mat-icon-button].trmrk-icon-btn:link {
   padding: 6px;
   overflow-y: hidden;
 
-  &.trmrk-shown {
-    animation: trmrk-app-bar-shown 0.1s ease-in-out;
+  &.trmrk-show {
+    animation: trmrk-app-bar-show 0.1s ease-in-out;
   }
 
-  &.trmrk-hidden {
+  &.trmrk-hide {
     height: 0;
     padding: 0;
-    animation: trmrk-app-bar-hidden 0.1s ease-in-out;
+    animation: trmrk-app-bar-hide 0.1s ease-in-out;
   }
 
   .trmrk-icon-btn {

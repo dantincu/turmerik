@@ -30,12 +30,12 @@ export class ToggleAppBarServiceBase<
       const appPanelElem = this.getAppPanelElem();
 
       if (appBarElem) {
-        appBarElem.classList.remove('trmrk-shown', 'trmrk-hidden');
+        appBarElem.classList.remove('trmrk-show', 'trmrk-hide');
 
         if (showAppBar) {
-          appBarElem.classList.add('trmrk-shown');
+          appBarElem.classList.add('trmrk-show');
         } else {
-          appBarElem.classList.add('trmrk-hidden');
+          appBarElem.classList.add('trmrk-hide');
         }
       }
 
