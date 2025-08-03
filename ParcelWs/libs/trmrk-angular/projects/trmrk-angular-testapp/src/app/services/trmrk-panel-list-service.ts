@@ -61,6 +61,17 @@ export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   getUpAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getDownAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getMovingAggregateRowEl: () => TrmrkHorizStrip | null;
+  toggleAppBar?:
+    | ((
+        svc: TrmrkPanelListService<TEntity, TItem>,
+        show: boolean
+      ) => void | any | unknown)
+    | null
+    | undefined;
+  getAppBarHeight?:
+    | ((svc: TrmrkPanelListService<TEntity, TItem>) => number)
+    | null
+    | undefined;
   entities: TEntity[];
   rows?: TrmrkPanelListServiceRow<TEntity>[] | null | undefined;
   idPropName?: string | null | undefined;
@@ -107,6 +118,13 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   appBarHeight!: number;
   topHorizStripHeight!: number;
 
+  toggleAppBar!: (
+    svc: TrmrkPanelListService<TEntity, TItem>,
+    show: boolean
+  ) => void | any | unknown;
+
+  getAppBarHeight!: (svc: TrmrkPanelListService<TEntity, TItem>) => number;
+
   hasPendingReorder = false;
   rowsAreSelectable!: boolean;
   rowsMasterCheckBoxIsChecked!: boolean;
@@ -145,8 +163,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   private leadingIconDragServices: DragService[] | null = null;
 
   constructor(
-    private appStateService: AppStateService,
-    private appBarMapService: AppBarMapService
+    public appStateService: AppStateService,
+    public appBarMapService: AppBarMapService
   ) {}
 
   ngOnDestroy(): void {
@@ -165,6 +183,12 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.getDownAcceleratingScrollPopover =
       args.getDownAcceleratingScrollPopover;
     this.getMovingAggregateRowEl = args.getMovingAggregateRowEl;
+    this.toggleAppBar =
+      args.toggleAppBar ??
+      ((svc, show) => svc.appStateService.showAppBar.next(show));
+    this.getAppBarHeight =
+      args.getAppBarHeight ??
+      ((svc) => svc.appBarMapService.getCurrent()?.offsetHeight ?? 0);
     this.entities = args.entities;
     this.idPropName = args.idPropName ?? 'id';
     this.componentInputDataPropName =
@@ -313,7 +337,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           this.slideOutVisuallyMovingRowPlaceholders = true;
           this.showVisuallyMovingRows = false;
           this.showMovingAggregateRow = true;
-          this.appStateService.showAppBar.next(false);
+          this.toggleAppBar(this, false);
         }
       }, this.selectedRowsReorderAggRowAnimationStepMillis);
     } else {
@@ -494,8 +518,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           this.leadingIconDragServices![idx].onTouchStartOrMouseDown(event);
 
         if (this.rowContentMouseDownOrTouchStartCoords) {
-          this.appBarHeight =
-            this.appBarMapService.getCurrent()?.offsetHeight ?? 0;
+          this.appBarHeight = this.getAppBarHeight(this);
 
           this.visuallyMovingRows = this.getVisuallyMovingRows(
             this.rowContentMouseDownOrTouchStartCoords,
@@ -701,7 +724,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.showMovingAggregateRow = false;
     this.slideOutVisuallyMovingRowPlaceholders = false;
     this.visuallyMovingMainRowIdx = null;
-    this.appStateService.showAppBar.next(true);
+    this.toggleAppBar?.call(this, this, true);
 
     const panelList = this.getPanelList?.call(this);
     panelList?.classList.remove('trmrk-no-touch-scroll');
@@ -733,7 +756,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       panelList.scrollTop -
       this.beforeMovingSelectedRowsListViewScrollTop! +
       this.appBarHeight -
-      (this.appBarMapService.getCurrent()?.offsetHeight ?? 0);
+      this.getAppBarHeight(this);
 
     itemHostEl.style.top = `${topPx}px`;
   }

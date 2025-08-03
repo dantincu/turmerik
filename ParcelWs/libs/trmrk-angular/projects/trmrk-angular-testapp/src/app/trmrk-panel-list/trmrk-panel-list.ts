@@ -119,7 +119,7 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
       whenChanged(
         changes,
         () => this.trmrkEntities,
-        (entities) => {
+        () => {
           this.panelListService.reset();
 
           this.panelListService.setup({
@@ -135,7 +135,7 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
             getDownAcceleratingScrollPopover:
               this.trmrkDownAcceleratingScrollPopover,
             getMovingAggregateRowEl: () => this.movingAggregateRowEl,
-            entities,
+            entities: this.trmrkEntities,
             idPropName: this.trmrkEntityKeyPropName,
             rowsSelectionIsAllowed: this.trmrkRowsSelectionIsAllowed,
             selectedRowsReorderIsAllowed:
