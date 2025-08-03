@@ -1,7 +1,7 @@
 import {
   Component,
   ViewChild,
-  ViewChildren,
+  HostBinding,
   ElementRef,
   QueryList,
   EventEmitter,
@@ -12,6 +12,7 @@ import {
   SimpleChanges,
   Output,
   TemplateRef,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
@@ -51,6 +52,7 @@ import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../di
   ],
   templateUrl: './trmrk-panel-list.html',
   styleUrl: './trmrk-panel-list.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
   @Input() trmrkCssClass: string | null = null;
@@ -91,11 +93,14 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
   @ViewChild('rowsMenu')
   rowsMenu!: MatMenu;
 
+  @HostBinding('class.trmrk-scrollable') scrollableCssClass = true;
+  @HostBinding('class.trmrk-scrollable-y') scrollableYCssClass = true;
+
   dragPanIcon: SafeHtml;
 
   constructor(
     public hostEl: ElementRef<HTMLElement>,
-    public panelListService: TrmrkPanelListService<any, TrmrkPanelListItem>,
+    public panelListService: TrmrkPanelListService<any, any>,
     private sanitizer: DomSanitizer
   ) {
     this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(

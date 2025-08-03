@@ -1,94 +1,52 @@
-<div class="trmrk-app-panel trmrk-companies-app-panel">
-  @if (!panelListService.showAcceleratingScrollPopovers) {
-  <div class="trmrk-horiz-strip trmrk-top-horiz-strip" #topHorizStrip>
-    @if (panelListService.rowsAreSelectable) {
-    <button mat-icon-button class="trmrk-icon-btn">
-      <mat-checkbox
-        class="trmrk-checkbox"
-        (change)="rowsMasterCheckBoxToggled($event)"
-        [checked]="panelListService.rowsMasterCheckBoxIsChecked"
-      ></mat-checkbox>
-    </button>
-    }
-    <trmrk-accelerating-scroll-control
-      [trmrkScrollable]="getPanelList"
-    ></trmrk-accelerating-scroll-control>
-  </div>
-  } @if (panelListService.showAcceleratingScrollPopovers) {
-  <trmrk-accelerating-scroll-popover
-    #upAcceleratingScrollPopover
-    [trmrkFocusedPadIdx]="panelListService.acceleratingScrollPadIdx"
-  ></trmrk-accelerating-scroll-popover>
-  }
+<trmrk-list-app-panel
+  [trmrkCssClass]="'trmrk-companies-app-panel'"
+  [trmrkEntities]="entities"
+  [trmrkListItems]="getListItems"
+  [trmrkVisuallyMovingListItems]="getCurrentlyMovingListItems"
+  [trmrkRowsSelectionIsAllowed]="true"
+  [trmrkSelectedRowsReorderIsAllowed]="true"
+  [trmrkSelectedRowsReorderAggRowVertIsOriented]="true"
+  (trmrkRowsUpdated)="rowsUpdated($event)"
+  [trmrkRowMenuTemplate]="rowMenuTemplate"
+  [trmrkRowTemplate]="rowTemplate"
+  [trmrkVisuallyMovingRowTemplate]="visuallyMovingRowTemplate"
+></trmrk-list-app-panel>
 
-  <trmrk-panel-list
-    #panelList
-    [topHorizStrip]="getTopHorizStrip"
-    [trmrkUpAcceleratingScrollPopover]="getUpAcceleratingScrollPopover"
-    [trmrkDownAcceleratingScrollPopover]="getDownAcceleratingScrollPopover"
-    [trmrkEntities]="entities"
-    [trmrkRowsSelectionIsAllowed]="true"
-    [trmrkSelectedRowsReorderIsAllowed]="true"
-    [trmrkSelectedRowsReorderAggRowVertIsOriented]="true"
-    [trmrkListItems]="getListItems"
-    [trmrkVisuallyMovingListItems]="getCurrentlyMovingListItems"
-    (trmrkRowsUpdated)="rowsUpdated($event)"
-    [trmrkRowMenuTemplate]="rowMenuTemplate"
-    [trmrkRowTemplate]="rowTemplate"
-    [trmrkVisuallyMovingRowTemplate]="visuallyMovingRowTemplate"
-  ></trmrk-panel-list>
+<ng-template #rowMenuTemplate>
+  <span class="trmrk-menu-item trmrk-text-menu-item">Some action</span>
+</ng-template>
 
-  @if (!panelListService.showAcceleratingScrollPopovers) {
-  <!--div class="trmrk-horiz-strip trmrk-bottom-horiz-strip"></div-->
-  } @if (panelListService.showAcceleratingScrollPopovers) {
-  <trmrk-accelerating-scroll-popover
-    #downAcceleratingScrollPopover
-    [trmrkHasCancelBtn]="true"
-    [trmrkFocusedPadIdx]="panelListService.acceleratingScrollPadIdx - 3"
-    [trmrkCancelBtnIsFocused]="panelListService.downAcceleratingPopoverCancelBtnIsFocused"
-  ></trmrk-accelerating-scroll-popover>
-  }
+<ng-template #rowTemplate let-row="row" let-idx="idx">
+  <trmrk-panel-list-item
+    #listItems
+    [trmrkMainText]="row.item.data.name"
+    [ngClass]="['trmrk-list-item']"
+    [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
+    [trmrkLeadingMatIconName]="'description'"
+    [trmrkIsSelectable]="panelListService.rowsAreSelectable"
+    [trmrkIsSelected]="row.item.isSelected"
+    [trmrkIsFocused]="row.item.isFocused"
+    (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, idx)"
+    (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, idx)"
+    (trmrkLeadingBtnShortPressOrLeftClick)="rowIconShortPressOrLeftClick($event, idx)"
+    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowLeadingIconMouseDownOrTouchStart($event, idx)"
+    (trmrkTextLongPressOrRightClick)="panelListService.rowTextLongPresOrRightClick($event, idx)"
+    (trmrkTextShortPressOrLeftClick)="rowTextShortPressOrLeftClick($event, idx)"
+    (trmrkTouchStartOrMouseDown)="panelListService.rowMouseDownOrTouchStart($event, idx)"
+    [trmrkInputData]="{id: row.item.data.id}"
+  ></trmrk-panel-list-item>
+</ng-template>
 
-  <ng-template #rowMenuTemplate>
-    <span class="trmrk-menu-item trmrk-text-menu-item">Some action</span>
-  </ng-template>
-
-  <ng-template #rowTemplate let-row="row" let-idx="idx">
-    @if (panelListService) {
-    <trmrk-panel-list-item
-      #listItems
-      [trmrkMainText]="row.item.data.name"
-      [ngClass]="['trmrk-list-item']"
-      [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
-      [trmrkLeadingMatIconName]="'description'"
-      [trmrkIsSelectable]="panelListService.rowsAreSelectable"
-      [trmrkIsSelected]="row.item.isSelected"
-      [trmrkIsFocused]="row.item.isFocused"
-      (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, idx)"
-      (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, idx)"
-      (trmrkLeadingBtnShortPressOrLeftClick)="rowIconShortPressOrLeftClick($event, idx)"
-      (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowLeadingIconMouseDownOrTouchStart($event, idx)"
-      (trmrkTextLongPressOrRightClick)="panelListService.rowTextLongPresOrRightClick($event, idx)"
-      (trmrkTextShortPressOrLeftClick)="rowTextShortPressOrLeftClick($event, idx)"
-      (trmrkTouchStartOrMouseDown)="panelListService.rowMouseDownOrTouchStart($event, idx)"
-      [trmrkInputData]="{id: row.item.data.id}"
-    ></trmrk-panel-list-item>
-    }
-  </ng-template>
-
-  <ng-template #visuallyMovingRowTemplate let-row="row" let-idx="idx">
-    @if (panelListService) {
-    <trmrk-panel-list-item
-      #currentlyMovingListItems
-      [trmrkMainText]="row.item!.data.name"
-      [ngClass]="['trmrk-list-item trmrk-floating-list-item', panelListService.showVisuallyMovingRows ? '' : 'trmrk-hidden']"
-      [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
-      [trmrkLeadingMatIconName]="'description'"
-      [trmrkIsSelectable]="true"
-      [trmrkIsSelected]="true"
-      [trmrkIsFocused]="row.item.isFocused"
-      [trmrkInputData]="{id: row.item.data.id}"
-    ></trmrk-panel-list-item>
-    }
-  </ng-template>
-</div>
+<ng-template #visuallyMovingRowTemplate let-row="row" let-idx="idx">
+  <trmrk-panel-list-item
+    #currentlyMovingListItems
+    [trmrkMainText]="row.item!.data.name"
+    [ngClass]="['trmrk-list-item trmrk-floating-list-item', panelListService.showVisuallyMovingRows ? '' : 'trmrk-hidden']"
+    [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
+    [trmrkLeadingMatIconName]="'description'"
+    [trmrkIsSelectable]="true"
+    [trmrkIsSelected]="true"
+    [trmrkIsFocused]="row.item.isFocused"
+    [trmrkInputData]="{id: row.item.data.id}"
+  ></trmrk-panel-list-item>
+</ng-template>

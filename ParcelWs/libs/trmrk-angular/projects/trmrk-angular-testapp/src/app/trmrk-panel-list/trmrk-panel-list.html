@@ -1,7 +1,4 @@
-<div
-  #panelList
-  [ngClass]="['trmrk-panel-list trmrk-scrollable trmrk-scrollable-y', trmrkCssClass ?? '', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
->
+<div #panelList [ngClass]="['trmrk-panel-list', trmrkCssClass ?? '']">
   <div
     class="trmrk-rows-menu-trigger"
     #rowsMenuTrigger="matMenuTrigger"

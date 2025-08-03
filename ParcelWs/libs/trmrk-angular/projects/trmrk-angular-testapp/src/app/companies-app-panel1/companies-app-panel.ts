@@ -1,19 +1,27 @@
 import {
   Component,
   ViewChildren,
+  ViewChild,
   QueryList,
-  ViewEncapsulation,
+  ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
-import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
+import {
+  TrmrkPanelListItem,
+  TrmrkTouchStartOrMouseDown,
+  TrmrkHorizStrip,
+} from 'trmrk-angular';
 
 import { companies } from '../services/companies';
+import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkListAppPanel } from '../trmrk-list-app-panel/trmrk-list-app-panel';
+import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
+import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 
 import {
   TrmrkPanelListService,
@@ -24,17 +32,33 @@ import {
   selector: 'companies-app-panel',
   imports: [
     CommonModule,
+    TrmrkPanelList,
     TrmrkPanelListItem,
+    TrmrkHorizStrip,
     TrmrkTouchStartOrMouseDown,
+    MatIconButton,
     MatIconModule,
-    TrmrkListAppPanel,
+    MatCheckbox,
+    TrmrkAcceleratingScrollControl,
+    TrmrkAcceleratingScrollPopover,
   ],
   templateUrl: './companies-app-panel.html',
   styleUrl: './companies-app-panel.scss',
   providers: [TrmrkPanelListService],
-  encapsulation: ViewEncapsulation.None,
 })
 export class CompaniesAppPanel {
+  @ViewChild('panelList')
+  panelList!: TrmrkPanelList;
+
+  @ViewChild('topHorizStrip')
+  topHorizStrip!: ElementRef<HTMLDivElement>;
+
+  @ViewChild('upAcceleratingScrollPopover')
+  upAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
+
+  @ViewChild('downAcceleratingScrollPopover')
+  downAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
+
   @ViewChildren('listItems')
   listItems!: QueryList<TrmrkPanelListItem>;
 
@@ -44,8 +68,18 @@ export class CompaniesAppPanel {
   listItemsColl!: QueryList<TrmrkPanelListItem>;
   currentlyMovingListItemsColl!: QueryList<TrmrkPanelListItem>;
 
+  getPanelList = () =>
+    this.panelList.hostEl.nativeElement.querySelector(
+      'trmrk-list-view'
+    ) as HTMLElement;
+
+  getTopHorizStrip = () => this.topHorizStrip.nativeElement;
+
   getListItems = () => this.listItems;
   getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
+
+  getUpAcceleratingScrollPopover = () => this.upAcceleratingScrollPopover;
+  getDownAcceleratingScrollPopover = () => this.downAcceleratingScrollPopover;
 
   entities = companies.slice(0, 200).map((name, idx) => ({
     id: idx + 1,

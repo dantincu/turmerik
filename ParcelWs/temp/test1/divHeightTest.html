@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple HTML Page</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0; /* Important: remove default body margin */
+      }
+
+      #app_root {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      #app_home_page {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      .trmrk-app-page-body {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        position: relative;
+        height: calc(100% - 50px);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app_root">
+      <div id="app_home_page">
+        <div class="trmrk-app-page-body">
+          <div
+            style="
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              position: relative;
+              background-color: #f80;
+            "
+          ></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

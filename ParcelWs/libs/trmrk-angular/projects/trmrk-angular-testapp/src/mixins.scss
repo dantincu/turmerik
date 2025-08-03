@@ -65,3 +65,18 @@
   white-space-collapse: preserve;
   line-break: anywhere;
 }
+
+@mixin rel-stretch-to-parent-size {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+
+@mixin rel-flex-stretch-to-parent-size {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 100%;
+
+  @include rel-stretch-to-parent-size();
+}

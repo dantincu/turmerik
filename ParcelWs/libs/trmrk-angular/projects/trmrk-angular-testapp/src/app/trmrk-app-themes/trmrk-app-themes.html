@@ -1,10 +1,8 @@
-<trmrk-app-bar [trmrkTitle]="'App Settings'"></trmrk-app-bar>
-
-<div class="trmrk-field">
-  <mat-checkbox (change)="onDarkModeBtnClick($event)" [checked]="isDarkMode"
-    >Dark Mode</mat-checkbox
-  >
+<trmrk-app-bar [trmrkTitle]="'App Themes'"></trmrk-app-bar>
+<div class="trmrk-app-panel trmrk-app-themes-panel">
+  
 </div>
+
 <div class="trmrk-field">
   <a mat-button [routerLink]="['/app-themes']"> App Theme </a>
 </div>

@@ -1,4 +1,10 @@
-import { Component, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -67,6 +73,7 @@ import { companies } from '../services/companies';
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
   providers: [ToggleAppBarService],
+  encapsulation: ViewEncapsulation.None,
 })
 export class HomePage implements OnDestroy {
   @ViewChild('appBar') appBar!: TrmrkAppBar;

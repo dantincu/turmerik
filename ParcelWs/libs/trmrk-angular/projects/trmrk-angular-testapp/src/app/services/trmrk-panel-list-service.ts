@@ -107,6 +107,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   appBarHeight!: number;
   topHorizStripHeight!: number;
 
+  hasPendingReorder = false;
   rowsAreSelectable!: boolean;
   rowsMasterCheckBoxIsChecked!: boolean;
   selectedRowsCount = 0;
@@ -146,9 +147,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   constructor(
     private appStateService: AppStateService,
     private appBarMapService: AppBarMapService
-  ) {
-    console.log('TrmrkPanelListService', new Date());
-  }
+  ) {}
 
   ngOnDestroy(): void {
     this.reset();
@@ -228,6 +227,10 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
           this.rowLeadingIconDragEndSubscriptions = listItems.map(() =>
             dragService.dragEnd.subscribe((_) => {
+              if (!this.downAcceleratingPopoverCancelBtnIsFocused) {
+                this.hasPendingReorder = true;
+              }
+
               this.resetVisuallyMovingRows();
             })
           );
@@ -425,6 +428,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
     if (this.selectedRowsCount === 0) {
       this.rowsAreSelectable = false;
+      this.hasPendingReorder = false;
     } else if (this.selectedRowsCount === this.rows.length) {
       this.rowsMasterCheckBoxIsChecked = true;
     } else {
@@ -444,6 +448,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     if (!event.checked) {
       this.rowsAreSelectable = false;
       this.selectedRowsCount = 0;
+      this.hasPendingReorder = false;
     } else {
       this.selectedRowsCount = this.rows.length;
     }
