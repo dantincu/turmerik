@@ -69,24 +69,26 @@
     >{{popupClosedMessage}}
   </div>
 
-  <div class="trmrk-panel-list">
-    @for (i of [0, 1, 2]; track $index;) {
-    <trmrk-thin-horiz-strip
-      [trmrkText]="getCompaniesText(20 * i, 20 * i + 10)"
-      class="my-thin-horiz-strip"
-      [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
-    ></trmrk-thin-horiz-strip>
-    <trmrk-thin-horiz-strip
-      [trmrkText]="getCompaniesText(20 * i + 10, 20 * i + 15)"
-      class="my-thin-horiz-strip"
-      [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
-    ></trmrk-thin-horiz-strip>
-    <trmrk-thin-horiz-strip
-      [trmrkText]="getCompaniesText(20 * i + 15, 20 * i + 18)"
-      class="my-thin-horiz-strip"
-      [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
-    ></trmrk-thin-horiz-strip>
-    }
+  <div [ngStyle]="{}">
+    <div class="trmrk-panel-list">
+      @for (i of [0, 1, 2]; track $index;) {
+      <trmrk-thin-horiz-strip
+        [trmrkText]="getCompaniesText(20 * i, 20 * i + 10)"
+        class="my-thin-horiz-strip"
+        [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+      ></trmrk-thin-horiz-strip>
+      <trmrk-thin-horiz-strip
+        [trmrkText]="getCompaniesText(20 * i + 10, 20 * i + 15)"
+        class="my-thin-horiz-strip"
+        [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+      ></trmrk-thin-horiz-strip>
+      <trmrk-thin-horiz-strip
+        [trmrkText]="getCompaniesText(20 * i + 15, 20 * i + 18)"
+        class="my-thin-horiz-strip"
+        [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+      ></trmrk-thin-horiz-strip>
+      }
+    </div>
   </div>
   @for (i of [0, 1, 2]; track $index; let idx1 = $index;) { @for (dStr of
   [['12kB', '2025-06-09 13:00', { text: 'I love american V8 muscle cars' }],
@@ -112,88 +114,90 @@
   ></trmrk-horiz-strip
   >}
 
-  <div class="trmrk-panel-list">
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-    ></trmrk-panel-list-item>
+  <div [ngStyle]="{}">
+    <div class="trmrk-panel-list">
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-      [trmrkColorLabelColor]="'#F80'"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkColorLabelColor]="'#F80'"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item trmrk-is-focused']"
-      [trmrkCssClass]="['trmrk-has-border-x2']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-focused']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-      [trmrkIsAppBar]="true"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsAppBar]="true"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item trmrk-is-selected']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-      [trmrkIsSelectable]="true"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-selected']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item trmrk-is-selected trmrk-is-focused']"
-      [trmrkCssClass]="['trmrk-has-border-x2']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-      [trmrkIsSelectable]="true"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-selected trmrk-is-focused']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item trmrk-is-current']"
-      [trmrkCssClass]="['trmrk-has-border-x2']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-selected']"
-      [trmrkCssClass]="['trmrk-has-border-x2']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-      [trmrkIsSelectable]="true"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-selected']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused']"
-      [trmrkCssClass]="['trmrk-has-border-x2']"
-      [trmrkLeadingIconTemplate]="fileItemIcon"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
 
-    <trmrk-panel-list-item
-      [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
-      [trmrkDetailsTextParts]="dStr"
-      [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused trmrk-is-selected']"
-      [trmrkCssClass]="['trmrk-has-border-x2']"
-      [trmrkLeadingMatIconName]="'description'"
-      [trmrkIsSelectable]="true"
-    ></trmrk-panel-list-item>
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused trmrk-is-selected']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingMatIconName]="'description'"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
+    </div>
   </div>
   }
   <trmrk-horiz-strip

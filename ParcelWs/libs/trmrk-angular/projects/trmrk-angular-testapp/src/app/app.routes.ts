@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Routes, Router } from '@angular/router';
 
 import { createDevPageRoutes } from 'trmrk-angular';
 
@@ -21,6 +22,16 @@ export const routes: Routes = [
   {
     path: 'reset-app',
     component: TrmrkResetApp,
+  },
+  {
+    path: 'resetapp',
+    redirectTo: () => {
+      const router = inject(Router);
+
+      return router.createUrlTree(['/reset-app'], {
+        queryParams: { reset: 'true' },
+      });
+    },
   },
   {
     path: '',

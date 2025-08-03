@@ -1,15 +1,34 @@
 <trmrk-app-bar [trmrkTitle]="'App Settings'"></trmrk-app-bar>
 
-<div class="trmrk-field">
-  <mat-checkbox (change)="onDarkModeBtnClick($event)" [checked]="isDarkMode"
-    >Dark Mode</mat-checkbox
-  >
-</div>
-<div class="trmrk-field">
-  <a mat-button [routerLink]="['/app-themes']"> App Theme </a>
-</div>
-<div class="trmrk-field">
-  <a mat-button [routerLink]="['/reset-app']" [queryParams]="{ reset: 'true' }">
-    Reset App
-  </a>
+<div class="trmrk-app-page-body trmrk-height-diff-x0">
+  <div class="trmrk-page-body trmrk-page-body-thin">
+    <div class="trmrk-field">
+      <mat-checkbox (change)="onDarkModeBtnClick($event)" [checked]="isDarkMode"
+        >Dark Mode</mat-checkbox
+      >
+    </div>
+    <div class="trmrk-field">
+      <a mat-button [routerLink]="['/app-themes']" class="trmrk-icon-link"
+        ><mat-icon class="trmrk-icon">palette</mat-icon> App Theme
+      </a>
+    </div>
+    <div class="trmrk-field">
+      <!--a
+        mat-button
+        [routerLink]="['/reset-app']"
+        [queryParams]="{ reset: 'true' }"
+        class="trmrk-icon-link"
+      >
+        <div class="trmrk-custom-svg-icon-wrapper" [innerHtml]="resetAltIcon"></div>
+        Reset App
+      </a-->
+      <a mat-button [routerLink]="['/resetapp']" class="trmrk-icon-link">
+        <div
+          class="trmrk-custom-svg-icon-wrapper"
+          [innerHtml]="resetAltIcon"
+        ></div>
+        Reset App
+      </a>
+    </div>
+  </div>
 </div>

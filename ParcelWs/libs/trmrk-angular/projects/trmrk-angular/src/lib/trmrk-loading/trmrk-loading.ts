@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'lib-trmrk-loading',
+  selector: 'trmrk-loading',
   imports: [],
   templateUrl: './trmrk-loading.html',
   styleUrl: './trmrk-loading.scss',

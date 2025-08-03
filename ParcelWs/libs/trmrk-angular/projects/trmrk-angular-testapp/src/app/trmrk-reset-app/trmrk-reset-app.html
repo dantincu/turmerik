@@ -21,13 +21,17 @@
   </mat-menu></ng-template
 >
 
-@if (isResetting) {
-<lib-trmrk-loading class="trmrk-loading"></lib-trmrk-loading>
-}
-<trmrk-user-message
-  class="trmrk-app-reset-success-message"
-  [trmrkMessage]="'The app has been reset'"
-  [trmrkShow]="showSuccessMessage"
-  [trmrkLevel]="0"
-  (trmrkClose)="successMessageClose()"
-></trmrk-user-message>
+<div class="trmrk-app-page-body trmrk-height-diff-x0">
+  <div class="trmrk-page-body trmrk-page-body-thin">
+    @if (isResetting) {
+    <trmrk-loading class="trmrk-loading"></trmrk-loading>
+    }
+    <trmrk-user-message
+      class="trmrk-app-reset-success-message"
+      [trmrkMessage]="'The app has been reset'"
+      [trmrkShow]="showSuccessMessage"
+      [trmrkLevel]="0"
+      (trmrkClose)="successMessageClose()"
+    ></trmrk-user-message>
+  </div>
+</div>

@@ -4,10 +4,11 @@ import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { setIsDarkModeToLocalStorage } from '../../trmrk-browser/domUtils/core';
 
-import { TrmrkAppBar } from 'trmrk-angular';
+import { TrmrkAppBar, materialIcons } from 'trmrk-angular';
 import { AppStateService } from '../services/app-state-service';
 
 @Component({
@@ -28,7 +29,12 @@ export class TrmrkSettings implements OnDestroy {
 
   isDarkMode;
 
-  constructor(private appStateService: AppStateService) {
+  resetAltIcon: SafeHtml;
+
+  constructor(
+    private appStateService: AppStateService,
+    private sanitizer: DomSanitizer
+  ) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
     this.titleContextMenu = this.titleContextMenu.bind(this);
@@ -37,6 +43,10 @@ export class TrmrkSettings implements OnDestroy {
       appStateService.isDarkMode.$obs.subscribe(this.darkModeStateChange);
 
     this.isDarkMode = this.appStateService.isDarkMode.value;
+
+    this.resetAltIcon = this.sanitizer.bypassSecurityTrustHtml(
+      materialIcons.reset_alt
+    );
   }
 
   ngOnDestroy(): void {

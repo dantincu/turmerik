@@ -123,7 +123,7 @@
     @include mixins.scrollableLight();
   }
 
-  [mat-icon-button].trmrk-icon-btn, .trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+  [mat-icon-button].trmrk-icon-btn, .trmrk-icon-btn, .trmrk-custom-svg-icon-btn, .trmrk-custom-svg-icon-wrapper, .trmrk-icon-link, [mat-button].trmrk-icon-link {
     mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
       color: #000;
       fill: #000;
@@ -244,7 +244,7 @@
     @include mixins.scrollableDark();
   }
 
-  [mat-icon-button].trmrk-icon-btn, .trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+  [mat-icon-button].trmrk-icon-btn, .trmrk-icon-btn, .trmrk-custom-svg-icon-btn, .trmrk-custom-svg-icon-wrapper, .trmrk-icon-link, [mat-button].trmrk-icon-link {
     mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
       color: #fff;
       fill: #fff;
