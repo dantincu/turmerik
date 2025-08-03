@@ -52,8 +52,6 @@ export class TrmrkAcceleratingScrollControl implements OnChanges {
       this.fakeBtn.nativeElement,
       this.scrollDownBtn.nativeElement,
     ];
-
-    this.acceleratingScrollService.scrollableElem = this.trmrkScrollable;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -73,6 +71,12 @@ export class TrmrkAcceleratingScrollControl implements OnChanges {
       changes,
       () => this.trmrkScrollBehavior,
       (value) => (this.acceleratingScrollService.scrollBehavior = value)
+    );
+
+    whenChanged(
+      changes,
+      () => this.trmrkScrollable,
+      (value) => (this.acceleratingScrollService.scrollableElem = value)
     );
   }
 

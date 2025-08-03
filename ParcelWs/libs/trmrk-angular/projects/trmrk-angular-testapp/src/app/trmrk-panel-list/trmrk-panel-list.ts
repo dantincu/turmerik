@@ -74,6 +74,21 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
   @Input()
   trmrkDownAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover;
 
+  @Input()
+  trmrkToggleAppBar?:
+    | ((
+        svc: TrmrkPanelListService<any, any>,
+        show: boolean
+      ) => void | any | unknown)
+    | null
+    | undefined;
+
+  @Input()
+  trmrkGetAppBarHeight?:
+    | ((svc: TrmrkPanelListService<any, any>) => number)
+    | null
+    | undefined;
+
   @Output() trmrkRowsUpdated = new EventEmitter<
     TrmrkPanelListServiceRow<any>[]
   >();
@@ -135,6 +150,8 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
             getDownAcceleratingScrollPopover:
               this.trmrkDownAcceleratingScrollPopover,
             getMovingAggregateRowEl: () => this.movingAggregateRowEl,
+            toggleAppBar: this.trmrkToggleAppBar,
+            getAppBarHeight: this.trmrkGetAppBarHeight,
             entities: this.trmrkEntities,
             idPropName: this.trmrkEntityKeyPropName,
             rowsSelectionIsAllowed: this.trmrkRowsSelectionIsAllowed,

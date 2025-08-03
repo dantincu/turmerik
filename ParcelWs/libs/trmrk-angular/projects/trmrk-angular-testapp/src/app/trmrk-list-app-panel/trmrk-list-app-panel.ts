@@ -80,10 +80,11 @@ export class TrmrkListAppPanel {
   listItemsColl!: QueryList<any>;
   currentlyMovingListItemsColl!: QueryList<any>;
 
-  getPanelList = () =>
-    this.panelList.hostEl.nativeElement.querySelector(
-      'trmrk-list-view'
-    ) as HTMLElement;
+  getPanelList = () => {
+    const elem = this.panelList.hostEl.nativeElement as HTMLElement;
+
+    return elem;
+  };
 
   getTopHorizStrip = () => this.topHorizStrip.nativeElement;
 
