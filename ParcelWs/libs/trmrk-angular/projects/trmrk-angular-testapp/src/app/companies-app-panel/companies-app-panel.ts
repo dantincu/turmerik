@@ -41,9 +41,6 @@ export class CompaniesAppPanel {
   @ViewChildren('currentlyMovingListItems')
   currentlyMovingListItems!: QueryList<TrmrkPanelListItem>;
 
-  listItemsColl!: QueryList<TrmrkPanelListItem>;
-  currentlyMovingListItemsColl!: QueryList<TrmrkPanelListItem>;
-
   getListItems = () => this.listItems;
   getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
 

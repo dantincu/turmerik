@@ -15,7 +15,11 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
-import { TrmrkHorizStrip, TrmrkPanelListItem } from 'trmrk-angular';
+import {
+  TrmrkHorizStrip,
+  TrmrkPanelListItem,
+  TrmrkLoading,
+} from 'trmrk-angular';
 
 import {
   TrmrkPanelListService,
@@ -36,6 +40,7 @@ import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
     TrmrkAcceleratingScrollPopover,
     TrmrkPanelList,
     TrmrkHorizStrip,
+    TrmrkLoading,
   ],
   templateUrl: './trmrk-list-app-panel.html',
   styleUrl: './trmrk-list-app-panel.scss',
@@ -52,8 +57,11 @@ export class TrmrkListAppPanel {
   @Input() trmrkSelectedRowsReorderAggRowVertIsOriented = false;
   @Input() trmrkRowTemplate!: TemplateRef<any>;
   @Input() trmrkVisuallyMovingRowTemplate!: TemplateRef<any>;
+  @Input() trmrkLoadingTemplate!: TemplateRef<any>;
+  @Input() trmrkNoItemsTemplate!: TemplateRef<any>;
   @Input() trmrkListItems!: () => QueryList<TrmrkPanelListItem>;
   @Input() trmrkVisuallyMovingListItems!: () => QueryList<TrmrkPanelListItem>;
+  @Input() trmrkIsLoading = true;
 
   @Output() trmrkRowsUpdated = new EventEmitter<
     TrmrkPanelListServiceRow<any>[]
@@ -62,8 +70,8 @@ export class TrmrkListAppPanel {
   @ViewChild('panelList')
   panelList!: TrmrkPanelList;
 
-  @ViewChild('topHorizStrip')
-  topHorizStrip!: ElementRef<HTMLDivElement>;
+  @ViewChild('panelHeader')
+  panelHeader!: ElementRef<HTMLDivElement>;
 
   @ViewChild('upAcceleratingScrollPopover')
   upAcceleratingScrollPopover!: TrmrkAcceleratingScrollPopover;
@@ -86,7 +94,7 @@ export class TrmrkListAppPanel {
     return elem;
   };
 
-  getTopHorizStrip = () => this.topHorizStrip.nativeElement;
+  getPanelHeader = () => this.panelHeader.nativeElement;
 
   getListItems = () => this.listItems;
   getCurrentlyMovingListItems = () => this.currentlyMovingListItems;

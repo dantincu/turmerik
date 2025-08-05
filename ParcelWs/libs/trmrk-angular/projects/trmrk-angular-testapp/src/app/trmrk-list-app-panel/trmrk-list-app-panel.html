@@ -1,34 +1,41 @@
 <div
-  [ngClass]="['trmrk-app-panel', panelListService.hasPendingReorder ? 'trmrk-has-bottom-horiz-strip' : '', trmrkCssClass ?? '', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
+  [ngClass]="['trmrk-app-panel', panelListService.hasPendingReorder ? 'trmrk-has-bottom-horiz-strip' : '', trmrkCssClass ?? '',
+  panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '',
+  trmrkIsLoading ? 'trmrk-is-loading' : '']"
 >
   @if (!panelListService.showAcceleratingScrollPopovers) {
-  <div
-    class="trmrk-horiz-strip trmrk-has-border-x2 trmrk-top-horiz-strip"
-    #topHorizStrip
-  >
-    @if (panelListService.rowsAreSelectable) {
-    <button mat-icon-button class="trmrk-icon-btn">
-      <mat-checkbox
-        class="trmrk-checkbox"
-        (change)="rowsMasterCheckBoxToggled($event)"
-        [checked]="panelListService.rowsMasterCheckBoxIsChecked"
-      ></mat-checkbox>
-    </button>
-    }
-    <trmrk-accelerating-scroll-control
-      [trmrkScrollable]="getPanelList"
-    ></trmrk-accelerating-scroll-control>
+  <div class="trmrk-panel-header" #panelHeader>
+    <div class="trmrk-horiz-strip trmrk-has-border-x2 trmrk-top-horiz-strip">
+      @if (panelListService.rowsAreSelectable) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-checkbox
+          class="trmrk-checkbox"
+          (change)="rowsMasterCheckBoxToggled($event)"
+          [checked]="panelListService.rowsMasterCheckBoxIsChecked"
+        ></mat-checkbox>
+      </button>
+      }
+      <trmrk-accelerating-scroll-control
+        [trmrkScrollable]="getPanelList"
+      ></trmrk-accelerating-scroll-control>
+    </div>
+    @if (trmrkIsLoading) { @if (trmrkLoadingTemplate) {
+    <ng-container *ngTemplateOutlet="trmrkLoadingTemplate"></ng-container> } @if
+    (!trmrkLoadingTemplate) {
+    <div class="trmrk-horiz-strip trmrk-loading-horiz-strip">
+      <trmrk-loading></trmrk-loading>
+    </div>
+    } }
   </div>
   } @if (panelListService.showAcceleratingScrollPopovers) {
   <trmrk-accelerating-scroll-popover
     #upAcceleratingScrollPopover
     [trmrkFocusedPadIdx]="panelListService.acceleratingScrollPadIdx"
   ></trmrk-accelerating-scroll-popover>
-  }
-
+  } @if (trmrkEntities.length) {
   <trmrk-panel-list
     #panelList
-    [topHorizStrip]="getTopHorizStrip"
+    [trmrkPanelHeader]="getPanelHeader"
     [trmrkEntities]="trmrkEntities"
     [trmrkEntityKeyPropName]="trmrkEntityKeyPropName"
     [trmrkRowsSelectionIsAllowed]="trmrkRowsSelectionIsAllowed"
@@ -42,9 +49,10 @@
     [trmrkRowMenuTemplate]="trmrkRowMenuTemplate"
     [trmrkRowTemplate]="trmrkRowTemplate"
     [trmrkVisuallyMovingRowTemplate]="trmrkVisuallyMovingRowTemplate"
-  ></trmrk-panel-list>
-
-  @if (!panelListService.showAcceleratingScrollPopovers) { @if
+  ></trmrk-panel-list
+  >} @if (!trmrkEntities.length) {
+  <ng-container *ngTemplateOutlet="trmrkNoItemsTemplate"></ng-container> } @if
+  (!panelListService.showAcceleratingScrollPopovers) { @if
   (panelListService.hasPendingReorder) {
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-bottom-horiz-strip trmrk-has-border-x2']"

@@ -495,14 +495,6 @@ a[mat-icon-button].trmrk-icon-btn:link {
       padding: 2px;
     }
   }
-
-  /* .trmrk-custom-svg-icon-wrapper {
-  }
-
-  [mat-button].trmrk-icon-link {
-    .trmrk-custom-svg-icon-wrapper {
-    }
-  } */
 }
 
 @keyframes trmrk-blank-placeholder-slide-out {
@@ -524,6 +516,10 @@ trmrk-list-app-panel, .trmrk-app-panel, trmrk-panel-list, .trmrk-panel-list {
 
 trmrk-list-app-panel {
   .trmrk-app-panel {
+    trmrk-loading {
+      margin-top: 3px;
+    }
+
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
       width: 100%;
@@ -589,10 +585,17 @@ trmrk-list-app-panel {
       }
     }
 
-    &.trmrk-has-bottom-horiz-strip {
+    &.trmrk-has-bottom-horiz-strip, &.trmrk-is-loading {
       trmrk-panel-list {
         height: calc(100% - 80px);
         flex: 1 0 calc(100% - 80px);
+      }
+    }
+
+    &.trmrk-is-loading.trmrk-has-bottom-horiz-strip {
+      trmrk-panel-list {
+        height: calc(100% - 120px);
+        flex: 1 0 calc(100% - 120px);
       }
     }
 

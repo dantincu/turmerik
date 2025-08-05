@@ -57,7 +57,7 @@ export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   rowsMenuTrigger: () => MatMenuTrigger;
   rowsMenu: () => MatMenu;
   getVisuallyMovingListItems: () => QueryList<TItem>;
-  getTopHorizStrip: () => HTMLElement;
+  getPanelHeader: () => HTMLElement;
   getUpAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getDownAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getMovingAggregateRowEl: () => TrmrkHorizStrip | null;
@@ -105,7 +105,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   rowsMenuTrigger!: () => MatMenuTrigger;
   rowsMenu!: () => MatMenu;
   getVisuallyMovingListItems!: () => QueryList<TItem>;
-  getTopHorizStrip!: () => HTMLElement;
+  getPanelHeader!: () => HTMLElement;
   getUpAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover | null;
   getDownAcceleratingScrollPopover!: () => TrmrkAcceleratingScrollPopover | null;
   getMovingAggregateRowEl!: () => TrmrkHorizStrip | null;
@@ -116,7 +116,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   componentIdPropName!: string;
   hostElPropName!: string;
   appBarHeight!: number;
-  topHorizStripHeight!: number;
+  panelHeaderHeight!: number;
 
   toggleAppBar!: (
     svc: TrmrkPanelListService<TEntity, TItem>,
@@ -178,7 +178,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.rowsMenuTrigger = args.rowsMenuTrigger;
     this.rowsMenu = args.rowsMenu;
     this.getVisuallyMovingListItems = args.getVisuallyMovingListItems;
-    this.getTopHorizStrip = args.getTopHorizStrip;
+    this.getPanelHeader = args.getPanelHeader;
     this.getUpAcceleratingScrollPopover = args.getUpAcceleratingScrollPopover;
     this.getDownAcceleratingScrollPopover =
       args.getDownAcceleratingScrollPopover;
@@ -195,10 +195,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       args.componentInputDataPropName ?? 'trmrkInputData';
     this.componentIdPropName = args.componentIdPropName ?? this.idPropName;
     this.hostElPropName = args.hostElPropName ?? 'hostEl';
-
-    const topHorizStrip = this.getTopHorizStrip();
-    this.topHorizStripHeight = topHorizStrip.offsetHeight;
-
+    this.panelHeaderHeight = this.getPanelHeader().offsetHeight;
     this.rowsSelectionIsAllowed = args.rowsSelectionIsAllowed ?? false;
 
     this.selectedRowsReorderIsAllowed =
@@ -373,7 +370,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
         )!,
         diffY -
           upAcceleratingScrollPopover.offsetHeight +
-          this.topHorizStripHeight
+          this.panelHeaderHeight
       );
 
       const acceleratingScrollPopovers = [

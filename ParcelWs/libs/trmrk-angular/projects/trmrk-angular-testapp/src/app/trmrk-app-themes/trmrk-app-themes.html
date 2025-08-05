@@ -1,13 +1,53 @@
 <trmrk-app-bar [trmrkTitle]="'App Themes'"></trmrk-app-bar>
-<div class="trmrk-app-panel trmrk-app-themes-panel">
-  
-</div>
+<trmrk-list-app-panel
+  [trmrkCssClass]="'trmrk-app-themes-panel'"
+  [trmrkEntities]="entities"
+  [trmrkListItems]="getListItems"
+  [trmrkVisuallyMovingListItems]="getCurrentlyMovingListItems"
+  [trmrkRowsSelectionIsAllowed]="true"
+  [trmrkSelectedRowsReorderIsAllowed]="true"
+  [trmrkSelectedRowsReorderAggRowVertIsOriented]="true"
+  (trmrkRowsUpdated)="rowsUpdated($event)"
+  [trmrkRowMenuTemplate]="rowMenuTemplate"
+  [trmrkRowTemplate]="rowTemplate"
+  [trmrkVisuallyMovingRowTemplate]="visuallyMovingRowTemplate"
+></trmrk-list-app-panel>
 
-<div class="trmrk-field">
-  <a mat-button [routerLink]="['/app-themes']"> App Theme </a>
-</div>
-<div class="trmrk-field">
-  <a mat-button [routerLink]="['/reset-app']" [queryParams]="{ reset: 'true' }">
-    Reset App
-  </a>
-</div>
+<ng-template #rowMenuTemplate>
+  <span class="trmrk-menu-item trmrk-text-menu-item">Some action</span>
+</ng-template>
+
+<ng-template #rowTemplate let-row="row" let-idx="idx">
+  <trmrk-panel-list-item
+    #listItems
+    [trmrkMainText]="row.item.data.name"
+    [ngClass]="['trmrk-list-item']"
+    [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
+    [trmrkLeadingMatIconName]="'description'"
+    [trmrkIsSelectable]="panelListService.rowsAreSelectable"
+    [trmrkIsSelected]="row.item.isSelected"
+    [trmrkIsFocused]="row.item.isFocused"
+    (trmrkCheckBoxToggled)="panelListService.rowCheckBoxToggled($event, idx)"
+    (trmrkLeadingBtnLongPressOrRightClick)="panelListService.rowIconLongPressOrRightClick($event, idx)"
+    (trmrkLeadingBtnShortPressOrLeftClick)="rowIconShortPressOrLeftClick($event, idx)"
+    (trmrkLeadingIconBtnMouseDownOrTouchStart)="panelListService.rowLeadingIconMouseDownOrTouchStart($event, idx)"
+    (trmrkTextLongPressOrRightClick)="panelListService.rowTextLongPresOrRightClick($event, idx)"
+    (trmrkTextShortPressOrLeftClick)="rowTextShortPressOrLeftClick($event, idx)"
+    (trmrkTouchStartOrMouseDown)="panelListService.rowMouseDownOrTouchStart($event, idx)"
+    [trmrkInputData]="{id: row.item.data.id}"
+  ></trmrk-panel-list-item>
+</ng-template>
+
+<ng-template #visuallyMovingRowTemplate let-row="row" let-idx="idx">
+  <trmrk-panel-list-item
+    #currentlyMovingListItems
+    [trmrkMainText]="row.item!.data.name"
+    [ngClass]="['trmrk-list-item trmrk-floating-list-item', panelListService.showVisuallyMovingRows ? '' : 'trmrk-hidden']"
+    [trmrkCssClass]="[row.item.isFocused ? 'trmrk-has-border-x2' : '']"
+    [trmrkLeadingMatIconName]="'description'"
+    [trmrkIsSelectable]="true"
+    [trmrkIsSelected]="true"
+    [trmrkIsFocused]="row.item.isFocused"
+    [trmrkInputData]="{id: row.item.data.id}"
+  ></trmrk-panel-list-item>
+</ng-template>

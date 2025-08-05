@@ -65,7 +65,7 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
   @Input() trmrkRowTemplate!: TemplateRef<any>;
   @Input() trmrkVisuallyMovingRowTemplate!: TemplateRef<any>;
   @Input() trmrkListItems!: () => QueryList<TrmrkPanelListItem>;
-  @Input() topHorizStrip!: () => HTMLElement;
+  @Input() trmrkPanelHeader!: () => HTMLElement;
   @Input() trmrkVisuallyMovingListItems!: () => QueryList<TrmrkPanelListItem>;
 
   @Input()
@@ -144,7 +144,7 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
             rowsMenuTrigger: () => this.rowsMenuTrigger,
             rowsMenu: () => this.rowsMenu,
             getVisuallyMovingListItems: this.trmrkVisuallyMovingListItems,
-            getTopHorizStrip: this.topHorizStrip,
+            getPanelHeader: this.trmrkPanelHeader,
             getUpAcceleratingScrollPopover:
               this.trmrkUpAcceleratingScrollPopover,
             getDownAcceleratingScrollPopover:
