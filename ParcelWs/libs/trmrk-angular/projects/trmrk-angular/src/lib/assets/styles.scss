@@ -299,7 +299,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-app-bar {
   height: 50px;
-  padding: 6px;
+  padding: 5px;
   overflow-y: hidden;
 
   &.trmrk-show {
@@ -338,7 +338,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   }
 
   &.trmrk-has-border {
-    padding: 5px;
+    padding: 4px;
 
     .trmrk-text-col {
       padding-top: 9px;
@@ -351,6 +351,23 @@ a[mat-icon-button].trmrk-icon-btn:link {
     .trmrk-strip-cap {
       margin-top: 1px;
       height: 33px;
+    }
+  }
+
+  &.trmrk-has-border-x2 {
+    padding: 3px;
+
+    .trmrk-text-col {
+      padding-top: 8px;
+
+      &.trmrk-has-details {
+        padding-top: 0;
+      }
+    }
+
+    .trmrk-strip-cap {
+      margin-top: 2px;
+      height: 31px;
     }
   }
 }
@@ -506,6 +523,7 @@ trmrk-list-app-panel {
     .trmrk-bottom-horiz-strip {
       width: 100%;
       border-radius: 0;
+      padding-left: 6px;
     }
 
     trmrk-panel-list {

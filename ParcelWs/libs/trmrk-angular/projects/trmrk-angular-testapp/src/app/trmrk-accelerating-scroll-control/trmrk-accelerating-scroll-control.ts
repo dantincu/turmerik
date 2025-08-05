@@ -6,6 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 
@@ -20,6 +21,7 @@ import { TrmrkAcceleratingScrollService } from '../services/trmrk-accelerating-s
 @Component({
   selector: 'trmrk-accelerating-scroll-control',
   imports: [
+    CommonModule,
     MatIconModule,
     MatButtonModule,
     MatIconButton,
@@ -44,9 +46,13 @@ export class TrmrkAcceleratingScrollControl implements OnChanges {
   @ViewChild('scrollDownBtn', { read: ElementRef<HTMLButtonElement> })
   scrollDownBtn!: ElementRef<HTMLButtonElement>;
 
+  isExpanded: boolean | null = null;
+
   constructor(
     private acceleratingScrollService: TrmrkAcceleratingScrollService
   ) {
+    this.toggleExpand = this.toggleExpand.bind(this);
+
     this.acceleratingScrollService.scrollAccElems = () => [
       this.scrollUpBtn.nativeElement,
       this.fakeBtn.nativeElement,
@@ -78,6 +84,10 @@ export class TrmrkAcceleratingScrollControl implements OnChanges {
       () => this.trmrkScrollable,
       (value) => (this.acceleratingScrollService.scrollableElem = value)
     );
+  }
+
+  toggleExpand() {
+    this.isExpanded = !this.isExpanded;
   }
 
   start(event: TouchEvent | MouseEvent) {

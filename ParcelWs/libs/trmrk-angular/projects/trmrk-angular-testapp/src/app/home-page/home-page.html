@@ -3,6 +3,7 @@
   [trmrkLeadingIconTemplate]="appIcon"
   [trmrkTrailingTemplate]="optionsMenu"
   [trmrkTitle]="'Turmerik OneDrive Notes'"
+  [trmrkCssClass]="'trmrk-has-border'"
 ></trmrk-app-bar>
 
 <ng-template #appIcon>
@@ -31,9 +32,6 @@
   #appPageContent
   class="trmrk-app-page-body trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-y"
 >
-  <div
-    [ngStyle]="{height: '100%', display: 'flex', flexDirection: 'column', position: 'relative', backgroundColor: '#F80'}"
-  ></div>
   <companies-app-panel></companies-app-panel>
   <div [ngStyle]="{marginTop: '0px'}">
     <input type="text" class="trmrk-input" />

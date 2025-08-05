@@ -2,12 +2,36 @@
   margin-top: -3px;
 }
 
-:host, .trmrk-accelerating-scroll-control {
-  width: 120px;
+.trmrk-accelerating-scroll-control {
+  display: flex;
+}
+
+:host, .trmrk-main-control {
   height: 40px;
 }
 
-.trmrk-accelerating-scroll-control {
+@keyframes trmrk-accelerating-scroll-control-show {
+  from {
+    width: 0;
+  }
+  to {
+    width: 120px;
+  }
+}
+
+@keyframes trmrk-accelerating-scroll-control-hide {
+  from {
+    width: 120px;
+  }
+  to {
+    width: 0;
+  }
+}
+
+.trmrk-main-control {
+  width: 0;
+  overflow: hidden;
+
   > :first-child .trmrk-icon {
     transform: rotate(-90deg);
   }
@@ -15,9 +39,26 @@
   > :nth-child(3) .trmrk-icon {
     transform: rotate(90deg);
   }
+
+  &.trmrk-show {
+    animation: trmrk-accelerating-scroll-control-show 0.2s forwards;
+    width: 120px;
+  }
+
+  &.trmrk-hide {
+    animation: trmrk-accelerating-scroll-control-hide 0.2s forwards;
+  }
 }
 
 .trmrk-fake-icon-btn {
   display: inline-flex;
   box-sizing: border-box;
+}
+
+.trmrk-expand-btn, .trmrk-collapse-btn {
+  margin-top: 0;
+}
+
+.trmrk-collapse-btn {
+  rotate: 180deg;
 }

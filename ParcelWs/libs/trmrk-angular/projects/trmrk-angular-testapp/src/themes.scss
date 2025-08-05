@@ -1,18 +1,18 @@
 .trmrk-app-theme-light {
   .trmrk-app-bar {
     background-color: #d0e8ff;
+    border-bottom: 1px solid #c0d8ff;
   }
 
   .trmrk-companies-app-panel {
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
-      background-color: #f0f0f0;
+      background-color: #d0e8ff;
+      border-top: 2px solid #c0d8ff;
+      border-bottom: 2px solid #c0d8ff;
     }
 
     trmrk-panel-list {
-      border-top: 2px solid #d0d0d0;
-      border-bottom: 2px solid #d0d0d0;
-
       .trmrk-list-item {
         .trmrk-horiz-strip {
           background-color: #f0f0f0;
@@ -187,13 +187,12 @@
   .trmrk-companies-app-panel {
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
-      background-color: #101010;
+      background-color: #000820;
+      border-top: 2px solid #001030;
+      border-bottom: 2px solid #001030;
     }
 
     trmrk-panel-list {
-      border-top: 2px solid #303030;
-      border-bottom: 2px solid #303030;
-
       .trmrk-list-item {
         .trmrk-horiz-strip {
           background-color: #101010;

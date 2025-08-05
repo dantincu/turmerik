@@ -2,7 +2,10 @@
   [ngClass]="['trmrk-app-panel', panelListService.hasPendingReorder ? 'trmrk-has-bottom-horiz-strip' : '', trmrkCssClass ?? '', panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '']"
 >
   @if (!panelListService.showAcceleratingScrollPopovers) {
-  <div class="trmrk-horiz-strip trmrk-top-horiz-strip" #topHorizStrip>
+  <div
+    class="trmrk-horiz-strip trmrk-has-border-x2 trmrk-top-horiz-strip"
+    #topHorizStrip
+  >
     @if (panelListService.rowsAreSelectable) {
     <button mat-icon-button class="trmrk-icon-btn">
       <mat-checkbox
@@ -44,7 +47,7 @@
   @if (!panelListService.showAcceleratingScrollPopovers) { @if
   (panelListService.hasPendingReorder) {
   <trmrk-horiz-strip
-    [trmrkCssClass]="['trmrk-bottom-horiz-strip']"
+    [trmrkCssClass]="['trmrk-bottom-horiz-strip trmrk-has-border-x2']"
     [trmrkMainText]="'Apply new order'"
     [trmrkTrailingTemplate]="bottomHorizStripTrailingTemplate"
   ></trmrk-horiz-strip>
