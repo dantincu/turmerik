@@ -309,7 +309,12 @@ a[mat-icon-button].trmrk-icon-btn:link {
   &.trmrk-hide {
     height: 0;
     padding: 0;
-    animation: trmrk-app-bar-hide 0.1s ease-in-out;
+    margin: 0;
+
+    &.trmrk-has-border, &.trmrk-has-border-x2 {
+      padding: 0;
+      border: 0;
+    }
   }
 
   .trmrk-icon-btn {

@@ -12,6 +12,10 @@
       border-bottom: 2px solid #c0d8ff;
     }
 
+    trmrk-accelerating-scroll-popover {
+      background-color: #d0e8ff;
+    }
+
     trmrk-panel-list {
       .trmrk-list-item {
         .trmrk-horiz-strip {
@@ -182,6 +186,7 @@
 .trmrk-app-theme-dark {
   .trmrk-app-bar {
     background-color: #000820;
+    border-bottom: 1px solid #001030;
   }
 
   .trmrk-companies-app-panel {
@@ -190,6 +195,10 @@
       background-color: #000820;
       border-top: 2px solid #001030;
       border-bottom: 2px solid #001030;
+    }
+
+    trmrk-accelerating-scroll-popover {
+      background-color: #000820;
     }
 
     trmrk-panel-list {
