@@ -11,15 +11,14 @@
       background-color: #d0e8ff;
     }
 
-    .trmrk-loading-horiz-strip,
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
       border-top: 2px solid #c0d8ff;
+      border-bottom: 2px solid #c0d8ff;
     }
 
-    .trmrk-top-horiz-strip,
-    .trmrk-bottom-horiz-strip {
-      border-bottom: 2px solid #c0d8ff;
+    .trmrk-loading-horiz-strip {
+      border-top: 1px solid #c0d8ff;
     }
 
     .trmrk-accelerating-scroll-popover {
@@ -206,15 +205,14 @@
       background-color: #000820;
     }
 
-    .trmrk-loading-horiz-strip,
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
       border-top: 2px solid #001030;
+      border-bottom: 2px solid #001030;
     }
 
-    .trmrk-top-horiz-strip,
-    .trmrk-bottom-horiz-strip {
-      border-bottom: 2px solid #001030;
+    .trmrk-loading-horiz-strip {
+      border-top: 1px solid #001030;
     }
 
     .trmrk-accelerating-scroll-popover {
