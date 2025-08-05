@@ -599,7 +599,7 @@ trmrk-list-app-panel {
       }
     }
 
-    &.trmrk-has-accelerating-popovers {
+    &.trmrk-has-accelerating-popovers.trmrk-has-accelerating-popovers {
       trmrk-panel-list {
         height: calc(100% - 140px);
         flex: 1 0 calc(100% - 140px);

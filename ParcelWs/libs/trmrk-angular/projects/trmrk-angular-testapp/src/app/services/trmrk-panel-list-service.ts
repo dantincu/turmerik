@@ -162,6 +162,8 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
   private leadingIconDragServices: DragService[] | null = null;
 
+  // _temp = 0;
+
   constructor(
     public appStateService: AppStateService,
     public appBarMapService: AppBarMapService
@@ -252,7 +254,9 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
                 this.hasPendingReorder = true;
               }
 
+              // if (!this._temp++) {
               this.resetVisuallyMovingRows();
+              // }
             })
           );
         }
