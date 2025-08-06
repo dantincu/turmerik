@@ -607,3 +607,7 @@ trmrk-list-app-panel {
     }
   }
 }
+
+trmrk-app-themes-list-view {
+  @include mixins.rel-flex-stretch-to-parent-size();
+}

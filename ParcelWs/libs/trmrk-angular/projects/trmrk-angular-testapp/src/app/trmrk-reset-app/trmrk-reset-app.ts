@@ -62,13 +62,20 @@ export class TrmrkResetApp implements OnDestroy {
           sessionStorage.clear();
 
           indexedDB.databases().then((databases) => {
-            for (let db of databases) {
-              if (db.name) {
-                indexedDB.deleteDatabase(db.name);
-              }
-            }
+            const onComplete = () =>
+              (window.location.href = '/reset-app?reset=false');
 
-            window.location.href = '/reset-app?reset=false';
+            databases = databases.filter((db) => (db.name ?? null) !== null);
+
+            if (databases.length) {
+              onComplete();
+            } else {
+              const promises = databases.map((db) =>
+                indexedDB.deleteDatabase(db.name!)
+              );
+
+              Promise.all(promises).then(onComplete);
+            }
           });
         }, 0);
       } else if (this.isResetting === false) {
