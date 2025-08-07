@@ -54,7 +54,7 @@ app-trmrk-app-icon {
   width: calc(100% - 6px);
 }
 
-app-home-page, app-trmrk-app-themes {
+trmrk-home-page, trmrk-app-themes {
   display: block;
   @include mixins.rel-stretch-to-parent-size();
 }

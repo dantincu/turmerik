@@ -1,9 +1,417 @@
-<trmrk-app-bar
+<trmrk-app-page
+  [trmrkPageTemplate]="page"
+  [trmrkAppBarTitle]="'Turmerik Notes'"
+  [trmrkAppBarLeadingIconTemplate]="appIcon"
+></trmrk-app-page>
+
+<ng-template #appIcon>
+  <trmrk-app-icon />
+</ng-template>
+
+<ng-template #page>
+  <trmrk-companies-app-panel></trmrk-companies-app-panel>
+  <div [ngStyle]="{marginTop: '0px'}">
+    <input type="text" class="trmrk-input" />
+  </div>
+  <div>
+    <mat-form-field
+      appearance="outline"
+      class="trmrk-form-field trmrk-has-label"
+    >
+      <mat-label>Enter your age</mat-label>
+      <input matInput type="number" placeholder="Age" class="trmrk-mat-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="outline" class="trmrk-form-field">
+      <input matInput type="number" placeholder="Age" class="trmrk-mat-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill" class="trmrk-form-field trmrk-has-label">
+      <mat-label>Enter your age</mat-label>
+      <input matInput type="number" placeholder="Age" class="trmrk-mat-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field appearance="fill" class="trmrk-form-field">
+      <input matInput type="number" placeholder="Age" class="trmrk-mat-input" />
+    </mat-form-field>
+  </div>
+  <div>
+    <button mat-button (click)="openPopupWindowClick()">
+      Open popup window</button
+    >{{popupClosedMessage}}
+  </div>
+
+  <div [ngStyle]="{}">
+    <div class="trmrk-panel-list">
+      @for (i of [0, 1, 2]; track $index;) {
+      <trmrk-thin-horiz-strip
+        [trmrkText]="getCompaniesText(20 * i, 20 * i + 10)"
+        class="my-thin-horiz-strip"
+        [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+      ></trmrk-thin-horiz-strip>
+      <trmrk-thin-horiz-strip
+        [trmrkText]="getCompaniesText(20 * i + 10, 20 * i + 15)"
+        class="my-thin-horiz-strip"
+        [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+      ></trmrk-thin-horiz-strip>
+      <trmrk-thin-horiz-strip
+        [trmrkText]="getCompaniesText(20 * i + 15, 20 * i + 18)"
+        class="my-thin-horiz-strip"
+        [trmrkCssClass]="[['', 'trmrk-has-border-x2', ''][$index]]"
+      ></trmrk-thin-horiz-strip>
+      }
+    </div>
+  </div>
+  @for (i of [0, 1, 2]; track $index; let idx1 = $index;) { @for (dStr of
+  [['12kB', '2025-06-09 13:00', { text: 'I love american V8 muscle cars' }],
+  ['12kB', '2025-06-09 13:00'], null]; track $index; let idx2 = $index;) { @for
+  (cssClassSffx of ['', '1', '2']; track $index; let idx3 = $index;) { @for
+  (isMinimal of [false, true]; track $index; let idx4 = $index;) {
+  <trmrk-horiz-strip
+    [trmrkMainText]="getCompaniesTextFromCoords([3, 2, 3, 2], [idx1, idx2, idx3, idx4], idx1 * 3 + 1)"
+    [trmrkDetailsTextParts]="dStr"
+    [trmrkMinimal]="isMinimal"
+    [ngClass]="['my-horiz-strip' + cssClassSffx]"
+    [trmrkCssClass]="[cssClassSffx === '2' ? '' : cssClassSffx === '1' ? 'trmrk-has-border' : 'trmrk-has-border-x2']"
+  ></trmrk-horiz-strip>
+  }
+
+  <trmrk-horiz-strip
+    [trmrkType]="TrmrkHorizStripType.AppBar"
+    [trmrkMainText]="getCompaniesTextFromCoords([3, 2, 3], [idx1, idx2, idx3], idx1 * 3 + 1)"
+    [trmrkDetailsTextParts]="dStr"
+    [ngClass]="['my-app-bar' + cssClassSffx]"
+    [trmrkCssClass]="[cssClassSffx === '2' ? '' : 'trmrk-has-border']"
+    [trmrkTrailingTemplate]="appHeaderOptionsIcon"
+  ></trmrk-horiz-strip
+  >}
+
+  <div [ngStyle]="{}">
+    <div class="trmrk-panel-list">
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkColorLabelColor]="'#F80'"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-focused']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsAppBar]="true"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-selected']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-selected trmrk-is-focused']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-selected']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingIconTemplate]="fileItemIcon"
+      ></trmrk-panel-list-item>
+
+      <trmrk-panel-list-item
+        [trmrkMainText]="getCompaniesTextFromCoords([3, 2], [idx1, idx2], idx1 * 3 + 1)"
+        [trmrkDetailsTextParts]="dStr"
+        [ngClass]="['trmrk-file-item trmrk-is-current trmrk-is-focused trmrk-is-selected']"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
+        [trmrkLeadingMatIconName]="'description'"
+        [trmrkIsSelectable]="true"
+      ></trmrk-panel-list-item>
+    </div>
+  </div>
+  }
+  <trmrk-horiz-strip
+    [trmrkType]="TrmrkHorizStripType.Scrollable"
+    [trmrkMainText]="getCompaniesTextFromCoords([3], [idx1], idx1 * 3 + 1)"
+    class="my-horiz-scrollable-strip"
+  ></trmrk-horiz-strip>
+  }
+
+  <ng-template #appHeaderOptionsIcon>
+    <button mat-icon-button class="trmrk-icon-btn">
+      <mat-icon class="trmrk-icon">more_vert</mat-icon>
+    </button>
+  </ng-template>
+
+  <ng-template #fileItemIcon>
+    <mat-icon class="trmrk-icon trmrk-leading-icon">description</mat-icon>
+  </ng-template>
+
+  <ng-template #fileItemIcon2>
+    <span class="material-icons">css</span>
+  </ng-template>
+
+  <div [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote"></div>
+
+  <div [ngStyle]="{height: '150px', position: 'relative'}">
+    <div>
+      <label
+        (mousedown)="onLongPressMouseDownOrTouchStart1($event)"
+        (touchstart)="onLongPressMouseDownOrTouchStart1($event)"
+        (trmrkLongPressOrRightClick)="onLongPress1($event)"
+        (trmrkShortPressOrLeftClick)="onShortPress1($event)"
+        [trmrkLongPressPreventDefault]="false"
+        [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer'}"
+      >
+        Long Press</label
+      ><span>{{longPressUserMsg1}}</span>
+    </div>
+    <div>
+      <label
+        (mousedown)="onLongPressMouseDownOrTouchStart2($event)"
+        (touchstart)="onLongPressMouseDownOrTouchStart2($event)"
+        (trmrkLongPressOrRightClick)="onLongPress2($event)"
+        (trmrkShortPressOrLeftClick)="onShortPress2($event)"
+        [ngStyle]="{color: '#88F', padding: '10px', lineHeight: '40px', cursor: 'pointer', userSelect: 'none', webkitUserSelect: 'none'}"
+      >
+        Long Press</label
+      ><span>{{longPressUserMsg2}}</span>
+    </div>
+    <div>
+      <button
+        mat-button
+        (mousedown)="onMultiClickMouseDownOrTouchStart($event)"
+        (touchstart)="onMultiClickMouseDownOrTouchStart($event)"
+        (trmrkMultiClick)="onMultiClick($event)"
+      >
+        Multi Press
+      </button>
+      <span>{{multiClickUserMsg}}</span>
+    </div>
+
+    <div
+      class="trmrk-vert-resize-strip"
+      #draggableStrip
+      (trmrkDrag)="onDrag($event)"
+      [ngStyle]="{zIndex: 1000000}"
+    ></div>
+  </div>
+  <div>
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+      [trmrkShow]="showUserMsg[0]"
+      [trmrkLevel]="1"
+      (trmrkClose)="userMessageClose(0)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="0"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasd fqwerqwerqwe rqwerqwerqwer qwerqwerqwrq werwqerqwerfq werqwerqw erqwerqwer qwerqwerw qerqwerfq werqwer qwerqwer weqrweq werqwer wqerqwerf qwerqwerq erqwerq werqweqr weqwerqwe rwqerqwer'"
+      [trmrkShow]="showUserMsg[1]"
+      [trmrkLevel]="0"
+      (trmrkClose)="userMessageClose(1)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="1"
+      [trmrkArrowStyle]="{left: 'calc(25%)'}"
+    ></trmrk-user-message>
+
+    <div [ngStyle]="{display: 'flex'}">
+      <trmrk-user-message
+        [trmrkMessage]="'asdfa qwerw'"
+        [trmrkShow]="showUserMsg[2]"
+        [trmrkLevel]="1"
+        (trmrkClose)="userMessageClose(2)"
+        [trmrkAutoCloseMillis]="0"
+        [trmrkArrowPlacement]="2"
+      ></trmrk-user-message>
+      <trmrk-user-message
+        [trmrkMessage]="'asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd asdfasdfasd'"
+        [trmrkShow]="showUserMsg[3]"
+        [trmrkLevel]="0"
+        (trmrkClose)="userMessageClose(3)"
+        [trmrkAutoCloseMillis]="0"
+        [trmrkArrowPlacement]="3"
+      ></trmrk-user-message>
+    </div>
+
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
+      [trmrkShow]="showUserMsg[4]"
+      [trmrkLevel]="1"
+      (trmrkClose)="userMessageClose(4)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="4"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'asdfasdfasdf qwerwqerqwer qwerwqerqwer'"
+      [trmrkShow]="showUserMsg[5]"
+      [trmrkLevel]="2"
+      (trmrkClose)="userMessageClose(5)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="1"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'failure'"
+      [trmrkShow]="showUserMsg[6]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(6)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="2"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'fail'"
+      [trmrkShow]="showUserMsg[7]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(7)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="3"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'fail more'"
+      [trmrkShow]="showUserMsg[8]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(8)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="4"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'fail even more'"
+      [trmrkShow]="showUserMsg[9]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(9)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="1"
+    ></trmrk-user-message>
+
+    <trmrk-user-message
+      [trmrkMessage]="'fail even more than'"
+      [trmrkShow]="showUserMsg[10]"
+      [trmrkLevel]="3"
+      (trmrkClose)="userMessageClose(10)"
+      [trmrkAutoCloseMillis]="0"
+      [trmrkArrowPlacement]="2"
+    ></trmrk-user-message>
+  </div>
+  <div>
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn trmrk-icon-btn-filled-primary"
+    >
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
+
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn trmrk-icon-btn-filled-secondary"
+    >
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
+
+    <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-accept">
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
+
+    <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-reject">
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
+
+    <button mat-button class="trmrk-btn trmrk-btn-filled-primary">
+      asdfasdfasdfafsd
+    </button>
+
+    <button mat-button class="trmrk-btn trmrk-btn-filled-secondary">
+      asdfasdfasdfafsd
+    </button>
+
+    <button mat-button class="trmrk-btn trmrk-btn-filled-accept">
+      asdfasdfasdfafsd
+    </button>
+
+    <button mat-button class="trmrk-btn trmrk-btn-filled-reject">
+      asdfasdfasdfafsd
+    </button>
+  </div>
+
+  <trmrk-user-message
+    [trmrkMessage]="mainUserMessageStr"
+    [trmrkShow]="showMainUserMessage"
+    [trmrkLevel]="mainUserMessageLevel"
+    [ngStyle]="{position: 'fixed', bottom: '0px', zIndex: '2', maxWidth: '100vw'}"
+    class="trmrk-main-user-message"
+  ></trmrk-user-message>
+
+  <button matButton="filled">asdfasdf</button>
+  <button
+    matButton="filled"
+    [ngStyle]="{minWidth: '40px', width: '40px', padding: '0 0 0 12px'}"
+  >
+    <mat-icon
+      class="trmrk-icon"
+      [ngStyle]="{width: '40px', height: '32px', fontSize: '32px'}"
+      >open_with</mat-icon
+    >
+  </button>
+  <button mat-icon-button class="trmrk-icon-btn">
+    <mat-icon class="trmrk-icon">open_with</mat-icon>
+  </button>
+  <trmrk-tree-view [trmrkData]="treeViewData"></trmrk-tree-view
+></ng-template>
+<!--trmrk-app-bar
   #appBar
   [trmrkLeadingIconTemplate]="appIcon"
   [trmrkTrailingTemplate]="optionsMenu"
-  [trmrkTitle]="'Turmerik OneDrive Notes'"
-  [trmrkCssClass]="'trmrk-has-border'"
+  [trmrkTitle]="'Turmerik Notes'"
 ></trmrk-app-bar>
 
 <ng-template #appIcon>
@@ -429,4 +837,4 @@
     <mat-icon class="trmrk-icon">open_with</mat-icon>
   </button>
   <trmrk-tree-view [trmrkData]="treeViewData"></trmrk-tree-view>
-</div>
+</div-->

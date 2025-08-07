@@ -178,6 +178,11 @@ a[mat-icon-button].trmrk-icon-btn:link {
   margin-left: max(0px, calc(50% - 300px));
 }
 
+trmrk-app-page {
+  display: block;
+  @include mixins.rel-stretch-to-parent-size();
+}
+
 @keyframes trmrk-user-message-opacFadeOut {
   from {
     opacity: 1;

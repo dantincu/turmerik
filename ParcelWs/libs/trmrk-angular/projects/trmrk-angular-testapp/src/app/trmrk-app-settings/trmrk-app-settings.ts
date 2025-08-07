@@ -12,7 +12,7 @@ import { materialIcons, TrmrkAppPage } from 'trmrk-angular';
 import { AppStateService } from '../services/app-state-service';
 
 @Component({
-  selector: 'trmrk-settings',
+  selector: 'trmrk-app-settings',
   imports: [
     MatCheckbox,
     RouterLink,
@@ -20,11 +20,11 @@ import { AppStateService } from '../services/app-state-service';
     MatButtonModule,
     TrmrkAppPage,
   ],
-  templateUrl: './trmrk-settings.html',
-  styleUrl: './trmrk-settings.scss',
+  templateUrl: './trmrk-app-settings.html',
+  styleUrl: './trmrk-app-settings.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class TrmrkSettings implements OnDestroy {
+export class TrmrkAppSettings implements OnDestroy {
   private darkModeStateChangeSubscription: Subscription;
 
   isDarkMode;

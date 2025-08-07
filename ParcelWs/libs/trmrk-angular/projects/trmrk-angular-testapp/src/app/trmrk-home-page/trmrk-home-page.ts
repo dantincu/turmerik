@@ -4,12 +4,12 @@ import {
   ElementRef,
   OnDestroy,
   ViewEncapsulation,
+  AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
-import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
@@ -29,7 +29,7 @@ import {
   AppBarMapService,
 } from 'trmrk-angular';
 
-import { TrmrkAppBar } from 'trmrk-angular';
+import { TrmrkAppBar, TrmrkAppPage } from 'trmrk-angular';
 import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
 import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 import { TrmrkThinHorizStrip } from 'trmrk-angular';
@@ -53,7 +53,6 @@ import { companies } from '../services/companies';
     MatIconModule,
     MatButtonModule,
     MatIconButton,
-    RouterLink,
     TrmrkAppIcon,
     MatMenuModule,
     CommonModule,
@@ -62,7 +61,7 @@ import { companies } from '../services/companies';
     TrmrkMultiClick,
     TrmrkUserMessage,
     TrmrkHorizStrip,
-    TrmrkAppBar,
+    TrmrkAppPage,
     MatInputModule,
     MatFormFieldModule,
     TrmrkPanelListItem,
@@ -75,15 +74,9 @@ import { companies } from '../services/companies';
   providers: [ToggleAppBarService],
   encapsulation: ViewEncapsulation.None,
 })
-export class HomePage implements OnDestroy {
-  @ViewChild('appBar') appBar!: TrmrkAppBar;
-
-  @ViewChild('appPageContent') appPageContent!: ElementRef<HTMLDivElement>;
-
-  @ViewChild(MatMenu) optionsMenu!: MatMenu;
-
-  @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
-  optionsMenuTrigger!: MatMenuTrigger;
+export class HomePage implements OnDestroy, AfterViewInit {
+  appBarEl!: HTMLElement;
+  appPageContentEl!: HTMLElement;
 
   @ViewChild('draggableStrip', { read: ElementRef })
   draggableStrip!: ElementRef;
@@ -127,30 +120,30 @@ export class HomePage implements OnDestroy {
   private id: number;
 
   constructor(
+    private hostEl: ElementRef<HTMLElement>,
     private appBarMapService: AppBarMapService,
     private toggleAppBarService: ToggleAppBarService,
     componentIdService: ComponentIdService
   ) {
     this.id = componentIdService.getNextId();
 
-    appBarMapService.setCurrent(
-      this.id,
-      () => this.appBar.hostEl.nativeElement
-    );
+    appBarMapService.setCurrent(this.id, () => this.appBarEl);
 
     this.toggleAppBarService.init({
-      getAppPanelElem: () => this.appPageContent.nativeElement,
+      getAppPanelElem: () => this.appPageContentEl,
     });
 
     this.treeViewData = this.getTreeViewData();
-
-    setTimeout(() => {
-      this.optionsMenuTrigger.menu = this.optionsMenu;
-    }, 0);
   }
 
-  onOptionsMenuBtnClick(event: MouseEvent): void {
-    this.optionsMenuTrigger.openMenu();
+  ngAfterViewInit(): void {
+    this.appBarEl = this.hostEl.nativeElement.querySelector(
+      'trmrk-app-bar'
+    ) as HTMLElement;
+
+    this.appPageContentEl = this.hostEl.nativeElement.querySelector(
+      '.trmrk-app-page-body'
+    ) as HTMLElement;
   }
 
   ngOnDestroy(): void {

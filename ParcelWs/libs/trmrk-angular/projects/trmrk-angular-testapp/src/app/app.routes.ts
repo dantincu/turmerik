@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Routes, Router } from '@angular/router';
 
 import { HomePage } from './trmrk-home-page/trmrk-home-page';
-import { TrmrkSettings } from './trmrk-settings/trmrk-settings';
+import { TrmrkAppSettings } from './trmrk-app-settings/trmrk-app-settings';
 import { TrmrkAppThemes } from './trmrk-app-themes/trmrk-app-themes';
 import { TrmrkResetApp } from './trmrk-reset-app/trmrk-reset-app';
 import { NotFound } from './trmrk-not-found/trmrk-not-found';
@@ -10,7 +10,7 @@ import { NotFound } from './trmrk-not-found/trmrk-not-found';
 export const routes: Routes = [
   {
     path: 'app/settings',
-    component: TrmrkSettings,
+    component: TrmrkAppSettings,
   },
   {
     path: 'app/themes',
