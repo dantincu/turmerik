@@ -33,13 +33,13 @@ export abstract class IDbAdapterBase {
         onError(event, target?.error ?? null);
       };
 
-      onError(
+      /* onError(
         {} as Event,
         {
           name: 'asdfasdf',
           message: 'This is a test error',
         } as DOMException
-      );
+      ); */
     }
 
     return request;

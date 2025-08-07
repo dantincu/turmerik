@@ -35,13 +35,21 @@
     <ng-template #trmrkLoadingTemplate>
       <trmrk-loading></trmrk-loading>
     </ng-template>
-    } } @if (trmrkHasError) {
+    } } @if (hasError) {
     <trmrk-horiz-strip
       [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-message-horiz-strip trmrk-error-message-horiz-strip']"
       [trmrkMainText]="trmrkErrorTitle"
       [trmrkDetailsTextParts]="((trmrkErrorMsg ?? null) !== null) ? [{text: trmrkErrorMsg!, italic: false}] : null"
+      [trmrkTrailingTemplate]="trmrkErrorHorizStripTrailingTemplate"
     >
     </trmrk-horiz-strip>
+    <ng-template #trmrkErrorHorizStripTrailingTemplate>
+      @if (trmrkCanCloseError) {
+      <button mat-icon-button class="trmrk-icon-btn" (click)="closeError()">
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      }
+    </ng-template>
     }
   </div>
   } @if (panelListService.showAcceleratingScrollPopovers) {

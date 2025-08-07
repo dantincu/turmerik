@@ -47,7 +47,7 @@ export class TrmrkAppThemes {
   entities: any[] = [];
   isLoading = false;
   hasLoadReqFinished = false;
-  hasError = false;
+  hasError = 0;
   errorTitle = '';
   errorMsg = '';
 
@@ -79,7 +79,7 @@ export class TrmrkAppThemes {
               const target = event.target as IDBRequest;
               this.isLoading = false;
               this.hasLoadReqFinished = true;
-              this.hasError = true;
+              this.hasError = 1;
               this.errorMsg = getIDbRequestOpenErrorMsg(target.error);
             };
           },
@@ -88,7 +88,7 @@ export class TrmrkAppThemes {
             this.hasLoadReqFinished = true;
             this.errorTitle = 'Error opening IndexedDB';
             this.errorMsg = getIDbRequestOpenErrorMsg(error);
-            this.hasError = true;
+            this.hasError = 1;
           }
         );
       });

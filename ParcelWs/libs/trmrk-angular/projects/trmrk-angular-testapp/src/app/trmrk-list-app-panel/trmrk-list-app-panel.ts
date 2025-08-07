@@ -9,6 +9,8 @@ import {
   Output,
   EventEmitter,
   ViewEncapsulation,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
@@ -19,6 +21,7 @@ import {
   TrmrkHorizStrip,
   TrmrkPanelListItem,
   TrmrkLoading,
+  whenChanged,
 } from 'trmrk-angular';
 
 import {
@@ -47,7 +50,7 @@ import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
   providers: [],
   encapsulation: ViewEncapsulation.None,
 })
-export class TrmrkListAppPanel {
+export class TrmrkListAppPanel implements OnChanges {
   @Input() trmrkCssClass: string | null = null;
   @Input() trmrkEntities!: any[];
   @Input() trmrkEntityKeyPropName = 'id';
@@ -64,7 +67,8 @@ export class TrmrkListAppPanel {
   @Input() trmrkIsLoading = true;
   @Input() trmrkErrorTitle = '';
   @Input() trmrkErrorMsg: string | null = null;
-  @Input() trmrkHasError = false;
+  @Input() trmrkHasError = 0;
+  @Input() trmrkCanCloseError = false;
 
   @Output() trmrkRowsUpdated = new EventEmitter<
     TrmrkPanelListServiceRow<any>[]
@@ -105,7 +109,19 @@ export class TrmrkListAppPanel {
   getUpAcceleratingScrollPopover = () => this.upAcceleratingScrollPopover;
   getDownAcceleratingScrollPopover = () => this.downAcceleratingScrollPopover;
 
+  hasError = false;
+
   constructor(public panelListService: TrmrkPanelListService<any, any>) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    whenChanged(
+      changes,
+      () => this.trmrkHasError,
+      (hasError) => {
+        this.hasError = hasError > 0;
+      }
+    );
+  }
 
   applyNewOrderClose() {
     this.panelListService.showPendingReorderStrip = false;
@@ -117,5 +133,9 @@ export class TrmrkListAppPanel {
 
   rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
     this.panelListService.rowsMasterCheckBoxToggled(event);
+  }
+
+  closeError() {
+    this.hasError = false;
   }
 }
