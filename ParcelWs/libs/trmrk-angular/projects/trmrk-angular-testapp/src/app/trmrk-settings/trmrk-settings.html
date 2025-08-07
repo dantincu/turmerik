@@ -1,6 +1,10 @@
-<trmrk-app-bar [trmrkTitle]="'App Settings'"></trmrk-app-bar>
+<trmrk-app-page
+  [trmrkPageTemplate]="page"
+  [trmrkAppBarTitle]="'App Settings'"
+  [trmrkIncludeSettingsMenuItem]="false"
+></trmrk-app-page>
 
-<div class="trmrk-app-page-body trmrk-height-diff-x0">
+<ng-template #page>
   <div class="trmrk-page-body trmrk-page-body-thin">
     <div class="trmrk-field">
       <mat-checkbox (change)="onDarkModeBtnClick($event)" [checked]="isDarkMode"
@@ -8,12 +12,12 @@
       >
     </div>
     <div class="trmrk-field">
-      <a mat-button [routerLink]="['/app-themes']" class="trmrk-icon-link"
+      <a mat-button [routerLink]="['/app/themes']" class="trmrk-icon-link"
         ><mat-icon class="trmrk-icon">palette</mat-icon> App Theme
       </a>
     </div>
     <div class="trmrk-field">
-      <a mat-button [routerLink]="['/resetapp']" class="trmrk-icon-link">
+      <a mat-button [routerLink]="['/app/resetapp']" class="trmrk-icon-link">
         <div
           class="trmrk-custom-svg-icon-wrapper"
           [innerHtml]="resetAltIcon"
@@ -22,4 +26,4 @@
       </a>
     </div>
   </div>
-</div>
+</ng-template>

@@ -6,9 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { TrmrkAppBar } from 'trmrk-angular';
 
 @Component({
-  selector: 'app-not-found',
+  selector: 'trmrk-not-found',
   imports: [MatIconModule, MatButtonModule, TrmrkAppBar],
-  templateUrl: './not-found.html',
-  styleUrl: './not-found.scss',
+  templateUrl: './trmrk-not-found.html',
+  styleUrl: './trmrk-not-found.scss',
 })
 export class NotFound {}

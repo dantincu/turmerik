@@ -7,7 +7,7 @@
 ></trmrk-app-bar>
 
 <ng-template #appIcon>
-  <app-trmrk-app-icon />
+  <trmrk-app-icon />
 </ng-template>
 
 <ng-template #optionsMenu>
@@ -21,7 +21,7 @@
     <mat-icon class="trmrk-icon">more_vert</mat-icon>
   </button>
   <mat-menu class="trmrk-menu" dense>
-    <a mat-menu-item class="trmrk-menu-item" [routerLink]="['/settings']">
+    <a mat-menu-item class="trmrk-menu-item" [routerLink]="['/app/settings']">
       <mat-icon class="trmrk-icon">settings</mat-icon>
       Settings
     </a>
@@ -32,7 +32,7 @@
   #appPageContent
   class="trmrk-app-page-body trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-y"
 >
-  <companies-app-panel></companies-app-panel>
+  <trmrk-companies-app-panel></trmrk-companies-app-panel>
   <div [ngStyle]="{marginTop: '0px'}">
     <input type="text" class="trmrk-input" />
   </div>

@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrmrkDevPage } from './trmrk-dev-page';
+import { HomePage } from './trmrk-home-page';
 
-describe('TrmrkDevPage', () => {
-  let component: TrmrkDevPage;
-  let fixture: ComponentFixture<TrmrkDevPage>;
+describe('HomePage', () => {
+  let component: HomePage;
+  let fixture: ComponentFixture<HomePage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrmrkDevPage]
-    })
-    .compileComponents();
+      imports: [HomePage],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(TrmrkDevPage);
+    fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

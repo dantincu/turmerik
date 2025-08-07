@@ -21,7 +21,7 @@ import {
 } from '../services/trmrk-panel-list-service';
 
 @Component({
-  selector: 'companies-app-panel',
+  selector: 'trmrk-companies-app-panel',
   imports: [
     CommonModule,
     TrmrkPanelListItem,
@@ -29,12 +29,12 @@ import {
     MatIconModule,
     TrmrkListAppPanel,
   ],
-  templateUrl: './companies-app-panel.html',
-  styleUrl: './companies-app-panel.scss',
+  templateUrl: './trmrk-companies-app-panel.html',
+  styleUrl: './trmrk-companies-app-panel.scss',
   providers: [TrmrkPanelListService],
   encapsulation: ViewEncapsulation.None,
 })
-export class CompaniesAppPanel {
+export class TrmrkCompaniesAppPanel {
   @ViewChildren('listItems')
   listItems!: QueryList<TrmrkPanelListItem>;
 

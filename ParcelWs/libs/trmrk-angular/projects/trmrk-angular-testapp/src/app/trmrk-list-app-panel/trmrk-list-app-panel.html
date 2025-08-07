@@ -6,7 +6,7 @@
   @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-panel-header" #panelHeader>
     <trmrk-horiz-strip
-      [trmrkCssClass]="['trmrk-horiz-strip trmrk-has-border-x2 trmrk-top-horiz-strip']"
+      [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-horiz-strip']"
       [trmrkLeadingTemplate]="topHorizStripLeadingTemplate"
     >
     </trmrk-horiz-strip>
@@ -28,7 +28,7 @@
     <ng-container *ngTemplateOutlet="trmrkLoadingTemplate"></ng-container> } @if
     (!trmrkLoadingTemplate) {
     <trmrk-horiz-strip
-      [trmrkCssClass]="['trmrk-loading-horiz-strip']"
+      [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-message-horiz-strip']"
       [trmrkLeadingTemplate]="trmrkLoadingTemplate"
     >
     </trmrk-horiz-strip>

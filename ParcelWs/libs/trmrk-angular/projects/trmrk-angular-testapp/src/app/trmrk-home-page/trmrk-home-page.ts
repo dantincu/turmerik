@@ -42,13 +42,13 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
 import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
-import { CompaniesAppPanel } from '../companies-app-panel/companies-app-panel';
+import { TrmrkCompaniesAppPanel } from '../trmrk-companies-app-panel/trmrk-companies-app-panel';
 import { ToggleAppBarService } from '../services/toggle-app-bar-service';
 
 import { companies } from '../services/companies';
 
 @Component({
-  selector: 'app-home-page',
+  selector: 'trmrk-home-page',
   imports: [
     MatIconModule,
     MatButtonModule,
@@ -68,10 +68,10 @@ import { companies } from '../services/companies';
     TrmrkPanelListItem,
     TrmrkTreeView,
     TrmrkThinHorizStrip,
-    CompaniesAppPanel,
+    TrmrkCompaniesAppPanel,
   ],
-  templateUrl: './home-page.html',
-  styleUrl: './home-page.scss',
+  templateUrl: './trmrk-home-page.html',
+  styleUrl: './trmrk-home-page.scss',
   providers: [ToggleAppBarService],
   encapsulation: ViewEncapsulation.None,
 })

@@ -1,30 +1,20 @@
 .trmrk-app-theme-light {
   .trmrk-app-bar {
     background-color: #d0e8ff;
-    border-bottom: 1px solid #c0d8ff;
+  }
+
+  .trmrk-top-message-horiz-strip,
+  .trmrk-top-horiz-strip,
+  .trmrk-bottom-horiz-strip {
+    background-color: #d0e8ff;
+    border-top: 2px solid #c0d8ff;
+  }
+
+  .trmrk-accelerating-scroll-popover {
+    background-color: #d0e8ff;
   }
 
   .trmrk-companies-app-panel, trmrk-app-themes-list-view {
-    .trmrk-loading-horiz-strip,
-    .trmrk-top-horiz-strip,
-    .trmrk-bottom-horiz-strip {
-      background-color: #d0e8ff;
-    }
-
-    .trmrk-top-horiz-strip,
-    .trmrk-bottom-horiz-strip {
-      border-top: 2px solid #c0d8ff;
-      border-bottom: 2px solid #c0d8ff;
-    }
-
-    .trmrk-loading-horiz-strip {
-      border-top: 1px solid #c0d8ff;
-    }
-
-    .trmrk-accelerating-scroll-popover {
-      background-color: #d0e8ff;
-    }
-
     trmrk-panel-list {
       .trmrk-list-item {
         .trmrk-horiz-strip {
@@ -195,30 +185,20 @@
 .trmrk-app-theme-dark {
   .trmrk-app-bar {
     background-color: #000820;
-    border-bottom: 1px solid #001030;
+  }
+
+  .trmrk-top-message-horiz-strip,
+  .trmrk-top-horiz-strip,
+  .trmrk-bottom-horiz-strip {
+    background-color: #000820;
+    border-top: 2px solid #001030;
+  }
+
+  .trmrk-accelerating-scroll-popover {
+    background-color: #000820;
   }
 
   .trmrk-companies-app-panel, trmrk-app-themes-list-view {
-    .trmrk-loading-horiz-strip,
-    .trmrk-top-horiz-strip,
-    .trmrk-bottom-horiz-strip {
-      background-color: #000820;
-    }
-
-    .trmrk-top-horiz-strip,
-    .trmrk-bottom-horiz-strip {
-      border-top: 2px solid #001030;
-      border-bottom: 2px solid #001030;
-    }
-
-    .trmrk-loading-horiz-strip {
-      border-top: 1px solid #001030;
-    }
-
-    .trmrk-accelerating-scroll-popover {
-      background-color: #000820;
-    }
-
     trmrk-panel-list {
       .trmrk-list-item {
         .trmrk-horiz-strip {

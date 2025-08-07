@@ -488,12 +488,20 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 .trmrk-user-message {
   .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+    margin-top: 0;
+
     mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
       font-size: 16px;
       position: relative;
       top: -4px;
       padding: 2px;
     }
+  }
+}
+
+.trmrk-horiz-strip {
+  .trmrk-user-message {
+    margin-top: -2px;
   }
 }
 
@@ -516,10 +524,6 @@ trmrk-list-app-panel, .trmrk-app-panel, trmrk-panel-list, .trmrk-panel-list {
 
 trmrk-list-app-panel {
   .trmrk-app-panel {
-    trmrk-loading {
-      margin-top: 3px;
-    }
-
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
       width: 100%;
@@ -605,6 +609,12 @@ trmrk-list-app-panel {
         flex: 1 0 calc(100% - 140px);
       }
     }
+  }
+}
+
+.trmrk-horiz-strip {
+  trmrk-loading {
+    margin-top: 4px;
   }
 }
 

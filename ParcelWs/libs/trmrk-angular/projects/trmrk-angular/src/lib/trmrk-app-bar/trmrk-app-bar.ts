@@ -40,7 +40,7 @@ export class TrmrkAppBar implements AfterViewInit {
     | readonly any[]
     | UrlTree
     | null
-    | undefined = ['/'];
+    | undefined = ['/app'];
   @Input() trmrkTitle!: string;
   @Input() trmrkCssClass: string | null = null;
 

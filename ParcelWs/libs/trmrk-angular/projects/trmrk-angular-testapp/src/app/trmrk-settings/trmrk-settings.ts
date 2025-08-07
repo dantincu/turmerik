@@ -8,17 +8,17 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { setIsDarkModeToLocalStorage } from '../../trmrk-browser/domUtils/core';
 
-import { TrmrkAppBar, materialIcons } from 'trmrk-angular';
+import { materialIcons, TrmrkAppPage } from 'trmrk-angular';
 import { AppStateService } from '../services/app-state-service';
 
 @Component({
-  selector: 'app-trmrk-settings',
+  selector: 'trmrk-settings',
   imports: [
     MatCheckbox,
     RouterLink,
     MatIconModule,
     MatButtonModule,
-    TrmrkAppBar,
+    TrmrkAppPage,
   ],
   templateUrl: './trmrk-settings.html',
   styleUrl: './trmrk-settings.scss',

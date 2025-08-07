@@ -59,6 +59,6 @@ app-home-page, app-trmrk-app-themes {
   @include mixins.rel-stretch-to-parent-size();
 }
 
-companies-app-panel {
+trmrk-companies-app-panel {
   @include mixins.rel-flex-stretch-to-parent-size();
 }
