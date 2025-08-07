@@ -1,11 +1,16 @@
 <div
-  [ngClass]="['trmrk-app-panel', panelListService.hasPendingReorder ? 'trmrk-has-bottom-horiz-strip' : '', trmrkCssClass ?? '',
+  [ngClass]="['trmrk-app-panel', panelListService.showPendingReorderStrip || panelListService.selectedRowsCount > 0 ? 'trmrk-has-bottom-horiz-strip' : '', trmrkCssClass ?? '',
   panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '',
   trmrkIsLoading ? 'trmrk-is-loading' : '']"
 >
   @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-panel-header" #panelHeader>
-    <div class="trmrk-horiz-strip trmrk-has-border-x2 trmrk-top-horiz-strip">
+    <trmrk-horiz-strip
+      [trmrkCssClass]="['trmrk-horiz-strip trmrk-has-border-x2 trmrk-top-horiz-strip']"
+      [trmrkLeadingTemplate]="topHorizStripLeadingTemplate"
+    >
+    </trmrk-horiz-strip>
+    <ng-template #topHorizStripLeadingTemplate>
       @if (panelListService.rowsAreSelectable) {
       <button mat-icon-button class="trmrk-icon-btn">
         <mat-checkbox
@@ -18,13 +23,18 @@
       <trmrk-accelerating-scroll-control
         [trmrkScrollable]="getPanelList"
       ></trmrk-accelerating-scroll-control>
-    </div>
+    </ng-template>
     @if (trmrkIsLoading) { @if (trmrkLoadingTemplate) {
     <ng-container *ngTemplateOutlet="trmrkLoadingTemplate"></ng-container> } @if
     (!trmrkLoadingTemplate) {
-    <div class="trmrk-horiz-strip trmrk-loading-horiz-strip">
+    <trmrk-horiz-strip
+      [trmrkCssClass]="['trmrk-loading-horiz-strip']"
+      [trmrkLeadingTemplate]="trmrkLoadingTemplate"
+    >
+    </trmrk-horiz-strip>
+    <ng-template #trmrkLoadingTemplate>
       <trmrk-loading></trmrk-loading>
-    </div>
+    </ng-template>
     } }
   </div>
   } @if (panelListService.showAcceleratingScrollPopovers) {
@@ -53,18 +63,44 @@
   >} @if (!trmrkEntities.length) {
   <ng-container *ngTemplateOutlet="trmrkNoItemsTemplate"></ng-container> } @if
   (!panelListService.showAcceleratingScrollPopovers) { @if
-  (panelListService.hasPendingReorder) {
+  (panelListService.showPendingReorderStrip) {
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-bottom-horiz-strip trmrk-has-border-x2']"
     [trmrkMainText]="'Apply new order'"
-    [trmrkTrailingTemplate]="bottomHorizStripTrailingTemplate"
+    [trmrkLeadingTemplate]="applyNewOrderHorizStripLeadingTemplate"
+    [trmrkTrailingTemplate]="applyNewOrderHorizStripTrailingTemplate"
   ></trmrk-horiz-strip>
-  <ng-template #bottomHorizStripTrailingTemplate>
+  <ng-template #applyNewOrderHorizStripLeadingTemplate>
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (click)="applyNewOrderClose()"
+    >
+      <mat-icon class="trmrk-icon">close</mat-icon>
+    </button>
+  </ng-template>
+  <ng-template #applyNewOrderHorizStripTrailingTemplate>
     <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-accept">
       <mat-icon class="trmrk-icon">check</mat-icon>
     </button>
     <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-reject">
       <mat-icon class="trmrk-icon">cancel</mat-icon>
+    </button>
+  </ng-template>
+  } @if (!panelListService.showPendingReorderStrip &&
+  panelListService.selectedRowsCount > 0) {
+  <trmrk-horiz-strip
+    [trmrkCssClass]="['trmrk-bottom-horiz-strip trmrk-has-border-x2']"
+    [trmrkMainText]="panelListService.selectedRowsCount + ' item' + (panelListService.selectedRowsCount > 1 ? 's' : '') + ' selected'"
+    [trmrkLeadingTemplate]="selectedItemsHorizStripLeadingTemplate"
+  ></trmrk-horiz-strip>
+  <ng-template #selectedItemsHorizStripLeadingTemplate>
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (click)="clearSelectedRows()"
+    >
+      <mat-icon class="trmrk-icon">close</mat-icon>
     </button>
   </ng-template>
   } } @if (panelListService.showAcceleratingScrollPopovers) {

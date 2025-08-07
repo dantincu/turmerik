@@ -104,6 +104,14 @@ export class TrmrkListAppPanel {
 
   constructor(public panelListService: TrmrkPanelListService<any, any>) {}
 
+  applyNewOrderClose() {
+    this.panelListService.showPendingReorderStrip = false;
+  }
+
+  clearSelectedRows() {
+    this.panelListService.toggleSelectedRows(false);
+  }
+
   rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
     this.panelListService.rowsMasterCheckBoxToggled(event);
   }

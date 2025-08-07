@@ -126,6 +126,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   getAppBarHeight!: (svc: TrmrkPanelListService<TEntity, TItem>) => number;
 
   hasPendingReorder = false;
+  showPendingReorderStrip = false;
   rowsAreSelectable!: boolean;
   rowsMasterCheckBoxIsChecked!: boolean;
   selectedRowsCount = 0;
@@ -230,39 +231,41 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.rows = this.rows.map((row) => ({ ...row }));
 
     setTimeout(() => {
+      const listItems = this.getListItems();
+
       this.leadingIconDragServices = this.rows.map((_, idx) => {
         const dragService = Injector.create({
           providers: [{ provide: DragService, useClass: DragService }],
         }).get(DragService);
 
-        const listItems = this.getListItems();
         const listItemComponent = listItems.get(idx);
         const listItem = this.getItemHostEl(listItemComponent!);
 
         dragService.init(listItem);
-
-        if (this.selectedRowsReorderIsAllowed) {
-          this.rowLeadingIconDragSubscriptions = listItems.map(() =>
-            dragService.drag.subscribe((event) => {
-              this.onDrag(event);
-            })
-          );
-
-          this.rowLeadingIconDragEndSubscriptions = listItems.map(() =>
-            dragService.dragEnd.subscribe((_) => {
-              if (!this.downAcceleratingPopoverCancelBtnIsFocused) {
-                this.hasPendingReorder = true;
-              }
-
-              // if (!this._temp++) {
-              this.resetVisuallyMovingRows();
-              // }
-            })
-          );
-        }
-
         return dragService;
       });
+
+      if (this.selectedRowsReorderIsAllowed) {
+        this.rowLeadingIconDragSubscriptions = listItems.map((_, idx) =>
+          this.leadingIconDragServices![idx].drag.subscribe((event) => {
+            this.onDrag(event);
+          })
+        );
+
+        this.rowLeadingIconDragEndSubscriptions = listItems.map((_, idx) =>
+          this.leadingIconDragServices![idx].dragEnd.subscribe((_) => {
+            if (!this.downAcceleratingPopoverCancelBtnIsFocused) {
+              this.hasPendingReorder = true;
+              this.showPendingReorderStrip = true;
+            } else if (this.hasPendingReorder) {
+              this.showPendingReorderStrip = true;
+            }
+            // if (!this._temp++) {
+            this.resetVisuallyMovingRows();
+            // }
+          })
+        );
+      }
     }, 0);
   }
 
@@ -454,6 +457,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     if (this.selectedRowsCount === 0) {
       this.rowsAreSelectable = false;
       this.hasPendingReorder = false;
+      this.showPendingReorderStrip = false;
     } else if (this.selectedRowsCount === this.rows.length) {
       this.rowsMasterCheckBoxIsChecked = true;
     } else {
@@ -462,21 +466,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   }
 
   rowsMasterCheckBoxToggled(event: MatCheckboxChange) {
-    this.rowsMasterCheckBoxIsChecked = event.checked;
-
-    for (let row of this.rows) {
-      if (row.item) {
-        row.item!.isSelected = event.checked;
-      }
-    }
-
-    if (!event.checked) {
-      this.rowsAreSelectable = false;
-      this.selectedRowsCount = 0;
-      this.hasPendingReorder = false;
-    } else {
-      this.selectedRowsCount = this.rows.length;
-    }
+    this.toggleSelectedRows(event.checked);
   }
 
   rowIconLongPressOrRightClick(event: TouchOrMouseCoords, idx: number) {
@@ -525,6 +515,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
             this.rowContentMouseDownOrTouchStartCoords,
             idx
           );
+
           this.isMovingSelectedRows = true;
           this.visuallyMovingMainRowIdx = idx;
           const panelList = this.getPanelList();
@@ -606,6 +597,25 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           }, 0);
         }
       }
+    }
+  }
+
+  toggleSelectedRows(selected: boolean) {
+    this.rowsMasterCheckBoxIsChecked = selected;
+
+    for (let row of this.rows) {
+      if (row.item) {
+        row.item!.isSelected = selected;
+      }
+    }
+
+    if (!selected) {
+      this.rowsAreSelectable = false;
+      this.selectedRowsCount = 0;
+      this.hasPendingReorder = false;
+      this.showPendingReorderStrip = false;
+    } else {
+      this.selectedRowsCount = this.rows.length;
     }
   }
 
