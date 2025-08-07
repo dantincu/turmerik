@@ -7,7 +7,7 @@
   ><trmrk-list-app-panel
     [trmrkCssClass]="'trmrk-app-themes-panel'"
     [trmrkEntities]="entities"
-    [trmrkIsLoading]="isLoading"
+    [trmrkIsLoading]="reqStateManager.isLoading"
     [trmrkListItems]="getListItems"
     [trmrkVisuallyMovingListItems]="getCurrentlyMovingListItems"
     [trmrkRowsSelectionIsAllowed]="true"
@@ -17,9 +17,9 @@
     [trmrkRowMenuTemplate]="rowMenuTemplate"
     [trmrkRowTemplate]="rowTemplate"
     [trmrkVisuallyMovingRowTemplate]="visuallyMovingRowTemplate"
-    [trmrkErrorTitle]="errorTitle"
-    [trmrkErrorMsg]="errorMsg"
-    [trmrkHasError]="hasError"
+    [trmrkErrorTitle]="reqStateManager.errorTitle"
+    [trmrkErrorMsg]="reqStateManager.errorMsg"
+    [trmrkHasError]="reqStateManager.hasError"
     [trmrkCanCloseError]="false"
   ></trmrk-list-app-panel>
 

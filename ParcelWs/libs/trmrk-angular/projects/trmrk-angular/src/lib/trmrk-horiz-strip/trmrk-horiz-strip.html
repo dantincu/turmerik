@@ -11,10 +11,10 @@
     [trmrkLongPressPreventDefault]="trmrkType !== TrmrkHorizStripType.Scrollable"
   >
     <div
-      [ngClass]="['trmrk-text-col', trmrkDetailsTextParts ? 'trmrk-has-details' : '']"
+      [ngClass]="['trmrk-text-col', ((trmrkDetailsTextParts ?? null) !== null) ? 'trmrk-has-details' : '']"
     >
       <span class="trmrk-text" [innerHTML]="mainText"></span>
-      @if (trmrkDetailsTextParts) {
+      @if ((trmrkDetailsTextParts ?? null) !== null) {
       <span class="trmrk-details"
         >@for (textPart of detailsTextParts; track $index) { @if (!$first) {
         &bull; }<span

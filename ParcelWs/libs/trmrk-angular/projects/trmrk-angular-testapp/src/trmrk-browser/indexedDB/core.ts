@@ -1,3 +1,5 @@
+import { AsyncRequestStateManager } from '../../trmrk/AsyncRequestStateManager';
+
 export interface TrmrkDBResp<T> {
   data: T;
   cacheMatch: boolean;

@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 
+import { AsyncRequestStateManager } from '../../trmrk/AsyncRequestStateManager';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 import { iDbAdapters } from '../../trmrk-browser/indexedDB/databases/adapters';
 import { getIDbRequestOpenErrorMsg } from '../../trmrk-browser/indexedDB/core';
@@ -45,11 +46,10 @@ export class TrmrkAppThemes {
   getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
 
   entities: any[] = [];
-  isLoading = false;
-  hasLoadReqFinished = false;
-  hasError = 0;
-  errorTitle = '';
-  errorMsg = '';
+  reqStateManager = new AsyncRequestStateManager<DOMException | null>(
+    null,
+    (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]
+  );
 
   rows: TrmrkPanelListServiceRow<{
     id: number;
@@ -59,40 +59,30 @@ export class TrmrkAppThemes {
   constructor(public panelListService: TrmrkPanelListService<any, any>) {}
 
   ngAfterViewInit() {
-    if (!this.hasLoadReqFinished) {
-      setTimeout(() => {
-        this.isLoading = true;
-        const adapter = iDbAdapters.basicAppSettings;
+    setTimeout(() => {
+      this.reqStateManager.beforeSend();
+      const adapter = iDbAdapters.basicAppSettings;
 
-        adapter.open(
-          (_, db) => {
-            const req = adapter.stores.appThemes.store(db).getAll();
+      adapter.open(
+        (_, db) => {
+          const req = adapter.stores.appThemes.store(db).getAll();
 
-            req.onsuccess = (event) => {
-              const target = event.target as IDBRequest<AppTheme[]>;
-              this.isLoading = false;
-              this.hasLoadReqFinished = true;
-              this.entities = target.result;
-            };
+          req.onsuccess = (event) => {
+            const target = event.target as IDBRequest<AppTheme[]>;
+            this.reqStateManager.success();
+            this.entities = target.result;
+          };
 
-            req.onerror = (event) => {
-              const target = event.target as IDBRequest;
-              this.isLoading = false;
-              this.hasLoadReqFinished = true;
-              this.hasError = 1;
-              this.errorMsg = getIDbRequestOpenErrorMsg(target.error);
-            };
-          },
-          (_, error) => {
-            this.isLoading = false;
-            this.hasLoadReqFinished = true;
-            this.errorTitle = 'Error opening IndexedDB';
-            this.errorMsg = getIDbRequestOpenErrorMsg(error);
-            this.hasError = 1;
-          }
-        );
-      });
-    }
+          req.onerror = (event) => {
+            const target = event.target as IDBRequest;
+            this.reqStateManager.error(target.error);
+          };
+        },
+        (_, error) => {
+          this.reqStateManager.error(error);
+        }
+      );
+    });
   }
 
   rowsUpdated(rows: TrmrkPanelListServiceRow<any>[]) {
