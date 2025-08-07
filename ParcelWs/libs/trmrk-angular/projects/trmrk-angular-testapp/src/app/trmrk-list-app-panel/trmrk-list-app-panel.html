@@ -1,7 +1,7 @@
 <div
   [ngClass]="['trmrk-app-panel', panelListService.showPendingReorderStrip || panelListService.selectedRowsCount > 0 ? 'trmrk-has-bottom-horiz-strip' : '', trmrkCssClass ?? '',
   panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '',
-  trmrkIsLoading ? 'trmrk-is-loading' : '']"
+  (trmrkIsLoading || trmrkHasError) ? 'trmrk-has-top-message-horiz-strip' : '',]"
 >
   @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-panel-header" #panelHeader>
@@ -35,7 +35,14 @@
     <ng-template #trmrkLoadingTemplate>
       <trmrk-loading></trmrk-loading>
     </ng-template>
-    } }
+    } } @if (trmrkHasError) {
+    <trmrk-horiz-strip
+      [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-message-horiz-strip trmrk-error-message-horiz-strip']"
+      [trmrkMainText]="trmrkErrorTitle"
+      [trmrkDetailsTextParts]="((trmrkErrorMsg ?? null) !== null) ? [{text: trmrkErrorMsg!, italic: false}] : null"
+    >
+    </trmrk-horiz-strip>
+    }
   </div>
   } @if (panelListService.showAcceleratingScrollPopovers) {
   <trmrk-accelerating-scroll-popover

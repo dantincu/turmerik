@@ -6,6 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { iDbAdapters } from '../../trmrk-browser/indexedDB/databases/adapters';
+import { getIDbRequestOpenErrorMsg } from '../../trmrk-browser/indexedDB/core';
+import { AppTheme } from '../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { TrmrkListAppPanel } from '../trmrk-list-app-panel/trmrk-list-app-panel';
 
@@ -43,7 +46,10 @@ export class TrmrkAppThemes {
 
   entities: any[] = [];
   isLoading = false;
-  hasLoaded = false;
+  hasLoadReqFinished = false;
+  hasError = false;
+  errorTitle = '';
+  errorMsg = '';
 
   rows: TrmrkPanelListServiceRow<{
     id: number;
@@ -51,6 +57,43 @@ export class TrmrkAppThemes {
   }>[] = [];
 
   constructor(public panelListService: TrmrkPanelListService<any, any>) {}
+
+  ngAfterViewInit() {
+    if (!this.hasLoadReqFinished) {
+      setTimeout(() => {
+        this.isLoading = true;
+        const adapter = iDbAdapters.basicAppSettings;
+
+        adapter.open(
+          (_, db) => {
+            const req = adapter.stores.appThemes.store(db).getAll();
+
+            req.onsuccess = (event) => {
+              const target = event.target as IDBRequest<AppTheme[]>;
+              this.isLoading = false;
+              this.hasLoadReqFinished = true;
+              this.entities = target.result;
+            };
+
+            req.onerror = (event) => {
+              const target = event.target as IDBRequest;
+              this.isLoading = false;
+              this.hasLoadReqFinished = true;
+              this.hasError = true;
+              this.errorMsg = getIDbRequestOpenErrorMsg(target.error);
+            };
+          },
+          (_, error) => {
+            this.isLoading = false;
+            this.hasLoadReqFinished = true;
+            this.errorTitle = 'Error opening IndexedDB';
+            this.errorMsg = getIDbRequestOpenErrorMsg(error);
+            this.hasError = true;
+          }
+        );
+      });
+    }
+  }
 
   rowsUpdated(rows: TrmrkPanelListServiceRow<any>[]) {
     this.rows = rows;

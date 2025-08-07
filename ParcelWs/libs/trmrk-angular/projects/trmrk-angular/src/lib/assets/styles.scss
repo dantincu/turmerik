@@ -594,14 +594,14 @@ trmrk-list-app-panel {
       }
     }
 
-    &.trmrk-has-bottom-horiz-strip, &.trmrk-is-loading {
+    &.trmrk-has-bottom-horiz-strip, &.trmrk-has-top-message-horiz-strip {
       trmrk-panel-list {
         height: calc(100% - 80px);
         flex: 1 0 calc(100% - 80px);
       }
     }
 
-    &.trmrk-is-loading.trmrk-has-bottom-horiz-strip {
+    &.trmrk-has-top-message-horiz-strip.trmrk-has-bottom-horiz-strip {
       trmrk-panel-list {
         height: calc(100% - 120px);
         flex: 1 0 calc(100% - 120px);
@@ -620,6 +620,12 @@ trmrk-list-app-panel {
 .trmrk-horiz-strip {
   trmrk-loading {
     margin-top: 4px;
+  }
+
+  &.trmrk-error-message-horiz-strip {
+    .trmrk-text-row {
+      justify-content: center;
+    }
   }
 }
 

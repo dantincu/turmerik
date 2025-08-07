@@ -11,15 +11,15 @@ export const localStorageKeys = Object.freeze({
   textCaretPositionerOpts: 'textCaretPositionerOpts',
 });
 
-export const appModeCssClasses = {
+export const appModeCssClasses = Object.freeze({
   compactMode: 'trmrk-app-mode-compact',
   fullMode: 'trmrk-app-mode-full',
-};
+});
 
-export const appThemeCssClasses = {
+export const appThemeCssClasses = Object.freeze({
   dark: 'trmrk-app-theme-dark',
   light: 'trmrk-app-theme-light',
-};
+});
 
 export const getAppModeCssClassName = (isCompactMode: boolean) => {
   const appModeClassName = isCompactMode

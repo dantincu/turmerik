@@ -1,4 +1,4 @@
-import { isSafariFunc, isAndroidFunc, isIPhoneFunc, isIPadFunc } from "./core";
+import { isSafariFunc, isAndroidFunc, isIPhoneFunc, isIPadFunc } from './core';
 
 export const isSafari = isSafariFunc();
 export const isIPad = isIPadFunc();

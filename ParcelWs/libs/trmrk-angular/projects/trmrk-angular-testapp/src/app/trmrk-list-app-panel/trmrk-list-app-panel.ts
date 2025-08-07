@@ -62,6 +62,9 @@ export class TrmrkListAppPanel {
   @Input() trmrkListItems!: () => QueryList<TrmrkPanelListItem>;
   @Input() trmrkVisuallyMovingListItems!: () => QueryList<TrmrkPanelListItem>;
   @Input() trmrkIsLoading = true;
+  @Input() trmrkErrorTitle = '';
+  @Input() trmrkErrorMsg: string | null = null;
+  @Input() trmrkHasError = false;
 
   @Output() trmrkRowsUpdated = new EventEmitter<
     TrmrkPanelListServiceRow<any>[]

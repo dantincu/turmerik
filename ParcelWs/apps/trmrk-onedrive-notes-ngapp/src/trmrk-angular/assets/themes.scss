@@ -157,6 +157,14 @@
       }
     }
   }
+
+  .trmrk-horiz-strip {
+    &.trmrk-error-message-horiz-strip {
+      .trmrk-text-row {
+        color: #F20;
+      }
+    }
+  }
 }
 
 .trmrk-app-theme-dark {
@@ -273,6 +281,14 @@
 
       .trmrk-cancel-icon-btn-highlighter {
         border-color: #F20;
+      }
+    }
+  }
+
+  .trmrk-horiz-strip {
+    &.trmrk-error-message-horiz-strip {
+      .trmrk-text-row {
+        color: #F20;
       }
     }
   }
