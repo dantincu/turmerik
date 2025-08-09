@@ -68,20 +68,20 @@ export interface ValueFactory<TInput, TOutput> {
   isAsync?: boolean | null | undefined;
 }
 
-export interface TextNode {
-  text?: string;
+export interface NodeCore {
   cssClass?: string | null | undefined;
+  data?: any | null | undefined;
+}
+
+export interface TextNode extends NodeCore {
+  text?: string;
   level?: TextLevel | null | undefined;
   style?: TextStyle | null | undefined;
   matIcon?: string | null | undefined;
   iconSvg?: string | null | undefined;
 }
 
-export interface DOMNodeAttrs {
-  disabled: boolean | null | undefined;
-  readonly: boolean | null | undefined;
-  checked: boolean | null | undefined;
-}
+export type DOMNodeAttrs = { [key: string]: string };
 
 export interface ComboBoxItem {
   key: string;
@@ -108,9 +108,8 @@ export interface FormNodeEvents {
   onClick?: OnClickEventHandler | null | undefined;
 }
 
-export interface FormNode extends FormNodeEvents {
+export interface FormNode extends FormNodeEvents, NodeCore {
   type: NodeType;
-  cssClass?: string | null | undefined;
   text?: TextNode[] | null | undefined;
   label?: string | null | undefined;
   value?: InputValueType | null | undefined;
@@ -118,13 +117,13 @@ export interface FormNode extends FormNodeEvents {
   linesCount?: number | null | undefined;
   attrs?: DOMNodeAttrs | null | undefined;
   buttonType?: ButtonType | null | undefined;
-  items?: ValueFactory<string, ComboBoxItem> | null | undefined;
+  items?: ValueFactory<string, ComboBoxItem[]> | null | undefined;
   childNodes?: FormNode[] | null | undefined;
 }
 
-export interface FormRow {
+export interface FormRow extends NodeCore {
   type: RowType;
-  cssClass?: string | null | undefined;
+  heading?: TextNode[] | null | undefined;
   nodes?: FormNode[] | null | undefined;
   rows?: FormRow[] | null | undefined;
   heightFactor?: number | null | undefined;
