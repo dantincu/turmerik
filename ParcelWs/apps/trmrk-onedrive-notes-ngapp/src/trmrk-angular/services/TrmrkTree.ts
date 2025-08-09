@@ -5,7 +5,6 @@ import { TrmrkObservable } from './TrmrkObservable';
 
 export interface TrmrkTreeNodeData<T> {
   nodeValue: T;
-  // path: number[];
   isHcyNode?: boolean | null | undefined;
   isExpanded?: boolean | null | undefined;
   isSelectable?: boolean | null | undefined;

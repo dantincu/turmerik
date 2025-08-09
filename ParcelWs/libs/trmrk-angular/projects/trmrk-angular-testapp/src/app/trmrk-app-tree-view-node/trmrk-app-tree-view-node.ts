@@ -12,10 +12,10 @@ import { Subscription } from 'rxjs';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import {
-  TrmrkObservable,
   TrmrkTree,
-  TrmrkTreeNode as TrmrkTreeNodeT,
+  TrmrkTreeNode,
   TrmrkTreeNodeData,
+  TrmrkTreeViewNode,
 } from 'trmrk-angular';
 
 import { TrmrkPanelListItem } from 'trmrk-angular';
@@ -28,15 +28,15 @@ export interface TreeNode {
 }
 
 @Component({
-  selector: 'trmrk-tree-node',
-  imports: [MatIconModule, TrmrkPanelListItem, CommonModule],
-  templateUrl: './trmrk-tree-node.html',
-  styleUrl: './trmrk-tree-node.scss',
+  selector: 'trmrk-app-tree-view-node',
+  imports: [MatIconModule, TrmrkPanelListItem, CommonModule, TrmrkTreeViewNode],
+  templateUrl: './trmrk-app-tree-view-node.html',
+  styleUrl: './trmrk-app-tree-view-node.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkTreeNode implements OnInit, OnDestroy {
+export class TrmrkAppTreeViewNode implements OnInit, OnDestroy {
   @Input() trmrkTreeData!: TrmrkTree<TreeNode>;
-  @Input() trmrkData!: TrmrkTreeNodeT<TreeNode>;
+  @Input() trmrkData!: TrmrkTreeNode<TreeNode>;
   @Input() trmrkPath!: number[];
 
   get showChildNodes() {

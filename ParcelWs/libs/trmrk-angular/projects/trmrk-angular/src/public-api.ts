@@ -9,6 +9,7 @@ export * from './lib/trmrk-thin-horiz-strip/trmrk-thin-horiz-strip';
 export * from './lib/trmrk-panel-list-item/trmrk-panel-list-item';
 export * from './lib/trmrk-app-bar/trmrk-app-bar';
 export * from './lib/trmrk-app-page/trmrk-app-page';
+export * from './lib/trmrk-tree-view-node/trmrk-tree-view-node';
 
 export * from './lib/services/drag-service';
 export * from './lib/services/simpleChanges';
@@ -29,5 +30,6 @@ export * from './lib/directives/trmrk-touch-end-or-mouse-up';
 export * from './lib/directives/trmrk-touch-or-mouse-event-base';
 export * from './lib/directives/trmrk-touch-or-mouse-move';
 export * from './lib/directives/trmrk-touch-start-or-mouse-down';
+export * from './lib/directives/trmrk-dynamic-attributes';
 
 export * from './lib/assets/icons/material/index';

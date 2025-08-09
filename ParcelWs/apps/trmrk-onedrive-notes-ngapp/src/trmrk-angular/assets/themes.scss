@@ -9,7 +9,8 @@
   :is(.trmrk-btn.trmrk-btn-filled-primary,
   .trmrk-btn.trmrk-btn-filled-secondary,
   .trmrk-btn.trmrk-btn-filled-accept,
-  .trmrk-btn.trmrk-btn-filled-reject) {
+  .trmrk-btn.trmrk-btn-filled-reject,
+  .trmrk-btn.trmrk-btn-filled-warn) {
   color: #FFF;
 }
 
@@ -19,7 +20,8 @@
   :is(.trmrk-icon-btn-filled-primary,
     .trmrk-icon-btn-filled-secondary,
     .trmrk-icon-btn-filled-accept,
-    .trmrk-icon-btn-filled-reject) {
+    .trmrk-icon-btn-filled-reject,
+    .trmrk-icon-btn-filled-warn) {
   color: #FFF;
 
   &[mat-icon-button].trmrk-icon-btn {
@@ -31,20 +33,44 @@
 
 :is(.trmrk-app-theme-light,
   .trmrk-app-theme-dark) {
-  .trmrk-icon-btn-filled-primary, .trmrk-btn-filled-primary {
+  .trmrk-icon-btn-filled-primary, .trmrk-btn-filled-primary, .trmrk-background-color-primary {
     background-color: #00F;
   }
 
-  .trmrk-icon-btn-filled-secondary, .trmrk-btn-filled-secondary {
+  .trmrk-color-primary {
+    color: #00F;
+  }
+
+  .trmrk-icon-btn-filled-secondary, .trmrk-btn-filled-secondary, .trmrk-background-color-secondary {
     background-color: #444;
   }
 
-  .trmrk-icon-btn-filled-accept, .trmrk-btn-filled-accept {
+  .trmrk-color-secondary {
+    color: #444;
+  }
+
+  .trmrk-icon-btn-filled-accept, .trmrk-btn-filled-accept, .trmrk-background-color-accept {
     background-color: #090;
   }
 
-  .trmrk-icon-btn-filled-reject, .trmrk-btn-filled-reject {
+  .trmrk-color-accept {
+    color: #090;
+  }
+
+  .trmrk-icon-btn-filled-reject, .trmrk-btn-filled-reject, .trmrk-background-color-reject {
     background-color: #F20;
+  }
+
+  .trmrk-color-reject {
+    color: #F20;
+  }
+
+  .trmrk-icon-btn-filled-warn, .trmrk-btn-filled-warn, .trmrk-background-color-warn {
+    background-color: #880;
+  }
+
+  .trmrk-color-warn {
+    color: #880;
   }
 }
 

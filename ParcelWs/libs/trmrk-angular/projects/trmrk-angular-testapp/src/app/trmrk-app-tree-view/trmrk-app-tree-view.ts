@@ -7,18 +7,21 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { TreeNode, TrmrkTreeNode } from '../trmrk-tree-node/trmrk-tree-node';
+import {
+  TreeNode,
+  TrmrkAppTreeViewNode,
+} from '../trmrk-app-tree-view-node/trmrk-app-tree-view-node';
 
 import { TrmrkTree, TrmrkTreeNodeData } from 'trmrk-angular';
 
 @Component({
-  selector: 'trmrk-tree-view',
-  imports: [TrmrkTreeNode],
-  templateUrl: './trmrk-tree-view.html',
-  styleUrl: './trmrk-tree-view.scss',
+  selector: 'trmrk-app-tree-view',
+  imports: [TrmrkAppTreeViewNode],
+  templateUrl: './trmrk-app-tree-view.html',
+  styleUrl: './trmrk-app-tree-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkTreeView implements OnInit, OnDestroy {
+export class TrmrkAppTreeView implements OnInit, OnDestroy {
   @Input() trmrkData!: TrmrkTree<TreeNode>;
 
   rootNodes!: TrmrkTreeNodeData<TreeNode>[] | null | undefined;

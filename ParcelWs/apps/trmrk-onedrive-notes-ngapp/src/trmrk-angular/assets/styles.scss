@@ -441,20 +441,31 @@ trmrk-app-page {
   }
 }
 
-.trmrk-tree-node {
-  display: flex;
-  flex-direction: column;
-  margin-right: 10px;
-  height: 40px;
-  margin-top: 3px;
+.trmrk-tree-view {
+  .trmrk-tree-node {
+    display: flex;
+    flex-direction: column;
 
-  &.trmrk-is-hcy-node {
-    height: unset;
-  }
+    .trmrk-tree-node-content {
+      display: flex;
+      height: 40px;
+      margin-top: 3px;
 
-  .trmrk-child-nodes {
-    margin-left: 20px;
-    width: 100%;
+      &.trmrk-is-hcy-node {
+        height: unset;
+      }
+
+      .trmrk-trailing-spacer {
+        display: block;
+        width: 10px;
+        min-width: 10px;
+      }
+    }
+
+    .trmrk-child-nodes-list {
+      margin-left: 10px;
+      width: 100%;
+    }
   }
 }
 

@@ -1,0 +1,17 @@
+<div
+  [ngClass]="['trmrk-tree-node', trmrkData.data.value.isHcyNode ? 'trmrk-is-hcy-node' : '', trmrkData.data.value.isExpanded ? 'trmrk-is-expanded' : '']"
+>
+  <div class="trmrk-tree-node-content">
+    <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+    <div class="trmrk-trailing-spacer">&nbsp;</div>
+  </div>
+  @if (showChildNodes) {
+  <div class="trmrk-child-nodes-list">
+    @for (node of childNodes; track node.nodeValue.id; let idx = $index) {
+    <ng-container
+      *ngTemplateOutlet="childNodeTemplate; context: { treeData: trmrkTreeData, data: trmrkData.childNodes![idx], path: getChildNodePath(idx), idx }"
+    ></ng-container>
+    }
+  </div>
+  }
+</div>

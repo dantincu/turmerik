@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrmrkTreeView } from './trmrk-tree-view';
+import { TrmrkTreeNode } from './trmrk-tree-node';
 
-describe('TrmrkTreeView', () => {
-  let component: TrmrkTreeView;
-  let fixture: ComponentFixture<TrmrkTreeView>;
+describe('TrmrkTreeNode', () => {
+  let component: TrmrkTreeNode;
+  let fixture: ComponentFixture<TrmrkTreeNode>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TrmrkTreeView]
+      imports: [TrmrkTreeNode]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TrmrkTreeView);
+    fixture = TestBed.createComponent(TrmrkTreeNode);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

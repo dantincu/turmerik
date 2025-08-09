@@ -16,11 +16,16 @@
       <span class="trmrk-text" [innerHTML]="mainText"></span>
       @if ((trmrkDetailsTextParts ?? null) !== null) {
       <span class="trmrk-details"
-        >@for (textPart of detailsTextParts; track $index) { @if (!$first) {
-        &bull; }<span
-          [ngClass]="['trmrk-text-part', textPart.italic ? 'trmrk-italic' : '']"
-          [ngStyle]="textPart.style"
-          >{{ textPart.text }}</span
+        >@for (textPart of detailsTextParts; track $index) { @if (!$first) { @if
+        (trmrkTextPartDelimiterTemplate) {
+        <ng-container
+          *ngTemplateOutlet="trmrkTextPartDelimiterTemplate"
+        ></ng-container>
+        } @if (!trmrkTextPartDelimiterTemplate) {
+        <span class="trmrk-delimiter"> &bull; </span> } }<span
+          [ngClass]="['trmrk-text-part', textPart.italic ? 'trmrk-italic' : '', textPart.cssClass ?? '']"
+          [innerHTML]="textPart.text"
+        ></span
         >}
       </span>
       }

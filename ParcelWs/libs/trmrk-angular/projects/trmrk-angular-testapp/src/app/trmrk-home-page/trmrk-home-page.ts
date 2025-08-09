@@ -40,8 +40,8 @@ import { getNextIdx } from '../../trmrk/math';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
-import { TreeNode } from '../trmrk-tree-node/trmrk-tree-node';
-import { TrmrkTreeView } from '../trmrk-tree-view/trmrk-tree-view';
+import { TreeNode } from '../trmrk-app-tree-view-node/trmrk-app-tree-view-node';
+import { TrmrkAppTreeView } from '../trmrk-app-tree-view/trmrk-app-tree-view';
 import { TrmrkCompaniesAppPanel } from '../trmrk-companies-app-panel/trmrk-companies-app-panel';
 import { ToggleAppBarService } from '../services/toggle-app-bar-service';
 
@@ -65,7 +65,7 @@ import { companies } from '../services/companies';
     MatInputModule,
     MatFormFieldModule,
     TrmrkPanelListItem,
-    TrmrkTreeView,
+    TrmrkAppTreeView,
     TrmrkThinHorizStrip,
     TrmrkCompaniesAppPanel,
   ],

@@ -27,7 +27,7 @@ export enum TrmrkHorizStripType {
 export interface TrmrkHorizStripDetailsTextPart {
   text: string;
   italic?: boolean | null | undefined;
-  style?: { [key: string]: any } | null | undefined;
+  cssClass?: string | null | undefined;
 }
 
 @Component({
@@ -67,6 +67,7 @@ export class TrmrkHorizStrip implements OnChanges {
   @Input() trmrkCapCssStyle: { [key: string]: any } | null = null;
   @Input() trmrkLeadingTemplate?: TemplateRef<any> | null | undefined;
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkTextPartDelimiterTemplate?: TemplateRef<any> | null | undefined;
 
   mainText = '';
   TrmrkHorizStripType = TrmrkHorizStripType;
@@ -103,8 +104,10 @@ export class TrmrkHorizStrip implements OnChanges {
         retPart = part;
       } else {
         retPart = {
-          text: part,
-          italic: true,
+          text: encodeHtml(
+            part ?? '',
+            this.trmrkUseNonBreakingSpaceTokens
+          ).replaceAll('\n', '&nbsp;'),
         };
       }
 
