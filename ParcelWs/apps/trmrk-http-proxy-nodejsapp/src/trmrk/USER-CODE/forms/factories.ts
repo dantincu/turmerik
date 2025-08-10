@@ -147,6 +147,14 @@ export const form = {
     attrs,
     data,
   }),
+  loading: (
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
+  ): FormNode => ({
+    type: NodeType.Loading,
+    cssClass,
+    data,
+  }),
   horizRule: (
     cssClass?: string | NullOrUndef,
     data?: any | NullOrUndef

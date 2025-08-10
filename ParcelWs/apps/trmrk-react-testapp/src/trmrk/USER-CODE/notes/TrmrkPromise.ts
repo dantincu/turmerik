@@ -4,7 +4,8 @@ import { ActionResponse } from './types';
 export class TrmrkPromise<T> {
   constructor(
     public promise: Promise<ActionResponse<T>>,
-    private onError?: ((error: any) => VoidOrAny) | NullOrUndef
+    private onError?: ((error: any) => VoidOrAny) | NullOrUndef,
+    private handleError?: boolean
   ) {}
 
   success<T1>(
@@ -15,7 +16,7 @@ export class TrmrkPromise<T> {
         this.promise.then(
           (response) =>
             callback(response).then((resp) => resolve(resp), this.onError),
-          this.onError
+          this.handleError ? this.onError : null
         );
       }),
       this.onError

@@ -6,9 +6,10 @@ export enum NodeType {
   Input,
   Combobox,
   Button,
-  HorizRule,
   Group,
   Field,
+  Loading,
+  HorizRule,
 }
 
 export enum ButtonType {
