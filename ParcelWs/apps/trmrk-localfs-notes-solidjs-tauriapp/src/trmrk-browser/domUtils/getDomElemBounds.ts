@@ -1,4 +1,5 @@
 import trmrk from '../../trmrk';
+import { NullOrUndef } from '../../trmrk/core';
 
 import { filterChildNodes } from './core';
 
@@ -9,10 +10,10 @@ export const emRegex = () => /px/i;
 export const remRegex = () => /px/i;
 
 export interface HtmlElementStyleRectangleCore {
-  left: number | null | undefined;
-  top: number | null | undefined;
-  width: number | null | undefined;
-  height: number | null | undefined;
+  left: number | NullOrUndef;
+  top: number | NullOrUndef;
+  width: number | NullOrUndef;
+  height: number | NullOrUndef;
 }
 
 export interface HtmlElementRectangleCore {
@@ -163,7 +164,7 @@ export const clearElemVertInset = (elemStyle: CSSStyleDeclaration) => {
 
 export const extractNumberFromCssPropVal = (
   cssPropVal: string,
-  suffix: string | null | undefined = null
+  suffix: string | NullOrUndef = null
 ) => {
   let pxCount: number | null = null;
   suffix ??= 'px';
@@ -188,14 +189,10 @@ export const applyCssPropValIfReq = <TPropVal>(
   elemStyle: CSSStyleDeclaration,
   cssPropVal: TPropVal,
   cssPropValAssigner: (elemStyle: CSSStyleDeclaration, propVal: string) => void,
-  cssPropValSerializer:
-    | ((propVal: TPropVal) => string)
-    | null
-    | undefined = null,
+  cssPropValSerializer: ((propVal: TPropVal) => string) | NullOrUndef = null,
   defaultCssPropValSerializer:
-    | ((propVal: TPropVal | null | undefined) => string | null)
-    | null
-    | undefined = null
+    | ((propVal: TPropVal | NullOrUndef) => string | null)
+    | NullOrUndef = null
 ) => {
   cssPropValSerializer ??= (propVal) => `${propVal}`;
   defaultCssPropValSerializer ??= () => null;
@@ -217,11 +214,9 @@ export const applyRectnglProps = (
   rectnglCssProps: HtmlElementStyleRectangleCore,
   clearPropsWhereNullOrUndef = false
 ) => {
-  const cssPropValSerializer = (val: number | null | undefined) => `${val}px`;
+  const cssPropValSerializer = (val: number | NullOrUndef) => `${val}px`;
 
-  let defaultCssPropValSerializer: (
-    val: number | null | undefined
-  ) => string | null;
+  let defaultCssPropValSerializer: (val: number | NullOrUndef) => string | null;
 
   defaultCssPropValSerializer = clearPropsWhereNullOrUndef
     ? () => ''

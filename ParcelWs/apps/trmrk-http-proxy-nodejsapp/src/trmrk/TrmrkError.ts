@@ -1,17 +1,19 @@
+import { NullOrUndef } from './core';
+
 export interface ITrmrkError<TData> {
-  statusCode?: number | null | undefined;
-  statusText?: string | null | undefined;
-  allowsRetry?: boolean | null | undefined;
-  showPageRefreshOption?: boolean | null | undefined;
-  data?: TData | null | undefined;
+  statusCode?: number | NullOrUndef;
+  statusText?: string | NullOrUndef;
+  allowsRetry?: boolean | NullOrUndef;
+  showPageRefreshOption?: boolean | NullOrUndef;
+  data?: TData | NullOrUndef;
 }
 
 export class TrmrkError<TData> extends Error implements ITrmrkError<TData> {
-  statusCode?: number | null | undefined;
-  statusText?: string | null | undefined;
-  allowsRetry?: boolean | null | undefined;
-  showPageRefreshOption?: boolean | null | undefined;
-  data: TData | null | undefined;
+  statusCode?: number | NullOrUndef;
+  statusText?: string | NullOrUndef;
+  allowsRetry?: boolean | NullOrUndef;
+  showPageRefreshOption?: boolean | NullOrUndef;
+  data: TData | NullOrUndef;
 
   constructor(
     message?: string,

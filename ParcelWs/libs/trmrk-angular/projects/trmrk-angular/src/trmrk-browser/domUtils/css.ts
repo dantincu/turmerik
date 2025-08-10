@@ -1,5 +1,5 @@
 import trmrk from '../../trmrk';
-import { NullOrUndef } from '../../trmrk/core';
+import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
 
 export const extractNum = (cssPropVal: string, unitStr: string = 'px') => {
   let num: number | null = null;
@@ -29,7 +29,7 @@ export const extractElCssStyleTopPx = (elem: HTMLDivElement | NullOrUndef) =>
 export const getGlobalSheetCssStrings = (
   styleSheetsArr?: CSSStyleSheet[] | NullOrUndef,
   predicate?:
-    | ((styleSheet: CSSStyleSheet, idx?: number) => boolean | any | void)
+    | ((styleSheet: CSSStyleSheet, idx?: number) => boolean | any | VoidOrAny)
     | NullOrUndef
 ) =>
   (styleSheetsArr ?? Array.from(document.styleSheets))

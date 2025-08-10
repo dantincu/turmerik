@@ -1,4 +1,4 @@
-import { Kvp } from "./core";
+import { Kvp, NullOrUndef } from './core';
 
 export class IndexedCollection<T> {
   private _map: { [key: number]: T } = {};
@@ -98,8 +98,7 @@ export class IndexedCollection<T> {
     throwIfNotExists: boolean,
     foundCallback:
       | ((key: number, keyIdx: number, found: boolean, item: T | null) => void)
-      | null
-      | undefined = null
+      | NullOrUndef = null
   ) {
     const keyIdx = this._keysArr.indexOf(key);
     let item: T | null = null;

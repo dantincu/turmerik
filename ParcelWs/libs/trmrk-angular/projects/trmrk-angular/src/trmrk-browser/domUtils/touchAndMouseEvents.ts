@@ -1,5 +1,5 @@
-import { Coords } from './types';
 import { NullOrUndef } from '../../trmrk/core';
+import { Coords } from './types';
 
 /**
  * From https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button

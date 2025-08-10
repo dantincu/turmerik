@@ -96,10 +96,7 @@ export const withValIf = <TIn, TOut>(
   inVal: TIn,
   convertor: (input: TIn) => TOut,
   defaultValueFactory: (input: TIn | NullOrUndef) => TOut,
-  defaultInputPredicate?:
-    | ((input: TIn | NullOrUndef) => boolean)
-    | null
-    | undefined
+  defaultInputPredicate?: ((input: TIn | NullOrUndef) => boolean) | NullOrUndef
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
   let retVal: TOut;
@@ -118,12 +115,8 @@ export const actWithValIf = <TVal>(
   action: (input: TVal) => unknown | any | void,
   defaultAction:
     | ((input: TVal | NullOrUndef) => unknown | any | void)
-    | null
-    | undefined = null,
-  defaultInputPredicate?:
-    | ((input: TVal | NullOrUndef) => boolean)
-    | null
-    | undefined
+    | NullOrUndef = null,
+  defaultInputPredicate?: ((input: TVal | NullOrUndef) => boolean) | NullOrUndef
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
 
@@ -143,12 +136,8 @@ export const actWithIf = <TVal>(
   action: (input: TVal) => unknown | any | void,
   defaultAction:
     | ((input: TVal | NullOrUndef) => unknown | any | void)
-    | null
-    | undefined = null,
-  defaultInputPredicate?:
-    | ((input: TVal | NullOrUndef) => boolean)
-    | null
-    | undefined
+    | NullOrUndef = null,
+  defaultInputPredicate?: ((input: TVal | NullOrUndef) => boolean) | NullOrUndef
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
   const retVal = defaultInputPredicate(inVal);

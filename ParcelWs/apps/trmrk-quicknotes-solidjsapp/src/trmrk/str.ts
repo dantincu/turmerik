@@ -1,8 +1,8 @@
-import { allWsRegex, digitRegex } from "./core";
+import { allWsRegex, digitRegex, NullOrUndef } from './core';
 
 export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
-  let retVal = "string" === typeof arg;
-  retVal = retVal && arg !== "";
+  let retVal = 'string' === typeof arg;
+  retVal = retVal && arg !== '';
 
   if (retVal && allWsSameAsEmpty) {
     retVal = !allWsRegex().test(arg);
@@ -13,14 +13,14 @@ export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
 
 export const errToString = (
   error: Error | any,
-  nullifyEmptyStr?: boolean | null | undefined
+  nullifyEmptyStr?: boolean | NullOrUndef
 ) => {
   let errMsg: string | null = null;
   const errTypeOf = typeof error;
 
-  if (errTypeOf === "string") {
+  if (errTypeOf === 'string') {
     errMsg = error;
-  } else if (errTypeOf === "object") {
+  } else if (errTypeOf === 'object') {
     errMsg = error.message ?? error.cause;
   } else {
     errMsg = error?.toString();
@@ -29,7 +29,7 @@ export const errToString = (
   errMsg ??= null;
   nullifyEmptyStr ??= true;
 
-  if (nullifyEmptyStr && typeof errMsg === "string" && errMsg.length === 0) {
+  if (nullifyEmptyStr && typeof errMsg === 'string' && errMsg.length === 0) {
     errMsg = null;
   }
 
@@ -39,8 +39,8 @@ export const errToString = (
 export const subStr = (
   str: string,
   opts: {
-    stIdx?: number | null | undefined;
-    endIdx?: number | null | undefined;
+    stIdx?: number | NullOrUndef;
+    endIdx?: number | NullOrUndef;
   }
 ) => {
   opts ??= {};
@@ -60,21 +60,20 @@ export const trimStr = (
   trimOpts?:
     | {
         trimStr: string;
-        fullTrim?: boolean | null | undefined;
-        trimStart?: boolean | null | undefined;
-        trimEnd?: boolean | null | undefined;
+        fullTrim?: boolean | NullOrUndef;
+        trimStart?: boolean | NullOrUndef;
+        trimEnd?: boolean | NullOrUndef;
       }
-    | null
-    | undefined
+    | NullOrUndef
 ) => {
   trimOpts ??= {
-    trimStr: " ",
+    trimStr: ' ',
   };
 
   let trimStr = trimOpts.trimStr;
 
   if (!isNonEmptyStr(trimStr)) {
-    trimStr = " ";
+    trimStr = ' ';
   }
 
   trimStr.length;
@@ -111,13 +110,13 @@ export const capitalizeFirstLetter = (str: string) => {
 export const transformStr = (
   inStr: string,
   convertor: (chr: string, idx: number) => string | null
-) => [...inStr].map(convertor).join("");
+) => [...inStr].map(convertor).join('');
 
 export const extractDigits = (
   inStr: string,
-  allowedNonDigits?: string[] | null | undefined
+  allowedNonDigits?: string[] | NullOrUndef
 ) => {
-  allowedNonDigits ??= ["."];
+  allowedNonDigits ??= ['.'];
 
   const outStr = transformStr(inStr, (chr) =>
     digitRegex().test(chr) || allowedNonDigits.indexOf(chr) >= 0 ? chr : null

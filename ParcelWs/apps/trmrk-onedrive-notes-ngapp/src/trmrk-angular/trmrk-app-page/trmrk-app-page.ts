@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
+import { NullOrUndef } from '../../trmrk/core';
+
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 
 @Component({
@@ -28,18 +30,17 @@ import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
   encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkAppPage {
-  @Input() trmrkPageTemplate: TemplateRef<any> | null | undefined;
+  @Input() trmrkPageTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkUseDefaultPageBody = true;
-  @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarHomeRouterLink:
     | string
     | readonly any[]
     | UrlTree
-    | null
-    | undefined = ['/'];
+    | NullOrUndef = ['/'];
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;
-  @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkShowOptionsBtn = true;
   @Input() trmrkRouteBasePath = '/app';
   @Input() trmrkIncludeSettingsMenuItem = true;

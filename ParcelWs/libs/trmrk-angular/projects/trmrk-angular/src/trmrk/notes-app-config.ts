@@ -1,7 +1,7 @@
-import { withValIf, NullOrUndef } from './core';
+import { withValIf, NullOrUndef } from "./core";
 
-import * as CmdCommandNs from './DotNetTypes/Turmerik.Notes.Core.CmdCommand';
-import * as NoteDirsPairConfig from './DotNetTypes/Turmerik.Notes.Core.NoteDirsPairConfigMtbl';
+import * as CmdCommandNs from "./DotNetTypes/Turmerik.Notes.Core.CmdCommand";
+import * as NoteDirsPairConfig from "./DotNetTypes/Turmerik.Notes.Core.NoteDirsPairConfigMtbl";
 
 export type CmdCommand = CmdCommandNs.CmdCommand;
 export type ArgOptionT = NoteDirsPairConfig.ArgOptionT;
@@ -71,15 +71,15 @@ export const withRequiredNodeVar = <T>(
 
 export const withNodeEnv = <T>(opts: WithNodeEnvOpts<T>) =>
   withRequiredNodeVar(
-    opts.nodeEnvName ?? 'NODE_ENV',
+    opts.nodeEnvName ?? "NODE_ENV",
     (value) => {
       let retVal: T;
 
       switch (value) {
-        case opts.devEnvName ?? 'development':
+        case opts.devEnvName ?? "development":
           retVal = opts.onDevelopment(value, process.env);
           break;
-        case opts.prodEnvName ?? 'production':
+        case opts.prodEnvName ?? "production":
           retVal = opts.onProduction(value, process.env);
           break;
         default:

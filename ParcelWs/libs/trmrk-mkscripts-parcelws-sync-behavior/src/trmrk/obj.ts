@@ -1,3 +1,5 @@
+import { NullOrUndef } from './core';
+
 /**
  * taken from https://stackoverflow.com/questions/33547583/safe-way-to-extract-property-names
  **/
@@ -7,7 +9,7 @@ export const proxiedPropsOf = <TObj>(obj?: TObj) => {
     {
       get: (_, prop) => prop,
       set: () => {
-        throw Error("Set not supported");
+        throw Error('Set not supported');
       },
     }
   ) as {
@@ -28,7 +30,7 @@ export const propsOf = <TObj>(_obj: TObj | undefined = undefined) => {
 };
 
 export const isNotNullObj = (arg: any) => {
-  let retVal = "object" === typeof arg;
+  let retVal = 'object' === typeof arg;
   retVal = retVal && arg !== null;
 
   return retVal;
@@ -56,7 +58,7 @@ export const forEachProp = <TObj extends Object>(
 export const merge = <TTrgObj extends Object>(
   trgObj: TTrgObj,
   srcObjsArr: Object[],
-  depth: number | null | undefined = 0,
+  depth: number | NullOrUndef = 0,
   mergeOverwrite = false
 ) => {
   depth ??= Number.MAX_VALUE;
@@ -73,8 +75,8 @@ export const merge = <TTrgObj extends Object>(
           trgObjMap[propName] = srcPropVal;
         } else if (
           depth > 0 &&
-          typeof trgObjMap[propName] === "object" &&
-          typeof srcPropVal === "object"
+          typeof trgObjMap[propName] === 'object' &&
+          typeof srcPropVal === 'object'
         ) {
           merge(trgObj, [srcObj], depth - 1, mergeOverwrite);
         } else if (mergeOverwrite) {

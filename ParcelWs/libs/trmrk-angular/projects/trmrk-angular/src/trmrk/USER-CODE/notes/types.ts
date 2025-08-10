@@ -1,7 +1,7 @@
 import { NullOrUndef } from '../../core';
 
 export interface ActionResponse<TResult> {
-  result?: TResult | NullOrUndef;
+  result?: TResult | `NullOrUndef`;
   hasError?: boolean | NullOrUndef;
   errorTitle?: string | NullOrUndef;
   errorMessage?: string | NullOrUndef;

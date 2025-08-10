@@ -1,6 +1,5 @@
 export type NullOrUndef = null | undefined;
-export type AnyOrNullOrUndef = any | NullOrUndef;
-export type AnyOrUnknown = AnyOrNullOrUndef | unknown;
+export type AnyOrUnknown = any | unknown | NullOrUndef;
 export type VoidOrAny = void | AnyOrUnknown;
 
 export type ValueOrAny<TValue> = TValue | AnyOrUnknown;

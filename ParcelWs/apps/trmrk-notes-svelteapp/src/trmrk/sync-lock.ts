@@ -1,3 +1,5 @@
+import { NullOrUndef } from './core';
+
 export class SyncLock {
   private static readonly dfVal = BigInt(0);
   private static readonly incVal = BigInt(1);
@@ -5,7 +7,7 @@ export class SyncLock {
   private readonly dfTimeout: number | undefined;
   private readonly syncRoot = new BigInt64Array(1);
 
-  constructor(dfTimeout: number | null | undefined = undefined) {
+  constructor(dfTimeout: number | NullOrUndef = undefined) {
     this.dfTimeout = dfTimeout ?? undefined;
   }
 
@@ -18,7 +20,7 @@ export class SyncLock {
           0,
           SyncLock.dfVal,
           timeout ?? this.dfTimeout
-        ) !== "timed-out"
+        ) !== 'timed-out'
       ) {
         action().then(
           () => {
@@ -33,7 +35,7 @@ export class SyncLock {
       } else {
         reject(
           new Error(
-            "While waiting for previously enqueued actions to finish their execution, more than the specified timeout has elapsed"
+            'While waiting for previously enqueued actions to finish their execution, more than the specified timeout has elapsed'
           )
         );
       }

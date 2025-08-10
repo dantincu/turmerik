@@ -1,3 +1,5 @@
+import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
+
 export abstract class IDbAdapterBase {
   constructor(public readonly dbName: string, public version: number = 1) {}
 
@@ -5,13 +7,11 @@ export abstract class IDbAdapterBase {
 
   open = (
     onSuccess:
-      | ((event: Event, db: IDBDatabase) => void | any | unknown)
-      | null
-      | undefined = null,
+      | ((event: Event, db: IDBDatabase) => VoidOrAny)
+      | NullOrUndef = null,
     onError:
-      | ((event: Event, error: DOMException | null) => void | any | unknown)
-      | null
-      | undefined = null
+      | ((event: Event, error: DOMException | null) => VoidOrAny)
+      | NullOrUndef = null
   ) => {
     const request = indexedDB.open(this.dbName, this.version);
 

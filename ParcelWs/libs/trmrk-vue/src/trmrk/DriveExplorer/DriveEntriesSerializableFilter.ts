@@ -1,4 +1,6 @@
+import { NullOrUndef } from '../core';
+
 export interface DriveEntriesSerializableFilter {
-  IncludedRelPathRegexes?: string[] | null | undefined;
-  ExcludedRelPathRegexes?: string[] | null | undefined;
+  IncludedRelPathRegexes?: string[] | NullOrUndef;
+  ExcludedRelPathRegexes?: string[] | NullOrUndef;
 }

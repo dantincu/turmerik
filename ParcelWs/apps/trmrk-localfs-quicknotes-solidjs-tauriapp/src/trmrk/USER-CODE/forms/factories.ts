@@ -1,3 +1,5 @@
+import { NullOrUndef } from '../../core';
+
 import {
   ButtonType,
   FormNode,
@@ -16,10 +18,10 @@ import {
 } from './types';
 
 type TextArgBase1 = [string];
-type TextArgBase2 = [...TextArgBase1, TextLevel | null | undefined];
-type TextArgBase3 = [...TextArgBase2, TextStyle | null | undefined];
-type TextArgBase4 = [...TextArgBase3, TextArgType | null | undefined];
-type TextArgBase5 = [...TextArgBase4, string | null | undefined];
+type TextArgBase2 = [...TextArgBase1, TextLevel | NullOrUndef];
+type TextArgBase3 = [...TextArgBase2, TextStyle | NullOrUndef];
+type TextArgBase4 = [...TextArgBase3, TextArgType | NullOrUndef];
+type TextArgBase5 = [...TextArgBase4, string | NullOrUndef];
 
 export type TextArg =
   | TextArgBase1
@@ -37,9 +39,9 @@ export enum TextArgType {
 export const form = {
   section: (
     rows: FormRow[],
-    heading?: TextArg[] | null | undefined,
-    cssClass?: string | null | undefined,
-    data?: any | null | undefined
+    heading?: TextArg[] | NullOrUndef,
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormRow => ({
     type: RowType.Section,
     rows,
@@ -48,9 +50,9 @@ export const form = {
     data,
   }),
   row: (
-    nodes?: FormNode[] | null | undefined,
-    cssClass?: string | null | undefined,
-    data?: any | null | undefined
+    nodes?: FormNode[] | NullOrUndef,
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormRow => ({
     type: RowType.Content,
     nodes,
@@ -58,8 +60,8 @@ export const form = {
     data,
   }),
   blank: (
-    heightFactor?: number | null | undefined,
-    data?: any | null | undefined
+    heightFactor?: number | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormRow => ({
     type: RowType.Blank,
     heightFactor,
@@ -67,15 +69,15 @@ export const form = {
   }),
   heading: (
     text: TextArg[],
-    cssClass?: string | null | undefined,
-    data?: any | null | undefined
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormNode => ({
     type: NodeType.Heading,
     text: text.map(form.textNode),
     cssClass,
     data,
   }),
-  textNode: (node: TextArg, data?: any | null | undefined): TextNode => ({
+  textNode: (node: TextArg, data?: any | NullOrUndef): TextNode => ({
     text: node[0],
     level: node[1] ?? TextLevel.Default,
     style: node[2] ?? TextStyle.Regular,
@@ -86,8 +88,8 @@ export const form = {
   }),
   text: (
     nodes: TextArg[],
-    cssClass?: string | null | undefined,
-    data?: any | null | undefined
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormNode => ({
     type: NodeType.Text,
     text: nodes.map(form.textNode),
@@ -95,13 +97,13 @@ export const form = {
     data,
   }),
   input: (
-    value?: string | null | undefined,
-    inputType?: HtmlInputType | null | undefined,
-    linesCount?: number | null | undefined,
-    onChange?: OnChangeEventHandler | null | undefined,
-    cssClass?: string | null | undefined,
-    attrs?: DOMNodeAttrs | null | undefined,
-    data?: any | null | undefined
+    value?: string | NullOrUndef,
+    inputType?: HtmlInputType | NullOrUndef,
+    linesCount?: number | NullOrUndef,
+    onChange?: OnChangeEventHandler | NullOrUndef,
+    cssClass?: string | NullOrUndef,
+    attrs?: DOMNodeAttrs | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormNode => ({
     type: NodeType.Input,
     linesCount,
@@ -114,11 +116,11 @@ export const form = {
   }),
   comboBox: (
     items: ValueFactory<string, ComboBoxItem[]>,
-    value?: string | null | undefined,
-    onChange?: OnChangeEventHandler | null | undefined,
-    cssClass?: string | null | undefined,
-    attrs?: DOMNodeAttrs | null | undefined,
-    data?: any | null | undefined
+    value?: string | NullOrUndef,
+    onChange?: OnChangeEventHandler | NullOrUndef,
+    cssClass?: string | NullOrUndef,
+    attrs?: DOMNodeAttrs | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormNode => ({
     type: NodeType.Combobox,
     items,
@@ -131,11 +133,11 @@ export const form = {
   }),
   button: (
     text: TextArg[],
-    buttonType?: ButtonType | null | undefined,
-    onClick?: OnClickEventHandler | null | undefined,
-    cssClass?: string | null | undefined,
-    attrs?: DOMNodeAttrs | null | undefined,
-    data?: any | null | undefined
+    buttonType?: ButtonType | NullOrUndef,
+    onClick?: OnClickEventHandler | NullOrUndef,
+    cssClass?: string | NullOrUndef,
+    attrs?: DOMNodeAttrs | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormNode => ({
     type: NodeType.Button,
     buttonType,
@@ -146,8 +148,8 @@ export const form = {
     data,
   }),
   horizRule: (
-    cssClass?: string | null | undefined,
-    data?: any | null | undefined
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
   ): FormNode => ({
     type: NodeType.HorizRule,
     cssClass,

@@ -1,9 +1,10 @@
+import { NullOrUndef, VoidOrAny } from '../../core';
 import { ActionResponse } from './types';
 
 export class TrmrkPromise<T> {
   constructor(
     public promise: Promise<ActionResponse<T>>,
-    private onError?: ((error: any) => void | any | unknown) | null | undefined
+    private onError?: ((error: any) => VoidOrAny) | NullOrUndef
   ) {}
 
   success<T1>(

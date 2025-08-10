@@ -1,5 +1,5 @@
-import { ActionResponse } from './types';
 import { NullOrUndef, VoidOrAny } from '../../core';
+import { ActionResponse } from './types';
 
 export class TrmrkPromise<T> {
   constructor(

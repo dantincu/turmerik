@@ -1,26 +1,26 @@
-import { Kvp, MtblRefValue } from "./core";
-import { isNonEmptyStr } from "./str";
+import { Kvp, MtblRefValue, NullOrUndef } from './core';
+import { isNonEmptyStr } from './str';
 
-import { containsAnyOfMx } from "./arr";
+import { containsAnyOfMx } from './arr';
 
-import { AppConfigData } from "./notes-app-config";
+import { AppConfigData } from './notes-app-config';
 
-export const trmrkPathSep = "/";
-export const trmrkPathStartTkn = "<";
+export const trmrkPathSep = '/';
+export const trmrkPathStartTkn = '<';
 
-export const trmrkHomePathTkn = "~";
-export const trmrkHomePathStr = [trmrkPathStartTkn, trmrkHomePathTkn].join("");
-export const trmrkHomePathStartStr = [trmrkHomePathStr, trmrkPathSep].join("");
+export const trmrkHomePathTkn = '~';
+export const trmrkHomePathStr = [trmrkPathStartTkn, trmrkHomePathTkn].join('');
+export const trmrkHomePathStartStr = [trmrkHomePathStr, trmrkPathSep].join('');
 
 export const getPath = (
   pathParts: string[] | readonly string[],
-  relToTrmrkHome: boolean | null | undefined = null
+  relToTrmrkHome: boolean | NullOrUndef = null
 ) => {
   const partsArr = [...pathParts];
 
-  if (typeof relToTrmrkHome === "boolean") {
+  if (typeof relToTrmrkHome === 'boolean') {
     if (isNonEmptyStr(partsArr[0])) {
-      partsArr.splice(0, 0, "");
+      partsArr.splice(0, 0, '');
     }
 
     if (relToTrmrkHome === true) {
@@ -42,7 +42,7 @@ export enum PathValidationErrCode {
 export interface PathValidationResult {
   isValid: boolean;
   errCode: PathValidationErrCode;
-  invalidChar: Kvp<number, string | null | undefined>;
+  invalidChar: Kvp<number, string | NullOrUndef>;
 }
 
 export const dfPathValidationResult = () =>
@@ -58,15 +58,15 @@ export const dfPathValidationResult = () =>
 export const createInvalidSeqncs = (sep: string, opSep: string) => [
   opSep,
   sep + sep,
-  sep + " ",
-  " " + sep,
-  sep + ".",
-  "." + sep,
+  sep + ' ',
+  ' ' + sep,
+  sep + '.',
+  '.' + sep,
 ];
 
-export const baseInvalidSeqncs = Object.freeze(["  ", " .", "..", ". "]);
-export const winInvalidSeqncs = Object.freeze(createInvalidSeqncs("\\", "/"));
-export const unixInvalidSeqncs = Object.freeze(createInvalidSeqncs("/", "\\"));
+export const baseInvalidSeqncs = Object.freeze(['  ', ' .', '..', '. ']);
+export const winInvalidSeqncs = Object.freeze(createInvalidSeqncs('\\', '/'));
+export const unixInvalidSeqncs = Object.freeze(createInvalidSeqncs('/', '\\'));
 
 export const getInvalidSeqncs = (isWinOs: boolean) =>
   isWinOs ? winInvalidSeqncs : unixInvalidSeqncs;
@@ -88,9 +88,9 @@ export const normalizeIfNetworkPath = (
 };
 
 export const normalizeIfRelPath = (path: string, sep: string) => {
-  if (path.startsWith(".." + sep)) {
+  if (path.startsWith('..' + sep)) {
     path = path.substring(2);
-  } else if (path.startsWith("." + sep)) {
+  } else if (path.startsWith('.' + sep)) {
     path = path.substring(1);
   }
 
@@ -103,7 +103,7 @@ export const checkPathNotContainsInvalidChars = (
   invalidStrMx: (string[] | readonly string[])[]
 ) => {
   let matching = {} as MtblRefValue<
-    Kvp<number, Kvp<number, string | null | undefined>>
+    Kvp<number, Kvp<number, string | NullOrUndef>>
   >;
 
   if (!(result.isValid = !containsAnyOfMx(path, invalidStrMx, matching))) {
@@ -134,7 +134,7 @@ export const isValidRootedPathCore = (
 export const isValidRootedPath = (
   cfg: AppConfigData,
   path: string,
-  result: PathValidationResult | null | undefined = null,
+  result: PathValidationResult | NullOrUndef = null,
   allowNetworkPath: boolean = true
 ) => {
   result ??= dfPathValidationResult();
@@ -145,7 +145,7 @@ export const isValidRootedPath = (
 
     if (
       !(result.isValid =
-        path.startsWith("/") || path.startsWith(trmrkHomePathStartStr))
+        path.startsWith('/') || path.startsWith(trmrkHomePathStartStr))
     ) {
       result.errCode = PathValidationErrCode.IsNotRooted;
     }
@@ -161,7 +161,7 @@ export const isValidRootedPath = (
 export const isValidRootedFsPath = (
   cfg: AppConfigData,
   path: string,
-  result: PathValidationResult | null | undefined = null,
+  result: PathValidationResult | NullOrUndef = null,
   allowNetworkPath: boolean = true
 ) => {
   result ??= dfPathValidationResult();
@@ -170,10 +170,10 @@ export const isValidRootedFsPath = (
     if ((result.isValid = /^[a-zA-Z]\:/.test(path))) {
       path = path.substring(2);
     } else {
-      result.isValid = path.startsWith("\\");
+      result.isValid = path.startsWith('\\');
     }
   } else {
-    result.isValid = path.startsWith("/");
+    result.isValid = path.startsWith('/');
   }
 
   if (result.isValid) {
@@ -199,7 +199,7 @@ export const isValidRootedFsPath = (
 export const isValidPath = (
   cfg: AppConfigData,
   path: string,
-  result: PathValidationResult | null | undefined = null,
+  result: PathValidationResult | NullOrUndef = null,
   allowNetworkPath: boolean = true
 ) => {
   result ??= dfPathValidationResult();
@@ -212,7 +212,7 @@ export const isValidPath = (
 export const isValidFsPath = (
   cfg: AppConfigData,
   path: string,
-  result: PathValidationResult | null | undefined = null,
+  result: PathValidationResult | NullOrUndef = null,
   allowNetworkPath: boolean = true
 ) => {
   result ??= dfPathValidationResult();
@@ -224,13 +224,13 @@ export const isValidFsPath = (
 
 export const getFileNameExtension = (fileName: string) => {
   let extension: string;
-  const fileNameParts = fileName.split(".");
+  const fileNameParts = fileName.split('.');
 
   if (fileNameParts.length > 1) {
     extension = fileNameParts.pop()!;
     extension = `.${extension}`;
   } else {
-    extension = "";
+    extension = '';
   }
 
   return extension;
@@ -239,7 +239,7 @@ export const getFileNameExtension = (fileName: string) => {
 export const getFileNameExtnWithoutLeadingDot = (fileName: string) => {
   let fileNameExtn: string | null = getFileNameExtension(fileName);
 
-  if (fileNameExtn !== "") {
+  if (fileNameExtn !== '') {
     fileNameExtn = fileNameExtn.substring(1);
   } else {
     fileNameExtn = null;

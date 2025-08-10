@@ -1,3 +1,5 @@
+import { NullOrUndef, VoidOrAny } from '../../core';
+
 export enum NodeType {
   Text = 0,
   Heading,
@@ -63,22 +65,22 @@ export type HtmlInputType =
   | 'button';
 
 export interface ValueFactory<TInput, TOutput> {
-  value?: TOutput | null | undefined;
-  factory?: ((input: TInput) => TOutput | Promise<TOutput>) | null | undefined;
-  isAsync?: boolean | null | undefined;
+  value?: TOutput | NullOrUndef;
+  factory?: ((input: TInput) => TOutput | Promise<TOutput>) | NullOrUndef;
+  isAsync?: boolean | NullOrUndef;
 }
 
 export interface NodeCore {
-  cssClass?: string | null | undefined;
-  data?: any | null | undefined;
+  cssClass?: string | NullOrUndef;
+  data?: any | NullOrUndef;
 }
 
 export interface TextNode extends NodeCore {
   text?: string;
-  level?: TextLevel | null | undefined;
-  style?: TextStyle | null | undefined;
-  matIcon?: string | null | undefined;
-  iconSvg?: string | null | undefined;
+  level?: TextLevel | NullOrUndef;
+  style?: TextStyle | NullOrUndef;
+  matIcon?: string | NullOrUndef;
+  iconSvg?: string | NullOrUndef;
 }
 
 export type DOMNodeAttrs = { [key: string]: string };
@@ -98,33 +100,33 @@ export type FormNodeChangedEventArg =
 
 export type OnChangeEventHandler = (
   newValue: FormNodeChangedEventArg,
-  searchString?: string | null | undefined
-) => void | any | unknown;
+  searchString?: string | NullOrUndef
+) => VoidOrAny;
 
-export type OnClickEventHandler = () => void | any | unknown;
+export type OnClickEventHandler = () => VoidOrAny;
 
 export interface FormNodeEvents {
-  onChange?: OnChangeEventHandler | null | undefined;
-  onClick?: OnClickEventHandler | null | undefined;
+  onChange?: OnChangeEventHandler | NullOrUndef;
+  onClick?: OnClickEventHandler | NullOrUndef;
 }
 
 export interface FormNode extends FormNodeEvents, NodeCore {
   type: NodeType;
-  text?: TextNode[] | null | undefined;
-  label?: string | null | undefined;
-  value?: InputValueType | null | undefined;
-  inputType?: HtmlInputType | null | undefined;
-  linesCount?: number | null | undefined;
-  attrs?: DOMNodeAttrs | null | undefined;
-  buttonType?: ButtonType | null | undefined;
-  items?: ValueFactory<string, ComboBoxItem[]> | null | undefined;
-  childNodes?: FormNode[] | null | undefined;
+  text?: TextNode[] | NullOrUndef;
+  label?: string | NullOrUndef;
+  value?: InputValueType | NullOrUndef;
+  inputType?: HtmlInputType | NullOrUndef;
+  linesCount?: number | NullOrUndef;
+  attrs?: DOMNodeAttrs | NullOrUndef;
+  buttonType?: ButtonType | NullOrUndef;
+  items?: ValueFactory<string, ComboBoxItem[]> | NullOrUndef;
+  childNodes?: FormNode[] | NullOrUndef;
 }
 
 export interface FormRow extends NodeCore {
   type: RowType;
-  heading?: TextNode[] | null | undefined;
-  nodes?: FormNode[] | null | undefined;
-  rows?: FormRow[] | null | undefined;
-  heightFactor?: number | null | undefined;
+  heading?: TextNode[] | NullOrUndef;
+  nodes?: FormNode[] | NullOrUndef;
+  rows?: FormRow[] | NullOrUndef;
+  heightFactor?: number | NullOrUndef;
 }

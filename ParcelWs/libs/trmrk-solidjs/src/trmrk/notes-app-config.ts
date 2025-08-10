@@ -1,4 +1,4 @@
-import { withValIf } from "./core";
+import { withValIf, NullOrUndef } from "./core";
 
 import * as CmdCommandNs from "./DotNetTypes/Turmerik.Notes.Core.CmdCommand";
 import * as NoteDirsPairConfig from "./DotNetTypes/Turmerik.Notes.Core.NoteDirsPairConfigMtbl";
@@ -47,15 +47,15 @@ export interface WithNodeEnvOpts<T> {
     nodeEnv: string | undefined,
     nodeEnvObj: NodeJS.ProcessEnv
   ) => T;
-  devEnvName?: string | null | undefined;
-  prodEnvName?: string | null | undefined;
-  nodeEnvName?: string | null | undefined;
+  devEnvName?: string | NullOrUndef;
+  prodEnvName?: string | NullOrUndef;
+  nodeEnvName?: string | NullOrUndef;
 }
 
 export const withRequiredNodeVar = <T>(
   varName: string,
   convertor: (value: string, nodeEnvObj: NodeJS.ProcessEnv) => T,
-  onNotFound?: ((nodeEnvObj: NodeJS.ProcessEnv) => T) | null | undefined
+  onNotFound?: ((nodeEnvObj: NodeJS.ProcessEnv) => T) | NullOrUndef
 ) =>
   withValIf(
     process.env[varName],

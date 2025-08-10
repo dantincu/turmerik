@@ -4,7 +4,6 @@ import {
   jsonBool,
   actWithIf,
   NullOrUndef,
-  VoidOrAny,
 } from '../../trmrk/core';
 
 export const supportedFeatures = {
@@ -232,7 +231,7 @@ export const filterChildNodes = <TChildNode extends ChildNode = ChildNode>(
         elem: ChildNode,
         idx: number,
         prElemChildNodesCollctn: NodeListOf<ChildNode>
-      ) => boolean | VoidOrAny)
+      ) => boolean | any | unknown | void)
     | NullOrUndef = null,
   reverseOrder: boolean = false
 ) => {

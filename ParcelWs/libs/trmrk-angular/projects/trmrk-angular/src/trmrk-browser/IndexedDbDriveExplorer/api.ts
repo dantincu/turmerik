@@ -45,7 +45,6 @@ class DriveItemNode
     } else {
       this._fileHandle = this._handle as FileSystemFileHandle;
     }
-    ``;
   }
 
   public get handle(): FileSystemHandle {

@@ -1,3 +1,5 @@
+import { NullOrUndef } from './core';
+
 export class EventListenersCollection<TEvent> implements Disposable {
   protected readonly listenersArr: ((event: TEvent) => void)[];
 
@@ -26,7 +28,7 @@ export class EventListenersCollection<TEvent> implements Disposable {
   }
 
   public unsubscribeAll(
-    listenersArr?: ((event: TEvent) => void)[] | null | undefined
+    listenersArr?: ((event: TEvent) => void)[] | NullOrUndef
   ) {
     if (listenersArr) {
       for (let listener of listenersArr) {

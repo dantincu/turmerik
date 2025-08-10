@@ -1,3 +1,5 @@
+import { NullOrUndef } from './core';
+
 // JavaScript epoch starts at 1970-01-01
 export const epoch1970Milliseconds = new Date(1970, 0, 1).getTime(); // 0 milliseconds
 
@@ -8,10 +10,7 @@ export const epoch0001Milliseconds = new Date(0).setFullYear(1, 0, 1); // Adjust
 export const millisecondsBetweenEpochs0001And1970 =
   epoch1970Milliseconds - epoch0001Milliseconds;
 
-export const ticksToMillis = (
-  ticks: number,
-  round?: boolean | null | undefined
-) => {
+export const ticksToMillis = (ticks: number, round?: boolean | NullOrUndef) => {
   let millis = ticks / 10000;
   round ??= true;
 
@@ -50,6 +49,6 @@ export const moveUtcDateToLocalTime = (date: Date, offsetInMillis?: number) => {
 };
 
 export const dateToDisplayStr = (date: Date) => {
-  const str = [date.toLocaleDateString(), date.toLocaleTimeString()].join(" ");
+  const str = [date.toLocaleDateString(), date.toLocaleTimeString()].join(' ');
   return str;
 };

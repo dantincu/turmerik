@@ -1,20 +1,21 @@
-import { extractNestedElement } from "./core";
+import { NullOrUndef } from '../../trmrk/core';
+import { extractNestedElement } from './core';
 
 export const isMultilineInput = (inputEl: HTMLElement) =>
-  inputEl.tagName !== "INPUT";
+  inputEl.tagName !== 'INPUT';
 
 export const hasContentEditable = (elem: HTMLElement) =>
-  (elem.getAttribute("contenteditable") ?? "false") !== "false";
+  (elem.getAttribute('contenteditable') ?? 'false') !== 'false';
 
 export const isReadOnly = (elem: HTMLElement) =>
-  !!elem.getAttribute("readonly");
+  !!elem.getAttribute('readonly');
 
 export const isTextInput = (elem: HTMLElement) => {
   switch (elem.tagName) {
-    case "INPUT":
+    case 'INPUT':
       return true;
-    case "TEXTAREA":
-      const isNotHidden = !elem.getAttribute("aria-hidden");
+    case 'TEXTAREA':
+      const isNotHidden = !elem.getAttribute('aria-hidden');
       return isNotHidden;
     default:
       const hasContentEditableVal = hasContentEditable(elem);
@@ -31,10 +32,9 @@ export const extractTextInput = (
         collctn: NodeListOf<ChildNode> | null
       ) => boolean)
     | boolean
-    | null
-    | undefined = null
+    | NullOrUndef = null
 ) => {
-  if (typeof filterPredicateOrAllowReadonly !== "function") {
+  if (typeof filterPredicateOrAllowReadonly !== 'function') {
     const allowReadonly = !!filterPredicateOrAllowReadonly;
 
     filterPredicateOrAllowReadonly = (elem) =>

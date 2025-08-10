@@ -1,7 +1,9 @@
+import { NullOrUndef } from '../../trmrk/core';
+
 export interface TrmrkDBResp<T> {
   data: T;
   cacheMatch: boolean;
-  cacheError?: any | null | undefined;
+  cacheError?: any | NullOrUndef;
 }
 
 export const getIDbRequestOpenErrorMsg = (

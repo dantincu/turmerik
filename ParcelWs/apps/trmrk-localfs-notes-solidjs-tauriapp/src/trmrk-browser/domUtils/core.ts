@@ -1,5 +1,10 @@
 import trmrk from '../../trmrk';
-import { MtblRefValue, jsonBool, actWithIf } from '../../trmrk/core';
+import {
+  MtblRefValue,
+  jsonBool,
+  actWithIf,
+  NullOrUndef,
+} from '../../trmrk/core';
 
 export const supportedFeatures = {
   fileSystemApi: !!(window as any).showDirectoryPicker,
@@ -39,8 +44,8 @@ export const getAppThemeCssClassName = (isDarkMode: boolean) => {
 
 export const getRoute = (
   routeBase: string,
-  path: string | null | undefined = null,
-  relPath: string | null | undefined = null
+  path: string | NullOrUndef = null,
+  relPath: string | NullOrUndef = null
 ) => {
   const partsArr = [path, relPath]
     .filter((value) => value)
@@ -65,7 +70,7 @@ export const prefersDarkMode = () =>
   window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 export const isDarkMode = (
-  localStorageIsDarkModeKey: string | null | undefined = null
+  localStorageIsDarkModeKey: string | NullOrUndef = null
 ) => {
   const localStorageIsDarkMode = localStorage.getItem(
     localStorageIsDarkModeKey ?? localStorageKeys.appThemeIsDarkMode
@@ -89,7 +94,7 @@ export const isDarkMode = (
 };
 
 export const isCompactMode = (
-  localStorageIsCompactModeKey: string | null | undefined = null
+  localStorageIsCompactModeKey: string | NullOrUndef = null
 ) => {
   const localStorageIsCompactMode = localStorage.getItem(
     localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode
@@ -101,7 +106,7 @@ export const isCompactMode = (
 
 export const setIsDarkModeToLocalStorage = (
   isDarkMode: boolean,
-  localStorageIsDarkModeKey: string | null | undefined = null
+  localStorageIsDarkModeKey: string | NullOrUndef = null
 ) =>
   localStorage.setItem(
     localStorageIsDarkModeKey ?? localStorageKeys.appThemeIsDarkMode,
@@ -110,7 +115,7 @@ export const setIsDarkModeToLocalStorage = (
 
 export const setIsCompactModeToLocalStorage = (
   isCompactMode: boolean,
-  localStorageIsCompactModeKey: string | null | undefined = null
+  localStorageIsCompactModeKey: string | NullOrUndef = null
 ) =>
   localStorage.setItem(
     localStorageIsCompactModeKey ?? localStorageKeys.appIsCompactMode,
@@ -143,11 +148,11 @@ export const extractFloatNumber = (str: string) =>
   parseInt(extractDigitsAndDot(str));
 
 export interface OverflowType {
-  visible?: boolean | null | undefined;
-  hidden?: boolean | null | undefined;
-  clip?: boolean | null | undefined;
-  scroll?: boolean | null | undefined;
-  auto?: boolean | null | undefined;
+  visible?: boolean | NullOrUndef;
+  hidden?: boolean | NullOrUndef;
+  clip?: boolean | NullOrUndef;
+  scroll?: boolean | NullOrUndef;
+  auto?: boolean | NullOrUndef;
   isHidden: boolean;
 }
 
@@ -227,8 +232,7 @@ export const filterChildNodes = <TChildNode extends ChildNode = ChildNode>(
         idx: number,
         prElemChildNodesCollctn: NodeListOf<ChildNode>
       ) => boolean | any | unknown | void)
-    | null
-    | undefined = null,
+    | NullOrUndef = null,
   reverseOrder: boolean = false
 ) => {
   const retArr: TChildNode[] = [];
@@ -259,8 +263,7 @@ export const filterChildElements = <
         idx: number,
         prElemChildNodesCollctn: NodeListOf<ChildNode>
       ) => boolean | any | unknown | void)
-    | null
-    | undefined = null,
+    | NullOrUndef = null,
   reverseOrder: boolean = false
 ) => {
   callback ??= () => true;
@@ -302,8 +305,7 @@ export const filterChildNodesArr = <TChildNode extends ChildNode>(
         idx: number,
         arr: ChildNode[]
       ) => boolean | any | unknown | void)
-    | null
-    | undefined = null
+    | NullOrUndef = null
 ) => {
   const retArr: TChildNode[] = [];
   callback ??= () => true;
@@ -329,9 +331,8 @@ export const filterChildElementsArr = <
         idx: number,
         arr: ChildNode[]
       ) => boolean | any | unknown | void)
-    | null
-    | undefined = null,
-  elemTagName: string | null | undefined = null
+    | NullOrUndef = null,
+  elemTagName: string | NullOrUndef = null
 ) => {
   callback ??= () => true;
 
@@ -389,7 +390,7 @@ export const extractNestedElement = <TElement = HTMLElement>(
 };
 
 export const clearTimeouIfReqCore = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined,
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef,
   clearFunc: (timeoutId: NodeJS.Timeout) => void
 ) => {
   const timeoutId = timeoutIdRef?.value;
@@ -401,22 +402,22 @@ export const clearTimeouIfReqCore = (
 };
 
 export const clearTimeoutIfReq = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef
 ) => clearTimeouIfReqCore(timeoutIdRef, clearTimeout);
 
 export const clearIntervalIfReq = (
-  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | null | undefined
+  timeoutIdRef: MtblRefValue<NodeJS.Timeout | null> | NullOrUndef
 ) => clearTimeouIfReqCore(timeoutIdRef, clearInterval);
 
-export const clearTmOutIfReq = (timeoutId: NodeJS.Timeout | null | undefined) =>
+export const clearTmOutIfReq = (timeoutId: NodeJS.Timeout | NullOrUndef) =>
   actWithIf(timeoutId, (id) => clearTimeout(id));
 
-export const clearIntvIfReq = (timeoutId: NodeJS.Timeout | null | undefined) =>
+export const clearIntvIfReq = (timeoutId: NodeJS.Timeout | NullOrUndef) =>
   actWithIf(timeoutId, (id) => clearInterval(id));
 
 export const updateDisableAttr = (
   elem: HTMLElement,
-  disabledValue: boolean | null | undefined
+  disabledValue: boolean | NullOrUndef
 ) => {
   if (disabledValue) {
     elem.setAttribute('disabled', '');

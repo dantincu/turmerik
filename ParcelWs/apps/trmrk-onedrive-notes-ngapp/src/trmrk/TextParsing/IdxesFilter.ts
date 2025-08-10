@@ -1,5 +1,7 @@
+import { NullOrUndef } from '../core';
+
 export interface IdxesFilter {
-  SingleIdx?: number | null | undefined;
-  StartIdx?: number | null | undefined;
-  EndIdx?: number | null | undefined;
+  SingleIdx?: number | NullOrUndef;
+  StartIdx?: number | NullOrUndef;
+  EndIdx?: number | NullOrUndef;
 }

@@ -1,4 +1,5 @@
 import trmrk from '../trmrk';
+import { NullOrUndef } from '../trmrk/core';
 
 export const defaultLongPressTimeoutMills = 400;
 export const defaultFastAnimationDurationMillis = 100;
@@ -9,11 +10,11 @@ export const absUriRegex = () => () =>
   /^[\w\-_]+\:\/\/([\w\-_]+\.?)+(\:[0-9]+)?(\/[\w\-\?\.\+_&=#,]*)*$/g;
 
 export const getNewUri = (
-  query?: URLSearchParams | null | undefined,
-  hash?: string | null | undefined,
-  path?: string | null | undefined,
-  host?: string | null | undefined,
-  preserveQueryDelim?: boolean | null | undefined
+  query?: URLSearchParams | NullOrUndef,
+  hash?: string | NullOrUndef,
+  path?: string | NullOrUndef,
+  host?: string | NullOrUndef,
+  preserveQueryDelim?: boolean | NullOrUndef
 ) => {
   const queryStr = query?.toString();
 
@@ -38,14 +39,12 @@ export const getRelUri = (
   queryParams: URLSearchParams,
   queryParamsTransformer: (query: URLSearchParams) => void,
   hashTransformer?:
-    | ((hash?: string | null | undefined) => string | null | undefined)
-    | null
-    | undefined,
+    | ((hash?: string | NullOrUndef) => string | NullOrUndef)
+    | NullOrUndef,
   pathTransformer?:
-    | ((hash?: string | null | undefined) => string | null | undefined)
-    | null
-    | undefined,
-  preserveQueryDelim?: boolean | null | undefined
+    | ((hash?: string | NullOrUndef) => string | NullOrUndef)
+    | NullOrUndef,
+  preserveQueryDelim?: boolean | NullOrUndef
 ) => {
   queryParamsTransformer(queryParams);
   hashTransformer ??= (hash) => hash;

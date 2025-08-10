@@ -1,6 +1,7 @@
-import trmrk from "../../trmrk";
+import trmrk from '../../trmrk';
+import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
 
-export const extractNum = (cssPropVal: string, unitStr: string = "px") => {
+export const extractNum = (cssPropVal: string, unitStr: string = 'px') => {
   let num: number | null = null;
 
   cssPropVal = cssPropVal.trim().toLocaleLowerCase();
@@ -22,23 +23,21 @@ export const extractNum = (cssPropVal: string, unitStr: string = "px") => {
   return num;
 };
 
-export const extractElCssStyleTopPx = (
-  elem: HTMLDivElement | null | undefined
-) => extractNum(elem?.style.top ?? "");
+export const extractElCssStyleTopPx = (elem: HTMLDivElement | NullOrUndef) =>
+  extractNum(elem?.style.top ?? '');
 
 export const getGlobalSheetCssStrings = (
-  styleSheetsArr?: CSSStyleSheet[] | null | undefined,
+  styleSheetsArr?: CSSStyleSheet[] | NullOrUndef,
   predicate?:
-    | ((styleSheet: CSSStyleSheet, idx?: number) => boolean | any | void)
-    | null
-    | undefined
+    | ((styleSheet: CSSStyleSheet, idx?: number) => boolean | any | VoidOrAny)
+    | NullOrUndef
 ) =>
   (styleSheetsArr ?? Array.from(document.styleSheets))
     .filter(predicate ?? (() => true))
     .map((x) => {
       const css = Array.from(x.cssRules)
         .map((rule) => rule.cssText)
-        .join("\n");
+        .join('\n');
 
       return css;
     });

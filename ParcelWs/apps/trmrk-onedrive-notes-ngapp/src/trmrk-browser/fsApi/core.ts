@@ -1,7 +1,9 @@
+import { NullOrUndef } from '../../trmrk/core';
+
 export interface FsApiEntry<THandle extends FileSystemHandle> {
   name: string;
   handle: THandle;
-  isFolder: boolean | null | undefined;
+  isFolder: boolean | NullOrUndef;
 }
 
 export interface FsApiFile extends FsApiEntry<FileSystemFileHandle> {}

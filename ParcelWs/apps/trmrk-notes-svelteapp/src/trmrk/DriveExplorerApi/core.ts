@@ -1,15 +1,16 @@
-import trmrk from "../index";
+import trmrk from '../index';
+import { NullOrUndef } from '../core';
 
-import { DriveItem } from "../drive-item";
+import { DriveItem } from '../drive-item';
 import {
   FileType,
   OfficeFileType,
-} from "../DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore";
+} from '../DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore';
 
 export interface RootedPathResolvedArgs {
   path: string;
-  basePathSegs?: string[] | null | undefined;
-  homePathSegs?: string[] | null | undefined;
+  basePathSegs?: string[] | NullOrUndef;
+  homePathSegs?: string[] | NullOrUndef;
 }
 
 export interface IDriveItemNodeCore<
@@ -19,8 +20,8 @@ export interface IDriveItemNodeCore<
   name: string;
   isFolder: boolean;
 
-  subFolders?: TDriveItemNode[] | null | undefined;
-  folderFiles?: TDriveItemNode[] | null | undefined;
+  subFolders?: TDriveItemNode[] | NullOrUndef;
+  folderFiles?: TDriveItemNode[] | NullOrUndef;
 }
 
 export class DriveItemNodeCore<
@@ -31,8 +32,8 @@ export class DriveItemNodeCore<
   private readonly _name: string;
   private readonly _isFolder: boolean;
 
-  private _subFolders?: TDriveItemNode[] | null | undefined;
-  private _folderFiles?: TDriveItemNode[] | null | undefined;
+  private _subFolders?: TDriveItemNode[] | NullOrUndef;
+  private _folderFiles?: TDriveItemNode[] | NullOrUndef;
 
   constructor(item: DriveItem) {
     this._item = item;
@@ -53,33 +54,33 @@ export class DriveItemNodeCore<
     return this._isFolder;
   }
 
-  public get subFolders(): TDriveItemNode[] | null | undefined {
+  public get subFolders(): TDriveItemNode[] | NullOrUndef {
     return this._subFolders;
   }
 
-  public set subFolders(value: TDriveItemNode[] | null | undefined) {
+  public set subFolders(value: TDriveItemNode[] | NullOrUndef) {
     this._subFolders = value;
   }
 
-  public get folderFiles(): TDriveItemNode[] | null | undefined {
+  public get folderFiles(): TDriveItemNode[] | NullOrUndef {
     return this._folderFiles;
   }
 
-  public set folderFiles(value: TDriveItemNode[] | null | undefined) {
+  public set folderFiles(value: TDriveItemNode[] | NullOrUndef) {
     this._folderFiles = value;
   }
 }
 
 export interface IDriveExplorerApi {
-  Init: (forceRefresh?: boolean | null | undefined) => Promise<void>;
+  Init: (forceRefresh?: boolean | NullOrUndef) => Promise<void>;
   GetItem: (
     pathArgs: RootedPathResolvedArgs,
-    parentRefreshDepth?: number | null | undefined
+    parentRefreshDepth?: number | NullOrUndef
   ) => Promise<DriveItem | null>;
   GetFolder: (
     pathArgs: RootedPathResolvedArgs,
-    depth?: number | null | undefined,
-    parentRefreshDepth?: number | null | undefined
+    depth?: number | NullOrUndef,
+    parentRefreshDepth?: number | NullOrUndef
   ) => Promise<DriveItem | null>;
   ItemExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
   FolderExists: (pathArgs: RootedPathResolvedArgs) => Promise<boolean>;
@@ -138,11 +139,11 @@ export abstract class DriveExplorerApiBase<
 > {
   protected abstract get rootDirNode(): TDriveItemNode;
 
-  public async Init(forceRefresh?: boolean | null | undefined): Promise<void> {}
+  public async Init(forceRefresh?: boolean | NullOrUndef): Promise<void> {}
 
   public async GetItem(
     pathArgs: RootedPathResolvedArgs,
-    parentRefreshDepth?: number | null | undefined
+    parentRefreshDepth?: number | NullOrUndef
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(pathArgs);
     let retNode = await this.getNode(pathSegs, null, parentRefreshDepth);
@@ -152,8 +153,8 @@ export abstract class DriveExplorerApiBase<
 
   public async GetFolder(
     pathArgs: RootedPathResolvedArgs,
-    depth?: number | null | undefined,
-    parentRefreshDepth?: number | null | undefined
+    depth?: number | NullOrUndef,
+    parentRefreshDepth?: number | NullOrUndef
   ): Promise<DriveItem | null> {
     const pathSegs = this.getPathSegments(pathArgs);
     let retNode = await this.getNode(pathSegs, true, parentRefreshDepth);
@@ -174,7 +175,7 @@ export abstract class DriveExplorerApiBase<
         ))!;
 
         if (!subFolder) {
-          throw new Error("One of the sub folders could not be refreshed");
+          throw new Error('One of the sub folders could not be refreshed');
         } else {
           tempSubFolders[i] = subFolder;
         }
@@ -209,11 +210,11 @@ export abstract class DriveExplorerApiBase<
   }
 
   public async GetDriveFolderWebUrl(idnf: string): Promise<string | null> {
-    throw new Error("Method GetDriveFolderWebUrl is not supported");
+    throw new Error('Method GetDriveFolderWebUrl is not supported');
   }
 
   public async GetDriveFileWebUrl(idnf: string): Promise<string | null> {
-    throw new Error("Method GetDriveFileWebUrl is not supported");
+    throw new Error('Method GetDriveFileWebUrl is not supported');
   }
 
   public async RenameFolder(
@@ -272,7 +273,7 @@ export abstract class DriveExplorerApiBase<
     newFileName: string,
     officeLikeFileType: OfficeFileType
   ): Promise<DriveItem | null> {
-    const retItem = await this.CreateTextFile(prPathArgs, newFileName, "");
+    const retItem = await this.CreateTextFile(prPathArgs, newFileName, '');
     return retItem;
   }
 
@@ -407,7 +408,7 @@ export abstract class DriveExplorerApiBase<
     } else if (isFolder) {
       await this.Init();
       retItem = this.rootDirNode;
-      await this.assureFolderHasDescendants("", retItem);
+      await this.assureFolderHasDescendants('', retItem);
     }
 
     return retItem ?? null;
@@ -438,7 +439,7 @@ export abstract class DriveExplorerApiBase<
         retParent = this.rootDirNode;
       }
     } else {
-      await this.assureFolderHasDescendants("", parent);
+      await this.assureFolderHasDescendants('', parent);
 
       if (pathSegs.length - level > 1) {
         const dirName = pathSegs[level];
@@ -460,7 +461,7 @@ export abstract class DriveExplorerApiBase<
 
     if (retParent) {
       await this.assureFolderHasDescendants(
-        parent?.item.Idnf ?? "",
+        parent?.item.Idnf ?? '',
         retParent,
         level + parentRefreshDepth - pathSegs.length >= 0
       );
@@ -537,7 +538,7 @@ export abstract class DriveExplorerApiBase<
     errMsg: string | null = null
   ) {
     if (this.containsItemName(itemsArr, itemName)) {
-      errMsg ??= "An item with the same name already exists at this location";
+      errMsg ??= 'An item with the same name already exists at this location';
       throw new Error(errMsg);
     }
   }
@@ -553,14 +554,14 @@ export abstract class DriveExplorerApiBase<
   }
 }
 
-export const dirPointers = Object.freeze([".", ".."]);
+export const dirPointers = Object.freeze(['.', '..']);
 
 export const getRootedPathSegments = (args: RootedPathResolvedArgs) => {
   const segments = args.path
-    .split("/")
+    .split('/')
     .filter((seg) => trmrk.isNonEmptyStr(seg, true));
 
-  if (args.path.startsWith(".")) {
+  if (args.path.startsWith('.')) {
     if (args.basePathSegs) {
       let sIdx = 0;
       let seg = segments[sIdx];
@@ -570,9 +571,9 @@ export const getRootedPathSegments = (args: RootedPathResolvedArgs) => {
 
       while ($keepLoop) {
         switch (seg) {
-          case ".":
+          case '.':
             break;
-          case "..":
+          case '..':
             bsIdx--;
             break;
           default:
@@ -588,14 +589,14 @@ export const getRootedPathSegments = (args: RootedPathResolvedArgs) => {
       segments.splice(0, sIdx, ...baseSegsToAdd);
     } else {
       throw new Error(
-        "Relative paths are only allowed if base path segments are also provided"
+        'Relative paths are only allowed if base path segments are also provided'
       );
     }
-  } else if (args.homePathSegs && args.path.startsWith("~/")) {
+  } else if (args.homePathSegs && args.path.startsWith('~/')) {
     const homePathSegsCount = args.homePathSegs.length;
     let idx = 1;
 
-    while (idx <= homePathSegsCount && segments[idx] === "..") {
+    while (idx <= homePathSegsCount && segments[idx] === '..') {
       idx++;
     }
 
@@ -608,23 +609,23 @@ export const getRootedPathSegments = (args: RootedPathResolvedArgs) => {
   }
 
   for (let seg of segments) {
-    if (seg.trim() != seg || seg.endsWith(".")) {
+    if (seg.trim() != seg || seg.endsWith('.')) {
       throw new Error(
-        "Rooted path segments are not allowed to end with the dot symbol or start or end with whitespace"
+        'Rooted path segments are not allowed to end with the dot symbol or start or end with whitespace'
       );
     } else {
       const chars = [...seg];
 
       if (
-        (chars.find((ch) => trmrk.allWsRegex().test(ch) && ch != " ") ??
+        (chars.find((ch) => trmrk.allWsRegex().test(ch) && ch != ' ') ??
           null) !== null
       ) {
         throw new Error(
-          "Paths are not allowed to contain any other type of whitespace than the space char"
+          'Paths are not allowed to contain any other type of whitespace than the space char'
         );
-      } else if (seg.indexOf("  ") >= 0) {
+      } else if (seg.indexOf('  ') >= 0) {
         throw new Error(
-          "Paths are not allowed to contain 2 or more spaces one after the other"
+          'Paths are not allowed to contain 2 or more spaces one after the other'
         );
       }
     }
