@@ -1,11 +1,12 @@
 import { SimpleChanges } from '@angular/core';
 
 import { getPropName } from '../../trmrk/Reflection/core';
+import { VoidOrAny } from '../../trmrk/core';
 
 export const whenChanged = <T>(
   changes: SimpleChanges,
   propName: string | (() => T),
-  callback: (value: T) => any | void | null | undefined
+  callback: (value: T) => VoidOrAny
 ) => {
   if ('string' !== typeof propName) {
     propName = getPropName(propName);

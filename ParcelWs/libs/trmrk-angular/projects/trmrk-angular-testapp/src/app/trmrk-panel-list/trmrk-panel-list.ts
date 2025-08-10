@@ -29,6 +29,8 @@ import {
 
 import { whenChanged } from 'trmrk-angular';
 
+import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
+
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cancel-context-menu';
 
@@ -76,18 +78,13 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
 
   @Input()
   trmrkToggleAppBar?:
-    | ((
-        svc: TrmrkPanelListService<any, any>,
-        show: boolean
-      ) => void | any | unknown)
-    | null
-    | undefined;
+    | ((svc: TrmrkPanelListService<any, any>, show: boolean) => VoidOrAny)
+    | NullOrUndef;
 
   @Input()
   trmrkGetAppBarHeight?:
     | ((svc: TrmrkPanelListService<any, any>) => number)
-    | null
-    | undefined;
+    | NullOrUndef;
 
   @Output() trmrkRowsUpdated = new EventEmitter<
     TrmrkPanelListServiceRow<any>[]

@@ -12,6 +12,7 @@ import {
 import { CommonModule } from '@angular/common';
 
 import { encodeHtml } from '../../trmrk/text';
+import { NullOrUndef } from '../../trmrk/core';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
@@ -26,8 +27,8 @@ export enum TrmrkHorizStripType {
 
 export interface TrmrkHorizStripDetailsTextPart {
   text: string;
-  italic?: boolean | null | undefined;
-  cssClass?: string | null | undefined;
+  italic?: boolean | NullOrUndef;
+  cssClass?: string | NullOrUndef;
 }
 
 @Component({
@@ -65,9 +66,9 @@ export class TrmrkHorizStrip implements OnChanges {
   @Input() trmrkCssClass: string[] = [];
   @Input() trmrkCssStyle: { [key: string]: any } | null = null;
   @Input() trmrkCapCssStyle: { [key: string]: any } | null = null;
-  @Input() trmrkLeadingTemplate?: TemplateRef<any> | null | undefined;
-  @Input() trmrkTrailingTemplate?: TemplateRef<any> | null | undefined;
-  @Input() trmrkTextPartDelimiterTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkLeadingTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkTextPartDelimiterTemplate?: TemplateRef<any> | NullOrUndef;
 
   mainText = '';
   TrmrkHorizStripType = TrmrkHorizStripType;

@@ -1,6 +1,8 @@
 import { Component, Input, TemplateRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { NullOrUndef } from '../../trmrk/core';
+
 import {
   TrmrkTree,
   TrmrkTreeNode,
@@ -21,7 +23,7 @@ export class TrmrkTreeViewNode implements OnInit {
   @Input() childNodeTemplate!: TemplateRef<any>;
 
   data!: TrmrkTreeNodeData<any>;
-  childNodes?: TrmrkTreeNodeData<any>[] | null | undefined;
+  childNodes?: TrmrkTreeNodeData<any>[] | NullOrUndef;
 
   get showChildNodes() {
     const showChildNodes = !!(

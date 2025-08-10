@@ -20,6 +20,7 @@ import {
 
 import { TrmrkPanelListItem } from 'trmrk-angular';
 
+import { NullOrUndef } from '../../trmrk/core';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 export interface TreeNode {
@@ -50,7 +51,7 @@ export class TrmrkAppTreeViewNode implements OnInit, OnDestroy {
   }
 
   data!: TrmrkTreeNodeData<TreeNode>;
-  childNodes?: TrmrkTreeNodeData<TreeNode>[] | null | undefined;
+  childNodes?: TrmrkTreeNodeData<TreeNode>[] | NullOrUndef;
 
   private dataSubscription?: Subscription;
   private childNodesSubscription?: Subscription;

@@ -1,23 +1,24 @@
 import { queryMx } from '../../trmrk/arr';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { NullOrUndef } from '../../trmrk/core';
 
 import { TrmrkObservable } from './TrmrkObservable';
 
 export interface TrmrkTreeNodeData<T> {
   nodeValue: T;
-  isHcyNode?: boolean | null | undefined;
-  isExpanded?: boolean | null | undefined;
-  isSelectable?: boolean | null | undefined;
-  isSelected?: boolean | null | undefined;
-  isFocused?: boolean | null | undefined;
-  isCurrent?: boolean | null | undefined;
-  childNodes?: TrmrkTreeNodeData<T>[] | null | undefined;
+  isHcyNode?: boolean | NullOrUndef;
+  isExpanded?: boolean | NullOrUndef;
+  isSelectable?: boolean | NullOrUndef;
+  isSelected?: boolean | NullOrUndef;
+  isFocused?: boolean | NullOrUndef;
+  isCurrent?: boolean | NullOrUndef;
+  childNodes?: TrmrkTreeNodeData<T>[] | NullOrUndef;
 }
 
 export interface TrmrkTreeNode<T> {
   data: TrmrkObservable<TrmrkTreeNodeData<T>>;
-  childNodesData?: TrmrkObservable<TrmrkTreeNodeData<T>[]> | null | undefined;
-  childNodes?: TrmrkTreeNode<T>[] | null | undefined;
+  childNodesData?: TrmrkObservable<TrmrkTreeNodeData<T>[]> | NullOrUndef;
+  childNodes?: TrmrkTreeNode<T>[] | NullOrUndef;
 }
 
 export interface TrmrkTreeNodeEventCore<T, TEvent = any> {

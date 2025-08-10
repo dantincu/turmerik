@@ -1,4 +1,5 @@
 import { Coords } from './types';
+import { NullOrUndef } from '../../trmrk/core';
 
 /**
  * From https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
@@ -33,9 +34,9 @@ export enum MouseButton {
 }
 
 export interface TouchOrMouseCoords extends Coords {
-  evt?: MouseEvent | TouchEvent | null | undefined;
-  isMouseEvt?: boolean | null | undefined;
-  mouseButton?: number | null | undefined;
+  evt?: MouseEvent | TouchEvent | NullOrUndef;
+  isMouseEvt?: boolean | NullOrUndef;
+  mouseButton?: number | NullOrUndef;
   pageX: number;
   pageY: number;
   screenX: number;
@@ -85,7 +86,7 @@ export const getTouchesCoords = (tcList: TouchList) => {
 
 export const getTouchOrMouseCoords = (
   ev: MouseEvent | TouchEvent,
-  requiredButton?: number | null | undefined
+  requiredButton?: number | NullOrUndef
 ) => {
   const mouseEv = ev as MouseEvent;
   const touchEv = ev as TouchEvent;
@@ -140,7 +141,7 @@ export const toSingleTouchOrClick = (
 
 export const getSingleTouchOrClick = (
   ev: MouseEvent | TouchEvent,
-  requiredButton?: number | null | undefined,
+  requiredButton?: number | NullOrUndef,
   skipEvtAssign: boolean = true
 ) =>
   toSingleTouchOrClick(
@@ -180,10 +181,10 @@ export const getCoords = (e: MouseEvent | TouchEvent | TouchOrMouseCoords) => {
 export interface IsContainedByArgs<TParent> {
   event: MouseEvent | TouchEvent | TouchOrMouseCoords;
   parent: TParent;
-  useComposedPath?: boolean | null | undefined;
-  coords?: Coords | null | undefined;
-  elemAtPoint?: Element | null | undefined;
-  composedPath?: EventTarget[] | null | undefined;
+  useComposedPath?: boolean | NullOrUndef;
+  coords?: Coords | NullOrUndef;
+  elemAtPoint?: Element | NullOrUndef;
+  composedPath?: EventTarget[] | NullOrUndef;
 }
 
 const normalizeIsContainedByArgs = <TParent>(

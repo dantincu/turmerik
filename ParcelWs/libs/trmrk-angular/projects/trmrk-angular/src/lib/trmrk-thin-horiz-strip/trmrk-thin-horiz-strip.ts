@@ -11,6 +11,7 @@ import {
 import { CommonModule } from '@angular/common';
 
 import { encodeHtml } from '../../trmrk/text';
+import { NullOrUndef } from '../../trmrk/core';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 import { whenChanged } from '../services/simpleChanges';
 
@@ -48,8 +49,8 @@ export class TrmrkThinHorizStrip {
   @Input() trmrkCssClass: string[] = [];
   @Input() trmrkCssStyle: { [key: string]: any } | null = null;
   @Input() trmrkCapCssStyle: { [key: string]: any } | null = null;
-  @Input() trmrkLeadingTemplate?: TemplateRef<any> | null | undefined;
-  @Input() trmrkTrailingTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkLeadingTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
 
   text = '';
 

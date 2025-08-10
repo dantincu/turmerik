@@ -1,3 +1,10 @@
+export type NullOrUndef = null | undefined;
+export type AnyOrUnknown = any | unknown | NullOrUndef;
+export type VoidOrAny = void | AnyOrUnknown;
+
+export type ValueOrAny<TValue> = TValue | AnyOrUnknown;
+export type ValueOrAnyOrVoid<TValue> = ValueOrAny<TValue> | void;
+
 export const allWsRegex = () => /^\s+$/g;
 export const digitRegex = () => /\d/g;
 export const numberRegex = () => /^(\-\d|\d)?\.?\d+$/g;
@@ -59,9 +66,6 @@ export interface ValueOrError<TValue, TError = Error | any> {
   error?: TError | undefined;
 }
 
-export type ValueOrAny<TValue> = TValue | any | unknown | null | undefined;
-export type ValueOrAnyOrVoid<TValue> = ValueOrAny<TValue> | void;
-
 export const jsonBool = Object.freeze({
   false: JSON.stringify(false),
   true: JSON.stringify(true),
@@ -91,11 +95,8 @@ export const actWithVal = <TVal>(
 export const withValIf = <TIn, TOut>(
   inVal: TIn,
   convertor: (input: TIn) => TOut,
-  defaultValueFactory: (input: TIn | null | undefined) => TOut,
-  defaultInputPredicate?:
-    | ((input: TIn | null | undefined) => boolean)
-    | null
-    | undefined
+  defaultValueFactory: (input: TIn | NullOrUndef) => TOut,
+  defaultInputPredicate?: ((input: TIn | NullOrUndef) => boolean) | NullOrUndef
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
   let retVal: TOut;
@@ -110,16 +111,12 @@ export const withValIf = <TIn, TOut>(
 };
 
 export const actWithValIf = <TVal>(
-  inVal: TVal | null | undefined,
+  inVal: TVal | NullOrUndef,
   action: (input: TVal) => unknown | any | void,
   defaultAction:
-    | ((input: TVal | null | undefined) => unknown | any | void)
-    | null
-    | undefined = null,
-  defaultInputPredicate?:
-    | ((input: TVal | null | undefined) => boolean)
-    | null
-    | undefined
+    | ((input: TVal | NullOrUndef) => unknown | any | void)
+    | NullOrUndef = null,
+  defaultInputPredicate?: ((input: TVal | NullOrUndef) => boolean) | NullOrUndef
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
 
@@ -135,16 +132,12 @@ export const actWithValIf = <TVal>(
 };
 
 export const actWithIf = <TVal>(
-  inVal: TVal | null | undefined,
+  inVal: TVal | NullOrUndef,
   action: (input: TVal) => unknown | any | void,
   defaultAction:
-    | ((input: TVal | null | undefined) => unknown | any | void)
-    | null
-    | undefined = null,
-  defaultInputPredicate?:
-    | ((input: TVal | null | undefined) => boolean)
-    | null
-    | undefined
+    | ((input: TVal | NullOrUndef) => unknown | any | void)
+    | NullOrUndef = null,
+  defaultInputPredicate?: ((input: TVal | NullOrUndef) => boolean) | NullOrUndef
 ) => {
   defaultInputPredicate ??= (input) => (input ?? null) === null;
   const retVal = defaultInputPredicate(inVal);
@@ -160,12 +153,10 @@ export const actWithIf = <TVal>(
   return retVal;
 };
 
-export const asNumber = (
-  val: number | null | undefined,
-  dfVal: number
-): number => (isNaN(val ?? NaN) ? dfVal : val) as number;
+export const asNumber = (val: number | NullOrUndef, dfVal: number): number =>
+  (isNaN(val ?? NaN) ? dfVal : val) as number;
 
-export const nullify = <T>(val: T | null | undefined) => (val ? val : null);
+export const nullify = <T>(val: T | NullOrUndef) => (val ? val : null);
 
 export enum UserMessageLevel {
   Success = 0,

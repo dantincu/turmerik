@@ -6,8 +6,6 @@ import {
   TemplateRef,
   ChangeDetectionStrategy,
   ElementRef,
-  AfterViewInit,
-  OnDestroy,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -15,6 +13,8 @@ import { NgTemplateOutlet } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+
+import { NullOrUndef } from '../../trmrk/core';
 
 import { TrmrkLongPressOrRightClick } from '../directives/trmrk-long-press-or-right-click';
 import { TrmrkTouchStartOrMouseDown } from '../directives/trmrk-touch-start-or-mouse-down';
@@ -104,19 +104,19 @@ export class TrmrkPanelListItem<TInputData = any> {
     | (string | TrmrkHorizStripDetailsTextPart)[]
     | null = null;
   @Input() trmrkCssClass: string[] = [];
-  @Input() trmrkIsExpandable?: boolean | null | undefined;
+  @Input() trmrkIsExpandable?: boolean | NullOrUndef;
   @Input() trmrkIsExpanded = false;
   @Input() trmrkIsSelectable = false;
   @Input() trmrkIsSelected = false;
   @Input() trmrkIsFocused = false;
-  @Input() trmrkLeadingMatIconName?: string | null | undefined;
-  @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | null | undefined;
-  @Input() trmrkShowGoToParentBtn?: boolean | null | undefined;
-  @Input() trmrkGoToParentMatIconName?: string | null | undefined;
+  @Input() trmrkLeadingMatIconName?: string | NullOrUndef;
+  @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkShowGoToParentBtn?: boolean | NullOrUndef;
+  @Input() trmrkGoToParentMatIconName?: string | NullOrUndef;
   @Input() trmrkGoToParentBtnIsEnabled = true;
-  @Input() trmrkColorLabelColor?: string | null | undefined;
+  @Input() trmrkColorLabelColor?: string | NullOrUndef;
   @Input() trmrkTrailingTemplate!: TemplateRef<any>;
-  @Input() trmrkInputData: TInputData | null | undefined;
+  @Input() trmrkInputData: TInputData | NullOrUndef;
 
   TrmrkHorizStripType = TrmrkHorizStripType;
 

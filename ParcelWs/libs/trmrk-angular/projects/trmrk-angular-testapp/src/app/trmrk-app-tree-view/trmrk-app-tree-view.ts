@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { NullOrUndef } from '../../trmrk/core';
+
 import {
   TreeNode,
   TrmrkAppTreeViewNode,
@@ -24,7 +26,7 @@ import { TrmrkTree, TrmrkTreeNodeData } from 'trmrk-angular';
 export class TrmrkAppTreeView implements OnInit, OnDestroy {
   @Input() trmrkData!: TrmrkTree<TreeNode>;
 
-  rootNodes!: TrmrkTreeNodeData<TreeNode>[] | null | undefined;
+  rootNodes!: TrmrkTreeNodeData<TreeNode>[] | NullOrUndef;
 
   private rootNodesSubscription?: Subscription;
 

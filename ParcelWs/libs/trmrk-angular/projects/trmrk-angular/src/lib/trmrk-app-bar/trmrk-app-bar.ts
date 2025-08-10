@@ -16,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 
+import { NullOrUndef } from '../../trmrk/core';
+
 @Component({
   selector: 'trmrk-app-bar',
   imports: [
@@ -33,14 +35,13 @@ import { MatMenuModule } from '@angular/material/menu';
 })
 export class TrmrkAppBar implements AfterViewInit {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
-  @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | null | undefined;
-  @Input() trmrkTrailingTemplate?: TemplateRef<any> | null | undefined;
+  @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkHomeRouterLink:
     | string
     | readonly any[]
     | UrlTree
-    | null
-    | undefined = ['/app'];
+    | NullOrUndef = ['/app'];
   @Input() trmrkTitle!: string;
   @Input() trmrkCssClass: string | null = null;
 

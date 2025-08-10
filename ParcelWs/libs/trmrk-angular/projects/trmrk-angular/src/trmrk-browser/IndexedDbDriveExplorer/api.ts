@@ -1,10 +1,7 @@
 import trmrk from '../../trmrk';
+import { NullOrUndef } from '../../trmrk/core';
 
 import { DriveItem } from '../../trmrk/drive-item';
-import {
-  FileType,
-  OfficeFileType,
-} from '../../trmrk/DotNetTypes/Turmerik.Core.DriveExplorer.DriveItemCore';
 
 import {
   RootedPathResolvedArgs,
@@ -21,8 +18,8 @@ import { copyFolder, deleteFolder, moveFolder } from '../fsApi/folder';
 
 interface IDriveItemNode extends IDriveItemNodeCore<IDriveItemNode> {
   handle: FileSystemHandle;
-  dirHandle?: FileSystemDirectoryHandle | null | undefined;
-  fileHandle?: FileSystemFileHandle | null | undefined;
+  dirHandle?: FileSystemDirectoryHandle | NullOrUndef;
+  fileHandle?: FileSystemFileHandle | NullOrUndef;
 }
 
 class DriveItemNode
@@ -30,10 +27,10 @@ class DriveItemNode
   implements IDriveItemNode
 {
   private readonly _handle: FileSystemHandle;
-  private readonly _dirHandle?: FileSystemDirectoryHandle | null | undefined;
-  private readonly _fileHandle?: FileSystemFileHandle | null | undefined;
+  private readonly _dirHandle?: FileSystemDirectoryHandle | NullOrUndef;
+  private readonly _fileHandle?: FileSystemFileHandle | NullOrUndef;
 
-  constructor(handle: FileSystemHandle, item?: DriveItem | null | undefined) {
+  constructor(handle: FileSystemHandle, item?: DriveItem | NullOrUndef) {
     super(
       (item ??= {
         Name: handle.name,
@@ -48,17 +45,18 @@ class DriveItemNode
     } else {
       this._fileHandle = this._handle as FileSystemFileHandle;
     }
+    ``;
   }
 
   public get handle(): FileSystemHandle {
     return this._handle;
   }
 
-  public get dirHandle(): FileSystemDirectoryHandle | null | undefined {
+  public get dirHandle(): FileSystemDirectoryHandle | NullOrUndef {
     return this._dirHandle;
   }
 
-  public get fileHandle(): FileSystemFileHandle | null | undefined {
+  public get fileHandle(): FileSystemFileHandle | NullOrUndef {
     return this._fileHandle;
   }
 }

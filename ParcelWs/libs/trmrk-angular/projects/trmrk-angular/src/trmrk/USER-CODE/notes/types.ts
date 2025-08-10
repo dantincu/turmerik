@@ -1,7 +1,19 @@
+import { NullOrUndef } from '../../core';
+
 export interface ActionResponse<TResult> {
-  result?: TResult | null | undefined;
-  hasError?: boolean | null | undefined;
-  errorTitle?: string | null | undefined;
-  errorMessage?: string | null | undefined;
-  errorCode?: number | null | undefined;
+  result?: TResult | NullOrUndef;
+  hasError?: boolean | NullOrUndef;
+  errorTitle?: string | NullOrUndef;
+  errorMessage?: string | NullOrUndef;
+  errorCode?: number | NullOrUndef;
+}
+
+export interface TrmrkUrlSegments {
+  segments: string[];
+  startsFromRoot?: boolean | NullOrUndef;
+}
+
+export interface TrmrNoteOrItemUrlSegments {
+  note?: TrmrkUrlSegments | NullOrUndef;
+  item?: TrmrkUrlSegments | NullOrUndef;
 }

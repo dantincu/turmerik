@@ -5,3 +5,13 @@ export interface ActionResponse<TResult> {
   errorMessage?: string | null | undefined;
   errorCode?: number | null | undefined;
 }
+
+export interface TrmrkUrlSegments {
+  segments: string[];
+  startsFromRoot?: boolean | null | undefined;
+}
+
+export interface TrmrNoteOrItemUrlSegments {
+  note?: TrmrkUrlSegments | null | undefined;
+  item?: TrmrkUrlSegments | null | undefined;
+}

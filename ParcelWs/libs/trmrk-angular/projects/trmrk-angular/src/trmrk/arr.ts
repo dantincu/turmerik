@@ -1,19 +1,22 @@
-import { Kvp, MtblRefValue, ValueOrAny } from './core';
+import {
+  Kvp,
+  MtblRefValue,
+  ValueOrAny,
+  AnyOrNullOrUndef,
+  NullOrUndef,
+} from './core';
 
 export interface CollectionFilterArgs<TColl, TIn, TOut = TIn> {
   collection: TColl;
   predicate: (
     args: CollectionFilterPredicateArgs<TIn, TOut>
-  ) => boolean | any | null | undefined;
+  ) => boolean | AnyOrNullOrUndef;
   selector?: (input: TIn, i: number) => TOut;
-  startIdx?: number | null | undefined;
-  incrementIdx?: number | null | undefined;
-  endIdx?: number | null | undefined;
-  collectionItemRetriever?:
-    | ((coll: TColl, i: number) => TIn)
-    | null
-    | undefined;
-  collectionLengthRetriever?: ((coll: TColl) => number) | null | undefined;
+  startIdx?: number | NullOrUndef;
+  incrementIdx?: number | NullOrUndef;
+  endIdx?: number | NullOrUndef;
+  collectionItemRetriever?: ((coll: TColl, i: number) => TIn) | NullOrUndef;
+  collectionLengthRetriever?: ((coll: TColl) => number) | NullOrUndef;
 }
 
 export interface CollectionFilterPredicateArgs<TIn, TOut = TIn> {
@@ -86,10 +89,7 @@ export const any = <T>(
 export const containsAnyOfArr = (
   inStr: string,
   strArr: string[] | readonly string[],
-  matching?:
-    | MtblRefValue<Kvp<number, string | null | undefined>>
-    | null
-    | undefined
+  matching?: MtblRefValue<Kvp<number, string | NullOrUndef>> | NullOrUndef
 ) => {
   matching ??= {
     value: {
@@ -112,9 +112,8 @@ export const containsAnyOfMx = (
   inStr: string,
   strMx: (string[] | readonly string[])[],
   matching?:
-    | MtblRefValue<Kvp<number, Kvp<number, string | null | undefined>>>
-    | null
-    | undefined
+    | MtblRefValue<Kvp<number, Kvp<number, string | NullOrUndef>>>
+    | NullOrUndef
 ) => {
   matching ??= {
     value: {
@@ -126,9 +125,7 @@ export const containsAnyOfMx = (
     },
   };
 
-  const innerMatching = {} as MtblRefValue<
-    Kvp<number, string | null | undefined>
-  >;
+  const innerMatching = {} as MtblRefValue<Kvp<number, string | NullOrUndef>>;
 
   const kvp = findKvp(strMx, (strArr) =>
     containsAnyOfArr(inStr, strArr, innerMatching)
@@ -277,7 +274,7 @@ export const removeAllIdxes = <T>(
 export const removeAll = <T>(
   inputArr: T[],
   predicate: T[] | ((item: T, idx: number, inArr: T[]) => ValueOrAny<boolean>),
-  eqCompr: ((val1: T, val2: T) => number) | null | undefined = null
+  eqCompr: ((val1: T, val2: T) => number) | NullOrUndef = null
 ) => {
   if (typeof predicate === 'object') {
     const arr = predicate as T[];

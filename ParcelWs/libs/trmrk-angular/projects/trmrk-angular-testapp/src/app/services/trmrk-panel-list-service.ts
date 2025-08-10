@@ -16,7 +16,7 @@ import {
   TrmrkDragEvent,
 } from 'trmrk-angular';
 
-import { withVal, actWithVal } from '../../trmrk/core';
+import { withVal, actWithVal, NullOrUndef, VoidOrAny } from '../../trmrk/core';
 import { filterKvp } from '../../trmrk/arr';
 
 import {
@@ -37,11 +37,11 @@ import { AppStateService } from './app-state-service';
 
 export interface TrmrkPanelListServiceRow<TEntity> {
   item: TrmrkPanelListServiceItemData<TEntity> | null;
-  hideItem?: boolean | null | undefined;
+  hideItem?: boolean | NullOrUndef;
   id: any;
-  isBlankPlaceholder?: boolean | null | undefined;
-  isMultipleSelectedPlaceholder?: boolean | null | undefined;
-  multipleSelectedCount?: number | null | undefined;
+  isBlankPlaceholder?: boolean | NullOrUndef;
+  isMultipleSelectedPlaceholder?: boolean | NullOrUndef;
+  multipleSelectedCount?: number | NullOrUndef;
 }
 
 export interface TrmrkPanelListServiceItemData<TEntity> {
@@ -62,28 +62,23 @@ export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   getDownAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getMovingAggregateRowEl: () => TrmrkHorizStrip | null;
   toggleAppBar?:
-    | ((
-        svc: TrmrkPanelListService<TEntity, TItem>,
-        show: boolean
-      ) => void | any | unknown)
-    | null
-    | undefined;
+    | ((svc: TrmrkPanelListService<TEntity, TItem>, show: boolean) => VoidOrAny)
+    | NullOrUndef;
   getAppBarHeight?:
     | ((svc: TrmrkPanelListService<TEntity, TItem>) => number)
-    | null
-    | undefined;
+    | NullOrUndef;
   entities: TEntity[];
-  rows?: TrmrkPanelListServiceRow<TEntity>[] | null | undefined;
-  idPropName?: string | null | undefined;
-  componentInputDataPropName?: string | null | undefined;
-  componentIdPropName?: string | null | undefined;
-  hostElPropName?: string | null | undefined;
-  rowsSelectionIsAllowed?: boolean | null | undefined;
-  selectedRowsReorderIsAllowed?: boolean | null | undefined;
-  selectedRowsReorderAggRowVertIsOriented?: boolean | null | undefined;
-  selectedRowsReorderShowAggRowDiffYpxThreshold?: number | null | undefined;
-  selectedRowsReorderAggRowAnimationStepMillis?: number | null | undefined;
-  selectedRowsReorderAggRowAnimationDurationMillis?: number | null | undefined;
+  rows?: TrmrkPanelListServiceRow<TEntity>[] | NullOrUndef;
+  idPropName?: string | NullOrUndef;
+  componentInputDataPropName?: string | NullOrUndef;
+  componentIdPropName?: string | NullOrUndef;
+  hostElPropName?: string | NullOrUndef;
+  rowsSelectionIsAllowed?: boolean | NullOrUndef;
+  selectedRowsReorderIsAllowed?: boolean | NullOrUndef;
+  selectedRowsReorderAggRowVertIsOriented?: boolean | NullOrUndef;
+  selectedRowsReorderShowAggRowDiffYpxThreshold?: number | NullOrUndef;
+  selectedRowsReorderAggRowAnimationStepMillis?: number | NullOrUndef;
+  selectedRowsReorderAggRowAnimationDurationMillis?: number | NullOrUndef;
 }
 
 interface TrmrkMovingPanelListItem<TItem> {
@@ -121,7 +116,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   toggleAppBar!: (
     svc: TrmrkPanelListService<TEntity, TItem>,
     show: boolean
-  ) => void | any | unknown;
+  ) => VoidOrAny;
 
   getAppBarHeight!: (svc: TrmrkPanelListService<TEntity, TItem>) => number;
 
@@ -784,15 +779,13 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           visuallyMovingListItems: QueryList<TItem>,
           visuallyMovingRows: TrmrkPanelListServiceRowX<TEntity>[]
         ) => void)
-      | null
-      | undefined = null,
+      | NullOrUndef = null,
     onNotAvailable:
       | ((
           visuallyMovingListItems: QueryList<TItem>,
           visuallyMovingRows: TrmrkPanelListServiceRowX<TEntity>[] | null
         ) => void)
-      | null
-      | undefined = null
+      | NullOrUndef = null
   ) {
     const visuallyMovingListItems = this.getVisuallyMovingListItems();
     const visuallyMovingRows = this.visuallyMovingRows;

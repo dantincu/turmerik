@@ -1,7 +1,7 @@
-import { withValIf } from "./core";
+import { withValIf, NullOrUndef } from './core';
 
-import * as CmdCommandNs from "./DotNetTypes/Turmerik.Notes.Core.CmdCommand";
-import * as NoteDirsPairConfig from "./DotNetTypes/Turmerik.Notes.Core.NoteDirsPairConfigMtbl";
+import * as CmdCommandNs from './DotNetTypes/Turmerik.Notes.Core.CmdCommand';
+import * as NoteDirsPairConfig from './DotNetTypes/Turmerik.Notes.Core.NoteDirsPairConfigMtbl';
 
 export type CmdCommand = CmdCommandNs.CmdCommand;
 export type ArgOptionT = NoteDirsPairConfig.ArgOptionT;
@@ -47,15 +47,15 @@ export interface WithNodeEnvOpts<T> {
     nodeEnv: string | undefined,
     nodeEnvObj: NodeJS.ProcessEnv
   ) => T;
-  devEnvName?: string | null | undefined;
-  prodEnvName?: string | null | undefined;
-  nodeEnvName?: string | null | undefined;
+  devEnvName?: string | NullOrUndef;
+  prodEnvName?: string | NullOrUndef;
+  nodeEnvName?: string | NullOrUndef;
 }
 
 export const withRequiredNodeVar = <T>(
   varName: string,
   convertor: (value: string, nodeEnvObj: NodeJS.ProcessEnv) => T,
-  onNotFound?: ((nodeEnvObj: NodeJS.ProcessEnv) => T) | null | undefined
+  onNotFound?: ((nodeEnvObj: NodeJS.ProcessEnv) => T) | NullOrUndef
 ) =>
   withValIf(
     process.env[varName],
@@ -71,15 +71,15 @@ export const withRequiredNodeVar = <T>(
 
 export const withNodeEnv = <T>(opts: WithNodeEnvOpts<T>) =>
   withRequiredNodeVar(
-    opts.nodeEnvName ?? "NODE_ENV",
+    opts.nodeEnvName ?? 'NODE_ENV',
     (value) => {
       let retVal: T;
 
       switch (value) {
-        case opts.devEnvName ?? "development":
+        case opts.devEnvName ?? 'development':
           retVal = opts.onDevelopment(value, process.env);
           break;
-        case opts.prodEnvName ?? "production":
+        case opts.prodEnvName ?? 'production':
           retVal = opts.onProduction(value, process.env);
           break;
         default:
