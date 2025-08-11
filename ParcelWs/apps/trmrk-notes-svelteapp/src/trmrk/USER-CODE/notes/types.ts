@@ -8,12 +8,12 @@ export interface ActionResponse<TResult> {
   errorCode?: number | NullOrUndef;
 }
 
-export interface TrmrkUrlSegments {
+export interface TrmrkItemUrlPath {
   segments: string[];
   startsFromRoot?: boolean | NullOrUndef;
 }
 
-export interface TrmrNoteOrItemUrlSegments {
-  note?: TrmrkUrlSegments | NullOrUndef;
-  item?: TrmrkUrlSegments | NullOrUndef;
+export interface TrmrkUrlPath {
+  note?: TrmrkItemUrlPath | NullOrUndef;
+  item?: TrmrkItemUrlPath | NullOrUndef;
 }

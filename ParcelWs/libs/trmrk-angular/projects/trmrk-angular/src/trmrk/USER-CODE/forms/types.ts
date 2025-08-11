@@ -67,7 +67,7 @@ export type HtmlInputType =
 
 export interface ValueFactory<TInput, TOutput> {
   value?: TOutput | NullOrUndef;
-  factory?: ((input: TInput) => TOutput | Promise<TOutput>) | NullOrUndef;
+  func?: ((input: TInput) => TOutput | Promise<TOutput>) | NullOrUndef;
   isAsync?: boolean | NullOrUndef;
 }
 
