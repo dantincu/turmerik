@@ -52,7 +52,9 @@ export class TrmrkAppPage {
 
   constructor() {
     setTimeout(() => {
-      this.optionsMenuTrigger.menu = this.optionsMenu;
+      if (this.optionsMenuTrigger) {
+        this.optionsMenuTrigger.menu = this.optionsMenu;
+      }
     }, 0);
   }
 

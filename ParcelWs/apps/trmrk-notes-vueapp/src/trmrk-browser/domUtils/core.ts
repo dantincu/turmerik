@@ -441,3 +441,18 @@ export const customEvent = <T>(
     bubbles,
     composed,
   });
+
+export const getDOMExceptionErrorMsg = (
+  error: DOMException | null,
+  defaultErrorMsg: string
+): string => {
+  let errorMsg: string;
+
+  if (error) {
+    errorMsg = `${error.name} - ${error.message}`;
+  } else {
+    errorMsg = 'Unknown error occurred while opening IndexedDB.';
+  }
+
+  return errorMsg;
+};

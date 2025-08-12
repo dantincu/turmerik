@@ -25,11 +25,10 @@ import { AppStateService } from '../services/app-state-service';
   encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkAppSettings implements OnDestroy {
-  private darkModeStateChangeSubscription: Subscription;
-
   isDarkMode;
-
   resetAltIcon: SafeHtml;
+
+  private darkModeStateChangeSubscription: Subscription;
 
   constructor(
     private appStateService: AppStateService,
@@ -37,7 +36,6 @@ export class TrmrkAppSettings implements OnDestroy {
   ) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
-    this.titleContextMenu = this.titleContextMenu.bind(this);
 
     this.darkModeStateChangeSubscription =
       appStateService.isDarkMode.$obs.subscribe(this.darkModeStateChange);
@@ -60,9 +58,5 @@ export class TrmrkAppSettings implements OnDestroy {
 
   darkModeStateChange(isDarkModeValue: boolean) {
     this.isDarkMode = isDarkModeValue;
-  }
-
-  titleContextMenu(event: MouseEvent) {
-    event.preventDefault();
   }
 }

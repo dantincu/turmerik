@@ -164,3 +164,13 @@ export enum UserMessageLevel {
   Warn,
   Error,
 }
+
+export const iterableToArray = <T>(list: Iterable<T>) => {
+  const retArr: T[] = [];
+
+  for (let value of list) {
+    retArr.push(value);
+  }
+
+  return retArr;
+};

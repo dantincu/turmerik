@@ -61,7 +61,7 @@ export class TrmrkResetApp implements OnDestroy {
 
             databases = databases.filter((db) => (db.name ?? null) !== null);
 
-            if (databases.length) {
+            if (!databases.length) {
               onComplete();
             } else {
               const promises = databases.map((db) =>

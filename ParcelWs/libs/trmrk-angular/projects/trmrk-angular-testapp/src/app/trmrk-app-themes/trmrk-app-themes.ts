@@ -45,7 +45,7 @@ export class TrmrkAppThemes {
   getListItems = () => this.listItems;
   getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
 
-  entities: any[] = [];
+  entities: AppTheme[] = [];
   reqStateManager = new AsyncRequestStateManager<DOMException | null>(
     null,
     (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]

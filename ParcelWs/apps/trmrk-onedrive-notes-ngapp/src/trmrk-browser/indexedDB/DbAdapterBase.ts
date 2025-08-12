@@ -1,6 +1,6 @@
 import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
 
-export abstract class IDbAdapterBase {
+export abstract class DbAdapterBase {
   constructor(public readonly dbName: string, public version: number = 1) {}
 
   abstract onUpgradeNeeded(event: IDBVersionChangeEvent, db: IDBDatabase): void;
@@ -46,7 +46,7 @@ export abstract class IDbAdapterBase {
   };
 }
 
-export class IDbStoreAdapter {
+export class DbStoreAdapter {
   constructor(public readonly dbStoreName: string) {}
 
   store(

@@ -1,21 +1,27 @@
-import { IDbAdapterBase, IDbStoreAdapter } from '../IDbAdapterBase';
+import { DbAdapterBase, DbStoreAdapter } from '../DbAdapterBase';
+import { createDbStoreIfNotExists } from '../core';
 
 export interface AppTheme {
   id: number;
   name: string;
+  clientVersion: number;
+}
+
+export interface AppSettingsChoice {
+  key: string;
 }
 
 export class BasicAppSettingsDbStores {
-  public readonly choices = new IDbStoreAdapter(
+  public readonly choices = new DbStoreAdapter(
     BasicAppSettingsDbAdapter.DB_STORES.Choices.name
   );
 
-  public appThemes = new IDbStoreAdapter(
+  public appThemes = new DbStoreAdapter(
     BasicAppSettingsDbAdapter.DB_STORES.AppThemes.name
   );
 }
 
-export class BasicAppSettingsDbAdapter extends IDbAdapterBase {
+export class BasicAppSettingsDbAdapter extends DbAdapterBase {
   public static readonly DB_NAME = 'BasicAppSettings';
   public static readonly DB_VERSION = 1;
 
@@ -40,12 +46,14 @@ export class BasicAppSettingsDbAdapter extends IDbAdapterBase {
     event: IDBVersionChangeEvent,
     db: IDBDatabase
   ): void {
-    db.createObjectStore(BasicAppSettingsDbAdapter.DB_STORES.Choices.name, {
-      keyPath: BasicAppSettingsDbAdapter.DB_STORES.Choices.keyPath,
+    const dbStores = BasicAppSettingsDbAdapter.DB_STORES;
+
+    createDbStoreIfNotExists(db, dbStores.Choices.name, {
+      keyPath: dbStores.Choices.keyPath,
     });
 
-    db.createObjectStore(BasicAppSettingsDbAdapter.DB_STORES.AppThemes.name, {
-      keyPath: BasicAppSettingsDbAdapter.DB_STORES.AppThemes.keyPath,
+    createDbStoreIfNotExists(db, dbStores.AppThemes.name, {
+      keyPath: dbStores.AppThemes.keyPath,
       autoIncrement: true,
     });
   }
