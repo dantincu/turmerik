@@ -3,14 +3,17 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { NullOrUndef } from '../../trmrk/core';
 
-export interface TrmrkDialogData<TData> {
-  title: string;
+export interface TrmrkDialogDataCore {
   disableClose?: boolean | NullOrUndef;
-  data: TData;
   dialogRef?: MatDialogRef<any> | NullOrUndef;
   contentTemplate?: TemplateRef<any> | NullOrUndef;
   actionsTemplate?: TemplateRef<any> | NullOrUndef;
   useMatDialogComponents?: boolean | NullOrUndef;
+}
+
+export interface TrmrkDialogData<TData> extends TrmrkDialogDataCore {
+  title: string;
+  data: TData;
 }
 
 export enum DialogPanelSize {
@@ -26,6 +29,11 @@ export interface OpenDialogArgs<TData> {
   clickEvent?: Event | NullOrUndef;
   dialogPanelSize?: DialogPanelSize | NullOrUndef;
 }
+
+export const mergeDialogData = <TData>(
+  data: TrmrkDialogData<TData>,
+  newData: TrmrkDialogDataCore
+) => ({ ...data, ...newData });
 
 export const getDialogPanelSizeCssClass = (
   dialogPanelSize: DialogPanelSize | NullOrUndef

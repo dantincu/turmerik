@@ -677,4 +677,8 @@ trmrk-app-themes-list-view {
   .mat-mdc-dialog-surface.mdc-dialog__surface {
     border-radius: 10px;
   }
+
+  .trmrk-dialog-content.trmrk-dialog-content, .trmrk-dialog-actions.trmrk-dialog-actions {
+    padding: 10px;
+  }
 }

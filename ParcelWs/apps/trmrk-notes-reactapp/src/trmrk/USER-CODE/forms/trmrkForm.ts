@@ -201,4 +201,30 @@ export class TrmrkFormHelper {
       data,
     };
   }
+
+  group(
+    childNodes: FormNode[],
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
+  ): FormNode {
+    return {
+      type: NodeType.Group,
+      childNodes,
+      cssClass,
+      data,
+    };
+  }
+
+  field(
+    childNodes: FormNode[],
+    cssClass?: string | NullOrUndef,
+    data?: any | NullOrUndef
+  ): FormNode {
+    return {
+      type: NodeType.Group,
+      childNodes,
+      cssClass,
+      data,
+    };
+  }
 }

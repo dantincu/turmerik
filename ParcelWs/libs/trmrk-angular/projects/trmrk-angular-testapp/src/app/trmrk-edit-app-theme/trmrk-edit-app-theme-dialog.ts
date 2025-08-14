@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NullOrUndef } from '../../trmrk/core';
 
 import { TrmrkDialog } from '../trmrk-dialog/trmrk-dialog';
+import { TrmrkDialogData, mergeDialogData } from '../services/trmrk-dialog';
 
 export interface TrmrkEditAppThemeData {
   id?: number | NullOrUndef;
@@ -32,8 +33,11 @@ export interface TrmrkEditAppThemeData {
   styleUrl: './trmrk-edit-app-theme-dialog.scss',
 })
 export class TrmrkEditAppThemeDialog {
+  mergeDialogData = mergeDialogData;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: TrmrkEditAppThemeData,
+    @Inject(MAT_DIALOG_DATA)
+    public data: TrmrkDialogData<TrmrkEditAppThemeData>,
     public dialogRef: MatDialogRef<any>
   ) {}
 }
