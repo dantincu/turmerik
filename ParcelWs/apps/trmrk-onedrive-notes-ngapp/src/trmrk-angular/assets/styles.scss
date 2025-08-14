@@ -5,6 +5,19 @@ html,
 body {
   height: 100%;
   margin: 0; /* Important: remove default body margin */
+  font-size: 15px;
+}
+
+h1 {
+  font-size: 18px;
+}
+
+h2 {
+  font-size: 17px;
+}
+
+h3 {
+  font-size: 16px;
 }
 
 app-root {
@@ -327,7 +340,6 @@ trmrk-app-page {
   }
 
   .trmrk-page-title {
-    font-size: 18px;
     margin: 10px 0;
     cursor: pointer;
     flex-grow: 1;
@@ -412,6 +424,13 @@ trmrk-app-page {
 
 .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
   height: 40px;
+}
+
+.trmrk-horiz-strip {
+  h2 {
+    margin-top: 7px;
+    margin-left: 5px;
+  }
 }
 
 .trmrk-thin-horiz-strip {
@@ -642,4 +661,20 @@ trmrk-list-app-panel {
 
 trmrk-app-themes-list-view {
   @include mixins.rel-flex-stretch-to-parent-size();
+}
+
+.trmrk-mat-dialog-panel {
+  &.trmrk-width-lg.trmrk-width-lg {
+    width: min(1000px, calc(100vw - 40px));
+    max-width: min(1000px, calc(100vw - 40px));
+  }
+
+  &.trmrk-width-stretch.trmrk-width-stretch {
+    width: calc(100vw - 40px);
+    max-width: calc(100vw - 40px);
+  }
+
+  .mat-mdc-dialog-surface.mdc-dialog__surface {
+    border-radius: 10px;
+  }
 }

@@ -1,0 +1,40 @@
+<trmrk-horiz-strip
+  [trmrkCssClass]="['trmrk-top-horiz-strip']"
+  [trmrkTrailingTemplate]="topStripTrailingTemplate"
+  [trmrkUseContentInsteadOfTextRow]="true"
+  ><div class="trmrk-text-row">
+    <h2>{{ data.title }}</h2>
+  </div></trmrk-horiz-strip
+>
+<ng-template #topStripTrailingTemplate>
+  @if (!data.disableClose) {
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn"
+    (click)="closeModalClick($event)"
+  >
+    <mat-icon class="trmrk-icon">close</mat-icon>
+  </button>
+  }
+</ng-template>
+@if (data.useMatDialogComponents === false) {
+<ng-container
+  *ngTemplateOutlet="data.contentTemplate; context: { data: data.data }"
+></ng-container>
+<ng-container
+  *ngTemplateOutlet="data.actionsTemplate; context: { data: data.data }"
+></ng-container>
+} @if (data.useMatDialogComponents ?? true) {
+<div mat-dialog-content class="trmrk-dialog-content">
+  <ng-container
+    *ngTemplateOutlet="data.contentTemplate; context: { data: data.data }"
+  ></ng-container>
+</div>
+
+@if (data.actionsTemplate) {
+<div mat-dialog-actions class="trmrk-dialog-actions">
+  <ng-container
+    *ngTemplateOutlet="data.actionsTemplate; context: { data: data.data }"
+  ></ng-container>
+</div>
+} }

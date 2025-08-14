@@ -69,6 +69,7 @@ export class TrmrkHorizStrip implements OnChanges {
   @Input() trmrkLeadingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTextPartDelimiterTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkUseContentInsteadOfTextRow?: boolean | NullOrUndef;
 
   mainText = '';
   TrmrkHorizStripType = TrmrkHorizStripType;

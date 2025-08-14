@@ -7,7 +7,10 @@
   .trmrk-top-horiz-strip,
   .trmrk-bottom-horiz-strip {
     background-color: #d0e8ff;
-    border-top: 2px solid #c0d8ff;
+
+    &.trmrk-has-border-x2 {
+      border-top: 2px solid #c0d8ff;
+    }
   }
 
   .trmrk-accelerating-scroll-popover {

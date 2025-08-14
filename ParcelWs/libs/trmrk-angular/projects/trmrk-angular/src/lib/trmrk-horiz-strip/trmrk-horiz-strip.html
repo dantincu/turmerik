@@ -1,7 +1,8 @@
 <div [ngClass]="cssClasses" [ngStyle]="trmrkCssStyle">
   @if (trmrkLeadingTemplate) {
   <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
-  }
+  } @if (trmrkUseContentInsteadOfTextRow) { <ng-content></ng-content>} @if
+  (!trmrkUseContentInsteadOfTextRow) {
   <div
     class="trmrk-text-row"
     (trmrkLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
@@ -34,7 +35,7 @@
     <div class="trmrk-strip-cap" [ngStyle]="trmrkCapCssStyle"></div>
     }
   </div>
-  @if (trmrkTrailingTemplate) {
+  } @if (trmrkTrailingTemplate) {
   <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
   }
 </div>

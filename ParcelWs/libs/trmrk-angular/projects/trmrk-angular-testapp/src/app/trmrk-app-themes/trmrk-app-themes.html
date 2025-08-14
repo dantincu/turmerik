@@ -17,6 +17,7 @@
     [trmrkRowMenuTemplate]="rowMenuTemplate"
     [trmrkRowTemplate]="rowTemplate"
     [trmrkVisuallyMovingRowTemplate]="visuallyMovingRowTemplate"
+    [trmrkTopStripTemplate]="topStripTemplate"
     [trmrkErrorTitle]="reqStateManager.errorTitle"
     [trmrkErrorMsg]="reqStateManager.errorMsg"
     [trmrkHasError]="reqStateManager.hasError"
@@ -25,6 +26,16 @@
 
   <ng-template #rowMenuTemplate>
     <span class="trmrk-menu-item trmrk-text-menu-item">Some action</span>
+  </ng-template>
+
+  <ng-template #topStripTemplate>
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (click)="addEntityClick($event)"
+    >
+      <mat-icon class="trmrk-icon">add</mat-icon>
+    </button>
   </ng-template>
 
   <ng-template #rowTemplate let-row="row" let-idx="idx">
@@ -61,4 +72,8 @@
       [trmrkInputData]="{id: row.item.data.id}"
     ></trmrk-panel-list-item>
   </ng-template>
+</ng-template>
+
+<ng-template>
+  <trmrk-edit-app-theme-dialog></trmrk-edit-app-theme-dialog>
 </ng-template>

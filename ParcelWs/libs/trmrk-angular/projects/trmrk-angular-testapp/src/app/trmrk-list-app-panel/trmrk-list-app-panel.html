@@ -20,9 +20,13 @@
         ></mat-checkbox>
       </button>
       }
+      <ng-container
+        *ngTemplateOutlet="trmrkTopStripLeadingTemplate"
+      ></ng-container>
       <trmrk-accelerating-scroll-control
         [trmrkScrollable]="getPanelList"
       ></trmrk-accelerating-scroll-control>
+      <ng-container *ngTemplateOutlet="trmrkTopStripTemplate"></ng-container>
     </ng-template>
     @if (trmrkIsLoading) { @if (trmrkLoadingTemplate) {
     <ng-container *ngTemplateOutlet="trmrkLoadingTemplate"></ng-container> } @if

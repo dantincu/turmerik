@@ -2,6 +2,7 @@ import { Component, ViewChildren, QueryList } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 
@@ -12,16 +13,20 @@ import { getIDbRequestOpenErrorMsg } from '../../trmrk-browser/indexedDB/core';
 import { AppTheme } from '../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { TrmrkListAppPanel } from '../trmrk-list-app-panel/trmrk-list-app-panel';
+import { TrmrkEditAppThemeDialog } from '../trmrk-edit-app-theme/trmrk-edit-app-theme-dialog';
 
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
 } from '../services/trmrk-panel-list-service';
 
+import { openDialog, DialogPanelSize } from '../services/trmrk-dialog';
+
 import { TrmrkAppPage } from 'trmrk-angular';
 
 @Component({
   selector: 'trmrk-app-themes',
+  standalone: true,
   imports: [
     TrmrkAppPage,
     MatIconModule,
@@ -30,6 +35,8 @@ import { TrmrkAppPage } from 'trmrk-angular';
     TrmrkPanelListItem,
     CommonModule,
     TrmrkTouchStartOrMouseDown,
+    MatDialogModule,
+    TrmrkEditAppThemeDialog,
   ],
   templateUrl: './trmrk-app-themes.html',
   styleUrl: './trmrk-app-themes.scss',
@@ -46,6 +53,7 @@ export class TrmrkAppThemes {
   getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
 
   entities: AppTheme[] = [];
+
   reqStateManager = new AsyncRequestStateManager<DOMException | null>(
     null,
     (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]
@@ -56,7 +64,10 @@ export class TrmrkAppThemes {
     name: string;
   }>[] = [];
 
-  constructor(public panelListService: TrmrkPanelListService<any, any>) {}
+  constructor(
+    public panelListService: TrmrkPanelListService<any, any>,
+    private editEntityDialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -92,4 +103,20 @@ export class TrmrkAppThemes {
   rowIconShortPressOrLeftClick(event: TouchOrMouseCoords, idx: number) {}
 
   rowTextShortPressOrLeftClick(event: TouchOrMouseCoords, idx: number) {}
+
+  addEntityClick(event: MouseEvent) {
+    openDialog({
+      matDialog: this.editEntityDialog,
+      dialogComponent: TrmrkEditAppThemeDialog,
+      data: {
+        title: 'Add app theme',
+        disableClose: false,
+        data: {
+          name: '',
+        },
+      },
+      clickEvent: event,
+      dialogPanelSize: DialogPanelSize.Large,
+    });
+  }
 }

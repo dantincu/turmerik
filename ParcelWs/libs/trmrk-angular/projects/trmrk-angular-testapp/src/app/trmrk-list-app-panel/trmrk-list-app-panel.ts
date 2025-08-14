@@ -24,6 +24,8 @@ import {
   whenChanged,
 } from 'trmrk-angular';
 
+import { NullOrUndef } from '../../trmrk/core';
+
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
@@ -60,6 +62,8 @@ export class TrmrkListAppPanel implements OnChanges {
   @Input() trmrkSelectedRowsReorderAggRowVertIsOriented = false;
   @Input() trmrkRowTemplate!: TemplateRef<any>;
   @Input() trmrkVisuallyMovingRowTemplate!: TemplateRef<any>;
+  @Input() trmrkTopStripLeadingTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkTopStripTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkLoadingTemplate!: TemplateRef<any>;
   @Input() trmrkNoItemsTemplate!: TemplateRef<any>;
   @Input() trmrkListItems!: () => QueryList<TrmrkPanelListItem>;

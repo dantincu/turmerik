@@ -1,0 +1,11 @@
+<trmrk-dialog
+  [trmrkData]="{
+    title: (data.id ? 'Edit' : 'Add') + ' app theme',
+    data,
+    dialogRef,
+    disableClose: false,
+    contentTemplate: content,
+    actionsTemplate: actions}"
+></trmrk-dialog>
+<ng-template #content>This is a standalone dialog1.</ng-template>
+<ng-template #actions><button mat-button>asdfsadf</button></ng-template>

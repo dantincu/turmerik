@@ -27,17 +27,16 @@ $dark-theme: mat.define-theme(
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  @include mat.all-component-themes($dark-theme);
+  @include mat.all-component-themes($light-theme);
 }
 
-// Apply color styles dynamically
+// Dynamic theme switching (only colors)
 .trmrk-app-theme-dark {
   @include mat.all-component-colors($dark-theme);
 }
 .trmrk-app-theme-light {
   @include mat.all-component-colors($light-theme);
 }
-
 /*
 * ------------ App Styles ------------
 */
