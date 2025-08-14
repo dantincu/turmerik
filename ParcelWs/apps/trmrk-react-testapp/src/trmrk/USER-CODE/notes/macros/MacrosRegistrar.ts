@@ -1,18 +1,11 @@
 import { VoidOrAny } from '../../../core';
 import { TrmrkUrlPath } from '../../notes/types';
 
-import {
-  MacroCore,
-  Macro,
-  ContentMacro,
-  ContentMacroSection,
-  TitleMacro,
-  TitleMacroSection,
-} from './types';
+import { MacroCore, Macro, MacroSection } from './types';
 
 export interface RegisterMacrosArgs {
-  title: (TitleMacroSection | TitleMacro)[];
-  content: (ContentMacroSection | ContentMacro)[];
+  title: (MacroSection | Macro)[];
+  content: (MacroSection | Macro)[];
 }
 
 export interface DirPathIdnf {
@@ -33,15 +26,14 @@ export interface MacrosRegistrarCallbacks {
   page: MacroRegistrarCallback[];
 }
 
-export const isMacroSection = (macro: MacroCore) =>
-  !!(macro as Macro<any, any>).factory;
+export const isMacroSection = (macro: MacroCore) => !!(macro as Macro).factory;
 
 export class MacrosRegistrar {
   registeredPages: TrmrkPage[] = [];
   currentPage: TrmrkPage | null = null;
   globalCallbacks: MacroRegistrarCallback[] = [];
-  title!: (TitleMacroSection | TitleMacro)[];
-  content!: (ContentMacroSection | ContentMacro)[];
+  title!: (MacroSection | Macro)[];
+  content!: (MacroSection | Macro)[];
 
   initPage(currentDirCsId: string, normPath: string, parsedPath: TrmrkUrlPath) {
     this.title = [];

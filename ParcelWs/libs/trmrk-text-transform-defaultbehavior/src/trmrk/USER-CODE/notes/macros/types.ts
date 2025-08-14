@@ -1,5 +1,6 @@
 import { NullOrUndef } from '../../../core';
-import { ValueFactory } from '../../forms/types';
+import { ValueFactory, FormRow } from '../../forms/types';
+import { TrmrkFormHelper } from '../../forms/trmrkForm';
 
 export interface MacroCore {
   key: string;
@@ -7,13 +8,13 @@ export interface MacroCore {
   isEnabled?: boolean | NullOrUndef;
 }
 
-export interface Macro<TInput, TOutput> extends MacroCore {
-  factory: ValueFactory<TInput, TOutput>;
+export interface Macro extends MacroCore {
+  factory: ValueFactory<MacroArgs, string | TextReplacement[] | MacroOutput>;
 }
 
-export interface MacroSection<TInput, TOutput> extends MacroCore {
-  macros?: Macro<TInput, TOutput>[] | NullOrUndef;
-  subSections?: MacroSection<TInput, TOutput>[] | NullOrUndef;
+export interface MacroSection extends MacroCore {
+  macros?: Macro[] | NullOrUndef;
+  subSections?: MacroSection[] | NullOrUndef;
 }
 
 export interface TextSelection {
@@ -21,21 +22,19 @@ export interface TextSelection {
   length: number;
 }
 
-export interface MacroInput {
-  text: string;
+export interface MacroArgs {
+  allText: string;
+  selection: TextSelection;
+  form: TrmrkFormHelper;
+  resolve: (result: TextReplacement[]) => void;
+}
+
+export interface TextReplacement {
+  newText: string;
   selection: TextSelection;
 }
 
-export interface MacroOutput extends MacroInput {}
-
-export interface TitleMacro
-  extends Macro<string, string | MacroOutput | MacroOutput[]> {}
-
-export interface TitleMacroSection
-  extends MacroSection<string, string | MacroOutput | MacroOutput[]> {}
-
-export interface ContentMacro
-  extends Macro<MacroInput, MacroOutput | MacroOutput | MacroOutput[]> {}
-
-export interface ContentMacroSection
-  extends MacroSection<MacroInput, MacroOutput | MacroOutput | MacroOutput[]> {}
+export interface MacroOutput {
+  result?: TextReplacement[] | NullOrUndef;
+  form?: FormRow[] | NullOrUndef;
+}
