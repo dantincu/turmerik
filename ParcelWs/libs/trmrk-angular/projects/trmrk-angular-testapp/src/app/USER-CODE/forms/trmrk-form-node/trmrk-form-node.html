@@ -49,9 +49,8 @@
   <trmrk-spinner></trmrk-spinner> } } @if (trmrkNode.type ===
   enums.TrmrkFormNodeType.Text) { @if ((textNode!.text ?? null) !== null) { {{
   textNode!.text }} } @if ((textNode!.matIcon ?? null) !== null) {
-  <mat-icon class="trmrk-icon">{{textNode!.matIcon}}</mat-icon> } } @if
-  (trmrkNode.type === enums.TrmrkFormNodeType.Row) { @if ((formRow!.label ??
-  null) !== null) {
+  <mat-icon>{{textNode!.matIcon}}</mat-icon> } } @if (trmrkNode.type ===
+  enums.TrmrkFormNodeType.Row) { @if ((formRow!.label ?? null) !== null) {
   <trmrk-horiz-strip
     [trmrkLeadingTemplate]="headingToggleBtn"
     [trmrkUseContentInsteadOfTextRow]="true"

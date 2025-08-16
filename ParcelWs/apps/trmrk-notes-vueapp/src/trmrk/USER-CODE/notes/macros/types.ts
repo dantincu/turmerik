@@ -18,7 +18,7 @@ export interface Macro<
 > extends MacroCore {
   factory: TrmrkValueFactory<
     MacroArgs<TData, THtml, TFormHelper>,
-    string | TextReplacement[] | MacroOutput
+    string | MacroOutput
   >;
 }
 
@@ -39,6 +39,11 @@ export interface TextSelection {
   length: number;
 }
 
+export interface MacroResult {
+  replace: TextReplacement[];
+  selection?: TextSelection | NullOrUndef;
+}
+
 export interface MacroArgs<
   TData = any,
   THtml = NodeHtml,
@@ -50,7 +55,8 @@ export interface MacroArgs<
   allText: string;
   selection: TextSelection;
   form: TFormHelper;
-  resolve: (result: TextReplacement[]) => void;
+  formEl: HTMLElement;
+  resolve: (result: MacroResult) => void;
 }
 
 export interface TextReplacement {
@@ -59,6 +65,6 @@ export interface TextReplacement {
 }
 
 export interface MacroOutput {
-  result?: TextReplacement[] | NullOrUndef;
+  result?: MacroResult | NullOrUndef;
   form?: TrmrkFormRow[] | NullOrUndef;
 }

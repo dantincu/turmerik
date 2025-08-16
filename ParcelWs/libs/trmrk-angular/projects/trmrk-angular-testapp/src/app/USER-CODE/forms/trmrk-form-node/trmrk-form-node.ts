@@ -200,8 +200,6 @@ export class TrmrkFormNode<TData = any> implements OnChanges {
           }
         }
       }
-    } else {
-      cssClass = [];
     }
 
     return cssClass;
