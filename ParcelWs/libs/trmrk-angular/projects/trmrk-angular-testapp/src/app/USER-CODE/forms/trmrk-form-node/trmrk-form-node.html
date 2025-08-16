@@ -1,0 +1,100 @@
+@if ((trmrkNode.html ?? null) === null) {
+<div [ngClass]="cssClass" [trmrkDynamicAttributes]="trmrkNode.attrs ?? {}">
+  @if (trmrkNode.type === enums.TrmrkFormNodeType.Default) { @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.Text) { @for
+  (childTextNode of formNode!.text ?? []; let idx = $index; track
+  childTextNode._id) {
+  <trmrk-form-node
+    [trmrkNode]="childTextNode"
+    [path]="childPath(idx)"
+    [trmrkTemplatesMap]="trmrkTemplatesMap"
+  ></trmrk-form-node>
+  } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Heading) {
+  <h3 [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}">
+    {{ formNode!.label }}
+  </h3>
+  } @if (formNode!.category === enums.TrmrkFormNodeCategory.Input) { @if
+  ((formNode!.linesCount ?? null) !== null) {
+  <mat-form-field appearance="fill" class="trmrk-form-area">
+    <textarea
+      matInput
+      [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
+      [value]="formNode!.value ?? ''"
+    ></textarea>
+  </mat-form-field>
+  } @if ((formNode!.linesCount ?? null) === null) {
+  <mat-form-field
+    appearance="outline"
+    [ngClass]="['trmrk-form-field', (formNode!.label ?? null) !== null ? 'trmrk-has-label' : '']"
+  >
+    @if ((formNode!.label ?? null) !== null) {
+    <mat-label>{{ formNode!.label }}</mat-label> }
+    <input
+      matInput
+      [type]="formNode!.inputType ?? 'text'"
+      class="trmrk-mat-input"
+      [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
+    />
+  </mat-form-field>
+  } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Combobox) { } @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.Button) { } @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.Group) { } @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.Loading) { } @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.HorizRule) { } @if
+  (formNode!.hasClearAllBtn) {
+  <button mat-icon-button class="trmrk-icon-btn" (click)="clearNode()">
+    <mat-icon class="trmrk-icon">close</mat-icon>
+  </button>
+  } @if (formNode!.hasSpinner) {
+  <trmrk-spinner></trmrk-spinner> } } @if (trmrkNode.type ===
+  enums.TrmrkFormNodeType.Text) { @if ((textNode!.text ?? null) !== null) { {{
+  textNode!.text }} } @if ((textNode!.matIcon ?? null) !== null) {
+  <mat-icon class="trmrk-icon">{{textNode!.matIcon}}</mat-icon> } } @if
+  (trmrkNode.type === enums.TrmrkFormNodeType.Row) { @if ((formRow!.label ??
+  null) !== null) {
+  <trmrk-horiz-strip
+    [trmrkLeadingTemplate]="headingToggleBtn"
+    [trmrkUseContentInsteadOfTextRow]="true"
+  >
+    <h3
+      [ngClass]="['trmrk-form-section-heading']"
+      [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
+    >
+      {{formRow!.label}}
+    </h3></trmrk-horiz-strip
+  >
+  <ng-template #headingToggleBtn>
+    <button mat-icon-button class="trmrk-icon-btn" (click)="toggleSection()">
+      <mat-icon class="trmrk-icon"
+        >{{ (formRow!.isExpanded ?? true) ? 'keyboard_arrow_up' :
+        'keyboard_arrow_down' }}</mat-icon
+      >
+    </button></ng-template
+  >
+  } @if (formRow!.isExpanded ?? true) { @if (formRow!.nodes) { @for (node of
+  formRow!.nodes; let idx = $index; track node._id;) {
+  <trmrk-form-node
+    [trmrkNode]="node"
+    [path]="childPath(idx)"
+    [trmrkTemplatesMap]="trmrkTemplatesMap"
+  ></trmrk-form-node>
+  } } @if (formRow!.rows) { @for (row of formRow!.rows; let idx = $index; track
+  row._id;) {
+  <trmrk-form-node
+    [trmrkNode]="row"
+    [path]="childPath(idx)"
+    [trmrkTemplatesMap]="trmrkTemplatesMap"
+  ></trmrk-form-node>
+  } } } }
+</div>
+} @if ((trmrkNode.html ?? null) !== null) { @if (hasRawHtml) {
+<div
+  [ngClass]="trmrkNode.cssClass ?? ''"
+  [trmrkDynamicAttributes]="trmrkNode.attrs ?? {}"
+  [innerHtml]="safeHtml"
+></div>
+} @if (hasHtmlTemplate) {
+<ng-container
+  *ngTemplateOutlet="trmrkTemplatesMap![htmlTemplateName]; context: { path, node: trmrkNode }"
+></ng-container>
+} }

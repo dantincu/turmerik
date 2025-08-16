@@ -1,39 +1,44 @@
-.trmrk-form-field {
-  height: 40px;
-  margin-top: 3px;
+.trmrk-form-section {
+  padding: 10px 3px 10px 10px;
+  border-radius: 10px;
 
-  .mat-mdc-text-field-wrapper {
-    height: 40px;
+  &.trmrk-is-first {
+    margin-top: 0;
   }
+}
 
-  .trmrk-mat-input {
-    position: relative;
-    top: -8px;
-  }
+.trmrk-form-row {
+  display: flex;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  text-wrap: wrap;
+  word-break: normal;
+  white-space-collapse: collapse;
+  line-break: anywhere;
+  width: 100%;
+}
 
-  &[appearance="fill"] {
-    .trmrk-mat-input {
-      top: -10px;
+.trmrk-form-node {
+  display: flex;
+  padding-right: 10px;
+
+  mat-form-field {
+    width: 100%;
+
+    .trmrk-icon-btn {
+      &.trmrk-is-last {
+        position: relative;
+        right: -10px;
+        width: 45px;
+      }
     }
   }
 
-  &.trmrk-has-label {
-    height: 60px;
-
-    &[appearance="outline"] {
-      margin-top: 7px;
-    }
-
-    &[appearance="fill"] {
-      margin-top: 7px;
-    }
-
-    .trmrk-mat-input {
-      top: 0;
-    }
+  trmrk-spinner {
+    padding-left: 10px;
   }
 
-  .mat-mdc-form-field-subscript-wrapper {
-    height: 3px;
+  &.trmrk-full-width {
+    width: 100%;
   }
 }

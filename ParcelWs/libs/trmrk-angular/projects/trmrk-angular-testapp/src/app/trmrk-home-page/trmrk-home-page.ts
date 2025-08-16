@@ -7,11 +7,26 @@ import {
   AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
+import { MatOptionSelectionChange } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatRadioModule } from '@angular/material/radio';
+
+import {
+  MatAutocompleteModule,
+  MatAutocompleteTrigger,
+} from '@angular/material/autocomplete';
+
+import { MatChipsModule } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { TrmrkDrag, TrmrkDragEvent } from 'trmrk-angular';
 import { TrmrkLongPressOrRightClick } from 'trmrk-angular';
@@ -27,9 +42,10 @@ import {
   TrmrkTreeNodeEventCore,
   ComponentIdService,
   AppBarMapService,
+  TrmrkTouchStartOrMouseDown,
 } from 'trmrk-angular';
 
-import { TrmrkAppBar, TrmrkAppPage } from 'trmrk-angular';
+import { TrmrkAppPage } from 'trmrk-angular';
 import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
 import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
 import { TrmrkThinHorizStrip } from 'trmrk-angular';
@@ -42,44 +58,62 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 import { TreeNode } from '../trmrk-app-tree-view-node/trmrk-app-tree-view-node';
 import { TrmrkAppTreeView } from '../trmrk-app-tree-view/trmrk-app-tree-view';
-import { TrmrkCompaniesAppPanel } from '../trmrk-companies-app-panel/trmrk-companies-app-panel';
+// import { TrmrkCompaniesAppPanel } from '../trmrk-companies-app-panel/trmrk-companies-app-panel';
 import { ToggleAppBarService } from '../services/toggle-app-bar-service';
+import { TrmrkSpinner } from '../USER-CODE/forms/trmrk-spinner/trmrk-spinner';
 
 import { companies } from '../services/companies';
 
 @Component({
   selector: 'trmrk-home-page',
   imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
     MatIconButton,
-    TrmrkAppIcon,
     MatMenuModule,
-    CommonModule,
+    MatSelectModule,
+    MatChipsModule,
+    MatCheckbox,
+    MatRadioModule,
+    MatAutocompleteModule,
+    TrmrkAppIcon,
+    TrmrkSpinner,
     TrmrkDrag,
     TrmrkLongPressOrRightClick,
     TrmrkMultiClick,
     TrmrkUserMessage,
     TrmrkHorizStrip,
     TrmrkAppPage,
-    MatInputModule,
-    MatFormFieldModule,
     TrmrkPanelListItem,
     TrmrkAppTreeView,
     TrmrkThinHorizStrip,
-    TrmrkCompaniesAppPanel,
+    // TrmrkCompaniesAppPanel,
   ],
   templateUrl: './trmrk-home-page.html',
   styleUrl: './trmrk-home-page.scss',
   providers: [ToggleAppBarService],
   encapsulation: ViewEncapsulation.None,
 })
-export class HomePage implements OnDestroy, AfterViewInit {
+export class TrmrkHomePage implements OnDestroy, AfterViewInit {
   appBarEl!: HTMLElement;
   appPageContentEl!: HTMLElement;
 
   @ViewChild('draggableStrip', { read: ElementRef })
   draggableStrip!: ElementRef;
+
+  @ViewChild('foodAutocompleteInput_1', { read: MatAutocompleteTrigger })
+  foodAutocompleteTrigger_1!: MatAutocompleteTrigger;
+
+  @ViewChild('foodAutocompleteInput', { read: MatAutocompleteTrigger })
+  foodAutocompleteTrigger!: MatAutocompleteTrigger;
+
+  @ViewChild('foodAutocompleteInput1', { read: MatAutocompleteTrigger })
+  foodAutocompleteTrigger1!: MatAutocompleteTrigger;
 
   quote = '"';
   nonBreakingText = encodeHtml(
@@ -112,10 +146,11 @@ export class HomePage implements OnDestroy, AfterViewInit {
   ];
 
   companies = [...companies];
-
   treeViewData: TrmrkTree<TreeNode>;
-
   popupClosedMessage = '';
+  foodOptionsSeparatorKeysCodes: number[] = [ENTER, COMMA];
+  foodAutocompleteCtrl = new FormControl('');
+  foodAutocompleteCtrl1 = new FormControl('');
 
   private id: number;
 
@@ -134,6 +169,8 @@ export class HomePage implements OnDestroy, AfterViewInit {
     });
 
     this.treeViewData = this.getTreeViewData();
+
+    this.foodAutocompleteCtrl.valueChanges.subscribe((value) => {});
   }
 
   ngAfterViewInit(): void {
@@ -418,5 +455,67 @@ export class HomePage implements OnDestroy, AfterViewInit {
     }
 
     return retData;
+  }
+
+  foodsComboboxDisplayFn(option: any): string {
+    return option?.viewValue || '';
+  }
+
+  selectFoodOption(
+    event: MatOptionSelectionChange<any>,
+    option: any,
+    cssSelectorSuffix = ''
+  ) {
+    if (event.isUserInput) {
+      let scrollTop: number | null = null;
+
+      let panel = document.querySelector(
+        `.trmrk-food-autocomplete${cssSelectorSuffix}`
+      );
+
+      if (panel) {
+        scrollTop = panel.scrollTop;
+      }
+
+      setTimeout(() => {
+        const foodAutocompleteTrigger =
+          cssSelectorSuffix === ''
+            ? this.foodAutocompleteTrigger
+            : this.foodAutocompleteTrigger1;
+
+        foodAutocompleteTrigger.openPanel();
+
+        panel = document.querySelector(
+          `.trmrk-food-autocomplete${cssSelectorSuffix}`
+        );
+
+        if (panel) {
+          panel.scrollTo({
+            top: scrollTop!,
+          });
+        }
+      });
+    }
+  }
+
+  selectFoodAutocompleteDoneClick(autoCompleteTriggerIdx = 0) {
+    const foodAutocompleteTrigger =
+      autoCompleteTriggerIdx === -1
+        ? this.foodAutocompleteTrigger_1
+        : autoCompleteTriggerIdx === 0
+        ? this.foodAutocompleteTrigger
+        : this.foodAutocompleteTrigger1;
+
+    console.log(
+      'foodAutocompleteTrigger.panelOpen',
+      foodAutocompleteTrigger.panelOpen,
+      autoCompleteTriggerIdx
+    );
+
+    if (foodAutocompleteTrigger.panelOpen) {
+      setTimeout(() => {
+        foodAutocompleteTrigger.closePanel();
+      });
+    }
   }
 }

@@ -3,7 +3,7 @@ import { Directive, OnInit, Input, ElementRef, Renderer2 } from '@angular/core';
 @Directive({
   selector: '[trmrkDynamicAttributes]',
 })
-export class DynamicAttributesDirective implements OnInit {
+export class TrmrkDynamicAttributesDirective implements OnInit {
   @Input('trmrkDynamicAttributes') attributes!: { [key: string]: string };
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}

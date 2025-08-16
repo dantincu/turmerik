@@ -1,0 +1,58 @@
+<trmrk-app-page
+  [trmrkPageTemplate]="page"
+  [trmrkAppBarTitle]="'Forms Test'"
+  [trmrkAppBarHomeRouterLink]="'/app'"
+></trmrk-app-page>
+
+<ng-template #page>
+  <div class="trmrk-page-body trmrk-page-body-thin">
+    <div class="trmrk-form-section trmrk-is-first">
+      <div class="trmrk-form-row">
+        <mat-form-field
+          appearance="outline"
+          class="trmrk-form-field trmrk-has-label"
+        >
+          <mat-label>Enter your name</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Age"
+            class="trmrk-mat-input"
+          />
+        </mat-form-field>
+      </div>
+      <div class="trmrk-form-section trmrk-nesting-level-odd">
+        <div class="trmrk-form-row">
+          <mat-form-field
+            appearance="outline"
+            class="trmrk-form-field trmrk-has-label"
+          >
+            <mat-label>Enter your age</mat-label>
+            <input
+              matInput
+              type="number"
+              placeholder="Age"
+              class="trmrk-mat-input"
+            />
+          </mat-form-field>
+        </div>
+        <div class="trmrk-form-section">
+          <div class="trmrk-form-row">
+            <mat-form-field
+              appearance="outline"
+              class="trmrk-form-field trmrk-has-label"
+            >
+              <mat-label>Enter your gender</mat-label>
+              <input
+                matInput
+                type="number"
+                placeholder="Age"
+                class="trmrk-mat-input"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

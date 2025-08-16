@@ -1,5 +1,5 @@
 import { NullOrUndef } from '../../../core';
-import { ValueFactory, FormRow } from '../../forms/types';
+import { TrmrkValueFactory, TrmrkFormRow, NodeHtml } from '../../forms/types';
 import { TrmrkFormHelper } from '../../forms/trmrkForm';
 
 export interface MacroCore {
@@ -8,13 +8,30 @@ export interface MacroCore {
   isEnabled?: boolean | NullOrUndef;
 }
 
-export interface Macro extends MacroCore {
-  factory: ValueFactory<MacroArgs, string | TextReplacement[] | MacroOutput>;
+export interface Macro<
+  TData = any,
+  THtml = NodeHtml,
+  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
+    TData,
+    THtml
+  >
+> extends MacroCore {
+  factory: TrmrkValueFactory<
+    MacroArgs<TData, THtml, TFormHelper>,
+    string | TextReplacement[] | MacroOutput
+  >;
 }
 
-export interface MacroSection extends MacroCore {
-  macros?: Macro[] | NullOrUndef;
-  subSections?: MacroSection[] | NullOrUndef;
+export interface MacroSection<
+  TData = any,
+  THtml = NodeHtml,
+  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
+    TData,
+    THtml
+  >
+> extends MacroCore {
+  macros?: Macro<TData, THtml, TFormHelper>[] | NullOrUndef;
+  subSections?: MacroSection<TData, THtml, TFormHelper>[] | NullOrUndef;
 }
 
 export interface TextSelection {
@@ -22,10 +39,17 @@ export interface TextSelection {
   length: number;
 }
 
-export interface MacroArgs {
+export interface MacroArgs<
+  TData = any,
+  THtml = NodeHtml,
+  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
+    TData,
+    THtml
+  >
+> {
   allText: string;
   selection: TextSelection;
-  form: TrmrkFormHelper;
+  form: TFormHelper;
   resolve: (result: TextReplacement[]) => void;
 }
 
@@ -36,5 +60,5 @@ export interface TextReplacement {
 
 export interface MacroOutput {
   result?: TextReplacement[] | NullOrUndef;
-  form?: FormRow[] | NullOrUndef;
+  form?: TrmrkFormRow[] | NullOrUndef;
 }

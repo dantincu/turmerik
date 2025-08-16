@@ -6,7 +6,8 @@
 
 :is(.trmrk-app-theme-light,
   .trmrk-app-theme-dark)
-  :is(.trmrk-btn.trmrk-btn-filled-primary,
+  :is(.trmrk-btn.trmrk-btn-filled-default,
+  .trmrk-btn.trmrk-btn-filled-primary,
   .trmrk-btn.trmrk-btn-filled-secondary,
   .trmrk-btn.trmrk-btn-filled-accept,
   .trmrk-btn.trmrk-btn-filled-reject,
@@ -17,7 +18,8 @@
 
 :is(.trmrk-app-theme-light,
   .trmrk-app-theme-dark)
-  :is(.trmrk-icon-btn-filled-primary,
+  :is(.trmrk-btn.trmrk-icon-btn-filled-default,
+    .trmrk-icon-btn-filled-primary,
     .trmrk-icon-btn-filled-secondary,
     .trmrk-icon-btn-filled-accept,
     .trmrk-icon-btn-filled-reject,
@@ -72,9 +74,26 @@
   .trmrk-color-warn {
     color: #880;
   }
+
+  .trmrk-text-level-info {
+    color: #04F;
+  }
+
+  .trmrk-text-level-warning {
+    color: #880;
+  }
+
+  .trmrk-text-level-error {
+    color: #F20;
+  }
 }
 
 .trmrk-app-theme-light {
+  .trmrk-icon-btn-filled-default, .trmrk-btn-filled-default {
+    background-color: #000;
+    color: #FFF;
+  }
+
   .trmrk-user-message {
     [mat-icon-button].trmrk-icon-btn {
       background-color: #0002;
@@ -156,6 +175,14 @@
     }
   }
 
+  .trmrk-form-section {
+    background-color: #FFFFFF;
+
+    &.trmrk-nesting-level-odd {
+      background-color: #EEEEEE;
+    }
+  }
+
   .trmrk-vert-resize-strip {
     background: repeating-linear-gradient(
       45deg,
@@ -200,6 +227,11 @@
   input.trmrk-input {
     background-color: #000;
     color: #fff;
+  }
+
+  .trmrk-icon-btn-filled-default.trmrk-icon-btn-filled-default, .trmrk-btn-filled-default.trmrk-btn-filled-default {
+    background-color: #FFF;
+    color: #000;
   }
 
   .trmrk-user-message {
@@ -280,6 +312,14 @@
     mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
       color: #fff;
       fill: #fff;
+    }
+  }
+
+  .trmrk-form-section {
+    background-color: #000000;
+
+    &.trmrk-nesting-level-odd {
+      background-color: #111111;
     }
   }
 

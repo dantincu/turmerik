@@ -29,6 +29,10 @@ app-root {
   display: none;
 }
 
+.trmrk-flex {
+  display: flex;
+}
+
 .trmrk-wrap-content {
   @include mixins.trmrk-wrap-content();
 }
@@ -508,10 +512,12 @@ trmrk-app-page {
   margin: 20px;
 }
 
+.trmrk-btn-filled-default,
 .trmrk-btn-filled-primary,
 .trmrk-btn-filled-secondary,
 .trmrk-btn-filled-accept,
-.trmrk-btn-filled-reject {
+.trmrk-btn-filled-reject,
+.trmrk-btn-filled-warn {
   height: 40px;
 }
 
@@ -665,16 +671,20 @@ trmrk-app-themes-list-view {
 
 .trmrk-mat-dialog-panel {
   &.trmrk-width-lg.trmrk-width-lg {
-    width: min(1000px, calc(100vw - 40px));
-    max-width: min(1000px, calc(100vw - 40px));
+    width: max(500px, min(1000px, calc(100vw - 40px)));
+    max-width: max(500px, min(1000px, calc(100vw - 40px)));
   }
 
-  &.trmrk-width-stretch.trmrk-width-stretch {
-    width: calc(100vw - 40px);
-    max-width: calc(100vw - 40px);
+  &.trmrk-width-stretch.trmrk-width-max {
+    width: max(500px, calc(100vw - 40px));
+    max-width: max(500px, calc(100vw - 40px));
   }
 
   .mat-mdc-dialog-surface.mdc-dialog__surface {
     border-radius: 10px;
+  }
+
+  .trmrk-dialog-content.trmrk-dialog-content, .trmrk-dialog-actions.trmrk-dialog-actions {
+    padding: 0;
   }
 }

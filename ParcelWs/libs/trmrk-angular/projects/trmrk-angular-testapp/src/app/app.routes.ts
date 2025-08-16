@@ -1,7 +1,8 @@
 import { inject } from '@angular/core';
 import { Routes, Router } from '@angular/router';
 
-import { HomePage } from './trmrk-home-page/trmrk-home-page';
+import { TrmrkHomePage } from './trmrk-home-page/trmrk-home-page';
+import { TrmrkFormsTestPage } from './trmrk-forms-test-page/trmrk-forms-test-page';
 import { TrmrkAppSettings } from './trmrk-app-settings/trmrk-app-settings';
 import { TrmrkAppThemes } from './trmrk-app-themes/trmrk-app-themes';
 import { TrmrkResetApp } from './trmrk-reset-app/trmrk-reset-app';
@@ -31,8 +32,12 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'app/forms',
+    component: TrmrkFormsTestPage,
+  },
+  {
     path: 'app',
-    component: HomePage,
+    component: TrmrkHomePage,
   },
   {
     path: '**',

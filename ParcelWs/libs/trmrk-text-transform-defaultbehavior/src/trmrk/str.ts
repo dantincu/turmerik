@@ -1,7 +1,11 @@
 import { allWsRegex, digitRegex, NullOrUndef } from './core';
 
-export const isNonEmptyStr = (arg: string | any, allWsSameAsEmpty = false) => {
-  let retVal = 'string' === typeof arg;
+export const isNonEmptyStr = (
+  arg: string | any,
+  allWsSameAsEmpty = false,
+  checkIsTypeOfString = true
+) => {
+  let retVal = !checkIsTypeOfString || 'string' === typeof arg;
   retVal = retVal && arg !== '';
 
   if (retVal && allWsSameAsEmpty) {
