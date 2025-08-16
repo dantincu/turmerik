@@ -11,7 +11,11 @@ export enum TrmrkFormNodeCategory {
   Heading,
   Input,
   Combobox,
+  Checkbox,
+  Radio,
+  RadioGroup,
   Button,
+  IconButton,
   Group,
   Loading,
   HorizRule,
@@ -84,25 +88,25 @@ export interface NodeHtmlInfo {
 
 export type NodeHtml = string | NodeHtmlInfo;
 
-export interface TrmrkNodeCoreBase<TData = any, THtml = NodeHtml> {
+export interface TrmrkNodeCoreBase<THtml = NodeHtml> {
   cssClass?: string | NullOrUndef;
+  controlClass?: string | NullOrUndef;
   attrs?: TrmrkDOMNodeAttrs | NullOrUndef;
-  data?: TData | NullOrUndef;
   html?: THtml | NullOrUndef;
+  useEnhancedControl?: boolean | NullOrUndef;
 }
 
-export interface TrmrkNodeCore<TData = any, THtml = NodeHtml>
-  extends TrmrkNodeCoreBase<TData, THtml> {
+export interface TrmrkNodeCore<THtml = NodeHtml>
+  extends TrmrkNodeCoreBase<THtml> {
   _id: number;
   type: TrmrkFormNodeType;
 }
 
-export interface TrmrkTextNode<TData = any, THtml = NodeHtml>
-  extends TrmrkNodeCore<TData, THtml> {
+export interface TrmrkTextNode<THtml = NodeHtml> extends TrmrkNodeCore<THtml> {
   text?: string;
   level?: TrmrkTextLevel | NullOrUndef;
   style?: TrmrkTextStyle | NullOrUndef;
-  matIcon?: string | NullOrUndef;
+  iconName?: string | NullOrUndef;
 }
 
 export type TrmrkDOMNodeAttrs = { [key: string]: string };
@@ -110,34 +114,33 @@ export type TrmrkDOMNodeAttrs = { [key: string]: string };
 export interface TrmrkComboBoxItem {
   key: string | NullOrUndef;
   text: string;
+  isSelected?: boolean | NullOrUndef;
 }
 
 export type TrmrkInputValueType = string;
 
 export type TrmrkFormNodeChangedEventArg =
   | TrmrkInputValueType
-  | string[]
   | TrmrkComboBoxItem
   | TrmrkComboBoxItem[];
 
 export type TrmrkOnChangeEventHandler = (
-  rows: TrmrkFormRow[],
   newValue: TrmrkFormNodeChangedEventArg,
   searchString?: string | NullOrUndef
 ) => VoidOrAny;
 
-export type TrmrkOnClickEventHandler = (rows: TrmrkFormRow[]) => VoidOrAny;
+export type TrmrkOnClickEventHandler = () => VoidOrAny;
 
 export interface TrmrkFormNodeEvents {
   onChange?: TrmrkOnChangeEventHandler | NullOrUndef;
   onClick?: TrmrkOnClickEventHandler | NullOrUndef;
 }
 
-export interface TrmrkFormNode<TData = any, THtml = NodeHtml>
+export interface TrmrkFormNode<THtml = NodeHtml>
   extends TrmrkFormNodeEvents,
-    TrmrkNodeCore<TData, THtml> {
+    TrmrkNodeCore<THtml> {
   category: TrmrkFormNodeCategory;
-  text?: TrmrkTextNode<TData, THtml>[] | NullOrUndef;
+  text?: TrmrkTextNode<THtml>[] | NullOrUndef;
   label?: string | NullOrUndef;
   value?: TrmrkInputValueType | NullOrUndef;
   inputType?: HtmlInputCategory | NullOrUndef;
@@ -145,19 +148,17 @@ export interface TrmrkFormNode<TData = any, THtml = NodeHtml>
   linesCount?: number | NullOrUndef;
   buttonType?: TrmrkButtonCategory | NullOrUndef;
   items?: TrmrkValueFactory<string, TrmrkComboBoxItem[]> | NullOrUndef;
-  childNodes?: TrmrkFormNode<TData, THtml>[] | NullOrUndef;
-  useMatControl?: boolean | NullOrUndef;
+  childNodes?: TrmrkFormNode<THtml>[] | NullOrUndef;
   fullWidth?: boolean | NullOrUndef;
   hasSpinner?: boolean | NullOrUndef;
   hasClearAllBtn?: boolean | NullOrUndef;
 }
 
-export interface TrmrkFormRow<TData = any, THtml = NodeHtml>
-  extends TrmrkNodeCore<TData, THtml> {
+export interface TrmrkFormRow<THtml = NodeHtml> extends TrmrkNodeCore<THtml> {
   category: TrmrkFormRowCategory;
   label?: string | NullOrUndef;
-  nodes?: TrmrkFormNode<TData, THtml>[] | NullOrUndef;
-  rows?: TrmrkFormRow<TData, THtml>[] | NullOrUndef;
+  nodes?: TrmrkFormNode<THtml>[] | NullOrUndef;
+  rows?: TrmrkFormRow<THtml>[] | NullOrUndef;
   heightFactor?: number | NullOrUndef;
   isExpanded?: boolean | NullOrUndef;
 }

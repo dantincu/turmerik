@@ -9,29 +9,21 @@ export interface MacroCore {
 }
 
 export interface Macro<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > extends MacroCore {
   factory: TrmrkValueFactory<
-    MacroArgs<TData, THtml, TFormHelper>,
+    MacroArgs<THtml, TFormHelper>,
     string | MacroOutput
   >;
 }
 
 export interface MacroSection<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > extends MacroCore {
-  macros?: Macro<TData, THtml, TFormHelper>[] | NullOrUndef;
-  subSections?: MacroSection<TData, THtml, TFormHelper>[] | NullOrUndef;
+  macros?: Macro<THtml, TFormHelper>[] | NullOrUndef;
+  subSections?: MacroSection<THtml, TFormHelper>[] | NullOrUndef;
 }
 
 export interface TextSelection {
@@ -42,15 +34,12 @@ export interface TextSelection {
 export interface MacroResult {
   replace: TextReplacement[];
   selection?: TextSelection | NullOrUndef;
+  autoClose?: boolean | NullOrUndef;
 }
 
 export interface MacroArgs<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > {
   allText: string;
   selection: TextSelection;

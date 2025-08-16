@@ -33,58 +33,67 @@
   }
 }
 
+:root {
+  --trmrk-primary-color: #04F;
+  --trmrk-secondary-color: #444;
+  --trmrk-accept-color: #090;
+  --trmrk-reject-color: #F20;
+  --trmrk-warn-color: #A70;
+  --trmrk-warn-back-color: #C90;
+}
+
 :is(.trmrk-app-theme-light,
   .trmrk-app-theme-dark) {
   .trmrk-icon-btn-filled-primary, .trmrk-btn-filled-primary, .trmrk-background-color-primary {
-    background-color: #00F;
+    background-color: var(--trmrk-primary-color);
   }
 
   .trmrk-color-primary {
-    color: #00F;
+    color: var(--trmrk-primary-color);
   }
 
   .trmrk-icon-btn-filled-secondary, .trmrk-btn-filled-secondary, .trmrk-background-color-secondary {
-    background-color: #444;
+    background-color: var(--trmrk-secondary-color);
   }
 
   .trmrk-color-secondary {
-    color: #444;
+    color: var(--trmrk-secondary-color);
   }
 
   .trmrk-icon-btn-filled-accept, .trmrk-btn-filled-accept, .trmrk-background-color-accept {
-    background-color: #090;
+    background-color: var(--trmrk-accept-color);
   }
 
   .trmrk-color-accept {
-    color: #090;
+    color: var(--trmrk-accept-color);
   }
 
   .trmrk-icon-btn-filled-reject, .trmrk-btn-filled-reject, .trmrk-background-color-reject {
-    background-color: #F20;
+    background-color: var(--trmrk-reject-color);
   }
 
   .trmrk-color-reject {
-    color: #F20;
+    color: var(--trmrk-reject-color);
   }
 
   .trmrk-icon-btn-filled-warn, .trmrk-btn-filled-warn, .trmrk-background-color-warn {
-    background-color: #880;
+    background-color: var(--trmrk-warn-back-color);
   }
 
   .trmrk-color-warn {
-    color: #880;
+    color: var(--trmrk-warn-color);
   }
 
   .trmrk-text-level-info {
-    color: #04F;
+    color: var(--trmrk-primary-color);
   }
 
   .trmrk-text-level-warning {
-    color: #880;
+    color: var(--trmrk-warn-color);
   }
 
   .trmrk-text-level-error {
-    color: #F20;
+    color: var(--trmrk-reject-color);
   }
 }
 

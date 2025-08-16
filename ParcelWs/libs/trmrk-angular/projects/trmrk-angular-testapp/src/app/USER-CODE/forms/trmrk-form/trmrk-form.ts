@@ -27,7 +27,6 @@ import {
 
 import {
   TrmrkFormHelper,
-  TrmrkFormTextArg,
   TrmrkFormHelperExtraArgs,
 } from '../../../../trmrk/USER-CODE/forms/trmrkForm';
 
@@ -37,7 +36,7 @@ import {
   templateUrl: './trmrk-form.html',
   styleUrl: './trmrk-form.scss',
 })
-export class TrmrkForm<TData = any, THtml = NodeHtml> {
-  @Input() trmrkRows!: TrmrkFormRow<TData, THtml>[];
+export class TrmrkForm {
+  @Input() trmrkRows!: TrmrkFormRow[];
   @Input() trmrkTemplatesMap?: { [templateName: string]: TemplateRef<any> };
 }

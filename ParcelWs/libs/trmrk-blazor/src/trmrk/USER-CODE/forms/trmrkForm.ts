@@ -22,70 +22,26 @@ import {
   TrmrkFormNodeType,
 } from './types';
 
-type TrmrkFormTextArgBase1 = [string];
-
-type TrmrkFormTextArgBase2 = [
-  ...TrmrkFormTextArgBase1,
-  TrmrkTextLevel | NullOrUndef
-];
-
-type TrmrkFormTextArgBase3 = [
-  ...TrmrkFormTextArgBase2,
-  TrmrkTextStyle | NullOrUndef
-];
-
-type TrmrkFormTextArgBase4 = [...TrmrkFormTextArgBase3, string | NullOrUndef];
-type TrmrkFormTextArgBase5 = [...TrmrkFormTextArgBase4, string | NullOrUndef];
-
-type TrmrkFormTextArgBase6 = [
-  ...TrmrkFormTextArgBase5,
-  TrmrkDOMNodeAttrs | NullOrUndef
-];
-
-type TrmrkFormTextArgBase7<TData = any> = [
-  ...TrmrkFormTextArgBase6,
-  TData | NullOrUndef
-];
-
-type TrmrkFormTextArgBase8<TData = any, THtml = NodeHtml> = [
-  ...TrmrkFormTextArgBase7<TData>,
-  THtml | NullOrUndef
-];
-
-export type TrmrkFormTextArg<TData = any, THtml = NodeHtml> =
-  | TrmrkFormTextArgBase1
-  | TrmrkFormTextArgBase2
-  | TrmrkFormTextArgBase3
-  | TrmrkFormTextArgBase4
-  | TrmrkFormTextArgBase5
-  | TrmrkFormTextArgBase6
-  | TrmrkFormTextArgBase7<TData>
-  | TrmrkFormTextArgBase8<TData, THtml>;
-
-export interface TrmrkFormHelperExtraArgs<TData = any, THtml = NodeHtml>
-  extends TrmrkNodeCoreBase<TData, THtml> {
-  onNodeCreated?:
-    | ((node: TrmrkNodeCore<TData, THtml>) => VoidOrAny)
-    | NullOrUndef;
+export interface TrmrkFormHelperExtraArgs<THtml = NodeHtml>
+  extends TrmrkNodeCoreBase<THtml> {
+  onNodeCreated?: ((node: TrmrkNodeCore<THtml>) => VoidOrAny) | NullOrUndef;
 }
 
-export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
+export class TrmrkFormHelper<THtml = NodeHtml> {
   static createAssignIdToAttrCallback =
-    <TData = any, THtml = NodeHtml>(attrName: string) =>
-    (node: TrmrkNodeCore<TData, THtml>) => {
+    <THtml = NodeHtml>(attrName: string) =>
+    (node: TrmrkNodeCore<THtml>) => {
       node.attrs ??= {};
       node.attrs[attrName] = node._id.toString();
     };
 
-  onNodeCreated?:
-    | ((node: TrmrkNodeCore<TData, THtml>) => VoidOrAny)
-    | NullOrUndef;
+  onNodeCreated?: ((node: TrmrkNodeCore<THtml>) => VoidOrAny) | NullOrUndef;
 
   _id = 1;
 
   constructor(
     onNodeCreated?:
-      | ((node: TrmrkNodeCore<TData, THtml>) => VoidOrAny)
+      | ((node: TrmrkNodeCore<THtml>) => VoidOrAny)
       | string
       | NullOrUndef
   ) {
@@ -94,7 +50,7 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
 
       if ('function' === onNodeCreatedType) {
         this.onNodeCreated = onNodeCreated as (
-          node: TrmrkNodeCore<TData, THtml>
+          node: TrmrkNodeCore<THtml>
         ) => VoidOrAny;
       } else if ('string' === onNodeCreatedType) {
         const idAttrName = onNodeCreated as string;
@@ -106,35 +62,29 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
     }
   }
 
-  nodeCoreBase<TNode extends TrmrkNodeCore<TData, THtml>>(
+  nodeCoreBase<TNode extends TrmrkNodeCore<THtml>>(
     type: TrmrkFormNodeType,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef,
-    callback?: ((node: TNode) => VoidOrAny) | NullOrUndef
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef,
+    callback?: ((node: TNode) => TNode | VoidOrAny) | NullOrUndef
   ): TNode {
     let retNode: TNode;
 
     let onNodeCreated:
-      | ((node: TrmrkNodeCore<TData, THtml>) => VoidOrAny)
+      | ((node: TrmrkNodeCore<THtml>) => VoidOrAny)
       | NullOrUndef = null;
 
     if (xArgs) {
-      const { cssClass, data, html, attrs } = xArgs;
-      onNodeCreated = xArgs.onNodeCreated;
+      retNode = xArgs as TNode;
+      retNode._id = this._id++;
+      retNode.type = type;
 
-      retNode = {
-        _id: this._id++,
-        type,
-        cssClass,
-        data,
-        html,
-        attrs,
-      } as TNode;
+      onNodeCreated = xArgs.onNodeCreated;
     } else {
       retNode = {} as TNode;
     }
 
     if (callback) {
-      callback(retNode);
+      retNode = callback(retNode) ?? retNode;
     }
 
     if (this.onNodeCreated) {
@@ -150,10 +100,10 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
 
   rowCore(
     rowType: TrmrkFormRowCategory,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef,
-    callback?: ((node: TrmrkFormRow<TData, THtml>) => VoidOrAny) | NullOrUndef
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef,
+    callback?: ((node: TrmrkFormRow<THtml>) => VoidOrAny) | NullOrUndef
   ) {
-    return this.nodeCoreBase<TrmrkFormRow<TData, THtml>>(
+    return this.nodeCoreBase<TrmrkFormRow<THtml>>(
       TrmrkFormNodeType.Row,
       xArgs,
       (node) => {
@@ -168,10 +118,10 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
 
   nodeCore(
     nodeType: TrmrkFormNodeCategory,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef,
-    callback?: ((node: TrmrkFormNode<TData, THtml>) => VoidOrAny) | NullOrUndef
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef,
+    callback?: ((node: TrmrkFormNode<THtml>) => VoidOrAny) | NullOrUndef
   ) {
-    return this.nodeCoreBase<TrmrkFormNode<TData, THtml>>(
+    return this.nodeCoreBase<TrmrkFormNode<THtml>>(
       TrmrkFormNodeType.Default,
       xArgs,
       (node) => {
@@ -185,10 +135,10 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
   }
 
   textNodeCore(
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef,
-    callback?: ((node: TrmrkTextNode<TData, THtml>) => VoidOrAny) | NullOrUndef
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef,
+    callback?: ((node: TrmrkTextNode<THtml>) => VoidOrAny) | NullOrUndef
   ) {
-    return this.nodeCoreBase<TrmrkTextNode<TData, THtml>>(
+    return this.nodeCoreBase<TrmrkTextNode<THtml>>(
       TrmrkFormNodeType.Text,
       xArgs,
       callback
@@ -196,10 +146,10 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
   }
 
   section(
-    rows: TrmrkFormRow<TData, THtml>[],
+    rows: TrmrkFormRow<THtml>[],
     heading?: string | NullOrUndef,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormRow<TData, THtml> {
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormRow<THtml> {
     return this.rowCore(TrmrkFormRowCategory.Section, xArgs, (node) => {
       node.rows = rows;
       node.label = heading;
@@ -207,9 +157,9 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
   }
 
   row(
-    nodes?: TrmrkFormNode<TData, THtml>[] | NullOrUndef,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormRow<TData, THtml> {
+    nodes?: TrmrkFormNode<THtml>[] | NullOrUndef,
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormRow<THtml> {
     return this.rowCore(TrmrkFormRowCategory.Content, xArgs, (node) => {
       node.nodes = nodes;
     });
@@ -217,57 +167,45 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
 
   blank(
     heightFactor?: number | NullOrUndef,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormRow<TData, THtml> {
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormRow<THtml> {
     return this.rowCore(TrmrkFormRowCategory.Blank, xArgs, (node) => {
       node.heightFactor = heightFactor;
     });
   }
 
   heading(
-    text: TrmrkFormTextArg<TData, THtml>[],
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    text: TrmrkTextNode<THtml>[],
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Heading, xArgs, (node) => {
       node.text = text.map((textNode) => this.textNode(textNode));
     });
   }
 
   textNode(
-    nodeArg: TrmrkFormTextArg<TData, THtml> | TrmrkTextNode<TData, THtml>,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkTextNode<TData, THtml> {
+    node: TrmrkTextNode<THtml>,
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkTextNode<THtml> {
     return this.textNodeCore(xArgs, (textNode) => {
-      if (
-        ((nodeArg as TrmrkFormTextArg<TData, THtml>).length ?? null) !== null
-      ) {
-        const node = nodeArg as TrmrkFormTextArg<TData, THtml>;
-        textNode.text = node[0];
-        textNode.level = node[1] ?? TrmrkTextLevel.Default;
-        textNode.style = node[2] ?? TrmrkTextStyle.Regular;
-        textNode.matIcon = node[3];
-        textNode.cssClass = node[4];
-        textNode.attrs = node[5];
-        textNode.data = node[6];
-        textNode.html = node[7];
-      } else {
-        const node = nodeArg as TrmrkTextNode<TData, THtml>;
-        textNode.text = node.text;
-        textNode.level = node.level ?? TrmrkTextLevel.Default;
-        textNode.style = node.style ?? TrmrkTextStyle.Regular;
-        textNode.matIcon = node.matIcon;
-        textNode.cssClass = node.cssClass;
-        textNode.attrs = node.attrs;
-        textNode.data = node.data;
-        textNode.html = node.html;
-      }
+      textNode.text = node.text ?? textNode.text;
+      textNode.level = node.level ?? textNode.level ?? TrmrkTextLevel.Default;
+      textNode.style = node.style ?? textNode.style ?? TrmrkTextStyle.Regular;
+      textNode.iconName = node.iconName ?? textNode.text;
+      textNode.cssClass = node.cssClass ?? textNode.text;
+      textNode.controlClass = node.controlClass ?? textNode.text;
+      textNode.attrs = node.attrs ?? textNode.attrs;
+      textNode.html = node.html ?? textNode.html;
+
+      textNode.useEnhancedControl =
+        node.useEnhancedControl ?? textNode.useEnhancedControl;
     });
   }
 
   text(
-    nodes: TrmrkFormTextArg<TData, THtml>[],
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    nodes: TrmrkTextNode<THtml>[],
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Text, xArgs, (node) => {
       node.text = nodes.map((textNode) => this.textNode(textNode));
     });
@@ -278,8 +216,8 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
     inputType?: HtmlInputCategory | NullOrUndef,
     linesCount?: number | NullOrUndef,
     onChange?: TrmrkOnChangeEventHandler | NullOrUndef,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Input, xArgs, (node) => {
       node.linesCount = linesCount;
       node.value = value;
@@ -292,8 +230,8 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
     items: TrmrkValueFactory<string, TrmrkComboBoxItem[]>,
     value?: string | NullOrUndef,
     onChange?: TrmrkOnChangeEventHandler | NullOrUndef,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Combobox, xArgs, (node) => {
       node.items = items;
       node.value = value;
@@ -303,11 +241,11 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
   }
 
   button(
-    text: TrmrkFormTextArg<TData, THtml>[],
+    text: TrmrkTextNode<THtml>[],
     buttonType?: TrmrkButtonCategory | NullOrUndef,
     onClick?: TrmrkOnClickEventHandler | NullOrUndef,
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Button, xArgs, (node) => {
       node.buttonType = buttonType;
       node.text = text.map((textNode) => this.textNode(textNode));
@@ -316,21 +254,21 @@ export class TrmrkFormHelper<TData = any, THtml = NodeHtml> {
   }
 
   loading(
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Loading, xArgs);
   }
 
   horizRule(
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.HorizRule, xArgs);
   }
 
   group(
-    childNodes: TrmrkFormNode<TData, THtml>[],
-    xArgs?: TrmrkFormHelperExtraArgs<TData, THtml> | NullOrUndef
-  ): TrmrkFormNode<TData, THtml> {
+    childNodes: TrmrkFormNode<THtml>[],
+    xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
+  ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Group, xArgs, (node) => {
       node.childNodes = childNodes;
     });

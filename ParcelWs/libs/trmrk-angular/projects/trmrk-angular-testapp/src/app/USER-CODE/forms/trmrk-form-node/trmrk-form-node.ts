@@ -45,7 +45,6 @@ import {
 
 import {
   TrmrkFormHelper,
-  TrmrkFormTextArg,
   TrmrkFormHelperExtraArgs,
 } from '../../../../trmrk/USER-CODE/forms/trmrkForm';
 
@@ -112,16 +111,16 @@ export const textStylesMap: [TrmrkTextStyle, string][] = [
   templateUrl: './trmrk-form-node.html',
   styleUrl: './trmrk-form-node.scss',
 })
-export class TrmrkFormNode<TData = any> implements OnChanges {
-  @Input() trmrkNode!: TrmrkNodeCore<TData, NodeHtml>;
-  @Input() path!: number[];
+export class TrmrkFormNode implements OnChanges {
+  @Input() trmrkNode!: TrmrkNodeCore;
+  @Input() trmrkPath!: number[];
   @Input() trmrkTemplatesMap?: { [templateName: string]: TemplateRef<any> };
 
   enums = enums;
 
-  formNode: TrmrkFormNodeObj<TData, NodeHtml> | null = null;
-  formRow: TrmrkFormRow<TData, NodeHtml> | null = null;
-  textNode: TrmrkTextNode<TData, NodeHtml> | null = null;
+  formNode: TrmrkFormNodeObj | null = null;
+  formRow: TrmrkFormRow | null = null;
+  textNode: TrmrkTextNode | null = null;
 
   get hasRawHtml() {
     return hasRawHtml(this.trmrkNode.html);
@@ -227,16 +226,16 @@ export class TrmrkFormNode<TData = any> implements OnChanges {
         this.textNode = this.trmrkNode;
         break;
       case TrmrkFormNodeType.Row:
-        this.formRow = this.trmrkNode as TrmrkFormRow<TData, NodeHtml>;
+        this.formRow = this.trmrkNode as TrmrkFormRow;
         break;
       default:
-        this.formNode = this.trmrkNode as TrmrkFormNodeObj<TData, NodeHtml>;
+        this.formNode = this.trmrkNode as TrmrkFormNodeObj;
         break;
     }
   }
 
   childPath(idx: number) {
-    const path = [...this.path, idx];
+    const path = [...this.trmrkPath, idx];
     return path;
   }
 

@@ -6,21 +6,11 @@ import { NodeHtml } from '../../forms/types';
 import { TrmrkFormHelper } from '../../forms/trmrkForm';
 
 export interface RegisterMacrosArgs<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > {
-  title: (
-    | MacroSection<TData, THtml, TFormHelper>
-    | Macro<TData, THtml, TFormHelper>
-  )[];
-  content: (
-    | MacroSection<TData, THtml, TFormHelper>
-    | Macro<TData, THtml, TFormHelper>
-  )[];
+  title: (MacroSection<THtml, TFormHelper> | Macro<THtml, TFormHelper>)[];
+  content: (MacroSection<THtml, TFormHelper> | Macro<THtml, TFormHelper>)[];
 }
 
 export interface DirPathIdnf {
@@ -30,59 +20,37 @@ export interface DirPathIdnf {
 }
 
 export type MacroRegistrarCallback<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
-> = (arg: RegisterMacrosArgs<TData, THtml, TFormHelper>) => VoidOrAny;
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
+> = (arg: RegisterMacrosArgs<THtml, TFormHelper>) => VoidOrAny;
 
 export interface TrmrkPage<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > {
   idnf: DirPathIdnf;
-  callbacks: MacroRegistrarCallback<TData, THtml, TFormHelper>[];
+  callbacks: MacroRegistrarCallback<THtml, TFormHelper>[];
 }
 
 export interface MacrosRegistrarCallbacks<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > {
-  global: MacroRegistrarCallback<TData, THtml, TFormHelper>[];
-  page: MacroRegistrarCallback<TData, THtml, TFormHelper>[];
+  global: MacroRegistrarCallback<THtml, TFormHelper>[];
+  page: MacroRegistrarCallback<THtml, TFormHelper>[];
 }
 
 export const isMacroSection = (macro: MacroCore) => !!(macro as Macro).factory;
 
 export class MacrosRegistrar<
-  TData = any,
   THtml = NodeHtml,
-  TFormHelper extends TrmrkFormHelper<TData, THtml> = TrmrkFormHelper<
-    TData,
-    THtml
-  >
+  TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > {
-  registeredPages: TrmrkPage<TData, THtml, TFormHelper>[] = [];
-  currentPage: TrmrkPage<TData, THtml, TFormHelper> | null = null;
-  globalCallbacks: MacroRegistrarCallback<TData, THtml, TFormHelper>[] = [];
-  title!: (
-    | MacroSection<TData, THtml, TFormHelper>
-    | Macro<TData, THtml, TFormHelper>
-  )[];
-  content!: (
-    | MacroSection<TData, THtml, TFormHelper>
-    | Macro<TData, THtml, TFormHelper>
-  )[];
+  registeredPages: TrmrkPage<THtml, TFormHelper>[] = [];
+  currentPage: TrmrkPage<THtml, TFormHelper> | null = null;
+  globalCallbacks: MacroRegistrarCallback<THtml, TFormHelper>[] = [];
+  title!: (MacroSection<THtml, TFormHelper> | Macro<THtml, TFormHelper>)[];
+  content!: (MacroSection<THtml, TFormHelper> | Macro<THtml, TFormHelper>)[];
 
   reset() {
     this.globalCallbacks = [];
@@ -118,17 +86,17 @@ export class MacrosRegistrar<
     });
   }
 
-  registerGobal(callback: MacroRegistrarCallback<TData, THtml, TFormHelper>) {
+  registerGobal(callback: MacroRegistrarCallback<THtml, TFormHelper>) {
     this.registerCore(callback, this.globalCallbacks);
   }
 
-  register(callback: MacroRegistrarCallback<TData, THtml, TFormHelper>) {
+  register(callback: MacroRegistrarCallback<THtml, TFormHelper>) {
     this.registerCore(callback, this.currentPage!.callbacks);
   }
 
   private registerCore(
-    callback: MacroRegistrarCallback<TData, THtml, TFormHelper>,
-    callbacks: MacroRegistrarCallback<TData, THtml, TFormHelper>[]
+    callback: MacroRegistrarCallback<THtml, TFormHelper>,
+    callbacks: MacroRegistrarCallback<THtml, TFormHelper>[]
   ) {
     callbacks.push(callback);
     this.fireCallBack(callback);
@@ -155,9 +123,7 @@ export class MacrosRegistrar<
     this.currentPage = page;
   }
 
-  private fireCallBack(
-    callback: MacroRegistrarCallback<TData, THtml, TFormHelper>
-  ) {
+  private fireCallBack(callback: MacroRegistrarCallback<THtml, TFormHelper>) {
     callback({
       title: this.title,
       content: this.content,
