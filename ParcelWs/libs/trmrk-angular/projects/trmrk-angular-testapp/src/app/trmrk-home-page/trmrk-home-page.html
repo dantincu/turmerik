@@ -18,7 +18,7 @@
 </ng-template>
 
 <ng-template #page>
-  <!--trmrk-companies-app-panel></trmrk-companies-app-panel-->
+  <trmrk-companies-app-panel></trmrk-companies-app-panel>
   <div [ngStyle]="{marginTop: '0px'}">
     <input type="text" class="trmrk-input" />
   </div>
@@ -663,6 +663,15 @@
     </p>
   </div>
   <div>
+    <p class="trmrk-color-secondary">
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+    </p>
+  </div>
+  <div>
     <p class="trmrk-text-level-info">
       asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
       asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
@@ -690,6 +699,22 @@
     </p>
   </div>
   <div>
+    <p class="trmrk-color-accept">
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+      asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf asdfasdf
+    </p>
+  </div>
+  <div>
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn trmrk-icon-btn-filled-default"
+    >
+      <mat-icon class="trmrk-icon">check_circle</mat-icon>
+    </button>
+
     <button
       mat-icon-button
       class="trmrk-icon-btn trmrk-icon-btn-filled-primary"
@@ -709,6 +734,10 @@
     </button>
 
     <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-reject">
+      <mat-icon class="trmrk-icon">open_with</mat-icon>
+    </button>
+
+    <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-warn">
       <mat-icon class="trmrk-icon">open_with</mat-icon>
     </button>
 
@@ -744,8 +773,31 @@
     [ngStyle]="{position: 'fixed', bottom: '0px', zIndex: '2', maxWidth: '100vw'}"
     class="trmrk-main-user-message"
   ></trmrk-user-message>
-
+  <div>
+    <button mat-button>asdfasdf</button>
+    <button matButton="text">text</button>
+    <button matButton="filled">filled</button>
+    <button matButton="elevated">elevated</button>
+    <button matButton="outlined">outlined</button>
+    <button matButton="tonal">tonal</button>
+    <!-- type MatButtonAppearance = 'text' | 'filled' | 'elevated' | 'outlined' | 'tonal'; -->
+  </div>
+  <button mat-button>asdfasdf</button>
   <button matButton="filled">asdfasdf</button>
+  <div>
+    <button mat-button>asdfasdf</button>
+    <button matButton="filled">asdfasdf</button>
+  </div>
+  <div
+    [ngStyle]="{display: 'flex', flexDirection: 'column', position: 'relative', flex: '1 0 10%', boxSizing: 'border-box'}"
+  >
+    <button mat-button>asdfasdf</button>
+    <button matButton="filled">asdfasdf</button>
+  </div>
+  <div>
+    <button mat-button>asdfasdf</button>
+    <button matButton="filled">asdfasdf</button>
+  </div>
   <button
     matButton="filled"
     [ngStyle]="{minWidth: '40px', width: '40px', padding: '0 0 0 12px'}"

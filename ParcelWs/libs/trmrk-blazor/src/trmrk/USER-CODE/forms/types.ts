@@ -1,4 +1,4 @@
-import { NullOrUndef, VoidOrAny } from '../../core';
+import { NullOrUndef, VoidOrAny, AnyOrUnknown } from '../../core';
 
 export enum TrmrkFormNodeType {
   Default = 0,
@@ -94,6 +94,7 @@ export interface TrmrkNodeCoreBase<THtml = NodeHtml> {
   attrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   html?: THtml | NullOrUndef;
   useEnhancedControl?: boolean | NullOrUndef;
+  appearance?: AnyOrUnknown;
 }
 
 export interface TrmrkNodeCore<THtml = NodeHtml>
@@ -142,7 +143,9 @@ export interface TrmrkFormNode<THtml = NodeHtml>
   category: TrmrkFormNodeCategory;
   text?: TrmrkTextNode<THtml>[] | NullOrUndef;
   label?: string | NullOrUndef;
+  labelHtml?: THtml | NullOrUndef;
   value?: TrmrkInputValueType | NullOrUndef;
+  isRequired?: boolean | NullOrUndef;
   inputType?: HtmlInputCategory | NullOrUndef;
   controlAttrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   linesCount?: number | NullOrUndef;

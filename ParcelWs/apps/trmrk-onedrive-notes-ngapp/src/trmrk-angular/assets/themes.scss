@@ -1,29 +1,26 @@
 @use "./mixins.scss" as mixins;
 
-.trmrk-error-text {
-  color: #F20;
-}
-
 :is(.trmrk-app-theme-light,
   .trmrk-app-theme-dark)
-  :is(.trmrk-btn.trmrk-btn-filled-default,
-  .trmrk-btn.trmrk-btn-filled-primary,
+  :is(.trmrk-btn.trmrk-btn-filled-primary,
   .trmrk-btn.trmrk-btn-filled-secondary,
   .trmrk-btn.trmrk-btn-filled-accept,
-  .trmrk-btn.trmrk-btn-filled-reject,
-  .trmrk-btn.trmrk-btn-filled-warn) {
+  .trmrk-btn.trmrk-btn-filled-reject) {
   color: #FFF;
 }
 
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-btn.trmrk-btn-filled-warn) {
+  color: #000;
+}
 
 :is(.trmrk-app-theme-light,
   .trmrk-app-theme-dark)
-  :is(.trmrk-btn.trmrk-icon-btn-filled-default,
-    .trmrk-icon-btn-filled-primary,
+  :is(.trmrk-icon-btn-filled-primary,
     .trmrk-icon-btn-filled-secondary,
     .trmrk-icon-btn-filled-accept,
-    .trmrk-icon-btn-filled-reject,
-    .trmrk-icon-btn-filled-warn) {
+    .trmrk-icon-btn-filled-reject) {
   color: #FFF;
 
   &[mat-icon-button].trmrk-icon-btn {
@@ -33,74 +30,105 @@
   }
 }
 
+:is(.trmrk-app-theme-light,
+  .trmrk-app-theme-dark)
+  :is(.trmrk-icon-btn-filled-warn) {
+  color: #000;
+
+  &[mat-icon-button].trmrk-icon-btn {
+    mat-icon.trmrk-icon {
+      color: #000;
+    }
+  }
+}
+
 :root {
-  --trmrk-primary-color: #04F;
-  --trmrk-secondary-color: #444;
-  --trmrk-accept-color: #090;
-  --trmrk-reject-color: #F20;
-  --trmrk-warn-color: #A70;
-  --trmrk-warn-back-color: #C90;
+  --trmrk-primary-color-theme-light: #04F;
+  --trmrk-primary-color-theme-dark: #48F;
+  --trmrk-primary-back-color: #04F;
+  --trmrk-secondary-color-theme-light: #667;
+  --trmrk-secondary-color-theme-dark: #AAA;
+  --trmrk-secondary-back-color: #444;
+  --trmrk-accept-color-theme-light: #090;
+  --trmrk-accept-color-theme-dark: #090;
+  --trmrk-accept-back-color: #090;
+  --trmrk-reject-color-theme-light: #E10;
+  --trmrk-reject-color-theme-dark: #F20;
+  --trmrk-reject-back-color: #E10;
+  --trmrk-warn-color-theme-light: #970;
+  --trmrk-warn-color-theme-dark: #DB0;
+  --trmrk-warn-back-color: #FD0;
 }
 
 :is(.trmrk-app-theme-light,
   .trmrk-app-theme-dark) {
   .trmrk-icon-btn-filled-primary, .trmrk-btn-filled-primary, .trmrk-background-color-primary {
-    background-color: var(--trmrk-primary-color);
-  }
-
-  .trmrk-color-primary {
-    color: var(--trmrk-primary-color);
+    background-color: var(--trmrk-primary-back-color);
   }
 
   .trmrk-icon-btn-filled-secondary, .trmrk-btn-filled-secondary, .trmrk-background-color-secondary {
-    background-color: var(--trmrk-secondary-color);
-  }
-
-  .trmrk-color-secondary {
-    color: var(--trmrk-secondary-color);
+    background-color: var(--trmrk-secondary-back-color);
   }
 
   .trmrk-icon-btn-filled-accept, .trmrk-btn-filled-accept, .trmrk-background-color-accept {
-    background-color: var(--trmrk-accept-color);
-  }
-
-  .trmrk-color-accept {
-    color: var(--trmrk-accept-color);
+    background-color: var(--trmrk-accept-back-color);
   }
 
   .trmrk-icon-btn-filled-reject, .trmrk-btn-filled-reject, .trmrk-background-color-reject {
-    background-color: var(--trmrk-reject-color);
-  }
-
-  .trmrk-color-reject {
-    color: var(--trmrk-reject-color);
+    background-color: var(--trmrk-reject-back-color);
   }
 
   .trmrk-icon-btn-filled-warn, .trmrk-btn-filled-warn, .trmrk-background-color-warn {
     background-color: var(--trmrk-warn-back-color);
   }
-
-  .trmrk-color-warn {
-    color: var(--trmrk-warn-color);
-  }
-
-  .trmrk-text-level-info {
-    color: var(--trmrk-primary-color);
-  }
-
-  .trmrk-text-level-warning {
-    color: var(--trmrk-warn-color);
-  }
-
-  .trmrk-text-level-error {
-    color: var(--trmrk-reject-color);
-  }
 }
 
 .trmrk-app-theme-light {
-  .trmrk-icon-btn-filled-default, .trmrk-btn-filled-default {
+  .trmrk-icon-btn-filled-default, .trmrk-btn.trmrk-btn-filled-default {
     background-color: #000;
     color: #FFF;
+
+    &[mat-icon-button].trmrk-icon-btn {
+      mat-icon.trmrk-icon {
+        color: #FFF;
+      }
+    }
+  }
+
+  .trmrk-color-primary {
+    color: var(--trmrk-primary-color-theme-light);
+  }
+
+  .trmrk-text-level-info {
+    color: var(--trmrk-primary-color-theme-light);
+  }
+
+  .trmrk-color-secondary {
+    color: var(--trmrk-secondary-color-theme-light);
+  }
+
+  .trmrk-color-accept {
+    color: var(--trmrk-accept-color-theme-light);
+  }
+
+  .trmrk-color-warn {
+    color: var(--trmrk-warn-color-theme-light);
+  }
+
+  .trmrk-text-level-warning {
+    color: var(--trmrk-warn-color-theme-light);
+  }
+
+  .trmrk-color-reject {
+    color: var(--trmrk-reject-color-theme-light);
+  }
+
+  .trmrk-text-level-error {
+    color: var(--trmrk-reject-color-theme-light);
+  }
+
+  .trmrk-error-text {
+    color: var(--trmrk-reject-color-theme-light);
   }
 
   .trmrk-user-message {
@@ -215,7 +243,7 @@
       }
 
       .trmrk-cancel-icon-btn-highlighter {
-        border-color: #F20;
+        border-color: var(--trmrk-reject-color);
       }
     }
   }
@@ -223,7 +251,7 @@
   .trmrk-horiz-strip {
     &.trmrk-error-message-horiz-strip {
       .trmrk-text-row {
-        color: #F20;
+        color: var(--trmrk-reject-color-theme-light);
       }
     }
   }
@@ -241,6 +269,48 @@
   .trmrk-icon-btn-filled-default.trmrk-icon-btn-filled-default, .trmrk-btn-filled-default.trmrk-btn-filled-default {
     background-color: #FFF;
     color: #000;
+
+    &[mat-icon-button].trmrk-icon-btn {
+      mat-icon.trmrk-icon {
+        color: #000;
+      }
+    }
+  }
+
+  .trmrk-color-primary {
+    color: var(--trmrk-primary-color-theme-dark);
+  }
+
+  .trmrk-text-level-info {
+    color: var(--trmrk-primary-color-theme-dark);
+  }
+
+  .trmrk-color-secondary {
+    color: var(--trmrk-secondary-color-theme-dark);
+  }
+
+  .trmrk-color-accept {
+    color: var(--trmrk-accept-color-theme-dark);
+  }
+
+  .trmrk-color-warn {
+    color: var(--trmrk-warn-color-theme-dark);
+  }
+
+  .trmrk-text-level-warning {
+    color: var(--trmrk-warn-color-theme-dark);
+  }
+
+  .trmrk-color-reject {
+    color: var(--trmrk-reject-color-theme-dark);
+  }
+
+  .trmrk-text-level-error {
+    color: var(--trmrk-reject-color-theme-dark);
+  }
+
+  .trmrk-error-text {
+    color: var(--trmrk-reject-color-theme-dark);
   }
 
   .trmrk-user-message {
@@ -355,7 +425,7 @@
       }
 
       .trmrk-cancel-icon-btn-highlighter {
-        border-color: #F20;
+        border-color: var(--trmrk-reject-color);
       }
     }
   }
@@ -363,7 +433,7 @@
   .trmrk-horiz-strip {
     &.trmrk-error-message-horiz-strip {
       .trmrk-text-row {
-        color: #F20;
+        color: var(--trmrk-reject-color-theme-dark);
       }
     }
   }

@@ -42,7 +42,6 @@ import {
   TrmrkTreeNodeEventCore,
   ComponentIdService,
   AppBarMapService,
-  TrmrkTouchStartOrMouseDown,
 } from 'trmrk-angular';
 
 import { TrmrkAppPage } from 'trmrk-angular';
@@ -58,7 +57,7 @@ import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEv
 import { TrmrkAppIcon } from '../trmrk-app-icon/trmrk-app-icon';
 import { TreeNode } from '../trmrk-app-tree-view-node/trmrk-app-tree-view-node';
 import { TrmrkAppTreeView } from '../trmrk-app-tree-view/trmrk-app-tree-view';
-// import { TrmrkCompaniesAppPanel } from '../trmrk-companies-app-panel/trmrk-companies-app-panel';
+import { TrmrkCompaniesAppPanel } from '../trmrk-companies-app-panel/trmrk-companies-app-panel';
 import { ToggleAppBarService } from '../services/toggle-app-bar-service';
 import { TrmrkSpinner } from '../USER-CODE/forms/trmrk-spinner/trmrk-spinner';
 
@@ -92,7 +91,7 @@ import { companies } from '../services/companies';
     TrmrkPanelListItem,
     TrmrkAppTreeView,
     TrmrkThinHorizStrip,
-    // TrmrkCompaniesAppPanel,
+    TrmrkCompaniesAppPanel,
   ],
   templateUrl: './trmrk-home-page.html',
   styleUrl: './trmrk-home-page.scss',

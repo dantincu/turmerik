@@ -1,10 +1,16 @@
-import { Kvp, MtblRefValue, ValueOrAny, NullOrUndef } from './core';
+import {
+  Kvp,
+  MtblRefValue,
+  ValueOrAny,
+  NullOrUndef,
+  AnyOrUnknown,
+} from './core';
 
 export interface CollectionFilterArgs<TColl, TIn, TOut = TIn> {
   collection: TColl;
   predicate: (
     args: CollectionFilterPredicateArgs<TIn, TOut>
-  ) => boolean | any | NullOrUndef;
+  ) => boolean | AnyOrUnknown;
   selector?: (input: TIn, i: number) => TOut;
   startIdx?: number | NullOrUndef;
   incrementIdx?: number | NullOrUndef;
