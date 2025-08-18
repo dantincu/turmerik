@@ -18,7 +18,7 @@
   </h3>
   } @if (formNode!.category === enums.TrmrkFormNodeCategory.Input) { @if
   ((formNode!.linesCount ?? null) !== null) {
-  <mat-form-field appearance="outline" class="trmrk-form-area">
+  <mat-form-field appearance="outline">
     <textarea
       matInput
       [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
@@ -27,17 +27,13 @@
     ></textarea>
   </mat-form-field>
   } @if ((formNode!.linesCount ?? null) === null) {
-  <mat-form-field
-    appearance="outline"
-    [ngClass]="['trmrk-form-field', (formNode!.label ?? null) !== null ? 'trmrk-has-label' : '']"
-  >
+  <mat-form-field appearance="outline">
     @if ((formNode!.label ?? null) !== null) {
     <mat-label>{{ formNode!.label }}</mat-label> }
     <input
       matInput
       [type]="formNode!.inputType ?? 'text'"
       [value]="formNode!.value ?? ''"
-      class="trmrk-mat-input"
       [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
       [ngClass]="trmrkNode!.controlClass ?? ''"
     />

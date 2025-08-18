@@ -7,6 +7,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 
@@ -27,6 +28,7 @@ import {
     TrmrkPanelListItem,
     TrmrkTouchStartOrMouseDown,
     MatIconModule,
+    MatMenuModule,
     TrmrkListAppPanel,
   ],
   templateUrl: './trmrk-companies-app-panel.html',
