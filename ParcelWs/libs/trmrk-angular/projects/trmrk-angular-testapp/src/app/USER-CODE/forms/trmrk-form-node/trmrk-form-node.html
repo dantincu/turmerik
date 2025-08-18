@@ -18,7 +18,7 @@
   </h3>
   } @if (formNode!.category === enums.TrmrkFormNodeCategory.Input) { @if
   ((formNode!.linesCount ?? null) !== null) {
-  <mat-form-field appearance="fill" class="trmrk-form-area">
+  <mat-form-field appearance="outline" class="trmrk-form-area">
     <textarea
       matInput
       [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"

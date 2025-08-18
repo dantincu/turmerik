@@ -3,6 +3,7 @@ import { Routes, Router } from '@angular/router';
 
 import { TrmrkHomePage } from './trmrk-home-page/trmrk-home-page';
 import { TrmrkFormsTestPage } from './trmrk-forms-test-page/trmrk-forms-test-page';
+import { TrmrkCompaniesPanelPage } from './trmrk-companies-panel-page/trmrk-companies-panel-page';
 import { TrmrkAppSettings } from './trmrk-app-settings/trmrk-app-settings';
 import { TrmrkAppThemes } from './trmrk-app-themes/trmrk-app-themes';
 import { TrmrkResetApp } from './trmrk-reset-app/trmrk-reset-app';
@@ -10,33 +11,37 @@ import { NotFound } from './trmrk-not-found/trmrk-not-found';
 
 export const routes: Routes = [
   {
-    path: 'app/settings',
+    path: 'settings',
     component: TrmrkAppSettings,
   },
   {
-    path: 'app/themes',
+    path: 'themes',
     component: TrmrkAppThemes,
   },
   {
-    path: 'app/reset-app',
+    path: 'reset-app',
     component: TrmrkResetApp,
   },
   {
-    path: 'app/resetapp',
+    path: 'resetapp',
     redirectTo: () => {
       const router = inject(Router);
 
-      return router.createUrlTree(['/app/reset-app'], {
+      return router.createUrlTree(['reset-app'], {
         queryParams: { reset: 'true' },
       });
     },
   },
   {
-    path: 'app/forms',
+    path: 'forms',
     component: TrmrkFormsTestPage,
   },
   {
-    path: 'app',
+    path: 'companies',
+    component: TrmrkCompaniesPanelPage,
+  },
+  {
+    path: '',
     component: TrmrkHomePage,
   },
   {

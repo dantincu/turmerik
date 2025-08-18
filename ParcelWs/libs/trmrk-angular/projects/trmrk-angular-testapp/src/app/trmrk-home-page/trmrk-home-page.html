@@ -11,15 +11,14 @@
 </ng-template>
 
 <ng-template #options>
-  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`forms`]">
-    <mat-icon class="trmrk-icon">settings</mat-icon>
-    Forms
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`forms`]"> Forms </a>
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`companies`]">
+    Companies
   </a>
 </ng-template>
 
 <ng-template #page>
-  <trmrk-companies-app-panel></trmrk-companies-app-panel>
-  <div [ngStyle]="{marginTop: '0px'}">
+  <div>
     <input type="text" class="trmrk-input" />
   </div>
   <div class="trmrk-form">

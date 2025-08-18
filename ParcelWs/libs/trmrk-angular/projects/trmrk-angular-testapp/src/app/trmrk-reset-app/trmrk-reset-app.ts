@@ -57,7 +57,7 @@ export class TrmrkResetApp implements OnDestroy {
 
           indexedDB.databases().then((databases) => {
             const onComplete = () =>
-              (window.location.href = '/app/reset-app?reset=false');
+              (window.location.href = '/reset-app?reset=false');
 
             databases = databases.filter((db) => (db.name ?? null) !== null);
 
@@ -87,6 +87,6 @@ export class TrmrkResetApp implements OnDestroy {
   }
 
   successMessageClose() {
-    this.router.navigate(['/app/reset-app']);
+    this.router.navigate(['/reset-app']);
   }
 }
