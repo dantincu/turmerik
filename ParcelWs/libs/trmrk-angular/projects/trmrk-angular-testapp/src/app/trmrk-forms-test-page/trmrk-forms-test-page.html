@@ -8,12 +8,11 @@
     <div class="trmrk-form-section trmrk-is-first">
       <div class="trmrk-form-row">
         <div class="trmrk-form-node">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="fill">
             <mat-label>Enter your name</mat-label>
             <input
               matInput
               type="number"
-              placeholder="Age"
               [formControl]="ageControl"
               [errorStateMatcher]="ageControlErrorMatcher"
             />@if (ageControl.invalid && ageControl.touched) {

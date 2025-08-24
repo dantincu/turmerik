@@ -1,9 +1,22 @@
 import { NullOrUndef, VoidOrAny } from '../../trmrk/core';
+import { getDbObjName } from './core';
 
 export abstract class DbAdapterBase {
-  constructor(public readonly dbName: string, public version: number = 1) {}
+  public readonly dbNameStr: string;
+
+  constructor(
+    public readonly dbName: string,
+    public readonly appName: string,
+    public version: number = 1
+  ) {
+    this.dbNameStr = this.getDbNameStr();
+  }
 
   abstract onUpgradeNeeded(event: IDBVersionChangeEvent, db: IDBDatabase): void;
+
+  getDbNameStr() {
+    return getDbObjName([this.appName, this.dbName]);
+  }
 
   open = (
     onSuccess:
@@ -13,7 +26,7 @@ export abstract class DbAdapterBase {
       | ((event: Event, error: DOMException | null) => VoidOrAny)
       | NullOrUndef = null
   ) => {
-    const request = indexedDB.open(this.dbName, this.version);
+    const request = indexedDB.open(this.dbNameStr, this.version);
 
     request.onupgradeneeded = (event) => {
       const target = event.target as IDBOpenDBRequest;

@@ -25,7 +25,10 @@
       <div class="trmrk-form-row">
         <div class="trmrk-form-node" [ngStyle]="{width: '50%'}">
           <mat-form-field appearance="outline">
-            <mat-label>Enter your age</mat-label>
+            <mat-label
+              >Enter your age
+              <sup class="trmrk-required-text">*</sup></mat-label
+            >
             <input matInput type="number" placeholder="Age" />
           </mat-form-field>
         </div>
@@ -102,7 +105,9 @@
           <mat-form-field appearance="outline">
             <mat-label>Favorite food</mat-label>
             <mat-select>
-              <mat-option [value]="null"></mat-option>
+              <mat-option [value]="null" [ngStyle]="{ backgroundColor: '#AAF' }"
+                >None</mat-option
+              >
               @for (food of [{value: 1, viewValue: "Shaworma"}, {value: 2,
               viewValue: "Hamburger"}, {value: 3, viewValue: "Carbonara Pasta"},
               {value: 4, viewValue: "Pizza"}]; track food.value) {
@@ -116,8 +121,11 @@
         <div class="trmrk-form-node">
           <mat-form-field appearance="outline">
             <mat-label>Favorite food</mat-label>
-            <select matNativeControl>
-              <option [value]="null"></option>
+            <select matNativeControl class="trmrk-select">
+              <option
+                [value]="null"
+                [ngStyle]="{ backgroundColor: '#AAF' }"
+              ></option>
               @for (food of [{value: 1, viewValue: "Shaworma"}, {value: 2,
               viewValue: "Hamburger"}, {value: 3, viewValue: "Carbonara Pasta"},
               {value: 4, viewValue: "Pizza"}]; track food.value) {

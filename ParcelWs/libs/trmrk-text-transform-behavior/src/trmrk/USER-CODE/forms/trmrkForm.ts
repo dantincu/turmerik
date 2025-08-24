@@ -11,7 +11,6 @@ import {
   TrmrkTextLevel,
   TrmrkTextStyle,
   TrmrkValueFactory,
-  TrmrkDOMNodeAttrs,
   TrmrkTextNode,
   HtmlInputCategory,
   TrmrkComboBoxItem,
@@ -26,6 +25,33 @@ export interface TrmrkFormHelperExtraArgs<THtml = NodeHtml>
   extends TrmrkNodeCoreBase<THtml> {
   onNodeCreated?: ((node: TrmrkNodeCore<THtml>) => VoidOrAny) | NullOrUndef;
 }
+
+export const retrieveValuesFromFactory = async <TInput, TOutput>(
+  factory: TrmrkValueFactory<TInput, TOutput>,
+  input: TInput
+) => {
+  let retVal: TOutput;
+
+  if (factory.func) {
+    if (factory.isAsync) {
+      retVal = await factory.func(input);
+    } else {
+      retVal = factory.func(input) as TOutput;
+    }
+  } else {
+    retVal = factory.value!;
+  }
+
+  return retVal;
+};
+
+export const refreshFactoryValues = async <TInput, TOutput>(
+  factory: TrmrkValueFactory<TInput, TOutput>,
+  input: TInput
+) => {
+  const output = await retrieveValuesFromFactory(factory, input);
+  factory.value = output;
+};
 
 export class TrmrkFormHelper<THtml = NodeHtml> {
   static createAssignIdToAttrCallback =
@@ -196,9 +222,6 @@ export class TrmrkFormHelper<THtml = NodeHtml> {
       textNode.controlClass = node.controlClass ?? textNode.text;
       textNode.attrs = node.attrs ?? textNode.attrs;
       textNode.html = node.html ?? textNode.html;
-
-      textNode.useEnhancedControl =
-        node.useEnhancedControl ?? textNode.useEnhancedControl;
     });
   }
 
@@ -227,7 +250,7 @@ export class TrmrkFormHelper<THtml = NodeHtml> {
   }
 
   comboBox(
-    items: TrmrkValueFactory<string, TrmrkComboBoxItem[]>,
+    items: TrmrkValueFactory<string | null, TrmrkComboBoxItem[]>,
     value?: string | NullOrUndef,
     onChange?: TrmrkOnChangeEventHandler | NullOrUndef,
     xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef

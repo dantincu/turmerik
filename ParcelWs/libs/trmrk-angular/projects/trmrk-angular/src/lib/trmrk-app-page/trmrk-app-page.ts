@@ -42,7 +42,7 @@ export class TrmrkAppPage {
   @Input() trmrkAppBarCssClass: string | null = null;
   @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkShowOptionsBtn = true;
-  @Input() trmrkRouteBasePath = '/app';
+  @Input() trmrkRouteBasePath = '/';
   @Input() trmrkIncludeSettingsMenuItem = true;
 
   @ViewChild(MatMenu) optionsMenu!: MatMenu;

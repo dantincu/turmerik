@@ -127,7 +127,7 @@
     color: var(--trmrk-reject-color-theme-light);
   }
 
-  .trmrk-error-text {
+  .trmrk-required-text {
     color: var(--trmrk-reject-color-theme-light);
   }
 
@@ -220,6 +220,12 @@
     }
   }
 
+  .trmrk-form-node {
+    :is(option, mat-option).trmrk-has-no-value {
+      background-color: #EEEEEE;
+    }
+  }
+
   .trmrk-vert-resize-strip {
     background: repeating-linear-gradient(
       45deg,
@@ -266,6 +272,16 @@
     color: #fff;
   }
 
+  select.trmrk-select.trmrk-select {
+    background-color: #000;
+    color: #fff;
+
+    option {
+    background-color: #000;
+    color: #fff;
+    }
+  }
+
   .trmrk-icon-btn-filled-default.trmrk-icon-btn-filled-default, .trmrk-btn-filled-default.trmrk-btn-filled-default {
     background-color: #FFF;
     color: #000;
@@ -309,7 +325,7 @@
     color: var(--trmrk-reject-color-theme-dark);
   }
 
-  .trmrk-error-text {
+  .trmrk-required-text {
     color: var(--trmrk-reject-color-theme-dark);
   }
 
@@ -398,6 +414,12 @@
     background-color: #000000;
 
     &.trmrk-nesting-level-odd {
+      background-color: #111111;
+    }
+  }
+
+  .trmrk-form-node {
+    :is(option, mat-option).trmrk-has-no-value {
       background-color: #111111;
     }
   }

@@ -1,12 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, Inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import {
-  localStorageKeys,
-  appThemeCssClasses,
-  isDarkMode,
-} from '../trmrk-browser/domUtils/core';
+import { AppStateServiceBase } from 'trmrk-angular';
+
+import { appThemeCssClasses, isDarkMode } from '../trmrk-browser/domUtils/core';
 
 import { jsonBool } from '../trmrk/core';
 
@@ -19,11 +17,15 @@ import { AppStateService } from './services/app-state-service';
   styleUrl: './app.scss',
 })
 export class App implements OnDestroy {
-  protected title = 'trmrk-angular-testapp';
   private darkModeStateChangeSubscription: Subscription;
 
-  constructor(private appStateService: AppStateService) {
-    const isDarkModeValue = isDarkMode();
+  constructor(
+    @Inject(AppStateServiceBase) private appStateService: AppStateService
+  ) {
+    const isDarkModeValue = isDarkMode(
+      this.appStateService.appThemeIsDarkModeLocalStorageKey
+    );
+
     this.darkModeStateChange(isDarkModeValue);
     appStateService.isDarkMode.next(isDarkModeValue);
 
@@ -39,12 +41,14 @@ export class App implements OnDestroy {
   storageEvent(event: StorageEvent) {
     if (
       (event.key ?? null) === null ||
-      event.key === localStorageKeys.appThemeIsDarkMode
+      event.key === this.appStateService.appThemeIsDarkModeLocalStorageKey
     ) {
       let isDarkModeValue = false;
 
       if ((event.key ?? null) === null) {
-        isDarkModeValue = isDarkMode();
+        isDarkModeValue = isDarkMode(
+          this.appStateService.appThemeIsDarkModeLocalStorageKey
+        );
       } else {
         isDarkModeValue = event.newValue === jsonBool.true;
       }

@@ -6,10 +6,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { Subscription } from 'rxjs';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { setIsDarkModeToLocalStorage } from '../../trmrk-browser/domUtils/core';
+import {
+  AppStateServiceBase,
+  materialIcons,
+  TrmrkAppPage,
+} from 'trmrk-angular';
 
-import { materialIcons, TrmrkAppPage } from 'trmrk-angular';
-import { AppStateService } from '../services/app-state-service';
+import { setIsDarkModeToLocalStorage } from '../../trmrk-browser/domUtils/core';
 
 @Component({
   selector: 'trmrk-app-settings',
@@ -31,7 +34,7 @@ export class TrmrkAppSettings implements OnDestroy {
   private darkModeStateChangeSubscription: Subscription;
 
   constructor(
-    private appStateService: AppStateService,
+    private appStateService: AppStateServiceBase,
     private sanitizer: DomSanitizer
   ) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
@@ -52,7 +55,11 @@ export class TrmrkAppSettings implements OnDestroy {
   }
 
   onDarkModeBtnClick(event: MatCheckboxChange): void {
-    setIsDarkModeToLocalStorage(!this.isDarkMode);
+    setIsDarkModeToLocalStorage(
+      !this.isDarkMode,
+      this.appStateService.appThemeIsDarkModeLocalStorageKey
+    );
+
     this.appStateService.isDarkMode.next(!this.isDarkMode);
   }
 

@@ -12,6 +12,8 @@ export enum TrmrkFormNodeCategory {
   Input,
   Combobox,
   Checkbox,
+  DatePicker,
+  DateTimePicker,
   Radio,
   RadioGroup,
   Button,
@@ -93,8 +95,8 @@ export interface TrmrkNodeCoreBase<THtml = NodeHtml> {
   controlClass?: string | NullOrUndef;
   attrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   html?: THtml | NullOrUndef;
-  useEnhancedControl?: boolean | NullOrUndef;
   appearance?: AnyOrUnknown;
+  errorMsg?: string | NullOrUndef;
 }
 
 export interface TrmrkNodeCore<THtml = NodeHtml>
@@ -150,7 +152,7 @@ export interface TrmrkFormNode<THtml = NodeHtml>
   controlAttrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   linesCount?: number | NullOrUndef;
   buttonType?: TrmrkButtonCategory | NullOrUndef;
-  items?: TrmrkValueFactory<string, TrmrkComboBoxItem[]> | NullOrUndef;
+  items?: TrmrkValueFactory<string | null, TrmrkComboBoxItem[]> | NullOrUndef;
   childNodes?: TrmrkFormNode<THtml>[] | NullOrUndef;
   fullWidth?: boolean | NullOrUndef;
   hasSpinner?: boolean | NullOrUndef;

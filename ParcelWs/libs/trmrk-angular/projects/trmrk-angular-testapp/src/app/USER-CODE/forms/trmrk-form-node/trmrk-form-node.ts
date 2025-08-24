@@ -6,10 +6,12 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 
 import {
   TrmrkDynamicAttributesDirective,
@@ -46,6 +48,7 @@ import {
 import {
   TrmrkFormHelper,
   TrmrkFormHelperExtraArgs,
+  refreshFactoryValues,
 } from '../../../../trmrk/USER-CODE/forms/trmrkForm';
 
 import {
@@ -57,6 +60,7 @@ import {
 } from '../form';
 
 import { TrmrkSpinner } from '../trmrk-spinner/trmrk-spinner';
+import { TrmrkErrorStateMatcher } from '../../../services/trmrk-error-state-matcher';
 
 const enums = {
   TrmrkFormNodeType,
@@ -100,10 +104,12 @@ export const textStylesMap: [TrmrkTextStyle, string][] = [
   selector: 'trmrk-form-node',
   imports: [
     CommonModule,
-    TrmrkDynamicAttributesDirective,
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconButton,
     MatIconModule,
+    MatSelectModule,
+    TrmrkDynamicAttributesDirective,
     TrmrkHorizStrip,
     MatInputModule,
     TrmrkSpinner,
@@ -122,6 +128,9 @@ export class TrmrkFormNode implements OnChanges {
   formRow: TrmrkFormRow | null = null;
   textNode: TrmrkTextNode | null = null;
 
+  formControl: FormControl | null = null;
+  formControlErrorMatcher: TrmrkErrorStateMatcher | null = null;
+
   get hasRawHtml() {
     return hasRawHtml(this.trmrkNode.html);
   }
@@ -130,12 +139,65 @@ export class TrmrkFormNode implements OnChanges {
     return hasHtmlTemplate(this.trmrkNode.html);
   }
 
-  get safeHtml(): SafeHtml | null {
+  get safeHtml() {
     return getSafeHtml(this.trmrkNode.html, this.sanitizer);
   }
 
-  get htmlTemplateName(): string {
+  get htmlTemplateName() {
     return getHtmlTemplateName(this.trmrkNode.html)!;
+  }
+
+  get hasLabelRawHtml() {
+    return hasRawHtml(this.formNode!.labelHtml);
+  }
+
+  get hasLabelHtmlTemplate() {
+    return hasHtmlTemplate(this.formNode!.labelHtml);
+  }
+
+  get labelSafeHtml() {
+    return getSafeHtml(this.formNode!.labelHtml, this.sanitizer);
+  }
+
+  get labelHtmlTemplateName() {
+    return getHtmlTemplateName(this.formNode!.labelHtml)!;
+  }
+
+  get formControlHasError() {
+    const formControlHasError = (this.trmrkNode.errorMsg ?? null) !== null;
+    return formControlHasError;
+  }
+
+  get isInputControl() {
+    const isInputControl =
+      this.formNode!.category >= enums.TrmrkFormNodeCategory.Input &&
+      this.formNode!.category <= enums.TrmrkFormNodeCategory.IconButton;
+
+    return isInputControl;
+  }
+
+  get controlAttrs() {
+    let controlAttrs: TrmrkDOMNodeAttrs;
+
+    if (this.formNode) {
+      controlAttrs = this.formNode.controlAttrs ?? {};
+
+      if (this.formNode.isRequired) {
+        controlAttrs['required'] = '';
+      }
+
+      if (
+        this.formNode.category === TrmrkFormNodeCategory.Combobox &&
+        (this.formNode.label ?? null) === null &&
+        (this.formNode.linesCount ?? null) !== null
+      ) {
+        controlAttrs['multiple'] = '';
+      }
+    } else {
+      controlAttrs = {};
+    }
+
+    return controlAttrs;
   }
 
   get cssClass(): string[] {
@@ -210,13 +272,13 @@ export class TrmrkFormNode implements OnChanges {
     whenChanged(
       changes,
       () => this.trmrkNode,
-      () => {
-        this.updateInputNode();
+      (_, change) => {
+        this.updateNode(change.firstChange);
       }
     );
   }
 
-  updateInputNode() {
+  updateNode(isFirstChange: boolean) {
     this.formNode = null;
     this.formRow = null;
     this.textNode = null;
@@ -230,8 +292,33 @@ export class TrmrkFormNode implements OnChanges {
         break;
       default:
         this.formNode = this.trmrkNode as TrmrkFormNodeObj;
+
+        if (this.isInputControl) {
+          if (isFirstChange) {
+            this.formControl = new FormControl();
+
+            this.formControlErrorMatcher = new TrmrkErrorStateMatcher(
+              () => this.formControlHasError
+            );
+          }
+        } else if (this.formNode.category === TrmrkFormNodeCategory.Combobox) {
+          this.formNode!.items!.value = [];
+          this.loadComboboxItems();
+        }
+
         break;
     }
+  }
+
+  async loadComboboxItems() {
+    const itemsFactory = this.formNode!.items!;
+
+    if (itemsFactory.isAsync) {
+      this.formNode!.hasSpinner = true;
+    }
+
+    await refreshFactoryValues(itemsFactory, this.formNode!.value ?? null);
+    this.formNode!.hasSpinner = false;
   }
 
   childPath(idx: number) {

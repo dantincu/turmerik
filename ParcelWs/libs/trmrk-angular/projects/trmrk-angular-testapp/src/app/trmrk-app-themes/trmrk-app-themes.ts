@@ -8,7 +8,7 @@ import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 
 import { AsyncRequestStateManager } from '../../trmrk/AsyncRequestStateManager';
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { iDbAdapters } from '../../trmrk-browser/indexedDB/databases/adapters';
+import { iDbAdapters } from '../services/adapters';
 import { getIDbRequestOpenErrorMsg } from '../../trmrk-browser/indexedDB/core';
 import { AppTheme } from '../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 

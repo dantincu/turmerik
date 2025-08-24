@@ -9,6 +9,7 @@ export interface AppTheme {
 
 export interface AppSettingsChoice {
   key: string;
+  catKey: string;
 }
 
 export class BasicAppSettingsDbStores {
@@ -28,7 +29,7 @@ export class BasicAppSettingsDbAdapter extends DbAdapterBase {
   public static readonly DB_STORES = Object.freeze({
     Choices: Object.freeze({
       name: 'Choices',
-      keyPath: 'key',
+      keyPath: Object.freeze(['key', 'catKey']),
     }),
     AppThemes: Object.freeze({
       name: 'AppThemes',
@@ -38,8 +39,11 @@ export class BasicAppSettingsDbAdapter extends DbAdapterBase {
 
   public readonly stores = new BasicAppSettingsDbStores();
 
-  constructor(version: number = BasicAppSettingsDbAdapter.DB_VERSION) {
-    super(BasicAppSettingsDbAdapter.DB_NAME, version);
+  constructor(
+    appName: string,
+    version: number = BasicAppSettingsDbAdapter.DB_VERSION
+  ) {
+    super(BasicAppSettingsDbAdapter.DB_NAME, appName, version);
   }
 
   override onUpgradeNeeded(
@@ -48,13 +52,13 @@ export class BasicAppSettingsDbAdapter extends DbAdapterBase {
   ): void {
     const dbStores = BasicAppSettingsDbAdapter.DB_STORES;
 
-    createDbStoreIfNotExists(db, dbStores.Choices.name, {
-      keyPath: dbStores.Choices.keyPath,
-    });
+    createDbStoreIfNotExists(db, dbStores.Choices.name, () => ({
+      keyPath: [...dbStores.Choices.keyPath],
+    }));
 
-    createDbStoreIfNotExists(db, dbStores.AppThemes.name, {
+    createDbStoreIfNotExists(db, dbStores.AppThemes.name, () => ({
       keyPath: dbStores.AppThemes.keyPath,
       autoIncrement: true,
-    });
+    }));
   }
 }

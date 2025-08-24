@@ -14,6 +14,7 @@ import {
   TrmrkHorizStrip,
   AppBarMapService,
   TrmrkDragEvent,
+  AppStateServiceBase,
 } from 'trmrk-angular';
 
 import { withVal, actWithVal, NullOrUndef, VoidOrAny } from '../../trmrk/core';
@@ -32,8 +33,6 @@ import {
 } from '../../trmrk-browser/core';
 
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
-
-import { AppStateService } from './app-state-service';
 
 export interface TrmrkPanelListServiceRow<TEntity> {
   item: TrmrkPanelListServiceItemData<TEntity> | null;
@@ -161,7 +160,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   // _temp = 0;
 
   constructor(
-    public appStateService: AppStateService,
+    public appStateService: AppStateServiceBase,
     public appBarMapService: AppBarMapService
   ) {}
 

@@ -11,6 +11,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { AppStateServiceBase } from 'trmrk-angular';
+import { AppStateService } from './services/app-state-service';
+
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -21,5 +24,6 @@ export const appConfig: ApplicationConfig = {
     BrowserAnimationsModule,
     provideAnimations(),
     importProvidersFrom(MatDialogModule),
+    { provide: AppStateServiceBase, useClass: AppStateService },
   ],
 };

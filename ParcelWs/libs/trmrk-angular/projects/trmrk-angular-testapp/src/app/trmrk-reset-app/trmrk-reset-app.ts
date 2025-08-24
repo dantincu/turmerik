@@ -7,11 +7,15 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { TrmrkLoading, TrmrkAppPage } from 'trmrk-angular';
-import { TrmrkUserMessage } from 'trmrk-angular';
+import {
+  TrmrkLoading,
+  TrmrkAppPage,
+  TrmrkUserMessage,
+  TrmrkHorizStrip,
+  AppStateServiceBase,
+} from 'trmrk-angular';
 
 import { jsonBool } from '../../trmrk/core';
-import { TrmrkHorizStrip } from 'trmrk-angular';
 
 @Component({
   selector: 'trmrk-reset-app',
@@ -36,7 +40,11 @@ export class TrmrkResetApp implements OnDestroy {
   showTopHorizStrip = true;
   private routeSub: Subscription;
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private appStateService: AppStateServiceBase
+  ) {
     this.routeSub = this.route.queryParamMap.subscribe((params) => {
       const resetParam = params.get('reset');
 
@@ -52,14 +60,23 @@ export class TrmrkResetApp implements OnDestroy {
         this.showTopHorizStrip = true;
 
         setTimeout(() => {
-          localStorage.clear();
-          sessionStorage.clear();
+          for (let storage of [localStorage, sessionStorage]) {
+            for (let i = 0; i < storage.length; i++) {
+              const key = storage.key(i);
+
+              if (key?.startsWith(this.appStateService.dbObjNamePrefix)) {
+                storage.removeItem(key);
+              }
+            }
+          }
 
           indexedDB.databases().then((databases) => {
             const onComplete = () =>
               (window.location.href = '/reset-app?reset=false');
 
-            databases = databases.filter((db) => (db.name ?? null) !== null);
+            databases = databases.filter((db) =>
+              db.name?.startsWith(this.appStateService.dbObjNamePrefix)
+            );
 
             if (!databases.length) {
               onComplete();

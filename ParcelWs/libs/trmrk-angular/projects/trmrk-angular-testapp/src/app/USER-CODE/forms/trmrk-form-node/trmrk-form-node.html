@@ -11,36 +11,91 @@
   ></trmrk-form-node>
   } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Heading) {
   <h3
-    [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
+    [trmrkDynamicAttributes]="controlAttrs"
     [ngClass]="trmrkNode!.controlClass ?? ''"
   >
     {{ formNode!.label }}
   </h3>
-  } @if (formNode!.category === enums.TrmrkFormNodeCategory.Input) { @if
-  ((formNode!.linesCount ?? null) !== null) {
-  <mat-form-field appearance="outline">
+  } @if (isInputControl) {
+  <mat-form-field
+    [appearance]="trmrkNode.appearance?.matFormFieldAppearance ?? 'outline'"
+    >@if ((formNode!.labelHtml ?? null) !== null) { @if (hasLabelRawHtml) {
+    <div [innerHtml]="labelSafeHtml"></div>
+    } @if (hasLabelHtmlTemplate) {
+    <ng-container
+      *ngTemplateOutlet="trmrkTemplatesMap![labelHtmlTemplateName]; context: { path: trmrkPath, node: trmrkNode }"
+    ></ng-container>
+    } } @if ((formNode!.labelHtml ?? null) === null && (formNode!.label ?? null)
+    !== null) {<mat-label
+      >{{formNode!.label}} @if (formNode!.isRequired) {
+      <sup class="trmrk-required-text">*</sup> }</mat-label
+    >} @if (formNode!.category === enums.TrmrkFormNodeCategory.Input) { @if
+    ((formNode!.linesCount ?? null) !== null) {
     <textarea
       matInput
-      [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
+      [trmrkDynamicAttributes]="controlAttrs"
       [value]="formNode!.value ?? ''"
       [ngClass]="trmrkNode!.controlClass ?? ''"
+      [formControl]="formControl!"
+      [errorStateMatcher]="formControlErrorMatcher!"
     ></textarea>
-  </mat-form-field>
-  } @if ((formNode!.linesCount ?? null) === null) {
-  <mat-form-field appearance="outline">
-    @if ((formNode!.label ?? null) !== null) {
-    <mat-label>{{ formNode!.label }}</mat-label> }
+    } @if ((formNode!.linesCount ?? null) === null) {
     <input
       matInput
       [type]="formNode!.inputType ?? 'text'"
       [value]="formNode!.value ?? ''"
-      [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
+      [trmrkDynamicAttributes]="controlAttrs"
       [ngClass]="trmrkNode!.controlClass ?? ''"
+      [formControl]="formControl!"
+      [errorStateMatcher]="formControlErrorMatcher!"
     />
-  </mat-form-field>
-  } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Combobox) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.Checkbox) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.Radio) { } @if
+    } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Combobox) { @if
+    ((formNode!.label ?? null) === null) { @if
+    (trmrkNode.appearance.useNativeControl) {
+    <select
+      matNativeControl
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="[trmrkNode!.controlClass ?? '', 'trmrk-select']"
+      [formControl]="formControl!"
+      [errorStateMatcher]="formControlErrorMatcher!"
+    >
+      @for (item of formNode!.items!.value!; track item.key) {
+      <option
+        [value]="item.key ?? null"
+        [selected]="(item.key ?? null) === (formNode!.value ?? null)"
+        [ngClass]="((item.key) ?? null) === null ? 'trmrk-has-no-value' : ''"
+      >
+        {{item.text}}
+      </option>
+      }
+    </select>
+    } @if (!trmrkNode.appearance.useNativeControl) {
+    <mat-select
+      [value]="formNode!.value ?? null"
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="trmrkNode!.controlClass ?? ''"
+      [formControl]="formControl!"
+      [errorStateMatcher]="formControlErrorMatcher!"
+    >
+      @for (item of formNode!.items!.value!; track item.key) {
+      <mat-option
+        [value]="item.key ?? null"
+        [ngClass]="((item.key) ?? null) === null ? 'trmrk-has-no-value' : ''"
+        >{{item.text}}</mat-option
+      >
+      }
+    </mat-select>
+    } } @if ((formNode!.label ?? null) !== null) {
+      
+    } } @if (formNode!.category
+    === enums.TrmrkFormNodeCategory.Checkbox) { } @if (formNode!.category ===
+    enums.TrmrkFormNodeCategory.DatePicker) { } @if (formNode!.category ===
+    enums.TrmrkFormNodeCategory.DateTimePicker) { } @if (formControl!.invalid &&
+    formControl!.touched) {
+    <mat-error> {{trmrkNode.errorMsg}} </mat-error>
+    }</mat-form-field
+  >
+  } @if (formNode!.category === enums.TrmrkFormNodeCategory.Radio) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.RadioGroup) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.Button) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.IconButton) { } @if
@@ -66,7 +121,7 @@
   >
     <h3
       [ngClass]="['trmrk-form-section-heading']"
-      [trmrkDynamicAttributes]="formNode!.controlAttrs ?? {}"
+      [trmrkDynamicAttributes]="controlAttrs"
       [ngClass]="trmrkNode!.controlClass ?? ''"
     >
       {{formRow!.label}}

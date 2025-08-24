@@ -16,13 +16,17 @@ export const getIDbRequestOpenErrorMsg = (error: DOMException | null): string =>
 export const createDbStoreIfNotExists = (
   db: IDBDatabase,
   storeName: string,
-  options?: IDBObjectStoreParameters | NullOrUndef
+  optionsFactory?: (() => IDBObjectStoreParameters) | NullOrUndef
 ) => {
   let dbStore: IDBObjectStore | null = null;
 
   if (!db.objectStoreNames.contains(storeName)) {
-    dbStore = db.createObjectStore(storeName, options ?? undefined);
+    const options = optionsFactory ? optionsFactory() : undefined;
+    dbStore = db.createObjectStore(storeName, options);
   }
 
   return dbStore;
 };
+
+export const getDbObjName = (parts: string[]) =>
+  parts.map((part) => `[${part}]`).join('');
