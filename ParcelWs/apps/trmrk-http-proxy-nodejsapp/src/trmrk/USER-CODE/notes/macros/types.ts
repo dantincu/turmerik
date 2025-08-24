@@ -23,8 +23,8 @@ export interface ItemsMacro<
   TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > extends MacroCore {
   factory: TrmrkValueFactory<
-    TextMacroArgs<THtml, TFormHelper>,
-    string | TextMacroOutput
+    ItemsMacroArgs<THtml, TFormHelper>,
+    ItemsMacroOutput
   >;
 }
 
@@ -76,38 +76,39 @@ export interface TextMacroResult extends MacroResultCore {
 export interface ItemsMacroResult extends MacroResultCore {}
 
 export interface MacroArgsCore<
+  TMacroResult extends MacroResultCore,
   THtml = NodeHtml,
   TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > {
   form: TFormHelper;
   formEl: HTMLElement;
+  resolve: (result: TMacroResult) => void;
 }
 
 export interface TextMacroArgs<
   THtml = NodeHtml,
   TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
-> extends MacroArgsCore<THtml, TFormHelper> {
+> extends MacroArgsCore<TextMacroResult, THtml, TFormHelper> {
   allText: string;
   selection: TextSelection;
-  resolve: (result: TextMacroResult) => void;
 }
 
 export interface ItemsMacroArgs<
   THtml = NodeHtml,
   TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
-> extends MacroArgsCore<THtml, TFormHelper> {
-  resolve: (result: ItemsMacroResult) => void;
-}
+> extends MacroArgsCore<ItemsMacroResult, THtml, TFormHelper> {}
 
 export interface TextReplacement {
   newText: string;
   selection: TextSelection;
 }
 
-export interface MacroOutputCore<TMacroResult extends MacroResultCore> {
-  result?: TMacroResult | NullOrUndef;
+export interface MacroOutputCore {
   form?: TrmrkFormRow[] | NullOrUndef;
 }
 
-export interface TextMacroOutput extends MacroOutputCore<TextMacroResult> {}
-export interface ItemsMacroOutput extends MacroOutputCore<ItemsMacroResult> {}
+export interface TextMacroOutput extends MacroOutputCore {
+  result?: TextMacroResult | NullOrUndef;
+}
+
+export interface ItemsMacroOutput extends MacroOutputCore {}

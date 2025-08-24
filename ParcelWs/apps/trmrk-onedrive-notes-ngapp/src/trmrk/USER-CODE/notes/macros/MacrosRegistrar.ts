@@ -28,7 +28,11 @@ export type MacroRegistrarCallbackCore<
   >,
   THtml = NodeHtml,
   TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
-> = (arg: (TMacroSection | TMacro)[]) => void | Promise<VoidOrAny>;
+> = (
+  macros: (TMacroSection | TMacro)[],
+  currentDirCsId: string | null,
+  currentFileName: string | null
+) => void | Promise<VoidOrAny>;
 
 export type TextMacroRegistrarCallback<
   THtml = NodeHtml,
@@ -68,8 +72,8 @@ export class MacrosRegistrar<
   THtml = NodeHtml,
   TFormHelper extends TrmrkFormHelper<THtml> = TrmrkFormHelper<THtml>
 > {
-  registeredPages: TrmrkPage<THtml, TFormHelper>[] = [];
-  currentPage: TrmrkPage<THtml, TFormHelper> | null = null;
+  registeredNotes: TrmrkPage<THtml, TFormHelper>[] = [];
+  currentNote: TrmrkPage<THtml, TFormHelper> | null = null;
 
   global: TrmrkPageCore = {
     titleCallbacks: [],
@@ -77,12 +81,29 @@ export class MacrosRegistrar<
     itemsCallbacks: [],
   };
 
-  initPage(currentDirCsId: string, normPath: string, parsedPath: TrmrkUrlPath) {
-    this.setCurrentPage({
-      csId: currentDirCsId,
-      path: normPath,
-      parsedPath,
-    });
+  setCurrentNote(noteCsId: string, normPath: string, parsedPath: TrmrkUrlPath) {
+    let note = this.registeredNotes.find((note) => note.idnf.csId === noteCsId);
+
+    if (!note) {
+      note = {
+        idnf: {
+          csId: noteCsId,
+          path: normPath,
+          parsedPath,
+        },
+        titleCallbacks: [],
+        contentCallbacks: [],
+        itemsCallbacks: [],
+      };
+
+      this.registeredNotes.push(note);
+    }
+
+    this.currentNote = note;
+  }
+
+  unsetCurrentNote() {
+    this.currentNote = null;
   }
 
   registerGobalTitle(callback: TextMacroRegistrarCallback<THtml, TFormHelper>) {
@@ -95,40 +116,57 @@ export class MacrosRegistrar<
     this.global.contentCallbacks.push(callback);
   }
 
-  registerGobalItems(callback: TextMacroRegistrarCallback<THtml, TFormHelper>) {
+  registerGobalItems(
+    callback: ItemsMacroRegistrarCallback<THtml, TFormHelper>
+  ) {
     this.global.itemsCallbacks.push(callback);
   }
 
-  registerTitle(callback: ItemsMacroRegistrarCallback<THtml, TFormHelper>) {
-    this.currentPage!.titleCallbacks.push(callback);
+  registerTitle(callback: TextMacroRegistrarCallback<THtml, TFormHelper>) {
+    this.currentNote!.titleCallbacks.push(callback);
   }
 
-  registerContent(callback: ItemsMacroRegistrarCallback<THtml, TFormHelper>) {
-    this.currentPage!.contentCallbacks.push(callback);
+  registerContent(callback: TextMacroRegistrarCallback<THtml, TFormHelper>) {
+    this.currentNote!.contentCallbacks.push(callback);
   }
 
   registerItems(callback: ItemsMacroRegistrarCallback<THtml, TFormHelper>) {
-    this.currentPage!.itemsCallbacks.push(callback);
+    this.currentNote!.itemsCallbacks.push(callback);
   }
 
-  getTitleMacros() {
+  getTitleMacros(
+    currentDirCsId: string | null = null,
+    currentFileName: string | null = null
+  ) {
     return this.getMacros(
       this.global.titleCallbacks,
-      this.currentPage!.titleCallbacks
+      this.currentNote!.titleCallbacks,
+      currentDirCsId,
+      currentFileName
     );
   }
 
-  getContentMacros() {
+  getContentMacros(
+    currentDirCsId: string | null = null,
+    currentFileName: string | null = null
+  ) {
     return this.getMacros(
       this.global.contentCallbacks,
-      this.currentPage!.contentCallbacks
+      this.currentNote!.contentCallbacks,
+      currentDirCsId,
+      currentFileName
     );
   }
 
-  getItemsMacros() {
+  getItemsMacros(
+    currentDirCsId: string | null = null,
+    currentFileName: string | null = null
+  ) {
     return this.getMacros(
       this.global.itemsCallbacks,
-      this.currentPage!.itemsCallbacks
+      this.currentNote!.itemsCallbacks,
+      currentDirCsId,
+      currentFileName
     );
   }
 
@@ -152,13 +190,15 @@ export class MacrosRegistrar<
       TMacroSection,
       THtml,
       TFormHelper
-    >[]
+    >[],
+    currentDirCsId: string | null = null,
+    currentFileName: string | null = null
   ) {
     const macros: (TMacroSection | TMacro)[] = [];
 
     for (let callbacksList of [globalCallbacks, pageCallbacks]) {
       for (let callback of callbacksList) {
-        const resp = callback(macros);
+        const resp = callback(macros, currentDirCsId, currentFileName);
 
         if (resp) {
           await resp;
@@ -167,24 +207,5 @@ export class MacrosRegistrar<
     }
 
     return macros;
-  }
-
-  private setCurrentPage(pageIdnf: DirPathIdnf) {
-    let page = this.registeredPages.find(
-      (page) => page.idnf.csId === pageIdnf.csId
-    );
-
-    if (!page) {
-      page = {
-        idnf: pageIdnf,
-        titleCallbacks: [],
-        contentCallbacks: [],
-        itemsCallbacks: [],
-      };
-
-      this.registeredPages.push(page);
-    }
-
-    this.currentPage = page;
   }
 }
