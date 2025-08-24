@@ -85,9 +85,7 @@
       >
       }
     </mat-select>
-    } } @if ((formNode!.label ?? null) !== null) {
-      
-    } } @if (formNode!.category
+    } } @if ((formNode!.label ?? null) !== null) { } } @if (formNode!.category
     === enums.TrmrkFormNodeCategory.Checkbox) { } @if (formNode!.category ===
     enums.TrmrkFormNodeCategory.DatePicker) { } @if (formNode!.category ===
     enums.TrmrkFormNodeCategory.DateTimePicker) { } @if (formControl!.invalid &&
@@ -99,6 +97,8 @@
   (formNode!.category === enums.TrmrkFormNodeCategory.RadioGroup) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.Button) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.IconButton) { } @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.HorizStrip) { } @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.ThinHorizStrip) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.Group) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.Loading) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.HorizRule) { } @if

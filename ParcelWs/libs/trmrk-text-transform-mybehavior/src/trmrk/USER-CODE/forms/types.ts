@@ -18,6 +18,8 @@ export enum TrmrkFormNodeCategory {
   RadioGroup,
   Button,
   IconButton,
+  HorizStrip,
+  ThinHorizStrip,
   Group,
   Loading,
   HorizRule,

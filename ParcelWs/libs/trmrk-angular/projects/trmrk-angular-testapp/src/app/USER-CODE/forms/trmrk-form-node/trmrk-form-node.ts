@@ -74,6 +74,8 @@ export const formNodeCategoriesMap: [TrmrkFormNodeCategory, string[]][] = [
   [TrmrkFormNodeCategory.Input, ['trmrk-form-node-input']],
   [TrmrkFormNodeCategory.Combobox, ['trmrk-form-node-combobox']],
   [TrmrkFormNodeCategory.Button, ['trmrk-form-node-button']],
+  [TrmrkFormNodeCategory.HorizStrip, ['trmrk-form-node-horiz-strip']],
+  [TrmrkFormNodeCategory.ThinHorizStrip, ['trmrk-form-node-thin-horiz-strip']],
   [TrmrkFormNodeCategory.Group, ['trmrk-form-node-group']],
   [TrmrkFormNodeCategory.Loading, ['trmrk-form-node-loading']],
   [TrmrkFormNodeCategory.HorizRule, ['trmrk-form-node-horiz-rule']],
