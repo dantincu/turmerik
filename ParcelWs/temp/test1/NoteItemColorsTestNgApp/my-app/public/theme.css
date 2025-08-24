@@ -1,0 +1,139 @@
+.trmrk-app-theme-light .trmrk-item-archive {
+  background-color: #EEF;
+  border-color: #DDF;
+}
+
+.trmrk-app-theme-light .trmrk-item-archive.trmrk-is-checked {
+  background-color: #DDE;
+  border-color: #CCD;
+}
+
+.trmrk-app-theme-light .trmrk-item-primary-section {
+  background-color: #EFF;
+  border-color: #CEE;
+}
+
+.trmrk-app-theme-light .trmrk-item-primary-section.trmrk-is-checked {
+  background-color: #DEE;
+  border-color: #BDD;
+}
+
+.trmrk-app-theme-light .trmrk-item-secondary-section {
+  background-color: #EFE;
+  border-color: #CEC;
+}
+
+.trmrk-app-theme-light .trmrk-item-secondary-section.trmrk-is-checked {
+  background-color: #DED;
+  border-color: #BDB;
+}
+
+.trmrk-app-theme-light .trmrk-item-ternary-section {
+  background-color: #FFE8FF;
+  border-color: #EFD8EF;
+}
+
+.trmrk-app-theme-light .trmrk-item-ternary-section.trmrk-is-checked {
+  background-color: #EED8EE;
+  border-color: #DFC8DF;
+}
+
+.trmrk-app-theme-light .trmrk-item-note {
+  background-color: #FFF0E0;
+  border-color: #EEE0D0;
+}
+
+.trmrk-app-theme-light .trmrk-item-note.trmrk-is-checked {
+  background-color: #EEE0D0;
+  border-color: #DDD0C0;
+}
+
+.trmrk-app-theme-light .trmrk-item-folder {
+  background-color: #F8F8E8;
+  border-color: #E8E8D8;
+}
+
+.trmrk-app-theme-light .trmrk-item-folder.trmrk-is-checked {
+  background-color: #E8E8D8;
+  border-color: #D8D8C8;
+}
+
+.trmrk-app-theme-light .trmrk-item-file {
+  background-color: #FFF;
+  border-color: #EEE;
+}
+
+.trmrk-app-theme-light .trmrk-item-file.trmrk-is-checked {
+  background-color: #EEE;
+  border-color: #DDD;
+}
+
+.trmrk-app-theme-dark .trmrk-item-archive {
+  background-color: #001;
+  border-color: #002;
+}
+
+.trmrk-app-theme-dark .trmrk-item-archive.trmrk-is-checked {
+  background-color: #112;
+  border-color: #113;
+}
+
+.trmrk-app-theme-dark .trmrk-item-primary-section {
+  background-color: #011;
+  border-color: #122;
+}
+
+.trmrk-app-theme-dark .trmrk-item-primary-section.trmrk-is-checked {
+  background-color: #122;
+  border-color: #233;
+}
+
+.trmrk-app-theme-dark .trmrk-item-secondary-section {
+  background-color: #121;
+  border-color: #232;
+}
+
+.trmrk-app-theme-dark .trmrk-item-secondary-section.trmrk-is-checked {
+  background-color: #232;
+  border-color: #343;
+}
+
+.trmrk-app-theme-dark .trmrk-item-ternary-section {
+  background-color: #1F081F;
+  border-color: #2F182F;
+}
+
+.trmrk-app-theme-dark .trmrk-item-ternary-section.trmrk-is-checked {
+  background-color: #2F182F;
+  border-color: #3F283F;
+}
+
+.trmrk-app-theme-dark .trmrk-item-note {
+  background-color: #1F1000;
+  border-color: #2F2010;
+}
+
+.trmrk-app-theme-dark .trmrk-item-note.trmrk-is-checked {
+  background-color: #2F2010;
+  border-color: #3F3020;
+}
+
+.trmrk-app-theme-dark .trmrk-item-folder {
+  background-color: #181808;
+  border-color: #282818;
+}
+
+.trmrk-app-theme-dark .trmrk-item-folder.trmrk-is-checked {
+  background-color: #282818;
+  border-color: #383828;
+}
+
+.trmrk-app-theme-dark .trmrk-item-file {
+  background-color: #000;
+  border-color: #111;
+}
+
+.trmrk-app-theme-dark .trmrk-item-file.trmrk-is-checked {
+  background-color: #111;
+  border-color: #222;
+}

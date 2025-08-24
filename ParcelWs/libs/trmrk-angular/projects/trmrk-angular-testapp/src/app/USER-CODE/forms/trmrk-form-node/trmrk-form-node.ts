@@ -133,6 +133,8 @@ export class TrmrkFormNode implements OnChanges {
   formControl: FormControl | null = null;
   formControlErrorMatcher: TrmrkErrorStateMatcher | null = null;
 
+  searchTextLastCallbackFiredStr: string | null = null;
+
   get hasRawHtml() {
     return hasRawHtml(this.trmrkNode.html);
   }
@@ -305,22 +307,38 @@ export class TrmrkFormNode implements OnChanges {
           }
         } else if (this.formNode.category === TrmrkFormNodeCategory.Combobox) {
           this.formNode!.items!.value = [];
-          this.loadComboboxItems();
+          this.initComboboxItems();
         }
 
         break;
     }
   }
 
-  async loadComboboxItems() {
-    const itemsFactory = this.formNode!.items!;
+  async initComboboxItems() {
+    this.searchTextLastCallbackFiredStr = this.formNode!.value ?? null;
+    await this.refreshComboboxItems(this.formNode!.value ?? null);
+  }
 
-    if (itemsFactory.isAsync) {
-      this.formNode!.hasSpinner = true;
+  async comboboxSearchTextChanged(searchText: string) {
+    this.searchTextLastCallbackFiredStr = searchText;
+
+    if (!this.formNode!.hasSpinner) {
+      await this.refreshComboboxItems(searchText);
     }
+  }
 
-    await refreshFactoryValues(itemsFactory, this.formNode!.value ?? null);
-    this.formNode!.hasSpinner = false;
+  async refreshComboboxItems(searchText: string | null) {
+    await refreshFactoryValues(
+      this.formNode!.items!,
+      searchText,
+      (hasSpinner) => {
+        this.formNode!.hasSpinner = hasSpinner;
+      }
+    );
+
+    if (this.searchTextLastCallbackFiredStr !== searchText) {
+      await this.refreshComboboxItems(this.searchTextLastCallbackFiredStr);
+    }
   }
 
   childPath(idx: number) {

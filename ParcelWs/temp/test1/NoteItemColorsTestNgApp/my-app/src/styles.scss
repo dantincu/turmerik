@@ -1,0 +1,140 @@
+@use "./mixins.scss" as mixins;
+
+html,
+body {
+  height: 100%;
+  margin: 0; /* Important: remove default body margin */
+  font-family: "Arial";
+  font-size: 15px;
+}
+
+h1 {
+  font-size: 18px;
+}
+
+h2 {
+  font-size: 17px;
+}
+
+h3 {
+  font-size: 16px;
+}
+
+app-root {
+  display: block;
+  @include mixins.rel-stretch-to-parent-size();
+}
+
+.trmrk-hidden {
+  display: none;
+}
+
+.trmrk-flex {
+  display: flex;
+}
+
+.trmrk-wrap-content {
+  @include mixins.trmrk-wrap-content();
+}
+
+.trmrk-no-wrap-anywhere {
+  @include mixins.trmrk-no-wrap-anywhere();
+}
+
+.trmrk-no-wrap {
+  @include mixins.trmrk-no-wrap();
+}
+
+/* .trmrk-scrollable::-webkit-scrollbar {
+  width: 15px;
+}
+
+.trmrk-scrollable::-webkit-scrollbar-thumb {
+  cursor: grabbing;
+} */
+
+.trmrk-scrollable-x {
+  overflow-x: auto;
+}
+
+.trmrk-scrollable-y {
+  overflow-y: auto;
+}
+
+.trmrk-no-touch-scroll {
+  touch-action: none;
+}
+
+.trmrk-app {
+  @include mixins.rel-flex-stretch-to-parent-size();
+}
+
+.trmrk-field {
+  cursor: pointer;
+}
+
+.trmrk-checkbox {
+  margin-right: 13px;
+  cursor: pointer;
+}
+
+.trmrk-app-bar {
+  display: flex;
+  flex: 1 0 50px;
+  height: 50px;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.trmrk-app-body {
+  @include mixins.rel-flex-stretch-to-parent-size();
+  height: calc(100% - 50px);
+  flex: 1 0 calc(100% - 50px);
+}
+
+app-item {
+  padding: 0;
+  margin: 0 3px 3px 3px;
+  display: flex;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.trmrk-item {
+  cursor: pointer;
+  display: flex;
+  flex: 1 0 40px;
+  box-sizing: border-box;
+  height: 40px;
+  padding: 8px;
+  border-radius: 3px;
+  border-width: 2px;
+  border-style: solid;
+
+  &:first-child {
+    margin-top: 3px;
+  }
+}
+
+.trmrk-app-theme-light {
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableLight();
+  }
+
+  .trmrk-app-bar {
+    background-color: #d0e8ff;
+  }
+}
+
+.trmrk-app-theme-dark {
+  background-color: #000;
+  color: #FFF;
+
+  &.trmrk-scrollable, .trmrk-scrollable, .trmrk-horiz-scrollable-strip {
+    @include mixins.scrollableDark();
+  }
+
+  .trmrk-app-bar {
+    background-color: #000820;
+  }
+}
