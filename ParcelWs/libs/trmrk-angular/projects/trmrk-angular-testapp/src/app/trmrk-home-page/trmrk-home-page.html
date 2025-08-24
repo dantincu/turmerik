@@ -375,7 +375,7 @@
     [trmrkMainText]="getCompaniesTextFromCoords([3, 2, 3], [idx1, idx2, idx3], idx1 * 3 + 1)"
     [trmrkDetailsTextParts]="dStr"
     [ngClass]="['my-app-bar' + cssClassSffx]"
-    [trmrkCssClass]="[cssClassSffx === '2' ? '' : 'trmrk-has-border']"
+    [trmrkCssClass]="[cssClassSffx === '2' ? '' : 'trmrk-has-border-x2']"
     [trmrkTrailingTemplate]="appHeaderOptionsIcon"
   ></trmrk-horiz-strip
   >}
@@ -418,6 +418,7 @@
         [trmrkDetailsTextParts]="dStr"
         [ngClass]="['trmrk-file-item trmrk-is-selected']"
         [trmrkLeadingIconTemplate]="fileItemIcon"
+        [trmrkCssClass]="['trmrk-has-border-x2']"
         [trmrkIsSelectable]="true"
       ></trmrk-panel-list-item>
 

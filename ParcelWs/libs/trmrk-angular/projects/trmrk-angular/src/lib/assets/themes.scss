@@ -138,7 +138,7 @@
 
     &.trmrk-success {
       background-color: var(--trmrk-user-message-success_back-color_light);
-      border: 1px solid var(--trmrk-user-message-success_border-color_light);
+      border-color: var(--trmrk-user-message-success_border-color_light);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -154,7 +154,7 @@
 
     &.trmrk-info {
       background-color: var(--trmrk-user-message-info_back-color_light);
-      border: 1px solid var(--trmrk-user-message-info_border-color_light);
+      border-color: var(--trmrk-user-message-info_border-color_light);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -170,7 +170,7 @@
 
     &.trmrk-warn {
       background-color: var(--trmrk-user-message-warn_back-color_light);
-      border: 1px solid var(--trmrk-user-message-warn_border-color_light);
+      border-color: var(--trmrk-user-message-warn_border-color_light);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -186,7 +186,7 @@
 
     &.trmrk-error {
       background-color: var(--trmrk-user-message-error_back-color_light);
-      border: 1px solid var(--trmrk-user-message-error_border-color_light);
+      border-color: var(--trmrk-user-message-error_border-color_light);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -245,7 +245,7 @@
       }
 
       [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
-        border: 2px solid #000;
+        border-color: #000;
       }
 
       .trmrk-cancel-icon-btn-highlighter {
@@ -336,7 +336,7 @@
 
     &.trmrk-success {
       background-color: var(--trmrk-user-message-success_back-color_dark);
-      border: 1px solid var(--trmrk-user-message-success_border-color_dark);
+      border-color: var(--trmrk-user-message-success_border-color_dark);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -352,7 +352,7 @@
 
     &.trmrk-info {
       background-color: var(--trmrk-user-message-info_back-color_dark);
-      border: 1px solid var(--trmrk-user-message-info_border-color_dark);
+      border-color: var(--trmrk-user-message-info_border-color_dark);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -368,7 +368,7 @@
 
     &.trmrk-warn {
       background-color: var(--trmrk-user-message-warn_back-color_dark);
-      border: 1px solid var(--trmrk-user-message-warn_border-color_dark);
+      border-color: var(--trmrk-user-message-warn_border-color_dark);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -384,7 +384,7 @@
 
     &.trmrk-error {
       background-color: var(--trmrk-user-message-error_back-color_dark);
-      border: 1px solid var(--trmrk-user-message-error_border-color_dark);
+      border-color: var(--trmrk-user-message-error_border-color_dark);
 
       .trmrk-arrow {
         .trmrk-arrow-body {
@@ -443,7 +443,7 @@
       }
 
       [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
-        border: 2px solid #FFF;
+        border-color: #FFF;
       }
 
       .trmrk-cancel-icon-btn-highlighter {

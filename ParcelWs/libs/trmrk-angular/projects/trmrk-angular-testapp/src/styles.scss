@@ -46,6 +46,81 @@ app-trmrk-app-icon {
   margin-left: -3px;
 }
 
+.trmrk-top-message-horiz-strip,
+.trmrk-top-horiz-strip,
+.trmrk-bottom-horiz-strip {
+  &.trmrk-has-border-x2 {
+    border-top-width: 2px;
+    border-top-style: solid;
+  }
+}
+
+.trmrk-companies-app-panel, trmrk-app-themes-list-view {
+  trmrk-panel-list {
+    .trmrk-list-item {
+      .trmrk-is-focused {
+        .trmrk-horiz-strip {
+          border-width: 2px;
+          border-style: solid;
+        }
+      }
+    }
+
+    .trmrk-moving-aggregate-row {
+      .trmrk-horiz-strip {
+          border-width: 2px;
+          border-style: solid;
+      }
+    }
+  }
+}
+
+.my-thin-horiz-strip .trmrk-thin-horiz-strip {
+  &.trmrk-has-border-x2 {
+    border-width: 2px;
+    border-style: solid;
+  }
+}
+
+.my-horiz-strip .trmrk-horiz-strip {
+  border-width: 2px;
+  border-style: solid;
+}
+
+.my-horiz-strip1 .trmrk-horiz-strip {
+  border-width: 1px;
+  border-style: solid;
+}
+
+.my-app-bar .trmrk-app-bar,
+.my-app-bar1 .trmrk-app-bar {
+  border-width: 2px;
+  border-style: solid;
+}
+
+.trmrk-file-item {
+  &.trmrk-is-focused {
+    .trmrk-horiz-strip {
+      border-width: 2px;
+      border-style: solid;
+    }
+  }
+
+  &.trmrk-is-selected {
+    .trmrk-horiz-strip {
+      border-width: 2px;
+      border-style: solid;
+    }
+  }
+
+  &.trmrk-is-current {
+    .trmrk-horiz-strip {
+      border-width: 2px;
+      border-style: solid;
+    }
+  }
+}
+
 .my-horiz-strip .trmrk-horiz-strip,
 .my-horiz-strip1 .trmrk-horiz-strip,
 .my-horiz-strip2 .trmrk-horiz-strip {

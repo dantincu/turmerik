@@ -503,12 +503,6 @@ export class TrmrkHomePage implements OnDestroy, AfterViewInit {
         ? this.foodAutocompleteTrigger
         : this.foodAutocompleteTrigger1;
 
-    console.log(
-      'foodAutocompleteTrigger.panelOpen',
-      foodAutocompleteTrigger.panelOpen,
-      autoCompleteTriggerIdx
-    );
-
     if (foodAutocompleteTrigger.panelOpen) {
       setTimeout(() => {
         foodAutocompleteTrigger.closePanel();

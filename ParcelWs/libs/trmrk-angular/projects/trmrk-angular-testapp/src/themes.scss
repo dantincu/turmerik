@@ -9,7 +9,7 @@
     background-color: #d0e8ff;
 
     &.trmrk-has-border-x2 {
-      border-top: 2px solid #c0d8ff;
+      border-color: #c0d8ff;
     }
   }
 
@@ -32,7 +32,7 @@
 
         .trmrk-is-focused {
           .trmrk-horiz-strip {
-            border: 2px solid #c0c0c0;
+            border-color: #c0c0c0;
           }
         }
       }
@@ -46,7 +46,7 @@
       .trmrk-moving-aggregate-row {
         .trmrk-horiz-strip {
           background-color: #e0e0e0;
-          border: 2px solid #FFF;
+          border-color: #FFF;
         }
       }
     }
@@ -56,7 +56,7 @@
     background-color: #f0f0f0;
 
     &.trmrk-has-border-x2 {
-      border: 2px solid #d0d0d0;
+      border-color: #d0d0d0;
     }
 
     .trmrk-strip-cap {
@@ -66,7 +66,7 @@
 
   .my-horiz-strip .trmrk-horiz-strip {
     background-color: #0c0;
-    border: 2px solid #080;
+    border-color: #080;
 
     .trmrk-strip-cap {
       background-color: #080;
@@ -79,7 +79,7 @@
 
   .my-horiz-strip1 .trmrk-horiz-strip {
     background-color: #0c0;
-    border: 1px solid #080;
+    border-color: #080;
 
     .trmrk-strip-cap {
       background-color: #080;
@@ -104,7 +104,7 @@
 
   .my-app-bar .trmrk-app-bar,
   .my-app-bar1 .trmrk-app-bar {
-    border: 2px solid #a0b0d0;
+    border-color: #a0b0d0;
 
     .trmrk-strip-cap {
       background-color: #a0b0d0;
@@ -145,35 +145,35 @@
 
     &.trmrk-is-focused {
       .trmrk-horiz-strip {
-        border: 2px solid #c0c0c0;
+        border-color: #c0c0c0;
       }
 
       &.trmrk-is-selected {
         .trmrk-horiz-strip {
-          border: 2px solid #a0a0a0;
+          border-color: #a0a0a0;
         }
       }
     }
 
     &.trmrk-is-current {
       .trmrk-horiz-strip {
-        border: 2px solid #60a0FF;
+        border-color: #60a0FF;
       }
 
       &.trmrk-is-selected {
         .trmrk-horiz-strip {
-          border: 2px solid #60a0FF;
+          border-color: #60a0FF;
         }
       }
 
       &.trmrk-is-focused {
         .trmrk-horiz-strip {
-          border: 2px solid #0040C0;
+          border-color: #0040C0;
         }
 
         &.trmrk-is-selected {
           .trmrk-horiz-strip {
-            border: 2px solid #0040C0;
+            border-color: #0040C0;
           }
         }
       }
@@ -208,7 +208,7 @@
     background-color: #000820;
 
     &.trmrk-has-border-x2 {
-      border-top: 2px solid #001030;
+      border-color: #001030;
     }
   }
 
@@ -231,7 +231,7 @@
 
         .trmrk-is-focused {
           .trmrk-horiz-strip {
-            border: 2px solid #404040;
+            border-color: #404040;
           }
         }
       }
@@ -245,7 +245,7 @@
       .trmrk-moving-aggregate-row {
         .trmrk-horiz-strip {
           background-color: #202020;
-          border: 2px solid #000;
+          border-color: #000;
         }
       }
     }
@@ -255,13 +255,13 @@
     background-color: #101010;
 
     &.trmrk-has-border-x2 {
-      border: 2px solid #303030;
+      border-color: #303030;
     }
   }
 
   .my-horiz-strip .trmrk-horiz-strip {
     background-color: #040;
-    border: 2px solid #080;
+    border-color: #080;
 
     .trmrk-strip-cap {
       background-color: #080;
@@ -274,7 +274,7 @@
 
   .my-horiz-strip1 .trmrk-horiz-strip {
     background-color: #040;
-    border: 1px solid #080;
+    border-color: #080;
 
     .trmrk-strip-cap {
       background-color: #080;
@@ -299,7 +299,7 @@
 
   .my-app-bar .trmrk-app-bar,
   .my-app-bar1 .trmrk-app-bar {
-    border: 2px solid #204080;
+    border-color: #204080;
 
     .trmrk-strip-cap {
       background-color: #204080;
@@ -340,35 +340,35 @@
 
     &.trmrk-is-focused {
       .trmrk-horiz-strip {
-        border: 2px solid #404040;
+        border-color: #404040;
       }
 
       &.trmrk-is-selected {
         .trmrk-horiz-strip {
-          border: 2px solid #606060;
+          border-color: #606060;
         }
       }
     }
 
     &.trmrk-is-current {
       .trmrk-horiz-strip {
-        border: 2px solid #2040A0;
+        border-color: #2040A0;
       }
 
       &.trmrk-is-selected {
         .trmrk-horiz-strip {
-          border: 2px solid #2040A0;
+          border-color: #2040A0;
         }
       }
 
       &.trmrk-is-focused {
         .trmrk-horiz-strip {
-          border: 2px solid #80A0FF;
+          border-color: #80A0FF;
         }
 
         &.trmrk-is-selected {
           .trmrk-horiz-strip {
-            border: 2px solid #80A0FF;
+            border-color: #80A0FF;
           }
         }
       }

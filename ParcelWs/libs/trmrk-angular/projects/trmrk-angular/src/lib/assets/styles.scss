@@ -384,16 +384,16 @@ trmrk-app-page {
     padding: 3px;
 
     .trmrk-text-col {
-      padding-top: 8px;
+      padding-top: 12px;
 
       &.trmrk-has-details {
-        padding-top: 0;
+        padding-top: 4px;
       }
     }
 
     .trmrk-strip-cap {
       margin-top: 2px;
-      height: 31px;
+      height: 35px;
     }
   }
 }
@@ -528,6 +528,9 @@ trmrk-app-page {
 }
 
 .trmrk-user-message {
+  border-width: 1px;
+  border-style: solid;
+
   .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
     margin-top: 0;
 
@@ -651,6 +654,15 @@ trmrk-list-app-panel {
       }
     }
   }
+}
+
+.trmrk-accelerating-scroll-popover {
+    .trmrk-scroll-pad {
+      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
+        border-width: 2px;
+        border-style: solid;
+      }
+    }
 }
 
 .trmrk-horiz-strip {
