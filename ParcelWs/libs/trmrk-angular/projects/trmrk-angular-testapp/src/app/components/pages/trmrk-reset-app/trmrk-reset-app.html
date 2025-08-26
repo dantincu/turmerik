@@ -10,6 +10,17 @@
     [trmrkLeadingTemplate]="topHorizStripLeadingTemplate"
   ></trmrk-horiz-strip>
   }
+  <div class="trmrk-page-body trmrk-page-body-thin">
+    @if (!isResetting) {
+    <a
+      mat-button
+      mat-button
+      class="trmrk-btn"
+      [routerLink]="router.createUrlTree([], { queryParams: { reset: 'true' } })"
+      >Reset</a
+    >
+    }
+  </div>
 </ng-template>
 
 <ng-template #topHorizStripLeadingTemplate>

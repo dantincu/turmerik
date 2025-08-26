@@ -7,7 +7,7 @@ import {
 } from 'trmrk-angular';
 
 import { ToggleAppBarService } from '../../../services/toggle-app-bar-service';
-import { TrmrkCompaniesAppPanel } from '../../common/trmrk-companies-app-panel/trmrk-companies-app-panel';
+import { TrmrkCompaniesAppPanel } from './trmrk-companies-app-panel/trmrk-companies-app-panel';
 
 @Component({
   selector: 'trmrk-companies-panel-page',

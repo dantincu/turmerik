@@ -9,13 +9,13 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { NullOrUndef } from '../../../../trmrk/core';
+import { NullOrUndef } from '../../../../../trmrk/core';
 
-import { TrmrkDialog } from '../../common/trmrk-dialog/trmrk-dialog';
+import { TrmrkDialog } from '../../../common/trmrk-dialog/trmrk-dialog';
 import {
   TrmrkDialogData,
   mergeDialogData,
-} from '../../../services/trmrk-dialog';
+} from '../../../../services/trmrk-dialog';
 
 export interface TrmrkEditAppThemeData {
   id?: number | NullOrUndef;

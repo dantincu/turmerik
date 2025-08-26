@@ -20,8 +20,8 @@ import {
 
 import { TrmrkPanelListItem } from 'trmrk-angular';
 
-import { NullOrUndef } from '../../../../trmrk/core';
-import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { NullOrUndef } from '../../../../../trmrk/core';
+import { TouchOrMouseCoords } from '../../../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 export interface TreeNode {
   id: number;

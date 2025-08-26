@@ -11,15 +11,15 @@ import { MatMenuModule } from '@angular/material/menu';
 
 import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 
-import { companies } from '../../../services/companies';
-import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { companies } from '../../../../services/companies';
+import { TouchOrMouseCoords } from '../../../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkListAppPanel } from '../trmrk-list-app-panel/trmrk-list-app-panel';
+import { TrmrkListAppPanel } from '../../../common/trmrk-list-app-panel/trmrk-list-app-panel';
 
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../../../services/trmrk-panel-list-service';
+} from '../../../../services/trmrk-panel-list-service';
 
 @Component({
   selector: 'trmrk-companies-app-panel',

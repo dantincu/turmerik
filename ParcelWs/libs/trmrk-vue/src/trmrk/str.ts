@@ -1,4 +1,12 @@
-import { allWsRegex, digitRegex, NullOrUndef } from './core';
+import {
+  allWsRegex,
+  digitRegex,
+  NullOrUndef,
+  Map,
+  StrMap,
+  NumMap,
+  UnifiedMap,
+} from './core';
 
 export const isNonEmptyStr = (
   arg: string | any,
@@ -80,8 +88,6 @@ export const trimStr = (
     trimStr = ' ';
   }
 
-  trimStr.length;
-
   if (trimOpts.fullTrim || trimOpts.trimStart) {
     while (str.startsWith(trimStr)) {
       str = str.substring(trimStr.length);
@@ -96,6 +102,15 @@ export const trimStr = (
 
   return str;
 };
+
+export const trimStartStr = (str: string, trimStrVal: string) =>
+  trimStr(str, { trimStr: trimStrVal, trimStart: true });
+
+export const trimEndStr = (str: string, trimStrVal: string) =>
+  trimStr(str, { trimStr: trimStrVal, trimEnd: true });
+
+export const trimFullStr = (str: string, trimStrVal: string) =>
+  trimStr(str, { trimStr: trimStrVal, fullTrim: true });
 
 export const capitalizeFirstLetter = (str: string) => {
   let firstLetter = str[0];
@@ -127,4 +142,30 @@ export const extractDigits = (
   );
 
   return outStr;
+};
+
+export interface SerializeMapOpts<T> {
+  startStr?: string | NullOrUndef;
+  endStr?: string | NullOrUndef;
+  keyValueJoinFactory: (key: string, value: T) => string;
+  propsJoinFactory: (prop1: string, prop2: string) => string;
+}
+
+export const serializeMap = <T>(
+  map: UnifiedMap<T>,
+  opts: SerializeMapOpts<T>
+) => {
+  const mapKeys = Object.keys(map);
+  let retStr: string;
+
+  if (mapKeys.length) {
+    retStr = mapKeys
+      .map((key) => opts.keyValueJoinFactory(key, (map as any)[key]))
+      .reduce((prop1, prop2) => opts.propsJoinFactory(prop1, prop2));
+  } else {
+    retStr = '';
+  }
+
+  retStr = [opts.startStr ?? '', retStr, opts.endStr ?? ''].join('');
+  return retStr;
 };

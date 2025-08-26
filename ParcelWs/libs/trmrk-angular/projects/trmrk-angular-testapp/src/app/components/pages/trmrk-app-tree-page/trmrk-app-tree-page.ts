@@ -16,8 +16,8 @@ import { trmrkTreeEventHandlers } from 'trmrk-angular';
 
 import { getNextIdx } from '../../../../trmrk/math';
 
-import { TreeNode } from '../../common/trmrk-app-tree-view-node/trmrk-app-tree-view-node';
-import { TrmrkAppTreeView } from '../../common/trmrk-app-tree-view/trmrk-app-tree-view';
+import { TreeNode } from './trmrk-app-tree-view-node/trmrk-app-tree-view-node';
+import { TrmrkAppTreeView } from './trmrk-app-tree-view/trmrk-app-tree-view';
 
 import { companies } from '../../../services/companies';
 

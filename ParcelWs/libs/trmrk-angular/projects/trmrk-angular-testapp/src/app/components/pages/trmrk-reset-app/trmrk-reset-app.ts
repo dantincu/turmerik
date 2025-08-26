@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule, MatMenu } from '@angular/material/menu';
@@ -16,18 +16,20 @@ import {
 } from 'trmrk-angular';
 
 import { jsonBool } from '../../../../trmrk/core';
+import { replaceQueryParams } from '../../../../trmrk/url';
 
 @Component({
   selector: 'trmrk-reset-app',
   imports: [
-    TrmrkLoading,
-    MatIconModule,
     CommonModule,
+    RouterModule,
     MatButtonModule,
-    TrmrkUserMessage,
+    MatIconModule,
     MatMenuModule,
-    TrmrkHorizStrip,
     TrmrkAppPage,
+    TrmrkUserMessage,
+    TrmrkHorizStrip,
+    TrmrkLoading,
   ],
   templateUrl: './trmrk-reset-app.html',
   styleUrl: './trmrk-reset-app.scss',
@@ -41,8 +43,8 @@ export class TrmrkResetApp implements OnDestroy {
   private routeSub: Subscription;
 
   constructor(
+    public router: Router,
     private route: ActivatedRoute,
-    private router: Router,
     private appStateService: AppStateServiceBase
   ) {
     this.routeSub = this.route.queryParamMap.subscribe((params) => {
@@ -71,8 +73,10 @@ export class TrmrkResetApp implements OnDestroy {
           }
 
           indexedDB.databases().then((databases) => {
-            const onComplete = () =>
-              (window.location.href = '/reset-app?reset=false');
+            const onComplete = () => {
+              const url = replaceQueryParams({ reset: 'false' });
+              window.location.href = url;
+            };
 
             databases = databases.filter((db) =>
               db.name?.startsWith(this.appStateService.dbObjNamePrefix)
@@ -104,6 +108,7 @@ export class TrmrkResetApp implements OnDestroy {
   }
 
   successMessageClose() {
-    this.router.navigate(['/reset-app']);
+    const url = replaceQueryParams('', null, false);
+    this.router.navigate([url]);
   }
 }

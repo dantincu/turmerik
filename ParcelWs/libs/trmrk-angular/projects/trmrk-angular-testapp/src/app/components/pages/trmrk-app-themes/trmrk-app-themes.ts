@@ -13,7 +13,7 @@ import { getIDbRequestOpenErrorMsg } from '../../../../trmrk-browser/indexedDB/c
 import { AppTheme } from '../../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { TrmrkListAppPanel } from '../../common/trmrk-list-app-panel/trmrk-list-app-panel';
-import { TrmrkEditAppThemeDialog } from '../trmrk-edit-app-theme/trmrk-edit-app-theme-dialog';
+import { TrmrkEditAppThemeDialog } from './trmrk-edit-app-theme/trmrk-edit-app-theme-dialog';
 
 import {
   TrmrkPanelListService,

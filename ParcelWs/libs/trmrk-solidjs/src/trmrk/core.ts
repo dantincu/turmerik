@@ -56,6 +56,11 @@ export class Singleton<T> {
   }
 }
 
+export type Map<T> = { [key: string | number]: T };
+export type StrMap<T> = { [key: string]: T };
+export type NumMap<T> = { [key: number]: T };
+export type UnifiedMap<T> = Map<T> | StrMap<T> | NumMap<T>;
+
 export interface Kvp<TKey, TValue> {
   key: TKey;
   value: TValue;
