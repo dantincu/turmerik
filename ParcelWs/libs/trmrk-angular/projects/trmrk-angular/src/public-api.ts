@@ -2,14 +2,14 @@
  * Public API Surface of trmrk-angular
  */
 
-export * from './lib/trmrk-loading/trmrk-loading';
-export * from './lib/trmrk-user-message/trmrk-user-message';
-export * from './lib/trmrk-horiz-strip/trmrk-horiz-strip';
-export * from './lib/trmrk-thin-horiz-strip/trmrk-thin-horiz-strip';
-export * from './lib/trmrk-panel-list-item/trmrk-panel-list-item';
-export * from './lib/trmrk-app-bar/trmrk-app-bar';
-export * from './lib/trmrk-app-page/trmrk-app-page';
-export * from './lib/trmrk-tree-view-node/trmrk-tree-view-node';
+export * from './lib/components/common/trmrk-loading/trmrk-loading';
+export * from './lib/components/common/trmrk-user-message/trmrk-user-message';
+export * from './lib/components/common/trmrk-horiz-strip/trmrk-horiz-strip';
+export * from './lib/components/common/trmrk-thin-horiz-strip/trmrk-thin-horiz-strip';
+export * from './lib/components/common/trmrk-panel-list-item/trmrk-panel-list-item';
+export * from './lib/components/common/trmrk-app-bar/trmrk-app-bar';
+export * from './lib/components/common/trmrk-app-page/trmrk-app-page';
+export * from './lib/components/common/trmrk-tree-view-node/trmrk-tree-view-node';
 
 export * from './lib/services/drag-service';
 export * from './lib/services/simpleChanges';
