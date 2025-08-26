@@ -2,7 +2,7 @@
   <a
     mat-icon-button
     class="trmrk-icon-btn"
-    [routerLink]="trmrkHomeRouterLink"
+    [routerLink]="trmrkHomeRouterLink ?? appConfigService.routeBasePath"
     aria-label="Home"
   >
     @if (trmrkLeadingIconTemplate) {

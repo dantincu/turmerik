@@ -17,6 +17,7 @@ import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { NullOrUndef } from '../../trmrk/core';
+import { AppConfigServiceBase } from '../services/app-config-service-base';
 
 @Component({
   selector: 'trmrk-app-bar',
@@ -37,18 +38,17 @@ export class TrmrkAppBar implements AfterViewInit {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
   @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkHomeRouterLink:
-    | string
-    | readonly any[]
-    | UrlTree
-    | NullOrUndef = ['/'];
+  @Input() trmrkHomeRouterLink: string | readonly any[] | UrlTree | NullOrUndef;
   @Input() trmrkTitle!: string;
   @Input() trmrkCssClass: string | null = null;
 
   @ViewChild('pageTitle', { read: ElementRef })
   pageTitle!: ElementRef;
 
-  constructor(public hostEl: ElementRef) {}
+  constructor(
+    public hostEl: ElementRef,
+    public appConfigService: AppConfigServiceBase
+  ) {}
 
   ngAfterViewInit(): void {
     this.trmrkPageTitleElem.emit(this.pageTitle.nativeElement);

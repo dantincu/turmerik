@@ -14,6 +14,7 @@ import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { NullOrUndef } from '../../trmrk/core';
 
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
+import { AppConfigServiceBase } from '../services/app-config-service-base';
 
 @Component({
   selector: 'trmrk-app-page',
@@ -33,16 +34,17 @@ export class TrmrkAppPage {
   @Input() trmrkPageTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkUseDefaultPageBody = true;
   @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
+
   @Input() trmrkAppBarHomeRouterLink:
     | string
     | readonly any[]
     | UrlTree
-    | NullOrUndef = ['/'];
+    | NullOrUndef;
+
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;
   @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkShowOptionsBtn = true;
-  @Input() trmrkRouteBasePath = '/';
   @Input() trmrkIncludeSettingsMenuItem = true;
 
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
@@ -50,7 +52,7 @@ export class TrmrkAppPage {
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
   optionsMenuTrigger!: MatMenuTrigger;
 
-  constructor() {
+  constructor(public appConfigService: AppConfigServiceBase) {
     setTimeout(() => {
       if (this.optionsMenuTrigger) {
         this.optionsMenuTrigger.menu = this.optionsMenu;

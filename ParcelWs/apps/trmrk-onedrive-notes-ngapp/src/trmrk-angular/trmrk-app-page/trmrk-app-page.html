@@ -21,7 +21,7 @@
     @if (trmrkIncludeSettingsMenuItem) {<a
       mat-menu-item
       class="trmrk-menu-item"
-      [routerLink]="[`${trmrkRouteBasePath}/settings`]"
+      [routerLink]="[`${appConfigService.routeBasePath}/settings`]"
     >
       <mat-icon class="trmrk-icon">settings</mat-icon>
       Settings

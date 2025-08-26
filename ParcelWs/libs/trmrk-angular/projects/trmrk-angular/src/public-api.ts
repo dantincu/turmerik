@@ -16,6 +16,7 @@ export * from './lib/services/simpleChanges';
 export * from './lib/services/TrmrkObservable';
 export * from './lib/services/TrmrkTree';
 export * from './lib/services/types';
+export * from './lib/services/app-config-service-base';
 export * from './lib/services/app-state-service-base';
 export * from './lib/services/toggle-app-bar-service-base';
 export * from './lib/services/component-id-service';

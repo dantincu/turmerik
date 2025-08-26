@@ -28,13 +28,22 @@ export interface TrmrkFormHelperExtraArgs<THtml = NodeHtml>
 
 export const retrieveValuesFromFactory = async <TInput, TOutput>(
   factory: TrmrkValueFactory<TInput, TOutput>,
-  input: TInput
+  input: TInput,
+  asyncFlagSetter?: ((showSpinner: boolean) => VoidOrAny) | NullOrUndef
 ) => {
   let retVal: TOutput;
 
   if (factory.func) {
     if (factory.isAsync) {
+      if (asyncFlagSetter) {
+        asyncFlagSetter(true);
+      }
+
       retVal = await factory.func(input);
+
+      if (asyncFlagSetter) {
+        asyncFlagSetter(false);
+      }
     } else {
       retVal = factory.func(input) as TOutput;
     }
@@ -47,9 +56,15 @@ export const retrieveValuesFromFactory = async <TInput, TOutput>(
 
 export const refreshFactoryValues = async <TInput, TOutput>(
   factory: TrmrkValueFactory<TInput, TOutput>,
-  input: TInput
+  input: TInput,
+  asyncFlagSetter?: ((showSpinner: boolean) => VoidOrAny) | NullOrUndef
 ) => {
-  const output = await retrieveValuesFromFactory(factory, input);
+  const output = await retrieveValuesFromFactory(
+    factory,
+    input,
+    asyncFlagSetter
+  );
+
   factory.value = output;
 };
 
