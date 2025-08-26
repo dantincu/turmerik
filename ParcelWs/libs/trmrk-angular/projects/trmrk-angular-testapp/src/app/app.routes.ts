@@ -1,6 +1,8 @@
 import { inject } from '@angular/core';
 import { Routes, Router } from '@angular/router';
 
+import { AppConfigServiceBase } from 'trmrk-angular';
+
 import { TrmrkHomePage } from './components/pages/trmrk-home-page/trmrk-home-page';
 import { TrmrkFormsTestPage } from './components/pages/trmrk-forms-test-page/trmrk-forms-test-page';
 import { TrmrkCompaniesPanelPage } from './components/pages/trmrk-companies-panel-page/trmrk-companies-panel-page';
@@ -33,13 +35,17 @@ export const routes: Routes = [
         component: TrmrkResetApp,
       },
       {
-        path: 'resetapp',
+        path: 'reset',
         redirectTo: () => {
           const router = inject(Router);
+          const appConfigService = inject(AppConfigServiceBase);
 
-          return router.createUrlTree(['reset-app'], {
-            queryParams: { reset: 'true' },
-          });
+          return router.createUrlTree(
+            [`${appConfigService.routeBasePath}/reset-app`],
+            {
+              queryParams: { reset: 'true' },
+            }
+          );
         },
       },
       {

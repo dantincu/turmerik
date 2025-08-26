@@ -8,6 +8,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import {
   AppStateServiceBase,
+  AppConfigServiceBase,
   materialIcons,
   TrmrkAppPage,
 } from 'trmrk-angular';
@@ -34,6 +35,7 @@ export class TrmrkAppSettings implements OnDestroy {
   private darkModeStateChangeSubscription: Subscription;
 
   constructor(
+    public appConfigService: AppConfigServiceBase,
     private appStateService: AppStateServiceBase,
     private sanitizer: DomSanitizer
   ) {

@@ -74,8 +74,8 @@ export class TrmrkResetApp implements OnDestroy {
 
           indexedDB.databases().then((databases) => {
             const onComplete = () => {
-              const url = replaceQueryParams({ reset: 'false' });
-              window.location.href = url;
+              const url = replaceQueryParams('', null, false);
+              this.router.navigate([url], { queryParams: { reset: 'false' } });
             };
 
             databases = databases.filter((db) =>

@@ -13,12 +13,19 @@
       >
     </div>
     <div class="trmrk-field">
-      <a mat-button [routerLink]="['/themes']" class="trmrk-icon-link"
+      <a
+        mat-button
+        [routerLink]="[`${appConfigService.routeBasePath}/themes`]"
+        class="trmrk-icon-link"
         ><mat-icon class="trmrk-icon">palette</mat-icon> App Theme
       </a>
     </div>
     <div class="trmrk-field">
-      <a mat-button [routerLink]="['/resetapp']" class="trmrk-icon-link">
+      <a
+        mat-button
+        [routerLink]="[`${appConfigService.routeBasePath}/reset`]"
+        class="trmrk-icon-link"
+      >
         <div
           class="trmrk-custom-svg-icon-wrapper"
           [innerHtml]="resetAltIcon"
