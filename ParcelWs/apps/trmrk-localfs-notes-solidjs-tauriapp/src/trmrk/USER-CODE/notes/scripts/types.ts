@@ -8,6 +8,8 @@ export interface ScriptCore {
 
 export interface Script<TFunc> extends ScriptCore {
   func: TFunc;
+  isEnabled?: boolean | NullOrUndef;
+  isCssFile?: boolean | NullOrUndef;
 }
 
 export interface ScriptsFolder<TFunc> extends ScriptCore {

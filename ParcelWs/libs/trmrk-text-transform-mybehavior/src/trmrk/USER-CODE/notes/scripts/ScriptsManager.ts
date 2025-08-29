@@ -14,7 +14,7 @@ export interface ScriptsContainer<TFunc> {
 
 export abstract class ScriptsManagerBase<TFunc> {
   rootFolder: ScriptsRootFolder<TFunc>;
-  current!: Script<TFunc>;
+  current: Script<TFunc> | null = null;
 
   constructor(
     rootFolder: ScriptsRootFolderCore,
@@ -30,6 +30,7 @@ export abstract class ScriptsManagerBase<TFunc> {
 
   abstract assureEntriesLoaded(folderCsid: string): Promise<ScriptCore[]>;
   abstract loadScript(scriptCsid: string): Promise<VoidOrAny>;
+  abstract loadCssFile(scriptCsid: string): Promise<VoidOrAny>;
 
   async assureScripts(folder: ScriptsFolder<TFunc>, infiniteDepth = false) {
     if (!(folder.subFolders && folder.scripts)) {
@@ -67,8 +68,13 @@ export abstract class ScriptsManagerBase<TFunc> {
 
   async loadAllScripts(allScripts: Script<TFunc>[]) {
     for (let script of allScripts) {
-      this.current = script;
-      await this.loadScript(script.csid);
+      if (script.isEnabled) {
+        this.current = script;
+        await this.loadScript(script.csid);
+        this.current = null;
+      } else if (script.isCssFile) {
+        await this.loadCssFile(script.csid);
+      }
     }
   }
 }
