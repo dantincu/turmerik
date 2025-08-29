@@ -28,13 +28,13 @@ export abstract class ScriptsManagerBase<TFunc> {
     } as unknown as ScriptsRootFolder<TFunc>;
   }
 
-  abstract assureEntriesLoaded(folderCsid: string): Promise<ScriptCore[]>;
+  abstract assureEntriesCore(folderCsid: string): Promise<ScriptCore[]>;
   abstract loadScript(scriptCsid: string): Promise<VoidOrAny>;
   abstract loadCssFile(scriptCsid: string): Promise<VoidOrAny>;
 
-  async assureScripts(folder: ScriptsFolder<TFunc>, infiniteDepth = false) {
+  async assureEntries(folder: ScriptsFolder<TFunc>, infiniteDepth = false) {
     if (!(folder.subFolders && folder.scripts)) {
-      const entries = await this.assureEntriesLoaded(folder.csid);
+      const entries = await this.assureEntriesCore(folder.csid);
 
       folder.subFolders ??= entries.filter(
         (ent) => ent.isFolder
@@ -47,7 +47,7 @@ export abstract class ScriptsManagerBase<TFunc> {
 
     if (infiniteDepth) {
       for (let subFolder of folder.subFolders) {
-        await this.assureScripts(subFolder, infiniteDepth);
+        await this.assureEntries(subFolder, infiniteDepth);
       }
     }
   }
@@ -56,7 +56,7 @@ export abstract class ScriptsManagerBase<TFunc> {
     folder: ScriptsFolder<TFunc>,
     callback: (fld: ScriptsFolder<TFunc>) => Promise<boolean | NullOrUndef>
   ) {
-    await this.assureScripts(folder);
+    await this.assureEntries(folder);
     const visitChildren = await callback(folder);
 
     if (visitChildren) {
@@ -68,12 +68,16 @@ export abstract class ScriptsManagerBase<TFunc> {
 
   async loadAllScripts(allScripts: Script<TFunc>[]) {
     for (let script of allScripts) {
-      if (script.isEnabled) {
-        this.current = script;
-        await this.loadScript(script.csid);
-        this.current = null;
-      } else if (script.isCssFile) {
-        await this.loadCssFile(script.csid);
+      if (!script.isLoaded) {
+        if (script.isEnabled) {
+          this.current = script;
+          await this.loadScript(script.csid);
+          this.current = null;
+          script.isLoaded = true;
+        } else if (script.isCssFile) {
+          await this.loadCssFile(script.csid);
+          script.isLoaded = true;
+        }
       }
     }
   }
