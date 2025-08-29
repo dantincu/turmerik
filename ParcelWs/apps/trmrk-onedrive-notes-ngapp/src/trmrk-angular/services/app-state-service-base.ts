@@ -13,6 +13,14 @@ export abstract class AppStateServiceBase {
   dbObjNamePrefix: string;
   appThemeIsDarkModeLocalStorageKey: string;
 
+  showOptionsMenuBtnByDefault = true;
+  showMainMenuTopStripByDefault = true;
+  showRefreshMainMenuBtnByDefault = true;
+  showUserProfileMainMenuBtnByDefault = true;
+  showManageAppMainMenuBtnByDefault = true;
+  showSettingsMainMenuBtnByDefault = true;
+  showHelpMainMenuBtnByDefault = true;
+
   constructor(public appName: string) {
     this.dbObjNamePrefix = getDbObjName([appName]);
 

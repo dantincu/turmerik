@@ -11,9 +11,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
-import { NullOrUndef } from '../../../../trmrk/core';
+import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
+import { AppStateServiceBase } from '../../../services/app-state-service-base';
 import { AppConfigServiceBase } from '../../../services/app-config-service-base';
 
 @Component({
@@ -44,15 +45,24 @@ export class TrmrkAppPage {
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;
   @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkShowOptionsBtn = true;
-  @Input() trmrkIncludeSettingsMenuItem = true;
+  @Input() trmrkShowOptionsBtn: boolean | NullOrUndef;
+  @Input() trmrkShowMainMenuTopStrip: boolean | NullOrUndef;
+  @Input() trmrkShowRefreshMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkRefreshAction!: (() => VoidOrAny) | NullOrUndef;
+  @Input() trmrkShowUserProfileMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkShowManageAppMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkShowSettingsMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkShowHelpMenuBtn: boolean | NullOrUndef;
 
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
 
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
   optionsMenuTrigger!: MatMenuTrigger;
 
-  constructor(public appConfigService: AppConfigServiceBase) {
+  constructor(
+    public appConfigService: AppConfigServiceBase,
+    public appStateService: AppStateServiceBase
+  ) {
     setTimeout(() => {
       if (this.optionsMenuTrigger) {
         this.optionsMenuTrigger.menu = this.optionsMenu;
@@ -62,5 +72,11 @@ export class TrmrkAppPage {
 
   optionsMenuBtnClick(event: MouseEvent): void {
     this.optionsMenuTrigger.openMenu();
+  }
+
+  refreshMenuBtnClick(event: MouseEvent): void {
+    if (this.trmrkRefreshAction) {
+      this.trmrkRefreshAction();
+    }
   }
 }
