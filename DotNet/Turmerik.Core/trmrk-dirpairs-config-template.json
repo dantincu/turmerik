@@ -17,6 +17,7 @@
     "OpenMdFileAndWatch": "ow",
     "OpenMdFileInteractively": "oi",
     "UpdateTimeStamp": "ut",
+    "UpdateTitleFromJson": "tjs",
     "SkipMdFileCreation": "skmd",
     "SkipPdfFileCreation": "skpdf",
     "SkipCurrentNode": "skcrnt",

@@ -31,6 +31,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
         public bool? OpenMdFileAndAddLinks { get; set; }
         public bool OpenMdFileAndInsertLinks { get; set; }
         public bool? UpdateTimeStamp { get; set; }
+        public bool? UpdateTitleFromJson { get; set; }
 
         public MdLink[]? MdLinksToAddArr { get; set; }
     }

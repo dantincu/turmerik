@@ -177,6 +177,26 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                         args.MdTitle,
                         config.DirNames.MacrosMap);
                 }
+                else if (args.UpdateTitleFromJson == true)
+                {
+                    string jsonFilePath = Path.Combine(
+                        args.ShortNameDirPath,
+                        config.FileNames.JsonFileName);
+
+                    if (File.Exists(jsonFilePath))
+                    {
+                        string json = File.ReadAllText(jsonFilePath);
+                        var noteItem = jsonConversion.Adapter.Deserialize<NoteItemCore>(json);
+
+                        args.MdTitle = noteItem.Title?.Nullify(true) ?? throw new InvalidOperationException(
+                            "Could not update title from json file because there is no title in the json file");
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "Could not update title from json file because the json file does not exist");
+                    }
+                }
 
                 if (Directory.Exists(args.ShortNameDirPath))
                 {
@@ -702,6 +722,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.UpdateTimeStamp.Arr(),
                                 data => data.Args.UpdateTimeStamp = true),
+                            consoleArgsParser.ArgsFlagOpts(data,
+                                config.ArgOpts.UpdateTitleFromJson.Arr(),
+                                data => data.Args.UpdateTitleFromJson = true),
                             consoleArgsParser.ArgsFlagOpts(data,
                                 config.ArgOpts.Title.Arr(),
                                 data => data.Args.MdTitle = string.Join(":", data.ArgFlagValue)),
