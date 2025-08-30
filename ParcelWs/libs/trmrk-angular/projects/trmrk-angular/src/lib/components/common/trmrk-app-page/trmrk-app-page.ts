@@ -35,6 +35,8 @@ export class TrmrkAppPage {
   @Input() trmrkPageTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkUseDefaultPageBody = true;
   @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkAppBarBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkAppBarTrailingTemplate?: TemplateRef<any> | NullOrUndef;
 
   @Input() trmrkAppBarHomeRouterLink:
     | string
@@ -44,6 +46,16 @@ export class TrmrkAppPage {
 
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;
+  @Input() trmrkAppBarShowBackBtn: boolean | NullOrUndef;
+  @Input() trmrkAppBarBackBtnClicked: (() => boolean | VoidOrAny) | NullOrUndef;
+
+  @Input() trmrkAppBarToggleBackBtnDisabled:
+    | ((disable: boolean) => boolean | VoidOrAny)
+    | NullOrUndef;
+
+  @Input() trmrkAppBarShowGoToParentBtn: boolean | NullOrUndef;
+  @Input() trmrkAppBarGoToParentBtnDisabled: boolean | NullOrUndef;
+  @Input() trmrkAppBarGoToParentBtnClicked: (() => VoidOrAny) | NullOrUndef;
   @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkShowOptionsBtn: boolean | NullOrUndef;
   @Input() trmrkShowMainMenuTopStrip: boolean | NullOrUndef;

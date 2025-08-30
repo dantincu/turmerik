@@ -13,6 +13,8 @@ export abstract class AppStateServiceBase {
   dbObjNamePrefix: string;
   appThemeIsDarkModeLocalStorageKey: string;
 
+  showBackBtnByDefault = true;
+  showGoToParentBtnByDefault = true;
   showOptionsMenuBtnByDefault = true;
   showMainMenuTopStripByDefault = true;
   showRefreshMainMenuBtnByDefault = true;

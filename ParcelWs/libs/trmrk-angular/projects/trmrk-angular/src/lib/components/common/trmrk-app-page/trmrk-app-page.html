@@ -3,9 +3,17 @@
   [trmrkHomeRouterLink]="trmrkAppBarHomeRouterLink"
   [trmrkTitle]="trmrkAppBarTitle"
   [trmrkCssClass]="trmrkAppBarCssClass"
-  [trmrkTrailingTemplate]="trmrkAppBarTrailingTemplate"
+  [trmrkBeforeTitleTemplate]="trmrkAppBarBeforeTitleTemplate"
+  [trmrkShowBackBtn]="trmrkAppBarShowBackBtn"
+  [trmrkBackBtnClicked]="trmrkAppBarBackBtnClicked"
+  [trmrkToggleBackBtnDisabled]="trmrkAppBarToggleBackBtnDisabled"
+  [trmrkShowGoToParentBtn]="trmrkAppBarShowGoToParentBtn"
+  [trmrkGoToParentBtnDisabled]="trmrkAppBarGoToParentBtnDisabled"
+  [trmrkGoToParentBtnClicked]="trmrkAppBarGoToParentBtnClicked"
+  [trmrkTrailingTemplate]="appBarTrailingTemplate"
 ></trmrk-app-bar>
-<ng-template #trmrkAppBarTrailingTemplate>
+<ng-template #appBarTrailingTemplate>
+  <ng-container *ngTemplateOutlet="trmrkAppBarTrailingTemplate"></ng-container>
   @if (trmrkShowOptionsBtn ?? appStateService.showOptionsMenuBtnByDefault) {
   <button
     mat-icon-button
@@ -43,7 +51,7 @@
         mat-icon-button
         class="trmrk-icon-btn"
         [routerLink]="[`${appConfigService.routeBasePath}/manage-app`]"
-        ><mat-icon class="trmrk-icon">dashboard_customize</mat-icon></a
+        ><mat-icon class="trmrk-icon">settings_applications</mat-icon></a
       >
       } @if (trmrkShowSettingsMenuBtn ??
       appStateService.showSettingsMainMenuBtnByDefault) {
