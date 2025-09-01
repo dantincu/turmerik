@@ -10,7 +10,9 @@
     >{{popupClosedMessage}}
   </div>
 
-  <div [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote"></div>
+  <div
+    [innerHTML]="nonBreakingText + quote + 'asdfasdf' + quote + '<a href=\'#\'>asdfasdf</a>'"
+  ></div>
 
   <div [ngStyle]="{height: '150px', position: 'relative'}">
     <div>

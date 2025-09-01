@@ -1,11 +1,12 @@
 <div #panelList [ngClass]="['trmrk-panel-list', trmrkCssClass ?? '']">
   <div
-    class="trmrk-rows-menu-trigger"
+    [ngClass]="['trmrk-rows-menu-trigger', panelListService.rowsMenuIsOpen ? '' : 'trmrk-invisible']"
     #rowsMenuTrigger="matMenuTrigger"
     #rowsMenuTriggerEl
     [matMenuTriggerFor]="null"
+    [matMenuTriggerRestoreFocus]="false"
   ></div>
-  <mat-menu class="trmrk-menu" dense #rowsMenu>
+  <mat-menu [ngClass]="['trmrk-menu']" dense #rowsMenu>
     <ng-container *ngTemplateOutlet="trmrkRowMenuTemplate"></ng-container>
   </mat-menu>
 

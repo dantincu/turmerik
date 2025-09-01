@@ -145,17 +145,21 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   showMovingAggregateRow = false;
   slideOutVisuallyMovingRowPlaceholders = false;
 
-  rowLeadingIconDragSubscriptions: Subscription[] | null = null;
-  rowLeadingIconDragEndSubscriptions: Subscription[] | null = null;
-
   acceleratingPopoverPads: HTMLElement[] | null = null;
   downAcceleratingPopoverCancelBtn: HTMLElement | null = null;
   acceleratingScrollPopoverIdx = -1;
   acceleratingScrollPadIdx = -1;
   downAcceleratingPopoverCancelBtnIsFocused = false;
   rowContentMouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
+  rowsMenuIsOpen = false;
+
+  private rowLeadingIconDragSubscriptions: Subscription[] | null = null;
+  private rowLeadingIconDragEndSubscriptions: Subscription[] | null = null;
 
   private leadingIconDragServices: DragService[] | null = null;
+
+  private rowsMenuOpenedSubscription: Subscription | null = null;
+  private rowsMenuClosedSubscription: Subscription | null = null;
 
   // _temp = 0;
 
@@ -224,6 +228,18 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
     this.rows = this.rows.map((row) => ({ ...row }));
 
+    this.rowsMenuOpenedSubscription =
+      this.rowsMenuTrigger().menuOpened.subscribe(() => {
+        setTimeout(() => {
+          this.rowsMenuIsOpen = true;
+        });
+      });
+
+    this.rowsMenuClosedSubscription =
+      this.rowsMenuTrigger().menuClosed.subscribe(() => {
+        this.rowsMenuIsOpen = false;
+      });
+
     setTimeout(() => {
       const listItems = this.getListItems();
 
@@ -276,6 +292,14 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
     for (let subscription of this.rowLeadingIconDragEndSubscriptions ?? []) {
       subscription.unsubscribe();
+    }
+
+    if (this.rowsMenuOpenedSubscription) {
+      this.rowsMenuOpenedSubscription.unsubscribe();
+    }
+
+    if (this.rowsMenuClosedSubscription) {
+      this.rowsMenuClosedSubscription.unsubscribe();
     }
   }
 
@@ -488,7 +512,9 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
   }
 
   rowTextLongPresOrRightClick(event: TouchOrMouseCoords, idx: number) {
-    this.openRowContextMenu(event);
+    setTimeout(() => {
+      this.openRowContextMenu(event);
+    });
   }
 
   rowLeadingIconMouseDownOrTouchStart(
