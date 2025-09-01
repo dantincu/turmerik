@@ -3,8 +3,8 @@
     "Turmerik.UpdFsDirPairsIdxes.ConsoleApp": {
       "commandName": "Project",
       // "commandLineArgs": ":h"
-      // "commandLineArgs": ":wd:|$ONEDRIVE_DIR|\\0002\\187\\196\\195\\988\\199 :s"
-      "commandLineArgs": ":wd:workDir :i :s:2: 196:292"
+      // "commandLineArgs": "\":wd:||$ONEDRIVE_DIR||\\0002\\187\\196\\195\\988\\199\" :s"
+      "commandLineArgs": "\":wd:||$ONEDRIVE_DIR||\\0002\\293\\289\\199\" :s:1:2 296:197"
       // "commandLineArgs": ":wd:workDir :i :s 199:198 198:199",
       // "commandLineArgs": ":wd:workDir :i :s",
       // "commandLineArgs": ":wd:workDir 799..:790.."
