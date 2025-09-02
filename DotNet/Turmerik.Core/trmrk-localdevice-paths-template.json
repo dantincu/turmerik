@@ -4,7 +4,7 @@
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|": "<TurmerikDotnetUtilityAppsEnvDir>",
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DEV_DIR|": "<TurmerikDotnetUtilityAppsEnvDevDir>",
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|": "<TurmerikDotnetUtilityAppsEnvProdDir>",
-    "|$ONEDRIVE_DIR|": "<OnedriveDir>",
-    "|$ONEDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<OnedriveTurmerikDotNetUtilityAppsArchiveReldir>"
+    "|$MAINCSDRIVE_DIR|": "<OnedriveDir>",
+    "|$MAINCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<OnedriveTurmerikDotNetUtilityAppsArchiveReldir>"
   }
 }

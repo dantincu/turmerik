@@ -2,7 +2,7 @@
   "profiles": {
     "Turmerik.PrintDupplicateTextLines.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": ":w:||$ONEDRIVE_DIR||\\0002 \":p:*.md\" :s:||$ONEDRIVE_DIR||\\0002\\288 \":f:^\\s*\\[.+\\]\\(.+\\)\\s*$\" :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
+      "commandLineArgs": ":w:||$MAINCSDRIVE_DIR||\\0002 \":p:*.md\" :s:||$MAINCSDRIVE_DIR||\\0002\\288 \":f:^\\s*\\[.+\\]\\(.+\\)\\s*$\" :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
     }
   }
 }

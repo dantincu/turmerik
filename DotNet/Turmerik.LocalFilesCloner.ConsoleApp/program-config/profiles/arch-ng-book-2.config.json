@@ -2,7 +2,7 @@
   "ProfileName": "arch-ng-book-2",
   "FileGroups": [
     {
-      "CloneArchiveDirPath": "|$ONEDRIVE_DIR|\\0002\\187\\195\\192\\199\\01\\2004\\01",
+      "CloneArchiveDirPath": "|$MAINCSDRIVE_DIR|\\0002\\187\\195\\192\\199\\01\\2004\\01",
       "CloneArchiveFileNameTpl": "ng-book-2[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
       "BeforeArchiveCleanupFilter": {
         "IncludedRelPathRegexes": [

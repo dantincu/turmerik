@@ -5,8 +5,8 @@
       // "commandLineArgs": "999 :od",
       "commandLineArgs": "999"
       // "commandLineArgs": "999 :skcrnt :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
-      // "commandLineArgs": "|$ONEDRIVE_DIR|\\0002 :skcrnt :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
-      // "commandLineArgs": "|$ONEDRIVE_DIR|\\0002 :skup:|$ONEDRIVE_DIR|\\0002\\193\\193\\199\\195\\199\\199\\999 :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
+      // "commandLineArgs": "|$MAINCSDRIVE_DIR|\\0002 :skcrnt :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
+      // "commandLineArgs": "|$MAINCSDRIVE_DIR|\\0002 :skup:|$MAINCSDRIVE_DIR|\\0002\\193\\193\\199\\195\\199\\199\\999 :rec:^[1-9][0-9]+$:\\\\[1-9][0-9]+$"
     }
   }
 }
