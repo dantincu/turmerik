@@ -25,6 +25,9 @@
           "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.ConsoleApp\\Release\\net9.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.ExecuteCustomCommand.ConsoleApp\\Release\\net9.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net9.0"
         },
         {
@@ -81,6 +84,9 @@
           "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.ConsoleApp\\Release\\net9.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.ExecuteCustomCommand.ConsoleApp\\Release\\net9.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net9.0"
         },
         {
@@ -135,6 +141,9 @@
           "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.ConsoleApp\\Release\\net9.0"
         },
         {
+          "CloneDirPath": "Bin\\Turmerik.ExecuteCustomCommand.ConsoleApp\\Release\\net9.0"
+        },
+        {
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net9.0"
         },
         {
@@ -187,6 +196,9 @@
       "Folders": [
         {
           "CloneDirPath": "Bin\\Turmerik.DotNetTypesToTypescript.ConsoleApp\\Release\\net9.0"
+        },
+        {
+          "CloneDirPath": "Bin\\Turmerik.ExecuteCustomCommand.ConsoleApp\\Release\\net9.0"
         },
         {
           "CloneDirPath": "Bin\\Turmerik.LocalFilesCloner.CmdApp\\Release\\net9.0"

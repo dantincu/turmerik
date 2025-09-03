@@ -17,6 +17,7 @@
             "IncludedRelPathRegexes": [
               "^\\/Bin\\/TrmrkMkFsDirsPair\\/.*",
               "^\\/Bin\\/TrmrkMkMdFile\\/.*",
+              "^\\/Bin\\/Turmerik\\.ExecuteCustomCommand\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LocalFilesCloner\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.LsFsDirPairs\\.ConsoleApp\\/.*",
               "^\\/Bin\\/Turmerik\\.MdToPdf\\.ConsoleApp\\/.*",

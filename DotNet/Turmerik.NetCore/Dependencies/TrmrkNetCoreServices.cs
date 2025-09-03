@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Turmerik.NetCore.LocalDeviceEnv;
-using Turmerik.Core.Utility;
-using Turmerik.NetCore.Md;
-using Turmerik.NetCore.Utility;
 using Turmerik.Core.Dependencies;
-
+using Turmerik.Core.Utility;
+using Turmerik.NetCore.ConsoleApps.ExecuteCustomCommand.Executors;
+using Turmerik.NetCore.LocalDeviceEnv;
+using Turmerik.NetCore.Md;
+using Turmerik.NetCore.Reflection.AssemblyLoading;
+using Turmerik.NetCore.Utility;
+using DotNetTypesToTypescript = Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript;
 using LocalFilesCloner = Turmerik.NetCore.ConsoleApps.LocalFilesCloner;
-using SyncLocalFiles = Turmerik.NetCore.ConsoleApps.SyncLocalFiles;
 using MkFiles = Turmerik.NetCore.ConsoleApps.MkFiles;
 using MkScripts = Turmerik.NetCore.ConsoleApps.MkScripts;
-using DotNetTypesToTypescript = Turmerik.NetCore.ConsoleApps.DotNetTypesToTypescript;
-using Turmerik.NetCore.Reflection.AssemblyLoading;
+using SyncLocalFiles = Turmerik.NetCore.ConsoleApps.SyncLocalFiles;
 
 namespace Turmerik.NetCore.Dependencies
 {
@@ -98,6 +98,14 @@ namespace Turmerik.NetCore.Dependencies
             services.AddSingleton<DotNetTypesToTypescript.IProgramArgsRetriever, DotNetTypesToTypescript.ProgramArgsRetriever>();
             services.AddSingleton<DotNetTypesToTypescript.IProgramArgsNormalizer, DotNetTypesToTypescript.ProgramArgsNormalizer>();
             services.AddSingleton<DotNetTypesToTypescript.IProgramComponent, DotNetTypesToTypescript.ProgramComponent>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomCommandExecutors(
+            this IServiceCollection services)
+        {
+            services.AddScoped<QuitCommandExecutor>();
 
             return services;
         }

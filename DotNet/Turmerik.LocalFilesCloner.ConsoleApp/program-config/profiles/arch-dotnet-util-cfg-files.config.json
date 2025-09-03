@@ -18,7 +18,8 @@
               "^\\/trmrk-dirpairs-config\\.json$",
               "^\\/trmrk-dirpairs-config\\..+\\.json$",
               "^\\/trmrk-notes-config\\.json$",
-              "^\\/trmrk-notes-config\\..+\\.json$"
+              "^\\/trmrk-notes-config\\..+\\.json$",
+              "^\\/trmrk-custom-commands-config\\.json$"
             ]
           }
         },

@@ -35,6 +35,9 @@
     <None Update="app-env-locator.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="trmrk-custom-commands-config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="trmrk-dirpairs-config.main.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
