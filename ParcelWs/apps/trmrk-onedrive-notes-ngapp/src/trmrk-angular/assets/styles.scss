@@ -69,13 +69,13 @@ app-root {
   touch-action: none;
 }
 
-.trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+/* .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
   display: inline-flex;
   width: 40px;
-  height: 40px;
-  cursor: pointer;
   padding: 2px;
+  height: 40px;
   overflow: hidden;
+  cursor: pointer;
 
   mat-icon.trmrk-icon, .trmrk-icon, svg[trmrk-custom-svg-icon] {
     display: inline-flex;
@@ -87,7 +87,7 @@ app-root {
   mat-icon.trmrk-icon, .trmrk-icon {
     padding: 2px;
   }
-}
+} */
 
 .trmrk-custom-svg-icon-wrapper {
   display: inline-flex;
@@ -99,7 +99,7 @@ app-root {
   }
 }
 
-[mat-button].trmrk-icon-link {
+/* [mat-button].trmrk-icon-link {
   line-height: 36px;
 
   .trmrk-custom-svg-icon-wrapper {
@@ -107,7 +107,7 @@ app-root {
     top: 6px;
     left: -3px;
   }
-}
+} */
 
 a.trmrk-icon-btn,
 a.trmrk-icon-btn:visited,
@@ -126,7 +126,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   box-shadow: none !important;
 }
 
-.trmrk-menu {
+/* .trmrk-menu {
   .trmrk-menu-item {
     min-height: 40px;
 
@@ -134,7 +134,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
       padding-left: 10px;
     }
   }
-}
+} */
 
 @keyframes trmrk-has-app-bar {
   from {
@@ -238,12 +238,14 @@ trmrk-app-page {
 
 .trmrk-app-bar, .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
   .trmrk-icon-btn {
-    margin-top: -3px;
+    margin-top: -2px;
 
     .trmrk-checkbox {
+      left: -7px;
+
       .mdc-checkbox {
-        margin-top: -1px;
-        margin-left: -1px;
+        margin-top: -8px;
+        margin-left: 0;
       }
 
       .mdc-checkbox__checkmark {
@@ -525,11 +527,11 @@ trmrk-app-page {
   height: 40px;
 }
 
-[mat-icon-button].trmrk-options-btn {
+/* [mat-icon-button].trmrk-options-btn {
   mat-icon.trmrk-icon {
     padding: 2px;
   }
-}
+} */
 
 .trmrk-user-message {
   border-width: 1px;
@@ -537,11 +539,13 @@ trmrk-app-page {
 
   .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
     margin-top: 0;
+    position: relative;
 
     mat-icon.trmrk-icon, svg[trmrk-custom-svg-icon] {
       font-size: 16px;
       position: relative;
-      top: -4px;
+      /* top: -4px; */
+      left: -4px;
       padding: 2px;
     }
   }

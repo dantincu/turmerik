@@ -1,13 +1,5 @@
-:host {
-  margin-top: -3px;
-}
-
 .trmrk-accelerating-scroll-control {
   display: flex;
-}
-
-:host, .trmrk-main-control {
-  height: 40px;
 }
 
 @keyframes trmrk-accelerating-scroll-control-show {
@@ -31,6 +23,7 @@
 .trmrk-main-control {
   width: 0;
   overflow: hidden;
+  padding-top: 1px;
 
   > :first-child .trmrk-icon {
     transform: rotate(-90deg);
@@ -53,10 +46,6 @@
 .trmrk-fake-icon-btn {
   display: inline-flex;
   box-sizing: border-box;
-}
-
-.trmrk-expand-btn, .trmrk-collapse-btn {
-  margin-top: 1px;
 }
 
 .trmrk-collapse-btn {

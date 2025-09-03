@@ -15,3 +15,13 @@ Command to run the production build:
 ```
 http-server ./dist/trmrk-angular-testapp/browser -S -C ./sslcert/cert.pem -K ./sslcert/key.pem -p 443
 ```
+
+Commands to update trmrk libs:
+
+```
+.\projects\trmrk-angular-testapp\src\trmrk-browser\_\push_to_trmrk-browser_ppgp.bat
+
+.\projects\trmrk-angular-testapp\src\trmrk\_\push_to_trmrk_ppgp.bat
+
+.\projects\trmrk-angular\src\lib\_\pull_from_this.bat
+```
