@@ -8,7 +8,12 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>Icon128x126.png</PackageIcon>
+    <ApplicationIcon>Icon32x30.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Icon32x30.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Turmerik.Jint\Turmerik.Jint.csproj" />

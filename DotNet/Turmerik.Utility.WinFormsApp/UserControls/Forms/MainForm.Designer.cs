@@ -33,9 +33,11 @@
             toolStripStatusLabelMain = new ToolStripStatusLabel();
             tabControlMain = new TabControl();
             tabPageTextUtils = new TabPage();
-            textUtilsUC = new UserControls.TextUtilsUC();
+            textUtilsUC = new Turmerik.Utility.WinFormsApp.UserControls.TextUtilsUC();
             tabPageTextTransform = new TabPage();
-            textTransformUC = new UserControls.TextTransformUC();
+            textTransformUC = new Turmerik.Utility.WinFormsApp.UserControls.TextTransformUC();
+            tabPageOpenMultipleLinks = new TabPage();
+            openMultipleLinksuc1 = new Turmerik.Utility.WinFormsApp.UserControls.OpenMultipleLinksUC();
             menuStripMain = new MenuStrip();
             textUtilsActionsToolStripMenuItem = new ToolStripMenuItem();
             goToWebResourceUrlToolStripMenuItem = new ToolStripMenuItem();
@@ -51,6 +53,7 @@
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
             tabPageTextTransform.SuspendLayout();
+            tabPageOpenMultipleLinks.SuspendLayout();
             menuStripMain.SuspendLayout();
             SuspendLayout();
             // 
@@ -72,6 +75,7 @@
             // 
             tabControlMain.Controls.Add(tabPageTextUtils);
             tabControlMain.Controls.Add(tabPageTextTransform);
+            tabControlMain.Controls.Add(tabPageOpenMultipleLinks);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tabControlMain.Location = new Point(0, 24);
@@ -119,6 +123,24 @@
             textTransformUC.Size = new Size(192, 71);
             textTransformUC.TabIndex = 0;
             // 
+            // tabPageOpenMultipleLinks
+            // 
+            tabPageOpenMultipleLinks.Controls.Add(openMultipleLinksuc1);
+            tabPageOpenMultipleLinks.Location = new Point(4, 25);
+            tabPageOpenMultipleLinks.Name = "tabPageOpenMultipleLinks";
+            tabPageOpenMultipleLinks.Size = new Size(1792, 825);
+            tabPageOpenMultipleLinks.TabIndex = 2;
+            tabPageOpenMultipleLinks.Text = "Open Multiple Links";
+            tabPageOpenMultipleLinks.UseVisualStyleBackColor = true;
+            // 
+            // openMultipleLinksuc1
+            // 
+            openMultipleLinksuc1.Dock = DockStyle.Fill;
+            openMultipleLinksuc1.Location = new Point(0, 0);
+            openMultipleLinksuc1.Name = "openMultipleLinksuc1";
+            openMultipleLinksuc1.Size = new Size(1792, 825);
+            openMultipleLinksuc1.TabIndex = 0;
+            // 
             // menuStripMain
             // 
             menuStripMain.Items.AddRange(new ToolStripItem[] { textUtilsActionsToolStripMenuItem, textTransformActionsToolStripMenuItem, helpToolStripMenuItem });
@@ -138,21 +160,21 @@
             // goToWebResourceUrlToolStripMenuItem
             // 
             goToWebResourceUrlToolStripMenuItem.Name = "goToWebResourceUrlToolStripMenuItem";
-            goToWebResourceUrlToolStripMenuItem.Size = new Size(227, 22);
+            goToWebResourceUrlToolStripMenuItem.Size = new Size(228, 22);
             goToWebResourceUrlToolStripMenuItem.Text = "Go To &Web Resource Url";
             goToWebResourceUrlToolStripMenuItem.Click += GoToWebResourceUrlToolStripMenuItem_Click;
             // 
             // goToMarkdownSourceTextToolStripMenuItem
             // 
             goToMarkdownSourceTextToolStripMenuItem.Name = "goToMarkdownSourceTextToolStripMenuItem";
-            goToMarkdownSourceTextToolStripMenuItem.Size = new Size(227, 22);
+            goToMarkdownSourceTextToolStripMenuItem.Size = new Size(228, 22);
             goToMarkdownSourceTextToolStripMenuItem.Text = "Go To Markdown &Source Text";
             goToMarkdownSourceTextToolStripMenuItem.Click += GoToMarkdownSourceTextToolStripMenuItem_Click;
             // 
             // goToMarkdownResultTextToolStripMenuItem
             // 
             goToMarkdownResultTextToolStripMenuItem.Name = "goToMarkdownResultTextToolStripMenuItem";
-            goToMarkdownResultTextToolStripMenuItem.Size = new Size(227, 22);
+            goToMarkdownResultTextToolStripMenuItem.Size = new Size(228, 22);
             goToMarkdownResultTextToolStripMenuItem.Text = "Go To Markdown &Result Text";
             goToMarkdownResultTextToolStripMenuItem.Click += GoToMarkdownResultTextToolStripMenuItem_Click;
             // 
@@ -166,7 +188,7 @@
             // goToTextTransformSrcTextBoxToolStripMenuItem
             // 
             goToTextTransformSrcTextBoxToolStripMenuItem.Name = "goToTextTransformSrcTextBoxToolStripMenuItem";
-            goToTextTransformSrcTextBoxToolStripMenuItem.Size = new Size(180, 22);
+            goToTextTransformSrcTextBoxToolStripMenuItem.Size = new Size(167, 22);
             goToTextTransformSrcTextBoxToolStripMenuItem.Text = "Go To &Src TextBox";
             goToTextTransformSrcTextBoxToolStripMenuItem.Click += GoToTextTransformSrcTextBoxToolStripMenuItem_Click;
             // 
@@ -181,7 +203,7 @@
             // 
             toolStripMenuItemShowHints.DropDownItems.AddRange(new ToolStripItem[] { toolStripComboBoxShowHints });
             toolStripMenuItemShowHints.Name = "toolStripMenuItemShowHints";
-            toolStripMenuItemShowHints.Size = new Size(199, 22);
+            toolStripMenuItemShowHints.Size = new Size(200, 22);
             toolStripMenuItemShowHints.Text = "Show &Hints";
             // 
             // toolStripComboBoxShowHints
@@ -194,7 +216,7 @@
             // startAppRecoveryToolToolStripMenuItem
             // 
             startAppRecoveryToolToolStripMenuItem.Name = "startAppRecoveryToolToolStripMenuItem";
-            startAppRecoveryToolToolStripMenuItem.Size = new Size(199, 22);
+            startAppRecoveryToolToolStripMenuItem.Size = new Size(200, 22);
             startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
             startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
             // 
@@ -217,6 +239,7 @@
             tabControlMain.ResumeLayout(false);
             tabPageTextUtils.ResumeLayout(false);
             tabPageTextTransform.ResumeLayout(false);
+            tabPageOpenMultipleLinks.ResumeLayout(false);
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
             ResumeLayout(false);
@@ -243,5 +266,7 @@
         private UserControls.TextTransformUC textTransformUC;
         private ToolStripMenuItem textTransformActionsToolStripMenuItem;
         private ToolStripMenuItem goToTextTransformSrcTextBoxToolStripMenuItem;
+        private TabPage tabPageOpenMultipleLinks;
+        private UserControls.OpenMultipleLinksUC openMultipleLinksuc1;
     }
 }
