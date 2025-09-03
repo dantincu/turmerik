@@ -6,8 +6,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Turmerik.Core.Text;
 
 namespace Turmerik.Utility.WinFormsApp.UserControls
 {
@@ -27,7 +29,10 @@ namespace Turmerik.Utility.WinFormsApp.UserControls
 
             foreach (var link in linksArr)
             {
-                Process.Start(EDGE_BROWSER_PATH, link);
+                if (UriH.UriSchemeStartRegex.Match(link)?.Success == true)
+                {
+                    Process.Start(EDGE_BROWSER_PATH, link);
+                }
             }
         }
 

@@ -11,8 +11,8 @@ namespace Turmerik.Core.Text
     {
         public const string HTTPS = "https";
 
-        public const string URI_SCHEME_REGEX_STR = @"^[a-zA-Z0-9\-_]*\:$";
-        public const string URI_SCHEME_START_REGEX_STR = @"^[a-zA-Z0-9\-_]*\:\/{2}";
+        public const string URI_SCHEME_REGEX_STR = @"^[a-zA-Z][a-zA-Z0-9\+\-\.]*\:$";
+        public const string URI_SCHEME_START_REGEX_STR = @"[a-zA-Z][a-zA-Z0-9\+\-\.]*\:\/{2}";
 
         public static readonly Regex UriSchemeRegex = new Regex(URI_SCHEME_REGEX_STR);
         public static readonly Regex UriSchemeStartRegex = new Regex(URI_SCHEME_START_REGEX_STR);
