@@ -82,10 +82,17 @@ namespace Turmerik.NetCore.ConsoleApps.ExecuteCustomCommand
                 string command = args[0];
                 var executor = GetCommandExecutor(command);
 
-                string executorName = executor.GetType().Name;
-                PrintMessage($"Executing: {executorName}");
-                await executor.ExecuteAsync(command);
-                PrintMessage($"Executed: {executorName}");
+                if (executor != null)
+                {
+                    string executorName = executor.GetType().Name;
+                    PrintMessage($"Executing: {executorName}");
+                    await executor.ExecuteAsync(command);
+                    PrintMessage($"Executed: {executorName}");
+                }
+                else
+                {
+                    PrintMessage("The provided command does not match any executor", ConsoleColor.Red);
+                }
             }
         }
 
