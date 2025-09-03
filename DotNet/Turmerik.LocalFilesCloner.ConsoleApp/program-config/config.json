@@ -1,6 +1,9 @@
 {
   "Profiles": [
     {
+      "ProfileRelFilePath": "profiles\\arch-aliases-dir.config.json"
+    },
+    {
       "ProfileRelFilePath": "profiles\\arch-dotnet-util-cfg-dirs.config.json"
     },
     {

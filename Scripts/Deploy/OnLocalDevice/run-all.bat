@@ -1,3 +1,4 @@
+CALL .\arch-aliases-dir.bat
 CALL .\cp-dotnet-util-cfg-files.bat
 CALL .\cp-dotnet-bkp-bins.bat
 CALL .\cp-dotnet-util-bins.bat
