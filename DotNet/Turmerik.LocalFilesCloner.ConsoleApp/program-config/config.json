@@ -22,6 +22,9 @@
       "ProfileRelFilePath": "profiles\\cp-dotnet-util-cfg-files.config.json"
     },
     {
+      "ProfileRelFilePath": "profiles\\cp-mk-fs-dirs-pair-cfg.config.json"
+    },
+    {
       "ProfileRelFilePath": "profiles\\cp-dotnet-util-bins.config.json"
     },
     {
