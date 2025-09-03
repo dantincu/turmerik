@@ -4,6 +4,7 @@ using Turmerik.Core.Helpers;
 using Turmerik.Core.Logging;
 using Turmerik.Core.UIActions;
 using Turmerik.Logging;
+using Turmerik.Utility.WinFormsApp.Services;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
 using Turmerik.WinForms.Actions;
@@ -26,11 +27,13 @@ namespace Turmerik.Utility.WinFormsApp
         private readonly ControlBlinkTimersManagerAdapterFactory controlBlinkTimersManagerAdapterFactory;
 
         private ToolTipHintsOrchestrator toolTipHintsOrchestrator;
+        private CustomCommandService customCommandService;
 
         private Action appRecoveryToolRequested;
 
         public MainForm()
         {
+            this.KeyPreview = true; // Form will get key events before controls
             svcProvContnr = ServiceProviderContainer.Instance.Value;
 
             if (svcProvContnr.IsRegistered)
@@ -43,6 +46,7 @@ namespace Turmerik.Utility.WinFormsApp
                 actionComponentCreator = svcProv.GetRequiredService<IWinFormsActionComponentCreator>();
                 actionComponent = actionComponentCreator.StatusLabel(GetType());
                 controlBlinkTimersManagerAdapterFactory = svcProv.GetRequiredService<ControlBlinkTimersManagerAdapterFactory>();
+                customCommandService = svcProv.GetRequiredService<CustomCommandService>();
             }
 
             InitializeComponent();
@@ -244,6 +248,34 @@ namespace Turmerik.Utility.WinFormsApp
                     HideAllActionMenuStripItems();
                     menuStripMain.Items.Insert(0, textTransformActionsToolStripMenuItem);
                     break;
+            }
+        }
+
+        private void TextBoxCustomCommand_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            actionComponent.Execute(new WinFormsActionOpts<int>
+            {
+                OnBeforeExecution = () => WinFormsMessageTuple.WithOnly("Executing custom command"),
+                OnAfterExecution = (result) => result.IsSuccess switch
+                {
+                    false => null!,
+                    true => WinFormsMessageTuple.WithOnly("Executed custom command")
+                },
+                Action = () =>
+                {
+                    customCommandService.Execute(
+                        textBoxCustomCommand.Text);
+
+                    return ActionResultH.Create(0);
+                }
+            });
+        }
+
+        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F12 && e.Control)
+            {
+                textBoxCustomCommand.Focus();
             }
         }
 

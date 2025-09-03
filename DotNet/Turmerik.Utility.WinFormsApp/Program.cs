@@ -1,25 +1,26 @@
 using Microsoft.Extensions.DependencyInjection;
-using Turmerik.WinForms.Dependencies;
+using Serilog.Core;
+using System.Windows.Forms;
+using Turmerik.Core.Actions;
 using Turmerik.Core.Dependencies;
+using Turmerik.Core.DriveExplorer;
+using Turmerik.Core.Helpers;
 using Turmerik.Core.LocalDeviceEnv;
-using Turmerik.Logging.Dependencies;
+using Turmerik.Dependencies;
+using Turmerik.Jint.Dependencies;
 using Turmerik.Logging;
+using Turmerik.Logging.Dependencies;
+using Turmerik.NetCore.Dependencies;
+using Turmerik.NetCore.Md;
+using Turmerik.NetCore.Utility;
+using Turmerik.Utility.WinFormsApp.Services;
 using Turmerik.Utility.WinFormsApp.Settings;
 using Turmerik.Utility.WinFormsApp.Settings.UI;
 using Turmerik.Utility.WinFormsApp.UserControls;
-using Turmerik.WinForms.Controls;
-using Turmerik.Core.Helpers;
-using Turmerik.WinForms.Actions;
-using Turmerik.Core.Actions;
-using Serilog.Core;
 using Turmerik.Utility.WinFormsApp.UserControls.Forms;
-using System.Windows.Forms;
-using Turmerik.NetCore.Md;
-using Turmerik.NetCore.Dependencies;
-using Turmerik.Core.DriveExplorer;
-using Turmerik.Dependencies;
-using Turmerik.Jint.Dependencies;
-using Turmerik.NetCore.Utility;
+using Turmerik.WinForms.Actions;
+using Turmerik.WinForms.Controls;
+using Turmerik.WinForms.Dependencies;
 
 namespace Turmerik.Utility.WinFormsApp
 {
@@ -169,6 +170,7 @@ namespace Turmerik.Utility.WinFormsApp
                     services.AddSingleton<ControlBlinkTimersManagerAltAdapterContainer>();
                     services.AddSingleton<ToolTipHintsOrchestratorRetriever>();
                     services.AddSingleton<TextTransformBehavior>();
+                    services.AddSingleton<CustomCommandService>();
                 }));
 
             return svcProv;

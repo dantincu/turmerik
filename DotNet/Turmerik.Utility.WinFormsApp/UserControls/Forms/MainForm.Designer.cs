@@ -49,12 +49,16 @@
             toolStripMenuItemShowHints = new ToolStripMenuItem();
             toolStripComboBoxShowHints = new ToolStripComboBox();
             startAppRecoveryToolToolStripMenuItem = new ToolStripMenuItem();
+            panelCustomCommand = new Panel();
+            textBoxCustomCommand = new TextBox();
+            labelTitleCustomCommand = new Label();
             statusStripMain.SuspendLayout();
             tabControlMain.SuspendLayout();
             tabPageTextUtils.SuspendLayout();
             tabPageTextTransform.SuspendLayout();
             tabPageOpenMultipleLinks.SuspendLayout();
             menuStripMain.SuspendLayout();
+            panelCustomCommand.SuspendLayout();
             SuspendLayout();
             // 
             // statusStripMain
@@ -78,10 +82,10 @@
             tabControlMain.Controls.Add(tabPageOpenMultipleLinks);
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Font = new Font("Arial", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            tabControlMain.Location = new Point(0, 24);
+            tabControlMain.Location = new Point(0, 47);
             tabControlMain.Name = "tabControlMain";
             tabControlMain.SelectedIndex = 0;
-            tabControlMain.Size = new Size(1800, 854);
+            tabControlMain.Size = new Size(1800, 831);
             tabControlMain.TabIndex = 2;
             tabControlMain.SelectedIndexChanged += TabControlMain_SelectedIndexChanged;
             // 
@@ -91,7 +95,7 @@
             tabPageTextUtils.Location = new Point(4, 25);
             tabPageTextUtils.Name = "tabPageTextUtils";
             tabPageTextUtils.Padding = new Padding(3);
-            tabPageTextUtils.Size = new Size(1792, 825);
+            tabPageTextUtils.Size = new Size(1792, 802);
             tabPageTextUtils.TabIndex = 0;
             tabPageTextUtils.Text = "Text Utils";
             tabPageTextUtils.UseVisualStyleBackColor = true;
@@ -102,7 +106,7 @@
             textUtilsUC.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             textUtilsUC.Location = new Point(3, 3);
             textUtilsUC.Name = "textUtilsUC";
-            textUtilsUC.Size = new Size(1786, 819);
+            textUtilsUC.Size = new Size(1786, 796);
             textUtilsUC.TabIndex = 0;
             // 
             // tabPageTextTransform
@@ -128,7 +132,7 @@
             tabPageOpenMultipleLinks.Controls.Add(openMultipleLinksuc1);
             tabPageOpenMultipleLinks.Location = new Point(4, 25);
             tabPageOpenMultipleLinks.Name = "tabPageOpenMultipleLinks";
-            tabPageOpenMultipleLinks.Size = new Size(1792, 825);
+            tabPageOpenMultipleLinks.Size = new Size(192, 71);
             tabPageOpenMultipleLinks.TabIndex = 2;
             tabPageOpenMultipleLinks.Text = "Open Multiple Links";
             tabPageOpenMultipleLinks.UseVisualStyleBackColor = true;
@@ -138,7 +142,7 @@
             openMultipleLinksuc1.Dock = DockStyle.Fill;
             openMultipleLinksuc1.Location = new Point(0, 0);
             openMultipleLinksuc1.Name = "openMultipleLinksuc1";
-            openMultipleLinksuc1.Size = new Size(1792, 825);
+            openMultipleLinksuc1.Size = new Size(192, 71);
             openMultipleLinksuc1.TabIndex = 0;
             // 
             // menuStripMain
@@ -220,12 +224,43 @@
             startAppRecoveryToolToolStripMenuItem.Text = "Start App Recovery Tool";
             startAppRecoveryToolToolStripMenuItem.Click += StartAppRecoveryToolToolStripMenuItem_Click;
             // 
+            // panelCustomCommand
+            // 
+            panelCustomCommand.Controls.Add(textBoxCustomCommand);
+            panelCustomCommand.Controls.Add(labelTitleCustomCommand);
+            panelCustomCommand.Dock = DockStyle.Top;
+            panelCustomCommand.Location = new Point(0, 24);
+            panelCustomCommand.Name = "panelCustomCommand";
+            panelCustomCommand.Size = new Size(1800, 23);
+            panelCustomCommand.TabIndex = 4;
+            // 
+            // textBoxCustomCommand
+            // 
+            textBoxCustomCommand.Dock = DockStyle.Fill;
+            textBoxCustomCommand.Location = new Point(179, 0);
+            textBoxCustomCommand.Name = "textBoxCustomCommand";
+            textBoxCustomCommand.Size = new Size(1621, 23);
+            textBoxCustomCommand.TabIndex = 1;
+            textBoxCustomCommand.KeyPress += TextBoxCustomCommand_KeyPress;
+            // 
+            // labelTitleCustomCommand
+            // 
+            labelTitleCustomCommand.AutoSize = true;
+            labelTitleCustomCommand.Dock = DockStyle.Left;
+            labelTitleCustomCommand.Location = new Point(0, 0);
+            labelTitleCustomCommand.Name = "labelTitleCustomCommand";
+            labelTitleCustomCommand.Padding = new Padding(3);
+            labelTitleCustomCommand.Size = new Size(179, 21);
+            labelTitleCustomCommand.TabIndex = 0;
+            labelTitleCustomCommand.Text = "Custom Command (Ctrl + F12)";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1800, 900);
             Controls.Add(tabControlMain);
+            Controls.Add(panelCustomCommand);
             Controls.Add(statusStripMain);
             Controls.Add(menuStripMain);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -234,6 +269,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Turmerik Utility";
             Load += MainForm_Load;
+            KeyUp += MainForm_KeyUp;
             statusStripMain.ResumeLayout(false);
             statusStripMain.PerformLayout();
             tabControlMain.ResumeLayout(false);
@@ -242,6 +278,8 @@
             tabPageOpenMultipleLinks.ResumeLayout(false);
             menuStripMain.ResumeLayout(false);
             menuStripMain.PerformLayout();
+            panelCustomCommand.ResumeLayout(false);
+            panelCustomCommand.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -268,5 +306,8 @@
         private ToolStripMenuItem goToTextTransformSrcTextBoxToolStripMenuItem;
         private TabPage tabPageOpenMultipleLinks;
         private UserControls.OpenMultipleLinksUC openMultipleLinksuc1;
+        private Panel panelCustomCommand;
+        private Label labelTitleCustomCommand;
+        private TextBox textBoxCustomCommand;
     }
 }
