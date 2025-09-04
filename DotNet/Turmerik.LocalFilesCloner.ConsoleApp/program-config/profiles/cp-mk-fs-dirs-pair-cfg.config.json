@@ -6,7 +6,12 @@
       "CloneDirPath": "|$MAINCSDRIVE_DIR|\\|$MAINCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|\\MkFsDirsPairCfg\\program-config",
       "Folders": [
         {
-          "CloneDirPath": "."
+          "CloneDirPath": ".",
+          "BeforeCloneDestnCleanupFilter": {
+            "IncludedRelPathRegexes": [
+              ".*"
+            ]
+          }
         }
       ]
     }

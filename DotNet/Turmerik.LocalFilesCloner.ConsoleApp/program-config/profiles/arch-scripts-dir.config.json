@@ -1,17 +1,17 @@
 {
-  "ProfileName": "arch-aliases-dir",
+  "ProfileName": "arch-scripts-dir",
   "FileGroups": [
     {
       "CloneArchiveDirPath": "|$MAINCSDRIVE_DIR|\\|$MAINCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|",
-      "CloneArchiveFileNameTpl": "AppsAliasesDir[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
+      "CloneArchiveFileNameTpl": "ScriptsDir[{0:yyyy-MM-dd_HH-mm-ss.fffffffK}].zip",
       "BeforeArchiveCleanupFilter": {
         "IncludedRelPathRegexes": [
-          "^\\/AppsAliasesDir\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
+          "^\\/ScriptsDir\\[\\d{4}\\-\\d{2}\\-\\d{2}_\\d{2}-\\d{2}\\-\\d{2}\\.\\d+(([\\-\\+]\\d{4})|Z)\\]\\.zip$"
         ]
       },
       "Folders": [
         {
-          "InputDirPath": "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_DIR|\\aliases",
+          "InputDirPath": "|$TURMERIK_REPO_DIR|\\Scripts",
           "CloneDirPath": "|$TURMERIK_TEMP_DIR|"
         }
       ]

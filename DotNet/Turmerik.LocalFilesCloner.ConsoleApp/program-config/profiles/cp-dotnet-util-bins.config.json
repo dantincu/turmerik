@@ -7,14 +7,16 @@
       "DfInputDirFilter": {
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
-          "^\\/trmrk-localdevice-paths\\.json$"
+          "^\\/trmrk-localdevice-paths\\.json$",
+          "^\\/_ENV$"
         ]
       },
       "DfBeforeCloneDestnCleanupFilter": {
         "ExcludedRelPathRegexes": [
           "^\\/app-env-locator\\.json$",
           "^\\/trmrk-localdevice-paths\\.json$",
-          "^\\/_.+\\.exe"
+          "^\\/Chrome\\/$",
+          "^\\/ChromeHeadlessShell\\/$"
         ]
       },
       "Folders": [

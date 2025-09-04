@@ -13,7 +13,7 @@
       // "commandLineArgs": ":pf:cp-text-transform-behavior"
       // "commandLineArgs": ":pf:cp-mkscripts-parcelws-sync-behavior"
       // "commandLineArgs": ":pf:cp-mk-md-file-repo-bins"
-      "commandLineArgs": ":pf:arch-dotnet-util-cfg-dirs"
+      "commandLineArgs": ":pf:cp-mk-fs-dirs-pair-cfg"
     }
   }
 }
