@@ -29,6 +29,7 @@ namespace Turmerik.Dependencies
             services.AddSingleton<IExistingDirPairsRetrieverFactory, ExistingDirPairsRetrieverFactory>();
 
             services.AddSingleton<INotesAppConfigLoader, NotesAppConfigLoader>();
+            services.AddSingleton<IHtmlToPdfConverter, HtmlToPdfConverter>();
 
             return services;
         }

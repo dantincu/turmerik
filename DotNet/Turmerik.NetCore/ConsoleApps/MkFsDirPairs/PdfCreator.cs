@@ -1,5 +1,4 @@
 ﻿using Markdig;
-using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,10 +8,10 @@ using System.Threading.Tasks;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Core.Utility;
+using Turmerik.Html;
 using Turmerik.Md;
-using Turmerik.Puppeteer.Helpers;
 
-namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
+namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
 {
     public class PdfCreator
     {
@@ -20,6 +19,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
         private readonly INoteMdParser nmdParser;
         private readonly ITimeStampHelper timeStampHelper;
+        private readonly IHtmlToPdfConverter htmlToPdfConverter;
         private readonly Opts opts;
 
         private Thread thread;
@@ -27,6 +27,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
         public PdfCreator(
             INoteMdParser nmdParser,
             ITimeStampHelper timeStampHelper,
+            IHtmlToPdfConverter htmlToPdfConverter,
             Opts opts)
         {
             this.nmdParser = nmdParser ?? throw new ArgumentNullException(
@@ -34,6 +35,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
             this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
                 nameof(timeStampHelper));
+
+            this.htmlToPdfConverter = htmlToPdfConverter ?? throw new ArgumentNullException(
+                nameof(htmlToPdfConverter));
 
             this.opts = opts ?? throw new ArgumentNullException(
                 nameof(opts));
@@ -92,11 +96,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
 
                 File.WriteAllText(htmlFilePath, html);
 
-                await PuppeteerH.HtmlToPdfFile(
+                await htmlToPdfConverter.ConvertHtmlFileAsync(
                     htmlFilePath,
-                    pdfFilePath,
-                    opts.Browser,
-                    opts.Page);
+                    pdfFilePath);
 
                 if (nmdParser.IsTrivialDoc(md))
                 {
@@ -117,8 +119,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public DriveItemX? ShortNameDir { get; init; }
             public string MdFilePath { get; init; }
             public DriveItemX? MdFile { get; init; }
-            public IPage Page { get; init; }
-            public IBrowser Browser { get; init; }
         }
     }
 
@@ -126,22 +126,28 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
     {
         private readonly INoteMdParser nmdParser;
         private readonly ITimeStampHelper timeStampHelper;
+        private readonly IHtmlToPdfConverter htmlToPdfConverter;
 
         public PdfCreatorFactory(
             INoteMdParser nmdParser,
-            ITimeStampHelper timeStampHelper)
+            ITimeStampHelper timeStampHelper,
+            IHtmlToPdfConverter htmlToPdfConverter)
         {
             this.nmdParser = nmdParser ?? throw new ArgumentNullException(
                 nameof(nmdParser));
 
             this.timeStampHelper = timeStampHelper ?? throw new ArgumentNullException(
                 nameof(timeStampHelper));
+
+            this.htmlToPdfConverter = htmlToPdfConverter ?? throw new ArgumentNullException(
+                nameof(htmlToPdfConverter));
         }
 
         public PdfCreator Creator(
             PdfCreator.Opts opts) => new(
                 nmdParser,
                 timeStampHelper,
+                htmlToPdfConverter,
                 opts);
     }
 }

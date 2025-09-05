@@ -15,10 +15,8 @@ using Turmerik.DirsPair;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
 using UpdFsDirPairsIdxes = Turmerik.DirsPair.ConsoleApps.UpdFsDirPairsIdxes;
-using RfDirsPairNames = Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames;
-using MkFsDirPairs = Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs;
-using MdToPdf = Turmerik.Puppeteer.ConsoleApps.MdToPdf;
 using Turmerik.Core.Helpers;
+using Turmerik.NetCore.ConsoleApps.RfDirsPairNames;
 
 namespace Turmerik.ConcatenateNotes.ConsoleApp
 {
@@ -41,7 +39,7 @@ namespace Turmerik.ConcatenateNotes.ConsoleApp
         private readonly NotesAppConfigMtbl notesConfig;
         private readonly INotesAppConfigLoader notesAppConfigLoader;
         private readonly UpdFsDirPairsIdxes.IProgramComponent updFsDirPairsIdxes;
-        private readonly RfDirsPairNames.IProgramComponent rfDirsPairNames;
+        private readonly IProgramComponent rfDirsPairNames;
         private readonly LocalDevicePathMacrosMapMtbl localDevicePathMacrosMapMtbl;
 
         public ProgramComponent(
@@ -55,7 +53,7 @@ namespace Turmerik.ConcatenateNotes.ConsoleApp
             IDirsPairConfigLoader dirsPairConfigLoader,
             INotesAppConfigLoader notesAppConfigLoader,
             UpdFsDirPairsIdxes.IProgramComponent updFsDirPairsIdxes,
-            RfDirsPairNames.IProgramComponent rfDirsPairNames)
+            IProgramComponent rfDirsPairNames)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
                 nameof(jsonConversion));
@@ -234,9 +232,9 @@ namespace Turmerik.ConcatenateNotes.ConsoleApp
 
                         File.WriteAllLines(mdFile, mdLines);
 
-                        await rfDirsPairNames.RunAsync(new RfDirsPairNames.ProgramComponent.WorkArgs()
+                        await rfDirsPairNames.RunAsync(new NetCore.ConsoleApps.RfDirsPairNames.ProgramComponent.WorkArgs()
                         {
-                            Args = new RfDirsPairNames.ProgramArgs
+                            Args = new NetCore.ConsoleApps.RfDirsPairNames.ProgramArgs
                             {
                                 ShortNameDirPath = hcyTuple.ShortDirPath,
                                 MdFileName = Path.GetFileName(mdFile)

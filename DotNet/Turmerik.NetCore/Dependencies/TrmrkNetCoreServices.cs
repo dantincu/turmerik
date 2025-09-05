@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Utility;
-using Turmerik.NetCore.ConsoleApps.ExecuteCustomCommand.Executors;
 using Turmerik.NetCore.LocalDeviceEnv;
 using Turmerik.NetCore.Md;
 using Turmerik.NetCore.Reflection.AssemblyLoading;
@@ -98,14 +97,6 @@ namespace Turmerik.NetCore.Dependencies
             services.AddSingleton<DotNetTypesToTypescript.IProgramArgsRetriever, DotNetTypesToTypescript.ProgramArgsRetriever>();
             services.AddSingleton<DotNetTypesToTypescript.IProgramArgsNormalizer, DotNetTypesToTypescript.ProgramArgsNormalizer>();
             services.AddSingleton<DotNetTypesToTypescript.IProgramComponent, DotNetTypesToTypescript.ProgramComponent>();
-
-            return services;
-        }
-
-        public static IServiceCollection AddCustomCommandExecutors(
-            this IServiceCollection services)
-        {
-            services.AddScoped<QuitCommandExecutor>();
 
             return services;
         }

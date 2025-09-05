@@ -1,0 +1,6 @@
+@Turmerik.HtmlToPdf.WebApi_HostAddress = http://localhost:5001
+
+GET {{Turmerik.HtmlToPdf.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

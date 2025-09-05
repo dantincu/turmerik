@@ -18,13 +18,11 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Markdig;
 using Turmerik.DirsPair;
-using Turmerik.Puppeteer.Helpers;
-using PuppeteerSharp;
 using Turmerik.Md;
 using Turmerik.Core.TextParsing.Md;
 using System.Threading;
 
-namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
+namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
 {
     public interface IProgramComponent
     {
@@ -119,25 +117,10 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             {
                 await NormalizeArgsAsync(args);
 
-                if (args.HasNodeRequiringPdf)
+                foreach (var nodeArgs in args.RootNodes)
                 {
-                    await PuppeteerH.WithNewPageAsync(
-                        async (page, browser) =>
-                        {
-                            foreach (var nodeArgs in args.RootNodes)
-                            {
-                                await RunAsync(
-                                    args.WorkDir, nodeArgs, page, browser);
-                            }
-                        });
-                }
-                else
-                {
-                    foreach (var nodeArgs in args.RootNodes)
-                    {
-                        await RunAsync(
-                            args.WorkDir, nodeArgs);
-                    }
+                    await RunAsync(
+                        args.WorkDir, nodeArgs);
                 }
             }
         }
@@ -563,7 +546,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 SrcObject = configSection,
                 OnPropPrinted = () =>
                 {
-                    if ((++tokensCount) % 10 == 0)
+                    if (++tokensCount % 10 == 0)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGreen;
 
@@ -576,7 +559,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             });
 
             Console.WriteLine();
-
             Console.ResetColor();
         }
 
@@ -584,36 +566,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             string workDir,
             ProgramArgs.Node nodeArgs)
         {
-            (var shortNameDir,
-                var mdFilePath,
-                var mdFile) = await RunAsyncCore(
-                workDir,
-                nodeArgs);
-
-            string childNodesWorkDir = Path.Combine(
-                workDir, shortNameDir.Name);
-
-            foreach (var childNodeArgs in nodeArgs.ChildNodes)
-            {
-                await RunAsync(
-                    childNodesWorkDir,
-                    childNodeArgs);
-            }
-        }
-
-        private async Task RunAsync(
-            string workDir,
-            ProgramArgs.Node nodeArgs,
-            IPage page,
-            IBrowser browser)
-        {
             (var shortNameDir, 
                var mdFilePath,
-               var mdFile) = await RunAsyncCore(
+               var mdFile) = await RunNodeArgsAsync(
                 workDir,
-                nodeArgs,
-                page,
-                browser);
+                nodeArgs);
 
             if (mdFile != null)
             {
@@ -625,8 +582,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                             MdFile = mdFile,
                             MdFilePath = mdFilePath,
                             ShortNameDir = shortNameDir,
-                            Browser = browser,
-                            Page = page
                         });
 
                     await pdfCreator.TryCreatePdf();
@@ -640,21 +595,17 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             {
                 await RunAsync(
                     childNodesWorkDir,
-                    childNodeArgs,
-                    page,
-                    browser);
+                    childNodeArgs);
             }
         }
 
         private bool ShouldCreatePdfFile(
-            ProgramArgs.Node nodeArgs) => (nodeArgs.CreatePdfFile || (
-                config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation));
+            ProgramArgs.Node nodeArgs) => nodeArgs.CreatePdfFile || 
+                config.CreatePdfFile == true && !nodeArgs.SkipPdfFileCreation;
 
-        private async Task<Tuple<DriveItemX, string?, DriveItemX?>> RunAsyncCore(
+        private async Task<Tuple<DriveItemX, string?, DriveItemX?>> RunNodeArgsAsync(
             string workDir,
-            ProgramArgs.Node nodeArgs,
-            IPage? page = null,
-            IBrowser? browser = null)
+            ProgramArgs.Node nodeArgs)
         {
             if (nodeArgs.OpenMdFileAndAddLinks)
             {
@@ -699,72 +650,65 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
                 {
                     ProcessH.OpenWithDefaultProgramIfNotNull(mdFilePath);
 
-                    if (page != null && browser != null)
+                    if (opts.OpenMdFileAndWatch)
                     {
-                        if (opts.OpenMdFileAndWatch)
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"Listening for changes to file {mdFilePath}; press any key to stop listening");
+                        Console.ResetColor();
+
+                        using (FileSystemWatcher watcher = new FileSystemWatcher())
                         {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"Listening for changes to file {mdFilePath}; press any key to stop listening");
-                            Console.ResetColor();
+                            watcher.Path = Path.GetDirectoryName(mdFilePath);
+                            watcher.Filter = Path.GetFileName(mdFilePath);
+                            watcher.NotifyFilter = NotifyFilters.LastWrite;
 
-                            using (FileSystemWatcher watcher = new FileSystemWatcher())
-                            {
-                                watcher.Path = Path.GetDirectoryName(mdFilePath);
-                                watcher.Filter = Path.GetFileName(mdFilePath);
-                                watcher.NotifyFilter = NotifyFilters.LastWrite;
-
-                                var pdfCreator = pdfCreatorFactory.Creator(
-                                    new()
-                                    {
-                                        MdFile = mdFile,
-                                        MdFilePath = mdFilePath,
-                                        ShortNameDir = shortNameDir,
-                                        Browser = browser,
-                                        Page = page
-                                    });
-
-                                watcher.Changed += (sender, evt) =>
+                            var pdfCreator = pdfCreatorFactory.Creator(
+                                new()
                                 {
-                                    Console.ForegroundColor = ConsoleColor.Blue;
+                                    MdFile = mdFile,
+                                    MdFilePath = mdFilePath,
+                                    ShortNameDir = shortNameDir,
+                                });
 
-                                    Console.WriteLine($"Change detected {timeStampHelper.TmStmp(
-                                        null, true, TimeStamp.Ticks, false, false, true)}");
-
-                                    Console.ResetColor();
-                                    pdfCreator.TryCreatePdfIfNotBusy();
-                                };
-
-                                watcher.EnableRaisingEvents = true;
-
-                                Console.ReadKey();
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine($"Stopped listening for changes to file {mdFilePath}");
-                                Console.ResetColor();
-                            }
-                        }
-                        else if (opts.OpenMdFileInteractively)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"Press any key to update the pdf file or the ENTER key to move on");
-                            Console.ResetColor();
-
-                            var key = Console.ReadKey();
-
-                            while (key.Key != ConsoleKey.Enter)
+                            watcher.Changed += (sender, evt) =>
                             {
-                                var pdfCreator = pdfCreatorFactory.Creator(
-                                    new()
-                                    {
-                                        MdFile = mdFile,
-                                        MdFilePath = mdFilePath,
-                                        ShortNameDir = shortNameDir,
-                                        Browser = browser,
-                                        Page = page
-                                    });
+                                Console.ForegroundColor = ConsoleColor.Blue;
 
-                                await pdfCreator.TryCreatePdf();
-                                key = Console.ReadKey();
-                            }
+                                Console.WriteLine($"Change detected {timeStampHelper.TmStmp(
+                                    null, true, TimeStamp.Ticks, false, false, true)}");
+
+                                Console.ResetColor();
+                                pdfCreator.TryCreatePdfIfNotBusy();
+                            };
+
+                            watcher.EnableRaisingEvents = true;
+
+                            Console.ReadKey();
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"Stopped listening for changes to file {mdFilePath}");
+                            Console.ResetColor();
+                        }
+                    }
+                    else if (opts.OpenMdFileInteractively)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"Press any key to update the pdf file or the ENTER key to move on");
+                        Console.ResetColor();
+
+                        var key = Console.ReadKey();
+
+                        while (key.Key != ConsoleKey.Enter)
+                        {
+                            var pdfCreator = pdfCreatorFactory.Creator(
+                                new()
+                                {
+                                    MdFile = mdFile,
+                                    MdFilePath = mdFilePath,
+                                    ShortNameDir = shortNameDir,
+                                });
+
+                            await pdfCreator.TryCreatePdf();
+                            key = Console.ReadKey();
                         }
                     }
                 }
@@ -1249,8 +1193,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
             public DriveItemX? ShortNameDir { get; init; }
             public string MdFilePath { get; init; }
             public DriveItemX? MdFile { get; init; }
-            public IPage Page { get; init; }
-            public IBrowser Browser { get; init; }
         }
     }
 }

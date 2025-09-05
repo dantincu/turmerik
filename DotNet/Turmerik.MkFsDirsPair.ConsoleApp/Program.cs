@@ -3,8 +3,13 @@ using Turmerik.Core.Dependencies;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
+using Turmerik.NetCore.ConsoleApps.MkFsDirPairs;
 using Turmerik.NetCore.Dependencies;
-using Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs;
+
+Console.ForegroundColor = ConsoleColor.DarkYellow;
+Console.WriteLine("Turmerik.MkFsDirsPair.ConsoleApp");
+Console.ResetColor();
+Console.WriteLine();
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());

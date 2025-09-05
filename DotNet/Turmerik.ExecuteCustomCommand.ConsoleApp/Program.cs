@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Turmerik.Core.Dependencies;
 using Turmerik.Core.Helpers;
+using Turmerik.ExecuteCustomCommand.Dependencies;
 using Turmerik.NetCore.ConsoleApps.ExecuteCustomCommand;
 using Turmerik.NetCore.Dependencies;
 

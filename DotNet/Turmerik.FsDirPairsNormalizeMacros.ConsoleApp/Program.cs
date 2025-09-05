@@ -4,8 +4,8 @@ using Turmerik.Core.DriveExplorer;
 using Turmerik.Core.Helpers;
 using Turmerik.Dependencies;
 using Turmerik.FsDirPairsNormalizeMacros.ConsoleApp;
-using RfDirsPairNames = Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames;
-using MdToPdf = Turmerik.Puppeteer.ConsoleApps.MdToPdf;
+using RfDirsPairNames = Turmerik.NetCore.ConsoleApps.RfDirsPairNames;
+using MdToPdf = Turmerik.NetCore.ConsoleApps.MdToPdf;
 
 var services = TrmrkCoreServices.RegisterAll(
     new ServiceCollection());

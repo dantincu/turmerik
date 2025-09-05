@@ -1,6 +1,5 @@
 ﻿using Markdig;
 using Markdig.Helpers;
-using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,9 +23,9 @@ using Turmerik.DirsPair;
 using Turmerik.Html;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
-using static Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames.ProgramComponent;
+using static Turmerik.NetCore.ConsoleApps.RfDirsPairNames.ProgramComponent;
 
-namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
+namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
 {
     public interface IProgramComponent
     {
@@ -254,11 +253,11 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                         args.MdFilePath);
 
                     args.ShortNameDirPath = Path.GetDirectoryName(
-                        args.MdFilePath);
+                        args.MdFilePath)!;
                 }
 
                 args.ParentDirPath = Path.GetDirectoryName(
-                    args.ShortNameDirPath);
+                    args.ShortNameDirPath)!;
 
                 args.ShortDirName = Path.GetFileName(
                     args.ShortNameDirPath);
@@ -289,8 +288,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
 
             string? newFullDirNamePart = null;
 
-            bool stopSkipping = args.SkipUntilPath == null || (
-                args.SkipUntilPath == args.ShortNameDirPath);
+            bool stopSkipping = args.SkipUntilPath == null || 
+                args.SkipUntilPath == args.ShortNameDirPath;
 
             if (args.SkipShortNameDirPath != true && stopSkipping)
             {
@@ -430,7 +429,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
                 }
             }
 
-            return Tuple.Create(stopSkipping, newFullDirNamePart);
+            return Tuple.Create(stopSkipping, newFullDirNamePart)!;
         }
 
         private void PrintHelpMessage(

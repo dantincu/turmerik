@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Turmerik.Core.LocalDeviceEnv;
 
-namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
+namespace Turmerik.NetCore.ConsoleApps.MdToPdf
 {
     public class ProgramArgs
     {

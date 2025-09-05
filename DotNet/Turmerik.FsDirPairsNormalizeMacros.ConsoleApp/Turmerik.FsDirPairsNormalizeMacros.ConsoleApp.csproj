@@ -9,11 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Turmerik.Puppeteer\Turmerik.Puppeteer.csproj" />
+    <ProjectReference Include="..\Turmerik.NetCore\Turmerik.NetCore.csproj" />
   </ItemGroup>
 
 </Project>

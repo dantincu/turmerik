@@ -12,6 +12,7 @@ namespace Turmerik.Core.DriveExplorer
         public bool? ThrowIfAnyItemAlreadyExists { get; set; }
         public string TrmrkGuidInputName { get; set; }
         public bool? CreatePdfFile { get; set; }
+        public string HtmlToPdfApiUri { get; set; }
 
         public ArgOptionsT ArgOpts { get; set; }
         public DirNamesT DirNames { get; set; }

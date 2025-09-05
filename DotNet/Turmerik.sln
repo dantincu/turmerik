@@ -108,6 +108,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ScrapeWebPages.Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ExecuteCustomCommand.ConsoleApp", "Turmerik.ExecuteCustomCommand.ConsoleApp\Turmerik.ExecuteCustomCommand.ConsoleApp.csproj", "{F063499C-733A-4C8E-A0D8-CB66C8CAB3C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.HtmlToPdf.WebApi", "Turmerik.HtmlToPdf.WebApi\Turmerik.HtmlToPdf.WebApi.csproj", "{1E4E45AA-EFA3-4962-93A1-03ECDACE070C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turmerik.ExecuteCustomCommand", "Turmerik.ExecuteCustomCommand\Turmerik.ExecuteCustomCommand.csproj", "{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -282,6 +286,14 @@ Global
 		{F063499C-733A-4C8E-A0D8-CB66C8CAB3C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F063499C-733A-4C8E-A0D8-CB66C8CAB3C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F063499C-733A-4C8E-A0D8-CB66C8CAB3C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E4E45AA-EFA3-4962-93A1-03ECDACE070C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E4E45AA-EFA3-4962-93A1-03ECDACE070C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E4E45AA-EFA3-4962-93A1-03ECDACE070C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E4E45AA-EFA3-4962-93A1-03ECDACE070C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -333,6 +345,8 @@ Global
 		{C2258D58-F1BD-4FCA-9476-DE3F297F7E2C} = {D9246AE3-53C4-4F02-B24F-6E02B5557AA9}
 		{B42416B0-0E59-AEFD-F022-40729ECC0FFD} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
 		{F063499C-733A-4C8E-A0D8-CB66C8CAB3C8} = {DE596E3B-C512-4C68-A18F-1968EC893DF6}
+		{1E4E45AA-EFA3-4962-93A1-03ECDACE070C} = {52B63410-2581-4146-9484-89D300FAE7B5}
+		{1A9C8889-A7FC-4813-88D6-4F49CD4BF1BB} = {A5B8430F-B64C-4AE7-B315-72686C296100}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37A6EE9C-CD4F-42D7-ACF7-2E49D78C5CCD}

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Turmerik.Core.LocalDeviceEnv;
 using Turmerik.DirsPair;
 
-namespace Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames
+namespace Turmerik.NetCore.ConsoleApps.RfDirsPairNames
 {
     public class ProgramArgs
     {

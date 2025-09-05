@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Turmerik.Core.DriveExplorer;
 using Turmerik.DirsPair;
 
-namespace Turmerik.Puppeteer.ConsoleApps.MkFsDirPairs
+namespace Turmerik.NetCore.ConsoleApps.MkFsDirPairs
 {
     public class ProgramArgs
     {

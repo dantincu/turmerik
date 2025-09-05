@@ -5,6 +5,7 @@
   "FileNameMaxLength": 100,
   "ThrowIfAnyItemAlreadyExists": true,
   "CreatePdfFile": null,
+  "HtmlToPdfApiUri": "https://localhost:7001/HtmlToPdf/Generate",
   "ArgOpts": {
     "PrintHelpMessage": "h",
     "PrintConfigSection": "cfg",

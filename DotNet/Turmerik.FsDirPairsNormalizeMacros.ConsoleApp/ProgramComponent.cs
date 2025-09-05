@@ -15,7 +15,7 @@ using Turmerik.Core.Utility;
 using Turmerik.DirsPair;
 using Turmerik.Md;
 using Turmerik.Notes.Core;
-using RfDirsPairNames = Turmerik.Puppeteer.ConsoleApps.RfDirsPairNames;
+using RfDirsPairNames = Turmerik.NetCore.ConsoleApps.RfDirsPairNames;
 
 namespace Turmerik.FsDirPairsNormalizeMacros.ConsoleApp
 {

@@ -1,5 +1,4 @@
 ﻿using Markdig;
-using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,10 +15,10 @@ using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
 using Turmerik.Core.TextSerialization;
 using Turmerik.Core.Utility;
+using Turmerik.Html;
 using Turmerik.Md;
-using Turmerik.Puppeteer.Helpers;
 
-namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
+namespace Turmerik.NetCore.ConsoleApps.MdToPdf
 {
     public interface IProgramComponent
     {
@@ -41,6 +40,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
         private readonly ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever;
         private readonly ITextMacrosReplacer textMacrosReplacer;
         private readonly INoteMdParser nmdParser;
+        private readonly IHtmlToPdfConverter htmlToPdfConverter;
         private readonly DirsPairConfig config;
         private readonly IDirsPairConfigLoader dirsPairConfigLoader;
 
@@ -51,6 +51,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
             ILocalDevicePathMacrosRetriever localDevicePathMacrosRetriever,
             ITextMacrosReplacer textMacrosReplacer,
             INoteMdParser nmdParser,
+            IHtmlToPdfConverter htmlToPdfConverter,
             IDirsPairConfigLoader dirsPairConfigLoader)
         {
             this.jsonConversion = jsonConversion ?? throw new ArgumentNullException(
@@ -70,6 +71,9 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
 
             this.nmdParser = nmdParser ?? throw new ArgumentNullException(
                 nameof(nmdParser));
+
+            this.htmlToPdfConverter = htmlToPdfConverter ?? throw new ArgumentNullException(
+                nameof(htmlToPdfConverter));
 
             this.dirsPairConfigLoader = dirsPairConfigLoader ?? throw new ArgumentNullException(
                 nameof(dirsPairConfigLoader));
@@ -110,12 +114,8 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
 
             var startTime = DateTime.UtcNow;
 
-            await PuppeteerH.WithNewPageAsync(
-                (page, browser) => RunCoreAsync(
-                    pgArgs,
-                    page,
-                    browser,
-                    MarkdigH.GetMarkdownPipeline()));
+            await RunCoreAsync(
+                pgArgs, MarkdigH.GetMarkdownPipeline());
 
             var endTime = DateTime.UtcNow;
             var elapsed = endTime - startTime;
@@ -166,8 +166,6 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
 
         private async Task RunCoreAsync(
             ProgramArgs pgArgs,
-            IPage page,
-            IBrowser browser,
             MarkdownPipeline markdownPipeline)
         {
             var filesArr = Directory.GetFiles(
@@ -223,7 +221,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
                         htmlFilePath = htmlFilePath.Replace("%", " ");
                         File.WriteAllText(htmlFilePath, htmlStr);
 
-                        await PuppeteerH.HtmlToPdfFile(
+                        await htmlToPdfConverter.ConvertHtmlFileAsync(
                             htmlFilePath,
                             pdfFilePath);
 
@@ -270,7 +268,7 @@ namespace Turmerik.Puppeteer.ConsoleApps.MdToPdf
 
                 foreach (var subFolderPgArgs in subFolderPgArgsArr)
                 {
-                    await RunCoreAsync(subFolderPgArgs, page, browser, markdownPipeline);
+                    await RunCoreAsync(subFolderPgArgs, markdownPipeline);
                 }
             }
         }
