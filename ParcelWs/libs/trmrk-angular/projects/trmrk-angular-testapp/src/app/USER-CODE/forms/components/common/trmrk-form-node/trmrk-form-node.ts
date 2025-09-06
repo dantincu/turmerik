@@ -79,6 +79,8 @@ import {
 import { TrmrkSpinner } from '../trmrk-spinner/trmrk-spinner';
 import { TrmrkErrorStateMatcher } from '../../../../../services/trmrk-error-state-matcher';
 
+import { TrmrkFormTextNode } from '../trmrk-form-text-node/trmrk-form-text-node';
+
 const enums = {
   TrmrkFormNodeType,
   TrmrkFormNodeCategory,
@@ -99,6 +101,7 @@ const enums = {
     MatChipsModule,
     TrmrkDynamicAttributesDirective,
     TrmrkSpinner,
+    TrmrkFormTextNode,
   ],
   templateUrl: './trmrk-form-node.html',
   styleUrl: './trmrk-form-node.scss',

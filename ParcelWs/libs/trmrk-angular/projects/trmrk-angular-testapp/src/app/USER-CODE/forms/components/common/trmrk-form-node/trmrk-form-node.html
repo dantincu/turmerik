@@ -3,11 +3,11 @@
   @if (formNode!.category === enums.TrmrkFormNodeCategory.Text) { @for
   (childTextNode of formNode!.text ?? []; let idx = $index; track
   childTextNode.id) {
-  <trmrk-form-node
+  <trmrk-form-text-node
     [trmrkNode]="childTextNode"
     [trmrkPath]="childPath(idx)"
     [trmrkTemplatesMap]="trmrkTemplatesMap"
-  ></trmrk-form-node>
+  ></trmrk-form-text-node>
   } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Heading) {
   <h3 [trmrkDynamicAttributes]="controlAttrs" [ngClass]="controlCssClass">
     {{ formNode!.label }}
@@ -172,11 +172,11 @@
   >
     {{formNode!.label ?? ""}} @for (childTextNode of formNode!.text ?? []; let
     idx = $index; track childTextNode.id) {
-    <trmrk-form-node
+    <trmrk-form-text-node
       [trmrkNode]="childTextNode"
       [trmrkPath]="childPath(idx)"
       [trmrkTemplatesMap]="trmrkTemplatesMap"
-    ></trmrk-form-node>
+    ></trmrk-form-text-node>
     }
   </button>
   } @if (formNode!.category === enums.TrmrkFormNodeCategory.IconButton) { } @if
