@@ -1,19 +1,15 @@
 @if ((trmrkNode.html ?? null) === null) {
-<div [ngClass]="cssClass" [trmrkDynamicAttributes]="trmrkNode.attrs ?? {}">
-  @if (trmrkNode.type === enums.TrmrkFormNodeType.Default) { @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.Text) { @for
+<div [ngClass]="cssClass" [trmrkDynamicAttributes]="nodeAttrs">
+  @if (formNode!.category === enums.TrmrkFormNodeCategory.Text) { @for
   (childTextNode of formNode!.text ?? []; let idx = $index; track
-  childTextNode._id) {
+  childTextNode.id) {
   <trmrk-form-node
     [trmrkNode]="childTextNode"
     [trmrkPath]="childPath(idx)"
     [trmrkTemplatesMap]="trmrkTemplatesMap"
   ></trmrk-form-node>
   } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Heading) {
-  <h3
-    [trmrkDynamicAttributes]="controlAttrs"
-    [ngClass]="trmrkNode!.controlClass ?? ''"
-  >
+  <h3 [trmrkDynamicAttributes]="controlAttrs" [ngClass]="controlCssClass">
     {{ formNode!.label }}
   </h3>
   } @if (isInputControl) {
@@ -30,73 +26,160 @@
       >{{formNode!.label}} @if (formNode!.isRequired) {
       <sup class="trmrk-required-text">*</sup> }</mat-label
     >} @if (formNode!.category === enums.TrmrkFormNodeCategory.Input) { @if
-    ((formNode!.linesCount ?? null) !== null) {
+    (isMultiple) {
     <textarea
       matInput
       [trmrkDynamicAttributes]="controlAttrs"
       [value]="formNode!.value ?? ''"
-      [ngClass]="trmrkNode!.controlClass ?? ''"
+      [ngClass]="controlCssClass"
       [formControl]="formControl!"
       [errorStateMatcher]="formControlErrorMatcher!"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
     ></textarea>
-    } @if ((formNode!.linesCount ?? null) === null) {
+    } @if (!isMultiple) {
     <input
       matInput
       [type]="formNode!.inputType ?? 'text'"
       [value]="formNode!.value ?? ''"
       [trmrkDynamicAttributes]="controlAttrs"
-      [ngClass]="trmrkNode!.controlClass ?? ''"
+      [ngClass]="controlCssClass"
       [formControl]="formControl!"
       [errorStateMatcher]="formControlErrorMatcher!"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
     />
     } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Combobox) { @if
-    ((formNode!.label ?? null) === null) { @if
-    (trmrkNode.appearance.useNativeControl) {
+    (trmrkNode.appearance?.useNativeControl) {
     <select
       matNativeControl
       [trmrkDynamicAttributes]="controlAttrs"
-      [ngClass]="[trmrkNode!.controlClass ?? '', 'trmrk-select']"
+      [ngClass]="[controlCssClass, 'trmrk-select']"
       [formControl]="formControl!"
       [errorStateMatcher]="formControlErrorMatcher!"
+      (change)="inputChange($event)"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
     >
-      @for (item of formNode!.items!.value!; track item.key) {
+      @for (option of formNode!.items!.value ?? []; track option.key) {
       <option
-        [value]="item.key ?? null"
-        [selected]="(item.key ?? null) === (formNode!.value ?? null)"
-        [ngClass]="((item.key) ?? null) === null ? 'trmrk-has-no-value' : ''"
+        [value]="option.key ?? null"
+        [selected]="option.isSelected"
+        [ngClass]="((option.key) ?? null) === null ? 'trmrk-has-no-value' : ''"
       >
-        {{item.text}}
+        {{option.text}}
       </option>
       }
     </select>
-    } @if (!trmrkNode.appearance.useNativeControl) {
+    } @if (!trmrkNode.appearance?.useNativeControl) { @if ((formNode!.text ??
+    null) !== null) {
+    <mat-chip-grid #chipList>
+      @for (selectedOption of comboboxSelectedOptions ?? []; track
+      selectedOption.key) {
+      <mat-chip
+        [removable]="isMultiple"
+        (click)="comboboxRemoveOption(selectedOption)"
+      >
+        {{ selectedOption.text }} @if (isMultiple) {
+        <mat-icon matChipRemove>cancel</mat-icon> }
+      </mat-chip>
+      }
+      <input
+        type="text"
+        #autocompleteInput
+        [formControl]="formControl!"
+        [matAutocomplete]="autocomplete"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="comboboxOptionsSeparatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        matAutocompleteTrigger
+        #autoTrigger="matAutocompleteTrigger"
+        (focus)="inputFocus($event)"
+        (blur)="inputFocus($event)"
+        (focusin)="inputFocusIn($event)"
+        (focusout)="inputFocusOut($event)"
+        (change)="inputChange($event)"
+        (keyup)="inputKeyUp($event)"
+        (matChipInputTokenEnd)="comboboxAddOptionFromInput($event)"
+      />
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn trmrk-is-last"
+        (click)="comboboxSelectAutocompleteDoneClick()"
+      >
+        <mat-icon class="trmrk-icon">done_outline</mat-icon>
+      </button>
+      <mat-autocomplete
+        [ngClass]="[`trmrk-autocomplete-${trmrkNode.id}`]"
+        #autocomplete="matAutocomplete"
+        [displayWith]="comboboxDisplayFn"
+      >
+        @for (option of formNode!.items!.value ?? []; track option.key) {
+        <mat-option
+          [ngClass]="[option.isSelected ? 'trmrk-is-selected' : '']"
+          [value]="option"
+          (onSelectionChange)="comboboxSelectOption($event, option)"
+        >
+          {{ option.text }}
+        </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-chip-grid>
+    } @if ((formNode!.text ?? null) === null) {
     <mat-select
       [value]="formNode!.value ?? null"
       [trmrkDynamicAttributes]="controlAttrs"
-      [ngClass]="trmrkNode!.controlClass ?? ''"
+      [ngClass]="controlCssClass"
       [formControl]="formControl!"
       [errorStateMatcher]="formControlErrorMatcher!"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
     >
-      @for (item of formNode!.items!.value!; track item.key) {
+      @for (option of formNode!.items!.value ?? []; track option.key) {
       <mat-option
-        [value]="item.key ?? null"
-        [ngClass]="((item.key) ?? null) === null ? 'trmrk-has-no-value' : ''"
-        >{{item.text}}</mat-option
+        [value]="option.key ?? null"
+        [ngClass]="((option.key) ?? null) === null ? 'trmrk-has-no-value' : ''"
+        (onSelectionChange)="comboboxSelectOption($event, option)"
+        >{{option.text}}</mat-option
       >
-      }
-    </mat-select>
-    } } @if ((formNode!.label ?? null) !== null) { } } @if (formNode!.category
-    === enums.TrmrkFormNodeCategory.Checkbox) { } @if (formNode!.category ===
-    enums.TrmrkFormNodeCategory.DatePicker) { } @if (formNode!.category ===
-    enums.TrmrkFormNodeCategory.DateTimePicker) { } @if (formControl!.invalid &&
-    formControl!.touched) {
+      } </mat-select
+    >} } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Checkbox) { }
+    @if (formNode!.category === enums.TrmrkFormNodeCategory.DatePicker) { } @if
+    (formNode!.category === enums.TrmrkFormNodeCategory.DateTimePicker) { } @if
+    (formControl!.invalid && formControl!.touched) {
     <mat-error> {{trmrkNode.errorMsg}} </mat-error>
     }</mat-form-field
   >
   } @if (formNode!.category === enums.TrmrkFormNodeCategory.Radio) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.RadioGroup) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.Button) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.IconButton) { } @if
+  (formNode!.category === enums.TrmrkFormNodeCategory.Button) {
+  <button
+    [trmrkDynamicAttributes]="controlAttrs"
+    [ngClass]="controlCssClass"
+    (click)="click($event)"
+  >
+    {{formNode!.label ?? ""}} @for (childTextNode of formNode!.text ?? []; let
+    idx = $index; track childTextNode.id) {
+    <trmrk-form-node
+      [trmrkNode]="childTextNode"
+      [trmrkPath]="childPath(idx)"
+      [trmrkTemplatesMap]="trmrkTemplatesMap"
+    ></trmrk-form-node>
+    }
+  </button>
+  } @if (formNode!.category === enums.TrmrkFormNodeCategory.IconButton) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.HorizStrip) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.ThinHorizStrip) { } @if
   (formNode!.category === enums.TrmrkFormNodeCategory.Group) { } @if
@@ -107,49 +190,7 @@
     <mat-icon class="trmrk-icon">close</mat-icon>
   </button>
   } @if (formNode!.hasSpinner) {
-  <trmrk-spinner></trmrk-spinner> } } @if (trmrkNode.type ===
-  enums.TrmrkFormNodeType.Text) { @if ((textNode!.text ?? null) !== null) { {{
-  textNode!.text }} } @if ((textNode!.iconName ?? null) !== null) {
-  <mat-icon [ngClass]="trmrkNode!.controlClass ?? ''"
-    >{{textNode!.iconName}}</mat-icon
-  >
-  } } @if (trmrkNode.type === enums.TrmrkFormNodeType.Row) { @if
-  ((formRow!.label ?? null) !== null) {
-  <trmrk-horiz-strip
-    [trmrkLeadingTemplate]="headingToggleBtn"
-    [trmrkUseContentInsteadOfTextRow]="true"
-  >
-    <h3
-      [ngClass]="['trmrk-form-section-heading']"
-      [trmrkDynamicAttributes]="controlAttrs"
-      [ngClass]="trmrkNode!.controlClass ?? ''"
-    >
-      {{formRow!.label}}
-    </h3></trmrk-horiz-strip
-  >
-  <ng-template #headingToggleBtn>
-    <button mat-icon-button class="trmrk-icon-btn" (click)="toggleSection()">
-      <mat-icon class="trmrk-icon"
-        >{{ (formRow!.isExpanded ?? true) ? 'keyboard_arrow_up' :
-        'keyboard_arrow_down' }}</mat-icon
-      >
-    </button></ng-template
-  >
-  } @if (formRow!.isExpanded ?? true) { @if (formRow!.nodes) { @for (node of
-  formRow!.nodes; let idx = $index; track node._id;) {
-  <trmrk-form-node
-    [trmrkNode]="node"
-    [trmrkPath]="childPath(idx)"
-    [trmrkTemplatesMap]="trmrkTemplatesMap"
-  ></trmrk-form-node>
-  } } @if (formRow!.rows) { @for (row of formRow!.rows; let idx = $index; track
-  row._id;) {
-  <trmrk-form-node
-    [trmrkNode]="row"
-    [trmrkPath]="childPath(idx)"
-    [trmrkTemplatesMap]="trmrkTemplatesMap"
-  ></trmrk-form-node>
-  } } } }
+  <trmrk-spinner></trmrk-spinner> }
 </div>
 } @if ((trmrkNode.html ?? null) !== null) { @if (hasRawHtml) {
 <div

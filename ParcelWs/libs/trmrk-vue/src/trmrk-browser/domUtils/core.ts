@@ -444,14 +444,14 @@ export const customEvent = <T>(
 
 export const getDOMExceptionErrorMsg = (
   error: DOMException | null,
-  defaultErrorMsg: string
+  defaultErrorMsg: string | null = null
 ): string => {
   let errorMsg: string;
 
   if (error) {
     errorMsg = `${error.name} - ${error.message}`;
   } else {
-    errorMsg = 'Unknown error occurred while opening IndexedDB.';
+    errorMsg = defaultErrorMsg ?? 'An unknown error occurred.';
   }
 
   return errorMsg;

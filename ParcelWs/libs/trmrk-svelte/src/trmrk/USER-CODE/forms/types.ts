@@ -96,6 +96,7 @@ export interface TrmrkNodeCoreBase<THtml = NodeHtml> {
   cssClass?: string | NullOrUndef;
   controlClass?: string | NullOrUndef;
   attrs?: TrmrkDOMNodeAttrs | NullOrUndef;
+  controlAttrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   html?: THtml | NullOrUndef;
   appearance?: AnyOrUnknown;
   errorMsg?: string | NullOrUndef;
@@ -103,7 +104,7 @@ export interface TrmrkNodeCoreBase<THtml = NodeHtml> {
 
 export interface TrmrkNodeCore<THtml = NodeHtml>
   extends TrmrkNodeCoreBase<THtml> {
-  _id: number;
+  id: string;
   type: TrmrkFormNodeType;
 }
 
@@ -124,21 +125,41 @@ export interface TrmrkComboBoxItem {
 
 export type TrmrkInputValueType = string;
 
-export type TrmrkFormNodeChangedEventArg =
-  | TrmrkInputValueType
+export type TrmrkComboboxChangedEventArg =
   | TrmrkComboBoxItem
   | TrmrkComboBoxItem[];
 
-export type TrmrkOnChangeEventHandler = (
-  newValue: TrmrkFormNodeChangedEventArg,
+export type TrmrkEventHandler<TEvent = Event> = (event: TEvent) => VoidOrAny;
+
+export type TrmrkChangeEventHandler = (
+  event: Event,
+  newValue: string
+) => VoidOrAny;
+
+export type TrmrkComboboxChangeEventHandler = (
+  event: Event,
+  newValue: TrmrkComboboxChangedEventArg,
   searchString?: string | NullOrUndef
 ) => VoidOrAny;
 
-export type TrmrkOnClickEventHandler = () => VoidOrAny;
+export type TrmrkClickEventHandler = TrmrkEventHandler<MouseEvent>;
+export type TrmrkKeyUpEventHandler = TrmrkEventHandler<KeyboardEvent>;
+
+export interface TrmrkItemsValueFactoryArg {
+  searchString?: string | NullOrUndef;
+  isInit?: boolean | NullOrUndef;
+}
 
 export interface TrmrkFormNodeEvents {
-  onChange?: TrmrkOnChangeEventHandler | NullOrUndef;
-  onClick?: TrmrkOnClickEventHandler | NullOrUndef;
+  change?: TrmrkChangeEventHandler | NullOrUndef;
+  click?: TrmrkClickEventHandler | NullOrUndef;
+  keyUp?: TrmrkKeyUpEventHandler | NullOrUndef;
+  focus?: TrmrkEventHandler | NullOrUndef;
+  focusIn?: TrmrkEventHandler | NullOrUndef;
+  blur?: TrmrkEventHandler | NullOrUndef;
+  focusOut?: TrmrkEventHandler | NullOrUndef;
+  anyChange?: TrmrkChangeEventHandler | NullOrUndef;
+  comboboxChange?: TrmrkComboboxChangeEventHandler | NullOrUndef;
 }
 
 export interface TrmrkFormNode<THtml = NodeHtml>
@@ -151,10 +172,15 @@ export interface TrmrkFormNode<THtml = NodeHtml>
   value?: TrmrkInputValueType | NullOrUndef;
   isRequired?: boolean | NullOrUndef;
   inputType?: HtmlInputCategory | NullOrUndef;
-  controlAttrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   linesCount?: number | NullOrUndef;
   buttonType?: TrmrkButtonCategory | NullOrUndef;
-  items?: TrmrkValueFactory<string | null, TrmrkComboBoxItem[]> | NullOrUndef;
+  items?:
+    | TrmrkValueFactory<TrmrkItemsValueFactoryArg, TrmrkComboBoxItem[]>
+    | NullOrUndef;
+  newItemFactory?: ((text: string) => TrmrkComboBoxItem) | NullOrUndef;
+  allowUserToAddItems?: boolean | NullOrUndef;
+  lazyLoadItems?: boolean | NullOrUndef;
+  refreshOnKeyPress?: boolean | NullOrUndef;
   childNodes?: TrmrkFormNode<THtml>[] | NullOrUndef;
   fullWidth?: boolean | NullOrUndef;
   hasSpinner?: boolean | NullOrUndef;

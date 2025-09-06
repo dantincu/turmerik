@@ -2,7 +2,49 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
-import { NodeHtml, NodeHtmlInfo } from '../../../trmrk/USER-CODE/forms/types';
+import {
+  NodeHtml,
+  NodeHtmlInfo,
+  TrmrkNodeCore,
+  TrmrkFormNodeCategory,
+  TrmrkFormRowCategory,
+  TrmrkTextLevel,
+  TrmrkTextStyle,
+} from '../../../trmrk/USER-CODE/forms/types';
+
+export const formNodeCategoriesMap: [TrmrkFormNodeCategory, string[]][] = [
+  [TrmrkFormNodeCategory.Text, ['trmrk-form-node-text']],
+  [TrmrkFormNodeCategory.Heading, ['trmrk-form-node-heading']],
+  [TrmrkFormNodeCategory.Input, ['trmrk-form-node-input']],
+  [TrmrkFormNodeCategory.Combobox, ['trmrk-form-node-combobox']],
+  [TrmrkFormNodeCategory.Button, ['trmrk-form-node-button']],
+  [TrmrkFormNodeCategory.HorizStrip, ['trmrk-form-node-horiz-strip']],
+  [TrmrkFormNodeCategory.ThinHorizStrip, ['trmrk-form-node-thin-horiz-strip']],
+  [TrmrkFormNodeCategory.Group, ['trmrk-form-node-group']],
+  [TrmrkFormNodeCategory.Loading, ['trmrk-form-node-loading']],
+  [TrmrkFormNodeCategory.HorizRule, ['trmrk-form-node-horiz-rule']],
+];
+
+export const formRowCategoriesMap: [TrmrkFormRowCategory, string[]][] = [
+  [TrmrkFormRowCategory.Content, ['trmrk-form-row']],
+  [TrmrkFormRowCategory.Section, ['trmrk-form-section']],
+  [TrmrkFormRowCategory.Blank, ['trmrk-form-row', 'trmrk-form-row-blank']],
+];
+
+export const textLevelsMap: [TrmrkTextLevel, string[]][] = [
+  [TrmrkTextLevel.Default, ['trmrk-text-level-default']],
+  [TrmrkTextLevel.Info, ['trmrk-text-level-info']],
+  [TrmrkTextLevel.Warning, ['trmrk-text-level-warning']],
+  [TrmrkTextLevel.Error, ['trmrk-text-level-error']],
+];
+
+export const textStylesMap: [TrmrkTextStyle, string][] = [
+  [TrmrkTextStyle.Code, 'trmrk-text-style-code'],
+  [TrmrkTextStyle.Strike, 'trmrk-text-style-strike'],
+  [TrmrkTextStyle.Underline, 'trmrk-text-style-underline'],
+  [TrmrkTextStyle.Bold, 'trmrk-text-style-bold'],
+  [TrmrkTextStyle.Italic, 'trmrk-text-style-italic'],
+];
 
 export const hasRawHtml = (htmlInfo: NodeHtml | NullOrUndef) =>
   (htmlInfo ?? null) !== null &&
@@ -40,4 +82,30 @@ export const getSafeHtml = (
   }
 
   return safeHtml;
+};
+
+export const getCssClass = <TEnum>(
+  trmrkNode: TrmrkNodeCore,
+  map: [TEnum, string[]][],
+  value: TEnum | NullOrUndef
+) => {
+  let cssClass: string[];
+
+  if ((value ?? null) !== null) {
+    const kvp = map.find((kvp) => kvp[0] === value);
+
+    if (kvp) {
+      cssClass = kvp[1];
+    } else {
+      cssClass = [];
+    }
+  } else {
+    cssClass = [];
+  }
+
+  if ((trmrkNode.cssClass ?? null) !== null) {
+    cssClass.push(trmrkNode.cssClass!);
+  }
+
+  return cssClass;
 };

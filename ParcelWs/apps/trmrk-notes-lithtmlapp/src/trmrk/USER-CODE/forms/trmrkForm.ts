@@ -14,11 +14,13 @@ import {
   TrmrkTextNode,
   HtmlInputCategory,
   TrmrkComboBoxItem,
-  TrmrkOnChangeEventHandler,
-  TrmrkOnClickEventHandler,
+  TrmrkComboboxChangeEventHandler,
+  TrmrkChangeEventHandler,
+  TrmrkClickEventHandler,
   TrmrkFormRowCategory,
   NodeHtml,
   TrmrkFormNodeType,
+  TrmrkItemsValueFactoryArg,
 } from './types';
 
 export interface TrmrkFormHelperExtraArgs<THtml = NodeHtml>
@@ -68,39 +70,51 @@ export const refreshFactoryValues = async <TInput, TOutput>(
   factory.value = output;
 };
 
-export class TrmrkFormHelper<THtml = NodeHtml> {
-  static createAssignIdToAttrCallback =
-    <THtml = NodeHtml>(attrName: string) =>
-    (node: TrmrkNodeCore<THtml>) => {
-      node.attrs ??= {};
-      node.attrs[attrName] = node._id.toString();
-    };
-
+export interface TrmrkFormHelperOpts<THtml = NodeHtml> {
+  idSeed?: number | NullOrUndef;
+  idAttrName?: string | NullOrUndef;
+  nextIdFactory?:
+    | ((node: TrmrkNodeCore<THtml>, nextId: number) => string)
+    | NullOrUndef;
   onNodeCreated?: ((node: TrmrkNodeCore<THtml>) => VoidOrAny) | NullOrUndef;
+}
 
-  _id = 1;
+export class TrmrkFormHelper<THtml = NodeHtml> {
+  defaultOnNodeCreated = (node: TrmrkNodeCore<THtml>) => {
+    node.attrs ??= {};
 
-  constructor(
-    onNodeCreated?:
-      | ((node: TrmrkNodeCore<THtml>) => VoidOrAny)
-      | string
-      | NullOrUndef
-  ) {
-    if ((onNodeCreated ?? null) !== null) {
-      const onNodeCreatedType = typeof onNodeCreated;
-
-      if ('function' === onNodeCreatedType) {
-        this.onNodeCreated = onNodeCreated as (
-          node: TrmrkNodeCore<THtml>
-        ) => VoidOrAny;
-      } else if ('string' === onNodeCreatedType) {
-        const idAttrName = onNodeCreated as string;
-
-        this.onNodeCreated = TrmrkFormHelper.createAssignIdToAttrCallback(
-          isNonEmptyStr(idAttrName, true, false) ? idAttrName : 'data-id'
-        );
-      }
+    if (this.idAttrName) {
+      node.attrs[this.idAttrName] = node.id;
     }
+  };
+
+  id: number;
+  idAttrName: string;
+
+  nextIdFactory: (node: TrmrkNodeCore<THtml>, nextId: number) => string;
+  onNodeCreated: (node: TrmrkNodeCore<THtml>) => VoidOrAny;
+
+  constructor(opts?: TrmrkFormHelperOpts<THtml> | NullOrUndef) {
+    opts ??= {};
+    this.id = opts.idSeed ?? 1;
+    this.idAttrName = opts.idAttrName ?? 'data-trmrk-id';
+
+    if (opts.onNodeCreated) {
+      this.onNodeCreated = (node) => {
+        this.defaultOnNodeCreated(node);
+        (opts.onNodeCreated as (node: TrmrkNodeCore<THtml>) => VoidOrAny)(node);
+      };
+    } else {
+      this.onNodeCreated = this.defaultOnNodeCreated;
+    }
+
+    this.nextIdFactory =
+      opts.nextIdFactory ?? ((_, nextId) => nextId.toString());
+  }
+
+  getNextId(node: TrmrkNodeCore<THtml>): string {
+    const nextId = this.nextIdFactory(node, this.id++);
+    return nextId;
   }
 
   nodeCoreBase<TNode extends TrmrkNodeCore<THtml>>(
@@ -116,9 +130,8 @@ export class TrmrkFormHelper<THtml = NodeHtml> {
 
     if (xArgs) {
       retNode = xArgs as TNode;
-      retNode._id = this._id++;
       retNode.type = type;
-
+      retNode.id = this.getNextId(retNode).toString();
       onNodeCreated = xArgs.onNodeCreated;
     } else {
       retNode = {} as TNode;
@@ -128,9 +141,7 @@ export class TrmrkFormHelper<THtml = NodeHtml> {
       retNode = callback(retNode) ?? retNode;
     }
 
-    if (this.onNodeCreated) {
-      this.onNodeCreated(retNode);
-    }
+    this.onNodeCreated(retNode);
 
     if (onNodeCreated) {
       onNodeCreated(retNode);
@@ -253,41 +264,41 @@ export class TrmrkFormHelper<THtml = NodeHtml> {
     value?: string | NullOrUndef,
     inputType?: HtmlInputCategory | NullOrUndef,
     linesCount?: number | NullOrUndef,
-    onChange?: TrmrkOnChangeEventHandler | NullOrUndef,
+    onChange?: TrmrkChangeEventHandler | NullOrUndef,
     xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
   ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Input, xArgs, (node) => {
       node.linesCount = linesCount;
       node.value = value;
       node.inputType = inputType;
-      node.onChange = onChange;
+      node.change = onChange;
     });
   }
 
   comboBox(
-    items: TrmrkValueFactory<string | null, TrmrkComboBoxItem[]>,
+    items: TrmrkValueFactory<TrmrkItemsValueFactoryArg, TrmrkComboBoxItem[]>,
     value?: string | NullOrUndef,
-    onChange?: TrmrkOnChangeEventHandler | NullOrUndef,
+    onComboboxChange?: TrmrkComboboxChangeEventHandler | NullOrUndef,
     xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
   ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Combobox, xArgs, (node) => {
       node.items = items;
       node.value = value;
       node.linesCount = 0;
-      node.onChange = onChange;
+      node.comboboxChange = onComboboxChange;
     });
   }
 
   button(
     text: TrmrkTextNode<THtml>[],
     buttonType?: TrmrkButtonCategory | NullOrUndef,
-    onClick?: TrmrkOnClickEventHandler | NullOrUndef,
+    onClick?: TrmrkClickEventHandler | NullOrUndef,
     xArgs?: TrmrkFormHelperExtraArgs<THtml> | NullOrUndef
   ): TrmrkFormNode<THtml> {
     return this.nodeCore(TrmrkFormNodeCategory.Button, xArgs, (node) => {
       node.buttonType = buttonType;
       node.text = text.map((textNode) => this.textNode(textNode));
-      node.onClick = onClick;
+      node.click = onClick;
     });
   }
 

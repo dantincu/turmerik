@@ -3,7 +3,11 @@ import { MatFormFieldAppearance } from '@angular/material/form-field';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
-export interface FormFieldAppearance {
+export interface AppearangeCore {
+  useNativeControl?: boolean | NullOrUndef;
+}
+
+export interface FormFieldAppearance extends AppearangeCore {
   matFormFieldAppearance?: MatFormFieldAppearance | NullOrUndef;
 }
 
@@ -11,6 +15,4 @@ export interface ButtonFormFieldAppearance extends FormFieldAppearance {
   matButtonAppearance?: MatButtonAppearance | NullOrUndef;
 }
 
-export interface ComboboxFormFieldAppearance extends FormFieldAppearance {
-  useNativeControl?: boolean | NullOrUndef;
-}
+export interface ComboboxFormFieldAppearance extends FormFieldAppearance {}
