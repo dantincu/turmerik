@@ -14,7 +14,7 @@ export enum TrmrkFormNodeCategory {
   Checkbox,
   DatePicker,
   DateTimePicker,
-  Radio,
+  // Radio,
   RadioGroup,
   Button,
   IconButton,
@@ -93,8 +93,8 @@ export interface NodeHtmlInfo {
 export type NodeHtml = string | NodeHtmlInfo;
 
 export interface TrmrkNodeCoreBase<THtml = NodeHtml> {
-  cssClass?: string | NullOrUndef;
-  controlClass?: string | NullOrUndef;
+  cssClass?: string | string[] | NullOrUndef;
+  controlClass?: string | string[] | NullOrUndef;
   attrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   controlAttrs?: TrmrkDOMNodeAttrs | NullOrUndef;
   html?: THtml | NullOrUndef;
@@ -123,7 +123,7 @@ export interface TrmrkComboBoxItem {
   isSelected?: boolean | NullOrUndef;
 }
 
-export type TrmrkInputValueType = string;
+export type TrmrkInputValueType = string | any | NullOrUndef;
 
 export type TrmrkComboboxChangedEventArg =
   | TrmrkComboBoxItem
@@ -132,8 +132,8 @@ export type TrmrkComboboxChangedEventArg =
 export type TrmrkEventHandler<TEvent = Event> = (event: TEvent) => VoidOrAny;
 
 export type TrmrkChangeEventHandler = (
-  event: Event,
-  newValue: string
+  event: Event | any,
+  newValue: TrmrkInputValueType
 ) => VoidOrAny;
 
 export type TrmrkComboboxChangeEventHandler = (
@@ -185,6 +185,7 @@ export interface TrmrkFormNode<THtml = NodeHtml>
   fullWidth?: boolean | NullOrUndef;
   hasSpinner?: boolean | NullOrUndef;
   hasClearAllBtn?: boolean | NullOrUndef;
+  heightFactor?: number | NullOrUndef;
 }
 
 export interface TrmrkFormRow<THtml = NodeHtml> extends TrmrkNodeCore<THtml> {

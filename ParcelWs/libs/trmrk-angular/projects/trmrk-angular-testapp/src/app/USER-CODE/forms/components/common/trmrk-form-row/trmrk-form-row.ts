@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { MatIconModule } from '@angular/material/icon';
 
@@ -17,6 +17,9 @@ import {
 } from 'trmrk-angular';
 
 import {
+  TrmrkFormNodeType,
+  TrmrkFormNodeCategory,
+  TrmrkFormRowCategory,
   TrmrkDOMNodeAttrs,
   TrmrkFormRow as TrmrkFormRowObj,
 } from '../../../../../../trmrk/USER-CODE/forms/types';
@@ -26,11 +29,21 @@ import {
   hasRawHtml,
   getHtmlTemplateName,
   getSafeHtml,
-  getCssClass,
+  getCssClassFromMap,
   formRowCategoriesMap,
 } from '../../../form';
 
 import { TrmrkFormNode } from '../trmrk-form-node/trmrk-form-node';
+
+import { normalizeAttrs, normalizeCssClass } from '../../../form';
+
+import { NullOrUndef } from '../../../../../../trmrk/core';
+
+const enums = {
+  TrmrkFormNodeType,
+  TrmrkFormNodeCategory,
+  TrmrkFormRowCategory,
+};
 
 @Component({
   selector: 'trmrk-form-row',
@@ -47,31 +60,47 @@ import { TrmrkFormNode } from '../trmrk-form-node/trmrk-form-node';
 export class TrmrkFormRow implements OnChanges {
   @Input() trmrkRow!: TrmrkFormRowObj;
   @Input() trmrkPath!: number[];
-  @Input() trmrkTemplatesMap?: { [templateName: string]: TemplateRef<any> };
+  @Input() trmrkTemplatesMap!: { [templateName: string]: TemplateRef<any> };
 
-  nodeAttrs: TrmrkDOMNodeAttrs = {};
+  enums = enums;
+
+  attrs!: TrmrkDOMNodeAttrs;
+  controlAttrs!: TrmrkDOMNodeAttrs;
+
+  cssClass!: string[];
+  controlCssClass!: string[];
+  skipDefaultCssClass: boolean | NullOrUndef;
+  skipDefaultControlCssClass: boolean | NullOrUndef;
+
+  private _hasRawHtml: boolean | null = null;
+  private _hasHtmlTemplate: boolean | null = null;
+  private _safeHtml: SafeHtml | null = null;
+  private _htmlTemplateName: string | null = null;
 
   constructor(private sanitizer: DomSanitizer) {}
 
   get hasRawHtml() {
-    return hasRawHtml(this.trmrkRow.html);
+    this._hasRawHtml ??= hasRawHtml(this.trmrkRow.html);
+    return this._hasRawHtml!;
   }
 
   get hasHtmlTemplate() {
-    return hasHtmlTemplate(this.trmrkRow.html);
+    this._hasHtmlTemplate ??= hasHtmlTemplate(this.trmrkRow.html);
+    return this._hasHtmlTemplate!;
   }
 
   get safeHtml() {
-    return getSafeHtml(this.trmrkRow.html, this.sanitizer);
+    this._safeHtml ??= getSafeHtml(this.trmrkRow.html, this.sanitizer);
+    return this._safeHtml;
   }
 
   get htmlTemplateName() {
-    return getHtmlTemplateName(this.trmrkRow.html)!;
+    this._htmlTemplateName ??= getHtmlTemplateName(this.trmrkRow.html)!;
+    return this._htmlTemplateName;
   }
 
-  get formControlHasError() {
-    const formControlHasError = (this.trmrkRow.errorMsg ?? null) !== null;
-    return formControlHasError;
+  get heightFactor() {
+    return this.trmrkRow.heightFactor ?? null;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -84,37 +113,6 @@ export class TrmrkFormRow implements OnChanges {
     );
   }
 
-  get controlAttrs() {
-    let controlAttrs = this.trmrkRow.controlAttrs ?? {};
-    return controlAttrs;
-  }
-
-  get cssClass(): string[] {
-    let cssClass = getCssClass(
-      this.trmrkRow,
-      formRowCategoriesMap,
-      this.trmrkRow?.category
-    );
-
-    if (this.trmrkRow) {
-      if ((this.trmrkRow.heightFactor ?? null) !== null) {
-        cssClass.push(`trmrk-height-x${this.trmrkRow.heightFactor}`);
-      }
-    }
-
-    return cssClass;
-  }
-
-  get controlCssClass(): string[] {
-    let cssClass: string[] = [];
-
-    if (this.trmrkRow.controlClass) {
-      cssClass.push(this.trmrkRow.controlClass);
-    }
-
-    return cssClass;
-  }
-
   childPath(idx: number) {
     const path = [...this.trmrkPath, idx];
     return path;
@@ -124,8 +122,55 @@ export class TrmrkFormRow implements OnChanges {
     this.trmrkRow!.isExpanded = !(this.trmrkRow!.isExpanded ?? true);
   }
 
+  private refreshAttrs() {
+    const normAttrs = normalizeAttrs(this.trmrkRow.attrs);
+    const normControlAttrs = normalizeAttrs(this.trmrkRow.controlAttrs);
+    this.attrs = normAttrs.main;
+    this.controlAttrs = normControlAttrs.main;
+  }
+
+  private refreshCssClass() {
+    const normCssClass = normalizeCssClass(this.trmrkRow.cssClass);
+    const normControlCssClass = normalizeCssClass(this.trmrkRow.cssClass);
+
+    this.cssClass = normCssClass.main.classes;
+    this.controlCssClass = normControlCssClass.main.classes;
+    this.skipDefaultCssClass = normCssClass.main.skipDefaultCssClass;
+    this.skipDefaultControlCssClass =
+      normControlCssClass.main.skipDefaultCssClass;
+
+    this.cssClass.push(
+      ...getCssClassFromMap(formRowCategoriesMap, this.trmrkRow.category)
+    );
+
+    const heightFactor = this.heightFactor;
+
+    if ((heightFactor ?? null) !== null) {
+      this.cssClass.push(`trmrk-height-x${heightFactor}`);
+    }
+
+    if (!this.skipDefaultControlCssClass) {
+      this.controlCssClass.push('trmrk-form-row-heading');
+    }
+  }
+
   private updateNode(_: boolean) {
-    this.nodeAttrs = this.trmrkRow.attrs ?? {};
-    this.nodeAttrs['data-trmrk-id'] = this.trmrkRow.id;
+    this.resetProps();
+    this.refreshAttrs();
+    this.refreshCssClass();
+  }
+
+  private resetProps() {
+    this.attrs = null!;
+    this.controlAttrs = null!;
+    this.cssClass = null!;
+    this.controlCssClass = null!;
+    this.skipDefaultCssClass = null;
+    this.skipDefaultControlCssClass = null;
+
+    this._hasRawHtml = null;
+    this._hasHtmlTemplate = null;
+    this._safeHtml = null;
+    this._htmlTemplateName = null;
   }
 }

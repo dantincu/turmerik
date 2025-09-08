@@ -9,7 +9,9 @@ import {
   ElementRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { encodeHtml } from '../../../../trmrk/text';
 import { NullOrUndef } from '../../../../trmrk/core';
@@ -25,11 +27,29 @@ export enum TrmrkHorizStripType {
   AppBar,
 }
 
-export interface TrmrkHorizStripDetailsTextPart {
+interface TrmrkHorizStripDetailsTextPartCore<THtml> {
   text: string;
   italic?: boolean | NullOrUndef;
   cssClass?: string | NullOrUndef;
+  html?: THtml | NullOrUndef;
 }
+
+interface TrmrkHorizStripDetailsTextPartHtmlInfoCore<HTML> {
+  template?: TemplateRef<any> | NullOrUndef;
+  raw?: HTML | NullOrUndef;
+}
+
+type TrmrkHorizStripDetailsTextPartInternal =
+  TrmrkHorizStripDetailsTextPartCore<
+    TrmrkHorizStripDetailsTextPartHtmlInfoCore<SafeHtml>
+  >;
+
+export type TrmrkHorizStripDetailsTextPartHtmlInfo =
+  TrmrkHorizStripDetailsTextPartHtmlInfoCore<string>;
+
+export type TrmrkHorizStripDetailsTextPart = TrmrkHorizStripDetailsTextPartCore<
+  string | TrmrkHorizStripDetailsTextPartHtmlInfo
+>;
 
 @Component({
   selector: 'trmrk-horiz-strip',
@@ -74,7 +94,7 @@ export class TrmrkHorizStrip implements OnChanges {
   mainText = '';
   TrmrkHorizStripType = TrmrkHorizStripType;
 
-  constructor(public hostEl: ElementRef) {}
+  constructor(public hostEl: ElementRef, private sanitizer: DomSanitizer) {}
 
   get cssClasses() {
     let cssClasses = [...this.trmrkCssClass];
@@ -100,10 +120,10 @@ export class TrmrkHorizStrip implements OnChanges {
 
   get detailsTextParts() {
     const detailsTextParts = this.trmrkDetailsTextParts?.map((part) => {
-      let retPart: TrmrkHorizStripDetailsTextPart;
+      let retPart: TrmrkHorizStripDetailsTextPartInternal;
 
       if (typeof part === 'object') {
-        retPart = part;
+        retPart = part as TrmrkHorizStripDetailsTextPartInternal;
       } else {
         retPart = {
           text: encodeHtml(
@@ -111,6 +131,20 @@ export class TrmrkHorizStrip implements OnChanges {
             this.trmrkUseNonBreakingSpaceTokens
           ).replaceAll('\n', '&nbsp;'),
         };
+      }
+
+      if ((retPart.html ?? null) !== null) {
+        if ('string' === typeof retPart.html) {
+          retPart.html = {
+            raw: retPart.html,
+          };
+        }
+
+        if ((retPart.html!.raw ?? null) !== null) {
+          retPart.html!.raw = this.sanitizer.bypassSecurityTrustHtml(
+            retPart.html!.raw as string
+          );
+        }
       }
 
       return retPart;

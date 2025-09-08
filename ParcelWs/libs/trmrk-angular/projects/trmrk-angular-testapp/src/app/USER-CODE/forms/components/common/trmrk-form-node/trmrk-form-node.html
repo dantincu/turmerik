@@ -1,39 +1,35 @@
 @if ((trmrkNode.html ?? null) === null) {
-<div [ngClass]="cssClass" [trmrkDynamicAttributes]="nodeAttrs">
-  @if (formNode!.category === enums.TrmrkFormNodeCategory.Text) { @for
-  (childTextNode of formNode!.text ?? []; let idx = $index; track
+<div [ngClass]="cssClass" [trmrkDynamicAttributes]="attrs">
+  @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Text) { @for
+  (childTextNode of trmrkNode.text ?? []; let idx = $index; track
   childTextNode.id) {
   <trmrk-form-text-node
     [trmrkNode]="childTextNode"
     [trmrkPath]="childPath(idx)"
     [trmrkTemplatesMap]="trmrkTemplatesMap"
   ></trmrk-form-text-node>
-  } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Heading) {
+  } } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Heading) {
   <h3 [trmrkDynamicAttributes]="controlAttrs" [ngClass]="controlCssClass">
-    {{ formNode!.label }}
+    {{ trmrkNode.label }}
   </h3>
   } @if (isInputControl) {
   <mat-form-field
-    [appearance]="trmrkNode.appearance?.matFormFieldAppearance ?? 'outline'"
-    >@if ((formNode!.labelHtml ?? null) !== null) { @if (hasLabelRawHtml) {
+    [appearance]="formFieldAppearance?.matFormFieldAppearance ?? 'outline'"
+    >@if ((trmrkNode.labelHtml ?? null) !== null) { @if (hasLabelRawHtml) {
     <div [innerHtml]="labelSafeHtml"></div>
     } @if (hasLabelHtmlTemplate) {
     <ng-container
       *ngTemplateOutlet="trmrkTemplatesMap![labelHtmlTemplateName]; context: { path: trmrkPath, node: trmrkNode }"
     ></ng-container>
-    } } @if ((formNode!.labelHtml ?? null) === null && (formNode!.label ?? null)
-    !== null) {<mat-label
-      >{{formNode!.label}} @if (formNode!.isRequired) {
+    } } @if ((trmrkNode.label ?? null) !== null) {<mat-label
+      >{{trmrkNode.label}} @if (trmrkNode.isRequired) {
       <sup class="trmrk-required-text">*</sup> }</mat-label
-    >} @if (formNode!.category === enums.TrmrkFormNodeCategory.Input) { @if
-    (isMultiple) {
+    >} @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Input) { @if
+    (isMultiple) { @if (appearance?.useNativeControl) {
     <textarea
-      matInput
       [trmrkDynamicAttributes]="controlAttrs"
-      [value]="formNode!.value ?? ''"
+      [value]="trmrkNode.value ?? ''"
       [ngClass]="controlCssClass"
-      [formControl]="formControl!"
-      [errorStateMatcher]="formControlErrorMatcher!"
       (focus)="inputFocus($event)"
       (blur)="inputFocus($event)"
       (focusin)="inputFocusIn($event)"
@@ -41,11 +37,39 @@
       (change)="inputChange($event)"
       (keyup)="inputKeyUp($event)"
     ></textarea>
-    } @if (!isMultiple) {
+    } @if (!appearance?.useNativeControl) {
+    <textarea
+      matInput
+      [trmrkDynamicAttributes]="controlAttrs"
+      [value]="trmrkNode.value ?? ''"
+      [ngClass]="controlCssClass"
+      [formControl]="formControl!"
+      [errorStateMatcher]="formControlErrorMatcher!"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
+    ></textarea
+    >} } @if (!isMultiple) { @if (appearance?.useNativeControl) {
+    <input
+      [type]="trmrkNode.inputType ?? 'text'"
+      [value]="trmrkNode.value ?? ''"
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="controlCssClass"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
+    />
+    } @if (!appearance?.useNativeControl) {
     <input
       matInput
-      [type]="formNode!.inputType ?? 'text'"
-      [value]="formNode!.value ?? ''"
+      [type]="trmrkNode.inputType ?? 'text'"
+      [value]="trmrkNode.value ?? ''"
       [trmrkDynamicAttributes]="controlAttrs"
       [ngClass]="controlCssClass"
       [formControl]="formControl!"
@@ -56,10 +80,11 @@
       (focusout)="inputFocusOut($event)"
       (change)="inputChange($event)"
       (keyup)="inputKeyUp($event)"
-    />
-    } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Combobox) { @if
-    (trmrkNode.appearance?.useNativeControl) {
+    />} } } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Combobox) {
+    @if (appearance?.useNativeControl) {
     <select
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="controlCssClass"
       matNativeControl
       [trmrkDynamicAttributes]="controlAttrs"
       [ngClass]="[controlCssClass, 'trmrk-select']"
@@ -71,7 +96,7 @@
       (focusin)="inputFocusIn($event)"
       (focusout)="inputFocusOut($event)"
     >
-      @for (option of formNode!.items!.value ?? []; track option.key) {
+      @for (option of trmrkNode.items!.value ?? []; track option.key) {
       <option
         [value]="option.key ?? null"
         [selected]="option.isSelected"
@@ -81,8 +106,8 @@
       </option>
       }
     </select>
-    } @if (!trmrkNode.appearance?.useNativeControl) { @if ((formNode!.text ??
-    null) !== null) {
+    } @if (!appearance?.useNativeControl) { @if ((trmrkNode.text ?? null) !==
+    null) {
     <mat-chip-grid #chipList>
       @for (selectedOption of comboboxSelectedOptions ?? []; track
       selectedOption.key) {
@@ -96,6 +121,8 @@
       }
       <input
         type="text"
+        [trmrkDynamicAttributes]="controlAttrs"
+        [ngClass]="controlCssClass"
         #autocompleteInput
         [formControl]="formControl!"
         [matAutocomplete]="autocomplete"
@@ -121,10 +148,11 @@
       </button>
       <mat-autocomplete
         [ngClass]="[`trmrk-autocomplete-${trmrkNode.id}`]"
+        [trmrkDynamicAttributes]="altControlAttrs"
         #autocomplete="matAutocomplete"
         [displayWith]="comboboxDisplayFn"
       >
-        @for (option of formNode!.items!.value ?? []; track option.key) {
+        @for (option of trmrkNode.items!.value ?? []; track option.key) {
         <mat-option
           [ngClass]="[option.isSelected ? 'trmrk-is-selected' : '']"
           [value]="option"
@@ -135,9 +163,9 @@
         }
       </mat-autocomplete>
     </mat-chip-grid>
-    } @if ((formNode!.text ?? null) === null) {
+    } @if ((trmrkNode.text ?? null) === null) {
     <mat-select
-      [value]="formNode!.value ?? null"
+      [value]="trmrkNode.value ?? null"
       [trmrkDynamicAttributes]="controlAttrs"
       [ngClass]="controlCssClass"
       [formControl]="formControl!"
@@ -147,7 +175,7 @@
       (focusin)="inputFocusIn($event)"
       (focusout)="inputFocusOut($event)"
     >
-      @for (option of formNode!.items!.value ?? []; track option.key) {
+      @for (option of trmrkNode.items!.value ?? []; track option.key) {
       <mat-option
         [value]="option.key ?? null"
         [ngClass]="((option.key) ?? null) === null ? 'trmrk-has-no-value' : ''"
@@ -155,47 +183,227 @@
         >{{option.text}}</mat-option
       >
       } </mat-select
-    >} } } @if (formNode!.category === enums.TrmrkFormNodeCategory.Checkbox) { }
-    @if (formNode!.category === enums.TrmrkFormNodeCategory.DatePicker) { } @if
-    (formNode!.category === enums.TrmrkFormNodeCategory.DateTimePicker) { } @if
-    (formControl!.invalid && formControl!.touched) {
+    >} } } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Checkbox) {
+    @if (appearance?.useNativeControl) {
+    <label>
+      @for (childTextNode of trmrkNode.text ?? []; let idx = $index; track
+      childTextNode.id) {
+      <trmrk-form-text-node
+        [trmrkNode]="childTextNode"
+        [trmrkPath]="childPath(idx)"
+        [trmrkTemplatesMap]="trmrkTemplatesMap"
+      ></trmrk-form-text-node>
+      }
+      <input
+        type="checkbox"
+        [trmrkDynamicAttributes]="controlAttrs"
+        [ngClass]="controlCssClass"
+        (change)="inputChange($event)"
+        [checked]="trmrkNode.value ?? false"
+      />
+    </label>
+    } @if (!appearance?.useNativeControl) {
+    <mat-checkbox
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="controlCssClass"
+      (change)="inputChange($event)"
+      [checked]="trmrkNode.value ?? false"
+      >@for (childTextNode of trmrkNode.text ?? []; let idx = $index; track
+      childTextNode.id) {
+      <trmrk-form-text-node
+        [trmrkNode]="childTextNode"
+        [trmrkPath]="childPath(idx)"
+        [trmrkTemplatesMap]="trmrkTemplatesMap"
+      ></trmrk-form-text-node>
+      }</mat-checkbox
+    >
+    } } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.DatePicker) {
+    @if (appearance?.useNativeControl) {
+    <input
+      type="date"
+      [value]="trmrkNode.value ?? ''"
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="controlCssClass"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
+    />
+    } @if (!appearance?.useNativeControl) {
+    <input matInput [matDatepicker]="picker" [(ngModel)]="trmrkNode.value" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    } } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.DateTimePicker)
+    { @if (appearance?.useNativeControl) {
+    <input
+      type="datetime-local"
+      [value]="trmrkNode.value ?? ''"
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="controlCssClass"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
+    />
+    } @if (!appearance?.useNativeControl) {
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [(ngModel)]="trmrkNode.value"
+      [trmrkDynamicAttributes]="controlAttrs"
+      [ngClass]="controlCssClass"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    }
+    <input
+      type="time"
+      [value]="dateTimeControlTimeValue ?? ''"
+      [trmrkDynamicAttributes]="altControlAttrs"
+      [ngClass]="altControlCssClass"
+      (focus)="inputFocus($event)"
+      (blur)="inputFocus($event)"
+      (focusin)="inputFocusIn($event)"
+      (focusout)="inputFocusOut($event)"
+      (change)="inputChange($event)"
+      (keyup)="inputKeyUp($event)"
+    />
+    } @if (formControl!.invalid && formControl!.touched) {
     <mat-error> {{trmrkNode.errorMsg}} </mat-error>
     }</mat-form-field
   >
-  } @if (formNode!.category === enums.TrmrkFormNodeCategory.Radio) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.RadioGroup) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.Button) {
+  } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.RadioGroup) {
+  <mat-radio-group
+    [(ngModel)]="trmrkNode.value"
+    (change)="inputChange($event)"
+    [trmrkDynamicAttributes]="controlAttrs"
+    [ngClass]="controlCssClass"
+    (focus)="inputFocus($event)"
+    (blur)="inputFocus($event)"
+    (focusin)="inputFocusIn($event)"
+    (focusout)="inputFocusOut($event)"
+    (change)="inputChange($event)"
+    (keyup)="inputKeyUp($event)"
+  >
+    @for (option of trmrkNode.items!.value ?? []; track option.key;) {
+    <mat-radio-button [value]="option.key">
+      {{ option.text }}
+    </mat-radio-button>
+    } @for (childNode of trmrkNode.childNodes ?? []; track childNode.id; let idx
+    = $index ) {
+    <trmrk-form-node
+      [trmrkNode]="childNode"
+      [trmrkPath]="childPath(idx)"
+      [trmrkTemplatesMap]="trmrkTemplatesMap"
+    ></trmrk-form-node
+    >}
+  </mat-radio-group>
+  } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Button) {
   <button
     [trmrkDynamicAttributes]="controlAttrs"
     [ngClass]="controlCssClass"
     (click)="click($event)"
   >
-    {{formNode!.label ?? ""}} @for (childTextNode of formNode!.text ?? []; let
-    idx = $index; track childTextNode.id) {
+    @for (childTextNode of trmrkNode.text ?? []; let idx = $index; track
+    childTextNode.id) {
     <trmrk-form-text-node
       [trmrkNode]="childTextNode"
       [trmrkPath]="childPath(idx)"
       [trmrkTemplatesMap]="trmrkTemplatesMap"
     ></trmrk-form-text-node>
-    }
+    } {{trmrkNode.label ?? ""}}
   </button>
-  } @if (formNode!.category === enums.TrmrkFormNodeCategory.IconButton) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.HorizStrip) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.ThinHorizStrip) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.Group) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.Loading) { } @if
-  (formNode!.category === enums.TrmrkFormNodeCategory.HorizRule) { } @if
-  (formNode!.hasClearAllBtn) {
+  } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.IconButton) {
+  <button
+    [trmrkDynamicAttributes]="controlAttrs"
+    [ngClass]="controlCssClass"
+    (click)="click($event)"
+  >
+    @for (childTextNode of trmrkNode.text ?? []; let idx = $index; track
+    childTextNode.id) {
+    <trmrk-form-text-node
+      [trmrkNode]="childTextNode"
+      [trmrkPath]="childPath(idx)"
+      [trmrkTemplatesMap]="trmrkTemplatesMap"
+    ></trmrk-form-text-node>
+    } {{trmrkNode.label ?? ""}}
+  </button>
+  } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.HorizStrip) { @if
+  ((trmrkNode.label ?? null) !== null) {
+  <trmrk-horiz-strip
+    [trmrkDynamicAttributes]="controlAttrs"
+    [trmrkCssClass]="controlCssClass"
+    [trmrkMainText]="trmrkNode.label!"
+    [trmrkDetailsTextParts]="horizStripDetailsTextParts"
+  ></trmrk-horiz-strip>
+  } @if ((trmrkNode.label ?? null) === null) {
+  <trmrk-horiz-strip
+    [trmrkUseContentInsteadOfTextRow]="true"
+    [trmrkDynamicAttributes]="controlAttrs"
+    [trmrkCssClass]="controlCssClass"
+    >@for (childNode of trmrkNode.childNodes ?? []; track childNode.id; let idx
+    = $index ) {
+    <trmrk-form-node
+      [trmrkNode]="childNode"
+      [trmrkPath]="childPath(idx)"
+      [trmrkTemplatesMap]="trmrkTemplatesMap"
+    ></trmrk-form-node
+    >}</trmrk-horiz-strip
+  >
+  } } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.ThinHorizStrip) {
+  @if ((trmrkNode.label ?? null) !== null) {
+  <trmrk-thin-horiz-strip
+    [trmrkDynamicAttributes]="controlAttrs"
+    [trmrkCssClass]="controlCssClass"
+    [trmrkText]="trmrkNode.label!"
+  ></trmrk-thin-horiz-strip>
+  } @if ((trmrkNode.label ?? null) === null) {
+  <trmrk-thin-horiz-strip
+    [trmrkUseContentInsteadOfTextRow]="true"
+    [trmrkDynamicAttributes]="controlAttrs"
+    [trmrkCssClass]="controlCssClass"
+    >@for (childNode of trmrkNode.childNodes ?? []; track childNode.id; let idx
+    = $index ) {
+    <trmrk-form-node
+      [trmrkNode]="childNode"
+      [trmrkPath]="childPath(idx)"
+      [trmrkTemplatesMap]="trmrkTemplatesMap"
+    ></trmrk-form-node
+    >}</trmrk-thin-horiz-strip
+  >
+  } } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Group) { @for
+  (childNode of trmrkNode.childNodes ?? []; track childNode.id; let idx = $index
+  ) {
+  <trmrk-form-node
+    [trmrkNode]="childNode"
+    [trmrkPath]="childPath(idx)"
+    [trmrkTemplatesMap]="trmrkTemplatesMap"
+  ></trmrk-form-node
+  >} } @if (trmrkNode.category === enums.TrmrkFormNodeCategory.Loading) {
+  <trmrk-spinner></trmrk-spinner> } @if (trmrkNode.category ===
+  enums.TrmrkFormNodeCategory.HorizRule) {
+  <div class="trmrk-horiz-rule"></div>
+  } @if (trmrkNode.hasClearAllBtn) {
   <button mat-icon-button class="trmrk-icon-btn" (click)="clearNode()">
     <mat-icon class="trmrk-icon">close</mat-icon>
   </button>
-  } @if (formNode!.hasSpinner) {
+  } @if (trmrkNode.hasSpinner) {
   <trmrk-spinner></trmrk-spinner> }
 </div>
 } @if ((trmrkNode.html ?? null) !== null) { @if (hasRawHtml) {
 <div
-  [ngClass]="trmrkNode.cssClass ?? ''"
-  [trmrkDynamicAttributes]="trmrkNode.attrs ?? {}"
+  [ngClass]="cssClass"
+  [trmrkDynamicAttributes]="attrs"
   [innerHtml]="safeHtml"
 ></div>
 } @if (hasHtmlTemplate) {

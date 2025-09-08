@@ -46,3 +46,21 @@
     height: 30px;
   }
 }
+
+.trmrk-icon-btn {
+  margin-top: -2px;
+
+  .trmrk-checkbox {
+    left: -7px;
+
+    .mdc-checkbox {
+      margin-top: -8px;
+      margin-left: 0;
+    }
+
+    .mdc-checkbox__checkmark {
+      top: -5px;
+      left: -5px;
+    }
+  }
+}

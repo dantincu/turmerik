@@ -237,24 +237,6 @@ trmrk-app-page {
 }
 
 .trmrk-app-bar, .trmrk-horiz-strip, .trmrk-horiz-scrollable-strip {
-  .trmrk-icon-btn {
-    margin-top: -2px;
-
-    .trmrk-checkbox {
-      left: -7px;
-
-      .mdc-checkbox {
-        margin-top: -8px;
-        margin-left: 0;
-      }
-
-      .mdc-checkbox__checkmark {
-        top: -5px;
-        left: -5px;
-      }
-    }
-  }
-
   .trmrk-details {
     font-size: 12px;
 

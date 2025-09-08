@@ -3,11 +3,12 @@ import { MatFormFieldAppearance } from '@angular/material/form-field';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
-export interface AppearangeCore {
+export interface AppearanceCore {
   useNativeControl?: boolean | NullOrUndef;
+  useNativeAltControl?: boolean | NullOrUndef;
 }
 
-export interface FormFieldAppearance extends AppearangeCore {
+export interface FormFieldAppearance extends AppearanceCore {
   matFormFieldAppearance?: MatFormFieldAppearance | NullOrUndef;
 }
 

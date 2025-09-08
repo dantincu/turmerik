@@ -6,14 +6,20 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+
 import { MatOptionSelectionChange } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
+
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { MatRadioModule, MatRadioChange } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import {
   MatAutocompleteModule,
@@ -29,6 +35,9 @@ import {
   TrmrkDynamicAttributesDirective,
   whenChanged,
   TrmrkHorizStrip,
+  TrmrkHorizStripDetailsTextPart,
+  TrmrkHorizStripDetailsTextPartHtmlInfo,
+  TrmrkThinHorizStrip,
 } from 'trmrk-angular';
 
 import { NullOrUndef } from '../../../../../../trmrk/core';
@@ -69,17 +78,37 @@ import {
   getHtmlTemplateName,
   getRawHtml,
   getSafeHtml,
-  getCssClass,
+  getCssClassFromMap,
   formNodeCategoriesMap,
   formRowCategoriesMap,
   textLevelsMap,
   textStylesMap,
+  normalizeAttrs,
+  normalizeCssClass,
 } from '../../../form';
 
 import { TrmrkSpinner } from '../trmrk-spinner/trmrk-spinner';
 import { TrmrkErrorStateMatcher } from '../../../../../services/trmrk-error-state-matcher';
 
 import { TrmrkFormTextNode } from '../trmrk-form-text-node/trmrk-form-text-node';
+import { DEFAULT_ROW_HEIGHT_FACTOR } from '../../../form';
+
+import {
+  AppearanceCore,
+  ButtonFormFieldAppearance,
+  ComboboxFormFieldAppearance,
+  FormFieldAppearance,
+} from '../../../types';
+
+import {
+  ALT_CONTROL_ATTR_PFX,
+  SKIP_DEFAULT_CSS_CLASS_PFX,
+} from '../../../form';
+
+export type FormInputChangeEvent =
+  | Event
+  | MatCheckboxChange
+  | MatRadioChange<any>;
 
 const enums = {
   TrmrkFormNodeType,
@@ -91,6 +120,7 @@ const enums = {
   selector: 'trmrk-form-node',
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatIconButton,
@@ -99,159 +129,179 @@ const enums = {
     MatInputModule,
     MatAutocompleteModule,
     MatChipsModule,
+    MatCheckbox,
+    MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     TrmrkDynamicAttributesDirective,
     TrmrkSpinner,
     TrmrkFormTextNode,
+    TrmrkHorizStrip,
+    TrmrkThinHorizStrip,
   ],
   templateUrl: './trmrk-form-node.html',
   styleUrl: './trmrk-form-node.scss',
 })
 export class TrmrkFormNode implements OnChanges {
-  @Input() trmrkNode!: TrmrkNodeCore;
+  @Input() trmrkNode!: TrmrkFormNodeObj;
   @Input() trmrkPath!: number[];
-  @Input() trmrkTemplatesMap?: { [templateName: string]: TemplateRef<any> };
+  @Input() trmrkTemplatesMap!: { [templateName: string]: TemplateRef<any> };
 
   @ViewChild('autocompleteInput', { read: MatAutocompleteTrigger })
   comboboxAutocompleteTrigger!: MatAutocompleteTrigger;
 
   enums = enums;
-  nodeAttrs: TrmrkDOMNodeAttrs = {};
-  formNode: TrmrkFormNodeObj | null = null;
-  formRow: TrmrkFormRow | null = null;
-  textNode: TrmrkTextNode | null = null;
+  comboboxOptionsSeparatorKeysCodes: number[] = [ENTER, COMMA];
+
+  attrs!: TrmrkDOMNodeAttrs;
+  controlAttrs!: TrmrkDOMNodeAttrs;
+  altControlAttrs!: TrmrkDOMNodeAttrs;
+
+  cssClass!: string[];
+  controlCssClass!: string[];
+  altControlCssClass!: string[];
+  skipDefaultCssClass: boolean | NullOrUndef;
+  skipDefaultControlCssClass: boolean | NullOrUndef;
+  skipDefaultAltControlCssClass: boolean | NullOrUndef;
+
   formControl: FormControl | null = null;
   formControlErrorMatcher: TrmrkErrorStateMatcher | null = null;
-  controlInitialized = false;
-
+  controlInitialized: boolean | null = null;
   comboBoxSearchText: string | null = null;
-  comboboxOptionsSeparatorKeysCodes: number[] = [ENTER, COMMA];
   comboboxSelectedOptions: TrmrkComboBoxItem[] | null = null;
+  dateTimeControlTimeValue: string | null = null;
+
+  private _hasRawHtml: boolean | null = null;
+  private _hasHtmlTemplate: boolean | null = null;
+  private _safeHtml: SafeHtml | null = null;
+  private _htmlTemplateName: string | null = null;
+  private _hasLabelRawHtml: boolean | null = null;
+  private _hasLabelHtmlTemplate: boolean | null = null;
+  private _labelSafeHtml: SafeHtml | null = null;
+  private _labelHtmlTemplateName: string | null = null;
+  private _formControlHasError: boolean | null = null;
+  private _isInputControl: boolean | null = null;
+  private _isMultiple: boolean | null = null;
+  private _heightFactor: number | null = null;
+  private _horizStripDetailsTextParts: TrmrkHorizStripDetailsTextPart[] | null =
+    null;
 
   constructor(private sanitizer: DomSanitizer) {}
 
   get hasRawHtml() {
-    return hasRawHtml(this.trmrkNode.html);
+    this._hasRawHtml ??= hasRawHtml(this.trmrkNode.html);
+    return this._hasRawHtml!;
   }
 
   get hasHtmlTemplate() {
-    return hasHtmlTemplate(this.trmrkNode.html);
+    this._hasHtmlTemplate ??= hasHtmlTemplate(this.trmrkNode.html);
+    return this._hasHtmlTemplate!;
   }
 
   get safeHtml() {
-    return getSafeHtml(this.trmrkNode.html, this.sanitizer);
+    this._safeHtml ??= getSafeHtml(this.trmrkNode.html, this.sanitizer);
+    return this._safeHtml;
   }
 
   get htmlTemplateName() {
-    return getHtmlTemplateName(this.trmrkNode.html)!;
+    this._htmlTemplateName ??= getHtmlTemplateName(this.trmrkNode.html)!;
+    return this._htmlTemplateName;
   }
 
   get hasLabelRawHtml() {
-    return hasRawHtml(this.formNode!.labelHtml);
+    this._hasLabelRawHtml ??= hasRawHtml(this.trmrkNode.labelHtml);
+    return this._hasLabelRawHtml!;
   }
 
   get hasLabelHtmlTemplate() {
-    return hasHtmlTemplate(this.formNode!.labelHtml);
+    this._hasLabelHtmlTemplate ??= hasHtmlTemplate(this.trmrkNode.labelHtml);
+    return this._hasLabelHtmlTemplate!;
   }
 
   get labelSafeHtml() {
-    return getSafeHtml(this.formNode!.labelHtml, this.sanitizer);
+    this._labelSafeHtml ??= getSafeHtml(
+      this.trmrkNode.labelHtml,
+      this.sanitizer
+    );
+    return this._labelSafeHtml;
   }
 
   get labelHtmlTemplateName() {
-    return getHtmlTemplateName(this.formNode!.labelHtml)!;
+    this._labelHtmlTemplateName ??= getHtmlTemplateName(
+      this.trmrkNode.labelHtml
+    )!;
+    return this._labelHtmlTemplateName;
   }
 
   get formControlHasError() {
-    const formControlHasError = (this.trmrkNode.errorMsg ?? null) !== null;
-    return formControlHasError;
+    this._formControlHasError ??= (this.trmrkNode.errorMsg ?? null) !== null;
+    return this._formControlHasError!;
   }
 
   get isInputControl() {
-    const isInputControl =
-      this.formNode!.category >= enums.TrmrkFormNodeCategory.Input &&
-      this.formNode!.category <= enums.TrmrkFormNodeCategory.DateTimePicker;
+    this._isInputControl ??=
+      this.trmrkNode.category >= enums.TrmrkFormNodeCategory.Input &&
+      this.trmrkNode.category <= enums.TrmrkFormNodeCategory.DateTimePicker;
 
-    return isInputControl;
+    return this._isInputControl!;
   }
 
   get isMultiple() {
-    const isMultiple = (this.formNode!.linesCount ?? null) !== null;
-    return isMultiple;
+    this._isMultiple ??= (this.trmrkNode.linesCount ?? null) !== null;
+    return this._isMultiple!;
   }
 
-  get controlAttrs() {
-    let controlAttrs: TrmrkDOMNodeAttrs;
-
-    if (this.formNode) {
-      controlAttrs = this.formNode.controlAttrs ?? {};
-
-      if (this.formNode.isRequired) {
-        controlAttrs['required'] = '';
-      }
-
-      if (this.formNode.category === TrmrkFormNodeCategory.Combobox) {
-        if (this.isMultiple) {
-          controlAttrs['multiple'] = '';
-        }
-      } else if (this.formNode.category === TrmrkFormNodeCategory.Button) {
-        const appearance = this.trmrkNode.appearance;
-
-        if (appearance) {
-          if (appearance.useNativeControl ?? false) {
-            if ((appearance.matButtonAppearance ?? null) !== null) {
-              controlAttrs['matButton'] = appearance.matButtonAppearance;
-            } else {
-              controlAttrs['mat-button'] = '';
-            }
-          }
-        }
-      } else if (this.formNode.category === TrmrkFormNodeCategory.IconButton) {
-        if (this.trmrkNode.appearance?.useNativeControl ?? false) {
-          controlAttrs['mat-icon-button'] = '';
-        }
-      }
-    } else {
-      controlAttrs = {};
-    }
-
-    return controlAttrs;
+  get appearance() {
+    return this.trmrkNode.appearance as AppearanceCore | NullOrUndef;
   }
 
-  get controlCssClass(): string[] {
-    let cssClass: string[] = [];
-
-    if (this.formNode) {
-      if (this.formNode.controlClass) {
-        cssClass.push(this.formNode.controlClass);
-      }
-
-      if (this.formNode.category === TrmrkFormNodeCategory.Button) {
-        if (!this.trmrkNode.appearance?.useNativeControl) {
-          cssClass.push('trmrk-btn');
-        }
-      } else if (this.formNode.category === TrmrkFormNodeCategory.IconButton) {
-        if (!this.trmrkNode.appearance?.useNativeControl) {
-          cssClass.push('trmrk-icon-btn');
-        }
-      }
-    }
-
-    return cssClass;
+  get formFieldAppearance() {
+    return this.trmrkNode.appearance as FormFieldAppearance | NullOrUndef;
   }
 
-  get cssClass(): string[] {
-    const cssClass = this.getCssClass(
-      formNodeCategoriesMap,
-      this.formNode?.category
-    );
+  get buttonFormFieldAppearance() {
+    return this.trmrkNode.appearance as ButtonFormFieldAppearance | NullOrUndef;
+  }
 
-    cssClass.push('trmrk-form-node');
+  get comboboxFormFieldAppearance() {
+    return this.trmrkNode.appearance as
+      | ComboboxFormFieldAppearance
+      | NullOrUndef;
+  }
 
-    if (this.formNode?.fullWidth) {
-      cssClass.push('trmrk-full-width');
+  get heightFactor() {
+    if ((this._heightFactor ?? null) === null) {
+      let heightFactor = this.trmrkNode.heightFactor;
+
+      if ((heightFactor ?? null) === null) {
+        if (
+          [
+            TrmrkFormNodeCategory.HorizRule,
+            TrmrkFormNodeCategory.ThinHorizStrip,
+          ].includes(this.trmrkNode.category)
+        ) {
+          heightFactor = DEFAULT_ROW_HEIGHT_FACTOR;
+        }
+      }
+
+      this._heightFactor = heightFactor ?? null;
     }
 
-    return cssClass;
+    return this._heightFactor;
+  }
+
+  get horizStripDetailsTextParts() {
+    if (!this._horizStripDetailsTextParts) {
+      this._horizStripDetailsTextParts =
+        this.trmrkNode.text?.map((part) => ({
+          text: part.text ?? '',
+          html: part.html
+            ? this.horizStripDetailsTextPartHtmlToFormNodeHtml(part.html)
+            : null,
+        })) ?? null;
+    }
+
+    return this._horizStripDetailsTextParts;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -264,58 +314,58 @@ export class TrmrkFormNode implements OnChanges {
     );
   }
 
-  inputChange(event: Event) {
-    const { newValue } = this.fireInputAnyChangeEventIfReq(event);
+  inputChange(event: FormInputChangeEvent) {
+    const { newValue } = this.onInputChange(event);
 
-    if (this.formNode!.change) {
-      this.formNode!.change(event, newValue);
+    if (this.trmrkNode.change) {
+      this.trmrkNode.change(event, newValue!);
     }
   }
 
   click(event: MouseEvent) {
-    if (this.formNode!.click) {
-      this.formNode!.click(event);
+    if (this.trmrkNode.click) {
+      this.trmrkNode.click(event);
     }
   }
 
   inputKeyUp(event: KeyboardEvent) {
-    this.fireInputAnyChangeEventIfReq(event);
+    this.onInputChange(event);
 
-    if (this.formNode!.keyUp) {
-      this.formNode!.keyUp(event);
+    if (this.trmrkNode.keyUp) {
+      this.trmrkNode.keyUp(event);
     }
   }
 
   inputFocus(event: Event) {
     if (
       !this.controlInitialized &&
-      this.formNode!.category === TrmrkFormNodeCategory.Combobox
+      this.trmrkNode.category === TrmrkFormNodeCategory.Combobox
     ) {
       this.initComboboxItems();
     }
 
-    if (this.formNode!.focus) {
-      this.formNode!.focus(event);
+    if (this.trmrkNode.focus) {
+      this.trmrkNode.focus(event);
     }
   }
 
   inputBlur(event: Event) {
-    this.fireInputAnyChangeEventIfReq(event);
+    this.onInputChange(event);
 
-    if (this.formNode!.blur) {
-      this.formNode!.blur(event);
+    if (this.trmrkNode.blur) {
+      this.trmrkNode.blur(event);
     }
   }
 
   inputFocusIn(event: Event) {
-    if (this.formNode!.focusIn) {
-      this.formNode!.focusIn(event);
+    if (this.trmrkNode.focusIn) {
+      this.trmrkNode.focusIn(event);
     }
   }
 
   inputFocusOut(event: Event) {
-    if (this.formNode!.focusOut) {
-      this.formNode!.focusOut(event);
+    if (this.trmrkNode.focusOut) {
+      this.trmrkNode.focusOut(event);
     }
   }
 
@@ -394,8 +444,8 @@ export class TrmrkFormNode implements OnChanges {
   }
 
   comboboxAddOptionFromInput(event: MatChipInputEvent) {
-    if (this.formNode!.allowUserToAddItems) {
-      const item = this.formNode!.newItemFactory!(event.value);
+    if (this.trmrkNode.allowUserToAddItems) {
+      const item = this.trmrkNode.newItemFactory!(event.value);
       this.comboboxSelectedOptions!.push(item);
       this.fireComboboxChangeEvent(item);
     }
@@ -411,48 +461,53 @@ export class TrmrkFormNode implements OnChanges {
   }
 
   clearNode() {
-    if (this.formNode) {
-      this.formNode.value = null;
+    if (this.trmrkNode) {
+      this.trmrkNode.value = null;
     }
   }
 
-  private updateInputValue(event: Event) {
-    const newValue = (event.target as HTMLInputElement | null)?.value!;
-    const isRealChange = this.formNode!.value !== newValue;
-    this.formNode!.value = newValue;
+  private updateInputValue(event: FormInputChangeEvent) {
+    const newValue: any =
+      (event as MatCheckboxChange).checked ??
+      (event as MatRadioChange).value ??
+      ((event as Event).target as HTMLInputElement | null)?.value ??
+      null;
+
+    const isRealChange = this.trmrkNode.value !== newValue;
+    this.trmrkNode.value = newValue;
     return { newValue, isRealChange };
   }
 
   private fireComboboxChangeEvent(option: TrmrkComboBoxItem) {
-    if (this.formNode!.comboboxChange) {
-      this.formNode!.comboboxChange(
+    if (this.trmrkNode.comboboxChange) {
+      this.trmrkNode.comboboxChange(
         {} as Event,
         this.isMultiple ? this.comboboxSelectedOptions! : option,
         this.comboBoxSearchText ?? undefined
       );
     }
 
-    if (this.formNode!.change) {
-      this.formNode!.change(
+    if (this.trmrkNode.change) {
+      this.trmrkNode.change(
         {} as Event,
         this.isMultiple ? this.comboBoxSearchText ?? '' : (option.key as string)
       );
     }
   }
 
-  private fireInputAnyChangeEventIfReq(event: Event) {
+  private onInputChange(event: FormInputChangeEvent) {
     const { newValue, isRealChange } = this.updateInputValue(event);
 
     if (isRealChange) {
       if (
-        this.formNode!.category === TrmrkFormNodeCategory.Combobox &&
+        this.trmrkNode.category === TrmrkFormNodeCategory.Combobox &&
         !this.trmrkNode.appearance.useNativeControl
       ) {
-        this.comboboxSearchTextChanged(newValue);
+        this.comboboxSearchTextChanged(newValue as string);
       }
 
-      if (this.formNode!.anyChange) {
-        this.formNode!.anyChange(event, newValue);
+      if (this.trmrkNode.anyChange) {
+        this.trmrkNode.anyChange(event, newValue!);
       }
     }
 
@@ -460,83 +515,87 @@ export class TrmrkFormNode implements OnChanges {
   }
 
   private updateNode(isFirstChange: boolean) {
-    this.nodeAttrs = this.trmrkNode.attrs ?? {};
-    this.nodeAttrs['data-trmrk-id'] = this.trmrkNode.id;
-    this.controlInitialized = true;
+    this.resetProps();
+    this.refreshAttrs();
+    this.refreshCssClass();
 
-    this.formNode = null;
-    this.formRow = null;
-    this.textNode = null;
+    if (this.isInputControl) {
+      if (isFirstChange) {
+        this.formControl = new FormControl();
 
-    switch (this.trmrkNode.type) {
-      case TrmrkFormNodeType.Text:
-        this.textNode = this.trmrkNode;
-        break;
-      case TrmrkFormNodeType.Row:
-        this.formRow = this.trmrkNode as TrmrkFormRow;
-        break;
-      default:
-        this.formNode = this.trmrkNode as TrmrkFormNodeObj;
+        this.formControlErrorMatcher = new TrmrkErrorStateMatcher(
+          () => this.formControlHasError
+        );
+      }
+    } else if (this.trmrkNode.category === TrmrkFormNodeCategory.RadioGroup) {
+      this.controlInitialized = false;
+      this.initRadioGroupItems();
+    } else if (this.trmrkNode.category === TrmrkFormNodeCategory.Combobox) {
+      this.controlInitialized = false;
+      this.formControl = new FormControl('');
 
-        if (this.isInputControl) {
-          if (isFirstChange) {
-            this.formControl = new FormControl();
+      if (this.trmrkNode.allowUserToAddItems) {
+        this.trmrkNode.newItemFactory ??= (text: string) => ({
+          key: uuidv4(),
+          text: text,
+          isSelected: true,
+        });
+      }
 
-            this.formControlErrorMatcher = new TrmrkErrorStateMatcher(
-              () => this.formControlHasError
-            );
-          }
-        } else if (this.formNode.category === TrmrkFormNodeCategory.Combobox) {
-          this.controlInitialized = false;
-          this.formControl = new FormControl('');
-
-          if (this.formNode!.allowUserToAddItems) {
-            this.formNode!.newItemFactory ??= (text: string) => ({
-              key: uuidv4(),
-              text: text,
-              isSelected: true,
-            });
-          }
-
-          if (!this.formNode!.lazyLoadItems) {
-            this.initComboboxItems();
-          }
-        }
-
-        break;
+      if (!this.trmrkNode.lazyLoadItems) {
+        this.initComboboxItems();
+      }
     }
   }
 
-  private async initComboboxItems() {
-    this.comboBoxSearchText ??= this.formNode!.value ?? null;
+  private async initRadioGroupItems() {
+    await refreshFactoryValues(
+      this.trmrkNode.items!,
+      {
+        isInit: !this.controlInitialized,
+      },
+      (hasSpinner) => {
+        this.trmrkNode.hasSpinner = hasSpinner;
+      }
+    );
 
-    if (!this.formNode!.hasSpinner) {
-      await this.refreshComboboxItems(this.formNode!.value ?? null);
+    this.controlInitialized = true;
+
+    this.trmrkNode.value = this.trmrkNode.items!.value?.find(
+      (item) => item.isSelected
+    )?.key;
+  }
+
+  private async initComboboxItems() {
+    this.comboBoxSearchText ??= this.trmrkNode.value ?? null;
+
+    if (!this.trmrkNode.hasSpinner) {
+      await this.refreshComboboxItems(this.trmrkNode.value ?? null);
     }
   }
 
   private async comboboxSearchTextChanged(searchText: string) {
     this.comboBoxSearchText = searchText;
 
-    if (!this.formNode!.hasSpinner) {
+    if (!this.trmrkNode.hasSpinner) {
       await this.refreshComboboxItems(searchText);
     }
   }
 
   private async refreshComboboxItems(searchText: string | null) {
     await refreshFactoryValues(
-      this.formNode!.items!,
+      this.trmrkNode.items!,
       {
         searchString: searchText,
         isInit: !this.controlInitialized,
       },
       (hasSpinner) => {
-        this.formNode!.hasSpinner = hasSpinner;
+        this.trmrkNode.hasSpinner = hasSpinner;
       }
     );
 
     this.controlInitialized = true;
-    const itemsValue = this.formNode!.items!.value ?? null;
+    const itemsValue = this.trmrkNode.items!.value ?? null;
 
     if (!this.comboboxSelectedOptions) {
       if (itemsValue) {
@@ -561,11 +620,161 @@ export class TrmrkFormNode implements OnChanges {
     }
   }
 
-  private getCssClass<TEnum>(
-    map: [TEnum, string[]][],
-    value: TEnum | NullOrUndef
-  ) {
-    const cssClass = getCssClass(this.trmrkNode, map, value);
-    return cssClass;
+  private horizStripDetailsTextPartHtmlToFormNodeHtml(
+    nodeHtml: NodeHtml
+  ): TrmrkHorizStripDetailsTextPartHtmlInfo {
+    let retVal: TrmrkHorizStripDetailsTextPartHtmlInfo;
+
+    if (typeof nodeHtml === 'string') {
+      retVal = { raw: nodeHtml };
+    } else {
+      retVal = {
+        raw: nodeHtml.raw,
+        template:
+          (nodeHtml.idnf ?? null) !== null
+            ? this.trmrkTemplatesMap[nodeHtml.idnf!]
+            : null,
+      };
+    }
+
+    return retVal;
+  }
+
+  private refreshAttrs() {
+    const normAttrs = normalizeAttrs(this.trmrkNode.attrs);
+    const normControlAttrs = normalizeAttrs(this.trmrkNode.controlAttrs);
+
+    this.attrs = normAttrs.main;
+    this.controlAttrs = normControlAttrs.main;
+    this.altControlAttrs = normControlAttrs.alt;
+
+    /*
+     * controlAttrs
+     */
+
+    if (this.trmrkNode.isRequired) {
+      this.controlAttrs['required'] = '';
+    }
+
+    if (this.trmrkNode.category === TrmrkFormNodeCategory.Combobox) {
+      if (this.isMultiple) {
+        this.controlAttrs['multiple'] = '';
+      }
+    } else if (this.trmrkNode.category === TrmrkFormNodeCategory.Button) {
+      if (this.appearance) {
+        if (!this.appearance.useNativeControl) {
+          if (
+            (this.buttonFormFieldAppearance?.matButtonAppearance ?? null) !==
+            null
+          ) {
+            this.controlAttrs['matButton'] =
+              this.buttonFormFieldAppearance!.matButtonAppearance!;
+          } else {
+            this.controlAttrs['mat-button'] = '';
+          }
+        }
+      }
+    } else if (this.trmrkNode.category === TrmrkFormNodeCategory.IconButton) {
+      if (this.trmrkNode.appearance?.useNativeControl ?? false) {
+        this.controlAttrs['mat-icon-button'] = '';
+      }
+    }
+  }
+
+  private refreshCssClass() {
+    const normCssClass = normalizeCssClass(this.trmrkNode.cssClass);
+    const normControlClass = normalizeCssClass(this.trmrkNode.controlClass);
+
+    this.cssClass = normCssClass.main.classes;
+    this.controlCssClass = normControlClass.main.classes;
+    this.altControlCssClass = normControlClass.alt.classes;
+    this.skipDefaultCssClass = normCssClass.main.skipDefaultCssClass;
+    this.skipDefaultControlCssClass = normControlClass.main.skipDefaultCssClass;
+    this.skipDefaultAltControlCssClass =
+      normControlClass.alt.skipDefaultCssClass;
+
+    /*
+     * cssClass
+     */
+
+    this.cssClass.push(
+      ...getCssClassFromMap(formNodeCategoriesMap, this.trmrkNode.category)
+    );
+
+    const heightFactor = this.heightFactor;
+
+    if ((heightFactor ?? null) !== null) {
+      this.cssClass.push(`trmrk-height-x${heightFactor}`);
+    }
+
+    if (!this.skipDefaultCssClass) {
+      this.cssClass.push('trmrk-form-node');
+
+      switch (this.trmrkNode.category) {
+        case TrmrkFormNodeCategory.HorizRule:
+          this.cssClass.push('trmrk-form-horiz-rule-node');
+          break;
+      }
+    }
+
+    /*
+     * controlCssClass
+     */
+
+    if (this.trmrkNode.category === TrmrkFormNodeCategory.Checkbox) {
+      if (
+        !this.appearance?.useNativeControl &&
+        !this.skipDefaultControlCssClass
+      ) {
+        this.controlCssClass.push('trmrk-checkbox');
+      }
+    } else if (this.trmrkNode.category === TrmrkFormNodeCategory.Button) {
+      if (
+        !this.appearance?.useNativeControl &&
+        !this.skipDefaultControlCssClass
+      ) {
+        this.controlCssClass.push('trmrk-btn');
+      }
+    } else if (this.trmrkNode.category === TrmrkFormNodeCategory.IconButton) {
+      if (
+        !this.appearance?.useNativeControl &&
+        !this.skipDefaultControlCssClass
+      ) {
+        this.controlCssClass.push('trmrk-icon-btn');
+      }
+    }
+  }
+
+  private resetProps() {
+    this.attrs = null!;
+    this.controlAttrs = null!;
+    this.altControlAttrs = null!;
+    this.cssClass = null!;
+    this.controlCssClass = null!;
+    this.altControlCssClass = null!;
+    this.skipDefaultCssClass = null;
+    this.skipDefaultControlCssClass = null;
+    this.skipDefaultAltControlCssClass = null;
+
+    this.formControl = null;
+    this.formControlErrorMatcher = null;
+    this.controlInitialized = null;
+    this.comboBoxSearchText = null;
+    this.comboboxSelectedOptions = null;
+    this.dateTimeControlTimeValue = null;
+
+    this._hasRawHtml = null;
+    this._hasHtmlTemplate = null;
+    this._safeHtml = null;
+    this._htmlTemplateName = null;
+    this._hasLabelRawHtml = null;
+    this._hasLabelHtmlTemplate = null;
+    this._labelSafeHtml = null;
+    this._labelHtmlTemplateName = null;
+    this._formControlHasError = null;
+    this._isInputControl = null;
+    this._isMultiple = null;
+    this._heightFactor = null;
+    this._horizStripDetailsTextParts = null;
   }
 }

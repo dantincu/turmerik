@@ -51,6 +51,7 @@ export class TrmrkThinHorizStrip {
   @Input() trmrkCapCssStyle: { [key: string]: any } | null = null;
   @Input() trmrkLeadingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
+  @Input() trmrkUseContentInsteadOfTextRow?: boolean | NullOrUndef;
 
   text = '';
 
