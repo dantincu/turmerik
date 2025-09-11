@@ -1,1 +1,0 @@
-CALL _sync :fst:diff :pf:turmerik-parcelws trmrk-text-transform-behavior:trmrk-text-transform-behavior-testapp
