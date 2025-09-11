@@ -1,1 +1,0 @@
-CALL _sync :fst:pull :pf:turmerik-parcelws trmrk-angular:trmrk-onedrive-notes-ngapp
