@@ -20,7 +20,10 @@ import {
   TrmrkPanelListServiceRow,
 } from '../../../services/trmrk-panel-list-service';
 
-import { openDialog, DialogPanelSize } from '../../../services/trmrk-dialog';
+import {
+  openDialog,
+  DialogPanelSize,
+} from '../../../../../../trmrk-angular/src/lib/services/trmrk-dialog';
 
 import { TrmrkAppPage } from 'trmrk-angular';
 

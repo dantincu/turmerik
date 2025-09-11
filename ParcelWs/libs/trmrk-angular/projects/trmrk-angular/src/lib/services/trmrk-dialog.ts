@@ -12,7 +12,7 @@ export interface TrmrkDialogDataCore {
 }
 
 export interface TrmrkDialogData<TData> extends TrmrkDialogDataCore {
-  title: string;
+  title?: string | NullOrUndef;
   data: TData;
 }
 

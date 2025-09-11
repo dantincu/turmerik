@@ -2,9 +2,13 @@
   [trmrkCssClass]="['trmrk-top-horiz-strip']"
   [trmrkTrailingTemplate]="topStripTrailingTemplate"
   [trmrkUseContentInsteadOfTextRow]="true"
-  ><div class="trmrk-text-row">
+  >@if (!trmrkHeaderTemplate) {
+  <div class="trmrk-text-row">
     <h2>{{ data.title }}</h2>
-  </div></trmrk-horiz-strip
+  </div>
+  } @if (trmrkHeaderTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkHeaderTemplate"></ng-container>
+  }</trmrk-horiz-strip
 >
 <ng-template #topStripTrailingTemplate>
   @if (!data.disableClose) {

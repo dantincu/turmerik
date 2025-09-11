@@ -89,6 +89,11 @@ app-root {
   }
 } */
 
+.trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
+  display: inline-flex;
+  overflow: hidden;
+}
+
 .trmrk-custom-svg-icon-wrapper {
   display: inline-flex;
   cursor: pointer;
@@ -126,7 +131,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
   box-shadow: none !important;
 }
 
-/* .trmrk-menu {
+.trmrk-menu {
   .trmrk-menu-item {
     min-height: 40px;
 
@@ -134,7 +139,7 @@ a[mat-icon-button].trmrk-icon-btn:link {
       padding-left: 10px;
     }
   }
-} */
+}
 
 @keyframes trmrk-has-app-bar {
   from {

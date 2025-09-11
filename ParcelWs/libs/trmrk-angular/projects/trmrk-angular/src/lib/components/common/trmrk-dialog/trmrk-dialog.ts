@@ -16,10 +16,9 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { TrmrkHorizStrip, whenChanged } from 'trmrk-angular';
-
+import { whenChanged } from '../../../services/simpleChanges';
+import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { NullOrUndef } from '../../../../trmrk/core';
-
 import { TrmrkDialogData } from '../../../services/trmrk-dialog';
 
 @Component({
@@ -36,6 +35,7 @@ import { TrmrkDialogData } from '../../../services/trmrk-dialog';
 })
 export class TrmrkDialog<TData = any> implements OnChanges {
   @Input() trmrkData?: TrmrkDialogData<TData> | NullOrUndef;
+  @Input() trmrkHeaderTemplate: TemplateRef<any> | NullOrUndef;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: TrmrkDialogData<TData>,

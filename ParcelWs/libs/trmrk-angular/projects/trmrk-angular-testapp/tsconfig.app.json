@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-, "../trmrk-angular/src/lib/services/simpleChanges.ts"  ],
+, "../trmrk-angular/src/lib/services/simpleChanges.ts", "../trmrk-angular/src/lib/services/trmrk-dialog.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

@@ -6,8 +6,6 @@ import {
 } from '@angular/core';
 
 import { provideRouter } from '@angular/router';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MatDialogModule } from '@angular/material/dialog';
 
@@ -22,8 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    BrowserAnimationsModule,
-    provideAnimations(),
     importProvidersFrom(MatDialogModule),
     { provide: AppStateServiceBase, useClass: AppStateService },
     { provide: AppConfigServiceBase, useClass: AppConfigService },
