@@ -1,5 +1,5 @@
 # Get the full path to the child script
-$scriptPath = Join-Path $PSScriptRoot "..\powershell\get-path-var.ps1"
+$scriptPath = Join-Path $PSScriptRoot "..\get-path-var.ps1"
 
 # Capture the output of the child script
 $newPath = & $scriptPath
