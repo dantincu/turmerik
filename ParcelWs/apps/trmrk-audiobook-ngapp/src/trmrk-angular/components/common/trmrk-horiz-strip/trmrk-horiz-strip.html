@@ -1,0 +1,51 @@
+<div [ngClass]="cssClasses" [ngStyle]="trmrkCssStyle">
+  @if (trmrkLeadingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
+  } @if (trmrkUseContentInsteadOfTextRow) { <ng-content></ng-content>} @if
+  (!trmrkUseContentInsteadOfTextRow) {
+  <div
+    class="trmrk-text-row"
+    (trmrkLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
+    (trmrkShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
+    (trmrkTouchStartOrMouseDown)="trmrkTextTouchStartOrMouseDown.emit($event)"
+    [trmrkAltHostElems]="trmrkTextLongPressAltHost"
+    [trmrkLongPressPreventDefault]="trmrkType !== TrmrkHorizStripType.Scrollable"
+  >
+    <div
+      [ngClass]="['trmrk-text-col', ((trmrkDetailsTextParts ?? null) !== null) ? 'trmrk-has-details' : '']"
+    >
+      <span class="trmrk-text" [innerHTML]="mainText"></span>
+      @if ((trmrkDetailsTextParts ?? null) !== null) {
+      <span class="trmrk-details"
+        >@for (textPart of detailsTextParts; track $index) { @if (!$first) { @if
+        (trmrkTextPartDelimiterTemplate) {
+        <ng-container
+          *ngTemplateOutlet="trmrkTextPartDelimiterTemplate"
+        ></ng-container>
+        } @if (!trmrkTextPartDelimiterTemplate) {
+        <span class="trmrk-delimiter"> &bull; </span> } } @if (!textPart.html) {
+        <span
+          [ngClass]="['trmrk-text-part', textPart.italic ? 'trmrk-italic' : '', textPart.cssClass ?? '']"
+          [innerHTML]="textPart.text"
+        ></span>
+        } @if (textPart.html) { @if ((textPart.html!.raw ?? null) !== null) {
+        <div
+          [ngClass]="['trmrk-text-part', textPart.italic ? 'trmrk-italic' : '', textPart.cssClass ?? '']"
+          [innerHTML]="textPart.html!.raw"
+        ></div>
+        } @if (textPart.html!.template) {
+        <ng-container
+          *ngTemplateOutlet="textPart.html!.template; context: { idx: $index, textPart }"
+        ></ng-container>
+        } } }
+      </span>
+      }
+    </div>
+    @if (trmrkHasCap) {
+    <div class="trmrk-strip-cap" [ngStyle]="trmrkCapCssStyle"></div>
+    }
+  </div>
+  } @if (trmrkTrailingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>
+  }
+</div>

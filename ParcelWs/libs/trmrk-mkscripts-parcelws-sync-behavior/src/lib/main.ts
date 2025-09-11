@@ -104,6 +104,10 @@ const destnLocationsArr: {
     dirPath: "libs\\trmrk-mkscripts-parcelws-sync-behavior-testapp\\src",
     syncedLibs: ["trmrk", "trmrk-mkscripts-parcelws-sync-behavior"],
   },
+  "trmrk-audiobook-ngapp": {
+    dirPath: "apps\\trmrk-audiobook-ngapp\\src",
+    syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],
+  },
   "trmrk-onedrive-notes-ngapp": {
     dirPath: "apps\\trmrk-onedrive-notes-ngapp\\src",
     syncedLibs: ["trmrk", "trmrk-browser", "trmrk-angular"],

@@ -31,6 +31,7 @@
               [ "..\\..\\libs\\trmrk-text-transform-mybehavior" ],
 
               [ "..\\..\\libs\\trmrk-angular\\projects\\trmrk-angular-testapp" ],
+              [ "..\\..\\apps\\trmrk-audiobook-ngapp" ],
               [ "..\\..\\apps\\trmrk-onedrive-notes-ngapp" ],
               [ "..\\..\\apps\\trmrk-http-proxy-nodejsapp" ],
               [ "..\\..\\apps\\trmrk-notes-lithtmlapp" ],
@@ -207,6 +208,7 @@
           "libs\\trmrk-text-transform-mybehavior\\_",
 
           "libs\\trmrk-angular\\projects\\trmrk-angular-testapp\\_",
+          "apps\\trmrk-audiobook-ngapp\\_",
           "apps\\trmrk-onedrive-notes-ngapp\\_",
           "apps\\trmrk-http-proxy-nodejsapp\\_",
           "apps\\trmrk-notes-lithtmlapp\\_",

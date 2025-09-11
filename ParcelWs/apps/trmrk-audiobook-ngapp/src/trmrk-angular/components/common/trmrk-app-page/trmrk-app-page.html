@@ -1,0 +1,88 @@
+<trmrk-app-bar
+  [trmrkLeadingIconTemplate]="trmrkAppBarLeadingIconTemplate"
+  [trmrkHomeRouterLink]="trmrkAppBarHomeRouterLink"
+  [trmrkTitle]="trmrkAppBarTitle"
+  [trmrkCssClass]="trmrkAppBarCssClass"
+  [trmrkBeforeTitleTemplate]="trmrkAppBarBeforeTitleTemplate"
+  [trmrkShowBackBtn]="trmrkAppBarShowBackBtn"
+  [trmrkBackBtnClicked]="trmrkAppBarBackBtnClicked"
+  [trmrkToggleBackBtnDisabled]="trmrkAppBarToggleBackBtnDisabled"
+  [trmrkShowGoToParentBtn]="trmrkAppBarShowGoToParentBtn"
+  [trmrkGoToParentBtnDisabled]="trmrkAppBarGoToParentBtnDisabled"
+  [trmrkGoToParentBtnClicked]="trmrkAppBarGoToParentBtnClicked"
+  [trmrkTrailingTemplate]="appBarTrailingTemplate"
+></trmrk-app-bar>
+<ng-template #appBarTrailingTemplate>
+  <ng-container *ngTemplateOutlet="trmrkAppBarTrailingTemplate"></ng-container>
+  @if (trmrkShowOptionsBtn ?? appStateService.showOptionsMenuBtnByDefault) {
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn trmrk-options-btn"
+    [matMenuTriggerFor]="null"
+    #optionsMenuTrigger="matMenuTrigger"
+    (click)="optionsMenuBtnClick($event)"
+  >
+    <mat-icon class="trmrk-icon">more_vert</mat-icon>
+  </button>
+  <mat-menu class="trmrk-menu" dense>
+    @if (trmrkShowMainMenuTopStrip ??
+    appStateService.showMainMenuTopStripByDefault) {
+    <div mat-menu-item class="trmrk-menu-item">
+      @if (trmrkShowRefreshMenuBtn ??
+      appStateService.showRefreshMainMenuBtnByDefault) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (click)="refreshMenuBtnClick($event)"
+      >
+        <mat-icon class="trmrk-icon">refresh</mat-icon>
+      </button>
+      } @if (trmrkShowUserProfileMenuBtn ??
+      appStateService.showUserProfileMainMenuBtnByDefault) {
+      <a
+        mat-icon-button
+        class="trmrk-icon-btn"
+        [routerLink]="[`${appConfigService.routeBasePath}/user-profile`]"
+        ><mat-icon class="trmrk-icon">account_circle</mat-icon></a
+      >
+      } @if (trmrkShowManageAppMenuBtn ??
+      appStateService.showManageAppMainMenuBtnByDefault) {
+      <a
+        mat-icon-button
+        class="trmrk-icon-btn"
+        [routerLink]="[`${appConfigService.routeBasePath}/manage-app`]"
+        ><mat-icon class="trmrk-icon">settings_applications</mat-icon></a
+      >
+      } @if (trmrkShowSettingsMenuBtn ??
+      appStateService.showSettingsMainMenuBtnByDefault) {
+      <a
+        mat-icon-button
+        class="trmrk-icon-btn"
+        [routerLink]="[`${appConfigService.routeBasePath}/settings`]"
+        ><mat-icon class="trmrk-icon">settings</mat-icon></a
+      >
+      } @if (trmrkShowHelpMenuBtn ??
+      appStateService.showHelpMainMenuBtnByDefault) {
+      <a
+        mat-icon-button
+        class="trmrk-icon-btn"
+        [routerLink]="[`${appConfigService.routeBasePath}/help`]"
+        ><mat-icon class="trmrk-icon">help</mat-icon></a
+      >
+      }
+    </div>
+    }
+    <ng-container *ngTemplateOutlet="trmrkOptionsMenuTemplate"></ng-container>
+  </mat-menu>
+  }
+</ng-template>
+
+@if (trmrkUseDefaultPageBody) {
+<div
+  class="trmrk-app-page-body trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-y"
+>
+  <ng-container *ngTemplateOutlet="trmrkPageTemplate"></ng-container>
+</div>
+} @if (!trmrkUseDefaultPageBody) {
+<ng-container *ngTemplateOutlet="trmrkPageTemplate"></ng-container>
+}

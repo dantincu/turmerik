@@ -275,6 +275,21 @@
       }
     },
     {
+      "Name": "trmrk-audiobook-ngapp",
+      "DirPath": "apps\\trmrk-audiobook-ngapp\\src",
+      "FoldersMap": {
+        "trmrk": {
+          "DirPath": "trmrk"
+        },
+        "trmrk-browser": {
+          "DirPath": "trmrk-browser"
+        },
+        "trmrk-angular": {
+          "DirPath": "trmrk-angular"
+        }
+      }
+    },
+    {
       "Name": "trmrk-onedrive-notes-ngapp",
       "DirPath": "apps\\trmrk-onedrive-notes-ngapp\\src",
       "FoldersMap": {
