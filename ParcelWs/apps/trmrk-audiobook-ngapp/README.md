@@ -1,59 +1,29 @@
-# TrmrkAudiobookNgapp
+Command to serve the app on https and on network:
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.2.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
+```shell
+ng serve --host=0.0.0.0 --port=4201 --ssl=true --ssl-key=./sslcert/key.pem --ssl-cert=./sslcert/cert.pem
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Command to build the app:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```shell
+ng build --project=trmrk-angular-testapp --base-href=/app/ --configuration production
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Command to run the production build:
 
-```bash
-ng generate --help
+```shell
+http-server ./dist/trmrk-angular-testapp/browser -S -C ./sslcert/cert.pem -K ./sslcert/key.pem -p 443
 ```
 
-## Building
+Commands to update trmrk libs:
 
-To build the project run:
+```shell
+.\src\trmrk-angular\_\push_to_trmrk-angular_ppgp.bat
 
-```bash
-ng build
+.\src\trmrk-browser\_\push_to_trmrk-browser_ppgp.bat
+
+.\src\trmrk\_\push_to_trmrk_ppgp.bat
+
+.\src\lib\_\pull_from_this.bat
 ```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

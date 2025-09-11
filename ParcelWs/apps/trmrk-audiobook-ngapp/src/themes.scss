@@ -1,0 +1,39 @@
+.trmrk-app-theme-light {
+  .trmrk-app-bar {
+    background-color: #d0e8ff;
+  }
+
+  .trmrk-top-message-horiz-strip,
+  .trmrk-top-horiz-strip,
+  .trmrk-bottom-horiz-strip {
+    background-color: #d0e8ff;
+
+    &.trmrk-has-border-x2 {
+      border-color: #c0d8ff;
+    }
+  }
+
+  .trmrk-accelerating-scroll-popover {
+    background-color: #d0e8ff;
+  }
+}
+
+.trmrk-app-theme-dark {
+  .trmrk-app-bar {
+    background-color: #000820;
+  }
+
+  .trmrk-top-message-horiz-strip,
+  .trmrk-top-horiz-strip,
+  .trmrk-bottom-horiz-strip {
+    background-color: #000820;
+
+    &.trmrk-has-border-x2 {
+      border-color: #001030;
+    }
+  }
+
+  .trmrk-accelerating-scroll-popover {
+    background-color: #000820;
+  }
+}

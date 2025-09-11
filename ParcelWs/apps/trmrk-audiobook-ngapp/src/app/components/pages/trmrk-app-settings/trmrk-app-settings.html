@@ -1,0 +1,28 @@
+<trmrk-app-page
+  [trmrkPageTemplate]="page"
+  [trmrkAppBarTitle]="'App Settings'"
+  [trmrkShowSettingsMenuBtn]="false"
+></trmrk-app-page>
+
+<ng-template #page>
+  <div class="trmrk-page-body trmrk-page-body-thin">
+    <div class="trmrk-field">
+      <mat-checkbox
+        class="trmrk-checkbox"
+        (change)="onDarkModeBtnClick($event)"
+        [checked]="isDarkMode"
+        >Dark Mode</mat-checkbox
+      >
+    </div>
+    <div class="trmrk-field">
+      <a
+        mat-button
+        [routerLink]="[`${appConfigService.routeBasePath}/reset`]"
+        class="trmrk-icon-link"
+      >
+        <div class="trmrk-custom-svg-icon-wrapper" [innerHtml]="resetAltIcon"></div>
+        Reset App
+      </a>
+    </div>
+  </div>
+</ng-template>

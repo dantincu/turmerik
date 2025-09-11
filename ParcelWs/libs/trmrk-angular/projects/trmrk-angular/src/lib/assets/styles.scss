@@ -99,7 +99,7 @@ app-root {
   }
 }
 
-/* [mat-button].trmrk-icon-link {
+[mat-button].trmrk-icon-link {
   line-height: 36px;
 
   .trmrk-custom-svg-icon-wrapper {
@@ -107,7 +107,7 @@ app-root {
     top: 6px;
     left: -3px;
   }
-} */
+}
 
 a.trmrk-icon-btn,
 a.trmrk-icon-btn:visited,
@@ -664,6 +664,15 @@ trmrk-list-app-panel {
     .trmrk-text-row {
       justify-content: center;
     }
+  }
+}
+
+.trmrk-top-message-horiz-strip,
+.trmrk-top-horiz-strip,
+.trmrk-bottom-horiz-strip {
+  &.trmrk-has-border-x2 {
+    border-top-width: 2px;
+    border-top-style: solid;
   }
 }
 

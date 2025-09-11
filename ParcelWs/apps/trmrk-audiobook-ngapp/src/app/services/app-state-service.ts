@@ -1,0 +1,17 @@
+import { Injectable } from '@angular/core';
+
+import { AppStateServiceBase } from '../../trmrk-angular/services/app-state-service-base';
+
+import { APP_NAME } from './core';
+
+@Injectable()
+export class AppStateService extends AppStateServiceBase {
+  constructor() {
+    super(APP_NAME);
+
+    this.showRefreshMainMenuBtnByDefault = false;
+    this.showUserProfileMainMenuBtnByDefault = false;
+    this.showManageAppMainMenuBtnByDefault = false;
+    this.showHelpMainMenuBtnByDefault = false;
+  }
+}

@@ -41,15 +41,6 @@ body {
 * ------------ App Styles ------------
 */
 
-.trmrk-top-message-horiz-strip,
-.trmrk-top-horiz-strip,
-.trmrk-bottom-horiz-strip {
-  &.trmrk-has-border-x2 {
-    border-top-width: 2px;
-    border-top-style: solid;
-  }
-}
-
 .trmrk-companies-app-panel, trmrk-app-themes-list-view {
   trmrk-panel-list {
     .trmrk-list-item {

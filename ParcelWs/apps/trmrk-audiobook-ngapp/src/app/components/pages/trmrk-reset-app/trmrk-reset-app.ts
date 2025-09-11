@@ -7,13 +7,12 @@ import { MatMenuModule, MatMenu } from '@angular/material/menu';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import {
-  TrmrkLoading,
-  TrmrkAppPage,
-  TrmrkUserMessage,
-  TrmrkHorizStrip,
-  AppStateServiceBase,
-} from 'trmrk-angular';
+import { AppStateServiceBase } from '../../../../trmrk-angular/services/app-state-service-base';
+
+import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
+import { TrmrkLoading } from '../../../../trmrk-angular/components/common/trmrk-loading/trmrk-loading';
+import { TrmrkUserMessage } from '../../../../trmrk-angular/components/common/trmrk-user-message/trmrk-user-message';
+import { TrmrkHorizStrip } from '../../../../trmrk-angular/components/common/trmrk-horiz-strip/trmrk-horiz-strip';
 
 import { jsonBool } from '../../../../trmrk/core';
 import { replaceQueryParams } from '../../../../trmrk/url';
@@ -86,9 +85,7 @@ export class TrmrkResetApp implements OnDestroy {
             if (!databases.length) {
               onComplete();
             } else {
-              const promises = databases.map((db) =>
-                indexedDB.deleteDatabase(db.name!)
-              );
+              const promises = databases.map((db) => indexedDB.deleteDatabase(db.name!));
 
               Promise.all(promises).then(onComplete);
             }
