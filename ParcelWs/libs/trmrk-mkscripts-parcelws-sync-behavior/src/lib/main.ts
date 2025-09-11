@@ -285,6 +285,14 @@ const getParcelWsSyncDestnSections = () =>
           },
         ],
       })),
+      {
+        Files: [
+          {
+            FileRelPath: ".gitignore",
+            TextContent: destnLocation.syncedLibs.join("\n"),
+          },
+        ],
+      },
     ];
 
     return {
