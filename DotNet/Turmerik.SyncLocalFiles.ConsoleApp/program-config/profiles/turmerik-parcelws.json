@@ -275,8 +275,8 @@
       }
     },
     {
-      "Name": "trmrk-audiobook-ngapp",
-      "DirPath": "apps\\trmrk-audiobook-ngapp\\src",
+      "Name": "trmrk-filemanager-ngapp",
+      "DirPath": "apps\\trmrk-filemanager-ngapp\\src",
       "FoldersMap": {
         "trmrk": {
           "DirPath": "trmrk"
