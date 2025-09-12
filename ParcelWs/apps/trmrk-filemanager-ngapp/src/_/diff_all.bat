@@ -1,1 +1,1 @@
-CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-audiobook-ngapp
+CALL _sync :fst:diff :pf:turmerik-parcelws *:trmrk-filemanager-ngapp
