@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Turmerik.Core.FileSystem;
 using Turmerik.Core.Helpers;
@@ -20,6 +21,7 @@ namespace Turmerik.Core.DriveExplorer
 
     public class FsItemsRetriever : DriveItemsRetrieverBase, IFsItemsRetriever
     {
+        private static readonly Regex parentDirRegex = new(@"[\\\/]\s*\.\s*\.[\\\/]");
         private readonly static string systemDrivePathRoot;
         private readonly static string userProfilePath;
         private readonly static string userProfilePathRoot;
@@ -415,51 +417,40 @@ namespace Turmerik.Core.DriveExplorer
             string path, bool allowsRootPath,
             out string rootedPath)
         {
-            bool canBeValid = path != null && path == path.Trim();
-
-            if (AllowSysFolders)
-            {
-                canBeValid = canBeValid && Path.IsPathRooted(
-                    path) && !path.All(
-                        c => c == '.' || char.IsWhiteSpace(c)) && !path.ContainsAny(
-                            PathH.InvalidPathCharsStr);
-            }
-
-            bool isValid = canBeValid;
             rootedPath = path;
+
+            bool isValid = path != null && path == path.Trim(
+                ) && !parentDirRegex.IsMatch(path) && !path.ContainsAny(
+                    PathH.InvalidPathCharsStr);
 
             if (isValid)
             {
-                if (Path.IsPathRooted(path))
-                {
-                    isValid = !hasRootDirPath;
+                string? pathRoot = Path.IsPathRooted(path) ? Path.GetPathRoot(path) : null;
 
-                    if (canBeValid && !isValid)
+                if (pathRoot != null)
+                {
+                    if (hasRootDirPath)
                     {
                         isValid = IsChildPathOf(
                             rootDirPath, path,
-                            allowsRootPath, out _);
+                            allowsRootPath);
                     }
-
-                    if (isValid && !AllowSysFolders)
+                    else if (!AllowSysFolders && pathRoot == systemDrivePathRoot)
                     {
-                        if (Path.GetPathRoot(path) == systemDrivePathRoot)
-                        {
-                            isValid = IsChildPathOf(
-                                userProfilePath, path, false,
-                                out string? restOfPath);
-
-                            isValid = isValid && restOfPath.First() != '.' &&
-                                restOfPath != appDataDirName && !restOfPath.StartsWith(
-                                    appDataChildRelPathStartStr);
-                        }
+                        isValid = IsChildPathOf(
+                            userProfilePath, path, false);
                     }
                 }
                 else
                 {
-                    rootedPath = Path.Combine(
-                        hasRootDirPath ? rootDirPath : userProfilePath,
-                        path);
+                    isValid = !IsPathEmpty(path);
+
+                    if (isValid)
+                    {
+                        rootedPath = Path.Combine(
+                            hasRootDirPath ? rootDirPath : userProfilePath,
+                            path);
+                    }
                 }
             }
 
@@ -469,22 +460,17 @@ namespace Turmerik.Core.DriveExplorer
         protected bool IsChildPathOf(
             string basePath,
             string trgPath,
-            bool allowsEqualToBasePath,
-            out string? restOfPath)
+            bool allowsEqualToBasePath)
         {
-            restOfPath = null;
             bool isChildOf = trgPath.StartsWith(basePath);
 
             if (isChildOf)
             {
-                string restOfPathStr = trgPath.Substring(
+                string restOfPath = trgPath.Substring(
                     basePath.Length);
 
-                string trimmedRestOfPath = PathTrimStart(
-                    restOfPathStr);
-
                 bool restOfPathIsEmpty = string.IsNullOrWhiteSpace(
-                    trimmedRestOfPath);
+                    restOfPath);
 
                 if (restOfPathIsEmpty)
                 {
@@ -492,22 +478,13 @@ namespace Turmerik.Core.DriveExplorer
                 }
                 else
                 {
-                    isChildOf = restOfPathStr.First() == Path.DirectorySeparatorChar;
-                }
-
-                if (isChildOf)
-                {
-                    restOfPath = trimmedRestOfPath;
+                    isChildOf = !IsPathEmpty(restOfPath);
                 }
             }
 
             return isChildOf;
         }
 
-        private string PathTrimStart(
-            string path) => path.TrimStart(
-            Path.DirectorySeparatorChar,
-            Path.AltDirectorySeparatorChar,
-            '.', ' ');
+        private bool IsPathEmpty(string path) => path.All(c => "./\\".Contains(c) || char.IsWhiteSpace(c));
     }
 }
