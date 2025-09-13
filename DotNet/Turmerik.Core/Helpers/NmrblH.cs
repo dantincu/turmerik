@@ -42,9 +42,9 @@ namespace Turmerik.Core.Helpers
             return result;
         }
 
-        public static TNmrbl ForEach<TItem, TNmrbl>(
-            this TNmrbl nmrbl,
-            ForCallback<TItem> callback) where TNmrbl : IEnumerable<TItem>
+        public static IEnumerable<TItem> ForEach<TItem>(
+            this IEnumerable<TItem> nmrbl,
+            ForCallback<TItem> callback)
         {
             int idx = 0;
             var @break = new MutableValueWrapper<bool>();
@@ -61,6 +61,16 @@ namespace Turmerik.Core.Helpers
 
             return nmrbl;
         }
+
+        public static IEnumerable<TItem> ForEach<TItem>(
+            this IEnumerable<TItem> nmrbl,
+            ForEachCallback<TItem> callback) => ForEach(
+                nmrbl, (item, _, @break) => callback(item, @break));
+
+        public static IEnumerable<TItem> ForEach<TItem>(
+            this IEnumerable<TItem> nmrbl,
+            Action<TItem> callback) => ForEach(
+                nmrbl, (item, _, _) => callback(item));
 
         public static ReadOnlyCollection<T> RdnlC<T>(
             this IList<T> list) => new ReadOnlyCollection<T>(list);

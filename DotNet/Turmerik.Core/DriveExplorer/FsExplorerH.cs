@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Turmerik.Core.Dependencies;
+using Turmerik.Core.FileManager;
 using Turmerik.Core.Helpers;
 
 namespace Turmerik.Core.DriveExplorer
@@ -16,11 +17,14 @@ namespace Turmerik.Core.DriveExplorer
             bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
-            services.AddSvcIfReq<IFsExplorerServiceFactory, FsExplorerServiceFactory>();
+            services.AddFsManagerGuard(
+                dependencyLifetime,
+                allowSysFolders,
+                allowNonSysDrives,
+                rootDirPath);
 
-            services.AddSvc(
-                svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Retriever(
-                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
+            services.AddSvc<IFsItemsRetriever, FsItemsRetriever>(
+                dependencyLifetime);
 
             return services;
         }
@@ -32,11 +36,14 @@ namespace Turmerik.Core.DriveExplorer
             bool allowNonSysDrives = false,
             string rootDirPath = null)
         {
-            services.AddSvcIfReq<IFsExplorerServiceFactory, FsExplorerServiceFactory>();
+            services.AddFsManagerGuard(
+                dependencyLifetime,
+                allowSysFolders,
+                allowNonSysDrives,
+                rootDirPath);
 
-            services.AddSvc(
-                svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Explorer(
-                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
+            services.AddSvc<IFsExplorerService, FsExplorerService>(
+                dependencyLifetime);
 
             return services;
         }

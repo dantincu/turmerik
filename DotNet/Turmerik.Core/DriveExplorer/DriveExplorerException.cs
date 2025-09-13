@@ -1,36 +1,31 @@
 ﻿using System;
 using System.Net;
 using System.Runtime.Serialization;
+using Turmerik.Core.FileManager;
 
 namespace Turmerik.Core.DriveExplorer
 {
-    public class DriveExplorerException : Exception
+    public class DriveExplorerException : FileManagerException
     {
         public DriveExplorerException(
             HttpStatusCode? httpStatusCode = null,
-            string? httpStatusText = null)
+            string? httpStatusText = null) : base(httpStatusCode, httpStatusText)
         {
-            HttpStatusCode = httpStatusCode;
-            HttpStatusText = httpStatusText;
         }
 
         public DriveExplorerException(
             string? message,
             HttpStatusCode? httpStatusCode = null,
-            string? httpStatusText = null) : base(message)
+            string? httpStatusText = null) : base(message, httpStatusCode, httpStatusText)
         {
-            HttpStatusCode = httpStatusCode;
-            HttpStatusText = httpStatusText;
         }
 
         public DriveExplorerException(
             string? message,
             Exception? innerException,
             HttpStatusCode? httpStatusCode = null,
-            string? httpStatusText = null) : base(message, innerException)
+            string? httpStatusText = null) : base(message, innerException, httpStatusCode, httpStatusText)
         {
-            HttpStatusCode = httpStatusCode;
-            HttpStatusText = httpStatusText;
         }
 
         protected DriveExplorerException(
@@ -40,8 +35,5 @@ namespace Turmerik.Core.DriveExplorer
                 context)
         {
         }
-
-        public HttpStatusCode? HttpStatusCode { get; set; }
-        public string? HttpStatusText { get; set; }
     }
 }

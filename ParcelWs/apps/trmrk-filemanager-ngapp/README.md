@@ -24,6 +24,4 @@ Commands to update trmrk libs:
 .\src\trmrk-browser\_\push_to_trmrk-browser_ppgp.bat
 
 .\src\trmrk\_\push_to_trmrk_ppgp.bat
-
-.\src\lib\_\pull_from_this.bat
 ```

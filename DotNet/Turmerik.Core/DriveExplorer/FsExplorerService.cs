@@ -5,10 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Turmerik.Core.FileManager;
 using Turmerik.Core.FileSystem;
-using Turmerik.Core.Utility;
 using Turmerik.Core.Text;
 using Turmerik.Core.TextParsing;
+using Turmerik.Core.Utility;
 
 namespace Turmerik.Core.DriveExplorer
 {
@@ -19,8 +20,10 @@ namespace Turmerik.Core.DriveExplorer
     public class FsExplorerService : FsItemsRetriever, IFsExplorerService
     {
         public FsExplorerService(
+            IFsManagerGuard fsManagerGuard,
             ITimeStampHelper timeStampHelper,
             IPascalOrCamelCaseToWordsConverter pascalOrCamelCaseToWordsConverter) : base(
+                fsManagerGuard,
                 timeStampHelper,
                 pascalOrCamelCaseToWordsConverter)
         {
@@ -31,8 +34,8 @@ namespace Turmerik.Core.DriveExplorer
             string newPrIdnf,
             string newFileName)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
-            ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
 
             string newPath = Path.Combine(
                 newPrFolderPath, newFileName);
@@ -51,8 +54,8 @@ namespace Turmerik.Core.DriveExplorer
             string newFolderName,
             bool? retMinimalInfo)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var folderPath);
-            ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var folderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
 
             string newPath = Path.Combine(
                 newPrFolderPath, newFolderName);
@@ -73,7 +76,7 @@ namespace Turmerik.Core.DriveExplorer
             string newFolderName,
             bool? retMinimalInfo)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(prIdnf, true, out var newPrFolderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(prIdnf, true, out var newPrFolderPath);
 
             string newPath = Path.Combine(
                 newPrFolderPath, newFolderName);
@@ -105,7 +108,7 @@ namespace Turmerik.Core.DriveExplorer
             string newFileName,
             string text)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(prIdnf, false, out var prFolderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(prIdnf, false, out var prFolderPath);
 
             string newPath = Path.Combine(
                 prFolderPath, newFileName);
@@ -120,7 +123,7 @@ namespace Turmerik.Core.DriveExplorer
 
         public async Task<DriveItem> DeleteFileAsync(string idnf)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
 
             var fileInfo = new FileInfo(filePath);
             var driveItem = GetDriveItem(fileInfo);
@@ -133,7 +136,7 @@ namespace Turmerik.Core.DriveExplorer
             string idnf,
             bool? retMinimalInfo)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var folderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var folderPath);
 
             var dirInfo = new DirectoryInfo(folderPath);
             var driveItem = GetDriveItem(dirInfo);
@@ -157,8 +160,8 @@ namespace Turmerik.Core.DriveExplorer
             string newPrIdnf,
             string newFileName)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
-            ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var filePath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
 
             string path = filePath;
 
@@ -178,8 +181,8 @@ namespace Turmerik.Core.DriveExplorer
             string newFolderName,
             bool? retMinimalInfo)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var folderPath);
-            ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, false, out var folderPath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(newPrIdnf, true, out var newPrFolderPath);
 
             string path = folderPath;
             string newPrPath = newPrFolderPath;
@@ -202,7 +205,7 @@ namespace Turmerik.Core.DriveExplorer
             string idnf,
             string newFileName)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var filePath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var filePath);
             string parentDirPath = Path.GetDirectoryName(filePath);
 
             var result = await MoveFileAsync(
@@ -216,9 +219,9 @@ namespace Turmerik.Core.DriveExplorer
             string newFolderName,
             bool? retMinimalInfo)
         {
-            ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var filePath);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(idnf, true, out var filePath);
             string parentPath = Path.GetDirectoryName(filePath);
-            ThrowIfPathIsNotValidAgainstRootPath(parentPath, true, out _);
+            FsManagerGuard.ThrowIfPathIsNotValidAgainstRootPath(parentPath, true, out _);
 
             var result = await MoveFolderAsync(
                 filePath, parentPath, newFolderName, retMinimalInfo);

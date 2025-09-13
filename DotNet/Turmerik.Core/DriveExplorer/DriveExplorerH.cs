@@ -34,10 +34,7 @@ namespace Turmerik.Core.DriveExplorer
                 services, dependencyLifetime,
                 allowSysFolders, allowNonSysDrives, rootDirPath);
 
-            services.AddSvc<IDriveItemsRetriever>(
-                svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Retriever(
-                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
-
+            services.AddSvc<IDriveItemsRetriever, FsItemsRetriever>(dependencyLifetime);
             return services;
         }
 
@@ -52,10 +49,7 @@ namespace Turmerik.Core.DriveExplorer
                 services, dependencyLifetime,
                 allowSysFolders, allowNonSysDrives, rootDirPath);
 
-            services.AddSvc<IDriveExplorerService>(
-                svcProv => svcProv.GetRequiredService<IFsExplorerServiceFactory>().Explorer(
-                    allowSysFolders, allowNonSysDrives, rootDirPath), dependencyLifetime);
-
+            services.AddSvc<IDriveExplorerService, FsExplorerService>(dependencyLifetime);
             return services;
         }
 

@@ -239,5 +239,36 @@ namespace Turmerik.Core.Text
                 group => group.Key,
                 group => group.Select(
                     tuple => tuple.Item2).ToArray());
+
+        public static bool IsPathEmpty(this string path) => path.All(
+            c => "./\\".Contains(c) || char.IsWhiteSpace(c));
+
+        public static bool IsChildPathOf(
+            this string basePath,
+            string trgPath,
+            bool allowsEqualToBasePath)
+        {
+            bool isChildOf = trgPath.StartsWith(basePath);
+
+            if (isChildOf)
+            {
+                string restOfPath = trgPath.Substring(
+                    basePath.Length);
+
+                bool restOfPathIsEmpty = string.IsNullOrWhiteSpace(
+                    restOfPath);
+
+                if (restOfPathIsEmpty)
+                {
+                    isChildOf = allowsEqualToBasePath;
+                }
+                else
+                {
+                    isChildOf = !restOfPath.IsPathEmpty();
+                }
+            }
+
+            return isChildOf;
+        }
     }
 }
