@@ -1,11 +1,21 @@
 :root {
-  --trmrk-app-bar_background-color_light: #ffe000;
-  --trmrk-top-horiz-strip_border-color-light: #ffd000;
+  --trmrk-app-bar_background-color_light: #ddbbff;
+  --trmrk-top-horiz-strip_border-color-light: #ccaaee;
+  --trmrk-app-bar_background-color_dark: #220033;
+  --trmrk-top-horiz-strip_border-color-dark: #330044;
+
+  /* --trmrk-app-bar_background-color_light: #ffe000;
+  --trmrk-top-horiz-strip_border-color-light: #f0d000;
   --trmrk-app-bar_background-color_dark: #200800;
-  --trmrk-top-horiz-strip_border-color-dark: #301000;
+  --trmrk-top-horiz-strip_border-color-dark: #301000; */
 }
 
 .trmrk-app-theme-light {
+  .trmrk-app-icon {
+    stroke: #44F;
+    fill: #44F;
+  }
+
   .trmrk-app-bar {
     background-color: var(--trmrk-app-bar_background-color_light);
   }
@@ -36,7 +46,7 @@
     background-color: var(--trmrk-app-bar_background-color_dark);
 
     &.trmrk-has-border-x2 {
-      border-color: var(--trmrk-top-horiz-strip_border-color-right);
+      border-color: var(--trmrk-top-horiz-strip_border-color-dark);
     }
   }
 

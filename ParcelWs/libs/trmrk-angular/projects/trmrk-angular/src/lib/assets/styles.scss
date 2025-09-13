@@ -92,6 +92,8 @@ app-root {
 .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
   display: inline-flex;
   overflow: hidden;
+  width: 40px;
+  height: 40px;
 }
 
 .trmrk-custom-svg-icon-wrapper {
@@ -455,6 +457,13 @@ trmrk-app-page {
       margin-top: 0;
     }
   }
+}
+
+.trmrk-top-message-horiz-strip,
+.trmrk-top-horiz-strip,
+.trmrk-bottom-horiz-strip
+{
+  border-radius: 0;
 }
 
 .trmrk-tree-view {
