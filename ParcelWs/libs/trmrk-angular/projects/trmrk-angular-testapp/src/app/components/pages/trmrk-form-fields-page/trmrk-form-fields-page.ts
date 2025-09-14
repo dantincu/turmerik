@@ -20,7 +20,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 import { TrmrkAppPage } from 'trmrk-angular';
 
-import { TrmrkSpinner } from '../../../USER-CODE/forms/components/common/trmrk-spinner/trmrk-spinner';
+import { TrmrkSpinner } from 'trmrk-angular';
 
 @Component({
   selector: 'trmrk-form-fields-page',

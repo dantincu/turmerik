@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { TrmrkAppPage } from 'trmrk-angular';
 
-import { TrmrkErrorStateMatcher } from '../../../services/trmrk-error-state-matcher';
+import { TrmrkErrorStateMatcher } from 'trmrk-angular';
 
 @Component({
   selector: 'trmrk-forms-test-page',
