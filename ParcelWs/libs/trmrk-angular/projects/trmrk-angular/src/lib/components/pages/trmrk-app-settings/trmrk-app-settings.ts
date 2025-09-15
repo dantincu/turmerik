@@ -1,70 +1,24 @@
-import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Subscription } from 'rxjs';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
-import { AppStateServiceBase } from '../../../services/app-state-service-base';
 import { AppConfigServiceBase } from '../../../services/app-config-service-base';
 
 import { TrmrkAppPage } from '../../common/trmrk-app-page/trmrk-app-page';
-import { materialIcons } from '../../../assets/icons/material';
 
-import { setIsDarkModeToLocalStorage } from '../../../../trmrk-browser/domUtils/core';
+import { TrmrkAppSettingsService } from '../../../services/pages/trmrk-app-settings-service';
 
 @Component({
   selector: 'trmrk-app-settings',
-  imports: [
-    MatCheckbox,
-    RouterLink,
-    MatIconModule,
-    MatButtonModule,
-    TrmrkAppPage,
-  ],
+  imports: [MatCheckbox, RouterLink, MatIconModule, MatButtonModule, TrmrkAppPage],
   templateUrl: './trmrk-app-settings.html',
   styleUrl: './trmrk-app-settings.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class TrmrkAppSettings implements OnDestroy {
-  isDarkMode;
-  resetAltIcon: SafeHtml;
-
-  private darkModeStateChangeSubscription: Subscription;
-
+export class TrmrkAppSettings {
   constructor(
     public appConfigService: AppConfigServiceBase,
-    private appStateService: AppStateServiceBase,
-    private sanitizer: DomSanitizer
-  ) {
-    this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
-    this.darkModeStateChange = this.darkModeStateChange.bind(this);
-
-    this.darkModeStateChangeSubscription =
-      appStateService.isDarkMode.$obs.subscribe(this.darkModeStateChange);
-
-    this.isDarkMode = this.appStateService.isDarkMode.value;
-
-    this.resetAltIcon = this.sanitizer.bypassSecurityTrustHtml(
-      materialIcons.reset_alt
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.darkModeStateChangeSubscription.unsubscribe();
-  }
-
-  onDarkModeBtnClick(event: MatCheckboxChange): void {
-    setIsDarkModeToLocalStorage(
-      !this.isDarkMode,
-      this.appStateService.appThemeIsDarkModeLocalStorageKey
-    );
-
-    this.appStateService.isDarkMode.next(!this.isDarkMode);
-  }
-
-  darkModeStateChange(isDarkModeValue: boolean) {
-    this.isDarkMode = isDarkModeValue;
-  }
+    public trmrkAppSettingsService: TrmrkAppSettingsService
+  ) {}
 }

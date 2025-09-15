@@ -40,6 +40,10 @@ export * from './lib/services/trmrk-panel-list-service';
 export * from './lib/services/TrmrkObservable';
 export * from './lib/services/TrmrkTree';
 export * from './lib/services/types';
+export * from './lib/services/pages/trmrk-app-settings-service';
+export * from './lib/services/pages/trmrk-app-themes-service';
+export * from './lib/services/pages/trmrk-edit-app-theme-dialog-service';
+export * from './lib/services/pages/trmrk-reset-app-service';
 
 export * from './lib/directives/trmrk-cancel-context-menu';
 export * from './lib/directives/trmrk-continuous-press';

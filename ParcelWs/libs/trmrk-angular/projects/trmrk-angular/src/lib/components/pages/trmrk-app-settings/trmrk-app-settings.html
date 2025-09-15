@@ -9,11 +9,12 @@
     <div class="trmrk-field">
       <mat-checkbox
         class="trmrk-checkbox"
-        (change)="onDarkModeBtnClick($event)"
-        [checked]="isDarkMode"
+        (change)="trmrkAppSettingsService.onDarkModeBtnClick($event)"
+        [checked]="trmrkAppSettingsService.isDarkMode"
         >Dark Mode</mat-checkbox
       >
     </div>
+    @if (trmrkAppSettingsService.showAppThemeOption ?? false) {
     <div class="trmrk-field">
       <a
         mat-button
@@ -22,6 +23,7 @@
         ><mat-icon class="trmrk-icon">palette</mat-icon> App Theme
       </a>
     </div>
+    }
     <div class="trmrk-field">
       <a
         mat-button
@@ -30,7 +32,7 @@
       >
         <div
           class="trmrk-custom-svg-icon-wrapper"
-          [innerHtml]="resetAltIcon"
+          [innerHtml]="trmrkAppSettingsService.resetAltIcon"
         ></div>
         Reset App
       </a>

@@ -27,10 +27,7 @@ export class AsyncRequestStateManager<TError = any> {
     }
   }
 
-  error(
-    error: TError,
-    onError: ((error: TError) => string | string[]) | NullOrUndef = null
-  ) {
+  error(error: TError, onError: ((error: TError) => string | string[]) | NullOrUndef = null) {
     this.isLoading = false;
     this.hasError++;
 
@@ -56,5 +53,14 @@ export class AsyncRequestStateManager<TError = any> {
 
     this.errorTitle = errorMsg[0];
     this.errorMsg = errorMsg[1];
+  }
+}
+
+export class AsyncRequestStateManagerFactory {
+  create<TError = any>(
+    onSuccess: (() => VoidOrAny) | NullOrUndef = null,
+    onError: ((error: TError) => string | string[]) | NullOrUndef = null
+  ) {
+    return new AsyncRequestStateManager(onSuccess, onError);
   }
 }

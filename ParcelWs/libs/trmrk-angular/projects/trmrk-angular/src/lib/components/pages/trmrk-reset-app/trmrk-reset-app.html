@@ -1,22 +1,24 @@
 <trmrk-app-page
   [trmrkPageTemplate]="page"
-  [trmrkAppBarTitle]="isResetting ? 'Resetting the app...' : 'App Reset'"
+  [trmrkAppBarTitle]="trmrkResetAppService.isResetting ? 'Resetting the app...' : 'App Reset'"
 ></trmrk-app-page>
 
 <ng-template #page>
-  @if (showTopHorizStrip) {
+  @if (trmrkResetAppService.showTopHorizStrip) {
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-top-message-horiz-strip trmrk-has-border-x2']"
     [trmrkLeadingTemplate]="topHorizStripLeadingTemplate"
   ></trmrk-horiz-strip>
   }
   <div class="trmrk-page-body trmrk-page-body-thin">
-    @if (!isResetting) {
+    @if (!trmrkResetAppService.isResetting) {
     <a
       mat-button
       mat-button
       class="trmrk-btn"
-      [routerLink]="router.createUrlTree([], { queryParams: { reset: 'true' } })"
+      [routerLink]="
+        trmrkResetAppService.router.createUrlTree([], { queryParams: { reset: 'true' } })
+      "
       >Reset</a
     >
     }
@@ -24,14 +26,14 @@
 </ng-template>
 
 <ng-template #topHorizStripLeadingTemplate>
-  @if (isResetting) {
+  @if (trmrkResetAppService.isResetting) {
   <trmrk-loading></trmrk-loading>
   }
   <trmrk-user-message
     class="trmrk-app-reset-success-message"
     [trmrkMessage]="'The app has been reset'"
-    [trmrkShow]="showSuccessMessage"
+    [trmrkShow]="trmrkResetAppService.showSuccessMessage"
     [trmrkLevel]="0"
-    (trmrkClose)="successMessageClose()"
+    (trmrkClose)="trmrkResetAppService.successMessageClose()"
   ></trmrk-user-message>
 </ng-template>
