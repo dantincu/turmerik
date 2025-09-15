@@ -8,6 +8,7 @@ import {
   TemplateRef,
   ElementRef,
   ChangeDetectionStrategy,
+  OnDestroy,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -62,7 +63,7 @@ export type TrmrkHorizStripDetailsTextPart = TrmrkHorizStripDetailsTextPartCore<
   styleUrl: './trmrk-horiz-strip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkHorizStrip implements OnChanges {
+export class TrmrkHorizStrip implements OnChanges, OnDestroy {
   @Output() trmrkTextLongPressOrRightClick =
     new EventEmitter<TouchOrMouseCoords>();
 
@@ -164,5 +165,13 @@ export class TrmrkHorizStrip implements OnChanges {
         ).replaceAll('\n', '&nbsp;');
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkTextLongPressAltHost = null;
+    this.trmrkDetailsTextParts = null;
+    this.trmrkLeadingTemplate = null;
+    this.trmrkTrailingTemplate = null;
+    this.trmrkTextPartDelimiterTemplate = null;
   }
 }

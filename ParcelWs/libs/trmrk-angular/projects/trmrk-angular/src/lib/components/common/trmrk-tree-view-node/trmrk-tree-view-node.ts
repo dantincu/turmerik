@@ -1,4 +1,10 @@
-import { Component, Input, TemplateRef, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  TemplateRef,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { NullOrUndef } from '../../../../trmrk/core';
@@ -15,7 +21,7 @@ import {
   templateUrl: './trmrk-tree-view-node.html',
   styleUrl: './trmrk-tree-view-node.scss',
 })
-export class TrmrkTreeViewNode implements OnInit {
+export class TrmrkTreeViewNode implements OnInit, OnDestroy {
   @Input() trmrkTreeData!: TrmrkTree<any>;
   @Input() trmrkData!: TrmrkTreeNode<any>;
   @Input() trmrkPath!: number[];
@@ -38,6 +44,15 @@ export class TrmrkTreeViewNode implements OnInit {
   ngOnInit() {
     this.data = this.trmrkData.data.value;
     this.childNodes = this.trmrkData.childNodesData?.value;
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkTreeData = null!;
+    this.trmrkData = null!;
+    this.contentTemplate = null!;
+    this.childNodeTemplate = null!;
+    this.data = null!;
+    this.childNodes = null!;
   }
 
   getChildNodePath(idx: number) {

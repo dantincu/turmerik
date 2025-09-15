@@ -169,6 +169,20 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
 
   ngOnDestroy(): void {
     this.reset();
+    this.getPanelList = null!;
+    this.getListItems = null!;
+    this.rowsMenuTriggerEl = null!;
+    this.rowsMenuTrigger = null!;
+    this.rowsMenu = null!;
+    this.getVisuallyMovingListItems = null!;
+    this.getPanelHeader = null!;
+    this.getUpAcceleratingScrollPopover = null!;
+    this.getDownAcceleratingScrollPopover = null!;
+    this.getMovingAggregateRowEl = null!;
+    this.entities = null!;
+    this.rows = null!;
+    this.toggleAppBar = null!;
+    this.getAppBarHeight = null!;
   }
 
   setup(args: TrmrkPanelListServiceSetupArgs<TEntity, TItem>) {
@@ -764,6 +778,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.downAcceleratingPopoverCancelBtn = null;
     this.downAcceleratingPopoverCancelBtnIsFocused = false;
     this.rowContentMouseDownOrTouchStartCoords = null;
+    this.leadingIconDragServices = null;
   }
 
   private getItemHostEl(item: TItem) {

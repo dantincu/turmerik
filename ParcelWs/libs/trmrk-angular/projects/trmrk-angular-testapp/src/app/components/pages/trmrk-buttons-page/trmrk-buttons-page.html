@@ -59,7 +59,6 @@
     <button mat-icon-button class="trmrk-icon-btn trmrk-icon-btn-filled-warn">
       <mat-icon class="trmrk-icon">open_with</mat-icon>
     </button>
-
     <button mat-button class="trmrk-btn trmrk-btn-filled-default">
       asdfasdfasdfafsd
     </button>
@@ -94,18 +93,23 @@
     <button matButton="tonal">tonal</button>
     <!-- type MatButtonAppearance = 'text' | 'filled' | 'elevated' | 'outlined' | 'tonal'; -->
   </div>
-  <button mat-button>asdfasdf</button>
-  <button matButton="filled">asdfasdf</button>
+  <div>
+    <button mat-button>asdfasdf</button>
+    <button matButton="filled">asdfasdf</button>
+  </div>
+  <div>
+    <button mat-button>asdfasdf</button>
+    <button matButton="filled">asdfasdf</button>
+  </div>
   <div>
     <button mat-button>asdfasdf</button>
     <button matButton="filled">asdfasdf</button>
   </div>
   <div
-    [ngStyle]="{display: 'flex', flexDirection: 'column', position: 'relative', flex: '1 0 10%', boxSizing: 'border-box'}"
-  >
-    <button mat-button>asdfasdf</button>
-    <button matButton="filled">asdfasdf</button>
-  </div>
+    [ngStyle]="{display: 'flex', flexDirection: 'column', position: 'relative', flex: '0.98 1 auto',
+      boxSizing: 'border-box', minHeight: '0px',
+      backgroundColor: '#F80', borderRadius: '3px', top: '0px'}"
+  ></div>
   <div>
     <button mat-button>asdfasdf</button>
     <button matButton="filled">asdfasdf</button>

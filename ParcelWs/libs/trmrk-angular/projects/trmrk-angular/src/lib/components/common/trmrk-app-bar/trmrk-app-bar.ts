@@ -10,6 +10,7 @@ import {
   ChangeDetectionStrategy,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 
 import { NgTemplateOutlet, CommonModule } from '@angular/common';
@@ -38,7 +39,7 @@ import { AppStateServiceBase } from '../../../services/app-state-service-base';
   styleUrl: './trmrk-app-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkAppBar implements AfterViewInit, OnChanges {
+export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
   @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
@@ -82,6 +83,12 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges {
         this.updateBackBtnDisabled();
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkLeadingIconTemplate = null;
+    this.trmrkBeforeTitleTemplate = null;
+    this.trmrkTrailingTemplate = null;
   }
 
   backBtnClicked(event: MouseEvent) {

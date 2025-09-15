@@ -7,6 +7,7 @@ import {
   Output,
   TemplateRef,
   ChangeDetectionStrategy,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -29,7 +30,7 @@ import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-star
   styleUrl: './trmrk-thin-horiz-strip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkThinHorizStrip {
+export class TrmrkThinHorizStrip implements OnDestroy {
   @Output() trmrkTextLongPressOrRightClick =
     new EventEmitter<TouchOrMouseCoords>();
 
@@ -78,5 +79,11 @@ export class TrmrkThinHorizStrip {
         ).replaceAll('\n', '&nbsp;');
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkTextLongPressAltHost = null;
+    this.trmrkLeadingTemplate = null;
+    this.trmrkTrailingTemplate = null;
   }
 }

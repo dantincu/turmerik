@@ -55,6 +55,7 @@ export class ToggleAppBarServiceBase<
   }
 
   ngOnDestroy(): void {
+    this.getAppPanelElem = null!;
     this.showAppBarSubscription?.unsubscribe();
   }
 

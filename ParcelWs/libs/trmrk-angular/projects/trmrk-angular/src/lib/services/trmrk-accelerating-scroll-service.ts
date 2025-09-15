@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { getCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 import { getElemIdx } from '../../trmrk-browser/domUtils/getDomElemBounds';
 
 @Injectable()
-export class TrmrkAcceleratingScrollService {
+export class TrmrkAcceleratingScrollService implements OnDestroy {
   incSpeedFactor = 2;
   minScrollStep = 40;
   scrollableElem!: () => HTMLElement;
@@ -15,6 +15,11 @@ export class TrmrkAcceleratingScrollService {
   private scrollStep = 0;
 
   constructor() {}
+
+  ngOnDestroy(): void {
+    this.scrollableElem = null!;
+    this.scrollAccElems = null!;
+  }
 
   start(scrollDirIsDown: boolean | null) {
     this.updateAccelerate(scrollDirIsDown, false, true);

@@ -1,4 +1,4 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter, OnDestroy } from '@angular/core';
 
 import {
   MouseButton,
@@ -14,7 +14,7 @@ import {
 } from './types';
 
 @Injectable()
-export class DragService {
+export class DragService implements OnDestroy {
   @Output() drag = new EventEmitter<TrmrkDragEvent>();
   @Output() dragEnd = new EventEmitter<TrmrkDragEvent>();
 
@@ -25,6 +25,12 @@ export class DragService {
   constructor() {
     this.touchOrMouseMove = this.touchOrMouseMove.bind(this);
     this.touchEndOrMouseUp = this.touchEndOrMouseUp.bind(this);
+  }
+
+  ngOnDestroy(): void {
+    this.mouseDownOrTouchStartCoords = null;
+    this.dragStartPosition = null;
+    this.hostEl = null;
   }
 
   public init(hostEl: HTMLElement | null = null) {

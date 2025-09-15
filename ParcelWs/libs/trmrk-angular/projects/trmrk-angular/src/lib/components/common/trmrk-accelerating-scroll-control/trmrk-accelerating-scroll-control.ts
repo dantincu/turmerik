@@ -5,6 +5,7 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,7 +32,7 @@ import { TrmrkAcceleratingScrollService } from '../../../services/trmrk-accelera
   styleUrl: './trmrk-accelerating-scroll-control.scss',
   providers: [TrmrkAcceleratingScrollService],
 })
-export class TrmrkAcceleratingScrollControl implements OnChanges {
+export class TrmrkAcceleratingScrollControl implements OnChanges, OnDestroy {
   @Input() trmrkIntervalMillis = 500;
   @Input() trmrkIncSpeedFactor = 2;
   @Input() trmrkMinScrollStep = 500;
@@ -84,6 +85,10 @@ export class TrmrkAcceleratingScrollControl implements OnChanges {
       () => this.trmrkScrollable,
       (value) => (this.acceleratingScrollService.scrollableElem = value)
     );
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkScrollable = null!;
   }
 
   toggleExpand() {

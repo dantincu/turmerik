@@ -11,6 +11,7 @@ import {
   ViewEncapsulation,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
@@ -51,7 +52,7 @@ import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
   providers: [],
   encapsulation: ViewEncapsulation.None,
 })
-export class TrmrkListAppPanel implements OnChanges {
+export class TrmrkListAppPanel implements OnChanges, OnDestroy {
   @Input() trmrkCssClass: string | null = null;
   @Input() trmrkEntities!: any[];
   @Input() trmrkEntityKeyPropName = 'id';
@@ -124,6 +125,20 @@ export class TrmrkListAppPanel implements OnChanges {
         this.hasError = hasError > 0;
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkRowMenuTemplate = null!;
+    this.trmrkVisuallyMovingRowTemplate = null!;
+    this.trmrkTopStripLeadingTemplate = null!;
+    this.trmrkTopStripTemplate = null!;
+    this.trmrkLoadingTemplate = null!;
+    this.trmrkNoItemsTemplate = null!;
+    this.trmrkListItems = null!;
+    this.trmrkVisuallyMovingListItems = null!;
+    this.trmrkRowMenuTemplate = null!;
+    this.trmrkRowMenuTemplate = null!;
+    this.trmrkRowMenuTemplate = null!;
   }
 
   applyNewOrderClose() {

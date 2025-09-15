@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken, Inject } from '@angular/core';
+import { Injectable, InjectionToken, Inject, OnDestroy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -28,7 +28,7 @@ export interface TrmrkAppThemesServiceInitArgs {
 @Injectable({
   providedIn: 'root',
 })
-export class TrmrkAppThemesService {
+export class TrmrkAppThemesService implements OnDestroy {
   reqStateManager: AsyncRequestStateManager<DOMException | null>;
 
   entities: AppTheme[] = [];
@@ -42,17 +42,27 @@ export class TrmrkAppThemesService {
   editEntityDialog!: MatDialog;
 
   constructor(
-    @Inject(BASIC_APP_SETTINGS_DB_ADAPTER) public trmrkBasicAppSettings: BasicAppSettingsDbAdapter,
+    @Inject(BASIC_APP_SETTINGS_DB_ADAPTER)
+    public trmrkBasicAppSettings: BasicAppSettingsDbAdapter,
     asyncRequestStateManagerFactory: AsyncRequestStateManagerFactory
   ) {
-    this.reqStateManager = asyncRequestStateManagerFactory.create<DOMException | null>(
-      null,
-      (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]
-    );
+    this.reqStateManager =
+      asyncRequestStateManagerFactory.create<DOMException | null>(
+        null,
+        (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.reqStateManager = null!;
+    this.rows = null!;
+    this.trmrkEditAppThemeDialogComponent = null!;
+    this.editEntityDialog = null!;
   }
 
   init(args: TrmrkAppThemesServiceInitArgs) {
-    this.trmrkEditAppThemeDialogComponent = args.trmrkEditAppThemeDialogComponent;
+    this.trmrkEditAppThemeDialogComponent =
+      args.trmrkEditAppThemeDialogComponent;
     this.editEntityDialog = args.editEntityDialog;
 
     setTimeout(() => {
@@ -60,7 +70,9 @@ export class TrmrkAppThemesService {
 
       this.trmrkBasicAppSettings.open(
         (_, db) => {
-          const req = this.trmrkBasicAppSettings.stores.appThemes.store(db).getAll();
+          const req = this.trmrkBasicAppSettings.stores.appThemes
+            .store(db)
+            .getAll();
 
           req.onsuccess = (event) => {
             const target = event.target as IDBRequest<AppTheme[]>;

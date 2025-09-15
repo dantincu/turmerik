@@ -162,5 +162,16 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
     }, 0);
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.trmrkRowMenuTemplate = null!;
+    this.trmrkRowTemplate = null!;
+    this.trmrkVisuallyMovingRowTemplate = null!;
+    this.trmrkListItems = null!;
+    this.trmrkPanelHeader = null!;
+    this.trmrkVisuallyMovingListItems = null!;
+    this.trmrkUpAcceleratingScrollPopover = null!;
+    this.trmrkDownAcceleratingScrollPopover = null!;
+    this.trmrkToggleAppBar = null!;
+    this.trmrkVisuallyMovingListItems = null!;
+  }
 }

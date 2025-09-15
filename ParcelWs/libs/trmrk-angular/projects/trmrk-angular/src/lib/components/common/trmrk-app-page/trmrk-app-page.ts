@@ -4,6 +4,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewEncapsulation,
+  OnDestroy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UrlTree, RouterModule } from '@angular/router';
@@ -31,7 +32,7 @@ import { AppConfigServiceBase } from '../../../services/app-config-service-base'
   styleUrl: './trmrk-app-page.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class TrmrkAppPage {
+export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkPageTemplate: TemplateRef<any> | NullOrUndef;
   @Input() trmrkUseDefaultPageBody = true;
   @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
@@ -80,6 +81,14 @@ export class TrmrkAppPage {
         this.optionsMenuTrigger.menu = this.optionsMenu;
       }
     }, 0);
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkPageTemplate = null;
+    this.trmrkAppBarLeadingIconTemplate = null;
+    this.trmrkAppBarBeforeTitleTemplate = null;
+    this.trmrkAppBarTrailingTemplate = null;
+    this.trmrkOptionsMenuTemplate = null;
   }
 
   optionsMenuBtnClick(event: MouseEvent): void {

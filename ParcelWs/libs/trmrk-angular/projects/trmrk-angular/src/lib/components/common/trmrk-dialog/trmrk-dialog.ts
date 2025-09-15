@@ -5,6 +5,7 @@ import {
   TemplateRef,
   OnChanges,
   SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -33,7 +34,7 @@ import { TrmrkDialogData } from '../../../services/trmrk-dialog';
   templateUrl: './trmrk-dialog.html',
   styleUrl: './trmrk-dialog.scss',
 })
-export class TrmrkDialog<TData = any> implements OnChanges {
+export class TrmrkDialog<TData = any> implements OnChanges, OnDestroy {
   @Input() trmrkData?: TrmrkDialogData<TData> | NullOrUndef;
   @Input() trmrkHeaderTemplate: TemplateRef<any> | NullOrUndef;
 
@@ -49,6 +50,11 @@ export class TrmrkDialog<TData = any> implements OnChanges {
       (data) =>
         (this.data = { ...data!, dialogRef: data!.dialogRef ?? this.dialogRef })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.trmrkData = null;
+    this.trmrkHeaderTemplate = null;
   }
 
   closeModalClick(_: MouseEvent) {

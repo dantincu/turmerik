@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 import { ComponentDataMap } from './componentDataMap';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AppBarMapService {
+export class AppBarMapService implements OnDestroy {
   public map = new ComponentDataMap<() => HTMLElement | null>();
   public currentPageId: number = 0;
 
@@ -30,5 +30,9 @@ export class AppBarMapService {
 
   public clear(pageId: number) {
     this.map.clear(pageId);
+  }
+
+  ngOnDestroy(): void {
+    this.map.clearAll();
   }
 }

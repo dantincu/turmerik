@@ -31,21 +31,27 @@ export class TrmrkAppSettingsService implements OnDestroy {
   private resetAppDialog!: MatDialog;
   private resetAppDialogComponent: any;
 
-  constructor(private appStateService: AppStateServiceBase, private sanitizer: DomSanitizer) {
+  constructor(
+    private appStateService: AppStateServiceBase,
+    private sanitizer: DomSanitizer
+  ) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
     this.darkModeStateChange = this.darkModeStateChange.bind(this);
 
-    this.darkModeStateChangeSubscription = appStateService.isDarkMode.$obs.subscribe(
-      this.darkModeStateChange
-    );
+    this.darkModeStateChangeSubscription =
+      appStateService.isDarkMode.$obs.subscribe(this.darkModeStateChange);
 
     this.isDarkMode = this.appStateService.isDarkMode.value;
 
-    this.resetAltIcon = this.sanitizer.bypassSecurityTrustHtml(materialIcons.reset_alt);
+    this.resetAltIcon = this.sanitizer.bypassSecurityTrustHtml(
+      materialIcons.reset_alt
+    );
   }
 
   ngOnDestroy(): void {
     this.darkModeStateChangeSubscription.unsubscribe();
+    this.resetAppDialog = null!;
+    this.resetAppDialogComponent = null!;
   }
 
   init(args: TrmrkAppSettingsServiceInitArgs) {

@@ -6,6 +6,7 @@ import {
   TemplateRef,
   ChangeDetectionStrategy,
   ElementRef,
+  OnDestroy,
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -44,7 +45,7 @@ import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndM
   styleUrl: './trmrk-panel-list-item.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrmrkPanelListItem<TInputData = any> {
+export class TrmrkPanelListItem<TInputData = any> implements OnDestroy {
   @Output() trmrkExpandedToggled = new EventEmitter<boolean>();
   @Output() trmrkCheckBoxToggled = new EventEmitter<MatCheckboxChange>();
 
@@ -121,4 +122,15 @@ export class TrmrkPanelListItem<TInputData = any> {
   TrmrkHorizStripType = TrmrkHorizStripType;
 
   constructor(public hostEl: ElementRef) {}
+
+  ngOnDestroy(): void {
+    this.trmrkLeadingBtnLongPressAltHost = null;
+    this.trmrkGoToParentBtnLongPressAltHost = null;
+    this.trmrkColorLabelBtnLongPressAltHost = null;
+    this.trmrkTextLongPressAltHost = null;
+    this.trmrkDetailsTextParts = null;
+    this.trmrkLeadingIconTemplate = null;
+    this.trmrkTrailingTemplate = null!;
+    this.trmrkInputData = null;
+  }
 }

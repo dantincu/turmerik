@@ -15,4 +15,8 @@ export class ComponentDataMap<TData> {
   public clear(id: number) {
     delete this._map[id];
   }
+
+  public clearAll() {
+    this._map = {};
+  }
 }
