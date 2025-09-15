@@ -2,10 +2,14 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { jsonBool } from '../../../trmrk/core';
-import { replaceQueryParams } from '../../../trmrk/url';
+import { jsonBool, NullOrUndef } from '../../../../trmrk/core';
+import { replaceQueryParams } from '../../../../trmrk/url';
 
-import { AppStateServiceBase } from '../../services/app-state-service-base';
+import { getIDbRequestOpenErrorMsg } from '../../../../trmrk-browser/indexedDB/core';
+
+import { AppStateServiceBase } from '../../app-state-service-base';
+
+import { ResetAppService } from './reset-app-service';
 
 export interface TrmrkResetAppServiceInitArgs {
   route: ActivatedRoute;
@@ -20,9 +24,15 @@ export class TrmrkResetAppService implements OnDestroy {
 
   isResetting: boolean | null = null;
   showSuccessMessage = 0;
+  showErrorMessage = 0;
+  errorMessage: string | NullOrUndef;
   showTopHorizStrip = true;
 
-  constructor(public router: Router, private appStateService: AppStateServiceBase) {}
+  constructor(
+    public router: Router,
+    private appStateService: AppStateServiceBase,
+    private resetAppService: ResetAppService
+  ) {}
 
   ngOnDestroy() {
     this.routeSub.unsubscribe();
@@ -43,38 +53,25 @@ export class TrmrkResetAppService implements OnDestroy {
       }
 
       if (this.isResetting) {
+        this.errorMessage = null;
+        this.showErrorMessage = 0;
         this.showTopHorizStrip = true;
 
-        setTimeout(() => {
-          for (let storage of [localStorage, sessionStorage]) {
-            for (let i = 0; i < storage.length; i++) {
-              const key = storage.key(i);
+        setTimeout(async () => {
+          try {
+            await this.resetAppService.resetApp(this.appStateService.dbObjNamePrefix);
+            const url = replaceQueryParams('', null, false);
 
-              if (key?.startsWith(this.appStateService.dbObjNamePrefix)) {
-                storage.removeItem(key);
-              }
-            }
+            this.router.navigate([url], {
+              queryParams: { reset: 'false' },
+              replaceUrl: true,
+            });
+          } catch (err) {
+            this.isResetting = null;
+            this.errorMessage = getIDbRequestOpenErrorMsg(err as DOMException);
+            this.showErrorMessage++;
+            this.showTopHorizStrip = true;
           }
-
-          indexedDB.databases().then((databases) => {
-            const onComplete = () => {
-              const url = replaceQueryParams('', null, false);
-              // window.location.replace(`${url}?reset=false`);
-              this.router.navigate([url], { queryParams: { reset: 'false' }, replaceUrl: true });
-            };
-
-            databases = databases.filter((db) =>
-              db.name?.startsWith(this.appStateService.dbObjNamePrefix)
-            );
-
-            if (!databases.length) {
-              onComplete();
-            } else {
-              const promises = databases.map((db) => indexedDB.deleteDatabase(db.name!));
-
-              Promise.all(promises).then(onComplete);
-            }
-          });
         }, 0);
       } else if (this.isResetting === false) {
         this.showSuccessMessage++;
@@ -86,7 +83,14 @@ export class TrmrkResetAppService implements OnDestroy {
     });
   }
 
-  successMessageClose() {
+  closeError() {
+    this.errorMessage = null;
+    this.showErrorMessage = 0;
+    this.showTopHorizStrip = false;
+    this.navToBaseRoute();
+  }
+
+  navToBaseRoute() {
     const url = replaceQueryParams('', null, false);
     this.router.navigate([url], {
       replaceUrl: true,

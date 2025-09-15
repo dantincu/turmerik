@@ -25,17 +25,17 @@
     </div>
     }
     <div class="trmrk-field">
-      <a
+      <button
         mat-button
-        [routerLink]="[`${appConfigService.routeBasePath}/reset`]"
         class="trmrk-icon-link"
+        (click)="trmrkAppSettingsService.resetAppClick($event)"
       >
         <div
           class="trmrk-custom-svg-icon-wrapper"
           [innerHtml]="trmrkAppSettingsService.resetAltIcon"
         ></div>
         Reset App
-      </a>
+      </button>
     </div>
   </div>
 </ng-template>

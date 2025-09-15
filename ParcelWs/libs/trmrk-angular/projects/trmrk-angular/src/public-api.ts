@@ -18,7 +18,9 @@ export * from './lib/components/common/trmrk-tree-view-node/trmrk-tree-view-node
 export * from './lib/components/common/trmrk-user-message/trmrk-user-message';
 
 export * from './lib/components/pages/trmrk-app-settings/trmrk-app-settings';
+export * from './lib/components/pages/trmrk-app-settings/trmrk-reset-app-dialog/trmrk-reset-app-dialog';
 export * from './lib/components/pages/trmrk-app-themes/trmrk-app-themes';
+export * from './lib/components/pages/trmrk-app-themes/trmrk-edit-app-theme/trmrk-edit-app-theme-dialog';
 export * from './lib/components/pages/trmrk-not-found/trmrk-not-found';
 export * from './lib/components/pages/trmrk-reset-app/trmrk-reset-app';
 
@@ -43,7 +45,8 @@ export * from './lib/services/types';
 export * from './lib/services/pages/trmrk-app-settings-service';
 export * from './lib/services/pages/trmrk-app-themes-service';
 export * from './lib/services/pages/trmrk-edit-app-theme-dialog-service';
-export * from './lib/services/pages/trmrk-reset-app-service';
+export * from './lib/services/pages/reset-app-service/reset-app-service';
+export * from './lib/services/pages/reset-app-service/trmrk-reset-app-service';
 
 export * from './lib/directives/trmrk-cancel-context-menu';
 export * from './lib/directives/trmrk-continuous-press';

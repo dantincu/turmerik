@@ -32,12 +32,13 @@ export interface OpenDialogArgs<TData> {
 
 export const mergeDialogData = <TData>(
   data: TrmrkDialogData<TData>,
-  newData: TrmrkDialogDataCore
-) => ({ ...data, ...newData });
+  newData: TrmrkDialogData<TData> | TrmrkDialogDataCore
+) => ({
+  ...data,
+  ...newData,
+});
 
-export const getDialogPanelSizeCssClass = (
-  dialogPanelSize: DialogPanelSize | NullOrUndef
-) => {
+export const getDialogPanelSizeCssClass = (dialogPanelSize: DialogPanelSize | NullOrUndef) => {
   if ((dialogPanelSize ?? null) !== null) {
     switch (dialogPanelSize) {
       case DialogPanelSize.Large:
@@ -60,10 +61,7 @@ export const openDialog = <TData>(args: OpenDialogArgs<TData>) => {
   }
 
   args.matDialog.open(args.dialogComponent, {
-    panelClass: [
-      'trmrk-mat-dialog-panel',
-      getDialogPanelSizeCssClass(args.dialogPanelSize),
-    ],
+    panelClass: ['trmrk-mat-dialog-panel', getDialogPanelSizeCssClass(args.dialogPanelSize)],
     disableClose: args.data.disableClose ?? undefined,
     data: args.data,
   });

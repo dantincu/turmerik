@@ -11,7 +11,8 @@ import { TrmrkUserMessage } from '../../common/trmrk-user-message/trmrk-user-mes
 import { TrmrkLoading } from '../../common/trmrk-loading/trmrk-loading';
 import { TrmrkAppPage } from '../../common/trmrk-app-page/trmrk-app-page';
 
-import { TrmrkResetAppService } from '../../../services/pages/trmrk-reset-app-service';
+import { TrmrkResetAppService } from '../../../services/pages/reset-app-service/trmrk-reset-app-service';
+import { UserMessageLevel } from '../../../../trmrk/core';
 
 @Component({
   selector: 'trmrk-reset-app',
@@ -31,6 +32,8 @@ import { TrmrkResetAppService } from '../../../services/pages/trmrk-reset-app-se
 })
 export class TrmrkResetApp {
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
+
+  UserMessageLevel = UserMessageLevel;
 
   constructor(public trmrkResetAppService: TrmrkResetAppService, route: ActivatedRoute) {
     trmrkResetAppService.init({

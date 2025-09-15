@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -9,7 +10,13 @@ import { NullOrUndef } from '../../../trmrk/core';
 import { AppStateServiceBase } from '../../services/app-state-service-base';
 import { materialIcons } from '../../assets/icons/material';
 
+import { openDialog, DialogPanelSize } from '../../services/trmrk-dialog';
 import { setIsDarkModeToLocalStorage } from '../../../trmrk-browser/domUtils/core';
+
+export interface TrmrkAppSettingsServiceInitArgs {
+  resetAppDialog: MatDialog;
+  resetAppDialogComponent: any;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +28,8 @@ export class TrmrkAppSettingsService implements OnDestroy {
   showAppThemeOption: boolean | NullOrUndef;
 
   private darkModeStateChangeSubscription: Subscription;
+  private resetAppDialog!: MatDialog;
+  private resetAppDialogComponent: any;
 
   constructor(private appStateService: AppStateServiceBase, private sanitizer: DomSanitizer) {
     this.onDarkModeBtnClick = this.onDarkModeBtnClick.bind(this);
@@ -39,6 +48,11 @@ export class TrmrkAppSettingsService implements OnDestroy {
     this.darkModeStateChangeSubscription.unsubscribe();
   }
 
+  init(args: TrmrkAppSettingsServiceInitArgs) {
+    this.resetAppDialog = args.resetAppDialog;
+    this.resetAppDialogComponent = args.resetAppDialogComponent;
+  }
+
   onDarkModeBtnClick(event: MatCheckboxChange): void {
     setIsDarkModeToLocalStorage(
       !this.isDarkMode,
@@ -50,5 +64,18 @@ export class TrmrkAppSettingsService implements OnDestroy {
 
   darkModeStateChange(isDarkModeValue: boolean) {
     this.isDarkMode = isDarkModeValue;
+  }
+
+  resetAppClick(event: MouseEvent) {
+    openDialog({
+      matDialog: this.resetAppDialog,
+      dialogComponent: this.resetAppDialogComponent,
+      data: {
+        disableClose: true,
+        data: {},
+      },
+      clickEvent: event,
+      dialogPanelSize: DialogPanelSize.Default,
+    });
   }
 }

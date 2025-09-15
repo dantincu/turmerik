@@ -6,9 +6,26 @@
 <ng-template #page>
   @if (trmrkResetAppService.showTopHorizStrip) {
   <trmrk-horiz-strip
-    [trmrkCssClass]="['trmrk-top-message-horiz-strip trmrk-has-border-x2']"
+    [trmrkCssClass]="[
+      'trmrk-top-message-horiz-strip trmrk-has-border-x2',
+      trmrkResetAppService.showErrorMessage ? 'trmrk-error-message-horiz-strip' : ''
+    ]"
     [trmrkLeadingTemplate]="topHorizStripLeadingTemplate"
+    [trmrkMainText]="
+      trmrkResetAppService.showErrorMessage ? 'An error occurred while resetting the app' : ''
+    "
+    [trmrkDetailsTextParts]="
+      trmrkResetAppService.showErrorMessage ? [trmrkResetAppService.errorMessage!] : null
+    "
+    [trmrkTrailingTemplate]="trmrkErrorHorizStripTrailingTemplate"
   ></trmrk-horiz-strip>
+  <ng-template #trmrkErrorHorizStripTrailingTemplate>
+    @if (trmrkResetAppService.showErrorMessage) {
+    <button mat-icon-button class="trmrk-icon-btn" (click)="trmrkResetAppService.closeError()">
+      <mat-icon class="trmrk-icon">close</mat-icon>
+    </button>
+    }
+  </ng-template>
   }
   <div class="trmrk-page-body trmrk-page-body-thin">
     @if (!trmrkResetAppService.isResetting) {
@@ -33,7 +50,7 @@
     class="trmrk-app-reset-success-message"
     [trmrkMessage]="'The app has been reset'"
     [trmrkShow]="trmrkResetAppService.showSuccessMessage"
-    [trmrkLevel]="0"
-    (trmrkClose)="trmrkResetAppService.successMessageClose()"
+    [trmrkLevel]="UserMessageLevel.Success"
+    (trmrkClose)="trmrkResetAppService.navToBaseRoute()"
   ></trmrk-user-message>
 </ng-template>
