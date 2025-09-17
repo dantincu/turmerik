@@ -1,7 +1,7 @@
 import { SimpleChanges, SimpleChange } from '@angular/core';
 
-import { getPropName } from '../../trmrk/Reflection/core';
-import { VoidOrAny } from '../../trmrk/core';
+import { getPropName } from '../../../trmrk/Reflection/core';
+import { VoidOrAny } from '../../../trmrk/core';
 
 export const whenChanged = <T>(
   changes: SimpleChanges,

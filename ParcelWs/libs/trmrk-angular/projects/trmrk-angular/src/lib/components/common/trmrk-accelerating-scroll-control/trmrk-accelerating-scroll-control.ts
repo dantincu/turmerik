@@ -11,23 +11,17 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 
-import { whenChanged } from '../../../services/simpleChanges';
+import { whenChanged } from '../../../services/common/simpleChanges';
 import { withVal } from '../../../../trmrk/core';
 import { getCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
 import { getElemIdx } from '../../../../trmrk-browser/domUtils/getDomElemBounds';
 
 import { TrmrkContinuousPress } from '../../../directives/trmrk-continuous-press';
-import { TrmrkAcceleratingScrollService } from '../../../services/trmrk-accelerating-scroll-service';
+import { TrmrkAcceleratingScrollService } from '../../../services/common/trmrk-accelerating-scroll-service';
 
 @Component({
   selector: 'trmrk-accelerating-scroll-control',
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    MatIconButton,
-    TrmrkContinuousPress,
-  ],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatIconButton, TrmrkContinuousPress],
   templateUrl: './trmrk-accelerating-scroll-control.html',
   styleUrl: './trmrk-accelerating-scroll-control.scss',
   providers: [TrmrkAcceleratingScrollService],
@@ -49,9 +43,7 @@ export class TrmrkAcceleratingScrollControl implements OnChanges, OnDestroy {
 
   isExpanded: boolean | null = null;
 
-  constructor(
-    private acceleratingScrollService: TrmrkAcceleratingScrollService
-  ) {
+  constructor(private acceleratingScrollService: TrmrkAcceleratingScrollService) {
     this.toggleExpand = this.toggleExpand.bind(this);
 
     this.acceleratingScrollService.scrollAccElems = () => [
@@ -104,19 +96,16 @@ export class TrmrkAcceleratingScrollControl implements OnChanges, OnDestroy {
       this.scrollDownBtn.nativeElement,
     ];
 
-    const scrollDirIsDown = withVal(
-      getElemIdx(scrollElems, coords),
-      (scrollElemIdx) => {
-        switch (scrollElemIdx) {
-          case 0:
-            return false;
-          case 2:
-            return true;
-          default:
-            return null;
-        }
+    const scrollDirIsDown = withVal(getElemIdx(scrollElems, coords), (scrollElemIdx) => {
+      switch (scrollElemIdx) {
+        case 0:
+          return false;
+        case 2:
+          return true;
+        default:
+          return null;
       }
-    );
+    });
 
     this.acceleratingScrollService.reset();
     this.acceleratingScrollService.start(scrollDirIsDown);

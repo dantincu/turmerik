@@ -7,8 +7,10 @@ import {
   TrmrkLongPressOrRightClick,
   TrmrkMultiClick,
   TrmrkDrag,
-  TrmrkDragEvent,
+  services,
 } from 'trmrk-angular';
+
+declare type TrmrkDragEvent = services.common.TrmrkDragEvent;
 
 import { encodeHtml } from '../../../../trmrk/text';
 import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';

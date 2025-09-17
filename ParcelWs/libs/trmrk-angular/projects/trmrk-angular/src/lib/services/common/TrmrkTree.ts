@@ -1,6 +1,6 @@
-import { queryMx } from '../../trmrk/arr';
-import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { NullOrUndef } from '../../trmrk/core';
+import { queryMx } from '../../../trmrk/arr';
+import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { NullOrUndef } from '../../../trmrk/core';
 
 import { TrmrkObservable } from './TrmrkObservable';
 
@@ -38,13 +38,9 @@ export interface TrmrkTree<T> {
   nodeExpandedToggled: TrmrkObservable<TrmrkTreeNodeEvent<T, boolean>>;
   nodeCheckBoxToggled: TrmrkObservable<TrmrkTreeNodeEvent<T, boolean>>;
 
-  nodeIconShortPressOrLeftClick: TrmrkObservable<
-    TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>
-  >;
+  nodeIconShortPressOrLeftClick: TrmrkObservable<TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>>;
 
-  nodeIconLongPressOrRightClick: TrmrkObservable<
-    TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>
-  >;
+  nodeIconLongPressOrRightClick: TrmrkObservable<TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>>;
 
   nodeColorLabelShortPressOrLeftClick: TrmrkObservable<
     TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>
@@ -54,13 +50,9 @@ export interface TrmrkTree<T> {
     TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>
   >;
 
-  nodeTextShortPressOrLeftClick: TrmrkObservable<
-    TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>
-  >;
+  nodeTextShortPressOrLeftClick: TrmrkObservable<TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>>;
 
-  nodeTextLongPressOrRightClick: TrmrkObservable<
-    TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>
-  >;
+  nodeTextLongPressOrRightClick: TrmrkObservable<TrmrkTreeNodeEventCore<T, TouchOrMouseCoords>>;
 }
 
 export const trmrkTreeEventHandlers = {

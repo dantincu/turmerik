@@ -1,6 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 
-import { AppStateServiceBase, AppServiceBase } from 'trmrk-angular';
+import { services } from 'trmrk-angular';
+
+const AppStateServiceBase = services.common.AppStateServiceBase;
+
+const AppServiceBase = services.common.AppServiceBase;
 
 import { AppStateService } from '../services/app-state-service';
 

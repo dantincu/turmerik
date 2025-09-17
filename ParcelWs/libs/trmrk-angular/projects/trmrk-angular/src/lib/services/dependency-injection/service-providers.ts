@@ -12,9 +12,9 @@ import { provideRouter, Route } from '@angular/router';
 
 import { MatDialogModule } from '@angular/material/dialog';
 
-import { AppStateServiceBase } from '../app-state-service-base';
-import { AppConfigServiceBase } from '../app-config-service-base';
-import { IntIdServiceFactory } from '../int-id-service-factory';
+import { AppStateServiceBase } from '../common/app-state-service-base';
+import { AppConfigServiceBase } from '../common/app-config-service-base';
+import { IntIdServiceFactory } from '../common/int-id-service-factory';
 
 import { NullOrUndef } from '../../../trmrk/core';
 import { AsyncRequestStateManagerFactory } from '../../../trmrk/AsyncRequestStateManager';

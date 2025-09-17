@@ -1,4 +1,4 @@
-import { NullOrUndef } from '../../trmrk/core';
+import { NullOrUndef } from '../../../trmrk/core';
 
 export class ComponentDataMap<TData> {
   private _map: { [key: number]: TData | NullOrUndef } = {};

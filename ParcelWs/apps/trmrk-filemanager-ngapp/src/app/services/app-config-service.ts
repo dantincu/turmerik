@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AppConfigServiceBase } from '../../trmrk-angular/services/app-config-service-base';
+import { AppConfigServiceBase } from '../../trmrk-angular/services/common/app-config-service-base';
 
 @Injectable({
   providedIn: 'root',

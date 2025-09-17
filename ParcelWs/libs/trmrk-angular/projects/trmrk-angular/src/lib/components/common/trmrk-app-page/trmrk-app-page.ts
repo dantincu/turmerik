@@ -15,19 +15,12 @@ import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
-import { AppStateServiceBase } from '../../../services/app-state-service-base';
-import { AppConfigServiceBase } from '../../../services/app-config-service-base';
+import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
+import { AppConfigServiceBase } from '../../../services/common/app-config-service-base';
 
 @Component({
   selector: 'trmrk-app-page',
-  imports: [
-    TrmrkAppBar,
-    MatIconModule,
-    MatButtonModule,
-    MatMenuModule,
-    RouterModule,
-    CommonModule,
-  ],
+  imports: [TrmrkAppBar, MatIconModule, MatButtonModule, MatMenuModule, RouterModule, CommonModule],
   templateUrl: './trmrk-app-page.html',
   styleUrl: './trmrk-app-page.scss',
   encapsulation: ViewEncapsulation.None,
@@ -39,11 +32,7 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkAppBarBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarTrailingTemplate?: TemplateRef<any> | NullOrUndef;
 
-  @Input() trmrkAppBarHomeRouterLink:
-    | string
-    | readonly any[]
-    | UrlTree
-    | NullOrUndef;
+  @Input() trmrkAppBarHomeRouterLink: string | readonly any[] | UrlTree | NullOrUndef;
 
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;

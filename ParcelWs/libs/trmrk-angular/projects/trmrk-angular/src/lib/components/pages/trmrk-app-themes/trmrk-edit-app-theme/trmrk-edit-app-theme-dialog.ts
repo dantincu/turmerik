@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { TrmrkDialog } from '../../../common/trmrk-dialog/trmrk-dialog';
 
-import { TrmrkDialogData, mergeDialogData } from '../../../../services/trmrk-dialog';
+import { TrmrkDialogData, mergeDialogData } from '../../../../services/common/trmrk-dialog';
 
 import { TrmrkEditAppThemeDialogService } from '../../../../services/pages/trmrk-edit-app-theme-dialog-service';
 

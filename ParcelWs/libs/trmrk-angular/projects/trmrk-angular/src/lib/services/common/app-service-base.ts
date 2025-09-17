@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { appThemeCssClasses, isDarkMode } from '../../trmrk-browser/domUtils/core';
+import { appThemeCssClasses, isDarkMode } from '../../../trmrk-browser/domUtils/core';
 
-import { jsonBool } from '../../trmrk/core';
+import { jsonBool } from '../../../trmrk/core';
 
 import { AppStateServiceBase } from './app-state-service-base';
 

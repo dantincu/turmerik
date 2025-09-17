@@ -3,7 +3,7 @@ import { Routes, Route, Router } from '@angular/router';
 
 import { NullOrUndef, withVal } from '../../../trmrk/core';
 
-import { AppConfigServiceBase } from '../../services/app-config-service-base';
+import { AppConfigServiceBase } from '../../services/common/app-config-service-base';
 
 import { TrmrkAppSettings } from './trmrk-app-settings/trmrk-app-settings';
 import { TrmrkAppThemes } from './trmrk-app-themes/trmrk-app-themes';
@@ -50,12 +50,9 @@ const defaultCommonChildRoutes = () =>
         const router = inject(Router);
         const appConfigService = inject(AppConfigServiceBase);
 
-        return router.createUrlTree(
-          [`${appConfigService.routeBasePath}/reset-app`],
-          {
-            queryParams: { reset: 'true' },
-          }
-        );
+        return router.createUrlTree([`${appConfigService.routeBasePath}/reset-app`], {
+          queryParams: { reset: 'true' },
+        });
       },
     };
 
@@ -113,10 +110,7 @@ const getRoutesArr = (
   return routes;
 };
 
-export const getAppRoutes = (
-  appRoutes: Routes,
-  opts?: GetCommonRoutesOpts | NullOrUndef
-) => {
+export const getAppRoutes = (appRoutes: Routes, opts?: GetCommonRoutesOpts | NullOrUndef) => {
   opts ??= {};
   opts.basePath ??= 'app';
   opts.routesMap ??= {};
@@ -124,10 +118,7 @@ export const getAppRoutes = (
   const routes: Routes = [
     {
       path: opts.basePath,
-      children: [
-        ...getRoutesArr(opts.routesMap, defaultCommonChildRoutes()),
-        ...appRoutes,
-      ],
+      children: [...getRoutesArr(opts.routesMap, defaultCommonChildRoutes()), ...appRoutes],
     },
     ...getRoutesArr(opts.routesMap, defaultCommonRoutes()),
   ];

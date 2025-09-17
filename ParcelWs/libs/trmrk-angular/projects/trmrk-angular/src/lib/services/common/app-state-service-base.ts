@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy, EventEmitter } from '@angular/core';
 
-import { getDbObjName } from '../../trmrk-browser/indexedDB/core';
-import { localStorageKeys } from '../../trmrk-browser/domUtils/core';
+import { getDbObjName } from '../../../trmrk-browser/indexedDB/core';
+import { localStorageKeys } from '../../../trmrk-browser/domUtils/core';
 
 import { TrmrkObservable } from './TrmrkObservable';
 

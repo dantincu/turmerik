@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { baseRoutes } from 'trmrk-angular';
+import { components } from 'trmrk-angular';
 
 import { TrmrkHomePage } from './components/pages/trmrk-home-page/trmrk-home-page';
 import { TrmrkFormsTestPage } from './components/pages/trmrk-forms-test-page/trmrk-forms-test-page';
@@ -12,6 +12,8 @@ import { TrmrkHorizStripsPage } from './components/pages/trmrk-horiz-strips-page
 import { TrmrkUserMessages } from './components/pages/trmrk-user-messages/trmrk-user-messages';
 import { TrmrkColoredText } from './components/pages/trmrk-colored-text/trmrk-colored-text';
 import { TrmrkMiscPage } from './components/pages/trmrk-misc-page/trmrk-misc-page';
+
+const baseRoutes = components.pages.baseRoutes;
 
 export const routes: Routes = baseRoutes.getAppRoutes([
   {

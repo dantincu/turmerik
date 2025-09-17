@@ -23,19 +23,19 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { TrmrkPanelListItem } from '../trmrk-panel-list-item/trmrk-panel-list-item';
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
-import { materialIcons } from '../../../assets/icons/material';
+import * as materialIcons from '../../../assets/icons/material';
 
-import { whenChanged } from '../../../services/simpleChanges';
+import { whenChanged } from '../../../services/common/simpleChanges';
 
 import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
-import { TrmrkCancelContextMenuService } from '../trmrk-cancel-context-menu/trmrk-cancel-context-menu';
+import { TrmrkCancelContextMenu } from '../trmrk-cancel-context-menu/trmrk-cancel-context-menu';
 
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../../../services/trmrk-panel-list-service';
+} from '../../../services/common/trmrk-panel-list-service';
 
 import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../../../directives/trmrk-cancel-context-menu';
 
@@ -47,7 +47,7 @@ import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../..
     MatMenuModule,
     CommonModule,
     TrmrkHorizStrip,
-    TrmrkCancelContextMenuService,
+    TrmrkCancelContextMenu,
     TrmrkCancelContextMenuDirective,
   ],
   templateUrl: './trmrk-panel-list.html',
@@ -80,13 +80,9 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
     | NullOrUndef;
 
   @Input()
-  trmrkGetAppBarHeight?:
-    | ((svc: TrmrkPanelListService<any, any>) => number)
-    | NullOrUndef;
+  trmrkGetAppBarHeight?: ((svc: TrmrkPanelListService<any, any>) => number) | NullOrUndef;
 
-  @Output() trmrkRowsUpdated = new EventEmitter<
-    TrmrkPanelListServiceRow<any>[]
-  >();
+  @Output() trmrkRowsUpdated = new EventEmitter<TrmrkPanelListServiceRow<any>[]>();
 
   @ViewChild('panelList')
   panelList!: ElementRef<HTMLDivElement>;
@@ -113,9 +109,7 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
     public panelListService: TrmrkPanelListService<any, any>,
     private sanitizer: DomSanitizer
   ) {
-    this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(
-      materialIcons.drag_pan
-    );
+    this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(materialIcons.drag_pan);
   }
 
   ngAfterViewInit(): void {
@@ -140,18 +134,15 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
             rowsMenu: () => this.rowsMenu,
             getVisuallyMovingListItems: this.trmrkVisuallyMovingListItems,
             getPanelHeader: this.trmrkPanelHeader,
-            getUpAcceleratingScrollPopover:
-              this.trmrkUpAcceleratingScrollPopover,
-            getDownAcceleratingScrollPopover:
-              this.trmrkDownAcceleratingScrollPopover,
+            getUpAcceleratingScrollPopover: this.trmrkUpAcceleratingScrollPopover,
+            getDownAcceleratingScrollPopover: this.trmrkDownAcceleratingScrollPopover,
             getMovingAggregateRowEl: () => this.movingAggregateRowEl,
             toggleAppBar: this.trmrkToggleAppBar,
             getAppBarHeight: this.trmrkGetAppBarHeight,
             entities: this.trmrkEntities,
             idPropName: this.trmrkEntityKeyPropName,
             rowsSelectionIsAllowed: this.trmrkRowsSelectionIsAllowed,
-            selectedRowsReorderIsAllowed:
-              this.trmrkSelectedRowsReorderIsAllowed,
+            selectedRowsReorderIsAllowed: this.trmrkSelectedRowsReorderIsAllowed,
             selectedRowsReorderAggRowVertIsOriented:
               this.trmrkSelectedRowsReorderAggRowVertIsOriented,
           });

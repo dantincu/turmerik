@@ -4,7 +4,7 @@ import {
   MouseButton,
   TouchOrMouseCoords,
   getSingleTouchOrClick,
-} from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+} from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import {
   TrmrkDragEvent,

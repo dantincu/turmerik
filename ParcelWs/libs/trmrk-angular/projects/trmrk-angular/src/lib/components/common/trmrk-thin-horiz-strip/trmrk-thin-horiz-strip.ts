@@ -14,32 +14,24 @@ import { CommonModule } from '@angular/common';
 import { encodeHtml } from '../../../../trmrk/text';
 import { NullOrUndef } from '../../../../trmrk/core';
 import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { whenChanged } from '../../../services/simpleChanges';
+import { whenChanged } from '../../../services/common/simpleChanges';
 
 import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press-or-right-click';
 import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-start-or-mouse-down';
 
 @Component({
   selector: 'trmrk-thin-horiz-strip',
-  imports: [
-    CommonModule,
-    TrmrkLongPressOrRightClick,
-    TrmrkTouchStartOrMouseDown,
-  ],
+  imports: [CommonModule, TrmrkLongPressOrRightClick, TrmrkTouchStartOrMouseDown],
   templateUrl: './trmrk-thin-horiz-strip.html',
   styleUrl: './trmrk-thin-horiz-strip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkThinHorizStrip implements OnDestroy {
-  @Output() trmrkTextLongPressOrRightClick =
-    new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkTextLongPressOrRightClick = new EventEmitter<TouchOrMouseCoords>();
 
-  @Output() trmrkTextShortPressOrLeftClick =
-    new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkTextShortPressOrLeftClick = new EventEmitter<TouchOrMouseCoords>();
 
-  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<
-    MouseEvent | TouchEvent
-  >();
+  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<MouseEvent | TouchEvent>();
 
   @Input() trmrkTextLongPressAltHost: (() => HTMLElement[]) | null = null;
 
@@ -73,10 +65,10 @@ export class TrmrkThinHorizStrip implements OnDestroy {
       changes,
       () => this.trmrkText,
       (value) => {
-        this.text = encodeHtml(
-          value ?? '',
-          this.trmrkUseNonBreakingSpaceTokens
-        ).replaceAll('\n', '&nbsp;');
+        this.text = encodeHtml(value ?? '', this.trmrkUseNonBreakingSpaceTokens).replaceAll(
+          '\n',
+          '&nbsp;'
+        );
       }
     );
   }

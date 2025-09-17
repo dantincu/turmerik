@@ -1,6 +1,6 @@
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { NullOrUndef } from '../../../trmrk/core';
+import { NullOrUndef } from '../../../../trmrk/core';
 
 import {
   NodeHtml,
@@ -11,7 +11,7 @@ import {
   TrmrkTextLevel,
   TrmrkTextStyle,
   TrmrkDOMNodeAttrs,
-} from '../../../trmrk/USER-CODE/forms/types';
+} from '../../../../trmrk/USER-CODE/forms/types';
 
 export const DEFAULT_ROW_HEIGHT_FACTOR = 4;
 
@@ -53,8 +53,7 @@ export const textStylesMap: [TrmrkTextStyle, string][] = [
 ];
 
 export const hasRawHtml = (htmlInfo: NodeHtml | NullOrUndef) =>
-  (htmlInfo ?? null) !== null &&
-  ('string' === typeof htmlInfo || (htmlInfo!.raw ?? null) !== null);
+  (htmlInfo ?? null) !== null && ('string' === typeof htmlInfo || (htmlInfo!.raw ?? null) !== null);
 
 export const hasHtmlTemplate = (htmlInfo: NodeHtml | NullOrUndef) =>
   ((htmlInfo as NodeHtmlInfo)?.idnf ?? null) !== null;
@@ -76,10 +75,7 @@ export const getRawHtml = (htmlInfo: NodeHtml | NullOrUndef) => {
   return htmlStr;
 };
 
-export const getSafeHtml = (
-  htmlInfo: NodeHtml | NullOrUndef,
-  sanitizer: DomSanitizer
-) => {
+export const getSafeHtml = (htmlInfo: NodeHtml | NullOrUndef, sanitizer: DomSanitizer) => {
   const rawHtml = getRawHtml(htmlInfo);
   let safeHtml: SafeHtml | null = null;
 
@@ -90,10 +86,7 @@ export const getSafeHtml = (
   return safeHtml;
 };
 
-export const getCssClassFromMap = <TEnum>(
-  map: [TEnum, string[]][],
-  value: TEnum | NullOrUndef
-) => {
+export const getCssClassFromMap = <TEnum>(map: [TEnum, string[]][], value: TEnum | NullOrUndef) => {
   let cssClass: string[];
 
   if ((value ?? null) !== null) {
@@ -122,9 +115,7 @@ export interface NormalizedCssClassesAgg {
   alt: NormalizedCssClasses;
 }
 
-export const normalizeCssClass = (
-  cssClass: string | string[] | NullOrUndef
-) => {
+export const normalizeCssClass = (cssClass: string | string[] | NullOrUndef) => {
   const retObj: NormalizedCssClassesAgg = {
     main: { classes: [] },
     alt: { classes: [] },

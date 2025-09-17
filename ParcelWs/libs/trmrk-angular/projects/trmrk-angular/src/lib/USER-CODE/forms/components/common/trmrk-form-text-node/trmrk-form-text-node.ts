@@ -1,22 +1,13 @@
-import {
-  Component,
-  Input,
-  TemplateRef,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, TemplateRef, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { MatIconModule } from '@angular/material/icon';
 
-import { whenChanged } from '../../../../../services/simpleChanges';
+import { whenChanged } from '../../../../../services/common/simpleChanges';
 import { TrmrkDynamicAttributesDirective } from '../../../../../directives/trmrk-dynamic-attributes';
 
-import {
-  TrmrkDOMNodeAttrs,
-  TrmrkTextNode,
-} from '../../../../../../trmrk/USER-CODE/forms/types';
+import { TrmrkDOMNodeAttrs, TrmrkTextNode } from '../../../../../../trmrk/USER-CODE/forms/types';
 
 import {
   hasHtmlTemplate,
@@ -26,11 +17,11 @@ import {
   getCssClassFromMap,
   textLevelsMap,
   textStylesMap,
-} from '../../../form';
+} from '../../../helpers/form';
 
-import { normalizeAttrs, normalizeCssClass } from '../../../form';
+import { normalizeAttrs, normalizeCssClass } from '../../../helpers/form';
 import { NullOrUndef } from '../../../../../../trmrk/core';
-import { AppearanceCore } from '../../../types';
+import { AppearanceCore } from '../../../helpers/types';
 
 @Component({
   selector: 'trmrk-form-text-node',
@@ -106,16 +97,13 @@ export class TrmrkFormTextNode implements OnChanges {
     this.cssClass = normCssClass.main.classes;
     this.controlCssClass = normControlCssClass.main.classes;
     this.skipDefaultCssClass = normCssClass.main.skipDefaultCssClass;
-    this.skipDefaultControlCssClass =
-      normControlCssClass.main.skipDefaultCssClass;
+    this.skipDefaultControlCssClass = normControlCssClass.main.skipDefaultCssClass;
 
     /*
      * cssClass
      */
 
-    this.cssClass.push(
-      ...getCssClassFromMap(textLevelsMap, this.trmrkNode.level)
-    );
+    this.cssClass.push(...getCssClassFromMap(textLevelsMap, this.trmrkNode.level));
 
     if ((this.trmrkNode.style ?? null) !== null && this.trmrkNode.style! > 0) {
       let style = this.trmrkNode.style as number;
@@ -140,10 +128,7 @@ export class TrmrkFormTextNode implements OnChanges {
      * controlCssClass
      */
 
-    if (
-      (this.trmrkNode.iconName ?? null) !== null &&
-      !this.skipDefaultControlCssClass
-    ) {
+    if ((this.trmrkNode.iconName ?? null) !== null && !this.skipDefaultControlCssClass) {
       this.controlCssClass.push('trmrk-icon');
     }
   }

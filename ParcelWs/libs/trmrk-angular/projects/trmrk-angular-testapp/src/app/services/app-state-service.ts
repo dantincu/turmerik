@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { AppStateServiceBase } from 'trmrk-angular';
+import { services } from 'trmrk-angular';
+
+const AppStateServiceBase = services.common.AppStateServiceBase;
 
 import { APP_NAME } from './core';
 

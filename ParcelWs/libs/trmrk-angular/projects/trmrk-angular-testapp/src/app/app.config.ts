@@ -1,6 +1,8 @@
 import { ApplicationConfig } from '@angular/core';
 
-import { getServiceProviders } from 'trmrk-angular';
+import { services } from 'trmrk-angular';
+
+const getServiceProviders = services.dependencyInjection.getServiceProviders;
 
 import { AppStateService } from './services/app-state-service';
 import { AppConfigService } from './services/app-config-service';

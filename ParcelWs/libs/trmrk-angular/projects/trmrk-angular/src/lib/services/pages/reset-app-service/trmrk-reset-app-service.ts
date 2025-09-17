@@ -7,7 +7,7 @@ import { replaceQueryParams } from '../../../../trmrk/url';
 
 import { getIDbRequestOpenErrorMsg } from '../../../../trmrk-browser/indexedDB/core';
 
-import { AppStateServiceBase } from '../../app-state-service-base';
+import { AppStateServiceBase } from '../../common/app-state-service-base';
 
 import { ResetAppService } from './reset-app-service';
 

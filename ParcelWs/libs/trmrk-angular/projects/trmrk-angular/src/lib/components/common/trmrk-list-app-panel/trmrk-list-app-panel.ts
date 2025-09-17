@@ -18,7 +18,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
-import { whenChanged } from '../../../services/simpleChanges';
+import { whenChanged } from '../../../services/common/simpleChanges';
 
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { TrmrkLoading } from '../trmrk-loading/trmrk-loading';
@@ -29,7 +29,7 @@ import { NullOrUndef } from '../../../../trmrk/core';
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../../../services/trmrk-panel-list-service';
+} from '../../../services/common/trmrk-panel-list-service';
 import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
@@ -74,9 +74,7 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
   @Input() trmrkHasError = 0;
   @Input() trmrkCanCloseError = false;
 
-  @Output() trmrkRowsUpdated = new EventEmitter<
-    TrmrkPanelListServiceRow<any>[]
-  >();
+  @Output() trmrkRowsUpdated = new EventEmitter<TrmrkPanelListServiceRow<any>[]>();
 
   @ViewChild('panelList')
   panelList!: TrmrkPanelList;

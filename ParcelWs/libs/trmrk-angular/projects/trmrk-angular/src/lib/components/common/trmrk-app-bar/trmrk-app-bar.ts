@@ -19,10 +19,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 
-import { whenChanged } from '../../../services/simpleChanges';
+import { whenChanged } from '../../../services/common/simpleChanges';
 import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
-import { AppConfigServiceBase } from '../../../services/app-config-service-base';
-import { AppStateServiceBase } from '../../../services/app-state-service-base';
+import { AppConfigServiceBase } from '../../../services/common/app-config-service-base';
+import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
 
 @Component({
   selector: 'trmrk-app-bar',
@@ -50,9 +50,7 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
   @Input() trmrkShowBackBtn: boolean | NullOrUndef;
   @Input() trmrkBackBtnClicked: (() => boolean | VoidOrAny) | NullOrUndef;
 
-  @Input() trmrkToggleBackBtnDisabled:
-    | ((disable: boolean) => boolean | VoidOrAny)
-    | NullOrUndef;
+  @Input() trmrkToggleBackBtnDisabled: ((disable: boolean) => boolean | VoidOrAny) | NullOrUndef;
 
   @Input() trmrkShowGoToParentBtn: boolean | NullOrUndef;
   @Input() trmrkGoToParentBtnDisabled: boolean | NullOrUndef;
@@ -114,8 +112,7 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
     let shouldBeDisabled = window.history.length <= 1;
 
     if (this.trmrkToggleBackBtnDisabled) {
-      shouldBeDisabled =
-        this.trmrkToggleBackBtnDisabled(shouldBeDisabled) ?? shouldBeDisabled;
+      shouldBeDisabled = this.trmrkToggleBackBtnDisabled(shouldBeDisabled) ?? shouldBeDisabled;
     }
 
     return shouldBeDisabled;

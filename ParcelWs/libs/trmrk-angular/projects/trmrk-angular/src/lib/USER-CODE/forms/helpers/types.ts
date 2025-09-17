@@ -1,7 +1,7 @@
 import { MatButtonAppearance } from '@angular/material/button';
 import { MatFormFieldAppearance } from '@angular/material/form-field';
 
-import { NullOrUndef } from '../../../trmrk/core';
+import { NullOrUndef } from '../../../../trmrk/core';
 
 export interface AppearanceCore {
   useNativeControl?: boolean | NullOrUndef;

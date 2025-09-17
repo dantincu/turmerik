@@ -4,13 +4,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 
 import { TrmrkAppPage } from 'trmrk-angular';
-import { TrmrkPanelListItem, trmrkTreeEventHandlers } from 'trmrk-angular';
-import { TrmrkHorizStrip, TrmrkHorizStripType } from 'trmrk-angular';
+import { TrmrkPanelListItem } from 'trmrk-angular';
+import { TrmrkHorizStrip, components, services } from 'trmrk-angular';
 import { TrmrkThinHorizStrip } from 'trmrk-angular';
 
 import { getNextIdx } from '../../../../trmrk/math';
 
 import { companies } from '../../../services/companies';
+
+const TrmrkHorizStripType = components.common.TrmrkHorizStripType;
 
 @Component({
   selector: 'trmrk-horiz-strips-page',

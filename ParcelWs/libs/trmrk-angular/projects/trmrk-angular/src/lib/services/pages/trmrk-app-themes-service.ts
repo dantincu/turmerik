@@ -13,8 +13,8 @@ import { getIDbRequestOpenErrorMsg } from '../../../trmrk-browser/indexedDB/core
 import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
 import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
-import { TrmrkPanelListServiceRow } from '../../services/trmrk-panel-list-service';
-import { openDialog, DialogPanelSize } from '../../services/trmrk-dialog';
+import { TrmrkPanelListServiceRow } from '../../services/common/trmrk-panel-list-service';
+import { openDialog, DialogPanelSize } from '../../services/common/trmrk-dialog';
 
 import { injectionTokens } from '../dependency-injection/injection-tokens';
 

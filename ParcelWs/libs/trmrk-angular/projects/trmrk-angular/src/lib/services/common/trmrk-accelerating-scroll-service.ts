@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 
-import { getCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
-import { getElemIdx } from '../../trmrk-browser/domUtils/getDomElemBounds';
+import { getCoords } from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
+import { getElemIdx } from '../../../trmrk-browser/domUtils/getDomElemBounds';
 
 @Injectable()
 export class TrmrkAcceleratingScrollService implements OnDestroy {
@@ -64,9 +64,7 @@ export class TrmrkAcceleratingScrollService implements OnDestroy {
     if (scrollStep > 0) {
       scrollStep = Math.min(
         this.scrollStep,
-        scrollableElem.scrollHeight -
-          scrollableElem.scrollTop -
-          scrollableElem.clientHeight
+        scrollableElem.scrollHeight - scrollableElem.scrollTop - scrollableElem.clientHeight
       );
     } else {
       scrollStep = Math.max(this.scrollStep, -1 * scrollableElem.scrollTop);

@@ -15,7 +15,7 @@ import {
   isContainedBy,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkLongPressOrRightClickEventData } from '../services/types';
+import { TrmrkLongPressOrRightClickEventData } from '../services/common/types';
 import { defaultLongPressTimeoutMills } from '../../trmrk-browser/core';
 
 @Directive({

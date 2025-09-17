@@ -1,19 +1,12 @@
-import {
-  Directive,
-  EventEmitter,
-  Output,
-  Input,
-  OnDestroy,
-  ElementRef,
-} from '@angular/core';
+import { Directive, EventEmitter, Output, Input, OnDestroy, ElementRef } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
 import { TouchOrMouseCoords } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkDragEvent } from '../services/types';
+import { TrmrkDragEvent } from '../services/common/types';
 
-import { DragService } from '../services/drag-service';
+import { DragService } from '../services/common/drag-service';
 
 @Directive({
   selector: '[trmrkDrag]',
@@ -27,10 +20,7 @@ export class TrmrkDrag implements OnDestroy {
   private dragSubscription!: Subscription;
   private dragEndSubscription!: Subscription;
 
-  constructor(
-    private el: ElementRef<HTMLElement>,
-    private dragService: DragService
-  ) {
+  constructor(private el: ElementRef<HTMLElement>, private dragService: DragService) {
     this.dragService.init(el.nativeElement);
     const elem = el.nativeElement;
     this.touchStartOrMouseDown = this.touchStartOrMouseDown.bind(this);
@@ -38,9 +28,7 @@ export class TrmrkDrag implements OnDestroy {
     elem.addEventListener('mousedown', this.touchStartOrMouseDown);
     elem.addEventListener('touchstart', this.touchStartOrMouseDown);
 
-    this.dragSubscription = this.dragService.drag.subscribe((value) =>
-      this.trmrkDrag.emit(value)
-    );
+    this.dragSubscription = this.dragService.drag.subscribe((value) => this.trmrkDrag.emit(value));
 
     this.dragEndSubscription = this.dragService.dragEnd.subscribe((value) =>
       this.trmrkDragEnd.emit(value)

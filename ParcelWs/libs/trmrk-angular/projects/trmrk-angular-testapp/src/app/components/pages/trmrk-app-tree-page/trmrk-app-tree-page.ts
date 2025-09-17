@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { TrmrkAppPage } from 'trmrk-angular';
 
 import {
-  TrmrkObservable,
   TrmrkTree,
   TrmrkTreeNode,
   TrmrkTreeNodeData,
@@ -12,7 +11,10 @@ import {
   TrmrkTreeNodeEventCore,
 } from 'trmrk-angular';
 
-import { trmrkTreeEventHandlers } from 'trmrk-angular';
+import { services } from 'trmrk-angular';
+
+const trmrkTreeEventHandlers = services.common.trmrkTreeEventHandlers;
+const TrmrkObservable = services.common.TrmrkObservable;
 
 import { getNextIdx } from '../../../../trmrk/math';
 

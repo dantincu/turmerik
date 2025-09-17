@@ -8,9 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { NullOrUndef } from '../../../../../trmrk/core';
 import { getIDbRequestOpenErrorMsg } from '../../../../../trmrk-browser/indexedDB/core';
 
-import { AppStateServiceBase } from '../../../../services/app-state-service-base';
+import { AppStateServiceBase } from '../../../../services/common/app-state-service-base';
 import { TrmrkDialog } from '../../../common/trmrk-dialog/trmrk-dialog';
-import { TrmrkDialogData, mergeDialogData } from '../../../../services/trmrk-dialog';
+import { TrmrkDialogData, mergeDialogData } from '../../../../services/common/trmrk-dialog';
 import { ResetAppService } from '../../../../services/pages/reset-app-service/reset-app-service';
 import { TrmrkLoading } from '../../../common/trmrk-loading/trmrk-loading';
 

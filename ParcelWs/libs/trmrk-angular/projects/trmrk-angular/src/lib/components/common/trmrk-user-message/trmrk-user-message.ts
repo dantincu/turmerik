@@ -16,10 +16,10 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { defaultSlowAnimationDurationMillis } from '../../../../trmrk-browser/core';
 
-import { whenChanged } from '../../../services/simpleChanges';
+import { whenChanged } from '../../../services/common/simpleChanges';
 import { UserMessageLevel, NullOrUndef } from '../../../../trmrk/core';
 
-import { Placement } from '../../../services/types';
+import { Placement } from '../../../services/common/types';
 
 @Component({
   selector: 'trmrk-user-message',

@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 
 import {
-  ToggleAppBarServiceBase,
   AppBarMapService,
   AppStateServiceBase,
+  ToggleAppBarServiceBase,
 } from 'trmrk-angular';
 
 import { AppStateService } from './app-state-service';

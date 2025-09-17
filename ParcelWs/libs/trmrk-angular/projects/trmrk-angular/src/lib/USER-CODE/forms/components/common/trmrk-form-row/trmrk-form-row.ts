@@ -1,16 +1,10 @@
-import {
-  Component,
-  Input,
-  TemplateRef,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, TemplateRef, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { MatIconModule } from '@angular/material/icon';
 
-import { whenChanged } from '../../../../../services/simpleChanges';
+import { whenChanged } from '../../../../../services/common/simpleChanges';
 import { TrmrkDynamicAttributesDirective } from '../../../../../directives/trmrk-dynamic-attributes';
 import { TrmrkHorizStrip } from '../../../../../components/common/trmrk-horiz-strip/trmrk-horiz-strip';
 
@@ -29,11 +23,11 @@ import {
   getSafeHtml,
   getCssClassFromMap,
   formRowCategoriesMap,
-} from '../../../form';
+} from '../../../helpers/form';
 
 import { TrmrkFormNode } from '../trmrk-form-node/trmrk-form-node';
 
-import { normalizeAttrs, normalizeCssClass } from '../../../form';
+import { normalizeAttrs, normalizeCssClass } from '../../../helpers/form';
 
 import { NullOrUndef } from '../../../../../../trmrk/core';
 
@@ -134,12 +128,9 @@ export class TrmrkFormRow implements OnChanges {
     this.cssClass = normCssClass.main.classes;
     this.controlCssClass = normControlCssClass.main.classes;
     this.skipDefaultCssClass = normCssClass.main.skipDefaultCssClass;
-    this.skipDefaultControlCssClass =
-      normControlCssClass.main.skipDefaultCssClass;
+    this.skipDefaultControlCssClass = normControlCssClass.main.skipDefaultCssClass;
 
-    this.cssClass.push(
-      ...getCssClassFromMap(formRowCategoriesMap, this.trmrkRow.category)
-    );
+    this.cssClass.push(...getCssClassFromMap(formRowCategoriesMap, this.trmrkRow.category));
 
     const heightFactor = this.heightFactor;
 

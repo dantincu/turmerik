@@ -1,11 +1,4 @@
-import {
-  Directive,
-  EventEmitter,
-  Output,
-  Input,
-  OnDestroy,
-  ElementRef,
-} from '@angular/core';
+import { Directive, EventEmitter, Output, Input, OnDestroy, ElementRef } from '@angular/core';
 
 import {
   MouseButton,
@@ -14,7 +7,7 @@ import {
   isAnyContainedBy,
 } from '../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkLongPressOrRightClickEventData } from '../services/types';
+import { TrmrkLongPressOrRightClickEventData } from '../services/common/types';
 import { defaultLongPressTimeoutMills } from '../../trmrk-browser/core';
 
 @Directive({
@@ -82,10 +75,7 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
       });
 
       if ((data.mouseOrTouchCoords!.mouseButton ?? -1) <= MouseButton.Left) {
-        this.longPressTimeout = setTimeout(
-          this.longPressTimeoutElapsed,
-          this.trmrkLongPressMillis
-        );
+        this.longPressTimeout = setTimeout(this.longPressTimeoutElapsed, this.trmrkLongPressMillis);
       }
     }
   }
@@ -141,9 +131,7 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
     if (data.isValid) {
       const mouseButton = data.mouseOrTouchCoords!.mouseButton;
 
-      data.isValid =
-        (mouseButton ?? -1) <= MouseButton.Left ||
-        mouseButton === MouseButton.Right;
+      data.isValid = (mouseButton ?? -1) <= MouseButton.Left || mouseButton === MouseButton.Right;
     }
 
     if (data.isValid) {
@@ -162,8 +150,7 @@ export class TrmrkLongPressOrRightClick implements OnDestroy {
         data.mouseOrTouchCoords!.screenY - mouseDownOrTouchStartCoords!.screenY
       );
 
-      data.isValid =
-        Math.max(diffX, diffY) <= this.trmrkValidMouseOrTouchMoveMaxPx;
+      data.isValid = Math.max(diffX, diffY) <= this.trmrkValidMouseOrTouchMoveMaxPx;
     }
 
     return data;

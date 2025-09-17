@@ -4,9 +4,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 
-import { TrmrkAppPage } from 'trmrk-angular';
+import { TrmrkAppPage, services } from 'trmrk-angular';
 
-import { TrmrkErrorStateMatcher } from 'trmrk-angular';
+const TrmrkErrorStateMatcher = services.common.TrmrkErrorStateMatcher;
 
 @Component({
   selector: 'trmrk-forms-test-page',

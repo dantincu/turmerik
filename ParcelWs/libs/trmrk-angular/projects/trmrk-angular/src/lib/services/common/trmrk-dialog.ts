@@ -1,7 +1,7 @@
 import { TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-import { NullOrUndef } from '../../trmrk/core';
+import { NullOrUndef } from '../../../trmrk/core';
 
 export interface TrmrkDialogDataCore {
   disableClose?: boolean | NullOrUndef;

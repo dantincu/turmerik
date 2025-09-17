@@ -1,7 +1,7 @@
 import {
   TouchOrMouseMoveCoords,
   TouchOrMouseCoords,
-} from '../../trmrk-browser/domUtils/touchAndMouseEvents';
+} from '../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 export enum Placement {
   None = 0,
@@ -30,7 +30,6 @@ export interface TrmrkDragEvent extends TouchOrMouseMoveCoords {
   dragStartPosition: TrmrkDragStartPosition | null;
 }
 
-export interface TrmrkDragEventData
-  extends TrmrkLongPressOrRightClickEventData {
+export interface TrmrkDragEventData extends TrmrkLongPressOrRightClickEventData {
   dragStartPosition: TrmrkDragStartPosition | null;
 }

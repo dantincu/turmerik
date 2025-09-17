@@ -3,12 +3,12 @@ import { Injectable, Inject } from '@angular/core';
 import { IntIdServiceFactory } from './int-id-service-factory';
 import { IntIdService } from './int-id-service';
 
-import { injectionTokens } from './dependency-injection/injection-tokens';
+import { injectionTokens } from '../dependency-injection/injection-tokens';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ModalIdService {
+export class ComponentIdService {
   private intIdService: IntIdService;
 
   constructor(

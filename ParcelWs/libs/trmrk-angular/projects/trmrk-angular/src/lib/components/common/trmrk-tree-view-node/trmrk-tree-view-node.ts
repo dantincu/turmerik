@@ -1,19 +1,9 @@
-import {
-  Component,
-  Input,
-  TemplateRef,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, Input, TemplateRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { NullOrUndef } from '../../../../trmrk/core';
 
-import {
-  TrmrkTree,
-  TrmrkTreeNode,
-  TrmrkTreeNodeData,
-} from '../../../services/TrmrkTree';
+import { TrmrkTree, TrmrkTreeNode, TrmrkTreeNodeData } from '../../../services/common/TrmrkTree';
 
 @Component({
   selector: 'trmrk-tree-view-node',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AppStateServiceBase } from '../../app-state-service-base';
+import { AppStateServiceBase } from '../../common/app-state-service-base';
 
 @Injectable({
   providedIn: 'root',

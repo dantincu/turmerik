@@ -14,9 +14,11 @@ import { TrmrkPanelListItem, TrmrkTouchStartOrMouseDown } from 'trmrk-angular';
 import { companies } from '../../../../services/companies';
 import { TouchOrMouseCoords } from '../../../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
-import { TrmrkListAppPanel } from 'trmrk-angular';
-
-import { TrmrkPanelListService, TrmrkPanelListServiceRow } from 'trmrk-angular';
+import {
+  TrmrkPanelListService,
+  TrmrkListAppPanel,
+  TrmrkPanelListServiceRow,
+} from 'trmrk-angular';
 
 @Component({
   selector: 'trmrk-companies-app-panel',

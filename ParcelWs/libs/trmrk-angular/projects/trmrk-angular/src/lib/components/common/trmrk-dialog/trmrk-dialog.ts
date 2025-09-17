@@ -7,30 +7,20 @@ import {
   SimpleChanges,
   OnDestroy,
 } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
-import { whenChanged } from '../../../services/simpleChanges';
+import { whenChanged } from '../../../services/common/simpleChanges';
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { NullOrUndef } from '../../../../trmrk/core';
-import { TrmrkDialogData } from '../../../services/trmrk-dialog';
+import { TrmrkDialogData } from '../../../services/common/trmrk-dialog';
 
 @Component({
   selector: 'trmrk-dialog',
-  imports: [
-    TrmrkHorizStrip,
-    CommonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
+  imports: [TrmrkHorizStrip, CommonModule, MatDialogModule, MatIconModule, MatButtonModule],
   templateUrl: './trmrk-dialog.html',
   styleUrl: './trmrk-dialog.scss',
 })
@@ -47,8 +37,7 @@ export class TrmrkDialog<TData = any> implements OnChanges, OnDestroy {
     whenChanged(
       changes,
       () => this.trmrkData,
-      (data) =>
-        (this.data = { ...data!, dialogRef: data!.dialogRef ?? this.dialogRef })
+      (data) => (this.data = { ...data!, dialogRef: data!.dialogRef ?? this.dialogRef })
     );
   }
 

@@ -14,7 +14,7 @@ import { TrmrkEditAppThemeDialog } from './trmrk-edit-app-theme/trmrk-edit-app-t
 import {
   TrmrkPanelListService,
   TrmrkPanelListServiceRow,
-} from '../../../services/trmrk-panel-list-service';
+} from '../../../services/common/trmrk-panel-list-service';
 
 import { TrmrkAppThemesService } from '../../../services/pages/trmrk-app-themes-service';
 

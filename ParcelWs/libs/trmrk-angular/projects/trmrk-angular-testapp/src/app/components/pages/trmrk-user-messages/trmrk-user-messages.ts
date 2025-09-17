@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TrmrkAppPage, TrmrkUserMessage } from 'trmrk-angular';
+import { TrmrkUserMessage, TrmrkAppPage } from 'trmrk-angular';
 
 import { UserMessageLevel } from '../../../../trmrk/core';
 
