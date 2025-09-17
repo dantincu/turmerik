@@ -1,12 +1,13 @@
 import {
   allWsRegex,
   digitRegex,
+  unicodeLetterRegex,
+  letterRegex,
   NullOrUndef,
-  Map,
-  StrMap,
-  NumMap,
   UnifiedMap,
 } from './core';
+
+import { numIsBetween } from './math';
 
 export const isNonEmptyStr = (
   arg: string | any,
@@ -23,10 +24,16 @@ export const isNonEmptyStr = (
   return retVal;
 };
 
-export const errToString = (
-  error: Error | any,
-  nullifyEmptyStr?: boolean | NullOrUndef
-) => {
+export const isDigit = (char: string) => digitRegex().test(char);
+export const isLetter = (char: string) => letterRegex().test(char);
+export const isUnicodeLetter = (char: string) => unicodeLetterRegex().test(char);
+
+export const isAsciiChar = (char: string, idx: number = 0) => char.charCodeAt(idx) <= 127;
+
+export const isPrintableAsciiChar = (char: string, idx: number = 0) =>
+  numIsBetween(char.charCodeAt(idx), 32, 126);
+
+export const errToString = (error: Error | any, nullifyEmptyStr?: boolean | NullOrUndef) => {
   let errMsg: string | null = null;
   const errTypeOf = typeof error;
 
@@ -131,10 +138,7 @@ export const transformStr = (
   convertor: (chr: string, idx: number) => string | null
 ) => [...inStr].map(convertor).join('');
 
-export const extractDigits = (
-  inStr: string,
-  allowedNonDigits?: string[] | NullOrUndef
-) => {
+export const extractDigits = (inStr: string, allowedNonDigits?: string[] | NullOrUndef) => {
   allowedNonDigits ??= ['.'];
 
   const outStr = transformStr(inStr, (chr) =>
@@ -151,10 +155,7 @@ export interface SerializeMapOpts<T> {
   propsJoinFactory: (prop1: string, prop2: string) => string;
 }
 
-export const serializeMap = <T>(
-  map: UnifiedMap<T>,
-  opts: SerializeMapOpts<T>
-) => {
+export const serializeMap = <T>(map: UnifiedMap<T>, opts: SerializeMapOpts<T>) => {
   const mapKeys = Object.keys(map);
   let retStr: string;
 

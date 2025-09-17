@@ -8,7 +8,7 @@ import { injectionTokens } from './dependency-injection/injection-tokens';
 @Injectable({
   providedIn: 'root',
 })
-export class ComponentIdService {
+export class ModalIdService {
   private intIdService: IntIdService;
 
   constructor(

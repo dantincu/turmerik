@@ -1,4 +1,4 @@
-import { Injectable, InjectionToken, Inject, OnDestroy } from '@angular/core';
+import { Injectable, Inject, OnDestroy } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -16,9 +16,7 @@ import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/BasicAppSet
 import { TrmrkPanelListServiceRow } from '../../services/trmrk-panel-list-service';
 import { openDialog, DialogPanelSize } from '../../services/trmrk-dialog';
 
-export const BASIC_APP_SETTINGS_DB_ADAPTER = new InjectionToken<object>(
-  'BasicAppSettingsDbAdapter'
-);
+import { injectionTokens } from '../dependency-injection/injection-tokens';
 
 export interface TrmrkAppThemesServiceInitArgs {
   trmrkEditAppThemeDialogComponent: any;
@@ -42,15 +40,14 @@ export class TrmrkAppThemesService implements OnDestroy {
   editEntityDialog!: MatDialog;
 
   constructor(
-    @Inject(BASIC_APP_SETTINGS_DB_ADAPTER)
+    @Inject(injectionTokens.basicAppSettingsDbAdapter.token)
     public trmrkBasicAppSettings: BasicAppSettingsDbAdapter,
     asyncRequestStateManagerFactory: AsyncRequestStateManagerFactory
   ) {
-    this.reqStateManager =
-      asyncRequestStateManagerFactory.create<DOMException | null>(
-        null,
-        (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]
-      );
+    this.reqStateManager = asyncRequestStateManagerFactory.create<DOMException | null>(
+      null,
+      (error) => ['Error opening IndexedDB', getIDbRequestOpenErrorMsg(error)]
+    );
   }
 
   ngOnDestroy(): void {
@@ -61,8 +58,7 @@ export class TrmrkAppThemesService implements OnDestroy {
   }
 
   init(args: TrmrkAppThemesServiceInitArgs) {
-    this.trmrkEditAppThemeDialogComponent =
-      args.trmrkEditAppThemeDialogComponent;
+    this.trmrkEditAppThemeDialogComponent = args.trmrkEditAppThemeDialogComponent;
     this.editEntityDialog = args.editEntityDialog;
 
     setTimeout(() => {
@@ -70,9 +66,7 @@ export class TrmrkAppThemesService implements OnDestroy {
 
       this.trmrkBasicAppSettings.open(
         (_, db) => {
-          const req = this.trmrkBasicAppSettings.stores.appThemes
-            .store(db)
-            .getAll();
+          const req = this.trmrkBasicAppSettings.stores.appThemes.store(db).getAll();
 
           req.onsuccess = (event) => {
             const target = event.target as IDBRequest<AppTheme[]>;

@@ -1,3 +1,5 @@
+import { NullOrUndef } from './core';
+
 export const getNextIdx = (dimSizes: number[], dimIdxes: number[]) => {
   dimSizes = [...dimSizes].reverse();
   let magn = 1;
@@ -12,9 +14,19 @@ export const getNextIdx = (dimSizes: number[], dimIdxes: number[]) => {
 
   dimSizes.reverse();
 
-  const retVal = dimIdxes
-    .map((idx, i) => idx * dimMagnitudes[i])
-    .reduce((acc, val) => acc + val);
+  const retVal = dimIdxes.map((idx, i) => idx * dimMagnitudes[i]).reduce((acc, val) => acc + val);
 
   return retVal;
+};
+
+export const numIsBetween = (num: number, min: number, max: number, strictComparison = false) => {
+  let result: boolean;
+
+  if (strictComparison) {
+    result = num > min && num < max;
+  } else {
+    result = num >= min && num <= max;
+  }
+
+  return result;
 };

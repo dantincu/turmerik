@@ -53,6 +53,8 @@ export const forEachProp = <TObj extends Object>(
     const propVal = objMap[propName];
     callback(propVal, propName, objMap, objPropNames, obj);
   }
+
+  return obj;
 };
 
 export const merge = <TTrgObj extends Object>(
@@ -88,3 +90,17 @@ export const merge = <TTrgObj extends Object>(
 
   return trgObj;
 };
+
+export const mapObjProps = <TObj extends Object>(
+  obj: TObj,
+  propValFactory: (
+    propVal: any,
+    propName: string,
+    objMap: { [key: string]: any },
+    objPropNames: string[],
+    obj: TObj
+  ) => any
+) =>
+  forEachProp(obj, (propVal, propName, objMap, objPropNames, obj) => {
+    objMap[propName] = propValFactory(propVal, propName, objMap, objPropNames, obj);
+  });
