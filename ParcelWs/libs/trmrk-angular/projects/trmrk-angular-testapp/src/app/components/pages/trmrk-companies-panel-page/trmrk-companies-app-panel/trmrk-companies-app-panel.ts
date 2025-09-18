@@ -45,17 +45,34 @@ export class TrmrkCompaniesAppPanel {
   getListItems = () => this.listItems;
   getCurrentlyMovingListItems = () => this.currentlyMovingListItems;
 
-  entities = companies.slice(0, 200).map((name, idx) => ({
-    id: idx + 1,
-    name,
-  }));
+  isLoading = false;
+
+  entities: {
+    id: number;
+    name: string;
+  }[] = [];
 
   rows: TrmrkPanelListServiceRow<{
     id: number;
     name: string;
   }>[] = [];
 
-  constructor(public panelListService: TrmrkPanelListService<any, any>) {}
+  constructor(public panelListService: TrmrkPanelListService<any, any>) {
+    setTimeout(() => {
+      this.isLoading = true;
+
+      setTimeout(() => {
+        this.entities = companies.slice(0, 200).map((name, idx) => ({
+          id: idx + 1,
+          name,
+        }));
+
+        setTimeout(() => {
+          this.isLoading = false;
+        });
+      }, 0);
+    });
+  }
 
   rowsUpdated(rows: TrmrkPanelListServiceRow<any>[]) {
     this.rows = rows;
