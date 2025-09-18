@@ -163,7 +163,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 @keyframes trmrk-has-app-bar {
   from {
-    height: 100%;
+    // height: 100%;
+    height: calc(100% - 50px);
   }
 
   to {
@@ -173,7 +174,8 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
 @keyframes trmrk-has-app-bar-not {
   from {
-    height: calc(100% - 50px);
+    height: 100%;
+    // height: calc(100% - 50px);
   }
 
   to {
@@ -314,8 +316,10 @@ trmrk-app-page {
 
 @keyframes trmrk-app-bar-show {
   from {
-    height: 0;
-    padding: 0;
+    /* height: 0;
+    padding: 0; */
+
+    height: 50px;
   }
 
   to {
@@ -325,7 +329,9 @@ trmrk-app-page {
 
 @keyframes trmrk-app-bar-hide {
   from {
-    height: 50px;
+    // height: 50px;
+    height: 0;
+    padding: 0;
   }
 
   to {
@@ -592,6 +598,8 @@ trmrk-list-app-panel, .trmrk-app-panel, trmrk-panel-list, .trmrk-panel-list {
 
 trmrk-list-app-panel {
   .trmrk-app-panel {
+    position: relative;
+
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
       width: 100%;
@@ -599,8 +607,22 @@ trmrk-list-app-panel {
       padding-left: 6px;
     }
 
+    .trmrk-moving-aggregate-row {
+      position: absolute;
+      z-index: 1;
+
+      &.trmrk-hidden {
+        display: none;
+      }
+
+      .trmrk-horiz-strip {
+          border-width: 2px;
+          border-style: solid;
+      }
+    }
+
     trmrk-panel-list {
-      height: calc(100% - 40px);
+      // height: calc(100% - 40px);
       flex: 1 0 calc(100% - 40px);
 
       .trmrk-panel-list {
@@ -645,35 +667,26 @@ trmrk-list-app-panel {
             animation: trmrk-blank-placeholder-slide-out 0.1s ease-in-out forwards;
           }
         }
-
-        .trmrk-moving-aggregate-row {
-          position: absolute;
-          z-index: 1;
-
-          &.trmrk-hidden {
-            display: none;
-          }
-        }
       }
     }
 
     &.trmrk-has-bottom-horiz-strip, &.trmrk-has-top-message-horiz-strip {
       trmrk-panel-list {
-        height: calc(100% - 80px);
+        // height: calc(100% - 80px);
         flex: 1 0 calc(100% - 80px);
       }
     }
 
     &.trmrk-has-top-message-horiz-strip.trmrk-has-bottom-horiz-strip {
       trmrk-panel-list {
-        height: calc(100% - 120px);
+        // height: calc(100% - 120px);
         flex: 1 0 calc(100% - 120px);
       }
     }
 
     &.trmrk-has-accelerating-popovers.trmrk-has-accelerating-popovers {
       trmrk-panel-list {
-        height: calc(100% - 120px);
+        // height: calc(100% - 120px);
         flex: 1 0 calc(100% - 120px);
       }
     }

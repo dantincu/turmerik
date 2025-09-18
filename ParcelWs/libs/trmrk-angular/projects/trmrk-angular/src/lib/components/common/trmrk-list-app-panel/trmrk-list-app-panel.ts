@@ -13,12 +13,14 @@ import {
   SimpleChanges,
   OnDestroy,
 } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
+import * as materialIcons from '../../../assets/icons/material';
 
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
 import { TrmrkLoading } from '../trmrk-loading/trmrk-loading';
@@ -34,6 +36,8 @@ import { TrmrkAcceleratingScrollControl } from '../trmrk-accelerating-scroll-con
 import { TrmrkAcceleratingScrollPopover } from '../trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
 
+import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../../../directives/trmrk-cancel-context-menu';
+
 @Component({
   selector: 'trmrk-list-app-panel',
   imports: [
@@ -46,6 +50,7 @@ import { TrmrkPanelList } from '../trmrk-panel-list/trmrk-panel-list';
     TrmrkPanelList,
     TrmrkHorizStrip,
     TrmrkLoading,
+    TrmrkCancelContextMenuDirective,
   ],
   templateUrl: './trmrk-list-app-panel.html',
   styleUrl: './trmrk-list-app-panel.scss',
@@ -74,7 +79,9 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
   @Input() trmrkHasError = 0;
   @Input() trmrkCanCloseError = false;
 
-  @Output() trmrkRowsUpdated = new EventEmitter<TrmrkPanelListServiceRow<any>[]>();
+  @Output() trmrkRowsUpdated = new EventEmitter<
+    TrmrkPanelListServiceRow<any>[]
+  >();
 
   @ViewChild('panelList')
   panelList!: TrmrkPanelList;
@@ -93,6 +100,11 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
 
   @ViewChildren('currentlyMovingListItems')
   currentlyMovingListItems!: QueryList<any>;
+
+  @ViewChild('movingAggregateRowEl')
+  movingAggregateRowEl!: TrmrkHorizStrip;
+
+  dragPanIcon: SafeHtml;
 
   listItemsColl!: QueryList<any>;
   currentlyMovingListItemsColl!: QueryList<any>;
@@ -113,7 +125,14 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
 
   hasError = false;
 
-  constructor(public panelListService: TrmrkPanelListService<any, any>) {}
+  constructor(
+    public panelListService: TrmrkPanelListService<any, any>,
+    private sanitizer: DomSanitizer
+  ) {
+    this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(
+      materialIcons.drag_pan
+    );
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     whenChanged(
@@ -123,6 +142,17 @@ export class TrmrkListAppPanel implements OnChanges, OnDestroy {
         this.hasError = hasError > 0;
       }
     );
+
+    setTimeout(() => {
+      whenChanged(
+        changes,
+        () => this.trmrkEntities,
+        () => {
+          this.panelListService.getMovingAggregateRowEl = () =>
+            this.movingAggregateRowEl;
+        }
+      );
+    });
   }
 
   ngOnDestroy(): void {

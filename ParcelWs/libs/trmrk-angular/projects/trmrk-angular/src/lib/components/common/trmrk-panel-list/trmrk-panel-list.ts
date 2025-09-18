@@ -14,7 +14,6 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { CommonModule } from '@angular/common';
@@ -23,7 +22,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { TrmrkPanelListItem } from '../trmrk-panel-list-item/trmrk-panel-list-item';
 import { TrmrkHorizStrip } from '../trmrk-horiz-strip/trmrk-horiz-strip';
-import * as materialIcons from '../../../assets/icons/material';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
 
@@ -37,8 +35,6 @@ import {
   TrmrkPanelListServiceRow,
 } from '../../../services/common/trmrk-panel-list-service';
 
-import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../../../directives/trmrk-cancel-context-menu';
-
 @Component({
   selector: 'trmrk-panel-list',
   imports: [
@@ -46,9 +42,7 @@ import { TrmrkCancelContextMenu as TrmrkCancelContextMenuDirective } from '../..
     MatButtonModule,
     MatMenuModule,
     CommonModule,
-    TrmrkHorizStrip,
     TrmrkCancelContextMenu,
-    TrmrkCancelContextMenuDirective,
   ],
   templateUrl: './trmrk-panel-list.html',
   styleUrl: './trmrk-panel-list.scss',
@@ -80,15 +74,16 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
     | NullOrUndef;
 
   @Input()
-  trmrkGetAppBarHeight?: ((svc: TrmrkPanelListService<any, any>) => number) | NullOrUndef;
+  trmrkGetAppBarHeight?:
+    | ((svc: TrmrkPanelListService<any, any>) => number)
+    | NullOrUndef;
 
-  @Output() trmrkRowsUpdated = new EventEmitter<TrmrkPanelListServiceRow<any>[]>();
+  @Output() trmrkRowsUpdated = new EventEmitter<
+    TrmrkPanelListServiceRow<any>[]
+  >();
 
   @ViewChild('panelList')
   panelList!: ElementRef<HTMLDivElement>;
-
-  @ViewChild('movingAggregateRowEl')
-  movingAggregateRowEl!: TrmrkHorizStrip;
 
   @ViewChild('rowsMenuTrigger', { read: MatMenuTrigger })
   rowsMenuTrigger!: MatMenuTrigger;
@@ -102,15 +97,10 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
   @HostBinding('class.trmrk-scrollable') scrollableCssClass = true;
   @HostBinding('class.trmrk-scrollable-y') scrollableYCssClass = true;
 
-  dragPanIcon: SafeHtml;
-
   constructor(
     public hostEl: ElementRef<HTMLElement>,
-    public panelListService: TrmrkPanelListService<any, any>,
-    private sanitizer: DomSanitizer
-  ) {
-    this.dragPanIcon = this.sanitizer.bypassSecurityTrustHtml(materialIcons.drag_pan);
-  }
+    public panelListService: TrmrkPanelListService<any, any>
+  ) {}
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -134,15 +124,17 @@ export class TrmrkPanelList implements OnChanges, AfterViewInit, OnDestroy {
             rowsMenu: () => this.rowsMenu,
             getVisuallyMovingListItems: this.trmrkVisuallyMovingListItems,
             getPanelHeader: this.trmrkPanelHeader,
-            getUpAcceleratingScrollPopover: this.trmrkUpAcceleratingScrollPopover,
-            getDownAcceleratingScrollPopover: this.trmrkDownAcceleratingScrollPopover,
-            getMovingAggregateRowEl: () => this.movingAggregateRowEl,
+            getUpAcceleratingScrollPopover:
+              this.trmrkUpAcceleratingScrollPopover,
+            getDownAcceleratingScrollPopover:
+              this.trmrkDownAcceleratingScrollPopover,
             toggleAppBar: this.trmrkToggleAppBar,
             getAppBarHeight: this.trmrkGetAppBarHeight,
             entities: this.trmrkEntities,
             idPropName: this.trmrkEntityKeyPropName,
             rowsSelectionIsAllowed: this.trmrkRowsSelectionIsAllowed,
-            selectedRowsReorderIsAllowed: this.trmrkSelectedRowsReorderIsAllowed,
+            selectedRowsReorderIsAllowed:
+              this.trmrkSelectedRowsReorderIsAllowed,
             selectedRowsReorderAggRowVertIsOriented:
               this.trmrkSelectedRowsReorderAggRowVertIsOriented,
           });

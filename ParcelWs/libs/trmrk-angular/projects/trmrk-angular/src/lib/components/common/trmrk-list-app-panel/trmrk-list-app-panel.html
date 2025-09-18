@@ -78,7 +78,24 @@
     [trmrkRowMenuTemplate]="trmrkRowMenuTemplate"
     [trmrkRowTemplate]="trmrkRowTemplate"
     [trmrkVisuallyMovingRowTemplate]="trmrkVisuallyMovingRowTemplate"
-  ></trmrk-panel-list
+  ></trmrk-panel-list>
+  <ng-template #movingAggregateRowLeadingTemplate>
+    <div class="trmrk-custom-svg-icon-btn" [innerHtml]="dragPanIcon"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+    <div class="trmrk-icon-btn trmrk-fake-icon-btn"></div>
+  </ng-template>
+  <trmrk-horiz-strip
+    trmrkCancelContextMenu
+    #movingAggregateRowEl
+    [trmrkMainText]="'Moving ' + panelListService.selectedRowsCount + ' item' + (panelListService.selectedRowsCount > 1 ? 's' : '')"
+    [ngClass]="['trmrk-moving-aggregate-row', panelListService.showMovingAggregateRow ? '' : 'trmrk-hidden']"
+    [trmrkCssClass]="['trmrk-has-border-x2']"
+    [trmrkLeadingTemplate]="movingAggregateRowLeadingTemplate"
+  >
+    Moving {{panelListService.selectedRowsCount}}
+    item{{panelListService.selectedRowsCount > 1 ? 's' : ''}} </trmrk-horiz-strip
   >} @if (!trmrkEntities.length) {
   <ng-container *ngTemplateOutlet="trmrkNoItemsTemplate"></ng-container> } @if
   (!panelListService.showAcceleratingScrollPopovers) { @if

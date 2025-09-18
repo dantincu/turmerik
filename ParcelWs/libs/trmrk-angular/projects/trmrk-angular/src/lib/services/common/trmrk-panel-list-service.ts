@@ -63,7 +63,7 @@ export interface TrmrkPanelListServiceSetupArgs<TEntity, TItem> {
   getPanelHeader: () => HTMLElement;
   getUpAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
   getDownAcceleratingScrollPopover: () => TrmrkAcceleratingScrollPopover | null;
-  getMovingAggregateRowEl: () => TrmrkHorizStrip | null;
+  // getMovingAggregateRowEl: () => TrmrkHorizStrip | null;
   toggleAppBar?:
     | ((svc: TrmrkPanelListService<TEntity, TItem>, show: boolean) => VoidOrAny)
     | NullOrUndef;
@@ -201,7 +201,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     this.getUpAcceleratingScrollPopover = args.getUpAcceleratingScrollPopover;
     this.getDownAcceleratingScrollPopover =
       args.getDownAcceleratingScrollPopover;
-    this.getMovingAggregateRowEl = args.getMovingAggregateRowEl;
+    // this.getMovingAggregateRowEl = args.getMovingAggregateRowEl;
     this.toggleAppBar =
       args.toggleAppBar ??
       ((svc, show) => svc.appStateService.showAppBar.next(show));
@@ -408,14 +408,17 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
       upAcceleratingScrollPopover &&
       downAcceleratingScrollPopover
     ) {
+      const panelList = this.getPanelList();
+
       this.updateItemTopPx(
         movingAggregateRowEl.hostEl.nativeElement,
         this.visuallyMovingRows.find(
           (row) => row.idx === this.visuallyMovingMainRowIdx
         )!,
-        diffY -
-          upAcceleratingScrollPopover.offsetHeight +
-          this.panelHeaderHeight
+        diffY +
+          this.appBarHeight +
+          upAcceleratingScrollPopover.offsetHeight -
+          panelList.parentElement!.scrollTop
       );
 
       const acceleratingScrollPopovers = [
@@ -566,7 +569,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
           setTimeout(() => {
             if (this.isMovingSelectedRows) {
               this.beforeMovingSelectedRowsListViewScrollTop =
-                panelList.scrollTop;
+                panelList.parentElement!.scrollTop;
 
               this.iterateVisuallyMovingItems(
                 (item, itemHostEl, visuallyMovingRow, i) => {
@@ -801,16 +804,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
     visuallyMovingRow: TrmrkPanelListServiceRowX<TEntity>,
     diffY: number = 0
   ) {
-    const panelList = this.getPanelList();
-
-    const topPx =
-      visuallyMovingRow.offsetTop +
-      Math.round(diffY) +
-      panelList.scrollTop -
-      this.beforeMovingSelectedRowsListViewScrollTop! +
-      this.appBarHeight -
-      this.getAppBarHeight(this);
-
+    const topPx = visuallyMovingRow.offsetTop + Math.round(diffY);
     itemHostEl.style.top = `${topPx}px`;
   }
 
