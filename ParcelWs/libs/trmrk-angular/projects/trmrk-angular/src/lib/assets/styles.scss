@@ -69,6 +69,10 @@ app-root {
   touch-action: none;
 }
 
+.trmrk-highlight-text-overflow {
+  text-overflow: ellipsis;
+}
+
 /* .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
   display: inline-flex;
   width: 40px;

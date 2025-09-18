@@ -21,24 +21,32 @@ import { TrmrkTouchStartOrMouseDown } from '../../../directives/trmrk-touch-star
 
 @Component({
   selector: 'trmrk-thin-horiz-strip',
-  imports: [CommonModule, TrmrkLongPressOrRightClick, TrmrkTouchStartOrMouseDown],
+  imports: [
+    CommonModule,
+    TrmrkLongPressOrRightClick,
+    TrmrkTouchStartOrMouseDown,
+  ],
   templateUrl: './trmrk-thin-horiz-strip.html',
   styleUrl: './trmrk-thin-horiz-strip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkThinHorizStrip implements OnDestroy {
-  @Output() trmrkTextLongPressOrRightClick = new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkTextLongPressOrRightClick =
+    new EventEmitter<TouchOrMouseCoords>();
 
-  @Output() trmrkTextShortPressOrLeftClick = new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkTextShortPressOrLeftClick =
+    new EventEmitter<TouchOrMouseCoords>();
 
-  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<MouseEvent | TouchEvent>();
+  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<
+    MouseEvent | TouchEvent
+  >();
 
   @Input() trmrkTextLongPressAltHost: (() => HTMLElement[]) | null = null;
 
   @Input() trmrkMinimal = false;
   @Input() trmrkText!: string;
   @Input() trmrkUseNonBreakingSpaceTokens = true;
-  @Input() trmrkHasCap = true;
+  @Input() trmrkHasCap = false;
   @Input() trmrkCssClass: string[] = [];
   @Input() trmrkCssStyle: { [key: string]: any } | null = null;
   @Input() trmrkCapCssStyle: { [key: string]: any } | null = null;
@@ -65,10 +73,10 @@ export class TrmrkThinHorizStrip implements OnDestroy {
       changes,
       () => this.trmrkText,
       (value) => {
-        this.text = encodeHtml(value ?? '', this.trmrkUseNonBreakingSpaceTokens).replaceAll(
-          '\n',
-          '&nbsp;'
-        );
+        this.text = encodeHtml(
+          value ?? '',
+          this.trmrkUseNonBreakingSpaceTokens
+        ).replaceAll('\n', '&nbsp;');
       }
     );
   }

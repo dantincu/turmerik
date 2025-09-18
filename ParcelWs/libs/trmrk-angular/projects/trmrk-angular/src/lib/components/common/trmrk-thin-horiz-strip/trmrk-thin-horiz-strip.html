@@ -4,7 +4,7 @@
   } @if (trmrkUseContentInsteadOfTextRow) { <ng-content></ng-content>} @if
   (!trmrkUseContentInsteadOfTextRow) {
   <div
-    class="trmrk-text-row"
+    [ngClass]="['trmrk-text-row', trmrkHasCap ? '' : 'trmrk-highlight-text-overflow']"
     (trmrkLongPressOrRightClick)="trmrkTextLongPressOrRightClick.emit($event)"
     (trmrkShortPressOrLeftClick)="trmrkTextShortPressOrLeftClick.emit($event)"
     (trmrkTouchStartOrMouseDown)="trmrkTextTouchStartOrMouseDown.emit($event)"
