@@ -673,20 +673,25 @@ trmrk-list-app-panel {
 
     &.trmrk-has-accelerating-popovers.trmrk-has-accelerating-popovers {
       trmrk-panel-list {
-        height: calc(100% - 140px);
-        flex: 1 0 calc(100% - 140px);
+        height: calc(100% - 120px);
+        flex: 1 0 calc(100% - 120px);
       }
     }
   }
 }
 
 .trmrk-accelerating-scroll-popover {
-    .trmrk-scroll-pad {
-      [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
-        border-width: 2px;
-        border-style: solid;
+  .trmrk-scroll-pad {
+    [mat-icon-button].trmrk-icon-btn.trmrk-cancel-icon-btn {
+      padding: 0;
+
+      .trmrk-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 40px;
       }
     }
+  }
 }
 
 .trmrk-horiz-strip {

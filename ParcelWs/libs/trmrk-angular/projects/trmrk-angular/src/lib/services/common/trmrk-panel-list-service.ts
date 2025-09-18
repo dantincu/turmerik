@@ -289,7 +289,7 @@ export class TrmrkPanelListService<TEntity, TItem> implements OnDestroy {
               this.showPendingReorderStrip = true;
             }
             // if (!this._temp++) {
-            // this.resetVisuallyMovingRows();
+            this.resetVisuallyMovingRows();
             // }
           })
         );

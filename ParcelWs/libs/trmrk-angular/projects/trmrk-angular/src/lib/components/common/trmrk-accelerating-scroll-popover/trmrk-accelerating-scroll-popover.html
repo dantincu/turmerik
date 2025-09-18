@@ -5,11 +5,9 @@
   <div
     [ngClass]="['trmrk-middle-scroll-pad trmrk-scroll-pad', trmrkFocusedPadIdx === 1 ? 'trmrk-is-focused' : '']"
   >
-    @if (trmrkHasCancelBtn) { @if (trmrkCancelBtnIsFocused) {
-    <div class="trmrk-cancel-icon-btn-highlighter"></div>
-    }
+    @if (trmrkHasCancelBtn) {
     <button mat-icon-button class="trmrk-icon-btn trmrk-cancel-icon-btn">
-      <mat-icon class="trmrk-icon">close</mat-icon>
+      <mat-icon class="trmrk-icon">cancel</mat-icon>
     </button>
     }
   </div>
