@@ -23,7 +23,9 @@
 .trmrk-main-control {
   width: 0;
   overflow: hidden;
+  margin-top: -3px;
   padding-top: 1px;
+  height: 40px;
 
   > :first-child .trmrk-icon {
     transform: rotate(-90deg);
@@ -41,11 +43,15 @@
   &.trmrk-hide {
     animation: trmrk-accelerating-scroll-control-hide 0.2s forwards;
   }
-}
 
-.trmrk-fake-icon-btn {
-  display: inline-flex;
-  box-sizing: border-box;
+  > .trmrk-icon-btn {
+    margin-top: -9px;
+  }
+
+  > .trmrk-fake-icon-btn {
+    position: relative;
+    top: 8px;
+  }
 }
 
 .trmrk-collapse-btn {

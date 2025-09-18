@@ -70,7 +70,7 @@ export class TrmrkCompaniesAppPanel {
         setTimeout(() => {
           this.isLoading = false;
         });
-      }, 0);
+      }, 625);
     });
   }
 

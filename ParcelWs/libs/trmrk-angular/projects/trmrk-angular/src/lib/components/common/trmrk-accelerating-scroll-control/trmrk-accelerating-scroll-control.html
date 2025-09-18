@@ -1,6 +1,6 @@
 <div class="trmrk-accelerating-scroll-control">
   <div
-    [ngClass]="['trmrk-main-control', isExpanded === true ? 'trmrk-show' : isExpanded === false ? 'trmrk-hide' : '']"
+    [ngClass]="['trmrk-main-control trmrk-no-wrap-anywhere', isExpanded === true ? 'trmrk-show' : isExpanded === false ? 'trmrk-hide' : '']"
     [trmrkIntervalMillis]="trmrkIntervalMillis"
     (trmrkContinuousPress)="scroll()"
     (trmrkTouchOrMouseMove)="touchOrMouseMove($event)"
