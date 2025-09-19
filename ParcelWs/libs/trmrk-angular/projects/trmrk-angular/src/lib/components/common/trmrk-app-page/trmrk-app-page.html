@@ -1,5 +1,6 @@
 <trmrk-app-bar
   [trmrkLeadingIconTemplate]="trmrkAppBarLeadingIconTemplate"
+  [trmrkLeadingTemplate]="trmrkAppBarLeadingTemplate"
   [trmrkHomeRouterLink]="trmrkAppBarHomeRouterLink"
   [trmrkTitle]="trmrkAppBarTitle"
   [trmrkCssClass]="trmrkAppBarCssClass"
@@ -25,49 +26,47 @@
     <mat-icon class="trmrk-icon">more_vert</mat-icon>
   </button>
   <mat-menu class="trmrk-menu" dense>
-    @if (trmrkShowMainMenuTopStrip ??
-    appStateService.showMainMenuTopStripByDefault) {
+    @if (trmrkShowMainMenuTopStrip ?? appStateService.showMainMenuTopStripByDefault) {
     <div mat-menu-item class="trmrk-menu-item">
-      @if (trmrkShowRefreshMenuBtn ??
-      appStateService.showRefreshMainMenuBtnByDefault) {
-      <button
-        mat-icon-button
-        class="trmrk-icon-btn"
-        (click)="refreshMenuBtnClick($event)"
-      >
+      @if (trmrkShowRefreshMenuBtn ?? appStateService.showRefreshMainMenuBtnByDefault) {
+      <button mat-icon-button class="trmrk-icon-btn" (click)="refreshMenuBtnClick($event)">
         <mat-icon class="trmrk-icon">refresh</mat-icon>
       </button>
-      } @if (trmrkShowUserProfileMenuBtn ??
-      appStateService.showUserProfileMainMenuBtnByDefault) {
-      <a
-        mat-icon-button
-        class="trmrk-icon-btn"
-        [routerLink]="[`${appConfigService.routeBasePath}/user-profile`]"
-        ><mat-icon class="trmrk-icon">account_circle</mat-icon></a
+      } @if (trmrkShowManageTabsMenuBtn ?? appStateService.showManageTabsMenuBtnByDefault) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon-wrapper" [innerHtml]="tabGroupIcon"></div>
+      </button>
+      } @if (trmrkShowDupplicateTabMenuBtn ?? appStateService.showDupplicateTabMenuBtnByDefault) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon-wrapper" [innerHtml]="tabDuplicateIcon"></div>
+      </button>
+      } @if (trmrkShowShareMenuBtn ?? appStateService.showShareMenuBtnByDefault) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">share</mat-icon>
+      </button>
+      } @if (trmrkShowUserProfileMenuBtn ?? appStateService.showUserProfileMainMenuBtnByDefault) {
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfigService.routeBasePath}/user-profile`]">
+        <button mat-icon-button class="trmrk-icon-btn">
+          <mat-icon class="trmrk-icon">account_circle</mat-icon>
+        </button>
+      </trmrk-app-link>
+      } @if (trmrkShowManageAppMenuBtn ?? appStateService.showManageAppMainMenuBtnByDefault) {
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfigService.routeBasePath}/manage-app`]">
+        <button mat-icon-button class="trmrk-icon-btn">
+          <mat-icon class="trmrk-icon">settings_applications</mat-icon>
+        </button></trmrk-app-link
       >
-      } @if (trmrkShowManageAppMenuBtn ??
-      appStateService.showManageAppMainMenuBtnByDefault) {
-      <a
-        mat-icon-button
-        class="trmrk-icon-btn"
-        [routerLink]="[`${appConfigService.routeBasePath}/manage-app`]"
-        ><mat-icon class="trmrk-icon">settings_applications</mat-icon></a
+      } @if (trmrkShowSettingsMenuBtn ?? appStateService.showSettingsMainMenuBtnByDefault) {
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfigService.routeBasePath}/settings`]"
+        ><button mat-icon-button class="trmrk-icon-btn">
+          <mat-icon class="trmrk-icon">settings</mat-icon>
+        </button></trmrk-app-link
       >
-      } @if (trmrkShowSettingsMenuBtn ??
-      appStateService.showSettingsMainMenuBtnByDefault) {
-      <a
-        mat-icon-button
-        class="trmrk-icon-btn"
-        [routerLink]="[`${appConfigService.routeBasePath}/settings`]"
-        ><mat-icon class="trmrk-icon">settings</mat-icon></a
-      >
-      } @if (trmrkShowHelpMenuBtn ??
-      appStateService.showHelpMainMenuBtnByDefault) {
-      <a
-        mat-icon-button
-        class="trmrk-icon-btn"
-        [routerLink]="[`${appConfigService.routeBasePath}/help`]"
-        ><mat-icon class="trmrk-icon">help</mat-icon></a
+      } @if (trmrkShowHelpMenuBtn ?? appStateService.showHelpMainMenuBtnByDefault) {
+      <trmrk-app-link [trmrkRouterLink]="[`${appConfigService.routeBasePath}/help`]"
+        ><button mat-icon-button class="trmrk-icon-btn">
+          <mat-icon class="trmrk-icon">help</mat-icon>
+        </button></trmrk-app-link
       >
       }
     </div>
@@ -78,8 +77,14 @@
 </ng-template>
 
 <div
-  [ngClass]="['trmrk-app-page-body trmrk-height-diff-x0',
-    trmrkIsScrollableY ? 'trmrk-scrollable trmrk-scrollable-y' : trmrkIsScrollableY === false ? 'trmrk-overflow-y-hidden' : '']"
+  [ngClass]="[
+    'trmrk-app-page-body trmrk-height-diff-x0',
+    trmrkIsScrollableY
+      ? 'trmrk-scrollable trmrk-scrollable-y'
+      : trmrkIsScrollableY === false
+      ? 'trmrk-overflow-y-hidden'
+      : ''
+  ]"
 >
   <ng-content></ng-content>
 </div>

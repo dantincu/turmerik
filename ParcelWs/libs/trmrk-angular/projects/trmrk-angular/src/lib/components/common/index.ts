@@ -1,5 +1,6 @@
 export * from './trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
 export * from './trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
+export * from './trmrk-app-link/trmrk-app-link';
 export * from './trmrk-app-bar/trmrk-app-bar';
 export * from './trmrk-app-page/trmrk-app-page';
 export * from './trmrk-cancel-context-menu/trmrk-cancel-context-menu';

@@ -1,0 +1,16 @@
+<a
+  [routerLink]="routerLink"
+  [ngClass]="trmrkCssClass ?? 'trmrk-link'"
+  (trmrkLongPressOrRightClick)="anchorLongPressOrRightClick($event)"
+  #ctxMenuTrigger="matMenuTrigger"
+  #ctxMenuTriggerEl
+  [matMenuTriggerFor]="null"
+  ><ng-content></ng-content
+></a>
+<mat-menu [ngClass]="['trmrk-menu']" dense #ctxMenu>
+  @if (trmrkShowOpenMenuBtn ?? true) {
+  <a mat-menu-item class="trmrk-menu-item" [routerLink]="routerLink"> Open </a>
+  } @if (trmrkShowOpenInNewTabMenuBtn ?? true) {
+  <div mat-menu-item class="trmrk-menu-item">Open in new tab</div>
+  }
+</mat-menu>

@@ -11,10 +11,11 @@ import {
   OnChanges,
   SimpleChanges,
   OnDestroy,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NgTemplateOutlet, CommonModule } from '@angular/common';
-import { RouterLink, UrlTree } from '@angular/router';
+import { UrlTree } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -23,6 +24,9 @@ import { whenChanged } from '../../../services/common/simpleChanges';
 import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 import { AppConfigServiceBase } from '../../../services/common/app-config-service-base';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
+import { TrmrkAppLink } from '../trmrk-app-link/trmrk-app-link';
+
+import { TrmrkUrlType } from '../../../services/common/types';
 
 @Component({
   selector: 'trmrk-app-bar',
@@ -31,20 +35,22 @@ import { AppStateServiceBase } from '../../../services/common/app-state-service-
     MatIconModule,
     MatButtonModule,
     MatIconButton,
-    RouterLink,
     MatMenuModule,
     NgTemplateOutlet,
+    TrmrkAppLink,
   ],
   templateUrl: './trmrk-app-bar.html',
   styleUrl: './trmrk-app-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
+  @Input() trmrkLeadingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkHomeRouterLink: string | readonly any[] | UrlTree | NullOrUndef;
+  @Input() trmrkHomeRouterLink: TrmrkUrlType | NullOrUndef;
   @Input() trmrkTitle!: string;
   @Input() trmrkCssClass: string | null = null;
   @Input() trmrkShowBackBtn: boolean | NullOrUndef;

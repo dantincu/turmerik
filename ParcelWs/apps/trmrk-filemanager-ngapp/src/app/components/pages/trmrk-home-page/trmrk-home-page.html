@@ -1,12 +1,35 @@
 <trmrk-app-page
-  [trmrkAppBarTitle]="'Turmerik File Manager'"
-  [trmrkAppBarLeadingIconTemplate]="appIcon"
+  [trmrkAppBarTitle]="'Home'"
+  [trmrkAppBarLeadingTemplate]="appMenuIconBtn"
   [trmrkOptionsMenuTemplate]="options"
   [trmrkAppBarShowGoToParentBtn]="false"
 ></trmrk-app-page>
 
-<ng-template #appIcon>
-  <trmrk-app-icon />
+<ng-template #appMenuIconBtn>
+  <button
+    mat-icon-button
+    class="trmrk-icon-btn"
+    #appMenuTrigger="matMenuTrigger"
+    [matMenuTriggerFor]="null"
+  >
+    <mat-icon class="trmrk-icon">menu</mat-icon>
+  </button>
+  <mat-menu class="trmrk-menu" dense #appMenu>
+    <div mat-menu-item class="trmrk-menu-item trmrk-no-pad">
+      <trmrk-app-link [trmrkRouterLink]="'/app/favorites'" [trmrkCssClass]="'trmrk-icon-link'">
+        <button mat-button class="trmrk-btn">
+          <mat-icon class="trmrk-icon">star</mat-icon>Favorites
+        </button>
+      </trmrk-app-link>
+    </div>
+    <div mat-menu-item class="trmrk-menu-item trmrk-no-pad">
+      <trmrk-app-link [trmrkRouterLink]="'/app/folder'" [trmrkCssClass]="'trmrk-icon-link'">
+        <button mat-button class="trmrk-btn">
+          <mat-icon class="trmrk-icon">folder_eye</mat-icon>Explore
+        </button>
+      </trmrk-app-link>
+    </div>
+  </mat-menu>
 </ng-template>
 
 <ng-template #options> </ng-template>

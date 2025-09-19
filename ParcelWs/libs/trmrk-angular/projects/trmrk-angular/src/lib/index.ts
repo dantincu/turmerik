@@ -31,6 +31,7 @@ export { TrmrkSpinner } from './USER-CODE/forms/components/common/trmrk-spinner/
 export { TrmrkAcceleratingScrollControl } from './components/common/trmrk-accelerating-scroll-control/trmrk-accelerating-scroll-control';
 export { TrmrkAcceleratingScrollPopover } from './components/common/trmrk-accelerating-scroll-popover/trmrk-accelerating-scroll-popover';
 export { TrmrkAppBar } from './components/common/trmrk-app-bar/trmrk-app-bar';
+export { TrmrkAppLink } from './components/common/trmrk-app-link/trmrk-app-link';
 export { TrmrkAppPage } from './components/common/trmrk-app-page/trmrk-app-page';
 export { TrmrkCancelContextMenu as TrmrkCancelContextMenuComponent } from './components/common/trmrk-cancel-context-menu/trmrk-cancel-context-menu';
 export { TrmrkDialog } from './components/common/trmrk-dialog/trmrk-dialog';

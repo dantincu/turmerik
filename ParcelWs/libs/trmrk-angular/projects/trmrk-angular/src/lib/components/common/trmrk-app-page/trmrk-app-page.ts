@@ -6,6 +6,7 @@ import {
   ViewEncapsulation,
   OnDestroy,
 } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { UrlTree, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,16 +18,22 @@ import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
 import { AppConfigServiceBase } from '../../../services/common/app-config-service-base';
+import { TrmrkAppLink } from '../../../components/common/trmrk-app-link/trmrk-app-link';
+
+import { TrmrkUrlType } from '../../../services/common/types';
+
+import { tab_duplicate, tab_group } from '../../../assets/icons/material';
 
 @Component({
   selector: 'trmrk-app-page',
   imports: [
-    TrmrkAppBar,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
     RouterModule,
     CommonModule,
+    TrmrkAppBar,
+    TrmrkAppLink,
   ],
   templateUrl: './trmrk-app-page.html',
   styleUrl: './trmrk-app-page.scss',
@@ -34,15 +41,12 @@ import { AppConfigServiceBase } from '../../../services/common/app-config-servic
 })
 export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkIsScrollableY: boolean | NullOrUndef = true;
+  @Input() trmrkAppBarLeadingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarTrailingTemplate?: TemplateRef<any> | NullOrUndef;
 
-  @Input() trmrkAppBarHomeRouterLink:
-    | string
-    | readonly any[]
-    | UrlTree
-    | NullOrUndef;
+  @Input() trmrkAppBarHomeRouterLink: TrmrkUrlType | NullOrUndef;
 
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;
@@ -76,10 +80,17 @@ export class TrmrkAppPage implements OnDestroy {
   @ViewChild('optionsMenuTrigger', { read: MatMenuTrigger })
   optionsMenuTrigger!: MatMenuTrigger;
 
+  tabDuplicateIcon: SafeHtml;
+  tabGroupIcon: SafeHtml;
+
   constructor(
     public appConfigService: AppConfigServiceBase,
-    public appStateService: AppStateServiceBase
+    public appStateService: AppStateServiceBase,
+    private domSanitizer: DomSanitizer
   ) {
+    this.tabDuplicateIcon = domSanitizer.bypassSecurityTrustHtml(tab_duplicate);
+    this.tabGroupIcon = domSanitizer.bypassSecurityTrustHtml(tab_group);
+
     setTimeout(() => {
       if (this.optionsMenuTrigger) {
         this.optionsMenuTrigger.menu = this.optionsMenu;

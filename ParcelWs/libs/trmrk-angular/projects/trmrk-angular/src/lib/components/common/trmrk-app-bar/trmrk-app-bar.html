@@ -1,17 +1,16 @@
 <div [ngClass]="['trmrk-app-bar', trmrkCssClass ?? '']">
-  <a
-    mat-icon-button
-    class="trmrk-icon-btn"
-    [routerLink]="trmrkHomeRouterLink ?? appConfigService.routeBasePath"
-    aria-label="Home"
-  >
-    @if (trmrkLeadingIconTemplate) {
-    <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container>
-    } @if (!trmrkLeadingIconTemplate) {
-    <mat-icon class="trmrk-icon trmrk-home-icon">home</mat-icon>}
-  </a>
-
-  @if (trmrkShowBackBtn ?? appStateService.showBackBtnByDefault) {
+  @if (trmrkLeadingTemplate) {
+  <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
+  } @if (!trmrkLeadingTemplate) {
+  <trmrk-app-link [trmrkRouterLink]="trmrkHomeRouterLink ?? appConfigService.routeBasePath">
+    <button mat-icon-button class="trmrk-icon-btn">
+      @if (trmrkLeadingIconTemplate) {
+      <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container>
+      } @if (!trmrkLeadingIconTemplate) {
+      <mat-icon class="trmrk-icon trmrk-home-icon">home</mat-icon>}
+    </button>
+  </trmrk-app-link>
+  } @if (trmrkShowBackBtn ?? appStateService.showBackBtnByDefault) {
   <button
     mat-icon-button
     class="trmrk-icon-btn"
@@ -32,7 +31,7 @@
   }
 
   <ng-container *ngTemplateOutlet="trmrkBeforeTitleTemplate"></ng-container>
-  <h1 class="trmrk-page-title" #pageTitle>{{trmrkTitle}}</h1>
+  <h1 class="trmrk-page-title" #pageTitle>{{ trmrkTitle }}</h1>
 
   @if (trmrkTrailingTemplate) {
   <ng-container *ngTemplateOutlet="trmrkTrailingTemplate"></ng-container>

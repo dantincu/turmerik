@@ -1,3 +1,5 @@
+import { AnyOrUnknown } from '../../../trmrk/core';
+
 import {
   TouchOrMouseMoveCoords,
   TouchOrMouseCoords,
@@ -33,3 +35,10 @@ export interface TrmrkDragEvent extends TouchOrMouseMoveCoords {
 export interface TrmrkDragEventData extends TrmrkLongPressOrRightClickEventData {
   dragStartPosition: TrmrkDragStartPosition | null;
 }
+
+export interface TrmrkUrl {
+  path: string | string[];
+  queryParams?: { [key: string]: string } | AnyOrUnknown;
+}
+
+export type TrmrkUrlType = string | string[] | TrmrkUrl;

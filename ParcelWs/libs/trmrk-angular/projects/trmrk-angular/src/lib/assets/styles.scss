@@ -81,6 +81,15 @@ app-root {
   text-overflow: ellipsis;
 }
 
+.trmrk-no-pad.trmrk-no-pad.trmrk-no-pad {
+  padding: 0;
+}
+
+.trmrk-no-horiz-pad {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /* .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
   display: inline-flex;
   width: 40px;
@@ -144,6 +153,11 @@ app-root {
   display: inline-flex;
 }
 
+a.trmrk-link,
+a.trmrk-link:visited,
+a.trmrk-link:hover,
+a.trmrk-link:active
+a.trmrk-link:link,
 a.trmrk-icon-btn,
 a.trmrk-icon-btn:visited,
 a.trmrk-icon-btn:hover,
@@ -167,6 +181,10 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
     &.trmrk-text-menu-item {
       padding-left: 10px;
+    }
+
+    .trmrk-link {
+
     }
   }
 }
