@@ -9,9 +9,9 @@ export class AppStateService extends AppStateServiceBase {
   constructor() {
     super(APP_NAME);
 
-    this.showRefreshMainMenuBtnByDefault = false;
+    /* this.showRefreshMainMenuBtnByDefault = false;
     this.showUserProfileMainMenuBtnByDefault = false;
     this.showManageAppMainMenuBtnByDefault = false;
-    this.showHelpMainMenuBtnByDefault = false;
+    this.showHelpMainMenuBtnByDefault = false; */
   }
 }

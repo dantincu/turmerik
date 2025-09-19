@@ -1,9 +1,4 @@
-<trmrk-app-page
-  [trmrkPageTemplate]="page"
-  [trmrkAppBarTitle]="'Horiz Strips'"
-></trmrk-app-page>
-
-<ng-template #page>
+<trmrk-app-page [trmrkAppBarTitle]="'Horiz Strips'">
   <div [ngStyle]="{}">
     <div class="trmrk-panel-list">
       @for (i of [0, 1, 2]; track $index;) {
@@ -157,5 +152,5 @@
 
   <ng-template #fileItemIcon2>
     <span class="material-icons">css</span>
-  </ng-template>
-</ng-template>
+  </ng-template></trmrk-app-page
+>

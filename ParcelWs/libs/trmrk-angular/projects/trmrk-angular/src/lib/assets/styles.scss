@@ -65,6 +65,14 @@ app-root {
   overflow-y: auto;
 }
 
+.trmrk-overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.trmrk-overflow-y-hidden {
+  overflow-y: hidden;
+}
+
 .trmrk-no-touch-scroll {
   touch-action: none;
 }
@@ -96,6 +104,8 @@ app-root {
 .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
   display: inline-flex;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .trmrk-custom-svg-icon-btn {

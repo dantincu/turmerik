@@ -1,6 +1,4 @@
-<trmrk-app-page [trmrkPageTemplate]="page" [trmrkAppBarTitle]="'App Themes'"></trmrk-app-page>
-
-<ng-template #page
+<trmrk-app-page [trmrkAppBarTitle]="'App Themes'"
   ><trmrk-list-app-panel
     [trmrkCssClass]="'trmrk-app-themes-panel'"
     [trmrkEntities]="trmrkAppThemesService.entities"
@@ -78,9 +76,8 @@
       [trmrkIsSelected]="true"
       [trmrkIsFocused]="row.item.isFocused"
       [trmrkInputData]="{ id: row.item.data.id }"
-    ></trmrk-panel-list-item>
-  </ng-template>
-</ng-template>
+    ></trmrk-panel-list-item> </ng-template
+></trmrk-app-page>
 
 <ng-template>
   <trmrk-edit-app-theme-dialog></trmrk-edit-app-theme-dialog>

@@ -19,6 +19,9 @@ export abstract class AppStateServiceBase implements OnDestroy {
   showOptionsMenuBtnByDefault = true;
   showMainMenuTopStripByDefault = true;
   showRefreshMainMenuBtnByDefault = true;
+  showManageTabsMenuBtnByDefault = true;
+  showDupplicateTabMenuBtnByDefault = true;
+  showShareBtnByDefault = true;
   showUserProfileMainMenuBtnByDefault = true;
   showManageAppMainMenuBtnByDefault = true;
   showSettingsMainMenuBtnByDefault = true;

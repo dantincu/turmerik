@@ -20,19 +20,29 @@ import { AppConfigServiceBase } from '../../../services/common/app-config-servic
 
 @Component({
   selector: 'trmrk-app-page',
-  imports: [TrmrkAppBar, MatIconModule, MatButtonModule, MatMenuModule, RouterModule, CommonModule],
+  imports: [
+    TrmrkAppBar,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    RouterModule,
+    CommonModule,
+  ],
   templateUrl: './trmrk-app-page.html',
   styleUrl: './trmrk-app-page.scss',
   encapsulation: ViewEncapsulation.None,
 })
 export class TrmrkAppPage implements OnDestroy {
-  @Input() trmrkPageTemplate: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkUseDefaultPageBody = true;
+  @Input() trmrkIsScrollableY: boolean | NullOrUndef = true;
   @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarTrailingTemplate?: TemplateRef<any> | NullOrUndef;
 
-  @Input() trmrkAppBarHomeRouterLink: string | readonly any[] | UrlTree | NullOrUndef;
+  @Input() trmrkAppBarHomeRouterLink:
+    | string
+    | readonly any[]
+    | UrlTree
+    | NullOrUndef;
 
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;
@@ -49,8 +59,13 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkShowOptionsBtn: boolean | NullOrUndef;
   @Input() trmrkShowMainMenuTopStrip: boolean | NullOrUndef;
+
   @Input() trmrkShowRefreshMenuBtn: boolean | NullOrUndef;
   @Input() trmrkRefreshAction!: (() => VoidOrAny) | NullOrUndef;
+
+  @Input() trmrkShowManageTabsMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkShowDupplicateTabMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkShowShareMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowUserProfileMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowManageAppMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowSettingsMenuBtn: boolean | NullOrUndef;
@@ -73,7 +88,6 @@ export class TrmrkAppPage implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.trmrkPageTemplate = null;
     this.trmrkAppBarLeadingIconTemplate = null;
     this.trmrkAppBarBeforeTitleTemplate = null;
     this.trmrkAppBarTrailingTemplate = null;

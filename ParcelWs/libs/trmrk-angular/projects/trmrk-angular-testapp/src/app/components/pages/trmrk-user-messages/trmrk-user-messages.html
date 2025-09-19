@@ -1,9 +1,4 @@
-<trmrk-app-page
-  [trmrkPageTemplate]="page"
-  [trmrkAppBarTitle]="'User Messages'"
-></trmrk-app-page>
-
-<ng-template #page>
+<trmrk-app-page [trmrkAppBarTitle]="'User Messages'">
   <div>
     <trmrk-user-message
       [trmrkMessage]="'asdfasdfasdf qwerwqerqwer'"
@@ -112,4 +107,4 @@
     [trmrkLevel]="mainUserMessageLevel"
     class="trmrk-main-user-message"
   ></trmrk-user-message
-></ng-template>
+></trmrk-app-page>

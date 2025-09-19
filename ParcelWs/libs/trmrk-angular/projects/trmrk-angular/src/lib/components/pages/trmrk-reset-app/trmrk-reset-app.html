@@ -1,9 +1,6 @@
 <trmrk-app-page
-  [trmrkPageTemplate]="page"
   [trmrkAppBarTitle]="trmrkResetAppService.isResetting ? 'Resetting the app...' : 'App Reset'"
-></trmrk-app-page>
-
-<ng-template #page>
+>
   @if (trmrkResetAppService.showTopHorizStrip) {
   <trmrk-horiz-strip
     [trmrkCssClass]="[
@@ -21,7 +18,11 @@
   ></trmrk-horiz-strip>
   <ng-template #trmrkErrorHorizStripTrailingTemplate>
     @if (trmrkResetAppService.showErrorMessage) {
-    <button mat-icon-button class="trmrk-icon-btn" (click)="trmrkResetAppService.closeError()">
+    <button
+      mat-icon-button
+      class="trmrk-icon-btn"
+      (click)="trmrkResetAppService.closeError()"
+    >
       <mat-icon class="trmrk-icon">close</mat-icon>
     </button>
     }
@@ -39,8 +40,8 @@
       >Reset</a
     >
     }
-  </div>
-</ng-template>
+  </div></trmrk-app-page
+>
 
 <ng-template #topHorizStripLeadingTemplate>
   @if (trmrkResetAppService.isResetting) {

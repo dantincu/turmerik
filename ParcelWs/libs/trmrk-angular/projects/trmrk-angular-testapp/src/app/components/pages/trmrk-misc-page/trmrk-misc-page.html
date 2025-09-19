@@ -1,9 +1,4 @@
-<trmrk-app-page
-  [trmrkPageTemplate]="page"
-  [trmrkAppBarTitle]="'Miscellaneous'"
-></trmrk-app-page>
-
-<ng-template #page>
+<trmrk-app-page [trmrkAppBarTitle]="'Miscellaneous'">
   <div>
     <button mat-button (click)="openPopupWindowClick()">
       Open popup window</button
@@ -56,4 +51,4 @@
       (trmrkDrag)="onDrag($event)"
       [ngStyle]="{zIndex: 999}"
     ></div></div
-></ng-template>
+></trmrk-app-page>

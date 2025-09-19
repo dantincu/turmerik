@@ -77,12 +77,9 @@
   }
 </ng-template>
 
-@if (trmrkUseDefaultPageBody) {
 <div
-  class="trmrk-app-page-body trmrk-height-diff-x0 trmrk-scrollable trmrk-scrollable-y"
+  [ngClass]="['trmrk-app-page-body trmrk-height-diff-x0',
+    trmrkIsScrollableY ? 'trmrk-scrollable trmrk-scrollable-y' : trmrkIsScrollableY === false ? 'trmrk-overflow-y-hidden' : '']"
 >
-  <ng-container *ngTemplateOutlet="trmrkPageTemplate"></ng-container>
+  <ng-content></ng-content>
 </div>
-} @if (!trmrkUseDefaultPageBody) {
-<ng-container *ngTemplateOutlet="trmrkPageTemplate"></ng-container>
-}
