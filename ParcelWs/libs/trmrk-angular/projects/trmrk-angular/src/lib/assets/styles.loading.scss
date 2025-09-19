@@ -74,3 +74,12 @@
   animation: trmrk-loading-el-dot-pulse-after 1.5s infinite linear;
   animation-delay: 0.5s;
 }
+
+.trmrk-loading-el {
+  display: flex;
+  width: 30px;
+  position: relative;
+  left: calc(50% - 5px);
+  margin: 5px 0 5px;
+  zoom: 2;
+}

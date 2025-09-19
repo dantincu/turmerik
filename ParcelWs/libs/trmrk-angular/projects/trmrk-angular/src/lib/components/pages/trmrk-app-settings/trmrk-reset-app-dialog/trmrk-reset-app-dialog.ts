@@ -1,4 +1,4 @@
-import { Component, Inject, AfterViewInit } from '@angular/core';
+import { Component, Inject, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { CommonModule } from '@angular/common';
@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { NullOrUndef } from '../../../../../trmrk/core';
 import { getIDbRequestOpenErrorMsg } from '../../../../../trmrk-browser/indexedDB/core';
 
+import { ModalService } from '../../../../services/common/modal-service';
+import { ModalServiceFactory } from '../../../../services/common/modal-service-factory';
 import { AppStateServiceBase } from '../../../../services/common/app-state-service-base';
 import { TrmrkDialog } from '../../../common/trmrk-dialog/trmrk-dialog';
 import { TrmrkDialogData, mergeDialogData } from '../../../../services/common/trmrk-dialog';
@@ -28,21 +30,32 @@ import { TrmrkLoading } from '../../../common/trmrk-loading/trmrk-loading';
   templateUrl: './trmrk-reset-app-dialog.html',
   styleUrl: './trmrk-reset-app-dialog.scss',
 })
-export class TrmrkResetAppDialog implements AfterViewInit {
+export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
   mergeDialogData = mergeDialogData;
+
   isResetting: boolean | null = null;
   showSuccessMessage = 0;
   showErrorMessage = 0;
   errorMessage: string | NullOrUndef;
   resetFinished: boolean | null = null;
 
+  private modalService: ModalService;
+
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: TrmrkDialogData<any>,
     public dialogRef: MatDialogRef<any>,
     private appStateService: AppStateServiceBase,
-    private resetAppService: ResetAppService
-  ) {}
+    private resetAppService: ResetAppService,
+    private modalServiceFactory: ModalServiceFactory,
+    private hostEl: ElementRef
+  ) {
+    this.modalService = modalServiceFactory.create();
+
+    this.modalService.setup({
+      hostEl: () => hostEl.nativeElement,
+    });
+  }
 
   ngAfterViewInit() {
     setTimeout(async () => {
@@ -59,6 +72,10 @@ export class TrmrkResetAppDialog implements AfterViewInit {
       this.isResetting = false;
       this.resetFinished = true;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.modalService.destroy();
   }
 
   okClick() {

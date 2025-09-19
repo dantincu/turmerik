@@ -37,6 +37,7 @@ export interface GetCommonServiceProvidersArgs {
   provideAsyncRequestStateManagerFactory?: boolean | NullOrUndef;
   provideIntIdServiceFactory?: boolean | NullOrUndef;
   routes?: Route[];
+  appProviders: (Provider | EnvironmentProviders | null)[];
 }
 
 export const getServiceProviders = (args: GetCommonServiceProvidersArgs) => {
@@ -76,6 +77,7 @@ export const getServiceProviders = (args: GetCommonServiceProvidersArgs) => {
       : null,
 
     args.routes ? provideRouter(args.routes) : null,
+    ...args.appProviders,
   ];
 
   const retArr: (Provider | EnvironmentProviders)[] = providersArr.filter(

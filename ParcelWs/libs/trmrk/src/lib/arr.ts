@@ -1,16 +1,8 @@
-import {
-  Kvp,
-  MtblRefValue,
-  ValueOrAny,
-  NullOrUndef,
-  AnyOrUnknown,
-} from './core';
+import { Kvp, MtblRefValue, ValueOrAny, NullOrUndef, AnyOrUnknown } from './core';
 
 export interface CollectionFilterArgs<TColl, TIn, TOut = TIn> {
   collection: TColl;
-  predicate: (
-    args: CollectionFilterPredicateArgs<TIn, TOut>
-  ) => boolean | AnyOrUnknown;
+  predicate: (args: CollectionFilterPredicateArgs<TIn, TOut>) => boolean | AnyOrUnknown;
   selector?: (input: TIn, i: number) => TOut;
   startIdx?: number | NullOrUndef;
   incrementIdx?: number | NullOrUndef;
@@ -41,11 +33,7 @@ export const toArray = <T>(itrbl: Iterable<T>) => {
 
 export const findKvp = <TValue>(
   arr: TValue[] | readonly TValue[],
-  predicate: (
-    value: TValue,
-    idx: number,
-    array: TValue[] | readonly TValue[]
-  ) => boolean
+  predicate: (value: TValue, idx: number, array: TValue[] | readonly TValue[]) => boolean
 ) => {
   let retIdx = -1;
   let retVal: TValue | null = null;
@@ -81,10 +69,8 @@ export const forEach = <T>(
 
 export const contains = <T>(arr: T[], item: T) => arr.indexOf(item) >= 0;
 
-export const any = <T>(
-  arr: T[],
-  predicate: (item: T, idx: number, array: T[]) => boolean
-) => arr.filter(predicate).length >= 0;
+export const any = <T>(arr: T[], predicate: (item: T, idx: number, array: T[]) => boolean) =>
+  arr.filter(predicate).length >= 0;
 
 export const containsAnyOfArr = (
   inStr: string,
@@ -111,9 +97,7 @@ export const containsAnyOfArr = (
 export const containsAnyOfMx = (
   inStr: string,
   strMx: (string[] | readonly string[])[],
-  matching?:
-    | MtblRefValue<Kvp<number, Kvp<number, string | NullOrUndef>>>
-    | NullOrUndef
+  matching?: MtblRefValue<Kvp<number, Kvp<number, string | NullOrUndef>>> | NullOrUndef
 ) => {
   matching ??= {
     value: {
@@ -127,9 +111,7 @@ export const containsAnyOfMx = (
 
   const innerMatching = {} as MtblRefValue<Kvp<number, string | NullOrUndef>>;
 
-  const kvp = findKvp(strMx, (strArr) =>
-    containsAnyOfArr(inStr, strArr, innerMatching)
-  );
+  const kvp = findKvp(strMx, (strArr) => containsAnyOfArr(inStr, strArr, innerMatching));
 
   const retVal = kvp.key >= 0;
 
@@ -245,8 +227,7 @@ export const flatten = <T>(
   return retArr;
 };
 
-export const freezeMx = <T>(mx: T[][]) =>
-  Object.freeze(mx.map((arr) => Object.freeze(arr)));
+export const freezeMx = <T>(mx: T[][]) => Object.freeze(mx.map((arr) => Object.freeze(arr)));
 
 export const removeAllIdxes = <T>(
   inputArr: T[],
@@ -294,11 +275,7 @@ export const removeAll = <T>(
       }
     }
   } else {
-    const predicateFunc = predicate as (
-      item: T,
-      idx: number,
-      inArr: T[]
-    ) => ValueOrAny<boolean>;
+    const predicateFunc = predicate as (item: T, idx: number, inArr: T[]) => ValueOrAny<boolean>;
 
     const idxesArr = inputArr
       .map(
@@ -317,8 +294,7 @@ export const removeAll = <T>(
   return inputArr;
 };
 
-export const removeNullOrUndef = <T>(arr: T[]) =>
-  arr.filter((val) => (val ?? false) !== false);
+export const removeNullOrUndef = <T>(arr: T[]) => arr.filter((val) => (val ?? false) !== false);
 
 export interface Iterator<T = any> {
   [Symbol.iterator]: () => { next: () => { value: T; done: boolean } };
@@ -354,9 +330,7 @@ export const queryMx = <T>(
   }
 
   if (found && path.length > 1) {
-    const childMx = (retVal as { [prop: string]: Iterator<T> | PseudoArray })[
-      childNodesPropName
-    ];
+    const childMx = (retVal as { [prop: string]: Iterator<T> | PseudoArray })[childNodesPropName];
 
     retVal = queryMx(childMx, childNodesPropName, path.slice(1));
   }
@@ -364,14 +338,11 @@ export const queryMx = <T>(
   return retVal;
 };
 
-export const filterKvp = <TColl, TIn, TOut = TIn>(
-  args: CollectionFilterArgs<TColl, TIn, TOut>
-) => {
+export const filterKvp = <TColl, TIn, TOut = TIn>(args: CollectionFilterArgs<TColl, TIn, TOut>) => {
   const retArr: Kvp<number, TOut>[] = [];
   const incIdx = args.incrementIdx ?? 1;
 
-  const collectionItemRetriever =
-    args.collectionItemRetriever ?? ((coll, i) => (coll as any)[i]);
+  const collectionItemRetriever = args.collectionItemRetriever ?? ((coll, i) => (coll as any)[i]);
 
   const selector = args.selector ?? ((value, i) => value as unknown as TOut);
 
@@ -386,11 +357,7 @@ export const filterKvp = <TColl, TIn, TOut = TIn>(
     break: false,
   };
 
-  for (
-    let i = args.startIdx ?? 0;
-    incIdx > 0 ? i <= endIdx : i >= endIdx;
-    i += incIdx
-  ) {
+  for (let i = args.startIdx ?? 0; incIdx > 0 ? i <= endIdx : i >= endIdx; i += incIdx) {
     const inVal = collectionItemRetriever(args.collection, i);
     const value = selector(inVal, i);
 
@@ -413,4 +380,14 @@ export const filterKvp = <TColl, TIn, TOut = TIn>(
   }
 
   return retArr;
+};
+
+export const splice = <T>(
+  arr: T[],
+  startIdx: number,
+  deleteCount: number,
+  ...itemsToAppend: T[]
+) => {
+  arr.splice(startIdx, deleteCount, ...itemsToAppend);
+  return arr;
 };

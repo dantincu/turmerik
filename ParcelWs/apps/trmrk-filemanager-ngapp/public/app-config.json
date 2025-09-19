@@ -1,0 +1,18 @@
+{
+  "driveStorageOptions": [
+    {
+      "key": "browser-indexeddb",
+      "displayName": "Browser's IndexedDB",
+      "storageType": 0,
+      "itemIdnfIsPath": false,
+      "cacheValidIntervalMillis": 0
+    },
+    {
+      "key": "browser-file-system-api",
+      "displayName": "Browser's File System Api",
+      "storageType": 1,
+      "itemIdnfIsPath": true,
+      "cacheValidIntervalMillis": 0
+    }
+  ]
+}

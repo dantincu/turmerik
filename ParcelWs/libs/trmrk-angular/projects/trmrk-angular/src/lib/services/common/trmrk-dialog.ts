@@ -1,6 +1,8 @@
 import { TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
+import { getAnchestor } from '../../../trmrk-browser/domUtils/core';
+
 import { NullOrUndef } from '../../../trmrk/core';
 
 export interface TrmrkDialogDataCore {
@@ -65,4 +67,23 @@ export const openDialog = <TData>(args: OpenDialogArgs<TData>) => {
     disableClose: args.data.disableClose ?? undefined,
     data: args.data,
   });
+};
+
+export const handleModalIdChanged = (
+  modalHostEl: HTMLElement,
+  modalId: number,
+  currentModalId: number
+) => {
+  const modalBackDrop = getAnchestor(modalHostEl, (prElem) =>
+    prElem.classList.contains('backdrop')
+  );
+
+  if (modalBackDrop) {
+    if (modalId !== currentModalId) {
+      modalId = currentModalId;
+      modalBackDrop.classList.add('trmrk-hidden');
+    } else {
+      modalBackDrop.classList.remove('trmrk-hidden');
+    }
+  }
 };

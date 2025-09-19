@@ -84,6 +84,24 @@
 }
 
 .trmrk-app-theme-light {
+  background-color: #FFF;
+  color: #000;
+
+  input.trmrk-input {
+    background-color: #FFF;
+    color: #000;
+  }
+
+  select.trmrk-select.trmrk-select {
+    background-color: #FFF;
+    color: #000;
+
+    option {
+      background-color: #FFF;
+      color: #000;
+    }
+  }
+
   .trmrk-icon-btn-filled-default, .trmrk-btn.trmrk-btn-filled-default {
     background-color: #000;
     color: #FFF;

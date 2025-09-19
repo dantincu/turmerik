@@ -10,6 +10,7 @@ export abstract class AppStateServiceBase implements OnDestroy {
   isDarkMode = new TrmrkObservable<boolean>(false);
   revertDarkModeToDefault = new EventEmitter<void>();
   showAppBar = new TrmrkObservable<boolean>(true);
+  currentModalId = new TrmrkObservable<number>(0);
 
   dbObjNamePrefix: string;
   appThemeIsDarkModeLocalStorageKey: string;

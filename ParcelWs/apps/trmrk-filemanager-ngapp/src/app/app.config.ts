@@ -1,5 +1,7 @@
 import { ApplicationConfig } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 
+import { appConfigProvider } from './services/app-config-provider';
 import { getServiceProviders } from '../trmrk-angular/services/dependency-injection/service-providers';
 
 import { AppStateService } from './services/app-state-service';
@@ -20,5 +22,6 @@ export const appConfig: ApplicationConfig = {
     AppConfigServiceType: AppConfigService,
     basicAppSettingsIDbAdapter: iDbAdapters.basicAppSettings,
     routes,
+    appProviders: [appConfigProvider, provideHttpClient()],
   }),
 };

@@ -20,6 +20,21 @@ h3 {
   font-size: 16px;
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #000;
+    color: #FFF;
+  }
+}
+
+/* Light mode styles */
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: #FFF;
+    color: #000;
+  }
+}
+
 app-root {
   display: block;
   @include mixins.rel-stretch-to-parent-size();
@@ -27,6 +42,10 @@ app-root {
 
 .trmrk-hidden {
   display: none;
+}
+
+.trmrk-position-absolute {
+  position: absolute;
 }
 
 .trmrk-invisible {

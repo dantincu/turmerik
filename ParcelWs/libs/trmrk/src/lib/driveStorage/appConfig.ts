@@ -2,9 +2,9 @@ import { NullOrUndef } from '../core';
 
 export enum DriveStorageType {
   IndexedDb = 0,
-  FileSystemApi,
-  PostMessage,
-  RestApi,
+  FileSystemApi = 1,
+  PostMessage = 2,
+  RestApi = 3,
 }
 
 export interface DriveStorageOption {
@@ -13,7 +13,6 @@ export interface DriveStorageOption {
   storageType: DriveStorageType;
   isEnabled?: boolean | NullOrUndef;
   mainApiBaseUri?: string | NullOrUndef;
-  restrictedApiBaseUri?: string | NullOrUndef;
   itemIdnfIsPath?: boolean | NullOrUndef;
   cacheValidIntervalMillis?: number | NullOrUndef;
 }

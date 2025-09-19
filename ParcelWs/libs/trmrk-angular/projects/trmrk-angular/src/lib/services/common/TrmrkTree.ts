@@ -74,29 +74,4 @@ export const trmrkTreeEventHandlers = {
 
     node.data.next({ ...event.data, isExpanded: event.value });
   },
-
-  nodeTextLongPressOrRightClick: <TTreeNode>(
-    treeData: TrmrkTree<TTreeNode>,
-    event: TrmrkTreeNodeEventCore<TTreeNode, TouchOrMouseCoords>
-  ) => {
-    const lastIdx = event.path.at(-1)!;
-    const prPath = event.path.slice(0, -1);
-
-    let childNodes: TrmrkTreeNode<TTreeNode>[];
-    let childNodesObs: TrmrkObservable<TrmrkTreeNodeData<TTreeNode>[]>;
-
-    if (prPath.length > 0) {
-      const prNode = queryMx(treeData.rootNodes, 'childNodes', prPath)!;
-      childNodes = prNode.childNodes!;
-      childNodesObs = prNode.childNodesData!;
-    } else {
-      childNodes = treeData.rootNodes;
-      childNodesObs = treeData.rootNodesData;
-    }
-
-    childNodes.splice(lastIdx, 1);
-    const childNodesData = [...childNodesObs.value];
-    childNodesData.splice(lastIdx, 1);
-    childNodesObs.next(childNodesData);
-  },
 };

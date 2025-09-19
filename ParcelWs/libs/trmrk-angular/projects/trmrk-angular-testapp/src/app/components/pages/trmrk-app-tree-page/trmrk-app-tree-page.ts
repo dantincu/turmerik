@@ -17,6 +17,8 @@ const trmrkTreeEventHandlers = services.common.trmrkTreeEventHandlers;
 const TrmrkObservable = services.common.TrmrkObservable;
 
 import { getNextIdx } from '../../../../trmrk/math';
+import { queryMx } from '../../../../trmrk/arr';
+import { TouchOrMouseCoords } from '../../../../trmrk-browser/domUtils/touchAndMouseEvents';
 
 import { TreeNode } from './trmrk-app-tree-view-node/trmrk-app-tree-view-node';
 import { TrmrkAppTreeView } from './trmrk-app-tree-view/trmrk-app-tree-view';
@@ -187,5 +189,31 @@ export class TrmrkAppTreePage {
     }
 
     return retData;
+  }
+
+  nodeTextLongPressOrRightClick(
+    treeData: TrmrkTree<TreeNode>,
+    event: TrmrkTreeNodeEventCore<TreeNode, TouchOrMouseCoords>
+  ) {
+    const lastIdx = event.path.at(-1)!;
+    const prPath = event.path.slice(0, -1);
+
+    let childNodes: TrmrkTreeNode<TreeNode>[];
+    // let childNodesObs: TrmrkObservable<TrmrkTreeNodeData<TreeNode>[]>;
+    let childNodesObs: any;
+
+    if (prPath.length > 0) {
+      const prNode = queryMx(treeData.rootNodes, 'childNodes', prPath)!;
+      childNodes = prNode.childNodes!;
+      childNodesObs = prNode.childNodesData!;
+    } else {
+      childNodes = treeData.rootNodes;
+      childNodesObs = treeData.rootNodesData;
+    }
+
+    childNodes.splice(lastIdx, 1);
+    const childNodesData = [...childNodesObs.value];
+    childNodesData.splice(lastIdx, 1);
+    childNodesObs.next(childNodesData);
   }
 }
