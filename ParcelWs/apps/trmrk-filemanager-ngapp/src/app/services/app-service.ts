@@ -10,9 +10,12 @@ import { injectionTokens } from '../../trmrk-angular/services/dependency-injecti
 
 import { AppStateService } from '../services/app-state-service';
 import { AppConfig } from '../services/app-config';
+import { AppDriveStorageOption } from '../services/driveStorageOption';
 
 @Injectable()
 export class AppService extends AppServiceBase {
+  currentDriveStorageOption: AppDriveStorageOption | null = null;
+
   constructor(
     @Inject(injectionTokens.appConfig.token) appConfig: AppConfig,
     @Inject(AppStateServiceBase) appStateService: AppStateService,

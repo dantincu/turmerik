@@ -226,10 +226,10 @@ export const getPropNameFromWords = (wordsArr: string[], convention: PropNameWor
     case PropNameWordsConvention.CamelCase:
       propName = wordsArr
         .map((word, i) => (i === 0 ? word.toLowerCase() : capitalizeFirstLetter(word)))
-        .join();
+        .join('');
       break;
     case PropNameWordsConvention.PascalCase:
-      propName = wordsArr.map((word) => capitalizeFirstLetter(word)).join();
+      propName = wordsArr.map((word) => capitalizeFirstLetter(word)).join('');
       break;
     case PropNameWordsConvention.KebabCase:
       propName = wordsArr.map((word) => word.toLowerCase()).join('-');
@@ -238,7 +238,7 @@ export const getPropNameFromWords = (wordsArr: string[], convention: PropNameWor
       propName = wordsArr.map((word) => word.toUpperCase()).join('_');
       break;
     default:
-      propName = wordsArr.join();
+      propName = wordsArr.join('');
       break;
   }
 

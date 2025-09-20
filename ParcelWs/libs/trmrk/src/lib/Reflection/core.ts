@@ -8,8 +8,8 @@ export const getPropName = (propNameFunc: ((obj: any) => any) | (() => any)) =>
     .map((part) => part.trim())
     .join('.');
 
-export const propName = <T>(_: T, propNameFunc: (obj: T) => any) =>
-  getPropName(propNameFunc);
+export const propName = <T>(_: T, propNameFunc: (obj: T) => any) => getPropName(propNameFunc);
 
-export const nameOf = <T>(_: () => T, propNameFunc: (obj: T) => any) =>
-  getPropName(propNameFunc);
+export const nameOf = <T>(_: () => T, propNameFunc: (obj: T) => any) => getPropName(propNameFunc);
+
+export const getVarName = (varNameFunc: () => any) => varNameFunc.toString().split('>')[1]?.trim();

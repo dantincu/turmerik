@@ -2,6 +2,7 @@
   "driveStorageOptions": [
     {
       "key": "browser-indexeddb",
+      "isEnabled": false,
       "displayName": "Browser's IndexedDB",
       "description": "lives only in your browser",
       "storageType": 0,

@@ -6,8 +6,9 @@
     })
   "
 ></trmrk-dialog>
-<ng-template #content
-  ><p>Choose what type of storage you want to use with this app. Pick any of the options bellow.</p>
+<ng-template #content>
+  @if (!selectedStorageOption) {
+  <p>Choose what type of storage you want to use with this app. Pick any of the options bellow.</p>
   @if (hasCloudStorageOptions) {
   <h3>Cloud Storage</h3>
   <ul class="trmrk-spaced-list">
@@ -19,7 +20,11 @@
   <ul class="trmrk-spaced-list">
     @for (option of otherStorageOptions; track option.key) {
     <li class="trmrk-spaced-list-item">
-      <button mat-button class="trmrk-btn trmrk-btn-filled-primary">
+      <button
+        mat-button
+        class="trmrk-btn trmrk-btn-filled-primary"
+        (click)="chooseStorageOption(option)"
+      >
         {{ option.displayName }}
       </button>
       @if ((option.description ?? null) !== null) {
@@ -28,5 +33,19 @@
     </li>
     }
   </ul>
+  } @if (selectedStorageOption) { @if (selectedStorageOption.storageType ===
+  DriveStorageType.FileSystemApi) {
+  <p>
+    Your device's system will open a folder picker window for you to choose a folder that this app
+    will have access to
+  </p>
+  <button
+    mat-button
+    class="trmrk-btn trmrk-btn-filled-primary"
+    (click)="chooseFileSystemApiRootFolder()"
+  >
+    Choose folder
+  </button>
+  } }
 </ng-template>
 <ng-template #actions></ng-template>

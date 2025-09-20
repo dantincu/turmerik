@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 import { NullOrUndef } from '../../../../../trmrk/core';
+import { getVarName } from '../../../../../trmrk/Reflection/core';
 import { getIDbRequestOpenErrorMsg } from '../../../../../trmrk-browser/indexedDB/core';
 
 import { ModalService } from '../../../../services/common/modal-service';
@@ -54,6 +55,7 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
 
     this.modalService.setup({
       hostEl: () => hostEl.nativeElement,
+      modalType: getVarName(() => TrmrkResetAppDialog),
       onCloseModal: () => this.dialogRef.close(),
       data: this.data.data,
     });

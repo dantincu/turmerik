@@ -1,5 +1,6 @@
 import { Injectable, Inject, EventEmitter, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+
+import { NullOrUndef } from '../../../trmrk/core';
 
 import { AppStateServiceBase } from './app-state-service-base';
 import { AppConfigCore } from './app-config';
@@ -7,17 +8,28 @@ import { injectionTokens } from '../dependency-injection/injection-tokens';
 
 export interface RegisterModalArgsCore {
   modalId: number;
+  modalType: string;
 }
 
 export interface RegisterModalArgs extends RegisterModalArgsCore {}
 
 export interface RegisteredModal extends RegisterModalArgsCore {}
 
+export interface GetAppObjectKeyOpts {
+  delims?: string[] | NullOrUndef;
+  includeAppName?: boolean | NullOrUndef;
+}
+
+export const AppObjectKeyDelims = {
+  default: ['[', ']'],
+  windowShowDirectoryPicker: ['_', '_'],
+};
+
 @Injectable()
 export class AppServiceBase implements OnDestroy {
   public onCloseModal = new EventEmitter<number>();
   public onCloseAllModals = new EventEmitter<void>();
-  private registeredModals: RegisteredModal[] = [];
+  public registeredModals: RegisteredModal[] = [];
 
   constructor(
     @Inject(injectionTokens.appConfig) public appConfig: AppConfigCore,
@@ -29,6 +41,17 @@ export class AppServiceBase implements OnDestroy {
   }
 
   ngOnDestroy(): void {}
+
+  getAppObjectKey(parts: string[], opts?: GetAppObjectKeyOpts | NullOrUndef) {
+    opts ??= {};
+    opts.delims ??= AppObjectKeyDelims.default;
+    opts.includeAppName ??= true;
+
+    const appObjectKey = [...(opts.includeAppName ? [this.appStateService.appName] : []), ...parts]
+      .map((part) => [opts.delims![0], part, opts.delims![1]].join(''))
+      .join('');
+    return appObjectKey;
+  }
 
   registerModal(args: RegisterModalArgs) {
     this.registeredModals.push(args);

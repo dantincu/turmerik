@@ -9,6 +9,7 @@ import { updateModalVisibility, TrmrkDialogComponentDataCore } from './trmrk-dia
 
 export interface ModalServiceSetupArgs {
   hostEl: () => HTMLElement;
+  modalType: string;
   onCloseModal: () => void;
   data: TrmrkDialogComponentDataCore;
 }
@@ -56,6 +57,7 @@ export class ModalService implements OnDestroy {
 
     this.appService.registerModal({
       modalId: this.modalId,
+      modalType: args.modalType,
     });
 
     if (args.data.modalIdAvailable) {

@@ -6,7 +6,10 @@ import { Subscription } from 'rxjs';
 import { AppService } from './services/app-service';
 import { openDialog, DialogPanelSize } from '../trmrk-angular/services/common/trmrk-dialog';
 import { AppServiceBase } from '../trmrk-angular/services/common/app-service-base';
-import { TrmrkAppSetupModal } from './components/common/trmrk-app-setup-modal/trmrk-app-setup-modal';
+import {
+  TrmrkAppSetupModal,
+  TrmrkAppSetupDialogComponentData,
+} from './components/common/trmrk-app-setup-modal/trmrk-app-setup-modal';
 
 @Component({
   selector: 'app-root',
@@ -40,11 +43,13 @@ export class App implements OnDestroy {
 
   setupOkValue(setupOk: boolean) {
     if (!setupOk) {
-      openDialog({
+      openDialog<TrmrkAppSetupDialogComponentData>({
         matDialog: this.appSetupDialog,
         dialogComponent: TrmrkAppSetupModal,
         data: {
-          data: {},
+          data: {
+            optionChosen: (option) => (this.appService.currentDriveStorageOption = option),
+          },
         },
         dialogPanelSize: DialogPanelSize.Default,
       });
