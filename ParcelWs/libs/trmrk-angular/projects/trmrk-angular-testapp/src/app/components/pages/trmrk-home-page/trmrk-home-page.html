@@ -1,12 +1,7 @@
 <trmrk-app-page
   [trmrkAppBarTitle]="'Turmerik Notes'"
-  [trmrkAppBarLeadingIconTemplate]="appIcon"
   [trmrkOptionsMenuTemplate]="options"
 ></trmrk-app-page>
-
-<ng-template #appIcon>
-  <trmrk-app-icon />
-</ng-template>
 
 <ng-template #options>
   <a mat-menu-item class="trmrk-menu-item" [routerLink]="[`forms`]"> Forms </a>

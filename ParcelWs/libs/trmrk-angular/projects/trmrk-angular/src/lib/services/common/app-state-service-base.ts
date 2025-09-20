@@ -12,6 +12,7 @@ export interface AppBarControlsVisibility {
 }
 
 export interface AppMainMenuControlsVisibility {
+  homeBtn: boolean;
   refreshBtn: boolean;
   manageTabsBtn: boolean;
   duplicateTabBtn: boolean;
@@ -41,6 +42,7 @@ export const getAppDefaultValues = (): AppDefaultValues => ({
     },
     mainMenuTopStrip: true,
     mainMenu: {
+      homeBtn: true,
       refreshBtn: true,
       manageTabsBtn: true,
       duplicateTabBtn: true,

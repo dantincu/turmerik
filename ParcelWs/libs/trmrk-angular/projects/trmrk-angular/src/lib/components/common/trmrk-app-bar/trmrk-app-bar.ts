@@ -16,7 +16,6 @@ import {
 } from '@angular/core';
 
 import { NgTemplateOutlet, CommonModule } from '@angular/common';
-import { UrlTree } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -26,7 +25,6 @@ import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { AppConfigCore } from '../../../services/common/app-config';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
-import { TrmrkAppLink } from '../trmrk-app-link/trmrk-app-link';
 
 import { TrmrkUrlType } from '../../../services/common/types';
 
@@ -39,7 +37,6 @@ import { TrmrkUrlType } from '../../../services/common/types';
     MatIconButton,
     MatMenuModule,
     NgTemplateOutlet,
-    TrmrkAppLink,
   ],
   templateUrl: './trmrk-app-bar.html',
   styleUrl: './trmrk-app-bar.scss',
@@ -49,10 +46,8 @@ import { TrmrkUrlType } from '../../../services/common/types';
 export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
   @Output() trmrkPageTitleElem = new EventEmitter<HTMLHeadingElement>();
   @Input() trmrkLeadingTemplate?: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkHomeRouterLink: TrmrkUrlType | NullOrUndef;
   @Input() trmrkTitle!: string;
   @Input() trmrkCssClass: string | null = null;
   @Input() trmrkShowBackBtn: boolean | NullOrUndef;
@@ -92,7 +87,6 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.trmrkLeadingIconTemplate = null;
     this.trmrkBeforeTitleTemplate = null;
     this.trmrkTrailingTemplate = null;
   }

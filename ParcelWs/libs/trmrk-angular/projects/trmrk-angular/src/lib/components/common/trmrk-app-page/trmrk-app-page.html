@@ -1,7 +1,5 @@
 <trmrk-app-bar
-  [trmrkLeadingIconTemplate]="trmrkAppBarLeadingIconTemplate"
   [trmrkLeadingTemplate]="trmrkAppBarLeadingTemplate"
-  [trmrkHomeRouterLink]="trmrkAppBarHomeRouterLink"
   [trmrkTitle]="trmrkAppBarTitle"
   [trmrkCssClass]="trmrkAppBarCssClass"
   [trmrkBeforeTitleTemplate]="trmrkAppBarBeforeTitleTemplate"
@@ -61,6 +59,12 @@
       <trmrk-app-link [trmrkRouterLink]="[`${appConfig.routeBasePath}/settings`]"
         ><button mat-icon-button class="trmrk-icon-btn">
           <mat-icon class="trmrk-icon">settings</mat-icon>
+        </button></trmrk-app-link
+      >
+      } @if (trmrkShowHomeMenuBtn ?? appStateService.defaults.show.mainMenu.homeBtn) {
+      <trmrk-app-link [trmrkRouterLink]="[appConfig.routeBasePath]"
+        ><button mat-icon-button class="trmrk-icon-btn">
+          <mat-icon class="trmrk-icon">home</mat-icon>
         </button></trmrk-app-link
       >
       } @if (trmrkShowHelpMenuBtn ?? appStateService.defaults.show.mainMenu.helpBtn) {

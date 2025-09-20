@@ -7,9 +7,10 @@ import {
   OnDestroy,
   Inject,
 } from '@angular/core';
+
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { UrlTree, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
@@ -20,7 +21,6 @@ import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
 import { AppConfigCore } from '../../../services/common/app-config';
 import { TrmrkAppLink } from '../../../components/common/trmrk-app-link/trmrk-app-link';
-import { TrmrkUrlType } from '../../../services/common/types';
 import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { tab_duplicate, tab_group } from '../../../assets/icons/material';
 
@@ -42,11 +42,8 @@ import { tab_duplicate, tab_group } from '../../../assets/icons/material';
 export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkIsScrollableY: boolean | NullOrUndef = true;
   @Input() trmrkAppBarLeadingTemplate?: TemplateRef<any> | NullOrUndef;
-  @Input() trmrkAppBarLeadingIconTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarBeforeTitleTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkAppBarTrailingTemplate?: TemplateRef<any> | NullOrUndef;
-
-  @Input() trmrkAppBarHomeRouterLink: TrmrkUrlType | NullOrUndef;
 
   @Input() trmrkAppBarTitle!: string;
   @Input() trmrkAppBarCssClass: string | null = null;
@@ -73,6 +70,7 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkShowUserProfileMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowManageAppMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowSettingsMenuBtn: boolean | NullOrUndef;
+  @Input() trmrkShowHomeMenuBtn: boolean | NullOrUndef;
   @Input() trmrkShowHelpMenuBtn: boolean | NullOrUndef;
 
   @ViewChild(MatMenu) optionsMenu!: MatMenu;
@@ -99,7 +97,6 @@ export class TrmrkAppPage implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.trmrkAppBarLeadingIconTemplate = null;
     this.trmrkAppBarBeforeTitleTemplate = null;
     this.trmrkAppBarTrailingTemplate = null;
     this.trmrkOptionsMenuTemplate = null;

@@ -69,21 +69,22 @@ export const openDialog = <TData>(args: OpenDialogArgs<TData>) => {
   });
 };
 
+export const updateModalVisibility = (modalHostEl: HTMLElement, show: boolean) => {
+  const modalBackDrop = getAnchestor(modalHostEl, (prElem) =>
+    prElem.classList.contains('cdk-overlay-container')
+  );
+
+  if (modalBackDrop) {
+    if (show) {
+      modalBackDrop.classList.remove('trmrk-hidden');
+    } else {
+      modalBackDrop.classList.add('trmrk-hidden');
+    }
+  }
+};
+
 export const handleModalIdChanged = (
   modalHostEl: HTMLElement,
   modalId: number,
   currentModalId: number
-) => {
-  const modalBackDrop = getAnchestor(modalHostEl, (prElem) =>
-    prElem.classList.contains('backdrop')
-  );
-
-  if (modalBackDrop) {
-    if (modalId !== currentModalId) {
-      modalId = currentModalId;
-      modalBackDrop.classList.add('trmrk-hidden');
-    } else {
-      modalBackDrop.classList.remove('trmrk-hidden');
-    }
-  }
-};
+) => updateModalVisibility(modalHostEl, modalId === currentModalId);
