@@ -2,11 +2,9 @@
   [routerLink]="routerLink"
   [ngClass]="trmrkCssClass ?? 'trmrk-link'"
   (trmrkLongPressOrRightClick)="anchorLongPressOrRightClick($event)"
-  #ctxMenuTrigger="matMenuTrigger"
-  #ctxMenuTriggerEl
-  [matMenuTriggerFor]="null"
   ><ng-content></ng-content
 ></a>
+<span #ctxMenuTrigger="matMenuTrigger" #ctxMenuTriggerEl [matMenuTriggerFor]="null"></span>
 <mat-menu [ngClass]="['trmrk-menu']" dense #ctxMenu>
   @if (trmrkShowOpenMenuBtn ?? true) {
   <a mat-menu-item class="trmrk-menu-item" [routerLink]="routerLink"> Open </a>
