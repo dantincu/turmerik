@@ -20,20 +20,19 @@ h3 {
   font-size: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   body {
     background-color: #000;
     color: #FFF;
   }
 }
 
-/* Light mode styles */
 @media (prefers-color-scheme: light) {
   body {
     background-color: #FFF;
     color: #000;
   }
-}
+} */
 
 app-root {
   display: block;
@@ -200,10 +199,6 @@ a[mat-icon-button].trmrk-icon-btn:link {
 
     &.trmrk-text-menu-item {
       padding-left: 10px;
-    }
-
-    .trmrk-link {
-
     }
   }
 }
@@ -756,7 +751,7 @@ trmrk-list-app-panel {
 
 .trmrk-horiz-strip {
   trmrk-loading {
-    margin-top: 4px;
+    margin-top: -2px;
   }
 
   &.trmrk-error-message-horiz-strip {

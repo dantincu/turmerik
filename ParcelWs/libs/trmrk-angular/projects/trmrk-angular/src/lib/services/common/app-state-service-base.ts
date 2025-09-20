@@ -5,6 +5,54 @@ import { localStorageKeys } from '../../../trmrk-browser/domUtils/core';
 
 import { TrmrkObservable } from './TrmrkObservable';
 
+export interface AppBarControlsVisibility {
+  backBtn: boolean;
+  goToParentBtn: boolean;
+  optionsBtn: boolean;
+}
+
+export interface AppMainMenuControlsVisibility {
+  refreshBtn: boolean;
+  manageTabsBtn: boolean;
+  duplicateTabBtn: boolean;
+  shareBtn: boolean;
+  userProfileBtn: boolean;
+  manageAppBtn: boolean;
+  settingsBtn: boolean;
+  helpBtn: boolean;
+}
+
+export interface AppControlsVisibility {
+  appBar: AppBarControlsVisibility;
+  mainMenuTopStrip: boolean;
+  mainMenu: AppMainMenuControlsVisibility;
+}
+
+export interface AppDefaultValues {
+  show: AppControlsVisibility;
+}
+
+export const getAppDefaultValues = (): AppDefaultValues => ({
+  show: {
+    appBar: {
+      backBtn: true,
+      goToParentBtn: false,
+      optionsBtn: true,
+    },
+    mainMenuTopStrip: true,
+    mainMenu: {
+      refreshBtn: true,
+      manageTabsBtn: true,
+      duplicateTabBtn: true,
+      shareBtn: true,
+      userProfileBtn: true,
+      manageAppBtn: true,
+      settingsBtn: true,
+      helpBtn: true,
+    },
+  },
+});
+
 @Injectable()
 export abstract class AppStateServiceBase implements OnDestroy {
   isDarkMode = new TrmrkObservable<boolean>(false);
@@ -12,21 +60,10 @@ export abstract class AppStateServiceBase implements OnDestroy {
   showAppBar = new TrmrkObservable<boolean>(true);
   currentModalId = new TrmrkObservable<number>(0);
 
+  defaults = getAppDefaultValues();
+
   dbObjNamePrefix: string;
   appThemeIsDarkModeLocalStorageKey: string;
-
-  showBackBtnByDefault = true;
-  showGoToParentBtnByDefault = true;
-  showOptionsMenuBtnByDefault = true;
-  showMainMenuTopStripByDefault = true;
-  showRefreshMainMenuBtnByDefault = true;
-  showManageTabsMenuBtnByDefault = true;
-  showDupplicateTabMenuBtnByDefault = true;
-  showShareMenuBtnByDefault = true;
-  showUserProfileMainMenuBtnByDefault = true;
-  showManageAppMainMenuBtnByDefault = true;
-  showSettingsMainMenuBtnByDefault = true;
-  showHelpMainMenuBtnByDefault = true;
 
   constructor(public appName: string) {
     this.dbObjNamePrefix = getDbObjName([appName]);

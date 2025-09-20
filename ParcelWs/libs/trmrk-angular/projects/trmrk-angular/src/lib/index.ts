@@ -2,6 +2,8 @@
  * Public API Surface of trmrk-angular
  */
 
+import { AppConfigCore as AppConfigCoreTsIntf } from './services/common/app-config';
+
 import {
   TrmrkPanelListServiceItemData as TrmrkPanelListServiceItemDataTsIntf,
   TrmrkPanelListServiceRow as TrmrkPanelListServiceRowTsIntf,
@@ -63,7 +65,6 @@ export { TrmrkTouchOrMouseMove } from './directives/trmrk-touch-or-mouse-move';
 export { TrmrkTouchStartOrMouseDown } from './directives/trmrk-touch-start-or-mouse-down';
 
 export { AppBarMapService } from './services/common/app-bar-map-service';
-export { AppConfigServiceBase } from './services/common/app-config-service-base';
 export { AppServiceBase } from './services/common/app-service-base';
 export { AppStateServiceBase } from './services/common/app-state-service-base';
 export { ComponentIdService } from './services/common/component-id-service';
@@ -74,6 +75,8 @@ export { ModalIdService } from './services/common/modal-id-service';
 export { ToggleAppBarServiceBase } from './services/common/toggle-app-bar-service-base';
 export { TrmrkAcceleratingScrollService } from './services/common/trmrk-accelerating-scroll-service';
 export { TrmrkPanelListService } from './services/common/trmrk-panel-list-service';
+
+export type AppConfigCore = AppConfigCoreTsIntf;
 
 export type TrmrkPanelListServiceRow<TEntity> = TrmrkPanelListServiceRowTsIntf<TEntity>;
 export type TrmrkPanelListServiceItemData<TEntity> = TrmrkPanelListServiceItemDataTsIntf<TEntity>;

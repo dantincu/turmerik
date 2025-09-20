@@ -1,18 +1,23 @@
 import { InjectionToken } from '@angular/core';
 
 import { mapObjProps } from '../../../trmrk/obj';
+import { BasicAppSettingsDbAdapter } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
-export interface InjectionTokenWrapper {
+import { IntIdServiceFactory } from '../common/int-id-service-factory';
+import { AppConfigCore } from '../common/app-config';
+
+export interface InjectionTokenWrapper<T> {
   name: string;
-  token: InjectionToken<any>;
+  token: InjectionToken<T>;
 }
 
 export const injectionTokens = mapObjProps(
   {
-    basicAppSettingsDbAdapter: {} as InjectionTokenWrapper,
-    intIdServiceFactory: {} as InjectionTokenWrapper,
+    basicAppSettingsDbAdapter: {} as InjectionTokenWrapper<BasicAppSettingsDbAdapter>,
+    intIdServiceFactory: {} as InjectionTokenWrapper<IntIdServiceFactory>,
+    appConfig: {} as InjectionTokenWrapper<AppConfigCore>,
   },
-  (_, propName): InjectionTokenWrapper => ({
+  (_, propName): InjectionTokenWrapper<any> => ({
     name: propName,
     token: new InjectionToken<any>(propName),
   })

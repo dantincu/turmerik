@@ -5,7 +5,6 @@ import { services } from 'trmrk-angular';
 const getServiceProviders = services.dependencyInjection.getServiceProviders;
 
 import { AppStateService } from './services/app-state-service';
-import { AppConfigService } from './services/app-config-service';
 
 import { iDbAdapters } from './services/adapters';
 
@@ -13,14 +12,15 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: getServiceProviders({
-    provideZoneChangeDetection: {
-      provide: true,
-      opts: {},
-      /* eventCoalescing: true */
+    provide: {
+      zoneChangeDetection: {
+        provide: true,
+        /* eventCoalescing: true */
+      },
+      appStateServiceType: AppStateService,
+      basicAppSettingsIDbAdapter: iDbAdapters.basicAppSettings,
     },
-    AppStateServiceType: AppStateService,
-    AppConfigServiceType: AppConfigService,
-    basicAppSettingsIDbAdapter: iDbAdapters.basicAppSettings,
     routes,
+    appProviders: [],
   }),
 };

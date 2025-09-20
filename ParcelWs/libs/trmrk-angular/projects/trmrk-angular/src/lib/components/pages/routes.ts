@@ -3,7 +3,7 @@ import { Routes, Route, Router } from '@angular/router';
 
 import { NullOrUndef, withVal } from '../../../trmrk/core';
 
-import { AppConfigServiceBase } from '../../services/common/app-config-service-base';
+import { injectionTokens } from '../../services/dependency-injection/injection-tokens';
 
 import { TrmrkAppSettings } from './trmrk-app-settings/trmrk-app-settings';
 import { TrmrkAppThemes } from './trmrk-app-themes/trmrk-app-themes';
@@ -48,9 +48,9 @@ const defaultCommonChildRoutes = () =>
       path: 'reset',
       redirectTo: () => {
         const router = inject(Router);
-        const appConfigService = inject(AppConfigServiceBase);
+        const appConfig = inject(injectionTokens.appConfig.token);
 
-        return router.createUrlTree([`${appConfigService.routeBasePath}/reset-app`], {
+        return router.createUrlTree([`${appConfig.routeBasePath}/reset-app`], {
           queryParams: { reset: 'true' },
         });
       },

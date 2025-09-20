@@ -1,7 +1,4 @@
-<trmrk-app-page
-  [trmrkAppBarTitle]="'App Settings'"
-  [trmrkShowSettingsMenuBtn]="false"
->
+<trmrk-app-page [trmrkAppBarTitle]="'App Settings'" [trmrkShowSettingsMenuBtn]="false">
   <div class="trmrk-page-body trmrk-page-body-thin">
     <div class="trmrk-field">
       <mat-checkbox
@@ -13,10 +10,7 @@
     </div>
     @if (trmrkAppSettingsService.showAppThemeOption ?? false) {
     <div class="trmrk-field">
-      <a
-        mat-button
-        [routerLink]="[`${appConfigService.routeBasePath}/themes`]"
-        class="trmrk-icon-link"
+      <a mat-button [routerLink]="[`${appConfig.routeBasePath}/themes`]" class="trmrk-icon-link"
         ><mat-icon class="trmrk-icon">palette</mat-icon> App Theme
       </a>
     </div>

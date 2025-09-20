@@ -1,10 +1,12 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, Inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AppConfigServiceBase } from '../../../services/common/app-config-service-base';
+
+import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
+import { AppConfigCore } from '../../../services/common/app-config';
 
 import { TrmrkAppPage } from '../../common/trmrk-app-page/trmrk-app-page';
 
@@ -22,7 +24,7 @@ export type TrmrkAppSettingsTsType = TrmrkAppSettings;
 })
 export class TrmrkAppSettings {
   constructor(
-    public appConfigService: AppConfigServiceBase,
+    @Inject(injectionTokens.appConfig.token) public appConfig: AppConfigCore,
     public trmrkAppSettingsService: TrmrkAppSettingsService,
     private resetAppDialog: MatDialog
   ) {

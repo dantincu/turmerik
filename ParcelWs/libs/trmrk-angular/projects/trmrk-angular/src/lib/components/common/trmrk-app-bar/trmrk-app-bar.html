@@ -2,7 +2,9 @@
   @if (trmrkLeadingTemplate) {
   <ng-container *ngTemplateOutlet="trmrkLeadingTemplate"></ng-container>
   } @if (!trmrkLeadingTemplate) {
-  <trmrk-app-link [trmrkRouterLink]="trmrkHomeRouterLink ?? appConfigService.routeBasePath">
+  <trmrk-app-link
+    [trmrkRouterLink]="trmrkHomeRouterLink ?? appConfig.routeBasePath"
+  >
     <button mat-icon-button class="trmrk-icon-btn">
       @if (trmrkLeadingIconTemplate) {
       <ng-container *ngTemplateOutlet="trmrkLeadingIconTemplate"></ng-container>
@@ -10,7 +12,7 @@
       <mat-icon class="trmrk-icon trmrk-home-icon">home</mat-icon>}
     </button>
   </trmrk-app-link>
-  } @if (trmrkShowBackBtn ?? appStateService.showBackBtnByDefault) {
+  } @if (trmrkShowBackBtn ?? appStateService.defaults.show.appBar.backBtn) {
   <button
     mat-icon-button
     class="trmrk-icon-btn"
@@ -19,7 +21,8 @@
   >
     <mat-icon class="trmrk-icon">arrow_back</mat-icon>
   </button>
-  } @if (trmrkShowGoToParentBtn ?? appStateService.showGoToParentBtnByDefault) {
+  } @if (trmrkShowGoToParentBtn ??
+  appStateService.defaults.show.appBar.goToParentBtn) {
   <button
     mat-icon-button
     class="trmrk-icon-btn"

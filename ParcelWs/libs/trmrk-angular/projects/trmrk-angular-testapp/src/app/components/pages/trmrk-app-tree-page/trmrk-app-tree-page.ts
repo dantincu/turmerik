@@ -120,7 +120,7 @@ export class TrmrkAppTreePage {
     );
 
     retData.nodeTextLongPressOrRightClick.subscribe((event) =>
-      trmrkTreeEventHandlers.nodeTextLongPressOrRightClick(retData, event)
+      this.nodeTextLongPressOrRightClick(retData, event)
     );
 
     const createItem = (

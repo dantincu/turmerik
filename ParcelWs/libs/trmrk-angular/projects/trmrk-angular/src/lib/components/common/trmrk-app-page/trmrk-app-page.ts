@@ -5,6 +5,7 @@ import {
   ViewChild,
   ViewEncapsulation,
   OnDestroy,
+  Inject,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
@@ -17,11 +18,10 @@ import { NullOrUndef, VoidOrAny } from '../../../../trmrk/core';
 
 import { TrmrkAppBar } from '../trmrk-app-bar/trmrk-app-bar';
 import { AppStateServiceBase } from '../../../services/common/app-state-service-base';
-import { AppConfigServiceBase } from '../../../services/common/app-config-service-base';
+import { AppConfigCore } from '../../../services/common/app-config';
 import { TrmrkAppLink } from '../../../components/common/trmrk-app-link/trmrk-app-link';
-
 import { TrmrkUrlType } from '../../../services/common/types';
-
+import { injectionTokens } from '../../../services/dependency-injection/injection-tokens';
 import { tab_duplicate, tab_group } from '../../../assets/icons/material';
 
 @Component({
@@ -84,7 +84,7 @@ export class TrmrkAppPage implements OnDestroy {
   tabGroupIcon: SafeHtml;
 
   constructor(
-    public appConfigService: AppConfigServiceBase,
+    @Inject(injectionTokens.appConfig.token) public appConfig: AppConfigCore,
     public appStateService: AppStateServiceBase,
     private domSanitizer: DomSanitizer
   ) {
