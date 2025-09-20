@@ -1,4 +1,6 @@
 :root {
+  --trmrk-body-font-size: 15px;
+
   --trmrk-loading-el-dot-pulse_color: #9880ff;
 
   --trmrk-scrollable-track_color_dark: #222;

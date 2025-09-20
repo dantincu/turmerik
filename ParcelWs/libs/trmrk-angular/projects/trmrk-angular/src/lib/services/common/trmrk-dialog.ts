@@ -5,6 +5,10 @@ import { getAnchestor } from '../../../trmrk-browser/domUtils/core';
 
 import { NullOrUndef } from '../../../trmrk/core';
 
+export interface TrmrkDialogComponentDataCore {
+  modalIdAvailable?: ((modalId: number) => void) | NullOrUndef;
+}
+
 export interface TrmrkDialogDataCore {
   disableClose?: boolean | NullOrUndef;
   dialogRef?: MatDialogRef<any> | NullOrUndef;
@@ -13,7 +17,8 @@ export interface TrmrkDialogDataCore {
   useMatDialogComponents?: boolean | NullOrUndef;
 }
 
-export interface TrmrkDialogData<TData> extends TrmrkDialogDataCore {
+export interface TrmrkDialogData<TData extends TrmrkDialogComponentDataCore>
+  extends TrmrkDialogDataCore {
   title?: string | NullOrUndef;
   data: TData;
 }
@@ -24,7 +29,7 @@ export enum DialogPanelSize {
   Stretch,
 }
 
-export interface OpenDialogArgs<TData> {
+export interface OpenDialogArgs<TData extends TrmrkDialogComponentDataCore> {
   matDialog: MatDialog;
   dialogComponent: any;
   data: TrmrkDialogData<TData>;
@@ -32,7 +37,7 @@ export interface OpenDialogArgs<TData> {
   dialogPanelSize?: DialogPanelSize | NullOrUndef;
 }
 
-export const mergeDialogData = <TData>(
+export const mergeDialogData = <TData extends TrmrkDialogComponentDataCore>(
   data: TrmrkDialogData<TData>,
   newData: TrmrkDialogData<TData> | TrmrkDialogDataCore
 ) => ({
@@ -55,7 +60,9 @@ export const getDialogPanelSizeCssClass = (dialogPanelSize: DialogPanelSize | Nu
   }
 };
 
-export const openDialog = <TData>(args: OpenDialogArgs<TData>) => {
+export const openDialog = <TData extends TrmrkDialogComponentDataCore>(
+  args: OpenDialogArgs<TData>
+) => {
   if (args.clickEvent) {
     const target = (args.clickEvent.target as HTMLElement)!;
     target.blur();
@@ -64,7 +71,8 @@ export const openDialog = <TData>(args: OpenDialogArgs<TData>) => {
 
   args.matDialog.open(args.dialogComponent, {
     panelClass: ['trmrk-mat-dialog-panel', getDialogPanelSizeCssClass(args.dialogPanelSize)],
-    disableClose: args.data.disableClose ?? undefined,
+    // disableClose: args.data.disableClose ?? undefined,
+    disableClose: true,
     data: args.data,
   });
 };
@@ -82,9 +90,3 @@ export const updateModalVisibility = (modalHostEl: HTMLElement, show: boolean) =
     }
   }
 };
-
-export const handleModalIdChanged = (
-  modalHostEl: HTMLElement,
-  modalId: number,
-  currentModalId: number
-) => updateModalVisibility(modalHostEl, modalId === currentModalId);

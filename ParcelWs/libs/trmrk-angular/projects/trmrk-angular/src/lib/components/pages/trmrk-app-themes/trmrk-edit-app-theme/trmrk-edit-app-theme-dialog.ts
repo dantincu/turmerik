@@ -7,13 +7,17 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { TrmrkDialog } from '../../../common/trmrk-dialog/trmrk-dialog';
 
-import { TrmrkDialogData, mergeDialogData } from '../../../../services/common/trmrk-dialog';
+import {
+  TrmrkDialogData,
+  mergeDialogData,
+  TrmrkDialogComponentDataCore,
+} from '../../../../services/common/trmrk-dialog';
 
 import { TrmrkEditAppThemeDialogService } from '../../../../services/pages/trmrk-edit-app-theme-dialog-service';
 
 import { NullOrUndef } from '../../../../../trmrk/core';
 
-export interface TrmrkEditAppThemeData {
+export interface TrmrkEditAppThemeData extends TrmrkDialogComponentDataCore {
   id?: number | NullOrUndef;
   name: string;
 }

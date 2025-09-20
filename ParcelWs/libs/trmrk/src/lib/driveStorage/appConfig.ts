@@ -10,6 +10,7 @@ export enum DriveStorageType {
 export interface DriveStorageOption {
   key: string;
   displayName: string;
+  description?: string | NullOrUndef;
   storageType: DriveStorageType;
   isEnabled?: boolean | NullOrUndef;
   mainApiBaseUri?: string | NullOrUndef;

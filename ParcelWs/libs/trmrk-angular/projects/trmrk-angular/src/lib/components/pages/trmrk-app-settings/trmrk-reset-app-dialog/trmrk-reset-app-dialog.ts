@@ -54,6 +54,8 @@ export class TrmrkResetAppDialog implements AfterViewInit, OnDestroy {
 
     this.modalService.setup({
       hostEl: () => hostEl.nativeElement,
+      onCloseModal: () => this.dialogRef.close(),
+      data: this.data.data,
     });
   }
 

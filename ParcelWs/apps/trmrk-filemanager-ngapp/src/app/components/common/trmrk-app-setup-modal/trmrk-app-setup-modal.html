@@ -3,9 +3,30 @@
     mergeDialogData(data, {
       title: 'App Setup',
       contentTemplate: content,
-      actionsTemplate: actions
     })
   "
 ></trmrk-dialog>
-<ng-template #content></ng-template>
+<ng-template #content
+  ><p>Choose what type of storage you want to use with this app. Pick any of the options bellow.</p>
+  @if (hasCloudStorageOptions) {
+  <h3>Cloud Storage</h3>
+  <ul class="trmrk-spaced-list">
+    @for (option of cloudStorageOptions; track option.key) { }
+  </ul>
+  } @if (hasCloudStorageOptions) {
+  <h3>Others</h3>
+  }
+  <ul class="trmrk-spaced-list">
+    @for (option of otherStorageOptions; track option.key) {
+    <li class="trmrk-spaced-list-item">
+      <button mat-button class="trmrk-btn trmrk-btn-filled-primary">
+        {{ option.displayName }}
+      </button>
+      @if ((option.description ?? null) !== null) {
+      <span> ({{ option.description }}) </span>
+      }
+    </li>
+    }
+  </ul>
+</ng-template>
 <ng-template #actions></ng-template>

@@ -5,7 +5,7 @@ html,
 body {
   height: 100%;
   margin: 0; /* Important: remove default body margin */
-  font-size: 15px;
+  font-size: var(--trmrk-body-font-size);
 }
 
 h1 {
@@ -65,6 +65,18 @@ app-root {
 
 .trmrk-no-wrap {
   @include mixins.trmrk-no-wrap();
+}
+
+.trmrk-text-italic {
+  font-style: italic;
+}
+
+.trmrk-text-bold {
+  font-weight: bold;
+}
+
+.trmrk-text-underline {
+  text-decoration: underline;
 }
 
 /* .trmrk-scrollable::-webkit-scrollbar {
@@ -789,7 +801,21 @@ trmrk-app-themes-list-view {
     border-radius: 10px;
   }
 
-  .trmrk-dialog-content.trmrk-dialog-content, .trmrk-dialog-actions.trmrk-dialog-actions {
+  /* .trmrk-dialog-content.trmrk-dialog-content, .trmrk-dialog-actions.trmrk-dialog-actions {
     padding: 10px;
+  } */
+
+  .trmrk-horiz-strip h2 {
+    text-align: center;
+    width: 100%;
   }
+
+  .mat-mdc-dialog-container .mat-mdc-dialog-content {
+    font-size: var(--trmrk-body-font-size);
+  }
+}
+
+.trmrk-spaced-list-item {
+  padding: 10px 0;
+  line-height: 30px;
 }

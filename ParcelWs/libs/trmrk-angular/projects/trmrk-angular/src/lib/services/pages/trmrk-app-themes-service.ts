@@ -14,9 +14,18 @@ import { TouchOrMouseCoords } from '../../../trmrk-browser/domUtils/touchAndMous
 import { AppTheme } from '../../../trmrk-browser/indexedDB/databases/BasicAppSettings';
 
 import { TrmrkPanelListServiceRow } from '../../services/common/trmrk-panel-list-service';
-import { openDialog, DialogPanelSize } from '../../services/common/trmrk-dialog';
+
+import {
+  openDialog,
+  DialogPanelSize,
+  TrmrkDialogComponentDataCore,
+} from '../../services/common/trmrk-dialog';
 
 import { injectionTokens } from '../dependency-injection/injection-tokens';
+
+export interface TrmrkEditAppThemeDialogComponentData extends TrmrkDialogComponentDataCore {
+  name: string;
+}
 
 export interface TrmrkAppThemesServiceInitArgs {
   trmrkEditAppThemeDialogComponent: any;
@@ -95,7 +104,7 @@ export class TrmrkAppThemesService implements OnDestroy {
   rowTextShortPressOrLeftClick(event: TouchOrMouseCoords, idx: number) {}
 
   addEntityClick(event: MouseEvent) {
-    openDialog({
+    openDialog<TrmrkEditAppThemeDialogComponentData>({
       matDialog: this.editEntityDialog,
       dialogComponent: this.trmrkEditAppThemeDialogComponent,
       data: {

@@ -3,6 +3,7 @@
  */
 
 import { AppConfigCore as AppConfigCoreTsIntf } from './services/common/app-config';
+import { EnvironmentCore as EnvironmentCoreTsIntf } from './services/common/environment';
 
 import {
   TrmrkPanelListServiceItemData as TrmrkPanelListServiceItemDataTsIntf,
@@ -77,6 +78,7 @@ export { TrmrkAcceleratingScrollService } from './services/common/trmrk-accelera
 export { TrmrkPanelListService } from './services/common/trmrk-panel-list-service';
 
 export type AppConfigCore = AppConfigCoreTsIntf;
+export type EnvironmentCore = EnvironmentCoreTsIntf;
 
 export type TrmrkPanelListServiceRow<TEntity> = TrmrkPanelListServiceRowTsIntf<TEntity>;
 export type TrmrkPanelListServiceItemData<TEntity> = TrmrkPanelListServiceItemDataTsIntf<TEntity>;

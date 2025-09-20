@@ -279,6 +279,10 @@
       }
     }
   }
+
+  .trmrk-mat-dialog-panel .mat-mdc-dialog-container .mat-mdc-dialog-content {
+    color: #000;
+  }
 }
 
 .trmrk-app-theme-dark {
@@ -476,5 +480,9 @@
         color: var(--trmrk-reject-color-theme-dark);
       }
     }
+  }
+
+  .trmrk-mat-dialog-panel .mat-mdc-dialog-container .mat-mdc-dialog-content {
+    color: #FFF;
   }
 }

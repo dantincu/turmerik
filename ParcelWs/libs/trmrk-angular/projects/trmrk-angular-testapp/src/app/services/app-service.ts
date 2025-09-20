@@ -1,18 +1,21 @@
 import { Injectable, Inject } from '@angular/core';
 
-import { services } from 'trmrk-angular';
+import { services, AppConfigCore } from 'trmrk-angular';
+
+import { AppStateService } from './app-state-service';
 
 const AppStateServiceBase = services.common.AppStateServiceBase;
-
 const AppServiceBase = services.common.AppServiceBase;
-
-import { AppStateService } from '../services/app-state-service';
+const injectionTokens = services.dependencyInjection.injectionTokens;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppService extends AppServiceBase {
-  constructor(@Inject(AppStateServiceBase) appStateService: AppStateService) {
-    super(appStateService);
+  constructor(
+    @Inject(injectionTokens.appConfig.token) appConfig: AppConfigCore,
+    @Inject(AppStateServiceBase) appStateService: AppStateService
+  ) {
+    super(appConfig, appStateService);
   }
 }

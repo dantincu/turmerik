@@ -1,5 +1,7 @@
 import { Subject, Observable, Subscription } from 'rxjs';
 
+import { NullOrUndef } from '../../../trmrk/core';
+
 export class TrmrkObservable<T> {
   public readonly $obs: Observable<T>;
 
@@ -22,7 +24,7 @@ export class TrmrkObservable<T> {
 
   public subscribe(callback: (value: T) => void) {
     const subscription = this.$obs.subscribe(callback);
-    this.subscriptions.push(subscription);
+    // this.subscriptions.push(subscription);
     return subscription;
   }
 
@@ -38,3 +40,36 @@ export class TrmrkObservable<T> {
     this.unsubscribeAll();
   }
 }
+
+export const runWhenValueIs = async <TValue, TResult = any | void>(
+  $obs: TrmrkObservable<TValue>,
+  value: TValue,
+  callback: (val: TValue) => TResult,
+  eqCompr?: ((refVal: TValue, trgVal: TValue) => boolean) | NullOrUndef
+) =>
+  new Promise<TResult>((resolve, reject) => {
+    eqCompr ??= (ref, trg) => ref === trg;
+
+    const onValueAvailable = (val: TValue) => {
+      const matches = eqCompr!(val, value);
+
+      if (matches) {
+        try {
+          const retVal = callback(val);
+          resolve(retVal);
+        } catch (err) {
+          reject(err);
+        }
+      }
+
+      return matches;
+    };
+
+    if (!onValueAvailable($obs.value)) {
+      const subscription = $obs.subscribe((val) => {
+        if (onValueAvailable(val)) {
+          subscription.unsubscribe();
+        }
+      });
+    }
+  });

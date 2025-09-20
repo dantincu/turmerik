@@ -15,6 +15,7 @@ import { provideHttpClient, HttpClient } from '@angular/common/http';
 
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { AppServiceBase } from '../common/app-service-base';
 import { AppStateServiceBase } from '../common/app-state-service-base';
 import { IntIdServiceFactory } from '../common/int-id-service-factory';
 
@@ -32,15 +33,14 @@ export interface ServiceProviderOpts<TOpts> {
   opts?: TOpts | NullOrUndef;
 }
 
-export interface GetCommonServiceProviderOpts<
-  TAppConfig extends AppConfigCore = AppConfigCore
-> {
+export interface GetCommonServiceProviderOpts<TAppConfig extends AppConfigCore = AppConfigCore> {
   browserGlobalErrorListeners?: boolean | NullOrUndef;
   zoneChangeDetection?: ServiceProviderOpts<NgZoneOptions>;
   httpClient?: boolean | NullOrUndef;
   matDialogModule?: boolean | NullOrUndef;
 
   appConfig?: LoadAppConfigOpts<TAppConfig> | NullOrUndef;
+  appServiceType?: Type<any> | NullOrUndef;
   appStateServiceType?: Type<any> | NullOrUndef;
   basicAppSettingsIDbAdapter?: BasicAppSettingsDbAdapter | NullOrUndef;
   asyncRequestStateManagerFactory?: boolean | NullOrUndef;
@@ -48,17 +48,14 @@ export interface GetCommonServiceProviderOpts<
   darkModeAppInitializer?: boolean | NullOrUndef;
 }
 
-export interface GetCommonServiceProvidersArgs<
-  TAppConfig extends AppConfigCore = AppConfigCore
-> {
+export interface GetCommonServiceProvidersArgs<TAppConfig extends AppConfigCore = AppConfigCore> {
+  isProdEnv: boolean;
   provide: GetCommonServiceProviderOpts<TAppConfig>;
   routes?: Route[];
   appProviders: (Provider | EnvironmentProviders | null)[];
 }
 
-export const defaultConfigNormalizeFactory = <
-  TConfig extends AppConfigCore = AppConfigCore
->(
+export const defaultConfigNormalizeFactory = <TConfig extends AppConfigCore = AppConfigCore>(
   appConfig: TConfig
 ) => {
   appConfig.isWebApp ??= true;
@@ -67,19 +64,19 @@ export const defaultConfigNormalizeFactory = <
   return appConfig;
 };
 
-export class AppConfigProvidersFactory<
-  TAppConfig extends AppConfigCore = AppConfigCore
-> {
+export class AppConfigProvidersFactory<TAppConfig extends AppConfigCore = AppConfigCore> {
   appConfig: TAppConfig | null = null;
 
   getProviders(
-    opts: LoadAppConfigOpts<TAppConfig>
+    opts: LoadAppConfigOpts<TAppConfig>,
+    isProdEnv: boolean
   ): (Provider | EnvironmentProviders)[] {
     return [
       provideAppInitializer(async () => {
         let appConfig =
-          opts.values ??
-          (await loadAppConfig<TAppConfig>(inject(HttpClient), opts));
+          opts.values ?? (await loadAppConfig<TAppConfig>(inject(HttpClient), opts, isProdEnv));
+
+        appConfig.isProdEnv = isProdEnv;
 
         if (opts.configNormalizeFactory) {
           appConfig = opts.configNormalizeFactory(appConfig);
@@ -105,17 +102,13 @@ export const getDarkModeAppInitializer = () =>
     darkModeService.init();
   });
 
-export const getServiceProviders = <
-  TAppConfig extends AppConfigCore = AppConfigCore
->(
+export const getServiceProviders = <TAppConfig extends AppConfigCore = AppConfigCore>(
   args: GetCommonServiceProvidersArgs<TAppConfig>
 ) => {
   const opts = args.provide;
 
   const providersArr: (Provider | EnvironmentProviders | null)[] = [
-    opts.browserGlobalErrorListeners ?? true
-      ? provideBrowserGlobalErrorListeners()
-      : null,
+    opts.browserGlobalErrorListeners ?? true ? provideBrowserGlobalErrorListeners() : null,
 
     opts.zoneChangeDetection?.provide
       ? provideZoneChangeDetection(opts.zoneChangeDetection.opts ?? {})
@@ -129,10 +122,12 @@ export const getServiceProviders = <
       ? new AppConfigProvidersFactory<TAppConfig>().getProviders(
           opts.appConfig ?? {
             values: {} as TAppConfig,
-            isProd: true,
-          }
+          },
+          args.isProdEnv
         )
       : []),
+
+    opts.appServiceType ? { provide: AppServiceBase, useClass: opts.appServiceType } : null,
 
     opts.appStateServiceType
       ? { provide: AppStateServiceBase, useClass: opts.appStateServiceType }
