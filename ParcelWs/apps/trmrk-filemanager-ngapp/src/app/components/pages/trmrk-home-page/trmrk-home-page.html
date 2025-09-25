@@ -2,6 +2,13 @@
   [trmrkAppBarTitle]="'Turmerik File Manager'"
   [trmrkAppBarLeadingTemplate]="appMenuIconBtn"
   [trmrkOptionsMenuTemplate]="options"
+  ><div class="trmrk-app-panel">
+    <trmrk-horiz-strip
+      [trmrkCssClass]="['trmrk-heading-horiz-strip']"
+      [trmrkUseContentInsteadOfTextRow]="true"
+      ><h2>Recent Items</h2></trmrk-horiz-strip
+    >
+    <div class="trmrk-panel-body trmrk-scrollable trmrk-scrollable-y"></div></div
 ></trmrk-app-page>
 
 <ng-template #appMenuIconBtn>

@@ -26,6 +26,13 @@ namespace Turmerik.HtmlToPdf.WebApi.Controllers
                 nameof(htmlToPdfService));
         }
 
+        [HttpGet]
+        [Route("[action]")]
+        public Task<IActionResult> TestError() => ExecuteCoreAsync(async () =>
+        {
+            throw new Exception("This is a test error");
+        });
+
         [HttpPost]
         [Route("[action]")]
         public Task<IActionResult> Generate() => ExecuteCoreAsync(async () =>
@@ -75,6 +82,8 @@ namespace Turmerik.HtmlToPdf.WebApi.Controllers
         private IActionResult HandleException(
             Exception exc)
         {
+            logger.LogError(exc.ToString());
+
             if (exc is TrmrkException<HttpStatusCode> trmrkExc)
             {
                 return StatusCode((int)trmrkExc.AdditionalData, trmrkExc.AdditionalData switch

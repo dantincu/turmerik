@@ -3,9 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
-import { AppService } from './services/app-service';
 import { openDialog, DialogPanelSize } from '../trmrk-angular/services/common/trmrk-dialog';
 import { AppServiceBase } from '../trmrk-angular/services/common/app-service-base';
+
+import { AppService } from './services/app-service';
+
 import {
   TrmrkAppSetupModal,
   TrmrkAppSetupDialogComponentData,
@@ -48,7 +50,10 @@ export class App implements OnDestroy {
         dialogComponent: TrmrkAppSetupModal,
         data: {
           data: {
-            optionChosen: (option) => (this.appService.currentDriveStorageOption = option),
+            optionChosen: (option) => {
+              this.appService.currentDriveStorageOption = option;
+              this.appService.appStateService.setupOk.next(true);
+            },
           },
         },
         dialogPanelSize: DialogPanelSize.Default,
