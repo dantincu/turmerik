@@ -4,7 +4,7 @@
   @if (trmrkResetAppService.showTopHorizStrip) {
   <trmrk-horiz-strip
     [trmrkCssClass]="[
-      'trmrk-top-message-horiz-strip trmrk-has-border-x2',
+      'trmrk-loading-horiz-strip trmrk-has-border-x2',
       trmrkResetAppService.showErrorMessage ? 'trmrk-error-message-horiz-strip' : ''
     ]"
     [trmrkLeadingTemplate]="topHorizStripLeadingTemplate"
@@ -18,11 +18,7 @@
   ></trmrk-horiz-strip>
   <ng-template #trmrkErrorHorizStripTrailingTemplate>
     @if (trmrkResetAppService.showErrorMessage) {
-    <button
-      mat-icon-button
-      class="trmrk-icon-btn"
-      (click)="trmrkResetAppService.closeError()"
-    >
+    <button mat-icon-button class="trmrk-icon-btn" (click)="trmrkResetAppService.closeError()">
       <mat-icon class="trmrk-icon">close</mat-icon>
     </button>
     }

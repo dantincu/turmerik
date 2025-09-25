@@ -283,6 +283,12 @@
   .trmrk-mat-dialog-panel .mat-mdc-dialog-container .mat-mdc-dialog-content {
     color: #000;
   }
+
+  .trmrk-3-panels-layout {
+    > .trmrk-app-panel {
+      border-color: #ddd;
+    }
+  }
 }
 
 .trmrk-app-theme-dark {
@@ -484,5 +490,11 @@
 
   .trmrk-mat-dialog-panel .mat-mdc-dialog-container .mat-mdc-dialog-content {
     color: #FFF;
+  }
+
+  .trmrk-3-panels-layout {
+    > .trmrk-app-panel {
+      border-color: #222;
+    }
   }
 }

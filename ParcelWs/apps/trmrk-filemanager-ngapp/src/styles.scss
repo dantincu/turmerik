@@ -46,6 +46,6 @@ body {
 * ------------ App Styles ------------
 */
 
-.trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
-  padding: 8px;
+trmrk-folder-view {
+  @include mixins.rel-flex-stretch-to-parent-size;
 }

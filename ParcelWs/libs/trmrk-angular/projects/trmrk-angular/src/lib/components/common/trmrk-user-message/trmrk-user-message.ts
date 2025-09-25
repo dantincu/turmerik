@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { defaultSlowAnimationDurationMillis } from '../../../../trmrk-browser/core';
 
 import { whenChanged } from '../../../services/common/simpleChanges';
-import { UserMessageLevel, NullOrUndef } from '../../../../trmrk/core';
+import { UserMessageLevel, NullOrUndef, AnyOrUnknown } from '../../../../trmrk/core';
 
 import { Placement } from '../../../services/common/types';
 
@@ -40,6 +40,7 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
         [klass: string]: any;
       }
     | NullOrUndef = null;
+  @Input() trmrkClick?: ((event: MouseEvent) => AnyOrUnknown) | NullOrUndef;
 
   messageFadeOut = false;
   show = false;
@@ -121,6 +122,12 @@ export class TrmrkUserMessage implements OnDestroy, OnChanges {
   closeButtonClick() {
     this.show = false;
     this.trmrkClose.emit(true);
+  }
+
+  click(event: MouseEvent) {
+    if (this.trmrkClick) {
+      this.trmrkClick(event);
+    }
   }
 
   setFadeTimeouts() {

@@ -1,7 +1,13 @@
 <div
-  [ngClass]="['trmrk-app-panel', panelListService.showPendingReorderStrip || panelListService.selectedRowsCount > 0 ? 'trmrk-has-bottom-horiz-strip' : '', trmrkCssClass ?? '',
-  panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '',
-  (trmrkIsLoading || trmrkHasError) ? 'trmrk-has-top-message-horiz-strip' : '',]"
+  [ngClass]="[
+    'trmrk-app-panel',
+    panelListService.showPendingReorderStrip || panelListService.selectedRowsCount > 0
+      ? 'trmrk-has-bottom-horiz-strip'
+      : '',
+    trmrkCssClass ?? '',
+    panelListService.showAcceleratingScrollPopovers ? 'trmrk-has-accelerating-popovers' : '',
+    trmrkIsLoading || trmrkHasError ? 'trmrk-has-top-message-horiz-strip' : ''
+  ]"
 >
   @if (!panelListService.showAcceleratingScrollPopovers) {
   <div class="trmrk-panel-header" #panelHeader>
@@ -20,9 +26,7 @@
         ></mat-checkbox>
       </button>
       }
-      <ng-container
-        *ngTemplateOutlet="trmrkTopStripLeadingTemplate"
-      ></ng-container>
+      <ng-container *ngTemplateOutlet="trmrkTopStripLeadingTemplate"></ng-container>
       <trmrk-accelerating-scroll-control
         [trmrkScrollable]="getPanelList"
       ></trmrk-accelerating-scroll-control>
@@ -32,7 +36,7 @@
     <ng-container *ngTemplateOutlet="trmrkLoadingTemplate"></ng-container> } @if
     (!trmrkLoadingTemplate) {
     <trmrk-horiz-strip
-      [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-message-horiz-strip']"
+      [trmrkCssClass]="['trmrk-has-border-x2 trmrk-loading-horiz-strip']"
       [trmrkLeadingTemplate]="trmrkLoadingTemplate"
     >
     </trmrk-horiz-strip>
@@ -41,9 +45,11 @@
     </ng-template>
     } } @if (hasError) {
     <trmrk-horiz-strip
-      [trmrkCssClass]="['trmrk-has-border-x2 trmrk-top-message-horiz-strip trmrk-error-message-horiz-strip']"
+      [trmrkCssClass]="['trmrk-has-border-x2 trmrk-error-message-horiz-strip']"
       [trmrkMainText]="trmrkErrorTitle"
-      [trmrkDetailsTextParts]="((trmrkErrorMsg ?? null) !== null) ? [{text: trmrkErrorMsg!, italic: false}] : null"
+      [trmrkDetailsTextParts]="
+        (trmrkErrorMsg ?? null) !== null ? [{ text: trmrkErrorMsg!, italic: false }] : null
+      "
       [trmrkTrailingTemplate]="trmrkErrorHorizStripTrailingTemplate"
     >
     </trmrk-horiz-strip>
@@ -89,13 +95,22 @@
   <trmrk-horiz-strip
     trmrkCancelContextMenu
     #movingAggregateRowEl
-    [trmrkMainText]="'Moving ' + panelListService.selectedRowsCount + ' item' + (panelListService.selectedRowsCount > 1 ? 's' : '')"
-    [ngClass]="['trmrk-moving-aggregate-row', panelListService.showMovingAggregateRow ? '' : 'trmrk-hidden']"
+    [trmrkMainText]="
+      'Moving ' +
+      panelListService.selectedRowsCount +
+      ' item' +
+      (panelListService.selectedRowsCount > 1 ? 's' : '')
+    "
+    [ngClass]="[
+      'trmrk-moving-aggregate-row',
+      panelListService.showMovingAggregateRow ? '' : 'trmrk-hidden'
+    ]"
     [trmrkCssClass]="['trmrk-has-border-x2']"
     [trmrkLeadingTemplate]="movingAggregateRowLeadingTemplate"
   >
-    Moving {{panelListService.selectedRowsCount}}
-    item{{panelListService.selectedRowsCount > 1 ? 's' : ''}} </trmrk-horiz-strip
+    Moving {{ panelListService.selectedRowsCount }} item{{
+      panelListService.selectedRowsCount > 1 ? 's' : ''
+    }} </trmrk-horiz-strip
   >} @if (!trmrkEntities.length) {
   <ng-container *ngTemplateOutlet="trmrkNoItemsTemplate"></ng-container> } @if
   (!panelListService.showAcceleratingScrollPopovers) { @if
@@ -107,11 +122,7 @@
     [trmrkTrailingTemplate]="applyNewOrderHorizStripTrailingTemplate"
   ></trmrk-horiz-strip>
   <ng-template #applyNewOrderHorizStripLeadingTemplate>
-    <button
-      mat-icon-button
-      class="trmrk-icon-btn"
-      (click)="applyNewOrderClose()"
-    >
+    <button mat-icon-button class="trmrk-icon-btn" (click)="applyNewOrderClose()">
       <mat-icon class="trmrk-icon">close</mat-icon>
     </button>
   </ng-template>
@@ -123,19 +134,19 @@
       <mat-icon class="trmrk-icon">cancel</mat-icon>
     </button>
   </ng-template>
-  } @if (!panelListService.showPendingReorderStrip &&
-  panelListService.selectedRowsCount > 0) {
+  } @if (!panelListService.showPendingReorderStrip && panelListService.selectedRowsCount > 0) {
   <trmrk-horiz-strip
     [trmrkCssClass]="['trmrk-bottom-horiz-strip trmrk-has-border-x2']"
-    [trmrkMainText]="panelListService.selectedRowsCount + ' item' + (panelListService.selectedRowsCount > 1 ? 's' : '') + ' selected'"
+    [trmrkMainText]="
+      panelListService.selectedRowsCount +
+      ' item' +
+      (panelListService.selectedRowsCount > 1 ? 's' : '') +
+      ' selected'
+    "
     [trmrkLeadingTemplate]="selectedItemsHorizStripLeadingTemplate"
   ></trmrk-horiz-strip>
   <ng-template #selectedItemsHorizStripLeadingTemplate>
-    <button
-      mat-icon-button
-      class="trmrk-icon-btn"
-      (click)="clearSelectedRows()"
-    >
+    <button mat-icon-button class="trmrk-icon-btn" (click)="clearSelectedRows()">
       <mat-icon class="trmrk-icon">close</mat-icon>
     </button>
   </ng-template>

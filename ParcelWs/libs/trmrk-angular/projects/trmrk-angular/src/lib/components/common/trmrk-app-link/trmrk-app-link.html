@@ -1,14 +1,78 @@
 <a
-  [routerLink]="routerLink"
+  [routerLink]="ngRouterLink"
   [ngClass]="trmrkCssClass ?? 'trmrk-link'"
   (trmrkLongPressOrRightClick)="anchorLongPressOrRightClick($event)"
   ><ng-content></ng-content
 ></a>
-<span #ctxMenuTrigger="matMenuTrigger" #ctxMenuTriggerEl [matMenuTriggerFor]="null"></span>
-<mat-menu [ngClass]="['trmrk-menu']" dense #ctxMenu>
+<span
+  #ctxMenuTrigger="matMenuTrigger"
+  #ctxMenuTriggerEl
+  [matMenuTriggerFor]="null"
+  [matMenuTriggerRestoreFocus]="false"
+></span>
+<mat-menu
+  [ngClass]="['trmrk-menu', 'trmrk-scrollable', 'trmrk-scrollable-x', 'trmrk-scrollable-y']"
+  dense
+  #ctxMenu="matMenu"
+>
   @if (trmrkShowOpenMenuBtn ?? true) {
-  <a mat-menu-item class="trmrk-menu-item" [routerLink]="routerLink"> Open </a>
+  <div mat-menu-item class="trmrk-menu-item trmrk-no-pad">
+    <a class="trmrk-icon-link trmrk-link" [routerLink]="ngRouterLink"
+      ><button mat-button class="trmrk-btn">
+        <mat-icon class="trmrk-icon">open_in_browser</mat-icon> Open
+      </button>
+    </a>
+  </div>
   } @if (trmrkShowOpenInNewTabMenuBtn ?? true) {
-  <div mat-menu-item class="trmrk-menu-item">Open in new tab</div>
+  <div mat-menu-item class="trmrk-menu-item trmrk-no-pad">
+    <a class="trmrk-icon-link trmrk-link" [routerLink]="openInNewTabNgRouterLink"
+      ><button mat-button class="trmrk-btn">
+        <mat-icon class="trmrk-icon">open_in_new</mat-icon> Open in new tab
+      </button>
+    </a>
+  </div>
+  } @if (trmrkShowOpenInNewBrowserTabMenuBtn ?? true) {
+  <div mat-menu-item class="trmrk-menu-item trmrk-no-pad">
+    <a
+      class="trmrk-icon-link trmrk-link"
+      [routerLink]="openInNewBrowserTabNgRouterLink"
+      target="_blank"
+      ><button mat-button class="trmrk-btn">
+        <mat-icon class="trmrk-icon">open_in_new_down</mat-icon> Open in new browser tab
+      </button>
+    </a>
+  </div>
+  } @if (trmrkShowCopyToClipboardMenuBtn ?? true) {
+  <div mat-menu-item class="trmrk-menu-item trmrk-no-pad" (click)="$event.stopPropagation()">
+    <div class="trmrk-icon-link" #copyToClipboardMenuItemAnchor>
+      <button mat-button class="trmrk-btn" (click)="copyToClipboardClick($event)">
+        <mat-icon class="trmrk-icon">content_copy</mat-icon> Copy to clipboard
+      </button>
+    </div>
+  </div>
+  <trmrk-user-message
+    [trmrkMessage]="'Copied!'"
+    [trmrkShow]="showCopiedToClipboardSuccessMessage"
+    [trmrkLevel]="UserMessageLevel.Success"
+    [trmrkAutoCloseMillis]="1000"
+    (trmrkClose)="copyToClipboardSuccessMessageClosed()"
+    [ngStyle]="{top: `${copiedToClipboardMessageTopPx}px`}"
+  ></trmrk-user-message>
+  <trmrk-user-message
+    [trmrkMessage]="`Could not copy to clipboard: ${copiedToClipboardErrorMessage}`"
+    [trmrkShow]="showCopiedToClipboardErrorMessage"
+    [trmrkLevel]="UserMessageLevel.Error"
+    (trmrkClose)="copyToClipboardErrorMessageClosed()"
+    [ngStyle]="{top: `${copiedToClipboardMessageTopPx}px`}"
+  ></trmrk-user-message>
+  } @if (((trmrkExternalUrl ?? null) !== null) && trmrkShowOpenExternallyMenuBtn !== false) {
+  <div mat-menu-item class="trmrk-menu-item trmrk-no-pad">
+    <a class="trmrk-icon-link trmrk-link" [href]="trmrkExternalUrl" target="_blank"
+      ><button mat-button class="trmrk-btn trmrk-icon-link">
+        <div class="trmrk-custom-svg-icon-wrapper" [innerHtml]="open_with"></div>
+        Open externally
+      </button>
+    </a>
+  </div>
   }
 </mat-menu>

@@ -1,4 +1,6 @@
-import { AnyOrUnknown } from '../../../trmrk/core';
+import { Params } from '@angular/router';
+
+import { NullOrUndef } from '../../../trmrk/core';
 
 import {
   TouchOrMouseMoveCoords,
@@ -38,7 +40,7 @@ export interface TrmrkDragEventData extends TrmrkLongPressOrRightClickEventData 
 
 export interface TrmrkUrl {
   path: string | string[];
-  queryParams?: { [key: string]: string } | AnyOrUnknown;
+  queryParams?: Params | NullOrUndef;
 }
 
 export type TrmrkUrlType = string | string[] | TrmrkUrl;

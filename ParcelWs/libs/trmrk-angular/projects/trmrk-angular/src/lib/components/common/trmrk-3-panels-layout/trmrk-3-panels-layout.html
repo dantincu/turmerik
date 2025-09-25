@@ -1,0 +1,65 @@
+<div [ngClass]="cssClass">
+  @if (trmrkRenderLeftPanel ?? renderPanelsByDefault) {
+  <div
+    [ngClass]="['trmrk-app-panel', 'trmrk-left-panel', trmrkShowLeftPanel ? '' : 'trmrk-hidden']"
+  >
+    <trmrk-horiz-strip
+      [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
+      [trmrkLeadingTemplate]="leftPanelLeadingTemplate"
+      [trmrkTrailingTemplate]="leftPanelTrailingTemplate"
+    >
+    </trmrk-horiz-strip>
+    <ng-template #leftPanelLeadingTemplate></ng-template>
+    <ng-template #leftPanelTrailingTemplate
+      >@if (visiblePanelsCount > 1) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
+      </button>
+      }</ng-template
+    >
+    <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
+      <ng-container *ngTemplateOutlet="trmrkLeftPanelTemplate"></ng-container>
+    </div>
+  </div>
+  } @if (trmrkRenderMiddlePanel ?? renderPanelsByDefault) {
+  <div
+    [ngClass]="[
+      'trmrk-app-panel',
+      'trmrk-middle-panel',
+      trmrkShowMiddlePanel ? '' : 'trmrk-hidden'
+    ]"
+  >
+    <trmrk-horiz-strip
+      [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
+      [trmrkLeadingTemplate]="middlePanelLeadingTemplate"
+      [trmrkTrailingTemplate]="middlePanelTrailingTemplate"
+    ></trmrk-horiz-strip>
+    <ng-template #middlePanelLeadingTemplate></ng-template>
+    <ng-template #middlePanelTrailingTemplate></ng-template>
+    <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
+      <ng-container *ngTemplateOutlet="trmrkMiddlePanelTemplate"></ng-container>
+    </div>
+  </div>
+  } @if (trmrkRenderRightPanel ?? renderPanelsByDefault) {
+  <div
+    [ngClass]="['trmrk-app-panel', 'trmrk-right-panel', trmrkShowRightPanel ? '' : 'trmrk-hidden']"
+  >
+    <trmrk-horiz-strip
+      [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
+      [trmrkLeadingTemplate]="rightPanelLeadingTemplate"
+      [trmrkTrailingTemplate]="rightPanelTrailingTemplate"
+    ></trmrk-horiz-strip>
+    <ng-template #rightPanelLeadingTemplate
+      >@if (visiblePanelsCount > 2 || (trmrkRenderMiddlePanel ?? renderPanelsByDefault)) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
+      </button>
+      }</ng-template
+    >
+    <ng-template #rightPanelTrailingTemplate></ng-template>
+    <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
+      <ng-container *ngTemplateOutlet="trmrkRightPanelTemplate"></ng-container>
+    </div>
+  </div>
+  }
+</div>
