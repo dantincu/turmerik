@@ -10,7 +10,18 @@
   >
     <mat-icon class="trmrk-icon">arrow_back</mat-icon>
   </button>
-  } @if (trmrkShowGoToParentBtn ?? appStateService.defaults.show.appBar.goToParentBtn) {
+  } @if (trmrkShowGoToParentBtn ?? appStateService.defaults.show.appBar.goToParentBtn) { @if
+  ((trmrkGoToParentRouterLink ?? null) !== null) {
+  <a
+    [routerLink]="trmrkGoToParentRouterLink"
+    mat-icon-button
+    class="trmrk-icon-btn"
+    (click)="goToParentBtnClicked($event)"
+    [disabled]="trmrkGoToParentBtnDisabled ?? false"
+  >
+    <mat-icon class="trmrk-icon">arrow_upward</mat-icon>
+  </a>
+  } @if ((trmrkGoToParentRouterLink ?? null) === null) {
   <button
     mat-icon-button
     class="trmrk-icon-btn"
@@ -19,7 +30,7 @@
   >
     <mat-icon class="trmrk-icon">arrow_upward</mat-icon>
   </button>
-  }
+  } }
 
   <ng-container *ngTemplateOutlet="trmrkBeforeTitleTemplate"></ng-container>
   <h1 class="trmrk-page-title" #pageTitle>{{ trmrkTitle }}</h1>

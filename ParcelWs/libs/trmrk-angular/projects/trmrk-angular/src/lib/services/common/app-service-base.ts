@@ -50,6 +50,7 @@ export class AppServiceBase implements OnDestroy {
     const appObjectKey = [...(opts.includeAppName ? [this.appStateService.appName] : []), ...parts]
       .map((part) => [opts.delims![0], part, opts.delims![1]].join(''))
       .join('');
+
     return appObjectKey;
   }
 

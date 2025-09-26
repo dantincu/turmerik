@@ -51,14 +51,16 @@
     </div>
   </div>
   <trmrk-user-message
+    (click)="$event.stopPropagation()"
     [trmrkMessage]="'Copied!'"
     [trmrkShow]="showCopiedToClipboardSuccessMessage"
     [trmrkLevel]="UserMessageLevel.Success"
-    [trmrkAutoCloseMillis]="1000"
+    [trmrkAutoCloseMillis]="2000"
     (trmrkClose)="copyToClipboardSuccessMessageClosed()"
     [ngStyle]="{top: `${copiedToClipboardMessageTopPx}px`}"
   ></trmrk-user-message>
   <trmrk-user-message
+    (click)="$event.stopPropagation()"
     [trmrkMessage]="`Could not copy to clipboard: ${copiedToClipboardErrorMessage}`"
     [trmrkShow]="showCopiedToClipboardErrorMessage"
     [trmrkLevel]="UserMessageLevel.Error"

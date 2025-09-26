@@ -11,7 +11,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { encodeHtml } from '../../../../trmrk/text';
@@ -40,10 +40,9 @@ interface TrmrkHorizStripDetailsTextPartHtmlInfoCore<HTML> {
   raw?: HTML | NullOrUndef;
 }
 
-type TrmrkHorizStripDetailsTextPartInternal =
-  TrmrkHorizStripDetailsTextPartCore<
-    TrmrkHorizStripDetailsTextPartHtmlInfoCore<SafeHtml>
-  >;
+type TrmrkHorizStripDetailsTextPartInternal = TrmrkHorizStripDetailsTextPartCore<
+  TrmrkHorizStripDetailsTextPartHtmlInfoCore<SafeHtml>
+>;
 
 export type TrmrkHorizStripDetailsTextPartHtmlInfo =
   TrmrkHorizStripDetailsTextPartHtmlInfoCore<string>;
@@ -54,34 +53,24 @@ export type TrmrkHorizStripDetailsTextPart = TrmrkHorizStripDetailsTextPartCore<
 
 @Component({
   selector: 'trmrk-horiz-strip',
-  imports: [
-    CommonModule,
-    TrmrkLongPressOrRightClick,
-    TrmrkTouchStartOrMouseDown,
-  ],
+  imports: [CommonModule, NgTemplateOutlet, TrmrkLongPressOrRightClick, TrmrkTouchStartOrMouseDown],
   templateUrl: './trmrk-horiz-strip.html',
   styleUrl: './trmrk-horiz-strip.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrmrkHorizStrip implements OnChanges, OnDestroy {
-  @Output() trmrkTextLongPressOrRightClick =
-    new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkTextLongPressOrRightClick = new EventEmitter<TouchOrMouseCoords>();
 
-  @Output() trmrkTextShortPressOrLeftClick =
-    new EventEmitter<TouchOrMouseCoords>();
+  @Output() trmrkTextShortPressOrLeftClick = new EventEmitter<TouchOrMouseCoords>();
 
-  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<
-    MouseEvent | TouchEvent
-  >();
+  @Output() trmrkTextTouchStartOrMouseDown = new EventEmitter<MouseEvent | TouchEvent>();
 
   @Input() trmrkTextLongPressAltHost: (() => HTMLElement[]) | null = null;
 
   @Input() trmrkType = TrmrkHorizStripType.Regular;
   @Input() trmrkMinimal = false;
   @Input() trmrkMainText!: string;
-  @Input() trmrkDetailsTextParts:
-    | (string | TrmrkHorizStripDetailsTextPart)[]
-    | null = null;
+  @Input() trmrkDetailsTextParts: (string | TrmrkHorizStripDetailsTextPart)[] | null = null;
   @Input() trmrkUseNonBreakingSpaceTokens = true;
   @Input() trmrkHasCap = false;
   @Input() trmrkCssClass: string[] = [];
@@ -127,10 +116,10 @@ export class TrmrkHorizStrip implements OnChanges, OnDestroy {
         retPart = part as TrmrkHorizStripDetailsTextPartInternal;
       } else {
         retPart = {
-          text: encodeHtml(
-            part ?? '',
-            this.trmrkUseNonBreakingSpaceTokens
-          ).replaceAll('\n', '&nbsp;'),
+          text: encodeHtml(part ?? '', this.trmrkUseNonBreakingSpaceTokens).replaceAll(
+            '\n',
+            '&nbsp;'
+          ),
         };
       }
 
@@ -142,9 +131,7 @@ export class TrmrkHorizStrip implements OnChanges, OnDestroy {
         }
 
         if ((retPart.html!.raw ?? null) !== null) {
-          retPart.html!.raw = this.sanitizer.bypassSecurityTrustHtml(
-            retPart.html!.raw as string
-          );
+          retPart.html!.raw = this.sanitizer.bypassSecurityTrustHtml(retPart.html!.raw as string);
         }
       }
 
@@ -159,10 +146,10 @@ export class TrmrkHorizStrip implements OnChanges, OnDestroy {
       changes,
       () => this.trmrkMainText,
       (value) => {
-        this.mainText = encodeHtml(
-          value ?? '',
-          this.trmrkUseNonBreakingSpaceTokens
-        ).replaceAll('\n', '&nbsp;');
+        this.mainText = encodeHtml(value ?? '', this.trmrkUseNonBreakingSpaceTokens).replaceAll(
+          '\n',
+          '&nbsp;'
+        );
       }
     );
   }

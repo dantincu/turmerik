@@ -1,18 +1,27 @@
-<div [ngClass]="cssClass">
+<div [ngClass]="cssClass" #containerEl>
   @if (trmrkRenderLeftPanel ?? renderPanelsByDefault) {
   <div
+    #leftPanelEl
     [ngClass]="['trmrk-app-panel', 'trmrk-left-panel', trmrkShowLeftPanel ? '' : 'trmrk-hidden']"
+    [ngStyle]="panelStyles[0]"
   >
     <trmrk-horiz-strip
       [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
-      [trmrkLeadingTemplate]="leftPanelLeadingTemplate"
-      [trmrkTrailingTemplate]="leftPanelTrailingTemplate"
+      [trmrkLeadingTemplate]="leftPanelHeaderLeadingTemplate"
+      [trmrkTrailingTemplate]="leftPanelHeaderTrailingTemplate"
     >
     </trmrk-horiz-strip>
-    <ng-template #leftPanelLeadingTemplate></ng-template>
-    <ng-template #leftPanelTrailingTemplate
+    <ng-template #leftPanelHeaderLeadingTemplate></ng-template>
+    <ng-template #leftPanelHeaderTrailingTemplate
       >@if (visiblePanelsCount > 1) {
-      <button mat-icon-button class="trmrk-icon-btn">
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkDrag)="leftPanelResizeBtnDrag($event)"
+        (trmrkDragStart)="leftPanelResizeBtnDragStart($event)"
+        (trmrkDragEnd)="leftPanelResizeBtnDragEnd($event)"
+        [trmrkPreventDefaults]="true"
+      >
         <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
       </button>
       }</ng-template
@@ -28,35 +37,45 @@
       'trmrk-middle-panel',
       trmrkShowMiddlePanel ? '' : 'trmrk-hidden'
     ]"
+    [ngStyle]="panelStyles[1]"
   >
     <trmrk-horiz-strip
       [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
-      [trmrkLeadingTemplate]="middlePanelLeadingTemplate"
-      [trmrkTrailingTemplate]="middlePanelTrailingTemplate"
+      [trmrkLeadingTemplate]="middlePanelHeaderLeadingTemplate"
+      [trmrkTrailingTemplate]="middlePanelHeaderTrailingTemplate"
     ></trmrk-horiz-strip>
-    <ng-template #middlePanelLeadingTemplate></ng-template>
-    <ng-template #middlePanelTrailingTemplate></ng-template>
+    <ng-template #middlePanelHeaderLeadingTemplate></ng-template>
+    <ng-template #middlePanelHeaderTrailingTemplate></ng-template>
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
       <ng-container *ngTemplateOutlet="trmrkMiddlePanelTemplate"></ng-container>
     </div>
   </div>
   } @if (trmrkRenderRightPanel ?? renderPanelsByDefault) {
   <div
+    #rightPanelEl
     [ngClass]="['trmrk-app-panel', 'trmrk-right-panel', trmrkShowRightPanel ? '' : 'trmrk-hidden']"
+    [ngStyle]="panelStyles[2]"
   >
     <trmrk-horiz-strip
       [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
-      [trmrkLeadingTemplate]="rightPanelLeadingTemplate"
-      [trmrkTrailingTemplate]="rightPanelTrailingTemplate"
+      [trmrkLeadingTemplate]="rightPanelHeaderLeadingTemplate"
+      [trmrkTrailingTemplate]="rightPanelHeaderTrailingTemplate"
     ></trmrk-horiz-strip>
-    <ng-template #rightPanelLeadingTemplate
-      >@if (visiblePanelsCount > 2 || (trmrkRenderMiddlePanel ?? renderPanelsByDefault)) {
-      <button mat-icon-button class="trmrk-icon-btn">
+    <ng-template #rightPanelHeaderLeadingTemplate
+      >@if (trmrkRenderMiddlePanel ?? renderPanelsByDefault) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        (trmrkDrag)="rightPanelResizeBtnDrag($event)"
+        (trmrkDragStart)="rightPanelResizeBtnDragStart($event)"
+        (trmrkDragEnd)="rightPanelResizeBtnDragEnd($event)"
+        [trmrkPreventDefaults]="true"
+      >
         <div class="trmrk-custom-svg-icon" [innerHtml]="drag_pan"></div>
       </button>
       }</ng-template
     >
-    <ng-template #rightPanelTrailingTemplate></ng-template>
+    <ng-template #rightPanelHeaderTrailingTemplate></ng-template>
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
       <ng-container *ngTemplateOutlet="trmrkRightPanelTemplate"></ng-container>
     </div>

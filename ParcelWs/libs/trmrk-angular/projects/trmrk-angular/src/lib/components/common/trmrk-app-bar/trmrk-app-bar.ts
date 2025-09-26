@@ -16,6 +16,7 @@ import {
 } from '@angular/core';
 
 import { NgTemplateOutlet, CommonModule } from '@angular/common';
+import { UrlTree, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -32,6 +33,7 @@ import { TrmrkUrlType } from '../../../services/common/types';
   selector: 'trmrk-app-bar',
   imports: [
     CommonModule,
+    RouterModule,
     MatIconModule,
     MatButtonModule,
     MatIconButton,
@@ -50,14 +52,15 @@ export class TrmrkAppBar implements AfterViewInit, OnChanges, OnDestroy {
   @Input() trmrkTrailingTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkTitle!: string;
   @Input() trmrkCssClass: string | null = null;
-  @Input() trmrkShowBackBtn: boolean | NullOrUndef;
-  @Input() trmrkBackBtnClicked: (() => boolean | VoidOrAny) | NullOrUndef;
+  @Input() trmrkShowBackBtn?: boolean | NullOrUndef;
+  @Input() trmrkBackBtnClicked?: (() => boolean | VoidOrAny) | NullOrUndef;
 
-  @Input() trmrkToggleBackBtnDisabled: ((disable: boolean) => boolean | VoidOrAny) | NullOrUndef;
+  @Input() trmrkToggleBackBtnDisabled?: ((disable: boolean) => boolean | VoidOrAny) | NullOrUndef;
 
-  @Input() trmrkShowGoToParentBtn: boolean | NullOrUndef;
-  @Input() trmrkGoToParentBtnDisabled: boolean | NullOrUndef;
-  @Input() trmrkGoToParentBtnClicked: (() => VoidOrAny) | NullOrUndef;
+  @Input() trmrkShowGoToParentBtn?: boolean | NullOrUndef;
+  @Input() trmrkGoToParentBtnDisabled?: boolean | NullOrUndef;
+  @Input() trmrkGoToParentBtnClicked?: (() => VoidOrAny) | NullOrUndef;
+  @Input() trmrkGoToParentRouterLink?: string | readonly any[] | UrlTree | NullOrUndef;
 
   @ViewChild('pageTitle', { read: ElementRef })
   pageTitle!: ElementRef;

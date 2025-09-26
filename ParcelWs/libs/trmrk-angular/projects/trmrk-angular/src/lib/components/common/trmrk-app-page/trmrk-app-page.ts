@@ -10,7 +10,7 @@ import {
 
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, UrlTree } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule, MatMenu, MatMenuTrigger } from '@angular/material/menu';
@@ -57,6 +57,7 @@ export class TrmrkAppPage implements OnDestroy {
   @Input() trmrkAppBarShowGoToParentBtn: boolean | NullOrUndef;
   @Input() trmrkAppBarGoToParentBtnDisabled: boolean | NullOrUndef;
   @Input() trmrkAppBarGoToParentBtnClicked: (() => VoidOrAny) | NullOrUndef;
+  @Input() trmrkAppBarGoToParentRouterLink?: string | readonly any[] | UrlTree | NullOrUndef;
   @Input() trmrkOptionsMenuTemplate?: TemplateRef<any> | NullOrUndef;
   @Input() trmrkShowOptionsBtn: boolean | NullOrUndef;
   @Input() trmrkShowMainMenuTopStrip: boolean | NullOrUndef;

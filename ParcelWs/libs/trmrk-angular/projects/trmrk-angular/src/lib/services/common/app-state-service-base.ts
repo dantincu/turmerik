@@ -62,6 +62,7 @@ export abstract class AppStateServiceBase implements OnDestroy {
   showAppBar = new TrmrkObservable<boolean>(true);
   currentModalId = new TrmrkObservable<number>(0);
   setupOk = new TrmrkObservable<boolean>(false);
+  appSuspended = new TrmrkObservable<boolean>(false);
 
   defaults = getAppDefaultValues();
 

@@ -51,6 +51,8 @@ import { TrmrkLongPressOrRightClick } from '../../../directives/trmrk-long-press
 import { TrmrkUserMessage } from '../trmrk-user-message/trmrk-user-message';
 import { open_with } from '../../../assets/icons/material/open_with';
 
+import { TrmrkAppLinkService } from '../../../services/common/trmrk-app-link-service';
+
 @Component({
   selector: 'trmrk-app-link',
   imports: [
@@ -123,6 +125,7 @@ export class TrmrkAppLink implements OnChanges, AfterViewInit {
   copiedToClipboardMessageTopPx = 0;
 
   constructor(
+    public appLinkService: TrmrkAppLinkService,
     private router: Router,
     private urlSerializer: UrlSerializer,
     private domSanitizer: DomSanitizer
@@ -206,9 +209,6 @@ export class TrmrkAppLink implements OnChanges, AfterViewInit {
     const url = serializeTrmrkUrl(this.routerLink);
 
     try {
-      throw new Error(
-        'asdfasdfqwerqwe rqwerqwerqwer qwerqwerqwerqw erqwerwqerqwer qwerqwerqw erqwerwqer'
-      );
       await navigator.clipboard.writeText(url);
       this.showCopiedToClipboardSuccessMessage++;
     } catch (err) {
@@ -283,14 +283,26 @@ export class TrmrkAppLink implements OnChanges, AfterViewInit {
   }
 
   getDefaultOpenInNewTabUrl(trmrkUrl: TrmrkUrl) {
+    if (this.appLinkService.getDefaultOpenInNewTabUrl) {
+      trmrkUrl = this.appLinkService.getDefaultOpenInNewTabUrl(trmrkUrl);
+    }
+
     return trmrkUrl;
   }
 
   getDefaultOpenInNewBrowserTabUrl(trmrkUrl: TrmrkUrl) {
+    if (this.appLinkService.getDefaultOpenInNewBrowserTabUrl) {
+      trmrkUrl = this.appLinkService.getDefaultOpenInNewBrowserTabUrl(trmrkUrl);
+    }
+
     return trmrkUrl;
   }
 
   getDefaultShareableTabUrl(trmrkUrl: TrmrkUrl) {
+    if (this.appLinkService.getDefaultShareableTabUrl) {
+      trmrkUrl = this.appLinkService.getDefaultShareableTabUrl(trmrkUrl);
+    }
+
     return trmrkUrl;
   }
 

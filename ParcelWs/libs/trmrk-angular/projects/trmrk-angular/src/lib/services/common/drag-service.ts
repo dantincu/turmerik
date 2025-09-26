@@ -1,4 +1,4 @@
-import { Injectable, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Injectable, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
 
 import {
   MouseButton,
@@ -17,6 +17,7 @@ import {
 export class DragService implements OnDestroy {
   @Output() drag = new EventEmitter<TrmrkDragEvent>();
   @Output() dragEnd = new EventEmitter<TrmrkDragEvent>();
+  @Input() preventDefaults = false;
 
   private mouseDownOrTouchStartCoords: TouchOrMouseCoords | null = null;
   private dragStartPosition: TrmrkDragStartPosition | null = null;
@@ -28,8 +29,7 @@ export class DragService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.mouseDownOrTouchStartCoords = null;
-    this.dragStartPosition = null;
+    this.reset();
     this.hostEl = null;
   }
 
@@ -92,13 +92,13 @@ export class DragService implements OnDestroy {
 
   private touchEndOrMouseUp(event: TouchEvent | MouseEvent) {
     const data = this.getEventData(event);
-
     this.dragEnd.emit(this.getTrmrkDragEvent(data));
 
     this.reset();
   }
 
   private getEventData(event: TouchEvent | MouseEvent) {
+    this.preventDefaultsIfReq(event);
     const elem = this.hostEl;
 
     const data: TrmrkDragEventData = {
@@ -156,5 +156,11 @@ export class DragService implements OnDestroy {
     document.removeEventListener('touchend', this.touchEndOrMouseUp, {
       capture: true,
     });
+  }
+
+  private preventDefaultsIfReq(event: Event) {
+    if (this.preventDefaults) {
+      event.preventDefault();
+    }
   }
 }
