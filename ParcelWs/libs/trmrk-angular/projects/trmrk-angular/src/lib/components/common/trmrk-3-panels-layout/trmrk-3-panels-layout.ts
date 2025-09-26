@@ -22,7 +22,7 @@ import { TrmrkDrag } from '../../../directives/trmrk-drag';
 import { TrmrkDragEvent } from '../../../services/common/types';
 import { drag_pan } from '../../../assets/icons/material/drag_pan';
 
-export const MIN_PANEL_WIDTH_PX = 100;
+export const MIN_PANEL_WIDTH_PX = 45;
 
 @Component({
   selector: 'trmrk-3-panels-layout',
