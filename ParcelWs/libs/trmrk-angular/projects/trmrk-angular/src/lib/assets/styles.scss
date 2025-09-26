@@ -9,15 +9,15 @@ body {
 }
 
 h1 {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 h2 {
-  font-size: 17px;
+  font-size: 15px;
 }
 
 h3 {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -379,11 +379,26 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
       flex: 1 0 calc(100% - 40px);
     }
 
-
     .trmrk-heading-horiz-strip,
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip {
       padding-left: 0;
+      padding-right: 0;
+    }
+
+    .trmrk-panel-resize-strip {
+      position: absolute;
+      width: 40px;
+      top: 40px;
+      bottom: 0;
+
+      &.trmrk-stick-right {
+        right: 0;
+      }
+
+      &.trmrk-stick-left {
+        left: 0;
+      }
     }
   }
 }
@@ -707,9 +722,14 @@ trmrk-app-page {
   text-align: center;
 }
 
-.trmrk-page-header {
-  font-size: 48px;
-  margin: 20px;
+h2.trmrk-page-header {
+  font-size: 30px;
+  margin: 10px;
+  margin-top: 15px;
+}
+
+h3.trmrk-page-summary {
+  margin: 5px;
 }
 
 .trmrk-btn-filled-default,
@@ -730,6 +750,7 @@ trmrk-app-page {
 .trmrk-user-message {
   border-width: 1px;
   border-style: solid;
+  font-size: 1em;
 
   .trmrk-icon-btn, [mat-icon-button].trmrk-icon-btn, .trmrk-custom-svg-icon-btn {
     margin-top: 0;
@@ -934,6 +955,13 @@ trmrk-app-themes-list-view {
   .mat-mdc-dialog-container .mat-mdc-dialog-content {
     font-size: var(--trmrk-body-font-size);
   }
+}
+
+div.mdc-form-field.mat-internal-form-field,
+.mat-mdc-button.mat-mdc-button,
+.mat-mdc-menu-content.mat-mdc-menu-content,
+.mat-mdc-menu-content .mat-mdc-menu-item span.mat-mdc-menu-item-text.mat-mdc-menu-item-text {
+  font-size: 1em;
 }
 
 .trmrk-spaced-list-item {

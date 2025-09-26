@@ -22,7 +22,7 @@ import { TrmrkDrag } from '../../../directives/trmrk-drag';
 import { TrmrkDragEvent } from '../../../services/common/types';
 import { drag_pan } from '../../../assets/icons/material/drag_pan';
 
-export const MIN_PANEL_WIDTH_PX = 40;
+export const MIN_PANEL_WIDTH_PX = 100;
 
 @Component({
   selector: 'trmrk-3-panels-layout',
@@ -44,24 +44,22 @@ export class Trmrk3PanelsLayout implements OnChanges {
   @Input() trmrkCssClass: string[] = [];
   @Input() trmrkDbObjectPfx: string = '';
 
-  @Input() trmrkRenderLeftPanel: boolean | NullOrUndef;
-  @Input() trmrkShowLeftPanel: boolean | NullOrUndef;
+  @Input() trmrkAlwaysRenderLeftPanel: boolean = false;
+  @Input() trmrkShowLeftPanel: boolean = false;
   @Input() trmrkLeftPanelTemplate: TemplateRef<any> | NullOrUndef;
 
-  @Input() trmrkRenderMiddlePanel: boolean | NullOrUndef;
-  @Input() trmrkShowMiddlePanel: boolean | NullOrUndef;
+  @Input() trmrkAlwaysRenderMiddlePanel: boolean = false;
+  @Input() trmrkShowMiddlePanel: boolean = false;
   @Input() trmrkMiddlePanelTemplate: TemplateRef<any> | NullOrUndef;
 
-  @Input() trmrkRenderRightPanel: boolean | NullOrUndef;
-  @Input() trmrkShowRightPanel: boolean | NullOrUndef;
+  @Input() trmrkAlwaysRenderRightPanel: boolean = false;
+  @Input() trmrkShowRightPanel: boolean = false;
   @Input() trmrkRightPanelTemplate: TemplateRef<any> | NullOrUndef;
 
-  readonly renderPanelsByDefault = true;
-
   cssClass: string[] = [Trmrk3PanelsLayout.dfCssClass];
-  hasLeftPanel = false;
-  hasMiddlePanel = false;
-  hasRightPanel = false;
+  showLeftPanel = false;
+  showMiddlePanel = false;
+  showRightPanel = false;
   visiblePanelsCount = 0;
 
   drag_pan: SafeHtml;
@@ -73,8 +71,12 @@ export class Trmrk3PanelsLayout implements OnChanges {
   @ViewChild('leftPanelEl') leftPanelEl!: ElementRef<any>;
   @ViewChild('rightPanelEl') rightPanelEl!: ElementRef<any>;
 
+  isResizingLeftPanel = false;
+  isResizingRightPanel = false;
+
   private dragStartTouchOrMoveCoords: TouchOrMouseCoords | null = null;
   private containerWidth: number | null = null;
+  private panelMinWidthRatio: number | null = null;
   private leftPanelWidth: number | null = null;
   private rightPanelWidth: number | null = null;
 
@@ -94,46 +96,10 @@ export class Trmrk3PanelsLayout implements OnChanges {
 
     whenChanged(
       changes,
-      () => this.trmrkRenderLeftPanel,
-      () => {
-        this.hasLeftPanel = this.shouldShowPanel(
-          this.trmrkRenderLeftPanel,
-          this.trmrkShowLeftPanel
-        );
-
-        this.visiblePanelsCount = this.getVisiblePanelsCount();
-        this.cssClass = this.getCssClass();
-        this.updatePanelWidths();
-      }
-    );
-
-    whenChanged(
-      changes,
       () => this.trmrkShowLeftPanel,
       () => {
-        this.hasLeftPanel = this.shouldShowPanel(
-          this.trmrkRenderLeftPanel,
-          this.trmrkShowLeftPanel
-        );
-
-        this.visiblePanelsCount = this.getVisiblePanelsCount();
-        this.cssClass = this.getCssClass();
-        this.updatePanelWidths();
-      }
-    );
-
-    whenChanged(
-      changes,
-      () => this.trmrkRenderMiddlePanel,
-      () => {
-        this.hasMiddlePanel = this.shouldShowPanel(
-          this.trmrkRenderMiddlePanel,
-          this.trmrkShowMiddlePanel
-        );
-
-        this.visiblePanelsCount = this.getVisiblePanelsCount();
-        this.cssClass = this.getCssClass();
-        this.updatePanelWidths();
+        this.showLeftPanel = this.trmrkShowLeftPanel;
+        this.panelsVisibilityChanged();
       }
     );
 
@@ -141,29 +107,8 @@ export class Trmrk3PanelsLayout implements OnChanges {
       changes,
       () => this.trmrkShowMiddlePanel,
       () => {
-        this.hasRightPanel = this.shouldShowPanel(
-          this.trmrkRenderRightPanel,
-          this.trmrkShowRightPanel
-        );
-
-        this.visiblePanelsCount = this.getVisiblePanelsCount();
-        this.cssClass = this.getCssClass();
-        this.updatePanelWidths();
-      }
-    );
-
-    whenChanged(
-      changes,
-      () => this.trmrkRenderRightPanel,
-      () => {
-        this.hasRightPanel = this.shouldShowPanel(
-          this.trmrkRenderRightPanel,
-          this.trmrkShowRightPanel
-        );
-
-        this.visiblePanelsCount = this.getVisiblePanelsCount();
-        this.cssClass = this.getCssClass();
-        this.updatePanelWidths();
+        this.showMiddlePanel = this.trmrkShowMiddlePanel;
+        this.panelsVisibilityChanged();
       }
     );
 
@@ -171,14 +116,32 @@ export class Trmrk3PanelsLayout implements OnChanges {
       changes,
       () => this.trmrkShowRightPanel,
       () => {
-        this.hasRightPanel = this.shouldShowPanel(
-          this.trmrkRenderRightPanel,
-          this.trmrkShowRightPanel
-        );
+        this.showRightPanel = this.trmrkShowRightPanel;
+        this.panelsVisibilityChanged();
+      }
+    );
 
-        this.visiblePanelsCount = this.getVisiblePanelsCount();
-        this.cssClass = this.getCssClass();
-        this.updatePanelWidths();
+    whenChanged(
+      changes,
+      () => this.trmrkAlwaysRenderLeftPanel,
+      () => {
+        this.panelsVisibilityChanged();
+      }
+    );
+
+    whenChanged(
+      changes,
+      () => this.trmrkAlwaysRenderMiddlePanel,
+      () => {
+        this.panelsVisibilityChanged();
+      }
+    );
+
+    whenChanged(
+      changes,
+      () => this.trmrkAlwaysRenderRightPanel,
+      () => {
+        this.panelsVisibilityChanged();
       }
     );
 
@@ -190,25 +153,37 @@ export class Trmrk3PanelsLayout implements OnChanges {
   }
 
   leftPanelResizeBtnDragStart(event: TouchOrMouseCoords) {
+    this.isResizingLeftPanel = true;
     this.dragStartTouchOrMoveCoords = event;
     this.containerWidth = (this.containerEl.nativeElement as HTMLElement).offsetWidth;
+    this.panelMinWidthRatio = (MIN_PANEL_WIDTH_PX / this.containerWidth) * 100;
     this.leftPanelWidth = (this.leftPanelEl.nativeElement as HTMLElement).offsetWidth;
   }
 
   leftPanelResizeBtnDrag(event: TrmrkDragEvent) {
     const dx = event.touchOrMouseMoveCoords.clientX - this.dragStartTouchOrMoveCoords!.clientX;
-    const leftPanelNewWidth = Math.max(this.leftPanelWidth! + dx, MIN_PANEL_WIDTH_PX);
+    const leftPanelNewWidth = this.leftPanelWidth! + dx;
     const leftPanelNewWidthRatio = (leftPanelNewWidth / this.containerWidth!) * 100;
 
+    const leftPanelNormNewWidthRatio = Math.min(
+      Math.max(leftPanelNewWidthRatio, this.panelMinWidthRatio!),
+      100 - 2 * this.panelMinWidthRatio!
+    );
+
     const middlePanelNewWidthRatio =
-      (100 - leftPanelNewWidthRatio) *
+      (100 - leftPanelNormNewWidthRatio) *
       (this.panelWidthRatios[1] / (this.panelWidthRatios[1] + this.panelWidthRatios[2]));
 
-    const rightPanelNewWidthRatio = 100 - leftPanelNewWidthRatio - middlePanelNewWidthRatio;
+    const middlePanelNormNewWidthRatio = Math.min(
+      Math.max(middlePanelNewWidthRatio, this.panelMinWidthRatio!),
+      100 - this.panelMinWidthRatio! - leftPanelNormNewWidthRatio
+    );
+
+    const rightPanelNewWidthRatio = 100 - leftPanelNormNewWidthRatio - middlePanelNormNewWidthRatio;
 
     this.panelBaseWidthRatios = [
-      leftPanelNewWidthRatio,
-      middlePanelNewWidthRatio,
+      leftPanelNormNewWidthRatio,
+      middlePanelNormNewWidthRatio,
       rightPanelNewWidthRatio,
     ];
 
@@ -216,55 +191,63 @@ export class Trmrk3PanelsLayout implements OnChanges {
   }
 
   leftPanelResizeBtnDragEnd(event: TrmrkDragEvent) {
+    this.isResizingLeftPanel = false;
     this.dragStartTouchOrMoveCoords = null;
     this.containerWidth = null;
+    this.panelMinWidthRatio = null;
     this.leftPanelWidth = null;
   }
 
   rightPanelResizeBtnDragStart(event: TouchOrMouseCoords) {
+    this.isResizingRightPanel = true;
     this.dragStartTouchOrMoveCoords = event;
     this.containerWidth = (this.containerEl.nativeElement as HTMLElement).offsetWidth;
+    this.panelMinWidthRatio = (MIN_PANEL_WIDTH_PX / this.containerWidth) * 100;
     this.rightPanelWidth = (this.rightPanelEl.nativeElement as HTMLElement).offsetWidth;
   }
 
   rightPanelResizeBtnDrag(event: TrmrkDragEvent) {
     const dx = event.touchOrMouseMoveCoords.clientX - this.dragStartTouchOrMoveCoords!.clientX;
-    const rightPanelNewWidth = Math.max(this.rightPanelWidth! - dx, MIN_PANEL_WIDTH_PX);
+    const rightPanelNewWidth = this.rightPanelWidth! - dx;
     const rightPanelNewWidthRatio = (rightPanelNewWidth / this.containerWidth!) * 100;
-    const middlePanelNewWidthRatio = 100 - this.panelBaseWidthRatios[0] - rightPanelNewWidthRatio;
+
+    const rightPanelNormNewWidthRatio = Math.min(
+      Math.max(rightPanelNewWidthRatio, this.panelMinWidthRatio!),
+      100 - this.panelBaseWidthRatios[0] - this.panelMinWidthRatio!
+    );
+
+    const middlePanelNewWidthRatio =
+      100 - this.panelBaseWidthRatios[0] - rightPanelNormNewWidthRatio;
 
     this.panelBaseWidthRatios = [
       this.panelBaseWidthRatios[0],
       middlePanelNewWidthRatio,
-      rightPanelNewWidthRatio,
+      rightPanelNormNewWidthRatio,
     ];
 
     this.updatePanelWidths();
   }
 
   rightPanelResizeBtnDragEnd(event: TrmrkDragEvent) {
+    this.isResizingRightPanel = false;
     this.dragStartTouchOrMoveCoords = null;
     this.containerWidth = null;
+    this.panelMinWidthRatio = null;
     this.rightPanelWidth = null;
-  }
-
-  shouldShowPanel(renderPanel: boolean | NullOrUndef, showPanel: boolean | NullOrUndef) {
-    const shouldShowPanel = (renderPanel ?? this.renderPanelsByDefault) && (showPanel ?? false);
-    return shouldShowPanel;
   }
 
   getCssClass() {
     const cssClass = [Trmrk3PanelsLayout.dfCssClass, ...this.trmrkCssClass];
 
-    if (this.hasLeftPanel) {
+    if (this.showLeftPanel) {
       cssClass.push('trmrk-has-left-panel');
     }
 
-    if (this.hasMiddlePanel) {
+    if (this.showMiddlePanel) {
       cssClass.push('trmrk-has-middle-panel');
     }
 
-    if (this.hasRightPanel) {
+    if (this.showRightPanel) {
       cssClass.push('trmrk-has-right-panel');
     }
 
@@ -275,15 +258,15 @@ export class Trmrk3PanelsLayout implements OnChanges {
   getVisiblePanelsCount() {
     let visiblePanelsCount = 0;
 
-    if (this.hasLeftPanel) {
+    if (this.showLeftPanel) {
       visiblePanelsCount++;
     }
 
-    if (this.hasMiddlePanel) {
+    if (this.showMiddlePanel) {
       visiblePanelsCount++;
     }
 
-    if (this.hasRightPanel) {
+    if (this.showRightPanel) {
       visiblePanelsCount++;
     }
 
@@ -291,9 +274,9 @@ export class Trmrk3PanelsLayout implements OnChanges {
   }
 
   updatePanelWidths() {
-    if (this.hasLeftPanel) {
-      if (this.hasMiddlePanel) {
-        if (this.hasRightPanel) {
+    if (this.showLeftPanel) {
+      if (this.showMiddlePanel) {
+        if (this.showRightPanel) {
           this.panelWidthRatios = [...this.panelBaseWidthRatios];
         } else {
           this.panelWidthRatios = [
@@ -302,7 +285,7 @@ export class Trmrk3PanelsLayout implements OnChanges {
             0,
           ];
         }
-      } else if (this.hasRightPanel) {
+      } else if (this.showRightPanel) {
         this.panelWidthRatios = [
           this.panelBaseWidthRatios[0],
           0,
@@ -311,8 +294,8 @@ export class Trmrk3PanelsLayout implements OnChanges {
       } else {
         this.panelWidthRatios = [100, 0, 0];
       }
-    } else if (this.hasMiddlePanel) {
-      if (this.hasRightPanel) {
+    } else if (this.showMiddlePanel) {
+      if (this.showRightPanel) {
         const middlePanelWidthRatio =
           (this.panelBaseWidthRatios[1] /
             (this.panelBaseWidthRatios[1] + this.panelBaseWidthRatios[2])) *
@@ -322,7 +305,7 @@ export class Trmrk3PanelsLayout implements OnChanges {
       } else {
         this.panelWidthRatios = [0, 100, 0];
       }
-    } else if (this.hasRightPanel) {
+    } else if (this.showRightPanel) {
       this.panelWidthRatios = [0, 0, 100];
     } else {
       this.panelWidthRatios = [0, 0, 0];
@@ -332,5 +315,11 @@ export class Trmrk3PanelsLayout implements OnChanges {
       width: `${ratio}%`,
       maxWidth: `${ratio}%`,
     }));
+  }
+
+  panelsVisibilityChanged() {
+    this.visiblePanelsCount = this.getVisiblePanelsCount();
+    this.cssClass = this.getCssClass();
+    this.updatePanelWidths();
   }
 }

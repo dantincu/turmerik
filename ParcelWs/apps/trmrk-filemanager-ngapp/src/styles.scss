@@ -46,6 +46,10 @@ body {
 * ------------ App Styles ------------
 */
 
+.trmrk-page-title {
+  font-size: 16px;
+}
+
 trmrk-folder-view {
   @include mixins.rel-flex-stretch-to-parent-size;
 }

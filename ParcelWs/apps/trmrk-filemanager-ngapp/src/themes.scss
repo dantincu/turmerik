@@ -36,6 +36,12 @@
   .trmrk-accelerating-scroll-popover {
     background-color: var(--trmrk-app-bar_background-color_light);
   }
+
+  .trmrk-3-panels-layout {
+    .trmrk-panel-resize-strip {
+      background-color: var(--trmrk-app-bar_background-color_light);
+    }
+  }
 }
 
 .trmrk-app-theme-dark {
@@ -55,5 +61,11 @@
 
   .trmrk-accelerating-scroll-popover {
     background-color: var(--trmrk-app-bar_background-color_dark);
+  }
+
+  .trmrk-3-panels-layout {
+    .trmrk-panel-resize-strip {
+      background-color: var(--trmrk-app-bar_background-color_dark);
+    }
   }
 }

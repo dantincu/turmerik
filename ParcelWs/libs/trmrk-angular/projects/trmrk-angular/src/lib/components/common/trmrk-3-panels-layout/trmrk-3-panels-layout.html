@@ -1,8 +1,8 @@
 <div [ngClass]="cssClass" #containerEl>
-  @if (trmrkRenderLeftPanel ?? renderPanelsByDefault) {
+  @if (trmrkAlwaysRenderLeftPanel || showLeftPanel) {
   <div
     #leftPanelEl
-    [ngClass]="['trmrk-app-panel', 'trmrk-left-panel', trmrkShowLeftPanel ? '' : 'trmrk-hidden']"
+    [ngClass]="['trmrk-app-panel', 'trmrk-left-panel', showLeftPanel ? '' : 'trmrk-hidden']"
     [ngStyle]="panelStyles[0]"
   >
     <trmrk-horiz-strip
@@ -29,14 +29,18 @@
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
       <ng-container *ngTemplateOutlet="trmrkLeftPanelTemplate"></ng-container>
     </div>
+
+    @if (isResizingLeftPanel) {
+    <div class="trmrk-panel-resize-strip trmrk-stick-right">
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">cancel</mat-icon>
+      </button>
+    </div>
+    }
   </div>
-  } @if (trmrkRenderMiddlePanel ?? renderPanelsByDefault) {
+  } @if (trmrkAlwaysRenderMiddlePanel || showMiddlePanel) {
   <div
-    [ngClass]="[
-      'trmrk-app-panel',
-      'trmrk-middle-panel',
-      trmrkShowMiddlePanel ? '' : 'trmrk-hidden'
-    ]"
+    [ngClass]="['trmrk-app-panel', 'trmrk-middle-panel', showMiddlePanel ? '' : 'trmrk-hidden']"
     [ngStyle]="panelStyles[1]"
   >
     <trmrk-horiz-strip
@@ -50,10 +54,10 @@
       <ng-container *ngTemplateOutlet="trmrkMiddlePanelTemplate"></ng-container>
     </div>
   </div>
-  } @if (trmrkRenderRightPanel ?? renderPanelsByDefault) {
+  } @if (trmrkAlwaysRenderRightPanel || showRightPanel) {
   <div
     #rightPanelEl
-    [ngClass]="['trmrk-app-panel', 'trmrk-right-panel', trmrkShowRightPanel ? '' : 'trmrk-hidden']"
+    [ngClass]="['trmrk-app-panel', 'trmrk-right-panel', showRightPanel ? '' : 'trmrk-hidden']"
     [ngStyle]="panelStyles[2]"
   >
     <trmrk-horiz-strip
@@ -62,7 +66,7 @@
       [trmrkTrailingTemplate]="rightPanelHeaderTrailingTemplate"
     ></trmrk-horiz-strip>
     <ng-template #rightPanelHeaderLeadingTemplate
-      >@if (trmrkRenderMiddlePanel ?? renderPanelsByDefault) {
+      >@if (trmrkAlwaysRenderMiddlePanel || showMiddlePanel) {
       <button
         mat-icon-button
         class="trmrk-icon-btn"
@@ -79,6 +83,13 @@
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
       <ng-container *ngTemplateOutlet="trmrkRightPanelTemplate"></ng-container>
     </div>
+    @if (isResizingRightPanel) {
+    <div class="trmrk-panel-resize-strip trmrk-stick-left">
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">cancel</mat-icon>
+      </button>
+    </div>
+    }
   </div>
   }
 </div>
