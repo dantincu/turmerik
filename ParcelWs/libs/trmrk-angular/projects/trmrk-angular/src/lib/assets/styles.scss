@@ -382,8 +382,8 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
     > trmrk-horiz-strip > :is(.trmrk-heading-horiz-strip,
     .trmrk-top-horiz-strip,
     .trmrk-bottom-horiz-strip) {
-      padding-left: 0;
-      padding-right: 0;
+      padding-left: 6px;
+      padding-right: 6px;
       overflow: hidden;
 
       > .trmrk-text-row {
@@ -395,9 +395,11 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
 
     .trmrk-panel-resize-strip {
       position: absolute;
-      width: 40px;
+      width: 52px;
       top: 40px;
       bottom: 0;
+      padding-left: 6px;
+      box-sizing: border-box;
 
       &.trmrk-stick-right {
         right: 0;
@@ -405,6 +407,18 @@ trmrk-3-panels-layout, .trmrk-3-panels-layout {
 
       &.trmrk-stick-left {
         left: 0;
+      }
+    }
+
+    &.trmrk-left-panel {
+      > trmrk-horiz-strip > .trmrk-app-panel-header {
+        padding-right: 46px;
+
+        > .trmrk-resize-btn {
+          position: absolute;
+          right: 6px;
+          background-color: inherit;
+        }
       }
     }
   }

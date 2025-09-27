@@ -2,21 +2,48 @@
   @if (trmrkAlwaysRenderLeftPanel || showLeftPanel) {
   <div
     #leftPanelEl
-    [ngClass]="['trmrk-app-panel', 'trmrk-left-panel', showLeftPanel ? '' : 'trmrk-hidden']"
+    [ngClass]="[
+      'trmrk-app-panel',
+      'trmrk-left-panel',
+      showLeftPanel ? '' : 'trmrk-hidden',
+      activePanel === PanelPosition.Left ? 'trmrk-is-active' : ''
+    ]"
     [ngStyle]="panelStyles[0]"
+    (trmrkTouchStartOrMouseDown)="leftPanelTouchStartOrMouseDown($event)"
   >
     <trmrk-horiz-strip
-      [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
+      [trmrkCssClass]="[
+        'trmrk-top-horiz-strip',
+        'trmrk-app-panel-header',
+        activePanel === PanelPosition.Left ? 'trmrk-has-border-x2' : ''
+      ]"
       [trmrkLeadingTemplate]="leftPanelHeaderLeadingTemplate"
       [trmrkTrailingTemplate]="leftPanelHeaderTrailingTemplate"
     >
     </trmrk-horiz-strip>
     <ng-template #leftPanelHeaderLeadingTemplate></ng-template>
-    <ng-template #leftPanelHeaderTrailingTemplate
-      >@if (visiblePanelsCount > 1) {
+    <ng-template #leftPanelHeaderTrailingTemplate>
+      @if (trmrkShowLeftPanelOptionsBtn) {
       <button
         mat-icon-button
         class="trmrk-icon-btn"
+        [matMenuTriggerFor]="null"
+        #leftPanelOptionsMenuTrigger="matMenuTrigger"
+        (click)="leftPanelOptionsMenuBtnClick()"
+      >
+        <mat-icon class="trmrk-icon">more_vert</mat-icon>
+      </button>
+      <mat-menu #leftPanelOptionsMenu class="trmrk-menu" dense>
+        <ng-container *ngTemplateOutlet="trmrkLeftPanelOptionsMenuTemplate"></ng-container>
+      </mat-menu>
+      } @if (trmrkAllowToggleLeftPanel) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      } @if (visiblePanelsCount > 1) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn trmrk-resize-btn"
         (trmrkDrag)="leftPanelResizeBtnDrag($event)"
         (trmrkDragStart)="leftPanelResizeBtnDragStart($event)"
         (trmrkDragEnd)="leftPanelResizeBtnDragEnd($event)"
@@ -33,23 +60,59 @@
     @if (isResizingLeftPanel) {
     <div class="trmrk-panel-resize-strip trmrk-stick-right">
       <button mat-icon-button class="trmrk-icon-btn">
-        <mat-icon class="trmrk-icon">cancel</mat-icon>
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon" [innerHtml]="recenter"></div>
       </button>
     </div>
     }
   </div>
   } @if (trmrkAlwaysRenderMiddlePanel || showMiddlePanel) {
   <div
-    [ngClass]="['trmrk-app-panel', 'trmrk-middle-panel', showMiddlePanel ? '' : 'trmrk-hidden']"
+    [ngClass]="[
+      'trmrk-app-panel',
+      'trmrk-middle-panel',
+      showMiddlePanel ? '' : 'trmrk-hidden',
+      activePanel === PanelPosition.Middle ? 'trmrk-is-active' : ''
+    ]"
     [ngStyle]="panelStyles[1]"
+    (trmrkTouchStartOrMouseDown)="middlePanelTouchStartOrMouseDown($event)"
   >
     <trmrk-horiz-strip
-      [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
+      [trmrkCssClass]="[
+        'trmrk-top-horiz-strip',
+        'trmrk-app-panel-header',
+        activePanel === PanelPosition.Middle ? 'trmrk-has-border-x2' : ''
+      ]"
       [trmrkLeadingTemplate]="middlePanelHeaderLeadingTemplate"
       [trmrkTrailingTemplate]="middlePanelHeaderTrailingTemplate"
     ></trmrk-horiz-strip>
     <ng-template #middlePanelHeaderLeadingTemplate></ng-template>
-    <ng-template #middlePanelHeaderTrailingTemplate></ng-template>
+    <ng-template #middlePanelHeaderTrailingTemplate>
+      @if (trmrkAllowToggleLeftPanel && !showLeftPanel) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon" [innerHtml]="left_panel_open"></div>
+      </button>
+      } @if (trmrkShowMiddlePanelOptionsBtn) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        [matMenuTriggerFor]="null"
+        #middlePanelOptionsMenuTrigger="matMenuTrigger"
+        (click)="middlePanelOptionsMenuBtnClick()"
+      >
+        <mat-icon class="trmrk-icon">more_vert</mat-icon>
+      </button>
+      <mat-menu #middlePanelOptionsMenu class="trmrk-menu" dense>
+        <ng-container *ngTemplateOutlet="trmrkMiddlePanelOptionsMenuTemplate"></ng-container>
+      </mat-menu>
+      } @if (trmrkAllowToggleMiddlePanel && showRightPanel) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      }
+    </ng-template>
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
       <ng-container *ngTemplateOutlet="trmrkMiddlePanelTemplate"></ng-container>
     </div>
@@ -57,11 +120,21 @@
   } @if (trmrkAlwaysRenderRightPanel || showRightPanel) {
   <div
     #rightPanelEl
-    [ngClass]="['trmrk-app-panel', 'trmrk-right-panel', showRightPanel ? '' : 'trmrk-hidden']"
+    [ngClass]="[
+      'trmrk-app-panel',
+      'trmrk-right-panel',
+      showRightPanel ? '' : 'trmrk-hidden',
+      activePanel === PanelPosition.Right ? 'trmrk-is-active' : ''
+    ]"
     [ngStyle]="panelStyles[2]"
+    (trmrkTouchStartOrMouseDown)="rightPanelTouchStartOrMouseDown($event)"
   >
     <trmrk-horiz-strip
-      [trmrkCssClass]="['trmrk-top-horiz-strip', 'trmrk-app-panel-header']"
+      [trmrkCssClass]="[
+        'trmrk-top-horiz-strip',
+        'trmrk-app-panel-header',
+        activePanel === PanelPosition.Right ? 'trmrk-has-border-x2' : ''
+      ]"
       [trmrkLeadingTemplate]="rightPanelHeaderLeadingTemplate"
       [trmrkTrailingTemplate]="rightPanelHeaderTrailingTemplate"
     ></trmrk-horiz-strip>
@@ -79,14 +152,36 @@
       </button>
       }</ng-template
     >
-    <ng-template #rightPanelHeaderTrailingTemplate></ng-template>
+    <ng-template #rightPanelHeaderTrailingTemplate>
+      @if (trmrkShowRightPanelOptionsBtn) {
+      <button
+        mat-icon-button
+        class="trmrk-icon-btn"
+        [matMenuTriggerFor]="null"
+        #rightPanelOptionsMenuTrigger="matMenuTrigger"
+        (click)="rightPanelOptionsMenuBtnClick()"
+      >
+        <mat-icon class="trmrk-icon">more_vert</mat-icon>
+      </button>
+      <mat-menu #rightPanelOptionsMenu class="trmrk-menu" dense>
+        <ng-container *ngTemplateOutlet="trmrkRightPanelOptionsMenuTemplate"></ng-container>
+      </mat-menu>
+      } @if (trmrkAllowToggleRightPanel && showMiddlePanel) {
+      <button mat-icon-button class="trmrk-icon-btn">
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      }
+    </ng-template>
     <div class="trmrk-app-panel-content trmrk-scrollable trmrk-scrollable-y trmrk-scrollable-x">
       <ng-container *ngTemplateOutlet="trmrkRightPanelTemplate"></ng-container>
     </div>
     @if (isResizingRightPanel) {
     <div class="trmrk-panel-resize-strip trmrk-stick-left">
       <button mat-icon-button class="trmrk-icon-btn">
-        <mat-icon class="trmrk-icon">cancel</mat-icon>
+        <mat-icon class="trmrk-icon">close</mat-icon>
+      </button>
+      <button mat-icon-button class="trmrk-icon-btn">
+        <div class="trmrk-custom-svg-icon" [innerHtml]="recenter"></div>
       </button>
     </div>
     }
