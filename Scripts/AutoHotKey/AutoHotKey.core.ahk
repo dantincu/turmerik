@@ -3,7 +3,7 @@
 ; ====================
 
 ; --------------------
-; [Ctrl + Alt + arrow keys] send 4 [Ctrl + arrow keys]
+; [Ctrl + Alt + arrow keys] send 4 [arrow keys]
 ; --------------------
 
 ^!Right:: {
@@ -31,7 +31,7 @@
 }
 
 ; --------------------
-; [Ctrl + Win + Alt + arrow keys] send 4 [Ctrl + Shift + arrow keys]
+; [Ctrl + Shift + Alt + arrow keys] send 4 [Shift + arrow keys]
 ; --------------------
 
 ^!+Right:: {
@@ -59,7 +59,7 @@
 }
 
 ; --------------------
-; [Ctrl + Shift + Alt + arrow keys] send 16 [Ctrl + arrow keys]
+; [Ctrl + Win + Alt + arrow keys] send 16 [arrow keys]
 ; --------------------
 
 ^#!Right:: {
@@ -87,7 +87,7 @@
 }
 
 ; --------------------
-; [Ctrl + Shift + Win + Alt + arrow keys] send 16 [Ctrl + Shift + arrow keys]
+; [Ctrl + Shift + Win + Alt + arrow keys] send 16 [Shift + arrow keys]
 ; --------------------
 
 ^#!+Right:: {
@@ -111,5 +111,37 @@
 ^#!+Down:: {
     Loop 16 {
         Send '+{Down}'
+    }
+}
+
+; --------------------
+; [Ctrl + Win + arrow keys] send 4 [Ctrl + arrow keys]
+; --------------------
+
+^#Right:: {
+    Loop 4 {
+        Send '^{Right}'
+    }
+}
+
+^#Left:: {
+    Loop 4 {
+        Send '^{Left}'
+    }
+}
+
+; --------------------
+; [Ctrl + Shift + Win + arrow keys] send 4 [Ctrl + Shift + arrow keys]
+; --------------------
+
+^#+Right:: {
+    Loop 4 {
+        Send '^+{Right}'
+    }
+}
+
+^#+Left:: {
+    Loop 4 {
+        Send '^+{Left}'
     }
 }
