@@ -214,7 +214,7 @@
       "KeepFileName": ".keep"
     },
     "FileContents": {
-      "KeepFileContentsTemplate": "",
+      "KeepFileContentsTemplate": "-",
       "KeepFileContainsNoteJson": false,
       "NoteFileContentsTemplate": "<input type=\"hidden\" name=\"{2}\" value=\"{1}\" />\n\n# {0}  \n\n",
       "NoteFileContentSectionTemplate": "{0}  \n\n",
