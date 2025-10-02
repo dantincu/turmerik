@@ -6,7 +6,11 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:dev": "scripts\\copy-app-config.bat dev && ng serve --configuration=development --host=0.0.0.0 --port=4201 --ssl=true --ssl-key=./sslcert/key.pem --ssl-cert=./sslcert/cert.pem",
+    "start:prod": "scripts\\copy-app-config.bat prod && ng serve --configuration=production --host=0.0.0.0 --port=4201 --ssl=true --ssl-key=./sslcert/key.pem --ssl-cert=./sslcert/cert.pem",
+    "build:dev": "scripts\\copy-app-config.bat dev && ng build --configuration=development",
+    "build:prod": "scripts\\copy-app-config.bat prod && ng build --configuration=production"
   },
   "prettier": {
     "printWidth": 100,

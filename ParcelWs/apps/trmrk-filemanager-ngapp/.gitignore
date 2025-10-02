@@ -40,3 +40,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+src/env/app-config.dev.json
+src/env/app-config.prod.json
+public/app-config.env.json

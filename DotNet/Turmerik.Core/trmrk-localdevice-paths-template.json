@@ -6,6 +6,8 @@
     "|$TURMERIK_DOTNET_UTILITY_APPS_ENV_PROD_DIR|": "<TurmerikDotnetUtilityAppsEnvProdDir>",
     "|$MAINCSDRIVE_DIR|": "<MainCsDriveDir>",
     "|$LARGEFILESCSDRIVE_DIR|": "<LargeFilesCsDriveDir>",
+    "|$LARGEFILESCSDRIVE_PROJECTS_RELDIR|": "<LargeFilesCsDriveProjectsReldir>",
+    "|$MAINCSDRIVE_PROJECTS_RELDIR|": "<MainCsDriveProjectsReldir>",
     "|$LARGEFILESCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<LargeFilesCsDriveTurmerikDotNetUtilityAppsArchiveReldir>",
     "|$MAINCSDRIVE_TURMERIK_DOT_NET_UTILITY_APPS_ARCHIVE_RELDIR|": "<MainCsDriveTurmerikDotNetUtilityAppsArchiveReldir>"
   }

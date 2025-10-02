@@ -23,5 +23,7 @@ Commands to update trmrk libs:
 
 .\src\trmrk-browser\_\push_to_trmrk-browser_ppgp.bat
 
+.\src\trmrk-browser\_\push_to_trmrk-filemanager-nglib_ppgp.bat
+
 .\src\trmrk\_\push_to_trmrk_ppgp.bat
 ```

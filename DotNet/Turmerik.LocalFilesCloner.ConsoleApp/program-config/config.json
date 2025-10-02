@@ -1,9 +1,6 @@
 {
   "Profiles": [
     {
-      "ProfileRelFilePath": "profiles\\arch-scripts-dir.config.json"
-    },
-    {
       "ProfileRelFilePath": "profiles\\arch-dotnet-util-cfg-dirs.config.json"
     },
     {
@@ -13,10 +10,19 @@
       "ProfileRelFilePath": "profiles\\arch-dotnet-util-dirs.config.json"
     },
     {
+      "ProfileRelFilePath": "profiles\\arch-ignored-src-files.config.json"
+    },
+    {
       "ProfileRelFilePath": "profiles\\arch-ng-book-2.config.json"
     },
     {
+      "ProfileRelFilePath": "profiles\\arch-scripts-dir.config.json"
+    },
+    {
       "ProfileRelFilePath": "profiles\\cp-dotnet-bkp-bins.config.json"
+    },
+    {
+      "ProfileRelFilePath": "profiles\\cp-dotnet-util-bins.config.json"
     },
     {
       "ProfileRelFilePath": "profiles\\cp-dotnet-util-cfg-files.config.json"
@@ -25,19 +31,16 @@
       "ProfileRelFilePath": "profiles\\cp-mk-fs-dirs-pair-cfg.config.json"
     },
     {
-      "ProfileRelFilePath": "profiles\\cp-dotnet-util-bins.config.json"
+      "ProfileRelFilePath": "profiles\\cp-mk-fs-dirs-pair-repo-bins.config.json"
     },
     {
-      "ProfileRelFilePath": "profiles\\cp-notes-blazorapp.config.json"
+      "ProfileRelFilePath": "profiles\\cp-mk-md-file-repo-bins.config.json"
     },
     {
       "ProfileRelFilePath": "profiles\\cp-text-transform-behavior.config.json"
     },
     {
-      "ProfileRelFilePath": "profiles\\cp-mk-fs-dirs-pair-repo-bins.config.json"
-    },
-    {
-      "ProfileRelFilePath": "profiles\\cp-mk-md-file-repo-bins.config.json"
+      "ProfileRelFilePath": "profiles\\cp-notes-blazorapp.config.json"
     },
     {
       "ProfileRelFilePath": "profiles\\cp-mkscripts-parcelws-sync-behavior.config.json"

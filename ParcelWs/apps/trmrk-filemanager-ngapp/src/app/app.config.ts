@@ -18,10 +18,10 @@ export const appConfig: ApplicationConfig = {
       },
       appConfig: {
         configMergeFactory: (baseConfig, envConfig) => {
-          baseConfig.driveStorageOptions.push(...(envConfig.driveStorageOptions ?? []));
+          baseConfig.driveStorageOptions.push(...envConfig.driveStorageOptions);
           return baseConfig;
         },
-        configNormalizeFactory: (appConfig) => {
+        configNormalizeFactory: async (appConfig) => {
           appConfig.requiresSetup ??= true;
           return appConfig;
         },

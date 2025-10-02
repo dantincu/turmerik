@@ -1,4 +1,5 @@
 {
+  "maxSimultaneousRequestsCount": 2,
   "driveStorageOptions": [
     {
       "key": "browser-indexeddb",
