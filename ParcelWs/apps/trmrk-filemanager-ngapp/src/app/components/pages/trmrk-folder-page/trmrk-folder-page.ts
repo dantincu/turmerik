@@ -7,7 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AppServiceBase } from '../../../../trmrk-angular/services/common/app-service-base';
 import { TrmrkAppPage } from '../../../../trmrk-angular/components/common/trmrk-app-page/trmrk-app-page';
 
-import { TrmrkFolderView } from '../../common/trmrk-folder-view/trmrk-folder-view';
+import { TrmrkFolderView } from '../../../../trmrk-filemanager-nglib/components/common/trmrk-folder-view/trmrk-folder-view';
 import { AppService } from '../../../services/app-service';
 
 @Component({

@@ -61,6 +61,7 @@ export const defaultConfigNormalizeFactory = <TConfig extends AppConfigCore = Ap
   appConfig.isWebApp ??= true;
   appConfig.routeBasePath ??= '/app';
   appConfig.requiresSetup ??= false;
+  appConfig.listDefaultPageSize ??= 50;
   return appConfig;
 };
 

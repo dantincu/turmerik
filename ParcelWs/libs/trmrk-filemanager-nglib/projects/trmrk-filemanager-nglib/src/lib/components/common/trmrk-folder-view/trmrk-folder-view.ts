@@ -14,8 +14,6 @@ import {
 import { TrmrkPaginatedList } from '../../../../trmrk-angular/components/common/trmrk-paginated-list/trmrk-paginated-list';
 import { Trmrk3PanelsLayout } from '../../../../trmrk-angular/components/common/trmrk-3-panels-layout/trmrk-3-panels-layout';
 
-import { AppService } from '../../../services/app-service';
-
 @Component({
   selector: 'trmrk-folder-view',
   imports: [CommonModule, MatIconModule, MatMenuModule, TrmrkPaginatedList, Trmrk3PanelsLayout],
