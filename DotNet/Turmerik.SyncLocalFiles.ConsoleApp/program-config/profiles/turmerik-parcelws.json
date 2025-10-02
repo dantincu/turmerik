@@ -167,8 +167,8 @@
         "trmrk-angular": {
           "DirPath": "trmrk-angular"
         },
-        "trmrk-filemanager-ngapp": {
-          "DirPath": "trmrk-filemanager-ngapp"
+        "trmrk-filemanager-nglib": {
+          "DirPath": "trmrk-filemanager-nglib"
         }
       }
     },
